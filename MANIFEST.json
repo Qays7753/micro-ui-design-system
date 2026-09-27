@@ -1,0 +1,18 @@
+{
+  ".gitignore": "c5bb269d6bcfa0ba0753889d7124e1708d7c88164d8f6c279bcb908301d5a500",
+  "AGENTS.md": "67bd046a690fb4364b049bdd0b5caebcabb630dfcae3557b5966a44aec69e4c7",
+  "README.md": "547505789151bc152455e3739e221800ca5e735925a7157a8a2daf84f05e7a31",
+  "components/README.md": "2dc61e9cc0f333b6e637da2d29a6e950e51df53c5fcb539e244d86feb60ee689",
+  "docs/ARTIFACTS.md": "0ff841dd9cb752238747345e784bd0d88314e98f80384495b11b230c95610000",
+  "docs/CURRENT-STATE.md": "0c81e56ef887410b70e434e19265403468af74bb48658fd0332d7a5cddbe40fb",
+  "docs/WORKFLOW.md": "67512bbfe966cfd738b23eef2204e175fef3ff4964a9347e69861d88ee8fee4f",
+  "docs/foundations/Micro-UI-Foundations-V1.md": "2f03503a792e170bd391c4eee2e25610d4c99985424e50276b0486f838d9838d",
+  "previews/README.md": "53dcd759743057f638a1966f0060d7a1a034fec3ff0466c46cc1a3808b2dca61",
+  "prompts/README.md": "67abfd07c253eb2f22db87545a27fb91f3c2d7758f898c20b8dcc4cd3eab84dd",
+  "references/micro-data-colors-v1.html": "bc2b1d34e4cebd8ef6d78b327c73eee1f50f4c76216cf64e954dbecd5c1167ca",
+  "references/reports/Micro-UI-Component-Needs-AR.docx": "d666ef244d1d9c46c30767691dfd05fea519f620b32a21637be57efc4f3d8e83",
+  "references/visuals/02-compact-direction.png": "c987ca176f9f1692e25bbfe4a73cb2cf76970b8835b73ea7b6b96faac20547a8",
+  "references/visuals/04-direction-review.png": "f65b04436b955f6f87985680f2763c664fd215c8edfa6d15b1bcea3119266eda",
+  "reviews/README.md": "54071541c8645cd759abefcb5376cd1bbe597a97c141c27fb908aec838252a10",
+  "reviews/component-needs-review.md": "4e1c57f1a7bdc14ab2255a9159d5d0734652e841ab11e63319ca327ebc87b789"
+}

@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<div id="micro-data-colors-v1" lang="ar" dir="rtl">
+  <style>
+    #micro-data-colors-v1{color-scheme:light;font-family:'IBM Plex Sans Arabic',sans-serif;color:#172D32}
+    #micro-data-colors-v1 *{box-sizing:border-box}
+    #micro-data-colors-v1 .md-board{background:#F7F8F4;padding:24px;border-radius:24px}
+    #micro-data-colors-v1 h2,#micro-data-colors-v1 h3,#micro-data-colors-v1 p{margin:0}
+    #micro-data-colors-v1 .md-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+    #micro-data-colors-v1 h2{font-size:24px;font-weight:600;line-height:34px}
+    #micro-data-colors-v1 h3{font-size:18px;font-weight:500;line-height:28px}
+    #micro-data-colors-v1 .md-small{font-size:13px;line-height:22px;color:#50656A}
+    #micro-data-colors-v1 .md-tag{background:#DFEEE6;color:#164D59;padding:4px 12px;border-radius:999px;font-size:13px;white-space:nowrap}
+    #micro-data-colors-v1 .md-palette{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:12px 0 24px}
+    #micro-data-colors-v1 .md-swatch{height:84px;border-radius:16px;display:flex;align-items:end;padding:12px;font-size:16px;direction:ltr;font-family:'IBM Plex Sans',sans-serif;font-weight:500}
+    #micro-data-colors-v1 .md-name{font-size:15px;font-weight:500;margin-top:8px}
+    #micro-data-colors-v1 .md-demo{border-top:1px solid #DCE5E2;border-bottom:1px solid #DCE5E2;padding:24px 0;margin-bottom:24px}
+    #micro-data-colors-v1 .md-demo-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+    #micro-data-colors-v1 #md-bubbles{width:100%;max-width:440px;display:block;margin:16px auto 0;overflow:visible}
+    #micro-data-colors-v1 .md-backup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:12px}
+    #micro-data-colors-v1 .md-backup .md-swatch{height:60px}
+    #micro-data-colors-v1 .md-footer{margin-top:24px;padding-top:16px;border-top:1px solid #DCE5E2;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;font-size:13px;color:#50656A;line-height:22px}
+    #micro-data-colors-v1 .md-ratio{direction:ltr;font-family:'IBM Plex Sans',sans-serif}
+    @media(max-width:480px){#micro-data-colors-v1 .md-board{padding:16px}#micro-data-colors-v1 h2{font-size:21px}#micro-data-colors-v1 .md-palette{gap:8px}#micro-data-colors-v1 .md-swatch{padding:8px;font-size:13px;height:76px}#micro-data-colors-v1 .md-name{font-size:14px}#micro-data-colors-v1 .md-small{font-size:12px}}
+  </style>
+  <div class="md-board">
+    <div class="md-heading"><div><h2>مايكرو / ألوان البيانات</h2><p class="md-small">نفس الهوية · تمييز أوضح بين الفئات</p></div><span class="md-tag">مقترح V1</span></div>
+    <h3>المجموعة الأساسية للرسوم</h3>
+    <div class="md-palette">
+      <div><div class="md-swatch" style="background:#164D59;color:#FFFFFF">#164D59</div><div class="md-name">بترولي</div><div class="md-small">من الهوية المعتمدة</div></div>
+      <div><div class="md-swatch" style="background:#F4AD76;color:#172D32">#F4AD76</div><div class="md-name">مشمشي</div><div class="md-small">من الهوية المعتمدة</div></div>
+      <div><div class="md-swatch" style="background:#B6A3D6;color:#172D32">#B6A3D6</div><div class="md-name">بنفسجي فاتح</div><div class="md-small">لون بيانات إضافي</div></div>
+    </div>
+    <div class="md-demo"><div class="md-demo-head"><h3>توزيع المبيعات حسب الفئة</h3><span class="md-small">مثال توضيحي · المجموع 100%</span></div>
+      <svg id="md-bubbles" role="img" aria-label="مثال توضيحي: منتجات 56 بالمئة، خدمات 30 بالمئة، أخرى 14 بالمئة. مساحات الدوائر متناسبة مع النسب."><title>دوائر متناسبة المساحة — بيانات توضيحية</title></svg>
+    </div>
+    <h3>لونان إضافيان عند زيادة الفئات</h3>
+    <div class="md-backup">
+      <div><div class="md-swatch" style="background:#496D92;color:#FFFFFF">#496D92</div><div class="md-name">أزرق هادئ</div></div>
+      <div><div class="md-swatch" style="background:#B3BD7B;color:#172D32">#B3BD7B</div><div class="md-name">زيتوني فاتح</div></div>
+    </div>
+    <div class="md-footer"><span>اللون + التسمية + القيمة</span><span>تباين النصوص المختارة: <bdi class="md-ratio">5.40–9.37 : 1</bdi></span></div>
+  </div>
+  <script>
+    (()=>{const root=document.getElementById('micro-data-colors-v1');const svg=root.querySelector('#md-bubbles');const data=[{label:'منتجات',value:56,fill:'#164D59',text:'#FFFFFF'},{label:'خدمات',value:30,fill:'#F4AD76',text:'#172D32'},{label:'أخرى',value:14,fill:'#B6A3D6',text:'#172D32'}];const NS='http://www.w3.org/2000/svg';function node(tag,attrs,text){const n=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,String(v)));if(text!==undefined)n.textContent=text;svg.appendChild(n);return n;}function draw(){const w=svg.getBoundingClientRect().width;if(!w)return;svg.querySelectorAll('circle,text').forEach(n=>n.remove());const gap=w<340?12:18;const weights=data.map(d=>Math.sqrt(d.value/56));const scale=Math.min(98,(w-16-gap*2)/(2*weights.reduce((a,b)=>a+b,0)));const total=2*scale*weights.reduce((a,b)=>a+b,0)+gap*2;let right=(w+total)/2;const baseline=scale*2+8;const h=baseline+42;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.style.height=h+'px';data.forEach((d,i)=>{const r=scale*weights[i];const cx=right-r;const cy=baseline-r;node('circle',{cx,cy,r,fill:d.fill});node('text',{x:cx,y:cy,'text-anchor':'middle','dominant-baseline':'central','font-family':'IBM Plex Sans, sans-serif','font-size':w<340?17:22,'font-weight':600,fill:d.text,direction:'ltr'},d.value+'%');node('text',{x:cx,y:baseline+27,'text-anchor':'middle','font-family':'IBM Plex Sans Arabic, sans-serif','font-size':14,'font-weight':500,fill:'#172D32',direction:'rtl'},d.label);right-=r*2+gap;});}new ResizeObserver(draw).observe(svg);draw();})();
+  </script>
+</div>
