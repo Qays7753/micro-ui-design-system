@@ -1,0 +1,257 @@
+/* =========================================================
+   Micro UI — مكوّن الأزرار (B01)
+   الملف: components/buttons/buttons.css
+   يعتمد على: shared/tokens.css (قيم مشتركة واحدة — لا ألوان أو مقاسات مكررة هنا)
+   الاتجاه: كل القيم بخصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
+   الحالة: DRAFT FOR REVIEW — ما لم تُحسمه الأسس موسوم بـ«مقترح» في المواصفات.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) الأساس المشترك لكل الأنواع
+   <button class="m-btn m-btn--primary">…</button>
+   ------------------------------------------------------------ */
+.m-btn {
+  box-sizing: border-box;
+  display: inline-flex;              /* يتمدد مع النص أفقيًا */
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
+  min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
+  padding-block: var(--micro-button-padding-block);   /* 12px */
+  padding-inline: var(--micro-button-padding-inline); /* 20px */
+  border: 0;
+  border-radius: var(--micro-radius-capsule);         /* كبسولة للزر القصير */
+  font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
+  font-size: var(--micro-button-label-size);          /* 16px */
+  line-height: var(--micro-button-label-line);        /* 24px */
+  font-weight: var(--micro-button-label-weight);      /* 500 */
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;        /* منع تأخير/تكبير النقر المزدوج على الهاتف */
+  transition:
+    background-color var(--micro-motion-press) var(--micro-ease-standard),
+    border-color var(--micro-motion-press) var(--micro-ease-standard),
+    color var(--micro-motion-press) var(--micro-ease-standard),
+    box-shadow var(--micro-motion-press) var(--micro-ease-standard);
+}
+
+/* لا اعتماد على hover — أداة الهاتف لا تستخدم التحويم (قاعدة الأسس) */
+
+/* ---------------------------------------------------------
+   2) الأنواع
+   ------------------------------------------------------------ */
+
+/* الأساسي: تدرج #236675 → #164D59 + ظل محدود (للأساسي فقط افتراضيًا) */
+.m-btn--primary {
+  background-image: var(--micro-button-primary-bg);
+  background-color: var(--micro-brand-primary); /* أرضية احتياطية إن لم يُدعم التدرج */
+  color: var(--micro-text-inverse);
+  box-shadow: var(--micro-shadow-emphasis);
+}
+
+/* الثانوي: أرضية هادئة وحد واضح وبروز أقل من الأساسي */
+.m-btn--secondary {
+  background-color: var(--micro-surface-base);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control); /* حد 1px داخلي لا يغيّر المقاس */
+  color: var(--micro-text-primary);
+}
+
+/* الخفيف/النصي: دون حاوية ثقيلة، لون الهوية يكفي للتعرف عليه.
+   نفس حشو الزر المعتمد (20px) — الاختلاف في الغلاف لا في المساحة. */
+.m-btn--light {
+  background-color: transparent;
+  color: var(--micro-brand-primary);
+}
+
+/* الإجراء المتلف: اللون المحدد له مع تسمية صريحة — ليس كل إجراء مهم أحمر */
+.m-btn--destructive {
+  background-color: var(--micro-danger);
+  color: var(--micro-text-inverse);
+}
+
+/* الإجراء المتلف الهادئ (مقترح): للسياقات الثانوية مثل قائمة إجراءات */
+.m-btn--destructive-soft {
+  background-color: var(--micro-danger-surface);
+  color: var(--micro-danger);
+}
+
+/* زر الأيقونة: تعديل شكل دائري فوق أي نوع — ليس عائلة مستقلة.
+   الاستخدام الغامض يحتاج تسمية مرئية في السياق + aria-label دائمًا. */
+.m-btn--icon {
+  width: var(--micro-icon-button-size);
+  min-height: var(--micro-icon-button-size);
+  height: var(--micro-icon-button-size);
+  padding-block: 0;
+  padding-inline: 0;
+  border-radius: var(--micro-radius-circle);
+  flex: none;
+}
+
+.m-btn--icon .m-btn__icon {
+  width: var(--micro-icon-button-icon); /* 24px داخل الزر الدائري */
+  height: var(--micro-icon-button-icon);
+}
+
+/* عرض كامل: خيار مكوّن، لا تصميم منفصل */
+.m-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   3) عدّاد التصفية داخل الزر
+   زر التصفية = ثانوي + أيقونة + «تصفية» + عدّاد عند وجود فلاتر.
+   الفلاتر النشطة ليست حالة ضغط ولا حالة فتح لوحة. */
+.m-btn__counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--micro-counter-height);
+  height: var(--micro-counter-height);
+  padding-inline: var(--micro-space-2);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-brand-accent);   /* مشمشي بنص داكن — 7.60:1 */
+  color: var(--micro-text-primary);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  /* أرقام 0–9: اتجاه معزول وعرض متساوٍ للمقارنة */
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* عدّاد صفر (مقترح): أرضية محايدة توضح «لا فلاتر نشطة» دون اختفاء العنصر */
+.m-btn__counter--zero {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-text-secondary);
+}
+
+/* ---------------------------------------------------------
+   4) الأيقونة داخل الزر
+   لا قلب آلي لأي أيقونة؛ الرموز الاتجاهية تُختار مناسبةً لـ RTL من أصلها.
+   ------------------------------------------------------------ */
+.m-btn__icon {
+  width: var(--micro-icon-in-button); /* 20px داخل زر بنص */
+  height: var(--micro-icon-in-button);
+  flex: none; /* لا تنضغط الأيقونة عند النص الطويل */
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* شارة «تجريبي» في العرض التجريبي فقط — ليست جزءًا من المكوّن */
+.m-btn__sim-tag { display: none; }
+
+/* ---------------------------------------------------------
+   5) الحالات — تفاعلية وثابتة للمقارنة
+   التركيز ≠ الضغط، والمعطل ≠ التحميل (قاعدة الأسس)
+   ------------------------------------------------------------ */
+
+/* الضغط: فعلي (:active) وثابت للمقارنة (.is-pressed) */
+.m-btn--primary:active,
+.m-btn--primary.is-pressed {
+  background-image: none;
+  background-color: var(--micro-brand-pressed); /* #103E48 */
+  box-shadow: none; /* ينخفض العمق عند الضغط */
+}
+
+/* ضغط الثانوي والخفيف — مقترح بانتظار المراجعة (غير محسوم في SHARED-SPEC) */
+.m-btn--secondary:active,
+.m-btn--secondary.is-pressed {
+  background-color: var(--micro-surface-selected);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control);
+}
+.m-btn--light:active,
+.m-btn--light.is-pressed {
+  background-color: var(--micro-surface-selected);
+}
+.m-btn--destructive:active,
+.m-btn--destructive.is-pressed {
+  background-color: var(--micro-danger-pressed); /* مقترح: أغمق من خطأ المعنى */
+}
+.m-btn--destructive-soft:active,
+.m-btn--destructive-soft.is-pressed {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-danger);
+}
+
+/* التركيز: حلقة 2px بفاصل أبيض 2px — فعلي (لوحة المفاتيح) وثابت للمقارنة.
+   الأساسي: يبقى ظله كي لا يقفز العنصر بين الحالات.
+   الثانوي: يحتفظ بحدّه الداخلي مع الحلقة. */
+.m-btn:focus-visible,
+.m-btn.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--primary:focus-visible,
+.m-btn--primary.is-focus {
+  box-shadow:
+    var(--micro-shadow-emphasis),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--secondary:focus-visible,
+.m-btn--secondary.is-focus {
+  box-shadow:
+    inset 0 0 0 1px var(--micro-border-control),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* المعطل: أرضية ونص معطل من القيم المشتركة، بلا ظل ولا حد.
+   التفعيل ممنوع فعليًا عبر خاصية disabled الأصلية. */
+.m-btn[disabled],
+.m-btn.is-disabled {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.m-btn[disabled] .m-btn__counter,
+.m-btn.is-disabled .m-btn__counter {
+  background-color: transparent;
+  color: var(--micro-text-disabled);
+}
+
+/* التحميل: يمنع التكرار مع ثبات المساحة.
+   المساحة ثابتة لأن المؤشر يشغل فتحة الأيقونة (20px) ويبقى النص نفسه،
+   ولا يتغير عرض الزر. الفعلي عبر aria-busy من buttons.js + صف مؤشر. */
+.m-btn.is-loading,
+.m-btn[aria-busy="true"] {
+  pointer-events: none; /* يمنع النقر المتكرر دون تغيير المظهر عن المعطل */
+}
+.m-btn.is-loading .m-btn__icon,
+.m-btn[aria-busy="true"] .m-btn__icon {
+  display: none; /* فتحة الأيقونة يستبدلها المؤشر بنفس المقاس */
+}
+
+.m-btn__spinner {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-inline-start-color: transparent; /* قوس متصل — اتجاه الدوران محايد للـ RTL */
+  animation: micro-spin 900ms linear infinite;
+}
+
+@keyframes micro-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* تقليل الحركة: تُلغى الانتقالات غير الجوهرية؛
+   مؤشر التحميل يبقى لأنه تغذية راجعة جوهرية للحالة (يوثّق في المواصفات). */
+@media (prefers-reduced-motion: reduce) {
+  .m-btn {
+    transition: none;
+  }
+  .m-btn__spinner {
+    animation-duration: 2400ms; /* دوران أبطأ بدل الإيقاف — الحالة تبقى مفهومة */
+  }
+}
