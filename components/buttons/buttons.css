@@ -1,9 +1,12 @@
 /* =========================================================
    Micro UI — مكوّن الأزرار (B01)
    الملف: components/buttons/buttons.css
-   يعتمد على: shared/tokens.css (قيم مشتركة واحدة — لا ألوان أو مقاسات مكررة هنا)
+   يعتمد على: shared/tokens.css — القيم المشتركة (الألوان والمقاسات والحركة)
+   تأتي منه كلها. الاستثناءات الداخلية بالمكوّن وحده موثقة عند مواضعها:
+   سماكة حد المؤشر 2px، ومقاس خط العدّاد (توكن مشترك مضاف:
+   --micro-counter-label-*). لا ألوان مكررة هنا إطلاقًا.
    الاتجاه: كل القيم بخصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
-   الحالة: DRAFT FOR REVIEW — ما لم تُحسمه الأسس موسوم بـ«مقترح» في المواصفات.
+   الحالة: DRAFT FOR RE-REVIEW — ما لم تُحسمه الأسس موسوم بـ«مقترح» في المواصفات.
    ========================================================= */
 
 /* ---------------------------------------------------------
@@ -12,6 +15,7 @@
    ------------------------------------------------------------ */
 .m-btn {
   box-sizing: border-box;
+  position: relative;                /* مرجع لموضع مؤشر التحميل في الزر النصي */
   display: inline-flex;              /* يتمدد مع النص أفقيًا */
   align-items: center;
   justify-content: center;
@@ -102,30 +106,33 @@
 /* ---------------------------------------------------------
    3) عدّاد التصفية داخل الزر
    زر التصفية = ثانوي + أيقونة + «تصفية» + عدّاد عند وجود فلاتر.
-   الفلاتر النشطة ليست حالة ضغط ولا حالة فتح لوحة. */
+   الفلاتر النشطة ليست حالة ضغط ولا حالة فتح لوحة.
+   توجيه جولة التصحيح R2: الشارة تُخفى عند 0 — الاسم الإتاحي
+   (aria-label) هو الذي يوضح «لا فلاتر نشطة»، والعدد يظهر عند وجوده.
+   الارتفاع حد أدنى (min-height) وليس ثابتًا: عند تكبير النص 200%
+   يتمدد العدّاد مع الخط بدل قصّه (فحص تكبير النص في reviews). */
 .m-btn__counter {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: var(--micro-counter-height);
-  height: var(--micro-counter-height);
+  min-height: var(--micro-counter-height);
   padding-inline: var(--micro-space-2);
   border-radius: var(--micro-radius-capsule);
   background-color: var(--micro-brand-accent);   /* مشمشي بنص داكن — 7.60:1 */
   color: var(--micro-text-primary);
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--micro-counter-label-size);
+  line-height: 1;
+  font-weight: var(--micro-counter-label-weight);
   /* أرقام 0–9: اتجاه معزول وعرض متساوٍ للمقارنة */
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
 }
 
-/* عدّاد صفر (مقترح): أرضية محايدة توضح «لا فلاتر نشطة» دون اختفاء العنصر */
+/* شارة العدد صفر: مخفية بصريةً — الدلالة على «لا فلاتر» في الاسم الإتاحي */
 .m-btn__counter--zero {
-  background-color: var(--micro-surface-selected);
-  color: var(--micro-text-secondary);
+  display: none;
 }
 
 /* ---------------------------------------------------------
@@ -219,12 +226,31 @@
   color: var(--micro-text-disabled);
 }
 
+/* المعطل: لا ضغط ولا حلقة تركيز — ليس عنصرًا نشطًا. قواعد صريحة فوق
+   قواعد الضغط والتركيز لأن أعلى منها خصوصية وتمنع أي حالة مضللة. */
+.m-btn[disabled]:active,
+.m-btn.is-disabled:active {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+}
+.m-btn[disabled]:focus-visible,
+.m-btn.is-disabled.is-focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* التحميل: يمنع التكرار مع ثبات المساحة.
-   المساحة ثابتة لأن المؤشر يشغل فتحة الأيقونة (20px) ويبقى النص نفسه،
-   ولا يتغير عرض الزر. الفعلي عبر aria-busy من buttons.js + صف مؤشر. */
+   - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
+   - زر نصي بلا أيقونة: المؤشر يتوضع مطلقًا داخل منطقة الحشو الأصلية
+     (is-loading--text من buttons.js أو في ترميز الأمثلة الثابتة)
+     فلا يزيد العرض ولا يحرك النص ولا يقصه.
+   pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
+   عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
 .m-btn.is-loading,
 .m-btn[aria-busy="true"] {
-  pointer-events: none; /* يمنع النقر المتكرر دون تغيير المظهر عن المعطل */
+  pointer-events: none; /* يمنع نقر المؤشر دون تغيير المظهر عن المعطل */
 }
 .m-btn.is-loading .m-btn__icon,
 .m-btn[aria-busy="true"] .m-btn__icon {
@@ -236,22 +262,45 @@
   height: var(--micro-icon-in-button);
   flex: none;
   border-radius: 50%;
-  border: 2px solid currentColor;
+  border: 2px solid currentColor; /* سماكة داخلية بالمكوّن — موثقة في الترويسة */
   border-inline-start-color: transparent; /* قوس متصل — اتجاه الدوران محايد للـ RTL */
   animation: micro-spin 900ms linear infinite;
+}
+
+/* زر الأيقونة الدائري: فتحة الأيقونة 24px — المؤشر بنفس المقاس */
+.m-btn--icon .m-btn__spinner {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+}
+
+/* زر نصي بلا أيقونة: النص يبقى في مساره محفوظًا المكان (opacity:0 —
+   باقٍ في شجرة الإتاحة فلا يفقد الزر اسمه) والمؤشر يتوسط الزر —
+   الأبعاد ثابتة بالبنية نفسها: لا زيادة عرض، لا قص، لا قفزة تخطيط.
+   التوسيط بلا transform كي لا يتعارض مع دوران المؤشر. */
+.m-btn.is-loading--text .m-btn__label {
+  opacity: 0;
+}
+.m-btn.is-loading--text .m-btn__spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 20px;
+  height: 20px;
 }
 
 @keyframes micro-spin {
   to { transform: rotate(360deg); }
 }
 
-/* تقليل الحركة: تُلغى الانتقالات غير الجوهرية؛
-   مؤشر التحميل يبقى لأنه تغذية راجعة جوهرية للحالة (يوثّق في المواصفات). */
+/* تقليل الحركة: تُلغى الانتقالات غير الجوهرية، ومؤشر التحميل يصير
+   ثابتًا (قوسًا ساكنًا) — الحالة تُفهم من تسمية التحميل الصريحة
+   (data-loading-label أو options.loadingLabel) ومن aria-busy.
+   توجيه جولة التصحيح R2: مؤشر ثابت بدل دوران أبطأ. */
 @media (prefers-reduced-motion: reduce) {
   .m-btn {
     transition: none;
   }
   .m-btn__spinner {
-    animation-duration: 2400ms; /* دوران أبطأ بدل الإيقاف — الحالة تبقى مفهومة */
+    animation: none;
   }
 }

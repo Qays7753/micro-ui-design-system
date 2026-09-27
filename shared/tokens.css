@@ -64,6 +64,8 @@
   --micro-icon-button-size: 48px;        /* زر الأيقونة الدائري */
   --micro-icon-button-icon: 24px;        /* الأيقونة داخل زر الأيقونة */
   --micro-counter-height: 20px;          /* عدّاد التصفية داخل الزر */
+  --micro-counter-label-size: 13px;      /* خط العدّاد — مشترك بين أمثلة المكوّن */
+  --micro-counter-label-weight: 500;     /* وزن خط العدّاد */
 
   /* ---- الانحناءات ---- */
   --micro-radius-capsule: 999px; /* كبسولة للزر القصير */
@@ -76,7 +78,8 @@
      والعربية تسقط تلقائيًا إلى IBM Plex Sans Arabic. لا تباعد أحرف مصطنع. */
   --micro-font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
   --micro-button-label-size: 16px;
-  --micro-button-label-line: 24px;
+  --micro-button-label-line: 1.5;        /* نسبة لا بكسل: 16×1.5 = 24px نفس القيمة المعتمدة،
+                                            وتتمدد مع النص عند تكبيره 200% بدل تجاوز السطر */
   --micro-button-label-weight: 500;
 
   /* ---- العمق ---- */

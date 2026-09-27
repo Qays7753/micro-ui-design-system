@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <!-- =========================================================
   Micro UI — لوحة معاينة الأزرار (B01)
-  الحالة: DRAFT FOR REVIEW — لقطات reviews/B01/screenshots مأخوذة من هذا الملف.
-  التشغيل: python3 -m http.server 8080 من جذر المستودع ثم فتح
-           http://localhost:8080/previews/buttons/
+  الحالة: DRAFT FOR RE-REVIEW — لقطات reviews/B01/screenshots مأخوذة من هذا الملف.
+  التشغيل (من جذر المستودع فقط — الأصول والمكوّن خارج هذا المجلد):
+    python3 -m http.server 8080
+    ثم فتح http://localhost:8080/previews/buttons/
   المكوّن نفسه في: components/buttons/buttons.css (+ buttons.js للسلوك)
   القيم المشتركة في: shared/tokens.css
+  الأيقونات تُحمَّل في هذه اللوحة من أصولها الوحيدة assets/icons/*.svg
+  عبر board.js — لا نسخ مكررة يدوية داخل HTML.
   هذا الملف يستدعي المكوّن ولا يعيد تعريف شكله.
 ========================================================= -->
 <html lang="ar" dir="rtl">
@@ -13,6 +16,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Micro — معاينة الأزرار (B01)</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../shared/tokens.css">
   <link rel="stylesheet" href="../../components/buttons/buttons.css">
@@ -20,43 +24,13 @@
 </head>
 <body>
 
-  <!-- ================= تعريفات الأيقونات (HugeIcons — Stroke Rounded، MIT)
-       نسخ حرفية من أصول assets/icons/*.svg — التعديل يكون هناك أو هنا مباشرة ================= -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none"><!-- assets/icons/search-01.svg -->
-      <path d="M17 17L21 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    </symbol>
-    <symbol id="i-filter" viewBox="0 0 24 24" fill="none"><!-- assets/icons/filter-horizontal.svg -->
-      <path d="M3 7H6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M3 17H9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M18 17L21 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M15 7L21 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z" stroke="currentColor" stroke-width="1.5"/>
-    </symbol>
-    <symbol id="i-add" viewBox="0 0 24 24" fill="none"><!-- assets/icons/add-01.svg -->
-      <path d="M12.001 5.00003V19.002" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M19.002 12.002L4.99998 12.002" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    </symbol>
-    <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none"><!-- assets/icons/checkmark-circle-02.svg -->
-      <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M8 12.5L10.5 15L16 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    </symbol>
-    <symbol id="i-delete" viewBox="0 0 24 24" fill="none"><!-- assets/icons/delete-02.svg -->
-      <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-      <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-      <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-      <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-    </symbol>
-    <symbol id="i-check" viewBox="0 0 24 24" fill="none"><!-- assets/icons/check.svg -->
-      <path d="M5 13.2592L7.58583 15.9568C8.2525 16.6523 8.58583 17 9.00004 17C9.41425 17 9.74759 16.6523 10.4143 15.9568L19 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    </symbol>
-  </svg>
+  <!-- تعريفات الأيقونات تُبنى وقت التشغيل من assets/icons/*.svg (مصدر واحد)
+       بواسطة board.js — عدّل الأصل في assets/icons وسينعكس هنا تلقائيًا. -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
 
   <header class="board-header">
-    <h1>Micro — الأزرار <span class="status-chip">DRAFT FOR REVIEW</span></h1>
-    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — الأنوان والحالات من الأسس المعتمدة V1.1. ما لم يُحسم موسوم «مقترح» في المواصفات والمراجعة.</p>
+    <h1>Micro — الأزرار <span class="status-chip">DRAFT FOR RE-REVIEW</span></h1>
+    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — الأنوان والحالات من الأسس المعتمدة V1.1. ما لم يُحسم موسوم «مقترح» في المواصفات والمراجعة. تصحيحات جولة R1 على نفس الملفات.</p>
   </header>
 
   <main>
@@ -104,7 +78,7 @@
     <!-- ================= 2) جدول الحالات الثابتة ================= -->
     <section class="panel" id="states">
       <h2>2) جدول الحالات — أمثلة ثابتة للمقارنة</h2>
-      <p class="panel-note">التركيز ≠ الضغط، والمعطل ≠ التحميل. الوسم الثابت للعروض فقط؛ التفاعل الفعلي في القسم 3. لا تُطبَّق حالة على نوع إلا ذُكرت هنا — جميع الحالات تنطبق على كل الأنواع، والمؤقت الوحيد: الثانوي/الخفيف في الضغط «مقترح» بانتظار المراجعة.</p>
+      <p class="panel-note">التركيز ≠ الضغط، والمعطل ≠ التحميل. الوسم الثابت للعروض فقط؛ التفاعل الفعلي في القسم 3. زر نصي في التحميل: المؤشر داخل منطقة الحشو (is-loading--text) فتبقى الأبعاد كما هي.</p>
       <div class="states-table">
 
         <div class="state-row">
@@ -113,7 +87,7 @@
           <div class="state-cell"><button class="m-btn m-btn--primary is-pressed">حفظ العملية</button><span class="state-label">ضغط ثابت</span></div>
           <div class="state-cell"><button class="m-btn m-btn--primary is-focus">حفظ العملية</button><span class="state-label">تركيز ثابت</span></div>
           <div class="state-cell"><button class="m-btn m-btn--primary" disabled>حفظ العملية</button><span class="state-label">معطل</span></div>
-          <div class="state-cell"><button class="m-btn m-btn--primary is-loading" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>حفظ العملية</button><span class="state-label">تحميل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
         </div>
 
         <div class="state-row">
@@ -122,7 +96,7 @@
           <div class="state-cell"><button class="m-btn m-btn--secondary is-pressed">إلغاء</button><span class="state-label">ضغط ثابت — مقترح</span></div>
           <div class="state-cell"><button class="m-btn m-btn--secondary is-focus">إلغاء</button><span class="state-label">تركيز ثابت</span></div>
           <div class="state-cell"><button class="m-btn m-btn--secondary" disabled>إلغاء</button><span class="state-label">معطل</span></div>
-          <div class="state-cell"><button class="m-btn m-btn--secondary is-loading" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>إلغاء</button><span class="state-label">تحميل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">إلغاء</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
         </div>
 
         <div class="state-row">
@@ -131,7 +105,7 @@
           <div class="state-cell"><button class="m-btn m-btn--light is-pressed">عرض الكل</button><span class="state-label">ضغط ثابت — مقترح</span></div>
           <div class="state-cell"><button class="m-btn m-btn--light is-focus">عرض الكل</button><span class="state-label">تركيز ثابت</span></div>
           <div class="state-cell"><button class="m-btn m-btn--light" disabled>عرض الكل</button><span class="state-label">معطل</span></div>
-          <div class="state-cell"><button class="m-btn m-btn--light is-loading" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>عرض الكل</button><span class="state-label">تحميل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--light is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">عرض الكل</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
         </div>
 
         <div class="state-row">
@@ -140,7 +114,7 @@
           <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-pressed" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">ضغط ثابت — مقترح</span></div>
           <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-focus" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">تركيز ثابت</span></div>
           <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث" disabled><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">معطل</span></div>
-          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-loading" aria-label="جارٍ البحث" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span></button><span class="state-label">تحميل — مساحة ثابتة</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-loading" aria-label="جارٍ البحث" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span></button><span class="state-label">تحميل — مؤشر 24px بفتحة الأيقونة</span></div>
         </div>
 
         <div class="state-row">
@@ -161,27 +135,43 @@
           <div class="state-cell"><button class="m-btn m-btn--secondary is-loading" aria-label="جارٍ التصفية" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">تحميل</span></div>
         </div>
 
+        <!-- حالات متزامنة (بند 9 من جولة التصحيح) — ثابتة للمقارنة، والتفاعل الحقيقي في القسم 3 -->
+        <div class="state-row">
+          <span class="type-name">حالات متزامنة</span>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-focus is-pressed">حفظ العملية</button><span class="state-label">تركيز + ضغط — الحلقة ظاهرة</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-focus is-pressed">إلغاء</button><span class="state-label">تركيز + ضغط — الحد والحلقة معًا</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-focus is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button><span class="state-label">تركيز + تحميل — التركيز يبقى</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary" disabled>حفظ العملية</button><span class="state-label">معطل — لا ضغط ولا حلقة</span></div>
+        </div>
+
       </div>
-      <p class="panel-note" style="margin-top:16px">ملاحظة: الفلاتر النشطة حالة عدّاد داخل الزر وليست حالة ضغط ولا حالة فتح لوحة — لا لوحة فلاتر في هذه الدفعة.</p>
+      <p class="panel-note" style="margin-top:16px">ملاحظة: الفلاتر النشطة حالة عدّاد داخل الزر وليست حالة ضغط ولا حالة فتح لوحة — لا لوحة فلاتر في هذه الدفعة. شارة العدد صفر مخفية (توجيه جولة التصحيح) والاسم الإتاحي يوضح عدم وجود فلاتر.</p>
     </section>
 
     <!-- ================= 3) تفاعل حقيقي ================= -->
     <section class="panel" id="live">
       <h2>3) تفاعل حقيقي — للمراجعة الفعلية</h2>
-      <p class="panel-note">جرّب: الضغط بالفأرة/اللمس، التنقل بلوحة المفاتيح (Tab) لرؤية حلقة التركيز، والنقر المتكرر أثناء التحميل (ممنوع فعليًا). النتائج الموسومة «تجريبية» محاكاة للعرض فقط.</p>
+      <p class="panel-note">جرّب: الضغط بالفأرة/اللمس، التنقل بلوحة المفاتيح (Tab) لرؤية حلقة التركيز، Enter/Space أثناء التحميل (ممنوع فعليًا عبر حراسة المكوّن، لا pointer-events وحده)، والنقر المتكرر أثناء التحميل. النتائج الموسومة «تجريبية» محاكاة للعرض فقط.</p>
 
-      <p class="demo-note">حفظ: تحميل حقيقي 2.2 ثانية ثم رسالة اكتمال مجاورة — الزر نفسه لا يتحول للأخضر:</p>
+      <p class="demo-note">حفظ: تحميل حقيقي 2.2 ثانية ثم رسالة اكتمال مجاورة — الزر نفسه لا يتحول للأخضر. الرسالة السابقة تُخفى عند بدء كل محاولة جديدة وتظهر فقط بعد انتهاء المحاكاة:</p>
       <div class="demo-group" data-demo-group>
-        <button class="m-btn m-btn--primary" data-demo="save"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
+        <button class="m-btn m-btn--primary" data-demo="save" data-loading-label="جارٍ الحفظ"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
         <span class="demo-message" data-demo-message hidden><svg aria-hidden="true"><use href="#i-check"/></svg>تم الحفظ — رسالة تجريبية للعرض فقط</span>
       </div>
 
-      <p class="demo-note" style="margin-top:16px">تصفية: كل نقرة تبدّل العدّاد 0 → 2 → 123 (أشكال العدّاد الثلاثة). لا لوحة تصفية:</p>
+      <p class="demo-note" style="margin-top:16px">تصفية: كل نقرة تبدّل العدّاد 0 → 2 → 123 (الشارة مخفية عند 0). لا لوحة تصفية:</p>
       <div class="demo-group" data-demo-group>
         <button class="m-btn m-btn--secondary" data-demo="filter" aria-label="تصفية، لا فلاتر نشطة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter m-btn__counter--zero">0</span></button>
       </div>
 
-      <p class="demo-note" style="margin-top:16px">تنقل بلوحة المفاتيح عبر هذه الصف (Tab / Shift+Tab) — حلقة التركيز بفاصل أبيض 2px:</p>
+      <p class="demo-note" style="margin-top:16px">عقد التحميل عبر واجهة المكوّن (MicroButtons.setLoading): زر نصي بلا أيقونة بأبعاد ثابتة، زر أيقونة بتسمية صريحة، وزر معطل أصلًا لا يدخل التحميل أبدًا:</p>
+      <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--light" data-loading-api data-loading-label="جارٍ التحديث">تحديث القائمة</button>
+        <button class="m-btn m-btn--secondary m-btn--icon" data-loading-api aria-label="بحث" data-loading-label="جارٍ البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+        <button class="m-btn m-btn--primary" disabled data-loading-api>محفوظ — معطل أصلًا</button>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">تنقل بلوحة المفاتيح عبر هذا الصف (Tab / Shift+Tab) — حلقة التركيز بفاصل أبيض 2px، وجرب Enter ثم راقب التحميل وعودة الاسم الإتاحي:</p>
       <div class="demo-group" data-demo-group>
         <button class="m-btn m-btn--primary">إنشاء طلب</button>
         <button class="m-btn m-btn--secondary">تعديل</button>
@@ -190,33 +180,38 @@
         <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
       </div>
 
-      <noscript><p class="demo-note">بدون JavaScript: الأمثلة الثابتة تعمل، والعروض التفاعلية أعلاه لا تعمل دون السكربت.</p></noscript>
+      <noscript><p class="demo-note">بدون JavaScript: الأمثلة الثابتة تعمل، لكن الأيقونات (تُحمَّل من أصولها) والعروض التفاعلية أعلاه لا تعمل — شغّل اللوحة بخادم محلي كما في README.</p></noscript>
     </section>
 
     <!-- ================= 4) خيارات المكوّن والأمثلة الصعبة ================= -->
     <section class="panel" id="options">
       <h2>4) خيارات المكوّن وأمثلة صعبة</h2>
-      <p class="panel-note">العرض الكامل خيار (m-btn--block) لا تصميم منفصل، والنص الطويل يلتفّ دون قص لأن الارتفاع حد أدنى.</p>
+      <p class="panel-note">العرض الكامل خيار (m-btn--block) لا تصميم منفصل، والنص الطويل يلتفّ دون قص لأن الارتفاع حد أدنى. المقاسات أدناه عروض CSS حقيقية بالعرض المكتوب على كل تسمية.</p>
       <div class="example-grid">
 
+        <!-- مقارنة جنبًا إلى جنب: قصير مقابل سطرين (بند 7 من جولة التصحيح) -->
+        <div class="example">
+          <button class="m-btn m-btn--primary">حفظ العملية</button>
+          <span class="caption">قصير — سطر واحد (48px ارتفاعًا)</span>
+        </div>
         <div class="example" style="width:320px;max-width:100%">
-          <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
-          <span class="caption">أساسي بعرض كامل (390px عمود)</span>
+          <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+          <span class="caption">طويل — سطران بنفس المكوّن (320px عرضًا)</span>
         </div>
 
         <div class="example" style="width:320px;max-width:100%">
-          <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
-          <span class="caption">تسمية طويلة — التفاف بلا قص (390px عمود)</span>
+          <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+          <span class="caption">أساسي بعرض كامل (320px عرضًا)</span>
         </div>
 
         <div class="example" style="width:340px;max-width:100%">
           <button class="m-btn m-btn--secondary" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
-          <span class="caption">أصعب مثال: أيقونة + نص طويل + عدّاد 123</span>
+          <span class="caption">أصعب مثال: أيقونة + نص طويل + عدّاد 123 (340px عرضًا)</span>
         </div>
 
         <div class="example">
           <button class="m-btn m-btn--secondary" aria-label="تصفية، لا فلاتر نشطة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter m-btn__counter--zero">0</span></button>
-          <span class="caption">عدّاد 0 — محايد (مقترح)</span>
+          <span class="caption">عدّاد 0 — الشارة مخفية (توجيه R2) والاسم الإتاحي يوضح «لا فلاتر»</span>
         </div>
         <div class="example">
           <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
@@ -228,18 +223,13 @@
         </div>
 
       </div>
+      <p class="demo-note" style="margin-top:16px">فحص الخط الفعلي (بند 7): التسمية تُعرض بـ IBM Plex Sans Arabic وزن 500 فعليًا — التحقق البرمجي document.fonts.check في سجل الفحص tools/b01-screenshots.py، وليس بالاستدلال من صورة.</p>
     </section>
 
-    <!-- ================= 5) أمثلة الهاتف بأبعاد CSS حقيقية ================= -->
+    <!-- ================= 5) لوحة مقارنة جانبية (أداة فحص عريضة) ================= -->
     <section class="panel" id="phones">
-      <h2>5) أمثلة الهاتف — أبعاد CSS حقيقية (320 / 390 / 430)</h2>
-      <p class="panel-note">نفس المصدر في الأعمدة الثلاثة، بهامش صفحة 20px (16px عند 320px). لا تكبير ولا تصغير لقطة — القياس الحقيقي.</p>
-
-      <div class="lab-controls">
-        <button class="m-btn m-btn--secondary" data-lab="zoom" aria-pressed="false">تكبير 200% — أصعب مثال</button>
-        <span class="demo-note">يضخّم عمود «أصعب مثال» أدناه بمعامل 2 (zoom) للتأكد من الالتفاف دون قص أو تمرير أفقي.</span>
-      </div>
-
+      <h2>5) لوحة مقارنة جانبية — أبعاد CSS حقيقية (320 / 390 / 430)</h2>
+      <p class="panel-note">أداة مقارنة للفحص على شاشة عريضة فقط: أعمدة جانبية قد تتجاوز الشاشة الضيقة (تمريرها محصور داخل هذا القسم). الإثبات المعتمد لسلامة الهاتف في القسم 6: عرض منفصل كامل لكل مقاس بلا قص ولا تمرير داخلي.</p>
       <div class="phone-lab">
 
         <div class="phone-demo is-320">
@@ -290,21 +280,95 @@
           </div>
         </div>
 
-        <div class="phone-demo is-390" id="zoom-target">
-          <p class="phone-title">390px — أصعب مثال</p>
-          <div class="phone-stack">
-            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
-            <button class="m-btn m-btn--secondary m-btn--block" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- ================= 6) فحص الخط والأيقونات ================= -->
+    <!-- ================= 6) معاينة هاتف كاملة + تكبير النص 200% =================
+         قسم مفتوح (بلا بطاقة بيضاء) كي يتسع كل مقاس بعرضه الحقيقي داخل
+         صفحة عرضه نفسه — الإثبات المعتمد لسلامة المكوّن على الهاتف. -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>6) معاينة هاتف كاملة — عرض منفصل لكل مقاس، بلا قص ولا تمرير داخلي</h2>
+      <p class="panel-note">كل عمود أدناه بعرض CSS حقيقي مطابق لعنوانه (المقاسات الأعرض من الشاشة الحالية تُخفى، وتُعاين عند عرضها هي)، وهامش الصفحة والحلقات والظلال ظاهرة كاملة. اللقطات 16–18 التُقطت بعرض صفحة مساوٍ للمقاس نفسه.</p>
+
+      <div class="phone-full-block" data-w="320">
+        <p class="phone-title">معاينة كاملة — 320px (هامش صفحة 16px داخل العمود)</p>
+        <div class="phone-demo is-320">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+              <button class="m-btn m-btn--destructive-soft">حذف السجل</button>
+            </div>
+            <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="390">
+        <p class="phone-title">معاينة كاملة — 390px (هامش صفحة 20px داخل العمود)</p>
+        <div class="phone-demo is-390">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="430">
+        <p class="phone-title">معاينة كاملة — 430px (هامش صفحة 20px داخل العمود)</p>
+        <div class="phone-demo is-430">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>تكبير النص 200% داخل مساحة هاتف ثابتة</h2>
+      <p class="panel-note">زر المحاكاة أدناه يضاعف حجم الخط المحسوب لكل عناصر العمود — مكافئ لتكبير النص في المتصفح: الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP Emulation.setTextZoomFactor أُزيلت من Chromium الحديث (تحقق فعلي) — القياسات في سجل الفحص tools/b01-screenshots.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا.</p>
+      <div class="lab-controls">
+        <button class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة تكبير النص 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+            <button class="m-btn m-btn--secondary m-btn--block" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7) فحص الخط والأيقونات ================= -->
     <section class="panel" id="assets-check">
-      <h2>6) فحص الخط والأيقونات — أصول فعلية</h2>
-      <p class="panel-note">الخط محلي (assets/fonts) — الأرقام من IBM Plex Sans والعربية من IBM Plex Sans Arabic. الأيقونات HugeIcons Stroke Rounded (MIT) من assets/icons.</p>
+      <h2>7) فحص الخط والأيقونات — أصول فعلية</h2>
+      <p class="panel-note">الخط محلي (assets/fonts) — الأرقام من IBM Plex Sans والعربية من IBM Plex Sans Arabic. الأيقونات HugeIcons Stroke Rounded (MIT) تُحمَّل من أصولها الوحيدة assets/icons/*.svg — تعديل الأصل ينعكس هنا مباشرة دون نسخ ثانية.</p>
       <div class="font-probe">
         <span>حفظ العملية</span>
         <span class="digits">0123456789</span>
@@ -312,7 +376,7 @@
         <span>د.أ 1,240.50</span>
         <span>عرض 20px · عنوان 600</span>
       </div>
-      <p class="demo-note" style="margin-top:16px">الرموز المستخدمة في هذه الدفعة (عرض 24px):</p>
+      <p class="demo-note" style="margin-top:16px">الرموز المستخدمة في هذه الدفعة (عرض 24px) — محمّلة من assets/icons عبر board.js: <span id="icon-load-status">جارٍ التحميل من الأصول…</span></p>
       <div class="icon-row">
         <div class="icon-item"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="caption">search-01</span></div>
         <div class="icon-item"><svg aria-hidden="true"><use href="#i-filter"/></svg><span class="caption">filter-horizontal</span></div>
@@ -326,7 +390,7 @@
   </main>
 
   <footer class="board-footer">
-    المصدر: components/buttons/ (specification.md · buttons.css · buttons.js) — القيم: shared/tokens.css — طريقة التشغيل والتعديل: previews/buttons/README.md — نتائج الفحص: reviews/B01/review.md
+    المصدر: components/buttons/ (specification.md · buttons.css · buttons.js) — القيم: shared/tokens.css — مثال الاستخدام خارج اللوحة: previews/buttons/example-usage.html — طريقة التشغيل والتعديل: previews/buttons/README.md — نتائج الفحص: reviews/B01/review.md
   </footer>
 
   <script src="../../components/buttons/buttons.js"></script>

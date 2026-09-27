@@ -66,6 +66,13 @@ section.panel {
   line-height: 28px;
   font-weight: 600;
 }
+.panel > h3 {
+  margin: var(--micro-space-6) 0 var(--micro-space-2);
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.panel > h3:first-of-type { margin-block-start: 0; }
 .panel > .panel-note {
   margin: 0 0 var(--micro-space-4);
   color: var(--micro-text-secondary);
@@ -127,7 +134,9 @@ section.panel {
   line-height: 20px;
   margin: 0 0 var(--micro-space-2);
 }
-/* رسالة الاكتمال التجريبية المجاورة — لا تحويل لون الزر نفسه */
+/* رسالة الاكتمال التجريبية المجاورة — لا تحويل لون الزر نفسه.
+   إصلاح R1: قاعدة [hidden] صريحة — كان display:inline-flex في هذا
+   الصنف يلغي إخفاء hidden الافتراضي فتظهر الرسالة أثناء التحميل. */
 .demo-message {
   display: inline-flex;
   align-items: center;
@@ -140,11 +149,14 @@ section.panel {
   line-height: 22px;
   font-weight: 500;
 }
+.demo-message[hidden] { display: none; } /* الإخفاء يلغي العرض دائمًا */
 .demo-message svg { width: var(--micro-icon-in-button); height: var(--micro-icon-in-button); color: var(--micro-success); }
 
 /* ---- عمود هاتف بأبعاد CSS حقيقية ----
-   overflow-x محصور هنا عمدًا: عند شاشة أضيق من لوحة المقارنة يبقى
-   التمرير داخل هذا القسم وحده، ولا تمرّر الصفحة نفسها أفقيًا أبدًا. */
+   لوحة المقارنة الجانبية: overflow-x محصور هنا عمدًا كي يبقى تمرير
+   الأعمدة داخل هذا القسم وحده عند شاشة أضيق، ولا تمرّر الصفحة نفسها.
+   إثبات سلامة المكوّن على الهاتف لا يعتمد على هذه اللوحة — بل على
+   قسم «معاينة هاتف كاملة» أدناه بعرض منفصل غير مقصوص لكل مقاس. */
 .phone-lab {
   display: flex;
   flex-wrap: wrap;
@@ -176,8 +188,52 @@ section.panel {
 .phone-stack { display: flex; flex-direction: column; gap: var(--micro-space-3); }
 .phone-row { display: flex; flex-wrap: wrap; gap: var(--micro-space-3); align-items: center; }
 
-/* عيّنة أصعب مثال لتكبير 200% — تُضخّم عبر خاصية zoom من لوحة التحكم أدناه */
-#zoom-target { transition: none; }
+/* ---- قسم المعاينة الكاملة + تكبير النص (القسم 6 — بند 6 و8) ----
+   قسم مفتوح بلا بطاقة بيضاء: هامشه السالب يلغي هامش main (20px)
+   فيمتد القسم بعرض الشاشة الحقيقية، ويتسع عمود 320/390/430 كاملًا
+   داخل صفحة عرضه نفسه — دون قص ودون تمرير داخلي.
+   المقاسات الأعرض من الشاشة الحالية تُخفى: كل مقاس يُعاين عند عرضه. */
+.phone-full-section {
+  margin-inline: calc(-1 * var(--micro-space-5));
+}
+.phone-full-section > h2 {
+  margin: var(--micro-space-2) 0 var(--micro-space-1);
+  padding-inline: var(--micro-space-5);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.phone-full-section > .panel-note {
+  margin: 0 0 var(--micro-space-4);
+  padding-inline: var(--micro-space-5);
+  color: var(--micro-text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+.phone-full-block { margin-block: var(--micro-space-6); }
+.phone-full-block:first-of-type { margin-block-start: var(--micro-space-2); }
+.phone-full-block > .phone-title {
+  margin: 0 0 var(--micro-space-3);
+  padding-inline: var(--micro-space-5);
+}
+.phone-full-block .phone-demo { margin-inline: auto; }
+@media (max-width: 389.98px) {
+  .phone-full-block[data-w="390"],
+  .phone-full-block[data-w="430"] { display: none; }
+}
+@media (min-width: 390px) and (max-width: 429.98px) {
+  .phone-full-block[data-w="430"] { display: none; }
+}
+
+/* ---- محاكاة تكبير النص 200% داخل مساحة هاتف ثابتة (بند 8) ----
+   العمود يعاين أصعب الأمثلة بعرض مساحة العرض الفعلية (يتبع الشاشة).
+   زر المحاكاة في board.js يضاعف حجم الخط المحسوب لكل عناصر العمود
+   (مكافئ لتكبير النص في المتصفح): الخط يتضاعف، وتبقى الأيقونة والحشو
+   والارتفاعات الدنيا — والسطر نسبة 1.5 فيتمدد مع الخط.
+   الفحص المعتمد في tools/b01-screenshots.py يضغط الزر نفسه ويقيس
+   الالتفاف والتجاوز (sw/cw) — آلية CDP Emulation.setTextZoomFactor
+   أُزيلت من Chromium الحديث (تحقق فعلي 2026-09). */
+.phone-demo.zoom-lab { max-width: 100%; }
 
 /* ---- لوحة تحكم الفحص ---- */
 .lab-controls {

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام أدنى لمكوّن الأزرار خارج لوحة المعاينة
+  الغرض: إثبات أن buttons.js واجهة عامة — المستهلك يحدد بداية
+  التحميل ونهايته، ولا يوجد أي مؤقت أو سلوك عرض داخل المكوّن.
+  هذا الملف مستقل عن لوحة المعاينة ولا يستخدم board.js إطلاقًا.
+  التشغيل من جذر المستودع:
+    python3 -m http.server 8080
+    ثم http://localhost:8080/previews/buttons/example-usage.html
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال استخدام الأزرار خارج لوحة المعاينة</title>
+  <link rel="icon" href="data:,">
+  <!-- المستهلك يحمّل ثلاثة ملفات فقط: الخطوط، القيم المشتركة، شكل المكوّن -->
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>
+    /* تنسيق صفحة المثال فقط — لا علاقة له بشكل المكوّن */
+    body {
+      margin: 0;
+      padding: 24px 20px 40px;
+      background: var(--micro-surface-page);
+      color: var(--micro-text-primary);
+      font-family: var(--micro-font-family);
+      font-size: 16px;
+      line-height: 26px;
+    }
+    .usage-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
+    .usage-note { color: var(--micro-text-hint); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
+    /* رسالة نتيجة المستهلك — عنصر المستهلك هو، وليس جزءًا من المكوّن */
+    .usage-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--micro-success-surface);
+      color: var(--micro-success);
+      border-radius: var(--micro-radius-field);
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 500;
+    }
+    .usage-status[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:20px;line-height:30px;margin:0 0 8px">مثال استخدام أدنى</h1>
+  <p class="usage-note">المستهلك يحمّل المكوّن ويستدعي <span dir="ltr">MicroButtons.setLoading(btn, true|false)</span> بنفسه عند بدء عمله واكتماله. التسمية الإتاحية أثناء التحميل صريحة من المستهلك (<span dir="ltr">data-loading-label</span>)، والحفظ الثاني يخفي نجاح المحاولة السابقة أولًا.</p>
+
+  <div class="usage-row">
+    <button class="m-btn m-btn--primary" id="save-btn" data-loading-label="جارٍ الحفظ">
+      حفظ العملية
+    </button>
+    <span class="usage-status" id="save-status" hidden>تم الحفظ — نتيجة المستهلك (ليست من المكوّن)</span>
+  </div>
+  <p class="usage-note">زر ثانوي بنفس الواجهة، بلا أيقونة — أبعاده ثابتة أثناء التحميل:</p>
+  <div class="usage-row">
+    <button class="m-btn m-btn--secondary" id="sync-btn" data-loading-label="جارٍ المزامنة">
+      مزامنة البيانات
+    </button>
+  </div>
+
+  <!-- واجهة المكوّن العامة: لا مؤقتات ولا عروض تجريبية داخلها -->
+  <script src="../../components/buttons/buttons.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      /* مستهلك 1: حفظ — يبدأ التحميل عند النقر وينهيه عند اكتمال عمله هو.
+         الموقت هنا يمثل عمل المستهلك (شبكة/حفظ فعلي) وليس سلوك المكوّن. */
+      var saveBtn = document.getElementById('save-btn');
+      var saveStatus = document.getElementById('save-status');
+      saveBtn.addEventListener('click', function () {
+        if (saveBtn.getAttribute('aria-busy') === 'true') return; /* لا تكرار */
+        saveStatus.hidden = true; /* إخفاء نجاح المحاولة السابقة عند بدء محاولة جديدة */
+        MicroButtons.setLoading(saveBtn, true);
+        window.setTimeout(function () {
+          MicroButtons.setLoading(saveBtn, false);
+          saveStatus.hidden = false;
+        }, 1500);
+      });
+
+      /* مستهلك 2: زر نصي بلا أيقونة — نفس الواجهة بالضبط */
+      var syncBtn = document.getElementById('sync-btn');
+      syncBtn.addEventListener('click', function () {
+        if (syncBtn.getAttribute('aria-busy') === 'true') return;
+        MicroButtons.setLoading(syncBtn, true);
+        window.setTimeout(function () {
+          MicroButtons.setLoading(syncBtn, false);
+        }, 1500);
+      });
+    })();
+  </script>
+</body>
+</html>
