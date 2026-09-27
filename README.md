@@ -21,3 +21,11 @@
 
 ## الخطوة النشطة
 [تكليف الأزرار B01](prompts/B01-BUTTONS-ZAI.md) جاهز للإرسال إلى ZAI Flash. المصدر القابل للتعديل إلزامي، ولا يوجد تنفيذ لهذه الدفعة بعد. راجع [القائمة](docs/COMPONENT-INVENTORY.md) و[عقد التسليم](docs/EDITABLE-DELIVERY.md).
+
+## التكليف الأحدث — 2026-09-28
+
+- [تكليف ZAI](prompts/UI-LIBRARY-EXPANSION-ZAI.md)
+- [المعايير والنطاق والتسليم](docs/UI-LIBRARY-EXECUTION-BRIEF.md)
+- [مصفوفة الحالات والسيناريوهات](docs/UI-COVERAGE-MATRIX.md)
+
+B01 ما زال مسودة في PR #1؛ هذه ملفات تكليف، وليست إعلان اكتمال المكتبة.

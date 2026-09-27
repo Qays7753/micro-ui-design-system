@@ -16,3 +16,11 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 
 ## تجهيز إنتاج المكوّنات
 قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، تكليف ../prompts/B01-BUTTONS-ZAI.md، وقالب ../reviews/REVIEW-TEMPLATE.md. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
+
+## حزمة تكليف التوسع — 2026-09-28
+
+- UI-LIBRARY-EXECUTION-BRIEF.md: معايير التنفيذ والمصدر والتبعيات.
+- UI-COVERAGE-MATRIX.md: متطلبات التغطية، وليست نتائج اختبار.
+- ../prompts/UI-LIBRARY-EXPANSION-ZAI.md: رسالة بدء التنفيذ.
+
+الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها.
