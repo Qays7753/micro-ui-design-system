@@ -13,3 +13,6 @@
 README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيفت مع هذه الحزمة.
 
 ملاحظات تقرير الاحتياجات: [المراجعة](../reviews/component-needs-review.md).
+
+## تجهيز إنتاج المكوّنات
+قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، تكليف ../prompts/B01-BUTTONS-ZAI.md، وقالب ../reviews/REVIEW-TEMPLATE.md. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
