@@ -63,7 +63,10 @@
   line-height: var(--micro-amount2-line);
 }
 
-/* مؤشر اتجاه (مقارنة): سهم + نسبة — لا لون وحده، دائمًا مع نص */
+/* مؤشر اتجاه (مقارنة): سهم + نسبة — لا لون وحده، دائمًا مع نص.
+   E09: الاتجاه (up/down/flat) يحدد شكل السهم فقط — اللون من tone
+   يمرره المستهلك (tone-positive/negative) أو الافتراضي المحايد؛
+   الاتجاه وحده لا يحدد جودة النتيجة (صاعد قد يكون سوءًا). */
 .m-stat__delta {
   display: inline-flex;
   align-items: center;
@@ -74,11 +77,15 @@
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
+  color: var(--micro-text-hint); /* الافتراضي: محايد */
 }
 .m-stat__delta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.m-stat__delta--up   { color: var(--micro-success); }
-.m-stat__delta--down { color: var(--micro-danger); }
-.m-stat__delta--flat { color: var(--micro-text-hint); }
+.m-stat__delta--tone-positive { color: var(--micro-success); }
+.m-stat__delta--tone-negative { color: var(--micro-danger); }
+/* اتجاه فقط — بلا لون (منطق الجودة عند المستهلك) */
+.m-stat__delta--up,
+.m-stat__delta--down,
+.m-stat__delta--flat { /* لا قاعدة لونية — الاتجاه في الترميز/السهم */ }
 
 /* مقارنة فترتين/حالتين: عمودان بقيم كاملة لا اختصار يخفي المبلغ */
 .m-compare {
@@ -105,6 +112,17 @@
 }
 .m-chart__plot { width: 100%; }
 .m-chart__plot svg { display: block; width: 100%; height: auto; }
+/* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
+.m-chart__error {
+  margin: 0;
+  padding: var(--micro-space-3) var(--micro-space-4);
+  border: 1.5px dashed var(--micro-warning);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-warning-surface);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
 .m-chart__summary {
   margin: 0;
   font-size: var(--micro-secondary-size);

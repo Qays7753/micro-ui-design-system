@@ -1,4 +1,5 @@
-/* محاكاة لوحة الاختيار B03 — كلها خارج المكوّن */
+/* محاكاة لوحة الاختيار B03 — كلها خارج المكوّن: بيانات + انتظار/فشل فقط.
+   المنتقي نفسه عقد عام في components/selection/picker.js */
 (function () {
   'use strict';
 
@@ -41,21 +42,24 @@
     });
   });
 
-  /* قائمة الاختيار: مسح الاختيار + ملخص */
+  /* قائمة الاختيار: مسح الاختيار (المفعّلة فقط — المعطل لا يُلمس) */
   var clearBtn = document.querySelector('[data-clear-list]');
   if (clearBtn) clearBtn.addEventListener('click', function () {
     document.querySelectorAll('[data-choice-group] [data-choice-item]').forEach(function (b) {
-      if (b.closest('.picker-sheet')) b.checked = false;
+      if (b.closest('.demo-card') && !b.disabled) b.checked = false;
     });
     document.dispatchEvent(new Event('micro-selection:changed', { bubbles: true }));
   });
 
-  /* منتقي الكيان: بحث محاكى + حالات قراءة + اختيار ومسح */
-  var list = document.getElementById('picker-list');
-  var search = document.getElementById('picker-search');
+  /* ======== منتقي الكيان في طبقة B07: بيانات ومحاكاة فقط ======== */
+  var DATA = [
+    { value: 'petrol', label: 'شركة البترول الوطنية' },
+    { value: 'noor', label: 'مؤسسة النور للتوريدات' },
+    { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' },
+    { value: 'watania', label: 'الشركة الوطنية للإمداد' }
+  ];
+  var picker = document.getElementById('entity-picker');
   var status = document.querySelector('[data-picker-status]');
-  var summary = document.querySelector('[data-picker-summary]');
-  var options = list ? [].slice.call(list.querySelectorAll('.picker-option')) : [];
 
   function showStatus(text, tone) {
     if (!status) return;
@@ -63,44 +67,37 @@
     status.setAttribute('data-tone', tone);
     status.textContent = text;
   }
-  document.querySelectorAll('[data-picker-demo]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var mode = btn.getAttribute('data-picker-demo');
-      list.innerHTML = '<div class="picker-option is-loading-row">جارٍ القراءة… (محاكاة)</div>';
-      showStatus('انتظار…', 'info');
-      window.setTimeout(function () {
-        if (mode === 'empty') {
-          list.innerHTML = '<div class="picker-option is-loading-row">لا نتائج مطابقة — جرّب اسمًا آخر</div>';
-          showStatus('لا نتائج', 'info');
-        } else if (mode === 'fail') {
-          list.innerHTML = '<div class="picker-option is-loading-row">تعذر القراءة</div>';
-          showStatus('فشل قراءة — أعد المحاولة (أزرار المحاكاة تعيد التحميل)', 'error');
-        } else {
-          restoreOptions();
-          showStatus('تمت القراءة (محاكاة)', 'success');
-        }
-      }, 900);
+
+  /* فشل القراءة: زر «إعادة المحاولة» من المكوّن يطلق micro-picker:retry */
+  if (picker) {
+    picker.addEventListener('micro-picker:retry', function () { simulate('loading'); });
+    picker.addEventListener('micro-picker:change', function (e) {
+      showStatus(e.detail && e.detail.label ? 'تم الاختيار (محاكاة)' : 'أُمسح الاختيار', e.detail && e.detail.label ? 'success' : 'info');
     });
-  });
-  function restoreOptions() {
-    list.innerHTML = '';
-    options.forEach(function (o) { list.appendChild(o); });
+    var clearSel = picker.querySelector('[data-picker-clear]');
+    if (clearSel) clearSel.addEventListener('click', function () { MicroPicker.clearSelection(picker); });
   }
-  if (search) search.addEventListener('input', function () {
-    var q = search.value.trim();
-    if (!q) { options.forEach(function (o) { o.hidden = false; }); return; }
-    options.forEach(function (o) { o.hidden = o.textContent.indexOf(q) === -1; });
-    var visible = options.filter(function (o) { return !o.hidden; });
-    if (!visible.length && list.querySelector('.picker-option')) {
-      /* لا نتائج محاكاة بحسب نص البحث */
-      list.querySelectorAll('.picker-option').forEach(function (o) { if (o.hidden) o.style.display = 'none'; });
-    }
-  });
-  list && list.addEventListener('click', function (e) {
-    var opt = e.target.closest('.picker-option[data-value]');
-    if (!opt) return;
-    options.forEach(function (o) { o.setAttribute('aria-selected', 'false'); });
-    opt.setAttribute('aria-selected', 'true');
-    if (summary) summary.textContent = 'المحدد: ' + opt.textContent.trim();
+
+  function simulate(mode) {
+    if (!picker) return;
+    MicroPicker.setStatus(picker, 'loading', 'جارٍ القراءة… (محاكاة)');
+    showStatus('انتظار…', 'info');
+    window.setTimeout(function () {
+      if (mode === 'empty') {
+        MicroPicker.setOptions(picker, []);
+        MicroPicker.setStatus(picker, 'empty', 'لا نتائج مطابقة — جرّب اسمًا آخر (محاكاة)');
+        showStatus('لا نتائج', 'info');
+      } else if (mode === 'fail') {
+        MicroPicker.setStatus(picker, 'error', 'تعذر القراءة (محاكاة) — زر إعادة المحاولة من المكوّن');
+        showStatus('فشل قراءة — أعد المحاولة', 'error');
+      } else {
+        MicroPicker.setOptions(picker, DATA);
+        MicroPicker.setStatus(picker, 'ready');
+        showStatus('تمت القراءة (محاكاة)', 'success');
+      }
+    }, 900);
+  }
+  document.querySelectorAll('[data-picker-demo]').forEach(function (btn) {
+    btn.addEventListener('click', function () { simulate(btn.getAttribute('data-picker-demo')); });
   });
 })();

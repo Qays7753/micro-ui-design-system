@@ -41,10 +41,30 @@
           <div class="m-stat">
             <span class="m-stat__label">إجمالي المبيعات — اليوم</span>
             <span class="m-stat__value"><span class="m-stat__num">1,240.50</span><span class="m-stat__unit">د.أ</span>
-              <span class="m-stat__delta m-stat__delta--up"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12%</span>
+              <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12%</span>
             </span>
           </div>
-          <span class="caption">مبلغ رئيسي 36/44 + مؤشر صاعد بنصه</span>
+          <span class="caption">مبلغ رئيسي 36/44 + مؤشر صاعد بنصه — tone موجب من المستهلك</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">مرتجعات هذا الأسبوع</span>
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">37</span><span class="m-stat__unit">عملية</span>
+              <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-negative"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+9</span>
+            </span>
+          </div>
+          <span class="caption">E09: الاتجاه ≠ الجودة — صاعد لكن tone سلبي يمرره المستهلك (المكوّن بلا منطق مالي)</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">عدد الزيارات</span>
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">212</span><span class="m-stat__unit">زيارة</span>
+              <span class="m-stat__delta m-stat__delta--down"><svg aria-hidden="true"><use href="#i-arrow-down"/></svg>-3</span>
+            </span>
+          </div>
+          <span class="caption">بدون صنف tone: الافتراضي محايد — الاتجاه وحده لا يعطي لون نجاح/خطر</span>
         </div>
 
         <div class="example" style="width:300px;max-width:100%">
@@ -165,13 +185,14 @@
         </div>
 
         <div class="example" style="width:340px;max-width:100%">
-          <div class="m-chart" data-chart="bubbles" data-max="100" data-title="حجم مبيعات الفروع (مساحة ∝ القيمة)" data-summary-text="المساحة تتناسب مع القيمة: 100 و49 و25 و4 و1. القيمة 1 دائرتها صغيرة وتسميتها خارجية. الصفر حلقة شرطة، والناقص «— غير متاح»، والسالب غير صالح للمساحة.">
+          <div class="m-chart" data-chart="bubbles" data-max="100" data-title="حجم مبيعات الفروع (مساحة ∝ القيمة)" data-summary-text="المساحة تتناسب مع القيمة: 100 و49 و25 و4 و1 و0.01. القيمة الصغيرة دائرتها بحدّها الحقيقي وتسميتها خارجية. الصفر حلقة شرطة، والناقص «— غير متاح»، والسالب غير صالح للمساحة.">
             <h3 class="m-chart__title">مبيعات الفروع (وحدة)</h3>
             <ul class="m-chart__data" hidden>
               <li data-series="a" data-label="الفرع الرئيسي" data-value="100"></li>
               <li data-series="b" data-label="الفرع الثاني" data-value="49"></li>
               <li data-series="c" data-label="الفرع الثالث" data-value="25"></li>
               <li data-series="d" data-label="كشك" data-value="1"></li>
+              <li data-series="e" data-label="نقطة بيع" data-value="0.01"></li>
               <li data-series="a" data-label="مغلق" data-value="0"></li>
               <li data-series="b" data-label="مستودع" data-value=""></li>
               <li data-series="c" data-label="تسوية" data-value="-5"></li>
@@ -179,7 +200,72 @@
             <div class="m-chart__plot" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
-          <span class="caption">مساحة صحيحة √القيمة + بدائل الصفر/الناقص/السالب</span>
+          <span class="caption">مساحة صحيحة √القيمة بلا حد أدنى يضخّم (0.01 قطرها 0.52px حرفيًا) + بدائل الصفر/الناقص/السالب</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) حالات الحدود الصعبة (E06) ================= -->
+    <section class="panel" id="edge-cases">
+      <h2>5) حالات الحدود الصعبة — E06 (لا تمثيل مضلل)</h2>
+      <p class="panel-note">حالات مثبتة في المراجعة: عمود بقيمة سالبة (لا يُرسم كموجب)، توزيع بكل القيم صفرية (بلا قسمة على صفر)، توزيع مجموعه أكبر من مقامه (fallback صريح بلا نسب متداخلة)، والخط ينقطع عند القيمة المفقودة (لا وصلة صامتة عبر الفجوة).</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="عمود بقيمة سالبة" data-summary-text="السالب غير مدعوم في الأعمدة: يُعرض بقيمته وسببه بلا رسم كموجب.">
+            <h3 class="m-chart__title">عمود بقيمة سالبة (-5)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="8"></li>
+              <li data-series="b" data-label="تسوية" data-value="-5"></li>
+              <li data-series="c" data-label="مشتريات" data-value="4"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">سالب: علامة شرطة + نص القيمة والسبب بلون التحذير — لا عمود موجب وهمي</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="donut" data-total="100" data-total-label="طلب" data-title="توزيع بكل القيم صفر" data-summary-text="كل القيم صفر: حالة صفرية واضحة — 0 في الوسط وحلقة محايدة بلا نسب.">
+            <h3 class="m-chart__title">كل القيم صفر (0 من 100)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتمل" data-value="0"></li>
+              <li data-series="b" data-label="قيد التجهيز" data-value="0"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">صفرية: حلقة محايدة و0 في الوسط — بلا dasharray NaN ولا قسمة على صفر</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="donut" data-total="100" data-total-label="بند" data-title="مجموع الفئات أكبر من المقام" data-summary-text="المجموع 110 والمقام 100: fallback صريح — رسالة سبب ومفتاح بقيم خام بلا نسب.">
+            <h3 class="m-chart__title">مجموع 110 ومقام 100</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتمل" data-value="60"></li>
+              <li data-series="b" data-label="قيد التجهيز" data-value="30"></li>
+              <li data-series="c" data-label="متأخر" data-value="20"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">مقام غير مطابق: رسالة خطأ ظاهرة + قيم خام — لا رسم يتجاوز دورة كاملة</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--line" data-chart="line" data-max="10" data-title="خط بقيمة مفقودة (انقطاع حقيقي)" data-summary-text="الاثنين مفقود: الخط ينقطع فعليًا — لا وصلة صامتة بين الأحد والأربعاء.">
+            <h3 class="m-chart__title">انقطاع عند القيمة المفقودة</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="السبت" data-value="4"></li>
+              <li data-series="a" data-label="الأحد" data-value="6"></li>
+              <li data-series="a" data-label="الاثنين" data-value=""></li>
+              <li data-series="a" data-label="الأربعاء" data-value="5"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">شرائح منفصلة عند الفجوة — يفحصها عدّاد polylines في السكربت</span>
         </div>
 
       </div>
@@ -187,7 +273,7 @@
 
     <!-- ================= 5) تقدم وخطوات ================= -->
     <section class="panel" id="tracking">
-      <h2>5) تقدم وخطوات — DATA-04</h2>
+      <h2>6) تقدم وخطوات — DATA-04</h2>
       <p class="panel-note">المحدد له قيمة معلنة، وغير المحدد انتظار بتسمية واضحة (وتقليل الحركة يجعله ثابتًا). الخطوات: أسماؤها وترتيبها من المستهلك — لا نبتكر دورة عمل.</p>
       <div class="example-grid" style="align-items:stretch">
 
@@ -240,7 +326,7 @@
 
     <!-- ================= 6) هاتف + تكبير ================= -->
     <section class="phone-full-section" id="phones-full">
-      <h2>6) هاتف كامل + محاكاة زيادة حجم الخط</h2>
+      <h2>7) هاتف كامل + محاكاة زيادة حجم الخط</h2>
       <div class="lab-controls">
         <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
         <span class="demo-note">تُطبّق على العمود أدناه فقط — التسميات والقيم تتضاعف والرسم يتمدد بنسبه.</span>
@@ -270,7 +356,7 @@
 
     <!-- ================= 7) فحص الخط والأيقونات ================= -->
     <section class="panel" id="assets-check">
-      <h2>7) فحص الخط والأيقونات</h2>
+      <h2>8) فحص الخط والأيقونات</h2>
       <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
       <div class="icon-row">
         <div class="icon-item"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg><span class="caption">arrow-up02</span></div>

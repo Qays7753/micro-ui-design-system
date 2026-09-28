@@ -13,10 +13,14 @@
   }
   if (toastBtn) toastBtn.addEventListener('click', showToast);
   if (repeatBtn) repeatBtn.addEventListener('click', showToast); /* إعلان دون تكرار نفس النص المتتالي */
-  var toastClose = document.querySelector('[data-toast-close]');
-  if (toastClose) toastClose.addEventListener('click', function () {
-    if (toastEl) { toastEl.hidden = true; if (toastEl.dataset.toastTimer) { clearTimeout(parseInt(toastEl.dataset.toastTimer, 10)); delete toastEl.dataset.toastTimer; } }
-  });
+  /* E01: الإغلاق اليدوي في المصدر (MicroMessages.closeToast عبر
+     bindClose على [data-toast-close]) — اللوحة لا تكرره. البديل
+     الثابت يظهر فورًا ويبقى (رسالة مهمة لا تختفي مع العابرة). */
+  if (toastEl) {
+    toastEl.addEventListener('micro-messages:toast-closed', function () {
+      if (mirror) mirror.setAttribute('data-tone', 'info');
+    });
+  }
 
   /* فشل القراءة: إعادة محاولة محاكاة (skeleton ثم قائمة نتيجة) */
   var retryBtn = document.querySelector('[data-retry-demo]');

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 160" preserveAspectRatio="none">
+  <!-- E12 (PROPOSED) — تنقيح الموجة: تدرجات أنعم، تلاشى أوضح نحو الأعلى،
+       شدة أقل كي تضيف عمقًا خلف المحتوى ولا تنافسه.
+       الألوان من الأسس المعتمدة نفسها (#DFEEE6 / #F4AD75 / #F7F8F4) —
+       لا لون جديد. التلاشى بتدرج خطي عمودي لكل طبقة (شفافية أعلى). -->
+  <defs>
+    <linearGradient id="wv2-a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#DFEEE6" stop-opacity="0.055"/>
+      <stop offset="1" stop-color="#DFEEE6" stop-opacity="0.10"/>
+    </linearGradient>
+    <linearGradient id="wv2-b" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4AD75" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#F4AD75" stop-opacity="0.035"/>
+      <stop offset="1" stop-color="#F4AD75" stop-opacity="0.065"/>
+    </linearGradient>
+    <linearGradient id="wv2-c" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7F8F4" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#F7F8F4" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#F7F8F4" stop-opacity="0.085"/>
+    </linearGradient>
+  </defs>
+  <!-- الطبقات الثلاث: انحناءات أنعم (مضاعفة نقاط التحكم) وتداخل أقل -->
+  <path fill="url(#wv2-a)" d="M0,78 C60,58 130,96 200,76 C265,58 320,70 375,56 L375,160 L0,160 Z"/>
+  <path fill="url(#wv2-b)" d="M0,112 C80,92 180,126 270,106 C320,96 355,102 375,98 L375,160 L0,160 Z"/>
+  <path fill="url(#wv2-c)" d="M0,140 C110,126 250,152 375,132 L375,160 L0,160 Z"/>
+</svg>

@@ -122,6 +122,13 @@
   --micro-amount2-size: 22px;           /* مبلغ ثانوي 22/32 */
   --micro-amount2-line: 1.4545;
 
+  /* ---- نصوص السطح البترولي S01 (PROPOSED — E12: موحدة هنا بدل
+     تكرار 22px/36px مباشرة في surfaces.css؛ تُعتمد بقرار المالك) ---- */
+  --micro-surface-title-size: 22px;     /* عنوان السطح 22/36 */
+  --micro-surface-title-line: 36px;
+  --micro-surface-amount-size: 36px;    /* مبلغ السطح 36/44 — نفس المبلغ الرئيسي */
+  --micro-surface-amount-line: 44px;
+
   /* ---- العمق ---- */
   --micro-shadow-emphasis: 0 3px 8px rgba(22, 77, 89, 0.14); /* ظل الزر البارز — للأساسي فقط افتراضيًا */
   --micro-shadow-overlay: 0 10px 28px rgba(23, 45, 50, 0.12); /* سطح مؤقت مرتفع — دفعات الطبقات */

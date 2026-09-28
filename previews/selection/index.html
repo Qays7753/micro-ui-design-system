@@ -3,10 +3,10 @@
   Micro UI — لوحة معاينة الاختيار (B03)
   الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
     python3 -m http.server 8080 → /previews/selection/
-  المكوّن: components/selection/ (+ fields و buttons كما هما)
-  محاكاة الإعداد غير المتزامن وقارئات القائمة في board.js — خارج المكوّن.
-  لوحة المنتقي/القائمة تستخدم طبقة مؤقتة مبسطة — تستكمل بطبقة B07
-  النهائية ويُحدَّث تتبعها (تكليف التوسعة §7.3).
+  المكوّن: components/selection/ (selection + picker) (+ fields و buttons و navigation للطبقة كما هي)
+  المنتقي في المصدر القابل لإعادة الاستخدام (picker.css/picker.js) — E04.
+  لوحة المنتقي تزوّد بيانات ومحاكاة انتظار/فشل فقط (board.js).
+  المنتقي يعمل مضمّنًا وداخل طبقة B07 الحقيقية (MicroNavigation).
 ========================================================= -->
 <html lang="ar" dir="rtl">
 <head>
@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="../../components/buttons/buttons.css">
   <link rel="stylesheet" href="../../components/fields/fields.css">
   <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/selection/picker.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
   <link rel="stylesheet" href="../board-base.css">
   <link rel="stylesheet" href="board.css">
 </head>
@@ -190,14 +192,14 @@
     <!-- ================= 3) قائمة اختيار + منتقي كيان ================= -->
     <section class="panel" id="pickers">
       <h2>3) قائمة اختيار واختيار كيان قابل للبحث — SEL-03</h2>
-      <p class="panel-note">بيانات المستهلك تمرر (لا شبكة حقيقية). القصير/الطويل، البحث، الانتظار، لا نتائج، فشل القراءة، الاختيار والمسح. الطبقة هنا مؤقتة مبسطة — تستكمل بطبقة B07 ويُحدَّث التتبع قبل التقرير النهائي.</p>
+      <p class="panel-note">بيانات المستهلك تمرر (لا شبكة حقيقية). المنتقي في المصدر (components/selection/picker.*) — اللوحة بيانات ومحاكاة فقط. يُفتح في طبقة B07 الحقيقية (حصر تركيز + عزل خلفية) أو مضمّنًا.</p>
 
       <div class="example-grid" style="align-items:stretch">
 
         <div class="example" style="width:320px;max-width:100%">
-          <p class="demo-note">قائمة اختيار متعدد (صفوف داخل طبقة مؤقتة):</p>
-          <div class="picker-sheet" data-choice-group>
-            <div class="picker-sheet__head">
+          <p class="demo-note">قائمة اختيار متعدد (صفوف داخل بطاقة عرض فقط):</p>
+          <div class="demo-card" data-choice-group>
+            <div class="m-picker__head">
               <span>تصفية حسب المورد</span>
               <button type="button" class="m-btn m-btn--light" data-clear-list>مسح الاختيار</button>
             </div>
@@ -216,39 +218,15 @@
               <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
               <span class="m-choice__text">مورد محلي — الاسم الطويل جدًا الذي يلتف على سطرين دون قص</span>
             </label>
-            <p class="picker-sheet__foot">2 من 3 محدد في هذا المثال (بيانات تجريبية)</p>
+            <p class="m-picker__foot">2 من 3 محدد في هذا المثال (بيانات تجريبية)</p>
           </div>
         </div>
 
         <div class="example" style="width:320px;max-width:100%">
-          <p class="demo-note">منتقي كيان (مورد) بحقل بحث B02 وحالات قراءة محاكاة:</p>
-          <div class="picker-sheet">
-            <div class="picker-sheet__head">
-              <span id="picker-title">اختيار المورد</span>
-              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-            </div>
-            <div class="m-field" data-micro-field>
-              <label class="m-field__label" for="picker-search">بحث</label>
-              <div class="m-field__control">
-                <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
-                <input class="m-field__input" id="picker-search" type="search" autocomplete="off" placeholder="اسم المورد…">
-                <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-              </div>
-            </div>
-            <div class="picker-sheet__list" id="picker-list" role="listbox" aria-label="النتائج">
-              <button type="button" class="picker-option" role="option" aria-selected="false" data-value="petrol">شركة البترول الوطنية</button>
-              <button type="button" class="picker-option" role="option" aria-selected="false" data-value="noor">مؤسسة النور للتوريدات</button>
-              <button type="button" class="picker-option" role="option" aria-selected="false" data-value="fawry">مأمورية فوري — فرع وسط المدينة</button>
-            </div>
-            <div class="picker-sheet__foot demo-group">
-              <span class="demo-status" data-picker-status hidden></span>
-              <span data-picker-summary>المحدد: لا شيء — أو مسح الاختيار من هنا</span>
-            </div>
-            <div class="demo-group" style="margin-top:8px">
-              <button type="button" class="m-btn m-btn--secondary" data-picker-demo="loading">محاكاة: انتظار</button>
-              <button type="button" class="m-btn m-btn--secondary" data-picker-demo="empty">محاكاة: لا نتائج</button>
-              <button type="button" class="m-btn m-btn--secondary" data-picker-demo="fail">محاكاة: فشل قراءة</button>
-            </div>
+          <p class="demo-note">منتقي كيان (مورد) في طبقة B07 — بحث وحالات قراءة محاكاة (أزرار المحاكاة داخل الطبقة كي تعمل أثناء العزل):</p>
+          <div class="demo-group" style="flex-direction:column;align-items:stretch;gap:8px">
+            <button type="button" class="m-btn m-btn--primary" data-layer-open="picker-layer">فتح المنتقي (طبقة B07)</button>
+            <span class="demo-status" data-picker-status hidden></span>
           </div>
         </div>
 
@@ -328,6 +306,39 @@
 
   </main>
 
+  <!-- ============ طبقة المنتقي (B07 حقيقية — خارج main) ============ -->
+  <div class="m-layer-backdrop" data-for="picker-layer" hidden></div>
+  <div class="m-layer" id="picker-layer" role="dialog" aria-modal="true" aria-labelledby="picker-layer-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="picker-layer-title">اختيار المورد</span>
+    </div>
+    <div class="m-layer__body">
+      <div class="m-picker" data-micro-picker id="entity-picker">
+        <div class="m-picker__head">
+          <span class="m-picker__title">ابحث واختر</span>
+          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        </div>
+        <input class="m-picker__input" id="picker-search" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم" placeholder="اسم المورد…">
+        <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="petrol">شركة البترول الوطنية</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="noor">مؤسسة النور للتوريدات</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="fawry">مأمورية فوري — فرع وسط المدينة</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="watania">الشركة الوطنية للإمداد</button>
+        </div>
+        <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
+        <div class="demo-group">
+          <button type="button" class="m-btn m-btn--light" data-picker-clear>مسح الاختيار</button>
+        </div>
+        <div class="demo-group">
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="loading">محاكاة: انتظار</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="empty">محاكاة: لا نتائج</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="fail">محاكاة: فشل قراءة</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="ready">محاكاة: نتائج سليمة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="board-footer">
     المصدر: components/selection/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/selection/README.md — النتائج: reviews/B03/review.md — فهرس اللوحات: previews/index.html
   </footer>
@@ -335,6 +346,8 @@
   <script src="../../components/buttons/buttons.js"></script>
   <script src="../../components/fields/fields.js"></script>
   <script src="../../components/selection/selection.js"></script>
+  <script src="../../components/selection/picker.js"></script>
+  <script src="../../components/navigation/navigation.js"></script>
   <script src="../board.js"></script>
   <script src="board.js"></script>
 </body>

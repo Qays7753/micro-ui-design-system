@@ -115,34 +115,70 @@ def main():
 
         # ---- لقطات ----
         page.locator("#compare").screenshot(path=str(SHOTS / "01-compare-390.png"))
+        page.locator("#wave-v2").screenshot(path=str(SHOTS / "06-wave-v2-compare-390.png"))
         page.locator("#rules").screenshot(path=str(SHOTS / "02-rules-390.png"))
         page.locator("#motion").screenshot(path=str(SHOTS / "03-motion-390.png"))
         page.screenshot(path=str(SHOTS / "00-overview-390-full.png"), full_page=True)
 
-        # ---- 320/430: السطح بأصغر وأكبر عرض + تكبير 200% ----
-        for width in (320, 390, 430):
+        # ---- E12: مقارنة الموجة قبل/بعد تعمل بالحجم العادي ومحتوى قصير ----
+        v2 = page.evaluate(
+            """() => { const s = document.querySelector('.m-surface--waves-v2');
+                 if (!s) return {exists: false};
+                 const w = s.querySelector('.m-surface__waves');
+                 const bg = getComputedStyle(w).backgroundImage;
+                 const amount = s.querySelector('.m-surface__amount');
+                 return {exists: true, v2bg: bg.includes('waves-soft-v2'),
+                         oldBg: getComputedStyle(document.querySelector('.m-surface--waves .m-surface__waves')).backgroundImage.includes('waves-soft.svg'),
+                         amountVisible: amount.getBoundingClientRect().height > 0}; }""")
+        check("A9 مقارنة E12: بعد v2 بتدرج/تلاشى أعمّ بجانب الأصل بالحجم العادي ومحتوى قصير",
+              v2.get("exists") and v2["v2bg"] and v2["oldBg"] and v2["amountVisible"], str(v2))
+
+        # ---- E1: تعديل توكن → انعكاس → استعادة ----
+        tok = page.evaluate(
+            """() => { const root = document.documentElement.style;
+                 const s = document.querySelector('.m-surface--waves');
+                 const before = s.querySelector('.m-surface__waves').getBoundingClientRect().height;
+                 root.setProperty('--micro-surface-wave-height', '25%');
+                 const after = s.querySelector('.m-surface__waves').getBoundingClientRect().height;
+                 root.removeProperty('--micro-surface-wave-height');
+                 const restored = s.querySelector('.m-surface__waves').getBoundingClientRect().height;
+                 return {before: Math.round(before), after: Math.round(after), restored: Math.round(restored)}; }""")
+        check("E1 تعديل توكن الموجة → انعكاس → استعادة",
+              tok["after"] < tok["before"] and tok["restored"] == tok["before"], str(tok))
+
+        # ---- 320/360/390/430: السطح بأصغر وأكبر عرض + تكبير 200% ----
+        for width in (320, 360, 390, 430):
             c = browser.new_context(viewport={"width": width, "height": 900})
             pg = c.new_page()
             pg.goto(board)
             pg.wait_for_load_state("networkidle")
             ov = pg.evaluate("() => ({sw: document.scrollingElement.scrollWidth, cw: document.scrollingElement.clientWidth})")
             check(f"B1 {width}px بلا تمرير أفقي", ov["sw"] <= ov["cw"], str(ov))
-            if width in (320, 390):
+            if width in (320, 390, 430):
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(250)
                 tz = pg.evaluate(
                     """() => { const t = document.getElementById('text-zoom-target');
                          const title = t.querySelector('.m-surface__title');
                          const amount = t.querySelector('.m-surface__amount');
+                         const surf = t.querySelector('.m-surface');
+                         const ar = amount.getBoundingClientRect();
+                         const sr = surf.getBoundingClientRect();
+                         // E07: بلا قصّ — الرقم كامله داخل السطح (حدود داخلية بهامش 4px)
+                         const notClipped = ar.left >= sr.left + 2 && ar.right <= sr.right - 2
+                                            && ar.top >= sr.top && ar.bottom <= sr.bottom + 0.5;
                          return {titleFont: getComputedStyle(title).fontSize,
                                  amountFont: getComputedStyle(amount).fontSize,
-                                 amountW: Math.round(amount.getBoundingClientRect().width),
+                                 overflow: getComputedStyle(surf).overflow,
+                                 notClipped,
                                  sw: t.scrollWidth, cw: t.clientWidth}; }""")
-                check(f"B2 {width}px تكبير 200%: العنوان 44px والرقم 72px والمحتوى داخل العمود",
+                check(f"B2 {width}px تكبير 200%: العنوان 44px والرقم 72px داخل السطح بلا قصّ (overflow ظاهر)",
                       tz["titleFont"] == "44px" and tz["amountFont"] == "72px"
+                      and tz["overflow"] == "visible" and tz["notClipped"]
                       and tz["sw"] <= tz["cw"] + 1, str(tz))
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / f"04-surface-zoom-{width}.png"))
                 pg.click('[data-lab="text-zoom"]')
+                pg.wait_for_timeout(200)
             c.close()
 
         # ---- تفضيل تقليل الحركة الفعلي (Playwright) ----

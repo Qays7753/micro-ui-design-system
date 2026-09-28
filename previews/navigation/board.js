@@ -5,7 +5,8 @@
   var panel = document.getElementById('filter-panel');
   if (!trigger || !panel) return;
   panel.addEventListener('micro-navigation:filters-applied', function (e) {
-    var n = Object.keys(e.detail.applied || {}).filter(function (k) { return e.detail.applied[k]; }).length;
+    var n = typeof e.detail.count === 'number' ? e.detail.count
+      : Object.keys(e.detail.applied || {}).filter(function (k) { return e.detail.applied[k]; }).length;
     var counter = trigger.querySelector('[data-filter-count]');
     if (!counter) return;
     counter.textContent = String(n);

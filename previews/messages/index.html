@@ -194,8 +194,11 @@
 
   </main>
 
-  <!-- الرسالة العابرة (عقد MicroMessages.toast) + منطقة الإعلان المشتركة -->
-  <div class="m-toast" data-toast hidden role="status">
+  <!-- الرسالة العابرة (عقد MicroMessages.toast) + منطقة الإعلان المشتركة.
+       E01: بلا role/aria-live هنا — الإعلان مسار واحد عبر منطقة live
+       التي يديرها المكوّن (لا مسارين لنفس الرسالة). زر الإغلاق يمر
+       بعقد MicroMessages.closeToast في المصدر. -->
+  <div class="m-toast" data-toast hidden>
     <span class="m-toast__text">تم النسخ إلى سجل اليوم (محاكاة)</span>
     <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
   </div>

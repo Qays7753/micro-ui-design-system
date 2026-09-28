@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل لمنتقي B03 — SYS-02/E11/E04
+  لا board.css ولا board.js. المصادر: tokens + selection/picker
+  + navigation (الطبقة B07) + buttons (أزرار) — تركيب عائلات موثق.
+  يثبت عقد المنتقي كعقد واحد: فتح في طبقة → بحث جزئي → نص بلا
+  نتائج → مسح الاستعلام (تعود النتائج — لا عالقة) → اختيار →
+  مسح الاختيار → إغلاق وإعادة فتح. النتائج في الصفحة وconsole.
+  التشغيل: python3 -m http.server 8080 من الجذر ثم
+  /previews/selection/example-usage.html
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: منتقي الكيان (B03+E04)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/selection/picker.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <style>
+    body { font-family: var(--micro-font-family); margin: 16px; background: #F7F8F4; }
+    pre { background: #fff; border: 1px solid var(--micro-border-divider); border-radius: 8px; padding: 10px; font-size: 12px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — منتقي كيان في طبقة B07</h1>
+  <button type="button" class="m-btn m-btn--primary" data-layer-open="pick-layer" id="open-pick">اختيار مورد</button>
+  <pre id="results">جارٍ الفحص…</pre>
+
+  <div class="m-layer-backdrop" data-for="pick-layer" hidden></div>
+  <div class="m-layer" id="pick-layer" role="dialog" aria-modal="true" aria-labelledby="pick-title" data-backdrop="close" hidden>
+    <div class="m-layer__head"><span class="m-layer__title" id="pick-title">اختيار المورد</span></div>
+    <div class="m-layer__body">
+      <div class="m-picker" data-micro-picker id="std-picker">
+        <div class="m-picker__head">
+          <span class="m-picker__title">ابحث واختر</span>
+          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        </div>
+        <input class="m-picker__input" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم">
+        <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list></div>
+        <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
+      </div>
+    </div>
+  </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="usage-icon-defs" style="display:none" aria-hidden="true"></svg>
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/selection/selection.js"></script>
+  <script src="../../components/selection/picker.js"></script>
+  <script src="../../components/navigation/navigation.js"></script>
+  <script>
+  /* بيانات المستهلك (بلا شبكة): أصل واحد للأيقونات والأصول */
+  (function () {
+    fetch('../../assets/icons/cancel01.svg')
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+        var sym = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');
+        var src = doc.querySelector('svg');
+        sym.setAttribute('id', 'i-close');
+        sym.setAttribute('viewBox', src.getAttribute('viewBox') || '0 0 24 24');
+        sym.innerHTML = src.innerHTML;
+        document.getElementById('usage-icon-defs').appendChild(sym);
+      }).catch(function () {});
+  })();
+
+  document.addEventListener('DOMContentLoaded', function () {
+  (function () {
+    'use strict';
+    var out = [];
+    function t(name, ok, detail) { out.push((ok ? 'PASS ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); }
+    function visible(el) {
+      return getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0;
+    }
+    function optTexts(picker) {
+      return [...picker.querySelectorAll('.m-picker__option')].filter(o => !o.hidden).map(o => o.textContent.trim());
+    }
+
+    var DATA = [
+      { value: 'petrol', label: 'شركة البترول الوطنية' },
+      { value: 'noor', label: 'مؤسسة النور للتوريدات' },
+      { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' }
+    ];
+    var picker = document.getElementById('std-picker');
+    MicroPicker.setOptions(picker, DATA);
+
+    /* 1) فتح في طبقة B07 */
+    document.getElementById('open-pick').click();
+    var layer = document.getElementById('pick-layer');
+    var trigger = document.getElementById('open-pick');
+    t('الفتح في طبقة B07: ظاهرة وعزل خلفية فعال (المشغّل inert)', visible(layer) && trigger.inert === true);
+
+    /* 2) بحث جزئي */
+    var search = picker.querySelector('[data-picker-search]');
+    search.value = 'النور';
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    t('بحث جزئي: خيار واحد ظاهر وبقية الخيارات مخفية فعليًا',
+      optTexts(picker).length === 1 && picker.querySelector('[data-value="petrol"]').getBoundingClientRect().height === 0);
+
+    /* 3) نص بلا نتائج ثم مسحه — تعود النتائج (لا عالقة) */
+    search.value = 'zzz-لا-شيء';
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    var emptyShown = picker.querySelector('.m-picker__state') && picker.querySelector('.m-picker__state').textContent.indexOf('لا نتائج') >= 0;
+    search.value = '';
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    var restored = optTexts(picker).length === 3 && !picker.querySelector('.m-picker__state');
+    t('بلا نتائج: صف حالة صريح ثم مسح الاستعلام يعيد كل الخيارات', emptyShown && restored);
+
+    /* 4) اختيار ومسح الاختيار */
+    var noor = picker.querySelector('[data-value="noor"]');
+    noor.click();
+    var sel = MicroPicker.getSelected(picker);
+    var selAria = noor.getAttribute('aria-selected'); /* قبل المسح */
+    var summary1 = picker.querySelector('[data-picker-summary]').textContent;
+    MicroPicker.clearSelection(picker);
+    var summary2 = picker.querySelector('[data-picker-summary]').textContent;
+    t('الاختيار: aria-selected وحده + ملخص + حدث قيمة المفتاح',
+      sel && sel.value === 'noor' && selAria === 'true' && summary1.indexOf('النور') >= 0);
+    t('مسح الاختيار: الملخص «لا شيء»', summary2.indexOf('لا شيء') >= 0);
+
+    /* 5) الإغلاق من زر المنتقي (يربط بطبقة B07) وإعادة الفتح — مع مهلة الخفوت */
+    picker.querySelector('[data-picker-close]').click();
+    window.setTimeout(function () {
+      var closedNow = layer.hidden;
+      document.getElementById('open-pick').click();
+      window.setTimeout(function () {
+        var reopened = visible(layer);
+        t('الإغلاق من المنتقي يغلق طبقة B07 (خفوت ثم hidden) ثم يعاد الفتح سليمًا', closedNow && reopened);
+
+        document.getElementById('results').textContent = out.join('\n');
+        console.log('[example] نتائج فحص عقد المنتقي:\n' + out.join('\n'));
+      }, 450);
+    }, 450);
+  })();
+  }, { once: true });
+  </script>
+</body>
+</html>

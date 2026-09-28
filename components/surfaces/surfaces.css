@@ -23,10 +23,12 @@
 }
 
 /* الأساس المشترك: أرضية بترولية مستقرة (تدرج عمودي من الأسس)
-   + طبقة إضاءة هادئة أعلى السطح (شعاعية خافتة). */
+   + طبقة إضاءة هادئة أعلى السطح (شعاعية خافتة).
+   E07: بلا overflow:hidden على السطح كله — كان يقص المحتوى نفسه
+   عند تكبير النص (الرقم الكبير يصل الحافة ويُقص). الخلفية والتدرج
+   يقصّان بـ border-radius أصلًا، والزخرفة محتواة في طبقتها أدناه. */
 .m-surface {
   position: relative;
-  overflow: hidden; /* قص الزخرفة داخل السطح فقط — المحتوى داخله لا يقص */
   border-radius: var(--micro-radius-surface);
   background-color: var(--micro-brand-primary);
   background-image:
@@ -42,7 +44,9 @@
 }
 
 /* طبقة الموجات: أصل SVG خارجي (مصدر واحد) مع مفاتيح التعديل.
-   غير تفاعلية وإخفاء إتاحي في الترميز. لا حركة مستمرة إطلاقًا. */
+   غير تفاعلية وإخفاء إتاحي في الترميز. لا حركة مستمرة إطلاقًا.
+   E07: احتواء الزخرفة منفصلًا عن المحتوى — زواياها السفلى بنصف
+   قطر السطح كي لا تخرج خارجه بلا قصّ السطح كلّه. */
 .m-surface__waves {
   position: absolute;
   inset-inline: 0;
@@ -54,6 +58,8 @@
   background-position: center var(--micro-surface-wave-pos, 100%);
   background-size: 100% var(--micro-surface-wave-scale, 100%);
   opacity: var(--micro-surface-wave-opacity, 1);
+  border-end-start-radius: var(--micro-radius-surface);
+  border-end-end-radius: var(--micro-radius-surface);
 }
 
 /* المقارنة 1: تدرج وإضاءة هادئة — بلا موجات */
@@ -62,6 +68,12 @@
 /* المقارنة 2 (المرشح الأساسي): موجات خافتة */
 .m-surface--waves .m-surface__waves {
   background-image: url("../../assets/surfaces/waves-soft.svg");
+}
+
+/* E12 (PROPOSED — مقارنة قبل/بعد في اللوحة): تنقيح الموجة نفسها —
+   تدرجات أنعم وتلاشى أوضح وشدة أقل. لا يستبدل المعتمد إلا بقرار المالك. */
+.m-surface--waves-v2 .m-surface__waves {
+  background-image: url("../../assets/surfaces/waves-soft-v2.svg");
 }
 
 /* المقارنة 3: عمق أغنى محدود — للسطح البارز فقط (ليس لكل سطح) */
@@ -85,16 +97,17 @@
   padding: var(--micro-space-6);
 }
 
-/* عناصر نصية داخل السطح (للقياس والفحص) */
+/* عناصر نصية داخل السطح (للقياس والفحص) — القيم من التوكنات
+   المقترحة في tokens.css (E12) بدل تكرار 22/36 مباشرة هنا */
 .m-surface__title {
-  font-size: 22px;
-  line-height: 1.4545; /* 32px */
+  font-size: var(--micro-surface-title-size, 22px);
+  line-height: var(--micro-surface-title-line, 36px);
   font-weight: 600;
   color: var(--micro-text-inverse);
 }
 .m-surface__amount {
-  font-size: 36px;
-  line-height: 1.2222; /* 44px */
+  font-size: var(--micro-surface-amount-size, 36px);
+  line-height: var(--micro-surface-amount-line, 44px);
   font-weight: 600;
   color: var(--micro-text-inverse);
   font-variant-numeric: tabular-nums;

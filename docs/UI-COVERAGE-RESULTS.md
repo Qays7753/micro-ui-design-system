@@ -1,15 +1,34 @@
 # نتائج تغطية تكليف UI — لكل معرف من المصفوفة (UI-COVERAGE-RESULTS)
 
-الحالة: DRAFT FOR REVIEW — هذا تقرير تغطية موثق بالأدلة من المصدر نفسه، وليس ادعاء اكتمال شامل. الحدود غير المفحوصة معلنة في كل تقرير دفعة (قارئ شاشة فعلي، لمس حقيقي، متصفحات غير Chromium، تكبير النظام الأصلي، هاتف حقيقي).
-الدفعات: B01 على فرع `task/b01-buttons` (PR #1 — DRAFT FOR RE-REVIEW بعد R1 وR2)؛ وB02–B07 وS01 على `task/ui-library-expansion` (PR #2 تابع لـ#1 — DRAFT FOR REVIEW). commit مصدر أدلة كل دفعة مدوّن في `reviews/<batch>/verification.txt` (أو `r2-verification.txt` لـB01).
+الحالة: DRAFT FOR RE-REVIEW — هذا تقرير تغطية موثق بالأدلة من المصدر نفسه، وليس ادعاء اكتمال شامل. الحدود غير المفحوصة معلنة في كل تقرير دفعة (قارئ شاشة فعلي، لمس حقيقي، متصفحات غير Chromium، تكبير النظام الأصلي، هاتف حقيقي).
+الدفعات: B01 على فرع `task/b01-buttons` (PR #1 — DRAFT FOR RE-REVIEW بعد R1 وR2)؛ وB02–B07 وS01 على `task/ui-library-expansion` (PR #2 تابع لـ#1 — DRAFT FOR RE-REVIEW بعد DELIVERY-R1). commit مصدر أدلة كل دفعة مدوّن في `reviews/<batch>/verification.txt` (أو `r2-verification.txt` لـB01).
 أمر تشغيل المعاينات: `python3 -m http.server 8080` من جذر نسخة نظيفة ثم `/previews/` — فهرسها: `previews/index.html`.
+
+## DELIVERY-R1 — إصلاحات E01–E12 (PR #2 وما يخص B01 في #1)
+
+جدول ربط كل إصلاح بمكانه واختباره ودليله. كل فحوص الدفعات أُعيد تشغيلها من المصدر الحالي: B01 49/49 (رأس `task/b01-buttons`، انظر `r2-verification.txt`)، B02 26/26، B03 21/21، B04 15/15، B05 24/24، B06 17/17، B07 24/24، S01 18/18 (رأس `task/ui-library-expansion`).
+
+| البند | الإصلاح | الملفات | الاختبار/الدليل | الحالة |
+|---|---|---|---|---|
+| E01 | إخفاء `[hidden]` فعلي للحالات الخمس؛ إغلاق toast في المصدر (`closeToast`)؛ `returnFocus` بـ`data-return-focus`؛ مسار إعلان واحد (بلا role على العنصر) | `messages.css` §0 · `messages.js` · `previews/messages/` | B06 A4–A7، A9 (بلا مؤقت قديم)، A10 (مثال مستقل 9/9) + لقطة `05-example-after-close.png` | مغطى |
+| E02 | عزل خلفية بـ`inert` + حصر Tab/Shift+Tab؛ التقاط المشغّل قبل النقل واستعادته؛ حفظ/استرجاع overflow؛ Escape واحد من أعلى طبقة؛ فتح/تهيئة متكرران آمنان؛ توحيد `backdropEl` | `navigation.js` (إعادة كتابة العقد) | B07 A3–A8، A10 | مغطى |
+| E03 | IDs رسائل فريدة (عدّاد عام)؛ دمج `aria-describedby` بلا استبدال؛ حراسة `readOnly/disabled` للمسح والخطوة | `fields.js` | B02 A12/A13 + مثال مستقل (EX) | مغطى |
+| E04 | منتقي كامل في المصدر (`picker.css/js`): بحث يعيد النتائج ولا يعلق، صف حالة صريح، عقد واحد للبحث/الاختيار/المسح/الإغلاق، ربط بطبقة B07 المصححة | `components/selection/picker.*` · `previews/selection/` | B03 A8–A10 + مثال مستقل (فتح/بحث/بلا نتائج/مسح/اختيار/إغلاق/إعادة فتح) | مغطى — التأجيل المؤجل سابقًا منجز |
+| E05 | انتظار المفتاح يعطّل فعليًا ويسترجع الأصل (WeakMap) + حماية تقاطع للترميز المباشر؛ «تحديد الكل» لا يغيّر المعطل؛ الأسهم تتجاوز المعطل؛ هدف لمس 48px فعلي (امتداد ::after) | `selection.js` · `selection.css` | B03 A7-b/c/d (قياس 40+8=48) | مغطى |
+| E06 | دوائر بلا حد يضخم (0.01 → 1.04px حرفيًا)؛ خط ينقطع عند المفقود (شرائح)؛ donut صفري بلا NaN؛ مقام مخطئ برسالة صريحة وقيم خام؛ سالب يُرفض بوضوح لا يُرسم موجبًا؛ مفتاح بعُقد DOM وtextContent | `data.js` (إعادة كتابة) · `data.css` (`m-chart__error`) | B05 A6، A10، A11 (شريحتان + حقن نصي) + قسم «حالات الحدود» في اللوحة ولقطة `09` | مغطى |
+| E07 | بلا `overflow:hidden` على السطح كله (الزخرفة محتواة بزواياها)؛ لفّ تسميات SVG (أسطر) وقياس تداخل فعلي؛ تركيب شريطي الأفعال/التنقل كمجموعة ثابتة بلا تصادم؛ +360 لكل المقاسات المكلّفة | `surfaces.css` · `data.js` (`wrapLabel`) · `previews/navigation/` | S01 B2 (320/390/430 بلا قص) · B05 B3 (بلا تداخل) · B07 B2/B3 (لا تغطية وآخر عنصر مرئي) | مغطى |
+| E08 | البحث داخل عقد الفلاتر (`data-filter-key`)؛ الملخص يتبع الجاري عند كل تغيير؛ المسح يفرّغ البحث والصناديق | `navigation.js` (initFilterPanel) · `previews/navigation/index.html` | B07 A11 (تطبيق/إلغاء/إعادة فتح/مسح مع بحث) | مغطى |
+| E09 | أرقام التباين مصححة بحسابات قابلة لإعادة التشغيل (9.38/11.64/دمج #D3E0E3) ومجال إعدادات مدعوم معلن؛ فصل اتجاه delta عن tone (افتراضي محايد) | `tools/contrast-check.py` + `reviews/S01/contrast-check.txt` (مولّد) · `data.css` | أزواج القسم 2 كلها ≥4.5 حتى أسوأ مفتاح (شدة = 2)؛ B05: صاعد بمحايد/سلبي بأمثلة | مغطى |
+| E10 | MOT-01 موصول بـ`.m-layer` الفعلي بتوكنات `motion.css` (فتح/إغلاق عبر data-closing + reduced-motion) — والتوثيق في رأس motion.css | `navigation.css` §4 · `shared/motion.css` (رأس موثق) | B07 A5 (خفوت 240ms) + D1 فعلي في S01 | مغطى |
+| E11 | مثال مستقل لكل عائلة (8 صفحات بلا board.*)؛ `reviews/B06/B07 review.md` منشأ؛ دليل E1 في B05/B06/B07/S01/B03/B07؛ إصلاح فحوص E01/E07 (ظهور محسوب/مستطيلات)؛ حذف `tools/__pycache__` المتتبع + `.gitignore`؛ MANIFEST موحد بإعادة توليد مستثنية Git/المؤقتات | `previews/*/example-usage.html` ×8 · `reviews/B06/review.md` · `reviews/B07/review.md` · `tools/manifest-build.py` · `.gitignore` | فحوص EX في كل سكربت؛ MANIFEST 260+ مدخلًا بصفر اختلافات | مغطى |
+| E12 | B01: تسمية دقيقة للقطات 27 (baseline) مع بقاء دليل التكبير في 19/20 والمرشحان موسومين بلا اعتماد ذاتي؛ S01: مقارنة موجة v2 (تدرج/تلاشى/شدة أقل) بالحجم العادي ومحتوى قصير + توكنات 22/36 مقترحة في tokens.css | فرع B01 commit منفصل · `assets/surfaces/waves-soft-v2.svg` · `previews/surfaces/index.html` §1-ب · `shared/tokens.css` | S01 A9 + لقطة `06-wave-v2-compare-390.png`؛ B01 49/49 | مغطى كترشيحات — **قرار الاعتماد للمالك** |
 
 ## B01 — تصحيحات جولتي المراجعة (PR #1)
 
 | المعرف | المطلوب | الملف | المعاينة/الدليل | الحالة | النقص |
 |---|---|---|---|---|---|
 | FIX-A | عدّاد B01: 123 عند تكبير 200% في 320/390 داخل الخلفية والحشو؛ قياس حدود النص | `components/buttons/buttons.css` (flex:none للشارة) · `tools/b01-screenshots.py` | فحص B5 (Range أفقي + غلاف سطر عمودي) في `reviews/B01/r2-verification.txt`؛ لقطات `19/20-text-zoom-200-*.png` | مغطى | — |
-| FIX-B | انحناء الزر الطويل: مقارنة الحالي ومرشح 24 مع بقاء القصير | `shared/tokens.css` (`--micro-radius-button-long`) · `buttons.css` (`m-btn--radius-limited`) · `previews/buttons/index.html` | فحص B7 عند 100%/200%؛ لقطات `27-radius-zoom-lab-320/390.png` ومقارنة القسم 4 | مغطى كمرشح | **مرشح R2-B ينتظر اعتماد المالك** — الافتراضي لم يتغير |
+| FIX-B | انحناء الزر الطويل: مقارنة الحالي ومرشح 24 مع بقاء القصير | `shared/tokens.css` (`--micro-radius-button-long`) · `buttons.css` (`m-btn--radius-limited`) · `previews/buttons/index.html` | فحص B7 عند 100%/200%؛ لقطات `27-radius-baseline-320/390.png` (baseline — دليل التكبير في 19/20) ومقارنة القسم 4 | مغطى كمرشح | **مرشح R2-B ينتظر اعتماد المالك** — الافتراضي لم يتغير |
 | FIX-C | CSS مستقل: نص/أيقونة/تصفية خارج board.css؛ box-sizing والمؤشر من توكن؛ أبعاد قبل/أثناء/بعد | `buttons.css` (نطاق box-sizing + توكن المؤشر) · `previews/buttons/example-usage.html` | فحوص E0/E2/E3 (توكن 26/28→كل الأنواع→استعادة) وA10 (6 أشكال) | مغطى | — |
 | FIX-D | أداة التكبير: مروران (قراءة ثم تطبيق) — 16→32 لا 64 واستعادة دقيقة؛ تسمية «محاكاة زيادة حجم الخط» | `previews/buttons/board.js` · `previews/board.js` (مشتركة) | فحوص B4/B8 (المباشر والغلاف 32px والاستعادة 16px بلا style) | مغطى | التكبير الأصلي للمتصفح/النظام بقي غير مفحوص — معلن |
 | FIX-E | التحميل النصي: مقارنة مقترحين بلا تصادم/قفزة | `buttons.css` (`is-loading--text` + `m-btn--loading-slot`) · `buttons.js` | لقطة `26-loading-proposals-390.png`؛ ثبات A10/E2 | مغطى كمرشحين | **الاختيار بين A/B للمراجعة/المالك** |

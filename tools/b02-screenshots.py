@@ -162,6 +162,100 @@ def main():
                  return {bg: getComputedStyle(f).backgroundColor, shadow: getComputedStyle(f).boxShadow}; }""")
         check("A11 المعطل: أرضية المعطل وبلا حلقة", dis["bg"] == "rgb(228, 234, 232)" and dis["shadow"] == "none", str(dis))
 
+        # ---- E03: حقول متطابقة البنية + وصف سابق + حراسة readOnly/disabled ----
+        e03 = page.evaluate(
+            """() => {
+              const host = document.createElement('div');
+              host.id = 'e03-probe';
+              // ثلاثة حقول متطابقة البنية (نفس الصنف بلا id) + حقل بوصف سابق + مسح + stepper
+              host.innerHTML = `
+                <div class="m-field" data-micro-field>
+                  <label class="m-field__label">حقل مكرر أ</label>
+                  <div class="m-field__control"><input class="m-field__input" type="text" value="A"></div>
+                  <p class="m-field__msg" data-field-msg hidden>رسالة أ</p>
+                </div>
+                <div class="m-field" data-micro-field>
+                  <label class="m-field__label">حقل مكرر ب</label>
+                  <div class="m-field__control"><input class="m-field__input" type="text" value="B"></div>
+                  <p class="m-field__msg" data-field-msg hidden>رسالة ب</p>
+                </div>
+                <div class="m-field" data-micro-field>
+                  <label class="m-field__label">حقل بوصف سابق</label>
+                  <div class="m-field__control">
+                    <input class="m-field__input" id="e03-prior" type="text" value="C" readonly aria-describedby="prior-help-77">
+                    <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح"><svg class="m-btn__icon" aria-hidden="true"></svg></button>
+                  </div>
+                  <p class="m-field__msg" data-field-msg hidden>رسالة ج</p>
+                </div>
+                <p id="prior-help-77" hidden>وصف مساعدة سابق</p>
+                <div class="m-field" data-micro-field>
+                  <label class="m-field__label">كمية قراءة فقط</label>
+                  <div class="m-field__control m-field__stepper">
+                    <button type="button" data-step="down" aria-label="إنقاص">−</button>
+                    <input class="m-field__input m-field__input--num" id="e03-ro-step" type="text" inputmode="decimal" dir="ltr" value="10" min="0" max="99" step="5" readonly>
+                    <button type="button" data-step="up" aria-label="زيادة">+</button>
+                  </div>
+                </div>
+                <div class="m-field" data-micro-field>
+                  <label class="m-field__label">كمية معطلة</label>
+                  <div class="m-field__control m-field__stepper">
+                    <button type="button" data-step="down" aria-label="إنقاص">−</button>
+                    <input class="m-field__input m-field__input--num" id="e03-dis-step" type="text" inputmode="decimal" dir="ltr" value="20" min="0" max="99" step="5" disabled>
+                    <button type="button" data-step="up" aria-label="زيادة">+</button>
+                  </div>
+                </div>`;
+              document.body.appendChild(host);
+              MicroFields.init(host);
+              MicroFields.init(host); // إعادة init — بلا تكرار
+              const fields = [...host.querySelectorAll('[data-micro-field]')];
+              const msgIds = fields.filter(f => f.querySelector('[data-field-msg]')).map(f => f.querySelector('[data-field-msg]').id);
+              const unique = new Set(msgIds).size === 3;
+              const prior = document.getElementById('e03-prior').getAttribute('aria-describedby').split(/\\s+/);
+              const merged = prior.includes('prior-help-77') && prior.includes(msgIds[2]);
+              // مسح readonly (زر المسح موجود في الحقل الثالث لكن نجرّب الحماية بنقل القيمة)
+              const roInput = document.getElementById('e03-ro-step');
+              const disInput = document.getElementById('e03-dis-step');
+              let roEvents = 0, disEvents = 0;
+              roInput.addEventListener('micro-field:changed', () => roEvents++);
+              disInput.addEventListener('micro-field:changed', () => disEvents++);
+              fields[3].querySelector('[data-step="up"]').click();
+              fields[4].querySelector('[data-step="up"]').click();
+              const roVal = roInput.value, disVal = disInput.value;
+              // مسح على حقل readonly عبر واجهة المسح: القيمة تبقى
+              const c3 = fields[2].querySelector('.m-field__clear');
+              const c3Input = document.getElementById('e03-prior');
+              const beforeClear = c3Input.value;
+              c3.click();
+              const afterClear = c3Input.value;
+              const res = {unique, msgIds, merged, roVal, disVal, roEvents, disEvents,
+                           clearKept: afterClear === beforeClear,
+                           priorStill: c3Input.getAttribute('aria-describedby').includes('prior-help-77')};
+              host.remove();
+              return res;
+            }""")
+        check("A12 حقول متطابقة: IDs رسائل فريدة + دمج وصف سابق بلا استبدال وبلا تكرار عند إعادة init",
+              e03["unique"] and e03["merged"] and e03["priorStill"],
+              str({k: e03[k] for k in ("unique", "msgIds", "merged", "priorStill")}))
+        check("A13 حراسة الحالة: مسح/زيادة/نقصان على readOnly وdisabled يترك القيمة ويمنع حدث التغيير",
+              e03["roVal"] == "10" and e03["disVal"] == "20" and e03["roEvents"] == 0
+              and e03["disEvents"] == 0 and e03["clearKept"],
+              str({k: e03[k] for k in ("roVal", "disVal", "roEvents", "disEvents", "clearKept")}))
+
+
+        # ---- SYS-02/E11: المثال المستقل بلا board.* ----
+        ex2 = f"{base}/previews/fields/example-usage.html"
+        pe2 = ctx.new_page()
+        ex_err2 = []
+        pe2.on("pageerror", lambda e: ex_err2.append(str(e)))
+        pe2.goto(ex2)
+        pe2.wait_for_load_state("networkidle")
+        pe2.wait_for_timeout(1200)
+        ex_res2 = pe2.evaluate("() => document.getElementById('results').textContent")
+        check("EX مثال مستقل fields: 0 فشل بلا أخطاء",
+              ex_res2.count("FAIL ") == 0 and ex_res2.count("PASS ") >= 3 and not ex_err2,
+              ex_res2.splitlines()[0] if ex_res2 else "لا نتائج")
+        pe2.close()
+
         # ---- لقطات ----
         page.locator("#types").screenshot(path=str(SHOTS / "01-types-390.png"))
         page.locator("#live").screenshot(path=str(SHOTS / "03-live-390.png"))

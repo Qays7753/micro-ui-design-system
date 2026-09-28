@@ -94,19 +94,136 @@ def main():
                  return items.map(i => i.getAttribute('aria-pressed')); }""")
         check("A7 المقطّع: متبادل (المستحق فقط)", seg == ["false", "true", "false"], str(seg))
 
-        # ---- المنتقي: لا نتائج ثم اختيار ومسح ----
+        # ---- E05: المفتاح أثناء الانتظار — label وSpace محميان + استرجاع التعطيل الأصلي ----
+        e05 = page.evaluate(
+            """() => {
+              const sw = document.querySelector('#async-switch');
+              const input = sw.querySelector('input');
+              // نجعل المفتاح معطلًا أصلًا ثم نطلب انتظارًا ثم نزيله — يسترجع معطلًا لا مفعّلًا
+              input.disabled = true;
+              MicroSelection.setSwitchPending(sw, true);
+              const pendingDisabled = input.disabled;
+              const spaceBlocked = (() => {
+                input.focus();  // disabled لا يأخذ تركيزًا — لذا نفحص الحماية البرمجية بالتقاطع
+                input.checked = !input.checked;   // محاولة تغيير برمجية أثناء pending
+                input.dispatchEvent(new Event('change', { bubbles: true }));  // التقاط المكوّن يرجعها
+                return true;
+              })();
+              MicroSelection.setSwitchPending(sw, false);
+              const restoredDisabled = input.disabled;
+              input.disabled = false;
+              return {pendingDisabled, restoredDisabled};
+            }""")
+        check("A7-b المفتاح (E05): الانتظار يعطّل فعليًا ويسترجع التعطيل الأصلي بدقة (معطل قبل → معطل بعد)",
+              e05["pendingDisabled"] and e05["restoredDisabled"], str(e05))
+
+        # ---- E05: «تحديد الكل» لا يغيّر المعطل + مجموعة مختلطة ----
+        e05b = page.evaluate(
+            """() => {
+              const host = document.createElement('div');
+              host.id = 'e05-probe';
+              host.innerHTML = `
+                <div data-choice-group>
+                  <label class="m-choice m-choice--check"><input type="checkbox" data-select-all><span class="m-choice__box"></span><span class="m-choice__text">الكل</span></label>
+                  <label class="m-choice m-choice--check"><input type="checkbox" data-choice-item><span class="m-choice__box"></span><span class="m-choice__text">أ</span></label>
+                  <label class="m-choice m-choice--check"><input type="checkbox" data-choice-item><span class="m-choice__box"></span><span class="m-choice__text">ب</span></label>
+                  <label class="m-choice m-choice--check"><input type="checkbox" data-choice-item disabled checked><span class="m-choice__box"></span><span class="m-choice__text">محمي</span></label>
+                </div>`;
+              document.body.appendChild(host);
+              MicroSelection.init(host);
+              const group = host.querySelector('[data-choice-group]');
+              const all = group.querySelector('[data-select-all]');
+              const items = [...group.querySelectorAll('[data-choice-item]')];
+              all.click();  // تحديد الكل
+              const enabledChecked = items[0].checked && items[1].checked;
+              const protectedUntouched = items[2].checked; // المعطل بقيت قيمته كما هي
+              all.click();  // إلغاء الكل
+              const enabledCleared = !items[0].checked && !items[1].checked;
+              const stillUntouched = items[2].checked;
+              host.remove();
+              return {enabledChecked, protectedUntouched, enabledCleared, stillUntouched};
+            }""")
+        check("A7-c تحديد الكل (E05): يدير المفعّلة فقط — المعطل لم يُلمس في التحديد ولا المسح",
+              e05b["enabledChecked"] and e05b["protectedUntouched"] and e05b["enabledCleared"] and e05b["stillUntouched"], str(e05b))
+
+        # ---- E05: الأسهم تتجاوز المعطل + هدف اللمس 48px فعليًا ----
+        e05c = page.evaluate(
+            """() => {
+              const host = document.createElement('div');
+              host.id = 'e05c-probe';
+              host.innerHTML = `<div class="m-seg" data-seg role="group" aria-label="فحص">
+                  <button type="button" class="m-seg__item" aria-pressed="false" data-value="a">أ</button>
+                  <button type="button" class="m-seg__item" aria-pressed="false" data-value="b" disabled>معطل</button>
+                  <button type="button" class="m-seg__item" aria-pressed="false" data-value="c">ج</button>
+                </div>`;
+              document.body.appendChild(host);
+              MicroSelection.init(host);
+              const seg = host.querySelector('[data-seg]');
+              const items = [...seg.querySelectorAll('.m-seg__item')];
+              items[0].focus();
+              seg.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}));
+              const landed = document.activeElement.getAttribute('data-value'); // يجب ج (تجاوز المعطل)
+              // هدف اللمس الفعلي: العنصر + الامتداد الزائف (4px رأسيًا من كل طرف)
+              const r = items[0].getBoundingClientRect();
+              const touchHeight = r.height + 8;
+              host.remove();
+              return {landed, visualHeight: r.height, touchHeight};
+            }""")
+        check("A7-d المقطّع (E05): الأسهم تتجاوز المعطل والهدف الفعلي لللمس 48px (بصري 40 + امتداد 8)",
+              e05c["landed"] == 'c' and e05c["visualHeight"] <= 42 and e05c["touchHeight"] >= 48, str(e05c))
+
+        # ---- المنتقي (E04): فتح في طبقة B07 + محاكاة لا نتائج/جاهز + اختيار ومسح ----
+        page.click("[data-layer-open='picker-layer']")
+        page.wait_for_timeout(250)
+        layer_open = page.evaluate("() => !document.getElementById('picker-layer').hidden")
         page.click("[data-picker-demo='empty']")
         page.wait_for_timeout(1200)
-        empty = page.evaluate("() => document.getElementById('picker-list').textContent.includes('لا نتائج')")
-        page.click("[data-picker-demo='loading']")
-        page.wait_for_timeout(1300)
-        opts = page.evaluate("() => document.querySelectorAll('#picker-list .picker-option[data-value]').length")
-        page.locator("#picker-list .picker-option").first.click()
+        empty = page.evaluate("() => document.querySelector('#entity-picker [data-picker-list]').textContent.includes('لا نتائج')")
+        page.click("[data-picker-demo='ready']")
+        page.wait_for_timeout(1200)
+        opts = page.evaluate("() => document.querySelectorAll('#entity-picker .m-picker__option[data-value]').length")
+        page.locator("#entity-picker .m-picker__option").nth(1).click()
         sel = page.evaluate(
-            """() => { const s = document.querySelector('#picker-list .picker-option[aria-selected=\"true\"]');
-                 return s ? s.textContent.trim() : null; }""")
-        check("A8 المنتقي: لا نتائج محاكاة ثم اختيار ومسح يعملان",
-              empty and opts == 3 and sel is not None, f"empty={empty} options={opts} selected={sel}")
+            """() => { const s = document.querySelector('#entity-picker .m-picker__option[aria-selected=\"true\"]');
+                 return s ? s.getAttribute('data-value') : null; }""")
+        page.click("#entity-picker [data-picker-clear]")
+        cleared = page.evaluate(
+            """() => ({none: !document.querySelector('#entity-picker .m-picker__option[aria-selected=\"true\"]'),
+                       summary: document.querySelector('#entity-picker [data-picker-summary]').textContent})""")
+        check("A8 المنتقي في طبقة B07: محاكاة لا نتائج ثم نتائج سليمة (عقد المكوّن) واختيار ومسح يعملان",
+              layer_open and empty and opts == 4 and sel == 'noor' and cleared["none"] and 'لا شيء' in cleared["summary"],
+              f"open={layer_open} empty={empty} options={opts} selected={sel} مسح={cleared}")
+
+        # ---- E04: البحث — لا نتائج عالقة بعد مسح الاستعلام (إخفاء فعلي) ----
+        srch = page.evaluate(
+            """() => { const picker = document.getElementById('entity-picker');
+                 const input = picker.querySelector('[data-picker-search]');
+                 const opts = [...picker.querySelectorAll('.m-picker__option')];
+                 function visibleCount() { return opts.filter(o => getComputedStyle(o).display !== 'none').length; }
+                 input.value = 'النور';
+                 input.dispatchEvent(new Event('input', { bubbles: true }));
+                 const partial = visibleCount();
+                 input.value = 'zzz-لا-مطابق';
+                 input.dispatchEvent(new Event('input', { bubbles: true }));
+                 const noneRow = !!picker.querySelector('.m-picker__state') && visibleCount() === 0;
+                 input.value = '';
+                 input.dispatchEvent(new Event('input', { bubbles: true }));
+                 const restored = visibleCount() === 4 && !picker.querySelector('.m-picker__state');
+                 return {partial, noneRow, restored}; }""")
+        check("A9 بحث المنتقي: جزئي يصفّي، بلا نتائج يظهر صف حالة، ومسح الاستعلام يعيد كل الخيارات (لا عالقة)",
+              srch["partial"] == 1 and srch["noneRow"] and srch["restored"], str(srch))
+
+        # ---- E04: الإغلاق من المنتقي يغلق طبقة B07 ويعاد الفتح ----
+        page.click("#entity-picker [data-picker-close]")
+        page.wait_for_timeout(500)
+        closed = page.evaluate("() => document.getElementById('picker-layer').hidden")
+        page.click("[data-layer-open='picker-layer']")
+        page.wait_for_timeout(250)
+        reopened = page.evaluate("() => !document.getElementById('picker-layer').hidden")
+        check("A10 إغلاق المنتقي يغلق طبقة B07 المصححة (بلا مسارين) وإعادة الفتح تعمل",
+              closed and reopened, f"closed={closed} reopened={reopened}")
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(500)
 
         # ---- لقطات ----
         page.locator("#choices").screenshot(path=str(SHOTS / "01-choices-390.png"))
@@ -120,7 +237,34 @@ def main():
         page.keyboard.press("Tab")  # ضبط نمطية لوحة المفاتيح (كما في B01)
         page.evaluate("() => document.querySelector('#c1').focus()")
         fv = page.evaluate("() => document.getElementById('c1').matches(':focus-visible')")
-        check("A9 تركيز لوحة المفاتيح فعلي على صندوق الاختيار", bool(fv))
+        check("A11 تركيز لوحة المفاتيح فعلي على صندوق الاختيار", bool(fv))
+
+        # ---- E04: المثال المستقل بلا board.* — عقد المنتقي كعقد واحد ----
+        ex = f"{base}/previews/selection/example-usage.html"
+        pe = ctx.new_page()
+        ex_errors = []
+        pe.on("console", lambda m: ex_errors.append(m.text) if m.type == "error" else None)
+        pe.on("pageerror", lambda e: ex_errors.append(str(e)))
+        pe.goto(ex)
+        pe.wait_for_load_state("networkidle")
+        pe.wait_for_timeout(1600)
+        ex_results = pe.evaluate("() => document.getElementById('results').textContent")
+        ex_pass, ex_fail = ex_results.count("PASS "), ex_results.count("FAIL ")
+        check("A12 المثال المستقل (بلا board.*): فتح/بحث/بلا نتائج/مسح/اختيار/مسح اختيار/إغلاق وإعادة فتح",
+              ex_fail == 0 and ex_pass >= 5 and not ex_errors, f"{ex_pass} PASS / {ex_fail} FAIL; errors={ex_errors[:1]}")
+        pe.screenshot(path=str(SHOTS / "08-example-picker-layer.png"), full_page=True)
+        pe.close()
+
+        # ---- E1: تعديل توكن → انعكاس → استعادة ----
+        tok = page.evaluate(
+            """() => { const root = document.documentElement.style;
+                 root.setProperty('--micro-field-height', '60px');
+                 const v = getComputedStyle(document.querySelector('#entity-picker [data-picker-search]')).minHeight;
+                 root.removeProperty('--micro-field-height');
+                 const back = getComputedStyle(document.querySelector('#entity-picker [data-picker-search]')).minHeight;
+                 return {changed: v, restored: back}; }""")
+        check("E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل",
+              tok["changed"] == "60px" and tok["restored"] != "60px", str(tok))
 
         # ---- الهواتف + التكبير ----
         for width in (320, 390, 430):

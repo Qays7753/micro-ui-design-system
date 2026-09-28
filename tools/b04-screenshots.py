@@ -109,6 +109,21 @@ def main():
         missing = page.evaluate("() => document.querySelector('.m-missing').textContent.trim()")
         check("A8 البيانات الناقصة تظهر — لا فراغ", missing == "—", missing)
 
+
+        # ---- SYS-02/E11: المثال المستقل بلا board.* ----
+        ex4 = f"{base}/previews/organization/example-usage.html"
+        pe4 = ctx.new_page()
+        ex_err4 = []
+        pe4.on("pageerror", lambda e: ex_err4.append(str(e)))
+        pe4.goto(ex4)
+        pe4.wait_for_load_state("networkidle")
+        pe4.wait_for_timeout(1200)
+        ex_res4 = pe4.evaluate("() => document.getElementById('results').textContent")
+        check("EX مثال مستقل organization: 0 فشل بلا أخطاء",
+              ex_res4.count("FAIL ") == 0 and ex_res4.count("PASS ") >= 3 and not ex_err4,
+              ex_res4.splitlines()[0] if ex_res4 else "لا نتائج")
+        pe4.close()
+
         # ---- لقطات ----
         page.locator("#grouping").screenshot(path=str(SHOTS / "01-grouping-390.png"))
         page.locator("#rows").screenshot(path=str(SHOTS / "02-rows-390.png"))

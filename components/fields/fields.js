@@ -32,6 +32,8 @@
 (function () {
   'use strict';
 
+  var msgUid = 0; /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
+
   function fieldOf(el) { return el.closest('[data-micro-field]'); }
 
   function bindCount(f) {
@@ -51,10 +53,13 @@
     var input = f.querySelector('.m-field__input');
     var clear = f.querySelector('.m-field__clear');
     if (!input || !clear) return;
+    /* E03: لا مسح على حقل readOnly أو disabled — يبقى قابلًا للقراءة والنسخ */
+    function locked() { return input.disabled || input.readOnly; }
     function sync() {
-      clear.classList.toggle('is-visible', input.value !== '');
+      clear.classList.toggle('is-visible', input.value !== '' && !locked());
     }
     clear.addEventListener('click', function () {
+      if (locked()) return; /* حراسة وقت النقر — الحالة قد تتغير بعد الربط */
       input.value = '';
       sync();
       input.focus(); /* إعادة التركيز للحقل بعد المسح */
@@ -76,6 +81,8 @@
     f.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-step]');
       if (!btn || !f.contains(btn)) return;
+      /* E03: لا تغيير قيمة على حقل readOnly أو disabled — readonly يبقى قابلًا للقراءة والنسخ */
+      if (input.disabled || input.readOnly || btn.disabled) return;
       var dir = btn.getAttribute('data-step') === 'up' ? 1 : -1;
       var v = parseFloat(input.value);
       if (isNaN(v)) v = min !== null && min > 0 ? min : 0;
@@ -91,11 +98,16 @@
   function bindMessage(f) {
     var msg = f.querySelector('[data-field-msg]');
     var input = f.querySelector('.m-field__input, .m-field__area');
-    if (!msg || !input || msg.getAttribute('aria-describedby')) return;
-    if (!msg.id) msg.id = 'm-field-msg-' + Math.abs(
-      (f.id || f.className) .split('').reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) | 0; }, 7)
-    );
-    input.setAttribute('aria-describedby', msg.id);
+    if (!msg || !input) return;
+    /* E03: الفحص على الحقل (لا على الرسالة) — ودمج المراجع القائمة
+       دون استبدال: مراجع وصف سابقة تبقى، ومعرف الرسالة يُضاف مرة.
+       المعرف فريد ثابت لكل عنصر (عدّاد عام) — الحقول المتكررة
+       بنفس الصنف لا تتشارك ID بعد الآن. */
+    var refs = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    if (msg.id && refs.indexOf(msg.id) >= 0) return; /* مرتبط سابقًا */
+    if (!msg.id) msg.id = 'm-field-msg-' + (++msgUid);
+    if (refs.indexOf(msg.id) < 0) refs.push(msg.id);
+    input.setAttribute('aria-describedby', refs.join(' '));
   }
 
   function init(root) {

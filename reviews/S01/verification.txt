@@ -1,5 +1,5 @@
-# S01 سجل الفحص — 2026-09-28T08:04:37
-# commit المصدر: 5b42c19c347bb508529b3c69715c21ced724cb41
+# S01 سجل الفحص — 2026-09-28T10:39:15
+# commit المصدر: cd14cc9e830fb54b7ec02538c0b0429c508bc29e
 
 PASS  A1 لا أخطاء
 PASS  A2 أربعة أسطح في المقارنة (3 مقارنات + مجردة) — 4
@@ -9,11 +9,15 @@ PASS  A5 الحقول صافية (أرضية بيضاء لا سطح بترولي
 PASS  A6 نص السطح أبيض والأرضية من التدرج المعتمد — {'bg': 'rgb(22, 77, 89)', 'color': 'rgb(255, 255, 255)', 'grad': 'radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%), linear-gradient(rgb(35, 102, 117) 0%, rgb(22, 77, 89) 55%, rgb(16, 62, 72) 100%)'}
 PASS  A7 الطبقة: تفتح وتغلق بـEscape ويعاد التركيز للمشغّل — فتحت=True أغلقت=True تركيز=True
 PASS  A8 محاكاة تقليل الحركة: لا انتقال (0s) والظهور فوري — duration=0s
+PASS  A9 مقارنة E12: بعد v2 بتدرج/تلاشى أعمّ بجانب الأصل بالحجم العادي ومحتوى قصير — {'exists': True, 'v2bg': True, 'oldBg': True, 'amountVisible': True}
+PASS  E1 تعديل توكن الموجة → انعكاس → استعادة — {'before': 152, 'after': 91, 'restored': 152}
 PASS  B1 320px بلا تمرير أفقي — {'sw': 320, 'cw': 320}
-PASS  B2 320px تكبير 200%: العنوان 44px والرقم 72px والمحتوى داخل العمود — {'titleFont': '44px', 'amountFont': '72px', 'amountW': 238, 'sw': 318, 'cw': 318}
+PASS  B2 320px تكبير 200%: العنوان 44px والرقم 72px داخل السطح بلا قصّ (overflow ظاهر) — {'titleFont': '44px', 'amountFont': '72px', 'overflow': 'visible', 'notClipped': True, 'sw': 318, 'cw': 318}
+PASS  B1 360px بلا تمرير أفقي — {'sw': 360, 'cw': 360}
 PASS  B1 390px بلا تمرير أفقي — {'sw': 390, 'cw': 390}
-PASS  B2 390px تكبير 200%: العنوان 44px والرقم 72px والمحتوى داخل العمود — {'titleFont': '44px', 'amountFont': '72px', 'amountW': 308, 'sw': 388, 'cw': 388}
+PASS  B2 390px تكبير 200%: العنوان 44px والرقم 72px داخل السطح بلا قصّ (overflow ظاهر) — {'titleFont': '44px', 'amountFont': '72px', 'overflow': 'visible', 'notClipped': True, 'sw': 388, 'cw': 388}
 PASS  B1 430px بلا تمرير أفقي — {'sw': 430, 'cw': 430}
+PASS  B2 430px تكبير 200%: العنوان 44px والرقم 72px داخل السطح بلا قصّ (overflow ظاهر) — {'titleFont': '44px', 'amountFont': '72px', 'overflow': 'visible', 'notClipped': True, 'sw': 388, 'cw': 388}
 PASS  D1 prefers-reduced-motion فعلي: صنف الطبقة بلا انتقال — duration=0s
 
-# النتيجة: 14/14 ناجح
+# النتيجة: 18/18 ناجح

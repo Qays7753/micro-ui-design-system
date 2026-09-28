@@ -62,29 +62,83 @@ def main():
             """() => [...document.querySelectorAll('#notes .m-note')].every(n => !n.hidden)""")
         check("A3 الرسائل الثابتة تبقى بعد 5 ثوانٍ (لا تختفي ذاتيًا)", still)
 
-        # ---- زر الإغلاق يخفي الرسالة ----
+        # ---- زر الإغلاق يخفي الرسالة — إخفاء فعليًا لا سمة فقط (E01) ----
+        def truly_hidden(sel):
+            return page.evaluate(
+                """(sel) => { const el = document.querySelector(sel);
+                     const cs = getComputedStyle(el);
+                     const r = el.getBoundingClientRect();
+                     return cs.display === 'none' && r.width === 0 && r.height === 0; }""", sel)
         page.click("#notes .m-note--error .m-note__close")
-        closed = page.evaluate("() => document.querySelector('#notes .m-note--error').hidden")
-        check("A4 الإغلاق اليدوي للرسالة يعمل", closed)
+        closed = truly_hidden("#notes .m-note--error")
+        check("A4 الإغلاق اليدوي للرسالة يعمل (display محسوب none + بلا مستطيل)", closed)
 
-        # ---- Toast: يظهر مع بديل ثابت ويختفي بعد مدته ويُعلن مرة ----
+        # ---- Toast: الظهور/الاختفاء بالظهور المحسوب والمستطيلات (E01) ----
         page.click("[data-toast-demo]")
-        toast_visible = page.evaluate("() => !document.querySelector('[data-toast]').hidden")
+        toast_visible = page.evaluate(
+            """() => { const el = document.querySelector('[data-toast]');
+                 return !el.hidden && getComputedStyle(el).display !== 'none' &&
+                        el.getBoundingClientRect().height > 0; }""")
         mirror = page.evaluate("() => !document.querySelector('[data-toast-mirror]').hidden")
         page.wait_for_timeout(300)  # مهلة إعلان aria-live (50ms داخل المكوّن + هامش)
         live = page.evaluate("() => document.querySelector('.m-live-region').textContent")
         page.wait_for_timeout(4400)
-        toast_gone = page.evaluate("() => document.querySelector('[data-toast]').hidden")
+        toast_gone = truly_hidden("[data-toast]")
         mirror_still = page.evaluate("() => !document.querySelector('[data-toast-mirror]').hidden")
-        check("A5 العابرة: تظهر مع بديل ثابت ويختفي بعد مدته والبديل يبقى",
+        check("A5 العابرة: تظهر مع بديل ثابت ويختفي بعد مدته (إخفاء فعلي) والبديل يبقى",
               toast_visible and mirror and toast_gone and mirror_still,
               f"ظهرت={toast_visible} بديل={mirror} اختفت={toast_gone} البديل باقٍ={mirror_still}")
-        check("A6 الإعلان دون تكرار: المنطقة تحمل النص مرة واحدة", len(live) > 0, f"live='{live[:40]}'")
+        check("A6 الإعلان دون تكرار: المنطقة تحمل النص مرة واحدة (مسار واحد بلا role على العنصر)",
+              len(live) > 0, f"live='{live[:40]}'")
         before_txt = page.evaluate("() => document.querySelector('.m-live-region').textContent")
         page.click("[data-toast-repeat]")
         page.wait_for_timeout(400)
         after_txt = page.evaluate("() => document.querySelector('.m-live-region').textContent")
         check("A7 إعادة نفس النص: لا إعلان مكرر", before_txt == after_txt, f"ثابت='{after_txt[:30]}'")
+
+        # ---- E01: إغلاق العابرة من المصدر وإعادة الاستخدام دون مؤقت قديم ----
+        page.click("[data-toast-demo]")
+        page.wait_for_timeout(200)
+        page.click("[data-toast] [data-toast-close]")  # زر داخل العنصر → عقد closeToast في المكوّن
+        manual = truly_hidden("[data-toast]")
+        no_timer = page.evaluate("() => !('toastTimer' in document.querySelector('[data-toast]').dataset)")
+        page.click("[data-toast-demo]")
+        page.wait_for_timeout(400)
+        reused = page.evaluate(
+            """() => { const el = document.querySelector('[data-toast]');
+                 return getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0; }""")
+        check("A9 الإغلاق اليدوي من المصدر (closeToast) وإعادة الاستخدام بلا مؤقت قديم",
+              manual and no_timer and reused, f"أغلق={manual} بلا_مؤقت={no_timer} أعيد={reused}")
+        truly_hidden("[data-toast]")  # توازن الحالة قبل اللقطات
+
+        # ---- E1: تعديل توكن → انعكاس → استعادة (دليل الاستقلال) ----
+        tok = page.evaluate(
+            """() => { const root = document.documentElement.style;
+                 root.setProperty('--micro-radius-field', '2px');
+                 const v = getComputedStyle(document.querySelector('#notes .m-note')).borderRadius;
+                 root.removeProperty('--micro-radius-field');
+                 const back = getComputedStyle(document.querySelector('#notes .m-note')).borderRadius;
+                 return {changed: v, restored: back}; }""")
+        check("E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل",
+              tok["changed"] == "2px" and tok["restored"] != "2px", str(tok))
+
+        # ---- المثال المستقل: عقد E01 كاملًا بلا board.* ----
+        ex = f"{base}/previews/messages/example-usage.html"
+        pe = ctx.new_page()
+        ex_errors = []
+        pe.on("console", lambda m: ex_errors.append(m.text) if m.type == "error" else None)
+        pe.on("pageerror", lambda e: ex_errors.append(str(e)))
+        pe.goto(ex)
+        pe.wait_for_load_state("networkidle")
+        pe.wait_for_timeout(2200)  # تسلسل الفحوص الداخلية (~1.9s)
+        ex_results = pe.evaluate("() => document.getElementById('results').textContent")
+        ex_pass = ex_results.count("PASS ")
+        ex_fail = ex_results.count("FAIL ")
+        check("A10 المثال المستقل (بلا board.*): عقد الإخفاء/الإغلاق/إعادة الاستخدام/استرجاع التركيز",
+              ex_fail == 0 and ex_pass >= 7 and not ex_errors,
+              f"{ex_pass} PASS / {ex_fail} FAIL; errors={ex_errors[:1]}")
+        pe.screenshot(path=str(SHOTS / "05-example-after-close.png"), full_page=True)
+        pe.close()
 
         # ---- الفراغ: ثلاث حالات مفهومة + إعادة المحاولة بمحاكاة ----
         page.click("[data-retry-demo]")

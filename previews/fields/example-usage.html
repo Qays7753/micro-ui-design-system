@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل لحقول B02 — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن + تركيب أزرار B01 موثق.
+  فحوص مدمجة: IDs رسائل فريدة لحقلين متطابقين، دمج وصف سابق،
+  مسح readonly محمي، عدّاد، خطوة بحدود. النتائج في الصفحة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: الحقول (B02)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — الحقول (B02)</h1>
+  <div class="m-field" data-micro-field>
+    <label class="m-field__label" for="u-1">اسم المستفيد</label>
+    <div class="m-field__control">
+      <input class="m-field__input" id="u-1" type="text" value="أحمد" maxlength="40">
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح"><svg class="m-btn__icon" aria-hidden="true"></svg></button>
+    </div>
+    <p class="m-field__msg" data-field-msg hidden>رسالة أ</p>
+    <span class="m-field__count" aria-hidden="true"></span>
+  </div>
+  <div class="m-field" data-micro-field>
+    <label class="m-field__label" for="u-2">حقل متطابق البنية (بلا id للغلاف)</label>
+    <div class="m-field__control"><input class="m-field__input" id="u-2" type="text" aria-describedby="prior-help"></div>
+    <p class="m-field__msg" data-field-msg hidden>رسالة ب</p>
+  </div>
+  <p id="prior-help" hidden>وصف مساعدة سابق</p>
+  <div class="m-field" data-micro-field>
+    <label class="m-field__label" for="u-3">كمية قراءة فقط</label>
+    <div class="m-field__control m-field__stepper">
+      <button type="button" data-step="down" aria-label="إنقاص">−</button>
+      <input class="m-field__input m-field__input--num" id="u-3" type="text" inputmode="decimal" dir="ltr" value="10" min="0" max="99" step="5" readonly>
+      <button type="button" data-step="up" aria-label="زيادة">+</button>
+    </div>
+  </div>
+  <pre id="results">جارٍ الفحص…</pre>
+  <script src="../../components/fields/fields.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var fields = [...document.querySelectorAll('[data-micro-field]')];
+      var id1 = fields[0].querySelector('[data-field-msg]').id;
+      var id2 = fields[1].querySelector('[data-field-msg]').id;
+      t('معرفا رسالة فريدان لحقلين متطابقين', id1 && id2 && id1 !== id2, id1 + ' / ' + id2);
+      var desc = document.getElementById('u-2').getAttribute('aria-describedby').split(/\s+/);
+      t('دمج وصف سابق دون استبدال', desc.indexOf('prior-help') >= 0 && desc.indexOf(id2) >= 0, desc.join(' '));
+      var ro = document.getElementById('u-3');
+      fields[2].querySelector('[data-step="up"]').click();
+      t('خطوة على readonly محمية (القيمة كما هي)', ro.value === '10', ro.value);
+      var inp = document.getElementById('u-1');
+      inp.value = 'أحمد سالم';
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      var cnt = document.querySelector('.m-field__count').textContent;
+      t('العدّاد يتبع القيمة (حد معلن)', cnt === '9/40', cnt);
+      inp.closest('.m-field__control').querySelector('.m-field__clear').click();
+      t('المسح يفرّغ القيمة ويعيد التركيز', inp.value === '' && document.activeElement === inp);
+      document.getElementById('results').textContent = out.join('\n');
+      console.log('[example] نتائج فحص الحقول:\n' + out.join('\n'));
+    })();
+  });
+  </script>
+</body>
+</html>

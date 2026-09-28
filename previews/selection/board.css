@@ -1,5 +1,6 @@
-/* تنسيق لوحة الاختيار B02 — طبقة المنتقي المؤقتة فقط (تستكمل بطبقة B07 النهائية) */
-.picker-sheet {
+/* بطاقة عرض للمثال المضمّن فقط — أسلوب المنتقي نفسه في
+   components/selection/picker.css (المصدر القابل لإعادة الاستخدام) */
+.demo-card {
   display: flex;
   flex-direction: column;
   gap: var(--micro-space-2);
@@ -8,49 +9,3 @@
   border-radius: var(--micro-radius-surface);
   padding: var(--micro-space-4);
 }
-.picker-sheet__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--micro-space-2);
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 24px;
-}
-.picker-sheet__list {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
-  overflow: hidden;
-}
-.picker-sheet__foot {
-  color: var(--micro-text-hint);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--micro-space-2);
-}
-.picker-option {
-  display: flex;
-  align-items: center;
-  gap: var(--micro-space-2);
-  min-height: 48px;
-  padding-inline: var(--micro-space-4);
-  background: var(--micro-surface-base);
-  border: 0;
-  border-block-end: 1px solid var(--micro-border-divider);
-  font-family: var(--micro-font-family);
-  font-size: var(--micro-body-size);
-  line-height: var(--micro-body-line);
-  color: var(--micro-text-primary);
-  text-align: start;
-  cursor: pointer;
-}
-.picker-option:last-child { border-block-end: 0; }
-.picker-option[aria-selected="true"] {
-  background-color: var(--micro-surface-selected);
-}
-.picker-option.is-loading-row { color: var(--micro-text-hint); }

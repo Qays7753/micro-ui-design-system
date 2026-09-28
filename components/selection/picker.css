@@ -1,0 +1,133 @@
+/* =========================================================
+   Micro UI — منتقي كيان قابل للبحث (جزء من B03)
+   الملف: components/selection/picker.css
+   يعتمد shared/tokens.css. أسلوب المنتقي هنا في المصدر القابل
+   لإعادة الاستخدام (E04) — لا تصميم في لوحة المعاينة. الخصائص
+   منطقية فتعمل في RTL. الحالة: DRAFT FOR REVIEW.
+   الربط بطبقة B07: يوضع داخل .m-layer فيُدار فتحه وإغلاقه بـ
+   MicroNavigation (بدايةً من المشغّل) — أو يُستخدم مضمّنًا.
+   البحث: حقل مستقل أو حقل B02 — يكفي وجود [data-picker-search].
+   ========================================================= */
+
+.m-picker,
+.m-picker * {
+  box-sizing: border-box;
+}
+
+.m-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  font-family: var(--micro-font-family);
+  min-width: 0;
+}
+
+.m-picker__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  font-weight: 600;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+.m-picker__title { flex: 1; min-width: 0; }
+
+/* البحث: إدخال حر — يناسب حقل B02 أو input مجردًا */
+.m-picker__search { display: flex; flex-direction: column; gap: 4px; }
+.m-picker__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+.m-picker__input {
+  min-height: var(--micro-field-height, 52px);
+  padding: 0 var(--micro-space-4);
+  border: 1.5px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+}
+.m-picker__input:focus-visible {
+  outline: none;
+  border-color: var(--micro-focus-ring);
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* القائمة: الأدوار listbox/option والتنقل بالأسهم في picker.js */
+.m-picker__list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  overflow: hidden;
+  background-color: var(--micro-surface-base);
+}
+.m-picker__list:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* الخيار: زر دائمًا (لوحة مفاتيح مجانية) — role=option في الترميز */
+.m-picker__option {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min); /* هدف لمس 48px — قاعدة المشروع */
+  padding-inline: var(--micro-space-4);
+  background: var(--micro-surface-base);
+  border: 0;
+  border-block-end: 1px solid var(--micro-border-divider);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+  text-align: start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.m-picker__option:last-child { border-block-end: 0; }
+.m-picker__option[aria-selected="true"] {
+  background-color: var(--micro-surface-selected);
+}
+/* E04: الإخفاء بالسمة hidden يغلب display:flex — بلا style.display
+   يدوي ولا نتائج عالقة مخفية بعد مسح البحث */
+.m-picker__option[hidden] { display: none; }
+.m-picker__option:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--micro-focus-ring);
+}
+
+/* صف حالة القراءة: انتظار/فشل/لا نتائج — نصه من العقد أدناه */
+.m-picker__state {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-4);
+  color: var(--micro-text-hint);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+}
+.m-picker__state--error { color: var(--micro-danger); }
+.m-picker__state .m-btn { flex: none; }
+
+.m-picker__foot {
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+  margin: 0;
+}

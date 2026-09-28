@@ -116,18 +116,23 @@
         <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
       </div>
       <div class="phone-full-block">
-        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target" style="padding-block-end:0">
-          <div class="phone-stack" style="padding-block-end:var(--micro-space-10)">
+        <div class="phone-demo is-390 zoom-lab is-scroll" id="text-zoom-target">
+          <div class="phone-stack">
             <h3 class="m-section-title">تفاصيل الطلب</h3>
-            <p class="m-section-desc">محتوى الصفحة يمتد فوق شريط الإجراء بحشو سفلي كي لا يحجبه الشريط عند النهاية — المحتوى الأخير يبقى مقروءًا دائمًا فوق الشريط الثابت.</p>
-            <div class="m-navbar" role="navigation" aria-label="عينة شريط (تكبير)">
+            <p class="m-section-desc">محتوى الصفحة يتمرّر داخل الهاتف — شريط الأفعال وشريط التنقل مجموعة ثابتة واحدة أسفل الحاوية، فلا يغطي أحدهما الآخر، والمحتوى الأخير يبقى مقروءًا عند نهاية التمرير لأن المجموعة تحتفظ بمكانها في التدفق.</p>
+            <p class="m-section-desc">فقرة تمهيدية لفحص التمرير: المحتوى أطول من ارتفاع الهاتف كي يعمل التمرير الداخلي فعليًا، مع بقاء الشريطين ظاهرين أسفل الحاوية أثناء التمرير.</p>
+            <p class="m-section-desc">فقرة ثانية: نفس النمط عند تكبير النص 200% — أزرار الشريط تلتف داخل مجموعته فيزيد ارتفاعها، والمساحة محجوزة تلقائيًا من التدفق لا بحشوة ثابتة.</p>
+            <p class="m-section-desc" id="last-content">عنصر فحص الوصول الأخير — يجب أن يُرى كاملًا فوق المجموعة الثابتة (شريط الأفعال ثم التنقل) عند نهاية التمرير.</p>
+          </div>
+          <div class="sticky-foot" id="sticky-foot">
+            <div class="m-actionbar">
+              <button type="button" class="m-btn m-btn--secondary">رفض</button>
+              <button type="button" class="m-btn m-btn--primary">اعتماد الطلب</button>
+            </div>
+            <div class="m-navbar" role="navigation" aria-label="شريط التنقل السفلي (عينة)">
               <button type="button" class="m-navbar__item" aria-current="page"><svg aria-hidden="true"><use href="#i-home"/></svg>مشروعي</button>
               <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-menu"/></svg>المزيد</button>
             </div>
-          </div>
-          <div class="m-actionbar">
-            <button type="button" class="m-btn m-btn--secondary">رفض</button>
-            <button type="button" class="m-btn m-btn--primary">اعتماد الطلب</button>
           </div>
         </div>
       </div>
@@ -200,7 +205,9 @@
         <label class="m-field__label" for="f-search">بحث بالاسم</label>
         <div class="m-field__control">
           <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
-          <input class="m-field__input" id="f-search" type="search" autocomplete="off">
+          <!-- E08: البحث هنا فلتر ضمن العقد نفسه (data-filter-key) —
+               يدخل الجاري/المطبّق ويُطبّق ويُمسح ويُلغى مع البقية -->
+          <input class="m-field__input" id="f-search" type="search" autocomplete="off" data-filter-key="بحث بالاسم">
         </div>
       </div>
       <div>

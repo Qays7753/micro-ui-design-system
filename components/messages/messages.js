@@ -4,13 +4,22 @@
    عقد عام فقط:
    1) MicroMessages.toast(el, options) — الرسالة العابرة لتأكيد
       غير حرج فقط: مدة يحددها المستهلك (options.duration،
-      افتراض 4000ms)، إغلاق يدوي دائمًا، وإعلان مرة واحدة عبر
-      منطقة aria-live مشتركة (دون تكرار عند إعادة الظهور).
+      افتراض 4000ms)، إغلاق يدوي دائمًا، وإعلان واحد عبر منطقة
+      aria-live مشتركة (مسار الإعلان الوحيد — عنصر toast نفسه
+      بلا role/aria-live حتى لا تتكرر الرسالة بمسارين).
       ليست للرسائل المهمة أو المطلوبة لتصحيح إدخال — تلك ثابتة.
-   2) MicroMessages.announce(text, assertive) — إعلان مرة واحدة
+   2) MicroMessages.closeToast(el) — الإغلاق اليدوي في المصدر:
+      يلغي المؤقت الحالي ويخفي العنصر فعليًا ويطلق حدث
+      micro-messages:toast-closed — قابل للاستدعاء من زر داخل
+      الـtoast أو من المستهلك مباشرة (لا يعود محصورًا باللوحة).
+   3) MicroMessages.announce(text, assertive) — إعلان مرة واحدة
       لنفس النص المتتالي (منع التكرار).
-   3) إغلاق الرسائل الثابتة ذات زر (.m-note__close) — يخفي
-      الرسالة ويعيد التركيز عند الطلب (options.returnFocus).
+   4) إغلاق الرسائل الثابتة ذات زر (.m-note__close) — يخفي
+      الرسالة ويعيد التركيز عند الطلب: سمة data-return-focus
+      على الزر أو على الرسالة (محدد CSS لعنصر هدف صالح).
+      بلا السمة: يُطلق حدث micro-messages:note-closed ليقرر
+      المستهلك — ولا يُدّعى استرجاع تركيز لم يحدث.
+   إخفاء hidden فعلي في messages.css (display:flex كان يغلبها).
    لا شبكة ولا retry منطقي داخل المكوّن — إعادة المحاولة عند المستهلك.
    ========================================================= */
 
@@ -39,19 +48,46 @@
     window.setTimeout(function () { region.textContent = text; }, 50);
   }
 
+  function toastText(el) {
+    var t = el.querySelector('.m-toast__text');
+    return (t || el).textContent;
+  }
+
   function toast(el, options) {
     if (!el || el.nodeType !== 1) return;
     options = options || {};
     var duration = typeof options.duration === 'number' ? options.duration : 4000;
-    el.hidden = false;
-    announce(el.querySelector('.m-toast__text') ? el.querySelector('.m-toast__text').textContent : el.textContent, false);
     if (el.dataset.toastTimer) window.clearTimeout(parseInt(el.dataset.toastTimer, 10));
+    el.hidden = false;
+    announce(toastText(el), false); /* مسار الإعلان الوحيد: المنطقة الحية */
     var timer = window.setTimeout(function () {
-      el.hidden = true;
-      delete el.dataset.toastTimer;
+      hideToast(el);
       el.dispatchEvent(new Event('micro-messages:toast-dismissed', { bubbles: true }));
     }, duration);
     el.dataset.toastTimer = String(timer);
+  }
+
+  /* الإخفاء بلا آثار مؤقت قديم — يعاد استخدام العنصر بأمان */
+  function hideToast(el) {
+    if (el.dataset.toastTimer) {
+      window.clearTimeout(parseInt(el.dataset.toastTimer, 10));
+      delete el.dataset.toastTimer;
+    }
+    el.hidden = true; /* messages.css تجعله مخفيًا فعليًا */
+  }
+
+  /* الإغلاق اليدوي من المصدر (زر داخل العنصر أو استدعاء مباشر) */
+  function closeToast(el) {
+    if (!el || el.nodeType !== 1) return;
+    hideToast(el);
+    el.dispatchEvent(new Event('micro-messages:toast-closed', { bubbles: true }));
+  }
+
+  /* هدف استرجاع التركيز: سمة data-return-focus على الزر أو الرسالة */
+  function returnFocusTarget(btn, note) {
+    var sel = btn.getAttribute('data-return-focus') || note.getAttribute('data-return-focus');
+    if (!sel) return null;
+    try { return document.querySelector(sel); } catch (e) { return null; }
   }
 
   function bindClose(root) {
@@ -61,14 +97,29 @@
       btn.addEventListener('click', function () {
         var note = btn.closest('.m-note');
         if (!note) return;
+        var target = returnFocusTarget(btn, note); /* قبل الإخفاء */
         note.hidden = true;
-        note.dispatchEvent(new Event('micro-messages:note-closed', { bubbles: true }));
+        if (target && !target.disabled && typeof target.focus === 'function') {
+          target.focus();
+        }
+        note.dispatchEvent(new CustomEvent('micro-messages:note-closed', {
+          bubbles: true, detail: { returnFocus: !!target }
+        }));
+      });
+    });
+    /* إغلاق toast اليدوي: أي عنصر [data-toast-close] داخل .m-toast */
+    (root || document).querySelectorAll('.m-toast [data-toast-close]').forEach(function (btn) {
+      if (btn.dataset.microToastCloseBound) return;
+      btn.dataset.microToastCloseBound = '1';
+      btn.addEventListener('click', function () {
+        closeToast(btn.closest('.m-toast'));
       });
     });
   }
 
   window.MicroMessages = {
     toast: toast,
+    closeToast: closeToast,
     announce: announce,
     init: function (root) { bindClose(root); }
   };

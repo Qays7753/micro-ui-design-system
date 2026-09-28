@@ -234,7 +234,10 @@
 .m-switch:has(input:disabled) input:focus-visible + .m-switch__track { box-shadow: none; }
 
 /* انتظار تحديث إعداد (محاكاة المستهلك): المفتاح يتعطل مؤقتًا —
-   العقد: المستهلك يضبط data-pending ويرجع القيمة عند الفشل */
+   العقد: المستهلك يضبط data-pending عبر setSwitchPending التي
+   تعطّل input فعليًا (label وSpace بلا أثر) وتسترجع الأصل.
+   pointer-events أدناه طبقة إضافية للترميز المباشر فقط، والحماية
+   الفعلية للتغيير البرمجي في selection.js (تقاطع change). */
 .m-switch[data-pending="true"] { cursor: wait; }
 .m-switch[data-pending="true"] input { pointer-events: none; }
 
@@ -259,6 +262,7 @@
   max-width: 100%;
 }
 .m-seg__item {
+  position: relative; /* لامتداد هدف اللمس دون تغيير الشكل */
   min-height: 40px;
   padding-inline: var(--micro-space-4);
   display: inline-flex;
@@ -296,6 +300,18 @@
   background-color: transparent;
   color: var(--micro-text-disabled);
   cursor: not-allowed;
+}
+
+/* E05 — هدف اللمس الفعلي 48px (قاعدة المشروع --micro-touch-min):
+   الشكل البصري 40px، والامتداد ::after يزيد 4px رأسيًا من كل طرف
+   (أحداث المؤشر على العنصر الزائف تُنسب للزر) — رأسيًا فقط كي لا
+   يتداخل مع المقاطع المجاورة (الفجوة بينها 4px). القياس في الفحوص
+   على المستطيل الفعلي الموسّع، لا على min-height وحده. */
+.m-seg__item::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: calc((40px - var(--micro-touch-min)) / 2); /* -4px */
 }
 
 @media (prefers-reduced-motion: reduce) {

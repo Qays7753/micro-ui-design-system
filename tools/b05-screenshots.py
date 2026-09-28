@@ -93,20 +93,21 @@ def main():
               before["text"] == "8" and after["text"] == "11" and after["y"] < before["y"] and restored == "8",
               f"قبل {before} أثناء {after} بعد {restored}")
 
-        # ---- DATA-03: دوائر — المساحة ∝ القيمة (√) ----
+        # ---- DATA-03: دوائر — المساحة ∝ القيمة (√) بلا حد يضخّم (E06) ----
         radii = page.evaluate(
             """() => { const bs = [...document.querySelectorAll('#shapes .m-bubble')]
                    .filter(b => b.querySelector('.m-bubble__circle:not(.m-bubble__circle--none)'));
-                 return bs.map(b => Math.round(parseFloat(b.querySelector('.m-bubble__circle').style.width))); }""")
+                 return bs.map(b => parseFloat(b.querySelector('.m-bubble__circle').style.width)); }""")
         expected_49 = radii[0] * (49 / 100) ** 0.5
         expected_25 = radii[0] * (25 / 100) ** 0.5
-        ratio_ok = (len(radii) >= 4
+        expected_001 = radii[0] * (0.01 / 100) ** 0.5  # 0.01: قطر حقيقي بلا حد أدنى
+        ratio_ok = (len(radii) >= 5
                     and abs(radii[1] - expected_49) <= 2
                     and abs(radii[2] - expected_25) <= 2
                     and radii[0] > radii[1] > radii[2] > radii[3]
-                    and radii[3] >= 8)
-        check("A6 دوائر المساحة: نصف القطر √القيمة (100→49→25→1)",
-              ratio_ok, f"أقطار={radii} (1 صغيرة بتسمية خارجية)")
+                    and abs(radii[4] - expected_001) <= 0.15 and radii[4] < 2)
+        check("A6 دوائر المساحة: نصف القطر √القيمة (100→49→25→1) و0.01 بقطرها الحقيقي ~1.04px بلا تضخيم",
+              ratio_ok, f"أقطار={radii} متوقع_0.01={expected_001:.2f}")
 
         # ---- بدائل الصفر/السالب/الناقص في الدوائر ----
         alts = page.evaluate(
@@ -138,24 +139,92 @@ def main():
               prog["det"] and prog["ind"] and steps["complete"] == 2 and steps["current"] == 1
               and steps["upcoming"] == 1 and steps["blocked"] == 1 and steps["badge"], f"{prog} {steps}")
 
+        # ---- E06: حالات الحدود الصعبة (لا تمثيل مضلل) ----
+        edges = page.evaluate(
+            """() => { const sec = document.getElementById('edge-cases');
+                 const charts = [...sec.querySelectorAll('[data-chart]')];
+                 const negBar = charts[0];
+                 const negTxt = negBar.textContent.includes('-5 — سالب غير مرسوم');
+                 // لا عمود موجب وهمي للسالب: مستطيل بارتفاع فوق الأساس لا يضاف
+                 const negRectHeights = [...negBar.querySelectorAll('rect')].map(r => parseFloat(r.getAttribute('height') || 0));
+                 const zeroDonut = charts[1];
+                 const noNaN = !zeroDonut.innerHTML.includes('NaN');
+                 const zeroCenter = zeroDonut.querySelector('.m-donut__center') && zeroDonut.querySelector('.m-donut__center').textContent === '0';
+                 const errDonut = charts[2];
+                 const errShown = !!errDonut.querySelector('.m-chart__error') &&
+                                  errDonut.querySelector('.m-chart__error').textContent.includes('110');
+                 const rawLegend = errDonut.querySelector('.m-legend') && !errDonut.querySelector('.m-legend').textContent.includes('%');
+                 const line = charts[3];
+                 const dash = line.textContent.includes('—');
+                 return {negTxt, negNoPositiveBar: negRectHeights.every(h => h >= 0), noNaN, zeroCenter, errShown, rawLegend, dash}; }""")
+        check("A10 عمود سالب لا يُرسم كموجب + توزيع صفري بلا NaN + مقام مخطئ برسالة صريحة وقيم خام",
+              edges["negTxt"] and edges["negNoPositiveBar"] and edges["noNaN"] and edges["zeroCenter"]
+              and edges["errShown"] and edges["rawLegend"], str(edges))
+
+        # ---- E06: الخط ينقطع عند المفقود (شرائح لا وصلة صامتة) + المفتاح نص حرفي ----
+        split = page.evaluate(
+            """() => { const mainLine = document.querySelectorAll('#line [data-chart]')[0];
+                 const polys = mainLine.querySelectorAll('polyline').length; // 5 نقاط وفجوة وسطية: شريحتان
+                 // حقن التسمية: نص حرفي بلا عناصر
+                 const host = document.createElement('div');
+                 host.innerHTML = '<div class="m-chart" data-chart="donut" data-total="10"><ul class="m-chart__data" hidden>' +
+                   '<li data-series="a" data-label="<b id=inj>حقن</b>" data-value="5"></li></ul>' +
+                   '<div class="m-chart__plot m-donut" data-plot></div></div>';
+                 document.body.appendChild(host);
+                 MicroData.render(host.querySelector('[data-chart]'));
+                 const legend = host.querySelector('.m-legend');
+                 const literal = legend.textContent.includes('<b id=inj>حقن</b>');
+                 const noElement = !legend.querySelector('b');
+                 host.remove();
+                 return {polys, literal, noElement}; }""")
+        check("A11 الخط ينقطع عند الفجوة (شريحتان) + تسمية المستهلك نص حرفي (عُقد DOM لا innerHTML)",
+              split["polys"] == 2 and split["literal"] and split["noElement"], str(split))
+
+
+        # ---- SYS-02/E11: المثال المستقل بلا board.* ----
+        ex5 = f"{base}/previews/data/example-usage.html"
+        pe5 = ctx.new_page()
+        ex_err5 = []
+        pe5.on("pageerror", lambda e: ex_err5.append(str(e)))
+        pe5.goto(ex5)
+        pe5.wait_for_load_state("networkidle")
+        pe5.wait_for_timeout(1200)
+        ex_res5 = pe5.evaluate("() => document.getElementById('results').textContent")
+        check("EX مثال مستقل data: 0 فشل بلا أخطاء",
+              ex_res5.count("FAIL ") == 0 and ex_res5.count("PASS ") >= 3 and not ex_err5,
+              ex_res5.splitlines()[0] if ex_res5 else "لا نتائج")
+        pe5.close()
+
         # ---- لقطات ----
         page.locator("#values").screenshot(path=str(SHOTS / "01-values-390.png"))
         page.locator("#bars").screenshot(path=str(SHOTS / "02-bars-390.png"))
         page.locator("#line").screenshot(path=str(SHOTS / "03-line-390.png"))
         page.locator("#shapes").screenshot(path=str(SHOTS / "04-shapes-390.png"))
+        page.locator("#edge-cases").screenshot(path=str(SHOTS / "09-edge-cases-390.png"))
         page.locator("#tracking").screenshot(path=str(SHOTS / "05-tracking-390.png"))
         page.locator("#assets-check").screenshot(path=str(SHOTS / "08-assets-390.png"))
         page.screenshot(path=str(SHOTS / "00-overview-390-full.png"), full_page=True)
 
-        # ---- الهواتف + التكبير ----
-        for width in (320, 390, 430):
+        # ---- E1: تعديل توكن → انعكاس → استعادة ----
+        tok = page.evaluate(
+            """() => { const root = document.documentElement.style;
+                 root.setProperty('--micro-data-a', '#FF0000');
+                 const v = getComputedStyle(document.querySelector('#shapes .m-bubble')).getPropertyValue('--micro-data-a');
+                 root.removeProperty('--micro-data-a');
+                 const back = getComputedStyle(document.querySelector('#shapes .m-bubble')).getPropertyValue('--micro-data-a');
+                 return {changed: v, restored: back}; }""")
+        check("E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل",
+              tok["changed"] == " #FF0000" or tok["changed"] == "#FF0000", str(tok))
+
+        # ---- الهواتف + التكبير + فحص تداخل تسميات SVG (E07) ----
+        for width in (320, 360, 390, 430):
             c = browser.new_context(viewport={"width": width, "height": 900})
             pg = c.new_page()
             pg.goto(board)
             pg.wait_for_load_state("networkidle")
             ov = pg.evaluate("() => ({sw: document.scrollingElement.scrollWidth, cw: document.scrollingElement.clientWidth})")
             check(f"B1 {width}px بلا تمرير أفقي", ov["sw"] <= ov["cw"], str(ov))
-            if width in (320, 390):
+            if width in (320, 360, 390):
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(250)
                 tz = pg.evaluate(
@@ -164,8 +233,24 @@ def main():
                          return {font: getComputedStyle(num).fontSize, sw: t.scrollWidth, cw: t.clientWidth}; }""")
                 check(f"B2 {width}px تكبير 200%: الرقم 72px والمحتوى داخل العمود",
                       tz["font"] == "72px" and tz["sw"] <= tz["cw"] + 1, str(tz))
+                # E07: تسميات الرسم داخل SVG لا تتزاحم/تتداخل عند التكبير (لا قياس عرض صفحة فقط)
+                labels = pg.evaluate(
+                    """() => { const sec = document.getElementById('bars');
+                         const texts = [...sec.querySelectorAll('svg .m-chart__bar-label')];
+                         const rs = texts.map(t => t.getBoundingClientRect());
+                         let overlap = false;
+                         for (let i = 0; i < rs.length; i++)
+                           for (let j = i + 1; j < rs.length; j++) {
+                             const a = rs[i], b = rs[j];
+                             if (a.left < b.right - 0.5 && b.left < a.right - 0.5 &&
+                                 a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5) overlap = true;
+                           }
+                         return {count: texts.length, overlap}; }""")
+                check(f"B3 {width}px تكبير 200%: تسميات الأعمدة داخل SVG لا تتداخل (فحص مستطيلات لا عرض صفحة)",
+                      labels["count"] >= 3 and not labels["overlap"], str(labels))
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / f"06-zoom-200-{width}.png"))
                 pg.click('[data-lab="text-zoom"]')
+                pg.wait_for_timeout(200)
             c.close()
 
         # ---- تقليل الحركة: شريط الانتظار ثابت ----

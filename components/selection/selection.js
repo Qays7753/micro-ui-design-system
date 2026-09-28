@@ -15,9 +15,18 @@
 (function () {
   'use strict';
 
+  /* E05: استرجاع دقيق لحالة التعطيل الأصلية للمفتاح بعد الانتظار */
+  var pendingRestore = new WeakMap();
+
+  function isDisabled(el) {
+    return el.disabled || el.getAttribute('aria-disabled') === 'true';
+  }
+
   function syncGroup(group) {
     var all = group.querySelector('[data-select-all]');
-    var boxes = [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'));
+    /* E05: «تحديد الكل» يدير العناصر المفعّلة فقط — لا يغيّر المحمية */
+    var boxes = [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'))
+      .filter(function (b) { return !b.disabled; });
     if (!all || !boxes.length) return;
     var checked = boxes.filter(function (b) { return b.checked; }).length;
     if (checked === 0) { all.checked = false; all.indeterminate = false; }
@@ -33,7 +42,7 @@
       if (all) {
         all.addEventListener('change', function () {
           [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'))
-            .forEach(function (b) { b.checked = all.checked; });
+            .forEach(function (b) { if (!b.disabled) b.checked = all.checked; }); /* E05: المعطل لا يُلمس */
           group.dispatchEvent(new Event('micro-selection:changed', { bubbles: true }));
         });
       }
@@ -62,16 +71,23 @@
       items.forEach(function (it) {
         it.addEventListener('click', function () { if (!it.disabled) select(it); });
       });
-      /* تنقل أسهم مثل مجموعة راديو */
+      /* تنقل أسهم مثل مجموعة راديو — يتجاوز المعطل (E05) ولا يقف عنده */
       seg.addEventListener('keydown', function (e) {
         var i = items.indexOf(document.activeElement);
         if (i < 0) return;
-        var next = null;
-        if (e.key === 'ArrowLeft') next = items[(i + 1) % items.length];      /* RTL: يسار = التالي */
-        else if (e.key === 'ArrowRight') next = items[(i - 1 + items.length) % items.length];
-        else if (e.key === 'ArrowDown') next = items[(i + 1) % items.length];
-        else if (e.key === 'ArrowUp') next = items[(i - 1 + items.length) % items.length];
-        if (next) { e.preventDefault(); next.focus(); if (!next.disabled) select(next); }
+        var dir = 0;
+        if (e.key === 'ArrowLeft') dir = 1;      /* RTL: يسار = التالي */
+        else if (e.key === 'ArrowRight') dir = -1;
+        else if (e.key === 'ArrowDown') dir = 1;
+        else if (e.key === 'ArrowUp') dir = -1;
+        if (!dir) return;
+        e.preventDefault();
+        var n = items.length, next = null;
+        for (var s = 1; s <= n; s++) {
+          var cand = items[((i + dir * s) % n + n) % n];
+          if (!isDisabled(cand)) { next = cand; break; }
+        }
+        if (next) { next.focus(); select(next); }
       });
     });
   }
@@ -82,13 +98,36 @@
     bindSegmented(scope);
   }
 
+  /* حماية مباشرة حتى مع data-pending المضبوط بالترميز دون API:
+   * أي تغيير على مفتاح في انتظار يُرجع فورًا (تقاطع). */
+  document.addEventListener('change', function (e) {
+    var input = e.target;
+    if (!input.matches || !input.matches('.m-switch input')) return;
+    var sw = input.closest('.m-switch');
+    if (sw && sw.getAttribute('data-pending') === 'true') {
+      input.checked = !input.checked;
+    }
+  }, true);
+
   /* عقد المفتاح: انتظار تحديث إعداد — المستهلك يضبط ويرجع عند الفشل */
   window.MicroSelection = {
     init: init,
     setSwitchPending: function (switchEl, pending) {
+      if (!switchEl || switchEl.nodeType !== 1) return;
       switchEl.setAttribute('data-pending', pending ? 'true' : 'false');
       var input = switchEl.querySelector('input');
-      if (input) input.setAttribute('aria-busy', pending ? 'true' : 'false');
+      if (!input) return;
+      input.setAttribute('aria-busy', pending ? 'true' : 'false');
+      /* E05: حماية تفعيل فعلية أثناء الانتظار — label وSpace والنقر
+         جميعها بلا أثر، مع استرجاع التعطيل الأصلي بدقة (ربما كان
+         معطلًا قبل الانتظار — يُرجع معطلًا لا مفعّلًا). */
+      if (pending) {
+        if (!pendingRestore.has(input)) pendingRestore.set(input, input.disabled);
+        input.disabled = true;
+      } else {
+        input.disabled = pendingRestore.has(input) ? pendingRestore.get(input) : false;
+        pendingRestore.delete(input);
+      }
     }
   };
 
