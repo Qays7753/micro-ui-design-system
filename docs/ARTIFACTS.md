@@ -40,8 +40,8 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 | `components/fields/` + `previews/fields/` | DRAFT FOR RE-REVIEW | B02 الحقول: فحوص 27/27 — بعد R2-06 (تفرد معرف الرسالة بالمستند) |
 | `components/selection/` + `previews/selection/` | DRAFT FOR RE-REVIEW | B03 الاختيار: فحوص 25/25 — بعد R2-03 (حالة قراءة موحدة للمنتقي) وR2-06 (ثبات عقود المفتاح) |
 | `components/organization/` + `previews/organization/` | DRAFT FOR RE-REVIEW | B04 التنظيم: فحوص 15/15 |
-| `components/surfaces/` + `assets/surfaces/` + `shared/motion.css` + `previews/surfaces/` | DRAFT FOR RE-REVIEW | S01 الأسطح والحركة: فحوص 21/21 — بعد R2-01 (سطور نسبية ولفّ رقم طويل) وR2-04 (عينات بكسل) + مثال مستقل |
-| `components/data/` + `previews/data/` | DRAFT FOR RE-REVIEW | B05 البيانات والتتبّع: فحوص 25/25 — بعد R2-05 (تحليل رقم كامل وتمييز مفقود/صفر/مقام غير صالح) |
+| `components/surfaces/` + `assets/surfaces/` + `shared/motion.css` + `previews/surfaces/` | DRAFT FOR RE-REVIEW | S01 الأسطح والحركة: فحوص 35/35 — بعد R2-01 (سطور نسبية ولفّ رقم طويل) وR2-04 (عينات بكسل) وC1 (نص مصمت وبوابة الأدوار الأربعة وقياس موضعي مصحح) + مثال مستقل |
+| `components/data/` + `previews/data/` | DRAFT FOR RE-REVIEW | B05 البيانات والتتبّع: فحوص 26/26 — بعد R2-05 (تحليل رقم كامل وتمييز مفقود/صفر/مقام غير صالح) وC2 (مقام صفر/سالب معلن لا يُتجاهل) |
 | `components/messages/` + `previews/messages/` | DRAFT FOR RE-REVIEW | B06 الرسائل والحالات: فحوص 17/17 |
 | `components/navigation/` + `previews/navigation/` | DRAFT FOR RE-REVIEW | B07 التنقّل والطبقات: فحوص 28/28 — بعد R2-02 (دورة حياة الطبقة الآمنة) |
 | `previews/index.html` + `previews/board-base.css` + `previews/board.js` | DRAFT | فهرس المعاينات والبنية المشتركة لفرع التوسعة |
