@@ -385,14 +385,14 @@ def main():
             check(f"B1 {width}px: الصفحة بلا تمرير أفقي", ov["sw"] <= ov["cw"], str(ov))
             if width == 320:
                 pg.locator("#options").screenshot(path=str(SHOTS / shot_hard))
-                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-zoom-lab-320.png"))
+                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-baseline-320.png"))
                 hidden_wider = pg.evaluate(
                     """() => { const b = document.querySelector('.phone-full-block[data-w="390"]');
                          return b && getComputedStyle(b).display === 'none'; }"""
                 )
                 check("B2 320px: الأعمدة الأعرض مخفية (تُعاين عند عرضها)", bool(hidden_wider))
             if width == 390:
-                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-zoom-lab-390.png"))
+                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-baseline-390.png"))
             fullsel = f'.phone-full-block[data-w="{width}"] .phone-demo'
             rect = js_rect(pg, fullsel)
             inner = pg.evaluate(
