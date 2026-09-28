@@ -36,6 +36,12 @@
             القيمة المفقودة تقطع الخط فعليًا (شرائح منفصلة — لا وصلة
             صامتة عبر الفجوة)، والمجهول بعلامة «—».
    - donut: نسب بمقام معلن (data-total) — التوزيع من الفئات المعلنة فقط.
+            C2: المقام المعلن يُحكم عليه بقيمته الفعلية لا بعلامة الاستفادة:
+              سالب → حالة غير صالحة صريحة (خطأ معلن، دون نسب)،
+              صفر مع قيم موجبة → تعارض صريح (لا استبدال المقام بالمجموع)،
+              صفر وقيم معلومة كلها صفر → الحالة الصفرية الموثقة دون قسمة
+              (المجهول يبقى «—» في المفتاح — فرق الصفر عن المجهول محفوظ)،
+              والغائب فقط يستعمل البديل الموثق (مجموع الفئات المعروفة).
             مقام صفر أو مجموع فئات صفر: حالة صفرية واضحة (لا قسمة على صفر
             ولا dasharray NaN). مجموع الفئات أكبر من المقام أو قيم سالبة:
             fallback صريح — رسالة خطأ ظاهرة ومفتاح بقيم خام بلا نسب
@@ -233,14 +239,19 @@
 
   /* ---- التوزيع الدائري (نسب بمقام معلن) ----
      R2-05: فارق صريح بين «لا قيمة صالحة» و«قيم معلومة كلها صفر»،
-     وبين مقام غائب (بديل موثق) ومقام موجود غير صالح (خطأ معلن). */
+     وبين مقام غائب (بديل موثق) ومقام موجود غير صالح (خطأ معلن).
+     C2: المقام المعلن صفرًا أو سالبًا لا يُتجاهل — كان `declared > 0`
+     وحده يُعتبر مقامًا صالحًا فيسقط الصفر والسالب صامتًا إلى مجموع
+     الفئات (بديل الغائب) ويظهر توزيع طبيعي بلا خطأ. */
   function renderDonut(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var declaredRaw = chart.getAttribute('data-total');
     var hasDeclaredAttr = declaredRaw !== null && String(declaredRaw).trim() !== '';
     var declared = hasDeclaredAttr ? parseNum(declaredRaw) : null; /* كامل لا بادئة */
     var declaredInvalid = hasDeclaredAttr && declared === null; /* موجود غير رقمي/غير محدود */
-    var hasDeclared = declared !== null && declared > 0; /* مقام صالح قابل للاستخدام */
+    var declaredNegative = hasDeclaredAttr && declared !== null && declared < 0; /* C2: سالب معلن */
+    var declaredZero = hasDeclaredAttr && declared === 0; /* C2: صفر معلن */
+    var hasDeclared = declared !== null && declared > 0; /* مقام صالح قابل للاستخدام فقط */
     var total = hasDeclared ? declared : 0;
     var known = items.filter(function (i) { return i.value !== null && i.value >= 0; });
     var invalid = items.filter(function (i) { return i.value !== null && i.value < 0; });
@@ -255,8 +266,12 @@
     var sumExceeds = hasDeclared && sum > total;
     var hasInvalid = invalid.length > 0;
     var noData = known.length === 0 && invalid.length === 0; /* لا قيمة صالحة إطلاقًا (R2-05) */
-    var unknownTotal = known.length > 0 && sum <= 0 && missing.length > 0; /* صفر مع مجهول: الإجمالي غير معلوم (R2-05) */
-    var zeroCase = known.length > 0 && sum <= 0 && missing.length === 0; /* كل المعلوم صفر — صادقة */
+    /* C2: الحالة الصفرية الموثقة — كل المعلوم صفر (بلا أي قيمة موجبة)،
+       مع مقام معلن صفر يبقى بلا قسمة أيضًا (المركز يعرض المقام المعلن 0
+       والمجهول يبقى «—» في المفتاح — لا دمج الصفر بالمجهول)، وبدونه
+       كما في R2-05. مع فئات مجهولة وبلا مقام معلن: الإجمالي غير معلوم. */
+    var zeroCase = known.length > 0 && sum === 0 && (missing.length === 0 || declaredZero);
+    var unknownTotal = known.length > 0 && sum === 0 && missing.length > 0 && !declaredZero; /* صفر مع مجهول بلا مقام: الإجمالي غير معلوم (R2-05) */
 
     function emptyRing(centerText, labelText) {
       svg.appendChild(svgEl('circle', {
@@ -278,22 +293,38 @@
       derr.className = 'm-chart__error';
       derr.textContent = 'تعذر رسم التوزيع: المقام المعلن غير صالح (data-total="' + declaredRaw + '") — صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.';
       plot.appendChild(derr);
-    } else if (sumExceeds || hasInvalid) {
+    } else if (hasInvalid || sumExceeds) {
       var err = document.createElement('p');
       err.className = 'm-chart__error';
       err.textContent = hasInvalid
         ? 'تعذر رسم التوزيع: توجد قيم سالبة — التوزيع نسب من قيم غير سالبة فقط. القيم معروضة في المفتاح دون نسب.'
         : 'تعذر رسم التوزيع: مجموع الفئات (' + fmt(sum) + ') أكبر من المقام المعلن (' + fmt(total) + ') — صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب.';
       plot.appendChild(err);
+    } else if (declaredNegative) {
+      /* C2: مقام سالب معلن — حالة غير صالحة صريحة، دون نسب
+         (كان يسقط صامتًا إلى مجموع الفئات ويرسم توزيعًا طبيعيًا) */
+      var nerr = document.createElement('p');
+      nerr.className = 'm-chart__error';
+      nerr.textContent = 'تعذر رسم التوزيع: المقام المعلن سالب (data-total="' + declaredRaw + '") — المقام السالب غير صالح للنسب. صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.';
+      plot.appendChild(nerr);
+    } else if (declaredZero && sum > 0) {
+      /* C2: مقام صفر مع قيم موجبة — تعارض صريح: لا استبدال المقام
+         بالمجموع (ذلك بديل المقام الغائب فقط) ولا قسمة على صفر */
+      var zerr = document.createElement('p');
+      zerr.className = 'm-chart__error';
+      zerr.textContent = 'تعذر رسم التوزيع: المقام المعلن صفر (data-total="0") بينما مجموع الفئات ' + fmt(sum) + ' — تعارض في البيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام. صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب.';
+      plot.appendChild(zerr);
     } else if (noData) {
       /* R2-05: عدم توفر البيانات ليس صفرًا — «— / لا توجد بيانات» */
       emptyRing('—', 'لا توجد بيانات');
     } else if (unknownTotal) {
-      /* R2-05: خلط مجهول/صفر والمجموع صفر — لا دعوى بإجمالي صفر */
+      /* R2-05: خلط مجهول/صفر والمجموع صفر بلا مقام معلن — لا دعوى بإجمالي صفر */
       emptyRing('—', 'الإجمالي غير معلوم');
     } else if (zeroCase) {
-      /* كل القيم المعلومة صفرية بلا مجهول — الصفر هنا صادق؛
-         مع مقام معلن صالح يظهر هو نفسه (شرائح كلها صفرية) */
+      /* كل القيم المعلومة صفرية بلا قيمة موجبة — الصفر هنا صادق؛
+         مع مقام معلن صالح يظهر هو نفسه (شرائح كلها صفرية)، ومع مقام
+         معلن صفر (C2) يظهر المقام المعلن 0 — الحالة الصفرية الموثقة
+         دون قسمة، والمجهول إن وُجد يبقى «—» في المفتاح لا صفرًا */
       emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || 'الإجمالي');
     } else {
       var denom = hasDeclared ? total : sum; /* بلا مقام معلن: مجموع الفئات المعروفة — موثق */
@@ -325,7 +356,8 @@
 
     /* مفتاح بقيم كاملة — عقد DOM وtextContent دائمًا (لا innerHTML:
        تسمية المستهلك تعرض كنص حرفي) */
-    var noPercent = declaredInvalid || sumExceeds || hasInvalid || noData || unknownTotal || zeroCase;
+    var noPercent = declaredInvalid || declaredNegative || (declaredZero && sum > 0)
+      || sumExceeds || hasInvalid || noData || unknownTotal || zeroCase;
     var legend = document.createElement('ul');
     legend.className = 'm-legend';
     known.forEach(function (it) {

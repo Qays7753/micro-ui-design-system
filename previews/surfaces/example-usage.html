@@ -88,6 +88,16 @@
       var noOverlap = lines.every(function (r, i) { return i === 0 || r.top >= lines[i - 1].bottom - 1; });
       t('أسطر العنوان بلا تداخل (line-height نسبي 1.6364)', noOverlap && lines.length >= 2, 'أسطر=' + lines.length);
 
+      /* 6) C1: أدوار النص الأربعة أبيض مصمت — التمييز بالحجم/الوزن لا الشفافية */
+      var roleOK = ['label', 'title', 'amount', 'sub'].every(function (r) {
+        return getComputedStyle(surf.querySelector('.m-surface__' + r)).color === 'rgb(255, 255, 255)';
+      });
+      var weights = ['label', 'sub'].map(function (r) {
+        return getComputedStyle(surf.querySelector('.m-surface__' + r)).fontWeight;
+      });
+      t('أدوار النص الأربعة أبيض مصمت (C1) والتمييز بالوزن 500/400 لا الشفافية',
+        roleOK && weights[0] === '500' && weights[1] === '400', 'أوزان=' + weights.join('/'));
+
       document.getElementById('results').textContent = out.join('\n');
     })();
   });

@@ -225,6 +225,52 @@ def main():
               and n.get("center") == "10", str(r2d))
 
 
+        # ---- C2: المقام المعلن صفرًا/سالبًا لا يُتجاهل — اختبار الحدود الموسع ----
+        c2d = page.evaluate(
+            """() => { try {
+                 function donut(dataItems, totalAttr) {
+                   const host = document.createElement('div');
+                   const total = totalAttr === undefined ? '' : ` data-total="${totalAttr}"`;
+                   host.innerHTML = `<div class="m-chart" data-chart="donut"${total}><ul class="m-chart__data" hidden>${dataItems}</ul><div class="m-chart__plot m-donut" data-plot></div></div>`;
+                   document.body.appendChild(host);
+                   MicroData.render(host.querySelector('[data-chart]'));
+                   const c = host.querySelector('[data-chart]');
+                   const center = c.querySelector('.m-donut__center');
+                   const err = c.querySelector('.m-chart__error');
+                   const legend = c.querySelector('.m-legend');
+                   const slices = c.querySelectorAll('circle[stroke-dasharray]').length;
+                   const out = {center: center ? center.textContent : null,
+                                err: err ? err.textContent : null,
+                                legend: legend ? legend.textContent : '',
+                                slices};
+                   host.remove();
+                   return out;
+                 }
+                 const items46 = '<li data-series="a" data-label="أ" data-value="4"></li><li data-series="b" data-label="ب" data-value="6"></li>';
+                 const total0pos = donut(items46, 0);        // صفر مع قيم موجبة: تعارض صريح
+                 const totalNeg = donut(items46, -5);        // سالب معلن: غير صالح صريح
+                 const total0allZero = donut('<li data-series="a" data-label="أ" data-value="0"></li><li data-series="b" data-label="ب" data-value="0"></li>', 0); // صفر وصفر: حالة صفرية مستقرة
+                 const total0missing = donut('<li data-series="a" data-label="أ" data-value="0"></li><li data-series="b" data-label="ب" data-value=""></li>', 0); // صفر + مجهول: الصفر معلن والمجهول «—»
+                 const noTotal = donut(items46);             // الغائب: البديل الموثق (مجموع 10)
+                 const posTotal = donut(items46, 10);        // الموجب: توزيع طبيعي بنسب
+                 return {total0pos, totalNeg, total0allZero, total0missing, noTotal, posTotal};
+               } catch (e) { return {err: e.message}; } }""")
+        t0p = c2d.get("total0pos", {}); tn = c2d.get("totalNeg", {})
+        t0z = c2d.get("total0allZero", {}); t0m = c2d.get("total0missing", {})
+        nt = c2d.get("noTotal", {}); pt = c2d.get("posTotal", {})
+        check("A17 (C2) مقام صفر مع [4,6] تعارض صريح بلا توزيع ولا استبدال بالمجموع، والسالب -5 غير صالح صريح، والصفر مع كل قيم صفر حالة صفرية مستقرة (المجهول «—» لا صفر)، والغائب مجموع 10 والموجب 10 بنسب كما وُثقا",
+              t0p.get("err") is not None and "صفر" in t0p.get("err", "") and "تعارض" in t0p.get("err", "")
+              and t0p.get("center") is None and t0p.get("slices") == 0 and "%" not in t0p.get("legend", "")
+              and tn.get("err") is not None and "سالب" in tn.get("err", "")
+              and tn.get("center") is None and tn.get("slices") == 0 and "%" not in tn.get("legend", "")
+              and t0z.get("center") == "0" and t0z.get("err") is None and t0z.get("slices") == 0
+              and "NaN" not in t0z.get("legend", "") and "%" not in t0z.get("legend", "")
+              and t0m.get("center") == "0" and t0m.get("err") is None
+              and "غير متاح" in t0m.get("legend", "") and "%" not in t0m.get("legend", "")
+              and nt.get("center") == "10" and "%" in nt.get("legend", "")
+              and pt.get("center") == "10" and "%" in pt.get("legend", "") and pt.get("slices") == 2,
+              str(c2d))
+
         # ---- SYS-02/E11: المثال المستقل بلا board.* ----
         ex5 = f"{base}/previews/data/example-usage.html"
         pe5 = ctx.new_page()

@@ -4,6 +4,19 @@
 Micro UI — S01 الأسطح والحركة: فحص ولقطات. من جذر المستودع:
   python3 tools/s01-screenshots.py
 المخرجات: reviews/S01/screenshots/*.png و reviews/S01/verification.txt
+
+بيئة الفحص (تسمية دقيقة — C1): متصفح headless فعلي (Playwright + Chromium) —
+ليست محاكاة DOM. القياس الموضعي للتباين من لقطات بكسل حقيقية للمتصفح.
+
+C1 — قياس التباين الموضعي المصحح (بديل sample_contrast القديمة):
+  الطريقة القديمة كانت تختار «الخلفية» بأفتح بكسل دون 85% من أقصى إضاءة
+  في لقطة العنصر، ويمكن أن يكون ذلك البكسل من حواف الحروف الملساء —
+  فكان رقم 2.09 السابق للنص الشفاف ليس قياسًا موضعيًا دقيقًا ولم يُعتمد.
+  الطريقة الحالية: لقطتان للعنصر نفسه — بالنص وبنص مخفي رسمه
+  (color: transparent — layout ثابت)؛ الخلفية من الإحداثيات نفسها،
+  والنص المرسوم (أو الممزوج من لون النص/شفافيته الفعليين المحسوبَين)
+  يُقاس مقابلها. الرقم المعلن «قياس موضعي فعلي» ويُميَّز عن الحد
+  المحافظ المحسوب في tools/contrast-check.txt (رقمان مختلفا الغرض).
 """
 import http.server, io, subprocess, sys, threading
 from datetime import datetime
@@ -30,23 +43,79 @@ def rel_lum(rgb):
     r, g, b = (_lin(x) for x in rgb)
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-def sample_contrast(png_bytes):
-    """R2-01/R2-04: قراءة بكسل فعلية من اللقطة عند موضع النص.
-    النص أبيض فوق بترولي: كور الحرف = أفتح بكسل، والخلفية = أفتح بكسل
-    واضح غير حرف (المحافظ: أفتح خلفية = أضعف تباين). يرجع النسبة + الألوان."""
+def rel_ratio(fg, bg):
+    l1, l2 = sorted((rel_lum(fg), rel_lum(bg)), reverse=True)
+    return (l1 + 0.05) / (l2 + 0.05)
+
+HIDE_JS = """(sel) => { const el = document.querySelector(sel);
+     el.dataset.c1style = el.getAttribute('style') || '';
+     el.style.color = 'transparent'; }"""
+RESTORE_JS = """(sel) => { const el = document.querySelector(sel);
+     if (!el || el.dataset.c1style === undefined) return;
+     if (el.dataset.c1style === '') el.removeAttribute('style');
+     else el.setAttribute('style', el.dataset.c1style);
+     delete el.dataset.c1style; }"""
+COLOR_JS = """(sel) => { const c = getComputedStyle(document.querySelector(sel)).color;
+     const m = c.match(/[\\d.]+/g) || [];
+     return {r: +m[0], g: +m[1], b: +m[2], a: m.length > 3 ? +m[3] : 1, raw: c}; }"""
+
+
+def measure_positional(page, el_sel):
+    """C1: قياس موضعي فعلي من لقطتين للعنصر نفسه (النص ثم مخفي الرسم).
+    الخلفية من الإحداثيات نفسها (نقطة نواة الحرف الأفتح) بعد إخفاء رسم
+    النص دون تغيير layout؛ والنص الممزوج من قيمه الفعلية (اللون/الشفافية
+    المحسوبان) يُقاس مقابلها — مع الرسم الفعلي كسند. layout ثابت بين
+    اللقطتين لأن تغيير اللون لا يؤثر فيه والزخرفة ساكنة."""
     from PIL import Image
-    im = Image.open(io.BytesIO(png_bytes)).convert("RGB")
-    px = list(im.getdata())
-    lums = [rel_lum(p) for p in px]
-    lmax = max(lums)
-    non_glyph = sorted(l for l in lums if l < 0.85 * lmax)
-    if not non_glyph:
-        non_glyph = lums
-    lbg = non_glyph[int(len(non_glyph) * 0.95)]  # المئين 95: أفتح خلفية محسوبة
-    bg_idx = min(range(len(lums)), key=lambda i: abs(lums[i] - lbg))
-    return {"ratio": (lmax + 0.05) / (lbg + 0.05),
-            "text": px[max(range(len(lums)), key=lambda i: lums[i])],
-            "bg": px[bg_idx]}
+    color = page.evaluate(COLOR_JS, el_sel)
+    loc = page.locator(el_sel)
+    shot_text = loc.screenshot()
+    page.evaluate(HIDE_JS, el_sel)
+    shot_bg = loc.screenshot()
+    page.evaluate(RESTORE_JS, el_sel)
+    a = Image.open(io.BytesIO(shot_text)).convert("RGB")
+    b = Image.open(io.BytesIO(shot_bg)).convert("RGB")
+    if a.size != b.size:
+        return {"error": "حجم اللقطتين مختلف — layout تغيّر"}
+    la, lb = list(a.getdata()), list(b.getdata())
+    idx = max(range(len(la)), key=lambda i: rel_lum(la[i]))  # نواة الحرف الأفتح
+    fg_rendered, bg = la[idx], lb[idx]
+    al = color["a"]
+    fg_expected = tuple(round(al * c + (1 - al) * k)
+                        for c, k in zip((color["r"], color["g"], color["b"]), bg))
+    return {"ratio": rel_ratio(fg_expected, bg),          # الطريقة المعتمدة (C1)
+            "ratio_rendered": rel_ratio(fg_rendered, bg),  # سند من الرسم الفعلي
+            "fg": fg_expected, "fg_rendered": fg_rendered, "bg": bg, "color": color}
+
+
+def gate_roles(page, base_sel, roles, tag, note):
+    """C1: بوابة أدوار النص — كل دور يُقاس موضعيًا ويدخل نجاح/فشل الجولة."""
+    for role in roles:
+        s = measure_positional(page, f"{base_sel} .m-surface__{role}")
+        if "error" in s:
+            check(f"{tag} تباين دور {role}", False, s["error"])
+            continue
+        ok = s["ratio"] >= 4.5 and s["ratio_rendered"] >= 4.5
+        check(f"{tag} تباين دور {role} (أبيض مصمت — C1) ≥ 4.5", ok,
+              "%.2f:1 موضعي (رسم فعلي %.2f:1) نص=%s خلفية=%s — %s"
+              % (s["ratio"], s["ratio_rendered"], s["fg"], s["bg"], note))
+
+
+ZOOM_ON_JS = """(args) => { const root = document.querySelector(args.sel);
+     const els = [root].concat([].slice.call(root.querySelectorAll('*')));
+     const originals = els.map(function (el) {
+       return {el: el, fs: parseFloat(getComputedStyle(el).fontSize)}; });
+     originals.forEach(function (item) {
+       item.el.dataset.tzStyle = item.el.getAttribute('style') || '';
+       item.el.style.fontSize = (item.fs * args.factor) + 'px'; }); }"""
+ZOOM_OFF_JS = """(sel) => { const root = document.querySelector(sel);
+     const els = [root].concat([].slice.call(root.querySelectorAll('*')));
+     els.forEach(function (el) {
+       if (el.dataset.tzStyle === undefined) return;
+       if (el.dataset.tzStyle === '') el.removeAttribute('style');
+       else el.setAttribute('style', el.dataset.tzStyle);
+       delete el.dataset.tzStyle; }); }"""
+
 
 def main():
     SHOTS.mkdir(parents=True, exist_ok=True)
@@ -60,6 +129,7 @@ def main():
     log(f"# S01 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
     log(f"# commit المصدر: {commit}")
     log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log("# بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — ليست محاكاة DOM")
     log("")
 
     errors = []
@@ -119,6 +189,22 @@ def main():
         check("A6 نص السطح أبيض والأرضية من التدرج المعتمد",
               contrast["color"] == "rgb(255, 255, 255)" and "rgb(35, 102, 117)" in contrast["grad"], str(contrast))
 
+        # ---- C1: الأدوار الأربعة أبيض مصمت بالقيم المحسوبة (حجم/وزن/إيقاع لا شفافية) ----
+        roles_css = page.evaluate(
+            """() => { const s = document.querySelector('[data-surface="waves"]');
+                 const roles = ['title', 'amount', 'label', 'sub'];
+                 const out = {};
+                 roles.forEach(function (r) {
+                   const cs = getComputedStyle(s.querySelector('.m-surface__' + r));
+                   out[r] = {color: cs.color, weight: cs.fontWeight, size: cs.fontSize};
+                 });
+                 return out; }""")
+        ok_c1 = (all(roles_css[r]["color"] == "rgb(255, 255, 255)" for r in ("title", "amount", "label", "sub"))
+                 and roles_css["title"]["weight"] == "600" and roles_css["amount"]["weight"] == "600"
+                 and roles_css["label"]["weight"] == "500" and roles_css["sub"]["weight"] == "400")
+        check("A6b (C1) أدوار النص الأربعة أبيض مصمت والتمييز بالحجم/الوزن (600/600/500/400) لا الشفافية",
+              ok_c1, str(roles_css))
+
         # ---- الطبقة التجريبية 240ms + Escape + إعادة التركيز ----
         page.click("[data-layer-open]")
         page.wait_for_timeout(60)
@@ -175,18 +261,48 @@ def main():
         check("E1 تعديل توكن الموجة → انعكاس → استعادة",
               tok["after"] < tok["before"] and tok["restored"] == tok["before"], str(tok))
 
-        # ---- R2-04 (B2c): عينات بكسل للنص الشفاف في مواضعه الفعلية — قياس موثق لا ضمان ----
-        for key, sel in (("التسمية 0.8", ".m-surface__label"), ("السطر الثانوي 0.72", ".m-surface__sub")):
-            r = page.evaluate(
-                """(sel) => { const s = document.querySelector('[data-surface="waves"]');
-                     const el = s.querySelector(sel);
-                     const r = el.getBoundingClientRect();
-                     return {x: r.x, y: r.y, width: r.width, height: r.height}; }""", sel)
-            png = page.locator(f'[data-surface="waves"] {sel}').screenshot()
-            s = sample_contrast(png)
-            # قياس موثق فقط (خارج المجال المضمون في contrast-check §3): لا عتبة نجاح معلنة
-            log("معلومة  B2c تباين %s من بكسل اللقطة الفعلية: %.2f:1 (نص=%s خلفية=%s) — قياس موثق خارج المجال المضمون لا ضمان نجاح"
-                % (key, s["ratio"], s["text"], s["bg"]))
+        # =============================================================
+        # C1 — بوابة أدوار النص (قياس موضعي فعلي: خلفية من الإحداثيات
+        # نفسها بعد إخفاء رسم النص — لا اختيار «أفتح بكسل دون 85%» الذي
+        # كان يلتقط حواف الحروف الملساء). كل دور يدخل نجاح/فشل الجولة.
+        # =============================================================
+        POSITIONAL_NOTE = "قياس موضعي فعلي (خلفية من الإحداثيات نفسها بعد إخفاء النص) — يُميَّز عن الحد المحافظ المحسوب في contrast-check.txt"
+
+        # B2c: السطح الافتراضي (الموجات) 390 — الأدوار الأربعة
+        gate_roles(page, '[data-surface="waves"]', ("title", "amount", "label", "sub"),
+                   "B2c (C1) السطح الافتراضي 390:", POSITIONAL_NOTE)
+
+        # B2c-v2: مرشح v2 390 — الأدوار المستخدمة فيه (label/amount/sub؛
+        # العنوان غير مستخدم في مقارنة v2 بمحتواها القصير ويُفحص على الافتراضي)
+        gate_roles(page, '#wave-v2 .m-surface--waves-v2', ("label", "amount", "sub"),
+                   "B2c (C1) مرشح v2 390:", POSITIONAL_NOTE)
+
+        # B2d: مرشح v2 عند تكبير 200% (مروران كأداة اللوحة) — الأدوار المستخدمة
+        page.evaluate(ZOOM_ON_JS, {"sel": "#wave-v2 .m-surface--waves-v2", "factor": 2})
+        page.wait_for_timeout(200)
+        gate_roles(page, '#wave-v2 .m-surface--waves-v2', ("label", "amount", "sub"),
+                   "B2d (C1) مرشح v2 تكبير 200%:", POSITIONAL_NOTE)
+        page.evaluate(ZOOM_OFF_JS, "#wave-v2 .m-surface--waves-v2")
+        page.wait_for_timeout(150)
+
+        # B2e: اختبار تحكم (C1) — حالة فاشلة داخل النطاق يعلنها الكاشف فشلًا
+        # فعليًا: القيمة السابقة المزالة (أبيض 0.72) تُحقن على التسمية نفسها
+        # ثم تُقاس بالآلية نفسها، ثم تُستعاد القيمة الافتراضية وينجح القياس.
+        page.evaluate(
+            """() => { const el = document.querySelector('[data-surface="waves"] .m-surface__label');
+                 el.dataset.c1ctrl = el.getAttribute('style') || '';
+                 el.style.color = 'rgba(255, 255, 255, 0.72)'; }""")
+        injected = measure_positional(page, '[data-surface="waves"] .m-surface__label')
+        page.evaluate(
+            """() => { const el = document.querySelector('[data-surface="waves"] .m-surface__label');
+                 if (el.dataset.c1ctrl === '') el.removeAttribute('style');
+                 else el.setAttribute('style', el.dataset.c1ctrl);
+                 delete el.dataset.c1ctrl; }""")
+        restored = measure_positional(page, '[data-surface="waves"] .m-surface__label')
+        check("B2e (C1) تحكم: القيمة المزالة 0.72 داخل النطاق يكشفها الكاشف فشلًا فعليًا ثم ينجح الافتراضي",
+              injected["ratio"] < 4.5 and restored["ratio"] >= 4.5,
+              "محقون=%.2f:1 (يجب <4.5) | مستعاد=%.2f:1 (يجب ≥4.5) — الكاشف يعمل" %
+              (injected["ratio"], restored["ratio"]))
 
         # ---- 320/360/390/430: السطح بأصغر وأكبر عرض + تكبير 200% ----
         for width in (320, 360, 390, 430):
@@ -232,12 +348,9 @@ def main():
                       and tz["sw"] <= tz["cw"] + 1, str(tz))
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / f"04-surface-zoom-{width}.png"))
                 if width == 320:
-                    # R2-01: قياس التباين من بكسل اللقطة نفسها عند موضع النص الفعلي
-                    for key, sel in (("العنوان", ".m-surface__title"), ("الرقم", ".m-surface__amount")):
-                        png = pg.locator(f"#text-zoom-target .m-surface {sel}").screenshot()
-                        s = sample_contrast(png)
-                        check(f"B2b 320px تكبير 200%: تباين {key} من بكسل اللقطة الفعلية ≥ 4.5",
-                              s["ratio"] >= 4.5, f"{s['ratio']:.2f}:1 (نص=%s خلفية=%s)" % (s["text"], s["bg"]))
+                    # C1/B2b: بوابة الأدوار الأربعة عند تكبير 200% على 320 — قياس موضعي فعلي
+                    gate_roles(pg, "#text-zoom-target .m-surface", ("title", "amount", "label", "sub"),
+                               "B2b (C1) 320px تكبير 200%:", POSITIONAL_NOTE)
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(200)
             c.close()
