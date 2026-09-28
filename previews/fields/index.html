@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة الحقول (B02)
+  الحالة: DRAFT FOR REVIEW — لقطات reviews/B02/screenshots مأخوذة من هذا الملف.
+  التشغيل (من جذر المستودع فقط):
+    python3 -m http.server 8080
+    ثم فتح http://localhost:8080/previews/fields/
+  المكوّن: components/fields/fields.css + fields.js (+ B01 للأزرار داخل الحقول)
+  القيم المشتركة: shared/tokens.css — الأيقونات من أصولها assets/icons عبر previews/board.js
+  السلوك التجريبي (محاكاة البحث وخطأ الخروج) في board.js — خارج المكوّن تمامًا.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة الحقول (B02)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — الحقول <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — تسمية دائمة خارج القيمة، الفارغ ≠ 0، الخطأ لا يمحو القيمة، والتحقق الفعلي قرار المستهلك. المسندة من الأسس؛ ما لم يُحسم موسوم «مقترح» في المواصفات.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) الأنواع الخمسة ================= -->
+    <section class="panel" id="types">
+      <h2>1) الأنواع الخمسة</h2>
+      <p class="panel-note">نظام واحد: نص، نص طويل، بحث مع مسح، مبلغ مع وحدة، كمية مع وحدة وخطوة اختيارية. المبلغ والرقم معزلان اتجاهيًا (LTR) داخل صفحة RTL، والوحدة تبقى عربية.</p>
+      <div class="example-grid">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="t-name">اسم العميل</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="t-name" type="text" name="customer-name" autocomplete="off" placeholder="مثال: مؤسسة النور">
+            </div>
+          </div>
+          <span class="caption">نص قصير — تسمية دائمة والـplaceholder تلميح لا تسمية</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="t-notes">ملاحظات التوصيل</label>
+            <div class="m-field__control">
+              <textarea class="m-field__area" id="t-notes" rows="3" placeholder="اتجاه المنزل، رقم الشقة…"></textarea>
+            </div>
+          </div>
+          <span class="caption">نص طويل — الارتفاع قابل للتمدد (min-height)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field id="search-live">
+            <label class="m-field__label" for="t-search">بحث عن مورد</label>
+            <div class="m-field__control">
+              <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+              <input class="m-field__input" id="t-search" type="search" inputmode="search" autocomplete="off" placeholder="اكتب اسم المورد…">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" id="search-clear" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <p class="m-field__msg" data-field-msg hidden></p>
+          </div>
+          <span class="caption">بحث — أيقونة + مسح إتاحي (يظهر بوجود نص) بهدف لمس 48</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="t-amount">المبلغ</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="t-amount" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+          </div>
+          <span class="caption">مبلغ مع وحدة — أرقام معزولة الاتجاه، الوحدة شريحة داخل الحقل</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="t-qty">الكمية</label>
+            <div class="m-field__control">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+              </div>
+              <input class="m-field__input m-field__input--num" id="t-qty" type="text" inputmode="numeric" dir="ltr" value="2" min="0" max="99" step="1">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              </div>
+              <span class="m-field__unit">كرتون</span>
+            </div>
+          </div>
+          <span class="caption">كمية — حدود وخطوة من المستهلك (min/max/step) وزرّا خطوة 48px</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="t-desc">وصف مختصر <span class="m-field__required">(حقل مطلوب)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="t-desc" type="text" maxlength="40" autocomplete="off">
+            </div>
+            <span class="m-field__count" data-count-for="t-desc"></span>
+          </div>
+          <span class="caption">عدّاد أحرف — عند حد معلن فقط (maxlength من المستهلك)</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2) الحالات الثابتة ================= -->
+    <section class="panel" id="states">
+      <h2>2) الحالات الثابتة — للمقارنة</h2>
+      <p class="panel-note">التركيز ≠ الضغط، الفارغ ≠ 0، والمعطل ≠ القراءة فقط. القراءة فقط تبقى قابلة للقراءة والنسخ ولا تعامل كمعطل. الخطأ لا يمحو القيمة.</p>
+      <div class="example-grid">
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="s-empty">المبلغ</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-empty" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+          </div>
+          <span class="caption">فارغ — placeholder «0.00» تلميح شكل الإدخال لا قيمة</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="s-zero">الكمية المرتجعة</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-zero" type="text" inputmode="numeric" dir="ltr" value="0">
+              <span class="m-field__unit">قطعة</span>
+            </div>
+          </div>
+          <span class="caption">صفر — قيمة حقيقية ≠ الحقل الفارغ أعلاه</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-focus" data-micro-field>
+            <label class="m-field__label" for="s-focus">اسم العميل</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="s-focus" type="text" value="مؤسسة">
+            </div>
+          </div>
+          <span class="caption">تركيز ثابت — حلقة بفاصل أبيض مثل تركيز B01 (وفعليًا :focus-within)</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="s-filled">اسم العميل</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="s-filled" type="text" value="مؤسسة النور للتجارة">
+            </div>
+          </div>
+          <span class="caption">ممتلئ — وجود قيمة ≠ نجاح تحقق (النجاح أدناه عند مبرر)</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-error" data-micro-field>
+            <label class="m-field__label" for="s-error">رقم الهاتف</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-error" type="tel" inputmode="tel" dir="ltr" value="07912">
+            </div>
+            <p class="m-field__msg is-visible" data-field-msg>الرقم ناقص — أكمل الأرقام العشرة بعد الصفر</p>
+          </div>
+          <span class="caption">خطأ — رسالة تشرح التصحيح ومرتبطة aria-describedby والقيمة باقية</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-error has-focus" data-micro-field>
+            <label class="m-field__label" for="s-error-focus">رقم الهاتف</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-error-focus" type="tel" inputmode="tel" dir="ltr" value="07912">
+            </div>
+            <p class="m-field__msg is-visible" data-field-msg>الرقم ناقص — أكمل الأرقام العشرة بعد الصفر</p>
+          </div>
+          <span class="caption">خطأ + تركيز معًا — حد الخطأ وحلقة التركيز منطقيتان معًا</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-success" data-micro-field>
+            <label class="m-field__label" for="s-success">رمز التحقق</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-success" type="text" inputmode="numeric" dir="ltr" value="4 8 2 9">
+            </div>
+            <p class="m-field__msg is-visible" data-field-msg>تم التحقق من الرمز — نتيجة المستهلك (مثال بتحقق ذي معنى)</p>
+          </div>
+          <span class="caption">نجاح — عند تحقق ذي معنى فقط لا عند كل امتلاء</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-disabled" data-micro-field>
+            <label class="m-field__label" for="s-disabled">رقم السجل</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="s-disabled" type="text" value="MIC-2026-0817" disabled>
+            </div>
+          </div>
+          <span class="caption">معطل — أرضية ونص المعطل، بلا حلقة تركيز، disabled أصلية</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-readonly" data-micro-field>
+            <label class="m-field__label" for="s-readonly">رقم الطلب (قراءة فقط)</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-readonly" type="text" dir="ltr" value="ORD-10233" readonly>
+            </div>
+          </div>
+          <span class="caption">قراءة فقط — نص كامل الوضوح قابل للتحديد والنسخ، ليس معطلًا</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-field has-readonly" data-micro-field>
+            <label class="m-field__label" for="s-ro-filled">اسم المورد (قراءة فقط + ممتلئ)</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="s-ro-filled" type="text" value="شركة البترول الوطنية للتوريد" readonly>
+            </div>
+          </div>
+          <span class="caption">ممتلئ + قراءة فقط — الحالتان متوافقتان</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 3) تفاعل حقيقي ================= -->
+    <section class="panel" id="live">
+      <h2>3) تفاعل حقيقي — للمراجعة الفعلية</h2>
+      <p class="panel-note">سلوك البحث (انتظار/لا نتائج/فشل) وخطأ الخروج محاكاة لوحة تجريبية خارج المكوّن — سياسة التحقق الفعلية قرار المستهلك. خطأ الإدخال لا يمحو القيمة أبدًا.</p>
+
+      <h3>بحث بمحاكاة حالات القراءة (خارج المكوّن)</h3>
+      <div class="m-field" data-micro-field style="max-width:360px">
+        <label class="m-field__label" for="live-search">بحث عن مورد</label>
+        <div class="m-field__control">
+          <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="m-field__input" id="live-search" type="search" autocomplete="off" placeholder="اكتب حرفين على الأقل…">
+          <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        </div>
+        <p class="m-field__msg" data-field-msg hidden></p>
+      </div>
+      <div class="demo-group" style="margin-top:12px">
+        <button type="button" class="m-btn m-btn--secondary" data-search-demo="results">محاكاة: نتائج</button>
+        <button type="button" class="m-btn m-btn--secondary" data-search-demo="empty">محاكاة: لا نتائج</button>
+        <button type="button" class="m-btn m-btn--secondary" data-search-demo="fail">محاكاة: فشل قراءة</button>
+        <span class="demo-status" data-search-status hidden></span>
+      </div>
+      <p class="demo-note">اكتب في الحقل ثم جرّب المسح (يزول النص ويعيد التركيز)، وأزرار المحاكاة تُظهر حالة القراءة كرسالة مربوطة بالحقل. المطور الحقيقي: المستهلك يقرأ ويعرض — لا مؤقتات داخل المكوّن.</p>
+
+      <h3 style="margin-top:24px">خطأ عند الخروج (مثال سياسة مستهلك)</h3>
+      <div class="m-field" data-micro-field id="live-amount-field" style="max-width:360px">
+        <label class="m-field__label" for="live-amount">مبلغ الدفعة</label>
+        <div class="m-field__control">
+          <input class="m-field__input m-field__input--num" id="live-amount" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
+          <span class="m-field__unit">د.أ</span>
+        </div>
+        <p class="m-field__msg" data-field-msg hidden></p>
+      </div>
+      <p class="demo-note">سياسة المثال: عند الخروج بقيمة غير رقمية تظهر رسالة خطأ والقيمة تبقى كما كُتبت (لا تمحو) — وكل كتابة تعفي الخطأ. التحقق الحقيقي عند الإرسال أو الخروج قرار المستهلك.</p>
+
+      <h3 style="margin-top:24px">كمية بحدود (min 0 · max 99 · step 5)</h3>
+      <div class="m-field" data-micro-field style="max-width:360px">
+        <label class="m-field__label" for="live-qty">عدد الصناديق</label>
+        <div class="m-field__control">
+          <div class="m-field__stepper">
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+          </div>
+          <input class="m-field__input m-field__input--num" id="live-qty" type="text" inputmode="numeric" dir="ltr" value="10" min="0" max="99" step="5">
+          <div class="m-field__stepper">
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+          </div>
+          <span class="m-field__unit">صندوق</span>
+        </div>
+      </div>
+      <p class="demo-note">عند الحد تتوقف الخطوة دون تجاوز (0 لا يقل، و99 لا يزيد) — الحدود والخطوة والدقة مدخلات المستهلك لا قواعد مالية داخلية.</p>
+    </section>
+
+    <!-- ================= 4) أمثلة صعبة ================= -->
+    <section class="panel" id="hard">
+      <h2>4) أمثلة صعبة</h2>
+      <div class="example-grid">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="h-mixed">اسم العميل</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="h-mixed" type="text" value="مؤسسة النور للتجارة — Order #10233">
+            </div>
+          </div>
+          <span class="caption">نص مختلط عربي + لاتيني وأرقام — لا كسر للاتجاه</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="h-big">قيمة الفاتورة</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="h-big" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+          </div>
+          <span class="caption">مبلغ بفواصل وكسور — لا تغيير تلقائي للعملة أو التقريب</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="h-negative">تسوية (سالب مسموح بعقد الحقل)</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="h-negative" type="text" inputmode="decimal" dir="ltr" value="-45.00">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+          </div>
+          <span class="caption">سالب بعلامته — حيث يسمح العقد (سمة min من المستهلك)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="h-long">ملاحظة طويلة</label>
+            <div class="m-field__control">
+              <textarea class="m-field__area" id="h-long" rows="3">طلب التوصيل بعد الرابعة عصرًا إلى المستودع الخلفي، البوابة الثانية بجانب محطة الوقود، واتصال السائق قبل الوصول بعشر دقائق على الرقم المعتمد في السجل.</textarea>
+            </div>
+          </div>
+          <span class="caption">نص طويل يلتف دون قص — الارتفاع يتمدد</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) معاينة هاتف كاملة + تكبير 200% ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>5) معاينة هاتف كاملة — عرض منفصل لكل مقاس، بلا قص ولا تمرير داخلي</h2>
+      <p class="panel-note">كل عمود بعرض CSS حقيقي مطابق لعنوانه (الأعرض من الشاشة يُخفى ويُعاين عند عرضه)، بهوامشه وحلقاته الظاهرة. لقطات 10–12 التُقطت بعرض صفحة مساوٍ للمقاس نفسه.</p>
+
+      <div class="phone-full-block" data-w="320">
+        <p class="phone-title">معاينة كاملة — 320px (هامش صفحة 16px)</p>
+        <div class="phone-demo is-320">
+          <div class="phone-stack">
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-amount-320">المبلغ</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="p-amount-320" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+                <span class="m-field__unit">د.أ</span>
+              </div>
+            </div>
+            <div class="m-field has-error" data-micro-field>
+              <label class="m-field__label" for="p-err-320">رقم الهاتف</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="p-err-320" type="tel" inputmode="tel" dir="ltr" value="07912">
+              </div>
+              <p class="m-field__msg is-visible" data-field-msg>الرقم ناقص — أكمل الأرقام العشرة بعد الصفر</p>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-qty-320">الكمية</label>
+              <div class="m-field__control">
+                <div class="m-field__stepper"><button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button></div>
+                <input class="m-field__input m-field__input--num" id="p-qty-320" type="text" inputmode="numeric" dir="ltr" value="2" min="0" max="99" step="1">
+                <div class="m-field__stepper"><button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button></div>
+                <span class="m-field__unit">كرتون</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="390">
+        <p class="phone-title">معاينة كاملة — 390px (هامش صفحة 20px)</p>
+        <div class="phone-demo is-390">
+          <div class="phone-stack">
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-name-390">اسم العميل</label>
+              <div class="m-field__control">
+                <input class="m-field__input" id="p-name-390" type="text" value="مؤسسة النور للتجارة">
+              </div>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-amount-390">المبلغ</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="p-amount-390" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+                <span class="m-field__unit">د.أ</span>
+              </div>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-search-390">بحث عن مورد</label>
+              <div class="m-field__control">
+                <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+                <input class="m-field__input" id="p-search-390" type="search" autocomplete="off" placeholder="اكتب اسم المورد…">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear is-visible" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="430">
+        <p class="phone-title">معاينة كاملة — 430px (هامش صفحة 20px)</p>
+        <div class="phone-demo is-430">
+          <div class="phone-stack">
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="p-notes-430">ملاحظات التوصيل</label>
+              <div class="m-field__control">
+                <textarea class="m-field__area" id="p-notes-430" rows="2">اتجاه المنزل، رقم الشقة، وقت التسليم المفضل.</textarea>
+              </div>
+            </div>
+            <div class="m-field has-success" data-micro-field>
+              <label class="m-field__label" for="p-code-430">رمز التحقق</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="p-code-430" type="text" inputmode="numeric" dir="ltr" value="4 8 2 9">
+              </div>
+              <p class="m-field__msg is-visible" data-field-msg>تم التحقق من الرمز — مثال بتحقق ذي معنى</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة</h2>
+      <p class="panel-note">زر «محاكاة زيادة حجم الخط» يضاعف الخط بمرورين (نفس آلية B01 بعد تصحيح R2-D — لا مضاعفة موروثة) على العمود أدناه فقط؛ التسميات والرسائل وعدّاد الأحرف تتضاعف كله ويظل المحتوى داخل العمود. آلية CDP غير متاحة في بيئة الفحص، والمحاكاة مكافئة للنص لا لتكبير النظام.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها ويعيد الأحجام بدقة.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="z-name">اسم العميل (تسمية طويلة للتأكد من التفافها دون قص)</label>
+              <div class="m-field__control">
+                <input class="m-field__input" id="z-name" type="text" value="مؤسسة النور للتجارة والتوريدات — المورد الرئيسي">
+              </div>
+              <p class="m-field__msg is-visible" data-field-msg>رسالة مساعدة طويلة: يجب أن يلتف النص المكبر داخل الحقل دون خروج عن العمود أو تداخل مع الوحدة.</p>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="z-amount">المبلغ</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="z-amount" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+                <span class="m-field__unit">د.أ</span>
+              </div>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="z-desc">وصف</label>
+              <div class="m-field__control">
+                <input class="m-field__input" id="z-desc" type="text" maxlength="40" value="وصف قصير">
+              </div>
+              <span class="m-field__count" data-count-for="z-desc"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>6) فحص الخط والأيقونات — أصول فعلية</h2>
+      <p class="panel-note">الخط محلي — الأرقام من IBM Plex Sans والعربية من IBM Plex Sans Arabic. الأيقونات HugeIcons Stroke Rounded (MIT) تُحمَّل من أصولها الوحيدة assets/icons عبر previews/board.js.</p>
+      <div class="font-probe">
+        <span>حفظ العملية</span>
+        <span class="digits">0123456789</span>
+        <span class="digits">1,240.50</span>
+        <span>د.أ 1,240.50</span>
+        <span>-45.00</span>
+      </div>
+      <p class="demo-note" style="margin-top:16px">الرموز المستخدمة في هذه الدفعة: <span id="icon-load-status">جارٍ التحميل من الأصول…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="caption">search-01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-close"/></svg><span class="caption">cancel01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-plus"/></svg><span class="caption">plus-sign</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-minus"/></svg><span class="caption">minus-sign</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/fields/ (specification.md · fields.css · fields.js) — القيم: shared/tokens.css — طريقة التشغيل والتعديل: previews/fields/README.md — نتائج الفحص: reviews/B02/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

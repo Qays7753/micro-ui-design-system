@@ -1,0 +1,231 @@
+/* =========================================================
+   Micro UI — مكوّن الحقول (B02)
+   الملف: components/fields/fields.css
+   يعتمد على: shared/tokens.css — كل الألوان والمقاسات منه.
+   القيم الداخلية بالمكوّن وحده موثقة عند مواضعها.
+   الاتجاه: خصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
+   الحالة: DRAFT FOR REVIEW — ما لم تحسمه الأسس موسوم «مقترح».
+   ========================================================= */
+
+/* استقلال المقاسات عن أي reset خارجي (نفس درس R2-C في B01) */
+.m-field,
+.m-field *,
+.m-field *::before,
+.m-field *::after {
+  box-sizing: border-box;
+}
+
+/* ---- الغلاف: تسمية دائمة خارج القيمة + تحكم + رسالة ---- */
+.m-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2); /* 8px بين التسمية والتحكم والرسالة */
+  font-family: var(--micro-font-family);
+}
+
+.m-field__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500;
+  color: var(--micro-text-primary);
+}
+
+/* علامة الطلب: نص ثانوي لا لون تحذيري — الطلب قرار المستهلك */
+.m-field__required {
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+}
+
+/* ---- التحكم: ارتفاع 52 قابل للتمدد، انحناء 16 ---- */
+.m-field__control {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-field-min-height); /* 52px */
+  padding-inline: var(--micro-space-4);      /* 16px */
+  background-color: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-field);  /* 16px */
+  transition:
+    border-color var(--micro-motion-press) var(--micro-ease-standard),
+    box-shadow var(--micro-motion-press) var(--micro-ease-standard);
+}
+
+/* الحقل نفسه: بلا إطار خاص به — الإطار على الغلاف ليشاركه الوحدة والأزرار */
+.m-field__input,
+.m-field__area {
+  flex: 1;
+  min-width: 0; /* يسمح بالانكماش داخل flex دون كسر الحاويات */
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);   /* 16px */
+  line-height: var(--micro-body-line); /* 1.625 => 26px */
+  color: var(--micro-text-primary);
+  outline: none; /* حلقة التركيز على الغلاف */
+  caret-color: var(--micro-brand-primary);
+}
+
+.m-field__input::placeholder,
+.m-field__area::placeholder {
+  color: var(--micro-text-hint); /* placeholder تلميح لا بديل تسمية */
+}
+
+/* النص الطويل: يتمدد مع المحتوى (min-height لا ارتفاع ثابت) */
+.m-field__area {
+  resize: vertical; /* المستهلك قد يمنعه */
+  padding-block: var(--micro-space-3);
+  min-height: var(--micro-field-min-height);
+}
+
+/* المبلغ والرقم: عزل اتجاهي — الأرقام لاتينية 0-9 والوحدة عربية */
+.m-field__input--num {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- الوحدة: شريحة داخل الحقل عند بدايته (كما في الاتجاه المرجعي) ---- */
+.m-field__unit {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--micro-space-2);
+  min-height: var(--micro-counter-height);
+  border-radius: var(--micro-radius-chip); /* مقترح: 12px — قيمة جديدة واحدة موسومة */
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size); /* 13px */
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+}
+
+/* ---- أيقونة البحث ومسحه ---- */
+.m-field__search-icon {
+  flex: none;
+  width: var(--micro-icon-in-button); /* 20px */
+  height: var(--micro-icon-in-button);
+  color: var(--micro-text-hint);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* زر المسح: هدف لمس 48 دائمًا — لا يظهر إلا بوجود نص (زر B01 مستخدم كما هو).
+   خصوصية أعلى من .m-btn كي لا يعيد زر B01 إظهاره (ترتيب التحميل لا يحسم) */
+.m-field .m-field__clear {
+  display: none;
+}
+.m-field .m-field__clear.is-visible {
+  display: inline-flex;
+}
+
+/* ---- عدّاد الأحرف: عند حد معلن فقط ---- */
+.m-field__count {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  align-self: flex-end;
+}
+
+/* ---- خطوة الكمية (زيادة/نقصان) — أزرار B01 المستخدمة كما هي ---- */
+.m-field__stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  flex: none;
+}
+/* قيمة الكمية بين زرّي الخطوة: عزل اتجاهي وأدنى عرض للتفادي القفز */
+.m-field__stepper .m-field__input--num {
+  width: var(--micro-quantity-min-width); /* مقترح 64px: يمنع قفزة العرض مع تغير الأرقام */
+  text-align: center;
+}
+
+/* ---- الحالات (الغلاف يحملها لأنه الإطار المرئي) ----
+   الفارغ ≠ 0: هذه حالات بصرية فقط — القيمة بيانات المستهلك. */
+
+/* التركيز: حلقة 2px بفاصل أبيض 2px — نفس لغة تركيز B01.
+   :focus-within يلتقط التركيز في الحقل أو زر المسح أو الخطوة،
+   وhas-focus صف ثابت للمقارنة في جدول الحالات. */
+.m-field__control:focus-within,
+.m-field.has-focus .m-field__control {
+  border-color: var(--micro-focus-ring);
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* الخطأ: حد ولون خطأ + رسالة مرتبطة — لا يمحو القيمة (بيانات المستهلك) */
+.m-field.has-error .m-field__control {
+  border-color: var(--micro-danger);
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-danger);
+}
+.m-field.has-error .m-field__msg {
+  color: var(--micro-danger);
+}
+/* خطأ + تركيز معًا: حد الخطأ يبقى مع حلقة التركيز — الحالتان منطقيتان ومتوافقتان */
+.m-field.has-error .m-field__control:focus-within,
+.m-field.has-error.has-focus .m-field__control {
+  border-color: var(--micro-danger);
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-danger);
+}
+
+/* النجاح: عند تحقق ذي معنى فقط — رسالة نجاح */
+.m-field.has-success .m-field__msg {
+  color: var(--micro-success);
+}
+
+/* الرسالة (مساعدة أو خطأ أو نجاح): مرتبطة بالحقل عبر aria-describedby */
+.m-field__msg {
+  display: none;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+.m-field__msg.is-visible {
+  display: block;
+}
+
+/* المعطل: أرضية ونص معطل — التفعيل ممنوع أصلا عبر disabled */
+.m-field.has-disabled .m-field__control {
+  background-color: var(--micro-surface-disabled);
+  border-color: transparent;
+}
+.m-field.has-disabled .m-field__input,
+.m-field.has-disabled .m-field__area {
+  color: var(--micro-text-disabled);
+  cursor: not-allowed;
+}
+.m-field.has-disabled .m-field__label {
+  color: var(--micro-text-secondary);
+}
+
+/* القراءة فقط: ليست معطلة — قابلة للقراءة والنسخ والتحديد */
+.m-field.has-readonly .m-field__control {
+  background-color: var(--micro-surface-page); /* تهدئة بصرية خفيفة دون تمويه */
+  border-color: var(--micro-border-divider);
+}
+.m-field.has-readonly .m-field__input,
+.m-field.has-readonly .m-field__area {
+  color: var(--micro-text-primary); /* نص كامل الوضوح — ليس نص معطل */
+  user-select: text;
+  cursor: default;
+}
+/* قراءة فقط + ممتلئ معًا: نفس الشكل — الحالتان متوافقتان */
+
+/* تقليل الحركة: لا انتقالات */
+@media (prefers-reduced-motion: reduce) {
+  .m-field__control {
+    transition: none;
+  }
+}
