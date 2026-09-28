@@ -1,0 +1,182 @@
+/* =========================================================
+   Micro UI — مكوّن الرسائل والحالات العامة (B06)
+   الملف: components/messages/messages.css
+   يعتمد على shared/tokens.css. الخصائص منطقية فتعمل في RTL.
+   القاعدة: الرسالة المهمة أو المطلوبة لتصحيح إدخال ثابتة لا
+   Toast تختفي؛ الرسالة العابرة تأكيد غير حرج فقط (عقد في messages.js).
+   الحالة: DRAFT FOR REVIEW.
+   ========================================================= */
+
+.m-note,
+.m-note *,
+.m-wait,
+.m-wait *,
+.m-skeleton,
+.m-skeleton *,
+.m-empty,
+.m-empty * {
+  box-sizing: border-box;
+}
+
+/* ================= 1) الرسائل الثابتة (مساعدة/معلومة/نجاح/تحذير/خطأ) =================
+   رسالة بحاوية: أيقونة معنى + نص. تبقى ظاهرة حتى يزيلها المستهلك —
+   ليست Toast. الإعلان: role موثق لكل نوع (معلومة/نجاح: status؛
+   تحذير/خطأ: alert) — بلا تكرار. */
+.m-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-4);
+  border-radius: var(--micro-radius-field);
+  font-family: var(--micro-font-family);
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+}
+.m-note__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.m-note__text { min-width: 0; }
+.m-note__title {
+  display: block;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 600;
+}
+.m-note__body {
+  margin: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+/* النوع: أرضية المعنى ونص المعنى — النص دائمًا مع الرمز واللون */
+.m-note--info    { background-color: var(--micro-info-surface);    color: var(--micro-info); }
+.m-note--info .m-note__body,
+.m-note--success .m-note__body,
+.m-note--warning .m-note__body,
+.m-note--error .m-note__body { color: var(--micro-text-secondary); }
+.m-note--success { background-color: var(--micro-success-surface); color: var(--micro-success); }
+.m-note--warning { background-color: var(--micro-warning-surface); color: var(--micro-warning); }
+.m-note--error   { background-color: var(--micro-danger-surface);  color: var(--micro-danger); }
+.m-note--help    { background-color: var(--micro-surface-page);    color: var(--micro-brand-primary); }
+
+/* زر إغلاق اختياري (المستهلك يقرر) — من أزرار B01 */
+.m-note .m-note__close { margin-inline-start: auto; flex: none; }
+.m-note .m-note__close[hidden] { display: none; }
+
+/* ================= 2) الرسالة العابرة Toast (تأكيد غير حرج فقط) =================
+   عقد messages.js: مدة يحددها المستهلك + إعلان مرة واحدة + بديل ثابت
+   يجب توفيره بجانبها للرسائل المهمة. ليست لمركز إشعارات. */
+.m-toast {
+  position: fixed;
+  inset-block-end: calc(var(--micro-space-5) + env(safe-area-inset-bottom, 0px));
+  inset-inline: var(--micro-space-5);
+  z-index: 90; /* فوق المحتوى ودون أن تحجب كل الشاشة */
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-4);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-text-primary);
+  color: var(--micro-text-inverse);
+  font-family: var(--micro-font-family);
+  box-shadow: var(--micro-shadow-overlay);
+}
+.m-toast__text { flex: 1; font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
+.m-toast .m-btn { color: var(--micro-text-inverse); }
+
+/* ================= 3) مؤشر الانتظار =================
+   مؤشر دوار + تسمية واضحة دائمًا — وتقليل الحركة يجعله ثابتًا
+   (الدلالة من التسمية لا من الدوران). */
+.m-wait {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  font-family: var(--micro-font-family);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.m-wait__spinner {
+  flex: none;
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  border-radius: var(--micro-radius-circle);
+  border: 2.5px solid var(--micro-border-divider);
+  border-inline-start-color: var(--micro-brand-primary);
+  animation: micro-wait-spin 900ms linear infinite;
+}
+@keyframes micro-wait-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .m-wait__spinner { animation: none; } /* ثابت — التسمية تحمل الدلالة */
+}
+
+/* ================= 4) الهيكل المؤقت Skeleton =================
+   خفيف للشكل المقابل (صف/بطاقة) عند فائدته فقط — بلا لمعان
+   مستمر عند تقليل الحركة. */
+.m-skeleton { display: flex; flex-direction: column; gap: var(--micro-space-3); font-family: var(--micro-font-family); }
+.m-skeleton__row { display: flex; align-items: center; gap: var(--micro-space-3); }
+.m-skeleton__block {
+  background: linear-gradient(90deg, var(--micro-surface-page) 25%, var(--micro-surface-selected) 50%, var(--micro-surface-page) 75%);
+  background-size: 200% 100%;
+  animation: micro-skeleton-shift 1.6s ease-in-out infinite;
+  border-radius: var(--micro-radius-chip);
+}
+@keyframes micro-skeleton-shift {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-skeleton__block { animation: none; } /* ثابت بلا لمعان */
+}
+.m-skeleton__block--icon { width: var(--micro-row-tile); height: var(--micro-row-tile); border-radius: var(--micro-radius-circle); flex: none; }
+.m-skeleton__block--line { height: 16px; flex: 1; }
+.m-skeleton__block--line.is-w40 { flex-basis: 40%; }
+.m-skeleton__block--line.is-w70 { flex-basis: 70%; }
+
+/* ================= 5) الفراغ والحالات =================
+   أشكال مختلفة مفهومة: لا بيانات / لا نتائج / فشل قراءة بإعادة محاولة
+   (المحاكاة عند المستهلك). لا بيانات مالية مخترعة. */
+.m-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-8) var(--micro-space-5);
+  text-align: center;
+  font-family: var(--micro-font-family);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-surface-page);
+}
+.m-empty__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--micro-text-hint);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.m-empty__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 600; color: var(--micro-text-primary); }
+.m-empty__body { margin: 0; font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-secondary); max-width: 34ch; }
+.m-empty .m-btn { flex: none; }
+
+/* منطقة الإعلان المشتركة (تديرها messages.js — إعلان دون تكرار) */
+.m-live-region {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
