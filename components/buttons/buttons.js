@@ -88,8 +88,12 @@
   /* يضمن وجود مؤشر التحميل في موضع صحيح:
      - زر بأيقونة: المؤشر يحل مكان الأيقونة نفسها (فتحة 20px / 24px
        الدائري) فيبقى عرض الزر وزاوية النص كما هما.
-     - زر نصي بلا أيقونة: النص يبقى محفوظ المكان (opacity:0) والمؤشر
-       يتوسط الزر (صف is-loading--text) — الأبعاد ثابتة بالبنية. */
+     - زر نصي بلا أيقونة مع m-btn--loading-slot (المقترح B للمراجعة):
+       التسمية تبقى ظاهرة والمؤشر في الفتحة المحجوزة في الحشو —
+       لا تغليف ولا إخفاء للنص.
+     - زر نصي بلا أيقونة (المقترح A الافتراضي): النص يبقى محفوظ المكان
+       (opacity:0) والمؤشر يتوسط الزر (صف is-loading--text) — الأبعاد
+       ثابتة بالبنية. */
   function ensureSpinner(btn) {
     var spinner = btn.querySelector(':scope > .m-btn__spinner');
     if (spinner) return;
@@ -99,6 +103,9 @@
     var icon = btn.querySelector(':scope > .m-btn__icon');
     if (icon) {
       icon.parentElement.insertBefore(spinner, icon); /* فتحة الأيقونة نفسها */
+    } else if (btn.classList.contains('m-btn--loading-slot')) {
+      /* المقترح B: التسمية تبقى ظاهرة والمؤشر في فتحته المحجوزة */
+      btn.insertBefore(spinner, btn.firstChild);
     } else {
       btn.insertBefore(spinner, btn.firstChild);
       btn.classList.add('is-loading--text'); /* نص فقط: توسيط المؤشر */
@@ -129,6 +136,8 @@
    * - زر نصي بلا أيقونة: النص يبقى محفوظ المكان (opacity:0 وباقٍ في
    *   شجرة الإتاحة — الاسم لا يفقد) ويتوسط المؤشر الزر؛ عرض الزر
    *   ثابت بالبنية نفسها، والنص يعود كما كان بعد التوقف.
+   *   بديل مقترح للمراجعة (المقترح B): صنف m-btn--loading-slot يحفظ
+   *   التسمية ظاهرة والمؤشر في فتحة محجوزة — العرض ثابت في الحالتين.
    */
   function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;

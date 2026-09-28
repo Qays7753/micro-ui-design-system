@@ -52,6 +52,7 @@ python3 -m http.server 8080
 | **مقاس** (ارتفاع الزر، الحشو، هدف اللمس، مقاس الأيقونة) | `shared/tokens.css` — `--micro-button-min-height`، `--micro-button-padding-inline`، `--micro-icon-button-size`، `--micro-icon-in-button` |
 | **خط العدّاد** | `shared/tokens.css` — `--micro-counter-label-size` / `--micro-counter-label-weight` |
 | **انحناء** (كبسولة، دائرة) | `shared/tokens.css` — `--micro-radius-capsule` / `--micro-radius-circle` |
+| **انحناء الزر الطويل متعدد الأسطر** (مرشح R2-B) | `shared/tokens.css` — `--micro-radius-button-long` (24px) + صنف `m-btn--radius-limited` على الزر الطويل؛ الزر القصير يبقى كبسولة دون صنف |
 | **الخط** | `shared/tokens.css` — `--micro-font-family` + ملفات `assets/fonts/` وتعريفات `assets/fonts/fonts.css` |
 | **نص زر** | `index.html` (أو صفحتك) — النص داخل `<button>` مباشرة |
 | **أيقونة** | عدّل ملف الأصل `assets/icons/*.svg` — تنعكس في اللوحة تلقائيًا. خارج اللوحة: انسخ محتوى الأصل أو استخدم `<img>` |
@@ -59,6 +60,8 @@ python3 -m http.server 8080
 | **حالة ثابتة** (للمقارنة) | أضف صنفًا للزر: `is-pressed` / `is-focus` / `is-loading` (+ `is-loading--text` للزر النصي بلا أيقونة، مع تغليف النص بـ `<span class="m-btn__label">…</span>` كما في جدول الحالات — المحرك يفعل ذلك تلقائيًا للنص العادي) أو السمة `disabled` |
 | **حالة تفاعلية** | لا صنف إضافي — `:active` و`:focus-visible` و`aria-busy` مغطاة في `buttons.css` و`buttons.js` |
 | **زمن الحركة** | `shared/tokens.css` — `--micro-motion-press` إلخ |
+| **أسلوب التحميل النصي** | الافتراضي: المقترح A (النص محفوظ المكان والمؤشر متوسط). المرشح B: أضف صنف `m-btn--loading-slot` فيبقى النص ظاهرًا والمؤشر في فتحة محجوزة — كلاهما بلا قفزة حجم، والاختيار للمراجعة/المالك |
+| **مقاس المؤشر** | `shared/tokens.css` — `--micro-icon-in-button` (نصي/نص+أيقونة) و`--micro-icon-button-icon` (الدائري) — التغيير ينعكس على كل الأنواع |
 | **رسالة الاكتمال التجريبية** | `board.js` (دالة `showDone`) ونصها — سلوك لوحة تجريبي، وليس من المكوّن |
 
 ## قاعدة ذهبية
@@ -67,3 +70,19 @@ python3 -m http.server 8080
 جديدة تُعرّف أولًا في `shared/tokens.css` ثم تُستهلك. القيم الداخلية
 بالمكوّن وحده (مثل سماكة حد المؤشر 2px) موثقة بتعليق في موضعها ولا
 تُقدَّم كقيم مشتركة.
+
+## استقلال المكوّن عن لوحة العرض (تصحيح R2-C)
+
+`board.css` يضع `box-sizing: border-box` على كل العناصر، لكن
+`buttons.css` لا يعتمد على ذلك: النطاق `.m-btn, .m-btn *` داخل مصدر
+المكوّن يجعل أبعاد أجزائه (المؤشر بحدّه، العدّاد، الأيقونة) متطابقة
+القياس داخل اللوحة وخارجها — مثال `example-usage.html` يعمل بلا أي
+reset عام وهذه مطابقته مفحوصة في سجل الفحص (E2/E3).
+
+## محاكاة زيادة حجم الخط (التسمية الرسمية)
+
+زر «محاكاة زيادة حجم الخط 200%» في القسم 6 يضاعف حجم الخط المحسوب
+لعمود الفحص في مرورين (تصحيح R2-D)، وهو مكافئ لتكبير النص من حيث
+مضاعفة الخط فقط — وليس تكبير متصفح/نظام مضمون التكافؤ. آلية CDP
+(`Emulation.setTextZoomFactor`) غير متاحة في بيئة الفحص، والتكبير
+الأصلي للمتصفح/الهاتف الحقيقي بقي غير مفحوص (انظر review.md).

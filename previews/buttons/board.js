@@ -138,22 +138,32 @@
   });
 
   /* ---------------------------------------------------------
-     3) محاكاة تكبير النص 200% على عمود الفحص (بند 8)
-        تضاعف حجم الخط المحسوب لكل عناصر العمود — مكافئ لتكبير
-        النص في المتصفح: الخط يتضاعف وتبقى الصناديق غير النصية.
-        آلية CDP Emulation.setTextZoomFactor أُزيلت من Chromium
-        الحديث (تحقق فعلي) فاستُخدمت هذه المحاكاة القابلة للنقر.
+     3) محاكاة زيادة حجم الخط 200% على عمود الفحص (بند 8)
+        تضاعف حجم الخط المحسوب لكل عناصر العمود — اسمها الرسمي
+        «محاكاة زيادة حجم الخط»: مكافئة لتكبير النص في المتصفح من حيث
+        مضاعفة الخط، وليست مكافئًا مضمونًا لكل تكبير متصفح/نظام.
+        تصحيح R2-D: الأحجام تُقرأ كلها أولًا (قبل تعديل أي عنصر) ثم
+        يُطبق العامل في مرور ثانٍ — القراءة والكتابة متتاليان من الأب
+        إلى الابن كانت تجعل الابن الوارث يقرأ الحجم المضاعف فيضاعفه
+        مرة ثانية (16→32 ثم 32→64 على m-btn__label الموروث).
+        آلية CDP Emulation.setTextZoomFactor غير متاحة في بيئة الفحص
+        (Chromium الحديث عبر Playwright) فاستُخدمت هذه المحاكاة القابلة
+        للنقر.
      --------------------------------------------------------- */
   var zoomLabBtn = document.querySelector('[data-lab="text-zoom"]');
   var zoomLab = document.getElementById('text-zoom-target');
 
   function applyTextZoom(root, factor) {
     var els = [root].concat([].slice.call(root.querySelectorAll('*')));
-    els.forEach(function (el) {
-      if (el.dataset.tzStyle !== undefined) return; /* لا مضاعفة مزدوجة */
-      el.dataset.tzStyle = el.getAttribute('style') || '';
-      var fs = parseFloat(getComputedStyle(el).fontSize);
-      el.style.fontSize = (fs * factor) + 'px';
+    /* مرور 1: قراءة كل الأحجام الأصلية من computedStyle قبل أي تعديل */
+    var originals = els.map(function (el) {
+      return { el: el, fs: parseFloat(getComputedStyle(el).fontSize) };
+    });
+    /* مرور 2: تطبيق العامل على الحجم الأصلي المحفوظ — لا مضاعفة موروثة */
+    originals.forEach(function (item) {
+      if (item.el.dataset.tzStyle !== undefined) return; /* لا مضاعفة مزدوجة */
+      item.el.dataset.tzStyle = item.el.getAttribute('style') || '';
+      item.el.style.fontSize = (item.fs * factor) + 'px';
     });
   }
 
@@ -173,11 +183,11 @@
       if (on) {
         restoreTextZoom(zoomLab);
         zoomLabBtn.setAttribute('aria-pressed', 'false');
-        zoomLabBtn.textContent = 'محاكاة تكبير النص 200%';
+        zoomLabBtn.textContent = 'محاكاة زيادة حجم الخط 200%';
       } else {
         applyTextZoom(zoomLab, 2);
         zoomLabBtn.setAttribute('aria-pressed', 'true');
-        zoomLabBtn.textContent = 'إلغاء محاكاة تكبير النص';
+        zoomLabBtn.textContent = 'إلغاء محاكاة زيادة حجم الخط';
       }
     });
   }

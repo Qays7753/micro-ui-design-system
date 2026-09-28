@@ -18,9 +18,13 @@ Micro UI — B01: سكربت الفحص واللقطات (قابل لإعادة 
 عقد setLoading (تسمية/استرجاع/حراسة/معطل/تكرار)، ثبات الأبعاد أثناء التحميل
 (قبل/أثناء/بعد)، رسالة النجاح (أول حفظ/إعادة حفظ)، تركيز+ضغط، تركيز←تحميل←عودة،
 منع Enter/Space أثناء التحميل، معاينات هاتف كاملة 320/390/430 بلا تجاوز أفقي،
-تكبير النص 200% داخل مساحة هاتف ثابتة (مضاعفة الخط المحسوب — آلية CDP
-Emulation.setTextZoomFactor أُزيلت من Chromium الحديث)،
-وتقليل الحركة (مؤشر ثابت). النتيجة النهائية: exit 0 عند نجاح الكل، وإلا exit 1.
+محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة (مروران: قراءة كل الأحجام
+الأصلية أولًا ثم تطبيق العامل — تصحيح R2-D؛ آلية CDP Emulation.setTextZoomFactor
+غير متاحة في بيئة الفحص)، احتواء نص العدّاد داخل الشارة بخصم الحشو
+(Range API — تصحيح R2-A)، الشكل المرشح للزر الطويل (R2-B)، استقلال المقاسات
+خارج اللوحة وانعكاس توكن المؤشر على الأنواع كلها (R2-C)، والمقترحان A/B
+للتحميل النصي، وتقليل الحركة (مؤشر ثابت). النتيجة النهائية: exit 0 عند نجاح
+الكل، وإلا exit 1.
 """
 
 import http.server
@@ -199,6 +203,8 @@ def main():
             ("نص+أيقونة", '#live [data-demo="save"]'),
             ("أيقونة دائري", "#live [data-loading-api].m-btn--icon"),
             ("تصفية بعدّاد", '#types [aria-label="تصفية، فلتران نشطان"]'),
+            ("مقترح A — نص فقط", '#live [data-load-proposal="A"]'),
+            ("مقترح B — فتحة محجوزة", '#live [data-load-proposal="B"]'),
         ]
         for name, sel in size_targets:
             before = js_rect(page, sel)
@@ -217,6 +223,18 @@ def main():
         page.wait_for_timeout(150)
         page.locator("#live [data-demo-group]").nth(2).screenshot(path=str(SHOTS / "15-loading-size-stability-390.png"))
         page.evaluate("() => MicroButtons.setLoading(document.querySelector('#live [data-loading-api].m-btn--light'), false)")
+
+        # لقطة المقترحين A/B للتحميل النصي أثناء التحميل معًا (قرار R2)
+        page.evaluate(
+            "([a, b]) => { MicroButtons.setLoading(document.querySelector(a), true); MicroButtons.setLoading(document.querySelector(b), true); }",
+            ['#live [data-load-proposal="A"]', '#live [data-load-proposal="B"]'],
+        )
+        page.wait_for_timeout(150)
+        page.locator("#live [data-demo-group]").nth(3).screenshot(path=str(SHOTS / "26-loading-proposals-390.png"))
+        page.evaluate(
+            "([a, b]) => { MicroButtons.setLoading(document.querySelector(a), false); MicroButtons.setLoading(document.querySelector(b), false); }",
+            ['#live [data-load-proposal="A"]', '#live [data-load-proposal="B"]'],
+        )
 
         # ---- عقد setLoading: الاسترجاع الدقيق والاستدعاءات المتكررة ----
         icon_sel = "#live [data-loading-api].m-btn--icon"
@@ -238,7 +256,7 @@ def main():
 
         # زر نصي بلا تسمية صريحة: الاسم يبقى مطابقًا للنص الظاهر
         txt_name = page.evaluate(
-            """() => { const b = document.querySelector('#live .demo-group:nth-of-type(4) .m-btn--primary');
+            """() => { const b = document.querySelector('#kb-group .m-btn--primary');
                  MicroButtons.setLoading(b, true);
                  const r = {label: b.getAttribute('aria-label'), text: b.textContent.trim()};
                  MicroButtons.setLoading(b, false);
@@ -271,7 +289,7 @@ def main():
         # ---- منع التفعيل أثناء التحميل: Enter/Space/نقر (حراسة المكوّن) ----
         # العدّاد على الزر نفسه في طور الفقاعة — المحرك الأمني حاجز الالتقاط
         # فأي نقرة محجوبة لا تصل إليه أصلًا.
-        guard_sel = "#live .demo-group:nth-of-type(4) .m-btn--primary"  # «إنشاء طلب»
+        guard_sel = "#kb-group .m-btn--primary"  # «إنشاء طلب»
         page.keyboard.press("Tab")  # ضبط نمطية لوحة المفاتيح
         page.evaluate("([s]) => document.querySelector(s).focus()", [guard_sel])
         page.evaluate(
@@ -367,11 +385,14 @@ def main():
             check(f"B1 {width}px: الصفحة بلا تمرير أفقي", ov["sw"] <= ov["cw"], str(ov))
             if width == 320:
                 pg.locator("#options").screenshot(path=str(SHOTS / shot_hard))
+                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-zoom-lab-320.png"))
                 hidden_wider = pg.evaluate(
                     """() => { const b = document.querySelector('.phone-full-block[data-w="390"]');
                          return b && getComputedStyle(b).display === 'none'; }"""
                 )
                 check("B2 320px: الأعمدة الأعرض مخفية (تُعاين عند عرضها)", bool(hidden_wider))
+            if width == 390:
+                pg.locator("#text-zoom-target").screenshot(path=str(SHOTS / "27-radius-zoom-lab-390.png"))
             fullsel = f'.phone-full-block[data-w="{width}"] .phone-demo'
             rect = js_rect(pg, fullsel)
             inner = pg.evaluate(
@@ -384,11 +405,23 @@ def main():
             pg.locator("#phones-full").screenshot(path=str(SHOTS / f"{16 + idx}-phone-full-{width}.png"))
 
             if shot_zoom:
-                # تكبير النص 200% عبر زر المحاكاة في اللوحة نفسه (مسار مستخدم حقيقي):
-                # يضاعف حجم الخط المحسوب لكل عناصر العمود — مكافئ لتكبير النص
-                # في المتصفح (الخط يتضاعف وتبقى الصناديق غير النصية).
-                # آلية CDP Emulation.setTextZoomFactor أُزيلت من Chromium الحديث
-                # (تحقق فعلي 2026-09: 'wasn't found') فاستُبدل بهذا الزر.
+                # محاكاة زيادة حجم الخط 200% عبر زر اللوحة نفسه (مسار مستخدم حقيقي):
+                # مروران — قراءة كل الأحجام الأصلية أولًا ثم تطبيق العامل
+                # (تصحيح R2-D يمنع مضاعفة الابن الوارث مرتين: 16→32 لا 64).
+                # آلية CDP Emulation.setTextZoomFactor غير متاحة في بيئة الفحص
+                # (Chromium الحديث عبر Playwright) فاستُخدم هذا الزر.
+                # الاسم الرسمي: «محاكاة زيادة حجم الخط» — مكافئة للنص وليست
+                # تكبير متصفح/نظام مضمون التكافؤ لكل الحالات.
+                # قبل التكبير: قياس زوج الانحناء المرشح (R2-B) عند 100%
+                rad100 = pg.evaluate(
+                    """() => { const cap = document.querySelector('#text-zoom-target [data-radius="capsule"]');
+                         const lim = document.querySelector('#text-zoom-target [data-radius="limited"]');
+                         const rc = getComputedStyle(lim).borderTopLeftRadius;
+                         const hc = cap.getBoundingClientRect().height;
+                         const hl = lim.getBoundingClientRect().height;
+                         return {capR: getComputedStyle(cap).borderTopLeftRadius, limR: rc,
+                                 capH: Math.round(hc), limH: Math.round(hl)}; }"""
+                )
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(250)
                 tz = pg.evaluate(
@@ -402,27 +435,85 @@ def main():
                          const csz = cnt.getBoundingClientRect();
                          const fb = sec.querySelector('#text-zoom-target .m-btn--secondary.m-btn--block');
                          const fr = fb.getBoundingClientRect();
+                         const wrapped = sec.querySelector('#text-zoom-target .m-btn__label');
+                         const wfs = wrapped ? getComputedStyle(wrapped).fontSize : null;
+                         /* حدود نص العدّاد داخل الشارة بخصم الحشو (تصحيح R2-A):
+                            أفقيًا عبر Range (عرض التقدم الفعلي)، وعموديًا عبر
+                            غلاف نص قابل للقياس (صندوق السطر المحجوز) — صندوق
+                            خط الزواجهة يفوق السطر بصريًا (1.3em) وليس قصًّا
+                            حقيقيًا، والغلاف هو ما يحجزه التخطيط فعلًا. */
+                         const range = document.createRange();
+                         range.selectNodeContents(cnt);
+                         const tr = range.getBoundingClientRect();
+                         const ccs = getComputedStyle(cnt);
+                         const padL = parseFloat(ccs.paddingLeft), padR = parseFloat(ccs.paddingRight);
+                         const tnode = cnt.firstChild;
+                         const wrap = document.createElement('span');
+                         wrap.style.display = 'inline-block';
+                         cnt.insertBefore(wrap, tnode);
+                         wrap.appendChild(tnode);
+                         const wr = wrap.getBoundingClientRect();
+                         cnt.insertBefore(tnode, wrap);
+                         wrap.remove();
+                         const crb = cnt.getBoundingClientRect();
+                         const textInside = tr.left >= crb.left + padL - 0.6
+                             && tr.right <= crb.right - padR + 0.6
+                             && wr.top >= crb.top - 0.6
+                             && wr.bottom <= crb.bottom + 0.6;
+                         const cap = sec.querySelector('#text-zoom-target [data-radius="capsule"]');
+                         const lim = sec.querySelector('#text-zoom-target [data-radius="limited"]');
                          return {labelFont: fs, line: lh, btnH: Math.round(bh),
+                                 wrappedFont: wfs,
                                  counterW: Math.round(csz.width), counterH: Math.round(csz.height),
+                                 counterTextW: Math.round(tr.width), counterTextH: Math.round(tr.height),
+                                 counterWrapH: Math.round(wr.height),
+                                 counterPadL: padL, counterPadR: padR,
+                                 counterTextInside: textInside,
                                  demoW: Math.round(demo.getBoundingClientRect().width),
                                  demoSw: demo.scrollWidth, demoCw: demo.clientWidth,
                                  hardestW: Math.round(fb.getBoundingClientRect().width),
-                                 hardestRight: Math.round(fr.right)}; }"""
+                                 hardestRight: Math.round(fr.right),
+                                 capR200: getComputedStyle(cap).borderTopLeftRadius,
+                                 limR200: getComputedStyle(lim).borderTopLeftRadius,
+                                 capH200: Math.round(cap.getBoundingClientRect().height),
+                                 limH200: Math.round(lim.getBoundingClientRect().height)}; }"""
                 )
                 ov2 = page_overflow(pg)
-                check(f"B4 {width}px تكبير نص 200%: خط التسمية 32px فعلي والسطر تمدّد معه",
-                      tz["labelFont"] == "32px" and abs(float(str(tz["line"]).replace("px", "")) - 48) < 1,
-                      f"fontSize={tz['labelFont']}، line={tz['line']}، ارتفاع الزر={tz['btnH']}px")
-                check(f"B5 {width}px تكبير نص 200%: لا قص ولا خروج — العدّاد يتمدد والمحتوى داخل العمود",
-                      tz["demoSw"] <= tz["demoCw"] + 1 and tz["counterH"] >= 26
+                check(f"B4 {width}px زيادة حجم الخط 200%: الخط المباشر وغلاف m-btn__label كلاهما 32px لا 64px والسطر تمدّد",
+                      tz["labelFont"] == "32px" and tz["wrappedFont"] == "32px"
+                      and abs(float(str(tz["line"]).replace("px", "")) - 48) < 1,
+                      f"fontSize={tz['labelFont']}، الغلاف={tz['wrappedFont']}، line={tz['line']}، ارتفاع الزر={tz['btnH']}px")
+                check(f"B5 {width}px زيادة حجم الخط 200%: نص العدّاد داخل الشارة بخصم الحشو (R2-A) والمحتوى داخل العمود",
+                      tz["counterTextInside"] and tz["counterH"] >= 26
+                      and tz["demoSw"] <= tz["demoCw"] + 1
                       and tz["hardestRight"] <= tz["demoCw"] + 1 and tz["btnH"] >= 56,
-                      f"عمود={tz['demoW']}px، داخلي sw/cw={tz['demoSw']}/{tz['demoCw']}، "
-                      f"عدّاد={tz['counterW']}x{tz['counterH']}، ارتفاع الزر={tz['btnH']}، أصعب زر يمين={tz['hardestRight']}")
-                check(f"B6 {width}px تكبير نص 200%: الصفحة بلا تمرير أفقي",
+                      f"شارة={tz['counterW']}x{tz['counterH']}، نصها={tz['counterTextW']}x{tz['counterTextH']} (غلاف السطر {tz['counterWrapH']}px)، "
+                      f"حشو inline={tz['counterPadL']}/{tz['counterPadR']}، نص داخل الحدود={tz['counterTextInside']}، "
+                      f"عمود داخلي sw/cw={tz['demoSw']}/{tz['demoCw']}، أصعب زر يمين={tz['hardestRight']}، ارتفاع الزر={tz['btnH']}")
+                check(f"B6 {width}px زيادة حجم الخط 200%: الصفحة بلا تمرير أفقي",
                       ov2["sw"] <= ov2["cw"], str(ov2))
+                check(f"B7 {width}px المرشح R2-B: انحناء الزر الطويل 24px عند 100% و200% وبنفس ارتفاع الحالي",
+                      rad100["limR"] == "24px" and rad100["capR"] == "999px"
+                      and tz["limR200"] == "24px" and tz["capR200"] == "999px"
+                      and abs(rad100["capH"] - rad100["limH"]) < 1
+                      and abs(tz["capH200"] - tz["limH200"]) < 1,
+                      f"100%: كبسولة={rad100['capR']} مرشح={rad100['limR']} ارتفاعا {rad100['capH']}/{rad100['limH']}؛ "
+                      f"200%: كبسولة={tz['capR200']} مرشح={tz['limR200']} ارتفاعا {tz['capH200']}/{tz['limH200']}")
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / shot_zoom))
                 pg.click('[data-lab="text-zoom"]')  # استعادة الحجم الأصلي
                 pg.wait_for_timeout(150)
+                # B8: الاستعادة الدقيقة بعد الإلغاء — المباشر والغلاف معًا (R2-D)
+                back = pg.evaluate(
+                    """() => { const sec = document.getElementById('phones-full');
+                         const btn = sec.querySelector('#text-zoom-target .m-btn--primary.m-btn--block');
+                         const wrapped = sec.querySelector('#text-zoom-target .m-btn__label');
+                         return {btn: getComputedStyle(btn).fontSize,
+                                 wrapped: wrapped ? getComputedStyle(wrapped).fontSize : null,
+                                 inline: btn.getAttribute('style')}; }"""
+                )
+                check(f"B8 {width}px الاستعادة الدقيقة بعد إلغاء المحاكاة: المباشر والغلاف يعودان 16px",
+                      back["btn"] == "16px" and back["wrapped"] == "16px" and back["inline"] is None,
+                      str(back))
             c.close()
 
         # ============ C) 1280 — جدول الحالات ولوحة المقارنة ============
@@ -456,12 +547,19 @@ def main():
               rm["anim"] == "none" and rm["busy"] == "true", str(rm))
         c.close()
 
-        # ============ E) مثال الاستخدام خارج اللوحة (بند 5) ============
+        # ============ E) مثال الاستخدام خارج اللوحة (بند 5 + تصحيح R2-C) ============
         c = browser.new_context(viewport={"width": 390, "height": 844})
         pg = c.new_page()
+        errors_usage = []
+        pg.on("console", lambda m: errors_usage.append(m.text) if m.type == "error" else None)
+        pg.on("pageerror", lambda e: errors_usage.append(str(e)))
         pg.goto(usage)
         pg.wait_for_load_state("networkidle")
         pg.evaluate("() => document.fonts.ready")
+        n_syms_u = pg.evaluate("() => document.querySelectorAll('#usage-icon-defs symbol').length")
+        check("E0 مثال الاستخدام: بلا أخطاء console/pageerror ورموز الأصول محملة (3)",
+              len(errors_usage) == 0 and n_syms_u == 3,
+              f"أخطاء={errors_usage[:2]}، رموز={n_syms_u}")
         pg.click("#save-btn")
         pg.wait_for_timeout(300)
         u1 = pg.evaluate(
@@ -482,6 +580,78 @@ def main():
               u1["busy"] == "true" and u1["label"] == "جارٍ الحفظ" and u1["statusHidden"]
               and u2["busy"] is None and u2["label"] is None and u2["statusVisible"],
               f"أثناء: {u1} | بعد: {u2}")
+
+        # ---- R2-C: استقلال المقاسات خارج اللوحة — أبعاد قبل/أثناء/بعد لكل شكل ----
+        e_targets = [
+            ("نص+أيقونة", "#icon-btn"),
+            ("أيقونة دائري", "#circle-btn"),
+            ("تصفية بعدّاد", "#filter-btn"),
+            ("مقترح B — فتحة محجوزة", "#slot-btn"),
+        ]
+        for name, sel in e_targets:
+            before = js_rect(pg, sel)
+            pg.evaluate("([s]) => MicroButtons.setLoading(document.querySelector(s), true)", [sel])
+            during = js_rect(pg, sel)
+            sp = pg.evaluate(
+                """([s]) => { const b = document.querySelector(s);
+                     const sp = b.querySelector('.m-btn__spinner');
+                     if (!sp) return null;
+                     const r = sp.getBoundingClientRect();
+                     return {w: Math.round(r.width * 100) / 100, h: Math.round(r.height * 100) / 100}; }""",
+                [sel],
+            )
+            pg.evaluate("([s]) => MicroButtons.setLoading(document.querySelector(s), false)", [sel])
+            after = js_rect(pg, sel)
+            stable = (before and during and after and sp
+                      and abs(before["w"] - during["w"]) < 0.5 and abs(before["h"] - during["h"]) < 0.5
+                      and abs(before["w"] - after["w"]) < 0.5 and abs(before["h"] - after["h"]) < 0.5)
+            check(f"E2 استقلال المقاسات خارج اللوحة — {name}", stable,
+                  f"قبل {before} أثناء {during} بعد {after} مؤشر {sp}")
+
+        # ---- R2-C: تغيّر توكن مقاس المؤشر ينعكس على الأنواع كلها ثم يستعاد ----
+        pg.evaluate("() => document.documentElement.style.setProperty('--micro-icon-in-button', '26px')")
+        t1 = pg.evaluate(
+            """() => {
+                 const out = {};
+                 const b1 = document.querySelector('#icon-btn');
+                 /* فتحة الأيقونة في الحالة العادية (أثناء التحميل display:none) */
+                 const ic0 = b1.querySelector('.m-btn__icon');
+                 out.iconSlot = ic0 ? Math.round(ic0.getBoundingClientRect().height) : null;
+                 MicroButtons.setLoading(b1, true);
+                 const s1 = b1.querySelector('.m-btn__spinner').getBoundingClientRect();
+                 out.iconBtnSpinner = Math.round(s1.width);
+                 MicroButtons.setLoading(b1, false);
+                 const b2 = document.querySelector('#sync-btn');
+                 MicroButtons.setLoading(b2, true);
+                 const s2 = b2.querySelector('.m-btn__spinner').getBoundingClientRect();
+                 out.textSpinner = Math.round(s2.width);
+                 MicroButtons.setLoading(b2, false);
+                 return out; }"""
+        )
+        pg.evaluate("() => document.documentElement.style.removeProperty('--micro-icon-in-button')")
+        pg.evaluate("() => document.documentElement.style.setProperty('--micro-icon-button-icon', '28px')")
+        t2 = pg.evaluate(
+            """() => { const b = document.querySelector('#circle-btn');
+                 MicroButtons.setLoading(b, true);
+                 const s = b.querySelector('.m-btn__spinner').getBoundingClientRect();
+                 const w = Math.round(s.width);
+                 MicroButtons.setLoading(b, false);
+                 return {circleSpinner: w}; }"""
+        )
+        pg.evaluate("() => document.documentElement.style.removeProperty('--micro-icon-button-icon')")
+        t3 = pg.evaluate(
+            """() => { const b = document.querySelector('#sync-btn');
+                 MicroButtons.setLoading(b, true);
+                 const s = b.querySelector('.m-btn__spinner').getBoundingClientRect();
+                 const w = Math.round(s.width);
+                 MicroButtons.setLoading(b, false);
+                 return {restored: w}; }"""
+        )
+        check("E3 توكن المؤشر ينعكس على الأنواع كلها ثم يستعاد (R2-C)",
+              t1["iconBtnSpinner"] == 26 and t1["iconSlot"] == 26 and t1["textSpinner"] == 26
+              and t2["circleSpinner"] == 28 and t3["restored"] == 20,
+              f"توكِن 26: نص+أيقونة={t1['iconBtnSpinner']} فتحة={t1['iconSlot']} نص={t1['textSpinner']}؛ "
+              f"توكن الدائري 28: {t2['circleSpinner']}؛ بعد الاستعادة: {t3['restored']}")
         c.close()
 
         browser.close()

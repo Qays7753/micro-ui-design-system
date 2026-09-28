@@ -30,7 +30,7 @@
 
   <header class="board-header">
     <h1>Micro — الأزرار <span class="status-chip">DRAFT FOR RE-REVIEW</span></h1>
-    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — الأنوان والحالات من الأسس المعتمدة V1.1. ما لم يُحسم موسوم «مقترح» في المواصفات والمراجعة. تصحيحات جولة R1 على نفس الملفات.</p>
+    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — الأنوان والحالات من الأسس المعتمدة V1.1. ما لم يُحسم موسوم «مقترح» في المواصفات والمراجعة. تصحيحات جولتي R1 وR2 على نفس الملفات.</p>
   </header>
 
   <main>
@@ -171,8 +171,14 @@
         <button class="m-btn m-btn--primary" disabled data-loading-api>محفوظ — معطل أصلًا</button>
       </div>
 
-      <p class="demo-note" style="margin-top:16px">تنقل بلوحة المفاتيح عبر هذا الصف (Tab / Shift+Tab) — حلقة التركيز بفاصل أبيض 2px، وجرب Enter ثم راقب التحميل وعودة الاسم الإتاحي:</p>
+      <p class="demo-note" style="margin-top:16px">المقترحان للتحميل النصي (قرار مراجعة R2 — كلاهما بلا قفزة حجم ولا تصادم، والاختيار بعد المقارنة): <b>المقترح A</b> (الافتراضي الحالي): التسمية محفوظة المكان (opacity:0 باقية في شجرة الإتاحة) والمؤشر يتوسط الزر. <b>المقترح B</b> (المرشح): التسمية تبقى ظاهرة والمؤشر في فتحة محجوزة عند بداية السطر (صنف m-btn--loading-slot) — العرض نفسه في الحالتين:</p>
       <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--secondary" data-loading-api data-loading-label="جارٍ التحديث" data-load-proposal="A">مزامنة البيانات</button>
+        <button class="m-btn m-btn--secondary m-btn--loading-slot" data-loading-api data-loading-label="جارٍ التحديث" data-load-proposal="B">مزامنة البيانات</button>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">تنقل بلوحة المفاتيح عبر هذا الصف (Tab / Shift+Tab) — حلقة التركيز بفاصل أبيض 2px، وجرب Enter ثم راقب التحميل وعودة الاسم الإتاحي:</p>
+      <div class="demo-group" data-demo-group id="kb-group">
         <button class="m-btn m-btn--primary">إنشاء طلب</button>
         <button class="m-btn m-btn--secondary">تعديل</button>
         <button class="m-btn m-btn--light">عرض الكل</button>
@@ -207,6 +213,16 @@
         <div class="example" style="width:340px;max-width:100%">
           <button class="m-btn m-btn--secondary" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
           <span class="caption">أصعب مثال: أيقونة + نص طويل + عدّاد 123 (340px عرضًا)</span>
+        </div>
+
+        <!-- مقارنة R2-B: انحناء الزر الطويل عند التفاف النص — المرشح ليس قرارًا معتمدًا -->
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+          <span class="caption">الحالي: كبسولة 999px — تتحول لبيضوي ضخم عند الالتفاف (4 أسطر)</span>
+        </div>
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block m-btn--radius-limited">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+          <span class="caption">المرشح R2-B: انحناء محدود 24px (m-btn--radius-limited) — نفس الخط والنص والارتفاع</span>
         </div>
 
         <div class="example">
@@ -345,17 +361,22 @@
         </div>
       </div>
 
-      <h2>تكبير النص 200% داخل مساحة هاتف ثابتة</h2>
-      <p class="panel-note">زر المحاكاة أدناه يضاعف حجم الخط المحسوب لكل عناصر العمود — مكافئ لتكبير النص في المتصفح: الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP Emulation.setTextZoomFactor أُزيلت من Chromium الحديث (تحقق فعلي) — القياسات في سجل الفحص tools/b01-screenshots.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا.</p>
+      <h2>محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة</h2>
+      <p class="panel-note">زر المحاكاة أدناه («محاكاة زيادة حجم الخط») يضاعف حجم الخط المحسوب لكل عناصر العمود في مرورين: قراءة كل الأحجام الأصلية أولًا ثم تطبيق العامل (تصحيح R2-D: يمنع مضاعفة الابن الوارث مرتين — 16→32 لا 64). الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP (Emulation.setTextZoomFactor) غير متاحة في بيئة الفحص — هذه المحاكاة مكافئة للنص وليست تكبير متصفح/نظام مضمونًا لكل الحالات. القياسات في سجل الفحص tools/b01-screenshots.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا. العمود يضم: نصًا مباشرًا، النص نفسه داخل غلاف m-btn__label (زر تحميل ثابت)، وزرين طويلين (الحالي والمرشح R2-B) لفحص الشكل عند 100% و200%.</p>
       <div class="lab-controls">
-        <button class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة تكبير النص 200%</button>
-        <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها.</span>
+        <button class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها ويعيد الأحجام بدقة.</span>
       </div>
       <div class="phone-full-block">
         <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
           <div class="phone-stack">
             <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
             <button class="m-btn m-btn--secondary m-btn--block" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
+            <!-- نص داخل غلاف التحميل المؤقت (R2-D): يجب أن يصل 32px لا 64px -->
+            <button class="m-btn m-btn--primary is-loading is-loading--text" aria-busy="true" aria-label="جارٍ الحفظ"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button>
+            <!-- مقارنة R2-B عند التكبير: الحالي مقابل المرشح -->
+            <button class="m-btn m-btn--primary m-btn--block" data-radius="capsule">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+            <button class="m-btn m-btn--primary m-btn--block m-btn--radius-limited" data-radius="limited">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
             <div class="phone-row">
               <button class="m-btn m-btn--light">عرض الكل</button>
               <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
