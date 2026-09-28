@@ -98,22 +98,28 @@
 }
 
 /* عناصر نصية داخل السطح (للقياس والفحص) — القيم من التوكنات
-   المقترحة في tokens.css (E12) بدل تكرار 22/36 مباشرة هنا */
+   المقترحة في tokens.css (E12) بدل تكرار 22/36 مباشرة هنا.
+   R2-01: ارتفاع السطر نسبة لا بكسل (36px/44px الثابتة كانت تتداخل
+   عند تكبير النص لأن الخط يصل 44px/72px والصندوق يبقى ثابتًا)،
+   والرقم الطويل بلا فراغات يُلف داخل السطح (overflow-wrap: anywhere)
+   كي لا يخرج إلى الخلفية الفاتحة — الاحتواء بالتمدد لا بالقصّ،
+   وتكبير المستخدم محفوظ كما هو. */
 .m-surface__title {
   font-size: var(--micro-surface-title-size, 22px);
-  line-height: var(--micro-surface-title-line, 36px);
+  line-height: var(--micro-surface-title-line, 1.6364); /* نسبية: 22/36 */
   font-weight: 600;
   color: var(--micro-text-inverse);
 }
 .m-surface__amount {
   font-size: var(--micro-surface-amount-size, 36px);
-  line-height: var(--micro-surface-amount-line, 44px);
+  line-height: var(--micro-surface-amount-line, 1.2222); /* نسبية: 36/44 */
   font-weight: 600;
   color: var(--micro-text-inverse);
   font-variant-numeric: tabular-nums;
   direction: ltr;
   unicode-bidi: isolate;
   text-align: end; /* يظهر عند نهاية السطر كما في الاتجاه المرجعي */
+  overflow-wrap: anywhere; /* R2-01: رقم طويل بلا فراغات يُلف داخل السطح — توثيق في المواصفات */
 }
 .m-surface__label {
   font-size: var(--micro-label-size);

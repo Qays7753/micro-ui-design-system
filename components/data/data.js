@@ -15,8 +15,18 @@
    <div class="m-chart__plot" data-plot></div>
    <p class="m-chart__summary" data-summary></p>
 
-   مدخلات موحدة (E06): القيمة الفارغة/غير الرقمية/NaN/∞ تصير null
-   (مجهول) — لا استيفاء ولا تخمين صامت.
+   مدخلات موحدة (E06 + R2-05): تحليل رقم كامل لا بادئة رقمية —
+   `12oops` ليس 12 بل قيمة غير صالحة (مجهول)، والفارغ/غير الرقمي/
+   NaN/∞ كلها null (مجهول) — لا استيفاء ولا تخمين صامت.
+
+   R2-05 تمييز الحالات في donut (ولا استنتاج قيمة عمل جديدة):
+   - لا قيمة صالحة إطلاقًا (كل الفئات مجهولة أو لا فئات): مركز «—»
+     وتسمية «لا توجد بيانات» — لا يُعرض صفر، فعدم التوفر ليس 0.
+   - قيم معلومة كلها صفر (بلا مجهول): حالة صفرية صادقة (0 هو القيمة).
+   - خلط مجهول/صفر والمجموع صفر: الإجمالي غير معلوم (—) — لا دعوى
+     بإجمالي صفر بينما فئات مجهولة.
+   - المقام data-total: غائب → مجموع الفئات المعروفة (بديل موثق)،
+     موجود غير صالح («bad» أو ∞) → رسالة خطأ صريحة لا سقوط صامت.
 
    - bars:  ارتفاع ∝ القيمة على max معلن (data-max) — صفر يظهر على الأساس.
             السالب غير مدعوم في الأعمدة: يُعرض بوضوح كقيمة غير مرسومة
@@ -40,12 +50,22 @@
 
   var NS = 'http://www.w3.org/2000/svg';
 
+  /* R2-05: تحليل رقم كامل لا بادئة رقمية — `12oops` غير صالح وليس 12،
+     والفارغ/غير الرقمي/NaN/∞ كلها null (مجهول). */
+  var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
+  function parseNum(raw) {
+    if (raw === null || raw === undefined) return null;
+    var s = String(raw).trim();
+    if (s === '' || !NUM_RE.test(s)) return null;
+    var v = Number(s);
+    return (isNaN(v) || !isFinite(v)) ? null : v;
+  }
+
   function itemsOf(chart) {
     return [].slice.call(chart.querySelectorAll('.m-chart__data [data-series]')).map(function (li) {
       var raw = li.getAttribute('data-value');
-      var v = raw === null || raw.trim() === '' ? null : parseFloat(raw);
-      /* E06: توحيد null — غير الرقمي وNaN وغير المحدود كلها مجهول */
-      if (v !== null && (isNaN(v) || !isFinite(v))) v = null;
+      /* E06/R2-05: توحيد null — الفارغ وغير الرقمي وNaN وغير المحدود كلها مجهول */
+      var v = parseNum(raw);
       return {
         series: li.getAttribute('data-series') || 'a',
         label: li.getAttribute('data-label') || '',
@@ -112,7 +132,8 @@
   /* ---- الأعمدة ---- */
   function renderBars(chart, items) {
     var plot = chart.querySelector('[data-plot]');
-    var max = parseFloat(chart.getAttribute('data-max')) || Math.max.apply(null,
+    var maxAttr = parseNum(chart.getAttribute('data-max')); /* R2-05: كامل لا بادئة */
+    var max = (maxAttr !== null && maxAttr > 0) ? maxAttr : Math.max.apply(null,
       items.map(function (i) { return i.value || 0; }).concat([1]));
     var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.2));
     var maxLines = Math.max.apply(null, items.map(function (i) {
@@ -162,7 +183,8 @@
     var plot = chart.querySelector('[data-plot]');
     var rtl = (chart.getAttribute('data-axis-dir') || 'rtl') !== 'ltr';
     var vals = items.map(function (i) { return i.value; });
-    var max = parseFloat(chart.getAttribute('data-max')) || Math.max.apply(null, vals.filter(function (v) { return v !== null && v >= 0; }).concat([1]));
+    var maxAttr = parseNum(chart.getAttribute('data-max')); /* R2-05: كامل لا بادئة */
+    var max = (maxAttr !== null && maxAttr > 0) ? maxAttr : Math.max.apply(null, vals.filter(function (v) { return v !== null && v >= 0; }).concat([1]));
     var n = Math.max(items.length, 2);
     var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.2));
     var maxLines = Math.max.apply(null, items.map(function (i) {
@@ -209,12 +231,16 @@
     plot.appendChild(svg);
   }
 
-  /* ---- التوزيع الدائري (نسب بمقام معلن) ---- */
+  /* ---- التوزيع الدائري (نسب بمقام معلن) ----
+     R2-05: فارق صريح بين «لا قيمة صالحة» و«قيم معلومة كلها صفر»،
+     وبين مقام غائب (بديل موثق) ومقام موجود غير صالح (خطأ معلن). */
   function renderDonut(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var declaredRaw = chart.getAttribute('data-total');
-    var declared = parseFloat(declaredRaw);
-    var hasDeclared = !isNaN(declared) && isFinite(declared);
+    var hasDeclaredAttr = declaredRaw !== null && String(declaredRaw).trim() !== '';
+    var declared = hasDeclaredAttr ? parseNum(declaredRaw) : null; /* كامل لا بادئة */
+    var declaredInvalid = hasDeclaredAttr && declared === null; /* موجود غير رقمي/غير محدود */
+    var hasDeclared = declared !== null && declared > 0; /* مقام صالح قابل للاستخدام */
     var total = hasDeclared ? declared : 0;
     var known = items.filter(function (i) { return i.value !== null && i.value >= 0; });
     var invalid = items.filter(function (i) { return i.value !== null && i.value < 0; });
@@ -225,35 +251,52 @@
     var svg = svgEl('svg', { class: 'm-donut__svg', viewBox: '0 0 148 148', role: 'img', 'aria-label': chart.getAttribute('data-title') || 'توزيع' });
     plot.innerHTML = '';
 
-    /* E06: حالات المدخلات غير القابلة للنسب — fallback صريح لا تمثيل مضلل.
-       zeroCase: كل القيم صفرية/مفقودة (بغضّ المقام) أو المقام نفسه ≤ 0
-       — بلا شرائح ولا قسمة على صفر ولا dasharray NaN. */
+    /* حالات المدخلات غير القابلة للنسب — fallback صريح لا تمثيل مضلل */
     var sumExceeds = hasDeclared && sum > total;
     var hasInvalid = invalid.length > 0;
-    var zeroCase = sum <= 0 || (hasDeclared && total <= 0);
+    var noData = known.length === 0 && invalid.length === 0; /* لا قيمة صالحة إطلاقًا (R2-05) */
+    var unknownTotal = known.length > 0 && sum <= 0 && missing.length > 0; /* صفر مع مجهول: الإجمالي غير معلوم (R2-05) */
+    var zeroCase = known.length > 0 && sum <= 0 && missing.length === 0; /* كل المعلوم صفر — صادقة */
 
-    if (sumExceeds || hasInvalid) {
+    function emptyRing(centerText, labelText) {
+      svg.appendChild(svgEl('circle', {
+        cx: cx, cy: cy, r: R, fill: 'none',
+        stroke: 'var(--micro-border-divider)', 'stroke-width': 22
+      }));
+      var c = svgEl('text', { class: 'm-donut__center', x: cx, y: cy + 2, 'text-anchor': 'middle' });
+      c.textContent = centerText;
+      svg.appendChild(c);
+      var l = svgEl('text', { class: 'm-donut__center-label', x: cx, y: cy + 20, 'text-anchor': 'middle' });
+      l.textContent = labelText;
+      svg.appendChild(l);
+      plot.appendChild(svg);
+    }
+
+    if (declaredInvalid) {
+      /* R2-05: مقام موجود غير صالح — خطأ معلن لا سقوط صامت إلى مجموع الفئات */
+      var derr = document.createElement('p');
+      derr.className = 'm-chart__error';
+      derr.textContent = 'تعذر رسم التوزيع: المقام المعلن غير صالح (data-total="' + declaredRaw + '") — صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.';
+      plot.appendChild(derr);
+    } else if (sumExceeds || hasInvalid) {
       var err = document.createElement('p');
       err.className = 'm-chart__error';
       err.textContent = hasInvalid
         ? 'تعذر رسم التوزيع: توجد قيم سالبة — التوزيع نسب من قيم غير سالبة فقط. القيم معروضة في المفتاح دون نسب.'
         : 'تعذر رسم التوزيع: مجموع الفئات (' + fmt(sum) + ') أكبر من المقام المعلن (' + fmt(total) + ') — صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب.';
       plot.appendChild(err);
+    } else if (noData) {
+      /* R2-05: عدم توفر البيانات ليس صفرًا — «— / لا توجد بيانات» */
+      emptyRing('—', 'لا توجد بيانات');
+    } else if (unknownTotal) {
+      /* R2-05: خلط مجهول/صفر والمجموع صفر — لا دعوى بإجمالي صفر */
+      emptyRing('—', 'الإجمالي غير معلوم');
     } else if (zeroCase) {
-      /* حالة صفرية واضحة: بلا شرائح — الصفر في الوسط */
-      svg.appendChild(svgEl('circle', {
-        cx: cx, cy: cy, r: R, fill: 'none',
-        stroke: 'var(--micro-border-divider)', 'stroke-width': 22
-      }));
-      var zero = svgEl('text', { class: 'm-donut__center', x: cx, y: cy + 2, 'text-anchor': 'middle' });
-      zero.textContent = '0';
-      svg.appendChild(zero);
-      var zlab = svgEl('text', { class: 'm-donut__center-label', x: cx, y: cy + 20, 'text-anchor': 'middle' });
-      zlab.textContent = chart.getAttribute('data-total-label') || 'الإجمالي';
-      svg.appendChild(zlab);
-      plot.appendChild(svg);
+      /* كل القيم المعلومة صفرية بلا مجهول — الصفر هنا صادق؛
+         مع مقام معلن صالح يظهر هو نفسه (شرائح كلها صفرية) */
+      emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || 'الإجمالي');
     } else {
-      var denom = hasDeclared ? total : sum; /* بلا مقام معلن: مجموع الفئات نفسه — موثق */
+      var denom = hasDeclared ? total : sum; /* بلا مقام معلن: مجموع الفئات المعروفة — موثق */
       var offset = 0;
       known.forEach(function (it) {
         var frac = it.value / denom;
@@ -273,13 +316,16 @@
       center.textContent = fmt(denom);
       svg.appendChild(center);
       var clab = svgEl('text', { class: 'm-donut__center-label', x: cx, y: cy + 20, 'text-anchor': 'middle' });
-      clab.textContent = chart.getAttribute('data-total-label') || 'الإجمالي';
+      /* مع فئات مجهولة وبلا مقام معلن: لا نسمّي المجموع إجماليًا كاملًا (R2-05) */
+      clab.textContent = chart.getAttribute('data-total-label')
+        || (missing.length && !hasDeclared ? 'مجموع المعلوم' : 'الإجمالي');
       svg.appendChild(clab);
       plot.appendChild(svg);
     }
 
     /* مفتاح بقيم كاملة — عقد DOM وtextContent دائمًا (لا innerHTML:
        تسمية المستهلك تعرض كنص حرفي) */
+    var noPercent = declaredInvalid || sumExceeds || hasInvalid || noData || unknownTotal || zeroCase;
     var legend = document.createElement('ul');
     legend.className = 'm-legend';
     known.forEach(function (it) {
@@ -291,7 +337,7 @@
       li.appendChild(document.createTextNode(it.label + ' '));
       var val = document.createElement('span');
       val.className = 'm-legend__value';
-      val.textContent = fmt(it.value) + (sumExceeds || hasInvalid || zeroCase
+      val.textContent = fmt(it.value) + (noPercent
         ? ''
         : ' (' + Math.round(it.value / (hasDeclared ? total : sum) * 100) + '%)');
       li.appendChild(val);
@@ -313,9 +359,11 @@
   /* ---- دوائر المساحة: المساحة ∝ القيمة (نصف القطر √) ---- */
   function renderBubbles(chart, items) {
     var plot = chart.querySelector('[data-plot]');
-    var Rmax = parseFloat(chart.getAttribute('data-rmax')) || 52;
+    var rmaxAttr = parseNum(chart.getAttribute('data-rmax')); /* R2-05: كامل لا بادئة */
+    var Rmax = (rmaxAttr !== null && rmaxAttr > 0) ? rmaxAttr : 52;
     var positive = items.filter(function (i) { return i.value !== null && i.value > 0; });
-    var vmax = parseFloat(chart.getAttribute('data-max')) ||
+    var vmaxAttr = parseNum(chart.getAttribute('data-max'));
+    var vmax = (vmaxAttr !== null && vmaxAttr > 0) ? vmaxAttr :
       Math.max.apply(null, positive.map(function (i) { return i.value; }).concat([1]));
     var wrap = document.createElement('div');
     wrap.className = 'm-bubbles';

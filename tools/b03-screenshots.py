@@ -30,8 +30,11 @@ def main():
     base = f"http://127.0.0.1:{server.server_address[1]}"
     board = f"{base}/previews/selection/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
+    tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
     log(f"# B03 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
-    log(f"# commit المصدر: {commit}\n")
+    log(f"# commit المصدر: {commit}")
+    log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log("")
 
     errors = []
     with sync_playwright() as p:
@@ -254,6 +257,140 @@ def main():
               ex_fail == 0 and ex_pass >= 5 and not ex_errors, f"{ex_pass} PASS / {ex_fail} FAIL; errors={ex_errors[:1]}")
         pe.screenshot(path=str(SHOTS / "08-example-picker-layer.png"), full_page=True)
         pe.close()
+
+        # ---- R2-03: حالة قراءة موحدة — الخيارات القديمة لا تُختار أثناء الانتظار/الفشل/الفراغ ----
+        r2p = page.evaluate(
+            """() => { try {
+                 const host = document.createElement('div');
+                 host.id = 'r2-picker-host';
+                 host.innerHTML = '<div class="m-picker" data-micro-picker>' +
+                   '<input class="m-picker__input" type="search" data-picker-search aria-label="بحث">' +
+                   '<div class="m-picker__list" role="listbox" aria-label="نتائج" data-picker-list></div>' +
+                   '<p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p></div>';
+                 document.body.appendChild(host);
+                 MicroPicker.init(host);
+                 const picker = host.querySelector('.m-picker');
+                 const opts = () => [...picker.querySelectorAll('.m-picker__option')];
+                 MicroPicker.setOptions(picker, [{value: 'a', label: 'Alpha'}, {value: 'b', label: 'Beta'}]);
+                 opts()[0].click(); // اختيار Alpha
+                 const selBefore = picker.querySelector('[data-picker-summary]').textContent;
+                 // loading: الخيار القديم مخفي وغير قابل للاختيار وصف الحالة ظاهر
+                 MicroPicker.setStatus(picker, 'loading');
+                 const loadingHidden = opts().every(o => o.hidden);
+                 const loadingRow = picker.querySelector('.m-picker__state').textContent.includes('جارٍ');
+                 // البحث أثناء الانتظار: لا يزيل الحالة ولا يكشف الخيارات
+                 const inp = picker.querySelector('[data-picker-search]');
+                 inp.value = 'Beta';
+                 inp.dispatchEvent(new Event('input', {bubbles: true}));
+                 const searchKeptState = !!picker.querySelector('.m-picker__state') && opts().every(o => o.hidden);
+                 // error + retry يطلق الحدث ثم ready يعيد الخيارات
+                 MicroPicker.setStatus(picker, 'error');
+                 let retried = false;
+                 picker.addEventListener('micro-picker:retry', () => { retried = true; }, {once: true});
+                 picker.querySelector('[data-picker-retry]').click();
+                 MicroPicker.setStatus(picker, 'ready');
+                 inp.value = '';
+                 inp.dispatchEvent(new Event('input', {bubbles: true}));
+                 const readyVisible = opts().filter(o => !o.hidden).length;
+                 // empty: لا خيارات قابلة للاختيار
+                 MicroPicker.setStatus(picker, 'empty');
+                 const emptyHidden = opts().every(o => o.hidden);
+                 MicroPicker.setStatus(picker, 'ready');
+                 return {selBefore, loadingHidden, loadingRow, searchKeptState, retried, readyVisible, emptyHidden};
+               } catch (e) { return {err: e.message}; } }""")
+        check("A13 (R2-03) حالة قراءة موحدة: القديمة مخفية في loading/error/empty، والبحث لا يلغي الحالة، وretry يطلق حدثه، وready يعيد العرض",
+              r2p.get("loadingHidden") and r2p.get("loadingRow") and r2p.get("searchKeptState")
+              and r2p.get("retried") and r2p.get("readyVisible") == 2 and r2p.get("emptyHidden"),
+              str(r2p))
+
+        # ---- R2-03: استبدال البيانات يحافظ على اختيار صالح أو يمسحه مع الملخص معًا ----
+        r2q = page.evaluate(
+            """() => { try {
+                 const picker = document.querySelector('#r2-picker-host .m-picker');
+                 const opts = () => [...picker.querySelectorAll('.m-picker__option')];
+                 opts()[1].click(); // اختيار Beta
+                 let changeDetail = null;
+                 picker.addEventListener('micro-picker:change', (e) => { changeDetail = e.detail; }, {once: true});
+                 // مجموعة جديدة تحتفظ بـ b: الاختيار يبقى والملخص يطابق getSelected
+                 MicroPicker.setOptions(picker, [{value: 'c', label: 'Gamma'}, {value: 'b', label: 'Beta2'}]);
+                 const kept = {sel: MicroPicker.getSelected(picker),
+                               summary: picker.querySelector('[data-picker-summary]').textContent};
+                 // مجموعة بلا b: الاختيار يُمسح والملخص يتبعه ويُعلن التغيير
+                 MicroPicker.setOptions(picker, [{value: 'c', label: 'Gamma'}]);
+                 const cleared = {sel: MicroPicker.getSelected(picker),
+                                  summary: picker.querySelector('[data-picker-summary]').textContent,
+                                  changeDetail};
+                 return {kept, cleared};
+               } catch (e) { return {err: e.message}; } }""")
+        kept_ok = (r2q.get("kept", {}).get("sel", {}) or {}).get("value") == "b" \
+                  and "Beta2" in (r2q.get("kept", {}).get("summary") or "") \
+                  and "Beta2" in str((r2q.get("kept", {}).get("sel") or {}).get("label") or "")
+        cleared_ok = (r2q.get("cleared", {}).get("sel") is None \
+                      and "لا شيء" in (r2q.get("cleared", {}).get("summary") or "") \
+                      and (r2q.get("cleared", {}).get("changeDetail") or {}).get("value") is None)
+        check("A14 (R2-03) استبدال البيانات: اختيار صالح يُحفظ ويطابق الملخص، وسقوطه يُمسح مع الملخص ويُعلن — لا «المحدد: Alpha» مع getSelected null",
+              kept_ok and cleared_ok, str(r2q))
+
+        # ---- R2-03: نقطة التبويب تتبع الحالي/المحدد لا أول خيار دائمًا ----
+        r2r = page.evaluate(
+            """() => { try {
+                 const picker = document.querySelector('#r2-picker-host .m-picker');
+                 const opts = () => [...picker.querySelectorAll('.m-picker__option')].filter(o => !o.hidden);
+                 MicroPicker.setOptions(picker, [{value: 'a', label: 'Alpha'}, {value: 'b', label: 'Beta'}, {value: 'd', label: 'Delta'}]);
+                 // تنقل بالأسهم: التركيز على الثاني → نقطة التبويب تتبعه
+                 opts()[0].focus();
+                 picker.querySelector('[data-picker-list]').dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}));
+                 const afterArrow = {focused: document.activeElement.textContent.trim(),
+                                     tabStop: opts().find(o => o.tabIndex === 0).textContent.trim()};
+                 // الاختيار يجعله نقطة التبويب
+                 opts()[2].click();
+                 const afterSelect = opts().find(o => o.tabIndex === 0).textContent.trim();
+                 const host = document.getElementById('r2-picker-host');
+                 host.remove();
+                 return {afterArrow, afterSelect};
+               } catch (e) { return {err: e.message}; } }""")
+        check("A15 (R2-03) tabIndex متنقل: الأسهم تحرّك نقطة التبويب مع الحالي والاختيار يجعل المحدد نقطة التبويب",
+              r2r.get("afterArrow", {}).get("tabStop") == r2r.get("afterArrow", {}).get("focused")
+              and r2r.get("afterSelect") == "Delta", str(r2r))
+
+        # ---- R2-06: ثبات عقود المفتاح — إنهاء انتظار غير مبدوء آمن وحماية موثوقة فقط ----
+        r2s = page.evaluate(
+            """() => { try {
+                 const host = document.createElement('div');
+                 host.id = 'r2-sw-host';
+                 host.innerHTML = '<div class="m-switch" id="r2-sw-a"><input type="checkbox" role="switch"></div>' +
+                   '<div class="m-switch" id="r2-sw-b"><input type="checkbox" role="switch" disabled></div>';
+                 document.body.appendChild(host);
+                 const a = host.querySelector('#r2-sw-a input');
+                 const b = host.querySelector('#r2-sw-b input');
+                 // false قبل أي دورة: لا يغيّر حالة المستهلك
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-a'), false);
+                 const falseFirst = a.disabled; // يجب أن يبقى false
+                 // دورة كاملة ثم false مرة أخرى: يبقى على الأصل (مفعّل)
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-a'), true);
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-a'), false);
+                 const afterCycle = a.disabled;
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-a'), false);
+                 const falseTwice = a.disabled;
+                 // معطل أصلًا: دورة كاملة ترجعه معطلًا لا مفعّلًا
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-b'), true);
+                 MicroSelection.setSwitchPending(document.getElementById('r2-sw-b'), false);
+                 const preDisabled = b.disabled;
+                 // إشعار برمجي (isTrusted=false) أثناء انتظار مضبوط بالترميز: لا يُعكس كتبديل
+                 const swM = document.getElementById('r2-sw-a');
+                 swM.setAttribute('data-pending', 'true');
+                 a.checked = !a.checked;
+                 a.dispatchEvent(new Event('change', {bubbles: true}));
+                 const progNotReverted = a.checked; // بقي كما ضبطه المستهلك برمجيًا
+                 swM.setAttribute('data-pending', 'false');
+                 a.checked = false;
+                 host.remove();
+                 return {falseFirst, afterCycle, falseTwice, preDisabled, progNotReverted};
+               } catch (e) { return {err: e.message}; } }""")
+        check("A16 (R2-06) المفتاح: false قبل دورة ومرتين بعدها لا يغيّران الحالة، والمعطل أصلًا يبقى معطلًا، والإشعار البرمجي لا يُعكس كتبديل",
+              r2s.get("falseFirst") is False and r2s.get("afterCycle") is False
+              and r2s.get("falseTwice") is False and r2s.get("preDisabled") is True
+              and r2s.get("progNotReverted") is True, str(r2s))
 
         # ---- E1: تعديل توكن → انعكاس → استعادة ----
         tok = page.evaluate(

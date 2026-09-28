@@ -21,9 +21,21 @@
    - البحث: input[data-picker-search] يصفّي الخيارات بالسمة hidden
      (CSS يغلبها على display:flex) — مسح الاستعلام يعيد كل الخيارات
      فورًا، وعدم وجود نتائج يظهر صف حالة صريحًا ولا يترك نتائج عالقة.
+   - R2-03 حالة قراءة موحدة متخزنة لكل منتقي:
+     ready | loading | error | empty (MicroPicker.setStatus).
+     غير ready: الخيارات القديمة مخفية وغير قابلة للاختيار، والبحث
+     لا يزيلها ولا يلغي الحالة (صف الحالة ثابت حتى نهاية الاستعلام)،
+     وready يعيد عرضها وفق الاستعلام الحالي. صف «لا نتائج مطابقة»
+     نتيجة تصفية بحث فقط ولا يغيّر حالة القراءة المتخزنة.
+   - R2-03 setOptions: استبدال البيانات يحافظ على اختيار صالح
+     (بنفس data-value) أو يمسحه — والملخص والقيمة يتحدّثان معًا،
+     ويُطلق micro-picker:change بقيمة null إذا سقط الاختيار السابق؛
+     فلا يبقى «المحدد: X» بينما getSelected() يرجع null.
+   - R2-03 تنقل بtabIndex متنقل: نقطة التبويب تتبع العنصر الحالي
+     (بعد الأسهم) أو المحدد — لا أول خيار دائمًا.
    - الحالات: MicroPicker.setStatus(picker, 'ready'|'loading'|'error'|'empty', msg)
-     — ready يعيد عرض الخيارات؛ error يعرض رسالة + زر إعادة محاولة
-     يطلق حدث micro-picker:retry؛ البيانات والشبكة من المستهلك.
+     — error يعرض رسالة + زر إعادة محاولة يطلق حدث micro-picker:retry؛
+     البيانات والشبكة من المستهلك.
    - البيانات: MicroPicker.setOptions(picker, [{value,label}]) —
      بناء بعُقد DOM وtextContent (التسميات نص حرفي).
    - الاختيار والمسح: نقر أو Enter/Space على خيار → aria-selected
@@ -40,6 +52,15 @@
 (function () {
   'use strict';
 
+  /* R2-03: حالة القراءة المتخزنة لكل منتقي (WeakMap لا سمات على DOM) */
+  var pickerState = new WeakMap();
+
+  function stateOf(picker) {
+    var s = pickerState.get(picker);
+    if (!s) { s = { status: 'ready', query: '' }; pickerState.set(picker, s); }
+    return s;
+  }
+
   function pickerOf(el) { return el.closest('[data-micro-picker]'); }
 
   function optionsOf(picker) {
@@ -55,15 +76,44 @@
     foot.textContent = sel ? 'المحدد: ' + sel.textContent.trim() : 'المحدد: لا شيء';
   }
 
-  function syncTabindex(picker) {
+  /* R2-03: tabIndex متنقل — نقطة التبويب تتبع العنصر الحالي أو المحدد */
+  function setRoving(picker, active) {
     var opts = optionsOf(picker).filter(function (o) { return !o.hidden; });
-    opts.forEach(function (o, i) { o.tabIndex = i === 0 ? 0 : -1; });
+    if (!opts.length) return;
+    var chosen = (active && opts.indexOf(active) >= 0) ? active
+      : opts.filter(function (o) { return o.getAttribute('aria-selected') === 'true'; })[0]
+      || opts[0];
+    opts.forEach(function (o) { o.tabIndex = (o === chosen) ? 0 : -1; });
+  }
+
+  /* R2-03: تطبيق الحالة المتخزنة + الاستعلام الحالي على الخيارات */
+  function applyState(picker) {
+    var s = stateOf(picker);
+    var opts = optionsOf(picker);
+    if (s.status !== 'ready') {
+      /* حالة قراءة غير جاهزة: لا بيانات قديمة ظاهرة أو قابلة للاختيار —
+         والبحث لا يلغي الحالة ولا يزيل صفها */
+      opts.forEach(function (o) { o.hidden = true; });
+      setRoving(picker, null);
+      return;
+    }
+    opts.forEach(function (o) { o.hidden = s.query !== '' && o.textContent.indexOf(s.query) === -1; });
+    var visible = opts.filter(function (o) { return !o.hidden; });
+    /* لا نتائج من البحث: صف حالة صريح — ومسح الاستعلام يعيد كل شيء.
+       هذا صف تصفية فقط: الحالة المتخزنة تبقى ready. */
+    if (s.query !== '' && !visible.length && opts.length) {
+      stateRow(picker, 'empty', 'لا نتائج مطابقة — جرّب اسمًا آخر');
+    } else {
+      stateRow(picker, 'ready');
+    }
+    setRoving(picker, null);
   }
 
   function select(picker, opt) {
     optionsOf(picker).forEach(function (o) { o.setAttribute('aria-selected', 'false'); });
     opt.setAttribute('aria-selected', 'true');
     setSummary(picker);
+    setRoving(picker, opt);
     picker.dispatchEvent(new CustomEvent('micro-picker:change', {
       bubbles: true, detail: { value: opt.getAttribute('data-value'), label: opt.textContent.trim() }
     }));
@@ -102,17 +152,9 @@
     var search = picker.querySelector('[data-picker-search]');
     if (search) {
       search.addEventListener('input', function () {
-        var q = search.value.trim();
-        var opts = optionsOf(picker);
-        opts.forEach(function (o) { o.hidden = q !== '' && o.textContent.indexOf(q) === -1; });
-        var visible = opts.filter(function (o) { return !o.hidden; });
-        /* لا نتائج من البحث: صف حالة صريح — ومسح الاستعلام يعيد كل شيء */
-        if (q !== '' && !visible.length && opts.length) {
-          stateRow(picker, 'empty', 'لا نتائج مطابقة — جرّب اسمًا آخر');
-        } else {
-          stateRow(picker, 'ready');
-        }
-        syncTabindex(picker);
+        var s = stateOf(picker);
+        s.query = search.value.trim();
+        applyState(picker); /* R2-03: البحث لا يلغي حالة القراءة المتخزنة */
       });
     }
 
@@ -132,7 +174,7 @@
         else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = opts[(i - 1 + opts.length) % opts.length];
         else if (e.key === 'Home') next = opts[0];
         else if (e.key === 'End') next = opts[opts.length - 1];
-        if (next) { e.preventDefault(); next.focus(); }
+        if (next) { e.preventDefault(); next.focus(); setRoving(picker, next); } /* R2-03: نقطة التبويب تتبع الحالي */
       });
     }
 
@@ -147,18 +189,22 @@
         picker.dispatchEvent(new CustomEvent('micro-picker:close', { bubbles: true }));
       });
     }
-    syncTabindex(picker);
+    syncRovingInit(picker);
   }
+
+  function syncRovingInit(picker) { setRoving(picker, null); }
 
   window.MicroPicker = {
     init: function (root) {
       (root || document).querySelectorAll('[data-micro-picker]').forEach(bindPicker);
     },
-    /* بيانات المستهلك — بناء بعُقد DOM (التسمية نص حرفي دائمًا) */
+    /* بيانات المستهلك — بناء بعُقد DOM (التسمية نص حرفي دائمًا).
+       R2-03: استبدال البيانات يحافظ على اختيار صالح أو يمسحه،
+       والملخص والقيمة يتحدثان معًا، وإسقاط الاختيار يعلن نفسه. */
     setOptions: function (picker, items) {
       var list = listEl(picker);
       if (!list) return;
-      stateRow(picker, 'ready');
+      var prev = window.MicroPicker.getSelected(picker); /* {value,label} أو null */
       optionsOf(picker).forEach(function (o) { o.remove(); });
       (items || []).forEach(function (it) {
         var b = document.createElement('button');
@@ -170,20 +216,44 @@
         b.textContent = it.label; /* نص حرفي — لا HTML */
         list.appendChild(b);
       });
-      syncTabindex(picker);
+      var s = stateOf(picker);
+      s.status = 'ready'; /* بيانات جديدة = قراءة جديدة سليمة */
+      var kept = null;
+      if (prev) {
+        kept = optionsOf(picker).filter(function (o) { return o.getAttribute('data-value') === prev.value; })[0] || null;
+      }
+      if (kept) kept.setAttribute('aria-selected', 'true');
+      setSummary(picker); /* الملخص يطابق getSelected دائمًا */
+      applyState(picker);
+      if (prev && !kept) {
+        picker.dispatchEvent(new CustomEvent('micro-picker:change', {
+          bubbles: true, detail: { value: null, label: null }
+        }));
+      }
     },
+    /* R2-03: حالة قراءة موحدة متخزنة — غير ready تخفي الخيارات القديمة
+       وتمنع اختيارها، والبحث لا يلغيها، وready يعيدها وفق الاستعلام. */
     setStatus: function (picker, kind, message) {
+      var s = stateOf(picker);
+      if (['ready', 'loading', 'error', 'empty'].indexOf(kind) < 0) return;
+      s.status = kind;
+      if (kind === 'ready') {
+        stateRow(picker, 'ready');
+        applyState(picker);
+        return;
+      }
+      applyState(picker); /* يخفي الخيارات ويثبت نقطة تبويب آمنة */
       var msgs = {
         loading: message || 'جارٍ القراءة…',
         error: message || 'تعذر القراءة',
         empty: message || 'لا نتائج'
       };
-      if (kind === 'ready') { stateRow(picker, 'ready'); return; }
       stateRow(picker, kind, msgs[kind] || message || '');
     },
     clearSelection: function (picker) {
       optionsOf(picker).forEach(function (o) { o.setAttribute('aria-selected', 'false'); });
       setSummary(picker);
+      setRoving(picker, null);
       picker.dispatchEvent(new CustomEvent('micro-picker:change', {
         bubbles: true, detail: { value: null, label: null }
       }));

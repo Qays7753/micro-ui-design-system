@@ -7,10 +7,19 @@
    - تركيز يُدار: التقاط المشغّل قبل نقل التركيز داخل الطبقة،
      أول عنصر تفاعلي عند الفتح، واستعادته عند الإغلاق إلى هدف
      صالح داخل المستند (وليس إلى ابن مخفي).
-   - عزل خلفية فعلي (inert على أبناء body خارج الطبقة العليا
-     وغشائها — بلا وصول لوحة مفاتيح أو تقنيات مساعدة) + حصر
-     Tab/Shift+Tab داخل الطبقة + قفل تمرير الصفحة مع حفظ قيمة
-     overflow السابقة واسترجاعها كما كانت.
+   - R2-02: طبقة بلا أي عنصر تفاعلي تستقبل التركيز بنفسها
+     (tabindex="-1" تُضاف تلقائيًا) — «بلا استثناء» ليس كافيًا؛
+     التركيز داخل الطبقة شرط معلن ومفحوص.
+   - عزل خلفية فعلي (inert) بأشقّاء مناسبين (R2-02): إن كانت
+     الطبقة داخل غلاف (مثل main) لا يُعزَّل الغلاف كله — يُعزَّل
+     كل ابن خارج سلسلة أسلاف الطبقة في كل مستوى، فتبقى الطبقة
+     نفسها وغشاؤها متاحين وسائر الصفحة معزولة.
+   - حصر Tab/Shift+Tab داخل الطبقة + قفل تمرير الصفحة بعدّاد
+     (R2-02: طبقات متتالية أثناء الخفوت لا تفسد قيمة overflow
+     السابقة ولا تترك body مقفولًا) مع حفظ القيمة واسترجاعها.
+   - R2-02: دورة حياة واحدة آمنة — إعادة فتح أثناء الخفوت تلغي
+     دورة الإغلاق القديمة (توليد لكل إغلاق) فلا يخفي مؤقت قديم
+     طبقة مفتوحة جديدة، والإغلاق النهائي يسترجع overflow والتركيز.
    - Escape: مستمع واحد على document (مهما تكرر init) يغلق أعلى
      طبقة مرة واحدة؛ الفتح المتكرر لنفس الطبقة آمن (لا تكرار في
      المكدس) والتهيئة المتكررة آمنة.
@@ -19,9 +28,11 @@
    - سياسة الضغط بالخلفية من سمة data-backdrop على الطبقة
      ("close" الافتراضي للغير المتلف، "keep" للحوار المتلف).
    - إغلاق ظاهر دائمًا (زر) — السحب ليس وسيلة الإغلاق الوحيدة.
-   - حركة فتح/إغلاق موصولة بـ shared/motion.css (MOT-01) عبر
-     data-closing مع احترام prefers-reduced-motion فعليًا،
-     ولا يبقى عنصر مخفي قابلًا للتركيز أثناء الخفوت.
+   - حركة فتح/إغلاق موصولة بـ shared/motion.css (MOT-01):
+     الإغلاق عبر data-closing والفتح عبر data-opening (R2-02:
+     طور بداية فعلي يثبت انتقال فتح 240ms لا ظهورًا مباشرًا)،
+     مع احترام prefers-reduced-motion فعليًا، ولا يبقى عنصر
+     مخفي قابلًا للتركيز أثناء الخفوت.
    - تبويبات: [data-tabs] بأسهم وتبديل لوحات مرتبطة aria-controls.
    - لوحة الفلاتر: [data-filter-panel] بعقد تطبيق/مسح/إلغاء يفرّق
      الجاري عن المطبّق. كل input ذو data-filter-key (checkbox أو
@@ -35,8 +46,10 @@
   'use strict';
 
   var openLayers = [];
+  var lockCount = 0;         /* R2-02: عدّاد قفل التمرير — لا تلف قيمة overflow السابقة */
   var prevOverflow = null;   /* قيمة overflow السابقة على body */
   var inertRestore = [];     /* [{el, inert}] — استرجاع دقيق */
+  var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
   var escapeBound = false;
   var doc = document;
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -61,27 +74,86 @@
     });
   }
 
-  /* ---- عزل الخلفية: inert على أبناء body خارج الطبقة العليا ----
-     تبقى منطقة الإعلان الحية والرسائل العابرة متاحة (خارج العزل). */
+  /* ---- R2-02: دورة إغلاق قابلة للإلغاء ----
+     لكل طبقة توليد يتزايد عند كل فتح/إغلاق جديد؛ المؤقت و
+     transitionend القديمان يفحصان التوليد فيصيران لا عمليّين
+     إذا فُتحت الطبقة مجددًا قبل انتهاء خفوتها. */
+  function genOf(layer) {
+    var s = closeState.get(layer);
+    if (!s) { s = { gen: 0, timer: null, onEnd: null, closing: false }; closeState.set(layer, s); }
+    return s;
+  }
+
+  function cancelScheduledClose(layer) {
+    var s = closeState.get(layer);
+    if (!s) return;
+    s.gen++; /* يُبطل أي onEnd معلّق */
+    if (s.closing) {
+      /* R2-02: إغلاق مُعلّق أُلغي بإعادة فتح — يُفرج عن قفله فورًا كي
+         لا يبقى body مقفولًا بقفل يتيم، والفتح الجديد يقفل من جديد
+         فيتوزن العدّاد. */
+      s.closing = false;
+      unlockScroll();
+    }
+    if (s.timer) { window.clearTimeout(s.timer); s.timer = null; }
+    if (s.onEnd) layer.removeEventListener('transitionend', s.onEnd);
+    s.onEnd = null;
+    layer.removeAttribute('data-closing');
+    layer.removeAttribute('data-opening');
+    layer.inert = false;
+  }
+
+  function transitionInstant(layer) {
+    if (reduceQuery && reduceQuery.matches) return true;
+    var d = getComputedStyle(layer).transitionDuration;
+    return d === '0s' || d === '';
+  }
+
+  /* ---- عزل الخلفية: inert على أبناء خارج سلسلة أسلاف الطبقة (R2-02) ----
+     إن كانت الطبقة داخل غلاف (main مثلًا) لا يُعزَّل الغلاف كله —
+     ننزل داخله ونعزل أشقّاءها المناسبين في كل مستوى، فتبقى الطبقة
+     وغشاؤها متاحين. منطقة الإعلان الحية والرسائل العابرة متاحة دائمًا. */
   function allowedOutside(el) {
     return el.classList.contains('m-live-region') || el.classList.contains('m-toast');
+  }
+
+  function isolateSiblings(container, layer, backdrop) {
+    [].slice.call(container.children).forEach(function (el) {
+      if (el === layer || el === backdrop) return;
+      if (allowedOutside(el)) return;
+      if (el.contains(layer)) { isolateSiblings(el, layer, backdrop); return; } /* سلف الطبقة: أعزل أشقاءه فقط */
+      inertRestore.push({ el: el, inert: el.inert });
+      el.inert = true;
+    });
   }
 
   function applyBackgroundInert() {
     releaseBackgroundInert();
     if (!openLayers.length) return;
     var top = openLayers[openLayers.length - 1];
-    [].slice.call(doc.body.children).forEach(function (el) {
-      if (el === top.layer || el === top.backdrop) return;
-      if (allowedOutside(el)) return;
-      inertRestore.push({ el: el, inert: el.inert });
-      el.inert = true;
-    });
+    isolateSiblings(doc.body, top.layer, top.backdrop);
   }
 
   function releaseBackgroundInert() {
     inertRestore.forEach(function (r) { r.el.inert = r.inert; });
     inertRestore = [];
+  }
+
+  /* ---- قفل التمرير بعدّاد (R2-02): فتح/إغلاق متقاطع لا يفسد القيمة السابقة ---- */
+  function lockScroll() {
+    if (lockCount === 0) {
+      prevOverflow = doc.body.style.overflow;
+      doc.body.style.overflow = 'hidden';
+    }
+    lockCount++;
+  }
+
+  function unlockScroll() {
+    if (lockCount > 0) lockCount--;
+    if (lockCount === 0 && prevOverflow !== null) {
+      doc.body.style.overflow = prevOverflow === '' ? '' : prevOverflow;
+      prevOverflow = null;
+    }
   }
 
   /* ---- حصر التركيز داخل الطبقة العليا ---- */
@@ -101,37 +173,63 @@
     });
   }
 
+  /* ---- R2-02: انتقال فتح فعلي (MOT-01) ----
+     الحالة البادئة data-opening (شفاف + إزاحة) تُعرض إطارًا فعليًا
+     (إطاران للأمان) ثم تُنزع فيبدأ الانتقال إلى الظهور الكامل 240ms —
+     النزع في المهمة نفسها لا يبدأ انتقالًا لأن الظهور الأول لم يتم بعد.
+     مع reduced-motion أو زمن 0s: ظهور فوري بلا طور بداية. */
+  function playOpenTransition(layer) {
+    if (transitionInstant(layer)) return;
+    layer.setAttribute('data-opening', 'true');
+    var s = genOf(layer);
+    var myGen = s.gen;
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        if (s.gen === myGen) layer.removeAttribute('data-opening');
+      });
+    });
+  }
+
   function openLayer(layer, options) {
     options = options || {};
     if (!layer || layer.tagName !== 'DIV') return;
+    /* R2-02: إلغاء أي دورة إغلاق قديمة أولًا — إعادة الفتح أثناء الخفوت آمنة */
+    cancelScheduledClose(layer);
     /* فتح متكرر لنفس الطبقة: آمن — إعادة تركيز دون تكرار في المكدس */
     if (openLayers.some(function (o) { return o.layer === layer; })) {
       var cur = focusables(layer)[0];
-      if (cur) cur.focus();
+      if (cur) cur.focus(); else layer.focus();
       return;
     }
     /* اسم موحد معلن = منفَّذ: options.backdropEl */
     var backdrop = options.backdropEl
       || (layer.getAttribute('data-backdrop-id') ? doc.getElementById(layer.getAttribute('data-backdrop-id')) : null)
       || doc.querySelector('.m-layer-backdrop[data-for="' + layer.id + '"]');
-    /* التقاط المشغّل قبل نقل التركيز — وإلا يكون الالتقاط ابنًا داخل الطبقة */
+    /* التقاط المشغّل قبل نقل التركيز — وإلا يكون الالتقاط ابنًا داخل الطبقة.
+       R2-02: عند إعادة الفتح والتركيز داخل الطبقة أصلاً (حالة الإغلاق/الفتح
+       المتقاطع)، يُستعمل مشغّل الدورة السابقة المحفوظ كي لا يضيع الاسترجاع. */
+    var st = closeState.get(layer);
     var trigger = options.trigger || doc.activeElement;
-    if (!inDocument(trigger) || layer.contains(trigger)) trigger = null;
+    if (!inDocument(trigger) || layer.contains(trigger)) {
+      trigger = (st && st.lastTrigger && inDocument(st.lastTrigger)) ? st.lastTrigger : null;
+    }
+    if (trigger && isDisabled(trigger)) trigger = null;
 
     layer.hidden = false;
-    layer.removeAttribute('data-closing');
+    layer.inert = false;
     if (backdrop) backdrop.hidden = false;
-    if (!openLayers.length) {
-      prevOverflow = doc.body.style.overflow; /* حفظ القيمة السابقة */
-      doc.body.style.overflow = 'hidden';
-    }
+    lockScroll();
     bindTrap(layer);
+    /* R2-02: هدف تركيز دائم داخل الطبقة — الطبقة الخالية من عناصر
+       تفاعلية تستقبل التركيز بنفسها بدل بقاء المشغّل خارجها */
+    if (!layer.hasAttribute('tabindex')) layer.setAttribute('tabindex', '-1');
     var f = focusables(layer);
     var first = layer.querySelector('[data-autofocus]');
     if (!(first && !isDisabled(first) && f.indexOf(first) >= 0)) first = f[0];
-    if (first) first.focus();
+    if (first) first.focus(); else layer.focus();
     openLayers.push({ layer: layer, backdrop: backdrop, trigger: trigger });
     applyBackgroundInert(); /* بعد الإدخال للمكدس — الطبقة العليا مستثناة */
+    playOpenTransition(layer);
     layer.dispatchEvent(new CustomEvent('micro-navigation:opened', { bubbles: true }));
   }
 
@@ -142,17 +240,17 @@
     }
     if (idx < 0) return;
     var entry = openLayers.splice(idx, 1)[0];
+    cancelScheduledClose(layer);
 
     function finish() {
       layer.hidden = true;
       layer.removeAttribute('data-closing');
+      layer.inert = false;
       if (entry.backdrop) entry.backdrop.hidden = true;
+      unlockScroll(); /* R2-02: كل طبقة تفرج عن قفلها الذي أخذته عند فتحها —
+                         الطبقات المتراكبة لا تسرّب قفلًا واحدًا */
       if (openLayers.length) applyBackgroundInert(); /* بقاء عزل لبقية المكدس */
-      else {
-        releaseBackgroundInert();
-        doc.body.style.overflow = prevOverflow == null ? '' : prevOverflow; /* استرجاع كما كان */
-        prevOverflow = null;
-      }
+      else releaseBackgroundInert();
       /* استعادة التركيز إلى مشغّل صالح داخل المستند فقط */
       var t = entry.trigger;
       if (t && inDocument(t) && !isDisabled(t) && typeof t.focus === 'function') t.focus();
@@ -161,21 +259,25 @@
 
     if (layer.hidden) { finish(); return; }
     /* الخفوت: الطبقة غير قابلة للتركيز فورًا (لا عنصر مخفي قابل للتركيز) */
-    var reduce = reduceQuery && reduceQuery.matches;
-    var instant = reduce || getComputedStyle(layer).transitionDuration === '0s';
-    if (instant) { finish(); return; }
+    if (transitionInstant(layer)) { finish(); return; }
     layer.inert = true;
     layer.setAttribute('data-closing', 'true');
+    var s = genOf(layer);
+    var myGen = s.gen;
+    s.closing = true; /* قفل معلّق حتى يكتمل onEnd أو يُلغى */
+    if (entry.trigger) s.lastTrigger = entry.trigger; /* R2-02: لإعادة الفتح أثناء الخفوت */
     var done = false;
     function onEnd() {
-      if (done) return;
+      if (done || s.gen !== myGen) return; /* R2-02: فتح جديد ألغى هذا الإغلاق */
       done = true;
+      s.closing = false;
       layer.removeEventListener('transitionend', onEnd);
-      layer.inert = false;
+      if (s.timer) { window.clearTimeout(s.timer); s.timer = null; }
       finish();
     }
+    s.onEnd = onEnd;
     layer.addEventListener('transitionend', onEnd);
-    window.setTimeout(onEnd, 320); /* احتياط لو لم يُطلق transitionend */
+    s.timer = window.setTimeout(onEnd, 320); /* احتياط لو لم يُطلق transitionend */
   }
 
   /* فلاتر: عقد الجاري/المطبّق — كل input ذو data-filter-key جزء من العقد */

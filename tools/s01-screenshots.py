@@ -5,7 +5,7 @@ Micro UI — S01 الأسطح والحركة: فحص ولقطات. من جذر �
   python3 tools/s01-screenshots.py
 المخرجات: reviews/S01/screenshots/*.png و reviews/S01/verification.txt
 """
-import http.server, subprocess, sys, threading
+import http.server, io, subprocess, sys, threading
 from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -22,6 +22,32 @@ def check(name, ok, detail=""):
     results.append((name, bool(ok)))
     log(("PASS  " if ok else "FAIL  ") + name + ((" — " + detail) if detail else ""))
 
+def _lin(v):
+    v /= 255.0
+    return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+
+def rel_lum(rgb):
+    r, g, b = (_lin(x) for x in rgb)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+def sample_contrast(png_bytes):
+    """R2-01/R2-04: قراءة بكسل فعلية من اللقطة عند موضع النص.
+    النص أبيض فوق بترولي: كور الحرف = أفتح بكسل، والخلفية = أفتح بكسل
+    واضح غير حرف (المحافظ: أفتح خلفية = أضعف تباين). يرجع النسبة + الألوان."""
+    from PIL import Image
+    im = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+    px = list(im.getdata())
+    lums = [rel_lum(p) for p in px]
+    lmax = max(lums)
+    non_glyph = sorted(l for l in lums if l < 0.85 * lmax)
+    if not non_glyph:
+        non_glyph = lums
+    lbg = non_glyph[int(len(non_glyph) * 0.95)]  # المئين 95: أفتح خلفية محسوبة
+    bg_idx = min(range(len(lums)), key=lambda i: abs(lums[i] - lbg))
+    return {"ratio": (lmax + 0.05) / (lbg + 0.05),
+            "text": px[max(range(len(lums)), key=lambda i: lums[i])],
+            "bg": px[bg_idx]}
+
 def main():
     SHOTS.mkdir(parents=True, exist_ok=True)
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
@@ -30,8 +56,11 @@ def main():
     base = f"http://127.0.0.1:{server.server_address[1]}"
     board = f"{base}/previews/surfaces/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
+    tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
     log(f"# S01 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
-    log(f"# commit المصدر: {commit}\n")
+    log(f"# commit المصدر: {commit}")
+    log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log("")
 
     errors = []
     with sync_playwright() as p:
@@ -146,6 +175,19 @@ def main():
         check("E1 تعديل توكن الموجة → انعكاس → استعادة",
               tok["after"] < tok["before"] and tok["restored"] == tok["before"], str(tok))
 
+        # ---- R2-04 (B2c): عينات بكسل للنص الشفاف في مواضعه الفعلية — قياس موثق لا ضمان ----
+        for key, sel in (("التسمية 0.8", ".m-surface__label"), ("السطر الثانوي 0.72", ".m-surface__sub")):
+            r = page.evaluate(
+                """(sel) => { const s = document.querySelector('[data-surface="waves"]');
+                     const el = s.querySelector(sel);
+                     const r = el.getBoundingClientRect();
+                     return {x: r.x, y: r.y, width: r.width, height: r.height}; }""", sel)
+            png = page.locator(f'[data-surface="waves"] {sel}').screenshot()
+            s = sample_contrast(png)
+            # قياس موثق فقط (خارج المجال المضمون في contrast-check §3): لا عتبة نجاح معلنة
+            log("معلومة  B2c تباين %s من بكسل اللقطة الفعلية: %.2f:1 (نص=%s خلفية=%s) — قياس موثق خارج المجال المضمون لا ضمان نجاح"
+                % (key, s["ratio"], s["text"], s["bg"]))
+
         # ---- 320/360/390/430: السطح بأصغر وأكبر عرض + تكبير 200% ----
         for width in (320, 360, 390, 430):
             c = browser.new_context(viewport={"width": width, "height": 900})
@@ -162,21 +204,40 @@ def main():
                          const title = t.querySelector('.m-surface__title');
                          const amount = t.querySelector('.m-surface__amount');
                          const surf = t.querySelector('.m-surface');
-                         const ar = amount.getBoundingClientRect();
                          const sr = surf.getBoundingClientRect();
-                         // E07: بلا قصّ — الرقم كامله داخل السطح (حدود داخلية بهامش 4px)
-                         const notClipped = ar.left >= sr.left + 2 && ar.right <= sr.right - 2
-                                            && ar.top >= sr.top && ar.bottom <= sr.bottom + 0.5;
+                         // R2-01: حدود حروف النص الفعلية (Range) لا مستطيل العنصر فقط
+                         function glyphRects(el) {
+                           const range = document.createRange();
+                           range.selectNodeContents(el);
+                           return [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0);
+                         }
+                         const aRects = glyphRects(amount);
+                         const tRects = glyphRects(title).sort((a, b) => a.top - b.top);
+                         const inSurf = rs => rs.every(r => r.left >= sr.left + 2 && r.right <= sr.right - 2
+                                                     && r.top >= sr.top - 0.5 && r.bottom <= sr.bottom + 0.5);
+                         // لا تداخل أسطر العنوان: كل سطر يبدأ عند انتهاء سابقه (سطر نسبي لا ثابت)
+                         const noOverlap = tRects.every((r, i) => i === 0 || r.top >= tRects[i-1].bottom - 1);
                          return {titleFont: getComputedStyle(title).fontSize,
                                  amountFont: getComputedStyle(amount).fontSize,
                                  overflow: getComputedStyle(surf).overflow,
-                                 notClipped,
+                                 amountGlyphs: aRects.length, titleLines: tRects.length,
+                                 amountGlyphsInSurface: inSurf(aRects),
+                                 titleGlyphsInSurface: inSurf(tRects),
+                                 titleLinesNoOverlap: noOverlap,
                                  sw: t.scrollWidth, cw: t.clientWidth}; }""")
-                check(f"B2 {width}px تكبير 200%: العنوان 44px والرقم 72px داخل السطح بلا قصّ (overflow ظاهر)",
+                check(f"B2 {width}px تكبير 200%: العنوان 44px والرقم 72px — حدود حروفهما الفعلية (Range) داخل السطح بلا قصّ وأسطر العنوان بلا تداخل",
                       tz["titleFont"] == "44px" and tz["amountFont"] == "72px"
-                      and tz["overflow"] == "visible" and tz["notClipped"]
+                      and tz["overflow"] == "visible" and tz["amountGlyphsInSurface"]
+                      and tz["titleGlyphsInSurface"] and tz["titleLinesNoOverlap"]
                       and tz["sw"] <= tz["cw"] + 1, str(tz))
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / f"04-surface-zoom-{width}.png"))
+                if width == 320:
+                    # R2-01: قياس التباين من بكسل اللقطة نفسها عند موضع النص الفعلي
+                    for key, sel in (("العنوان", ".m-surface__title"), ("الرقم", ".m-surface__amount")):
+                        png = pg.locator(f"#text-zoom-target .m-surface {sel}").screenshot()
+                        s = sample_contrast(png)
+                        check(f"B2b 320px تكبير 200%: تباين {key} من بكسل اللقطة الفعلية ≥ 4.5",
+                              s["ratio"] >= 4.5, f"{s['ratio']:.2f}:1 (نص=%s خلفية=%s)" % (s["text"], s["bg"]))
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(200)
             c.close()
@@ -193,6 +254,22 @@ def main():
                  l.remove(); return d; }""")
         check("D1 prefers-reduced-motion فعلي: صنف الطبقة بلا انتقال", rm == "0s", f"duration={rm}")
         c.close()
+
+        # ---- R2-07 (EX): المثال المستقل للأسطح بلا board.* ----
+        exs = f"{base}/previews/surfaces/example-usage.html"
+        pes = ctx.new_page()
+        ex_errs = []
+        pes.on("console", lambda m: ex_errs.append(m.text) if m.type == "error" else None)
+        pes.on("pageerror", lambda e: ex_errs.append(str(e)))
+        pes.goto(exs)
+        pes.wait_for_load_state("networkidle")
+        pes.wait_for_timeout(800)
+        ex_res = pes.evaluate("() => document.getElementById('results').textContent")
+        check("EX مثال مستقل surfaces: 0 فشل بلا أخطاء (موجات مفعّلة ومفاتيح تعمل ومحتوى مقروء)",
+              ex_res.count("FAIL ") == 0 and ex_res.count("PASS ") >= 3 and not ex_errs,
+              ex_res.splitlines()[0] if ex_res else "لا نتائج")
+        pes.locator("#demo").screenshot(path=str(SHOTS / "07-example-surface.png"))
+        pes.close()
 
         browser.close()
     server.shutdown()

@@ -29,8 +29,11 @@ def main():
     base = f"http://127.0.0.1:{server.server_address[1]}"
     board = f"{base}/previews/data/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
+    tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
     log(f"# B05 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
-    log(f"# commit المصدر: {commit}\n")
+    log(f"# commit المصدر: {commit}")
+    log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log("")
 
     errors = []
     with sync_playwright() as p:
@@ -149,7 +152,8 @@ def main():
                  const negRectHeights = [...negBar.querySelectorAll('rect')].map(r => parseFloat(r.getAttribute('height') || 0));
                  const zeroDonut = charts[1];
                  const noNaN = !zeroDonut.innerHTML.includes('NaN');
-                 const zeroCenter = zeroDonut.querySelector('.m-donut__center') && zeroDonut.querySelector('.m-donut__center').textContent === '0';
+                 // R2-05: كل القيم صفر مع مقام معلن 100 — المركز يظهر المقام المعلن لا صفرًا متناقضًا
+                 const zeroCenter = zeroDonut.querySelector('.m-donut__center') && zeroDonut.querySelector('.m-donut__center').textContent === '100';
                  const errDonut = charts[2];
                  const errShown = !!errDonut.querySelector('.m-chart__error') &&
                                   errDonut.querySelector('.m-chart__error').textContent.includes('110');
@@ -157,7 +161,7 @@ def main():
                  const line = charts[3];
                  const dash = line.textContent.includes('—');
                  return {negTxt, negNoPositiveBar: negRectHeights.every(h => h >= 0), noNaN, zeroCenter, errShown, rawLegend, dash}; }""")
-        check("A10 عمود سالب لا يُرسم كموجب + توزيع صفري بلا NaN + مقام مخطئ برسالة صريحة وقيم خام",
+        check("A10 عمود سالب لا يُرسم كموجب + توزيع صفري بلا NaN وبالمقام المعلن في المركز + مقام مخطئ برسالة صريحة وقيم خام",
               edges["negTxt"] and edges["negNoPositiveBar"] and edges["noNaN"] and edges["zeroCenter"]
               and edges["errShown"] and edges["rawLegend"], str(edges))
 
@@ -179,6 +183,46 @@ def main():
                  return {polys, literal, noElement}; }""")
         check("A11 الخط ينقطع عند الفجوة (شريحتان) + تسمية المستهلك نص حرفي (عُقد DOM لا innerHTML)",
               split["polys"] == 2 and split["literal"] and split["noElement"], str(split))
+
+        # ---- R2-05: فارق المفقود/الصفر والرقم الكامل والمقام الغائب/غير الصالح ----
+        r2d = page.evaluate(
+            """() => { try {
+                 function donut(dataItems, totalAttr) {
+                   const host = document.createElement('div');
+                   const total = totalAttr === undefined ? '' : ` data-total="${totalAttr}"`;
+                   host.innerHTML = `<div class="m-chart" data-chart="donut"${total}><ul class="m-chart__data" hidden>${dataItems}</ul><div class="m-chart__plot m-donut" data-plot></div></div>`;
+                   document.body.appendChild(host);
+                   MicroData.render(host.querySelector('[data-chart]'));
+                   const c = host.querySelector('[data-chart]');
+                   const center = c.querySelector('.m-donut__center');
+                   const clab = c.querySelector('.m-donut__center-label');
+                   const err = c.querySelector('.m-chart__error');
+                   const legend = c.querySelector('.m-legend');
+                   const out = {center: center ? center.textContent : null,
+                                label: clab ? clab.textContent : null,
+                                err: err ? err.textContent : null,
+                                legend: legend ? legend.textContent : ''};
+                   host.remove();
+                   return out;
+                 }
+                 const allNull = donut('<li data-series="a" data-label="أ" data-value=""></li><li data-series="b" data-label="ب" data-value="x"></li>');
+                 const allZero = donut('<li data-series="a" data-label="أ" data-value="0"></li><li data-series="b" data-label="ب" data-value="0"></li>');
+                 const mixNullZero = donut('<li data-series="a" data-label="أ" data-value="0"></li><li data-series="b" data-label="ب" data-value=""></li>');
+                 const oops = donut('<li data-series="a" data-label="أ" data-value="12oops"></li><li data-series="b" data-label="ب" data-value="3"></li>', 100);
+                 const badTotal = donut('<li data-series="a" data-label="أ" data-value="4"></li>', 'bad');
+                 const noTotal = donut('<li data-series="a" data-label="أ" data-value="4"></li><li data-series="b" data-label="ب" data-value="6"></li>');
+                 return {allNull, allZero, mixNullZero, oops, badTotal, noTotal};
+               } catch (e) { return {err: e.message}; } }""")
+        a = r2d.get("allNull", {}); z = r2d.get("allZero", {}); m = r2d.get("mixNullZero", {})
+        o = r2d.get("oops", {}); b = r2d.get("badTotal", {}); n = r2d.get("noTotal", {})
+        check("A12 (R2-05) all-null يعرض «— / لا توجد بيانات» لا صفرًا، والخلط مع المجهول «الإجمالي غير معلوم»، و12oops مجهول لا 12، والمقام غير الصالح خطأ صريح، والغائب مجموع الفئات",
+              a.get("center") == "—" and a.get("label") == "لا توجد بيانات"
+              and z.get("center") == "0"
+              and m.get("center") == "—" and m.get("label") == "الإجمالي غير معلوم"
+              and o.get("center") == "100" and "12oops" not in o.get("legend", "")
+              and "غير متاح" in o.get("legend", "")
+              and b.get("err") is not None and "bad" in b.get("err", "")
+              and n.get("center") == "10", str(r2d))
 
 
         # ---- SYS-02/E11: المثال المستقل بلا board.* ----

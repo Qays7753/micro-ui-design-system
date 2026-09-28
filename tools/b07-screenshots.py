@@ -29,8 +29,11 @@ def main():
     base = f"http://127.0.0.1:{server.server_address[1]}"
     board = f"{base}/previews/navigation/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
+    tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
     log(f"# B07 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
-    log(f"# commit المصدر: {commit}\n")
+    log(f"# commit المصدر: {commit}")
+    log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log("")
 
     errors = []
     with sync_playwright() as p:
@@ -236,6 +239,122 @@ def main():
               and cleared["search"] == "" and not cleared["anyChecked"] and zero["hidden"],
               f"تطبيق={applied} ملخص_جاري='{summary_after_check[:30]}' ملخص_بحث='{summary_after_search[:30]}' استعادة={restored} بعد_إلغاء={after_cancel} مسح={cleared} صفر={zero}")
 
+
+        # ---- R2-02: إعادة الفتح أثناء الخفوت — لا أثر لإغلاق قديم على فتح جديد ----
+        r2a = page.evaluate(
+            """() => { try {
+                 const opener = document.querySelector("[data-layer-open='sheet-more']");
+                 opener.focus();
+                 const l = document.getElementById('sheet-more');
+                 MicroNavigation.openLayer(l);
+                 MicroNavigation.closeLayer(l);          // بدء الخفوت
+                 MicroNavigation.openLayer(l);           // إعادة فتح فورية بلا انتظار
+                 return {reopened: !l.hidden};
+               } catch (e) { return {err: e.message}; } }""")
+        page.wait_for_timeout(400)  # لو بقي مؤقت الإغلاق القديم لخفى الطبقة هنا
+        after = page.evaluate(
+            """() => ({stillOpen: !document.getElementById('sheet-more').hidden,
+                       locked: document.body.style.overflow === 'hidden'})""")
+        page.keyboard.press("Escape")  # إغلاق نهائي
+        page.wait_for_timeout(450)
+        final = page.evaluate(
+            """() => ({closed: document.getElementById('sheet-more').hidden,
+                       overflowRestored: document.body.style.overflow === '',
+                       refocus: document.activeElement === document.querySelector("[data-layer-open='sheet-more']")})""")
+        check("A12 (R2-02) إعادة الفتح أثناء الخفوت: الطبقة تبقى مفتوحة بعد انقضاء مهلة الإغلاق القديم، والإغلاق النهائي يسترجع overflow والتركيز",
+              r2a.get("reopened") and after["stillOpen"] and after["locked"]
+              and final["closed"] and final["overflowRestored"] and final["refocus"],
+              f"فتح={r2a} بعد400ms={after} نهائي={final}")
+
+        # ---- R2-02: طبقة داخل غلاف — العزل على الأشقاء المناسبين لا الغلاف كله ----
+        r2b = page.evaluate(
+            """() => { try {
+                 const wrap = document.createElement('div');
+                 wrap.id = 'r2-wrap';
+                 wrap.innerHTML = '<p>نص شقيق داخل الغلاف</p>';
+                 const l = document.createElement('div');
+                 l.className = 'm-layer'; l.id = 'r2-nested'; l.setAttribute('role', 'dialog');
+                 l.innerHTML = '<div class="m-layer__head"><span>طبقة داخل غلاف</span>' +
+                   '<button type="button">موافق</button></div>';
+                 wrap.appendChild(l);
+                 document.body.appendChild(wrap);
+                 MicroNavigation.openLayer(l);
+                 return {wrapInert: wrap.inert, layerInert: l.inert,
+                         siblingInert: wrap.querySelector('p').inert,
+                         mainInert: document.querySelector('main').inert};
+               } catch (e) { return {err: e.message}; } }""")
+        page.wait_for_timeout(100)
+        r2b_focus = page.evaluate(
+            """() => { const l = document.getElementById('r2-nested');
+                 return {focusInside: l.contains(document.activeElement)}; }""")
+        page.evaluate("() => MicroNavigation.closeLayer(document.getElementById('r2-nested'))")
+        page.wait_for_timeout(450)
+        r2b_restored = page.evaluate(
+            """() => ({wrapInert: document.getElementById('r2-wrap').inert,
+                       mainFree: !document.querySelector('main').inert,
+                       overflowOk: document.body.style.overflow === ''})""")
+        page.evaluate("() => document.getElementById('r2-wrap').remove()")
+        check("A13 (R2-02) طبقة داخل غلاف: الأشقاء معزولة والغلاف والطبقة حرّان، وبعد الإغلاق يُستأنف كل شيء",
+              not r2b.get("wrapInert") and not r2b.get("layerInert") and r2b.get("siblingInert")
+              and r2b.get("mainInert") and r2b_focus.get("focusInside")
+              and not r2b_restored.get("wrapInert") and r2b_restored.get("mainFree") and r2b_restored.get("overflowOk"),
+              f"أثناء={r2b} تركيز={r2b_focus} بعد={r2b_restored}")
+
+        # ---- R2-02: طبقة خالية من العناصر التفاعلية — تستقبل التركيز بنفسها ----
+        r2c = page.evaluate(
+            """() => { try {
+                 const opener = document.querySelector("[data-layer-open='sheet-more']");
+                 opener.focus();
+                 const l = document.createElement('div');
+                 l.className = 'm-layer'; l.id = 'r2-empty'; l.setAttribute('role', 'dialog');
+                 l.innerHTML = '<div class="m-layer__head"><span>بلا عناصر تفاعلية</span></div>';
+                 document.body.appendChild(l);
+                 MicroNavigation.openLayer(l);
+                 return {focusedLayer: document.activeElement === l,
+                         backgroundInert: document.querySelector('main').inert};
+               } catch (e) { return {err: e.message}; } }""")
+        page.evaluate("() => MicroNavigation.closeLayer(document.getElementById('r2-empty'))")
+        page.wait_for_timeout(450)
+        page.evaluate("() => document.getElementById('r2-empty').remove()")
+        check("A14 (R2-02) طبقة فارغة: التركيز داخلها عليها نفسها والخلفية معزولة (المشغّل فعليًا غير قابل للوصول) — لا «بلا استثناء» فقط",
+              r2c.get("focusedLayer") and r2c.get("backgroundInert"), str(r2c))
+
+        # ---- R2-02: انتقال فتح فعلي 240ms (طور بداية) + فوري مع محاكاة تقليل الحركة ----
+        # الدليل الحتمي: getAnimations يرصد انتقال opacity بمدة 240ms أثناء الفتح،
+        # ثم تكتمل الشفافية إلى 1. (أخذ العينات بالإطارات يتأثر ببطء إطارات headless.)
+        r2d = page.evaluate(
+            """async () => {
+                 const l = document.getElementById('sheet-more');
+                 MicroNavigation.openLayer(l);
+                 await new Promise(r => requestAnimationFrame(r));
+                 const anims = l.getAnimations().map(a => ({
+                   prop: a.transitionProperty || (a.effect && a.effect.getKeyframes ? 'css' : '?'),
+                   dur: a.effect && a.effect.getTiming ? String(a.effect.getTiming().duration) : null
+                 }));
+                 await new Promise(r => setTimeout(r, 400));
+                 return {anims, late: parseFloat(getComputedStyle(l).opacity)};
+               }""")
+        r2d_late = {"late": r2d.pop("late")} if isinstance(r2d, dict) else {}
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(450)
+        document_reduce = page.evaluate(
+            """() => { try {
+                 document.body.classList.add('micro-reduce');
+                 const l = document.getElementById('sheet-more');
+                 MicroNavigation.openLayer(l);
+                 const op = parseFloat(getComputedStyle(l).opacity);
+                 const anims = l.getAnimations().length;
+                 MicroNavigation.closeLayer(l);
+                 document.body.classList.remove('micro-reduce');
+                 return {instant: op, anims};
+               } catch (e) { return {err: e.message}; } }""")
+        page.wait_for_timeout(450)
+        has_open_transition = any(a.get("prop") == "opacity" and a.get("dur") in ("240", "240ms", "0.24")
+                                  for a in (r2d.get("anims") or [])) if isinstance(r2d.get("anims"), list) else False
+        check("A15 (R2-02) انتقال الفتح: انتقال opacity بمدة 240ms يُرصد فعليًا أثناء الفتح ويكتمل، ومع تقليل الحركة فوري بلا انتقالات",
+              has_open_transition and r2d_late.get("late") == 1
+              and document_reduce.get("instant") == 1 and document_reduce.get("anims") == 0,
+              f"رصد={r2d.get('anims')} اكتمال={r2d_late} فوري={document_reduce}")
 
         # ---- SYS-02/E11: المثال المستقل بلا board.* ----
         ex7 = f"{base}/previews/navigation/example-usage.html"

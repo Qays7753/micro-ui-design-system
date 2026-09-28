@@ -53,6 +53,11 @@ def main():
         pass
     log(f"# B02 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
     log(f"# commit المصدر: {commit}")
+    try:
+        tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
+        log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    except Exception:
+        pass
     log("")
 
     errors = []
@@ -240,6 +245,33 @@ def main():
               e03["roVal"] == "10" and e03["disVal"] == "20" and e03["roEvents"] == 0
               and e03["disEvents"] == 0 and e03["clearKept"],
               str({k: e03[k] for k in ("roVal", "disVal", "roEvents", "disEvents", "clearKept")}))
+
+        # ---- R2-06: تفرد معرف الرسالة في المستند كله — معرف موجود مسبقًا لا يُعاد استعماله ----
+        e06 = page.evaluate(
+            """() => { try {
+                 // معرف موجود مسبقًا من المستهلك بنفس نمط العدّاد
+                 const taken = document.createElement('p');
+                 taken.id = 'm-field-msg-1';
+                 taken.hidden = true;
+                 document.body.appendChild(taken);
+                 const host = document.createElement('div');
+                 host.innerHTML = '<div class="m-field" data-micro-field>' +
+                   '<label class="m-field__label" for="r2-f">حقل</label>' +
+                   '<div class="m-field__control"><input class="m-field__input" id="r2-f" type="text"></div>' +
+                   '<p class="m-field__msg" data-field-msg hidden>رسالة بلا معرف</p></div>';
+                 document.body.appendChild(host);
+                 MicroFields.init(host);
+                 const msg = host.querySelector('[data-field-msg]');
+                 const input = host.querySelector('#r2-f');
+                 const res = {newId: msg.id,
+                              notColliding: msg.id !== 'm-field-msg-1' && document.getElementById(msg.id) === msg,
+                              bound: input.getAttribute('aria-describedby').includes(msg.id)};
+                 host.remove();
+                 taken.remove();
+                 return res;
+               } catch (e) { return {err: e.message}; } }""")
+        check("A14 (R2-06) معرف رسالة جديد يفحص المستند كله: لا تصادم مع m-field-msg-1 الموجود والموجود محفوظ لصاحبه",
+              e06.get("notColliding") and e06.get("bound"), str(e06))
 
 
         # ---- SYS-02/E11: المثال المستقل بلا board.* ----

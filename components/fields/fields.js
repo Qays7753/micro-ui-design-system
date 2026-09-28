@@ -101,13 +101,21 @@
     if (!msg || !input) return;
     /* E03: الفحص على الحقل (لا على الرسالة) — ودمج المراجع القائمة
        دون استبدال: مراجع وصف سابقة تبقى، ومعرف الرسالة يُضاف مرة.
-       المعرف فريد ثابت لكل عنصر (عدّاد عام) — الحقول المتكررة
-       بنفس الصنف لا تتشارك ID بعد الآن. */
+       R2-06: التفرد يُفحص في المستند كله — معرف موجود مسبقًا (من
+       مستهلك أو رسالة أخرى) لا يُعاد استعماله؛ الموجود يُحفظ كما هو. */
     var refs = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
     if (msg.id && refs.indexOf(msg.id) >= 0) return; /* مرتبط سابقًا */
-    if (!msg.id) msg.id = 'm-field-msg-' + (++msgUid);
+    if (!msg.id) msg.id = uniqueMsgId('m-field-msg-');
     if (refs.indexOf(msg.id) < 0) refs.push(msg.id);
     input.setAttribute('aria-describedby', refs.join(' '));
+  }
+
+  /* R2-06: معرف رسالة غير مستعمل في المستند كله — لا تصادم مع
+     معرفات موجودة (مثل m-field-msg-1 المضبوطة من المستهلك). */
+  function uniqueMsgId(base) {
+    var i = ++msgUid;
+    while (document.getElementById(base + i)) i++;
+    return base + i;
   }
 
   function init(root) {

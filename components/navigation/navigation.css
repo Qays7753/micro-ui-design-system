@@ -155,21 +155,27 @@
   padding-block-end: calc(var(--micro-space-4) + env(safe-area-inset-bottom, 0px));
   font-family: var(--micro-font-family);
   /* MOT-01 موصول بالمكوّن الفعلي: نفس توكنات shared/motion.css
-     (طبقة 240ms) — الفتح يُدار من navigation.js عبر data-closing:
+     (طبقة 240ms) — الفتح عبر data-opening والإغلاق عبر data-closing
+     من navigation.js (R2-02: طور بداية فعلي للفتح). الإزاحة الحركية
+     بخاصية transform المنفصلة كي تركّب مع translate التمركز في
+     الحوار الموسّط (.m-layer--center) بدل إلغائه.
      الإخفاء بالسمة hidden، والخفوت قبلها بلا تركيز (inert). */
   transition:
     opacity var(--micro-motion-open) var(--micro-ease-standard),
-    translate var(--micro-motion-open) var(--micro-ease-standard);
+    transform var(--micro-motion-open) var(--micro-ease-standard);
 }
+/* طورا الفتح والإغلاق: شفافية 0 وإزاحة 8px — transform لا يلغي تمركز الحوار */
+.m-layer[data-opening="true"],
 .m-layer[data-closing="true"] {
   opacity: 0;
-  translate: 0 8px;
+  transform: translateY(8px);
 }
 @media (prefers-reduced-motion: reduce) {
   .m-layer,
+  .m-layer[data-opening="true"],
   .m-layer[data-closing="true"] {
     transition: none;
-    translate: none;
+    transform: none;
   }
 }
 .m-layer--center { /* الحوار: موسّط */

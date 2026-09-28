@@ -99,8 +99,11 @@
   }
 
   /* حماية مباشرة حتى مع data-pending المضبوط بالترميز دون API:
-   * أي تغيير على مفتاح في انتظار يُرجع فورًا (تقاطع). */
+   * تبديل مستخدم فعلي على مفتاح في انتظار يُرجع فورًا (تقاطع).
+   * R2-06: إشعار change برمجي (isTrusted=false — مثلاً استهلاكٍ
+   * ضبط checked وأطلق الححدث بنفسه) ليس تبديلًا فعليًا فلا يُعكس. */
   document.addEventListener('change', function (e) {
+    if (!e.isTrusted) return; /* R2-06: إشعار برمجي ليس تبديلًا فعليًا */
     var input = e.target;
     if (!input.matches || !input.matches('.m-switch input')) return;
     var sw = input.closest('.m-switch');
@@ -120,14 +123,18 @@
       input.setAttribute('aria-busy', pending ? 'true' : 'false');
       /* E05: حماية تفعيل فعلية أثناء الانتظار — label وSpace والنقر
          جميعها بلا أثر، مع استرجاع التعطيل الأصلي بدقة (ربما كان
-         معطلًا قبل الانتظار — يُرجع معطلًا لا مفعّلًا). */
+         معطلًا قبل الانتظار — يُرجع معطلًا لا مفعّلًا).
+         R2-06: إنهاء انتظار غير مبدوء آمن — لا يغيّر حالة المستهلك
+         (مفتاح معطل أصلًا يبقى معطلًا، ومفعّل أصلًا يبقى مفعّلًا)،
+         وإنهاء متكرر بعد دورة مكتملة لا يعيد فعل شيء. */
       if (pending) {
         if (!pendingRestore.has(input)) pendingRestore.set(input, input.disabled);
         input.disabled = true;
-      } else {
-        input.disabled = pendingRestore.has(input) ? pendingRestore.get(input) : false;
+      } else if (pendingRestore.has(input)) {
+        input.disabled = pendingRestore.get(input);
         pendingRestore.delete(input);
       }
+      /* بلا دورة انتظار سابقة: لا يُلمس disabled إطلاقًا */
     }
   };
 
