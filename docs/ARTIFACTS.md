@@ -31,3 +31,9 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - `reviews/DELIVERY-R1/CHATGPT-REVIEW.md`: تقرير CHANGES REQUESTED للرأسين `30d0070` و`cd14cc9`، مع الإصلاحات وأدلة قبولها.
 - `reviews/DELIVERY-R1/source-probes.cjs`: تشخيص قابل للتشغيل على نسخة التسليم، باستخدام DOM محاكى؛ ليس فحص متصفح.
 - `reviews/DELIVERY-R1/source-probes.txt`: نتائج التشخيص من `cd14cc9`، وليست إعلان نجاح.
+
+
+## إعادة مراجعة DELIVERY-R2 — 2026-09-28
+
+- `reviews/DELIVERY-R2/CHATGPT-REVIEW.md`: نتيجة مراجعة `71ffff1` و`4fa61e1`، إغلاق جزئي للجولة السابقة و7 متبقيات محددة مع الترشيحات البصرية.
+- `reviews/DELIVERY-R2/source-probes.cjs` و`source-probes.txt`: تشخيصات مصدر قابلة لإعادة التشغيل وأدلة التحقق؛ ليست فحص متصفح.
