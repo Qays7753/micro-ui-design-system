@@ -1,0 +1,296 @@
+/* =========================================================
+   Micro UI — مكوّن التنظيم والمعلومات (B04)
+   الملف: components/organization/organization.css
+   يعتمد على shared/tokens.css. خصائص منطقية فتعمل في RTL.
+   القواعد: تجميع بالمحاذاة والمسافات والعنوان أولًا؛ لا بطاقات
+   متداخلة ولا ظل لكل صف؛ السطح عند حاجة استقلال المحتوى فقط.
+   صف السطرين حد أدنى 72px. صف الفتح ليس رابطًا يحيوي زرًا.
+   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   ========================================================= */
+
+.m-row,
+.m-row *,
+.m-section,
+.m-section *,
+.m-badge,
+.m-identity,
+.m-identity * {
+  box-sizing: border-box;
+}
+
+/* ================= 1) العنوان والوصف والفاصل ================= */
+.m-section-title {
+  margin: 0;
+  font-family: var(--micro-font-family);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.m-section-title + .m-section-desc {
+  margin-top: var(--micro-space-1);
+}
+.m-section-desc {
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-divider {
+  border: 0;
+  border-block-start: 1px solid var(--micro-border-divider);
+  margin: 0;
+}
+
+/* مجموعة مفتوحة (بلا بطاقة): عنوان + محتوى + فواصل */
+.m-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  font-family: var(--micro-font-family);
+}
+
+/* ================= 2) الصفوف ================= */
+.m-row {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-row-min-height); /* صف سطرين: 72px حد أدنى */
+  padding-block: var(--micro-space-3);
+  font-family: var(--micro-font-family);
+  background: transparent;
+}
+
+/* بلاط الأيقونة: أرضية هادئة وأيقونة بترولية (صف اختياري) */
+.m-row__tile {
+  flex: none;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-primary);
+}
+.m-row__tile svg {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.m-row__text {
+  flex: 1;
+  min-width: 0; /* يسمح للعنوان الطويل بالالتفاف */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.m-row__title {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 500;
+  color: var(--micro-text-primary);
+}
+.m-row__subtitle {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.m-row__value {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- صف الفتح: رابط حقيقي — تسمية واضحة وسهم فتح يسارًا (RTL) ---- */
+a.m-row {
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--micro-radius-field);
+}
+a.m-row:active { background-color: var(--micro-surface-selected); }
+.m-row__open {
+  flex: none;
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  color: var(--micro-text-hint);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+a.m-row:focus-visible,
+a.m-row.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* ---- صف بإجراء: مناطق تفاعل منفصلة — الإجراء زر مستقل خارج الرابط ---- */
+.m-row .m-btn { flex: none; }
+.m-row__action-disabled { /* إجراء معطل معلن */
+  opacity: 1; /* لا تمويه — شكل المعطل من B01 نفسه */
+}
+
+/* ================= 3) القسم القابل للطي ================= */
+.m-section {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--micro-font-family);
+}
+.m-section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-touch-min);
+  padding: var(--micro-space-2);
+  background: transparent;
+  border: 0;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+  text-align: start;
+  cursor: pointer;
+  border-radius: var(--micro-radius-field);
+  -webkit-tap-highlight-color: transparent;
+}
+.m-section__head:active { background-color: var(--micro-surface-selected); }
+.m-section__head:focus-visible,
+.m-section__head.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-section__chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-inline-start: auto;
+  color: var(--micro-text-hint);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+}
+/* RTL: مغلق يشير يسارًا (اتجاه الفتح) — مفتوح يشير أسفل */
+.m-section__head[aria-expanded="false"] .m-section__chevron { transform: rotate(90deg); }
+.m-section__head[aria-expanded="true"] .m-section__chevron { transform: rotate(0deg); }
+
+.m-section__body {
+  padding: var(--micro-space-2);
+}
+/* الطي: hidden فقط — لا حركة layout تقفز؛ تقليل الحركة يبقيه فوريًا */
+
+/* ================= 4) الشارات والعدّادات =================
+   الشارة غير تفاعلية: span لا زر — لا تتخفى كزر ولا تدّعي ضغطًا. */
+.m-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  padding: 2px var(--micro-space-2);
+  border-radius: var(--micro-radius-capsule);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+  white-space: nowrap;
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-secondary);
+}
+.m-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--micro-radius-circle);
+  background-color: currentColor; /* نقطة بلون المعنى نفسه */
+}
+.m-badge--success { background-color: var(--micro-success-surface); color: var(--micro-success); }
+.m-badge--error   { background-color: var(--micro-danger-surface);  color: var(--micro-danger); }
+.m-badge--warning { background-color: var(--micro-warning-surface); color: var(--micro-warning); }
+.m-badge--info    { background-color: var(--micro-info-surface);    color: var(--micro-info); }
+.m-badge--accent  { background-color: var(--micro-brand-accent);    color: var(--micro-text-primary); } /* مشمشي بنص داكن */
+
+/* عدّاد: يتمدد مع الرقم (min-width لا width) ويخفي 0 بصرية إن طلب المستهلك */
+.m-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--micro-counter-height);
+  min-height: var(--micro-counter-height);
+  padding-inline: var(--micro-space-2);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-counter-label-size);
+  line-height: 1;
+  font-weight: var(--micro-counter-label-weight);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  flex: none; /* لا انكماش تحت المحتوى — درس R2-A */
+}
+.m-counter--zero { display: none; } /* عند 0: مخفية والاسم الإتاحي يوضح */
+
+/* ================= 5) هوية الشخص/الكيان (مثال عام) ================= */
+.m-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-touch-min);
+  font-family: var(--micro-font-family);
+}
+.m-identity__img,
+.m-identity__initials {
+  flex: none;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  border-radius: var(--micro-radius-circle);
+}
+.m-identity__img {
+  object-fit: cover;
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-hint);
+}
+.m-identity__initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--micro-brand-primary);
+  color: var(--micro-text-inverse);
+  font-size: var(--micro-label-size);
+  font-weight: 600;
+}
+/* فشل تحميل الصورة: organization.js يستبدلها بالأحرف الأولى — بديل ظاهر */
+.m-identity__name {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 500;
+  color: var(--micro-text-primary);
+}
+.m-identity__sub {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* ---- بيانات ناقصة: بديل ظاهر موحّد (—) لا فراغ مضلل ---- */
+.m-missing {
+  color: var(--micro-text-hint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-section__chevron { transition: none; }
+}

@@ -107,6 +107,10 @@
   --micro-switch-track-h: 32px;
   --micro-switch-thumb: 24px;
 
+  /* ---- تنظيم (B04) ---- */
+  --micro-row-min-height: 72px;         /* صف السطرين — حد أدنى يتسع 48px هدف لمس + سطر ثانٍ */
+  --micro-row-tile: 48px;               /* بلاط الأيقونة/الصورة — نفس هدف اللمس */
+
   /* ---- العمق ---- */
   --micro-shadow-emphasis: 0 3px 8px rgba(22, 77, 89, 0.14); /* ظل الزر البارز — للأساسي فقط افتراضيًا */
   --micro-shadow-overlay: 0 10px 28px rgba(23, 45, 50, 0.12); /* سطح مؤقت مرتفع — دفعات الطبقات */
