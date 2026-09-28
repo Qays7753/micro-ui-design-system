@@ -24,3 +24,10 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - ../prompts/UI-LIBRARY-EXPANSION-ZAI.md: رسالة بدء التنفيذ.
 
 الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها.
+
+
+## مراجعة DELIVERY-R1 — 2026-09-28
+
+- `reviews/DELIVERY-R1/CHATGPT-REVIEW.md`: تقرير CHANGES REQUESTED للرأسين `30d0070` و`cd14cc9`، مع الإصلاحات وأدلة قبولها.
+- `reviews/DELIVERY-R1/source-probes.cjs`: تشخيص قابل للتشغيل على نسخة التسليم، باستخدام DOM محاكى؛ ليس فحص متصفح.
+- `reviews/DELIVERY-R1/source-probes.txt`: نتائج التشخيص من `cd14cc9`، وليست إعلان نجاح.
