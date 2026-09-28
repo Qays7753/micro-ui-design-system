@@ -32,3 +32,21 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - ../prompts/UI-LIBRARY-EXPANSION-ZAI.md: رسالة بدء التنفيذ.
 
 الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها.
+
+## مخرجات التوسعة — 2026-09-28 (فرع task/ui-library-expansion — PR #2 تابع لـ#1)
+
+| الملف | الحالة | الملاحظة |
+|---|---|---|
+| `components/fields/` + `previews/fields/` | DRAFT FOR REVIEW | B02 الحقول: فحوص 23/23 — لوحة مفاتيح الهاتف الفعلية غير مفحوصة (معلن) |
+| `components/selection/` + `previews/selection/` | DRAFT FOR REVIEW | B03 الاختيار: فحوص 14/14 — طبقة المنتقي مؤقتة حتى B07 |
+| `components/organization/` + `previews/organization/` | DRAFT FOR REVIEW | B04 التنظيم: فحوص 14/14 |
+| `components/surfaces/` + `assets/surfaces/` + `shared/motion.css` + `previews/surfaces/` | DRAFT FOR REVIEW | S01 الأسطح والحركة: فحوص 14/14 — مرشح الموجات الخافتة بانتظار الاعتماد |
+| `components/data/` + `previews/data/` | DRAFT FOR REVIEW | B05 البيانات والتتبّع: فحوص 15/15 |
+| `components/messages/` + `previews/messages/` | DRAFT FOR REVIEW | B06 الرسائل والحالات: فحوص 14/14 |
+| `components/navigation/` + `previews/navigation/` | DRAFT FOR REVIEW | B07 التنقّل والطبقات: فحوص 12/12 |
+| `previews/index.html` + `previews/board-base.css` + `previews/board.js` | DRAFT | فهرس المعاينات والبنية المشتركة لفرع التوسعة |
+| `docs/UI-USAGE-SOP.md` + `docs/UI-COVERAGE-RESULTS.md` | DRAFT | دليل الاستخدام والتركيب + تقرير التغطية لكل معرف |
+| `tools/b02..b07/s01-screenshots.py` + `tools/hugeicons-convert.py` | DRAFT TOOL | سكربتات فحص الدفعات ومحوّل الأيقونات من الحزمة المعتمدة |
+| `assets/icons/` (+26 أصلًا) | LICENSED ASSETS | نفس الحزمة @hugeicons/core-free-icons@4.3.5 بنفس طريقة التحويل دون تعديل مسارات |
+
+تقرير التغطية لكل معرف: docs/UI-COVERAGE-RESULTS.md.

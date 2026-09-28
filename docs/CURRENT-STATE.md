@@ -46,3 +46,6 @@
 - EDITABLE-DELIVERY.md: المصدر القابل للتعديل شرط للتسليم.
 - ../prompts/B01-BUTTONS-ZAI.md: التكليف الأول.
 - ../reviews/REVIEW-TEMPLATE.md: نموذج المراجعة.
+
+## تحديث التوسعة — 2026-09-28
+تنفيذ B02–B07 وS01 كمسودات على فرع `task/ui-library-expansion` عبر PR #2 التابع لـ#1 (وفق تكليف التوسعة الذي يسمح بالبدء بعد تسليم تصحيحات B01). الفهرس: previews/index.html — التغطية لكل معرف: docs/UI-COVERAGE-RESULTS.md — الاستخدام والتركيب: docs/UI-USAGE-SOP.md. الحالة كلها DRAFT FOR REVIEW: لا دمج ولا نشر ولا اعتماد ذاتي، والتفاصيل المقترحة موسومة «مقترح» لا قرارات معتمدة.

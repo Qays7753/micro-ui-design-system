@@ -258,3 +258,19 @@ section.panel {
   font-size: var(--micro-secondary-size, 13px);
   line-height: 22px;
 }
+
+/* ---- بطاقة الفهرس (previews/index.html) ---- */
+.index-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-4);
+  background: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  text-decoration: none;
+  font-family: var(--micro-font-family);
+  transition: border-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+.index-card:hover { border-color: var(--micro-border-control); }
+.index-card__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 600; color: var(--micro-brand-primary); }
