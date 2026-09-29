@@ -11,7 +11,7 @@ python3 -m http.server 8080        # من جذر المستودع فقط (ولي
 # دفعة واحدة: http://localhost:8080/previews/<family>/
 ```
 
-تشغيل فحوص أي دفعة (Chromium + Playwright): `python3 tools/<batch>-screenshots.py` — السجل والقياسات وcommit مصدر اللقطات في `reviews/<batch>/verification.txt`. دفعة العارض المستقلة: `python3 tools/carousel-screenshots.py` → `reviews/CAROUSEL/`.
+تشغيل فحوص أي دفعة (Chromium + Playwright): `python3 tools/<batch>-screenshots.py` — السجل والقياسات وcommit مصدر اللقطات في `reviews/<batch>/verification.txt`. دفعة العارض المستقلة: `python3 tools/carousel-screenshots.py` → `reviews/CAROUSEL/`. دفعة اتجاه After: `python3 tools/after-direction-screenshots.py` → `reviews/AFTER-DIRECTION/`.
 
 ## 2) استهلاك مكوّن في صفحتك (الحد الأدنى)
 
@@ -27,6 +27,7 @@ python3 -m http.server 8080        # من جذر المستودع فقط (ولي
 - رسائل B06 تُستخدم داخل أي لوحة/صفحة كعنصر مستهلك ثابت.
 - ألوان البيانات (B05) لا تنتقل زينةً إلى حقول أو أزرار.
 - الأسطح (S01) للأسطح البارزة فقط — القوائم والمدخلات صافية.
+- تركيب اتجاه After (دفعة مستقلة PROPOSED): نمط التجميع عنوان+فاصل+صفوف بلا بطاقة لكل عنصر، وسطح بترولي بارز واحد عند الحاجة، وقيمة رئيسية + اتجاه بنص لا لون، ودوائر متداخلة بقيم داخلها (امتداد packed PROPOSED) — مرجع تركيب قابل للتعديل في `previews/after-direction/` وليس شاشة إنتاجية ولا نمط تنقل.
 - العارض (دفعة مستقلة) مستقل عن محتوى البطاقات تمامًا: استهلكه بوضع أي محتوى داخل `.m-carousel__card`؛ لا تجعله صفحة رئيسية ولا Dashboard، ولا تعتمد السحب وحده، ولا `autoplay` أصلًا. أمثلة محتواه من عقد B05/التوزيع والدوائر (المتداخلة امتداد PROPOSED opt-in في `components/data/packed-circle.*` لا يغيّر سلوك B05).
 - الاختيار داخل المنتقي (B03) يُعاد استخدام طبقة B07 النهائية عند توفرها.
 

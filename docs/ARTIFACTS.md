@@ -67,3 +67,11 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - `reviews/DELIVERY-R2/CHATGPT-REVIEW.md`: إغلاق جزئي للجولة السابقة ومتطلبات R2 المحددة.
 - `reviews/DELIVERY-R3/CHATGPT-REVIEW.md`: مراجعة C1/C2 وإغلاق المتبقيات المحددة.
 - ملفات `source-probes` تشخيصات مصدر قابلة لإعادة التشغيل وليست بديلًا عن اختبار هاتف أو قارئ شاشة.
+
+## دفعة اتجاه After — 2026-09-29
+
+| الملف | الحالة | الملاحظة |
+|---|---|---|
+| `previews/after-direction/` (index/board.css/board.js/README) | DRAFT FOR REVIEW (تركيب PROPOSED) | تركيب مرجعي قابل للتعديل لا شاشة إنتاجية — المكوّنات من مصدرها في components/ بلا تعديل |
+| `tools/after-direction-screenshots.py` + `reviews/AFTER-DIRECTION/` | DRAFT TOOL | فحص ولقطات (22 لقطة) — 41/41 من شجرة commit المصدر + إثبات تعديل ثلاثي مع استعادة موثقة بالبصمات |
+| `references/visual-direction/after/` + `references/motion/card-carousel-reference.*` | REFERENCE ONLY | حزمة المراجع من `task/after-direction-reference-pack` — فُتحت فعليًا (6 صور + إطارات الفيديو) ولم تُستخدم خلفيات أو بديل مصدر |
