@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة التنقّل والطبقات (B07)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/navigation/
+  شريط عنوان وتبويبات وشريط تنقل عينة وحوار تأكيد ولوحة سفلية
+  ولوحة فلاتر بعقد الجاري/المطبّق وشريط إجراء. لا شاشات فعلية
+  ولا هندسة تنقل جديدة — عناصر فقط.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة التنقّل والطبقات (B07)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — التنقّل والطبقات <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">عناصر تنقّل وطبقات: عنوان ورجوع، تبويبات محتوى، شريط تنقل عينة، قائمة المزيد، حوار تأكيد، لوحة سفلية، فلاتر بعقد الجاري/المطبّق، وشريط إجراء. خلفية modal غير تفاعلية وتركيز يُدار ويُستعاد.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) شريط العنوان + تبويبات ================= -->
+    <section class="panel" id="appbar">
+      <h2>1) شريط العنوان وتبويبات المحتوى — NAV-01</h2>
+      <p class="panel-note">الرجوع يمينًا في RTL من أصل الأيقونة (اتجاه الرجوع) والفتح يسارًا — لا قلب آلي لكل الرموز. التبويبات تغيّر لوحة محتوى مرتبطة فعليًا (أسهم + aria-controls) — ليست بديلًا عن Segmented.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="phone-demo is-350">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+              <span class="m-appbar__title">طلبات الفرع الرئيسي — عنوان طويل يلتف دون قص داخل الشريط</span>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="المزيد"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-more"/></svg></button>
+            </div>
+            <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام الطلبات">
+              <button type="button" class="m-tabs__tab" role="tab" aria-selected="true" aria-controls="tab-a" id="tab-a-btn">النشطة</button>
+              <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="tab-b" id="tab-b-btn" tabindex="-1">المكتملة</button>
+            </div>
+            <div id="tab-a" role="tabpanel" aria-labelledby="tab-a-btn" style="padding:12px 4px">
+              <p class="m-section-desc">لوحة الطلبات النشطة — محتوى مرتبط بالتبويب الأول (بيانات تجريبية).</p>
+            </div>
+            <div id="tab-b" role="tabpanel" aria-labelledby="tab-b-btn" hidden style="padding:12px 4px">
+              <p class="m-section-desc">لوحة الطلبات المكتملة — التبويب يبدّل المحتوى فعليًا.</p>
+            </div>
+          </div>
+          <span class="caption">شريط عنوان بعنوان طويل + تبويبات بمحتوى مرتبط</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <p class="demo-note">شريط تنقل سفلي — عينة بعناصر قابلة للتغيير (لا تثبيت عددها أو أسمائها):</p>
+          <div class="m-navbar" role="navigation" aria-label="التنقل الرئيسي (عينة)">
+            <button type="button" class="m-navbar__item" aria-current="page"><svg aria-hidden="true"><use href="#i-home"/></svg>مشروعي</button>
+            <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-grid"/></svg>العمل</button>
+            <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-plus"/></svg>سجل</button>
+            <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-menu"/></svg>المزيد</button>
+          </div>
+          <span class="caption">عينة شريط تنقل — العنصر الحالي بنص ولون خلفية لا لون وحده</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2) الطبقات: حوار تأكيد + قائمة المزيد + لوحة سفلية ================= -->
+    <section class="panel" id="layers">
+      <h2>2) الحوار واللوحة السفلية وقائمة المزيد — NAV-02</h2>
+      <p class="panel-note">فتح/إغلاق، تركيز يُدار ويُستعاد للمشغّل، Escape، خلفية غير تفاعلية، إغلاق ظاهر دائمًا (السحب ليس وسيلة الإغلاق الوحيدة). سياسة الضغط بالخلفية: يغلق للطبقات غير المتلفة ويُبقى في حوار الحذف (قرار صريح بالإجراء).</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="demo-group" style="flex-direction:column;align-items:stretch;gap:8px">
+            <button type="button" class="m-btn m-btn--primary" data-layer-open="dialog-delete">حوار تأكيد حذف (المتلف)</button>
+            <button type="button" class="m-btn m-btn--secondary" data-layer-open="sheet-more">لوحة سفلية — قائمة المزيد</button>
+            <button type="button" class="m-btn m-btn--secondary" data-layer-open="dialog-long">حوار بنص طويل (تمرير داخلي)</button>
+          </div>
+          <span class="caption">ثلاثة مشغّلات — كل طبقة تدير تركيزها وتستعيده</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3) لوحة الفلاتر — عقد الجاري/المطبّق ================= -->
+    <section class="panel" id="filters">
+      <h2>3) لوحة الفلاتر — NAV-03 (تُفتح من زر B01)</h2>
+      <p class="panel-note">زر تصفية B01 يفتح اللوحة. داخلها: حقول واختيارات + ملخص الجاري + ثلاثة أجراءات: **تطبيق** (يقرّ ويحدّث العدّاد)، **مسح** (يفريغ الجاري)، **إلغاء** (يرجع المطبّق السابق). لا صف chips بديلًا — العدّاد على الزر نفسه ويخفي 0.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <p class="demo-note">زر التصفية — عدّاده يعكس الفلاتر المطبّقة (يخفي 0):</p>
+          <div class="demo-group">
+            <button type="button" class="m-btn m-btn--secondary" id="filter-trigger" data-layer-open="filter-panel" data-filter-trigger>
+              <svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter m-btn__counter--zero" data-filter-count>0</span>
+            </button>
+            <span class="demo-status" data-filter-result data-tone="info" hidden></span>
+          </div>
+          <p class="demo-note" style="margin-top:8px">جرّب: اختر فلترين → تطبيق (العدّاد 2) → افتح مرة أخرى وغيّر → إلغاء (يبقى المطبّق 2) → افتح → مسح → تطبيق (العدّاد يختفي 0).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4) شريط إجراء + هواتف ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>4) شريط إجراء لا يحجب المحتوى + هاتف كامل + تكبير</h2>
+      <p class="panel-note">الشريط sticky أسفل القسم والمحتوى فوقه بحشو سفلي — مع مساحة الأمان. حدود لوحة مفاتيح الهاتف الفعلية غير مفحوصة (بيئة headless) — موثقة في التقرير.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab is-scroll" id="text-zoom-target">
+          <div class="phone-stack">
+            <h3 class="m-section-title">تفاصيل الطلب</h3>
+            <p class="m-section-desc">محتوى الصفحة يتمرّر داخل الهاتف — شريط الأفعال وشريط التنقل مجموعة ثابتة واحدة أسفل الحاوية، فلا يغطي أحدهما الآخر، والمحتوى الأخير يبقى مقروءًا عند نهاية التمرير لأن المجموعة تحتفظ بمكانها في التدفق.</p>
+            <p class="m-section-desc">فقرة تمهيدية لفحص التمرير: المحتوى أطول من ارتفاع الهاتف كي يعمل التمرير الداخلي فعليًا، مع بقاء الشريطين ظاهرين أسفل الحاوية أثناء التمرير.</p>
+            <p class="m-section-desc">فقرة ثانية: نفس النمط عند تكبير النص 200% — أزرار الشريط تلتف داخل مجموعته فيزيد ارتفاعها، والمساحة محجوزة تلقائيًا من التدفق لا بحشوة ثابتة.</p>
+            <p class="m-section-desc" id="last-content">عنصر فحص الوصول الأخير — يجب أن يُرى كاملًا فوق المجموعة الثابتة (شريط الأفعال ثم التنقل) عند نهاية التمرير.</p>
+          </div>
+          <div class="sticky-foot" id="sticky-foot">
+            <div class="m-actionbar">
+              <button type="button" class="m-btn m-btn--secondary">رفض</button>
+              <button type="button" class="m-btn m-btn--primary">اعتماد الطلب</button>
+            </div>
+            <div class="m-navbar" role="navigation" aria-label="شريط التنقل السفلي (عينة)">
+              <button type="button" class="m-navbar__item" aria-current="page"><svg aria-hidden="true"><use href="#i-home"/></svg>مشروعي</button>
+              <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-menu"/></svg>المزيد</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>5) فحص الخط والأيقونات</h2>
+      <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg><span class="caption">chevron-right (رجوع RTL)</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg><span class="caption">chevron-left (فتح RTL)</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-more"/></svg><span class="caption">more-vertical</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ الطبقات (خارج main — fixed) ============ -->
+
+  <div class="m-layer-backdrop" data-for="dialog-delete" hidden></div>
+  <div class="m-layer m-layer--center m-layer--danger" id="dialog-delete" role="dialog" aria-modal="true" aria-labelledby="dlg-del-title" data-backdrop="keep" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="dlg-del-title">حذف السجل؟</span>
+    </div>
+    <div class="m-layer__body">
+      <p class="m-section-desc">سيُحذف «سجل اليوم 12:30» نهائيًا — لا يمكن التراجع. هذا عرض تجريبي: **لا ينفذ حذف بيانات حقيقيًا**.</p>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--secondary" data-layer-close>إلغاء</button>
+      <button type="button" class="m-btn m-btn--destructive" data-layer-close data-autofocus>حذف نهائي</button>
+    </div>
+  </div>
+
+  <div class="m-layer-backdrop" data-for="sheet-more" hidden></div>
+  <div class="m-layer" id="sheet-more" role="dialog" aria-modal="true" aria-labelledby="sheet-more-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="sheet-more-title">المزيد</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق اللوحة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body" style="padding-block-end:16px">
+      <button type="button" class="m-btn m-btn--secondary" style="width:100%;justify-content:flex-start">تعديل الطلب</button>
+      <button type="button" class="m-btn m-btn--secondary" style="width:100%;justify-content:flex-start">مشاركة ملخص (مؤجل — بلا قناة)</button>
+      <button type="button" class="m-btn m-btn--destructive-soft" style="width:100%;justify-content:flex-start">إزالة من القائمة</button>
+    </div>
+  </div>
+
+  <div class="m-layer-backdrop" data-for="dialog-long" hidden></div>
+  <div class="m-layer m-layer--center" id="dialog-long" role="dialog" aria-modal="true" aria-labelledby="dlg-long-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="dlg-long-title">شروط الاتفاق — نص طويل</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body" style="max-height:200px">
+      <p class="m-section-desc">فقرة أولى طويلة لفحص التمرير الداخلي عند حاجة المحتوى. المادة الأولى: تلتزم الأطراف بما ورد في هذا العرض التجريبي من بنود وهمية قابلة للتعديل دون أي أثر حقيقي، والنص هنا مكرر عمدًا لفحص سلوك التمرير داخل الحوار عند تجاوز المحتوى للارتفاع المتاح، مع بقاء العنوان وزر الإغلاق ظاهرين دائمًا فوق المحتوى.</p>
+      <p class="m-section-desc">فقرة ثانية: يستمر النص الطويل ليصل المحتوى إلى ما يتجاوز الارتفاع فلاحظ شريط التمرير الداخلي داخل جسم الحوار وحده دون تحرك الصفحة خلفه.</p>
+      <p class="m-section-desc">فقرة ثالثة: نهاية النص — الإغلاق ظاهر أعلى وEscape يعمل ويعيد التركيز للمشغّل.</p>
+    </div>
+  </div>
+
+  <div class="m-layer-backdrop" data-for="filter-panel" hidden></div>
+  <div class="m-layer" id="filter-panel" role="dialog" aria-modal="true" aria-labelledby="filter-title" data-backdrop="close" data-filter-panel hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="filter-title">تصفية الطلبات</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق التصفية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <p class="m-filter-summary" data-filter-summary>الجاري: لا فلاتر (العدّاد يخفي 0)</p>
+      <div class="m-field" data-micro-field>
+        <label class="m-field__label" for="f-search">بحث بالاسم</label>
+        <div class="m-field__control">
+          <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <!-- E08: البحث هنا فلتر ضمن العقد نفسه (data-filter-key) —
+               يدخل الجاري/المطبّق ويُطبّق ويُمسح ويُلغى مع البقية -->
+          <input class="m-field__input" id="f-search" type="search" autocomplete="off" data-filter-key="بحث بالاسم">
+        </div>
+      </div>
+      <div>
+        <p class="m-section-desc" style="margin-bottom:4px">الحالة</p>
+        <label class="m-choice m-choice--check"><input type="checkbox" data-filter-key="قيد التجهيز"><span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="m-choice__text">قيد التجهيز</span></label>
+        <label class="m-choice m-choice--check"><input type="checkbox" data-filter-key="متأخر"><span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="m-choice__text">متأخر</span></label>
+        <label class="m-choice m-choice--check"><input type="checkbox" data-filter-key="مكتمل"><span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="m-choice__text">مكتمل</span></label>
+      </div>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--light" data-filter-clear>مسح</button>
+      <button type="button" class="m-btn m-btn--secondary" data-filter-cancel>إلغاء</button>
+      <button type="button" class="m-btn m-btn--primary" data-filter-apply>تطبيق</button>
+    </div>
+  </div>
+
+  <footer class="board-footer">
+    المصدر: components/navigation/ — القيم: shared/tokens.css + shared/motion.css — التشغيل والتعديل: previews/navigation/README.md — النتائج: reviews/B07/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../../components/selection/selection.js"></script>
+  <script src="../../components/navigation/navigation.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

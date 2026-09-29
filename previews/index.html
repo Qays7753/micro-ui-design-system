@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — فهرس لوحات المعاينة (previews/index.html)
+  التشغيل من جذر المستودع: python3 -m http.server 8080 ثم /previews/
+  كل لوحة مستقلة وتشغّل من الجذر نفسه. المصادر في components/.
+  الحالة: DRAFT FOR REVIEW — لا دمج ولا اعتماد ذاتي.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — فهرس معاينات المكوّنات</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="previews/board-base.css">
+</head>
+<body>
+
+  <header class="board-header">
+    <h1>Micro — فهرس معاينات المكوّنات <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح. كل لوحة تعرض المصدر الحقيقي من components/ — الصور أدلة من المصدر نفسه. أمر التشغيل: <span dir="ltr">python3 -m http.server 8080</span> من جذر المستودع.</p>
+  </header>
+
+  <main>
+
+    <section class="panel">
+      <h2>الدفعات المنفذة</h2>
+      <p class="panel-note">B01 على فرعه وPR #1 (DRAFT FOR RE-REVIEW)؛ وبقية الدفعات على فرع التوسعة وPR #2 التابع له (DRAFT FOR REVIEW). لا دمج قبل المراجعة واعتماد المالك.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="buttons/">
+            <span class="index-card__title">B01 — الأزرار</span>
+            <span class="m-section-desc">الأنواع الستة والحالات وعقد التحميل والعدّاد — PR #1</span>
+          </a>
+          <span class="caption">components/buttons/ · reviews/B01/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="fields/">
+            <span class="index-card__title">B02 — الحقول</span>
+            <span class="m-section-desc">نص ونص طويل وبحث ومبلغ وكمية — الفارغ ≠ 0 والخطأ لا يمحو</span>
+          </a>
+          <span class="caption">components/fields/ · reviews/B02/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="selection/">
+            <span class="index-card__title">B03 — الاختيار</span>
+            <span class="m-section-desc">Checkbox/Radio/Switch/Toggle/Segmented + قائمة ومنتقي وتاريخ</span>
+          </a>
+          <span class="caption">components/selection/ · reviews/B03/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="organization/">
+            <span class="index-card__title">B04 — التنظيم والمعلومات</span>
+            <span class="m-section-desc">صفوف وقراءة/فتح/إجراء وطي وشارات وعدّادات وهوية</span>
+          </a>
+          <span class="caption">components/organization/ · reviews/B04/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="surfaces/">
+            <span class="index-card__title">S01 — الأسطح البترولية والحركة</span>
+            <span class="m-section-desc">ثلاث مقارنات + نسخة مجردة + مفاتيح الموجة + مقارنة الحركة وتقليلها</span>
+          </a>
+          <span class="caption">components/surfaces/ · assets/surfaces/ · reviews/S01/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="data/">
+            <span class="index-card__title">B05 — البيانات والتتبّع</span>
+            <span class="m-section-desc">قيم ومقارنات وأعمدة وخط وتوزيع ودوائر مساحة صحيحة وتقدم وخطوات</span>
+          </a>
+          <span class="caption">components/data/ · reviews/B05/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="messages/">
+            <span class="index-card__title">B06 — الرسائل والحالات</span>
+            <span class="m-section-desc">رسائل ثابتة وخمسة أنواع وعابرة بعقد موثق وانتظار وskeleton وفراغات</span>
+          </a>
+          <span class="caption">components/messages/ · reviews/B06/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="navigation/">
+            <span class="index-card__title">B07 — التنقّل والطبقات</span>
+            <span class="m-section-desc">شريط عنوان وتبويبات وشريط تنقل عينة وطبقات وفلاتر وشريط إجراء</span>
+          </a>
+          <span class="caption">components/navigation/ · reviews/B07/</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="buttons/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B01)</span>
+            <span class="m-section-desc">المستهلك يشغّل عقد setLoading بنفسه — بلا board.js</span>
+          </a>
+          <span class="caption">previews/buttons/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="fields/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B02)</span>
+            <span class="m-section-desc">IDs رسائل فريدة ودمج وصف سابق وحراسة readOnly — بلا board.*</span>
+          </a>
+          <span class="caption">previews/fields/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="selection/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B03+E04)</span>
+            <span class="m-section-desc">منتقي في طبقة B07: بحث/بلا نتائج/اختيار/إغلاق وإعادة فتح — بلا board.*</span>
+          </a>
+          <span class="caption">previews/selection/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="organization/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B04)</span>
+            <span class="m-section-desc">طي بكيبورد وaria وبديل صورة فاشلة — بلا board.*</span>
+          </a>
+          <span class="caption">previews/organization/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="data/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B05)</span>
+            <span class="m-section-desc">تصيير من بيانات HTML وتعديل المصدر ينعكس — بلا board.*</span>
+          </a>
+          <span class="caption">previews/data/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="messages/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B06)</span>
+            <span class="m-section-desc">إخفاء فعلي وإغلاق من المصدر وإعادة استخدام بلا مؤقت قديم — بلا board.*</span>
+          </a>
+          <span class="caption">previews/messages/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="navigation/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (B07)</span>
+            <span class="m-section-desc">عزل خلفية وحصر تركيز واستعادة مشغّل — بلا board.*</span>
+          </a>
+          <span class="caption">previews/navigation/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="surfaces/example-usage.html">
+            <span class="index-card__title">مثال استخدام خارج اللوحة (S01)</span>
+            <span class="m-section-desc">موجة من أصل واحد ومفاتيح تنعكس وحدود حروف داخل السطح — بلا board.*</span>
+          </a>
+          <span class="caption">previews/surfaces/example-usage.html</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="surfaces/">
+            <span class="index-card__title">S01 — مقارنة تنقيح الموجة قبل/بعد</span>
+            <span class="m-section-desc">مقترح بصري (PROPOSED) بالحجم العادي ومحتوى قصير — قرار المالك</span>
+          </a>
+          <span class="caption">previews/surfaces/index.html §1-ب · assets/surfaces/waves-soft-v2.svg</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>وثائق الاستخدام والتغطية</h2>
+      <div class="example-grid">
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="../docs/UI-USAGE-SOP.md"><span class="index-card__title">docs/UI-USAGE-SOP.md</span><span class="m-section-desc">إعادة الاستخدام والتركيب وإضافة نوع جديد والتغيير المشترك</span></a>
+        </div>
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="../docs/UI-COVERAGE-RESULTS.md"><span class="index-card__title">docs/UI-COVERAGE-RESULTS.md</span><span class="m-section-desc">تقرير لكل معرف: الملف والمعاينة والدليل والحالة والنقص</span></a>
+        </div>
+        <div class="example" style="width:300px;max-width:100%">
+          <a class="index-card" href="../docs/UI-COVERAGE-MATRIX.md"><span class="index-card__title">docs/UI-COVERAGE-MATRIX.md</span><span class="m-section-desc">المصفوفة المطلوبة (المرجع — ليست نتائج)</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    النتائج لكل دفعة في reviews/&lt;batch&gt;/review.md — سجلات الفحص وcommit مصدر اللقطات مدوّنة داخل كل دفعة. لا تُعتبر صور هذه المعاينات بديلًا عن المصدر.
+  </footer>
+
+</body>
+</html>

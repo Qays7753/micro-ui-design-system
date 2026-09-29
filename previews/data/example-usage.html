@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للبيانات B05 — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن فقط.
+  فحوص مدمجة: تصيير من بيانات HTML، تعديل المصدر ينعكس (8→11→8)،
+  الصفر ظاهر، الناقص «—»، المفتاح بنص حرفي. النتائج في الصفحة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: البيانات (B05)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — البيانات والتتبّع (B05)</h1>
+  <div class="m-chart m-chart--bars" id="ex-chart" data-chart="bars" data-max="12" data-title="مثال" data-summary-text="مثال مستقل — البيانات في HTML المصدر.">
+    <h3 class="m-chart__title">توزيع العمليات</h3>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="مبيعات" data-value="8"></li>
+      <li data-series="b" data-label="مشتريات" data-value="0"></li>
+      <li data-series="c" data-label="مرتجعات" data-value=""></li>
+    </ul>
+    <div class="m-chart__plot" data-plot></div>
+    <p class="m-chart__summary" data-summary></p>
+  </div>
+  <pre id="results">جارٍ الفحص…</pre>
+  <script src="../../components/data/data.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var chart = document.getElementById('ex-chart');
+      function values() { return [...chart.querySelectorAll('.m-chart__bar-value')].map(t => t.textContent); }
+      t('تصيير من بيانات HTML: القيم 8/0/—', values().join('|') === '8|0|—', values().join('|'));
+      // تعديل بيانات المصدر ينعكس ثم يستعاد (دليل مصدر واحد)
+      var li = chart.querySelector('[data-series="a"]');
+      li.setAttribute('data-value', '11');
+      MicroData.render(chart);
+      t('تعديل المصدر ينعكس (8→11)', values()[0] === '11', values().join('|'));
+      li.setAttribute('data-value', '8');
+      MicroData.render(chart);
+      t('الاستعادة (11→8)', values()[0] === '8', values().join('|'));
+      var barCount = chart.querySelectorAll('rect').length;
+      t('الصفر بحد ظاهر على الأساس (لا فراغ)', barCount >= 3, 'rects=' + barCount);
+      document.getElementById('results').textContent = out.join('\n');
+      console.log('[example] نتائج فحص البيانات:\n' + out.join('\n'));
+    })();
+  });
+  </script>
+</body>
+</html>

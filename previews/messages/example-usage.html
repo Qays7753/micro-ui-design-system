@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل لمكوّن الرسائل (B06) — SYS-02/E11
+  لا board.css ولا board.js ولا أدوات لوحة — مصادر المكوّن فقط.
+  يثبت عقد E01 فعليًا (بفحوص مدمجة تعرض نتائجها في الصفحة):
+  1) الرسائل مخفية أولًا إخفاءً فعليًا (display محسوب none + بلا مستطيل)
+  2) الظهور عند الاستدعاء ثم الاختفاء بعد الإغلاق اليدوي من المصدر
+  3) الاختفاء بعد المهلة ثم إعادة الاستخدام دون مؤقت قديم
+  4) استرجاع التركيز عند الطلب (data-return-focus)
+  التشغيل: python3 -m http.server 8080 من جذر المستودع ثم
+  /previews/messages/example-usage.html
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: الرسائل (B06)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/messages/messages.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css"> <!-- زر الإغلاق من أزرار B01 (تركيب عائلات موثق) -->
+  <style>
+    body { font-family: var(--micro-font-family); margin: 16px; background: #F7F8F4; }
+    .row { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin-block-end: 16px; }
+    .m-toast { position: fixed; } /* موضعها الفعلي من CSS المكوّن */
+    pre { background: #fff; border: 1px solid var(--micro-border-divider); border-radius: 8px; padding: 10px; font-size: 12px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — الرسائل والحالات (B06)</h1>
+  <p>هذه صفحة تشغيل بمصادر المكوّن وحدها. افتح console لرؤية نتائج فحوص العقد.</p>
+
+  <div class="row">
+    <div class="m-note m-note--success" id="note-ok" role="status">
+      <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
+      <span class="m-note__text"><b class="m-note__title">تم الحفظ</b><span class="m-note__body">رسالة ثابتة تظل حتى يغلقها المستهلك.</span></span>
+      <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#reopen-note">إغلاق</button>
+    </div>
+    <button type="button" class="m-btn m-btn--secondary" id="reopen-note">زر يبدأ منه الإغلاق (يعود إليه التركيز)</button>
+    <button type="button" class="m-btn m-btn--primary" id="show-toast">إظهار العابرة (4000ms)</button>
+  </div>
+
+  <!-- العابرة: بلا role — الإعلان مسار واحد عبر منطقة live في المكوّن -->
+  <div class="m-toast" id="toast" hidden>
+    <span class="m-toast__text">تم النسخ إلى سجل اليوم (مثال)</span>
+    <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+  </div>
+
+  <pre id="results">جارٍ الفحص…</pre>
+
+  <script src="../../components/messages/messages.js"></script>
+  <!-- أيقونة المثال من الأصول نفسها (assets/icons) وقت التشغيل -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="usage-icon-defs" style="display:none" aria-hidden="true"></svg>
+  <script>
+    (function () {
+      fetch('../../assets/icons/check.svg')
+        .then(function (r) { return r.text(); })
+        .then(function (text) {
+          var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+          var sym = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');
+          var src = doc.querySelector('svg');
+          sym.setAttribute('id', 'i-check');
+          sym.setAttribute('viewBox', src.getAttribute('viewBox') || '0 0 24 24');
+          sym.innerHTML = src.innerHTML;
+          document.getElementById('usage-icon-defs').appendChild(sym);
+        })
+        .catch(function () {});
+    })();
+  </script>
+  <script>
+  (function () {
+    'use strict';
+    var out = [];
+    function t(name, ok, detail) {
+      out.push((ok ? 'PASS ' : 'FAIL ') + name + (detail ? ' — ' + detail : ''));
+    }
+    /* الإخفاء الفعلي: display محسوب + مستطيلات فارغة (لا السمة وحدها) */
+    function trulyHidden(el) {
+      var cs = getComputedStyle(el);
+      var r = el.getBoundingClientRect();
+      return cs.display === 'none' && r.width === 0 && r.height === 0;
+    }
+    function visible(el) { return !trulyHidden(el); }
+
+    var toast = document.getElementById('toast');
+    var note = document.getElementById('note-ok');
+    var noteHiddenBefore = trulyHidden(note); /* مثال يبدأ بحالة ثابتة ظاهرة — نفحص العابرة والإخفاء على toast */
+
+    /* 1) العابرة مخفية أولًا فعليًا */
+    t('أولًا: العابرة مخفية فعليًا (display:none + بلا مستطيل)', trulyHidden(toast));
+
+    /* 2) الظهور ثم الإغلاق اليدوي من المصدر */
+    MicroMessages.toast(toast, { duration: 4000 });
+    t('الظهور عند الاستدعاء (ظهور محسوب)', visible(toast));
+    window.setTimeout(function () {
+      t('البديل: الإعلان عبر مسار واحد (منطقة live تحمل النص)',
+        document.querySelector('.m-live-region').textContent.indexOf('تم النسخ') >= 0);
+      toast.querySelector('[data-toast-close]').click();
+      t('الإغلاق اليدوي من المصدر: مخفية فعليًا', trulyHidden(toast));
+      t('لا مؤقت قديم: dataset.toastTimer مُزيل', !('toastTimer' in toast.dataset));
+
+      /* 3) إعادة الاستخدام ثم الاختفاء بالمهلة (لا مؤقت قديم يعيد الإخفاء فورًا) */
+      MicroMessages.toast(toast, { duration: 600 });
+      window.setTimeout(function () {
+        var survived150 = visible(toast); /* لو بقي مؤقت قديم لاختفت فورًا */
+        window.setTimeout(function () {
+          t('إعادة الاستخدام: تبقى ظاهرة بعد 150ms (لا مؤقت قديم)', survived150 === true);
+          window.setTimeout(function () {
+            t('الاختفاء بعد مدتها المعلنة (700ms)', trulyHidden(toast));
+
+            /* 4) استرجاع التركيز عند الطلب */
+            document.getElementById('reopen-note').focus();
+            note.querySelector('.m-note__close').click();
+            t('إغلاق الرسالة الثابتة يخفيها فعليًا', trulyHidden(note));
+            t('استرجاع التركيز إلى الهدف المعلن (data-return-focus)',
+              document.activeElement === document.getElementById('reopen-note'));
+
+            document.getElementById('results').textContent = out.join('\n');
+            console.log('[example] نتائج فحص العقد:\n' + out.join('\n'));
+          }, 900);
+        }, 150);
+      }, 150);
+    }, 150);
+
+    document.getElementById('show-toast').addEventListener('click', function () {
+      MicroMessages.toast(toast, { duration: 4000 });
+    });
+  })();
+  </script>
+</body>
+</html>

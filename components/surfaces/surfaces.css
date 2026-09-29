@@ -1,0 +1,147 @@
+/* =========================================================
+   Micro UI — معالجة الأسطح البترولية (S01)
+   الملف: components/surfaces/surfaces.css
+   يعتمد على shared/tokens.css. معالجة سطح مستقلة قابلة للتحرير:
+   تدرج + إضاءة + موجات خافتة من أصول assets/surfaces/*.svg
+   (مصدر واحد قابل للتعديل) — لا صورة خلفية مسطحة ولا نسخ المرجع.
+   ثلاث مقارنات فقط: (1) تدرج وإضاءة هادئة (2) موجات خافتة —
+   المرشح الأساسي (3) عمق أغنى محدود للسطح البارز + نسخة بلا زخرفة.
+   مفاتيح التعديل (متغيرات CSS على السطح نفسه):
+     --micro-surface-wave-opacity  شدة الموجة
+     --micro-surface-wave-pos      موضع الموجة العمودي
+     --micro-surface-wave-scale    حجم الموجة (سماكة العمود)
+     --micro-surface-light         شدة الإضاءة
+   القيم الجديدة موسومة PROPOSED (لم تثبت في الأسس).
+   الطبقة الزخرفية غير تفاعلية ومخفية عن قارئ الشاشة (aria-hidden في
+   الترميز) ولا تقطع المحتوى — نص المستخدم في طبقة مستقلة فوقه.
+   الحالة: DRAFT FOR REVIEW.
+   ========================================================= */
+
+.m-surface,
+.m-surface * {
+  box-sizing: border-box;
+}
+
+/* الأساس المشترك: أرضية بترولية مستقرة (تدرج عمودي من الأسس)
+   + طبقة إضاءة هادئة أعلى السطح (شعاعية خافتة).
+   E07: بلا overflow:hidden على السطح كله — كان يقص المحتوى نفسه
+   عند تكبير النص (الرقم الكبير يصل الحافة ويُقص). الخلفية والتدرج
+   يقصّان بـ border-radius أصلًا، والزخرفة محتواة في طبقتها أدناه. */
+.m-surface {
+  position: relative;
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-brand-primary);
+  background-image:
+    radial-gradient(120% 90% at 50% 0%,
+      rgba(255, 255, 255, var(--micro-surface-light, 0.10)) 0%,
+      rgba(255, 255, 255, 0) 60%),
+    linear-gradient(180deg,
+      var(--micro-brand-gradient-start) 0%,
+      var(--micro-brand-primary) 55%,
+      var(--micro-brand-pressed) 100%);
+  color: var(--micro-text-inverse);
+  font-family: var(--micro-font-family);
+}
+
+/* طبقة الموجات: أصل SVG خارجي (مصدر واحد) مع مفاتيح التعديل.
+   غير تفاعلية وإخفاء إتاحي في الترميز. لا حركة مستمرة إطلاقًا.
+   E07: احتواء الزخرفة منفصلًا عن المحتوى — زواياها السفلى بنصف
+   قطر السطح كي لا تخرج خارجه بلا قصّ السطح كلّه. */
+.m-surface__waves {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: var(--micro-surface-wave-height, 42%); /* نسبة من السطح */
+  pointer-events: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  background-position: center var(--micro-surface-wave-pos, 100%);
+  background-size: 100% var(--micro-surface-wave-scale, 100%);
+  opacity: var(--micro-surface-wave-opacity, 1);
+  border-end-start-radius: var(--micro-radius-surface);
+  border-end-end-radius: var(--micro-radius-surface);
+}
+
+/* المقارنة 1: تدرج وإضاءة هادئة — بلا موجات */
+.m-surface--calm .m-surface__waves { display: none; }
+
+/* المقارنة 2 (المرشح الأساسي): موجات خافتة */
+.m-surface--waves .m-surface__waves {
+  background-image: url("../../assets/surfaces/waves-soft.svg");
+}
+
+/* E12 (PROPOSED — مقارنة قبل/بعد في اللوحة): تنقيح الموجة نفسها —
+   تدرجات أنعم وتلاشى أوضح وشدة أقل. لا يستبدل المعتمد إلا بقرار المالك. */
+.m-surface--waves-v2 .m-surface__waves {
+  background-image: url("../../assets/surfaces/waves-soft-v2.svg");
+}
+
+/* المقارنة 3: عمق أغنى محدود — للسطح البارز فقط (ليس لكل سطح) */
+.m-surface--depth .m-surface__waves {
+  background-image: url("../../assets/surfaces/waves-depth.svg");
+}
+
+/* نسخة بلا زخرفة: نفس الأرضية المستقرة دون إضاءة ولا موجات */
+.m-surface--plain {
+  background-image: linear-gradient(180deg,
+    var(--micro-brand-gradient-start) 0%,
+    var(--micro-brand-primary) 55%,
+    var(--micro-brand-pressed) 100%);
+}
+.m-surface--plain .m-surface__waves { display: none; }
+
+/* طبقة المحتوى: مستقلة فوق الزخرفة — تضمن قراءة النص */
+.m-surface__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--micro-space-6);
+}
+
+/* عناصر نصية داخل السطح (للقياس والفحص) — القيم من التوكنات
+   المقترحة في tokens.css (E12) بدل تكرار 22/36 مباشرة هنا.
+   R2-01: ارتفاع السطر نسبة لا بكسل (36px/44px الثابتة كانت تتداخل
+   عند تكبير النص لأن الخط يصل 44px/72px والصندوق يبقى ثابتًا)،
+   والرقم الطويل بلا فراغات يُلف داخل السطح (overflow-wrap: anywhere)
+   كي لا يخرج إلى الخلفية الفاتحة — الاحتواء بالتمدد لا بالقصّ،
+   وتكبير المستخدم محفوظ كما هو.
+   C1: كل أدوار النص المعلوماتي أبيض مصمت افتراضيًا (--micro-text-inverse
+   من التوكنات — لا لون جديد) — كانت التسمية 0.8 والثانوي 0.72 شفافَين
+   فيسقطان دون عتبة النص في مواضع فعلية. تمييز المستويات بالحجم
+   (14/13) والوزن (500/400) وإيقاع السطر (22/20) لا بالشفافية:
+   تباعد الحروف (letter-spacing) يكسر اتصال الحرف العربي فلا يُستعمل.
+   أي درجة أخف من الأبيض المصمت تبقى مسموحة فقط في تركيب موثق لدى
+   المستهلك يجتاز عتبة النص المنطبقة — لا صنف في المكوّن يشحنها. */
+.m-surface__title {
+  font-size: var(--micro-surface-title-size, 22px);
+  line-height: var(--micro-surface-title-line, 1.6364); /* نسبية: 22/36 */
+  font-weight: 600;
+  color: var(--micro-text-inverse);
+}
+.m-surface__amount {
+  font-size: var(--micro-surface-amount-size, 36px);
+  line-height: var(--micro-surface-amount-line, 1.2222); /* نسبية: 36/44 */
+  font-weight: 600;
+  color: var(--micro-text-inverse);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: end; /* يظهر عند نهاية السطر كما في الاتجاه المرجعي */
+  overflow-wrap: anywhere; /* R2-01: رقم طويل بلا فراغات يُلف داخل السطح — توثيق في المواصفات */
+}
+.m-surface__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500; /* C1: التمييز بالوزن لا الشفافية */
+  color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.8) */
+}
+.m-surface__sub {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 400; /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
+  color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.72) */
+}
+
+/* تقليل الحركة: لا شيء متحرك هنا أصلًا (الزخرفة ساكنة) — قاعدة موثقة */
+@media (prefers-reduced-motion: reduce) {
+  .m-surface__waves { /* ساكنة كما هي */ }
+}

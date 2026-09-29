@@ -1,0 +1,284 @@
+/* =========================================================
+   Micro UI — مكوّن البيانات والتتبّع (B05)
+   الملف: components/data/data.css
+   يعتمد على shared/tokens.css. الرسوم SVG/CSS بلا مكتبات —
+   البيانات مدخلات المستهلك في HTML وdata.js يصيّرها (مصدر واحد).
+   ألوان الفئات تعيين ثابت بالمفتاح (data-series) لا بالترتيب —
+   من ألوان البيانات المعتمدة ولا تنتقل كزينة لحقول/أزرار.
+   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   ========================================================= */
+
+.m-stat,
+.m-stat *,
+.m-chart,
+.m-chart *,
+.m-progress,
+.m-progress *,
+.m-steps,
+.m-steps * {
+  box-sizing: border-box;
+}
+
+/* ================= 1) قيمة + وحدة + مؤشر + مقارنة ================= */
+.m-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  font-family: var(--micro-font-family);
+}
+.m-stat__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+.m-stat__value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--micro-space-2);
+  direction: ltr;
+  unicode-bidi: isolate; /* الأرقام LTR والوحدة تبقى معزولة داخل الصف */
+  font-variant-numeric: tabular-nums;
+}
+.m-stat__num {
+  font-size: var(--micro-amount-size);      /* 36/44 مبلغ رئيسي */
+  line-height: var(--micro-amount-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.m-stat__num--secondary {
+  font-size: var(--micro-amount2-size);     /* 22/32 مبلغ ثانوي */
+  line-height: var(--micro-amount2-line);
+}
+.m-stat__num--negative { color: var(--micro-danger); } /* السالب بعلامته ولونه الدلالي */
+.m-stat__unit {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+  font-family: var(--micro-font-family); /* الوحدة عربية تبقى RTL داخل المعزول */
+}
+/* مجهول/غير متاح ≠ 0: بديل ظاهر موحد */
+.m-stat__value--unknown .m-stat__num {
+  color: var(--micro-text-hint);
+  font-size: var(--micro-amount2-size);
+  line-height: var(--micro-amount2-line);
+}
+
+/* مؤشر اتجاه (مقارنة): سهم + نسبة — لا لون وحده، دائمًا مع نص.
+   E09: الاتجاه (up/down/flat) يحدد شكل السهم فقط — اللون من tone
+   يمرره المستهلك (tone-positive/negative) أو الافتراضي المحايد؛
+   الاتجاه وحده لا يحدد جودة النتيجة (صاعد قد يكون سوءًا). */
+.m-stat__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  color: var(--micro-text-hint); /* الافتراضي: محايد */
+}
+.m-stat__delta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-stat__delta--tone-positive { color: var(--micro-success); }
+.m-stat__delta--tone-negative { color: var(--micro-danger); }
+/* اتجاه فقط — بلا لون (منطق الجودة عند المستهلك) */
+.m-stat__delta--up,
+.m-stat__delta--down,
+.m-stat__delta--flat { /* لا قاعدة لونية — الاتجاه في الترميز/السهم */ }
+
+/* مقارنة فترتين/حالتين: عمودان بقيم كاملة لا اختصار يخفي المبلغ */
+.m-compare {
+  display: flex;
+  gap: var(--micro-space-6);
+  font-family: var(--micro-font-family);
+}
+.m-compare__item { display: flex; flex-direction: column; gap: 2px; }
+
+/* ================= 2) الرسوم — إطار عام =================
+   القيم والتسميات ظاهرة دائمًا؛ أي تلميح إضافي وليس المصدر الوحيد
+   ولا يعتمد hover. الملخص النصي أسفل كل رسم (قابل للقراءة من قارئ الشاشة). */
+.m-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  font-family: var(--micro-font-family);
+}
+.m-chart__title {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.m-chart__plot { width: 100%; }
+.m-chart__plot svg { display: block; width: 100%; height: auto; }
+/* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
+.m-chart__error {
+  margin: 0;
+  padding: var(--micro-space-3) var(--micro-space-4);
+  border: 1.5px dashed var(--micro-warning);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-warning-surface);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-chart__summary {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+/* بيانات المستهلك (مصدر واحد قابل للتعديل) — مخفية بصريًا لأن المرسوم يعرضها */
+.m-chart__data[hidden] { display: none; }
+
+/* ألوان الفئات — تعيين ثابت بالمفتاح (لا بالترتيب) من ألوان البيانات المعتمدة */
+.m-cat--a { --cat: var(--micro-data-a); }  /* #164D59 */
+.m-cat--b { --cat: var(--micro-data-b); }  /* #F4AD76 */
+.m-cat--c { --cat: var(--micro-data-c); }  /* #B6A3D6 */
+.m-cat--d { --cat: var(--micro-data-d); }  /* #496D92 */
+.m-cat--e { --cat: var(--micro-data-e); }  /* #B3BD7B */
+
+/* ---- الأعمدة (SVG يصيّره data.js) ----
+   القيمة فوق العمود والفئة تحته دائمًا. صفر = عمود صفر ظاهر على الأساس. */
+.m-chart--bars .m-chart__bar-label {
+  font-size: 12px;
+  fill: var(--micro-text-secondary);
+  font-family: var(--micro-font-family);
+}
+.m-chart--bars .m-chart__bar-value {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.m-chart--bars .m-chart__baseline { stroke: var(--micro-border-divider); stroke-width: 1; }
+.m-chart--bars .m-chart__bar-unknown {
+  fill: none; stroke: var(--micro-text-hint); stroke-width: 1; stroke-dasharray: 3 3;
+}
+
+/* ---- الخط ---- */
+.m-chart--line .m-chart__line { fill: none; stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; }
+.m-chart--line .m-chart__point-value {
+  font-size: 11px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-family: var(--micro-font-family);
+}
+.m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
+.m-chart--line .m-chart__x-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+
+/* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
+.m-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.m-legend__item { display: inline-flex; align-items: center; gap: var(--micro-space-2); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-primary); }
+.m-legend__swatch { width: 12px; height: 12px; border-radius: 4px; background-color: var(--cat); flex: none; }
+.m-legend__value { color: var(--micro-text-secondary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+
+/* ---- التوزيع الدائري ----
+   نسب بمقام معلن (الإجمالي من المستهلك) — لا نسب من مجموع وهمي. */
+.m-donut { display: flex; align-items: center; gap: var(--micro-space-5); flex-wrap: wrap; }
+.m-donut__svg { width: 148px; height: 148px; flex: none; }
+.m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+
+/* ---- دوائر المساحة ----
+   المساحة تتناسب مع القيمة: نصف القطر √القيمة. لا حد أدنى يزوّر
+   المساحة؛ الصغيرة جدًا تسميتها خارجية. لا دائرة سالبة. */
+.m-bubbles { display: flex; align-items: flex-end; justify-content: center; gap: var(--micro-space-5); flex-wrap: wrap; }
+.m-bubble { display: flex; flex-direction: column; align-items: center; gap: var(--micro-space-2); }
+.m-bubble__circle { border-radius: var(--micro-radius-circle); background-color: var(--cat, var(--micro-data-a)); }
+.m-bubble--soft .m-bubble__circle { opacity: 0.85; } /* لقراءة التداخل المحدود إن وجد */
+.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+.m-bubble__label { font-size: var(--micro-secondary-size); color: var(--micro-text-secondary); }
+/* التسمية خارجية دائمًا (فوق الدائرة) — لا نص داخل دائرة صغيرة */
+.m-bubble__circle--none {
+  background: transparent;
+  border: 1.5px dashed var(--micro-text-hint);
+  width: 14px; height: 14px; /* بديل صفر/سالب/ناقص: حلقة شَرطة صغيرة موحدة */
+}
+
+/* ================= 3) التقدم والتتبّع =================
+   المحدد له قيمة معلومة؛ غير المحدد انتظار بلا نسبة — والتسمية
+   واضحة في الحالين. تقليل الحركة: لا شريط متحرك. */
+.m-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  font-family: var(--micro-font-family);
+}
+.m-progress__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--micro-space-3); }
+.m-progress__label { font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-primary); }
+.m-progress__value { font-size: var(--micro-secondary-size); color: var(--micro-text-secondary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+.m-progress__track {
+  height: 8px;
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-surface-page);
+  overflow: hidden;
+}
+.m-progress__bar {
+  height: 100%;
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-brand-primary);
+  width: var(--progress, 0%);
+  transition: width var(--micro-motion-selection) var(--micro-ease-standard);
+}
+/* غير المحدد: شريط متحرك بسيط — وتقليل الحركة يجعله ثابتًا (التسمية تحمل الدلالة) */
+.m-progress--indeterminate .m-progress__bar {
+  width: 40%;
+  animation: micro-progress-shift 1.4s ease-in-out infinite;
+}
+@keyframes micro-progress-shift {
+  0% { margin-inline-start: -40%; }
+  100% { margin-inline-start: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-progress--indeterminate .m-progress__bar {
+    animation: none;
+    margin-inline-start: 30%; /* ثابت — التسمية «جارٍ…» تحمل الدلالة */
+  }
+}
+
+/* خطوات/تسلسل زمني: مكتمل/حالي/قادم/متوقف — أسماءها وترتيبها من المستهلك */
+.m-steps { display: flex; flex-direction: column; gap: 0; font-family: var(--micro-font-family); }
+.m-step {
+  display: flex;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-touch-min);
+  position: relative;
+  padding-block: var(--micro-space-2);
+}
+.m-step__rail { display: flex; flex-direction: column; align-items: center; flex: none; }
+.m-step__marker {
+  flex: none;
+  width: var(--micro-choice-size);
+  height: var(--micro-choice-size);
+  border-radius: var(--micro-radius-circle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--micro-border-control);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-inverse);
+  font-size: 12px;
+  font-weight: 600;
+}
+.m-step__marker svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-step--complete .m-step__marker { background-color: var(--micro-success); border-color: var(--micro-success); }
+.m-step--current .m-step__marker { background-color: var(--micro-brand-primary); border-color: var(--micro-brand-primary); }
+.m-step--blocked .m-step__marker { background-color: var(--micro-surface-disabled); border-color: var(--micro-surface-disabled); color: var(--micro-text-disabled); }
+.m-step__connector { flex: 1; width: 2px; background-color: var(--micro-border-divider); margin-block: 2px; }
+.m-step--complete .m-step__connector { background-color: var(--micro-success); }
+.m-step:last-child .m-step__connector { display: none; }
+.m-step__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.m-step__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); color: var(--micro-text-primary); font-weight: 500; }
+.m-step--upcoming .m-step__title { color: var(--micro-text-secondary); font-weight: 400; }
+.m-step--blocked .m-step__title { color: var(--micro-text-disabled); }
+.m-step__time { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-hint); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+/* الشارة على الحالي (بدل الاعتماد على اللون وحده) */
+.m-step__badge { align-self: flex-start; margin-inline-start: auto; }

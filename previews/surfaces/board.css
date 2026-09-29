@@ -1,0 +1,16 @@
+/* لوحة S01 — عرض فقط: مساحات المقابض وورقة الطبقة التجريبية */
+.demo-sheet {
+  margin-top: 12px;
+  padding: 16px;
+  background: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  box-shadow: var(--micro-shadow-overlay);
+}
+.demo-sheet__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 8px;
+  font-weight: 600; font-size: 15px; line-height: 24px;
+}
+[data-wave-keys] { flex-wrap: wrap; }
+[data-wave-keys] input[type="range"] { accent-color: var(--micro-brand-primary); }

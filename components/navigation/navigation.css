@@ -1,0 +1,256 @@
+/* =========================================================
+   Micro UI — مكوّن التنقّل والطبقات (B07)
+   الملف: components/navigation/navigation.css
+   يعتمد على shared/tokens.css وmotion.css والطبقة الزجاجية الأصلية
+   للأزرار B01 (تفتح لوحة الفلاتر من زر B01 المعتمد).
+   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   ========================================================= */
+
+.m-appbar,
+.m-appbar *,
+.m-tabs,
+.m-tabs *,
+.m-navbar,
+.m-navbar *,
+.m-layer,
+.m-layer *,
+.m-actionbar,
+.m-actionbar * {
+  box-sizing: border-box;
+}
+
+/* ================= 1) شريط العنوان =================
+   عنوان + رجوع (اتجاهه يمينًا في RTL من أصل الأيقونة — لا قلب آلي
+   لكل الرموز) + إجراء اختياري. */
+.m-appbar {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min);
+  padding: var(--micro-space-2) var(--micro-space-4);
+  background-color: var(--micro-surface-base);
+  border-block-end: 1px solid var(--micro-border-divider);
+  font-family: var(--micro-font-family);
+}
+.m-appbar__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+  /* عنوان طويل يلتف — لا قص */
+}
+.m-appbar .m-btn { flex: none; }
+
+/* ================= 2) تبويبات المحتوى =================
+   تبويبات تغيّر محتوى مرتبطًا فعليًا (role=tablist/tab/tabpanel
+   + تنقّل أسهم). ليس بديلًا عن Segmented (الذي يغيّر قيمة/وضعًا — B03). */
+.m-tabs {
+  display: flex;
+  gap: var(--micro-space-1);
+  border-block-end: 1px solid var(--micro-border-divider);
+  font-family: var(--micro-font-family);
+}
+.m-tabs__tab {
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-4);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  background: transparent;
+  border: 0;
+  border-block-end: 2px solid transparent;
+  margin-block-end: -1px;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
+  font-weight: 500;
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+.m-tabs__tab[aria-selected="true"] {
+  color: var(--micro-brand-primary);
+  border-block-end-color: var(--micro-brand-primary);
+}
+.m-tabs__tab:focus-visible,
+.m-tabs__tab.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+  border-radius: var(--micro-radius-field);
+}
+
+/* ================= 3) شريط التنقل السفلي (عينة) =================
+   عناصره قابلة للتغيير من المستهلك (بيانات HTML) — لا تثبيت عددها
+   أو أسمائها، ولا هندسة تنقل جديدة. */
+.m-navbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  background-color: var(--micro-surface-base);
+  border-block-start: 1px solid var(--micro-border-divider);
+  padding-block: var(--micro-space-1) calc(var(--micro-space-1) + env(safe-area-inset-bottom, 0px));
+  font-family: var(--micro-font-family);
+}
+.m-navbar__item {
+  flex: 1;
+  min-height: var(--micro-touch-min);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--micro-radius-field);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.m-navbar__item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-navbar__item[aria-current="page"] {
+  color: var(--micro-brand-primary);
+  background-color: var(--micro-surface-selected);
+}
+.m-navbar__item:focus-visible,
+.m-navbar__item.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* ================= 4) الطبقات (حوار/لوحة سفلية/قائمة المزيد/فلاتر) =================
+   فتح/إغلاق، تركيز يُدار ويُستعاد للمشغّل، خلفية modal غير تفاعلية،
+   إغلاق ظاهر + Escape، سياسة الضغط بالخلفية موثقة بالسمة
+   (data-backdrop="close" للغير المتلف، "keep" للحوار المتلف)،
+   والسحب ليس وسيلة الإغلاق الوحيدة. */
+.m-layer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background-color: rgba(23, 45, 50, 0.4); /* مقترح: غشاء الخلفية */
+  font-family: var(--micro-font-family);
+}
+.m-layer-backdrop[hidden] { display: none; }
+
+.m-layer {
+  position: fixed;
+  z-index: 85;
+  inset-inline: 0;
+  inset-block-end: 0;
+  max-height: 86%; /* يبقى شريط حالة مرئي — العنوان والغلق ظاهران دائمًا */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--micro-surface-base);
+  border-radius: var(--micro-radius-surface) var(--micro-radius-surface) 0 0;
+  box-shadow: var(--micro-shadow-overlay);
+  padding-block-end: calc(var(--micro-space-4) + env(safe-area-inset-bottom, 0px));
+  font-family: var(--micro-font-family);
+  /* MOT-01 موصول بالمكوّن الفعلي: نفس توكنات shared/motion.css
+     (طبقة 240ms) — الفتح عبر data-opening والإغلاق عبر data-closing
+     من navigation.js (R2-02: طور بداية فعلي للفتح). الإزاحة الحركية
+     بخاصية transform المنفصلة كي تركّب مع translate التمركز في
+     الحوار الموسّط (.m-layer--center) بدل إلغائه.
+     الإخفاء بالسمة hidden، والخفوت قبلها بلا تركيز (inert). */
+  transition:
+    opacity var(--micro-motion-open) var(--micro-ease-standard),
+    transform var(--micro-motion-open) var(--micro-ease-standard);
+}
+/* طورا الفتح والإغلاق: شفافية 0 وإزاحة 8px — transform لا يلغي تمركز الحوار */
+.m-layer[data-opening="true"],
+.m-layer[data-closing="true"] {
+  opacity: 0;
+  transform: translateY(8px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-layer,
+  .m-layer[data-opening="true"],
+  .m-layer[data-closing="true"] {
+    transition: none;
+    transform: none;
+  }
+}
+.m-layer--center { /* الحوار: موسّط */
+  inset-inline: var(--micro-space-5);
+  inset-block-end: auto;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  max-height: 70%;
+  border-radius: var(--micro-radius-surface);
+  padding-block-end: var(--micro-space-4);
+}
+.m-layer[hidden] { display: none; }
+
+.m-layer__head {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  padding: var(--micro-space-4) var(--micro-space-5) var(--micro-space-2);
+}
+.m-layer__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.m-layer__body {
+  padding: 0 var(--micro-space-5);
+  overflow-y: auto; /* نص طويل/محتوى طويل: تمرير داخلي عند الحاجة */
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+}
+.m-layer__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-4) var(--micro-space-5) 0;
+}
+/* شريط إجراء الطبقة لا يحجب المحتوى: الجسم يتمدد والقدم ثابت تحته */
+
+/* حوار التأكيد/الحذف: إلغاء ظاهر وإجراء متلف بوضوح — لا حذف حقيقي */
+.m-layer--danger .m-layer__title { color: var(--micro-danger); }
+
+/* ================= 5) لوحة الفلاتر — عقد الاختيار الجاري والمطبّق =================
+   تُفتح من زر B01 المعتمد. داخلها حقول واختيارات؛ ثلاثة أزرار:
+   تطبيق (يقرّ الفلاتر المطبقة ويحدّث عدّاد الزر) · مسح (يفريغ
+   الجاري) · إلغاء (يرجع الجاري إلى المطبق السابق ويغلق).
+   ملخص الاختيار داخل اللوحة — لا صف chips بديلًا عن زر الفلاتر. */
+.m-filter-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+  padding: var(--micro-space-3) var(--micro-space-4);
+  background-color: var(--micro-surface-page);
+  border-radius: var(--micro-radius-field);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.m-filter-summary b { color: var(--micro-text-primary); font-weight: 600; }
+
+/* ================= 6) شريط إجراء أساسي =================
+   ثابت أسفل المحتوى — المحتوى تحته حشو سفلي كي لا يُحجب. */
+.m-actionbar {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3) var(--micro-space-5) calc(var(--micro-space-3) + env(safe-area-inset-bottom, 0px));
+  background-color: var(--micro-surface-base);
+  border-block-start: 1px solid var(--micro-border-divider);
+  font-family: var(--micro-font-family);
+}
+.m-actionbar .m-btn { flex: 1; }
+.m-actionbar--stack .m-btn { flex: none; width: 100%; }

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة البيانات والتتبّع (B05)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/data/
+  البيانات مدخلات المستهلك في HTML (مصدر واحد) وdata.js يصيّرها.
+  ألوان الفئات تعيين ثابت بالمفتاح لا بالترتيب. لا hover إلزاميًا.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة البيانات والتتبّع (B05)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — البيانات والتتبّع <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">مبالغ ووحدات ومقارنات وأعمدة وخط وتوزيع ودوائر مساحتها صحيحة وتقدم وخطوات. المجهول ≠ 0، السالب بعلامته، القيم الكاملة ظاهرة لا مخفية خلف اختصار، والملخص النصي أسفل كل رسم.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) قيمة/وحدة/مؤشر/مقارنة ================= -->
+    <section class="panel" id="values">
+      <h2>1) قيمة ووحدة ومؤشر ومقارنة — DATA-01</h2>
+      <p class="panel-note">المجهول «—» ≠ الصفر، والسالب بعلامته، والقيمة الكاملة ظاهرة (لا اختصار يخفيها). المؤشر نص + سهم لا لون وحده.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">إجمالي المبيعات — اليوم</span>
+            <span class="m-stat__value"><span class="m-stat__num">1,240.50</span><span class="m-stat__unit">د.أ</span>
+              <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12%</span>
+            </span>
+          </div>
+          <span class="caption">مبلغ رئيسي 36/44 + مؤشر صاعد بنصه — tone موجب من المستهلك</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">مرتجعات هذا الأسبوع</span>
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">37</span><span class="m-stat__unit">عملية</span>
+              <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-negative"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+9</span>
+            </span>
+          </div>
+          <span class="caption">E09: الاتجاه ≠ الجودة — صاعد لكن tone سلبي يمرره المستهلك (المكوّن بلا منطق مالي)</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">عدد الزيارات</span>
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">212</span><span class="m-stat__unit">زيارة</span>
+              <span class="m-stat__delta m-stat__delta--down"><svg aria-hidden="true"><use href="#i-arrow-down"/></svg>-3</span>
+            </span>
+          </div>
+          <span class="caption">بدون صنف tone: الافتراضي محايد — الاتجاه وحده لا يعطي لون نجاح/خطر</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">صافي التسوية الأخيرة</span>
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary m-stat__num--negative">-45.00</span><span class="m-stat__unit">د.أ</span></span>
+          </div>
+          <span class="caption">سالب بعلامته (المصروف ليس خطأ تلقائيًا — هنا قيمة سالبة معلنة)</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-stat">
+            <span class="m-stat__label">مبيعات الفرع الجديد</span>
+            <span class="m-stat__value m-stat__value--unknown"><span class="m-stat__num">— غير متاح</span></span>
+            <span class="m-stat__delta m-stat__delta--flat">لا توجد بيانات بعد</span>
+          </div>
+          <span class="caption">مجهول/غير متاح — ليس صفرًا ولا فراغًا</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-compare">
+            <div class="m-compare__item">
+              <span class="m-stat__label">هذا الأسبوع</span>
+              <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">820.00</span><span class="m-stat__unit">د.أ</span></span>
+            </div>
+            <div class="m-compare__item">
+              <span class="m-stat__label">الأسبوع الماضي</span>
+              <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">731.25</span><span class="m-stat__unit">د.أ</span></span>
+            </div>
+          </div>
+          <span class="caption">مقارنة فترتين بقيم كاملة ظاهرة</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2) أعمدة — 3 ثم 5 فئات ================= -->
+    <section class="panel" id="bars">
+      <h2>2) أعمدة — DATA-02 (صفر/ناقص/شاذة، و3 فئات ثم 5)</h2>
+      <p class="panel-note">القيمة فوق كل عمود والفئة تحته دائمًا — لا hover. الصفر عمود على الأساس، والناقص شرطة معلنة، والشاذة موسومة. الفئتان d وe تُثبتان إضافة الفئات.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="توزيع العمليات على الفئات" data-summary-text="مثال 3 فئات: مبيعات 8، مشتريات 0 (صفر ظاهر)، مرتجعات غير متاحة (—). قيمة خارج النطاق موسومة.">
+            <h3 class="m-chart__title">توزيع العمليات (3 فئات)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="8"></li>
+              <li data-series="b" data-label="مشتريات" data-value="0"></li>
+              <li data-series="c" data-label="مرتجعات" data-value=""></li>
+              <li data-series="a" data-label="خارج النطاق" data-value="12" data-outlier></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">3 فئات + حالات صفر وناقص وشاذة</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="توزيع العمليات — خمس فئات" data-summary-text="مثال 5 فئات لإثبات الإضافة: الفئتان d وe بنفس تعيين الألوان الثابت — الترتيب لا يبدّل اللون.">
+            <h3 class="m-chart__title">توزيع العمليات (5 فئات)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="8"></li>
+              <li data-series="b" data-label="مشتريات" data-value="5"></li>
+              <li data-series="c" data-label="مرتجعات" data-value="3"></li>
+              <li data-series="d" data-label="تسويات" data-value="6"></li>
+              <li data-series="e" data-label="أخرى" data-value="2"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">5 فئات — إضافة فئتين تثبت قابلية التوسع (لا نستخدم الخمس دائمًا)</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 3) خط زمني ================= -->
+    <section class="panel" id="line">
+      <h2>3) خط — المحور الزمني باتجاهه الموثق</h2>
+      <p class="panel-note">الاتجاه الافتراضي RTL: الأقدم يمين والأحدث يسار — موثق في المواصفات ولا يُقلب آليًا بسبب RTL؛ ويمكن تمرير <span dir="ltr">data-axis-dir="ltr"</span>. قيمة ناقصة تظهر «—» وانقطاع النقطة لا تلفيف مضلل.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--line" data-chart="line" data-max="10" data-title="مبيعات الأسبوع" data-summary-text="الأسبوع 34: الأقدم (السبت) يمين والأحدث (الخميس) يسار. الاثنين غير متاح (—). أعلى قيمة 9 الخميس.">
+            <h3 class="m-chart__title">مبيعات الأسبوع (السبت → الخميس)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="السبت" data-value="4"></li>
+              <li data-series="a" data-label="الأحد" data-value="6"></li>
+              <li data-series="a" data-label="الاثنين" data-value=""></li>
+              <li data-series="a" data-label="الأربعاء" data-value="5"></li>
+              <li data-series="a" data-label="الخميس" data-value="9"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">خط بقيم ظاهرة عند كل نقطة ونقطة ناقصة معلنة</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4) توزيع دائري + دوائر مساحة ================= -->
+    <section class="panel" id="shapes">
+      <h2>4) توزيع دائري ودوائر المساحة — DATA-03</h2>
+      <p class="panel-note">التوزيع: نسب بمقام معلن (إجمالي من المستهلك) من فئات متجانسة — لا خلط ربح ومصاريف كنسب من مجموع وهمي. الدوائر: المساحة ∝ القيمة (نصف القطر √القيمة)، الصغيرة جدًا تسميتها خارجية، ولا دائرة سالبة.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="donut" data-total="100" data-total-label="طلب" data-title="توزيع حالات الطلبات" data-summary-text="من 100 طلب: مكتمل 60، قيد التجهيز 30، متأخر 10 — فئات متجانسة بمقام معلن.">
+            <h3 class="m-chart__title">حالات الطلبات (من 100 طلب)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتمل" data-value="60"></li>
+              <li data-series="b" data-label="قيد التجهيز" data-value="30"></li>
+              <li data-series="c" data-label="متأخر" data-value="10"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">توزيع بمفتاح قيم كاملة ونسب من مقام معلن</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="bubbles" data-max="100" data-title="حجم مبيعات الفروع (مساحة ∝ القيمة)" data-summary-text="المساحة تتناسب مع القيمة: 100 و49 و25 و4 و1 و0.01. القيمة الصغيرة دائرتها بحدّها الحقيقي وتسميتها خارجية. الصفر حلقة شرطة، والناقص «— غير متاح»، والسالب غير صالح للمساحة.">
+            <h3 class="m-chart__title">مبيعات الفروع (وحدة)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الفرع الرئيسي" data-value="100"></li>
+              <li data-series="b" data-label="الفرع الثاني" data-value="49"></li>
+              <li data-series="c" data-label="الفرع الثالث" data-value="25"></li>
+              <li data-series="d" data-label="كشك" data-value="1"></li>
+              <li data-series="e" data-label="نقطة بيع" data-value="0.01"></li>
+              <li data-series="a" data-label="مغلق" data-value="0"></li>
+              <li data-series="b" data-label="مستودع" data-value=""></li>
+              <li data-series="c" data-label="تسوية" data-value="-5"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">مساحة صحيحة √القيمة بلا حد أدنى يضخّم (0.01 قطرها 0.52px حرفيًا) + بدائل الصفر/الناقص/السالب</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) حالات الحدود الصعبة (E06) ================= -->
+    <section class="panel" id="edge-cases">
+      <h2>5) حالات الحدود الصعبة — E06 (لا تمثيل مضلل)</h2>
+      <p class="panel-note">حالات مثبتة في المراجعة: عمود بقيمة سالبة (لا يُرسم كموجب)، توزيع بكل القيم صفرية (بلا قسمة على صفر)، توزيع مجموعه أكبر من مقامه (fallback صريح بلا نسب متداخلة)، والخط ينقطع عند القيمة المفقودة (لا وصلة صامتة عبر الفجوة).</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="عمود بقيمة سالبة" data-summary-text="السالب غير مدعوم في الأعمدة: يُعرض بقيمته وسببه بلا رسم كموجب.">
+            <h3 class="m-chart__title">عمود بقيمة سالبة (-5)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="8"></li>
+              <li data-series="b" data-label="تسوية" data-value="-5"></li>
+              <li data-series="c" data-label="مشتريات" data-value="4"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">سالب: علامة شرطة + نص القيمة والسبب بلون التحذير — لا عمود موجب وهمي</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="donut" data-total="100" data-total-label="طلب" data-title="توزيع بكل القيم صفر" data-summary-text="كل القيم المعلومة صفر: حلقة محايدة بلا شرائح، والمقام المعلن 100 في الوسط — كل حصصه صفر (R2-05: لا يُستبدل بالمجنيّ عليه صفرًا).">
+            <h3 class="m-chart__title">كل القيم صفر (0 من 100)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتمل" data-value="0"></li>
+              <li data-series="b" data-label="قيد التجهيز" data-value="0"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">صفرية: حلقة محايدة والمقام المعلن في الوسط — بلا dasharray NaN ولا قسمة على صفر</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-chart" data-chart="donut" data-total="100" data-total-label="بند" data-title="مجموع الفئات أكبر من المقام" data-summary-text="المجموع 110 والمقام 100: fallback صريح — رسالة سبب ومفتاح بقيم خام بلا نسب.">
+            <h3 class="m-chart__title">مجموع 110 ومقام 100</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتمل" data-value="60"></li>
+              <li data-series="b" data-label="قيد التجهيز" data-value="30"></li>
+              <li data-series="c" data-label="متأخر" data-value="20"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">مقام غير مطابق: رسالة خطأ ظاهرة + قيم خام — لا رسم يتجاوز دورة كاملة</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--line" data-chart="line" data-max="10" data-title="خط بقيمة مفقودة (انقطاع حقيقي)" data-summary-text="الاثنين مفقود: الخط ينقطع فعليًا — لا وصلة صامتة بين الأحد والأربعاء.">
+            <h3 class="m-chart__title">انقطاع عند القيمة المفقودة</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="السبت" data-value="4"></li>
+              <li data-series="a" data-label="الأحد" data-value="6"></li>
+              <li data-series="a" data-label="الاثنين" data-value=""></li>
+              <li data-series="a" data-label="الأربعاء" data-value="5"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">شرائح منفصلة عند الفجوة — يفحصها عدّاد polylines في السكربت</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) تقدم وخطوات ================= -->
+    <section class="panel" id="tracking">
+      <h2>6) تقدم وخطوات — DATA-04</h2>
+      <p class="panel-note">المحدد له قيمة معلنة، وغير المحدد انتظار بتسمية واضحة (وتقليل الحركة يجعله ثابتًا). الخطوات: أسماؤها وترتيبها من المستهلك — لا نبتكر دورة عمل.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-progress" data-progress style="--progress: 65%">
+            <div class="m-progress__head">
+              <span class="m-progress__label">تجهيز الطلب ORD-10233</span>
+              <span class="m-progress__value">65%</span>
+            </div>
+            <div class="m-progress__track"><div class="m-progress__bar"></div></div>
+          </div>
+          <div class="m-progress m-progress--indeterminate" style="margin-top:16px">
+            <div class="m-progress__head">
+              <span class="m-progress__label">جارٍ مزامنة المخزون…</span>
+              <span class="m-progress__value">—</span>
+            </div>
+            <div class="m-progress__track"><div class="m-progress__bar"></div></div>
+          </div>
+          <span class="caption">محدد (65%) ≠ غير محدد (انتظار بتسمية لا نسبة)</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-steps">
+            <div class="m-step m-step--complete">
+              <div class="m-step__rail"><span class="m-step__marker"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="m-step__connector"></span></div>
+              <div class="m-step__text"><span class="m-step__title">تم الاستلام</span><span class="m-step__time">09:00</span></div>
+            </div>
+            <div class="m-step m-step--complete">
+              <div class="m-step__rail"><span class="m-step__marker"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="m-step__connector"></span></div>
+              <div class="m-step__text"><span class="m-step__title">تم الاعتماد</span><span class="m-step__time">10:15</span></div>
+            </div>
+            <div class="m-step m-step--current">
+              <div class="m-step__rail"><span class="m-step__marker">3</span><span class="m-step__connector"></span></div>
+              <div class="m-step__text"><span class="m-step__title">قيد التجهيز</span><span class="m-step__badge"><span class="m-badge m-badge--warning"><span class="m-badge__dot"></span>الحالية</span></span></div>
+            </div>
+            <div class="m-step m-step--upcoming">
+              <div class="m-step__rail"><span class="m-step__marker">4</span><span class="m-step__connector"></span></div>
+              <div class="m-step__text"><span class="m-step__title">خرج للتوصيل</span></div>
+            </div>
+            <div class="m-step m-step--blocked">
+              <div class="m-step__rail"><span class="m-step__marker"><svg aria-hidden="true"><use href="#i-close"/></svg></span><span class="m-step__connector"></span></div>
+              <div class="m-step__text"><span class="m-step__title">التسليم — متوقف بانتظار المستندات</span></div>
+            </div>
+          </div>
+          <span class="caption">مكتمل/حالي (بشارة نصية)/قادم/متوقف + وقت اختياري</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 6) هاتف + تكبير ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>7) هاتف كامل + محاكاة زيادة حجم الخط</h2>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط — التسميات والقيم تتضاعف والرسم يتمدد بنسبه.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <div class="m-stat">
+              <span class="m-stat__label">إجمالي المبيعات — اليوم مع وصف التسمية الطويل للتأكد من التفافها دون قص</span>
+              <span class="m-stat__value"><span class="m-stat__num">1,240.50</span><span class="m-stat__unit">د.أ</span>
+                <span class="m-stat__delta m-stat__delta--up"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12%</span>
+              </span>
+            </div>
+            <div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="توزيع مختصر" data-summary-text="ملخص نصي: أعلى عمود مبيعات 8 — والقيم كلها ظاهرة.">
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="مبيعات" data-value="8"></li>
+                <li data-series="b" data-label="مشتريات" data-value="5"></li>
+                <li data-series="c" data-label="مرتجعات" data-value="3"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+              <p class="m-chart__summary" data-summary></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>8) فحص الخط والأيقونات</h2>
+      <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg><span class="caption">arrow-up02</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-arrow-down"/></svg><span class="caption">arrow-down02</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-check"/></svg><span class="caption">check</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/data/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/data/README.md — النتائج: reviews/B05/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/organization/organization.js"></script>
+  <script src="../../components/data/data.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

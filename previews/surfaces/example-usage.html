@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للأسطح البترولية S01 — SYS-02/R2-07.1
+  بلا board.css/board.js — مصادر المكوّن فقط (tokens + motion + surfaces).
+  فحوص مدمجة: الموجة من الأصل الواحد، مفاتيح السطح تنعكس وتستعاد،
+  حدود حروف النص داخل السطح، الرقم الطويل يُلف داخل السطح (R2-01)،
+  وأسطر العنوان النسبي بلا تداخل. النتائج في الصفحة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: الأسطح البترولية (S01)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — المعالجة البترولية (S01)</h1>
+  <div id="demo">
+    <div class="m-surface m-surface--waves" id="ex-surface">
+      <div class="m-surface__waves" aria-hidden="true"></div>
+      <div class="m-surface__content">
+        <p class="m-surface__label">صافي الربح حتى تاريخه</p>
+        <h3 class="m-surface__title" id="ex-title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة والمستردات من الموردين</h3>
+        <p class="m-surface__amount" id="ex-amount">1,240.50</p>
+        <p class="m-surface__sub">ريال يمني · د.أ — آخر تحديث اليوم 12:30</p>
+      </div>
+    </div>
+  </div>
+  <pre id="results">جارٍ الفحص…</pre>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var surf = document.getElementById('ex-surface');
+      var waves = surf.querySelector('.m-surface__waves');
+      var sr = surf.getBoundingClientRect();
+
+      function glyphRects(el) {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        return [].slice.call(range.getClientRects()).filter(function (r) { return r.width > 0 && r.height > 0; });
+      }
+      function inSurface(rs) {
+        return rs.every(function (r) {
+          return r.left >= sr.left + 2 && r.right <= sr.right - 2
+            && r.top >= sr.top - 0.5 && r.bottom <= sr.bottom + 0.5;
+        });
+      }
+
+      /* 1) الموجة من الأصل الواحد + الزخرفة غير تفاعلية */
+      var bg = getComputedStyle(waves).backgroundImage;
+      t('الموجة من أصلها waves-soft.svg (مصدر واحد قابل للتعديل)', bg.indexOf('waves-soft.svg') >= 0, bg.slice(0, 60));
+      var deco = getComputedStyle(waves);
+      t('الزخرفة غير تفاعلية (pointer-events:none) وaria-hidden في الترميز',
+        deco.pointerEvents === 'none' && waves.getAttribute('aria-hidden') === 'true');
+
+      /* 2) مفاتيح السطح تنعكس ثم تُستعاد */
+      surf.style.setProperty('--micro-surface-wave-opacity', '0.3');
+      var op = getComputedStyle(waves).opacity;
+      surf.style.removeProperty('--micro-surface-wave-opacity');
+      var op2 = getComputedStyle(waves).opacity;
+      t('مفتاح شدة الموجة يننعكس ثم يستعاد', op === '0.3' && op2 === '1', 'أثناء=' + op + ' بعد=' + op2);
+
+      /* 3) حدود حروف النص داخل السطح (R2-01 — Range لا مستطيل العنصر فقط) */
+      var title = document.getElementById('ex-title');
+      var amount = document.getElementById('ex-amount');
+      t('حدود حروف العنوان داخل السطح', inSurface(glyphRects(title)));
+      t('حدود حروف الرقم داخل السطح', inSurface(glyphRects(amount)));
+
+      /* 4) الرقم الطويل بلا فراغات يُلف داخل السطح (R2-01 — لا قص ولا خروج) */
+      var before = amount.getBoundingClientRect().height;
+      var saved = amount.textContent;
+      amount.textContent = '1,240.500000000000000000000';
+      var aRects = glyphRects(amount);
+      var grew = amount.getBoundingClientRect().height > before;
+      t('الرقم الطويل يُلف داخل السطح (ارتفاع يزيد وحدود الحروف داخلية)', grew && inSurface(aRects));
+      amount.textContent = saved;
+
+      /* 5) أسطر العنوان النسبي بلا تداخل (R2-01 — سطر نسبي لا 36px ثابت) */
+      var lines = glyphRects(title).sort(function (a, b) { return a.top - b.top; });
+      var noOverlap = lines.every(function (r, i) { return i === 0 || r.top >= lines[i - 1].bottom - 1; });
+      t('أسطر العنوان بلا تداخل (line-height نسبي 1.6364)', noOverlap && lines.length >= 2, 'أسطر=' + lines.length);
+
+      /* 6) C1: أدوار النص الأربعة أبيض مصمت — التمييز بالحجم/الوزن لا الشفافية */
+      var roleOK = ['label', 'title', 'amount', 'sub'].every(function (r) {
+        return getComputedStyle(surf.querySelector('.m-surface__' + r)).color === 'rgb(255, 255, 255)';
+      });
+      var weights = ['label', 'sub'].map(function (r) {
+        return getComputedStyle(surf.querySelector('.m-surface__' + r)).fontWeight;
+      });
+      t('أدوار النص الأربعة أبيض مصمت (C1) والتمييز بالوزن 500/400 لا الشفافية',
+        roleOK && weights[0] === '500' && weights[1] === '400', 'أوزان=' + weights.join('/'));
+
+      document.getElementById('results').textContent = out.join('\n');
+    })();
+  });
+  </script>
+</body>
+</html>

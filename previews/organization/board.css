@@ -1,0 +1,3 @@
+/* لوحة التنظيم B04 — لا يعيد تنسيق المكوّن؛ مسافات عرض فقط */
+#rows .m-row, #badges .m-identity { background: var(--micro-surface-base); }
+.phone-stack .m-row { background: var(--micro-surface-base); border-radius: var(--micro-radius-field); }

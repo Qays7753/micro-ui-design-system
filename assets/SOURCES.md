@@ -26,6 +26,7 @@
 | التحويل | سكربت خارج المستودع (regex على مسارات الحزمة) — لم يُغيَّر أي مسار أو سمة تصميم |
 | الترخيص | MIT — النص الكامل: `icons/LICENSE-hugeicons.txt` |
 | الرموز المستخدمة في B01 | `search-01.svg` · `filter-horizontal.svg` · `add-01.svg` · `checkmark-circle-02.svg` · `delete-02.svg` · `check.svg` |
+| الرموز المضافة لفرع التوسعة (B02+) | `cancel01` · `chevron-down` · `chevron-left` · `chevron-right` · `arrow-up02` · `arrow-down02` · `plus-sign` · `minus-sign` · `image01` · `home01` · `home02` · `menu01` · `clock01` · `calendar03` · `alert01` · `alert-circle` · `information-circle` · `user-circle` · `package01` · `truck` · `inbox` · `wallet01` · `more-vertical` · `grid` · `refresh` · `eye` — نفس الحزمة والإصدار وبنفس طريقة التحويل دون تعديل مسارات |
 
 الرموز المستقبلية تُضاف بنفس الطريقة (اسم ملف kebab-case + سطر في هذا الجدول). لا تُستخدم رموز Emoji أو رسوم بديلة منسوبة للعائلة.
 

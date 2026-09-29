@@ -1,0 +1,325 @@
+/* =========================================================
+   Micro UI — مكوّن الاختيار (B03)
+   الملف: components/selection/selection.css
+   يعتمد على shared/tokens.css فقط. خصائص منطقية فتعمل في RTL.
+   الحالة: DRAFT FOR REVIEW — ما لم تحسمه الأسس موسوم «مقترح».
+   أدوار منفصلة (لا خلط):
+   - Checkbox: اختيار مستقل/متعدد + حالة جزئية لمجموعة.
+   - Radio: اختيار واحد من مجموعة (مجموعة واحدة باسم واحد).
+   - Switch: إعداد On/Off (role="switch") — لا يرسل نموذجًا ولا يفتح صفحة.
+   - Toggle (زر وضع): تفعيل وضع مؤقت على زر aria-pressed.
+   - Segmented: اختيار قصير متبادل (radiogroup) يغيّر قيمة/وضعًا.
+   ========================================================= */
+
+.m-choice,
+.m-choice *,
+.m-choice *::before,
+.m-choice *::after,
+.m-switch,
+.m-switch *,
+.m-seg,
+.m-seg * {
+  box-sizing: border-box; /* استقلال عن أي reset خارجي */
+}
+
+/* إخفاء بصري للمدخلات الأصلية مع بقاءها قابلة للتركيز والتشغيل بالكيبورد
+   وقارئ الشاشة (لا display:none) — الصندوق المخصص هو العرض */
+.m-choice input[type="checkbox"],
+.m-choice input[type="radio"],
+.m-switch input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ================= 1) صف الاختيار (Checkbox/Radio) =================
+   الصف كله هدف لمس 48px — النقر على التسمية يفعّل (label حقيقي). */
+.m-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-2);
+  border-radius: var(--micro-radius-field);
+  cursor: pointer;
+  font-family: var(--micro-font-family);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-choice__box {
+  flex: none;
+  width: var(--micro-choice-size);
+  height: var(--micro-choice-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--micro-surface-base);
+  border: 1.5px solid var(--micro-border-control);
+  color: var(--micro-text-inverse);
+  transition:
+    background-color var(--micro-motion-selection) var(--micro-ease-standard),
+    border-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+/* مربع الاختيار: انحناء 8px (مقترح) — الراديو دائري */
+.m-choice--check .m-choice__box { border-radius: var(--micro-radius-choice); }
+.m-choice--radio .m-choice__box { border-radius: var(--micro-radius-circle); }
+
+.m-choice__box svg {
+  width: 16px;
+  height: 16px;
+  opacity: 0;          /* العلامة تظهر عند التحديد فقط */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+.m-choice__text {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+/* وصف ثانوي تحت التسمية (اختياري) */
+.m-choice__hint {
+  display: block;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+}
+
+/* ---- التحديد ---- */
+.m-choice input:checked + .m-choice__box {
+  background-color: var(--micro-brand-primary);
+  border-color: var(--micro-brand-primary);
+}
+.m-choice input:checked + .m-choice__box svg { opacity: 1; }
+
+/* الجزئي (مجموعة): خلفية حدّية وعلامة ناقص */
+.m-choice input:indeterminate + .m-choice__box {
+  background-color: var(--micro-brand-primary);
+  border-color: var(--micro-brand-primary);
+}
+.m-choice input:indeterminate + .m-choice__box svg { opacity: 1; }
+
+/* الراديو المحدد: نقطة داخلية بدل علامة صح */
+.m-choice--radio .m-choice__box svg { display: none; }
+.m-choice--radio input:checked + .m-choice__box::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-text-inverse);
+}
+
+/* ---- الضغط والتركيز (فعلية وثابتة) ----
+   الحلقة على الصندوق لا الصف كي لا تختلط مع خلفية ضغط الصف */
+.m-choice:active { background-color: var(--micro-surface-selected); }
+.m-choice.is-pressed { background-color: var(--micro-surface-selected); }
+
+.m-choice input:focus-visible + .m-choice__box,
+.m-choice.is-focus .m-choice__box {
+  border-color: var(--micro-focus-ring);
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* ---- المعطل: بلا ضغط ولا حلقة، نص ونصHint معطلان ---- */
+.m-choice.is-disabled,
+.m-choice:has(input:disabled) {
+  cursor: not-allowed;
+}
+.m-choice:has(input:disabled) .m-choice__box {
+  background-color: var(--micro-surface-disabled);
+  border-color: transparent;
+  color: var(--micro-text-disabled);
+}
+.m-choice:has(input:disabled) .m-choice__text { color: var(--micro-text-disabled); }
+.m-choice:has(input:disabled):active { background-color: transparent; }
+.m-choice:has(input:disabled) input:focus-visible + .m-choice__box {
+  box-shadow: none;
+  border-color: transparent;
+}
+
+/* ================= 2) المفتاح Switch (إعداد On/Off) =================
+   checkbox أصلية بدور switch — التسمية ثابتة والحالة نص ظاهر + aria-checked.
+   لا يُستخدم لإرسال نموذج أو فتح صفحة (قاعدة موثقة). */
+.m-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-3);
+  min-height: var(--micro-touch-min);
+  cursor: pointer;
+  font-family: var(--micro-font-family);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-switch__track {
+  flex: none;
+  position: relative;
+  width: var(--micro-switch-track-w);
+  height: var(--micro-switch-track-h);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-surface-disabled); /* OFF: أرضية هادئة محايدة */
+  transition: background-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+.m-switch__thumb {
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: var(--micro-switch-thumb);
+  height: var(--micro-switch-thumb);
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-surface-base);
+  box-shadow: 0 1px 3px rgba(23, 45, 50, 0.2);
+  transition: translate var(--micro-motion-selection) var(--micro-ease-standard);
+  translate: 0 0; /* RTL: البداية يمين — الإزاحة باتجاه النهاية عند ON */
+}
+
+.m-switch input:checked + .m-switch__track {
+  background-color: var(--micro-brand-primary);
+}
+.m-switch input:checked + .m-switch__track .m-switch__thumb {
+  translate: calc(-1 * (var(--micro-switch-track-w) - var(--micro-switch-thumb) - 6px)) 0;
+}
+
+/* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف) */
+.m-switch__state {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+  color: var(--micro-text-hint);
+  min-width: 4ch; /* ثبات العرض بين الحالتين */
+  text-align: start;
+}
+.m-switch input:checked ~ .m-switch__text .m-switch__state {
+  color: var(--micro-brand-primary);
+}
+
+.m-switch__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.m-switch__label {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+/* تركيز وضغط ومعطل */
+.m-switch input:focus-visible + .m-switch__track,
+.m-switch.is-focus .m-switch__track {
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-switch:has(input:disabled) { cursor: not-allowed; }
+.m-switch:has(input:disabled) .m-switch__track { background-color: var(--micro-surface-disabled); opacity: 0.7; }
+.m-switch:has(input:disabled) .m-switch__label,
+.m-switch:has(input:disabled) .m-switch__state { color: var(--micro-text-disabled); }
+.m-switch:has(input:disabled) input:focus-visible + .m-switch__track { box-shadow: none; }
+
+/* انتظار تحديث إعداد (محاكاة المستهلك): المفتاح يتعطل مؤقتًا —
+   العقد: المستهلك يضبط data-pending عبر setSwitchPending التي
+   تعطّل input فعليًا (label وSpace بلا أثر) وتسترجع الأصل.
+   pointer-events أدناه طبقة إضافية للترميز المباشر فقط، والحماية
+   الفعلية للتغيير البرمجي في selection.js (تقاطع change). */
+.m-switch[data-pending="true"] { cursor: wait; }
+.m-switch[data-pending="true"] input { pointer-events: none; }
+
+/* ================= 3) زر الوضع Toggle (aria-pressed) =================
+   زر B01 بصنف وضع: مفعّل = أرضية التحديد — لوضع مؤقت لا إعداد دائم. */
+.m-toggle[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-primary);
+  box-shadow: inset 0 0 0 1px var(--micro-brand-primary);
+}
+
+/* ================= 4) المقطّع Segmented (اختيار قصير متبادل) ================= */
+.m-seg {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap; /* عند التكبير 200% أو عمود 320: تلتف المقاطع بدل خروجها عن العمود */
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1);
+  background-color: var(--micro-surface-page);
+  border-radius: var(--micro-radius-capsule);
+  font-family: var(--micro-font-family);
+  max-width: 100%;
+}
+.m-seg__item {
+  position: relative; /* لامتداد هدف اللمس دون تغيير الشكل */
+  min-height: 40px;
+  padding-inline: var(--micro-space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  border: 0;
+  border-radius: var(--micro-radius-capsule);
+  background: transparent;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
+  font-weight: 500;
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--micro-motion-selection) var(--micro-ease-standard),
+    color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+.m-seg__item[aria-pressed="true"],
+.m-seg__item.is-selected {
+  background-color: var(--micro-surface-selected); /* تحديد #DFEEE6 — دلالة الأسس */
+  color: var(--micro-text-primary);
+}
+.m-seg__item:active { background-color: var(--micro-surface-selected); }
+.m-seg__item:focus-visible,
+.m-seg__item.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-seg__item[disabled] {
+  background-color: transparent;
+  color: var(--micro-text-disabled);
+  cursor: not-allowed;
+}
+
+/* E05 — هدف اللمس الفعلي 48px (قاعدة المشروع --micro-touch-min):
+   الشكل البصري 40px، والامتداد ::after يزيد 4px رأسيًا من كل طرف
+   (أحداث المؤشر على العنصر الزائف تُنسب للزر) — رأسيًا فقط كي لا
+   يتداخل مع المقاطع المجاورة (الفجوة بينها 4px). القياس في الفحوص
+   على المستطيل الفعلي الموسّع، لا على min-height وحده. */
+.m-seg__item::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: calc((40px - var(--micro-touch-min)) / 2); /* -4px */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-choice__box,
+  .m-choice__box svg,
+  .m-switch__track,
+  .m-switch__thumb,
+  .m-seg__item {
+    transition: none;
+  }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للتنظيم B04 — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن فقط (+ أزرار B01 للأزرار).
+  فحوص مدمجة: طي بكيبورد وaria-expanded، بديل صورة فاشل بأحرف
+  أولى، قسم بعنوان طويل يلتف. النتائج في الصفحة وconsole.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: التنظيم (B04)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — التنظيم (B04)</h1>
+
+  <section class="m-section">
+    <button type="button" class="m-section__head" aria-expanded="false" aria-controls="ex-body">
+      <span class="m-section__title">تفاصيل التسوية — عنوان طويل يلتف على سطرين دون قص داخل رأس القسم القابل للطي</span>
+      <svg class="m-section__chevron" aria-hidden="true"></svg>
+    </button>
+    <div class="m-section__body" id="ex-body" hidden>
+      <p>محتوى القسم — الطي الفوري بلا حركة تغيّر التخطيط، ومفتاح aria-expanded يديره المكوّن.</p>
+    </div>
+  </section>
+
+  <div class="m-identity" style="margin-block-start:16px">
+    <!-- src بيانات غير صورية عمدًا: يفشل التحميل ويُظهر بديل الأحرف الأولى -->
+    <img data-avatar-fallback src="data:text/plain,not-an-image" alt="شعار المورد" style="width:40px;height:40px">
+    <span class="m-identity__name">شركة البترول الوطنية</span>
+  </div>
+
+  <pre id="results">جارٍ الفحص…</pre>
+  <script src="../../components/organization/organization.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var head = document.querySelector('.m-section__head');
+      var body = document.getElementById('ex-body');
+      head.click();
+      t('الفتح: aria-expanded=true والجسم ظاهر',
+        head.getAttribute('aria-expanded') === 'true' && !body.hidden);
+      t('المفتاح زر أصلي — Enter/Space يفعّلانه أصلًا بلا مستمع إضافي', head.tagName === 'BUTTON');
+      head.click();
+      t('النقر الثاني يطوي (تبديل كامل)', head.getAttribute('aria-expanded') === 'false' && body.hidden);
+      head.click();
+      setTimeout(function () {
+        var fb = document.querySelector('.m-identity__initials');
+        t('بديل الصورة الفاشلة: أحرف أولى من الاسم (بلا مربع مكسور)',
+          !!fb && fb.textContent.indexOf('شا') >= 0, fb ? fb.textContent : 'لا بديل');
+        document.getElementById('results').textContent = out.join('\n');
+        console.log('[example] نتائج فحص التنظيم:\n' + out.join('\n'));
+      }, 300);
+    })();
+  });
+  </script>
+</body>
+</html>

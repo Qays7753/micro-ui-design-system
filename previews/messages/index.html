@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة الرسائل والحالات العامة (B06)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/messages/
+  الرسائل الثابتة لا تختفي؛ العابرة لتأكيد غير حرج بعقد موثق؛
+  skeleton لا يلمع عند تقليل الحركة؛ وإعادة المحاولة محاكاة المستهلك.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة الرسائل والحالات العامة (B06)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/messages/messages.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — الرسائل والحالات العامة <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">مساعدة ومعلومة ونجاح وتحذير وخطأ ثابتة، ومؤشر انتظار وتسمية، وskeleton خفيف، وفراغات مفهومة. الرسالة المهمة لا تختفي؛ العابرة تأكيد غير حرج بعقد موثق وإعلان دون تكرار.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) الرسائل الثابتة ================= -->
+    <section class="panel" id="notes">
+      <h2>1) الرسائل الثابتة — MSG-01 (قصيرة وطويلة)</h2>
+      <p class="panel-note">كل رسالة برمز معنى ونص دائم — تبقى حتى يزيلها المستهلك (زر الإغلاق اختياري). الإعلان: معلومة/نجاح status، تحذير/خطأ alert — بلا تكرار.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="example-grid" style="gap:8px">
+            <div class="m-note m-note--help" role="note">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
+              <div class="m-note__text"><span class="m-note__title">مساعدة</span><p class="m-note__body">يمكنك تعديل الكمية قبل اعتماد الطلب فقط.</p></div>
+            </div>
+            <div class="m-note m-note--info" role="status">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
+              <div class="m-note__text"><span class="m-note__title">معلومة</span><p class="m-note__body">سيصلك إشعار عند بدء التوصيل.</p></div>
+            </div>
+            <div class="m-note m-note--success" role="status">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
+              <div class="m-note__text"><span class="m-note__title">نجاح</span><p class="m-note__body">تم حفظ العملية — نتيجة المستهلك المعلنة.</p></div>
+            </div>
+          </div>
+          <span class="caption">مساعدة/معلومة/نجاح — ثابتة بإغلاق اختياري</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="example-grid" style="gap:8px">
+            <div class="m-note m-note--warning" role="alert">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
+              <div class="m-note__text"><span class="m-note__title">تحذير — نص طويل</span><p class="m-note__body">رصيد الصندوق دون الحد الأدنى المعتمد لهذا الفرع وفق سجل اليوم، وقد يتأخر صرف بعض المصروفات النثرية إذا استمر الصرف بهذا المعدل حتى نهاية الدوام — راجع الإدارة المالية قبل اعتماد أي طلب صرف جديد. هذه رسالة تحذير طويلة عمدًا لفحص الالتفاف.</p></div>
+            </div>
+            <div class="m-note m-note--error" role="alert">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert-circle"/></svg>
+              <div class="m-note__text"><span class="m-note__title">خطأ</span><p class="m-note__body">تعذر حفظ الطلب — تحقق من الاتصال ثم أعد المحاولة. المحتوى الذي كتبته باقٍ.</p></div>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary m-note__close" aria-label="إغلاق الرسالة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+          </div>
+          <span class="caption">تحذير طويل يلتف / خطأ بقيمه الباقية وزر إغلاق اختياري</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2) الرسالة العابرة Toast بعقد موثق ================= -->
+    <section class="panel" id="toast">
+      <h2>2) الرسالة العابرة — تأكيد غير حرج فقط (عقد موثق)</h2>
+      <p class="panel-note">الرسالة المهمة أو المطلوبة لتصحيح إدخال **ليست Toast** — ثابتة كما أعلاه. العابرة: مدة يحددها المستهلك (افتراض 4 ثوانٍ) + إغلاق يدوي دائمًا + **بديل ثابت** بجانبها (سطر الحالة أدناه) + إعلان مرة واحدة دون تكرار.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="demo-group">
+            <button type="button" class="m-btn m-btn--secondary" data-toast-demo>تأكيد غير حرج (محاكاة)</button>
+            <button type="button" class="m-btn m-btn--light" data-toast-repeat>إعلان نفس النص مرة أخرى</button>
+          </div>
+          <p class="demo-note" style="margin-top:8px">البديل الثابت (يظل بعد اختفاء العابرة): <span class="demo-status" data-toast-mirror data-tone="success" hidden>تم النسخ إلى سجل اليوم (محاكاة)</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3) انتظار وskeleton ================= -->
+    <section class="panel" id="wait">
+      <h2>3) مؤشر الانتظار والهيكل المؤقت — MSG-02</h2>
+      <p class="panel-note">المؤشر دائمًا بتسمية واضحة؛ وتقليل الحركة يجعله ثابتًا (والدلالة من التسمية). skeleton خفيف للشكل المقابل عند فائدته — ولا يلمع عند تقليل الحركة. جرّب زر المحاكاة وقارن.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="demo-group" style="flex-direction:column;align-items:flex-start;gap:8px">
+            <div class="m-wait" role="status"><span class="m-wait__spinner" aria-hidden="true"></span>جارٍ تحميل العمليات…</div>
+            <div class="m-wait" role="status"><span class="m-wait__spinner" aria-hidden="true"></span>جارٍ قراءة بيانات المورد…</div>
+          </div>
+          <span class="caption">انتظار: مؤشر + تسمية صريحة (لا دوران بلا معنى)</span>
+        </div>
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-skeleton" aria-hidden="true">
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--icon"></span><span class="m-skeleton__block m-skeleton__block--line is-w40"></span></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--line is-w70"></span></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--line"></span></div>
+          </div>
+          <span class="caption">skeleton لشكل قائمة صفوف — خفيف بلا تفاصيل مزيفة</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4) الفراغ والحالات ================= -->
+    <section class="panel" id="empty">
+      <h2>4) لا بيانات / لا نتائج / فشل قراءة</h2>
+      <p class="panel-note">أشكال مختلفة مفهومة لكل حالة — والفشل زر إعادة محاولة (المحاكاة عند المستهلك في board.js: يظهر skeleton ثم المحتوى). لا بيانات مالية مخترعة.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-empty">
+            <svg class="m-empty__icon" aria-hidden="true"><use href="#i-inbox"/></svg>
+            <span class="m-empty__title">لا توجد بيانات بعد</span>
+            <p class="m-empty__body">ابدأ بتسجيل أول عملية لهذا الفرع وستظهر السجلات هنا.</p>
+            <button type="button" class="m-btn m-btn--primary">سجل عملية</button>
+          </div>
+          <span class="caption">لا بيانات — بدء استخدام</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-empty">
+            <svg class="m-empty__icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <span class="m-empty__title">لا نتائج مطابقة</span>
+            <p class="m-empty__body">لم نجد شيئًا عن «شرطة 12» — جرّب كلمة أقصر أو مسح التصفية.</p>
+            <button type="button" class="m-btn m-btn--secondary">مسح التصفية</button>
+          </div>
+          <span class="caption">لا نتائج — مع خطوة تصحيح مقترحة</span>
+        </div>
+
+        <div class="example" style="width:300px;max-width:100%">
+          <div class="m-empty" data-fail-state>
+            <svg class="m-empty__icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+            <span class="m-empty__title">تعذر تحميل القائمة</span>
+            <p class="m-empty__body">حدث خطأ أثناء قراءة البيانات — لم يتغير أي شيء كتبته.</p>
+            <button type="button" class="m-btn m-btn--primary" data-retry-demo>إعادة المحاولة</button>
+          </div>
+          <div class="m-skeleton" aria-hidden="true" data-retry-skeleton hidden>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--icon"></span><span class="m-skeleton__block m-skeleton__block--line is-w40"></span></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--line is-w70"></span></div>
+          </div>
+          <span class="caption">فشل قراءة — إعادة محاولة محاكاة تُظهر skeleton ثم قائمة نتيجة</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) هاتف + تكبير ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>5) هاتف كامل + محاكاة زيادة حجم الخط</h2>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <div class="m-note m-note--warning" role="alert">
+              <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
+              <div class="m-note__text"><span class="m-note__title">تحذير طويل عند التكبير</span><p class="m-note__body">رسالة تحذير طويلة عمدًا لفحص التفاف النص المكبر داخل الحاوية دون خروج عن العمود أو تداخل مع الأيقونة أو زر الإغلاق.</p></div>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary m-note__close" aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="m-wait" role="status"><span class="m-wait__spinner" aria-hidden="true"></span>جارٍ تحميل العمليات…</div>
+            <div class="m-empty">
+              <svg class="m-empty__icon" aria-hidden="true"><use href="#i-inbox"/></svg>
+              <span class="m-empty__title">لا توجد بيانات بعد</span>
+              <p class="m-empty__body">ابدأ بتسجيل أول عملية وستظهر السجلات هنا.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>6) فحص الخط والأيقونات</h2>
+      <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-info"/></svg><span class="caption">information-circle</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-alert"/></svg><span class="caption">alert01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-alert-circle"/></svg><span class="caption">alert-circle</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-check"/></svg><span class="caption">check</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-inbox"/></svg><span class="caption">inbox</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- الرسالة العابرة (عقد MicroMessages.toast) + منطقة الإعلان المشتركة.
+       E01: بلا role/aria-live هنا — الإعلان مسار واحد عبر منطقة live
+       التي يديرها المكوّن (لا مسارين لنفس الرسالة). زر الإغلاق يمر
+       بعقد MicroMessages.closeToast في المصدر. -->
+  <div class="m-toast" data-toast hidden>
+    <span class="m-toast__text">تم النسخ إلى سجل اليوم (محاكاة)</span>
+    <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+  </div>
+
+  <footer class="board-footer">
+    المصدر: components/messages/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/messages/README.md — النتائج: reviews/B06/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/messages/messages.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

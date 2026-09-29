@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة التنظيم والمعلومات (B04)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/organization/
+  المكوّن: components/organization/ — المحاكاة في board.js فقط.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة التنظيم والمعلومات (B04)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — التنظيم والمعلومات <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">عناوين وأوصاف، فواصل ومجموعات مفتوحة، صفوف قراءة/فتح/إجراء، قسم قابل للطي، شارات غير تفاعلية وعدّادات تتمدد، هوية كيان عام. لا صف رابطًا يحيوي زرًا متداخلًا — مناطق التفاعل منفصلة.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) عنوان/وصف/فاصل/مجموعة ================= -->
+    <section class="panel" id="grouping">
+      <h2>1) عنوان ووصف وفاصل ومجموعة مفتوحة — ORG-01</h2>
+      <p class="panel-note">قسم مفتوح بلا بطاقة — التجميع بالعنوان والمسافات والفواصل. عنوان طويل يلتف ومحاذاة موحدة.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="m-group">
+            <h3 class="m-section-title">ملخص اليوم ولمحة سريعة عن آخر العمليات والموردين النشطين في هذا الشهر</h3>
+            <p class="m-section-desc">وصف قسم طويل: يقرأ النص الثانوي بخط 14 والتفاف طبيعي دون قص أو تقصير.</p>
+            <hr class="m-divider">
+            <p class="m-section-desc">محتوى المجموعة بعد الفاصل — بلا صندوق ولا ظل لكل سطر.</p>
+          </div>
+          <span class="caption">عنوان 18/28 وزن 600 — عنوان طويل يلتف، فاصل رقيق</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2) صفوف القراءة/الفتح/الإجراء ================= -->
+    <section class="panel" id="rows">
+      <h2>2) الصفوف — ORG-02</h2>
+      <p class="panel-note">صف قراءة (قيمة) · صف فتح (رابط حقيقي بسهم يسارًا) · صف بإجراء (زر منفصل داخل الصف لا داخل رابط). بيانات ناقصة تظهر «—» لا فراغًا، وإجراء معطل معلن.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-wallet"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">إجمالي المبيعات</span>
+              <span class="m-row__subtitle">اليوم · أرقام لاتينية معزولة</span>
+            </div>
+            <span class="m-row__value" dir="ltr">1,240.50 د.أ</span>
+          </div>
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-truck"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">توصيلات اليوم</span>
+              <span class="m-row__subtitle">جهة التوصيل — بيانات ناقصة</span>
+            </div>
+            <span class="m-row__value m-missing" aria-label="غير متوفر">—</span>
+          </div>
+
+          <hr class="m-divider">
+
+          <!-- صف فتح: رابط حقيقي — لا زر متداخل داخله -->
+          <a class="m-row" href="#rows" data-open-row>
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-package"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">طلب قيد التجهيز — هذا عنوان طويل يلتف على سطرين داخل الصف دون قص</span>
+              <span class="m-row__subtitle">ORD-10233 · اليوم 12:30</span>
+            </div>
+            <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+          </a>
+
+          <!-- صف بإجراء: مناطق تفاعل منفصلة -->
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-user"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">مؤسسة النور للتوريدات العامة والتجزئة — فرع وسط المدينة</span>
+              <span class="m-row__subtitle">مورد معتمد</span>
+            </div>
+            <button type="button" class="m-btn m-btn--secondary" data-action-btn>تعديل</button>
+          </div>
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-clock"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">إعادة جدولة التسليم</span>
+              <span class="m-row__subtitle">الإجراء معطل — العقد غير مكتمل</span>
+            </div>
+            <button type="button" class="m-btn m-btn--secondary" disabled>جدولة</button>
+          </div>
+
+          <span class="caption">قراءة (قيمة/—) · فتح (رابط بسهم) · إجراء (زر منفصل ومعطل) — صف السطرين 72px</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3) قسم قابل للطي + سطح ================= -->
+    <section class="panel" id="sections">
+      <h2>3) قسم قابل للطي والسطح عند الحاجة — ORG-03</h2>
+      <p class="panel-note">الطي باللمس والكيبورد (aria-expanded + hidden — بلا حركة layout تقفز). السطح انتقائي: للاستقلال المؤقت فقط، لا صندوقًا لكل معلومة.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:350px;max-width:100%">
+
+          <div class="m-section">
+            <button type="button" class="m-section__head" aria-expanded="true" id="sec1-head" aria-controls="sec1-body">
+              تفاصيل الفاتورة — قابل للطي
+              <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="m-section__body" id="sec1-body">
+              <p class="m-section-desc">محتوى مفتوح افتراضيًا — الطي فوري بلا حركة، والفاصل يوضح الحد لا ظل.</p>
+              <hr class="m-divider">
+              <p class="m-section-desc">سطر ثانٍ من المحتوى لقياس الطي فعليًا.</p>
+            </div>
+          </div>
+
+          <hr class="m-divider">
+
+          <div class="m-section">
+            <button type="button" class="m-section__head" aria-expanded="false" id="sec2-head" aria-controls="sec2-body">
+              شروط الدفع الموسعة
+              <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="m-section__body" id="sec2-body" hidden>
+              <p class="m-section-desc">مضموم افتراضيًا — يفتح باللمس أو Enter/Space على الرأس.</p>
+            </div>
+          </div>
+
+          <span class="caption">قسمان: مفتوح ومضموم — الرأس زر 48px بحالة تركيز</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4) شارات وعدّادات وهوية ================= -->
+    <section class="panel" id="badges">
+      <h2>4) شارات وعدّادات وهوية — ORG-04</h2>
+      <p class="panel-note">الشارة span غير تفاعلية (لا تتخفى كزر). العدّاد تتمدد مع الرقم (0 مخفية إن طُلب، 1، 123، وكبير). الصورة الغائبة تعرض أحرفًا أولى، والفاشلة تستبدل بالأحرف عبر organization.js.</p>
+      <div class="example-grid">
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="demo-group">
+            <span class="m-badge m-badge--warning"><span class="m-badge__dot"></span>قيد التجهيز</span>
+            <span class="m-badge m-badge--success"><span class="m-badge__dot"></span>مكتمل</span>
+            <span class="m-badge m-badge--error"><span class="m-badge__dot"></span>متأخر</span>
+            <span class="m-badge m-badge--info"><span class="m-badge__dot"></span>قيد المراجعة</span>
+            <span class="m-badge m-badge--accent">مشمشي — نص داكن</span>
+            <span class="m-badge">حالة محايدة نص طويل يلتف عند الضيق</span>
+          </div>
+          <span class="caption">شارات حالة بنقطة لون المعنى — نص دائمًا مع اللون</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="demo-group">
+            <span class="m-counter">1</span>
+            <span class="m-counter">123</span>
+            <span class="m-counter">9999</span>
+            <span class="m-counter m-counter--zero">0</span>
+          </div>
+          <span class="caption">عدّادات: تتمدد مع الرقم — و0 مخفية بصرية (data-وضح في الاسم الإتاحي عند الاستخدام)</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <div class="example-grid" style="gap:4px 24px">
+            <div class="m-identity">
+              <span class="m-identity__initials" aria-hidden="true">ن ت</span>
+              <div class="m-row__text">
+                <span class="m-identity__name">مؤسسة النور للتوريدات</span>
+                <span class="m-identity__sub">مورد معتمد — صورة غائبة: أحرف أولى</span>
+              </div>
+            </div>
+            <div class="m-identity">
+              <img class="m-identity__img" data-avatar-fallback src="assets/icons/logo-غير-موجود.png" alt="شعار المورد">
+              <div class="m-row__text">
+                <span class="m-identity__name">شركة البترول الوطنية</span>
+                <span class="m-identity__sub">صورة فاشلة التحميل — تستبدل أحرفًا أولى (organization.js)</span>
+              </div>
+            </div>
+            <div class="m-identity">
+              <span class="m-identity__initials" aria-hidden="true">ط م</span>
+              <div class="m-row__text">
+                <span class="m-identity__name">طلب جديد من عميل اسمه طويل جدًا يمتد على سطرين دون قص داخل الهوية</span>
+                <span class="m-identity__sub">قبل 10 دقائق</span>
+              </div>
+            </div>
+          </div>
+          <span class="caption">هوية كيان عام — ليس بطاقة عميل كاملة (حدود التكليف)</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 5) تركيب صعب + هاتف ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>5) تركيب صعب + معاينة هاتف كاملة + محاكاة زيادة حجم الخط</h2>
+      <p class="panel-note">تركيب التحقق من المصفوفة: صف طلب + شارة + قائمة إجراء (نقر ودلالات منفصلة، لا صفحة طلبات).</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <h3 class="m-section-title">متتابعة اليوم</h3>
+            <div class="m-row">
+              <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-package"/></svg></div>
+              <div class="m-row__text">
+                <span class="m-row__title">طلب التجهيز العاجل لمورد التغليف المعتمد في حرم المنشأة الرئيسية</span>
+                <div class="demo-group" style="margin-top:4px">
+                  <span class="m-badge m-badge--warning"><span class="m-badge__dot"></span>قيد التجهيز</span>
+                  <span class="m-counter">3</span>
+                </div>
+              </div>
+              <div class="demo-group" style="flex-direction:column;gap:4px;align-items:stretch">
+                <button type="button" class="m-btn m-btn--secondary" style="min-height:40px;padding-block:6px">تفاصيل</button>
+                <button type="button" class="m-btn m-btn--light" style="min-height:40px;padding-block:6px" disabled>إلغاء</button>
+              </div>
+            </div>
+            <div class="m-section">
+              <button type="button" class="m-section__head" aria-expanded="true">
+                سجل الحالات — قابل للطي
+                <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+              </button>
+              <div class="m-section__body">
+                <p class="m-section-desc">12:30 قيد التجهيز · 10:15 تم الاعتماد · 09:00 استلام الطلب — وقت اختياري في الصف.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>6) فحص الخط والأيقونات</h2>
+      <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-wallet"/></svg><span class="caption">wallet01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-truck"/></svg><span class="caption">truck</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-package"/></svg><span class="caption">package01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-user"/></svg><span class="caption">user-circle</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg><span class="caption">chevron-left</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/organization/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/organization/README.md — النتائج: reviews/B04/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/organization/organization.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

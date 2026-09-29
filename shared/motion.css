@@ -1,0 +1,63 @@
+/* =========================================================
+   Micro UI — الحركة المشتركة (shared/motion.css)
+   يستخدمه فرع التوسعة (S01 وما بعده). الأزمنة والمنحنى في
+   shared/tokens.css (ضغط 120ms · تحديد 180ms · طبقة 240ms،
+   easing موحد cubic-bezier(0.2,0,0,1) — يوسم مقترحًا إن لم
+   يثبت في الأسس).
+   قواعد العمل:
+   - لا حركة تزيينية مستمرة ولا حركة تغيّر layout (قفزة).
+   - الأزمنة أدناه مرجع موحد للطبقات والرسائل والطي.
+   - تقليل الحركة: الانتقالات فورية/مختصرة بلا حركة مكانية.
+   الربط بالمكوّنات الفعلية (E10 — موثق لا مجرد demo):
+   - مكوّن الطبقات B07 (.m-layer في components/navigation/) يطبق
+     MOT-01 بنفس التوكنات مباشرة في navigation.css (إغلاق عبر
+     data-closing وفتح عبر data-opening من navigation.js — R2-02)
+     — الصنف .micro-layer أدناه يبقى للتجربة المستقلة والاستهلاك
+     المباشر، وليس الدليل الوحيد.
+   - مكوّنات التحديد (m-choice__box، m-switch__track/thumb،
+     m-seg__item) تستخدم --micro-motion-selection في ملفاتها —
+     .micro-select أدناه يعادلها للاستهلاك المباشر.
+   ========================================================= */
+
+/* سطح/طبقة تُفتح وتُغلق (حوار/لوحة سفلية/قائمة) — يطبقها المستهلك
+   على العنصر الظاهر؛ الحالة مخفية عبر [hidden] وطور الظهور هنا. */
+.micro-layer {
+  transition:
+    opacity var(--micro-motion-open) var(--micro-ease-standard),
+    translate var(--micro-motion-open) var(--micro-ease-standard);
+}
+.micro-layer[data-closing="true"] {
+  opacity: 0;
+  translate: 0 8px;
+}
+
+/* تحديد/تبديل لوني — نفس زمن التحديد (180ms) */
+.micro-select {
+  transition:
+    background-color var(--micro-motion-selection) var(--micro-ease-standard),
+    color var(--micro-motion-selection) var(--micro-ease-standard),
+    border-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+/* محاكاة تفضيل تقليل الحركة في المعاينات فقط (سلم للفحص):
+   الصنف على الجذر يعامل كأن prefers-reduced-motion مفعّل —
+   الفحص الفعلي بالتفضيل الحقيقي عبر Playwright reduced_motion. */
+.micro-reduce *,
+.micro-reduce *::before,
+.micro-reduce *::after {
+  transition-duration: 0s !important;
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  translate: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .micro-layer,
+  .micro-layer[data-closing="true"],
+  .micro-select {
+    transition: none;
+  }
+  .micro-layer[data-closing="true"] {
+    translate: none;
+  }
+}

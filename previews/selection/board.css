@@ -1,0 +1,11 @@
+/* بطاقة عرض للمثال المضمّن فقط — أسلوب المنتقي نفسه في
+   components/selection/picker.css (المصدر القابل لإعادة الاستخدام) */
+.demo-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  background: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  padding: var(--micro-space-4);
+}

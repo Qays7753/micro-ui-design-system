@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للتنقّل والطبقات B07 — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن + تركيب أزرار B01.
+  فحوص مدمجة: طبقة بعزل خلفية وحصر تركيز واستعادة مشغّل، Escape،
+  تبويب بلوحة مرتبطة. النتائج في الصفحة وconsole.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: التنقّل والطبقات (B07)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — التنقّل والطبقات (B07)</h1>
+  <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام">
+    <button type="button" class="m-tabs__tab" role="tab" aria-selected="true" aria-controls="ta" id="ta-btn">أ</button>
+    <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="tb" id="tb-btn" tabindex="-1">ب</button>
+  </div>
+  <div id="ta" role="tabpanel" aria-labelledby="ta-btn"><p>لوحة أ</p></div>
+  <div id="tb" role="tabpanel" aria-labelledby="tb-btn" hidden><p>لوحة ب</p></div>
+  <button type="button" class="m-btn m-btn--primary" data-layer-open="ex-layer" id="ex-trigger" style="margin-block-start:12px">فتح لوحة</button>
+  <pre id="results">جارٍ الفحص…</pre>
+
+  <div class="m-layer-backdrop" data-for="ex-layer" hidden></div>
+  <div class="m-layer" id="ex-layer" role="dialog" aria-modal="true" aria-labelledby="ex-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="ex-title">لوحة تجريبية</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"></svg></button>
+    </div>
+    <div class="m-layer__body"><p>محتوى الطبقة — عزل الخلفية وحصر التركيز داخلها.</p></div>
+    <div class="m-layer__foot"><button type="button" class="m-btn m-btn--secondary" data-layer-close>إغلاق</button></div>
+  </div>
+
+  <script src="../../components/navigation/navigation.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      /* تبويب */
+      document.getElementById('tb-btn').click();
+      t('التبويب يبدّل لوحة مرتبطة', !document.getElementById('tb').hidden && document.getElementById('ta').hidden);
+      document.getElementById('ta-btn').click();
+      /* الطبقة */
+      document.getElementById('ex-trigger').click();
+      var layer = document.getElementById('ex-layer');
+      t('الفتح: ظاهرة وعزل خلفية (المشغّل inert)', !layer.hidden && document.getElementById('ex-trigger').inert === true);
+      /* حصر تركيز: Tab من الأخير يعود للأول */
+      var f = [...layer.querySelectorAll('button')];
+      f[f.length - 1].focus();
+      layer.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+      t('حصر Tab داخل الطبقة (الأخير → الأول)', document.activeElement === f[0]);
+      /* Escape يستعيد المشغّل */
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      setTimeout(function () {
+        t('Escape يغلق ويستعيد تركيز المشغّل',
+          layer.hidden && document.activeElement === document.getElementById('ex-trigger'));
+        document.getElementById('results').textContent = out.join('\n');
+        console.log('[example] نتائج فحص التنقّل:\n' + out.join('\n'));
+      }, 450);
+    })();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة الاختيار (B03)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/selection/
+  المكوّن: components/selection/ (selection + picker) (+ fields و buttons و navigation للطبقة كما هي)
+  المنتقي في المصدر القابل لإعادة الاستخدام (picker.css/picker.js) — E04.
+  لوحة المنتقي تزوّد بيانات ومحاكاة انتظار/فشل فقط (board.js).
+  المنتقي يعمل مضمّنًا وداخل طبقة B07 الحقيقية (MicroNavigation).
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة الاختيار (B03)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/selection/picker.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — الاختيار <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">أدوار منفصلة: Checkbox تعدد/مستقل + جزئي — Radio اختيار واحد — Switch إعداد On/Off (لا يرسل نموذجًا) — Toggle وضع مؤقت — Segmented متبادل قصير. الحالة نص ظاهر لا لون وحده.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) Checkbox / Radio ================= -->
+    <section class="panel" id="choices">
+      <h2>1) مربع الاختيار والراديو — SEL-01</h2>
+      <p class="panel-note">الصف كله هدف لمس 48px (label حقيقي). الحالة الجزئية لمجموعة تُزامَن تلقائيًا مع «تحديد الكل» (selection.js). التسمية الطويلة تلتف دون قص.</p>
+      <div class="example-grid">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="example-grid" style="gap:4px 24px">
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" id="c1">
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">إخفاء العمليات المؤرشفة</span>
+            </label>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" id="c2" checked>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">محدد</span>
+            </label>
+            <label class="m-choice m-choice--check is-disabled">
+              <input type="checkbox" id="c3" disabled>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">معطل — غير متاح لدورك</span>
+            </label>
+          </div>
+          <span class="caption">مربع اختيار: غير محدد/محدد/معطل — تركيز فعلي بالكيبورد</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div data-choice-group>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-select-all>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">تحديد الكل <span class="m-choice__hint">يدعم الجزئي عند اختيار بعض الصفوف</span></span>
+            </label>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-choice-item checked>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">طلبات التجهيز</span>
+            </label>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-choice-item>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">توصيلات اليوم</span>
+            </label>
+          </div>
+          <span class="caption">مجموعة + تحديد الكل — الجزئي يظهر عند 1 من 2 (مفحوص A6)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="example-grid" style="gap:4px 24px" role="radiogroup" aria-label="طريقة التسوية">
+            <label class="m-choice m-choice--radio">
+              <input type="radio" name="settle" value="cash" checked>
+              <span class="m-choice__box"></span>
+              <span class="m-choice__text">نقدًا عند التسليم</span>
+            </label>
+            <label class="m-choice m-choice--radio">
+              <input type="radio" name="settle" value="transfer">
+              <span class="m-choice__box"></span>
+              <span class="m-choice__text">تحويل بنكي</span>
+            </label>
+            <label class="m-choice m-choice--radio is-disabled">
+              <input type="radio" name="settle" value="credit" disabled>
+              <span class="m-choice__box"></span>
+              <span class="m-choice__text">آجل — غير متاح</span>
+            </label>
+          </div>
+          <span class="caption">راديو: اختيار واحد — المعطل خارج التبويب</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <label class="m-choice m-choice--check">
+            <input type="checkbox" id="c-long">
+            <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="m-choice__text">إشعار المورد بالتعديلات التي تطرأ على بنود العقد قبل اعتماد الدفعة النهائية</span>
+          </label>
+          <span class="caption">تسمية طويلة — تلتف داخل الصف دون قص وتبقى الصندوق متوسطًا</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2) Switch / Toggle / Segmented ================= -->
+    <section class="panel" id="switches">
+      <h2>2) المفتاح وزر الوضع والمقطّع — SEL-02 (أدوار منفصلة)</h2>
+      <p class="panel-note">Switch = إعداد On/Off بتسمية ثابتة ونص حالة ظاهر (لا لون وحده) — لا يُستخدم لإرسال نموذج أو فتح صفحة. Toggle = وضع مؤقت (aria-pressed). Segmented = تبادل قيم قصير.</p>
+      <div class="example-grid">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="example-grid" style="gap:4px 24px">
+            <label class="m-switch" data-switch>
+              <span class="m-switch__text">
+                <span class="m-switch__label">الإيصالات الآلية</span>
+                <span class="m-switch__state" data-switch-state>مُعطّل</span>
+              </span>
+              <input type="checkbox" role="switch">
+              <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+            </label>
+            <label class="m-switch" data-switch>
+              <span class="m-switch__text">
+                <span class="m-switch__label">تعديل المبالغ بعد الاعتماد</span>
+                <span class="m-switch__state" data-switch-state>مُفعّل</span>
+              </span>
+              <input type="checkbox" role="switch" checked>
+              <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+            </label>
+            <label class="m-switch is-disabled">
+              <span class="m-switch__text">
+                <span class="m-switch__label">قفل المورد</span>
+                <span class="m-switch__state" data-switch-state>مُعطّل</span>
+              </span>
+              <input type="checkbox" role="switch" disabled>
+              <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+            </label>
+          </div>
+          <span class="caption">مفتاح: تسمية ثابتة + نص حالة يتبع القيمة (board.js يحدّث النص التجريبي)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <p class="demo-note">إعداد غير متزامن (محاكاة موسومة): عند التغيير يدخل انتظارًا ثم يفشل فيرجع كما كان — العقد: المستهلك يضبط data-pending ويرجع القيمة:</p>
+          <label class="m-switch" id="async-switch" data-switch>
+            <span class="m-switch__text">
+              <span class="m-switch__label">مزامنة المخزون تلقائيًا</span>
+              <span class="m-switch__state" data-switch-state>مُعطّل</span>
+            </span>
+            <input type="checkbox" role="switch">
+            <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+          </label>
+          <div class="demo-group" style="margin-top:8px">
+            <button type="button" class="m-btn m-btn--secondary" data-async-demo="fail">محاكاة: فشل التحديث</button>
+            <button type="button" class="m-btn m-btn--secondary" data-async-demo="ok">محاكاة: نجاح</button>
+            <span class="demo-status" data-async-status hidden></span>
+          </div>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="demo-group">
+            <button type="button" class="m-btn m-btn--secondary m-toggle" aria-pressed="false">تحديد الكل</button>
+            <button type="button" class="m-btn m-btn--secondary m-toggle" aria-pressed="true">عرض المبالغ</button>
+          </div>
+          <span class="caption">Toggle (زر وضع): مفعّل بأرضية التحديد — وضع مؤقت لا إعداد</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-seg" data-seg role="group" aria-label="طريقة العرض">
+            <button type="button" class="m-seg__item is-selected" aria-pressed="true" data-value="all">الكل</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="due">المستحق</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="paid">المدفوع</button>
+          </div>
+          <span class="caption">مقطّع: تبادل قصير (تنقّل أسهم) — يغيّر قيمة/وضعًا لا محتوى شاشة</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 3) قائمة اختيار + منتقي كيان ================= -->
+    <section class="panel" id="pickers">
+      <h2>3) قائمة اختيار واختيار كيان قابل للبحث — SEL-03</h2>
+      <p class="panel-note">بيانات المستهلك تمرر (لا شبكة حقيقية). المنتقي في المصدر (components/selection/picker.*) — اللوحة بيانات ومحاكاة فقط. يُفتح في طبقة B07 الحقيقية (حصر تركيز + عزل خلفية) أو مضمّنًا.</p>
+
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <p class="demo-note">قائمة اختيار متعدد (صفوف داخل بطاقة عرض فقط):</p>
+          <div class="demo-card" data-choice-group>
+            <div class="m-picker__head">
+              <span>تصفية حسب المورد</span>
+              <button type="button" class="m-btn m-btn--light" data-clear-list>مسح الاختيار</button>
+            </div>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-choice-item>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">شركة البترول الوطنية</span>
+            </label>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-choice-item checked>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">مؤسسة النور للتوريدات العامة والتجزئة</span>
+            </label>
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" data-choice-item>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">مورد محلي — الاسم الطويل جدًا الذي يلتف على سطرين دون قص</span>
+            </label>
+            <p class="m-picker__foot">2 من 3 محدد في هذا المثال (بيانات تجريبية)</p>
+          </div>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <p class="demo-note">منتقي كيان (مورد) في طبقة B07 — بحث وحالات قراءة محاكاة (أزرار المحاكاة داخل الطبقة كي تعمل أثناء العزل):</p>
+          <div class="demo-group" style="flex-direction:column;align-items:stretch;gap:8px">
+            <button type="button" class="m-btn m-btn--primary" data-layer-open="picker-layer">فتح المنتقي (طبقة B07)</button>
+            <span class="demo-status" data-picker-status hidden></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 4) تاريخ بسيط ================= -->
+    <section class="panel" id="date">
+      <h2>4) مدخل تاريخ بسيط — SEL-04</h2>
+      <p class="panel-note">مدخل أصلي داخل حقل B02 + تنسيق عرض ضمن الأسس — لا تقويم مخصص ولا نظام نطاقات جديد. واجهة المنتقي الأصلي تختلف حسب المنصة (iOS/Android/سطح المكتب) — أي تخصيص كامل يبقى مقترحًا معلقًا.</p>
+      <div class="example-grid">
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="date-from">من تاريخ</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="date-from" type="date" dir="ltr" value="2026-09-01">
+            </div>
+          </div>
+          <span class="caption">مدخل تاريخ أصلي (type=date) — المنتقي من المنصة</span>
+        </div>
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="date-to">إلى تاريخ</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="date-to" type="date" dir="ltr">
+            </div>
+          </div>
+          <span class="caption">تنسيق العرض بالأسس (DD/MM/YYYY في التقارير) — لا منطق نطاقات هنا</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5) هاتف كامل + تكبير ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>5) معاينة هاتف كاملة + محاكاة زيادة حجم الخط</h2>
+      <p class="panel-note">أعمدة كاملة بعرضها الحقيقي (الأعرض يُخفى عند ضيق الشاشة) — والمحاكاة بمرورين كآلية B01.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <label class="m-choice m-choice--check">
+              <input type="checkbox" checked>
+              <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="m-choice__text">إشعار المورد بالتعديلات التي تطرأ على بنود العقد قبل اعتماد الدفعة النهائية للحساب</span>
+            </label>
+            <label class="m-switch" data-switch>
+              <span class="m-switch__text">
+                <span class="m-switch__label">الإيصالات الآلية عند كل تسوية مكتملة</span>
+                <span class="m-switch__state" data-switch-state>مُفعّل</span>
+              </span>
+              <input type="checkbox" role="switch" checked>
+              <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+            </label>
+            <div class="m-seg" data-seg role="group" aria-label="طريقة العرض">
+              <button type="button" class="m-seg__item is-selected" aria-pressed="true" data-value="all">الكل</button>
+              <button type="button" class="m-seg__item" aria-pressed="false" data-value="due">المستحق</button>
+              <button type="button" class="m-seg__item" aria-pressed="false" data-value="paid">المدفوع</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>6) فحص الخط والأيقونات</h2>
+      <p class="demo-note">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-check"/></svg><span class="caption">check</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-close"/></svg><span class="caption">cancel01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="caption">search-01</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ طبقة المنتقي (B07 حقيقية — خارج main) ============ -->
+  <div class="m-layer-backdrop" data-for="picker-layer" hidden></div>
+  <div class="m-layer" id="picker-layer" role="dialog" aria-modal="true" aria-labelledby="picker-layer-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="picker-layer-title">اختيار المورد</span>
+    </div>
+    <div class="m-layer__body">
+      <div class="m-picker" data-micro-picker id="entity-picker">
+        <div class="m-picker__head">
+          <span class="m-picker__title">ابحث واختر</span>
+          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        </div>
+        <input class="m-picker__input" id="picker-search" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم" placeholder="اسم المورد…">
+        <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="petrol">شركة البترول الوطنية</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="noor">مؤسسة النور للتوريدات</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="fawry">مأمورية فوري — فرع وسط المدينة</button>
+          <button type="button" class="m-picker__option" role="option" aria-selected="false" data-value="watania">الشركة الوطنية للإمداد</button>
+        </div>
+        <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
+        <div class="demo-group">
+          <button type="button" class="m-btn m-btn--light" data-picker-clear>مسح الاختيار</button>
+        </div>
+        <div class="demo-group">
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="loading">محاكاة: انتظار</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="empty">محاكاة: لا نتائج</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="fail">محاكاة: فشل قراءة</button>
+          <button type="button" class="m-btn m-btn--secondary" data-picker-demo="ready">محاكاة: نتائج سليمة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="board-footer">
+    المصدر: components/selection/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/selection/README.md — النتائج: reviews/B03/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../../components/selection/selection.js"></script>
+  <script src="../../components/selection/picker.js"></script>
+  <script src="../../components/navigation/navigation.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

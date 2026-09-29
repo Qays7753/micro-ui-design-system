@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة الأسطح البترولية والحركة (S01)
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/surfaces/
+  المعالجة: components/surfaces/surfaces.css — الأصول: assets/surfaces/*.svg
+  الحركة المشتركة: shared/motion.css — محاكاة تقليل الحركة صنف micro-reduce.
+  المقارنات الثلاث + النسخة المجردة معروضة جنبًا إلى جنب؛ وجودها
+  للمقارنة لا يعني اعتمادها كلها.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — الأسطح البترولية والحركة (S01)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — المعالجة البترولية والحركة <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">معالجة سطح مستقلة للأسطح البارزة فقط — أصول SVG قابلة للتحرير ومفاتيح تعديل موسومة PROPOSED. القوائم والحقول صافية دائمًا. الزخرفة غير تفاعلية ومخفية عن قارئ الشاشة.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) المقارنات الثلاث + المجردة ================= -->
+    <section class="panel" id="compare">
+      <h2>1) المقارنات الثلاث والنسخة المجردة — SURF-01</h2>
+      <p class="panel-note">وجود المقارنة لا يعني اعتماد الأنماط الثلاثة — المرشح الأساسي موسوم في التقرير. كل سطح بنصه التجريبي نفسه للقياس العادل: عنوان طويل ورقم كبير وتسمية.</p>
+      <div class="example-grid" style="align-items:stretch">
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--calm">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">1) تدرج وإضاءة هادئة</p>
+              <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة</h3>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">مقارنة 1 — بلا موجات</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--waves" data-surface="waves">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">2) موجات خافتة — المرشح الأساسي</p>
+              <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة</h3>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">مقارنة 2 — المرشح الأساسي (waves-soft.svg)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--depth">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">3) عمق أغنى محدود</p>
+              <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة</h3>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">مقارنة 3 — للسطح البارز فقط (waves-depth.svg)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--plain">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">نسخة بلا زخرفة</p>
+              <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة</h3>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">مجردة — أرضية مستقرة فقط (متوفرة دائمًا)</span>
+        </div>
+
+      </div>
+
+      <h3>مفاتيح التعديل — غيّرها هنا وشاهد الانعكاس فورًا</h3>
+      <div class="lab-controls" data-wave-keys>
+        <label style="display:flex;align-items:center;gap:8px">
+          <span class="demo-note">شدة الموجة</span>
+          <input type="range" min="0" max="2" step="0.1" value="1" data-key="--micro-surface-wave-opacity">
+        </label>
+        <label style="display:flex;align-items:center;gap:8px">
+          <span class="demo-note">الإضاءة</span>
+          <input type="range" min="0" max="0.25" step="0.01" value="0.1" data-key="--micro-surface-light">
+        </label>
+        <label style="display:flex;align-items:center;gap:8px">
+          <span class="demo-note">موضع الموجة</span>
+          <input type="range" min="60" max="100" step="1" value="100" data-key="--micro-surface-wave-pos" data-unit="%">
+        </label>
+        <label style="display:flex;align-items:center;gap:8px">
+          <span class="demo-note">حجم الموجة</span>
+          <input type="range" min="60" max="140" step="2" value="100" data-key="--micro-surface-wave-scale" data-unit="%">
+        </label>
+        <button type="button" class="m-btn m-btn--light" data-reset-keys>استعادة القيم</button>
+      </div>
+      <p class="demo-note">المقابض تعمل على سطح المقارنة 2 أعلاه فقط للتجربة؛ القيم المسلَّمة موثقة في المواصفات §3 وتعديلها الدائم في HTML المستهلك.</p>
+    </section>
+
+    <!-- ================= 1-ب) مقارنة تنقيح الموجة (E12 — مقترح بصري) ================= -->
+    <section class="panel" id="wave-v2">
+      <h2>1-ب) مقارنة تنقيح الموجة قبل/بعد — E12 (PROPOSED)</h2>
+      <p class="panel-note">توصية المراجعة البصرية: تدرجات أنعم وتلاشى أوضح وشدة أقل كي تضيف الموجة عمقًا خلف المحتوى. المقارنة بالحجم العادي وبمحتوى قصير — قرار الاعتماد للمالك؛ الأصل waves-soft.svg يبقى المعتمد حتى ذلك الحين، والألوان والمفاتيح نفسها.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--waves">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">قبل — الحالي</p>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">الأصل: waves-soft.svg (طبقات بشفافيات ثابتة)</span>
+        </div>
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--waves-v2">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">بعد — المقترح (v2)</p>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">المقترح: waves-soft-v2.svg — تدرج عمودي لكل طبقة وتلاشى نحو الأعلى وشدة أقل</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2) الزخرفة لا تعيق المحتوى والحقول صافية ================= -->
+    <section class="panel" id="rules">
+      <h2>2) قواعد الاستخدام — حقول صافية وزر بتدرج بسيط</h2>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:340px;max-width:100%">
+          <p class="demo-note">الحقول والقوائم دائمًا على أرضية صافية — لا زخرفة خلفها:</p>
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="s-plain">مبلغ الدفعة</label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="s-plain" type="text" inputmode="decimal" dir="ltr" value="360.00">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+          </div>
+          <p class="demo-note" style="margin-top:12px">الزر الصغير بتدرج B01 البسيط (بلا موجات):</p>
+          <div class="demo-group">
+            <button type="button" class="m-btn m-btn--primary">سجل عملية</button>
+            <button type="button" class="m-btn m-btn--secondary">التفاصيل</button>
+          </div>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <p class="demo-note">سطح بارز يحتضن إجراءه الوحيد (نص فوق الزخرفة سليم):</p>
+          <div class="m-surface m-surface--waves">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content" style="padding:20px">
+              <p class="m-surface__label">المستحق عليك</p>
+              <p class="m-surface__amount" style="font-size:28px">820.00</p>
+              <div class="demo-group" style="margin-top:12px">
+                <button type="button" class="m-btn m-btn--primary" style="background-image:none;background-color:var(--micro-text-inverse);color:var(--micro-brand-primary)">سدّد الآن</button>
+              </div>
+            </div>
+          </div>
+          <span class="caption">زر على السطح: أبيض مصمت بنص بترولي (تباين 8.86:1) — بلا زخرفة داخل الزر</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3) مقارنة الحركة + تقليلها ================= -->
+    <section class="panel" id="motion">
+      <h2>3) مقارنة الحركة وتقليلها — MOT-01</h2>
+      <p class="panel-note">الأزمنة من التوكنات: ضغط 120ms · تحديد 180ms · طبقة 240ms — والمنحنى الموحد. جرّب كل عنصر فعليًا، ثم فعّل المحاكاة وقارن (الطبقة تظهر فورًا بلا حركة مكانية). محاكاة الصنف موسومة — الفحص الفعلي بالتفضيل الحقيقي في سجل الفحص.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-reduce-toggle aria-pressed="false">محاكاة تقليل الحركة (مقترح)</button>
+        <span class="demo-note" data-motion-state>الحركة الكاملة مفعّلة.</span>
+      </div>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:300px;max-width:100%">
+          <p class="demo-note">طبقة 240ms (فتح/إغلاق):</p>
+          <div class="demo-group">
+            <button type="button" class="m-btn m-btn--primary" data-layer-open>فتح الطبقة</button>
+          </div>
+          <div class="micro-layer demo-sheet" data-layer hidden>
+            <div class="demo-sheet__head">
+              <span>طبقة مؤقتة</span>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق الطبقة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <p class="m-section-desc">محتوى الطبقة التجريبية — الظهور 240ms والاختفاء نفسه، بلا حركة تغيّر التخطيط.</p>
+          </div>
+        </div>
+        <div class="example" style="width:300px;max-width:100%">
+          <p class="demo-note">تحديد 180ms (تبديل صف):</p>
+          <div class="demo-group" style="flex-direction:column;align-items:stretch">
+            <button type="button" class="m-btn m-btn--secondary m-toggle micro-select" aria-pressed="false">صف اختيار أ</button>
+            <button type="button" class="m-btn m-btn--secondary m-toggle micro-select" aria-pressed="false">صف اختيار ب</button>
+          </div>
+          <span class="caption">اضغط لرؤية تغيّر التحديد بزمن 180ms</span>
+        </div>
+        <div class="example" style="width:300px;max-width:100%">
+          <p class="demo-note">ضغط 120ms (زر أساسي):</p>
+          <button type="button" class="m-btn m-btn--primary">اضغط مع الاستمرار</button>
+          <span class="caption">الضغط يزيل الظل ويغمق اللون فورًا (120ms)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4) هاتف كامل + تكبير فوق السطح ================= -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>4) السطح بأصغر وأكبر عرض + تكبير 200% فوق السطح</h2>
+      <p class="panel-note">عنوان طويل ورقم كبير فوق السطح عند 320 و430 — ثم محاكاة زيادة حجم الخط فوق السطح نفسه بمرورين.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <div class="m-surface m-surface--waves">
+              <div class="m-surface__waves" aria-hidden="true"></div>
+              <div class="m-surface__content" style="padding:20px">
+                <p class="m-surface__label">ملخص الشهر</p>
+                <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة والمستردات من الموردين</h3>
+                <p class="m-surface__amount">1,240.50</p>
+                <p class="m-surface__sub">ريال يمني · د.أ — آخر تحديث اليوم 12:30</p>
+              </div>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="s-zoom-field">حقل صافٍ تحت السطح</label>
+              <div class="m-field__control">
+                <input class="m-field__input m-field__input--num" id="s-zoom-field" type="text" inputmode="decimal" dir="ltr" value="360.00">
+                <span class="m-field__unit">د.أ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5) فحص الخط والأصول ================= -->
+    <section class="panel" id="assets-check">
+      <h2>5) الأصول — أصول موجات حقيقية قابلة للتحرير</h2>
+      <div class="demo-group">
+        <a class="m-row" href="../../assets/surfaces/waves-soft.svg" style="min-height:40px">
+          <div class="m-row__text"><span class="m-row__title">assets/surfaces/waves-soft.svg</span><span class="m-row__subtitle">المرشح الأساسي — افتح الأصل وعدّل المسارات مباشرة</span></div>
+        </a>
+        <a class="m-row" href="../../assets/surfaces/waves-depth.svg" style="min-height:40px">
+          <div class="m-row__text"><span class="m-row__title">assets/surfaces/waves-depth.svg</span><span class="m-row__subtitle">عمق أغنى محدود — نفس الطريقة</span></div>
+        </a>
+      </div>
+      <p class="demo-note" style="margin-top:12px">الرموز: <span id="icon-load-status">جارٍ التحميل…</span></p>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/surfaces/ (specification.md · surfaces.css) — الأصول: assets/surfaces/ — الحركة: shared/motion.css — القيم: shared/tokens.css — النتائج: reviews/S01/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>
