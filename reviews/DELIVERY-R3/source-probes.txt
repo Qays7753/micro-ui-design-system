@@ -1,0 +1,20 @@
+Reviewed head: 03dfd5810e0ed06eb2627a3eb789f07e0cbad89b
+Evidence source commit: f4cddd405e149d83232c3a8701ad2ff48d4ef43e
+Evidence source tree: 1b1179673bec2741e421c1815d95390f82a4ac78
+Method: actual repository source with a small simulated DOM, not a browser/layout or screen-reader test.
+Interpretation: earlier lifecycle, ID, switch and picker probes now show corrected state. A reopened active modal should keep body scrolling locked. The last two donut probes still show incorrect normal percentages for invalid declared totals.
+
+MODAL_REOPEN_DURING_CLOSE {"hiddenAfterReopen":false,"bodyOverflow":"hidden"}
+MODAL_NESTED {"ancestorInert":false}
+MODAL_EMPTY {"focusMovedInside":true,"oldTriggerInert":true}
+SWITCH_END_WITHOUT_START {"disabled":true}
+FIELD_PREEXISTING_ID {"first":"m-field-msg-1","second":"m-field-msg-2","duplicate":false}
+PICKER_LOADING {"optionHidden":true,"optionDisabled":false,"optionCount":1}
+PICKER_REPLACE {"selected":null,"summary":"المحدد: لا شيء"}
+DONUT_ALL_MISSING "—لا توجد بياناتitem0 — غير متاحitem1 — غير متاح"
+DONUT_INVALID_NUMBER "3مجموع المعلومitem1 3 (100%)item0 — غير متاح"
+DONUT_INVALID_TOTAL "تعذر رسم التوزيع: المقام المعلن غير صالح (data-total=\"bad\") — صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.item0 4item1 6"
+DONUT_ZERO_DENOMINATOR "10الإجماليitem0 4 (40%)item1 6 (60%)"
+DONUT_NEGATIVE_DENOMINATOR "10الإجماليitem0 4 (40%)item1 6 (60%)"
+
+Independent checks: 273 manifest entries; 0 mismatches; 8 standalone examples; 16 JS files pass syntax; contrast selftest passes. No implementation differences between evidence source and reviewed head. The 158 browser checks remain executor evidence, not independently rerun here.
