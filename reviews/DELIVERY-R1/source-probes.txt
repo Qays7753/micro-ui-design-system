@@ -1,0 +1,13 @@
+Reviewed source: cd14cc9e830fb54b7ec02538c0b0429c508bc29e
+Method: actual source functions with minimal mocked DOM; no browser layout, pointer interaction, or screen-reader execution.
+These diagnostic outputs demonstrate regressions, not a passing test suite.
+
+FIELD_ID_COLLISION {"id1":"m-field-msg-1345836621","id2":"m-field-msg-1345836621","duplicate":true,"existingDescriptionReplaced":"m-field-msg-1345836621"}
+READONLY_CLEAR {"value":""}
+MODAL_DEFAULT_RETURN {"restoredOutside":false,"focusedHiddenChild":true}
+SWITCH_PENDING {"disabled":false,"ariaBusy":"true"}
+BUBBLE_SMALL {"expectedPx":1.04,"actualPx":"8px"}
+LINE_MISSING ["296,82 24,24"]
+DONUT_ZERO ["NaN NaN","NaN NaN"]
+DONUT_OVER_TOTAL {"segments":["218.65484868984962 145.7698991265664","182.212373908208 182.212373908208"],"sum":110,"total":100}
+BAR_NEGATIVE [[{"height":"3","y":"143"}],[{"height":"120","y":"26"}]]

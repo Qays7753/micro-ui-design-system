@@ -33,3 +33,22 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - `../prompts/UI-LIBRARY-EXPANSION-ZAI.md`: رسالة بدء التنفيذ.
 
 الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها.
+
+
+## مراجعة DELIVERY-R1 — 2026-09-28
+
+- `reviews/DELIVERY-R1/CHATGPT-REVIEW.md`: تقرير CHANGES REQUESTED للرأسين `30d0070` و`cd14cc9`، مع الإصلاحات وأدلة قبولها.
+- `reviews/DELIVERY-R1/source-probes.cjs`: تشخيص قابل للتشغيل على نسخة التسليم، باستخدام DOM محاكى؛ ليس فحص متصفح.
+- `reviews/DELIVERY-R1/source-probes.txt`: نتائج التشخيص من `cd14cc9`، وليست إعلان نجاح.
+
+
+## إعادة مراجعة DELIVERY-R2 — 2026-09-28
+
+- `reviews/DELIVERY-R2/CHATGPT-REVIEW.md`: نتيجة مراجعة `71ffff1` و`4fa61e1`، إغلاق جزئي للجولة السابقة و7 متبقيات محددة مع الترشيحات البصرية.
+- `reviews/DELIVERY-R2/source-probes.cjs` و`source-probes.txt`: تشخيصات مصدر قابلة لإعادة التشغيل وأدلة التحقق؛ ليست فحص متصفح.
+
+
+## DELIVERY-R3 — إغلاق معظم المتبقيات
+
+- `reviews/DELIVERY-R3/CHATGPT-REVIEW.md`: مراجعة `03dfd58`؛ خمسة بنود مغلقة وتصحيحان محددان C1/C2.
+- `reviews/DELIVERY-R3/source-probes.cjs` و`source-probes.txt`: إعادة تشخيص المصدر، مع إثبات المقام الصفري/السالب. ليست فحوص متصفح.

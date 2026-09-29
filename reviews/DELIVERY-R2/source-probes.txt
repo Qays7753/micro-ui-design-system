@@ -1,0 +1,18 @@
+Source commit: 4fa61e1b6d5bf069ea5911a008435360ddc13192
+Method: repository source executed with a small simulated DOM, NOT a browser or screen reader. Printed regressions are diagnostic output; exit 0 is not a passing quality gate.
+
+MODAL_REOPEN_DURING_CLOSE {"hiddenAfterReopen":true,"bodyOverflow":"hidden"}
+MODAL_NESTED {"ancestorInert":true}
+MODAL_EMPTY {"focusMovedInside":false,"oldTriggerInert":true}
+SWITCH_END_WITHOUT_START {"disabled":false}
+FIELD_PREEXISTING_ID {"first":"m-field-msg-1","second":"m-field-msg-1","duplicate":true}
+PICKER_LOADING {"optionHidden":false,"optionDisabled":false,"optionCount":1}
+PICKER_REPLACE {"selected":null,"summary":"المحدد: Alpha"}
+DONUT_ALL_MISSING "0الإجماليitem0 — غير متاحitem1 — غير متاح"
+DONUT_INVALID_NUMBER "15الإجماليitem0 12 (80%)item1 3 (20%)"
+DONUT_INVALID_TOTAL "10الإجماليitem0 4 (40%)item1 6 (60%)"
+
+Independent tools/contrast-check.py execution: exit 0; rows 4.19:1 FAIL and 3.74:1 FAIL; final summary incorrectly reports no failed pairs.
+Manifest: 271 entries, 0 mismatches, no tracked omissions except manifest itself.
+JavaScript syntax: 16 files, 0 failures.
+Independent example HTML files found: 7; surfaces example missing.
