@@ -34,11 +34,11 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 
 الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها واعتمادها.
 
-## مخرجات التوسعة — 2026-09-28 (فرع task/ui-library-expansion — PR #2)
+## مخرجات التوسعة — 2026-09-28 (PR #2 المدموج في main)
 
 | الملف | الحالة | الملاحظة |
 |---|---|---|
-| `components/fields/` + `previews/fields/` | DRAFT FOR RE-REVIEW | B02 الحقول: فحوص 27/27 — بعد R2-06 (تفرد معرف الرسالة بالمستند) |
+| `components/fields/` + `previews/fields/` | DRAFT FOR RE-REVIEW | B02 الحقول: فحوص 27/27 — مدموجة في main بعد R2-06 (تفرد معرف الرسالة بالمستند) |
 | `components/selection/` + `previews/selection/` | DRAFT FOR RE-REVIEW | B03 الاختيار: فحوص 25/25 — بعد R2-03 (حالة قراءة موحدة للمنتقي) وR2-06 (ثبات عقود المفتاح) |
 | `components/organization/` + `previews/organization/` | DRAFT FOR RE-REVIEW | B04 التنظيم: فحوص 15/15 |
 | `components/surfaces/` + `assets/surfaces/` + `shared/motion.css` + `previews/surfaces/` | DRAFT FOR RE-REVIEW | S01 الأسطح والحركة: فحوص 35/35 — بعد R2-01 وR2-04 وC1 + مثال مستقل |
