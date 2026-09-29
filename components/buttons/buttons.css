@@ -1,0 +1,351 @@
+/* =========================================================
+   Micro UI — مكوّن الأزرار (B01)
+   الملف: components/buttons/buttons.css
+   يعتمد على: shared/tokens.css — القيم المشتركة (الألوان والمقاسات والحركة)
+   تأتي منه كلها. الاستثناءات الداخلية بالمكوّن وحده موثقة عند مواضعها:
+   سماكة حد المؤشر 2px، ومقاس خط العدّاد (توكن مشترك مضاف:
+   --micro-counter-label-*). لا ألوان مكررة هنا إطلاقًا.
+   الاتجاه: كل القيم بخصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
+   الحالة: DRAFT FOR RE-REVIEW — ما لم تُحسمه الأسس موسوم بـ«مقترح» في المواصفات.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) الأساس المشترك لكل الأنواع
+   <button class="m-btn m-btn--primary">…</button>
+   ------------------------------------------------------------ */
+.m-btn {
+  box-sizing: border-box;
+  position: relative;                /* مرجع لموضع مؤشر التحميل في الزر النصي */
+  display: inline-flex;              /* يتمدد مع النص أفقيًا */
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
+  min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
+  padding-block: var(--micro-button-padding-block);   /* 12px */
+  padding-inline: var(--micro-button-padding-inline); /* 20px */
+  border: 0;
+  border-radius: var(--micro-radius-capsule);         /* كبسولة للزر القصير */
+  font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
+  font-size: var(--micro-button-label-size);          /* 16px */
+  line-height: var(--micro-button-label-line);        /* 24px */
+  font-weight: var(--micro-button-label-weight);      /* 500 */
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;        /* منع تأخير/تكبير النقر المزدوج على الهاتف */
+  transition:
+    background-color var(--micro-motion-press) var(--micro-ease-standard),
+    border-color var(--micro-motion-press) var(--micro-ease-standard),
+    color var(--micro-motion-press) var(--micro-ease-standard),
+    box-shadow var(--micro-motion-press) var(--micro-ease-standard);
+}
+
+/* لا اعتماد على hover — أداة الهاتف لا تستخدم التحويم (قاعدة الأسس) */
+
+/* استقلال المقاسات عن أي reset خارجي (تصحيح R2-C):
+   box-sizing لا يورَّث تلقائيًا للأبناء؛ لو اعتمد المكوّن على reset اللوحة
+   (border-box لكل العناصر) لصار المؤشر (عرض 20px + حد 2px) خارجيًا 24px
+   خارج اللوحة، والمؤشر الدائري 28px بدل 24px. النطاق أدناه يجعل كل أجزاء
+   المكوّن مستقلة عن لوحة العرض ومتطابقة القياس في الموضعين. */
+.m-btn,
+.m-btn *,
+.m-btn *::before,
+.m-btn *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   2) الأنواع
+   ------------------------------------------------------------ */
+
+/* الأساسي: تدرج #236675 → #164D59 + ظل محدود (للأساسي فقط افتراضيًا) */
+.m-btn--primary {
+  background-image: var(--micro-button-primary-bg);
+  background-color: var(--micro-brand-primary); /* أرضية احتياطية إن لم يُدعم التدرج */
+  color: var(--micro-text-inverse);
+  box-shadow: var(--micro-shadow-emphasis);
+}
+
+/* الثانوي: أرضية هادئة وحد واضح وبروز أقل من الأساسي */
+.m-btn--secondary {
+  background-color: var(--micro-surface-base);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control); /* حد 1px داخلي لا يغيّر المقاس */
+  color: var(--micro-text-primary);
+}
+
+/* الخفيف/النصي: دون حاوية ثقيلة، لون الهوية يكفي للتعرف عليه.
+   نفس حشو الزر المعتمد (20px) — الاختلاف في الغلاف لا في المساحة. */
+.m-btn--light {
+  background-color: transparent;
+  color: var(--micro-brand-primary);
+}
+
+/* الإجراء المتلف: اللون المحدد له مع تسمية صريحة — ليس كل إجراء مهم أحمر */
+.m-btn--destructive {
+  background-color: var(--micro-danger);
+  color: var(--micro-text-inverse);
+}
+
+/* الإجراء المتلف الهادئ (مقترح): للسياقات الثانوية مثل قائمة إجراءات */
+.m-btn--destructive-soft {
+  background-color: var(--micro-danger-surface);
+  color: var(--micro-danger);
+}
+
+/* زر الأيقونة: تعديل شكل دائري فوق أي نوع — ليس عائلة مستقلة.
+   الاستخدام الغامض يحتاج تسمية مرئية في السياق + aria-label دائمًا. */
+.m-btn--icon {
+  width: var(--micro-icon-button-size);
+  min-height: var(--micro-icon-button-size);
+  height: var(--micro-icon-button-size);
+  padding-block: 0;
+  padding-inline: 0;
+  border-radius: var(--micro-radius-circle);
+  flex: none;
+}
+
+.m-btn--icon .m-btn__icon {
+  width: var(--micro-icon-button-icon); /* 24px داخل الزر الدائري */
+  height: var(--micro-icon-button-icon);
+}
+
+/* عرض كامل: خيار مكوّن، لا تصميم منفصل */
+.m-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   3) عدّاد التصفية داخل الزر
+   زر التصفية = ثانوي + أيقونة + «تصفية» + عدّاد عند وجود فلاتر.
+   الفلاتر النشطة ليست حالة ضغط ولا حالة فتح لوحة.
+   توجيه جولة التصحيح R2: الشارة تُخفى عند 0 — الاسم الإتاحي
+   (aria-label) هو الذي يوضح «لا فلاتر نشطة»، والعدد يظهر عند وجوده.
+   الارتفاع حد أدنى (min-height) وليس ثابتًا: عند تكبير النص 200%
+   يتمدد العدّاد مع الخط بدل قصّه (فحص تكبير النص في reviews). */
+.m-btn__counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* لا انكماش الشارة تحت محتواها وحشوها (تصحيح R2-A): min-width وحدها
+     تستبدل الحد الأدنى التلقائي للعنصر المرن فيسمح flex بتقزيمها عن
+     الأرقام المكبّرة (خروج 123 عن الكبسولة عند تكبير الخط). الشارة
+     غير قابلة للانكماش، والتسمية هي التي تلتّف عند الضيق. */
+  flex: none;
+  min-width: var(--micro-counter-height);
+  min-height: var(--micro-counter-height);
+  padding-inline: var(--micro-space-2);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-brand-accent);   /* مشمشي بنص داكن — 7.60:1 */
+  color: var(--micro-text-primary);
+  font-size: var(--micro-counter-label-size);
+  line-height: 1;
+  font-weight: var(--micro-counter-label-weight);
+  /* أرقام 0–9: اتجاه معزول وعرض متساوٍ للمقارنة */
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* شارة العدد صفر: مخفية بصريةً — الدلالة على «لا فلاتر» في الاسم الإتاحي */
+.m-btn__counter--zero {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   4) الأيقونة داخل الزر
+   لا قلب آلي لأي أيقونة؛ الرموز الاتجاهية تُختار مناسبةً لـ RTL من أصلها.
+   ------------------------------------------------------------ */
+.m-btn__icon {
+  width: var(--micro-icon-in-button); /* 20px داخل زر بنص */
+  height: var(--micro-icon-in-button);
+  flex: none; /* لا تنضغط الأيقونة عند النص الطويل */
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* شارة «تجريبي» في العرض التجريبي فقط — ليست جزءًا من المكوّن */
+.m-btn__sim-tag { display: none; }
+
+/* ---------------------------------------------------------
+   5) الحالات — تفاعلية وثابتة للمقارنة
+   التركيز ≠ الضغط، والمعطل ≠ التحميل (قاعدة الأسس)
+   ------------------------------------------------------------ */
+
+/* الضغط: فعلي (:active) وثابت للمقارنة (.is-pressed) */
+.m-btn--primary:active,
+.m-btn--primary.is-pressed {
+  background-image: none;
+  background-color: var(--micro-brand-pressed); /* #103E48 */
+  box-shadow: none; /* ينخفض العمق عند الضغط */
+}
+
+/* ضغط الثانوي والخفيف — مقترح بانتظار المراجعة (غير محسوم في SHARED-SPEC) */
+.m-btn--secondary:active,
+.m-btn--secondary.is-pressed {
+  background-color: var(--micro-surface-selected);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control);
+}
+.m-btn--light:active,
+.m-btn--light.is-pressed {
+  background-color: var(--micro-surface-selected);
+}
+.m-btn--destructive:active,
+.m-btn--destructive.is-pressed {
+  background-color: var(--micro-danger-pressed); /* مقترح: أغمق من خطأ المعنى */
+}
+.m-btn--destructive-soft:active,
+.m-btn--destructive-soft.is-pressed {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-danger);
+}
+
+/* التركيز: حلقة 2px بفاصل أبيض 2px — فعلي (لوحة المفاتيح) وثابت للمقارنة.
+   الأساسي: يبقى ظله كي لا يقفز العنصر بين الحالات.
+   الثانوي: يحتفظ بحدّه الداخلي مع الحلقة. */
+.m-btn:focus-visible,
+.m-btn.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--primary:focus-visible,
+.m-btn--primary.is-focus {
+  box-shadow:
+    var(--micro-shadow-emphasis),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--secondary:focus-visible,
+.m-btn--secondary.is-focus {
+  box-shadow:
+    inset 0 0 0 1px var(--micro-border-control),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* المعطل: أرضية ونص معطل من القيم المشتركة، بلا ظل ولا حد.
+   التفعيل ممنوع فعليًا عبر خاصية disabled الأصلية. */
+.m-btn[disabled],
+.m-btn.is-disabled {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.m-btn[disabled] .m-btn__counter,
+.m-btn.is-disabled .m-btn__counter {
+  background-color: transparent;
+  color: var(--micro-text-disabled);
+}
+
+/* المعطل: لا ضغط ولا حلقة تركيز — ليس عنصرًا نشطًا. قواعد صريحة فوق
+   قواعد الضغط والتركيز لأن أعلى منها خصوصية وتمنع أي حالة مضللة. */
+.m-btn[disabled]:active,
+.m-btn.is-disabled:active {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+}
+.m-btn[disabled]:focus-visible,
+.m-btn.is-disabled.is-focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* التحميل: يمنع التكرار مع ثبات المساحة.
+   - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
+   - زر نصي بلا أيقونة: المؤشر يتوضع مطلقًا داخل منطقة الحشو الأصلية
+     (is-loading--text من buttons.js أو في ترميز الأمثلة الثابتة)
+     فلا يزيد العرض ولا يحرك النص ولا يقصه.
+   pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
+   عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
+.m-btn.is-loading,
+.m-btn[aria-busy="true"] {
+  pointer-events: none; /* يمنع نقر المؤشر دون تغيير المظهر عن المعطل */
+}
+.m-btn.is-loading .m-btn__icon,
+.m-btn[aria-busy="true"] .m-btn__icon {
+  display: none; /* فتحة الأيقونة يستبدلها المؤشر بنفس المقاس */
+}
+
+.m-btn__spinner {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid currentColor; /* سماكة داخلية بالمكوّن — موثقة في الترويسة */
+  border-inline-start-color: transparent; /* قوس متصل — اتجاه الدوران محايد للـ RTL */
+  animation: micro-spin 900ms linear infinite;
+}
+
+/* زر الأيقونة الدائري: فتحة الأيقونة 24px — المؤشر بنفس المقاس */
+.m-btn--icon .m-btn__spinner {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+}
+
+/* زر نصي بلا أيقونة: النص يبقى في مساره محفوظًا المكان (opacity:0 —
+   باقٍ في شجرة الإتاحة فلا يفقد الزر اسمه) والمؤشر يتوسط الزر —
+   الأبعاد ثابتة بالبنية نفسها: لا زيادة عرض، لا قص، لا قفزة تخطيط.
+   التوسيط بلا transform كي لا يتعارض مع دوران المؤشر. */
+.m-btn.is-loading--text .m-btn__label {
+  opacity: 0;
+}
+.m-btn.is-loading--text .m-btn__spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  /* مقاس المؤشر من القاعدة الأساسية .m-btn__spinner بالتوكن
+     (--micro-icon-in-button) — لا مقاس صريح هنا (تصحيح R2-C:
+     تغيير التوكن ينعكس على كل الأنواع دون استثناء). */
+}
+
+/* انحناء محدود للأزرار متعددة الأسطر — مرشح جولة R2-B للمراجعة (ليس قرارًا معتمدًا):
+   الزر القصير يبقى كبسولة كما هو (ارتفاعه 48px ونصفها 24 فيبدو كبسولة
+   كاملة). عند التفاف النص يُحدّ الانحناء بـ24px من سلم الأسس بدل البيضوي
+   الضخم الذي يصنعه 999px على زر ارتفاعه 216px. طريقة قابلة لإعادة
+   الاستخدام: صنف تعديل اختياري يُضاف للزر الطويل (لا CSS خاصًا بلقطة)،
+   بلا تصغير خط ولا قص نص ولا ارتفاع ثابت. يُعرض في اللوحة بجانب
+   الحالي للمقارنة ويبقى مرشحًا حتى اعتماد المالك. */
+.m-btn--radius-limited {
+  border-radius: var(--micro-radius-button-long);
+}
+
+/* المقترح B للتحميل النصي — مقترح للمراجعة بجانب المقترح A الافتراضي أعلاه
+   (قرار التحميل النصي في مراجعة R2): التسمية تبقى ظاهرة والمؤشر يشغل
+   فتحة محجوزة عند بداية السطر. الحشو محجوز مسبقًا في الحالتين (عادي
+   وتحميل) فلا قفزة حجم ولا تصادم: الفتحة = أيقونة 20px + فراغ 8px عند
+   كل طرف كي يبقى النص متوسطًا في الحالتين. */
+.m-btn--loading-slot {
+  padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
+}
+.m-btn--loading-slot.is-loading .m-btn__spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
+}
+
+@keyframes micro-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* تقليل الحركة: تُلغى الانتقالات غير الجوهرية، ومؤشر التحميل يصير
+   ثابتًا (قوسًا ساكنًا) — الحالة تُفهم من تسمية التحميل الصريحة
+   (data-loading-label أو options.loadingLabel) ومن aria-busy.
+   توجيه جولة التصحيح R2: مؤشر ثابت بدل دوران أبطأ. */
+@media (prefers-reduced-motion: reduce) {
+  .m-btn {
+    transition: none;
+  }
+  .m-btn__spinner {
+    animation: none;
+  }
+}

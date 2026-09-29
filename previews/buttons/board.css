@@ -1,0 +1,278 @@
+/* =========================================================
+   Micro UI — تنسيق لوحة معاينة الأزرار فقط (previews/buttons/board.css)
+   هذا الملف خاص بعرض اللوحة (ترويسات، شبكات، تسميات، إطارات هاتف).
+   لا يعيد تنسيق .m-btn إطلاقًا — شكل المكوّن في components/buttons/buttons.css
+   والقيم كلها من shared/tokens.css.
+   ========================================================= */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: 16px;
+  line-height: 26px;
+}
+
+/* ---- ترويسة اللوحة ---- */
+.board-header {
+  padding: var(--micro-space-6) var(--micro-space-5);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.board-header h1 {
+  margin: 0 0 var(--micro-space-1);
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.board-header .meta {
+  color: var(--micro-text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+.status-chip {
+  display: inline-block;
+  background: var(--micro-warning-surface);
+  color: var(--micro-warning);
+  border-radius: var(--micro-radius-capsule);
+  padding: 2px var(--micro-space-3);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-inline-start: var(--micro-space-2);
+  white-space: nowrap;
+}
+
+/* ---- الأقسام ---- */
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--micro-space-5) var(--micro-space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-6);
+}
+section.panel {
+  background: var(--micro-surface-base);
+  border-radius: var(--micro-radius-surface);
+  padding: var(--micro-space-6);
+}
+.panel > h2 {
+  margin: 0 0 var(--micro-space-1);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.panel > h3 {
+  margin: var(--micro-space-6) 0 var(--micro-space-2);
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.panel > h3:first-of-type { margin-block-start: 0; }
+.panel > .panel-note {
+  margin: 0 0 var(--micro-space-4);
+  color: var(--micro-text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* ---- شبكة أمثلة مع تسمية تحت كل مثال ---- */
+.example-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-4) var(--micro-space-6);
+  align-items: flex-end;
+}
+.example { display: flex; flex-direction: column; gap: var(--micro-space-2); }
+.example > .caption {
+  color: var(--micro-text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* ---- جدول الحالات الثابتة ---- */
+.states-table { display: flex; flex-direction: column; gap: var(--micro-space-4); }
+.state-row {
+  display: grid;
+  grid-template-columns: 130px repeat(5, max-content);
+  gap: var(--micro-space-3) var(--micro-space-4);
+  align-items: start;
+}
+.state-row > .type-name {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  padding-top: 15px; /* محاذاة بصرية مع مركز الزر */
+}
+.state-cell { display: flex; flex-direction: column; gap: var(--micro-space-2); align-items: center; }
+.state-cell > .state-label {
+  color: var(--micro-text-hint);
+  font-size: 13px;
+  line-height: 20px;
+}
+@media (max-width: 860px) {
+  .state-row { grid-template-columns: 1fr; }
+  .state-row > .type-name { padding-top: 0; }
+  .state-cell { align-items: flex-start; }
+}
+
+/* ---- منطقة التفاعل الحقيقي ---- */
+.demo-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-3);
+}
+.demo-note {
+  color: var(--micro-text-hint);
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0 0 var(--micro-space-2);
+}
+/* رسالة الاكتمال التجريبية المجاورة — لا تحويل لون الزر نفسه.
+   إصلاح R1: قاعدة [hidden] صريحة — كان display:inline-flex في هذا
+   الصنف يلغي إخفاء hidden الافتراضي فتظهر الرسالة أثناء التحميل. */
+.demo-message {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  background: var(--micro-success-surface);
+  color: var(--micro-success);
+  border-radius: var(--micro-radius-field);
+  padding: var(--micro-space-2) var(--micro-space-3);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 500;
+}
+.demo-message[hidden] { display: none; } /* الإخفاء يلغي العرض دائمًا */
+.demo-message svg { width: var(--micro-icon-in-button); height: var(--micro-icon-in-button); color: var(--micro-success); }
+
+/* ---- عمود هاتف بأبعاد CSS حقيقية ----
+   لوحة المقارنة الجانبية: overflow-x محصور هنا عمدًا كي يبقى تمرير
+   الأعمدة داخل هذا القسم وحده عند شاشة أضيق، ولا تمرّر الصفحة نفسها.
+   إثبات سلامة المكوّن على الهاتف لا يعتمد على هذه اللوحة — بل على
+   قسم «معاينة هاتف كاملة» أدناه بعرض منفصل غير مقصوص لكل مقاس. */
+.phone-lab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-6);
+  align-items: flex-start;
+  overflow-x: auto;
+  max-width: 100%;
+  padding-bottom: var(--micro-space-1);
+}
+.phone-demo {
+  background: var(--micro-surface-page);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  padding: var(--micro-space-5) var(--micro-space-5) var(--micro-space-6);
+  flex: none;
+}
+.phone-demo.is-320 { width: 320px; padding-inline: var(--micro-space-4); } /* هامش 16px للشاشات الأصغر */
+.phone-demo.is-390 { width: 390px; }
+.phone-demo.is-430 { width: 430px; }
+.phone-demo > .phone-title {
+  color: var(--micro-text-hint);
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0 0 var(--micro-space-3);
+  direction: ltr;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.phone-stack { display: flex; flex-direction: column; gap: var(--micro-space-3); }
+.phone-row { display: flex; flex-wrap: wrap; gap: var(--micro-space-3); align-items: center; }
+
+/* ---- قسم المعاينة الكاملة + محاكاة زيادة حجم الخط (القسم 6 — بند 6 و8) ----
+   قسم مفتوح بلا بطاقة بيضاء: هامشه السالب يلغي هامش main (20px)
+   فيمتد القسم بعرض الشاشة الحقيقية، ويتسع عمود 320/390/430 كاملًا
+   داخل صفحة عرضه نفسه — دون قص ودون تمرير داخلي.
+   المقاسات الأعرض من الشاشة الحالية تُخفى: كل مقاس يُعاين عند عرضه. */
+.phone-full-section {
+  margin-inline: calc(-1 * var(--micro-space-5));
+}
+.phone-full-section > h2 {
+  margin: var(--micro-space-2) 0 var(--micro-space-1);
+  padding-inline: var(--micro-space-5);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.phone-full-section > .panel-note {
+  margin: 0 0 var(--micro-space-4);
+  padding-inline: var(--micro-space-5);
+  color: var(--micro-text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+.phone-full-block { margin-block: var(--micro-space-6); }
+.phone-full-block:first-of-type { margin-block-start: var(--micro-space-2); }
+.phone-full-block > .phone-title {
+  margin: 0 0 var(--micro-space-3);
+  padding-inline: var(--micro-space-5);
+}
+.phone-full-block .phone-demo { margin-inline: auto; }
+@media (max-width: 389.98px) {
+  .phone-full-block[data-w="390"],
+  .phone-full-block[data-w="430"] { display: none; }
+}
+@media (min-width: 390px) and (max-width: 429.98px) {
+  .phone-full-block[data-w="430"] { display: none; }
+}
+
+/* ---- محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة (بند 8) ----
+   العمود يعاين أصعب الأمثلة بعرض مساحة العرض الفعلية (يتبع الشاشة).
+   زر المحاكاة في board.js يضاعف حجم الخط المحسوب لكل عناصر العمود
+   في مرورين (قراءة الأحجام أولًا ثم تطبيق العامل — تصحيح R2-D):
+   الخط يتضاعف، وتبقى الأيقونة والحشو والارتفاعات الدنيا — والسطر
+   نسبة 1.5 فيتمدد مع الخط.
+   الفحص المعتمد في tools/b01-screenshots.py يضغط الزر نفسه ويقيس
+   الالتفاف والتجاوز (sw/cw) وحدود نص العدّاد داخل الشارة —
+   آلية CDP Emulation.setTextZoomFactor غير متاحة في بيئة الفحص. */
+.phone-demo.zoom-lab { max-width: 100%; }
+
+/* ---- لوحة تحكم الفحص ---- */
+.lab-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+  align-items: center;
+  margin-bottom: var(--micro-space-4);
+}
+.lab-controls .demo-note { margin: 0; }
+
+/* ---- فحص الخط والأيقونات ---- */
+.font-probe {
+  background: var(--micro-surface-page);
+  border-radius: var(--micro-radius-field);
+  padding: var(--micro-space-3) var(--micro-space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-6);
+  align-items: baseline;
+}
+.font-probe .digits {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.icon-row { display: flex; flex-wrap: wrap; gap: var(--micro-space-4); }
+.icon-item { display: flex; flex-direction: column; gap: var(--micro-space-1); align-items: center; }
+.icon-item svg { width: 24px; height: 24px; color: var(--micro-text-primary); }
+.icon-item .caption { font-size: 13px; color: var(--micro-text-secondary); }
+
+/* ---- تذييل ---- */
+.board-footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--micro-space-5) var(--micro-space-8);
+  color: var(--micro-text-hint);
+  font-size: 13px;
+  line-height: 22px;
+}

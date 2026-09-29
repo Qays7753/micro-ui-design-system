@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة الأزرار (B01)
+  الحالة: DRAFT FOR RE-REVIEW — لقطات reviews/B01/screenshots مأخوذة من هذا الملف.
+  التشغيل (من جذر المستودع فقط — الأصول والمكوّن خارج هذا المجلد):
+    python3 -m http.server 8080
+    ثم فتح http://localhost:8080/previews/buttons/
+  المكوّن نفسه في: components/buttons/buttons.css (+ buttons.js للسلوك)
+  القيم المشتركة في: shared/tokens.css
+  الأيقونات تُحمَّل في هذه اللوحة من أصولها الوحيدة assets/icons/*.svg
+  عبر board.js — لا نسخ مكررة يدوية داخل HTML.
+  هذا الملف يستدعي المكوّن ولا يعيد تعريف شكله.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة الأزرار (B01)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <!-- تعريفات الأيقونات تُبنى وقت التشغيل من assets/icons/*.svg (مصدر واحد)
+       بواسطة board.js — عدّل الأصل في assets/icons وسينعكس هنا تلقائيًا. -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — الأزرار <span class="status-chip">DRAFT FOR RE-REVIEW</span></h1>
+    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح — الأنوان والحالات من الأسس المعتمدة V1.1. ما لم يُحسم موسوم «مقترح» في المواصفات والمراجعة. تصحيحات جولتي R1 وR2 على نفس الملفات.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) الأنواع — الحالة العادية ================= -->
+    <section class="panel" id="types">
+      <h2>1) الأنواع الستة — الحالة العادية</h2>
+      <p class="panel-note">خيارات لنظام واحد: label · variant · icon · disabled · loading · full-width. «حفظ» و«إنشاء» نفس المكوّن بلايات مختلفة.</p>
+      <div class="example-grid">
+        <div class="example">
+          <button class="m-btn m-btn--primary"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
+          <span class="caption">أساسي + أيقونة</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--primary">حفظ العملية</button>
+          <span class="caption">أساسي بنص فقط</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--secondary">إلغاء</button>
+          <span class="caption">ثانوي</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--light">عرض الكل</button>
+          <span class="caption">خفيف/نصي</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+          <span class="caption">أيقونة دائري (اسم إتاحة: «بحث»)</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+          <span class="caption">متلف صلب — تسمية صريحة</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--destructive-soft">إزالة من القائمة</button>
+          <span class="caption">متلف هادئ — مقترح</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+          <span class="caption">تصفية بعدّاد — العدّاد داخل الزر</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2) جدول الحالات الثابتة ================= -->
+    <section class="panel" id="states">
+      <h2>2) جدول الحالات — أمثلة ثابتة للمقارنة</h2>
+      <p class="panel-note">التركيز ≠ الضغط، والمعطل ≠ التحميل. الوسم الثابت للعروض فقط؛ التفاعل الفعلي في القسم 3. زر نصي في التحميل: المؤشر داخل منطقة الحشو (is-loading--text) فتبقى الأبعاد كما هي.</p>
+      <div class="states-table">
+
+        <div class="state-row">
+          <span class="type-name">أساسي</span>
+          <div class="state-cell"><button class="m-btn m-btn--primary">حفظ العملية</button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-pressed">حفظ العملية</button><span class="state-label">ضغط ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-focus">حفظ العملية</button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary" disabled>حفظ العملية</button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
+        </div>
+
+        <div class="state-row">
+          <span class="type-name">ثانوي</span>
+          <div class="state-cell"><button class="m-btn m-btn--secondary">إلغاء</button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-pressed">إلغاء</button><span class="state-label">ضغط ثابت — مقترح</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-focus">إلغاء</button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary" disabled>إلغاء</button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">إلغاء</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
+        </div>
+
+        <div class="state-row">
+          <span class="type-name">خفيف/نصي</span>
+          <div class="state-cell"><button class="m-btn m-btn--light">عرض الكل</button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--light is-pressed">عرض الكل</button><span class="state-label">ضغط ثابت — مقترح</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--light is-focus">عرض الكل</button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--light" disabled>عرض الكل</button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--light is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">عرض الكل</span></button><span class="state-label">تحميل — أبعاد ثابتة</span></div>
+        </div>
+
+        <div class="state-row">
+          <span class="type-name">أيقونة دائري<br>(ثانوي + شكل دائري)</span>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-pressed" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">ضغط ثابت — مقترح</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-focus" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث" disabled><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary m-btn--icon is-loading" aria-label="جارٍ البحث" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span></button><span class="state-label">تحميل — مؤشر 24px بفتحة الأيقونة</span></div>
+        </div>
+
+        <div class="state-row">
+          <span class="type-name">متلف صلب</span>
+          <div class="state-cell"><button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--destructive is-pressed"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button><span class="state-label">ضغط ثابت — مقترح</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--destructive is-focus"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--destructive" disabled><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--destructive is-loading" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>حذف السجل</button><span class="state-label">تحميل</span></div>
+        </div>
+
+        <div class="state-row">
+          <span class="type-name">تصفية بعدّاد</span>
+          <div class="state-cell"><button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">عادي</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-pressed" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">ضغط ثابت — مقترح</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-focus" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">تركيز ثابت</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary" disabled aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">معطل</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-loading" aria-label="جارٍ التصفية" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span>تصفية<span class="m-btn__counter">2</span></button><span class="state-label">تحميل</span></div>
+        </div>
+
+        <!-- حالات متزامنة (بند 9 من جولة التصحيح) — ثابتة للمقارنة، والتفاعل الحقيقي في القسم 3 -->
+        <div class="state-row">
+          <span class="type-name">حالات متزامنة</span>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-focus is-pressed">حفظ العملية</button><span class="state-label">تركيز + ضغط — الحلقة ظاهرة</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--secondary is-focus is-pressed">إلغاء</button><span class="state-label">تركيز + ضغط — الحد والحلقة معًا</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary is-focus is-loading is-loading--text" aria-busy="true"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button><span class="state-label">تركيز + تحميل — التركيز يبقى</span></div>
+          <div class="state-cell"><button class="m-btn m-btn--primary" disabled>حفظ العملية</button><span class="state-label">معطل — لا ضغط ولا حلقة</span></div>
+        </div>
+
+      </div>
+      <p class="panel-note" style="margin-top:16px">ملاحظة: الفلاتر النشطة حالة عدّاد داخل الزر وليست حالة ضغط ولا حالة فتح لوحة — لا لوحة فلاتر في هذه الدفعة. شارة العدد صفر مخفية (توجيه جولة التصحيح) والاسم الإتاحي يوضح عدم وجود فلاتر.</p>
+    </section>
+
+    <!-- ================= 3) تفاعل حقيقي ================= -->
+    <section class="panel" id="live">
+      <h2>3) تفاعل حقيقي — للمراجعة الفعلية</h2>
+      <p class="panel-note">جرّب: الضغط بالفأرة/اللمس، التنقل بلوحة المفاتيح (Tab) لرؤية حلقة التركيز، Enter/Space أثناء التحميل (ممنوع فعليًا عبر حراسة المكوّن، لا pointer-events وحده)، والنقر المتكرر أثناء التحميل. النتائج الموسومة «تجريبية» محاكاة للعرض فقط.</p>
+
+      <p class="demo-note">حفظ: تحميل حقيقي 2.2 ثانية ثم رسالة اكتمال مجاورة — الزر نفسه لا يتحول للأخضر. الرسالة السابقة تُخفى عند بدء كل محاولة جديدة وتظهر فقط بعد انتهاء المحاكاة:</p>
+      <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--primary" data-demo="save" data-loading-label="جارٍ الحفظ"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
+        <span class="demo-message" data-demo-message hidden><svg aria-hidden="true"><use href="#i-check"/></svg>تم الحفظ — رسالة تجريبية للعرض فقط</span>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">تصفية: كل نقرة تبدّل العدّاد 0 → 2 → 123 (الشارة مخفية عند 0). لا لوحة تصفية:</p>
+      <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--secondary" data-demo="filter" aria-label="تصفية، لا فلاتر نشطة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter m-btn__counter--zero">0</span></button>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">عقد التحميل عبر واجهة المكوّن (MicroButtons.setLoading): زر نصي بلا أيقونة بأبعاد ثابتة، زر أيقونة بتسمية صريحة، وزر معطل أصلًا لا يدخل التحميل أبدًا:</p>
+      <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--light" data-loading-api data-loading-label="جارٍ التحديث">تحديث القائمة</button>
+        <button class="m-btn m-btn--secondary m-btn--icon" data-loading-api aria-label="بحث" data-loading-label="جارٍ البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+        <button class="m-btn m-btn--primary" disabled data-loading-api>محفوظ — معطل أصلًا</button>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">المقترحان للتحميل النصي (قرار مراجعة R2 — كلاهما بلا قفزة حجم ولا تصادم، والاختيار بعد المقارنة): <b>المقترح A</b> (الافتراضي الحالي): التسمية محفوظة المكان (opacity:0 باقية في شجرة الإتاحة) والمؤشر يتوسط الزر. <b>المقترح B</b> (المرشح): التسمية تبقى ظاهرة والمؤشر في فتحة محجوزة عند بداية السطر (صنف m-btn--loading-slot) — العرض نفسه في الحالتين:</p>
+      <div class="demo-group" data-demo-group>
+        <button class="m-btn m-btn--secondary" data-loading-api data-loading-label="جارٍ التحديث" data-load-proposal="A">مزامنة البيانات</button>
+        <button class="m-btn m-btn--secondary m-btn--loading-slot" data-loading-api data-loading-label="جارٍ التحديث" data-load-proposal="B">مزامنة البيانات</button>
+      </div>
+
+      <p class="demo-note" style="margin-top:16px">تنقل بلوحة المفاتيح عبر هذا الصف (Tab / Shift+Tab) — حلقة التركيز بفاصل أبيض 2px، وجرب Enter ثم راقب التحميل وعودة الاسم الإتاحي:</p>
+      <div class="demo-group" data-demo-group id="kb-group">
+        <button class="m-btn m-btn--primary">إنشاء طلب</button>
+        <button class="m-btn m-btn--secondary">تعديل</button>
+        <button class="m-btn m-btn--light">عرض الكل</button>
+        <button class="m-btn m-btn--secondary" disabled>إرسال — معطل</button>
+        <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+      </div>
+
+      <noscript><p class="demo-note">بدون JavaScript: الأمثلة الثابتة تعمل، لكن الأيقونات (تُحمَّل من أصولها) والعروض التفاعلية أعلاه لا تعمل — شغّل اللوحة بخادم محلي كما في README.</p></noscript>
+    </section>
+
+    <!-- ================= 4) خيارات المكوّن والأمثلة الصعبة ================= -->
+    <section class="panel" id="options">
+      <h2>4) خيارات المكوّن وأمثلة صعبة</h2>
+      <p class="panel-note">العرض الكامل خيار (m-btn--block) لا تصميم منفصل، والنص الطويل يلتفّ دون قص لأن الارتفاع حد أدنى. المقاسات أدناه عروض CSS حقيقية بالعرض المكتوب على كل تسمية.</p>
+      <div class="example-grid">
+
+        <!-- مقارنة جنبًا إلى جنب: قصير مقابل سطرين (بند 7 من جولة التصحيح) -->
+        <div class="example">
+          <button class="m-btn m-btn--primary">حفظ العملية</button>
+          <span class="caption">قصير — سطر واحد (48px ارتفاعًا)</span>
+        </div>
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+          <span class="caption">طويل — سطران بنفس المكوّن (320px عرضًا)</span>
+        </div>
+
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+          <span class="caption">أساسي بعرض كامل (320px عرضًا)</span>
+        </div>
+
+        <div class="example" style="width:340px;max-width:100%">
+          <button class="m-btn m-btn--secondary" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
+          <span class="caption">أصعب مثال: أيقونة + نص طويل + عدّاد 123 (340px عرضًا)</span>
+        </div>
+
+        <!-- مقارنة R2-B: انحناء الزر الطويل عند التفاف النص — المرشح ليس قرارًا معتمدًا -->
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+          <span class="caption">الحالي: كبسولة 999px — تتحول لبيضوي ضخم عند الالتفاف (4 أسطر)</span>
+        </div>
+        <div class="example" style="width:320px;max-width:100%">
+          <button class="m-btn m-btn--primary m-btn--block m-btn--radius-limited">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+          <span class="caption">المرشح R2-B: انحناء محدود 24px (m-btn--radius-limited) — نفس الخط والنص والارتفاع</span>
+        </div>
+
+        <div class="example">
+          <button class="m-btn m-btn--secondary" aria-label="تصفية، لا فلاتر نشطة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter m-btn__counter--zero">0</span></button>
+          <span class="caption">عدّاد 0 — الشارة مخفية (توجيه R2) والاسم الإتاحي يوضح «لا فلاتر»</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+          <span class="caption">عدّاد 2 — مشمشي بنص داكن</span>
+        </div>
+        <div class="example">
+          <button class="m-btn m-btn--secondary" aria-label="تصفية، 123 فلترًا نشطًا"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">123</span></button>
+          <span class="caption">عدّاد 123 — يتمدد دون انكسار</span>
+        </div>
+
+      </div>
+      <p class="demo-note" style="margin-top:16px">فحص الخط الفعلي (بند 7): التسمية تُعرض بـ IBM Plex Sans Arabic وزن 500 فعليًا — التحقق البرمجي document.fonts.check في سجل الفحص tools/b01-screenshots.py، وليس بالاستدلال من صورة.</p>
+    </section>
+
+    <!-- ================= 5) لوحة مقارنة جانبية (أداة فحص عريضة) ================= -->
+    <section class="panel" id="phones">
+      <h2>5) لوحة مقارنة جانبية — أبعاد CSS حقيقية (320 / 390 / 430)</h2>
+      <p class="panel-note">أداة مقارنة للفحص على شاشة عريضة فقط: أعمدة جانبية قد تتجاوز الشاشة الضيقة (تمريرها محصور داخل هذا القسم). الإثبات المعتمد لسلامة الهاتف في القسم 6: عرض منفصل كامل لكل مقاس بلا قص ولا تمرير داخلي.</p>
+      <div class="phone-lab">
+
+        <div class="phone-demo is-320">
+          <p class="phone-title">320px</p>
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+              <button class="m-btn m-btn--destructive-soft">حذف السجل</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone-demo is-390">
+          <p class="phone-title">390px</p>
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone-demo is-430">
+          <p class="phone-title">430px</p>
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 6) معاينة هاتف كاملة + تكبير النص 200% =================
+         قسم مفتوح (بلا بطاقة بيضاء) كي يتسع كل مقاس بعرضه الحقيقي داخل
+         صفحة عرضه نفسه — الإثبات المعتمد لسلامة المكوّن على الهاتف. -->
+    <section class="phone-full-section" id="phones-full">
+      <h2>6) معاينة هاتف كاملة — عرض منفصل لكل مقاس، بلا قص ولا تمرير داخلي</h2>
+      <p class="panel-note">كل عمود أدناه بعرض CSS حقيقي مطابق لعنوانه (المقاسات الأعرض من الشاشة الحالية تُخفى، وتُعاين عند عرضها هي)، وهامش الصفحة والحلقات والظلال ظاهرة كاملة. اللقطات 16–18 التُقطت بعرض صفحة مساوٍ للمقاس نفسه.</p>
+
+      <div class="phone-full-block" data-w="320">
+        <p class="phone-title">معاينة كاملة — 320px (هامش صفحة 16px داخل العمود)</p>
+        <div class="phone-demo is-320">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+              <button class="m-btn m-btn--destructive-soft">حذف السجل</button>
+            </div>
+            <button class="m-btn m-btn--primary m-btn--block">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="390">
+        <p class="phone-title">معاينة كاملة — 390px (هامش صفحة 20px داخل العمود)</p>
+        <div class="phone-demo is-390">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-full-block" data-w="430">
+        <p class="phone-title">معاينة كاملة — 430px (هامش صفحة 20px داخل العمود)</p>
+        <div class="phone-demo is-430">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>سجل عملية</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--secondary">التفاصيل</button>
+              <button class="m-btn m-btn--secondary" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--destructive"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف السجل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة</h2>
+      <p class="panel-note">زر المحاكاة أدناه («محاكاة زيادة حجم الخط») يضاعف حجم الخط المحسوب لكل عناصر العمود في مرورين: قراءة كل الأحجام الأصلية أولًا ثم تطبيق العامل (تصحيح R2-D: يمنع مضاعفة الابن الوارث مرتين — 16→32 لا 64). الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP (Emulation.setTextZoomFactor) غير متاحة في بيئة الفحص — هذه المحاكاة مكافئة للنص وليست تكبير متصفح/نظام مضمونًا لكل الحالات. القياسات في سجل الفحص tools/b01-screenshots.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا. العمود يضم: نصًا مباشرًا، النص نفسه داخل غلاف m-btn__label (زر تحميل ثابت)، وزرين طويلين (الحالي والمرشح R2-B) لفحص الشكل عند 100% و200%.</p>
+      <div class="lab-controls">
+        <button class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+        <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها ويعيد الأحجام بدقة.</span>
+      </div>
+      <div class="phone-full-block">
+        <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
+          <div class="phone-stack">
+            <button class="m-btn m-btn--primary m-btn--block"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية وتأكيد التحويل إلى المورد الرئيسي</button>
+            <button class="m-btn m-btn--secondary m-btn--block" aria-label="تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية الطلبات المتأخرة عن الموعد<span class="m-btn__counter">123</span></button>
+            <!-- نص داخل غلاف التحميل المؤقت (R2-D): يجب أن يصل 32px لا 64px -->
+            <button class="m-btn m-btn--primary is-loading is-loading--text" aria-busy="true" aria-label="جارٍ الحفظ"><span class="m-btn__spinner" data-demo="persistent" aria-hidden="true"></span><span class="m-btn__label">حفظ العملية</span></button>
+            <!-- مقارنة R2-B عند التكبير: الحالي مقابل المرشح -->
+            <button class="m-btn m-btn--primary m-btn--block" data-radius="capsule">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+            <button class="m-btn m-btn--primary m-btn--block m-btn--radius-limited" data-radius="limited">حفظ العملية وتأكيد التحويل إلى المورد الرئيسي وتحديث رصيد الصندوق</button>
+            <div class="phone-row">
+              <button class="m-btn m-btn--light">عرض الكل</button>
+              <button class="m-btn m-btn--secondary m-btn--icon" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7) فحص الخط والأيقونات ================= -->
+    <section class="panel" id="assets-check">
+      <h2>7) فحص الخط والأيقونات — أصول فعلية</h2>
+      <p class="panel-note">الخط محلي (assets/fonts) — الأرقام من IBM Plex Sans والعربية من IBM Plex Sans Arabic. الأيقونات HugeIcons Stroke Rounded (MIT) تُحمَّل من أصولها الوحيدة assets/icons/*.svg — تعديل الأصل ينعكس هنا مباشرة دون نسخ ثانية.</p>
+      <div class="font-probe">
+        <span>حفظ العملية</span>
+        <span class="digits">0123456789</span>
+        <span class="digits">1,240.50</span>
+        <span>د.أ 1,240.50</span>
+        <span>عرض 20px · عنوان 600</span>
+      </div>
+      <p class="demo-note" style="margin-top:16px">الرموز المستخدمة في هذه الدفعة (عرض 24px) — محمّلة من assets/icons عبر board.js: <span id="icon-load-status">جارٍ التحميل من الأصول…</span></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="caption">search-01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-filter"/></svg><span class="caption">filter-horizontal</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-add"/></svg><span class="caption">add-01</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-check-circle"/></svg><span class="caption">checkmark-circle-02</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-delete"/></svg><span class="caption">delete-02</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-check"/></svg><span class="caption">check</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/buttons/ (specification.md · buttons.css · buttons.js) — القيم: shared/tokens.css — مثال الاستخدام خارج اللوحة: previews/buttons/example-usage.html — طريقة التشغيل والتعديل: previews/buttons/README.md — نتائج الفحص: reviews/B01/review.md
+  </footer>
+
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

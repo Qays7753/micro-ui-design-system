@@ -1,0 +1,104 @@
+/* =========================================================
+   Micro UI — القيم المشتركة (shared/tokens.css)
+   المصدر: docs/SHARED-SPEC.md + docs/foundations/Micro-UI-Foundations-V1.md
+   الحالة: قيم عمل مشتقة من الأسس المعتمدة (V1.1) — أي تعديل بصري جديد يبقى مقترحًا.
+   النطاق: دفعة B01 (الأزرار) وما سبق اعتماده من قيم مشتركة فقط.
+   ملاحظة RTL: كل قيم المكوّنات تستخدم الخصائص المنطقية (inline/block) فلا تتأثر باتجاه الصفحة.
+   ========================================================= */
+
+:root {
+  /* ---- الهوية البترولية ---- */
+  --micro-brand-primary: #164D59;        /* الأزرار الرئيسية، الروابط المهمة، التحديد */
+  --micro-brand-pressed: #103E48;        /* الضغط على الإجراء الرئيسي */
+  --micro-brand-gradient-start: #236675; /* طرف تدرج الزر الأساسي، والنهاية primary */
+  --micro-brand-support: #507F8B;        /* لون مساعد للتدرجات والزخرفة فقط — لا نص أبيض صغير فوقه */
+  --micro-brand-accent: #F4AD76;         /* اللمسة المشمشية: عدّاد التصفية وشارات محدودة، بنص داكن */
+
+  /* ---- الأسطح ---- */
+  --micro-surface-page: #F7F8F4;      /* الخلفية العامة */
+  --micro-surface-base: #FFFFFF;      /* أرضية صافية: حقول ونوافذ وأزرار ثانوية */
+  --micro-surface-selected: #DFEEE6;  /* اختيار خفيف أو احتواء هادئ */
+  --micro-surface-disabled: #E4EAE8;  /* خلفية العنصر المعطل */
+
+  /* ---- النصوص ---- */
+  --micro-text-primary: #172D32;   /* العناوين والنص والمبالغ الأساسية */
+  --micro-text-secondary: #50656A; /* نص ثانوي يبقى مقروءًا */
+  --micro-text-hint: #5F7378;      /* تلميحات على الأبيض أو خلفية الصفحة */
+  --micro-text-inverse: #FFFFFF;   /* نص فوق البترولي أو تدرج الزر */
+  --micro-text-disabled: #53676B;  /* نص العنصر المعطل */
+
+  /* ---- الحدود والتركيز ---- */
+  --micro-border-control: #71868B; /* حد التحكم عندما يلزم للتعرف عليه */
+  --micro-border-divider: #DCE5E2; /* فاصل خفيف تكميلي */
+  --micro-focus-ring: #164D59;     /* حلقة تركيز واضحة */
+  --micro-focus-ring-width: 2px;   /* سماكة حلقة التركيز */
+  --micro-focus-gap: 2px;          /* الفاصل الأبيض بين الزر والحلقة */
+
+  /* ---- ألوان المعنى (ألوان البيانات منفصلة عن هذه الدفعة) ---- */
+  --micro-success: #176647;        --micro-success-surface: #E5F3EA;
+  --micro-danger: #AD303B;         --micro-danger-surface: #FBEAEC;
+  --micro-warning: #815400;        --micro-warning-surface: #FFF1CD;
+  --micro-info: #265E91;           --micro-info-surface: #E9F1FA;
+
+  /* مقترح بانتظار المراجعة: لون ضغط الإجراء المتلف (أغمق درجة من #AD303B).
+     لم يُحدد في الأسس؛ يظهر في review.md ضمن القرارات المطلوبة. */
+  --micro-danger-pressed: #8F2730;
+
+  /* ---- سلم المسافات ---- */
+  --micro-space-1: 4px;
+  --micro-space-2: 8px;
+  --micro-space-3: 12px;
+  --micro-space-4: 16px;
+  --micro-space-5: 20px;
+  --micro-space-6: 24px;
+  --micro-space-8: 32px;
+  --micro-space-10: 40px;
+
+  /* ---- مقاسات التحكم ---- */
+  --micro-touch-min: 48px;               /* هدف لمس مستقل: 48 × 48px كقاعدة مشروع */
+  --micro-button-min-height: 48px;       /* ارتفاع أدنى للزر — يتمدد مع النص ولا يقصه */
+  --micro-button-padding-inline: 20px;   /* الحشو الأفقي للزر */
+  --micro-button-padding-block: 12px;    /* الحشو العمودي للزر */
+  --micro-button-gap: 8px;               /* الفراغ الافتراضي بين الأيقونة والنص (8–12 حسب السياق) */
+  --micro-icon-in-button: 20px;          /* أيقونة داخل زر بنص */
+  --micro-icon-button-size: 48px;        /* زر الأيقونة الدائري */
+  --micro-icon-button-icon: 24px;        /* الأيقونة داخل زر الأيقونة */
+  --micro-counter-height: 20px;          /* عدّاد التصفية داخل الزر */
+  --micro-counter-label-size: 13px;      /* خط العدّاد — مشترك بين أمثلة المكوّن */
+  --micro-counter-label-weight: 500;     /* وزن خط العدّاد */
+
+  /* ---- الانحناءات ---- */
+  --micro-radius-capsule: 999px; /* كبسولة للزر القصير */
+  /* انحناء محدود للزر متعدد الأسطر — مرشح مراجعة R2-B (ليس قرارًا معتمدًا):
+     نفس انحناء السطح 24px من سلم الأسس؛ على الزر القصير (48px) يعطي
+     الكبسولة نفسها بصريًا، وعند التفاف النص يبقى الشكل متزنًا بدل
+     البيضوي الضخم. مصنف مرشحًا حتى اعتماد المالك. */
+  --micro-radius-button-long: 24px;
+  --micro-radius-field: 16px;    /* للحقل — قيمة مشتركة لدفعة الإدخال */
+  --micro-radius-surface: 24px;  /* لسطح مستقل — قيمة مشتركة */
+  --micro-radius-circle: 50%;    /* زر الأيقونة */
+
+  /* ---- الخط والأرقام ----
+     IBM Plex Sans أولًا ليأخذ الأرقام 0–9 واللاتيني منها،
+     والعربية تسقط تلقائيًا إلى IBM Plex Sans Arabic. لا تباعد أحرف مصطنع. */
+  --micro-font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+  --micro-button-label-size: 16px;
+  --micro-button-label-line: 1.5;        /* نسبة لا بكسل: 16×1.5 = 24px نفس القيمة المعتمدة،
+                                            وتتمدد مع النص عند تكبيره 200% بدل تجاوز السطر */
+  --micro-button-label-weight: 500;
+
+  /* ---- العمق ---- */
+  --micro-shadow-emphasis: 0 3px 8px rgba(22, 77, 89, 0.14); /* ظل الزر البارز — للأساسي فقط افتراضيًا */
+  --micro-shadow-overlay: 0 10px 28px rgba(23, 45, 50, 0.12); /* سطح مؤقت مرتفع — دفعات الطبقات */
+
+  /* ---- الحركة ---- */
+  --micro-motion-press: 120ms;     /* الضغط */
+  --micro-motion-selection: 180ms; /* تغيّر اللون/التحديد */
+  --micro-motion-open: 240ms;      /* فتح سطح مؤقت — دفعات الطبقات */
+  --micro-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- تدرج الزر الأساسي ----
+     #236675 → #164D59 وفق الأسس؛ عمودي ليظل ثابتًا في RTL وLTR.
+     البديل المصمت: اجعل القيمة لونًا واحدًا عند صغر المساحة. */
+  --micro-button-primary-bg: linear-gradient(180deg, var(--micro-brand-gradient-start) 0%, var(--micro-brand-primary) 100%);
+}

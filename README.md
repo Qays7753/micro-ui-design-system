@@ -20,7 +20,7 @@
 راجع ARTIFACTS.md لمعرفة حالة كل ملف. هذه نسخة تأسيسية لمرجع التصميم؛ مكتبة المكوّنات لم تكتمل بعد. المستودع عام بموافقة المالك، ولا يتضمن أسرارًا أو بيانات مستخدمين.
 
 ## الخطوة النشطة
-[تكليف الأزرار B01](prompts/B01-BUTTONS-ZAI.md) جاهز للإرسال إلى ZAI Flash. المصدر القابل للتعديل إلزامي، ولا يوجد تنفيذ لهذه الدفعة بعد. راجع [القائمة](docs/COMPONENT-INVENTORY.md) و[عقد التسليم](docs/EDITABLE-DELIVERY.md).
+دفعة [الأزرار B01](prompts/B01-BUTTONS-ZAI.md) منفذة بمصدر قابل للتعديل ومعاينة على فرع `task/b01-buttons` عبر [PR #1](https://github.com/Qays7753/micro-ui-design-system/pull/1) — الحالة **DRAFT FOR RE-REVIEW** بعد جولتي تصحيح R1 وR2 على نفس الملفات (المراجعات: `reviews/B01/CHATGPT-REVIEW-R1.md` و`CHATGPT-REVIEW-R2.md`، النتائج: `reviews/B01/review.md`). لا اعتماد ذاتي قبل المراجعة التالية واعتماد قيس. المصدر القابل للتعديل إلزامي. راجع [القائمة](docs/COMPONENT-INVENTORY.md) و[عقد التسليم](docs/EDITABLE-DELIVERY.md).
 
 ## التكليف الأحدث — 2026-09-28
 
@@ -28,4 +28,4 @@
 - [المعايير والنطاق والتسليم](docs/UI-LIBRARY-EXECUTION-BRIEF.md)
 - [مصفوفة الحالات والسيناريوهات](docs/UI-COVERAGE-MATRIX.md)
 
-B01 ما زال مسودة في PR #1؛ هذه ملفات تكليف، وليست إعلان اكتمال المكتبة.
+تصحيحات B01 سُلّمت على PR #1 كـ **DRAFT FOR RE-REVIEW**، وتكملة العائلات B02–B07 وS01 تجري كمسودات على فرع `task/ui-library-expansion` عبر PR تابع له. هذه ملفات تكليف، وليست إعلان اكتمال المكتبة.

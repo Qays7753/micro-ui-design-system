@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام أدنى لمكوّن الأزرار خارج لوحة المعاينة
+  الغرض: إثبات أن buttons.js واجهة عامة — المستهلك يحدد بداية
+  التحميل ونهايته، ولا يوجد أي مؤقت أو سلوك عرض داخل المكوّن.
+  هذا الملف مستقل عن لوحة المعاينة ولا يستخدم board.js إطلاقًا،
+  ولا يحتوي أي reset عام (لا box-sizing شامل مثل board.css) —
+  استقلال مقاسات المكوّن عن أي reset خارجي مفحوص هنا (تصحيح R2-C):
+  نص فقط، نص + أيقونة، أيقونة دائري، تصفية بعدّاد، والمقترح B
+  للتحميل النصي — بقياسات قبل/أثناء/بعد التحميل في سجل الفحص.
+  التشغيل من جذر المستودع:
+    python3 -m http.server 8080
+    ثم http://localhost:8080/previews/buttons/example-usage.html
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال استخدام الأزرار خارج لوحة المعاينة</title>
+  <link rel="icon" href="data:,">
+  <!-- المستهلك يحمّل ثلاثة ملفات فقط: الخطوط، القيم المشتركة، شكل المكوّن -->
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>
+    /* تنسيق صفحة المثال فقط — لا علاقة له بشكل المكوّن */
+    body {
+      margin: 0;
+      padding: 24px 20px 40px;
+      background: var(--micro-surface-page);
+      color: var(--micro-text-primary);
+      font-family: var(--micro-font-family);
+      font-size: 16px;
+      line-height: 26px;
+    }
+    .usage-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
+    .usage-note { color: var(--micro-text-hint); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
+    /* رسالة نتيجة المستهلك — عنصر المستهلك هو، وليس جزءًا من المكوّن */
+    .usage-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--micro-success-surface);
+      color: var(--micro-success);
+      border-radius: var(--micro-radius-field);
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 500;
+    }
+    .usage-status[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:20px;line-height:30px;margin:0 0 8px">مثال استخدام أدنى</h1>
+  <p class="usage-note">المستهلك يحمّل المكوّن ويستدعي <span dir="ltr">MicroButtons.setLoading(btn, true|false)</span> بنفسه عند بدء عمله واكتماله. التسمية الإتاحية أثناء التحميل صريحة من المستهلك (<span dir="ltr">data-loading-label</span>)، والحفظ الثاني يخفي نجاح المحاولة السابقة أولًا.</p>
+
+  <div class="usage-row">
+    <button class="m-btn m-btn--primary" id="save-btn" data-loading-label="جارٍ الحفظ">
+      حفظ العملية
+    </button>
+    <span class="usage-status" id="save-status" hidden>تم الحفظ — نتيجة المستهلك (ليست من المكوّن)</span>
+  </div>
+  <p class="usage-note">زر ثانوي بنفس الواجهة، بلا أيقونة — أبعاده ثابتة أثناء التحميل:</p>
+  <div class="usage-row">
+    <button class="m-btn m-btn--secondary" id="sync-btn" data-loading-label="جارٍ المزامنة">
+      مزامنة البيانات
+    </button>
+  </div>
+
+  <p class="usage-note">بقية أشكال المكوّن خارج أي لوحة وبأي reset (تصحيح R2-C): نص + أيقونة، أيقونة دائري، تصفية بعدّاد، والمقترح B للتحميل النصي (التسمية ظاهرة والمؤشر في فتحة محجوزة). كلها بنفس الواجهة تمامًا:</p>
+  <div class="usage-row">
+    <button class="m-btn m-btn--primary" id="icon-btn" data-loading-label="جارٍ الحفظ"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
+    <button class="m-btn m-btn--secondary m-btn--icon" id="circle-btn" aria-label="بحث" data-loading-label="جارٍ البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+    <button class="m-btn m-btn--secondary" id="filter-btn" aria-label="تصفية، فلتران نشطان"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية<span class="m-btn__counter">2</span></button>
+    <button class="m-btn m-btn--secondary m-btn--loading-slot" id="slot-btn" data-loading-label="جارٍ التحديث">تحديث القائمة</button>
+  </div>
+
+  <!-- أيقونات هذا المثال تُجلب من الأصول نفسها (assets/icons) وقت التشغيل —
+       هذا دور المستهلك (الصفحة) وليس دور المكوّن: صفحتك تعرف نفسها
+       كيف تحمّل رموزها، والمكوّن يستهلك أي <svg class="m-btn__icon"> تجده. -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="usage-icon-defs" style="display:none" aria-hidden="true"></svg>
+  <script>
+    /* محمّل أيقونات المستهلك (مثال): الأصل الوحيد assets/icons/*.svg */
+    (function () {
+      var defs = document.getElementById('usage-icon-defs');
+      ['checkmark-circle-02.svg|i-check-circle', 'search-01.svg|i-search', 'filter-horizontal.svg|i-filter']
+        .forEach(function (entry) {
+          var parts = entry.split('|');
+          fetch('../../assets/icons/' + parts[0])
+            .then(function (r) { return r.text(); })
+            .then(function (text) {
+              var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+              var src = doc.querySelector('svg');
+              if (!src || doc.querySelector('parsererror')) return;
+              var sym = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');
+              sym.id = parts[1];
+              sym.setAttribute('viewBox', src.getAttribute('viewBox') || '0 0 24 24');
+              sym.setAttribute('fill', src.getAttribute('fill') || 'none');
+              sym.innerHTML = src.innerHTML;
+              defs.appendChild(sym);
+            });
+        });
+    })();
+  </script>
+  <p class="usage-note">ملاحظة: رموز هذا المثال تُجلب من أصولها <span dir="ltr">assets/icons/*.svg</span> كما في اللوحة — الأصل الواحد للمصدر. بديل مسموح: <span dir="ltr">&lt;img src="assets/icons/search-01.svg"&gt;</span> مع فقدان تلوين <span dir="ltr">currentColor</span>.</p>
+
+  <!-- واجهة المكوّن العامة: لا مؤقتات ولا عروض تجريبية داخلها -->
+  <script src="../../components/buttons/buttons.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      /* مستهلك 1: حفظ — يبدأ التحميل عند النقر وينهيه عند اكتمال عمله هو.
+         الموقت هنا يمثل عمل المستهلك (شبكة/حفظ فعلي) وليس سلوك المكوّن. */
+      var saveBtn = document.getElementById('save-btn');
+      var saveStatus = document.getElementById('save-status');
+      saveBtn.addEventListener('click', function () {
+        if (saveBtn.getAttribute('aria-busy') === 'true') return; /* لا تكرار */
+        saveStatus.hidden = true; /* إخفاء نجاح المحاولة السابقة عند بدء محاولة جديدة */
+        MicroButtons.setLoading(saveBtn, true);
+        window.setTimeout(function () {
+          MicroButtons.setLoading(saveBtn, false);
+          saveStatus.hidden = false;
+        }, 1500);
+      });
+
+      /* مستهلك 2: زر نصي بلا أيقونة — نفس الواجهة بالضبط */
+      var syncBtn = document.getElementById('sync-btn');
+      syncBtn.addEventListener('click', function () {
+        if (syncBtn.getAttribute('aria-busy') === 'true') return;
+        MicroButtons.setLoading(syncBtn, true);
+        window.setTimeout(function () {
+          MicroButtons.setLoading(syncBtn, false);
+        }, 1500);
+      });
+
+      /* مستهلك 3: بقية الأشكال (نص+أيقونة، دائري، تصفية، المقترح B) —
+         كلها بنفس الواجهة: المستهلك يبدأ وينهي التحميل. تصفية هنا
+         تُبدّل العدّاد دورة 0→2→123 كبيانات مستهلك لا كسلوك مكوّن. */
+      ['icon-btn', 'circle-btn', 'slot-btn'].forEach(function (id) {
+        var b = document.getElementById(id);
+        b.addEventListener('click', function () {
+          if (b.getAttribute('aria-busy') === 'true') return;
+          MicroButtons.setLoading(b, true);
+          window.setTimeout(function () {
+            MicroButtons.setLoading(b, false);
+          }, 1500);
+        });
+      });
+      var filterBtn = document.getElementById('filter-btn');
+      var counts = [0, 2, 123];
+      var filterLabels = [
+        'تصفية، لا فلاتر نشطة',
+        'تصفية، فلتران نشطان',
+        'تصفية، 123 فلترًا نشطًا'
+      ];
+      var fi = 1; /* يبدأ عند 2 (مظهره الأولي) */
+      filterBtn.addEventListener('click', function () {
+        fi = (fi + 1) % counts.length;
+        var counter = filterBtn.querySelector('.m-btn__counter');
+        counter.textContent = String(counts[fi]);
+        counter.classList.toggle('m-btn__counter--zero', counts[fi] === 0);
+        filterBtn.setAttribute('aria-label', filterLabels[fi]);
+      });
+    })();
+  </script>
+</body>
+</html>
