@@ -15,12 +15,21 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 ملاحظات تقرير الاحتياجات: [المراجعة](../reviews/component-needs-review.md).
 
 ## تجهيز إنتاج المكوّنات
-قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، تكليف ../prompts/B01-BUTTONS-ZAI.md، وقالب ../reviews/REVIEW-TEMPLATE.md. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
+
+قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، التكليفات الموجودة في `prompts/`، وقالب `reviews/REVIEW-TEMPLATE.md`. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
 
 ## مخرجات الدفعات
 
 | الملف | الحالة | الملاحظة |
 |---|---|---|
-| `components/buttons/` + `previews/buttons/` + `shared/tokens.css` (فرع task/b01-buttons، PR #1) | DRAFT FOR RE-REVIEW | دفعة B01 (الأزرار): مصدر كامل قابل للتعديل + معاينة + فحوص — بعد جولة تصحيح R1؛ بانتظار مراجعة ChatGPT واعتماد قيس |
-| `reviews/B01/review.md` + `reviews/B01/CHATGPT-REVIEW-R1.md` | REVIEW | نتائج الفحص ومراجعة ChatGPT وتعليمات التصحيح |
+| `components/buttons/` + `previews/buttons/` + `shared/tokens.css` (فرع task/b01-buttons، PR #1) | DRAFT FOR RE-REVIEW | دفعة B01 (الأزرار): مصدر كامل قابل للتعديل + معاينة + فحوص — بعد جولتي تصحيح R1 وR2؛ بانتظار مراجعة ChatGPT واعتماد قيس |
+| `reviews/B01/review.md` + `reviews/B01/CHATGPT-REVIEW-R1.md` + `reviews/B01/CHATGPT-REVIEW-R2.md` | REVIEW | نتائج الفحص ومراجعتا ChatGPT وتعليمات التصحيح |
 | `tools/b01-screenshots.py` + `tools/README.md` | DRAFT TOOL | سكربت اللقطات وفحوص المتصفح — يعاد تشغيله من جذر المستودع |
+
+## حزمة تكليف التوسع — 2026-09-28
+
+- `UI-LIBRARY-EXECUTION-BRIEF.md`: معايير التنفيذ والمصدر والتبعيات.
+- `UI-COVERAGE-MATRIX.md`: متطلبات التغطية، وليست نتائج اختبار.
+- `../prompts/UI-LIBRARY-EXPANSION-ZAI.md`: رسالة بدء التنفيذ.
+
+الحزمة تحافظ على الأسس؛ الأشكال الناتجة تبقى DRAFT حتى مراجعتها.
