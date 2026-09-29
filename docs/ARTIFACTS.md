@@ -52,6 +52,15 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 
 تقرير التغطية لكل معرف: `docs/UI-COVERAGE-RESULTS.md`.
 
+## دفعة العارض المستقلة — 2026-09-29
+
+| الملف | الحالة | الملاحظة |
+|---|---|---|
+| `components/carousel/` + `previews/carousel/` | DRAFT FOR REVIEW | العارض: بطاقة نشطة بالمنتصف ومجاورة ظاهرة وأسهم ومؤشر وسحب pointer بعتبات موثقة وترتيب منطقي RTL — فحوص 38/38 من شجرة commit المصدر `2940aa6` (بصمة `277b828c`) |
+| `components/data/packed-circle.css` + `packed-circle.js` | PROPOSED (opt-in) | امتداد الدوائر المتداخلة فوق عقد B05 — لا يغيّر سلوك B05 الافتراضي ولا يلمس data.js؛ بانتظار اعتماد المالك |
+| `docs/components/CAROUSEL-COMPONENT-BRIEF.md` + `references/motion/card-carousel-reference.md` | DRAFT + REFERENCE | تكليف الدفعة + مرجع الحركة بتصريح صريح أن الصورة/الفيديو المرفقين لم يصلا إلى بيئة التنفيذ |
+| `tools/carousel-screenshots.py` + `reviews/CAROUSEL/` | DRAFT TOOL | فحص ولقطات (27 لقطة) — متصفح headless فعلي، وتحقق استنساخ نظيف بخرج مطابق |
+
 ## تقارير المراجعة والتسليم
 
 - `reviews/DELIVERY-R1/CHATGPT-REVIEW.md`: تقرير CHANGES REQUESTED مع الإصلاحات وأدلة قبولها.
