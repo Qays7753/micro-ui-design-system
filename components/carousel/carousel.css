@@ -1,0 +1,231 @@
+/* =========================================================
+   Micro UI — عارض البطاقات القابل للسحب (Carousel)
+   الملف: components/carousel/carousel.css
+   يعتمد على shared/tokens.css فقط — لا ألوان أو مقاسات صريحة
+   خارج التوكنات المعتمدة. المكوّن مستقل عن محتوى البطاقة:
+   العارض (viewport/track/slide) لا يعرف شيئًا عن محتوى البطاقات،
+   ومحتوى البطاقة (.m-carousel__card وما بداخله) من المستهلك.
+
+   بنية العقد (التفصيل في components/carousel/specification.md):
+   <div class="m-carousel" data-carousel data-carousel-label="…">
+     <div class="m-carousel__viewport" data-viewport>
+       <ul class="m-carousel__track" data-track>
+         <li class="m-carousel__slide" data-carousel-slide data-card-label="…">
+           <div class="m-carousel__card">…محتوى المستهلك…</div>
+         </li>
+       </ul>
+     </div>
+     <div class="m-carousel__controls">
+       <button type="button" class="m-carousel__btn" data-prev aria-label="السابق">
+         <svg aria-hidden="true"><use href="#i-chevron-right"/></svg>
+       </button>
+       <p class="m-carousel__status" data-status aria-live="polite">البطاقة 1 من 3</p>
+       <button type="button" class="m-carousel__btn" data-next aria-label="التالي">
+         <svg aria-hidden="true"><use href="#i-chevron-left"/></svg>
+       </button>
+     </div>
+     <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+   </div>
+
+   RTL: كل خصائص الشكل منطقية (inline/block)؛ حركة track فيزيائية
+   يديرها carousel.js بصيغة واحدة تعمل مع الاتجاهين — الترتيب
+   المنطقي (سابق/تالي بحسب ترتيب القراءة) لا اسم الاتجاه الفيزيائي.
+
+   الحالة: DRAFT FOR REVIEW — القيم الداخلية الموسومة «مقترح»
+   (PROPOSED) قيم مكوّن موثقة هنا لا توكنات مشتركة.
+   ========================================================= */
+
+.m-carousel,
+.m-carousel *,
+.m-carousel *::before,
+.m-carousel *::after {
+  box-sizing: border-box;
+}
+
+.m-carousel {
+  font-family: var(--micro-font-family);
+  /* قيم داخلية للمكوّن (PROPOSED — بانتظار المراجعة):
+     --_peek: شريحة البطاقة المجاورة الظاهرة على كل جانب.
+     الحد يبقي النص الفعلي للبطاقة النشطة كاملًا داخل القناع
+     (قناع viewport يؤثر على ظهور المجاورة فقط) ويستوعب ظل
+     التمييز (3px 8px) دون قصّه. عدّلها على .m-carousel نفسه. */
+  --_peek: 24px;
+  /* فاصل بين البطاقات: من سلم المسافات المعتمد */
+  --_gap: var(--micro-space-3);
+}
+
+/* ================= 1) viewport: القناع =================
+   يقصّ امتداد البطاقات المجاورة فقط. البطاقة النشطة كاملة
+   العرض داخل القناع (W = V − 2×(peek + gap)) والارتفاع حرّ —
+   لا قصّ عمودي لمحتوى البطاقة النشطة ولا لتكبيره.
+   touch-action: pan-y يبقي التمرير العمودي الطبيعي للمتصفح
+   والسحب الأفقي يُدار بالأحداث (لا مكتبات خارجية). */
+.m-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  /* فراغ مستقر للحالة الفارغة (0 بطاقات) حتى لا تنهار المساحة (مقترح) */
+  min-height: 72px;
+}
+/* أثناء السحب فقط: لا تحديد نص عَرَضي مع سحب المؤشر */
+.m-carousel.is-dragging .m-carousel__viewport {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.m-carousel.is-dragging .m-carousel__track {
+  transition: none;
+}
+
+/* ================= 2) track: صف البطاقات =================
+   الانتقال بزمن «تغيير التحديد» المعتمد (180ms) على transform —
+   لا حركة تغيّر تخطيط (لا قفزة). السحب المباشر يرفق is-dragging
+   فيُلغى الانتقال مؤقتًا والبطاقة تتبع المؤشر حرفيًا. */
+.m-carousel__track {
+  display: flex;
+  gap: var(--_gap);
+  position: relative;
+  margin: 0;
+  padding: 0;
+  padding-block: var(--micro-space-2); /* مساحة ظل البطاقة — لا قصّ */
+  list-style: none;
+  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+/* البطاقة النشطة في المنتصف: عرضها = 100% − 2×(peek + gap)
+   نسبةً إلى عرض viewport (لأن track بلا padding-inline) —
+   تتمدد وتنكمش مع العرض وتلف محتواها لا تقصّه. العرض موحّد
+   بصرف النظر عن عدد البطاقات (لا قفزة تخطيط عند إضافة بطاقة). */
+.m-carousel__slide {
+  flex: 0 0 auto;
+  width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
+  min-width: 0; /* يسمح بلفّ المحتوى الطويل داخل البطاقة */
+}
+/* البطاقة النشطة — وسام حالة يديره carousel.js (لا شكل خاص إلزامي) */
+.m-carousel__slide[data-current="true"] { }
+/* البطاقات المخفية كليًا خارج القناع تُعطَّل inert من السكربت —
+   لا شكل هنا؛ المجاورة المرئية (الشريحة الظاهرة) تبقى قابلة للقراءة. */
+
+/* سطح البطاقة: هيكل خفيف من توكنات الأسس — هوية محتوى البطاقة
+   (ترويسة/أرقام/رسوم) من المستهلك وبقية عائلات المكتبة */
+.m-carousel__card {
+  background-color: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  padding: var(--micro-space-5);
+  min-height: 100%;
+  overflow-wrap: break-word; /* أرقام ونصوص طويلة تُلف لا تقصّ */
+}
+
+/* ================= 3) أزرار التنقل =================
+   زر أيقونة دائري 48×48 (هدف لمس المشروع) بحدود التحكم؛
+   المعطل بلا تفاعل مضلل (خلفية معطلة ونص معطل ونمط افتراضي).
+   الأسهم أيقونات ديكورية aria-hidden — الاسم من aria-label. */
+.m-carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  margin-block-start: var(--micro-space-3);
+}
+.m-carousel__btn {
+  flex: none;
+  inline-size: var(--micro-icon-button-size);  /* 48 */
+  block-size: var(--micro-icon-button-size);
+  border-radius: var(--micro-radius-circle);
+  border: 1px solid var(--micro-border-control);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color var(--micro-motion-press) var(--micro-ease-standard);
+}
+.m-carousel__btn svg {
+  inline-size: var(--micro-icon-button-icon); /* 24 */
+  block-size: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.m-carousel__btn:active { background-color: var(--micro-surface-selected); }
+.m-carousel__btn:disabled {
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  border-color: transparent;
+  cursor: default;
+}
+/* حلقة التركيز — نفس عقد الأزرار B01 (حلقة 2px بفاصل 2px) */
+.m-carousel__btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* ================= 4) مؤشر الموضع =================
+   نص صريح «البطاقة 2 من 3» (المصدر الإتاحي — aria-live polite)
+   بأرقام جدولية حتى لا يقفز عرضه بين الحالات. */
+.m-carousel__status {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================= 5) نقاط الانتقال المباشر (اختيارية) =================
+   تُبنى من السكربت عند توفّر [data-dots] وعدد البطاقات > 1.
+   زر النقطة 48×48 (هدف لمس كامل بلا تداخل أهداف) والشكل النقطي
+   بداخلها؛ الحالية أوسع ولون العلامة — لا لون وحده: نص aria-label
+   وaria-current للإتاحة. تُعرض حتى 6 نقاط ثم تلتفّ (مقترح). */
+.m-carousel__dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-block-start: var(--micro-space-1);
+}
+.m-carousel__dots[hidden] { display: none; }
+.m-carousel__dot {
+  inline-size: var(--micro-touch-min);   /* 48 */
+  block-size: var(--micro-touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.m-carousel__dot::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-border-control);
+  transition: inline-size var(--micro-motion-selection) var(--micro-ease-standard),
+              background-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+.m-carousel__dot[aria-current="true"]::before {
+  inline-size: 20px;
+  background-color: var(--micro-brand-primary);
+}
+.m-carousel__dot:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+  border-radius: var(--micro-radius-circle);
+}
+
+/* ================= 6) تقليل الحركة =================
+   الانتقال يصير فوريًا — البطاقة الحالية ومؤشر الموضع يبقيان
+   واضحين (لا pulse ولا bounce ولا حركة مستمرة أصلًا). */
+@media (prefers-reduced-motion: reduce) {
+  .m-carousel__track { transition: none; }
+  .m-carousel__btn,
+  .m-carousel__dot::before { transition: none; }
+}

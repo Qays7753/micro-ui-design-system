@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة معاينة عارض البطاقات + المقارنة المتداخلة
+  الحالة: DRAFT FOR REVIEW — التشغيل من جذر المستودع:
+    python3 -m http.server 8080 → /previews/carousel/
+  العارض مستقل عن محتوى البطاقة؛ محتوى البطاقات أمثلة محايدة
+  من عقد قائمة (B05 stat/donut + امتداد packed PROPOSED).
+  لا autoplay ولا منطق أعمال ولا بيانات حقيقية.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — معاينة عارض البطاقات (Carousel)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../../components/data/packed-circle.css">
+  <link rel="stylesheet" href="../../components/carousel/carousel.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — عارض البطاقات القابل للسحب <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">بطاقة نشطة في المنتصف، ظهور جزء من المجاورة، أسهم ومؤشر موضع نصي، سحب pointer مع الحفاظ على التمرير العمودي، ترتيب منطقي RTL، لوحة مفاتيح، وتقليل حركة. العارض مستقل عن محتوى البطاقة. لا autoplay ولا تبديل تلقائي. التداخل في دوائر المقارنة إشارة علاقة بصرية لا عملية حسابية — امتداد PROPOSED فوق عقد B05.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= 1) العرض العام: البطاقات الثلاث ================= -->
+    <section class="panel" id="overview">
+      <h2>1) العرض العام — ثلاث بطاقات مثال</h2>
+      <p class="panel-note">مؤشرات تشغيل · الطلبات حسب الحالة (donut بمقام معلن من المستهلك) · المقارنة المالية (دوائر متداخلة — امتداد PROPOSED). الأول/الأوسط/الأخر من نفس العارض: التنقل بالأسهم أو السحب أو النقاط أو لوحة المفاتيح.</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="ملخصات العمليات" id="main-carousel">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="مؤشرات التشغيل">
+              <div class="m-carousel__card">
+                <h3 class="card-title">مؤشرات التشغيل — اليوم</h3>
+                <div class="kpi-stack">
+                  <div class="m-stat">
+                    <span class="m-stat__label">طلبات جديدة</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">132</span><span class="m-stat__unit">طلب</span>
+                      <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12</span>
+                    </span>
+                  </div>
+                  <div class="m-stat">
+                    <span class="m-stat__label">قيد التوصيل</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">27</span><span class="m-stat__unit">طلب</span></span>
+                  </div>
+                  <div class="m-stat">
+                    <span class="m-stat__label">متأخرة عن الجدول</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">4</span><span class="m-stat__unit">طلبات</span>
+                      <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-negative"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+2</span>
+                    </span>
+                  </div>
+                </div>
+                <p class="card-note">القيم ثابتة من HTML مثال — لا قراءة شبكة ولا حساب.</p>
+              </div>
+            </li>
+
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="الطلبات حسب الحالة">
+              <div class="m-carousel__card">
+                <h3 class="card-title">الطلبات حسب الحالة</h3>
+                <div class="m-chart m-chart--donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-title="توزيع الطلبات حسب الحالة (مقام معلن 25)">
+                  <ul class="m-chart__data" hidden>
+                    <li data-series="a" data-label="مكتملة" data-value="11"></li>
+                    <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
+                    <li data-series="c" data-label="جديدة" data-value="8"></li>
+                  </ul>
+                  <div class="m-chart__plot m-donut" data-plot></div>
+                  <p class="m-chart__summary" data-summary></p>
+                </div>
+                <p class="card-note">نسب من مقام معلن صريح (25) — عقد donut في B05 كما هو مع C2.</p>
+              </div>
+            </li>
+
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="المقارنة المالية">
+              <div class="m-carousel__card">
+                <h3 class="card-title">المقارنة المالية — الفترة</h3>
+                <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="46" style="--packed-overlap: 24px" data-title="مقارنة الإيرادات والتكاليف — قيم مستقلة لا نسب">
+                  <ul class="m-chart__data" hidden>
+                    <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
+                    <li data-series="b" data-label="التكاليف" data-value="61150" data-display="61,150"></li>
+                  </ul>
+                  <div class="m-chart__plot" data-plot></div>
+                </div>
+                <div class="m-stat net-profit">
+                  <span class="m-stat__label">صافي الربح — رقم مستقل لا دائرة</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">23,150</span><span class="m-stat__unit">د.أ</span></span>
+                </div>
+                <p class="card-note">قيمتان مستقلتان: التداخل إشارة علاقة لا عملية حسابية، ولا أجزاء من مجموع. المرجع الرقم والتسمية — الحجم مساعد. امتداد PROPOSED بانتظار اعتماد المالك.</p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+        <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+      </div>
+    </section>
+
+    <!-- ================= 2) حالات العدد ================= -->
+    <section class="panel" id="counts">
+      <h2>2) حالات العدد — 0 / 1 / 2 / 6</h2>
+      <p class="panel-note">الثلاث بطاقات في القسم 1. هنا الأطراف: لا بطاقات (فراغ مستقر وكلا الزرين معطل)، وبطاقة واحدة (لا تنقل شيئًا)، وبطاقتان، وعدد أكبر (6 نقاط). كل معمل عارض مستقل كامل العقد.</p>
+
+      <div class="state-lab">
+        <h3>بدون بطاقات (0)</h3>
+        <div class="m-carousel" data-carousel data-carousel-label="معمل فارغ">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track></ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-lab">
+        <h3>بطاقة واحدة</h3>
+        <div class="m-carousel" data-carousel data-carousel-label="معمل بطاقة واحدة">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص وحيد">
+                <div class="m-carousel__card"><p class="card-note">بطاقة واحدة: كلا الزرين معطل والمؤشر «البطاقة 1 من 1». لا سحب يبدّل شيئًا.</p></div>
+              </li>
+            </ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-lab">
+        <h3>بطاقتان</h3>
+        <div class="m-carousel" data-carousel data-carousel-label="معمل بطاقتين" id="lab-two">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة أولى">
+                <div class="m-carousel__card"><p class="card-note">الأولى من اثنتين — المجاورة ظاهرة جزئيًا.</p></div>
+              </li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة ثانية">
+                <div class="m-carousel__card"><p class="card-note">الثانية — prev متاح وnext معطل عند الوصول.</p></div>
+              </li>
+            </ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+          <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+        </div>
+      </div>
+
+      <div class="state-lab">
+        <h3>عدد أكبر من البطاقات (6)</h3>
+        <div class="m-carousel" data-carousel data-carousel-label="معمل ست بطاقات" id="lab-many">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة أ"><div class="m-carousel__card"><h3 class="card-title">أ</h3><p class="card-note">بطاقة أ من ست.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة ب"><div class="m-carousel__card"><h3 class="card-title">ب</h3><p class="card-note">بطاقة ب من ست.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة ج"><div class="m-carousel__card"><h3 class="card-title">ج</h3><p class="card-note">بطاقة ج من ست.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة د"><div class="m-carousel__card"><h3 class="card-title">د</h3><p class="card-note">بطاقة د من ست.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة هـ"><div class="m-carousel__card"><h3 class="card-title">هـ</h3><p class="card-note">بطاقة هـ من ست.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة و"><div class="m-carousel__card"><h3 class="card-title">و</h3><p class="card-note">بطاقة و من ست — الأخيرة.</p></div></li>
+            </ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+          <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3) RTL والترتيب المنطقي ================= -->
+    <section class="panel" id="lab-rtl">
+      <h2>3) RTL — الترتيب المنطقي لا اسم الاتجاه</h2>
+      <p class="panel-note">الصفحة كلها dir="rtl". سابق/تالي بحسب ترتيب القراءة: «التالي» (الترتيب الأعلى) يظهر يسارًا بصريًا في RTL. الأسماء أدناه (الأولى/الثانية/الثالثة) تجعل الحركة مرئية. الدليل الآلي: بعد next() من الأولى يكون translateX للـtrack موجبًا (A12 في سجل التحقق) — قياس لا ادعاء.</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="معمل الاتجاه المنطقي">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="الأولى في ترتيب القراءة">
+              <div class="m-carousel__card"><h3 class="card-title">الأولى</h3><p class="card-note">أول ترتيب قراءة. في RTL تبدأ من اليمين — والسحب يمينًا يجلب «التالي» من اليسار.</p></div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="الثانية في ترتيب القراءة">
+              <div class="m-carousel__card"><h3 class="card-title">الثانية</h3><p class="card-note">الوسطى — مجاورتاها على الجانبين.</p></div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="الثالثة في ترتيب القراءة">
+              <div class="m-carousel__card"><h3 class="card-title">الثالثة</h3><p class="card-note">آخر الترتيب — next معطل هنا.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+        <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+      </div>
+
+      <table class="mapping-table">
+        <caption>خريطة المنطقي ↔ الفيزيائي (RTL) — مفحوصة آليًا A9/A12/A13</caption>
+        <thead><tr><th>الإجراء</th><th>المنطقي (ترتيب القراءة)</th><th>الفيزيائي في RTL</th></tr></thead>
+        <tbody>
+          <tr><td>زر «التالي»</td><td>البطاقة التالية في الترتيب</td><td>تظهر من اليسار — translateX موجب</td></tr>
+          <tr><td><kbd>ArrowLeft</kbd></td><td>التالي</td><td>حركة يسار الصفحة</td></tr>
+          <tr><td><kbd>ArrowRight</kbd></td><td>السابق</td><td>حركة يمين الصفحة</td></tr>
+          <tr><td>سحب يمينًا (يفوق العتبة)</td><td>التالي</td><td>تتبع المؤشر يمينًا ثم التزام</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= 4) لوحة المفاتيح والتركيز ================= -->
+    <section class="panel" id="lab-keys">
+      <h2>4) لوحة المفاتيح والتركيز</h2>
+      <p class="panel-note">جرّب من هذه المعاملات: <kbd>Tab</kbd> يمر على السابق/التالي/النقاط (أزرار فعلية)، <kbd>Enter</kbd>/<kbd>Space</kbd> تفعل الأزرار، <kbd>ArrowLeft</kbd>/<kbd>ArrowRight</kbd> تنقلان بالترتيب المنطقي من أي نقطة داخل العارض، <kbd>Home</kbd>/<kbd>End</kbd> للأطراف. التنقل لا ينقل التركيز إلى بطاقة غير ظاهرة: المخفية كليًا معلّمة inert والمجاورة الظاهرة معاينة غير قابلة للتركيز. حلقة التركيز بعقد B01 (2px + فاصل 2px). لا حالة تحميل في هذا العارض أصلًا.</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="معمل لوحة المفاتيح">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة 1">
+              <div class="m-carousel__card"><p class="card-note">بطاقة 1 من 4 — لا عناصر تفاعلية داخل البطاقات في هذه الأمثلة عمدًا.</p></div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة 2">
+              <div class="m-carousel__card"><p class="card-note">بطاقة 2 من 4.</p></div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة 3">
+              <div class="m-carousel__card"><p class="card-note">بطاقة 3 من 4.</p></div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة 4">
+              <div class="m-carousel__card"><p class="card-note">بطاقة 4 من 4.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+        <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+      </div>
+    </section>
+
+    <!-- ================= 5) السحب ================= -->
+    <section class="panel" id="lab-drag">
+      <h2>5) السحب الأفقي — pointer/touch بلا مكتبات</h2>
+      <p class="panel-note">السحب ليس الوسيلة الوحيدة. العتبات الموثقة في المصدر: قفل محور 8px (العمودي يُسلَّم للتمرير الطبيعي — touch-action: pan-y)، والتزام max(32px، 20% من عرض البطاقة) — أقل من ذلك إلغاء وعودة (snap-back). بطاقة واحدة لكل إيماءة، ومقاومة عند الطرفين. لا سحب للمس فعليًا في بيئة الفحص — المحاكاة بالمؤشر والقواعد مذكورة في السجل.</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="معمل السحب">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="سحب 1"><div class="m-carousel__card"><p class="card-note">اسحب أفقيًا بهذه البطاقة — 1 من 4. اسحب عموديًا فستلاحظ أن الصفحة تتمرر طبيعيًا.</p></div></li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="سحب 2"><div class="m-carousel__card"><p class="card-note">2 من 4 — تتبع المؤشر حرفيًا أثناء السحب.</p></div></li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="سحب 3"><div class="m-carousel__card"><p class="card-note">3 من 4 — أقل من العتبة يعيدك إلى البطاقة نفسها.</p></div></li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="سحب 4"><div class="m-carousel__card"><p class="card-note">4 من 4 — السحب أبعد من الطرف يقاوم ثم يعود.</p></div></li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6) المقارنة المالية — تفصيل الامتداد ================= -->
+    <section class="panel" id="packed-detail">
+      <h2>6) المقارنة المالية — دوائر متداخلة (امتداد PROPOSED فوق عقد B05)</h2>
+      <p class="panel-note">عقد m-bubbles نفسه (ألوان المفاتيح الثابتة، نصف القطر √القيمة، التسميات خارجية دائمًا) + تداخل جزئي opt-in موسوم PROPOSED. القيم مستقلة: لا نسب ولا مجموع وهمي — والتداخل إشارة علاقة بصرية فقط. صافي الربح رقم مستقل لا دائرة. المكوّن لا يحسب شيئًا.</p>
+
+      <h3>6-أ) الحالة الأساسية — قيمتان مستقلتان</h3>
+      <div class="packed-demo">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="64" style="--packed-overlap: 32px" data-title="الإيرادات والتكاليف — قيم مستقلة والمساحة ∝ القيمة">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
+            <li data-series="b" data-label="التكاليف" data-value="61150" data-display="61,150"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary></p>
+        </div>
+        <div class="m-stat">
+          <span class="m-stat__label">صافي الربح (قيمة ثابتة من HTML — لا حساب داخل المكوّن)</span>
+          <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">23,150</span><span class="m-stat__unit">د.أ</span></span>
+        </div>
+        <p class="card-note">«84,300» و«61,150» نصوص data-display من المستهلك — أساس المساحة data-value الرقمي. المفتاح النصي أعلاه هو المرجع الدقيق.</p>
+      </div>
+
+      <h3>6-ب) القيم غير الطبيعية — فرق بصري وبياني</h3>
+      <div class="edge-grid">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40" data-title="قيم: موجبة وصفر ومجهولة وغير متاحة وسالبة">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="موجبة" data-value="9000" data-display="9,000"></li>
+            <li data-series="b" data-label="صفر" data-value="0"></li>
+            <li data-series="c" data-label="مجهولة"></li>
+            <li data-series="d" data-label="غير متاحة" data-value="n/a"></li>
+            <li data-series="e" data-label="سالبة" data-value="-2400"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+        <p class="caption">المجهولة (سمة غائبة): «— غير معروف» ≠ غير المتاحة (سمة غير قابلة للتحليل): «— غير متاح» ≠ الصفر: حلقة شرطة و«0» ≠ السالبة: لا دائرة سالبة إطلاقًا — نص حالتها صريح.</p>
+      </div>
+
+      <h3>6-ج) حالات المقياس data-max (نظير المقام — بلمسة متسقة مع C2 بلا لمس donut)</h3>
+      <div class="edge-grid">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-max="0" data-title="مقياس صفر مع قيم موجبة — تعارض صريح">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="قيمة أ" data-value="40"></li>
+            <li data-series="b" data-label="قيمة ب" data-value="60"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-max="-5" data-title="مقياس سالب — غير صالح صريح">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="قيمة أ" data-value="40"></li>
+            <li data-series="b" data-label="قيمة ب" data-value="60"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-title="مقياس غائب — البديل الموثق (أكبر قيمة)">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="قيمة أ" data-value="40"></li>
+            <li data-series="b" data-label="قيمة ب" data-value="60"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+      </div>
+      <p class="caption">صفر مع موجبة: تعارض صريح بلا استبدال المقياس بالمشتق · سالب/غير رقمي: غير صالح صريح · الغائب: أكبر قيمة موجبة (البديل الموثق كما في عقد B05) · لا دائرة تُرسم في حالتي الخطأ والمفتاح بقيم خام.</p>
+
+      <h3>6-د) صافي ربح سالب — رقم وحالة، لا دائرة سالبة</h3>
+      <div class="packed-demo" id="net-negative">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="56" style="--packed-overlap: 28px" data-title="إيرادات وتكاليف بصافي سالب — الدوائر للقيمتين المستقلتين فقط">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="الإيرادات" data-value="48200" data-display="48,200"></li>
+            <li data-series="b" data-label="التكاليف" data-value="60600" data-display="60,600"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+        <div class="m-stat">
+          <span class="m-stat__label">صافي الربح — سالب يُعرض بعلامته وحالته، ولا يُحوَّل دائرة مضللة</span>
+          <span class="m-stat__value"><span class="m-stat__num m-stat__num--negative">-12,400</span><span class="m-stat__unit">د.أ</span>
+            <span class="m-badge">خسارة الفترة</span>
+          </span>
+        </div>
+        <p class="card-note">لا معادلة مالية داخل المكوّن: الرقمان والحالة نصوص ثابتة من HTML المستهلك، وعقد m-stat__num--negative من B05 كما هو.</p>
+      </div>
+    </section>
+
+    <!-- ================= 7) تقليل الحركة ================= -->
+    <section class="panel" id="lab-motion">
+      <h2>7) تقليل الحركة</h2>
+      <p class="panel-note">التفضيل الفعلي مفحوص في سجل التحقق (Playwright reduced_motion: الانتقال صفر). هنا محاكاة معلنة للتجربة اليدوية: الزر يفعّل صنف <code>micro-reduce</code> على قسم المعمل — نفس آلية motion.css الموثقة. لا pulse ولا bounce ولا حركة مستمرة في العارض أصلًا، والمؤشر يبقى واضحًا.</p>
+      <div class="lab-controls">
+        <button type="button" class="reduce-toggle" data-lab="reduce-toggle" aria-pressed="false">تفعيل محاكاة تقليل الحركة (micro-reduce)</button>
+      </div>
+      <div class="m-carousel micro-reduce-scope" id="motion-scope">
+        <div class="m-carousel" data-carousel data-carousel-label="معمل تقليل الحركة">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="حركة 1"><div class="m-carousel__card"><p class="card-note">1 من 3 — بلا تقليل: انتقال 180ms.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="حركة 2"><div class="m-carousel__card"><p class="card-note">2 من 3 — فعّل المحاكاة ثم تنقّل: الانتقال فوري.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="حركة 3"><div class="m-carousel__card"><p class="card-note">3 من 3.</p></div></li>
+            </ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 8) محتوى صعب ================= -->
+    <section class="panel" id="lab-content">
+      <h2>8) محتوى صعب — نص عربي طويل وأرقام مختلطة</h2>
+      <p class="panel-note">النص الطويل يُلفّ داخل البطاقة وارتفاع الصف كله يتمدد (لا قصّ ولا تمرير داخلي)، والأرقام والمبالغ المختلطة بعزل اتجاهي كما في عقد B05. لا يُعتبر إخفاء overflow داخل حاوية قابلة للتمرير دليلًا — القياس في السجل (B2).</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="معمل المحتوى الصعب">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="نص عربي طويل">
+              <div class="m-carousel__card">
+                <h3 class="card-title">ملخص دور الموردين في عمليات التوريد الأسبوعية للفروع الشمالية وترتيب أولويات الاستلام والتوزيع الداخلي</h3>
+                <p class="card-note">فقرة تجريبية طويلة: تُظهر التفاف العناوين والعناصر متعددة الأسطر داخل بطاقة العارض دون قصّ عمودي، وتنسيق ثابت للحشو والانحناء عند أقصر عرض (320px)، مع بقاء المجاورة الظاهرة على الجانب دون تغطية نص البطاقة النشطة في أي حالة من حالات التكبير المعروضة في القسم التالي.</p>
+              </div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="أرقام ومبالغ مختلطة">
+              <div class="m-carousel__card">
+                <h3 class="card-title">مبالغ ومراجع مختلطة</h3>
+                <div class="m-stat">
+                  <span class="m-stat__label">قيمة الطلب ORD-2419</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">1,240.50</span><span class="m-stat__unit">د.أ</span></span>
+                </div>
+                <div class="m-stat">
+                  <span class="m-stat__label">المستحق للمورد SUP-7741 (Acme Trading Co.)</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">9,875.00</span><span class="m-stat__unit">د.أ</span></span>
+                </div>
+                <p class="card-note">أرقام لاتينية وعربية في سطر واحد بعزل اتجاهي — العرض لا يبسط اتجاه العدد ولا الوحدة.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 9) تكبير النص 200% ================= -->
+    <section class="panel" id="lab-zoom">
+      <h2>9) محاكاة زيادة حجم الخط 200%</h2>
+      <p class="panel-note">آلية اللوحات نفسها (مروران — تسمية رسمية: محاكاة مكافئة للنص، لا تكبير متصفح/نظام مضمون التكافؤ). البطاقة النشطة تلفّ محتواها والمجاورة تظل شريحة معاينة — القناع لا يقصّ محتوى البطاقة النشطة (قياس حدود حروف داخل viewport في السجل).</p>
+      <div class="lab-controls">
+        <button type="button" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+      </div>
+      <div id="text-zoom-target">
+        <div class="m-carousel" data-carousel data-carousel-label="معمل التكبير">
+          <div class="m-carousel__viewport" data-viewport>
+            <ul class="m-carousel__track" data-track>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="تكبير 1">
+                <div class="m-carousel__card">
+                  <h3 class="card-title">ملخص الموردين المتأخرين عن جدول التسليم الأسبوعي مع أسباب التأخير المقترحة للمراجعة</h3>
+                  <div class="m-stat"><span class="m-stat__label">عدد الموردين</span><span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">14</span><span class="m-stat__unit">موردًا</span></span></div>
+                  <p class="card-note">نص طويل عند تكبير 200% — يُلفّ داخل البطاقة ولا يقصّ.</p>
+                </div>
+              </li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="تكبير 2">
+                <div class="m-carousel__card"><p class="card-note">2 من 3 عند التكبير — الحشو والانحناء ثابتان والنص ملفوف.</p></div></li>
+              <li class="m-carousel__slide" data-carousel-slide data-card-label="تكبير 3">
+                <div class="m-carousel__card"><p class="card-note">3 من 3.</p></div></li>
+            </ul>
+          </div>
+          <div class="m-carousel__controls">
+            <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+            <p class="m-carousel__status" data-status aria-live="polite"></p>
+            <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 10) الأصول ================= -->
+    <section class="panel" id="assets-check">
+      <h2>10) الأصول والخط</h2>
+      <p class="panel-note">أيقونات الأسهم من الأصل الوحيد assets/icons عبر board.js — لا نسخ مكررة.</p>
+      <p class="icon-load-status" id="icon-load-status"></p>
+      <div class="icon-row">
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg><span class="caption">chevron-right (السابق في RTL)</span></div>
+        <div class="icon-item"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg><span class="caption">chevron-left (التالي في RTL)</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="board-footer">
+    المصدر: components/carousel/ — القيم: shared/tokens.css — التشغيل والتعديل: previews/carousel/README.md — النتائج: reviews/CAROUSEL/review.md — فهرس اللوحات: previews/index.html
+  </footer>
+
+  <script src="../../components/data/data.js"></script>
+  <script src="../../components/data/packed-circle.js"></script>
+  <script src="../../components/carousel/carousel.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

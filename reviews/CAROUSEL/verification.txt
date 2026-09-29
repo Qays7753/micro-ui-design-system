@@ -1,0 +1,47 @@
+# CAROUSEL سجل الفحص — 2026-09-29T10:27:05
+# commit المصدر: 7f281c9e0fb104535490304bd4f31cab57e23908
+# بصمة شجرة المصدر: 309e6ed2e205817d859d756e6964e5e3ef4738ba (الأدلة مولدة من شجرة هذا commit نظيفة)
+# بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — لا محاكاة DOM؛ القياسات الهندسية من مستطيلات المتصفح الحقيقية
+# حدود الفحوص المعلنة: لا قارئ شاشة فعلي، لا لمس حقيقي (سحب بالمؤشر فقط)، لا متصفحات غير Chromium، لا تكبير نظام/متصفح أصلي (محاكاة مكافئة للنص)، لا هاتف حقيقي
+
+PASS  A1 لا أخطاء كونسول/صفحة في اللوحة
+PASS  A2 البنية: viewport/track/3 شرائح/أزرار/مؤشر/3 نقاط + group/عارض بطاقات/اسم إتاحي — {'vp': True, 'track': True, 'slides': 3, 'prev': True, 'next': True, 'status': True, 'dots': 3, 'role': 'group', 'roledesc': 'عارض بطاقات', 'label': 'ملخصات العمليات'}
+PASS  A3 تسمية كل شريحة «الاسم، البطاقة X من N» (نمط «ملخص الطلبات، البطاقة 2 من 3») — ['مؤشرات التشغيل، البطاقة 1 من 3', 'الطلبات حسب الحالة، البطاقة 2 من 3', 'المقارنة المالية، البطاقة 3 من 3']
+PASS  A4 الحالة الأولى: prev معطل وnext متاح والمؤشر «البطاقة 1 من 3» والبطاقة النشطة بمركز الشاشة (فرق ≤ 1px) — {'prevDisabled': True, 'nextDisabled': False, 'status': 'البطاقة 1 من 3', 'off': 0, 'tx': -36}
+PASS  A5 الحالة الوسطى: كلا الزرين متاحان والمؤشر «البطاقة 2 من 3» والوسطى متمركزة — {'status': 'البطاقة 2 من 3', 'prevDis': False, 'nextDis': False, 'off': 0}
+PASS  A6 RTL: بعد next من الأولى translateX موجب (التالي ظهر من اليسار) والمجاورة السابقة تطلّ من اليمين والتالية من اليسار بمقدار peek (24±2) — {'tx': 206, 'rtl': True, 'prevPeekRight': 24, 'nextPeekLeft': 24, 'dirAttr': 'rtl'}
+PASS  A7 الحالة الأخيرة: next معطل والمؤشر «البطاقة 3 من 3» وprev متاح — {'status': 'البطاقة 3 من 3', 'nextDis': True, 'prevDis': False}
+PASS  A8 أسماء الأزرار «السابق/التالي» + أيقونة ديكورية aria-hidden + المؤشر حيّ aria-live=polite — {'prevLabel': 'السابق', 'nextLabel': 'التالي', 'live': 'polite', 'iconHidden': 'true'}
+PASS  A9 صفر بطاقات: «لا توجد بطاقات» وكلا الزرين معطل وبلا نقاط · بطاقة واحدة: «البطاقة 1 من 1» وكلا الزرين معطل — empty={'status': 'لا توجد بطاقات', 'prev': True, 'next': True, 'dotsHidden': None, 'slides': 0} one={'status': 'البطاقة 1 من 1', 'prev': True, 'next': True}
+PASS  A10 بطاقتان: نقطتان والوصول للأخير يعطّل next · عدد أكبر: 6 شرائح و6 نقاط والمؤشر صادق — two={'dots': 2, 'willCheck': True} two2={'status': 'البطاقة 2 من 2', 'nextDis': True} many={'dots': 6, 'slides': 6, 'status': 'البطاقة 1 من 6'}
+PASS  A11 نقطة رقم 4: aria-label صريح والنقر ينقل («البطاقة 4 من 6») وaria-current للحالية فقط — {'label': 'الانتقال إلى البطاقة 4 من 6'} {'status': 'البطاقة 4 من 6', 'current': [False, False, False, True, False, False]}
+PASS  A12 RTL منطقيًا: ArrowLeft تالي (+1) وArrowRight سابق (−1) وHome الأولى وEnd الأخيرة — {'start': 3, 'afterLeft': 4, 'afterRight': 3, 'afterHome': 0, 'afterEnd': 5}
+PASS  A13 Enter ثم Space يبدّلان البطاقة والتركيز يبقى على الزر · الشرائح المخفية كليًا inert والمجاورة الظاهرة مقروءة — enter={'status': 'البطاقة 2 من 3', 'active': True} space=البطاقة 3 من 3 inert={'vis': [False, True, True], 'inertAttr': [True, False, False]}
+PASS  A14 حلقة تركيز مرئية على الزر المركّز بلوحة المفاتيح (focus-visible + ظل) — {'fv': True, 'shadow': True, 'rect': {'x': 298, 'y': 894.96875, 'w': 48, 'h': 48}}
+PASS  A15 لا autoplay: الموضع ثابت بعد 1.4s بلا أي تفاعل — 2→2
+PASS  A16 السحب: يمينًا 120px في RTL يلتزم التالي (من 0 إلى 1) و20px يلغي نفسه (snap-back) وtouch-action: pan-y يحفظ التمرير العمودي — commit={'idx': 1, 'status': 'البطاقة 2 من 3'} cancel={'idx': 1} touch-action=pan-y
+PASS  A17 حدث micro-carousel:change يفصح عن {index, count} — {'index': 2, 'count': 3}
+PASS  A18 بطاقة الطلبات: donut بمقام معلن 25 في المركز ونسب من المقام — عقد B05 داخل بطاقة العارض دون تغيير — {'center': '25', 'pct': True}
+PASS  A18b بطاقة المقارنة داخل العارض: دوائر متداخلة + صافي الربح رقم مستقل والمؤشر «البطاقة 3 من 3» — {'packed': True, 'circles': 2, 'netIsStat': True, 'status': 'البطاقة 3 من 3'}
+PASS  A19 المقارنة: القطران بتناسب الجذر (84300/61150) وتداخل فعلي بين الدائرتين والنصوص خارج الدوائر والمفتاح بقيم خام بلا نسب وصافي الربح m-stat لا دائرة — {'w0': 128, 'w1': 109.017, 'ratioOk': True, 'overlap': 12, 'textInCircle': False, 'keyPct': False, 'keyHasVals': True, 'netProfitIsStat': True}
+PASS  A20 القيم غير الطبيعية: صفر «0» ومجهول «— غير معروف» ≠ غير متاح «— غير متاح» وسالب بنص صريح — دائرة واحدة فقط للموجبة وحلقات شرطة للأربعة البدائل — {'unknown': True, 'unavailable': True, 'zero': True, 'neg': True, 'circles': 1, 'noneRings': 4}
+PASS  A21 المقياس المعلن: صفر مع موجبة تعارض صريح بلا دوائر · سالب غير صالح صريح · الغائب يشتق من أكبر قيمة (البديل الموثق) — بلا سقوط صامت — {'zeroErr': True, 'zeroNoCircles': 0, 'negErr': True, 'negNoCircles': 0, 'noMaxCircles': 2, 'noMaxErr': True}
+PASS  A22 صافي سالب: رقم بعلامته وحالة «خسارة» — لا دائرة سالبة مضللة ولا معادلة داخل المكوّن — {'negNum': True, 'noBubble': True, 'badge': True}
+PASS  A23 توكنات الأسس: حد الزر #71868B ونص المؤشر #50656A وانحناء البطاقة 24px وزمن الانتقال 0.18s — {'btnBorder': 'rgb(113, 134, 139)', 'statusColor': 'rgb(80, 101, 106)', 'cardRadius': '24px', 'trackDur': '0.18s'}
+PASS  A24 إثبات التعديل: --_peek 24→60 يضيّق البطاقة (الشريحة المجاورة أوسع) ثم يُستعاد · data-card-label ينعكس على aria-label · data-value نصفها يقلّص القطر بتناسب √ ثم يُستعاد — {'wBefore': 230, 'wAfter': 158, 'wBack': 230, 'lblBefore': 'الطلبات حسب الحالة، البطاقة 2 من 3', 'lblAfter': 'اسم معدّل للفحص، البطاقة 2 من 3', 'lblBack': 'الطلبات حسب الحالة، البطاقة 2 من 3', 'dBefore': 80, 'dAfter': 56.5685, 'dBack': 80}
+      قياس القطر: 80 → 56.5685 (√0.5 المتوقع 56.6) → 80
+PASS  B1 320px بلا تمرير أفقي للصفحة — {'sw': 320, 'cw': 320}
+PASS  B3 320px: عرض الشريحة = viewport − 2×(24+12) والنشطة متمركزة (فرق ≤ 1px) — {'w': 160, 'expected': 160, 'off': 0}
+PASS  B1 390px بلا تمرير أفقي للصفحة — {'sw': 390, 'cw': 390}
+PASS  B3 390px: عرض الشريحة = viewport − 2×(24+12) والنشطة متمركزة (فرق ≤ 1px) — {'w': 230, 'expected': 230, 'off': 0}
+PASS  B1 430px بلا تمرير أفقي للصفحة — {'sw': 430, 'cw': 430}
+PASS  B3 430px: عرض الشريحة = viewport − 2×(24+12) والنشطة متمركزة (فرق ≤ 1px) — {'w': 270, 'expected': 270, 'off': 0}
+PASS  B2 320px تكبير 200%: العنوان مضاعف ويُلفّ أسطره داخل viewport بلا قصّ أفقي والبطاقة بلا تمرير داخلي والمؤشر ظاهر — {'font': '32px', 'lines': 12, 'inX': True, 'cardNoHScroll': True, 'statusVisible': True}
+PASS  B2 390px تكبير 200%: العنوان مضاعف ويُلفّ أسطره داخل viewport بلا قصّ أفقي والبطاقة بلا تمرير داخلي والمؤشر ظاهر — {'font': '32px', 'lines': 8, 'inX': True, 'cardNoHScroll': True, 'statusVisible': True}
+PASS  B4 نص طويل: البطاقة النشطة كاملة داخل القناع بلا قصّ عمودي · الأرقام والمبالغ المختلطة ظاهرة — {'withinVp': True, 'noClip': True, 'mixed': True}
+PASS  D1 تقليل الحركة (تفضيل Playwright فعلي): مدة الانتقال 0s والموضع النهائي فوري عند next والمؤشر واضح — {'dur': '0s', 'offImmediately': 0, 'status': 'البطاقة 2 من 3'}
+PASS  B5 عرض 768: بلا تمرير أفقي والنشطة متمركزة — العرض يتمدد دون تغيير دور العنصر — {'sw': 768, 'cw': 768, 'off': 0}
+PASS  EX مثال مستقل carousel: 0 فشل بلا أخطاء (15 فحصًا مدمجًا) — ALL PASS — مثال مستقل للعارض
+PASS  A25 لا أخطاء متراكمة في الكونسول/الصفحة بعد كل الفحوص والتفاعلات
+
+# النتيجة: 38/38 ناجح

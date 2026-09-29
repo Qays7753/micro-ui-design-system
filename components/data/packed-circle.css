@@ -1,0 +1,70 @@
+/* =========================================================
+   Micro UI — امتداد الدوائر المتداخلة (Packed-Circle) فوق عقد B05
+   الملف: components/data/packed-circle.css
+   الحالة: **PROPOSED — يحتاج مراجعة واعتماد المالك** — امتداد
+   opt-in لكود B05 (m-chart--bubbles) لا يغيّر سلوكه الافتراضي
+   إطلاقًا: لا يُحمَّل أثره إلا بإضافة الصنفين معًا:
+     .m-chart.m-chart--bubbles.m-chart--packed
+   ويُصيَّر بـ components/data/packed-circle.js (لا data.js).
+
+   ما يأخذه من عقد B05 الحالي (بلا إعادة بناء):
+   - عقد m-bubble / m-bubble__circle / m-bubble__value / m-bubble__label
+   - تعيين ألوان الفئات الثابت بالمفتاح (--cat عبر m-cat--a..e)
+   - مبدأ المساحة ∝ القيمة (نصف القطر √v) بلا حد أدنى يضخّم
+   - القيم والتسميات خارجية دائمًا — التداخل لا يخفي رقمًا أو تسمية
+
+   ما يضيفه (مقترح):
+   - سحب البطاقات أفقيًا لتتداخل الدوائر تداخلًا جزئيًا إشارةً
+     بصرية للعلاقة والمقارنة فقط — لا يعني عملية حسابية أو تقاطعًا
+     ماليًا ولا أجزاء من مجموع واحد (القيم مستقلة).
+   - مفتاح نصي كامل تحت الرسم بقيم خام بلا نسب — المرجع الدقيق
+     هو الرقم والتسمية لا الحجم.
+   ========================================================= */
+
+/* المدخل مركّب من data.css؛ هنا فقط ما يخص التداخل وحالاته */
+
+.m-chart--packed .m-bubbles {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* التداخل: كل بطاقة بعد الأولى تُسحب نحو سابقتها بمقدار
+   --packed-overlap (نسبة من قطر الأصغر ≈ 20–25% مقترحة) —
+   الالتزام إشارة علاقة لا عملية. عدّل المتغيّر على الرسم نفسه:
+   <div class="m-chart m-chart--bubbles m-chart--packed" style="--packed-overlap: 36px"> */
+.m-chart--packed .m-bubble + .m-bubble {
+  margin-inline-start: calc(-1 * var(--packed-overlap, 28px));
+}
+
+/* ترتيب الرسم: الأصغر فوق الأكبر حتى يبقى حدّ كل دائرة مقروءًا.
+   (DOM: الأكبر أولًا — يُبنى الترتيب في packed-circle.js) */
+.m-chart--packed .m-bubble { position: relative; }
+.m-chart--packed .m-bubble[data-size="large"] { z-index: 1; }
+.m-chart--packed .m-bubble[data-size="small"] { z-index: 2; }
+
+/* عمود القيمة/التسمية يبقى خارجيًا — لا نص داخل الدائرة */
+.m-chart--packed .m-bubble__value,
+.m-chart--packed .m-bubble__label {
+  background: transparent;
+}
+
+/* حلقة الحالة الصفرية (نفس لغة B05: حلقة شَرطة صغيرة) */
+.m-chart--packed .m-bubble__circle--none {
+  background: transparent;
+  border: 1.5px dashed var(--micro-text-hint);
+  width: 14px;
+  height: 14px;
+}
+
+/* رسالة حالة المقام/المقياس غير الصالح — نفس لغة m-chart__error
+   في data.css (إطار شرطة تحذيرية بنص صريح) — تُبنى في السكربت */
+.m-chart--packed .m-chart__scale-error {
+  margin: 0 0 var(--micro-space-3);
+  padding: var(--micro-space-3) var(--micro-space-4);
+  border: 1.5px dashed var(--micro-warning);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-warning-surface);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}

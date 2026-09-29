@@ -1,0 +1,122 @@
+/* =========================================================
+   Micro UI — لوحة معاينة العارض (previews/carousel/board.css)
+   تنسيق لوحة العرض فقط — لا يعيد تنسيق أي مكوّن إطلاقًا.
+   شكل العارض في components/carousel/carousel.css وشكل دوائر
+   المقارنة في components/data/*.css.
+   ========================================================= */
+
+/* عناوين بطاقات المثال — محتوى المستهلك داخل .m-carousel__card */
+.card-title {
+  margin: 0 0 var(--micro-space-3);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.card-note {
+  margin: var(--micro-space-3) 0 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* عمود مؤشرات داخل بطاقة المثال */
+.kpi-stack { display: flex; flex-direction: column; gap: var(--micro-space-3); }
+
+/* صافي الربح داخل بطاقة المقارنة */
+.net-profit {
+  margin-block-start: var(--micro-space-4);
+  padding-block-start: var(--micro-space-3);
+  border-top: 1px solid var(--micro-border-divider);
+}
+
+/* معاملات الحالات */
+.state-lab {
+  margin-block: var(--micro-space-6);
+  padding-block-end: var(--micro-space-5);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+.state-lab:last-of-type { border-block-end: 0; }
+.state-lab > h3 {
+  margin: 0 0 var(--micro-space-3);
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+/* جدول خريطة الاتجاه */
+.mapping-table {
+  width: 100%;
+  margin-block-start: var(--micro-space-5);
+  border-collapse: collapse;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.mapping-table caption {
+  text-align: start;
+  color: var(--micro-text-hint);
+  padding-block-end: var(--micro-space-2);
+}
+.mapping-table th,
+.mapping-table td {
+  border: 1px solid var(--micro-border-divider);
+  padding: var(--micro-space-2) var(--micro-space-3);
+  text-align: start;
+  vertical-align: top;
+}
+.mapping-table th { background: var(--micro-surface-page); font-weight: 600; }
+.mapping-table kbd {
+  font-family: var(--micro-font-family);
+  background: var(--micro-surface-page);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: 6px;
+  padding: 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* شبكة حالات الحدود لدوائر المقارنة */
+.edge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-5);
+  align-items: flex-start;
+}
+.edge-grid > .m-chart { flex: 1 1 260px; max-width: 340px; }
+
+/* عرض تفصيل المقارنة خارج البطاقة */
+.packed-demo {
+  background: var(--micro-surface-page);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  padding: var(--micro-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  max-width: 480px;
+}
+
+/* زر محاكاة تقليل الحركة (لوحة فقط — الصنف micro-reduce من motion.css) */
+.reduce-toggle {
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500;
+  padding: var(--micro-space-2) var(--micro-space-4);
+  border-radius: var(--micro-radius-field);
+  border: 1px solid var(--micro-border-control);
+  background: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  cursor: pointer;
+}
+.reduce-toggle[aria-pressed="true"] {
+  background: var(--micro-surface-selected);
+  border-color: var(--micro-brand-primary);
+}
+
+/* حالة تحميل الأيقونات */
+.icon-load-status {
+  margin: 0 0 var(--micro-space-3);
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}

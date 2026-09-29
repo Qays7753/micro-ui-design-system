@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للعارض — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن فقط (أيقونات الأسهم
+  مرجع خارجي مباشر من الأصل الوحيد assets/icons بلا نسخ).
+  فحوص مدمجة: البنية والعقد، التنقل والمؤشر، تعطيل الأطراف،
+  RTL بالقياس الفيزيائي، لوحة المفاتيح، لا autoplay، دوائر
+  المقارنة r∝√v والحالات الصريحة. النتائج في الصفحة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: عارض البطاقات</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../../components/data/packed-circle.css">
+  <link rel="stylesheet" href="../../components/carousel/carousel.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — عارض البطاقات القابل للسحب</h1>
+
+  <div class="m-carousel" data-carousel data-carousel-label="مثال مستقل" id="ex-carousel">
+    <div class="m-carousel__viewport" data-viewport>
+      <ul class="m-carousel__track" data-track>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص الطلبات">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">ملخص الطلبات</h3>
+            <p style="margin:0;color:var(--micro-text-secondary);font-size:13px">بطاقة أولى في مثال مستقل بلا لوحة.</p>
+          </div>
+        </li>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص المورد">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">ملخص المورد</h3>
+            <p style="margin:0;color:var(--micro-text-secondary);font-size:13px">بطاقة ثانية — المجاورة ظاهرة جزئيًا.</p>
+          </div>
+        </li>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="المقارنة المالية">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">المقارنة المالية</h3>
+            <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40" style="--packed-overlap: 22px">
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
+                <li data-series="b" data-label="التكاليف" data-value="61150" data-display="61,150"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+            </div>
+            <p style="margin:8px 0 0;color:var(--micro-text-secondary);font-size:13px">صافي الربح <b style="direction:ltr;unicode-bidi:isolate">23,150</b> د.أ — رقم مستقل لا دائرة، لا حساب داخل المكوّن.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="m-carousel__controls">
+      <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="../../assets/icons/chevron-right.svg"></use></svg></button>
+      <p class="m-carousel__status" data-status aria-live="polite"></p>
+      <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="../../assets/icons/chevron-left.svg"></use></svg></button>
+    </div>
+    <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+  </div>
+
+  <pre id="results">جارٍ الفحص…</pre>
+
+  <script src="../../components/data/data.js"></script>
+  <script src="../../components/data/packed-circle.js"></script>
+  <script src="../../components/carousel/carousel.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var root = document.getElementById('ex-carousel');
+      var track = root.querySelector('[data-track]');
+      var status = root.querySelector('[data-status]');
+      var prevBtn = root.querySelector('[data-prev]');
+      var nextBtn = root.querySelector('[data-next]');
+      var slides = root.querySelectorAll('[data-carousel-slide]');
+      var rtl = getComputedStyle(root).direction === 'rtl';
+
+      function tx() {
+        var tr = getComputedStyle(track).transform;
+        if (!tr || tr === 'none') return 0;
+        var m = tr.match(/matrix\(([^)]+)\)/);
+        return m ? parseFloat(m[1].split(',')[4]) : 0;
+      }
+      function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+      (async function () {
+        /* البنية والعقد */
+        t('A1 البنية: viewport/track/3 شرائح/أزرار/مؤشر/نقاط',
+          !!track && slides.length === 3 && !!prevBtn && !!nextBtn && !!status && !!root.querySelector('[data-dots]'));
+        t('A2 أدوار إتاحية: group/عارض بطاقات + aria-label من data-carousel-label',
+          root.getAttribute('role') === 'group' &&
+          root.getAttribute('aria-roledescription') === 'عارض بطاقات' &&
+          root.getAttribute('aria-label') === 'مثال مستقل');
+        t('A3 تسمية الشريحة «الاسم، البطاقة X من N»',
+          slides[1].getAttribute('aria-label') === 'ملخص المورد، البطاقة 2 من 3',
+          slides[1].getAttribute('aria-label'));
+
+        /* الأطراف معطلة والمؤشر صادق */
+        t('A4 الحالة الأولى: prev معطل فعليًا والمؤشر «البطاقة 1 من 3»',
+          prevBtn.disabled && !nextBtn.disabled && status.textContent === 'البطاقة 1 من 3',
+          status.textContent);
+
+        /* التنقل والمؤشر */
+        nextBtn.click(); await wait(60);
+        t('A5 next: «البطاقة 2 من 3» وكلا الزرين متاح',
+          status.textContent === 'البطاقة 2 من 3' && !prevBtn.disabled && !nextBtn.disabled,
+          status.textContent);
+
+        /* RTL بالقياس: التالي منطقيًا = حركة فيزيائية موجبة في RTL */
+        var x1 = tx();
+        t('A6 RTL بالقياس: بعد next من الأولى translateX موجب (المجاورة من اليسار)',
+          rtl && x1 > 0, 'tx=' + x1.toFixed(1));
+
+        /* لوحة المفاتيح: السهم الأيسر = التالي في RTL */
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+        await wait(60);
+        var idxAfterLeft = MicroCarousel.getIndex(root);
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+        await wait(60);
+        var idxAfterRight = MicroCarousel.getIndex(root);
+        t('A7 RTL: ArrowLeft تالي وArrowRight سابق (ترتيب منطقي)',
+          idxAfterLeft === 2 && idxAfterRight === 1,
+          'left→' + idxAfterLeft + ' right→' + idxAfterRight);
+
+        /* النهاية معطلة */
+        MicroCarousel.goTo(root, 2); await wait(60);
+        t('A8 الحالة الأخيرة: next معطل والمؤشر «البطاقة 3 من 3»',
+          nextBtn.disabled && status.textContent === 'البطاقة 3 من 3', status.textContent);
+
+        /* Home/End */
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+        await wait(60);
+        t('A9 Home يعود للأولى', MicroCarousel.getIndex(root) === 0);
+
+        /* لا تركيز في غير المرئي: الشرائح الخفية كليًا inert */
+        MicroCarousel.goTo(root, 0); await wait(80);
+        var lastInert = slides[2].hasAttribute('inert');
+        var neighborReadable = !slides[1].hasAttribute('inert');
+        t('A10 المخفية كليًا inert والمجاورة الظاهرة تبقى مقروءة',
+          lastInert && neighborReadable);
+
+        /* لا autoplay: بلا تبديل تلقائي بعد مهلة */
+        var before = MicroCarousel.getIndex(root);
+        await wait(1200);
+        t('A11 لا autoplay: الموضع ثابت بعد 1.2s بلا تفاعل',
+          MicroCarousel.getIndex(root) === before && MicroCarousel.getIndex(root) === 0);
+
+        /* دوائر المقارنة: r ∝ √v وقيم خارجية بلا نسب */
+        var circs = root.querySelectorAll('.m-chart--packed .m-bubble__circle:not(.m-bubble__circle--none)');
+        var w0 = parseFloat(circs[0].style.width), w1 = parseFloat(circs[1].style.width);
+        var ratioOk = Math.abs(w1 - w0 * Math.sqrt(61150 / 84300)) <= 1.5;
+        var plot = root.querySelector('.m-chart--packed [data-plot]');
+        t('A12 دوائر المقارنة: القطر بتناسب الجذر (84300/61150) والمفتاح بلا نسب',
+          circs.length === 2 && ratioOk && !plot.textContent.includes('%'),
+          'w=' + w0 + '/' + w1);
+
+        /* الحالات الصريحة في الحدود (مجهول/غير متاح/صفر/سالب) — فحص حقن */
+        var host = document.createElement('div');
+        host.innerHTML = '<div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40">' +
+          '<ul class="m-chart__data" hidden>' +
+          '<li data-series="a" data-label="موجبة" data-value="9000"></li>' +
+          '<li data-series="b" data-label="صفر" data-value="0"></li>' +
+          '<li data-series="c" data-label="مجهولة"></li>' +
+          '<li data-series="d" data-label="غير متاحة" data-value="n/a"></li>' +
+          '<li data-series="e" data-label="سالبة" data-value="-2400"></li>' +
+          '</ul><div class="m-chart__plot" data-plot></div></div>';
+        document.body.appendChild(host);
+        MicroPacked.render(host.querySelector('[data-chart-packed]'));
+        var ptxt = host.querySelector('[data-plot]').textContent;
+        t('A13 حالات القيم: صفر «0» ومجهول «غير معروف» وغير متاح و«سالب غير صالح» — لا دائرة سالبة',
+          ptxt.includes('— غير معروف') && ptxt.includes('— غير متاح') &&
+          ptxt.includes('سالب غير صالح للمساحة') && ptxt.includes('0'),
+          ptxt.slice(0, 80));
+        host.innerHTML = '<div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-max="0">' +
+          '<ul class="m-chart__data" hidden>' +
+          '<li data-series="a" data-label="أ" data-value="40"></li>' +
+          '<li data-series="b" data-label="ب" data-value="60"></li>' +
+          '</ul><div class="m-chart__plot" data-plot></div></div>';
+        MicroPacked.render(host.querySelector('[data-chart-packed]'));
+        var scaleErr = host.querySelector('.m-chart__scale-error');
+        t('A14 مقياس صفر مع موجبة: تعارض صريح بلا دوائر',
+          !!scaleErr && scaleErr.textContent.includes('تعارض') &&
+          host.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length === 0);
+        host.remove();
+
+        /* حدث عام */
+        var fired = null;
+        root.addEventListener('micro-carousel:change', function (e) { fired = e.detail; }, { once: true });
+        MicroCarousel.next(root); await wait(60);
+        t('A15 حدث micro-carousel:change يفصح عن الموضع والعدد',
+          !!fired && fired.index === 1 && fired.count === 3,
+          fired ? JSON.stringify(fired) : 'لم يُطلق');
+
+        /* استعادة الحالة الأولى للقطة */
+        MicroCarousel.goTo(root, 0); await wait(80);
+
+        var fails = out.filter(function (l) { return l.indexOf('FAIL') === 0; }).length;
+        out.unshift((fails === 0 ? 'ALL PASS' : fails + ' FAILS') + ' — مثال مستقل للعارض');
+        document.getElementById('results').textContent = out.join('\n');
+      })();
+    })();
+  });
+  </script>
+</body>
+</html>

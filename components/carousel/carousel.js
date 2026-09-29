@@ -1,0 +1,335 @@
+/* =========================================================
+   Micro UI — سلوك عارض البطاقات القابل للسحب (Carousel)
+   الملف: components/carousel/carousel.js
+   الدور: التنقل المنطقي (سابق/تالي/مباشر) + السحب pointer/touch
+   + مؤشر الموضع + لوحة المفاتيح + RTL + تقليل الحركة.
+
+   القواعد الثابتة لهذا الملف:
+   - لا autoplay ولا أي مؤقّت تبديل (لا setInterval/setTimeout دوري —
+     المؤقت الوحيد إن استُخدم هو requestAnimationFrame لمزامنة قياس
+     بعد resize، لا يبدّل بطاقة أبدًا).
+   - لا مكتبة خارجية ولا خدمة بعيدة ولا عشوائية.
+   - السحب ليس الوسيلة الوحيدة: الأزرار والنقاط ولوحة المفاتيح
+     تصل إلى كل بطاقة.
+   - previous/next حسب الترتيب المنطقي (ترتيب القراءة) لا اسم
+     الاتجاه الفيزيائي: في RTL «التالي» يظهر يسارًا بصريًا، وفي
+     LTR يظهر يمينًا — والمواضع الفيزيائية تُقاس من الهندسة نفسها
+     (getBoundingClientRect) فتعمل الصيغة مع الاتجاهين بلا تفرّع.
+
+   ثوابت السحب الموثقة (عدّلها هنا فقط):
+   - AXIS_LOCK = 8px   : قفل المحور بعد أول إزاحة — تجاوزها
+     عموديًا يُلغي السحب ويُسلّم الحركة للتمرير الطبيعي.
+   - COMMIT نسبة 0.2 من عرض البطاقة بحد أدنى 32px: السحب أقل
+     من العتبة يلغي نفسه (snap-back) ولا يبدّل بطاقة.
+   - إلغاء السحب: pointercancel (المتصفح يأخذ الحركة عموديًا
+     مع touch-action: pan-y) أو خروج أقل من العتبة أو تجاوز
+     الطرفين — كله يرجع إلى أقرب بطاقة صالحة.
+
+   الواجهة العامة:
+   window.MicroCarousel = {
+     init(root?)           — يربط كل [data-carousel] تحت الجذر
+     goTo(carousel, i)     — بطاقة محددة (منطقيًا)
+     next(carousel) / prev(carousel)
+     getIndex(carousel)
+   }
+   حدث عام: micro-carousel:change {detail: {index, count}}
+   ========================================================= */
+
+(function () {
+  'use strict';
+
+  var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب */
+  var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
+  var COMMIT_MIN = 32;    /* أدنى عتلام التزام بالبكسل */
+  var DOTS_MAX = 6;       /* أقصى عدد نقاط قبل الالتفاف (مقترح) */
+
+  var reduceMotionQuery = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : null;
+
+  function prefersReducedMotion() {
+    return !!(reduceMotionQuery && reduceMotionQuery.matches);
+  }
+
+  var stateOf = new WeakMap();
+
+  function parts(carousel) {
+    return {
+      root: carousel,
+      viewport: carousel.querySelector('[data-viewport]'),
+      track: carousel.querySelector('[data-track]'),
+      slides: [].slice.call(carousel.querySelectorAll('[data-carousel-slide]')),
+      prev: carousel.querySelector('[data-prev]'),
+      next: carousel.querySelector('[data-next]'),
+      status: carousel.querySelector('[data-status]'),
+      dots: carousel.querySelector('[data-dots]')
+    };
+  }
+
+  function directionOf(carousel) {
+    return getComputedStyle(carousel).direction === 'rtl' ? 'rtl' : 'ltr';
+  }
+
+  /* الموضع الفيزيائي الحالي للـtrack (px) — يُتتبّع في الحالة */
+
+  function setX(st, x, animate) {
+    st.x = x;
+    if (animate && !prefersReducedMotion()) {
+      st.track.style.transform = 'translateX(' + x + 'px)';
+    } else {
+      /* فوري بلا انتقال: نوقف الانتقال لحظة التطبيق ثم نعيده */
+      st.track.style.transition = 'none';
+      st.track.style.transform = 'translateX(' + x + 'px)';
+      void st.track.offsetWidth; /* إجبار إطار حتى لا يُرى انتقال */
+      st.track.style.transition = '';
+    }
+  }
+
+  /* الموضع المطلق الذي يوسّط بطاقة i — من قيم layout المستقلة عن
+     transform (offsetLeft/offsetWidth): لا تتأثر بانتقال جارٍ
+     ولا بالاتجاه (offsetLeft فيزيائي). مرجع الإحداثيات: الـtrack
+     نفسه (offsetParent للشرائح لكونه position:relative)، وأصل
+     الـtrack الساكن = حافة محتوى الـviewport (طفل block بعرض
+     كامل بلا هوامش) — لذلك مركز الشاشة بإحداثيات الـtrack = W/2. */
+  function slideX(st, i) {
+    var s = st.slides[i];
+    return st.viewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+  }
+
+  function goToIndex(carousel, i, opts) {
+    var st = stateOf.get(carousel);
+    if (!st || st.count === 0) return;
+    var animate = !(opts && opts.animate === false);
+    var clamped = Math.max(0, Math.min(st.count - 1, i));
+    setX(st, slideX(st, clamped), animate);
+    if (clamped !== st.index) {
+      st.index = clamped;
+      update(carousel, st);
+      carousel.dispatchEvent(new CustomEvent('micro-carousel:change', {
+        bubbles: true,
+        detail: { index: st.index, count: st.count }
+      }));
+    } else {
+      update(carousel, st); /* snap-back بعد إلغاء سحب: مزامنة الحالة */
+    }
+  }
+
+  /* أزرار الحالة: معطل فعليًا عند الطرف — لا تفاعل مضلل */
+  function update(carousel, st) {
+    var rtl = directionOf(carousel) === 'rtl';
+    st.slides.forEach(function (slide, i) {
+      var isCurrent = i === st.index;
+      slide.setAttribute('data-current', isCurrent ? 'true' : 'false');
+      slide.setAttribute('aria-roledescription', 'بطاقة');
+      var name = slide.getAttribute('data-card-label') || ('بطاقة ' + (i + 1));
+      slide.setAttribute('aria-label', name + '، البطاقة ' + (i + 1) + ' من ' + st.count);
+      /* الصف الحالي فقط قابل للتذكر في تبويب العارض نفسه لا محتواه */
+      slide.removeAttribute('aria-hidden');
+      slide.removeAttribute('inert');
+    });
+
+    /* البطاقات المخفية كليًا خارج القناع: inert — لا تركيز في غير المرئي.
+       الحساب من قيم layout (offsetLeft) + الموضع المستهدف x — لا من
+       مستطيلات منتصف الانتقال، فتكون النتيجة صحيحة لحظة التبديل نفسه.
+       المجاورة الظاهرة جزئيًا تبقى مقروءة (القناع للمعاينة لا للإخفاء). */
+    var vpW = st.viewport.clientWidth;
+    st.slides.forEach(function (slide) {
+      var left = slide.offsetLeft + st.x;
+      var right = left + slide.offsetWidth;
+      var fullyOutside = right <= 1 || left >= vpW - 1;
+      if (fullyOutside) slide.setAttribute('inert', '');
+      else slide.removeAttribute('inert');
+    });
+
+    /* أزرار الطرفين */
+    var atStart = st.index === 0;
+    var atEnd = st.index === st.count - 1;
+    if (st.prev) st.prev.disabled = atStart || st.count <= 1;
+    if (st.next) st.next.disabled = atEnd || st.count <= 1;
+
+    /* مؤشر الموضع — نص إتاحي صريح */
+    if (st.status) {
+      st.status.textContent = st.count === 0
+        ? 'لا توجد بطاقات'
+        : 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
+    }
+
+    /* النقاط: تُبنى مرة، وتُحدَّث الحالية هنا */
+    if (st.dots) {
+      if (st.count > 1 && !st.dotsBuilt) buildDots(carousel, st);
+      if (st.count > 1) {
+        st.dots.hidden = false;
+        [].slice.call(st.dots.children).forEach(function (btn, i) {
+          if (i === st.index) btn.setAttribute('aria-current', 'true');
+          else btn.removeAttribute('aria-current');
+        });
+      } else {
+        st.dots.hidden = true;
+      }
+    }
+
+    carousel.setAttribute('data-dir', rtl ? 'rtl' : 'ltr');
+  }
+
+  function buildDots(carousel, st) {
+    st.dots.textContent = '';
+    for (var i = 0; i < st.count; i++) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'm-carousel__dot';
+      b.setAttribute('aria-label', 'الانتقال إلى البطاقة ' + (i + 1) + ' من ' + st.count);
+      (function (idx) {
+        b.addEventListener('click', function () { goToIndex(carousel, idx); });
+      })(i);
+      st.dots.appendChild(b);
+    }
+    st.dotsBuilt = true;
+  }
+
+  /* ---------- السحب (pointer events — لا مكتبات) ---------- */
+  function onPointerDown(carousel, st, e) {
+    if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    st.drag = {
+      id: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      baseX: st.x,
+      axis: null
+    };
+    st.root.classList.add('is-dragging');
+  }
+
+  function onPointerMove(carousel, st, e) {
+    var d = st.drag;
+    if (!d || e.pointerId !== d.id) return;
+    var dx = e.clientX - d.startX;
+    var dy = e.clientY - d.startY;
+    if (!d.axis) {
+      if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
+      /* قفل المحور: العمودي يُسلَّم للتمرير الطبيعي — لا نحوّل كل لمس إلى سحب */
+      d.axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'cancel';
+      if (d.axis === 'cancel') { endDrag(carousel, st, true); return; }
+      try { st.viewport.setPointerCapture(d.id); } catch (err) { /* غير حرِج */ }
+    }
+    if (d.axis !== 'x') return;
+    /* تتبّع المؤشر مباشرة (بلا انتقال) — المقاومة عند الطرفين تصفّر الحركة */
+    var proposed = d.baseX + dx;
+    var atStartEdge = st.index === 0 && ((directionOf(carousel) === 'rtl') ? dx < 0 : dx > 0);
+    var atEndEdge = st.index === st.count - 1 && ((directionOf(carousel) === 'rtl') ? dx > 0 : dx < 0);
+    st.drag.dx = dx;
+    setX(st, (atStartEdge || atEndEdge) ? d.baseX : proposed, false);
+    e.preventDefault();
+  }
+
+  function endDrag(carousel, st, canceled) {
+    var d = st.drag;
+    st.drag = null;
+    st.root.classList.remove('is-dragging');
+    if (!d) return;
+    try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
+    var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
+    var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
+    var dx = d.dx || 0;
+    if (canceled || Math.abs(dx) < threshold) {
+      goToIndex(carousel, st.index, { animate: true }); /* snap-back — إلغاء السحب */
+      return;
+    }
+    var rtl = directionOf(carousel) === 'rtl';
+    /* اتجاه الالتزام فيزيائي: في RTL السحب يمينًا (+) يجلب «التالي» (يسارًا) */
+    var step = rtl ? (dx > 0 ? 1 : -1) : (dx < 0 ? 1 : -1);
+    goToIndex(carousel, st.index + step, { animate: true });
+  }
+
+  function wireDrag(carousel, st) {
+    st.viewport.addEventListener('pointerdown', function (e) { onPointerDown(carousel, st, e); });
+    st.viewport.addEventListener('pointermove', function (e) { onPointerMove(carousel, st, e); });
+    st.viewport.addEventListener('pointerup', function () { endDrag(carousel, st, false); });
+    st.viewport.addEventListener('pointercancel', function () { endDrag(carousel, st, true); });
+    /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
+    st.viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  }
+
+  /* ---------- لوحة المفاتيح (الترتيب المنطقي لا الفيزيائي) ---------- */
+  function wireKeys(carousel, st) {
+    carousel.addEventListener('keydown', function (e) {
+      if (st.count === 0) return;
+      var rtl = directionOf(carousel) === 'rtl';
+      var handled = true;
+      switch (e.key) {
+        case 'ArrowRight': rtl ? prev(carousel) : next(carousel); break;
+        case 'ArrowLeft':  rtl ? next(carousel) : prev(carousel); break;
+        case 'Home': goToIndex(carousel, 0); break;
+        case 'End':  goToIndex(carousel, st.count - 1); break;
+        default: handled = false;
+      }
+      if (handled) e.preventDefault();
+    });
+  }
+
+  /* ---------- إعادة القياس (بلا تبديل بطاقات) ---------- */
+  function wireResize(carousel, st) {
+    window.addEventListener('resize', function () {
+      if (st.raf) return;
+      st.raf = requestAnimationFrame(function () {
+        st.raf = null;
+        if (st.count > 0) goToIndex(carousel, st.index, { animate: false });
+      });
+    });
+  }
+
+  function setup(carousel) {
+    if (stateOf.get(carousel)) return; /* إعادة init آمنة */
+    var st = parts(carousel);
+    st.index = 0;
+    st.x = 0;
+    st.count = st.slides.length;
+    st.drag = null;
+    st.dotsBuilt = false;
+    stateOf.set(carousel, st);
+
+    carousel.setAttribute('role', 'group');
+    carousel.setAttribute('aria-roledescription', 'عارض بطاقات');
+    if (!carousel.hasAttribute('aria-label') && carousel.hasAttribute('data-carousel-label')) {
+      carousel.setAttribute('aria-label', carousel.getAttribute('data-carousel-label'));
+    }
+    st.track.setAttribute('data-track-state', 'idle');
+
+    if (st.prev) st.prev.addEventListener('click', function () { prev(carousel); });
+    if (st.next) st.next.addEventListener('click', function () { next(carousel); });
+
+    wireKeys(carousel, st);
+    wireDrag(carousel, st);
+    wireResize(carousel, st);
+
+    if (reduceMotionQuery && reduceMotionQuery.addEventListener) {
+      reduceMotionQuery.addEventListener('change', function () {
+        goToIndex(carousel, st.index, { animate: false });
+      });
+    }
+
+    update(carousel, st);
+    /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) */
+    requestAnimationFrame(function () {
+      goToIndex(carousel, st.index, { animate: false });
+    });
+  }
+
+  function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
+  function prev(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index - 1); }
+
+  window.MicroCarousel = {
+    init: function (root) {
+      (root || document).querySelectorAll('[data-carousel]').forEach(setup);
+    },
+    goTo: goToIndex,
+    next: next,
+    prev: prev,
+    getIndex: function (carousel) {
+      var st = stateOf.get(carousel);
+      return st ? st.index : -1;
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { window.MicroCarousel.init(); });
+  if (document.readyState !== 'loading') window.MicroCarousel.init();
+})();
