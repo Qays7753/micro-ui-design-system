@@ -34,10 +34,13 @@
 
   <main>
 
-    <!-- ================= 1) العرض العام: البطاقات الثلاث ================= -->
+    <!-- ================= 1) العرض العام: البطاقات الثلاث =================
+         قرات PR#5: بطاقات compact افتراضيًا (ملخص مقصود بلا قصّ CSS)
+         + توسعة inline من زر صريح (aria-expanded/aria-controls) —
+         قرار PROPOSED بانتظار اعتماد المالك. -->
     <section class="panel" id="overview">
-      <h2>1) العرض العام — ثلاث بطاقات مثال</h2>
-      <p class="panel-note">مؤشرات تشغيل · الطلبات حسب الحالة (donut بمقام معلن من المستهلك) · المقارنة المالية (دوائر متداخلة — امتداد PROPOSED). الأول/الأوسط/الأخر من نفس العارض: التنقل بالأسهم أو السحب أو النقاط أو لوحة المفاتيح.</p>
+      <h2>1) العرض العام — ثلاث بطاقات مثال (compact + توسعة inline)</h2>
+      <p class="panel-note">مؤشرات تشغيل · الطلبات حسب الحالة (donut بمقام معلن من المستهلك) · المقارنة المالية (دوائر متداخلة — امتداد PROPOSED). البطاقة مغلقة مضغوطة بملخص مقصود (عنوان + أهم قيمة أو قيمتين + حالة)، والتوسعة من زر «عرض التفاصيل» داخل مكانها بلا قصّ ولا انتقال إلى صفحة أو نافذة. الانتقال إلى بطاقة أخرى يطوي الموسّعة. لا autoplay ولا تبديل تلقائي. التداخل في دوائر المقارنة إشارة علاقة بصرية لا عملية حسابية.</p>
 
       <div class="m-carousel" data-carousel data-carousel-label="ملخصات العمليات" id="main-carousel">
         <div class="m-carousel__viewport" data-viewport>
@@ -54,51 +57,87 @@
                     </span>
                   </div>
                   <div class="m-stat">
-                    <span class="m-stat__label">قيد التوصيل</span>
-                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">27</span><span class="m-stat__unit">طلب</span></span>
-                  </div>
-                  <div class="m-stat">
                     <span class="m-stat__label">متأخرة عن الجدول</span>
                     <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">4</span><span class="m-stat__unit">طلبات</span>
                       <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-negative"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+2</span>
                     </span>
                   </div>
                 </div>
-                <p class="card-note">القيم ثابتة من HTML مثال — لا قراءة شبكة ولا حساب.</p>
+                <button type="button" class="m-carousel__card-toggle" data-card-expand
+                        aria-expanded="false" aria-controls="details-ops"
+                        data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل">
+                  <span data-card-expand-text>عرض التفاصيل</span>
+                  <svg aria-hidden="true"><use href="#i-chevron-down"/></svg>
+                </button>
+                <div class="m-carousel__card-details" id="details-ops" data-card-details hidden>
+                  <div class="m-stat">
+                    <span class="m-stat__label">قيد التوصيل</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">27</span><span class="m-stat__unit">طلب</span></span>
+                  </div>
+                  <p class="card-note">الملخص المقصود أعلاه + هذه التفاصيل = المحتوى الكامل. القيم ثابتة من HTML مثال — لا قراءة شبكة ولا حساب ولا قصّ CSS.</p>
+                </div>
               </div>
             </li>
 
             <li class="m-carousel__slide" data-carousel-slide data-card-label="الطلبات حسب الحالة">
               <div class="m-carousel__card">
                 <h3 class="card-title">الطلبات حسب الحالة</h3>
-                <div class="m-chart m-chart--donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-title="توزيع الطلبات حسب الحالة (مقام معلن 25)">
-                  <ul class="m-chart__data" hidden>
-                    <li data-series="a" data-label="مكتملة" data-value="11"></li>
-                    <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
-                    <li data-series="c" data-label="جديدة" data-value="8"></li>
-                  </ul>
-                  <div class="m-chart__plot m-donut" data-plot></div>
-                  <p class="m-chart__summary" data-summary></p>
+                <div class="m-stat">
+                  <span class="m-stat__label">إجمالي الطلبات اليوم</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">25</span><span class="m-stat__unit">طلب</span></span>
                 </div>
-                <p class="card-note">نسب من مقام معلن صريح (25) — عقد donut في B05 كما هو مع C2.</p>
+                <p class="card-note">أكبر فئة: مكتملة (11 من مقام معلن 25).</p>
+                <button type="button" class="m-carousel__card-toggle" data-card-expand
+                        aria-expanded="false" aria-controls="details-donut"
+                        data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل">
+                  <span data-card-expand-text>عرض التفاصيل</span>
+                  <svg aria-hidden="true"><use href="#i-chevron-down"/></svg>
+                </button>
+                <div class="m-carousel__card-details" id="details-donut" data-card-details hidden>
+                  <div class="m-chart m-chart--donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-title="توزيع الطلبات حسب الحالة (مقام معلن 25)">
+                    <ul class="m-chart__data" hidden>
+                      <li data-series="a" data-label="مكتملة" data-value="11"></li>
+                      <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
+                      <li data-series="c" data-label="جديدة" data-value="8"></li>
+                    </ul>
+                    <div class="m-chart__plot m-donut" data-plot></div>
+                    <p class="m-chart__summary" data-summary></p>
+                  </div>
+                  <p class="card-note">نسب من مقام معلن صريح (25) — عقد donut في B05 كما هو مع C2.</p>
+                </div>
               </div>
             </li>
 
             <li class="m-carousel__slide" data-carousel-slide data-card-label="المقارنة المالية">
               <div class="m-carousel__card">
                 <h3 class="card-title">المقارنة المالية — الفترة</h3>
-                <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="46" style="--packed-overlap: 24px" data-title="مقارنة الإيرادات والتكاليف — قيم مستقلة لا نسب">
-                  <ul class="m-chart__data" hidden>
-                    <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
-                    <li data-series="b" data-label="التكاليف" data-value="61150" data-display="61,150"></li>
-                  </ul>
-                  <div class="m-chart__plot" data-plot></div>
+                <div class="kpi-stack">
+                  <div class="m-stat">
+                    <span class="m-stat__label">الإيرادات</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">7,532</span><span class="m-stat__unit">د.أ</span></span>
+                  </div>
+                  <div class="m-stat">
+                    <span class="m-stat__label">التكاليف</span>
+                    <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">3,333</span><span class="m-stat__unit">د.أ</span></span>
+                  </div>
                 </div>
-                <div class="m-stat net-profit">
-                  <span class="m-stat__label">صافي الربح — رقم مستقل لا دائرة</span>
-                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">23,150</span><span class="m-stat__unit">د.أ</span></span>
+                <button type="button" class="m-carousel__card-toggle" data-card-expand
+                        aria-expanded="false" aria-controls="details-packed"
+                        data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل">
+                  <span data-card-expand-text>عرض التفاصيل</span>
+                  <svg aria-hidden="true"><use href="#i-chevron-down"/></svg>
+                </button>
+                <div class="m-carousel__card-details" id="details-packed" data-card-details hidden>
+                  <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="44" data-legend="off" style="--packed-overlap: 10px" data-title="الإيرادات والربح والتكاليف — قيم حقيقية داخل الدوائر لا نسب">
+                    <ul class="m-chart__data" hidden>
+                      <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+                      <li data-series="b" data-label="الربح" data-value="3566" data-display="3,566"></li>
+                      <li data-series="c" data-label="التكاليف" data-value="3333" data-display="3,333"></li>
+                    </ul>
+                    <div class="m-chart__plot" data-plot></div>
+                  </div>
+                  <p class="card-note">القيم داخل الدوائر لا نسب، والمساحة ∝ القيمة (القطر ∝ √القيمة) — التداخل إشارة علاقة لا عملية. امتداد PROPOSED.</p>
                 </div>
-                <p class="card-note">قيمتان مستقلتان: التداخل إشارة علاقة لا عملية حسابية، ولا أجزاء من مجموع. المرجع الرقم والتسمية — الحجم مساعد. امتداد PROPOSED بانتظار اعتماد المالك.</p>
               </div>
             </li>
 
@@ -237,7 +276,44 @@
     <!-- ================= 4) لوحة المفاتيح والتركيز ================= -->
     <section class="panel" id="lab-keys">
       <h2>4) لوحة المفاتيح والتركيز</h2>
-      <p class="panel-note">جرّب من هذه المعاملات: <kbd>Tab</kbd> يمر على السابق/التالي/النقاط (أزرار فعلية)، <kbd>Enter</kbd>/<kbd>Space</kbd> تفعل الأزرار، <kbd>ArrowLeft</kbd>/<kbd>ArrowRight</kbd> تنقلان بالترتيب المنطقي من أي نقطة داخل العارض، <kbd>Home</kbd>/<kbd>End</kbd> للأطراف. التنقل لا ينقل التركيز إلى بطاقة غير ظاهرة: المخفية كليًا معلّمة inert والمجاورة الظاهرة معاينة غير قابلة للتركيز. حلقة التركيز بعقد B01 (2px + فاصل 2px). لا حالة تحميل في هذا العارض أصلًا.</p>
+      <h3>4-أ) عناصر تفاعلية داخل البطاقة — الأسهم تبقى محلية لها</h3>
+      <p class="panel-note">إصلاح PR#5: <kbd>ArrowLeft</kbd>/<kbd>ArrowRight</kbd> داخل <code>input</code> أو <code>contenteditable</code> تبقى للتحرير المحلي — لا تنقل العارض ولا تمنع الحدث الافتراضي، وكذلك الأسهم على أزرار محتوى البطاقة. أما من سطح العارض أو أزرار التحكم (السابق/التالي/النقاط) فتبقى الأسهم تنقل بالترتيب المنطقي، و<kbd>Enter</kbd>/<kbd>Space</kbd> تفعلان الأزرار، و<kbd>Home</kbd>/<kbd>End</kbd> للأطراف من سطح العارض.</p>
+      <div class="m-carousel" data-carousel data-carousel-label="معمل العناصر التفاعلية داخل البطاقة" id="lab-interactive">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة بحقل بحث">
+              <div class="m-carousel__card">
+                <h3 class="card-title">بطاقة بحقل بحث</h3>
+                <label class="inline-field">
+                  <span class="m-stat__label">بحث داخل البطاقة</span>
+                  <input type="text" id="card-input" placeholder="جرّب الأسهم هنا — تبقى للحقل" value="ORD">
+                </label>
+                <p class="card-note">ركّز الحقل واضغط <kbd>ArrowLeft</kbd>/<kbd>ArrowRight</kbd>: مؤشر التحرير يتحرك داخل الحقل والعارض لا يتبدل (فحص آلي في السجل).</p>
+              </div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة بنص قابل للتحرير">
+              <div class="m-carousel__card">
+                <h3 class="card-title">بطاقة بنص قابل للتحرير</h3>
+                <p class="card-note" contenteditable="true" id="card-editable">نص تجريبي قابل للتحرير — الأسهم هنا تحرك مؤشر التحرير محليًا.</p>
+                <p class="card-note">زر داخل البطاقة (أدناه) أسهمه محلية أيضًا: لا ينقل العارض.</p>
+                <button type="button" class="inline-btn" id="card-plain-btn">زر عادي داخل البطاقة</button>
+              </div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="بطاقة ثالثة">
+              <div class="m-carousel__card"><p class="card-note">3 من 3 — للتحقق من أن الأسهم من سطح العارض تصل إلى هنا.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+        <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+      </div>
+
+      <h3>4-ب) التنقل والتركيز</h3>
+      <p class="panel-note">جرّب من هذه المعاملات: <kbd>Tab</kbd> يمر على السابق/التالي/النقاط وأزرار التوسعة (أزرار فعلية)، <kbd>Enter</kbd>/<kbd>Space</kbd> تفعل الأزرار وتفتح/تغلق البطاقات، <kbd>ArrowLeft</kbd>/<kbd>ArrowRight</kbd> تنقلان بالترتيب المنطقي من سطح العارض، <kbd>Home</kbd>/<kbd>End</kbd> للأطراف. التنقل لا ينقل التركيز إلى بطاقة غير ظاهرة: المخفية كليًا معلّمة inert والمجاورة الظاهرة معاينة غير قابلة للتركيز. حلقة التركيز بعقد B01 (2px + فاصل 2px).</p>
 
       <div class="m-carousel" data-carousel data-carousel-label="معمل لوحة المفاتيح">
         <div class="m-carousel__viewport" data-viewport>
@@ -290,26 +366,35 @@
     <!-- ================= 6) المقارنة المالية — تفصيل الامتداد ================= -->
     <section class="panel" id="packed-detail">
       <h2>6) المقارنة المالية — دوائر متداخلة (امتداد PROPOSED فوق عقد B05)</h2>
-      <p class="panel-note">عقد m-bubbles نفسه (ألوان المفاتيح الثابتة، نصف القطر √القيمة، التسميات خارجية دائمًا) + تداخل جزئي opt-in موسوم PROPOSED. القيم مستقلة: لا نسب ولا مجموع وهمي — والتداخل إشارة علاقة بصرية فقط. صافي الربح رقم مستقل لا دائرة. المكوّن لا يحسب شيئًا.</p>
+      <p class="panel-note">عقد m-bubbles نفسه (ألوان المفاتيح الثابتة، نصف القطر √القيمة) + تداخل واضح opt-in موسوم PROPOSED. قرار PR#5: القيم الحقيقية (data-display أو الخام) داخل الدوائر — لا نسب مئوية داخلها إطلاقًا — والتسمية خارجها تحتها والمفتاح بقيم خام مرجعًا إضافيًا. القيم مستقلة: لا مجموع وهمي — والتداخل إشارة علاقة بصرية فقط. صافي الربح السالب رقم وحالة لا دائرة. المكوّن لا يحسب شيئًا.</p>
 
-      <h3>6-أ) الحالة الأساسية — قيمتان مستقلتان</h3>
+      <h3>6-أ) الحالة الأساسية — ثلاث قيم حقيقية داخل الدوائر (لا نسب)</h3>
       <div class="packed-demo">
-        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="64" style="--packed-overlap: 32px" data-title="الإيرادات والتكاليف — قيم مستقلة والمساحة ∝ القيمة">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="64" style="--packed-overlap: 18px" data-title="الإيرادات والربح والتكاليف — القيم الحقيقية داخل الدوائر">
           <ul class="m-chart__data" hidden>
-            <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
-            <li data-series="b" data-label="التكاليف" data-value="61150" data-display="61,150"></li>
+            <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+            <li data-series="b" data-label="الربح" data-value="3566" data-display="3,566"></li>
+            <li data-series="c" data-label="التكاليف" data-value="3333" data-display="3,333"></li>
           </ul>
           <div class="m-chart__plot" data-plot></div>
           <p class="m-chart__summary" data-summary></p>
         </div>
-        <div class="m-stat">
-          <span class="m-stat__label">صافي الربح (قيمة ثابتة من HTML — لا حساب داخل المكوّن)</span>
-          <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">23,150</span><span class="m-stat__unit">د.أ</span></span>
-        </div>
-        <p class="card-note">«84,300» و«61,150» نصوص data-display من المستهلك — أساس المساحة data-value الرقمي. المفتاح النصي أعلاه هو المرجع الدقيق.</p>
+        <p class="card-note">القيم نفسها داخل الدوائر: 7,532 و3,566 و3,333 — لا نسب مئوية داخل الدوائر إطلاقًا. الحجم يعكس القيمة الخام: مساحة الدائرة ∝ القيمة والقطر ∝ √القيمة، فدائرة 7,532 الأكبر ثم 3,566 ثم 3,333 (المقياس توثيق نصي هنا لا نسبة معروضة). القيم مستقلة من HTML المستهلك — المكوّن لا يحسب شيئًا والتداخل إشارة علاقة بصرية فقط.</p>
       </div>
 
-      <h3>6-ب) القيم غير الطبيعية — فرق بصري وبياني</h3>
+      <h3>6-ب) قيمة سالبة مع data-display — التنسيق والدلالة معًا</h3>
+      <div class="edge-grid">
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40" data-title="سالب بتنسيق عرض: الرقم المنسق ودلالة الحالة معًا">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+            <li data-series="b" data-label="الربح" data-value="-3566" data-display="-3,566"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+        <p class="caption">السالب مع data-display: يظهر الرقم المنسق بعلامته «-3,566» ومعه دلالة الحالة «سالب غير صالح للمساحة» معًا — في الرسم والمفتاح — ولا دائرة سالبة إطلاقًا والدلالة لا تعتمد على اللون وحده (إصلاح PR#5).</p>
+      </div>
+
+      <h3>6-ج) القيم غير الطبيعية — فرق بصري وبياني</h3>
       <div class="edge-grid">
         <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40" data-title="قيم: موجبة وصفر ومجهولة وغير متاحة وسالبة">
           <ul class="m-chart__data" hidden>
@@ -324,7 +409,7 @@
         <p class="caption">المجهولة (سمة غائبة): «— غير معروف» ≠ غير المتاحة (سمة غير قابلة للتحليل): «— غير متاح» ≠ الصفر: حلقة شرطة و«0» ≠ السالبة: لا دائرة سالبة إطلاقًا — نص حالتها صريح.</p>
       </div>
 
-      <h3>6-ج) حالات المقياس data-max (نظير المقام — بلمسة متسقة مع C2 بلا لمس donut)</h3>
+      <h3>6-د) حالات المقياس data-max (نظير المقام — بلمسة متسقة مع C2 بلا لمس donut)</h3>
       <div class="edge-grid">
         <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-max="0" data-title="مقياس صفر مع قيم موجبة — تعارض صريح">
           <ul class="m-chart__data" hidden>
@@ -350,7 +435,7 @@
       </div>
       <p class="caption">صفر مع موجبة: تعارض صريح بلا استبدال المقياس بالمشتق · سالب/غير رقمي: غير صالح صريح · الغائب: أكبر قيمة موجبة (البديل الموثق كما في عقد B05) · لا دائرة تُرسم في حالتي الخطأ والمفتاح بقيم خام.</p>
 
-      <h3>6-د) صافي ربح سالب — رقم وحالة، لا دائرة سالبة</h3>
+      <h3>6-هـ) صافي ربح سالب — رقم وحالة، لا دائرة سالبة</h3>
       <div class="packed-demo" id="net-negative">
         <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="56" style="--packed-overlap: 28px" data-title="إيرادات وتكاليف بصافي سالب — الدوائر للقيمتين المستقلتين فقط">
           <ul class="m-chart__data" hidden>

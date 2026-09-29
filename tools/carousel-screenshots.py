@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Micro UI — دفعة العارض (Carousel + Packed-Circle): فحص ولقطات. من جذر المستودع:
+Micro UI — دفعة العارض (Carousel + Packed-Circle) — جولة إصلاح PR#5: فحص ولقطات. من جذر المستودع:
   python3 tools/carousel-screenshots.py
 متصفح headless فعلي (Playwright + Chromium) — لقطات وقياسات من المصدر نفسه.
+
+جولة PR#5 تضيف فحوصًا إلزامية جديدة:
+  - إفلات المؤشر خارج الـviewport أثناء السحب → لا بقاء is-dragging والانتقال يعود.
+  - السحب العمودي يُسلَّم للتمرير (إلغاء ذاتي) وفقدان التركيز يوقف السحب.
+  - الأسهم داخل input/contenteditable/زر بطاقة تبقى محلية (لا اعتراض ولا preventDefault).
+  - التوسعة inline: aria-expanded/aria-controls والطي عند الانتقال والسحب لا يوسّع.
+  - القيم الحقيقية داخل الدوائر (لا نسب) وتداخل لا يخفي رقمًا (قياس تقاطع فعلي).
+  - القيمة السالبة مع data-display: التنسيق والدلالة معًا في الرسم والمفتاح.
 """
 import http.server, subprocess, sys, threading
 from datetime import datetime
@@ -31,11 +39,11 @@ def main():
     board = f"{base}/previews/carousel/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
     tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
-    log(f"# CAROUSEL سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
+    log(f"# CAROUSEL سجل الفحص — جولة إصلاح PR#5 — {datetime.now().isoformat(timespec='seconds')}")
     log(f"# commit المصدر: {commit}")
     log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
     log("# بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — لا محاكاة DOM؛ القياسات الهندسية من مستطيلات المتصفح الحقيقية")
-    log("# حدود الفحوص المعلنة: لا قارئ شاشة فعلي، لا لمس حقيقي (سحب بالمؤشر فقط)، لا متصفحات غير Chromium، لا تكبير نظام/متصفح أصلي (محاكاة مكافئة للنص)، لا هاتف حقيقي")
+    log("# حدود الفحوص المعلنة: لا قارئ شاشة فعلي، لا لمس حقيقي (سحب بالمؤشر فقط)، لا متصفحات غير Chromium، لا تكبير نظام/متصفح أصلي (محاكاة مكافئة للنص)، لا هاتف حقيقي؛ فقدان التركيز يُحاكى بحدث blur تركيبي موثق")
     log("")
 
     errors = []
@@ -237,7 +245,7 @@ def main():
               keys["start"] == 3 and keys["afterLeft"] == 4 and keys["afterRight"] == 3
               and keys["afterHome"] == 0 and keys["afterEnd"] == 5, str(keys))
 
-        # ==== A13: Enter/Space على الأزرار + عدم نقل التركيز لغير المرئي ====
+        # ==== A13: Enter/Space على أزرار العارض + عدم نقل التركيز لغير المرئي ====
         page.focus("#main-carousel [data-next]")
         page.keyboard.press("Enter")
         page.wait_for_timeout(300)
@@ -249,7 +257,6 @@ def main():
         page.wait_for_timeout(300)
         spaceState = page.evaluate(
             """() => document.querySelector('#main-carousel [data-status]').textContent""")
-        # تركيز داخل بطاقة مخفية كليًا مستحيل (inert) — والشرائح الخفية معلّمة
         inert = page.evaluate(
             """() => { const r = document.querySelector('#main-carousel');
                  const ss = [...r.querySelectorAll('[data-carousel-slide]')];
@@ -264,6 +271,48 @@ def main():
               and (not inert["vis"][0]) and inert["vis"][1] and inert["vis"][2]
               and inert["inertAttr"][0] and not inert["inertAttr"][1] and not inert["inertAttr"][2],
               f"enter={enterState} space={spaceState} inert={inert}")
+
+        # ==== A13b (جديد PR#5): حارس الأسهم داخل العناصر التفاعلية للبطاقة ====
+        guard = page.evaluate(
+            """() => { const r = document.querySelector('#lab-interactive');
+                 const idx = () => MicroCarousel.getIndex(r);
+                 const start = idx();
+                 /* 1) داخل input: الأسهم محلية — لا تبديل ولا منع افتراضي */
+                 const input = document.getElementById('card-input');
+                 input.focus();
+                 const eL = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true});
+                 const eR = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true});
+                 input.dispatchEvent(eL); input.dispatchEvent(eR);
+                 const afterInput = idx();
+                 /* 2) داخل contenteditable */
+                 const ed = document.getElementById('card-editable');
+                 ed.focus();
+                 const eE = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true});
+                 ed.dispatchEvent(eE);
+                 const afterEditable = idx();
+                 /* 3) زر عادي داخل البطاقة: أسهمه محلية */
+                 const btn = document.getElementById('card-plain-btn');
+                 btn.focus();
+                 const eB = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true});
+                 btn.dispatchEvent(eB);
+                 const afterCardBtn = idx();
+                 /* 4) من زر تحكم العارض (prev): الأسهم تبقى تنقل بالترتيب المنطقي */
+                 const prevBtn = r.querySelector('[data-prev]');
+                 prevBtn.focus();
+                 const idxAtCtrl = idx();
+                 const eC = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true});
+                 prevBtn.dispatchEvent(eC);
+                 const afterCtrl = idx();
+                 return {start, afterInput, afterEditable, afterCardBtn, idxAtCtrl, afterCtrl,
+                         inPrevL: eL.defaultPrevented, inPrevR: eR.defaultPrevented,
+                         inEd: eE.defaultPrevented, inBtn: eB.defaultPrevented, inCtrl: eC.defaultPrevented}; }""")
+        page.wait_for_timeout(250)
+        check("A13b حارس الأسهم: داخل input/contenteditable/زر بطاقة لا تبديل ولا preventDefault — ومن زر تحكم العارض تبقى الأسهم تنقل (RTL: يسار = تالي)",
+              guard["afterInput"] == guard["start"] and guard["afterEditable"] == guard["start"]
+              and guard["afterCardBtn"] == guard["start"]
+              and not guard["inPrevL"] and not guard["inPrevR"] and not guard["inEd"] and not guard["inBtn"]
+              and guard["afterCtrl"] == guard["idxAtCtrl"] + 1 and guard["inCtrl"],
+              str(guard))
 
         # لقطة تركيز لوحة المفاتيح: Tab حتى زر مع حلقة التركيز
         page.evaluate("() => document.activeElement && document.activeElement.blur()")
@@ -313,13 +362,63 @@ def main():
               dragCommit["idx"] == 1 and dragCancel["idx"] == 1 and touchAction == "pan-y",
               f"commit={dragCommit} cancel={dragCancel} touch-action={touchAction}")
 
+        # ==== A16b (جديد PR#5): إفلات المؤشر خارج الـviewport — لا بقاء is-dragging ====
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(350)
+        vpBox = page.locator("#main-carousel [data-viewport]").bounding_box()
+        cx, cy = vpBox["x"] + vpBox["width"] / 2, vpBox["y"] + vpBox["height"] / 2
+        stateExpr = """() => { const r = document.querySelector('#main-carousel');
+                     return {dragging: r.classList.contains('is-dragging'),
+                             dur: getComputedStyle(r.querySelector('[data-track]')).transitionDuration,
+                             idx: MicroCarousel.getIndex(r)}; }"""
+        page.mouse.move(cx, cy)
+        page.mouse.down()
+        page.mouse.move(cx + 50, cy, steps=5)
+        during = page.evaluate(stateExpr)
+        # الخروج خارج حدود الـviewport (إلى أعلى الصفحة) ثم الإفلات هناك
+        page.mouse.move(cx + 50, 12, steps=8)
+        page.mouse.up()
+        page.wait_for_timeout(250)
+        after = page.evaluate(stateExpr)
+        page.screenshot(path=str(SHOTS / "27-drag-released-outside-390.png"), clip={"x": 0, "y": 0, "width": 390, "height": 480})
+        check("A16b pointerup خارج الـviewport: أثناء السحب is-dragging=true والانتقال 0s — وبعد الإفلات خارج الـviewport يُنظَّف كل شيء (is-dragging=false والانتقال يعود 0.18s) — إصلاح PR#5 المثبت",
+              during["dragging"] and during["dur"] == "0s"
+              and not after["dragging"] and after["dur"] == "0.18s",
+              f"during={during} after={after}")
+
+        # ==== A16c (جديد PR#5): السحب العمودي يُسلَّم للتمرير + blur يوقف السحب ====
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(350)
+        page.mouse.move(cx, cy)
+        page.mouse.down()
+        page.mouse.move(cx, cy + 34, steps=5)  # عمودي > قفل المحور 8px
+        page.wait_for_timeout(60)
+        vert = page.evaluate(stateExpr)
+        page.mouse.up()
+        page.wait_for_timeout(250)
+        # فقدان التركيز/النافذة أثناء سحب جديد — مسار تنظيف تركيبي موثق (blur)
+        page.mouse.move(cx, cy)
+        page.mouse.down()
+        page.mouse.move(cx + 30, cy, steps=3)
+        page.evaluate("() => window.dispatchEvent(new Event('blur'))")
+        page.wait_for_timeout(60)
+        blurState = page.evaluate(stateExpr)
+        page.mouse.up()
+        page.wait_for_timeout(250)
+        check("A16c مسارات الإلغاء: السحب العمودي (>8px) يُلغي نفسه ويُسلّم للتمرير (is-dragging=false والموضع ثابت) وفقدان التركيز (blur) ينظّف حالة السحب فورًا",
+              not vert["dragging"] and vert["idx"] == 0
+              and not blurState["dragging"],
+              f"vertical={vert} blur={blurState}")
+
         # ==== A17: حدث عام ====
         ev = page.evaluate(
             """() => new Promise(res => { const r = document.querySelector('#main-carousel');
                  r.addEventListener('micro-carousel:change', e => res(e.detail), {once: true});
                  MicroCarousel.next(r); })""")
         page.wait_for_timeout(250)
-        check("A17 حدث micro-carousel:change يفصح عن {index, count}", ev == {"index": 2, "count": 3}, str(ev))
+        check("A17 حدث micro-carousel:change يفصح عن {index, count}", ev == {"index": 1, "count": 3}, str(ev))
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(300)
 
         # ==== A18: المحتوى داخل بطاقة المقارنة (donut بمقام معلن داخل العارض) ====
         donut = page.evaluate(
@@ -329,46 +428,239 @@ def main():
         check("A18 بطاقة الطلبات: donut بمقام معلن 25 في المركز ونسب من المقام — عقد B05 داخل بطاقة العارض دون تغيير",
               donut["center"] == "25" and donut["pct"], str(donut))
 
+        # ==== C0 (جديد PR#5): البطاقات compact افتراضيًا — لا تمدد إجباري ولا قصّ ====
+        compact = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const cards = [...r.querySelectorAll('.m-carousel__card')];
+                 const hs = cards.map(c => Math.round(c.getBoundingClientRect().height));
+                 const noClip = cards.every(c => c.scrollHeight <= c.clientHeight + 2);
+                 const slide = r.querySelector('[data-current="true"]').querySelector('.m-carousel__card');
+                 const sh = Math.round(slide.getBoundingClientRect().height);
+                 const noStretchCSS = getComputedStyle(r.querySelector('[data-track]')).alignItems;
+                 return {heights: hs, noClip, activeH: sh, align: noStretchCSS}; }""")
+        page.locator("#main-carousel").screenshot(path=str(SHOTS / "20-compact-closed-390.png"))
+        check("C0 compact افتراضيًا: أطوال البطاقات تتبع محتواها (غير متساوية — لا تمدد إجباري) والبطاقة النشطة المغلقة ≈ 220–280px على 390px بلا أي قصّ محتوى وalign-items: flex-start",
+              len(set(compact["heights"])) > 1 and compact["noClip"]
+              and 200 <= compact["activeH"] <= 320 and compact["align"] == "flex-start",
+              str(compact))
+
+        # ==== C1 (جديد PR#5): الحالة المغلقة الافتراضية لعقد التوسعة ====
+        contract = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const ss = [...r.querySelectorAll('[data-carousel-slide]')];
+                 return ss.map(s => { const b = s.querySelector('[data-card-expand]');
+                   const reg = s.querySelector('[data-card-details]');
+                   return b && reg ? {exp: b.getAttribute('aria-expanded'), hidden: reg.hidden,
+                                      type: b.getAttribute('type'), ctl: b.getAttribute('aria-controls'),
+                                      label: b.textContent.trim()} : null; }); }""")
+        check("C1 عقد التوسعة في كل بطاقة: type=button وaria-expanded=false وaria-controls والمنطقة hidden والنص «عرض التفاصيل»",
+              all(c and c["exp"] == "false" and c["hidden"] and c["type"] == "button" and c["ctl"] and "عرض التفاصيل" in c["label"] for c in contract),
+              str(contract))
+
+        # ==== A18b: بطاقة المقارنة داخل العارض — مغلقة: دوائر موجودة والتفاصيل مطوية ====
         page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 2)")
         page.wait_for_timeout(350)
-        # اللقطة 15: بطاقة المقارنة المالية داخل العارض (الحالة الأخيرة)
-        page.locator("#main-carousel").screenshot(path=str(SHOTS / "15-financial-card-390.png"))
         fincard = page.evaluate(
             """() => { const r = document.querySelector('#main-carousel');
                  const card = r.querySelector('[data-current="true"]');
+                 const det = card.querySelector('[data-card-details]');
                  return {packed: !!card.querySelector('.m-chart--packed'),
                          circles: card.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length,
-                         netIsStat: !!card.querySelector('.net-profit .m-stat__num'),
+                         detailsHidden: det && det.hidden,
                          status: r.querySelector('[data-status]').textContent}; }""")
-        check("A18b بطاقة المقارنة داخل العارض: دوائر متداخلة + صافي الربح رقم مستقل والمؤشر «البطاقة 3 من 3»",
-              fincard["packed"] and fincard["circles"] == 2 and fincard["netIsStat"]
+        page.locator("#main-carousel").screenshot(path=str(SHOTS / "24-packed-card-closed-390.png"))
+        check("A18b بطاقة الدوائر مغلقة: دوائر مقرَّرة في DOM (تظهر عند التوسعة) والتفاصيل hidden والمؤشر «البطاقة 3 من 3»",
+              fincard["packed"] and fincard["circles"] == 3 and fincard["detailsHidden"]
               and fincard["status"] == "البطاقة 3 من 3", str(fincard))
+
+        # ==== C2 (جديد PR#5): التوسعة inline من الزر — القياس واللقطة ====
+        hBefore = page.evaluate(
+            """() => Math.round(document.querySelector('#main-carousel [data-current="true"] .m-carousel__card').getBoundingClientRect().height)""")
+        expandSeq = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const slide = r.querySelector('[data-current="true"]');
+                 const btn = slide.querySelector('[data-card-expand]');
+                 const reg = document.getElementById(btn.getAttribute('aria-controls'));
+                 btn.click();
+                 return {slideExp: slide.getAttribute('data-expanded'), aria: btn.getAttribute('aria-expanded'),
+                         regHidden: reg.hidden, label: btn.textContent.trim(),
+                         regIsAriaCtl: document.getElementById(btn.getAttribute('aria-controls')) === reg}; }""")
+        page.wait_for_timeout(250)
+        hAfter = page.evaluate(
+            """() => Math.round(document.querySelector('#main-carousel [data-current="true"] .m-carousel__card').getBoundingClientRect().height)""")
+        expandedNoClip = page.evaluate(
+            """() => { const c = document.querySelector('#main-carousel [data-current="true"] .m-carousel__card');
+                 const plot = c.querySelector('.m-chart--packed [data-plot]');
+                 return {noClip: c.scrollHeight <= c.clientHeight + 2,
+                         plotVisible: plot.getBoundingClientRect().height > 40}; }""")
+        page.locator("#main-carousel").screenshot(path=str(SHOTS / "23-expanded-active-390.png"))
+        page.locator("#main-carousel [data-current=\"true\"] .m-carousel__card").screenshot(path=str(SHOTS / "25-packed-card-expanded-390.png"))
+        page.locator("#main-carousel [data-current=\"true\"] .m-carousel__card").screenshot(path=str(SHOTS / "30-aria-expanded-true-390.png"))
+        check("C2 التوسعة من الزر الصريح: data-expanded=true وaria-expanded=true والمنطقة تُكشف والنص يصير «إخفاء التفاصيل» والارتفاع يتبع المحتوى (يزيد) بلا قصّ والرسم ظاهر",
+              expandSeq["slideExp"] == "true" and expandSeq["aria"] == "true" and not expandSeq["regHidden"]
+              and "إخفاء التفاصيل" in expandSeq["label"] and expandSeq["regIsAriaCtl"]
+              and hAfter > hBefore + 40 and expandedNoClip["noClip"] and expandedNoClip["plotVisible"],
+              f"before={hBefore} after={hAfter} seq={expandSeq} clip={expandedNoClip}")
+        log(f"      قياس الارتفاع: مغلقة {hBefore}px → موسعة {hAfter}px (المستهدف البصري للموسعة على 390 ≈ 280–360)")
+
+        # ==== C3 (جديد PR#5): الإغلاق من الزر نفسه ====
+        closeSeq = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const slide = r.querySelector('[data-current="true"]');
+                 const btn = slide.querySelector('[data-card-expand]');
+                 const reg = document.getElementById(btn.getAttribute('aria-controls'));
+                 btn.click();
+                 return {slideExp: slide.getAttribute('data-expanded'), aria: btn.getAttribute('aria-expanded'),
+                         regHidden: reg.hidden, label: btn.textContent.trim()}; }""")
+        check("C3 الإغلاق من الزر: aria-expanded تعود false والمنطقة hidden والنص يعود «عرض التفاصيل»",
+              closeSeq["slideExp"] == "false" and closeSeq["aria"] == "false" and closeSeq["regHidden"]
+              and "عرض التفاصيل" in closeSeq["label"], str(closeSeq))
+
+        # ==== C4 (جديد PR#5): الطي عند الانتقال إلى بطاقة أخرى ====
+        page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const slide = r.querySelectorAll('[data-carousel-slide]')[2];
+                 slide.querySelector('[data-card-expand]').click(); }""")
+        page.wait_for_timeout(150)
         page.click("#main-carousel [data-prev]")
-        page.click("#main-carousel [data-prev]")
+        page.wait_for_timeout(320)
+        collapseNav = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const s2 = r.querySelectorAll('[data-carousel-slide]')[2];
+                 const b2 = s2.querySelector('[data-card-expand]');
+                 const reg = document.getElementById(b2.getAttribute('aria-controls'));
+                 return {idx: MicroCarousel.getIndex(r), s2Exp: s2.hasAttribute('data-expanded'),
+                         aria: b2.getAttribute('aria-expanded'), hidden: reg.hidden}; }""")
+        check("C4 الطي عند الانتقال: توسعة بطاقة ثم الانتقال → البطاقة السابقة تُطوى (aria-expanded=false والمنطقة hidden) والجديدة تظهر مغلقة",
+              collapseNav["idx"] == 1 and not collapseNav["s2Exp"] and collapseNav["aria"] == "false" and collapseNav["hidden"],
+              str(collapseNav))
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 2)")
         page.wait_for_timeout(300)
 
-        # ==== A19: دوائر المقارنة — المساحة ∝ القيمة ونصوص خارجية ====
+        # ==== C5 (جديد PR#5): السحب لا يوسّع ولا يغيّر حالة التوسعة ====
+        page.mouse.move(cx, cy)
+        page.mouse.down()
+        page.mouse.move(cx + 30, cy, steps=4)  # دون عتبة الالتزام
+        page.mouse.up()
+        page.wait_for_timeout(320)
+        dragExp = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const s2 = r.querySelectorAll('[data-carousel-slide]')[2];
+                 const b2 = s2.querySelector('[data-card-expand]');
+                 return {idx: MicroCarousel.getIndex(r), aria: b2.getAttribute('aria-expanded'),
+                         dragging: r.classList.contains('is-dragging')}; }""")
+        # زر توسعة بطاقة غير النشطة ينقل دون توسعة
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(300)
+        peekClick = page.evaluate(
+            """() => { const r = document.querySelector('#main-carousel');
+                 const s1 = r.querySelectorAll('[data-carousel-slide]')[1];
+                 s1.querySelector('[data-card-expand]').click();
+                 return {idx: MicroCarousel.getIndex(r),
+                         s1Exp: s1.hasAttribute('data-expanded'),
+                         s1Aria: s1.querySelector('[data-card-expand]').getAttribute('aria-expanded')}; }""")
+        page.wait_for_timeout(250)
+        check("C5 السحب لا يوسّع: سحب دون العتبة لا يغيّر aria-expanded ولا يترك is-dragging · زر توسعة بطاقة غير النشطة ينقل إليها دون توسعة",
+              dragExp["idx"] == 2 and dragExp["aria"] == "false" and not dragExp["dragging"]
+              and peekClick["idx"] == 1 and not peekClick["s1Exp"] and peekClick["s1Aria"] == "false",
+              f"drag={dragExp} peek={peekClick}")
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(300)
+
+        # ==== C6 (جديد PR#5): Tab يصل زر التوسعة وEnter/Space يفتحان ويغلقان ====
+        page.evaluate("() => { const b = document.querySelector('#main-carousel [data-prev]'); b && b.blur(); }")
+        page.evaluate("() => { const i = document.createElement('input'); i.style.position='fixed'; i.style.top='0'; i.style.left='0'; i.id='tab-start'; document.body.appendChild(i); i.focus(); }")
+        tabbed = None
+        for _ in range(20):
+            page.keyboard.press("Tab")
+            isToggle = page.evaluate("() => !!document.activeElement && document.activeElement.matches('#main-carousel [data-card-expand]')")
+            if isToggle:
+                tabbed = page.evaluate(
+                    """() => { const b = document.activeElement;
+                         return {fv: b.matches(':focus-visible'), shadow: getComputedStyle(b).boxShadow !== 'none'}; }""")
+                break
+        check("C6 Tab يصل إلى زر التوسعة بحلقة تركيز مرئية",
+              tabbed is not None and (tabbed["fv"] or tabbed["shadow"]), str(tabbed))
+        page.locator("#main-carousel [data-current=\"true\"] .m-carousel__card").screenshot(path=str(SHOTS / "29-expand-focus-390.png"))
+        enterOpen = page.evaluate(
+            """() => { const b = document.activeElement;
+                 return {aria: b.getAttribute('aria-expanded'), label: b.textContent.trim()}; }""")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(200)
+        enterOpen2 = page.evaluate(
+            """() => { const b = document.activeElement;
+                 return {aria: b.getAttribute('aria-expanded'), label: b.textContent.trim()}; }""")
+        page.keyboard.press("Space")
+        page.wait_for_timeout(200)
+        enterClose = page.evaluate(
+            """() => { const b = document.activeElement;
+                 return {aria: b.getAttribute('aria-expanded'), label: b.textContent.trim()}; }""")
+        check("C7 Enter/Space على زر التوسعة: Enter يفتح (aria-expanded=true و«إخفاء التفاصيل») وSpace يغلق (تعود false و«عرض التفاصيل»)",
+              enterOpen2["aria"] == "true" and "إخفاء" in enterOpen2["label"]
+              and enterClose["aria"] == "false" and "عرض" in enterClose["label"],
+              f"before={enterOpen} enter={enterOpen2} space={enterClose}")
+        page.evaluate("() => { const i = document.getElementById('tab-start'); i && i.remove(); }")
+
+        # ==== A19 (محدَّث PR#5): دوائر بقيم حقيقية داخلها وتداخل لا يخفي رقمًا ====
+        page.evaluate("() => MicroCarousel.goTo(document.querySelector('#main-carousel'), 0)")
+        page.wait_for_timeout(300)
         packed = page.evaluate(
             """() => { const c = document.querySelector('#packed-detail .packed-demo .m-chart--packed');
-                 const circs = [...c.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)')];
+                 const bubbles = [...c.querySelectorAll('.m-bubble')].filter(b => b.querySelector('.m-bubble__circle'));
+                 const circs = bubbles.map(b => b.querySelector('.m-bubble__circle'));
                  const widths = circs.map(x => parseFloat(x.style.width));
-                 const w0 = widths[0], w1 = widths[1];
-                 const ratioOk = Math.abs(w1 - w0 * Math.sqrt(61150 / 84300)) <= 1.5;
-                 const cRects = circs.map(x => x.getBoundingClientRect());
-                 const overlap = +(Math.min(cRects[0].right, cRects[1].right) - Math.max(cRects[0].left, cRects[1].left)).toFixed(1);
-                 const textInCircle = [...c.querySelectorAll('.m-bubble')].some(b =>
-                     b.querySelector('.m-bubble__value').compareDocumentPosition(b.querySelector('.m-bubble__circle')) & Node.DOCUMENT_POSITION_CONTAINS);
+                 const w0 = widths[0];
+                 const r1ok = Math.abs(widths[1] - w0 * Math.sqrt(3566 / 7532)) <= 1.5;
+                 const r2ok = Math.abs(widths[2] - w0 * Math.sqrt(3333 / 7532)) <= 1.5;
+                 const rects = circs.map(x => x.getBoundingClientRect());
+                 const ov1 = +(Math.min(rects[0].right, rects[1].right) - Math.max(rects[0].left, rects[1].left)).toFixed(1);
+                 const ov2 = +(Math.min(rects[1].right, rects[2].right) - Math.max(rects[1].left, rects[2].left)).toFixed(1);
+                 const inCircle = circs.map(x => { const v = x.querySelector('.m-bubble__value');
+                   return v && x.contains(v) ? v.textContent.trim() : null; });
+                 /* لا يخفي التداخل أي رقم: نص كل دائرة لا يتقاطع مع أي دائرة مرسومة فوقه (الأصغر فوق الأكبر) */
+                 let covered = 0;
+                 for (let i = 0; i < circs.length; i++) {
+                   const v = circs[i].querySelector('.m-bubble__value');
+                   if (!v) continue;
+                   const vr = v.getBoundingClientRect();
+                   for (let j = i + 1; j < circs.length; j++) {
+                     const cr = circs[j].getBoundingClientRect();
+                     const ox = Math.min(vr.right, cr.right) - Math.max(vr.left, cr.left);
+                     const oy = Math.min(vr.bottom, cr.bottom) - Math.max(vr.top, cr.top);
+                     if (ox > 0 && oy > 0) covered++;
+                   }
+                 }
                  const key = c.querySelector('.m-legend').textContent;
-                 const netProfitIsStat = !!document.querySelector('#packed-detail .packed-demo .m-stat__num');
-                 return {w0, w1, ratioOk, overlap, textInCircle, keyPct: key.includes('%'), keyHasVals: key.includes('84,300') && key.includes('61,150'), netProfitIsStat}; }""")
+                 return {widths, r1ok, r2ok, ov1, ov2, inCircle, covered,
+                         keyPct: key.includes('%'),
+                         keyHasVals: key.includes('7,532') && key.includes('3,566') && key.includes('3,333')}; }""")
         page.locator("#packed-detail .packed-demo").first.screenshot(path=str(SHOTS / "16-packed-overlap-390.png"))
-        check("A19 المقارنة: القطران بتناسب الجذر (84300/61150) وتداخل فعلي بين الدائرتين والنصوص خارج الدوائر والمفتاح بقيم خام بلا نسب وصافي الربح m-stat لا دائرة",
-              packed["ratioOk"] and packed["overlap"] > 0 and not packed["textInCircle"]
-              and not packed["keyPct"] and packed["keyHasVals"] and packed["netProfitIsStat"], str(packed))
+        page.locator("#packed-detail .packed-demo .m-chart--packed [data-plot]").first.screenshot(path=str(SHOTS / "26-overlap-readable-390.png"))
+        check("A19 المقارنة (قرار PR#5): ثلاث دوائر بأقطار √القيمة (7532→3566→3333) والقيم الحقيقية 7,532/3,566/3,333 داخلها بلا نسب · تداخل هندسي فعلي في الزوجين · التداخل لا يغطي أي رقم (قياس تقاطع نص×دائرة = 0) والمفتاح بقيم خام بلا نسب",
+              packed["r1ok"] and packed["r2ok"] and packed["ov1"] > 0 and packed["ov2"] > 0
+              and packed["inCircle"] == ["7,532", "3,566", "3,333"] and packed["covered"] == 0
+              and not packed["keyPct"] and packed["keyHasVals"], str(packed))
+        log(f"      القياسات: أقطار {packed['widths']} · تداخل الزوجين {packed['ov1']}/{packed['ov2']}px · أرقام مغطاة: {packed['covered']}")
+
+        # ==== A20b (جديد PR#5): قيمة سالبة مع data-display — التنسيق والدلالة معًا ====
+        negDisp = page.evaluate(
+            """() => { const g = document.querySelectorAll('#packed-detail .edge-grid')[0];
+                 const c = g.querySelector('.m-chart--packed');
+                 const t = c.textContent;
+                 const posCircles = [...c.querySelectorAll('.m-bubble__circle')].filter(x => !x.className.includes('--none')).length;
+                 const noneRings = c.querySelectorAll('.m-bubble__circle--none').length;
+                 const inVal = c.querySelector('.m-bubble__circle:not(.m-bubble__circle--none) .m-bubble__value');
+                 return {both: t.includes('-3,566 — سالب غير صالح للمساحة'),
+                         rawInCircle: inVal ? inVal.textContent.trim() : null,
+                         posCircles, noneRings}; }""")
+        page.locator("#packed-detail .edge-grid").first.screenshot(path=str(SHOTS / "28-negative-with-display-390.png"))
+        check("A20b سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» يظهر بالتنسيق والدلالة معًا (في الرسم/المفتاح) ولا دائرة سالبة ولا نسب — إصلاح PR#5",
+              negDisp["both"] and negDisp["posCircles"] == 1 and negDisp["noneRings"] == 1
+              and negDisp["rawInCircle"] == "7,532", str(negDisp))
 
         # ==== A20: القيم غير الطبيعية ====
         edge = page.evaluate(
-            """() => { const g = document.querySelectorAll('#packed-detail .edge-grid')[0];
+            """() => { const g = document.querySelectorAll('#packed-detail .edge-grid')[1];
                  const c = g.querySelector('.m-chart--packed');
                  const t = c.textContent;
                  const negCircles = [...c.querySelectorAll('.m-bubble__circle')].filter(x =>
@@ -377,14 +669,14 @@ def main():
                  return {unknown: t.includes('— غير معروف'), unavailable: t.includes('— غير متاح'),
                          zero: t.includes('0'), neg: t.includes('سالب غير صالح للمساحة'),
                          circles: negCircles, noneRings}; }""")
-        page.locator("#packed-detail .edge-grid").first.screenshot(path=str(SHOTS / "17-packed-edge-states-390.png"))
+        page.locator("#packed-detail .edge-grid").nth(1).screenshot(path=str(SHOTS / "17-packed-edge-states-390.png"))
         check("A20 القيم غير الطبيعية: صفر «0» ومجهول «— غير معروف» ≠ غير متاح «— غير متاح» وسالب بنص صريح — دائرة واحدة فقط للموجبة وحلقات شرطة للأربعة البدائل",
               edge["unknown"] and edge["unavailable"] and edge["zero"] and edge["neg"]
               and edge["circles"] == 1 and edge["noneRings"] == 4, str(edge))
 
         # ==== A21: حالات المقياس (نظير المقام — اتساق مع دلالة C2) ====
         scale = page.evaluate(
-            """() => { const gs = document.querySelectorAll('#packed-detail .edge-grid')[1];
+            """() => { const gs = document.querySelectorAll('#packed-detail .edge-grid')[2];
                  const charts = [...gs.querySelectorAll('.m-chart--packed')];
                  const zeroMax = charts[0], negMax = charts[1], noMax = charts[2];
                  const zerr = zeroMax.querySelector('.m-chart__scale-error');
@@ -395,7 +687,7 @@ def main():
                          negNoCircles: negMax.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length,
                          noMaxCircles: noMax.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length,
                          noMaxErr: !noMax.querySelector('.m-chart__scale-error')}; }""")
-        page.locator("#packed-detail .edge-grid").nth(1).screenshot(path=str(SHOTS / "17b-scale-states-390.png"))
+        page.locator("#packed-detail .edge-grid").nth(2).screenshot(path=str(SHOTS / "17b-scale-states-390.png"))
         check("A21 المقياس المعلن: صفر مع موجبة تعارض صريح بلا دوائر · سالب غير صالح صريح · الغائب يشتق من أكبر قيمة (البديل الموثق) — بلا سقوط صامت",
               scale["zeroErr"] and scale["zeroNoCircles"] == 0 and scale["negErr"]
               and scale["negNoCircles"] == 0 and scale["noMaxCircles"] == 2 and scale["noMaxErr"], str(scale))
@@ -414,16 +706,19 @@ def main():
         # ==== A23: توكنات لا قيم صريحة (فحص عيّنة) ====
         tokens = page.evaluate(
             """() => { const r = document.querySelector('#main-carousel');
-                 const b = r.querySelector('[data-next]'); /* زر متاح عند الحالة الأولى — المعطل حدّه شفاف بعمد */
+                 const b = r.querySelector('[data-next]');
                  const s = r.querySelector('.m-carousel__status');
                  const card = r.querySelector('.m-carousel__card');
+                 const toggle = r.querySelector('[data-card-expand]');
                  return {btnBorder: getComputedStyle(b).borderColor,
                          statusColor: getComputedStyle(s).color,
                          cardRadius: getComputedStyle(card).borderRadius,
-                         trackDur: getComputedStyle(r.querySelector('[data-track]')).transitionDuration}; }""")
-        check("A23 توكنات الأسس: حد الزر #71868B ونص المؤشر #50656A وانحناء البطاقة 24px وزمن الانتقال 0.18s",
+                         trackDur: getComputedStyle(r.querySelector('[data-track]')).transitionDuration,
+                         toggleRadius: toggle ? getComputedStyle(toggle).borderRadius : null}; }""")
+        check("A23 توكنات الأسس: حد الزر #71868B ونص المؤشر #50656A وانحناء البطاقة 24px وزمن الانتقال 0.18s وزر التوسعة بكبسولة التوكن 999px",
               tokens["btnBorder"] == "rgb(113, 134, 139)" and tokens["statusColor"] == "rgb(80, 101, 106)"
-              and tokens["cardRadius"] == "24px" and "0.18" in tokens["trackDur"], str(tokens))
+              and tokens["cardRadius"] == "24px" and "0.18" in tokens["trackDur"]
+              and tokens["toggleRadius"] == "999px", str(tokens))
 
         # ==== A24: إثبات قابلية التعديل (تعديل → انعكاس → استعادة) ====
         edit = page.evaluate(
@@ -457,12 +752,17 @@ def main():
                  chart.querySelector('[data-series="a"]').setAttribute('data-value', '9000');
                  MicroPacked.render(chart);
                  const dBack = parseFloat(chart.querySelector('.m-bubble__circle').style.width);
+                 /* تعديل نص زر التوسعة عبر سمات الملصقين — يعكس فورًا */
+                 const tbtn = r.querySelector('[data-card-expand]');
+                 tbtn.setAttribute('data-label-closed', 'تفاصيل معدّلة');
+                 const txt = tbtn.querySelector('[data-card-expand-text]').textContent;
+                 tbtn.setAttribute('data-label-closed', 'عرض التفاصيل');
                  host.remove();
                  return {wBefore, wAfter, wBack, lblBefore, lblAfter, lblBack,
-                         dBefore, dAfter, dBack}; }""")
+                         dBefore, dAfter, dBack, txt}; }""")
         page.wait_for_timeout(250)
         diameterOk = abs(edit["dAfter"] - edit["dBefore"] * (0.5 ** 0.5)) < 1.5
-        check("A24 إثبات التعديل: --_peek 24→60 يضيّق البطاقة (الشريحة المجاورة أوسع) ثم يُستعاد · data-card-label ينعكس على aria-label · data-value نصفها يقلّص القطر بتناسب √ ثم يُستعاد",
+        check("A24 إثبات التعديل: --_peek 24→60 يضيّق البطاقة ثم يُستعاد · data-card-label ينعكس على aria-label · data-value نصفها يقلّص القطر بتناسب √ ثم يُستعاد · ملصقا زر التوسعة ينعكسان على النص",
               edit["wAfter"] < edit["wBefore"] and edit["wBack"] == edit["wBefore"]
               and edit["lblAfter"].startswith("اسم معدّل للفحص") and edit["lblBack"].startswith("الطلبات حسب الحالة")
               and diameterOk,
@@ -472,7 +772,7 @@ def main():
         # ==== لقطة عامة كاملة ====
         page.screenshot(path=str(SHOTS / "00-overview-390-full.png"), full_page=True)
 
-        # ==== B1: العروض الثلاثة بلا تمرير أفقي + لقطات 320/390/430 ====
+        # ==== B1: العروض الثلاثة بلا تمرير أفقي + لقطات 320/390/430 (compact) ====
         for width in (320, 390, 430):
             c = browser.new_context(viewport={"width": width, "height": 900})
             pg = c.new_page()
@@ -491,7 +791,22 @@ def main():
                      return {w: b.width, expected: vb.width - 72, off: Math.abs((b.left + b.width/2) - (vb.left + vb.width/2))}; }""")
             check(f"B3 {width}px: عرض الشريحة = viewport − 2×(24+12) والنشطة متمركزة (فرق ≤ 1px)",
                   abs(geo["w"] - geo["expected"]) <= 2 and geo["off"] <= 1, str(geo))
+            # C8: compact عند كل عرض — البطاقة المغلقة مضغوطة بلا قصّ ولا فراغ زائد
+            comp = pg.evaluate(
+                """() => { const r = document.querySelector('#main-carousel');
+                     const card = r.querySelector('[data-current="true"] .m-carousel__card');
+                     const b = card.getBoundingClientRect();
+                     const packedVals = [...document.querySelectorAll('#packed-detail .packed-demo .m-bubble__circle')]
+                       .map(x => { const v = x.querySelector('.m-bubble__value');
+                         const vr = v ? v.getBoundingClientRect() : null; const cr = x.getBoundingClientRect();
+                         return vr ? {inX: vr.left >= cr.left && vr.right <= cr.right,
+                                      inY: vr.top >= cr.top && vr.bottom <= cr.bottom} : null; });
+                     return {h: Math.round(b.height), noClip: card.scrollHeight <= card.clientHeight + 2,
+                             vals: packedVals}; }""")
             pg.locator("#main-carousel").screenshot(path=str(SHOTS / f"18-width-{width}.png"))
+            check(f"C8 {width}px: البطاقة المغلقة مضغوطة (≈220–280، حد مرن ≤ 340) بلا قصّ ولا سطح فارغ طويل · قيم الدوائر (6-أ) داخل حدود دوائرها",
+                  comp["h"] <= 340 and comp["noClip"]
+                  and all(v and v["inX"] and v["inY"] for v in comp["vals"]), str(comp))
             c.close()
 
         # ==== B2: تكبير النص 200% — النشط يلفّ ولا يقصّ (Range داخل viewport) ====
@@ -524,7 +839,7 @@ def main():
             pg.click('[data-lab="text-zoom"]')
             c.close()
 
-        # ==== المحتوى الصعب: نص طويل وأرقام مختلطة (لقطات) ====
+        # ==== المحتوى الصعب: نص طويل وأرقام مختلطة (لقطات) — لا قصّ مع compact ====
         page.locator("#lab-content .m-carousel").first.screenshot(path=str(SHOTS / "11b-long-arabic-390.png"))
         long_ok = page.evaluate(
             """() => { const r = document.querySelector('#lab-content [data-carousel]');
@@ -537,7 +852,7 @@ def main():
                          mixed: document.querySelector('#lab-content').textContent.includes('ORD-2419') &&
                                 document.querySelector('#lab-content').textContent.includes('1,240.50')}; }""")
         page.locator("#lab-content").screenshot(path=str(SHOTS / "12-mixed-amounts-390.png"))
-        check("B4 نص طويل: البطاقة النشطة كاملة داخل القناع بلا قصّ عمودي · الأرقام والمبالغ المختلطة ظاهرة",
+        check("B4 نص طويل: البطاقة النشطة كاملة داخل القناع وارتفاعها يتبع محتواها بلا قصّ عمودي · الأرقام والمبالغ المختلطة ظاهرة",
               long_ok["withinVp"] and long_ok["noClip"] and long_ok["mixed"], str(long_ok))
 
         # ==== D1: تقليل الحركة (تفضيل فعلي) — الانتقال فوري والموضع صحيح ====
@@ -560,7 +875,7 @@ def main():
               rm["dur"] == "0s" and rm["offImmediately"] <= 1 and rm["status"] == "البطاقة 2 من 3", str(rm))
         c.close()
 
-        # ==== B5: عرض أكبر مناسب للمعاينة (768) ====
+        # ==== B5: عرض أكبر مناسب للمعاينة (768) — لا سطح طويل فارغ ====
         cw = browser.new_context(viewport={"width": 768, "height": 900})
         pgw = cw.new_page()
         pgw.goto(board)
@@ -571,11 +886,14 @@ def main():
             """() => { const r = document.querySelector('#main-carousel');
                  const vp = r.querySelector('[data-viewport]').getBoundingClientRect();
                  const s0 = r.querySelectorAll('[data-carousel-slide]')[0].getBoundingClientRect();
+                 const card = r.querySelector('[data-current="true"] .m-carousel__card');
                  return {sw: document.scrollingElement.scrollWidth, cw: document.scrollingElement.clientWidth,
-                         off: Math.abs((s0.left + s0.width/2) - (vp.left + vp.width/2))}; }""")
+                         off: Math.abs((s0.left + s0.width/2) - (vp.left + vp.width/2)),
+                         cardH: Math.round(card.getBoundingClientRect().height),
+                         noClip: card.scrollHeight <= card.clientHeight + 2}; }""")
         pgw.locator("#overview").screenshot(path=str(SHOTS / "19-wide-768.png"))
-        check("B5 عرض 768: بلا تمرير أفقي والنشطة متمركزة — العرض يتمدد دون تغيير دور العنصر",
-              w768["sw"] <= w768["cw"] and w768["off"] <= 1, str(w768))
+        check("B5 عرض 768: بلا تمرير أفقي والنشطة متمركزة والبطاقة تتبع محتواها (لا سطح طويل فارغ ولا قصّ)",
+              w768["sw"] <= w768["cw"] and w768["off"] <= 1 and w768["cardH"] <= 340 and w768["noClip"], str(w768))
         cw.close()
 
         # ==== EX: المثال المستقل بلا board.* ====
@@ -587,12 +905,12 @@ def main():
         pex.wait_for_load_state("networkidle")
         pex.wait_for_timeout(2400)
         ex_res = pex.evaluate("() => document.getElementById('results').textContent")
-        check("EX مثال مستقل carousel: 0 فشل بلا أخطاء (15 فحصًا مدمجًا)",
-              ex_res.count("FAIL ") == 0 and ex_res.count("PASS ") >= 10 and not ex_err,
+        check("EX مثال مستقل carousel: 0 فشل بلا أخطاء (20 فحصًا مدمجًا: بنية وحارس أسهم وتوسعة ودوائر بقيم داخلها وسالب مع data-display)",
+              ex_res.count("FAIL ") == 0 and ex_res.count("PASS ") >= 15 and not ex_err,
               ex_res.splitlines()[0] if ex_res else "لا نتائج")
         pex.close()
 
-        # ==== A25: بلا أخطاء متراكمة بعد كل التفاعلات (سحب/مفاتيح/نقاط/تعديلات) ====
+        # ==== A25: بلا أخطاء متراكمة بعد كل التفاعلات (سحب/مفاتيح/نقاط/توسعة/تعديلات) ====
         check("A25 لا أخطاء متراكمة في الكونسول/الصفحة بعد كل الفحوص والتفاعلات", len(errors) == 0,
               "; ".join(errors[:2]))
 

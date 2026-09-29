@@ -24,18 +24,26 @@
      أدنى يضخّم الدائرة الصغيرة (الصغيرة جدًا قيمتها خارجية).
 
    القرارات المحددة لهذا الامتداد (موثقة في specification):
-   - القيم مستقلة لا نسب: لا نسب مئوية إطلاقًا — المفتاح النصي
-     الكامل (تسمية + قيمة خام) هو المرجع الدقيق، والحجم مساعد
-     تمييز لا مصدر الرقم. التداخل إشارة علاقة بصرية فقط ولا يعني
+   - القيم مستقلة لا نسب: لا نسب مئوية إطلاقًا — الرقم الحقيقي
+     (من data-display أو القيمة الخام) يظهر داخل كل دائرة موجبة،
+     والتسمية خارجها تحتها، والمفتاح النصي الكامل (تسمية + قيمة
+     خام) مرجع إضافي. التداخل إشارة علاقة بصرية فقط ولا يعني
      عملية حسابية أو تقاطعًا ماليًا أو أجزاء من مجموع.
+   - الحجم يعكس القيمة الخام: مساحة الدائرة ∝ القيمة والقطر
+     ∝ √القيمة — المقياس (data-max أو أكبر قيمة) توثيق نصي خارج
+     الدوائر ولا يتحول إلى نسبة معروضة داخلها.
+   - data-legend="off" (اختياري): إخفاء المفتاح النصي تحت الرسم —
+     للبطاقات المضغوطة حيث القيم داخل الدوائر والتسميات تحتها؛
+     يبقى المفتاح الافتراضي ظاهرًا في بقية الحالات كمرجع قيم خام.
    - data-display (اختياري): نص العرض المُنسّق من المستهلك —
-     أساس المساحة يبقى data-value الرقمي دائمًا.
+     أساس المساحة يبقى data-value الرقمي دائمًا، ومع القيمة
+     السالبة يُعرض مع دلالة الحالة ولا يحل محلها.
    - حالات القيم (نفس لغة B05، بصياغة نصية صريحة):
-       موجبة        → دائرة r ∝ √v
+       موجبة        → دائرة r ∝ √v والرقم داخلها
        صفر          → حلقة شَرطة + «0» (لا دائرة بحجم صفري مخفي)
        مجهولة       → سمة data-value غائبة كليًا → «— غير معروف»
        غير متاحة    → سمة موجودة غير قابلة للتحليل → «— غير متاح»
-       سالبة        → لا دائرة سالبة أبدًا → «سالب غير صالح للمساحة»
+       سالبة        → لا دائرة سالبة أبدًا → «-3,566 — سالب غير صالح للمساحة»
    - المقياس data-max (نظير «المقام» لهذا الرسم — بلا لمس منطق
      donut في data.js وبدون تناقض مع C2):
        غائب         → البديل الموثق: أكبر قيمة موجبة (كما في B05)
@@ -76,11 +84,18 @@
     });
   }
 
-  /* مفاتيح الحالة — نصوص صريحة لا لون وحده (فرق المجهول عن غير المتاح محفوظ نصيًا) */
+  /* مفاتيح الحالة — نصوص صريحة لا لون وحده (فرق المجهول عن غير المتاح محفوظ نصيًا).
+     إصلاح PR#5: القيمة السالبة مع data-display تحافظ على الرقم المنسق
+     بعلامته ومعها دلالة الحالة دائمًا — لا تختفي الدلالة بسبب التنسيق:
+     «-3,566 — سالب غير صالح للمساحة». وللقيم الموجبة بلا تغيير:
+     data-display نص العرض كما هو. */
   function stateText(it) {
     if (!it.hasAttr) return { text: '— غير معروف', none: true };
     if (it.value === null) return { text: '— غير متاح', none: true };
-    if (it.value < 0) return { text: it.display || String(it.value) + ' (سالب غير صالح للمساحة)', none: true };
+    if (it.value < 0) {
+      var num = it.display || String(it.value);
+      return { text: num + ' — سالب غير صالح للمساحة', none: true };
+    }
     if (it.value === 0) return { text: '0', none: true };
     return { text: it.display || String(it.value), none: false };
   }
@@ -173,27 +188,38 @@
       lab.className = 'm-bubble__label';
       lab.textContent = it.label;
       var stt = stateText(it);
-      valTxt.textContent = stt.text;
       if (stt.none) {
+        /* الصفر/المجهول/غير المتاح/السالب: لا دائرة قيمة — الحالة رقم
+           وحالة صريحان خارج مجموعة الدوائر (السالب لا يصير دائرة موجبة). */
+        valTxt.textContent = stt.text;
         circ.className = 'm-bubble__circle--none';
+        b.appendChild(valTxt);
+        b.appendChild(circ);
+        b.appendChild(lab);
       } else {
+        /* الدائرة الموجبة: الرقم الحقيقي داخلها — المنسق من data-display
+           أو القيمة الخام، لا نسب مئوية إطلاقًا. التسمية القصيرة خارجها
+           تحت الدائرة (المفتاح يعرض القيم الخام كمرجع إضافي). */
         var r = Rmax * Math.sqrt(it.value / vmax);
         circ.className = 'm-bubble__circle';
         /* بلا حد أدنى — القطر حرفي 2r والمساحة صادقة؛ الصغيرة جدًا
            قيمتها بتسمية خارجية (نفس قاعدة B05) */
         circ.style.width = circ.style.height = (r * 2) + 'px';
         b.setAttribute('data-size', r >= Rmax * 0.7 ? 'large' : 'small');
+        valTxt.textContent = stt.text;
+        circ.appendChild(valTxt);
+        b.appendChild(circ);
+        b.appendChild(lab);
       }
-      b.appendChild(valTxt);
-      b.appendChild(circ);
-      b.appendChild(lab);
       wrap.appendChild(b);
     });
 
     plot.innerHTML = '';
     plot.appendChild(wrap);
 
-    /* مفتاح نصي كامل بالترتيب المعلن للمستهلك — المرجع الدقيق (بلا نسب) */
+    /* مفتاح نصي كامل بالترتيب المعلن للمستهلك — المرجع الدقيق (بلا نسب).
+      يستثنى عند data-legend="off" (البطاقات المضغوطة) — قيمة موثقة أعلاه */
+    if (chart.getAttribute('data-legend') !== 'off') {
     var legend = document.createElement('ul');
     legend.className = 'm-legend';
     items.forEach(function (it) {
@@ -210,6 +236,7 @@
       legend.appendChild(li);
     });
     plot.appendChild(legend);
+    }
 
     if (chart.hasAttribute('data-summary-text')) {
       var summary = chart.querySelector('[data-summary]');

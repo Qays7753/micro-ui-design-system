@@ -78,9 +78,15 @@
 /* ================= 2) track: صف البطاقات =================
    الانتقال بزمن «تغيير التحديد» المعتمد (180ms) على transform —
    لا حركة تغيّر تخطيط (لا قفزة). السحب المباشر يرفق is-dragging
-   فيُلغى الانتقال مؤقتًا والبطاقة تتبع المؤشر حرفيًا. */
+   فيُلغى الانتقال مؤقتًا والبطاقة تتبع المؤشر حرفيًا.
+
+   compact افتراضيًا (قرار PROPOSED — بانتظار اعتماد المالك):
+   align-items: flex-start يجعل ارتفاع كل بطاقة يتبع محتواها —
+   البطاقة القصيرة لا تتمدد إلى ارتفاع أطول بطاقة في الصف
+   ولا تفرض ارتفاعها على البطاقة النشطة (لا فراغ رأسي غير مبرر). */
 .m-carousel__track {
   display: flex;
+  align-items: flex-start;
   gap: var(--_gap);
   position: relative;
   margin: 0;
@@ -105,15 +111,66 @@
    لا شكل هنا؛ المجاورة المرئية (الشريحة الظاهرة) تبقى قابلة للقراءة. */
 
 /* سطح البطاقة: هيكل خفيف من توكنات الأسس — هوية محتوى البطاقة
-   (ترويسة/أرقام/رسوم) من المستهلك وبقية عائلات المكتبة */
+   (ترويسة/أرقام/رسوم) من المستهلك وبقية عائلات المكتبة.
+   الارتفاع يتبع المحتوى (لا min-height ولا تمديد إجباري) —
+   والنص الطويل يُلف لا يُقص. */
 .m-carousel__card {
   background-color: var(--micro-surface-base);
   border: 1px solid var(--micro-border-divider);
   border-radius: var(--micro-radius-surface);
-  padding: var(--micro-space-5);
-  min-height: 100%;
+  padding: var(--micro-space-4);
   overflow-wrap: break-word; /* أرقام ونصوص طويلة تُلف لا تقصّ */
 }
+
+/* ---------- توسعة داخل مكانها (آلية عامة — قرار PROPOSED) ----------
+   الملخص المغلق HTML مقصود من المستهلك، والمنطقة الموسعة تُدار
+   بحالة hidden من السكربت — لا max-height ولا overflow: hidden
+   ولا text-overflow لإخفاء أي شيء. زر التوسعة: هدف لمس كامل
+   بعقد أزرار المكتبة (حلقة تركيز B01)، والمؤشر (سهم) يدور 180°
+   عند التوسعة — لا حركة مستمرة. */
+.m-carousel__card-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  margin-block-start: var(--micro-space-3);
+  min-block-size: var(--micro-touch-min);
+  padding: var(--micro-space-2) var(--micro-space-4);
+  border: 1px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--micro-motion-press) var(--micro-ease-standard);
+}
+.m-carousel__card-toggle svg {
+  inline-size: var(--micro-icon-in-button);
+  block-size: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+}
+.m-carousel__slide[data-expanded="true"] .m-carousel__card-toggle {
+  background-color: var(--micro-surface-selected);
+}
+.m-carousel__slide[data-expanded="true"] .m-carousel__card-toggle svg {
+  transform: rotate(180deg);
+}
+.m-carousel__card-toggle:active { background-color: var(--micro-surface-selected); }
+.m-carousel__card-toggle:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+/* المنطقة الموسعة تُدار بـ hidden من carousel.js — لا قواعد قصّ هنا */
+.m-carousel__card-details { min-inline-size: 0; }
 
 /* ================= 3) أزرار التنقل =================
    زر أيقونة دائري 48×48 (هدف لمس المشروع) بحدود التحكم؛
@@ -227,5 +284,6 @@
 @media (prefers-reduced-motion: reduce) {
   .m-carousel__track { transition: none; }
   .m-carousel__btn,
+  .m-carousel__card-toggle svg,
   .m-carousel__dot::before { transition: none; }
 }

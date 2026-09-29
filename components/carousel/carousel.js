@@ -25,6 +25,37 @@
      مع touch-action: pan-y) أو خروج أقل من العتبة أو تجاوز
      الطرفين — كله يرجع إلى أقرب بطاقة صالحة.
 
+   دورة حياة السحب (إصلاح PR#5): أثناء السحب تُسجَّل أدوات تتبع
+   المؤشر على window/document (pointermove/pointerup/pointercancel
+   في طور الالتقاط + blur للنافذة + visibilitychange للإخفاء)
+   وتُزال حتمًا عند نهاية السحب مهما كان مسار الخروج — فلا تبقى
+   حالة is-dragging عالقة إذا أُفلت الزر خارج الـviewport أو خرج
+   المؤشر من الصفحة أو فُقد التركيز. pointer capture (عند قفل
+   المحور فقط) تقوية إضافية لا بديل عن التنظيف على window، ولا
+   يُؤخذ capture عند pointerdown حتى لا يسرق نقر الأزرار داخل
+   البطاقات. السحب العمودي يُسلَّم للتمرير الطبيعي كما هو
+   (touch-action: pan-y لا يُكسر)، والسحب الأفقي يكبت النقرة
+   المتبقية (suppressClick) حتى لا تُفسَّر كبطاقة أو توسعة.
+
+   الأسهم داخل المحتوى التفاعلي (إصلاح PR#5): لا اعتراض
+   ArrowLeft/ArrowRight/Home/End عندما يكون التركيز داخل عنصر
+   يحتاج الأسهم محليًا: input/textarea/select/contenteditable/
+   [role="slider"]/summary/رابط — أو زر داخل محتوى البطاقة.
+   تبقى الأسهم تعمل على سطح العارض وعناصر تحكمه (prev/next/النقاط)
+   وEnter/Space على أزرار Carousel أصلية لم تُلمس.
+
+   التوسعة داخل مكانها (قرار PROPOSED — بانتظار اعتماد المالك):
+   آلية عامة لا تعرف محتوى البطاقة: زر [data-card-expand] داخل
+   شريحة يبدّل data-expanded على الشريحة وaria-expanded على الزر
+   وhidden على منطقة [data-card-details] (أو المعرَّفة بـ
+   aria-controls). الملخص المغلق هو HTML مقصود من المستهلك —
+   لا قصّ CSS ولا max-height ولا overflow: hidden. البطاقة
+   النشطة فقط تُوسَّع: الانتقال إلى بطاقة أخرى يطوي الموسّعة
+   وتظهر الجديدة مغلقة، والأسهم/النقاط/السحب لا تُوسّع أبدًا،
+   والنقر على زر توسعة بطاقة غير النشطة ينقل إليها دون توسعة.
+   أزرار التوسعة: type="button" واسم واضح وaria-expanded
+   وaria-controls — وتعمل باللمس ولوحة المفاتيح (Enter/Space).
+
    الواجهة العامة:
    window.MicroCarousel = {
      init(root?)           — يربط كل [data-carousel] تحت الجذر
@@ -103,6 +134,9 @@
     var clamped = Math.max(0, Math.min(st.count - 1, i));
     setX(st, slideX(st, clamped), animate);
     if (clamped !== st.index) {
+      /* الانتقال إلى بطاقة أخرى يطوي الموسّعة دائمًا — والجديدة تظهر مغلقة،
+         ولا تُوسّع أبدًا (التوسعة من زر صريح فقط). */
+      collapseSlide(st, st.slides[st.index]);
       st.index = clamped;
       update(carousel, st);
       carousel.dispatchEvent(new CustomEvent('micro-carousel:change', {
@@ -186,7 +220,11 @@
     st.dotsBuilt = true;
   }
 
-  /* ---------- السحب (pointer events — لا مكتبات) ---------- */
+  /* ---------- السحب (pointer events — لا مكتبات) ----------
+     دورة الحياة مغلقة في كل المسارات: يبدأ على الـviewport ويُتابع
+     على window (طور الالتقاط) حتى لو خرج المؤشر خارج الـviewport أو
+     من الصفحة، ويُنظَّف حتمًا عند pointerup/pointercancel/blur/إخفاء
+     الصفحة — فلا تبقى is-dragging عالقة أبدًا. */
   function onPointerDown(carousel, st, e) {
     if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
     st.drag = {
@@ -194,9 +232,40 @@
       startX: e.clientX,
       startY: e.clientY,
       baseX: st.x,
-      axis: null
+      axis: null,
+      handlers: null
     };
+    st.suppressClick = false; /* بداية تفاعل جديد: النقر صالح حتى يثبت سحب أفقي */
     st.root.classList.add('is-dragging');
+    attachDragWindow(carousel, st);
+  }
+
+  /* تتبع المؤشر على window أثناء السحب — يُزال في endDrag مهما كان المسار */
+  function attachDragWindow(carousel, st) {
+    var d = st.drag;
+    if (!d || d.handlers) return;
+    d.handlers = {
+      move: function (e) { onPointerMove(carousel, st, e); },
+      up: function (e) { endDrag(carousel, st, false, e); },
+      cancel: function (e) { endDrag(carousel, st, true, e); },
+      blur: function () { endDrag(carousel, st, true, null); },
+      vis: function () { if (document.visibilityState === 'hidden') endDrag(carousel, st, true, null); }
+    };
+    window.addEventListener('pointermove', d.handlers.move, true);
+    window.addEventListener('pointerup', d.handlers.up, true);
+    window.addEventListener('pointercancel', d.handlers.cancel, true);
+    window.addEventListener('blur', d.handlers.blur);
+    document.addEventListener('visibilitychange', d.handlers.vis);
+  }
+
+  function detachDragWindow(st, d) {
+    if (!d || !d.handlers) return;
+    window.removeEventListener('pointermove', d.handlers.move, true);
+    window.removeEventListener('pointerup', d.handlers.up, true);
+    window.removeEventListener('pointercancel', d.handlers.cancel, true);
+    window.removeEventListener('blur', d.handlers.blur);
+    document.removeEventListener('visibilitychange', d.handlers.vis);
+    d.handlers = null;
   }
 
   function onPointerMove(carousel, st, e) {
@@ -221,11 +290,17 @@
     e.preventDefault();
   }
 
-  function endDrag(carousel, st, canceled) {
+  function endDrag(carousel, st, canceled, e) {
     var d = st.drag;
+    if (!d) return;
+    /* مؤشر آخر لا ينهي سحبًا جاريًا لمؤشره */
+    if (e && e.pointerId !== undefined && e.pointerId !== d.id) return;
+    detachDragWindow(st, d);
     st.drag = null;
     st.root.classList.remove('is-dragging');
-    if (!d) return;
+    /* سحب أفقي مثبت (حتى دون الالتزام) يكبت النقرة المتبقية حتى لا
+       تُفسَّر كبطاقة/توسعة بعد الإفلات خارج البطاقة نفسها */
+    st.suppressClick = d.axis === 'x';
     try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
     var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
     var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
@@ -240,19 +315,105 @@
     goToIndex(carousel, st.index + step, { animate: true });
   }
 
+  /* ---------- التوسعة داخل مكانها (آلية عامة — قرار PROPOSED) ----------
+     العارض لا يعرف محتوى البطاقة: يبدّل حالة فقط، والملخص والتفاصيل
+     HTML مقصود من المستهلك — لا قصّ CSS ولا max-height+overflow.
+     زر [data-card-expand] يملك type="button" وaria-expanded
+     وaria-controls (أو منطقة [data-card-details] داخل الشريحة نفسها). */
+  function expandRegionOf(slide, btn) {
+    var id = btn ? btn.getAttribute('aria-controls') : null;
+    if (id) {
+      var byId = document.getElementById(id);
+      if (byId && slide.contains(byId)) return byId;
+    }
+    return slide.querySelector('[data-card-details]');
+  }
+
+  function setToggleLabel(btn, open) {
+    if (!btn) return;
+    var t = btn.querySelector('[data-card-expand-text]') || btn;
+    var v = open ? btn.getAttribute('data-label-open') : btn.getAttribute('data-label-closed');
+    if (v) t.textContent = v;
+  }
+
+  function collapseSlide(st, slide) {
+    if (!slide || !slide.hasAttribute('data-expanded')) return;
+    slide.removeAttribute('data-expanded');
+    var btn = slide.querySelector('[data-card-expand]');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    setToggleLabel(btn, false);
+    var region = expandRegionOf(slide, btn);
+    if (region) region.hidden = true;
+  }
+
+  function toggleExpand(st, slide) {
+    var btn = slide ? slide.querySelector('[data-card-expand]') : null;
+    if (!btn) return;
+    var open = slide.hasAttribute('data-expanded');
+    slide.setAttribute('data-expanded', open ? 'false' : 'true');
+    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    setToggleLabel(btn, !open);
+    var region = expandRegionOf(slide, btn);
+    if (region) region.hidden = open; /* عند الفتح يُكشف الكامل — الارتفاع يتبع المحتوى */
+  }
+
+  function wireExpand(carousel, st) {
+    carousel.addEventListener('click', function (e) {
+      var btn = (e.target && e.target.closest) ? e.target.closest('[data-card-expand]') : null;
+      if (!btn || !carousel.contains(btn)) return;
+      /* السحب الأفقي لا يوسّع: النقرة المتبقية بعد سحب مثبت تُكبت —
+         نقرات أصل مؤشر فقط (detail > 0)؛ نقرات لوحة المفاتيح
+         (Enter/Space → detail = 0) تمر دائمًا ولا تُكبت أبدًا */
+      if (st.suppressClick && e.detail > 0) { st.suppressClick = false; return; }
+      var slide = btn.closest('[data-carousel-slide]');
+      if (!slide) return;
+      /* البطاقة النشطة فقط تُوسّع؛ زر بطاقة غير النشطة ينقل إليها دون توسعة */
+      if (st.slides[st.index] !== slide) {
+        goToIndex(carousel, [].indexOf.call(st.slides, slide));
+        return;
+      }
+      toggleExpand(st, slide);
+    });
+  }
+
   function wireDrag(carousel, st) {
+    /* البداية على الـviewport فقط؛ المتابعة والنهاية على window أثناء
+       السحب (attachDragWindow) حتى يعمل الإفلات خارج الـviewport. */
     st.viewport.addEventListener('pointerdown', function (e) { onPointerDown(carousel, st, e); });
-    st.viewport.addEventListener('pointermove', function (e) { onPointerMove(carousel, st, e); });
-    st.viewport.addEventListener('pointerup', function () { endDrag(carousel, st, false); });
-    st.viewport.addEventListener('pointercancel', function () { endDrag(carousel, st, true); });
     /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
     st.viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
   }
 
-  /* ---------- لوحة المفاتيح (الترتيب المنطقي لا الفيزيائي) ---------- */
+  /* ---------- لوحة المفاتيح (الترتيب المنطقي لا الفيزيائي) ----------
+     حارس الأسهم: لا اعتراض داخل العناصر التي تحتاج الأسهم محليًا
+     (input/textarea/select/contenteditable/slider/summary/رابط)
+     ولا داخل أزرار محتوى البطاقة؛ وتبقى الأسهم تعمل على سطح
+     العارض وعناصر تحكمه. Enter/Space أصلية على الأزرار ولم تُلمس. */
+  function isLocalArrowTarget(el) {
+    if (!el || !el.closest) return false;
+    return !!el.closest(
+      'input:not([type="hidden"]), textarea, select, summary, a[href], ' +
+      '[contenteditable="true"], [contenteditable=""], [role="slider"]');
+  }
+  function isCarouselControl(el, carousel) {
+    if (!el || !el.closest) return false;
+    var ctl = el.closest('[data-prev], [data-next], [data-dots]');
+    return !!ctl && carousel.contains(ctl);
+  }
+  function isCardContentButton(el, carousel) {
+    if (!el || !el.closest) return false;
+    var btn = el.closest('button');
+    return !!btn && carousel.contains(btn) && !!btn.closest('[data-carousel-slide]');
+  }
   function wireKeys(carousel, st) {
     carousel.addEventListener('keydown', function (e) {
       if (st.count === 0) return;
+      var target = e.target;
+      /* 1) حقول وعناصر تفاعلية تحتاج الأسهم محليًا: لا اعتراض ولا منع افتراضي */
+      if (isLocalArrowTarget(target)) return;
+      /* 2) زر داخل محتوى البطاقة: أسهمه محلية (لا تنقل العارض)؛
+         أما أزرار تحكم العارض نفسه (prev/next/النقاط) فتبقى تنقل بالأسهم */
+      if (!isCarouselControl(target, carousel) && isCardContentButton(target, carousel)) return;
       var rtl = directionOf(carousel) === 'rtl';
       var handled = true;
       switch (e.key) {
@@ -284,6 +445,7 @@
     st.x = 0;
     st.count = st.slides.length;
     st.drag = null;
+    st.suppressClick = false;
     st.dotsBuilt = false;
     stateOf.set(carousel, st);
 
@@ -299,6 +461,7 @@
 
     wireKeys(carousel, st);
     wireDrag(carousel, st);
+    wireExpand(carousel, st);
     wireResize(carousel, st);
 
     if (reduceMotionQuery && reduceMotionQuery.addEventListener) {
