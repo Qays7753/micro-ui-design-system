@@ -25,7 +25,7 @@
 }
 
 /* ================= ملخص After الفاتح — Composition Pattern مقترح =================
-   زخرفة الموجة محصورة بهذا التركيب وثابتة؛ المحتوى والتفاعل أعلى منها. */
+   مستويان لونيان عريضان منخفضا التباين؛ المحتوى والتفاعل أعلى منهما. */
 .aft-light-summary {
   position: relative;
   isolation: isolate;
@@ -49,15 +49,9 @@
   inset-inline: 0;
   inset-block-end: 0;
   width: 100%;
-  height: 36%;
-  overflow: visible;
+  height: 48%;
+  overflow: hidden;
   pointer-events: none;
-}
-.aft-light-summary__waves path {
-  fill: none;
-  stroke: var(--micro-brand-primary);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
 }
 .aft-light-summary__content {
   position: relative;
@@ -192,6 +186,14 @@
   gap: var(--micro-space-3);
 }
 
+/* إيقاع التركيب من gap أعلاه، لا هوامش p الافتراضية المتراكمة فوقه.
+   لا تغيير لعقد S01 أو تخطيط المستهلكين الآخرين. */
+.aft-hero .m-surface__label,
+.aft-hero .m-surface__amount,
+.aft-hero .m-surface__sub {
+  margin: 0;
+}
+
 /* رأس السطح: بلاط أيقونة بنفس مقاس بلاط B04 — أرضية بيضاء خافتة داخل
    السطح فقط؛ لا صنف مكوّن جديد: تنسيق تركيب داخل معاينة موسوم PROPOSED */
 .aft-hero__head {
@@ -273,6 +275,20 @@
 /* إجراء اختياري داخل السطح: B01 secondary بأرضية مستقرة ونص داكن. */
 .aft-hero__action {
   align-self: flex-start;
+}
+
+/* عند وجود المفتاح الكامل تبقى تسميات القيم داخله مرة واحدة فقط؛
+   data-legend="off" يحتفظ بصفوف التسميات الخارجية للقيم غير الملائمة للدائرة. */
+.m-chart--packed:not([data-legend="off"]) .m-packed__labels {
+  display: none;
+}
+.m-chart--packed [data-plot] > .m-legend:not(.m-packed__states) .m-legend__item {
+  flex-wrap: wrap;
+  max-inline-size: 100%;
+}
+.m-chart--packed [data-plot] > .m-legend:not(.m-packed__states) .m-legend__value {
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
 }
 
 /* ================= 2) القيم الرئيسية بلا بطاقات =================

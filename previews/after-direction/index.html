@@ -51,11 +51,23 @@
 
       <div class="aft-comp" id="aft-comp">
 
-        <!-- 1-أ) ملخص فاتح — المثال الافتراضي المقترح؛ زخرفة ساكنة ومحلية -->
+        <!-- 1-أ) ملخص فاتح — المثال الافتراضي المقترح؛ مستويان ساكنان ومحليان -->
         <div class="aft-light-summary" id="light-summary">
-          <svg class="aft-light-summary__waves" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M-20 72 C90 24 170 120 285 76 S480 32 620 82" opacity=".16"/>
-            <path d="M-20 105 C100 58 190 142 315 104 S500 65 620 112" opacity=".10"/>
+          <svg class="aft-light-summary__waves" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="summary-plane-mint" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#DFEEE6" stop-opacity=".2"/>
+                <stop offset="1" stop-color="#DFEEE6" stop-opacity=".48"/>
+              </linearGradient>
+              <linearGradient id="summary-plane-petroleum" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#507F8B" stop-opacity="0"/>
+                <stop offset=".65" stop-color="#507F8B" stop-opacity=".035"/>
+                <stop offset="1" stop-color="#507F8B" stop-opacity=".09"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#summary-plane-mint)" d="M-24 78c93 2 146-38 256-24 91 12 167 37 244 22 59-11 99-25 148-18v122H-24Z"/>
+            <path fill="url(#summary-plane-petroleum)" d="M-24 123c100-21 178 14 279 12 112-2 203-42 369-25v70H-24Z"/>
           </svg>
           <div class="aft-light-summary__content">
             <div class="aft-light-summary__head">
@@ -703,17 +715,17 @@
     </section>
 
     <!-- =====================================================
-         7) الأسطح البترولية — Calm / Waves / Depth / Plain (F)
+         7) الأسطح البترولية — Calm / Planes / Depth / Plain (F)
     ====================================================== -->
     <section class="panel" id="surfaces">
       <h2>7) خيارات السطح البترولي — عند الحاجة فقط <span class="status-chip">PROPOSED</span></h2>
-      <p class="panel-note">الملخص الفاتح أعلاه هو المثال الأول والافتراضي في هذه اللوحة. خيارات S01 البترولية محدودة وليست قاعدة النظام: Calm لتدرج وإضاءة هادئة بلا موجات، Waves لموجة ساكنة خافتة على سطح بارز، Depth لسطح بارز عند الحاجة إلى فصل بصري أقوى، وPlain عندما تكفي الأرضية البترولية بلا زخرفة. لا موجات خلف الحقول أو الأزرار أو الصفوف، ولا خلفية عامة أو Canvas أو حركة مستمرة. زخرفة السطح محصورة به؛ النص والتفاعل في طبقة مستقلة أعلى الموجة. جميع التركيبات المعروضة PROPOSED.</p>
+      <p class="panel-note">الملخص الفاتح أعلاه هو المثال الأول والافتراضي في هذه اللوحة. خيارات S01 البترولية محدودة وليست قاعدة النظام: Calm لتدرج هادئ بلا طبقات، Planes لمستويين منحنيين خافتين على سطح بارز، Depth لسطح بارز عند الحاجة إلى فصل بصري أقوى، وPlain عندما تكفي الأرضية البترولية بلا زخرفة. لا زخرفة خلف الحقول أو الأزرار أو الصفوف، ولا خلفية عامة أو Canvas أو حركة مستمرة. المستويات محصورة بالسطح؛ النص والتفاعل في طبقة مستقلة فوقها. جميع التركيبات المعروضة PROPOSED.</p>
 
       <div class="aft-surfaces" id="surfaces-grid">
         <div class="m-surface m-surface--calm" id="s-calm">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
-            <p class="m-surface__label">1) Calm — بلا موجات</p>
+            <p class="m-surface__label">1) Calm — بلا طبقات</p>
             <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
             <p class="m-surface__amount">4,812.50</p>
             <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
@@ -723,7 +735,7 @@
         <div class="m-surface m-surface--waves" id="s-waves">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
-            <p class="m-surface__label">2) Waves — المرشح الأساسي</p>
+            <p class="m-surface__label">2) Planes — المرشح الأساسي</p>
             <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
             <p class="m-surface__amount">4,812.50</p>
             <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
@@ -756,7 +768,7 @@
         <div class="m-surface m-surface--waves" style="--micro-surface-wave-opacity: 0.45; --micro-surface-wave-pos: 60%; --micro-surface-wave-scale: 80%; --micro-surface-light: 0.18">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
-            <p class="m-surface__label">مفاتيح التعديل من HTML — نفس Waves بقيم مختلفة</p>
+            <p class="m-surface__label">مفاتيح التعديل من HTML — نفس Planes بقيم مختلفة</p>
             <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
             <p class="m-surface__amount">4,812.50</p>
             <p class="m-surface__sub">opacity 0.45 · pos 60% · scale 80% · light 0.18 — قابلة للتعديل من سطر style السطح</p>

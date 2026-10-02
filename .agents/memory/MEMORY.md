@@ -1,1 +1,2 @@
 - [Delivery approval](delivery-approval.md) — cumulative UI delivery needs separate owner approval before merging or deleting ancestors.
+- [Visual quality](visual-quality.md) — owner rejects artificial waves and template-like styling; fix geometry against the identity reference, not opacity alone.

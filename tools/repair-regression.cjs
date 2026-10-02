@@ -256,7 +256,9 @@ async function packedChecks(page,base) {
         const values=data.filter(x=>Number(x.getAttribute('data-value'))>0).map(x=>Number(x.getAttribute('data-value'))).sort((a,b)=>b-a);
         const rects=circles.map(c=>c.getBoundingClientRect());
         const widths=circles.map(c=>parseFloat(c.style.width));
-        const raw=[...box.querySelectorAll('.m-bubble__value, .m-packed__states .m-legend__value')].map(x=>x.textContent);
+        const visible=e=>e.getClientRects().length>0 && getComputedStyle(e).visibility!=='hidden';
+        const raw=[...box.querySelectorAll('.m-bubble__value, .m-legend__value')].filter(visible).map(x=>x.textContent);
+        const visibleKeys=[...chart.querySelectorAll('[data-plot] > .m-packed__labels, [data-plot] > .m-legend:not(.m-packed__states)')].filter(visible).length;
         const outside=box.querySelectorAll('[data-value-placement="outside"]').length;
         let covered=0, fit=true, overCap=false;
         circles.forEach((c,i)=>{
@@ -275,11 +277,11 @@ async function packedChecks(page,base) {
           if(overlap>Math.min(a.width,b.width)*.25+.5) overCap=true;
         }));
         const bounds=chart.getBoundingClientRect();
-        const overflow=[...box.querySelectorAll('.m-bubble__value,.m-bubble__label,.m-packed__states li')].some(e=>{
+        const overflow=[...box.querySelectorAll('.m-bubble__value,.m-bubble__label,.m-legend__value,.m-legend__item,.m-packed__states li')].filter(visible).some(e=>{
           const r=e.getBoundingClientRect(); return r.left<bounds.left-1 || r.right>bounds.right+1;
         });
         const ratio=widths.every((w,i)=>!values.length || Math.abs(w/widths[0]-Math.sqrt(values[i]/values[0]))<.00001);
-        return {values,widths,raw,outside,covered,fit,overCap,overflow,ratio,
+        return {values,widths,raw,outside,covered,fit,overCap,overflow,ratio,visibleKeys,
           circles:circles.length,states:box.querySelectorAll('.m-packed__states li').length,
           rings:box.querySelectorAll('.m-bubble__circle--none').length,
           empty:!!box.querySelector('[data-empty]')};
@@ -289,7 +291,7 @@ async function packedChecks(page,base) {
         v===0?'0 — صفر':v<0?v.toLocaleString('en-US')+' — سالب غير صالح للمساحة':v.toLocaleString('en-US'));
       check(`M5/M6 ${f.id} ${width} zoom=${zoom}`,measure.circles===positive &&
         measure.states===f.v.length-positive && measure.empty===(positive===0) &&
-        measure.rings===0 && measure.ratio && measure.fit && !measure.covered &&
+        measure.rings===0 && measure.visibleKeys===(positive>0?1:0) && measure.ratio && measure.fit && !measure.covered &&
         !measure.overCap && !measure.overflow && expected.every(v=>measure.raw.includes(v)) &&
         (!['tiny','single-small'].includes(f.id)||measure.outside>=1),measure);
       if(['medium','large-small','tiny','mixed','empty'].includes(f.id) && (!zoom||width===390))
@@ -342,6 +344,36 @@ async function surfaceChecks(page,base) {
   }
 }
 
+async function quietWaveChecks(page,base) {
+  await load(page,base+'/previews/after-direction/');
+  for(const name of ['waves-soft.svg','waves-soft-v2.svg','waves-depth.svg']) {
+    const xml=fs.readFileSync(path.join(root,'assets/surfaces',name),'utf8');
+    const info=await page.evaluate(xml=>{
+      const doc=new DOMParser().parseFromString(xml,'image/svg+xml');
+      const colors=[...doc.querySelectorAll('*')].flatMap(e=>['fill','stroke','stop-color'].map(a=>e.getAttribute(a)||''))
+        .filter(c=>c.startsWith('#')).map(c=>c.toUpperCase());
+      const stops=[...doc.querySelectorAll('stop')].map(e=>Number(e.getAttribute('stop-opacity')??1));
+      return {valid:!doc.querySelector('parsererror'),colors,fade:stops.some(n=>n===0),
+        gradients:doc.querySelectorAll('linearGradient,radialGradient').length,
+        prohibited:doc.querySelectorAll('script,animate,animateTransform,pattern,image,text').length};
+    },xml);
+    check('VISUAL static identity wash '+name,info.valid && info.gradients>0 && info.fade &&
+      info.prohibited===0 && info.colors.length>0 && info.colors.every(c=>
+        ['#DFEEE6','#F7F8F4','#507F8B','#164D59','#103E48','#236675','#FFFFFF'].includes(c)),info);
+  }
+  const layer=await page.evaluate(()=>{
+    const dark=document.querySelector('#hero-surface .m-surface__waves');
+    const light=document.querySelector('#light-summary svg');
+    return {darkHidden:dark.getAttribute('aria-hidden')==='true',lightHidden:light.getAttribute('aria-hidden')==='true',
+      darkPointer:getComputedStyle(dark).pointerEvents,lightPointer:getComputedStyle(light).pointerEvents,
+      darkAnimation:getComputedStyle(dark).animationName,lightAnimation:getComputedStyle(light).animationName,
+      outlined:!!light.querySelector('[stroke]:not([stroke="none"])')};
+  });
+  check('VISUAL decorative layers isolated, static, no outlined light waves',
+    layer.darkHidden && layer.lightHidden && layer.darkPointer==='none' && layer.lightPointer==='none' &&
+    layer.darkAnimation==='none' && layer.lightAnimation==='none' && !layer.outlined,layer);
+}
+
 (async()=>{
   fs.mkdirSync(shots,{recursive:true});
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
@@ -356,6 +388,7 @@ async function surfaceChecks(page,base) {
     await navigationChecks(page,base);
     await packedChecks(page,base);
     await surfaceChecks(page,base);
+    await quietWaveChecks(page,base);
     check('JavaScript/browser errors',errors.length===0,errors);
   } finally {
     await browser.close(); server.close();

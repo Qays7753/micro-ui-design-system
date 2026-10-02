@@ -1,8 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 160" preserveAspectRatio="none">
-  <!-- عمق أغنى محدود — المقارنة الثالثة (S01) — للسطح البارز فقط -->
-  <!-- طبقات أكثر وسعة أكبر من waves-soft؛ تبقى خافتة بلا لمعان مستمر -->
-  <path fill="#507F8B" fill-opacity="0.22" d="M0,48 C80,18 170,72 250,46 C310,26 350,44 375,32 L375,160 L0,160 Z"/>
-  <path fill="#DFEEE6" fill-opacity="0.18" d="M0,92 C100,60 220,110 310,84 C345,74 365,82 375,78 L375,160 L0,160 Z"/>
-  <path fill="#F4AD76" fill-opacity="0.10" d="M0,126 C120,100 260,140 375,116 L375,160 L0,160 Z"/>
-  <path fill="#F7F8F4" fill-opacity="0.12" d="M0,146 C130,132 270,156 375,140 L375,160 L0,160 Z"/>
+  <!-- عمق أغنى محدود ومقترح للسطح البارز فقط؛ تراكب واسع بلا لمعان أو شرائط. -->
+  <defs>
+    <linearGradient id="depth-petroleum" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#507F8B" stop-opacity="0"/>
+      <stop offset=".38" stop-color="#507F8B" stop-opacity=".035"/>
+      <stop offset="1" stop-color="#507F8B" stop-opacity=".15"/>
+    </linearGradient>
+    <linearGradient id="depth-mint" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+      <stop offset=".58" stop-color="#DFEEE6" stop-opacity=".035"/>
+      <stop offset="1" stop-color="#DFEEE6" stop-opacity=".12"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#depth-petroleum)" d="M0 58c80-23 131 17 202 7 63-9 107-36 173-31v126H0Z"/>
+  <path fill="url(#depth-mint)" d="M0 91c68-13 122 14 190 15 73 1 131-30 185-17v71H0Z"/>
 </svg>
