@@ -309,11 +309,12 @@ async function surfaceChecks(page,base) {
         return [...range.getClientRects()].some(b=>b.left<r.left+3||b.right>r.right-3);
       }));
       return {background:css.backgroundImage,color:css.color,clipped,
+        scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,
         animation:getComputedStyle(el.querySelector('svg')).animationName};
     });
     check(`M7 light ${width} zoom=${zoom}`,light.background.includes('184, 217, 220') &&
       light.background.includes('223, 238, 230') && light.background.includes('247, 248, 244') &&
-      !light.clipped && light.animation==='none',light);
+      !light.clipped && light.scrollWidth<=light.viewport && light.animation==='none',light);
     for(const part of ['.aft-light-summary__unit',
       '.aft-light-summary__metric:first-child .aft-light-summary__metric-label']) {
       const info=await localContrast(page,'#light-summary '+part);

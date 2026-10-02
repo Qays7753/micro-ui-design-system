@@ -178,12 +178,12 @@
         await wait(60);
         t('A11 Home يعود للأولى', MicroCarousel.getIndex(root) === 0);
 
-        /* لا تركيز في غير المرئي: الشرائح الخفية كليًا inert */
+        /* النشطة وحدها تفاعلية؛ المجاورة معاينة بصرية لا هدف Tab مقصوص */
         MicroCarousel.goTo(root, 0); await wait(80);
         var lastInert = slides[2].hasAttribute('inert');
-        var neighborReadable = !slides[1].hasAttribute('inert');
-        t('A12 المخفية كليًا inert والمجاورة الظاهرة تبقى مقروءة',
-          lastInert && neighborReadable);
+        var neighborInert = slides[1].hasAttribute('inert');
+        t('A12 كل غير النشطة inert، بما فيها المجاورة الجزئية، والنشطة غير معزولة',
+          lastInert && neighborInert && !slides[0].inert);
 
         /* لا autoplay: بلا تبديل تلقائي بعد مهلة */
         var before = MicroCarousel.getIndex(root);

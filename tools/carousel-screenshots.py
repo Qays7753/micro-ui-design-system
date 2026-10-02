@@ -265,11 +265,11 @@ def main():
                    return !(b.right <= vp.left + 1 || b.left >= vp.right - 1); });
                  const inertAttr = ss.map(s => s.hasAttribute('inert'));
                  return {vis, inertAttr}; }""")
-        check("A13 Enter ثم Space يبدّلان البطاقة والتركيز يبقى على الزر · الشرائح المخفية كليًا inert والمجاورة الظاهرة مقروءة",
+        check("A13 Enter ثم Space يبدّلان البطاقة والتركيز يبقى على الزر؛ المجاورة تبقى معاينة بصرية لكن inert، والنشطة وحدها تفاعلية",
               enterState["status"] == "البطاقة 2 من 3" and enterState["active"]
               and spaceState == "البطاقة 3 من 3"
               and (not inert["vis"][0]) and inert["vis"][1] and inert["vis"][2]
-              and inert["inertAttr"][0] and not inert["inertAttr"][1] and not inert["inertAttr"][2],
+              and inert["inertAttr"][0] and inert["inertAttr"][1] and not inert["inertAttr"][2],
               f"enter={enterState} space={spaceState} inert={inert}")
 
         # ==== A13b (جديد PR#5): حارس الأسهم داخل العناصر التفاعلية للبطاقة ====
