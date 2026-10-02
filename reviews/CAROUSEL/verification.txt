@@ -1,6 +1,6 @@
-# CAROUSEL سجل الفحص — جولة إصلاح PR#5 — 2026-09-29T13:26:34
-# commit المصدر: 474ed5ba89e829234ae47dd3537414b05b92544f
-# بصمة شجرة المصدر: cdf98816f573c9e943f26e25c59582ead8dbf688 (الأدلة مولدة من شجرة هذا commit نظيفة)
+# CAROUSEL سجل الفحص — جولة إصلاح PR#5 — 2026-10-02T20:43:36
+# commit المصدر: 0092c714921158ac89a8b928678593e190a5667d
+# بصمة شجرة المصدر: e79bf4d04c1f3204f1e836038bc311a034da1fde (الأدلة مولدة من شجرة هذا commit نظيفة)
 # بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — لا محاكاة DOM؛ القياسات الهندسية من مستطيلات المتصفح الحقيقية
 # حدود الفحوص المعلنة: لا قارئ شاشة فعلي، لا لمس حقيقي (سحب بالمؤشر فقط)، لا متصفحات غير Chromium، لا تكبير نظام/متصفح أصلي (محاكاة مكافئة للنص)، لا هاتف حقيقي؛ فقدان التركيز يُحاكى بحدث blur تركيبي موثق
 
@@ -16,7 +16,7 @@ PASS  A9 صفر بطاقات: «لا توجد بطاقات» وكلا الزري
 PASS  A10 بطاقتان: نقطتان والوصول للأخير يعطّل next · عدد أكبر: 6 شرائح و6 نقاط والمؤشر صادق — two={'dots': 2, 'willCheck': True} two2={'status': 'البطاقة 2 من 2', 'nextDis': True} many={'dots': 6, 'slides': 6, 'status': 'البطاقة 1 من 6'}
 PASS  A11 نقطة رقم 4: aria-label صريح والنقر ينقل («البطاقة 4 من 6») وaria-current للحالية فقط — {'label': 'الانتقال إلى البطاقة 4 من 6'} {'status': 'البطاقة 4 من 6', 'current': [False, False, False, True, False, False]}
 PASS  A12 RTL منطقيًا: ArrowLeft تالي (+1) وArrowRight سابق (−1) وHome الأولى وEnd الأخيرة — {'start': 3, 'afterLeft': 4, 'afterRight': 3, 'afterHome': 0, 'afterEnd': 5}
-PASS  A13 Enter ثم Space يبدّلان البطاقة والتركيز يبقى على الزر · الشرائح المخفية كليًا inert والمجاورة الظاهرة مقروءة — enter={'status': 'البطاقة 2 من 3', 'active': True} space=البطاقة 3 من 3 inert={'vis': [False, True, True], 'inertAttr': [True, False, False]}
+PASS  A13 Enter ثم Space يبدّلان البطاقة والتركيز يبقى على الزر؛ المجاورة تبقى معاينة بصرية لكن inert، والنشطة وحدها تفاعلية — enter={'status': 'البطاقة 2 من 3', 'active': True} space=البطاقة 3 من 3 inert={'vis': [False, True, True], 'inertAttr': [True, True, False]}
 PASS  A13b حارس الأسهم: داخل input/contenteditable/زر بطاقة لا تبديل ولا preventDefault — ومن زر تحكم العارض تبقى الأسهم تنقل (RTL: يسار = تالي) — {'start': 0, 'afterInput': 0, 'afterEditable': 0, 'afterCardBtn': 0, 'idxAtCtrl': 0, 'afterCtrl': 1, 'inPrevL': False, 'inPrevR': False, 'inEd': False, 'inBtn': False, 'inCtrl': True}
 PASS  A14 حلقة تركيز مرئية على الزر المركّز بلوحة المفاتيح (focus-visible + ظل) — {'fv': True, 'shadow': True, 'rect': {'x': 298, 'y': 785.734375, 'w': 48, 'h': 48}}
 PASS  A15 لا autoplay: الموضع ثابت بعد 1.4s بلا أي تفاعل — 2→2
@@ -28,17 +28,17 @@ PASS  A18 بطاقة الطلبات: donut بمقام معلن 25 في المر�
 PASS  C0 compact افتراضيًا: أطوال البطاقات تتبع محتواها (غير متساوية — لا تمدد إجباري) والبطاقة النشطة المغلقة ≈ 220–280px على 390px بلا أي قصّ محتوى وalign-items: flex-start — {'heights': [260, 242, 260], 'noClip': True, 'activeH': 260, 'align': 'flex-start'}
 PASS  C1 عقد التوسعة في كل بطاقة: type=button وaria-expanded=false وaria-controls والمنطقة hidden والنص «عرض التفاصيل» — [{'exp': 'false', 'hidden': True, 'type': 'button', 'ctl': 'details-ops', 'label': 'عرض التفاصيل'}, {'exp': 'false', 'hidden': True, 'type': 'button', 'ctl': 'details-donut', 'label': 'عرض التفاصيل'}, {'exp': 'false', 'hidden': True, 'type': 'button', 'ctl': 'details-packed', 'label': 'عرض التفاصيل'}]
 PASS  A18b بطاقة الدوائر مغلقة: دوائر مقرَّرة في DOM (تظهر عند التوسعة) والتفاصيل hidden والمؤشر «البطاقة 3 من 3» — {'packed': True, 'circles': 3, 'detailsHidden': True, 'status': 'البطاقة 3 من 3'}
-PASS  C2 التوسعة من الزر الصريح: data-expanded=true وaria-expanded=true والمنطقة تُكشف والنص يصير «إخفاء التفاصيل» والارتفاع يتبع المحتوى (يزيد) بلا قصّ والرسم ظاهر — before=260 after=469 seq={'slideExp': 'true', 'aria': 'true', 'regHidden': False, 'label': 'إخفاء التفاصيل', 'regIsAriaCtl': True} clip={'noClip': True, 'plotVisible': True}
-      قياس الارتفاع: مغلقة 260px → موسعة 469px (المستهدف البصري للموسعة على 390 ≈ 280–360)
+PASS  C2 التوسعة من الزر الصريح: data-expanded=true وaria-expanded=true والمنطقة تُكشف والنص يصير «إخفاء التفاصيل» والارتفاع يتبع المحتوى (يزيد) بلا قصّ والرسم ظاهر — before=260 after=538 seq={'slideExp': 'true', 'aria': 'true', 'regHidden': False, 'label': 'إخفاء التفاصيل', 'regIsAriaCtl': True} clip={'noClip': True, 'plotVisible': True}
+      قياس الارتفاع: مغلقة 260px → موسعة 538px (المستهدف البصري للموسعة على 390 ≈ 280–360)
 PASS  C3 الإغلاق من الزر: aria-expanded تعود false والمنطقة hidden والنص يعود «عرض التفاصيل» — {'slideExp': 'false', 'aria': 'false', 'regHidden': True, 'label': 'عرض التفاصيل'}
 PASS  C4 الطي عند الانتقال: توسعة بطاقة ثم الانتقال → البطاقة السابقة تُطوى (aria-expanded=false والمنطقة hidden) والجديدة تظهر مغلقة — {'idx': 1, 's2Exp': False, 'aria': 'false', 'hidden': True}
 PASS  C5 السحب لا يوسّع: سحب دون العتبة لا يغيّر aria-expanded ولا يترك is-dragging · زر توسعة بطاقة غير النشطة ينقل إليها دون توسعة — drag={'idx': 2, 'aria': 'false', 'dragging': False} peek={'idx': 1, 's1Exp': False, 's1Aria': 'false'}
 PASS  C6 Tab يصل إلى زر التوسعة بحلقة تركيز مرئية — {'fv': True, 'shadow': True}
 PASS  C7 Enter/Space على زر التوسعة: Enter يفتح (aria-expanded=true و«إخفاء التفاصيل») وSpace يغلق (تعود false و«عرض التفاصيل») — before={'aria': 'false', 'label': 'عرض التفاصيل'} enter={'aria': 'true', 'label': 'إخفاء التفاصيل'} space={'aria': 'false', 'label': 'عرض التفاصيل'}
-PASS  A19 المقارنة (قرار PR#5): ثلاث دوائر بأقطار √القيمة (7532→3566→3333) والقيم الحقيقية 7,532/3,566/3,333 داخلها بلا نسب · تداخل هندسي فعلي في الزوجين · التداخل لا يغطي أي رقم (قياس تقاطع نص×دائرة = 0) والمفتاح بقيم خام بلا نسب — {'widths': [128, 88.0735, 85.1476], 'r1ok': True, 'r2ok': True, 'ov1': 18, 'ov2': 22.6, 'inCircle': ['7,532', '3,566', '3,333'], 'covered': 0, 'keyPct': False, 'keyHasVals': True}
-      القياسات: أقطار [128, 88.0735, 85.1476] · تداخل الزوجين 18/22.6px · أرقام مغطاة: 0
-PASS  A20b سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» يظهر بالتنسيق والدلالة معًا (في الرسم/المفتاح) ولا دائرة سالبة ولا نسب — إصلاح PR#5 — {'both': True, 'rawInCircle': '7,532', 'posCircles': 1, 'noneRings': 1}
-PASS  A20 القيم غير الطبيعية: صفر «0» ومجهول «— غير معروف» ≠ غير متاح «— غير متاح» وسالب بنص صريح — دائرة واحدة فقط للموجبة وحلقات شرطة للأربعة البدائل — {'unknown': True, 'unavailable': True, 'zero': True, 'neg': True, 'circles': 1, 'noneRings': 4}
+PASS  A19 المقارنة (قرار PR#5): ثلاث دوائر بأقطار √القيمة (7532→3566→3333) والقيم الحقيقية 7,532/3,566/3,333 داخلها بلا نسب · تداخل هندسي فعلي في الزوجين · التداخل لا يغطي أي رقم (قياس تقاطع نص×دائرة = 0) والمفتاح بقيم خام بلا نسب — {'widths': [128, 88.0735, 85.1476], 'r1ok': True, 'r2ok': True, 'ov1': 5.3, 'ov2': 12, 'inCircle': ['7,532', '3,566', '3,333'], 'covered': 0, 'keyPct': False, 'keyHasVals': True}
+      القياسات: أقطار [128, 88.0735, 85.1476] · تداخل الزوجين 5.3/12px · أرقام مغطاة: 0
+PASS  A20b سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» يظهر بالتنسيق والدلالة معًا (في الرسم/المفتاح) ولا دائرة سالبة ولا نسب — إصلاح PR#5 — {'both': True, 'rawInCircle': '7,532', 'posCircles': 1, 'noneRings': 0, 'states': 1}
+PASS  A20 دائرة موجبة واحدة؛ أربعة صفوف حالة منفصلة للصفر والمجهول وغير المتاح والسالب، بلا حلقات — {'unknown': True, 'unavailable': True, 'zero': True, 'neg': True, 'circles': 1, 'noneRings': 0, 'states': 4}
 PASS  A21 المقياس المعلن: صفر مع موجبة تعارض صريح بلا دوائر · سالب غير صالح صريح · الغائب يشتق من أكبر قيمة (البديل الموثق) — بلا سقوط صامت — {'zeroErr': True, 'zeroNoCircles': 0, 'negErr': True, 'negNoCircles': 0, 'noMaxCircles': 2, 'noMaxErr': True}
 PASS  A22 صافي سالب: رقم بعلامته وحالة «خسارة» — لا دائرة سالبة مضللة ولا معادلة داخل المكوّن — {'negNum': True, 'noBubble': True, 'badge': True}
 PASS  A23 توكنات الأسس: حد الزر #71868B ونص المؤشر #50656A وانحناء البطاقة 24px وزمن الانتقال 0.18s وزر التوسعة بكبسولة التوكن 999px — {'btnBorder': 'rgb(113, 134, 139)', 'statusColor': 'rgb(80, 101, 106)', 'cardRadius': '24px', 'trackDur': '0.18s', 'toggleRadius': '999px'}
