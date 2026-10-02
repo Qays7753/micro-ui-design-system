@@ -25,8 +25,8 @@
 
    القرارات المحددة لهذا الامتداد (موثقة في specification):
    - القيم مستقلة لا نسب: لا نسب مئوية إطلاقًا — الرقم الحقيقي
-     (من data-display أو القيمة الخام) يظهر داخل كل دائرة موجبة،
-     والتسمية خارجها تحتها، والمفتاح النصي الكامل (تسمية + قيمة
+      (من data-display أو القيمة الخام) يظهر داخل الدائرة إن اتسع،
+      وإلا في صف خارجي مقروء مع التسمية؛ المفتاح الكامل (تسمية + قيمة
      خام) مرجع إضافي. التداخل إشارة علاقة بصرية فقط ولا يعني
      عملية حسابية أو تقاطعًا ماليًا أو أجزاء من مجموع.
    - الحجم يعكس القيمة الخام: مساحة الدائرة ∝ القيمة والقطر
@@ -40,7 +40,7 @@
      السالبة يُعرض مع دلالة الحالة ولا يحل محلها.
    - حالات القيم (نفس لغة B05، بصياغة نصية صريحة):
        موجبة        → دائرة r ∝ √v والرقم داخلها
-       صفر          → حلقة شَرطة + «0» (لا دائرة بحجم صفري مخفي)
+        صفر          → صف حالة «0 — صفر» منفصل، دون دائرة مصطنعة
        مجهولة       → سمة data-value غائبة كليًا → «— غير معروف»
        غير متاحة    → سمة موجودة غير قابلة للتحليل → «— غير متاح»
        سالبة        → لا دائرة سالبة أبدًا → «-3,566 — سالب غير صالح للمساحة»
@@ -61,6 +61,85 @@
   'use strict';
 
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
+  var observers = new WeakMap();
+
+  /* ترتيب حتمي: دائرة رئيسية وبجوارها دائرتان متدرجتان رأسيًا.
+     كل مجموعة من ثلاث مستقلة؛ لا عشوائية أو مساحات مالية مشتقة.
+     المقياس يتقلص موحدًا عند ضيق العمود، فلا يتغير تناسب المساحات. */
+  function layoutPacked(chart, nodes, wrap) {
+    var available = wrap.clientWidth || chart.clientWidth;
+    if (!available || !nodes.length) return;
+    var requested = parseNum(getComputedStyle(chart).getPropertyValue('--packed-overlap'));
+    requested = requested === null ? 12 : Math.max(0, requested);
+    var gap = parseFloat(getComputedStyle(chart).getPropertyValue('--micro-space-4')) || 16;
+    var groups = [];
+    for (var i = 0; i < nodes.length; i += 3) groups.push(nodes.slice(i, i + 3));
+    var widest = Math.max.apply(null, groups.map(function (g) {
+      return g[0].diameter + (g[1] ? Math.max(g[1].diameter, g[2] ? g[2].diameter : 0) : 0);
+    }));
+    var factor = Math.min(1, available / widest);
+    nodes.forEach(function (n) {
+      n.d = n.diameter * factor;
+      n.circ.style.width = n.circ.style.height = n.d + 'px';
+      /* قياس النص الطبيعي، لا عرضًا مصغّرًا أو حدًا أدنى للدائرة. */
+      n.circ.appendChild(n.value);
+      var previous = n.value.style.whiteSpace;
+      n.value.style.whiteSpace = 'nowrap';
+      var t = n.value.getBoundingClientRect();
+      n.textDiagonal = Math.hypot(t.width, t.height);
+      n.inside = n.textDiagonal + 8 <= n.d;
+      n.value.style.whiteSpace = previous;
+      n.bubble.setAttribute('data-value-placement', n.inside ? 'inside' : 'outside');
+      if (!n.inside) n.row.appendChild(n.value);
+      n.row.setAttribute('data-external-value', n.inside ? 'false' : 'true');
+    });
+    function overlap(a, b) {
+      var cap = Math.min(requested, Math.min(a.d, b.d) * 0.25);
+      [a, b].forEach(function (n) {
+        if (n.inside) cap = Math.min(cap, Math.max(0, (n.d - n.textDiagonal) / 2 - 2));
+      });
+      return Math.max(0, cap);
+    }
+    var top = 0;
+    groups.forEach(function (g) {
+      var main = g[0], a = g[1], b = g[2];
+      var verticalOverlap = a && b ? overlap(a, b) : 0;
+      var stackHeight = a ? a.d + (b ? b.d - verticalOverlap : 0) : 0;
+      var height = Math.max(main.d, stackHeight);
+      var sideOverlap = a ? Math.min(overlap(main, a), b ? overlap(main, b) : Infinity) : 0;
+      var width = main.d + (a ? Math.max(a.d, b ? b.d : 0) - sideOverlap : 0);
+      var start = (available - width) / 2;
+      function position(n, x, y) {
+        n.bubble.style.insetInlineStart = x + 'px';
+        n.bubble.style.top = (top + y) + 'px';
+        n.bubble.style.width = n.bubble.style.height = n.d + 'px';
+      }
+      position(main, start, (height - main.d) / 2);
+      if (a) position(a, start + main.d - sideOverlap, (height - stackHeight) / 2);
+      if (b) position(b, start + main.d - sideOverlap, (height - stackHeight) / 2 + a.d - verticalOverlap);
+      top += height + gap;
+    });
+    wrap.style.height = Math.max(0, top - gap) + 'px';
+  }
+
+  function stateList(items) {
+    var list = document.createElement('ul');
+    list.className = 'm-packed__states m-legend';
+    list.setAttribute('aria-label', 'حالات لا تدخل الرسم المساحي');
+    items.forEach(function (it) {
+      var li = document.createElement('li');
+      li.className = 'm-legend__item m-cat--' + it.series;
+      var label = document.createElement('span');
+      label.textContent = it.label;
+      var value = document.createElement('bdi');
+      value.className = 'm-legend__value';
+      value.textContent = it.value === 0 ? '0 — صفر' : stateText(it).text;
+      li.appendChild(label);
+      li.appendChild(value);
+      list.appendChild(li);
+    });
+    return list;
+  }
 
   function parseNum(raw) {
     if (raw === null || raw === undefined) return null;
@@ -142,6 +221,7 @@
   }
 
   function render(chart) {
+    if (observers.has(chart)) observers.get(chart).disconnect();
     var plot = chart.querySelector('[data-plot]');
     var items = itemsOf(chart);
     var positives = items.filter(function (i) { return i.value !== null && i.value > 0; });
@@ -168,16 +248,13 @@
       vmax = declaredMax;
     }
 
+    plot.innerHTML = '';
     var wrap = document.createElement('div');
     wrap.className = 'm-bubbles';
-
-    /* ترتيب الرسم: الأكبر أولًا في DOM ليكون الأصغر فوقه بلا إخفاء نصوص */
-    var order = items.slice().sort(function (a, b) {
-      var av = (a.value !== null && a.value > 0) ? a.value : -1;
-      var bv = (b.value !== null && b.value > 0) ? b.value : -1;
-      return bv - av;
-    });
-
+    var labels = document.createElement('ul');
+    labels.className = 'm-packed__labels';
+    var nodes = [];
+    var order = positives.slice().sort(function (a, b) { return b.value - a.value; });
     order.forEach(function (it) {
       var b = document.createElement('div');
       b.className = 'm-bubble m-cat--' + it.series;
@@ -187,42 +264,54 @@
       var lab = document.createElement('span');
       lab.className = 'm-bubble__label';
       lab.textContent = it.label;
-      var stt = stateText(it);
-      if (stt.none) {
-        /* الصفر/المجهول/غير المتاح/السالب: لا دائرة قيمة — الحالة رقم
-           وحالة صريحان خارج مجموعة الدوائر (السالب لا يصير دائرة موجبة). */
-        valTxt.textContent = stt.text;
-        circ.className = 'm-bubble__circle--none';
-        b.appendChild(valTxt);
-        b.appendChild(circ);
-        b.appendChild(lab);
-      } else {
-        /* الدائرة الموجبة: الرقم الحقيقي داخلها — المنسق من data-display
-           أو القيمة الخام، لا نسب مئوية إطلاقًا. التسمية القصيرة خارجها
-           تحت الدائرة (المفتاح يعرض القيم الخام كمرجع إضافي). */
-        var r = Rmax * Math.sqrt(it.value / vmax);
-        circ.className = 'm-bubble__circle';
-        /* بلا حد أدنى — القطر حرفي 2r والمساحة صادقة؛ الصغيرة جدًا
-           قيمتها بتسمية خارجية (نفس قاعدة B05) */
-        circ.style.width = circ.style.height = (r * 2) + 'px';
-        b.setAttribute('data-size', r >= Rmax * 0.7 ? 'large' : 'small');
-        valTxt.textContent = stt.text;
-        circ.appendChild(valTxt);
-        b.appendChild(circ);
-        b.appendChild(lab);
-      }
+      var r = Rmax * Math.sqrt(it.value / vmax);
+      circ.className = 'm-bubble__circle';
+      circ.style.width = circ.style.height = (r * 2) + 'px';
+      b.setAttribute('data-size', r >= Rmax * 0.7 ? 'large' : 'small');
+      valTxt.textContent = stateText(it).text;
+      circ.appendChild(valTxt);
+      b.appendChild(circ);
       wrap.appendChild(b);
+      var row = document.createElement('li');
+      row.className = 'm-packed__value-row m-cat--' + it.series;
+      var swatch = document.createElement('span');
+      swatch.className = 'm-legend__swatch';
+      swatch.setAttribute('aria-hidden', 'true');
+      row.appendChild(swatch);
+      row.appendChild(lab);
+      labels.appendChild(row);
+      nodes.push({ bubble: b, circ: circ, value: valTxt, row: row, diameter: r * 2 });
     });
 
-    plot.innerHTML = '';
-    plot.appendChild(wrap);
+    if (positives.length) {
+      plot.appendChild(wrap);
+      plot.appendChild(labels);
+      layoutPacked(chart, nodes, wrap);
+      if (window.ResizeObserver) {
+        var observer = new ResizeObserver(function () { layoutPacked(chart, nodes, wrap); });
+        observer.observe(chart);
+        nodes.forEach(function (n) { observer.observe(n.value); });
+        observers.set(chart, observer);
+      }
+      if (document.fonts) document.fonts.ready.then(function () {
+        if (plot.contains(wrap)) layoutPacked(chart, nodes, wrap);
+      });
+    } else {
+      var empty = document.createElement('p');
+      empty.className = 'm-packed__empty';
+      empty.setAttribute('data-empty', '');
+      empty.textContent = 'لا توجد قيم موجبة قابلة للرسم المساحي.';
+      plot.appendChild(empty);
+    }
+    var special = items.filter(function (it) { return stateText(it).none; });
+    if (special.length) plot.appendChild(stateList(special));
 
     /* مفتاح نصي كامل بالترتيب المعلن للمستهلك — المرجع الدقيق (بلا نسب).
       يستثنى عند data-legend="off" (البطاقات المضغوطة) — قيمة موثقة أعلاه */
-    if (chart.getAttribute('data-legend') !== 'off') {
+    if (positives.length && chart.getAttribute('data-legend') !== 'off') {
     var legend = document.createElement('ul');
     legend.className = 'm-legend';
-    items.forEach(function (it) {
+    positives.forEach(function (it) {
       var li = document.createElement('li');
       li.className = 'm-legend__item m-cat--' + it.series;
       var sw = document.createElement('span');

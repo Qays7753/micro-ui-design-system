@@ -1,105 +1,104 @@
-/* =========================================================
-   Micro UI — امتداد الدوائر المتداخلة (Packed-Circle) فوق عقد B05
-   الملف: components/data/packed-circle.css
-   الحالة: **PROPOSED — يحتاج مراجعة واعتماد المالك** — امتداد
-   opt-in لكود B05 (m-chart--bubbles) لا يغيّر سلوكه الافتراضي
-   إطلاقًا: لا يُحمَّل أثره إلا بإضافة الصنفين معًا:
-     .m-chart.m-chart--bubbles.m-chart--packed
-   ويُصيَّر بـ components/data/packed-circle.js (لا data.js).
-
-   ما يأخذه من عقد B05 الحالي (بلا إعادة بناء):
-   - عقد m-bubble / m-bubble__circle / m-bubble__value / m-bubble__label
-   - تعيين ألوان الفئات الثابت بالمفتاح (--cat عبر m-cat--a..e)
-   - مبدأ المساحة ∝ القيمة (نصف القطر √v) بلا حد أدنى يضخّم
-   - التداخل لا يخفي رقمًا أو تسمية (قياس آلي في verification.txt)
-
-   ما يضيفه (مقترح):
-   - سحب البطاقات أفقيًا لتتداخل الدوائر تداخلًا واضحًا (20–25%
-     من قطر الأصغر تقريبًا) إشارةً بصرية للعلاقة والمقارنة فقط —
-     لا يعني عملية حسابية أو تقاطعًا ماليًا ولا أجزاء من مجموع
-     واحد (القيم مستقلة).
-   - الرقم الحقيقي (data-display أو القيمة الخام) داخل كل دائرة
-     موجبة بمركزها — لا نسب مئوية داخل الدوائر إطلاقًا؛ والتسمية
-     خارجها تحت الدائرة والمفتاح النصي بقيم خام مرجعًا إضافيًا.
-   - قاعدة اختيار --packed-overlap الآمنة: لا يغطي التداخل نص
-     الدائرة الأكبر — أبقِ القيمة ≤ 25% من قطر الأصغر مع بقاء
-     حافة نص الدائرة الأكبر خارج منطقة التغطية (مفحوص آليًا في
-     reviews/CAROUSEL/verification.txt أن كل رقم مقروء كاملًا).
-   ========================================================= */
-
-/* المدخل مركّب من data.css؛ هنا فقط ما يخص التداخل وحالاته */
+/* Micro UI — Packed-Circle opt-in above B05. PROPOSED.
+   Deterministic clusters: primary circle + two vertically staggered circles.
+   --packed-overlap is a requested cap (default 12px), not guaranteed overlap.
+   JS limits it to 25% of the smaller diameter and protects fitted numbers.
+   Geometry stays proportional; text that does not fit moves to the label row.
+   Zero/unknown/unavailable/negative never enter positive geometry. */
 
 .m-chart--packed .m-bubbles {
-  align-items: flex-end;
-  justify-content: center;
-  /* gap الأساس من data.css يُصفّر هنا حتى يكون --packed-overlap
-     هو التداخل الهندسي الحرفي بين الدوائر (قياس مباشر بلا حسبة
-     ذهنية للمستهلك) */
+  display: block;
+  position: relative;
+  inline-size: 100%;
   gap: 0;
+  margin-block-end: var(--micro-space-3);
 }
-
-/* التداخل: كل بطاقة بعد الأولى تُسحب نحو سابقتها بمقدار
-   --packed-overlap (قيمة صريحة من المستهلك أو الافتراضي المقترح
-   28px) — الالتزام إشارة علاقة لا عملية. عدّل المتغيّر على الرسم
-   نفسه: <div class="m-chart m-chart--bubbles m-chart--packed"
-   style="--packed-overlap: 20px"> */
-.m-chart--packed .m-bubble + .m-bubble {
-  margin-inline-start: calc(-1 * var(--packed-overlap, 28px));
+.m-chart--packed .m-bubble {
+  position: absolute;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
 }
-
-/* ترتيب الرسم: الأصغر فوق الأكبر حتى يبقى حدّ كل دائرة مقروءًا.
-   (DOM: الأكبر أولًا — يُبنى الترتيب في packed-circle.js) */
-.m-chart--packed .m-bubble { position: relative; }
 .m-chart--packed .m-bubble[data-size="large"] { z-index: 1; }
 .m-chart--packed .m-bubble[data-size="small"] { z-index: 2; }
-
-/* الرقم الحقيقي داخل الدائرة: الدائرة حاوية متمركزة — الرقم
-   بأرقام جدولية وعزل اتجاهي للمبالغ المختلطة، ويُلفّ بأمان داخل
-   الدائرة إن طال (لا قصّ ولا خروج عن الدائرة على 320px).
-   لا نص دائرة فوق نص دائرة أخرى: طبقات الرسم تجعل الأصغر فوق
-   الأكبر ومنطقة التداخل خارج نص الأكبر.
-   تباين النص فوق لون الفئة ليس اللون الأبيض وحده: الفئات الفاتحة
-   (b/c/e) تأخذ النص الداكن الأساسي — لا تراجع على فحص C1. */
 .m-chart--packed .m-bubble__circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-.m-chart--packed .m-bubble__circle .m-bubble__value {
+.m-chart--packed .m-bubble__value {
   display: inline-block;
-  max-inline-size: 92%;
-  padding-inline: 4px;
-  color: var(--micro-text-inverse);
+  padding: 0;
+  max-inline-size: none;
   font-size: var(--micro-secondary-size);
   line-height: 1.2;
-  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.m-chart--packed .m-bubble__circle .m-bubble__value {
+  white-space: nowrap;
+  color: var(--micro-text-inverse);
 }
 .m-chart--packed .m-cat--b .m-bubble__circle .m-bubble__value,
 .m-chart--packed .m-cat--c .m-bubble__circle .m-bubble__value,
 .m-chart--packed .m-cat--e .m-bubble__circle .m-bubble__value {
   color: var(--micro-text-primary);
 }
-
-/* التسمية تبقى خارجية تحت الدائرة — لا ازدحام داخل الدائرة */
-.m-chart--packed .m-bubble__label { background: transparent; }
-
-/* حلقة الحالة الصفرية (نفس لغة B05: حلقة شَرطة صغيرة) */
-.m-chart--packed .m-bubble__circle--none {
-  background: transparent;
-  border: 1.5px dashed var(--micro-text-hint);
-  width: 14px;
-  height: 14px;
+.m-chart--packed .m-packed__labels,
+.m-chart--packed .m-packed__states {
+  list-style: none;
+  margin: 0 0 var(--micro-space-3);
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--micro-space-2) var(--micro-space-4);
 }
-
-/* رسالة حالة المقام/المقياس غير الصالح — نفس لغة m-chart__error
-   في data.css (إطار شرطة تحذيرية بنص صريح) — تُبنى في السكربت */
+.m-chart--packed .m-packed__value-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+.m-chart--packed .m-packed__value-row .m-bubble__label {
+  margin: 0;
+  background: transparent;
+  overflow-wrap: anywhere;
+}
+.m-chart--packed .m-packed__value-row .m-bubble__value {
+  color: var(--micro-text-primary);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  max-inline-size: 100%;
+}
+.m-chart--packed .m-packed__states {
+  display: grid;
+  justify-content: stretch;
+  border-block-start: 1px solid var(--micro-border-divider);
+  padding-block-start: var(--micro-space-3);
+}
+.m-chart--packed .m-packed__states .m-legend__item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  overflow-wrap: anywhere;
+}
+.m-chart--packed .m-packed__empty,
 .m-chart--packed .m-chart__scale-error {
   margin: 0 0 var(--micro-space-3);
   padding: var(--micro-space-3) var(--micro-space-4);
-  border: 1.5px dashed var(--micro-warning);
+  border: 1px solid var(--micro-border-divider);
   border-radius: var(--micro-radius-field);
-  background-color: var(--micro-warning-surface);
+  background: var(--micro-surface-page);
   color: var(--micro-text-primary);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
+}
+.m-chart--packed .m-chart__scale-error {
+  border: 1.5px dashed var(--micro-warning);
+  background: var(--micro-warning-surface);
 }

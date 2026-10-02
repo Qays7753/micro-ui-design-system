@@ -24,8 +24,167 @@
   font-family: var(--micro-font-family);
 }
 
+/* ================= ملخص After الفاتح — Composition Pattern مقترح =================
+   زخرفة الموجة محصورة بهذا التركيب وثابتة؛ المحتوى والتفاعل أعلى منها. */
+.aft-light-summary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  padding: var(--micro-space-5);
+  border-radius: var(--micro-radius-surface);
+  color: var(--micro-text-primary);
+  background-image: linear-gradient(
+    135deg,
+    var(--micro-summary-light-start) 0%,
+    var(--micro-summary-light-mid) 56%,
+    var(--micro-summary-light-end) 100%
+  );
+}
+.aft-light-summary__waves {
+  position: absolute;
+  z-index: 0;
+  inset-inline: 0;
+  inset-block-end: 0;
+  width: 100%;
+  height: 36%;
+  overflow: visible;
+  pointer-events: none;
+}
+.aft-light-summary__waves path {
+  fill: none;
+  stroke: var(--micro-brand-primary);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.aft-light-summary__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+.aft-light-summary__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-3);
+}
+.aft-light-summary__tile {
+  flex: none;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--micro-radius-field);
+  color: var(--micro-brand-primary);
+  background-color: rgba(255, 255, 255, 0.62);
+}
+.aft-light-summary__tile svg {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-light-summary__heading {
+  flex: 1;
+  min-inline-size: min-content;
+  max-inline-size: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+}
+.aft-light-summary__title {
+  margin: 0;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+}
+.aft-light-summary__label {
+  margin: 0;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__amount-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-3);
+}
+.aft-light-summary__amount {
+  margin: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-surface-amount-size);
+  line-height: var(--micro-surface-amount-line);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.aft-light-summary__unit {
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__trend svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--micro-brand-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-light-summary__support {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3) var(--micro-space-5);
+  padding-block-start: var(--micro-space-2);
+  border-block-start: 1px solid rgba(22, 77, 89, 0.18);
+}
+.aft-light-summary__metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: min(100%, 120px);
+}
+.aft-light-summary__metric-label {
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.aft-light-summary__metric-value {
+  color: var(--micro-text-primary);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.aft-light-summary__action {
+  align-self: flex-start;
+}
+
 /* ================= 1) السطح البارز (hero) =================
-   السطح البترولي مرة واحدة في التركيب — «عند الحاجة فقط».
+   النسخة البترولية خيار محدود في التركيب — «عند الحاجة فقط».
    المحتوى من عقد S01 (title/amount/label/sub) + صف اتجاه بنص */
 .aft-hero .m-surface__content {
   display: flex;
@@ -100,7 +259,7 @@
   stroke-linejoin: round;
 }
 
-/* إجراء اختياري داخل السطح: زر B01 فاتح — لا شكل جديد */
+/* إجراء اختياري داخل السطح: B01 secondary بأرضية مستقرة ونص داكن. */
 .aft-hero__action {
   align-self: flex-start;
 }

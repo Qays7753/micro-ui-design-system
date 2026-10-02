@@ -162,14 +162,16 @@ def main():
           const circles = bubbles.map(b => b.querySelector('.m-bubble__circle'));
           const widths = circles.filter(Boolean).map(c => c.getBoundingClientRect().width);
           const inVals = circles.filter(Boolean).map(c => c.querySelector('.m-bubble__value')?.textContent);
-          const labels = bubbles.map(b => b.querySelector('.m-bubble__label')?.textContent);
+          const labels = [...chart.querySelectorAll('.m-packed__labels .m-bubble__label')].map(b => b.textContent);
           const legendText = chart.querySelector('.m-legend')?.textContent || '';
           /* تداخل هندسي فعلي بين الدوائر المتجاورة */
           let ovs = [];
           for (let i = 0; i + 1 < circles.length; i++) {
             if (!circles[i] || !circles[i+1]) continue;
             const a = circles[i].getBoundingClientRect(), b = circles[i+1].getBoundingClientRect();
-            const ov = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));
+            const ov = Math.max(0, (a.width + b.width) / 2 -
+              Math.hypot((a.left + a.right - b.left - b.right) / 2,
+                         (a.top + a.bottom - b.top - b.bottom) / 2));
             ovs.push(Math.round(ov * 10) / 10);
           }
           /* لا نص دائرة مغطى بدائرة أخرى: يُحسب التقاطع مع دوائر مرسومة
@@ -193,7 +195,7 @@ def main():
         check("A6 المثال الثابت: ثلاث دوائر بأقطار ∝ √القيمة (7,532/3,566/3,333 — القطر 88/60.6/58.6 ≤1px) والقيم الحقيقية داخلها بلا نسب",
               okRatio and circ["inVals"] == ["7,532", "3,566", "3,333"] and circ["nPct"] == 0,
               f"widths={[round(w,1) for w in circ['widths']]} expected={[round(e,1) for e in exp]}")
-        check("A7 التداخل الهندسي فعلي بين الزوجين (12px) ولا يغطي أي رقم (تقاطع نص×دائرة لاحقة = 0) — ويلتزم القاعدة الموثقة: التداخل ≤ 25% من قطر الأصغر",
+        check("A7 تداخل ثنائي الأبعاد محسوب من المسافة بين المراكز (سقف المثال 8px، الافتراضي 12px) بلا رقم مغطى؛ الفعلي ≤25% من قطر الأصغر",
               len(circ["ovs"]) == 2 and all(o > 0 for o in circ["ovs"]) and circ["covered"] == 0
               and all(o <= 0.25 * min(exp[i], exp[i + 1]) + 0.5 for i, o in enumerate(circ["ovs"])),
               f"overlaps={circ['ovs']} covered={circ['covered']} rule≤{[round(0.25*min(exp[i],exp[i+1]),1) for i in range(2)]}")
@@ -206,20 +208,21 @@ def main():
           const grab = id => {
             const c = document.querySelector(id);
             return {
-              vals: [...c.querySelectorAll('.m-bubble__value')].map(v => v.textContent),
+              vals: [...c.querySelectorAll('.m-bubble__value, .m-packed__states .m-legend__value')].map(v => v.textContent),
               circles: c.querySelectorAll('.m-bubble__circle').length,
-              rings: c.querySelectorAll('.m-bubble__circle--none').length
+              rings: c.querySelectorAll('.m-bubble__circle--none').length,
+              states: c.querySelectorAll('.m-packed__states .m-legend__item').length
             };
           };
           return { edge: grab('#circ-edge'), neg: grab('#circ-negative') };
         }""")
-        check("A9 الحالات: صفر حلقة شرطة و«0» · المجهول «— غير معروف» · غير المتاح «— غير متاح» — المجهول ≠ الصفر ≠ غير المتاح",
-              edge["edge"]["vals"] == ["1,200", "0", "— غير معروف", "— غير متاح"]
-              and edge["edge"]["circles"] == 1 and edge["edge"]["rings"] == 3,
+        check("A9 دائرة موجبة فقط؛ صفر ومجهول وغير متاح في ثلاثة صفوف منفصلة دون حلقات مصطنعة",
+              edge["edge"]["vals"] == ["1,200", "0 — صفر", "— غير معروف", "— غير متاح"]
+              and edge["edge"]["circles"] == 1 and edge["edge"]["rings"] == 0 and edge["edge"]["states"] == 3,
               str(edge["edge"]))
         check("A10 السالب: رقمه بعلامته + دلالة «سالب غير صالح للمساحة» وبلا دائرة موجبة — ومع data-display يبقى التنسيق (-3,566) والدلالة معًا",
               edge["neg"]["vals"] == ["7,532", "-3,566 — سالب غير صالح للمساحة", "-2400 — سالب غير صالح للمساحة"]
-              and edge["neg"]["circles"] == 1 and edge["neg"]["rings"] == 2,
+              and edge["neg"]["circles"] == 1 and edge["neg"]["rings"] == 0 and edge["neg"]["states"] == 2,
               str(edge["neg"]))
 
         scale = page.evaluate("""() => {

@@ -157,23 +157,17 @@
       slide.setAttribute('aria-roledescription', 'بطاقة');
       var name = slide.getAttribute('data-card-label') || ('بطاقة ' + (i + 1));
       slide.setAttribute('aria-label', name + '، البطاقة ' + (i + 1) + ' من ' + st.count);
-      /* الصف الحالي فقط قابل للتذكر في تبويب العارض نفسه لا محتواه */
+      /* المعاينة البصرية للمجاورة لا تجعل تحكماتها أهداف Tab مقصوصة. */
       slide.removeAttribute('aria-hidden');
-      slide.removeAttribute('inert');
+      slide.inert = !isCurrent;
     });
 
-    /* البطاقات المخفية كليًا خارج القناع: inert — لا تركيز في غير المرئي.
-       الحساب من قيم layout (offsetLeft) + الموضع المستهدف x — لا من
-       مستطيلات منتصف الانتقال، فتكون النتيجة صحيحة لحظة التبديل نفسه.
-       المجاورة الظاهرة جزئيًا تبقى مقروءة (القناع للمعاينة لا للإخفاء). */
-    var vpW = st.viewport.clientWidth;
-    st.slides.forEach(function (slide) {
-      var left = slide.offsetLeft + st.x;
-      var right = left + slide.offsetWidth;
-      var fullyOutside = right <= 1 || left >= vpW - 1;
-      if (fullyOutside) slide.setAttribute('inert', '');
-      else slide.removeAttribute('inert');
-    });
+    /* إذا انتقلت البطاقة برمجيًا أثناء تركيز محتواها، يعود التركيز
+       إلى العارض القابل للوحة المفاتيح بدل البقاء داخل شريحة inert. */
+    var focusedSlide = document.activeElement.closest('[data-carousel-slide]');
+    if (focusedSlide && st.slides.indexOf(focusedSlide) >= 0 && focusedSlide.inert) {
+      carousel.focus({ preventScroll: true });
+    }
 
     /* أزرار الطرفين */
     var atStart = st.index === 0;
@@ -349,7 +343,7 @@
   function toggleExpand(st, slide) {
     var btn = slide ? slide.querySelector('[data-card-expand]') : null;
     if (!btn) return;
-    var open = slide.hasAttribute('data-expanded');
+    var open = slide.getAttribute('data-expanded') === 'true';
     slide.setAttribute('data-expanded', open ? 'false' : 'true');
     btn.setAttribute('aria-expanded', open ? 'false' : 'true');
     setToggleLabel(btn, !open);
@@ -450,6 +444,7 @@
     stateOf.set(carousel, st);
 
     carousel.setAttribute('role', 'group');
+    if (!carousel.hasAttribute('tabindex')) carousel.setAttribute('tabindex', '0');
     carousel.setAttribute('aria-roledescription', 'عارض بطاقات');
     if (!carousel.hasAttribute('aria-label') && carousel.hasAttribute('data-carousel-label')) {
       carousel.setAttribute('aria-label', carousel.getAttribute('data-carousel-label'));

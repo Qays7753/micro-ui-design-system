@@ -1,0 +1,1 @@
+- [Delivery approval](delivery-approval.md) — cumulative UI delivery needs separate owner approval before merging or deleting ancestors.

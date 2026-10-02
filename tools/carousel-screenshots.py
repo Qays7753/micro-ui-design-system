@@ -613,8 +613,11 @@ def main():
                  const r1ok = Math.abs(widths[1] - w0 * Math.sqrt(3566 / 7532)) <= 1.5;
                  const r2ok = Math.abs(widths[2] - w0 * Math.sqrt(3333 / 7532)) <= 1.5;
                  const rects = circs.map(x => x.getBoundingClientRect());
-                 const ov1 = +(Math.min(rects[0].right, rects[1].right) - Math.max(rects[0].left, rects[1].left)).toFixed(1);
-                 const ov2 = +(Math.min(rects[1].right, rects[2].right) - Math.max(rects[1].left, rects[2].left)).toFixed(1);
+                 const overlap = (a, b) => +Math.max(0, (a.width + b.width) / 2 -
+                   Math.hypot((a.left+a.right-b.left-b.right)/2,
+                              (a.top+a.bottom-b.top-b.bottom)/2)).toFixed(1);
+                 const ov1 = overlap(rects[0], rects[1]);
+                 const ov2 = overlap(rects[1], rects[2]);
                  const inCircle = circs.map(x => { const v = x.querySelector('.m-bubble__value');
                    return v && x.contains(v) ? v.textContent.trim() : null; });
                  /* لا يخفي التداخل أي رقم: نص كل دائرة لا يتقاطع مع أي دائرة مرسومة فوقه (الأصغر فوق الأكبر) */
@@ -652,10 +655,10 @@ def main():
                  const inVal = c.querySelector('.m-bubble__circle:not(.m-bubble__circle--none) .m-bubble__value');
                  return {both: t.includes('-3,566 — سالب غير صالح للمساحة'),
                          rawInCircle: inVal ? inVal.textContent.trim() : null,
-                         posCircles, noneRings}; }""")
+                         posCircles, noneRings, states: c.querySelectorAll('.m-packed__states li').length}; }""")
         page.locator("#packed-detail .edge-grid").first.screenshot(path=str(SHOTS / "28-negative-with-display-390.png"))
         check("A20b سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» يظهر بالتنسيق والدلالة معًا (في الرسم/المفتاح) ولا دائرة سالبة ولا نسب — إصلاح PR#5",
-              negDisp["both"] and negDisp["posCircles"] == 1 and negDisp["noneRings"] == 1
+              negDisp["both"] and negDisp["posCircles"] == 1 and negDisp["noneRings"] == 0 and negDisp["states"] == 1
               and negDisp["rawInCircle"] == "7,532", str(negDisp))
 
         # ==== A20: القيم غير الطبيعية ====
@@ -668,11 +671,11 @@ def main():
                  const noneRings = c.querySelectorAll('.m-bubble__circle--none').length;
                  return {unknown: t.includes('— غير معروف'), unavailable: t.includes('— غير متاح'),
                          zero: t.includes('0'), neg: t.includes('سالب غير صالح للمساحة'),
-                         circles: negCircles, noneRings}; }""")
+                         circles: negCircles, noneRings, states: c.querySelectorAll('.m-packed__states li').length}; }""")
         page.locator("#packed-detail .edge-grid").nth(1).screenshot(path=str(SHOTS / "17-packed-edge-states-390.png"))
-        check("A20 القيم غير الطبيعية: صفر «0» ومجهول «— غير معروف» ≠ غير متاح «— غير متاح» وسالب بنص صريح — دائرة واحدة فقط للموجبة وحلقات شرطة للأربعة البدائل",
+        check("A20 دائرة موجبة واحدة؛ أربعة صفوف حالة منفصلة للصفر والمجهول وغير المتاح والسالب، بلا حلقات",
               edge["unknown"] and edge["unavailable"] and edge["zero"] and edge["neg"]
-              and edge["circles"] == 1 and edge["noneRings"] == 4, str(edge))
+              and edge["circles"] == 1 and edge["noneRings"] == 0 and edge["states"] == 4, str(edge))
 
         # ==== A21: حالات المقياس (نظير المقام — اتساق مع دلالة C2) ====
         scale = page.evaluate(

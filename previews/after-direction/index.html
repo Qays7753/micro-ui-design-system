@@ -47,11 +47,49 @@
     ====================================================== -->
     <section class="panel" id="composition">
       <h2>1) تركيب After — عمود مرجعي كامل <span class="status-chip">PROPOSED</span></h2>
-      <p class="panel-note">ملخص بيانات بارز على سطح بترولي (S01 — عند الحاجة فقط) ← قيم رئيسية بلا بطاقات ← لوحة بيضاء واحدة للرسم (دوائر متداخلة بقيم حقيقية) ← مؤشرا تقدم ← قسم بصفوف متصلة (B04) بلا بطاقة لكل صف ← رسالة مساعدة (B06) ← إجراء رئيسي واحد واضح (B01). المحتوى أمثلة ثابتة من HTML — عدّل القيم هنا وستنعكس مباشرة.</p>
+      <p class="panel-note">ملخص فاتح هو المثال الافتراضي أولًا، بدرجات <span dir="ltr">#B8D9DC → #DFEEE6 → #F7F8F4</span> ونص داكن؛ ويليه خيار السطح البترولي المحدود عند الحاجة فقط. بعده قيم رئيسية بلا بطاقات ← لوحة بيضاء واحدة للرسم ← مؤشرا تقدم ← قسم بصفوف متصلة ← رسالة مساعدة وإجراء. المحتوى أمثلة ثابتة من HTML — عدّل القيم هنا وستنعكس مباشرة. التكوين كله PROPOSED للمراجعة.</p>
 
       <div class="aft-comp" id="aft-comp">
 
-        <!-- 1-أ) السطح البترولي البارز: ملخص البيانات (S01 --waves المرشح الأساسي) -->
+        <!-- 1-أ) ملخص فاتح — المثال الافتراضي المقترح؛ زخرفة ساكنة ومحلية -->
+        <div class="aft-light-summary" id="light-summary">
+          <svg class="aft-light-summary__waves" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M-20 72 C90 24 170 120 285 76 S480 32 620 82" opacity=".16"/>
+            <path d="M-20 105 C100 58 190 142 315 104 S500 65 620 112" opacity=".10"/>
+          </svg>
+          <div class="aft-light-summary__content">
+            <div class="aft-light-summary__head">
+              <span class="aft-light-summary__tile" aria-hidden="true"><svg><use href="#i-wallet"/></svg></span>
+              <div class="aft-light-summary__heading">
+                <h3 class="aft-light-summary__title">نظرة اليوم</h3>
+                <span class="status-chip">PROPOSED</span>
+              </div>
+            </div>
+            <p class="aft-light-summary__label">التحصيل اليوم</p>
+            <div class="aft-light-summary__amount-row">
+              <p class="aft-light-summary__amount">4,812.50</p>
+              <span class="aft-light-summary__unit">د.أ</span>
+              <span class="aft-light-summary__trend">
+                <svg aria-hidden="true"><use href="#i-arrow-up"/></svg>
+                <span dir="ltr">+6</span>
+                <span>عن أمس</span>
+              </span>
+            </div>
+            <div class="aft-light-summary__support">
+              <div class="aft-light-summary__metric">
+                <span class="aft-light-summary__metric-label">طلبات قيد التجهيز</span>
+                <span class="aft-light-summary__metric-value" dir="ltr">12</span>
+              </div>
+              <div class="aft-light-summary__metric">
+                <span class="aft-light-summary__metric-label">فواتير مستحقة</span>
+                <span class="aft-light-summary__metric-value" dir="ltr">3</span>
+              </div>
+            </div>
+            <button type="button" class="m-btn m-btn--secondary aft-light-summary__action">عرض التفاصيل</button>
+          </div>
+        </div>
+
+        <!-- 1-ب) خيار بترولي محدود: ملخص بيانات S01 --waves -->
         <div class="m-surface m-surface--waves aft-hero" id="hero-surface">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
@@ -69,7 +107,7 @@
               </span>
             </div>
             <p class="m-surface__sub">الفترة: 2026-09-21 حتى 2026-09-30 · العملة: دينار</p>
-            <button type="button" class="m-btn m-btn--light aft-hero__action">عرض التقرير الكامل</button>
+            <button type="button" class="m-btn m-btn--secondary m-btn--radius-limited aft-hero__action">عرض التقرير الكامل</button>
           </div>
         </div>
 
@@ -209,8 +247,8 @@
          3) ملخص البيانات المركب (D) — بنية واحدة × محتويات
     ====================================================== -->
     <section class="panel" id="summary-variants">
-      <h2>3) ملخص البيانات المركب — بنية واحدة × محتويات <span class="status-chip">PROPOSED</span></h2>
-      <p class="panel-note">كل ملخص: عنوان + أيقونة اختيارية + قيمة رئيسية + وحدة/وصف + مقارنة بنص + رسم صغير اختياري + إجراء اختياري + تفاصيل قابلة للفتح. المستهلك يغيّر العنوان والقيم والوحدة والألوان (مفاتيح الفئات) وعدد الدوائر ونوع الرسم من HTML دون إعادة بناء البنية — لا معلومة في بطاقة مستقلة لكل منها: الملخص داخل لوحة أبيض واحدة أو على الصفحة.</p>
+      <h2>3) ملخص البيانات المركب — Composition Pattern <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note"><span dir="ltr">aft-summary</span> تركيب موثق داخل هذه المعاينة، وليس مكوّنًا مستخرجًا مستقلًا: الرأس (أيقونة + عنوان + إجراء) · القيمة · الاتجاه · رسم صغير اختياري · تفاصيل قابلة للفتح. مسؤولية المستهلك توفير المحتوى والبيانات والرسم المختار؛ البنية والأمثلة تتغير من HTML دون توسيع API للمكوّنات.</p>
 
       <div class="aft-surfaces" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
 
@@ -485,7 +523,7 @@
 
         <h3>5-ب) الصفر والمجهول وغير المتاح — لا تضخيم ولا خلط</h3>
         <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-edge" data-chart-packed data-rmax="52"
-             data-summary-text="موجبة 1,200 دائرة حقيقية · صفر حلقة شرطة و«0» (ليست دائرة بحجم صفري) · المجهول «—» لأن data-value غائبة كليًا · غير المتاح «—» لأن القيمة غير قابلة للتحليل — المجهول ≠ الصفر ≠ غير المتاح.">
+             data-summary-text="موجبة 1,200 دائرة حقيقية فقط · الصفر والمجهول وغير المتاح صفوف حالة منفصلة بلا دوائر مصطنعة — المجهول (سمة غائبة) ≠ الصفر ≠ غير المتاح (قيمة غير قابلة للتحليل).">
           <ul class="m-chart__data" hidden>
             <li data-series="a" data-label="محصّل" data-value="1200" data-display="1,200"></li>
             <li data-series="b" data-label="مسترد" data-value="0"></li>
@@ -560,6 +598,33 @@
     <!-- =====================================================
          6) الأقسام والصفوف — قواعد After فوق B04 (E)
     ====================================================== -->
+    <section class="panel" id="repair-cases">
+      <h2>حالات الإصلاح — دوائر صغيرة وحالة فارغة <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">المساحة صادقة دون حد أدنى مصطنع. الرقم الذي لا يتسع ينتقل إلى صف خارجي حتى عند إخفاء المفتاح الكامل؛ الحالات غير الموجبة منفصلة عن الرسم. التكوين البصري يحتاج مراجعة المالك.</p>
+      <div class="aft-panel">
+        <h3 class="aft-panel__title">فرق شديد جدًا — 1,000,000 مقابل 1</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="44" data-legend="off" style="--packed-overlap: 8px" id="circ-tiny">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="القيمة الكبيرة" data-value="1000000" data-display="1,000,000"></li>
+            <li data-series="b" data-label="القيمة الصغيرة" data-value="1" data-display="1"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+      </div>
+      <div class="aft-panel">
+        <h3 class="aft-panel__title">لا توجد قيم موجبة قابلة للرسم</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-legend="off" id="circ-empty">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="صفر" data-value="0"></li>
+            <li data-series="b" data-label="مجهول"></li>
+            <li data-series="c" data-label="غير متاح" data-value="invalid"></li>
+            <li data-series="d" data-label="سالب" data-value="-2400" data-display="-2,400"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" id="sections-rows">
       <h2>6) الأقسام والصفوف — تجميع دون بطاقات زائدة <span class="status-chip">PROPOSED</span></h2>
       <p class="panel-note">عنوان قسم + وصف مختصر + صفوف متصلة بفواصل هادئة + قيمة ثانوية واضحة. الصف القابل للفتح رابط حقيقي (a.m-row) فقط عندما يكون الفتح فعليًا، والقسم القابل للطي مفتاح aria-expanded حقيقي. لا ظل ولا سطح منفصل لكل صف ولا تحويل كل عنصر إلى بطاقة — التجميع بالعنوان والمسافة والفاصل.</p>
@@ -641,8 +706,8 @@
          7) الأسطح البترولية — Calm / Waves / Depth / Plain (F)
     ====================================================== -->
     <section class="panel" id="surfaces">
-      <h2>7) الأسطح البترولية — أربع معالجات بمحتوى واحد <span class="status-chip">PROPOSED</span></h2>
-      <p class="panel-note">S01 كما هو: Calm (تدرج وإضاءة هادئة بلا موجات) · Waves (المرشح الأساسي) · Depth (للسطح البارز فقط) · Plain (بلا زخرفة). لا موجات خلف حقول أو أزرار، لا زجاج شامل، لا WebGL/Canvas، لا حركة مستمرة؛ النص في طبقة محتوى مستقلة فوق الزخرفة، والموجات أصول SVG قابلة للتعديل من <span dir="ltr">assets/surfaces/*.svg</span>.</p>
+      <h2>7) خيارات السطح البترولي — عند الحاجة فقط <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">الملخص الفاتح أعلاه هو المثال الأول والافتراضي في هذه اللوحة. خيارات S01 البترولية محدودة وليست قاعدة النظام: Calm لتدرج وإضاءة هادئة بلا موجات، Waves لموجة ساكنة خافتة على سطح بارز، Depth لسطح بارز عند الحاجة إلى فصل بصري أقوى، وPlain عندما تكفي الأرضية البترولية بلا زخرفة. لا موجات خلف الحقول أو الأزرار أو الصفوف، ولا خلفية عامة أو Canvas أو حركة مستمرة. زخرفة السطح محصورة به؛ النص والتفاعل في طبقة مستقلة أعلى الموجة. جميع التركيبات المعروضة PROPOSED.</p>
 
       <div class="aft-surfaces" id="surfaces-grid">
         <div class="m-surface m-surface--calm" id="s-calm">
