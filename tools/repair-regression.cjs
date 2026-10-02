@@ -215,6 +215,8 @@ const fixtures = [
   {id:'unknown-only',v:[undefined]},
   {id:'unavailable-only',v:['invalid']},
   {id:'negative-only',v:[-2400]},
+  {id:'no-positive',v:[0,undefined,'invalid',-2400],off:true},
+  {id:'invalid-scale-empty',v:[0],max:-1},
   {id:'empty',v:[]}
 ];
 async function packedChecks(page,base) {

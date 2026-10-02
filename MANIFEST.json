@@ -62,7 +62,7 @@
   "components/data/data.css": "22bdf093ff2500f42387368d1ebbfebf5102db16b73e22523755e88a9e3f863b",
   "components/data/data.js": "e1ebee3b42d3828734a479f6df24313980f21ad3f806ebfdd4cc33a3db8751ae",
   "components/data/packed-circle.css": "8a2253d084ae92122077e7a1ffb109b6b1506d061853f49b766e2ae1ef586e32",
-  "components/data/packed-circle.js": "3d8a5090253fdcd4e24138323b0274e7f35ea4bed87ba05fca5fddd8000c029d",
+  "components/data/packed-circle.js": "3db0d570d16d58c082eb99ed2f045ddcbf7356d58d9965f8481b90c2d44ccd38",
   "components/data/specification.md": "bfc80938a66e0ef31a365222fae30a0111d41371ffb5fb15e5f156a3b7acbdf5",
   "components/fields/fields.css": "010f42ad5b7660f206edb4cb27ede7c23000caa140f75ab54f6bc7d0bad222f7",
   "components/fields/fields.js": "18d30e091d2b6cf301e5f35751a920d11bd6fe29207e4720505ff8ccd3507011",
@@ -377,6 +377,6 @@
   "tools/contrast-check.py": "811d0aee750ed8730e1133d0897346b1e7af9f19de7bf38e52651acc9f5f249d",
   "tools/hugeicons-convert.py": "3ed183a63e565882534a62b673a5f10966ee65879705712d88632849387b4515",
   "tools/manifest-build.py": "7f75543f8254826c8f911b95a3073432b69185a8a0b0de5f14b7377030f4852f",
-  "tools/repair-regression.cjs": "1fc527a72f875092e9d80eaad45643142bf39a650c3400072368d1e60a25feb1",
+  "tools/repair-regression.cjs": "15e25333c85052fec5d71770d34bf329d83ba3d8bd2ed8f1eb314cdd7536e17e",
   "tools/s01-screenshots.py": "4211287f08502653f6411e72add38353a37ebbf581312834a9ebc2173f837fdb"
 }

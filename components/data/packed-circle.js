@@ -194,7 +194,17 @@
     }
     plot.innerHTML = '';
     plot.appendChild(err);
-    renderKeyOnly(chart);
+    if (!positiveExists) {
+      var empty = document.createElement('p');
+      empty.className = 'm-packed__empty';
+      empty.setAttribute('data-empty', '');
+      empty.textContent = 'لا توجد قيم موجبة قابلة للرسم المساحي.';
+      plot.appendChild(empty);
+      var states = stateList(itemsOf(chart));
+      if (states.children.length) plot.appendChild(states);
+    } else {
+      renderKeyOnly(chart);
+    }
     chart.dispatchEvent(new CustomEvent('micro-packed:rendered', {
       bubbles: true, detail: { ok: false, reason: 'scale-invalid', vmaxDerived: vmaxDerived || null }
     }));
