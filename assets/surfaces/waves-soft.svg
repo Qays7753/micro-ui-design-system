@@ -1,8 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 160" preserveAspectRatio="none">
-  <!-- موجات بترولية خافتة — المرشح الأساسي (S01) — طبقات قابلة للتعديل -->
-  <!-- الألوان من الأسس المعتمدة: صفحة/تحديد/مشمشي بشفافيات خافتة مقترحة -->
-  <!-- المرحلة الثانية: طبقة زخرفة غير تفاعلية (pointer-events:none عبر CSS) -->
-  <path fill="#DFEEE6" fill-opacity="0.14" d="M0,64 C70,36 150,88 225,62 C290,40 330,58 375,44 L375,160 L0,160 Z"/>
-  <path fill="#F4AD76" fill-opacity="0.08" d="M0,104 C90,76 210,124 300,96 C340,84 360,92 375,88 L375,160 L0,160 Z"/>
-  <path fill="#F7F8F4" fill-opacity="0.10" d="M0,138 C110,116 250,150 375,124 L375,160 L0,160 Z"/>
+  <!-- S01 — مستويان عريضان وهادئان، مستلهمان من الانحناءات اللونية المنتشرة في المرجع.
+       شكلان غير متماثلين بتدرج تدريجي؛ ألوان الأسس المعتمدة فقط. -->
+  <defs>
+    <linearGradient id="plane-mint" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+      <stop offset=".42" stop-color="#DFEEE6" stop-opacity=".035"/>
+      <stop offset="1" stop-color="#DFEEE6" stop-opacity=".12"/>
+    </linearGradient>
+    <linearGradient id="plane-ivory" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7F8F4" stop-opacity="0"/>
+      <stop offset=".58" stop-color="#F7F8F4" stop-opacity=".018"/>
+      <stop offset="1" stop-color="#F7F8F4" stop-opacity=".075"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#plane-mint)" d="M0 63C67 52 116 79 172 73c64-7 113-37 203-29v116H0Z"/>
+  <path fill="url(#plane-ivory)" d="M0 108c71-18 127 9 188 8 74-1 120-28 187-17v61H0Z"/>
 </svg>

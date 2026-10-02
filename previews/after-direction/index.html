@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — لوحة اتجاه After (previews/after-direction/index.html)
+  الحالة: DRAFT FOR REVIEW — تركيب مرجعي قابل للتعديل لا شاشة إنتاجية
+  ولا User Flow ولا مرتبط ببيانات حقيقية أو API أو منطق أعمال.
+  التشغيل من جذر المستودع: python3 -m http.server 8080 → /previews/after-direction/
+  المكوّنات من مصدرها الحقيقي components/ (S01·B05·packed PROPOSED·B04·B02·B01·B06·العارض)
+  وهذا الملف + board.css + board.js طبقة تركيب ومعاينة فقط.
+  اتجاه After المستهدف: تسلسل بصري قوي · ضجيج أقل · تجميع مفهوم ·
+  إجراء رئيسي واضح · دوائر مقارنة بقيم حقيقية · مصفوفة حالات حقل واحد.
+  لا يُنسخ من المراجع: الألوان/الخطوط/الأسماء/البيانات/الشاشات/الخلفيات الداكنة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — لوحة اتجاه After (تركيب مرجعي)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../../components/data/packed-circle.css">
+  <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../../components/messages/messages.css">
+  <link rel="stylesheet" href="../../components/carousel/carousel.css">
+  <link rel="stylesheet" href="../board-base.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" style="display:none" aria-hidden="true"></svg>
+
+  <header class="board-header">
+    <h1>Micro — لوحة اتجاه After <span class="status-chip">DRAFT FOR REVIEW</span></h1>
+    <p class="meta">تركيب مرجعي قابل للتعديل يترجم جودة اتجاه After إلى هوية Micro: تسلسل بصري قوي، ضجيج أقل، تجميع بالمحاذاة والعنوان، إجراء رئيسي واضح، دوائر مقارنة بقيم حقيقية، ومصفوفة حالات حقل واحد. كل المكوّنات من مصدرها في components/ — هذا الملف طبقة تركيب فقط. لا شاشة إنتاجية ولا بيانات حقيقية. أمر التشغيل: <span dir="ltr">python3 -m http.server 8080</span> من جذر المستودع. المراجع REFERENCE ONLY في <span dir="ltr">references/visual-direction/after/</span> ولم تُستخدم خلفيات أو بديل مصدر.</p>
+  </header>
+
+  <main>
+
+    <!-- =====================================================
+         1) تركيب After الكامل — عمود مرجعي (A + D + E + F + G مدمجة)
+         محتوى محايد مرتبط بـMicro: إيرادات/مصروفات/طلبات/توريد/تحصيل.
+    ====================================================== -->
+    <section class="panel" id="composition">
+      <h2>1) تركيب After — عمود مرجعي كامل <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">ملخص فاتح هو المثال الافتراضي أولًا، بدرجات <span dir="ltr">#B8D9DC → #DFEEE6 → #F7F8F4</span> ونص داكن؛ ويليه خيار السطح البترولي المحدود عند الحاجة فقط. بعده قيم رئيسية بلا بطاقات ← لوحة بيضاء واحدة للرسم ← مؤشرا تقدم ← قسم بصفوف متصلة ← رسالة مساعدة وإجراء. المحتوى أمثلة ثابتة من HTML — عدّل القيم هنا وستنعكس مباشرة. التكوين كله PROPOSED للمراجعة.</p>
+
+      <div class="aft-comp" id="aft-comp">
+
+        <!-- 1-أ) ملخص فاتح — المثال الافتراضي المقترح؛ مستويان ساكنان ومحليان -->
+        <div class="aft-light-summary" id="light-summary">
+          <svg class="aft-light-summary__waves" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="summary-plane-mint" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#DFEEE6" stop-opacity=".2"/>
+                <stop offset="1" stop-color="#DFEEE6" stop-opacity=".48"/>
+              </linearGradient>
+              <linearGradient id="summary-plane-petroleum" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#507F8B" stop-opacity="0"/>
+                <stop offset=".65" stop-color="#507F8B" stop-opacity=".035"/>
+                <stop offset="1" stop-color="#507F8B" stop-opacity=".09"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#summary-plane-mint)" d="M-24 78c93 2 146-38 256-24 91 12 167 37 244 22 59-11 99-25 148-18v122H-24Z"/>
+            <path fill="url(#summary-plane-petroleum)" d="M-24 123c100-21 178 14 279 12 112-2 203-42 369-25v70H-24Z"/>
+          </svg>
+          <div class="aft-light-summary__content">
+            <div class="aft-light-summary__head">
+              <span class="aft-light-summary__tile" aria-hidden="true"><svg><use href="#i-wallet"/></svg></span>
+              <div class="aft-light-summary__heading">
+                <h3 class="aft-light-summary__title">نظرة اليوم</h3>
+                <span class="status-chip">PROPOSED</span>
+              </div>
+            </div>
+            <p class="aft-light-summary__label">التحصيل اليوم</p>
+            <div class="aft-light-summary__amount-row">
+              <p class="aft-light-summary__amount">4,812.50</p>
+              <span class="aft-light-summary__unit">د.أ</span>
+              <span class="aft-light-summary__trend">
+                <svg aria-hidden="true"><use href="#i-arrow-up"/></svg>
+                <span dir="ltr">+6</span>
+                <span>عن أمس</span>
+              </span>
+            </div>
+            <div class="aft-light-summary__support">
+              <div class="aft-light-summary__metric">
+                <span class="aft-light-summary__metric-label">طلبات قيد التجهيز</span>
+                <span class="aft-light-summary__metric-value" dir="ltr">12</span>
+              </div>
+              <div class="aft-light-summary__metric">
+                <span class="aft-light-summary__metric-label">فواتير مستحقة</span>
+                <span class="aft-light-summary__metric-value" dir="ltr">3</span>
+              </div>
+            </div>
+            <button type="button" class="m-btn m-btn--secondary aft-light-summary__action">عرض التفاصيل</button>
+          </div>
+        </div>
+
+        <!-- 1-ب) خيار بترولي محدود: ملخص بيانات S01 --waves -->
+        <div class="m-surface m-surface--waves aft-hero" id="hero-surface">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <div class="aft-hero__head">
+              <span class="aft-hero__tile" aria-hidden="true"><svg><use href="#i-wallet"/></svg></span>
+              <h3 class="aft-hero__title" id="aft-hero-title">ملخص الأداء التشغيلي</h3>
+            </div>
+            <p class="m-surface__label">الإيرادات المحصّلة — الأسبوع الحالي</p>
+            <div class="aft-hero__amount-row">
+              <p class="m-surface__amount" id="hero-amount">7,532</p>
+              <span class="aft-hero__trend">
+                <svg aria-hidden="true"><use href="#i-arrow-up"/></svg>
+                <span dir="ltr">+8%</span>
+                <span>مقارنة بالأسبوع الماضي</span>
+              </span>
+            </div>
+            <p class="m-surface__sub">الفترة: 2026-09-21 حتى 2026-09-30 · العملة: دينار</p>
+            <button type="button" class="m-btn m-btn--secondary m-btn--radius-limited aft-hero__action">عرض التقرير الكامل</button>
+          </div>
+        </div>
+
+        <!-- 1-ب) القيم الرئيسية: على خلفية الصفحة مباشرة — لا بطاقة لكل قيمة -->
+        <div class="aft-kpis" id="aft-kpis">
+          <div class="m-stat">
+            <span class="m-stat__label">المصروفات التشغيلية</span>
+            <span class="m-stat__value"><span class="m-stat__num">3,333</span><span class="m-stat__unit">د.أ</span>
+              <span class="m-stat__delta m-stat__delta--down m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-down"/></svg>-4%</span>
+            </span>
+          </div>
+          <div class="m-stat">
+            <span class="m-stat__label">الطلبات النشطة</span>
+            <span class="m-stat__value"><span class="m-stat__num">132</span><span class="m-stat__unit">طلب</span>
+              <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+12</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- 1-ج) اللوحة البيضاء الوحيدة: الدوائر المتداخلة بقيم حقيقية
+             (امتداد PROPOSED فوق عقد B05 — القيم مثال ثابت من HTML) -->
+        <div class="aft-panel" id="circ-panel">
+          <h4 class="aft-panel__title">مقارنة القيم — الفترة الحالية</h4>
+          <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="44" style="--packed-overlap: 8px"
+               data-summary-text="مقارنة مساحية بين قيم مستقلة: المساحة ∝ القيمة. التداخل إشارة علاقة بصرية لا عملية حسابية ولا تقاطعًا ماليًا."
+               data-title="الإيرادات والربح والتكاليف — قيم حقيقية داخل الدوائر لا نسب">
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+              <li data-series="b" data-label="الربح" data-value="3566" data-display="3,566"></li>
+              <li data-series="c" data-label="التكاليف" data-value="3333" data-display="3,333"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <p class="aft-panel__note">لا نسب مئوية داخل الدوائر · التداخل لا يخفي رقمًا أو تسمية · القيم قابلة للتعديل من عناصر <span dir="ltr">data-value / data-display</span> أعلاه. امتداد PROPOSED بانتظار اعتماد المالك.</p>
+        </div>
+
+        <!-- 1-د) مؤشرا تقدم: نص + قيمة + شريط — بلا بطاقات -->
+        <div class="aft-section" id="progress-section" aria-label="مؤشرات التقدم">
+          <div class="m-progress">
+            <div class="m-progress__head">
+              <span class="m-progress__label">تحصيل فواتير الأسبوع</span>
+              <span class="m-progress__value" dir="ltr">68%</span>
+            </div>
+            <div class="m-progress__track"><div class="m-progress__bar" style="--progress: 68%"></div></div>
+          </div>
+          <div class="m-progress">
+            <div class="m-progress__head">
+              <span class="m-progress__label">تغذية المخزون — خط الشمال</span>
+              <span class="m-progress__value" dir="ltr">45%</span>
+            </div>
+            <div class="m-progress__track"><div class="m-progress__bar" style="--progress: 45%"></div></div>
+          </div>
+        </div>
+
+        <!-- 1-هـ) قسم منظم بصفوف متصلة (B04): تجميع بالعنوان والفاصل —
+             لا سطح منفصل ولا ظل لكل صف؛ صف الفتح رابط حقيقي فقط عند فتح فعلي -->
+        <div class="aft-section" id="rows-section">
+          <h3 class="m-section-title">طلبات قيد التنفيذ</h3>
+          <p class="m-section-desc">3 من 12 طلبًا نشطًا هذا اليوم — القيم الثانوية ظاهرة دائمًا.</p>
+          <hr class="m-divider">
+
+          <a class="m-row" href="#rows-section">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-package"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">طلب قيد التجهيز — فرع الوسط</span>
+              <span class="m-row__subtitle">ORD-10233 · اليوم 12:30</span>
+            </div>
+            <span class="m-row__value" dir="ltr">3 بنود</span>
+            <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+          </a>
+          <hr class="m-divider">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-truck"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">توصيلة الشمال</span>
+              <span class="m-row__subtitle">السائق غير مسند بعد</span>
+            </div>
+            <span class="m-badge m-badge--warning"><span class="m-badge__dot" aria-hidden="true"></span>متأخرة 25 د</span>
+          </div>
+          <hr class="m-divider">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-wallet"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">تحصيل فاتورة INV-2214</span>
+              <span class="m-row__subtitle">مؤسسة النور للتوريدات — فرع وسط المدينة</span>
+            </div>
+            <span class="m-row__value" dir="ltr">1,240.50 د.أ</span>
+          </div>
+          <hr class="m-divider">
+
+          <a class="m-row" href="#rows-section">
+            <div class="m-row__text">
+              <span class="m-row__title">عرض بقية طلبات اليوم</span>
+              <span class="m-row__subtitle">تُفتح قائمة الطلبات الكاملة</span>
+            </div>
+            <span class="m-counter" aria-label="9 طلبات أخرى">9</span>
+            <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+          </a>
+        </div>
+
+        <!-- 1-و) رسالة مساعدة (B06) — شرح لا زخرفة -->
+        <div class="m-note m-note--info aft-note" role="note" id="help-note">
+          <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <div class="m-note__text">
+            <span class="m-note__title">معلومة</span>
+            <p class="m-note__body">التحصيل يُحدّث لحظة تسجيل الدفعة في المصدر؛ الفواتير المؤجلة لا تُحتسب هنا. أرقام هذا التركيب أمثلة ثابتة للعرض.</p>
+          </div>
+        </div>
+
+        <!-- 1-ز) الإجراء الرئيسي الواحد — واضح وبارز -->
+        <div class="aft-action" id="primary-action">
+          <button type="button" class="m-btn m-btn--primary m-btn--block">تسوية يوم العمل</button>
+          <p class="m-section-desc">إجراء رئيسي واحد للتركيب كله — الإجراءات الثانوية داخل مواضعها.</p>
+        </div>
+
+      </div><!-- /aft-comp -->
+    </section>
+
+    <!-- =====================================================
+         2) قياس الاستجابة والنص على العمود الحقيقي نفسه
+         (بدل نسخ متعددة: اللوحة عمود مرن — الفحص بأعراض 320/360/390/430
+          وبتكبير النص 200% من أداة الأدلة على هذا العمود نفسه)
+    ====================================================== -->
+    <section class="panel" id="measure">
+      <h2>2) القياس على العرض الحقيقي — 320 / 360 / 390 / 430 وتكبير النص</h2>
+      <p class="panel-note">التركيب أعلاه عمود واحد مرن (حد أقصى 430px) — لا نسخ مكررة تنساب عن التعديل. أداة الأدلة <span dir="ltr">tools/after-direction-screenshots.py</span> تفحص العمود نفسه بأربع أعراض حقيقية + محاكاة زيادة حجم الخط 200% + تفضيل تقليل الحركة الفعلي، وتوثيق كل قياس في verification.txt.</p>
+      <div class="lab-controls">
+        <button type="button" class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
+      </div>
+      <p class="demo-note">المحاكاة على عمود التركيب (#aft-comp) — مكافئة للنص فقط، وليست تكبير متصفح/نظام مضمون التكافؤ (آلية لوحات المعاينة نفسها).</p>
+    </section>
+
+    <!-- =====================================================
+         3) ملخص البيانات المركب (D) — بنية واحدة × محتويات
+    ====================================================== -->
+    <section class="panel" id="summary-variants">
+      <h2>3) ملخص البيانات المركب — Composition Pattern <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note"><span dir="ltr">aft-summary</span> تركيب موثق داخل هذه المعاينة، وليس مكوّنًا مستخرجًا مستقلًا: الرأس (أيقونة + عنوان + إجراء) · القيمة · الاتجاه · رسم صغير اختياري · تفاصيل قابلة للفتح. مسؤولية المستهلك توفير المحتوى والبيانات والرسم المختار؛ البنية والأمثلة تتغير من HTML دون توسيع API للمكوّنات.</p>
+
+      <div class="aft-surfaces" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
+
+        <!-- ملخص أ: قيمة + اتجاه + دوائر صغيرة (2) + تفاصيل -->
+        <div class="aft-panel">
+          <div class="aft-summary" id="sum-a">
+            <div class="aft-summary__head">
+              <svg class="aft-summary__icon" aria-hidden="true"><use href="#i-package"/></svg>
+              <h4 class="aft-summary__title">حركة الطلبات — اليوم</h4>
+              <button type="button" class="m-btn m-btn--secondary m-btn--icon aft-summary__more" data-card-expand
+                      aria-expanded="false" aria-controls="aft-details-a"
+                      data-label-closed="تفاصيل الملخص الأول" data-label-open="إخفاء التفاصيل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-down"/></svg><span class="m-btn__sim-tag">تفاصيل الملخص الأول</span></button>
+            </div>
+            <div class="m-stat">
+              <span class="m-stat__value"><span class="m-stat__num">25</span><span class="m-stat__unit">طلب</span>
+                <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+5</span>
+              </span>
+            </div>
+            <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="34" data-legend="off" style="--packed-overlap: 10px">
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="مكتملة" data-value="11" data-display="11"></li>
+                <li data-series="c" data-label="جديدة" data-value="8" data-display="8"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+            </div>
+            <p class="aft-panel__note">الدوائر مقارنة قيمتين مستقلتين (11 و8) — لا إجمالي ولا نسب هنا.</p>
+            <div class="aft-summary__details" id="aft-details-a" data-card-details hidden>
+              <p class="aft-panel__note">التفتح من زر الرأس الصريح: <span dir="ltr">aria-expanded/aria-controls</span> والنص المعلن من سمتَي <span dir="ltr">data-label-closed/open</span>. القيم من HTML الملخص نفسه.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ملخص ب: نفس البنية — قيمة + شريط تقدم بدل الدوائر -->
+        <div class="aft-panel">
+          <div class="aft-summary" id="sum-b">
+            <div class="aft-summary__head">
+              <svg class="aft-summary__icon" aria-hidden="true"><use href="#i-wallet"/></svg>
+              <h4 class="aft-summary__title">تحصيل الفواتير — الأسبوع</h4>
+              <button type="button" class="m-btn m-btn--secondary m-btn--icon aft-summary__more" data-card-expand
+                      aria-expanded="false" aria-controls="aft-details-b"
+                      data-label-closed="تفاصيل الملخص الثاني" data-label-open="إخفاء التفاصيل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-down"/></svg><span class="m-btn__sim-tag">تفاصيل الملخص الثاني</span></button>
+            </div>
+            <div class="m-stat">
+              <span class="m-stat__value"><span class="m-stat__num">16,410</span><span class="m-stat__unit">د.أ</span>
+                <span class="m-stat__delta m-stat__delta--down m-stat__delta--tone-negative"><svg aria-hidden="true"><use href="#i-arrow-down"/></svg>-2%</span>
+              </span>
+              <span class="m-stat__label">من أصل 24,150 د.أ مستهدفة هذا الأسبوع</span>
+            </div>
+            <div class="m-progress">
+              <div class="m-progress__track"><div class="m-progress__bar" style="--progress: 68%"></div></div>
+            </div>
+            <p class="aft-panel__note">نفس بنية الملخص الأول: الرسم صار شريط تقدم — تغيير نوع الرسم من HTML دون إعادة بناء.</p>
+            <div class="aft-summary__details" id="aft-details-b" data-card-details hidden>
+              <p class="aft-panel__note">المستهدف والمحقق نصان ظاهران لا لون وحده؛ الشريط شكل مكمّل للنص.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ملخص ج: نفس البنية — بسيط بلا رسم، مع إجراء -->
+        <div class="aft-panel">
+          <div class="aft-summary" id="sum-c">
+            <div class="aft-summary__head">
+              <svg class="aft-summary__icon" aria-hidden="true"><use href="#i-truck"/></svg>
+              <h4 class="aft-summary__title">توصيلات اليوم</h4>
+            </div>
+            <div class="m-stat">
+              <span class="m-stat__value"><span class="m-stat__num">18</span><span class="m-stat__unit">توصيلة</span></span>
+              <span class="m-stat__label">قيد التنفيذ الآن: 6 — بانتظار الاستلام: 12</span>
+            </div>
+            <button type="button" class="m-btn m-btn--secondary">فتح خطة التوصيل</button>
+            <p class="aft-panel__note">بلا رسم إطلاقًا — الرسم اختياري في البنية، والإجراء زر B01 كما هو.</p>
+          </div>
+        </div>
+
+        <!-- ملخص د: نسخة معدلة من (أ) — إثبات قابلية التعديل بالبنية نفسها -->
+        <div class="aft-panel">
+          <div class="aft-summary" id="sum-d">
+            <div class="aft-summary__head">
+              <svg class="aft-summary__icon" aria-hidden="true"><use href="#i-grid"/></svg>
+              <h4 class="aft-summary__title">أحجام الشحنات — الأسبوع</h4>
+              <button type="button" class="m-btn m-btn--secondary m-btn--icon aft-summary__more" data-card-expand
+                      aria-expanded="false" aria-controls="aft-details-d"
+                      data-label-closed="تفاصيل الملخص الرابع" data-label-open="إخفاء التفاصيل"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-down"/></svg><span class="m-btn__sim-tag">تفاصيل الملخص الرابع</span></button>
+            </div>
+            <div class="m-stat">
+              <span class="m-stat__value"><span class="m-stat__num">9,204</span><span class="m-stat__unit">كجم</span>
+                <span class="m-stat__delta m-stat__delta--up m-stat__delta--tone-positive"><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>+310</span>
+              </span>
+            </div>
+            <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="30" data-legend="off" style="--packed-overlap: 8px">
+              <ul class="m-chart__data" hidden>
+                <li data-series="d" data-label="صغير" data-value="1200" data-display="1,200"></li>
+                <li data-series="e" data-label="متوسط" data-value="2904" data-display="2,904"></li>
+                <li data-series="b" data-label="كبير" data-value="5100" data-display="5,100"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+            </div>
+            <p class="aft-panel__note">نسخة معدلة من الملخص (أ): عنوان ووحدة وقيم مختلفة وثلاث دوائر بمفاتيح فئات أخرى (d/e/b) — البنية والأصناف نفسها دون تعديل CSS.</p>
+            <div class="aft-summary__details" id="aft-details-d" data-card-details hidden>
+              <p class="aft-panel__note">عدد الدوائر ومفاتيح الألوان (data-series a–e) وقيمها كلها بيانات HTML المستهلك.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         4) مصفوفة حالات الحقل الثماني (B) — حقل واحد × حالات
+    ====================================================== -->
+    <section class="panel" id="field-matrix">
+      <h2>4) مصفوفة حالات الحقل — حقل واحد × ثماني حالات <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">نفس حقل «رقم الطلب» النصي بعقد B02 الحرفي (m-field) — التسمية ظاهرة دائمًا، الفارغ ≠ صفر، الامتلاء ≠ نجاح، الخطأ يحتفظ بالقيمة ويعرض رسالة تصحيحية، القراءة فقط ليست معطلة. الحالات ثابتة بأصناف has-* للعرض، والحقل الأخير تفاعلي حقيقي. شكل الحالة النشطة (التركيز الفعلي) مفحوص في أداة الأدلة.</p>
+
+      <div class="aft-states" id="field-states">
+
+        <div class="aft-state">
+          <span class="aft-state__label">فارغ<span class="aft-state__hint">placeholder تلميح لا تسمية — الفارغ ليس صفرًا</span></span>
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="aft-f-empty">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-empty" type="text" placeholder="مثال: ORD-10233">
+            </div>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">تركيز<span class="aft-state__hint">حد بترولي + حلقة 2px بفاصل أبيض — حالة has-focus ثابتة للعرض</span></span>
+          <div class="m-field has-focus" data-micro-field>
+            <label class="m-field__label" for="aft-f-focus">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-focus" type="text" placeholder="مثال: ORD-10233">
+            </div>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">كتابة<span class="aft-state__hint">أثناء الإدخال: تركيز + قيمة جزئية — لا شكل ثالث</span></span>
+          <div class="m-field has-focus" data-micro-field>
+            <label class="m-field__label" for="aft-f-typing">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-typing" type="text" value="ORD-1" placeholder="مثال: ORD-10233">
+            </div>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">ممتلئ<span class="aft-state__hint">بلا شكل نجاح — الامتلاء ليس تحققًا</span></span>
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="aft-f-filled">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-filled" type="text" value="ORD-10233" placeholder="مثال: ORD-10233">
+            </div>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">خطأ<span class="aft-state__hint">القيمة باقية + رسالة تشرح التصحيح (aria-describedby)</span></span>
+          <div class="m-field has-error" data-micro-field>
+            <label class="m-field__label" for="aft-f-error">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-error" type="text" value="ORD-10" aria-describedby="aft-msg-error">
+            </div>
+            <p class="m-field__msg is-visible" id="aft-msg-error">رقم الطلب ناقص — أكمله بصيغة ORD-10233 (8 أحرف).</p>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">نجاح<span class="aft-state__hint">عند تحقق حقيقي فقط — ليس لكل امتلاء</span></span>
+          <div class="m-field has-success" data-micro-field>
+            <label class="m-field__label" for="aft-f-success">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-success" type="text" value="ORD-10233" aria-describedby="aft-msg-success">
+            </div>
+            <p class="m-field__msg is-visible" id="aft-msg-success">تم التحقق: الرقم مطابق بسجل الطلبات.</p>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">معطل<span class="aft-state__hint">أرضية المعطل ولا تركيز ولا إدخال (disabled أصلية)</span></span>
+          <div class="m-field has-disabled" data-micro-field>
+            <label class="m-field__label" for="aft-f-disabled">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-disabled" type="text" value="ORD-10233" disabled>
+            </div>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">قراءة فقط<span class="aft-state__hint">وضوح كامل وقابل للتحديد والنسخ — ليس معطلًا (readonly أصلية)</span></span>
+          <div class="m-field has-readonly" data-micro-field>
+            <label class="m-field__label" for="aft-f-readonly">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-readonly" type="text" value="ORD-10233" readonly>
+            </div>
+            <p class="m-field__msg is-visible">عرض من سجل مغلق — القيمة قابلة للنسخ.</p>
+          </div>
+        </div>
+
+        <div class="aft-state">
+          <span class="aft-state__label">خطأ + تركيز<span class="aft-state__hint">الحالتان متوافقتان — حد الخطأ مع حلقة التركيز</span></span>
+          <div class="m-field has-error has-focus" data-micro-field>
+            <label class="m-field__label" for="aft-f-errorfocus">رقم الطلب</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="aft-f-errorfocus" type="text" value="ORD-1" aria-describedby="aft-msg-errorfocus">
+            </div>
+            <p class="m-field__msg is-visible" id="aft-msg-errorfocus">أكمل الرقم بصيغة ORD-10233.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- شريط الأشكال: نص قصير/طويل/بحث/مبلغ/كمية — تفاعلي حقيقي -->
+      <h3 style="margin:24px 0 8px;font-size:15px;line-height:24px">أشكال الإدخال نفسها — تفاعلية (بحث بمسح · مبلغ معزول · كمية بخطوة B01 · نص طويل بعدّاد)</h3>
+      <div class="aft-shapes" id="field-shapes">
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="aft-f-search">بحث في الطلبات</label>
+          <div class="m-field__control">
+            <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <input class="m-field__input" id="aft-f-search" type="search" placeholder="رقم الطلب أو اسم العميل">
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg><span class="m-btn__sim-tag">مسح البحث</span></button>
+          </div>
+        </div>
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="aft-f-amount">قيمة الفاتورة</label>
+          <div class="m-field__control">
+            <input class="m-field__input m-field__input--num" id="aft-f-amount" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
+            <span class="m-field__unit">د.أ</span>
+          </div>
+        </div>
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="aft-f-qty">كمية الصنف</label>
+          <div class="m-field__control">
+            <div class="m-field__stepper">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg><span class="m-btn__sim-tag">إنقاص الكمية</span></button>
+              <input class="m-field__input m-field__input--num" id="aft-f-qty" type="text" inputmode="numeric" value="3" min="0" max="99" step="1">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg><span class="m-btn__sim-tag">زيادة الكمية</span></button>
+            </div>
+            <span class="m-field__unit">كرتون</span>
+          </div>
+        </div>
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="aft-f-long">ملاحظة التسليم</label>
+          <div class="m-field__control">
+            <textarea class="m-field__area" id="aft-f-long" maxlength="40" data-maxlength="40" placeholder="ما يجب أن يعرفه المندوب قبل الوصول"></textarea>
+          </div>
+          <span class="m-field__count" dir="ltr">0/40</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         5) الدوائر المتداخلة — الشكل والمنطق (C)
+    ====================================================== -->
+    <section class="panel" id="circles-matrix">
+      <h2>5) الدوائر المتداخلة — الشكل والمنطق <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">امتداد opt-in فوق عقد B05 لا يغيّر سلوكه الافتراضي (PROPOSED — يحتاج مراجعة واعتماد المالك). <strong>donut</strong> توزيع بمقام معلن من المستهلك، و<strong>packed</strong> مقارنة مساحة بين قيم مستقلة — لا يُخلط معنى النوعين ولا يُحسب أي شيء داخل المكوّن. المساحة ∝ القيمة الخام والقطر ∝ √القيمة — بلا حد أدنى يضخّم الصغيرة.</p>
+
+      <div class="aft-circ-labs">
+
+        <h3>5-أ) المثال الثابت المطلوب — القيم الحقيقية داخل الدوائر والمفتاح ظاهر</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-fixed" data-chart-packed data-rmax="44" style="--packed-overlap: 8px"
+             data-summary-text="الإيرادات 7,532 والربح 3,566 والتكاليف 3,333 — قيم مستقلة؛ لا مجموع ولا نسب. حجم كل دائرة من قيمتها الخام (القطر ∝ √القيمة).">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+            <li data-series="b" data-label="الربح" data-value="3566" data-display="3,566"></li>
+            <li data-series="c" data-label="التكاليف" data-value="3333" data-display="3,333"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary></p>
+        </div>
+
+        <h3>5-ب) الصفر والمجهول وغير المتاح — لا تضخيم ولا خلط</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-edge" data-chart-packed data-rmax="52"
+             data-summary-text="موجبة 1,200 دائرة حقيقية فقط · الصفر والمجهول وغير المتاح صفوف حالة منفصلة بلا دوائر مصطنعة — المجهول (سمة غائبة) ≠ الصفر ≠ غير المتاح (قيمة غير قابلة للتحليل).">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="محصّل" data-value="1200" data-display="1,200"></li>
+            <li data-series="b" data-label="مسترد" data-value="0"></li>
+            <li data-series="c" data-label="مؤجل"></li>
+            <li data-series="d" data-label="ممنوع" data-value="غير معروف"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary></p>
+        </div>
+
+        <h3>5-ج) السالب — بعلامته ودلالته، لا دائرة سالبة أبدًا</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-negative" data-chart-packed data-rmax="52"
+             data-summary-text="سالب غير صالح للمساحة: يعرض رقمه المنسق بعلامته مع دلالة الحالة (مع data-display يبقى التنسيق والدلالة معًا) — ولا تُرسم له دائرة موجبة.">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+            <li data-series="b" data-label="خسارة مُعلنة" data-value="-3566" data-display="-3,566"></li>
+            <li data-series="c" data-label="عجز سابق" data-value="-2400"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary></p>
+        </div>
+
+        <h3>5-د) المقياس data-max معلن — أساس المساحة موثق نصيًا لا نسبة داخل الدائرة</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-scale" data-chart-packed data-rmax="44" data-max="10000" style="--packed-overlap: 8px"
+             data-summary-text="المقياس المعلن data-max=10000 أساس النسبة الداخلية فقط — لا يظهر داخل الدوائر ولا يتحول إلى نسبة معروضة؛ المفتاح يبقى بالقيم الخام.">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="مبيعات" data-value="7532" data-display="7,532"></li>
+            <li data-series="b" data-label="مرتجعات" data-value="1200" data-display="1,200"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary></p>
+        </div>
+
+        <h3>5-هـ) مقياس غير صالح — صفر مع موجبة، وسالب: رسالة صريحة بلا استبدال صامت</h3>
+        <div class="aft-circ-labs" style="gap:16px">
+          <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-max-zero" data-chart-packed data-rmax="52" data-max="0"
+               data-summary-text="state: max-zero">
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="7532" data-display="7,532"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--bubbles m-chart--packed" id="circ-max-negative" data-chart-packed data-rmax="52" data-max="-100"
+               data-summary-text="state: max-negative">
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="7532" data-display="7,532"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+
+        <h3>5-و) donut مقابل packed — التمييز بين النوعين</h3>
+        <div class="aft-circ-labs" style="gap:16px">
+          <div class="m-chart m-chart--donut" id="donut-demo" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات"
+               data-title="توزيع الطلبات حسب الحالة (مقام معلن 25 من المستهلك)">
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتملة" data-value="11"></li>
+              <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
+              <li data-series="c" data-label="جديدة" data-value="8"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <p class="aft-panel__note">donut: نسب من مقام معلن صريح (25) ومركز بإجمالي — توزيع أجزاء معروفة. packed أعلاه: قيم مستقلة لا أجزاء؛ لا مقام ولا إجمالي يُدّعى — «خلط صفر ومجهول» لا ينطبق على packed لأنه لا يعلن إجماليًا أصلًا، وفي donut يفرض عقد C2 صراحة التعارض بدل الاستبدال الصامت (مفحوص في دفعة B05).</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         6) الأقسام والصفوف — قواعد After فوق B04 (E)
+    ====================================================== -->
+    <section class="panel" id="repair-cases">
+      <h2>حالات الإصلاح — دوائر صغيرة وحالة فارغة <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">المساحة صادقة دون حد أدنى مصطنع. الرقم الذي لا يتسع ينتقل إلى صف خارجي حتى عند إخفاء المفتاح الكامل؛ الحالات غير الموجبة منفصلة عن الرسم. التكوين البصري يحتاج مراجعة المالك.</p>
+      <div class="aft-panel">
+        <h3 class="aft-panel__title">فرق شديد جدًا — 1,000,000 مقابل 1</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="44" data-legend="off" style="--packed-overlap: 8px" id="circ-tiny">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="القيمة الكبيرة" data-value="1000000" data-display="1,000,000"></li>
+            <li data-series="b" data-label="القيمة الصغيرة" data-value="1" data-display="1"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+      </div>
+      <div class="aft-panel">
+        <h3 class="aft-panel__title">لا توجد قيم موجبة قابلة للرسم</h3>
+        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-legend="off" id="circ-empty">
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="صفر" data-value="0"></li>
+            <li data-series="b" data-label="مجهول"></li>
+            <li data-series="c" data-label="غير متاح" data-value="invalid"></li>
+            <li data-series="d" data-label="سالب" data-value="-2400" data-display="-2,400"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="sections-rows">
+      <h2>6) الأقسام والصفوف — تجميع دون بطاقات زائدة <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">عنوان قسم + وصف مختصر + صفوف متصلة بفواصل هادئة + قيمة ثانوية واضحة. الصف القابل للفتح رابط حقيقي (a.m-row) فقط عندما يكون الفتح فعليًا، والقسم القابل للطي مفتاح aria-expanded حقيقي. لا ظل ولا سطح منفصل لكل صف ولا تحويل كل عنصر إلى بطاقة — التجميع بالعنوان والمسافة والفاصل.</p>
+
+      <div class="aft-comp" style="max-width:430px" id="rows-lab">
+        <div class="aft-section">
+          <h3 class="m-section-title">حالة التوريد هذا الأسبوع</h3>
+          <p class="m-section-desc">ملخص تشغيلي محايد — الصفوف متصلة والقيم الثانوية كاملة.</p>
+          <hr class="m-divider">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-truck"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">شحنة المواد الغذائية — مستودع الجسر</span>
+              <span class="m-row__subtitle">بتسليم جزئي: 12 من 20 بندًا</span>
+            </div>
+            <span class="m-row__value" dir="ltr">60%</span>
+          </div>
+          <hr class="m-divider">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-package"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">فاتورة مورد — بند صيانة دورية</span>
+              <span class="m-row__subtitle">بانتظار اعتماد المالك</span>
+            </div>
+            <span class="m-badge m-badge--info"><span class="m-badge__dot" aria-hidden="true"></span>مراجعة</span>
+          </div>
+          <hr class="m-divider">
+
+          <div class="m-row">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-clock"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">مستخلص أعمال — قيد التدقيق</span>
+              <span class="m-row__subtitle">قيمة البند الثانوية ظاهرة ولا صف على شكل بطاقة</span>
+            </div>
+            <span class="m-row__value m-missing" aria-label="غير متوفر بعد">—</span>
+          </div>
+          <hr class="m-divider">
+
+          <a class="m-row" href="#sections-rows">
+            <div class="m-row__tile"><svg aria-hidden="true"><use href="#i-inbox"/></svg></div>
+            <div class="m-row__text">
+              <span class="m-row__title">أرشيف التوريد — فتح حقيقي من الرابط</span>
+              <span class="m-row__subtitle">الصف رابط لأن الفتح فعلي — وليس زرًا يحيوي زرًا</span>
+            </div>
+            <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+          </a>
+        </div>
+
+        <!-- قسم قابل للطي: مفتاح حقيقي + بكيبورد (Enter/Space) -->
+        <div class="m-section" id="fold-section">
+          <button type="button" class="m-section__head" aria-expanded="false" aria-controls="fold-body">
+            <span>تفاصيل بنود التوريد — قسم قابل للطي</span>
+            <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </button>
+          <div class="m-section__body" id="fold-body" hidden>
+            <div class="m-row">
+              <div class="m-row__text">
+                <span class="m-row__title">بند 1 — مواد تغليف</span>
+                <span class="m-row__subtitle">الكمية المعتمدة</span>
+              </div>
+              <span class="m-row__value" dir="ltr">120 صندوق</span>
+            </div>
+            <hr class="m-divider">
+            <div class="m-row">
+              <div class="m-row__text">
+                <span class="m-row__title">بند 2 — ملصقات التوريد</span>
+                <span class="m-row__subtitle">بانتظار التسعير</span>
+              </div>
+              <span class="m-row__value m-missing" aria-label="غير متوفر">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         7) الأسطح البترولية — Calm / Planes / Depth / Plain (F)
+    ====================================================== -->
+    <section class="panel" id="surfaces">
+      <h2>7) خيارات السطح البترولي — عند الحاجة فقط <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">الملخص الفاتح أعلاه هو المثال الأول والافتراضي في هذه اللوحة. خيارات S01 البترولية محدودة وليست قاعدة النظام: Calm لتدرج هادئ بلا طبقات، Planes لمستويين منحنيين خافتين على سطح بارز، Depth لسطح بارز عند الحاجة إلى فصل بصري أقوى، وPlain عندما تكفي الأرضية البترولية بلا زخرفة. لا زخرفة خلف الحقول أو الأزرار أو الصفوف، ولا خلفية عامة أو Canvas أو حركة مستمرة. المستويات محصورة بالسطح؛ النص والتفاعل في طبقة مستقلة فوقها. جميع التركيبات المعروضة PROPOSED.</p>
+
+      <div class="aft-surfaces" id="surfaces-grid">
+        <div class="m-surface m-surface--calm" id="s-calm">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <p class="m-surface__label">1) Calm — بلا طبقات</p>
+            <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
+            <p class="m-surface__amount">4,812.50</p>
+            <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
+          </div>
+        </div>
+
+        <div class="m-surface m-surface--waves" id="s-waves">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <p class="m-surface__label">2) Planes — المرشح الأساسي</p>
+            <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
+            <p class="m-surface__amount">4,812.50</p>
+            <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
+          </div>
+        </div>
+
+        <div class="m-surface m-surface--depth" id="s-depth">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <p class="m-surface__label">3) Depth — للسطح البارز فقط</p>
+            <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
+            <p class="m-surface__amount">4,812.50</p>
+            <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
+          </div>
+        </div>
+
+        <div class="m-surface m-surface--plain" id="s-plain">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <p class="m-surface__label">4) Plain — بلا زخرفة</p>
+            <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
+            <p class="m-surface__amount">4,812.50</p>
+            <p class="m-surface__sub">الفواتير المسددة 18 من 24</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- نموذج المفاتيح: تعديل من HTML ينعكس فورًا — مفاتيح S01 الموثقة -->
+      <div class="aft-surface-keys" id="s-keys">
+        <div class="m-surface m-surface--waves" style="--micro-surface-wave-opacity: 0.45; --micro-surface-wave-pos: 60%; --micro-surface-wave-scale: 80%; --micro-surface-light: 0.18">
+          <div class="m-surface__waves" aria-hidden="true"></div>
+          <div class="m-surface__content">
+            <p class="m-surface__label">مفاتيح التعديل من HTML — نفس Planes بقيم مختلفة</p>
+            <h3 class="m-surface__title">صافي التحصيل اليوم</h3>
+            <p class="m-surface__amount">4,812.50</p>
+            <p class="m-surface__sub">opacity 0.45 · pos 60% · scale 80% · light 0.18 — قابلة للتعديل من سطر style السطح</p>
+          </div>
+        </div>
+        <p class="aft-panel__note" style="margin-top:8px">مكان التعديل: مفاتيح <span dir="ltr">--micro-surface-wave-*</span> و<span dir="ltr">--micro-surface-light</span> على السطح نفسه (توثيق S01 §3) — وشكل الموجة من أصل <span dir="ltr">assets/surfaces/waves-soft.svg</span> وألوان الأرضية من توكنات <span dir="ltr">--micro-brand-*</span>. لا صنف جديد هنا.</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         8) العارض المُرحَّل من PR#5 (G) — إثبات الترحيل بلا فقدان
+    ====================================================== -->
+    <section class="panel" id="carousel-migrated">
+      <h2>8) العارض المُرحَّل — دفعة PR#5 ضمن فرع After <span class="status-chip">PROPOSED</span></h2>
+      <p class="panel-note">مكوّن اختياري مستقل — ليس هيكل الصفحة ولا بديل الأقسام والصفوف. عمل PR#5 (سحب pointer دورة مغلقة · حارس أسهم · compact افتراضي · توسعة inline · RTL منطقي) نُقل بدمج تاريخه الكامل في هذا الفرع دون فقدان، وأدلته الأصلية (53/53 من شجرة 474ed5b) في <span dir="ltr">reviews/CAROUSEL/</span>؛ وهنا انحدار سريع يعيد إثبات الأساسيات من شجرة هذه الدفعة. لا autoplay ولا اعتماد على السحب وحده.</p>
+
+      <div class="m-carousel" data-carousel data-carousel-label="ملخصات After" id="car-after" style="max-width:430px">
+        <div class="m-carousel__viewport" data-viewport>
+          <ul class="m-carousel__track" data-track>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="طلبات اليوم">
+              <div class="m-carousel__card">
+                <h3 class="card-title">طلبات اليوم</h3>
+                <div class="m-stat">
+                  <span class="m-stat__label">إجمالي الطلبات</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">132</span><span class="m-stat__unit">طلب</span></span>
+                </div>
+                <button type="button" class="m-carousel__card-toggle" data-card-expand
+                        aria-expanded="false" aria-controls="aft-car-d1"
+                        data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل"><span data-card-expand-text>عرض التفاصيل</span><svg aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="m-carousel__card-details" id="aft-car-d1" data-card-details hidden>
+                  <p class="card-note">قيد التوصيل 27 · مكتملة 88 · ملغاة 17 — قيم ثابتة من HTML.</p>
+                </div>
+              </div>
+            </li>
+            <li class="m-carousel__slide" data-carousel-slide data-card-label="تحصيل الأسبوع">
+              <div class="m-carousel__card">
+                <h3 class="card-title">تحصيل الأسبوع</h3>
+                <div class="m-stat">
+                  <span class="m-stat__label">المحصّل</span>
+                  <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">16,410</span><span class="m-stat__unit">د.أ</span></span>
+                </div>
+                <button type="button" class="m-carousel__card-toggle" data-card-expand
+                        aria-expanded="false" aria-controls="aft-car-d2"
+                        data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل"><span data-card-expand-text>عرض التفاصيل</span><svg aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+                <div class="m-carousel__card-details" id="aft-car-d2" data-card-details hidden>
+                  <p class="card-note">من مستهدف 24,150 — نسبة التحصيل نص ظاهر 68% لا لون وحده.</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="m-carousel__controls">
+          <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          <p class="m-carousel__status" data-status aria-live="polite"></p>
+          <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+        </div>
+        <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+      </div>
+      <p class="demo-note">اللوحة الكاملة للعارض وحالاته التفصيلية: <span dir="ltr">previews/carousel/</span> (تبقى لوحتها وأدلتها كما هي دون تعديل).</p>
+    </section>
+
+    <!-- =====================================================
+         9) التوثيق الحي — إثبات تعديل من المصدر (ينفذه أداة الأدلة)
+    ====================================================== -->
+    <section class="panel" id="token-proof">
+      <h2>9) إثبات التعديل من المصدر</h2>
+      <p class="panel-note">دورة واحدة موثقة في <span dir="ltr">reviews/AFTER-DIRECTION/verification.txt</span>: تعديل قيمة نصية من HTML التركيب ينعكس على المعاينة · تعديل قيمة دائرة يغيّر قطرها (∝ √القيمة) · تعديل توكن <span dir="ltr">--micro-data-a</span> ينعكس على المفتاح الحي أدناه — ثم تُعاد القيم المقصودة قبل التسليم وتُدقق بالبصمات.</p>
+      <div class="aft-token-proof">
+        <span class="swatch" id="token-swatch" aria-hidden="true"></span>
+        <span>هذه البقعة لونها <span dir="ltr">var(--micro-data-a)</span> من shared/tokens.css — يتبع التوكن فورًا عند تعديله (القيمة المقصودة: <span dir="ltr">#164D59</span>).</span>
+      </div>
+    </section>
+
+</main>
+
+  <footer class="board-footer">
+    اتجاه After مرجع جودة لا هوية منسوخة — الألوان والخطوط والأيقونات من أسس Micro المعتمدة حصرًا. القرارات الجديدة موسومة PROPOSED في reviews/AFTER-DIRECTION/review.md بانتظار اعتماد المالك. المراجع البصرية REFERENCE ONLY في references/visual-direction/after/ وreferences/motion/.
+  </footer>
+
+  <script src="../../components/data/data.js"></script>
+  <script src="../../components/data/packed-circle.js"></script>
+  <script src="../../components/organization/organization.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../../components/carousel/carousel.js"></script>
+  <script src="../board.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

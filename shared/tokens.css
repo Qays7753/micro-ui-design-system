@@ -20,6 +20,11 @@
   --micro-surface-selected: #DFEEE6;  /* اختيار خفيف أو احتواء هادئ */
   --micro-surface-disabled: #E4EAE8;  /* خلفية العنصر المعطل */
 
+  /* ---- ملخص After الفاتح (تركيب PROPOSED) ---- */
+  --micro-summary-light-start: #B8D9DC;
+  --micro-summary-light-mid: #DFEEE6;
+  --micro-summary-light-end: #F7F8F4;
+
   /* ---- النصوص ---- */
   --micro-text-primary: #172D32;   /* العناوين والنص والمبالغ الأساسية */
   --micro-text-secondary: #50656A; /* نص ثانوي يبقى مقروءًا */

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مثال استخدام مستقل للعارض — SYS-02/E11
+  بلا board.css/board.js — مصادر المكوّن فقط (أيقونات الأسهم
+  مرجع خارجي مباشر من الأصل الوحيد assets/icons بلا نسخ).
+  فحوص مدمجة: البنية والعقد، التنقل والمؤشر، تعطيل الأطراف،
+  RTL بالقياس الفيزيائي، لوحة المفاتيح وحارس الأسهم داخل
+  input/contenteditable، لا autoplay، التوسعة inline
+  (aria-expanded/aria-controls والطي عند الانتقال)، دوائر
+  المقارنة بقيم حقيقية داخلها r∝√v بلا نسب، السالب مع
+  data-display بالتنسيق والدلالة معًا. النتائج في الصفحة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال مستقل: عارض البطاقات</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../../components/data/packed-circle.css">
+  <link rel="stylesheet" href="../../components/carousel/carousel.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1 style="font-size:18px">مثال مستقل — عارض البطاقات القابل للسحب</h1>
+
+  <div class="m-carousel" data-carousel data-carousel-label="مثال مستقل" id="ex-carousel">
+    <div class="m-carousel__viewport" data-viewport>
+      <ul class="m-carousel__track" data-track>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص الطلبات">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">ملخص الطلبات</h3>
+            <div class="m-stat">
+              <span class="m-stat__label">طلبات جديدة</span>
+              <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">132</span><span class="m-stat__unit">طلب</span></span>
+            </div>
+            <button type="button" class="m-carousel__card-toggle" data-card-expand
+                    aria-expanded="false" aria-controls="ex-details-1"
+                    data-label-closed="عرض التفاصيل" data-label-open="إخفاء التفاصيل">
+              <span data-card-expand-text>عرض التفاصيل</span>
+              <svg aria-hidden="true"><use href="../../assets/icons/chevron-down.svg"></use></svg>
+            </button>
+            <div class="m-carousel__card-details" id="ex-details-1" data-card-details hidden>
+              <p style="margin:8px 0 0;color:var(--micro-text-secondary);font-size:13px">بطاقة أولى في مثال مستقل بلا لوحة — التفاصيل الكاملة تظهر داخل مكانها بلا قصّ.</p>
+            </div>
+          </div>
+        </li>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص المورد">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">ملخص المورد</h3>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--micro-text-secondary)">
+              بحث داخل البطاقة
+              <input type="text" id="ex-input" value="ORD" style="font-family:var(--micro-font-family);font-size:16px;padding:8px 12px;border:1px solid var(--micro-border-control);border-radius:16px;color:var(--micro-text-primary);background:var(--micro-surface-base)">
+            </label>
+            <p style="margin:8px 0 0;color:var(--micro-text-secondary);font-size:13px">بطاقة ثانية — المجاورة ظاهرة جزئيًا، والأسهم داخل الحقل تبقى للحقل.</p>
+          </div>
+        </li>
+        <li class="m-carousel__slide" data-carousel-slide data-card-label="المقارنة المالية">
+          <div class="m-carousel__card">
+            <h3 style="margin:0 0 8px;font-size:16px">المقارنة المالية</h3>
+            <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="56" style="--packed-overlap: 16px">
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>
+                <li data-series="b" data-label="الربح" data-value="3566" data-display="3,566"></li>
+                <li data-series="c" data-label="التكاليف" data-value="3333" data-display="3,333"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+            </div>
+            <p style="margin:8px 0 0;color:var(--micro-text-secondary);font-size:13px">القيم الحقيقية داخل الدوائر (لا نسب) — مساحة الدائرة ∝ القيمة والقطر ∝ √القيمة، والمكوّن لا يحسب شيئًا.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="m-carousel__controls">
+      <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="../../assets/icons/chevron-right.svg"></use></svg></button>
+      <p class="m-carousel__status" data-status aria-live="polite"></p>
+      <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="../../assets/icons/chevron-left.svg"></use></svg></button>
+    </div>
+    <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+  </div>
+
+  <pre id="results">جارٍ الفحص…</pre>
+
+  <script src="../../components/data/data.js"></script>
+  <script src="../../components/data/packed-circle.js"></script>
+  <script src="../../components/carousel/carousel.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      'use strict';
+      var out = [];
+      function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
+      var root = document.getElementById('ex-carousel');
+      var track = root.querySelector('[data-track]');
+      var status = root.querySelector('[data-status]');
+      var prevBtn = root.querySelector('[data-prev]');
+      var nextBtn = root.querySelector('[data-next]');
+      var slides = root.querySelectorAll('[data-carousel-slide]');
+      var rtl = getComputedStyle(root).direction === 'rtl';
+
+      function tx() {
+        var tr = getComputedStyle(track).transform;
+        if (!tr || tr === 'none') return 0;
+        var m = tr.match(/matrix\(([^)]+)\)/);
+        return m ? parseFloat(m[1].split(',')[4]) : 0;
+      }
+      function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+      (async function () {
+        /* البنية والعقد */
+        t('A1 البنية: viewport/track/3 شرائح/أزرار/مؤشر/نقاط',
+          !!track && slides.length === 3 && !!prevBtn && !!nextBtn && !!status && !!root.querySelector('[data-dots]'));
+        t('A2 أدوار إتاحية: group/عارض بطاقات + aria-label من data-carousel-label',
+          root.getAttribute('role') === 'group' &&
+          root.getAttribute('aria-roledescription') === 'عارض بطاقات' &&
+          root.getAttribute('aria-label') === 'مثال مستقل');
+        t('A3 تسمية الشريحة «الاسم، البطاقة X من N»',
+          slides[1].getAttribute('aria-label') === 'ملخص المورد، البطاقة 2 من 3',
+          slides[1].getAttribute('aria-label'));
+
+        /* الأطراف معطلة والمؤشر صادق */
+        t('A4 الحالة الأولى: prev معطل فعليًا والمؤشر «البطاقة 1 من 3»',
+          prevBtn.disabled && !nextBtn.disabled && status.textContent === 'البطاقة 1 من 3',
+          status.textContent);
+
+        /* التنقل والمؤشر */
+        nextBtn.click(); await wait(60);
+        t('A5 next: «البطاقة 2 من 3» وكلا الزرين متاح',
+          status.textContent === 'البطاقة 2 من 3' && !prevBtn.disabled && !nextBtn.disabled,
+          status.textContent);
+
+        /* RTL بالقياس: التالي منطقيًا = حركة فيزيائية موجبة في RTL */
+        var x1 = tx();
+        t('A6 RTL بالقياس: بعد next من الأولى translateX موجب (المجاورة من اليسار)',
+          rtl && x1 > 0, 'tx=' + x1.toFixed(1));
+
+        /* لوحة المفاتيح: السهم الأيسر = التالي في RTL (من سطح العارض) */
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+        await wait(60);
+        var idxAfterLeft = MicroCarousel.getIndex(root);
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+        await wait(60);
+        var idxAfterRight = MicroCarousel.getIndex(root);
+        t('A7 RTL: ArrowLeft تالي وArrowRight سابق (ترتيب منطقي)',
+          idxAfterLeft === 2 && idxAfterRight === 1,
+          'left→' + idxAfterLeft + ' right→' + idxAfterRight);
+
+        /* حارس الأسهم: input داخل البطاقة — أسهمه محلية */
+        var input = document.getElementById('ex-input');
+        var idxBefore = MicroCarousel.getIndex(root);
+        var evIn = new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true });
+        input.dispatchEvent(evIn);
+        var evIn2 = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true });
+        input.dispatchEvent(evIn2);
+        await wait(60);
+        t('A8 حارس الأسهم: داخل input لا تنقل العارض ولا يُمنع الحدث الافتراضي',
+          MicroCarousel.getIndex(root) === idxBefore && !evIn.defaultPrevented && !evIn2.defaultPrevented,
+          'idx=' + MicroCarousel.getIndex(root) + ' prevented=' + evIn.defaultPrevented);
+
+        /* حارس الأسهم: زر تحكم العارض يبقى يعمل بالأسهم */
+        prevBtn.focus();
+        var idxAtBtn = MicroCarousel.getIndex(root);
+        prevBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+        await wait(60);
+        t('A9 الأسهم من زر تحكم العارض (prev) تنقل بالترتيب المنطقي',
+          MicroCarousel.getIndex(root) === idxAtBtn + 1,
+          'idx=' + MicroCarousel.getIndex(root));
+
+        /* النهاية معطلة */
+        MicroCarousel.goTo(root, 2); await wait(60);
+        t('A10 الحالة الأخيرة: next معطل والمؤشر «البطاقة 3 من 3»',
+          nextBtn.disabled && status.textContent === 'البطاقة 3 من 3', status.textContent);
+
+        /* Home/End */
+        root.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+        await wait(60);
+        t('A11 Home يعود للأولى', MicroCarousel.getIndex(root) === 0);
+
+        /* النشطة وحدها تفاعلية؛ المجاورة معاينة بصرية لا هدف Tab مقصوص */
+        MicroCarousel.goTo(root, 0); await wait(80);
+        var lastInert = slides[2].hasAttribute('inert');
+        var neighborInert = slides[1].hasAttribute('inert');
+        t('A12 كل غير النشطة inert، بما فيها المجاورة الجزئية، والنشطة غير معزولة',
+          lastInert && neighborInert && !slides[0].inert);
+
+        /* لا autoplay: بلا تبديل تلقائي بعد مهلة */
+        var before = MicroCarousel.getIndex(root);
+        await wait(1200);
+        t('A13 لا autoplay: الموضع ثابت بعد 1.2s بلا تفاعل',
+          MicroCarousel.getIndex(root) === before && MicroCarousel.getIndex(root) === 0);
+
+        /* التوسعة داخل مكانها: زر صريح + aria-expanded + الطي عند الانتقال */
+        var exBtn = slides[0].querySelector('[data-card-expand]');
+        var exRegion = document.getElementById('ex-details-1');
+        t('A14 عقد التوسعة: type=button وaria-expanded=false وaria-controls والمنطقة hidden',
+          exBtn.getAttribute('type') === 'button' && exBtn.getAttribute('aria-expanded') === 'false'
+          && exBtn.getAttribute('aria-controls') === 'ex-details-1' && exRegion.hidden);
+        exBtn.click(); await wait(80);
+        var opened = slides[0].hasAttribute('data-expanded') && exBtn.getAttribute('aria-expanded') === 'true' && !exRegion.hidden;
+        nextBtn.click(); await wait(120);
+        var collapsedAfterNav = !slides[0].hasAttribute('data-expanded')
+          && exBtn.getAttribute('aria-expanded') === 'false' && exRegion.hidden;
+        prevBtn.click(); await wait(120);
+        exBtn.focus();
+        exBtn.dispatchEvent(new MouseEvent('click', { bubbles: true })); /* Enter/Space أصلية — المحاكاة هنا بالنقر المركّز */
+        var reopened = slides[0].hasAttribute('data-expanded') && exBtn.getAttribute('aria-expanded') === 'true';
+        t('A15 التوسعة: تفتح من الزر (aria-expanded=true) وتُطوى عند الانتقال إلى بطاقة أخرى وتُعاد',
+          opened && collapsedAfterNav && reopened,
+          'open=' + opened + ' collapse=' + collapsedAfterNav + ' reopen=' + reopened);
+        exBtn.click(); await wait(60); /* إغلاق للحالة المستقرة */
+
+        /* دوائر المقارنة: قيم حقيقية داخل الدوائر + r ∝ √v + بلا نسب */
+        var circs = root.querySelectorAll('.m-chart--packed .m-bubble__circle:not(.m-bubble__circle--none)');
+        var widths = [...circs].map(function (c) { return parseFloat(c.style.width); });
+        var w0 = widths[0], w1 = widths[1], w2 = widths[2];
+        var r1ok = Math.abs(w1 - w0 * Math.sqrt(3566 / 7532)) <= 1.5;
+        var r2ok = Math.abs(w2 - w0 * Math.sqrt(3333 / 7532)) <= 1.5;
+        var inCircle = [...circs].every(function (c) {
+          var v = c.querySelector('.m-bubble__value');
+          return v && c.contains(v) && v.textContent.trim().length > 0;
+        });
+        var valsInside = [...circs].map(function (c) { return c.querySelector('.m-bubble__value').textContent; });
+        var plot = root.querySelector('.m-chart--packed [data-plot]');
+        t('A16 دوائر المقارنة: ثلاث دوائر بأقطار بتناسب الجذر (7532/3566/3333) والقيم الحقيقية داخلها بلا نسب',
+          circs.length === 3 && r1ok && r2ok && inCircle
+          && valsInside.join('|') === '7,532|3,566|3,333'
+          && !plot.textContent.includes('%'),
+          'w=' + widths.join('/') + ' in=' + valsInside.join('|'));
+
+        /* الحالات الصريحة: سالب مع data-display — التنسيق والدلالة معًا */
+        var host = document.createElement('div');
+        host.innerHTML = '<div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="40">' +
+          '<ul class="m-chart__data" hidden>' +
+          '<li data-series="a" data-label="الإيرادات" data-value="7532" data-display="7,532"></li>' +
+          '<li data-series="b" data-label="الربح" data-value="-3566" data-display="-3,566"></li>' +
+          '<li data-series="c" data-label="صفر" data-value="0"></li>' +
+          '<li data-series="d" data-label="مجهولة"></li>' +
+          '<li data-series="e" data-label="غير متاحة" data-value="n/a"></li>' +
+          '</ul><div class="m-chart__plot" data-plot></div></div>';
+        document.body.appendChild(host);
+        MicroPacked.render(host.querySelector('[data-chart-packed]'));
+        var ptxt = host.querySelector('[data-plot]').textContent;
+        var negCircles = host.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length;
+        t('A17 سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» بالتنسيق والدلالة معًا ولا دائرة سالبة',
+          ptxt.includes('-3,566 — سالب غير صالح للمساحة') && negCircles === 1,
+          ptxt.slice(0, 90));
+        t('A18 حالات القيم: صفر «0» ومجهول «غير معروف» وغير متاح — نص صريح لا لون وحده',
+          ptxt.includes('— غير معروف') && ptxt.includes('— غير متاح') && ptxt.includes('0'));
+        host.innerHTML = '<div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-max="0">' +
+          '<ul class="m-chart__data" hidden>' +
+          '<li data-series="a" data-label="أ" data-value="40"></li>' +
+          '<li data-series="b" data-label="ب" data-value="60"></li>' +
+          '</ul><div class="m-chart__plot" data-plot></div></div>';
+        MicroPacked.render(host.querySelector('[data-chart-packed]'));
+        var scaleErr = host.querySelector('.m-chart__scale-error');
+        t('A19 مقياس صفر مع موجبة: تعارض صريح بلا دوائر',
+          !!scaleErr && scaleErr.textContent.includes('تعارض') &&
+          host.querySelectorAll('.m-bubble__circle:not(.m-bubble__circle--none)').length === 0);
+        host.remove();
+
+        /* حدث عام */
+        var fired = null;
+        root.addEventListener('micro-carousel:change', function (e) { fired = e.detail; }, { once: true });
+        MicroCarousel.next(root); await wait(60);
+        t('A20 حدث micro-carousel:change يفصح عن الموضع والعدد',
+          !!fired && fired.index === 1 && fired.count === 3,
+          fired ? JSON.stringify(fired) : 'لم يُطلق');
+
+        /* استعادة الحالة الأولى للقطة */
+        MicroCarousel.goTo(root, 0); await wait(80);
+
+        var fails = out.filter(function (l) { return l.indexOf('FAIL') === 0; }).length;
+        out.unshift((fails === 0 ? 'ALL PASS' : fails + ' FAILS') + ' — مثال مستقل للعارض');
+        document.getElementById('results').textContent = out.join('\n');
+      })();
+    })();
+  });
+  </script>
+</body>
+</html>

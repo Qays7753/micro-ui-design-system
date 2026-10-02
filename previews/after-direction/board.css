@@ -1,0 +1,486 @@
+/* =========================================================
+   Micro UI — تنسيق لوحة اتجاه After (previews/after-direction/board.css)
+   هذا الملف تنسيق **تركيب المعاينة فقط** (layout glue) — لا يعيد
+   تنسيق أي مكوّن ولا يضيف شكلًا جديدًا للمكتبة؛ كل القيم من
+   shared/tokens.css. المكوّنات نفسها في components/ كما هي:
+   S01 (m-surface) · B05 (m-stat/m-chart/m-progress) · امتداد الدوائر
+   (m-chart--packed — PROPOSED) · B04 (m-row/m-section/m-badge) ·
+   B02 (m-field) · B01 (m-btn) · B06 (m-note) · العارض (m-carousel).
+   الحالة: DRAFT FOR REVIEW — كل قرار تركيب جديد هنا موسوم PROPOSED
+   في review.md ولا يُعتبر معتمدًا.
+   ========================================================= */
+
+* { box-sizing: border-box; }
+
+/* ---- عمود التركيب: عمود هاتف منطقي (حد أقصى 430) على خلفية الصفحة ----
+   التركيب المرجعي كله داخل .aft-comp — ليس شاشة إنتاجية ولا User Flow؛
+   بيئة عرض تُظهر كيف تُركّب مكوّنات Micro معًا وفق اتجاه After. */
+.aft-comp {
+  max-width: 430px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-8); /* 32px بين أقسام التركيب */
+  font-family: var(--micro-font-family);
+}
+
+/* ================= ملخص After الفاتح — Composition Pattern مقترح =================
+   مستويان لونيان عريضان منخفضا التباين؛ المحتوى والتفاعل أعلى منهما. */
+.aft-light-summary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  padding: var(--micro-space-5);
+  border-radius: var(--micro-radius-surface);
+  color: var(--micro-text-primary);
+  background-image: linear-gradient(
+    135deg,
+    var(--micro-summary-light-start) 0%,
+    var(--micro-summary-light-mid) 56%,
+    var(--micro-summary-light-end) 100%
+  );
+}
+.aft-light-summary__waves {
+  position: absolute;
+  z-index: 0;
+  inset-inline: 0;
+  inset-block-end: 0;
+  width: 100%;
+  height: 48%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aft-light-summary__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+.aft-light-summary__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-3);
+}
+.aft-light-summary__tile {
+  flex: none;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--micro-radius-field);
+  color: var(--micro-brand-primary);
+  background-color: rgba(255, 255, 255, 0.62);
+}
+.aft-light-summary__tile svg {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-light-summary__heading {
+  flex: 1;
+  min-inline-size: min-content;
+  max-inline-size: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+}
+.aft-light-summary__title {
+  margin: 0;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+}
+.aft-light-summary__label {
+  margin: 0;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__amount-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-3);
+}
+.aft-light-summary__amount {
+  margin: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-surface-amount-size);
+  line-height: var(--micro-surface-amount-line);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.aft-light-summary__unit {
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+.aft-light-summary__trend svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--micro-brand-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-light-summary__support {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3) var(--micro-space-5);
+  padding-block-start: var(--micro-space-2);
+  border-block-start: 1px solid rgba(22, 77, 89, 0.18);
+}
+.aft-light-summary__metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: min(100%, 120px);
+}
+.aft-light-summary__metric-label {
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.aft-light-summary__metric-value {
+  color: var(--micro-text-primary);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.aft-light-summary__action {
+  align-self: flex-start;
+}
+
+/* ================= 1) السطح البارز (hero) =================
+   النسخة البترولية خيار محدود في التركيب — «عند الحاجة فقط».
+   المحتوى من عقد S01 (title/amount/label/sub) + صف اتجاه بنص */
+.aft-hero .m-surface__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+
+/* إيقاع التركيب من gap أعلاه، لا هوامش p الافتراضية المتراكمة فوقه.
+   لا تغيير لعقد S01 أو تخطيط المستهلكين الآخرين. */
+.aft-hero .m-surface__label,
+.aft-hero .m-surface__amount,
+.aft-hero .m-surface__sub {
+  margin: 0;
+}
+
+/* رأس السطح: بلاط أيقونة بنفس مقاس بلاط B04 — أرضية بيضاء خافتة داخل
+   السطح فقط؛ لا صنف مكوّن جديد: تنسيق تركيب داخل معاينة موسوم PROPOSED */
+.aft-hero__head {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+}
+.aft-hero__tile {
+  flex: none;
+  width: var(--micro-row-tile); /* 48px — نفس بلاط B04 */
+  height: var(--micro-row-tile);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--micro-radius-field);
+  background-color: rgba(255, 255, 255, 0.12); /* إضاءة خافتة داخل السطح فقط */
+  color: var(--micro-text-inverse);
+}
+.aft-hero__tile svg {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-hero__title {
+  margin: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  font-size: var(--micro-surface-title-size);   /* 22px — توكن S01 */
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+  color: var(--micro-text-inverse);
+}
+
+/* صف المبلغ: قيمة رئيسية + وحدة + اتجاه بنص (اللون لا يحمل المعنى وحده) */
+.aft-hero__amount-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-3);
+  flex-wrap: wrap;
+}
+.aft-hero__amount-row .m-surface__amount {
+  text-align: start;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* اتجاه مقارن داخل السطح: نص أبيض مصمت (C1) + سهم — لا لون دلالي فوق البترولي */
+.aft-hero__trend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  align-items: center;
+  gap: var(--micro-space-1);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500;
+  color: var(--micro-text-inverse);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.aft-hero__trend svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* إجراء اختياري داخل السطح: B01 secondary بأرضية مستقرة ونص داكن. */
+.aft-hero__action {
+  align-self: flex-start;
+}
+
+/* عند وجود المفتاح الكامل تبقى تسميات القيم داخله مرة واحدة فقط؛
+   data-legend="off" يحتفظ بصفوف التسميات الخارجية للقيم غير الملائمة للدائرة. */
+.m-chart--packed:not([data-legend="off"]) .m-packed__labels {
+  display: none;
+}
+.m-chart--packed [data-plot] > .m-legend:not(.m-packed__states) .m-legend__item {
+  flex-wrap: wrap;
+  max-inline-size: 100%;
+}
+.m-chart--packed [data-plot] > .m-legend:not(.m-packed__states) .m-legend__value {
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* ================= 2) القيم الرئيسية بلا بطاقات =================
+   After: القيم على خلفية الصفحة مباشرة — بطاقة لكل قيمة ليست مطلوبة */
+.aft-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-4) var(--micro-space-5);
+}
+.aft-kpis .m-stat {
+  min-inline-size: 0;
+}
+.aft-kpis .m-stat__value {
+  flex-wrap: wrap;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.aft-kpis .m-stat__num {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 359.98px) {
+  .aft-kpis { grid-template-columns: 1fr; }
+}
+
+/* ================= 3) لوحة بيضاء للرسم البياني فقط =================
+   سطح أبيض مستقل واحد حيث يحتاج الرسم حدودًا (فكرة After) —
+   ليس بطاقة لكل صف ولا ظلًا لكل عنصر؛ الفصل بالأرضية والحشو بلا ظل */
+.aft-panel {
+  background-color: var(--micro-surface-base);
+  border-radius: var(--micro-radius-surface); /* 24px من التوكنات */
+  padding: var(--micro-space-5);              /* 20px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+.aft-panel__title {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.aft-panel__note {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* ================= 4) مصفوفة حالات الحقل =================
+   صف لكل حالة: تسمية الحالة (نص صريح) + الحقل نفسه — نفس لغة
+   المرجع (حقل واحد × حالات) بعقد B02 الحرفي (لا شكل جديد) */
+.aft-states {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-5);
+}
+.aft-state {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--micro-space-3) var(--micro-space-4);
+  align-items: start;
+}
+.aft-state__label {
+  padding-top: var(--micro-space-4); /* محاذاة بصرية مع منتصف الحقل */
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500;
+  color: var(--micro-text-primary);
+}
+.aft-state__hint {
+  display: block;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 400;
+  color: var(--micro-text-hint);
+}
+@media (max-width: 479.98px) {
+  .aft-state { grid-template-columns: 1fr; }
+  .aft-state__label { padding-top: 0; }
+}
+
+/* شريط أشكال الإدخال (نص/طويل/بحث/مبلغ/كمية) — تفاعلي حقيقي */
+.aft-shapes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-5);
+  max-width: 430px;
+}
+
+/* ================= 5) ملخص البيانات المركب (D) =================
+   بنية واحدة قابلة لإعادة الاستخدام: رأس (أيقونة+عنوان+إجراء) +
+   قيمة + اتجاه + رسم صغير اختياري + تفاصيل قابلة للفتح.
+   العنوان/القيم/الوحدة/عدد الدوائر/نوع الرسم كلها HTML المستهلك. */
+.aft-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+.aft-summary__head {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+}
+.aft-summary__icon {
+  flex: none;
+  width: var(--micro-icon-in-button); /* 20px */
+  height: var(--micro-icon-in-button);
+  color: var(--micro-brand-primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.aft-summary__title {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+/* إجراء رأس صريح: زر B01 نصي ثانوي — لا أيقونة بلا اسم */
+.aft-summary__more {
+  flex: none;
+}
+/* تفاصيل قابلة للفتح (نفس عقد توسعة العارض: aria-expanded/hidden) */
+.aft-summary__details[hidden] { display: none; }
+
+/* ================= 6) الأقسام والصفوف =================
+   B04 كما هو: تجميع بالعنوان والمسافة والفاصل — بلا بطاقة لكل صف */
+.aft-section { display: flex; flex-direction: column; gap: var(--micro-space-2); }
+.aft-section .m-divider { margin-block: var(--micro-space-1); }
+
+/* ================= 7) شبكة الأسطح (F) =================
+   أربع مقارنات بنفس المحتوى الداخلي — عمودان على الشاسع وعمود واحد ضيق */
+.aft-surfaces {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-4);
+}
+@media (max-width: 479.98px) {
+  .aft-surfaces { grid-template-columns: 1fr; }
+}
+.aft-surfaces .m-surface__content { display: flex; flex-direction: column; gap: var(--micro-space-2); }
+
+/* ================= 8) شبكات حالات الدوائر (C) ================= */
+.aft-circ-labs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-6);
+}
+.aft-circ-labs h3 {
+  margin: 0 0 var(--micro-space-2);
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.aft-circ-labs .m-chart { max-width: 430px; }
+
+/* ================= 9) الإجراء الرئيسي والرسالة ================= */
+.aft-action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+.aft-note { margin: 0; }
+
+/* ================= 10) صف التوثيق الحي (إثبات التعديل) ================= */
+.aft-token-proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+  align-items: center;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.aft-token-proof .swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: var(--micro-data-a); /* يتغير بتغيير التوكن — إثبات حي */
+  border: 1px solid var(--micro-border-divider);
+}
+
+/* تقليل الحركة: التركيب ساكن لا حركة فيه أصلًا — القاعدة موثقة
+   والفحص بالتفضيل الفعلي في tools/after-direction-screenshots.py */
+@media (prefers-reduced-motion: reduce) {
+  .aft-comp, .aft-panel, .aft-summary__details { transition: none; }
+}

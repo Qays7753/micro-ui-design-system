@@ -1,5 +1,7 @@
 # فهرس المخرجات الحالية
 
+جولة إصلاح After: `reviews/AFTER-DIRECTION/REPAIR-REPORT.md`، نتائج `reviews/AFTER-DIRECTION/repair/`، وأمثلة قابلة للتعديل في لوحة After، مع عقد `components/data/PACKED-PATTERN.md`. حالة القرارات البصرية PROPOSED. بقية السجلات أدناه تاريخية ولا تستبدل بوابات الإصلاح الحالية.
+
 النسخ الحالية المرتبطة بالاتجاه المعتمد، مع التقرير الوارد ومراجعته. استُبعدت الدراسات القديمة والمعاينات المستبدلة والملفات المؤقتة. لا تمثل الصور مكتبة مكوّنات نهائية.
 
 | الملف | الحالة | الملاحظة |
@@ -52,9 +54,26 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 
 تقرير التغطية لكل معرف: `docs/UI-COVERAGE-RESULTS.md`.
 
+## دفعة العارض المستقلة — 2026-09-29
+
+| الملف | الحالة | الملاحظة |
+|---|---|---|
+| `components/carousel/` + `previews/carousel/` | DRAFT FOR REVIEW | العارض: بطاقة نشطة بالمنتصف ومجاورة ظاهرة وأسهم ومؤشر وسحب pointer بعتبات موثقة وترتيب منطقي RTL — فحوص 38/38 من شجرة commit المصدر `2940aa6` (بصمة `277b828c`) |
+| `components/data/packed-circle.css` + `packed-circle.js` | PROPOSED (opt-in) | امتداد الدوائر المتداخلة فوق عقد B05 — لا يغيّر سلوك B05 الافتراضي ولا يلمس data.js؛ بانتظار اعتماد المالك |
+| `docs/components/CAROUSEL-COMPONENT-BRIEF.md` + `references/motion/card-carousel-reference.md` | DRAFT + REFERENCE | تكليف الدفعة + مرجع الحركة بتصريح صريح أن الصورة/الفيديو المرفقين لم يصلا إلى بيئة التنفيذ |
+| `tools/carousel-screenshots.py` + `reviews/CAROUSEL/` | DRAFT TOOL | فحص ولقطات (27 لقطة) — متصفح headless فعلي، وتحقق استنساخ نظيف بخرج مطابق |
+
 ## تقارير المراجعة والتسليم
 
 - `reviews/DELIVERY-R1/CHATGPT-REVIEW.md`: تقرير CHANGES REQUESTED مع الإصلاحات وأدلة قبولها.
 - `reviews/DELIVERY-R2/CHATGPT-REVIEW.md`: إغلاق جزئي للجولة السابقة ومتطلبات R2 المحددة.
 - `reviews/DELIVERY-R3/CHATGPT-REVIEW.md`: مراجعة C1/C2 وإغلاق المتبقيات المحددة.
 - ملفات `source-probes` تشخيصات مصدر قابلة لإعادة التشغيل وليست بديلًا عن اختبار هاتف أو قارئ شاشة.
+
+## دفعة اتجاه After — 2026-09-29
+
+| الملف | الحالة | الملاحظة |
+|---|---|---|
+| `previews/after-direction/` (index/board.css/board.js/README) | DRAFT FOR REVIEW (تركيب PROPOSED) | تركيب مرجعي قابل للتعديل لا شاشة إنتاجية — المكوّنات من مصدرها في components/ بلا تعديل |
+| `tools/after-direction-screenshots.py` + `reviews/AFTER-DIRECTION/` | DRAFT TOOL | فحص ولقطات (22 لقطة) — 41/41 من شجرة commit المصدر + إثبات تعديل ثلاثي مع استعادة موثقة بالبصمات |
+| `references/visual-direction/after/` + `references/motion/card-carousel-reference.*` | REFERENCE ONLY | حزمة المراجع من `task/after-direction-reference-pack` — فُتحت فعليًا (6 صور + إطارات الفيديو) ولم تُستخدم خلفيات أو بديل مصدر |

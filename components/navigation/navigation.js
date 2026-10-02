@@ -223,17 +223,23 @@
     /* R2-02: هدف تركيز دائم داخل الطبقة — الطبقة الخالية من عناصر
        تفاعلية تستقبل التركيز بنفسها بدل بقاء المشغّل خارجها */
     if (!layer.hasAttribute('tabindex')) layer.setAttribute('tabindex', '-1');
+    openLayers.push({ layer: layer, backdrop: backdrop, trigger: trigger });
+    applyBackgroundInert(); /* حرر أسلاف العليا قبل محاولة focus */
     var f = focusables(layer);
     var first = layer.querySelector('[data-autofocus]');
     if (!(first && !isDisabled(first) && f.indexOf(first) >= 0)) first = f[0];
     if (first) first.focus(); else layer.focus();
-    openLayers.push({ layer: layer, backdrop: backdrop, trigger: trigger });
-    applyBackgroundInert(); /* بعد الإدخال للمكدس — الطبقة العليا مستثناة */
     playOpenTransition(layer);
     layer.dispatchEvent(new CustomEvent('micro-navigation:opened', { bubbles: true }));
   }
 
   function closeLayer(layer) {
+    if (!layer) return;
+    /* إغلاق سلف لا يترك طبقة ابنة مفتوحة داخل hidden. أغلق الأبناء
+       أولًا؛ تبقى قفلة التمرير لكل طبقة محفوظة حتى اكتمال انتقالها. */
+    openLayers.slice().reverse().forEach(function (o) {
+      if (o.layer !== layer && layer.contains(o.layer)) closeLayer(o.layer);
+    });
     var idx = -1;
     for (var i = 0; i < openLayers.length; i++) {
       if (openLayers[i].layer === layer) { idx = i; break; }
@@ -253,7 +259,14 @@
       else releaseBackgroundInert();
       /* استعادة التركيز إلى مشغّل صالح داخل المستند فقط */
       var t = entry.trigger;
-      if (t && inDocument(t) && !isDisabled(t) && typeof t.focus === 'function') t.focus();
+      var top = openLayers.length ? openLayers[openLayers.length - 1].layer : null;
+      var usable = t && inDocument(t) && !isDisabled(t)
+        && !t.closest('[inert], [hidden]') && (!top || top.contains(t));
+      if (usable && typeof t.focus === 'function') t.focus();
+      else if (top) {
+        var target = focusables(top)[0] || top;
+        target.focus();
+      }
       layer.dispatchEvent(new CustomEvent('micro-navigation:closed', { bubbles: true }));
     }
 

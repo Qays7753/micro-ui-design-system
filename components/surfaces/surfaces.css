@@ -2,9 +2,9 @@
    Micro UI — معالجة الأسطح البترولية (S01)
    الملف: components/surfaces/surfaces.css
    يعتمد على shared/tokens.css. معالجة سطح مستقلة قابلة للتحرير:
-   تدرج + إضاءة + موجات خافتة من أصول assets/surfaces/*.svg
+   تدرج + مستويات منحنية خافتة من أصول assets/surfaces/*.svg
    (مصدر واحد قابل للتعديل) — لا صورة خلفية مسطحة ولا نسخ المرجع.
-   ثلاث مقارنات فقط: (1) تدرج وإضاءة هادئة (2) موجات خافتة —
+   ثلاث مقارنات فقط: (1) تدرج هادئ (2) مستويان منحنيان خافتان —
    المرشح الأساسي (3) عمق أغنى محدود للسطح البارز + نسخة بلا زخرفة.
    مفاتيح التعديل (متغيرات CSS على السطح نفسه):
      --micro-surface-wave-opacity  شدة الموجة
@@ -22,8 +22,7 @@
   box-sizing: border-box;
 }
 
-/* الأساس المشترك: أرضية بترولية مستقرة (تدرج عمودي من الأسس)
-   + طبقة إضاءة هادئة أعلى السطح (شعاعية خافتة).
+/* الأساس المشترك: أرضية بترولية مستقرة بتدرج عمودي من الأسس.
    E07: بلا overflow:hidden على السطح كله — كان يقص المحتوى نفسه
    عند تكبير النص (الرقم الكبير يصل الحافة ويُقص). الخلفية والتدرج
    يقصّان بـ border-radius أصلًا، والزخرفة محتواة في طبقتها أدناه. */
@@ -31,10 +30,9 @@
   position: relative;
   border-radius: var(--micro-radius-surface);
   background-color: var(--micro-brand-primary);
-  background-image:
-    radial-gradient(120% 90% at 50% 0%,
-      rgba(255, 255, 255, var(--micro-surface-light, 0.10)) 0%,
-      rgba(255, 255, 255, 0) 60%),
+  background-image: linear-gradient(180deg,
+    rgba(255, 255, 255, var(--micro-surface-light, 0.12)) 0%,
+    rgba(255, 255, 255, 0) 54%),
     linear-gradient(180deg,
       var(--micro-brand-gradient-start) 0%,
       var(--micro-brand-primary) 55%,
@@ -43,7 +41,7 @@
   font-family: var(--micro-font-family);
 }
 
-/* طبقة الموجات: أصل SVG خارجي (مصدر واحد) مع مفاتيح التعديل.
+/* طبقة المستويات المنحنية: أصل SVG خارجي مع مفاتيح التعديل.
    غير تفاعلية وإخفاء إتاحي في الترميز. لا حركة مستمرة إطلاقًا.
    E07: احتواء الزخرفة منفصلًا عن المحتوى — زواياها السفلى بنصف
    قطر السطح كي لا تخرج خارجه بلا قصّ السطح كلّه. */
@@ -62,16 +60,16 @@
   border-end-end-radius: var(--micro-radius-surface);
 }
 
-/* المقارنة 1: تدرج وإضاءة هادئة — بلا موجات */
+/* المقارنة 1: تدرج هادئ — بلا مستويات منحنية */
 .m-surface--calm .m-surface__waves { display: none; }
 
-/* المقارنة 2 (المرشح الأساسي): موجات خافتة */
+/* المقارنة 2 (المرشح الأساسي): مستويان عريضان بانحناء هادئ */
 .m-surface--waves .m-surface__waves {
   background-image: url("../../assets/surfaces/waves-soft.svg");
 }
 
-/* E12 (PROPOSED — مقارنة قبل/بعد في اللوحة): تنقيح الموجة نفسها —
-   تدرجات أنعم وتلاشى أوضح وشدة أقل. لا يستبدل المعتمد إلا بقرار المالك. */
+/* E12 (PROPOSED — مقارنة بديلة في اللوحة): نفس المستويات بتلاشي أخف.
+   لا يستبدل المعتمد إلا بقرار المالك. */
 .m-surface--waves-v2 .m-surface__waves {
   background-image: url("../../assets/surfaces/waves-soft-v2.svg");
 }
@@ -81,7 +79,7 @@
   background-image: url("../../assets/surfaces/waves-depth.svg");
 }
 
-/* نسخة بلا زخرفة: نفس الأرضية المستقرة دون إضاءة ولا موجات */
+/* نسخة بلا زخرفة: نفس الأرضية المستقرة دون طبقة إضافية */
 .m-surface--plain {
   background-image: linear-gradient(180deg,
     var(--micro-brand-gradient-start) 0%,
