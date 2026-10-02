@@ -325,11 +325,12 @@ def main():
         page.locator("#live").screenshot(path=str(SHOTS / "06-focus-keyboard-390.png"))
 
         # ---- تركيز + ضغط معًا (بند 9) ----
+        # ضغط لوحة مفاتيح فعلي: النقر بالمؤشر يغير focus-visible حسب
+        # المتصفح وقد تكون الإحداثيات خارج العرض بعد لقطة القسم السابق.
+        page.keyboard.press("Tab")
         page.evaluate("([s]) => document.querySelector(s).focus()", [guard_sel])
-        box = page.locator(guard_sel).bounding_box()
-        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
-        page.mouse.down()
-        page.wait_for_timeout(120)
+        page.keyboard.down("Space")
+        page.wait_for_timeout(160)
         fp = page.evaluate(
             """([s]) => { const b = document.querySelector(s);
                  const cs = getComputedStyle(b);
@@ -338,7 +339,7 @@ def main():
             [guard_sel],
         )
         page.locator("#live").screenshot(path=str(SHOTS / "21-focus-press-390.png"))
-        page.mouse.up()
+        page.keyboard.up("Space")
         check("A18 تركيز + ضغط: الحلقة ظاهرة وخلفية الضغط معًا",
               fp["fv"] and "rgb(22, 77, 89)" in fp["shadow"] and fp["bg"] == "rgb(16, 62, 72)",
               f"focus-visible={fp['fv']}، bg={fp['bg']}")

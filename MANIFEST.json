@@ -366,7 +366,7 @@
   "shared/tokens.css": "33b0b1b52221a68a2272d5398fcb8579d5339d07b01caa0f8f07ba72248b1d5d",
   "tools/README.md": "f8908089281023829b811a05a6c6e1de6ab6ec4a41dae82ebc713d37ecf16c60",
   "tools/after-direction-screenshots.py": "ca36e73d65087e15250a26bfb58367d305248e72c53c50b038b2fea51eb1ff9b",
-  "tools/b01-screenshots.py": "12bb1c77ff145e8dfbca90df43ab1d88be7da0a9855e5d2aa942bb41e648ff7d",
+  "tools/b01-screenshots.py": "267e6f4209101b0bf6a47e5e40ec6afb9bf3e35fab1b3434d0018dc87dad6987",
   "tools/b02-screenshots.py": "1fa2b3026f78d0bd32f6098f4874a9820bb02717319d92e6d5a75af136f8f6dc",
   "tools/b03-screenshots.py": "290495e587761a15553df90b5df1e40da9555560ea0e2606bce7295a1ce4de9e",
   "tools/b04-screenshots.py": "0c057f90e5608912407550515fadb5948b3bc6b34350292a5b534596908fcc98",
@@ -377,6 +377,6 @@
   "tools/contrast-check.py": "811d0aee750ed8730e1133d0897346b1e7af9f19de7bf38e52651acc9f5f249d",
   "tools/hugeicons-convert.py": "3ed183a63e565882534a62b673a5f10966ee65879705712d88632849387b4515",
   "tools/manifest-build.py": "7f75543f8254826c8f911b95a3073432b69185a8a0b0de5f14b7377030f4852f",
-  "tools/repair-regression.cjs": "55fc47285ee8935d7e347ac0f215c7b3c41ee5803534e334b2cbdf8648e2f9b6",
+  "tools/repair-regression.cjs": "3f7dd3bf1a236710f8aec4a177f65de9bcd1c4e041a4d561b67a488d9fd46423",
   "tools/s01-screenshots.py": "4211287f08502653f6411e72add38353a37ebbf581312834a9ebc2173f837fdb"
 }

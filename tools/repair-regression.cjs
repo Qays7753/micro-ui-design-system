@@ -77,9 +77,18 @@ async function localContrast(page, selector) {
   await button.scrollIntoViewIfNeeded();
   const color=await button.evaluate(b=>getComputedStyle(b).color.match(/[\d.]+/g).map(Number));
   const saved=await button.getAttribute('style');
-  await button.evaluate(b=>b.style.setProperty('color','transparent','important'));
+  await button.evaluate(b=>{
+    b.style.setProperty('transition','none','important');
+    b.style.setProperty('color','transparent','important');
+  });
   const image=pixels(await button.screenshot());
-  await button.evaluate((b,s)=>s===null?b.removeAttribute('style'):b.setAttribute('style',s),saved);
+  await button.evaluate((b,s)=>{
+    function restore() {if(s===null) b.removeAttribute('style'); else b.setAttribute('style',s);}
+    restore();
+    b.style.setProperty('transition','none','important');
+    void getComputedStyle(b).color;
+    restore();
+  },saved);
   let min=Infinity;
   for (let y=Math.floor(image.h*.25);y<image.h*.75;y++)
     for(let x=Math.floor(image.w*.15);x<image.w*.85;x++)
@@ -150,8 +159,8 @@ async function carouselChecks(page, base) {
     await dots.nth(1).click();
     check(`M2 ${width} dot`,await host.locator('[data-current="true"]').evaluate(s=>s===s.parentElement.children[1]),{});
     await host.focus();
-    await page.keyboard.press('ArrowLeft'); // RTL next
-    check(`M2 ${width} RTL arrow`,await host.locator('[data-current="true"]').evaluate(s=>s===s.parentElement.children[2]),{});
+    await page.keyboard.press('ArrowRight'); // RTL previous: second -> first
+    check(`M2 ${width} RTL arrow`,await host.locator('[data-current="true"]').evaluate(s=>s===s.parentElement.children[0]),{});
     if(!reduced) await shot(page,'[data-carousel]',`carousel-focus-${width}`);
   }
 }
@@ -305,6 +314,11 @@ async function surfaceChecks(page,base) {
     check(`M7 light ${width} zoom=${zoom}`,light.background.includes('184, 217, 220') &&
       light.background.includes('223, 238, 230') && light.background.includes('247, 248, 244') &&
       !light.clipped && light.animation==='none',light);
+    for(const part of ['.aft-light-summary__unit',
+      '.aft-light-summary__metric:first-child .aft-light-summary__metric-label']) {
+      const info=await localContrast(page,'#light-summary '+part);
+      check(`M7 local contrast ${part} ${width} zoom=${zoom}`,info.min>=4.5,info);
+    }
     await shot(page,'#light-summary',`light-summary-${width}${zoom?'-text200':''}`);
     const selector='#hero-surface .aft-hero__action';
     const button=page.locator(selector);
@@ -316,9 +330,10 @@ async function surfaceChecks(page,base) {
       await page.waitForTimeout(210);
       const info=await localContrast(page,selector);
       const target=await button.evaluate(b=>{const r=b.getBoundingClientRect();return {w:r.width,h:r.height,
-        outline:getComputedStyle(b).outlineWidth};});
+        focusVisible:b.matches(':focus-visible'),shadow:getComputedStyle(b).boxShadow};});
       check(`M4 ${state} ${width} zoom=${zoom}`,info.min>=4.5 && target.w>=48 && target.h>=48 &&
-        (state!=='focus'||target.outline==='2px'),{...info,...target});
+        (state!=='focus'||target.focusVisible && target.shadow.includes('rgb(22, 77, 89)') &&
+          target.shadow.includes('2px') && target.shadow.includes('4px')),{...info,...target});
       if(width===390&&!zoom) await shot(page,'#hero-surface',`dark-summary-${state}-390`);
     }
   }
