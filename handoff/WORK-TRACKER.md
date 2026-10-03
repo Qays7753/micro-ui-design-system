@@ -1,3 +1,7 @@
+# حالة المراجعة الأحدث —2026-10-04
+
+رأسe5dc86a روجع: R8-01..R8-06 CLOSED، R8-07 PARTIAL. المهمتان المتبقيتانR8-07a (نصdonut الموجز وفصل التشخيص) وR8-07b (مسح/مزامنة تشخيصrender في كل دورة) OPEN. [التكليف والأدلة](../reviews/UI-COMPLETION/CHATGPT-REVIEW-R2.md). لا إعادة فتح الهوية/العائلات المغلقة، ولا شاشات/UX/merge. A05 قرار المالكPROPOSED. مرحلة القبول لم تغلق بهذا التقرير. السجل أدناه تاريخي.
+
 # تحديث المراجعة المستقلة PR#8 —2026-10-03
 
 الحالة: CHANGES REQUESTED. [التقرير](../reviews/UI-COMPLETION/CHATGPT-REVIEW-R1.md) و[الأدلة](../reviews/UI-COMPLETION/independent/probes.json). لا تُقرأ عبارات الإغلاق في سجل المنفذ أدناه كاعتماد للمراجعة الجديدة.

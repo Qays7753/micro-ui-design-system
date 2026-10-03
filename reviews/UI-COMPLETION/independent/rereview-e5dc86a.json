@@ -1,0 +1,151 @@
+{
+  "source_commit": "e5dc86ac3a4c21cc1cfc48e9003db4ba63e46b4f",
+  "review_status": "CHANGES REQUESTED — R8-07 PARTIAL",
+  "engine": "Chromium 153.0.8010.0 / Playwright 1.63.0",
+  "rerun_checks": {
+    "a05": {
+      "passed": 24,
+      "total": 24
+    },
+    "audit": {
+      "passed": 21,
+      "total": 21
+    },
+    "ui_release": {
+      "passed": 322,
+      "total": 322
+    }
+  },
+  "package_before_review_changes": {
+    "manifest": 579,
+    "manifest_mismatches": 0,
+    "zip_entries": 580,
+    "zip_mismatches": 0,
+    "crc_error": null
+  },
+  "original_reproductions": {
+    "engine": "153.0.8010.0",
+    "missing_icons": [],
+    "peek_before_next": {
+      "peekIndex": 0,
+      "activeSlide": 0,
+      "position": "1 / 4",
+      "commonReady": false,
+      "peekReady": true
+    },
+    "peek_after_next": {
+      "peekIndex": 1,
+      "activeSlide": 1,
+      "position": "2 / 4",
+      "commonReady": false,
+      "peekReady": true
+    },
+    "next_errors": [],
+    "peek_before_prev": {
+      "peekIndex": 2,
+      "activeSlide": 2,
+      "position": "3 / 4",
+      "commonReady": false,
+      "peekReady": true
+    },
+    "peek_after_prev": {
+      "peekIndex": 1,
+      "activeSlide": 1,
+      "position": "2 / 4",
+      "commonReady": false,
+      "peekReady": true
+    },
+    "prev_errors": [],
+    "focus_after_change": {
+      "before": "inside-card",
+      "after": "DIV",
+      "viewport": true,
+      "insideInert": false
+    },
+    "focus_after_change_later": {
+      "active": "DIV",
+      "insideInert": false
+    },
+    "mid_geometry": [
+      {
+        "visibleWidth": 0,
+        "width": 266
+      },
+      {
+        "visibleWidth": 18,
+        "width": 266
+      },
+      {
+        "visibleWidth": 266,
+        "width": 266
+      },
+      {
+        "visibleWidth": 18,
+        "width": 266
+      }
+    ],
+    "empty_single_variant": [
+      {
+        "count": 0,
+        "ready": true,
+        "viewportHidden": true,
+        "emptyHidden": false,
+        "controlsHidden": true,
+        "index": -1
+      },
+      {
+        "count": 1,
+        "ready": true,
+        "viewportHidden": false,
+        "emptyHidden": true,
+        "controlsHidden": true,
+        "index": 0
+      }
+    ],
+    "surface_example_selftest": "PASS الخلفية من curves.css (تدرج بدء الملخص الفاتح) — لا أصل موجات في خلفية السطح — linear-gradient(145deg, rgb(184, 217, 220) 0%, rgb(223, 238, 230) 52%,\nPASS طبقة الموجات القديمة مخفية في الاتجاه الحالي (display:none لا افتراضيان متنافسان)\nPASS الزخرفة الشعاعية ساكنة بلا حركة (animation none)\nPASS أدوار النص الأربعة داكنة ثابتة (--micro-text-primary) فوق السطح الفاتح\nPASS تباين النص الداكن على أفتح؟ لا — على أغمق توقف في التدرج ≥ 4.5:1 — النسبة 9.60 (text-primary على #B8D9DC)\nPASS حدود حروف العنوان داخل السطح\nPASS حدود حروف الرقم داخل السطح\nPASS الرقم الطويل يُلف داخل السطح (ارتفاع يزيد وحدود الحروف داخلية)\nPASS أسطر العنوان بلا تداخل (line-height نسبي 1.6364) — أسطر=3\nPASS عند تكبير النص 200% (محاكاة المكتبة — مضاعفة أحجام العناصر الفعلية): العنوان 22→44px والرقم 36→72px، الحروف داخل السطح بلا تداخل ولا قص ولا خروج أفقي — title 22→44px، amount 36→72px، أسطر=5"
+  },
+  "additional": {
+    "ltr_next": 1,
+    "ltr_prev": 0,
+    "ltr_right": 1,
+    "ltr_left": 0,
+    "surface_checks": {
+      "320": {
+        "fail": false,
+        "real_200_percent": true
+      },
+      "360": {
+        "fail": false,
+        "real_200_percent": true
+      },
+      "390": {
+        "fail": false,
+        "real_200_percent": true
+      },
+      "430": {
+        "fail": false,
+        "real_200_percent": true
+      }
+    },
+    "donut_user_errors": [
+      "تعذر رسم التوزيع: مجموع الفئات (110) أكبر من المقام المعلن (100) — صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب."
+    ],
+    "scale_transition": {
+      "before": {
+        "state": "over",
+        "detail": "bars: أكبر قيمة (10) تتجاوز data-max=\"5\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+        "svg": false
+      },
+      "after_valid": {
+        "state": "over",
+        "detail": "bars: أكبر قيمة (10) تتجاوز data-max=\"5\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+        "svg": true
+      },
+      "after_auto": {
+        "state": "over",
+        "detail": "bars: أكبر قيمة (10) تتجاوز data-max=\"5\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+        "svg": true
+      }
+    }
+  }
+}
