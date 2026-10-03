@@ -1,23 +1,28 @@
 # Micro UI — دليل الاستخدام والتركيب والتغيير المشترك (UI-USAGE-SOP)
 
-الحالة: DRAFT FOR REVIEW — يصف طريقة عمل فرع التوسعة (B02+) على المصدر نفسه دون إعادة بناء.
-المرجع: docs/EDITABLE-DELIVERY.md وdocs/UI-LIBRARY-EXECUTION-BRIEF.md.
+الحالة: دليل استخدام حالي للمراجعة؛ التنفيذ غير المعتمد يبقى DRAFT، دون إعادة بناء.
+المرجع: [DESIGN.md](../DESIGN.md)، docs/EDITABLE-DELIVERY.md، ومواصفات كل عائلة. التكليف الأقدم محفوظ في docs/UI-LIBRARY-EXECUTION-BRIEF.md بوصفه تاريخ التنفيذ.
 
 ## 1) التشغيل السريع
 
 ```bash
-python3 -m http.server 8080        # من جذر المستودع فقط (وليس من مجلد المعاينة)
-# الفهرس:   http://localhost:8080/previews/
-# دفعة واحدة: http://localhost:8080/previews/<family>/
+python3 tools/preview-server.py   # الخدمة الحالية من جذر المستودع، على 5000
+# الفهرس: /previews/ — الجذر يعيد التوجيه إليه
+# دفعة واحدة: /previews/<family>/ — المكونات الجديدة مجتمعة في /previews/concepts/
 ```
 
-تشغيل فحوص أي دفعة (Chromium + Playwright): `python3 tools/<batch>-screenshots.py` — السجل والقياسات وcommit مصدر اللقطات في `reviews/<batch>/verification.txt`. دفعة العارض المستقلة: `python3 tools/carousel-screenshots.py` → `reviews/CAROUSEL/`. دفعة اتجاه After: `python3 tools/after-direction-screenshots.py` → `reviews/AFTER-DIRECTION/`.
+في Replit استخدم الخدمة الموجودة ولا تشغل نسخة ثانية. فحوص الدفعات التاريخية: `python3 tools/<batch>-screenshots.py`؛ الفحوص الحالية للمدخل والتركيب: `python3 tools/identity-check.py`، وتغطية المفاهيم: `python3 tools/concepts-check.py`. سجل المتصفح الفعلي وطريقة التكبير وبصمات المصدر، وأعد المتأثر فقط؛ نجاح سابق لا يثبت مصدرًا تغيّر.
+
+مرجع النسخة الحالية [UI-RELEASE](UI-RELEASE.md) و[UI-VISUAL-SYSTEM](UI-VISUAL-SYSTEM.md)، والحالات الحية في `previews/system/`. فحص الإصدار `python3 tools/ui-release-check.py` يغطي الأمثلة الاثني عشر والمقاسات والحالات والتباين. انحناء الزر 24px والتحميل B هما الافتراضيان؛ A للتوافق الصريح فقط.
+
+الفحص `python3 tools/design-core-check.py` يغطي أيضًا الأمثلة المستقلة الثلاثة وحجب مسارات الملفات الخاصة؛ أدلته في `reviews/DESIGN-CORE/`. كل سجل له نطاقه ومصدره ومحركه، ولا يجمع العددان كشهادة للمكتبة.
+المراجع التاريخية المستعادة من GitHub: `tools/carousel-screenshots.py` → `reviews/CAROUSEL/` و`tools/after-direction-screenshots.py` → `reviews/AFTER-DIRECTION/`. لا تثبت فحوصها القديمة صحة مصدر تغير بعد ذلك.
 
 ## 2) استهلاك مكوّن في صفحتك (الحد الأدنى)
 
 1. حمّل بالترتيب: `assets/fonts/fonts.css` ← `shared/tokens.css` ← `components/<family>/<family>.css` (و`shared/motion.css` إذا احتجت طبقات/حركة).
 2. انسخ البنية المعلنة في `components/<family>/specification.md` (§ البنية) — أسماء الأصناف هي العقد.
-3. السلوك العام عند الحاجة فقط: `components/<family>/<family>.js` (واجهات عامة موثقة: `MicroButtons/MicroFields/MicroSelection/MicroMessages/MicroNavigation/MicroData/MicroOrganization`) — ثم `init()` أو ربط الأحداث المعلنة.
+3. السلوك العام عند الحاجة فقط: `components/<family>/<family>.js`؛ راجع واجهات مواصفات العائلة بدل افتراض `init()` لكل API. العائلات الجديدة: `MicroInfoStrip` و`MicroMetricComparison` و`MicroAccountSettings` و`MicroAccessGateway`؛ معالج المصادقة والحفظ مسؤولية المستهلك وخارج الأمثلة.
 4. أيقونات صفحتك: تُجلب من `assets/icons/*.svg` وتُحوّل إلى `<symbol>` كما تفعل لوحات المعاينة عبر `previews/board.js` — أو استخدم `<img>` مع فقدان `currentColor`.
 
 ## 3) تركيب بين العائلات (قواعد مثبتة)
@@ -27,9 +32,12 @@ python3 -m http.server 8080        # من جذر المستودع فقط (ولي
 - رسائل B06 تُستخدم داخل أي لوحة/صفحة كعنصر مستهلك ثابت.
 - ألوان البيانات (B05) لا تنتقل زينةً إلى حقول أو أزرار.
 - الأسطح (S01) للأسطح البارزة فقط — القوائم والمدخلات صافية.
+- الاختيار داخل المنتقي (B03) يستخدم طبقة B07 الموجودة؛ تأجيلها القديم انتهى.
+- استخدم [الأمثلة المصغرة المستقلة](../previews/compositions/index.html) للتحقق، لا كأساس لشاشات أعمال أو نصوص نهائية.
+- الأمثلة المستقلة المحفوظة: [صف وشارة وإجراء](../previews/compositions/row-example.html)، [نموذج ومساعدة وخطأ](../previews/compositions/form-example.html)، [قراءة رئيسية وقائمة مفتوحة](../previews/compositions/summary-example.html). لا إرسال أو تخزين فيها.
+- اختر الرسم حسب الوحدة والفترة وتعريف المقام؛ السالب ليس خطأ أعمال، والغياب ليس صفرًا. [جدول الاختيار](../DESIGN.md) يسري على العائلات القديمة والجديدة.
 - تركيب اتجاه After (دفعة مستقلة PROPOSED): نمط التجميع عنوان+فاصل+صفوف بلا بطاقة لكل عنصر، وسطح بترولي بارز واحد عند الحاجة، وقيمة رئيسية + اتجاه بنص لا لون، ودوائر متداخلة بقيم داخلها (امتداد packed PROPOSED) — مرجع تركيب قابل للتعديل في `previews/after-direction/` وليس شاشة إنتاجية ولا نمط تنقل.
 - العارض (دفعة مستقلة) مستقل عن محتوى البطاقات تمامًا: استهلكه بوضع أي محتوى داخل `.m-carousel__card`؛ لا تجعله صفحة رئيسية ولا Dashboard، ولا تعتمد السحب وحده، ولا `autoplay` أصلًا. أمثلة محتواه من عقد B05/التوزيع والدوائر (المتداخلة امتداد PROPOSED opt-in في `components/data/packed-circle.*` لا يغيّر سلوك B05).
-- الاختيار داخل المنتقي (B03) يُعاد استخدام طبقة B07 النهائية عند توفرها.
 
 ## 4) إضافة نوع جديد لدفعة قائمة (مثال: نوع زر سابع)
 
@@ -54,24 +62,15 @@ python3 tools/b01-screenshots.py   # وكذلك b02..b07 وs01
 ## 7) إعادة توليد MANIFEST (بعد آخر تعديل — مستثنيًا نفسه)
 
 ```bash
-python3 - <<'PY'
-import hashlib, json
-from pathlib import Path
-m = {}
-for p in sorted(Path('.').rglob('*')):
-    rel = p.relative_to('.').as_posix()
-    if not p.is_file() or p.is_symlink() or rel == 'MANIFEST.json' or rel.startswith('.git/'):
-        continue
-    m[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-Path('MANIFEST.json').write_text(json.dumps(m, ensure_ascii=False, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-print('entries:', len(m))
-PY
+python3 tools/manifest-build.py
+python3 tools/build-components-package.py
 ```
+بعد آخر تعديل والأدلة. الأداة تستثني البيئة وبيانات المساعد والمؤقتات والحزمة نفسها؛ لا تستعمل جردًا عشوائيًا لكل ملفات مساحة العمل. البصمات في MANIFEST للمصادر، وبصمة ZIP في التقرير خارج الحزمة.
 
 ## 8) قواعد ذهبية (ملخص)
 
 - المصدر قابل للتعديل دائمًا — الصورة/PDF/build وحدها ليست تسليمًا.
-- لا force-push ولا دمج ذاتي — كل دفعة DRAFT FOR REVIEW حتى مراجعة ChatGPT واعتماد قيس.
+- لا رفع أو force-push أو دمج أو نشر أو حذف فروع دون أمر منفصل؛ حالة كل اختيار بحسب سجل الاختيارات، لا اعتماد تلقائي باجتياز الفحص.
 - أي قيمة بصرية جديدة = توكن مسمّى موسوم «مقترح» + سبب في review.md، لا قيمة صامتة.
 - القيم الداخلية بالمكوّن وحده موثقة بتعليق في موضعها ولا تُقدَّم كقيم مشتركة.
 - لا تُنقل ادعاءات فحص قديمة إلى مصدر تغيّر — أعد الفحص أو أعلن النقص.

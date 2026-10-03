@@ -1,209 +1,109 @@
-<!DOCTYPE html>
-<!-- =========================================================
-  Micro UI — فهرس لوحات المعاينة (previews/index.html)
-  التشغيل من جذر المستودع: python3 -m http.server 8080 ثم /previews/
-  كل لوحة مستقلة وتشغّل من الجذر نفسه. المصادر في components/.
-  الحالة: DRAFT FOR REVIEW — لا دمج ولا اعتماد ذاتي.
-========================================================= -->
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — فهرس معاينات المكوّنات</title>
+  <meta name="theme-color" content="#f7f8f4">
+  <title>Micro UI — مكتبة المكوّنات</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="shared/tokens.css">
-  <link rel="stylesheet" href="previews/board-base.css">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../shared/tokens.css">
+  <link rel="stylesheet" href="../shared/motion.css">
+  <link rel="stylesheet" href="../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../components/fields/fields.css">
+  <link rel="stylesheet" href="../components/selection/selection.css">
+  <link rel="stylesheet" href="../components/selection/picker.css">
+  <link rel="stylesheet" href="../components/organization/organization.css">
+  <link rel="stylesheet" href="../components/data/data.css">
+  <link rel="stylesheet" href="../components/messages/messages.css">
+  <link rel="stylesheet" href="../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../components/surfaces/curves.css">
+  <link rel="stylesheet" href="../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="../components/metric-comparison/metric-comparison.css">
+  <link rel="stylesheet" href="../components/account-settings/account-settings.css">
+  <link rel="stylesheet" href="../components/access-gateway/access-gateway.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-
-  <header class="board-header">
-    <h1>Micro — فهرس معاينات المكوّنات <span class="status-chip">DRAFT FOR REVIEW</span></h1>
-    <p class="meta">هاتف · عربي RTL · أرقام 0–9 · وضع فاتح. كل لوحة تعرض المصدر الحقيقي من components/ — الصور أدلة من المصدر نفسه. أمر التشغيل: <span dir="ltr">python3 -m http.server 8080</span> من جذر المستودع.</p>
+  <header class="library-head">
+    <div class="library-head__inner">
+      <p class="eyebrow"><span class="brand-mark">m</span> MICRO <span class="eyebrow__divider"></span> مكتبة الواجهة · عربي RTL</p>
+      <h1>وضوح يومي،<br><span>في كل تفصيلة.</span></h1>
+      <p class="library-head__intro">مرجع التنفيذ الحالي لمكوّنات Micro المشتركة. عناصر عملية لمشاريع صغيرة في الأردن، مبنية لتقرأ بسرعة وتبقى هادئة تحت ضغط يوم العمل.</p>
+      <div class="head-meta"><span class="release-pill"><i></i> مرجع تنفيذ مستقر</span><span>12 عائلة · مصدر قابل للتحرير</span><a href="system/">مرجع الحالات والتجربة ←</a></div>
+    </div>
+    <div class="head-ornament" aria-hidden="true"><span></span><span></span><b>01</b></div>
   </header>
-
-  <main>
-
-    <section class="panel">
-      <h2>الدفعات المنفذة</h2>
-      <p class="panel-note">B01 على فرعه وPR #1 (DRAFT FOR RE-REVIEW)؛ وبقية الدفعات على فرع التوسعة وPR #2 التابع له (DRAFT FOR REVIEW). لا دمج قبل المراجعة واعتماد المالك.</p>
-      <div class="example-grid" style="align-items:stretch">
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="buttons/">
-            <span class="index-card__title">B01 — الأزرار</span>
-            <span class="m-section-desc">الأنواع الستة والحالات وعقد التحميل والعدّاد — PR #1</span>
-          </a>
-          <span class="caption">components/buttons/ · reviews/B01/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="fields/">
-            <span class="index-card__title">B02 — الحقول</span>
-            <span class="m-section-desc">نص ونص طويل وبحث ومبلغ وكمية — الفارغ ≠ 0 والخطأ لا يمحو</span>
-          </a>
-          <span class="caption">components/fields/ · reviews/B02/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="selection/">
-            <span class="index-card__title">B03 — الاختيار</span>
-            <span class="m-section-desc">Checkbox/Radio/Switch/Toggle/Segmented + قائمة ومنتقي وتاريخ</span>
-          </a>
-          <span class="caption">components/selection/ · reviews/B03/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="organization/">
-            <span class="index-card__title">B04 — التنظيم والمعلومات</span>
-            <span class="m-section-desc">صفوف وقراءة/فتح/إجراء وطي وشارات وعدّادات وهوية</span>
-          </a>
-          <span class="caption">components/organization/ · reviews/B04/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="surfaces/">
-            <span class="index-card__title">S01 — الأسطح البترولية والحركة</span>
-            <span class="m-section-desc">ثلاث مقارنات + نسخة مجردة + مفاتيح الموجة + مقارنة الحركة وتقليلها</span>
-          </a>
-          <span class="caption">components/surfaces/ · assets/surfaces/ · reviews/S01/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="data/">
-            <span class="index-card__title">B05 — البيانات والتتبّع</span>
-            <span class="m-section-desc">قيم ومقارنات وأعمدة وخط وتوزيع ودوائر مساحة صحيحة وتقدم وخطوات</span>
-          </a>
-          <span class="caption">components/data/ · reviews/B05/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="carousel/">
-            <span class="index-card__title">العارض — بطاقات ملخصات قابلة للسحب (دفعة مستقلة)</span>
-            <span class="m-section-desc">بطاقة نشطة بالمنتصف ومجاورة ظاهرة وأسهم ومؤشر وسحب pointer وترتيب منطقي RTL — ومقارنة مالية بدوائر متداخلة PROPOSED</span>
-          </a>
-          <span class="caption">components/carousel/ · components/data/packed-circle.* · reviews/CAROUSEL/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="messages/">
-            <span class="index-card__title">B06 — الرسائل والحالات</span>
-            <span class="m-section-desc">رسائل ثابتة وخمسة أنواع وعابرة بعقد موثق وانتظار وskeleton وفراغات</span>
-          </a>
-          <span class="caption">components/messages/ · reviews/B06/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="navigation/">
-            <span class="index-card__title">B07 — التنقّل والطبقات</span>
-            <span class="m-section-desc">شريط عنوان وتبويبات وشريط تنقل عينة وطبقات وفلاتر وشريط إجراء</span>
-          </a>
-          <span class="caption">components/navigation/ · reviews/B07/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="buttons/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B01)</span>
-            <span class="m-section-desc">المستهلك يشغّل عقد setLoading بنفسه — بلا board.js</span>
-          </a>
-          <span class="caption">previews/buttons/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="fields/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B02)</span>
-            <span class="m-section-desc">IDs رسائل فريدة ودمج وصف سابق وحراسة readOnly — بلا board.*</span>
-          </a>
-          <span class="caption">previews/fields/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="selection/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B03+E04)</span>
-            <span class="m-section-desc">منتقي في طبقة B07: بحث/بلا نتائج/اختيار/إغلاق وإعادة فتح — بلا board.*</span>
-          </a>
-          <span class="caption">previews/selection/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="organization/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B04)</span>
-            <span class="m-section-desc">طي بكيبورد وaria وبديل صورة فاشلة — بلا board.*</span>
-          </a>
-          <span class="caption">previews/organization/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="data/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B05)</span>
-            <span class="m-section-desc">تصيير من بيانات HTML وتعديل المصدر ينعكس — بلا board.*</span>
-          </a>
-          <span class="caption">previews/data/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="messages/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B06)</span>
-            <span class="m-section-desc">إخفاء فعلي وإغلاق من المصدر وإعادة استخدام بلا مؤقت قديم — بلا board.*</span>
-          </a>
-          <span class="caption">previews/messages/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="navigation/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (B07)</span>
-            <span class="m-section-desc">عزل خلفية وحصر تركيز واستعادة مشغّل — بلا board.*</span>
-          </a>
-          <span class="caption">previews/navigation/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="surfaces/example-usage.html">
-            <span class="index-card__title">مثال استخدام خارج اللوحة (S01)</span>
-            <span class="m-section-desc">موجة من أصل واحد ومفاتيح تنعكس وحدود حروف داخل السطح — بلا board.*</span>
-          </a>
-          <span class="caption">previews/surfaces/example-usage.html</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="after-direction/">
-            <span class="index-card__title">اتجاه After — تركيب مرجعي (دفعة مستقلة)</span>
-            <span class="m-section-desc">تركيب After مترجم إلى Micro: سطح بارز وملخص مركب ومصفوفة حقول ودوائر متداخلة وأقسام وأسطح وعارض مُرحَّل — PROPOSED</span>
-          </a>
-          <span class="caption">previews/after-direction/ · reviews/AFTER-DIRECTION/</span>
-        </div>
-
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="surfaces/">
-            <span class="index-card__title">S01 — مقارنة تنقيح الموجة قبل/بعد</span>
-            <span class="m-section-desc">مقترح بصري (PROPOSED) بالحجم العادي ومحتوى قصير — قرار المالك</span>
-          </a>
-          <span class="caption">previews/surfaces/index.html §1-ب · assets/surfaces/waves-soft-v2.svg</span>
-        </div>
-
-      </div>
+  <main class="library-main">
+    <section class="intro-band" aria-label="مبادئ العرض">
+      <p><strong>مقياس هادئ.</strong> البترولي يحدد الفعل والاختيار، النعناعي يحتضن الحالات، والمشمشي يلفت النظر بقدر الحاجة.</p>
+      <a href="../docs/UI-VISUAL-SYSTEM.md">قواعد النظام البصري <span aria-hidden="true">↗</span></a>
     </section>
-
-    <section class="panel">
-      <h2>وثائق الاستخدام والتغطية</h2>
-      <div class="example-grid">
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="../docs/UI-USAGE-SOP.md"><span class="index-card__title">docs/UI-USAGE-SOP.md</span><span class="m-section-desc">إعادة الاستخدام والتركيب وإضافة نوع جديد والتغيير المشترك</span></a>
+    <div class="section-title">
+      <div><p class="section-kicker">01 / COMPONENT FAMILIES</p><h2>المكوّنات، من المصدر</h2></div>
+      <p>كل عينة هنا تستخدم CSS الإنتاج نفسه؛ افتح المثال المستقل أو المواصفة أو الملف مباشرة.</p>
+    </div>
+    <div class="family-list">
+      <article class="family" id="buttons">
+        <div class="family__demo demo--petrol">
+          <button class="m-btn m-btn--primary" type="button"><span class="m-btn__label">حفظ التغييرات</span><span class="m-btn__spinner" aria-hidden="true"></span></button>
+          <button class="m-btn m-btn--secondary" type="button">إجراء ثانوي</button>
+          <button class="m-btn m-btn--secondary m-btn--icon" type="button" aria-label="المزيد"><span class="m-btn__icon" aria-hidden="true"></span></button>
         </div>
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="../docs/UI-COVERAGE-RESULTS.md"><span class="index-card__title">docs/UI-COVERAGE-RESULTS.md</span><span class="m-section-desc">تقرير لكل معرف: الملف والمعاينة والدليل والحالة والنقص</span></a>
-        </div>
-        <div class="example" style="width:300px;max-width:100%">
-          <a class="index-card" href="../docs/UI-COVERAGE-MATRIX.md"><span class="index-card__title">docs/UI-COVERAGE-MATRIX.md</span><span class="m-section-desc">المصفوفة المطلوبة (المرجع — ليست نتائج)</span></a>
-        </div>
-      </div>
+        <div class="family__info"><div class="family__index">01 <span>B01</span></div><div class="family__copy"><h3>الأزرار</h3><p>قرار واضح، مساحة ثابتة؛ فتحة التحميل محجوزة قبل بدء الانتظار.</p><div class="family__links"><a href="buttons/example-usage.html">مثال مستقل</a><a href="../components/buttons/specification.md">المواصفة</a><a href="../components/buttons/buttons.css">CSS</a><a href="../components/buttons/buttons.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="fields">
+        <div class="family__demo demo--warm"><div class="m-field has-readonly"><label class="m-field__label" for="gallery-name">اسم الصنف</label><div class="m-field__control"><input class="m-field__input" id="gallery-name" value="صابون زيت الزيتون" readonly aria-describedby="gallery-name-hint"></div><p class="m-field__msg is-visible" id="gallery-name-hint">القراءة فقط تبقى واضحة وقابلة للنسخ.</p></div></div>
+        <div class="family__info"><div class="family__index">02 <span>B02</span></div><div class="family__copy"><h3>الحقول</h3><p>تسمية دائمة، قيمة مقروءة، ورسالة مساعدة لا تزاحم المحتوى.</p><div class="family__links"><a href="fields/example-usage.html">مثال مستقل</a><a href="../components/fields/specification.md">المواصفة</a><a href="../components/fields/fields.css">CSS</a><a href="../components/fields/fields.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="selection">
+        <div class="family__demo demo--mint"><label class="m-choice m-choice--check"><input type="checkbox" checked><span class="m-choice__box" aria-hidden="true"><span class="family__check-icon"></span></span><span class="m-choice__text">توصيل داخل عمّان</span></label><div class="m-switch"><input type="checkbox" checked role="switch" aria-label="تفعيل التنبيهات"><span class="m-switch__track"><span class="m-switch__thumb"></span></span><span class="m-switch__text"><span class="m-switch__label">التنبيهات</span><span class="m-switch__state">مفعّلة</span></span></div></div>
+        <div class="family__info"><div class="family__index">03 <span>B03</span></div><div class="family__copy"><h3>الاختيار</h3><p>المحدد، المفتاح، والتبديل يميز كلٌّ منها غرضه دون اعتماد على اللون وحده.</p><div class="family__links"><a href="selection/example-usage.html">مثال مستقل</a><a href="../components/selection/specification.md">المواصفة</a><a href="../components/selection/selection.css">CSS</a><a href="../components/selection/selection.js">JS</a><a href="../components/selection/picker.css">المنتقي</a><a href="../components/selection/picker.js">JS المنتقي</a></div></div></div>
+      </article>
+      <article class="family" id="organization">
+        <div class="family__demo demo--warm"><div class="m-row"><span class="m-row__tile" aria-hidden="true"><span class="family__row-icon"></span></span><span class="m-row__text"><span class="m-row__title">طلبية اليوم</span><span class="m-row__subtitle">منذ 11 دقيقة · جبل عمّان</span></span><span class="m-badge m-badge--info">قيد التجهيز</span></div><div class="m-divider"></div><p class="m-section-desc">صف مفتوح ومقروء؛ لا صندوق إضافي لمجرد الفصل.</p></div>
+        <div class="family__info"><div class="family__index">04 <span>B04</span></div><div class="family__copy"><h3>التنظيم والمعلومات</h3><p>القوائم تتجمع بالعنوان والمسافة، والبطاقة تظهر حين تحتاج استقلالًا.</p><div class="family__links"><a href="organization/example-usage.html">مثال مستقل</a><a href="../components/organization/specification.md">المواصفة</a><a href="../components/organization/organization.css">CSS</a><a href="../components/organization/organization.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="data">
+        <div class="family__demo demo--paper"><div class="m-chart m-chart--bars" data-chart="bars" data-max="12" data-title="ملخص توضيحي"><h3 class="m-chart__title">طلبات الأسبوع</h3><ul class="m-chart__data" hidden><li data-series="a" data-label="السبت" data-value="8"></li><li data-series="b" data-label="الأحد" data-value="11"></li><li data-series="c" data-label="الاثنين" data-value="5"></li></ul><div class="m-chart__plot" data-plot></div><p class="m-chart__summary" data-summary>قيم توضيحية للمكوّن.</p></div></div>
+        <div class="family__info"><div class="family__index">05 <span>B05</span></div><div class="family__copy"><h3>البيانات والتتبّع</h3><p>الصفر والغياب والسالب حالات مختلفة؛ الرسم لا يقرر معنى الأعمال.</p><div class="family__links"><a href="data/example-usage.html">مثال مستقل</a><a href="../components/data/specification.md">المواصفة</a><a href="../components/data/data.css">CSS</a><a href="../components/data/data.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="messages">
+        <div class="family__demo demo--mint"><div class="m-note m-note--success"><span class="family__status-icon" aria-hidden="true"></span><div class="m-note__text"><strong class="m-note__title">تم حفظ التعديل</strong><p class="m-note__body">أصبح وصف الصنف محدثًا.</p></div></div><div class="m-empty"><span class="family__empty-icon" aria-hidden="true"></span><strong class="m-empty__title">لا توجد عناصر بعد</strong><p class="m-empty__body">ستظهر العناصر هنا عند إضافتها.</p></div></div>
+        <div class="family__info"><div class="family__index">06 <span>B06</span></div><div class="family__copy"><h3>الرسائل والحالات</h3><p>إشعار النجاح، الانتظار، الخطأ، والفراغ لكل منها لغة ودلالة واضحة.</p><div class="family__links"><a href="messages/example-usage.html">مثال مستقل</a><a href="../components/messages/specification.md">المواصفة</a><a href="../components/messages/messages.css">CSS</a><a href="../components/messages/messages.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="navigation">
+        <div class="family__demo demo--paper"><div class="m-appbar"><span class="m-appbar__title">تفاصيل الطلب</span><button class="m-btn m-btn--secondary m-btn--icon" aria-label="المزيد"><span class="m-btn__icon" aria-hidden="true"></span></button></div><div class="m-tabs" role="tablist"><button class="m-tabs__tab" role="tab" aria-selected="true">التفاصيل</button><button class="m-tabs__tab" role="tab" aria-selected="false">السجل</button></div></div>
+        <div class="family__info"><div class="family__index">07 <span>B07</span></div><div class="family__copy"><h3>التنقّل والطبقات</h3><p>عنوان، تبويبات، وطبقات مناسبة للمس؛ اتجاه RTL من البنية المنطقية.</p><div class="family__links"><a href="navigation/example-usage.html">مثال مستقل</a><a href="../components/navigation/specification.md">المواصفة</a><a href="../components/navigation/navigation.css">CSS</a><a href="../components/navigation/navigation.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="surfaces">
+        <div class="family__demo demo--surface"><div class="m-surface m-surface--waves"><div class="m-surface__waves" aria-hidden="true"></div><div class="m-surface__content"><span class="m-surface__label">إجمالي المبيعات</span><div class="m-surface__amount" dir="ltr">1,284.50</div><span class="m-surface__sub">د.أ · هذا الشهر</span></div></div></div>
+        <div class="family__info"><div class="family__index">08 <span>S01</span></div><div class="family__copy"><h3>الأسطح والحركة</h3><p>طبقة بترولية ذات عمق محسوب، لا ظلّ لكل صف ولا حركة للزينة.</p><div class="family__links"><a href="surfaces/example-usage.html">مثال مستقل</a><a href="../components/surfaces/specification.md">المواصفة</a><a href="../components/surfaces/surfaces.css">CSS</a><a href="../components/surfaces/curves.css">CSS المنحنيات</a><a href="surfaces/approved-curves.html">مرجع المنحنيات</a></div></div></div>
+      </article>
+      <article class="family" id="info-strip">
+        <div class="family__demo demo--petrol"><article class="m-info-card"><span class="m-info-card__label">رصيد الأسبوع</span><div class="m-info-card__reading"><span class="m-info-card__number">326.40</span><span class="m-info-card__unit">د.أ</span></div><span class="m-info-card__item-label">قراءة توضيحية</span></article></div>
+        <div class="family__info"><div class="family__index">09 <span>E01</span></div><div class="family__copy"><h3>بطاقة القراءة والشريط</h3><p>بطاقة مستقلة للقراءة؛ الشريط اختياري ولا يفرض تنقّلًا تلقائيًا.</p><div class="family__links"><a href="info-strip/">لوحة العائلة</a><a href="../components/info-strip/specification.md">المواصفة</a><a href="../components/info-strip/info-strip.css">CSS</a><a href="../components/info-strip/info-strip.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="metric-comparison">
+        <div class="family__demo demo--warm"><div class="m-main-metric m-main-metric--compact"><h3 class="m-main-metric__title">العمليات اليوم</h3><div class="m-main-metric__layout"><div class="m-main-metric__hero"><span class="m-main-metric__label">الإجمالي</span><span class="m-main-metric__value"><span class="m-main-metric__number">18</span></span></div><ul class="m-main-metric__rows"><li class="m-main-metric__row" data-series="a"><div class="m-main-metric__row-head"><span class="m-main-metric__row-label">توصيل</span><span class="m-main-metric__row-value">12</span></div><div class="m-main-metric__track"><span class="m-main-metric__bar" style="--m-bar-width:67%"></span></div></li></ul></div></div></div>
+        <div class="family__info"><div class="family__index">10 <span>E02</span></div><div class="family__copy"><h3>المقارنة العددية</h3><p>القراءة الرئيسية والمقاييس الجانبية مستقلة؛ الدوائر لا تعني جمعًا.</p><div class="family__links"><a href="../components/metric-comparison/example-usage.html">مثال مستقل</a><a href="../components/metric-comparison/specification.md">المواصفة</a><a href="../components/metric-comparison/metric-comparison.css">CSS</a><a href="../components/metric-comparison/metric-comparison.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="account-settings">
+        <div class="family__demo demo--mint"><div class="m-account-profile"><span class="m-account-profile__avatar">ر</span><span class="m-account-profile__text"><span class="m-account-profile__name">رنا الخطيب</span><span class="m-account-profile__detail">مشغل منزلي · عمّان</span></span></div><div class="m-setting-group"><h4 class="m-setting-group__title">الحساب</h4><ul class="m-setting-group__items"><li><div class="m-setting-row"><span class="m-setting-row__content"><span class="m-setting-row__label">اللغة</span></span><span class="m-setting-row__end">العربية</span></div></li></ul></div></div>
+        <div class="family__info"><div class="family__index">11 <span>E03</span></div><div class="family__copy"><h3>إعدادات الحساب</h3><p>صفوف إعدادات قابلة للمس؛ معلومات واضحة دون تحويل كل سطر إلى بطاقة.</p><div class="family__links"><a href="../components/account-settings/example-usage.html">مثال مستقل</a><a href="../components/account-settings/specification.md">المواصفة</a><a href="../components/account-settings/account-settings.css">CSS</a><a href="../components/account-settings/account-settings.js">JS</a></div></div></div>
+      </article>
+      <article class="family" id="access-gateway">
+        <div class="family__demo demo--paper"><div class="m-access-gateway"><h3 class="m-access-gateway__heading">أهلًا بعودتك</h3><p class="m-access-gateway__intro">سجّل الدخول لمتابعة شغلك.</p><div class="m-field has-readonly"><label class="m-field__label" for="gallery-email">البريد الإلكتروني</label><div class="m-field__control"><input class="m-field__input" id="gallery-email" value="r.al-khatib@example.com" readonly></div></div><button type="button" class="m-btn m-btn--primary m-access-gateway__submit">متابعة</button></div></div>
+        <div class="family__info"><div class="family__index">12 <span>E04</span></div><div class="family__copy"><h3>بوابة الوصول</h3><p>تركيب محلي من الحقول والأزرار؛ لا مصادقة أو اتصال شبكي في هذا المرجع.</p><div class="family__links"><a href="../components/access-gateway/example-usage.html">مثال مستقل</a><a href="../components/access-gateway/specification.md">المواصفة</a><a href="../components/access-gateway/access-gateway.css">CSS</a><a href="../components/access-gateway/access-gateway.js">JS</a></div></div></div>
+      </article>
+    </div>
+    <section class="reference-end">
+      <div><p class="section-kicker">02 / REFERENCE</p><h2>المنفّذ مرجعًا، والتاريخ في مكانه.</h2><p>المعرض يعرض العائلات الحالية فقط. المواد التي سبقت هذه البنية محفوظة للرجوع والتوافق، ولا تحل محل المكتبة الأساسية.</p></div>
+      <div class="reference-end__links"><a href="system/">مرجع الحالات التفاعلي <b>↗</b></a><a href="compositions/">تراكيب مستقلة <b>↗</b></a><a href="carousel/">تاريخي · مرجع العارض <b>↗</b></a><a href="../components/data/packed-circle.css">تاريخي · packed-circle <b>↗</b></a><a href="after-direction/">تاريخي · اتجاه After <b>↗</b></a><a href="surfaces/approved-curves.html">عينة المنحنيات الحالية <b>↗</b></a></div>
     </section>
-
   </main>
-
-  <footer class="board-footer">
-    النتائج لكل دفعة في reviews/&lt;batch&gt;/review.md — سجلات الفحص وcommit مصدر اللقطات مدوّنة داخل كل دفعة. لا تُعتبر صور هذه المعاينات بديلًا عن المصدر.
-  </footer>
-
+  <footer class="library-footer"><span>MICRO UI · ARABIC RTL</span><span>ألوان وخطوط وأيقونات من أصول Micro المحلية.</span></footer>
+  <script src="../components/data/data.js"></script>
 </body>
 </html>

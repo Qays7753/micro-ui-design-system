@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro UI — مرجع الحالات</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/messages/messages.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="system.css">
+</head>
+<body>
+  <header class="ref-header">
+    <a class="ref-back" href="../">← مكتبة المكوّنات</a>
+    <p class="ref-eyebrow">MICRO · VISUAL SYSTEM · 01</p>
+    <h1>الحالات، كما تظهر<br><span>في الاستخدام.</span></h1>
+    <p class="ref-lede">مرجع تنفيذي حيّ للمكوّنات المشتركة. شغّل الحالات أو انتقل إليها بلوحة المفاتيح؛ كل تفاعل محلي ومؤقت، ولا يحفظ بيانات.</p>
+    <span class="ref-release">مرجع تنفيذ مستقر · مصادر المكوّنات الفعلية</span>
+  </header>
+  <main class="ref-main">
+    <section class="ref-section" aria-labelledby="actions-title">
+      <div class="ref-section__head"><div><p class="ref-kicker">01 / ACTIONS</p><h2 id="actions-title">الفعل والانتظار</h2></div><p>تسمية الزر تبقى ظاهرة أثناء التحميل. مكان المؤشر محجوز سلفًا، والضغط لا يزيح المحتوى.</p></div>
+      <div class="ref-panel">
+        <div class="ref-controls" aria-label="حالات الأزرار">
+          <button type="button" data-command="busy" aria-pressed="false">تبديل التحميل</button>
+          <button type="button" data-command="pressed" aria-pressed="false">تبديل الضغط</button>
+          <button type="button" data-command="disabled" aria-pressed="false">تبديل التعطيل</button>
+        </div>
+        <div class="ref-button-samples">
+          <button class="m-btn m-btn--primary" id="demo-action" type="button" aria-label="حفظ التغييرات"><span class="m-btn__label">حفظ التغييرات</span></button>
+          <button class="m-btn m-btn--secondary" type="button">إجراء ثانوي</button>
+          <button class="m-btn m-btn--secondary m-btn--icon" type="button" aria-label="خيارات إضافية"><span class="m-btn__icon" aria-hidden="true"></span></button>
+        </div>
+        <p class="ref-live" id="action-status" aria-live="polite">التسمية واضحة؛ حرّك التركيز بالـ Tab ثم استخدم Space أو Enter.</p>
+      </div>
+    </section>
+    <section class="ref-section" aria-labelledby="fields-title">
+      <div class="ref-section__head"><div><p class="ref-kicker">02 / INPUT</p><h2 id="fields-title">قيمة مفهومة، بلا التباس</h2></div><p>القراءة فقط تبقى مقروءة وقابلة للنسخ؛ الخطأ يحتفظ بالقيمة ويرتبط برسالة صريحة.</p></div>
+      <div class="ref-panel ref-field-grid">
+        <div class="m-field" id="demo-field">
+          <label class="m-field__label" for="demo-product">اسم الصنف</label>
+          <div class="m-field__control"><input class="m-field__input" id="demo-product" value="صابون زيت الزيتون" aria-describedby="field-message"></div>
+          <span class="m-field__msg is-visible" id="field-message">اسم يظهر في قائمة المنتجات.</span>
+        </div>
+        <div class="ref-controls ref-controls--vertical">
+          <button type="button" data-command="invalid" aria-pressed="false">تبديل رسالة الخطأ</button>
+          <button type="button" data-command="readonly" aria-pressed="false">تبديل القراءة فقط</button>
+        </div>
+      </div>
+      <div class="ref-state-pair">
+        <div class="ref-state-sample"><span class="ref-state-label">معطّل · غير متاح للتفاعل</span><div class="m-field has-disabled"><label class="m-field__label" for="disabled-field">الكمية</label><div class="m-field__control"><input class="m-field__input m-field__input--num" id="disabled-field" value="4" disabled></div></div></div>
+        <div class="ref-state-sample"><span class="ref-state-label">قراءة فقط · قيمة متاحة</span><div class="m-field has-readonly"><label class="m-field__label" for="readonly-sample">المرجع</label><div class="m-field__control"><input class="m-field__input" id="readonly-sample" value="ORD-2407" readonly></div></div></div>
+      </div>
+    </section>
+    <section class="ref-section" aria-labelledby="selection-title">
+      <div class="ref-section__head"><div><p class="ref-kicker">03 / SELECTION</p><h2 id="selection-title">التحديد ليس حالة ضغط</h2></div><p>اختبر مربع الاختيار بمفتاح المسافة. التحديد ثابت حتى يختار المستخدم قيمة أخرى.</p></div>
+      <div class="ref-panel ref-selection">
+        <label class="m-choice m-choice--check"><input type="checkbox" checked><span class="m-choice__box" aria-hidden="true"><span class="ref-check-icon"></span></span><span class="m-choice__text">استلام من المتجر</span></label>
+        <button class="m-btn m-btn--secondary m-toggle" type="button" aria-pressed="false" data-command="toggle">وضع العرض</button>
+        <div class="m-tabs ref-tabs" role="tablist" aria-label="عرض محتوى تجريبي"><button class="m-tabs__tab" role="tab" aria-selected="true">ملخص</button><button class="m-tabs__tab" role="tab" aria-selected="false">تفاصيل</button></div>
+      </div>
+    </section>
+    <section class="ref-section" aria-labelledby="feedback-title">
+      <div class="ref-section__head"><div><p class="ref-kicker">04 / FEEDBACK</p><h2 id="feedback-title">عند الانتظار، والفشل، والفراغ</h2></div><p>النص والرمز يوضّحان الحالة. لا تعتمد الدلالة على اللون وحده، ولا يظهر صفر مكان الغياب.</p></div>
+      <div class="ref-panel">
+        <div class="ref-controls" aria-label="عرض حالة المكوّن"><button type="button" data-view="loading">انتظار</button><button type="button" data-view="error">تعذر القراءة</button><button type="button" data-view="empty">لا بيانات</button></div>
+        <div class="ref-feedback" id="feedback" aria-live="polite">
+          <div class="m-wait"><span class="m-wait__spinner" aria-hidden="true"></span><span>جارٍ تحديث القائمة</span></div>
+          <div class="m-note m-note--error" hidden><span class="m-note__text"><strong class="m-note__title">تعذر تحديث القائمة</strong><span class="m-note__body">تحقق من الاتصال ثم حاول مرة أخرى.</span></span><button class="m-btn m-btn--destructive-soft" type="button" data-view="loading">إعادة المحاولة</button></div>
+          <div class="m-empty" hidden><span class="m-empty__icon ref-inbox-icon" aria-hidden="true"></span><strong class="m-empty__title">لا توجد طلبات هنا</strong><p class="m-empty__body">ستظهر الطلبات الجديدة في هذه القائمة.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="ref-bottom">
+      <p>تجربة محلية، بلا حفظ أو خدمات خلفية.</p>
+      <a href="../../docs/UI-VISUAL-SYSTEM.md">قواعد النظام البصري ←</a>
+    </section>
+  </main>
+  <script src="system.js"></script>
+</body>
+</html>

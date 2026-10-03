@@ -1,0 +1,133 @@
+/* Composition page only. Component appearances remain owned by components/*.css. */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+}
+.composition-header,
+.composition-main,
+.composition-footer {
+  width: min(100% - 40px, 920px);
+  margin-inline: auto;
+}
+.composition-header { position: relative; padding-block: 30px 24px; }
+.composition-back,
+.composition-source a,
+.composition-footer a {
+  color: var(--micro-brand-primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.composition-back { font-size: var(--micro-secondary-size); }
+.composition-eyebrow {
+  margin: 25px 0 4px;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  font-weight: 500;
+}
+.composition-header h1 {
+  max-width: 700px;
+  margin: 0;
+  font-size: clamp(28px, 6vw, 42px);
+  line-height: 1.25;
+  font-weight: 600;
+}
+.composition-intro { max-width: 680px; margin: 12px 0 0; color: var(--micro-text-secondary); }
+.composition-status {
+  display: inline-flex;
+  margin-block-start: 16px;
+  padding: 2px 12px;
+  border-radius: var(--micro-radius-capsule);
+  background: var(--micro-warning-surface);
+  color: var(--micro-warning);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+  direction: ltr;
+}
+.composition-main { display: grid; gap: 18px; padding-block-end: 42px; }
+.composition-block {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: clamp(18px, 4vw, 30px);
+  border-block-start: 1px solid var(--micro-border-divider);
+}
+.composition-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-block-end: 20px;
+}
+.composition-index {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--micro-surface-selected);
+  color: var(--micro-brand-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.composition-heading h2 { margin: 0; font-size: 19px; line-height: 1.45; }
+.composition-heading p { margin: 3px 0 0; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); }
+.composition-surface { padding-block: 8px; }
+.composition-row-action { flex: none; max-width: 100%; }
+.composition-surface .m-row__text { flex-basis: calc(100% - 60px); }
+.composition-feedback { min-height: 20px; margin: 8px 0 2px; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); }
+.composition-form-wrap { min-width: 0; max-width: 560px; }
+.composition-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.composition-sample-label {
+  margin: 0;
+  padding: 8px 12px;
+  border-inline-start: 3px solid var(--micro-info);
+  background: var(--micro-info-surface);
+  color: var(--micro-info);
+  font-size: var(--micro-secondary-size);
+}
+.composition-error { color: var(--micro-danger); }
+.composition-submit { justify-self: start; max-width: 100%; }
+.composition-summary-wrap { display: grid; grid-template-columns: minmax(0, .9fr) minmax(260px, 1.1fr); gap: 24px; align-items: start; }
+.composition-summary-wrap > .m-info-card { min-height: 100%; }
+.composition-list { padding-block-start: 2px; }
+.composition-list .m-section__body { padding-inline: 2px; }
+.composition-list .m-row { min-height: 52px; padding-block: 6px; }
+.composition-source {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-block-start: 18px;
+  font-size: var(--micro-secondary-size);
+}
+.composition-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-block: 0 28px;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: var(--micro-focus-gap);
+}
+@media (max-width: 680px) {
+  .composition-header,
+  .composition-main,
+  .composition-footer { width: min(100% - 28px, 920px); }
+  .composition-summary-wrap { grid-template-columns: minmax(0, 1fr); }
+  .composition-surface { padding-inline: 10px; }
+  .composition-row-action { width: 100%; }
+  .composition-surface .m-row { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

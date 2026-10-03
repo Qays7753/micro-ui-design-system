@@ -88,10 +88,10 @@
   /* يضمن وجود مؤشر التحميل في موضع صحيح:
      - زر بأيقونة: المؤشر يحل مكان الأيقونة نفسها (فتحة 20px / 24px
        الدائري) فيبقى عرض الزر وزاوية النص كما هما.
-     - زر نصي بلا أيقونة مع m-btn--loading-slot (المقترح B للمراجعة):
+     - زر نصي بلا أيقونة (B الافتراضي، وm-btn--loading-slot توافقي):
        التسمية تبقى ظاهرة والمؤشر في الفتحة المحجوزة في الحشو —
        لا تغليف ولا إخفاء للنص.
-     - زر نصي بلا أيقونة (المقترح A الافتراضي): النص يبقى محفوظ المكان
+     - زر نصي مع m-btn--loading-replace (A توافقي صريح): النص يبقى محفوظ المكان
        (opacity:0) والمؤشر يتوسط الزر (صف is-loading--text) — الأبعاد
        ثابتة بالبنية. */
   function ensureSpinner(btn) {
@@ -103,8 +103,9 @@
     var icon = btn.querySelector(':scope > .m-btn__icon');
     if (icon) {
       icon.parentElement.insertBefore(spinner, icon); /* فتحة الأيقونة نفسها */
-    } else if (btn.classList.contains('m-btn--loading-slot')) {
-      /* المقترح B: التسمية تبقى ظاهرة والمؤشر في فتحته المحجوزة */
+    } else if (!btn.classList.contains('m-btn--loading-replace')) {
+      /* Default B: CSS reserves the slot before loading; label stays visible.
+         Explicit loading-replace preserves legacy A without changing the API. */
       btn.insertBefore(spinner, btn.firstChild);
     } else {
       btn.insertBefore(spinner, btn.firstChild);
@@ -133,11 +134,10 @@
    * - الزر أثناء التحميل يبقى قابلًا للتركيز (ليس disabled) فلا يضيع
    *   التركيز من مستخدم لوحة المفاتيح، وحلقة التركيز تبقى ظاهرة.
    * - منع التفعيل: pointer-events:none + حراسة click/keydown أعلاه.
-   * - زر نصي بلا أيقونة: النص يبقى محفوظ المكان (opacity:0 وباقٍ في
-   *   شجرة الإتاحة — الاسم لا يفقد) ويتوسط المؤشر الزر؛ عرض الزر
-   *   ثابت بالبنية نفسها، والنص يعود كما كان بعد التوقف.
-   *   بديل مقترح للمراجعة (المقترح B): صنف m-btn--loading-slot يحفظ
-   *   التسمية ظاهرة والمؤشر في فتحة محجوزة — العرض ثابت في الحالتين.
+    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة والمؤشر
+    *   في فتحة محجوزة قبل التحميل؛ العرض ثابت بالبنية نفسها.
+    *   A عبر m-btn--loading-replace يخفي النص بصريًا فقط مع حفظ
+    *   مكانه واسمه الإتاحي. يعود النص كما كان عند التوقف.
    */
   function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;

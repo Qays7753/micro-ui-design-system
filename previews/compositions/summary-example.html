@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال قراءة وقائمة تشغيلية</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/metric-comparison/metric-comparison.css">
+  <style>
+    * { box-sizing: border-box; }
+    a { color: var(--micro-primary); display: inline-flex; align-items: center; min-height: var(--micro-touch-min); }
+    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { width: min(100%, 520px); margin-inline: auto; }
+    h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.45; }
+    .demo-note { margin: 0 0 24px; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
+    .m-main-metric { padding: 0; }
+    .m-main-metric__title { margin-block-end: 16px; }
+    .m-main-metric__status:empty { display: none; }
+    [dir="ltr"] { unicode-bidi: isolate; }
+    @media (max-width: 389px) {
+      .m-main-metric--compact .m-main-metric__layout { grid-template-columns: minmax(80px, 0.7fr) minmax(0, 1.3fr); }
+    }
+  </style>
+</head>
+<body>
+  <main id="summary-example">
+    <h1>ملخص العمل اليوم</h1>
+    <p class="demo-note">تركيب عينة من المقارنة العددية: قراءة رئيسية بجوار قائمة مفتوحة، بلا لوحة تحكم كاملة.</p>
+    <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="طلب" data-common-period="اليوم" data-max="24">
+      <h2 class="m-main-metric__title">متابعة الطلبات</h2>
+      <div class="m-main-metric__layout">
+        <div class="m-main-metric__hero">
+          <span class="m-main-metric__label">طلبات اليوم</span>
+          <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">طلب</span></span>
+        </div>
+        <div>
+          <ul class="m-main-metric__source" data-bar-source hidden>
+            <li data-label="قيد التجهيز" data-value="7" data-unit="طلب" data-period="اليوم" data-series="a"></li>
+            <li data-label="جاهز للاستلام" data-value="4" data-unit="طلب" data-period="اليوم" data-series="b"></li>
+            <li data-label="بانتظار العميل" data-value="2" data-unit="طلب" data-period="اليوم" data-series="c"></li>
+          </ul>
+          <ul class="m-main-metric__rows" data-bar-items aria-label="حالات الطلبات"></ul>
+          <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+    <p><a href="index.html">العودة إلى أمثلة التركيب</a></p>
+  </main>
+  <script src="../../components/metric-comparison/metric-comparison.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — اتجاه السطح المنحني العريض</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../../components/surfaces/curves.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100dvh;
+      margin: 0;
+      padding: clamp(20px, 5vw, 56px);
+      background: var(--micro-surface-page);
+      color: var(--micro-text-primary);
+      font-family: var(--micro-font-family);
+      font-size: var(--micro-body-size);
+      line-height: var(--micro-body-line);
+    }
+    main { width: min(100%, 760px); margin-inline: auto; }
+    .curves-nav,
+    .curves-sources { display: flex; flex-wrap: wrap; gap: 10px 20px; }
+    .curves-nav a,
+    .curves-sources a { color: var(--micro-brand-primary); text-underline-offset: 4px; }
+    .curves-nav { margin-block-end: 36px; font-size: var(--micro-secondary-size); }
+    .curves-eyebrow {
+      margin: 0 0 8px;
+      color: var(--micro-brand-primary);
+      font-size: var(--micro-secondary-size);
+      font-weight: 600;
+    }
+    h1 { max-width: 650px; margin: 0; font-size: clamp(27px, 6vw, 40px); line-height: 1.25; }
+    .curves-status {
+      display: inline-block;
+      margin-block-start: 14px;
+      padding: 3px 10px;
+      border: 1px solid var(--micro-border-control);
+      border-radius: var(--micro-radius-field);
+      font-size: var(--micro-secondary-size);
+      font-weight: 600;
+      direction: ltr;
+    }
+    .curves-note { max-width: 650px; margin: 12px 0 28px; color: var(--micro-text-secondary); }
+    .curves-stage { padding: clamp(16px, 4vw, 28px); }
+    .curves-stage .m-surface { min-height: 270px; }
+    .curves-stage .m-surface__content { min-height: 270px; display: flex; flex-direction: column; justify-content: center; }
+    .curves-stage .m-surface__label { margin: 0 0 10px; }
+    .curves-stage .m-surface__title { margin: 0; max-width: 560px; }
+    .curves-stage .m-surface__amount { margin: 12px 0 4px; }
+    .curves-stage .m-surface__sub { margin: 0; }
+    .curves-sources {
+      margin-block-start: 18px;
+      padding-block-start: 14px;
+      border-block-start: 1px solid var(--micro-border-divider);
+      font-size: var(--micro-secondary-size);
+    }
+    a:focus-visible { outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset: var(--micro-focus-gap); }
+    @media (max-width: 520px) {
+      body { padding-inline: 14px; }
+      .curves-nav { margin-block-end: 28px; }
+      .curves-stage { padding-inline: 0; }
+      .curves-stage .m-surface__content { padding: var(--micro-space-4); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="curves-nav" aria-label="روابط المعاينة">
+      <a href="../index.html">العودة إلى فهرس المعاينات</a>
+      <a href="index.html">لوحة عائلة الأسطح S01</a>
+      <a href="example-usage.html">مثال S01 المستقل</a>
+    </nav>
+
+    <header>
+      <p class="curves-eyebrow">APPROVED VISUAL DIRECTION</p>
+      <h1>أسطح منحنية عريضة وخافتة</h1>
+      <span class="curves-status">EXECUTABLE TRANSLATION · FOR REVIEW</span>
+      <p class="curves-note">اتجاه السطح الفاتح المنحني العريض والخافت هو المعتمد بصريًا. هذه عينة S01 مستقلة وقابلة للتحرير لمراجعة ترجمتها التنفيذية؛ لا يعني ذلك اعتماد كل تفصيل فيها.</p>
+    </header>
+
+    <section class="curves-stage" aria-label="عينة الاتجاه البصري المعتمد">
+      <article class="m-surface m-surface--curves">
+        <div class="m-surface__waves" aria-hidden="true"></div>
+        <div class="m-surface__content">
+          <p class="m-surface__label">قراءة عينة</p>
+          <h2 class="m-surface__title">ملخّص تجريبي موجز</h2>
+          <p class="m-surface__amount">58.4</p>
+          <p class="m-surface__sub">بيانات عرض ثابتة · ليست قراءة منتج أو قيمة مالية</p>
+        </div>
+      </article>
+    </section>
+
+    <nav class="curves-sources" aria-label="المواصفات والمصدر">
+      <a href="../../components/surfaces/specification.md">مواصفات الأسطح S01</a>
+      <a href="../../components/surfaces/surfaces.css">CSS الأسطح S01</a>
+      <a href="../../components/surfaces/curves.css">CSS المنحنيات القابل للتحرير</a>
+    </nav>
+  </main>
+</body>
+</html>

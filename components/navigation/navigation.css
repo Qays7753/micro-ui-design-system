@@ -3,7 +3,7 @@
    الملف: components/navigation/navigation.css
    يعتمد على shared/tokens.css وmotion.css والطبقة الزجاجية الأصلية
    للأزرار B01 (تفتح لوحة الفلاتر من زر B01 المعتمد).
-   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   مرجع التنفيذ: التنقل والطبقات موثقة في مواصفة B07.
    ========================================================= */
 
 .m-appbar,
@@ -254,3 +254,8 @@
 }
 .m-actionbar .m-btn { flex: 1; }
 .m-actionbar--stack .m-btn { flex: none; width: 100%; }
+
+.m-tabs__tab:hover:not([aria-selected="true"]) { color: var(--micro-text-primary); background: var(--micro-surface-page); }
+.m-navbar__item:hover:not([aria-current="page"]) { background: var(--micro-surface-page); }
+.m-layer__title { overflow-wrap: anywhere; }
+.m-layer__foot { padding-block-end: var(--micro-space-1); }

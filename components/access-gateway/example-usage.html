@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مثال بوابة الدخول — Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../buttons/buttons.css">
+  <link rel="stylesheet" href="../fields/fields.css">
+  <link rel="stylesheet" href="access-gateway.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { max-width: 390px; margin-inline: auto; padding: 24px; border-radius: var(--micro-radius-surface); background: var(--micro-surface-base); }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="m-access-gateway" data-access-gateway aria-labelledby="access-title">
+      <h1 class="m-access-gateway__heading" id="access-title">الدخول إلى الحساب</h1>
+      <p class="m-access-gateway__intro">مثال محلي لا يتصل بخدمة مصادقة.</p>
+      <form data-access-form novalidate>
+        <div class="m-access-gateway__fields">
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="gateway-email">البريد الإلكتروني</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="gateway-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username" required>
+            </div>
+            <p class="m-field__msg" data-field-msg></p>
+          </div>
+          <div class="m-field" data-micro-field>
+            <label class="m-field__label" for="gateway-password">كلمة المرور</label>
+            <div class="m-field__control m-access-gateway__password-control">
+              <input class="m-field__input" id="gateway-password" name="secret" data-access-credential="password" type="password" autocomplete="current-password" required>
+              <button class="m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal" type="button" data-access-reveal aria-controls="gateway-password" aria-label="إظهار كلمة المرور" aria-pressed="false">
+                <span class="m-access-gateway__eye" aria-hidden="true"></span>
+              </button>
+            </div>
+            <p class="m-field__msg" data-field-msg></p>
+          </div>
+        </div>
+        <div class="m-access-gateway__actions">
+          <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit">متابعة</button>
+          <div class="m-access-gateway__links">
+            <button class="m-access-gateway__link" type="button" data-access-recovery hidden>نسيت كلمة المرور؟</button>
+          </div>
+        </div>
+        <div class="m-access-gateway__providers" data-access-providers hidden>
+          <p class="m-access-gateway__providers-title">خيارات دخول إضافية يحددها المستهلك</p>
+          <div class="m-access-gateway__provider-list">
+            <button class="m-btn m-btn--secondary" type="button" data-access-provider="google" hidden>Google</button>
+            <button class="m-btn m-btn--secondary" type="button" data-access-provider="apple" hidden>Apple</button>
+          </div>
+        </div>
+        <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+      </form>
+      <p class="m-access-gateway__demo-note">لا يتم إرسال أو حفظ البيانات في هذا المثال.</p>
+    </section>
+  </main>
+  <script src="../fields/fields.js"></script>
+  <script src="../buttons/buttons.js"></script>
+  <script src="access-gateway.js"></script>
+</body>
+</html>

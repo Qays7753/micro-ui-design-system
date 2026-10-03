@@ -2,7 +2,7 @@
    Micro UI — مكوّن الاختيار (B03)
    الملف: components/selection/selection.css
    يعتمد على shared/tokens.css فقط. خصائص منطقية فتعمل في RTL.
-   الحالة: DRAFT FOR REVIEW — ما لم تحسمه الأسس موسوم «مقترح».
+   مرجع التنفيذ: حالات الاختيار وحدوده موثقة في مواصفة B03.
    أدوار منفصلة (لا خلط):
    - Checkbox: اختيار مستقل/متعدد + حالة جزئية لمجموعة.
    - Radio: اختيار واحد من مجموعة (مجموعة واحدة باسم واحد).
@@ -323,3 +323,10 @@
     transition: none;
   }
 }
+
+/* Selected values read from both surface and mark; hover never masks focus. */
+.m-choice:hover:not(:has(input:disabled)) { background: var(--micro-surface-page); }
+.m-choice:focus-within .m-choice__box { outline: 2px solid var(--micro-focus-ring); outline-offset: 2px; }
+.m-switch:hover:not(:has(input:disabled)) .m-switch__track { box-shadow: inset 0 0 0 1px var(--micro-brand-primary); }
+.m-seg__item:hover:not([disabled]):not([aria-pressed="true"]) { color: var(--micro-text-primary); background: rgba(223,238,230,.65); }
+.m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: 600; }
