@@ -366,7 +366,24 @@
      وبين مقام غائب (بديل موثق) ومقام موجود غير صالح (خطأ معلن).
      C2: المقام المعلن صفرًا أو سالبًا لا يُتجاهل — كان `declared > 0`
      وحده يُعتبر مقامًا صالحًا فيسقط الصفر والسالب صامتًا إلى مجموع
-     الفئات (بديل الغائب) ويظهر توزيع طبيعي بلا خطأ. */
+     الفئات (بديل الغائب) ويظهر توزيع طبيعي بلا خطأ.
+     R8-07a: نفس فصل نص المستخدم عن تشخيص المطور المطبق على bars/line —
+     رسالة موحدة موجزة بلا أسماء سمات أو تعليمات، والسبب/القيم في
+     data-scale-state/data-scale-detail على جذر الرسم (عقد موثق في
+     specification.md؛ حالات donut: invalid/over/conflict). */
+
+  /* R8-07a: رسالة رفض donut — نص مستخدم موجز موحد + تشخيص تقني كامل
+     على الجذر (يُقرأ من الكود/السجلات لا من الواجهة). لا HTML ولا
+     نظام رسائل جديد. */
+  function donutRefusal(chart, plot, stateKind, devDetail) {
+    var err = document.createElement('p');
+    err.className = 'm-chart__error';
+    err.textContent = 'تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.';
+    plot.appendChild(err);
+    chart.setAttribute('data-scale-state', stateKind);
+    chart.setAttribute('data-scale-detail', devDetail);
+  }
+
   function renderDonut(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var declaredRaw = chart.getAttribute('data-total');
@@ -412,32 +429,26 @@
     }
 
     if (declaredInvalid) {
-      /* R2-05: مقام موجود غير صالح — خطأ معلن لا سقوط صامت إلى مجموع الفئات */
-      var derr = document.createElement('p');
-      derr.className = 'm-chart__error';
-      derr.textContent = 'تعذر رسم التوزيع: المقام المعلن غير صالح (data-total="' + declaredRaw + '") — صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.';
-      plot.appendChild(derr);
+      /* R2-05: مقام موجود غير صالح — خطأ معلن لا سقوط صامت إلى مجموع الفئات.
+         R8-07a: رسالة المستخدم موحدة موجزة والتشخيص يحمل السبب والقيمة الخام */
+      donutRefusal(chart, plot, 'invalid',
+        'donut: data-total="' + declaredRaw + '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
     } else if (hasInvalid || sumExceeds) {
-      var err = document.createElement('p');
-      err.className = 'm-chart__error';
-      err.textContent = hasInvalid
-        ? 'تعذر رسم التوزيع: توجد قيم سالبة — التوزيع نسب من قيم غير سالبة فقط. القيم معروضة في المفتاح دون نسب.'
-        : 'تعذر رسم التوزيع: مجموع الفئات (' + fmt(sum) + ') أكبر من المقام المعلن (' + fmt(total) + ') — صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب.';
-      plot.appendChild(err);
+      /* نفس أسبقية الحالات السابقة: قيم سالبة تأخذ الأولوية عند اجتماع الاثنين */
+      donutRefusal(chart, plot, hasInvalid ? 'invalid' : 'over',
+        hasInvalid
+          ? 'donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.'
+          : 'donut: مجموع الفئات (' + fmt(sum) + ') يتجاوز المقام المعلن data-total="' + fmt(total) + '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
     } else if (declaredNegative) {
       /* C2: مقام سالب معلن — حالة غير صالحة صريحة، دون نسب
          (كان يسقط صامتًا إلى مجموع الفئات ويرسم توزيعًا طبيعيًا) */
-      var nerr = document.createElement('p');
-      nerr.className = 'm-chart__error';
-      nerr.textContent = 'تعذر رسم التوزيع: المقام المعلن سالب (data-total="' + declaredRaw + '") — المقام السالب غير صالح للنسب. صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون نسب.';
-      plot.appendChild(nerr);
+      donutRefusal(chart, plot, 'invalid',
+        'donut: data-total="' + declaredRaw + '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
     } else if (declaredZero && sum > 0) {
       /* C2: مقام صفر مع قيم موجبة — تعارض صريح: لا استبدال المقام
          بالمجموع (ذلك بديل المقام الغائب فقط) ولا قسمة على صفر */
-      var zerr = document.createElement('p');
-      zerr.className = 'm-chart__error';
-      zerr.textContent = 'تعذر رسم التوزيع: المقام المعلن صفر (data-total="0") بينما مجموع الفئات ' + fmt(sum) + ' — تعارض في البيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام. صحّح data-total أو القيم. القيم معروضة في المفتاح دون نسب.';
-      plot.appendChild(zerr);
+      donutRefusal(chart, plot, 'conflict',
+        'donut: data-total="0" بينما مجموع الفئات ' + fmt(sum) + ' — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
     } else if (noData) {
       /* R2-05: عدم توفر البيانات ليس صفرًا — «— / لا توجد بيانات» */
       emptyRing('—', 'لا توجد بيانات');
@@ -562,6 +573,11 @@
     var kind = chart.getAttribute('data-chart');
     var items = itemsOf(chart);
     var summary = chart.querySelector('[data-summary]');
+    /* R8-07b: كل دورة render تبدأ بلا تشخيص قديم — السمتان تصفان
+       الدورة الحالية وحدها؛ الحالة السليمة (auto/ok/توزيع صالح) تبقيهما
+       غائبتين بعقد المواصفة، والحالات غير السليمة تكتبهما من جديد. */
+    chart.removeAttribute('data-scale-state');
+    chart.removeAttribute('data-scale-detail');
     if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);

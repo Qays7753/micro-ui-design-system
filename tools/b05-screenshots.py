@@ -155,13 +155,17 @@ def main():
                  // R2-05: كل القيم صفر مع مقام معلن 100 — المركز يظهر المقام المعلن لا صفرًا متناقضًا
                  const zeroCenter = zeroDonut.querySelector('.m-donut__center') && zeroDonut.querySelector('.m-donut__center').textContent === '100';
                  const errDonut = charts[2];
-                 const errShown = !!errDonut.querySelector('.m-chart__error') &&
-                                  errDonut.querySelector('.m-chart__error').textContent.includes('110');
+                 // R8-07a: رسالة المستخدم موجزة موحدة بلا قراءات خام أو أسماء سمات؛
+                 // التشخيص التقني (بما فيه 110) على جذر الرسم data-scale-state/detail
+                 const errText = errDonut.querySelector('.m-chart__error') ? errDonut.querySelector('.m-chart__error').textContent : null;
+                 const errShown = errText === 'تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.'
+                                  && errDonut.getAttribute('data-scale-state') === 'over'
+                                  && (errDonut.getAttribute('data-scale-detail') || '').includes('110');
                  const rawLegend = errDonut.querySelector('.m-legend') && !errDonut.querySelector('.m-legend').textContent.includes('%');
                  const line = charts[3];
                  const dash = line.textContent.includes('—');
                  return {negTxt, negNoPositiveBar: negRectHeights.every(h => h >= 0), noNaN, zeroCenter, errShown, rawLegend, dash}; }""")
-        check("A10 عمود سالب لا يُرسم كموجب + توزيع صفري بلا NaN وبالمقام المعلن في المركز + مقام مخطئ برسالة صريحة وقيم خام",
+        check("A10 عمود سالب لا يُرسم كموجب + توزيع صفري بلا NaN وبالمقام المعلن في المركز + مقام مخطئ برسالة موجزة وقيم خام في المفتاح والتشخيص على الجذر (R8-07a)",
               edges["negTxt"] and edges["negNoPositiveBar"] and edges["noNaN"] and edges["zeroCenter"]
               and edges["errShown"] and edges["rawLegend"], str(edges))
 
@@ -201,7 +205,9 @@ def main():
                    const out = {center: center ? center.textContent : null,
                                 label: clab ? clab.textContent : null,
                                 err: err ? err.textContent : null,
-                                legend: legend ? legend.textContent : ''};
+                                legend: legend ? legend.textContent : '',
+                                state: c.getAttribute('data-scale-state'),
+                                detail: c.getAttribute('data-scale-detail')};
                    host.remove();
                    return out;
                  }
@@ -215,14 +221,15 @@ def main():
                } catch (e) { return {err: e.message}; } }""")
         a = r2d.get("allNull", {}); z = r2d.get("allZero", {}); m = r2d.get("mixNullZero", {})
         o = r2d.get("oops", {}); b = r2d.get("badTotal", {}); n = r2d.get("noTotal", {})
-        check("A12 (R2-05) all-null يعرض «— / لا توجد بيانات» لا صفرًا، والخلط مع المجهول «الإجمالي غير معلوم»، و12oops مجهول لا 12، والمقام غير الصالح خطأ صريح، والغائب مجموع الفئات",
+        check("A12 (R2-05) all-null يعرض «— / لا توجد بيانات» لا صفرًا، والخلط مع المجهول «الإجمالي غير معلوم»، و12oops مجهول لا 12، والمقام غير الصالح رسالة موجزة وتشخيصه على الجذر، والغائب مجموع الفئات بحالة سليمة بلا تشخيص",
               a.get("center") == "—" and a.get("label") == "لا توجد بيانات"
               and z.get("center") == "0"
               and m.get("center") == "—" and m.get("label") == "الإجمالي غير معلوم"
               and o.get("center") == "100" and "12oops" not in o.get("legend", "")
               and "غير متاح" in o.get("legend", "")
-              and b.get("err") is not None and "bad" in b.get("err", "")
-              and n.get("center") == "10", str(r2d))
+              and b.get("err") == "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب."
+              and b.get("state") == "invalid" and "bad" in (b.get("detail") or "")
+              and n.get("center") == "10" and n.get("state") is None, str(r2d))
 
 
         # ---- C2: المقام المعلن صفرًا/سالبًا لا يُتجاهل — اختبار الحدود الموسع ----
@@ -242,7 +249,9 @@ def main():
                    const out = {center: center ? center.textContent : null,
                                 err: err ? err.textContent : null,
                                 legend: legend ? legend.textContent : '',
-                                slices};
+                                slices,
+                                state: c.getAttribute('data-scale-state'),
+                                detail: c.getAttribute('data-scale-detail')};
                    host.remove();
                    return out;
                  }
@@ -258,17 +267,19 @@ def main():
         t0p = c2d.get("total0pos", {}); tn = c2d.get("totalNeg", {})
         t0z = c2d.get("total0allZero", {}); t0m = c2d.get("total0missing", {})
         nt = c2d.get("noTotal", {}); pt = c2d.get("posTotal", {})
-        check("A17 (C2) مقام صفر مع [4,6] تعارض صريح بلا توزيع ولا استبدال بالمجموع، والسالب -5 غير صالح صريح، والصفر مع كل قيم صفر حالة صفرية مستقرة (المجهول «—» لا صفر)، والغائب مجموع 10 والموجب 10 بنسب كما وُثقا",
-              t0p.get("err") is not None and "صفر" in t0p.get("err", "") and "تعارض" in t0p.get("err", "")
+        check("A17 (C2) مقام صفر مع [4,6] رسالة موجزة وحالة conflict وتشخيص التعارض على الجذر بلا توزيع ولا استبدال بالمجموع، والسالب -5 حالة invalid وتشخيصه على الجذر، والصفر مع كل قيم صفر حالة صفرية مستقرة بلا تشخيص (المجهول «—» لا صفر)، والغائب مجموع 10 والموجب 10 بنسب بحالة سليمة كما وُثقا",
+              t0p.get("err") == "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب."
+              and t0p.get("state") == "conflict" and "تعارض" in (t0p.get("detail") or "") and "صفر" in (t0p.get("detail") or "")
               and t0p.get("center") is None and t0p.get("slices") == 0 and "%" not in t0p.get("legend", "")
-              and tn.get("err") is not None and "سالب" in tn.get("err", "")
+              and tn.get("err") == "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب."
+              and tn.get("state") == "invalid" and "سالب" in (tn.get("detail") or "")
               and tn.get("center") is None and tn.get("slices") == 0 and "%" not in tn.get("legend", "")
-              and t0z.get("center") == "0" and t0z.get("err") is None and t0z.get("slices") == 0
+              and t0z.get("center") == "0" and t0z.get("err") is None and t0z.get("slices") == 0 and t0z.get("state") is None
               and "NaN" not in t0z.get("legend", "") and "%" not in t0z.get("legend", "")
-              and t0m.get("center") == "0" and t0m.get("err") is None
+              and t0m.get("center") == "0" and t0m.get("err") is None and t0m.get("state") is None
               and "غير متاح" in t0m.get("legend", "") and "%" not in t0m.get("legend", "")
-              and nt.get("center") == "10" and "%" in nt.get("legend", "")
-              and pt.get("center") == "10" and "%" in pt.get("legend", "") and pt.get("slices") == 2,
+              and nt.get("center") == "10" and nt.get("state") is None and "%" in nt.get("legend", "")
+              and pt.get("center") == "10" and pt.get("state") is None and "%" in pt.get("legend", "") and pt.get("slices") == 2,
               str(c2d))
 
         # ---- SYS-02/E11: المثال المستقل بلا board.* ----
