@@ -17,7 +17,7 @@
 - [فهرس العائلات](COMPONENT-INVENTORY.md)، [الاختيارات](UI-DECISIONS.md)، [ثلاث تركيبات](../previews/compositions/index.html).
 - [أدلة IDENTITY السابقة](../reviews/IDENTITY/review.md): تاريخية وتتبع بصمات مصدرها.
 - [الاتجاه المنحني الواسع والخافت](../previews/surfaces/approved-curves.html) و[CSS المستقل](../components/surfaces/curves.css) ضمن لغة الإصدار؛ لا تعميم لدراسات S01 القديمة. الزر 24px والتحميل B حُسما، لا PROPOSED حالي.
-- الحزمة القابلة للتعديل `deliverables/micro-components-editable.zip` وMANIFEST بعد آخر تعديل.
+- [الحزمة الكاملة على أجزاء وأمر جمعها](../deliverables/README.md)؛ أمر `python3 tools/assemble-components-package.py` ينتج `deliverables/micro-components-editable.zip` متحققًا. MANIFEST يطابق المصادر بعد آخر تعديل.
 
 ## أدلة جولة نواة المكتبة المحفوظة
 

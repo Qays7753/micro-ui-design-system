@@ -33,6 +33,7 @@
 - [المعرض](../previews/index.html)، [فهرس العائلات](COMPONENT-INVENTORY.md)، [المواصفات المشتركة](SHARED-SPEC.md)، [SOP](UI-USAGE-SOP.md).
 - [مراجعة الإغلاق R3](../reviews/UI-COMPLETION/CHATGPT-REVIEW-R3.md) وأدلة الإقفال في reviews/UI-COMPLETION/FINALIZATION.md.
 - الأصول والمراجع في assets/ وreferences/ ومساراتها في handoff/ASSET-REGISTER.md؛ لا تمثل الصور بديلًا عن HTML/CSS/JS/SVG.
-- `tools/manifest-build.py` ثم `tools/build-components-package.py` لتوليد الفهرس والحزمة. لا تستخدم ZIP أقدم من مصادر main الحالية.
+- `tools/manifest-build.py` ثم `tools/build-components-package.py` ثم `tools/split-components-package.py` لتوليد الفهرس والحزمة وأجزاء النقل.
+- الحزمة الكاملة محفوظة في deliverables على أجزاء متحققة بسبب حد حجم طلب موصل GitHub. شغّل `python3 tools/assemble-components-package.py` من نسخة المستودع لإنتاج ZIP كامل مطابق بالبصمة وCRC؛ لا تنقص أي مصادر أو أدلة. لا تستخدم ZIP أقدم من مصادر main الحالية.
 
 المكتبة جاهزة للاستهلاك والتطوير في نطاقها. قرار التركيب أو النشر ليس ضمن إذن دمج مستودع UI.
