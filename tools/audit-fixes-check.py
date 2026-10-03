@@ -81,6 +81,8 @@ def run_a01(page):
               return {
                 svg: !!svg,
                 err: c.querySelector('.m-chart__error') ? c.querySelector('.m-chart__error').textContent : null,
+                scaleState: c.getAttribute('data-scale-state'),
+                scaleDetail: c.getAttribute('data-scale-detail'),
                 note: c.querySelector('.m-chart__scale-note') ? c.querySelector('.m-chart__scale-note').textContent : null,
                 values: [...c.querySelectorAll('.m-chart__bar-value,.m-chart__point-value')].map(t => t.textContent),
                 barHeights: [...c.querySelectorAll('rect')].map(r => parseFloat(r.getAttribute('height') || '0')).filter(h => h > 0),
@@ -99,9 +101,13 @@ def run_a01(page):
         return out
 
     # ---- 1) الأعمدة: data-max=5 وقيم [5,10] — الافتراضي رفض، القراءات محفوظة ----
+    # R8-07: رسالة المستخدم موحدة موجزة بلا أسماء سمات؛ التشخيص في data-scale-*
     r = mount("bars", lis([("a", "أ", 5, ""), ("b", "ب", 10, "")]), 'data-max="5"')
-    check("A01.1 أعمدة [5,10] على max=5: لا رسم مشوه (بلا svg بأعمدة متساوية) ورسالة تجاوز صريحة",
-          not r["svg"] and r["err"] and "تتجاوز المقياس المعلن" in r["err"], (r["err"] or "")[:60])
+    check("A01.1 أعمدة [5,10] على max=5: لا رسم مشوه ورسالة موجزة + تشخيص التجاوز في data-scale-detail",
+          not r["svg"] and r["err"] == "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه."
+          and r["scaleState"] == "over" and "تتجاوز data-max" in (r["scaleDetail"] or "")
+          and "10" in (r["scaleDetail"] or ""),
+          (r["err"] or "")[:60] + " | state=" + str(r["scaleState"]))
     check("A01.2 أعمدة [5,10] على max=5: القراءات 5 و10 محفوظة كاملة في قائمة قراءات",
           r["readings"] == ["5", "10"], str(r["readings"]))
 
@@ -115,8 +121,10 @@ def run_a01(page):
 
     # ---- 3) [4,6] على max=5: تجاوز → رفض افتراضي ----
     r = mount("bars", lis([("a", "أ", 4, ""), ("b", "ب", 6, "")]), 'data-max="5"')
-    check("A01.4 أعمدة [4,6] على max=5: رفض صريح (لا clamp صامت لقيمة 6)",
-          not r["svg"] and r["err"] and "6" in r["err"], (r["err"] or "")[:60])
+    check("A01.4 أعمدة [4,6] على max=5: رفض صريح (لا clamp صامت لقيمة 6) — الرسالة موجزة والتشخيص يسمي 6",
+          not r["svg"] and r["err"] == "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه."
+          and r["scaleState"] == "over" and "6" in (r["scaleDetail"] or ""),
+          (r["err"] or "")[:60] + " | detail=" + (r["scaleDetail"] or "")[:50])
 
     # ---- 4) مقام غائب: مقياس تلقائي يستوعب القيم بنسب صادقة ----
     r = mount("bars", lis([("a", "أ", 5, ""), ("b", "ب", 10, "")]), "")
@@ -128,9 +136,11 @@ def run_a01(page):
     # ---- 5) مقياس معلن غير رقمي/صفر/سالب: حالة غير صالح صريحة لا سقوط صامت ----
     for bad in ("bad", "0", "-5"):
         r = mount("bars", lis([("a", "أ", 5, ""), ("b", "ب", 10, "")]), f'data-max="{bad}"')
-        check(f"A01.6 أعمدة [5,10] على data-max={bad}: حالة «غير صالح» صريحة وقراءات محفوظة",
-              not r["svg"] and r["err"] and "غير صالح" in r["err"] and r["readings"] == ["5", "10"],
-              (r["err"] or "")[:60])
+        check(f"A01.6 أعمدة [5,10] على data-max={bad}: حالة «غير صالح» صريحة (state+detail) وقراءات محفوظة ورسالة موجزة",
+              not r["svg"] and r["err"] == "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه."
+              and r["scaleState"] == "invalid" and "غير رقمي/غير موجب" in (r["scaleDetail"] or "")
+              and r["readings"] == ["5", "10"],
+              (r["err"] or "")[:60] + " | state=" + str(r["scaleState"]))
 
     # ---- 6) قيمة مجهولة داخل حالة الرفض تبقى «—» ----
     r = mount("bars", lis([("a", "أ", 10, ""), ("b", "ب", None, "")]), 'data-max="5"')
@@ -139,8 +149,10 @@ def run_a01(page):
 
     # ---- 7) الخط: [5,10] على max=5 — الافتراضي رفض، ولا نقطة خارج SVG مع rescale ----
     r = mount("line", lis([("a", "أ", 5, ""), ("b", "ب", 10, "")]), 'data-max="5"')
-    check("A01.8 خط [5,10] على max=5: رفض صريح — لا نقطة خارج مجال الرسم بلا معالجة",
-          not r["svg"] and r["err"] and "تتجاوز المقياس المعلن" in r["err"], (r["err"] or "")[:60])
+    check("A01.8 خط [5,10] على max=5: رفض صريح برسالة موجزة وتشخيص التجاوز في data-scale-detail",
+          not r["svg"] and r["err"] == "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه."
+          and r["scaleState"] == "over" and "تتجاوز data-max" in (r["scaleDetail"] or ""),
+          (r["err"] or "")[:60] + " | state=" + str(r["scaleState"]))
     r = mount("line", lis([("a", "أ", 5, ""), ("b", "ب", 10, "")]), 'data-max="5" data-overscale="rescale"')
     inside = all(0 <= p["y"] <= 170 for p in r["pts"]) and len(r["dots"]) == 2 if r["pts"] else False
     check("A01.9 خط [5,10] مع overscale=rescale: النقطتان داخل SVG وبنسب صادقة وملاحظة ظاهرة",

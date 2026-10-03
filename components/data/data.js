@@ -159,12 +159,17 @@
   }
 
   /* A01: حالة رفض الرسم النسبي (مقياس غير صالح أو متجاوز) —
-     القراءات محفوظة كاملة (القيم والتسميات لا تتغير) بلا رسم مشوه */
-  function renderScaleRefusal(chart, items, plot, state, title) {
+     القراءات محفوظة كاملة (القيم والتسميات لا تتغير) بلا رسم مشوه.
+     R8-07: رسالة المستخدم موجزة مفهومة بلا أسماء سمات أو تعليمات؛
+     تشخيص المطور/العقد يوضع في data-scale-state و data-scale-detail
+     على جذر الرسم (موثقة في specification.md) لا في واجهة المكوّن */
+  function renderScaleRefusal(chart, items, plot, state, userLabel, devDetail) {
     var err = document.createElement('p');
     err.className = 'm-chart__error';
-    err.textContent = title;
+    err.textContent = userLabel;
     plot.appendChild(err);
+    chart.setAttribute('data-scale-state', state.kind);
+    chart.setAttribute('data-scale-detail', devDetail);
     var list = document.createElement('ul');
     list.className = 'm-legend';
     items.forEach(function (it) {
@@ -206,13 +211,15 @@
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر رسم الأعمدة: المقياس المعلن غير صالح (data-max="' + scale.declaredRaw + '") — يجب أن يكون رقمًا موجبًا. القيم معروضة كاملة دون رسم نسبي.');
+        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
+        'bars: data-max="' + scale.declaredRaw + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر رسم الأعمدة: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز المقياس المعلن (data-max="' + fmt(scale.declared) + '") — الرسم النسبي على هذا المقياس كان سيخفي الفرق بين القيم. صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن. القيم معروضة كاملة دون رسم نسبي.');
+        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
+        'bars: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز data-max="' + fmt(scale.declared) + '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -263,11 +270,14 @@
     plot.innerHTML = '';
     plot.appendChild(svg);
     if (scale.kind === 'over') {
-      /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا */
+      /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا.
+         R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared) + ' (data-overscale="rescale") — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
       plot.appendChild(note);
+      chart.setAttribute('data-scale-state', 'over-rescaled');
+      chart.setAttribute('data-scale-detail', 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
     }
   }
 
@@ -280,13 +290,15 @@
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر رسم الخط: المقياس المعلن غير صالح (data-max="' + scale.declaredRaw + '") — يجب أن يكون رقمًا موجبًا. القيم معروضة كاملة دون رسم نسبي.');
+        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
+        'line: data-max="' + scale.declaredRaw + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر رسم الخط: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز المقياس المعلن (data-max="' + fmt(scale.declared) + '") — الرسم على هذا المقياس كان سيخرج نقطة خارج مجال الرسم. صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن. القيم معروضة كاملة دون رسم نسبي.');
+        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
+        'line: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز data-max="' + fmt(scale.declared) + '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -342,8 +354,10 @@
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared) + ' (data-overscale="rescale") — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
       plot.appendChild(note);
+      chart.setAttribute('data-scale-state', 'over-rescaled');
+      chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
     }
   }
 

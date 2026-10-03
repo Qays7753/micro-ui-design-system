@@ -80,17 +80,26 @@
   }
 
   function update(strip, st) {
+    /* R8-04: التركيز يُلتقط قبل تغيير حالة inert — إن كان داخل بطاقة
+       ستصبح غير نشطة يُنقل مرة واحدة إلى العارض (هدف صالح داخل الشريط،
+       tabindex=0) بلا نقل عشوائي عند كل تبديل وبلا بقاء في عنصر مخفي */
+    var activeEl = document.activeElement;
+    var focusedIdx = -1;
+    if (activeEl) {
+      for (var fi = 0; fi < st.slides.length; fi++) {
+        if (st.slides[fi].contains(activeEl)) { focusedIdx = fi; break; }
+      }
+    }
     st.slides.forEach(function (slide, i) {
       var active = i === st.index;
       slide.setAttribute('aria-hidden', active ? 'false' : 'true');
       slide.inert = !active; /* المجاور مرئي لا تفاعلي — كعقد info-strip */
     });
-    if (document.activeElement && st.slides[st.index] && st.slides[st.index].inert &&
-        st.slides.some(function (s) { return s.contains(document.activeElement); })) {
+    if (focusedIdx >= 0 && focusedIdx !== st.index) {
       st.viewport.focus({ preventScroll: true });
     }
-    if (st.prev) st.prev.disabled = st.index === 0 || st.count <= 1;
-    if (st.next) st.next.disabled = st.index === st.count - 1 || st.count <= 1;
+    if (st.prevBtn) st.prevBtn.disabled = st.index === 0 || st.count <= 1;
+    if (st.nextBtn) st.nextBtn.disabled = st.index === st.count - 1 || st.count <= 1;
     if (st.position) st.position.textContent = (st.index + 1) + ' / ' + st.count;
     if (st.status) st.status.textContent = 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
     if (st.pages) {
@@ -217,19 +226,37 @@
     var pages = strip.querySelector('[data-info-strip-pages]');
     var status = strip.querySelector('[data-info-strip-status]');
     var empty = strip.querySelector('[data-info-strip-empty]');
-    var prev = strip.querySelector('[data-info-strip-prev]');
-    var next = strip.querySelector('[data-info-strip-next]');
+    /* R8-01: عناصر DOM بأسماء واضحة (prevBtn/nextBtn) — لا تظلّل
+       دالتي التنقل prev()/next() اللتين تستدعيهما المعالجات */
+    var prevBtn = strip.querySelector('[data-info-strip-prev]');
+    var nextBtn = strip.querySelector('[data-info-strip-next]');
     var position = strip.querySelector('[data-info-strip-position]');
-    if (!viewport || !track || !slides.length) return;
+    if (!viewport || !track) return;
 
     strip.setAttribute('data-info-peek-ready', '');
+
+    /* R8-05: صفر بطاقة — العقد نفسه: صف الفراغ يملك العرض، والمنفذ
+       والتحكمات مخفيان، والحالة موسومة جاهزة (بلا محرك تنقل) */
+    if (!slides.length) {
+      viewport.hidden = true;
+      if (controls) controls.hidden = true;
+      if (empty) empty.hidden = false;
+      stateOf.set(strip, {
+        viewport: viewport, track: track, slides: [],
+        prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
+        index: -1, x: 0, count: 0, drag: null, suppressClick: false
+      });
+      return;
+    }
+
     if (!strip.hasAttribute('tabindex')) strip.setAttribute('tabindex', '0');
     if (empty) empty.hidden = true;
+    /* R8-05: بطاقة واحدة — بلا تحكمات تنقل غير لازمة */
     if (slides.length < 2 && controls) controls.hidden = true;
 
     var st = {
       viewport: viewport, track: track, slides: slides,
-      prev: prev, next: next, position: position, status: status, pages: pages,
+      prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
       index: 0, x: 0, count: slides.length, drag: null, suppressClick: false
     };
     stateOf.set(strip, st);
@@ -251,8 +278,8 @@
       });
     }
 
-    if (prev) prev.addEventListener('click', function () { prev(strip); });
-    if (next) next.addEventListener('click', function () { next(strip); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { prev(strip); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { next(strip); });
 
     viewport.addEventListener('pointerdown', function (e) { onPointerDown(strip, st, e); });
     viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });

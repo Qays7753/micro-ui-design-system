@@ -1,8 +1,12 @@
-/* Micro — optional numeric-card carousel. Consumer supplies every card and value. */
+/* Micro — optional numeric-card carousel. Consumer supplies every card and value.
+   R8-02: الجذر الذي يطلب variant الـpeek (data-info-peek) يملكه info-strip-peek
+   وحده (مالك واحد للحالة والأحداث) — هذا المحرك يتخطاه مهما تقدّم ترتيب
+   التحميل، وسلوكه على الجذور غير peek لا يتغيّر. */
 (function () {
   'use strict';
 
   function initStrip(strip) {
+    if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
     if (strip.hasAttribute('data-info-strip-ready')) return;
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');

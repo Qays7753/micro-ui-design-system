@@ -55,10 +55,11 @@
         range.selectNodeContents(el);
         return [].slice.call(range.getClientRects()).filter(function (r) { return r.width > 0 && r.height > 0; });
       }
-      function inSurface(rs) {
+      function inSurface(rs, ref) {
+        var R = ref || sr;
         return rs.every(function (r) {
-          return r.left >= sr.left + 2 && r.right <= sr.right - 2
-            && r.top >= sr.top - 0.5 && r.bottom <= sr.bottom + 0.5;
+          return r.left >= R.left + 2 && r.right <= R.right - 2
+            && r.top >= R.top - 0.5 && r.bottom <= R.bottom + 0.5;
         });
       }
 
@@ -113,14 +114,29 @@
       var noOverlap = lines.every(function (r, i) { return i === 0 || r.top >= lines[i - 1].bottom - 1; });
       t('أسطر العنوان بلا تداخل (line-height نسبي 1.6364)', noOverlap && lines.length >= 2, 'أسطر=' + lines.length);
 
-      /* 7) تكبير النص 200% (محاكاة مضاعفة الخط المعلنة): لا خروج ولا تداخل */
-      var root = document.documentElement;
-      var prevSize = getComputedStyle(root).fontSize;
-      root.style.fontSize = (parseFloat(prevSize) * 2) + 'px';
-      var okZoom = inSurface(glyphRects(title)) && inSurface(glyphRects(amount))
-        && surf.scrollWidth <= surf.clientWidth + 1;
-      root.style.fontSize = prevSize;
-      t('عند تكبير النص 200% (محاكاة خط): الحروف داخل السطح ولا overflow أفقي', okZoom);
+      /* 7) تكبير النص 200% — المحاكاة المعلنة بالمكتبة (ui-release-check):
+         مضاعفة أحجام الخط المحسوبة للعناصر الفعلية لا الجذر فقط (R8-06):
+         العنوان 22→44px والرقم 36→72px، ثم حدود حروف Range والالتفاف
+         والتباعد وبلا قص أو خروج أفقي. ليست اختبار جهاز/zoom نظام. */
+      var title0 = parseFloat(getComputedStyle(title).fontSize);
+      var amount0 = parseFloat(getComputedStyle(amount).fontSize);
+      var zoomed = [].slice.call(document.querySelectorAll('body, body *')).map(function (e) {
+        return [e, parseFloat(getComputedStyle(e).fontSize)];
+      });
+      zoomed.forEach(function (p) { p[0].style.fontSize = p[1] * 2 + 'px'; });
+      var title1 = parseFloat(getComputedStyle(title).fontSize);
+      var amount1 = parseFloat(getComputedStyle(amount).fontSize);
+      /* السطح ينمو مع المحتوى (بلا overflow:hidden — E07) — تُقاس الحروف
+         على مستطيل السطح بعد التكبير لا على القياس قبل الزيادة */
+      var srZ = surf.getBoundingClientRect();
+      var zLines = glyphRects(title).sort(function (a, b) { return a.top - b.top; });
+      var zNoOverlap = zLines.every(function (r, i) { return i === 0 || r.top >= zLines[i - 1].bottom - 1; });
+      var okZoom = title1 === 44 && amount1 === 72
+        && inSurface(glyphRects(title), srZ) && inSurface(glyphRects(amount), srZ)
+        && zNoOverlap && surf.scrollWidth <= surf.clientWidth + 1;
+      zoomed.forEach(function (p) { p[0].style.fontSize = ''; });
+      t('عند تكبير النص 200% (محاكاة المكتبة — مضاعفة أحجام العناصر الفعلية): العنوان 22→44px والرقم 36→72px، الحروف داخل السطح بلا تداخل ولا قص ولا خروج أفقي',
+        okZoom, 'title ' + title0 + '→' + title1 + 'px، amount ' + amount0 + '→' + amount1 + 'px، أسطر=' + zLines.length);
 
       document.getElementById('results').textContent = out.join('\n');
     })();
