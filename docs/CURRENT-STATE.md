@@ -1,3 +1,7 @@
+# مراجعة PR#8 — CHANGES REQUESTED /2026-10-03
+
+التسليم عند81f1f3b روجع مستقلًا: الرفع والحزمة صحيحان، وA01/A02/T01 نجحت إعادة فحصها، لكن variantA05 وأدلة المثال بها عيوب مثبتة. [التقرير الملزم للتصحيح](../reviews/UI-COMPLETION/CHATGPT-REVIEW-R1.md): R8-01..R8-07، على release/ui-professional وPR#8 نفسه دون تغيير الهوية أو بناء شاشات. لا اعتماد/دمج الآن. ZIP السابق لقطة81f1f3b؛ يعاد توليده مع التصحيحات والأدلة والتوثيق. ملخص المنفذ أدناه يخص تسليمه قبل هذه المراجعة.
+
 # التكليف الجاري — UI COMPLETION /2026-10-03
 
 - أحدث تكليف المالك: [مدخل Flash](../handoff/ZAI-START-HERE.md) و[التكليف](../handoff/ZAI-EXECUTION-BRIEF.md) و[التتبع](../handoff/WORK-TRACKER.md).
