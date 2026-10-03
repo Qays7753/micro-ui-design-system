@@ -1,0 +1,66 @@
+/* =========================================================
+   Micro UI — variant عرض بطاقات مع peek وتتبع السحب (A05)
+   الملف: components/info-strip/info-strip-peek.css
+   الحالة: PROPOSED — مقارنة اختيارية بانتظار قرار المالك؛
+   ليست الافتراضي ولا بديلًا عن info-strip الحالي.
+   المصدر: نفس بنية info-strip (العرض/التحكم/الحالات)، وأنماط
+   التوسيط والمعاينة مستوحاة من مصدر carousel القابل للتعديل
+   (components/carousel/carousel.js) — لا مكتبة ثالثة ولا ألوان
+   أو 3D أو محتوى من الفيديو المرجعي.
+   يعمل بعد info-strip.css. التحميل اختياري صريح.
+   مفاتيح التعديل (على العارض):
+     --m-peek-width   عرض جزء المجاور الظاهر (افتراضي 24px)
+     --m-peek-gap     الفاصل بين البطاقات (افتراضي 12px)
+   ========================================================= */
+
+.m-info-peek,
+.m-info-peek * {
+  box-sizing: border-box;
+}
+
+/* الجار الظاهر جزئيًا: البطاقة النشطة موسّطة، والمجاورات على الجانبين.
+   عكس info-strip الحالي: الشرائح المخفية لا تطوى (بلا height:0)
+   كي يبقى جزء المجاور مرئيًا كمطلوب في مقارنة الفيديو. */
+.m-info-peek .m-info-strip__slide {
+  flex: 0 0 calc(100% - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
+  min-width: 0;
+  padding: 0;
+}
+
+.m-info-peek .m-info-strip__slide[aria-hidden="true"] {
+  height: auto;
+}
+
+.m-info-peek .m-info-strip__track {
+  gap: var(--m-peek-gap, 12px);
+  /* التمركز الفيزيائي يُحسب من JS (offsetLeft) ليعمل مع RTL وLTR بلا تفرّع؛
+     القيمة الابتدائية هنا تمنع وميضًا قبل أول قياس. */
+  transform: translateX(0);
+}
+
+/* أثناء السحب: تتبع الإصبع مباشرة بلا انتقال — الاستجابة فورية */
+.m-info-peek .m-info-strip__track.is-peek-dragging {
+  transition: none;
+}
+
+/* سحب أفقي محتمل: touch-action pan-y يبقى (التمرير العمودي محفوظ) */
+.m-info-peek .m-info-strip__viewport {
+  touch-action: pan-y;
+}
+
+/* إخفاء المؤشر الأصلي عند سحب بالفأرة — لا تغيير تخطيط */
+.m-info-peek .m-info-strip__viewport.is-peek-grabbing {
+  cursor: grabbing;
+}
+
+/* مؤشر مجاورة خافت: بدون إخفاء أو تعتيم قوي — مجرد حدّ بصري هادئ
+   يفصل البطاقة النشطة (قيمة مشتقة من حدود info-card الحالية) */
+.m-info-peek .m-info-strip__slide[aria-hidden="true"] .m-info-card {
+  border-color: var(--micro-border-divider);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-info-peek .m-info-strip__track {
+    transition: none;
+  }
+}

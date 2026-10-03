@@ -1,12 +1,14 @@
 {
-  "timestamp": "2026-10-03T01:12:08.282973+00:00",
+  "timestamp": "2026-10-03T18:32:24.417933+00:00",
   "engine": "chromium",
-  "version": "138.0.7204.100",
+  "version": "143.0.7499.4",
+  "engine_binary_source": "playwright-bundled",
+  "engine_binary": "/home/z/.cache/ms-playwright/chromium-1200/chrome-linux64/chrome",
   "physical_device": false,
   "screen_reader": false,
   "text_enlargement": "computed CSS font sizes doubled; not native browser/device zoom",
-  "passed": 321,
-  "total": 321,
+  "passed": 322,
+  "total": 322,
   "results": [
     {
       "name": "Page loads: /previews/",
@@ -1414,6 +1416,11 @@
       "detail": null
     },
     {
+      "name": "Required tokens readable via explicit getPropertyValue",
+      "passed": true,
+      "detail": []
+    },
+    {
       "name": "Contrast text-primary/surface-page >= 4.5",
       "passed": true,
       "detail": 13.505
@@ -1634,8 +1641,8 @@
     "components/carousel/carousel.js": "ed11ea6fb437bcfbe8e9fe9cd40f7abd887d2228aae40ac3d5000989bae0244c",
     "components/carousel/specification.md": "0c3a41689b3366d72b3d7ae10de9d44ee06acd81016024c17fdcfd700f51bd6a",
     "components/data/PACKED-PATTERN.md": "08e0f202f971e9ac702f4802f2ebf035613680c09d2af2013c041bb8ad10401f",
-    "components/data/data.css": "5dc7185f71043558882e6a8d3e48f9f1cb76404d79c88bc8f1c458e67df61c82",
-    "components/data/data.js": "e1ebee3b42d3828734a479f6df24313980f21ad3f806ebfdd4cc33a3db8751ae",
+    "components/data/data.css": "39f9288381d510bb442097f223b7e2587766373a1dff1c642e09c2256f4c1a1c",
+    "components/data/data.js": "7801a9d132423a0c0ebcf83f7413c979d631633c2130b92e0f4a5a83efa8d1da",
     "components/data/packed-circle.css": "8a2253d084ae92122077e7a1ffb109b6b1506d061853f49b766e2ae1ef586e32",
     "components/data/packed-circle.js": "3db0d570d16d58c082eb99ed2f045ddcbf7356d58d9965f8481b90c2d44ccd38",
     "components/data/specification.md": "429a9c3effac2f6be132749db082879207ecd8f01dd7e76778a0884139af8c96",
@@ -1656,7 +1663,7 @@
     "components/metric-comparison/metric-comparison.js": "cb2460f4ff82195f1eb8e7b4c1da68c4adbc82150d319fead9f5cd50da16771b",
     "components/metric-comparison/specification.md": "f3927d6f2460d962a28b3b2a42505a61d045843e99ba928a8e5a47584e3c2c42",
     "components/navigation/navigation.css": "0887ba88bce088ab7880fc633eb6813e4a23b5c0fd8bda61328aa32bbe94befa",
-    "components/navigation/navigation.js": "7d74dfc138c89189400ebfbd99d267ed0bd0f8be0bde5635bde96a8b2bd2cf8d",
+    "components/navigation/navigation.js": "2f3435b4db95ae6dca51791eb84e5b8e569303deffb13debd0e21a070a5cbcc6",
     "components/navigation/specification.md": "3db4853d587fd14fd19d024dcd6c140207493929abe379fe0355ebdde4ec2ebf",
     "components/organization/organization.css": "7f6d63f841bb2eda48f8d93ba11f3bc3402ee883839bff485f9db97778419f28",
     "components/organization/organization.js": "bb8aed24ece5e3c1e693de97f286292c5b6adfd84330400b9975670546b607be",
@@ -1742,6 +1749,6 @@
     "previews/system/index.html": "3931a1c50761275e93758e482929419ec1edaf2ef18a126f9bfb5bc5492d75a8",
     "previews/system/system.css": "0b3a49eaff9599f66b330cb633787ab8fc7c443bb7154526314ec975814f2b0b",
     "previews/system/system.js": "b0fc0d76b4fbae90a9e3baea234a547794a1953d60bb9fb62e4ef4e22e169afa",
-    "tools/ui-release-check.py": "9bac930dc51878f14b4464c8863603601c8d5332867e9170aba60de50a57d9a5"
+    "tools/ui-release-check.py": "a16f9b590505d5ff76ad4147c74ff81e9223c99a0bba8b3ec6dfae6edfa8a70c"
   }
 }

@@ -123,6 +123,18 @@
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
 }
+/* A01: ملاحظة المقياس الموسّع لخيار data-overscale="rescale" الصريح —
+   إعلان ظاهر بالتوسيع والمقياس المعلن، لا قيمة صامتة */
+.m-chart__scale-note {
+  margin: var(--micro-space-2) 0 0;
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border-inline-start: 3px solid var(--micro-info);
+  background-color: var(--micro-info-surface);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  border-radius: var(--micro-radius-chip);
+}
 .m-chart__summary {
   margin: 0;
   font-size: var(--micro-secondary-size);
