@@ -1,18 +1,30 @@
-# فحص مقارنة A05 — 2026-10-03T19:07:37
-# commit المصدر: c0509735f4000e1009b96b47194b3d21988a2837
-# بصمة شجرة المصدر: 0b82678576b1528bc5240ee8c90949e8ab5666fa
+# فحص مقارنة A05 — 2026-10-03T20:19:41
+# commit المصدر: db3a6e65b9c701dc19babd486f4395f2beb1c649
+# بصمة شجرة المصدر: aa9885609669ebb8d43b4fb8056e50221123f4f2
 
-PASS  A05.0 الصفحة تعمل بلا أخطاء JavaScript
+PASS  A05.0 الصفحة تعمل بلا أخطاء JavaScript ولا موارد فاشلة عند التحميل
 PASS  A05.1 الشريط الحالي (لمس): المسار لا يتبع أثناء الحركة (tMid==t0) ثم ينتقل عند الإفلات — tMid==t0:True idx=1
-PASS  A05.2 الـvariant: البطاقة النشطة موسّطة وجزء المجاور ظاهر على الجانبين (≥16px) — geo0={'left': 30, 'right': 30, 'w': 266} peek=30
-PASS  A05.3 الـvariant: المسار يتبع الإصبع أثناء الحركة (بلا انتقال) ولا يقفز قبل الإفلات — moved=True held=True
-PASS  A05.4 سحب دون العتبة (18px < 32px): snap-back دون تبديل بطاقة — idx=1
-PASS  A05.5 سحب يمينًا في RTL يلتزم إلى «التالية» (ترتيب منطقي) — idx=2
-PASS  A05.6 pointercancel أثناء السحب: snap-back وبلا حالة سحب عالقة — idx=2 clean=True
-PASS  A05.7 لوحة المفاتيح RTL (يسار=التالية، يمين=السابقة، End=الأخيرة) وزر التالية معطل عند النهاية — 3→2→3 nextDisabled=True
-PASS  A05.8 المجاور: مرئي (peek) لكنه inert وaria-hidden — لا تفاعل مخفي — [{'ah': 'true', 'inert': True}, {'ah': 'true', 'inert': True}, {'ah': 'true', 'inert': True}, {'ah': 'false', 'inert': False}]
-PASS  A05.9 لا autoplay: الموضع ثابت دون أي إدخال — 3==3
-PASS  A05.10 prefers-reduced-motion: لا انتقال على المسار
-PASS  A05.11 عارض بلا بطاقات: صف الفراغ ظاهر وبلا تحكمات — {'ready': True, 'emptyShown': True}
+PASS  A05.2 الـvariant: جذر peek بمالك واحد (بلا تهيئة المحرك القديم) والبطاقة موسّطة وجزء المجاور ظاهر (≥16px) — owner=True geo0={'left': 30, 'right': 30, 'w': 266} peek=30
+PASS  A05.3 أزرار التنقل تعمل بلا أخطاء: next→1 (position «2 / 4» + النقطة الثانية aria-current + التمركز) ثم prev→0 — next=1 pos='2 / 4' dot=1 centered=True prev=0
+PASS  A05.4 الطرفان: next×3→3 (معطل) وprev×3→0 (معطل)، النقاط تنقل (dot3→2) والتركيز يبقى على النقطة (لا نقل عشوائي) — end=3 nd=True start=0 pd=True dot=2 focusKept=True
+PASS  A05.5 peek مقاسًا: الوسطى (الجار 0 والجار 2 ظاهران ≥16px) والطرف 0 (الجار 1 ظاهر والطرف الآخر 0) والطرف 3 بالمثل — mid=[18, 266, 18, 0] first=[266, 18, 0, 0] last=[0, 0, 18, 266]
+PASS  A05.6 تتبع 1:1 مقاسًا: +30px مؤشر → +30px مسار و+90 → +90 (±2px)، بلا انزلاق بعد التوقف، والالتزام عند الإفلات → البطاقة 1 — tx0=-30.0 d30=30.0 d90=90.0 held=True idx=1
+PASS  A05.7 سحب 18px (< العتبة): المسار تحرك أثناء السحب ثم snap-back إلى الموضع نفسه (±2px) دون تبديل — mid=18.0 restore=0.0 idx=1
+PASS  A05.8 سحب يمينًا في RTL يلتزم إلى «التالية» (ترتيب منطقي) — idx=2
+PASS  A05.9 pointercancel أثناء السحب: snap-back وبلا حالة سحب عالقة — idx=2 clean=True
+PASS  A05.10 حدث micro-info-peek:change واحد لكل تنقل — بلا ازدواج إعلان من محركين — events=1 idx=3
+PASS  A05.11 تهيئة متكررة للمحركين: النقاط 4 (لا مضاعفة) والتنقل يتحرك خطوة واحدة بحدث واحد — dots=4 events=1 idx=2
+PASS  A05.12 لوحة المفاتيح RTL (يسار=التالية، يمين=السابقة، End=الأخيرة) وزر التالية معطل عند النهاية — 3→2→3 nextDisabled=True
+PASS  A05.13 المجاور: مرئي (peek) لكنه inert وaria-hidden — لا تفاعل مخفي — [{'ah': 'true', 'inert': True}, {'ah': 'true', 'inert': True}, {'ah': 'true', 'inert': True}, {'ah': 'false', 'inert': False}]
+PASS  A05.14 لا autoplay: الموضع ثابت دون أي إدخال — 3==3
+PASS  A05.15 prefers-reduced-motion: الموضع الهدف فورًا (80ms) بلا انتقال على المسار — {'i': 3, 'centered': True} noAnim=True
+PASS  A05.16 صفر أخطاء JS وصفر موارد فاشلة (404+) بعد كل التفاعلات أعلاه
+PASS  A05.17 ترتيب تحميل معكوس (peek أولًا): مالك واحد للجذر — ready بعقد variant وبلا ready للمحرك القديم ونقاط 3 — owner=True dots=3
+PASS  A05.18 تركيز داخل بطاقة تصبح غير نشطة → يُنقل مرة إلى العارض (لا BODY ولا عنصر داخل inert) ولا يُنقل عند بقاء البطاقة نشطة — before=ro-btn after={'id': 'ro-vp', 'isViewport': True, 'inInert': False, 'isBody': False} idx=1
+PASS  A05.19 التركيز على نقطة (خارج البطاقات) يبقى مكانه بعد التنقل — لا نقل عشوائي — kept=True
+PASS  A05.20 أسهم لوحة المفاتيح داخل حقل إدخال بالبطاقة لا تُلتقط كتنقل (يبقى 2 والتركيز في الحقل) — idx=2 inputFocused=True
+PASS  A05.21 بطاقة واحدة: جاهز بعقد variant، المنفذ ظاهر والتحكمات مخفية والفراغ مخفي، والتنقل لا يخرج من 0 — {'ready': True, 'oldReady': False, 'index': 0, 'viewportHidden': False, 'controlsHidden': True, 'emptyHidden': None} stable=0
+PASS  A05.22 عارض بلا بطاقات (عقد variant): جاهز، صف الفراغ ظاهر، المنفذ والتحكمات مخفيان، index -1 والتنقل لا يُجاري — {'ready': True, 'oldReady': False, 'index': -1, 'viewportHidden': True, 'controlsHidden': True, 'emptyShown': True}
+PASS  A05.23 الحصيلة عبر كل الصفحات والتفاعلات: صفر أخطاء JS وصفر موارد فاشلة
 
-# النتيجة: 12/12
+# النتيجة: 24/24
