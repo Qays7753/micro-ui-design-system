@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مثال مستقل — بطاقة Micro العددية</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="info-strip.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font-family: var(--micro-font-family); }
+    main { width: min(100%, 390px); margin-inline: auto; }
+    h1 { margin: 0 0 20px; font-size: 22px; line-height: 1.45; }
+    .m-info-card { width: min(100%, 320px); }
+    @media (max-width: 359px) { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>عينة بطاقة مستقلة</h1>
+    <article class="m-info-card" aria-label="عدد الطلبات">
+      <span class="m-info-card__label">طلبات اليوم</span>
+      <span class="m-info-card__reading">
+        <span class="m-info-card__number" dir="ltr">18</span>
+        <span class="m-info-card__unit">طلب</span>
+      </span>
+    </article>
+  </main>
+</body>
+</html>

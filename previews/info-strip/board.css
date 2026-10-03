@@ -1,0 +1,52 @@
+/* Review presentation only. Component appearance lives in components/info-strip/. */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+}
+.review {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+}
+.review__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+}
+.review__brand { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; }
+.review__mark { width: 12px; height: 12px; border-radius: var(--micro-radius-choice); background: var(--micro-brand-primary); }
+.review__stage { color: var(--micro-text-hint); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
+.review__intro { padding-block: var(--micro-space-8) 28px; }
+.review__eyebrow { margin: 0 0 12px; color: var(--micro-brand-primary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); font-weight: 500; }
+.review__intro h1 { margin: 0; font-size: var(--micro-amount-size); line-height: var(--micro-amount-line); font-weight: 600; }
+.review__lede { max-width: 30ch; margin: 14px 0 0; color: var(--micro-text-secondary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); }
+.review__sample { padding-block: 18px 22px; border-top: 1px solid var(--micro-border-divider); }
+.review__section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-block-end: 14px; }
+.review__section-heading h2 { margin: 0; font-size: 18px; line-height: 28px; font-weight: 600; }
+.review__sample-tag { color: var(--micro-text-hint); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); white-space: nowrap; }
+.review__sample .m-info-strip,
+.review__sample > .m-info-card { max-width: 100%; }
+.review__sample--solo { padding-block-end: 20px; }
+.review__hint { margin: 6px 2px 0; color: var(--micro-text-hint); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
+.review__note { display: flex; align-items: flex-start; gap: 12px; margin-block-start: auto; padding-block: 18px; border-top: 1px solid var(--micro-border-divider); }
+.review__note-mark { flex: 0 0 8px; height: 8px; margin-block-start: 8px; border-radius: 50%; background: var(--micro-brand-accent); }
+.review__note p { margin: 0; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
+.review__footer { display: flex; justify-content: space-between; gap: var(--micro-space-3); padding-block-start: 10px; color: var(--micro-text-hint); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
+.review__footer span:first-child { direction: ltr; font-variant-numeric: tabular-nums; }
+@media (max-width: 359px) {
+  .review { padding-inline: 16px; }
+  .review__intro { padding-block-start: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .review *, .review *::before, .review *::after { scroll-behavior: auto; }
+}

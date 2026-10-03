@@ -1,0 +1,731 @@
+{
+  "timestamp": "2026-10-03T13:24:00.397104+00:00",
+  "engine": "chromium",
+  "version": "138.0.7204.100",
+  "base": "http://127.0.0.1:5000",
+  "text_enlargement": "computed CSS font sizes doubled; not native browser/device zoom",
+  "physical_device": false,
+  "screen_reader": false,
+  "other_engines": {
+    "firefox": {
+      "installed": false,
+      "tested": false
+    },
+    "webkit": {
+      "installed": false,
+      "tested": false
+    }
+  },
+  "results": [
+    {
+      "name": "Root redirects to unified gallery",
+      "passed": true
+    },
+    {
+      "name": "Twelve source families are discoverable",
+      "passed": true
+    },
+    {
+      "name": "Arabic RTL and local font loaded",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/access-gateway/access-gateway.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/access-gateway/access-gateway.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/access-gateway/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/access-gateway/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/account-settings/account-settings.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/account-settings/account-settings.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/account-settings/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/account-settings/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/buttons/buttons.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/buttons/buttons.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/buttons/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/data/data.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/data/data.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/data/packed-circle.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/data/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/fields/fields.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/fields/fields.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/fields/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/info-strip/info-strip.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/info-strip/info-strip.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/info-strip/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/messages/messages.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/messages/messages.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/messages/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/metric-comparison/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/metric-comparison/metric-comparison.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/metric-comparison/metric-comparison.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/metric-comparison/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/navigation/navigation.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/navigation/navigation.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/navigation/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/organization/organization.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/organization/organization.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/organization/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/selection/picker.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/selection/picker.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/selection/selection.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/selection/selection.js",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/selection/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/surfaces/curves.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/surfaces/specification.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../components/surfaces/surfaces.css",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: ../docs/UI-VISUAL-SYSTEM.md",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: after-direction/",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: buttons/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: carousel/",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: compositions/",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: data/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: fields/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: info-strip/",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: messages/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: navigation/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: organization/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: selection/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: surfaces/approved-curves.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: surfaces/example-usage.html",
+      "passed": true
+    },
+    {
+      "name": "Gallery link responds: system/",
+      "passed": true
+    },
+    {
+      "name": "Private workspace not served (GET/HEAD): /.agents/memory/MEMORY.md",
+      "passed": true
+    },
+    {
+      "name": "Private workspace not served (GET/HEAD): /attached_assets/",
+      "passed": true
+    },
+    {
+      "name": "Private workspace not served (GET/HEAD): /.replit",
+      "passed": true
+    },
+    {
+      "name": "Private workspace not served (GET/HEAD): /.local/tasks/",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/row-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/row-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/row-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/form-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/form-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/form-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/summary-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/summary-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "320px /previews/compositions/summary-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/row-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/row-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/row-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/form-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/form-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/form-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/summary-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/summary-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "360px /previews/compositions/summary-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/row-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/row-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/row-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/form-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/form-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/form-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/summary-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/summary-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "390px /previews/compositions/summary-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/row-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/row-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/row-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/form-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/form-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/form-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/summary-example.html: no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/summary-example.html: numeric direction preserved",
+      "passed": true
+    },
+    {
+      "name": "430px /previews/compositions/summary-example.html: CSS text 200% no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "Empty form exposes associated error and restores focus",
+      "passed": true
+    },
+    {
+      "name": "Invalid input is preserved",
+      "passed": true
+    },
+    {
+      "name": "Keyboard submit validates locally without storage or navigation",
+      "passed": true
+    },
+    {
+      "name": "Editing clears stale success",
+      "passed": true
+    },
+    {
+      "name": "Row action updates its demo state",
+      "passed": true
+    },
+    {
+      "name": "Row action is not inside a link and meets 48px target",
+      "passed": true
+    },
+    {
+      "name": "Summary consumes real metric renderer and preserves readings",
+      "passed": true
+    },
+    {
+      "name": "Carousel 0 cards: controls reflect cardinality",
+      "passed": true
+    },
+    {
+      "name": "Empty carousel exposes explicit empty state",
+      "passed": true
+    },
+    {
+      "name": "Carousel 0 cards: reduced motion has no animated track",
+      "passed": true
+    },
+    {
+      "name": "Carousel 1 cards: controls reflect cardinality",
+      "passed": true
+    },
+    {
+      "name": "Carousel 1 cards: current card and page count correct",
+      "passed": true
+    },
+    {
+      "name": "Carousel 1 cards: reduced motion has no animated track",
+      "passed": true
+    },
+    {
+      "name": "Carousel 12 cards: controls reflect cardinality",
+      "passed": true
+    },
+    {
+      "name": "Carousel 12 cards: current card and page count correct",
+      "passed": true
+    },
+    {
+      "name": "Many cards: End activates last card without hidden focus",
+      "passed": true
+    },
+    {
+      "name": "Many cards: Home returns to first card",
+      "passed": true
+    },
+    {
+      "name": "Carousel 12 cards: reduced motion has no animated track",
+      "passed": true
+    },
+    {
+      "name": "No page runtime errors",
+      "passed": true
+    },
+    {
+      "name": "No failed source asset responses",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "failed_assets": [],
+  "source_sha256": {
+    "components/README.md": "2dc61e9cc0f333b6e637da2d29a6e950e51df53c5fcb539e244d86feb60ee689",
+    "components/access-gateway/README.md": "64907b8f3835054ab25a019b3654bb239fcd06eb95dfb47af945f7e444e4ebb0",
+    "components/access-gateway/access-gateway.css": "53e433ac48cf06de655e1921a950c1029e7bcb9a3960ec4823db153246dfc807",
+    "components/access-gateway/access-gateway.js": "396bd0d2da64f19ae118a140c67009ec5dd9782ad0123334e2f5762c2c828870",
+    "components/access-gateway/example-usage.html": "ed39f1715f7326de245d9963d3a83565a40c8179074ea7c833d2b2a65750d263",
+    "components/access-gateway/specification.md": "7eabb4d3df0a899e063cae5e87d1edec84334eaac1a5a20cae3b499ccd24a0dc",
+    "components/account-settings/README.md": "c1ac45e81467e2ed32e15d39c83dfbda5bb0e97e5af6b414657a97898087d3df",
+    "components/account-settings/account-settings.css": "3d85b0e9af563d25d086cde72f05e764e4beeb3250505d9cb17758f50d8d89b1",
+    "components/account-settings/account-settings.js": "73aace828812d574e603781f1b0916963a3507dc1e7748969eef50b644effa6e",
+    "components/account-settings/example-usage.html": "5460c2e03b4ee7e0943d717a54bcd06747b0ef060081bfa3aa7ea1682ca5c0e3",
+    "components/account-settings/specification.md": "052dbdc0f0f6a58e90d21796442c9708b0f840bfe2a852eceb63e7bd0bc99cf7",
+    "components/buttons/buttons.css": "200fa76d1e6936e1753208fac48bf5a923e56481a9614dd27a2ebce7b6112d5d",
+    "components/buttons/buttons.js": "4f53951cf86e6915bdc803385e1fb1efe811999233aa3876519e4f8bd82a8f88",
+    "components/buttons/specification.md": "6ebaac0ad06dad1c8f6a721a9969f04f08dd7151740944d2360261f6f1dbbc38",
+    "components/carousel/README.md": "a81ae67925f6283007b533d5e32aba7bb58d1b030395a281dfef792493102be6",
+    "components/carousel/carousel.css": "7321fd9ed56f3b0003c2779864e95eedd1b9e1e95080ebb6bfdf8d5c93b14d8b",
+    "components/carousel/carousel.js": "ed11ea6fb437bcfbe8e9fe9cd40f7abd887d2228aae40ac3d5000989bae0244c",
+    "components/carousel/specification.md": "0c3a41689b3366d72b3d7ae10de9d44ee06acd81016024c17fdcfd700f51bd6a",
+    "components/data/PACKED-PATTERN.md": "08e0f202f971e9ac702f4802f2ebf035613680c09d2af2013c041bb8ad10401f",
+    "components/data/data.css": "5dc7185f71043558882e6a8d3e48f9f1cb76404d79c88bc8f1c458e67df61c82",
+    "components/data/data.js": "e1ebee3b42d3828734a479f6df24313980f21ad3f806ebfdd4cc33a3db8751ae",
+    "components/data/packed-circle.css": "8a2253d084ae92122077e7a1ffb109b6b1506d061853f49b766e2ae1ef586e32",
+    "components/data/packed-circle.js": "3db0d570d16d58c082eb99ed2f045ddcbf7356d58d9965f8481b90c2d44ccd38",
+    "components/data/specification.md": "429a9c3effac2f6be132749db082879207ecd8f01dd7e76778a0884139af8c96",
+    "components/fields/fields.css": "dbe2cc6e076ba67af752f0b44c336ee468b5f597816157884ccf0a932910c793",
+    "components/fields/fields.js": "18d30e091d2b6cf301e5f35751a920d11bd6fe29207e4720505ff8ccd3507011",
+    "components/fields/specification.md": "a92937c4d5b8e2d24fc5a664eed54cd9fc2cbad0832b5013cb154c63ec9a8fca",
+    "components/info-strip/README.md": "11b0ed34c424a6dfe6eb959dba335fa27e0ddc30ebb2e4bde16171a74de2397a",
+    "components/info-strip/example-usage.html": "52afc6443dfdf9f22ca7fe34f2d70ad5cb2a2709b7a2cc83a9b2813ada8baa5e",
+    "components/info-strip/info-strip.css": "8faccdd3010f2cd6aaa5e67ec7c1909c63f88d1778d6a4accda15051e68756dc",
+    "components/info-strip/info-strip.js": "3059fb00ebecf3a178123b2ae6b56afd1cc90ce978b9aed3f00c24230796bdb3",
+    "components/info-strip/specification.md": "fb20b87d93d9a2e8dde2dc3688491e314c47a4df21c3a294b17144634de47f97",
+    "components/messages/messages.css": "a11559f6fe12dd64ee1fe44cb07832db0cb010d3baa67fc7fd281cff1c12115c",
+    "components/messages/messages.js": "eb874f2a581c1683664f0f7db784d6c87c33f0cbc50f1cb1f138a70bd9c1981b",
+    "components/messages/specification.md": "9468da1ed7b4de62cf7ec9ec7b3affb6a8a7974613a4230c2c797c1403f520d5",
+    "components/metric-comparison/README.md": "19c27af3ea4798970e6abe5ff3a66204e76d2fc58aca57049c1da406433e7cb7",
+    "components/metric-comparison/example-usage.html": "6c4e3d0d84eb88619cc56f14eea22468868a31ed5a39aa02f12fc45391483807",
+    "components/metric-comparison/metric-comparison.css": "11b72a292d518d3a3b961481f60e4025a9cfb9c1cc1d4ac594dc8f12fd5800af",
+    "components/metric-comparison/metric-comparison.js": "cb2460f4ff82195f1eb8e7b4c1da68c4adbc82150d319fead9f5cd50da16771b",
+    "components/metric-comparison/specification.md": "f3927d6f2460d962a28b3b2a42505a61d045843e99ba928a8e5a47584e3c2c42",
+    "components/navigation/navigation.css": "0887ba88bce088ab7880fc633eb6813e4a23b5c0fd8bda61328aa32bbe94befa",
+    "components/navigation/navigation.js": "7d74dfc138c89189400ebfbd99d267ed0bd0f8be0bde5635bde96a8b2bd2cf8d",
+    "components/navigation/specification.md": "3db4853d587fd14fd19d024dcd6c140207493929abe379fe0355ebdde4ec2ebf",
+    "components/organization/organization.css": "7f6d63f841bb2eda48f8d93ba11f3bc3402ee883839bff485f9db97778419f28",
+    "components/organization/organization.js": "bb8aed24ece5e3c1e693de97f286292c5b6adfd84330400b9975670546b607be",
+    "components/organization/specification.md": "3e998e458e2f3573c012532471e0f915afe80cb91d81017c8a54d5025b64a855",
+    "components/selection/picker.css": "ae55929cfae667158679d3a6747bd5c9e04edcebf32d2bc5de1bedd8c2889459",
+    "components/selection/picker.js": "b4aadcca1d40f4e17b40931f9d08857e2842b85408139537e114466aa9615ffe",
+    "components/selection/selection.css": "4a5fdd614f24e40dab7a0c215dc537f7f13629c922e329690856a7a60ac4e7f5",
+    "components/selection/selection.js": "5eb9e5597a832610fe1a29d9e2549e5a00072010e850fe3561e7dad5dddc7c73",
+    "components/selection/specification.md": "330da3582b121ab2444ae7c1dfb34257407102d9a3b3f2132e6681f5b2481756",
+    "components/surfaces/curves.css": "fa4d0058d92c5f34938951f65b795d12139388cbe2f758b307a902bb51ca12d6",
+    "components/surfaces/specification.md": "dc44fe0844b94ec1dcea77ba7b005d6c4616fb505d62620a481f56cf92a6c636",
+    "components/surfaces/surfaces.css": "7926eae4fdbbd8e4636c2cd16c7543ba7835115459369a8bd4392423031a9229",
+    "shared/icons.js": "0f0d9dfcf14a86e885b74e308fc3bdb1baa08c721e1d798ff8641e5273989969",
+    "shared/motion.css": "6ff6d9714f71f6259a7071e0fed0ee60c6973b7633991ea633ec10a36024c7c0",
+    "shared/tokens.css": "427e52b5abddb3869ccaed51eb55627296ce24cc30ce0423c98fec8e2c9e4130",
+    "previews/README.md": "f946d081c2ce4499d4b2a7c9733f2b781d10e9d360f1a658a121db7082eed2d1",
+    "previews/after-direction/README.md": "3aa28a248b046daed59c87f773c497c7d597fa470b59aa2ca527fb90258bb47e",
+    "previews/after-direction/board.css": "223412a22c9d8fb7c6865ed97e8d5a7353a0cef4d571659defd93cd019a8ed81",
+    "previews/after-direction/board.js": "75fd8a4ded102315b2a5fe72f56dcf7e18e2b18fd117687aac17c2b31461dba8",
+    "previews/after-direction/index.html": "7ef889432900422aac13894ef7e5845440332973ea999a2d929df2293d29ff1d",
+    "previews/board-base.css": "2375f8eb1e70a0754e2c691209f527a7aca686704e2df171c158187058e74589",
+    "previews/board.js": "fc5e04c1b0a3f42a3404076abdc59dea5a4efe5ceda3c5f3539ec06a67ffb2f6",
+    "previews/buttons/README.md": "787f20135c49672a9994ccd9eebe91d974a3e8ac4bcd6b6b2d6aa9df6e29f886",
+    "previews/buttons/board.css": "4644702bbf333dddd58a56a17760745c9747add2b661ee0a560653dbdf8b8025",
+    "previews/buttons/board.js": "83e1122868ea450d8abad15f775c3b076895b1f7b1a6b67d80cc94a1e4edbe65",
+    "previews/buttons/example-usage.html": "b31a7fa5624c09d470e3175658b105dc703e73a5f032eb5267b0086ba8514a3f",
+    "previews/buttons/index.html": "bbca6cedf716b8bf7240962b062a43cd73f19c5ba99fb157c853c550cd485fa9",
+    "previews/carousel/README.md": "eeeafb3e15688471eb93368a7d8cfbc423d048845e33b0656014653ab538b29d",
+    "previews/carousel/board.css": "228fa99753c382abdb8698d5a40dfda62d4b9d637ee64ea2ff63496679a3b490",
+    "previews/carousel/board.js": "899645d8348a0d798731c6975d85d81e50e38da0939b9cf062e273f637728455",
+    "previews/carousel/example-usage.html": "de4a8b20d118fd29b59c8ddd90d94c33cfc00a231a1facc2749cf1b58eac2d1c",
+    "previews/carousel/index.html": "1990877347ee16199f7e6f2288a33396214e8523079587fa59bdd816f25e6ed1",
+    "previews/compositions/compositions.css": "302a65236724e8be9481f4e9ace77e53bbaf13639c1e27864f6b05b1d7434393",
+    "previews/compositions/compositions.js": "55781dee182661683832cc94c2302ed5c1970f328ab06dbeb8c71ddfba37caf2",
+    "previews/compositions/form-example.html": "30ecb8dfea97b4a8d8bea24290e4f3425a38f2d34b20c9833265fbfcf6b34e3b",
+    "previews/compositions/index.html": "4ec7eebc53be5b256dfad9d770004f92c539b22ebf9f54cffdca2676b085250c",
+    "previews/compositions/row-example.html": "7c021aa929e38e294a4ef0a7b76b6c8e6e92bba7d6fe8f50720a980b8a130794",
+    "previews/compositions/summary-example.html": "5a0aa374f05086506bd2c904af71efd82449096a1c5d5fe977b4b16fe63b9af7",
+    "previews/concepts/README.md": "99d49c25078b4d00b0740609e6bfe333481b3fbc9c12d2b33bd6a2b7b8751ef3",
+    "previews/concepts/board.css": "342ee168b3c89262efef17a1cfe374521aeda2cbb7eb2d53160e34e819ed6a43",
+    "previews/concepts/board.js": "6b083c4339695a27f1edcbb1c5ecd1612bd3668a4de68ad1141adf17a3196ff2",
+    "previews/concepts/index.html": "586f436205e68dfed1172f82d1d22bd24ce16c09bad0904f960a3c160342c765",
+    "previews/data/README.md": "9bfb1f2a9f08ee8fcb972037752b49e3ad8695cee6868c5d2552b33537c338fc",
+    "previews/data/board.css": "961a9c9e72b098dac5960e8925587644e2ee1b5804c1cfe6655d00916cd26ac0",
+    "previews/data/board.js": "c61c005842f97243f99f691fda2dca418b834ac10f2beb87d256e6e1f99ad989",
+    "previews/data/example-usage.html": "94b7e465e352a3e20f51d90f800ca870dc65d71bc7e7ffa685b9c9663835493a",
+    "previews/data/index.html": "cb56a56322bfc4f0d394f92e299aca5e7923c1ac800f584bfbba49323cec0bf7",
+    "previews/fields/README.md": "b366094211d65920382bb7921ad6f1c3cb6d4dfb894f6a02dfbb7657875eb582",
+    "previews/fields/board.css": "90e9a6ca82e09dbcf5515dc22b0d53ccf11ffba95d21b51231df475cba93000b",
+    "previews/fields/board.js": "b259a5c1f0c4811bae810047afcce98394347e4a81243660b1bee30b7560945b",
+    "previews/fields/example-usage.html": "ee53e30487b2deb6415368b8f6300d6fbad98efe2d0e434f735e0a6737c87ec0",
+    "previews/fields/index.html": "ec83cdd6e332f6e2deb1dffca83e5a47bf40fa326de28b7af0ba12b2b2143be3",
+    "previews/index.css": "259ab767a4c23cdc866e823978bd7f2b41a32fe2e79e697013855752c30122bd",
+    "previews/index.html": "f9910600aa9356d83328f9c8a434bf3d4d77a4cdab82fbe4313d67638f27f730",
+    "previews/info-strip/board.css": "557fce7e206e516bcd1dfc380dd27fd638ed66f3105030e2b6c5aa41632697b5",
+    "previews/info-strip/index.html": "09aa322b5367a17429186e97cf6ee2b7b23126a326689104ef971786c4feb087",
+    "previews/messages/README.md": "a0f7bf2fa83870654d53ab9aa11cea0760cdf156f203a53c0b0f37b1e359c010",
+    "previews/messages/board.css": "965fcaec95489420c21bc82dd0211d5d441e82305bfcd4d1b6ab6ff6617eed96",
+    "previews/messages/board.js": "80f60420117c97f651e83acedea15454849c51bfb5003d89a7fda32483927457",
+    "previews/messages/example-usage.html": "ea0372195c6b399b808fdea555000cdaa2a64cb887c3973f7c638e2c2f987f49",
+    "previews/messages/index.html": "571585a31740cef90f7d4b2fa8fadee78fb75c4ff0bb6873d3d1d02180bb8ff2",
+    "previews/navigation/README.md": "92b00d8997027f9a72f18436cdab1578147f796cc713d248362367e1b496e832",
+    "previews/navigation/board.css": "78684dba057b72fe78d48fcea6e29a1405e1997ee5cb9d6e24dcb8739b42a921",
+    "previews/navigation/board.js": "a343d32b13965a8e6cebc251419c4a79336be9c820600ef41bf03d1930b1b154",
+    "previews/navigation/example-usage.html": "dc8a106b7081835c83bb2b3cdf56e54ea8650b80282603de06ccffff7c989e93",
+    "previews/navigation/index.html": "5ee470cee700b4b13131410aed01b0934068e77c084afb08a7f685fe6adc6800",
+    "previews/organization/README.md": "08ed0c190f10fe28d60622326b883b77c02739a532b14ae76e1b3fc3756c6613",
+    "previews/organization/board.css": "09dba4ea95a7d32a1f509e7312820d6db10b3a091aeb08a37c0ae63d8d3c2d9a",
+    "previews/organization/board.js": "8ba2b3ce583193d708b9042ff5ccc669cb9e29a197669522b56c4ebda34fdffd",
+    "previews/organization/example-usage.html": "2b914f999a6da897f01efec22323cb7be3bc3454587220ecfaac2a068aae0efe",
+    "previews/organization/index.html": "0820e07bfce8b6513e0efbe6e33fbdc28bd35b81514ff15a3e5e2bff20facf71",
+    "previews/selection/README.md": "361b5bb2036412950e222afc0cbed2b92292e78f012b3ad4f199d86c9d7f9550",
+    "previews/selection/board.css": "378fe8eef79f4d974d35b84338cfca237ae3be1d9a90422367a4d70e6dbcf21b",
+    "previews/selection/board.js": "6fd68788b0a8d8a09810c5f5875304d4463f89f9f3f92b9e3b1a2ee4894e3ef6",
+    "previews/selection/example-usage.html": "bc52854b0d2dbb0ec5d631839fb22836951889165d2bc6a781c4e40304324935",
+    "previews/selection/index.html": "079130a8af6d9cc3f605213b96767ab53069e887be9865c41197e07868b922e1",
+    "previews/surfaces/README.md": "73d06a502148f888c148ece3b5c2196276beab0e926ff5d11f0dbb9231e1af98",
+    "previews/surfaces/approved-curves.html": "baf7bd2a8194086cfb02a1050807f966f387c963342310cd4b4ac96727acfd4d",
+    "previews/surfaces/board.css": "c31d26ab12f1346b17a347ea529dd70c152207b501e5be672e8570b2d7a9cf78",
+    "previews/surfaces/board.js": "2855fbb662bcfe24ddfb45761a628fe32d702bf9f4176dd3669c0784adb5c037",
+    "previews/surfaces/example-usage.html": "05dcd02d3fb2cd8157d71b637addf1f7cfb66b77ae0f28d6a7b8fd9b80987f65",
+    "previews/surfaces/index.html": "5db8bfa1d52de1dbcd7ecb916134208fb290e54d94823960feface040c03f2c7",
+    "previews/system/index.html": "3931a1c50761275e93758e482929419ec1edaf2ef18a126f9bfb5bc5492d75a8",
+    "previews/system/system.css": "0b3a49eaff9599f66b330cb633787ab8fc7c443bb7154526314ec975814f2b0b",
+    "previews/system/system.js": "b0fc0d76b4fbae90a9e3baea234a547794a1953d60bb9fb62e4ef4e22e169afa",
+    "tools/design-core-check.py": "2cd3f7999042da38d0f3bfb3ca67c6ed7badbaf9f33a86f729cf442d54b3ae7e"
+  },
+  "passed": 144,
+  "total": 144
+}

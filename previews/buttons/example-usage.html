@@ -34,7 +34,7 @@
       line-height: 26px;
     }
     .usage-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
-    .usage-note { color: var(--micro-text-hint); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
+    .usage-note { color: var(--micro-text-hint); font-size: 13px; line-height: 20px; margin: 8px 0 0; overflow-wrap: anywhere; }
     /* رسالة نتيجة المستهلك — عنصر المستهلك هو، وليس جزءًا من المكوّن */
     .usage-status {
       display: inline-flex;
@@ -68,7 +68,7 @@
     </button>
   </div>
 
-  <p class="usage-note">بقية أشكال المكوّن خارج أي لوحة وبأي reset (تصحيح R2-C): نص + أيقونة، أيقونة دائري، تصفية بعدّاد، والمقترح B للتحميل النصي (التسمية ظاهرة والمؤشر في فتحة محجوزة). كلها بنفس الواجهة تمامًا:</p>
+  <p class="usage-note">بقية أشكال المكوّن خارج أي لوحة وبأي reset: نص + أيقونة، أيقونة دائري، تصفية بعدّاد، والتحميل B الافتراضي (التسمية ظاهرة والمؤشر في فتحة محجوزة). كلها بنفس الواجهة تمامًا:</p>
   <div class="usage-row">
     <button class="m-btn m-btn--primary" id="icon-btn" data-loading-label="جارٍ الحفظ"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>حفظ العملية</button>
     <button class="m-btn m-btn--secondary m-btn--icon" id="circle-btn" aria-label="بحث" data-loading-label="جارٍ البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-search"/></svg></button>

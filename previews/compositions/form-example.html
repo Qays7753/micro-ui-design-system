@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال حقل ومساعدة وخطأ</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>
+    * { box-sizing: border-box; }
+    a { color: var(--micro-primary); display: inline-flex; align-items: center; min-height: var(--micro-touch-min); }
+    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { width: min(100%, 420px); margin-inline: auto; }
+    h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.45; }
+    .demo-note { margin: 0 0 24px; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
+    form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .m-btn { justify-self: start; }
+    .feedback { margin: 0; min-height: calc(var(--micro-label-size) * var(--micro-label-line)); font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-secondary); }
+    .feedback.is-error { color: var(--micro-danger); }
+    .feedback.is-success { color: var(--micro-success); }
+  </style>
+</head>
+<body>
+  <main id="form-example">
+    <h1>جهّز طلبك للاستلام</h1>
+    <p class="demo-note">مثال محلي: اكتب اسمًا ثم اضغط متابعة. لا إرسال ولا تخزين.</p>
+    <form id="composition-form" novalidate>
+      <div class="m-field" data-micro-field>
+        <label class="m-field__label" for="composition-name">اسم المستلم</label>
+        <div class="m-field__control">
+          <input class="m-field__input" id="composition-name" name="name" type="text" autocomplete="off" aria-describedby="composition-help composition-error">
+        </div>
+        <p class="m-field__msg is-visible" id="composition-help">أدخل الاسم الذي سيستلم الطلب.</p>
+        <p class="m-field__msg" id="composition-error" aria-live="polite"></p>
+      </div>
+      <button class="m-btn m-btn--primary" id="composition-submit" type="submit">متابعة</button>
+      <p class="feedback" id="composition-feedback" role="status" aria-live="polite"></p>
+    </form>
+    <p><a href="index.html">العودة إلى أمثلة التركيب</a></p>
+  </main>
+  <script>
+    (function () {
+      var form = document.getElementById('composition-form');
+      var input = document.getElementById('composition-name');
+      var field = input.closest('[data-micro-field]');
+      var error = document.getElementById('composition-error');
+      var feedback = document.getElementById('composition-feedback');
+      function clearError() {
+        field.classList.remove('has-error');
+        input.removeAttribute('aria-invalid');
+        error.textContent = '';
+        error.classList.remove('is-visible');
+      }
+      input.addEventListener('input', function () {
+        clearError();
+        feedback.textContent = '';
+        feedback.className = 'feedback';
+      });
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!input.value.trim()) {
+          field.classList.add('has-error');
+          input.setAttribute('aria-invalid', 'true');
+          error.textContent = 'اكتب اسم المستلم للمتابعة.';
+          error.classList.add('is-visible');
+          feedback.textContent = 'لم يتغير النص؛ صحّح الحقل وحاول مرة أخرى.';
+          feedback.className = 'feedback is-error';
+          input.focus();
+          return;
+        }
+        clearError();
+        feedback.textContent = 'تم التحقق محليًا من الاسم؛ لم يُرسل أو يُحفظ.';
+        feedback.className = 'feedback is-success';
+      });
+    }());
+  </script>
+</body>
+</html>

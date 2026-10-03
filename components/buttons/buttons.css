@@ -6,7 +6,7 @@
    سماكة حد المؤشر 2px، ومقاس خط العدّاد (توكن مشترك مضاف:
    --micro-counter-label-*). لا ألوان مكررة هنا إطلاقًا.
    الاتجاه: كل القيم بخصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
-   الحالة: DRAFT FOR RE-REVIEW — ما لم تُحسمه الأسس موسوم بـ«مقترح» في المواصفات.
+    مرجع التنفيذ: الأنواع والحالات وعقد التحميل موثقة في مواصفة B01.
    ========================================================= */
 
 /* ---------------------------------------------------------
@@ -22,9 +22,9 @@
   gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
   min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
   padding-block: var(--micro-button-padding-block);   /* 12px */
-  padding-inline: var(--micro-button-padding-inline); /* 20px */
+  padding-inline: var(--micro-button-padding-inline);
   border: 0;
-  border-radius: var(--micro-radius-capsule);         /* كبسولة للزر القصير */
+  border-radius: min(var(--micro-radius-button-long), 50%); /* قصير كبسولة؛ متعدد الأسطر 24px */
   font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
   font-size: var(--micro-button-label-size);          /* 16px */
   line-height: var(--micro-button-label-line);        /* 24px */
@@ -260,9 +260,7 @@
 
 /* التحميل: يمنع التكرار مع ثبات المساحة.
    - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
-   - زر نصي بلا أيقونة: المؤشر يتوضع مطلقًا داخل منطقة الحشو الأصلية
-     (is-loading--text من buttons.js أو في ترميز الأمثلة الثابتة)
-     فلا يزيد العرض ولا يحرك النص ولا يقصه.
+   - زر نصي: فتحة محجوزة قبل التحميل؛ التسمية باقية والمؤشر لا يحركها.
    pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
    عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
 .m-btn.is-loading,
@@ -290,10 +288,8 @@
   height: var(--micro-icon-button-icon);
 }
 
-/* زر نصي بلا أيقونة: النص يبقى في مساره محفوظًا المكان (opacity:0 —
-   باقٍ في شجرة الإتاحة فلا يفقد الزر اسمه) والمؤشر يتوسط الزر —
-   الأبعاد ثابتة بالبنية نفسها: لا زيادة عرض، لا قص، لا قفزة تخطيط.
-   التوسيط بلا transform كي لا يتعارض مع دوران المؤشر. */
+/* نمط A القديم، متاح حصريًا مع m-btn--loading-replace:
+   التسمية تبقى في شجرة الإتاحة، والمؤشر يحل محل ظهورها. */
 .m-btn.is-loading--text .m-btn__label {
   opacity: 0;
 }
@@ -306,22 +302,13 @@
      تغيير التوكن ينعكس على كل الأنواع دون استثناء). */
 }
 
-/* انحناء محدود للأزرار متعددة الأسطر — مرشح جولة R2-B للمراجعة (ليس قرارًا معتمدًا):
-   الزر القصير يبقى كبسولة كما هو (ارتفاعه 48px ونصفها 24 فيبدو كبسولة
-   كاملة). عند التفاف النص يُحدّ الانحناء بـ24px من سلم الأسس بدل البيضوي
-   الضخم الذي يصنعه 999px على زر ارتفاعه 216px. طريقة قابلة لإعادة
-   الاستخدام: صنف تعديل اختياري يُضاف للزر الطويل (لا CSS خاصًا بلقطة)،
-   بلا تصغير خط ولا قص نص ولا ارتفاع ثابت. يُعرض في اللوحة بجانب
-   الحالي للمقارنة ويبقى مرشحًا حتى اعتماد المالك. */
+/* Compatibility class; bounded multiline radius is the shared default. */
 .m-btn--radius-limited {
   border-radius: var(--micro-radius-button-long);
 }
 
-/* المقترح B للتحميل النصي — مقترح للمراجعة بجانب المقترح A الافتراضي أعلاه
-   (قرار التحميل النصي في مراجعة R2): التسمية تبقى ظاهرة والمؤشر يشغل
-   فتحة محجوزة عند بداية السطر. الحشو محجوز مسبقًا في الحالتين (عادي
-   وتحميل) فلا قفزة حجم ولا تصادم: الفتحة = أيقونة 20px + فراغ 8px عند
-   كل طرف كي يبقى النص متوسطًا في الحالتين. */
+/* Legacy opt-in hook retained for markup compatibility. The production
+   default reserves the same slot on text-only controls before loading. */
 .m-btn--loading-slot {
   padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
 }
@@ -349,3 +336,40 @@
     animation: none;
   }
 }
+
+/* Stable default B: indicator occupies a reserved inline-start slot while
+   the readable label remains visible. The reservation exists before loading. */
+.m-btn:not(.m-btn--icon) .m-btn__spinner {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  margin-block: auto;
+  visibility: hidden;
+}
+.m-btn:not(.m-btn--icon):has(.m-btn__icon) .m-btn__spinner {
+  position: static;
+  visibility: visible;
+  margin: 0;
+}
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-replace):not(:has(.m-btn__icon)) {
+  padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
+}
+.m-btn:not(.m-btn--icon).is-loading .m-btn__spinner,
+.m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__spinner { visibility: visible; }
+.m-btn:not(.m-btn--icon).is-loading .m-btn__label,
+.m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__label { opacity: 1; }
+.m-btn--icon { padding-inline: 0; }
+.m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
+
+/* Explicit legacy A compatibility; never the default. */
+.m-btn--loading-replace:not(.m-btn--icon):not(:has(.m-btn__icon)) {
+  padding-inline: var(--micro-button-padding-inline);
+}
+.m-btn--loading-replace.is-loading--text .m-btn__label { opacity: 0; }
+.m-btn--loading-replace.is-loading--text .m-btn__spinner {
+  inset: 0;
+  margin: auto;
+}
+.m-btn--light:hover:not(:disabled) { background-color: var(--micro-surface-selected); }
+.m-btn--secondary:hover:not(:disabled) { background-color: var(--micro-surface-page); }
+.m-btn--destructive-soft:hover:not(:disabled) { background-color: var(--micro-danger-surface); }

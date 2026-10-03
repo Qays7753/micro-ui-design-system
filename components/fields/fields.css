@@ -4,7 +4,7 @@
    يعتمد على: shared/tokens.css — كل الألوان والمقاسات منه.
    القيم الداخلية بالمكوّن وحده موثقة عند مواضعها.
    الاتجاه: خصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
-   الحالة: DRAFT FOR REVIEW — ما لم تحسمه الأسس موسوم «مقترح».
+   مرجع التنفيذ: حالات الحقل وحدوده موثقة في مواصفة B02.
    ========================================================= */
 
 /* استقلال المقاسات عن أي reset خارجي (نفس درس R2-C في B01) */
@@ -229,3 +229,13 @@
     transition: none;
   }
 }
+
+/* Purposeful feedback without a second decorative frame. */
+.m-field:not(.has-readonly):not(.has-error):not(.has-disabled) .m-field__control:hover {
+  border-color: var(--micro-text-secondary);
+}
+.m-field.has-focus .m-field__control,
+.m-field__control:focus-within { border-color: var(--micro-brand-primary); }
+.m-field.has-error .m-field__control { border-width: 1px; }
+.m-field.has-disabled .m-field__control { cursor: not-allowed; }
+.m-field.has-readonly .m-field__control:hover { border-color: var(--micro-border-control); }

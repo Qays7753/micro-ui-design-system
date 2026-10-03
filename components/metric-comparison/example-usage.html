@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مثال المقارنة العددية — Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="metric-comparison.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { max-width: 430px; margin-inline: auto; display: grid; gap: 32px; }
+    section { padding: 20px; border-radius: var(--micro-radius-surface); background: var(--micro-surface-base); }
+    [hidden] { display: none !important; }
+    .layout-control { display: grid; gap: 8px; margin-block-end: 16px; }
+    .layout-control select { min-height: 48px; padding-inline: 12px; border: 1px solid var(--micro-border-control); border-radius: var(--micro-radius-field); background: var(--micro-surface-base); color: var(--micro-text-primary); font: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="m-metric-circles" data-metric-circles data-layout="overlap" data-radius="72">
+      <h1 class="m-metric-circles__title">قيم تشغيلية — مثال</h1>
+      <label class="layout-control" for="circle-layout">
+        <span>طريقة ترتيب الدوائر</span>
+        <select id="circle-layout">
+          <option value="overlap" selected>متداخلة بصريًا</option>
+          <option value="separated">منفصلة</option>
+        </select>
+      </label>
+      <ul class="m-metric-circles__source" data-metric-source hidden>
+        <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
+        <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
+        <li data-label="عنصر ج" data-value="9" data-unit="وحدة" data-series="c"></li>
+      </ul>
+      <ol class="m-metric-circles__items" data-metric-items aria-label="مقارنة قيم تشغيلية"></ol>
+      <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="التسميات والقراءات خارج الدوائر"></ul>
+      <p class="m-metric-circles__empty" data-metric-scale></p>
+      <p class="m-metric-circles__empty" data-metric-empty hidden></p>
+    </section>
+
+    <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40">
+      <h2 class="m-main-metric__title">قيمة رئيسية ومؤشرات مستقلة</h2>
+      <div class="m-main-metric__layout">
+        <div class="m-main-metric__hero">
+          <span class="m-main-metric__label">قيمة العينة</span>
+          <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
+        </div>
+        <div>
+          <ul class="m-main-metric__source" data-bar-source hidden>
+            <li data-label="طلبات" data-value="32" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+            <li data-label="مرتجعات" data-value="9" data-unit="عملية" data-period="اليوم" data-series="b"></li>
+            <li data-label="مراجعات" data-value="2" data-unit="عملية" data-period="اليوم" data-series="c"></li>
+          </ul>
+          <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+          <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="metric-comparison.js"></script>
+  <script>
+    (function () {
+      var chart = document.querySelector('[data-metric-circles]');
+      var control = document.getElementById('circle-layout');
+      control.addEventListener('change', function () {
+        chart.setAttribute('data-layout', control.value);
+        window.MicroMetricComparison.render(chart);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
    القواعد: تجميع بالمحاذاة والمسافات والعنوان أولًا؛ لا بطاقات
    متداخلة ولا ظل لكل صف؛ السطح عند حاجة استقلال المحتوى فقط.
    صف السطرين حد أدنى 72px. صف الفتح ليس رابطًا يحيوي زرًا.
-   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   مرجع التنفيذ: الصفوف والمجموعات موثقة في مواصفة B04.
    ========================================================= */
 
 .m-row,
@@ -294,3 +294,9 @@ a.m-row.is-focus {
 @media (prefers-reduced-motion: reduce) {
   .m-section__chevron { transition: none; }
 }
+
+a.m-row:hover { background-color: var(--micro-surface-page); }
+a.m-row:active { background-color: var(--micro-surface-selected); }
+.m-section__head:hover { background-color: var(--micro-surface-page); }
+.m-badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.m-row__value,.m-row__subtitle,.m-row__title { overflow-wrap: anywhere; }

@@ -14,13 +14,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "MANIFEST.json"
 
-EXCLUDE_DIRS = {".git", "__pycache__", "node_modules", ".venv", "venv"}
+EXCLUDE_DIRS = {
+    ".git", "__pycache__", "node_modules", ".venv", "venv",
+    ".pythonlibs", ".cache", ".agents", ".local", "attached_assets", "deliverables",
+}
 EXCLUDE_FILES = {"MANIFEST.json"}
 EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".DS_Store"}
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools"}
+PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "pyproject.toml", "uv.lock"}
 
 
 def included(p: Path) -> bool:
     rel = p.relative_to(ROOT)
+    if p.is_symlink() or any(part.startswith(".") for part in rel.parts) or (rel.parts[0] not in PUBLIC_DIRS and str(rel) not in PUBLIC_FILES):
+        return False
     parts = set(rel.parts)
     if parts & EXCLUDE_DIRS:
         return False

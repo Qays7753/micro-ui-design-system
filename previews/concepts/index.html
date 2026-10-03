@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مراجعة المكونات</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="../../components/metric-comparison/metric-comparison.css">
+  <link rel="stylesheet" href="../../components/account-settings/account-settings.css">
+  <link rel="stylesheet" href="../../components/access-gateway/access-gateway.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+  <header class="concept-header">
+    <div class="concept-header__top">
+      <span class="concept-header__product">Micro · UI</span>
+      <span class="concept-header__draft">مسودة للمراجعة</span>
+    </div>
+    <h1>مراجعة المكونات</h1>
+    <p>عينات عربية مستقلة من مكتبة Micro. الأرقام والنصوص أمثلة توضيحية، لا مؤشرات منتج.</p>
+    <nav class="concept-nav" aria-label="أقسام المراجعة">
+      <a href="#strip">البطاقة والشريط</a>
+      <a href="#comparison">المقارنة</a>
+      <a href="#settings">الإعدادات</a>
+      <a href="#gateway">بوابة الدخول</a>
+    </nav>
+  </header>
+
+  <main class="concept-main">
+    <section class="concept-section" id="strip" aria-labelledby="strip-heading">
+      <div class="concept-section__head">
+        <div>
+          <p class="concept-kicker">01 · قراءة سريعة</p>
+          <h2 id="strip-heading">البطاقة العددية</h2>
+        </div>
+        <a class="concept-source" href="../../components/info-strip/example-usage.html">مثال مستقل</a>
+      </div>
+      <p class="concept-copy">بطاقات مرجعية أفقية؛ شكل القراءة يتبع محتوى المستهلك ولا يفترض عنوانًا عدديًا واحدًا.</p>
+      <p class="concept-sample-note">كل ما في الشريط عينة شكلية: قراءتان عامتان، قيمة رئيسية مع ثلاثة صفوف، وثلاث دوائر مستقلة.</p>
+      <div class="m-info-strip" data-info-strip>
+        <div class="m-info-strip__viewport" data-info-strip-viewport role="group" tabindex="0" aria-label="بطاقات أرقام العينة">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" aria-label="مثال متعدد القراءات: القراءة الأولى 18 وحدة، القراءة الثانية 4 وحدات">
+                <span class="m-info-card__label">مثال متعدد القراءات</span>
+                <span class="m-info-card__values">
+                  <span class="m-info-card__item">
+                    <span class="m-info-card__item-label">قراءة أولى</span>
+                    <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">وحدة</span></span>
+                  </span>
+                  <span class="m-info-card__item">
+                    <span class="m-info-card__item-label">قراءة ثانية</span>
+                    <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">4</span><span class="m-info-card__unit">وحدة</span></span>
+                  </span>
+                </span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="concept-carousel-card" aria-label="قيمة رئيسية مع ثلاثة أشرطة مقارنة">
+                <div class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="وحدة" data-common-period="العينة" data-max="40">
+                  <h3 class="m-main-metric__title">قيمة رئيسية وأشرطة مستقلة</h3>
+                  <div class="m-main-metric__layout">
+                    <div class="m-main-metric__hero">
+                      <span class="m-main-metric__label">قراءة أساسية</span>
+                      <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">وحدة</span></span>
+                    </div>
+                    <div>
+                      <ul class="m-main-metric__source" data-bar-source hidden>
+                        <li data-label="عنصر أ" data-value="32" data-unit="وحدة" data-period="العينة" data-series="a"></li>
+                        <li data-label="عنصر ب" data-value="9" data-unit="وحدة" data-period="العينة" data-series="b"></li>
+                        <li data-label="عنصر ج" data-value="2" data-unit="وحدة" data-period="العينة" data-series="c"></li>
+                      </ul>
+                      <ul class="m-main-metric__rows" data-bar-items aria-label="قراءات مستقلة"></ul>
+                      <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="concept-carousel-card" aria-label="ثلاث دوائر مقارنة في بطاقة واحدة">
+                <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="72" aria-labelledby="circle-title">
+                  <h3 class="m-metric-circles__title" id="circle-title">دوائر مقارنة · عينة واحدة</h3>
+                  <ul class="m-metric-circles__source" data-metric-source hidden>
+                    <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
+                    <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
+                    <li data-label="عنصر ج" data-value="9" data-unit="وحدة" data-series="c"></li>
+                  </ul>
+                  <ol class="m-metric-circles__items" data-metric-items aria-label="مقارنة دوائر بمقياس مشترك"></ol>
+                  <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="التسميات والقراءات خارج الدوائر"></ul>
+                  <p class="m-metric-circles__empty" data-metric-empty hidden></p>
+                  <p class="m-metric-circles__empty" data-metric-scale aria-live="polite"></p>
+                </section>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <div class="m-info-strip__arrows">
+            <button class="m-info-strip__arrow" type="button" data-info-strip-prev aria-label="البطاقة السابقة">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../assets/icons/chevron-right.svg')"></span>
+            </button>
+            <button class="m-info-strip__arrow" type="button" data-info-strip-next aria-label="البطاقة التالية">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../assets/icons/chevron-left.svg')"></span>
+            </button>
+          </div>
+          <div class="m-info-strip__position" aria-label="موضع البطاقة">
+            <span data-info-strip-position dir="ltr">1 / 3</span>
+            <span class="m-info-strip__pages" data-info-strip-pages></span>
+          </div>
+        </div>
+        <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
+      </div>
+      <p class="concept-hint">لا تشغيل تلقائي. في RTL اسحب إلى اليمين للتقدم إلى محتوى البطاقة التالية على اليسار، أو استخدم الأسهم واختيار الموضع.</p>
+      <div class="concept-links">
+        <a href="../../components/info-strip/info-strip.css">CSS المصدر</a>
+        <a href="../../components/info-strip/info-strip.js">JavaScript المصدر</a>
+        <a href="../../components/info-strip/specification.md">المواصفات</a>
+      </div>
+    </section>
+
+    <section class="concept-section" id="comparison" aria-labelledby="comparison-heading">
+      <div class="concept-section__head">
+        <div>
+          <p class="concept-kicker">02 · أرقام مستقلة</p>
+          <h2 id="comparison-heading">مقارنة عددية</h2>
+        </div>
+        <a class="concept-source" href="../../components/metric-comparison/example-usage.html">مثال مستقل</a>
+      </div>
+      <p class="concept-copy">في البطاقة الثالثة أعلاه، بدّل التخطيط للانتقال بين الدوائر المنفصلة والمتداخلة باستخدام البيانات نفسها. المساحة تقارن القيم الموجبة؛ التداخل بصري فقط. البوابة المستقلة تعرض تركيب القيمة الرئيسية والصفوف منفردًا.</p>
+
+      <div class="concept-controls">
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="comparison-mode">حالة العينة</label>
+          <div class="m-field__control">
+            <select class="m-field__input" id="comparison-mode">
+              <option value="standard">القيم المعتادة</option>
+              <option value="small">قيم صغيرة جدًا</option>
+              <option value="negative">قيمة سالبة وصفر</option>
+              <option value="missing">قيمة غير متاحة</option>
+              <option value="invalid">قيمة غير صالحة</option>
+              <option value="zero">كل القيم صفر</option>
+              <option value="mixed">وحدات مختلطة</option>
+            </select>
+          </div>
+        </div>
+        <div class="m-field" data-micro-field>
+          <label class="m-field__label" for="circle-layout">تخطيط الدوائر</label>
+          <div class="m-field__control">
+            <select class="m-field__input" id="circle-layout">
+              <option value="separated">منفصلة</option>
+              <option value="overlap">متداخلة بصريًا</option>
+            </select>
+          </div>
+        </div>
+        <button class="m-btn m-btn--secondary" type="button" data-comparison-reset>إعادة العينة</button>
+      </div>
+      <p class="concept-sample-note">العينة داخل البطاقات: 64، 25، 9 وحدات؛ أرقام شكلية فقط ولا تمثل مجموعًا أو نسبة.</p>
+      <div class="concept-links">
+        <a href="../../components/metric-comparison/metric-comparison.css">CSS المصدر</a>
+        <a href="../../components/metric-comparison/metric-comparison.js">JavaScript المصدر</a>
+        <a href="../../components/metric-comparison/specification.md">المواصفات</a>
+      </div>
+    </section>
+
+    <section class="concept-section" id="settings" aria-labelledby="settings-heading">
+      <div class="concept-section__head">
+        <div>
+          <p class="concept-kicker">03 · مجموعة إعدادات</p>
+          <h2 id="settings-heading">الحساب والتطبيق</h2>
+        </div>
+        <a class="concept-source" href="../../components/account-settings/example-usage.html">مثال مستقل</a>
+      </div>
+      <p class="concept-copy">زر واحد يفتح الحساب؛ مدخل إعداد التطبيق ينتقل داخل اللوحة نفسها. الأسماء والتبديلات أدناه عينة لا تحفظ.</p>
+
+      <div class="concept-specimen" data-account-settings data-account-layer-id="concept-settings-layer">
+        <button class="m-btn m-btn--secondary" type="button" data-account-open>فتح إعدادات الحساب</button>
+        <div class="m-layer-backdrop" id="concept-settings-backdrop" data-for="concept-settings-layer" hidden></div>
+        <div class="m-layer m-layer--center" id="concept-settings-layer" role="dialog" aria-modal="true" aria-labelledby="concept-account-title" data-account-settings-layer hidden>
+          <header class="m-layer__head">
+            <button class="m-btn m-btn--secondary m-btn--icon m-account-settings__back" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب" hidden>
+              <svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+            </button>
+            <h3 class="m-layer__title" id="concept-account-title" data-account-title="account" tabindex="-1">الحساب</h3>
+            <h3 class="m-layer__title" id="concept-application-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h3>
+            <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات">
+              <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"></use></svg>
+            </button>
+          </header>
+          <div class="m-layer__body m-account-settings">
+            <div class="m-account-settings__view" data-account-view="account">
+              <div class="m-account-profile">
+                <span class="m-account-profile__avatar" aria-hidden="true">سع</span>
+                <span class="m-account-profile__text"><span class="m-account-profile__name">سمر العبدلي</span><span class="m-account-profile__detail" dir="ltr">samar@example.test</span></span>
+              </div>
+              <section class="m-setting-group">
+                <h4 class="m-setting-group__title">الحساب</h4>
+                <ul class="m-setting-group__items">
+                  <li class="m-setting-row"><span class="m-setting-row__icon" data-icon="user" aria-hidden="true"></span><span class="m-setting-row__content"><span class="m-setting-row__label">الملف الشخصي</span><span class="m-setting-row__detail">معلومات الحساب</span></span></li>
+                </ul>
+              </section>
+              <section class="m-setting-group">
+                <h4 class="m-setting-group__title">التطبيق</h4>
+                <ul class="m-setting-group__items">
+                  <li>
+                    <button class="m-setting-row" type="button" data-account-to-application>
+                      <span class="m-setting-row__icon" data-icon="info" aria-hidden="true"></span>
+                      <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات التطبيق</span><span class="m-setting-row__detail">اللغة والتفضيلات</span></span>
+                      <span class="m-setting-row__end" aria-hidden="true"></span>
+                    </button>
+                  </li>
+                </ul>
+              </section>
+            </div>
+            <div class="m-account-settings__view" data-account-view="application" hidden>
+              <p class="m-account-settings__demo-note">مثال مؤقت؛ لا يتم حفظ أي تفضيل.</p>
+              <section class="m-setting-group">
+                <h4 class="m-setting-group__title">تفضيلات التطبيق</h4>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="order-alerts" data-demo-only>
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span><span class="m-switch__state">تغيير تجريبي</span></span>
+                  </label>
+                </div>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="weekly-summary" data-demo-only>
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">ملخص أسبوعي</span><span class="m-switch__state">تغيير تجريبي</span></span>
+                  </label>
+                </div>
+              </section>
+              <p class="m-account-settings__demo-status" data-account-demo-status aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="concept-links">
+        <a href="../../components/account-settings/account-settings.css">CSS المصدر</a>
+        <a href="../../components/account-settings/account-settings.js">JavaScript المصدر</a>
+        <a href="../../components/account-settings/specification.md">المواصفات</a>
+      </div>
+    </section>
+
+    <section class="concept-section" id="gateway" aria-labelledby="gateway-heading">
+      <div class="concept-section__head">
+        <div>
+          <p class="concept-kicker">04 · نموذج قابل للتركيب</p>
+          <h2 id="gateway-heading">بوابة الدخول</h2>
+        </div>
+        <a class="concept-source" href="../../components/access-gateway/example-usage.html">مثال مستقل</a>
+      </div>
+      <p class="concept-copy">الحقول والأزرار من مكتبة Micro الحالية. الإرسال هنا محلي؛ لا مصادقة، ولا مزود دخول مفعّل.</p>
+      <div class="gateway-specimen">
+        <section class="m-access-gateway" data-access-gateway aria-labelledby="gateway-form-title">
+          <h3 class="m-access-gateway__heading" id="gateway-form-title">الدخول إلى الحساب</h3>
+          <p class="m-access-gateway__intro">مثال واجهة لا يتصل بخدمة.</p>
+          <form data-access-form novalidate>
+            <div class="m-access-gateway__fields">
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="concept-email">البريد الإلكتروني</label>
+                <div class="m-field__control"><input class="m-field__input" id="concept-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username" required></div>
+                <p class="m-field__msg" data-field-msg></p>
+              </div>
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="concept-password">كلمة المرور</label>
+                <div class="m-field__control m-access-gateway__password-control">
+                  <input class="m-field__input" id="concept-password" name="secret" data-access-credential="password" type="password" autocomplete="current-password" required>
+                  <button class="m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal" type="button" data-access-reveal aria-controls="concept-password" aria-label="إظهار كلمة المرور" aria-pressed="false"><span class="m-access-gateway__eye" aria-hidden="true"></span></button>
+                </div>
+                <p class="m-field__msg" data-field-msg></p>
+              </div>
+            </div>
+            <div class="m-access-gateway__actions">
+              <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit">متابعة</button>
+              <div class="m-access-gateway__links"><button class="m-access-gateway__link" type="button" data-access-recovery hidden>نسيت كلمة المرور؟</button></div>
+            </div>
+            <div class="m-access-gateway__providers" data-access-providers hidden>
+              <p class="m-access-gateway__providers-title">خيارات يحددها المستهلك</p>
+              <div class="m-access-gateway__provider-list">
+                <button class="m-btn m-btn--secondary" type="button" data-access-provider="google" hidden>Google</button>
+                <button class="m-btn m-btn--secondary" type="button" data-access-provider="apple" hidden>Apple</button>
+              </div>
+            </div>
+            <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+          </form>
+          <p class="m-access-gateway__demo-note">لا يتم إرسال أو حفظ البيانات في هذا المثال.</p>
+        </section>
+      </div>
+      <div class="concept-links">
+        <a href="../../components/access-gateway/access-gateway.css">CSS المصدر</a>
+        <a href="../../components/access-gateway/access-gateway.js">JavaScript المصدر</a>
+        <a href="../../components/access-gateway/specification.md">المواصفات</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="concept-footer">
+    <span>Micro · UI library · STABLE UI</span>
+    <a href="../../components/info-strip/specification.md">مواصفات البطاقة والشريط</a>
+    <a href="../../docs/MICRO-COMPONENTS-GUIDE.md">دليل التعديل</a>
+    <a href="../../reviews/CONCEPTS/review.md">تقرير الفحص</a>
+    <a href="../../deliverables/micro-components-editable.zip" download>تحميل المصدر القابل للتعديل</a>
+  </footer>
+
+  <svg xmlns="http://www.w3.org/2000/svg" id="m-icon-defs" class="concept-icon-defs" aria-hidden="true"></svg>
+  <script>
+    window.MICRO_ICONS = [
+      { file: 'check.svg', id: 'i-check' },
+      { file: 'cancel01.svg', id: 'i-close' },
+      { file: 'chevron-right.svg', id: 'i-chevron-right' }
+    ];
+  </script>
+  <script src="../../previews/board.js"></script>
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../../components/selection/selection.js"></script>
+  <script src="../../components/navigation/navigation.js"></script>
+  <script src="../../components/info-strip/info-strip.js"></script>
+  <script src="../../components/metric-comparison/metric-comparison.js"></script>
+  <script src="../../components/account-settings/account-settings.js"></script>
+  <script src="../../components/access-gateway/access-gateway.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

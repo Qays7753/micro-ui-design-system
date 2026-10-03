@@ -5,7 +5,7 @@
    البيانات مدخلات المستهلك في HTML وdata.js يصيّرها (مصدر واحد).
    ألوان الفئات تعيين ثابت بالمفتاح (data-series) لا بالترتيب —
    من ألوان البيانات المعتمدة ولا تنتقل كزينة لحقول/أزرار.
-   الحالة: DRAFT FOR REVIEW — ما لم يُحسم موسوم «مقترح».
+   مرجع التنفيذ: الرسوم والبيانات موثقة في مواصفة B05.
    ========================================================= */
 
 .m-stat,
@@ -243,6 +243,12 @@
     margin-inline-start: 30%; /* ثابت — التسمية «جارٍ…» تحمل الدلالة */
   }
 }
+
+.m-stat,.m-compare,.m-chart,.m-progress,.m-steps { color: var(--micro-text-primary); }
+.m-chart__title { margin-block-end: var(--micro-space-4); }
+.m-chart__summary { color: var(--micro-text-secondary); }
+.m-progress__track { border: 1px solid var(--micro-border-divider); }
+.m-step__title { overflow-wrap: anywhere; }
 
 /* خطوات/تسلسل زمني: مكتمل/حالي/قادم/متوقف — أسماءها وترتيبها من المستهلك */
 .m-steps { display: flex; flex-direction: column; gap: 0; font-family: var(--micro-font-family); }

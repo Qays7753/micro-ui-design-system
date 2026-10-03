@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — تراكيب مستقلة</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="compositions.css">
+</head>
+<body>
+  <header class="composition-header">
+    <a class="composition-back" href="../index.html">العودة إلى فهرس المعاينات</a>
+    <nav class="composition-source" aria-label="أمثلة التركيب المستقلة المحفوظة">
+      <a href="row-example.html">مثال الصف المستقل</a>
+      <a href="form-example.html">مثال النموذج المستقل</a>
+      <a href="summary-example.html">مثال القراءة المستقل</a>
+    </nav>
+    <p class="composition-eyebrow">Micro UI · أمثلة تركيب مستقلة</p>
+    <h1>قطع صغيرة، بعقودها الحقيقية</h1>
+    <p class="composition-intro">ثلاثة أمثلة محلية تستهلك CSS وJavaScript الفعليين للمكوّنات. لا لوحة عرض، ولا بيانات منتج، ولا حفظ.</p>
+    <span class="composition-status">DRAFT FOR REVIEW</span>
+  </header>
+
+  <main class="composition-main">
+    <section class="composition-block" aria-labelledby="row-title">
+      <div class="composition-heading">
+        <span class="composition-index" dir="ltr">01</span>
+        <div>
+          <h2 id="row-title">صف + شارة + إجراء</h2>
+          <p>نموذج حالة صف تجريبي. الإجراء يعمل محليًا فقط.</p>
+        </div>
+      </div>
+      <div class="composition-surface">
+        <div class="m-row">
+          <span class="m-row__tile" aria-hidden="true">
+            <img src="../../assets/icons/chevron-left.svg" width="24" height="24" alt="">
+          </span>
+          <span class="m-row__text">
+            <span class="m-row__title">عنصر عينة للمراجعة</span>
+            <span class="m-row__subtitle">بيانات توضيحية · لا تمثل سجلًا حقيقيًا</span>
+          </span>
+          <span class="m-badge m-badge--success"><span class="m-badge__dot" aria-hidden="true"></span>جاهز — عينة</span>
+          <button class="m-btn m-btn--secondary composition-row-action" type="button" data-row-action>تنفيذ تجريبي</button>
+        </div>
+        <p class="composition-feedback" data-row-feedback role="status" aria-live="polite">لم يُنفّذ أي إجراء.</p>
+      </div>
+      <div class="composition-source">
+        <a href="../../components/organization/specification.md">مواصفات الصفوف والشارات</a>
+        <a href="../../components/organization/organization.css">CSS المصدر</a>
+        <a href="../../components/organization/organization.js">JavaScript المصدر</a>
+        <a href="../../components/buttons/specification.md">مواصفات الأزرار</a>
+        <a href="../../components/buttons/buttons.css">CSS الأزرار</a>
+        <a href="../../components/buttons/buttons.js">JavaScript الأزرار</a>
+      </div>
+    </section>
+
+    <section class="composition-block" aria-labelledby="form-title">
+      <div class="composition-heading">
+        <span class="composition-index" dir="ltr">02</span>
+        <div>
+          <h2 id="form-title">حقل + مساعدة + خطأ + زر</h2>
+          <p>رسالة المساعدة والخطأ مرتبطتان بالحقل. يظل النص المدخل محفوظًا عند ظهور الخطأ.</p>
+        </div>
+      </div>
+      <div class="composition-form-wrap">
+        <form class="composition-form" data-sample-form novalidate>
+          <p class="composition-sample-label">نموذج عينة محلي — لا يرسل شيئًا</p>
+          <div class="m-field has-error" data-micro-field>
+            <label class="m-field__label" for="sample-note">عنوان الملاحظة</label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="sample-note" name="sample-note" type="text" value="م" aria-describedby="sample-note-help sample-note-error" aria-invalid="true" autocomplete="off">
+            </div>
+            <p class="m-field__msg is-visible" id="sample-note-help">اكتب ثلاثة أحرف على الأقل. قيمة المثال قصيرة عمدًا لإظهار الخطأ.</p>
+            <p class="m-field__msg is-visible composition-error" id="sample-note-error" data-field-msg>أضف مزيدًا من الأحرف قبل المتابعة.</p>
+          </div>
+          <button class="m-btn m-btn--primary composition-submit" type="submit" data-form-submit data-loading-label="جارٍ التحقق">تحقق من العينة</button>
+          <p class="composition-feedback" data-form-feedback role="status" aria-live="polite">هذه تجربة تحقق محلية؛ لا توجد خدمة خلفها.</p>
+        </form>
+      </div>
+      <div class="composition-source">
+        <a href="../../components/fields/specification.md">مواصفات الحقول</a>
+        <a href="../../components/fields/fields.css">CSS المصدر</a>
+        <a href="../../components/fields/fields.js">JavaScript المصدر</a>
+        <a href="../../components/buttons/specification.md">مواصفات الأزرار</a>
+        <a href="../../components/buttons/buttons.css">CSS الأزرار</a>
+        <a href="../../components/buttons/buttons.js">JavaScript الأزرار</a>
+      </div>
+    </section>
+
+    <section class="composition-block" aria-labelledby="summary-title">
+      <div class="composition-heading">
+        <span class="composition-index" dir="ltr">03</span>
+        <div>
+          <h2 id="summary-title">قراءات ملخّصة + قسم قابل للفتح</h2>
+          <p>العلامة والسالب والصفر والقراءة المفقودة بيانات مختلفة؛ «—» هنا لا تعني صفرًا.</p>
+        </div>
+      </div>
+      <div class="composition-summary-wrap">
+        <article class="m-info-card" aria-label="ملخص قراءات العينة">
+          <span class="m-info-card__label">قراءات عينة مستقلة · لا دلالة منتج</span>
+          <span class="m-info-card__values">
+            <span class="m-info-card__item">
+              <span class="m-info-card__item-label">موجب</span>
+              <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">+14</span><span class="m-info-card__unit">وحدة</span></span>
+            </span>
+            <span class="m-info-card__item">
+              <span class="m-info-card__item-label">سالب</span>
+              <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">−3</span><span class="m-info-card__unit">وحدة</span></span>
+            </span>
+            <span class="m-info-card__item">
+              <span class="m-info-card__item-label">صفر</span>
+              <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit">وحدة</span></span>
+            </span>
+            <span class="m-info-card__item">
+              <span class="m-info-card__item-label">غير متاح</span>
+              <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number m-missing" dir="ltr">—</span><span class="m-info-card__unit">لا قراءة</span></span>
+            </span>
+          </span>
+        </article>
+        <section class="m-section composition-list">
+          <button class="m-section__head" type="button" aria-expanded="true" aria-controls="sample-list-body">
+            <span class="m-section__title">تفاصيل القراءات</span>
+            <img class="m-section__chevron" src="../../assets/icons/chevron-down.svg" width="24" height="24" alt="">
+          </button>
+          <div class="m-section__body" id="sample-list-body">
+            <div class="m-group" role="list" aria-label="قراءات منفصلة للعينة">
+              <div class="m-row" role="listitem"><span class="m-row__text"><span class="m-row__title">قراءة بإشارة موجبة</span></span><span class="m-row__value" dir="ltr">+14</span></div>
+              <hr class="m-divider">
+              <div class="m-row" role="listitem"><span class="m-row__text"><span class="m-row__title">قراءة سالبة</span></span><span class="m-row__value" dir="ltr">−3</span></div>
+              <hr class="m-divider">
+              <div class="m-row" role="listitem"><span class="m-row__text"><span class="m-row__title">صفر معلوم</span></span><span class="m-row__value" dir="ltr">0</span></div>
+              <hr class="m-divider">
+              <div class="m-row" role="listitem"><span class="m-row__text"><span class="m-row__title">قراءة مفقودة</span></span><span class="m-row__value m-missing" dir="ltr">— · غير متاح</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="composition-source">
+        <a href="../../components/info-strip/specification.md">مواصفات بطاقة القراءة</a>
+        <a href="../../components/info-strip/info-strip.css">CSS المصدر</a>
+        <a href="../../components/organization/specification.md">مواصفات القسم والصف</a>
+        <a href="../../components/organization/organization.js">JavaScript المصدر</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="composition-footer">
+    <span>كل التفاعلات محلية ومؤقتة؛ لا مصادقة ولا حفظ ولا اتصال بخدمة.</span>
+    <a href="../concepts/index.html">استعراض معرض المفاهيم</a>
+  </footer>
+  <script src="../../components/buttons/buttons.js"></script>
+  <script src="../../components/fields/fields.js"></script>
+  <script src="../../components/organization/organization.js"></script>
+  <script src="compositions.js"></script>
+</body>
+</html>

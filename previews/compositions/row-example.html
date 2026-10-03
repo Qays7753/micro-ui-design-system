@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مثال صف وشارة وإجراء</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <style>
+    * { box-sizing: border-box; }
+    a { color: var(--micro-primary); display: inline-flex; align-items: center; min-height: var(--micro-touch-min); }
+    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { width: min(100%, 420px); margin-inline: auto; }
+    h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.45; }
+    .demo-note { margin: 0 0 24px; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
+    .m-row { flex-wrap: wrap; }
+    .m-row__action { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    [dir="ltr"] { unicode-bidi: isolate; }
+  </style>
+</head>
+<body>
+  <main id="row-example">
+    <h1>موعد استلام عينة</h1>
+    <p class="demo-note">مثال تركيب فقط · يتغير الوسم محليًا عند الضغط، دون حفظ بيانات.</p>
+    <div class="m-row">
+      <div class="m-row__text">
+        <span class="m-row__title">طلب من سارة الخطيب</span>
+        <span class="m-row__subtitle">قطعة كعك بالتمر · اليوم، 4:30 م</span>
+      </div>
+      <span class="m-badge m-badge--warning" id="row-status"><span class="m-badge__dot" aria-hidden="true"></span><span>بانتظار التأكيد</span></span>
+      <span class="m-row__action">
+        <button class="m-btn m-btn--secondary" id="row-action" type="button">تأكيد الموعد</button>
+      </span>
+    </div>
+    <p id="row-feedback" class="m-section-desc" role="status" aria-live="polite"></p>
+    <p><a href="index.html">العودة إلى أمثلة التركيب</a></p>
+  </main>
+  <script>
+    (function () {
+      var button = document.getElementById('row-action');
+      var badge = document.getElementById('row-status');
+      var feedback = document.getElementById('row-feedback');
+      button.addEventListener('click', function () {
+        badge.className = 'm-badge m-badge--success';
+        badge.querySelector('span:last-child').textContent = 'تم التأكيد تجريبيًا';
+        button.disabled = true;
+        feedback.textContent = 'تأكيد محلي للعرض فقط؛ لم يُرسل أي تحديث.';
+      });
+    }());
+  </script>
+</body>
+</html>

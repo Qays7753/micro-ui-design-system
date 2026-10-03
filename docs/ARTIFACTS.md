@@ -1,6 +1,28 @@
 # فهرس المخرجات الحالية
 
-جولة إصلاح After: `reviews/AFTER-DIRECTION/REPAIR-REPORT.md`، نتائج `reviews/AFTER-DIRECTION/repair/`، وأمثلة قابلة للتعديل في لوحة After، مع عقد `components/data/PACKED-PATTERN.md`. حالة القرارات البصرية PROPOSED. بقية السجلات أدناه تاريخية ولا تستبدل بوابات الإصلاح الحالية.
+
+## مدخل الإصدار الحالي
+
+- [UI-RELEASE](UI-RELEASE.md) و[UI-VISUAL-SYSTEM](UI-VISUAL-SYSTEM.md): المرجع النهائي لهذه الدفعة.
+- [مرجع الحالات](../previews/system/index.html) و[تقرير التحقق](../reviews/UI-RELEASE/review.md).
+
+- [DESIGN.md](../DESIGN.md): مرجع الهوية والتركيب؛ لا لوحة جديدة.
+- [المعرض الموحد](../previews/index.html): العائلات الأساسية والجديدة والأمثلة المستقلة وروابط المصدر.
+- [فهرس العائلات](COMPONENT-INVENTORY.md)، [الاختيارات](UI-DECISIONS.md)، [ثلاث تركيبات](../previews/compositions/index.html).
+- [أدلة IDENTITY السابقة](../reviews/IDENTITY/review.md): تاريخية وتتبع بصمات مصدرها.
+- [الاتجاه المنحني الواسع والخافت](../previews/surfaces/approved-curves.html) و[CSS المستقل](../components/surfaces/curves.css) ضمن لغة الإصدار؛ لا تعميم لدراسات S01 القديمة. الزر 24px والتحميل B حُسما، لا PROPOSED حالي.
+- الحزمة القابلة للتعديل `deliverables/micro-components-editable.zip` وMANIFEST بعد آخر تعديل.
+
+## أدلة جولة نواة المكتبة المحفوظة
+
+- [مرجع الهوية](../DESIGN.md) — القواعد المعتمدة وروابط مصادرها.
+- [القرارات](DESIGN-DECISIONS.md) — المعتمد والمقترح والمشروط بالحاجة.
+- [المعرض الموحد](../previews/index.html) — جميع العائلات الحالية من المصدر.
+- [أمثلة التركيب](../previews/compositions/index.html) — ثلاثة أمثلة مصغرة لا شاشات منتج.
+- [تقرير هذه الجولة](../reviews/DESIGN-CORE/review.md) — الفحوص وحدودها.
+
+## المراجع البصرية السابقة
+جولة إصلاح After محفوظة تاريخيًا: `reviews/AFTER-DIRECTION/REPAIR-REPORT.md`، نتائج `reviews/AFTER-DIRECTION/repair/`، وأمثلة قابلة للتعديل في لوحة After، مع عقد `components/data/PACKED-PATTERN.md`. لا تمحى أدلتها ولا تعتبر تلقائيًا فحصًا للإصدار الجديد.
 
 النسخ الحالية المرتبطة بالاتجاه المعتمد، مع التقرير الوارد ومراجعته. استُبعدت الدراسات القديمة والمعاينات المستبدلة والملفات المؤقتة. لا تمثل الصور مكتبة مكوّنات نهائية.
 
@@ -16,7 +38,7 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 
 ملاحظات تقرير الاحتياجات: [المراجعة](../reviews/component-needs-review.md).
 
-## تجهيز إنتاج المكوّنات
+## سجل إنتاج الدفعات — تاريخي
 
 قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، التكليفات الموجودة في `prompts/`، وقالب `reviews/REVIEW-TEMPLATE.md`. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
 
@@ -70,7 +92,10 @@ README وAGENTS وCURRENT-STATE وWORKFLOW ملفات تنظيم عمل أضيف
 - `reviews/DELIVERY-R3/CHATGPT-REVIEW.md`: مراجعة C1/C2 وإغلاق المتبقيات المحددة.
 - ملفات `source-probes` تشخيصات مصدر قابلة لإعادة التشغيل وليست بديلًا عن اختبار هاتف أو قارئ شاشة.
 
-## دفعة اتجاه After — 2026-09-29
+## سجل إنتاج الدفعات — تاريخي
+
+قائمة العمل COMPONENT-INVENTORY.md، القواعد SHARED-SPEC.md، عقد المصدر EDITABLE-DELIVERY.md، التكليفات الموجودة في `prompts/`، وقالب `reviews/REVIEW-TEMPLATE.md`. هذه مواصفات عمل؛ لا تمثل اعتماد مخرجات بصرية لم تُنتج بعد.
+## دفعة اتجاه After — 2026-09-29 — تاريخية
 
 | الملف | الحالة | الملاحظة |
 |---|---|---|

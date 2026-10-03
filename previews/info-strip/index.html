@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مراجعة البطاقة العددية</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+  <main class="review">
+    <header class="review__header">
+      <div class="review__brand" aria-label="مايكرو"><span class="review__mark" aria-hidden="true"></span><span>مايكرو</span></div>
+      <span class="review__stage">مراجعة المكوّن 01</span>
+    </header>
+
+    <section class="review__intro" aria-labelledby="review-title">
+      <p class="review__eyebrow">بطاقة رقمية · شريط اختياري</p>
+      <h1 id="review-title">رقم واحد.<br>بوضوح.</h1>
+      <p class="review__lede">بطاقات مستقلة بحجم مريح لقراءة سريعة. مرّر بينها عند الحاجة.</p>
+    </section>
+
+    <section class="review__sample" aria-labelledby="strip-title">
+      <div class="review__section-heading">
+        <h2 id="strip-title">معاينة الشريط</h2>
+        <span class="review__sample-tag">بيانات عينة</span>
+      </div>
+
+      <div class="m-info-strip" data-info-strip>
+        <div class="m-info-strip__viewport" data-info-strip-viewport role="group" tabindex="0" aria-label="بطاقات الأرقام التجريبية">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" aria-label="طلبات اليوم، 18 طلب">
+                <span class="m-info-card__label">طلبات اليوم</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" aria-label="قيمة عينة، 1,240.50 دينار أردني">
+                <span class="m-info-card__label">قيمة عينة</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">1,240.50</span><span class="m-info-card__unit">د.أ</span></span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
+                <span class="m-info-card__label">مخزون عينة</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <div class="m-info-strip__arrows">
+            <button class="m-info-strip__arrow" type="button" data-info-strip-prev aria-label="البطاقة السابقة">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../assets/icons/chevron-right.svg')"></span>
+            </button>
+            <button class="m-info-strip__arrow" type="button" data-info-strip-next aria-label="البطاقة التالية">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../assets/icons/chevron-left.svg')"></span>
+            </button>
+          </div>
+          <div class="m-info-strip__position" aria-label="موضع البطاقة">
+            <span data-info-strip-position>1 / 3</span>
+            <span class="m-info-strip__pages" data-info-strip-pages aria-label="اختيار البطاقة"></span>
+          </div>
+        </div>
+        <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
+      </div>
+      <p class="review__hint">اسحب أفقيًا أو استخدم السهمين. لا تبديل تلقائي.</p>
+    </section>
+
+    <section class="review__sample review__sample--solo" aria-labelledby="solo-title">
+      <div class="review__section-heading">
+        <h2 id="solo-title">وتعمل بمفردها</h2>
+        <span class="review__sample-tag">مثال مستقل</span>
+      </div>
+      <article class="m-info-card" aria-label="قطع جاهزة، 7 قطع">
+        <span class="m-info-card__label">قطع جاهزة</span>
+        <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">7</span><span class="m-info-card__unit">قطعة</span></span>
+      </article>
+    </section>
+
+    <aside class="review__note" aria-label="ملاحظة مراجعة">
+      <span class="review__note-mark" aria-hidden="true"></span>
+      <p>الأرقام الظاهرة للتوضيح فقط. حجم البطاقة هو موضوع المراجعة قبل التوسع.</p>
+    </aside>
+
+    <footer class="review__footer">
+      <span>MICRO UI · DRAFT</span>
+      <span>بطاقات رقمية · RTL</span>
+    </footer>
+  </main>
+  <script src="../../components/info-strip/info-strip.js"></script>
+</body>
+</html>
