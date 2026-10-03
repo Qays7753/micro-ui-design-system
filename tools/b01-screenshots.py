@@ -413,7 +413,7 @@ def main():
                 # (Chromium الحديث عبر Playwright) فاستُخدم هذا الزر.
                 # الاسم الرسمي: «محاكاة زيادة حجم الخط» — مكافئة للنص وليست
                 # تكبير متصفح/نظام مضمون التكافؤ لكل الحالات.
-                # قبل التكبير: قياس زوج الانحناء المرشح (R2-B) عند 100%
+                # قبل التكبير: قياس زوج الانحناء (القرار STABLE: الافتراضي محدود 24px)
                 rad100 = pg.evaluate(
                     """() => { const cap = document.querySelector('#text-zoom-target [data-radius="capsule"]');
                          const lim = document.querySelector('#text-zoom-target [data-radius="limited"]');
@@ -493,13 +493,18 @@ def main():
                       f"عمود داخلي sw/cw={tz['demoSw']}/{tz['demoCw']}، أصعب زر يمين={tz['hardestRight']}، ارتفاع الزر={tz['btnH']}")
                 check(f"B6 {width}px زيادة حجم الخط 200%: الصفحة بلا تمرير أفقي",
                       ov2["sw"] <= ov2["cw"], str(ov2))
-                check(f"B7 {width}px المرشح R2-B: انحناء الزر الطويل 24px عند 100% و200% وبنفس ارتفاع الحالي",
-                      rad100["limR"] == "24px" and rad100["capR"] == "999px"
-                      and tz["limR200"] == "24px" and tz["capR200"] == "999px"
+                # B7 (تحديث 2026-10): القرار STABLE جعل الانحناء المحدود 24px هو الافتراضي
+                # المشترك (min(24px, 50%) — القصير يبدو كبسولة والمتعدد أسطر 24px)،
+                # وm-btn--radius-limited صنف توافق للقيمة نفسها صراحة. التوقع هنا من
+                # العقد المقرّر (UI-RELEASE) لا من الحالة التاريخية 999px:
+                # افتراضي محدود عند 100% و200% + تساوي الارتفاع مع صنف التوافق.
+                check(f"B7 {width}px الانحناء المحدود 24px هو الافتراضي المقرر عند 100% و200% وبنفس ارتفاع صنف التوافق",
+                      rad100["limR"] == "24px" and rad100["capR"] in ("24px", "min(24px, 50%)")
+                      and tz["limR200"] == "24px" and tz["capR200"] in ("24px", "min(24px, 50%)")
                       and abs(rad100["capH"] - rad100["limH"]) < 1
                       and abs(tz["capH200"] - tz["limH200"]) < 1,
-                      f"100%: كبسولة={rad100['capR']} مرشح={rad100['limR']} ارتفاعا {rad100['capH']}/{rad100['limH']}؛ "
-                      f"200%: كبسولة={tz['capR200']} مرشح={tz['limR200']} ارتفاعا {tz['capH200']}/{tz['limH200']}")
+                      f"100%: افتراضي={rad100['capR']} توافق={rad100['limR']} ارتفاعا {rad100['capH']}/{rad100['limH']}؛ "
+                      f"200%: افتراضي={tz['capR200']} توافق={tz['limR200']} ارتفاعا {tz['capH200']}/{tz['limH200']}")
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / shot_zoom))
                 pg.click('[data-lab="text-zoom"]')  # استعادة الحجم الأصلي
                 pg.wait_for_timeout(150)

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — مقارنة A05: شريط المعلومات الحالي مقابل variant العارض
+  الحالة: ADOPTED — النمطان معتمدان بقرار المالك 2026-10-04؛ المقارنة من المصدر
+  نفسه (info-strip + info-strip-peek)؛ الاختيار النهائي للمالك،
+  قرار الاستخدام لا يغير الافتراضي ولا يعني تحقق جميع المنصات. الفيديو المرجعي فُتح فعليًا (10 إطارات @1fps،
+  2026-10) وأخذت منه العلاقة السلوكية فقط: بطاقة نشطة موسّطة + جزء
+  مجاور ظاهر + سحب يتبع المؤشر + أزرار ومؤشر موضع، بلا autoplay.
+  ما لا يُنسخ من الفيديو: الخلفية الداكنة، الألوان، هوية Apple
+  Watch/النشاط الرياضي، 3D/WebGL، المحتوى، التوقيت الحرفي، autoplay.
+  R8-03: أسهم الأسهم من أصول HugeIcons المتاحة في المكتبة (chevron-right/
+  chevron-left — نفس أصل الشريط المعتمد في previews/info-strip/index.html)
+  بنفس طريقة --m-info-icon؛ لا glyph من عائلة أخرى ولا أصول مفقودة.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — مقارنة A05: الشريط الحالي مقابل عارض الـpeek</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip-peek.css">
+  <script src="../../components/info-strip/info-strip.js"></script>
+  <script src="../../components/info-strip/info-strip-peek.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 20px 16px; background: var(--micro-surface-page);
+      color: var(--micro-text-primary); font-family: var(--micro-font-family);
+      font-size: var(--micro-body-size); line-height: var(--micro-body-line);
+    }
+    main { max-width: 560px; margin-inline: auto; }
+    h1 { font-size: 22px; line-height: 1.45; margin: 0 0 4px; }
+    .cmp-status {
+      display: inline-block; margin-block: 8px 16px; padding: 3px 10px;
+      border: 1px solid var(--micro-border-control);
+      border-radius: var(--micro-radius-field);
+      font-size: var(--micro-secondary-size); font-weight: 600;
+    }
+    .cmp-section { margin-block: 24px 8px; }
+    .cmp-note {
+      margin: 0 0 10px; color: var(--micro-text-secondary);
+      font-size: var(--micro-label-size); line-height: var(--micro-label-line);
+    }
+    .cmp-table { width: 100%; border-collapse: collapse; margin-block: 12px 20px; }
+    .cmp-table th, .cmp-table td {
+      text-align: start; vertical-align: top; padding: 8px 10px;
+      border: 1px solid var(--micro-border-divider);
+      font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line);
+    }
+    .cmp-table th { background: var(--micro-surface-base); font-weight: 600; }
+    .cmp-demo { padding: var(--micro-space-4); background: var(--micro-surface-base);
+      border-radius: var(--micro-radius-surface); margin-block-end: 8px; }
+    .cmp-caption { display: block; margin-block-end: 20px;
+      color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); }
+    code { font-family: inherit; background: var(--micro-surface-selected);
+      padding: 0 4px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>مقارنة سلوك عرض البطاقات — الشريط الحالي مقابل عارض peek</h1>
+    <span class="cmp-status">ADOPTED · قرار المالك 2026-10-04 · استخدام اختياري</span>
+
+    <p class="cmp-note">اعتمد المالك النمطين بقواعد استخدام واضحة: الشريط الحالي <code>info-strip</code> يعرض بطاقة كاملة
+      وينتقل بعد نهاية السحب، بينما يتيح variant العارض جزءًا ظاهرًا من المجاور وتتبعًا للسحب أثناء
+      الحركة، مستفيدًا من مصدر <code>carousel</code> القائم. الاثنان من المصدر القابل للتعديل بلا مكتبة
+      ثالثة، وبنفس محتوى المستهلك وبلا autoplay.</p>
+
+    <table class="cmp-table">
+      <tr><th scope="col">الوجه</th><th scope="col">الشريط الحالي (info-strip)</th><th scope="col">العارض الاختياري (info-peek)</th></tr>
+      <tr><td>البطاقة النشطة</td><td>كامل العرض</td><td>موسّطة وجزء المجاورين ظاهر (peek 24px قابل للتعديل)</td></tr>
+      <tr><td>السحب</td><td>الانتقال بعد pointerup (بلا تتبع أثناء الحركة)</td><td>تتبع المؤشر 1:1 أثناء الحركة والتزام عند عتبة max(32px، 20% من العرض)</td></tr>
+      <tr><td>الإلغاء</td><td>pointercancel يتجاهل الحركة</td><td>pointercancel/blur/إخفاء الصفحة → snap-back إلى أقرب بطاقة (نفس عقد carousel)</td></tr>
+      <tr><td>التمرير العمودي</td><td>محفوظ (touch-action: pan-y)</td><td>محفوظ — قفل محور 8px يسلّم العمودي للتمرير الطبيعي</td></tr>
+      <tr><td>RTL</td><td>الترتيب المنطقي، اليمين للتالية</td><td>الترتيب المنطقي نفسه؛ التمركز الفيزيائي مقاس لا افتراضي</td></tr>
+      <tr><td>لوحة المفاتيح</td><td>أسهم وHome/End على العارض</td><td>الشيء نفسه — السحب ليس الوسيلة الوحيدة</td></tr>
+      <tr><td>حالة الفراغ/بطاقة واحدة</td><td>صف فراغ/إخفاء التحكم</td><td>العقد نفسه</td></tr>
+      <tr><td>reduced-motion</td><td>بلا انتقالات</td><td>بلا انتقالات (ظهور فوري)</td></tr>
+      <tr><td>الحالة</td><td><b>الحالي المعتمد</b> — يبقى النمط الافتراضي</td><td><b>ADOPTED</b> — opt-in بسمة <code>data-info-peek</code></td></tr>
+    </table>
+
+    <p class="cmp-note"><b>ما يستمر في شريط المعلومات:</b> العرض الكامل داخل تدفق القراءة حيث لا يلزم
+      إظهار استمرار المحتوى (بطاقة قراءة واحدة في القسم). <b>العارض الخياري:</b> لموضع يلزم فيه فهم أن
+      ثمة بطاقات مجاورة قابلة للسحب (عارض محتوى اختياري) — وليس افتراض كل بطاقة أو كل شاشة، ولا
+      الرئيسية. حدود المساحة: عند أقل من ~300px يصغر جزء المجاور تلقائيًا بالحساب الفيزيائي ويبقى
+      المحتوى مقروءًا (الرقم الطويل يلتف بعقد info-card).</p>
+
+    <h2 class="cmp-section">1) الشريط الحالي — info-strip (المعتمد)</h2>
+    <div class="cmp-demo">
+      <div class="m-info-strip" data-info-strip id="cmp-current">
+        <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="شريط البطاقات — الانتقال بالأسهم">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">رصيد الأسبوع</span><div class="m-info-card__reading"><span class="m-info-card__number">326.40</span><span class="m-info-card__unit">د.أ</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">طلبات اليوم</span><div class="m-info-card__reading"><span class="m-info-card__number">18</span><span class="m-info-card__unit">طلب</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">موردون نشطون</span><div class="m-info-card__reading"><span class="m-info-card__number">7</span><span class="m-info-card__unit">موردين</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <span class="m-info-strip__position">البطاقة <span data-info-strip-position></span></span>
+          <div class="m-info-strip__pages" data-info-strip-pages></div>
+          <div class="m-info-strip__arrows">
+            <button type="button" class="m-info-strip__arrow" data-info-strip-prev aria-label="السابقة"><span class="m-info-strip__arrow-icon" style="--m-info-icon:url('../../assets/icons/chevron-right.svg')" aria-hidden="true"></span></button>
+            <button type="button" class="m-info-strip__arrow" data-info-strip-next aria-label="التالية"><span class="m-info-strip__arrow-icon" style="--m-info-icon:url('../../assets/icons/chevron-left.svg')" aria-hidden="true"></span></button>
+          </div>
+        </div>
+        <p class="m-info-strip__status" data-info-strip-status role="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <span class="cmp-caption">سلوكه: بطاقة كاملة، الانتقال بعد رفع الإصبع، لا جزء ظاهر من المجاور.</span>
+
+    <h2 class="cmp-section">2) variant العارض — peek وتتبع السحب (المعتمد — اختياري)</h2>
+    <div class="cmp-demo">
+      <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="cmp-peek">
+        <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="عارض البطاقات — الانتقال بالأسهم أو السحب">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">رصيد الأسبوع</span><div class="m-info-card__reading"><span class="m-info-card__number">326.40</span><span class="m-info-card__unit">د.أ</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">طلبات اليوم</span><div class="m-info-card__reading"><span class="m-info-card__number">18</span><span class="m-info-card__unit">طلب</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">موردون نشطون</span><div class="m-info-card__reading"><span class="m-info-card__number">7</span><span class="m-info-card__unit">موردين</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+            <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">تسويات معلقة</span><div class="m-info-card__reading"><span class="m-info-card__number">2</span><span class="m-info-card__unit">تسويات</span></div><span class="m-info-card__item-label">بيانات عرض ثابتة</span></article></div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <span class="m-info-strip__position">البطاقة <span data-info-strip-position></span></span>
+          <div class="m-info-strip__pages" data-info-strip-pages></div>
+          <div class="m-info-strip__arrows">
+            <button type="button" class="m-info-strip__arrow" data-info-strip-prev aria-label="السابقة"><span class="m-info-strip__arrow-icon" style="--m-info-icon:url('../../assets/icons/chevron-right.svg')" aria-hidden="true"></span></button>
+            <button type="button" class="m-info-strip__arrow" data-info-strip-next aria-label="التالية"><span class="m-info-strip__arrow-icon" style="--m-info-icon:url('../../assets/icons/chevron-left.svg')" aria-hidden="true"></span></button>
+          </div>
+        </div>
+        <p class="m-info-strip__status" data-info-strip-status role="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <span class="cmp-caption">سلوكه: بطاقة موسّطة وجزء المجاورين ظاهر، السحب يتبع المؤشر 1:1 ويُلغى
+      نقطةً بـpointercancel (snap-back)، الأسهم/النقاط/لوحة المفاتيح تصل لكل بطاقة، بلا autoplay.</span>
+
+    <h2 class="cmp-section">حدود المقارنة</h2>
+    <p class="cmp-note">أُنتجت هذه المقارنة على Chromium headless (فحص آلي + مراجعة بصرية للقطات) —
+      لمس حقيقي وأجهزة فعلية وقارئ شاشة خارج نطاق ما اختُبر هنا ويُسجل منفصلًا. سلوك الفيديو المرجعي
+      فُهم من فتحه فعليًا (إطارات مستخرجة 2026-10)؛ لا تُنسخ ألوانه أو خلفيته الداكنة أو محتواه أو
+      أي تأثير 3D، ولا يُعد توقيته الحرفي قيمة معتمدة. اعتمد المالك النمطين بتاريخ 2026-10-04: العارض للملخصات المتقاربة، والشريط
+      لبطاقات العرض الكامل. الاختيار لكل موضع، دون تغيير الافتراضي أو تركيب شاشة جديدة (A05).</p>
+  </main>
+</body>
+</html>

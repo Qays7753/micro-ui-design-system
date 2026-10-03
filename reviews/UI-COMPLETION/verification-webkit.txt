@@ -1,0 +1,30 @@
+# فحص WebKit آلي — الحالة: غير منفذ (البيئة تمنعه) — 2026-10-04
+
+# commit المصدر: (انظر سجل الأدلة الرئيس verification-r8-07.txt لنفس جولة المصدر المثبت)
+# هذه ليست نتيجة PASS — توثيق محاولة تشغيل فعلية وحاجزها، وفق متطلب الصدق في المراجعة.
+
+## ما جرى فعليًا
+
+1. وُجد ملف المتصفح webkit-2227 مع Playwright 1.57.0 في بيئة التنفيذ.
+2. pw.webkit.launch(headless=True) ينجح («launched»).
+3. إنشاء الصفحة (new_page) يعلق ثم ينهار السائق دائمًا بـ:
+   Error: write EPIPE
+     at PipeTransport.send (.../playwright/driver/package/lib/server/utils/pipeTransport.js:52:21)
+   (تكرر في كل المحاولات، حتى بعد `playwright install webkit` لإعادة التنزيل).
+4. `playwright install-deps webkit` فشل: تثبيت تبعيات النظام يحتاج sudo بكلمة مرور غير متاحة.
+5. نتيجة مطابقة لحدود مراجعتي R1/R2 المسجلتين: «لا Safari/WebKit في بيئة التنفيذ».
+
+## المعنى
+
+- لا توجد أي أرقام WebKit ناجحة من هذه البيئة — ولا يُدعى أي فحص WebKit منفذ.
+- أداة الفحص سُلّمت جاهزة وتُنتج أدلة فعلية عند تشغيلها في بيئة WebKit سليمة:
+    python3 tools/webkit-check.py
+    MICRO_TEST_ENGINE=webkit python3 tools/data-scale-state-check.py  (23 فحصًا بلاحقة -webkit)
+- تشغيلها هنا سيحل هذا الملف محل نفسه بأدلة حقيقية (أسماء W1–W10 + R07).
+
+## خطوات تحقق بديلة على Safari حقيقي (لمن يملك الجهاز)
+
+افتح `previews/data/index.html` و`previews/info-strip/comparison.html` من خادم محلي:
+- donut/الأعمدة/الخط تُرسم دون تشوه، ورسالة الرفض موجزة بلا أسماء سمات.
+- السحب يتبع الإصبع ويُلتزم عند العتبة (snap-back دون التزام)، والأسهم ولوحة المفاتيح تصل لكل بطاقة.
+- لا تمرير أفقي عند عرض 320px.

@@ -64,9 +64,17 @@
 
   function focusables(layer) {
     return [].slice.call(layer.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]'
     )).filter(function (el) {
+      /* A02: العناصر في ترتيب Tab فعليًا فقط — استبعاد أي tabindex سالب
+         على أي عنصر (كان الاستبعاد في فرع [tabindex] وحده فيمرّ أزرار
+         roving tabindex=-1 كنهاية للتسلسل فيقفز Tab خارج الطبقة)،
+         مع المعطل/المخفي/الخاضع لسلف inert. عقد roving نفسه محفوظ:
+         لا تحويل خيارات المنتقي إلى tabindex=0. */
       if (isDisabled(el)) return false;
+      var ti = el.getAttribute('tabindex');
+      if (ti !== null && parseInt(ti, 10) < 0) return false;
+      if (el.closest('[inert]')) return false;
       if (typeof el.checkVisibility === 'function') {
         return el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true });
       }

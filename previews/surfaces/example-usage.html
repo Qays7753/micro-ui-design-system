@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <!-- =========================================================
-  Micro UI — مثال استخدام مستقل للأسطح البترولية S01 — SYS-02/R2-07.1
-  بلا board.css/board.js — مصادر المكوّن فقط (tokens + motion + surfaces).
-  فحوص مدمجة: الموجة من الأصل الواحد، مفاتيح السطح تنعكس وتستعاد،
-  حدود حروف النص داخل السطح، الرقم الطويل يُلف داخل السطح (R2-01)،
-  وأسطر العنوان النسبي بلا تداخل. النتائج في الصفحة.
+  Micro UI — مثال استخدام مستقل للأسطح S01 — الاتجاه الحالي (curves)
+  بلا board.css/board.js — مصادر المكوّن فقط (tokens + motion + surfaces + curves).
+  A04: المثال المستقل يعرض الاتجاه المعتمد (منحنيات واسعة خافتة من
+  curves.css — المصدر نفسه الذي تستهلكه approved-curves.html)، ولا يعرض
+  الموجات القديمة افتراضيًا. دراسات الموجات تاريخية في لوحة S01 (#compare)
+  ومرجع الحالات الحي، واضحة الوسم.
+  فحوص مدمجة: المصدر الواحد (curves.css)، إخفاء طبقة الموجات، أدوار النص
+  الداكنة الثابتة، حدود حروف النص داخل السطح عند الأساس و200%، الرقم
+  الطويل يُلف (R2-01)، أسطر العنوان النسبي بلا تداخل، التباين الحقيقي
+  محسوبًا من التوكنات، وسطح ساكن بلا حركة.
 ========================================================= -->
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — مثال مستقل: الأسطح البترولية (S01)</title>
+  <title>Micro — مثال مستقل: الأسطح S01 (الاتجاه الحالي — المنحنيات)</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../shared/tokens.css">
   <link rel="stylesheet" href="../../shared/motion.css">
   <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
-  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}</style>
+  <link rel="stylesheet" href="../../components/surfaces/curves.css">
+  <style>body{font-family:var(--micro-font-family);margin:16px;max-width:420px}pre{background:#fff;border:1px solid #D9E1DE;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}.hist{font-size:13px;color:var(--micro-text-secondary)}.hist a{color:var(--micro-brand-primary)}</style>
 </head>
 <body>
-  <h1 style="font-size:18px">مثال مستقل — المعالجة البترولية (S01)</h1>
+  <h1 style="font-size:18px">مثال مستقل — سطح S01 بالاتجاه الحالي (منحنيات واسعة خافتة)</h1>
+  <p class="hist">دراسات الموجات القديمة (<code>waves-soft</code> وغيرها) تاريخية للمقارنة في
+    <a href="index.html#compare">لوحة S01 — منطقة الدراسات التاريخية</a>؛ هذا المثال الافتراضي يستهلك
+    <a href="../../components/surfaces/curves.css">curves.css</a> من المصدر نفسه المعتمد.</p>
   <div id="demo">
-    <div class="m-surface m-surface--waves" id="ex-surface">
+    <div class="m-surface m-surface--curves" id="ex-surface">
       <div class="m-surface__waves" aria-hidden="true"></div>
       <div class="m-surface__content">
         <p class="m-surface__label">صافي الربح حتى تاريخه</p>
@@ -39,7 +48,6 @@
       var out = [];
       function t(n, ok, d) { out.push((ok ? 'PASS ' : 'FAIL ') + n + (d ? ' — ' + d : '')); }
       var surf = document.getElementById('ex-surface');
-      var waves = surf.querySelector('.m-surface__waves');
       var sr = surf.getBoundingClientRect();
 
       function glyphRects(el) {
@@ -47,34 +55,52 @@
         range.selectNodeContents(el);
         return [].slice.call(range.getClientRects()).filter(function (r) { return r.width > 0 && r.height > 0; });
       }
-      function inSurface(rs) {
+      function inSurface(rs, ref) {
+        var R = ref || sr;
         return rs.every(function (r) {
-          return r.left >= sr.left + 2 && r.right <= sr.right - 2
-            && r.top >= sr.top - 0.5 && r.bottom <= sr.bottom + 0.5;
+          return r.left >= R.left + 2 && r.right <= R.right - 2
+            && r.top >= R.top - 0.5 && r.bottom <= R.bottom + 0.5;
         });
       }
 
-      /* 1) الموجة من الأصل الواحد + الزخرفة غير تفاعلية */
-      var bg = getComputedStyle(waves).backgroundImage;
-      t('الموجة من أصلها waves-soft.svg (مصدر واحد قابل للتعديل)', bg.indexOf('waves-soft.svg') >= 0, bg.slice(0, 60));
-      var deco = getComputedStyle(waves);
-      t('الزخرفة غير تفاعلية (pointer-events:none) وaria-hidden في الترميز',
-        deco.pointerEvents === 'none' && waves.getAttribute('aria-hidden') === 'true');
+      /* 1) المصدر الواحد: الخلفية من curves.css (تدرج ساكن) والموجات القديمة ليست هنا */
+      var bg = getComputedStyle(surf).backgroundImage;
+      t('الخلفية من curves.css (تدرج بدء الملخص الفاتح) — لا أصل موجات في خلفية السطح',
+        bg.indexOf('linear-gradient') >= 0 && bg.indexOf('waves-soft') < 0,
+        bg.slice(0, 70));
+      var waves = surf.querySelector('.m-surface__waves');
+      t('طبقة الموجات القديمة مخفية في الاتجاه الحالي (display:none لا افتراضيان متنافسان)',
+        getComputedStyle(waves).display === 'none' && waves.getAttribute('aria-hidden') === 'true');
+      t('الزخرفة الشعاعية ساكنة بلا حركة (animation none)',
+        ['animationName'].every(function (p) { return getComputedStyle(surf).animationName === 'none'; }));
 
-      /* 2) مفاتيح السطح تنعكس ثم تُستعاد */
-      surf.style.setProperty('--micro-surface-wave-opacity', '0.3');
-      var op = getComputedStyle(waves).opacity;
-      surf.style.removeProperty('--micro-surface-wave-opacity');
-      var op2 = getComputedStyle(waves).opacity;
-      t('مفتاح شدة الموجة يننعكس ثم يستعاد', op === '0.3' && op2 === '1', 'أثناء=' + op + ' بعد=' + op2);
+      /* 2) أدوار النص داكنة ثابتة فوق السطح الفاتح (curves) */
+      var dark = ['label', 'title', 'amount', 'sub'].every(function (r) {
+        return getComputedStyle(surf.querySelector('.m-surface__' + r)).color === 'rgb(23, 45, 50)';
+      });
+      t('أدوار النص الأربعة داكنة ثابتة (--micro-text-primary) فوق السطح الفاتح', dark);
 
-      /* 3) حدود حروف النص داخل السطح (R2-01 — Range لا مستطيل العنصر فقط) */
+      /* 3) تباين حقيقي محسوب من التوكنات على أسوأ خلفية في التدرج */
+      function lum(hex) {
+        var v = hex.replace('#', '');
+        if (v.length === 3) v = v.split('').map(function (c) { return c + c; }).join('');
+        var ch = [0, 2, 4].map(function (i) { return parseInt(v.slice(i, i + 2), 16) / 255; })
+          .map(function (c) { return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); });
+        return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+      }
+      var text = getComputedStyle(document.documentElement).getPropertyValue('--micro-text-primary').trim();
+      var worst = getComputedStyle(document.documentElement).getPropertyValue('--micro-summary-gradient-start').trim();
+      var ratio = (Math.max(lum(text), lum(worst)) + 0.05) / (Math.min(lum(text), lum(worst)) + 0.05);
+      t('تباين النص الداكن على أفتح؟ لا — على أغمق توقف في التدرج ≥ 4.5:1',
+        ratio >= 4.5, 'النسبة ' + ratio.toFixed(2) + ' (text-primary على ' + worst + ')');
+
+      /* 4) حدود حروف النص داخل السطح (R2-01 — Range لا مستطيل العنصر فقط) */
       var title = document.getElementById('ex-title');
       var amount = document.getElementById('ex-amount');
       t('حدود حروف العنوان داخل السطح', inSurface(glyphRects(title)));
       t('حدود حروف الرقم داخل السطح', inSurface(glyphRects(amount)));
 
-      /* 4) الرقم الطويل بلا فراغات يُلف داخل السطح (R2-01 — لا قص ولا خروج) */
+      /* 5) الرقم الطويل بلا فراغات يُلف داخل السطح (R2-01 — لا قص ولا خروج) */
       var before = amount.getBoundingClientRect().height;
       var saved = amount.textContent;
       amount.textContent = '1,240.500000000000000000000';
@@ -83,20 +109,34 @@
       t('الرقم الطويل يُلف داخل السطح (ارتفاع يزيد وحدود الحروف داخلية)', grew && inSurface(aRects));
       amount.textContent = saved;
 
-      /* 5) أسطر العنوان النسبي بلا تداخل (R2-01 — سطر نسبي لا 36px ثابت) */
+      /* 6) أسطر العنوان النسبي بلا تداخل (R2-01 — سطر نسبي لا بكسل ثابت) */
       var lines = glyphRects(title).sort(function (a, b) { return a.top - b.top; });
       var noOverlap = lines.every(function (r, i) { return i === 0 || r.top >= lines[i - 1].bottom - 1; });
       t('أسطر العنوان بلا تداخل (line-height نسبي 1.6364)', noOverlap && lines.length >= 2, 'أسطر=' + lines.length);
 
-      /* 6) C1: أدوار النص الأربعة أبيض مصمت — التمييز بالحجم/الوزن لا الشفافية */
-      var roleOK = ['label', 'title', 'amount', 'sub'].every(function (r) {
-        return getComputedStyle(surf.querySelector('.m-surface__' + r)).color === 'rgb(255, 255, 255)';
+      /* 7) تكبير النص 200% — المحاكاة المعلنة بالمكتبة (ui-release-check):
+         مضاعفة أحجام الخط المحسوبة للعناصر الفعلية لا الجذر فقط (R8-06):
+         العنوان 22→44px والرقم 36→72px، ثم حدود حروف Range والالتفاف
+         والتباعد وبلا قص أو خروج أفقي. ليست اختبار جهاز/zoom نظام. */
+      var title0 = parseFloat(getComputedStyle(title).fontSize);
+      var amount0 = parseFloat(getComputedStyle(amount).fontSize);
+      var zoomed = [].slice.call(document.querySelectorAll('body, body *')).map(function (e) {
+        return [e, parseFloat(getComputedStyle(e).fontSize)];
       });
-      var weights = ['label', 'sub'].map(function (r) {
-        return getComputedStyle(surf.querySelector('.m-surface__' + r)).fontWeight;
-      });
-      t('أدوار النص الأربعة أبيض مصمت (C1) والتمييز بالوزن 500/400 لا الشفافية',
-        roleOK && weights[0] === '500' && weights[1] === '400', 'أوزان=' + weights.join('/'));
+      zoomed.forEach(function (p) { p[0].style.fontSize = p[1] * 2 + 'px'; });
+      var title1 = parseFloat(getComputedStyle(title).fontSize);
+      var amount1 = parseFloat(getComputedStyle(amount).fontSize);
+      /* السطح ينمو مع المحتوى (بلا overflow:hidden — E07) — تُقاس الحروف
+         على مستطيل السطح بعد التكبير لا على القياس قبل الزيادة */
+      var srZ = surf.getBoundingClientRect();
+      var zLines = glyphRects(title).sort(function (a, b) { return a.top - b.top; });
+      var zNoOverlap = zLines.every(function (r, i) { return i === 0 || r.top >= zLines[i - 1].bottom - 1; });
+      var okZoom = title1 === 44 && amount1 === 72
+        && inSurface(glyphRects(title), srZ) && inSurface(glyphRects(amount), srZ)
+        && zNoOverlap && surf.scrollWidth <= surf.clientWidth + 1;
+      zoomed.forEach(function (p) { p[0].style.fontSize = ''; });
+      t('عند تكبير النص 200% (محاكاة المكتبة — مضاعفة أحجام العناصر الفعلية): العنوان 22→44px والرقم 36→72px، الحروف داخل السطح بلا تداخل ولا قص ولا خروج أفقي',
+        okZoom, 'title ' + title0 + '→' + title1 + 'px، amount ' + amount0 + '→' + amount1 + 'px، أسطر=' + zLines.length);
 
       document.getElementById('results').textContent = out.join('\n');
     })();

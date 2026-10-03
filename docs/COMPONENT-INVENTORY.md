@@ -1,6 +1,6 @@
 # قائمة عناصر Micro — V1
 
-الحالة الحالية: العائلات الاثنتا عشرة مرجع تنفيذ UI مستقر تحت قواعد [الإصدار](UI-RELEASE.md) و[النظام البصري](UI-VISUAL-SYSTEM.md). حُسمت تفاصيل الأزرار بالتفويض الحالي. الأسس والاتجاه المنحني محفوظان؛ [عينة المصدر](../previews/surfaces/approved-curves.html)، [DESIGN.md](../DESIGN.md)، [المعرض](../previews/index.html)، و[الحالات](../previews/system/index.html). جداول الأدلة القديمة أدناه تاريخية، ولا تعني جاهزية تطبيق أو UX.
+الحالة الحالية: العائلات الاثنتا عشرة مرجع تنفيذ UI مستقر تحت قواعد [الإصدار](UI-RELEASE.md) و[النظام البصري](UI-VISUAL-SYSTEM.md). حُسمت تفاصيل الأزرار بالتفويض الحالي، وإغلاق تدقيق 2026-10 موثق في [مصفوفة التدقيق](UI-COMPLETION-AUDIT-MATRIX.md) و[تقرير الإغلاق](../reviews/UI-COMPLETION/review.md). الأسس والاتجاه المنحني محفوظان؛ [عينة المصدر](../previews/surfaces/approved-curves.html)، [DESIGN.md](../DESIGN.md)، [المعرض](../previews/index.html)، و[الحالات](../previews/system/index.html). جداول الأدلة القديمة أدناه تاريخية، ولا تعني جاهزية تطبيق أو UX.
 
 | الدفعة | العائلات المطلوبة | حدودها |
 |---|---|---|
@@ -19,14 +19,14 @@
 | العائلة | المعاينة | المثال المستقل | المصدر والعقد | الحالة |
 |---|---|---|---|---|
 | الأزرار | [B01](../previews/buttons/) | [مثال](../previews/buttons/example-usage.html) | [مواصفات](../components/buttons/specification.md) | STABLE UI؛ 24px وB افتراضيان |
-| الحقول | [B02](../previews/fields/) | [مثال](../previews/fields/example-usage.html) | [مواصفات](../components/fields/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
-| الاختيار | [B03](../previews/selection/) | [مثال](../previews/selection/example-usage.html) | [مواصفات](../components/selection/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
-| التنظيم | [B04](../previews/organization/) | [مثال](../previews/organization/example-usage.html) | [مواصفات](../components/organization/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
-| البيانات | [B05](../previews/data/) | [مثال](../previews/data/example-usage.html) | [مواصفات](../components/data/specification.md) | STABLE UI؛ C2 مغلق |
-| الرسائل | [B06](../previews/messages/) | [مثال](../previews/messages/example-usage.html) | [مواصفات](../components/messages/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
-| التنقل والطبقات | [B07](../previews/navigation/) | [مثال](../previews/navigation/example-usage.html) | [مواصفات](../components/navigation/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
-| الأسطح | [S01](../previews/surfaces/) | [مثال](../previews/surfaces/example-usage.html) | [مواصفات](../components/surfaces/specification.md) | دراسات قديمة/مقترحة؛ C1 مغلق |
-| البطاقة وشريط المعلومات | [معاينة](../previews/info-strip/) | [مثال](../components/info-strip/example-usage.html) | [مواصفات](../components/info-strip/specification.md) | مفهوم البطاقات المستقلة معتمد؛ التنفيذ للمراجعة |
+| الحقول | [B02](../previews/fields/) | [مثال](../previews/fields/example-usage.html) | [مواصفات](../components/fields/specification.md) | STABLE UI؛ تدقيق 2026-10 مغلق |
+| الاختيار | [B03](../previews/selection/) | [مثال](../previews/selection/example-usage.html) | [مواصفات](../components/selection/specification.md) | STABLE UI؛ حصر التركيز مصحح (A02) |
+| التنظيم | [B04](../previews/organization/) | [مثال](../previews/organization/example-usage.html) | [مواصفات](../components/organization/specification.md) | STABLE UI |
+| البيانات | [B05](../previews/data/) | [مثال](../previews/data/example-usage.html) | [مواصفات](../components/data/specification.md) | STABLE UI؛ C2 مغلق + عقد المقياس الصريح (A01) |
+| الرسائل | [B06](../previews/messages/) | [مثال](../previews/messages/example-usage.html) | [مواصفات](../components/messages/specification.md) | STABLE UI |
+| التنقل والطبقات | [B07](../previews/navigation/) | [مثال](../previews/navigation/example-usage.html) | [مواصفات](../components/navigation/specification.md) | STABLE UI؛ الحصر مصحح (A02) + التفاف شريط الأفعال |
+| الأسطح | [S01](../previews/surfaces/) | [مثال](../previews/surfaces/example-usage.html) — على المنحنيات الحالية | [مواصفات](../components/surfaces/specification.md) | STABLE UI؛ الاتجاه الحالي curves (A04 مغلق)؛ C1 مغلق |
+| البطاقة وشريط المعلومات | [معاينة](../previews/info-strip/) | [مثال](../components/info-strip/example-usage.html) + [مقارنة A05](../previews/info-strip/comparison.html) | [مواصفات](../components/info-strip/specification.md) | مفهوم البطاقات المستقلة معتمد؛ variant peek ADOPTED بقرار المالك 2026-10-04، opt-in |
 | المقارنة العددية | [معاينة](../previews/concepts/#comparison) | [مثال](../components/metric-comparison/example-usage.html) | [مواصفات](../components/metric-comparison/specification.md) | الفصل والتداخل معتمدان مفهوميًا؛ التنفيذ للمراجعة |
 | الحساب والتطبيق | [معاينة](../previews/concepts/#settings) | [مثال](../components/account-settings/example-usage.html) | [مواصفات](../components/account-settings/specification.md) | STABLE UI دون حفظ |
 | بوابة الوصول | [معاينة](../previews/concepts/#gateway) | [مثال](../components/access-gateway/example-usage.html) | [مواصفات](../components/access-gateway/specification.md) | STABLE UI دون مصادقة |

@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import shutil
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,6 +12,18 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE = os.environ.get("MICRO_TEST_BASE", "http://127.0.0.1:5000")
+
+# T01: أسماء التوكنات المطلوبة تُقرأ صراحة عبر getPropertyValue —
+# تعداد CSSStyleDeclaration غير مضمون عبر إصدارات المحرك (توقف على
+# Chromium 134 بعد 281 فحصًا ثم KeyError). الحد الأدنى المدعوم معلن
+# أدناه بدل الاعتماد على تعداد غير مضمون؛ الإصدار يُسجل في التقرير.
+REQUIRED_TOKENS = (
+    "text-primary", "text-secondary", "text-hint", "text-inverse",
+    "brand-primary", "brand-gradient-start", "brand-pressed",
+    "surface-page", "surface-base",
+    "danger", "success", "success-surface", "warning", "warning-surface",
+    "info", "info-surface", "border-control", "focus-ring",
+)
 PAGES = {
     "gallery": "/previews/",
     "system": "/previews/system/",
@@ -34,6 +47,23 @@ def contrast(a, b):
     return (y + .05) / (x + .05)
 
 
+def resolve_chromium(pw):
+    """T01: حسم المتصفح بترتيب معلن — MICRO_TEST_CHROME ثم chromium على PATH
+    ثم Chromium المرفق مع Playwright؛ يُسجل المحدد في التقرير."""
+    override = os.environ.get("MICRO_TEST_CHROME")
+    if override:
+        if not Path(override).exists():
+            raise RuntimeError(f"MICRO_TEST_CHROME does not exist: {override}")
+        return override, "MICRO_TEST_CHROME"
+    on_path = shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("google-chrome")
+    if on_path:
+        return on_path, "PATH"
+    try:
+        return pw.chromium.executable_path, "playwright-bundled"
+    except Exception as exc:  # noqa: BLE001
+        raise RuntimeError("No Chromium found (MICRO_TEST_CHROME / PATH / playwright bundle)") from exc
+
+
 def main():
     out = ROOT / "reviews/UI-RELEASE"
     (out / "screenshots").mkdir(parents=True, exist_ok=True)
@@ -44,10 +74,9 @@ def main():
         print(("PASS " if ok else "FAIL ") + name)
 
     with sync_playwright() as pw:
-        binary = shutil.which("chromium")
-        if not binary:
-            raise RuntimeError("Native Nix Chromium is required")
+        binary, binary_source = resolve_chromium(pw)
         browser = pw.chromium.launch(executable_path=binary)
+        print(f"# engine: {browser.version} ({binary_source}: {binary})")
         page = browser.new_page(viewport={"width": 390, "height": 874})
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.on("response", lambda r: assets.append(r.url) if r.status >= 400 else None)
@@ -78,10 +107,18 @@ def main():
                     "document.documentElement.scrollWidth <= innerWidth + 1"))
 
         load(PAGES["buttons"])
-        tokens = page.evaluate("""() => {
+        # T01: قراءة صريحة بأسماء معلنة عبر getPropertyValue (لا تعداد CSS)
+        tokens = page.evaluate("""(names) => {
           const s=getComputedStyle(document.documentElement);
-          return Object.fromEntries([...s].filter(k=>k.startsWith('--micro-')).map(k=>[k,s.getPropertyValue(k).trim()]));
-        }""")
+          const out={};
+          for (const n of names) {
+            const v=s.getPropertyValue(n).trim();
+            if (v) out[n]=v;
+          }
+          return out;
+        }""", ["--micro-" + name for name in REQUIRED_TOKENS])
+        missing = [n for n in ("--micro-" + t for t in REQUIRED_TOKENS) if n not in tokens]
+        check("Required tokens readable via explicit getPropertyValue", not missing, missing)
         for foreground, background, minimum in (
             ("text-primary", "surface-page", 4.5),
             ("text-secondary", "surface-page", 4.5),
@@ -175,6 +212,8 @@ def main():
         report = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "engine": "chromium", "version": browser.version,
+            "engine_binary_source": binary_source,
+            "engine_binary": binary,
             "physical_device": False, "screen_reader": False,
             "text_enlargement": "computed CSS font sizes doubled; not native browser/device zoom",
             "passed": sum(r["passed"] for r in results), "total": len(results),

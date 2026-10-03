@@ -29,15 +29,35 @@
 
   <header class="board-header">
     <h1>Micro — المعالجة البترولية والحركة <span class="status-chip">DRAFT FOR REVIEW</span></h1>
-    <p class="meta">معالجة سطح مستقلة للأسطح البارزة فقط — أصول SVG قابلة للتحرير ومفاتيح تعديل موسومة PROPOSED. القوائم والحقول صافية دائمًا. الزخرفة غير تفاعلية ومخفية عن قارئ الشاشة.</p>
+    <p class="meta">معالجة سطح مستقلة للأسطح البارزة فقط — الاتجاه الحالي منحنيات واسعة خافتة (curves.css)، والدراسات القديمة أدناه تاريخية واضحة الوسم. القوائم والحقول صافية دائمًا. الزخرفة غير تفاعلية ومخفية عن قارئ الشاشة.</p>
   </header>
 
   <main>
 
-    <!-- ================= 1) المقارنات الثلاث + المجردة ================= -->
+    <!-- ================= 0) الاتجاه الحالي (A04) ================= -->
+    <section class="panel" id="current-direction">
+      <h2>0) الاتجاه الحالي — منحنيات واسعة خافتة (curves.css)</h2>
+      <p class="panel-note">هذا هو المسار الافتراضي للأسطح البارزة من <a href="../../components/surfaces/curves.css">curves.css</a> — عينة مستقلة: <a href="approved-curves.html">approved-curves.html</a> · <a href="example-usage.html">المثال المستقل</a>. المقارنات أدناه (§1 و§wave-v2) دراسات تاريخية للمقارنة فقط — ليست افتراضيات متنافسة.</p>
+      <div class="example-grid" style="align-items:stretch">
+        <div class="example" style="width:320px;max-width:100%">
+          <div class="m-surface m-surface--curves">
+            <div class="m-surface__waves" aria-hidden="true"></div>
+            <div class="m-surface__content">
+              <p class="m-surface__label">الوضع الحالي</p>
+              <h3 class="m-surface__title">صافي الربح لهذا الشهر حتى تاريخه مع كل التسويات المعلقة</h3>
+              <p class="m-surface__amount">1,240.50</p>
+              <p class="m-surface__sub">ريال يمني · د.أ</p>
+            </div>
+          </div>
+          <span class="caption">الاتجاه الحالي — مجالات منحنية عريضة خافتة على أرضية فاتحة (curves.css)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 1) المقارنات الثلاث + المجردة — تاريخية ================= -->
     <section class="panel" id="compare">
-      <h2>1) المقارنات الثلاث والنسخة المجردة — SURF-01</h2>
-      <p class="panel-note">وجود المقارنة لا يعني اعتماد الأنماط الثلاثة — المرشح الأساسي موسوم في التقرير. كل سطح بنصه التجريبي نفسه للقياس العادل: عنوان طويل ورقم كبير وتسمية.</p>
+      <h2>1) المقارنات الثلاث والنسخة المجردة — SURF-01 — تاريخية</h2>
+      <p class="panel-note">دراسات تاريخية محفوظة للمقارنة فقط — الاتجاه الافتراضي الحالي في §0 فوق (curves.css). كل سطح بنصه التجريبي نفسه للقياس العادل: عنوان طويل ورقم كبير وتسمية.</p>
       <div class="example-grid" style="align-items:stretch">
 
         <div class="example" style="width:320px;max-width:100%">
@@ -50,7 +70,7 @@
               <p class="m-surface__sub">ريال يمني · د.أ</p>
             </div>
           </div>
-          <span class="caption">مقارنة 1 — بلا موجات</span>
+          <span class="caption">تاريخية — مقارنة 1: بلا موجات (دراسة سابقة، ليست الافتراضي)</span>
         </div>
 
         <div class="example" style="width:320px;max-width:100%">
@@ -63,7 +83,7 @@
               <p class="m-surface__sub">ريال يمني · د.أ</p>
             </div>
           </div>
-          <span class="caption">مقارنة 2 — المرشح الأساسي (waves-soft.svg)</span>
+          <span class="caption">تاريخية — مقارنة 2: موجات خافتة (دراسة سابقة؛ الاتجاه الحالي curves فوق)</span>
         </div>
 
         <div class="example" style="width:320px;max-width:100%">
@@ -76,7 +96,7 @@
               <p class="m-surface__sub">ريال يمني · د.أ</p>
             </div>
           </div>
-          <span class="caption">مقارنة 3 — للسطح البارز فقط (waves-depth.svg)</span>
+          <span class="caption">تاريخية — مقارنة 3: عمق أغنى (دراسة سابقة للسطح البارز فقط)</span>
         </div>
 
         <div class="example" style="width:320px;max-width:100%">
@@ -89,7 +109,7 @@
               <p class="m-surface__sub">ريال يمني · د.أ</p>
             </div>
           </div>
-          <span class="caption">مجردة — أرضية مستقرة فقط (متوفرة دائمًا)</span>
+          <span class="caption">مجردة — أرضية مستقرة فقط (متوفرة دائمًا بكل الاتجاهات)</span>
         </div>
 
       </div>
