@@ -1,5 +1,5 @@
-# B04 سجل الفحص — 2026-10-02T21:19:58
-# commit المصدر: afd9f0a6cf3e3f4930f120df455ec01db967214b
+# B04 سجل الفحص — 2026-10-03T18:48:58
+# commit المصدر: 9fe9443459d5e7e8c15adc80a1e12bf0f98df52f
 
 PASS  A1 لا أخطاء (مع استثناء 404 صورة الفشل المقصودة)
 PASS  A2 الطي: يفتح ويغلق باللمس مع aria-expanded/hidden — بعد الفتح {'exp': 'true', 'hidden': False} بعد الإغلاق {'exp': 'false', 'hidden': True}

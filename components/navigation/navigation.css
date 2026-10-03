@@ -246,13 +246,16 @@
   position: sticky;
   inset-block-end: 0;
   display: flex;
+  flex-wrap: wrap; /* 2026-10 (B3): عند تكبير النص تلتف الأزرار داخل الشريط
+                     بدل الخروج عن العمود — reflow بلا تمرير أفقي (WCAG 1.4.10)؛
+                     الارتفاع حد أدنى يتمدد والشريط يبقى فوق المحتوى بحشوه */
   gap: var(--micro-space-3);
   padding: var(--micro-space-3) var(--micro-space-5) calc(var(--micro-space-3) + env(safe-area-inset-bottom, 0px));
   background-color: var(--micro-surface-base);
   border-block-start: 1px solid var(--micro-border-divider);
   font-family: var(--micro-font-family);
 }
-.m-actionbar .m-btn { flex: 1; }
+.m-actionbar .m-btn { flex: 1 1 auto; min-width: 0; }
 .m-actionbar--stack .m-btn { flex: none; width: 100%; }
 
 .m-tabs__tab:hover:not([aria-selected="true"]) { color: var(--micro-text-primary); background: var(--micro-surface-page); }

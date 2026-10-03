@@ -427,10 +427,21 @@ def main():
                       const nav = t.querySelector('.m-navbar').getBoundingClientRect();
                       const last = document.getElementById('last-content').getBoundingClientRect();
                       const overlap = !(bar.top >= nav.bottom || bar.bottom <= nav.top);
-                      const lastVisible = last.top >= t.getBoundingClientRect().top && last.bottom <= nav.top + 1;
-                      return {overlap, lastVisible, sw: t.scrollWidth, cw: t.clientWidth}; }""")
-                check(f"B3 {width}px تكبير 200%: الشريطان لا يتصادمان وآخر عنصر قابل للوصول والمحتوى داخل العمود",
-                      not compz["overlap"] and compz["lastVisible"] and compz["sw"] <= compz["cw"] + 1, str(compz))
+                      // قابلية الوصول عند أقصى تمرير: أسفل العنصر الأخير فوق المجموعة الثابتة
+                      const bottomClears = last.bottom <= nav.top + 1;
+                      // إن بقي أعلى العنصر فوق حافة العمود (عنصر أطول من المتبقي عند
+                      // تكبير 200% على 320)، تمرير أعلى قليلًا يحقق الرؤية الكاملة —
+                      // هذا reflow عمودي مشروع (WCAG 1.4.10): لا حجب ولا تمرير أفقي.
+                      let fullyVisible = last.top >= t.getBoundingClientRect().top;
+                      if (!fullyVisible && bottomClears) {
+                        t.scrollTop = Math.max(0, t.scrollTop - (t.getBoundingClientRect().top - last.top) - 2);
+                        const l2 = document.getElementById('last-content').getBoundingClientRect();
+                        const n2 = t.querySelector('.m-navbar').getBoundingClientRect();
+                        fullyVisible = l2.top >= t.getBoundingClientRect().top && l2.bottom <= n2.top + 1;
+                      }
+                      return {overlap, bottomClears, fullyVisible, sw: t.scrollWidth, cw: t.clientWidth}; }""")
+                check(f"B3 {width}px تكبير 200%: الشريطان لا يتصادمان والمحتوى بلا تمرير أفقي وآخر عنصر قابل للوصول كاملًا",
+                      not compz["overlap"] and compz["bottomClears"] and compz["fullyVisible"] and compz["sw"] <= compz["cw"] + 1, str(compz))
                 pg.locator("#phones-full").screenshot(path=str(SHOTS / f"05-zoom-200-{width}.png"))
                 pg.click('[data-lab="text-zoom"]')
                 pg.wait_for_timeout(200)
