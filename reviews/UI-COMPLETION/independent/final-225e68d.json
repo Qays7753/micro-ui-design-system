@@ -1,0 +1,85 @@
+{
+  "source_commit": "225e68db568d6c6593e80c4fe5cb7e462e0e1d8e",
+  "source_code_commit": "5ac5d2bc36e5f056e9e72d058dedf5097380c8d6",
+  "review_decision": "R8 functional corrections CLOSED in component scope; N1 status-label cleanup remains",
+  "engine": "Chromium 153.0.8010.0 / Playwright1.63.0",
+  "independent_reruns": {
+    "data_scale": {
+      "passed": 23,
+      "total": 23
+    },
+    "b05": {
+      "passed": 26,
+      "total": 26
+    },
+    "a05": {
+      "passed": 24,
+      "total": 24
+    },
+    "audit": {
+      "passed": 21,
+      "total": 21
+    },
+    "ui_release": {
+      "passed": 322,
+      "total": 322
+    }
+  },
+  "before_review_changes_package": {
+    "manifest": 586,
+    "mismatches": 0,
+    "zip": 587,
+    "zip_mismatches": 0,
+    "crc_error": null
+  },
+  "independent_reproductions": {
+    "ltr_next": 1,
+    "ltr_prev": 0,
+    "ltr_right": 1,
+    "ltr_left": 0,
+    "surface_checks": {
+      "320": {
+        "no_fail": true,
+        "actual_text_200_percent": true
+      },
+      "360": {
+        "no_fail": true,
+        "actual_text_200_percent": true
+      },
+      "390": {
+        "no_fail": true,
+        "actual_text_200_percent": true
+      },
+      "430": {
+        "no_fail": true,
+        "actual_text_200_percent": true
+      }
+    },
+    "donut_user_errors": [
+      "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب."
+    ],
+    "scale_transition": {
+      "before": {
+        "state": "over",
+        "detail": "bars: أكبر قيمة (10) تتجاوز data-max=\"5\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+        "svg": false
+      },
+      "after_valid": {
+        "state": null,
+        "detail": null,
+        "svg": true
+      },
+      "after_auto": {
+        "state": null,
+        "detail": null,
+        "svg": true
+      }
+    }
+  },
+  "platforms": {
+    "webkit": "not executed independently; agent records failed start and no passing results",
+    "physical_android_ios": "not executed",
+    "actual_screen_reader": "not executed",
+    "native_zoom_wrapper": "not executed"
+  }
+}
