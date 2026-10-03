@@ -5,7 +5,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "deliverables" / "micro-components-editable.zip"
-DIRECTORIES = ("assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools")
+DIRECTORIES = ("assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools", "handoff")
 FILES = ("README.md", "AGENTS.md", "DESIGN.md", "MANIFEST.json", "pyproject.toml", "uv.lock",
          "tools/preview-server.py", "tools/concepts-check.py",
          "tools/manifest-build.py", "tools/build-components-package.py")

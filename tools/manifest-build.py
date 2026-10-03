@@ -20,7 +20,7 @@ EXCLUDE_DIRS = {
 }
 EXCLUDE_FILES = {"MANIFEST.json"}
 EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".DS_Store"}
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools"}
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools", "handoff"}
 PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "pyproject.toml", "uv.lock"}
 
 

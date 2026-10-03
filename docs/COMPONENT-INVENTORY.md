@@ -12,22 +12,24 @@
 | B06 التغذية الراجعة | مساعدة، تنبيه، تأكيد، خطأ، تحميل، لا بيانات، لا نتائج، فشل قراءة | النمط العام يغطي الحالات؛ لا نصوص نهائية لكل خدمة، ولا اعتماد Toast أو منعه من التقرير وحده. |
 | B07 التنقل والطبقات | رجوع، تبويب، قائمة إجراءات، حوار، لوحة سفلية، شريط إجراء | عناصر قابلة لإعادة الاستخدام دون تغيير خريطة تنقل التطبيق أو تثبيت عدد تبويبات. |
 
-## الوصول إلى الموجود (ليس جرد أصول)
+## روابط المصادر وحالة المراجعة
+
+العائلات مرجع UI مستقر وفق الإصدار؛ عيوب التدقيق الجديد والنواقص تُتبع في handoff/WORK-TRACKER.md ولا يُستنتج منها سقوط جميع العائلات. الجدول لا يمنح شهادة إنتاجية.
 
 | العائلة | المعاينة | المثال المستقل | المصدر والعقد | الحالة |
 |---|---|---|---|---|
-| الأزرار | [B01](../previews/buttons/) | [مثال](../previews/buttons/example-usage.html) | [مواصفات](../components/buttons/specification.md) | DRAFT؛ 24px وB مقترحان |
-| الحقول | [B02](../previews/fields/) | [مثال](../previews/fields/example-usage.html) | [مواصفات](../components/fields/specification.md) | DRAFT |
-| الاختيار | [B03](../previews/selection/) | [مثال](../previews/selection/example-usage.html) | [مواصفات](../components/selection/specification.md) | DRAFT |
-| التنظيم | [B04](../previews/organization/) | [مثال](../previews/organization/example-usage.html) | [مواصفات](../components/organization/specification.md) | DRAFT |
-| البيانات | [B05](../previews/data/) | [مثال](../previews/data/example-usage.html) | [مواصفات](../components/data/specification.md) | DRAFT؛ C2 مغلق |
-| الرسائل | [B06](../previews/messages/) | [مثال](../previews/messages/example-usage.html) | [مواصفات](../components/messages/specification.md) | DRAFT |
-| التنقل والطبقات | [B07](../previews/navigation/) | [مثال](../previews/navigation/example-usage.html) | [مواصفات](../components/navigation/specification.md) | DRAFT |
+| الأزرار | [B01](../previews/buttons/) | [مثال](../previews/buttons/example-usage.html) | [مواصفات](../components/buttons/specification.md) | STABLE UI؛ 24px وB افتراضيان |
+| الحقول | [B02](../previews/fields/) | [مثال](../previews/fields/example-usage.html) | [مواصفات](../components/fields/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
+| الاختيار | [B03](../previews/selection/) | [مثال](../previews/selection/example-usage.html) | [مواصفات](../components/selection/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
+| التنظيم | [B04](../previews/organization/) | [مثال](../previews/organization/example-usage.html) | [مواصفات](../components/organization/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
+| البيانات | [B05](../previews/data/) | [مثال](../previews/data/example-usage.html) | [مواصفات](../components/data/specification.md) | STABLE UI؛ C2 مغلق |
+| الرسائل | [B06](../previews/messages/) | [مثال](../previews/messages/example-usage.html) | [مواصفات](../components/messages/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
+| التنقل والطبقات | [B07](../previews/navigation/) | [مثال](../previews/navigation/example-usage.html) | [مواصفات](../components/navigation/specification.md) | STABLE UI؛ مع تدقيق التكليف الجاري |
 | الأسطح | [S01](../previews/surfaces/) | [مثال](../previews/surfaces/example-usage.html) | [مواصفات](../components/surfaces/specification.md) | دراسات قديمة/مقترحة؛ C1 مغلق |
 | البطاقة وشريط المعلومات | [معاينة](../previews/info-strip/) | [مثال](../components/info-strip/example-usage.html) | [مواصفات](../components/info-strip/specification.md) | مفهوم البطاقات المستقلة معتمد؛ التنفيذ للمراجعة |
 | المقارنة العددية | [معاينة](../previews/concepts/#comparison) | [مثال](../components/metric-comparison/example-usage.html) | [مواصفات](../components/metric-comparison/specification.md) | الفصل والتداخل معتمدان مفهوميًا؛ التنفيذ للمراجعة |
-| الحساب والتطبيق | [معاينة](../previews/concepts/#settings) | [مثال](../components/account-settings/example-usage.html) | [مواصفات](../components/account-settings/specification.md) | DRAFT دون حفظ |
-| بوابة الوصول | [معاينة](../previews/concepts/#gateway) | [مثال](../components/access-gateway/example-usage.html) | [مواصفات](../components/access-gateway/specification.md) | DRAFT دون مصادقة |
+| الحساب والتطبيق | [معاينة](../previews/concepts/#settings) | [مثال](../components/account-settings/example-usage.html) | [مواصفات](../components/account-settings/specification.md) | STABLE UI دون حفظ |
+| بوابة الوصول | [معاينة](../previews/concepts/#gateway) | [مثال](../components/access-gateway/example-usage.html) | [مواصفات](../components/access-gateway/specification.md) | STABLE UI دون مصادقة |
 
 [التركيبات المصغرة](../previews/compositions/) عينات مراجعة من المصادر نفسها وليست عائلة جديدة. روابط CSS/JS المباشرة لكل عائلة في المعرض. [المراجع المعتمدة](ARTIFACTS.md) لا تحل محل هذه المصادر.
 
