@@ -31,6 +31,19 @@
    - bars:  ارتفاع ∝ القيمة على max معلن (data-max) — صفر يظهر على الأساس.
             السالب غير مدعوم في الأعمدة: يُعرض بوضوح كقيمة غير مرسومة
             (شرطة + نص القيمة والسبب) — لا يُرسم كموجب أبدًا.
+   - A01 — عقد المقياس الصريح (bars/line): «data-max» معلن من المستهلك
+            يُحكَم بقيمته الفعلية لا بسلوك صامت:
+              غائب → مقياس تلقائي موثق يستوعب أكبر قيمة مرسومة (أرضية 1).
+              معلن غير صالح (غير رقمي أو 0 أو سالب) → حالة «مقياس غير صالح»
+                صريحة: رسالة سبب + القراءات كاملة في قائمة بلا رسم نسبي
+                (نفس فلسفة C2 في donut — لا سقوط صامت إلى مقياس تلقائي).
+              معلن صالح أصغر من أكبر قيمة مرسومة → تجاوز مقياس، والافتراضي
+                «رفض» (data-overscale="refuse" أو غياب السمة): لا clamp صامت
+                ولا نقطة خارج SVG ولا مساواة بصرية بين قيم مختلفة — رسالة
+                تجاوز + القراءات كاملة بلا رسم نسبي.
+              خيار صريح موثق للمستهلك: data-overscale="rescale" يرسم بمقياس
+                موسّع يستوعب القيم مع ملاحظة ظاهرة تسمّي المقياس المعلن
+                والموسّع — لا توسيع خفي. قيم البيانات لا تتغير أبدًا.
    - line:  نقاط بترتيب المستهلك — المحور الزمني باتجاهه المعلن
             (data-axis-dir="rtl|ltr" افتراضي rtl: الأقدم يمين) — لا قلب آلي.
             القيمة المفقودة تقطع الخط فعليًا (شرائح منفصلة — لا وصلة
@@ -120,6 +133,56 @@
     return lines.length;
   }
 
+  /* ---- A01: عقد مقياس bars/line ----
+     حالة المقياس تُحسم مرة واحدة من data-max + القيم القابلة للرسم
+     (v >= 0؛ السالب غير مرسوم أصلًا فلا يدخل احتواء المقياس):
+       auto    : بلا data-max — مقياس تلقائي يستوعب القيم (أرضية 1)
+       ok      : معلن صالح ويحتوي أكبر قيمة مرسومة
+       invalid : معلن موجود لكنه غير رقمي أو 0 أو سالب — غير قابل للاستخدام
+       over    : معلن صالح لكنه أصغر من أكبر قيمة مرسومة — تجاوز صريح */
+  function scaleStateOf(chart, items) {
+    var raw = chart.getAttribute('data-max');
+    var hasDeclared = raw !== null && String(raw).trim() !== '';
+    var declared = hasDeclared ? parseNum(raw) : null;
+    var largest = 0;
+    items.forEach(function (it) {
+      if (it.value !== null && it.value >= 0 && it.value > largest) largest = it.value;
+    });
+    if (!hasDeclared) return { kind: 'auto', max: Math.max(largest, 1), declared: null, largest: largest };
+    if (declared === null || declared <= 0) {
+      return { kind: 'invalid', max: 0, declaredRaw: raw, largest: largest };
+    }
+    if (largest > declared) {
+      return { kind: 'over', max: declared, declared: declared, largest: largest };
+    }
+    return { kind: 'ok', max: declared, declared: declared, largest: largest };
+  }
+
+  /* A01: حالة رفض الرسم النسبي (مقياس غير صالح أو متجاوز) —
+     القراءات محفوظة كاملة (القيم والتسميات لا تتغير) بلا رسم مشوه */
+  function renderScaleRefusal(chart, items, plot, state, title) {
+    var err = document.createElement('p');
+    err.className = 'm-chart__error';
+    err.textContent = title;
+    plot.appendChild(err);
+    var list = document.createElement('ul');
+    list.className = 'm-legend';
+    items.forEach(function (it) {
+      var li = document.createElement('li');
+      li.className = 'm-legend__item';
+      var sw = document.createElement('span');
+      sw.className = 'm-legend__swatch m-cat--' + it.series;
+      li.appendChild(sw);
+      li.appendChild(document.createTextNode(it.label + ' '));
+      var val = document.createElement('span');
+      val.className = 'm-legend__value';
+      val.textContent = it.value === null ? '— غير متاح' : fmt(it.value);
+      li.appendChild(val);
+      list.appendChild(li);
+    });
+    plot.appendChild(list);
+  }
+
   /* قيمة سالبة في رسم لا يدعم السالب: عرض صادق — شرطة + نص القيمة والسبب */
   function invalidMarker(svg, g, cx, base, value, why) {
     var r = svgEl('rect', {
@@ -138,9 +201,22 @@
   /* ---- الأعمدة ---- */
   function renderBars(chart, items) {
     var plot = chart.querySelector('[data-plot]');
-    var maxAttr = parseNum(chart.getAttribute('data-max')); /* R2-05: كامل لا بادئة */
-    var max = (maxAttr !== null && maxAttr > 0) ? maxAttr : Math.max.apply(null,
-      items.map(function (i) { return i.value || 0; }).concat([1]));
+    /* A01: عقد المقياس الصريح — لا clamp صامت ولا مساواة بصرية بين قيم مختلفة */
+    var scale = scaleStateOf(chart, items);
+    if (scale.kind === 'invalid') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, scale,
+        'تعذر رسم الأعمدة: المقياس المعلن غير صالح (data-max="' + scale.declaredRaw + '") — يجب أن يكون رقمًا موجبًا. القيم معروضة كاملة دون رسم نسبي.');
+      return;
+    }
+    if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, scale,
+        'تعذر رسم الأعمدة: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز المقياس المعلن (data-max="' + fmt(scale.declared) + '") — الرسم النسبي على هذا المقياس كان سيخفي الفرق بين القيم. صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن. القيم معروضة كاملة دون رسم نسبي.');
+      return;
+    }
+    /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
+    var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.2));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
@@ -148,7 +224,11 @@
     var extra = (maxLines - 1) * 13;
     var W = 320, H = 180 + extra, base = H - 34 - extra, top = 26;
     var colW = W / Math.max(items.length, 1);
-    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': chart.getAttribute('data-title') || 'رسم أعمدة' });
+    var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
+    if (scale.kind === 'over') {
+      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+    }
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     svg.appendChild(svgEl('line', { class: 'm-chart__baseline', x1: 0, y1: base, x2: W, y2: base }));
     items.forEach(function (it, i) {
       var cx = colW * i + colW / 2;
@@ -182,15 +262,35 @@
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
+    if (scale.kind === 'over') {
+      /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا */
+      var note = document.createElement('p');
+      note.className = 'm-chart__scale-note';
+      note.textContent = 'مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared) + ' (data-overscale="rescale") — القيم الأصلية دون تغيير.';
+      plot.appendChild(note);
+    }
   }
 
   /* ---- الخط ---- */
   function renderLine(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var rtl = (chart.getAttribute('data-axis-dir') || 'rtl') !== 'ltr';
-    var vals = items.map(function (i) { return i.value; });
-    var maxAttr = parseNum(chart.getAttribute('data-max')); /* R2-05: كامل لا بادئة */
-    var max = (maxAttr !== null && maxAttr > 0) ? maxAttr : Math.max.apply(null, vals.filter(function (v) { return v !== null && v >= 0; }).concat([1]));
+    /* A01: عقد المقياس الصريح نفسه المطبق على الأعمدة — لا نقطة خارج SVG */
+    var scale = scaleStateOf(chart, items);
+    if (scale.kind === 'invalid') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, scale,
+        'تعذر رسم الخط: المقياس المعلن غير صالح (data-max="' + scale.declaredRaw + '") — يجب أن يكون رقمًا موجبًا. القيم معروضة كاملة دون رسم نسبي.');
+      return;
+    }
+    if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, scale,
+        'تعذر رسم الخط: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز المقياس المعلن (data-max="' + fmt(scale.declared) + '") — الرسم على هذا المقياس كان سيخرج نقطة خارج مجال الرسم. صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن. القيم معروضة كاملة دون رسم نسبي.');
+      return;
+    }
+    /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
+    var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var n = Math.max(items.length, 2);
     var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.2));
     var maxLines = Math.max.apply(null, items.map(function (i) {
@@ -200,7 +300,11 @@
     var W = 320, H = 170 + extra, base = H - 30 - extra, top = 24;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
-    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': chart.getAttribute('data-title') || 'رسم خط' });
+    var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
+    if (scale.kind === 'over') {
+      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+    }
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     svg.appendChild(svgEl('line', { class: 'm-chart__axis', x1: 12, y1: base, x2: W - 12, y2: base }));
     /* E06: القيمة المفقودة تقطع الخط — شرائح منفصلة، لا وصلة عبر الفجوة */
     var seg = [];
@@ -235,6 +339,12 @@
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
+    if (scale.kind === 'over') {
+      var note = document.createElement('p');
+      note.className = 'm-chart__scale-note';
+      note.textContent = 'مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared) + ' (data-overscale="rescale") — القيم الأصلية دون تغيير.';
+      plot.appendChild(note);
+    }
   }
 
   /* ---- التوزيع الدائري (نسب بمقام معلن) ----

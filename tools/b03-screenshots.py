@@ -393,15 +393,19 @@ def main():
               and r2s.get("progNotReverted") is True, str(r2s))
 
         # ---- E1: تعديل توكن → انعكاس → استعادة ----
+        # (تحديث 2026-10: اسم التوكن الفعلي --micro-field-min-height في
+        # shared/tokens.css — الاسم القديم --micro-field-height لم يعد موجودًا،
+        # فكان التعديل لا ينعكس. التوقع من العقد: توكن حقيقي ينعكس ثم يُستعاد)
         tok = page.evaluate(
             """() => { const root = document.documentElement.style;
-                 root.setProperty('--micro-field-height', '60px');
+                 const before = getComputedStyle(document.querySelector('#entity-picker [data-picker-search]')).minHeight;
+                 root.setProperty('--micro-field-min-height', '60px');
                  const v = getComputedStyle(document.querySelector('#entity-picker [data-picker-search]')).minHeight;
-                 root.removeProperty('--micro-field-height');
+                 root.removeProperty('--micro-field-min-height');
                  const back = getComputedStyle(document.querySelector('#entity-picker [data-picker-search]')).minHeight;
-                 return {changed: v, restored: back}; }""")
+                 return {before: before, changed: v, restored: back}; }""")
         check("E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل",
-              tok["changed"] == "60px" and tok["restored"] != "60px", str(tok))
+              tok["before"] != "60px" and tok["changed"] == "60px" and tok["restored"] != "60px", str(tok))
 
         # ---- الهواتف + التكبير ----
         for width in (320, 390, 430):

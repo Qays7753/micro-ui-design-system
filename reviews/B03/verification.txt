@@ -1,6 +1,6 @@
-# B03 سجل الفحص — 2026-10-02T21:19:34
-# commit المصدر: afd9f0a6cf3e3f4930f120df455ec01db967214b
-# بصمة شجرة المصدر: 9805d6cbf5f10b089a59fc012ddbf87405f65720 (الأدلة مولدة من شجرة هذا commit نظيفة)
+# B03 سجل الفحص — 2026-10-03T19:04:01
+# commit المصدر: c0509735f4000e1009b96b47194b3d21988a2837
+# بصمة شجرة المصدر: 0b82678576b1528bc5240ee8c90949e8ab5666fa (الأدلة مولدة من شجرة هذا commit نظيفة)
 
 PASS  A1 لا أخطاء
 PASS  A2 الأيقونات من الأصول — 32
@@ -21,7 +21,7 @@ PASS  A13 (R2-03) حالة قراءة موحدة: القديمة مخفية في
 PASS  A14 (R2-03) استبدال البيانات: اختيار صالح يُحفظ ويطابق الملخص، وسقوطه يُمسح مع الملخص ويُعلن — لا «المحدد: Alpha» مع getSelected null — {'kept': {'sel': {'value': 'b', 'label': 'Beta2'}, 'summary': 'المحدد: Beta2'}, 'cleared': {'sel': None, 'summary': 'المحدد: لا شيء', 'changeDetail': {'value': None, 'label': None}}}
 PASS  A15 (R2-03) tabIndex متنقل: الأسهم تحرّك نقطة التبويب مع الحالي والاختيار يجعل المحدد نقطة التبويب — {'afterArrow': {'focused': 'Beta', 'tabStop': 'Beta'}, 'afterSelect': 'Delta'}
 PASS  A16 (R2-06) المفتاح: false قبل دورة ومرتين بعدها لا يغيّران الحالة، والمعطل أصلًا يبقى معطلًا، والإشعار البرمجي لا يُعكس كتبديل — {'falseFirst': False, 'afterCycle': False, 'falseTwice': False, 'preDisabled': True, 'progNotReverted': True}
-PASS  E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل — {'changed': '60px', 'restored': '52px'}
+PASS  E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل — {'before': '52px', 'changed': '60px', 'restored': '52px'}
 PASS  B1 320px بلا تمرير أفقي — {'sw': 320, 'cw': 320}
 PASS  B2 320px تكبير 200%: نص المفتاح 32px والمحتوى داخل العمود — {'font': '32px', 'sw': 318, 'cw': 318}
 PASS  B1 390px بلا تمرير أفقي — {'sw': 390, 'cw': 390}

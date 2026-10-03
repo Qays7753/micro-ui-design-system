@@ -268,6 +268,45 @@
           <span class="caption">شرائح منفصلة عند الفجوة — يفحصها عدّاد polylines في السكربت</span>
         </div>
 
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="5" data-title="تجاوز المقياس المعلن (A01)" data-summary-text="أكبر قيمة (10) تتجاوز data-max=5: الافتراضي رفض الرسم النسبي — القراءات كاملة بلا clamp صامت يخفي الفرق.">
+            <h3 class="m-chart__title">تجاوز المقياس المعلن — رفض (A01)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="5"></li>
+              <li data-series="b" data-label="مشتريات" data-value="10"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">A01 الافتراضي (refuse): رسالة تجاوز + قراءات كاملة — لا عمودان متساويان لقيمتين مختلفتين</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="5" data-overscale="rescale" data-title="توسيع المقياس بخيار معلن (A01)" data-summary-text="data-overscale=rescale: رسم بمقياس موسّع إلى 10 مع ملاحظة ظاهرة تسمّي المعلن والموسّع — القيم دون تغيير.">
+            <h3 class="m-chart__title">توسيع المقياس بخيار معلن — rescale (A01)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="5"></li>
+              <li data-series="b" data-label="مشتريات" data-value="10"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">A01 خيار صريح (rescale): نسب صادقة + ملاحظة المقياس الموسّع ظاهرة</span>
+        </div>
+
+        <div class="example" style="width:350px;max-width:100%">
+          <div class="m-chart m-chart--bars" data-chart="bars" data-max="bad" data-title="مقياس معلن غير صالح (A01)" data-summary-text="data-max غير رقمي: حالة «مقياس غير صالح» صريحة — لا سقوط صامت إلى مقياس تلقائي (نفس فلسفة C2 في donut).">
+            <h3 class="m-chart__title">مقياس معلن غير صالح — bad (A01)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مبيعات" data-value="5"></li>
+              <li data-series="b" data-label="مشتريات" data-value="10"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <span class="caption">A01 مقام غير صالح: رسالة سبب وقراءات كاملة — لا رسم نسبي</span>
+        </div>
+
       </div>
     </section>
 

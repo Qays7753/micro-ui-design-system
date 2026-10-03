@@ -2,16 +2,16 @@
   "engines": {
     "chromium": {
       "status": "tested",
-      "version": "138.0.7204.100",
+      "version": "143.0.7499.4",
       "coverage": "all results below"
     },
     "firefox": {
       "status": "unavailable",
-      "reason": "BrowserType.launch: Executable doesn't exist at /home/runner/workspace/.cache/ms-playwright/firefox-1543/firefox/firefox"
+      "reason": "BrowserType.launch: Executable doesn't exist at /home/z/.cache/ms-playwright/firefox-1497/firefox/firefox"
     },
     "webkit": {
       "status": "unavailable",
-      "reason": "BrowserType.launch: Executable doesn't exist at /home/runner/workspace/.cache/ms-playwright/webkit-2359/pw_run.sh"
+      "reason": "BrowserType.launch: Executable doesn't exist at /home/z/.cache/ms-playwright/webkit-2227/pw_run.sh"
     }
   },
   "source": {
@@ -81,16 +81,18 @@
       "components/carousel/carousel.js": "ed11ea6fb437bcfbe8e9fe9cd40f7abd887d2228aae40ac3d5000989bae0244c",
       "components/carousel/specification.md": "0c3a41689b3366d72b3d7ae10de9d44ee06acd81016024c17fdcfd700f51bd6a",
       "components/data/PACKED-PATTERN.md": "08e0f202f971e9ac702f4802f2ebf035613680c09d2af2013c041bb8ad10401f",
-      "components/data/data.css": "5dc7185f71043558882e6a8d3e48f9f1cb76404d79c88bc8f1c458e67df61c82",
-      "components/data/data.js": "e1ebee3b42d3828734a479f6df24313980f21ad3f806ebfdd4cc33a3db8751ae",
+      "components/data/data.css": "39f9288381d510bb442097f223b7e2587766373a1dff1c642e09c2256f4c1a1c",
+      "components/data/data.js": "7801a9d132423a0c0ebcf83f7413c979d631633c2130b92e0f4a5a83efa8d1da",
       "components/data/packed-circle.css": "8a2253d084ae92122077e7a1ffb109b6b1506d061853f49b766e2ae1ef586e32",
       "components/data/packed-circle.js": "3db0d570d16d58c082eb99ed2f045ddcbf7356d58d9965f8481b90c2d44ccd38",
-      "components/data/specification.md": "429a9c3effac2f6be132749db082879207ecd8f01dd7e76778a0884139af8c96",
+      "components/data/specification.md": "89624ccfe1d95d741e5c6cf71756bba1e4d36949d3ae8a2f31725235a1f536ef",
       "components/fields/fields.css": "dbe2cc6e076ba67af752f0b44c336ee468b5f597816157884ccf0a932910c793",
       "components/fields/fields.js": "18d30e091d2b6cf301e5f35751a920d11bd6fe29207e4720505ff8ccd3507011",
       "components/fields/specification.md": "a92937c4d5b8e2d24fc5a664eed54cd9fc2cbad0832b5013cb154c63ec9a8fca",
       "components/info-strip/README.md": "11b0ed34c424a6dfe6eb959dba335fa27e0ddc30ebb2e4bde16171a74de2397a",
       "components/info-strip/example-usage.html": "52afc6443dfdf9f22ca7fe34f2d70ad5cb2a2709b7a2cc83a9b2813ada8baa5e",
+      "components/info-strip/info-strip-peek.css": "55f3134e7e2b0f1724cb22fe5559ac341e54f92921b560e85b7d3758f8c64a2c",
+      "components/info-strip/info-strip-peek.js": "1422808ba9adaf503f5eec249570fb12310a58af169b4ec3bf1367ec651a7060",
       "components/info-strip/info-strip.css": "8faccdd3010f2cd6aaa5e67ec7c1909c63f88d1778d6a4accda15051e68756dc",
       "components/info-strip/info-strip.js": "3059fb00ebecf3a178123b2ae6b56afd1cc90ce978b9aed3f00c24230796bdb3",
       "components/info-strip/specification.md": "fb20b87d93d9a2e8dde2dc3688491e314c47a4df21c3a294b17144634de47f97",
@@ -102,8 +104,8 @@
       "components/metric-comparison/metric-comparison.css": "11b72a292d518d3a3b961481f60e4025a9cfb9c1cc1d4ac594dc8f12fd5800af",
       "components/metric-comparison/metric-comparison.js": "cb2460f4ff82195f1eb8e7b4c1da68c4adbc82150d319fead9f5cd50da16771b",
       "components/metric-comparison/specification.md": "f3927d6f2460d962a28b3b2a42505a61d045843e99ba928a8e5a47584e3c2c42",
-      "components/navigation/navigation.css": "0887ba88bce088ab7880fc633eb6813e4a23b5c0fd8bda61328aa32bbe94befa",
-      "components/navigation/navigation.js": "7d74dfc138c89189400ebfbd99d267ed0bd0f8be0bde5635bde96a8b2bd2cf8d",
+      "components/navigation/navigation.css": "db175f4d70a56c66f48c331d53817dfa482a2d93ad94e3e76b48c27c1f142481",
+      "components/navigation/navigation.js": "2f3435b4db95ae6dca51791eb84e5b8e569303deffb13debd0e21a070a5cbcc6",
       "components/navigation/specification.md": "3db4853d587fd14fd19d024dcd6c140207493929abe379fe0355ebdde4ec2ebf",
       "components/organization/organization.css": "7f6d63f841bb2eda48f8d93ba11f3bc3402ee883839bff485f9db97778419f28",
       "components/organization/organization.js": "bb8aed24ece5e3c1e693de97f286292c5b6adfd84330400b9975670546b607be",
@@ -114,7 +116,7 @@
       "components/selection/selection.js": "5eb9e5597a832610fe1a29d9e2549e5a00072010e850fe3561e7dad5dddc7c73",
       "components/selection/specification.md": "330da3582b121ab2444ae7c1dfb34257407102d9a3b3f2132e6681f5b2481756",
       "components/surfaces/curves.css": "fa4d0058d92c5f34938951f65b795d12139388cbe2f758b307a902bb51ca12d6",
-      "components/surfaces/specification.md": "dc44fe0844b94ec1dcea77ba7b005d6c4616fb505d62620a481f56cf92a6c636",
+      "components/surfaces/specification.md": "c46efc4ff83d289397920dc709599d26692cf668e30c3183039eca4c14601cc5",
       "components/surfaces/surfaces.css": "7926eae4fdbbd8e4636c2cd16c7543ba7835115459369a8bd4392423031a9229",
       "previews/README.md": "f946d081c2ce4499d4b2a7c9733f2b781d10e9d360f1a658a121db7082eed2d1",
       "previews/after-direction/README.md": "3aa28a248b046daed59c87f773c497c7d597fa470b59aa2ca527fb90258bb47e",
@@ -127,7 +129,7 @@
       "previews/buttons/board.css": "4644702bbf333dddd58a56a17760745c9747add2b661ee0a560653dbdf8b8025",
       "previews/buttons/board.js": "83e1122868ea450d8abad15f775c3b076895b1f7b1a6b67d80cc94a1e4edbe65",
       "previews/buttons/example-usage.html": "b31a7fa5624c09d470e3175658b105dc703e73a5f032eb5267b0086ba8514a3f",
-      "previews/buttons/index.html": "bbca6cedf716b8bf7240962b062a43cd73f19c5ba99fb157c853c550cd485fa9",
+      "previews/buttons/index.html": "9c003d7de57f9c93fdec0d6032ec3fc64330d7d6ac6f84129096400b7c2849a4",
       "previews/carousel/README.md": "eeeafb3e15688471eb93368a7d8cfbc423d048845e33b0656014653ab538b29d",
       "previews/carousel/board.css": "228fa99753c382abdb8698d5a40dfda62d4b9d637ee64ea2ff63496679a3b490",
       "previews/carousel/board.js": "899645d8348a0d798731c6975d85d81e50e38da0939b9cf062e273f637728455",
@@ -147,15 +149,16 @@
       "previews/data/board.css": "961a9c9e72b098dac5960e8925587644e2ee1b5804c1cfe6655d00916cd26ac0",
       "previews/data/board.js": "c61c005842f97243f99f691fda2dca418b834ac10f2beb87d256e6e1f99ad989",
       "previews/data/example-usage.html": "94b7e465e352a3e20f51d90f800ca870dc65d71bc7e7ffa685b9c9663835493a",
-      "previews/data/index.html": "cb56a56322bfc4f0d394f92e299aca5e7923c1ac800f584bfbba49323cec0bf7",
+      "previews/data/index.html": "96ca9b6e67c5f1262379dd18af34f6a2ab31f4d07688ec03d5540b27a12859ff",
       "previews/fields/README.md": "b366094211d65920382bb7921ad6f1c3cb6d4dfb894f6a02dfbb7657875eb582",
       "previews/fields/board.css": "90e9a6ca82e09dbcf5515dc22b0d53ccf11ffba95d21b51231df475cba93000b",
       "previews/fields/board.js": "b259a5c1f0c4811bae810047afcce98394347e4a81243660b1bee30b7560945b",
       "previews/fields/example-usage.html": "ee53e30487b2deb6415368b8f6300d6fbad98efe2d0e434f735e0a6737c87ec0",
       "previews/fields/index.html": "ec83cdd6e332f6e2deb1dffca83e5a47bf40fa326de28b7af0ba12b2b2143be3",
       "previews/index.css": "259ab767a4c23cdc866e823978bd7f2b41a32fe2e79e697013855752c30122bd",
-      "previews/index.html": "f9910600aa9356d83328f9c8a434bf3d4d77a4cdab82fbe4313d67638f27f730",
+      "previews/index.html": "b4e008284143e3ad0fba701f0d6bcc091c249615885da71d1ad6e4c9948cc1d4",
       "previews/info-strip/board.css": "557fce7e206e516bcd1dfc380dd27fd638ed66f3105030e2b6c5aa41632697b5",
+      "previews/info-strip/comparison.html": "3d6581f0fefb536ec60b7acf769714236fd1b2b7ef0fb95f2bd262c4c8ea0319",
       "previews/info-strip/index.html": "09aa322b5367a17429186e97cf6ee2b7b23126a326689104ef971786c4feb087",
       "previews/messages/README.md": "a0f7bf2fa83870654d53ab9aa11cea0760cdf156f203a53c0b0f37b1e359c010",
       "previews/messages/board.css": "965fcaec95489420c21bc82dd0211d5d441e82305bfcd4d1b6ab6ff6617eed96",
@@ -181,8 +184,8 @@
       "previews/surfaces/approved-curves.html": "baf7bd2a8194086cfb02a1050807f966f387c963342310cd4b4ac96727acfd4d",
       "previews/surfaces/board.css": "c31d26ab12f1346b17a347ea529dd70c152207b501e5be672e8570b2d7a9cf78",
       "previews/surfaces/board.js": "2855fbb662bcfe24ddfb45761a628fe32d702bf9f4176dd3669c0784adb5c037",
-      "previews/surfaces/example-usage.html": "05dcd02d3fb2cd8157d71b637addf1f7cfb66b77ae0f28d6a7b8fd9b80987f65",
-      "previews/surfaces/index.html": "5db8bfa1d52de1dbcd7ecb916134208fb290e54d94823960feface040c03f2c7",
+      "previews/surfaces/example-usage.html": "a58d19f16097f021e56c972d0e218191139ab5c60078c8593ea0f79d022d4176",
+      "previews/surfaces/index.html": "3843aed6da52bb7e7827c713642905a1502d616bdf486b43c4c210118bccb5e4",
       "previews/system/index.html": "3931a1c50761275e93758e482929419ec1edaf2ef18a126f9bfb5bc5492d75a8",
       "previews/system/system.css": "0b3a49eaff9599f66b330cb633787ab8fc7c443bb7154526314ec975814f2b0b",
       "previews/system/system.js": "b0fc0d76b4fbae90a9e3baea234a547794a1953d60bb9fb62e4ef4e22e169afa",
@@ -192,9 +195,9 @@
       "tools/identity-check.py": "382871a69915fb8f0982841d6d4d93875cc7f04370976bbba3535633930c212a",
       "tools/preview-server.py": "40c2f9098f4889a7d9ec6d249e950fbb24a80841e7083f9f73cc75b5f91fbf1b"
     },
-    "sha256": "81888c314604617f80e456615100b65ab7b6a31d3942effb70982ae8b058a774"
+    "sha256": "eba5ed784f08eff475071e910dec164135cca50f7fb682b2bb0c561413323f37"
   },
-  "git_head": "647391af31f72fe711998603fa2daaa5e55e9126",
+  "git_head": "c0509735f4000e1009b96b47194b3d21988a2837",
   "working_tree": "file SHA256s identify tested working sources, not a clean commit claim",
   "zoom": "200% computed-font simulation, not native browser/device zoom",
   "touch": "synthetic pointer events, not physical touch",

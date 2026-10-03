@@ -1,6 +1,6 @@
-# B07 سجل الفحص — 2026-10-02T21:20:09
-# commit المصدر: afd9f0a6cf3e3f4930f120df455ec01db967214b
-# بصمة شجرة المصدر: 9805d6cbf5f10b089a59fc012ddbf87405f65720 (الأدلة مولدة من شجرة هذا commit نظيفة)
+# B07 سجل الفحص — 2026-10-03T19:04:55
+# commit المصدر: c0509735f4000e1009b96b47194b3d21988a2837
+# بصمة شجرة المصدر: 0b82678576b1528bc5240ee8c90949e8ab5666fa (الأدلة مولدة من شجرة هذا commit نظيفة)
 
 PASS  A1 لا أخطاء
 PASS  A2 تبويبات: تبديل لوحة مرتبطة فعليًا وأسهم RTL تعمل — أول=True ثانٍ={'bVisible': True, 'aHidden': True, 'sel': 'true'} بعد سهم=false
@@ -21,13 +21,13 @@ PASS  EX مثال مستقل navigation: 0 فشل بلا أخطاء — PASS ا�
 PASS  E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل — {'changed': '56px', 'restored': '48px'}
 PASS  B1 320px بلا تمرير أفقي — {'sw': 320, 'cw': 320}
 PASS  B2 320px تركيب الشريطين: الأفعال لا تغطي التنقل السفلي وآخر عنصر مرئي كاملًا — {'overlap': False, 'lastVisible': True}
-PASS  B3 320px تكبير 200%: الشريطان لا يتصادمان وآخر عنصر قابل للوصول والمحتوى داخل العمود — {'overlap': False, 'lastVisible': True, 'sw': 318, 'cw': 318}
+PASS  B3 320px تكبير 200%: الشريطان لا يتصادمان والمحتوى بلا تمرير أفقي وآخر عنصر قابل للوصول كاملًا — {'overlap': False, 'bottomClears': True, 'fullyVisible': True, 'sw': 318, 'cw': 318}
 PASS  B1 360px بلا تمرير أفقي — {'sw': 360, 'cw': 360}
 PASS  B2 360px تركيب الشريطين: الأفعال لا تغطي التنقل السفلي وآخر عنصر مرئي كاملًا — {'overlap': False, 'lastVisible': True}
-PASS  B3 360px تكبير 200%: الشريطان لا يتصادمان وآخر عنصر قابل للوصول والمحتوى داخل العمود — {'overlap': False, 'lastVisible': True, 'sw': 358, 'cw': 358}
+PASS  B3 360px تكبير 200%: الشريطان لا يتصادمان والمحتوى بلا تمرير أفقي وآخر عنصر قابل للوصول كاملًا — {'overlap': False, 'bottomClears': True, 'fullyVisible': True, 'sw': 358, 'cw': 358}
 PASS  B1 390px بلا تمرير أفقي — {'sw': 390, 'cw': 390}
 PASS  B2 390px تركيب الشريطين: الأفعال لا تغطي التنقل السفلي وآخر عنصر مرئي كاملًا — {'overlap': False, 'lastVisible': True}
-PASS  B3 390px تكبير 200%: الشريطان لا يتصادمان وآخر عنصر قابل للوصول والمحتوى داخل العمود — {'overlap': False, 'lastVisible': True, 'sw': 388, 'cw': 388}
+PASS  B3 390px تكبير 200%: الشريطان لا يتصادمان والمحتوى بلا تمرير أفقي وآخر عنصر قابل للوصول كاملًا — {'overlap': False, 'bottomClears': True, 'fullyVisible': True, 'sw': 388, 'cw': 388}
 PASS  B1 430px بلا تمرير أفقي — {'sw': 430, 'cw': 430}
 PASS  B2 430px تركيب الشريطين: الأفعال لا تغطي التنقل السفلي وآخر عنصر مرئي كاملًا — {'overlap': False, 'lastVisible': True}
 
