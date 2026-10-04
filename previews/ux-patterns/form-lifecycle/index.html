@@ -2,7 +2,8 @@
 <!-- =========================================================
   Micro UI — UX-F01: مثال مستقل لدورة نموذج «تحرير سجل تجريبي»
   الملف: previews/ux-patterns/form-lifecycle/index.html
-  الحالة: DRAFT FOR REVIEW — عينة محاكاة للمراجعة، ليست سياسة أعمال معتمدة.
+  الحالة: DRAFT FOR RE-REVIEW — أُصلحت بنود مراجعة R1 (F01-R1-01..06).
+  عينة محاكاة للمراجعة، ليست سياسة أعمال معتمدة.
 
   الحدود (من docs/ux/F01-ACCEPTANCE.md وprompts/UX-F01-ZAI.md):
   - بلا board.js/board.css: مصادر المكوّن فقط (tokens + buttons + fields
@@ -57,7 +58,7 @@
       عينة مستقلة لدورة نموذج: تعديل محلي، تحقق عند الإرسال، انتظار، نجاح/رفض مؤكد،
       نتيجة مجهولة والتحقق منها، ومغادرة بحوار قرار. هاتف · عربي RTL · أرقام 0–9 ·
       مصادر المكوّن كما هي (IBM Plex · HugeIcons · تحميل B · انحناءات معتمدة).
-      الحالة: DRAFT FOR REVIEW.
+      الحالة: DRAFT FOR RE-REVIEW.
     </p>
   </header>
 
@@ -70,11 +71,11 @@
       <dl class="f01-readlist">
         <div class="f01-readlist__row">
           <dt>الاسم</dt>
-          <dd id="f01-read-name">عينة</dd>
+          <dd id="f01-read-name"></dd>
         </div>
         <div class="f01-readlist__row">
           <dt>الملاحظة</dt>
-          <dd id="f01-read-note">—</dd>
+          <dd id="f01-read-note"></dd>
         </div>
       </dl>
       <div class="f01-actions">
@@ -92,8 +93,10 @@
         <div class="m-field" data-micro-field id="f01-name-field">
           <label class="m-field__label" for="f01-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
           <div class="m-field__control">
-            <input class="m-field__input" id="f01-name" name="name" type="text"
-                   autocomplete="off" required placeholder="مثال: سجل النور" value="عينة">
+            <!-- لا value هنا: القيم الابتدائية من مصدر وحيد CONFIRMED_INIT
+               في example.js تُبث للحقول ومنظر القراءة عند الإقلاع (F01-R1-04) -->
+          <input class="m-field__input" id="f01-name" name="name" type="text"
+                   autocomplete="off" required placeholder="مثال: سجل النور">
           </div>
           <p class="m-field__msg" id="f01-name-msg" data-field-msg hidden></p>
         </div>
@@ -163,6 +166,8 @@
     <p class="f01-sim__note">
       سيناريو «النتيجة التالية» يطبق على الدعوة المقبلة فقط ولا يعدّل طلبًا جارٍ.
       الطلب المعلق لا يُنجَز إلا بأمر صريح من هنا — لا مؤقت واجهة يقرر نجاحًا.
+      «استجابة بمعرف قديم» تُسلّم ردًا بمعرف لا يطابق المحاولة النشطة عبر مسار
+      معالجة النتائج لدى المستهلك دون إنهاء الطلب المعلق — فيُتجاهل ويتاح الإنهاء بعده.
       المحتوى التقني أدناه (عدادات/معرف المحاولة) للفحص، لا لرسائل المستفيد.
     </p>
     <div class="f01-sim__grid">

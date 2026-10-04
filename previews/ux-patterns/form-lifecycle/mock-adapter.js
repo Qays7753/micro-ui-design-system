@@ -10,9 +10,14 @@
      ولرفض معلوم صريح استخدم نتيجة not-saved.
    - السيناريو (setNextSave/setNextCheck) يطبق على الدعوة المقبلة فقط — لا يعدّل
      Promise جارٍ أو نتيجته بعد انطلاقه.
-   - الإنهاء حتمي بأمر صريح (settle/respond) — لا مؤقت واجهة يقرر نتيجة، ولا sleeps.
-   - respond(kind, payload) استجابة حرة بأي attemptId لفحص تجاهل الردود القديمة —
-     تجاهلها مسؤولية المستهلك (example.js) وتسجل في دليل الفحص فقط.
+   - الإنهاء حتمي بأمر صريح (settle) — لا مؤقت واجهة يقرر نتيجة، ولا sleeps.
+   - (F01-R1-05) لا توجد أداة respond هنا: تسوية Promise الطلب المعلق برد
+     بمعرف قديم كانت تستهلك الطلب الحالي وتعلق المحاكاة (لا يمكن حسمه بعدها).
+     رد الفحص بمعرف قديم يُسلّم الآن عبر مسار معالجة النتائج لدى المستهلك
+     (F01Example.deliverTestResponse) — نفس معالجات Promise وفلتر attemptId —
+     دون استهلاك الطلب المعلق؛ فيُتجاهل الرد القديم ويظل الطلب قابلًا للحسم
+     بنتيجته الصحيحة. ما يثبته الفحص: فلتر المستهلك وتجاهله واستمرار الحسم —
+     لا يثبت وصولًا شبكيًا فعليًا لرد محاولة سابقة (حد موثق في README).
    - عدّادا الدعوات وسجل النسخة المرسلة/معرف المحاولة معروضان في قسم SIMULATION
      وفي inspect() للفحص — وليسا رسائل مستفيد.
    لا localStorage ولا شبكة ولا مصادقة ولا بيانات حقيقية.
@@ -100,26 +105,12 @@
       return true;
     }
 
-    function respond(kind, payload) {
-      /* استجابة حرة للفحص: تحمل أي attemptId (قديم مثلًا) — المستهلك يفلتر */
-      var entry = pending[kind];
-      if (!entry || entry.settled) return false;
-      entry.settled = true;
-      pending[kind] = null;
-      entry.result = payload;
-      entry._resolve(payload);
-      emit(Object.assign({ type: 'responded', kind: kind,
-        payloadAttemptId: payload && payload.attemptId }, readout()));
-      return true;
-    }
-
     return {
       save: function (p) { return makeCall('save', p); },
       check: function (p) { return makeCall('check', p); },
       setNextSave: function (o) { if (isOutcome(o)) { next.save = o; emit(Object.assign({ type: 'scenario' }, readout())); } },
       setNextCheck: function (o) { if (isOutcome(o)) { next.check = o; emit(Object.assign({ type: 'scenario' }, readout())); } },
       settle: settle,
-      respond: respond,
       counters: counters,
       calls: calls,
       readout: readout
@@ -163,9 +154,16 @@
     checkSel.addEventListener('change', function () { connector.setNextCheck(checkSel.value); });
     settleSave.addEventListener('click', function () { connector.settle('save'); });
     settleCheck.addEventListener('click', function () { connector.settle('check'); });
-    /* رد بمعرف قديم (0): يفلتره المستهلك — دليل التجاهل في حدث f01:test وسجل الفحص */
-    staleSave.addEventListener('click', function () { connector.respond('save', { attemptId: 0, outcome: 'saved' }); });
-    staleCheck.addEventListener('click', function () { connector.respond('check', { attemptId: 0, outcome: 'saved' }); });
+    /* (F01-R1-05) رد بمعرف قديم: يُسلّم عبر مسار معالجة النتائج لدى المستهلك
+       (نفس معالجات Promise وفلتر attemptId) دون استهلاك الطلب المعلق —
+       فيُتجاهل ويظل الطلب قابلًا للحسم بـ«إنهاء». المحاولات تبدأ من 1
+       فالمعرف 0 لا يطابق أي محاولة نشطة. */
+    staleSave.addEventListener('click', function () {
+      if (window.F01Example) window.F01Example.deliverTestResponse('save', { attemptId: 0, outcome: 'saved' });
+    });
+    staleCheck.addEventListener('click', function () {
+      if (window.F01Example) window.F01Example.deliverTestResponse('check', { attemptId: 0, outcome: 'saved' });
+    });
 
     document.addEventListener('f01:sim', function (e) { render(e.detail); });
     render(connector.readout());

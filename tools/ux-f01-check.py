@@ -2,9 +2,26 @@
 # -*- coding: utf-8 -*-
 """
 Micro UI — فحص قبول UX-F01 (مسارات F01-01..F01-20). من جذر المستودع:
-  python3 tools/ux-f01-check.py
-النتائج: reviews/UX-F01/verification.json + verification.txt + screenshots/
+  python3 tools/ux-f01-check.py                # أدلة الجولة الأصلية في reviews/UX-F01/
+  python3 tools/ux-f01-check.py --round r2     # أدلة جولة الإصلاحات في round-r2/
+النتائج: verification.json + verification.txt + screenshots/ في مجلد الجولة
+(الجولة r2 تحفظ أدلة R1 السابقة دون الكتابة فوقها).
 فشل أي assertion أو تعذر تشغيل البيئة → رمز خروج غير صفري (لا PASS صامت).
+
+تقوية الجولة r2 (بنود F01-R1-01..06):
+- قياس الظهور الفعلي لزر التحقق (computed display + مستطيل + قابلية الالتقاط
+  بالتركيز) لا سمة hidden وحدها، في idle/unknown/checking وبعد الحسم.
+- قياس التركيز بعد حسم التحقق: زر مركّز → هدف موثق (زر الحفظ)؛ تركيز على
+  حقل/زر آخر أثناء الانتظار → لا سرقة. لا BODY.
+- مطابقة رسائل الحالة مع القيم الحالية: clean→edit→invalid، failed→edit،
+  failed→return-to-confirmed، saved→edit، ثم save/retry.
+- عقد المُهيّئ: إعدادان مختلفان (بملاحظة غير فارغة) عبر اعتراض example.js —
+  منظر القراءة والتحرير من مصدر وحيد، dirty=false، حفظ clean بلا calls.
+- الرد القديم: تسليم عبر مسار معالجة النتائج لدى المستهلك دون استهلاك
+  الطلب المعلق، ثم حسم الطلب الصحيح بلا reload ولا save جديد.
+- لقطات أثناء الحالات نفسها (saving/failed/checking)، إصدار المتصفح
+  الفعلي في JSON، وأسماء assertions الفاشلة مُصدّرة، وقياسات الحوار
+  والرسائل والقيم الطويلة عند المقاسات الأربعة وعند 200%.
 
 بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — فحوص DOM ولوحة
 مفاتيح محاكاة ومقاسات ومحاكاة تكبير النص 200% بالآلية المعلنة (مضاعفة
@@ -25,8 +42,20 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "reviews" / "UX-F01"
 PAGE_PATH = "previews/ux-patterns/form-lifecycle/index.html"
+EXAMPLE_JS = ROOT / "previews" / "ux-patterns" / "form-lifecycle" / "example.js"
+
+# جولة الأدلة: --round r2 يكتب في round-r2/ حفاظًا على أدلة الجولات السابقة
+ROUND = None
+_args = sys.argv[1:]
+if "--round" in _args:
+    _i = _args.index("--round")
+    if _i + 1 < len(_args):
+        ROUND = _args[_i + 1]
+if ROUND:
+    OUT = OUT / f"round-{ROUND}"
 
 results, log_lines, rows, js_errors = [], [], [], []
+BROWSER_VERSION = ""
 
 
 def log(m):
@@ -99,6 +128,42 @@ def stale_response(page, kind):
     page.evaluate("(id) => document.getElementById(id).click()", f"f01-sim-stale-{kind}")
 
 
+def vis(page, sel):
+    """الظهور الفعلي (F01-R1-01): computed display + مستطيل + قابلية الالتقاط بالتركيز.
+    لا يكفي !hidden وحدها لإثبات الظهور أو الاختفاء."""
+    return page.evaluate(
+        """(sel) => {
+        const e = document.getElementById(sel);
+        if (!e) return null;
+        const cs = getComputedStyle(e);
+        const r = e.getBoundingClientRect();
+        const before = document.activeElement;
+        e.focus();
+        const took = document.activeElement === e;
+        if (took && before && before.focus) before.focus();
+        return { display: cs.display, visibility: cs.visibility, hiddenAttr: e.hidden,
+                 w: Math.round(r.width), h: Math.round(r.height), focusable: took };
+      }""", sel)
+
+
+def init_source_and_needle():
+    src = EXAMPLE_JS.read_text(encoding="utf-8")
+    needle = "var CONFIRMED_INIT = { name: 'عينة', note: '' };"
+    return src, needle
+
+
+def route_init(page, init_obj, src, needle):
+    """اعتراض example.js بمهيّئ معدّل — اختبار عقد مصدر القيم الواحد (F01-R1-04).
+    المعالج بمعامل واحد (route) حصرًا: Playwright يفحص التوقيع فيمرر Request
+    كوسيط ثانٍ لو وجد معاملًا موضعيًا ثانيًا فيتعارض مع body."""
+    body = src.replace(needle, "var CONFIRMED_INIT = " + json.dumps(init_obj, ensure_ascii=False) + ";")
+
+    def _fulfill(route):
+        route.fulfill(status=200, content_type="text/javascript", body=body)
+
+    page.route("**/example.js", _fulfill)
+
+
 def save_click(page):
     page.click("#f01-save")
 
@@ -127,7 +192,49 @@ def run_f01_01(page):
     A(r, "رسالة لا تغييرات للحفظ", s["message"] and "لا تغييرات للحفظ" in s["message"]["text"], s["message"])
     A(r, "لا نجاح", s["message"]["variant"] != "success", s["message"]["variant"])
     A(r, "القيم لم تُمس", s["current"] == {"name": "عينة", "note": ""}, s["current"])
+    # (F01-R1-01) زر التحقق في idle: لا مساحة مرئية ولا وصول تفاعلي —
+    # قياس فعلي (display/مستطيل/تركيز) لا سمة hidden وحدها
+    v = vis(page, "f01-check")
+    A(r, "زر التحقق display:none في idle", v["display"] == "none", v["display"])
+    A(r, "زر التحقق بلا مستطيل مرئي في idle", v["w"] == 0 and v["h"] == 0, (v["w"], v["h"]))
+    A(r, "زر التحقق لا يلتقطه التركيز في idle", v["focusable"] is False)
     page.screenshot(path=str(OUT / "screenshots" / "f01-01-clean-save.png"))
+    # (F01-R1-03) clean-message → تعديل → إرسال ناقص: لا رسالة مطابقة مع خطأ
+    page.fill("#f01-name", "تعديل بعد الرسالة")
+    s = insp(page)
+    A(r, "رسالة «لا تغييرات» تزالت عند التعديل", s["message"] is None, s["message"])
+    page.fill("#f01-name", "")
+    save_click(page)
+    s = insp(page)
+    A(r, "خطأ الاسم معروض", s["nameError"] is True)
+    A(r, "لا رسالة مطابقة مع الخطأ", s["message"] is None, s["message"])
+    A(r, "التركيز على الاسم", s["focusId"] == "f01-name", s["focusId"])
+    # (F01-R1-04) عقد المُهيّئ: مصدر وحيد للقيم — إعدادان مختلفان بملاحظة غير فارغة
+    src, needle = init_source_and_needle()
+    A(r, "موضع التعديل الموثق موجود في example.js", needle in src)
+    for vi, init in enumerate([
+            {"name": "اسم جديد", "note": "ملاحظة جديدة"},
+            {"name": "سجل B2 — 2026", "note": "ملاحظة ثانية بمسافات"}]):
+        route_init(page, init, src, needle)
+        page.goto(f"{BASE}/{PAGE_PATH}")
+        page.wait_for_load_state("networkidle")
+        page.evaluate("() => document.fonts.ready")
+        page.wait_for_function("() => window.F01Example && window.F01Example.inspect().op === 'idle'")
+        read_txt = page.evaluate("() => [document.getElementById('f01-read-name').textContent,"
+                                 "document.getElementById('f01-read-note').textContent]")
+        A(r, f"إعداد {vi + 1}: منظر القراءة من المؤكد من أول فتح", read_txt == [init["name"], init["note"]], read_txt)
+        s = insp(page)
+        A(r, f"إعداد {vi + 1}: dirty=false عند الفتح", s["dirty"] is False, s["dirty"])
+        A(r, f"إعداد {vi + 1}: الحقول تطابق المؤكد", s["current"] == init, s["current"])
+        enter_edit(page)
+        s = insp(page)
+        A(r, f"إعداد {vi + 1}: التحرير يبدأ مطابقًا وdirty=false", s["current"] == init and s["dirty"] is False, s["current"])
+        save_click(page)
+        s = insp(page)
+        A(r, f"إعداد {vi + 1}: حفظ clean بلا calls",
+          s["saveCalls"] == 0 and s["message"] and "لا تغييرات" in s["message"]["text"],
+          (s["saveCalls"], s["message"]))
+        page.unroute("**/example.js")
 
 
 def run_f01_02(page):
@@ -227,11 +334,12 @@ def run_f01_05(page):
     A(r, "الحقول بقيت readonly", s["readonly"] is True)
     A(r, "لا فقد للتركيز", s["focusId"] == "f01-save", s["focusId"])
     A(r, "نسخة الإرسال ثابتة", s["sending"]["name"] == "تكرار أثناء الانتظار", s["sending"])
+    # اللقطة أثناء الحالة نفسها (F01-R1-06): saving فعليًا لا بعد حسمها
+    page.screenshot(path=str(OUT / "screenshots" / "f01-05-saving.png"))
     settle(page, "save")
     wait_op(page, "saved")
     s = insp(page)
     A(r, "النتيجة تصل بعد الانتظار", s["op"] == "saved" and s["saveCalls"] == 1)
-    page.screenshot(path=str(OUT / "screenshots" / "f01-05-saving.png"))
 
 
 def run_f01_06(page):
@@ -250,7 +358,22 @@ def run_f01_06(page):
     A(r, "رسالة رفض باقية ومسار عمل", s["message"] and s["message"]["variant"] == "error"
       and "المحاولة" in s["message"]["text"] or (s["message"] and "التصحيح" in s["message"]["text"]), s["message"])
     A(r, "التحرير متاح بعد الرفض", s["readonly"] is False)
+    # اللقطة أثناء الحالة نفسها (F01-R1-06): failed فعليًا
+    page.screenshot(path=str(OUT / "screenshots" / "f01-06-failed.png"))
+    # (F01-R1-03) failed → العودة إلى المؤكد: لا ادعاء تعديلات غير محفوظة
+    page.fill("#f01-name", "عينة")
+    s = insp(page)
+    A(r, "العودة للمؤكد: رسالة الرفض تزالت", s["message"] is None, s["message"])
+    A(r, "العودة للمؤكد: dirty=false", s["dirty"] is False, s["dirty"])
+    A(r, "failed يبقى سجل المحاولة (محور مستقل بلا ادعاء على القيم)", s["op"] == "failed", s["op"])
+    save_click(page)
+    s = insp(page)
+    A(r, "حفظ clean بعد العودة: بلا calls جديدة ورسالة دقيقة",
+      s["saveCalls"] == 1 and s["message"] and "لا تغييرات" in s["message"]["text"],
+      (s["saveCalls"], s["message"]))
     page.fill("#f01-name", "قيمة مصححة")
+    s = insp(page)
+    A(r, "رسالة «لا تغييرات» تزالت عند التعديل", s["message"] is None, s["message"])
     save_click(page)
     wait_op(page, "saving")
     s = insp(page)
@@ -262,7 +385,7 @@ def run_f01_06(page):
     A(r, "النجاح يحدث المؤكد", s["confirmed"] == {"name": "قيمة مصححة", "note": ""}, s["confirmed"])
     A(r, "clean بعد النجاح", s["dirty"] is False)
     A(r, "رسالة نجاح", s["message"]["variant"] == "success")
-    page.screenshot(path=str(OUT / "screenshots" / "f01-06-failed-retry.png"))
+    page.screenshot(path=str(OUT / "screenshots" / "f01-06-retry-saved.png"))
 
 
 def run_f01_07(page):
@@ -297,6 +420,10 @@ def run_f01_08(page):
     A(r, "لا ادعاء رفض أو نجاح", s["message"] and s["message"]["variant"] == "warning", s["message"])
     A(r, "الحقول readonly وليست معطلة", s["readonly"] is True and s["disabled"] is False)
     A(r, "زر التحقق متاح", s["checkVisible"] is True)
+    # الظهور الفعلي لا السمة وحدها (F01-R1-01)
+    v = vis(page, "f01-check")
+    A(r, "زر التحقق مرئي فعليًا في unknown", v["display"] != "none" and v["w"] > 0 and v["h"] > 0,
+      (v["display"], v["w"], v["h"]))
     # محاولة حفظ في unknown: ممنوعة سلوكيًا بلا دعوة جديدة
     page.evaluate("() => document.getElementById('f01-form').requestSubmit()")
     save_click(page)
@@ -333,14 +460,36 @@ def run_f01_09(page):
     A(r, "checkCalls=1 رغم التكرار", s["checkCalls"] == 1, s["checkCalls"])
     A(r, "saveCalls ثابت", s["saveCalls"] == save_calls_before, (s["saveCalls"], save_calls_before))
     A(r, "زر التحقق busy فقط", s["checkBusy"] is True and s["saveBusy"] is False)
+    # اللقطة أثناء الحالة نفسها (F01-R1-06): checking فعليًا
+    page.screenshot(path=str(OUT / "screenshots" / "f01-09-checking.png"))
+    # (F01-R1-02) الحالة أ: زر التحقق مركّز عند الحسم → هدف موثق (زر الحفظ) لا BODY
+    A(r, "التركيز على زر التحقق قبل الحسم", s["focusId"] == "f01-check", s["focusId"])
     settle(page, "check")
     wait_op(page, "saved")
     s = insp(page)
     A(r, "saved بعد التحقق", s["op"] == "saved")
+    A(r, "التركيز انتقل لزر الحفظ (لا BODY)", s["focusId"] == "f01-save", s["focusId"])
     A(r, "المؤكد من نسخة إرسال المحاولة نفسها",
       s["confirmed"] == {"name": "غير محسومة", "note": ""}, s["confirmed"])
     A(r, "clean بعد التحقق", s["dirty"] is False)
     A(r, "زر التحقق اختفى بعد الحسم", s["checkVisible"] is False)
+    v = vis(page, "f01-check")
+    A(r, "زر التحقق display:none وبلا مستطيل بعد الحسم", v["display"] == "none" and v["w"] == 0,
+      (v["display"], v["w"]))
+    # (F01-R1-02) الحالة ب: التركيز على حقل آخر أثناء الانتظار → لا سرقة تركيز
+    page.fill("#f01-name", "تركيز على حقل")
+    arm(page, "save", "unknown")
+    save_click(page)
+    settle_wait(page, "save", "unknown")
+    page.click("#f01-check")
+    wait_op(page, "checking")
+    page.focus("#f01-note")
+    s0 = insp(page)
+    A(r, "التركيز على حقل الملاحظة أثناء الانتظار", s0["focusId"] == "f01-note", s0["focusId"])
+    settle(page, "check")
+    wait_op(page, "saved")
+    s = insp(page)
+    A(r, "لا سرقة تركيز: بقي على حقل الملاحظة", s["focusId"] == "f01-note", s["focusId"])
 
 
 def run_f01_10(page):
@@ -354,8 +503,15 @@ def run_f01_10(page):
     settle_wait(page, "save", "unknown")
     arm(page, "check", "not-saved")
     page.click("#f01-check")
-    settle_wait(page, "check", "failed")
+    wait_op(page, "checking")
+    # (F01-R1-02) التركيز على زر آخر أثناء الانتظار → لا سرقة ولا BODY
+    page.focus("#f01-back")
+    s0 = insp(page)
+    A(r, "التركيز على زر رجوع أثناء الانتظار", s0["focusId"] == "f01-back", s0["focusId"])
+    settle(page, "check")
+    wait_op(page, "failed")
     s = insp(page)
+    A(r, "لا سرقة تركيز: بقي على زر رجوع", s["focusId"] == "f01-back", s["focusId"])
     A(r, "failed بعد not-saved من التحقق", s["op"] == "failed")
     A(r, "القيم الجارية باقية", s["current"]["name"] == "نتيجة لاحقة", s["current"]["name"])
     A(r, "لا نجاح", s["message"]["variant"] == "error", s["message"])
@@ -418,9 +574,13 @@ def run_f01_12(page):
 
 
 def run_f01_13(page):
-    """رد قديم من موصل اختبار: حالة وقيم ورسالة المحاولة الحالية لا تتغير."""
-    r = row("F01-13", "رد قديم من موصل اختبار (حفظ ثم تحقق)",
-            "الرد بمعرف قديم يُتجاهل: الحالة والقيم والرسالة والتركيز لا تتغير")
+    """رد بمعرف قديم عبر مسار معالجة المستهلك دون استهلاك الطلب المعلق (F01-R1-05):
+    تجاهل كامل ثم حسم الطلب الصحيح بنتيجته بلا إعادة تحميل ولا حفظ جديد."""
+    r = row("F01-13", "رد بمعرف قديم (حفظ ثم تحقق) مع استمرار المحاولة على الصفحة نفسها",
+            "الرد بمعرف قديم يُسلّم لمسار معالجة النتائج فيُتجاهل: الحالة والقيم والرسالة "
+            "والتركيز لا تتغير؛ الطلب المعلق يظل قابلًا للحسم وينتهي بنتيجته بلا reload ولا "
+            "save جديد. ما يثبته: فلتر المستهلك وتجاهله واستمرار الحسم — لا وصول شبكي فعلي "
+            "لرد محاولة سابقة (حد موثق في README)")
     fresh(page)
     page.fill("#f01-name", "رد قديم")
     save_click(page)
@@ -435,8 +595,18 @@ def run_f01_13(page):
     A(r, "التركيز لم يتغير", s["focusId"] == s0["focusId"], s["focusId"])
     A(r, "المؤكد لم يتغير", s["confirmed"] == s0["confirmed"])
     A(r, "تجاهل مسجل للفحص", s["staleIgnored"] == 1, s["staleIgnored"])
-    # الوعد الواحد استُهلك بالرد القديم (عقد الموصل) — نسخة نظيفة لفرع التحقق
-    fresh(page)
+    A(r, "الطلب المعلق لم يُستهلك: زر الإنهاء ما زال متاحًا",
+      page.locator("#f01-sim-settle-save").is_disabled() is False)
+    # استمرار التجربة: حسم الطلب الصحيح بلا إعادة تحميل ولا حفظ جديد
+    settle(page, "save")
+    wait_op(page, "saved")
+    s = insp(page)
+    A(r, "الطلب الصحيح حُسم بلا reload ولا save جديد",
+      s["op"] == "saved" and s["saveCalls"] == 1 and s["attemptId"] == 1,
+      (s["op"], s["saveCalls"], s["attemptId"]))
+    A(r, "المؤكد حدث من المحاولة نفسها", s["confirmed"] == {"name": "رد قديم", "note": ""},
+      s["confirmed"])
+    # فرع التحقق على الصفحة نفسها (بلا إعادة تحميل)
     page.fill("#f01-name", "رد قديم في التحقق")
     arm(page, "save", "unknown")
     save_click(page)
@@ -450,7 +620,13 @@ def run_f01_13(page):
       (s["op"], s["checkCalls"]))
     A(r, "الرسالة لم تتغير في فرع التحقق", s["message"] == s0["message"])
     A(r, "التركيز لم يتغير في فرع التحقق", s["focusId"] == s0["focusId"], s["focusId"])
-    A(r, "تجاهل فرع التحقق مسجل (صفحة نظيفة)", s["staleIgnored"] == 1, s["staleIgnored"])
+    A(r, "تجاهل فرع التحقق مسجل", s["staleIgnored"] == 2, s["staleIgnored"])
+    A(r, "زر إنهاء التحقق ما زال متاحًا", page.locator("#f01-sim-settle-check").is_disabled() is False)
+    settle(page, "check")
+    wait_op(page, "saved")
+    s = insp(page)
+    A(r, "تحقق المحاولة نفسها حُسم بعد التجاهل", s["op"] == "saved" and s["checkCalls"] == 1,
+      (s["op"], s["checkCalls"]))
 
 def run_f01_14(page):
     """رجوع clean ثم إعادة تعديل: لا حوار؛ قراءة المؤكد؛ عنوان القراءة ثم الاسم أهداف التركيز."""
@@ -588,7 +764,7 @@ def run_f01_18(page):
     settle_wait(page, "save", "failed")
     s = insp(page)
     A(r, "رسالة رفض باقية قبل الحوار", s["message"] and s["message"]["variant"] == "error")
-    page.fill("#f01-note", "حوار فوق رسالة")
+    # لا إدخال هنا (F01-R1-03): أي تعديل يزيل رسالة الرفض — dirty قائمة أصلًا من الاسم
     page.click("#f01-back")
     wait_dialog(page, True)
     seq = []
@@ -649,6 +825,29 @@ def run_f01_19(page):
         A(r, f"حدود حروف التلميح داخل الحاوية عند {w}", geo["hint"] is True)
         A(r, f"لا تداخل أهداف الأزرار عند {w}", geo["btnsOverlap"] is False)
         A(r, f"هدف الزر ≥ الحد الأدنى عند {w}", geo["btnH"] >= 44, geo["btnH"])
+        # (F01-R1-06) ملاءمة حوار المغادرة داخل إطار العرض عند كل مقاس
+        # (قياسات الترتيب بعد إزالة الزر الزائد: الزر محدث الآن في idle)
+        page.fill("#f01-note", "حوار للقياس")
+        page.click("#f01-back")
+        wait_dialog(page, True)
+        dg = page.evaluate("""() => {
+          const e = document.getElementById('f01-leave-dialog');
+          const r = e.getBoundingClientRect();
+          const btns = [...e.querySelectorAll('button')].map(b => { const z = b.getBoundingClientRect();
+            return { top: z.top, bottom: z.bottom, left: z.left, right: z.right }; });
+          return { left: r.left, right: r.right, top: r.top, bottom: r.bottom,
+                   iw: window.innerWidth, ih: window.innerHeight,
+                   clip: e.scrollHeight - e.clientHeight,
+                   btnsInside: btns.every(b => b.left >= -1 && b.right <= window.innerWidth + 1
+                     && b.top >= -1 && b.bottom <= window.innerHeight + 1) };
+        }""")
+        A(r, f"الحوار داخل إطار العرض عند {w}", dg["left"] >= -1 and dg["right"] <= dg["iw"] + 1
+          and dg["top"] >= -1 and dg["bottom"] <= dg["ih"] + 1,
+          (dg["left"], dg["right"], dg["top"], dg["bottom"], dg["iw"], dg["ih"]))
+        A(r, f"لا قص عمودي في الحوار عند {w}", dg["clip"] <= 0, dg["clip"])
+        A(r, f"أزرار الحوار داخل الإطار عند {w}", dg["btnsInside"] is True)
+        page.keyboard.press("Escape")
+        wait_dialog(page, False)
     # تكبير النص 200% — الآلية المعلنة بالمكتبة (ui-release-check): مضاعفة
     # أحجام الخط المحسوبة للعناصر الفعلية. ليست اختبار native zoom/جهاز.
     page.set_viewport_size({"width": 390, "height": 844})
@@ -688,6 +887,92 @@ def run_f01_19(page):
     s = insp(page)
     A(r, "الوظيفة محفوظة عند 200% (رسالة clean)", s["message"] and "لا تغييرات للحفظ" in s["message"]["text"])
     page.screenshot(path=str(OUT / "screenshots" / "f01-19-zoom200-390.png"))
+
+    # (F01-R1-06) رسالة حالة عند 200%: حدود النص داخل الحاوية ولا خروج أفقي
+    page.fill("#f01-name", "رسالة عند التكبير")
+    arm(page, "save", "not-saved")
+    save_click(page)
+    settle_wait(page, "save", "failed")
+    msg_fit = page.evaluate("""() => {
+      const R = document.getElementById('f01-edit').getBoundingClientRect();
+      const m = document.getElementById('f01-op-note');
+      const range = document.createRange();
+      range.selectNodeContents(m.querySelector('.m-note__text'));
+      const rects = [...range.getClientRects()].filter(x => x.width > 0 && x.height > 0);
+      return { inside: rects.every(x => x.left >= R.left - 1 && x.right <= R.right + 1),
+               overflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
+               n: rects.length };
+    }""")
+    A(r, "نص رسالة النتيجة داخل الحاوية عند 200%",
+      msg_fit["inside"] is True and msg_fit["n"] > 0, msg_fit)
+    A(r, "لا خروج أفقي مع الرسالة عند 200%", msg_fit["overflow"] is True)
+    page.screenshot(path=str(OUT / "screenshots" / "f01-19-zoom200-message-390.png"))
+
+    # (F01-R1-06) حوار المغادرة عند 200% على 390 و320 (الأضيق)
+    for zw in (390, 320):
+        page.set_viewport_size({"width": zw, "height": 844})
+        fresh(page)
+        page.fill("#f01-note", "حوار مكبّر")
+        page.click("#f01-back")
+        wait_dialog(page, True)
+        page.evaluate("""() => {
+          const sizes = [...document.querySelectorAll('body, body *')]
+            .map(e => [e, parseFloat(getComputedStyle(e).fontSize)]);
+          sizes.forEach(([e, s]) => e.style.fontSize = s * 2 + 'px');
+        }""")
+        dg = page.evaluate("""() => {
+          const e = document.getElementById('f01-leave-dialog');
+          const r = e.getBoundingClientRect();
+          const btns = [...e.querySelectorAll('button')].map(b => { const z = b.getBoundingClientRect();
+            return { top: z.top, bottom: z.bottom, left: z.left, right: z.right }; });
+          return { left: r.left, right: r.right, top: r.top, bottom: r.bottom,
+                   iw: window.innerWidth, ih: window.innerHeight,
+                   clip: e.scrollHeight - e.clientHeight,
+                   btnsInside: btns.every(b => b.left >= -1 && b.right <= window.innerWidth + 1
+                     && b.top >= -1 && b.bottom <= window.innerHeight + 1) };
+        }""")
+        A(r, f"الحوار داخل إطار العرض عند 200% و{zw}", dg["left"] >= -1
+          and dg["right"] <= dg["iw"] + 1 and dg["top"] >= -1 and dg["bottom"] <= dg["ih"] + 1,
+          (dg["left"], dg["right"], dg["top"], dg["bottom"], dg["iw"], dg["ih"]))
+        A(r, f"لا قص عمودي وأزرار داخل الإطار عند 200% و{zw}",
+          dg["clip"] <= 0 and dg["btnsInside"] is True, (dg["clip"], dg["btnsInside"]))
+        page.screenshot(path=str(OUT / "screenshots" / f"f01-19-zoom200-dialog-{zw}.png"))
+        page.keyboard.press("Escape")
+        wait_dialog(page, False)
+
+    # (F01-R1-06) قيمة مقروءة طويلة مختلطة في منظر القراءة عند 200%
+    page.set_viewport_size({"width": 390, "height": 844})
+    fresh(page)
+    LONG_VAL = "سجل تجريبي 2026 — Alpha Beta 123 تقرير الموردين والعمليات Gamma 456 وسطر إضافي للالتفاف"
+    page.fill("#f01-name", LONG_VAL)
+    save_click(page)
+    settle(page, "save")
+    wait_op(page, "saved")
+    page.click("#f01-back")
+    page.wait_for_function("() => window.F01Example.inspect().views.read === true")
+    page.evaluate("""() => {
+      const sizes = [...document.querySelectorAll('body, body *')]
+        .map(e => [e, parseFloat(getComputedStyle(e).fontSize)]);
+      sizes.forEach(([e, s]) => e.style.fontSize = s * 2 + 'px');
+    }""")
+    read_fit = page.evaluate("""() => {
+      const R = document.getElementById('f01-read').getBoundingClientRect();
+      const dd = document.getElementById('f01-read-name');
+      const range = document.createRange();
+      range.selectNodeContents(dd);
+      const rects = [...range.getClientRects()].filter(x => x.width > 0 && x.height > 0);
+      return { inside: rects.every(x => x.left >= R.left - 1 && x.right <= R.right + 1),
+               wrapped: dd.scrollWidth <= dd.clientWidth + 1,
+               n: rects.length,
+               overflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
+               text: dd.textContent };
+    }""")
+    A(r, "القيمة الطويلة مقروءة كاملة في القراءة", read_fit["text"] == LONG_VAL)
+    A(r, "القيمة الطويلة تلتف ولا تقص عند 200%",
+      read_fit["inside"] is True and read_fit["wrapped"] is True and read_fit["n"] > 0, read_fit)
+    A(r, "لا خروج أفقي في القراءة عند 200%", read_fit["overflow"] is True)
+    page.screenshot(path=str(OUT / "screenshots" / "f01-19-zoom200-read-390.png"))
+
     page.set_viewport_size({"width": 320, "height": 844})
     fresh(page)
     page.screenshot(path=str(OUT / "screenshots" / "f01-19-320.png"))
@@ -768,6 +1053,9 @@ def main():
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
+        global BROWSER_VERSION
+        BROWSER_VERSION = browser.version
+        log(f"# إصدار المتصفح الفعلي: {BROWSER_VERSION}")
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         page = ctx.new_page()
         page.on("pageerror", lambda e: js_errors.append(str(e)))
@@ -804,6 +1092,7 @@ def main():
 
     engine = {
         "browser": "Chromium (headless)",
+        "browser_version": BROWSER_VERSION,
         "driver": "Playwright (Python sync API)",
         "base_url": BASE,
         "page": PAGE_PATH,
@@ -818,18 +1107,21 @@ def main():
     verification = {
         "meta": {
             "title": "UX-F01 — مصفوفة قبول دورة النموذج (تحرير سجل تجريبي)",
-            "status": "DRAFT FOR REVIEW",
+            "status": "DRAFT FOR RE-REVIEW",
+            "round": ROUND or "default",
             "date": datetime.now().isoformat(timespec="seconds"),
             "source_commit": commit,
             "source_tree": tree,
             "engine": engine,
-            "command": "python3 tools/ux-f01-check.py",
+            "command": "python3 tools/ux-f01-check.py" + (f" --round {ROUND}" if ROUND else ""),
             "zoom_mechanism": zoom_note,
             "reduced_motion_mechanism": "Playwright reduced_motion='reduce' (تفضيل حقيقي مُحاكى على مستوى السياق)",
             "announce_channel_decision": "رسالة B06 ثابتة واحدة role=status (#f01-op-note) بلا MicroMessages.announce لنصها ولا منطقة حية ثانية",
+            "sim_neutrality": "تسليح/إنهاء السيناريو عبر evaluate (click/change برمجي) — محايد للتركيز كي لا يخفي سلوك التركيز الفعلي (F01-R1-02)",
+            "stale_delivery_semantics": "F01-13 يسلّم ردًا بمعرف قديم عبر مسار معالجة النتائج لدى المستهلك (F01Example.deliverTestResponse) دون استهلاك Promise المعلق؛ يثبت فلتر المستهلك وتجاهله واستمرار حسم الطلب الصحيح بلا reload ولا save جديد — لا يثبت وصولًا شبكيًا فعليًا لرد محاولة سابقة (حد موثق)",
             "js_errors": js_errors,
         },
-        "rows": [{k: r[k] for k in ("id", "path", "expected", "measured", "status")} for r in rows],
+        "rows": [{k: r[k] for k in ("id", "path", "expected", "measured", "failed", "status")} for r in rows],
         "not_run": [
             {"item": "WebKit (browser engine آخر)", "reason": "غير منفذ في بيئة التنفيذ — لم يُنفذ فعليًا"},
             {"item": "أجهزة Android/iPhone حقيقية + TalkBack/VoiceOver", "reason": "لا جهاز أو أداة قارئ شاشة في البيئة — لم تُنفذ"},

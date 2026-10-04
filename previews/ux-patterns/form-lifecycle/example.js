@@ -1,11 +1,12 @@
 /* =========================================================
    Micro UI — UX-F01: سلوك المستهلك لنموذج «تحرير سجل تجريبي»
    الملف: previews/ux-patterns/form-lifecycle/example.js
-   الحالة: DRAFT FOR REVIEW — سلوك مستهلك للعينة، ليس framework عام
-   ولا منطق أعمال، ولا يعدّل أي مصدر UI.
+   الحالة: DRAFT FOR RE-REVIEW — أُصلحت بنود مراجعة R1 (F01-R1-01..06).
+   سلوك مستهلك للعينة، ليس framework عام ولا منطق أعمال،
+   ولا يعدّل أي مصدر UI.
 
    مصدر الحقيقة (docs/ux/F01-ACCEPTANCE.md §2):
-   - confirmed: النسخة المؤكدة (تبدأ {name:'عينة', note:''}).
+   - confirmed: النسخة المؤكدة (تبدأ من CONFIRMED_INIT أدناه).
    - sending: نسخة إرسال ثابتة عند بدء الحفظ (خام بلا trim).
    - attemptId: معرف محاولة متزايد لكل حفظ جديد.
    - op: idle | saving | failed | unknown | checking | saved
@@ -23,13 +24,30 @@
    - المغادرة: clean بلا حوار؛ dirty في idle/failed بحوار B07 (كل
      إغلاق غير التخلي = بقاء)؛ saving/unknown/checking محجوبة برسالة
      محلية موجزة.
-   - الردود القديمة (attemptId لا يطابق المحاولة النشطة) تُتجاهل تمامًا
-     وتسجل في حدث f01:test لدليل الفحص فقط.
+   - (R1-01) زر التحقق مخفي فعليًا بقاعدة عينة في example.css
+     (#f01-check[hidden]) لأن قاعدة عرض B01 تغلب إخفاء المتصفح؛
+     يظهر فقط في unknown/checking.
+   - (R1-02) عند حسم التحقق إن كان زر التحقق مركّزًا يُنقل التركيز
+     قبل إخفائه إلى زر الحفظ (هدف مرئي ثابت موثق)؛ وإن نقل المستخدم
+     التركيز أثناء الانتظار فلا يُسرق.
+   - (R1-03) عند تغيّر القيم تزال رسائل العملية السابقة التي انتهى
+     سببها (نجاح/لا تغييرات/رفض) — لا رسالة تصف قيمًا لم تعد الحالية؛
+     op في failed يبقى سجل المحاولة دون عرضها كرفض للقيم الحالية.
+   - (R1-04) تهيئة من مصدر واحد: CONFIRMED_INIT يُبث إلى حقول التحرير
+     ومنظر القراءة عند الإقلاع (applyInitialValues)؛ لا قيم مكررة
+     في index.html، ونسخ current/confirmed/sending مستقلة بعدها.
+   - (R1-05) رد الفحص بمعرف قديم يُسلّم عبر مسار معالجة النتائج لدى
+     المستهلك (deliverTestResponse) دون استهلاك Promise الطلب المعلق؛
+     الطلب يظل قابلًا للحسم بنتيجته الصحيحة بعد تجاهل الرد القديم.
    ========================================================= */
 
 (function () {
   'use strict';
 
+  /* القيم الابتدائية: مصدر تعديل وحيد (F01-R1-04) — عدّل هذا الثابت فقط،
+     وتُبث قيمه إلى حقول التحرير ومنظر القراءة عند الإقلاع عبر
+     applyInitialValues(). لا قيم مكررة في index.html. نسخ current/
+     confirmed/sending تبقى مستقلة بعد الإقلاع. */
   var CONFIRMED_INIT = { name: 'عينة', note: '' };
 
   /* ---------- عناصر العينة ---------- */
@@ -71,6 +89,23 @@
   /* الموصل التجريبي — قابل للاستبدال (واجهة mock-adapter.js) */
   var connector = window.F01Sim.createConnector();
   window.F01Sim.bindSimulationPanel(document.getElementById('f01-sim'), connector);
+
+  /* ---------- التهيئة من المصدر الواحد (F01-R1-04) ---------- */
+  function applyInitialValues() {
+    el.name.value = CONFIRMED_INIT.name;
+    el.note.value = CONFIRMED_INIT.note;
+    el.readName.textContent = CONFIRMED_INIT.name;
+    el.readNote.textContent = CONFIRMED_INIT.note === '' ? '—' : CONFIRMED_INIT.note;
+  }
+  applyInitialValues();
+
+  /* قياس الظهور الفعلي: لا الاعتماد على سمة hidden وحدها (F01-R1-01) */
+  function isReallyVisible(e) {
+    var cs = window.getComputedStyle(e);
+    if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+    var r = e.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
 
   /* ---------- أدوات مساعدة ---------- */
   function currentValues() {
@@ -144,17 +179,24 @@
     el.dirtyHint.hidden = !isDirty();
   }
 
-  /* ---------- الإدخال: محور dirty + تقييم الخطأ المعروف ---------- */
+  /* ---------- الإدخال: محور dirty + تقييم الخطأ المعروف + رسائل انتهى سببها ---------- */
   function syncAfterInput() {
     renderDirtyHint();
     /* UX-09: بعد معرفة خطأ محدد أعد تقييمه عند التصحيح */
     if (nameErrorActive() && nameValid(el.name.value)) setNameError(false);
-    /* رسالة النجاح القديمة لا تصف الإدخال الجديد: تزال وتصبح العملية idle */
+    /* (F01-R1-03) رسالة عملية سابقة انتهى سببها بتغير القيم تزال —
+       لا تبقى رسالة تصف قيمًا لم تعد الحالية:
+       - saved: النجاح يخص القيم السابقة → idle بقاعدة البطاقة.
+       - failed: رسالة الرفض وصف القيم المرفوضة وقد تغيرت → تزال؛
+         op يبقي failed كسجل للمحاولة (محور مستقل) دون عرضها
+         كرفض للقيم الحالية.
+       - idle: رسالة «لا تغييرات» وصفت مطابقة انتهت → تزال. */
     if (state.op === 'saved') {
       state.op = 'idle';
       clearOpMessage();
+    } else if (state.op === 'failed' || state.op === 'idle') {
+      clearOpMessage();
     }
-    /* failed تبقى: «لم تُحفظ» تصف حالة القيم الحالية أيضًا حتى محاولة جديدة */
   }
   el.name.addEventListener('input', syncAfterInput);
   el.note.addEventListener('input', syncAfterInput);
@@ -269,6 +311,15 @@
       });
   });
 
+  /* (F01-R1-02) إخفاء زر تحقق مركّز يُسقط التركيز إلى BODY. إن كان
+     التركيز على الزر عند حسم النتيجة ننقله قبل الإخفاء إلى هدف مرئي
+     ثابت موثق داخل النموذج: زر الحفظ (أقرب هدف تفاعلي في صف الأزرار
+     نفسه، متاح في saved وfailed). وإن نقل المستخدم التركيز أثناء
+     الانتظار إلى عنصر آخر فلا نسرقه. */
+  function refocusIfCheckFocused() {
+    if (document.activeElement === el.checkBtn) el.saveBtn.focus();
+  }
+
   function handleCheckResult(res) {
     if (!belongsToActiveAttempt(res)) {
       state.staleIgnored += 1;
@@ -278,9 +329,11 @@
     window.MicroButtons.setLoading(el.checkBtn, false);
     if (res.outcome === 'saved') {
       /* النتيجة تُطبق على نسخة إرسال المحاولة نفسها */
+      refocusIfCheckFocused();
       applySaved('تأكدت النتيجة: تم حفظ التعديلات.');
       el.checkBtn.hidden = true;
     } else if (res.outcome === 'not-saved') {
+      refocusIfCheckFocused();
       applyFailed('تأكدت النتيجة: لم تُحفظ التعديلات — القيم باقية ويمكنك التصحيح والمحاولة مجددًا.');
       el.checkBtn.hidden = true;
     } else {
@@ -355,9 +408,21 @@
     el.name.focus(); /* سياسة التركيز: إعادة تعديل → الاسم */
   });
 
+  /* ---------- تسليم رد فحص بمعرف قديم (F01-R1-05) ----------
+     يستدعي معالِج النتائج نفسه لدى المستهلك (الذي تستدعيه حلول Promise)
+     بذات فلتر attemptId — دون استهلاك Promise الطلب المعلق، فيظل
+     الطلب قادرًا على الحسم بنتيجته الصحيحة بعد تجاهل الرد القديم.
+     للفحص عبر لوحة SIMULATION فقط. ما يثبته: فلتر المستهلك وتجاهله —
+     لا يثبت وصولًا شبكيًا فعليًا لرد محاولة سابقة (حد موثق في README). */
+  function deliverTestResponse(kind, payload) {
+    if (kind === 'save') handleSaveResult(payload);
+    else if (kind === 'check') handleCheckResult(payload);
+  }
+
   /* ---------- واجهة فحص للقراءة فقط (ليست أزرار debug في الواجهة) ---------- */
   window.F01Example = {
-    version: 'F01-R1',
+    version: 'F01-R2',
+    deliverTestResponse: deliverTestResponse,
     inspect: function () {
       var active = document.activeElement;
       return {
@@ -375,7 +440,17 @@
         disabled: el.name.disabled || el.note.disabled,
         saveBusy: el.saveBtn.getAttribute('aria-busy') === 'true',
         checkBusy: el.checkBtn.getAttribute('aria-busy') === 'true',
-        checkVisible: !el.checkBtn.hidden,
+        /* الظهور الفعلي (F01-R1-01): display/مستطيل وليس سمة hidden وحدها */
+        checkVisible: isReallyVisible(el.checkBtn),
+        checkBox: (function () {
+          var r = el.checkBtn.getBoundingClientRect();
+          return {
+            display: window.getComputedStyle(el.checkBtn).display,
+            hiddenAttr: el.checkBtn.hidden,
+            w: Math.round(r.width),
+            h: Math.round(r.height)
+          };
+        })(),
         message: el.opNote.hidden ? null : {
           variant: el.opNote.getAttribute('data-op-state'),
           title: el.opTitle.textContent,

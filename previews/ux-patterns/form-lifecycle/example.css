@@ -137,6 +137,13 @@ body {
 #f01-op-note[hidden] { display: none; }
 #f01-op-note { margin: 0; }
 
+/* ---- زر التحقق: إخفاء فعلي محصور بالعينة (F01-R1-01) ----
+   قاعدة عرض B01 (display:inline-flex في .m-btn) تغلب إخفاء المتصفح
+   الافتراضي للسمة hidden — فطبّق المستهلك الإخفاء صراحة هنا دون تعديل
+   core، كما فُعل للمنظر (.f01-view[hidden]) والرسالة (#f01-op-note[hidden]).
+   الزر لا يظهر إلا في unknown/checking حيث التحقق مناسب. */
+#f01-check[hidden] { display: none; }
+
 .f01-actions {
   display: flex;
   flex-wrap: wrap;
