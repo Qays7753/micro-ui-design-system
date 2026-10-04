@@ -1,3 +1,7 @@
+# أحدث عمل — UX-F01 نُفذ (DRAFT FOR REVIEW) /2026-10-04
+
+F01: نُفذ كعينة مستقلة على main — [المثال](../previews/ux-patterns/form-lifecycle/README.md) (عرض + `example.js` + `mock-adapter.js` + README) وأداة الفحص [tools/ux-f01-check.py](../tools/ux-f01-check.py) والأدلة [reviews/UX-F01](../reviews/UX-F01/review.md). مصفوفة F01-01..F01-20: **20/20 PASS** من checkout نظيف لـcommit مصدر مثبت (Playwright + Chromium headless). NOT RUN فعليًا: WebKit، الأجهزة الحقيقية + TalkBack/VoiceOver، native zoom، اللمس وsafe areas. الحالة DRAFT FOR REVIEW بانتظار مراجعة القائد؛ لا F02 ولا اعتماد ذاتي. القسم التالي (READY TO EXECUTE) تاريخي الآن.
+
 # أحدث عمل — UX-F01 READY TO EXECUTE /2026-10-04
 
 F00: مراجعة القائد R1 مكتملة في نطاق الوثائق؛ قواعد عامة للمراجعة وليست اعتماد منتج. F01: تكليف منقح وبطاقة مستقلة بـ20 مسار قبول، **غير منفذ**. [التكليف](../prompts/UX-F01-ZAI.md) و[المراجعة](../reviews/UX-F00/review-R1.md). لا F02/F03/F04 الآن، ولا تحديث core أو الهوية. main لكل العمل الجديد؛ فرع الإصدار يبقى مؤقتًا بقرار المالك، لا حذف. اختبارات المنصات باقية. السجل أدناه تاريخي.
