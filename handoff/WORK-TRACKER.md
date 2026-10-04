@@ -1,3 +1,7 @@
+# أحدث عمل — UX-F01 مراجعة R1: CHANGES REQUIRED /2026-10-05
+
+[مراجعة التنفيذ R1](../reviews/UX-F01/CHATGPT-REVIEW-R1.md) على `648949d`: ستة بنود إصلاح موثقة مع تجارب إضافية وإعادة تشغيل أداة المنفذ. 20/20 نجاح الأداة لا يثبت اكتمال القبول. التالي: تصحيح مصدر العينة/المحاكاة والفحوص والتهيئة والرسائل والتركيز ثم أدلة جديدة ومراجعة؛ لا F02 ولا تغيير الهوية/core. نتائج المنصات الحقيقية ما زالت NOT RUN. السجل التالي تاريخي.
+
 # أحدث عمل — UX-F01 نُفذ (DRAFT FOR REVIEW) /2026-10-04
 
 F01: نُفذ كعينة مستقلة على main — [المثال](../previews/ux-patterns/form-lifecycle/README.md) (عرض + `example.js` + `mock-adapter.js` + README) وأداة الفحص [tools/ux-f01-check.py](../tools/ux-f01-check.py) والأدلة [reviews/UX-F01](../reviews/UX-F01/review.md). مصفوفة F01-01..F01-20: **20/20 PASS** من checkout نظيف لـcommit مصدر مثبت (Playwright + Chromium headless). NOT RUN فعليًا: WebKit، الأجهزة الحقيقية + TalkBack/VoiceOver، native zoom، اللمس وsafe areas. الحالة DRAFT FOR REVIEW بانتظار مراجعة القائد؛ لا F02 ولا اعتماد ذاتي. القسم التالي (READY TO EXECUTE) تاريخي الآن.

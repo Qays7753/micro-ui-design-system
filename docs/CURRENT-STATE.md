@@ -1,3 +1,7 @@
+# أحدث مراجعة — UX-F01 يحتاج إصلاحات /2026-10-05
+
+الحالة **CHANGES REQUIRED** على التسليم `648949d`: مراجعة التنفيذ R1 تؤكد رفع المصادر وصحة MANIFEST وإعادة إنتاج فحوص المنفذ 20/20، لكن التجربة المستقلة كشفت إخفاقات لم تفحصها الأداة: زر تحقق ظاهر رغم hidden، فقد التركيز بعد حسمه، رسائل حالة قديمة، وتهيئة ابتدائية غير موحدة؛ إضافة إلى تصحيح محاكاة الرد القديم وتقوية الأدلة. [مراجعة التنفيذ R1](../reviews/UX-F01/CHATGPT-REVIEW-R1.md). لا F02 قبل الإصلاح وإعادة المراجعة. لم يغيّر المراجع كود العينة أو core أو الهوية؛ الأقسام التالية تاريخية.
+
 # أحدث تنفيذ — UX-F01 عينة دورة النموذج /2026-10-04
 
 نُفذ F01 كعينة مستقلة على main: مثال «تحرير سجل تجريبي» في [previews/ux-patterns/form-lifecycle/](../previews/ux-patterns/form-lifecycle/README.md) مع موصل محاكاة قابل للاستبدال (`mock-adapter.js`) وأدوات SIMULATION موسومة خارج واجهة المثال. مصفوفة القبول F01-01..F01-20: **20/20 PASS** من checkout نظيف لـcommit المصدر المثبت، عبر `python3 tools/ux-f01-check.py` (Playwright + Chromium headless) — [التقرير والأدلة واللقطات](../reviews/UX-F01/review.md). الحالة **DRAFT FOR REVIEW**؛ لا اعتماد ذاتي، ولا F02 قبل مراجعة القائد. لا تعديل على components/shared/assets أو core/tokens أو نص قواعد UX وحالة اعتمادها. NOT RUN فعليًا: WebKit، الأجهزة الحقيقية وقارئات الشاشة (TalkBack/VoiceOver)، native zoom، اللمس وsafe areas — الحدود كاملة في [review.md](../reviews/UX-F01/review.md). الأقسام أدناه سجل تاريخي.
