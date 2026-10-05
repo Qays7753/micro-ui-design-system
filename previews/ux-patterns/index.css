@@ -1,0 +1,87 @@
+/* =========================================================
+   Micro UI — فهرس عينات أنماط UX: تنسيق التجميع فقط
+   الملف: previews/ux-patterns/index.css
+   القيم من shared/tokens.css — لا هوية جديدة.
+   ========================================================= */
+
+body {
+  margin: 0;
+  background-color: var(--micro-surface-page);
+  font-family: var(--micro-font-family);
+  color: var(--micro-text-primary);
+}
+
+.ux-index__head {
+  padding: var(--micro-space-5);
+}
+.ux-index__head h1 {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+}
+.ux-index__meta {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.ux-index__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  padding: 0 var(--micro-space-5) var(--micro-space-5);
+  max-width: 640px;
+}
+
+.ux-index__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3) var(--micro-space-4);
+  background-color: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  text-decoration: none;
+  color: inherit;
+  min-height: var(--micro-touch-min);
+}
+.ux-index__item:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.ux-index__num {
+  flex: none;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 600;
+  color: var(--micro-text-secondary);
+  padding: 2px var(--micro-space-2);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-selected);
+}
+.ux-index__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ux-index__title {
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+}
+.ux-index__desc {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.ux-index__foot {
+  padding: var(--micro-space-3) var(--micro-space-5) var(--micro-space-5);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+}

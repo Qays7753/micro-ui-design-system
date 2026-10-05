@@ -311,20 +311,45 @@
     return String(input.value == null ? '' : input.value).trim() !== '';
   }
 
-  function activeKeys(panel) {
-    return draftInputs(panel)
-      .filter(inputActive)
-      .map(function (i) { return i.getAttribute('data-filter-key'); })
-      .filter(function (k) { return k && k !== 'none'; });
+  /* F02-P03: تسمية بشرية لكل فلتر — data-filter-label أولًا، ثم التسمية
+     المرتبطة فعليًا (label[for] أو label حاوية)، وإلا نص فارغ يعطي ملخص
+     عدد محايدًا بلا اسم المفتاح الداخلي. قيمة البحث الخام لا تظهر في
+     الملخص إطلاقًا، ولا توجد عبارة «العدّاد يخفي 0». */
+  function filterLabel(input) {
+    var attr = input.getAttribute('data-filter-label');
+    if (attr && attr.trim()) return attr.trim();
+    var lab = null;
+    var id = input.id;
+    if (id) {
+      try { lab = doc.querySelector('label[for="' + String(id).replace(/"/g, '') + '"]'); } catch (err) { lab = null; }
+    }
+    if (!lab && input.closest) lab = input.closest('label');
+    if (lab) {
+      var t = String(lab.textContent || '').replace(/\s+/g, ' ').trim();
+      if (t) return t;
+    }
+    return '';
   }
 
   function updateSummary(panel, phase) {
     var summary = panel.querySelector('[data-filter-summary]');
     if (!summary) return;
-    var keys = activeKeys(panel);
-    summary.textContent = keys.length
-      ? phase + ': ' + keys.length + ' فلاتر — ' + keys.join('، ')
-      : phase + ': لا فلاتر (العدّاد يخفي 0)';
+    var actives = draftInputs(panel).filter(function (input) {
+      var key = input.getAttribute('data-filter-key');
+      return !!key && key !== 'none' && inputActive(input);
+    });
+    if (!actives.length) { summary.textContent = phase + ': لا فلاتر'; return; }
+    var labels = [];
+    actives.forEach(function (input) {
+      var l = filterLabel(input);
+      if (l && labels.indexOf(l) < 0) labels.push(l);
+    });
+    /* كل الشرطات لها تسمية بشرية → ملخص بالتسميات؛ وإلا ملخص عدد
+       محايد بلا أسماء مفاتيح. event.detail.count/applied وdraft/applied
+       سليمة كما هي — هذا النص عرض فقط. */
+    summary.textContent = labels.length === actives.length
+      ? phase + ': ' + labels.join('، ')
+      : phase + ': ' + (actives.length === 1 ? 'فلتر واحد' : actives.length + ' فلاتر');
   }
 
   function initFilterPanel(panel) {

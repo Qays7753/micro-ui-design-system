@@ -1,0 +1,187 @@
+/* =========================================================
+   Micro UI — UX-F02 عينة الاختيار: تنسيق التركيب فقط
+   الملف: previews/ux-patterns/choice-lifecycle/example.css
+   الحالة: DRAFT FOR REVIEW.
+   لا تعريف مكوّنات UI هنا ولا ألوان/خطوط/انحناءات جديدة — كل القيم
+   من shared/tokens.css، وشكل المكوّنات من ملفاتها الأصلية. هذا الملف
+   للتجميع: العناوين والمسافات وصفوف التركيب وقسم SIMULATION فقط.
+   ========================================================= */
+
+/* ---------- الترويسة والصفحة ---------- */
+.f02-head {
+  padding: var(--micro-space-5) var(--micro-space-5) var(--micro-space-2);
+  font-family: var(--micro-font-family);
+}
+.f02-head h1 {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-surface-title-size); /* توكن عناوين الأسطح — كنمط F01 */
+  line-height: var(--micro-surface-title-line);
+  color: var(--micro-text-primary);
+}
+.f02-head__meta {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f02-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-6);
+  padding: 0 var(--micro-space-5) var(--micro-space-6);
+  font-family: var(--micro-font-family);
+  max-width: 640px;
+}
+
+/* ---------- الأقسام ---------- */
+.f02-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+.f02-section__title {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+.f02-subtitle {
+  margin: var(--micro-space-3) 0 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 500;
+  color: var(--micro-text-primary);
+}
+.f02-hint {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* تجميع المجموعات القصيرة بالمسافة — لا بطاقة لكل عنصر */
+.f02-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  margin-block-end: var(--micro-space-3);
+}
+
+/* نص وضع المقطّع: محتوى مطابق للوضع المختار */
+.f02-mode-text {
+  margin: var(--micro-space-2) 0 0;
+  padding: var(--micro-space-3) var(--micro-space-4);
+  background-color: var(--micro-surface-page);
+  border-radius: var(--micro-radius-field);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+/* ---------- العرض الخارجي للاختيار ---------- */
+.f02-selected {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+  color: var(--micro-text-primary);
+}
+/* القناة الحية لتغيّر الاختيار: نص فارغ يطويه تمامًا حين لا رسالة */
+.f02-note {
+  margin: 0;
+  min-height: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.f02-note:empty { display: none; }
+
+.f02-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+  margin-block-start: var(--micro-space-2);
+}
+
+/* ---------- الإعلان داخل الطبقة (حالة القراءة) ---------- */
+.f02-live {
+  margin: 0;
+  padding: var(--micro-space-2) var(--micro-space-3);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  background-color: var(--micro-surface-page);
+  border-radius: var(--micro-radius-field);
+}
+.f02-live:empty { display: none; }
+
+/* ---------- قسم SIMULATION (خارج واجهة المستفيد) ---------- */
+.f02-sim {
+  margin: var(--micro-space-6) var(--micro-space-5) var(--micro-space-6);
+  padding: var(--micro-space-4);
+  border: 1px dashed var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  font-family: var(--micro-font-family);
+}
+.f02-sim__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+  margin-block-end: var(--micro-space-2);
+}
+.f02-sim__head h2 {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+.f02-sim__chip {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+}
+.f02-sim__note {
+  margin: 0 0 var(--micro-space-3);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.f02-sim__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-4);
+  align-items: flex-start;
+}
+.f02-sim__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  min-width: 220px;
+}
+.f02-sim__group label {
+  font-size: var(--micro-label-size, var(--micro-secondary-size));
+  line-height: var(--micro-label-line, var(--micro-secondary-line));
+  color: var(--micro-text-secondary);
+}
+.f02-sim__group select {
+  min-height: var(--micro-field-min-height);
+  padding: 0 var(--micro-space-3);
+  border: 1.5px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+}
+.f02-sim__readout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.f02-sim__readout b { color: var(--micro-text-primary); }

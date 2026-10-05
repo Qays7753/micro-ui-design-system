@@ -27,7 +27,12 @@
     /* E05: «تحديد الكل» يدير العناصر المفعّلة فقط — لا يغيّر المحمية */
     var boxes = [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'))
       .filter(function (b) { return !b.disabled; });
-    if (!all || !boxes.length) return;
+    if (!all) return;
+    /* F02-P01: مجموعة بلا خيارات مفعّلة = حالة صفر صريح على الحامل
+       (checked=false وindeterminate=false) عند التهيئة وعند أي إعادة حساب،
+       حتى لو ورد الحامل بالسمتين من الترميز. العناصر المعطلة وقيمها
+       تبقى كما هي — لا تُمس ولا تُستنتج منها. */
+    if (!boxes.length) { all.checked = false; all.indeterminate = false; return; }
     var checked = boxes.filter(function (b) { return b.checked; }).length;
     if (checked === 0) { all.checked = false; all.indeterminate = false; }
     else if (checked === boxes.length) { all.checked = true; all.indeterminate = false; }
@@ -43,6 +48,9 @@
         all.addEventListener('change', function () {
           [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'))
             .forEach(function (b) { if (!b.disabled) b.checked = all.checked; }); /* E05: المعطل لا يُلمس */
+          /* F02-P01: إعادة حساب بعد كل تغيير — نقر «تحديد الكل» في مجموعة
+             بلا مفعّلين يقلب الحامل أصليًا ثم يُصفّر هنا فلا حالة وهمية */
+          syncGroup(group);
           group.dispatchEvent(new Event('micro-selection:changed', { bubbles: true }));
         });
       }
@@ -69,7 +77,10 @@
         }));
       }
       items.forEach(function (it) {
-        it.addEventListener('click', function () { if (!it.disabled) select(it); });
+        /* F02-P02: نفس حراسة الأسهم (isDisabled) في النقر — المعطّل
+           أصليًا أو aria-disabled=true لا يغيّر الاختيار ولا يطلق حدث
+           micro-selection:segment، بما يشمل Enter/Space (أصله click). */
+        it.addEventListener('click', function () { if (!isDisabled(it)) select(it); });
       });
       /* تنقل أسهم مثل مجموعة راديو — يتجاوز المعطل (E05) ولا يقف عنده */
       seg.addEventListener('keydown', function (e) {

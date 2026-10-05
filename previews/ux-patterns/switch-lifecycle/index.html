@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — UX-F02: عينة مستقلة لتحديث إعداد تجريبي (مفتاح غير متزامن)
+  الملف: previews/ux-patterns/switch-lifecycle/index.html
+  الحالة: DRAFT FOR REVIEW — عينة محاكاة للمراجعة، ليست سياسة أعمال.
+
+  الحدود (docs/ux/F02-ACCEPTANCE.md §5):
+  - إعداد تجريبي واحد بحفظ تلقائي (تحديث واحد لكل تبديل بمعرف محاولة) —
+    لا زر حفظ نموذج، ولا صلاحيات أو خدمة حقيقية.
+  - المفتاح الثاني «قفل العينة» معطل أصلًا: يختبر عقد R2-06 (إنهاء
+    انتظار متكرر لا يعيد تفعيل معطل أصلاً) — ليس سلوك مستخدم.
+  - سياسة التركيز عند الانتظار/الحسم موثقة في example.js وREADME.
+  - بلا طبقات B07 هنا: العينة صفا إعدادياً محلياً؛ الطبقات مفحوصة في
+    عينتي الاختيار والفلاتر.
+  السلوك: example.js — الموصل: mock-adapter.js — التنسيق: example.css
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — UX-F02: تحديث إعداد تجريبي</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../../shared/tokens.css">
+  <link rel="stylesheet" href="../../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../../components/messages/messages.css">
+  <link rel="stylesheet" href="example.css">
+</head>
+<body>
+
+  <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-alert" viewBox="0 0 24 24"><!-- assets/icons/alert01.svg -->
+      <path d="M13.9248 21H10.0752C5.44476 21 3.12955 21 2.27636 19.4939C1.42317 17.9879 2.60736 15.9914 4.97574 11.9985L6.90057 8.75333C9.17559 4.91778 10.3131 3 12 3C13.6869 3 14.8244 4.91777 17.0994 8.75332L19.0243 11.9985C21.3926 15.9914 22.5768 17.9879 21.7236 19.4939C20.8704 21 18.5552 21 13.9248 21Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M12 17V13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M12 9.25H12.125M12.25 9.25C12.25 9.11193 12.1381 9 12 9C11.8619 9 11.75 9.11193 11.75 9.25C11.75 9.38807 11.8619 9.5 12 9.5C12.1381 9.5 12.25 9.25 12.25 9.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </symbol>
+  </svg>
+
+  <header class="f02-head">
+    <h1>UX-F02 — تحديث إعداد تجريبي</h1>
+    <p class="f02-head__meta">
+      عينة مستقلة: مفتاح بحفظ تلقائي — انتظار، نجاح مؤكد، رفض مؤكد باسترجاع
+      القيمة، ونتيجة مجهولة بتحقق صريح عن المحاولة نفسها. هاتف · عربي RTL ·
+      أرقام 0–9 · مصادر المكوّن كما هي. الحالة: DRAFT FOR REVIEW.
+    </p>
+  </header>
+
+  <main class="f02-main">
+
+    <!-- ===== الإعداد التجريبي =====
+         تبديل واحد = تحديث واحد. «مفعّل/غير مفعّل» نص ظاهر لا لون وحده،
+         والرسالة قناة إعلان واحدة باقية (لا toast). -->
+    <section class="f02-section" aria-labelledby="f02s-settings-title">
+      <h2 class="f02-section__title" id="f02s-settings-title">الإعدادات</h2>
+
+      <div class="f02s-row">
+        <label class="m-switch" id="f02s-switch">
+          <span class="m-switch__text">
+            <span class="m-switch__label">إعداد تجريبي</span>
+            <span class="m-switch__state" id="f02s-switch-state">غير مفعّل</span>
+          </span>
+          <input type="checkbox" role="switch" id="f02s-switch-input">
+          <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+        </label>
+        <p class="f02-hint">التغيير يُحدّث الإعداد فورًا؛ النتيجة المؤكدة وحدها تقول «تم تحديث الإعداد».</p>
+      </div>
+
+      <!-- رسالة العملية: قناة إعلان واحدة (role=status) باقية حتى حدث
+           أحدث، وهدف تركيز برمجي (tabindex=-1) لسياسة انتظار المفتاح. -->
+      <div class="m-note m-note--info" role="status" id="f02s-note" data-op-state="idle" hidden>
+        <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="m-note__text">
+          <span class="m-note__title" id="f02s-note-title"></span>
+          <p class="m-note__body" id="f02s-note-body"></p>
+        </div>
+      </div>
+
+      <!-- زر التحقق: يظهر فقط عندما تكون النتيجة غير محسومة؛ الإخفاء
+           فعلي (hidden + قاعدة CSS في example.css — درس F01-R1-01). -->
+      <div class="f02-actions">
+        <button type="button" class="m-btn m-btn--secondary" id="f02s-check" hidden>التحقق من النتيجة</button>
+      </div>
+
+      <!-- مفتاح معطل أصلًا (اختبار عقد R2-06 في الفحص — ليس سلوك مستخدم) -->
+      <div class="f02s-row f02s-row--secondary">
+        <label class="m-switch is-disabled" id="f02s-locked-switch">
+          <span class="m-switch__text">
+            <span class="m-switch__label">قفل العينة (معطل أصلًا)</span>
+            <span class="m-switch__state">معطل</span>
+          </span>
+          <input type="checkbox" role="switch" id="f02s-locked-input" disabled>
+          <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+        </label>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== SIMULATION — خارج واجهة المثال =====
+       سيناريو «النتيجة التالية» للتحديث وللتحقق منفصلان، والتسوية بأمر
+       صريح بلا مؤقت واجهة. الرد القديم بمعرف لا يطابق المحاولة يُسلّم عبر
+       مسار معالجة النتائج لدى المستهلك دون إنهاء الطلب المعلق. -->
+  <section class="f02-sim" id="f02s-sim" aria-labelledby="f02s-sim-title">
+    <div class="f02-sim__head">
+      <h2 id="f02s-sim-title">أدوات المحاكاة — SIMULATION</h2>
+      <span class="f02-sim__chip">بيانات تركيبية · بلا شبكة أو تخزين · للتجربة والفحص فقط</span>
+    </div>
+    <p class="f02-sim__note">
+      السيناريو يطبق على الدعوة التالية فقط. «إنهاء التحديث المعلق» و«إنهاء
+      التحقق المعلق» يحسمان بالسيناريو المسلح. «استجابة بمعرف قديم» تمر عبر
+      فلتر المستهلك نفسه فتُتجاهل ويظل الطلب الحالي قابلًا للحسم بعدها.
+      المحتوى التقني أدناه للفحص، لا لرسائل المستفيد.
+    </p>
+    <div class="f02-sim__grid">
+      <div class="f02-sim__group">
+        <label for="f02s-sim-update-outcome">نتيجة التحديث التالية</label>
+        <select id="f02s-sim-update-outcome">
+          <option value="saved">saved — نجاح مؤكد</option>
+          <option value="not-saved">not-saved — رفض مؤكد</option>
+          <option value="unknown">unknown — نتيجة مجهولة</option>
+          <option value="reject">رفض Promise بلا نتيجة</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f02s-sim-settle-update" disabled>إنهاء التحديث المعلق</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f02s-sim-stale-update" disabled>استجابة تحديث بمعرف قديم</button>
+      </div>
+      <div class="f02-sim__group">
+        <label for="f02s-sim-check-outcome">نتيجة التحقق التالية</label>
+        <select id="f02s-sim-check-outcome">
+          <option value="saved">saved — نجاح مؤكد</option>
+          <option value="not-saved">not-saved — رفض مؤكد</option>
+          <option value="unknown">unknown — ما زالت مجهولة</option>
+          <option value="reject">رفض Promise للتحقق</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f02s-sim-settle-check" disabled>إنهاء التحقق المعلق</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f02s-sim-stale-check" disabled>استجابة تحقق بمعرف قديم</button>
+      </div>
+      <div class="f02-sim__readout" aria-label="قراءات فحص تقنية">
+        <span>updateCalls: <b id="f02s-sim-calls">0</b></span>
+        <span>checkCalls: <b id="f02s-sim-check-calls">0</b></span>
+        <span>معرف آخر محاولة: <b id="f02s-sim-attempt">—</b></span>
+        <span>الحالة: <b id="f02s-sim-pending">لا طلبات معلقة</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- مصادر المكوّن ثم المحاكاة ثم سلوك المستهلك -->
+  <script src="../../../components/buttons/buttons.js"></script>
+  <script src="../../../components/selection/selection.js"></script>
+  <script src="mock-adapter.js"></script>
+  <script src="example.js"></script>
+</body>
+</html>
