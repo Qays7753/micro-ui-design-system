@@ -1,0 +1,156 @@
+{
+  "scope": "إعادة إنتاج بنود CHATGPT-REVIEW-R1 الثمانية على الشجرة المشار إليها؛ لا اختبار منصات ولا قارئ شاشة",
+  "date": "2026-10-05T15:36:15",
+  "target_root": "/home/z/my-project/work/f02-before",
+  "probes": [
+    {
+      "name": "R1-01-initial-beta-first-ready",
+      "reproduced": true,
+      "measured": {
+        "before": {
+          "value": "beta",
+          "label": "عينة ب"
+        },
+        "after": null,
+        "summary": "المحدد: لا شيء",
+        "note": "الخيار السابق لم يعد متاحًا. اختر مجددًا."
+      }
+    },
+    {
+      "name": "R1-02-selected-beta-empty-source",
+      "reproduced": true,
+      "measured": {
+        "selected": {
+          "value": "beta",
+          "label": "عينة ب"
+        },
+        "summary": "المحدد: عينة ب",
+        "stateRow": "لا خيارات في المصدر.",
+        "liveText": "لا خيارات في المصدر."
+      }
+    },
+    {
+      "name": "R1-03-stable-close-focus-stolen",
+      "reproduced": true,
+      "measured": {
+        "stableUsed": "picker-inner-close",
+        "focusBefore": true,
+        "focusAfter": "f02c-picker-search",
+        "liveText": "تمت القراءة: 2 خيارات."
+      }
+    },
+    {
+      "name": "R1-04a-no-results-stale-live",
+      "reproduced": true,
+      "measured": {
+        "liveBefore": "تمت القراءة: 3 خيارات.",
+        "liveAfter": "تمت القراءة: 3 خيارات.",
+        "stateRow": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "rowMeta": {
+          "role": null,
+          "live": null
+        }
+      }
+    },
+    {
+      "name": "R1-04b-drop-note-in-inert",
+      "reproduced": true,
+      "measured": {
+        "externalNote": {
+          "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "inInert": true
+        },
+        "liveInLayer": "تمت القراءة: 2 خيارات."
+      }
+    },
+    {
+      "name": "R1-05-read-fixture-changed-after-call",
+      "reproduced": true,
+      "measured": {
+        "newerFirst": {
+          "readId": 102,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "new",
+              "label": "New"
+            }
+          ]
+        },
+        "olderLater": {
+          "readId": 101,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "new",
+              "label": "New"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "R1-06a-double-visible-close",
+      "reproduced": true,
+      "measured": {
+        "layerClose": true,
+        "pickerClose": true
+      }
+    },
+    {
+      "name": "R1-06b-visible-live-strip-duplicates-state-row",
+      "reproduced": true,
+      "measured": {
+        "display": "block",
+        "liveText": "تمت القراءة: 3 خيارات.",
+        "visuallyHidden": false
+      }
+    },
+    {
+      "name": "R1-06c-alternate-filter-badge",
+      "reproduced": true,
+      "measured": {
+        "legacy": true,
+        "approved": false,
+        "ariaLabel": null,
+        "icon": false
+      }
+    },
+    {
+      "name": "R1-06d-saved-message-internal-detail",
+      "reproduced": true,
+      "measured": {
+        "variant": "success",
+        "title": "تم تحديث الإعداد",
+        "text": "تم تحديث الإعداد — القيمة المؤكدة محدثة."
+      }
+    },
+    {
+      "name": "R1-07-horizontal-overflow-200-at-320",
+      "reproduced": true,
+      "measured": {
+        "docOverflow": true,
+        "offenders": [
+          {
+            "text": "\n      عينة مستقلة: مجموعات checkboxes/radio/مقطّع",
+            "left": -25
+          }
+        ]
+      }
+    },
+    {
+      "name": "R1-08-fail-detector-blind-to-actual-fail",
+      "reproduced": true,
+      "measured": {
+        "pattern": "^FAIL\\\\b",
+        "logHasRealFail": true,
+        "oldPatternIsBlind": true,
+        "treeToolBlind": true,
+        "detectorFound": false
+      }
+    }
+  ],
+  "page_errors": [],
+  "source_commit": "4a111327bad077501cffa9ce74b50070c58e2971",
+  "browser": "143.0.7499.4"
+}
