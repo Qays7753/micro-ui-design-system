@@ -1,0 +1,155 @@
+{
+  "source_commit": "e83c2150e9e2a8c8f0a497493cefde59ddafdc15",
+  "source_tree": "f47347c20e33d02a6dc9a338cb5dd3b4059dc78b",
+  "engine": {
+    "browser": "Chromium (headless)",
+    "browser_version": "153.0.8010.0",
+    "driver": "Playwright (Python sync API)",
+    "base_url": "http://127.0.0.1:34423",
+    "page": "previews/ux-patterns/form-lifecycle/index.html",
+    "viewport_default": "390x844",
+    "playwright_version": "1.63.0"
+  },
+  "rows": [
+    {
+      "id": "F01-01",
+      "status": "PASS",
+      "assertions": 27,
+      "failed": []
+    },
+    {
+      "id": "F01-02",
+      "status": "PASS",
+      "assertions": 7,
+      "failed": []
+    },
+    {
+      "id": "F01-03",
+      "status": "PASS",
+      "assertions": 8,
+      "failed": []
+    },
+    {
+      "id": "F01-04",
+      "status": "PASS",
+      "assertions": 12,
+      "failed": []
+    },
+    {
+      "id": "F01-05",
+      "status": "PASS",
+      "assertions": 9,
+      "failed": []
+    },
+    {
+      "id": "F01-06",
+      "status": "PASS",
+      "assertions": 14,
+      "failed": []
+    },
+    {
+      "id": "F01-07",
+      "status": "PASS",
+      "assertions": 5,
+      "failed": []
+    },
+    {
+      "id": "F01-08",
+      "status": "PASS",
+      "assertions": 12,
+      "failed": []
+    },
+    {
+      "id": "F01-09",
+      "status": "PASS",
+      "assertions": 12,
+      "failed": []
+    },
+    {
+      "id": "F01-10",
+      "status": "PASS",
+      "assertions": 7,
+      "failed": []
+    },
+    {
+      "id": "F01-11",
+      "status": "PASS",
+      "assertions": 8,
+      "failed": []
+    },
+    {
+      "id": "F01-12",
+      "status": "PASS",
+      "assertions": 5,
+      "failed": []
+    },
+    {
+      "id": "F01-13",
+      "status": "PASS",
+      "assertions": 16,
+      "failed": []
+    },
+    {
+      "id": "F01-14",
+      "status": "PASS",
+      "assertions": 6,
+      "failed": []
+    },
+    {
+      "id": "F01-15",
+      "status": "PASS",
+      "assertions": 10,
+      "failed": []
+    },
+    {
+      "id": "F01-16",
+      "status": "PASS",
+      "assertions": 6,
+      "failed": []
+    },
+    {
+      "id": "F01-17",
+      "status": "PASS",
+      "assertions": 6,
+      "failed": []
+    },
+    {
+      "id": "F01-18",
+      "status": "PASS",
+      "assertions": 6,
+      "failed": []
+    },
+    {
+      "id": "F01-19",
+      "status": "PASS",
+      "assertions": 47,
+      "failed": []
+    },
+    {
+      "id": "F01-20",
+      "status": "PASS",
+      "assertions": 9,
+      "failed": []
+    }
+  ],
+  "js_errors": [],
+  "test_changes": "No assertion changes; executable path and evidence output overridden externally",
+  "not_run": [
+    {
+      "item": "WebKit (browser engine آخر)",
+      "reason": "غير منفذ في بيئة التنفيذ — لم يُنفذ فعليًا"
+    },
+    {
+      "item": "أجهزة Android/iPhone حقيقية + TalkBack/VoiceOver",
+      "reason": "لا جهاز أو أداة قارئ شاشة في البيئة — لم تُنفذ"
+    },
+    {
+      "item": "native zoom للنظام/المتصفح",
+      "reason": "الفحص المنفذ محاكاة CSS 200% معلنة الآلية فقط"
+    },
+    {
+      "item": "لمس حقيقي ولوحة مفاتيح نظام وsafe areas فعلية",
+      "reason": "بيئة headless — لم تُنفذ"
+    }
+  ]
+}
