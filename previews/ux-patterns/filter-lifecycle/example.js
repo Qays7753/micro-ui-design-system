@@ -89,10 +89,22 @@
     el.resultsCount.textContent = 'النتائج: ' + shown.length;
   }
 
+  /* F02-R1-06: العدّاد هو .m-btn__counter المعتمد من B01 — الصفر الحقيقي
+     مخفي فعليًا بـ .m-btn__counter--zero (درس تجاوز hidden في B01)،
+     والاسم المتاح للزر يشرح عدد الشروط بكلمات لا رقم مجرد. */
+  function conditionsLabel(n) {
+    if (n === 0) return 'تصفية، لا شروط مطبقة';
+    if (n === 1) return 'تصفية، شرط واحد مطبق';
+    if (n === 2) return 'تصفية، شرطان مطبقان';
+    return 'تصفية، ' + n + ' شروط مطبقة';
+  }
+
   function renderBadge() {
     var n = conditionCount(applied);
     el.filterCount.textContent = String(n);
-    el.filterCount.hidden = n === 0; /* 0 = مخفي فعليًا (حراسة display في example.css) */
+    el.filterCount.hidden = n === 0;
+    el.filterCount.classList.toggle('m-btn__counter--zero', n === 0);
+    el.openBtn.setAttribute('aria-label', conditionsLabel(n));
   }
 
   /* ---------- حدث التطبيق: نسخة من detail.applied ---------- */

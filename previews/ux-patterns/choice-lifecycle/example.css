@@ -23,6 +23,9 @@
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
+  /* F02-R1-07: النص المختلط (عربي + رموز لاتينية مثل loading/ready/empty/error)
+     يجب أن يلتف دون قص أو تصغير خط أو إخفاء — لا تمرير أفقي عند 320/200%. */
+  overflow-wrap: anywhere;
 }
 
 .f02-main {
@@ -105,17 +108,22 @@
   margin-block-start: var(--micro-space-2);
 }
 
-/* ---------- الإعلان داخل الطبقة (حالة القراءة) ---------- */
+/* ---------- الإعلان داخل الطبقة (حالة القراءة) ----------
+   F02-R1-06: قناة live-only — الحالة المرئية لكل معنى هي صف حالة
+   المنتقي (من core) والملخص، لا strip مرئي مكرر يكرر الخطأ/الانتظار.
+   القناة داخل نطاق الطبقة المفتوحة (لا خلفية inert) وتُعلن مرة واحدة. */
 .f02-live {
-  margin: 0;
-  padding: var(--micro-space-2) var(--micro-space-3);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
-  background-color: var(--micro-surface-page);
-  border-radius: var(--micro-radius-field);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.f02-live:empty { display: none; }
 
 /* ---------- قسم SIMULATION (خارج واجهة المستفيد) ---------- */
 .f02-sim {

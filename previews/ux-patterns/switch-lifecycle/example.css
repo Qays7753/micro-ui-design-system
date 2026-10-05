@@ -136,3 +136,6 @@
   color: var(--micro-text-secondary);
 }
 .f02-sim__readout b { color: var(--micro-text-primary); }
+
+/* F02-R1-06: الجسم الفارغ لا يشغل مساحة — المعنى في العنوان وحده. */
+.m-note__body:empty { display: none; }

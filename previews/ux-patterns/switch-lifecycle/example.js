@@ -68,6 +68,9 @@
   window.F02SwitchSim.bindSimulationPanel(document.getElementById('f02s-sim'), connector);
 
   /* ---------- رسالة العملية: القناة الإعلانية الوحيدة ----------
+     F02-R1-06: معنى واحد لكل رسالة — العنوان يحمل المعنى كاملًا
+     والجسم للخطوة التالية فقط إن وجدت (لا تكرار العنوان في الجسم،
+     ولا تفاصيل داخلية مثل حالة القيمة في رسالة النجاح.
      ثابتة باقية (لا toast) وتحمل tabindex=-1 لتكون هدف تركيز برمجي
      لسياسة انتظار المفتاح، وaria-describedby على input يربطها به. */
   function setOpMessage(variant, title, body) {
@@ -117,7 +120,7 @@
     state.attemptId += 1;
     state.submitted = { attemptId: state.attemptId, value: intended };
     state.op = 'pending';
-    setOpMessage('info', 'جارٍ تحديث الإعداد', 'جارٍ تحديث الإعداد…');
+    setOpMessage('info', 'جارٍ تحديث الإعداد…', '');
     renderSwitchState();
     /* سياسة التركيز: قبل التعطيل — إن كان المفتاح هو التركيز انقل إلى
        وصف الانتظار الثابت. إن كان المستخدم في موضع آخر فلا سرقة. */
@@ -139,7 +142,7 @@
     state.confirmed = state.submitted.value;
     releasePending();
     state.op = 'saved';
-    setOpMessage('success', 'تم تحديث الإعداد', 'تم تحديث الإعداد — القيمة المؤكدة محدثة.');
+    setOpMessage('success', 'تم تحديث الإعداد.', '');
     renderSwitchState();
     el.input.checked = state.confirmed;
   }
@@ -147,7 +150,7 @@
   function applyNotSavedResult() {
     releasePending();
     state.op = 'not-saved';
-    setOpMessage('error', 'لم يُحدَّث الإعداد', 'لم يُحدَّث الإعداد. حاول مجددًا.');
+    setOpMessage('error', 'لم يُحدَّث الإعداد.', 'حاول مجددًا.');
     renderSwitchState();
     el.input.checked = state.confirmed; /* استرجاع القيمة المؤكدة */
   }
@@ -155,7 +158,7 @@
   function enterUnknown() {
     state.op = 'unknown';
     /* يبقى محجوبًا (لا setSwitchPending false): القيمة غير محسومة */
-    setOpMessage('warning', 'تعذر تأكيد التحديث', 'تعذر تأكيد التحديث. تحقق من النتيجة.');
+    setOpMessage('warning', 'تعذر تأكيد التحديث.', 'تحقق من النتيجة.');
     renderSwitchState();
     el.checkBtn.hidden = false; /* التحقق متاح فعليًا */
   }
@@ -186,7 +189,7 @@
   el.checkBtn.addEventListener('click', function () {
     if (state.op !== 'unknown') return; /* تكرار التفعيل لا يكرر الاستعلام */
     state.op = 'checking';
-    setOpMessage('info', 'جارٍ التحقق', 'جارٍ التحقق من نتيجة آخر تحديث…');
+    setOpMessage('info', 'جارٍ التحقق من نتيجة آخر تحديث…', '');
     renderSwitchState();
     window.MicroButtons.setLoading(el.checkBtn, true, { loadingLabel: 'جارٍ التحقق' });
     connector.check({ attemptId: state.attemptId })
@@ -194,7 +197,7 @@
         /* رفض check يبقي النتيجة مجهولة: عودة unknown وإتاحة تحقق جديد */
         window.MicroButtons.setLoading(el.checkBtn, false);
         state.op = 'unknown';
-        setOpMessage('warning', 'تعذر تأكيد التحديث', 'تعذر تأكيد التحديث. تحقق من النتيجة.');
+        setOpMessage('warning', 'تعذر تأكيد التحديث.', 'تحقق من النتيجة.');
         renderSwitchState();
       });
   });
@@ -215,7 +218,7 @@
       el.checkBtn.hidden = true;
     } else {
       state.op = 'unknown';
-      setOpMessage('warning', 'تعذر تأكيد التحديث', 'تعذر تأكيد التحديث. تحقق من النتيجة.');
+      setOpMessage('warning', 'تعذر تأكيد التحديث.', 'تحقق من النتيجة.');
       renderSwitchState(); /* زر التحقق يبقى متاحًا — دون إرسال تلقائي */
     }
   }

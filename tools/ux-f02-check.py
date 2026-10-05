@@ -208,25 +208,26 @@ def vis(page, selector):
       }""", selector)
 
 
+ZOOM_SELECTORS = ['h1', '.f02-hint', '.m-choice__text', '.m-btn', '.m-note__body',
+                  '.m-picker__option', '.f02f-row__label', '.m-switch__label']
+
+
 def zoom200(page):
-    """مضاعفة أحجام الخط المحسوبة لعناصر مختارة (آلية معلنة) — تعيد القياس قبل/بعد."""
-    return page.evaluate("""() => {
-      const sel = ['h1', '.f02-hint', '.m-choice__text', '.m-btn', '.m-note__body',
-                   '.m-picker__option', '.f02f-row__label', '.m-switch__label'];
-      const els = sel.map(s => document.querySelector(s)).filter(Boolean).slice(0, 6);
+    """F02-R1-08(3): مضاعفة 200% بممرين — التقاط أحجام البداية لكل العناصر
+    أولًا ثم تطبيقها من اللقطة (قراءة/كتابة متسلسلة تضاعف الموروث مرتين).
+    تعيد before/after للعناصر المطلوبة وآلية معلنة. ليست native zoom."""
+    return page.evaluate("""(sel) => {
+      const els = sel.map(s => document.querySelector(s)).filter(Boolean).slice(0, 8);
       const before = els.map(e => parseFloat(getComputedStyle(e).fontSize));
-      const fontEls = new Set();
-      document.querySelectorAll('body, body *').forEach(e => {
-        const fs = getComputedStyle(e).fontSize;
-        if (fs && fs.endsWith('px')) fontEls.add(e);
-      });
-      fontEls.forEach(e => {
-        e.style.fontSize = (parseFloat(getComputedStyle(e).fontSize) * 2) + 'px';
-      });
+      const fontEls = [...document.querySelectorAll('body, body *')]
+        .filter(e => { const fs = getComputedStyle(e).fontSize; return fs && fs.endsWith('px'); });
+      const snapshot = new Map(fontEls.map(e => [e, parseFloat(getComputedStyle(e).fontSize)]));
+      snapshot.forEach((px, e) => { e.style.fontSize = (px * 2) + 'px'; });
       const after = els.map(e => parseFloat(getComputedStyle(e).fontSize));
-      return { before, after,
+      const names = sel.filter(s => document.querySelector(s) !== null);
+      return { before, after, names,
                doubled: before.every((b, i) => Math.abs(after[i] - b * 2) < 0.6) };
-    }""")
+    }""", ZOOM_SELECTORS)
 
 
 def no_h_overflow(page):
@@ -486,37 +487,64 @@ def run_f02_07(page):
 
 
 def run_f02_08(page):
-    r = row("F02-08", "empty-source وno-results ثم مسح البحث", "حالتان مختلفتان؛ تصحيح no-results يعيد البيانات بلا قراءة جديدة")
+    r = row("F02-08", "empty-source وready بلا عناصر بعد اختيار سابق + no-results",
+            "المصدر الفارغ (مسارا empty وready/items=[]) يصفر الاختيار والملخص والعرض مع رسالة "
+            "الزوال دون استبدال العقدة أو reload ولا اختيار تلقائي؛ no-results ثم المسح يعيد البيانات بلا قراءة")
     goto(page, CHOICE_PAGE)
+    # اختيار سابق: open → settle → اختيار beta
+    choice_open(page)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    page.click(".m-picker__option[data-value='beta']")
+    choice_close_wait(page)
+    nodes_before = page.evaluate("() => document.querySelectorAll('#f02c-picker-layer .m-picker__option').length")
+    reset_reload_marker(page)
+    # المسار 1: armed=empty والطبقة مفتوحة
     choice_arm(page, "empty")
     choice_open(page)
     choice_settle(page, "latest")
     page.wait_for_timeout(80)
     s = choice_inspect(page)
-    A(r, "empty: حالة صريحة لا قائمة بيضاء", s["stateRow"] == "لا خيارات في المصدر." and len(s["options"]) == 0, s)
-    shot(page, "f02-08-picker-empty.png")
-    # الفارغ ليس خطأً بلا زر retry: إعادة القراءة بفتح جديد
+    A(r, "empty بعد اختيار: الاختيار صفر في القيمة والعرض والملخص",
+      s["selected"] is None and "لا شيء" in s["displayText"]
+      and s["pickerSummary"] == "المحدد: لا شيء", s)
+    A(r, "empty بعد اختيار: رسالة زوال داخل قناة الطبقة المفتوحة",
+      "لم يعد متاحًا" in (s["liveText"] or "") and s["selectionNote"] == "", (s["liveText"], s["selectionNote"]))
+    A(r, "empty بعد اختيار: صف حالة صريح ولا اختيار تلقائي لأول خيار",
+      s["stateRow"] == "لا خيارات في المصدر." and not any(o["selected"] for o in s["options"]), s)
+    # المسار 2: ready بقائمة فارغة عبر مسار المستهلك (نفس التزامن)
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'ready', items: [] });""")
+    page.wait_for_timeout(60)
+    s = choice_inspect(page)
+    A(r, "ready/items=[] يطابق empty (تزامن null ورسالة الزوال)",
+      s["selected"] is None and s["stateRow"] == "لا خيارات في المصدر."
+      and not any(o["selected"] for o in s["options"]), s)
+    A(r, "بلا reload في المسارين", page.evaluate("() => window.__f02_no_reload === 'F02-SESSION'"))
     page.keyboard.press("Escape")
     choice_close_wait(page)
+    # عودة البيانات: فتح جديد ready ثم no-results ثم مسح البحث
     choice_arm(page, "ready")
     choice_open(page)
-    page.wait_for_timeout(80)
     choice_settle(page, "latest")
     page.wait_for_timeout(80)
     s = choice_inspect(page)
-    A(r, "فتح جديد يعيد ready بعد empty", len(s["options"]) == 3 and s["stateRow"] is None, s)
-    # no-results: نتيجة بحث فقط — الحالة تبقى ready
+    A(r, "فتح جديد يعيد ready بعد الفارغ", len(s["options"]) == 3 and s["stateRow"] is None, s)
     page.fill("[data-picker-search]", "zzz")
     page.wait_for_timeout(60)
     s = choice_inspect(page)
     A(r, "no-results: صف بحث ولا يخلط بحالة القراءة", "لا نتائج مطابقة" in (s["stateRow"] or ""), s["stateRow"])
-    A(r, "الخيارات تختفي بالبحث", all(o["hiddenAttr"] for o in s["options"]), s)
+    A(r, "no-results: القناة المباشرة تعلن انعدام النتائج لا عدد القراءة القديم",
+      "لا نتائج" in (s["liveText"] or "") and "تمت القراءة" not in (s["liveText"] or ""), s["liveText"])
     shot(page, "f02-08-picker-no-results.png")
     calls_before = s["readCalls"]
     page.fill("[data-picker-search]", "")
     page.wait_for_timeout(60)
     s = choice_inspect(page)
-    A(r, "مسح البحث يعيد كل الخيارات بلا قراءة جديدة", len([o for o in s["options"] if o["visibleRect"]]) == 3 and s["readCalls"] == calls_before, s)
+    A(r, "مسح البحث يعيد كل الخيارات بلا قراءة جديدة وتعلانًا مفهومًا",
+      len([o for o in s["options"] if o["visibleRect"]]) == 3 and s["readCalls"] == calls_before
+      and "الخيارات الظاهرة: 3" in (s["liveText"] or ""), (s["liveText"], s["readCalls"]))
+    shot(page, "f02-08-picker-empty.png")
 
 
 def run_f02_09(page):
@@ -548,42 +576,43 @@ def run_f02_09(page):
 
 
 def run_f02_10(page):
-    r = row("F02-10", "إغلاق بلا اختيار جديد بكل الوسائل", "الاختيار السابق محفوظ؛ لا إعادة فتل تلقائية؛ تركيز إلى المشغّل الصالح")
+    r = row("F02-10", "إغلاق بلا اختيار جديد بكل الوسائل",
+            "الاختيار السابق محفوظ؛ لا إعادة فتح تلقائية؛ تركيز إلى المشغّل الصالح؛ "
+            "إغلاق ظاهر واحد في التركيب (R1-06) بفقد Escape/الخلفية")
     goto(page, CHOICE_PAGE)
-    # اختيار سابق محفوظ
+    A(r, "إغلاق ظاهر واحد: لا [data-picker-close] في تركيب الطبقة",
+      page.evaluate("() => document.querySelectorAll('#f02c-picker-layer [data-picker-close]').length") == 0)
+    A(r, "زر رأس الطبقة موجود والوسائل الأخرى سليمة (Escape/خلفية data-backdrop=close)",
+      page.evaluate("() => !!document.querySelector('#f02c-picker-layer [data-layer-close]')")
+      and page.evaluate("() => document.getElementById('f02c-picker-layer').getAttribute('data-backdrop') === 'close'"))
     choice_open(page)
     choice_settle(page, "latest")
     page.wait_for_timeout(80)
     page.click(".m-picker__option[data-value='alpha']")
     choice_close_wait(page)
     means = []
-    # 1) زر الطبقة الظاهر
+    # 1) زر رأس الطبقة (الإغلاق الظاهر الوحيد)
     choice_open(page)
     page.click("[data-layer-close]")
     choice_close_wait(page)
     means.append(choice_inspect(page)["focusId"])
-    # 2) زر إغلاق المنتقي
-    choice_open(page)
-    page.click("[data-picker-close]")
-    choice_close_wait(page)
-    means.append(choice_inspect(page)["focusId"])
-    # 3) Escape
+    # 2) Escape
     choice_open(page)
     page.keyboard.press("Escape")
     choice_close_wait(page)
     means.append(choice_inspect(page)["focusId"])
-    # 4) الخلفية بنقرة حقيقية
+    # 3) الخلفية بنقرة حقيقية
     choice_open(page)
     page.wait_for_timeout(120)  # اكتمال انتقال الفتح
     page.mouse.click(10, 10)  # زاوية الخلفية خارج الطبقة
     choice_close_wait(page)
     means.append(choice_inspect(page)["focusId"])
-    A(r, "كل الوسائل تُغلق وترجع التركيز للمشغّل", means == ["f02c-open-picker"] * 4, means)
+    A(r, "كل الوسائل تُغلق وترجع التركيز للمشغّل", means == ["f02c-open-picker"] * 3, means)
     s = choice_inspect(page)
     A(r, "الاختيار السابق محفوظ بعد كل الإغلاقات", s["selected"] == {"value": "alpha", "label": "عينة أ"}, s["selected"])
     page.wait_for_timeout(400)
     A(r, "لا إعادة فتح تلقائية", choice_inspect(page)["layerOpen"] is False)
-    A(r, "القراءات = فتح الاختيار الأول + 4 فتحات الإغلاق (الإغلاق بلا قراءة)", s["readCalls"] == 5, s["readCalls"])
+    A(r, "القراءات = فتح الاختيار الأول + 3 فتحات الإغلاق (الإغلاق بلا قراءة)", s["readCalls"] == 4, s["readCalls"])
     shot(page, "f02-10-closed-preserved.png")
 
 
@@ -618,14 +647,16 @@ def run_f02_11(page):
 
 
 def run_f02_12(page):
-    r = row("F02-12", "اختفاء الاختيار من المصدر", "null في كل العروض ورسالة معالجة؛ لا اختيار تلقائي لأول خيار")
+    r = row("F02-12", "اختفاء الاختيار من المصدر — توجيه الرسالة (R1-04)",
+            "داخل الطبقة المفتوحة: رسالة الزوال تصل قناة واحدة داخل النطاق (لا خلفية inert ولا مزدوج)؛ "
+            "خارج الطبقة: القناة الخارجية المناسبة دون إعادة فتح؛ null في كل العروض؛ بلا اختيار تلقائي")
     goto(page, CHOICE_PAGE)
+    # (أ) الطبقة مفتوحة: الرسالة داخل القناة داخل الطبقة
     choice_open(page)
     choice_settle(page, "latest")
     page.wait_for_timeout(80)
     page.click(".m-picker__option[data-value='beta']")
     choice_close_wait(page)
-    # مصدر جديد بلا beta (تعديل fixture عبر أداة SIMULATION)
     page.evaluate("""() => window.F02Choice.setSource([
       { value: 'alpha', label: 'عينة أ' },
       { value: 'gamma', label: 'عينة ج' }]);""")
@@ -635,39 +666,92 @@ def run_f02_12(page):
     page.wait_for_timeout(80)
     s = choice_inspect(page)
     A(r, "الاختيار سقط: null في القيمة والعرض والملخص",
-      s["selected"] is None and "لا شيء" in s["displayText"] and s["pickerSummary"] == "المحدد: لا شيء", s)
-    A(r, "رسالة معالجة ظاهرة", "لم يعد متاحًا" in s["selectionNote"], s["selectionNote"])
+      s["selected"] is None and "لا شيء" in s["displayText"]
+      and s["pickerSummary"] == "المحدد: لا شيء", s)
+    A(r, "الطبقة مفتوحة: رسالة الزوال في القناة داخل النطاق",
+      "لم يعد متاحًا" in (s["liveText"] or ""), s["liveText"])
+    note_in_inert = page.evaluate("""() => {
+      const n = document.getElementById('f02c-selection-note');
+      return { text: n.textContent, inInert: !!n.closest('[inert]') }; }""")
+    A(r, "لا نص معالجة في القناة الخارجية الخاضعة لـinert أثناء الفتح",
+      note_in_inert["inInert"] is True and note_in_inert["text"] == "", note_in_inert)
     sel = [o["selected"] for o in s["options"]]
     A(r, "بلا تحديد تلقائي لأول خيار", not any(sel), sel)
+    # إغلاق الطبقة قبل مرحلة العرض المغلق (كانت مفتوحة بعد نتيجة المرحلة أ)
+    page.keyboard.press("Escape")
+    choice_close_wait(page)
     shot(page, "f02-12-selection-dropped.png")
+    # (ب) الطبقة مغلقة أثناء وصول النتيجة: القناة الخارجية وبلا إعادة فتح
+    page.evaluate("""() => window.F02Choice.setSource([
+      { value: 'alpha', label: 'عينة أ' },
+      { value: 'beta', label: 'عينة ب' },
+      { value: 'gamma', label: 'عينة ج' }]);""")
+    choice_open(page)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    page.click(".m-picker__option[data-value='beta']")
+    choice_close_wait(page)
+    page.evaluate("""() => window.F02Choice.setSource([
+      { value: 'alpha', label: 'عينة أ' },
+      { value: 'gamma', label: 'عينة ج' }]);""")
+    choice_open(page)          # قراءة جديدة
+    page.keyboard.press("Escape")  # إغلاق أثناء القراءة (لا إلغاء)
+    choice_close_wait(page)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "النتيجة المقبولة أثناء الإغلاق تزامن العرض", s["selected"] is None and "لا شيء" in s["displayText"], s)
+    A(r, "العرض مغلق: رسالة الزوال في القناة الخارجية", "لم يعد متاحًا" in s["selectionNote"], s["selectionNote"])
+    A(r, "لا إعادة فتح تلقائية", s["layerOpen"] is False)
 
 
 def run_f02_13(page):
-    r = row("F02-13", "قراءتان متداخلتان؛ إغلاق أثناء القراءة", "الأقدم يُتجاهل كليًا؛ الأحدث يُسوى في الصفحة نفسها بلا reload")
+    r = row("F02-13", "قراءتان متداخلتان + لقطة fixture لكل قراءة (R1-05)",
+            "الأقدم يُتجاهل كليًا؛ نتيجة كل Promise تخص مصدرها وreadId (تسوية الأحدث أولًا ثم الأقدم)؛ "
+            "تسوية الحالي بلا reload")
     goto(page, CHOICE_PAGE)
-    # فتح (قراءة 1) وإغلاق أثناء القراءة
+    # (أ) فتح (قراءة 1) وإغلاق أثناء القراءة ثم فتح (قراءة 2)
     choice_open(page)
     page.keyboard.press("Escape")
     choice_close_wait(page)
-    # إعادة فتح = قراءة 2 متداخلة
     choice_open(page)
     page.wait_for_timeout(60)
     s = choice_inspect(page)
     A(r, "قراءتان معلقتان (1 و2)", s["readCalls"] == 2 and s["readSeq"] == 2, (s["readCalls"], s["readSeq"]))
     reset_reload_marker(page)
-    choice_settle(page, "oldest")  # الأقدم يصل أولًا
+    # (ج) تجاهل الأقدم في الصفحة ثم تسوية الأحدث
+    choice_settle(page, "oldest")
     page.wait_for_timeout(80)
     s = choice_inspect(page)
     A(r, "القديم تجاهل كليًا: لا حالة ولا رسالة ولا اختيار",
       s["staleIgnored"] == 1 and s["stateRow"] == "جارٍ القراءة…" and s["selected"] is None, s)
     A(r, "التركيز لم يتحرك بالقديم", s["focusId"] != "f02c-open-picker", s["focusId"])
-    choice_settle(page, "latest")  # الأحدث
+    choice_settle(page, "latest")
     page.wait_for_timeout(80)
     s = choice_inspect(page)
-    A(r, "الأحدث طُبق في الصفحة نفسها (بلا reload) واختيار ما زال null",
+    A(r, "الأحدث طُبق في الصفحة نفسها (بلا reload) والاختيار لا يزال null",
       len(s["options"]) == 3 and s["selected"] is None, s)
     assert_no_reload(page, r)
-    # الرد القديم عبر مسار المستهلك أيضاً
+    # (ب-لاحق) لقطة البيانات لكل قراءة (R1-05): موصل مؤقت بعد انتهاء تسويات
+    # الصفحة (أحداثه تعطل أزرار التسوية — فينزل بعد الحاجة إليها)
+    snap = page.evaluate("""() => {
+      const c = window.F02ChoiceSim.createConnector({ items: [{ value: 'old', label: 'Old' }] });
+      const p1 = c.read({ readId: 101 });
+      c.setSource([{ value: 'new', label: 'New' }]);
+      const p2 = c.read({ readId: 102 });
+      const out = { newFirst: null, oldLater: null };
+      return c.settle(102) === true ? p2.then(r2 => {
+        out.newFirst = r2;
+        c.settle(101);
+        return p1.then(r1 => { out.oldLater = r1; return out; });
+      }) : Promise.reject(new Error('settle 102 failed')); }""")
+    A(r, "R1-05: نتيجة القراءة الأحدث من مصدرها الجديد",
+      snap["newFirst"] == {"readId": 102, "outcome": "ready",
+                           "items": [{"value": "new", "label": "New"}]}, snap["newFirst"])
+    A(r, "R1-05: نتيجة القراءة الأقدم من مصدرها القديم رغم تغيير fixture",
+      snap["oldLater"] == {"readId": 101, "outcome": "ready",
+                            "items": [{"value": "old", "label": "Old"}]}, snap["oldLater"])
+    # (د) الرد القديم عبر مسار المستهلك أيضًا
     choice_stale(page)
     page.wait_for_timeout(60)
     s = choice_inspect(page)
@@ -676,12 +760,14 @@ def run_f02_13(page):
 
 
 def run_f02_14(page):
-    r = row("F02-14", "تحديث بيانات والتركيز داخل المنتقي + لوحة المفاتيح", "استبدال خيارات مركّز يوجه التركيز للبحث الثابت؛ بلا سرقة إن كان المستخدم خارجها؛ أسهم/Home/End وroving سليمة")
+    r = row("F02-14", "تحديث بيانات والتركيز داخل المنتقي + لوحة المفاتيح (R1-03)",
+            "خيار مركّز → البحث الثابت قبل استبدال العقدة؛ زر retry المزول → البحث؛ "
+            "البحث الثابت وزر رأس الطبقة لا تُسرق منهما؛ بلا عنصر نشط مخفي؛ أسهم/Home/End وroving سليمة")
     goto(page, CHOICE_PAGE)
     choice_open(page)
     choice_settle(page, "latest")  # ready
     page.wait_for_timeout(80)
-    # (أ) المستخدم على خيار مركّز → تحديث بيانات عبر مسار المستهلك (أداة SIMULATION §6)
+    # (أ) المستخدم على خيار مركّز → تحديث بيانات عبر مسار المستهلك (SIMULATION §6)
     page.evaluate("""() => {
       const g = document.querySelector(".m-picker__option[data-value='gamma']");
       g.focus(); window.__was_gamma = document.activeElement === g; }""")
@@ -697,16 +783,41 @@ def run_f02_14(page):
     A(r, "الخيارات استُبدلت فعليًا", all("(جديدة)" in o["label"] for o in s["options"]), [o["label"] for o in s["options"]])
     A(r, "لا عنصر نشط مخفي بعد الاستبدال",
       page.evaluate("() => !document.activeElement.hidden && document.getElementById('f02c-picker-layer').contains(document.activeElement)"))
-    # (ب) المستخدم خارج الخيارات (زر الإغلاق) → لا سرقة تركيز
+    # (ب) عنصر ثابت داخل المنتقي: التركيز على البحث نفسه → لا نقل
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'ready',
+      items: [{ value: 'alpha', label: 'عينة أ (أحدث)' },
+              { value: 'beta', label: 'عينة ب (أحدث)' },
+              { value: 'gamma', label: 'عينة ج (أحدث)' }] });""")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "R1-03: تركيز المستخدم على البحث الثابت لا يُسرق", s["focusId"] == "f02c-picker-search", s["focusId"])
+    # (ج) عنصر ثابت خارج المنتقي: زر رأس الطبقة → لا سرقة
     page.evaluate("() => document.getElementById('f02c-layer-close').focus()")
     page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
       readId: window.F02Choice.inspect().readSeq, outcome: 'ready',
       items: [{ value: 'alpha', label: 'عينة أ' }, { value: 'beta', label: 'عينة ب' }, { value: 'gamma', label: 'عينة ج' }] });""")
     page.wait_for_timeout(80)
     s = choice_inspect(page)
-    A(r, "تركيز المستخدم خارج الاستبدال: لا سرقة", s["focusId"] == "f02c-layer-close", s["focusId"])
-    A(r, "البيانات تجددت رغم عدم سرقة التركيز", all("(جديدة)" not in o["label"] for o in s["options"]), None)
-    # (ج) لوحة المفاتيح: أسهم RTL/Home/End/roving
+    A(r, "R1-03: تركيز المستخدم على زر رأس الطبقة لا يُسرق", s["focusId"] == "f02c-layer-close", s["focusId"])
+    A(r, "البيانات تجددت رغم عدم سرقة التركيز", all("(أحدث)" not in o["label"] for o in s["options"]), None)
+    # (د) صف الخطأ المزول: التركيز على retry → البحث الثابت قبل استبدال الصف
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'error', items: [] });""")
+    page.wait_for_timeout(80)
+    page.evaluate("() => document.querySelector('[data-picker-retry]').focus()")
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'error', items: [] });""")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "R1-03: تركيز على retry المزول → البحث الثابت (لا body)",
+      s["focusId"] == "f02c-picker-search" and s["stateRow"] and "إعادة المحاولة" in s["stateRow"], s["focusId"])
+    # (هـ) لوحة المفاتيح: أسهم RTL/Home/End/roving — عبر retry قراءة جديدة
+    choice_arm(page, "ready")
+    page.click("[data-picker-retry]")
+    page.wait_for_timeout(80)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
     kb = page.evaluate("""() => {
       const list = document.querySelector('[data-picker-list]');
       const res = {};
@@ -728,27 +839,86 @@ def run_f02_14(page):
 
 
 def run_f02_15(page, browser):
-    r = row("F02-15", "fixtures بديلة للاختيار والمفتاح", "قيم البداية من مصدر واحد؛ beta وtrue ظاهران دون أحداث/تحديثات مبكرة")
+    r = row("F02-15", "fixtures بديلة للاختيار والمفتاح + بقاء البذرة بعد القراءة (R1-01)",
+            "قيم البداية من مصدر واحد؛ beta تظهر محددة داخل المنتقي وخارجه عند الإقلاع، "
+            "تبقى بعد أول ready وتسميته المحدثة وبعد إعادة الفتح؛ معرف غائب يُمسح بأول تأكيد برسالة الزوال؛ "
+            "بلا أحداث/تحديثات مبكرة")
+    # ---------- اختيار: PICKER_SELECTED_INIT = beta ----------
     ctx = browser.new_context(viewport={"width": 390, "height": 844})
     pg = ctx.new_page()
     watch(pg)
-    # اختيار: PICKER_SELECTED_INIT = beta
     src = (ROOT / "previews" / UX_DIRNAME / "choice-lifecycle" / "example.js").read_text(encoding="utf-8")
     patched = src.replace("var PICKER_SELECTED_INIT = null;",
                           "var PICKER_SELECTED_INIT = { value: 'beta', label: 'عينة ب' };")
+    assert patched != src, "seed needle missing"
     pg.route("**/example.js", lambda route: route.fulfill(status=200, content_type="text/javascript", body=patched))
     pg.goto(f"{BASE}/{CHOICE_PAGE}", wait_until="networkidle")
     pg.evaluate("() => document.fonts.ready")
     s = choice_inspect(pg)
-    A(r, "اختيار beta ظاهر عند الإقلاع", s["selected"] == {"value": "beta", "label": "عينة ب"} and "عينة ب" in s["displayText"], s)
-    A(r, "بلا قراءات مبكرة", s["readCalls"] == 0, s["readCalls"])
+    A(r, "اختيار beta ظاهر عند الإقلاع (قيمة/عرض/ملخص داخلي)",
+      s["selected"] == {"value": "beta", "label": "عينة ب"} and "عينة ب" in s["displayText"]
+      and s["pickerSummary"] == "المحدد: عينة ب", s)
+    A(r, "بلا قراءات مبكرة عند الإقلاع", s["readCalls"] == 0, s["readCalls"])
+    pg.unroute("**/example.js")
+    # أول ready صحيح يبقي البذرة محددة داخل المنتقي وخارجه
+    choice_open(pg)
+    s = choice_inspect(pg)
+    A(r, "الفتح يقرأ ولا يزيل البذرة قبل النتيجة", s["readCalls"] == 1 and s["selected"]["value"] == "beta", s)
+    choice_settle(pg, "latest")
+    pg.wait_for_timeout(80)
+    s = choice_inspect(pg)
+    in_picker = pg.evaluate("""() => {
+      const o = document.querySelector(".m-picker__option[data-value='beta']");
+      return { ariaSelected: o && o.getAttribute('aria-selected') === 'true',
+               summary: document.querySelector('[data-picker-summary]').textContent }; }""")
+    A(r, "R1-01: أول ready يبقي beta محددة داخل المنتقي (aria-selected + ملخص)",
+      in_picker["ariaSelected"] is True and in_picker["summary"] == "المحدد: عينة ب", in_picker)
+    A(r, "R1-01: البذرة باقية خارج المنتقي بلا رسالة زوال",
+      s["selected"] == {"value": "beta", "label": "عينة ب"} and s["selectionNote"] == "", s)
+    pg.keyboard.press("Escape")
+    choice_close_wait(pg)
+    # تسمية محدثة + إعادة فتح: بقاء المعرف مع التسمية الجديدة
+    pg.evaluate("""() => window.F02Choice.setSource([
+      { value: 'alpha', label: 'عينة أ' },
+      { value: 'beta', label: 'عينة ب — المحدثة' },
+      { value: 'gamma', label: 'عينة ج' }]);""")
+    choice_open(pg)
+    pg.wait_for_timeout(80)
+    choice_settle(pg, "latest")
+    pg.wait_for_timeout(80)
+    s = choice_inspect(pg)
+    A(r, "إعادة الفتح: beta باقية بالمعرف وبالتسمية المحدثة",
+      s["selected"] == {"value": "beta", "label": "عينة ب — المحدثة"}
+      and "المحدثة" in s["pickerSummary"] and "المحدثة" in s["displayText"], s)
+    pg.keyboard.press("Escape")
+    choice_close_wait(pg)
     ctx.close()
-    # مفتاح: SWITCH_CONFIRMED_INIT = true
+    # ---------- معرف البداية غير موجود في المصدر ----------
+    ctx = browser.new_context(viewport={"width": 390, "height": 844})
+    pg = ctx.new_page()
+    watch(pg)
+    patched_missing = src.replace("var PICKER_SELECTED_INIT = null;",
+                                  "var PICKER_SELECTED_INIT = { value: 'ghost', label: 'غير موجودة' };")
+    pg.route("**/example.js", lambda route: route.fulfill(status=200, content_type="text/javascript", body=patched_missing))
+    pg.goto(f"{BASE}/{CHOICE_PAGE}", wait_until="networkidle")
+    pg.evaluate("() => document.fonts.ready")
+    s = choice_inspect(pg)
+    A(r, "معرف غائب: يظهر في القيمة عند الإقلاع (لم تؤكد قراءة بعد)", s["selected"]["value"] == "ghost", s["selected"])
+    A(r, "معرف غائب: لا بذرة داخل المنتقي قبل القراءة", s["pickerSummary"] == "المحدد: لا شيء", s["pickerSummary"])
+    choice_open(pg)
+    choice_settle(pg, "latest")
+    pg.wait_for_timeout(80)
+    s = choice_inspect(pg)
+    A(r, "معرف غائب: أول ready يمسحه برسالة الزوال الصحيحة",
+      s["selected"] is None and "لم يعد متاحًا" in (s["liveText"] or ""), (s["selected"], s["liveText"]))
+    ctx.close()
+    # ---------- مفتاح: SWITCH_CONFIRMED_INIT = true ----------
     ctx2 = browser.new_context(viewport={"width": 390, "height": 844})
     pg2 = ctx2.new_page()
     watch(pg2)
     src2 = (ROOT / "previews" / UX_DIRNAME / "switch-lifecycle" / "example.js").read_text(encoding="utf-8")
     patched2 = src2.replace("var SWITCH_CONFIRMED_INIT = false;", "var SWITCH_CONFIRMED_INIT = true;")
+    assert patched2 != src2, "switch seed needle missing"
     pg2.route("**/example.js", lambda route: route.fulfill(status=200, content_type="text/javascript", body=patched2))
     pg2.goto(f"{BASE}/{SWITCH_PAGE}", wait_until="networkidle")
     pg2.evaluate("() => document.fonts.ready")
@@ -1014,6 +1184,11 @@ def run_f02_25(page):
     s = switch_inspect(page)
     A(r, "confirmed لم يتغير وchecked استُرجعت", s["confirmed"] is False and s["checked"] is False and s["inputDisabled"] is False, s)
     A(r, "رسالة الرفض ثابتة", s["message"]["variant"] == "error" and "لم يُحدَّث الإعداد" in s["message"]["title"], s["message"])
+    # اللقطة وهي مستقرة في not-saved نفسها (R1-08(7): إثبات الحالة قبل التقاطها)
+    s_ns = switch_inspect(page)
+    A(r, "الحالة المقصودة not-saved مثبتة قبل اللقطة",
+      s_ns["op"] == "not-saved" and s_ns["message"]["variant"] == "error", s_ns["op"])
+    shot(page, "f02-25-switch-not-saved.png")
     # إعادة محاولة فورية بلا reload
     switch_arm(page, "update", "saved")
     switch_toggle(page)
@@ -1023,7 +1198,7 @@ def run_f02_25(page):
     s = switch_inspect(page)
     A(r, "إعادة المحاولة نجحت بلا reload", s["confirmed"] is True and s["attemptId"] == 2, s)
     assert_no_reload(page, r)
-    shot(page, "f02-25-switch-not-saved.png")
+    shot(page, "f02-25-switch-retry-saved.png")
 
 
 def run_f02_26(page):
@@ -1049,11 +1224,27 @@ def run_f02_26(page):
     s = switch_inspect(page)
     A(r, "لا تحديث جديد أثناء unknown", s["updateCalls"] == calls, s["updateCalls"])
     shot(page, "f02-26-switch-unknown.png")
-    # (ب) رفض Promise
+    # (ب) رفض Promise لتحديث جديد: نتيجة مجهولة بلا rollback ولا ادعاء رفض
+    goto(page, SWITCH_PAGE)
+    switch_arm(page, "update", "reject")
+    switch_toggle(page)
+    page.wait_for_function("() => window.F02Switch.inspect().op === 'pending'", timeout=3000)
+    switch_settle(page, "update")
+    page.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
+    s = switch_inspect(page)
+    A(r, "رفض update: unknown بلا rollback (checked المقصودة باقية) وبلا ادعاء",
+      s["checked"] is True and s["confirmed"] is False and s["inputDisabled"] is True
+      and s["updateCalls"] == 1, s)
+    v = vis(page, "#f02s-check")
+    A(r, "رفض update: زر التحقق ظاهر فعليًا", v["display"] != "none" and v["w"] > 0 and v["focusable"] is True, v)
+    # (ج) رفض Promise
 
 
 def run_f02_27(page):
-    r = row("F02-27", "unknown→checking متكرر→saved/not-saved/unknown/رفض", "check واحد لكل دورة لنفس attemptId؛ update ثابت؛ تركيز قبل إخفاء check؛ الرفض يعيد التحقق")
+    r = row("F02-27", "unknown→checking متكرر→saved/not-saved/unknown صريح/رفض (R1-08(5))",
+            "check واحد لكل دورة لنفس attemptId؛ update ثابت؛ حسم صحيح وتركيز قبل إخفاء الزر "
+            "وفقط إن كان التركيز عليه؛ رفض check يعيد unknown؛ check outcome=unknown صريح يُنفذ فعلًا؛ "
+            "تركيز المستخدم في مكان آخر لا يُسرق عند الحسم")
     goto(page, SWITCH_PAGE)
     switch_arm(page, "update", "unknown")
     switch_toggle(page)
@@ -1061,21 +1252,27 @@ def run_f02_27(page):
     page.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
     attempt = switch_inspect(page)["attemptId"]
     updates = switch_inspect(page)["updateCalls"]
-    # دورة 1: check saved
+    # دورة 1: check saved — وتركيز المستخدم ينتقل لموضع آخر أثناء checking
     switch_arm(page, "check", "saved")
     page.click("#f02s-check")
     page.wait_for_function("() => window.F02Switch.inspect().op === 'checking'", timeout=3000)
-    page.keyboard.press("Enter")  # المستخدم الحقيقي أثناء busy: المؤشر محجوب (عقد B01) وEnter يولد click محروساً
+    page.keyboard.press("Enter")  # المستخدم الحقيقي أثناء busy: المؤشر محجوب (عقد B01)
     page.wait_for_timeout(60)
     s = switch_inspect(page)
     A(r, "تكرار تفعيل أثناء checking: لا check ثانٍ", s["checkCalls"] == 1 and s["updateCalls"] == updates, s)
     A(r, "busy على زر التحقق فقط", s["checkBusy"] is True, s)
+    s_chk = switch_inspect(page)
+    A(r, "حالة checking مثبتة قبل اللقطة", s_chk["op"] == "checking", s_chk["op"])
+    shot(page, "f02-27-switch-checking.png")
+    # المستخدم في موضع آخر (وصف الانتظار) — الحسم لا يسرق تركيزه
+    page.evaluate("() => document.getElementById('f02s-note').focus()")
     switch_settle(page, "check")
     page.wait_for_function("() => window.F02Switch.inspect().op === 'saved'", timeout=3000)
     s = switch_inspect(page)
+    A(r, "R1-08(5): الحسم مع المستخدم في مكان آخر: لا سرقة تركيز",
+      s["focusId"] == "f02s-note", s["focusId"])
     A(r, "حسم saved على قيمة إرسال المحاولة", s["confirmed"] is True and s["attemptId"] == attempt, s)
-    A(r, "تركيز نقل للمفتاح قبل إخفاء الزر", s["focusId"] == "f02s-switch-input" and s["checkVisible"] is False, s)
-    # دورة 2: تبديل → unknown → check not-saved
+    # دورة 2: تبديل → unknown → check not-saved (التركيز على زر التحقق → المفتاح قبل الإخفاء)
     switch_arm(page, "update", "unknown")
     switch_toggle(page)
     switch_settle(page, "update")
@@ -1088,9 +1285,11 @@ def run_f02_27(page):
     page.wait_for_function("() => window.F02Switch.inspect().op === 'not-saved'", timeout=3000)
     s = switch_inspect(page)
     A(r, "حسم not-saved: confirmed بقي وchecked استُرجعت", s["confirmed"] is True and s["checked"] is True and s["checkVisible"] is False, s)
+    A(r, "التركيز كان على زر التحقق عند الحسم → المفتاح قبل إخفاء الزر",
+      s["focusId"] == "f02s-switch-input", s["focusId"])
     # دورة 3: رفض check يبقي مجهولة ويعيد التحقق بلا إرسال تلقائي
     switch_arm(page, "update", "reject")
-    switch_toggle(page)  # من not-saved: تبديل حُر (True) → pending → رفض → unknown
+    switch_toggle(page)  # من not-saved: تبديل حر (True) → pending → رفض → unknown
     switch_settle(page, "update")
     page.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
     updates = switch_inspect(page)["updateCalls"]
@@ -1101,6 +1300,19 @@ def run_f02_27(page):
     page.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
     s = switch_inspect(page)
     A(r, "رفض check: عودة unknown والتحقق متاح مجددًا", s["checkVisible"] is True and s["updateCalls"] == updates, s)
+    A(r, "رفض check: بلا إرسال تلقائي ثانٍ", s["checkCalls"] == 3, s["checkCalls"])
+    # دورة 4: check بنتيجة unknown صريحة (عنوان الدورة مذكور في التجربة — تُنفذ فعلًا)
+    switch_arm(page, "check", "unknown")
+    calls_before = switch_inspect(page)["checkCalls"]
+    page.click("#f02s-check")
+    page.wait_for_function("() => window.F02Switch.inspect().op === 'checking'", timeout=3000)
+    switch_settle(page, "check")
+    page.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
+    s = switch_inspect(page)
+    A(r, "check unknown صريح: عودة unknown وزر التحقق متاح",
+      s["op"] == "unknown" and s["checkVisible"] is True and s["checkCalls"] == calls_before + 1, s)
+    A(r, "check unknown صريح: بلا rollback وبلا تحديث جديد",
+      s["confirmed"] is True and s["updateCalls"] == updates, s)
     shot(page, "f02-27-switch-check.png")
 
 
@@ -1234,7 +1446,10 @@ def run_f02_30(page, browser):
 
 
 def run_f02_31(page, browser):
-    r = row("F02-31", "المقاسات الأربعة + 200% + reduced-motion لكل عينة", "لا خروج أفقي/قص؛ قياس font قبل/بعد مضاعفة فعلي؛ الحوار قابل للتمرير؛ reduced-motion حقيقي")
+    r = row("F02-31", "المقاسات الأربعة لكل عينة + 200% + reduced-motion",
+            "لا خروج أفقي/قص في كل المقاسات والحالات المنطبقة؛ 200% بتضخيم فعلي مقاس قبل/بعد "
+            "(بما فيها خيارات المنتقي بعد تجهيزها) ولا خروج أفقي عند 320/390؛ "
+            "الحوار قابل للتمرير فعليًا وآخر نص مreachable؛ reduced-motion حقيقي للطبقتين")
     widths = [320, 360, 390, 430]
     overflow_report = {}
     for which, label in ((CHOICE_PAGE, "choice"), (FILTER_PAGE, "filter"), (SWITCH_PAGE, "switch")):
@@ -1244,8 +1459,11 @@ def run_f02_31(page, browser):
             watch(pg)
             pg.goto(f"{BASE}/{which}", wait_until="networkidle")
             pg.evaluate("() => document.fonts.ready")
-            overflow_report[f"{label}-{w}-main"] = pg.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth + 1")
-            # حالة طبقة مفتوحة (الاختيار/الفلاتر) أو حالة مجهولة (المفتاح)
+            overflow_report[f"{label}-{w}-main"] = pg.evaluate(
+                "() => document.documentElement.scrollWidth <= window.innerWidth + 1")
+            # حالة مطبقة حقيقية: الاختيار/الفلاتر بطبقة مفتوحة، والمفتاح بنتيجة
+            # مجهولة مؤكدة (F02-R1-08(2): تسوية update المعلق فعلًا قبل القياس —
+            # الحالة المسماة unknown يجب أن تكون unknown مقاسة لا pending)
             if label == "choice":
                 choice_arm(pg, "error")
                 choice_open(pg)
@@ -1259,56 +1477,147 @@ def run_f02_31(page, browser):
             else:
                 switch_arm(pg, "update", "unknown")
                 switch_toggle(pg)
-                pg.wait_for_timeout(150)
-                overflow_report[f"{label}-{w}-unknown"] = no_h_overflow(pg)
+                switch_settle(pg, "update")
+                pg.wait_for_function("() => window.F02Switch.inspect().op === 'unknown'", timeout=3000)
+                st = switch_inspect(pg)
+                overflow_report[f"{label}-{w}-unknown"] = {
+                    "overflow": no_h_overflow(pg), "op": st["op"]}
             ctx.close()
-    A(r, "لا خروج أفقي في كل المقاسات والحالات", all(overflow_report.values()), overflow_report)
-    # 200% نص: قياس قبل/بعد + بقاء الوظيفة
-    ctx = browser.new_context(viewport={"width": 390, "height": 844})
-    pg = ctx.new_page()
-    watch(pg)
-    pg.goto(f"{BASE}/{CHOICE_PAGE}", wait_until="networkidle")
-    pg.evaluate("() => document.fonts.ready")
-    z = zoom200(pg)
-    A(r, "200%: أحجام الخط تضاعفت فعليًا (قياس قبل/بعد)", z["doubled"], z)
-    A(r, "200%: لا خروج أفقي بعد التكبير", no_h_overflow(pg))
-    # الحوار عند 200%: محتواه قابل للوصول بالتمرير الداخلي
-    choice_open(pg)
-    pg.wait_for_timeout(150)
-    dlg = pg.evaluate("""() => {
-      const body = document.querySelector('#f02c-picker-layer .m-layer__body');
-      return { sh: body.scrollHeight, ch: body.clientHeight, scrollable: body.scrollHeight >= body.clientHeight }; }""")
-    A(r, "200%: جسم الحوار قابل للتمرير عند الحاجة", dlg["scrollable"], dlg)
-    # وظيفة باقية: مقطّع يعمل بعد التكبير
-    pg.keyboard.press("Escape")
-    choice_close_wait(pg)
-    pg.click("#f02c-mode-seg [data-value='detail']")
-    pg.wait_for_timeout(40)
-    A(r, "200%: الوظيفة باقية (مقطّع يعمل)", choice_inspect(pg)["mode"] == "detail")
-    ctx.close()
-    # reduced-motion: تفضيل فعلي عبر سياق Playwright
-    ctx = browser.new_context(viewport={"width": 390, "height": 844}, reduced_motion="reduce")
-    pg = ctx.new_page()
-    watch(pg)
-    pg.goto(f"{BASE}/{FILTER_PAGE}", wait_until="networkidle")
-    rm = pg.evaluate("() => window.matchMedia('(prefers-reduced-motion: reduce)').matches")
-    A(r, "reduced-motion: تفضيل فعلي مطبق في السياق", rm is True)
-    filter_open(pg)
-    dur = pg.evaluate("""() => {
-      const layer = document.getElementById('f02f-filter-layer');
-      const d = getComputedStyle(layer).transitionDuration;
-      return { d, instant: d === '0s' || d === '' }; }""")
-    A(r, "reduced-motion: زمن انتقال الطبقة صفر (بلا حركة)", dur["instant"], dur["d"])
-    A(r, "reduced-motion: الطبقة تُفتح وتعمل", filter_inspect(pg)["layerOpen"] is True)
-    pg.click("[data-filter-apply]")
-    filter_close_wait(pg)
-    A(r, "reduced-motion: الإغلاق يعمل فورًا", filter_inspect(pg)["layerOpen"] is False)
-    ctx.close()
+    A(r, "لا خروج أفقي في كل المقاسات والحالات", all(
+        (v if isinstance(v, bool) else v["overflow"]) for v in overflow_report.values()), overflow_report)
+    A(r, "حالة المفتاح في حلقة المقاسات unknown مقاسة (لا pending)",
+      all(v["op"] == "unknown" for k, v in overflow_report.items() if isinstance(v, dict)),
+      {k: v["op"] for k, v in overflow_report.items() if isinstance(v, dict)})
+
+    # ---------- 200% نص: الاختيار عند 320 و390 ----------
+    # (F02-R1-08(3): الحالات والخيارات تُجهز قبل القياس ثم مضاعفة بممرين،
+    # فتُغطى خيارات المنتقي المبنية بالقراءة أولًا — لا عناصر تفلت من القياس)
+    for w in (320, 390):
+        ctx = browser.new_context(viewport={"width": w, "height": 844})
+        pg = ctx.new_page()
+        watch(pg)
+        pg.goto(f"{BASE}/{CHOICE_PAGE}", wait_until="networkidle")
+        pg.evaluate("() => document.fonts.ready")
+        choice_open(pg)
+        choice_settle(pg, "latest")
+        pg.wait_for_timeout(100)
+        z = zoom200(pg)
+        A(r, f"200% @{w}: أحجام الخط تضاعفت فعليًا (قياس قبل/بعد)", z["doubled"], z)
+        probe = pg.evaluate(
+            """() => { const o = document.querySelector('.m-picker__option');
+                   const h1 = document.querySelector('h1');
+                   return { opt: parseFloat(getComputedStyle(o).fontSize),
+                            h1: parseFloat(getComputedStyle(h1).fontSize) }; }""")
+        idx_opt = z["names"].index('.m-picker__option')
+        A(r, f"200% @{w}: خيارات المنتقي مغطاة بالتضخيم",
+          probe["opt"] >= z["before"][idx_opt] * 2 - 0.6, (probe, z["before"][idx_opt]))
+        A(r, f"200% @{w}: لا خروج أفقي بعد التكبير", no_h_overflow(pg))
+        # حدود الحروف: لا حرف خارج صفحة العرض (قاعدة F02-R1-07)
+        glyphs = pg.evaluate("""() => {
+          const out = [];
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          while (walker.nextNode()) {
+            const n = walker.currentNode;
+            if (!n.textContent.trim() || n.parentElement.closest('[hidden],svg,script,style')) continue;
+            const range = new Range(); range.selectNodeContents(n);
+            for (const rect of range.getClientRects())
+              if (rect.left < -2 || rect.right > window.innerWidth + 2)
+                out.push({ text: n.textContent.slice(0, 60), left: rect.left, right: rect.right });
+          }
+          return out; }""")
+        A(r, f"200% @{w}: لا حدود حروف خارج الصفحة", len(glyphs) == 0, glyphs[:4])
+        # الحوار عند 200%: تمرير فعلي إلى آخر نص ووصول الأفعال (F02-R1-08(4))
+        dlg = pg.evaluate("""() => {
+          const body = document.querySelector('#f02c-picker-layer .m-layer__body');
+          const cs = getComputedStyle(body);
+          const lastOpt = [...body.querySelectorAll('.m-picker__option')].pop();
+          const before = body.scrollTop;
+          body.scrollTop = body.scrollHeight;
+          const scrolled = body.scrollTop;
+          const lr = lastOpt.getBoundingClientRect();
+          const br = body.getBoundingClientRect();
+          const lastReachable = lr.bottom <= br.bottom + 2 && lr.top >= br.top - 2;
+          body.scrollTop = before;
+          return { sh: body.scrollHeight, ch: body.clientHeight,
+                   overflowY: cs.overflowY, canScroll: scrolled > before,
+                   lastReachable }; }""")
+        if dlg["sh"] > dlg["ch"]:
+            A(r, f"200% @{w}: الحوار يتجاوز → تمرير فعلي وآخر خيار reachable",
+              dlg["canScroll"] is True and dlg["overflowY"] != "hidden"
+              and dlg["lastReachable"] is True, dlg)
+        else:
+            A(r, f"200% @{w}: الحوار بلا تجاوز", True, dlg)
+        shot(pg, f"f02-31-choice-200-{w}.png")
+        # وظيفة باقية بعد التكبير: مقطّع يعمل
+        pg.keyboard.press("Escape")
+        choice_close_wait(pg)
+        pg.click("#f02c-mode-seg [data-value='detail']")
+        pg.wait_for_timeout(40)
+        A(r, f"200% @{w}: الوظيفة باقية (مقطّع يعمل)", choice_inspect(pg)["mode"] == "detail")
+        ctx.close()
+
+    # 200% للفلاتر والمفتاح عند 320 (قيد F02-R1-07: تثبيت الفحص عند 320)
+    for which, label, prepare in ((FILTER_PAGE, "filter", True), (SWITCH_PAGE, "switch", False)):
+        ctx = browser.new_context(viewport={"width": 320, "height": 844})
+        pg = ctx.new_page()
+        watch(pg)
+        pg.goto(f"{BASE}/{which}", wait_until="networkidle")
+        pg.evaluate("() => document.fonts.ready")
+        if label == "filter":
+            filter_open(pg)
+            pg.wait_for_timeout(100)
+        z = zoom200(pg)
+        A(r, f"200% @320 {label}: تضخيم فعلي قبل/بعد", z["doubled"], z)
+        A(r, f"200% @320 {label}: لا خروج أفقي", no_h_overflow(pg))
+        shot(pg, f"f02-31-{label}-200-320.png")
+        ctx.close()
+
+    # ---------- reduced-motion: تفضيل فعلي للطبقتين ----------
+    for which, label, opener in ((CHOICE_PAGE, "choice", "choice"), (FILTER_PAGE, "filter", "filter")):
+        ctx = browser.new_context(viewport={"width": 390, "height": 844}, reduced_motion="reduce")
+        pg = ctx.new_page()
+        watch(pg)
+        pg.goto(f"{BASE}/{which}", wait_until="networkidle")
+        rm = pg.evaluate("() => window.matchMedia('(prefers-reduced-motion: reduce)').matches")
+        A(r, f"reduced-motion {label}: تفضيل فعلي مطبق في السياق", rm is True)
+        if label == "choice":
+            choice_open(pg)
+            dur = pg.evaluate("""() => {
+              const layer = document.getElementById('f02c-picker-layer');
+              const d = getComputedStyle(layer).transitionDuration;
+              return { d, instant: d === '0s' || d === '' }; }""")
+            A(r, f"reduced-motion {label}: زمن انتقال الطبقة صفر", dur["instant"], dur["d"])
+            A(r, f"reduced-motion {label}: الطبقة تفتح وتعمل", choice_inspect(pg)["layerOpen"] is True)
+            pg.keyboard.press("Escape")
+            choice_close_wait(pg)
+            A(r, f"reduced-motion {label}: الإغلاق يعمل فورًا", choice_inspect(pg)["layerOpen"] is False)
+        else:
+            filter_open(pg)
+            dur = pg.evaluate("""() => {
+              const layer = document.getElementById('f02f-filter-layer');
+              const d = getComputedStyle(layer).transitionDuration;
+              return { d, instant: d === '0s' || d === '' }; }""")
+            A(r, f"reduced-motion {label}: زمن انتقال الطبقة صفر", dur["instant"], dur["d"])
+            pg.click("[data-filter-apply]")
+            filter_close_wait(pg)
+            A(r, f"reduced-motion {label}: الإغلاق يعمل فورًا", filter_inspect(pg)["layerOpen"] is False)
+        ctx.close()
     shot(page, "f02-31-viewport-390.png")
 
 
+def find_fail_line(txt):
+    """F02-R1-08(1): كاشف أحكام FAIL المثبت في بداية السطر — النمط
+    القديم r"^FAIL\\b" كان يطابق backslash حرفيًا فلا يكشف سجلًا فيه FAIL.
+    النمط الصحيح يطابق FAIL في أول السطر متبوعًا بنهايته أو مسافة."""
+    return re.search(r"^FAIL(\s|$)", txt, re.M) is not None
+
+
 def run_f02_32(page):
-    r = row("F02-32", "مصدر قابل للتعديل + فحوص رجعية + أدلة نظيفة", "تعديل fixture ينعكس؛ صفر pageerrors/404 عبر الجلسة؛ فحوص B03/B07/F01 موثقة؛ source مثبت")
+    r = row("F02-32", "مصدر قابل للتعديل + فحوص رجعية + أدلة نظيفة",
+            "تعديل fixture ينعكس؛ صفر pageerrors/404؛ فحوص B03/B07/F01 من مصدر مثبت "
+            "مع تطابق commit/الشجرة وعدد الأحكام لا كلمة PASS؛ كاشف FAIL صحيح "
+            "مُختبَر ذاتيًا؛ شجرة المصدر نظيفة من تعديلات غير أدلة الجولة؛ "
+            "روابط READMEs لملفات موجودة")
     # 1) تعديل fixture الفلاتر ينعكس دون إعادة إنشاء
     goto(page, FILTER_PAGE)
     src = (ROOT / "previews" / UX_DIRNAME / "filter-lifecycle" / "example.js").read_text(encoding="utf-8")
@@ -1320,30 +1629,86 @@ def run_f02_32(page):
     s = filter_inspect(page)
     A(r, "إضافة عنصر للـfixture ينعكس في العرض", s["rowLabels"] == ["عينة أ", "عينة ب", "عينة ج", "عينة د"], s["rowLabels"])
     page.unroute("**/example.js")
-    # 2) صفر أخطاء JS وموارد فاشلة عبر كل الجلسة (تُجمع عالمياً)
+    # 2) صفر أخطاء JS وموارد فاشلة عبر كل الجلسة (تُجمع عالميًا)
     A(r, "صفر pageerrors في الجلسة كلها", len(js_errors) == 0, js_errors[:5])
     A(r, "صفر موارد 4xx/5xx في الجلسة كلها", len(http_failures) == 0, http_failures[:5])
-    # 3) أدلة فحوص رجعية (تُولد من checkout نظيف قبل هذه الأداة — ترتيب موثق)
-    reg_dir = ROOT / "reviews" / "UX-F02" / "regression"
-    f01_dir = ROOT / "reviews" / "UX-F01" / "round-f02-regression"
-    for p, name in ((reg_dir / "b03-verification.txt", "B03"), (reg_dir / "b07-verification.txt", "B07")):
-        ok = False
+    # 3) كاشف FAIL: اختبار ذاتي لحالات نجاح كامل/مختلط/مفقود/ناقص
+    A(r, "كاشف FAIL: سجل ناجح كامل يمر", find_fail_line("PASS a\nPASS b\n") is False)
+    A(r, "كاشف FAIL: سجل مختلط PASS+FAIL يكشف", find_fail_line("PASS a\nFAIL real failure\nPASS b\n") is True)
+    A(r, "كاشف FAIL: FAIL داخل اسم اختبار لا يكشف (بداية سطر فقط)",
+      find_fail_line("PASS no FAIL here\n") is False)
+    A(r, "كاشف FAIL: النمط القديم كان معطوبًا فعلًا",
+      re.search(r"^FAIL\\b", "FAIL real failure\nPASS x", re.M) is None)
+    # 4) فحوص رجعية من checkout نظيف لنفس source commit (جولة R2 بلا overwrite تاريخي)
+    reg_dir = ROOT / "reviews" / "UX-F02" / ("round-" + ROUND) / "regression"
+    f01_dir = ROOT / "reviews" / "UX-F02" / ("round-" + ROUND) / "f01-regression"
+    for p, name, expected in ((reg_dir / "b03-verification.txt", "B03", 25),
+                              (reg_dir / "b07-verification.txt", "B07", 28)):
+        ok, detail = False, "مفقود"
         if p.exists():
-            txt = p.read_text(encoding="utf-8", errors="replace")
-            # الحكم على الأحكام في بداية السطر لا على ذكر الكلمة في اسم اختبار
-            ok = re.search(r"^FAIL\\b", txt, re.M) is None and "PASS" in txt
-        A(r, f"فحص رجعي {name}: PASS من checkout نظيف", ok, str(p.relative_to(ROOT)) if p.exists() else "مفقود")
+            body = p.read_text(encoding="utf-8", errors="replace")
+            commit_m = re.search(r"^# commit المصدر: ([0-9a-f]{40})", body, re.M)
+            tree_m = re.search(r"^# بصمة شجرة المصدر: ([0-9a-f]{40})", body, re.M)
+            pass_n = len(re.findall(r"^PASS\b", body, re.M))
+            fail_n = len(re.findall(r"^FAIL\b", body, re.M))
+            result_m = re.search(r"^# النتيجة: (\d+)/(\d+)", body, re.M)
+            checks = {
+                "commit-match": bool(commit_m and commit_m.group(1) == SOURCE_COMMIT),
+                "tree-match": bool(tree_m and tree_m.group(1) == SOURCE_TREE),
+                "pass-count": pass_n == expected,
+                "no-fail": not find_fail_line(body) and fail_n == 0,
+                "result-line": bool(result_m and int(result_m.group(1)) == pass_n
+                                    and int(result_m.group(1)) == expected),
+            }
+            ok = all(checks.values())
+            detail = checks
+        A(r, f"فحص رجعي {name}: {expected} PASS من مصدر مثبت (commit+شجرة+عدد)", ok, detail)
     f01_p = f01_dir / "verification.json"
-    ok = False
+    ok, detail = False, "مفقود"
     if f01_p.exists():
         try:
             data = json.loads(f01_p.read_text(encoding="utf-8"))
             rows_ = data.get("rows", [])
-            ok = rows_ and all(x.get("status") == "PASS" for x in rows_)
-        except Exception:
-            ok = False
-    A(r, "فحص رجعي F01 (--round f02-regression): 20/20 PASS", ok, str(f01_p.relative_to(ROOT)) if f01_p.exists() else "مفقود")
-    # 4) بصمة المصدر في الأدلة
+            meta = data.get("meta", {})
+            checks = {
+                "count": len(rows_) == 20,
+                "all-pass": bool(rows_) and all(x.get("status") == "PASS" for x in rows_),
+                "source-commit": meta.get("source_commit") == SOURCE_COMMIT,
+                "no-fail-rows": not any(x.get("failed") for x in rows_),
+            }
+            ok = all(checks.values())
+            detail = checks
+        except Exception as exc:
+            ok, detail = False, str(exc)
+    A(r, "فحص رجعي F01: 20/20 PASS من نفس source commit", ok, detail)
+    # 5) نظافة شجرة المصدر: لا تعديلات مصدر قبل التشغيل (مجلد الأدلة الجديد مستثنى)
+    try:
+        status = subprocess.check_output(["git", "status", "--porcelain"], cwd=str(ROOT), text=True)
+        out_prefix = f"reviews/UX-F02/round-{ROUND}"
+        # يُستثنى مجلد أدلة الجولة نفسه (untracked تحته ليس تعديل مصدر)
+        dirty = [l for l in status.splitlines()
+                 if not (l.strip().startswith("??") and out_prefix in l)]
+    except Exception as exc:
+        dirty, status = [f"git-status-error: {exc}"], ""
+    A(r, "شجرة المصدر نظيفة عند التشغيل (الأدلة الجديدة مستثناة)", not dirty, dirty[:8])
+    # 6) روابط READMEs تشير لملفات موجودة
+    ux = UX_DIRNAME
+    link_failures = []
+    for name in ("choice-lifecycle", "filter-lifecycle", "switch-lifecycle"):
+        rp = ROOT / "previews" / ux / name / "README.md"
+        if not rp.exists():
+            link_failures.append(f"{name}/README.md missing")
+            continue
+        body = rp.read_text(encoding="utf-8")
+        for m in re.finditer(r"\]\(([^)#]+?)(?:#[^)]*)?\)", body):
+            target = m.group(1).strip()
+            if target.startswith(("http://", "https://", "data:")) or not target:
+                continue
+            resolved = (rp.parent / target).resolve()
+            if not resolved.exists():
+                link_failures.append(f"{name}: {target}")
+    A(r, "روابط READMEs الداخلية لملفات موجودة", not link_failures, link_failures[:8])
+    # 7) بصمة المصدر في الأدلة
     A(r, "source commit مثبت في السجل", len(SOURCE_COMMIT) == 40 and len(SOURCE_TREE) == 40, (SOURCE_COMMIT[:8], SOURCE_TREE[:8]))
 
 
@@ -1362,6 +1727,7 @@ def main():
     ns = parser.parse_args()
     root = Path(ns.root).resolve()
     globals()["ROOT"] = root  # أدلة الشجرة قيد الفحص هي المرجع للنسب النسبية
+    globals()["ROUND"] = ns.round  # اسم الجولة يصل لفحص نظافة الشجرة ومسارات الرجعية
     OUT = root / "reviews" / "UX-F02" / ("round-" + ns.round)
     UX_DIRNAME = discover_ux_dir()
     CHOICE_PAGE = f"previews/{UX_DIRNAME}/choice-lifecycle/index.html"
@@ -1451,11 +1817,11 @@ def main():
             "source_tree": SOURCE_TREE,
             "engine": engine,
             "command": f"python3 tools/ux-f02-check.py --root {ns.root} --round {ns.round}".strip(),
-            "zoom_mechanism": "مضاعفة أحجام الخط المحسوبة لعناصر body وقياسها قبل/بعد (آلية ui-release-check المعلنة) — ليست native zoom",
+            "zoom_mechanism": "مضاعفة 200% بممرين: التقاط أحجام البداية لكل عناصر body ثم تطبيقها من اللقطة (F02-R1-08-3: لا قراءة/كتابة متسلسلة تضاعف الموروث مرتين)؛ الحالات والخيارات تُجهز قبل القياس — ليست native zoom",
             "reduced_motion_mechanism": "Playwright reduced_motion='reduce' (تفضيل حقيقي على مستوى السياق)",
             "raw_pointer_mechanism": "page.mouse.click على إحداثيات العنصر للمعطل/aria-disabled وفق PREFLIGHT — إحداثيات حقيقية لا click() محمي",
             "sim_neutrality": "تسليح/تسوية/رد قديم عبر evaluate (محايد للتركيز) وفق إذن البطاقة §6؛ أفعال المستخدم بالنقر/لوحة المفاتيح الفعلية",
-            "regression_order": "فحوص B03/B07 وF01 (--round f02-regression) تُشغل من checkout نظيف لنفس source commit قبل هذه الأداة، وتُنسخ نتائجها المقصودة إلى reviews/UX-F02/regression/ وround-f02-regression/",
+            "regression_order": "فحوص B03/B07 وF01 (--round f02r2-regression) تُشغل من checkout نظيف لنفس source commit قبل هذه الأداة، وتُنسخ إلى reviews/UX-F02/round-r2/regression/ وf01-regression/ — ملفات الجولات السابقة لا تُكتب فوقها؛ الفحص يطابق commit/الشجرة وعدد الأحكام لا كلمة PASS",
             "js_errors": js_errors,
             "http_failures": http_failures,
         },
@@ -1466,6 +1832,7 @@ def main():
             {"item": "native zoom للنظام/المتصفح", "reason": "الفحص المنفذ محاكاة CSS 200% معلنة الآلية فقط"},
             {"item": "لمس حقيقي وsafe areas فعلية ولوحة مفاتيح نظام", "reason": "بيئة headless — لم تُنفذ"},
         ],
+        "fail_detector": "F02-R1-08-1: كاشف FAIL مثبت الأحكام ببداية السطر، مُختبَر ذاتيًا في F02-32 (ناجح كامل/مختلط/مفقود/النمط القديم المعطوب)",
         "limits": [
             "فحوص DOM ولوحة مفاتيح محاكاة لا تثبت سلوك قارئ شاشة فعلي",
             "الصور أدلة شكل فقط — القيم والتركيز والعدادات هي أدلة السلوك",

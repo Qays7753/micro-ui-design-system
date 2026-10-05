@@ -49,9 +49,13 @@
       var entry = {
         readId: readId,
         armed: OUTCOMES.indexOf(next) >= 0 ? next : 'ready',
-        settled: false
+        settled: false,
+        /* F02-R1-05: نسخة بيانات مستقلة لكل طلب عند بدئه — تعديل
+           fixture (setSource) بعد الدعوة يخص القراءة التالية ولا يمس
+           الجارية، بعكس قراءة المصدر عند التسوية. */
+        itemsSnapshot: sourceItems.slice()
       };
-      next = 'ready'; /* سيناريو لمرة واحدة */
+      next = 'ready'; /* سيناريو الدعوة التالية فقط */
       log.push(entry);
       var promise = new Promise(function (resolve, reject) {
         entry._resolve = resolve;
@@ -68,7 +72,8 @@
       if (outcome === 'reject') {
         entry._reject(new Error('محاكاة UX-F02: رفض قراءة بلا نتيجة معلومة'));
       } else {
-        var items = outcome === 'ready' ? sourceItems.slice() : [];
+        /* النتيجة من لقطة الطلب نفسه — لا من المصدر الحالي */
+        var items = outcome === 'ready' ? (entry.itemsSnapshot || []).slice() : [];
         entry._resolve({ readId: entry.readId, outcome: outcome, items: items });
       }
       emit(Object.assign({ type: 'settled', outcome: outcome, readId: entry.readId }, readout()));
@@ -102,7 +107,8 @@
     return {
       read: function (p) { return makeCall(p); },
       /* أداة SIMULATION: تبديل مصدر الخيارات لاختبار القراءة التالية
-         (تسمية محدثة/اختفاء اختيار) — تعديل fixture التالي لا يلمس قراءة جارية. */
+         (تسمية محدثة/اختفاء اختيار) — لقطة كل طلب تُخذ عند بدئه فلا
+         يمس تعديل fixture أي قراءة جارية (F02-R1-05). */
       setSource: function (items) { sourceItems = (items || []).slice(); emit(Object.assign({ type: 'source' }, readout())); },
       setNext: function (o) { if (OUTCOMES.indexOf(o) >= 0) { next = o; emit(Object.assign({ type: 'scenario' }, readout())); } },
       settle: settle,

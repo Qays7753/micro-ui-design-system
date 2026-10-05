@@ -53,21 +53,9 @@
   justify-content: space-between;
   gap: var(--micro-space-3);
 }
-/* عنصر عينة (وليس مكوّنًا): 0 شرط = مخفي فعليًا بلا مساحة ولا وصول */
-.f02f-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: var(--micro-space-5);
-  height: var(--micro-space-5);
-  padding-inline: var(--micro-space-1);
-  border-radius: var(--micro-radius-capsule);
-  background-color: var(--micro-surface-selected);
-  color: var(--micro-text-primary);
-  font-size: var(--micro-secondary-size);
-  line-height: 1;
-}
-.f02f-count[hidden] { display: none; }
+/* F02-R1-06: لا شارة بديلة — العدّاد هو .m-btn__counter المعتمد من
+   B01 داخل الزر (الصفر الحقيقي مخفي بـ .m-btn__counter--zero)، ولا
+   حاجة لأي CSS محلي له. */
 
 /* ---------- القائمة المحلية ---------- */
 .f02f-results {

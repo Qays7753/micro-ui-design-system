@@ -143,9 +143,9 @@
       <div class="m-picker" data-micro-picker id="f02c-picker">
         <div class="m-picker__head">
           <span class="m-picker__title" id="f02c-picker-inner-title">ابحث واختر</span>
-          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي">
-            <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
-          </button>
+          <!-- F02-R1-06: إغلاق ظاهر واحد في هذا التركيب — زر رأس الطبقة
+               أعلاه. المسار الإضافي [data-picker-close] خاص بالمنتقي
+               المستقل وحده، وحذفه هنا لا يمس Escape أو الخلفية. -->
         </div>
         <input class="m-picker__input" type="search" id="f02c-picker-search" data-picker-search autocomplete="off"
                aria-label="بحث في الخيارات" placeholder="اسم العينة…">

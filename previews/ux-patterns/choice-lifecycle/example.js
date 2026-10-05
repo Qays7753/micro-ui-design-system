@@ -6,32 +6,60 @@
 
    مصدر الحقيقة:
    - selected: الاختيار المحلي الفوري {value,label} أو null.
-     يبدأ من PICKER_SELECTED_INIT (لا أحداث/طلبات عند الإقلاع).
+     يبدأ من PICKER_SELECTED_INIT (لا أحداث/طلبات عند الإقلاع)، ويُبذر
+     داخل المنتقي نفسه عند الإقلاع (F02-R1-01 أدناه) فلا يزيله أول ready.
    - readSeq: معرف القراءة المتزايد (readId) — النتيجة بمعرف أقدم من
      readSeq تُتجاهل كليًا (لا قيمة/رسالة/تركيز).
    - mode: «موجز»|«تفصيلي» محلي عبر المقطّع — بلا أثر على المنتقي.
+
+   قرارات جولة R2 (تفصيلها في README.md):
+   - R1-01 بذرة البداية من مصدر واحد: PICKER_SELECTED_INIT يُزرع في
+     حالة المستهلك وداخل المنتقي (aria-selected عبر عقد DOM الموثقة
+     و[data-picker-summary]) عند الإقلاع، بلا أحداث اختيار/قراءة مبكرة.
+     أول ready صحيح يُبقي معرف البداية الموجود محددًا داخل المنتقي
+     وخارجه؛ معرف غائب فعلًا يُمسح بأول تأكيد قراءة برسالة الزوال.
+   - R1-02 empty مؤكدة تُطبق مصدرًا فارغًا وتزامن null والملخص والعرض
+     ورسالة الزوال — مثل ready بقائمة فارغة. loading/error يحفظان
+     آخر اختيار محلي وفق البطاقة §3.2.
+   - R1-03 حرس التركيز ينتقل فقط قبل زوال عنصر مركّز سيُخفى أو يُستبدل
+     (خيار/صف حالة/زر إعادة محاولة)؛ العناصر الثابتة (البحث/إغلاق
+     الطبقة/غيرها) لا تُسرق منها، وإن انتقل المستخدم لهدف آخر صالح
+     فلا نقل.
+   - R1-04 توجيه رسالة معالجة الاختيار: داخل طبقة مفتوحة تُدمج في
+     إعلان القراءة نفسه على القناة الوحيدة داخل نطاق الطبقة (#f02c-
+     picker-live، live-only) كي لا تسقط في خلفية inert ولا تُعلن
+     مرتين؛ خارج الطبقة تُكتب في #f02c-selection-note. no-results
+     ومسح البحث يزامنان إعلانًا مفهومًا بدل عدد قراءة قديم.
+   - R1-06 إغلاق ظاهر واحد في هذا التركيب: زر رأس الطبقة (B07) —
+     Escape/الخلفية كما هي. القناة داخل الطبقة live-only؛ الحالة
+     المرئية لكل معنى هي صف حالة المنتقي (من core) والملخص.
 
    قرارات موثقة (تفصيلها في README.md):
    - الاختيار فوري ومحلي: micro-picker:change بقيمة يحدّث القيمة والعرض
      الخارجي ثم يغلق الطبقة. setOptions أو المسح (قيمة null) لا يغلق.
    - كل فتح للطبقة يبدأ قراءة جديدة بreadId جديد؛ الإغلاق لا يلغي قراءة،
      والنتيجة المقبولة تزامن العرض ولو كانت الطبقة مغلقة، ولا إعادة فتح
-     تلقائية (الإغلاق الظاهر/Escape/الخلفية كلها إغلاق عرض لا «إلغاء»).
+     تلقائية (الإغلاق الظاهر = زر رأس الطبقة/Escape/الخلفية كلها إغلاق
+     عرض لا «إلغاء»).
    - الحالة عبر setStatus: loading/error/empty تخفي الخيارات القديمة
      (لا اختيار نتائج عتيقة)، والبحث لا يزيل حالة الخطأ.
    - setOptions: يحفظ اختيارًا باقيًا بالمعرف ويزامن تسميته الخارجية
      حتى دون حدث change (بقاء المعرف)، ويسقط الاختيار الزائل مع رسالة
      «الخيار السابق لم يعد متاحًا. اختر مجددًا» — بلا اختيار تلقائي لأول خيار.
-   - مصدر فارغ: setStatus(picker,'empty') صراحة بعد setOptions — لا
-     اعتماد على قائمة بيضاء. no-results نتيجة بحث فقط ولا تخلط بالحالة.
-   - التركيز (F02-14): قبل استبدال/إخفاء عناصر مركّز داخل منتقي مفتوح
-     ينتقل التركيز إلى حقل البحث الثابت؛ إن نقل المستخدم تركيزه خارج
-     العنصر المستبدل فلا سرقة. عند إغلاق الطبقة يدير B07 الإعادة وحده.
-   - قناتان منفصلتان، حدث واحد = قناة واحدة:
-     · حالة القراءة (loading/ready/empty/error) داخل الطبقة المفتوحة
-       (#f02c-picker-live) كي لا تسقط في خلفية inert.
-     · تغيّر الاختيار (اختيار/مسح/سقوط) خارجها (#f02c-selection-note).
-     لا MicroMessages.announce لأي من النصين، ولا منطقة حية ثالثة.
+   - مصدر فارغ (ready بلا عناصر أو empty): مصدر فارغ مطبق + حالة صريحة
+     بعد setOptions — لا اعتماد على قائمة بيضاء، والمسح يزامن null.
+     no-results نتيجة بحث فقط ولا تخلط بالحالة.
+   - التركيز (F02-14/F02-R1-03): قبل زوال عنصر مركّز سيُخفى/يُستبدل
+     (خيار/صف حالة/إعادة محاولة) ينتقل التركيز إلى حقل البحث الثابت؛
+     العناصر الثابتة لا تُسرق منها، وإن نقل المستخدم تركيزه فلا نقل.
+     عند إغلاق الطبقة يدير B07 الإعادة وحده.
+   - قناة الإعلان (حدث = قناة واحدة):
+     · حالة القراءة وسقوط الاختيار أثناء طبقة مفتوحة: #f02c-picker-live
+       داخل نطاق الطبقة (live-only بلا strip مرئي مكرر — الحالة المرئية
+       صف حالة المنتقي من core). رسالة السقوط تُدمج في إعلان القراءة
+       نفسه كي لا تُعلن مرتين ولا يطغى عليها عد القراءة.
+     · سقوط الاختيار والعرض مغلق: #f02c-selection-note (role=status).
+     · لا MicroMessages.announce لأي من النصين، ولا منطقة حية ثالثة.
    ========================================================= */
 
 (function () {
@@ -79,6 +107,11 @@
     readSeq: 0,
     staleIgnored: 0
   };
+  /* F02-R1-04: أثناء معالجة نتيجة قراءة تُؤجل رسالة السقوط لتُدمج في
+     إعلان القراءة نفسه (قناة واحدة، بلا إعلان مزدوج). خارج المعالجة
+     تُوجّه فورًا حسب موضع الطبقة. */
+  var inReadResult = false;
+  var pendingDropNote = null;
 
   /* الموصل التجريبي — قابل للاستبدال (واجهة mock-adapter.js) */
   var connector = window.F02ChoiceSim.createConnector({ items: PICKER_READ_ITEMS_INIT });
@@ -164,15 +197,21 @@
     el.pickerLive.textContent = text; /* قناة واحدة داخل الطبقة */
   }
 
-  /* F02-14: قبل استبدال/إخفاء عنصر مركّز داخل منتقي مفتوح → البحث الثابت.
-     إن كان المستخدم خارج الخيارات/المنتجق فلا سرقة تركيز. */
+  /* F02-14 + F02-R1-03: التركيز يُنقل إلى البحث الثابت فقط قبل زوال
+     عنصر مركّز سيُخفى أو تُستبدل عقده (خيار/صف حالة/زر إعادة محاولة).
+     العناصر الثابتة — حقل البحث وزر إغلاق الطبقة وغيرهما — لا تُسرق
+     منها، وإن نقل المستخدم تركيزه إلى هدف آخر صالح فلا نقل. */
   function moveFocusIntoPickerBeforeDataChange() {
     var layerOpen = !el.layer.hidden;
     if (!layerOpen) return;
     var active = document.activeElement;
     if (!active || !el.picker.contains(active)) return;
+    var doomed = active.classList.contains('m-picker__option')
+      || active.hasAttribute('data-picker-retry')
+      || !!active.closest('.m-picker__state');
+    if (!doomed) return; /* عنصر ثابت أو هدف صالح آخر — لا سرقة */
     var search = el.picker.querySelector('[data-picker-search]');
-    if (active !== search) search.focus();
+    if (search && active !== search) search.focus();
   }
 
   function startRead(reason) {
@@ -199,25 +238,50 @@
       return; /* رد أقدم: لا قيمة ولا رسالة ولا تركيز */
     }
     moveFocusIntoPickerBeforeDataChange();
-    if (res.outcome === 'ready') {
-      window.MicroPicker.setOptions(el.picker, res.items || []);
-      /* المزامنة بعد setOptions — بما فيها تسمية جديدة لبقاء المعرف
-         دون حدث change، أو سقوط الاختيار مع رسالة معالجة */
-      syncSelectionFromPicker();
-      if (!res.items || !res.items.length) {
-        /* مصدر فارغ: حالة صريحة بعد setOptions — لا اعتماد على قائمة بيضاء */
+    inReadResult = true;
+    pendingDropNote = null;
+    try {
+      if (res.outcome === 'ready') {
+        window.MicroPicker.setOptions(el.picker, res.items || []);
+        /* المزامنة بعد setOptions — بما فيها تسمية جديدة لبقاء المعرف
+           دون حدث change، أو سقوط الاختيار (رسالته تُدمج أدناه) */
+        syncSelectionFromPicker();
+        if (!res.items || !res.items.length) {
+          /* مصدر فارغ: حالة صريحة بعد setOptions — لا اعتماد على قائمة بيضاء */
+          window.MicroPicker.setStatus(el.picker, 'empty', 'لا خيارات في المصدر.');
+          announceWithDropNote('لا خيارات في المصدر.');
+        } else {
+          announceWithDropNote('تمت القراءة: ' + res.items.length + ' خيارات.');
+        }
+      } else if (res.outcome === 'empty') {
+        /* F02-R1-02: empty مؤكدة تطبق مصدرًا فارغًا وتزامن null والملخص
+           والعرض ورسالة الزوال — مثل ready بقائمة فارغة. ليست كـ
+           loading/error الذين يحفظان آخر اختيار محلي وفق البطاقة §3.2. */
+        window.MicroPicker.setOptions(el.picker, []);
+        syncSelectionFromPicker();
         window.MicroPicker.setStatus(el.picker, 'empty', 'لا خيارات في المصدر.');
-        announceReadState('لا خيارات في المصدر.');
+        announceWithDropNote('لا خيارات في المصدر.');
       } else {
-        announceReadState('تمت القراءة: ' + res.items.length + ' خيارات.');
+        window.MicroPicker.setStatus(el.picker, 'error');
+        announceWithDropNote('تعذرت قراءة الخيارات.');
       }
-    } else if (res.outcome === 'empty') {
-      window.MicroPicker.setStatus(el.picker, 'empty', 'لا خيارات في المصدر.');
-      announceReadState('لا خيارات في المصدر.');
-    } else {
-      window.MicroPicker.setStatus(el.picker, 'error');
-      announceReadState('تعذرت قراءة الخيارات.');
+    } finally {
+      inReadResult = false;
+      pendingDropNote = null;
     }
+  }
+
+  /* F02-R1-04: حالة القراءة + سقوط الاختيار في تحديث قناة واحد داخل
+     نطاق الطبقة المفتوحة (لا إعلان مزدوج ولا يطغى عد القراءة على رسالة
+     السقوط). والعرض مغلق: السقوط إلى القناة الخارجية المناسبة. */
+  function announceWithDropNote(baseText) {
+    if (pendingDropNote && el.layer.hidden) {
+      /* عرض مغلق: القناة الخارجية للمعالجة، وإعلان حالة القراءة كما هو */
+      setSelectionNote(pendingDropNote);
+      announceReadState(baseText);
+      return;
+    }
+    announceReadState(pendingDropNote ? baseText + ' ' + pendingDropNote : baseText);
   }
 
   /* بعد setOptions: الوضع المحلي يجب أن يطابق المنتقي دائمًا */
@@ -230,9 +294,48 @@
       }
     } else if (state.selected) {
       state.selected = null;
-      setSelectionNote('الخيار السابق لم يعد متاحًا. اختر مجددًا.');
+      var dropNote = 'الخيار السابق لم يعد متاحًا. اختر مجددًا.';
+      if (inReadResult) {
+        /* داخل معالجة قراءة: يُدمج مع إعلان القراءة نفسه (قناة واحدة) */
+        pendingDropNote = dropNote;
+      } else {
+        routeProcessingMessage(dropNote);
+      }
     }
     renderSelection();
+  }
+
+  /* F02-R1-04: توجيه رسالة معالجة الاختيار إلى القناة الصحيحة حسب موضع
+     الطبقة — داخلها عبر قناتها الحية داخل النطاق (وإلا سقطت في خلفية
+     inert)، وخارجها القناة الخارجية. قناة واحدة لكل حدث بلا إعلان
+     مزدوج ولا إعادة فتح. */
+  function routeProcessingMessage(text) {
+    if (!el.layer.hidden) {
+      announceReadState(text);
+    } else {
+      setSelectionNote(text);
+    }
+  }
+
+  /* ---------- بذرة اختيار البداية (F02-R1-01) ----------
+     مصدر واحد: PICKER_SELECTED_INIT يُزرع في حالة المستهلك وداخل
+     المنتقي نفسه عند الإقلاع — بناء الخيارات من PICKER_READ_ITEMS_INIT
+     (بلا أحداث اختيار لأن لا تحديد سابق) ثم aria-selected على العقدة
+     الموثقة وتحديث الملخص الداخلي. بلا أحداث حفظ/قراءة مبكرة. معرف
+     البداية غير موجود في المصدر: لا بذرة داخل المنتقي، وأول ready
+     يؤكد الزوال ويمسح برسالة الزوال الصحيحة. */
+  function seedInitialSelection() {
+    if (!state.selected) return;
+    window.MicroPicker.setOptions(el.picker, PICKER_READ_ITEMS_INIT);
+    var options = el.picker.querySelectorAll('.m-picker__option');
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].getAttribute('data-value') === state.selected.value) {
+        options[i].setAttribute('aria-selected', 'true');
+        var foot = el.picker.querySelector('[data-picker-summary]');
+        if (foot) foot.textContent = 'المحدد: ' + options[i].textContent.trim();
+        return;
+      }
+    }
   }
 
   /* ---------- أحداث المنتقي ---------- */
@@ -270,6 +373,41 @@
     window.MicroPicker.clearSelection(el.picker); /* يعلن change بقيمة null → التزامن أعلاه */
     renderSelection();
   });
+
+  /* F02-R1-04: مزامنة إعلان البحث مع القناة داخل الطبقة — لا عدد قراءة
+     قديم يوهم بوجود نتائج عند no-results، ومسح البحث يعلن حالة مفهومة.
+     لا role حي على خيار أو صف نتائج؛ القناة واحدة هي #f02c-picker-live.
+     حالة القراءة (غير ready) يدير إعلانها مسار القراءة — لا نعلن فوقها. */
+  var searchInput = el.picker.querySelector('[data-picker-search]');
+  function bindSearchAnnouncement() {
+    if (!searchInput || searchInput.dataset.f02SearchAnnounced) return;
+    searchInput.dataset.f02SearchAnnounced = '1';
+    searchInput.addEventListener('input', function () {
+      if (el.layer.hidden) return;
+      var row = el.picker.querySelector('.m-picker__state');
+      var rowText = row ? row.textContent : '';
+      /* صف «لا نتائج مطابقة» نتيجة تصفية بحث فقط (يظهر في ready وحده) */
+      if (rowText.indexOf('لا نتائج مطابقة') !== -1) {
+        announceReadState('لا نتائج مطابقة للبحث. جرّب اسمًا آخر.');
+        return;
+      }
+      if (row) return; /* صف حالة قراءة (loading/error/empty) — مسار القراءة يعلنها */
+      var visible = pickerStatusVisibleOptionCount();
+      if (searchInput.value.trim() === '') {
+        announceReadState('الخيارات الظاهرة: ' + visible + ' خيارات.');
+      } else {
+        announceReadState('نتائج البحث: ' + visible + ' خيارات.');
+      }
+    });
+  }
+  /* التسجيل بعد init المنتقي (DOMContentLoaded يُبلّغ المسجلين بترتيبهم،
+     وpicker.js سجل نفسه قبل هذا الملف) كي يقرأ المستمع DOM بعد تصفية
+     المنتقي لا قبلها — وإلا لعكس الإعلان حدثًا (درس مُثبت بالفحص). */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindSearchAnnouncement);
+  } else {
+    bindSearchAnnouncement();
+  }
 
   /* ---------- المقطّع: وضع محلي فقط ---------- */
   el.seg.addEventListener('micro-selection:segment', function (e) {
@@ -328,7 +466,10 @@
     }
   };
 
-  /* ---------- إقلاع: بلا أحداث ولا طلبات ---------- */
+  /* ---------- إقلاع: بلا أحداث ولا طلبات ----------
+     F02-R1-01: بذرة اختيار البداية داخل المنتقي نفسه من المصدر الواحد
+     (aria-selected + الملخص) دون أحداث اختيار/قراءة مبكرة. */
   renderGroups();
+  seedInitialSelection();
   renderSelection();
 })();
