@@ -125,6 +125,14 @@
   white-space: nowrap;
 }
 
+/* ---------- F02-R2-01: رسالة معالجة زوال الاختيار داخل الطبقة ----------
+   المكوّن نفسه معتمد (m-note--warning من B06) بقواعده الأصلية؛ هنا
+   مسافة تركيب فقط بينها وبين المنتقي — بلا ألوان/خطوط/انحناءات جديدة.
+   الظهور الفعلي من سمة hidden وقاعدة .m-note[hidden] في المكوّن. */
+.f02-drop-note {
+  margin-block-end: var(--micro-space-3);
+}
+
 /* ---------- قسم SIMULATION (خارج واجهة المستفيد) ---------- */
 .f02-sim {
   margin: var(--micro-space-6) var(--micro-space-5) var(--micro-space-6);

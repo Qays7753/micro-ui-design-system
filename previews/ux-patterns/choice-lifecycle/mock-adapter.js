@@ -10,6 +10,11 @@
      كل طلب مستقل بمعرفه، والتسوية بأمر صريح: settle(readId?) تسوّي
      أقدم معلّق عند غياب المعرف، وsettleLatest() تسوّي الأحدث.
    - السيناريو (setNext) يطبق على الدعوة المقبلة فقط ولا يعدّل طلبًا جارٍ.
+   - F02-R2-03: لقطة كل طلب نسخ عميق نسبيًا لمخطط خيارات العينة: كل عنصر
+     يُنسخ عنصرًا عنصرًا عند بدء القراءة (value وlabel وdisabled/checked
+     كقيم أولية) — تعديل كائنات المصدر نفسها بعد الدعوة (label أو value)
+     لا يمس نتيجة الطلب الجارية، بعكس نسخ المصفوفة فقط الذي يشارك
+     الكائنات. حد موثق: ما دون مخطط العينة لا يُحمل ولا يُستنسخ عميقًا.
    - لا مؤقت واجهة يقرر نتيجة، ولا شبكة أو تخزين أو مصادقة.
    - رد بمعرف قديم يُسلّم عبر مسار المستهلك (deliverTestReadResponse)
      دون استهلاك التسوية الحالية — يثبت فلتر المستهلك لا وصولًا شبكيًا.
@@ -21,6 +26,23 @@
   'use strict';
 
   var OUTCOMES = ['ready', 'empty', 'error', 'reject'];
+
+  /* F02-R2-03: نسخ عنصر واحد وفق مخطط خيارات العينة.
+     المخطط: { value, label } إلزاميان سلوكيًا، وdisabled/checked أعلام
+     اختيارية — قيم أولية بنسخ مباشر (لا مراجع مشتركة). حد موثق: مفاتيح
+     خارج المخطط لا تُحمل، والكائنات المتداخلة لا تُستنسخ (لا مكتبة
+     استنساخ عامة — العينة لا تحتاجها؛ القيم في المخطط أولية). */
+  var SNAPSHOT_KEYS = ['value', 'label', 'disabled', 'checked'];
+
+  function snapshotItem(item) {
+    if (!item || typeof item !== 'object') return item;
+    var copy = {};
+    for (var i = 0; i < SNAPSHOT_KEYS.length; i++) {
+      var k = SNAPSHOT_KEYS[i];
+      if (item[k] !== undefined) copy[k] = item[k];
+    }
+    return copy;
+  }
 
   function createConnector(config) {
     var sourceItems = (config && config.items) || [];
@@ -50,10 +72,13 @@
         readId: readId,
         armed: OUTCOMES.indexOf(next) >= 0 ? next : 'ready',
         settled: false,
-        /* F02-R1-05: نسخة بيانات مستقلة لكل طلب عند بدئه — تعديل
-           fixture (setSource) بعد الدعوة يخص القراءة التالية ولا يمس
-           الجارية، بعكس قراءة المصدر عند التسوية. */
-        itemsSnapshot: sourceItems.slice()
+        /* F02-R1-05 + F02-R2-03: نسخة بيانات مستقلة لكل طلب عند بدئه —
+           نسخ المصفوفة والعناصر معًا (snapshotItem): تعديل fixture
+           (setSource) أو تعديل كائنات عناصر المصدر نفسها بعد الدعوة
+           (label/value) يخص القراءة التالية ولا يمس الجارية، بعكس
+           قراءة المصدر عند التسوية أو نسخ المصفوفة فقط الذي يشارك
+           كائنات العناصر. */
+        itemsSnapshot: sourceItems.map(snapshotItem)
       };
       next = 'ready'; /* سيناريو الدعوة التالية فقط */
       log.push(entry);
@@ -107,8 +132,9 @@
     return {
       read: function (p) { return makeCall(p); },
       /* أداة SIMULATION: تبديل مصدر الخيارات لاختبار القراءة التالية
-         (تسمية محدثة/اختفاء اختيار) — لقطة كل طلب تُخذ عند بدئه فلا
-         يمس تعديل fixture أي قراءة جارية (F02-R1-05). */
+         (تسمية محدثة/اختفاء اختيار) — لقطة كل طلب تُخذ عند بدئه بنسخ
+         العناصر نفسها فلا يمس تعديل fixture (المصفوفة أو كائناتها)
+         أي قراءة جارية (F02-R1-05 + F02-R2-03). */
       setSource: function (items) { sourceItems = (items || []).slice(); emit(Object.assign({ type: 'source' }, readout())); },
       setNext: function (o) { if (OUTCOMES.indexOf(o) >= 0) { next = o; emit(Object.assign({ type: 'scenario' }, readout())); } },
       settle: settle,

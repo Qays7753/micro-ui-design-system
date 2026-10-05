@@ -133,6 +133,34 @@ def choice_close_wait(page):
     page.wait_for_function("() => window.F02Choice.inspect().layerOpen === false", timeout=3000)
 
 
+def drop_note_measure(page):
+    """F02-R2-04(1): قياس رسالة زوال الاختيار فعليًا — الظهور المحسوب
+    (display/hidden) ومساحة العنصر وعدم القص + نصها وموقعها داخل الطبقة
+    + هل نص الزوال موجود أيضًا في قناة القراءة (فحص قناة واحدة)."""
+    return page.evaluate(
+        """() => {
+        const n = document.getElementById('f02c-drop-note');
+        const live = document.getElementById('f02c-picker-live');
+        const layer = document.getElementById('f02c-picker-layer');
+        if (!n) return null;
+        const cs = getComputedStyle(n), r = n.getBoundingClientRect();
+        return { text: (document.getElementById('f02c-drop-note-text') || {textContent: ''}).textContent,
+                 hiddenAttr: n.hidden, display: cs.display, visibility: cs.visibility,
+                 w: Math.round(r.width), h: Math.round(r.height),
+                 clipPath: cs.clipPath, inLayer: layer.contains(n),
+                 inLive: (live.textContent || '').indexOf('لم يعد متاحًا') !== -1 };
+      }""")
+
+
+def drop_note_visible_assertion(dn):
+    """شرط الظهور الفعلي للرسالة (لا textContent وحده ولا داخل الطبقة وحدها):
+    محسوبًا معروضة، بسمة hidden=false، بمستطيل حقيقي > 1×1، بلا قص،
+    داخل الطبقة، بنص الزوال الصحيح."""
+    return bool(dn) and dn["inLayer"] and not dn["hiddenAttr"] and dn["display"] != "none" \
+        and dn["visibility"] != "hidden" and dn["w"] > 1 and dn["h"] > 1 \
+        and dn["clipPath"] == "none" and "لم يعد متاحًا" in dn["text"]
+
+
 def raw_click(page, selector):
     """نقر مؤشر حقيقي بإحداثيات العنصر — يتجاوز حراسة Playwright للمعطل."""
     box = page.locator(selector).bounding_box()
@@ -489,7 +517,9 @@ def run_f02_07(page):
 def run_f02_08(page):
     r = row("F02-08", "empty-source وready بلا عناصر بعد اختيار سابق + no-results",
             "المصدر الفارغ (مسارا empty وready/items=[]) يصفر الاختيار والملخص والعرض مع رسالة "
-            "الزوال دون استبدال العقدة أو reload ولا اختيار تلقائي؛ no-results ثم المسح يعيد البيانات بلا قراءة")
+            "الزوال الظاهرة داخل الطبقة (R2-01) دون استبدال العقدة أو reload ولا اختيار تلقائي؛ "
+            "no-results ثم المسح يعيد البيانات بلا قراءة؛ والبحث المكتوب أثناء القراءة (R2-04-2) "
+            "يعلن من الظاهر لا من عدد المصدر: مطابقة/بلا مطابقة/تحديث ببيانات جديدة/مسح")
     goto(page, CHOICE_PAGE)
     # اختيار سابق: open → settle → اختيار beta
     choice_open(page)
@@ -508,8 +538,11 @@ def run_f02_08(page):
     A(r, "empty بعد اختيار: الاختيار صفر في القيمة والعرض والملخص",
       s["selected"] is None and "لا شيء" in s["displayText"]
       and s["pickerSummary"] == "المحدد: لا شيء", s)
-    A(r, "empty بعد اختيار: رسالة زوال داخل قناة الطبقة المفتوحة",
-      "لم يعد متاحًا" in (s["liveText"] or "") and s["selectionNote"] == "", (s["liveText"], s["selectionNote"]))
+    dn = drop_note_measure(page)
+    A(r, "empty بعد اختيار: رسالة الزوال ظاهرة فعليًا داخل الطبقة (R2-01)",
+      drop_note_visible_assertion(dn), dn)
+    A(r, "empty بعد اختيار: قناة واحدة — نص الزوال ليس في قناة القراءة والخارجية فارغة",
+      not dn["inLive"] and s["selectionNote"] == "", (dn["inLive"], s["selectionNote"]))
     A(r, "empty بعد اختيار: صف حالة صريح ولا اختيار تلقائي لأول خيار",
       s["stateRow"] == "لا خيارات في المصدر." and not any(o["selected"] for o in s["options"]), s)
     # المسار 2: ready بقائمة فارغة عبر مسار المستهلك (نفس التزامن)
@@ -545,6 +578,47 @@ def run_f02_08(page):
       len([o for o in s["options"] if o["visibleRect"]]) == 3 and s["readCalls"] == calls_before
       and "الخيارات الظاهرة: 3" in (s["liveText"] or ""), (s["liveText"], s["readCalls"]))
     shot(page, "f02-08-picker-empty.png")
+    # F02-R2-04(2): كتابة البحث أثناء القراءة ثم التسوية — لا مكتوب بعد ready فقط
+    page.keyboard.press("Escape")  # الطبقة مفتوحة من المسار السابق — إغلاق قبل قراءة جديدة
+    choice_close_wait(page)
+    choice_open(page)
+    page.fill("[data-picker-search]", "ب")  # أثناء loading
+    page.wait_for_timeout(50)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "بحث أثناء القراءة ثم ready بمطابقة: الإعلان يطابق الظاهر (R2-02)",
+      "نتائج البحث: 1" in (s["liveText"] or "")
+      and len([o for o in s["options"] if o["visibleRect"]]) == 1, s["liveText"])
+    page.keyboard.press("Escape")
+    choice_close_wait(page)
+    choice_open(page)
+    page.fill("[data-picker-search]", "zzz")  # أثناء loading
+    page.wait_for_timeout(50)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "بحث أثناء القراءة ثم ready بلا مطابقة: انعدام النتائج لا عدد المصدر (R2-02)",
+      s["searchValue"] == "zzz" and "لا نتائج مطابقة" in (s["liveText"] or "")
+      and "تمت القراءة" not in (s["liveText"] or "")
+      and len([o for o in s["options"] if o["visibleRect"]]) == 0
+      and "لا نتائج مطابقة" in (s["stateRow"] or ""), s["liveText"])
+    # تحديث البيانات مع استعلام قائم (R2-04-2): نتيجة جديدة بمطابقة واحدة
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'ready',
+      items: [{ value: 'zzz-a', label: 'نتيجة zzz واحدة' }] });""")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    A(r, "تحديث بيانات باستعلام قائم مع مطابقة: عدد الظاهر هو المعلن",
+      "نتائج البحث: 1" in (s["liveText"] or "")
+      and len([o for o in s["options"] if o["visibleRect"]]) == 1, s["liveText"])
+    page.fill("[data-picker-search]", "")
+    page.wait_for_timeout(60)
+    s = choice_inspect(page)
+    A(r, "مسح البحث بعد تحديث باستعلام قائم: النص يطابق المعروض",
+      "الخيارات الظاهرة: 1" in (s["liveText"] or ""), s["liveText"])
+    page.keyboard.press("Escape")
+    choice_close_wait(page)
 
 
 def run_f02_09(page):
@@ -647,11 +721,15 @@ def run_f02_11(page):
 
 
 def run_f02_12(page):
-    r = row("F02-12", "اختفاء الاختيار من المصدر — توجيه الرسالة (R1-04)",
-            "داخل الطبقة المفتوحة: رسالة الزوال تصل قناة واحدة داخل النطاق (لا خلفية inert ولا مزدوج)؛ "
-            "خارج الطبقة: القناة الخارجية المناسبة دون إعادة فتح؛ null في كل العروض؛ بلا اختيار تلقائي")
+    r = row("F02-12", "اختفاء الاختيار من المصدر — الرسالة الظاهرة والقناة الواحدة (R2-01)",
+            "داخل الطبقة المفتوحة: رسالة الزوال ظاهرة فعليًا داخل النطاق (display/مستطيل/بلا قص) "
+            "وهي القناة الوحيدة للحدث (نصها ليس في قناة القراءة ولا في الخارجية)؛ اللقطة وهي مفتوحة "
+            "والرسالة مستقرة بعد توكيد الحالة؛ تحديث بيانات وحده لا يمسحها (بلا استعادة تلقائية) "
+            "واختيار جديد يمسح سببها؛ "
+            "خارج الطبقة: القناة الخارجية دون إعادة فتح؛ null في كل العروض؛ بلا اختيار تلقائي؛ "
+            "وأن يزول الاختيار مع no-results البحثية معًا (R2-02)")
     goto(page, CHOICE_PAGE)
-    # (أ) الطبقة مفتوحة: الرسالة داخل القناة داخل الطبقة
+    # (أ) الطبقة مفتوحة: الرسالة الظاهرة داخل النطاق — اللقطة قبل الإغلاق
     choice_open(page)
     choice_settle(page, "latest")
     page.wait_for_timeout(80)
@@ -668,8 +746,11 @@ def run_f02_12(page):
     A(r, "الاختيار سقط: null في القيمة والعرض والملخص",
       s["selected"] is None and "لا شيء" in s["displayText"]
       and s["pickerSummary"] == "المحدد: لا شيء", s)
-    A(r, "الطبقة مفتوحة: رسالة الزوال في القناة داخل النطاق",
-      "لم يعد متاحًا" in (s["liveText"] or ""), s["liveText"])
+    dn = drop_note_measure(page)
+    A(r, "الطبقة مفتوحة: رسالة الزوال ظاهرة فعليًا داخل النطاق (R2-01)",
+      drop_note_visible_assertion(dn), dn)
+    A(r, "قناة واحدة للحدث: نص الزوال ليس في قناة القراءة",
+      not dn["inLive"], (dn["inLive"], s["liveText"]))
     note_in_inert = page.evaluate("""() => {
       const n = document.getElementById('f02c-selection-note');
       return { text: n.textContent, inInert: !!n.closest('[inert]') }; }""")
@@ -677,10 +758,26 @@ def run_f02_12(page):
       note_in_inert["inInert"] is True and note_in_inert["text"] == "", note_in_inert)
     sel = [o["selected"] for o in s["options"]]
     A(r, "بلا تحديد تلقائي لأول خيار", not any(sel), sel)
-    # إغلاق الطبقة قبل مرحلة العرض المغلق (كانت مفتوحة بعد نتيجة المرحلة أ)
+    # توكيد استقرار الرسالة الظاهرة قبل اللقطة (R2-04-4)
+    dn2 = drop_note_measure(page)
+    A(r, "الرسالة الظاهرة مستقرة قبل اللقطة (قياسان متطابقان)",
+      dn2 == dn and drop_note_visible_assertion(dn2), dn2)
+    shot(page, "f02-12-selection-dropped.png")  # الطبقة مفتوحة والرسالة ظاهرة
+    # تحديث البيانات بعد الزوال: لا استعادة تلقائية (بلا اختيار تلقائي) —
+    # الرسالة باقية ما دام سببها قائمًا (لا اختيار جديد بعد) (R2-01)
+    page.evaluate("""() => window.F02Choice.deliverTestReadResponse({
+      readId: window.F02Choice.inspect().readSeq, outcome: 'ready',
+      items: [{ value: 'alpha', label: 'عينة أ' }, { value: 'beta', label: 'عينة ب' },
+              { value: 'gamma', label: 'عينة ج' }] });""")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    dn3 = drop_note_measure(page)
+    A(r, "تحديث البيانات بعد الزوال لا يعيد الاختيار تلقائيًا والرسالة باقية (سببها قائم)",
+      s["selected"] is None and not any(o["selected"] for o in s["options"])
+      and drop_note_visible_assertion(dn3), dn3)
     page.keyboard.press("Escape")
     choice_close_wait(page)
-    shot(page, "f02-12-selection-dropped.png")
+    shot(page, "f02-12-selection-dropped-closed.png")  # لقطة العرض المغلق مستقلة
     # (ب) الطبقة مغلقة أثناء وصول النتيجة: القناة الخارجية وبلا إعادة فتح
     page.evaluate("""() => window.F02Choice.setSource([
       { value: 'alpha', label: 'عينة أ' },
@@ -702,7 +799,37 @@ def run_f02_12(page):
     s = choice_inspect(page)
     A(r, "النتيجة المقبولة أثناء الإغلاق تزامن العرض", s["selected"] is None and "لا شيء" in s["displayText"], s)
     A(r, "العرض مغلق: رسالة الزوال في القناة الخارجية", "لم يعد متاحًا" in s["selectionNote"], s["selectionNote"])
+    A(r, "العرض مغلق: رسالة الطبقة مخفية (القناة الوحيدة للحدث المغلق)",
+      s["dropNote"]["hiddenAttr"] is True and s["dropNote"]["text"] == "", s["dropNote"])
     A(r, "لا إعادة فتح تلقائية", s["layerOpen"] is False)
+    # اختيار جديد يمسح سبب الرسالة (R2-01)
+    choice_open(page)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    page.click(".m-picker__option[data-value='alpha']")
+    choice_close_wait(page)
+    s = choice_inspect(page)
+    A(r, "اختيار جديد يمسح القناتين: سبب الرسالة زال",
+      s["selected"]["value"] == "alpha" and s["selectionNote"] == ""
+      and s["dropNote"]["hiddenAttr"] is True and s["dropNote"]["text"] == "", s["dropNote"])
+    # (ج) اجتماع زوال الاختيار مع no-results البحثية (R2-02)
+    page.evaluate("""() => window.F02Choice.setSource([
+      { value: 'beta', label: 'عينة ب' }]);""")  # alpha المحدد سيزول
+    choice_open(page)
+    page.fill("[data-picker-search]", "zzz")  # أثناء loading
+    page.wait_for_timeout(50)
+    choice_settle(page, "latest")
+    page.wait_for_timeout(80)
+    s = choice_inspect(page)
+    dn = drop_note_measure(page)
+    A(r, "زوال الاختيار + no-results معًا: كل قناة تعلن معناها دون تكرار أو تطغى",
+      s["selected"] is None and drop_note_visible_assertion(dn)
+      and not dn["inLive"]
+      and "لا نتائج مطابقة" in (s["liveText"] or "")
+      and len([o for o in s["options"] if o["visibleRect"]]) == 0, (dn, s["liveText"]))
+    shot(page, "f02-12-drop-no-results.png")
+    page.keyboard.press("Escape")
+    choice_close_wait(page)
 
 
 def run_f02_13(page):
@@ -751,6 +878,31 @@ def run_f02_13(page):
     A(r, "R1-05: نتيجة القراءة الأقدم من مصدرها القديم رغم تغيير fixture",
       snap["oldLater"] == {"readId": 101, "outcome": "ready",
                             "items": [{"value": "old", "label": "Old"}]}, snap["oldLater"])
+    # (ج-2) F02-R2-04(3): تعديل خصائص الكائنات المشتركة بعد بدء الدعوة
+    # (label وvalue معًا) في مصدر الإنشاء ومصدر setSource — لا استبدال مصفوفة فقط
+    snap2 = page.evaluate("""() => {
+      const src = [{ value: 'old', label: 'قبل القراءة' }];
+      const c = window.F02ChoiceSim.createConnector({ items: src });
+      const p1 = c.read({ readId: 201 });
+      src[0].label = 'تعديل بعد بدء الطلب';
+      src[0].value = 'معدل';
+      const src2 = [{ value: 'new', label: 'المصدر الجديد' }];
+      c.setSource(src2);
+      const p2 = c.read({ readId: 202 });
+      src2[0].label = 'تعديل المصدر بعد بدء الطلب';
+      src2[0].value = 'معدل-جديد';
+      const out = { first: null, second: null };
+      return c.settleLatest() === true ? p2.then(r2 => {
+        out.second = r2;
+        c.settle(201);
+        return p1.then(r1 => { out.first = r1; return out; });
+      }) : Promise.reject(new Error('settle failed')); }""")
+    A(r, "R2-03: تعديل label وvalue لكائن مصدر الإنشاء بعد بدء الطلب لا يمس نتيجته",
+      snap2["first"] == {"readId": 201, "outcome": "ready",
+                         "items": [{"value": "old", "label": "قبل القراءة"}]}, snap2["first"])
+    A(r, "R2-03: تعديل label وvalue لكائن مصدر setSource بعد بدء الطلب لا يمس نتيجته",
+      snap2["second"] == {"readId": 202, "outcome": "ready",
+                          "items": [{"value": "new", "label": "المصدر الجديد"}]}, snap2["second"])
     # (د) الرد القديم عبر مسار المستهلك أيضًا
     choice_stale(page)
     page.wait_for_timeout(60)
@@ -909,8 +1061,10 @@ def run_f02_15(page, browser):
     choice_settle(pg, "latest")
     pg.wait_for_timeout(80)
     s = choice_inspect(pg)
-    A(r, "معرف غائب: أول ready يمسحه برسالة الزوال الصحيحة",
-      s["selected"] is None and "لم يعد متاحًا" in (s["liveText"] or ""), (s["selected"], s["liveText"]))
+    dn = drop_note_measure(pg)
+    A(r, "معرف غائب: أول ready يمسحه برسالة الزوال الظاهرة داخل الطبقة (R2-01)",
+      s["selected"] is None and drop_note_visible_assertion(dn) and not dn["inLive"],
+      (s["selected"], dn))
     ctx.close()
     # ---------- مفتاح: SWITCH_CONFIRMED_INIT = true ----------
     ctx2 = browser.new_context(viewport={"width": 390, "height": 844})
@@ -1356,7 +1510,9 @@ def run_f02_28(page):
 
 
 def run_f02_29(page):
-    r = row("F02-29", "الرسائل وقناة واحدة وإنهاء pending", "قناة واحدة لكل حدث؛ لا نص تقني ولا toast؛ false المتكرر والمعطل الأصلي محفوظان")
+    r = row("F02-29", "الرسائل وقناة واحدة وإنهاء pending",
+            "قناة واحدة لكل حدث؛ لا نص تقني ولا toast؛ false قبل أي pending (متاح ومعطل أصلًا — R2-04-5) "
+            "بلا أثر، وfalse المتكرر والمعطل الأصلي محفوظان، والدورة القائمة سليمة")
     goto(page, SWITCH_PAGE)
     # دورة كاملة تختبر الرسائل الباقية
     switch_arm(page, "update", "not-saved")
@@ -1370,6 +1526,33 @@ def run_f02_29(page):
     A(r, "لا نص تقني/مفاتيح في الرسالة",
       all(k not in (s["message"]["title"] + s["message"]["text"]) for k in ("saved", "unknown", "pending", "attemptId")), s["message"])
     A(r, "وصف الانتظار قابل للتركيز برمجيًا ويبقى بعد الحسم", s["noteFocusable"] is True and s["noteVisible"] is True, s)
+    # F02-R2-04(5): false قبل أي pending — فجوة R1-08(5): حالة متاحة وحالة معطلة أصلًا
+    pre = page.evaluate("""() => {
+      const mainInput = document.getElementById('f02s-switch-input');
+      const mainSw = document.getElementById('f02s-switch');
+      const locked = document.getElementById('f02s-locked-switch');
+      const lockedInput = locked.querySelector('input');
+      const before = { mainDisabled: mainInput.disabled, mainChecked: mainInput.checked,
+                       lockedDisabled: lockedInput.disabled,
+                       op: window.F02Switch.inspect().op };
+      window.MicroSelection.setSwitchPending(mainSw, false);
+      window.MicroSelection.setSwitchPending(locked, false);
+      return Object.assign(before, {
+        mainDisabledAfter: mainInput.disabled, mainCheckedAfter: mainInput.checked,
+        opAfter: window.F02Switch.inspect().op,
+        mainPending: mainSw.getAttribute('data-pending'),
+        mainBusy: mainInput.getAttribute('aria-busy'),
+        lockedDisabledAfter: lockedInput.disabled,
+        lockedPending: locked.getAttribute('data-pending'),
+        lockedBusy: lockedInput.getAttribute('aria-busy') }); }""")
+    A(r, "false قبل أي pending: المتاح لا يتغير (disabled/checked/op محفوظة)",
+      pre["mainDisabled"] is False and pre["mainDisabledAfter"] is False
+      and pre["mainChecked"] == pre["mainCheckedAfter"] and pre["op"] == pre["opAfter"], pre)
+    A(r, "false قبل أي pending: المعطل أصلًا يبقى معطلًا",
+      pre["lockedDisabled"] is True and pre["lockedDisabledAfter"] is True, pre)
+    A(r, "false قبل أي pending: بلا آثار pending/aria-busy على الحالتين",
+      pre["mainPending"] == "false" and pre["mainBusy"] == "false"
+      and pre["lockedPending"] == "false" and pre["lockedBusy"] == "false", pre)
     # false المتكرر والمعطل الأصلي (R2-06)
     page.evaluate("""() => {
       const sw = document.getElementById('f02s-locked-switch');

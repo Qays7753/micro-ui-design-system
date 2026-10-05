@@ -140,6 +140,19 @@
     <div class="m-layer__body">
       <!-- الإعلان الموحد لحالة القراءة داخل نطاق الطبقة المفتوحة (حدث = قناة) -->
       <p class="f02-live" id="f02c-picker-live" role="status"></p>
+      <!-- F02-R2-01: رسالة معالجة زوال الاختيار — ظاهرة داخل الطبقة بنمط
+           B06 المعتمد (m-note--warning) وهي القناة الوحيدة لهذا الحدث
+           (تحذير: role=alert وفق مواصفة B06)؛ نصها لا يُكتب في قناة
+           القراءة ولا في الخارجية معًا (حدث = قناة واحدة). تظهر عند
+           زوال الاختيار فقط ولا تكرر loading/error/count، وتُمسح حين
+           يزول سببها (اختيار جديد/مسح صريح/قراءة جديدة/إغلاق) —
+           وتحديث بيانات وحده لا يمسحها لعدم الاستعادة التلقائية. -->
+      <div class="m-note m-note--warning f02-drop-note" role="alert" id="f02c-drop-note" hidden>
+        <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="m-note__text">
+          <p class="m-note__body" id="f02c-drop-note-text"></p>
+        </div>
+      </div>
       <div class="m-picker" data-micro-picker id="f02c-picker">
         <div class="m-picker__head">
           <span class="m-picker__title" id="f02c-picker-inner-title">ابحث واختر</span>
