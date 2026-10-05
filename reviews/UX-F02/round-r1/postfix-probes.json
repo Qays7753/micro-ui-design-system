@@ -1,0 +1,42 @@
+{
+  "source_commit": "91f3616c938efd548e08236b9fb9e4adf99105e1",
+  "source_worktree_clean_before_probe": false,
+  "source_sha256": {
+    "components/selection/selection.js": "326d55340103c975bdb296abfad67faa0c6411c5766e3acd72cd19b35b71e9b8",
+    "components/navigation/navigation.js": "b26ce55819caf8436ba8c562d0c2f909566e051217db40357d1f39fcb08e481f",
+    "components/selection/specification.md": "161344819e3dc0a84d593f5a451471074a0206f3eba08dd8fb91ea63d2d51383"
+  },
+  "scope": "bounded baseline reproduction; not F02 implementation or full UI acceptance",
+  "observations": [
+    {
+      "id": "F02-P01",
+      "expected": "zero eligible choices: checked=false and indeterminate=false",
+      "measured": {
+        "checked": false,
+        "indeterminate": false,
+        "eligible": 0
+      },
+      "issue_reproduced": false
+    },
+    {
+      "id": "F02-P02",
+      "expected": "aria-disabled option does not change selection or dispatch selection event",
+      "measured": {
+        "selected": "false",
+        "events": 0
+      },
+      "issue_reproduced": false
+    },
+    {
+      "id": "F02-P03",
+      "expected": "human-facing summary; no machine key or implementation instruction",
+      "measured": {
+        "active_summary": "الجاري: العناصر النشطة",
+        "zero_summary": "الجاري: لا فلاتر"
+      },
+      "issue_reproduced": false
+    }
+  ],
+  "browser": "143.0.7499.4",
+  "page_errors": []
+}
