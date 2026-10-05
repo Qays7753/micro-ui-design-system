@@ -1,0 +1,326 @@
+/* =========================================================
+   Micro UI — UX-F03: تنسيق عينة «عرض عنصر وتعديله وحفظه»
+   الملف: previews/ux-patterns/mobile-record-sample/example.css
+   الحالة: DRAFT FOR REVIEW — التنسيق من التوكنات المعتمدة فقط
+   (shared/tokens.css) — لا لون أو مقاس أو انحناء جديد. القواعد
+   المحصورة بالعينة (#f03-*) لتجميع الصفحة ولإخفاء فعلي وظبط
+   تراكب الطبقتين (قرار تركيب لا قيمة بصرية جديدة).
+   ========================================================= */
+
+/* ---------- صفحة العينة: هاتف أولًا، عمود مقروء على الشاشات الأوسع ----------
+   لا إطار هاتف مرسوم ولا تصغير بـtransform: الصفحة هي التجربة، وتتمدد
+   مع مساحة المتصفح الفعلية، والأرقام 0–9 والاتجاه RTL من المستند. */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  -webkit-text-size-adjust: 100%;
+}
+
+.f03-head {
+  padding: var(--micro-space-5) var(--micro-space-5) 0;
+}
+
+.f03-head h1 {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+}
+
+.f03-head__meta {
+  margin: 0 0 var(--micro-space-4);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-main {
+  padding: 0 var(--micro-space-4) var(--micro-space-10);
+}
+
+/* سطح التطبيق الواحد: تجميع بالمسافة والمحاذاة — ليست كل حقل بطاقة */
+.f03-app {
+  max-width: 480px;
+  margin-inline: auto;
+  background-color: var(--micro-surface-base);
+  border-radius: var(--micro-radius-surface);
+  box-shadow: var(--micro-shadow-overlay);
+  padding: var(--micro-space-5);
+}
+
+.f03-app__title {
+  margin: 0 0 var(--micro-space-4);
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+}
+
+.f03-app__title:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--micro-radius-chip);
+}
+
+/* ---------- منظر القراءة: صفوف تعريف بقسمة فاصلة خفيفة ---------- */
+.f03-readlist {
+  margin: 0 0 var(--micro-space-5);
+}
+
+.f03-readlist__row {
+  display: flex;
+  gap: var(--micro-space-4);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: var(--micro-space-3);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+
+.f03-readlist__row:first-child {
+  padding-block-start: 0;
+}
+
+.f03-readlist dt {
+  margin: 0;
+  flex: none;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-readlist dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere; /* نص عربي طويل/مختلط يلتف دون قص أو خروج */
+  font-weight: 500;
+  text-align: start;
+}
+
+/* رسالة نتيجة الحفظ في سياق العرض: قناة واحدة ظاهرة (لا إخفاء بأنماط العرض) */
+.f03-view-note {
+  margin-block-end: var(--micro-space-4);
+}
+
+/* ---------- لوحة التعديل: الحقول والفئة والأفعال ---------- */
+#f03-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+}
+
+#f03-form .m-field {
+  margin: 0;
+}
+
+/* إخفاء فعلي لزر التحقق خارج unknown/checking (درس F01-R1-01:
+   قاعدة عرض B01 تغلب إخفاء المتصفح — قاعدة عينة محصورة لا تعديل core) */
+#f03-check[hidden] { display: none; }
+
+/* صف الفئة: تسمية + فعل تغيير واحد — هدف لمس كامل من التوكنات */
+.f03-cat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.f03-cat__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-cat__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  width: 100%;
+  min-height: var(--micro-touch-min); /* 48px — قاعدة المشروع من التوكنات */
+  padding: var(--micro-space-3) var(--micro-space-4);
+  background-color: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-field);
+  color: var(--micro-text-primary);
+  font-family: inherit;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 500;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+.f03-cat__trigger:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.f03-cat__trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--micro-focus-ring-width) var(--micro-surface-base),
+              0 0 0 calc(var(--micro-focus-ring-width) + var(--micro-focus-gap)) var(--micro-focus-ring);
+}
+
+.f03-cat__trigger[disabled] {
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  cursor: default;
+}
+
+.f03-cat__value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.f03-cat__chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--micro-text-secondary);
+}
+
+/* رسالة خطأ الفئة: نفس عنصر رسالة الحقول (B02) مرتبط aria-describedby —
+   قواعد العرض من fields.css نفسها (display:none الافتراضي وis-visible)،
+   ولون الخطأ هنا لأن الصف خارج .m-field لا داخلها */
+#f03-cat-field.has-error #f03-cat-msg { color: var(--micro-danger); }
+
+.f03-dirty {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-dialog-text {
+  margin: 0;
+}
+
+/* أفعال لوحة التعديل: زر أساسي واحد (حفظ) والبقية ثانوية (UX-02) */
+#f03-edit-sheet .m-layer__foot .m-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- تراكب الطبقتين: منتقي الفئة فوق لوحة التعديل ----------
+   قرار تركيب بمستوى العينة: الطبقان قيمتهما الافتراضية 85/80 في B07،
+   وطبقة المنتقي وأغشيتها فوق لوحة التعديل كي يظهر الغشاء عليها
+   (لا قيمة بصرية جديدة ولا تعديل core). */
+#f03-cat-backdrop { z-index: 88; }
+#f03-cat-layer { z-index: 89; }
+
+/* قناة القراءة داخل طبقة المنتقي: live-only مخفية بصريًا بالطريقة
+   المعتمدة (نمط F02) — الحالة المرئية صف حالة المنتقي من core،
+   فلا نص مكرر مرئي ولا قناة ثانية */
+.f03-live {
+  margin: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.f03-drop-note {
+  margin-block-end: var(--micro-space-2);
+}
+
+/* ---------- قسم SIMULATION: خارج واجهة المثال وموسوم ---------- */
+.f03-sim {
+  max-width: 480px;
+  margin: var(--micro-space-8) auto 0;
+  border: 1px dashed var(--micro-border-control);
+  border-radius: var(--micro-radius-surface);
+  padding: var(--micro-space-5);
+}
+
+.f03-sim__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  margin-block-end: var(--micro-space-3);
+}
+
+.f03-sim__head h2 {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  font-weight: 600;
+}
+
+.f03-sim__chip {
+  display: inline-block;
+  padding: 2px var(--micro-space-3);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-page);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-sim__note {
+  margin: 0 0 var(--micro-space-4);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-sim__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+}
+
+.f03-sim__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.f03-sim__group label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-sim__group select {
+  min-height: var(--micro-touch-min);
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border: 1px solid var(--micro-border-control);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-family: inherit;
+  font-size: var(--micro-body-size);
+}
+
+.f03-sim__group .m-btn { justify-content: start; }
+
+.f03-sim__readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-4);
+  padding-top: var(--micro-space-2);
+  border-block-start: 1px solid var(--micro-border-divider);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.f03-sim__readout b {
+  color: var(--micro-text-primary);
+  font-weight: 600;
+}
