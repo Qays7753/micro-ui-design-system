@@ -1,0 +1,27 @@
+{
+  "source_commit": "5721ba93245d673e2a519ca8e3312c48e164bea0",
+  "source_tree": "306eeb57d4f0e3f9d3dbc8ba8868b6bc79c2394c",
+  "engine": {
+    "browser": "Chromium (headless)",
+    "browser_version": "153.0.8010.0",
+    "driver": "Playwright (Python sync API)",
+    "base_url": "http://127.0.0.1:40601",
+    "pages": [
+      "previews/ux-patterns/choice-lifecycle/index.html",
+      "previews/ux-patterns/filter-lifecycle/index.html",
+      "previews/ux-patterns/switch-lifecycle/index.html"
+    ],
+    "viewport_default": "390x844",
+    "playwright_version": "1.63.0"
+  },
+  "passed_rows": 32,
+  "total_rows": 32,
+  "stored_measurements": 179,
+  "page_errors": [],
+  "http_failures": [],
+  "scope": "unmodified executor suite rerun using external browser launch adapter; passing this suite is not full acceptance",
+  "manifest_at_delivery": {
+    "entries": 737,
+    "differences": 0
+  }
+}

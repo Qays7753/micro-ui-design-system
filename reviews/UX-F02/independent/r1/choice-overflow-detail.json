@@ -1,0 +1,29 @@
+{
+  "browser": "153.0.8010.0",
+  "mechanism": "snapshot computed font sizes before doubling; data/states loaded before snapshot",
+  "results": [
+    {
+      "sample": "choice",
+      "width": 320,
+      "font": {
+        "h1": 44,
+        "label": 32
+      },
+      "bounds": {
+        "viewport": 320,
+        "doc": 345,
+        "horizontalClips": [],
+        "controlOverflow": [],
+        "offenders": [],
+        "glyphOffenders": [
+          {
+            "text": "\n      عينة مستقلة: مجموعات checkboxes/radio/مقطّع محلي، ومنتقي قابل للبحث داخل\n      طبقة B07 بقراء",
+            "parent": "f02-head__meta",
+            "left": -25,
+            "right": 292
+          }
+        ]
+      }
+    }
+  ]
+}
