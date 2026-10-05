@@ -1,0 +1,69 @@
+{
+  "source_commit": "f369edd034c7690948be9b4815c55ca4caa14d9e",
+  "probes": [
+    {
+      "id": "snapshot-item-mutation",
+      "failure": true,
+      "measured": {
+        "first": {
+          "readId": 1,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "old",
+              "label": "تعديل بعد بدء الطلب"
+            }
+          ]
+        },
+        "second": {
+          "readId": 2,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "new",
+              "label": "المصدر الجديد"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "drop-message-not-visible",
+      "failure": true,
+      "measured": {
+        "selected": null,
+        "liveText": "تمت القراءة: 1 خيارات. الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+        "liveRect": {
+          "w": 1,
+          "h": 1
+        },
+        "clipPath": "inset(50%)",
+        "externalNote": "",
+        "visibleTexts": [
+          "اختيار عينة",
+          "ابحث واختر",
+          "عينة أ",
+          "المحدد: لا شيء"
+        ]
+      }
+    },
+    {
+      "id": "no-results-after-read",
+      "failure": true,
+      "measured": {
+        "before": {
+          "live": "جارٍ قراءة الخيارات…",
+          "row": "جارٍ القراءة…"
+        },
+        "after": {
+          "query": "zzz",
+          "live": "تمت القراءة: 3 خيارات.",
+          "row": "لا نتائج مطابقة — جرّب اسمًا آخر",
+          "visibleOptions": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "browser": "153.0.8010.0"
+}
