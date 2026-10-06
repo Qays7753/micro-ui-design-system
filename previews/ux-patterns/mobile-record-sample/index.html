@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <!-- =========================================================
-  Micro UI — UX-F03: عينة هاتف مستقلة «عرض عنصر وتعديله وحفظه»
+  Micro UI — UX-F03: تجربة هاتف مترابطة «العناصر» (إضافة وتعديل وحفظ)
   الملف: previews/ux-patterns/mobile-record-sample/index.html
-  الحالة: DRAFT FOR REVIEW — عينة محاكاة للمراجعة، ليست سياسة أعمال.
+  الحالة: DRAFT FOR RE-REVIEW — عينة محاكاة للمراجعة، ليست سياسة أعمال.
 
-  الحدود (docs/ux/F03-ACCEPTANCE.md §1..2):
-  - بلا board.js/board.css: مصادر المكوّن فقط (tokens + buttons + fields
-    + selection + picker + messages + navigation) وأيقونات HugeIcons
-    Stroke Rounded معلنة inline أدناه بنفس محتوى assets/icons.
-  - منظر عرض واحد + نموذج التعديل «الصغير» داخل لوحة سفلية B07
-    (النموذج داخل modal وحراسة مغادرته: التطبيق المؤجل من قرار F01
-    بعد مراجعة R1)، ومنتقي الفئة طبقة B07 فوقه، وحوار التغييرات
-    غير المحفوظة حوار B07 موسط. الحراسة في example.js دون تغيير core.
-  - بيانات تركيبية من ثوابت example.js فقط — لا قيم مكررة هنا؛
-    لا شبكة أو تخزين أو مصادقة أو منطق أعمال. الحفظ تجريبي داخل الجلسة.
-  - قسم SIMULATION أدناه خارج واجهة المستفيد وموسوم بوضوح؛
-    النسخة المكتفية ذاتيًا tools/build-f03-standalone.py يولدها.
-  السلوك: example.js — الموصل: mock-adapter.js — التنسيق: example.css
+  النطاق (docs/ux/F03-EXPERIENCE-BRIEF.md):
+  - وحدة مترابطة: رئيسية → قائمة (بحث وتصفية) → تفاصيل → إضافة/تعديل →
+    حفظ → ظهور النتيجة في التفاصيل والقائمة وملخص الرئيسية.
+  - نموذج الإضافة/التعديل صفحة كاملة (قرار تركيب موثق في الموجز §2)؛
+    منتقي الفئة وحوار تجاهل التعديلات ووضع المراجعة طبقات B07 معتمدة.
+  - بيانات تركيبية من مخزن وحيد (demo-store.js) — لا قيم مكررة هنا؛
+    حفظ محلي عند توفره وجلسي عند التعذر، بلا شبكة أو مصادقة.
+  - الواجهة الافتراضية نظيفة بلا أدوات فحص؛ أدوات وضع المراجعة داخل
+    طبقة مغلقة افتراضيًا (رابط التذييل هو المدخل الوحيد).
+  - الرموز أدناه من أصول assets/icons (HugeIcons Stroke Rounded) بنفس
+    محتواها وخصائصها (fill="none" على الأصل) — أداة البناء تتحقق من كل
+    رمز مقابل ملفه وتفشل عند أي انحراف.
+  السلوك: example.js — المخزن: demo-store.js — الموصل: mock-adapter.js
+  التنسيق: example.css (توكنات المكتبة فقط)
 ========================================================= -->
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — UX-F03: عرض عنصر وتعديله وحفظه</title>
+  <title>العناصر</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../../shared/tokens.css">
@@ -32,6 +33,7 @@
   <link rel="stylesheet" href="../../../components/selection/picker.css">
   <link rel="stylesheet" href="../../../components/messages/messages.css">
   <link rel="stylesheet" href="../../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../../components/data/data.css">
   <link rel="stylesheet" href="example.css">
 </head>
 <body>
@@ -39,55 +41,133 @@
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
        — الرموز المستخدمة في هذه العينة فقط، بلا مكتبة خارجية جديدة. -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-    <symbol id="i-info" viewBox="0 0 24 24"><!-- assets/icons/information-circle.svg -->
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M12 16V12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M12.125 8.25H12M12.25 8.25C12.25 8.11193 12.1381 8 12 8C11.8619 8 11.75 8.11193 11.75 8.25C11.75 8.38807 11.8619 8.5 12 8.5C12.1381 8.5 12.25 8.25 12.25 8.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" data-icon-source="information-circle.svg"><!-- assets/icons/information-circle.svg -->
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M12 16V12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+      <path d="M12.125 8.25H12M12.25 8.25C12.25 8.11193 12.1381 8 12 8C11.8619 8 11.75 8.11193 11.75 8.25C11.75 8.38807 11.8619 8.5 12 8.5C12.1381 8.5 12.25 8.38807 12.25 8.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
     </symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><!-- assets/icons/alert01.svg -->
-      <path d="M13.9248 21H10.0752C5.44476 21 3.12955 21 2.27636 19.4939C1.42317 17.9879 2.60736 15.9914 4.97574 11.9985L6.90057 8.75333C9.17559 4.91778 10.3131 3 12 3C13.6869 3 14.8244 4.91777 17.0994 8.75332L19.0243 11.9985C21.3926 15.9914 22.5768 17.9879 21.7236 19.4939C20.8704 21 18.5552 21 13.9248 21Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M12 17V13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-      <path d="M12 9.25H12.125M12.25 9.25C12.25 9.11193 12.1381 9 12 9C11.8619 9 11.75 9.11193 11.75 9.25C11.75 9.38807 11.8619 9.5 12 9.5C12.1381 9.5 12.25 9.25 12.25 9.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" data-icon-source="alert01.svg"><!-- assets/icons/alert01.svg -->
+      <path d="M13.9248 21H10.0752C5.44476 21 3.12955 21 2.27636 19.4939C1.42317 17.9879 2.60736 15.9914 4.97574 11.9985L6.90057 8.75333C9.17559 4.91778 10.3131 3 12 3C13.6869 3 14.8244 4.91777 17.0994 8.75332L19.0243 11.9985C21.3926 15.9914 22.5768 17.9879 21.7236 19.4939C20.8704 21 18.5552 21 13.9248 21Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M12 17V13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+      <path d="M12 9.25H12.125M12.25 9.25C12.25 9.11193 12.1381 9 12 9C11.8619 9 11.75 9.11193 11.75 9.25C11.75 9.38807 11.8619 9.5 12 9.5C12.1381 9.5 12.25 9.38807 12.25 9.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
     </symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><!-- assets/icons/check.svg -->
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" data-icon-source="check.svg"><!-- assets/icons/check.svg -->
       <path d="M5 13.2592L7.58583 15.9568C8.2525 16.6523 8.58583 17 9.00004 17C9.41425 17 9.74759 16.6523 10.4143 15.9568L19 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
     </symbol>
-    <symbol id="i-close" viewBox="0 0 24 24"><!-- assets/icons/cancel01.svg -->
-      <path d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" data-icon-source="cancel01.svg"><!-- assets/icons/cancel01.svg -->
+      <path d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
-    <symbol id="i-chevron-down" viewBox="0 0 24 24"><!-- assets/icons/chevron-down.svg -->
-      <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" data-icon-source="chevron-down.svg"><!-- assets/icons/chevron-down.svg -->
+      <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24" fill="none" data-icon-source="filter-horizontal.svg"><!-- assets/icons/filter-horizontal.svg -->
+      <path d="M3 7H6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M3 17H9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M18 17L21 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M15 7L21 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z" stroke="currentColor" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="i-add" viewBox="0 0 24 24" fill="none" data-icon-source="add-01.svg"><!-- assets/icons/add-01.svg -->
+      <path d="M12.001 5.00003V19.002" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path d="M19.002 12.002L4.99998 12.002" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" data-icon-source="chevron-right.svg"><!-- assets/icons/chevron-right.svg — اتجاه الرجوع في RTL -->
+      <path d="M9.00005 18C9.00005 18 15 13.5811 15 12C15 10.4188 9 6 9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
   </svg>
 
-  <header class="f03-head">
-    <h1>UX-F03 — عرض عنصر وتعديله وحفظه</h1>
-    <p class="f03-head__meta">
-      عينة هاتف مستقلة لمهمة واحدة: عرض عنصر تجريبي، تعديل بياناته، ثم حفظها.
-      هاتف · عربي RTL · أرقام 0–9 · مصادر المكوّن كما هي (IBM Plex · HugeIcons ·
-      تحميل B · انحناءات معتمدة). النسخة المكتفية ذاتيًا: standalone.html.
-      الحالة: DRAFT FOR REVIEW.
-    </p>
-  </header>
+  <main class="f03-main" id="f03-main">
 
-  <main class="f03-main">
+    <!-- ================= الرئيسية: ملخص من البيانات الفعلية ================= -->
+    <section class="f03-view" id="view-home" aria-labelledby="f03-home-title">
+      <header class="f03-appbar">
+        <h2 class="f03-appbar__title" id="f03-home-title" tabindex="-1">العناصر</h2>
+      </header>
 
-    <!-- ================= منظر العرض: النسخة المؤكدة فقط ================= -->
-    <section class="f03-app" id="f03-view" aria-labelledby="f03-view-title">
-      <h2 class="f03-app__title" id="f03-view-title" tabindex="-1">العنصر</h2>
+      <p class="f03-home-line" id="f03-home-count"></p>
 
-      <!-- رسالة نتيجة الحفظ بعد إغلاق لوحة التعديل: قناة سياق العرض
-           الوحيدة (role=status) — تظهر بعد نجاح مؤكد فقط ولا تُكرر،
-           وتُمسح عند بدء سياق تعديل جديد. -->
-      <div class="m-note m-note--success f03-view-note" role="status" id="f03-view-note" data-view-state="success" hidden>
+      <section class="f03-card" aria-labelledby="f03-home-dist-title">
+        <h3 class="f03-card__title" id="f03-home-dist-title">التوزيع حسب الفئة</h3>
+        <div class="f03-dist" id="f03-home-dist"><!-- صفوف m-progress من المخزن --></div>
+      </section>
+
+      <div class="f03-actions">
+        <button type="button" class="m-btn m-btn--primary" id="f03-home-add">إضافة عنصر</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-home-all"></button>
+      </div>
+
+      <section class="f03-block" aria-labelledby="f03-home-recent-title">
+        <h3 class="f03-block__title" id="f03-home-recent-title">أحدث العناصر</h3>
+        <ul class="f03-rowlist" id="f03-home-recent"></ul>
+        <p class="f03-hint" id="f03-home-recent-empty" hidden>لا عناصر بعد.</p>
+      </section>
+    </section>
+
+    <!-- ================= قائمة العناصر: بحث وتصفية على البيانات ================= -->
+    <section class="f03-view" id="view-list" aria-labelledby="f03-list-title" hidden>
+      <header class="f03-appbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-list-back" aria-label="رجوع إلى الرئيسية">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <h2 class="f03-appbar__title" id="f03-list-title" tabindex="-1">جميع العناصر</h2>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-list-add">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>إضافة
+        </button>
+      </header>
+
+      <div class="f03-toolbar">
+        <div class="m-field f03-search" data-micro-field>
+          <label class="m-field__label" for="f03-search-input">البحث</label>
+          <div class="m-field__control">
+            <input class="m-field__input" id="f03-search-input" type="search" autocomplete="off" placeholder="ابحث في العناصر…">
+          </div>
+        </div>
+        <!-- زر التصفية المعتمد (نمط F02): ثانوي + أيقونة + عدّاد الشروط المطبقة
+             — الصفر الحقيقي مخفي بـ--zero والاسم المتاح يشرح العدد بكلمات -->
+        <button type="button" class="m-btn m-btn--secondary f03-filter-btn" id="f03-filter-btn" aria-label="تصفية، لا فلاتر مطبقة">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية
+          <span class="m-btn__counter m-btn__counter--zero" id="f03-filter-count" hidden>0</span>
+        </button>
+      </div>
+
+      <p class="f03-results" id="f03-list-results"></p>
+
+      <ul class="f03-rowlist" id="f03-list-rows"></ul>
+
+      <!-- لا بيانات ≠ لا نتائج: كل حالة بنصها وفعلها -->
+      <div class="f03-state" id="f03-list-empty" hidden>
+        <p class="f03-state__text">لا عناصر بعد — أضف أول عنصر.</p>
+        <button type="button" class="m-btn m-btn--primary" id="f03-list-empty-add">إضافة عنصر</button>
+      </div>
+      <div class="f03-state" id="f03-list-noresults" hidden>
+        <p class="f03-state__text">لا نتائج مطابقة.</p>
+        <div class="f03-state__actions">
+          <button type="button" class="m-btn m-btn--secondary" id="f03-clear-search" hidden>مسح البحث</button>
+          <button type="button" class="m-btn m-btn--secondary" id="f03-clear-filters" hidden>مسح الفلاتر</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= تفاصيل العنصر: البيانات المحفوظة ================= -->
+    <section class="f03-view" id="view-detail" aria-labelledby="f03-detail-title" hidden>
+      <header class="f03-appbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-detail-back" aria-label="رجوع">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <h2 class="f03-appbar__title" id="f03-detail-title" tabindex="-1">تفاصيل العنصر</h2>
+      </header>
+
+      <!-- قناة حالة سياق التفاصيل الوحيدة (role=status): رسالة نجاح الحفظ
+           تُكتب هنا مرة واحدة بعد الانتقال الفعلي إلى العرض (الموجز §7) -->
+      <div class="m-note m-note--success f03-detail-note" role="status" id="f03-detail-note" data-detail-state="success" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
         <div class="m-note__text">
-          <span class="m-note__title" id="f03-view-note-title"></span>
-          <p class="m-note__body" id="f03-view-note-body"></p>
+          <span class="m-note__title" id="f03-detail-note-title"></span>
+          <p class="m-note__body" id="f03-detail-note-body"></p>
         </div>
       </div>
 
-      <!-- منظر القراءة: تجميع بالمسافة والمحاذاة — ليست كل حقل بطاقة -->
       <dl class="f03-readlist">
         <div class="f03-readlist__row">
           <dt>الاسم</dt>
@@ -104,43 +184,30 @@
       </dl>
 
       <div class="f03-actions">
-        <button type="button" class="m-btn m-btn--primary" id="f03-edit-btn">تعديل</button>
+        <button type="button" class="m-btn m-btn--primary" id="f03-detail-edit">تعديل</button>
       </div>
     </section>
-  </main>
 
-  <!-- ================= لوحة تعديل «الصغيرة» — B07 كما هي =================
-       نموذج داخل modal وحراسة مغادرته: التطبيق المؤجل من قرار F01.
-       زر الإغلاق الظاهر هنا بلا [data-layer-close] الجاهزة كي يمر عبر
-       حراسة المستهلك (example.js) — لا تغيير على عقد B07. الخلفية
-       data-backdrop="keep" (بقاء ضمني). Escape يوجّهه المستهلك بطور
-       الالتقاط: نظيف → إغلاق، dirty → حوار البقاء، pending → حجب. -->
-  <div class="m-layer-backdrop" data-for="f03-edit-sheet" hidden></div>
-  <div class="m-layer" id="f03-edit-sheet" role="dialog" aria-modal="true"
-       aria-labelledby="f03-edit-title" data-backdrop="keep" hidden>
-    <div class="m-layer__head">
-      <span class="m-layer__title" id="f03-edit-title">تعديل العنصر</span>
-      <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-edit-close" aria-label="إغلاق لوحة التعديل">
-        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
-      </button>
-    </div>
-    <div class="m-layer__body">
+    <!-- ================= إضافة/تعديل: صفحة نموذج كاملة ================= -->
+    <section class="f03-view" id="view-form" aria-labelledby="f03-form-title" hidden>
+      <header class="f03-appbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-form-back" aria-label="رجوع">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <h2 class="f03-appbar__title" id="f03-form-title" tabindex="-1">إضافة عنصر</h2>
+      </header>
+
       <form id="f03-form" novalidate>
-        <!-- الاسم: مطلوب — required والتسمية أصلية بمعناها، والتحقق سياسة المستهلك (novalidate) -->
+        <!-- الاسم: مطلوب — التسمية أصلية بمعناها والتحقق سياسة المستهلك -->
         <div class="m-field" data-micro-field id="f03-name-field">
           <label class="m-field__label" for="f03-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
           <div class="m-field__control">
-            <!-- لا value هنا: القيم الابتدائية من مصدر وحيد RECORD_INIT
-                 في example.js تُبث للحقول ومنظر العرض عند الإقلاع -->
-            <input class="m-field__input" id="f03-name" name="name" type="text"
-                   autocomplete="off" required placeholder="مثال: عنصر المخزن" data-autofocus>
+            <input class="m-field__input" id="f03-name" name="name" type="text" autocomplete="off">
           </div>
           <p class="m-field__msg" id="f03-name-msg" data-field-msg hidden></p>
         </div>
 
-        <!-- الفئة: اختيار من ثلاث فئات تركيبية عبر المنتقي المعتمد —
-             صف قراءة + فعل «تغيير» واحد؛ الاسم الإتاحي يصف الفعل
-             والقيمة الحالية ويحدَّث من example.js. -->
+        <!-- الفئة: اختيار واحد عبر المنتقي المعتمد — صف قراءة + فعل تغيير -->
         <div class="f03-cat" id="f03-cat-field">
           <span class="f03-cat__label" id="f03-cat-label">الفئة <span class="m-field__required">(مطلوبة)</span></span>
           <button type="button" class="f03-cat__trigger" id="f03-cat-trigger" aria-describedby="f03-cat-label f03-cat-msg">
@@ -154,17 +221,15 @@
         <div class="m-field" data-micro-field id="f03-note-field">
           <label class="m-field__label" for="f03-note">الملاحظة <span class="m-field__required">(اختيارية)</span></label>
           <div class="m-field__control">
-            <textarea class="m-field__area" id="f03-note" name="note" rows="2"
-                      placeholder="ملاحظة تركيبية قابلة للتعديل"></textarea>
+            <textarea class="m-field__area" id="f03-note" name="note" rows="3"></textarea>
           </div>
         </div>
 
         <!-- مؤشر التعديل المحلي: نص عادي بلا قناة حية (UX-19) -->
-        <p class="f03-dirty" id="f03-dirty-hint" hidden>تغييرات غير محفوظة — التعديل محلي حتى الحفظ.</p>
+        <p class="f03-dirty" id="f03-dirty-hint" hidden>تغييرات غير محفوظة.</p>
 
-        <!-- رسالة نتيجة/انتظار العملية أثناء فتح اللوحة: قناة سياق
-             اللوحة الوحيدة (m-note ثابتة role=status بلا announce ثانٍ).
-             بعد النجاح تغادر اللوحة والحدث لقناة سياق العرض. -->
+        <!-- رسالة نتيجة/انتظار العملية: قناة سياق النموذج الوحيدة
+             (m-note ثابتة role=status بلا announce ثانٍ) -->
         <div class="m-note m-note--info" role="status" id="f03-op-note" data-op-state="info" hidden>
           <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
           <div class="m-note__text">
@@ -172,18 +237,24 @@
             <p class="m-note__body" id="f03-op-body"></p>
           </div>
         </div>
+
+        <div class="f03-actions">
+          <button type="submit" class="m-btn m-btn--primary" id="f03-save">حفظ</button>
+          <button type="button" class="m-btn m-btn--secondary" id="f03-check" hidden>التحقق من النتيجة</button>
+        </div>
       </form>
-    </div>
-    <div class="m-layer__foot">
-      <button type="button" class="m-btn m-btn--secondary" id="f03-back">رجوع</button>
-      <button type="submit" form="f03-form" class="m-btn m-btn--primary" id="f03-save">حفظ التعديلات</button>
-      <button type="button" class="m-btn m-btn--secondary" id="f03-check" hidden>التحقق من النتيجة</button>
-    </div>
-  </div>
+    </section>
+  </main>
+
+  <!-- تذييل قصير: تعريف التجربة + مدخل وضع المراجعة الوحيد -->
+  <footer class="f03-foot">
+    <p class="f03-foot__text">تجربة ببيانات تجريبية — تُحفظ تعديلاتك محليًا في هذا المتصفح عند توفر التخزين.</p>
+    <button type="button" class="f03-foot__link" id="f03-review-open">وضع المراجعة</button>
+  </footer>
 
   <!-- ================= طبقة منتقي الفئة — B07 + MicroPicker كما هما =====
-       كل وسائل الإغلاق (الزر الظاهر/Escape/الخلفية) إغلاق عرض لا «إلغاء
-       تعديل». قراءة الفئات من الموصل بمعرف جديد لكل فتح؛ رد قديم مُتجاهَل. -->
+       كل وسائل الإغلاق إغلاق عرض لا «إلغاء تعديل». قراءة بمعرف جديد لكل
+       فتح ومرتبطة بجلسة الفتح — رد سياق مغلق يُبطل ويُلغى صراحةً. -->
   <div class="m-layer-backdrop" data-for="f03-cat-layer" hidden id="f03-cat-backdrop"></div>
   <div class="m-layer" id="f03-cat-layer" role="dialog" aria-modal="true"
        aria-labelledby="f03-cat-layer-title" data-backdrop="close" hidden>
@@ -196,11 +267,8 @@
     <div class="m-layer__body">
       <!-- القناة الحية لحالة القراءة داخل نطاق الطبقة المفتوحة -->
       <p class="f03-live" id="f03-cat-live" role="status"></p>
-      <!-- رسالة معالجة زوال الفئة — ظاهرة داخل الطبقة بنمط B06 المعتمد
-           (m-note--warning + role=alert وفق مواصفة B06) وهي القناة الوحيدة
-           لهذا الحدث (درس F02-R2-01): نصها لا يُكتب في قناة القراءة ولا
-           في قناة اللوحة معًا. تظهر عند زوال الفئة المختارة فقط وتُمسح
-           حين يزول سببها (اختيار جديد/قراءة جديدة/إغلاق الطبقة). -->
+      <!-- رسالة زوال الفئة: ظاهرة داخل الطبقة بنمط B06 (m-note--warning +
+           role=alert) وهي القناة الوحيدة لهذا الحدث (درس F02-R2-01) -->
       <div class="m-note m-note--warning f03-drop-note" role="alert" id="f03-cat-drop-note" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
         <div class="m-note__text">
@@ -210,9 +278,6 @@
       <div class="m-picker" data-micro-picker id="f03-picker">
         <div class="m-picker__head">
           <span class="m-picker__title" id="f03-picker-title">ابحث واختر</span>
-          <!-- إغلاق ظاهر واحد في هذا التركيب: زر رأس الطبقة أعلاه.
-               المسار الإضافي [data-picker-close] خاص بالمنتقي المستقل
-               وحده، وحذفه هنا لا يمس Escape أو الخلفية (نمط F02). -->
         </div>
         <input class="m-picker__input" type="search" id="f03-picker-search" data-picker-search autocomplete="off"
                aria-label="بحث في الفئات" placeholder="اسم الفئة…" data-autofocus>
@@ -222,10 +287,10 @@
     </div>
   </div>
 
-  <!-- ================= حوار التغييرات غير المحفوظة — B07 كما هو ==========
+  <!-- ================= حوار تجاهل التعديلات — B07 كما هو ==========
        البقاء/Escape/الإغلاق الظاهر/الخلفية كلها بقاء: لا تمس القيم ولا
-       تغادر. «التخلي عن التعديل» وحده يستعيد النسخة المؤكدة ثم يغادر
-       لوحة التعديل بعد اكتمال الإغلاق، دون أي حفظ. -->
+       تغادر. «تجاهل التعديلات» وحده يغادر النموذج بعد اكتمال الإغلاق،
+       دون أي حفظ. -->
   <div class="m-layer-backdrop" data-for="f03-leave-dialog" hidden></div>
   <div class="m-layer m-layer--center" id="f03-leave-dialog" role="dialog" aria-modal="true"
        aria-labelledby="f03-leave-title" data-backdrop="close" hidden>
@@ -236,88 +301,117 @@
       </button>
     </div>
     <div class="m-layer__body">
-      <p class="f03-dialog-text">لديك تعديلات لم تُحفظ بعد. البقاء يُبقي إدخالك كما هو؛
-        والتخلي يستعيد النسخة المؤكدة ويغادر لوحة التعديل دون أي حفظ.</p>
+      <p class="f03-dialog-text">لديك تعديلات لم تُحفظ. هل تريد تجاهل تعديلاتك؟ البقاء يُبقي إدخالك كما هو.</p>
     </div>
     <div class="m-layer__foot">
       <button type="button" class="m-btn m-btn--primary" id="f03-stay" data-autofocus>البقاء في التعديل</button>
-      <button type="button" class="m-btn m-btn--destructive-soft" id="f03-abandon">التخلي عن التعديل</button>
+      <button type="button" class="m-btn m-btn--destructive-soft" id="f03-abandon">تجاهل التعديلات</button>
     </div>
   </div>
 
-  <!-- ================= SIMULATION — خارج واجهة المثال =================
-       أدوات محاكاة موسومة: سيناريوهات حتمية للموصل وعدادات فحص تقنية.
-       لا تُنقل نصوصها إلى رسائل المستفيد، وليست جزءًا من واجهة العينة.
-       الوضع الافتراضي (auto): كل دعوة تُحسم تلقائيًا بعد زمن ثابت —
-       المسار الافتراضي ينجح وحده. اختيار سيناريو يجعل الدعوة المقبلة
-       معلقة حتى أمر التسوية الصريح. أثناء فتح طبقة فوق الصفحة يعزل B07
-       هذا القسم فعليًا (inert)؛ الفحص الآلي يستخدم تحكمًا برمجيًا محايد
-       التركيز (F03Example.arm/settle) موثقًا في README. -->
-  <section class="f03-sim" id="f03-sim" aria-labelledby="f03-sim-title">
-    <div class="f03-sim__head">
-      <h2 id="f03-sim-title">أدوات المحاكاة — SIMULATION</h2>
-      <span class="f03-sim__chip">بيانات تركيبية · بلا شبكة أو تخزين · حفظ تجريبي داخل الجلسة · للفحص فقط</span>
+  <!-- ================= لوحة التصفية — عقد B07 كما هو (data-filter-panel) ==
+       الفتح يعيد المسودة من المطبق. التطبيق يقرّ ويطلق
+       micro-navigation:filters-applied والعدّاد يطابق المطبق. المسح يمسح
+       المسودة وحده، والإلغاء/الإغلاق/Escape/الخلفية ترمي المسودة. خانات
+       الفئات تُبنى من المصدر الواحد (demo-store.js) بلا قيم مكررة. -->
+  <div class="m-layer-backdrop" data-for="f03-filter-layer" hidden></div>
+  <div class="m-layer" id="f03-filter-layer" role="dialog" aria-modal="true"
+       aria-labelledby="f03-filter-title" data-backdrop="close" data-filter-panel hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="f03-filter-title">تصفية القائمة</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق التصفية">
+        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
     </div>
-    <p class="f03-sim__note">
-      سيناريو «النتيجة التالية» يطبق على الدعوة المقبلة فقط ولا يعدّل طلبًا جارٍ.
-      الطلب المعلق لا يُنجَز إلا بأمر صريح من هنا — لا مؤقت واجهة يقرر نجاحًا.
-      «استجابة بمعرف قديم» تُسلّم ردًا بمعرف لا يطابق الطلب النشط عبر مسار معالجة
-      النتائج لدى المستهلك دون إنهاء الطلب المعلق — فيُتجاهل ويتاح الإنهاء بعده.
-      المحتوى التقني أدناه (عدادات/حالات) للفحص، لا لرسائل المستفيد.
-    </p>
-    <div class="f03-sim__grid">
-      <div class="f03-sim__group">
-        <label for="f03-sim-save-outcome">نتيجة الحفظ التالية</label>
-        <select id="f03-sim-save-outcome">
-          <option value="">auto — حسم تلقائي بعد زمن ثابت</option>
-          <option value="saved">saved — نجاح مؤكد (معلق حتى التسوية)</option>
-          <option value="not-saved">not-saved — رفض مؤكد (معلق حتى التسوية)</option>
-          <option value="unknown">unknown — نتيجة مجهولة (معلق حتى التسوية)</option>
-          <option value="reject">رفض Promise بلا نتيجة (معلق حتى التسوية)</option>
-        </select>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-settle-save" disabled>إنهاء الحفظ المعلق بالسيناريو</button>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-stale-save" disabled>استجابة حفظ بمعرف قديم</button>
-      </div>
-      <div class="f03-sim__group">
-        <label for="f03-sim-check-outcome">نتيجة التحقق التالية</label>
-        <select id="f03-sim-check-outcome">
-          <option value="">auto — حسم تلقائي بعد زمن ثابت</option>
-          <option value="saved">saved — نجاح مؤكد (معلق حتى التسوية)</option>
-          <option value="not-saved">not-saved — رفض مؤكد (معلق حتى التسوية)</option>
-          <option value="unknown">unknown — ما زالت مجهولة (معلق حتى التسوية)</option>
-          <option value="reject">رفض Promise للتحقق (معلق حتى التسوية)</option>
-        </select>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-settle-check" disabled>إنهاء التحقق المعلق بالسيناريو</button>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-stale-check" disabled>استجابة تحقق بمعرف قديم</button>
-      </div>
-      <div class="f03-sim__group">
-        <label for="f03-sim-read-outcome">نتيجة قراءة الفئات التالية</label>
-        <select id="f03-sim-read-outcome">
-          <option value="">auto — حسم تلقائي بعد زمن ثابت</option>
-          <option value="ready">ready — الفئات متاحة (معلق حتى التسوية)</option>
-          <option value="empty">empty — مصدر فارغ (معلق حتى التسوية)</option>
-          <option value="error">error — فشل قراءة (معلق حتى التسوية)</option>
-          <option value="reject">رفض Promise للقراءة (معلق حتى التسوية)</option>
-        </select>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-settle-read" disabled>إنهاء القراءة المعلقة بالسيناريو</button>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-sim-stale-read" disabled>استجابة قراءة بمعرف قديم</button>
-      </div>
-      <div class="f03-sim__readout" aria-label="قراءات فحص تقنية">
-        <span>saveCalls: <b id="f03-sim-save-calls">0</b></span>
-        <span>checkCalls: <b id="f03-sim-check-calls">0</b></span>
-        <span>readCalls: <b id="f03-sim-read-calls">0</b></span>
-        <span>الحالة: <b id="f03-sim-pending">لا طلبات معلقة</b></span>
-      </div>
+    <div class="m-layer__body">
+      <p class="m-filter-summary" data-filter-summary></p>
+      <div class="f03-filter-cats" id="f03-filter-cats"><!-- خيارات الفئات من المخزن --></div>
     </div>
-  </section>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--light" data-filter-clear>مسح</button>
+      <button type="button" class="m-btn m-btn--secondary" data-filter-cancel>إلغاء</button>
+      <button type="button" class="m-btn m-btn--primary" data-filter-apply>تطبيق</button>
+    </div>
+  </div>
 
-  <!-- مصادر المكوّن ثم المحاكاة ثم سلوك المستهلك -->
+  <!-- ================= وضع المراجعة — طبقة أدوات مغلقة افتراضيًا ==========
+       المدخل الوحيد رابط التذييل. الأدوات داخل الطبقة تعمل من الهاتف بلا
+       console ولا reload، والسيناريو المسلح يُحسم تلقائيًا بوقت حتمي
+       داخل الموصل إن لم يُنهَ من هنا (إغلاق R1-07). النصوص التقنية داخل
+       هذه الطبقة فقط ولا تُنقل إلى واجهة المستفيد. -->
+  <div class="m-layer-backdrop" data-for="f03-review-layer" hidden></div>
+  <div class="m-layer" id="f03-review-layer" role="dialog" aria-modal="true"
+       aria-labelledby="f03-review-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="f03-review-title">وضع المراجعة</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-review-close" data-layer-close aria-label="إغلاق وضع المراجعة">
+        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="m-layer__body f03-rev">
+      <p class="f03-rev__note">
+        أدوات فحص للسيناريوهات الخاصة ببيانات تجريبية. «النتيجة التالية» تطبق على
+        الدعوة المقبلة فقط وتُحسم تلقائيًا بعد زمن ثابت إن لم تُنهَ من هنا.
+      </p>
+      <div class="f03-rev__group">
+        <label for="f03-rev-save-outcome">نتيجة الحفظ التالية</label>
+        <select id="f03-rev-save-outcome">
+          <option value="">تلقائي — نجاح بعد زمن ثابت</option>
+          <option value="saved">نجاح — معلق حتى الإنهاء أو المهلة</option>
+          <option value="not-saved">رفض معلوم — معلق حتى الإنهاء أو المهلة</option>
+          <option value="unknown">نتيجة غير مؤكدة — معلق حتى الإنهاء أو المهلة</option>
+          <option value="reject">رفض بلا نتيجة — معلق حتى الإنهاء أو المهلة</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-settle-save" disabled>إنهاء الحفظ المعلق</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-stale-save">استجابة حفظ بمعرف قديم</button>
+      </div>
+      <div class="f03-rev__group">
+        <label for="f03-rev-check-outcome">نتيجة التحقق التالية</label>
+        <select id="f03-rev-check-outcome">
+          <option value="">تلقائي — حسم بعد زمن ثابت</option>
+          <option value="saved">نجاح — معلق حتى الإنهاء أو المهلة</option>
+          <option value="not-saved">رفض معلوم — معلق حتى الإنهاء أو المهلة</option>
+          <option value="unknown">ما زالت غير مؤكدة — معلق حتى الإنهاء أو المهلة</option>
+          <option value="reject">رفض بلا نتيجة — معلق حتى الإنهاء أو المهلة</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-settle-check" disabled>إنهاء التحقق المعلق</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-stale-check">استجابة تحقق بمعرف قديم</button>
+      </div>
+      <div class="f03-rev__group">
+        <label for="f03-rev-read-outcome">نتيجة قراءة الفئات التالية</label>
+        <select id="f03-rev-read-outcome">
+          <option value="">تلقائي — حسم بعد زمن ثابت</option>
+          <option value="ready">الفئات متاحة — معلق حتى الإنهاء أو المهلة</option>
+          <option value="empty">مصدر فارغ — معلق حتى الإنهاء أو المهلة</option>
+          <option value="error">فشل قراءة — معلق حتى الإنهاء أو المهلة</option>
+          <option value="reject">رفض بلا نتيجة — معلق حتى الإنهاء أو المهلة</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-settle-read" disabled>إنهاء القراءة المعلقة</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-stale-read">استجابة قراءة بمعرف قديم</button>
+      </div>
+      <div class="f03-rev__group">
+        <h4>البيانات التجريبية</h4>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-reset-data">استعادة البيانات التجريبية الأصلية</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-clear-data">تفريغ البيانات التجريبية</button>
+      </div>
+      <div class="f03-rev__readout" aria-label="قراءات فحص تقنية">
+        <span>التخزين: <b id="f03-rev-storage"></b></span>
+        <span>حفظ: <b id="f03-rev-save-calls">0</b></span>
+        <span>تحقق: <b id="f03-rev-check-calls">0</b></span>
+        <span>قراءة: <b id="f03-rev-read-calls">0</b></span>
+        <span>الحالة: <b id="f03-rev-pending">لا طلبات معلقة</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مصادر المكوّن ثم المخزن والموصل ثم سلوك المستهلك -->
   <script src="../../../components/buttons/buttons.js"></script>
   <script src="../../../components/fields/fields.js"></script>
   <script src="../../../components/selection/selection.js"></script>
   <script src="../../../components/selection/picker.js"></script>
   <script src="../../../components/messages/messages.js"></script>
   <script src="../../../components/navigation/navigation.js"></script>
+  <script src="demo-store.js"></script>
   <script src="mock-adapter.js"></script>
   <script src="example.js"></script>
 </body>

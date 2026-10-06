@@ -1,187 +1,173 @@
 /* =========================================================
-   Micro UI — UX-F03: سلوك المستهلك لعينة «عرض عنصر وتعديله وحفظه»
+   Micro UI — UX-F03: سلوك المستهلك للتجربة المترابطة «العناصر»
    الملف: previews/ux-patterns/mobile-record-sample/example.js
-   الحالة: DRAFT FOR REVIEW — سلوك مستهلك للعينة، ليس framework عام
+   الحالة: DRAFT FOR RE-REVIEW — سلوك مستهلك للعينة، ليس framework عامًا
    ولا منطق أعمال، ولا يعدّل أي مصدر UI.
-   مصدر القواعد: docs/ux/F03-ACCEPTANCE.md §2..3 و§5.
+   مصدر القواعد: docs/ux/F03-EXPERIENCE-BRIEF.md §2..8.
+
+   بنية التجربة (أربع وجهات + ثلاث طبقات B07):
+   - الرئيسية: ملخص من المخزن الوحيد (عدد/توزيع m-progress/أحدث العناصر).
+   - القائمة: بحث فعلي + زر التصفية المعتمد (عقد data-filter-panel) وعدّاد
+     المطبق + «لا بيانات» ≠ «لا نتائج».
+   - التفاصيل: البيانات المحفوظة + قناة حالة السياق الوحيدة للصفحة.
+   - الإضافة/التعديل: صفحة نموذج كاملة (قرار تركيب موثق في الموجب §2 بدل
+     اللوحة السفلية) — منتقي الفئة طبقة B07 وحوار تجاهل التعديلات طبقة B07.
 
    مصدر الحقيقة:
-   - confirmed: النسخة المؤكدة {name, category:{value,label}, note}
-     تبدأ من RECORD_INIT أدناه (مصدر وحيد يُبث عند الإقلاع).
-   - draftCategory: فئة اللوحة الجارية (مرآة حالة المستهلك؛ الحقول
-     النصية قيمها من input/textarea نفسهما).
-   - sending: نسخة إرسال ثابتة عند بدء الحفظ (خام بلا trim).
-   - attemptId / readSeq: معرفا محاولة الحفظ وقراءة الفئات المتزايدان —
-     الردود بمعرف أقدم تُتجاهل كليًا (لا قيمة/رسالة/تركيز).
-   - op: idle | saving | failed | unknown | checking | saved
-   - dirty محور مستقل: اختلاف أي قيمة خام (الاسم/قيمة الفئة/الملاحظة)
-     عن المؤكدة؛ الكتابة ثم العودة لنفس القيم تعيد clean دون حفظ.
+   - F03Store: العناصر والفئات — كل الصفحات والملخصات تُشتق منه، والحفظ
+     المحلي عند توفره (جلسي عند التعذر) بلا ادعاء دوام أو مزامنة.
+   - formBaseline: أساس النموذج عند الفتح (قيم العنصر أو فراغ)؛ dirty محور
+     مستقل = اختلاف القيم الخام عن الأساس، والعودة للأصل تعيد clean.
+   - sending: نسخة إرسال ثابتة عند بدء الحفظ؛ attemptId/readSeq/pickerSession/
+     formEpoch معرفات متزايدة — الردود خارج سياقها تُبطل ولا تطبق أبدًا.
+   - op: idle | saving | failed | unknown | checking.
 
    قرارات موثقة (تفصيلها في README.md):
-   - النموذج داخل لوحة B07 سفلية (التطبيق المؤجل من قرار F01) وحراسة
-     مغادرته في المستهلك: «رجوع» وزر الإغلاق الظاهر بلا [data-layer-close]
-     كي يمرا عبر الحارس، والخلفية data-backdrop="keep" (بقاء ضمني)،
-     وEscape يوجَّه بطور الالتقاط: نظيف → يُمرَّر إلى B07 (إغلاق عادي)،
-     dirty → حوار البقاء/التخلي (UX-17: لا Escape صامت للتخلي)،
-     pending → حجب برسالة موجزة. لا تعديل على عقد B07.
-   - قناة واحدة لكل سياق: أثناء فتح اللوحة رسالة العملية ملاحظة B06
-     ثابتة role=status داخلها (#f03-op-note) بلا MicroMessages.announce
-     لنصها؛ بعد النجاح وإغلاق اللوحة قناة سياق العرض (#f03-view-note
-     role=status) هي المالكة للحدث (نمط توجيه F02-R2-01). خطأ الاسم عبر
-     aria-describedby/aria-invalid في رسالة الحقل، وخطأ الفئة عبر
-     رسالة صف الفئة مرتبطة aria-describedby — بلا مصدر إعلان ثانٍ.
-     رسالة زوال الفئة داخل طبقة المنتقي ظاهرة (m-note--warning +
-     role=alert وفق مواصفة B06) وهي القناة الوحيدة لهذا الحدث.
-   - المنتقي المعتمد (MicroPicker) داخل طبقة B07 ثانية فوق اللوحة:
-     كل فتح قراءة جديدة بمعرف جديد؛ loading/error/empty تخفي الخيارات
-     القديمة؛ البحث لا يلغي الحالة ولا يزيل صفها؛ empty المؤكدة تطبق
-     مصدرًا فارغًا وتُسقط فئة اللوحة الجارية برسالة الزوال (لا بديل
-     تلقائي) وتُلزم باختيار عند الحفظ؛ رد بمعرف قديم يُتجاهل كليًا.
-   - unknown: الحقول readOnly وزر الفئة معطل (لا تحرير قبل حسم النتيجة،
-     والوصول والقراءة محفوظان) وزر «التحقق من النتيجة» يظهر ظهورًا
-     فعليًا (#f03-check[hidden] بقاعدة عينة — درس F01-R1-01)؛ الحفظ
-     محروس سلوكيًا ولا إعادة إرسال تلقائية.
-   - نجاح مؤكد: المؤكدة = نسخة الإرسال، اللوحة تغلق وتُعرض النتيجة في
-     قناة سياق العرض ويستعيد B07 التركيز لمشغّل «تعديل» — دورة المهمة
-     تكتمل. زر التحقق المركز عند حسم النتيجة ينتقل تركيزه قبل إخفائه
-     إلى زر الحفظ (درس F01-R1-02) ما لم ينقل المستخدم تركيزه.
-   - رسائل انتهى سببها تزال عند تغير القيم (درس F01-R1-03): رسالة
-     نجاح العرض تُمسح عند فتح تعديل جديد، ورسائل اللوحة تتبع القيم.
+   - (R1-05) صلاحية رد القراءة مرتبطة بسياق مزدوج: جلسة فتح المنتقي + جلسة
+     النموذج + ظهور الطبقة فعليًا؛ الإغلاق أو مغادرة النموذج يُبطل السياق
+     ويُلغي الطلب إلغاءً صريحًا (cancel → {cancelled:true} يُتجاهل بصمت
+     بعقد موثق) — فلا يغير رد مغلق فئة جلسة أحدث أو dirty أو التركيز.
+   - (R1-06) نجاح الحفظ: تحديث المؤكد ثم تبديل العرض إلى التفاصيل ثم كتابة
+     رسالة النجاح مرة واحدة في قناة سياق التفاصيل الظاهرة (role=status) —
+     سجل الأحداث يثبت الترتيب: save:saved → view:detail → note:written.
+     لا رسالة مكررة ولا سرقة تركيز إضافية.
+   - (R1-01) الواجهة الافتراضية بلا أي نصوص أو أدوات فحص؛ وضع المراجعة
+     طبقة مغلقة مدخلها رابط التذييل وحده (R1-07: أدواته تعمل من الهاتف
+     بلا console، والمسلح يُحسم تلقائيًا بوقت حتمي داخل الموصل).
+   - (R1-02) رموز inline بنفس خصائص أصول HugeIcons بينها fill="none" —
+     وأداة البناء تتحقق من كل رمز مقابل ملفه.
+   - قناة واحدة لكل سياق: أخطاء الحقول قرب الحقل (aria-describedby)؛ رسالة
+     العملية داخل النموذج role=status؛ نجاح الحفظ في قناة التفاصيل بعد
+     الانتقال؛ رسالة زوال الفئة داخل طبقة المنتقي role=alert ظاهرة (B06)
+     وهي القناة الوحيدة لهذا الحدث. لا Toast في هذه العينة.
+   - رسائل انتهى سببها تزال عند تغير القيم (درس F01-R1-03)؛ failed يبقى
+     سجل محاولة دون عرضه كرفض للقيم الحالية.
+   - المغادرة: clean → عودة مباشرة؛ dirty → حوار قرار (كل إغلاق غير
+     التجاهل = بقاء)؛ pending → حجب برسالة موجزة دون وهم إلغاء عملية.
+   - Escape بطور الالتقاط: طبقة مفتوحة → سلوك B07؛ نموذج dirty → الحوار؛
+     نموذج pending → حجب؛ غير ذلك لا فعل (موثق). رجوع النظام NOT RUN.
    ========================================================= */
 
 (function () {
   'use strict';
 
-  /* ---------- ثوابت البداية: مصدر وحيد للتعديل ----------
-     عدّل هذه الثوابت فقط وتنعكس في منظر العرض وحقول اللوحة والمنتقي
-     والموصل والفحص دون إعادة إنشاء (درس F01-R1-04). لا قيم مكررة في HTML. */
-  var RECORD_INIT = {
-    name: 'عنصر تجريبي',
-    category: { value: 'cat-a', label: 'فئة أ' },
-    note: ''
-  };
-  /* الفئات التركيبية الثلاث: تمرر إلى الموصل كبيانات القراءة */
-  var CATEGORIES_INIT = [
-    { value: 'cat-a', label: 'فئة أ' },
-    { value: 'cat-b', label: 'فئة ب' },
-    { value: 'cat-c', label: 'فئة ج' }
-  ];
+  /* ---------- العناصر ---------- */
+  function q(id) { return document.getElementById(id); }
 
-  /* ---------- عناصر العينة ---------- */
   var el = {
-    view: document.getElementById('f03-view'),
-    viewTitle: document.getElementById('f03-view-title'),
-    viewNote: document.getElementById('f03-view-note'),
-    viewNoteTitle: document.getElementById('f03-view-note-title'),
-    viewNoteBody: document.getElementById('f03-view-note-body'),
-    readName: document.getElementById('f03-read-name'),
-    readCat: document.getElementById('f03-read-cat'),
-    readNote: document.getElementById('f03-read-note'),
-    editBtn: document.getElementById('f03-edit-btn'),
-    sheet: document.getElementById('f03-edit-sheet'),
-    sheetClose: document.getElementById('f03-edit-close'),
-    form: document.getElementById('f03-form'),
-    nameField: document.getElementById('f03-name-field'),
-    name: document.getElementById('f03-name'),
-    nameMsg: document.getElementById('f03-name-msg'),
-    catField: document.getElementById('f03-cat-field'),
-    catTrigger: document.getElementById('f03-cat-trigger'),
-    catValue: document.getElementById('f03-cat-value'),
-    catMsg: document.getElementById('f03-cat-msg'),
-    noteField: document.getElementById('f03-note-field'),
-    note: document.getElementById('f03-note'),
-    dirtyHint: document.getElementById('f03-dirty-hint'),
-    opNote: document.getElementById('f03-op-note'),
-    opTitle: document.getElementById('f03-op-title'),
-    opBody: document.getElementById('f03-op-body'),
-    backBtn: document.getElementById('f03-back'),
-    saveBtn: document.getElementById('f03-save'),
-    checkBtn: document.getElementById('f03-check'),
-    catLayer: document.getElementById('f03-cat-layer'),
-    picker: document.getElementById('f03-picker'),
-    pickerLive: document.getElementById('f03-cat-live'),
-    dropNote: document.getElementById('f03-cat-drop-note'),
-    dropNoteText: document.getElementById('f03-cat-drop-note-text'),
-    leaveDialog: document.getElementById('f03-leave-dialog'),
-    stayBtn: document.getElementById('f03-stay'),
-    abandonBtn: document.getElementById('f03-abandon')
+    views: {
+      home: q('view-home'),
+      list: q('view-list'),
+      detail: q('view-detail'),
+      form: q('view-form')
+    },
+    titles: {
+      home: q('f03-home-title'),
+      list: q('f03-list-title'),
+      detail: q('f03-detail-title'),
+      form: q('f03-form-title')
+    },
+    homeCount: q('f03-home-count'),
+    homeDist: q('f03-home-dist'),
+    homeAdd: q('f03-home-add'),
+    homeAll: q('f03-home-all'),
+    homeRecent: q('f03-home-recent'),
+    homeRecentEmpty: q('f03-home-recent-empty'),
+    listBack: q('f03-list-back'),
+    listAdd: q('f03-list-add'),
+    searchInput: q('f03-search-input'),
+    filterBtn: q('f03-filter-btn'),
+    filterCount: q('f03-filter-count'),
+    filterLayer: q('f03-filter-layer'),
+    filterCats: q('f03-filter-cats'),
+    listResults: q('f03-list-results'),
+    listRows: q('f03-list-rows'),
+    listEmpty: q('f03-list-empty'),
+    listEmptyAdd: q('f03-list-empty-add'),
+    listNoResults: q('f03-list-noresults'),
+    clearSearch: q('f03-clear-search'),
+    clearFilters: q('f03-clear-filters'),
+    detailBack: q('f03-detail-back'),
+    detailNote: q('f03-detail-note'),
+    detailNoteTitle: q('f03-detail-note-title'),
+    detailNoteBody: q('f03-detail-note-body'),
+    readName: q('f03-read-name'),
+    readCat: q('f03-read-cat'),
+    readNote: q('f03-read-note'),
+    detailEdit: q('f03-detail-edit'),
+    formBack: q('f03-form-back'),
+    formTitle: q('f03-form-title'),
+    form: q('f03-form'),
+    nameField: q('f03-name-field'),
+    name: q('f03-name'),
+    nameMsg: q('f03-name-msg'),
+    catField: q('f03-cat-field'),
+    catTrigger: q('f03-cat-trigger'),
+    catValue: q('f03-cat-value'),
+    catMsg: q('f03-cat-msg'),
+    noteField: q('f03-note-field'),
+    note: q('f03-note'),
+    dirtyHint: q('f03-dirty-hint'),
+    opNote: q('f03-op-note'),
+    opTitle: q('f03-op-title'),
+    opBody: q('f03-op-body'),
+    saveBtn: q('f03-save'),
+    checkBtn: q('f03-check'),
+    catLayer: q('f03-cat-layer'),
+    catLayerClose: q('f03-cat-layer-close'),
+    picker: q('f03-picker'),
+    pickerLive: q('f03-cat-live'),
+    dropNote: q('f03-cat-drop-note'),
+    dropNoteText: q('f03-cat-drop-note-text'),
+    leaveDialog: q('f03-leave-dialog'),
+    stayBtn: q('f03-stay'),
+    abandonBtn: q('f03-abandon'),
+    reviewLayer: q('f03-review-layer'),
+    reviewOpen: q('f03-review-open')
   };
-  var searchInput = el.picker.querySelector('[data-picker-search]');
+  var pickerSearch = el.picker.querySelector('[data-picker-search]');
+
+  /* ---------- المخزن والموصل (مصدر واحد قابل للاستبدال) ---------- */
+  var store = window.F03Store;
+  var connector = window.F03Sim.createConnector({ store: store });
+  window.F03Sim.bindReviewPanel(el.reviewLayer, connector);
 
   /* ---------- حالة المستهلك ---------- */
   var state = {
-    confirmed: copyRecord(RECORD_INIT),
-    draftCategory: { value: RECORD_INIT.category.value, label: RECORD_INIT.category.label },
+    view: 'home',
+    detailId: null,
+    detailReturnTo: 'list',       /* مصدر الوصول إلى التفاصيل */
+    formMode: 'add',
+    formId: null,
+    formReturnTo: 'home',         /* وجهة المغادرة بلا حفظ */
+    formEpoch: 0,
+    baseline: { name: '', category: null, note: '' },
+    draftCategory: null,
     sending: null,
     attemptId: 0,
     readSeq: 0,
-    op: 'idle', /* idle|saving|failed|unknown|checking|saved */
-    staleIgnored: 0,
+    pickerSession: 0,
+    activeRead: null,             /* {readId, session, epoch} */
+    op: 'idle',
     abandonRequested: false,
-    leaveTrigger: null, /* مشغّل حوار المغادرة (رجوع/إغلاق/Escape → رجوع) */
+    leaveTrigger: null,
     catLayerOpen: false,
-    dialogOpen: false
+    dialogOpen: false,
+    reviewOpen: false,
+    openLayers: 0,
+    search: '',
+    appliedFilters: {},
+    listScrollY: 0,
+    staleIgnored: 0,
+    events: []
   };
 
-  function copyRecord(r) {
-    return {
-      name: r.name,
-      category: r.category ? { value: r.category.value, label: r.category.label } : null,
-      note: r.note
-    };
+  function logEvent(kind, detail) {
+    state.events.push({ t: kind, at: Date.now(), detail: detail || null });
+    if (state.events.length > 80) state.events.splice(0, state.events.length - 80);
   }
 
-  /* الموصل التجريبي — قابل للاستبدال (واجهة mock-adapter.js) */
-  var connector = window.F03Sim.createConnector({ categories: CATEGORIES_INIT });
-  window.F03Sim.bindSimulationPanel(document.getElementById('f03-sim'), connector);
-
-  /* ---------- التهيئة من المصدر الواحد ---------- */
-  function applyInitialValues() {
-    el.name.value = state.confirmed.name;
-    el.note.value = state.confirmed.note;
-    el.readName.textContent = state.confirmed.name;
-    el.readNote.textContent = state.confirmed.note === '' ? '—' : state.confirmed.note;
-    setDraftCategory(state.confirmed.category, { syncPickerSummary: false });
-    renderReadView();
-  }
-
-  function renderReadView() {
-    el.readName.textContent = state.confirmed.name;
-    el.readCat.textContent = state.confirmed.category ? state.confirmed.category.label : '—';
-    el.readNote.textContent = state.confirmed.note === '' ? '—' : state.confirmed.note;
-  }
-
-  /* الاسم الإتاحي لصف الفئة يصف الفعل والقيمة الحالية ويُحدث دائمًا */
-  function renderCatTrigger() {
-    el.catValue.textContent = state.draftCategory ? state.draftCategory.label : 'لم تُحدد فئة';
-    el.catTrigger.setAttribute('aria-label', state.draftCategory
-      ? 'تغيير الفئة، الفئة الحالية: ' + state.draftCategory.label
-      : 'تغيير الفئة، لا فئة محددة — اختر فئة');
-  }
-
-  function setDraftCategory(category, opts) {
-    state.draftCategory = category ? { value: category.value, label: category.label } : null;
-    renderCatTrigger();
-    /* بذرة داخل المنتقي نفسه كي يطابق الملخص فئة اللوحة الجارية (نمط F02) */
-    if (opts && opts.syncPickerSummary !== false && !el.catLayer.hidden) {
-      syncPickerSeed();
-    }
-  }
-
-  function syncPickerSeed() {
-    if (!state.draftCategory) return;
-    var options = el.picker.querySelectorAll('.m-picker__option');
-    for (var i = 0; i < options.length; i++) {
-      if (options[i].getAttribute('data-value') === state.draftCategory.value) {
-        options[i].setAttribute('aria-selected', 'true');
-        var foot = el.picker.querySelector('[data-picker-summary]');
-        if (foot) foot.textContent = 'المحدد: ' + options[i].textContent.trim();
-        return;
-      }
-    }
-  }
-
-  /* ---------- قياس الظهور الفعلي (لا سمة hidden وحدها) ---------- */
+  /* ---------- أدوات ---------- */
   function isReallyVisible(e) {
     var cs = window.getComputedStyle(e);
     if (cs.display === 'none' || cs.visibility === 'hidden') return false;
@@ -189,7 +175,12 @@
     return r.width > 0 && r.height > 0;
   }
 
-  /* ---------- أدوات الحالة ---------- */
+  function categoryObj(value) {
+    if (!value) return null;
+    var label = store.categoryLabel(value);
+    return label ? { value: value, label: label } : { value: value, label: value };
+  }
+
   function currentValues() {
     return {
       name: el.name.value,
@@ -197,78 +188,300 @@
       note: el.note.value
     };
   }
-  function catValueOf(c) {
-    /* القيمة الجارية نص؛ والمؤكدة كائن {value,label} — القارنة على value */
-    return c == null ? null : (typeof c === 'object' ? c.value : c);
-  }
+
   function sameValues(a, b) {
-    return a.name === b.name && a.note === b.note &&
-      catValueOf(a.category) === catValueOf(b.category);
+    return a.name === b.name && a.note === b.note && a.category === b.category;
   }
+
   function isDirty() {
-    return !sameValues(currentValues(), state.confirmed);
+    return !sameValues(currentValues(), state.baseline);
   }
+
   function nameValid(raw) {
     return String(raw).trim() !== ''; /* الفحص دون تغيير القيمة المكتوبة */
   }
-  function categoryValid() {
-    return !!state.draftCategory;
-  }
+
   function inBusyOp() {
     return state.op === 'saving' || state.op === 'checking' || state.op === 'unknown';
   }
 
-  function emitTest(kind, detail) {
-    /* أثر فحص فقط — لا يظهر في واجهة المستفيد */
-    document.dispatchEvent(new CustomEvent('f03:test', {
-      detail: Object.assign({ kind: kind }, detail || {})
-    }));
+  function countPhrase(n) {
+    if (n === 0) return 'لا عناصر بعد.';
+    if (n === 1) return 'عنصر واحد.';
+    if (n === 2) return 'عنصران.';
+    if (n <= 10) return n + ' عناصر.';
+    return n + ' عنصر.';
   }
 
-  /* ---------- رسالة العملية داخل اللوحة: قناة سياق اللوحة الوحيدة ---------- */
-  function setOpMessage(variant, title, body) {
-    el.opNote.hidden = false;
-    el.opNote.className = 'm-note m-note--' + variant;
-    el.opNote.setAttribute('data-op-state', variant);
-    el.opTitle.textContent = title;
-    el.opBody.textContent = body;
-  }
-  function clearOpMessage() {
-    el.opNote.hidden = true;
-    el.opNote.setAttribute('data-op-state', 'idle');
-    el.opTitle.textContent = '';
-    el.opBody.textContent = '';
-  }
-
-  /* رسالة نتيجة الحفظ بعد إغلاق اللوحة: قناة سياق العرض الوحيدة.
-     تُمسح عند فتح سياق تعديل جديد (انتهى سببها — درس F01-R1-03). */
-  function setViewNote(variant, title, body) {
-    el.viewNote.hidden = false;
-    el.viewNote.className = 'm-note m-note--' + variant + ' f03-view-note';
-    el.viewNote.setAttribute('data-view-state', variant);
-    el.viewNoteTitle.textContent = title;
-    el.viewNoteBody.textContent = body;
-  }
-  function clearViewNote() {
-    el.viewNote.hidden = true;
-    el.viewNote.setAttribute('data-view-state', 'idle');
-    el.viewNoteTitle.textContent = '';
-    el.viewNoteBody.textContent = '';
-  }
-
-  /* رسالة زوال الفئة داخل طبقة المنتقي — القناة الوحيدة لهذا الحدث */
-  function setDropNote(text) {
-    if (!el.dropNote || !el.dropNoteText) return;
-    if (text) {
-      el.dropNote.hidden = false;
-      el.dropNoteText.textContent = text;
-    } else {
-      el.dropNote.hidden = true;
-      el.dropNoteText.textContent = '';
+  /* ---------- تبديل العروض: تركيز وتمرير موثقان ---------- */
+  function showView(name, opts) {
+    opts = opts || {};
+    if (state.view === 'list' && name !== 'list') {
+      state.listScrollY = window.scrollY || 0; /* حفظ سياق القائمة قبل المغادرة */
+    }
+    Object.keys(el.views).forEach(function (k) { el.views[k].hidden = k !== name; });
+    state.view = name;
+    logEvent('view:' + name);
+    if (name === 'home') renderHome();
+    if (name === 'list') renderList();
+    if (name === 'detail') renderDetail();
+    window.scrollTo(0, 0);
+    if (name === 'list' && opts.restoreScroll !== false) {
+      window.scrollTo(0, state.listScrollY || 0); /* استعادة موضع التمرير قد الإمكان */
+    }
+    if (opts.focus !== false) {
+      var target = opts.focusEl || el.titles[name];
+      /* preventScroll: التمرير قرار العرض صريحًا أعلاه — لا قفزة تركيز تفسد الاستعادة */
+      if (target) target.focus({ preventScroll: true });
     }
   }
 
-  /* ---------- حالة الحقول والأزرار ---------- */
+  /* ---------- الرئيسية: ملخص من البيانات الفعلية فقط ---------- */
+  function renderHome() {
+    var items = store.all();
+    var total = items.length;
+    var cats = store.categories();
+    var used = 0;
+    el.homeDist.textContent = '';
+    cats.forEach(function (c) {
+      var n = items.filter(function (it) { return it.category === c.value; }).length;
+      if (n > 0) used += 1;
+      var row = document.createElement('div');
+      row.className = 'm-progress';
+      row.setAttribute('data-cat', c.value);
+      var head = document.createElement('div');
+      head.className = 'm-progress__head';
+      var label = document.createElement('span');
+      label.className = 'm-progress__label';
+      label.textContent = c.label;
+      var value = document.createElement('span');
+      value.className = 'm-progress__value';
+      value.textContent = String(n);
+      head.appendChild(label);
+      head.appendChild(value);
+      var track = document.createElement('div');
+      track.className = 'm-progress__track';
+      var bar = document.createElement('div');
+      bar.className = 'm-progress__bar';
+      var pct = total > 0 ? Math.round((n / total) * 100) : 0;
+      bar.style.setProperty('--progress', pct + '%');
+      track.appendChild(bar);
+      row.appendChild(head);
+      row.appendChild(track);
+      el.homeDist.appendChild(row);
+    });
+    el.homeCount.textContent = total === 0
+      ? countPhrase(0)
+      : countPhrase(total) + ' موزعة على ' + used + (used === 1 ? ' فئة.' : ' فئات.');
+    el.homeAll.textContent = 'عرض جميع العناصر (' + total + ')';
+
+    el.homeRecent.textContent = '';
+    var recent = items.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; }).slice(0, 3);
+    recent.forEach(function (it) { el.homeRecent.appendChild(rowNode(it)); });
+    el.homeRecentEmpty.hidden = total !== 0;
+    el.homeRecent.hidden = total === 0;
+  }
+
+  function rowNode(it) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'f03-row';
+    btn.setAttribute('data-id', it.id);
+    var name = document.createElement('span');
+    name.className = 'f03-row__name';
+    name.textContent = it.name;
+    var meta = document.createElement('span');
+    meta.className = 'f03-row__meta';
+    meta.textContent = store.categoryLabel(it.category) || '—';
+    btn.appendChild(name);
+    btn.appendChild(meta);
+    li.appendChild(btn);
+    return li;
+  }
+
+  /* ---------- القائمة: بحث وتصفية على البيانات ---------- */
+  function matchesFilters(it) {
+    var q = state.search.trim().toLowerCase();
+    if (q && (it.name + ' ' + it.note).toLowerCase().indexOf(q) < 0) return false;
+    for (var k in state.appliedFilters) {
+      if (state.appliedFilters[k] === true && it.category !== k) return false;
+    }
+    return true;
+  }
+
+  function renderList() {
+    var items = store.all();
+    var filtered = items.filter(matchesFilters);
+    el.listRows.textContent = '';
+    filtered.forEach(function (it) { el.listRows.appendChild(rowNode(it)); });
+
+    var isNoData = items.length === 0;
+    var isNoMatch = !isNoData && filtered.length === 0;
+    el.listEmpty.hidden = !isNoData;
+    el.listNoResults.hidden = !isNoMatch;
+    el.listRows.hidden = isNoData || isNoMatch;
+    el.listResults.hidden = isNoData;
+    el.listResults.textContent = 'النتائج: ' + filtered.length;
+    el.clearSearch.hidden = state.search.trim() === '';
+    var anyFilter = Object.keys(state.appliedFilters).some(function (k) { return state.appliedFilters[k] === true; });
+    el.clearFilters.hidden = !anyFilter;
+    updateFilterCounter();
+  }
+
+  function updateFilterCounter() {
+    var n = Object.keys(state.appliedFilters).filter(function (k) { return state.appliedFilters[k] === true; }).length;
+    el.filterCount.textContent = String(n);
+    el.filterCount.hidden = n === 0;
+    el.filterCount.classList.toggle('m-btn__counter--zero', n === 0);
+    el.filterBtn.setAttribute('aria-label', n === 0
+      ? 'تصفية، لا فلاتر مطبقة'
+      : (n === 1 ? 'تصفية، فلتر واحد مطبق' : 'تصفية، ' + n + ' فلاتر مطبقة'));
+  }
+
+  function buildFilterCats() {
+    el.filterCats.textContent = '';
+    store.categories().forEach(function (c) {
+      var lab = document.createElement('label');
+      lab.className = 'm-choice m-choice--check';
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.setAttribute('data-filter-key', c.value);
+      input.setAttribute('data-filter-label', c.label);
+      var box = document.createElement('span');
+      box.className = 'm-choice__box';
+      box.innerHTML = '<svg aria-hidden="true"><use href="#i-check"/></svg>';
+      var text = document.createElement('span');
+      text.className = 'm-choice__text';
+      text.textContent = c.label;
+      lab.appendChild(input);
+      lab.appendChild(box);
+      lab.appendChild(text);
+      el.filterCats.appendChild(lab);
+    });
+  }
+
+  el.filterBtn.addEventListener('click', function () {
+    window.MicroNavigation.openLayer(el.filterLayer, { trigger: el.filterBtn });
+  });
+
+  el.filterLayer.addEventListener('micro-navigation:filters-applied', function (e) {
+    state.appliedFilters = Object.assign({}, (e.detail && e.detail.applied) || {});
+    logEvent('filters:applied', { count: e.detail && e.detail.count });
+    renderList();
+  });
+  el.filterLayer.addEventListener('micro-navigation:closed', function (e) {
+    if (e.target !== el.filterLayer) return;
+  });
+
+  el.searchInput.addEventListener('input', function () {
+    state.search = el.searchInput.value;
+    renderList();
+  });
+  el.clearSearch.addEventListener('click', function () {
+    el.searchInput.value = '';
+    state.search = '';
+    renderList();
+    el.searchInput.focus();
+  });
+  el.clearFilters.addEventListener('click', function () {
+    state.appliedFilters = {};
+    el.filterCats.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+    renderList();
+  });
+
+  /* صفوف القائمة وأحدث العناصر: هدف واحد واضح يفتح تفاصيل العنصر الصحيح */
+  el.listRows.addEventListener('click', function (e) {
+    var row = e.target.closest('.f03-row');
+    if (row) openDetail(row.getAttribute('data-id'), { from: 'list' });
+  });
+  el.homeRecent.addEventListener('click', function (e) {
+    var row = e.target.closest('.f03-row');
+    if (row) openDetail(row.getAttribute('data-id'), { from: 'home' });
+  });
+
+  /* ---------- التفاصيل ---------- */
+  function clearDetailNote() {
+    el.detailNote.hidden = true;
+    el.detailNote.setAttribute('data-detail-state', 'idle');
+    el.detailNoteTitle.textContent = '';
+    el.detailNoteBody.textContent = '';
+  }
+
+  function setDetailNote(variant, title, body) {
+    /* تُكتب مرة واحدة بعد ظهور سياق التفاصيل فعليًا (الموجز §7) */
+    el.detailNote.hidden = false;
+    el.detailNote.className = 'm-note m-note--' + variant + ' f03-detail-note';
+    el.detailNote.setAttribute('data-detail-state', variant);
+    el.detailNoteTitle.textContent = title;
+    el.detailNoteBody.textContent = body;
+  }
+
+  function renderDetail() {
+    var item = state.detailId ? store.get(state.detailId) : null;
+    if (!item) {
+      el.readName.textContent = '—';
+      el.readCat.textContent = '—';
+      el.readNote.textContent = '—';
+      return;
+    }
+    el.readName.textContent = item.name;
+    el.readCat.textContent = store.categoryLabel(item.category) || '—';
+    el.readNote.textContent = item.note === '' ? '—' : item.note;
+  }
+
+  function openDetail(id, opts) {
+    opts = opts || {};
+    state.detailId = id;
+    state.detailReturnTo = opts.from === 'home' ? 'home' : 'list';
+    clearDetailNote();
+    showView('detail');
+  }
+
+  el.detailBack.addEventListener('click', function () {
+    /* الرجوع يعيد إلى مصدر الوصول مع سياق القائمة (بحث/تصفية/تمرير) */
+    showView(state.detailReturnTo === 'home' ? 'home' : 'list');
+  });
+
+  el.detailEdit.addEventListener('click', function () {
+    clearDetailNote(); /* سياق تعديل جديد: رسالة النجاح السابقة انتهى سببها */
+    openForm({ mode: 'edit', id: state.detailId });
+  });
+
+  /* ---------- إضافة/تعديل: فتح النموذج من المصدر الواحد ---------- */
+  function openForm(opts) {
+    var mode = opts.mode === 'edit' ? 'edit' : 'add';
+    state.formEpoch += 1;
+    state.formMode = mode;
+    state.formId = opts.id || null;
+    state.formReturnTo = mode === 'edit' ? 'detail' : state.view;
+    var item = mode === 'edit' ? store.get(state.formId) : null;
+    state.baseline = item
+      ? { name: item.name, category: item.category, note: item.note }
+      : { name: '', category: null, note: '' };
+    el.formTitle.textContent = mode === 'add' ? 'إضافة عنصر' : 'تعديل العنصر';
+    el.name.value = state.baseline.name;
+    el.note.value = state.baseline.note;
+    setDraftCategory(item ? categoryObj(item.category) : null);
+    setNameError(false);
+    setCatError(false);
+    state.op = 'idle';
+    state.sending = null;
+    clearOpMessage();
+    el.checkBtn.hidden = true;
+    setFieldsReadonly(false);
+    renderDirtyHint();
+    showView('form', { focusEl: el.name });
+    logEvent('form:open:' + mode, { id: state.formId });
+  }
+
+  el.homeAdd.addEventListener('click', function () { openForm({ mode: 'add' }); });
+  el.listAdd.addEventListener('click', function () { openForm({ mode: 'add' }); });
+  el.listEmptyAdd.addEventListener('click', function () { openForm({ mode: 'add' }); });
+  el.homeAll.addEventListener('click', function () { showView('list'); });
+  el.listBack.addEventListener('click', function () { showView('home'); });
+
+  /* ---------- حالة الحقول والرسائل ---------- */
   function setFieldsReadonly(ro) {
     /* readOnly يفقد التحرير ويحفظ القراءة والنسخ — ليس fieldset معطلاً */
     el.name.readOnly = ro;
@@ -312,22 +525,62 @@
     return el.catField.classList.contains('has-error');
   }
 
+  function setOpMessage(variant, title, body) {
+    el.opNote.hidden = false;
+    el.opNote.className = 'm-note m-note--' + variant;
+    el.opNote.setAttribute('data-op-state', variant);
+    el.opTitle.textContent = title;
+    el.opBody.textContent = body;
+  }
+  function clearOpMessage() {
+    el.opNote.hidden = true;
+    el.opNote.setAttribute('data-op-state', 'idle');
+    el.opTitle.textContent = '';
+    el.opBody.textContent = '';
+  }
+
   function renderDirtyHint() {
     el.dirtyHint.hidden = !isDirty();
   }
 
-  /* ---------- الإدخال: محور dirty + تقييم الأخطاء المعروفة + رسائل انتهى سببها ---------- */
+  function setDraftCategory(category) {
+    state.draftCategory = category ? { value: category.value, label: category.label } : null;
+    renderCatTrigger();
+    if (!el.catLayer.hidden) syncPickerSeed();
+  }
+
+  function renderCatTrigger() {
+    el.catValue.textContent = state.draftCategory ? state.draftCategory.label : 'لم تُحدد فئة';
+    el.catTrigger.setAttribute('aria-label', state.draftCategory
+      ? 'تغيير الفئة، الفئة الحالية: ' + state.draftCategory.label
+      : 'تغيير الفئة، لا فئة محددة — اختر فئة');
+  }
+
+  function syncPickerSeed() {
+    if (!state.draftCategory) return;
+    var options = el.picker.querySelectorAll('.m-picker__option');
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].getAttribute('data-value') === state.draftCategory.value) {
+        options[i].setAttribute('aria-selected', 'true');
+        var foot = el.picker.querySelector('[data-picker-summary]');
+        if (foot) foot.textContent = 'المحدد: ' + options[i].textContent.trim();
+        return;
+      }
+    }
+  }
+
+  /* ---------- الإدخال: محور dirty + أخطاء انتهى سببها ---------- */
   function syncAfterInput() {
     renderDirtyHint();
     /* UX-09: بعد معرفة خطأ محدد أعد تقييمه عند التصحيح */
     if (nameErrorActive() && nameValid(el.name.value)) setNameError(false);
-    /* رسالة عملية سابقة انتهى سببها بتغير القيم تزال — لا تبقى رسالة
-       تصف قيمًا لم تعد الحالية (F01-R1-03): saved → idle؛ failed/idle
-       تزال الرسالة وfailed يبقى سجل محاولة دون عرضها كرفض للقيم الحالية. */
+    /* رسالة عملية سابقة انتهى سببها بتغير القيم تزال (F01-R1-03):
+       failed/idle تزال الرسالة وfailed يبقى سجل محاولة فقط. */
     if (state.op === 'saved') {
       state.op = 'idle';
       clearOpMessage();
     } else if (state.op === 'failed' || state.op === 'idle') {
+      state.op = 'idle';
       clearOpMessage();
     }
   }
@@ -337,29 +590,32 @@
   /* ---------- الحفظ: حراسة المستهلك + تحقق عند الإرسال ---------- */
   el.form.addEventListener('submit', function (e) {
     e.preventDefault();
+    attemptSave();
+  });
+
+  function attemptSave() {
     /* حراسة المستهلك إضافة لحراسة الزر: submit لا يلزم أن يأتي من click.
        saving/checking: لا عملية جديدة إطلاقًا. unknown: الحفظ ممنوع
-       سلوكيًا وشرح السبب باقٍ (لا رسالة جديدة ولا حفظ ولا إعادة إرسال). */
-    if (state.op === 'saving' || state.op === 'checking') return;
-    if (state.op === 'unknown') return;
+       سلوكيًا وشرح السبب باقٍ — لا إعادة إرسال تلقائية أبدًا. */
+    if (state.op === 'saving' || state.op === 'checking' || state.op === 'unknown') return;
 
     var values = currentValues();
 
-    /* حفظ clean: لا دعوة ولا loading ولا نجاح جديد */
+    /* حفظ clean: لا دعوة ولا loading ولا نجاح جديد — لا عملية تُنشأ */
     if (!isDirty()) {
-      setOpMessage('info', 'لا تغييرات', 'لا تغييرات للحفظ — القيم مطابقة للنسخة المؤكدة.');
+      setOpMessage('info', 'لا تغييرات', 'لا تغييرات للحفظ.');
       return;
     }
 
     /* إدخال غير صالح: لا عملية — عرّف موضع الخطأ وسببه، حافظ القيم،
        وركّز موضع التصحيح (UX-10) */
     if (!nameValid(values.name)) {
-      setNameError(true, 'الاسم مطلوب — أدخل اسمًا غير فارغ ثم احفظ مجددًا.');
+      setNameError(true, 'الاسم مطلوب.');
       el.name.focus();
       return;
     }
-    if (!categoryValid()) {
-      setCatError(true, 'الفئة مطلوبة — اختر فئة من القائمة ثم احفظ.');
+    if (!values.category) {
+      setCatError(true, 'الفئة مطلوبة — اختر فئة من القائمة.');
       el.catTrigger.focus();
       return;
     }
@@ -367,26 +623,33 @@
     /* حفظ dirty صالح: نسخة إرسال ثابتة (خام بلا trim) + معرف محاولة */
     state.attemptId += 1;
     state.sending = {
-      name: el.name.value,
-      category: state.draftCategory ? { value: state.draftCategory.value, label: state.draftCategory.label } : null,
-      note: el.note.value
+      mode: state.formMode,
+      id: state.formId,
+      values: { name: values.name, category: values.category, note: values.note }
     };
     state.op = 'saving';
     setFieldsReadonly(true);
     setOpMessage('info', 'جارٍ الحفظ', 'جارٍ حفظ التعديلات…');
     window.MicroButtons.setLoading(el.saveBtn, true, { loadingLabel: 'جارٍ الحفظ' });
-    emitTest('attempt', { channel: 'save', attemptId: state.attemptId });
+    logEvent('save:attempt', { attemptId: state.attemptId, mode: state.formMode });
 
     connector.save({
       attemptId: state.attemptId,
-      values: copyRecord(state.sending)
-    }).then(handleSaveResult, function () {
-      /* رفض Promise أثناء save بلا عقد عدم حفظ: نتيجة مجهولة لا رفض مؤكد.
-         لا حفظ جديد يبدأ تلقائيًا — الحفظ التالي قرار المستخدم فقط. */
+      mode: state.sending.mode,
+      id: state.sending.id,
+      values: {
+        name: state.sending.values.name,
+        category: state.sending.values.category,
+        note: state.sending.values.note
+      }
+    }).then(handleSaveResult, function (err) {
+      /* عقد الإلغاء الصريح: سياق الطلب انتهى — تجاهل صامت موثق */
+      if (err && err.cancelled) { logEvent('save:cancelled', { attemptId: state.attemptId }); return; }
+      /* رفض Promise أثناء save بلا عقد عدم حفظ: نتيجة مجهولة لا رفض مؤكد */
       endSaveBusy();
       enterUnknown('انتهت محاولة الحفظ بنتيجة غير مؤكدة — تحقق من النتيجة قبل أي تعديل.');
     });
-  });
+  }
 
   function belongsToActiveAttempt(res) {
     return !!(res && typeof res === 'object' && res.attemptId === state.attemptId);
@@ -396,24 +659,56 @@
     window.MicroButtons.setLoading(el.saveBtn, false);
   }
 
-  /* نجاح مؤكد: قناة سياق اللوحة تغادر والحدث لقناة سياق العرض —
-     اللوحة تُغلق بعد تحديث المؤكد ودورة المهمة تكتمل (بطاقة §2). */
-  function applySaved(messageText) {
-    state.confirmed = copyRecord(state.sending);
-    state.op = 'saved';
-    setFieldsReadonly(false);
-    renderReadView();
-    renderDirtyHint();
-    setViewNote('success', 'تم الحفظ', messageText);
-    clearOpMessage();
-    window.MicroNavigation.closeLayer(el.sheet);
+  function handleSaveResult(res) {
+    /* رد قديم لا يخص المحاولة النشطة: تجاهل كليًا وسجّل للفحص فقط */
+    if (!belongsToActiveAttempt(res)) {
+      state.staleIgnored += 1;
+      logEvent('stale:ignored', { channel: 'save', receivedAttemptId: res && res.attemptId });
+      return;
+    }
+    endSaveBusy();
+    if (res.outcome === 'saved') {
+      applySaved(res.item);
+    } else if (res.outcome === 'not-saved') {
+      applyFailed('لم تُحفظ التعديلات', 'يمكنك التصحيح والمحاولة مجددًا.');
+    } else {
+      enterUnknown('انتهت محاولة الحفظ بنتيجة غير مؤكدة — تحقق من النتيجة قبل أي تعديل.');
+    }
   }
 
-  function applyFailed(messageText) {
+  /* (R1-06) نجاح مؤكد: تحديث المؤكد ثم الانتقال إلى التفاصيل ثم كتابة
+     رسالة النجاح مرة واحدة في قناة سياق التفاصيل الظاهرة — الترتيب يُسجل */
+  function applySaved(item) {
+    state.baseline = {
+      name: state.sending.values.name,
+      category: state.sending.values.category,
+      note: state.sending.values.note
+    };
+    var savedItem = item || (state.sending.id ? store.get(state.sending.id) : null);
+    var mode = state.sending.mode;
+    state.op = 'idle';
+    state.sending = null;
+    setFieldsReadonly(false);
+    renderDirtyHint();
+    clearOpMessage();
+    logEvent('save:saved', { attemptId: state.attemptId, id: savedItem && savedItem.id, mode: mode });
+
+    clearDetailNote();
+    if (mode === 'add') state.detailReturnTo = 'list';
+    state.detailId = savedItem ? savedItem.id : state.detailId;
+    renderHome();
+    renderList(); /* القائمة تُحدَّث في محتواها بترتيبها المستقر */
+    showView('detail'); /* الانتقال الفعلي ثم الكتابة مرة واحدة */
+    setDetailNote('success', mode === 'add' ? 'تمت إضافة العنصر' : 'تم حفظ التعديلات', 'القائمة والرئيسية محدّثة.');
+    logEvent('note:written', { context: 'detail', attemptId: state.attemptId });
+  }
+
+  function applyFailed(title, body) {
     state.op = 'failed';
     setFieldsReadonly(false);
-    setOpMessage('error', 'تعذر الحفظ', messageText);
+    setOpMessage('error', title, body);
     renderDirtyHint();
+    logEvent('save:failed', { attemptId: state.attemptId });
   }
 
   function enterUnknown(reasonText) {
@@ -422,23 +717,7 @@
     setOpMessage('warning', 'النتيجة غير مؤكدة', reasonText);
     el.checkBtn.hidden = false; /* التحقق متاح — يظهر ظهورًا فعليًا */
     renderDirtyHint();
-  }
-
-  function handleSaveResult(res) {
-    /* رد قديم لا يخص المحاولة النشطة: تجاهل كليًا وسجّل للفحص فقط */
-    if (!belongsToActiveAttempt(res)) {
-      state.staleIgnored += 1;
-      emitTest('stale-ignored', { channel: 'save', receivedAttemptId: res && res.attemptId });
-      return;
-    }
-    endSaveBusy();
-    if (res.outcome === 'saved') {
-      applySaved('تم حفظ التعديلات — النسخة المؤكدة محدثة.');
-    } else if (res.outcome === 'not-saved') {
-      applyFailed('لم تُحفظ التعديلات — القيم كما كتبتها باقية، ويمكنك التصحيح والمحاولة مجددًا.');
-    } else {
-      enterUnknown('انتهت محاولة الحفظ بنتيجة غير مؤكدة — تحقق من النتيجة قبل أي تعديل.');
-    }
+    logEvent('save:unknown', { attemptId: state.attemptId });
   }
 
   /* ---------- التحقق من نتيجة محاولة مجهولة ---------- */
@@ -447,22 +726,21 @@
     state.op = 'checking';
     setOpMessage('info', 'جارٍ التحقق', 'جارٍ التحقق من نتيجة الحفظ…');
     window.MicroButtons.setLoading(el.checkBtn, true, { loadingLabel: 'جارٍ التحقق' });
-    emitTest('attempt', { channel: 'check', attemptId: state.attemptId });
+    logEvent('check:attempt', { attemptId: state.attemptId });
 
     connector.check({ attemptId: state.attemptId })
-      .then(handleCheckResult, function () {
-        /* رفض التحقق يبقى unknown — لا يتحول رفض حفظ مؤكدًا ولا نجاحًا،
-           وإعادة التحقق تبقى ممكنة دون أي حفظ جديد */
+      .then(handleCheckResult, function (err) {
         window.MicroButtons.setLoading(el.checkBtn, false);
+        if (err && err.cancelled) { logEvent('check:cancelled', { attemptId: state.attemptId }); state.op = 'unknown'; return; }
+        /* رفض التحقق يبقى unknown — لا يتحول رفض حفظ مؤكدًا ولا نجاحًا */
         state.op = 'unknown';
         setOpMessage('warning', 'تعذر تأكيد النتيجة', 'تعذر تأكيد النتيجة، تحقق مجددًا.');
       });
   });
 
   /* (F01-R1-02) إخفاء زر تحقق مركّز يُسقط التركيز إلى BODY. إن كان
-     التركيز على الزر عند حسم النتيجة ننقله قبل الإخفاء إلى هدف مرئي
-     ثابت موثق داخل اللوحة: زر الحفظ. وإن نقل المستخدم التركيز أثناء
-     الانتظار فلا نسرقه. */
+     التركيز على الزر عند حسم النتيجة ننقله قبل الإخفاء إلى زر الحفظ —
+     وإن نقل المستخدم تركيزه فلا نسرقه. */
   function refocusIfCheckFocused() {
     if (document.activeElement === el.checkBtn) el.saveBtn.focus();
   }
@@ -470,26 +748,28 @@
   function handleCheckResult(res) {
     if (!belongsToActiveAttempt(res)) {
       state.staleIgnored += 1;
-      emitTest('stale-ignored', { channel: 'check', receivedAttemptId: res && res.attemptId });
+      logEvent('stale:ignored', { channel: 'check', receivedAttemptId: res && res.attemptId });
       return;
     }
     window.MicroButtons.setLoading(el.checkBtn, false);
     if (res.outcome === 'saved') {
       refocusIfCheckFocused();
-      applySaved('تأكدت النتيجة: تم حفظ التعديلات.');
       el.checkBtn.hidden = true;
+      applySaved(res.item);
+      logEvent('check:saved', { attemptId: state.attemptId });
     } else if (res.outcome === 'not-saved') {
       refocusIfCheckFocused();
-      applyFailed('تأكدت النتيجة: لم تُحفظ التعديلات — القيم باقية ويمكنك التصحيح والمحاولة مجددًا.');
       el.checkBtn.hidden = true;
+      applyFailed('تأكدت النتيجة: لم تُحفظ التعديلات', 'القيم باقية ويمكنك التصحيح والمحاولة مجددًا.');
     } else {
       /* تحقق بنتيجة مجهولة: عودة unknown بقيم كما هي وإمكان إعادة تحقق */
       state.op = 'unknown';
       setOpMessage('warning', 'تعذر تأكيد النتيجة', 'تعذر تأكيد النتيجة، تحقق مجددًا.');
+      logEvent('check:unknown', { attemptId: state.attemptId });
     }
   }
 
-  /* ---------- قراءة الفئات: loading → ready | empty | error ---------- */
+  /* ---------- قراءة الفئات: سياق مزدوج + إبطال عند الإغلاق (R1-05) ---------- */
   function pickerVisibleOptionCount() {
     return [].slice.call(el.picker.querySelectorAll('.m-picker__option'))
       .filter(function (o) { return !o.hidden; }).length;
@@ -499,8 +779,7 @@
     el.pickerLive.textContent = text; /* القناة الحية داخل الطبقة */
   }
 
-  /* التركيز يُنقل إلى البحث الثابت فقط قبل زوال عنصر مركّز سيُخفى أو
-     تُستبدل عقده (خيار/صف حالة/إعادة محاولة) — نمط F02-R1-03. */
+  /* التركيز يُنقل إلى البحث الثابت فقط قبل زوال عنصر مركّز سيُخفى — نمط F02 */
   function moveFocusIntoPickerBeforeDataChange() {
     if (el.catLayer.hidden) return;
     var active = document.activeElement;
@@ -509,31 +788,48 @@
       || active.hasAttribute('data-picker-retry')
       || !!active.closest('.m-picker__state');
     if (!doomed) return; /* عنصر ثابت أو هدف صالح آخر — لا سرقة */
-    if (searchInput && active !== searchInput) searchInput.focus();
+    if (pickerSearch && active !== pickerSearch) pickerSearch.focus();
   }
 
   function startRead() {
     state.readSeq += 1;
+    /* (R1-05) الطلب مرتبط بجلسة فتح المنتقي وجلسة النموذج معًا */
+    state.activeRead = {
+      readId: state.readSeq,
+      session: state.pickerSession,
+      epoch: state.formEpoch
+    };
     var readId = state.readSeq;
     moveFocusIntoPickerBeforeDataChange();
     setDropNote(''); /* قراءة جديدة = سياق معالجة جديد: رسالة قديمة تُمسح */
     window.MicroPicker.setStatus(el.picker, 'loading');
     announceReadState('جارٍ قراءة الفئات…');
-    connector.readCategories({ readId: readId }).then(handleReadResult, function () {
-      /* رفض Promise قراءة = خطأ قراءة معروف (عقد الموصل §4) */
+    logEvent('read:attempt', { readId: readId, session: state.pickerSession, epoch: state.formEpoch });
+    connector.readCategories({ readId: readId }).then(handleReadResult, function (err) {
+      if (err && err.cancelled) {
+        /* عقد الإلغاء الصريح: سياق القراءة انتهى — تجاهل صامت موثق */
+        logEvent('read:cancelled', { readId: readId });
+        return;
+      }
+      /* رفض Promise قراءة = خطأ قراءة معروف (عقد الموصل) */
       handleReadResult({ readId: readId, outcome: 'error', items: [] });
     });
   }
 
-  function belongsToLatestRead(res) {
-    return !!(res && typeof res === 'object' && res.readId === state.readSeq);
-  }
-
   function handleReadResult(res) {
-    if (!belongsToLatestRead(res)) {
+    /* (R1-05) الرد لا يُطبق إلا في سياقه الحي: نفس الجلسة، نفس جلسة
+       النموذج، الطبقة مفتوحة فعليًا، والمستخدم في النموذج — وإلا يُبطل */
+    var active = state.activeRead;
+    var contextOk = !!(active && res && typeof res === 'object'
+      && res.readId === active.readId
+      && active.session === state.pickerSession
+      && active.epoch === state.formEpoch
+      && !el.catLayer.hidden
+      && state.view === 'form');
+    if (!contextOk) {
       state.staleIgnored += 1;
-      emitTest('stale-ignored', { channel: 'read', receivedReadId: res && res.readId });
-      return; /* رد أقدم: لا قيمة ولا رسالة ولا تركيز */
+      logEvent('stale:ignored', { channel: 'read', receivedReadId: res && res.readId });
+      return; /* رد بلا سياق: لا قيمة ولا رسالة ولا تركيز */
     }
     moveFocusIntoPickerBeforeDataChange();
     if (res.outcome === 'ready') {
@@ -544,8 +840,8 @@
         window.MicroPicker.setStatus(el.picker, 'empty', 'لا فئات في المصدر.');
         announceReadState('لا فئات في المصدر.');
       } else {
-        /* الإعلان من الحالة الفعلية الظاهرة لا عدد المصدر وحده (درس F02-R2-02) */
-        var query = searchInput ? searchInput.value.trim() : '';
+        /* الإعلان من الحالة الفعلية الظاهرة لا عدد المصدر وحده (F02-R2-02) */
+        var query = pickerSearch ? pickerSearch.value.trim() : '';
         if (query) {
           announceReadState(visibleCount
             ? 'نتائج البحث: ' + visibleCount + ' فئات.'
@@ -554,20 +850,23 @@
           announceReadState('تمت القراءة: ' + res.items.length + ' فئات.');
         }
       }
+      logEvent('read:ready', { readId: res.readId, items: (res.items || []).length });
     } else if (res.outcome === 'empty') {
-      /* empty مؤكدة تطبق مصدرًا فارغًا وتُسقط فئة اللوحة الجارية برسالة
+      /* empty مؤكدة تطبق مصدرًا فارغًا وتُسقط فئة النموذج الجارية برسالة
          الزوال — لا بديل تلقائي (نمط F02-R1-02) */
       window.MicroPicker.setOptions(el.picker, []);
       syncDraftFromPicker();
       window.MicroPicker.setStatus(el.picker, 'empty', 'لا فئات في المصدر.');
       announceReadState('لا فئات في المصدر.');
+      logEvent('read:empty', { readId: res.readId });
     } else {
       window.MicroPicker.setStatus(el.picker, 'error');
       announceReadState('تعذرت قراءة الفئات.');
+      logEvent('read:error', { readId: res.readId });
     }
   }
 
-  /* بعد setOptions: فئة اللوحة الجارية يجب أن تطابق المنتقي دائمًا.
+  /* بعد setOptions: فئة النموذج الجارية يجب أن تطابق المنتقي دائمًا.
      السقوط وحده يوجَّه إلى رسالة الزوال الظاهرة داخل الطبقة (قناة
      واحدة لهذا الحدث) — ويُلزم باختيار عند الحفظ. */
   function syncDraftFromPicker() {
@@ -576,7 +875,7 @@
       if (!state.draftCategory || state.draftCategory.value !== cur.value || state.draftCategory.label !== cur.label) {
         state.draftCategory = { value: cur.value, label: cur.label };
         setDropNote(''); /* سبب الرسالة زال بوجود الفئة */
-        if (catErrorActive() && categoryValid()) setCatError(false);
+        if (catErrorActive()) setCatError(false);
         renderCatTrigger();
         renderDirtyHint();
       }
@@ -595,14 +894,15 @@
       /* اختيار مستخدم: فوري ومحلي ثم إغلاق الطبقة (لا Apply ثانٍ) */
       state.draftCategory = { value: d.value, label: d.label };
       setDropNote(''); /* سبب الرسالة زال باختيار جديد */
-      if (catErrorActive() && categoryValid()) setCatError(false);
+      if (catErrorActive()) setCatError(false);
       renderCatTrigger();
       renderDirtyHint();
       syncAfterInput();
+      logEvent('picker:selected', { value: d.value });
       window.MicroNavigation.closeLayer(el.catLayer);
     } else {
-      /* مسح (clearSelection) أو سقوط الاختيار (setOptions): تزامن دون إغلاق.
-         رسالة السقوط تصدر من syncDraftFromPicker بعد setOptions. */
+      /* مسح أو سقوط الاختيار: تزامن دون إغلاق — رسالة السقوط تصدر من
+         syncDraftFromPicker بعد setOptions */
       syncDraftFromPicker();
     }
   });
@@ -616,29 +916,38 @@
     window.MicroNavigation.openLayer(el.catLayer, { trigger: el.catTrigger });
   });
 
-  /* كل فتح للمنتقي: قراءة جديدة بمعرف جديد + بذرة فئة اللوحة الجارية */
+  /* كل فتح للمنتقي: جلسة جديدة بمعرف جديد + بذرة فئة النموذج الجارية */
   el.catLayer.addEventListener('micro-navigation:opened', function () {
     state.catLayerOpen = true;
-    window.MicroPicker.setOptions(el.picker, connectorSourceSnapshot());
+    state.pickerSession += 1;
+    logEvent('picker:opened', { session: state.pickerSession });
+    window.MicroPicker.setOptions(el.picker, store.categories());
     if (state.draftCategory) syncPickerSeed();
     else window.MicroPicker.clearSelection(el.picker);
     startRead();
   });
 
-  /* عند إغلاق المنتقي تخرج رسالة الزوال من النطاق — تُمسح، وقناة
-     القراءة تُفرغ (لا بقايا)، والتركيز أعادته B07 إلى صف الفئة */
-  el.catLayer.addEventListener('micro-navigation:closed', function () {
+  /* (R1-05) عند إغلاق المنتقي: إبطال سياق القراءة وإلغاء الطلب إلغاءً
+     صريحًا فلا يغير رد لاحق جلسة أحدث؛ رسالة الزوال تخرج من النطاق
+     وتُمسح، وقناة القراءة تُفرغ، والتركيز أعادته B07 إلى صف الفئة */
+  el.catLayer.addEventListener('micro-navigation:closed', function (e) {
+    if (e.target !== el.catLayer) return;
     state.catLayerOpen = false;
+    if (state.activeRead) {
+      connector.cancel('read', state.activeRead.readId);
+      state.activeRead = null;
+    }
     setDropNote('');
     announceReadState('');
+    logEvent('picker:closed');
   });
 
   /* مزامنة بحث المنتقي مع القناة داخل الطبقة — نمط F02-R2-02:
      لا إعلان قديم يوهم بوجود نتائج، ومسح البحث يعلن الظاهر فعليًا. */
   function bindSearchAnnouncement() {
-    if (!searchInput || searchInput.dataset.f03SearchAnnounced) return;
-    searchInput.dataset.f03SearchAnnounced = '1';
-    searchInput.addEventListener('input', function () {
+    if (!pickerSearch || pickerSearch.dataset.f03SearchAnnounced) return;
+    pickerSearch.dataset.f03SearchAnnounced = '1';
+    pickerSearch.addEventListener('input', function () {
       if (el.catLayer.hidden) return;
       var row = el.picker.querySelector('.m-picker__state');
       var rowText = row ? row.textContent : '';
@@ -648,64 +957,54 @@
       }
       if (row) return; /* صف حالة قراءة (loading/error/empty) — مسار القراءة يعلنها */
       var visible = pickerVisibleOptionCount();
-      if (searchInput.value.trim() === '') {
+      if (pickerSearch.value.trim() === '') {
         announceReadState('الفئات الظاهرة: ' + visible + ' فئات.');
       } else {
         announceReadState('نتائج البحث: ' + visible + ' فئات.');
       }
     });
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindSearchAnnouncement);
-  } else {
-    bindSearchAnnouncement();
+
+  /* ---------- رسالة زوال الفئة داخل طبقة المنتقي (قناة وحيدة) ---------- */
+  function setDropNote(text) {
+    if (!el.dropNote || !el.dropNoteText) return;
+    if (text) {
+      el.dropNote.hidden = false;
+      el.dropNoteText.textContent = text;
+    } else {
+      el.dropNote.hidden = true;
+      el.dropNoteText.textContent = '';
+    }
   }
 
-  /* مصدر الفئات الحالي لدى الموصل (لبذرة الفتح) — نسخة مستقلة لا مرجع حي */
-  function connectorSourceSnapshot() {
-    return CATEGORIES_INIT.map(function (c) { return { value: c.value, label: c.label }; });
-  }
-
-  /* ---------- فتح/إغلاق لوحة التعديل + حراسة المغادرة ---------- */
-  el.editBtn.addEventListener('click', function () {
-    clearViewNote(); /* سياق تعديل جديد: رسالة النجاح السابقة انتهى سببها */
-    /* اللوحة تفتح على النسخة المؤكدة دائمًا (بطاقة §3: فتح التعديل) */
-    el.name.value = state.confirmed.name;
-    el.note.value = state.confirmed.note;
-    setDraftCategory(state.confirmed.category, { syncPickerSummary: false });
-    setNameError(false);
-    setCatError(false);
-    state.op = 'idle';
-    state.sending = null;
-    clearOpMessage();
-    el.checkBtn.hidden = true;
-    renderDirtyHint();
-    window.MicroNavigation.openLayer(el.sheet, { trigger: el.editBtn });
+  /* ---------- مغادرة النموذج: حراسة clean/dirty/pending ---------- */
+  el.formBack.addEventListener('click', function () {
+    requestLeaveForm(el.formBack);
   });
 
-  /* زر الإغلاق الظاهر بلا [data-layer-close] الجاهزة كي يمر عبر الحارس */
-  el.sheetClose.addEventListener('click', function () {
-    requestLeave(el.sheetClose);
-  });
-
-  el.backBtn.addEventListener('click', function () {
-    requestLeave(el.backBtn);
-  });
-
-  /* حراسة المغادرة: pending محجوب برسالة موجزة، dirty بحوار قرار،
-     نظيف إغلاق مباشر (بطاقة §3) */
-  function requestLeave(trigger) {
+  function requestLeaveForm(trigger) {
     if (inBusyOp()) {
       setOpMessage('warning', 'المغادرة غير متاحة الآن', blockedLeaveText());
       return;
     }
     if (isDirty()) {
       state.abandonRequested = false;
-      state.leaveTrigger = trigger || el.backBtn;
+      state.leaveTrigger = trigger || el.formBack;
       window.MicroNavigation.openLayer(el.leaveDialog, { trigger: state.leaveTrigger });
       return;
     }
-    window.MicroNavigation.closeLayer(el.sheet);
+    logEvent('form:leave:clean');
+    closeFormTo(state.formReturnTo);
+  }
+
+  function closeFormTo(dest) {
+    /* مغادرة النموذج تُبطل سياق أي قراءة معلقة (لا ينبغي أن توجد بعد
+       حراسة busy، والإلغاء الصريح عقد أمان) */
+    if (state.activeRead) {
+      connector.cancel('read', state.activeRead.readId);
+      state.activeRead = null;
+    }
+    showView(dest, { focusEl: dest === 'detail' ? el.detailEdit : null });
   }
 
   function blockedLeaveText() {
@@ -714,16 +1013,16 @@
     return 'لا يمكن الرجوع قبل حسم نتيجة الحفظ — استخدم «التحقق من النتيجة» أولًا.';
   }
 
-  /* Escape: قرار مستهلك موثق (بطاقة §2) — مستمع التقاط على المستند
-     يسبق مستمع B07 فيوجّه الحدث دون تعديل عقد B07:
-     - طبقة المنتقي أو الحوار أعلى: يُمرَّر إلى B07 (إغلاق عرض آمن).
-     - dirty: يفتح حوار البقاء/التخلي — لا Escape صامت للتخلي (UX-17).
-     - pending: حجب برسالة موجزة.
-     - نظيف: يُمرَّر إلى B07 (إغلاق عادي واستعادة تركيز المشغّل). */
+  /* Escape: قرار مستهلك موثق (الموجز §7) — مستمع التقاط على المستند يسبق
+     مستمع B07 ويوجّه الحدث دون تعديل عقد B07:
+     - أي طبقة مفتوحة (منتقي/حوار/مراجعة/تصفية): يُمرَّر إلى B07.
+     - نموذج dirty: حوار البقاء/التجاهل — لا Escape صامت للتخلي (UX-17).
+     - نموذج pending: حجب برسالة موجزة.
+     - غير ذلك: لا فعل (موثق). */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (el.sheet.hidden) return;
-    if (state.catLayerOpen || state.dialogOpen) return; /* أعلى طبقة أخرى: سلوك B07 */
+    if (state.openLayers > 0) return; /* أعلى طبقة: سلوك B07 */
+    if (state.view !== 'form') return;
     if (inBusyOp()) {
       e.preventDefault();
       e.stopPropagation();
@@ -734,12 +1033,12 @@
       e.preventDefault();
       e.stopPropagation();
       state.abandonRequested = false;
-      state.leaveTrigger = el.backBtn; /* هدف استرجاع تركيز موثق لـEscape */
+      state.leaveTrigger = el.formBack; /* هدف استرجاع تركيز موثق لـEscape */
       window.MicroNavigation.openLayer(el.leaveDialog, { trigger: state.leaveTrigger });
     }
   }, true);
 
-  /* حوار البقاء/التخلي: كل إغلاق غير «التخلي» = بقاء (B07 يستعيد
+  /* حوار البقاء/التجاهل: كل إغلاق غير «التجاهل» = بقاء (B07 يستعيد
      التركيز للمشغّل بنفسه ولا نمس القيم ولا نغادر) */
   el.stayBtn.addEventListener('click', function () {
     window.MicroNavigation.closeLayer(el.leaveDialog);
@@ -747,17 +1046,7 @@
 
   el.abandonBtn.addEventListener('click', function () {
     state.abandonRequested = true;
-    /* التخلي وحده يستعيد النسخة المؤكدة — بلا أي حفظ */
-    el.name.value = state.confirmed.name;
-    el.note.value = state.confirmed.note;
-    setDraftCategory(state.confirmed.category, { syncPickerSummary: false });
-    state.op = 'idle';
-    state.sending = null;
-    clearOpMessage();
-    el.checkBtn.hidden = true;
-    setNameError(false);
-    setCatError(false);
-    renderDirtyHint();
+    logEvent('form:leave:discard');
     window.MicroNavigation.closeLayer(el.leaveDialog);
   });
 
@@ -770,48 +1059,78 @@
     state.dialogOpen = false;
     if (!state.abandonRequested) return; /* بقاء: لا فعل إضافي */
     state.abandonRequested = false;
-    /* ننتظر إغلاق الحوار الفعلي قبل إغلاق اللوحة (لا نخفي المشغّل أثناء
-       الخفوت) — الإغلاق نظيف الآن فيغلق مباشرة ويستعيد B07 تركيز
-       مشغّل «تعديل» */
-    window.MicroNavigation.closeLayer(el.sheet);
+    /* التجاهل وحده يغادر النموذج بعد اكتمال إغلاق الحوار — بلا أي حفظ،
+       والبيانات المحفوظة كما هي (لا استرجاع مطلوب: النموذج يُبث من
+       المؤكد عند كل فتح) */
+    closeFormTo(state.formReturnTo);
   });
 
-  /* عند إغلاق لوحة التعديل بأي طريق: حالة اللوحة تعود لتهيئة نظيفة
-     (رسائل/تحقق/تحرير) — القيم تبقى كما أُغلقت، وإعادة الفتح تبث
-     المؤكد من جديد عبر فتح «تعديل» */
-  el.sheet.addEventListener('micro-navigation:closed', function (e) {
-    if (e.target !== el.sheet) return;
-    if (state.op === 'saved') {
-      state.op = 'idle'; /* رسالة النجاح انتقلت لقناة العرض */
-    }
-    state.sending = null;
-    setFieldsReadonly(false);
-    clearOpMessage();
-    el.checkBtn.hidden = true;
-    setNameError(false);
-    setCatError(false);
-    renderDirtyHint();
+  /* ---------- عدّ الطبقات المفتوحة (لتوجيه Escape) ---------- */
+  [el.catLayer, el.leaveDialog, el.reviewLayer, el.filterLayer].forEach(function (layer) {
+    layer.addEventListener('micro-navigation:opened', function () {
+      state.openLayers += 1;
+    });
+    layer.addEventListener('micro-navigation:closed', function (e) {
+      if (e.target !== layer) return;
+      state.openLayers = Math.max(0, state.openLayers - 1);
+    });
   });
+
+  el.reviewLayer.addEventListener('micro-navigation:opened', function () {
+    state.reviewOpen = true;
+    logEvent('review:opened');
+  });
+  el.reviewLayer.addEventListener('micro-navigation:closed', function (e) {
+    if (e.target !== el.reviewLayer) return;
+    state.reviewOpen = false;
+    logEvent('review:closed');
+  });
+
+  el.reviewOpen.addEventListener('click', function () {
+    window.MicroNavigation.openLayer(el.reviewLayer, { trigger: el.reviewOpen });
+  });
+
+  /* ---------- أدوات البيانات في وضع المراجعة ---------- */
+  function afterDataTool() {
+    if (state.activeRead) {
+      connector.cancel('read', state.activeRead.readId);
+      state.activeRead = null;
+    }
+    el.searchInput.value = '';
+    state.search = '';
+    state.appliedFilters = {};
+    el.filterCats.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+    if (state.view === 'form') {
+      /* فعل أداة وليس مغادرة مستخدم: عودة مباشرة بلا حوار (موثق) */
+      state.detailId = null;
+      showView('home');
+      return;
+    }
+    if (state.view === 'detail' && !store.get(state.detailId)) {
+      state.detailId = null;
+      clearDetailNote();
+      showView('home');
+      return;
+    }
+    renderHome();
+    renderList();
+    renderDetail();
+  }
 
   /* ---------- تسليم رد فحص بمعرف قديم (نمط F01-R1-05) ----------
      يستدعي معالِج النتائج نفسه لدى المستهلك (الذي تستدعيه حلول Promise)
-     بذات فلتر attemptId/readId — دون استهلاك Promise الطلب المعلق، فيظل
-     الطلب قادرًا على الحسم بنتيجته الصحيحة بعد تجاهل الرد القديم.
-     للفحص عبر لوحة SIMULATION فقط. ما يثبته: فلتر المستهلك وتجاهله —
-     لا يثبت وصولًا شبكيًا فعليًا لرد طلب سابق (حد موثق في README). */
+     بذات فلاتر attemptId/سياق القراءة — دون استهلاك Promise الطلب المعلق،
+     فيظل الطلب قادرًا على الحسم بنتيجته الصحيحة بعد تجاهل الرد القديم.
+     ما يثبته: فلاتر المستهلك وتجاهلها الكامل — لا يثبت وصولًا شبكيًا. */
   function deliverTestResponse(kind, payload) {
     if (kind === 'save') handleSaveResult(payload);
     else if (kind === 'check') handleCheckResult(payload);
     else if (kind === 'read') handleReadResult(payload);
   }
 
-  /* ---------- تحكم فحص محايد التركيز ----------
-     أثناء فتح طبقة يعزل B07 قسم SIMULATION فعليًا (inert)؛ هذه الواجهة
-     البرمجية تسمح لأداة الفحص بتسليح السيناريوهات وإنهاء الطلبات المعلقة
-     دون نقر لوحة ولا سرقة تركيز (نمط F01 الموثق). ليست أزرار debug في
-     واجهة العينة، ولا جزءًا من عقد المستهلك. */
-  var F03Example = {
-    version: 'F03-V1',
+  /* ---------- واجهة الفحص البرمجي (محايدة التركيز — للفحص فقط) ---------- */
+  var F03App = {
+    version: 'F03-V2',
     arm: function (kind, outcome) {
       if (kind === 'save') connector.setNextSave(outcome);
       else if (kind === 'check') connector.setNextCheck(outcome);
@@ -821,105 +1140,192 @@
     settle: function (kind, override) {
       return connector.settle(kind, override);
     },
-    setSource: function (items) { connector.setSource(items); },
     deliverTestResponse: deliverTestResponse,
-    inspect: function () {
-      var active = document.activeElement;
-      var options = [].slice.call(el.picker.querySelectorAll('.m-picker__option'));
-      return {
-        op: state.op,
-        dirty: isDirty(),
-        current: currentValues(),
-        draftCategory: state.draftCategory ? { value: state.draftCategory.value, label: state.draftCategory.label } : null,
-        confirmed: copyRecord(state.confirmed),
-        sending: state.sending ? copyRecord(state.sending) : null,
-        attemptId: state.attemptId,
-        readSeq: state.readSeq,
-        nameError: nameErrorActive(),
-        nameMsgText: el.nameMsg.hidden ? '' : el.nameMsg.textContent,
-        nameAriaInvalid: el.name.getAttribute('aria-invalid') === 'true',
-        nameDescribedBy: el.name.getAttribute('aria-describedby') || '',
-        catError: catErrorActive(),
-        catMsgText: el.catMsg.hidden ? '' : el.catMsg.textContent,
-        catTriggerDisabled: el.catTrigger.disabled,
-        catTriggerLabel: el.catTrigger.getAttribute('aria-label') || '',
-        readonly: el.name.readOnly && el.note.readOnly,
-        saveBusy: el.saveBtn.getAttribute('aria-busy') === 'true',
-        checkBusy: el.checkBtn.getAttribute('aria-busy') === 'true',
-        /* الظهور الفعلي (درس F01-R1-01): display/مستطيل وليس سمة hidden وحدها */
-        checkVisible: isReallyVisible(el.checkBtn),
-        checkBox: (function () {
-          var r = el.checkBtn.getBoundingClientRect();
+    resetDemoData: function () {
+      store.resetToSeed();
+      logEvent('data:reset');
+      afterDataTool();
+    },
+    clearDemoData: function () {
+      store.clearAll();
+      logEvent('data:cleared');
+      afterDataTool();
+    },
+    openReview: function () {
+      window.MicroNavigation.openLayer(el.reviewLayer, { trigger: el.reviewOpen });
+    },
+    closeReview: function () {
+      window.MicroNavigation.closeLayer(el.reviewLayer);
+    },
+    /* الحدث المحايد لفتح النموذج (للفحص البرمجي دون افتراضات) */
+    openForm: openForm,
+    openDetail: openDetail,
+    showView: function (name) { showView(name); },
+    inspect: inspect
+  };
+
+  function inspect() {
+    var active = document.activeElement;
+    var options = [].slice.call(el.picker.querySelectorAll('.m-picker__option'));
+    var rows = [].slice.call(el.listRows.querySelectorAll('.f03-row'));
+    var recentRows = [].slice.call(el.homeRecent.querySelectorAll('.f03-row'));
+    var distRows = [].slice.call(el.homeDist.querySelectorAll('.m-progress'));
+    var filterChecks = [].slice.call(el.filterCats.querySelectorAll('input[type="checkbox"]'));
+    var homeItems = store.all();
+    var recentSorted = homeItems.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; }).slice(0, 3);
+    return {
+      version: F03App.version,
+      view: state.view,
+      op: state.op,
+      dirty: isDirty(),
+      formMode: state.formMode,
+      formId: state.formId,
+      formReturnTo: state.formReturnTo,
+      formEpoch: state.formEpoch,
+      pickerSession: state.pickerSession,
+      attemptId: state.attemptId,
+      readSeq: state.readSeq,
+      baseline: Object.assign({}, state.baseline),
+      current: currentValues(),
+      draftCategory: state.draftCategory ? { value: state.draftCategory.value, label: state.draftCategory.label } : null,
+      sending: state.sending
+        ? { mode: state.sending.mode, id: state.sending.id, values: Object.assign({}, state.sending.values) }
+        : null,
+      formTitle: el.formTitle.textContent,
+      nameError: nameErrorActive(),
+      nameMsgText: el.nameMsg.hidden ? '' : el.nameMsg.textContent,
+      nameAriaInvalid: el.name.getAttribute('aria-invalid') === 'true',
+      nameDescribedBy: el.name.getAttribute('aria-describedby') || '',
+      catError: catErrorActive(),
+      catMsgText: el.catMsg.hidden ? '' : el.catMsg.textContent,
+      catTriggerDisabled: el.catTrigger.disabled,
+      catTriggerLabel: el.catTrigger.getAttribute('aria-label') || '',
+      readonly: el.name.readOnly && el.note.readOnly,
+      saveBusy: el.saveBtn.getAttribute('aria-busy') === 'true',
+      checkBusy: el.checkBtn.getAttribute('aria-busy') === 'true',
+      checkVisible: isReallyVisible(el.checkBtn),
+      checkBox: (function () {
+        var r = el.checkBtn.getBoundingClientRect();
+        return { display: window.getComputedStyle(el.checkBtn).display, hiddenAttr: el.checkBtn.hidden, w: Math.round(r.width), h: Math.round(r.height) };
+      })(),
+      formMessage: el.opNote.hidden ? null : {
+        variant: el.opNote.getAttribute('data-op-state'),
+        title: el.opTitle.textContent,
+        text: el.opBody.textContent
+      },
+      formMessageVisible: isReallyVisible(el.opNote),
+      dirtyHintVisible: !el.dirtyHint.hidden,
+      detailId: state.detailId,
+      detailReturnTo: state.detailReturnTo,
+      detailRead: {
+        name: el.readName.textContent,
+        category: el.readCat.textContent,
+        note: el.readNote.textContent
+      },
+      detailNote: el.detailNote.hidden ? null : {
+        variant: el.detailNote.getAttribute('data-detail-state'),
+        title: el.detailNoteTitle.textContent,
+        text: el.detailNoteBody.textContent
+      },
+      detailNoteVisible: isReallyVisible(el.detailNote),
+      detailNoteInertAncestor: !!el.detailNote.closest('[inert]'),
+      home: {
+        countLine: el.homeCount.textContent,
+        allBtnText: el.homeAll.textContent,
+        distribution: distRows.map(function (row) {
+          var r = row.querySelector('.m-progress__bar');
           return {
-            display: window.getComputedStyle(el.checkBtn).display,
-            hiddenAttr: el.checkBtn.hidden,
-            w: Math.round(r.width),
-            h: Math.round(r.height)
-          };
-        })(),
-        message: el.opNote.hidden ? null : {
-          variant: el.opNote.getAttribute('data-op-state'),
-          title: el.opTitle.textContent,
-          text: el.opBody.textContent
-        },
-        viewNote: el.viewNote.hidden ? null : {
-          variant: el.viewNote.getAttribute('data-view-state'),
-          title: el.viewNoteTitle.textContent,
-          text: el.viewNoteBody.textContent
-        },
-        viewNoteVisible: isReallyVisible(el.viewNote),
-        dirtyHintVisible: !el.dirtyHint.hidden,
-        readView: {
-          name: el.readName.textContent,
-          category: el.readCat.textContent,
-          note: el.readNote.textContent
-        },
-        sheetOpen: !el.sheet.hidden,
-        catLayerOpen: !el.catLayer.hidden,
-        dialogOpen: !el.leaveDialog.hidden,
-        focusId: active ? (active.id || active.tagName.toLowerCase()) : 'none',
-        pickerSummary: (el.picker.querySelector('[data-picker-summary]') || {}).textContent || '',
-        pickerStateRow: (function () {
-          var row = el.picker.querySelector('.m-picker__state');
-          return row ? row.textContent : null;
-        })(),
-        pickerLiveText: el.pickerLive.textContent,
-        pickerOptions: options.map(function (o) {
-          var r = o.getBoundingClientRect();
-          return {
-            value: o.getAttribute('data-value'),
-            label: o.textContent,
-            selected: o.getAttribute('aria-selected') === 'true',
-            hiddenAttr: o.hidden,
-            display: getComputedStyle(o).display,
-            visibleRect: r.width > 0 && r.height > 0,
-            h: Math.round(r.height)
+            cat: row.getAttribute('data-cat'),
+            label: row.querySelector('.m-progress__label').textContent,
+            value: row.querySelector('.m-progress__value').textContent,
+            width: r ? r.style.getPropertyValue('--progress') : ''
           };
         }),
-        dropNote: (function () {
-          if (!el.dropNote || !el.dropNoteText) return null;
-          var cs = getComputedStyle(el.dropNote);
-          var r = el.dropNote.getBoundingClientRect();
-          return {
-            text: el.dropNoteText.textContent,
-            hiddenAttr: el.dropNote.hidden,
-            display: cs.display,
-            w: Math.round(r.width),
-            h: Math.round(r.height),
-            inLayer: el.catLayer.contains(el.dropNote)
-          };
-        })(),
-        searchValue: (searchInput || {}).value || '',
-        saveCalls: connector.counters.save,
-        checkCalls: connector.counters.check,
-        readCalls: connector.counters.read,
-        staleIgnored: state.staleIgnored,
-        sim: connector.readout()
-      };
-    }
-  };
-  window.F03Example = F03Example;
+        recentIds: recentRows.map(function (r) { return r.getAttribute('data-id'); }),
+        recentExpected: recentSorted.map(function (it) { return it.id; }),
+        recentEmptyVisible: !el.homeRecentEmpty.hidden
+      },
+      list: {
+        resultsText: el.listResults.hidden ? null : el.listResults.textContent,
+        rowIds: rows.map(function (r) { return r.getAttribute('data-id'); }),
+        rowCount: rows.length,
+        emptyVisible: !el.listEmpty.hidden,
+        noResultsVisible: !el.listNoResults.hidden,
+        clearSearchVisible: !el.clearSearch.hidden,
+        clearFiltersVisible: !el.clearFilters.hidden,
+        searchValue: el.searchInput.value,
+        appliedFilters: Object.assign({}, state.appliedFilters),
+        filterCount: el.filterCount.textContent,
+        filterCounterHidden: el.filterCount.hidden,
+        filterCounterZeroClass: el.filterCount.classList.contains('m-btn__counter--zero'),
+        filterAria: el.filterBtn.getAttribute('aria-label') || ''
+      },
+      filterPanelOpen: !el.filterLayer.hidden,
+      filterChecks: filterChecks.map(function (cb) {
+        return { key: cb.getAttribute('data-filter-key'), label: cb.getAttribute('data-filter-label'), checked: cb.checked };
+      }),
+      pickerOpen: !el.catLayer.hidden,
+      dialogOpen: !el.leaveDialog.hidden,
+      reviewOpen: !el.reviewLayer.hidden,
+      openLayers: state.openLayers,
+      focusId: active ? (active.id || active.tagName.toLowerCase()) : 'none',
+      pickerSummary: (el.picker.querySelector('[data-picker-summary]') || {}).textContent || '',
+      pickerStateRow: (function () {
+        var row = el.picker.querySelector('.m-picker__state');
+        return row ? row.textContent : null;
+      })(),
+      pickerLiveText: el.pickerLive.textContent,
+      pickerOptions: options.map(function (o) {
+        var r = o.getBoundingClientRect();
+        return {
+          value: o.getAttribute('data-value'),
+          label: o.textContent,
+          selected: o.getAttribute('aria-selected') === 'true',
+          hiddenAttr: o.hidden,
+          display: getComputedStyle(o).display,
+          visibleRect: r.width > 0 && r.height > 0,
+          h: Math.round(r.height)
+        };
+      }),
+      dropNote: (function () {
+        if (!el.dropNote || !el.dropNoteText) return null;
+        var cs = getComputedStyle(el.dropNote);
+        var r = el.dropNote.getBoundingClientRect();
+        return {
+          text: el.dropNoteText.textContent,
+          hiddenAttr: el.dropNote.hidden,
+          display: cs.display,
+          w: Math.round(r.width),
+          h: Math.round(r.height),
+          inLayer: el.catLayer.contains(el.dropNote)
+        };
+      })(),
+      pickerSearchValue: (pickerSearch || {}).value || '',
+      scrollY: Math.round(window.scrollY || 0),
+      saveCalls: connector.counters.save,
+      checkCalls: connector.counters.check,
+      readCalls: connector.counters.read,
+      staleIgnored: state.staleIgnored,
+      storage: store.storageStatus(),
+      sim: connector.readout(),
+      events: state.events.slice()
+    };
+  }
+  window.F03App = F03App;
 
-  /* ---------- إقلاع: بلا أحداث ولا طلبات ---------- */
-  applyInitialValues();
+  /* ---------- إقلاع: بناء التصفية والرئيسية بلا طلبات ولا أحداث ---------- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  function boot() {
+    buildFilterCats();
+    bindSearchAnnouncement();
+    renderHome();
+    showView('home', { focus: false });
+    logEvent('boot', { storage: store.storageStatus().persistent ? 'local' : 'session' });
+  }
 })();
+

@@ -7,10 +7,13 @@ Micro UI — توليد النسخة المكتفية ذاتيًا لعينة UX
     python3 tools/build-f03-standalone.py --check    # يتحقق أن الملف القائم مطابق لإعادة التوليد (بلا كتابة)
 
 الضمانات:
-- المصدر الوحيد: ملفات previews/ux-patterns/mobile-record-sample/{index.html,example.css,example.js,mock-adapter.js}
-  والأصول المعتمدة (shared/tokens.css، components/*.css|js، assets/fonts).
+- المصدر الوحيد: ملفات previews/ux-patterns/mobile-record-sample/{index.html,example.css,example.js,demo-store.js,mock-adapter.js}
+  والأصول المعتمدة (shared/tokens.css، components/*.css|js، assets/fonts، assets/icons).
 - لا نسختان تُعدلان يدويًا: standalone.html مولّد دائمًا — أي تعديل يمر عبر المصادر ثم إعادة البناء.
 - حتمي تمامًا: نفس المدخلات → نفس البايتات (لا أختام زمن ولا قيم بيئة)؛ للتحقق: --check أو ux-f03-check.py.
+- (R1-02) حماية أصول الأيقونات: كل <symbol> في index.html يحمل data-icon-source="اسم الملف" ويُقارن
+  محتواه بمكافئه في assets/icons — أي انحراف في المسارات أو الخصائص (منها fill="none" على الأصل)
+  يفشل البناء فلا يمر رسم أيقونة مخالف للأصل المعتمد.
 - الخطوط مضمّنة base64 من أصول fonts.css نفسها مع حفظ ترخيص SIL OFL 1.1 كاملًا داخل الملف،
   وترخيص HugeIcons للأيقونات المضمّنة كذلك.
 - بلا fetch/import ولا modules ولا CDN ولا ملفات جانبية: كل CSS/JS/SVG/خط داخل الملف الواحد.
@@ -28,6 +31,7 @@ OUT = SAMPLE / "standalone.html"
 FONTS_CSS = ROOT / "assets" / "fonts" / "fonts.css"
 FONT_LICENSE = ROOT / "assets" / "fonts" / "LICENSE-IBM-Plex-OFL.txt"
 ICONS_LICENSE = ROOT / "assets" / "icons" / "LICENSE-hugeicons.txt"
+ICONS_DIR = ROOT / "assets" / "icons"
 
 # CSS وJS المضمّنة — بترتيبها في index.html نفسه (أهمية للترتيب التراكبي)
 EXPECTED_CSS = [
@@ -39,6 +43,7 @@ EXPECTED_CSS = [
     "components/selection/picker.css",
     "components/messages/messages.css",
     "components/navigation/navigation.css",
+    "components/data/data.css",
     "previews/ux-patterns/mobile-record-sample/example.css",
 ]
 EXPECTED_JS = [
@@ -48,6 +53,7 @@ EXPECTED_JS = [
     "components/selection/picker.js",
     "components/messages/messages.js",
     "components/navigation/navigation.js",
+    "previews/ux-patterns/mobile-record-sample/demo-store.js",
     "previews/ux-patterns/mobile-record-sample/mock-adapter.js",
     "previews/ux-patterns/mobile-record-sample/example.js",
 ]
@@ -61,6 +67,60 @@ def read(p: Path) -> str:
     if not p.is_file():
         raise SystemExit(f"BUILD ERROR: ملف مطلوب غير موجود: {repo_rel(p)}")
     return p.read_text(encoding="utf-8")
+
+
+def normalize_svg_fragment(svg_text: str) -> str:
+    """تطبيع مقارن: إزالة التعليقات والمسافات الزائدة لمقارنة العقد الفعلية."""
+    s = re.sub(r"<!--.*?-->", "", svg_text, flags=re.S)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def symbol_inner(symbol_text: str) -> str:
+    """محتوى الـsymbol الداخلي (بين وسمي الفتح والإغلاق) مطبّع."""
+    m = re.search(r"<symbol\b[^>]*>(.*)</symbol>", symbol_text, flags=re.S)
+    if not m:
+        raise SystemExit("BUILD ERROR: symbol بلا محتوى قابل للتحديد")
+    return normalize_svg_fragment(m.group(1))
+
+
+def asset_inner(fname: str) -> tuple[str, str]:
+    """(محتوى عنصر الجذر الداخلي مطبّع، سمة fill على الجذر) لملف الأصل."""
+    raw = read(ICONS_DIR / fname)
+    m = re.search(r"<svg\b([^>]*)>(.*)</svg>", raw, flags=re.S)
+    if not m:
+        raise SystemExit(f"BUILD ERROR: أصل أيقونة غير مقروء: assets/icons/{fname}")
+    attrs, inner = m.group(1), m.group(2)
+    fill_m = re.search(r'fill="([^"]*)"', attrs)
+    fill = fill_m.group(1) if fill_m else ""
+    return normalize_svg_fragment(inner), fill
+
+
+def verify_icons(html: str) -> None:
+    """(R1-02) كل symbol مع data-icon-source يطابق أصله: المحتوى وسمة fill."""
+    symbols = re.findall(r"<symbol\b[^>]*>.*?</symbol>", html, flags=re.S)
+    checked = 0
+    for sym in symbols:
+        src_m = re.search(r'data-icon-source="([^"]+)"', sym)
+        if not src_m:
+            continue  # رموز بلا أصل معلن لا تُدار هنا
+        fname = src_m.group(1)
+        asset_inner_text, asset_fill = asset_inner(fname)
+        sym_inner = symbol_inner(sym)
+        if sym_inner != asset_inner_text:
+            raise SystemExit(
+                f"BUILD ERROR (R1-02): محتوى الرمز يخالف الأصل assets/icons/{fname} — "
+                f"انسخ الأصل كما هو أو أصلح المصدر ثم أعد البناء")
+        sym_fill_m = re.search(r'fill="([^"]*)"', sym[: sym.find(">")])
+        sym_fill = sym_fill_m.group(1) if sym_fill_m else ""
+        if sym_fill != asset_fill:
+            raise SystemExit(
+                f"BUILD ERROR (R1-02): سمة fill للرمز ({sym_fill!r}) تخالف الأصل "
+                f"assets/icons/{fname} ({asset_fill!r}) — استعد خصائص الأصل المعتمد")
+        checked += 1
+    if checked == 0:
+        raise SystemExit("BUILD ERROR (R1-02): لا رموز موسومة data-icon-source للتحقق")
+    print(f"ICON CHECK OK: {checked} رمزًا يطابق أصول assets/icons (المحتوى وfill)")
 
 
 def inline_fonts_css() -> str:
@@ -125,16 +185,19 @@ def build_html() -> str:
     if n_js != len(EXPECTED_JS):
         raise SystemExit(f"BUILD ERROR: عدد السكربتات {n_js} ≠ المتوقع {len(EXPECTED_JS)}")
 
-    # 3) ترويسة التوليد (حتمية بلا أختام زمن) + ترخيص الأيقونات المضمّنة
+    # 3) حماية أصول الأيقونات قبل التغليف (R1-02)
+    verify_icons(html)
+
+    # 4) ترويسة التوليد (حتمية بلا أختام زمن) + ترخيص الأيقونات المضمّنة
     icons_lic = ICONS_LICENSE.read_text(encoding="utf-8").strip()
     banner = (
         "<!-- =========================================================\n"
         "  Micro UI — UX-F03: النسخة المكتفية ذاتيًا (ملف واحد)\n"
         "  ملف مولّد آليًا بواسطة tools/build-f03-standalone.py من المصادر القابلة للتعديل:\n"
-        "  previews/ux-patterns/mobile-record-sample/{index.html, example.css, example.js, mock-adapter.js}\n"
-        "  والأصول المعتمدة (shared/tokens.css، components/*، assets/fonts). لا تُعدَّل هذه النسخة يدويًا؛\n"
+        "  previews/ux-patterns/mobile-record-sample/{index.html, example.css, example.js, demo-store.js, mock-adapter.js}\n"
+        "  والأصول المعتمدة (shared/tokens.css، components/*، assets/fonts، assets/icons). لا تُعدَّل هذه النسخة يدويًا؛\n"
         "  عدّل المصادر ثم أعد البناء. يعمل محليًا بلا إنترنت أو خادم أو CDN أو ملفات جانبية\n"
-        "  (بلا fetch/import ولا modules). الحالة: DRAFT FOR REVIEW — عينة محاكاة للمراجعة.\n"
+        "  (بلا fetch/import ولا modules). الحالة: DRAFT FOR RE-REVIEW — عينة محاكاة للمراجعة.\n"
         "\n"
         "  تراخيص الأصول المضمّنة:\n"
         "  - الخطوط: SIL Open Font License 1.1 (IBM Plex) — النص الكامل مضمّن مع قواعد @font-face أدناه.\n"
