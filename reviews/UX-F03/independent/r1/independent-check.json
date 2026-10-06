@@ -1,0 +1,875 @@
+{
+  "commit": "c7d0037c38fcbe41634fb9925030b67532f149d9",
+  "checks": [
+    {
+      "name": "default-phone-view-no-technical-report",
+      "status": "FAIL",
+      "measured": {
+        "heading": "UX-F03 — عرض عنصر وتعديله وحفظه\n\nعينة هاتف مستقلة لمهمة واحدة: عرض عنصر تجريبي، تعديل بياناته، ثم حفظها. هاتف · عربي RTL · أرقام 0–9 · مصادر المكوّن كما هي (IBM Plex · HugeIcons · تحميل B · انحناءات معتمدة). النسخة المكتفية ذاتيًا: standalone.html. الحالة: DRAFT FOR REVIEW.",
+        "simulationVisible": true,
+        "bodyText": "UX-F03 — عرض عنصر وتعديله وحفظه\n\nعينة هاتف مستقلة لمهمة واحدة: عرض عنصر تجريبي، تعديل بياناته، ثم حفظها. هاتف · عربي RTL · أرقام 0–9 · مصادر المكوّن كما هي (IBM Plex · HugeIcons · تحميل B · انحناءات معتمدة). النسخة المكتفية ذاتيًا: standalone.html. الحالة: DRAFT FOR REVIEW.\n\nالعنصر\nالاسم\nعنصر تجريبي\nالفئة\nفئة أ\nالملاحظة\n—\nتعديل\nأدوات المحاكاة — SIMULATION\nبيانات تركيبية · بلا شبكة أو تخزين · حفظ تجريبي داخل الجلسة · للفحص فقط\n\nسيناريو «النتيجة التالية» يطبق على الدعوة المقبلة فقط ولا يعدّل طلبًا جارٍ. الطلب المعلق لا يُنجَز إلا بأمر صريح من هنا — لا مؤقت واجهة يقرر نجاحًا. «استجابة بمعرف قديم» تُسلّم ردًا بمعرف لا يطابق الطلب النشط عبر مسار معالجة النتائج لدى المستهلك دون إنهاء الطلب المعلق — فيُتجاهل ويتاح الإنهاء بعده. المحتوى التقني أدناه (عدادات/حالات) للفحص، لا لرسائل المستفيد.\n\nنتيجة الحفظ التالية\nauto — حسم تلقائي بعد زمن ثابت\nsaved — نجاح مؤكد (معلق حتى التسوية)\nnot-saved — رفض مؤكد (معلق حتى التسوية)\nunknown — نتيجة مجهولة (معلق حتى التسوية)\nرفض Promise بلا نتيجة (معلق حتى التسوية)\nإنهاء الحفظ المعلق بالسيناريو\nاستجابة حفظ بمعرف قديم\nنتيجة التحقق التالية\nauto — حسم تلقائي بعد زمن ثابت\nsaved — نجاح مؤكد (معلق حتى التسوية)\nnot-saved — رفض مؤكد (معلق حتى التسوية)\nunknown — ما زالت مجهولة (معلق حتى التسوية)\nرفض Promise للتحقق (معلق حتى التسوية)\nإنهاء التحقق المعلق بالسيناريو\nاستجابة تحقق بمعرف قديم\nنتيجة قراءة الفئات التالية\nauto — حسم تلقائي بعد زمن ثابت\nready — الفئات متاحة (معلق حتى التسوية)\nempty — مصدر فارغ (معلق حتى التسوية)\nerror — فشل قراءة (معلق حتى التسوية)\nرفض Promise للقراءة (معلق حتى التسوية)\nإنهاء القراءة المعلقة بالسيناريو\nاستجابة قراءة بمعرف قديم\nsaveCalls: 0\ncheckCalls: 0\nreadCalls: 0\nالحالة: لا طلبات معلقة"
+      }
+    },
+    {
+      "name": "hugeicons-chevron-unfilled",
+      "status": "FAIL",
+      "measured": {
+        "computedFill": "rgb(0, 0, 0)",
+        "symbolFill": null,
+        "assetRequiresFillNone": true
+      }
+    },
+    {
+      "name": "read-snapshot-at-invocation",
+      "status": "FAIL",
+      "measured": {
+        "readId": 1,
+        "outcome": "ready",
+        "items": [
+          {
+            "value": "b",
+            "label": "after"
+          }
+        ]
+      }
+    },
+    {
+      "name": "timer-resolves-own-request-only",
+      "status": "FAIL",
+      "measured": {
+        "first": null,
+        "second": {
+          "readId": 2,
+          "outcome": "error",
+          "items": []
+        },
+        "readout": {
+          "saveCalls": 0,
+          "checkCalls": 0,
+          "readCalls": 2,
+          "pendingSave": false,
+          "pendingCheck": false,
+          "pendingRead": false,
+          "nextSave": "auto",
+          "nextCheck": "auto",
+          "nextRead": "auto"
+        },
+        "firstSettled": false,
+        "secondSettled": true
+      }
+    },
+    {
+      "name": "closed-picker-response-does-not-mutate-new-edit",
+      "status": "FAIL",
+      "measured": {
+        "before": {
+          "op": "idle",
+          "dirty": false,
+          "current": {
+            "name": "عنصر تجريبي",
+            "category": "cat-a",
+            "note": ""
+          },
+          "draftCategory": {
+            "value": "cat-a",
+            "label": "فئة أ"
+          },
+          "confirmed": {
+            "name": "عنصر تجريبي",
+            "category": {
+              "value": "cat-a",
+              "label": "فئة أ"
+            },
+            "note": ""
+          },
+          "sending": null,
+          "attemptId": 0,
+          "readSeq": 1,
+          "nameError": false,
+          "nameMsgText": "",
+          "nameAriaInvalid": false,
+          "nameDescribedBy": "f03-name-msg",
+          "catError": false,
+          "catMsgText": "",
+          "catTriggerDisabled": false,
+          "catTriggerLabel": "تغيير الفئة، الفئة الحالية: فئة أ",
+          "readonly": false,
+          "saveBusy": false,
+          "checkBusy": false,
+          "checkVisible": false,
+          "checkBox": {
+            "display": "none",
+            "hiddenAttr": true,
+            "w": 0,
+            "h": 0
+          },
+          "message": null,
+          "viewNote": null,
+          "viewNoteVisible": false,
+          "dirtyHintVisible": false,
+          "readView": {
+            "name": "عنصر تجريبي",
+            "category": "فئة أ",
+            "note": "—"
+          },
+          "sheetOpen": true,
+          "catLayerOpen": false,
+          "dialogOpen": false,
+          "focusId": "f03-name",
+          "pickerSummary": "المحدد: فئة أ",
+          "pickerStateRow": "جارٍ القراءة…",
+          "pickerLiveText": "",
+          "pickerOptions": [
+            {
+              "value": "cat-a",
+              "label": "فئة أ",
+              "selected": true,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "h": 0
+            },
+            {
+              "value": "cat-b",
+              "label": "فئة ب",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "h": 0
+            },
+            {
+              "value": "cat-c",
+              "label": "فئة ج",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "h": 0
+            }
+          ],
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "inLayer": true
+          },
+          "searchValue": "",
+          "saveCalls": 0,
+          "checkCalls": 0,
+          "readCalls": 1,
+          "staleIgnored": 0,
+          "sim": {
+            "saveCalls": 0,
+            "checkCalls": 0,
+            "readCalls": 1,
+            "pendingSave": false,
+            "pendingCheck": false,
+            "pendingRead": true,
+            "nextSave": "auto",
+            "nextCheck": "auto",
+            "nextRead": "auto"
+          }
+        },
+        "after": {
+          "op": "idle",
+          "dirty": true,
+          "current": {
+            "name": "عنصر تجريبي",
+            "category": null,
+            "note": ""
+          },
+          "draftCategory": null,
+          "confirmed": {
+            "name": "عنصر تجريبي",
+            "category": {
+              "value": "cat-a",
+              "label": "فئة أ"
+            },
+            "note": ""
+          },
+          "sending": null,
+          "attemptId": 0,
+          "readSeq": 1,
+          "nameError": false,
+          "nameMsgText": "",
+          "nameAriaInvalid": false,
+          "nameDescribedBy": "f03-name-msg",
+          "catError": false,
+          "catMsgText": "",
+          "catTriggerDisabled": false,
+          "catTriggerLabel": "تغيير الفئة، لا فئة محددة — اختر فئة",
+          "readonly": false,
+          "saveBusy": false,
+          "checkBusy": false,
+          "checkVisible": false,
+          "checkBox": {
+            "display": "none",
+            "hiddenAttr": true,
+            "w": 0,
+            "h": 0
+          },
+          "message": null,
+          "viewNote": null,
+          "viewNoteVisible": false,
+          "dirtyHintVisible": true,
+          "readView": {
+            "name": "عنصر تجريبي",
+            "category": "فئة أ",
+            "note": "—"
+          },
+          "sheetOpen": true,
+          "catLayerOpen": false,
+          "dialogOpen": false,
+          "focusId": "f03-name",
+          "pickerSummary": "المحدد: لا شيء",
+          "pickerStateRow": "لا فئات في المصدر.",
+          "pickerLiveText": "لا فئات في المصدر.",
+          "pickerOptions": [],
+          "dropNote": {
+            "text": "الفئة السابقة لم تعد متاحة. اختر فئة جديدة.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "w": 0,
+            "h": 0,
+            "inLayer": true
+          },
+          "searchValue": "",
+          "saveCalls": 0,
+          "checkCalls": 0,
+          "readCalls": 1,
+          "staleIgnored": 0,
+          "sim": {
+            "saveCalls": 0,
+            "checkCalls": 0,
+            "readCalls": 1,
+            "pendingSave": false,
+            "pendingCheck": false,
+            "pendingRead": false,
+            "nextSave": "auto",
+            "nextCheck": "auto",
+            "nextRead": "auto"
+          }
+        }
+      }
+    },
+    {
+      "name": "success-live-note-updated-after-background-activation",
+      "status": "FAIL",
+      "measured": [
+        {
+          "text": "تم الحفظ\n\nتم حفظ التعديلات — النسخة المؤكدة محدثة.",
+          "hidden": false,
+          "inertAncestor": true,
+          "sheetHidden": false
+        }
+      ]
+    },
+    {
+      "name": "default-save-updates-record",
+      "status": "PASS",
+      "measured": {
+        "op": "idle",
+        "record": {
+          "name": "تعديل واحد",
+          "category": {
+            "value": "cat-a",
+            "label": "فئة أ"
+          },
+          "note": ""
+        },
+        "viewNote": {
+          "variant": "success",
+          "title": "تم الحفظ",
+          "text": "تم حفظ التعديلات — النسخة المؤكدة محدثة."
+        }
+      }
+    },
+    {
+      "name": "manual-simulation-can-settle-armed-save",
+      "status": "FAIL",
+      "measured": {
+        "op": "saving",
+        "pending": true,
+        "buttonDisabled": false,
+        "buttonInertAncestor": true,
+        "sheetVisible": true
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-320-100",
+      "status": "PASS",
+      "measured": {
+        "width": 320,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 640,
+        "footBottom": 828,
+        "bodyHeight": 450,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "16px",
+            "w": 280,
+            "h": 48,
+            "top": 656,
+            "bottom": 704,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 144.5,
+                "right": 175.5,
+                "top": 670,
+                "bottom": 690
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "16px",
+            "w": 280,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 114,
+                "right": 206,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "16px",
+            "w": 280,
+            "h": 48,
+            "top": 776,
+            "bottom": 824,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 103.5,
+                "right": 216.5,
+                "top": 790,
+                "bottom": 810
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-320-200",
+      "status": "PASS",
+      "measured": {
+        "width": 320,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 520,
+        "footBottom": 828,
+        "bodyHeight": 326,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "32px",
+            "w": 280,
+            "h": 72,
+            "top": 536,
+            "bottom": 608,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 128,
+                "right": 192,
+                "top": 551,
+                "bottom": 593
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "32px",
+            "w": 280,
+            "h": 72,
+            "top": 620,
+            "bottom": 692,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 68,
+                "right": 252,
+                "top": 635,
+                "bottom": 677
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "32px",
+            "w": 280,
+            "h": 120,
+            "top": 704,
+            "bottom": 824,
+            "left": 20,
+            "right": 300,
+            "glyphs": [
+              {
+                "left": 94,
+                "right": 226,
+                "top": 719,
+                "bottom": 761
+              },
+              {
+                "left": 118.5,
+                "right": 201.5,
+                "top": 767,
+                "bottom": 809
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-360-100",
+      "status": "PASS",
+      "measured": {
+        "width": 360,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 640,
+        "footBottom": 828,
+        "bodyHeight": 450,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "16px",
+            "w": 320,
+            "h": 48,
+            "top": 656,
+            "bottom": 704,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 164.5,
+                "right": 195.5,
+                "top": 670,
+                "bottom": 690
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "16px",
+            "w": 320,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 134,
+                "right": 226,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "16px",
+            "w": 320,
+            "h": 48,
+            "top": 776,
+            "bottom": 824,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 123.5,
+                "right": 236.5,
+                "top": 790,
+                "bottom": 810
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-360-200",
+      "status": "PASS",
+      "measured": {
+        "width": 360,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 568,
+        "footBottom": 828,
+        "bodyHeight": 374,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "32px",
+            "w": 320,
+            "h": 72,
+            "top": 584,
+            "bottom": 656,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 148,
+                "right": 212,
+                "top": 599,
+                "bottom": 641
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "32px",
+            "w": 320,
+            "h": 72,
+            "top": 668,
+            "bottom": 740,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 88,
+                "right": 272,
+                "top": 683,
+                "bottom": 725
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "32px",
+            "w": 320,
+            "h": 72,
+            "top": 752,
+            "bottom": 824,
+            "left": 20,
+            "right": 340,
+            "glyphs": [
+              {
+                "left": 68.5,
+                "right": 291.5,
+                "top": 767,
+                "bottom": 809
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-390-100",
+      "status": "PASS",
+      "measured": {
+        "width": 390,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 174.109375,
+        "footTop": 700,
+        "footBottom": 828,
+        "bodyHeight": 454,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "16px",
+            "w": 138.5,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 231.5,
+            "right": 370,
+            "glyphs": [
+              {
+                "left": 285.25,
+                "right": 316.25,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "16px",
+            "w": 199.5,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 20,
+            "right": 219.5,
+            "glyphs": [
+              {
+                "left": 73.75,
+                "right": 165.75,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "16px",
+            "w": 350,
+            "h": 48,
+            "top": 776,
+            "bottom": 824,
+            "left": 20,
+            "right": 370,
+            "glyphs": [
+              {
+                "left": 138.5,
+                "right": 251.5,
+                "top": 790,
+                "bottom": 810
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-390-200",
+      "status": "PASS",
+      "measured": {
+        "width": 390,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 568,
+        "footBottom": 828,
+        "bodyHeight": 374,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "32px",
+            "w": 350,
+            "h": 72,
+            "top": 584,
+            "bottom": 656,
+            "left": 20,
+            "right": 370,
+            "glyphs": [
+              {
+                "left": 163,
+                "right": 227,
+                "top": 599,
+                "bottom": 641
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "32px",
+            "w": 350,
+            "h": 72,
+            "top": 668,
+            "bottom": 740,
+            "left": 20,
+            "right": 370,
+            "glyphs": [
+              {
+                "left": 103,
+                "right": 287,
+                "top": 683,
+                "bottom": 725
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "32px",
+            "w": 350,
+            "h": 72,
+            "top": 752,
+            "bottom": 824,
+            "left": 20,
+            "right": 370,
+            "glyphs": [
+              {
+                "left": 83.5,
+                "right": 306.5,
+                "top": 767,
+                "bottom": 809
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-430-100",
+      "status": "PASS",
+      "measured": {
+        "width": 430,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 174.109375,
+        "footTop": 700,
+        "footBottom": 828,
+        "bodyHeight": 454,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "16px",
+            "w": 158.5,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 251.5,
+            "right": 410,
+            "glyphs": [
+              {
+                "left": 315.25,
+                "right": 346.25,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "16px",
+            "w": 219.5,
+            "h": 48,
+            "top": 716,
+            "bottom": 764,
+            "left": 20,
+            "right": 239.5,
+            "glyphs": [
+              {
+                "left": 83.75,
+                "right": 175.75,
+                "top": 730,
+                "bottom": 750
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "16px",
+            "w": 390,
+            "h": 48,
+            "top": 776,
+            "bottom": 824,
+            "left": 20,
+            "right": 410,
+            "glyphs": [
+              {
+                "left": 158.5,
+                "right": 271.5,
+                "top": 790,
+                "bottom": 810
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown-footer-bounds-430-200",
+      "status": "PASS",
+      "measured": {
+        "width": 430,
+        "height": 844,
+        "docOverflow": false,
+        "layerTop": 118.171875,
+        "footTop": 568,
+        "footBottom": 828,
+        "bodyHeight": 374,
+        "actions": [
+          {
+            "id": "f03-back",
+            "font": "32px",
+            "w": 390,
+            "h": 72,
+            "top": 584,
+            "bottom": 656,
+            "left": 20,
+            "right": 410,
+            "glyphs": [
+              {
+                "left": 183,
+                "right": 247,
+                "top": 599,
+                "bottom": 641
+              }
+            ]
+          },
+          {
+            "id": "f03-save",
+            "font": "32px",
+            "w": 390,
+            "h": 72,
+            "top": 668,
+            "bottom": 740,
+            "left": 20,
+            "right": 410,
+            "glyphs": [
+              {
+                "left": 123,
+                "right": 307,
+                "top": 683,
+                "bottom": 725
+              }
+            ]
+          },
+          {
+            "id": "f03-check",
+            "font": "32px",
+            "w": 390,
+            "h": 72,
+            "top": 752,
+            "bottom": 824,
+            "left": 20,
+            "right": 410,
+            "glyphs": [
+              {
+                "left": 103.5,
+                "right": 326.5,
+                "top": 767,
+                "bottom": 809
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "page_errors": [],
+  "browser": "153.0.8010.0",
+  "summary": {
+    "passed": 9,
+    "total": 16,
+    "failures": [
+      "default-phone-view-no-technical-report",
+      "hugeicons-chevron-unfilled",
+      "read-snapshot-at-invocation",
+      "timer-resolves-own-request-only",
+      "closed-picker-response-does-not-mutate-new-edit",
+      "success-live-note-updated-after-background-activation",
+      "manual-simulation-can-settle-armed-save"
+    ]
+  }
+}
