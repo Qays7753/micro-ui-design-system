@@ -1,0 +1,167 @@
+{
+  "home": {
+    "hero": {
+      "w": 328,
+      "h": 136,
+      "bg": "rgba(0, 0, 0, 0)",
+      "bgImage": "none",
+      "pad": "0px",
+      "fs": "16px",
+      "shadow": "none"
+    },
+    "amount": {
+      "w": 328,
+      "h": 26,
+      "fs": "16px",
+      "color": "rgb(23, 45, 50)"
+    },
+    "heroAmountText": "797.35 د.أ",
+    "metricHero": {
+      "w": 208,
+      "h": 208,
+      "bg": "rgb(22, 77, 89)",
+      "bgImage": "none",
+      "pad": "20px",
+      "fs": "16px",
+      "shadow": "rgba(255, 255, 255, 0.16) 0px 0px 0px 1px inset"
+    },
+    "firstCircle": {
+      "w": 70
+    },
+    "compareBlockH": 750,
+    "scaleNoteText": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة. النطاق يصل إلى 474. الحجم متكيف مع عرض البطاقة ضمن الحد الذي حدده المستهلك.",
+    "infoStripArrows": 2
+  },
+  "list": {
+    "sortrowH": 104,
+    "segW": 328,
+    "toggle": {
+      "w": 133,
+      "h": 48,
+      "padInline": "48px / 48px"
+    },
+    "toolbarH": 82,
+    "resultsH": 20,
+    "firstRowTop": 326,
+    "rowlistTop": 326,
+    "contentStartToFirstRow": 238
+  },
+  "reports": {
+    "donut": {
+      "w": 328,
+      "h": 328,
+      "viewBox": "0 0 148 148"
+    },
+    "barsSvg": {
+      "w": 328,
+      "viewBox": "0 0 320 180"
+    },
+    "barLabelFs": [
+      "12px",
+      "12px",
+      "12px"
+    ],
+    "barValueFs": [
+      "12px",
+      "12px",
+      "12px"
+    ],
+    "pointValueFs": [
+      "11px",
+      "11px",
+      "11px"
+    ],
+    "track": {
+      "h": 8
+    },
+    "barShadow": "rgb(23, 45, 50) 0px 0px 0px 1px inset",
+    "trackBg": "rgb(228, 234, 232)",
+    "hero": {
+      "w": 208,
+      "h": 208
+    },
+    "barStatusText": "مقياس مشترك: حتى 474 د.أ · كل الفترات.",
+    "viewH": 1963
+  },
+  "form": {
+    "counterText": "0/40",
+    "counterVisible": true,
+    "nameLen": 8,
+    "nameValue": "عنصر ألف",
+    "clear": {
+      "w": 0,
+      "h": 0,
+      "display": "none",
+      "hasIcon": false,
+      "ariaLabel": "مسح الاسم"
+    },
+    "stepDown": {
+      "w": 24,
+      "h": 21,
+      "cls": ""
+    },
+    "stepUpCls": "",
+    "qtyField": {
+      "w": 328,
+      "h": 82
+    },
+    "valueField": {
+      "w": 328,
+      "h": 82
+    },
+    "dateField": {
+      "w": 328,
+      "h": 82
+    },
+    "dateInput": {
+      "w": 294,
+      "h": 28,
+      "dir": "ltr",
+      "fontSize": "16px",
+      "value": "2026-10-05",
+      "type": "date"
+    },
+    "noteRows": "3",
+    "noteH": 102,
+    "formH": 850,
+    "valueLabel": "القيمة (اختيارية — الفارغ يعني قيمة مجهولة)"
+  },
+  "detail": {
+    "detailRows": [
+      {
+        "k": "الاسم",
+        "v": "عنصر ألف"
+      },
+      {
+        "k": "الفئة",
+        "v": "فئة أ"
+      },
+      {
+        "k": "الحالة",
+        "v": "جاهز"
+      },
+      {
+        "k": "القيمة",
+        "v": "120.5 د.أ"
+      },
+      {
+        "k": "الكمية",
+        "v": "10 وحدة"
+      },
+      {
+        "k": "التاريخ",
+        "v": "2026-10-05"
+      },
+      {
+        "k": "الملاحظة",
+        "v": "ملاحظة تركيبية للتجربة."
+      }
+    ],
+    "rowValues": [
+      "القيمة: 120.5 د.أ",
+      "القيمة: 85 د.أ",
+      "القيمة: 42.75 د.أ"
+    ]
+  },
+  "pageErrors": []
+}
