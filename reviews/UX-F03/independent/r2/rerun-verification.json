@@ -1,0 +1,2202 @@
+{
+  "tool": "tools/ux-f03-check.py",
+  "experience": "F03 تجربة مترابطة: رئيسية/قائمة/تفاصيل/إضافة-تعديل (الموجز F03-EXPERIENCE-BRIEF)",
+  "source": {
+    "commit": "dc1536d10e95df67b42b00be8bd527da9c94f753",
+    "tree": "a3885cabe421ba224182462c4161580e1744ec45",
+    "dirty_files": 0,
+    "status_clean": true
+  },
+  "browser": {
+    "engine": "Chromium (Playwright headless)"
+  },
+  "url_source": "http://127.0.0.1:45425/previews/ux-patterns/mobile-record-sample/index.html",
+  "widths": [
+    320,
+    360,
+    390,
+    430
+  ],
+  "zoom_policy": "مضاعفة أحجام الخط المحسوبة بتمريرين (الآلية المعلنة) — لا native zoom",
+  "paths": [
+    {
+      "id": "F03-01",
+      "path": "إقلاع أول حقيقي: لا أخطاء، الرئيسية من البذرة، لا طلبات، بلا نصوص تقنية",
+      "assertions": [
+        {
+          "name": "لا أخطاء صفحة عند الإقلاع الأول",
+          "expected": "0 أخطاء",
+          "measured": 0,
+          "pass": true
+        },
+        {
+          "name": "الرئيسية هي العرض الأول",
+          "expected": "home",
+          "measured": "home",
+          "pass": true
+        },
+        {
+          "name": "ملخص الرئيسية من البذرة (9 عناصر)",
+          "expected": "countLine يحوي 9",
+          "measured": {
+            "line": "9 عناصر. موزعة على 3 فئات.",
+            "all": "عرض جميع العناصر (9)"
+          },
+          "pass": true
+        },
+        {
+          "name": "لا دعوات حفظ/تحقق/قراءة عند الإقلاع",
+          "expected": "0/0/0",
+          "measured": {
+            "save": 0,
+            "check": 0,
+            "read": 0
+          },
+          "pass": true
+        },
+        {
+          "name": "لا رسالة نجاح أو عملية مبكرة",
+          "expected": "null",
+          "measured": {
+            "detailNote": null,
+            "formMessage": null
+          },
+          "pass": true
+        },
+        {
+          "name": "لا نصوص تقنية في الواجهة الافتراضية (R1-01)",
+          "expected": "بلا UX-F03/DRAFT/SIMULATION/مكونات",
+          "measured": {
+            "hits": []
+          },
+          "pass": true
+        },
+        {
+          "name": "لا أدوات فحص قابلة للتبويب في الافتراضي (R1-01) — رابط المدخل وحده استثناء موثق",
+          "expected": "لا f03-rev-* في التبويب (المدخل f03-review-open وحده)",
+          "measured": {
+            "revTabs": []
+          },
+          "pass": true
+        },
+        {
+          "name": "لا خروج أفقي عند 390",
+          "expected": "bad=0",
+          "measured": {
+            "clientW": 390,
+            "scrollW": 390,
+            "bodyScrollW": 390,
+            "bad": [],
+            "badCount": 0
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-02",
+      "path": "الرئيسية مبنية من البيانات الفعلية: عدد وتوزيع وأحدث وروابط صحيحة",
+      "assertions": [
+        {
+          "name": "التوزيع يطابق البذرة (3/3/3)",
+          "expected": "فئة أ=3، فئة ب=3، فئة ج=3",
+          "measured": [
+            [
+              "فئة أ",
+              "3",
+              "33%"
+            ],
+            [
+              "فئة ب",
+              "3",
+              "33%"
+            ],
+            [
+              "فئة ج",
+              "3",
+              "33%"
+            ]
+          ],
+          "pass": true
+        },
+        {
+          "name": "أحدث العناصر بترتيب آخر تحديث ومرتبطة بتفاصيلها",
+          "expected": "it-01,it-02,it-03",
+          "measured": {
+            "rows": [
+              "it-01",
+              "it-02",
+              "it-03"
+            ],
+            "expected": [
+              "it-01",
+              "it-02",
+              "it-03"
+            ]
+          },
+          "pass": true
+        },
+        {
+          "name": "ضغط صف الأحدث يفتح تفاصيل العنصر نفسه",
+          "expected": "it-02/عنصر باء",
+          "measured": {
+            "id": "it-02",
+            "read": {
+              "name": "عنصر باء",
+              "category": "فئة ب",
+              "note": "—"
+            },
+            "returnTo": "home"
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-03",
+      "path": "أفعال الرئيسية: إضافة عنصر وعرض الكل — وكل فعل يعمل",
+      "assertions": [
+        {
+          "name": "«عرض جميع العناصر» يفتح القائمة",
+          "expected": "list",
+          "measured": "list",
+          "pass": true
+        },
+        {
+          "name": "«إضافة عنصر» يفتح نموذج إضافة فارغًا",
+          "expected": "add/فارغ/التركيز للاسم",
+          "measured": {
+            "title": "إضافة عنصر",
+            "cur": {
+              "name": "",
+              "category": null,
+              "note": ""
+            },
+            "focus": "f03-name",
+            "dirty": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-04",
+      "path": "القائمة: كل الصفوف من المخزن وكل صف يفتح تفاصيله الصحيحة",
+      "assertions": [
+        {
+          "name": "عدد الصفوف = عدد عناصر المخزن (9)",
+          "expected": "9",
+          "measured": {
+            "rows": 9,
+            "results": "النتائج: 9"
+          },
+          "pass": true
+        },
+        {
+          "name": "الصف الخامس يفتح تفاصيل العنصر الصحيح",
+          "expected": "it-05/عنصر هاء/فئة ب",
+          "measured": {
+            "id": "it-05",
+            "read": {
+              "name": "عنصر هاء",
+              "category": "فئة ب",
+              "note": "ملاحظة ثانية للتجربة."
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "التفاصيل تعرض البيانات المحفوظة وفعل تعديل واضح",
+          "expected": "تعديل ظاهر",
+          "measured": {
+            "editVisible": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-05",
+      "path": "البحث يعمل على البيانات: تصفية حية وعدّاد نتائج ومسح يعيد",
+      "assertions": [
+        {
+          "name": "بحث «باء» → صف واحد صحيح",
+          "expected": "it-02",
+          "measured": {
+            "rows": [
+              "it-02"
+            ],
+            "results": "النتائج: 1"
+          },
+          "pass": true
+        },
+        {
+          "name": "البحث يشمل الملاحظة أيضًا",
+          "expected": "4 صفوف (ملاحظات البذرة)",
+          "measured": 4,
+          "pass": true
+        },
+        {
+          "name": "مسح البحث يعيد كل الصفوف",
+          "expected": "9",
+          "measured": 9,
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-06",
+      "path": "حالة «لا نتائج مطابقة» تختلف عن حالة «لا عناصر بعد»",
+      "assertions": [
+        {
+          "name": "بلا بيانات فارغة: لا نتائج ≠ لا عناصر (فراغ البذرة)",
+          "expected": "noResults ظاهرة وempty مخفية",
+          "measured": {
+            "noRes": true,
+            "empty": false,
+            "clearSearch": true
+          },
+          "pass": true
+        },
+        {
+          "name": "مسح البحث من الحالة يعيد القائمة",
+          "expected": "9 صفوف",
+          "measured": 9,
+          "pass": true
+        },
+        {
+          "name": "تفريغ البيانات → القائمة تعرض حالة «لا عناصر بعد» بفعل إضافة",
+          "expected": "empty ظاهرة وnoResults مخفية",
+          "measured": {
+            "empty": true,
+            "noRes": false,
+            "results": null
+          },
+          "pass": true
+        },
+        {
+          "name": "فعل الإضافة من حالة الفراغ يعمل",
+          "expected": "إضافة عنصر",
+          "measured": "إضافة عنصر",
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-07",
+      "path": "لوحة التصفية المعتمدة: مسودة/تطبيق/مسح/إلغاء وعدّاد المطبق",
+      "assertions": [
+        {
+          "name": "اللوحة تفتح طبقة B07 والمسودة تبدأ من المطبق (لا شيء)",
+          "expected": "3 خيارات غير مختارة",
+          "measured": [
+            {
+              "key": "cat-a",
+              "label": "فئة أ",
+              "checked": false
+            },
+            {
+              "key": "cat-b",
+              "label": "فئة ب",
+              "checked": false
+            },
+            {
+              "key": "cat-c",
+              "label": "فئة ج",
+              "checked": false
+            }
+          ],
+          "pass": true
+        },
+        {
+          "name": "الإلغاء يرمي المسودة: لا فلتر مطبق ولا تغيير قائمة",
+          "expected": "counter=0 و9 صفوف",
+          "measured": {
+            "applied": {},
+            "rows": 9,
+            "counter": true,
+            "aria": "تصفية، لا فلاتر مطبقة"
+          },
+          "pass": true
+        },
+        {
+          "name": "التطبيق يقرّ: عدّاد المطبق = 1 وصفوف فئة ب فقط (3)",
+          "expected": "counter=1 و3 صفوف",
+          "measured": {
+            "applied": {
+              "cat-a": false,
+              "cat-b": true,
+              "cat-c": false
+            },
+            "rows": 3,
+            "counter": "1",
+            "zero": false,
+            "aria": "تصفية، فلتر واحد مطبق"
+          },
+          "pass": true
+        },
+        {
+          "name": "المسح يفرغ المسودة (لا يطبق وحده)",
+          "expected": "لا اختيار في المسودة والقائمة كما هي حتى التطبيق",
+          "measured": {
+            "checks": [
+              false,
+              false,
+              false
+            ],
+            "rows": 3
+          },
+          "pass": true
+        },
+        {
+          "name": "تطبيق بعد المسح → لا فلاتر و9 صفوف",
+          "expected": "counter مخفي و9",
+          "measured": {
+            "rows": 9,
+            "hidden": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-08",
+      "path": "البحث والتصفية يجتمعان (AND) ولا يغيّر أحدهما عدّاد الآخر",
+      "assertions": [
+        {
+          "name": "فلتر cat-a + بحث «دال» → صف واحد (it-04)",
+          "expected": "it-04 وcounter=1",
+          "measured": {
+            "rows": [
+              "it-04"
+            ],
+            "counter": "1"
+          },
+          "pass": true
+        },
+        {
+          "name": "بحث لا يطابق الفلتر → لا نتائج مع بقاء العدّاد",
+          "expected": "noResults وcounter=1",
+          "measured": {
+            "noRes": true,
+            "counter": "1",
+            "clearFilters": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-09",
+      "path": "الرجوع من التفاصيل يحفظ سياق القائمة: بحث وتصفية وموضع التمرير",
+      "assertions": [
+        {
+          "name": "التمرير ممكن فعلًا قبل المغادرة (9 صفوف بارتفاع قصير)",
+          "expected": "scrollY>0",
+          "measured": 306,
+          "pass": true
+        },
+        {
+          "name": "موضع التمرير استُعيد (قد الإمكان)",
+          "expected": ">= 306",
+          "measured": {
+            "before": 306,
+            "after": 306
+          },
+          "pass": true
+        },
+        {
+          "name": "سياق قبل المغادرة: فلتر cat-a وبحث «عنصر» و3 صفوف",
+          "expected": "counter=1 و3",
+          "measured": {
+            "rows": 3,
+            "counter": "1"
+          },
+          "pass": true
+        },
+        {
+          "name": "التفاصيل تظهر العنصر الصحيح",
+          "expected": "it-01",
+          "measured": {
+            "id": "it-01",
+            "read": {
+              "name": "عنصر ألف",
+              "category": "فئة أ",
+              "note": "ملاحظة تركيبية للتجربة."
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "العودة تجد البحث والتصفية كما كانت",
+          "expected": "بحث+فلتر+عدّاد كما هي",
+          "measured": {
+            "search": "عنصر",
+            "counter": "1",
+            "rows": 3
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-10",
+      "path": "تعديل وحفظ ناجح: النتيجة تظهر في التفاصيل والقائمة وملخص الرئيسية",
+      "assertions": [
+        {
+          "name": "النموذج يُبث من المؤكد عند الفتح",
+          "expected": "عنصر جيم/cat-c/ملاحظة قابلة للتعديل.",
+          "measured": {
+            "title": "تعديل العنصر",
+            "cur": {
+              "name": "عنصر جيم",
+              "category": "cat-c",
+              "note": "ملاحظة قابلة للتعديل."
+            },
+            "dirty": false
+          },
+          "pass": true
+        },
+        {
+          "name": "dirty=true مع مؤشر التعديل المحلي",
+          "expected": "hint ظاهر",
+          "measured": {
+            "dirty": true,
+            "hint": true
+          },
+          "pass": true
+        },
+        {
+          "name": "التفاصيل تعرض الاسم المعدّل مع رسالة نجاح",
+          "expected": "success/عنصر جيم المعدّل",
+          "measured": {
+            "read": {
+              "name": "عنصر جيم المعدّل",
+              "category": "فئة ج",
+              "note": "ملاحظة قابلة للتعديل."
+            },
+            "note": {
+              "variant": "success",
+              "title": "تم حفظ التعديلات",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "visible": true
+          },
+          "pass": true
+        },
+        {
+          "name": "القائمة تعرض القيمة الجديدة في مكانها (ترتيب مستقر)",
+          "expected": "it-03 محدّث",
+          "measured": {
+            "rows": 9,
+            "pos": 2
+          },
+          "pass": true
+        },
+        {
+          "name": "صف القائمة يعرض الاسم المعدّل",
+          "expected": "الصف يحوي المعدّل",
+          "measured": {
+            "rows": 9
+          },
+          "pass": true
+        },
+        {
+          "name": "نص الصف المعدّل ظاهر",
+          "expected": "عنصر جيم المعدّل",
+          "measured": "عنصر جيم المعدّل\nفئة ج",
+          "pass": true
+        },
+        {
+          "name": "ملخص الرئيسية تحدّث (أحدث العناصر يتصدر المعدّل)",
+          "expected": "it-03 أول الأحدث",
+          "measured": {
+            "recent": [
+              "it-03",
+              "it-01",
+              "it-02"
+            ],
+            "dist": {
+              "فئة أ": "3",
+              "فئة ب": "3",
+              "فئة ج": "3"
+            }
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-11",
+      "path": "إضافة عنصر: نجاح الحفظ يظهر العنصر في التفاصيل والقائمة والرئيسية",
+      "assertions": [
+        {
+          "name": "النموذج مكتمل قبل الحفظ",
+          "expected": "cat-b وdirty",
+          "measured": {
+            "cat": "cat-b",
+            "dirty": true
+          },
+          "pass": true
+        },
+        {
+          "name": "التفاصيل تعرض العنصر الجديد برسالة إضافة",
+          "expected": "تمت إضافة العنصر",
+          "measured": {
+            "read": {
+              "name": "عنصر جديد كليًا",
+              "category": "فئة ب",
+              "note": "أول ملاحظة له."
+            },
+            "note": {
+              "variant": "success",
+              "title": "تمت إضافة العنصر",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "id": "it-10"
+          },
+          "pass": true
+        },
+        {
+          "name": "القائمة تحتوي العنصر الجديد (10 صفوف)",
+          "expected": "10 ويتضمن الجديد",
+          "measured": {
+            "rows": 10,
+            "has": true
+          },
+          "pass": true
+        },
+        {
+          "name": "الرئيسية: العدد صار 10 وفئة ب صارت 4 والجديد في الأحدث",
+          "expected": "10/4/في الأحدث",
+          "measured": {
+            "all": "عرض جميع العناصر (10)",
+            "dist": {
+              "فئة أ": "3",
+              "فئة ب": "4",
+              "فئة ج": "3"
+            },
+            "recent": [
+              "it-10",
+              "it-01",
+              "it-02"
+            ]
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-12",
+      "path": "التحقق: «الاسم مطلوب» مرتبط بالحقل والقيم باقية والوصول لموضع التصحيح",
+      "assertions": [
+        {
+          "name": "لا عملية عند الاسم الفارغ",
+          "expected": "saveCalls=0",
+          "measured": 0,
+          "pass": true
+        },
+        {
+          "name": "«الاسم مطلوب» مرتبطة aria-invalid+describedby",
+          "expected": "true+f03-name-msg",
+          "measured": {
+            "invalid": true,
+            "desc": "f03-name-msg",
+            "msg": "الاسم مطلوب."
+          },
+          "pass": true
+        },
+        {
+          "name": "التركيز إلى الاسم (موضع التصحيح)",
+          "expected": "f03-name",
+          "measured": "f03-name",
+          "pass": true
+        },
+        {
+          "name": "بقية الإدخال محفوظة",
+          "expected": "ملاحظة تبقى",
+          "measured": "ملاحظة تبقى",
+          "pass": true
+        },
+        {
+          "name": "التصحيح يزول الخطأ عند الإدخال (UX-09)",
+          "expected": "has-error=false",
+          "measured": {
+            "err": false,
+            "msg": ""
+          },
+          "pass": true
+        },
+        {
+          "name": "الفئة مطلوبة: خطأ موضعي وتركيز لصف الفئة",
+          "expected": "خطأ + f03-cat-trigger",
+          "measured": {
+            "err": true,
+            "msg": "الفئة مطلوبة — اختر فئة من القائمة.",
+            "focus": "f03-cat-trigger",
+            "save": 0
+          },
+          "pass": true
+        },
+        {
+          "name": "خطأ الفئة مرتبط aria-describedby",
+          "expected": "f03-cat-msg",
+          "measured": "تغيير الفئة، لا فئة محددة — اختر فئة|f03-cat-label f03-cat-msg",
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-13",
+      "path": "حفظ clean لا ينشئ عملية؛ dirty محور مستقل والعودة للأصل تعيد clean",
+      "assertions": [
+        {
+          "name": "حفظ clean: لا دعوة ولا saving ولا نجاح",
+          "expected": "لا عملية ورسالة «لا تغييرات»",
+          "measured": {
+            "save": 0,
+            "op": "idle",
+            "msg": {
+              "variant": "info",
+              "title": "لا تغييرات",
+              "text": "لا تغييرات للحفظ."
+            },
+            "note": null
+          },
+          "pass": true
+        },
+        {
+          "name": "تعديل → dirty=true والمؤكد لم يُمس",
+          "expected": "true",
+          "measured": {
+            "dirty": true,
+            "base": "ملاحظة تركيبية للتجربة."
+          },
+          "pass": true
+        },
+        {
+          "name": "العودة للأصل → clean دون حفظ",
+          "expected": "false وsaveCalls=0",
+          "measured": {
+            "dirty": false,
+            "save": 0,
+            "msg": null
+          },
+          "pass": true
+        },
+        {
+          "name": "كتابة الاسم وإرجاعه → clean",
+          "expected": "false",
+          "measured": false,
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-14",
+      "path": "المنتقي: قراءة بمعرف جديد loading→ready وبذرة الفئة واختيار يزامن ويغلق",
+      "assertions": [
+        {
+          "name": "قراءة واحدة بدأت بحالة loading",
+          "expected": "readCalls=1",
+          "measured": {
+            "read": 1,
+            "row": "جارٍ القراءة…",
+            "focus": "f03-picker-search"
+          },
+          "pass": true
+        },
+        {
+          "name": "ready بثلاث فئات ظاهرة وبذرة محددة",
+          "expected": "3 وواحدة selected",
+          "measured": {
+            "opts": [
+              [
+                "cat-a",
+                true,
+                true
+              ],
+              [
+                "cat-b",
+                false,
+                true
+              ],
+              [
+                "cat-c",
+                false,
+                true
+              ]
+            ],
+            "row": null,
+            "summary": "المحدد: فئة أ",
+            "live": "تمت القراءة: 3 فئات."
+          },
+          "pass": true
+        },
+        {
+          "name": "الاختيار: إغلاق وتزامن القيمة والملخص وdirty",
+          "expected": "cat-c ومغلق وdirty",
+          "measured": {
+            "open": false,
+            "cat": "cat-c",
+            "focus": "f03-cat-trigger",
+            "dirty": true,
+            "trigger": "تغيير الفئة، الفئة الحالية: فئة ج"
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-15",
+      "path": "بحث المنتقي: تصفية وno-results ومسح — الحالة المخزنة لا يتغيرها البحث",
+      "assertions": [
+        {
+          "name": "بحث «أ» → فئة أ فقط",
+          "expected": "1 ظاهر",
+          "measured": {
+            "n": 1,
+            "live": "نتائج البحث: 1 فئات."
+          },
+          "pass": true
+        },
+        {
+          "name": "بلا مطابقة → صف «لا نتائج مطابقة» منسجم مع الإعلان",
+          "expected": "صف + إعلان",
+          "measured": {
+            "row": "لا نتائج مطابقة — جرّب اسمًا آخر",
+            "live": "لا نتائج مطابقة للبحث. جرّب اسمًا آخر."
+          },
+          "pass": true
+        },
+        {
+          "name": "no-results نتيجة بحث فقط — الملخص يبقى بفئة النموذج",
+          "expected": "المحدد: فئة أ",
+          "measured": "المحدد: فئة أ",
+          "pass": true
+        },
+        {
+          "name": "مسح البحث يعيد الخيارات ويعلن الظاهر",
+          "expected": "3 + إعلان",
+          "measured": {
+            "n": 3,
+            "live": "الفئات الظاهرة: 3 فئات."
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-16",
+      "path": "فشل القراءة وإعادتها؛ empty المؤكدة تُسقط الفئة برسالة ظاهرة وحيدة",
+      "assertions": [
+        {
+          "name": "error: صف خطأ + إعادة محاولة والخيارات القديمة مخفية",
+          "expected": "صف خطأ و0 خيار ظاهر",
+          "measured": {
+            "row": "تعذر القراءةإعادة المحاولة",
+            "visible": [
+              false,
+              false,
+              false
+            ]
+          },
+          "pass": true
+        },
+        {
+          "name": "زر إعادة المحاولة بأدنى هدف لمس",
+          "expected": "h>=48",
+          "measured": {
+            "sel": "[data-picker-retry]",
+            "w": 182,
+            "h": 48,
+            "display": "flex"
+          },
+          "pass": true
+        },
+        {
+          "name": "إعادة المحاولة → ready يعيد الخيارات",
+          "expected": "3 ظاهر",
+          "measured": 3,
+          "pass": true
+        },
+        {
+          "name": "empty: مصدر فارغ ورسالة الزوال ظاهرة داخل الطبقة (قناة وحيدة R1-02/F02)",
+          "expected": "role=alert ظاهرة داخل الطبقة",
+          "measured": {
+            "n": 0,
+            "row": "لا فئات في المصدر.",
+            "dn": {
+              "text": "الفئة السابقة لم تعد متاحة. اختر فئة جديدة.",
+              "hiddenAttr": false,
+              "display": "flex",
+              "w": 350,
+              "h": 54,
+              "inLayer": true
+            },
+            "inLayer": true
+          },
+          "pass": true
+        },
+        {
+          "name": "الفئة الجارية أُسقطت (لا بديل تلقائي)",
+          "expected": "null",
+          "measured": {
+            "draft": null,
+            "trigger": "تغيير الفئة، لا فئة محددة — اختر فئة"
+          },
+          "pass": true
+        },
+        {
+          "name": "إغلاق الطبقة يمسح رسالة الزوال من النطاق",
+          "expected": "مخفية فعليًا",
+          "measured": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "inLayer": true
+          },
+          "pass": true
+        },
+        {
+          "name": "الحفظ بلا فئة: خطأ موضعي بلا عملية",
+          "expected": "خطأ + saveCalls=0",
+          "measured": {
+            "err": true,
+            "save": 0
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-17",
+      "path": "رد قراءة قديم يُتجاهل؛ snapshot القراءة من لحظة الدعوة (R1-03)",
+      "assertions": [
+        {
+          "name": "الرد القديم لم يغيّر الخيارات/الحالة/الإعلان",
+          "expected": "لا تغيّر",
+          "measured": {
+            "opts": [
+              "cat-a",
+              "cat-b",
+              "cat-c"
+            ],
+            "row": "جارٍ القراءة…",
+            "live": "جارٍ قراءة الفئات…"
+          },
+          "pass": true
+        },
+        {
+          "name": "تجاهل مسجل للفحص",
+          "expected": "staleIgnored=1",
+          "measured": 1,
+          "pass": true
+        },
+        {
+          "name": "الطلب الصحيح حُسم بعده",
+          "expected": "3 ظاهر",
+          "measured": 3,
+          "pass": true
+        },
+        {
+          "name": "snapshot القراءة عند بدء الدعوة لا عند التسوية (R1-03)",
+          "expected": "فئات المخزن الثلاث لا «after»",
+          "measured": {
+            "items": [
+              "فئة أ",
+              "فئة ب",
+              "فئة ج"
+            ]
+          },
+          "pass": true
+        },
+        {
+          "name": "تعديل خصائص كائنات المصدر بعد الدعوة لا يمس النتيجة (R1-03)",
+          "expected": "before",
+          "measured": "before",
+          "pass": true
+        },
+        {
+          "name": "قراءتان متداخلتان: كل نتيجة من snapshot دعوتها",
+          "expected": "مصدر أول/فئة أ",
+          "measured": {
+            "r1": "مصدر أول",
+            "r2": "فئة أ"
+          },
+          "pass": true
+        },
+        {
+          "name": "الفيض المعلن: كل دعوة تحسم بعقدها وبـsnapshot دعوتها",
+          "expected": "overflow+ready+ready",
+          "measured": {
+            "overflowSeen": true,
+            "r2out": "ready",
+            "firstStillPending": true,
+            "r1out": "ready",
+            "r1snapshot": "فئة أ"
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-18",
+      "path": "مؤقت الطلب يخص طلبه: مؤقت قديم لا يحسم طلبًا أحدث (R1-04)",
+      "assertions": [
+        {
+          "name": "مؤقت الأول حسم طلبه هو بنتيجته ولم يمس المسلح (R1-04)",
+          "expected": "first محسوم ببياناته وsecond معلق",
+          "measured": {
+            "firstSettled": true,
+            "firstOutcome": "ready",
+            "firstItems": 3,
+            "secondSettled": false,
+            "second": null
+          },
+          "pass": true
+        },
+        {
+          "name": "الطلب المسلح حُسم بأمره الصريح بعدها دون تسوية مبكرة",
+          "expected": "error",
+          "measured": {
+            "outcome": "error"
+          },
+          "pass": true
+        },
+        {
+          "name": "والعكس: مؤقت الثاني لا يحسم الأول المسلح — والمسلح يحسم بمهلته الحتمية",
+          "expected": "المسلح يبقى حتى أمره/مهلته ثم يحسم",
+          "measured": {
+            "firstStillPending": true,
+            "r1out": "ready",
+            "secondSettledFirst": true
+          },
+          "pass": true
+        },
+        {
+          "name": "الإلغاء الصريح بعقد موثق {cancelled:true} — لا وعد يتيم",
+          "expected": "cancelled",
+          "measured": {
+            "cancelled": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-19",
+      "path": "رد منتقي مغلق لا يمس جلسة أحدث (R1-05): إبطال السياق وإلغاء صريح وفلتر سياق",
+      "assertions": [
+        {
+          "name": "إغلاق المنتقي ألغى الطلب المعلق إلغاءً صريحًا (عقد R1-04)",
+          "expected": "read:cancelled في الأحداث",
+          "measured": [
+            "view:home",
+            "boot",
+            "data:reset",
+            "view:list",
+            "view:detail",
+            "view:form",
+            "form:open:edit",
+            "picker:opened",
+            "read:attempt",
+            "picker:closed",
+            "read:cancelled"
+          ],
+          "pass": true
+        },
+        {
+          "name": "جلسة جديدة بفئتها المحفوظة وclean",
+          "expected": "cat-a وdirty=false",
+          "measured": {
+            "cat": "cat-a",
+            "dirty": false
+          },
+          "pass": true
+        },
+        {
+          "name": "رد القراءة القديمة لا يغير فئة الجلسة الجديدة ولا dirty ولا الرسائل",
+          "expected": "لا تغيّر",
+          "measured": {
+            "cat": "cat-a",
+            "dirty": false,
+            "msg": null,
+            "focus": "f03-name",
+            "picker": false
+          },
+          "pass": true
+        },
+        {
+          "name": "تجاهل مسجل (سياق مغلق)",
+          "expected": "staleIgnored=1",
+          "measured": 1,
+          "pass": true
+        },
+        {
+          "name": "الجلسة الجديدة قادرة على الحسم: قراءة صحيحة بثلاث فئات",
+          "expected": "3 ظاهر",
+          "measured": 3,
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-20",
+      "path": "الدورة الافتراضية: تعديل → حفظ → حسم تلقائي → نجاح مرة واحدة بعد الانتقال (R1-06)",
+      "assertions": [
+        {
+          "name": "حالة saving بديل واحد وحقول readOnly",
+          "expected": "busy واحد وreadonly وcat معطل",
+          "measured": {
+            "op": "saving",
+            "busy": true,
+            "ro": true,
+            "catDis": true
+          },
+          "pass": true
+        },
+        {
+          "name": "نسخة إرسال ثابتة خام",
+          "expected": "مطابقة",
+          "measured": {
+            "mode": "edit",
+            "id": "it-04",
+            "values": {
+              "name": "عنصر دال المعدّل",
+              "category": "cat-a",
+              "note": ""
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "ترتيب الأحداث: الحفظ ثم الانتقال ثم كتابة الرسالة (R1-06)",
+          "expected": "save:saved → view:detail → note:written",
+          "measured": {
+            "order": [
+              "save:saved",
+              "view:detail",
+              "note:written"
+            ],
+            "writtenOnce": 1
+          },
+          "pass": true
+        },
+        {
+          "name": "الرسالة في سياق التفاصيل الظاهر فعليًا وبلا سلف inert",
+          "expected": "visible وinert=false",
+          "measured": {
+            "note": {
+              "variant": "success",
+              "title": "تم حفظ التعديلات",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "visible": true,
+            "inert": false
+          },
+          "pass": true
+        },
+        {
+          "name": "البيانات الجديدة في التفاصيل وdirty=false وتركيز صالح",
+          "expected": "محدّث",
+          "measured": {
+            "read": {
+              "name": "عنصر دال المعدّل",
+              "category": "فئة أ",
+              "note": "—"
+            },
+            "dirty": false,
+            "focus": "f03-detail-title"
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-21",
+      "path": "منع التفعيل المتكرر: pointer وEnter وSpace وsubmit أثناء pending → دعوة واحدة",
+      "assertions": [
+        {
+          "name": "كل التفعيلات المتكررة أطلقت دعوة واحدة",
+          "expected": "saveCalls=1",
+          "measured": {
+            "save": 1,
+            "op": "saving"
+          },
+          "pass": true
+        },
+        {
+          "name": "النقر الحقيقي أثناء pending لا يصل إلى الزر (حالة التحميل B01)",
+          "expected": "elementFromPoint ≠ الزر",
+          "measured": true,
+          "pass": true
+        },
+        {
+          "name": "الحسم يعمل بنتيجته بعد الحراسة",
+          "expected": "تم حفظ التعديلات",
+          "measured": {
+            "variant": "success",
+            "title": "تم حفظ التعديلات",
+            "text": "القائمة والرئيسية محدّثة."
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-22",
+      "path": "رفض معلوم: القيم باقية والرسالة باقية والتصحيح ومحاولة جديدة تنجح",
+      "assertions": [
+        {
+          "name": "failed: رسالة باقية داخل النموذج والقيم باقية",
+          "expected": "رسالة error وقيم كما كتبت",
+          "measured": {
+            "op": "failed",
+            "msg": {
+              "variant": "error",
+              "title": "لم تُحفظ التعديلات",
+              "text": "يمكنك التصحيح والمحاولة مجددًا."
+            },
+            "name": "اسم لن يُحفظ",
+            "note": "ملاحظة باقية",
+            "view": "form"
+          },
+          "pass": true
+        },
+        {
+          "name": "إعادة المحاولة متاحة والحقول قابلة للتحرير",
+          "expected": "readonly=false",
+          "measured": {
+            "ro": false,
+            "busy": false
+          },
+          "pass": true
+        },
+        {
+          "name": "تغيير القيم أزال رسالة الرفض المنتهية سببها",
+          "expected": "msg=null",
+          "measured": null,
+          "pass": true
+        },
+        {
+          "name": "المحاولة الجديدة تنجح بالقيم الحالية",
+          "expected": "اسم لن يُحفظ محفوظ",
+          "measured": {
+            "read": {
+              "name": "اسم لن يُحفظ",
+              "category": "فئة أ",
+              "note": "تعديل بعد الرفض"
+            },
+            "dirty": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-23",
+      "path": "نتيجة غير مؤكدة: زر التحقق يظهر ظهورًا فعليًا ولا إعادة إرسال؛ التحقق → نجاح",
+      "assertions": [
+        {
+          "name": "unknown: لا «لم يُحفظ» ولا إعادة إرسال تلقائية",
+          "expected": "op=unknown وsaveCalls=1 ورسالة تحذير",
+          "measured": {
+            "op": "unknown",
+            "save": 1,
+            "msg": {
+              "variant": "warning",
+              "title": "النتيجة غير مؤكدة",
+              "text": "انتهت محاولة الحفظ بنتيجة غير مؤكدة — تحقق من النتيجة قبل أي تعديل."
+            },
+            "ro": true
+          },
+          "pass": true
+        },
+        {
+          "name": "زر «التحقق من النتيجة» يظهر ظهورًا فعليًا",
+          "expected": "display!=none وw>0",
+          "measured": {
+            "display": "flex",
+            "hiddenAttr": false,
+            "w": 358,
+            "h": 48
+          },
+          "pass": true
+        },
+        {
+          "name": "الحفظ محروس أثناء unknown (لا دعوة جديدة)",
+          "expected": "saveCalls=1",
+          "measured": 1,
+          "pass": true
+        },
+        {
+          "name": "التحقق مرة واحدة رغم التكرار ثم نجاح بالانتقال",
+          "expected": "checkCalls=1 ونجاح",
+          "measured": {
+            "check": 1,
+            "note": {
+              "variant": "success",
+              "title": "تم حفظ التعديلات",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "save": 1
+          },
+          "pass": true
+        },
+        {
+          "name": "زر التحقق اختفى فعليًا بعد الحسم",
+          "expected": "hidden فعلي",
+          "measured": {
+            "visible": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-24",
+      "path": "التحقق → رفض معلوم يبقي القيم؛ تحقق مجهول يبقي unknown ويمكن إعادة التحقق",
+      "assertions": [
+        {
+          "name": "تأكد الرفض: لا نجاح ولا انتقال والقيم باقية",
+          "expected": "form وfailed وقيم باقية",
+          "measured": {
+            "view": "form",
+            "op": "failed",
+            "msg": {
+              "variant": "error",
+              "title": "تأكدت النتيجة: لم تُحفظ التعديلات",
+              "text": "القيم باقية ويمكنك التصحيح والمحاولة مجددًا."
+            },
+            "note": "ملاحظة تحقق",
+            "checkVisible": false
+          },
+          "pass": true
+        },
+        {
+          "name": "تحقق مجهول: عودة unknown بلا حفظ جديد وإعادة التحقق متاحة",
+          "expected": "op=unknown وcheck ظاهر وsaveCalls=2",
+          "measured": {
+            "op": "unknown",
+            "check": 2,
+            "save": 2,
+            "visible": true,
+            "msg": {
+              "variant": "warning",
+              "title": "تعذر تأكيد النتيجة",
+              "text": "تعذر تأكيد النتيجة، تحقق مجددًا."
+            }
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-25",
+      "path": "ردود حفظ/تحقق بمعرف قديم تُتجاهل كليًا والطلب المعلق يحسم بعده",
+      "assertions": [
+        {
+          "name": "الردود القديمة لم تغير الحالة/الرسالة/التركيز",
+          "expected": "لا تغيّر",
+          "measured": {
+            "op": "saving",
+            "msg": {
+              "variant": "info",
+              "title": "جارٍ الحفظ",
+              "text": "جارٍ حفظ التعديلات…"
+            },
+            "stale": 2,
+            "focus": "f03-save"
+          },
+          "pass": true
+        },
+        {
+          "name": "الطلب الصحيح حُسم بعده بنتيجته",
+          "expected": "نجاح",
+          "measured": {
+            "note": {
+              "variant": "success",
+              "title": "تم حفظ التعديلات",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "read": {
+              "name": "اسم الطلب المعلق",
+              "category": "فئة أ",
+              "note": "ملاحظة تركيبية للتجربة."
+            }
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-26",
+      "path": "مغادرة نظيفة: عودة مباشرة بلا حوار وتركيز صالح",
+      "assertions": [
+        {
+          "name": "رجوع نظيف من تعديل → تفاصيل بلا حوار وتركيز على «تعديل»",
+          "expected": "detail/dialog=false/focus=f03-detail-edit",
+          "measured": {
+            "view": "detail",
+            "dialog": false,
+            "focus": "f03-detail-edit"
+          },
+          "pass": true
+        },
+        {
+          "name": "رجوع نظيف من إضافة فارغة → الرئيسية بلا حوار",
+          "expected": "home/dialog=false",
+          "measured": {
+            "view": "home",
+            "dialog": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-27",
+      "path": "مغادرة مع تغييرات: حوار قرار — البقاء يبقي الإدخال والتجاهل يغادر بلا حفظ",
+      "assertions": [
+        {
+          "name": "الحوار يفتح والتركيز على زر البقاء",
+          "expected": "dialog=true/focus=f03-stay",
+          "measured": {
+            "dialog": true,
+            "focus": "f03-stay"
+          },
+          "pass": true
+        },
+        {
+          "name": "البقاء يبقي الإدخال والتركيز والنموذج مفتوحًا",
+          "expected": "form والقيم كما هي",
+          "measured": {
+            "view": "form",
+            "name": "اسم سيُسأل عنه",
+            "note": "ملاحظة سيُسأل عنها",
+            "dirty": true
+          },
+          "pass": true
+        },
+        {
+          "name": "التجاهل يغادر النموذج إلى التفاصيل المحفوظة بلا أي حفظ",
+          "expected": "detail/القيم المحفوظة/saveCalls=0",
+          "measured": {
+            "view": "detail",
+            "read": {
+              "name": "عنصر ألف",
+              "category": "فئة أ",
+              "note": "ملاحظة تركيبية للتجربة."
+            },
+            "save": 0,
+            "focus": "f03-detail-edit"
+          },
+          "pass": true
+        },
+        {
+          "name": "تجاهل الإضافة يعود للقائمة بلا عنصر جديد",
+          "expected": "9 صفوف",
+          "measured": 9,
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-28",
+      "path": "المغادرة أثناء busy محجوبة برسالة موجزة والعملية تحسم بنتيجتها",
+      "assertions": [
+        {
+          "name": "المغادرة محجوبة برسالة والحالة saving مستمرة",
+          "expected": "form وsaving ورسالة حجب",
+          "measured": {
+            "view": "form",
+            "op": "saving",
+            "msg": {
+              "variant": "warning",
+              "title": "المغادرة غير متاحة الآن",
+              "text": "لا يمكن الرجوع الآن — بانتظار نتيجة الحفظ."
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "العملية تحسم بنتيجتها رغم محاولة المغادرة",
+          "expected": "نجاح",
+          "measured": {
+            "variant": "success",
+            "title": "تم حفظ التعديلات",
+            "text": "القائمة والرئيسية محدّثة."
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-29",
+      "path": "حصر التركيز والطبقات: Tab داخل الطبقة العليا والخلفية معزولة والعودة للمشغّل",
+      "assertions": [
+        {
+          "name": "Tab المتكرر يبقى داخل الطبقة العليا",
+          "expected": "active داخل f03-cat-layer",
+          "measured": {
+            "active": "f03-cat-layer-close",
+            "inLayer": true,
+            "openLayers": 1
+          },
+          "pass": true
+        },
+        {
+          "name": "الخلفية معزولة فعليًا (سلف inert) أثناء الطبقة",
+          "expected": "true",
+          "measured": true,
+          "pass": true
+        },
+        {
+          "name": "الإغلاق يعيد التركيز إلى صف الفئة ويزيل العزل",
+          "expected": "f03-cat-trigger وinert=false",
+          "measured": {
+            "focus": "f03-cat-trigger",
+            "inert": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-30",
+      "path": "سياسة Escape: طبقة → تُغلق؛ dirty → الحوار؛ pending → حجب؛ غير ذلك لا فعل",
+      "assertions": [
+        {
+          "name": "Escape على نموذج dirty يفتح حوار البقاء (لا تخلي صامت)",
+          "expected": "dialog=true وdirty بقي",
+          "measured": true,
+          "pass": true
+        },
+        {
+          "name": "Escape داخل الحوار يغلفه فقط: بقاء بالنموذج والإدخال",
+          "expected": "dialog=false والنموذج بقي",
+          "measured": {
+            "dialog": false,
+            "view": "form",
+            "name": "اسم لإسكيب"
+          },
+          "pass": true
+        },
+        {
+          "name": "Escape أثناء pending محجوب برسالة",
+          "expected": "form وsaving",
+          "measured": {
+            "view": "form",
+            "op": "saving",
+            "msg": {
+              "variant": "warning",
+              "title": "المغادرة غير متاحة الآن",
+              "text": "لا يمكن الرجوع الآن — بانتظار نتيجة الحفظ."
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "Escape في التفاصيل: لا فعل (رجوع النظام خارج النطاق)",
+          "expected": "detail",
+          "measured": "detail",
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-31",
+      "path": "المقاسات 320/360/390/430: لا خروج أفقي ولا قص في كل العروض والطبقات",
+      "assertions": [
+        {
+          "name": "لا خروج أفقي في كل المقاسات والحالات (24 قياسًا)",
+          "expected": "24/24",
+          "measured": {
+            "bad": [],
+            "total": 24
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-32",
+      "path": "تكبير النص 200%: قياس قبل/بعد وحدود الحروف داخل الأفعال داخل الإطار وتمرير فعلي",
+      "assertions": [
+        {
+          "name": "رسالة الخطأ مرئية قبل التكبير",
+          "expected": "h>0",
+          "measured": {
+            "fontSize": "14px",
+            "w": 288,
+            "h": 22,
+            "right": 304
+          },
+          "pass": true
+        },
+        {
+          "name": "نص الرسالة يتضاعف عند 200%",
+          "expected": "h تقريبًا ×2",
+          "measured": {
+            "before": {
+              "fontSize": "14px",
+              "w": 288,
+              "h": 22,
+              "right": 304
+            },
+            "after": {
+              "fontSize": "28px",
+              "w": 288,
+              "h": 44,
+              "right": 304
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "لا خروج أفقي عند 320 و200%",
+          "expected": "bad=0",
+          "measured": {
+            "clientW": 320,
+            "scrollW": 320,
+            "bodyScrollW": 320,
+            "bad": [],
+            "badCount": 0
+          },
+          "pass": true
+        },
+        {
+          "name": "حدود أفعال النموذج وحروفها أفقيا داخل الإطار عند 320/200%",
+          "expected": "كل زر وكل حرف داخل الحدود الأفقية",
+          "measured": {
+            "actions": [
+              "f03-form-back",
+              "f03-cat-trigger",
+              "f03-save"
+            ],
+            "ok": true
+          },
+          "pass": true
+        },
+        {
+          "name": "أفعال الحوار الثابت وحروفها داخل الشاشة كاملة عند 320/200%",
+          "expected": "كل زر داخل الإطار رأسيا وأفقيا",
+          "measured": {
+            "actions": [
+              "f03-leave-close",
+              "f03-stay",
+              "f03-abandon"
+            ],
+            "ok": true,
+            "rects": [
+              [
+                171,
+                219,
+                40,
+                88
+              ],
+              [
+                445,
+                565,
+                40,
+                280
+              ],
+              [
+                577,
+                697,
+                40,
+                280
+              ]
+            ]
+          },
+          "pass": true
+        },
+        {
+          "name": "زر الحفظ قابل للوصول بتمرير فعلي عند 320/200%",
+          "expected": "bottom داخل الشاشة بعد التمرير",
+          "measured": {
+            "before": {
+              "w": 288,
+              "h": 72,
+              "top": 794,
+              "bottom": 866,
+              "left": 16,
+              "right": 304
+            },
+            "after": {
+              "w": 288,
+              "h": 72,
+              "top": 519,
+              "bottom": 591,
+              "left": 16,
+              "right": 304
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "أفعال unknown وحروفها أفقيا داخل الإطار عند 320/200% (تمرير فعلي للوصول)",
+          "expected": "كل زر داخل الحدود الأفقية",
+          "measured": {
+            "actions": [
+              "f03-form-back",
+              "f03-cat-trigger",
+              "f03-save",
+              "f03-check"
+            ],
+            "ok": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-33",
+      "path": "reduced-motion (تفضيل بيئة حقيقي): فتح/إغلاق فوريان بلا حركة والوظيفة محفوظة",
+      "assertions": [
+        {
+          "name": "الطبقة تفتح وتعمل بلا حركة",
+          "expected": "مفتوحة و3 خيارات",
+          "measured": {
+            "open": true,
+            "opts": 3
+          },
+          "pass": true
+        },
+        {
+          "name": "لا طور فتح مكاني (data-opening منزوع)",
+          "expected": "false",
+          "measured": false,
+          "pass": true
+        },
+        {
+          "name": "الإغلاق فوري والمحاورة كاملة",
+          "expected": "مغلق وتركيز صالح",
+          "measured": {
+            "open": false,
+            "focus": "f03-cat-trigger"
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-34",
+      "path": "دورة كاملة بلوحة المفاتيح وحدها + أهداف لمس السياسة (48px)",
+      "assertions": [
+        {
+          "name": "حوار Escape بالكيبورد: البقاء يبقي النموذج",
+          "expected": "form وdirty",
+          "measured": {
+            "view": "form",
+            "dirty": true
+          },
+          "pass": true
+        },
+        {
+          "name": "اختيار فئة بالكيبورد وحده",
+          "expected": "cat-c ومغلق",
+          "measured": {
+            "cat": "cat-c",
+            "open": false
+          },
+          "pass": true
+        },
+        {
+          "name": "حفظ بالكيبورد → نجاح كامل",
+          "expected": "تم حفظ التعديلات",
+          "measured": {
+            "variant": "success",
+            "title": "تم حفظ التعديلات",
+            "text": "القائمة والرئيسية محدّثة."
+          },
+          "pass": true
+        },
+        {
+          "name": "أهداف اللمس وفق سياسة المشروع (48px) — سياسة لا ادعاء WCAG",
+          "expected": "كل h>=48 في عرضه",
+          "measured": [
+            {
+              "sel": "#f03-detail-edit",
+              "w": 358,
+              "h": 48,
+              "display": "flex"
+            },
+            {
+              "sel": "#f03-home-add",
+              "w": 358,
+              "h": 48,
+              "display": "flex"
+            },
+            {
+              "sel": "#f03-home-all",
+              "w": 358,
+              "h": 48,
+              "display": "flex"
+            },
+            {
+              "sel": "#f03-filter-btn",
+              "w": 106,
+              "h": 48,
+              "display": "flex"
+            },
+            {
+              "sel": "#f03-list-rows .f03-row",
+              "w": 358,
+              "h": 48,
+              "display": "flex"
+            },
+            {
+              "sel": "#f03-save",
+              "w": 358,
+              "h": 48,
+              "display": "flex"
+            }
+          ],
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-35",
+      "path": "وضع المراجعة: مغلق افتراضيًا ويُفتح من التذييل بالنقر وينهي المعلق من الهاتف (R1-01/07)",
+      "assertions": [
+        {
+          "name": "الطبقة مغلقة افتراضيًا (display:none فعليًا)",
+          "expected": "مغلق",
+          "measured": {
+            "rect": {
+              "w": 0,
+              "h": 0,
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0
+            },
+            "open": false
+          },
+          "pass": true
+        },
+        {
+          "name": "الرابط يفتح الطبقة وأدواتها ظاهرة",
+          "expected": "مفتوحة وأدوات مرئية",
+          "measured": {
+            "open": true,
+            "tools": 10
+          },
+          "pass": true
+        },
+        {
+          "name": "السيناريو المسلح جعل الحفظ معلقًا",
+          "expected": "saving",
+          "measured": {
+            "op": "saving",
+            "pending": true
+          },
+          "pass": true
+        },
+        {
+          "name": "زر «إنهاء الحفظ المعلق» متاح ومفعّل داخل الطبقة العليا",
+          "expected": "h>0 وغير معطل",
+          "measured": {
+            "btn": {
+              "sel": "#f03-rev-settle-save",
+              "w": 350,
+              "h": 48,
+              "display": "flex"
+            },
+            "disabled": false,
+            "inert": false
+          },
+          "pass": true
+        },
+        {
+          "name": "الرفض طُبق بالنقر: رسالة باقية والقيم باقية",
+          "expected": "failed وقيم باقية",
+          "measured": {
+            "op": "failed",
+            "msg": {
+              "variant": "error",
+              "title": "لم تُحفظ التعديلات",
+              "text": "يمكنك التصحيح والمحاولة مجددًا."
+            },
+            "name": "سيناريو من الهاتف"
+          },
+          "pass": true
+        },
+        {
+          "name": "المسلح معلق قبل مهلته",
+          "expected": "saving",
+          "measured": "saving",
+          "pass": true
+        },
+        {
+          "name": "حسم تلقائي حتمي بلا تدخل: لا مستخدم محتجز في pending",
+          "expected": "unknown بعد المهلة",
+          "measured": {
+            "op": "unknown",
+            "checkVisible": true
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-36",
+      "path": "التخزين المحلي: الحفظ يبقى بعد إعادة الفتح؛ الاستعادة والتفريغ بالنقر والحالة معلنة",
+      "assertions": [
+        {
+          "name": "التخزين متاح في بيئة الفحص ومعلن بصدق",
+          "expected": "persistent=true",
+          "measured": {
+            "available": true,
+            "persistent": true,
+            "note": "التخزين المحلي متاح — التعديلات تبقى بعد إغلاق الملف."
+          },
+          "pass": true
+        },
+        {
+          "name": "إعادة فتح الملف تعرض البيانات المحفوظة (بلا بذرة)",
+          "expected": "الاسم المحفوظ في القائمة",
+          "measured": {
+            "rows": null,
+            "seedCount": 9
+          },
+          "pass": true
+        },
+        {
+          "name": "الصف المحفوظ ظاهر بعد إعادة الفتح",
+          "expected": "عنصر باء المحفوظ",
+          "measured": "عنصر باء المحفوظ\nفئة ب",
+          "pass": true
+        },
+        {
+          "name": "«استعادة البيانات الأصلية» بالنقر تعيد البذرة",
+          "expected": "عنصر باء (بذرة)",
+          "measured": {
+            "rows": 9
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-37",
+      "path": "تعذر التخزين المحلي: تدهور آمن إلى حفظ الجلسة بلا انهيار والحالة معلنة",
+      "assertions": [
+        {
+          "name": "الإقلاع يعمل بلا تخزين محلي (بذرة في الذاكرة)",
+          "expected": "home و9 عناصر",
+          "measured": {
+            "view": "home",
+            "count": true
+          },
+          "pass": true
+        },
+        {
+          "name": "الحالة معلنة بصدق: التخزين غير متاح",
+          "expected": "available=false",
+          "measured": {
+            "available": false,
+            "persistent": false,
+            "note": "التخزين المحلي غير متاح — البيانات تبقى داخل هذه الجلسة فقط."
+          },
+          "pass": true
+        },
+        {
+          "name": "الحفظ داخل الجلسة يعمل رغم حجب التخزين",
+          "expected": "نجاح",
+          "measured": {
+            "variant": "success",
+            "title": "تم حفظ التعديلات",
+            "text": "القائمة والرئيسية محدّثة."
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-38",
+      "path": "الملف الواحد عبر file://: صفر طلبات خارجية وخطوط وأيقونات وبناء حتمي وتكافؤ",
+      "assertions": [
+        {
+          "name": "build --check: الملف مطابق لإعادة التوليد بايت-ببايت",
+          "expected": "CHECK OK",
+          "measured": {
+            "code": 0,
+            "out": "ICON CHECK OK: 8 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت"
+          },
+          "pass": true
+        },
+        {
+          "name": "حماية أصول الأيقونات تعمل في البناء (R1-02)",
+          "expected": "ICON CHECK OK",
+          "measured": "ICON CHECK OK: 8 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت\n",
+          "pass": true
+        },
+        {
+          "name": "صفر طلبات خارجية (كل الطلبات file:// أو data:)",
+          "expected": "0 خارجي",
+          "measured": {
+            "total": 1,
+            "external": []
+          },
+          "pass": true
+        },
+        {
+          "name": "الخطان محمّلان داخل الملف الواحد",
+          "expected": "arabic+latin",
+          "measured": {
+            "arabic400": true,
+            "arabic500": true,
+            "latin400": true,
+            "count": 6
+          },
+          "pass": true
+        },
+        {
+          "name": "الواجهة الافتراضية نظيفة أيضًا في الملف الواحد (R1-01)",
+          "expected": "بلا نصوص تقنية",
+          "measured": {
+            "hits": []
+          },
+          "pass": true
+        },
+        {
+          "name": "تكافؤ الإقلاع: الرئيسية من البذرة بلا طلبات",
+          "expected": "9 عناصر و0/0/0",
+          "measured": {
+            "count": true,
+            "calls": [
+              0,
+              0,
+              0
+            ]
+          },
+          "pass": true
+        },
+        {
+          "name": "تكافؤ السلوك: الحفظ ينجح ويرسالة واحدة في التفاصيل",
+          "expected": "success",
+          "measured": {
+            "note": {
+              "variant": "success",
+              "title": "تم حفظ التعديلات",
+              "text": "القائمة والرئيسية محدّثة."
+            },
+            "read": {
+              "name": "تعديل في الملف الواحد",
+              "category": "فئة أ",
+              "note": "ملاحظة تركيبية للتجربة."
+            }
+          },
+          "pass": true
+        },
+        {
+          "name": "سهم الفئة في الملف الواحد: fill=none (R1-02)",
+          "expected": "none",
+          "measured": {
+            "found": true,
+            "use": true,
+            "hostFill": "none",
+            "useFill": "none",
+            "w": 0,
+            "h": 0
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-39",
+      "path": "reduced-motion بالتفضيل الحقيقي للبيئة: فتح/إغلاق ووظيفة محفوظة",
+      "assertions": [
+        {
+          "name": "المنتقي يفتح ويعمل بتفضيل الحركة المخفض",
+          "expected": "3 خيارات",
+          "measured": {
+            "open": true,
+            "opts": 3
+          },
+          "pass": true
+        },
+        {
+          "name": "الاختيار والإغلاق فوريان والوظيفة محفوظة",
+          "expected": "cat-b ومغلق",
+          "measured": {
+            "cat": "cat-b",
+            "open": false
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    },
+    {
+      "id": "F03-40",
+      "path": "صحة عامة: صفر أخطاء صفحة وموارد عبر جميع المسارات مجمعة (بلا مسح)",
+      "assertions": [
+        {
+          "name": "أخطاء صفحة/كونسول عبر كل المسارات",
+          "expected": "0",
+          "measured": {
+            "count": 0,
+            "errors": []
+          },
+          "pass": true
+        },
+        {
+          "name": "فشل موارد (طلبات فاشلة أو HTTP>=400)",
+          "expected": "0",
+          "measured": {
+            "count": 0,
+            "items": []
+          },
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "result": "PASS",
+      "new_errors": []
+    }
+  ],
+  "summary": {
+    "paths_total": 40,
+    "paths_passed": 40,
+    "paths_failed": [],
+    "assertions_total": 164,
+    "page_errors_total": 0,
+    "resource_failures_total": 0,
+    "not_run": [
+      "Samsung Galaxy S25 الحقيقي وأي جهاز فعلي — محاكاة Chromium ليست اختبار S25 ولا Samsung Internet",
+      "TalkBack/VoiceOver وقارئ شاشة فعلي",
+      "native zoom (تكبير النظام) — تمت المحاكاة المعلنة فقط",
+      "اللمس الحقيقي ولوحة مفاتيح النظام وsafe areas الفعلية",
+      "WebKit/Safari",
+      "رجوع النظام (predictive back)"
+    ],
+    "limits": [
+      "تسليم الردود القديمة عبر deliverTestResponse يثبت فلاتر المستهلك ولا يثبت وصولًا شبكيًا",
+      "قياس 200% بالآلية المعلنة لا native zoom"
+    ]
+  }
+}
