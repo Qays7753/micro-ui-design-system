@@ -1,0 +1,108 @@
+{
+  "root": "/home/z/my-project/work/f03-evidence-wt",
+  "commit": "dc1536d10e95df67b42b00be8bd527da9c94f753",
+  "checks": [
+    {
+      "name": "R1-01 الافتراضي يعرض تقريرًا تقنيًا وأدوات اختبار",
+      "defect_found": false,
+      "measured": {
+        "headVisible": false,
+        "simVisible": false,
+        "textHits": [],
+        "tabCount": 75
+      }
+    },
+    {
+      "name": "R1-02 سهم الفئة لا يحفظ fill=none من الأصل",
+      "defect_found": false,
+      "measured": {
+        "found": true,
+        "useFill": "none",
+        "symFillAttr": "none"
+      }
+    },
+    {
+      "name": "R1-03 نتيجة القراءة تستعمل مصدر وقت التسوية",
+      "defect_found": false,
+      "measured": {
+        "labels": [
+          "فئة أ",
+          "فئة ب",
+          "فئة ج"
+        ]
+      }
+    },
+    {
+      "name": "R1-04 مؤقت طلب قديم يحسم طلبًا أحدث أو يتركه معلقًا",
+      "defect_found": false,
+      "measured": {
+        "firstSettled": true,
+        "first": {
+          "readId": 1,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "cat-a",
+              "label": "فئة أ"
+            },
+            {
+              "value": "cat-b",
+              "label": "فئة ب"
+            },
+            {
+              "value": "cat-c",
+              "label": "فئة ج"
+            }
+          ]
+        },
+        "secondSettled": false,
+        "second": null
+      }
+    },
+    {
+      "name": "R1-05 رد منتقي مغلق يغير فئة جلسة أحدث",
+      "defect_found": false,
+      "measured": {
+        "before": {
+          "cat": "cat-a",
+          "dirty": false
+        },
+        "after": {
+          "cat": "cat-a",
+          "dirty": false
+        }
+      }
+    },
+    {
+      "name": "R1-06 كتابة النجاح خارج النطاق المتاح أو أكثر من مرة",
+      "defect_found": false,
+      "measured": {
+        "writes": [
+          {
+            "text": "تم حفظ التعديلات\n\nالقائمة والرئيسية محدّثة.",
+            "hidden": false,
+            "inert": false,
+            "detailShown": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "R1-07 الإنهاء اليدوي غير قابل للوصول من الهاتف",
+      "defect_found": false,
+      "measured": {
+        "pending": true,
+        "btn": {
+          "disabled": false,
+          "inert": false,
+          "h": 48
+        },
+        "opAfterSettle": "failed"
+      }
+    }
+  ],
+  "summary": {
+    "defects_found": 0,
+    "total": 7
+  }
+}

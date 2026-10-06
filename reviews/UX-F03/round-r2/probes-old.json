@@ -1,0 +1,95 @@
+{
+  "root": "/home/z/my-project/work/f03-old-wt",
+  "commit": "189b0d815addf766bdcee356cda831abcec6f78e",
+  "checks": [
+    {
+      "name": "R1-01 الافتراضي يعرض تقريرًا تقنيًا وأدوات اختبار",
+      "defect_found": true,
+      "measured": {
+        "headVisible": true,
+        "simVisible": true,
+        "textHits": [
+          "UX-F03",
+          "DRAFT",
+          "SIMULATION",
+          "IBM Plex"
+        ],
+        "tabCount": 39
+      }
+    },
+    {
+      "name": "R1-02 سهم الفئة لا يحفظ fill=none من الأصل",
+      "defect_found": true,
+      "measured": {
+        "found": true,
+        "useFill": "rgb(0, 0, 0)",
+        "symFillAttr": "absent"
+      }
+    },
+    {
+      "name": "R1-03 نتيجة القراءة تستعمل مصدر وقت التسوية",
+      "defect_found": true,
+      "measured": {
+        "labels": [
+          "after"
+        ]
+      }
+    },
+    {
+      "name": "R1-04 مؤقت طلب قديم يحسم طلبًا أحدث أو يتركه معلقًا",
+      "defect_found": true,
+      "measured": {
+        "firstSettled": false,
+        "first": null,
+        "secondSettled": true,
+        "second": {
+          "readId": 2,
+          "outcome": "error",
+          "items": []
+        }
+      }
+    },
+    {
+      "name": "R1-05 رد منتقي مغلق يغير فئة جلسة أحدث",
+      "defect_found": true,
+      "measured": {
+        "before": {
+          "cat": "cat-a",
+          "dirty": false
+        },
+        "after": {
+          "cat": null,
+          "dirty": true
+        }
+      }
+    },
+    {
+      "name": "R1-06 كتابة النجاح خارج النطاق المتاح أو أكثر من مرة",
+      "defect_found": true,
+      "measured": {
+        "writes": [
+          {
+            "text": "تم الحفظ\n\nتم حفظ التعديلات — النسخة المؤكدة محدثة.",
+            "hidden": false,
+            "inert": true,
+            "sheetHidden": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "R1-07 الإنهاء اليدوي غير قابل للوصول من الهاتف",
+      "defect_found": true,
+      "measured": {
+        "disabled": false,
+        "inert": true,
+        "op": "saving",
+        "pending": true
+      }
+    }
+  ],
+  "summary": {
+    "defects_found": 7,
+    "total": 7
+  }
+}
