@@ -102,11 +102,13 @@ body {
 }
 
 /* ---------- بوابة الوصول: عمود مقروء وسط الصفحة ---------- */
+/* R1-UI11: أسطح ثابتة مسطّحة بحد فاصل — ظل الطبقات (overlay) للحواريات
+   المؤقتة فقط، لا لقوائم المحتوى الدائمة. */
 .f03-gateway {
   margin-block-start: var(--micro-space-5);
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   padding: var(--micro-space-5) var(--micro-space-4);
 }
 
@@ -132,13 +134,14 @@ body {
 }
 
 /* ---------- صفوف القائمة وأحدث العناصر: هدف فتح واحد واضح ---------- */
+/* R1-UI11: قائمة محتوى دائمة بحد فاصل لا ظل طبقة مؤقتة (overlay). */
 .f03-rowlist {
   list-style: none;
   margin: 0;
   padding: 0;
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   overflow: hidden;
 }
 
@@ -238,8 +241,10 @@ body {
   margin-block-end: var(--micro-space-3);
 }
 
-.f03-sortrow .m-seg { flex: 1 1 auto; min-width: 0; }
-.f03-sortrow .m-toggle { flex: none; }
+/* R1-UI03: المقاطع بعرضها الطبيعي والالتفاف مسموح عند الضيق —
+   لا تمدّد يفتح الصف على ارتفاعين. */
+.f03-sortrow .m-seg { flex: 0 1 auto; min-width: 0; }
+.f03-sortrow .m-toggle { flex: none; margin-inline-start: auto; }
 
 .f03-results {
   margin: 0 0 var(--micro-space-2);
@@ -248,10 +253,11 @@ body {
   line-height: var(--micro-secondary-line);
 }
 
+/* R1-UI11: حالة فراغ دائمة بحد فاصل لا ظل طبقة مؤقتة (overlay). */
 .f03-state {
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   padding: var(--micro-space-6) var(--micro-space-4);
   text-align: center;
 }
@@ -339,11 +345,40 @@ body {
 #f03-form {
   display: flex;
   flex-direction: column;
-  gap: var(--micro-space-4);
+  gap: var(--micro-space-3); /* R1-UI14: تجميع أوضح بين الحقول القصيرة */
 }
 
 #f03-form .m-field {
   margin: 0;
+}
+
+/* R1-UI14: فاصل أوضح قبل مجموعة الملاحظة الأخيرة */
+#f03-note-field {
+  margin-block-start: var(--micro-space-2);
+}
+
+/* R1-UI12/13/16: الحقول الرقمية القصيرة — القيمة والكمية وحدة واحدة متراصة */
+.f03-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+}
+.f03-field-row .m-field { margin: 0; min-width: 0; }
+.f03-field-row #f03-value-field { flex: 1 1 130px; }
+.f03-field-row #f03-qty-field { flex: 0 0 auto; }
+#f03-qty-field .m-field__control { width: fit-content; } /* زيادة + قيمة + نقصان وحدة متماسكة */
+/* R1-UI12: عرض قيمة الكمية من توكن المكتبة نفسه — في تركيب B01 الرسمي
+   (input بين غلافَي خطوة مستقلين) لا تنطبق قاعدة width الخاصة بـ
+   .m-field__stepper، فتثبّتها العينة ليبقى الصف المتراص متماسكًا بلا
+   فيض عند الضيق ولا اتساعًا بالافتراضي الأصلي عند تكبير النص. */
+#f03-qty-field .m-field__input--num { flex: none; width: var(--micro-quantity-min-width); text-align: center; }
+
+/* R1-UI15: مساعدة قصيرة تحت حقل القيمة — الخطأ يحل محلها عند ظهوره */
+.f03-field-help {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
 }
 
 /* إخفاء فعلي لزر التحقق خارج unknown/checking (درس F01-R1-01:
@@ -452,6 +487,9 @@ body {
   flex-direction: column;
   gap: var(--micro-space-3);
 }
+
+/* احتياط بسيط: إخفاء فعلي لجسم القسم المطوي حين hidden (R1-UI07) */
+.m-section__body[hidden] { display: none; }
 
 /* ---------- الحساب: هوية ومجموعات إعدادات ---------- */
 .f03-account-id {

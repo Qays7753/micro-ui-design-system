@@ -152,6 +152,7 @@
     valueField: q('f03-value-field'),
     value: q('f03-value'),
     valueMsg: q('f03-value-msg'),
+    valueHelp: q('f03-value-help'),
     qtyField: q('f03-qty-field'),
     qty: q('f03-qty'),
     qtyMsg: q('f03-qty-msg'),
@@ -279,6 +280,24 @@
     return String(Math.round(n * 100) / 100);
   }
 
+  /* R1-UI20: تنسيق عرض ثابت — المبالغ برقمين عشريين دائمًا والأعداد الصحيحة بلا كسور.
+     عرض فقط؛ دقة البيانات المخزنة وقيم data-value/data-max محفوظة كما هي. */
+  function formatMoney(n) {
+    if (n == null || !isFinite(n)) return '—';
+    return (Math.round(n * 100) / 100).toFixed(2);
+  }
+  function formatCount(n) {
+    if (n == null || !isFinite(n)) return '—';
+    return String(Math.round(n));
+  }
+  var AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  function formatDateAr(iso) {
+    if (!iso) return '—';
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso));
+    if (!m) return String(iso);
+    return String(Number(m[3])) + ' ' + AR_MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+  }
+
   function categoryObj(value) {
     if (!value) return null;
     var label = store.categoryLabel(value);
@@ -396,7 +415,7 @@
     var sumQty = items.reduce(function (a, it) { return a + (it.quantity || 0); }, 0);
     var settings = store.settings();
 
-    el.homeTotal.textContent = formatNumber(sumValue);
+    el.homeTotal.textContent = formatMoney(sumValue);
     el.homeTotalSub.textContent = total === 0
       ? 'المجموع يظهر عند إضافة عناصر ذات قيمة.'
       : (unknownCount > 0
@@ -405,19 +424,20 @@
         : 'مجموع قيم ' + total + ' عناصر.');
 
     /* بطاقات شريط المعلومات من البيانات نفسها */
-    function card(node, num, unit, label) {
-      node.setAttribute('aria-label', label + '، ' + num + ' ' + unit);
-      node.querySelector('.m-info-card__number').textContent = formatNumber(num);
+    function card(node, num, unit, label, fmt) {
+      var text = fmt(num);
+      node.setAttribute('aria-label', label + '، ' + text + ' ' + unit);
+      node.querySelector('.m-info-card__number').textContent = text;
       node.querySelector('.m-info-card__unit').textContent = unit;
     }
-    card(el.stripCount, total, 'عنصر', 'عدد العناصر');
-    card(el.stripUnknown, unknownCount, 'عنصر', 'بلا قيمة معلومة');
-    card(el.stripCats, usedCats, 'فئة', 'فئات قيد الاستخدام');
+    card(el.stripCount, total, 'عنصر', 'عدد العناصر', formatCount);
+    card(el.stripUnknown, unknownCount, 'عنصر', 'بلا قيمة معلومة', formatCount);
+    card(el.stripCats, usedCats, 'فئة', 'فئات قيد الاستخدام', formatCount);
 
     el.homeAll.textContent = 'عرض جميع العناصر (' + total + ')';
 
     /* المقارنة العددية: بطل الكمية + صفوف عدّ كل فئة */
-    el.homeQty.textContent = formatNumber(sumQty);
+    el.homeQty.textContent = formatCount(sumQty);
     el.homeBarsSrc.textContent = '';
     var maxCount = 0;
     cats.forEach(function (c) {
@@ -451,6 +471,7 @@
           li.setAttribute('data-state', 'unavailable');
         } else {
           li.setAttribute('data-value', String(Math.round(s * 100) / 100));
+          li.setAttribute('data-display-value', formatMoney(Math.round(s * 100) / 100));
           li.setAttribute('data-unit', 'د.أ');
           if (s > maxVal) maxVal = s;
         }
@@ -513,7 +534,7 @@
     body.appendChild(meta);
     var val = document.createElement('span');
     val.className = 'f03-row__value';
-    val.textContent = it.value == null ? 'القيمة: —' : 'القيمة: ' + formatNumber(it.value) + ' د.أ';
+    val.textContent = it.value == null ? '—' : formatMoney(it.value) + ' د.أ'; /* R1-UI20: بلا بادئة مكررة وبنمط ثابت */
     btn.appendChild(body);
     btn.appendChild(val);
     li.appendChild(btn);
@@ -836,9 +857,9 @@
     el.readStatus.appendChild(statusBadge(item.status));
     el.readValue.textContent = item.value == null
       ? '— (قيمة مجهولة)'
-      : formatNumber(item.value) + ' د.أ';
+      : formatMoney(item.value) + ' د.أ';
     el.readQty.textContent = formatNumber(item.quantity) + ' وحدة';
-    el.readDate.textContent = item.date || '—';
+    el.readDate.textContent = formatDateAr(item.date);
     el.readNote.textContent = item.note === '' ? '—' : item.note;
 
     /* سجل النشاط من حقول العنصر الفعلية — لا تاريخ مُختلق */
@@ -963,9 +984,11 @@
     el.formTitle.textContent = mode === 'add' ? 'إضافة عنصر' : 'تعديل العنصر';
     el.name.value = state.baseline.name;
     el.note.value = state.baseline.note;
+    el.note.style.height = ''; /* R1-UI21: إعادة النمو لمحتوى هذه الجلسة */
     el.value.value = state.baseline.value;
     el.qty.value = state.baseline.quantity;
     el.date.value = state.baseline.date;
+    if (window.MicroFields) window.MicroFields.sync(el.form); /* R1-UI05/06 */
     setDraftStatus(state.baseline.status);
     setDraftCategory(item ? categoryObj(item.category) : null);
     setNameError(false);
@@ -979,6 +1002,7 @@
     setFieldsReadonly(false);
     renderDirtyHint();
     showView('form', { focusEl: el.name });
+    autoGrowNote(); /* R1-UI21: القياس بعد إظهار العرض — مخفيًا كان scrollHeight صفرًا */
     logEvent('form:open:' + mode, { id: state.formId });
   }
 
@@ -1006,6 +1030,7 @@
     [el.nameField, el.noteField, el.valueField, el.qtyField, el.dateField].forEach(function (f) {
       f.classList.toggle('has-readonly', ro);
     });
+    if (window.MicroFields) window.MicroFields.sync(el.form); /* R1-UI05/06: زر المسح يختفي في readonly ويعود بعدها */
     el.catTrigger.disabled = ro; /* لا تغيير فئة قبل حسم النتيجة */
   }
 
@@ -1027,7 +1052,10 @@
 
   function setNameError(show, text) { fieldError(el.nameField, el.name, el.nameMsg, show, text); }
   function setCatError(show, text) { fieldError(el.catField, el.catTrigger, el.catMsg, show, text); }
-  function setValueError(show, text) { fieldError(el.valueField, el.value, el.valueMsg, show, text); }
+  function setValueError(show, text) {
+    fieldError(el.valueField, el.value, el.valueMsg, show, text);
+    if (el.valueHelp) el.valueHelp.hidden = !!show; /* R1-UI15: الخطأ يحل محل المساعدة */
+  }
   function setQtyError(show, text) { fieldError(el.qtyField, el.qty, el.qtyMsg, show, text); }
 
   function setOpMessage(variant, title, body) {
@@ -1148,6 +1176,13 @@
   el.value.addEventListener('input', syncAfterInput);
   el.qty.addEventListener('input', syncAfterInput);
   el.date.addEventListener('input', function () { renderDirtyHint(); });
+
+  /* R1-UI21: مساحة ابتدائية معتدلة (rows=2) تنمو مع المحتوى وتقرأ كاملة */
+  function autoGrowNote() {
+    el.note.style.height = 'auto';
+    el.note.style.height = el.note.scrollHeight + 'px';
+  }
+  el.note.addEventListener('input', autoGrowNote);
 
   el.statusSeg.addEventListener('micro-selection:segment', function (e) {
     var v = e.detail && e.detail.value;
@@ -1707,12 +1742,13 @@
     var cats = store.categories();
     var unit = metricUnit();
     var metricLabel = state.repMetric === 'value' ? 'القيمة' : 'الكمية';
+    var fmtMetric = state.repMetric === 'value' ? formatMoney : formatCount; /* R1-UI20 */
 
     /* بطاقتا peek من البيانات نفسها */
     var sumAll = 0;
     items.forEach(function (it) { var v = metricValueOf(it); if (v != null) sumAll += v; });
-    el.repTotal.setAttribute('aria-label', 'إجمالي المقياس، ' + formatNumber(sumAll) + ' ' + unit);
-    el.repTotal.querySelector('.m-info-card__number').textContent = formatNumber(sumAll);
+    el.repTotal.setAttribute('aria-label', 'إجمالي المقياس، ' + fmtMetric(sumAll) + ' ' + unit);
+    el.repTotal.querySelector('.m-info-card__number').textContent = fmtMetric(sumAll);
     el.repTotal.querySelector('.m-info-card__unit').textContent = unit;
     el.repIncluded.setAttribute('aria-label', 'عناصر مشمولة، ' + items.length);
     el.repIncluded.querySelector('.m-info-card__number').textContent = formatNumber(items.length);
@@ -1786,7 +1822,7 @@
     el.repMetric.setAttribute('data-common-unit', unit);
     el.repMetric.setAttribute('data-common-period', 'كل الفترات');
     el.repHeroLabel.textContent = 'إجمالي ' + metricLabel;
-    el.repHeroNum.textContent = formatNumber(sumAll);
+    el.repHeroNum.textContent = fmtMetric(sumAll);
     el.repHeroUnit.textContent = unit;
     el.repBarsSrc.textContent = '';
     var maxRow = 0;
@@ -1798,7 +1834,10 @@
       li.setAttribute('data-period', 'كل الفترات');
       li.setAttribute('data-series', seriesOf(p.cat.value));
       if (p.sum == null) li.setAttribute('data-state', 'unavailable');
-      else li.setAttribute('data-value', String(Math.round(p.sum * 100) / 100));
+      else {
+        li.setAttribute('data-value', String(Math.round(p.sum * 100) / 100));
+        li.setAttribute('data-display-value', fmtMetric(Math.round(p.sum * 100) / 100)); /* R1-UI20: عرض منسق داخل صفوف المقارنة */
+      }
       el.repBarsSrc.appendChild(li);
     });
     if (maxRow > 0) el.repMetric.setAttribute('data-max', String(Math.ceil(maxRow)));

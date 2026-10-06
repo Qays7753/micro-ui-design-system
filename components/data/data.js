@@ -119,12 +119,16 @@
     return lines;
   }
 
-  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls) {
+  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep) {
+    /* R1-UI09: خطوة السطر تتبع حجم خط التسمية (≈ 1.5×) — بعد تكبير التسميات
+       (أعمدة 13px/خط 12px) الخطوة 13 الثابتة كانت تصطدم عند مضاعفة حجم
+       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه. */
+    var step = lineStep || 13;
     var lines = wrapLabel(text, maxChars);
     lines.forEach(function (ln, k) {
       var t = svgEl('text', {
         class: cls, x: cx,
-        y: yBottom - (lines.length - 1 - k) * 13,
+        y: yBottom - (lines.length - 1 - k) * step,
         'text-anchor': 'middle'
       });
       t.textContent = ln;
@@ -224,11 +228,12 @@
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
-    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.2));
+    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 12→13px كي يلتف النص قبل الاصطدام */
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var extra = (maxLines - 1) * 13;
+    var BAR_LABEL_STEP = 20; /* R1-UI09: 1.5× تقريبًا لخط 13px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var extra = (maxLines - 1) * BAR_LABEL_STEP;
     var W = 320, H = 180 + extra, base = H - 34 - extra, top = 26;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
@@ -264,7 +269,7 @@
           o.textContent = 'قيمة شاذة'; g.appendChild(o);
         }
       }
-      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label');
+      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -304,11 +309,12 @@
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var n = Math.max(items.length, 2);
-    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.2));
+    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 11→12px كي يلتف النص قبل الاصطدام */
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var extra = (maxLines - 1) * 12;
+    var X_LABEL_STEP = 18; /* R1-UI09: 1.5× تقريبًا لخط 12px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var extra = (maxLines - 1) * X_LABEL_STEP;
     var W = 320, H = 170 + extra, base = H - 30 - extra, top = 24;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
@@ -346,7 +352,7 @@
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
         val.textContent = fmt(it.value); g.appendChild(val);
       }
-      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label');
+      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP);
       svg.appendChild(g);
     });
     plot.innerHTML = '';

@@ -93,6 +93,9 @@
     var scaleNote = chart.querySelector('[data-metric-scale]');
     if (scaleNote) {
       scaleNote.setAttribute('data-valid', String(validLayout && validMax && validRadius && width > 0));
+      /* R1-UI10 (دورة حياة التشخيص — نمط B05): تُمسح السمة كل render ثم
+         تُكتب تشخيصات الدورة الحالية وحدها على الجذر لا في نص المستخدم. */
+      chart.removeAttribute('data-scale-detail');
       if (!validLayout) scaleNote.textContent = 'تعذّر رسم الدوائر: اختر تخطيطًا معروفًا.';
       else if (!validMax) scaleNote.textContent = 'تعذّر رسم الدوائر: مقياس القيم غير صالح أو أصغر من قيمة معلومة.';
       else if (!validRadius) scaleNote.textContent = 'تعذّر رسم الدوائر: الحد الأقصى لحجم الدائرة غير صالح.';
@@ -103,10 +106,16 @@
       else {
         var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
         if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
-        if (declaredRaw === null) scaledMessage += ' يحدّ المقياس أكبر مقدار معروف.';
-        else scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
-        if (radiusRaw !== null) scaledMessage += ' الحجم متكيف مع عرض البطاقة ضمن الحد الذي حدده المستهلك.';
+        if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
         if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
+        /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
+           data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
+           وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
+           أو المعلن) — لا يظهر في نص الواجهة. */
+        chart.setAttribute('data-scale-detail',
+          'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
+          + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+          + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
         scaleNote.textContent = scaledMessage;
       }
     }

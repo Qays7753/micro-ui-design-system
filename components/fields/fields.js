@@ -9,6 +9,18 @@
      3) خطوة الكمية (زيادة/نقصان) بحدود وخطوة يمررها المستهلك
         (min/max/step من السمات أو data-* على الغلاف).
      4) ربط الرسالة بالحقل عبر aria-describedby تلقائيًا إن لم يتصله.
+     5) عقد مزامنة القيم المعينة برمجيًا: MicroFields.sync(root)
+        (UI-05/UI-06) — إعادة حساب عدّاد الأحرف وظهور زر المسح من
+        القيم الحالية دون إطلاق أي حدث تعديل (لا input ولا change
+        ولا micro-field:*) ودون أي أثر جانبي (لا يجعل النموذج dirty).
+
+   الواجهة العلنية (window.MicroFields):
+     init(root): تهيئة/ربط حقول النطاق (تلقائيًا عند التحميل).
+     sync(root): مزامنة عدّاد الأحرف وظهور زر المسح بعد تعيين
+                 القيم برمجيًا (input.value = ...) — بلا أحداث
+                 تعديل زائفة. root = عنصر حقل واحد [data-micro-field]
+                 أو أي نطاق (عندها تُزامَن كل حقوله)؛ الحقول غير
+                 المربوطة تُتجاهل بصمت.
 
    مثال استخدام أدنى (خارج لوحة المعاينة):
    ─────────────────────────────────────────────────────────
@@ -36,6 +48,21 @@
 
   function fieldOf(el) { return el.closest('[data-micro-field]'); }
 
+  /* UI-05/UI-06: عقد مزامنة القيم المعينة برمجيًا — دوال التحديث
+     نفسها المستدعاة على حدث input تُحفظ على الغلاف (مصدر واحد
+     للحقيقة) ليستدعيها MicroFields.sync(root) لاحقًا؛ هي بلا
+     أحداث ولا آثار جانبية أصلا (نص العدّاد وصنف is-visible فقط). */
+  function registerSync(f, fn) {
+    if (!Array.isArray(f.__microFieldSyncs)) f.__microFieldSyncs = [];
+    f.__microFieldSyncs.push(fn);
+  }
+
+  function runSyncs(f) {
+    var list = f.__microFieldSyncs;
+    if (!list || !list.length) return; /* حقل غير مربوط — يُتجاهل بصمت */
+    for (var i = 0; i < list.length; i++) list[i]();
+  }
+
   function bindCount(f) {
     var input = f.querySelector('.m-field__input, .m-field__area');
     var count = f.querySelector('.m-field__count');
@@ -46,6 +73,7 @@
       count.textContent = input.value.length + '/' + max;
     }
     input.addEventListener('input', update);
+    registerSync(f, update); /* UI-05: نفس دالة الحدث للمزامنة البرمجية */
     update();
   }
 
@@ -67,6 +95,8 @@
       input.dispatchEvent(new Event('micro-field:cleared', { bubbles: true }));
     });
     input.addEventListener('input', sync);
+    registerSync(f, sync); /* UI-06: نفس دالة الحدث للمزامنة البرمجية —
+                              دالة locked تُحترم فيها أيضا (readonly/disabled بلا مسح) */
     sync();
   }
 
@@ -130,8 +160,22 @@
     });
   }
 
-  /* واجهة عامة: تهيئة يدوية للمحتوى المضاف لاحقًا */
-  window.MicroFields = { init: init };
+  /* UI-05/UI-06: مزامنة حالة الحقول من قيمها الحالية بعد تعيينها
+     برمجيًا (input.value = ...) — بلا إطلاق أي حدث تعديل (لا input
+     ولا change ولا micro-field:*) وبلا أثر جانبي، فلا يصبح النموذج
+     dirty بسببها. تقبل عنصر حقل واحد أو أي نطاق (document/عنصر
+     حاوي) فتُزامن كل حقوله؛ الحقول غير المربوطة تُتجاهل بصمت. */
+  function sync(root) {
+    var scope = (root && typeof root.querySelectorAll === 'function') ? root : document;
+    if (scope.nodeType === 1 && scope.matches('[data-micro-field]')) {
+      runSyncs(scope);
+    }
+    scope.querySelectorAll('[data-micro-field]').forEach(runSyncs);
+  }
+
+  /* واجهة عامة: init تهيئة يدوية للمحتوى المضاف لاحقًا؛
+     sync مزامنة العدّاد/المسح بعد تعيين القيم برمجيًا. */
+  window.MicroFields = { init: init, sync: sync };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

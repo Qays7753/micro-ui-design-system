@@ -111,7 +111,10 @@
   color: var(--micro-text-primary);
 }
 .m-chart__plot { width: 100%; }
-.m-chart__plot svg { display: block; width: 100%; height: auto; }
+/* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
+   .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
+   الأعمدة/الخط تتمدد بعرض البطاقة كالمعتاد. */
+.m-chart__plot svg:not(.m-donut__svg) { display: block; width: 100%; height: auto; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
   margin: 0;
@@ -153,13 +156,15 @@
 
 /* ---- الأعمدة (SVG يصيّره data.js) ----
    القيمة فوق العمود والفئة تحته دائمًا. صفر = عمود صفر ظاهر على الأساس. */
+/* R1-UI09: قفزة واحدة متدرجة لقراءة تسميات SVG على الهاتف —
+   أعمدة 12→13px وخط/دونات 11→12px (لا تكبير عشوائي). */
 .m-chart--bars .m-chart__bar-label {
-  font-size: 12px;
+  font-size: 13px;
   fill: var(--micro-text-secondary);
   font-family: var(--micro-font-family);
 }
 .m-chart--bars .m-chart__bar-value {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   fill: var(--micro-text-primary);
   font-variant-numeric: tabular-nums;
@@ -173,11 +178,11 @@
 .m-chart--line .m-chart__line { fill: none; stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
-  font-size: 11px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-size: 12px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart--line .m-chart__x-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart--line .m-chart__x-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {
@@ -197,7 +202,7 @@
 .m-donut { display: flex; align-items: center; gap: var(--micro-space-5); flex-wrap: wrap; }
 .m-donut__svg { width: 148px; height: 148px; flex: none; }
 .m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
-.m-donut__center-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- دوائر المساحة ----
    المساحة تتناسب مع القيمة: نصف القطر √القيمة. لا حد أدنى يزوّر

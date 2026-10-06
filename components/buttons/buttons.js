@@ -85,12 +85,12 @@
     delete btn.dataset.labelWrapped;
   }
 
-  /* يضمن وجود مؤشر التحميل في موضع صحيح:
+  /* يضمن وجود مؤشر التحميل في موضع صحيح (عقد R1-UI02):
      - زر بأيقونة: المؤشر يحل مكان الأيقونة نفسها (فتحة 20px / 24px
        الدائري) فيبقى عرض الزر وزاوية النص كما هما.
      - زر نصي بلا أيقونة (B الافتراضي، وm-btn--loading-slot توافقي):
-       التسمية تبقى ظاهرة والمؤشر في الفتحة المحجوزة في الحشو —
-       لا تغليف ولا إخفاء للنص.
+       لا حجز مسبق — التسمية تبقى ظاهرة والمؤشر يظهر أثناء التحميل داخل
+       حشو بداية الزر نفسه (20px) فلا يتغير العرض ولا الارتفاع.
      - زر نصي مع m-btn--loading-replace (A توافقي صريح): النص يبقى محفوظ المكان
        (opacity:0) والمؤشر يتوسط الزر (صف is-loading--text) — الأبعاد
        ثابتة بالبنية. */
@@ -104,7 +104,9 @@
     if (icon) {
       icon.parentElement.insertBefore(spinner, icon); /* فتحة الأيقونة نفسها */
     } else if (!btn.classList.contains('m-btn--loading-replace')) {
-      /* Default B: CSS reserves the slot before loading; label stays visible.
+      /* Default B (R1-UI02): no reserved slot — the label stays visible and
+         the spinner appears inside the button's inline-start padding while
+         loading, so box size is identical across the three phases.
          Explicit loading-replace preserves legacy A without changing the API. */
       btn.insertBefore(spinner, btn.firstChild);
     } else {
@@ -134,8 +136,9 @@
    * - الزر أثناء التحميل يبقى قابلًا للتركيز (ليس disabled) فلا يضيع
    *   التركيز من مستخدم لوحة المفاتيح، وحلقة التركيز تبقى ظاهرة.
    * - منع التفعيل: pointer-events:none + حراسة click/keydown أعلاه.
-    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة والمؤشر
-    *   في فتحة محجوزة قبل التحميل؛ العرض ثابت بالبنية نفسها.
+    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة ويُظهر المؤشر
+    *   أثناء التحميل داخل حشو بداية الزر نفسه — بلا حجز مساحة قبل
+    *   التحميل، فالعرض والارتفاع ثابتان في الأطوار الثلاثة (R1-UI02).
     *   A عبر m-btn--loading-replace يخفي النص بصريًا فقط مع حفظ
     *   مكانه واسمه الإتاحي. يعود النص كما كان عند التوقف.
    */

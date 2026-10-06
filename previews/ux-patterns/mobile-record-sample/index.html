@@ -15,6 +15,7 @@
   - الرموز أدناه من أصول assets/icons (HugeIcons Stroke Rounded) بنفس
     محتواها وخصائصها (fill="none" على الأصل) — أداة البناء تتحقق من كل
     رمز مقابل ملفه وتفشل عند أي انحراف.
+  جولة UI-SOURCE-REPAIR-R1: اعتماد الأسطح (UI-01) وخطوة كمية بعقد B01 (UI-04) ومساعدة القيمة (UI-15) وتوزيع مختصر (UI-07/13/19).
   السلوك: example.js — المخزن: demo-store.js — الموصل: mock-adapter.js
   التنسيق: example.css (توكنات المكتبة فقط)
 ========================================================= -->
@@ -39,6 +40,8 @@
   <link rel="stylesheet" href="../../../components/metric-comparison/metric-comparison.css">
   <link rel="stylesheet" href="../../../components/account-settings/account-settings.css">
   <link rel="stylesheet" href="../../../components/access-gateway/access-gateway.css">
+  <link rel="stylesheet" href="../../../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../../../components/surfaces/curves.css">
   <link rel="stylesheet" href="example.css">
 </head>
 <body>
@@ -108,6 +111,12 @@
       <circle cx="7.5" cy="7.5" r="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
       <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" key="1" />
       <path d="M5 21C9.37246 15.775 14.2741 8.88406 21.4975 13.5424" stroke="currentColor" stroke-width="1.5" key="2" />
+    </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" data-icon-source="minus-sign.svg"><!-- assets/icons/minus-sign.svg -->
+      <path d="M20 12L4 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" data-icon-source="plus-sign.svg"><!-- assets/icons/plus-sign.svg -->
+      <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
   </svg>
 
@@ -218,7 +227,7 @@
 
       <section class="f03-block" id="f03-home-compare" aria-labelledby="f03-home-compare-title">
         <h3 class="f03-block__title" id="f03-home-compare-title">مقارنة سريعة</h3>
-        <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="عنصر" data-common-period="كل الفترات" id="f03-home-metric" aria-label="مقارنة عدد الفئات">
+        <section class="m-main-metric m-main-metric--compact f03-metric" data-main-comparison data-common-unit="عنصر" data-common-period="كل الفترات" id="f03-home-metric" aria-label="مقارنة عدد الفئات">
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">إجمالي الكمية</span>
@@ -401,7 +410,7 @@
           <label class="m-field__label" for="f03-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
           <div class="m-field__control">
             <input class="m-field__input" id="f03-name" name="name" type="text" maxlength="40" autocomplete="off">
-            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"></button>
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <p class="m-field__msg" id="f03-name-msg" data-field-msg hidden></p>
           <span class="m-field__count" aria-hidden="true"></span>
@@ -416,29 +425,36 @@
           <p class="m-field__msg" id="f03-cat-msg" data-field-msg hidden></p>
         </div>
 
-        <div class="m-field" data-micro-field id="f03-value-field">
-          <label class="m-field__label" for="f03-value">القيمة <span class="m-field__required">(اختيارية — الفارغ يعني قيمة مجهولة)</span></label>
-          <div class="m-field__control">
-            <input class="m-field__input m-field__input--num" id="f03-value" name="value" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
-            <span class="m-field__unit">د.أ</span>
+        <div class="f03-field-row">
+          <div class="m-field" data-micro-field id="f03-value-field">
+            <label class="m-field__label" for="f03-value">القيمة <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="f03-value" name="value" type="text" inputmode="decimal" dir="ltr" placeholder="0.00" aria-describedby="f03-value-help">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+            <p class="f03-field-help" id="f03-value-help">الفارغ يعني قيمة غير معلومة — وليس صفرًا.</p>
+            <p class="m-field__msg" id="f03-value-msg" data-field-msg hidden></p>
           </div>
-          <p class="m-field__msg" id="f03-value-msg" data-field-msg hidden></p>
-        </div>
 
-        <div class="m-field" data-micro-field id="f03-qty-field">
-          <label class="m-field__label" for="f03-qty">الكمية</label>
-          <div class="m-field__control m-field__stepper">
-            <button type="button" data-step="down" aria-label="إنقاص الكمية">−</button>
-            <input class="m-field__input m-field__input--num" id="f03-qty" name="quantity" type="text" inputmode="numeric" dir="ltr" min="0" max="9999" step="1" value="0">
-            <button type="button" data-step="up" aria-label="زيادة الكمية">+</button>
+          <div class="m-field" data-micro-field id="f03-qty-field">
+            <label class="m-field__label" for="f03-qty">الكمية</label>
+            <div class="m-field__control">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+              </div>
+              <input class="m-field__input m-field__input--num" id="f03-qty" name="quantity" type="text" inputmode="numeric" dir="ltr" min="0" max="9999" step="1" value="0">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              </div>
+            </div>
+            <p class="m-field__msg" id="f03-qty-msg" data-field-msg hidden></p>
           </div>
-          <p class="m-field__msg" id="f03-qty-msg" data-field-msg hidden></p>
         </div>
 
         <div class="m-field" data-micro-field id="f03-date-field">
           <label class="m-field__label" for="f03-date">التاريخ <span class="m-field__required">(اختياري)</span></label>
           <div class="m-field__control">
-            <input class="m-field__input m-field__input--num" id="f03-date" name="date" type="date">
+            <input class="m-field__input" id="f03-date" name="date" type="date">
           </div>
           <p class="m-field__msg" id="f03-date-msg" data-field-msg hidden></p>
         </div>
@@ -455,7 +471,7 @@
         <div class="m-field" data-micro-field id="f03-note-field">
           <label class="m-field__label" for="f03-note">الملاحظة <span class="m-field__required">(اختيارية)</span></label>
           <div class="m-field__control">
-            <textarea class="m-field__area" id="f03-note" name="note" rows="3"></textarea>
+            <textarea class="m-field__area" id="f03-note" name="note" rows="2"></textarea>
           </div>
         </div>
 
@@ -530,13 +546,6 @@
         <p class="m-chart__summary" data-summary></p>
       </div>
 
-      <div class="m-chart m-chart--donut" data-chart="donut" id="f03-rep-donut">
-        <h3 class="m-chart__title" id="f03-rep-donut-title">توزيع القيمة على الفئات</h3>
-        <ul class="m-chart__data" hidden id="f03-rep-donut-data"></ul>
-        <div class="m-chart__plot" data-plot></div>
-        <p class="m-chart__summary" data-summary></p>
-      </div>
-
       <div class="m-chart m-chart--line" data-chart="line" id="f03-rep-line">
         <h3 class="m-chart__title" id="f03-rep-line-title">القيمة أسبوعيًا</h3>
         <ul class="m-chart__data" hidden id="f03-rep-line-data"></ul>
@@ -544,7 +553,7 @@
         <p class="m-chart__summary" data-summary></p>
       </div>
 
-      <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="د.أ" data-common-period="كل الفترات" id="f03-rep-metric" aria-label="مقارنة الفئات">
+      <section class="m-main-metric m-main-metric--compact f03-metric" data-main-comparison data-common-unit="د.أ" data-common-period="كل الفترات" id="f03-rep-metric" aria-label="مقارنة الفئات">
         <div class="m-main-metric__layout">
           <div class="m-main-metric__hero">
             <span class="m-main-metric__label" id="f03-rep-hero-label">إجمالي القيمة</span>
@@ -561,6 +570,21 @@
       <section class="f03-block" aria-labelledby="f03-rep-known-title">
         <h3 class="f03-block__title" id="f03-rep-known-title">القيم المعلومة لكل فئة</h3>
         <div class="f03-dist" id="f03-rep-known"></div>
+      </section>
+
+      <section class="m-section" id="f03-rep-extra">
+        <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-rep-donut-body">
+          <span class="m-section__title">توزيع إضافي (دونات)</span>
+          <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="m-section__body" id="f03-rep-donut-body" hidden>
+          <div class="m-chart m-chart--donut" data-chart="donut" id="f03-rep-donut">
+            <h3 class="m-chart__title" id="f03-rep-donut-title">توزيع القيمة على الفئات</h3>
+            <ul class="m-chart__data" hidden id="f03-rep-donut-data"></ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
       </section>
     </section>
 

@@ -3,7 +3,9 @@
   Micro UI — مثال استخدام مستقل لحقول B02 — SYS-02/E11
   بلا board.css/board.js — مصادر المكوّن + تركيب أزرار B01 موثق.
   فحوص مدمجة: IDs رسائل فريدة لحقلين متطابقين، دمج وصف سابق،
-  مسح readonly محمي، عدّاد، خطوة بحدود. النتائج في الصفحة.
+  مسح readonly محمي، عدّاد، خطوة بحدود، ومزامنة القيم المعينة
+  برمجيًا عبر MicroFields.sync (عدّاد/مسح بلا أحداث تعديل).
+  النتائج في الصفحة.
 ========================================================= -->
 <html lang="ar" dir="rtl">
 <head>
@@ -66,6 +68,23 @@
       t('العدّاد يتبع القيمة (حد معلن)', cnt === '9/40', cnt);
       inp.closest('.m-field__control').querySelector('.m-field__clear').click();
       t('المسح يفرّغ القيمة ويعيد التركيز', inp.value === '' && document.activeElement === inp);
+      /* UI-05/UI-06: مزامنة القيم المعينة برمجيًا (لا حدث input مع input.value) */
+      var evCount = 0;
+      inp.addEventListener('input', function () { evCount++; });
+      inp.value = 'عنصر تجريبي'; /* تعيين برمجي بلا dispatchEvent */
+      var staleCnt = document.querySelector('.m-field__count').textContent;
+      var staleClear = fields[0].querySelector('.m-field__clear').classList.contains('is-visible');
+      t('قبل المزامنة: العدّاد متقادم 0/40 والمسح مخفي بعد تعيين برمجي', staleCnt === '0/40' && !staleClear, staleCnt + ' / clear=' + staleClear);
+      MicroFields.sync(fields[0]);
+      var syncCnt = document.querySelector('.m-field__count').textContent;
+      var syncClear = fields[0].querySelector('.m-field__clear').classList.contains('is-visible');
+      t('MicroFields.sync(field) يحدّث العدّاد 11/40 ويظهر المسح', syncCnt === '11/40' && syncClear, syncCnt + ' / clear=' + syncClear);
+      t('المزامنة لا تطلق أي حدث input', evCount === 0, 'أحداث input=' + evCount);
+      inp.readOnly = true;
+      MicroFields.sync(fields[0]);
+      var roClear = fields[0].querySelector('.m-field__clear').classList.contains('is-visible');
+      t('المزامنة تحترم readonly: المسح يختفي والقيمة تبقى', !roClear && inp.value === 'عنصر تجريبي');
+      inp.readOnly = false;
       document.getElementById('results').textContent = out.join('\n');
       console.log('[example] نتائج فحص الحقول:\n' + out.join('\n'));
     })();

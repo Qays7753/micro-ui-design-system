@@ -762,9 +762,9 @@ def p14_single_delete_confirm(t: CheckTool, page, url):
     page.click("#f03-nav-home")
     t.wait_view(page, "home")
     i = t.insp(page)
-    t.assert_("ملخص الرئيسية تحدّث بعد الحذف (797.35 − 42.75)", {"total": "754.6", "count": "8"},
+    t.assert_("ملخص الرئيسية تحدّث بعد الحذف (797.35 − 42.75)", {"total": "754.60", "count": "8"},
               {"total": i["home"]["totalText"], "count": i["home"]["strip"]["count"]},
-              i["home"]["totalText"] == "754.6" and i["home"]["strip"]["count"] == "8")
+              i["home"]["totalText"] == "754.60" and i["home"]["strip"]["count"] == "8")
     t.path_end()
 
 
@@ -943,9 +943,9 @@ def p19_edit_flow_updates_everywhere(t: CheckTool, page, url):
     t.wait_view(page, "detail", timeout=8000)
     page.wait_for_timeout(150)
     i = t.insp(page)
-    t.assert_("التفاصيل تعرض القيم الملتزمة", {"name": "عنصر دال محدث", "value": "99.5 د.أ"},
+    t.assert_("التفاصيل تعرض القيم الملتزمة", {"name": "عنصر دال محدث", "value": "99.50 د.أ"},
               {"name": i["detailRead"]["name"], "value": i["detailRead"]["value"]},
-              i["detailRead"]["name"] == "عنصر دال محدث" and i["detailRead"]["value"] == "99.5 د.أ")
+              i["detailRead"]["name"] == "عنصر دال محدث" and i["detailRead"]["value"] == "99.50 د.أ")
     t.assert_("رسالة نجاح مكتوبة في سياق التفاصيل", {"note": "تم حفظ التعديلات", "visible": True, "inert": False},
               {"note": i["detailNote"]["title"] if i["detailNote"] else None,
                "visible": i["detailNoteVisible"], "inert": i["detailNoteInertAncestor"]},
@@ -1133,9 +1133,9 @@ def p24_unknown_check_saved_add_idempotent(t: CheckTool, page, url):
     page.wait_for_timeout(150)
     i = t.insp(page)
     t.assert_("الإضافة التزمت مرة واحدة: 9→10", 10, i["storeCount"], i["storeCount"] == 10)
-    t.assert_("التفاصيل تعرض العنصر الملتزم", {"name": "إضافة عبر التحقق", "value": "77 د.أ"},
+    t.assert_("التفاصيل تعرض العنصر الملتزم", {"name": "إضافة عبر التحقق", "value": "77.00 د.أ"},
               {"name": i["detailRead"]["name"], "value": i["detailRead"]["value"]},
-              i["detailRead"]["name"] == "إضافة عبر التحقق" and i["detailRead"]["value"] == "77 د.أ")
+              i["detailRead"]["name"] == "إضافة عبر التحقق" and i["detailRead"]["value"] == "77.00 د.أ")
     t.goto_view(page, "home")
     i = t.insp(page)
     t.assert_("الرئيسية: العدد 10 والإجمالي 874.35", {"count": "10", "total": "874.35"},
@@ -1466,8 +1466,8 @@ def p34_storage_persistence_and_reload(t: CheckTool, page, url):
     page.click("#f03-list-rows .f03-row[data-id='it-06']")
     t.wait_view(page, "detail")
     i = t.insp(page)
-    t.assert_("بعد إعادة الفتح: القيمة المحفوظة معروضة", "55 د.أ", i["detailRead"]["value"],
-              i["detailRead"]["value"] == "55 د.أ")
+    t.assert_("بعد إعادة الفتح: القيمة المحفوظة معروضة", "55.00 د.أ", i["detailRead"]["value"],
+              i["detailRead"]["value"] == "55.00 د.أ")
     seed = page.evaluate("() => window.F03h.storageSeed()")
     t.assert_("مفتاح v2 يحمل الحقول الجديدة", True,
               {"schema": seed is not None and "items" in seed and "settings" in seed},

@@ -17,7 +17,7 @@
     <svg class="m-field__search-icon">                  ← البحث فقط
     <button class="m-btn m-btn--icon m-btn--secondary m-field__clear"> ← البحث فقط (من B01 كما هو)
     <span class="m-field__unit">د.أ</span>              ← المبلغ/الكمية فقط
-    <div class="m-field__stepper"><button class="m-btn m-btn--icon" data-step="down|up"> ← الكمية
+    <div class="m-field__stepper">…زر B01 خطوة…</div>   ← الكمية (عقد التركيب أدناه)
   </div>
   <p class="m-field__msg" data-field-msg hidden>…</p>   ← مساعدة/خطأ/نجاح — مرتبطة aria-describedby
   <span class="m-field__count">12/40</span>             ← عند حد معلن فقط
@@ -25,7 +25,34 @@
 ```
 
 - لا placeholder بديلًا عن التسمية — التلميح شكل الإدخال المتوقع فقط.
-- زر المسح وزرّا الخطوة زرّا B01 الحقيقيان (48px هدف لمس) — لا نسخ لشكل B02.
+- زر المسح زر B01 حقيقي (48px هدف لمس) — لا نسخ لشكل B02.
+- **تركيب خطوة الكمية الرسمي (عقد UI-04)**: زرا الزيادة/النقصان زرا B01
+  أيقونيان حقيقيان — `m-btn m-btn--icon m-btn--secondary` بهدف لمس 48px —
+  يحملان `data-step="up"`/`data-step="down"` مع `aria-label` عربي صريح
+  (مثل «زيادة الكمية»/«إنقاص الكمية»)، كلٌّ داخل عنصر `.m-field__stepper`
+  مستقل داخل `.m-field__control`، والقيمة `input` رقمي
+  (`m-field__input--num` مع `min`/`max`/`step`) بين الغلافين، والوحدة
+  `span.m-field__unit` بعدهما — كما في أمثلة المكتبة الرسمية
+  (`previews/fields/index.html`):
+
+  ```
+  <div class="m-field__control">
+    <div class="m-field__stepper">
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary"
+              data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon"…></button>
+    </div>
+    <input class="m-field__input m-field__input--num" … min max step>
+    <div class="m-field__stepper">
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary"
+              data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon"…></button>
+    </div>
+    <span class="m-field__unit">…</span>
+  </div>
+  ```
+
+  الأزرار الخام (نص −/+) بمقاسات مخصصة خارج عقد B01 (كما ظهر في عينة
+  F03 بعرض 24×21px) **خارج هذا العقد** — من يخرج عنه يتحمل هدف اللمس
+  48px وشكل الحالة بنفسه، والمكوّن لا يضمن له شيئًا.
 - **ترتيب التحميل**: tokens ثم buttons.css ثم fields.css (خصوصية `.m-field .m-field__clear` أعلى من `.m-btn` فلا يحسم الترتيب المسح، والباقي مستقل).
 
 ## 3) الخصائص والمدخلات
@@ -39,7 +66,18 @@
 | حدود الكمية وخطوتها | المستهلك | سمات `min`/`max`/`step` على الحقل — لا قواعد مالية داخلية |
 | حالة الخطأ/النجاح/المعطل/القراءة فقط | المستهلك | أصناف `has-*` على الغلاف + سمات `disabled`/`readonly` الأصلية |
 
-مخرجات: قيم الحقول قياسية (`input`/`textarea`) وأحداث خاصة `micro-field:cleared` و`micro-field:changed` (bubbles) للراحة — موثقة، والاستهلاك المباشر بالقيمة ممكن دائمًا. القيم الافتراضية: لا شيء مخفي؛ كل سلوك بلا سمة = سلوك إدخال أصلي.
+مخرجات: قيم الحقول قياسية (`input`/`textarea`) وأحداث خاصة `micro-field:cleared` و`micro-field:changed` (bubbles) للراحة — موثقة، والاستهلاك المباشر بالقيمة ممكن دائمًا. الواجهة العلنية `window.MicroFields`:
+
+- `init(root)`: ربط حقول النطاق (يُستدعى تلقائيًا عند التحميل، ويدويًا للمحتوى المضاف).
+- `sync(root)` **(عقد UI-05/UI-06)**: مزامنة عدّاد الأحرف وظهور زر المسح بعد
+  تعيين القيم برمجيًا (`input.value = …` — تعيين القيمة لا يطلق `input`) —
+  **بلا أحداث تعديل زائفة**: لا تطلق sync أي `input`/`change`/`micro-field:*`
+  ولا أي أثر جانبي (لا تجعل النموذج dirty)؛ تعيد حساب الحالة من القيم
+  الحالية فقط. تقبل عنصر حقل واحد `[data-micro-field]` أو أي نطاق (تُزامن
+  كل حقوله)، والحقول غير المربوطة تُتجاهل بصمت. حراسة `readonly`/`disabled`
+  محفوظة داخل sync بدوال الحدث نفسها (لا مسح على حقل مقفل).
+
+القيم الافتراضية: لا شيء مخفي؛ كل سلوك بلا سمة = سلوك إدخال أصلي.
 
 ## 4) الحالات المنطبقة والمتزامنة
 
@@ -77,6 +115,11 @@
 3. القراءة فقط ليست معطلة — لا تحجب النسخ ولا تخفض الوضوح.
 4. الحدود والخطوة والدقة تُمرر كسمات — لا تُخترع داخل المكوّن.
 5. النجاح للحالة المثبتة فقط (تحقق رمز/مطابقة) لا لكل امتلاء.
+6. زرّا خطوة الكمية زرا B01 كاملان داخل `.m-field__stepper` — لا أزرار خام بمقاسات مخصصة.
+7. عند ملء النموذج برمجيًا (فتح نموذج تعديل بقيم سجل): استدعِ
+   `MicroFields.sync(field)` (أو `sync(root)` للنموذج كله) بعد التعيين
+   لتحديث العدّاد وزر المسح — لا تعتمد على حدث `input` لأن تعيين
+   `input.value` لا يطلقه، ولا تطلق أحداثًا زائفة بيدك.
 
 ## 8) أين أعدّل؟
 

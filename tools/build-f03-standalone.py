@@ -50,6 +50,8 @@ EXPECTED_CSS = [
     "components/metric-comparison/metric-comparison.css",
     "components/account-settings/account-settings.css",
     "components/access-gateway/access-gateway.css",
+    "components/surfaces/surfaces.css",
+    "components/surfaces/curves.css",
     "previews/ux-patterns/mobile-record-sample/example.css",
 ]
 EXPECTED_JS = [

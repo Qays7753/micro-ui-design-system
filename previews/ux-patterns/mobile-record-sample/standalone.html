@@ -49,6 +49,7 @@ SOFTWARE.
   - الرموز أدناه من أصول assets/icons (HugeIcons Stroke Rounded) بنفس
     محتواها وخصائصها (fill="none" على الأصل) — أداة البناء تتحقق من كل
     رمز مقابل ملفه وتفشل عند أي انحراف.
+  جولة UI-SOURCE-REPAIR-R1: اعتماد الأسطح (UI-01) وخطوة كمية بعقد B01 (UI-04) ومساعدة القيمة (UI-15) وتوزيع مختصر (UI-07/13/19).
   السلوك: example.js — المخزن: demo-store.js — الموصل: mock-adapter.js
   التنسيق: example.css (توكنات المكتبة فقط)
 ========================================================= -->
@@ -640,7 +641,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 /* التحميل: يمنع التكرار مع ثبات المساحة.
    - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
-   - زر نصي: فتحة محجوزة قبل التحميل؛ التسمية باقية والمؤشر لا يحركها.
+   - زر نصي: لا حجز لمساحة المؤشر في الحالة العادية (R1-UI02)؛ أثناء
+     التحميل يتمركز المؤشر داخل حشو بداية السطر نفسه فتبقى التسمية
+     في مكانها ويبقى العرض والارتفاع ثابتين في الأطوار الثلاثة.
    pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
    عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
 .m-btn.is-loading,
@@ -687,17 +690,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   border-radius: var(--micro-radius-button-long);
 }
 
-/* Legacy opt-in hook retained for markup compatibility. The production
-   default reserves the same slot on text-only controls before loading. */
+/* Legacy opt-in hook: explicitly reserves the loading slot (48px inline
+   padding per side). Since R1-UI02 the production default reserves nothing
+   in the resting state — this class is the explicit way to opt back into
+   the old reservation. The matching spinner rule is declared after the
+   default-B block below: equal specificity (0,3,0), so source order keeps
+   its reserved-slot offset (padding+gap)/2 = 14px unchanged. */
 .m-btn--loading-slot {
   padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
-}
-.m-btn--loading-slot.is-loading .m-btn__spinner {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
-  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
 }
 
 @keyframes micro-spin {
@@ -717,12 +717,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   }
 }
 
-/* Stable default B: indicator occupies a reserved inline-start slot while
-   the readable label remains visible. The reservation exists before loading. */
+/* عقد B الافتراضي للتحميل النصي — إصلاح R1-UI02 (جولة UI-SOURCE-REPAIR-R1):
+   - لا حجز في الحالة العادية: حشو الزر النصي يبقى توكنه (20px لكل جانب)
+     لأي زر نصي بلا أيقونة (قاعدة الحجز السابقة كانت تضيف 20+8=28px لكل
+     جانب فتضخّم كل زر نصي ساكن 56px إجمالًا — عيب مكوّن مشترك).
+   - أثناء التحميل: المؤشر (20px) يتمركز عموديًا داخل حشو بداية السطر
+     نفسه — inset-inline-start = (padding − icon)/2 = 0px عند تساوي
+     التوكنين — فلا تداخل مع التسمية ولا تغيّر في العرض/الارتفاع.
+   - الأبعاد ثابتة قبل/أثناء/بعد التحميل بلا تضخيم.
+   - الأزرار ذات الأيقونة كما هي: المؤشر في فتحة الأيقونة نفسها.
+   - التوافق الصريح بلا تغيير: m-btn--loading-slot (حجز فتحة مسبقة)
+     وm-btn--loading-replace (نمط A القديم بتوسيط المؤشر). */
 .m-btn:not(.m-btn--icon) .m-btn__spinner {
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button)) / 2);
   margin-block: auto;
   visibility: hidden;
 }
@@ -731,15 +740,20 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   visibility: visible;
   margin: 0;
 }
-.m-btn:not(.m-btn--icon):not(.m-btn--loading-replace):not(:has(.m-btn__icon)) {
-  padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
-}
 .m-btn:not(.m-btn--icon).is-loading .m-btn__spinner,
 .m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__spinner { visibility: visible; }
 .m-btn:not(.m-btn--icon).is-loading .m-btn__label,
 .m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__label { opacity: 1; }
 .m-btn--icon { padding-inline: 0; }
 .m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
+
+.m-btn--loading-slot.is-loading .m-btn__spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
+}
 
 /* Explicit legacy A compatibility; never the default. */
 .m-btn--loading-replace:not(.m-btn--icon):not(:has(.m-btn__icon)) {
@@ -2356,7 +2370,10 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-primary);
 }
 .m-chart__plot { width: 100%; }
-.m-chart__plot svg { display: block; width: 100%; height: auto; }
+/* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
+   .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
+   الأعمدة/الخط تتمدد بعرض البطاقة كالمعتاد. */
+.m-chart__plot svg:not(.m-donut__svg) { display: block; width: 100%; height: auto; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
   margin: 0;
@@ -2398,13 +2415,15 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 /* ---- الأعمدة (SVG يصيّره data.js) ----
    القيمة فوق العمود والفئة تحته دائمًا. صفر = عمود صفر ظاهر على الأساس. */
+/* R1-UI09: قفزة واحدة متدرجة لقراءة تسميات SVG على الهاتف —
+   أعمدة 12→13px وخط/دونات 11→12px (لا تكبير عشوائي). */
 .m-chart--bars .m-chart__bar-label {
-  font-size: 12px;
+  font-size: 13px;
   fill: var(--micro-text-secondary);
   font-family: var(--micro-font-family);
 }
 .m-chart--bars .m-chart__bar-value {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   fill: var(--micro-text-primary);
   font-variant-numeric: tabular-nums;
@@ -2418,11 +2437,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-chart--line .m-chart__line { fill: none; stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
-  font-size: 11px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-size: 12px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart--line .m-chart__x-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart--line .m-chart__x-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {
@@ -2442,7 +2461,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-donut { display: flex; align-items: center; gap: var(--micro-space-5); flex-wrap: wrap; }
 .m-donut__svg { width: 148px; height: 148px; flex: none; }
 .m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
-.m-donut__center-label { font-size: 11px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- دوائر المساحة ----
    المساحة تتناسب مع القيمة: نصف القطر √القيمة. لا حد أدنى يزوّر
@@ -3125,7 +3144,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 .m-main-metric--compact .m-main-metric__rows { gap: var(--micro-space-1); }
 .m-main-metric--compact .m-main-metric__row { gap: 0; }
-.m-main-metric--compact .m-main-metric__track { height: var(--micro-space-1); }
+.m-main-metric--compact .m-main-metric__track { height: var(--micro-space-2); } /* R1-UI17: 4→8px في الوضع المدمج */
 
 .m-main-metric[data-hero-reading] .m-main-metric__layout {
   grid-template-columns: minmax(0, 1fr);
@@ -3218,7 +3237,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 .m-main-metric__track {
   position: relative;
-  height: var(--micro-space-2);
+  height: var(--micro-space-3); /* R1-UI17: 8→12px شريط أوضح للمسح البصري (compact: 8px أدناه) */
   border-radius: var(--micro-radius-capsule);
   background: var(--micro-surface-disabled);
   overflow: hidden;
@@ -3230,7 +3249,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   height: 100%;
   border-radius: inherit;
   background: var(--micro-brand-primary);
-  box-shadow: inset 0 0 0 1px var(--micro-text-primary);
+  /* R1-UI17: حد خافت 30% من التوكن نفسه بدل الحد الداكن المصمت — يُبقي ظهور
+     الشرائح الفاتحة (b/c/e) فوق المقياس الفاتح بلا حد مسيطر */
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--micro-text-primary) 30%, transparent);
 }
 
 .m-main-metric__track[data-signed="true"] {
@@ -3590,6 +3611,211 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-access-gateway__link:hover { color: var(--micro-brand-pressed); }
 .m-access-gateway__status { overflow-wrap: anywhere; }
 </style>
+  <style data-f03-from="components/surfaces/surfaces.css">
+/* =========================================================
+   Micro UI — معالجة الأسطح البترولية (S01)
+   الملف: components/surfaces/surfaces.css
+   يعتمد على shared/tokens.css. معالجة سطح مستقلة قابلة للتحرير:
+   تدرج + مستويات منحنية خافتة من أصول assets/surfaces/*.svg
+   (مصدر واحد قابل للتعديل) — لا صورة خلفية مسطحة ولا نسخ المرجع.
+   ثلاث مقارنات فقط: (1) تدرج هادئ (2) مستويان منحنيان خافتان —
+   المرشح الأساسي (3) عمق أغنى محدود للسطح البارز + نسخة بلا زخرفة.
+   مفاتيح التعديل (متغيرات CSS على السطح نفسه):
+     --micro-surface-wave-opacity  شدة الموجة
+     --micro-surface-wave-pos      موضع الموجة العمودي
+     --micro-surface-wave-scale    حجم الموجة (سماكة العمود)
+     --micro-surface-light         شدة الإضاءة
+   القيم الجديدة موسومة PROPOSED (لم تثبت في الأسس).
+   الطبقة الزخرفية غير تفاعلية ومخفية عن قارئ الشاشة (aria-hidden في
+   الترميز) ولا تقطع المحتوى — نص المستخدم في طبقة مستقلة فوقه.
+   مرجع التنفيذ: الأسطح والحركة مشتركة؛ المقارنات التاريخية موسومة أدناه.
+   ========================================================= */
+
+.m-surface,
+.m-surface * {
+  box-sizing: border-box;
+}
+
+/* الأساس المشترك: أرضية بترولية مستقرة بتدرج عمودي من الأسس.
+   E07: بلا overflow:hidden على السطح كله — كان يقص المحتوى نفسه
+   عند تكبير النص (الرقم الكبير يصل الحافة ويُقص). الخلفية والتدرج
+   يقصّان بـ border-radius أصلًا، والزخرفة محتواة في طبقتها أدناه. */
+.m-surface {
+  position: relative;
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-brand-primary);
+  background-image: linear-gradient(180deg,
+    rgba(255, 255, 255, var(--micro-surface-light, 0.12)) 0%,
+    rgba(255, 255, 255, 0) 54%),
+    linear-gradient(180deg,
+      var(--micro-brand-gradient-start) 0%,
+      var(--micro-brand-primary) 55%,
+      var(--micro-brand-pressed) 100%);
+  color: var(--micro-text-inverse);
+  font-family: var(--micro-font-family);
+}
+
+/* طبقة المستويات المنحنية: أصل SVG خارجي مع مفاتيح التعديل.
+   غير تفاعلية وإخفاء إتاحي في الترميز. لا حركة مستمرة إطلاقًا.
+   E07: احتواء الزخرفة منفصلًا عن المحتوى — زواياها السفلى بنصف
+   قطر السطح كي لا تخرج خارجه بلا قصّ السطح كلّه. */
+.m-surface__waves {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: var(--micro-surface-wave-height, 42%); /* نسبة من السطح */
+  pointer-events: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  background-position: center var(--micro-surface-wave-pos, 100%);
+  background-size: 100% var(--micro-surface-wave-scale, 100%);
+  opacity: var(--micro-surface-wave-opacity, 1);
+  border-end-start-radius: var(--micro-radius-surface);
+  border-end-end-radius: var(--micro-radius-surface);
+}
+
+/* المقارنة 1: تدرج هادئ — بلا مستويات منحنية */
+.m-surface--calm .m-surface__waves { display: none; }
+
+/* المقارنة 2 (المرشح الأساسي): مستويان عريضان بانحناء هادئ */
+.m-surface--waves .m-surface__waves {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzUgMTYwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj4KICA8IS0tIFMwMSDigJQg2YXYs9iq2YjZitin2YYg2LnYsdmK2LbYp9mGINmI2YfYp9iv2KbYp9mG2Iwg2YXYs9iq2YTZh9mF2KfZhiDZhdmGINin2YTYp9mG2K3Zhtin2KHYp9iqINin2YTZhNmI2YbZitipINin2YTZhdmG2KrYtNix2Kkg2YHZiiDYp9mE2YXYsdis2LkuCiAgICAgICDYtNmD2YTYp9mGINi62YrYsSDZhdiq2YXYp9ir2YTZitmGINio2KrYr9ix2Kwg2KrYr9ix2YrYrNmK2Jsg2KPZhNmI2KfZhiDYp9mE2KPYs9izINin2YTZhdi52KrZhdiv2Kkg2YHZgti3LiAtLT4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGxhbmUtbWludCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii40MiIgc3RvcC1jb2xvcj0iI0RGRUVFNiIgc3RvcC1vcGFjaXR5PSIuMDM1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RGRUVFNiIgc3RvcC1vcGFjaXR5PSIuMTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InBsYW5lLWl2b3J5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y3RjhGNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjU4IiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wNzUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGZpbGw9InVybCgjcGxhbmUtbWludCkiIGQ9Ik0wIDYzQzY3IDUyIDExNiA3OSAxNzIgNzNjNjQtNyAxMTMtMzcgMjAzLTI5djExNkgwWiIvPgogIDxwYXRoIGZpbGw9InVybCgjcGxhbmUtaXZvcnkpIiBkPSJNMCAxMDhjNzEtMTggMTI3IDkgMTg4IDggNzQtMSAxMjAtMjggMTg3LTE3djYxSDBaIi8+Cjwvc3ZnPgo=");
+}
+
+/* E12 (PROPOSED — مقارنة بديلة في اللوحة): نفس المستويات بتلاشي أخف.
+   لا يستبدل المعتمد إلا بقرار المالك. */
+.m-surface--waves-v2 .m-surface__waves {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzUgMTYwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj4KICA8IS0tIEUxMiAoUFJPUE9TRUQpIOKAlCDZhdmC2KfYsdmG2Kkg2KPYrtmBINmE2YTYs9i32K3ZitmGINin2YTZiNin2LPYudmK2YbYmyDZhNinINiu2LfZiNi3INmI2YTYpyDYtNix2KfYpti3INmF2KrYqtin2KjYudipLiAtLT4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0id3YyLW1pbnQiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjREZFRUU2IiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNDgiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iLjAxOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iLjA3NSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0id3YyLWl2b3J5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y3RjhGNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjYyIiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wMTIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wNDUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGZpbGw9InVybCgjd3YyLW1pbnQpIiBkPSJNMCA3MGM3OC0xOCAxMjEgMTMgMTg2IDUgNjAtNyAxMTEtMzEgMTg5LTI2djExMUgwWiIvPgogIDxwYXRoIGZpbGw9InVybCgjd3YyLWl2b3J5KSIgZD0iTTAgMTEyYzY2LTE0IDEyMiA3IDE4NyA5IDc5IDIgMTI2LTIyIDE4OC0xNXY1NEgwWiIvPgo8L3N2Zz4K");
+}
+
+/* المقارنة 3: عمق أغنى محدود — للسطح البارز فقط (ليس لكل سطح) */
+.m-surface--depth .m-surface__waves {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzUgMTYwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj4KICA8IS0tINi52YXZgiDYo9i62YbZiSDZhdit2K/ZiNivINmI2YXZgtiq2LHYrSDZhNmE2LPYt9itINin2YTYqNin2LHYsiDZgdmC2LfYmyDYqtix2KfZg9ioINmI2KfYs9i5INio2YTYpyDZhNmF2LnYp9mGINij2Ygg2LTYsdin2KbYty4gLS0+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImRlcHRoLXBldHJvbGV1bSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1MDdGOEIiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4zOCIgc3RvcC1jb2xvcj0iIzUwN0Y4QiIgc3RvcC1vcGFjaXR5PSIuMDM1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzUwN0Y4QiIgc3RvcC1vcGFjaXR5PSIuMTUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImRlcHRoLW1pbnQiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjREZFRUU2IiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNTgiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iLjAzNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iLjEyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBmaWxsPSJ1cmwoI2RlcHRoLXBldHJvbGV1bSkiIGQ9Ik0wIDU4YzgwLTIzIDEzMSAxNyAyMDIgNyA2My05IDEwNy0zNiAxNzMtMzF2MTI2SDBaIi8+CiAgPHBhdGggZmlsbD0idXJsKCNkZXB0aC1taW50KSIgZD0iTTAgOTFjNjgtMTMgMTIyIDE0IDE5MCAxNSA3MyAxIDEzMS0zMCAxODUtMTd2NzFIMFoiLz4KPC9zdmc+Cg==");
+}
+
+/* نسخة بلا زخرفة: نفس الأرضية المستقرة دون طبقة إضافية */
+.m-surface--plain {
+  background-image: linear-gradient(180deg,
+    var(--micro-brand-gradient-start) 0%,
+    var(--micro-brand-primary) 55%,
+    var(--micro-brand-pressed) 100%);
+}
+.m-surface--plain .m-surface__waves { display: none; }
+
+/* طبقة المحتوى: مستقلة فوق الزخرفة — تضمن قراءة النص */
+.m-surface__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--micro-space-6);
+}
+
+/* عناصر نصية داخل السطح (للقياس والفحص) — القيم من التوكنات
+   المقترحة في tokens.css (E12) بدل تكرار 22/36 مباشرة هنا.
+   R2-01: ارتفاع السطر نسبة لا بكسل (36px/44px الثابتة كانت تتداخل
+   عند تكبير النص لأن الخط يصل 44px/72px والصندوق يبقى ثابتًا)،
+   والرقم الطويل بلا فراغات يُلف داخل السطح (overflow-wrap: anywhere)
+   كي لا يخرج إلى الخلفية الفاتحة — الاحتواء بالتمدد لا بالقصّ،
+   وتكبير المستخدم محفوظ كما هو.
+   C1: كل أدوار النص المعلوماتي أبيض مصمت افتراضيًا (--micro-text-inverse
+   من التوكنات — لا لون جديد) — كانت التسمية 0.8 والثانوي 0.72 شفافَين
+   فيسقطان دون عتبة النص في مواضع فعلية. تمييز المستويات بالحجم
+   (14/13) والوزن (500/400) وإيقاع السطر (22/20) لا بالشفافية:
+   تباعد الحروف (letter-spacing) يكسر اتصال الحرف العربي فلا يُستعمل.
+   أي درجة أخف من الأبيض المصمت تبقى مسموحة فقط في تركيب موثق لدى
+   المستهلك يجتاز عتبة النص المنطبقة — لا صنف في المكوّن يشحنها. */
+.m-surface__title {
+  font-size: var(--micro-surface-title-size, 22px);
+  line-height: var(--micro-surface-title-line, 1.6364); /* نسبية: 22/36 */
+  font-weight: 600;
+  color: var(--micro-text-inverse);
+}
+.m-surface__amount {
+  font-size: var(--micro-surface-amount-size, 36px);
+  line-height: var(--micro-surface-amount-line, 1.2222); /* نسبية: 36/44 */
+  font-weight: 600;
+  color: var(--micro-text-inverse);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: end; /* يظهر عند نهاية السطر كما في الاتجاه المرجعي */
+  overflow-wrap: anywhere; /* R2-01: رقم طويل بلا فراغات يُلف داخل السطح — توثيق في المواصفات */
+}
+.m-surface__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 500; /* C1: التمييز بالوزن لا الشفافية */
+  color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.8) */
+}
+.m-surface__sub {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 400; /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
+  color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.72) */
+}
+
+.m-surface__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  overflow-wrap: anywhere;
+}
+
+/* تقليل الحركة: لا شيء متحرك هنا أصلًا (الزخرفة ساكنة) — قاعدة موثقة */
+@media (prefers-reduced-motion: reduce) {
+  .m-surface__waves { /* ساكنة كما هي */ }
+}
+
+</style>
+  <style data-f03-from="components/surfaces/curves.css">
+/* Micro UI — opt-in broad, faint curved surfaces for S01.
+   Stable UI release translation of the approved direction; see docs/UI-RELEASE.md.
+   Load after surfaces.css. No animation, waves, or new palette.
+   Ellipse placement/opacity are surface-specific geometry, not shared tokens. */
+
+.m-surface--curves {
+  background-color: var(--micro-surface-page);
+  background-image: linear-gradient(
+    145deg,
+    var(--micro-summary-gradient-start) 0%,
+    var(--micro-surface-selected) 52%,
+    var(--micro-surface-page) 100%
+  );
+  color: var(--micro-text-primary);
+}
+
+/* Two broad elliptical light fields, not ribbon/stripe bands. */
+.m-surface--curves::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(
+      ellipse 86% 72% at 92% 2%,
+      color-mix(in srgb, var(--micro-text-primary) 4%, transparent) 0%,
+      color-mix(in srgb, var(--micro-text-primary) 2%, transparent) 46%,
+      transparent 76%
+    ),
+    radial-gradient(
+      ellipse 78% 70% at 0% 108%,
+      color-mix(in srgb, var(--micro-text-primary) 3%, transparent) 0%,
+      color-mix(in srgb, var(--micro-text-primary) 1.5%, transparent) 48%,
+      transparent 76%
+    );
+  content: "";
+  pointer-events: none;
+}
+
+.m-surface--curves .m-surface__waves {
+  display: none;
+}
+
+.m-surface--curves .m-surface__label,
+.m-surface--curves .m-surface__title,
+.m-surface--curves .m-surface__amount,
+.m-surface--curves .m-surface__sub {
+  color: var(--micro-text-primary);
+}
+</style>
   <style data-f03-from="previews/ux-patterns/mobile-record-sample/example.css">
 /* =========================================================
    Micro UI — UX-F03: تنسيق تجربة الهاتف الكاملة «العناصر»
@@ -3695,11 +3921,13 @@ body {
 }
 
 /* ---------- بوابة الوصول: عمود مقروء وسط الصفحة ---------- */
+/* R1-UI11: أسطح ثابتة مسطّحة بحد فاصل — ظل الطبقات (overlay) للحواريات
+   المؤقتة فقط، لا لقوائم المحتوى الدائمة. */
 .f03-gateway {
   margin-block-start: var(--micro-space-5);
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   padding: var(--micro-space-5) var(--micro-space-4);
 }
 
@@ -3725,13 +3953,14 @@ body {
 }
 
 /* ---------- صفوف القائمة وأحدث العناصر: هدف فتح واحد واضح ---------- */
+/* R1-UI11: قائمة محتوى دائمة بحد فاصل لا ظل طبقة مؤقتة (overlay). */
 .f03-rowlist {
   list-style: none;
   margin: 0;
   padding: 0;
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   overflow: hidden;
 }
 
@@ -3831,8 +4060,10 @@ body {
   margin-block-end: var(--micro-space-3);
 }
 
-.f03-sortrow .m-seg { flex: 1 1 auto; min-width: 0; }
-.f03-sortrow .m-toggle { flex: none; }
+/* R1-UI03: المقاطع بعرضها الطبيعي والالتفاف مسموح عند الضيق —
+   لا تمدّد يفتح الصف على ارتفاعين. */
+.f03-sortrow .m-seg { flex: 0 1 auto; min-width: 0; }
+.f03-sortrow .m-toggle { flex: none; margin-inline-start: auto; }
 
 .f03-results {
   margin: 0 0 var(--micro-space-2);
@@ -3841,10 +4072,11 @@ body {
   line-height: var(--micro-secondary-line);
 }
 
+/* R1-UI11: حالة فراغ دائمة بحد فاصل لا ظل طبقة مؤقتة (overlay). */
 .f03-state {
   background-color: var(--micro-surface-base);
   border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
+  border: 1px solid var(--micro-border-divider);
   padding: var(--micro-space-6) var(--micro-space-4);
   text-align: center;
 }
@@ -3932,11 +4164,40 @@ body {
 #f03-form {
   display: flex;
   flex-direction: column;
-  gap: var(--micro-space-4);
+  gap: var(--micro-space-3); /* R1-UI14: تجميع أوضح بين الحقول القصيرة */
 }
 
 #f03-form .m-field {
   margin: 0;
+}
+
+/* R1-UI14: فاصل أوضح قبل مجموعة الملاحظة الأخيرة */
+#f03-note-field {
+  margin-block-start: var(--micro-space-2);
+}
+
+/* R1-UI12/13/16: الحقول الرقمية القصيرة — القيمة والكمية وحدة واحدة متراصة */
+.f03-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-3);
+}
+.f03-field-row .m-field { margin: 0; min-width: 0; }
+.f03-field-row #f03-value-field { flex: 1 1 130px; }
+.f03-field-row #f03-qty-field { flex: 0 0 auto; }
+#f03-qty-field .m-field__control { width: fit-content; } /* زيادة + قيمة + نقصان وحدة متماسكة */
+/* R1-UI12: عرض قيمة الكمية من توكن المكتبة نفسه — في تركيب B01 الرسمي
+   (input بين غلافَي خطوة مستقلين) لا تنطبق قاعدة width الخاصة بـ
+   .m-field__stepper، فتثبّتها العينة ليبقى الصف المتراص متماسكًا بلا
+   فيض عند الضيق ولا اتساعًا بالافتراضي الأصلي عند تكبير النص. */
+#f03-qty-field .m-field__input--num { flex: none; width: var(--micro-quantity-min-width); text-align: center; }
+
+/* R1-UI15: مساعدة قصيرة تحت حقل القيمة — الخطأ يحل محلها عند ظهوره */
+.f03-field-help {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
 }
 
 /* إخفاء فعلي لزر التحقق خارج unknown/checking (درس F01-R1-01:
@@ -4045,6 +4306,9 @@ body {
   flex-direction: column;
   gap: var(--micro-space-3);
 }
+
+/* احتياط بسيط: إخفاء فعلي لجسم القسم المطوي حين hidden (R1-UI07) */
+.m-section__body[hidden] { display: none; }
 
 /* ---------- الحساب: هوية ومجموعات إعدادات ---------- */
 .f03-account-id {
@@ -4272,6 +4536,12 @@ body {
       <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" key="1" />
       <path d="M5 21C9.37246 15.775 14.2741 8.88406 21.4975 13.5424" stroke="currentColor" stroke-width="1.5" key="2" />
     </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" data-icon-source="minus-sign.svg"><!-- assets/icons/minus-sign.svg -->
+      <path d="M20 12L4 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" data-icon-source="plus-sign.svg"><!-- assets/icons/plus-sign.svg -->
+      <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
   </svg>
 
   <main class="f03-main" id="f03-main">
@@ -4381,7 +4651,7 @@ body {
 
       <section class="f03-block" id="f03-home-compare" aria-labelledby="f03-home-compare-title">
         <h3 class="f03-block__title" id="f03-home-compare-title">مقارنة سريعة</h3>
-        <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="عنصر" data-common-period="كل الفترات" id="f03-home-metric" aria-label="مقارنة عدد الفئات">
+        <section class="m-main-metric m-main-metric--compact f03-metric" data-main-comparison data-common-unit="عنصر" data-common-period="كل الفترات" id="f03-home-metric" aria-label="مقارنة عدد الفئات">
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">إجمالي الكمية</span>
@@ -4564,7 +4834,7 @@ body {
           <label class="m-field__label" for="f03-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
           <div class="m-field__control">
             <input class="m-field__input" id="f03-name" name="name" type="text" maxlength="40" autocomplete="off">
-            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"></button>
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <p class="m-field__msg" id="f03-name-msg" data-field-msg hidden></p>
           <span class="m-field__count" aria-hidden="true"></span>
@@ -4579,29 +4849,36 @@ body {
           <p class="m-field__msg" id="f03-cat-msg" data-field-msg hidden></p>
         </div>
 
-        <div class="m-field" data-micro-field id="f03-value-field">
-          <label class="m-field__label" for="f03-value">القيمة <span class="m-field__required">(اختيارية — الفارغ يعني قيمة مجهولة)</span></label>
-          <div class="m-field__control">
-            <input class="m-field__input m-field__input--num" id="f03-value" name="value" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
-            <span class="m-field__unit">د.أ</span>
+        <div class="f03-field-row">
+          <div class="m-field" data-micro-field id="f03-value-field">
+            <label class="m-field__label" for="f03-value">القيمة <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input m-field__input--num" id="f03-value" name="value" type="text" inputmode="decimal" dir="ltr" placeholder="0.00" aria-describedby="f03-value-help">
+              <span class="m-field__unit">د.أ</span>
+            </div>
+            <p class="f03-field-help" id="f03-value-help">الفارغ يعني قيمة غير معلومة — وليس صفرًا.</p>
+            <p class="m-field__msg" id="f03-value-msg" data-field-msg hidden></p>
           </div>
-          <p class="m-field__msg" id="f03-value-msg" data-field-msg hidden></p>
-        </div>
 
-        <div class="m-field" data-micro-field id="f03-qty-field">
-          <label class="m-field__label" for="f03-qty">الكمية</label>
-          <div class="m-field__control m-field__stepper">
-            <button type="button" data-step="down" aria-label="إنقاص الكمية">−</button>
-            <input class="m-field__input m-field__input--num" id="f03-qty" name="quantity" type="text" inputmode="numeric" dir="ltr" min="0" max="9999" step="1" value="0">
-            <button type="button" data-step="up" aria-label="زيادة الكمية">+</button>
+          <div class="m-field" data-micro-field id="f03-qty-field">
+            <label class="m-field__label" for="f03-qty">الكمية</label>
+            <div class="m-field__control">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+              </div>
+              <input class="m-field__input m-field__input--num" id="f03-qty" name="quantity" type="text" inputmode="numeric" dir="ltr" min="0" max="9999" step="1" value="0">
+              <div class="m-field__stepper">
+                <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              </div>
+            </div>
+            <p class="m-field__msg" id="f03-qty-msg" data-field-msg hidden></p>
           </div>
-          <p class="m-field__msg" id="f03-qty-msg" data-field-msg hidden></p>
         </div>
 
         <div class="m-field" data-micro-field id="f03-date-field">
           <label class="m-field__label" for="f03-date">التاريخ <span class="m-field__required">(اختياري)</span></label>
           <div class="m-field__control">
-            <input class="m-field__input m-field__input--num" id="f03-date" name="date" type="date">
+            <input class="m-field__input" id="f03-date" name="date" type="date">
           </div>
           <p class="m-field__msg" id="f03-date-msg" data-field-msg hidden></p>
         </div>
@@ -4618,7 +4895,7 @@ body {
         <div class="m-field" data-micro-field id="f03-note-field">
           <label class="m-field__label" for="f03-note">الملاحظة <span class="m-field__required">(اختيارية)</span></label>
           <div class="m-field__control">
-            <textarea class="m-field__area" id="f03-note" name="note" rows="3"></textarea>
+            <textarea class="m-field__area" id="f03-note" name="note" rows="2"></textarea>
           </div>
         </div>
 
@@ -4693,13 +4970,6 @@ body {
         <p class="m-chart__summary" data-summary></p>
       </div>
 
-      <div class="m-chart m-chart--donut" data-chart="donut" id="f03-rep-donut">
-        <h3 class="m-chart__title" id="f03-rep-donut-title">توزيع القيمة على الفئات</h3>
-        <ul class="m-chart__data" hidden id="f03-rep-donut-data"></ul>
-        <div class="m-chart__plot" data-plot></div>
-        <p class="m-chart__summary" data-summary></p>
-      </div>
-
       <div class="m-chart m-chart--line" data-chart="line" id="f03-rep-line">
         <h3 class="m-chart__title" id="f03-rep-line-title">القيمة أسبوعيًا</h3>
         <ul class="m-chart__data" hidden id="f03-rep-line-data"></ul>
@@ -4707,7 +4977,7 @@ body {
         <p class="m-chart__summary" data-summary></p>
       </div>
 
-      <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="د.أ" data-common-period="كل الفترات" id="f03-rep-metric" aria-label="مقارنة الفئات">
+      <section class="m-main-metric m-main-metric--compact f03-metric" data-main-comparison data-common-unit="د.أ" data-common-period="كل الفترات" id="f03-rep-metric" aria-label="مقارنة الفئات">
         <div class="m-main-metric__layout">
           <div class="m-main-metric__hero">
             <span class="m-main-metric__label" id="f03-rep-hero-label">إجمالي القيمة</span>
@@ -4724,6 +4994,21 @@ body {
       <section class="f03-block" aria-labelledby="f03-rep-known-title">
         <h3 class="f03-block__title" id="f03-rep-known-title">القيم المعلومة لكل فئة</h3>
         <div class="f03-dist" id="f03-rep-known"></div>
+      </section>
+
+      <section class="m-section" id="f03-rep-extra">
+        <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-rep-donut-body">
+          <span class="m-section__title">توزيع إضافي (دونات)</span>
+          <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="m-section__body" id="f03-rep-donut-body" hidden>
+          <div class="m-chart m-chart--donut" data-chart="donut" id="f03-rep-donut">
+            <h3 class="m-chart__title" id="f03-rep-donut-title">توزيع القيمة على الفئات</h3>
+            <ul class="m-chart__data" hidden id="f03-rep-donut-data"></ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
       </section>
     </section>
 
@@ -5115,12 +5400,12 @@ body {
     delete btn.dataset.labelWrapped;
   }
 
-  /* يضمن وجود مؤشر التحميل في موضع صحيح:
+  /* يضمن وجود مؤشر التحميل في موضع صحيح (عقد R1-UI02):
      - زر بأيقونة: المؤشر يحل مكان الأيقونة نفسها (فتحة 20px / 24px
        الدائري) فيبقى عرض الزر وزاوية النص كما هما.
      - زر نصي بلا أيقونة (B الافتراضي، وm-btn--loading-slot توافقي):
-       التسمية تبقى ظاهرة والمؤشر في الفتحة المحجوزة في الحشو —
-       لا تغليف ولا إخفاء للنص.
+       لا حجز مسبق — التسمية تبقى ظاهرة والمؤشر يظهر أثناء التحميل داخل
+       حشو بداية الزر نفسه (20px) فلا يتغير العرض ولا الارتفاع.
      - زر نصي مع m-btn--loading-replace (A توافقي صريح): النص يبقى محفوظ المكان
        (opacity:0) والمؤشر يتوسط الزر (صف is-loading--text) — الأبعاد
        ثابتة بالبنية. */
@@ -5134,7 +5419,9 @@ body {
     if (icon) {
       icon.parentElement.insertBefore(spinner, icon); /* فتحة الأيقونة نفسها */
     } else if (!btn.classList.contains('m-btn--loading-replace')) {
-      /* Default B: CSS reserves the slot before loading; label stays visible.
+      /* Default B (R1-UI02): no reserved slot — the label stays visible and
+         the spinner appears inside the button's inline-start padding while
+         loading, so box size is identical across the three phases.
          Explicit loading-replace preserves legacy A without changing the API. */
       btn.insertBefore(spinner, btn.firstChild);
     } else {
@@ -5164,8 +5451,9 @@ body {
    * - الزر أثناء التحميل يبقى قابلًا للتركيز (ليس disabled) فلا يضيع
    *   التركيز من مستخدم لوحة المفاتيح، وحلقة التركيز تبقى ظاهرة.
    * - منع التفعيل: pointer-events:none + حراسة click/keydown أعلاه.
-    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة والمؤشر
-    *   في فتحة محجوزة قبل التحميل؛ العرض ثابت بالبنية نفسها.
+    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة ويُظهر المؤشر
+    *   أثناء التحميل داخل حشو بداية الزر نفسه — بلا حجز مساحة قبل
+    *   التحميل، فالعرض والارتفاع ثابتان في الأطوار الثلاثة (R1-UI02).
     *   A عبر m-btn--loading-replace يخفي النص بصريًا فقط مع حفظ
     *   مكانه واسمه الإتاحي. يعود النص كما كان عند التوقف.
    */
@@ -5220,6 +5508,18 @@ body {
      3) خطوة الكمية (زيادة/نقصان) بحدود وخطوة يمررها المستهلك
         (min/max/step من السمات أو data-* على الغلاف).
      4) ربط الرسالة بالحقل عبر aria-describedby تلقائيًا إن لم يتصله.
+     5) عقد مزامنة القيم المعينة برمجيًا: MicroFields.sync(root)
+        (UI-05/UI-06) — إعادة حساب عدّاد الأحرف وظهور زر المسح من
+        القيم الحالية دون إطلاق أي حدث تعديل (لا input ولا change
+        ولا micro-field:*) ودون أي أثر جانبي (لا يجعل النموذج dirty).
+
+   الواجهة العلنية (window.MicroFields):
+     init(root): تهيئة/ربط حقول النطاق (تلقائيًا عند التحميل).
+     sync(root): مزامنة عدّاد الأحرف وظهور زر المسح بعد تعيين
+                 القيم برمجيًا (input.value = ...) — بلا أحداث
+                 تعديل زائفة. root = عنصر حقل واحد [data-micro-field]
+                 أو أي نطاق (عندها تُزامَن كل حقوله)؛ الحقول غير
+                 المربوطة تُتجاهل بصمت.
 
    مثال استخدام أدنى (خارج لوحة المعاينة):
    ─────────────────────────────────────────────────────────
@@ -5247,6 +5547,21 @@ body {
 
   function fieldOf(el) { return el.closest('[data-micro-field]'); }
 
+  /* UI-05/UI-06: عقد مزامنة القيم المعينة برمجيًا — دوال التحديث
+     نفسها المستدعاة على حدث input تُحفظ على الغلاف (مصدر واحد
+     للحقيقة) ليستدعيها MicroFields.sync(root) لاحقًا؛ هي بلا
+     أحداث ولا آثار جانبية أصلا (نص العدّاد وصنف is-visible فقط). */
+  function registerSync(f, fn) {
+    if (!Array.isArray(f.__microFieldSyncs)) f.__microFieldSyncs = [];
+    f.__microFieldSyncs.push(fn);
+  }
+
+  function runSyncs(f) {
+    var list = f.__microFieldSyncs;
+    if (!list || !list.length) return; /* حقل غير مربوط — يُتجاهل بصمت */
+    for (var i = 0; i < list.length; i++) list[i]();
+  }
+
   function bindCount(f) {
     var input = f.querySelector('.m-field__input, .m-field__area');
     var count = f.querySelector('.m-field__count');
@@ -5257,6 +5572,7 @@ body {
       count.textContent = input.value.length + '/' + max;
     }
     input.addEventListener('input', update);
+    registerSync(f, update); /* UI-05: نفس دالة الحدث للمزامنة البرمجية */
     update();
   }
 
@@ -5278,6 +5594,8 @@ body {
       input.dispatchEvent(new Event('micro-field:cleared', { bubbles: true }));
     });
     input.addEventListener('input', sync);
+    registerSync(f, sync); /* UI-06: نفس دالة الحدث للمزامنة البرمجية —
+                              دالة locked تُحترم فيها أيضا (readonly/disabled بلا مسح) */
     sync();
   }
 
@@ -5341,8 +5659,22 @@ body {
     });
   }
 
-  /* واجهة عامة: تهيئة يدوية للمحتوى المضاف لاحقًا */
-  window.MicroFields = { init: init };
+  /* UI-05/UI-06: مزامنة حالة الحقول من قيمها الحالية بعد تعيينها
+     برمجيًا (input.value = ...) — بلا إطلاق أي حدث تعديل (لا input
+     ولا change ولا micro-field:*) وبلا أثر جانبي، فلا يصبح النموذج
+     dirty بسببها. تقبل عنصر حقل واحد أو أي نطاق (document/عنصر
+     حاوي) فتُزامن كل حقوله؛ الحقول غير المربوطة تُتجاهل بصمت. */
+  function sync(root) {
+    var scope = (root && typeof root.querySelectorAll === 'function') ? root : document;
+    if (scope.nodeType === 1 && scope.matches('[data-micro-field]')) {
+      runSyncs(scope);
+    }
+    scope.querySelectorAll('[data-micro-field]').forEach(runSyncs);
+  }
+
+  /* واجهة عامة: init تهيئة يدوية للمحتوى المضاف لاحقًا؛
+     sync مزامنة العدّاد/المسح بعد تعيين القيم برمجيًا. */
+  window.MicroFields = { init: init, sync: sync };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();
@@ -6618,12 +6950,16 @@ body {
     return lines;
   }
 
-  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls) {
+  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep) {
+    /* R1-UI09: خطوة السطر تتبع حجم خط التسمية (≈ 1.5×) — بعد تكبير التسميات
+       (أعمدة 13px/خط 12px) الخطوة 13 الثابتة كانت تصطدم عند مضاعفة حجم
+       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه. */
+    var step = lineStep || 13;
     var lines = wrapLabel(text, maxChars);
     lines.forEach(function (ln, k) {
       var t = svgEl('text', {
         class: cls, x: cx,
-        y: yBottom - (lines.length - 1 - k) * 13,
+        y: yBottom - (lines.length - 1 - k) * step,
         'text-anchor': 'middle'
       });
       t.textContent = ln;
@@ -6723,11 +7059,12 @@ body {
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
-    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.2));
+    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 12→13px كي يلتف النص قبل الاصطدام */
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var extra = (maxLines - 1) * 13;
+    var BAR_LABEL_STEP = 20; /* R1-UI09: 1.5× تقريبًا لخط 13px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var extra = (maxLines - 1) * BAR_LABEL_STEP;
     var W = 320, H = 180 + extra, base = H - 34 - extra, top = 26;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
@@ -6763,7 +7100,7 @@ body {
           o.textContent = 'قيمة شاذة'; g.appendChild(o);
         }
       }
-      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label');
+      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -6803,11 +7140,12 @@ body {
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var n = Math.max(items.length, 2);
-    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.2));
+    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 11→12px كي يلتف النص قبل الاصطدام */
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var extra = (maxLines - 1) * 12;
+    var X_LABEL_STEP = 18; /* R1-UI09: 1.5× تقريبًا لخط 12px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var extra = (maxLines - 1) * X_LABEL_STEP;
     var W = 320, H = 170 + extra, base = H - 30 - extra, top = 24;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
@@ -6845,7 +7183,7 @@ body {
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
         val.textContent = fmt(it.value); g.appendChild(val);
       }
-      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label');
+      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -7690,6 +8028,9 @@ body {
     var scaleNote = chart.querySelector('[data-metric-scale]');
     if (scaleNote) {
       scaleNote.setAttribute('data-valid', String(validLayout && validMax && validRadius && width > 0));
+      /* R1-UI10 (دورة حياة التشخيص — نمط B05): تُمسح السمة كل render ثم
+         تُكتب تشخيصات الدورة الحالية وحدها على الجذر لا في نص المستخدم. */
+      chart.removeAttribute('data-scale-detail');
       if (!validLayout) scaleNote.textContent = 'تعذّر رسم الدوائر: اختر تخطيطًا معروفًا.';
       else if (!validMax) scaleNote.textContent = 'تعذّر رسم الدوائر: مقياس القيم غير صالح أو أصغر من قيمة معلومة.';
       else if (!validRadius) scaleNote.textContent = 'تعذّر رسم الدوائر: الحد الأقصى لحجم الدائرة غير صالح.';
@@ -7700,10 +8041,16 @@ body {
       else {
         var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
         if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
-        if (declaredRaw === null) scaledMessage += ' يحدّ المقياس أكبر مقدار معروف.';
-        else scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
-        if (radiusRaw !== null) scaledMessage += ' الحجم متكيف مع عرض البطاقة ضمن الحد الذي حدده المستهلك.';
+        if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
         if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
+        /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
+           data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
+           وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
+           أو المعلن) — لا يظهر في نص الواجهة. */
+        chart.setAttribute('data-scale-detail',
+          'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
+          + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+          + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
         scaleNote.textContent = scaledMessage;
       }
     }
@@ -9124,6 +9471,7 @@ body {
     valueField: q('f03-value-field'),
     value: q('f03-value'),
     valueMsg: q('f03-value-msg'),
+    valueHelp: q('f03-value-help'),
     qtyField: q('f03-qty-field'),
     qty: q('f03-qty'),
     qtyMsg: q('f03-qty-msg'),
@@ -9251,6 +9599,24 @@ body {
     return String(Math.round(n * 100) / 100);
   }
 
+  /* R1-UI20: تنسيق عرض ثابت — المبالغ برقمين عشريين دائمًا والأعداد الصحيحة بلا كسور.
+     عرض فقط؛ دقة البيانات المخزنة وقيم data-value/data-max محفوظة كما هي. */
+  function formatMoney(n) {
+    if (n == null || !isFinite(n)) return '—';
+    return (Math.round(n * 100) / 100).toFixed(2);
+  }
+  function formatCount(n) {
+    if (n == null || !isFinite(n)) return '—';
+    return String(Math.round(n));
+  }
+  var AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  function formatDateAr(iso) {
+    if (!iso) return '—';
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso));
+    if (!m) return String(iso);
+    return String(Number(m[3])) + ' ' + AR_MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+  }
+
   function categoryObj(value) {
     if (!value) return null;
     var label = store.categoryLabel(value);
@@ -9368,7 +9734,7 @@ body {
     var sumQty = items.reduce(function (a, it) { return a + (it.quantity || 0); }, 0);
     var settings = store.settings();
 
-    el.homeTotal.textContent = formatNumber(sumValue);
+    el.homeTotal.textContent = formatMoney(sumValue);
     el.homeTotalSub.textContent = total === 0
       ? 'المجموع يظهر عند إضافة عناصر ذات قيمة.'
       : (unknownCount > 0
@@ -9377,19 +9743,20 @@ body {
         : 'مجموع قيم ' + total + ' عناصر.');
 
     /* بطاقات شريط المعلومات من البيانات نفسها */
-    function card(node, num, unit, label) {
-      node.setAttribute('aria-label', label + '، ' + num + ' ' + unit);
-      node.querySelector('.m-info-card__number').textContent = formatNumber(num);
+    function card(node, num, unit, label, fmt) {
+      var text = fmt(num);
+      node.setAttribute('aria-label', label + '، ' + text + ' ' + unit);
+      node.querySelector('.m-info-card__number').textContent = text;
       node.querySelector('.m-info-card__unit').textContent = unit;
     }
-    card(el.stripCount, total, 'عنصر', 'عدد العناصر');
-    card(el.stripUnknown, unknownCount, 'عنصر', 'بلا قيمة معلومة');
-    card(el.stripCats, usedCats, 'فئة', 'فئات قيد الاستخدام');
+    card(el.stripCount, total, 'عنصر', 'عدد العناصر', formatCount);
+    card(el.stripUnknown, unknownCount, 'عنصر', 'بلا قيمة معلومة', formatCount);
+    card(el.stripCats, usedCats, 'فئة', 'فئات قيد الاستخدام', formatCount);
 
     el.homeAll.textContent = 'عرض جميع العناصر (' + total + ')';
 
     /* المقارنة العددية: بطل الكمية + صفوف عدّ كل فئة */
-    el.homeQty.textContent = formatNumber(sumQty);
+    el.homeQty.textContent = formatCount(sumQty);
     el.homeBarsSrc.textContent = '';
     var maxCount = 0;
     cats.forEach(function (c) {
@@ -9423,6 +9790,7 @@ body {
           li.setAttribute('data-state', 'unavailable');
         } else {
           li.setAttribute('data-value', String(Math.round(s * 100) / 100));
+          li.setAttribute('data-display-value', formatMoney(Math.round(s * 100) / 100));
           li.setAttribute('data-unit', 'د.أ');
           if (s > maxVal) maxVal = s;
         }
@@ -9485,7 +9853,7 @@ body {
     body.appendChild(meta);
     var val = document.createElement('span');
     val.className = 'f03-row__value';
-    val.textContent = it.value == null ? 'القيمة: —' : 'القيمة: ' + formatNumber(it.value) + ' د.أ';
+    val.textContent = it.value == null ? '—' : formatMoney(it.value) + ' د.أ'; /* R1-UI20: بلا بادئة مكررة وبنمط ثابت */
     btn.appendChild(body);
     btn.appendChild(val);
     li.appendChild(btn);
@@ -9808,9 +10176,9 @@ body {
     el.readStatus.appendChild(statusBadge(item.status));
     el.readValue.textContent = item.value == null
       ? '— (قيمة مجهولة)'
-      : formatNumber(item.value) + ' د.أ';
+      : formatMoney(item.value) + ' د.أ';
     el.readQty.textContent = formatNumber(item.quantity) + ' وحدة';
-    el.readDate.textContent = item.date || '—';
+    el.readDate.textContent = formatDateAr(item.date);
     el.readNote.textContent = item.note === '' ? '—' : item.note;
 
     /* سجل النشاط من حقول العنصر الفعلية — لا تاريخ مُختلق */
@@ -9935,9 +10303,11 @@ body {
     el.formTitle.textContent = mode === 'add' ? 'إضافة عنصر' : 'تعديل العنصر';
     el.name.value = state.baseline.name;
     el.note.value = state.baseline.note;
+    el.note.style.height = ''; /* R1-UI21: إعادة النمو لمحتوى هذه الجلسة */
     el.value.value = state.baseline.value;
     el.qty.value = state.baseline.quantity;
     el.date.value = state.baseline.date;
+    if (window.MicroFields) window.MicroFields.sync(el.form); /* R1-UI05/06 */
     setDraftStatus(state.baseline.status);
     setDraftCategory(item ? categoryObj(item.category) : null);
     setNameError(false);
@@ -9951,6 +10321,7 @@ body {
     setFieldsReadonly(false);
     renderDirtyHint();
     showView('form', { focusEl: el.name });
+    autoGrowNote(); /* R1-UI21: القياس بعد إظهار العرض — مخفيًا كان scrollHeight صفرًا */
     logEvent('form:open:' + mode, { id: state.formId });
   }
 
@@ -9978,6 +10349,7 @@ body {
     [el.nameField, el.noteField, el.valueField, el.qtyField, el.dateField].forEach(function (f) {
       f.classList.toggle('has-readonly', ro);
     });
+    if (window.MicroFields) window.MicroFields.sync(el.form); /* R1-UI05/06: زر المسح يختفي في readonly ويعود بعدها */
     el.catTrigger.disabled = ro; /* لا تغيير فئة قبل حسم النتيجة */
   }
 
@@ -9999,7 +10371,10 @@ body {
 
   function setNameError(show, text) { fieldError(el.nameField, el.name, el.nameMsg, show, text); }
   function setCatError(show, text) { fieldError(el.catField, el.catTrigger, el.catMsg, show, text); }
-  function setValueError(show, text) { fieldError(el.valueField, el.value, el.valueMsg, show, text); }
+  function setValueError(show, text) {
+    fieldError(el.valueField, el.value, el.valueMsg, show, text);
+    if (el.valueHelp) el.valueHelp.hidden = !!show; /* R1-UI15: الخطأ يحل محل المساعدة */
+  }
   function setQtyError(show, text) { fieldError(el.qtyField, el.qty, el.qtyMsg, show, text); }
 
   function setOpMessage(variant, title, body) {
@@ -10120,6 +10495,13 @@ body {
   el.value.addEventListener('input', syncAfterInput);
   el.qty.addEventListener('input', syncAfterInput);
   el.date.addEventListener('input', function () { renderDirtyHint(); });
+
+  /* R1-UI21: مساحة ابتدائية معتدلة (rows=2) تنمو مع المحتوى وتقرأ كاملة */
+  function autoGrowNote() {
+    el.note.style.height = 'auto';
+    el.note.style.height = el.note.scrollHeight + 'px';
+  }
+  el.note.addEventListener('input', autoGrowNote);
 
   el.statusSeg.addEventListener('micro-selection:segment', function (e) {
     var v = e.detail && e.detail.value;
@@ -10679,12 +11061,13 @@ body {
     var cats = store.categories();
     var unit = metricUnit();
     var metricLabel = state.repMetric === 'value' ? 'القيمة' : 'الكمية';
+    var fmtMetric = state.repMetric === 'value' ? formatMoney : formatCount; /* R1-UI20 */
 
     /* بطاقتا peek من البيانات نفسها */
     var sumAll = 0;
     items.forEach(function (it) { var v = metricValueOf(it); if (v != null) sumAll += v; });
-    el.repTotal.setAttribute('aria-label', 'إجمالي المقياس، ' + formatNumber(sumAll) + ' ' + unit);
-    el.repTotal.querySelector('.m-info-card__number').textContent = formatNumber(sumAll);
+    el.repTotal.setAttribute('aria-label', 'إجمالي المقياس، ' + fmtMetric(sumAll) + ' ' + unit);
+    el.repTotal.querySelector('.m-info-card__number').textContent = fmtMetric(sumAll);
     el.repTotal.querySelector('.m-info-card__unit').textContent = unit;
     el.repIncluded.setAttribute('aria-label', 'عناصر مشمولة، ' + items.length);
     el.repIncluded.querySelector('.m-info-card__number').textContent = formatNumber(items.length);
@@ -10758,7 +11141,7 @@ body {
     el.repMetric.setAttribute('data-common-unit', unit);
     el.repMetric.setAttribute('data-common-period', 'كل الفترات');
     el.repHeroLabel.textContent = 'إجمالي ' + metricLabel;
-    el.repHeroNum.textContent = formatNumber(sumAll);
+    el.repHeroNum.textContent = fmtMetric(sumAll);
     el.repHeroUnit.textContent = unit;
     el.repBarsSrc.textContent = '';
     var maxRow = 0;
@@ -10770,7 +11153,10 @@ body {
       li.setAttribute('data-period', 'كل الفترات');
       li.setAttribute('data-series', seriesOf(p.cat.value));
       if (p.sum == null) li.setAttribute('data-state', 'unavailable');
-      else li.setAttribute('data-value', String(Math.round(p.sum * 100) / 100));
+      else {
+        li.setAttribute('data-value', String(Math.round(p.sum * 100) / 100));
+        li.setAttribute('data-display-value', fmtMetric(Math.round(p.sum * 100) / 100)); /* R1-UI20: عرض منسق داخل صفوف المقارنة */
+      }
       el.repBarsSrc.appendChild(li);
     });
     if (maxRow > 0) el.repMetric.setAttribute('data-max', String(Math.ceil(maxRow)));

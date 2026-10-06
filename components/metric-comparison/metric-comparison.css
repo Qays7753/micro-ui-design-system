@@ -213,7 +213,7 @@
 
 .m-main-metric--compact .m-main-metric__rows { gap: var(--micro-space-1); }
 .m-main-metric--compact .m-main-metric__row { gap: 0; }
-.m-main-metric--compact .m-main-metric__track { height: var(--micro-space-1); }
+.m-main-metric--compact .m-main-metric__track { height: var(--micro-space-2); } /* R1-UI17: 4→8px في الوضع المدمج */
 
 .m-main-metric[data-hero-reading] .m-main-metric__layout {
   grid-template-columns: minmax(0, 1fr);
@@ -306,7 +306,7 @@
 
 .m-main-metric__track {
   position: relative;
-  height: var(--micro-space-2);
+  height: var(--micro-space-3); /* R1-UI17: 8→12px شريط أوضح للمسح البصري (compact: 8px أدناه) */
   border-radius: var(--micro-radius-capsule);
   background: var(--micro-surface-disabled);
   overflow: hidden;
@@ -318,7 +318,9 @@
   height: 100%;
   border-radius: inherit;
   background: var(--micro-brand-primary);
-  box-shadow: inset 0 0 0 1px var(--micro-text-primary);
+  /* R1-UI17: حد خافت 30% من التوكن نفسه بدل الحد الداكن المصمت — يُبقي ظهور
+     الشرائح الفاتحة (b/c/e) فوق المقياس الفاتح بلا حد مسيطر */
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--micro-text-primary) 30%, transparent);
 }
 
 .m-main-metric__track[data-signed="true"] {

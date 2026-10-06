@@ -260,7 +260,9 @@
 
 /* التحميل: يمنع التكرار مع ثبات المساحة.
    - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
-   - زر نصي: فتحة محجوزة قبل التحميل؛ التسمية باقية والمؤشر لا يحركها.
+   - زر نصي: لا حجز لمساحة المؤشر في الحالة العادية (R1-UI02)؛ أثناء
+     التحميل يتمركز المؤشر داخل حشو بداية السطر نفسه فتبقى التسمية
+     في مكانها ويبقى العرض والارتفاع ثابتين في الأطوار الثلاثة.
    pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
    عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
 .m-btn.is-loading,
@@ -307,17 +309,14 @@
   border-radius: var(--micro-radius-button-long);
 }
 
-/* Legacy opt-in hook retained for markup compatibility. The production
-   default reserves the same slot on text-only controls before loading. */
+/* Legacy opt-in hook: explicitly reserves the loading slot (48px inline
+   padding per side). Since R1-UI02 the production default reserves nothing
+   in the resting state — this class is the explicit way to opt back into
+   the old reservation. The matching spinner rule is declared after the
+   default-B block below: equal specificity (0,3,0), so source order keeps
+   its reserved-slot offset (padding+gap)/2 = 14px unchanged. */
 .m-btn--loading-slot {
   padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
-}
-.m-btn--loading-slot.is-loading .m-btn__spinner {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
-  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
 }
 
 @keyframes micro-spin {
@@ -337,12 +336,21 @@
   }
 }
 
-/* Stable default B: indicator occupies a reserved inline-start slot while
-   the readable label remains visible. The reservation exists before loading. */
+/* عقد B الافتراضي للتحميل النصي — إصلاح R1-UI02 (جولة UI-SOURCE-REPAIR-R1):
+   - لا حجز في الحالة العادية: حشو الزر النصي يبقى توكنه (20px لكل جانب)
+     لأي زر نصي بلا أيقونة (قاعدة الحجز السابقة كانت تضيف 20+8=28px لكل
+     جانب فتضخّم كل زر نصي ساكن 56px إجمالًا — عيب مكوّن مشترك).
+   - أثناء التحميل: المؤشر (20px) يتمركز عموديًا داخل حشو بداية السطر
+     نفسه — inset-inline-start = (padding − icon)/2 = 0px عند تساوي
+     التوكنين — فلا تداخل مع التسمية ولا تغيّر في العرض/الارتفاع.
+   - الأبعاد ثابتة قبل/أثناء/بعد التحميل بلا تضخيم.
+   - الأزرار ذات الأيقونة كما هي: المؤشر في فتحة الأيقونة نفسها.
+   - التوافق الصريح بلا تغيير: m-btn--loading-slot (حجز فتحة مسبقة)
+     وm-btn--loading-replace (نمط A القديم بتوسيط المؤشر). */
 .m-btn:not(.m-btn--icon) .m-btn__spinner {
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button)) / 2);
   margin-block: auto;
   visibility: hidden;
 }
@@ -351,15 +359,20 @@
   visibility: visible;
   margin: 0;
 }
-.m-btn:not(.m-btn--icon):not(.m-btn--loading-replace):not(:has(.m-btn__icon)) {
-  padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
-}
 .m-btn:not(.m-btn--icon).is-loading .m-btn__spinner,
 .m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__spinner { visibility: visible; }
 .m-btn:not(.m-btn--icon).is-loading .m-btn__label,
 .m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__label { opacity: 1; }
 .m-btn--icon { padding-inline: 0; }
 .m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
+
+.m-btn--loading-slot.is-loading .m-btn__spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
+}
 
 /* Explicit legacy A compatibility; never the default. */
 .m-btn--loading-replace:not(.m-btn--icon):not(:has(.m-btn__icon)) {
