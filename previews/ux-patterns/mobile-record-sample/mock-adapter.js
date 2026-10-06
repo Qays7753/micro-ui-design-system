@@ -3,13 +3,19 @@
    الملف: previews/ux-patterns/mobile-record-sample/mock-adapter.js
    الحالة: DRAFT FOR RE-REVIEW — عينة مستقلة، ليست API جديدة للمكتبة.
 
-   العقد (docs/ux/F03-EXPERIENCE-BRIEF.md §4):
+   العقد (docs/ux/F03-COMPLETE-EXPERIENCE-BRIEF.md §4):
    - save({attemptId, mode:'add'|'edit', id, values})
        → Promise<{attemptId, outcome:'saved'|'not-saved'|'unknown', item?}>
-     عند نتيجة saved المؤكدة فقط يُلتزم العنصر في F03Store (معرف جديد
-     للإضافة وupdatedAt جديد) ويُحل Promise بمرجع العنصر الملزم.
-   - check({attemptId}) → Promise بالصيغة نفسها: استعلام حتمي عن نتيجة
-     محاولة الحفظ الأصلية بلا حفظ جديد (الافتراضي saved إن لم توجد).
+     values تشمل كل حقول العنصر (name/category/note/value/quantity/date/
+     status/photo) وتثبت snapshot عند الدعوة. عند نتيجة saved المؤكدة فقط
+     يُلتزم العنصر في F03Store (معرف جديد للإضافة وupdatedAt جديد) ويُحل
+     Promise بمرجع العنصر الملزم — الالتزام مرة واحدة (idempotent).
+   - (R2-01) check({attemptId}) استعلام حتمي عن محاولة الحفظ الأصلية بلا
+     حفظ جديد: حين تُحسم بنتيجة saved **يلتزم snapshot المحاولة الأصلية
+     ذاتها** (idempotent على دخولها — إعادة تحقق أو رد مكرر يعيد العنصر
+     الملتزم نفسه بلا upsert ثانٍ وبلا عنصر جديد)، ولا يستدعي save جديدًا.
+     بلا محاولة أصلية معروفة تُحل saved بلا item — والمستهلك يطبق سياسته
+     الموثقة: نجاح بعقد ناقص = بقاء unknown بلا ادعاء نجاح.
    - readCategories({readId})
        → Promise<{readId, outcome:'ready'|'empty'|'error', items:[{value,label}]}>
    - cancel(kind, id) → إلغاء صريح بعقد موثق: رفض Promise بـ
@@ -21,13 +27,10 @@
      تلقائيًا داخل الموصل بوقت حتمي (ARMED_SETTLE_MS = 2000ms) إن لم
      يُنهَ يدويًا من طبقة وضع المراجعة — مساران مستقلان فلا يعلق
      المستخدم داخل pending أبدًا (إغلاق R1-07).
-   - (R1-03) كل قراءة تثبت snapshot لعناصرها عند بدء الدعوة (نسخ
-     {value,label} عنصرًا عنصرًا) وتُسوّى من snapshot الخاص بها؛ تغيير
-     المصدر أو تعديل خصائص كائناته بعد الدعوة لا يمس النتيجة الجارية.
-   - (R1-04) المؤقت والتسوية التلقائية مربوطان بالدخول (entry) الذي
-     أنشأهما لا بـ pending[kind] الحالي؛ طلب أحدث لا تحسمه مؤقتات أقدم.
-   - الفيض: دعوة ثانية لنوع معلق تُعلن overflow وتُلغي المعلق القديم
-     إلغاءً صريحًا (cancel) — لا تجاهل صامت ولا وعد يتيم.
+   - (R1-03) كل قراءة تثبت snapshot لعناصرها عند بدء الدعوة وتُسوّى منه.
+   - (R1-04) المؤقت والتسوية التلقائية مربوطان بالدخول الذي أنشأهما.
+   - الفيض: دعوة ثانية لنوع معلق تُعلن overflow — الدخول المتزاح يبقى
+     قادرًا على الحسم بمؤقته أو بالإلغاء الصريح.
    - رفض Promise أثناء save يعامل unknown إن لم يؤكد العقد عدم الحفظ؛
      رفض check يبقى unknown؛ ولرفض معلوم صريح استخدم نتيجة not-saved.
    - عدادات وسجل الدعوات للفحص فقط — لا تدخل رسائل المستفيد.
@@ -41,6 +44,7 @@
   var ARMED_SETTLE_MS = 2000;  /* حسم السيناريو المسلح بوقت حتمي إن لم يُنهَ يدويًا */
   var SAVE_OUTCOMES = ['saved', 'not-saved', 'unknown'];
   var READ_OUTCOMES = ['ready', 'empty', 'error'];
+  var STATUS_VALUES = ['draft', 'ready', 'stopped'];
 
   function isSaveOutcome(o) { return SAVE_OUTCOMES.indexOf(o) >= 0 || o === 'reject'; }
   function isReadOutcome(o) { return READ_OUTCOMES.indexOf(o) >= 0 || o === 'reject'; }
@@ -61,12 +65,22 @@
       document.dispatchEvent(new CustomEvent('f03:sim', { detail: detail }));
     }
 
+    /* snapshot قيم العنصر كاملة عند الدعوة — النتيجة الجارية لا تمسها
+       تعديلات النموذج أو المصدر لاحقًا (أساس التزام R2-01) */
     function snapshotValues(values) {
       if (!values) return null;
+      function num(x) { return (typeof x === 'number' && isFinite(x)) ? x : null; }
+      function str(x) { return x == null ? '' : String(x); }
+      var q = num(values.quantity);
       return {
-        name: String(values.name == null ? '' : values.name),
+        name: str(values.name),
         category: values.category == null ? null : String(values.category),
-        note: String(values.note == null ? '' : values.note)
+        note: str(values.note),
+        value: values.value == null ? null : num(values.value),
+        quantity: q == null ? 0 : q,
+        date: (typeof values.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(values.date)) ? values.date : null,
+        status: STATUS_VALUES.indexOf(values.status) >= 0 ? values.status : 'draft',
+        photo: values.photo === true
       };
     }
 
@@ -119,27 +133,23 @@
         if (outcome === 'reject') {
           entry.result = { rejected: true };
           entry._reject(new Error('محاكاة UX-F03: رفض Promise بلا نتيجة معلومة'));
-        } else if (entry.kind === 'save' && outcome === 'saved') {
-          /* التزام النتيجة المؤكدة في المخزن ثم حل Promise بالعنصر الملزم،
-             وتسجيل العنصر الملتزم بالدخول ليُعيده check للمحاولة نفسها */
-          var v = entry.values;
-          var item = store.upsert({
-            id: entry.mode === 'add' ? store.nextId() : entry.itemId,
-            name: v.name,
-            category: v.category,
-            note: v.note,
-            updatedAt: Date.now()
-          });
-          entry.committedItem = item;
-          var res2 = { attemptId: entry.id, outcome: 'saved', item: item };
-          entry.result = res2;
-          entry._resolve(res2);
-        } else if (entry.kind === 'check' && outcome === 'saved' && entry.committedItemId) {
-          /* نجاح تحقق المحاولة نفسها: العنصر الملتزم بها (نسخة من المخزن) */
-          var committed = store.get(entry.committedItemId);
-          var res4 = { attemptId: entry.id, outcome: 'saved', item: committed };
-          entry.result = res4;
-          entry._resolve(res4);
+        } else if (outcome === 'saved') {
+          /* (R2-01) الالتزام باللقطة الأصلية للدخول نفسه، مرة واحدة
+             idempotent: save يلتزم قيمه هو، وcheck يلتزم محاولة الحفظ
+             الأصلية — إعادة تحقق/رد مكرر يعيد العنصر الملتزم نفسه. */
+          var src = entry.kind === 'save' ? entry : (entry.originalSave || null);
+          if (!src) {
+            /* بلا محاولة أصلية معروفة: عقد ناقص — نجاح بلا عنصر،
+               والمستهلك يطبق سياسته الموثقة (بقاء unknown) */
+            var resNoItem = { attemptId: entry.id, outcome: 'saved' };
+            entry.result = resNoItem;
+            entry._resolve(resNoItem);
+          } else {
+            var item = commitEntry(src);
+            var resOk = { attemptId: entry.id, outcome: 'saved', item: Object.assign({}, item) };
+            entry.result = resOk;
+            entry._resolve(resOk);
+          }
         } else {
           var res3 = { attemptId: entry.id, outcome: outcome };
           entry.result = res3;
@@ -148,6 +158,30 @@
       }
       emit(Object.assign({ type: 'settled', kind: entry.kind, outcome: outcome }, readout()));
       return true;
+    }
+
+    /* (R2-01) الالتزام مرة واحدة لدخول الحفظ: العنصر الملتزم هو المعاد
+       دائمًا — لا upsert ثانٍ مهما تكرر التحقق أو ورد رد مكرر. */
+    function commitEntry(entry) {
+      if (entry.committedItem) {
+        var cur = store ? store.get(entry.committedItem.id) : null;
+        return cur || entry.committedItem;
+      }
+      var v = entry.values;
+      var item = store.upsert({
+        id: entry.mode === 'add' ? store.nextId() : entry.itemId,
+        name: v.name,
+        category: v.category,
+        note: v.note,
+        value: v.value,
+        quantity: v.quantity,
+        date: v.date,
+        status: v.status,
+        photo: v.photo,
+        updatedAt: Date.now()
+      });
+      entry.committedItem = item;
+      return item;
     }
 
     /* إلغاء صريح بعقد موثق: رفض {cancelled:true} — للمستهلك تجاهله بصمت
@@ -190,6 +224,7 @@
         values: kind === 'save' ? snapshotValues(payload && payload.values) : null,
         /* (R1-03) snapshot القراءة يثبت الآن — عند بدء الدعوة لا عند التسوية */
         snapshot: kind === 'read' ? snapshotSource() : null,
+        originalSave: null, /* (R2-01) يُربط بعد الدعوة بدخول المحاولة الأصلية */
         armed: armed || defaultOutcome,
         settled: false,
         cancelled: false,
@@ -208,14 +243,11 @@
       return promise;
     }
 
-    /* التسوية اليدوية تستهدف الدخول المزاح أيضًا إن كان أحدث pending —
-       والعكس: settle(kind) ينهي المعلق الحالي لنوعه فقط (عقد واضح). */
-
     return {
       save: function (p) { return makeCall('save', p, 'saved'); },
       check: function (p) {
-        /* استعلام حتمي عن نتيجة المحاولة الأصلية بلا حفظ جديد؛ النجاح
-           يعيد العنصر الملتزم بالمحاولة نفسها (نسخة من المخزن) */
+        /* (R2-01) استعلام حتمي عن المحاولة الأصلية بلا save جديد: يُربط
+           دخول التحقق بدخول المحاولة الأصلية ليلتزم snapshotها idempotent */
         var attemptId = p && p.attemptId;
         var original = null;
         for (var i = calls.length - 1; i >= 0; i--) {
@@ -226,10 +258,7 @@
           replay = original.result.outcome;
         }
         var promise = makeCall('check', p, replay);
-        /* تسجيل العنصر الملتزم بالمحاولة الأصلية على دخول التحقق نفسه */
-        if (original && original.committedItem && calls.length) {
-          calls[calls.length - 1].committedItemId = original.committedItem.id;
-        }
+        if (original && calls.length) calls[calls.length - 1].originalSave = original;
         return promise;
       },
       readCategories: function (p) { return makeCall('read', p, 'ready'); },
@@ -272,6 +301,8 @@
     var staleRead = root.querySelector('#f03-rev-stale-read');
     var resetData = root.querySelector('#f03-rev-reset-data');
     var clearData = root.querySelector('#f03-rev-clear-data');
+    var photoBtn = root.querySelector('#f03-rev-photo-fallback');
+    var settingSel = root.querySelector('#f03-rev-setting-outcome');
     var saveCallsEl = root.querySelector('#f03-rev-save-calls');
     var checkCallsEl = root.querySelector('#f03-rev-check-calls');
     var readCallsEl = root.querySelector('#f03-rev-read-calls');
@@ -299,6 +330,7 @@
 
     function renderStorage() {
       if (storageEl && window.F03Store) {
+        /* (R2-05) الوصف دائمًا من آخر نتيجة كتابة فعلية */
         storageEl.textContent = window.F03Store.storageStatus().note;
       }
     }
@@ -330,7 +362,25 @@
       if (window.F03App) window.F03App.clearDemoData();
     });
 
+    /* تجربة بديل الصورة: كسر مصدر صورة التفاصيل ببيانات URI غير صالحة —
+       خطأ في العنصر بلا طلب شبكة، فيشتغل بديل الأحرف من المكوّن نفسه */
+    if (photoBtn) {
+      photoBtn.addEventListener('click', function () {
+        if (window.F03App) window.F03App.breakDetailPhoto();
+      });
+    }
+
+    /* نتيجة الإعداد التالية (UX-13): رفع معلق حتى الإنهاء أو رفض معلوم
+       — يستهلكه المستهلك عبر setSwitchPending مع استعادة القيمة عند الرفض */
+    if (settingSel) {
+      settingSel.addEventListener('change', function () {
+        document.dispatchEvent(new CustomEvent('f03:setting-scenario', { detail: { outcome: settingSel.value || 'auto' } }));
+      });
+    }
+
     document.addEventListener('f03:sim', function (e) { render(e.detail); });
+    /* (R2-05) وصف التخزين يتبع آخر كتابة فعلية — تحديث فوري عند أي تغيّر */
+    document.addEventListener('f03:storage-changed', renderStorage);
     render(connector.readout());
     renderStorage();
   }

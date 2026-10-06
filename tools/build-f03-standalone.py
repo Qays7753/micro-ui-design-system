@@ -43,7 +43,13 @@ EXPECTED_CSS = [
     "components/selection/picker.css",
     "components/messages/messages.css",
     "components/navigation/navigation.css",
+    "components/organization/organization.css",
     "components/data/data.css",
+    "components/info-strip/info-strip.css",
+    "components/info-strip/info-strip-peek.css",
+    "components/metric-comparison/metric-comparison.css",
+    "components/account-settings/account-settings.css",
+    "components/access-gateway/access-gateway.css",
     "previews/ux-patterns/mobile-record-sample/example.css",
 ]
 EXPECTED_JS = [
@@ -53,6 +59,13 @@ EXPECTED_JS = [
     "components/selection/picker.js",
     "components/messages/messages.js",
     "components/navigation/navigation.js",
+    "components/organization/organization.js",
+    "components/data/data.js",
+    "components/info-strip/info-strip.js",
+    "components/info-strip/info-strip-peek.js",
+    "components/metric-comparison/metric-comparison.js",
+    "components/account-settings/account-settings.js",
+    "components/access-gateway/access-gateway.js",
     "previews/ux-patterns/mobile-record-sample/demo-store.js",
     "previews/ux-patterns/mobile-record-sample/mock-adapter.js",
     "previews/ux-patterns/mobile-record-sample/example.js",
@@ -144,6 +157,28 @@ def inline_fonts_css() -> str:
     return header + css2
 
 
+def inline_css_urls(css_text: str, css_dir: Path) -> str:
+    """حشو url() التي تشير إلى أصول المستودع بـ data URIs (svg) — لاستقلالية
+    الملف الواحد عن ملفات جانبية. data:/http تُمرر كما هي، وwoff2 تُدار
+    بواسطة inline_fonts_css حصرًا. المسارات تُحل نسبةً إلى موضع ملف CSS الأصلي."""
+    def repl(m: re.Match) -> str:
+        quote, path = m.group(1) or "", m.group(2)
+        if path.startswith("data:") or path.startswith("http://") or path.startswith("https://"):
+            return m.group(0)
+        if path.endswith(".woff2"):
+            return m.group(0)
+        resolved = (css_dir / path).resolve()
+        try:
+            rel = repo_rel(resolved)
+        except ValueError:
+            return m.group(0)
+        if not rel.startswith("assets/") or not resolved.is_file():
+            return m.group(0)
+        data = base64.b64encode(resolved.read_bytes()).decode("ascii")
+        return f"url({quote}data:image/svg+xml;base64,{data}{quote})"
+    return re.sub(r"url\((['\"]?)([^)'\"]+)\1\)", repl, css_text)
+
+
 def style_block(src_rel: str, css: str) -> str:
     return f'<style data-f03-from="{src_rel}">\n{css}\n</style>'
 
@@ -159,7 +194,8 @@ def script_block(src_rel: str, js: str) -> str:
 def build_html() -> str:
     html = read(SAMPLE / "index.html")
 
-    # 1) أوراق الأنماط: fonts.css تُضمّن بخطوط base64؛ البقية كما هي
+    # 1) أوراق الأنماط: fonts.css تُضمّن بخطوط base64؛ والبقية مع حشو
+    #    url() الأصول بـ data URIs (استقلالية الملف الواحد)
     def css_repl(m: re.Match) -> str:
         href = m.group(1)
         if href == "data:,":
@@ -168,13 +204,15 @@ def build_html() -> str:
         rel = repo_rel(src)
         if rel == "assets/fonts/fonts.css":
             return style_block(rel, inline_fonts_css())
-        return style_block(rel, read(src))
+        return style_block(rel, inline_css_urls(read(src), src.parent))
 
     html, n_css = re.subn(
         r'<link rel="stylesheet" href="([^"]+)">',
         css_repl, html)
     if n_css != len(EXPECTED_CSS):
         raise SystemExit(f"BUILD ERROR: عدد أوراق الأنماط {n_css} ≠ المتوقع {len(EXPECTED_CSS)}")
+    # 1b) url() داخل الأنماط السطرية في HTML (أسهم شريط المعلومات) → data URIs
+    html = inline_css_urls(html, SAMPLE)
 
     # 2) السكربتات
     def js_repl(m: re.Match) -> str:

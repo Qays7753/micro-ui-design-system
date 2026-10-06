@@ -1,10 +1,10 @@
 /* =========================================================
-   Micro UI — UX-F03: تنسيق التجربة المترابطة «العناصر»
+   Micro UI — UX-F03: تنسيق تجربة الهاتف الكاملة «العناصر»
    الملف: previews/ux-patterns/mobile-record-sample/example.css
    الحالة: DRAFT FOR RE-REVIEW — التنسيق من التوكنات المعتمدة فقط
    (shared/tokens.css) — لا لون أو مقاس أو انحناء جديد. القواعد
-   المحصورة بالعينة (#f03-*/.f03-*) لتجميع الصفحة وترتيب العروض
-   والطبقات (قرار تركيب لا قيمة بصرية جديدة).
+   المحصورة بالعينة (#f03-*/.f03-*) لتجميع الصفحة وترتيب الوجهات
+   والطبقات وشريط التنقل (قرارات تركيب لا قيم بصرية جديدة).
    ========================================================= */
 
 /* ---------- صفحة العينة: هاتف أولًا، عمود مقروء على الشاشات الأوسع ----------
@@ -29,10 +29,10 @@ body {
 .f03-main {
   max-width: 560px;
   margin-inline: auto;
-  padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-6);
+  padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-10);
 }
 
-/* ---------- شريط التطبيق لكل عرض: رجوع + عنوان + فعل ---------- */
+/* ---------- شريط التطبيق لكل وجهة: رجوع + عنوان + فعل ---------- */
 .f03-appbar {
   display: flex;
   align-items: center;
@@ -52,50 +52,30 @@ body {
 .f03-appbar .m-btn { flex: none; }
 
 .f03-appbar__title:focus-visible,
-.f03-block__title:focus-visible {
+.f03-block__title:focus-visible,
+.f03-block__sub:focus-visible {
   outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
   outline-offset: 2px;
   border-radius: var(--micro-radius-chip);
 }
 
-/* ---------- الرئيسية: ملخص من البيانات الفعلية ---------- */
-.f03-home-line {
-  margin: 0 0 var(--micro-space-4);
-  color: var(--micro-text-secondary);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
+/* ---------- كتل وأفعال مشتركة ---------- */
+.f03-block {
+  margin-block-end: var(--micro-space-5);
 }
 
-.f03-card {
-  background-color: var(--micro-surface-base);
-  border-radius: var(--micro-radius-surface);
-  box-shadow: var(--micro-shadow-overlay);
-  padding: var(--micro-space-4);
-  margin-block-end: var(--micro-space-4);
-}
-
-.f03-card__title {
+.f03-block__title {
   margin: 0 0 var(--micro-space-3);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
   font-weight: 600;
 }
 
-.f03-dist {
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-3);
-}
-
-.f03-block {
-  margin-block-end: var(--micro-space-5);
-}
-
-.f03-block__title {
-  margin: 0 0 var(--micro-space-2);
+.f03-block__sub {
+  margin: var(--micro-space-4) 0 var(--micro-space-3);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .f03-hint {
@@ -109,12 +89,46 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--micro-space-2);
-  margin-block-end: var(--micro-space-5);
+  margin-block: var(--micro-space-5);
 }
 
 .f03-actions .m-btn {
   width: 100%;
   min-width: 0;
+}
+
+.f03-dialog-text {
+  margin: 0;
+}
+
+/* ---------- بوابة الوصول: عمود مقروء وسط الصفحة ---------- */
+.f03-gateway {
+  margin-block-start: var(--micro-space-5);
+  background-color: var(--micro-surface-base);
+  border-radius: var(--micro-radius-surface);
+  box-shadow: var(--micro-shadow-overlay);
+  padding: var(--micro-space-5) var(--micro-space-4);
+}
+
+/* ---------- الرئيسية: سطح بارز + شريط + مقارنة ---------- */
+.f03-hero {
+  margin-block-end: var(--micro-space-4);
+}
+
+.f03-hero .m-surface__amount {
+  margin: var(--micro-space-2) 0;
+}
+
+.f03-home-strip {
+  margin-block-end: var(--micro-space-4);
+}
+
+.f03-metric {
+  margin-block-end: var(--micro-space-4);
+}
+
+.f03-circles {
+  margin-block-end: 0;
 }
 
 /* ---------- صفوف القائمة وأحدث العناصر: هدف فتح واحد واضح ---------- */
@@ -131,7 +145,6 @@ body {
 .f03-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--micro-space-3);
   width: 100%;
   min-height: var(--micro-touch-min); /* 48px — قاعدة المشروع من التوكنات */
@@ -157,6 +170,14 @@ body {
   box-shadow: inset 0 0 0 var(--micro-focus-ring-width) var(--micro-focus-ring);
 }
 
+.f03-row__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .f03-row__name {
   min-width: 0;
   overflow-wrap: anywhere;
@@ -164,13 +185,35 @@ body {
 }
 
 .f03-row__meta {
-  flex: none;
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
 }
 
-/* ---------- القائمة: بحث وتصفية وحالات ---------- */
+.f03-row__value {
+  flex: none;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+}
+
+/* خانة التحديد: هدف مستقل بلا تداخل مع هدف الفتح (UX-24) — يظهر بوضع
+   التحديد فقط وعرضه محجوز مسبقًا كي لا يقفز التخطيط */
+.f03-row__check {
+  flex: none;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+  width: 24px;
+}
+
+.f03-selecting .f03-row__check { visibility: visible; }
+
+.f03-selecting .f03-row[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+}
+
+/* ---------- القائمة: بحث وتصفية وترتيب وحالات ---------- */
 .f03-toolbar {
   display: flex;
   align-items: flex-end;
@@ -185,6 +228,18 @@ body {
 }
 
 .f03-toolbar .f03-filter-btn { flex: none; }
+
+.f03-sortrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+  margin-block-end: var(--micro-space-3);
+}
+
+.f03-sortrow .m-seg { flex: 1 1 auto; min-width: 0; }
+.f03-sortrow .m-toggle { flex: none; }
 
 .f03-results {
   margin: 0 0 var(--micro-space-2);
@@ -212,9 +267,34 @@ body {
   align-items: center;
 }
 
-/* ---------- التفاصيل: صفوف تعريف بقسمة فاصلة خفيفة ---------- */
+/* شريط التحديد الجماعي: sticky فوق شريط التنقل (53px قياسه الفعلي) —
+   عقد m-actionbar: الشريط يبقى فوق المحتوى بحشوه ولا يُحجب بالشريط السفلي */
+#f03-select-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  flex-wrap: wrap;
+  margin-block-start: var(--micro-space-3);
+  inset-block-end: calc(53px + env(safe-area-inset-bottom, 0px));
+}
+
+#f03-select-bar[hidden] { display: none; }
+
+#f03-select-bar .m-btn { flex: none; }
+
+.f03-select-all { flex: 1 1 auto; min-width: 0; }
+
+/* ---------- التفاصيل: هوية وصفوف قراءة وسجل ---------- */
+.f03-detail-id {
+  margin-block-end: var(--micro-space-3);
+}
+
+.f03-detail-note {
+  margin-block-end: var(--micro-space-4);
+}
+
 .f03-readlist {
-  margin: 0 0 var(--micro-space-5);
+  margin: 0 0 var(--micro-space-4);
 }
 
 .f03-readlist__row {
@@ -244,13 +324,18 @@ body {
   overflow-wrap: anywhere; /* نص عربي طويل/مختلط يلتف دون قص أو خروج */
   font-weight: 500;
   text-align: start;
+  display: flex;
+  align-items: baseline;
+  gap: var(--micro-space-2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-.f03-detail-note {
+#f03-detail-activity {
   margin-block-end: var(--micro-space-4);
 }
 
-/* ---------- نموذج الإضافة/التعديل: صفحة كاملة ---------- */
+/* ---------- نموذج الإضافة/تعديل: صفحة كاملة ---------- */
 #f03-form {
   display: flex;
   flex-direction: column;
@@ -330,9 +415,17 @@ body {
   color: var(--micro-text-secondary);
 }
 
-/* رسالة خطأ الفئة: نفس عنصر رسالة الحقول (B02) مرتبط aria-describedby —
-   قواعد العرض من fields.css نفسها، ولون الخطأ هنا لأن الصف خارج .m-field */
-#f03-cat-field.has-error #f03-cat-msg { color: var(--micro-danger); }
+/* رسائل أخطاء الصفوف خارج .m-field: نفس لون الخطأ من التوكنات */
+#f03-cat-field.has-error #f03-cat-msg,
+#f03-status-field.has-error .m-field__msg { color: var(--micro-danger); }
+
+.f03-status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.f03-status .m-seg { width: 100%; }
 
 .f03-dirty {
   margin: 0;
@@ -341,16 +434,50 @@ body {
   color: var(--micro-text-secondary);
 }
 
-.f03-dialog-text {
-  margin: 0;
+/* ---------- التقارير: مقاطع رسوم متراصبة ---------- */
+.f03-rep-peek {
+  margin-block-end: var(--micro-space-4);
 }
 
-/* ---------- لوحة التصفية: خيارات الفئات من المصدر الواحد ---------- */
-.f03-filter-cats {
+#view-reports .m-chart {
+  margin-block-end: var(--micro-space-4);
+}
+
+#view-reports .f03-metric {
+  margin-block-end: var(--micro-space-4);
+}
+
+#view-reports .f03-dist {
   display: flex;
   flex-direction: column;
-  gap: var(--micro-space-2);
+  gap: var(--micro-space-3);
 }
+
+/* ---------- الحساب: هوية ومجموعات إعدادات ---------- */
+.f03-account-id {
+  margin-block-end: var(--micro-space-4);
+}
+
+#view-account .m-setting-group {
+  margin-block-end: var(--micro-space-4);
+}
+
+/* ---------- شريط التنقل الرئيسي: الوجهات الأربع فقط ----------
+   ثابت أسفل الصفحة على الوجهات الرئيسية، والمحتوى له حشو سفلي
+   كي لا يُحجب (عقد m-actionbar نفسه) */
+.f03-navbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  max-width: 560px;
+  margin-inline: auto;
+  padding-block-end: env(safe-area-inset-bottom, 0);
+  background-color: var(--micro-surface-base);
+  border-block-start: 1px solid var(--micro-border-divider);
+}
+
+.f03-navbar[hidden] { display: none; }
 
 /* ---------- تراكب الطبقات: منتقي الفئة فوق صفحة النموذج ----------
    قرار تركيب بمستوى العينة: الطبقان قيمتهما الافتراضية 85/80 في B07،
@@ -379,11 +506,19 @@ body {
   margin-block-end: var(--micro-space-2);
 }
 
-/* ---------- تذييل التجربة: تعريف قصير + مدخل وضع المراجعة ---------- */
+/* ---------- لوحة التصفية: خيارات الفئات من المصدر الواحد ---------- */
+.f03-filter-cats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+/* ---------- تذييل التجربة: بقاء البيانات بصدق + مدخل وضع المراجعة --
+   حشو سفلي يفوق شريط التنقل الثابت (53px) كي لا يُحجب رابط وضع المراجعة */
 .f03-foot {
   max-width: 560px;
   margin-inline: auto;
-  padding: 0 var(--micro-space-4) var(--micro-space-6);
+  padding: 0 var(--micro-space-4) calc(53px + var(--micro-space-6) + env(safe-area-inset-bottom, 0px));
 }
 
 .f03-foot__text {

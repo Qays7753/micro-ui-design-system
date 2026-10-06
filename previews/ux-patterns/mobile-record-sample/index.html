@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <!-- =========================================================
-  Micro UI — UX-F03: تجربة هاتف مترابطة «العناصر» (إضافة وتعديل وحفظ)
+  Micro UI — UX-F03: تجربة الهاتف الكاملة «العناصر»
   الملف: previews/ux-patterns/mobile-record-sample/index.html
   الحالة: DRAFT FOR RE-REVIEW — عينة محاكاة للمراجعة، ليست سياسة أعمال.
 
-  النطاق (docs/ux/F03-EXPERIENCE-BRIEF.md):
-  - وحدة مترابطة: رئيسية → قائمة (بحث وتصفية) → تفاصيل → إضافة/تعديل →
-    حفظ → ظهور النتيجة في التفاصيل والقائمة وملخص الرئيسية.
-  - نموذج الإضافة/التعديل صفحة كاملة (قرار تركيب موثق في الموجز §2)؛
-    منتقي الفئة وحوار تجاهل التعديلات ووضع المراجعة طبقات B07 معتمدة.
+  النطاق (docs/ux/F03-COMPLETE-EXPERIENCE-BRIEF.md):
+  - تطبيق تجريبي مترابط بتنقل رئيسي: الرئيسية / العناصر / التقارير /
+    الحساب عبر navbar B07، وبوابة الوصول محليًا بمعالج محاكاة، والتفاصيل
+    والإضافة/التعديل وجهات فرعية برجوع واضح.
   - بيانات تركيبية من مخزن وحيد (demo-store.js) — لا قيم مكررة هنا؛
     حفظ محلي عند توفره وجلسي عند التعذر، بلا شبكة أو مصادقة.
-  - الواجهة الافتراضية نظيفة بلا أدوات فحص؛ أدوات وضع المراجعة داخل
-    طبقة مغلقة افتراضيًا (رابط التذييل هو المدخل الوحيد).
+  - الطبقات كلها بعقد B07: منتقي الفئة، تجاهل التعديلات، تأكيد الحذف،
+    لوحة التصفية، وضع المراجعة (مغلق افتراضيًا)، إعدادات الحساب.
   - الرموز أدناه من أصول assets/icons (HugeIcons Stroke Rounded) بنفس
     محتواها وخصائصها (fill="none" على الأصل) — أداة البناء تتحقق من كل
     رمز مقابل ملفه وتفشل عند أي انحراف.
@@ -23,7 +22,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>العناصر</title>
+  <title>تجربة Micro — العناصر</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../../shared/tokens.css">
@@ -33,7 +32,13 @@
   <link rel="stylesheet" href="../../../components/selection/picker.css">
   <link rel="stylesheet" href="../../../components/messages/messages.css">
   <link rel="stylesheet" href="../../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../../components/organization/organization.css">
   <link rel="stylesheet" href="../../../components/data/data.css">
+  <link rel="stylesheet" href="../../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="../../../components/info-strip/info-strip-peek.css">
+  <link rel="stylesheet" href="../../../components/metric-comparison/metric-comparison.css">
+  <link rel="stylesheet" href="../../../components/account-settings/account-settings.css">
+  <link rel="stylesheet" href="../../../components/access-gateway/access-gateway.css">
   <link rel="stylesheet" href="example.css">
 </head>
 <body>
@@ -75,27 +80,166 @@
     <symbol id="i-back" viewBox="0 0 24 24" fill="none" data-icon-source="chevron-right.svg"><!-- assets/icons/chevron-right.svg — اتجاه الرجوع في RTL -->
       <path d="M9.00005 18C9.00005 18 15 13.5811 15 12C15 10.4188 9 6 9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" data-icon-source="home01.svg"><!-- assets/icons/home01.svg -->
+      <path d="M3 11.9896V14.5C3 17.7998 3 19.4497 4.02513 20.4749C5.05025 21.5 6.70017 21.5 10 21.5H14C17.2998 21.5 18.9497 21.5 19.9749 20.4749C21 19.4497 21 17.7998 21 14.5V11.9896C21 10.3083 21 9.46773 20.6441 8.74005C20.2882 8.01237 19.6247 7.49628 18.2976 6.46411L16.2976 4.90855C14.2331 3.30285 13.2009 2.5 12 2.5C10.7991 2.5 9.76689 3.30285 7.70242 4.90855L5.70241 6.46411C4.37533 7.49628 3.71179 8.01237 3.3559 8.74005C3 9.46773 3 10.3083 3 11.9896Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
+    <symbol id="i-items" viewBox="0 0 24 24" fill="none" data-icon-source="package01.svg"><!-- assets/icons/package01.svg -->
+      <path d="M2.5 7.5V13.5C2.5 17.2712 2.5 19.1569 3.67157 20.3284C4.84315 21.5 6.72876 21.5 10.5 21.5H13.5C17.2712 21.5 19.1569 21.5 20.3284 20.3284C21.5 19.1569 21.5 17.2712 21.5 13.5V7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M3.86909 5.31461L2.5 7.5H21.5L20.2478 5.41303C19.3941 3.99021 18.9673 3.2788 18.2795 2.8894C17.5918 2.5 16.7621 2.5 15.1029 2.5H8.95371C7.32998 2.5 6.51812 2.5 5.84013 2.8753C5.16215 3.2506 4.73113 3.93861 3.86909 5.31461Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+      <path d="M12 7.5V2.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
+      <path d="M10 10.5H14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
+    </symbol>
+    <symbol id="i-reports" viewBox="0 0 24 24" fill="none" data-icon-source="arrow-up02.svg"><!-- assets/icons/arrow-up02.svg -->
+      <path d="M12 5.5V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M18 11C18 11 13.5811 5.00001 12 5C10.4188 4.99999 6 11 6 11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+    </symbol>
+    <symbol id="i-account" viewBox="0 0 24 24" fill="none" data-icon-source="user-circle.svg"><!-- assets/icons/user-circle.svg -->
+      <path d="M18.4984 19.1511C17.3377 17.4018 15.2947 16.2009 12.9313 16.0569L11.9984 16C11.6652 16.0083 11.3547 16.0194 11.0617 16.0325C8.71722 16.1376 6.66598 17.3796 5.5 19.1511" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M14.9961 10C14.9961 11.6569 13.6529 13 11.9961 13C10.3392 13 8.99609 11.6569 8.99609 10C8.99609 8.34315 10.3392 7 11.9961 7C13.6529 7 14.9961 8.34315 14.9961 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+      <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
+    </symbol>
+    <symbol id="i-delete" viewBox="0 0 24 24" fill="none" data-icon-source="delete-02.svg"><!-- assets/icons/delete-02.svg -->
+      <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
+      <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
+      <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
+      <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="i-image" viewBox="0 0 24 24" fill="none" data-icon-source="image01.svg"><!-- assets/icons/image01.svg -->
+      <circle cx="7.5" cy="7.5" r="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+      <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" key="1" />
+      <path d="M5 21C9.37246 15.775 14.2741 8.88406 21.4975 13.5424" stroke="currentColor" stroke-width="1.5" key="2" />
+    </symbol>
   </svg>
 
   <main class="f03-main" id="f03-main">
 
-    <!-- ================= الرئيسية: ملخص من البيانات الفعلية ================= -->
-    <section class="f03-view" id="view-home" aria-labelledby="f03-home-title">
+    <!-- ================= بوابة الوصول: تجربة محلية بمعالج محاكاة ========== -->
+    <section class="f03-view" id="view-gateway" aria-labelledby="f03-gateway-title">
+      <section class="m-access-gateway f03-gateway" data-access-gateway aria-labelledby="f03-gateway-title">
+        <h1 class="m-access-gateway__heading" id="f03-gateway-title">الدخول إلى التجربة</h1>
+        <p class="m-access-gateway__intro">تجربة محلية ببيانات تجريبية — لا تتصل بأي خدمة مصادقة.</p>
+        <form data-access-form novalidate>
+          <div class="m-access-gateway__fields">
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="f03-gw-email">البريد الإلكتروني</label>
+              <div class="m-field__control">
+                <input class="m-field__input" id="f03-gw-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username" required>
+              </div>
+              <p class="m-field__msg" data-field-msg hidden></p>
+            </div>
+            <div class="m-field" data-micro-field>
+              <label class="m-field__label" for="f03-gw-password">كلمة المرور</label>
+              <div class="m-field__control m-access-gateway__password-control">
+                <input class="m-field__input" id="f03-gw-password" name="secret" data-access-credential="password" type="password" autocomplete="current-password" required>
+                <button class="m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal" type="button" data-access-reveal aria-controls="f03-gw-password" aria-label="إظهار كلمة المرور" aria-pressed="false">
+                  <span class="m-access-gateway__eye" aria-hidden="true"></span>
+                </button>
+              </div>
+              <p class="m-field__msg" data-field-msg hidden></p>
+            </div>
+          </div>
+          <div class="m-access-gateway__actions">
+            <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit" id="f03-gw-submit">متابعة</button>
+            <div class="m-access-gateway__links">
+              <button class="m-access-gateway__link" type="button" data-access-recovery hidden>نسيت كلمة المرور؟</button>
+            </div>
+          </div>
+          <div class="m-access-gateway__providers" data-access-providers hidden>
+            <p class="m-access-gateway__providers-title">دخول سريع للتجربة</p>
+            <div class="m-access-gateway__provider-list">
+              <button class="m-btn m-btn--secondary" type="button" data-access-provider="demo" id="f03-gw-demo">دخول تجريبي مباشر</button>
+            </div>
+          </div>
+          <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+        </form>
+        <p class="m-access-gateway__demo-note">لا تُرسل بياناتك إلى أي خدمة — الدخول محاكاة محلية فقط.</p>
+      </section>
+    </section>
+
+    <!-- ================= الرئيسية: ملخص فعلي من المخزن الوحيد ============ -->
+    <section class="f03-view" id="view-home" aria-labelledby="f03-home-title" hidden>
       <header class="f03-appbar">
-        <h2 class="f03-appbar__title" id="f03-home-title" tabindex="-1">العناصر</h2>
+        <h2 class="f03-appbar__title" id="f03-home-title" tabindex="-1">الرئيسية</h2>
       </header>
 
-      <p class="f03-home-line" id="f03-home-count"></p>
+      <div class="m-surface m-surface--curves f03-hero" id="f03-home-surface">
+        <div class="m-surface__waves" aria-hidden="true"></div>
+        <div class="m-surface__content">
+          <p class="m-surface__label">إجمالي قيمة العناصر</p>
+          <p class="m-surface__amount"><span dir="ltr" id="f03-home-total">0</span> د.أ</p>
+          <p class="m-surface__sub" id="f03-home-total-sub"></p>
+        </div>
+      </div>
 
-      <section class="f03-card" aria-labelledby="f03-home-dist-title">
-        <h3 class="f03-card__title" id="f03-home-dist-title">التوزيع حسب الفئة</h3>
-        <div class="f03-dist" id="f03-home-dist"><!-- صفوف m-progress من المخزن --></div>
-      </section>
+      <div class="m-info-strip f03-home-strip" data-info-strip id="f03-home-strip">
+        <div class="m-info-strip__viewport" data-info-strip-viewport role="group" tabindex="0" aria-label="أرقام العناصر">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" id="f03-strip-count">
+                <span class="m-info-card__label">عدد العناصر</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit">عنصر</span></span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" id="f03-strip-unknown">
+                <span class="m-info-card__label">بلا قيمة معلومة</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit">عنصر</span></span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" id="f03-strip-cats">
+                <span class="m-info-card__label">فئات قيد الاستخدام</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit">فئة</span></span>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <div class="m-info-strip__arrows">
+            <button class="m-info-strip__arrow" type="button" data-info-strip-prev aria-label="البطاقة السابقة">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../../assets/icons/chevron-right.svg')"></span>
+            </button>
+            <button class="m-info-strip__arrow" type="button" data-info-strip-next aria-label="البطاقة التالية">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../../assets/icons/chevron-left.svg')"></span>
+            </button>
+          </div>
+          <div class="m-info-strip__position" aria-label="موضع البطاقة">
+            <span data-info-strip-position>1 / 3</span>
+            <span class="m-info-strip__pages" data-info-strip-pages aria-label="اختيار البطاقة"></span>
+          </div>
+        </div>
+        <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
+      </div>
 
       <div class="f03-actions">
         <button type="button" class="m-btn m-btn--primary" id="f03-home-add">إضافة عنصر</button>
-        <button type="button" class="m-btn m-btn--secondary" id="f03-home-all"></button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-home-all">عرض جميع العناصر</button>
       </div>
+
+      <section class="f03-block" id="f03-home-compare" aria-labelledby="f03-home-compare-title">
+        <h3 class="f03-block__title" id="f03-home-compare-title">مقارنة سريعة</h3>
+        <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="عنصر" data-common-period="كل الفترات" id="f03-home-metric" aria-label="مقارنة عدد الفئات">
+          <div class="m-main-metric__layout">
+            <div class="m-main-metric__hero">
+              <span class="m-main-metric__label">إجمالي الكمية</span>
+              <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr" id="f03-home-qty">0</span><span class="m-main-metric__unit">وحدة</span></span>
+            </div>
+            <div>
+              <ul class="m-main-metric__source" data-bar-source hidden id="f03-home-bars-src"></ul>
+              <ul class="m-main-metric__rows" data-bar-items aria-label="عدد كل فئة"></ul>
+              <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+        <section class="m-metric-circles f03-circles" data-metric-circles data-layout="separated" data-radius="56" id="f03-home-circles" aria-label="مقارنة قيمة الفئات">
+          <h4 class="f03-block__sub">قيمة الفئات المعلومة</h4>
+          <ul class="m-metric-circles__source" data-metric-source hidden id="f03-home-circles-src"></ul>
+          <ol class="m-metric-circles__items" data-metric-items aria-label="المقارنة"></ol>
+          <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="قراءات خارج الدوائر"></ul>
+          <p class="m-metric-circles__empty" data-metric-scale></p>
+          <p class="m-metric-circles__empty" data-metric-empty hidden></p>
+        </section>
+      </section>
 
       <section class="f03-block" aria-labelledby="f03-home-recent-title">
         <h3 class="f03-block__title" id="f03-home-recent-title">أحدث العناصر</h3>
@@ -104,13 +248,13 @@
       </section>
     </section>
 
-    <!-- ================= قائمة العناصر: بحث وتصفية على البيانات ================= -->
+    <!-- ================= العناصر: بحث وتصفية وترتيب وتحديد جماعي ========== -->
     <section class="f03-view" id="view-list" aria-labelledby="f03-list-title" hidden>
       <header class="f03-appbar">
         <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-list-back" aria-label="رجوع إلى الرئيسية">
           <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
         </button>
-        <h2 class="f03-appbar__title" id="f03-list-title" tabindex="-1">جميع العناصر</h2>
+        <h2 class="f03-appbar__title" id="f03-list-title" tabindex="-1">العناصر</h2>
         <button type="button" class="m-btn m-btn--secondary" id="f03-list-add">
           <svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>إضافة
         </button>
@@ -123,33 +267,55 @@
             <input class="m-field__input" id="f03-search-input" type="search" autocomplete="off" placeholder="ابحث في العناصر…">
           </div>
         </div>
-        <!-- زر التصفية المعتمد (نمط F02): ثانوي + أيقونة + عدّاد الشروط المطبقة
-             — الصفر الحقيقي مخفي بـ--zero والاسم المتاح يشرح العدد بكلمات -->
         <button type="button" class="m-btn m-btn--secondary f03-filter-btn" id="f03-filter-btn" aria-label="تصفية، لا فلاتر مطبقة">
           <svg class="m-btn__icon" aria-hidden="true"><use href="#i-filter"/></svg>تصفية
           <span class="m-btn__counter m-btn__counter--zero" id="f03-filter-count" hidden>0</span>
         </button>
       </div>
 
+      <div class="f03-sortrow">
+        <div class="m-seg" data-seg role="group" aria-label="الترتيب" id="f03-sort-seg">
+          <button type="button" class="m-seg__item" aria-pressed="true" data-value="recent">الأحدث</button>
+          <button type="button" class="m-seg__item" aria-pressed="false" data-value="name">الاسم</button>
+          <button type="button" class="m-seg__item" aria-pressed="false" data-value="value">القيمة</button>
+        </div>
+        <button type="button" class="m-btn m-btn--secondary m-toggle" aria-pressed="false" id="f03-select-toggle">تحديد</button>
+      </div>
+
       <p class="f03-results" id="f03-list-results"></p>
 
-      <ul class="f03-rowlist" id="f03-list-rows"></ul>
+      <!-- مجموعة التحديد: الصفوف وشريط الأفعال والحامل الكل في نطاق واحد
+           (عقد data-choice-group: الحامل داخل المجموعة) -->
+      <div data-choice-group id="f03-select-zone">
+        <ul class="f03-rowlist" id="f03-list-rows"></ul>
 
-      <!-- لا بيانات ≠ لا نتائج: كل حالة بنصها وفعلها -->
-      <div class="f03-state" id="f03-list-empty" hidden>
-        <p class="f03-state__text">لا عناصر بعد — أضف أول عنصر.</p>
-        <button type="button" class="m-btn m-btn--primary" id="f03-list-empty-add">إضافة عنصر</button>
-      </div>
-      <div class="f03-state" id="f03-list-noresults" hidden>
-        <p class="f03-state__text">لا نتائج مطابقة.</p>
-        <div class="f03-state__actions">
-          <button type="button" class="m-btn m-btn--secondary" id="f03-clear-search" hidden>مسح البحث</button>
-          <button type="button" class="m-btn m-btn--secondary" id="f03-clear-filters" hidden>مسح الفلاتر</button>
+        <div class="f03-state" id="f03-list-empty" hidden>
+          <p class="f03-state__text">لا عناصر بعد — أضف أول عنصر.</p>
+          <button type="button" class="m-btn m-btn--primary" id="f03-list-empty-add">إضافة عنصر</button>
+        </div>
+        <div class="f03-state" id="f03-list-noresults" hidden>
+          <p class="f03-state__text">لا نتائج مطابقة.</p>
+          <div class="f03-state__actions">
+            <button type="button" class="m-btn m-btn--secondary" id="f03-clear-search" hidden>مسح البحث</button>
+            <button type="button" class="m-btn m-btn--secondary" id="f03-clear-filters" hidden>مسح الفلاتر</button>
+          </div>
+        </div>
+
+        <div class="m-actionbar f03-selectbar" id="f03-select-bar" hidden>
+          <label class="m-choice m-choice--check f03-select-all">
+            <input type="checkbox" id="f03-select-all" data-select-all aria-label="تحديد كل الصفوف الظاهرة">
+            <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="m-choice__text">الكل</span>
+          </label>
+          <button type="button" class="m-btn m-btn--secondary" id="f03-select-cancel">إلغاء التحديد</button>
+          <button type="button" class="m-btn m-btn--destructive-soft" id="f03-select-delete">
+            <svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف المحدد
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- ================= تفاصيل العنصر: البيانات المحفوظة ================= -->
+    <!-- ================= التفاصيل: البيانات المحفوظة ====================== -->
     <section class="f03-view" id="view-detail" aria-labelledby="f03-detail-title" hidden>
       <header class="f03-appbar">
         <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-detail-back" aria-label="رجوع">
@@ -159,13 +325,17 @@
       </header>
 
       <!-- قناة حالة سياق التفاصيل الوحيدة (role=status): رسالة نجاح الحفظ
-           تُكتب هنا مرة واحدة بعد الانتقال الفعلي إلى العرض (الموجز §7) -->
+           تُكتب هنا مرة واحدة في سياق متاح فعليًا (تأجيل R2-04) -->
       <div class="m-note m-note--success f03-detail-note" role="status" id="f03-detail-note" data-detail-state="success" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
         <div class="m-note__text">
           <span class="m-note__title" id="f03-detail-note-title"></span>
           <p class="m-note__body" id="f03-detail-note-body"></p>
         </div>
+      </div>
+
+      <div class="m-identity f03-detail-id" id="f03-detail-identity">
+        <!-- صورة العنصر أو بديل الأحرف — يُبنى من المخزن -->
       </div>
 
       <dl class="f03-readlist">
@@ -178,17 +348,46 @@
           <dd id="f03-read-cat"></dd>
         </div>
         <div class="f03-readlist__row">
+          <dt>الحالة</dt>
+          <dd id="f03-read-status"></dd>
+        </div>
+        <div class="f03-readlist__row">
+          <dt>القيمة</dt>
+          <dd id="f03-read-value"></dd>
+        </div>
+        <div class="f03-readlist__row">
+          <dt>الكمية</dt>
+          <dd id="f03-read-qty"></dd>
+        </div>
+        <div class="f03-readlist__row">
+          <dt>التاريخ</dt>
+          <dd id="f03-read-date"></dd>
+        </div>
+        <div class="f03-readlist__row">
           <dt>الملاحظة</dt>
           <dd id="f03-read-note"></dd>
         </div>
       </dl>
 
+      <section class="m-section" id="f03-detail-activity">
+        <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-detail-activity-body">
+          <span class="m-section__title">سجل النشاط</span>
+          <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="m-section__body" id="f03-detail-activity-body" hidden>
+          <ol class="m-steps" id="f03-detail-steps"></ol>
+        </div>
+      </section>
+
       <div class="f03-actions">
         <button type="button" class="m-btn m-btn--primary" id="f03-detail-edit">تعديل</button>
+        <button type="button" class="m-btn m-btn--destructive-soft" id="f03-detail-delete">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-delete"/></svg>حذف
+        </button>
       </div>
     </section>
 
-    <!-- ================= إضافة/تعديل: صفحة نموذج كاملة ================= -->
+    <!-- ================= إضافة/تعديل: صفحة نموذج كاملة =================== -->
     <section class="f03-view" id="view-form" aria-labelledby="f03-form-title" hidden>
       <header class="f03-appbar">
         <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-form-back" aria-label="رجوع">
@@ -198,16 +397,16 @@
       </header>
 
       <form id="f03-form" novalidate>
-        <!-- الاسم: مطلوب — التسمية أصلية بمعناها والتحقق سياسة المستهلك -->
         <div class="m-field" data-micro-field id="f03-name-field">
           <label class="m-field__label" for="f03-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
           <div class="m-field__control">
-            <input class="m-field__input" id="f03-name" name="name" type="text" autocomplete="off">
+            <input class="m-field__input" id="f03-name" name="name" type="text" maxlength="40" autocomplete="off">
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"></button>
           </div>
           <p class="m-field__msg" id="f03-name-msg" data-field-msg hidden></p>
+          <span class="m-field__count" aria-hidden="true"></span>
         </div>
 
-        <!-- الفئة: اختيار واحد عبر المنتقي المعتمد — صف قراءة + فعل تغيير -->
         <div class="f03-cat" id="f03-cat-field">
           <span class="f03-cat__label" id="f03-cat-label">الفئة <span class="m-field__required">(مطلوبة)</span></span>
           <button type="button" class="f03-cat__trigger" id="f03-cat-trigger" aria-describedby="f03-cat-label f03-cat-msg">
@@ -217,7 +416,42 @@
           <p class="m-field__msg" id="f03-cat-msg" data-field-msg hidden></p>
         </div>
 
-        <!-- الملاحظة: اختيارية — نص طويل يلتف دون قص -->
+        <div class="m-field" data-micro-field id="f03-value-field">
+          <label class="m-field__label" for="f03-value">القيمة <span class="m-field__required">(اختيارية — الفارغ يعني قيمة مجهولة)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input m-field__input--num" id="f03-value" name="value" type="text" inputmode="decimal" dir="ltr" placeholder="0.00">
+            <span class="m-field__unit">د.أ</span>
+          </div>
+          <p class="m-field__msg" id="f03-value-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="m-field" data-micro-field id="f03-qty-field">
+          <label class="m-field__label" for="f03-qty">الكمية</label>
+          <div class="m-field__control m-field__stepper">
+            <button type="button" data-step="down" aria-label="إنقاص الكمية">−</button>
+            <input class="m-field__input m-field__input--num" id="f03-qty" name="quantity" type="text" inputmode="numeric" dir="ltr" min="0" max="9999" step="1" value="0">
+            <button type="button" data-step="up" aria-label="زيادة الكمية">+</button>
+          </div>
+          <p class="m-field__msg" id="f03-qty-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="m-field" data-micro-field id="f03-date-field">
+          <label class="m-field__label" for="f03-date">التاريخ <span class="m-field__required">(اختياري)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input m-field__input--num" id="f03-date" name="date" type="date">
+          </div>
+          <p class="m-field__msg" id="f03-date-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="f03-status" id="f03-status-field">
+          <span class="f03-cat__label" id="f03-status-label">الحالة</span>
+          <div class="m-seg" data-seg role="group" aria-labelledby="f03-status-label" id="f03-status-seg">
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="draft">قيد الإعداد</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="ready">جاهز</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="stopped">متوقف</button>
+          </div>
+        </div>
+
         <div class="m-field" data-micro-field id="f03-note-field">
           <label class="m-field__label" for="f03-note">الملاحظة <span class="m-field__required">(اختيارية)</span></label>
           <div class="m-field__control">
@@ -225,11 +459,8 @@
           </div>
         </div>
 
-        <!-- مؤشر التعديل المحلي: نص عادي بلا قناة حية (UX-19) -->
         <p class="f03-dirty" id="f03-dirty-hint" hidden>تغييرات غير محفوظة.</p>
 
-        <!-- رسالة نتيجة/انتظار العملية: قناة سياق النموذج الوحيدة
-             (m-note ثابتة role=status بلا announce ثانٍ) -->
         <div class="m-note m-note--info" role="status" id="f03-op-note" data-op-state="info" hidden>
           <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
           <div class="m-note__text">
@@ -244,17 +475,227 @@
         </div>
       </form>
     </section>
+
+    <!-- ================= التقارير: رسوم من البيانات الفعلية ============== -->
+    <section class="f03-view" id="view-reports" aria-labelledby="f03-reports-title" hidden>
+      <header class="f03-appbar">
+        <h2 class="f03-appbar__title" id="f03-reports-title" tabindex="-1">التقارير</h2>
+      </header>
+
+      <div class="f03-sortrow">
+        <div class="m-seg" data-seg role="group" aria-label="مقياس العرض" id="f03-rep-seg">
+          <button type="button" class="m-seg__item" aria-pressed="true" data-value="value">القيمة</button>
+          <button type="button" class="m-seg__item" aria-pressed="false" data-value="quantity">الكمية</button>
+        </div>
+      </div>
+
+      <div class="m-info-strip m-info-peek f03-rep-peek" data-info-strip data-info-peek id="f03-rep-strip" aria-label="ملخصات المقياس">
+        <div class="m-info-strip__viewport" data-info-strip-viewport role="group" tabindex="0" aria-label="ملخصات المقياس">
+          <div class="m-info-strip__track" data-info-strip-track>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" id="f03-rep-total">
+                <span class="m-info-card__label">إجمالي المقياس</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit"></span></span>
+              </article>
+            </div>
+            <div class="m-info-strip__slide">
+              <article class="m-info-card" id="f03-rep-included">
+                <span class="m-info-card__label">عناصر مشمولة</span>
+                <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">0</span><span class="m-info-card__unit">عنصر</span></span>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="m-info-strip__controls" data-info-strip-controls>
+          <div class="m-info-strip__arrows">
+            <button class="m-info-strip__arrow" type="button" data-info-strip-prev aria-label="البطاقة السابقة">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../../assets/icons/chevron-right.svg')"></span>
+            </button>
+            <button class="m-info-strip__arrow" type="button" data-info-strip-next aria-label="البطاقة التالية">
+              <span class="m-info-strip__arrow-icon" aria-hidden="true" style="--m-info-icon:url('../../../assets/icons/chevron-left.svg')"></span>
+            </button>
+          </div>
+          <div class="m-info-strip__position" aria-label="موضع البطاقة">
+            <span data-info-strip-position>1 / 2</span>
+            <span class="m-info-strip__pages" data-info-strip-pages aria-label="اختيار البطاقة"></span>
+          </div>
+        </div>
+        <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
+      </div>
+
+      <div class="m-chart m-chart--bars" data-chart="bars" id="f03-rep-bars">
+        <h3 class="m-chart__title" id="f03-rep-bars-title">القيمة لكل فئة</h3>
+        <ul class="m-chart__data" hidden id="f03-rep-bars-data"></ul>
+        <div class="m-chart__plot" data-plot></div>
+        <p class="m-chart__summary" data-summary></p>
+      </div>
+
+      <div class="m-chart m-chart--donut" data-chart="donut" id="f03-rep-donut">
+        <h3 class="m-chart__title" id="f03-rep-donut-title">توزيع القيمة على الفئات</h3>
+        <ul class="m-chart__data" hidden id="f03-rep-donut-data"></ul>
+        <div class="m-chart__plot" data-plot></div>
+        <p class="m-chart__summary" data-summary></p>
+      </div>
+
+      <div class="m-chart m-chart--line" data-chart="line" id="f03-rep-line">
+        <h3 class="m-chart__title" id="f03-rep-line-title">القيمة أسبوعيًا</h3>
+        <ul class="m-chart__data" hidden id="f03-rep-line-data"></ul>
+        <div class="m-chart__plot" data-plot></div>
+        <p class="m-chart__summary" data-summary></p>
+      </div>
+
+      <section class="m-main-metric f03-metric" data-main-comparison data-common-unit="د.أ" data-common-period="كل الفترات" id="f03-rep-metric" aria-label="مقارنة الفئات">
+        <div class="m-main-metric__layout">
+          <div class="m-main-metric__hero">
+            <span class="m-main-metric__label" id="f03-rep-hero-label">إجمالي القيمة</span>
+            <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr" id="f03-rep-hero-num">0</span><span class="m-main-metric__unit" id="f03-rep-hero-unit">د.أ</span></span>
+          </div>
+          <div>
+            <ul class="m-main-metric__source" data-bar-source hidden id="f03-rep-bars-src"></ul>
+            <ul class="m-main-metric__rows" data-bar-items aria-label="مقارنة الفئات"></ul>
+            <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="f03-block" aria-labelledby="f03-rep-known-title">
+        <h3 class="f03-block__title" id="f03-rep-known-title">القيم المعلومة لكل فئة</h3>
+        <div class="f03-dist" id="f03-rep-known"></div>
+      </section>
+    </section>
+
+    <!-- ================= الحساب: مكونات الحساب والإعدادات ================ -->
+    <section class="f03-view" id="view-account" aria-labelledby="f03-account-view-title" data-account-settings data-account-layer-id="f03-account-layer">
+      <header class="f03-appbar">
+        <h2 class="f03-appbar__title" id="f03-account-view-title" tabindex="-1">الحساب</h2>
+      </header>
+
+      <div class="m-identity f03-account-id">
+        <span class="m-identity__initials" aria-hidden="true">تج</span>
+        <span class="m-identity__name">مستخدم التجربة</span>
+      </div>
+
+      <section class="m-setting-group">
+        <h3 class="m-setting-group__title">الحساب</h3>
+        <ul class="m-setting-group__items">
+          <li>
+            <button class="m-setting-row" type="button" data-account-open>
+              <span class="m-setting-row__icon" data-icon="user" aria-hidden="true"></span>
+              <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات الحساب والتطبيق</span><span class="m-setting-row__detail">مفاتيح بأثر تجريبي فوري</span></span>
+              <span class="m-setting-row__end" aria-hidden="true"></span>
+            </button>
+          </li>
+          <li>
+            <button class="m-setting-row" type="button" id="f03-account-logout">
+              <span class="m-setting-row__icon" data-icon="chevron" aria-hidden="true"></span>
+              <span class="m-setting-row__content"><span class="m-setting-row__label">تسجيل الخروج</span><span class="m-setting-row__detail">عودة إلى بوابة الدخول — بياناتك تبقى</span></span>
+              <span class="m-setting-row__end" aria-hidden="true"></span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <p class="f03-hint">تجربة محلية ببيانات تجريبية — لا حساب فعلي ولا مصادقة.</p>
+    <!-- ================= طبقة إعدادات الحساب — مكوّن E03 كما هو ========== -->
+    <div class="m-layer-backdrop" id="f03-account-backdrop" data-for="f03-account-layer" hidden></div>
+    <div class="m-layer m-layer--center" id="f03-account-layer" role="dialog" aria-modal="true"
+         aria-labelledby="f03-account-title" data-account-settings-layer hidden>
+      <header class="m-layer__head">
+        <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب" hidden>
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <h2 class="m-layer__title" id="f03-account-title" data-account-title="account" tabindex="-1">الحساب</h2>
+        <h2 class="m-layer__title" id="f03-app-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h2>
+        <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+        </button>
+      </header>
+      <div class="m-layer__body m-account-settings">
+        <div class="m-account-settings__view" data-account-view="account">
+          <div class="m-account-profile">
+            <span class="m-account-profile__avatar" aria-hidden="true">تج</span>
+            <span class="m-account-profile__text">
+              <span class="m-account-profile__name">مستخدم التجربة</span>
+              <span class="m-account-profile__detail">تجربة محلية بلا حساب فعلي</span>
+            </span>
+          </div>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">الحساب</h3>
+            <ul class="m-setting-group__items">
+              <li class="m-setting-row">
+                <span class="m-setting-row__icon" data-icon="user" aria-hidden="true"></span>
+                <span class="m-setting-row__content"><span class="m-setting-row__label">الملف الشخصي</span><span class="m-setting-row__detail">بيانات تجريبية فقط</span></span>
+              </li>
+            </ul>
+          </section>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">التطبيق</h3>
+            <ul class="m-setting-group__items">
+              <li>
+                <button class="m-setting-row" type="button" data-account-to-application>
+                  <span class="m-setting-row__icon" data-icon="info" aria-hidden="true"></span>
+                  <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات التطبيق</span><span class="m-setting-row__detail">مفاتيح بأثر فوري على الرئيسية والتقارير</span></span>
+                  <span class="m-setting-row__end" aria-hidden="true"></span>
+                </button>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <div class="m-account-settings__view" data-account-view="application" hidden>
+          <p class="m-account-settings__demo-note">الإعدادات تُطبق فورًا وتُحفظ في هذا المتصفح، ويمكن استعادتها من وضع المراجعة.</p>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">تفضيلات التجربة</h3>
+            <div class="m-setting-row m-setting-row--toggle">
+              <label class="m-switch">
+                <input type="checkbox" role="switch" data-account-setting="includeStoppedInReports">
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">تضمين العناصر المتوقفة في التقارير</span><span class="m-switch__state">تأثير فوري على أرقام التقارير</span></span>
+              </label>
+            </div>
+            <div class="m-setting-row m-setting-row--toggle">
+              <label class="m-switch">
+                <input type="checkbox" role="switch" data-account-setting="showHomeComparison">
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">إظهار المقارنة في الرئيسية</span><span class="m-switch__state">تأثير فوري على قسم المقارنة</span></span>
+              </label>
+            </div>
+          </section>
+          <p class="m-account-settings__demo-status" data-account-demo-status aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- تنبيه مكتمل الأفعال: نتائج الحذف الجماعي — لا معلومة مطلوبة للاستكمال -->
+    <div class="m-toast" id="f03-toast" hidden>
+      <span class="m-toast__text" id="f03-toast-text"></span>
+      <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+    </div>
+    </section>
   </main>
 
-  <!-- تذييل قصير: تعريف التجربة + مدخل وضع المراجعة الوحيد -->
+  <!-- شريط التنقل الرئيسي: الوجهات الأربع فقط — يخفى في البوابة والفرعية -->
+  <nav class="m-navbar f03-navbar" id="f03-navbar" role="navigation" aria-label="التنقل الرئيسي" hidden>
+    <button type="button" class="m-navbar__item" id="f03-nav-home" aria-current="page">
+      <svg aria-hidden="true"><use href="#i-home"/></svg>الرئيسية
+    </button>
+    <button type="button" class="m-navbar__item" id="f03-nav-list">
+      <svg aria-hidden="true"><use href="#i-items"/></svg>العناصر
+    </button>
+    <button type="button" class="m-navbar__item" id="f03-nav-reports">
+      <svg aria-hidden="true"><use href="#i-reports"/></svg>التقارير
+    </button>
+    <button type="button" class="m-navbar__item" id="f03-nav-account">
+      <svg aria-hidden="true"><use href="#i-account"/></svg>الحساب
+    </button>
+  </nav>
+
+  <!-- تذييل قصير: بقاء البيانات بصدق + مدخل وضع المراجعة الوحيد -->
   <footer class="f03-foot">
-    <p class="f03-foot__text">تجربة ببيانات تجريبية — تُحفظ تعديلاتك محليًا في هذا المتصفح عند توفر التخزين.</p>
+    <p class="f03-foot__text" id="f03-storage-line"></p>
     <button type="button" class="f03-foot__link" id="f03-review-open">وضع المراجعة</button>
   </footer>
 
-  <!-- ================= طبقة منتقي الفئة — B07 + MicroPicker كما هما =====
-       كل وسائل الإغلاق إغلاق عرض لا «إلغاء تعديل». قراءة بمعرف جديد لكل
-       فتح ومرتبطة بجلسة الفتح — رد سياق مغلق يُبطل ويُلغى صراحةً. -->
+  <!-- ================= طبقة منتقي الفئة — B07 + MicroPicker كما هما ===== -->
   <div class="m-layer-backdrop" data-for="f03-cat-layer" hidden id="f03-cat-backdrop"></div>
   <div class="m-layer" id="f03-cat-layer" role="dialog" aria-modal="true"
        aria-labelledby="f03-cat-layer-title" data-backdrop="close" hidden>
@@ -265,10 +706,7 @@
       </button>
     </div>
     <div class="m-layer__body">
-      <!-- القناة الحية لحالة القراءة داخل نطاق الطبقة المفتوحة -->
       <p class="f03-live" id="f03-cat-live" role="status"></p>
-      <!-- رسالة زوال الفئة: ظاهرة داخل الطبقة بنمط B06 (m-note--warning +
-           role=alert) وهي القناة الوحيدة لهذا الحدث (درس F02-R2-01) -->
       <div class="m-note m-note--warning f03-drop-note" role="alert" id="f03-cat-drop-note" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
         <div class="m-note__text">
@@ -287,10 +725,7 @@
     </div>
   </div>
 
-  <!-- ================= حوار تجاهل التعديلات — B07 كما هو ==========
-       البقاء/Escape/الإغلاق الظاهر/الخلفية كلها بقاء: لا تمس القيم ولا
-       تغادر. «تجاهل التعديلات» وحده يغادر النموذج بعد اكتمال الإغلاق،
-       دون أي حفظ. -->
+  <!-- ================= حوار تجاهل التعديلات — B07 كما هو ================ -->
   <div class="m-layer-backdrop" data-for="f03-leave-dialog" hidden></div>
   <div class="m-layer m-layer--center" id="f03-leave-dialog" role="dialog" aria-modal="true"
        aria-labelledby="f03-leave-title" data-backdrop="close" hidden>
@@ -309,11 +744,29 @@
     </div>
   </div>
 
+  <!-- ================= حوار تأكيد الحذف — B07 بعقد keep =================
+       كل إغلاق غير «حذف» إلغاء؛ النص يوضح أثر الحذف بصدق (UX-04) -->
+  <div class="m-layer-backdrop" data-for="f03-delete-dialog" hidden></div>
+  <div class="m-layer m-layer--center m-layer--danger" id="f03-delete-dialog" role="dialog" aria-modal="true"
+       aria-labelledby="f03-delete-title" data-backdrop="keep" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="f03-delete-title">تأكيد الحذف</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إلغاء الحذف">
+        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="m-layer__body">
+      <p class="f03-dialog-text" id="f03-delete-text"></p>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--secondary" data-layer-close data-autofocus>إلغاء</button>
+      <button type="button" class="m-btn m-btn--destructive" id="f03-delete-confirm">حذف</button>
+    </div>
+  </div>
+
   <!-- ================= لوحة التصفية — عقد B07 كما هو (data-filter-panel) ==
-       الفتح يعيد المسودة من المطبق. التطبيق يقرّ ويطلق
-       micro-navigation:filters-applied والعدّاد يطابق المطبق. المسح يمسح
-       المسودة وحده، والإلغاء/الإغلاق/Escape/الخلفية ترمي المسودة. خانات
-       الفئات تُبنى من المصدر الواحد (demo-store.js) بلا قيم مكررة. -->
+       الاتحاد ضمن بعد الفئة (R2-02)؛ المسح الخارجي يزامن المطبق عبر
+       MicroNavigation.setAppliedFilters (R2-03) -->
   <div class="m-layer-backdrop" data-for="f03-filter-layer" hidden></div>
   <div class="m-layer" id="f03-filter-layer" role="dialog" aria-modal="true"
        aria-labelledby="f03-filter-title" data-backdrop="close" data-filter-panel hidden>
@@ -334,11 +787,7 @@
     </div>
   </div>
 
-  <!-- ================= وضع المراجعة — طبقة أدوات مغلقة افتراضيًا ==========
-       المدخل الوحيد رابط التذييل. الأدوات داخل الطبقة تعمل من الهاتف بلا
-       console ولا reload، والسيناريو المسلح يُحسم تلقائيًا بوقت حتمي
-       داخل الموصل إن لم يُنهَ من هنا (إغلاق R1-07). النصوص التقنية داخل
-       هذه الطبقة فقط ولا تُنقل إلى واجهة المستفيد. -->
+  <!-- ================= وضع المراجعة — طبقة أدوات مغلقة افتراضيًا ======== -->
   <div class="m-layer-backdrop" data-for="f03-review-layer" hidden></div>
   <div class="m-layer" id="f03-review-layer" role="dialog" aria-modal="true"
        aria-labelledby="f03-review-title" data-backdrop="close" hidden>
@@ -390,9 +839,19 @@
         <button type="button" class="m-btn m-btn--secondary" id="f03-rev-stale-read">استجابة قراءة بمعرف قديم</button>
       </div>
       <div class="f03-rev__group">
-        <h4>البيانات التجريبية</h4>
+        <label for="f03-rev-setting-outcome">نتيجة الإعداد التالية</label>
+        <select id="f03-rev-setting-outcome">
+          <option value="">تلقائي — تطبيق فوري</option>
+          <option value="pending">رفع معلق — حتى الإنهاء أو المهلة</option>
+          <option value="reject">رفض معلوم — استعادة القيمة السابقة</option>
+        </select>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-settle-setting" disabled>إنهاء الإعداد المعلق</button>
+      </div>
+      <div class="f03-rev__group">
+        <h4>البيانات التجريبية والعرض</h4>
         <button type="button" class="m-btn m-btn--secondary" id="f03-rev-reset-data">استعادة البيانات التجريبية الأصلية</button>
         <button type="button" class="m-btn m-btn--secondary" id="f03-rev-clear-data">تفريغ البيانات التجريبية</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-rev-photo-fallback">تجربة بديل الصورة في التفاصيل</button>
       </div>
       <div class="f03-rev__readout" aria-label="قراءات فحص تقنية">
         <span>التخزين: <b id="f03-rev-storage"></b></span>
@@ -411,6 +870,13 @@
   <script src="../../../components/selection/picker.js"></script>
   <script src="../../../components/messages/messages.js"></script>
   <script src="../../../components/navigation/navigation.js"></script>
+  <script src="../../../components/organization/organization.js"></script>
+  <script src="../../../components/data/data.js"></script>
+  <script src="../../../components/info-strip/info-strip.js"></script>
+  <script src="../../../components/info-strip/info-strip-peek.js"></script>
+  <script src="../../../components/metric-comparison/metric-comparison.js"></script>
+  <script src="../../../components/account-settings/account-settings.js"></script>
+  <script src="../../../components/access-gateway/access-gateway.js"></script>
   <script src="demo-store.js"></script>
   <script src="mock-adapter.js"></script>
   <script src="example.js"></script>

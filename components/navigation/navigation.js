@@ -410,6 +410,30 @@
     });
     var cancel = panel.querySelector('[data-filter-cancel]');
     if (cancel) cancel.addEventListener('click', function () { closeLayer(panel); }); /* يرمي الجاري */
+    /* (F03-R2-03) مزامنة المطبّق من الخارج بعقد موثق: يحدّث المتغير الداخلي
+       `applied` نفسه (لا نسخة عرض) ومسودة الفتح التالي والملخص و
+       __microApplied معًا — بقية العقد (مسح/إلغاء داخل اللوحة ترمي الجاري
+       وحده) كما هي. القيم {key: true|false|نص}؛ مفتاح بلا input في اللوحة
+       يُهمل، ومدخل بلا قيمة في values يُصفَّر (false/نص فارغ). التغيير
+       موثق في مواصفة navigation مع رجعية F02. */
+    panel.__microSetApplied = function (values) {
+      applied = {};
+      var src = values && typeof values === 'object' ? values : {};
+      draftInputs(panel).forEach(function (input) {
+        var key = input.getAttribute('data-filter-key');
+        if (!key || key === 'none') return;
+        var has = Object.prototype.hasOwnProperty.call(src, key);
+        if (input.type === 'checkbox') {
+          applied[key] = has ? src[key] === true : false;
+          input.checked = applied[key] === true;
+        } else {
+          applied[key] = has && typeof src[key] === 'string' ? String(src[key]).trim() : '';
+          input.value = applied[key];
+        }
+      });
+      updateSummary(panel, 'المطبّق');
+      panel.__microApplied = Object.assign({}, applied);
+    };
   }
 
   /* تبويبات المحتوى */
@@ -487,6 +511,11 @@
     /* قراءة المطبّق الحالي — للفحص والمستهلك */
     appliedFilters: function (panel) {
       return panel && panel.__microApplied ? Object.assign({}, panel.__microApplied) : {};
+    },
+    /* (F03-R2-03) مزامنة المطبّق من الخارج بعقد موثق — انظر initFilterPanel.
+       تغيير محدود موثق في مواصفة navigation مع رجعية F02. */
+    setAppliedFilters: function (panel, values) {
+      if (panel && typeof panel.__microSetApplied === 'function') panel.__microSetApplied(values);
     }
   };
   document.addEventListener('DOMContentLoaded', function () { init(); });
