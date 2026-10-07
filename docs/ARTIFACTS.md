@@ -1,3 +1,11 @@
+# أحدث جولة — UI-R3 + جدول الطلبات / 2026-10-07
+
+- [تقرير جولة جدول الطلبات](../reviews/ORDER-SCHEDULE/review.md): إغلاق UI-R3-01..03 + مكوّن جدول الطلبات ببطاقة قبول CAL-01..15 — DRAFT FOR REVIEW.
+- [أدلة إصلاح UI-R3](../reviews/UI-SOURCE-REPAIR-R3/): أداة 130/130 من checkout نظيف `4d45311` مع [برهان قبل/بعد](../reviews/UI-SOURCE-REPAIR-R3/before-after/) (12/12 فشل R3 على `e517214` → صفر على `2cda796`) وprobes المراجع 0/6→6/6، ولقطات الحالات الثلاث.
+- [تحقق CAL الآلي](../reviews/ORDER-SCHEDULE/verification.json): 16/16 مسارًا / 267 تحقيقًا على src/standalone/sample/comp، مع قياسات فعلية للخلايا والأزرار.
+- [المراجعة المستقلة](../reviews/ORDER-SCHEDULE/INDEPENDENT-REVIEW-R1.md): قراءات رؤية فعلية (18 قراءة خام في independent/vlm-readings/) — DRAFT READY FOR REVIEW بلا بنود جسيمة؛ استثناء خلايا الشهر PROPOSED ينتظر توقيع المالك.
+- المصادر: المكوّن `components/order-schedule/`، الموصل والعينة `previews/ux-patterns/order-schedule/`، الدمج في F03 (`view-schedule`)، والملف الواحد `previews/ux-patterns/mobile-record-sample/standalone.html` (يعمل بfile:// بلا إنترنت).
+
 # أحدث مراجعة ومراجع جدول الطلبات — 2026-10-07
 
 - [مراجعة UI-R2 المستقلة](../reviews/UI-SOURCE-REPAIR-R2/CHATGPT-REVIEW-R1.md): CHANGES REQUIRED؛ [التشغيل المعاد118/118](../reviews/UI-SOURCE-REPAIR-R2/independent/r1/official-replay.json)، [الفجوات6/6](../reviews/UI-SOURCE-REPAIR-R2/independent/r1/checks.json)، وprobes/replay قابلان للإعادة دون تعديل المصدر.

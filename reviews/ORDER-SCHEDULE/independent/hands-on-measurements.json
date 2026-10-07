@@ -1,0 +1,72 @@
+{
+  "reviewer": "الوكيل 5 — المراجعة المستقلة (R3-5)",
+  "reviewed_head": "4d453118553c4405cd77b33414043dcdddd6dbd3",
+  "reviewed_tree": "1cd2fd82d36f2fc3304f3374054e24f3b6f046bc",
+  "ran_with": {
+    "browser": "Chromium 143.0.7499.4 headless (Playwright Python)",
+    "vlm": "z-ai vision CLI — model glm-5v-turbo (11 لقطات المنفذ + 4 قراءات تكبير + 3 لقطات المراجع الخاصة = 18 ملفًا في independent/vlm-readings/)",
+    "targets": "sample (HTTP 127.0.0.1) + F03 src (HTTP) — العينة المستقلة وF03"
+  },
+  "measurements": {
+    "dots_cap": {
+      "day_2026-10-22_dots": 3,
+      "day_2026-10-22_counter": "5",
+      "max_dots_any_cell": 3,
+      "note": "قياس برمجي مباشر — يغلب قراءتي VLM الأولية التي ظنت 5 نقاط (عدّ VLM للنقاط 6px غير موثوق)"
+    },
+    "colors_vs_tokens": {
+      "chip_progress": ["rgb(233,241,250)", "rgb(38,94,145)"],
+      "chip_success": ["rgb(229,243,234)", "rgb(23,102,71)"],
+      "chip_warning": ["rgb(255,241,205)", "rgb(129,84,0)"],
+      "tokens": {"--micro-info-surface": "#E9F1FA", "--micro-info": "#265E91", "--micro-success-surface": "#E5F3EA", "--micro-success": "#176647", "--micro-warning-surface": "#FFF1CD", "--micro-warning": "#815400"},
+      "selected_cell_fill": "rgb(22,77,89) = #164D59 = --micro-brand-primary",
+      "today_ring": "rgb(22,77,89) 0px 0px 0px 2px",
+      "verdict": "تطابق تام — صفر ألوان خارج التوكنات في العناصر المقيسة"
+    },
+    "contrast_ratios": {
+      "progress_text_on_surface": "5.96:1",
+      "success_text_on_surface": "6.06:1",
+      "warning_text_on_surface": "5.85:1",
+      "selected_day_number_white_on_petroleum": "9.38:1"
+    },
+    "keyboard_rtl": {
+      "sample_arrows": {"before": "2026-10-07", "after_ArrowLeft": "2026-10-08 (اليوم التالي — صحيح في RTL)", "after_ArrowRight_back": "2026-10-07"},
+      "f03_arrows": {"focused": "2026-10-08", "after_ArrowLeft": "2026-10-09", "selected_after_Enter": "2026-10-09"},
+      "roving_tabindex_zero_count": 1,
+      "month_nav_position": {"prev_month_x": 326 "(يمين العنوان — صحيح RTL)", "next_month_x": 88 "(يسار)", "prev_label": "الشهر السابق", "next_label": "الشهر التالي"}
+    },
+    "tab_stops_sample": "14 توقفًا من زر إضافة الرأس حتى الخروج من المكوّن (زر الرأس، تقويم/قائمة، السابق/التالي/اليوم، شهر/يوم، خلية واحدة roving، إضافة اللوحة، 3 صفوف) — لا عشرات التوقفات",
+    "aria": {
+      "day7_label": "الأربعاء 7 أكتوبر 2026، اليوم، 3 طلبات",
+      "day22_label": "الخميس 22 أكتوبر 2026، 5 طلبات",
+      "aria_current_date_count": 1,
+      "aria_selected_count": 1,
+      "live_regions": "منطقة حية واحدة polite (سجل العينة) + مسار MicroMessages المهذب — لا دوي صوتي"
+    },
+    "reduced_motion": "صفر انتقالات غير صفرية على عناصر المكوّن في سياق prefers-reduced-motion=reduce",
+    "f03_journey": {
+      "view_schedule_opened": true,
+      "navbar_hidden": "display:none (#f03-navbar)",
+      "forbidden_terms_in_view": [],
+      "list_rows": 24,
+      "back_focus_restored": "f03-home-schedule",
+      "restored_view_after_return": "list (المثيل حي — الحالة محفوظة)",
+      "add_flow": "النموذج فُتح وحُفظ بلا reload: عدّاد 2026-10-08 صار 4 (كان 3)",
+      "day_screen_titles": "الأربعاء 7 أكتوبر 2026 → بعد سهم التالي: الخميس 8 أكتوبر 2026",
+      "escape_closes_layer_and_returns_focus_to_row": "od-22a"
+    },
+    "reports_r3_resize": {
+      "before_430_min_effective_label_px": 12,
+      "after_320_min_effective_label_px": 12,
+      "overflow_at_320": 0,
+      "note": "فتح التقارير عند 430 ثم set_viewport_size(320) دون أي نقرة أو إعادة فتح — إصلاح UI-R3-01 يعمل (قبل الإصلاح كان 10.8)"
+    },
+    "sizes_320": {
+      "month_cell": "37.70 × 37.79 px (PROPOSED كما هو معلن)",
+      "rows_min_height": "73.98 px (فوق 48)",
+      "nav_arrows": "48×48", "today_btn": "64×48", "views_modes_add": "48px"
+    },
+    "toast_in_f03": "عنصر toast داخل #view-account: w=0/h=0 خارجها (غير مرئي بصريًا في الجدولة) — الإعلان يمر بالمنطقة الحية المهذبة فقط؛ موثق من المنفذ كسلوك قائم",
+    "page_errors": "صفر في العينة وF03"
+  }
+}

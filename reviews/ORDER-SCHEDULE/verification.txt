@@ -1,5 +1,5 @@
-ORDER-SCHEDULE (CAL) — نتائج الفحص (2026-10-07T11:21:02+00:00)
-المصدر: commit 623ff38e5eb72ec9aea2125556592e525bb62a65 tree defdda59ef297e45e1aed3173c66dd58f8654e35 branch main clean=False
+ORDER-SCHEDULE (CAL) — نتائج الفحص (2026-10-07T11:29:21+00:00)
+المصدر: commit 4d453118553c4405cd77b33414043dcdddd6dbd3 tree 1cd2fd82d36f2fc3304f3374054e24f3b6f046bc branch None clean=True
 المحرك: Chromium 143.0.7499.4 headless
 الأهداف: src=HTTP (F03)؛ standalone=file:// (F03 ملف واحد)؛ sample=file:// (عينة مستقلة)؛ comp=file:// (وثيقة المكوّن)
 طريقة التكبير: محاكاة تكبير نص ×2 بمرورين نظيفين (قراءة الأحجام المحسوبة لكل العناصر ثم تطبيقها كي لا تتضاعف الموروثة) — ليست native zoom؛ المرجع WCAG 1.4.4/1.4.10 للمراجعة لا ادعاء امتثال شامل

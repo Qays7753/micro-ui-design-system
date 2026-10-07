@@ -1,13 +1,13 @@
 {
   "tool": "tools/order-schedule-check.py",
   "experience": "جدول الطلبات المجدولة (ORDER-SCHEDULE) — مصفوفة CAL-01..15 من بطاقة القبول docs/ux/ORDER-SCHEDULE-ACCEPTANCE.md",
-  "generated_at_utc": "2026-10-07T11:21:02+00:00",
+  "generated_at_utc": "2026-10-07T11:29:21+00:00",
   "source": {
-    "commit": "623ff38e5eb72ec9aea2125556592e525bb62a65",
-    "tree": "defdda59ef297e45e1aed3173c66dd58f8654e35",
-    "branch": "main",
-    "dirty_files": "?? reviews/ORDER-SCHEDULE/\n?? tools/order-schedule-check.py",
-    "status_clean": false
+    "commit": "4d453118553c4405cd77b33414043dcdddd6dbd3",
+    "tree": "1cd2fd82d36f2fc3304f3374054e24f3b6f046bc",
+    "branch": null,
+    "dirty_files": "",
+    "status_clean": true
   },
   "source_note": "git_meta التُقطت قبل إنشاء مجلد الإخراج؛ الأداة نفسها غير مثبتة بعد (القائد يثبّت) لذا قد تظهر dirty_files",
   "browser": {
@@ -17,19 +17,19 @@
   },
   "targets": {
     "src": {
-      "url": "http://127.0.0.1:37457/previews/ux-patterns/mobile-record-sample/index.html",
+      "url": "http://127.0.0.1:44829/previews/ux-patterns/mobile-record-sample/index.html",
       "how": "HTTP عبر خادم محلي ThreadingHTTPServer (127.0.0.1) — تجربة F03 الكاملة"
     },
     "standalone": {
-      "url": "file:///home/z/my-project/micro-ui-design-system/previews/ux-patterns/mobile-record-sample/standalone.html",
+      "url": "file:///home/z/my-project/evidence/wt-official2/previews/ux-patterns/mobile-record-sample/standalone.html",
       "how": "file:// — الملف الواحد المولّد حتميًا (تجربة F03 نفسها)"
     },
     "sample": {
-      "url": "file:///home/z/my-project/micro-ui-design-system/previews/ux-patterns/order-schedule/index.html",
+      "url": "file:///home/z/my-project/evidence/wt-official2/previews/ux-patterns/order-schedule/index.html",
       "how": "file:// — العينة المستقلة (order-store + طبقات B07)"
     },
     "comp": {
-      "url": "file:///home/z/my-project/micro-ui-design-system/components/order-schedule/example-usage.html",
+      "url": "file:///home/z/my-project/evidence/wt-official2/components/order-schedule/example-usage.html",
       "how": "file:// — وثيقة المكوّن example-usage.html (رياضيات API المثيل وحالات الخطأ/الفراغ وinit/destroy)"
     }
   },

@@ -1,6 +1,6 @@
-## توسعة مكلّف بها — جدول الطلبات / 2026-10-07
+## تسليم جدول الطلبات (m-ocal) — DRAFT FOR REVIEW / 2026-10-07
 
-[ORDER-SCHEDULE-BRIEF](ux/ORDER-SCHEDULE-BRIEF.md): شهر/يوم/قائمة زمنية، مؤشرات حالات من بيانات المستهلك، وفتح تفاصيل الطلب. المصدر المقترح `components/order-schedule/` **غير موجود بعد**؛ READY FOR IMPLEMENTATION AS DRAFT. لا يضاف إلى عدد العائلات المنفذة حتى التسليم؛ الصور REFERENCE والهوية الحالية محفوظة.
+نُفّذ وفق [ORDER-SCHEDULE-BRIEF](ux/ORDER-SCHEDULE-BRIEF.md) و[بطاقة القبول](ux/ORDER-SCHEDULE-ACCEPTANCE.md): المصدر `components/order-schedule/` (order-schedule.css/js/specification.md/example-usage.html) — تقويم شهر/يوم وقائمة زمنية، حساب تقويم مدني صحيح (كبيسة/حدود الشهور) بلا UTC، حالات من خريطة المستهلك بأزواج توكنات فقط (لا استنتاج من التاريخ، لا أرباح)، لوحة مفاتيح roving RTL، تهيئة مزدوجة آمنة وdestroy. عينة مستقلة وموصل منفصل `previews/ux-patterns/order-schedule/` وعرض متصل داخل F03 وملف واحد مكتفٍ ذاتيًا. أداة القبول `tools/order-schedule-check.py` 16/16/267 على أربعة أهداف. استثناء خلايا الشهر عند 320 **PROPOSED** موثق في المواصفة — قرار التوقيع للمالك. الحالة DRAFT FOR REVIEW؛ لا يُعد عائلة معتمدة قبل اعتماد المالك.
 
 # قائمة عناصر Micro — V1
 

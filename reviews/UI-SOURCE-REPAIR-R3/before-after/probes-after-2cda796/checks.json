@@ -1,0 +1,32 @@
+[
+  {
+    "case": "responsive-minimum",
+    "tag": "src",
+    "ok": true
+  },
+  {
+    "case": "whole-word-labels-200",
+    "tag": "src",
+    "ok": true
+  },
+  {
+    "case": "iso-dates-200",
+    "tag": "src",
+    "ok": true
+  },
+  {
+    "case": "responsive-minimum",
+    "tag": "standalone",
+    "ok": true
+  },
+  {
+    "case": "whole-word-labels-200",
+    "tag": "standalone",
+    "ok": true
+  },
+  {
+    "case": "iso-dates-200",
+    "tag": "standalone",
+    "ok": true
+  }
+]
