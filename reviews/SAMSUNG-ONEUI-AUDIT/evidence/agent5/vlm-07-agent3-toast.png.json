@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "**Q1:** No, there is no toast or confirmation banner visible.\n**Q2:** A card titled \"طلب اليوم الفائت\" (Today's missed order) showing a time of 14:30 and the status \"تم الحجز\" (Booked) is visible at the very bottom.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791401094,
+  "id": "202610080324528422e496e11a48e6",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202610080324528422e496e11a48e6",
+  "usage": {
+    "completion_tokens": 64,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 414,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 478
+  }
+}

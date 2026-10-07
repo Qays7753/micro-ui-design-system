@@ -1,0 +1,37 @@
+{
+  "category_chosen": "فئة أ",
+  "item_save": {
+    "view": "view-detail",
+    "noteHidden": false,
+    "noteVisibleRect": {
+      "w": 328,
+      "h": 76
+    },
+    "noteTitle": "تمت إضافة العنصر",
+    "noteBody": "القائمة والرئيسية والتقارير محدّثة.",
+    "noteRole": "status",
+    "noteVariant": "m-note m-note--success f03-detail-note",
+    "focus": "f03-detail-title",
+    "toastRect": {
+      "w": 0,
+      "h": 0
+    }
+  },
+  "navbar_aria_current_switch": {
+    "#f03-nav-list": "f03-nav-list",
+    "#f03-nav-reports": "f03-nav-reports",
+    "#f03-nav-account": "f03-nav-account",
+    "#f03-nav-home": "f03-nav-home"
+  },
+  "failed_save_op_note": {
+    "opNoteHidden": false,
+    "opNoteRole": "status",
+    "opNoteVariant": "m-note m-note--info",
+    "opNoteTitle": "جارٍ الحفظ",
+    "opNoteBody": "جارٍ حفظ التعديلات…",
+    "fieldsStillEditable": true,
+    "checkBtnVisible": false,
+    "focus": "f03-save"
+  },
+  "pageErrors": []
+}

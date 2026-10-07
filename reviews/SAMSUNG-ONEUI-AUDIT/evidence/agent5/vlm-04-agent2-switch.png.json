@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "**Q1:** The state text is **\"تعطيل الملاحظات الفورية\"** (Disable instant notifications). It appears in **gray** (dark gray/black text).\n**Q2:** **Yes**, the switch track is dark (dark petroleum/teal color).",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791401071,
+  "id": "20261008032430b35fc61ba5f64846",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008032430b35fc61ba5f64846",
+  "usage": {
+    "completion_tokens": 60,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 130,
+    "prompt_tokens_details": {
+      "cached_tokens": 6
+    },
+    "total_tokens": 190
+  }
+}

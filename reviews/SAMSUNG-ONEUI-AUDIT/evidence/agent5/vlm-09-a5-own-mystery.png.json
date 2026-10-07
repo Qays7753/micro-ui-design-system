@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "**Q1:** The labels in the status legend row are: **قيد التنفيذ, تم الإلغاء, تأجيل الموعد, mystery**.\n\n**Q2:** **Yes**, the English word 'mystery' is among them.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791401110,
+  "id": "20261008032509e39843794fd14fb7",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008032509e39843794fd14fb7",
+  "usage": {
+    "completion_tokens": 52,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 404,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 456
+  }
+}

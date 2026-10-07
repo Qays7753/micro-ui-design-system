@@ -1,0 +1,389 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "pages": [
+      "components/order-schedule/example-usage.html (independent)",
+      "previews/ux-patterns/order-schedule/index.html (sample)",
+      "previews/ux-patterns/mobile-record-sample/index.html (F03 schedule)"
+    ],
+    "note": "month-cell size numbers are CONTEXT for the PROPOSED 37.7px exception (CAL-D1 owner decision) — not a new finding"
+  },
+  "runs": {
+    "example_320": {
+      "cellCount": 31,
+      "cellW": [
+        37.7
+      ],
+      "cellH": [
+        37.8
+      ],
+      "rowH": [
+        37.8
+      ],
+      "gap": "4px",
+      "todayCell": {
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 2px",
+        "ariaCurrent": "date",
+        "dot": "css-marker"
+      },
+      "selectedCell": {
+        "bg": "rgb(22, 77, 89)",
+        "color": "rgb(255, 255, 255)",
+        "ariaSelected": "true"
+      },
+      "countBadges": [
+        {
+          "text": "1",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "3",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "3",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "1",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "1",
+          "w": 13.8,
+          "h": 15
+        }
+      ],
+      "dotsPerCell": [
+        1,
+        2,
+        3,
+        1,
+        1,
+        2
+      ],
+      "legend": [
+        "قيد التنفيذ",
+        "تم التسليم",
+        "بانتظار العميل",
+        "mystery",
+        "قيد التنفيذ",
+        "تم التسليم",
+        "بانتظار العميل",
+        "mystery"
+      ],
+      "navBtns": [
+        [
+          48,
+          48
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          48,
+          48
+        ]
+      ],
+      "todayBtn": [
+        64.1,
+        48
+      ],
+      "viewsBtns": [
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ]
+      ],
+      "dayRows": [
+        [
+          256,
+          74
+        ],
+        [
+          256,
+          106
+        ],
+        [
+          256,
+          74
+        ],
+        [
+          256,
+          74
+        ]
+      ],
+      "doc": {
+        "sw": 320,
+        "cw": 320
+      }
+    },
+    "example_360": {
+      "cellW": [
+        43.42
+      ],
+      "cellH": [
+        43.42
+      ],
+      "rowH": [
+        43.42
+      ],
+      "doc": {
+        "sw": 360,
+        "cw": 360
+      }
+    },
+    "example_390": {
+      "cellW": [
+        47.7
+      ],
+      "cellH": [
+        47.7
+      ],
+      "rowH": [
+        47.7
+      ],
+      "doc": {
+        "sw": 390,
+        "cw": 390
+      }
+    },
+    "example_430": {
+      "cellW": [
+        46.56
+      ],
+      "cellH": [
+        46.56
+      ],
+      "rowH": [
+        46.56
+      ],
+      "doc": {
+        "sw": 430,
+        "cw": 430
+      }
+    },
+    "example_instance_api": {
+      "hasInstance": true
+    },
+    "example_keyboard": {
+      "focusStart": "2026-10-01",
+      "afterArrowLeft": "2026-10-02",
+      "afterArrowDown": "2026-10-09",
+      "afterEnter": {
+        "selectedDate": "2026-10-09",
+        "focusDate": "2026-10-09"
+      }
+    },
+    "sample_320": {
+      "cellCount": 31,
+      "cellW": [
+        37.7
+      ],
+      "cellH": [
+        37.8
+      ],
+      "rowH": [
+        37.8
+      ],
+      "gap": "4px",
+      "todayCell": {
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 2px",
+        "ariaCurrent": "date",
+        "dot": "css-marker"
+      },
+      "selectedCell": {
+        "bg": "rgb(22, 77, 89)",
+        "color": "rgb(255, 255, 255)",
+        "ariaSelected": "true"
+      },
+      "countBadges": [
+        {
+          "text": "1",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "2",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "3",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "3",
+          "w": 13.8,
+          "h": 15
+        },
+        {
+          "text": "1",
+          "w": 13.8,
+          "h": 15
+        }
+      ],
+      "dotsPerCell": [
+        1,
+        2,
+        2,
+        3,
+        1,
+        1
+      ],
+      "legend": [
+        "قيد التنفيذ",
+        "تم التسليم",
+        "بانتظار العميل",
+        "mystery"
+      ],
+      "navBtns": [
+        [
+          48,
+          48
+        ],
+        [
+          48,
+          48
+        ]
+      ],
+      "todayBtn": [
+        64.1,
+        48
+      ],
+      "viewsBtns": [
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ]
+      ],
+      "dayRows": [
+        [
+          288,
+          74
+        ],
+        [
+          288,
+          74
+        ],
+        [
+          288,
+          74
+        ]
+      ],
+      "doc": {
+        "sw": 320,
+        "cw": 320
+      },
+      "dotsOnOct15": {
+        "count": "1",
+        "dots": 1,
+        "dotTones": [
+          "m-ocal__dot m-ocal__dot--neutral"
+        ],
+        "ariaLabel": "الخميس 15 أكتوبر 2026، طلب واحد"
+      }
+    },
+    "sample_legend_mystery": [
+      "قيد التنفيذ",
+      "تم التسليم",
+      "بانتظار العميل",
+      "mystery"
+    ],
+    "f03_schedule_legend": [
+      "قيد التنفيذ",
+      "تم التسليم",
+      "بانتظار العميل",
+      "mystery"
+    ],
+    "f03_schedule_320": {
+      "cellW": [
+        37.7
+      ],
+      "cellH": [
+        37.8
+      ],
+      "rowH": [
+        37.8
+      ],
+      "navBtns": [
+        [
+          48,
+          48
+        ],
+        [
+          48,
+          48
+        ]
+      ],
+      "todayBtn": [
+        64.1,
+        48
+      ],
+      "viewsBtns": [
+        [
+          140,
+          48
+        ],
+        [
+          140,
+          48
+        ]
+      ],
+      "dayRows": [
+        [
+          288,
+          74
+        ],
+        [
+          288,
+          74
+        ],
+        [
+          288,
+          74
+        ]
+      ],
+      "doc": {
+        "sw": 320,
+        "cw": 320
+      }
+    }
+  },
+  "pageerrors": []
+}

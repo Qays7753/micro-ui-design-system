@@ -1,0 +1,15 @@
+{
+ "counter": {
+  "text": "20/40",
+  "direction": "ltr",
+  "unicodeBidi": "isolate",
+  "font": "13px",
+  "alignSelf": "flex-end",
+  "visible": "block",
+  "insideFieldBounds": true
+ },
+ "motion_tokens": {
+  "buttonTransition": "0.12s, 0.12s, 0.12s, 0.12s",
+  "fieldTransition": "0.12s, 0.12s"
+ }
+}

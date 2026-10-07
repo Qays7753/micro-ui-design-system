@@ -1,0 +1,52 @@
+{
+  "gateway_tab_order": [
+    "f03-gw-email",
+    "f03-gw-password",
+    "BUTTON.m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal",
+    "f03-gw-submit",
+    "BUTTON.m-access-gateway__link",
+    "f03-gw-demo",
+    "f03-review-open",
+    "BODY.",
+    "f03-gw-email"
+  ],
+  "home_tab_order": [
+    "DIV.m-info-strip__viewport",
+    "BUTTON.m-info-strip__arrow",
+    "BUTTON.m-info-strip__page",
+    "BUTTON.m-info-strip__page",
+    "BUTTON.m-info-strip__page",
+    "f03-home-add",
+    "f03-home-all",
+    "f03-home-schedule",
+    "BUTTON.f03-row",
+    "BUTTON.f03-row",
+    "BUTTON.f03-row"
+  ],
+  "navbar_focus_ring_while_tabbing": {
+    "onNavbar": true,
+    "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+    "outline": "0px none"
+  },
+  "foot_clearance_scrolled_default": {
+    "linkBottom": 723,
+    "navbarTop": 747,
+    "clearance": 24,
+    "linkFullyVisible": true
+  },
+  "account_example_firstTab": "BUTTON.m-btn m-btn--secondary",
+  "account_example": {
+    "layerOpen": true,
+    "focusOnOpen": "BUTTON.m-btn m-btn--secondary m-btn--icon",
+    "backdropOpen": true,
+    "tab2": "BUTTON.m-setting-row",
+    "afterEscape_hidden": true,
+    "afterEscape_focus": "BUTTON.m-btn m-btn--secondary"
+  },
+  "gateway_example": {
+    "recoveryHidden": true,
+    "providersHidden": true,
+    "demoNoteText": "لا يتم إرسال أو حفظ البيانات في هذا المثال."
+  },
+  "pageErrors": []
+}

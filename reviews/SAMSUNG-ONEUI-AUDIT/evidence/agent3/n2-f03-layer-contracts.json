@@ -1,0 +1,83 @@
+{
+  "viewport": "360x800",
+  "tests": {
+    "A_category_layer": {
+      "layerOpen": true,
+      "backdropOpen": true,
+      "focusOnOpen": "f03-picker-search",
+      "bodyScrollLocked": "hidden",
+      "backgroundInert": true,
+      "mainInert": true,
+      "tabCycleAllInsideLayer": true,
+      "tabFocusSequence": [
+        "f03-cat-layer-close",
+        "f03-picker-search",
+        "f03-cat-layer-close",
+        "f03-picker-search",
+        "f03-cat-layer-close",
+        "f03-picker-search",
+        "BUTTON.m-picker__option",
+        "f03-cat-layer-close",
+        "f03-picker-search",
+        "BUTTON.m-picker__option"
+      ],
+      "afterEscape_layerHidden": true,
+      "afterEscape_focusRestoredTo": "f03-cat-trigger",
+      "afterEscape_inertReleased": true,
+      "afterEscape_scrollUnlocked": true
+    },
+    "B_leave_guard": {
+      "leaveDialogOpen": true,
+      "focusOnOpen": "f03-stay",
+      "afterEscape_dialogHidden": true,
+      "afterEscape_focus": "f03-form-back",
+      "stillInForm": true,
+      "afterAbandon_view": "view-home",
+      "afterAbandon_focus": "f03-home-title"
+    },
+    "C_filter_panel": {
+      "open_focus": "BUTTON.m-btn m-btn--icon m-btn--secondary",
+      "checkboxCount": 3,
+      "draftSummary": "الجاري: فئة أ، فئة ب",
+      "afterApply_layerHidden": true,
+      "afterApply_focus": "f03-filter-btn",
+      "afterApply_counter": "2/hidden=false",
+      "afterApply_ariaLabel": "تصفية، 2 فلاتر مطبقة",
+      "afterApply_results": "النتائج: 6",
+      "reopen_draftState": [
+        true,
+        true,
+        false
+      ],
+      "reopen_summary": "الجاري: فئة أ، فئة ب",
+      "afterCancel_focus": "f03-filter-btn",
+      "afterCancel_counter": "2/hidden=false"
+    },
+    "D_account_layer": {
+      "layerOpen": true,
+      "focusOnOpen": "BUTTON.m-btn m-btn--secondary m-btn--icon",
+      "backBtnHidden_accountView": true,
+      "appViewShown": true,
+      "focusAfterToApplication": "f03-app-title",
+      "backBtnVisible_appView": true,
+      "ariaLabelledby": "f03-app-title",
+      "switchBefore": true,
+      "switchAfterSpace": false,
+      "switchStateText": "تأثير فوري على أرقام التقارير",
+      "demoStatus": "حُفظ الإعداد في هذا المتصفح.",
+      "afterBack_view": true,
+      "afterBack_focus": "f03-account-title",
+      "afterEscape_layerHidden": true,
+      "afterEscape_focus": "BUTTON.m-setting-row"
+    },
+    "E_delete_dialog": {
+      "dialogOpen": true,
+      "focusOnOpen": "BUTTON.m-btn m-btn--secondary",
+      "afterBackdropClick_dialogStillOpen": true,
+      "afterEscape_dialogHidden": true,
+      "afterEscape_focus": "f03-detail-delete",
+      "itemStillExists": true
+    }
+  },
+  "pageErrors": []
+}

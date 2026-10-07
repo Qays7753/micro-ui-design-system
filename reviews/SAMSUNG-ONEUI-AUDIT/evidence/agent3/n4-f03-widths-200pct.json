@@ -1,0 +1,154 @@
+{
+  "declaredTextZoomMechanism": "JS walk doubling computed font-size on every element (simulates text zoom 200%); two passes: baseline -> apply -> measure. NOT native zoom.",
+  "actionbar_scrolled_end": {
+    "lastContentBottom": 2558,
+    "footTop": 2594,
+    "cleared": true,
+    "barHeight": 73,
+    "lastContentVisibleFully": true
+  },
+  "tabs_edge_wrap": {
+    "fromLastTabArrowLeft_goesTo": "tab-a-btn",
+    "selected": "tab-a-btn"
+  },
+  "f03_default_widths": {
+    "320": {
+      "navbarH": 53,
+      "itemWidths": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "itemHeights": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "labelLines": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "hOverflow": false,
+      "appbarH": 60,
+      "appbarTitleFont": "22px",
+      "footBottomPadding": "77px",
+      "footLinkClearsNavbar": false
+    },
+    "360": {
+      "navbarH": 53,
+      "itemWidths": [
+        90,
+        90,
+        90,
+        90
+      ],
+      "itemHeights": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "labelLines": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "hOverflow": false,
+      "appbarH": 60,
+      "appbarTitleFont": "22px",
+      "footBottomPadding": "77px",
+      "footLinkClearsNavbar": false
+    },
+    "390": {
+      "navbarH": 53,
+      "itemWidths": [
+        98,
+        98,
+        98,
+        98
+      ],
+      "itemHeights": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "labelLines": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "hOverflow": false,
+      "appbarH": 60,
+      "appbarTitleFont": "22px",
+      "footBottomPadding": "77px",
+      "footLinkClearsNavbar": false
+    },
+    "430": {
+      "navbarH": 53,
+      "itemWidths": [
+        108,
+        108,
+        108,
+        108
+      ],
+      "itemHeights": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "labelLines": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "hOverflow": false,
+      "appbarH": 60,
+      "appbarTitleFont": "22px",
+      "footBottomPadding": "77px",
+      "footLinkClearsNavbar": false
+    }
+  },
+  "f03_list_back_button": {
+    "w": 48,
+    "h": 48,
+    "label": "رجوع إلى الرئيسية",
+    "isAtInlineStart": false,
+    "side": "right-half",
+    "appbarNote": "RTL: back should be at the right (inline-start)"
+  },
+  "f03_200pct_selection": {
+    "pass1_baseline_navbarH": 53,
+    "pass1_selectbar": {
+      "navbarH": 53,
+      "selectBarH": 129,
+      "selectBarBottom": 747,
+      "navbarTop": 747
+    },
+    "pass1_scrolled": {
+      "selectBarBottom": 587,
+      "navbarTop": 747,
+      "overlap": 0
+    },
+    "pass2_navbarH": 70.984375,
+    "pass2_scrolled": {
+      "navbarH": 71,
+      "selectBarH": 237,
+      "selectBarBottom": 747,
+      "navbarTop": 729,
+      "selectBarVisiblePartAboveNavbar": 219,
+      "hOverflow": false
+    },
+    "overlap200": -18,
+    "measuredOverlap": 18
+  },
+  "pageErrors": []
+}

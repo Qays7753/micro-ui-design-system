@@ -1,0 +1,14 @@
+{
+  "rejected_save_final": {
+    "opNoteHidden": false,
+    "variant": "m-note m-note--error",
+    "title": "لم تُحفظ التعديلات",
+    "body": "يمكنك التصحيح والمحاولة مجددًا.",
+    "role": "status",
+    "nameValueKept": "صنف فاشل",
+    "checkBtnVisible": false,
+    "saveBtnLoading": "m-btn m-btn--primary",
+    "focus": "f03-save"
+  },
+  "pageErrors": []
+}

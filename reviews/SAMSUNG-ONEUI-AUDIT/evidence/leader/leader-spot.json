@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "page": "http://127.0.0.1:5000/previews/ux-patterns/mobile-record-sample/",
+    "viewport": 360,
+    "browser": "chromium 143",
+    "commit": "a5500c9"
+  },
+  "cal_r1_02_mystery": {
+    "legend_count": 1,
+    "legend_texts": [
+      "قيد التنفيذ",
+      "قيد التنفيذ",
+      "تم التسليم",
+      "تم التسليم",
+      "بانتظار العميل",
+      "بانتظار العميل",
+      "mystery",
+      "mystery"
+    ],
+    "legend_box": {
+      "x": 16,
+      "y": 600.515625,
+      "width": 328,
+      "height": 19.984375
+    },
+    "mystery_count": 1,
+    "mystery_box": {
+      "x": 43.84375,
+      "y": 600.515625,
+      "width": 46.96875,
+      "height": 19.984375
+    },
+    "mystery_visible_text": "mystery"
+  },
+  "d1_peek_stale_geometry": {
+    "viewport_count": 1,
+    "before_interaction": {
+      "viewportRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "stripTransform": "none",
+      "activeRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      }
+    },
+    "after_one_interaction": {
+      "stripTransform": "none",
+      "activeRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      }
+    }
+  },
+  "pageerrors": []
+}

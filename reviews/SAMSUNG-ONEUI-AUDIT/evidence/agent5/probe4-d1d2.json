@@ -1,0 +1,154 @@
+{
+ "meta": {
+  "commit": "a5500c9",
+  "tree": "05f344b05ef12284abfc31ad9a1c8633dcd6a058",
+  "browser": "Chrome for Testing 143.0.7499.4 (Playwright sync)",
+  "textZoom200": "DECLARED clean two-pass (collect-then-apply, library ZOOM2_CLEAN style) — NOT native zoom"
+ },
+ "D1_before_any_interaction": {
+  "viewHidden": false,
+  "viewport": {
+   "left": 16,
+   "right": 304,
+   "w": 288
+  },
+  "trackTransform": "matrix(1, 0, 0, 1, 0, 0)",
+  "trackTranslateX": null,
+  "slides": [
+   {
+    "hidden": "false",
+    "left": 76,
+    "right": 304,
+    "w": 228
+   },
+   {
+    "hidden": "true",
+    "left": -164,
+    "right": 64,
+    "w": 228
+   }
+  ],
+  "position": "1 / 2",
+  "index": 0
+ },
+ "D1_after_first_real_click_next": {
+  "viewHidden": false,
+  "viewport": {
+   "left": 16,
+   "right": 304,
+   "w": 288
+  },
+  "trackTransform": "matrix(1, 0, 0, 1, 210, 0)",
+  "trackTranslateX": null,
+  "slides": [
+   {
+    "hidden": "true",
+    "left": 286,
+    "right": 514,
+    "w": 228
+   },
+   {
+    "hidden": "false",
+    "left": 46,
+    "right": 274,
+    "w": 228
+   }
+  ],
+  "position": "2 / 2",
+  "index": 1
+ },
+ "D1_after_programmatic_goTo_index0": {
+  "viewHidden": false,
+  "viewport": {
+   "left": 16,
+   "right": 304,
+   "w": 288
+  },
+  "trackTransform": "matrix(1, 0, 0, 1, -30, 0)",
+  "trackTranslateX": null,
+  "slides": [
+   {
+    "hidden": "false",
+    "left": 46,
+    "right": 274,
+    "w": 228
+   },
+   {
+    "hidden": "true",
+    "left": -194,
+    "right": 34,
+    "w": 228
+   }
+  ],
+  "position": "1 / 2",
+  "index": 0
+ },
+ "D2_harness_1x": {
+  "long": {
+   "text": "7,543,210,986.55",
+   "w": 302.3,
+   "right": 330.3,
+   "left": 28
+  },
+  "short": {
+   "w": 151.1
+  },
+  "card": {
+   "w": 288,
+   "right": 304
+  },
+  "overflowWrap": "normal",
+  "doc": {
+   "scrollW": 320,
+   "clientW": 320
+  }
+ },
+ "D2_harness_2x": {
+  "elementsDoubled": 12,
+  "measure": {
+   "long": {
+    "text": "7,543,210,986.55",
+    "w": 604.5,
+    "right": 632.5,
+    "left": 28,
+    "font": "72px"
+   },
+   "short": {
+    "w": 302.3,
+    "font": "72px"
+   },
+   "card": {
+    "w": 288,
+    "right": 304
+   },
+   "overflowWrap": "normal",
+   "doc": {
+    "scrollW": 320,
+    "clientW": 320
+   }
+  }
+ },
+ "D2_panel_1x": {
+  "numW": 302.3,
+  "right": 346.3,
+  "doc": {
+   "scrollW": 320,
+   "clientW": 320
+  }
+ },
+ "D2_panel_2x": {
+  "elementsDoubled": 659,
+  "measure": {
+   "numW": 604.5,
+   "right": 648.5,
+   "cardRight": 276,
+   "cardW": 232,
+   "overflowWrap": "normal",
+   "doc": {
+    "scrollW": 428,
+    "clientW": 320
+   }
+  }
+ },
+ "pageerrors": []
+}

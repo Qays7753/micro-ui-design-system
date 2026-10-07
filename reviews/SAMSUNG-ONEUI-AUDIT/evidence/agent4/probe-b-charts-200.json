@@ -1,0 +1,794 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "page": "http://localhost:5000/previews/data/index.html",
+    "zoom_mechanism": "PROJECT-DECLARED: per-element computed font-size *2, two clean passes, data-r2z marker (same as tools/ui-repair-r2-check.py ZOOM2_CLEAN) — NOT native zoom"
+  },
+  "runs": {
+    "z320_1x": {
+      "labels": {
+        "#bars:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "خارج",
+            "الن…خارج النطاق"
+          ],
+          "labelFs": [
+            "17.931px"
+          ],
+          "valueTexts": [
+            "8",
+            "0",
+            "—",
+            "12",
+            "قيمة شاذة"
+          ],
+          "valueFs": [
+            "17.931px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "الن…خارج النطاق",
+              "aria": "خارج النطاق",
+              "title": "خارج النطاق"
+            }
+          ]
+        },
+        "#bars:1": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "ت…تسويات",
+            "أخ…أخرى"
+          ],
+          "labelFs": [
+            "17.931px"
+          ],
+          "valueTexts": [
+            "8",
+            "5",
+            "3",
+            "6",
+            "2"
+          ],
+          "valueFs": [
+            "17.931px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "ت…تسويات",
+              "aria": "تسويات",
+              "title": "تسويات"
+            },
+            {
+              "text": "أخ…أخرى",
+              "aria": "أخرى",
+              "title": "أخرى"
+            }
+          ]
+        },
+        "#line:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "ال…السبت",
+            "الأ…الأحد",
+            "الا…الاثنين",
+            "الأ…الأربعاء",
+            "ال…الخميس"
+          ],
+          "labelFs": [
+            "16.5517px"
+          ],
+          "valueTexts": [
+            "4",
+            "6",
+            "—",
+            "5",
+            "9"
+          ],
+          "valueFs": [
+            "16.5517px"
+          ],
+          "truncated": [
+            {
+              "text": "ال…السبت",
+              "aria": "السبت",
+              "title": "السبت"
+            },
+            {
+              "text": "الأ…الأحد",
+              "aria": "الأحد",
+              "title": "الأحد"
+            },
+            {
+              "text": "الا…الاثنين",
+              "aria": "الاثنين",
+              "title": "الاثنين"
+            },
+            {
+              "text": "الأ…الأربعاء",
+              "aria": "الأربعاء",
+              "title": "الأربعاء"
+            },
+            {
+              "text": "ال…الخميس",
+              "aria": "الخميس",
+              "title": "الخميس"
+            }
+          ]
+        }
+      },
+      "donuts": [
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 3,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 60 (60%)",
+            "قيد التجهيز 30 (30%)",
+            "متأخر 10 (10%)"
+          ],
+          "state": null
+        },
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 1,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 0",
+            "قيد التجهيز 0"
+          ],
+          "state": null
+        },
+        {
+          "refused": true,
+          "error": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+          "state": "over"
+        }
+      ]
+    },
+    "z320_200pct_pass1": {
+      "doubled": 657,
+      "labels": {
+        "#bars:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "خارج",
+            "الن…خارج النطاق"
+          ],
+          "labelFs": [
+            "35.862px"
+          ],
+          "valueTexts": [
+            "8",
+            "0",
+            "—",
+            "12",
+            "قيمة شاذة"
+          ],
+          "valueFs": [
+            "35.862px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "الن…خارج النطاق",
+              "aria": "خارج النطاق",
+              "title": "خارج النطاق"
+            }
+          ]
+        },
+        "#bars:1": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "ت…تسويات",
+            "أخ…أخرى"
+          ],
+          "labelFs": [
+            "35.862px"
+          ],
+          "valueTexts": [
+            "8",
+            "5",
+            "3",
+            "6",
+            "2"
+          ],
+          "valueFs": [
+            "35.862px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "ت…تسويات",
+              "aria": "تسويات",
+              "title": "تسويات"
+            },
+            {
+              "text": "أخ…أخرى",
+              "aria": "أخرى",
+              "title": "أخرى"
+            }
+          ]
+        },
+        "#line:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "ال…السبت",
+            "الأ…الأحد",
+            "الا…الاثنين",
+            "الأ…الأربعاء",
+            "ال…الخميس"
+          ],
+          "labelFs": [
+            "33.1034px"
+          ],
+          "valueTexts": [
+            "4",
+            "6",
+            "—",
+            "5",
+            "9"
+          ],
+          "valueFs": [
+            "33.1034px"
+          ],
+          "truncated": [
+            {
+              "text": "ال…السبت",
+              "aria": "السبت",
+              "title": "السبت"
+            },
+            {
+              "text": "الأ…الأحد",
+              "aria": "الأحد",
+              "title": "الأحد"
+            },
+            {
+              "text": "الا…الاثنين",
+              "aria": "الاثنين",
+              "title": "الاثنين"
+            },
+            {
+              "text": "الأ…الأربعاء",
+              "aria": "الأربعاء",
+              "title": "الأربعاء"
+            },
+            {
+              "text": "ال…الخميس",
+              "aria": "الخميس",
+              "title": "الخميس"
+            }
+          ]
+        }
+      },
+      "donuts": [
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 3,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 60 (60%)",
+            "قيد التجهيز 30 (30%)",
+            "متأخر 10 (10%)"
+          ],
+          "state": null
+        },
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 1,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 0",
+            "قيد التجهيز 0"
+          ],
+          "state": null
+        },
+        {
+          "refused": true,
+          "error": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+          "state": "over"
+        }
+      ],
+      "overflow": {
+        "sw": 428,
+        "cw": 320
+      }
+    },
+    "z320_back_to_1x": {
+      "labels": {
+        "#bars:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "خارج",
+            "الن…خارج النطاق"
+          ],
+          "labelFs": [
+            "13px"
+          ],
+          "valueTexts": [
+            "8",
+            "0",
+            "—",
+            "12",
+            "قيمة شاذة"
+          ],
+          "valueFs": [
+            "13px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "الن…خارج النطاق",
+              "aria": "خارج النطاق",
+              "title": "خارج النطاق"
+            }
+          ]
+        },
+        "#bars:1": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "ت…تسويات",
+            "أخ…أخرى"
+          ],
+          "labelFs": [
+            "13px"
+          ],
+          "valueTexts": [
+            "8",
+            "5",
+            "3",
+            "6",
+            "2"
+          ],
+          "valueFs": [
+            "13px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "ت…تسويات",
+              "aria": "تسويات",
+              "title": "تسويات"
+            },
+            {
+              "text": "أخ…أخرى",
+              "aria": "أخرى",
+              "title": "أخرى"
+            }
+          ]
+        },
+        "#line:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "ال…السبت",
+            "الأ…الأحد",
+            "الا…الاثنين",
+            "الأ…الأربعاء",
+            "ال…الخميس"
+          ],
+          "labelFs": [
+            "12px"
+          ],
+          "valueTexts": [
+            "4",
+            "6",
+            "—",
+            "5",
+            "9"
+          ],
+          "valueFs": [
+            "12px"
+          ],
+          "truncated": [
+            {
+              "text": "ال…السبت",
+              "aria": "السبت",
+              "title": "السبت"
+            },
+            {
+              "text": "الأ…الأحد",
+              "aria": "الأحد",
+              "title": "الأحد"
+            },
+            {
+              "text": "الا…الاثنين",
+              "aria": "الاثنين",
+              "title": "الاثنين"
+            },
+            {
+              "text": "الأ…الأربعاء",
+              "aria": "الأربعاء",
+              "title": "الأربعاء"
+            },
+            {
+              "text": "ال…الخميس",
+              "aria": "الخميس",
+              "title": "الخميس"
+            }
+          ]
+        }
+      }
+    },
+    "z320_200pct_pass2": {
+      "doubled": 657,
+      "labels": {
+        "#bars:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "خارج",
+            "الن…خارج النطاق"
+          ],
+          "labelFs": [
+            "26px"
+          ],
+          "valueTexts": [
+            "8",
+            "0",
+            "—",
+            "12",
+            "قيمة شاذة"
+          ],
+          "valueFs": [
+            "26px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "الن…خارج النطاق",
+              "aria": "خارج النطاق",
+              "title": "خارج النطاق"
+            }
+          ]
+        },
+        "#bars:1": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "م…مبيعات",
+            "م…مشتريات",
+            "مر…مرتجعات",
+            "ت…تسويات",
+            "أخ…أخرى"
+          ],
+          "labelFs": [
+            "26px"
+          ],
+          "valueTexts": [
+            "8",
+            "5",
+            "3",
+            "6",
+            "2"
+          ],
+          "valueFs": [
+            "26px"
+          ],
+          "truncated": [
+            {
+              "text": "م…مبيعات",
+              "aria": "مبيعات",
+              "title": "مبيعات"
+            },
+            {
+              "text": "م…مشتريات",
+              "aria": "مشتريات",
+              "title": "مشتريات"
+            },
+            {
+              "text": "مر…مرتجعات",
+              "aria": "مرتجعات",
+              "title": "مرتجعات"
+            },
+            {
+              "text": "ت…تسويات",
+              "aria": "تسويات",
+              "title": "تسويات"
+            },
+            {
+              "text": "أخ…أخرى",
+              "aria": "أخرى",
+              "title": "أخرى"
+            }
+          ]
+        },
+        "#line:0": {
+          "labelCount": 5,
+          "collisions": 0,
+          "collisionPairs": [],
+          "labelsOutsidePlot": 0,
+          "plotW": 232,
+          "labelTexts": [
+            "ال…السبت",
+            "الأ…الأحد",
+            "الا…الاثنين",
+            "الأ…الأربعاء",
+            "ال…الخميس"
+          ],
+          "labelFs": [
+            "24px"
+          ],
+          "valueTexts": [
+            "4",
+            "6",
+            "—",
+            "5",
+            "9"
+          ],
+          "valueFs": [
+            "24px"
+          ],
+          "truncated": [
+            {
+              "text": "ال…السبت",
+              "aria": "السبت",
+              "title": "السبت"
+            },
+            {
+              "text": "الأ…الأحد",
+              "aria": "الأحد",
+              "title": "الأحد"
+            },
+            {
+              "text": "الا…الاثنين",
+              "aria": "الاثنين",
+              "title": "الاثنين"
+            },
+            {
+              "text": "الأ…الأربعاء",
+              "aria": "الأربعاء",
+              "title": "الأربعاء"
+            },
+            {
+              "text": "ال…الخميس",
+              "aria": "الخميس",
+              "title": "الخميس"
+            }
+          ]
+        }
+      },
+      "donuts": [
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 3,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 60 (60%)",
+            "قيد التجهيز 30 (30%)",
+            "متأخر 10 (10%)"
+          ],
+          "state": null
+        },
+        {
+          "refused": false,
+          "size": [
+            148,
+            148
+          ],
+          "viewBox": "0 0 148 148",
+          "segmentCircles": 1,
+          "centerText": "100",
+          "legend": [
+            "مكتمل 0",
+            "قيد التجهيز 0"
+          ],
+          "state": null
+        },
+        {
+          "refused": true,
+          "error": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+          "state": "over"
+        }
+      ],
+      "overflow": {
+        "sw": 428,
+        "cw": 320
+      }
+    },
+    "render_events_live_resize": {
+      "events_after_430": 9,
+      "events_after_back_320": 18,
+      "note": "counter attached at 320 before widening; both directions counted"
+    },
+    "w320_after_live_resize_sizes": {
+      "#bars .m-chart": [
+        17.931,
+        13
+      ],
+      "#line .m-chart": [
+        16.5517,
+        12
+      ]
+    }
+  },
+  "pageerrors": []
+}

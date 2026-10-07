@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "pages": [
+      "/previews/carousel/index.html",
+      "/previews/ux-patterns/mobile-record-sample/index.html"
+    ]
+  },
+  "runs": {
+    "packed_before_expand": {
+      "wrapW": 0,
+      "wrapH": "",
+      "circles": [
+        {
+          "series": "a",
+          "w": 0,
+          "h": 0,
+          "placement": null,
+          "value": "7,532",
+          "insideText": true
+        },
+        {
+          "series": "b",
+          "w": 0,
+          "h": 0,
+          "placement": null,
+          "value": "3,566",
+          "insideText": true
+        },
+        {
+          "series": "c",
+          "w": 0,
+          "h": 0,
+          "placement": null,
+          "value": "3,333",
+          "insideText": true
+        }
+      ],
+      "valueRows": [
+        "الإيرادات",
+        "الربح",
+        "التكاليف"
+      ],
+      "legendVisible": false
+    },
+    "packed_after_expand": {
+      "wrapW": 126,
+      "wrapH": "97.3862px",
+      "circles": [
+        {
+          "series": "a",
+          "w": 74.6,
+          "h": 74.6,
+          "placement": "inside",
+          "value": "7,532",
+          "insideText": true
+        },
+        {
+          "series": "b",
+          "w": 51.3,
+          "h": 51.3,
+          "placement": "inside",
+          "value": "3,566",
+          "insideText": true
+        },
+        {
+          "series": "c",
+          "w": 49.6,
+          "h": 49.6,
+          "placement": "inside",
+          "value": "3,333",
+          "insideText": true
+        }
+      ],
+      "valueRows": [
+        "الإيرادات",
+        "الربح",
+        "التكاليف"
+      ],
+      "legendVisible": false
+    },
+    "expand_state": {
+      "expanded": "true",
+      "btnAria": "true",
+      "detailsHidden": false
+    },
+    "peek_drag_f03": {
+      "before": 0,
+      "during": {
+        "transform": "translateX(50px)",
+        "dragging": true
+      },
+      "afterDragRight60px": {
+        "idx": 1,
+        "pos": "2 / 2"
+      },
+      "afterDragLeft20px": {
+        "idx": 1,
+        "pos": "2 / 2"
+      }
+    }
+  },
+  "pageerrors": []
+}

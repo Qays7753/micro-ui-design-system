@@ -1,0 +1,140 @@
+{
+  "org_board": {
+    "zoomTargetWidth": 390,
+    "smallButtons": [
+      {
+        "text": "تفاصيل",
+        "rect": {
+          "x": 21,
+          "y": 2806.34375,
+          "width": 86.515625,
+          "height": 40,
+          "top": 2806.34375,
+          "right": 107.515625,
+          "bottom": 2846.34375,
+          "left": 21
+        },
+        "minHeight": "40px",
+        "inlineStyle": "min-height:40px;padding-block:6px"
+      },
+      {
+        "text": "إلغاء",
+        "rect": {
+          "x": 21,
+          "y": 2850.34375,
+          "width": 86.515625,
+          "height": 40,
+          "top": 2850.34375,
+          "right": 107.515625,
+          "bottom": 2890.34375,
+          "left": 21
+        },
+        "minHeight": "40px",
+        "inlineStyle": "min-height:40px;padding-block:6px"
+      }
+    ],
+    "readRow": {
+      "h": 72,
+      "minH": "72px",
+      "pad": "12px 0px"
+    },
+    "tile": {
+      "w": 48,
+      "h": 48,
+      "radius": "16px",
+      "bg": "rgb(223, 238, 230)",
+      "color": "rgb(22, 77, 89)"
+    },
+    "sectionHead": {
+      "h": 48,
+      "minH": "48px",
+      "fontSize": "16px",
+      "weight": "600"
+    },
+    "sectionTitle": {
+      "fontSize": "18px",
+      "weight": "600"
+    },
+    "headSpanTitle": null,
+    "counter": {
+      "h": 20,
+      "minW": "20px",
+      "fontSize": "13px",
+      "bg": "rgb(223, 238, 230)",
+      "color": "rgb(22, 77, 89)"
+    },
+    "badge": {
+      "fontSize": "13px",
+      "bg": "rgb(255, 241, 205)",
+      "color": "rgb(129, 84, 0)"
+    },
+    "value": {
+      "fontSize": "16px",
+      "color": "rgb(80, 101, 106)",
+      "fontVariant": "tabular-nums"
+    }
+  },
+  "org_keyboard": {
+    "sec2Expanded": "true",
+    "sec2BodyHidden": false,
+    "focusStillOnHead": true,
+    "afterSpace_expanded": "false",
+    "afterSpace_bodyHidden": true
+  },
+  "surfaces_example_selfcheck": {
+    "selfCheckText": "PASS الخلفية من curves.css (تدرج بدء الملخص الفاتح) — لا أصل موجات في خلفية السطح — linear-gradient(145deg, rgb(184, 217, 220) 0%, rgb(223, 238, 230) 52%,\nPASS طبقة الموجات القديمة مخفية في الاتجاه الحالي (display:none لا افتراضيان متنافسان)\nPASS الزخرفة الشعاعية ساكنة بلا حركة (animation none)\nPASS أدوار النص الأربعة داكنة ثابتة (--micro-text-primary) فوق السطح الفاتح\nPASS تباين النص الداكن على أفتح؟ لا — على أغمق توقف في التدرج ≥ 4.5:1 — النسبة 9.60 (text-primary على #B8D9DC)\nPASS حدود حروف العنوان داخل السطح\nPASS حدود حروف الرقم داخل السطح\nPASS الرقم الطويل يُلف داخل السطح (ارتفاع يزيد وحدود الحروف داخلية)\nPASS أسطر العنوان بلا تداخل (line-height نسبي 1.6364) — أسطر=3\nPASS عند تكبير النص 200% (محاكاة المكتبة — مضاعفة أحجام العناصر الفعلية): العنوان 22→44px والرقم 36→72px، الحروف داخل السطح بلا تداخل ولا قص ولا خروج أفقي — title 22→44px، amount 36→72px، أسطر=7",
+    "surface": {
+      "rect": {
+        "x": 16,
+        "y": 256.875,
+        "width": 358,
+        "height": 435.953125,
+        "top": 256.875,
+        "right": 374,
+        "bottom": 692.828125,
+        "left": 16
+      },
+      "padding": "24px",
+      "titleSize": "22px",
+      "amountSize": "36px",
+      "labelColor": "rgb(23, 45, 50)",
+      "bg": "linear-gradient(145deg, rgb(184, 217, 220) 0%, rgb(223, 238,",
+      "wavesDisplay": "none"
+    }
+  },
+  "gallery_letter_spacing": {
+    "eyebrow": {
+      "letterSpacing": "0.48px",
+      "hasArabic": true,
+      "arabicWord": "مكتبة",
+      "widthWith": 25.28125,
+      "widthWithout": 25.28125,
+      "deltaPx": 0
+    },
+    "h1": {
+      "letterSpacing": "-1.61px",
+      "hasArabic": true,
+      "arabicWord": "وضوح",
+      "widthWith": 113.1875,
+      "widthWithout": 113.1875,
+      "deltaPx": 0
+    },
+    "kicker": {
+      "letterSpacing": "0.48px",
+      "hasArabic": false,
+      "arabicWord": null,
+      "widthWith": null,
+      "widthWithout": null,
+      "deltaPx": null
+    },
+    "footerLatin": {
+      "letterSpacing": "0.66px",
+      "hasArabic": false,
+      "arabicWord": null,
+      "widthWith": null,
+      "widthWithout": null,
+      "deltaPx": null
+    }
+  },
+  "pageerrors": []
+}

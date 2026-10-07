@@ -1,3 +1,11 @@
+# تسليم تدقيق Samsung One UI × Micro — 2026-10-07
+
+- [تقرير التدقيق الموحد](../reviews/SAMSUNG-ONEUI-AUDIT/REPORT.md): مقارنة تطبيقية بمراجع One UI الرسمية على الرأس `a5500c9` — **DRAFT FOR REVIEW، لا إصلاحات منفذة**. 32 نتيجة موحدة (SUI-001..032: 10 BUG مثبتة / 16 تحسينًا / 6 قرارات مالك) + 52 بند KEEP مقيسًا + خطة دفعات لاحقة.
+- [FINDINGS.json](../reviews/SAMSUNG-ONEUI-AUDIT/FINDINGS.json) و[COVERAGE.csv](../reviews/SAMSUNG-ONEUI-AUDIT/COVERAGE.csv): النتائج القابلة للمعالجة وتغطية 14 عائلة بأحوالها الصادقة (REVIEWED/PARTIAL/NOT RUN).
+- [سجل قراءة المصادر](../reviews/SAMSUNG-ONEUI-AUDIT/SOURCE-READING-LOG.md) و[المراجعة المستقلة](../reviews/SAMSUNG-ONEUI-AUDIT/INDEPENDENT-REVIEW.md): ما قُرئ فعلًا من الـ41 مرجعًا + تحقق المستقل 10/10 CONFIRMED وتحقق القائد المباشر.
+- [تقارير الأدوار والأدلة](../reviews/SAMSUNG-ONEUI-AUDIT/agents/) و[evidence/](../reviews/SAMSUNG-ONEUI-AUDIT/evidence/): 5 وكلاء فعليين (Chromium 143 + لوحة مفاتيح حقيقية)؛ probes قابلة لإعادة التشغيل، صفر تعديل على مصدر components/previews/shared/docs/tools.
+- البنود CAL-R1-01/02 السابقة **مؤكدة وموسّعة** (SUI-001/SUI-009) وقرارات CAL-D1/D2 سياقها محدث (SUI-030/031) — تظل متابعات صاحب القرار.
+
 # حزمة Samsung One UI × Micro — 2026-10-07
 
 - [المدخل](../references/samsung-one-ui/README.md) و[فهرس المراجع](../references/samsung-one-ui/SOURCES.md) و[سجل المصدر](../references/samsung-one-ui/SOURCE-REGISTER.json):41 رابطًا رسميًا متحققًا، والوثائق الأصلية لدى الناشر.

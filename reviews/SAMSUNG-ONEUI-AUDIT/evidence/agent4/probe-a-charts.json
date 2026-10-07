@@ -1,0 +1,787 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "tool": "Playwright sync + Chromium (Chrome for Testing)",
+    "page": "http://localhost:5000/previews/data/index.html",
+    "mechanism_200pct": "declared: multiply html font-size by 2 (two clean passes, recorded before/after) — simulates text scaling, NOT native browser zoom",
+    "zero_mechanism": "root html font-size * 1 back to normal"
+  },
+  "runs": {
+    "w430_before": {
+      "bars": {
+        "plotWidth": 342,
+        "viewBox": "0 0 320 220",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 13,
+            "screenPx": 13.89,
+            "text": "مبيع…مبيعات",
+            "aria": "مبيعات",
+            "hasTitle": true,
+            "titleText": "مبيعات",
+            "x": 42.6929817199707,
+            "len": 32.18
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 13,
+            "screenPx": 13.89,
+            "text": "مش…مشتريات",
+            "aria": "مشتريات",
+            "hasTitle": true,
+            "titleText": "مشتريات",
+            "x": 120,
+            "len": 32.43
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 13,
+            "screenPx": 13.89,
+            "text": "مر…مرتجعات",
+            "aria": "مرتجعات",
+            "hasTitle": true,
+            "titleText": "مرتجعات",
+            "x": 200,
+            "len": 20.85
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 13,
+            "screenPx": 13.89,
+            "text": "خارج",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 280,
+            "len": 23.25
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 13,
+            "screenPx": 13.89,
+            "text": "النطاق",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 275.8304100036621,
+            "len": 32.18
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "8",
+            "cssPx": 13,
+            "clipped": false
+          },
+          {
+            "text": "0",
+            "cssPx": 13,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 13,
+            "clipped": false
+          },
+          {
+            "text": "12",
+            "cssPx": 13,
+            "clipped": false
+          },
+          {
+            "text": "قيمة شاذة",
+            "cssPx": 13,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 4,
+        "hasError": false
+      },
+      "bars5": null,
+      "line": {
+        "plotWidth": 342,
+        "viewBox": "0 0 320 170",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 12,
+            "screenPx": 12.83,
+            "text": "ال…السبت",
+            "aria": "السبت",
+            "hasTitle": true,
+            "titleText": "السبت",
+            "x": 287.9649124145508,
+            "len": 20.18
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 12,
+            "screenPx": 12.83,
+            "text": "الأحد",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 228,
+            "len": 22.87
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 12,
+            "screenPx": 12.83,
+            "text": "الاثنين",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 160,
+            "len": 27.28
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 12,
+            "screenPx": 12.83,
+            "text": "الأر…الأربعاء",
+            "aria": "الأربعاء",
+            "hasTitle": true,
+            "titleText": "الأربعاء",
+            "x": 92,
+            "len": 21.71
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 12,
+            "screenPx": 12.83,
+            "text": "الخ…الخميس",
+            "aria": "الخميس",
+            "hasTitle": true,
+            "titleText": "الخميس",
+            "x": 34.71052551269531,
+            "len": 23.25
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "4",
+            "cssPx": 12,
+            "clipped": false
+          },
+          {
+            "text": "6",
+            "cssPx": 12,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 12,
+            "clipped": false
+          },
+          {
+            "text": "5",
+            "cssPx": 12,
+            "clipped": false
+          },
+          {
+            "text": "9",
+            "cssPx": 12,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 0,
+        "hasError": false
+      },
+      "donut": null
+    },
+    "w320_after_live_resize": {
+      "bars": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 235.17241379310346",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مبيعات",
+            "aria": "مبيعات",
+            "hasTitle": true,
+            "titleText": "مبيعات",
+            "x": 40,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مشتريات",
+            "aria": "مشتريات",
+            "hasTitle": true,
+            "titleText": "مشتريات",
+            "x": 120,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "مر…مرتجعات",
+            "aria": "مرتجعات",
+            "hasTitle": true,
+            "titleText": "مرتجعات",
+            "x": 200,
+            "len": 28.79
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "خارج",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 279.88793182373047,
+            "len": 32.11
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "الن…خارج النطاق",
+            "aria": "خارج النطاق",
+            "hasTitle": true,
+            "titleText": "خارج النطاق",
+            "x": 275.94396591186523,
+            "len": 36.06
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "8",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "0",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "12",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "قيمة شاذة",
+            "cssPx": 17.931,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 4,
+        "hasError": false
+      },
+      "bars5": null,
+      "line": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 170",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…السبت",
+            "aria": "السبت",
+            "hasTitle": true,
+            "titleText": "السبت",
+            "x": 284.1551742553711,
+            "len": 27.84
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأحد",
+            "aria": "الأحد",
+            "hasTitle": true,
+            "titleText": "الأحد",
+            "x": 228,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الا…الاثنين",
+            "aria": "الاثنين",
+            "hasTitle": true,
+            "titleText": "الاثنين",
+            "x": 160,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأربعاء",
+            "aria": "الأربعاء",
+            "hasTitle": true,
+            "titleText": "الأربعاء",
+            "x": 92,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…الخميس",
+            "aria": "الخميس",
+            "hasTitle": true,
+            "titleText": "الخميس",
+            "x": 35.844825744628906,
+            "len": 27.84
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "4",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "6",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "5",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "9",
+            "cssPx": 16.5517,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 0,
+        "hasError": false
+      },
+      "donut": null
+    },
+    "render_count_probe": {
+      "note": "listener attached after first resize; second resize 320->328 to count events",
+      "events_after_second_resize": 0
+    },
+    "before_200_root": {
+      "htmlFs": "16px",
+      "bodyFs": "16px"
+    },
+    "w320_200pct_pass1": {
+      "bars": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 235.17241379310346",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مبيعات",
+            "aria": "مبيعات",
+            "hasTitle": true,
+            "titleText": "مبيعات",
+            "x": 40,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مشتريات",
+            "aria": "مشتريات",
+            "hasTitle": true,
+            "titleText": "مشتريات",
+            "x": 120,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "مر…مرتجعات",
+            "aria": "مرتجعات",
+            "hasTitle": true,
+            "titleText": "مرتجعات",
+            "x": 200,
+            "len": 28.79
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "خارج",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 279.88793182373047,
+            "len": 32.11
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "الن…خارج النطاق",
+            "aria": "خارج النطاق",
+            "hasTitle": true,
+            "titleText": "خارج النطاق",
+            "x": 275.94396591186523,
+            "len": 36.06
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "8",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "0",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "12",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "قيمة شاذة",
+            "cssPx": 17.931,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 4,
+        "hasError": false
+      },
+      "bars5": null,
+      "line": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 170",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…السبت",
+            "aria": "السبت",
+            "hasTitle": true,
+            "titleText": "السبت",
+            "x": 284.1551742553711,
+            "len": 27.84
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأحد",
+            "aria": "الأحد",
+            "hasTitle": true,
+            "titleText": "الأحد",
+            "x": 228,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الا…الاثنين",
+            "aria": "الاثنين",
+            "hasTitle": true,
+            "titleText": "الاثنين",
+            "x": 160,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأربعاء",
+            "aria": "الأربعاء",
+            "hasTitle": true,
+            "titleText": "الأربعاء",
+            "x": 92,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…الخميس",
+            "aria": "الخميس",
+            "hasTitle": true,
+            "titleText": "الخميس",
+            "x": 35.844825744628906,
+            "len": 27.84
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "4",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "6",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "5",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "9",
+            "cssPx": 16.5517,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 0,
+        "hasError": false
+      },
+      "donut": null
+    },
+    "overflow_w320_200": {
+      "docScrollW": 320,
+      "docClientW": 320,
+      "bodyScrollW": 320,
+      "horizontalOverflow": false
+    },
+    "w320_200pct_pass2": {
+      "bars": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 235.17241379310346",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مبيعات",
+            "aria": "مبيعات",
+            "hasTitle": true,
+            "titleText": "مبيعات",
+            "x": 40,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "م…مشتريات",
+            "aria": "مشتريات",
+            "hasTitle": true,
+            "titleText": "مشتريات",
+            "x": 120,
+            "len": 24.35
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "مر…مرتجعات",
+            "aria": "مرتجعات",
+            "hasTitle": true,
+            "titleText": "مرتجعات",
+            "x": 200,
+            "len": 28.79
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "خارج",
+            "aria": null,
+            "hasTitle": false,
+            "titleText": null,
+            "x": 279.88793182373047,
+            "len": 32.11
+          },
+          {
+            "cls": "m-chart__bar-label",
+            "cssPx": 17.931,
+            "screenPx": 13,
+            "text": "الن…خارج النطاق",
+            "aria": "خارج النطاق",
+            "hasTitle": true,
+            "titleText": "خارج النطاق",
+            "x": 275.94396591186523,
+            "len": 36.06
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "8",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "0",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "12",
+            "cssPx": 17.931,
+            "clipped": false
+          },
+          {
+            "text": "قيمة شاذة",
+            "cssPx": 17.931,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 4,
+        "hasError": false
+      },
+      "bars5": null,
+      "line": {
+        "plotWidth": 232,
+        "viewBox": "0 0 320 170",
+        "labelCount": 5,
+        "labels": [
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…السبت",
+            "aria": "السبت",
+            "hasTitle": true,
+            "titleText": "السبت",
+            "x": 284.1551742553711,
+            "len": 27.84
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأحد",
+            "aria": "الأحد",
+            "hasTitle": true,
+            "titleText": "الأحد",
+            "x": 228,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الا…الاثنين",
+            "aria": "الاثنين",
+            "hasTitle": true,
+            "titleText": "الاثنين",
+            "x": 160,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "الأ…الأربعاء",
+            "aria": "الأربعاء",
+            "hasTitle": true,
+            "titleText": "الأربعاء",
+            "x": 92,
+            "len": 25.58
+          },
+          {
+            "cls": "m-chart__x-label",
+            "cssPx": 16.5517,
+            "screenPx": 12,
+            "text": "ال…الخميس",
+            "aria": "الخميس",
+            "hasTitle": true,
+            "titleText": "الخميس",
+            "x": 35.844825744628906,
+            "len": 27.84
+          }
+        ],
+        "valueCount": 5,
+        "values": [
+          {
+            "text": "4",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "6",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "—",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "5",
+            "cssPx": 16.5517,
+            "clipped": false
+          },
+          {
+            "text": "9",
+            "cssPx": 16.5517,
+            "clipped": false
+          }
+        ],
+        "scaleState": null,
+        "rects": 0,
+        "hasError": false
+      },
+      "donut": null
+    }
+  },
+  "pageerrors": []
+}

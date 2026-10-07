@@ -1,0 +1,33 @@
+{
+  "carousel_btns_320": {
+    "btns": [
+      [
+        48,
+        48
+      ],
+      [
+        48,
+        48
+      ]
+    ],
+    "dots": [
+      [
+        48,
+        48
+      ],
+      [
+        48,
+        48
+      ],
+      [
+        48,
+        48
+      ]
+    ],
+    "dotsRowW": 232,
+    "controlsVisible": true
+  },
+  "peek_reduced_motion": {
+    "transition": "none"
+  }
+}

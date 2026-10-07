@@ -1,0 +1,109 @@
+{
+  "viewport": "360x800",
+  "flows": {
+    "view": "view-schedule",
+    "cal_r1_01_order_save": {
+      "toast": {
+        "found": true,
+        "hiddenAttr": false,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "display": "flex",
+        "position": "fixed",
+        "zIndex": "90",
+        "text": "تمت إضافة الطلب.",
+        "parentViewId": "view-account",
+        "parentViewHidden": true,
+        "opacity": "1",
+        "visibility": "visible"
+      },
+      "liveRegion": {
+        "text": "تمت إضافة الطلب.",
+        "ariaLive": "polite",
+        "ariaAtomic": "true",
+        "parent": "BODY"
+      },
+      "visibleTextAnywhere": {
+        "found": true,
+        "tag": "DIV",
+        "id": "",
+        "w": 1,
+        "h": 1
+      },
+      "layerOpenAfterSave": false,
+      "focusAfterSave": "f03-schedule-title"
+    },
+    "delete_item_toast": {
+      "view": "view-list",
+      "toast": {
+        "found": true,
+        "hiddenAttr": false,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "display": "flex",
+        "position": "fixed",
+        "zIndex": "90",
+        "text": "تم حذف العنصر.",
+        "parentViewId": "view-account",
+        "parentViewHidden": true,
+        "opacity": "1",
+        "visibility": "visible"
+      },
+      "liveRegion": {
+        "text": "تم حذف العنصر.",
+        "ariaLive": "polite",
+        "ariaAtomic": "true",
+        "parent": "BODY"
+      },
+      "visibleTextAnywhere": {
+        "found": true,
+        "tag": "DIV",
+        "id": "",
+        "w": 1,
+        "h": 1
+      }
+    },
+    "cal_r1_02_legend": {
+      "found": true,
+      "items": [
+        "قيد التنفيذ",
+        "تم التسليم",
+        "بانتظار العميل",
+        "mystery"
+      ],
+      "rect": {
+        "x": 16,
+        "y": 600.515625,
+        "w": 328,
+        "h": 19.984375
+      },
+      "visible": true
+    },
+    "cal_r1_02_mystery_nodes": [
+      {
+        "tag": "SPAN",
+        "cls": "m-ocal__legend-label",
+        "w": 46.96875,
+        "h": 19.984375,
+        "visible": true
+      }
+    ]
+  },
+  "gateway": {
+    "demoButtonVisible": true,
+    "navbarHiddenAtGateway": true,
+    "viewAfterLogin": "view-home",
+    "navbarHiddenAfterLogin": false,
+    "navbarItems": 4,
+    "focusAfterLogin": "f03-home-title"
+  },
+  "pageErrors": []
+}

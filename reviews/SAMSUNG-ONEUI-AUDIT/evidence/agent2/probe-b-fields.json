@@ -1,0 +1,165 @@
+{
+ "meta": {
+  "commit": "a5500c9",
+  "tree": "05f344b",
+  "browser": "Chromium via /home/z/my-project/evidence/bin/chromium (Playwright)",
+  "textZoom": "declared two-pass computed font-size x2 scoped to .phone-demo.is-320 (NOT native zoom)",
+  "pages": [
+   "http://127.0.0.1:5000/previews/fields/",
+   "http://127.0.0.1:5000/previews/fields/example-usage.html"
+  ]
+ },
+ "B1_geometry": {
+  "320": {
+   "inputFont": "16px",
+   "inputW": 214.8,
+   "controlH": 52,
+   "unitAtInlineEnd": true,
+   "unitFont": "13px",
+   "unitText": "د.أ",
+   "stepBtns": [],
+   "blockW": 320
+  },
+  "390": {
+   "inputFont": "16px",
+   "inputW": 276.8,
+   "controlH": 52,
+   "unitAtInlineEnd": true,
+   "unitFont": "13px",
+   "unitText": "د.أ",
+   "stepBtns": [],
+   "blockW": 390
+  },
+  "430": {
+   "inputFont": "16px",
+   "inputW": 354,
+   "controlH": 52,
+   "unitAtInlineEnd": null,
+   "stepBtns": [],
+   "blockW": 430
+  },
+  "qtyInputComputedW_320": {
+   "computedW": "88.7656px",
+   "offsetW": 89,
+   "cs": "tabular-nums"
+  }
+ },
+ "B2_text200_in_320": {
+  "elementsScaled": 24,
+  "qtyBefore": {
+   "clientW": 89,
+   "scrollW": null,
+   "font": "16px"
+  },
+  "amountBefore": {
+   "clientW": 215,
+   "scrollW": 215,
+   "font": "16px"
+  },
+  "after": {
+   "qty": {
+    "clientW": 62,
+    "scrollW": 77,
+    "clipped": true,
+    "font": "32px"
+   },
+   "qtyFieldH": 106,
+   "amount": {
+    "clientW": 202,
+    "scrollW": 218,
+    "clipped": true,
+    "font": "32px"
+   },
+   "amountFieldH": 106,
+   "unitFont": "26px",
+   "stepBtnSize": "48x48",
+   "controlRowOverflow": false,
+   "errFont": "32px",
+   "errFieldH": 258,
+   "labelFont": "28px",
+   "blockW": 320
+  }
+ },
+ "B3_clear": {
+  "visibility": {
+   "display": "flex",
+   "w": 48,
+   "h": 48,
+   "aria": "مسح البحث"
+  },
+  "tabFocusOnClear": "search-clear",
+  "afterKeyboardEnter": {
+   "value": "",
+   "focused": "t-search",
+   "evts": [
+    "input",
+    "input"
+   ]
+  },
+  "afterMouseClick": {
+   "value": "",
+   "focused": "t-search",
+   "evts": [
+    "input",
+    "input",
+    "input",
+    "input"
+   ],
+   "clearVisible": "none"
+  }
+ },
+ "B4_counter_sync_contract": {
+  "initial": "11/40",
+  "afterProgrammaticSetAndSync": {
+   "count": "35/40",
+   "evts": [],
+   "ariaHidden": "true"
+  }
+ },
+ "B6_aria_describedby": {
+  "fields": {
+   "u2": "prior-help m-field-msg-2",
+   "u1": "m-field-msg-1",
+   "priorHelpExists": true
+  },
+  "readonlyStepperValueAfterClick": "10"
+ },
+ "B5_stepper": {
+  "upBtn": "found",
+  "value10_plus5_viaKeyboardEnter": "15",
+  "value99_up_clamped": "99",
+  "value0_down_clamped": "0"
+ },
+ "B7_readonly_disabled_placeholder": {
+  "readonly": {
+   "color": "rgb(23, 45, 50)",
+   "userSelect": "text",
+   "cursor": "default",
+   "controlBg": "rgb(247, 248, 244)",
+   "canSelect": true
+  },
+  "disabled": {
+   "color": "rgb(83, 103, 107)",
+   "inputDisabled": true,
+   "controlBg": "rgb(228, 234, 232)"
+  },
+  "placeholder": {
+   "color": "rgb(95, 115, 120)",
+   "hintToken": "#5F7378"
+  },
+  "errorValue": "07912",
+  "errorMsgLinked": "m-field-msg-2"
+ },
+ "B8_viewport_430_to_320_noreload": {
+  "at430": {
+   "w": 342,
+   "h": 52,
+   "overflow": false
+  },
+  "at320": {
+   "w": 232,
+   "h": 52,
+   "overflow": false
+  }
+ }
+}

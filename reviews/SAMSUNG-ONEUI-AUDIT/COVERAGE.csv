@@ -1,0 +1,55 @@
+family,variant,state,source_path,preview_path,review_status,evidence_id,finding_ids,reason
+shared,tokens.css,full-read+24-contrast-pairs,shared/tokens.css,previews/index.html,REVIEWED,evidence/agent1/contrast-tokens.json,SUI-002;SUI-016,قراءة سطرًا سطرًا + حساب تباين 24 زوجًا — الأساس سليم
+shared,motion.css,full-read+reduced-motion,shared/motion.css,-,REVIEWED,evidence/agent1/,-,الحماية مقيسة لmicro-layer/micro-select؛ فجوة حماية عينة = SUI-020
+organization,rows/sections/collapsible,keyboard+measure,components/organization/organization.css,previews/organization/,REVIEWED,evidence/agent1/components-probe.json,SUI-026,Enter/Space للقسم القابل للطي مقيسان؛ زرا 40px في لوحة التركيب الصعب
+surfaces,surfaces+curves,self-check+depth,components/surfaces/surfaces.css,previews/surfaces/,REVIEWED,evidence/agent1/,SUI-018;SUI-019,مثال مستقل 10/10 PASS؛ تناقض المواصفة 0.10/0.12
+buttons,primary/secondary/ghost/icon/destructive/filter-counter,default+pressed+focused+disabled+loading,components/buttons/buttons.css,previews/buttons/,REVIEWED,evidence/agent2/probe-a-buttons.json,-,أحجام 48px بالأربع مقاسات + عقد التحميل B + حرس busy + التفاف
+buttons,multiline+counter-at-200pct,text-zoom-200,components/buttons/buttons.css,previews/buttons/,REVIEWED,evidence/agent2/probe-a-buttons.json,-,عدّاد 123 محتوى عند 200% بلا تمرير
+buttons,panel-board,dynamic-states,components/buttons/buttons.js,previews/buttons/,PARTIAL,evidence/agent2/,SUI-006,حالات اللوحة الثابتة لم تُعد قياسًا (مغطاة وظيفيًا عبر example-usage)
+fields,text/long/search/amount/quantity,default+error+readonly+help,components/fields/fields.css,previews/fields/,REVIEWED,evidence/agent2/probe-b-fields.json,SUI-004;SUI-005,مسح/عداد/خطوة/ربط رسائل/430→320 مقيسة؛ قص القيم الرقمية عند 200%
+fields,example-usage-raw-steppers,read-only-quantity,components/fields/specification.md,previews/fields/example-usage.html,REVIEWED,evidence/agent2/probe-b-fields.json,SUI-006,زرا 23.8×21px خامان يخالفان العقد والمواصفة
+selection,checkbox/radio,rows+wrap+disabled,components/selection/selection.css,previews/selection/,REVIEWED,evidence/agent2/probe-c-selection.json,SUI-011,صفوف 48px والتفاف بلا قص؛ تباعد صفري بين المقاطع الملتفة
+selection,switch,on+off+pending+unknown,components/selection/selection.css,previews/selection/,REVIEWED,evidence/agent2/probe-c-selection.json,SUI-003,قاعدة لون الحالة ميتة بترتيب DOM؛ حماية pending مقيسة
+selection,segmented,rtl-arrows+disabled,components/selection/selection.css,previews/selection/,REVIEWED,evidence/agent2/probe-c-selection.json,SUI-011,أسهم RTL حقيقية وحرس معطل
+selection,picker,ready+loading+error+retry+empty+search+roving,components/selection/picker.js,previews/selection/,REVIEWED,evidence/agent2/probe-c-selection.json,SUI-032,العقد كامل مقيس؛ خيار S13 قرار لاحق
+navigation,appbar+back,rtl+48px,components/navigation/navigation.css,previews/navigation/,REVIEWED,evidence/agent3/n4-*.json,-,زر رجوع 48×48 يمين RTL بأيقونة أصلية
+navigation,tabs,roving+rtl-arrows,components/navigation/navigation.js,previews/navigation/,REVIEWED,evidence/agent3/n3-*.json,SUI-022,أسهم تلتف عند الحواف (S29) — خيار موثق
+navigation,navbar-4-destinations,aria-current+widths,components/navigation/navigation.css,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent3/n4-*.json;evidence/agent3/n5-*.json,SUI-002,48px بلا فيض 320-430؛ التراكب عند 200% تركيب F03
+navigation,filter-panel,open+draft+applied+clear,components/navigation/navigation.js,previews/ux-patterns/filter-lifecycle/,REVIEWED,evidence/agent3/n6-*.json,SUI-015,عقد الجاري/المطبق كامل؛ أول تركيز على X
+navigation,dialog+bottom-sheet,delete+leave+category+more,components/navigation/navigation.css,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent3/n2-*.json,SUI-028;SUI-023,عقود Escape/استعادة تركيز/inert/حصر Tab مرّت كلها؛ موضع الحوار قرار
+messages,inline/banner,roles+variants,components/messages/messages.js,previews/messages/,REVIEWED,evidence/agent3/n3-*.json,SUI-012;SUI-010,dedup يبتلع التكرار؛ role الثابت في تركيب F03
+messages,toast,visible+timing+close+channel,components/messages/messages.js,previews/messages/,REVIEWED,evidence/agent3/n3-*.json,-,ظهور فعلي 320×80 وتوقيت ~4s وقناة إعلان واحدة
+messages,states,loading+empty+error+success+unknown,components/messages/messages.css,previews/messages/,REVIEWED,evidence/agent2/probe-d-lifecycles.json,-,دورات الحياة الثلاث مقيسة
+access-gateway,entry+fields+submit,reveal+error+busy,components/access-gateway/access-gateway.js,previews/concepts/,REVIEWED,evidence/agent3/n3-*.json;evidence/agent3/n8-*.json,SUI-013;SUI-014,خطأ→تركيز الحقل+aria-invalid؛ نصوص تقنية+قناة مزدوجة
+account-settings,two-levels+switch+save-feedback,layers+escape,components/account-settings/account-settings.js,previews/concepts/,REVIEWED,evidence/agent3/n2-*.json;evidence/agent3/n5-*.json,SUI-003,رجوع داخلي وحالة صادقة وSpace للمفتاح
+data,bars+line,resize-430to320+200pct+labels,components/data/data.js,previews/data/,REVIEWED,evidence/agent4/probe-a.json;evidence/agent4/probe-c.json,SUI-031,13.00/12.00px فعلية بعد تصغير حي؛ صفر تصادم عند 200%؛ قص تسمية 320
+data,donuts,148-contract+refusals,components/data/data.js,previews/data/,REVIEWED,evidence/agent4/probe-b.json,-,148×148 محفوظة عبر العروض والتكبير وفتح القسم
+data,packed-circle,area-proportion+expand,components/data/packed-circle.js,previews/data/,REVIEWED,evidence/agent4/probe-d.json;evidence/agent4/probe-e2.json,-,نسبة 8:5:3 بالضبط (√) عبر العروض
+data,values/zero/unknown/anomaly,all-contracts,components/data/data.css,previews/data/,REVIEWED,evidence/agent4/probe-a.json,SUI-008,صفر≠مجهول≠شاذة مقيسة؛ m-stat__num بلا لف عند 200%
+metric-comparison,circles+list+main-metric,overflow+scale-refusal,components/metric-comparison/metric-comparison.css,previews/concepts/,REVIEWED,evidence/agent4/probe-h.json,-,رفض النطاق بنص بشري وتشخيص على الجذر؛ overflow-wrap موجود
+info-strip,strip,manual+no-autoplay,components/info-strip/info-strip.js,previews/info-strip/,REVIEWED,evidence/agent4/,-,سحب RTL وكيبورد ومؤشرات
+info-strip,peek,reveal+drag+keyboard,components/info-strip/info-strip-peek.js,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent4/ (D1);evidence/leader/leader-peek.json,SUI-007,هندسة قديمة عند الكشف مؤكدة ثلاث مرات؛ 0/1/عديد PARTIAL (0/1 قراءة مصدر)
+carousel,cards+packed,drag-rtl+keyboard+indicators,components/carousel/carousel.js,previews/carousel/,REVIEWED,evidence/agent4/probe-e.json,SUI-025,سحب RTL 1:1 وsnap-back و«البطاقة X من N»؛ نمط resize الكامن
+order-schedule,month/day/list,leap+clamp+sync,components/order-schedule/order-schedule.js,previews/ux-patterns/order-schedule/,REVIEWED,evidence/agent4/ (قياس خلايا 320-430),SUI-030,خلايا 37.7/43.4/47.7px (سياق CAL-D1)؛ البدائل ≥48px؛ لا استنتاج حالة من التاريخ
+order-schedule,states,loading+error+empty,components/order-schedule/order-schedule.js,previews/ux-patterns/order-schedule/,PARTIAL,-,-,اعتماد على أدوات الجولة السابقة الموثقة (CAL 16/16) + قراءة مصدر؛ لم تُعد إنتاجها في هذه الجولة
+composition-F03,gateway→4-destinations→layers→forms,full-journey,previews/ux-patterns/mobile-record-sample/,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent3/n1-*.json;evidence/agent3/n2-*.json;evidence/agent3/n5-*.json,SUI-001;SUI-002;SUI-009;SUI-010,مسارات مقيسة بلوحة مفاتيح حقيقية؛ toast 0×0 مؤكد في مسارين
+composition-F03,visual-hierarchy+spacing,320/360/390/430+200pct+reduce,previews/ux-patterns/mobile-record-sample/example.css,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent1/components-probe.json,SUI-016;SUI-017;SUI-020,تراكب شريط التحديد 17.98px عند 200%؛ هوامش وتراتب مقيسان
+composition-F03,reports-view,charts+peek+donuts,previews/ux-patterns/mobile-record-sample/,previews/ux-patterns/mobile-record-sample/,REVIEWED,evidence/agent4/;evidence/leader/leader-peek.json,SUI-007;SUI-031,peek قديم الهندسة عند الكشف + قص تسميات 320
+composition-F03,forms-at-200pct,text-zoom,previews/ux-patterns/mobile-record-sample/,previews/ux-patterns/mobile-record-sample/,NOT RUN,-,SUI-004;SUI-005,قيّمها الوكيل 2 على المكوّن واللوحات؛ خطوة لاحقة: المروران على view-form نفسها
+composition-F03,order-save/edit,add-measured+edit-shared-path,previews/ux-patterns/mobile-record-sample/example.js,previews/ux-patterns/mobile-record-sample/,PARTIAL,evidence/agent3/n1-*.json,SUI-001,قِست «إضافة» فعليًا؛ «التعديل» بمسار saveOrderForm نفسه (قراءة)
+ux-form-lifecycle,error→focus→loading→success,full-cycle,previews/ux-patterns/form-lifecycle/,previews/ux-patterns/form-lifecycle/,REVIEWED,evidence/agent2/probe-d-lifecycles.json,-,خطأ يركز حقل الاسم مع aria-describedby
+ux-choice-lifecycle,open→search→select→close+empty,full-cycle,previews/ux-patterns/choice-lifecycle/,previews/ux-patterns/choice-lifecycle/,REVIEWED,evidence/agent2/probe-d-lifecycles.json,-,منتقي كامل
+ux-switch-lifecycle,pending+failure+unknown+next-action,full-cycle,previews/ux-patterns/switch-lifecycle/,previews/ux-patterns/switch-lifecycle/,REVIEWED,evidence/agent2/probe-d-lifecycles.json,SUI-003,حماية pending + فعل تالٍ بعد unknown
+ux-filter-lifecycle,panel+draft+applied+retry,full-cycle,previews/ux-patterns/filter-lifecycle/,previews/ux-patterns/filter-lifecycle/,REVIEWED,evidence/agent3/n6-*.json,SUI-015,عقد الفلاتر + «تعديل الفلاتر» في لا نتائج
+ux-order-schedule,sample+connector,independent+file://,previews/ux-patterns/order-schedule/,previews/ux-patterns/order-schedule/,REVIEWED,evidence/agent4/ (D6),SUI-009,مفتاح mystery في البذرة المشتركة مؤكد
+gallery,previews/index.html,letter-spacing+structure,previews/index.css,previews/index.html,REVIEWED,evidence/agent1/components-probe.json,SUI-021,تباعد معلن على عربي بلا أثر مقيس في Chromium
+standalone,build-output,equivalence,-,previews/ux-patterns/mobile-record-sample/standalone.html,PARTIAL,evidence/agent1/ (مسح m-section__title فقط),SUI-019,لم يُعد قياسه مباشرة هذه الجولة؛ تكافؤ البناء موثق بأدوات الجولة السابقة (build --check byte-identical)
+platform,real-device/S25/Samsung-Internet,ALL,-,-,NOT RUN,-,-,بيئة Chromium headless فقط؛ خطوة لاحقة: جلسة جهاز يدوية مع text scaling
+platform,touch+drag-finger,ALL,-,-,NOT RUN,-,-,أحداث مؤشر Chromium لا إصبعًا
+platform,TalkBack/VoiceOver/NVDA,ALL,-,-,NOT RUN,-,-,السمات مقيسة DOM فقط؛ قراءة فعلية تحتاج جهازًا/قارئًا
+platform,WebKit/Safari,ALL,-,-,NOT RUN,-,-,لا متصفح غير Chromium في البيئة
+platform,native-zoom,ALL,-,-,NOT RUN,-,SUI-002;SUI-004;SUI-005;SUI-008,استُخدمت آلية مضاعفة خط معلنة بمرورين (ليست zoom النظام)
+platform,safe-area-env-insets,ALL,-,-,NOT RUN,-,-,قيم 0 في headless
+platform,system-keyboard-over-layered-field,ALL,-,-,NOT RUN,-,-,موثقة أصلًا في مواصفة B07 كغير مفحوصة
+platform,system-back/History,ALL,-,-,NOT RUN,-,-,موثق في example.js
+platform,LTR,ALL,-,-,NOT RUN,-,-,المنتج RTL بحكم العقد

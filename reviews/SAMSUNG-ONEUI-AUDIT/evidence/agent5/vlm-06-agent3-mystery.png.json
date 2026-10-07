@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Based on the image provided, here are the answers to your questions:\n\n**Q1: Items in the status legend/key row:**\nThe image does **not** contain a visible status legend or key row. The items visible on the screen are:\n*   **Header:** الطلبات (Orders)\n*   **Top Card:** إجمالي قيمة المبيعات (Total Sales Value), 676.85 د.أ (Currency), and a summary of completed/pending orders.\n*   **Middle Card:** عدد الطلبات (Number of Orders), 8 طلب (8 Orders).\n*   **Pagination:** 1 / 3 with navigation arrows.\n*   **Action Buttons:** إضافة طلب (Add Order), عرض جميع الطلبات (View All Orders), التقويم الميلادي (Gregorian Calendar).\n*   **Bottom Navigation:** الرئيسية (Home), الطلبات (Orders), الإضافات (Add-ons), الحساب (Account).\n\n**Q2: Is there any English word like 'mystery' visible?**\n**No.** There is no English text visible anywhere on this screen; all text is in Arabic.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791401091,
+  "id": "20261008032446fa87ca6d4c444230",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008032446fa87ca6d4c444230",
+  "usage": {
+    "completion_tokens": 242,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 403,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 645
+  }
+}

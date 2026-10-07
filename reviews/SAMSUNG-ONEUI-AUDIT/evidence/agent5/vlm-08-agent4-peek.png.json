@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Based on the visual evidence, the **active card is flush against the right edge**.\n\nThe layout appears **off-center and unbalanced**. The active card (\"إجمالي المقياس\") is aligned to the right, with the navigation arrows positioned to its left. There is no centering of the active card, nor is there a \"peek\" of the next card visible on the left side of the strip in this view.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791401096,
+  "id": "20261008032454cf927b4a5d2c4708",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008032454cf927b4a5d2c4708",
+  "usage": {
+    "completion_tokens": 90,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 196,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 286
+  }
+}

@@ -1,0 +1,339 @@
+{
+ "meta": {
+  "commit": "a5500c9",
+  "tree": "05f344b",
+  "browser": "Chromium via /home/z/my-project/evidence/bin/chromium (Playwright)",
+  "viewportWidths": [
+   320,
+   360,
+   390,
+   430
+  ],
+  "textZoom": "declared two-pass computed font-size x2 (R2-D mechanism; NOT native zoom)",
+  "page": "http://127.0.0.1:5000/previews/buttons/example-usage.html"
+ },
+ "A1_button_sizes": {
+  "320": {
+   "primaryText": {
+    "w": 117.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "secondaryText": {
+    "w": 127,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconPlusText": {
+    "w": 145.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconCircle": {
+    "w": 48,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "50%",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "filterCounter2": {
+    "w": 138.8,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   }
+  },
+  "360": {
+   "primaryText": {
+    "w": 117.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "secondaryText": {
+    "w": 127,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconPlusText": {
+    "w": 145.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconCircle": {
+    "w": 48,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "50%",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "filterCounter2": {
+    "w": 138.8,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   }
+  },
+  "390": {
+   "primaryText": {
+    "w": 117.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "secondaryText": {
+    "w": 127,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconPlusText": {
+    "w": 145.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconCircle": {
+    "w": 48,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "50%",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "filterCounter2": {
+    "w": 138.8,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   }
+  },
+  "430": {
+   "primaryText": {
+    "w": 117.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "secondaryText": {
+    "w": 127,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconPlusText": {
+    "w": 145.3,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "iconCircle": {
+    "w": 48,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "50%",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   },
+   "filterCounter2": {
+    "w": 138.8,
+    "h": 48,
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "borderRadius": "min(24px, 50%)",
+    "minHeight": "48px",
+    "cursor": "pointer"
+   }
+  }
+ },
+ "A2_multiline_320_maxW200": {
+  "box": {
+   "w": 200,
+   "h": 96,
+   "fontSize": "16px",
+   "lineHeight": "24px",
+   "borderRadius": "min(24px, 50%)",
+   "minHeight": "48px",
+   "cursor": "pointer"
+  },
+  "labelCheck": {
+   "clientH": 96,
+   "scrollH": 96,
+   "w": 200,
+   "h": 96,
+   "radius": "min(24px, 50%)",
+   "clipped": false
+  }
+ },
+ "A3_counter_123_at_200pct": {
+  "zoomApplied": {
+   "count": 55
+  },
+  "btnBefore": {
+   "x": 145.7,
+   "y": 502,
+   "w": 154.3,
+   "h": 48
+  },
+  "counterBefore": {
+   "text": "123",
+   "insideX": true,
+   "cW": 39.4,
+   "cH": 20
+  },
+  "btnAfter": {
+   "x": 23.3,
+   "y": 784,
+   "w": 216.7,
+   "h": 72
+  },
+  "counterAfter": {
+   "text": "123",
+   "insideX": true,
+   "insideY": true,
+   "cW": 62.8,
+   "cH": 26,
+   "counterFontSize": "26px",
+   "horizScroll": false
+  },
+  "btnBoxAfter": {
+   "w": 216.7,
+   "h": 72,
+   "fontSize": "32px",
+   "lineHeight": "48px",
+   "borderRadius": "min(24px, 50%)",
+   "minHeight": "48px",
+   "cursor": "pointer"
+  },
+  "btnRestored": {
+   "x": 145.7,
+   "y": 502,
+   "w": 154.3,
+   "h": 48
+  }
+ },
+ "A4_loading_contract_B": {
+  "textBtn": {
+   "before": {
+    "x": 222.7,
+    "y": 178,
+    "w": 117.3,
+    "h": 48
+   },
+   "during": {
+    "x": 222.7,
+    "y": 178,
+    "w": 117.3,
+    "h": 48
+   },
+   "after": {
+    "x": 222.7,
+    "y": 178,
+    "w": 117.3,
+    "h": 48
+   },
+   "spinner": {
+    "visible": "visible",
+    "w": 18.5,
+    "h": 18.5,
+    "gapToBtnEdgeX": 0.7,
+    "gapToLabelX": null,
+    "labelOpacity": null,
+    "ariaBusy": "true",
+    "ariaLabel": "جارٍ الحفظ"
+   }
+  },
+  "iconCircleBtn": {
+   "during": {
+    "x": 134.7,
+    "y": 402,
+    "w": 48,
+    "h": 48
+   },
+   "spinner": {
+    "w": 33.8,
+    "h": 33.8
+   }
+  }
+ },
+ "A5_real_keyboard": {
+  "focusedAfterTabs": "icon-btn",
+  "focusRingOnKeyboardFocus": {
+   "matchesFocusVisible": true,
+   "boxShadow": "rgba(22, 77, 89, 0.14) 0px 3px 8px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+   "outline": "rgb(255, 255, 255) none 0px"
+  },
+  "focusedForGuardTest": "save-btn",
+  "clicksWhileBusyEnter": 0,
+  "clicksWhileBusySpace": 0,
+  "clicksAfterBusyEnter": 1,
+  "focusRetainedDuringLoading": "save-btn",
+  "focusRingDuringLoading": "rgba(22, 77, 89, 0.14) 0px 3px 8px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px"
+ },
+ "A6_disabled": {
+  "computed": {
+   "cursor": "not-allowed",
+   "bg": "rgb(247, 248, 248)",
+   "boxShadow": "rgba(113, 134, 139, 0.69) 0px 0px 0px 0.689463px inset",
+   "color": "rgb(42, 63, 68)"
+  },
+  "firstTabStop": "save-btn",
+  "note": "disabled native button skipped in Tab order"
+ }
+}

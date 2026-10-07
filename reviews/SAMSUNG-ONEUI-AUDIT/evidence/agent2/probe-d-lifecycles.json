@@ -1,0 +1,116 @@
+{
+ "meta": {
+  "commit": "a5500c9",
+  "tree": "05f344b",
+  "browser": "Chromium via /home/z/my-project/evidence/bin/chromium (Playwright)",
+  "keyboard": "REAL keyboard events (Tab/Enter/Space) via Playwright keyboard API"
+ },
+ "D1_f01_error_focus": {
+  "hasError": true,
+  "msgVisible": true,
+  "msgText": "الاسم مطلوب — أدخل اسمًا غير فارغ ثم احفظ مجددًا.",
+  "ariaDescribedby": "f01-name-msg",
+  "focusAfterError": "f01-name",
+  "errorBorderColor": "rgb(173, 48, 59)"
+ },
+ "D3_f01_actions_emphasis": {
+  "labels": [
+   "تعديل السجل:m-btn--primary"
+  ],
+  "primaryCount": 1,
+  "destructiveCount": 0
+ },
+ "D2_f01_busy_and_settle": {
+  "during": {
+   "saveAriaBusy": "true",
+   "saveAriaLabel": "جارٍ الحفظ",
+   "nameReadonly": true,
+   "noteReadonly": true,
+   "opNoteVisible": true,
+   "opText": "جارٍ الحفظ",
+   "checkBtnVisible": false
+  },
+  "afterSavedSettle": {
+   "saveAriaBusy": null,
+   "readViewVisible": false,
+   "editViewHidden": false,
+   "readName": "عينة",
+   "opState": "success",
+   "opTitle": "تم الحفظ"
+  }
+ },
+ "D4_f02_choice_picker": {
+  "opened": {
+   "layerHidden": false,
+   "activeElement": "f02c-layer-close",
+   "liveText": "جارٍ قراءة الخيارات…",
+   "stateRow": "جارٍ القراءة…",
+   "optionsVisible": 0
+  },
+  "afterReadSettled": {
+   "stateRow": null,
+   "optionsVisible": 3
+  },
+  "filtered": [
+   "عينة ب"
+  ],
+  "selected": {
+   "summary": "المحدد: عينة ب",
+   "outerDisplay": "المحدد: عينة ب",
+   "statusNote": ""
+  },
+  "closed": {
+   "layerHidden": true,
+   "activeAfterClose": "f02c-open-picker"
+  }
+ },
+ "D5_f02_choice_empty": {
+  "emptyState": {
+   "layerHidden": false,
+   "stateRow": "لا خيارات في المصدر.",
+   "optionsVisible": 0,
+   "liveText": "لا خيارات في المصدر."
+  },
+  "afterSearchInEmpty": {
+   "stateRow": "لا خيارات في المصدر.",
+   "optionsVisible": 0
+  }
+ },
+ "D6_f02_switch_pending": {
+  "pending": {
+   "dataPending": "true",
+   "inputDisabled": true,
+   "inputAriaBusy": "true",
+   "inputChecked": true,
+   "stateText": "جارٍ التحديث…",
+   "activeElement": "f02s-note"
+  },
+  "afterFailedSettle": {
+   "dataPending": "false",
+   "inputDisabled": false,
+   "inputChecked": false,
+   "stateText": "غير مفعّل",
+   "noteState": "error",
+   "noteTitle": "لم يُحدَّث الإعداد.",
+   "noteBody": "حاول مجددًا.",
+   "checkBtnVisible": false
+  },
+  "afterUnknownSettle": {
+   "inputChecked": true,
+   "stateText": "غير مؤكد",
+   "noteState": "warning",
+   "checkBtnVisible": true,
+   "checkBtnText": "التحقق من النتيجة"
+  },
+  "realKeyboardCheckButton": {
+   "focused": "f02s-check",
+   "checkBtnVisible": true,
+   "checkBusy": "true",
+   "activeElement": "f02s-check"
+  },
+  "locked": {
+   "lockedDisabled": true
+  },
+  "note": "scenario armed BEFORE the toggle (previous run armed after call start — measurement error, corrected)"
+ }
+}

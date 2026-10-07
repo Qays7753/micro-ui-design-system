@@ -1,0 +1,403 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "zoom_mechanism": "project-declared per-element computed font-size *2, two clean passes"
+  },
+  "runs": {
+    "data_board_320_1x": {
+      "doc": {
+        "sw": 320,
+        "cw": 320
+      }
+    },
+    "data_board_320_200": {
+      "doc": {
+        "sw": 428,
+        "cw": 320
+      },
+      "overflow_sources": [
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__num",
+          "w": 302.3,
+          "right": 346.3
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__unit",
+          "w": 27,
+          "right": 381.3
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__delta m-stat__delta--up m-stat__delta--tone-positive",
+          "w": 89.4,
+          "right": 478.7
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "w": 14,
+          "right": 403.3
+        },
+        {
+          "tag": "use",
+          "cls": "[object SVGAnimatedString]",
+          "w": 7,
+          "right": 399.8
+        },
+        {
+          "tag": "DIV",
+          "cls": "m-compare__item",
+          "w": 180.2,
+          "right": 71.8
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__label",
+          "w": 180.2,
+          "right": 71.8
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__value",
+          "w": 180.2,
+          "right": 71.8
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__num m-stat__num--secondary",
+          "w": 145.2,
+          "right": 36.8
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__num",
+          "w": 302.3,
+          "right": 323.3
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__unit",
+          "w": 27,
+          "right": 358.3
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__delta m-stat__delta--up",
+          "w": 89.4,
+          "right": 455.7
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "w": 14,
+          "right": 380.3
+        },
+        {
+          "tag": "use",
+          "cls": "[object SVGAnimatedString]",
+          "w": 7,
+          "right": 376.8
+        }
+      ]
+    },
+    "concepts_w430_1x": {
+      "circles": [
+        {
+          "layout": "separated",
+          "scaleState": "ok",
+          "scaleNote": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
+          "items": [
+            {
+              "series": "a",
+              "state": "positive",
+              "inside": "true",
+              "boxW": 144,
+              "boxH": 144,
+              "bubbleW": 144,
+              "reading": "64 وحدة"
+            },
+            {
+              "series": "b",
+              "state": "positive",
+              "inside": "true",
+              "boxW": 90,
+              "boxH": 90,
+              "bubbleW": 90,
+              "reading": "25 وحدة"
+            },
+            {
+              "series": "c",
+              "state": "positive",
+              "inside": "false",
+              "boxW": 54,
+              "boxH": 54,
+              "bubbleW": 54,
+              "reading": "9 وحدة"
+            }
+          ],
+          "fallbackItems": [
+            "عنصر ج9 وحدة"
+          ]
+        }
+      ],
+      "packed": [],
+      "doc": {
+        "scrollW": 430,
+        "clientW": 430
+      }
+    },
+    "concepts_w320_live_resize": {
+      "circles": [
+        {
+          "layout": "separated",
+          "scaleState": "ok",
+          "scaleNote": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
+          "items": [
+            {
+              "series": "a",
+              "state": "positive",
+              "inside": "true",
+              "boxW": 110,
+              "boxH": 110,
+              "bubbleW": 110,
+              "reading": "64 وحدة"
+            },
+            {
+              "series": "b",
+              "state": "positive",
+              "inside": "false",
+              "boxW": 68.8,
+              "boxH": 68.8,
+              "bubbleW": 68.8,
+              "reading": "25 وحدة"
+            },
+            {
+              "series": "c",
+              "state": "positive",
+              "inside": "false",
+              "boxW": 41.3,
+              "boxH": 41.3,
+              "bubbleW": 41.3,
+              "reading": "9 وحدة"
+            }
+          ],
+          "fallbackItems": [
+            "عنصر ب25 وحدة",
+            "عنصر ج9 وحدة"
+          ]
+        }
+      ],
+      "packed": [],
+      "doc": {
+        "scrollW": 320,
+        "clientW": 320
+      }
+    },
+    "concepts_w320_200pct": {
+      "circles": [
+        {
+          "layout": "separated",
+          "scaleState": "ok",
+          "scaleNote": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
+          "items": [
+            {
+              "series": "a",
+              "state": "positive",
+              "inside": "true",
+              "boxW": 110,
+              "boxH": 110,
+              "bubbleW": 110,
+              "reading": "64 وحدة"
+            },
+            {
+              "series": "b",
+              "state": "positive",
+              "inside": "false",
+              "boxW": 68.8,
+              "boxH": 68.8,
+              "bubbleW": 68.8,
+              "reading": "25 وحدة"
+            },
+            {
+              "series": "c",
+              "state": "positive",
+              "inside": "false",
+              "boxW": 41.3,
+              "boxH": 41.3,
+              "bubbleW": 41.3,
+              "reading": "9 وحدة"
+            }
+          ],
+          "fallbackItems": [
+            "عنصر ب25 وحدة",
+            "عنصر ج9 وحدة"
+          ]
+        }
+      ],
+      "packed": [],
+      "doc": {
+        "scrollW": 320,
+        "clientW": 320
+      }
+    },
+    "concepts_area_check_note": "diameters measured from bubbles; proportionality computed in analysis (sqrt ratio)",
+    "info_strip_index_320": [
+      {
+        "peek": false,
+        "slideCount": 3,
+        "position": "1 / 3",
+        "status": "البطاقة 1 من 3",
+        "emptyVisible": false,
+        "emptyText": null,
+        "controlsHidden": false,
+        "viewportHidden": false
+      }
+    ],
+    "info_strip_comparison_320": [
+      {
+        "peek": false,
+        "slideCount": 3,
+        "position": "1 / 3",
+        "status": "البطاقة 1 من 3",
+        "emptyVisible": false,
+        "emptyText": null,
+        "controlsHidden": false,
+        "viewportHidden": false
+      },
+      {
+        "peek": true,
+        "slideCount": 4,
+        "position": "1 / 4",
+        "status": "البطاقة 1 من 4",
+        "emptyVisible": false,
+        "emptyText": null,
+        "controlsHidden": false,
+        "viewportHidden": false
+      }
+    ],
+    "info_strip_comparison_320_200": {
+      "strips": [
+        {
+          "peek": false,
+          "slideCount": 3,
+          "position": "1 / 3",
+          "status": "البطاقة 1 من 3",
+          "emptyVisible": false,
+          "emptyText": null,
+          "controlsHidden": false,
+          "viewportHidden": false
+        },
+        {
+          "peek": true,
+          "slideCount": 4,
+          "position": "1 / 4",
+          "status": "البطاقة 1 من 4",
+          "emptyVisible": false,
+          "emptyText": null,
+          "controlsHidden": false,
+          "viewportHidden": false
+        }
+      ],
+      "doc": {
+        "sw": 572,
+        "cw": 320
+      },
+      "overflow_sources": [
+        {
+          "tag": "TABLE",
+          "cls": "cmp-table",
+          "w": 555.8,
+          "right": 304
+        },
+        {
+          "tag": "TBODY",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        },
+        {
+          "tag": "TH",
+          "cls": "",
+          "w": 180.6,
+          "right": 176.3
+        },
+        {
+          "tag": "TH",
+          "cls": "",
+          "w": 247,
+          "right": -4.3
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 180.6,
+          "right": 176.3
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 247,
+          "right": -4.3
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 180.6,
+          "right": 176.3
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 247,
+          "right": -4.3
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 180.6,
+          "right": 176.3
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "w": 247,
+          "right": -4.3
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "w": 554.8,
+          "right": 303.5
+        }
+      ]
+    }
+  },
+  "pageerrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "scroll_300": {
+    "barBottom": 747,
+    "navbarTop": 729.015625,
+    "overlap": 17.984375,
+    "barH": 237
+  },
+  "scroll_600": {
+    "barBottom": 747,
+    "navbarTop": 729.015625,
+    "overlap": 17.984375,
+    "barH": 237
+  },
+  "scroll_900": {
+    "barBottom": 747,
+    "navbarTop": 729.015625,
+    "overlap": 17.984375,
+    "barH": 237
+  },
+  "scroll_1200": {
+    "barBottom": 747,
+    "navbarTop": 729.015625,
+    "overlap": 17.984375,
+    "barH": 237
+  }
+}

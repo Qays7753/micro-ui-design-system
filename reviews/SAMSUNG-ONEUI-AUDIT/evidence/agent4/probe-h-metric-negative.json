@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "commit": "a5500c9",
+    "tree": "05f344b",
+    "page": "http://localhost:5000/previews/concepts/index.html",
+    "method": "public API render() after attribute mutation (source editable, no rebuild)"
+  },
+  "max_below_largest": {
+    "userNote": "تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.",
+    "scaleState": "invalid-scale",
+    "scaleDetail": "metric-circles: data-max='5' غير موجب أو أصغر من أكبر مقدار معلوم (64) — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
+    "circlesRendered": 0,
+    "fallbackRows": [
+      "عنصر أ64 وحدة",
+      "عنصر ب25 وحدة",
+      "عنصر ج9 وحدة"
+    ]
+  },
+  "invalid_layout": {
+    "userNote": "تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.",
+    "scaleState": "invalid-layout",
+    "circlesRendered": 0,
+    "fallbackRows": [
+      "عنصر أ64 وحدة",
+      "عنصر ب25 وحدة",
+      "عنصر ج9 وحدة"
+    ]
+  },
+  "restored_and_bars": {
+    "circlesBack": 3,
+    "mmState": "ok",
+    "mmStatus": "مقياس مشترك: حتى 40 وحدة · العينة.",
+    "rows": [
+      {
+        "label": "عنصر أ",
+        "value": "32 وحدة",
+        "trackHidden": false,
+        "zero": null,
+        "barW": "80%"
+      },
+      {
+        "label": "عنصر ب",
+        "value": "9 وحدة",
+        "trackHidden": false,
+        "zero": null,
+        "barW": "22.5%"
+      },
+      {
+        "label": "عنصر ج",
+        "value": "2 وحدة",
+        "trackHidden": false,
+        "zero": null,
+        "barW": "5%"
+      }
+    ],
+    "hero": "18"
+  },
+  "pageerrors": []
+}

@@ -1,0 +1,41 @@
+{
+ "before_any_interaction": {
+  "viewportRect": {
+   "x": 16,
+   "y": 136,
+   "width": 328,
+   "height": 135.96875,
+   "top": 136,
+   "right": 344,
+   "bottom": 271.96875,
+   "left": 16
+  },
+  "transform": "matrix(1, 0, 0, 1, 0, 0)",
+  "cardRects": [
+   {
+    "x": 76,
+    "y": 136,
+    "width": 268,
+    "height": 135.96875,
+    "top": 136,
+    "right": 344,
+    "bottom": 271.96875,
+    "left": 76
+   },
+   {
+    "x": -204,
+    "y": 136,
+    "width": 268,
+    "height": 135.96875,
+    "top": 136,
+    "right": 64,
+    "bottom": 271.96875,
+    "left": -204
+   }
+  ]
+ },
+ "after_goTo": {
+  "transform": "matrix(1, 0, 0, 1, 0, 0)"
+ },
+ "goTo_clicked": false
+}
