@@ -1,3 +1,8 @@
+# مراجعة جودة المصادر — 2026-10-07
+
+- [مراجعة R1 المستقلة](../reviews/UI-SOURCE-REPAIR-R1/CHATGPT-REVIEW-R1.md) و[الدليل المحدد](../reviews/UI-SOURCE-REPAIR-R1/independent/r1/source-findings.json): CHANGES REQUIRED.
+- [تكليف R2 المحدود](../prompts/UI-SOURCE-REPAIR-R2-ZAI.md): جاهز ليُرسل إلى المنفذ، لم يُنفذ بإضافته.
+
 # أصول الشعار المعتمد — 2026-10-07
 
 - [Micro Logo V1 — المدخل والمصدر وكل المشتقات](../assets/brand/micro-logo/README.md): APPROVED BY OWNER، محفوظ على main. [التطوير المؤجل](../assets/brand/micro-logo/FUTURE-DEVELOPMENT.md).
