@@ -42,6 +42,7 @@
   <link rel="stylesheet" href="../../../components/access-gateway/access-gateway.css">
   <link rel="stylesheet" href="../../../components/surfaces/surfaces.css">
   <link rel="stylesheet" href="../../../components/surfaces/curves.css">
+  <link rel="stylesheet" href="../../../components/order-schedule/order-schedule.css">
   <link rel="stylesheet" href="example.css">
 </head>
 <body>
@@ -117,6 +118,12 @@
     </symbol>
     <symbol id="i-plus" viewBox="0 0 24 24" fill="none" data-icon-source="plus-sign.svg"><!-- assets/icons/plus-sign.svg -->
       <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" data-icon-source="calendar03.svg"><!-- assets/icons/calendar03.svg -->
+      <path d="M16 2V6M8 2V6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+  <path d="M13 4H11C7.22876 4 5.34315 4 4.17157 5.17157C3 6.34315 3 8.22876 3 12V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V12C21 8.22876 21 6.34315 19.8284 5.17157C18.6569 4 16.7712 4 13 4Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+  <path d="M3 10H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
+  <path d="M12.1258 14H12.0008M12.1258 18H12.0008M7.625 14H7.5M7.625 18H7.5M16.625 14H16.5M12.2508 14C12.2508 14.1381 12.1389 14.25 12.0008 14.25C11.8628 14.25 11.7508 14.1381 11.7508 14C11.7508 13.8619 11.8628 13.75 12.0008 13.75C12.1389 13.75 12.2508 13.8619 12.2508 14ZM12.2508 18C12.2508 18.1381 12.1389 18.25 12.0008 18.25C11.8628 18.25 11.7508 18.1381 11.7508 18C11.7508 17.8619 11.8628 17.75 12.0008 17.75C12.1389 17.75 12.2508 17.8619 12.2508 18ZM7.75 14C7.75 14.1381 7.63807 14.25 7.5 14.25C7.36193 14.25 7.25 14.1381 7.25 14C7.25 13.8619 7.36193 13.75 7.5 13.75C7.63807 13.75 7.75 13.8619 7.75 14ZM7.75 18C7.75 18.1381 7.63807 18.25 7.5 18.25C7.36193 18.25 7.25 18.1381 7.25 18C7.25 17.8619 7.36193 17.75 7.5 17.75C7.63807 17.75 7.75 17.8619 7.75 18ZM16.75 14C16.75 14.1381 16.6381 14.25 16.5 14.25C16.3619 14.25 16.25 14.1381 16.25 14C16.25 13.8619 16.3619 13.75 16.5 13.75C16.6381 13.75 16.75 13.8619 16.75 14Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
     </symbol>
   </svg>
 
@@ -223,6 +230,9 @@
       <div class="f03-actions">
         <button type="button" class="m-btn m-btn--primary" id="f03-home-add">إضافة عنصر</button>
         <button type="button" class="m-btn m-btn--secondary" id="f03-home-all">عرض جميع العناصر</button>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-home-schedule">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-calendar"/></svg>الطلبات المجدولة
+        </button>
       </div>
 
       <section class="f03-block" id="f03-home-compare" aria-labelledby="f03-home-compare-title">
@@ -588,6 +598,27 @@
       </section>
     </section>
 
+    <!-- ================= الطلبات المجدولة: مكوّن m-ocal داخل التجربة ======
+         عرض فرعي متصل من الرئيسية (ليس وجهة navbar): بيانات الطلبات من
+         موصل مستقل OrderDemoStore (order-store.js — منفصل عن F03Store
+         بلا تحويل «العناصر» إلى طلبات). التفاصيل والنموذج طبقتا B07
+         (نفس نمط f03-cat-layer/f03-leave-dialog) — عقد المكوّن:
+         الأحداث على الجذر #f03-ocal، والحفظ عند المستهلك هنا. -->
+    <section class="f03-view" id="view-schedule" aria-labelledby="f03-schedule-title" hidden>
+      <header class="f03-appbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" id="f03-schedule-back" aria-label="رجوع إلى الرئيسية">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <h2 class="f03-appbar__title" id="f03-schedule-title" tabindex="-1">الطلبات المجدولة</h2>
+        <button type="button" class="m-btn m-btn--secondary" id="f03-schedule-add">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-add"/></svg>إضافة
+        </button>
+      </header>
+
+      <!-- جذر مكوّن جدول الطلبات (يُهيَّأ مرة واحدة ويحفظ حالته) -->
+      <div id="f03-ocal"></div>
+    </section>
+
     <!-- ================= الحساب: مكونات الحساب والإعدادات ================ -->
     <section class="f03-view" id="view-account" aria-labelledby="f03-account-view-title" data-account-settings data-account-layer-id="f03-account-layer">
       <header class="f03-appbar">
@@ -887,6 +918,119 @@
     </div>
   </div>
 
+  <!-- ================= طبقة تفاصيل الطلب — B07 (نمط f03-cat-layer) =====
+       تُملأ من OrderDemoStore.get(id) عند حدث order-schedule:order-open
+       (كل القيم textContent — لا HTML من البيانات) -->
+  <div class="m-layer-backdrop" data-for="f03-order-layer" hidden id="f03-order-backdrop"></div>
+  <div class="m-layer" id="f03-order-layer" role="dialog" aria-modal="true"
+       aria-labelledby="f03-order-layer-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="f03-order-layer-title">تفاصيل الطلب</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق تفاصيل الطلب">
+        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="m-layer__body">
+      <h3 class="f03-order-title" id="f03-order-title"></h3>
+      <dl class="f03-readlist">
+        <div class="f03-readlist__row">
+          <dt>العميل</dt>
+          <dd id="f03-order-customer"></dd>
+        </div>
+        <div class="f03-readlist__row">
+          <dt>الموعد</dt>
+          <dd id="f03-order-date"></dd>
+        </div>
+        <div class="f03-readlist__row" id="f03-order-time-row">
+          <dt>الوقت</dt>
+          <dd><span class="f03-order-time" dir="ltr" id="f03-order-time"></span></dd>
+        </div>
+        <div class="f03-readlist__row">
+          <dt>الحالة</dt>
+          <dd>
+            <span class="f03-ochip" id="f03-order-status">
+              <span class="f03-ochip__dot" aria-hidden="true"></span>
+              <span class="f03-ochip__text" id="f03-order-status-text"></span>
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--primary" id="f03-order-edit">تعديل الموعد</button>
+      <button type="button" class="m-btn m-btn--secondary" data-layer-close>إغلاق</button>
+    </div>
+  </div>
+
+  <!-- ================= طبقة نموذج الطلب — B07 (عقد نموذج العنصر) =======
+         حقل اسم مطلوب + عميل اختياري + منتقي تاريخ أصلي (type=date كما
+         في نموذج العنصر — لا اختراع منتقي جديد) + وقت اختياري أصلي
+         (type=time) + حالة segmented ثابتة بحالات الموصل الثلاث -->
+  <div class="m-layer-backdrop" data-for="f03-order-form-layer" hidden id="f03-order-form-backdrop"></div>
+  <div class="m-layer" id="f03-order-form-layer" role="dialog" aria-modal="true"
+       aria-labelledby="f03-order-form-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="f03-order-form-title">إضافة طلب</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق نموذج الطلب">
+        <svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="m-layer__body">
+      <form id="f03-order-form" novalidate>
+        <div class="m-field" data-micro-field id="f03-order-name-field">
+          <label class="m-field__label" for="f03-order-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input" id="f03-order-name" name="name" type="text" maxlength="40" autocomplete="off" data-autofocus>
+            <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح الاسم"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+          </div>
+          <p class="m-field__msg" id="f03-order-name-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="m-field" data-micro-field id="f03-order-customer-field">
+          <label class="m-field__label" for="f03-order-form-customer">العميل <span class="m-field__required">(اختياري)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input" id="f03-order-form-customer" name="customer" type="text" maxlength="60" autocomplete="off">
+          </div>
+          <p class="m-field__msg" id="f03-order-form-customer-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="f03-field-row">
+          <div class="m-field" data-micro-field id="f03-order-date-field">
+            <label class="m-field__label" for="f03-order-form-date">الموعد <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="f03-order-form-date" name="date" type="date">
+            </div>
+            <p class="m-field__msg" id="f03-order-form-date-msg" data-field-msg hidden></p>
+          </div>
+
+          <div class="m-field" data-micro-field id="f03-order-time-field">
+            <label class="m-field__label" for="f03-order-form-time">الوقت <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="f03-order-form-time" name="time" type="time">
+            </div>
+            <p class="m-field__msg" id="f03-order-form-time-msg" data-field-msg hidden></p>
+          </div>
+        </div>
+
+        <p class="f03-hint f03-order-date-hint">الفارغ في الموعد يعني طلبًا غير مجدول — يظهر في قسم «غير المجدولة».</p>
+
+        <div class="f03-status" id="f03-order-status-field">
+          <span class="f03-cat__label" id="f03-order-status-label">الحالة</span>
+          <div class="m-seg" data-seg role="group" aria-labelledby="f03-order-status-label" id="f03-order-status-seg">
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="progress">قيد التنفيذ</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="done">تم التسليم</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-value="hold">بانتظار العميل</button>
+          </div>
+        </div>
+
+        <div class="f03-actions">
+          <button type="submit" class="m-btn m-btn--primary" id="f03-order-save">حفظ</button>
+          <button type="button" class="m-btn m-btn--secondary" data-layer-close id="f03-order-cancel">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- مصادر المكوّن ثم المخزن والموصل ثم سلوك المستهلك -->
   <script src="../../../components/buttons/buttons.js"></script>
   <script src="../../../components/fields/fields.js"></script>
@@ -901,6 +1045,8 @@
   <script src="../../../components/metric-comparison/metric-comparison.js"></script>
   <script src="../../../components/account-settings/account-settings.js"></script>
   <script src="../../../components/access-gateway/access-gateway.js"></script>
+  <script src="../../../components/order-schedule/order-schedule.js"></script>
+  <script src="../order-schedule/order-store.js"></script>
   <script src="demo-store.js"></script>
   <script src="mock-adapter.js"></script>
   <script src="example.js"></script>

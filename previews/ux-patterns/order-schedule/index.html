@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- =========================================================
+  Micro UI — عينة مستقلة: جدول الطلبات المجدولة على الهاتف
+  الملف: previews/ux-patterns/order-schedule/index.html
+  الحالة: DRAFT FOR REVIEW — عينة مراجعة، ليست سياسة أعمال.
+
+  تعمل بفتح الملف مباشرة file:// بلا إنترنت أو خادم: كل الأصول
+  محلية نسبية (خطوط + توكنات + مكوّنات). المصدر الواحد للطلبات
+  هو order-store.js (window.OrderDemoStore — مستقل عن F03Store)،
+  والمكوّن نفسه components/order-schedule (MicroOrderSchedule).
+  التفاصيل والنموذج طبقتا B07 (m-layer/MicroNavigation) — نفس
+  عقد ورحلة نسخة F03 لكن أبسط. سجل أحداث نصي صغير أسفل الصفحة
+  مسموح في هذه العينة فقط.
+========================================================= -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الطلبات المجدولة — عينة مستقلة — Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../../shared/tokens.css">
+  <link rel="stylesheet" href="../../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../../components/messages/messages.css">
+  <link rel="stylesheet" href="../../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../../components/order-schedule/order-schedule.css">
+  <link rel="stylesheet" href="example.css">
+</head>
+<body>
+
+  <main class="ocal-page" id="ocal-page">
+    <header class="ocal-page__bar">
+      <h1 class="ocal-page__title" id="ocal-demo-title" tabindex="-1">الطلبات المجدولة — عينة مستقلة</h1>
+      <button type="button" class="ocal-btn ocal-btn--primary" id="ocal-demo-add">إضافة طلب</button>
+    </header>
+
+    <!-- جذر مكوّن جدول الطلبات -->
+    <div id="ocal-demo"></div>
+
+    <!-- سجل أحداث نصي صغير (مسموح في هذه العينة المستقلة فقط) -->
+    <section class="ocal-log" aria-label="سجل أحداث العينة">
+      <h2 class="ocal-log__title">سجل الأحداث</h2>
+      <ul class="ocal-log__list" id="ocal-log-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <!-- طبقة تفاصيل الطلب — B07 (m-layer) -->
+  <div class="m-layer-backdrop" data-for="ocal-order-layer" hidden id="ocal-order-backdrop"></div>
+  <div class="m-layer" id="ocal-order-layer" role="dialog" aria-modal="true"
+       aria-labelledby="ocal-order-layer-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="ocal-order-layer-title">تفاصيل الطلب</span>
+      <button type="button" class="ocal-btn ocal-btn--ghost ocal-layer-close" data-layer-close aria-label="إغلاق تفاصيل الطلب">إغلاق</button>
+    </div>
+    <div class="m-layer__body">
+      <h3 class="ocal-order-title" id="ocal-order-title"></h3>
+      <dl class="ocal-readlist">
+        <div class="ocal-readlist__row">
+          <dt>العميل</dt>
+          <dd id="ocal-rd-customer"></dd>
+        </div>
+        <div class="ocal-readlist__row">
+          <dt>الموعد</dt>
+          <dd id="ocal-rd-date"></dd>
+        </div>
+        <div class="ocal-readlist__row" id="ocal-rd-time-row">
+          <dt>الوقت</dt>
+          <dd><span class="ocal-order-time" dir="ltr" id="ocal-rd-time"></span></dd>
+        </div>
+        <div class="ocal-readlist__row">
+          <dt>الحالة</dt>
+          <dd>
+            <span class="ocal-chip" id="ocal-order-status">
+              <span class="ocal-chip__dot" aria-hidden="true"></span>
+              <span class="ocal-chip__text" id="ocal-order-status-text"></span>
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="ocal-btn ocal-btn--primary" id="ocal-order-edit">تعديل الموعد</button>
+      <button type="button" class="ocal-btn ocal-btn--secondary" data-layer-close>إغلاق</button>
+    </div>
+  </div>
+
+  <!-- طبقة نموذج الطلب — B07: منتقي تاريخ/وقت أصلي + حالة segmented -->
+  <div class="m-layer-backdrop" data-for="ocal-order-form-layer" hidden id="ocal-order-form-backdrop"></div>
+  <div class="m-layer" id="ocal-order-form-layer" role="dialog" aria-modal="true"
+       aria-labelledby="ocal-order-form-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="ocal-order-form-title">إضافة طلب</span>
+      <button type="button" class="ocal-btn ocal-btn--ghost ocal-layer-close" data-layer-close aria-label="إغلاق نموذج الطلب">إغلاق</button>
+    </div>
+    <div class="m-layer__body">
+      <form id="ocal-order-form" novalidate>
+        <div class="m-field" data-micro-field id="ocal-order-name-field">
+          <label class="m-field__label" for="ocal-order-name">الاسم <span class="m-field__required">(مطلوب)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input" id="ocal-order-name" name="name" type="text" maxlength="40" autocomplete="off" data-autofocus>
+          </div>
+          <p class="m-field__msg" id="ocal-order-name-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="m-field" data-micro-field id="ocal-order-customer-field">
+          <label class="m-field__label" for="ocal-order-customer">العميل <span class="m-field__required">(اختياري)</span></label>
+          <div class="m-field__control">
+            <input class="m-field__input" id="ocal-order-customer" name="customer" type="text" maxlength="60" autocomplete="off">
+          </div>
+          <p class="m-field__msg" id="ocal-order-customer-msg" data-field-msg hidden></p>
+        </div>
+
+        <div class="ocal-form-row">
+          <div class="m-field" data-micro-field id="ocal-order-date-field">
+            <label class="m-field__label" for="ocal-order-date">الموعد <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="ocal-order-date" name="date" type="date">
+            </div>
+            <p class="m-field__msg" id="ocal-order-date-msg" data-field-msg hidden></p>
+          </div>
+          <div class="m-field" data-micro-field id="ocal-order-time-field">
+            <label class="m-field__label" for="ocal-order-time">الوقت <span class="m-field__required">(اختياري)</span></label>
+            <div class="m-field__control">
+              <input class="m-field__input" id="ocal-order-time" name="time" type="time">
+            </div>
+            <p class="m-field__msg" id="ocal-order-time-msg" data-field-msg hidden></p>
+          </div>
+        </div>
+
+        <p class="ocal-hint">الفارغ في الموعد يعني طلبًا غير مجدول — يظهر في قسم «غير المجدولة».</p>
+
+        <div class="ocal-seg" role="group" aria-labelledby="ocal-order-status-label" id="ocal-order-status-seg">
+          <span class="ocal-seg__label" id="ocal-order-status-label">الحالة</span>
+          <div class="ocal-seg__items">
+            <button type="button" class="ocal-seg__item" aria-pressed="false" data-value="progress">قيد التنفيذ</button>
+            <button type="button" class="ocal-seg__item" aria-pressed="false" data-value="done">تم التسليم</button>
+            <button type="button" class="ocal-seg__item" aria-pressed="false" data-value="hold">بانتظار العميل</button>
+          </div>
+        </div>
+
+        <div class="ocal-form-actions">
+          <button type="submit" class="ocal-btn ocal-btn--primary" id="ocal-order-save">حفظ</button>
+          <button type="button" class="ocal-btn ocal-btn--secondary" data-layer-close id="ocal-order-cancel">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- الرسالة العابرة (نجاح الحفظ) — قناة messages القائمة -->
+  <div class="m-toast" id="ocal-toast" hidden>
+    <span class="m-toast__text" id="ocal-toast-text"></span>
+  </div>
+
+  <!-- المكوّنات ثم الموصل ثم سلوك المستهلك -->
+  <script src="../../../components/messages/messages.js"></script>
+  <script src="../../../components/fields/fields.js"></script>
+  <script src="../../../components/navigation/navigation.js"></script>
+  <script src="order-store.js"></script>
+  <script src="../../../components/order-schedule/order-schedule.js"></script>
+  <script src="example.js"></script>
+</body>
+</html>

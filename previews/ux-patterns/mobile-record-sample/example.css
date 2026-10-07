@@ -614,6 +614,92 @@ body {
   border-radius: var(--micro-radius-chip);
 }
 
+/* ---------- الطلبات المجدولة: عرض الجدول داخل التجربة ----------
+   المكوّن (m-ocal) يجلب تنسيقه من components/order-schedule — هنا
+   تركيب العرض فقط: لا قيم بصرية جديدة (توكنات المكتبة حصرًا). */
+#view-schedule #f03-ocal {
+  /* إطار مسافة موحد مع بقية كتل التجربة */
+  margin-block-end: var(--micro-space-5);
+}
+
+/* عنوان الطلب داخل طبقة التفاصيل: يلتف ولا يكسر (نمط قراءات العنصر) */
+.f03-order-title {
+  margin: 0 0 var(--micro-space-3);
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* قيمة الوقت في القراءة معزولة LTR كشارة المكوّن */
+.f03-order-time {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* إخفاء فعلي لصف قراءة الوقت حين hidden: display:flex على الصف
+   يغلب سمة hidden الافتراضية (نفس احتياط E01/#f03-select-bar) */
+#f03-order-time-row[hidden] { display: none; }
+
+/* شريحة الحالة نصًا ولونًا (نفس أزواج توكنات المكوّن — لا لون جديد):
+   نقطة + نص معًا دائمًا؛ النبرة المجهولة/الغائبة محايدة */
+.f03-ochip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1) var(--micro-space-2);
+  border-radius: var(--micro-radius-chip);
+}
+
+.f03-ochip__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--micro-radius-circle);
+  background-color: currentColor;
+}
+
+.f03-ochip__text {
+  overflow-wrap: anywhere; /* مفتاح خام طويل يلتف داخل الشريحة */
+}
+
+.f03-ochip--progress {
+  background-color: var(--micro-info-surface);
+  color: var(--micro-info);
+}
+
+.f03-ochip--success {
+  background-color: var(--micro-success-surface);
+  color: var(--micro-success);
+}
+
+.f03-ochip--warning {
+  background-color: var(--micro-warning-surface);
+  color: var(--micro-warning);
+}
+
+.f03-ochip--neutral {
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-secondary);
+}
+
+/* نموذج الطلب داخل الطبقة: نفس عقد نموذج العنصر (عمود + مساعدة) */
+#f03-order-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+
+#f03-order-form .m-field {
+  margin: 0;
+}
+
+.f03-order-date-hint {
+  margin: 0;
+}
+
 /* ---------- وضع المراجعة: أدوات داخل طبقة مغلقة افتراضيًا ---------- */
 .f03-rev {
   display: flex;

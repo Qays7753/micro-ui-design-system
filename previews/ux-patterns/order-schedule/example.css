@@ -1,0 +1,328 @@
+/* =========================================================
+   Micro UI — تنسيق عينة جدول الطلبات المستقلة
+   الملف: previews/ux-patterns/order-schedule/example.css
+   الحالة: DRAFT FOR REVIEW — أنماط الصفحة فقط: عمود هاتف مركزي،
+   شريط علوي، أزرار محلية، مقطع حالة، سجل أحداث، شريحة حالة،
+   وقراءات التفاصيل. كل القيم من توكنات shared/tokens.css —
+   لا لون أو مقاس أو انحناء جديد.
+   ========================================================= */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* عمود الهاتف: 430px كحد أقصى مركزيًا — الصفحة هي التجربة */
+.ocal-page {
+  max-width: 430px;
+  margin-inline: auto;
+  padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-8);
+  overflow-wrap: anywhere; /* رموز لاتينية طويلة عند التكبير تلتف */
+}
+
+/* ---------- الشريط العلوي: عنوان + زر إضافة ---------- */
+.ocal-page__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+  padding-block: var(--micro-space-2) var(--micro-space-4);
+}
+
+.ocal-page__title:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--micro-radius-chip);
+}
+
+.ocal-page__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- أزرار الصفحة (نفس قيم m-btn من التوكنات — بلا تبعية
+   إضافية على أزرار B01 في هذه العينة المستقلة) ---------- */
+.ocal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min); /* 48px — قاعدة المشروع */
+  padding: var(--micro-button-padding-block) var(--micro-button-padding-inline);
+  border: 0;
+  border-radius: var(--micro-radius-button-long);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-button-label-size);
+  line-height: 1;
+  font-weight: var(--micro-button-label-weight);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ocal-btn:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: 2px;
+}
+
+.ocal-btn--primary {
+  background-color: var(--micro-brand-primary);
+  color: var(--micro-text-inverse);
+}
+
+.ocal-btn--primary:active {
+  background-color: var(--micro-brand-pressed);
+}
+
+.ocal-btn--secondary {
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  border: 1px solid var(--micro-border-control);
+}
+
+.ocal-btn--secondary:active {
+  background-color: var(--micro-surface-selected);
+}
+
+/* زر شفاف صغير لرأس الطبقة (بجانب العنوان) */
+.ocal-btn--ghost {
+  min-height: 40px;
+  padding: var(--micro-space-2) var(--micro-space-3);
+  background-color: transparent;
+  color: var(--micro-text-primary);
+  border-radius: var(--micro-radius-chip);
+}
+
+.ocal-btn--ghost:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.ocal-layer-close { flex: none; }
+
+/* ---------- تفاصيل الطلب داخل الطبقة ---------- */
+.ocal-order-title {
+  margin: 0 0 var(--micro-space-3);
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
+  font-weight: 600;
+  overflow-wrap: anywhere; /* عنوان طويل جدًا يلتف */
+}
+
+.ocal-readlist {
+  margin: 0;
+}
+
+.ocal-readlist__row {
+  display: flex;
+  gap: var(--micro-space-4);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: var(--micro-space-3);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+
+.ocal-readlist__row:first-child { padding-block-start: 0; }
+
+.ocal-readlist dt {
+  margin: 0;
+  flex: none;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.ocal-readlist dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 500;
+  text-align: start;
+}
+
+.ocal-order-time {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* إخفاء فعلي لصف قراءة الوقت حين hidden: display:flex على الصف
+   يغلب سمة hidden الافتراضية (احتياط E01) */
+#ocal-rd-time-row[hidden] { display: none; }
+
+/* شريحة الحالة نصًا ولونًا — نفس أزواج توكنات المكوّن */
+.ocal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1) var(--micro-space-2);
+  border-radius: var(--micro-radius-chip);
+}
+
+.ocal-chip__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--micro-radius-circle);
+  background-color: currentColor;
+}
+
+.ocal-chip__text { overflow-wrap: anywhere; }
+
+.ocal-chip--progress { background-color: var(--micro-info-surface); color: var(--micro-info); }
+.ocal-chip--success { background-color: var(--micro-success-surface); color: var(--micro-success); }
+.ocal-chip--warning { background-color: var(--micro-warning-surface); color: var(--micro-warning); }
+.ocal-chip--neutral { background-color: var(--micro-surface-page); color: var(--micro-text-secondary); }
+
+/* ---------- نموذج الطلب داخل الطبقة ---------- */
+#ocal-order-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  margin: 0;
+}
+
+#ocal-order-form .m-field { margin: 0; }
+
+.ocal-form-row {
+  display: flex;
+  flex-wrap: wrap; /* عند الضيق/التكبير يلتف الصف */
+  gap: var(--micro-space-3);
+}
+
+.ocal-form-row .m-field { min-width: 0; }
+.ocal-form-row #ocal-order-date-field { flex: 1 1 150px; }
+.ocal-form-row #ocal-order-time-field { flex: 0 1 auto; }
+
+.ocal-hint {
+  margin: 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+
+/* مقطع الحالة: نفس نمط m-seg (aria-pressed + خلفية/لون من التوكنات) */
+.ocal-seg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.ocal-seg__label {
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.ocal-seg__items {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1);
+  background-color: var(--micro-surface-page);
+  border-radius: var(--micro-radius-capsule);
+  max-width: 100%;
+}
+
+.ocal-seg__item {
+  min-height: 40px;
+  padding-inline: var(--micro-space-4);
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-radius: var(--micro-radius-capsule);
+  background: transparent;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
+  font-weight: 500;
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ocal-seg__item[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-text-primary);
+  font-weight: 600;
+}
+
+.ocal-seg__item:active { background-color: var(--micro-surface-selected); }
+
+.ocal-seg__item:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+.ocal-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  padding-block-start: var(--micro-space-2);
+}
+
+.ocal-form-actions .ocal-btn { width: 100%; }
+
+/* ---------- سجل الأحداث (هذه العينة فقط) ---------- */
+.ocal-log {
+  margin-block-start: var(--micro-space-8);
+  padding: var(--micro-space-4);
+  border-radius: var(--micro-radius-surface);
+  border: 1px solid var(--micro-border-divider);
+  background-color: var(--micro-surface-base);
+}
+
+.ocal-log__title {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 600;
+  color: var(--micro-text-secondary);
+}
+
+.ocal-log__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 180px;
+  overflow: auto;
+  display: grid;
+  gap: var(--micro-space-1);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.ocal-log__list li {
+  padding-block: 2px;
+  border-block-end: 1px solid var(--micro-border-divider);
+  overflow-wrap: anywhere;
+}
+
+.ocal-log__list li:last-child { border-block-end: 0; }
+
+/* الحركة المخفضة: بلا انتقالات في عناصر الصفحة */
+@media (prefers-reduced-motion: reduce) {
+  .ocal-btn,
+  .ocal-seg__item {
+    transition: none;
+    animation: none;
+  }
+}

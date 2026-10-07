@@ -62,6 +62,7 @@
       detail: q('view-detail'),
       form: q('view-form'),
       reports: q('view-reports'),
+      schedule: q('view-schedule'),
       account: q('view-account')
     },
     titles: {
@@ -71,6 +72,7 @@
       detail: q('f03-detail-title'),
       form: q('f03-form-title'),
       reports: q('f03-reports-title'),
+      schedule: q('f03-schedule-title'),
       account: q('f03-account-view-title')
     },
     navbar: q('f03-navbar'),
@@ -188,6 +190,38 @@
     repHeroUnit: q('f03-rep-hero-unit'),
     repBarsSrc: q('f03-rep-bars-src'),
     repKnown: q('f03-rep-known'),
+    /* الطلبات المجدولة (موصل مستقل عن F03Store) */
+    homeSchedule: q('f03-home-schedule'),
+    scheduleBack: q('f03-schedule-back'),
+    scheduleAdd: q('f03-schedule-add'),
+    ocal: q('f03-ocal'),
+    /* طبقة تفاصيل الطلب */
+    orderLayer: q('f03-order-layer'),
+    orderTitle: q('f03-order-title'),
+    orderCustomer: q('f03-order-customer'),
+    orderDate: q('f03-order-date'),
+    orderTimeRow: q('f03-order-time-row'),
+    orderTime: q('f03-order-time'),
+    orderStatusChip: q('f03-order-status'),
+    orderStatusText: q('f03-order-status-text'),
+    orderEdit: q('f03-order-edit'),
+    /* طبقة نموذج الطلب */
+    orderFormLayer: q('f03-order-form-layer'),
+    orderFormTitle: q('f03-order-form-title'),
+    orderForm: q('f03-order-form'),
+    orderNameField: q('f03-order-name-field'),
+    orderName: q('f03-order-name'),
+    orderNameMsg: q('f03-order-name-msg'),
+    orderCustomerField: q('f03-order-customer-field'),
+    orderCustomerInput: q('f03-order-form-customer'),
+    orderCustomerMsg: q('f03-order-form-customer-msg'),
+    orderDateField: q('f03-order-date-field'),
+    orderDateInput: q('f03-order-form-date'),
+    orderDateMsg: q('f03-order-form-date-msg'),
+    orderTimeField: q('f03-order-time-field'),
+    orderTimeInput: q('f03-order-form-time'),
+    orderTimeMsg: q('f03-order-form-time-msg'),
+    orderStatusSeg: q('f03-order-status-seg'),
     /* الحساب */
     accountLogout: q('f03-account-logout'),
     accountViewRoot: q('view-account'),
@@ -252,6 +286,12 @@
     selecting: false,
     selected: {},                 /* id → true */
     repMetric: 'value',
+    /* الطلبات المجدولة (مستقل عن العناصر — موصل OrderDemoStore) */
+    orderDetailId: null,
+    orderFormMode: 'add',
+    orderFormId: null,
+    orderDraftStatus: 'progress',
+    orderSavedFocus: null,      /* معرف صف الطلب الذي يحمل التركيز بعد إغلاق الطبقات */
     settingScenario: 'auto',
     pendingSetting: null,
     pendingSettingTimer: null,
@@ -291,11 +331,22 @@
     return String(Math.round(n));
   }
   var AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  var AR_WEEKDAYS = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   function formatDateAr(iso) {
     if (!iso) return '—';
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso));
     if (!m) return String(iso);
     return String(Number(m[3])) + ' ' + AR_MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+  }
+
+  /* التاريخ الكامل بالعربية لطلبات الجدولة: «الأربعاء 7 أكتوبر 2026» —
+     regex نصي ويوم أسبوع محلي مدني (نفس عقد order-schedule: بلا UTC). */
+  function orderFullDateAr(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+    if (!m) return '';
+    var y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+    var wd = new Date(y, mo - 1, d).getDay();
+    return AR_WEEKDAYS[wd] + ' ' + d + ' ' + AR_MONTHS[mo - 1] + ' ' + y;
   }
 
   function categoryObj(value) {
@@ -336,6 +387,7 @@
     if (name === 'list') renderList();
     if (name === 'detail') renderDetail();
     if (name === 'reports') renderReports();
+    if (name === 'schedule') renderSchedule();
     window.scrollTo(0, 0);
     if (name === 'list' && opts.restoreScroll !== false) {
       window.scrollTo(0, state.listScrollY || 0); /* استعادة موضع التمرير قدر الإمكان */
@@ -1689,7 +1741,7 @@
   });
 
   /* ---------- عدّ الطبقات + تدفق الإعلان المؤجل عند أي إغلاق ---------- */
-  [el.catLayer, el.leaveDialog, el.deleteDialog, el.reviewLayer, el.filterLayer, el.accountLayer].forEach(function (layer) {
+  [el.catLayer, el.leaveDialog, el.deleteDialog, el.reviewLayer, el.filterLayer, el.accountLayer, el.orderLayer, el.orderFormLayer].forEach(function (layer) {
     layer.addEventListener('micro-navigation:opened', function () {
       state.openLayers += 1;
     });
@@ -1894,6 +1946,215 @@
       logEvent('reports:metric', { metric: v });
       renderReports();
     }
+  });
+
+  /* ---------- جدول الطلبات المجدولة: موصل مستقل داخل التجربة ----------
+     بيانات الطلبات من OrderDemoStore (order-store.js — بذرة مستقلة عن
+     F03Store: لا تحويل «العناصر» إلى طلبات). schedule وجهة فرعية من
+     الرئيسية (ليست في MAIN_VIEWS — navbar يختفي تلقائيًا لأن isMain
+     false)، بحفظ الرجوع والتركيز وحالة التقويم (المثيل لا يُعاد
+     إنشاؤه قط). عقد المكوّن: الأحداث على جذر #f03-ocal (bubbles)،
+     والعمليات البرمجية صامتة — المستهلك هنا يملك التفاصيل والحفظ. */
+
+  var OrderStore = window.OrderDemoStore;
+  var ocalInst = null; /* مثيل واحد داخل closure — حالة التقويم تبقى */
+
+  function renderSchedule() {
+    if (!window.MicroOrderSchedule || !el.ocal || !OrderStore) return;
+    if (!ocalInst) {
+      /* تهيئة مرة واحدة: weekStart 6 (السبت — اختيار سياق عربي للعينة)،
+         today من الموصل (مثبت 2026-10-07 لحتمية الفحص — موثق هناك) */
+      ocalInst = window.MicroOrderSchedule.init(el.ocal, {
+        orders: OrderStore.all(),
+        statuses: OrderStore.statuses(),
+        today: OrderStore.today(),
+        weekStart: 6
+      });
+    } else {
+      /* إعادة الدخول: تحديث البيانات فقط — العرض/اليوم المحدد/الشهر
+         محفوظة في المثيل (عقد setData: تحديث بلا إعادة تهيئة) */
+      ocalInst.setData(OrderStore.all());
+    }
+  }
+
+  el.homeSchedule.addEventListener('click', function () {
+    showView('schedule');
+    logEvent('schedule:open');
+  });
+
+  /* رجوع يحفظ التركيز على مشغّل الدخول (زر الرئيسية) */
+  el.scheduleBack.addEventListener('click', function () {
+    showView('home', { focusEl: el.homeSchedule });
+  });
+
+  /* أي كتابة في الموصل (حدثه bubbles على document) تنعكس على المكوّن
+     من المصدر الواحد بلا reload — setData صامت، وsetSelectedDate صامت
+     كذلك: المستهلك هو من بدأ التغيير فلا حدث يوم جديد (عقد المواصفة) */
+  document.addEventListener('order-store:changed', function (e) {
+    if (!ocalInst) return;
+    var d = e.detail || {};
+    ocalInst.setData(OrderStore.all());
+    var saved = d.id ? OrderStore.get(d.id) : null;
+    if (saved && saved.date) ocalInst.setSelectedDate(saved.date);
+  });
+
+  /* مشغّل صف الطلب داخل الجذر — لإعادة التركيز عند إغلاق الطبقة */
+  function orderRowTrigger(id) {
+    return el.ocal.querySelector('.m-ocal__row[data-ocal-id="' + id + '"]');
+  }
+
+  /* فتح طلب: كل القيم textContent — لا HTML من البيانات */
+  function openOrderDetail(id, trigger) {
+    var order = OrderStore.get(id);
+    if (!order) return;
+    state.orderDetailId = id;
+    el.orderTitle.textContent = order.title;
+    el.orderCustomer.textContent = order.customer || '—';
+    el.orderDate.textContent = order.date ? orderFullDateAr(order.date) : 'غير مجدول';
+    el.orderTimeRow.hidden = !order.time;
+    el.orderTime.textContent = order.time || '';
+    /* شريحة الحالة نصًا ولونًا: من خريطة الموصل؛ المفتاح المجهول محايد
+       بنصه الخام (نفس عقد المكوّن — لا إخفاء ولا خطأ) */
+    var st = OrderStore.statuses()[order.statusKey];
+    var tone = (st && st.tone) || 'neutral';
+    el.orderStatusText.textContent = st ? st.label : String(order.statusKey || '');
+    el.orderStatusChip.className = 'f03-ochip f03-ochip--' + tone;
+    window.MicroNavigation.openLayer(el.orderLayer, { trigger: trigger || orderRowTrigger(id) });
+    logEvent('order:detail', { id: id });
+  }
+
+  el.ocal.addEventListener('order-schedule:order-open', function (e) {
+    var id = e.detail && e.detail.id;
+    if (id) openOrderDetail(id, orderRowTrigger(id));
+  });
+
+  /* زر الإضافة في رأس الأب بار: بلا تاريخ مسبق (اختيار موثق في README
+     العينة المستقلة — عقد add-request من المكوّن يمرر اليوم المحدد
+     وهنا المستهلك صاحب القرار؛ كلاهما مقبول بالتكليف) */
+  el.scheduleAdd.addEventListener('click', function () {
+    openOrderForm({ mode: 'add', date: null, trigger: el.scheduleAdd });
+  });
+
+  /* إضافة من داخل المكوّن: بتاريخ اليوم المختار إن مرّره الحدث */
+  el.ocal.addEventListener('order-schedule:add-request', function (e) {
+    var date = (e.detail && e.detail.date) || null;
+    var addBtn = el.ocal.querySelector('[data-ocal-action="add"]');
+    openOrderForm({ mode: 'add', date: date, trigger: addBtn || el.scheduleAdd });
+  });
+
+  /* تعديل الموعد من التفاصيل: النموذج مملوء من المصدر نفسه */
+  el.orderEdit.addEventListener('click', function () {
+    var order = state.orderDetailId ? OrderStore.get(state.orderDetailId) : null;
+    if (!order) return;
+    openOrderForm({ mode: 'edit', id: order.id, trigger: el.orderEdit });
+  });
+
+  function setOrderDraftStatus(key) {
+    state.orderDraftStatus = key;
+    [].slice.call(el.orderStatusSeg.querySelectorAll('.m-seg__item')).forEach(function (b) {
+      var on = b.getAttribute('data-value') === key;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.classList.toggle('is-selected', on);
+    });
+  }
+
+  el.orderStatusSeg.addEventListener('micro-selection:segment', function (e) {
+    var v = e.detail && e.detail.value;
+    if (v && OrderStore.statuses()[v]) setOrderDraftStatus(v);
+  });
+
+  function openOrderForm(opts) {
+    var mode = opts.mode === 'edit' ? 'edit' : 'add';
+    var order = mode === 'edit' ? OrderStore.get(opts.id) : null;
+    if (mode === 'edit' && !order) return;
+    state.orderFormMode = mode;
+    state.orderFormId = order ? order.id : null;
+    el.orderFormTitle.textContent = mode === 'add' ? 'إضافة طلب' : 'تعديل الطلب';
+    el.orderName.value = order ? order.title : '';
+    el.orderCustomerInput.value = order ? (order.customer || '') : '';
+    /* ملء مسبق: التعديل من بيانات الطلب، والإضافة بتاريخ الحدث إن وجد */
+    el.orderDateInput.value = order ? (order.date || '') : (opts.date || '');
+    el.orderTimeInput.value = order ? (order.time || '') : '';
+    /* حالة مجهولة (مثل 'mystery'): لا زر مضغوط — الحفظ يبقيها كما هي
+       بلا قسر صامت إلى حالة معروفة (موثق) */
+    setOrderDraftStatus(order ? order.statusKey : 'progress');
+    fieldError(el.orderNameField, el.orderName, el.orderNameMsg, false);
+    fieldError(el.orderDateField, el.orderDateInput, el.orderDateMsg, false);
+    fieldError(el.orderTimeField, el.orderTimeInput, el.orderTimeMsg, false);
+    if (window.MicroFields) window.MicroFields.sync(el.orderForm);
+    window.MicroNavigation.openLayer(el.orderFormLayer, { trigger: opts.trigger });
+    logEvent('order:form:' + mode, { id: state.orderFormId, date: opts.date || null });
+  }
+
+  /* إعادة تقييم خطأ الاسم عند الكتابة (نمط UX-09 في نموذج العنصر) */
+  el.orderName.addEventListener('input', function () {
+    if (errorActive(el.orderNameField) && String(el.orderName.value).trim() !== '') {
+      fieldError(el.orderNameField, el.orderName, el.orderNameMsg, false);
+    }
+  });
+
+  /* الحفظ: تحقق الاسم أولًا؛ التاريخ الفارغ = غير مجدول؛ الوقت الفارغ
+     مقبول؛ قيم غير صالحة (منتقي أصلي نادرًا يعطيها) خطأ صريح لا قسر */
+  el.orderForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    saveOrderForm();
+  });
+
+  function saveOrderForm() {
+    var name = String(el.orderName.value || '');
+    if (!name.trim()) {
+      fieldError(el.orderNameField, el.orderName, el.orderNameMsg, true, 'الاسم مطلوب.');
+      el.orderName.focus();
+      return;
+    }
+    var dateRaw = el.orderDateInput.value;
+    if (dateRaw !== '' && !/^\d{4}-\d{2}-\d{2}$/.test(dateRaw)) {
+      fieldError(el.orderDateField, el.orderDateInput, el.orderDateMsg, true, 'أدخل تاريخًا صالحًا أو اتركه فارغًا.');
+      el.orderDateInput.focus();
+      return;
+    }
+    var timeRaw = el.orderTimeInput.value;
+    if (timeRaw !== '' && !/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(timeRaw)) {
+      fieldError(el.orderTimeField, el.orderTimeInput, el.orderTimeMsg, true, 'أدخل وقتًا صالحًا أو اتركه فارغًا.');
+      el.orderTimeInput.focus();
+      return;
+    }
+    var customer = String(el.orderCustomerInput.value || '').trim();
+    var id = (state.orderFormMode === 'edit' && state.orderFormId)
+      ? state.orderFormId
+      : OrderStore.nextId();
+    /* upsert idempotent بالمعرف → حدث order-store:changed يعيد تصيير
+       المكوّن من المصدر الواحد فورًا (الطلب الجديد في خليته والمنقول
+       في يومه الجديد) — بلا reload */
+    var saved = OrderStore.upsert({
+      id: id,
+      title: name.trim(),
+      date: dateRaw === '' ? null : dateRaw,
+      time: timeRaw === '' ? null : timeRaw.slice(0, 5),
+      statusKey: state.orderDraftStatus,
+      customer: customer === '' ? null : customer
+    });
+    if (!saved) return; /* لا نجاح كاذب — لم يُكتب شيء */
+    state.orderSavedFocus = saved.id;
+    logEvent('order:save', { id: saved.id, date: saved.date, mode: state.orderFormMode });
+    window.MicroNavigation.closeLayer(el.orderFormLayer);
+    if (!el.orderLayer.hidden) window.MicroNavigation.closeLayer(el.orderLayer);
+    showToast(state.orderFormMode === 'edit' ? 'تم حفظ تعديل الطلب.' : 'تمت إضافة الطلب.');
+  }
+
+  /* التركيز بعد حفظ أغلق الطبقتين: عقد closeLayer يستعيد مشغّله، لكن
+     إعادة التصيير أزالت صف اليوم القديم — يهبط التركيز على صف الطلب
+     المحفوظ في اليوم المحدد الجديد (أو عنوان العرض إن لم يظهر صف) */
+  [el.orderLayer, el.orderFormLayer].forEach(function (layer) {
+    layer.addEventListener('micro-navigation:closed', function (e) {
+      if (e.target !== layer) return;
+      if (!state.orderSavedFocus || state.openLayers !== 0) return;
+      var id = state.orderSavedFocus;
+      state.orderSavedFocus = null;
+      var row = el.ocal.querySelector('.m-ocal__row[data-ocal-id="' + id + '"]');
+      if (row && typeof row.focus === 'function') row.focus();
+      else if (el.titles.schedule) el.titles.schedule.focus({ preventScroll: true });
+    });
   });
 
   /* ---------- الحساب: مفاتيح بأثر فوري محفوظ + خروج ---------- */

@@ -52,6 +52,7 @@ EXPECTED_CSS = [
     "components/access-gateway/access-gateway.css",
     "components/surfaces/surfaces.css",
     "components/surfaces/curves.css",
+    "components/order-schedule/order-schedule.css",
     "previews/ux-patterns/mobile-record-sample/example.css",
 ]
 EXPECTED_JS = [
@@ -68,6 +69,8 @@ EXPECTED_JS = [
     "components/metric-comparison/metric-comparison.js",
     "components/account-settings/account-settings.js",
     "components/access-gateway/access-gateway.js",
+    "components/order-schedule/order-schedule.js",
+    "previews/ux-patterns/order-schedule/order-store.js",
     "previews/ux-patterns/mobile-record-sample/demo-store.js",
     "previews/ux-patterns/mobile-record-sample/mock-adapter.js",
     "previews/ux-patterns/mobile-record-sample/example.js",
