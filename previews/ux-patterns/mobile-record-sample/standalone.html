@@ -747,6 +747,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-btn--icon { padding-inline: 0; }
 .m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
 
+/* R2-UI02-loading (جولة UI-SOURCE-REPAIR-R2): أثناء تحميل الزر النصي
+   فقط (بلا أيقونة وبلا أنماط التوافق الصريحة) يرسم المؤشر قوسًا أصغر
+   نسبيًا (0.8 × توكن الأيقونة = 16px من 20px) متمركزًا في فتحة حشو
+   بداية السطر نفسها — بهامش 2px من حافة الزر ومن التسمية، فلا ملامسة
+   حافة ولا تداخل مع النص. المؤشر خارج التدفق فلا يتغير عرض الزر ولا
+   ارتفاعه ولا يُحجز أي حشو في الحالة الساكنة (عقد B بعد R1-UI02 قائم).
+   أزرار الأيقونة (48px دائرية) وأزرار النص+أيقونة (فتحة 20px داخل حشو
+   20px) وأنماط التوافق loading-slot/loading-replace خارج هذا الضبط. */
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon)).is-loading .m-btn__spinner,
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon))[aria-busy="true"] .m-btn__spinner {
+  width: calc(var(--micro-icon-in-button) * 0.8);
+  height: calc(var(--micro-icon-in-button) * 0.8);
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button) * 0.8) / 2);
+}
+
 .m-btn--loading-slot.is-loading .m-btn__spinner {
   position: absolute;
   top: 0;
@@ -2415,8 +2430,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 /* ---- الأعمدة (SVG يصيّره data.js) ----
    القيمة فوق العمود والفئة تحته دائمًا. صفر = عمود صفر ظاهر على الأساس. */
-/* R1-UI09: قفزة واحدة متدرجة لقراءة تسميات SVG على الهاتف —
-   أعمدة 12→13px وخط/دونات 11→12px (لا تكبير عشوائي). */
+/* R1-UI09 + R2-UI02: قفزة واحدة متدرجة لقراءة تسميات SVG على الهاتف —
+   أعمدة 12→13px وخط/دونات 11→12px (لا تكبير عشوائي). القيم هنا (13/12)
+   حد أدنى فعلي على الشاشة لا قيمة CSS وحسب: data.js يقيس عرض كل رسم
+   عند الـrender ويعوّض مقاييس النص حين يقل عرض SVG المعروض عن 320
+   (عقد الحجم الفعلي موثق في specification.md). */
 .m-chart--bars .m-chart__bar-label {
   font-size: 13px;
   fill: var(--micro-text-secondary);
@@ -4176,21 +4194,50 @@ body {
   margin-block-start: var(--micro-space-2);
 }
 
-/* R1-UI12/13/16: الحقول الرقمية القصيرة — القيمة والكمية وحدة واحدة متراصة */
+/* R1-UI12/13/16 + R2-UI01: الحقول الرقمية القصيرة — القيمة والكمية صف واحد
+   متراص عند 360/390/430، والتفاف حقيقي عند 320 أو حين لا تتسع القراءة
+   (تكبير النص). عقد القياس على تحكمات الإدخال نفسها: القيمة تستوعب
+   «120.50» بوحدة «د.أ»، والكمية «9999»، وزرا الخطوة ≥48px دائمًا. */
 .f03-field-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--micro-space-3);
 }
 .f03-field-row .m-field { margin: 0; min-width: 0; }
-.f03-field-row #f03-value-field { flex: 1 1 130px; }
+/* R2-UI01: أساس 128px مع حد أدنى نسبي بالقراءة (11ch بخط مثبّت على توكن
+   الجسم 16px) — الحد يحسم الالتفاف: يلتف الصف عند 320 (288px متاحة)
+   وعند تكبير النص 200% حين تتضاعف مقاييس القراءة فلا تتسع الوحدتان
+   معًا. تثبيت font-size على الجذر يجعل ch مستقلة (لا تتضاعف مع توريث
+   التكبير لأن كل أبناء الحقل يعلنون أحجام خطوطهم)، وهو نفس حجم الجسم
+   الموروث فلا تغيير بصري في السكون. */
+.f03-field-row #f03-value-field {
+  flex: 1 1 128px;
+  font-size: var(--micro-body-size);
+  min-width: 11ch;
+}
 .f03-field-row #f03-qty-field { flex: 0 0 auto; }
-#f03-qty-field .m-field__control { width: fit-content; } /* زيادة + قيمة + نقصان وحدة متماسكة */
+/* R2-UI01: وحدة الكمية المتماسكة أضيق: حشو 8px (توكن space-2) وفجوة 4px
+   (توكن space-1) بين عناصرها — توزيع مساحة من التوكنات القائمة فقط،
+   دون مساس بحجم النص أو أهداف اللمس (زرّا B01 يبقيان 48×48). */
+#f03-qty-field .m-field__control {
+  width: fit-content; /* زيادة + قيمة + نقصان وحدة متماسكة */
+  padding-inline: var(--micro-space-2);
+  gap: var(--micro-space-1);
+}
 /* R1-UI12: عرض قيمة الكمية من توكن المكتبة نفسه — في تركيب B01 الرسمي
    (input بين غلافَي خطوة مستقلين) لا تنطبق قاعدة width الخاصة بـ
    .m-field__stepper، فتثبّتها العينة ليبقى الصف المتراص متماسكًا بلا
-   فيض عند الضيق ولا اتساعًا بالافتراضي الأصلي عند تكبير النص. */
-#f03-qty-field .m-field__input--num { flex: none; width: var(--micro-quantity-min-width); text-align: center; }
+   فيض عند الضيق ولا اتساعًا بالافتراضي الأصلي عند تكبير النص.
+   R2-UI01: حد أدنى نسبي 5ch أرضية قراءة تتضاعف مع تكبير النص فتنمو
+   الوحدة ويلتف الصف بدل قص «9999» — لا أثر له عند الحجم الأساسي. */
+#f03-qty-field .m-field__input--num {
+  flex: none;
+  width: var(--micro-quantity-min-width);
+  min-width: 5ch; /* أرضية قراءة نسبية (خمسة أرقام) */
+  text-align: center;
+}
+/* R2-UI01: أرضية قراءة القيمة نفسها (5ch) تمنع سحق إدخال المبلغ دون قص */
+#f03-value-field .m-field__input--num { min-width: 5ch; }
 
 /* R1-UI15: مساعدة قصيرة تحت حقل القيمة — الخطأ يحل محلها عند ظهوره */
 .f03-field-help {
@@ -6935,25 +6982,79 @@ body {
     return String(v);
   }
 
-  /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل */
+  /* ---- R2-UI02: عقد الحجم الفعلي لتسميات الرسوم (bars/line) ----
+     الحجم المعلن في data.css (أعمدة 13px / خط 12px) حد أدنى فعلي على
+     الشاشة لا قيمة CSS وحسب: الرسوم تُمدّ بعرض الحاوية (viewBox 320)،
+     فعند عرض أضيق من 320 يتقلص الحجم الفعلي بالتناسب (11.7/10.8px عند
+     288px). يقيس المصيّر عرض الرسم المتاح عند كل render ويضرب مقاييس
+     النص وحدها بمعامل 320/العرض المقيس (حجم خط كل text بسمة style،
+     خطوة سطر الالتفاف، ومرجع أحرف الالتفاف) فيبقى الحجم المعروض
+     ≥ المعلن، بينما تبقى هندسة الرسم (الأعمدة/المحاور/الخط) نسبية
+     للعرض المتاح كما كانت. القيم والنسب وحالات البيانات لا تتغير،
+     والدونات مقاس ثابت 148 فلا يدخل التعويض. الرسم في حاوية مخفية
+     (عرض 0) يصيّر بمعامل 1 (سلوك عرض التصميم) ويعيد المستهلك رسمه
+     عند الإظهار — عينة F03 ترسم رسوم التقارير عند فتح عرضها. */
+  var DESIGN_W = 320;
+  var BAR_TEXT_PX = 13;  /* مزدوج مع .m-chart--bars في data.css (عقد الأدنى) */
+  var LINE_TEXT_PX = 12; /* مزدوج مع .m-chart--line في data.css (عقد الأدنى) */
+
+  function textScaleOf(plot) {
+    var w = plot.getBoundingClientRect().width;
+    if (!isFinite(w) || w <= 1) return { k: 1, refW: DESIGN_W }; /* مخفي/غير مقيس */
+    if (w >= DESIGN_W) return { k: 1, refW: DESIGN_W };           /* كعقد R1 بلا تغيير */
+    return { k: DESIGN_W / w, refW: w };                           /* أضيق: عوّض النص */
+  }
+
+  function applyTextPx(t, fontPx) {
+    if (fontPx) t.style.fontSize = fontPx + 'px'; /* R2-UI02: الحجم الفعلي المعلن */
+    return t;
+  }
+
+  /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
+     R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
+     مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
+     تبقى كاملة مهما طالت (حد معلن: كلمة مفردة أطول من ميزانية السطر
+     قد تجاور تسميتها عند 200%). */
   function wrapLabel(text, maxChars) {
     text = String(text || '');
     if (text.length <= maxChars) return [text];
-    var words = text.split(' ');
+    var tokens = [];
+    text.split(' ').forEach(function (w) {
+      if (w.length > maxChars && w.indexOf('-') >= 0) {
+        /* قسّم عند الشرطات ثم ادمج المقاطع المجاورة ما دامت ضمن السقف:
+           2026-09-10 بسقف 5 → «2026-» + «09-10» (سطران معقولان) لا 3 أسطر */
+        var segs = [];
+        w.split('-').forEach(function (seg, i, arr) {
+          segs.push(i < arr.length - 1 ? seg + '-' : seg);
+        });
+        var merged = [];
+        segs.forEach(function (s) {
+          var last = merged[merged.length - 1];
+          if (last !== undefined && (last + s).length <= maxChars) merged[merged.length - 1] = last + s;
+          else merged.push(s);
+        });
+        tokens = tokens.concat(merged);
+      } else if (w) {
+        tokens.push(w);
+      }
+    });
+    if (!tokens.length) tokens = [text];
     var lines = [], cur = '';
-    words.forEach(function (w) {
-      var t = cur ? cur + ' ' + w : w;
-      if (t.length <= maxChars || !cur) cur = t;
-      else { lines.push(cur); cur = w; }
+    tokens.forEach(function (t) {
+      var joined = cur ? cur + ' ' + t : t;
+      if (joined.length <= maxChars || !cur) cur = joined;
+      else { lines.push(cur); cur = t; }
     });
     if (cur) lines.push(cur);
     return lines;
   }
 
-  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep) {
+  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep, fontPx) {
     /* R1-UI09: خطوة السطر تتبع حجم خط التسمية (≈ 1.5×) — بعد تكبير التسميات
        (أعمدة 13px/خط 12px) الخطوة 13 الثابتة كانت تصطدم عند مضاعفة حجم
-       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه. */
+       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه.
+       R2-UI02: fontPx (إن مُرّر) يثبّت الحجم الفعلي للتسمية على الحد
+       المعلن عند تقلص الرسم تحت عرض التصميم. */
     var step = lineStep || 13;
     var lines = wrapLabel(text, maxChars);
     lines.forEach(function (ln, k) {
@@ -6962,6 +7063,7 @@ body {
         y: yBottom - (lines.length - 1 - k) * step,
         'text-anchor': 'middle'
       });
+      applyTextPx(t, fontPx);
       t.textContent = ln;
       g.appendChild(t);
     });
@@ -7023,8 +7125,9 @@ body {
     plot.appendChild(list);
   }
 
-  /* قيمة سالبة في رسم لا يدعم السالب: عرض صادق — شرطة + نص القيمة والسبب */
-  function invalidMarker(svg, g, cx, base, value, why) {
+  /* قيمة سالبة في رسم لا يدعم السالب: عرض صادق — شرطة + نص القيمة والسبب
+     R2-UI02: fontPx يعوّض حجم النص عند تقلص الرسم تحت عرض التصميم */
+  function invalidMarker(svg, g, cx, base, value, why, fontPx) {
     var r = svgEl('rect', {
       class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4,
       stroke: 'var(--micro-warning)'
@@ -7034,6 +7137,7 @@ body {
       class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle',
       fill: 'var(--micro-warning)'
     });
+    applyTextPx(t, fontPx);
     t.textContent = fmt(value) + ' — ' + why;
     g.appendChild(t);
   }
@@ -7059,13 +7163,22 @@ body {
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
-    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 12→13px كي يلتف النص قبل الاصطدام */
+    var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
+    var fontPx = ts.k > 1 ? BAR_TEXT_PX * ts.k : null;
+    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (محاكاة 200%
+       المعلنة في المشروع): الحد/2 لكل سطر — النص الملفوف لا يصطدم بجاره
+       ولا يخرج عن عموده عند مضاعفة حجم الخط، والشرطات تقسم التواريخ.
+       الأرضية 6 كما في R1. */
+    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / (6.8 * 2)));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 20; /* R1-UI09: 1.5× تقريبًا لخط 13px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var BAR_LABEL_STEP = 40 * ts.k; /* R2-UI02: ~2.85× للخط 13px — صندوق السطر المضاعف (≈1.42em بارتفاع الخط العربي الكامل) لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× غير كافٍ للمضاعفة الكاملة */
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
-    var W = 320, H = 180 + extra, base = H - 34 - extra, top = 26;
+    /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
+       صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
+       عند 200% (كانت 22 غير كافية). */
+    var W = 320, H = 180 + extra, base = H - 50 - extra, top = 26;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
@@ -7080,10 +7193,11 @@ body {
         /* ناقص/مجهول: مستطيل شرطة قصير فوق الأساس + تسمية «—» */
         g.appendChild(svgEl('rect', { class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle' });
+        applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
         /* E06: سالب في الأعمدة — رفض بوضوح، لا رسم كموجب */
-        invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم');
+        invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم', fontPx);
       } else {
         var h = Math.min(it.value, max) / max * (base - top); /* صفر = صفر حقيقي */
         g.appendChild(svgEl('rect', {
@@ -7094,13 +7208,15 @@ body {
           'stroke-width': it.value === 0 ? 1 : 0
         }));
         var val = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - h - 6, 'text-anchor': 'middle' });
+        applyTextPx(val, fontPx);
         val.textContent = fmt(it.value); g.appendChild(val);
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
+          applyTextPx(o, fontPx);
           o.textContent = 'قيمة شاذة'; g.appendChild(o);
         }
       }
-      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP);
+      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP, fontPx);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -7139,14 +7255,20 @@ body {
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
+    var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
+    var fontPx = ts.k > 1 ? LINE_TEXT_PX * ts.k : null;
     var n = Math.max(items.length, 2);
-    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 11→12px كي يلتف النص قبل الاصطدام */
+    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (200%) كما في
+       الأعمدة — الحد/2 لكل سطر؛ الأرضية 5 كما في R1. */
+    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / (6.8 * 2)));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 18; /* R1-UI09: 1.5× تقريبًا لخط 12px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var X_LABEL_STEP = 37 * ts.k; /* R2-UI02: ~2.85× للخط 12px — صندوق السطر المضاعف لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× (18) غير كافٍ */
     var extra = (maxLines - 1) * X_LABEL_STEP;
-    var W = 320, H = 170 + extra, base = H - 30 - extra, top = 24;
+    /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
+       صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
+    var W = 320, H = 170 + extra, base = H - 48 - extra, top = 24;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
@@ -7175,15 +7297,17 @@ body {
       var g = svgEl('g', { class: 'm-cat--' + it.series });
       if (y === null) {
         var u = svgEl('text', { class: 'm-chart__point-value', x: x, y: base - 6, 'text-anchor': 'middle', fill: 'var(--micro-text-hint)' });
+        applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, x, base, it.value, 'سالب غير مرسوم');
+        invalidMarker(svg, g, x, base, it.value, 'سالب غير مرسوم', fontPx);
       } else {
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4.5 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
+        applyTextPx(val, fontPx);
         val.textContent = fmt(it.value); g.appendChild(val);
       }
-      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP);
+      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP, fontPx);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -7961,7 +8085,24 @@ body {
     return node;
   }
 
+  /* R2-UI03: عقد تشخيص الجذر — نفس نمط B05 (R8-07/07a/07b): رسالة
+     المستخدم في عنصر الملاحظة موجزة بلا أسماء سمات ولا تعليمات للمبرمج،
+     والسبب التقني الكامل في data-scale-state/data-scale-detail على
+     جذر المكوّن. تُمسح السمتان في أول كل render — دون شرط وجود عنصر
+     ملاحظة — ثم تُكتب حالة الدورة الحالية وحدها، فلا يبقى تشخيص دورة
+     سابقة بعد invalid→valid على العقدة نفسها. */
+  function clearDiagnostics(chart) {
+    chart.removeAttribute('data-scale-state');
+    chart.removeAttribute('data-scale-detail');
+  }
+
+  function writeDiagnostics(chart, state, detail) {
+    chart.setAttribute('data-scale-state', state);
+    chart.setAttribute('data-scale-detail', detail);
+  }
+
   function circleItems(chart) {
+    clearDiagnostics(chart); /* R2-UI03: كل دورة تبدأ نظيفة حتى دون عنصر ملاحظة */
     var source = chart.querySelector('[data-metric-source]');
     var target = chart.querySelector('[data-metric-items]');
     var fallbackTarget = chart.querySelector('[data-metric-fallback]');
@@ -8028,31 +8169,53 @@ body {
     var scaleNote = chart.querySelector('[data-metric-scale]');
     if (scaleNote) {
       scaleNote.setAttribute('data-valid', String(validLayout && validMax && validRadius && width > 0));
-      /* R1-UI10 (دورة حياة التشخيص — نمط B05): تُمسح السمة كل render ثم
-         تُكتب تشخيصات الدورة الحالية وحدها على الجذر لا في نص المستخدم. */
-      chart.removeAttribute('data-scale-detail');
-      if (!validLayout) scaleNote.textContent = 'تعذّر رسم الدوائر: اختر تخطيطًا معروفًا.';
-      else if (!validMax) scaleNote.textContent = 'تعذّر رسم الدوائر: مقياس القيم غير صالح أو أصغر من قيمة معلومة.';
-      else if (!validRadius) scaleNote.textContent = 'تعذّر رسم الدوائر: الحد الأقصى لحجم الدائرة غير صالح.';
-      else if (!width) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
-      else if (!measuredMax) scaleNote.textContent = known.length
+    }
+    /* R2-UI03: تعليمات المبرمج (data-layout/data-max/data-radius) خارج نص
+       المستخدم — رسالة موجزة والقراءات في القائمة البديلة دائمًا، والسبب
+       التقني الكامل على الجذر عبر writeDiagnostics. الشروحات الدلالية
+       للصفر/النطاق/التداخل محفوظة كما هي في الحالة السليمة. */
+    if (!validLayout) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-layout',
+        "metric-circles: data-layout='" + layout + "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.");
+    } else if (!validMax) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-scale',
+        "metric-circles: data-max='" + declaredRaw + "' غير موجب أو أصغر من أكبر مقدار معلوم (" + measuredMax + ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+    } else if (!validRadius) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-radius',
+        "metric-circles: data-radius='" + radiusRaw + "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+    } else if (!width) {
+      if (scaleNote) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
+      writeDiagnostics(chart, 'pending-width',
+        'metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).');
+    } else if (!measuredMax) {
+      if (scaleNote) scaleNote.textContent = known.length
         ? 'القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.'
         : 'لا توجد قراءات متاحة للمقارنة بعد.';
-      else {
+      writeDiagnostics(chart, known.length ? 'zero' : 'empty',
+        known.length
+          ? 'metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.'
+          : 'metric-circles: لا قيم معلومة — لا رسم.');
+    } else {
+      if (scaleNote) {
         var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
         if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
         if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
         if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
-        /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
-           data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
-           وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
-           أو المعلن) — لا يظهر في نص الواجهة. */
-        chart.setAttribute('data-scale-detail',
-          'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
-          + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
-          + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
         scaleNote.textContent = scaledMessage;
       }
+      /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
+         data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
+         وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
+         أو المعلن) — لا يظهر في نص الواجهة.
+         R2-UI03: يكتب مع حالة ok للدورة الحالية بعد المسح في أول
+         circleItems — لا يبقى تشخيص دورة سابقة. */
+      writeDiagnostics(chart, 'ok',
+        'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
+        + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+        + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
     }
 
     var itemGeometry = items.map(function (item, index) {
@@ -8172,6 +8335,7 @@ body {
   }
 
   function barItems(chart) {
+    clearDiagnostics(chart); /* R2-UI03: كل دورة تبدأ نظيفة حتى دون عنصر حالة */
     var source = chart.querySelector('[data-bar-source]');
     var target = chart.querySelector('[data-bar-items]');
     var status = chart.querySelector('[data-bar-status]');
@@ -8200,29 +8364,47 @@ body {
     var declaredRaw = chart.getAttribute('data-max');
     var declared = declaredRaw === null ? null : readNumber(declaredRaw);
     var max = null;
-    var reason = '';
+    var userText = '';
 
+    /* R2-UI03: نفس فصل تعليمات المبرمج عن نص المستخدم المطبق في الدوائر —
+       رسالة موجزة بلا أسماء سمات (data-unit/data-period/data-max) ولا
+       أوامر إصلاح للمطور («أزل الحد أو حدّد قيمة موجبة»)، والقراءات معروضة
+       كاملة في الصفوف دائمًا، والسبب التقني في data-scale-state/detail.
+       الشروحات الدلالية للوحدة والفترة والصفر والإشارة محفوظة. */
     if (!entries.length) {
-      reason = 'لا توجد بيانات للمقارنة.';
+      userText = 'لا توجد بيانات للمقارنة.';
+      writeDiagnostics(chart, 'empty', 'metric-bars: مصدر فارغ — لا صفوف.');
     } else if (!consistent) {
-      reason = 'الأشرطة غير معروضة: يجب أن تتوافق الوحدة والفترة في جميع القيم.';
+      userText = 'تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'inconsistent',
+        "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declaredRaw !== null && (!declared || declared.state !== 'positive')) {
-      reason = 'مقياس المقارنة غير صالح؛ أزل الحد أو حدّد قيمة موجبة.';
+      userText = 'تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'invalid-scale',
+        "metric-bars: data-max='" + declaredRaw + "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared && declared.value < magnitudeMax) {
-      reason = 'حد المقياس أصغر من مقدار معلوم؛ لم تُعرض الأشرطة.';
+      userText = 'تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'scale-below-known',
+        'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared) {
       max = declared.value;
-      reason = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      writeDiagnostics(chart, 'ok',
+        'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      reason = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      userText = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      writeDiagnostics(chart, 'ok',
+        'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (hasKnown) {
       max = 0;
-      reason = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
+      userText = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
+      writeDiagnostics(chart, 'zero', 'metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.');
     } else {
-      reason = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
+      userText = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
+      writeDiagnostics(chart, 'empty', 'metric-bars: لا قيم معلومة — لا مقياس.');
     }
-    if (signed && max !== null) reason += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
+    if (signed && max !== null) userText += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
 
     target.textContent = '';
     entries.forEach(function (entry, index) {
@@ -8261,7 +8443,7 @@ body {
       target.appendChild(li);
     });
     if (status) {
-      status.textContent = reason;
+      status.textContent = userText;
       status.setAttribute('data-valid', String(max !== null));
     }
   }

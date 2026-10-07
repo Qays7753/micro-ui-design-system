@@ -224,9 +224,19 @@ def main():
           el.removeAttribute('data-max'); el.setAttribute('data-radius', 'bad');
           MicroMetricComparison.render(el);
         }""")
+        # R2-UI03: التشخيص التقني في data-scale-state/detail على الجذر،
+        # ونص المستخدم موجز بلا أسماء سمات (كانت الرسالة القديمة تخاطب
+        # المبرمج بـ«الحد الأقصى لحجم الدائرة غير صالح»).
+        radius_diag = chart.evaluate("""el => ({
+          state: el.getAttribute('data-scale-state'),
+          detail: el.getAttribute('data-scale-detail') || '',
+          note: el.querySelector('[data-metric-scale]').textContent
+        })""")
         check("Invalid declared radius is explicitly rejected",
               page.locator(".m-metric-circles__item").count() == 0
-              and "غير صالح" in page.locator("[data-metric-scale]").inner_text())
+              and radius_diag["state"] == "invalid-radius"
+              and "data-radius" in radius_diag["detail"]
+              and "data-radius" not in radius_diag["note"])
         chart.evaluate("""el => {
           el.setAttribute('data-radius', '72');
           el.querySelector('[data-metric-source]').replaceChildren();

@@ -26,7 +26,24 @@
     return node;
   }
 
+  /* R2-UI03: عقد تشخيص الجذر — نفس نمط B05 (R8-07/07a/07b): رسالة
+     المستخدم في عنصر الملاحظة موجزة بلا أسماء سمات ولا تعليمات للمبرمج،
+     والسبب التقني الكامل في data-scale-state/data-scale-detail على
+     جذر المكوّن. تُمسح السمتان في أول كل render — دون شرط وجود عنصر
+     ملاحظة — ثم تُكتب حالة الدورة الحالية وحدها، فلا يبقى تشخيص دورة
+     سابقة بعد invalid→valid على العقدة نفسها. */
+  function clearDiagnostics(chart) {
+    chart.removeAttribute('data-scale-state');
+    chart.removeAttribute('data-scale-detail');
+  }
+
+  function writeDiagnostics(chart, state, detail) {
+    chart.setAttribute('data-scale-state', state);
+    chart.setAttribute('data-scale-detail', detail);
+  }
+
   function circleItems(chart) {
+    clearDiagnostics(chart); /* R2-UI03: كل دورة تبدأ نظيفة حتى دون عنصر ملاحظة */
     var source = chart.querySelector('[data-metric-source]');
     var target = chart.querySelector('[data-metric-items]');
     var fallbackTarget = chart.querySelector('[data-metric-fallback]');
@@ -93,31 +110,53 @@
     var scaleNote = chart.querySelector('[data-metric-scale]');
     if (scaleNote) {
       scaleNote.setAttribute('data-valid', String(validLayout && validMax && validRadius && width > 0));
-      /* R1-UI10 (دورة حياة التشخيص — نمط B05): تُمسح السمة كل render ثم
-         تُكتب تشخيصات الدورة الحالية وحدها على الجذر لا في نص المستخدم. */
-      chart.removeAttribute('data-scale-detail');
-      if (!validLayout) scaleNote.textContent = 'تعذّر رسم الدوائر: اختر تخطيطًا معروفًا.';
-      else if (!validMax) scaleNote.textContent = 'تعذّر رسم الدوائر: مقياس القيم غير صالح أو أصغر من قيمة معلومة.';
-      else if (!validRadius) scaleNote.textContent = 'تعذّر رسم الدوائر: الحد الأقصى لحجم الدائرة غير صالح.';
-      else if (!width) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
-      else if (!measuredMax) scaleNote.textContent = known.length
+    }
+    /* R2-UI03: تعليمات المبرمج (data-layout/data-max/data-radius) خارج نص
+       المستخدم — رسالة موجزة والقراءات في القائمة البديلة دائمًا، والسبب
+       التقني الكامل على الجذر عبر writeDiagnostics. الشروحات الدلالية
+       للصفر/النطاق/التداخل محفوظة كما هي في الحالة السليمة. */
+    if (!validLayout) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-layout',
+        "metric-circles: data-layout='" + layout + "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.");
+    } else if (!validMax) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-scale',
+        "metric-circles: data-max='" + declaredRaw + "' غير موجب أو أصغر من أكبر مقدار معلوم (" + measuredMax + ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+    } else if (!validRadius) {
+      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      writeDiagnostics(chart, 'invalid-radius',
+        "metric-circles: data-radius='" + radiusRaw + "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+    } else if (!width) {
+      if (scaleNote) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
+      writeDiagnostics(chart, 'pending-width',
+        'metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).');
+    } else if (!measuredMax) {
+      if (scaleNote) scaleNote.textContent = known.length
         ? 'القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.'
         : 'لا توجد قراءات متاحة للمقارنة بعد.';
-      else {
+      writeDiagnostics(chart, known.length ? 'zero' : 'empty',
+        known.length
+          ? 'metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.'
+          : 'metric-circles: لا قيم معلومة — لا رسم.');
+    } else {
+      if (scaleNote) {
         var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
         if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
         if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
         if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
-        /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
-           data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
-           وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
-           أو المعلن) — لا يظهر في نص الواجهة. */
-        chart.setAttribute('data-scale-detail',
-          'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
-          + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
-          + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
         scaleNote.textContent = scaledMessage;
       }
+      /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
+         data-scale-detail في B05) — مصدر نصف القطر (auto أي 72 الافتراضي)
+         وتكيف الحجم مع عرض البطاقة ضمنه، ومصدر المقياس (أكبر مقدار معروف
+         أو المعلن) — لا يظهر في نص الواجهة.
+         R2-UI03: يكتب مع حالة ok للدورة الحالية بعد المسح في أول
+         circleItems — لا يبقى تشخيص دورة سابقة. */
+      writeDiagnostics(chart, 'ok',
+        'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
+        + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+        + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
     }
 
     var itemGeometry = items.map(function (item, index) {
@@ -237,6 +276,7 @@
   }
 
   function barItems(chart) {
+    clearDiagnostics(chart); /* R2-UI03: كل دورة تبدأ نظيفة حتى دون عنصر حالة */
     var source = chart.querySelector('[data-bar-source]');
     var target = chart.querySelector('[data-bar-items]');
     var status = chart.querySelector('[data-bar-status]');
@@ -265,29 +305,47 @@
     var declaredRaw = chart.getAttribute('data-max');
     var declared = declaredRaw === null ? null : readNumber(declaredRaw);
     var max = null;
-    var reason = '';
+    var userText = '';
 
+    /* R2-UI03: نفس فصل تعليمات المبرمج عن نص المستخدم المطبق في الدوائر —
+       رسالة موجزة بلا أسماء سمات (data-unit/data-period/data-max) ولا
+       أوامر إصلاح للمطور («أزل الحد أو حدّد قيمة موجبة»)، والقراءات معروضة
+       كاملة في الصفوف دائمًا، والسبب التقني في data-scale-state/detail.
+       الشروحات الدلالية للوحدة والفترة والصفر والإشارة محفوظة. */
     if (!entries.length) {
-      reason = 'لا توجد بيانات للمقارنة.';
+      userText = 'لا توجد بيانات للمقارنة.';
+      writeDiagnostics(chart, 'empty', 'metric-bars: مصدر فارغ — لا صفوف.');
     } else if (!consistent) {
-      reason = 'الأشرطة غير معروضة: يجب أن تتوافق الوحدة والفترة في جميع القيم.';
+      userText = 'تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'inconsistent',
+        "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declaredRaw !== null && (!declared || declared.state !== 'positive')) {
-      reason = 'مقياس المقارنة غير صالح؛ أزل الحد أو حدّد قيمة موجبة.';
+      userText = 'تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'invalid-scale',
+        "metric-bars: data-max='" + declaredRaw + "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared && declared.value < magnitudeMax) {
-      reason = 'حد المقياس أصغر من مقدار معلوم؛ لم تُعرض الأشرطة.';
+      userText = 'تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.';
+      writeDiagnostics(chart, 'scale-below-known',
+        'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared) {
       max = declared.value;
-      reason = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      writeDiagnostics(chart, 'ok',
+        'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      reason = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      userText = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      writeDiagnostics(chart, 'ok',
+        'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (hasKnown) {
       max = 0;
-      reason = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
+      userText = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
+      writeDiagnostics(chart, 'zero', 'metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.');
     } else {
-      reason = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
+      userText = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
+      writeDiagnostics(chart, 'empty', 'metric-bars: لا قيم معلومة — لا مقياس.');
     }
-    if (signed && max !== null) reason += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
+    if (signed && max !== null) userText += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
 
     target.textContent = '';
     entries.forEach(function (entry, index) {
@@ -326,7 +384,7 @@
       target.appendChild(li);
     });
     if (status) {
-      status.textContent = reason;
+      status.textContent = userText;
       status.setAttribute('data-valid', String(max !== null));
     }
   }

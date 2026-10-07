@@ -653,9 +653,13 @@ def main():
                  MicroButtons.setLoading(b, false);
                  return {restored: w}; }"""
         )
-        check("E3 توكن المؤشر ينعكس على الأنواع كلها ثم يستعاد (R2-C)",
-              t1["iconBtnSpinner"] == 26 and t1["iconSlot"] == 26 and t1["textSpinner"] == 26
-              and t2["circleSpinner"] == 28 and t3["restored"] == 20,
+        # R2-loading (UI-SOURCE-REPAIR-R2): الزر النصي بلا أيقونة يرسم مؤشره
+        # 0.8× التوكن (16 من 20) بهامش من الحافة والتسمية أثناء التحميل —
+        # انعكاس التوكن على النصي نسبي لا 1:1 (المواصفة 4.1/2)، والأنواع
+        # الأخرى (أيقونة/دائري/فتحة محجوزة) 1:1 كما في R2-C.
+        check("E3 توكن المؤشر ينعكس على الأنواع كلها ثم يستعاد (R2-C؛ النصي 0.8×)",
+              t1["iconBtnSpinner"] == 26 and t1["iconSlot"] == 26 and t1["textSpinner"] == 21
+              and t2["circleSpinner"] == 28 and t3["restored"] == 16,
               f"توكِن 26: نص+أيقونة={t1['iconBtnSpinner']} فتحة={t1['iconSlot']} نص={t1['textSpinner']}؛ "
               f"توكن الدائري 28: {t2['circleSpinner']}؛ بعد الاستعادة: {t3['restored']}")
         c.close()

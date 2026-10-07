@@ -366,6 +366,21 @@
 .m-btn--icon { padding-inline: 0; }
 .m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
 
+/* R2-UI02-loading (جولة UI-SOURCE-REPAIR-R2): أثناء تحميل الزر النصي
+   فقط (بلا أيقونة وبلا أنماط التوافق الصريحة) يرسم المؤشر قوسًا أصغر
+   نسبيًا (0.8 × توكن الأيقونة = 16px من 20px) متمركزًا في فتحة حشو
+   بداية السطر نفسها — بهامش 2px من حافة الزر ومن التسمية، فلا ملامسة
+   حافة ولا تداخل مع النص. المؤشر خارج التدفق فلا يتغير عرض الزر ولا
+   ارتفاعه ولا يُحجز أي حشو في الحالة الساكنة (عقد B بعد R1-UI02 قائم).
+   أزرار الأيقونة (48px دائرية) وأزرار النص+أيقونة (فتحة 20px داخل حشو
+   20px) وأنماط التوافق loading-slot/loading-replace خارج هذا الضبط. */
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon)).is-loading .m-btn__spinner,
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon))[aria-busy="true"] .m-btn__spinner {
+  width: calc(var(--micro-icon-in-button) * 0.8);
+  height: calc(var(--micro-icon-in-button) * 0.8);
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button) * 0.8) / 2);
+}
+
 .m-btn--loading-slot.is-loading .m-btn__spinner {
   position: absolute;
   top: 0;

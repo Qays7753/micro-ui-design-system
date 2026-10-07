@@ -104,25 +104,79 @@
     return String(v);
   }
 
-  /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل */
+  /* ---- R2-UI02: عقد الحجم الفعلي لتسميات الرسوم (bars/line) ----
+     الحجم المعلن في data.css (أعمدة 13px / خط 12px) حد أدنى فعلي على
+     الشاشة لا قيمة CSS وحسب: الرسوم تُمدّ بعرض الحاوية (viewBox 320)،
+     فعند عرض أضيق من 320 يتقلص الحجم الفعلي بالتناسب (11.7/10.8px عند
+     288px). يقيس المصيّر عرض الرسم المتاح عند كل render ويضرب مقاييس
+     النص وحدها بمعامل 320/العرض المقيس (حجم خط كل text بسمة style،
+     خطوة سطر الالتفاف، ومرجع أحرف الالتفاف) فيبقى الحجم المعروض
+     ≥ المعلن، بينما تبقى هندسة الرسم (الأعمدة/المحاور/الخط) نسبية
+     للعرض المتاح كما كانت. القيم والنسب وحالات البيانات لا تتغير،
+     والدونات مقاس ثابت 148 فلا يدخل التعويض. الرسم في حاوية مخفية
+     (عرض 0) يصيّر بمعامل 1 (سلوك عرض التصميم) ويعيد المستهلك رسمه
+     عند الإظهار — عينة F03 ترسم رسوم التقارير عند فتح عرضها. */
+  var DESIGN_W = 320;
+  var BAR_TEXT_PX = 13;  /* مزدوج مع .m-chart--bars في data.css (عقد الأدنى) */
+  var LINE_TEXT_PX = 12; /* مزدوج مع .m-chart--line في data.css (عقد الأدنى) */
+
+  function textScaleOf(plot) {
+    var w = plot.getBoundingClientRect().width;
+    if (!isFinite(w) || w <= 1) return { k: 1, refW: DESIGN_W }; /* مخفي/غير مقيس */
+    if (w >= DESIGN_W) return { k: 1, refW: DESIGN_W };           /* كعقد R1 بلا تغيير */
+    return { k: DESIGN_W / w, refW: w };                           /* أضيق: عوّض النص */
+  }
+
+  function applyTextPx(t, fontPx) {
+    if (fontPx) t.style.fontSize = fontPx + 'px'; /* R2-UI02: الحجم الفعلي المعلن */
+    return t;
+  }
+
+  /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
+     R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
+     مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
+     تبقى كاملة مهما طالت (حد معلن: كلمة مفردة أطول من ميزانية السطر
+     قد تجاور تسميتها عند 200%). */
   function wrapLabel(text, maxChars) {
     text = String(text || '');
     if (text.length <= maxChars) return [text];
-    var words = text.split(' ');
+    var tokens = [];
+    text.split(' ').forEach(function (w) {
+      if (w.length > maxChars && w.indexOf('-') >= 0) {
+        /* قسّم عند الشرطات ثم ادمج المقاطع المجاورة ما دامت ضمن السقف:
+           2026-09-10 بسقف 5 → «2026-» + «09-10» (سطران معقولان) لا 3 أسطر */
+        var segs = [];
+        w.split('-').forEach(function (seg, i, arr) {
+          segs.push(i < arr.length - 1 ? seg + '-' : seg);
+        });
+        var merged = [];
+        segs.forEach(function (s) {
+          var last = merged[merged.length - 1];
+          if (last !== undefined && (last + s).length <= maxChars) merged[merged.length - 1] = last + s;
+          else merged.push(s);
+        });
+        tokens = tokens.concat(merged);
+      } else if (w) {
+        tokens.push(w);
+      }
+    });
+    if (!tokens.length) tokens = [text];
     var lines = [], cur = '';
-    words.forEach(function (w) {
-      var t = cur ? cur + ' ' + w : w;
-      if (t.length <= maxChars || !cur) cur = t;
-      else { lines.push(cur); cur = w; }
+    tokens.forEach(function (t) {
+      var joined = cur ? cur + ' ' + t : t;
+      if (joined.length <= maxChars || !cur) cur = joined;
+      else { lines.push(cur); cur = t; }
     });
     if (cur) lines.push(cur);
     return lines;
   }
 
-  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep) {
+  function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep, fontPx) {
     /* R1-UI09: خطوة السطر تتبع حجم خط التسمية (≈ 1.5×) — بعد تكبير التسميات
        (أعمدة 13px/خط 12px) الخطوة 13 الثابتة كانت تصطدم عند مضاعفة حجم
-       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه. */
+       الخط (محاكاة 200%)؛ الخطوة تُمرّر من كل رسم بحجم خطه.
+       R2-UI02: fontPx (إن مُرّر) يثبّت الحجم الفعلي للتسمية على الحد
+       المعلن عند تقلص الرسم تحت عرض التصميم. */
     var step = lineStep || 13;
     var lines = wrapLabel(text, maxChars);
     lines.forEach(function (ln, k) {
@@ -131,6 +185,7 @@
         y: yBottom - (lines.length - 1 - k) * step,
         'text-anchor': 'middle'
       });
+      applyTextPx(t, fontPx);
       t.textContent = ln;
       g.appendChild(t);
     });
@@ -192,8 +247,9 @@
     plot.appendChild(list);
   }
 
-  /* قيمة سالبة في رسم لا يدعم السالب: عرض صادق — شرطة + نص القيمة والسبب */
-  function invalidMarker(svg, g, cx, base, value, why) {
+  /* قيمة سالبة في رسم لا يدعم السالب: عرض صادق — شرطة + نص القيمة والسبب
+     R2-UI02: fontPx يعوّض حجم النص عند تقلص الرسم تحت عرض التصميم */
+  function invalidMarker(svg, g, cx, base, value, why, fontPx) {
     var r = svgEl('rect', {
       class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4,
       stroke: 'var(--micro-warning)'
@@ -203,6 +259,7 @@
       class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle',
       fill: 'var(--micro-warning)'
     });
+    applyTextPx(t, fontPx);
     t.textContent = fmt(value) + ' — ' + why;
     g.appendChild(t);
   }
@@ -228,13 +285,22 @@
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
-    var labelChars = Math.max(6, Math.floor((320 / Math.max(items.length, 1)) * 0.9 / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 12→13px كي يلتف النص قبل الاصطدام */
+    var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
+    var fontPx = ts.k > 1 ? BAR_TEXT_PX * ts.k : null;
+    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (محاكاة 200%
+       المعلنة في المشروع): الحد/2 لكل سطر — النص الملفوف لا يصطدم بجاره
+       ولا يخرج عن عموده عند مضاعفة حجم الخط، والشرطات تقسم التواريخ.
+       الأرضية 6 كما في R1. */
+    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / (6.8 * 2)));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 20; /* R1-UI09: 1.5× تقريبًا لخط 13px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var BAR_LABEL_STEP = 40 * ts.k; /* R2-UI02: ~2.85× للخط 13px — صندوق السطر المضاعف (≈1.42em بارتفاع الخط العربي الكامل) لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× غير كافٍ للمضاعفة الكاملة */
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
-    var W = 320, H = 180 + extra, base = H - 34 - extra, top = 26;
+    /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
+       صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
+       عند 200% (كانت 22 غير كافية). */
+    var W = 320, H = 180 + extra, base = H - 50 - extra, top = 26;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
@@ -249,10 +315,11 @@
         /* ناقص/مجهول: مستطيل شرطة قصير فوق الأساس + تسمية «—» */
         g.appendChild(svgEl('rect', { class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle' });
+        applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
         /* E06: سالب في الأعمدة — رفض بوضوح، لا رسم كموجب */
-        invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم');
+        invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم', fontPx);
       } else {
         var h = Math.min(it.value, max) / max * (base - top); /* صفر = صفر حقيقي */
         g.appendChild(svgEl('rect', {
@@ -263,13 +330,15 @@
           'stroke-width': it.value === 0 ? 1 : 0
         }));
         var val = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - h - 6, 'text-anchor': 'middle' });
+        applyTextPx(val, fontPx);
         val.textContent = fmt(it.value); g.appendChild(val);
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
+          applyTextPx(o, fontPx);
           o.textContent = 'قيمة شاذة'; g.appendChild(o);
         }
       }
-      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP);
+      appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP, fontPx);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
@@ -308,14 +377,20 @@
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
+    var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
+    var fontPx = ts.k > 1 ? LINE_TEXT_PX * ts.k : null;
     var n = Math.max(items.length, 2);
-    var labelChars = Math.max(5, Math.floor(((320 - 48) / n) / 6.8)); /* R1-UI09: 6.2→6.8 حرفًا أعرض بعد تكبير التسمية 11→12px كي يلتف النص قبل الاصطدام */
+    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (200%) كما في
+       الأعمدة — الحد/2 لكل سطر؛ الأرضية 5 كما في R1. */
+    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / (6.8 * 2)));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 18; /* R1-UI09: 1.5× تقريبًا لخط 12px — أسطر الملفوف لا تتزاحم عند مضاعفة الخط */
+    var X_LABEL_STEP = 37 * ts.k; /* R2-UI02: ~2.85× للخط 12px — صندوق السطر المضاعف لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× (18) غير كافٍ */
     var extra = (maxLines - 1) * X_LABEL_STEP;
-    var W = 320, H = 170 + extra, base = H - 30 - extra, top = 24;
+    /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
+       صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
+    var W = 320, H = 170 + extra, base = H - 48 - extra, top = 24;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
@@ -344,15 +419,17 @@
       var g = svgEl('g', { class: 'm-cat--' + it.series });
       if (y === null) {
         var u = svgEl('text', { class: 'm-chart__point-value', x: x, y: base - 6, 'text-anchor': 'middle', fill: 'var(--micro-text-hint)' });
+        applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, x, base, it.value, 'سالب غير مرسوم');
+        invalidMarker(svg, g, x, base, it.value, 'سالب غير مرسوم', fontPx);
       } else {
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4.5 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
+        applyTextPx(val, fontPx);
         val.textContent = fmt(it.value); g.appendChild(val);
       }
-      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP);
+      appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP, fontPx);
       svg.appendChild(g);
     });
     plot.innerHTML = '';
