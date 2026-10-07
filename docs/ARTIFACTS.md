@@ -1,3 +1,10 @@
+# حزمة Samsung One UI × Micro — 2026-10-07
+
+- [المدخل](../references/samsung-one-ui/README.md) و[فهرس المراجع](../references/samsung-one-ui/SOURCES.md) و[سجل المصدر](../references/samsung-one-ui/SOURCE-REGISTER.json):41 رابطًا رسميًا متحققًا، والوثائق الأصلية لدى الناشر.
+- [تفسير Micro](../references/samsung-one-ui/MICRO-ADAPTATION.md) و[تغطية كل العائلات14](../references/samsung-one-ui/AUDIT-COVERAGE.md) و[قالب التقرير](../references/samsung-one-ui/REPORT-TEMPLATE.md).
+- [تكليف Z AI](../prompts/SAMSUNG-ONEUI-MICRO-AUDIT-ZAI.md): خمسة أدوار، تقرير وأدلة وخطة لاحقة فقط، لا إصلاحات أو تغييرات UI.
+- [أداة الجلب المحلي](../tools/fetch-samsung-one-ui-references.py) و[تحقق الحزمة](../references/samsung-one-ui/VALIDATION.md): الملفات تُجلب خارج المستودع؛ HTML لا يضم الوسائط التابعة.
+
 # أحدث جولة — UI-R3 + جدول الطلبات / 2026-10-07
 
 - [تقرير جولة جدول الطلبات](../reviews/ORDER-SCHEDULE/review.md): إغلاق UI-R3-01..03 + مكوّن جدول الطلبات ببطاقة قبول CAL-01..15 — DRAFT FOR REVIEW.
