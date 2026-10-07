@@ -1,0 +1,93 @@
+{
+  "reviewed_head": "3c88aca499e306b80a9efdd2934b91d52d2974a4",
+  "browser": "Chromium 153.0.8010.0",
+  "calendar_replay": {
+    "paths_total": 16,
+    "paths_passed": 16,
+    "paths_failed": [],
+    "assertions_total": 267,
+    "page_errors_by_target": {
+      "src": 0,
+      "standalone": 0,
+      "sample": 0,
+      "comp": 0
+    },
+    "resource_failures_by_target": {
+      "src": 0,
+      "standalone": 0,
+      "sample": 0,
+      "comp": 0
+    },
+    "per_target_checks": {
+      "src": {
+        "checks": 14,
+        "passed": 14
+      },
+      "standalone": {
+        "checks": 13,
+        "passed": 13
+      },
+      "sample": {
+        "checks": 15,
+        "passed": 15
+      },
+      "comp": {
+        "checks": 3,
+        "passed": 3
+      }
+    },
+    "not_run": [
+      "جهاز Samsung Galaxy S25 الحقيقي وSamsung Internet",
+      "أجهزة Android/iOS الفعلية واللمس ولوحة النظام وsafe areas ورجوع النظام",
+      "TalkBack/VoiceOver وقارئ شاشة فعلي",
+      "WebKit/Safari",
+      "native zoom (المستخدم محاكاة نص ×2 بمرورين معلنة)",
+      "القراءة البصرية البشرية للقطات CAL-15 (الأداة تثبت وجودها وغير فارغة — الحكم النهائي للقائد)"
+    ],
+    "limits": [
+      "حالات الخطأ/الانتظار/الفراغ في أهداف الرحلة تُحقق عبر API المثيل العمومي getInstance (لا أزرار مستهلك مكشوفة هناك)؛ أزرار حقيقية في example-usage (comp)",
+      "prefers-reduced-motion مُحقق بسياق Playwright أصلي على العينة المستقلة (عناصر المكوّن) لا على كل أهداف F03",
+      "CAL-14 تكافؤ الأعمدة يشمل CAL-01..12 على src/standalone/sample؛ CAL-13 مكونية (comp) + سلوك العينة"
+    ]
+  },
+  "chart_checks": [
+    {
+      "case": "responsive-minimum",
+      "tag": "src",
+      "ok": true
+    },
+    {
+      "case": "whole-word-labels-200",
+      "tag": "src",
+      "ok": true
+    },
+    {
+      "case": "iso-dates-200",
+      "tag": "src",
+      "ok": true
+    },
+    {
+      "case": "responsive-minimum",
+      "tag": "standalone",
+      "ok": true
+    },
+    {
+      "case": "whole-word-labels-200",
+      "tag": "standalone",
+      "ok": true
+    },
+    {
+      "case": "iso-dates-200",
+      "tag": "standalone",
+      "ok": true
+    }
+  ],
+  "save_feedback_probe": {
+    "view": "schedule",
+    "hidden": false,
+    "width": 0,
+    "height": 0,
+    "text": "تمت إضافة الطلب."
+  },
+  "limits": "Headless Chromium; no actual device, screen reader, Safari, native zoom or touch."
+}
