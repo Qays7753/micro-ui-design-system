@@ -1,3 +1,7 @@
+# أصول الشعار المعتمد — 2026-10-07
+
+- [Micro Logo V1 — المدخل والمصدر وكل المشتقات](../assets/brand/micro-logo/README.md): APPROVED BY OWNER، محفوظ على main. [التطوير المؤجل](../assets/brand/micro-logo/FUTURE-DEVELOPMENT.md).
+
 # مخرجات التكليف الجاري —2026-10-03
 
 حزمة الاستكمال في [handoff/ZAI-START-HERE.md](../handoff/ZAI-START-HERE.md): التكليف، تدقيق main، المراحل الثماني، القرارات، الأصول، المعايير، والتتبع. [البرومبت](../prompts/ZAI-UI-COMPLETION.md). أصول الصور والفيديو المشار إليها موجودة في references ولم تُنسخ مرة أخرى. الملفات القديمة في handoff/archive تاريخية. ZIP المصدر السابق يعاد توليده في نهاية المهمة؛ التوثيق الحالي لا يدعي تنفيذ إصلاحات UI.

@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-06",
+  "svg_files_checked": 10,
+  "embedded_bitmaps_fonts_scripts": false,
+  "four_symbol_modules_identical": true,
+  "symbol_rotations": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "transparent_pngs_checked": 9,
+  "png_edge_clipping": false,
+  "renderers": [
+    "CairoSVG",
+    "Inkscape"
+  ],
+  "matched_resolution_alpha_iou": 0.9998640090142596,
+  "compatibility_fix": "SVG 1.1 xlink:href added alongside href for linked symbol",
+  "not_tested": [
+    "physical print",
+    "Illustrator import",
+    "Figma import",
+    "trademark similarity"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "reference": "exec-8eb1115a-9182-4c29-b6d3-75dbe86b9422.png",
+  "reference_sha256": "18d81a49c315c92d8c2e3f0d9defd55502405867aac2266cc4337241183445b9",
+  "lettering": {
+    "ar": {
+      "reference_origin": [
+        197,
+        178
+      ],
+      "bounds": [
+        823,
+        268
+      ],
+      "components": 8,
+      "bezier_and_line_segments": 135,
+      "silhouette_iou": 0.990581,
+      "changed_pixels": 930,
+      "optical_letter_shifts_x": {
+        "waw": 0,
+        "raa": 4,
+        "kaf": 4,
+        "yaa": 9,
+        "alif": 9,
+        "meem": 10
+      },
+      "final_wordmark_width": 833
+    },
+    "en": {
+      "reference_origin": [
+        547,
+        669
+      ],
+      "bounds": [
+        805,
+        197
+      ],
+      "components": 8,
+      "bezier_and_line_segments": 111,
+      "silhouette_iou": 0.991506,
+      "changed_pixels": 813,
+      "optical_letter_shifts_x": {
+        "M": 0,
+        "i": 0,
+        "c": 0,
+        "r": 1,
+        "o": 5
+      },
+      "final_wordmark_width": 810
+    }
+  },
+  "symbol": {
+    "master_module": "M40 0 H100 Q112 0 112 12 V52 Q112 64 100 64 H12 Q0 64 0 52 V40 A40 40 0 0 1 40 0 Z",
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "viewBox": [
+      0,
+      0,
+      192,
+      192
+    ],
+    "straight_channel_width": 16
+  },
+  "notes": [
+    "Wordmarks traced from the approved raster with cubic Bezier paths; small contour deviations quantified above before optical letter shifts.",
+    "Symbol reconstructed analytically from the agreed equal-module geometry.",
+    "sRGB vector artwork; no CMYK press profile assigned."
+  ]
+}
