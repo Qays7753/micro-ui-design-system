@@ -1,3 +1,8 @@
+# أحدث جولة — UI-SOURCE-REPAIR-R2 / 2026-10-07
+
+- [تقرير جولة R2](../reviews/UI-SOURCE-REPAIR-R2/review.md): تنفيذ UI-R2-01..04 على main (`e517214`) — DRAFT FOR RE-REVIEW.
+- [تحقق R2 الآلي](../reviews/UI-SOURCE-REPAIR-R2/verification.json): 118/118 من checkout نظيف (المصدر وstandalone، المقاسات الأربعة والتكبير وloading RTL/LTR) مع [تحقق القديم](../reviews/UI-SOURCE-REPAIR-R2/verification-before.json) 66/118 يثبت العيوب قبل الإصلاح، و[لقطات قبل/بعد](../reviews/UI-SOURCE-REPAIR-R2/screenshots/) و[قراءات VLM](../reviews/UI-SOURCE-REPAIR-R2/evidence/).
+
 # مراجعة جودة المصادر — 2026-10-07
 
 - [مراجعة R1 المستقلة](../reviews/UI-SOURCE-REPAIR-R1/CHATGPT-REVIEW-R1.md) و[الدليل المحدد](../reviews/UI-SOURCE-REPAIR-R1/independent/r1/source-findings.json): CHANGES REQUIRED.
