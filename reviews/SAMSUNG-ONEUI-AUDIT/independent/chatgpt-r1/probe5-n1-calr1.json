@@ -1,0 +1,103 @@
+{
+  "N1_rejected_save_op_note": {
+    "hidden": false,
+    "className": "m-note m-note--error",
+    "role": "status",
+    "dataOpState": "error",
+    "title": "لم تُحفظ التعديلات",
+    "body": "يمكنك التصحيح والمحاولة مجددًا.",
+    "rect": {
+      "w": 328,
+      "h": 75.96875
+    }
+  },
+  "CAL_R1_01_add_order_toast": {
+    "hidden": false,
+    "display": "flex",
+    "position": "fixed",
+    "zIndex": "90",
+    "rect": {
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "text": "تمت إضافة الطلب.",
+    "ancestorViewAccountHidden": true,
+    "ancestorDisplay": "none",
+    "liveRegionText": "تمت إضافة الطلب.",
+    "visibleElementsWithToastText": 0
+  },
+  "CAL_R1_01_add_order_after_close": {
+    "currentView": [
+      "view-schedule"
+    ],
+    "layerOpen": false
+  },
+  "CAL_R1_01_delete_item_toast": {
+    "hidden": false,
+    "display": "flex",
+    "position": "fixed",
+    "zIndex": "90",
+    "rect": {
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "text": "تم حذف العنصر.",
+    "ancestorViewAccountHidden": true,
+    "ancestorDisplay": "none",
+    "liveRegionText": "تم حذف العنصر.",
+    "visibleElementsWithToastText": 0
+  },
+  "CAL_R1_02_schedule_legend": {
+    "found": true,
+    "legendRect": {
+      "w": 328,
+      "h": 19.984375
+    },
+    "items": [
+      {
+        "text": "قيد التنفيذ",
+        "w": 52,
+        "h": 19.98
+      },
+      {
+        "text": "تم التسليم",
+        "w": 52,
+        "h": 19.98
+      },
+      {
+        "text": "بانتظار العميل",
+        "w": 66,
+        "h": 19.98
+      },
+      {
+        "text": "mystery",
+        "w": 46,
+        "h": 19.98
+      }
+    ]
+  },
+  "pageerrors": [],
+  "original_tool_metadata": {
+    "commit": "a5500c9",
+    "tree": "05f344b05ef12284abfc31ad9a1c8633dcd6a058",
+    "browser": "Chrome for Testing 143.0.7499.4 (Playwright sync)",
+    "settle": "mock-adapter ARMED_SETTLE_MS=2000ms, AUTO_SETTLE_MS=600ms"
+  },
+  "replay_metadata": {
+    "reviewed_head": "e60e8e82a0bad08cdaba57f1158b5fe2b91c93ce",
+    "source_parity": "components/previews/shared/tools identical to audited a5500c9",
+    "browser": "Chromium 153.0.8010.0",
+    "adapter": "Only server URL, output paths and executable/sandbox argument changed. Source and probes assertions untouched. Original hardcoded metadata is not the replay metadata.",
+    "not_run": [
+      "actual devices",
+      "screen reader",
+      "native zoom",
+      "WebKit",
+      "touch"
+    ]
+  }
+}

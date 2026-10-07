@@ -1,3 +1,8 @@
+# مراجعة ChatGPT لتدقيق Samsung — 2026-10-07
+
+- [المراجعة](../reviews/SAMSUNG-ONEUI-AUDIT/CHATGPT-REVIEW-R1.md): تقرير مفيد مع تصحيحات لازمة للحساب والصياغة والتغطية والخطة؛ لا إذن تنفيذ.
+- [الأدلة وإعادة التشغيل](../reviews/SAMSUNG-ONEUI-AUDIT/independent/chatgpt-r1/README.md): خمسة probes معادة، وعزل لمس المقاطع والإعلان المتكرر. لا تغيير على المصدر.
+
 # تسليم تدقيق Samsung One UI × Micro — 2026-10-07
 
 - [تقرير التدقيق الموحد](../reviews/SAMSUNG-ONEUI-AUDIT/REPORT.md): مقارنة تطبيقية بمراجع One UI الرسمية على الرأس `a5500c9` — **DRAFT FOR REVIEW، لا إصلاحات منفذة**. 32 نتيجة موحدة (SUI-001..032: 10 BUG مثبتة / 16 تحسينًا / 6 قرارات مالك) + 52 بند KEEP مقيسًا + خطة دفعات لاحقة.

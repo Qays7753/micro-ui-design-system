@@ -1,0 +1,22 @@
+{
+  "reviewed_head": "e60e8e82a0bad08cdaba57f1158b5fe2b91c93ce",
+  "original_audited_source": "a5500c90ffc9b6c6bbdd28dd63be6df7997eae1d",
+  "source_diff_components_previews_shared_tools": [],
+  "browser": "Chromium 153.0.8010.0",
+  "replayed_scripts": 5,
+  "replayed_scripts_exit_zero": 5,
+  "coverage_actual_rows": 54,
+  "coverage_states": {
+    "REVIEWED": 40,
+    "PARTIAL": 4,
+    "NOT RUN": 10
+  },
+  "additional_segment_touch_gaps": {
+    "row_gap_4": -4,
+    "row_gap_8": 0,
+    "row_gap_12": 4
+  },
+  "second_same_announcement_mutations_after_700ms": 0,
+  "audio_not_tested": true,
+  "production_files_changed": false
+}
