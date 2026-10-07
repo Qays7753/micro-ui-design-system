@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- الوكيل 5 — هارنس مستقل: SUI-003 لون حالة المفتاح بتركيب DOM معاكس
+     ومركّب (لا نسخ من سيناريو الوكيل 2): الترتيب المعكوس + ترتيب مزدوج التداخل
+     + حالة معطل مع checked + حالة غير محددة. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A5 — مفتاح بترتيب DOM معاكس</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../../../../shared/tokens.css">
+  <link rel="stylesheet" href="../../../../../components/selection/selection.css">
+  <style>body{font-family:var(--micro-font-family);margin:12px;background:var(--micro-surface-page)}</style>
+</head>
+<body>
+  <!-- أ: النص قبل المدخل (الترتيب الرسمي) -->
+  <label class="m-switch" id="sw-a">
+    <span class="m-switch__text">
+      <span class="m-switch__label">مفتاح أ — النص قبل المدخل</span>
+      <span class="m-switch__state">غير مُفعّل</span>
+    </span>
+    <input type="checkbox" role="switch" checked aria-label="مفتاح أ">
+    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+  </label>
+
+  <!-- ب: المدخل قبل النص (الترتيب المعاكس — كترتيب account-settings) -->
+  <label class="m-switch" id="sw-b">
+    <input type="checkbox" role="switch" checked aria-label="مفتاح ب">
+    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+    <span class="m-switch__text">
+      <span class="m-switch__label">مفتاح ب — المدخل قبل النص</span>
+      <span class="m-switch__state">غير مُفعّل</span>
+    </span>
+  </label>
+
+  <!-- ج: تركيب مزدوج التداخل — المسار ثم النص ثم المدخل (غريب عمدًا) -->
+  <label class="m-switch" id="sw-c">
+    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+    <span class="m-switch__text">
+      <span class="m-switch__label">مفتاح ج — المسار ثم النص ثم المدخل</span>
+      <span class="m-switch__state">غير مُفعّل</span>
+    </span>
+    <input type="checkbox" role="switch" checked aria-label="مفتاح ج">
+  </label>
+
+  <!-- د: معطل ومحدد معًا — قاعدة المعطل تتغلب -->
+  <label class="m-switch" id="sw-d">
+    <span class="m-switch__text">
+      <span class="m-switch__label">مفتاح د — معطل</span>
+      <span class="m-switch__state">غير مُفعّل</span>
+    </span>
+    <input type="checkbox" role="switch" checked disabled aria-label="مفتاح د">
+    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+  </label>
+
+  <!-- هـ: بلا checked — يجب أن يبقى لون التلميح -->
+  <label class="m-switch" id="sw-e">
+    <input type="checkbox" role="switch" aria-label="مفتاح هـ">
+    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+    <span class="m-switch__text">
+      <span class="m-switch__label">مفتاح هـ — غير محدد (المدخل أولًا)</span>
+      <span class="m-switch__state">غير مُفعّل</span>
+    </span>
+  </label>
+</body>
+</html>

@@ -32,6 +32,7 @@ body {
   padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-10);
 }
 
+
 /* ---------- شريط التطبيق لكل وجهة: رجوع + عنوان + فعل ---------- */
 .f03-appbar {
   display: flex;
@@ -66,8 +67,11 @@ body {
 
 .f03-block__title {
   margin: 0 0 var(--micro-space-3);
-  font-size: var(--micro-label-size);
-  line-height: var(--micro-label-line);
+  /* SUI-017: عنوان مجموعة داخل وجهة = 16/24×600 (قرار القائد) — نفس
+     توكني تسمية الزر (16px × 1.5 = 24px)؛ عنوان قسم صفحة مستقلة يبقى
+     18/28 (m-section-title). لا رفع إلى 18 هنا */
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
   font-weight: 600;
 }
 
@@ -165,6 +169,11 @@ body {
 }
 
 .f03-rowlist > li:last-child .f03-row { border-block-end: 0; }
+
+/* SUI-020: انتقال خلفية الصف حركة غير وظيفية — تحت تقليل الحركة يُلغى */
+@media (prefers-reduced-motion: reduce) {
+  .f03-row { transition: none; }
+}
 
 .f03-row:active { background-color: var(--micro-surface-selected); }
 
@@ -273,15 +282,18 @@ body {
   align-items: center;
 }
 
-/* شريط التحديد الجماعي: sticky فوق شريط التنقل (53px قياسه الفعلي) —
-   عقد m-actionbar: الشريط يبقى فوق المحتوى بحشوه ولا يُحجب بالشريط السفلي */
+/* شريط التحديد الجماعي: sticky فوق شريط التنقل — SUI-002: الإزاحة
+   تستهلك --f03-navbar-h (ارتفاع شريط التنقل المقيس فعليًا عبر
+   ResizeObserver في example.js؛ 53px قيمة احتياطية عند الإقلاع قبل
+   أول قياس) — عند تكبير النص 200% يتبع الشريط الارتفاع المقيس (~71px)
+   فلا تراكب. عقد m-actionbar كما هو: الشريط فوق المحتوى بحشوه */
 #f03-select-bar {
   display: flex;
   align-items: center;
   gap: var(--micro-space-2);
   flex-wrap: wrap;
   margin-block-start: var(--micro-space-3);
-  inset-block-end: calc(53px + env(safe-area-inset-bottom, 0px));
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
 }
 
 #f03-select-bar[hidden] { display: none; }
@@ -581,11 +593,21 @@ body {
 }
 
 /* ---------- تذييل التجربة: بقاء البيانات بصدق + مدخل وضع المراجعة --
-   حشو سفلي يفوق شريط التنقل الثابت (53px) كي لا يُحجب رابط وضع المراجعة */
+   حشو سفلي يفوق شريط التنقل الثابت: --f03-navbar-h المقيسة ديناميكيًا
+   (SUI-002) + فراغ قراءة 24px كي لا يُحجب رابط وضع المراجعة عند
+   تكبير النص (كان 53px ثابتة تنجو بـ6px فقط عند 200%) */
 .f03-foot {
   max-width: 560px;
   margin-inline: auto;
-  padding: 0 var(--micro-space-4) calc(53px + var(--micro-space-6) + env(safe-area-inset-bottom, 0px));
+  padding: 0 var(--micro-space-4) calc(var(--f03-navbar-h, 53px) + var(--micro-space-6) + env(safe-area-inset-bottom, 0px));
+}
+
+/* SUI-016 (عقد UI-VISUAL-SYSTEM): هامش 16px دون 390 و20px من 390 فأعلى —
+   على حاوية التجربة والتذييل معًا (نفس العمود المقروء). توضع بعد قاعدتي
+   .f03-main/.f03-foot كي يغلب تعيين padding-inline المتأخر الحشو المختصر */
+@media (min-width: 390px) {
+  .f03-main { padding-inline: var(--micro-space-5); }
+  .f03-foot { padding-inline: var(--micro-space-5); }
 }
 
 .f03-foot__text {
@@ -698,6 +720,17 @@ body {
 
 .f03-order-date-hint {
   margin: 0;
+}
+
+/* ---------- SUI-001: توست مستوى التطبيق خارج الوجهات المخفية ----------
+   نقل من #view-account إلى جذر الصفحة: مستطيله >0 دائمًا في كل الوجهات.
+   الإزاحة السفلية تحسب ارتفاع navbar الفعلي المقيس (--f03-navbar-h من
+   ResizeObserver) + فراغ 16px كي لا يتراكب مع الشريط (النقل الساذج بلا
+   إزاحة كان يغطي navbar بتراكب 33px). عندما يكون navbar مخفيًا (وجهات
+   فرعية) تبقى آخر قيمة مقيسة — الموضع ثابت ومتوقع. عقد toast نفسه
+   (B06): مدة المستهلك، إغلاق يدوي، قناة إعلان واحدة (بلا role هنا). */
+#f03-toast {
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + var(--micro-space-4) + env(safe-area-inset-bottom, 0px));
 }
 
 /* ---------- وضع المراجعة: أدوات داخل طبقة مغلقة افتراضيًا ---------- */

@@ -31,13 +31,27 @@ body {
   overflow-wrap: anywhere; /* رموز لاتينية طويلة عند التكبير تلتف */
 }
 
-/* ---------- الشريط العلوي: عنوان + زر إضافة ---------- */
+/* ---------- الشريط العلوي: عنوان + أزرار (إضافة + وضع فحص الحالات الحدية SUI-009) ---------- */
 .ocal-page__bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
   padding-block: var(--micro-space-2) var(--micro-space-4);
+}
+
+/* SUI-009: حاوية أزرار الشريط — تلتف عند الضيق بلا فيض */
+.ocal-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+}
+
+.ocal-page__actions .ocal-btn[aria-pressed="true"] {
+  font-weight: 600;
+  border-color: var(--micro-info);
+  color: var(--micro-info);
 }
 
 .ocal-page__title:focus-visible {

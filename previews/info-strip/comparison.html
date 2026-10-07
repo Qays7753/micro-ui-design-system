@@ -46,7 +46,14 @@
       margin: 0 0 10px; color: var(--micro-text-secondary);
       font-size: var(--micro-label-size); line-height: var(--micro-label-line);
     }
-    .cmp-table { width: 100%; border-collapse: collapse; margin-block: 12px 20px; }
+    /* SUI-024 (REPAIR-R1 2026-10-07): حاوية تمرير أفقية للجدول — المحتوى قابل
+       للوصول بالتمرير (WCAG 1.4.10) بلا تمديد الصفحة كلها عند تكبير النص 200%. */
+    .cmp-table-scroll {
+      overflow-x: auto;
+      margin-block: 12px 20px;
+      border-inline-start: 1px solid transparent; /* مساحة تنفس للحد عند أقصى تمرير */
+    }
+    .cmp-table { width: 100%; border-collapse: collapse; margin-block: 0; }
     .cmp-table th, .cmp-table td {
       text-align: start; vertical-align: top; padding: 8px 10px;
       border: 1px solid var(--micro-border-divider);
@@ -71,6 +78,7 @@
       الحركة، مستفيدًا من مصدر <code>carousel</code> القائم. الاثنان من المصدر القابل للتعديل بلا مكتبة
       ثالثة، وبنفس محتوى المستهلك وبلا autoplay.</p>
 
+    <div class="cmp-table-scroll" tabindex="0" aria-label="جدول مقارنة الشريطين — قابل للتمرير أفقًا">
     <table class="cmp-table">
       <tr><th scope="col">الوجه</th><th scope="col">الشريط الحالي (info-strip)</th><th scope="col">العارض الاختياري (info-peek)</th></tr>
       <tr><td>البطاقة النشطة</td><td>كامل العرض</td><td>موسّطة وجزء المجاورين ظاهر (peek 24px قابل للتعديل)</td></tr>
@@ -83,6 +91,7 @@
       <tr><td>reduced-motion</td><td>بلا انتقالات</td><td>بلا انتقالات (ظهور فوري)</td></tr>
       <tr><td>الحالة</td><td><b>الحالي المعتمد</b> — يبقى النمط الافتراضي</td><td><b>ADOPTED</b> — opt-in بسمة <code>data-info-peek</code></td></tr>
     </table>
+    </div>
 
     <p class="cmp-note"><b>ما يستمر في شريط المعلومات:</b> العرض الكامل داخل تدفق القراءة حيث لا يلزم
       إظهار استمرار المحتوى (بطاقة قراءة واحدة في القسم). <b>العارض الخياري:</b> لموضع يلزم فيه فهم أن

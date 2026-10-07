@@ -1,0 +1,70 @@
+{
+  "before_sim_1x_short": {
+    "cardClientW": 288,
+    "cardScrollW": 288,
+    "numW": 140,
+    "numH": 44,
+    "overflowWrap": "normal",
+    "numInsideCard": true,
+    "text": "1,240.50"
+  },
+  "before_sim_200pct_16digits": {
+    "cardClientW": 288,
+    "cardScrollW": 288,
+    "numW": 641,
+    "numH": 88,
+    "overflowWrap": "normal",
+    "numInsideCard": false,
+    "text": "1234567890123456"
+  },
+  "board_page_320_200pct": {
+    "after_fix": {
+      "sw": 344,
+      "cw": 320
+    },
+    "before_sim": {
+      "sw": 428,
+      "cw": 320
+    },
+    "scan_after_fix": {
+      "offenders": 0,
+      "sample": []
+    },
+    "scan_before_sim_offenders": {
+      "offenders": 14,
+      "sample": [
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__num",
+          "left": 44,
+          "right": 346
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__unit",
+          "left": 354,
+          "right": 381
+        },
+        {
+          "tag": "SPAN",
+          "cls": "m-stat__delta m-stat__delta--up m-stat__delta--ton",
+          "left": 389,
+          "right": 479
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": 389,
+          "right": 403
+        },
+        {
+          "tag": "use",
+          "cls": "[object SVGAnimatedString]",
+          "left": 393,
+          "right": 400
+        }
+      ]
+    },
+    "note": "قبل الإصلاح (قيم محسوبة أصلية): 428>320 — يطابق رقم تدقيق D2 حرفيًا، مع عناصر m-stat__unit/m-stat__delta تخرج فعليًا عن إطار العرض (يسار 354..479). بعد الإصلاح: صفر عنصر خارج إطار العرض (مسح rect كامل) — الرقم يلتف داخل البطاقة؛ قراءة scrollWidth الظاهرة 344 محاسبة RTL لأصل قياس التمرير بلا فيض مرئي (صفر عناصر خارج العرض)، وفيض m-stat الفعلي زال."
+  }
+}

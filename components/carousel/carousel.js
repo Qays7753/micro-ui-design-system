@@ -84,6 +84,47 @@
 
   var stateOf = new WeakMap();
 
+  /* ---------- SUI-025 (REPAIR-R1 2026-10-07): رصد عرض العارض — نفس نمط R3-UI01/SUI-007 ----------
+     عقد المواصفة: التوسيط يُقاس عند أول كشف لعارض كان مخفيًا (إخفاء ثم
+     كشف: display:none/hidden ثم الظهور) وعند تغيّر عرض الحاوية (أب أو
+     نافذة) — بلا انتظار أول تفاعل. أعيد إنتاج العيب قبل الإصلاح: كشف
+     بعد إخفاء يترك transform=0 والبطاقة ملاصقة للحافة (حواف 72/0)، وتغيّر
+     عرض الأب بلا window-resize يترك هندسة قديمة (بطاقة تنزلق خارج القناع
+     بحافة سالبة). مراقب ResizeObserver واحد لكل عارض (WeakMap — التهيئة
+     المزدوجة لـinit() لا تنشئ مراقبًا ثانيًا) يراقب العرض فقط؛ الاختفاء
+     (عرض 0) لا يعيد القياس (سياسة العرض 0) والإظهار يطلق الرصد بنفسه.
+     إعادة التوسيط تحفظ الفهرس والتركيز (goToIndex لنفس الفهرس: مزامنة
+     صامتة بلا حدث micro-carousel:change ولا طي توسعة ولا نقل تركيز).
+     بيئة بلا ResizeObserver تبقي سلوك window-resize فقط (حد موثق).
+     window.MicroCarousel.disconnect(root) يفصل المراقبين لدورة التنظيف. */
+  var viewportObservers = new WeakMap(); /* carousel → ResizeObserver وحيد */
+  var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
+
+  function recenterCarousel(carousel, st) {
+    if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
+    st.raf = requestAnimationFrame(function () {
+      st.raf = null;
+      if (st.count <= 0) return;
+      var w = st.viewport.clientWidth;
+      if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      st.lastWidth = w;
+      goToIndex(carousel, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
+    });
+  }
+
+  function observeViewport(carousel, st) {
+    if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
+    if (viewportObservers.has(carousel)) return; /* مراقب واحد لكل عارض — علامة الوجود */
+    var ro = new ResizeObserver(function (entries) {
+      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
+      if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
+      recenterCarousel(carousel, st);
+    });
+    ro.observe(st.viewport);
+    viewportObservers.set(carousel, ro);
+  }
+
   function parts(carousel) {
     return {
       root: carousel,
@@ -421,15 +462,12 @@
     });
   }
 
-  /* ---------- إعادة القياس (بلا تبديل بطاقات) ---------- */
+  /* ---------- إعادة القياس (بلا تبديل بطاقات) ----------
+     SUI-025: window-resize يُوجّه عبر recenterCarousel (دمج rAF + حماية
+     EPS) والرصد ResizeObserver يغطي الكشف وتغيّر عرض الحاوية الأب. */
   function wireResize(carousel, st) {
-    window.addEventListener('resize', function () {
-      if (st.raf) return;
-      st.raf = requestAnimationFrame(function () {
-        st.raf = null;
-        if (st.count > 0) goToIndex(carousel, st.index, { animate: false });
-      });
-    });
+    window.addEventListener('resize', function () { recenterCarousel(carousel, st); });
+    observeViewport(carousel, st);
   }
 
   function setup(carousel) {
@@ -466,10 +504,9 @@
     }
 
     update(carousel, st);
-    /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) */
-    requestAnimationFrame(function () {
-      goToIndex(carousel, st.index, { animate: false });
-    });
+    /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) —
+       يخزّن عرض العرض الأول في lastWidth (SUI-025) */
+    recenterCarousel(carousel, st);
   }
 
   function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
@@ -485,6 +522,21 @@
     getIndex: function (carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;
+    },
+    /* SUI-025: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
+       ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
+       الجذر نفسه إن كان عارضًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+    disconnect: function (root) {
+      var scope = root || document;
+      var items = [];
+      if (scope.matches && scope.matches('[data-carousel]')) items.push(scope);
+      Array.prototype.push.apply(items, scope.querySelectorAll('[data-carousel]'));
+      items.forEach(function (carousel) {
+        var ro = viewportObservers.get(carousel);
+        if (ro) { ro.disconnect(); viewportObservers.delete(carousel); }
+        var st = stateOf.get(carousel);
+        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+      });
     }
   };
 

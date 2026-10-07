@@ -1,0 +1,13 @@
+PASS  العينة المسار الافتراضي: لا 'mystery' في DOM كله (ولا في مفتاح الكالندر) — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'hasMysteryRow': False, 'hasInjRow': False, 'mysteryInDom': False, 'injectionLiteral': False, 'rootB': 0, 'rootImg': 0, 'xssArmed': False, 'storeC
+PASS  العينة المسار الافتراضي: لا صفوف الحالات الحدية (od-10/od-inj) ولا نص حقن — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'hasMysteryRow': False, 'hasInjRow': False, 'mysteryInDom': False, 'injectionLiteral': False, 'rootB': 0, 'rootImg': 0, 'xssArmed': False, 'storeC
+PASS  العينة المسار الافتراضي: البذرة 22 طلبًا بمفاتيح معروفة فقط — {'storeCount': 22, 'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'labels': ['تم التسليم', 'قيد التنفيذ']}
+PASS  وضع ?fixtures=edge: صف od-10 (مفتاح 'mystery') وصف od-inj (عنوان محقون) حاضران — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميلmystery', 'hasMysteryRow': True, 'hasInjRow': True, 'mysteryInDom': True, 'injectionLiteral': True, 'rootB': 0, 'rootImg': 0, 'xssArmed': False, 'sto
+PASS  وضع ?fixtures=edge: المفتاح المجهول محايد بنصه في المفتاح والصف — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميلmystery'}
+PASS  وضع ?fixtures=edge: الحقن نص حرفي — لا b/img وwindow.__xss غير مفعّل — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميلmystery', 'hasMysteryRow': True, 'hasInjRow': True, 'mysteryInDom': True, 'injectionLiteral': True, 'rootB': 0, 'rootImg': 0, 'xssArmed': False, 'sto
+PASS  وضع ?fixtures=edge: المخزن 24 (22 + حالتا حدود) — {'storeCount': 24}
+PASS  F03 المسار الافتراضي: لا 'mystery' في DOM (مفتاح الكالندر نظيف) — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'hasMysteryRow': False, 'hasInjRow': False, 'mysteryInDom': False, 'injectionLiteral': False, 'storeCount': 22}
+PASS  F03 المسار الافتراضي: لا صفوف الحالات الحدية ولا نص حقن — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'hasMysteryRow': False, 'hasInjRow': False, 'mysteryInDom': False, 'injectionLiteral': False, 'storeCount': 22}
+PASS  F03 المسار الافتراضي: الموصل 22 طلبًا (بذرة نظيفة) — {'legendText': 'قيد التنفيذتم التسليمبانتظار العميل', 'hasMysteryRow': False, 'hasInjRow': False, 'mysteryInDom': False, 'injectionLiteral': False, 'storeCount': 22}
+PASS  صفر أخطاء JavaScript في كل الصفحات أعلاه
+
+# النتيجة: 11/11

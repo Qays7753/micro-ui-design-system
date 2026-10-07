@@ -61,8 +61,11 @@
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onRecovery !== 'function') return;
       Promise.resolve().then(function () { return current.onRecovery(); })
-        .then(function () { setMessage(form, 'تم تمرير طلب المساعدة للمعالج المحدد.', 'info'); })
-        .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذر تنفيذ الطلب.', 'error'); });
+        .then(function (result) {
+          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها، وإلا رسالة المكوّن البسيطة */
+          setMessage(form, (result && typeof result.message === 'string' && result.message) || 'تم إرسال طلب المساعدة.', 'info');
+        })
+        .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر إرسال طلب المساعدة.', 'error'); });
     });
     providers.forEach(function (button) {
       button.addEventListener('click', function () {
@@ -71,8 +74,8 @@
         var handler = current.providers && current.providers[key];
         if (typeof handler !== 'function') return;
         Promise.resolve().then(function () { return handler(); })
-          .then(function () { setMessage(form, 'تم تمرير الطلب إلى المعالج المحدد.', 'info'); })
-          .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذر تنفيذ الطلب.', 'error'); });
+          .then(function () { setMessage(form, 'تم الدخول بنجاح.', 'info'); })
+          .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر تنفيذ الدخول.', 'error'); });
       });
     });
 
@@ -92,7 +95,7 @@
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, 'تعذر استخدام نموذج الدخول: حقول البريد وكلمة المرور غير مكتملة.', 'error');
+        setMessage(form, 'تعذّر تجهيز نموذج الدخول — تأكد من اكتمال حقوله.', 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -109,20 +112,24 @@
                 : 'تحقق من كلمة المرور المطلوبة.');
         });
         setMessage(form, 'تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.', 'error');
-        if (invalid[0].reportValidity) invalid[0].reportValidity();
+        /* SUI-014: قناة خطأ واحدة — رسالة المكوّن المرتبطة بالحقل + aria-invalid
+           + تركيز الحقل الأول. لا نستدعي reportValidity() فلا فقاعة أصلية
+           ثانية بلغة النظام فوق الرسالة العربية (العرض البصري للفقاعة نفسها
+           يحتاج متصفحًا مرئيًا — موثق NOT RUN). */
         invalid[0].focus();
         return;
       }
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
-        setMessage(form, 'عرض فقط: لم تُرسل البيانات؛ لا توجد خدمة مصادقة موصولة.', 'info');
+        /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
+        setMessage(form, 'هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.', 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
       form.setAttribute('aria-busy', 'true');
       var submit = form.querySelector('[type="submit"]');
-      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تمرير الطلب' });
-      setMessage(form, 'جارٍ تمرير الطلب إلى المعالج المحدد.', 'info');
+      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تسجيل الدخول' });
+      setMessage(form, 'جارٍ التحقق من بيانات الدخول…', 'info');
       Promise.resolve().then(function () {
         return current.onSubmit({
           email: email ? email.value : '',
@@ -130,9 +137,10 @@
         });
       }).then(function (result) {
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
-        setMessage(form, 'تم تمرير الطلب للمعالج؛ نتيجة الدخول يحددها المستهلك.', 'info');
+        /* SUI-013: النتيجة مسؤولية المستهلك — بصياغة بشرية */
+        setMessage(form, 'تم التحقق من بيانات الدخول.', 'info');
       }).catch(function (error) {
-        setMessage(form, error && error.message ? error.message : 'تعذر تمرير الطلب؛ حاول مرة أخرى.', 'error');
+        setMessage(form, error && error.message ? error.message : 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.', 'error');
       }).then(function () {
         form.dataset.microAccessBusy = 'false';
         form.removeAttribute('aria-busy');

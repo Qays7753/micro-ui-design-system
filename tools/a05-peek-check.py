@@ -2,7 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 Micro UI — فحص مقارنة A05 (شريط المعلومات الحالي مقابل variant peek). من الجذر:
-  python3 tools/a05-peek-check.py
+  python3 tools/a05-peek-check.py [--out DIR] [--port PORT]
+SAMSUNG-ONEUI-REPAIR-R1 (الوكيل 4 — جولة الرجعية 2026-10-07): وسائط
+  --out/--port اختيارية لإعادة تشغيل الرجعية بمخرجات معزولة (أدلة
+  evidence/agent4/regression/) دون الكتابة فوق الأدلة التاريخية في
+  reviews/UI-COMPLETION/، ولتثبيت الخادم على منفذ نطاق الوكيل 4
+  (4400-4419). الافتراضات كما كانت.
 التغطية بعد R8 (مراجعة CHATGPT-REVIEW-R1):
   - الشريط الحالي: لا تتبع أثناء الحركة (الانتقال بعد pointerup).
   - الـvariant: peek على بطاقة وسطية (الجارين ظاهران) واستقرار الطرفين.
@@ -20,6 +25,7 @@ Micro UI — فحص مقارنة A05 (شريط المعلومات الحالي �
 الأدلة: reviews/UI-COMPLETION/verification-a05.txt + لقطات.
 بيئة: Playwright + Chromium headless — لا لمس حقيقي ولا قارئ شاشة.
 """
+import argparse
 import http.server
 import subprocess
 import sys
@@ -60,10 +66,12 @@ CARD = ('<div class="m-info-strip__slide"><article class="m-info-card">'
         '<span class="m-info-card__unit">وحدة</span></div>%s</article></div>')
 
 
-def main():
+def main(out_dir: Path = OUT, port: int = 0):
+    global OUT
+    OUT = out_dir
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "screenshots").mkdir(exist_ok=True)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), http.server.SimpleHTTPRequestHandler)
     server.daemon_threads = True
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_address[1]}"
@@ -520,4 +528,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    _ap = argparse.ArgumentParser()
+    _ap.add_argument("--out", default=str(OUT),
+                     help="دليل الإخراج (الافتراضي reviews/UI-COMPLETION التاريخي)")
+    _ap.add_argument("--port", type=int, default=0,
+                     help="منفذ الخادم (0 = تلقائي؛ أثناء REPAIR-R1 استخدم 4400-4419)")
+    _args = _ap.parse_args()
+    main(Path(_args.out).resolve(), _args.port)

@@ -31,7 +31,13 @@
   <main class="ocal-page" id="ocal-page">
     <header class="ocal-page__bar">
       <h1 class="ocal-page__title" id="ocal-demo-title" tabindex="-1">الطلبات المجدولة — عينة مستقلة</h1>
-      <button type="button" class="ocal-btn ocal-btn--primary" id="ocal-demo-add">إضافة طلب</button>
+      <div class="ocal-page__actions">
+        <!-- SUI-009 (REPAIR-R1): وضع فحص صريح لحالات الحدود (fixtures معزولة)
+             — ليس جزءًا من تجربة المستخدم الافتراضية؛ البذرة الافتراضية نظيفة. -->
+        <button type="button" class="ocal-btn ocal-btn--secondary" id="ocal-demo-fixtures"
+                aria-pressed="false" title="يضيف طلبات اختبار الحالات الحدية إلى الجدول — وضع الفحص فقط">حالات الحدود (وضع الفحص)</button>
+        <button type="button" class="ocal-btn ocal-btn--primary" id="ocal-demo-add">إضافة طلب</button>
+      </div>
     </header>
 
     <!-- جذر مكوّن جدول الطلبات -->

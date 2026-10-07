@@ -108,10 +108,16 @@ def ui_purity_ok(snap):
     return all(not any(f in t for f in FORBIDDEN_UI) for t in texts)
 
 
-def main():
+def main(out_dir: Path = None, port: int = 0):
+    global OUT
+    # SAMSUNG-ONEUI-REPAIR-R1 (الوكيل 4 — رجعية 2026-10-07): --out/--port
+    # لمخرجات معزولة دون الكتابة فوق reviews/UI-COMPLETION التاريخي
+    # + منفذ نطاق الوكيل 4 (4400-4419). الافتراضات كما كانت.
+    if out_dir is not None:
+        OUT = out_dir
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "screenshots").mkdir(exist_ok=True)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), http.server.SimpleHTTPRequestHandler)
     server.daemon_threads = True
     threading.Thread(target=server.serve_forever, daemon=True).start()
     BASE = f"http://127.0.0.1:{server.server_address[1]}"
@@ -303,4 +309,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    _ap = argparse.ArgumentParser()
+    _ap.add_argument("--out", default="", help="دليل إخراج معزول (افتراضي: reviews/UI-COMPLETION التاريخي)")
+    _ap.add_argument("--port", type=int, default=0, help="منفذ الخادم (0 تلقائي؛ REPAIR-R1: 4400-4419)")
+    _a = _ap.parse_args()
+    main(Path(_a.out).resolve() if _a.out else None, _a.port)

@@ -390,7 +390,7 @@
 
       <section class="m-section" id="f03-detail-activity">
         <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-detail-activity-body">
-          <span class="m-section__title">سجل النشاط</span>
+          <span class="m-section-title">سجل النشاط</span>
           <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
         </button>
         <div class="m-section__body" id="f03-detail-activity-body" hidden>
@@ -584,7 +584,7 @@
 
       <section class="m-section" id="f03-rep-extra">
         <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-rep-donut-body">
-          <span class="m-section__title">توزيع إضافي (دونات)</span>
+          <span class="m-section-title">توزيع إضافي (دونات)</span>
           <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
         </button>
         <div class="m-section__body" id="f03-rep-donut-body" hidden>
@@ -720,11 +720,6 @@
       </div>
     </div>
 
-    <!-- تنبيه مكتمل الأفعال: نتائج الحذف الجماعي — لا معلومة مطلوبة للاستكمال -->
-    <div class="m-toast" id="f03-toast" hidden>
-      <span class="m-toast__text" id="f03-toast-text"></span>
-      <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
-    </div>
     </section>
   </main>
 
@@ -744,11 +739,20 @@
     </button>
   </nav>
 
-  <!-- تذييل قصير: بقاء البيانات بصدق + مدخل وضع المراجعة الوحيد -->
+  <!-- تذييل قصير: بقاء البيانات بصدق + مدخل وضع المراجعة الوحيد
+       (SUI-029: المدخل يُخفى في شاشة الدخول — أداة الفحص للفترة بعد الدخول) -->
   <footer class="f03-foot">
     <p class="f03-foot__text" id="f03-storage-line"></p>
     <button type="button" class="f03-foot__link" id="f03-review-open">وضع المراجعة</button>
   </footer>
+
+  <!-- تنبيه مكتمل الأفعال (SUI-001): على مستوى التطبيق خارج كل الوجهات —
+       مستطيل >0 دائمًا، بلا role/aria-live (قناة الإعلان الواحدة هي المنطقة
+       الحية)، والإزاحة السفلية تحسب --f03-navbar-h المقيسة ديناميكيًا -->
+  <div class="m-toast f03-app-toast" id="f03-toast" hidden>
+    <span class="m-toast__text" id="f03-toast-text"></span>
+    <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+  </div>
 
   <!-- ================= طبقة منتقي الفئة — B07 + MicroPicker كما هما ===== -->
   <div class="m-layer-backdrop" data-for="f03-cat-layer" hidden id="f03-cat-backdrop"></div>
@@ -762,7 +766,9 @@
     </div>
     <div class="m-layer__body">
       <p class="f03-live" id="f03-cat-live" role="status"></p>
-      <div class="m-note m-note--warning f03-drop-note" role="alert" id="f03-cat-drop-note" hidden>
+      <!-- SUI-010 (عقد B06 المحدث): رسالة زوال الفئة = تحذير → role=status —
+           قابلة للتصرف لكن ليست خطأً؛ القناة واحدة (هذه الرسالة لحدث الزوال) -->
+      <div class="m-note m-note--warning f03-drop-note" role="status" id="f03-cat-drop-note" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
         <div class="m-note__text">
           <p class="m-note__body" id="f03-cat-drop-note-text"></p>

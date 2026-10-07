@@ -363,6 +363,38 @@
     return n + ' عنصر.';
   }
 
+  /* ---------- SUI-002: قياس فعلي لارتفاع شريط التنقل ----------
+     ResizeObserver على عنصر الـnavbar نفسه يرصد تغير content-box
+     (خط/محتوى/إظهار) ويحدّث متغير CSS --f03-navbar-h على جذر المستند
+     (:root)؛ الموضعان الثابتان سابقًا (#f03-select-bar و.f03-foot)
+     وإزاحة التوست (SUI-001) تستهلكه — لا سطر load/resize.
+     - منع init مزدوج: مراقب واحد مخزن على العنصر (__f03NavbarRO)
+       وإعادة الاستدعاء آمنة (لا تكرار مراقبين).
+     - سياسة الحالة المخفية: navbar مخفي (rect 0) → لا تحديث — تبقى
+       آخر قيمة مقيسة (أو الاحتياطية 53px قبل أول قياس) فلا يقفز
+       التخطيط عند العودة ولا يتراكب شيء عند ظهوره.
+     - التنظيف: pagehide يفك المراقب عند مغادرة المستند. */
+  var navbarObserver = null;
+
+  function observeNavbarHeight() {
+    if (!el.navbar || !window.ResizeObserver) return;
+    if (navbarObserver) return; /* مراقب واحد لا يتكرر */
+    var apply = function () {
+      var h = el.navbar.getBoundingClientRect().height;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--f03-navbar-h', h + 'px');
+      }
+      /* h=0 (مخفي): آخر قيمة مقيسة تبقى — سياسة موثقة أعلاه */
+    };
+    navbarObserver = new ResizeObserver(apply);
+    navbarObserver.observe(el.navbar); /* content-box: يرصد تغير الخط والمحتوى */
+    el.navbar.__f03NavbarRO = navbarObserver;
+    apply();
+    window.addEventListener('pagehide', function () {
+      if (navbarObserver) navbarObserver.disconnect();
+    });
+  }
+
   /* ---------- تبديل العروض: تركيز وتمرير وnavbar موثقة ---------- */
   var MAIN_VIEWS = ['home', 'list', 'reports', 'account'];
 
@@ -377,6 +409,9 @@
     /* navbar للوجهات الأربع الرئيسية فقط — التيار aria-current */
     var isMain = MAIN_VIEWS.indexOf(name) >= 0;
     el.navbar.hidden = !isMain;
+    /* SUI-029: أداة المراجعة خارج مسار الدخول — مدخل التذييل يظهر بعد
+       الدخول فقط (الوجهات ما بعد البوابة)؛ الطبقة نفسها وأدواتها كما هي */
+    el.reviewOpen.hidden = (name === 'gateway');
     if (isMain) {
       Object.keys(el.navItems).forEach(function (k) {
         if (k === name) el.navItems[k].setAttribute('aria-current', 'page');
@@ -672,6 +707,11 @@
       lab.appendChild(text);
       el.filterCats.appendChild(lab);
     });
+    /* SUI-015: أول تحكم فعلي (أول خانة فئة) هو هدف التركيز عند فتح
+       اللوحة — عقد data-autofocus في B07 بدل زر الإغلاق (رأس اللوحة).
+       بلا فئات (حالة فراغ) يبقى سلوك اللوحة الافتراضي (أول تفاعلي). */
+    var firstCat = el.filterCats.querySelector('input[type="checkbox"]');
+    if (firstCat) firstCat.setAttribute('data-autofocus', '');
   }
 
   el.filterBtn.addEventListener('click', function () {
@@ -974,9 +1014,11 @@
   function requestDelete(ids, single, trigger) {
     state.deleteConfirmed = false;
     state.deleteTarget = { ids: ids, single: single };
+    /* SUI-023 (نمط S26): سؤال واضح يخاطب قرار المستخدم مع بيان الأثر
+       بصدق؛ الإلغاء يبقى الخيار الافتراضي الآمن محفوظ التركيز (HTML) */
     el.deleteText.textContent = single
-      ? 'سيُحذف «' + (store.get(ids[0]) || { name: '—' }).name + '» من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.'
-      : 'سيُحذف ' + ids.length + (ids.length === 1 ? ' عنصر' : ' عناصر') + ' من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.';
+      ? 'هل تريد حذف «' + (store.get(ids[0]) || { name: '—' }).name + '»؟ سيُحذف نهائيًا من هذه التجربة، ولا يمكن التراجع بعد التأكيد.'
+      : 'هل تريد حذف ' + ids.length + (ids.length === 1 ? ' عنصر' : ' عناصر') + '؟ سيُحذف نهائيًا من هذه التجربة، ولا يمكن التراجع بعد التأكيد.';
     window.MicroNavigation.openLayer(el.deleteDialog, { trigger: trigger });
   }
 
@@ -1114,12 +1156,18 @@
     el.opNote.hidden = false;
     el.opNote.className = 'm-note m-note--' + variant;
     el.opNote.setAttribute('data-op-state', variant);
+    /* SUI-010 (عقد B06 المحدث): الخطأ الثابت القابل للتصرف = role=alert
+       (إعلان واحد عند الظهور عبر دور الرسالة نفسها)؛ النجاح/المعلومة/
+       التحذير = status — لا إعلان مقاطع آلي لكل تحذير (WCAG Status
+       Messages / ARIA Alert Pattern — راجع مواصفة messages). */
+    el.opNote.setAttribute('role', variant === 'error' ? 'alert' : 'status');
     el.opTitle.textContent = title;
     el.opBody.textContent = body;
   }
   function clearOpMessage() {
     el.opNote.hidden = true;
     el.opNote.setAttribute('data-op-state', 'idle');
+    el.opNote.setAttribute('role', 'status');
     el.opTitle.textContent = '';
     el.opBody.textContent = '';
   }
@@ -2302,6 +2350,7 @@
       return state.settingScenario;
     },
     settlePendingSetting: settlePendingSetting,
+    observeNavbarHeight: observeNavbarHeight, /* SUI-002: للفحص — إعادة آمنة لا تكرر المراقب */
     inspect: inspect
   };
 
@@ -2524,6 +2573,8 @@
       storage: store.storageStatus(),
       storageLineText: el.storageLine.textContent,
       navbarVisible: !el.navbar.hidden,
+      navbarH: document.documentElement.style.getPropertyValue('--f03-navbar-h') || null, /* SUI-002 */
+      navbarRO: navbarObserver ? 1 : 0, /* SUI-002: عدد المراقبين (مراقب واحد) */
       sim: connector.readout(),
       events: state.events.slice()
     };
@@ -2541,6 +2592,7 @@
     buildFilterCats();
     bindSearchAnnouncement();
     bindGateway();
+    observeNavbarHeight(); /* SUI-002: قبل أول عرض — يقيس عند كشف navbar */
     /* مزامنة مفاتيح الإعدادات من المصدر الواحد */
     var s = store.settings();
     var sw1 = el.accountLayer.querySelector('[data-account-setting="includeStoppedInReports"]');

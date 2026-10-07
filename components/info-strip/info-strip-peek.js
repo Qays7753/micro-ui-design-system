@@ -40,6 +40,46 @@
 
   var stateOf = new WeakMap();
 
+  /* ---------- SUI-007 (REPAIR-R1): رصد عرض العارض — نمط R3-UI01 من data.js ----------
+     عقد المواصفة (A05): التوسيط يُقاس عند أول كشف لوجهة مخفية وعند تغيّر
+     عرض العارض (حاوية أب أو نافذة) — بلا انتظار أول تفاعل من المستخدم.
+     مراقب ResizeObserver واحد لكل شريط (WeakMap — التهيئة المزدوجة
+     لـinit() لا تنشئ مراقبًا ثانيًا) يراقب العرض فقط؛ الاختفاء (عرض 0)
+     لا يعيد القياس (سياسة العرض 0 الموثقة) والإظهار يطلق الرصد بنفسه
+     فيعيد التوسيط. إعادة التوسيط تحفظ الفهرس والتركيز: goToIndex
+     لنفس الفهرس مزامنة صامتة بلا حدث micro-info-peek:change ولا نقل
+     تركيز. بيئة بلا ResizeObserver تبقي سلوك window-resize فقط
+     (العقد القديم الموثق — المستهلك يعيد القياس عند الفتح).
+     window.MicroInfoPeek.disconnect(root) يفصل المراقبين تحت جذر
+     لدورة التنظيف (init يعيد الإلحاق عند الحاجة). */
+  var viewportObservers = new WeakMap(); /* strip → ResizeObserver وحيد */
+  var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
+
+  function recenterStrip(strip, st) {
+    if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
+    st.raf = requestAnimationFrame(function () {
+      st.raf = null;
+      if (st.count <= 0) return;
+      var w = st.viewport.clientWidth;
+      if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      st.lastWidth = w;
+      goToIndex(strip, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
+    });
+  }
+
+  function observeViewport(strip, st) {
+    if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
+    if (viewportObservers.has(strip)) return; /* مراقب واحد لكل شريط — علامة الوجود */
+    var ro = new ResizeObserver(function (entries) {
+      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
+      if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
+      recenterStrip(strip, st);
+    });
+    ro.observe(st.viewport);
+    viewportObservers.set(strip, ro);
+  }
+
   function rtlOf(strip) {
     return getComputedStyle(strip).direction === 'rtl';
   }
@@ -288,13 +328,11 @@
     }, true);
     wireKeys(strip, st);
 
-    window.addEventListener('resize', function () {
-      if (st.raf) return;
-      st.raf = requestAnimationFrame(function () {
-        st.raf = null;
-        if (st.count > 0) goToIndex(strip, st.index, { animate: false });
-      });
-    });
+    /* SUI-007: window-resize يبقى (احتياط لبيئة بلا ResizeObserver
+       ولتغيّر النافذة) ويُوجّه عبر recenterStrip نفسها — حماية EPS
+       تمنع العمل المزدوج مع الرصد (rAF واحد لكل نبضة). */
+    window.addEventListener('resize', function () { recenterStrip(strip, st); });
+    observeViewport(strip, st);
 
     if (reduceQuery && reduceQuery.addEventListener) {
       reduceQuery.addEventListener('change', function () {
@@ -303,10 +341,9 @@
     }
 
     update(strip, st);
-    /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) */
-    requestAnimationFrame(function () {
-      goToIndex(strip, st.index, { animate: false });
-    });
+    /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) — يخزّن
+       عرض العرض الأول في lastWidth (SUI-007) */
+    recenterStrip(strip, st);
   }
 
   function next(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index + 1); }
@@ -324,6 +361,21 @@
     getIndex: function (strip) {
       var st = stateOf.get(strip);
       return st ? st.index : -1;
+    },
+    /* SUI-007: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
+       ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
+       الجذر نفسه إن كان شريطًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+    disconnect: function (root) {
+      var scope = root || document;
+      var strips = [];
+      if (scope.matches && scope.matches('[data-info-peek]')) strips.push(scope);
+      Array.prototype.push.apply(strips, scope.querySelectorAll('[data-info-peek]'));
+      strips.forEach(function (strip) {
+        var ro = viewportObservers.get(strip);
+        if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
+        var st = stateOf.get(strip);
+        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+      });
     }
   };
 

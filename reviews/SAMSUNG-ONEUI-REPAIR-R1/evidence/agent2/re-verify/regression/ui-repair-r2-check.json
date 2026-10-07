@@ -1,0 +1,684 @@
+{
+  "meta": {
+    "commit": "",
+    "tree": "",
+    "source_clean": true,
+    "dirty_sample": [],
+    "branch": "",
+    "browser": "143.0.7499.4",
+    "zoom_type": "محاكاة نص ×2 بمرورين نظيفين (لا مضاعفة موريثة) — ليست native zoom",
+    "widths": [
+      320,
+      360,
+      390,
+      430
+    ],
+    "declared_bounds": {
+      "bars": 13.0,
+      "line": 12.0
+    },
+    "checked_at": "2026-10-07T21:20:49.743100+00:00"
+  },
+  "summary": {
+    "total": 130,
+    "passed": 130,
+    "failed": 0,
+    "not_run": [
+      "Samsung Galaxy S25 حقيقي وSamsung Internet ولوحة نظام وسيف إريا واللمس",
+      "TalkBack/VoiceOver وقارئ شاشة فعلي",
+      "WebKit/Safari وnative zoom (التكبير هنا محاكاة نص ×2 بمرورين نظيفين معلنة)"
+    ]
+  },
+  "results": [
+    {
+      "name": "R2-01[src w320] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": false, \"vf\": {\"l\": 16, \"t\": 304, \"r\": 304, \"b\": 413.9, \"w\": 288, \"h\": 110}, \"qf\": {\"l\": 118, \"t\": 425.9, \"r\": 304, \"b\": 507.9, \"w\": 186, \"h\": 82}}"
+    },
+    {
+      "name": "R2-01[src w320] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[src w320] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 247, \"t\": 457.9, \"r\": 295, \"b\": 505.9, \"w\": 48, \"h\": 48}, {\"l\": 127, \"t\": 457.9, \"r\": 175, \"b\": 505.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-01[src w360] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 344, \"b\": 433.9, \"w\": 130, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[src w360] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[src w360] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[src w360] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 360, \"docW\": 360}"
+    },
+    {
+      "name": "R2-01[src w390] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 374, \"b\": 433.9, \"w\": 160, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[src w390] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[src w390] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[src w390] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 390, \"docW\": 390}"
+    },
+    {
+      "name": "R2-01[src w430] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 414, \"b\": 433.9, \"w\": 200, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[src w430] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[src w430] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[src w430] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 430, \"docW\": 430}"
+    },
+    {
+      "name": "R2-01[src] خطأ القيمة يظهر ويحل محل المساعدة والتراص ثابت",
+      "ok": true,
+      "detail": "{\"e\": {\"helpHidden\": true, \"msgShown\": true, \"msgText\": \"أدخل رقمًا صحيحًا للقيمة، أو اتركها فارغة لقيمة مجهولة.\", \"hasError\": true}, \"sameRow\": true}"
+    },
+    {
+      "name": "R2-01[src zoom200] يلتف الصف عند عدم اتساع القراءة وتبقى القراءة كاملة",
+      "ok": true,
+      "detail": "{\"controlsSameRow\": false, \"valueFits\": true, \"qtyFits\": true, \"docScrollW\": 360, \"docW\": 360, \"vi\": {\"l\": 83, \"t\": 169.9, \"r\": 327, \"b\": 221.9, \"w\": 244, \"h\": 52}, \"qi\": {\"l\": 188, \"t\": 375.9, \"r\": 283, \"b\": 427.9, \"w\": 95, \"h\": 52}, \"steps\": [{\"l\": 287, \"t\": 377.9, \"r\": 335, \"b\": 425.9, \"w\": 48, \"h\": 48}, {\"l\": 136, \"t\": 377.9, \"r\": 184, \"b\": 425.9, \"w\": 48, \"h\": 48}]}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 0.9",
+      "ok": true,
+      "detail": "{\"minEff\": 13, \"effs\": [13]}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 0.9",
+      "ok": true,
+      "detail": "{\"minEff\": 12, \"effs\": [12]}"
+    },
+    {
+      "name": "R2-02[src w320] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.025",
+      "ok": true,
+      "detail": "{\"minEff\": 13.32, \"effs\": [13.32]}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.025",
+      "ok": true,
+      "detail": "{\"minEff\": 12.3, \"effs\": [12.3]}"
+    },
+    {
+      "name": "R2-02[src w360] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.1187",
+      "ok": true,
+      "detail": "{\"minEff\": 14.54, \"effs\": [14.54]}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.1187",
+      "ok": true,
+      "detail": "{\"minEff\": 13.42, \"effs\": [13.42]}"
+    },
+    {
+      "name": "R2-02[src w390] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.2437",
+      "ok": true,
+      "detail": "{\"minEff\": 16.17, \"effs\": [16.17]}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.2437",
+      "ok": true,
+      "detail": "{\"minEff\": 14.92, \"effs\": [14.92]}"
+    },
+    {
+      "name": "R2-02[src w430] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[src long w320] f03-rep-bars: أسماء طويلة/تواريخ — الحد المعلن ولا اصطدام",
+      "ok": true,
+      "detail": "{\"minEff\": 13, \"collisions\": []}"
+    },
+    {
+      "name": "R2-02[src long w320] f03-rep-line: أسماء طويلة/تواريخ — الحد المعلن ولا اصطدام",
+      "ok": true,
+      "detail": "{\"minEff\": 12, \"collisions\": []}"
+    },
+    {
+      "name": "R2-02[src long w320 zoom200] f03-rep-bars: لا اصطدام ولا فيض صفحة",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-02[src long w320 zoom200] f03-rep-line: لا اصطدام ولا فيض صفحة",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-02[src] الدونات 148 الثابتة محمية (خارج التعويض)",
+      "ok": true,
+      "detail": "{\"w\": 148, \"vb\": \"0 0 148 148\"}"
+    },
+    {
+      "name": "R3-01[src resize430-320] f03-rep-bars: رصد العرض يعيد القياس بلا نقرة ولا render يدوي (الحد 13.0px)",
+      "ok": true,
+      "detail": "{\"declared\": 13.0, \"visibleBarsLine\": 2, \"before\": {\"minEff\": 16.17, \"plotW\": 398, \"scale\": 1.2437, \"nTexts\": 6}, \"after\": {\"minEff\": 13, \"plotW\": 288, \"scale\": 0.9, \"nTexts\": 6, \"outsideH\": 0, \"collisions\": []}}"
+    },
+    {
+      "name": "R3-01[src resize430-320] f03-rep-line: رصد العرض يعيد القياس بلا نقرة ولا render يدوي (الحد 12.0px)",
+      "ok": true,
+      "detail": "{\"declared\": 12.0, \"visibleBarsLine\": 2, \"before\": {\"minEff\": 14.92, \"plotW\": 398, \"scale\": 1.2437, \"nTexts\": 8}, \"after\": {\"minEff\": 12, \"plotW\": 288, \"scale\": 0.9, \"nTexts\": 8, \"outsideH\": 0, \"collisions\": []}}"
+    },
+    {
+      "name": "R3-02a[src w320 zoom200] f03-rep-bars: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"declared\": 13.0, \"visibleBarsLine\": 2, \"nTexts\": 6, \"minEff\": 26, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02a[src w320 zoom200] f03-rep-line: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"declared\": 12.0, \"visibleBarsLine\": 2, \"nTexts\": 8, \"minEff\": 24, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02b[src w320 zoom200] f03-rep-bars: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"visibleBarsLine\": 2, \"nTexts\": 6, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02b[src w320 zoom200] f03-rep-line: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"visibleBarsLine\": 2, \"nTexts\": 12, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-03[src] دوائر سليمة: حالة ok وملاحظة دلالية والتشخيص على الجذر",
+      "ok": true,
+      "detail": "{\"tag\": \"valid-baseline\", \"note\": \"المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة. النطاق يصل إلى 474.\", \"state\": \"ok\", \"detail\": \"metric-circles: radius=56 — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale=declared\", \"fallbackN\": 2, \"itemsN\": 3}"
+    },
+    {
+      "name": "R2-03[src] layout=weird: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"layout=weird\", \"note\": \"تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.\", \"state\": \"invalid-layout\", \"detail\": \"metric-circles: data-layout='weird' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[src] max=bad: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"max=bad\", \"note\": \"تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.\", \"state\": \"invalid-scale\", \"detail\": \"metric-circles: data-max='bad' غير موجب أو أصغر من أكبر مقدار معلوم (473.9) — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[src] radius=0: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"radius=0\", \"note\": \"تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.\", \"state\": \"invalid-radius\", \"detail\": \"metric-circles: data-radius='0' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[src] invalid→valid على العقدة نفسها: لا يبقى تشخيص الدورة السابقة",
+      "ok": true,
+      "detail": "{\"a1\": \"ok\", \"a2\": \"ok\"}"
+    },
+    {
+      "name": "R2-03[src] المسح يعمل دون عنصر الملاحظة (حالة الدورة الحالية وحدها)",
+      "ok": true,
+      "detail": "{\"no-note-invalid\": \"invalid-layout\", \"no-note-valid\": \"ok\"}"
+    },
+    {
+      "name": "R2-03[src] unit-mismatch: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"unit-mismatch\", \"note\": \"تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.\", \"state\": \"inconsistent\", \"detail\": \"metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[src] bars-max=bad: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-max=bad\", \"note\": \"تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.\", \"state\": \"invalid-scale\", \"detail\": \"metric-bars: data-max='bad' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[src] bars-max-too-small: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-max-too-small\", \"note\": \"تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.\", \"state\": \"scale-below-known\", \"detail\": \"metric-bars: data-max=1 أصغر من أكبر مقدار معلوم (473.9) — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[src] أشرطة invalid→valid: حالة ok وشروح الوحدة/الفترة محفوظة",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-valid-again\", \"note\": \"مقياس مشترك تلقائي: حتى 473.9 د.أ · كل الفترات (أكبر مقدار معلوم).\", \"state\": \"ok\", \"detail\": \"metric-bars: scale=auto-largest-known=473.9؛ common-unit=د.أ؛ common-period=كل الفترات.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-ERR[src] صفر أخطاء صفحة",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R2-01[standalone w320] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": false, \"vf\": {\"l\": 16, \"t\": 304, \"r\": 304, \"b\": 413.9, \"w\": 288, \"h\": 110}, \"qf\": {\"l\": 118, \"t\": 425.9, \"r\": 304, \"b\": 507.9, \"w\": 186, \"h\": 82}}"
+    },
+    {
+      "name": "R2-01[standalone w320] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[standalone w320] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 247, \"t\": 457.9, \"r\": 295, \"b\": 505.9, \"w\": 48, \"h\": 48}, {\"l\": 127, \"t\": 457.9, \"r\": 175, \"b\": 505.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-01[standalone w360] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 344, \"b\": 433.9, \"w\": 130, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[standalone w360] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[standalone w360] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[standalone w360] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 360, \"docW\": 360}"
+    },
+    {
+      "name": "R2-01[standalone w390] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 374, \"b\": 433.9, \"w\": 160, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[standalone w390] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[standalone w390] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[standalone w390] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 390, \"docW\": 390}"
+    },
+    {
+      "name": "R2-01[standalone w430] تراص القيمة+الكمية بقياس مواضع التحكمات",
+      "ok": true,
+      "detail": "{\"sameRow\": true, \"vf\": {\"l\": 214, \"t\": 304, \"r\": 414, \"b\": 433.9, \"w\": 200, \"h\": 130}, \"qf\": {\"l\": 16, \"t\": 304, \"r\": 202, \"b\": 433.9, \"w\": 186, \"h\": 130}}"
+    },
+    {
+      "name": "R2-01[standalone w430] الحقلان متجاوران بفجوة موجبة",
+      "ok": true,
+      "detail": "gap=12"
+    },
+    {
+      "name": "R2-01[standalone w430] قراءة المبلغ 120.50 والكمية 9999 والوحدة داخل التحكم",
+      "ok": true,
+      "detail": "{\"valueFits\": true, \"qtyFits\": true, \"unitVisible\": true, \"unitInside\": true, \"valueTextW\": 54, \"qtyTextW\": 40}"
+    },
+    {
+      "name": "R2-01[standalone w430] زرا الخطوة ≥48px ولا فيض أفقي",
+      "ok": true,
+      "detail": "{\"steps\": [{\"l\": 145, \"t\": 335.9, \"r\": 193, \"b\": 383.9, \"w\": 48, \"h\": 48}, {\"l\": 25, \"t\": 335.9, \"r\": 73, \"b\": 383.9, \"w\": 48, \"h\": 48}], \"docScrollW\": 430, \"docW\": 430}"
+    },
+    {
+      "name": "R2-01[standalone] خطأ القيمة يظهر ويحل محل المساعدة والتراص ثابت",
+      "ok": true,
+      "detail": "{\"e\": {\"helpHidden\": true, \"msgShown\": true, \"msgText\": \"أدخل رقمًا صحيحًا للقيمة، أو اتركها فارغة لقيمة مجهولة.\", \"hasError\": true}, \"sameRow\": true}"
+    },
+    {
+      "name": "R2-01[standalone zoom200] يلتف الصف عند عدم اتساع القراءة وتبقى القراءة كاملة",
+      "ok": true,
+      "detail": "{\"controlsSameRow\": false, \"valueFits\": true, \"qtyFits\": true, \"docScrollW\": 360, \"docW\": 360, \"vi\": {\"l\": 83, \"t\": 169.9, \"r\": 327, \"b\": 221.9, \"w\": 244, \"h\": 52}, \"qi\": {\"l\": 188, \"t\": 375.9, \"r\": 283, \"b\": 427.9, \"w\": 95, \"h\": 52}, \"steps\": [{\"l\": 287, \"t\": 377.9, \"r\": 335, \"b\": 425.9, \"w\": 48, \"h\": 48}, {\"l\": 136, \"t\": 377.9, \"r\": 184, \"b\": 425.9, \"w\": 48, \"h\": 48}]}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 0.9",
+      "ok": true,
+      "detail": "{\"minEff\": 13, \"effs\": [13]}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 0.9",
+      "ok": true,
+      "detail": "{\"minEff\": 12, \"effs\": [12]}"
+    },
+    {
+      "name": "R2-02[standalone w320] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.025",
+      "ok": true,
+      "detail": "{\"minEff\": 13.32, \"effs\": [13.32]}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.025",
+      "ok": true,
+      "detail": "{\"minEff\": 12.3, \"effs\": [12.3]}"
+    },
+    {
+      "name": "R2-02[standalone w360] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.1187",
+      "ok": true,
+      "detail": "{\"minEff\": 14.54, \"effs\": [14.54]}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.1187",
+      "ok": true,
+      "detail": "{\"minEff\": 13.42, \"effs\": [13.42]}"
+    },
+    {
+      "name": "R2-02[standalone w390] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-bars: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 6, \"nRects\": 3}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-bars: الحجم الفعلي ≥ المعلن (13.0px) بمعامل CTM 1.2437",
+      "ok": true,
+      "detail": "{\"minEff\": 16.17, \"effs\": [16.17]}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-bars: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-line: عدد نصوص موجب قبل all()",
+      "ok": true,
+      "detail": "{\"nTexts\": 8, \"nRects\": 0}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-line: الحجم الفعلي ≥ المعلن (12.0px) بمعامل CTM 1.2437",
+      "ok": true,
+      "detail": "{\"minEff\": 14.92, \"effs\": [14.92]}"
+    },
+    {
+      "name": "R2-02[standalone w430] f03-rep-line: لا اصطدام ولا خروج أفقي عن الرسم",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-02[standalone long w320] f03-rep-bars: أسماء طويلة/تواريخ — الحد المعلن ولا اصطدام",
+      "ok": true,
+      "detail": "{\"minEff\": 13, \"collisions\": []}"
+    },
+    {
+      "name": "R2-02[standalone long w320] f03-rep-line: أسماء طويلة/تواريخ — الحد المعلن ولا اصطدام",
+      "ok": true,
+      "detail": "{\"minEff\": 12, \"collisions\": []}"
+    },
+    {
+      "name": "R2-02[standalone long w320 zoom200] f03-rep-bars: لا اصطدام ولا فيض صفحة",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-02[standalone long w320 zoom200] f03-rep-line: لا اصطدام ولا فيض صفحة",
+      "ok": true,
+      "detail": "{\"collisions\": [], \"docScrollW\": 320, \"docW\": 320}"
+    },
+    {
+      "name": "R2-02[standalone] الدونات 148 الثابتة محمية (خارج التعويض)",
+      "ok": true,
+      "detail": "{\"w\": 148, \"vb\": \"0 0 148 148\"}"
+    },
+    {
+      "name": "R3-01[standalone resize430-320] f03-rep-bars: رصد العرض يعيد القياس بلا نقرة ولا render يدوي (الحد 13.0px)",
+      "ok": true,
+      "detail": "{\"declared\": 13.0, \"visibleBarsLine\": 2, \"before\": {\"minEff\": 16.17, \"plotW\": 398, \"scale\": 1.2437, \"nTexts\": 6}, \"after\": {\"minEff\": 13, \"plotW\": 288, \"scale\": 0.9, \"nTexts\": 6, \"outsideH\": 0, \"collisions\": []}}"
+    },
+    {
+      "name": "R3-01[standalone resize430-320] f03-rep-line: رصد العرض يعيد القياس بلا نقرة ولا render يدوي (الحد 12.0px)",
+      "ok": true,
+      "detail": "{\"declared\": 12.0, \"visibleBarsLine\": 2, \"before\": {\"minEff\": 14.92, \"plotW\": 398, \"scale\": 1.2437, \"nTexts\": 8}, \"after\": {\"minEff\": 12, \"plotW\": 288, \"scale\": 0.9, \"nTexts\": 8, \"outsideH\": 0, \"collisions\": []}}"
+    },
+    {
+      "name": "R3-02a[standalone w320 zoom200] f03-rep-bars: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"declared\": 13.0, \"visibleBarsLine\": 2, \"nTexts\": 6, \"minEff\": 26, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02a[standalone w320 zoom200] f03-rep-line: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"declared\": 12.0, \"visibleBarsLine\": 2, \"nTexts\": 8, \"minEff\": 24, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02b[standalone w320 zoom200] f03-rep-bars: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"visibleBarsLine\": 2, \"nTexts\": 6, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R3-02b[standalone w320 zoom200] f03-rep-line: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+      "ok": true,
+      "detail": "{\"visibleBarsLine\": 2, \"nTexts\": 12, \"collisions\": [], \"outsideH\": 0}"
+    },
+    {
+      "name": "R2-03[standalone] دوائر سليمة: حالة ok وملاحظة دلالية والتشخيص على الجذر",
+      "ok": true,
+      "detail": "{\"tag\": \"valid-baseline\", \"note\": \"المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة. النطاق يصل إلى 474.\", \"state\": \"ok\", \"detail\": \"metric-circles: radius=56 — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale=declared\", \"fallbackN\": 2, \"itemsN\": 3}"
+    },
+    {
+      "name": "R2-03[standalone] layout=weird: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"layout=weird\", \"note\": \"تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.\", \"state\": \"invalid-layout\", \"detail\": \"metric-circles: data-layout='weird' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[standalone] max=bad: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"max=bad\", \"note\": \"تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.\", \"state\": \"invalid-scale\", \"detail\": \"metric-circles: data-max='bad' غير موجب أو أصغر من أكبر مقدار معلوم (473.9) — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[standalone] radius=0: نص موجز بلا تعليمات مبرمج والقراءات في القائمة",
+      "ok": true,
+      "detail": "{\"tag\": \"radius=0\", \"note\": \"تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.\", \"state\": \"invalid-radius\", \"detail\": \"metric-circles: data-radius='0' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.\", \"fallbackN\": 3, \"itemsN\": 0}"
+    },
+    {
+      "name": "R2-03[standalone] invalid→valid على العقدة نفسها: لا يبقى تشخيص الدورة السابقة",
+      "ok": true,
+      "detail": "{\"a1\": \"ok\", \"a2\": \"ok\"}"
+    },
+    {
+      "name": "R2-03[standalone] المسح يعمل دون عنصر الملاحظة (حالة الدورة الحالية وحدها)",
+      "ok": true,
+      "detail": "{\"no-note-invalid\": \"invalid-layout\", \"no-note-valid\": \"ok\"}"
+    },
+    {
+      "name": "R2-03[standalone] unit-mismatch: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"unit-mismatch\", \"note\": \"تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.\", \"state\": \"inconsistent\", \"detail\": \"metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[standalone] bars-max=bad: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-max=bad\", \"note\": \"تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.\", \"state\": \"invalid-scale\", \"detail\": \"metric-bars: data-max='bad' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[standalone] bars-max-too-small: نص موجز والقراءات كاملة في الصفوف",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-max-too-small\", \"note\": \"تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.\", \"state\": \"scale-below-known\", \"detail\": \"metric-bars: data-max=1 أصغر من أكبر مقدار معلوم (473.9) — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-03[standalone] أشرطة invalid→valid: حالة ok وشروح الوحدة/الفترة محفوظة",
+      "ok": true,
+      "detail": "{\"tag\": \"bars-valid-again\", \"note\": \"مقياس مشترك تلقائي: حتى 473.9 د.أ · كل الفترات (أكبر مقدار معلوم).\", \"state\": \"ok\", \"detail\": \"metric-bars: scale=auto-largest-known=473.9؛ common-unit=د.أ؛ common-period=كل الفترات.\", \"rows\": 3, \"rowsWithValues\": 3}"
+    },
+    {
+      "name": "R2-ERR[standalone] صفر أخطاء صفحة",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R2-04[r2-btn-short-rtl] لا تداخل مؤشر/نص ولا ملامسة حافة (هامش ≥1px) وثبات الأبعاد",
+      "ok": true,
+      "detail": "{\"spinnerW\": 16, \"dim\": {\"w\": 77, \"h\": 48}, \"before\": {\"w\": 77, \"h\": 48}, \"dimStable\": true, \"gapStartEdge\": 1, \"gapStartPx\": 2, \"gapLabelPx\": 2, \"labelOverlap\": false, \"after\": {\"w\": 77, \"h\": 48}, \"restored\": true}"
+    },
+    {
+      "name": "R2-04[r2-btn-wide-rtl] لا تداخل مؤشر/نص ولا ملامسة حافة (هامش ≥1px) وثبات الأبعاد",
+      "ok": true,
+      "detail": "{\"spinnerW\": 16, \"dim\": {\"w\": 324, \"h\": 72}, \"before\": {\"w\": 324, \"h\": 72}, \"dimStable\": true, \"gapStartEdge\": 1, \"gapStartPx\": 2, \"gapLabelPx\": 9.5, \"labelOverlap\": false, \"after\": {\"w\": 324, \"h\": 72}, \"restored\": true}"
+    },
+    {
+      "name": "R2-04[r2-btn-short-ltr] لا تداخل مؤشر/نص ولا ملامسة حافة (هامش ≥1px) وثبات الأبعاد",
+      "ok": true,
+      "detail": "{\"spinnerW\": 16, \"dim\": {\"w\": 62, \"h\": 48}, \"before\": {\"w\": 62, \"h\": 48}, \"dimStable\": true, \"gapStartEdge\": 1, \"gapStartPx\": 2, \"gapLabelPx\": 2, \"labelOverlap\": false, \"after\": {\"w\": 62, \"h\": 48}, \"restored\": true}"
+    },
+    {
+      "name": "R2-04[r2-btn-wide-ltr] لا تداخل مؤشر/نص ولا ملامسة حافة (هامش ≥1px) وثبات الأبعاد",
+      "ok": true,
+      "detail": "{\"spinnerW\": 16, \"dim\": {\"w\": 324, \"h\": 72}, \"before\": {\"w\": 324, \"h\": 72}, \"dimStable\": true, \"gapStartEdge\": 1, \"gapStartPx\": 2, \"gapLabelPx\": 3.5, \"labelOverlap\": false, \"after\": {\"w\": 324, \"h\": 72}, \"restored\": true}"
+    }
+  ]
+}

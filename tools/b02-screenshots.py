@@ -11,14 +11,23 @@ Micro UI — B02 الحقول: سكربت الفحص واللقطات (بلا أ
 القيمة، خطأ+تركيز، معاينات هاتف 320/390/430، محاكاة زيادة حجم الخط
 200% (مروران)، استعادة توكن ارتفاع الحقل (إثبات تعديل المصدر).
 """
+import argparse
 import http.server, os, subprocess, sys, threading
 from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-SHOTS = ROOT / "reviews" / "B02" / "screenshots"
-LOGFILE = ROOT / "reviews" / "B02" / "verification.txt"
+# SUI-A2 (REPAIR-R1): وسيط --out يوجه المخرجات إلى مجلد أدلة الوكيل بدل
+# الكتابة فوق الأدلة التاريخية (reviews/B02) — بروتوكول REPAIR-R1: لا
+# تُمس الأدلة التاريخية؛ الافتراضي كما كان فيبقى السلوك التاريخي للقائد.
+DEFAULT_OUT = ROOT / "reviews" / "B02"
+ap = argparse.ArgumentParser()
+ap.add_argument("--out", default=str(DEFAULT_OUT),
+                help="مجلد الإخراج (الافتراضي reviews/B02 التاريخي)")
+_args = ap.parse_args()
+SHOTS = Path(_args.out).resolve() / "screenshots"
+LOGFILE = Path(_args.out).resolve() / "verification.txt"
 results, log_lines = [], []
 
 def log(msg):
@@ -55,14 +64,21 @@ def main():
     log(f"# commit المصدر: {commit}")
     try:
         tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
-        log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+        # SUI-A2 (REPAIR-R1، إعادة التحقق): صياغة صادقة لحالة الشجرة — الفحص
+        # يخدم شجرة العمل الفعلية، فإن كانت معدلة وجب قول ذلك بدل ادعاء «نظيفة».
+        dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=str(ROOT), text=True).strip()
+        if dirty:
+            state = f"شجرة عمل معدلة ({len(dirty.splitlines())} مدخلًا في git status) — الفحص على المحتوى الحالي للشجرة، لا على بصمة الـcommit"
+        else:
+            state = "شجرة عمل نظيفة مطابقة لبصمة الـcommit"
+        log(f"# بصمة شجرة المصدر: {tree} ({state})")
     except Exception:
         pass
     log("")
 
     errors = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, executable_path="/home/z/my-project/evidence/bin/chromium")  # SUI-A2: متصفح البروتوكول الثابت
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         page = ctx.new_page()
         page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)

@@ -5,6 +5,10 @@
   فحوص مدمجة: IDs رسائل فريدة لحقلين متطابقين، دمج وصف سابق،
   مسح readonly محمي، عدّاد، خطوة بحدود، ومزامنة القيم المعينة
   برمجيًا عبر MicroFields.sync (عدّاد/مسح بلا أحداث تعديل).
+  SUI-006 (REPAIR-R1): زرا الخطوة زرا B01 حقيقيان بعقد المواصفة §2
+  (m-btn--icon m-btn--secondary بهدف لمس 48px + aria-label عربي)
+  مع مثال خطوة عامل (u-4) ومثال محمي (u-3 قراءة فقط) — الأزرار
+  الخام بمقاسات مخصصة خارج هذا العقد (محظورة نصًا في المواصفة).
   النتائج في الصفحة.
 ========================================================= -->
 <html lang="ar" dir="rtl">
@@ -25,7 +29,7 @@
     <label class="m-field__label" for="u-1">اسم المستفيد</label>
     <div class="m-field__control">
       <input class="m-field__input" id="u-1" type="text" value="أحمد" maxlength="40">
-      <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح"><svg class="m-btn__icon" aria-hidden="true"></svg></button>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
     </div>
     <p class="m-field__msg" data-field-msg hidden>رسالة أ</p>
     <span class="m-field__count" aria-hidden="true"></span>
@@ -38,13 +42,56 @@
   <p id="prior-help" hidden>وصف مساعدة سابق</p>
   <div class="m-field" data-micro-field>
     <label class="m-field__label" for="u-3">كمية قراءة فقط</label>
-    <div class="m-field__control m-field__stepper">
-      <button type="button" data-step="down" aria-label="إنقاص">−</button>
+    <div class="m-field__control">
+      <div class="m-field__stepper">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+      </div>
       <input class="m-field__input m-field__input--num" id="u-3" type="text" inputmode="decimal" dir="ltr" value="10" min="0" max="99" step="5" readonly>
-      <button type="button" data-step="up" aria-label="زيادة">+</button>
+      <div class="m-field__stepper">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="m-field" data-micro-field>
+    <label class="m-field__label" for="u-4">كمية قابلة للتعديل (خطوة عاملة)</label>
+    <div class="m-field__control">
+      <div class="m-field__stepper">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+      </div>
+      <input class="m-field__input m-field__input--num" id="u-4" type="text" inputmode="decimal" dir="ltr" value="10" min="0" max="99" step="5">
+      <div class="m-field__stepper">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      </div>
+      <span class="m-field__unit">صندوق</span>
     </div>
   </div>
   <pre id="results">جارٍ الفحص…</pre>
+
+  <!-- أيقونات هذا المثال تُجلب من الأصول نفسها (assets/icons) وقت التشغيل —
+       هذا دور المستهلك (الصفحة) وليس دور المكوّن (نمط مثال B01 نفسه). -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="usage-icon-defs" style="display:none" aria-hidden="true"></svg>
+  <script>
+    (function () {
+      var defs = document.getElementById('usage-icon-defs');
+      ['minus-sign.svg|i-minus', 'plus-sign.svg|i-plus', 'cancel01.svg|i-close']
+        .forEach(function (entry) {
+          var parts = entry.split('|');
+          fetch('../../assets/icons/' + parts[0])
+            .then(function (r) { return r.text(); })
+            .then(function (text) {
+              var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+              var src = doc.querySelector('svg');
+              if (!src || doc.querySelector('parsererror')) return;
+              var sym = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');
+              sym.id = parts[1];
+              sym.setAttribute('viewBox', src.getAttribute('viewBox') || '0 0 24 24');
+              sym.setAttribute('fill', src.getAttribute('fill') || 'none');
+              sym.innerHTML = src.innerHTML;
+              defs.appendChild(sym);
+            });
+        });
+    })();
+  </script>
   <script src="../../components/fields/fields.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -61,6 +108,21 @@
       var ro = document.getElementById('u-3');
       fields[2].querySelector('[data-step="up"]').click();
       t('خطوة على readonly محمية (القيمة كما هي)', ro.value === '10', ro.value);
+      /* SUI-006: الخطوة تعمل فعليًا على الحقل القابل للتعديل (u-4) بالحدود والخطوة */
+      var q4 = document.getElementById('u-4');
+      var f4 = q4.closest('.m-field');
+      f4.querySelector('[data-step="up"]').click();
+      var upV = q4.value;
+      f4.querySelector('[data-step="down"]').click();
+      f4.querySelector('[data-step="down"]').click();
+      var downV = q4.value;
+      t('خطوة الكمية تعمل فعليًا (10 → 15 → 5) بحدود المستهلك', upV === '15' && downV === '5', upV + ' → ' + downV);
+      var steps = [].slice.call(document.querySelectorAll('[data-step]'));
+      var sizesOk = steps.every(function (b) {
+        var r = b.getBoundingClientRect();
+        return r.width >= 47.5 && r.height >= 47.5;
+      });
+      t('كل زر خطوة بعقد B01 (هدف لمس 48×48)', sizesOk && steps.length === 4, steps.length + ' أزرار');
       var inp = document.getElementById('u-1');
       inp.value = 'أحمد سالم';
       inp.dispatchEvent(new Event('input', { bubbles: true }));

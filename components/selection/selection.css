@@ -196,7 +196,14 @@
   translate: calc(-1 * (var(--micro-switch-track-w) - var(--micro-switch-thumb) - 6px)) 0;
 }
 
-/* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف) */
+/* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف).
+   SUI-003 (REPAIR-R1): اللون بـ :has() على الغلاف — مستقل تمامًا عن
+   ترتيب العقد داخل .m-switch (النص قبل المدخل أو بعده)، وقد كان المحدد
+   الأخوي السابق `input:checked ~ .m-switch__text .m-switch__state` ميتًا
+   في كل تركيب يسبق فيه النصُ المدخلَ (تركيب عائلة الاختيار الرسمي)،
+   بينما يعمل في الترتيب المعاكس — مظهران لنفس المكوّن. :has() مستخدم
+   أصلًا في هذا الملف (المعطل والانتظار) فالتوافق محسوم داخل المشروع
+   (Chromium الحديث)، ويعمل في الترتيبين معًا بلا متطلبات ترتيب DOM. */
 .m-switch__state {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
@@ -205,7 +212,7 @@
   min-width: 4ch; /* ثبات العرض بين الحالتين */
   text-align: start;
 }
-.m-switch input:checked ~ .m-switch__text .m-switch__state {
+.m-switch:has(input:checked) .m-switch__state {
   color: var(--micro-brand-primary);
 }
 
@@ -254,7 +261,14 @@
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap; /* عند التكبير 200% أو عمود 320: تلتف المقاطع بدل خروجها عن العمود */
-  gap: var(--micro-space-1);
+  /* SUI-011 (REPAIR-R1): فصل فجوات — الأفقية 4px كما كانت (كثافة السطر
+     الواحد بلا تغيير)، والرأسية 12px للصفوف الملتفة فقط. الحساب المصحح
+     (AUD-R1-01): هدف اللمس الموسع يزيد 4px من كل طرف (امتداد ::after أدناه)
+     فالمسافة الفعلية بين أهداف الصفين = rowGap − 8px؛ أي أن 12px تترك
+     فراغًا محققًا 4px بلا تداخل. 12px ليست توكنًا عامًا بل قيمة محققة لهذه
+     البنية بهذا الامتداد (توثيق كامل في مواصفة B03 §4). */
+  column-gap: var(--micro-space-1);
+  row-gap: var(--micro-space-3);
   padding: var(--micro-space-1);
   background-color: var(--micro-surface-page);
   border-radius: var(--micro-radius-capsule);
@@ -305,8 +319,10 @@
 /* E05 — هدف اللمس الفعلي 48px (قاعدة المشروع --micro-touch-min):
    الشكل البصري 40px، والامتداد ::after يزيد 4px رأسيًا من كل طرف
    (أحداث المؤشر على العنصر الزائف تُنسب للزر) — رأسيًا فقط كي لا
-   يتداخل مع المقاطع المجاورة (الفجوة بينها 4px). القياس في الفحوص
-   على المستطيل الفعلي الموسّع، لا على min-height وحده. */
+   يتداخل مع المقاطع المجاورة أفقًا (الفجوة الأفقية 4px). القياس في
+   الفحوص على المستطيل الفعلي الموسّع، لا على min-height وحده.
+   مع row-gap 12px (SUI-011): المسافة بين الأهداف الموسعة لصفين
+   متجاورين = 12 − 8 = 4px فراغ محقق (hit-test في فحوص الوكيل 2). */
 .m-seg__item::after {
   content: "";
   position: absolute;

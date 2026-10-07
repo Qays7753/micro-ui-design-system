@@ -18,7 +18,7 @@ C1 — قياس التباين الموضعي المصحح (بديل sample_cont
   يُقاس مقابلها. الرقم المعلن «قياس موضعي فعلي» ويُميَّز عن الحد
   المحافظ المحسوب في tools/contrast-check.txt (رقمان مختلفا الغرض).
 """
-import http.server, io, subprocess, sys, threading
+import argparse, http.server, io, subprocess, sys, threading
 from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -118,8 +118,24 @@ ZOOM_OFF_JS = """(sel) => { const root = document.querySelector(sel);
 
 
 def main():
+    global SHOTS, LOGFILE
+    ap = argparse.ArgumentParser()
+    # تعديل جولة SAMSUNG-ONEUI-REPAIR-R1 (ملكية الوكيل 1 الحصرية — إضافي فقط):
+    # --out/--port/--browser لتوجيه المخرجات إلى أدلة الجولة بدل الكتابة فوق
+    # reviews/S01 التاريخية، ومنفذ من نطاق الوكيل 1 (4100-4119).
+    # الافتراضات تحافظ على السلوك التاريخي نفسه.
+    ap.add_argument("--out", default=str(ROOT / "reviews" / "S01"),
+                    help="مجلد الإخراج (الافتراضي reviews/S01 التاريخي؛ مرر مجلد أدلتك لتفادي الكتابة فوقه)")
+    ap.add_argument("--port", type=int, default=0,
+                    help="منفذ الخادم (0 تلقائي كالسلوك التاريخي؛ نطاق الوكيل 1: 4100-4119)")
+    ap.add_argument("--browser", default="",
+                    help="مسار Chromium التنفيذي (الافتراضي: متصفح Playwright المثبت)")
+    args = ap.parse_args()
+    out = Path(args.out).resolve()
+    SHOTS = out / "screenshots"
+    LOGFILE = out / "verification.txt"
     SHOTS.mkdir(parents=True, exist_ok=True)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), http.server.SimpleHTTPRequestHandler)
     server.daemon_threads = True
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_address[1]}"
@@ -128,13 +144,14 @@ def main():
     tree = subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=str(ROOT), text=True).strip()
     log(f"# S01 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
     log(f"# commit المصدر: {commit}")
-    log(f"# بصمة شجرة المصدر: {tree} (الأدلة مولدة من شجرة هذا commit نظيفة)")
+    log(f"# بصمة شجرة المصدر: {tree}")
+    log(f"# الإخراج: {out}")
     log("# بيئة الفحص: متصفح headless فعلي (Playwright + Chromium) — ليست محاكاة DOM")
     log("")
 
     errors = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, executable_path=(args.browser or None))
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         page = ctx.new_page()
         page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)

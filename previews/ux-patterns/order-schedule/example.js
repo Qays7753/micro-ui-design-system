@@ -20,6 +20,7 @@
     root: q('ocal-demo'),
     title: q('ocal-demo-title'),
     addBtn: q('ocal-demo-add'),
+    fixturesBtn: q('ocal-demo-fixtures'),
     logList: q('ocal-log-list'),
     /* تفاصيل الطلب */
     layer: q('ocal-order-layer'),
@@ -71,6 +72,32 @@
     while (el.logList.childNodes.length > 30) el.logList.removeChild(el.logList.lastChild);
   }
 
+  /* ---------- وضع الفحص: حالات الحدود عبر fixtures صريحة (SUI-009) ----------
+     البذرة الافتراضية نظيفة (بيانات أعمال بمفاتيح معروفة فقط). حالات
+     الحدود (مفتاح حالة مجهول 'mystery' + عنوان يحوي حقن HTML) تعيش في
+     OrderDemoStore.EDGE_FIXTURES المعزولة وتُحمّل فقط:
+     - وسيط URL ?fixtures=edge (للأدوات والفحوص الآلية)، أو
+     - زر «حالات الحدود (وضع الفحص)» أعلى الصفحة (موسوم بـaria-pressed).
+     إعادة تحميل الصفحة بلا وسيط تعيد المسار الافتراضي النظيف. */
+  var fixturesOn = false;
+  function loadEdgeFixtures(silent) {
+    if (fixturesOn) return false;
+    window.OrderDemoStore.EDGE_FIXTURES.forEach(function (o) { store.upsert(o); });
+    fixturesOn = true;
+    if (el.fixturesBtn) {
+      el.fixturesBtn.setAttribute('aria-pressed', 'true');
+      el.fixturesBtn.textContent = 'حالات الحدود محمّلة (وضع الفحص)';
+    }
+    if (!silent) log('حُمّلت حالات الحدود من fixtures (وضع الفحص) — إعادة تحميل الصفحة تعيد البذرة النظيفة.');
+    return true;
+  }
+  (function () {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('fixtures') === 'edge') loadEdgeFixtures(true);
+    } catch (e) { /* بلا وسيط — المسار الافتراضي */ }
+  })();
+
   /* ---------- تهيئة المكوّن من المصدر الواحد ---------- */
   var inst = window.MicroOrderSchedule.init(el.root, {
     orders: store.all(),
@@ -78,7 +105,15 @@
     today: store.today(),   /* مثبت 2026-10-07 في الموصل لحتمية الفحص */
     weekStart: 6            /* السبت — اختيار سياق عربي للعينة */
   });
-  log('تهيئة الجدول من الموصل: ' + store.count() + ' طلبًا (اليوم المثبت ' + store.today() + ').');
+  log('تهيئة الجدول من الموصل: ' + store.count() + ' طلبًا (اليوم المثبت ' + store.today() + ')' +
+    (fixturesOn ? ' + حالات حدود fixtures (وضع الفحص).' : '.'));
+
+  if (el.fixturesBtn) {
+    el.fixturesBtn.addEventListener('click', function () {
+      if (!loadEdgeFixtures(false)) return;
+      inst.setData(store.all()); /* إن لم يكن مستمع الحدث قد رُبط بعد */
+    });
+  }
 
   /* أي كتابة في الموصل تنعكس فورًا على المكوّن — بلا reload */
   document.addEventListener('order-store:changed', function (e) {

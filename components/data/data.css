@@ -34,6 +34,8 @@
 .m-stat__value {
   display: inline-flex;
   align-items: baseline;
+  flex-wrap: wrap;   /* SUI-008: الوحدة/المؤشر يلتفان لسطر تالٍ حين يلتف الرقم الطويل — القيمة كلها داخل البطاقة */
+  max-width: 100%;   /* SUI-008: صف القيمة لا يتجاوز البطاقة (نمط .m-main-metric__value الشقيق) */
   gap: var(--micro-space-2);
   direction: ltr;
   unicode-bidi: isolate; /* الأرقام LTR والوحدة تبقى معزولة داخل الصف */
@@ -44,6 +46,14 @@
   line-height: var(--micro-amount-line);
   font-weight: 600;
   color: var(--micro-text-primary);
+  /* SUI-008 (REPAIR-R1 2026-10-07): الرقم الطويل يلتف داخل البطاقة بدل
+     الفيض غير القابل للوصول عند تكبير النص 200% — نفس نمط العائلات
+     الشقيقة .m-main-metric__number (metric-comparison) و.m-info-card__number
+     (info-strip). القيمة كاملة في DOM، بلا تصغير ولا تغيير قيمة ولا تمرير
+     مفقود؛ min-width:0 يسمح لعنصر flex بالانكماش قبل اللف. */
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .m-stat__num--secondary {
   font-size: var(--micro-amount2-size);     /* 22/32 مبلغ ثانوي */
@@ -106,7 +116,9 @@
 }
 .m-chart__title {
   font-size: var(--micro-body-size);
-  line-height: var(--micro-body-line);
+  /* SUI-017 (REPAIR-R1 2026-10-07): عنوان مجموعة داخل وجهة = 16/24 وزن 600
+     (قرار قائد الوحدة — اتساق مع F03)؛ كان 16/26 (var(--micro-body-line)). */
+  line-height: 1.5; /* 24px عند 16px — يتبع الخط عند التكبير */
   font-weight: 600;
   color: var(--micro-text-primary);
 }

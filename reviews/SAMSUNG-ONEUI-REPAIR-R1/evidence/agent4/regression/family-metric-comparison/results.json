@@ -1,0 +1,38 @@
+{
+  "tool": "evidence/agent4/scripts/a4_family_metric_probe.py",
+  "generated_at": "2026-10-07T22:41:00",
+  "browser": "Chromium 143.0.7499.4 — Playwright sync",
+  "server": "http://127.0.0.1:4407 (نطاق الوكيل 4)",
+  "not_run": [
+    "أجهزة فعلية/لمس",
+    "قارئ شاشة فعلي",
+    "WebKit",
+    "native zoom"
+  ],
+  "checks": [
+    {
+      "name": "حماية اللف overflow-wrap: anywhere على الرقم الرئيسي وتسميات fallback (مقيسة)",
+      "ok": true,
+      "detail": "{'wrapValues': ['anywhere']}"
+    },
+    {
+      "name": "رقم 16 خانة عند 320+200%: مستطيله داخل البطاقة (يلتف لا يفيض)",
+      "ok": true,
+      "detail": "{'numText': '1234567890123456', 'numInside': True, 'numRect': {'l': 76, 'r': 244, 't': 3317.9, 'b': 3845.8}, 'cardRect': {'l': 20, 'r': 300}, 'wrapAll': True, 'wrapValues': ['anywhere']}"
+    },
+    {
+      "name": "الغياب «غير متاح» (لا صفر مخترع) والصفر قراءة صريحة (عقد المواصفة)",
+      "ok": true,
+      "detail": "{'hasUnavailable': True, 'fallbackHasLabel': True, 'liStates': ['zero']}"
+    },
+    {
+      "name": "صفر أخطاء JavaScript",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "total": 4
+  }
+}

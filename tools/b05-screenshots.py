@@ -21,9 +21,15 @@ def check(name, ok, detail=""):
     results.append((name, bool(ok)))
     log(("PASS  " if ok else "FAIL  ") + name + ((" — " + detail) if detail else ""))
 
-def main():
+def main(out_dir: Path = None, port: int = 0):
+    global SHOTS, LOGFILE
+    # SAMSUNG-ONEUI-REPAIR-R1 (الوكيل 4 — رجعية 2026-10-07): --out/--port
+    # لمخرجات معزولة دون الكتابة فوق reviews/B05 التاريخي + منفذ نطاق الوكيل 4.
+    if out_dir is not None:
+        SHOTS = out_dir / "screenshots"
+        LOGFILE = out_dir / "verification.txt"
     SHOTS.mkdir(parents=True, exist_ok=True)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), http.server.SimpleHTTPRequestHandler)
     server.daemon_threads = True
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_address[1]}"
@@ -377,4 +383,9 @@ def main():
     print(f"\nOK — اللقطات في {SHOTS}")
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    _ap = argparse.ArgumentParser()
+    _ap.add_argument("--out", default="", help="دليل إخراج معزول (افتراضي: reviews/B05 التاريخي)")
+    _ap.add_argument("--port", type=int, default=0, help="منفذ الخادم (0 تلقائي؛ REPAIR-R1: 4400-4419)")
+    _a = _ap.parse_args()
+    main(Path(_a.out).resolve() if _a.out else None, _a.port)

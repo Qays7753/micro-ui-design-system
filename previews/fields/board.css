@@ -10,3 +10,9 @@
 /* لوحة البحث التجريبية: مؤقت انتظار صغير بجانب رسالة الحالة
    (محاكاة لوحة فقط — لا علاقة له بالمكوّن) */
 .search-demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
+
+/* SUI-A2 (مراجعة المرحلة 2): تذييل اللوحة يحوي رموز مسارات لاتينية
+   غير قابلة للكسر (components/fields/…) تُفيض الصفحة 35px عند 320+200%
+   — لفها بأرضية anywhere يبقيها داخل الصفحة بلا تمرير أفقي (S31). */
+.board-footer { overflow-wrap: anywhere; }
+

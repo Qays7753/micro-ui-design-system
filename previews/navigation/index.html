@@ -207,7 +207,8 @@
           <svg class="m-field__search-icon" aria-hidden="true"><use href="#i-search"/></svg>
           <!-- E08: البحث هنا فلتر ضمن العقد نفسه (data-filter-key) —
                يدخل الجاري/المطبّق ويُطبّق ويُمسح ويُلغى مع البقية -->
-          <input class="m-field__input" id="f-search" type="search" autocomplete="off" data-filter-key="بحث بالاسم">
+          <!-- SUI-015: أول تحكم فعلي (البحث) هدف التركيز عند فتح اللوحة (عقد data-autofocus) -->
+          <input class="m-field__input" id="f-search" type="search" autocomplete="off" data-filter-key="بحث بالاسم" data-autofocus>
         </div>
       </div>
       <div>

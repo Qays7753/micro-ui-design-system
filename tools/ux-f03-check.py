@@ -1930,8 +1930,16 @@ def run(browser, url, out_dir: Path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--round", dest="round_name", default="")
+    # (SAMSUNG-ONEUI-REPAIR-R1 — الوكيل 3، جولة التحقق: وسيط --out اختياري على
+    # نمط b02/b03 لتوجيه الإخراج إلى مجلد أدلة الوكيل بدل إنشاء مجلد شارد تحت
+    # reviews/UX-F03 — الافتراضي يحافظ على السلوك التاريخي حرفيًا. لا تغيير
+    # لأي توقع فحص.)
+    parser.add_argument("--out", dest="out_dir_arg", default="")
     args = parser.parse_args()
-    out_dir = OUT / args.round_name if args.round_name else OUT
+    if args.out_dir_arg:
+        out_dir = Path(args.out_dir_arg)
+    else:
+        out_dir = OUT / args.round_name if args.round_name else OUT
 
     handler = lambda *a, **k: SimpleHTTPRequestHandler(*a, directory=str(ROOT), **k)
     srv = ThreadingHTTPServer(("127.0.0.1", 0), handler)

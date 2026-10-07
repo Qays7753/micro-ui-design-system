@@ -823,9 +823,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   font-size: var(--micro-secondary-size);
 }
 
-/* ---- التحكم: ارتفاع 52 قابل للتمدد، انحناء 16 ---- */
+/* ---- التحكم: ارتفاع 52 قابل للتمدد، انحناء 16 ----
+   SUI-005 (REPAIR-R1): الالتفاف مفعّل كي تعمل أرضيات القراءة ch أدناه —
+   عند الضيق أو تكبير النص 200% تلتف الوحدة/العناصر إلى سطر مستقل
+   بدل قص القيمة، ولا يلتف شيء ما لم يتجاوز سطر واحد مقاسه. */
 .m-field__control {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
   min-height: var(--micro-field-min-height); /* 52px */
@@ -866,12 +870,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   min-height: var(--micro-field-min-height);
 }
 
-/* المبلغ والرقم: عزل اتجاهي — الأرقام لاتينية 0-9 والوحدة عربية */
+/* المبلغ والرقم: عزل اتجاهي — الأرقام لاتينية 0-9 والوحدة عربية.
+   SUI-005 (REPAIR-R1): أرضية قراءة 11ch مثبتة بخط العنصر نفسه (يُعلن
+   حجم خطه فيعلن معه) — تتضاعف مع تكبير النص ×2 فلا يُسمح بانكماش
+   المدخل دونها؛ عند الضيق تلتف الوحدة إلى سطر مستقل (flex-wrap أعلاه)
+   بدل قص أرقام المبلغ (نمط R2 المعتمد لحقل القيمة في mobile-record-sample
+   128px/11ch — مرفوعًا هنا إلى المكوّن). القيم الأطول من سعة الصف الفيزيائية
+   عند 200% تبقى كاملة في القيمة وقراءتها بتمرير أفقي داخل الحقل. */
 .m-field__input--num {
   direction: ltr;
   unicode-bidi: isolate;
   text-align: left;
   font-variant-numeric: tabular-nums;
+  min-width: 11ch; /* أرضية قراءة (11 حرفًا رقميًا بخط الجسم) — SUI-005 */
 }
 
 /* ---- الوحدة: شريحة داخل الحقل عند بدايته (كما في الاتجاه المرجعي) ---- */
@@ -928,9 +939,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   gap: var(--micro-space-1);
   flex: none;
 }
-/* قيمة الكمية بين زرّي الخطوة: عزل اتجاهي وأدنى عرض للتفادي القفز */
+/* قيمة الكمية بين زرّي الخطوة: عزل اتجاهي وأدنى عرض للتفادي القفز.
+   SUI-004 (REPAIR-R1): العقد مطبق فعليًا في شكلي التركيب المعتمدين:
+   (أ) التركيب الرسمي — زرا B01 كلٌ داخل غلاف .m-field__stepper مستقل
+   والمدخل أخوهما داخل .m-field__control (كما في المواصفة §2 واللوحة)،
+   و(ب) الغلاف الحامل لصنف .m-field__stepper نفسه (شكل example-usage).
+   العرض 64px عند الحجم الأساسي (توكن --micro-quantity-min-width) يمنع
+   قفزة العرض مع تغير الأرقام، وأرضية قراءة 5ch مثبتة بخط العنصر تتضاعف
+   مع تكبير النص فتبقى «9999» كاملة عند 320+200% (تلتف الوحدة عند الحاجة
+   بفعل flex-wrap أعلاه) — لا تصغير خط ولا حد أعمال (نمط R2 المعتمد
+   لحقل الكمية في mobile-record-sample مرفوعًا إلى المكوّن). */
+.m-field__control:has(> .m-field__stepper) > .m-field__input--num,
 .m-field__stepper .m-field__input--num {
-  width: var(--micro-quantity-min-width); /* مقترح 64px: يمنع قفزة العرض مع تغير الأرقام */
+  flex: none;
+  width: var(--micro-quantity-min-width); /* 64px: يمنع قفزة العرض مع تغير الأرقام */
+  min-width: 5ch; /* أرضية قراءة نسبية (خمسة أرقام) — SUI-004 */
   text-align: center;
 }
 
@@ -1227,7 +1250,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   translate: calc(-1 * (var(--micro-switch-track-w) - var(--micro-switch-thumb) - 6px)) 0;
 }
 
-/* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف) */
+/* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف).
+   SUI-003 (REPAIR-R1): اللون بـ :has() على الغلاف — مستقل تمامًا عن
+   ترتيب العقد داخل .m-switch (النص قبل المدخل أو بعده)، وقد كان المحدد
+   الأخوي السابق `input:checked ~ .m-switch__text .m-switch__state` ميتًا
+   في كل تركيب يسبق فيه النصُ المدخلَ (تركيب عائلة الاختيار الرسمي)،
+   بينما يعمل في الترتيب المعاكس — مظهران لنفس المكوّن. :has() مستخدم
+   أصلًا في هذا الملف (المعطل والانتظار) فالتوافق محسوم داخل المشروع
+   (Chromium الحديث)، ويعمل في الترتيبين معًا بلا متطلبات ترتيب DOM. */
 .m-switch__state {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
@@ -1236,7 +1266,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   min-width: 4ch; /* ثبات العرض بين الحالتين */
   text-align: start;
 }
-.m-switch input:checked ~ .m-switch__text .m-switch__state {
+.m-switch:has(input:checked) .m-switch__state {
   color: var(--micro-brand-primary);
 }
 
@@ -1285,7 +1315,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap; /* عند التكبير 200% أو عمود 320: تلتف المقاطع بدل خروجها عن العمود */
-  gap: var(--micro-space-1);
+  /* SUI-011 (REPAIR-R1): فصل فجوات — الأفقية 4px كما كانت (كثافة السطر
+     الواحد بلا تغيير)، والرأسية 12px للصفوف الملتفة فقط. الحساب المصحح
+     (AUD-R1-01): هدف اللمس الموسع يزيد 4px من كل طرف (امتداد ::after أدناه)
+     فالمسافة الفعلية بين أهداف الصفين = rowGap − 8px؛ أي أن 12px تترك
+     فراغًا محققًا 4px بلا تداخل. 12px ليست توكنًا عامًا بل قيمة محققة لهذه
+     البنية بهذا الامتداد (توثيق كامل في مواصفة B03 §4). */
+  column-gap: var(--micro-space-1);
+  row-gap: var(--micro-space-3);
   padding: var(--micro-space-1);
   background-color: var(--micro-surface-page);
   border-radius: var(--micro-radius-capsule);
@@ -1336,8 +1373,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 /* E05 — هدف اللمس الفعلي 48px (قاعدة المشروع --micro-touch-min):
    الشكل البصري 40px، والامتداد ::after يزيد 4px رأسيًا من كل طرف
    (أحداث المؤشر على العنصر الزائف تُنسب للزر) — رأسيًا فقط كي لا
-   يتداخل مع المقاطع المجاورة (الفجوة بينها 4px). القياس في الفحوص
-   على المستطيل الفعلي الموسّع، لا على min-height وحده. */
+   يتداخل مع المقاطع المجاورة أفقًا (الفجوة الأفقية 4px). القياس في
+   الفحوص على المستطيل الفعلي الموسّع، لا على min-height وحده.
+   مع row-gap 12px (SUI-011): المسافة بين الأهداف الموسعة لصفين
+   متجاورين = 12 − 8 = 4px فراغ محقق (hit-test في فحوص الوكيل 2). */
 .m-seg__item::after {
   content: "";
   position: absolute;
@@ -2308,6 +2347,8 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-stat__value {
   display: inline-flex;
   align-items: baseline;
+  flex-wrap: wrap;   /* SUI-008: الوحدة/المؤشر يلتفان لسطر تالٍ حين يلتف الرقم الطويل — القيمة كلها داخل البطاقة */
+  max-width: 100%;   /* SUI-008: صف القيمة لا يتجاوز البطاقة (نمط .m-main-metric__value الشقيق) */
   gap: var(--micro-space-2);
   direction: ltr;
   unicode-bidi: isolate; /* الأرقام LTR والوحدة تبقى معزولة داخل الصف */
@@ -2318,6 +2359,14 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   line-height: var(--micro-amount-line);
   font-weight: 600;
   color: var(--micro-text-primary);
+  /* SUI-008 (REPAIR-R1 2026-10-07): الرقم الطويل يلتف داخل البطاقة بدل
+     الفيض غير القابل للوصول عند تكبير النص 200% — نفس نمط العائلات
+     الشقيقة .m-main-metric__number (metric-comparison) و.m-info-card__number
+     (info-strip). القيمة كاملة في DOM، بلا تصغير ولا تغيير قيمة ولا تمرير
+     مفقود؛ min-width:0 يسمح لعنصر flex بالانكماش قبل اللف. */
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .m-stat__num--secondary {
   font-size: var(--micro-amount2-size);     /* 22/32 مبلغ ثانوي */
@@ -2380,7 +2429,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 }
 .m-chart__title {
   font-size: var(--micro-body-size);
-  line-height: var(--micro-body-line);
+  /* SUI-017 (REPAIR-R1 2026-10-07): عنوان مجموعة داخل وجهة = 16/24 وزن 600
+     (قرار قائد الوحدة — اتساق مع F03)؛ كان 16/26 (var(--micro-body-line)). */
+  line-height: 1.5; /* 24px عند 16px — يتبع الخط عند التكبير */
   font-weight: 600;
   color: var(--micro-text-primary);
 }
@@ -4521,6 +4572,7 @@ body {
   padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-10);
 }
 
+
 /* ---------- شريط التطبيق لكل وجهة: رجوع + عنوان + فعل ---------- */
 .f03-appbar {
   display: flex;
@@ -4555,8 +4607,11 @@ body {
 
 .f03-block__title {
   margin: 0 0 var(--micro-space-3);
-  font-size: var(--micro-label-size);
-  line-height: var(--micro-label-line);
+  /* SUI-017: عنوان مجموعة داخل وجهة = 16/24×600 (قرار القائد) — نفس
+     توكني تسمية الزر (16px × 1.5 = 24px)؛ عنوان قسم صفحة مستقلة يبقى
+     18/28 (m-section-title). لا رفع إلى 18 هنا */
+  font-size: var(--micro-button-label-size);
+  line-height: var(--micro-button-label-line);
   font-weight: 600;
 }
 
@@ -4654,6 +4709,11 @@ body {
 }
 
 .f03-rowlist > li:last-child .f03-row { border-block-end: 0; }
+
+/* SUI-020: انتقال خلفية الصف حركة غير وظيفية — تحت تقليل الحركة يُلغى */
+@media (prefers-reduced-motion: reduce) {
+  .f03-row { transition: none; }
+}
 
 .f03-row:active { background-color: var(--micro-surface-selected); }
 
@@ -4762,15 +4822,18 @@ body {
   align-items: center;
 }
 
-/* شريط التحديد الجماعي: sticky فوق شريط التنقل (53px قياسه الفعلي) —
-   عقد m-actionbar: الشريط يبقى فوق المحتوى بحشوه ولا يُحجب بالشريط السفلي */
+/* شريط التحديد الجماعي: sticky فوق شريط التنقل — SUI-002: الإزاحة
+   تستهلك --f03-navbar-h (ارتفاع شريط التنقل المقيس فعليًا عبر
+   ResizeObserver في example.js؛ 53px قيمة احتياطية عند الإقلاع قبل
+   أول قياس) — عند تكبير النص 200% يتبع الشريط الارتفاع المقيس (~71px)
+   فلا تراكب. عقد m-actionbar كما هو: الشريط فوق المحتوى بحشوه */
 #f03-select-bar {
   display: flex;
   align-items: center;
   gap: var(--micro-space-2);
   flex-wrap: wrap;
   margin-block-start: var(--micro-space-3);
-  inset-block-end: calc(53px + env(safe-area-inset-bottom, 0px));
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
 }
 
 #f03-select-bar[hidden] { display: none; }
@@ -5070,11 +5133,21 @@ body {
 }
 
 /* ---------- تذييل التجربة: بقاء البيانات بصدق + مدخل وضع المراجعة --
-   حشو سفلي يفوق شريط التنقل الثابت (53px) كي لا يُحجب رابط وضع المراجعة */
+   حشو سفلي يفوق شريط التنقل الثابت: --f03-navbar-h المقيسة ديناميكيًا
+   (SUI-002) + فراغ قراءة 24px كي لا يُحجب رابط وضع المراجعة عند
+   تكبير النص (كان 53px ثابتة تنجو بـ6px فقط عند 200%) */
 .f03-foot {
   max-width: 560px;
   margin-inline: auto;
-  padding: 0 var(--micro-space-4) calc(53px + var(--micro-space-6) + env(safe-area-inset-bottom, 0px));
+  padding: 0 var(--micro-space-4) calc(var(--f03-navbar-h, 53px) + var(--micro-space-6) + env(safe-area-inset-bottom, 0px));
+}
+
+/* SUI-016 (عقد UI-VISUAL-SYSTEM): هامش 16px دون 390 و20px من 390 فأعلى —
+   على حاوية التجربة والتذييل معًا (نفس العمود المقروء). توضع بعد قاعدتي
+   .f03-main/.f03-foot كي يغلب تعيين padding-inline المتأخر الحشو المختصر */
+@media (min-width: 390px) {
+  .f03-main { padding-inline: var(--micro-space-5); }
+  .f03-foot { padding-inline: var(--micro-space-5); }
 }
 
 .f03-foot__text {
@@ -5187,6 +5260,17 @@ body {
 
 .f03-order-date-hint {
   margin: 0;
+}
+
+/* ---------- SUI-001: توست مستوى التطبيق خارج الوجهات المخفية ----------
+   نقل من #view-account إلى جذر الصفحة: مستطيله >0 دائمًا في كل الوجهات.
+   الإزاحة السفلية تحسب ارتفاع navbar الفعلي المقيس (--f03-navbar-h من
+   ResizeObserver) + فراغ 16px كي لا يتراكب مع الشريط (النقل الساذج بلا
+   إزاحة كان يغطي navbar بتراكب 33px). عندما يكون navbar مخفيًا (وجهات
+   فرعية) تبقى آخر قيمة مقيسة — الموضع ثابت ومتوقع. عقد toast نفسه
+   (B06): مدة المستهلك، إغلاق يدوي، قناة إعلان واحدة (بلا role هنا). */
+#f03-toast {
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + var(--micro-space-4) + env(safe-area-inset-bottom, 0px));
 }
 
 /* ---------- وضع المراجعة: أدوات داخل طبقة مغلقة افتراضيًا ---------- */
@@ -5598,7 +5682,7 @@ body {
 
       <section class="m-section" id="f03-detail-activity">
         <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-detail-activity-body">
-          <span class="m-section__title">سجل النشاط</span>
+          <span class="m-section-title">سجل النشاط</span>
           <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
         </button>
         <div class="m-section__body" id="f03-detail-activity-body" hidden>
@@ -5792,7 +5876,7 @@ body {
 
       <section class="m-section" id="f03-rep-extra">
         <button type="button" class="m-section__head" aria-expanded="false" aria-controls="f03-rep-donut-body">
-          <span class="m-section__title">توزيع إضافي (دونات)</span>
+          <span class="m-section-title">توزيع إضافي (دونات)</span>
           <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
         </button>
         <div class="m-section__body" id="f03-rep-donut-body" hidden>
@@ -5928,11 +6012,6 @@ body {
       </div>
     </div>
 
-    <!-- تنبيه مكتمل الأفعال: نتائج الحذف الجماعي — لا معلومة مطلوبة للاستكمال -->
-    <div class="m-toast" id="f03-toast" hidden>
-      <span class="m-toast__text" id="f03-toast-text"></span>
-      <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
-    </div>
     </section>
   </main>
 
@@ -5952,11 +6031,20 @@ body {
     </button>
   </nav>
 
-  <!-- تذييل قصير: بقاء البيانات بصدق + مدخل وضع المراجعة الوحيد -->
+  <!-- تذييل قصير: بقاء البيانات بصدق + مدخل وضع المراجعة الوحيد
+       (SUI-029: المدخل يُخفى في شاشة الدخول — أداة الفحص للفترة بعد الدخول) -->
   <footer class="f03-foot">
     <p class="f03-foot__text" id="f03-storage-line"></p>
     <button type="button" class="f03-foot__link" id="f03-review-open">وضع المراجعة</button>
   </footer>
+
+  <!-- تنبيه مكتمل الأفعال (SUI-001): على مستوى التطبيق خارج كل الوجهات —
+       مستطيل >0 دائمًا، بلا role/aria-live (قناة الإعلان الواحدة هي المنطقة
+       الحية)، والإزاحة السفلية تحسب --f03-navbar-h المقيسة ديناميكيًا -->
+  <div class="m-toast f03-app-toast" id="f03-toast" hidden>
+    <span class="m-toast__text" id="f03-toast-text"></span>
+    <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+  </div>
 
   <!-- ================= طبقة منتقي الفئة — B07 + MicroPicker كما هما ===== -->
   <div class="m-layer-backdrop" data-for="f03-cat-layer" hidden id="f03-cat-backdrop"></div>
@@ -5970,7 +6058,9 @@ body {
     </div>
     <div class="m-layer__body">
       <p class="f03-live" id="f03-cat-live" role="status"></p>
-      <div class="m-note m-note--warning f03-drop-note" role="alert" id="f03-cat-drop-note" hidden>
+      <!-- SUI-010 (عقد B06 المحدث): رسالة زوال الفئة = تحذير → role=status —
+           قابلة للتصرف لكن ليست خطأً؛ القناة واحدة (هذه الرسالة لحدث الزوال) -->
+      <div class="m-note m-note--warning f03-drop-note" role="status" id="f03-cat-drop-note" hidden>
         <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
         <div class="m-note__text">
           <p class="m-note__body" id="f03-cat-drop-note-text"></p>
@@ -7052,8 +7142,11 @@ body {
       يلغي المؤقت الحالي ويخفي العنصر فعليًا ويطلق حدث
       micro-messages:toast-closed — قابل للاستدعاء من زر داخل
       الـtoast أو من المستهلك مباشرة (لا يعود محصورًا باللوحة).
-   3) MicroMessages.announce(text, assertive) — إعلان مرة واحدة
-      لنفس النص المتتالي (منع التكرار).
+   3) MicroMessages.announce(text, opts) — إعلان بهوية الحدث (SUI-012):
+      opts.id يميّز الحدث نفسه — الحدث ذاته (id نفسه والنص نفسه)
+      يُعلن مرة واحدة، والحدث المستقل (id مختلف أو بلا id) يُعلن
+      ولو تطابق النص. الوسيط الثاني يقبل أيضًا المنطقي القديم
+      (assertive) للتوافق الخلفي، وopts.assertive للإلحاح.
    4) إغلاق الرسائل الثابتة ذات زر (.m-note__close) — يخفي
       الرسالة ويعيد التركيز عند الطلب: سمة data-return-focus
       على الزر أو على الرسالة (محدد CSS لعنصر هدف صالح).
@@ -7067,7 +7160,8 @@ body {
   'use strict';
 
   var liveRegion = null;
-  var lastAnnounced = '';
+  /* SUI-012: آخر إعلان بهوية الحدث — المنع لهوية الحدث نفسه لا للنص */
+  var lastAnnounced = { text: '', id: undefined };
 
   function ensureLiveRegion() {
     if (liveRegion && document.body.contains(liveRegion)) return liveRegion;
@@ -7079,11 +7173,25 @@ body {
     return liveRegion;
   }
 
-  function announce(text, assertive) {
+  function announce(text, opts) {
+    /* التوافق الخلفي: الوسيط الثاني كان منطقيًا (assertive) — يقبل
+       الكائن {id, assertive} أو المنطقي القديم؛ بلا وسيط = حدث مستقل */
+    var id, assertive;
+    if (opts && typeof opts === 'object') {
+      id = opts.id;
+      assertive = !!opts.assertive;
+    } else {
+      assertive = !!opts;
+      id = undefined;
+    }
     var region = ensureLiveRegion();
     region.setAttribute('aria-live', assertive ? 'assertive' : 'polite');
-    if (text === lastAnnounced) return; /* إعلان دون تكرار */
-    lastAnnounced = text;
+    /* الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة؛ حدث مستقل (id مختلف
+       أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32) */
+    if (id !== undefined && id !== null && id === lastAnnounced.id && text === lastAnnounced.text) {
+      return;
+    }
+    lastAnnounced = { text: text, id: id };
     region.textContent = '';
     window.setTimeout(function () { region.textContent = text; }, 50);
   }
@@ -8864,6 +8972,46 @@ body {
 
   var stateOf = new WeakMap();
 
+  /* ---------- SUI-007 (REPAIR-R1): رصد عرض العارض — نمط R3-UI01 من data.js ----------
+     عقد المواصفة (A05): التوسيط يُقاس عند أول كشف لوجهة مخفية وعند تغيّر
+     عرض العارض (حاوية أب أو نافذة) — بلا انتظار أول تفاعل من المستخدم.
+     مراقب ResizeObserver واحد لكل شريط (WeakMap — التهيئة المزدوجة
+     لـinit() لا تنشئ مراقبًا ثانيًا) يراقب العرض فقط؛ الاختفاء (عرض 0)
+     لا يعيد القياس (سياسة العرض 0 الموثقة) والإظهار يطلق الرصد بنفسه
+     فيعيد التوسيط. إعادة التوسيط تحفظ الفهرس والتركيز: goToIndex
+     لنفس الفهرس مزامنة صامتة بلا حدث micro-info-peek:change ولا نقل
+     تركيز. بيئة بلا ResizeObserver تبقي سلوك window-resize فقط
+     (العقد القديم الموثق — المستهلك يعيد القياس عند الفتح).
+     window.MicroInfoPeek.disconnect(root) يفصل المراقبين تحت جذر
+     لدورة التنظيف (init يعيد الإلحاق عند الحاجة). */
+  var viewportObservers = new WeakMap(); /* strip → ResizeObserver وحيد */
+  var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
+
+  function recenterStrip(strip, st) {
+    if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
+    st.raf = requestAnimationFrame(function () {
+      st.raf = null;
+      if (st.count <= 0) return;
+      var w = st.viewport.clientWidth;
+      if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      st.lastWidth = w;
+      goToIndex(strip, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
+    });
+  }
+
+  function observeViewport(strip, st) {
+    if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
+    if (viewportObservers.has(strip)) return; /* مراقب واحد لكل شريط — علامة الوجود */
+    var ro = new ResizeObserver(function (entries) {
+      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
+      if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
+      recenterStrip(strip, st);
+    });
+    ro.observe(st.viewport);
+    viewportObservers.set(strip, ro);
+  }
+
   function rtlOf(strip) {
     return getComputedStyle(strip).direction === 'rtl';
   }
@@ -9112,13 +9260,11 @@ body {
     }, true);
     wireKeys(strip, st);
 
-    window.addEventListener('resize', function () {
-      if (st.raf) return;
-      st.raf = requestAnimationFrame(function () {
-        st.raf = null;
-        if (st.count > 0) goToIndex(strip, st.index, { animate: false });
-      });
-    });
+    /* SUI-007: window-resize يبقى (احتياط لبيئة بلا ResizeObserver
+       ولتغيّر النافذة) ويُوجّه عبر recenterStrip نفسها — حماية EPS
+       تمنع العمل المزدوج مع الرصد (rAF واحد لكل نبضة). */
+    window.addEventListener('resize', function () { recenterStrip(strip, st); });
+    observeViewport(strip, st);
 
     if (reduceQuery && reduceQuery.addEventListener) {
       reduceQuery.addEventListener('change', function () {
@@ -9127,10 +9273,9 @@ body {
     }
 
     update(strip, st);
-    /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) */
-    requestAnimationFrame(function () {
-      goToIndex(strip, st.index, { animate: false });
-    });
+    /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) — يخزّن
+       عرض العرض الأول في lastWidth (SUI-007) */
+    recenterStrip(strip, st);
   }
 
   function next(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index + 1); }
@@ -9148,6 +9293,21 @@ body {
     getIndex: function (strip) {
       var st = stateOf.get(strip);
       return st ? st.index : -1;
+    },
+    /* SUI-007: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
+       ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
+       الجذر نفسه إن كان شريطًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+    disconnect: function (root) {
+      var scope = root || document;
+      var strips = [];
+      if (scope.matches && scope.matches('[data-info-peek]')) strips.push(scope);
+      Array.prototype.push.apply(strips, scope.querySelectorAll('[data-info-peek]'));
+      strips.forEach(function (strip) {
+        var ro = viewportObservers.get(strip);
+        if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
+        var st = stateOf.get(strip);
+        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+      });
     }
   };
 
@@ -9766,8 +9926,11 @@ body {
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onRecovery !== 'function') return;
       Promise.resolve().then(function () { return current.onRecovery(); })
-        .then(function () { setMessage(form, 'تم تمرير طلب المساعدة للمعالج المحدد.', 'info'); })
-        .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذر تنفيذ الطلب.', 'error'); });
+        .then(function (result) {
+          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها، وإلا رسالة المكوّن البسيطة */
+          setMessage(form, (result && typeof result.message === 'string' && result.message) || 'تم إرسال طلب المساعدة.', 'info');
+        })
+        .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر إرسال طلب المساعدة.', 'error'); });
     });
     providers.forEach(function (button) {
       button.addEventListener('click', function () {
@@ -9776,8 +9939,8 @@ body {
         var handler = current.providers && current.providers[key];
         if (typeof handler !== 'function') return;
         Promise.resolve().then(function () { return handler(); })
-          .then(function () { setMessage(form, 'تم تمرير الطلب إلى المعالج المحدد.', 'info'); })
-          .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذر تنفيذ الطلب.', 'error'); });
+          .then(function () { setMessage(form, 'تم الدخول بنجاح.', 'info'); })
+          .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر تنفيذ الدخول.', 'error'); });
       });
     });
 
@@ -9797,7 +9960,7 @@ body {
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, 'تعذر استخدام نموذج الدخول: حقول البريد وكلمة المرور غير مكتملة.', 'error');
+        setMessage(form, 'تعذّر تجهيز نموذج الدخول — تأكد من اكتمال حقوله.', 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -9814,20 +9977,24 @@ body {
                 : 'تحقق من كلمة المرور المطلوبة.');
         });
         setMessage(form, 'تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.', 'error');
-        if (invalid[0].reportValidity) invalid[0].reportValidity();
+        /* SUI-014: قناة خطأ واحدة — رسالة المكوّن المرتبطة بالحقل + aria-invalid
+           + تركيز الحقل الأول. لا نستدعي reportValidity() فلا فقاعة أصلية
+           ثانية بلغة النظام فوق الرسالة العربية (العرض البصري للفقاعة نفسها
+           يحتاج متصفحًا مرئيًا — موثق NOT RUN). */
         invalid[0].focus();
         return;
       }
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
-        setMessage(form, 'عرض فقط: لم تُرسل البيانات؛ لا توجد خدمة مصادقة موصولة.', 'info');
+        /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
+        setMessage(form, 'هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.', 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
       form.setAttribute('aria-busy', 'true');
       var submit = form.querySelector('[type="submit"]');
-      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تمرير الطلب' });
-      setMessage(form, 'جارٍ تمرير الطلب إلى المعالج المحدد.', 'info');
+      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تسجيل الدخول' });
+      setMessage(form, 'جارٍ التحقق من بيانات الدخول…', 'info');
       Promise.resolve().then(function () {
         return current.onSubmit({
           email: email ? email.value : '',
@@ -9835,9 +10002,10 @@ body {
         });
       }).then(function (result) {
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
-        setMessage(form, 'تم تمرير الطلب للمعالج؛ نتيجة الدخول يحددها المستهلك.', 'info');
+        /* SUI-013: النتيجة مسؤولية المستهلك — بصياغة بشرية */
+        setMessage(form, 'تم التحقق من بيانات الدخول.', 'info');
       }).catch(function (error) {
-        setMessage(form, error && error.message ? error.message : 'تعذر تمرير الطلب؛ حاول مرة أخرى.', 'error');
+        setMessage(form, error && error.message ? error.message : 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.', 'error');
       }).then(function () {
         form.dataset.microAccessBusy = 'false';
         form.removeAttribute('aria-busy');
@@ -10924,6 +11092,21 @@ body {
    - لا شبكة ولا مصادقة ولا أي حقل مالي (لا مبلغ/رصيد/إيراد) —
      عقد الجدولة فقط: {id, title, date|null, time|null,
      statusKey, customer|null}.
+
+   SUI-009 (REPAIR-R1 2026-10-07): البذرة الافتراضية **نظيفة ببيانات
+   أعمال عربية واقعية** بمفاتيح الحالات المعروفة فقط (progress/done/hold)
+   وبلا نصوص فحص تقنية — كانت تحمل od-10 بمفتاح 'mystery' وod-inj
+   بعنوان فيه <b>/<img onerror> فتظهر في المسار الافتراضي لـF03 والعينة.
+   الحالات الحدية انتقلت إلى **EDGE_FIXTURES معزولة** لا تُحمّل إلا بوضع
+   فحص صريح:
+   - OrderDemoStore.EDGE_FIXTURES: مصفوفة حالات الحدود (مفتاح حالة
+     مجهول 'mystery' + عنوان يحوي حقن HTML) للأدوات والفحوص.
+   - OrderDemoStore.createStore(seedArray): مصنع مخزن معزول بنفس
+     الواجهة (بذرة بديلة) — لا يلمس المخزن الافتراضي ولا يظهر في
+     أي مسار افتراضي؛ تستخدمه الأدوات لبناء حالة حدود مستقلة.
+   - تحميل fixtures في العينة المستقلة: وسيط URL ?fixtures=edge أو
+     زر «حالات الحدود (وضع الفحص)» الموثق في README — يبقى المسار
+     الافتراضي نظيفًا في F03 والعينة على السواء.
    ========================================================= */
 
 (function () {
@@ -10935,14 +11118,16 @@ body {
   /* خريطة الحالات — **fixtures عينة فقط، ليست آلة حالات منتج**:
      المفاتيح الثلاثة ونبراتها أزواج توكنات معتمدة تمرر للمكوّن
      كما هي (النبرة قرار عرض لا قاعدة عمل). المفتاح غير المعروف
-     يظهر محايدًا بنصه الخام من جهة المكوّن (عقد المواصفة). */
+     يظهر محايدًا بنصه الخام من جهة المكوّن (عقد المواصفة) —
+     اختباره عبر EDGE_FIXTURES أدناه لا عبر المسار الافتراضي. */
   var STATUSES = {
     progress: { label: 'قيد التنفيذ', tone: 'progress' },
     done: { label: 'تم التسليم', tone: 'success' },
     hold: { label: 'بانتظار العميل', tone: 'warning' }
   };
 
-  /* البذرة التركيبية الغنية حول 2026-10-07 (كل الحالات المثبتة):
+  /* البذرة الافتراضية النظيفة حول 2026-10-07 (بيانات أعمال عربية
+   * واقعية بمفاتيح الحالات المعروفة فقط — SUI-009):
    * أمس (10-06) طلبان (واحد بعميل وواحد بوقت)؛
    * اليوم (10-07) ثلاثة مختلطة: واحد بعميل وواحد بوقت وواحد بهما؛
    * غدًا (10-08) ثلاثة — منها العنوان الطويل جدًا (يلتف ولا يكسر)؛
@@ -10950,13 +11135,10 @@ body {
    * يوم 5 طلبات بثلاث حالات (10-22: progress/done/hold)؛
    * بعد أسبوعين (10-20)؛
    * ماضٍ أبعد: حالتان done (لا تسمّيا «متأخرة» — الحالة من
-     البيانات فقط ولا استنتاج من التاريخ)؛
-   * طلبان غير مجدولين (date null) في قسمهما؛
-   * od-10 بمفتاح حالة غير معروف 'mystery' (محايد بنصه الخام)؛
-   * od-inj عنوانه فيه <b> و<img onerror> — اختبار الحقن:
-     يظهر نصًا حرفيًا (المكوّن لا يمرر HTML من البيانات أبدًا).
-   updatedAt عدّاد داخلي للترتيب/الفحص — ليس جزءًا من عقد
-   الطلب لدى المكوّن (يُهمل هناك) ويُعاد ضبطه عند كل كتابة. */
+   * البيانات فقط ولا استنتاج من التاريخ)؛
+   * طلبان غير مجدولين (date null) في قسمهما.
+   * updatedAt عدّاد داخلي للترتيب/الفحص — ليس جزءًا من عقد
+   * الطلب لدى المكوّن (يُهمل هناك) ويُعاد ضبطه عند كل كتابة. */
   var SEED_ORDERS = [
     /* اليوم — 3 مختلطة */
     { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل' },
@@ -10968,8 +11150,6 @@ body {
     { id: 'od-06', title: 'طلب صيانة أجهزة العرض', date: '2026-10-08', time: null, statusKey: 'hold', customer: null },
     /* يوم بطلب واحد */
     { id: 'od-07', title: 'طلب قرطاسية إدارية', date: '2026-10-09', time: '10:30', statusKey: 'done', customer: 'الإدارة العامة' },
-    /* مفتاح حالة غير معروف → محايد بنص المفتاح الخام */
-    { id: 'od-10', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'mystery', customer: 'وحدة التسويق' },
     /* الأسبوع القادم */
     { id: 'od-08', title: 'طلب فطور اجتماع القسم', date: '2026-10-12', time: '08:00', statusKey: 'progress', customer: 'قسم التطوير' },
     { id: 'od-09', title: 'طلب ماء وضيافة مسائية', date: '2026-10-12', time: '13:00', statusKey: 'done', customer: null },
@@ -10991,13 +11171,21 @@ body {
     { id: 'od-p4', title: 'طلب تغيير إضاءة الممرات', date: '2026-09-28', time: null, statusKey: 'done', customer: null },
     /* غير مجدولة — طلبان */
     { id: 'od-u1', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' },
-    { id: 'od-u2', title: 'طلب إطارات كراسي مكتبية', date: null, time: null, statusKey: 'done', customer: null },
-    /* حقن HTML: العنوان يظهر نصًا حرفيًا */
-    { id: 'od-inj', title: 'طلب <b>عنوان</b> <img onerror="window.__xss=1"> تجريبي', date: '2026-10-11', time: '13:00', statusKey: 'progress', customer: null }
+    { id: 'od-u2', title: 'طلب إطارات كراسي مكتبية', date: null, time: null, statusKey: 'done', customer: null }
   ];
 
-  var orders = [];
-  var updateClock = 0; /* عدّاد updatedAt متزايد — حتمي بلا ساعة حائط */
+  /* حالات الحدود المعزولة (SUI-009) — **fixtures لوضع الفحص الصريح
+     فقط** (وسيط URL ?fixtures=edge أو زر وضع الفحص في العينة المستقلة
+     أو createStore للأدوات)؛ لا تُحمّل في أي مسار افتراضي:
+     - od-10: مفتاح حالة غير معروف 'mystery' → يظهر محايدًا بنصه الخام
+       (عقد المواصفة — اختبار سقوط المكوّن للمجهول)؛
+     - od-inj: عنوان فيه <b> و<img onerror> — اختبار الحقن: يظهر نصًا
+       حرفيًا (المكوّن لا يمرر HTML من البيانات أبدًا وwindow.__xss
+       لا يتفعّل). */
+  var EDGE_FIXTURES = [
+    { id: 'od-10', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'mystery', customer: 'وحدة التسويق' },
+    { id: 'od-inj', title: 'طلب <b>عنوان</b> <img onerror="window.__xss=1"> تجريبي', date: '2026-10-11', time: '13:00', statusKey: 'progress', customer: null }
+  ];
 
   function copy(o) {
     return {
@@ -11006,69 +11194,30 @@ body {
     };
   }
 
-  function seedCopy() {
-    return SEED_ORDERS.map(function (o) {
-      var c = copy(o);
-      updateClock += 1;
-      c.updatedAt = updateClock;
-      return c;
-    });
-  }
+  /* مصنع مخزن معزول (SUI-009): نفس الواجهة، حالة داخلية مستقلة
+     (طلبات + عدّاد) — createStore(seed) لا يلمس المخزن الافتراضي ولا
+     يطلق أحداث المستند (صامت: للأدوات وبذرات الاختبار البديلة)؛
+     الإخبار عبر حدث order-store:changed سلوك المخزن الافتراضي وحده. */
+  function createStore(seed, opts) {
+    var announce = !!(opts && opts.announce); /* المخزن الافتراضي وحده يخبر المستند */
+    var seeding = true; /* البذر الأولي صامت — مطابق لسلوك seedCopy السابق */
+    var orders = [];
+    var updateClock = 0; /* عدّاد updatedAt متزايد — حتمي بلا ساعة حائط */
 
-  function notifyChange(id, isNew) {
-    try {
-      document.dispatchEvent(new CustomEvent('order-store:changed', {
-        bubbles: true,
-        detail: { id: id, isNew: isNew === true }
-      }));
-    } catch (e) { /* لا شيء — الإخبار تحسين لا شرط */ }
-  }
+    (seed || []).forEach(function (o) { upsert(o); });
+    seeding = false; /* كتابات ما بعد البذر تخبر مستمعي المستند (الافتراضي فقط) */
 
-  orders = seedCopy();
+    function notifyChange(id, isNew) {
+      if (seeding || !announce) return; /* بذر صامت + مخزن معزول صامت (SUI-009) */
+      try {
+        document.dispatchEvent(new CustomEvent('order-store:changed', {
+          bubbles: true,
+          detail: { id: id, isNew: isNew === true, store: api }
+        }));
+      } catch (e) { /* لا شيء — الإخبار تحسين لا شرط */ }
+    }
 
-  window.OrderDemoStore = {
-    /* نسخة قراءة فقط — التعديل عبر upsert حصرًا؛ ترتيب الإدخال
-       (updatedAt) حتمي = ترتيب البذرة نفسه */
-    all: function () {
-      return orders.slice().sort(function (a, b) {
-        return a.updatedAt - b.updatedAt;
-      }).map(copy);
-    },
-    get: function (id) {
-      for (var i = 0; i < orders.length; i++) {
-        if (orders[i].id === id) return copy(orders[i]);
-      }
-      return null;
-    },
-    /* خريطة الحالات (نسخة) — fixtures عينة لا آلة حالات منتج */
-    statuses: function () {
-      var out = {};
-      Object.keys(STATUSES).forEach(function (k) {
-        out[k] = { label: STATUSES[k].label, tone: STATUSES[k].tone };
-      });
-      return out;
-    },
-    today: function () {
-      return TODAY; /* مثبت لحتمية الفحص — موثق في رأس الملف */
-    },
-    count: function () {
-      return orders.length;
-    },
-    nextId: function () {
-      var max = 0;
-      orders.forEach(function (o) {
-        var m = /^od-(\d+)$/.exec(o.id);
-        if (m) max = Math.max(max, parseInt(m[1], 10));
-      });
-      return 'od-' + String(max + 1).padStart(2, '0');
-    },
-    /* إضافة أو تعديل — idempotent بالمعرف: نفس المعرف يستبدل طلبه
-       القائم (لا نسخة ثانية) بupdatedAt جديد دائمًا. القيم تُطبع
-       نصًا خامًا (نفس عقد المكوّن: تاريخ غير صالح → غير مجدول،
-       وقت غير صالح → غائب) بلا أي تمرير HTML. يُطلق حدث DOM
-       'order-store:changed' (bubbles) على المستند ليستمع
-       المستهلكون ويعيدوا التصيير من المصدر الواحد. */
-    upsert: function (order) {
+    function upsert(order) {
       if (!order || typeof order !== 'object' || !order.id) return null;
       var now = {
         id: String(order.id),
@@ -11096,7 +11245,61 @@ body {
       notifyChange(now.id, isNew);
       return copy(now);
     }
-  };
+
+    var api = {
+      /* نسخة قراءة فقط — التعديل عبر upsert حصرًا؛ ترتيب الإدخال
+         (updatedAt) حتمي = ترتيب البذرة نفسه */
+      all: function () {
+        return orders.slice().sort(function (a, b) {
+          return a.updatedAt - b.updatedAt;
+        }).map(copy);
+      },
+      get: function (id) {
+        for (var i = 0; i < orders.length; i++) {
+          if (orders[i].id === id) return copy(orders[i]);
+        }
+        return null;
+      },
+      /* خريطة الحالات (نسخة) — fixtures عينة لا آلة حالات منتج */
+      statuses: function () {
+        var out = {};
+        Object.keys(STATUSES).forEach(function (k) {
+          out[k] = { label: STATUSES[k].label, tone: STATUSES[k].tone };
+        });
+        return out;
+      },
+      today: function () {
+        return TODAY; /* مثبت لحتمية الفحص — موثق في رأس الملف */
+      },
+      count: function () {
+        return orders.length;
+      },
+      nextId: function () {
+        var max = 0;
+        orders.forEach(function (o) {
+          var m = /^od-(\d+)$/.exec(o.id);
+          if (m) max = Math.max(max, parseInt(m[1], 10));
+        });
+        return 'od-' + String(max + 1).padStart(2, '0');
+      },
+      /* إضافة أو تعديل — idempotent بالمعرف: نفس المعرف يستبدل طلبه
+         القائم (لا نسخة ثانية) بupdatedAt جديد دائمًا. القيم تُطبع
+         نصًا خامًا (نفس عقد المكوّن: تاريخ غير صالح → غير مجدول،
+         وقت غير صالح → غائب) بلا أي تمرير HTML. يُطلق حدث DOM
+         'order-store:changed' (bubbles) على المستند ليستمع
+         المستهلكون ويعيدوا التصيير من المصدر الواحد. */
+      upsert: upsert
+    };
+    return api;
+  }
+
+  /* المخزن الافتراضي: البذرة النظيفة — المسار الافتراضي لـF03 والعينة */
+  var defaultStore = createStore(SEED_ORDERS, { announce: true });
+
+  defaultStore.createStore = createStore;       /* مصنع معزول (SUI-009) */
+  defaultStore.EDGE_FIXTURES = EDGE_FIXTURES;   /* حالات الحدود (SUI-009) */
+
+  window.OrderDemoStore = defaultStore;
 })();
 
 </script>
@@ -12185,6 +12388,38 @@ body {
     return n + ' عنصر.';
   }
 
+  /* ---------- SUI-002: قياس فعلي لارتفاع شريط التنقل ----------
+     ResizeObserver على عنصر الـnavbar نفسه يرصد تغير content-box
+     (خط/محتوى/إظهار) ويحدّث متغير CSS --f03-navbar-h على جذر المستند
+     (:root)؛ الموضعان الثابتان سابقًا (#f03-select-bar و.f03-foot)
+     وإزاحة التوست (SUI-001) تستهلكه — لا سطر load/resize.
+     - منع init مزدوج: مراقب واحد مخزن على العنصر (__f03NavbarRO)
+       وإعادة الاستدعاء آمنة (لا تكرار مراقبين).
+     - سياسة الحالة المخفية: navbar مخفي (rect 0) → لا تحديث — تبقى
+       آخر قيمة مقيسة (أو الاحتياطية 53px قبل أول قياس) فلا يقفز
+       التخطيط عند العودة ولا يتراكب شيء عند ظهوره.
+     - التنظيف: pagehide يفك المراقب عند مغادرة المستند. */
+  var navbarObserver = null;
+
+  function observeNavbarHeight() {
+    if (!el.navbar || !window.ResizeObserver) return;
+    if (navbarObserver) return; /* مراقب واحد لا يتكرر */
+    var apply = function () {
+      var h = el.navbar.getBoundingClientRect().height;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--f03-navbar-h', h + 'px');
+      }
+      /* h=0 (مخفي): آخر قيمة مقيسة تبقى — سياسة موثقة أعلاه */
+    };
+    navbarObserver = new ResizeObserver(apply);
+    navbarObserver.observe(el.navbar); /* content-box: يرصد تغير الخط والمحتوى */
+    el.navbar.__f03NavbarRO = navbarObserver;
+    apply();
+    window.addEventListener('pagehide', function () {
+      if (navbarObserver) navbarObserver.disconnect();
+    });
+  }
+
   /* ---------- تبديل العروض: تركيز وتمرير وnavbar موثقة ---------- */
   var MAIN_VIEWS = ['home', 'list', 'reports', 'account'];
 
@@ -12199,6 +12434,9 @@ body {
     /* navbar للوجهات الأربع الرئيسية فقط — التيار aria-current */
     var isMain = MAIN_VIEWS.indexOf(name) >= 0;
     el.navbar.hidden = !isMain;
+    /* SUI-029: أداة المراجعة خارج مسار الدخول — مدخل التذييل يظهر بعد
+       الدخول فقط (الوجهات ما بعد البوابة)؛ الطبقة نفسها وأدواتها كما هي */
+    el.reviewOpen.hidden = (name === 'gateway');
     if (isMain) {
       Object.keys(el.navItems).forEach(function (k) {
         if (k === name) el.navItems[k].setAttribute('aria-current', 'page');
@@ -12494,6 +12732,11 @@ body {
       lab.appendChild(text);
       el.filterCats.appendChild(lab);
     });
+    /* SUI-015: أول تحكم فعلي (أول خانة فئة) هو هدف التركيز عند فتح
+       اللوحة — عقد data-autofocus في B07 بدل زر الإغلاق (رأس اللوحة).
+       بلا فئات (حالة فراغ) يبقى سلوك اللوحة الافتراضي (أول تفاعلي). */
+    var firstCat = el.filterCats.querySelector('input[type="checkbox"]');
+    if (firstCat) firstCat.setAttribute('data-autofocus', '');
   }
 
   el.filterBtn.addEventListener('click', function () {
@@ -12796,9 +13039,11 @@ body {
   function requestDelete(ids, single, trigger) {
     state.deleteConfirmed = false;
     state.deleteTarget = { ids: ids, single: single };
+    /* SUI-023 (نمط S26): سؤال واضح يخاطب قرار المستخدم مع بيان الأثر
+       بصدق؛ الإلغاء يبقى الخيار الافتراضي الآمن محفوظ التركيز (HTML) */
     el.deleteText.textContent = single
-      ? 'سيُحذف «' + (store.get(ids[0]) || { name: '—' }).name + '» من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.'
-      : 'سيُحذف ' + ids.length + (ids.length === 1 ? ' عنصر' : ' عناصر') + ' من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.';
+      ? 'هل تريد حذف «' + (store.get(ids[0]) || { name: '—' }).name + '»؟ سيُحذف نهائيًا من هذه التجربة، ولا يمكن التراجع بعد التأكيد.'
+      : 'هل تريد حذف ' + ids.length + (ids.length === 1 ? ' عنصر' : ' عناصر') + '؟ سيُحذف نهائيًا من هذه التجربة، ولا يمكن التراجع بعد التأكيد.';
     window.MicroNavigation.openLayer(el.deleteDialog, { trigger: trigger });
   }
 
@@ -12936,12 +13181,18 @@ body {
     el.opNote.hidden = false;
     el.opNote.className = 'm-note m-note--' + variant;
     el.opNote.setAttribute('data-op-state', variant);
+    /* SUI-010 (عقد B06 المحدث): الخطأ الثابت القابل للتصرف = role=alert
+       (إعلان واحد عند الظهور عبر دور الرسالة نفسها)؛ النجاح/المعلومة/
+       التحذير = status — لا إعلان مقاطع آلي لكل تحذير (WCAG Status
+       Messages / ARIA Alert Pattern — راجع مواصفة messages). */
+    el.opNote.setAttribute('role', variant === 'error' ? 'alert' : 'status');
     el.opTitle.textContent = title;
     el.opBody.textContent = body;
   }
   function clearOpMessage() {
     el.opNote.hidden = true;
     el.opNote.setAttribute('data-op-state', 'idle');
+    el.opNote.setAttribute('role', 'status');
     el.opTitle.textContent = '';
     el.opBody.textContent = '';
   }
@@ -14124,6 +14375,7 @@ body {
       return state.settingScenario;
     },
     settlePendingSetting: settlePendingSetting,
+    observeNavbarHeight: observeNavbarHeight, /* SUI-002: للفحص — إعادة آمنة لا تكرر المراقب */
     inspect: inspect
   };
 
@@ -14346,6 +14598,8 @@ body {
       storage: store.storageStatus(),
       storageLineText: el.storageLine.textContent,
       navbarVisible: !el.navbar.hidden,
+      navbarH: document.documentElement.style.getPropertyValue('--f03-navbar-h') || null, /* SUI-002 */
+      navbarRO: navbarObserver ? 1 : 0, /* SUI-002: عدد المراقبين (مراقب واحد) */
       sim: connector.readout(),
       events: state.events.slice()
     };
@@ -14363,6 +14617,7 @@ body {
     buildFilterCats();
     bindSearchAnnouncement();
     bindGateway();
+    observeNavbarHeight(); /* SUI-002: قبل أول عرض — يقيس عند كشف navbar */
     /* مزامنة مفاتيح الإعدادات من المصدر الواحد */
     var s = store.settings();
     var sw1 = el.accountLayer.querySelector('[data-account-setting="includeStoppedInReports"]');

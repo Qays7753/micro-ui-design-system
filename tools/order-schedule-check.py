@@ -29,6 +29,7 @@ screenshots/}. البناء الحتمي يُتحقق منه بـ build-f03-stan
 (بلا كتابة).
 """
 
+import argparse
 import json
 import subprocess
 import sys
@@ -371,6 +372,43 @@ JS_NO_RELOAD = r"""
 })
 """
 
+# ---------- SUI-009 (REPAIR-R1 2026-10-07): تحميل حالات الحدود عبر fixtures صريحة ----------
+# تبرير التحديث (عقد SUI-009 المكتوب في المواصفة وREADME العينة): البذرة
+# الافتراضية للموصل صارت **نظيفة** (بيانات أعمال بمفاتيح الحالات المعروفة
+# فقط — 22 طلبًا)، وحالتا الحدود (od-10 بمفتاح مجهول 'mystery' + od-inj
+# بعنوان محقون) انتقلتا إلى OrderDemoStore.EDGE_FIXTURES المعزولة التي لا
+# تُحمّل إلا بوضع فحص صريح (وسيط ?fixtures=edge أو زر وضع الفحص أو الواجهة
+# البرمجية). المسارات التي تعتمد على أعدادهما/نصوصهما (CAL-05/07/08/09/10)
+# تحمّلها الآن صراحة عبر الواجهة البرمجية (upsert بعد فتح الهدف) —
+# **اختبار الحالات الحدية عبر fixtures صريحة بدل المسار الافتراضي — عقد
+# SUI-009** — دون تعديل أي توقع قائم (الأعداد 24/18 وسلوك المفتاح المجهول
+# المحايد والحقن النصي الحرفي كما هي في بطاقة القبول).
+# standalone.html القائم (قبل إعادة بناء القائد للدمج) مبني على البذرة
+# القديمة التي تحمل الحالتين أصلًا ولا يعرّف EDGE_FIXTURES — فالتحميل
+# يتخطاه بأمان (Array.isArray يفشل) وتبقى توقعاته محققة من بذرته الخاصة.
+# (تحديث القائد بعد إعادة البناء الحتمي 2026-10-07): standalone الجديد
+# مبني على البذرة النظيفة نفسها ويعرّف EDGE_FIXTURES — فصار الهدف
+# الثالث يُحمّل fixtures صريحة مثل src/sample (نفس التبرير أعلاه، عقد
+# SUI-009؛ بلا تعديل أي توقع).
+EDGE_FIXTURES_LOAD = r"""
+() => {
+  if (window.OrderDemoStore && Array.isArray(window.OrderDemoStore.EDGE_FIXTURES)) {
+    window.OrderDemoStore.EDGE_FIXTURES.forEach((o) => window.OrderDemoStore.upsert(o));
+    return window.OrderDemoStore.count();
+  }
+  return null; /* standalone القديم: الحالات في بذرته أصلًا */
+}
+"""
+
+
+def ensure_edge_fixtures(page, tgt):
+    """تحميل fixtures الحالات الحدية لمسارات CAL-05/07/08/09/10 (عقد SUI-009).
+    حدث order-store:changed يعيد التصيير من المصدر الواحد في F03 والعينة."""
+    if tgt not in ("src", "sample", "standalone"):
+        return
+    page.evaluate(EDGE_FIXTURES_LOAD)
+    page.wait_for_timeout(450)  # إعادة تصيير المستهلك من حدث الموصل
+
 JS_CELL_SELECT_STATE = r"""
 (rs) => {
   const root = document.querySelector(rs);
@@ -625,9 +663,10 @@ def p04_rows_details_back(t: CheckTool, ctx: Ctx):
 
 def p05_views_sync(t: CheckTool, ctx: Ctx):
     """CAL-05: الشهر واليوم والقائمة على نسخة البيانات نفسها بلا تكرار أو ضياع."""
-    t.path_begin("CAL-05", "تزامن شهر/يوم/قائمة: عدّ الخلية = صفوف الشهر = صفوف اليوم، وكل طلب مرة واحدة")
+    t.path_begin("CAL-05", "تزامن شهر/يوم/قائمة: عدّ الخلية = صفوف الشهر = صفوف اليوم، وكل طلب مرة واحدة (+ حالات حدود fixtures — عقد SUI-009)")
     for tgt in ("src", "standalone", "sample"):
         page = t.open_target(tgt, ctx)
+        ensure_edge_fixtures(page, tgt)  # SUI-009: fixtures صريحة بدل البذرة الافتراضية
         A = F03_IDS if tgt != "sample" else SMP_IDS
         R = A["root"]
         with t.target_scope(tgt, "CAL-05"):
@@ -747,9 +786,10 @@ def p06_connected_journey(t: CheckTool, ctx: Ctx):
 
 def p07_list_sections(t: CheckTool, ctx: Ctx):
     """CAL-07: أقسام القائمة بترتيبها، والماضي لا يتحول إلى «متأخر»."""
-    t.path_begin("CAL-07", "القائمة: القادمة صاعدة/السابقة الأحدث أولًا/غير المجدولة قسمها، ولا «متأخر» أبدًا")
+    t.path_begin("CAL-07", "القائمة: القادمة صاعدة/السابقة الأحدث أولًا/غير المجدولة قسمها، ولا «متأخر» أبدًا (+ حالات حدود fixtures — عقد SUI-009)")
     for tgt in ("src", "standalone", "sample"):
         page = t.open_target(tgt, ctx)
+        ensure_edge_fixtures(page, tgt)  # SUI-009: fixtures صريحة بدل البذرة الافتراضية
         A = F03_IDS if tgt != "sample" else SMP_IDS
         R = A["root"]
         with t.target_scope(tgt, "CAL-07"):
@@ -829,6 +869,7 @@ def p08_states(t: CheckTool, ctx: Ctx):
     # --- src/standalone/sample: API المثيل العمومي (getInstance) ---
     for tgt in ("src", "standalone", "sample"):
         page = t.open_target(tgt, ctx)
+        ensure_edge_fixtures(page, tgt)  # SUI-009: fixtures صريحة بدل البذرة الافتراضية
         R = F03_IDS["root"] if tgt != "sample" else SMP_IDS["root"]
         with t.target_scope(tgt, "CAL-08"):
             st = page.evaluate("""(rs) => {
@@ -882,9 +923,10 @@ def p08_states(t: CheckTool, ctx: Ctx):
 
 def p09_date_time_status(t: CheckTool, ctx: Ctx):
     """CAL-09: التاريخ الكامل بالعربية في التفاصيل، الوقت فقط إن وُجد، والحالات من الخريطة."""
-    t.path_begin("CAL-09", "قراءة التفاصيل: تاريخ كامل بالعربية، صف الوقت يخفى بلا وقت، وشريحة الحالة من الخريطة (المجهول بنصه)")
+    t.path_begin("CAL-09", "قراءة التفاصيل: تاريخ كامل بالعربية، صف الوقت يخفى بلا وقت، وشريحة الحالة من الخريطة (المجهول بنصه — عبر fixtures صريحة، عقد SUI-009)")
     for tgt in ("src", "standalone", "sample"):
         page = t.open_target(tgt, ctx)
+        ensure_edge_fixtures(page, tgt)  # SUI-009: fixtures صريحة بدل البذرة الافتراضية
         A = F03_IDS if tgt != "sample" else SMP_IDS
         R = A["root"]
         with t.target_scope(tgt, "CAL-09"):
@@ -934,9 +976,10 @@ def p09_date_time_status(t: CheckTool, ctx: Ctx):
 
 def p10_robustness(t: CheckTool, ctx: Ctx):
     """CAL-10: عنوان طويل بلا كسر، مفتاح مجهول محايد، ولا HTML من البيانات."""
-    t.path_begin("CAL-10", "عنوان طويل يلتف بلا فيض، mystery محايد بنصه، وحقن <b>/<img> يظهر نصًا حرفيًا (window.__xss غير مفعّل)")
+    t.path_begin("CAL-10", "عنوان طويل يلتف بلا فيض، mystery محايد بنصه، وحقن <b>/<img> يظهر نصًا حرفيًا (window.__xss غير مفعّل) — عبر fixtures صريحة (عقد SUI-009)")
     for tgt in ("src", "standalone", "sample"):
         page = t.open_target(tgt, ctx)
+        ensure_edge_fixtures(page, tgt)  # SUI-009: fixtures صريحة بدل البذرة الافتراضية
         A = F03_IDS if tgt != "sample" else SMP_IDS
         R = A["root"]
         with t.target_scope(tgt, "CAL-10"):
@@ -1337,6 +1380,19 @@ def git_info():
 
 
 def main():
+    # SAMSUNG-ONEUI-REPAIR-R1 (الوكيل 4 — جولة الرجعية 2026-10-07): وسيطا
+    # --out و--port اختياريان لإعادة تشغيل الرجعية بمخرجات معزولة (مثل أدلة
+    # evidence/agent4/regression/) دون الكتابة فوق الأدلة التاريخية في
+    # reviews/ORDER-SCHEDULE/، ولتثبيت الخادم على منفذ ضمن نطاق الوكيل 4
+    # (4400-4419) بدل منفذ تلقائي. الافتراضات كما كانت بلا تغيير سلوك.
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(OUT),
+                    help="دليل الإخراج (الافتراضي reviews/ORDER-SCHEDULE التاريخي)")
+    ap.add_argument("--port", type=int, default=0,
+                    help="منفذ الخادم (0 = تلقائي؛ أثناء REPAIR-R1 استخدم 4400-4419)")
+    args = ap.parse_args()
+    out_dir = Path(args.out).resolve()
+
     git_meta = git_info()
 
     class QuietHandler(SimpleHTTPRequestHandler):
@@ -1344,7 +1400,7 @@ def main():
             pass
 
     handler = lambda *a, **k: QuietHandler(*a, directory=str(ROOT), **k)
-    srv = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    srv = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
     port = srv.server_address[1]
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     urls = {
@@ -1357,7 +1413,7 @@ def main():
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True, args=["--no-sandbox", "--disable-dev-shm-usage"])
         version = browser.version
-        tool = run(browser, urls, OUT)
+        tool = run(browser, urls, out_dir)
 
     passed = sum(1 for r in tool.results if r["result"] == "PASS")
     failed = [r["id"] for r in tool.results if r["result"] == "FAIL"]
@@ -1405,9 +1461,9 @@ def main():
             ],
         },
     }
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "verification.json").write_text(json.dumps(doc, ensure_ascii=False, indent=2),
-                                           encoding="utf-8")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "verification.json").write_text(json.dumps(doc, ensure_ascii=False, indent=2),
+                                               encoding="utf-8")
     lines = [
         f"ORDER-SCHEDULE (CAL) — نتائج الفحص ({doc['generated_at_utc']})",
         f"المصدر: commit {git_meta.get('commit')} tree {git_meta.get('tree')} "
@@ -1432,7 +1488,7 @@ def main():
     lines.append("فحوص لكل هدف (تكافؤ): " + "؛ ".join(
         f"{tgt} {per_target[tgt]['passed']}/{per_target[tgt]['checks']}" for tgt in TARGETS))
     lines.append("NOT RUN: " + "؛ ".join(doc["summary"]["not_run"]))
-    (OUT / "verification.txt").write_text("\n".join(lines), encoding="utf-8")
+    (out_dir / "verification.txt").write_text("\n".join(lines), encoding="utf-8")
 
     print("\n".join(lines[-8:]))
     sys.exit(0 if not failed else 1)

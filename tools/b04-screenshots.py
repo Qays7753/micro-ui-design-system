@@ -4,8 +4,13 @@
 Micro UI — B04 التنظيم والمعلومات: فحص ولقطات. من جذر المستودع:
   python3 tools/b04-screenshots.py
 المخرجات: reviews/B04/screenshots/*.png و reviews/B04/verification.txt
+
+تعديل جولة SAMSUNG-ONEUI-REPAIR-R1 (ملكية الوكيل 1 الحصرية — إضافي فقط):
+  وسيطا --out و--port الاختياريان لتوجيه المخرجات إلى مجلد أدلة الجولة
+  بدل الكتابة فوق أدلة الجولات التاريخية (reviews/B04) ومنفذ من نطاق
+  الوكيل 1 (4100-4119). الافتراضان يحافظان على السلوك التاريخي نفسه.
 """
-import http.server, subprocess, sys, threading
+import argparse, http.server, subprocess, sys, threading
 from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -23,19 +28,33 @@ def check(name, ok, detail=""):
     log(("PASS  " if ok else "FAIL  ") + name + ((" — " + detail) if detail else ""))
 
 def main():
+    global SHOTS, LOGFILE
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(ROOT / "reviews" / "B04"),
+                    help="مجلد الإخراج (الافتراضي reviews/B04 التاريخي؛ مرر مجلد أدلتك لتفادي الكتابة فوقه)")
+    ap.add_argument("--port", type=int, default=0,
+                    help="منفذ الخادم (0 تلقائي كالسلوك التاريخي؛ نطاق الوكيل 1: 4100-4119)")
+    ap.add_argument("--browser", default="",
+                    help="مسار Chromium التنفيذي (الافتراضي: متصفح Playwright المثبت)")
+    args = ap.parse_args()
+    out = Path(args.out).resolve()
+    SHOTS = out / "screenshots"
+    LOGFILE = out / "verification.txt"
     SHOTS.mkdir(parents=True, exist_ok=True)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), http.server.SimpleHTTPRequestHandler)
     server.daemon_threads = True
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_address[1]}"
     board = f"{base}/previews/organization/index.html"
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
     log(f"# B04 سجل الفحص — {datetime.now().isoformat(timespec='seconds')}")
-    log(f"# commit المصدر: {commit}\n")
+    log(f"# commit المصدر: {commit}")
+    log(f"# الإخراج: {out}")
+    log("")
 
     errors = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, executable_path=(args.browser or None))
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         page = ctx.new_page()
         page.on("console", lambda m: errors.append((m.text or "") + " @" + ((m.location or {}).get("url") or "")) if m.type == "error" else None)

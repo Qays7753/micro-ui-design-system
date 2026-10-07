@@ -8,7 +8,9 @@
 
 ## callbacks
 
-`MicroAccessGateway.init(root, handlers)` حيث `handlers.onSubmit({email,password})` و`handlers.onRecovery()` و`handlers.providers[key]()` وظائف يقدمها المستهلك. يمكن أن تعيد Promise؛ حالة الانتظار تستعمل `MicroButtons.setLoading`، والرفض يظهر نص الخطأ بـ`textContent`. بعد النجاح تُرسل `micro-access:submitted` وتذكر الرسالة أن نتيجة الدخول مسؤولية المستهلك. لا تحفظ المكتبة كلمة المرور ولا تطلب API.
+`MicroAccessGateway.init(root, handlers)` حيث `handlers.onSubmit({email,password})` و`handlers.onRecovery()` و`handlers.providers[key]()` وظائف يقدمها المستهلك. يمكن أن تعيد Promise؛ حالة الانتظار تستعمل `MicroButtons.setLoading`، والرفض يظهر نص الخطأ بـ`textContent`. بعد النجاح تُرسل `micro-access:submitted`. لا تحفظ المكتبة كلمة المرور ولا تطلب API.
+
+**قناة خطأ واحدة (SUI-014):** عند إرسال غير صالح تُدار الرسالة من المكوّن وحده — رسالة عربية مرتبطة بالحقل + `aria-invalid` + تركيز أول حقل غير صالح. لا يُستدعي `reportValidity()` الأصلي فلا تظهر فقاعة نظام ثانية فوق رسالة المكوّن (عدم الاستدعاء مقيس برمجيًا؛ عرض الفقاعة البصري نفسه غير مفحوص في headless). **لغة بشرية (SUI-013):** النصوص الافتراضية عربية بسيطة بلا مصطلحات داخلية («المعالج/المستهلك/موصولة»)؛ رسالة `onRecovery` المحلولة تُعرض إن قدم المستهلك `result.message`، ودون `onSubmit` تعلن النسخة أنها عرض تجريبي لا يرسل بيانات.
 
 دون `onSubmit`، يرفض المثال الإيهام بالإرسال ويعلن أنه عرض محلي فقط. القيود الأساسية والتحقق الأصلي للبريد وكلمة المرور مطلوبة؛ لا منطق تحقق/مصادقة تجاري. موصلات Google/Apple/الضيف لا تظهر ولا تعمل دون handlers صريحة.
 

@@ -56,7 +56,9 @@
 
         <div class="example" style="width:350px;max-width:100%">
           <div class="example-grid" style="gap:8px">
-            <div class="m-note m-note--warning" role="alert">
+            <!-- SUI-010 (عقد B06 المحدث): التحذير = role=status — لا إعلان مقاطع
+                 آليًا لكل تحذير؛ الخطأ وحده (أدناه) = alert -->
+            <div class="m-note m-note--warning" role="status">
               <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
               <div class="m-note__text"><span class="m-note__title">تحذير — نص طويل</span><p class="m-note__body">رصيد الصندوق دون الحد الأدنى المعتمد لهذا الفرع وفق سجل اليوم، وقد يتأخر صرف بعض المصروفات النثرية إذا استمر الصرف بهذا المعدل حتى نهاية الدوام — راجع الإدارة المالية قبل اعتماد أي طلب صرف جديد. هذه رسالة تحذير طويلة عمدًا لفحص الالتفاف.</p></div>
             </div>
@@ -163,7 +165,8 @@
       <div class="phone-full-block">
         <div class="phone-demo is-390 zoom-lab" id="text-zoom-target">
           <div class="phone-stack">
-            <div class="m-note m-note--warning" role="alert">
+            <!-- SUI-010 (عقد B06 المحدث): التحذير = role=status -->
+            <div class="m-note m-note--warning" role="status">
               <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
               <div class="m-note__text"><span class="m-note__title">تحذير طويل عند التكبير</span><p class="m-note__body">رسالة تحذير طويلة عمدًا لفحص التفاف النص المكبر داخل الحاوية دون خروج عن العمود أو تداخل مع الأيقونة أو زر الإغلاق.</p></div>
               <button type="button" class="m-btn m-btn--icon m-btn--secondary m-note__close" aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>

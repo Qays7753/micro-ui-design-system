@@ -12,8 +12,11 @@
       يلغي المؤقت الحالي ويخفي العنصر فعليًا ويطلق حدث
       micro-messages:toast-closed — قابل للاستدعاء من زر داخل
       الـtoast أو من المستهلك مباشرة (لا يعود محصورًا باللوحة).
-   3) MicroMessages.announce(text, assertive) — إعلان مرة واحدة
-      لنفس النص المتتالي (منع التكرار).
+   3) MicroMessages.announce(text, opts) — إعلان بهوية الحدث (SUI-012):
+      opts.id يميّز الحدث نفسه — الحدث ذاته (id نفسه والنص نفسه)
+      يُعلن مرة واحدة، والحدث المستقل (id مختلف أو بلا id) يُعلن
+      ولو تطابق النص. الوسيط الثاني يقبل أيضًا المنطقي القديم
+      (assertive) للتوافق الخلفي، وopts.assertive للإلحاح.
    4) إغلاق الرسائل الثابتة ذات زر (.m-note__close) — يخفي
       الرسالة ويعيد التركيز عند الطلب: سمة data-return-focus
       على الزر أو على الرسالة (محدد CSS لعنصر هدف صالح).
@@ -27,7 +30,8 @@
   'use strict';
 
   var liveRegion = null;
-  var lastAnnounced = '';
+  /* SUI-012: آخر إعلان بهوية الحدث — المنع لهوية الحدث نفسه لا للنص */
+  var lastAnnounced = { text: '', id: undefined };
 
   function ensureLiveRegion() {
     if (liveRegion && document.body.contains(liveRegion)) return liveRegion;
@@ -39,11 +43,25 @@
     return liveRegion;
   }
 
-  function announce(text, assertive) {
+  function announce(text, opts) {
+    /* التوافق الخلفي: الوسيط الثاني كان منطقيًا (assertive) — يقبل
+       الكائن {id, assertive} أو المنطقي القديم؛ بلا وسيط = حدث مستقل */
+    var id, assertive;
+    if (opts && typeof opts === 'object') {
+      id = opts.id;
+      assertive = !!opts.assertive;
+    } else {
+      assertive = !!opts;
+      id = undefined;
+    }
     var region = ensureLiveRegion();
     region.setAttribute('aria-live', assertive ? 'assertive' : 'polite');
-    if (text === lastAnnounced) return; /* إعلان دون تكرار */
-    lastAnnounced = text;
+    /* الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة؛ حدث مستقل (id مختلف
+       أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32) */
+    if (id !== undefined && id !== null && id === lastAnnounced.id && text === lastAnnounced.text) {
+      return;
+    }
+    lastAnnounced = { text: text, id: id };
     region.textContent = '';
     window.setTimeout(function () { region.textContent = text; }, 50);
   }

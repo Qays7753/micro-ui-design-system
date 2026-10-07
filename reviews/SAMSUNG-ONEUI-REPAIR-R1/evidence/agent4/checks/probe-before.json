@@ -1,0 +1,140 @@
+{
+  "SUI-007_F03_320": {
+    "before_first_interaction": {
+      "transform": 0,
+      "vpW": 288,
+      "slideW": 228,
+      "leftInset": 60,
+      "rightInset": 0,
+      "index": 0
+    },
+    "after_first_goTo": {
+      "transform": -30,
+      "vpW": 288,
+      "slideW": 228,
+      "leftInset": 30,
+      "rightInset": 30,
+      "index": 0
+    },
+    "delta_transform": -30
+  },
+  "SUI-017_F03_title": {
+    "fs": "16px",
+    "lh": "26px",
+    "fw": "600"
+  },
+  "SUI-009_F03_schedule": {
+    "legendText": "قيد التنفيذتم التسليمبانتظار العميلmystery",
+    "mysteryInDom": true,
+    "hasOd10": false,
+    "hasOdInj": false,
+    "rowCount": 3,
+    "literalB": null,
+    "storeCount": 24
+  },
+  "SUI-007_harness": {
+    "while_hidden": {
+      "transform": 0,
+      "vpW": 0,
+      "slideW": 0,
+      "leftInset": 0,
+      "rightInset": 0,
+      "index": 0
+    },
+    "after_reveal": {
+      "transform": 0,
+      "vpW": 304,
+      "slideW": 244,
+      "leftInset": 60,
+      "rightInset": 0,
+      "index": 0
+    },
+    "after_goTo_same_index": {
+      "transform": -30,
+      "vpW": 304,
+      "slideW": 244,
+      "leftInset": 30,
+      "rightInset": 30,
+      "index": 0
+    },
+    "peek_has_RO_or_disconnect_api": false
+  },
+  "SUI-025_harness": {
+    "while_hidden": {
+      "transform": 0,
+      "vpW": 0,
+      "slideW": 0,
+      "leftInset": 0,
+      "rightInset": 0,
+      "index": 0
+    },
+    "after_reveal": {
+      "transform": 0,
+      "vpW": 320,
+      "slideW": 248,
+      "leftInset": 72,
+      "rightInset": 0,
+      "index": 0
+    },
+    "after_goTo_1": {
+      "transform": 224,
+      "vpW": 320,
+      "slideW": 248,
+      "leftInset": 36,
+      "rightInset": 36,
+      "index": 1
+    },
+    "after_parent_width_360_no_window_resize": {
+      "transform": 224,
+      "vpW": 360,
+      "slideW": 288,
+      "leftInset": -4,
+      "rightInset": 76,
+      "index": 1
+    },
+    "carousel_has_disconnect_api": false
+  },
+  "SUI-008_harness": {
+    "at_1x": {
+      "cardClientW": 312,
+      "cardScrollW": 312,
+      "numW": 320,
+      "numH": 44,
+      "cardW": 312,
+      "cardH": 94,
+      "overflowWrap": "normal",
+      "fontSize": "36px",
+      "numInsideCardX": false,
+      "numInsideCardY": true,
+      "text": "1234567890123456"
+    },
+    "at_200pct": {
+      "cardClientW": 312,
+      "cardScrollW": 312,
+      "numW": 641,
+      "numH": 88,
+      "cardW": 312,
+      "cardH": 160,
+      "overflowWrap": "normal",
+      "fontSize": "72px",
+      "numInsideCardX": false,
+      "numInsideCardY": true,
+      "text": "1234567890123456"
+    }
+  },
+  "SUI-024_comparison": {
+    "docScrollW": 739,
+    "docClientW": 320,
+    "tableW": 569,
+    "hasScrollContainer": false
+  },
+  "SUI-009_sample_default": {
+    "legendText": "قيد التنفيذتم التسليمبانتظار العميلmystery",
+    "mysteryInDom": true,
+    "hasOd10": false,
+    "hasOdInj": false,
+    "storeCount": 24,
+    "hasCreateStore": false,
+    "hasEdgeFixtures": false
+  }
+}

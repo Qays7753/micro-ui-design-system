@@ -1,0 +1,49 @@
+{
+  "tool": "evidence/agent3/family-review.py",
+  "purpose": "مراجعة عائلات المرحلة الثانية بعد إصلاحات A3: B06 + E01 + E04",
+  "generated_at": "2026-10-07T22:07:15.784295+00:00",
+  "page_errors": [],
+  "results": [
+    {
+      "name": "B06 toast: ظهور فعلي 320×80 تقريبًا مع قناة إعلان واحدة (بلا role/aria-live على العنصر)",
+      "ok": true,
+      "detail": "{'w': 350, 'h': 80, 'hidden': False, 'role': None, 'ariaLive': None, 'regionText': 'تم النسخ إلى سجل اليوم (محاكاة)', 'fromBottom': 20}"
+    },
+    {
+      "name": "B06 toast: الإغلاق اليدوي يعمل",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "B06 اللوحة: عقد أدوار m-note مطبق في HTML العينة (SUI-010: خطأ=alert، تحذير/معلومة/نجاح=status)",
+      "ok": true,
+      "detail": "{'info': {'role': 'status'}, 'success': {'role': 'status'}, 'warning': {'role': 'status'}, 'error': {'role': 'alert'}}"
+    },
+    {
+      "name": "E01 gateway: كشف كلمة المرور يبدّل النوع مع aria-pressed وlabel",
+      "ok": true,
+      "detail": "{'type': 'text', 'pressed': 'true', 'label': 'إخفاء كلمة المرور'}"
+    },
+    {
+      "name": "E01 gateway: صيغة بريد غير صالحة → رسالة مرتبطة وaria-invalid وتركيز (قناة واحدة)",
+      "ok": true,
+      "detail": "{'ariaInvalid': 'true', 'msg': 'أدخل بريدًا إلكترونيًا صالحًا.', 'focus': 'gateway-email'}"
+    },
+    {
+      "name": "E04 account-settings: المفتاح وقناة الحالة موجودان في لوحة المفاهيم",
+      "ok": true,
+      "detail": "{'hasSwitch': True, 'note': True}"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  },
+  "not_run": [
+    "قارئ شاشة فعلي",
+    "لمس/هاتف فعلي",
+    "WebKit",
+    "native zoom"
+  ]
+}

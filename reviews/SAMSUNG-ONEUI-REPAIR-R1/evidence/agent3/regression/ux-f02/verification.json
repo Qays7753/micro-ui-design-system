@@ -1,0 +1,3177 @@
+{
+  "meta": {
+    "title": "UX-F02 — مصفوفة قبول الاختيار والفلاتر والمفتاح (32 مسارًا)",
+    "status": "DRAFT FOR REVIEW",
+    "round": "repair-a3",
+    "date": "2026-10-07T21:54:47",
+    "source_commit": "eacfe8ac700a995d76ca450fc2aaca6f7530762a",
+    "source_tree": "11d196e330dc1f592508e59c7be5e3facd4d4a9b",
+    "engine": {
+      "browser": "Chromium (headless)",
+      "browser_version": "143.0.7499.4",
+      "driver": "Playwright (Python sync API)",
+      "base_url": "http://127.0.0.1:40125",
+      "pages": [
+        "previews/ux-patterns/choice-lifecycle/index.html",
+        "previews/ux-patterns/filter-lifecycle/index.html",
+        "previews/ux-patterns/switch-lifecycle/index.html"
+      ],
+      "viewport_default": "390x844",
+      "playwright_version": "1.57.0"
+    },
+    "command": "python3 tools/ux-f02-check.py --root /home/z/my-project/micro-ui-design-system --round repair-a3",
+    "zoom_mechanism": "مضاعفة 200% بممرين: التقاط أحجام البداية لكل عناصر body ثم تطبيقها من اللقطة (F02-R1-08-3: لا قراءة/كتابة متسلسلة تضاعف الموروث مرتين)؛ الحالات والخيارات تُجهز قبل القياس — ليست native zoom",
+    "reduced_motion_mechanism": "Playwright reduced_motion='reduce' (تفضيل حقيقي على مستوى السياق)",
+    "raw_pointer_mechanism": "page.mouse.click على إحداثيات العنصر للمعطل/aria-disabled وفق PREFLIGHT — إحداثيات حقيقية لا click() محمي",
+    "sim_neutrality": "تسليح/تسوية/رد قديم عبر evaluate (محايد للتركيز) وفق إذن البطاقة §6؛ أفعال المستخدم بالنقر/لوحة المفاتيح الفعلية",
+    "regression_order": "فحوص B03/B07 وF01 (--round f02r2-regression) تُشغل من checkout نظيف لنفس source commit قبل هذه الأداة، وتُنسخ إلى reviews/UX-F02/round-r2/regression/ وf01-regression/ — ملفات الجولات السابقة لا تُكتب فوقها؛ الفحص يطابق commit/الشجرة وعدد الأحكام لا كلمة PASS",
+    "js_errors": [],
+    "http_failures": []
+  },
+  "rows": [
+    {
+      "id": "F02-01",
+      "path": "P01 مجموعة بلا خيارات مفعّلة: init ثم نقر تحديد الكل",
+      "expected": "checked=false وindeterminate=false قبل/بعد النقر؛ المعطل وقيمته محفوظان",
+      "measured": {
+        "init: الحامل صفر صريح": {
+          "checked": false,
+          "indeterminate": false
+        },
+        "بعد النقر: بلا حالة وهمية": {
+          "checked": false,
+          "indeterminate": false
+        },
+        "المعطلان محفوظان (أحدهما محدد)": [
+          {
+            "disabled": true,
+            "checked": true
+          },
+          {
+            "disabled": true,
+            "checked": false
+          }
+        ],
+        "المجموعة الرئيسية: صفر مبدئي + ثالث معطل محدد": {
+          "allChecked": false,
+          "allInd": false,
+          "items": [
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-02",
+      "path": "P02 مقطّع: aria-disabled + مؤشر حقيقي + Enter/Space + أسهم",
+      "expected": "لا تغيير ولا حدث من المعطل؛ الأسهم تتجاوزه؛ المفعّل يعمل",
+      "measured": {
+        "نقرة مؤشر حقيقية: لا تحديد ولا حدث": {
+          "pressed": "false",
+          "events": 0,
+          "mode": "brief"
+        },
+        "Enter/Space: لا تحديد ولا حدث": {
+          "pressed": "false",
+          "events": 0
+        },
+        "أسهم تتجاوز المعطل وتحدد التالي المفعّل": {
+          "detailPressed": "true",
+          "extraPressed": "false",
+          "events": 1,
+          "mode": "detail",
+          "focusOn": "detail"
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-03",
+      "path": "P03 ملخص الفلاتر: تسميات بشرية، لا مفاتيح، event/count سليم",
+      "expected": "ملخص بالتسميات؛ لا قيمة بحث خام؛ تسمية غائبة → عدد محايد؛ detail.applied/count سليمة",
+      "measured": {
+        "ملخص الجاري بالتسمية لا القيمة": "الجاري: البحث",
+        "تسمية data-filter-label تعمل": "الجاري: البحث، النشطة",
+        "لا قيمة بحث خام في الملخص": "الجاري: البحث، النشطة",
+        "لا عبارة العدّاد التقنية": "الجاري: البحث، النشطة",
+        "تسمية غائبة: ملخص عدد محايد بلا مفاتيح": "الجاري: 3 فلاتر",
+        "لا اسم مفتاح داخلي ظهر": "الجاري: 3 فلاتر",
+        "حدث تطبيق واحد بنسخة applied": {
+          "n": 1,
+          "d": {
+            "applied": {
+              "q": "ج",
+              "active": false,
+              "marked": false
+            },
+            "count": 1
+          }
+        },
+        "count = عدد الشروط": {
+          "applied": {
+            "q": "ج",
+            "active": false,
+            "marked": false
+          },
+          "count": 1
+        },
+        "applied لدى المستهلك مطابق": {
+          "q": "ج",
+          "active": false,
+          "marked": false
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-04",
+      "path": "P04 توثيق المنتقي/العقود",
+      "expected": "لا وصف طبقة مؤقتة؛ عقد B07 مرجع الروابط؛ READMEs موجودة ومطابقة",
+      "measured": {
+        "لا «المنتقي بطبقة مؤقتة حتى B07»": true,
+        "الربط الفعلي بB07 موثق": "specification.md §6",
+        "إصلاح F02-P04 موسوم": true,
+        "data-filter-label موثق في مواصفة B07": true,
+        "حراسة isDisabled في النقر موثقة (F02-P02)": true,
+        "حالة صفر صريح للمجموعة الفارغة موثقة (F02-P01)": true,
+        "README موجود: choice-lifecycle": true,
+        "README موجود: filter-lifecycle": true,
+        "README موجود: switch-lifecycle": true,
+        "فهرس ux-patterns يربط العينات الأربع": true,
+        "فهرس المعرض يحيل لعينات UX": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-05",
+      "path": "checkboxes صفر→جزئي→كل→مسح + راديو",
+      "expected": "المعطل المحفوظ ثابت؛ تحديد الكل يخص المفعّل؛ راديو واحد؛ لا قراءات ولا حفظ",
+      "measured": {
+        "بداية: صفر مفعّل محدد، المعطل محدد": {
+          "items": [
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ],
+          "all": {
+            "checked": false,
+            "indeterminate": false
+          }
+        },
+        "جزئي: alpha محدد → indeterminate": {
+          "items": [
+            {
+              "checked": true,
+              "disabled": false
+            },
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ],
+          "all": {
+            "checked": false,
+            "indeterminate": true
+          }
+        },
+        "كل المفعّل: تحديد الكل true بلا جزئية": {
+          "items": [
+            {
+              "checked": true,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ],
+          "all": {
+            "checked": true,
+            "indeterminate": false
+          }
+        },
+        "مسح المفعّل: صفر صريح، المعطل باقٍ": {
+          "items": [
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ],
+          "all": {
+            "checked": false,
+            "indeterminate": false
+          }
+        },
+        "تحديد الكل يحدد المفعّلين ولا يلمس المعطل": {
+          "items": [
+            {
+              "checked": true,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": false
+            },
+            {
+              "checked": true,
+              "disabled": true
+            }
+          ],
+          "all": {
+            "checked": true,
+            "indeterminate": false
+          }
+        },
+        "راديو: اسم واحد واختيار واحد": [
+          {
+            "checked": false,
+            "name": "f02c-radio"
+          },
+          {
+            "checked": true,
+            "name": "f02c-radio"
+          },
+          {
+            "checked": false,
+            "name": "f02c-radio"
+          }
+        ],
+        "لا قراءات من المجموعات المحلية": 0,
+        "لا رسائل نجاح/حفظ": ""
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-06",
+      "path": "مقطّع موجز/تفصيلي",
+      "expected": "aria-pressed والمحتوى متطابقان؛ لا تأثير على المنتقي ولا أحداث عرض",
+      "measured": {
+        "المحتوى يتبع الوضع": {
+          "brief": true,
+          "detail": false,
+          "pressedDetail": "true",
+          "pressedBrief": "false",
+          "events": 1,
+          "insp": {
+            "selected": null,
+            "displayText": "المحدد: لا شيء",
+            "selectionNote": "",
+            "mode": "detail",
+            "readSeq": 0,
+            "staleIgnored": 0,
+            "layerOpen": false,
+            "pickerSummary": "المحدد: لا شيء",
+            "options": [],
+            "stateRow": null,
+            "liveText": "",
+            "dropNote": {
+              "text": "",
+              "hiddenAttr": true,
+              "display": "none",
+              "w": 0,
+              "h": 0,
+              "clipPath": "none",
+              "inLayer": true
+            },
+            "focusId": "button",
+            "readCalls": 0,
+            "searchValue": ""
+          }
+        },
+        "aria-pressed متزامن": {
+          "brief": true,
+          "detail": false,
+          "pressedDetail": "true",
+          "pressedBrief": "false",
+          "events": 1,
+          "insp": {
+            "selected": null,
+            "displayText": "المحدد: لا شيء",
+            "selectionNote": "",
+            "mode": "detail",
+            "readSeq": 0,
+            "staleIgnored": 0,
+            "layerOpen": false,
+            "pickerSummary": "المحدد: لا شيء",
+            "options": [],
+            "stateRow": null,
+            "liveText": "",
+            "dropNote": {
+              "text": "",
+              "hiddenAttr": true,
+              "display": "none",
+              "w": 0,
+              "h": 0,
+              "clipPath": "none",
+              "inLayer": true
+            },
+            "focusId": "button",
+            "readCalls": 0,
+            "searchValue": ""
+          }
+        },
+        "المنتقي لم يتأثر: لا قراءات ولا اختيار ولا طبقة": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "detail",
+          "readSeq": 0,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": null,
+          "liveText": "",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "button",
+          "readCalls": 0,
+          "searchValue": ""
+        },
+        "عودة للموجز سليمة": 2
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-07",
+      "path": "قراءة المنتقي loading→error→retry→ready",
+      "expected": "القديم غير مرئي/غير قابل للاختيار؛ البحث لا يمس الخطأ؛ retry قراءة واحدة",
+      "measured": {
+        "loading: لا خيارات ظاهرة": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "جارٍ القراءة…",
+          "liveText": "جارٍ قراءة الخيارات…",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "error: صف حالة + زر إعادة محاولة، الخيارات مخفية فعليًا": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "تعذر القراءةإعادة المحاولة",
+          "liveText": "تعذرت قراءة الخيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "error: لا خيار قديم قابل للاختيار": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "تعذر القراءةإعادة المحاولة",
+          "liveText": "تعذرت قراءة الخيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "البحث لا يزيل حالة الخطأ": "تعذر القراءةإعادة المحاولة",
+        "retry: قراءة واحدة جديدة": [
+          2,
+          2
+        ],
+        "retry أثناء loading: صف الانتظار": "جارٍ القراءة…",
+        "ready: خيارات ظاهرة وصف الحالة زال": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-picker-search",
+          "readCalls": 2,
+          "searchValue": ""
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-08",
+      "path": "empty-source وready بلا عناصر بعد اختيار سابق + no-results",
+      "expected": "المصدر الفارغ (مسارا empty وready/items=[]) يصفر الاختيار والملخص والعرض مع رسالة الزوال الظاهرة داخل الطبقة (R2-01) دون استبدال العقدة أو reload ولا اختيار تلقائي؛ no-results ثم المسح يعيد البيانات بلا قراءة؛ والبحث المكتوب أثناء القراءة (R2-04-2) يعلن من الظاهر لا من عدد المصدر: مطابقة/بلا مطابقة/تحديث ببيانات جديدة/مسح",
+      "measured": {
+        "empty بعد اختيار: الاختيار صفر في القيمة والعرض والملخص": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "لا خيارات في المصدر.",
+          "liveText": "لا خيارات في المصدر.",
+          "dropNote": {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "empty بعد اختيار: رسالة الزوال ظاهرة فعليًا داخل الطبقة (R2-01)": {
+          "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "hiddenAttr": false,
+          "display": "flex",
+          "visibility": "visible",
+          "w": 350,
+          "h": 54,
+          "clipPath": "none",
+          "inLayer": true,
+          "inLive": false
+        },
+        "empty بعد اختيار: قناة واحدة — نص الزوال ليس في قناة القراءة والخارجية فارغة": [
+          false,
+          ""
+        ],
+        "empty بعد اختيار: صف حالة صريح ولا اختيار تلقائي لأول خيار": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "لا خيارات في المصدر.",
+          "liveText": "لا خيارات في المصدر.",
+          "dropNote": {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "ready/items=[] يطابق empty (تزامن null ورسالة الزوال)": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "لا خيارات في المصدر.",
+          "liveText": "لا خيارات في المصدر.",
+          "dropNote": {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "بلا reload في المسارين": true,
+        "فتح جديد يعيد ready بعد الفارغ": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 3,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 3,
+          "searchValue": ""
+        },
+        "no-results: صف بحث ولا يخلط بحالة القراءة": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "no-results: القناة المباشرة تعلن انعدام النتائج لا عدد القراءة القديم": "لا نتائج مطابقة للبحث. جرّب اسمًا آخر.",
+        "مسح البحث يعيد كل الخيارات بلا قراءة جديدة وتعلانًا مفهومًا": [
+          "الخيارات الظاهرة: 3 خيارات.",
+          3
+        ],
+        "بحث أثناء القراءة ثم ready بمطابقة: الإعلان يطابق الظاهر (R2-02)": "نتائج البحث: 1 خيارات.",
+        "بحث أثناء القراءة ثم ready بلا مطابقة: انعدام النتائج لا عدد المصدر (R2-02)": "لا نتائج مطابقة للبحث. جرّب اسمًا آخر.",
+        "تحديث بيانات باستعلام قائم مع مطابقة: عدد الظاهر هو المعلن": "نتائج البحث: 1 خيارات.",
+        "مسح البحث بعد تحديث باستعلام قائم: النص يطابق المعروض": "الخيارات الظاهرة: 1 خيارات."
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-09",
+      "path": "اختيار ثم إعادة فتح ثم مسح",
+      "expected": "قيمة/ملخص/عرض متطابقة؛ الاختيار يغلق الطبقة؛ المسح إلى null بلا قراءات حفظ",
+      "measured": {
+        "الاختيار أغلق الطبقة وتركّز على المشغّل": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب"
+          },
+          "displayText": "المحدد: عينة ب",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: عينة ب",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": true,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-open-picker",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "قيمة/عرض/ملخص متطابقة": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب"
+          },
+          "displayText": "المحدد: عينة ب",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: عينة ب",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": true,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-open-picker",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "إعادة فتح: الملخص الداخلي يحفظ الاختيار": "المحدد: عينة ب",
+        "مسح الاختيار: null في كل العروض": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": "جارٍ القراءة…",
+          "liveText": "جارٍ قراءة الخيارات…",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-clear",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "لا قراءات جديدة عند المسح (ولا مسار حفظ أصلاً)": [
+          2,
+          2
+        ]
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-10",
+      "path": "إغلاق بلا اختيار جديد بكل الوسائل",
+      "expected": "الاختيار السابق محفوظ؛ لا إعادة فتح تلقائية؛ تركيز إلى المشغّل الصالح؛ إغلاق ظاهر واحد في التركيب (R1-06) بفقد Escape/الخلفية",
+      "measured": {
+        "إغلاق ظاهر واحد: لا [data-picker-close] في تركيب الطبقة": true,
+        "زر رأس الطبقة موجود والوسائل الأخرى سليمة (Escape/خلفية data-backdrop=close)": true,
+        "كل الوسائل تُغلق وترجع التركيز للمشغّل": [
+          "f02c-open-picker",
+          "f02c-open-picker",
+          "f02c-open-picker"
+        ],
+        "الاختيار السابق محفوظ بعد كل الإغلاقات": {
+          "value": "alpha",
+          "label": "عينة أ"
+        },
+        "لا إعادة فتح تلقائية": true,
+        "القراءات = فتح الاختيار الأول + 3 فتحات الإغلاق (الإغلاق بلا قراءة)": 4
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-11",
+      "path": "إعادة قراءة بمعرف باقٍ وتسمية جديدة",
+      "expected": "القيمة ثابتة والتسمية الداخلية/الخارجية تجددان حتى دون change",
+      "measured": {
+        "beta باقٍ بالمعرف": {
+          "value": "beta",
+          "label": "عينة ب — المحدثة"
+        },
+        "التسمية الجديدة داخلية وخارجية": [
+          "المحدد: عينة ب — المحدثة",
+          "المحدد: عينة ب — المحدثة"
+        ],
+        "بلا change لازمة لتحديث التسمية (بقاء المعرف)": 0
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-12",
+      "path": "اختفاء الاختيار من المصدر — الرسالة الظاهرة والقناة الواحدة (R2-01)",
+      "expected": "داخل الطبقة المفتوحة: رسالة الزوال ظاهرة فعليًا داخل النطاق (display/مستطيل/بلا قص) وهي القناة الوحيدة للحدث (نصها ليس في قناة القراءة ولا في الخارجية)؛ اللقطة وهي مفتوحة والرسالة مستقرة بعد توكيد الحالة؛ تحديث بيانات وحده لا يمسحها (بلا استعادة تلقائية) واختيار جديد يمسح سببها؛ خارج الطبقة: القناة الخارجية دون إعادة فتح؛ null في كل العروض؛ بلا اختيار تلقائي؛ وأن يزول الاختيار مع no-results البحثية معًا (R2-02)",
+      "measured": {
+        "الاختيار سقط: null في القيمة والعرض والملخص": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 2 خيارات.",
+          "dropNote": {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "الطبقة مفتوحة: رسالة الزوال ظاهرة فعليًا داخل النطاق (R2-01)": {
+          "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "hiddenAttr": false,
+          "display": "flex",
+          "visibility": "visible",
+          "w": 350,
+          "h": 54,
+          "clipPath": "none",
+          "inLayer": true,
+          "inLive": false
+        },
+        "قناة واحدة للحدث: نص الزوال ليس في قناة القراءة": [
+          false,
+          "تمت القراءة: 2 خيارات."
+        ],
+        "لا نص معالجة في القناة الخارجية الخاضعة لـinert أثناء الفتح": {
+          "text": "",
+          "inInert": true
+        },
+        "بلا تحديد تلقائي لأول خيار": [
+          false,
+          false
+        ],
+        "الرسالة الظاهرة مستقرة قبل اللقطة (قياسان متطابقان)": {
+          "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "hiddenAttr": false,
+          "display": "flex",
+          "visibility": "visible",
+          "w": 350,
+          "h": 54,
+          "clipPath": "none",
+          "inLayer": true,
+          "inLive": false
+        },
+        "تحديث البيانات بعد الزوال لا يعيد الاختيار تلقائيًا والرسالة باقية (سببها قائم)": {
+          "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "hiddenAttr": false,
+          "display": "flex",
+          "visibility": "visible",
+          "w": 350,
+          "h": 54,
+          "clipPath": "none",
+          "inLayer": true,
+          "inLive": false
+        },
+        "النتيجة المقبولة أثناء الإغلاق تزامن العرض": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+          "mode": "brief",
+          "readSeq": 4,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 2 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-open-picker",
+          "readCalls": 4,
+          "searchValue": ""
+        },
+        "العرض مغلق: رسالة الزوال في القناة الخارجية": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+        "العرض مغلق: رسالة الطبقة مخفية (القناة الوحيدة للحدث المغلق)": {
+          "text": "",
+          "hiddenAttr": true,
+          "display": "none",
+          "w": 0,
+          "h": 0,
+          "clipPath": "none",
+          "inLayer": true
+        },
+        "لا إعادة فتح تلقائية": true,
+        "اختيار جديد يمسح القناتين: سبب الرسالة زال": {
+          "text": "",
+          "hiddenAttr": true,
+          "display": "none",
+          "w": 0,
+          "h": 0,
+          "clipPath": "none",
+          "inLayer": true
+        },
+        "زوال الاختيار + no-results معًا: كل قناة تعلن معناها دون تكرار أو تطغى": [
+          {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibility": "visible",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true,
+            "inLive": false
+          },
+          "لا نتائج مطابقة للبحث. جرّب اسمًا آخر."
+        ]
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-13",
+      "path": "قراءتان متداخلتان + لقطة fixture لكل قراءة (R1-05)",
+      "expected": "الأقدم يُتجاهل كليًا؛ نتيجة كل Promise تخص مصدرها وreadId (تسوية الأحدث أولًا ثم الأقدم)؛ تسوية الحالي بلا reload",
+      "measured": {
+        "قراءتان معلقتان (1 و2)": [
+          2,
+          2
+        ],
+        "القديم تجاهل كليًا: لا حالة ولا رسالة ولا اختيار": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 1,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [],
+          "stateRow": "جارٍ القراءة…",
+          "liveText": "جارٍ قراءة الخيارات…",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "التركيز لم يتحرك بالقديم": "f02c-layer-close",
+        "الأحدث طُبق في الصفحة نفسها (بلا reload) والاختيار لا يزال null": {
+          "selected": null,
+          "displayText": "المحدد: لا شيء",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 1,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: لا شيء",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "بلا reload": true,
+        "R1-05: نتيجة القراءة الأحدث من مصدرها الجديد": {
+          "readId": 102,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "new",
+              "label": "New"
+            }
+          ]
+        },
+        "R1-05: نتيجة القراءة الأقدم من مصدرها القديم رغم تغيير fixture": {
+          "readId": 101,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "old",
+              "label": "Old"
+            }
+          ]
+        },
+        "R2-03: تعديل label وvalue لكائن مصدر الإنشاء بعد بدء الطلب لا يمس نتيجته": {
+          "readId": 201,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "old",
+              "label": "قبل القراءة"
+            }
+          ]
+        },
+        "R2-03: تعديل label وvalue لكائن مصدر setSource بعد بدء الطلب لا يمس نتيجته": {
+          "readId": 202,
+          "outcome": "ready",
+          "items": [
+            {
+              "value": "new",
+              "label": "المصدر الجديد"
+            }
+          ]
+        },
+        "رد بمعرف 0 عبر مسار المستهلك يُتجاهل": 2
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-14",
+      "path": "تحديث بيانات والتركيز داخل المنتقي + لوحة المفاتيح (R1-03)",
+      "expected": "خيار مركّز → البحث الثابت قبل استبدال العقدة؛ زر retry المزول → البحث؛ البحث الثابت وزر رأس الطبقة لا تُسرق منهما؛ بلا عنصر نشط مخفي؛ أسهم/Home/End وroving سليمة",
+      "measured": {
+        "كان التركيز على خيار قبل التحديث": true,
+        "التركيز انتقل للبحث الثابت قبل استبدال العقدة": "f02c-picker-search",
+        "الخيارات استُبدلت فعليًا": [
+          "عينة أ (جديدة)",
+          "عينة ب (جديدة)",
+          "عينة ج (جديدة)"
+        ],
+        "لا عنصر نشط مخفي بعد الاستبدال": true,
+        "R1-03: تركيز المستخدم على البحث الثابت لا يُسرق": "f02c-picker-search",
+        "R1-03: تركيز المستخدم على زر رأس الطبقة لا يُسرق": "f02c-layer-close",
+        "البيانات تجددت رغم عدم سرقة التركيز": true,
+        "R1-03: تركيز على retry المزول → البحث الثابت (لا body)": "f02c-picker-search",
+        "Home لأول خيار وEnd لآخره": {
+          "home": "alpha",
+          "end": "gamma",
+          "next_rtl": "alpha",
+          "prev_rtl": "gamma",
+          "tab_stops": 1
+        },
+        "أسهم RTL: يسار=التالي ويمين=السابق": {
+          "home": "alpha",
+          "end": "gamma",
+          "next_rtl": "alpha",
+          "prev_rtl": "gamma",
+          "tab_stops": 1
+        },
+        "roving: نقطة تبويب واحدة": 1
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-15",
+      "path": "fixtures بديلة للاختيار والمفتاح + بقاء البذرة بعد القراءة (R1-01)",
+      "expected": "قيم البداية من مصدر واحد؛ beta تظهر محددة داخل المنتقي وخارجه عند الإقلاع، تبقى بعد أول ready وتسميته المحدثة وبعد إعادة الفتح؛ معرف غائب يُمسح بأول تأكيد برسالة الزوال؛ بلا أحداث/تحديثات مبكرة",
+      "measured": {
+        "اختيار beta ظاهر عند الإقلاع (قيمة/عرض/ملخص داخلي)": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب"
+          },
+          "displayText": "المحدد: عينة ب",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 0,
+          "staleIgnored": 0,
+          "layerOpen": false,
+          "pickerSummary": "المحدد: عينة ب",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": true,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "body",
+          "readCalls": 0,
+          "searchValue": ""
+        },
+        "بلا قراءات مبكرة عند الإقلاع": 0,
+        "الفتح يقرأ ولا يزيل البذرة قبل النتيجة": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب"
+          },
+          "displayText": "المحدد: عينة ب",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: عينة ب",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": true,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": true,
+              "display": "none",
+              "visibleRect": false,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": "جارٍ القراءة…",
+          "liveText": "جارٍ قراءة الخيارات…",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "R1-01: أول ready يبقي beta محددة داخل المنتقي (aria-selected + ملخص)": {
+          "ariaSelected": true,
+          "summary": "المحدد: عينة ب"
+        },
+        "R1-01: البذرة باقية خارج المنتقي بلا رسالة زوال": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب"
+          },
+          "displayText": "المحدد: عينة ب",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 1,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: عينة ب",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب",
+              "selected": true,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 1,
+          "searchValue": ""
+        },
+        "إعادة الفتح: beta باقية بالمعرف وبالتسمية المحدثة": {
+          "selected": {
+            "value": "beta",
+            "label": "عينة ب — المحدثة"
+          },
+          "displayText": "المحدد: عينة ب — المحدثة",
+          "selectionNote": "",
+          "mode": "brief",
+          "readSeq": 2,
+          "staleIgnored": 0,
+          "layerOpen": true,
+          "pickerSummary": "المحدد: عينة ب — المحدثة",
+          "options": [
+            {
+              "value": "alpha",
+              "label": "عينة أ",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            },
+            {
+              "value": "beta",
+              "label": "عينة ب — المحدثة",
+              "selected": true,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": 0
+            },
+            {
+              "value": "gamma",
+              "label": "عينة ج",
+              "selected": false,
+              "hiddenAttr": false,
+              "display": "flex",
+              "visibleRect": true,
+              "tabIndex": -1
+            }
+          ],
+          "stateRow": null,
+          "liveText": "تمت القراءة: 3 خيارات.",
+          "dropNote": {
+            "text": "",
+            "hiddenAttr": true,
+            "display": "none",
+            "w": 0,
+            "h": 0,
+            "clipPath": "none",
+            "inLayer": true
+          },
+          "focusId": "f02c-layer-close",
+          "readCalls": 2,
+          "searchValue": ""
+        },
+        "معرف غائب: يظهر في القيمة عند الإقلاع (لم تؤكد قراءة بعد)": {
+          "value": "ghost",
+          "label": "غير موجودة"
+        },
+        "معرف غائب: لا بذرة داخل المنتقي قبل القراءة": "المحدد: لا شيء",
+        "معرف غائب: أول ready يمسحه برسالة الزوال الظاهرة داخل الطبقة (R2-01)": [
+          null,
+          {
+            "text": "الخيار السابق لم يعد متاحًا. اختر مجددًا.",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibility": "visible",
+            "w": 350,
+            "h": 54,
+            "clipPath": "none",
+            "inLayer": true,
+            "inLive": false
+          }
+        ],
+        "مفتاح true عند الإقلاع": {
+          "op": "idle",
+          "confirmed": true,
+          "submitted": null,
+          "attemptId": 0,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": null,
+          "lockedInputDisabled": true,
+          "message": null,
+          "noteFocusable": true,
+          "noteVisible": false,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "body",
+          "updateCalls": 0,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 0,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": null,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "بلا تحديثات مبكرة": [
+          0,
+          null
+        ]
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-16",
+      "path": "تعديل draft فلاتر",
+      "expected": "applied/القائمة/العدّاد لا تتغير قبل التطبيق؛ الملخص الجاري فقط يتغير",
+      "measured": {
+        "applied لم يتغير": {
+          "q": "",
+          "active": false,
+          "marked": false
+        },
+        "القائمة والعدّاد ثابتان": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          {
+            "text": "0",
+            "hiddenAttr": true,
+            "display": "none",
+            "visibleRect": false
+          }
+        ],
+        "الملخص يتبع الجاري": "الجاري: البحث، النشطة",
+        "لا حدث تطبيق": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-17",
+      "path": "إلغاء الفلاتر بكل الوسائل ثم فتح",
+      "expected": "applied/القائمة/العدّاد محفوظة؛ draft يُستعاد من applied؛ لا apply من الإغلاق",
+      "measured": {
+        "أساس: شرطان مطبقان": {
+          "applied": {
+            "q": "ج",
+            "active": false,
+            "marked": true
+          },
+          "appliedEventCount": 2,
+          "shownIds": [
+            "c"
+          ],
+          "resultsText": "النتائج: 1",
+          "badge": {
+            "text": "2",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibleRect": true
+          },
+          "summaryText": "المطبّق: البحث، المعلّمة",
+          "draft": {
+            "q": "ج",
+            "active": false,
+            "marked": true
+          },
+          "layerOpen": false,
+          "noResultsVisible": false,
+          "rowLabels": [
+            "عينة ج"
+          ],
+          "focusId": "f02f-filter-btn"
+        },
+        "كل الوسائل حفظت applied والعدّاد": [
+          [
+            "cancel",
+            {
+              "q": "ج",
+              "active": false,
+              "marked": true
+            },
+            "2"
+          ],
+          [
+            "close-btn",
+            {
+              "q": "ج",
+              "active": false,
+              "marked": true
+            },
+            "2"
+          ],
+          [
+            "escape",
+            {
+              "q": "ج",
+              "active": false,
+              "marked": true
+            },
+            "2"
+          ],
+          [
+            "backdrop",
+            {
+              "q": "ج",
+              "active": false,
+              "marked": true
+            },
+            "2"
+          ]
+        ],
+        "لا أحداث تطبيق من الإغلاق": true,
+        "الفتح يعيد draft من applied": {
+          "q": "ج",
+          "active": false,
+          "marked": true
+        },
+        "تركيز داخل الطبقة عند الفتح": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-18",
+      "path": "تطبيق q+checkbox ثم إعادة فتح",
+      "expected": "حدث واحد بنسخة القيم؛ AND صحيح؛ العدّاد شروط لا نتائج؛ draft=applied",
+      "measured": {
+        "حدث واحد بقيم مقصوصة": {
+          "n": 1,
+          "d": {
+            "applied": {
+              "q": "ج",
+              "active": true,
+              "marked": false
+            },
+            "count": 2
+          }
+        },
+        "AND: العنصر المطابق للشرطين وحده": [
+          "c"
+        ],
+        "العدّاد شروط (2) لا نتائج (1)": [
+          {
+            "text": "2",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibleRect": true
+          },
+          "النتائج: 1"
+        ],
+        "draft يطابق applied بعد الفتح": {
+          "q": "ج",
+          "active": true,
+          "marked": false
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-19",
+      "path": "applied → مسح draft → إلغاء",
+      "expected": "المطبّق والنتائج محفوظة؛ إعادة الفتح تعيد المطبّق إلى draft",
+      "measured": {
+        "أساس: شرطان مطبقان": [
+          {
+            "text": "2",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibleRect": true
+          },
+          [
+            "a",
+            "c"
+          ]
+        ],
+        "مسح draft: الجاري صفر والملخص آمن": [
+          {
+            "q": "",
+            "active": false,
+            "marked": false
+          },
+          "الجاري: لا فلاتر"
+        ],
+        "الإلغاء حفظ المطبّق": [
+          {
+            "text": "2",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibleRect": true
+          },
+          [
+            "a",
+            "c"
+          ]
+        ],
+        "إعادة الفتح تعيد المطبّق للـdraft": {
+          "q": "عينة",
+          "active": true,
+          "marked": false
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-20",
+      "path": "applied → مسح → تطبيق",
+      "expected": "3 نتائج؛ count=0 والعدّاد مخفي فعليًا بلا وصول؛ لا «تم الحفظ»",
+      "measured": {
+        "تطبيق صفر شروط: count=0 وقيم فارغة": {
+          "applied": {
+            "q": "",
+            "active": false,
+            "marked": false
+          },
+          "count": 0
+        },
+        "3 نتائج": "النتائج: 3",
+        "العدّاد مخفي فعليًا: display:none ومستطيل 0 وبلا وصول تركيز": {
+          "display": "none",
+          "w": 0,
+          "h": 0,
+          "focusable": false
+        },
+        "لا «تم الحفظ» إطلاقًا": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-21",
+      "path": "no-results مع تعديل الفلاتر",
+      "expected": "النص والفعل ظاهران؛ الفتح يعيد التصحيح دون فقد applied غير مقصود",
+      "measured": {
+        "no-results ظاهرة": {
+          "applied": {
+            "q": "zzz",
+            "active": true,
+            "marked": false
+          },
+          "appliedEventCount": 2,
+          "shownIds": [],
+          "resultsText": "النتائج: 0",
+          "badge": {
+            "text": "2",
+            "hiddenAttr": false,
+            "display": "flex",
+            "visibleRect": true
+          },
+          "summaryText": "المطبّق: البحث، النشطة",
+          "draft": {
+            "q": "zzz",
+            "active": true,
+            "marked": false
+          },
+          "layerOpen": false,
+          "noResultsVisible": true,
+          "rowLabels": [],
+          "focusId": "f02f-filter-btn"
+        },
+        "نص موجز بلا تقنيات (ليست خطأ قراءة)": "لا نتائج مطابقة للفلاتر المطبقة.\n\nتعديل الفلاتر",
+        "الفتح يعيد draft المطبق للتصحيح": {
+          "q": "zzz",
+          "active": true,
+          "marked": false
+        },
+        "التصحيح يعيد النتائج": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-22",
+      "path": "بحث مختلط/مسافات/أحرف شبيهة بـHTML",
+      "expected": "قص أطراف فقط؛ مطابقة معلنة؛ نص حرفي؛ لا حقن أو أسماء مفاتيح في الواجهة",
+      "measured": {
+        "القيمة المطبقة مشذبة الأطراف فقط": {
+          "q": "<b>عينة</b>",
+          "active": false,
+          "marked": false
+        },
+        "مطابقة حرفية: بلا نتائج للنص الكامل": [],
+        "احتواء حرفي: <b> لا يطابق شيء": [],
+        "لا حقن: تسميات القائمة نصوص مقروبة": [],
+        "مطابقة بالاحتواء المعلنة تعمل": [
+          "b"
+        ],
+        "لا أسماء مفاتيح داخلية في الواجهة": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-23",
+      "path": "idle→pending مع نقر/Space متكرر",
+      "expected": "تحديث واحد ونسخة ثابتة؛ confirmed القديم؛ checked المقصود؛ حجب التكرار وتركيز صالح",
+      "measured": {
+        "تحديث واحد بمعرف 1 ونسخة مقصودة": {
+          "attemptId": 1,
+          "value": true
+        },
+        "confirmed لم يتغير وchecked المقصودة": {
+          "op": "pending",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ تحديث الإعداد…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": true,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "التعطيل الفعلي + data-pending": {
+          "op": "pending",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ تحديث الإعداد…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": true,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "التركيز انتقل للوصف قبل التعطيل (لا BODY ولا معطل)": "f02s-note",
+        "نقرة خام أثناء pending: لا تحديث ثانٍ": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-24",
+      "path": "pending→saved ثم تبديل معاكس",
+      "expected": "تزامن confirmed؛ النجاح بعد النتيجة فقط؛ القديم يزال؛ المحاولة الثانية مستقلة",
+      "measured": {
+        "saved: confirmed=1 وchecked متزامنة": {
+          "op": "saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "رسالة النجاح بعد الحسم فقط": {
+          "variant": "success",
+          "title": "تم تحديث الإعداد.",
+          "text": ""
+        },
+        "الحسم لا يحرك التركيز": [
+          "f02s-note",
+          "f02s-note"
+        ],
+        "نتيجة قديمة (نجاح) زالت عند محاولة جديدة": {
+          "variant": "info",
+          "title": "جارٍ تحديث الإعداد…",
+          "text": ""
+        },
+        "المحاولة الثانية مستقلة": {
+          "attemptId": 2,
+          "value": false
+        },
+        "الثانية حُسمت: confirmed=0": {
+          "op": "saved",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 2,
+            "value": false
+          },
+          "attemptId": 2,
+          "checked": false,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 2,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-25",
+      "path": "pending→not-saved ثم إعادة المحاولة",
+      "expected": "استرجاع confirmed ونص ثابت؛ محاولة جديدة ممكنة بلا reload",
+      "measured": {
+        "confirmed لم يتغير وchecked استُرجعت": {
+          "op": "not-saved",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": false,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "error",
+            "title": "لم يُحدَّث الإعداد.",
+            "text": "حاول مجددًا."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "رسالة الرفض ثابتة": {
+          "variant": "error",
+          "title": "لم يُحدَّث الإعداد.",
+          "text": "حاول مجددًا."
+        },
+        "الحالة المقصودة not-saved مثبتة قبل اللقطة": "not-saved",
+        "إعادة المحاولة نجحت بلا reload": {
+          "op": "saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 2,
+            "value": true
+          },
+          "attemptId": 2,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 2,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "بلا reload": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-26",
+      "path": "update unknown ورفض Promise",
+      "expected": "لا rollback ولا ادعاء رفض؛ لا تحديث جديد؛ زر التحقق ظاهر فعليًا والسبب واضح",
+      "measured": {
+        "unknown: لا rollback (checked المقصودة باقية) ولا ادعاء": {
+          "op": "unknown",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "warning",
+            "title": "تعذر تأكيد التحديث.",
+            "text": "تحقق من النتيجة."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "زر التحقق ظاهر فعليًا (display/مستطيل/وصول)": {
+          "display": "flex",
+          "hiddenAttr": false,
+          "w": 153,
+          "h": 48,
+          "focusable": true
+        },
+        "سبب الحجب واضح": {
+          "variant": "warning",
+          "title": "تعذر تأكيد التحديث.",
+          "text": "تحقق من النتيجة."
+        },
+        "لا تحديث جديد أثناء unknown": 1,
+        "رفض update: unknown بلا rollback (checked المقصودة باقية) وبلا ادعاء": {
+          "op": "unknown",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "warning",
+            "title": "تعذر تأكيد التحديث.",
+            "text": "تحقق من النتيجة."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "رفض update: زر التحقق ظاهر فعليًا": {
+          "display": "flex",
+          "hiddenAttr": false,
+          "w": 153,
+          "h": 48,
+          "focusable": true
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-27",
+      "path": "unknown→checking متكرر→saved/not-saved/unknown صريح/رفض (R1-08(5))",
+      "expected": "check واحد لكل دورة لنفس attemptId؛ update ثابت؛ حسم صحيح وتركيز قبل إخفاء الزر وفقط إن كان التركيز عليه؛ رفض check يعيد unknown؛ check outcome=unknown صريح يُنفذ فعلًا؛ تركيز المستخدم في مكان آخر لا يُسرق عند الحسم",
+      "measured": {
+        "تكرار تفعيل أثناء checking: لا check ثانٍ": {
+          "op": "checking",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ التحقق من نتيجة آخر تحديث…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": true,
+          "focusId": "f02s-check",
+          "updateCalls": 1,
+          "checkCalls": 1,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 1,
+            "pendingUpdate": false,
+            "pendingCheck": true,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "busy على زر التحقق فقط": {
+          "op": "checking",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ التحقق من نتيجة آخر تحديث…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": true,
+          "focusId": "f02s-check",
+          "updateCalls": 1,
+          "checkCalls": 1,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 1,
+            "pendingUpdate": false,
+            "pendingCheck": true,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "حالة checking مثبتة قبل اللقطة": "checking",
+        "R1-08(5): الحسم مع المستخدم في مكان آخر: لا سرقة تركيز": "f02s-note",
+        "حسم saved على قيمة إرسال المحاولة": {
+          "op": "saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 1,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 1,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "حسم not-saved: confirmed بقي وchecked استُرجعت": {
+          "op": "not-saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 2,
+            "value": false
+          },
+          "attemptId": 2,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "error",
+            "title": "لم يُحدَّث الإعداد.",
+            "text": "حاول مجددًا."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-switch-input",
+          "updateCalls": 2,
+          "checkCalls": 2,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 2,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "التركيز كان على زر التحقق عند الحسم → المفتاح قبل إخفاء الزر": "f02s-switch-input",
+        "رفض check: عودة unknown والتحقق متاح مجددًا": {
+          "op": "unknown",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 3,
+            "value": false
+          },
+          "attemptId": 3,
+          "checked": false,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "warning",
+            "title": "تعذر تأكيد التحديث.",
+            "text": "تحقق من النتيجة."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": false,
+          "focusId": "f02s-check",
+          "updateCalls": 3,
+          "checkCalls": 3,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 3,
+            "checkCalls": 3,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 3,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "رفض check: بلا إرسال تلقائي ثانٍ": 3,
+        "check unknown صريح: عودة unknown وزر التحقق متاح": {
+          "op": "unknown",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 3,
+            "value": false
+          },
+          "attemptId": 3,
+          "checked": false,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "warning",
+            "title": "تعذر تأكيد التحديث.",
+            "text": "تحقق من النتيجة."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": false,
+          "focusId": "f02s-check",
+          "updateCalls": 3,
+          "checkCalls": 4,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 3,
+            "checkCalls": 4,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 3,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "check unknown صريح: بلا rollback وبلا تحديث جديد": {
+          "op": "unknown",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 3,
+            "value": false
+          },
+          "attemptId": 3,
+          "checked": false,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "warning",
+            "title": "تعذر تأكيد التحديث.",
+            "text": "تحقق من النتيجة."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": false,
+          "focusId": "f02s-check",
+          "updateCalls": 3,
+          "checkCalls": 4,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 3,
+            "checkCalls": 4,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 3,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-28",
+      "path": "رد قديم update/check ثم تسوية الحالي",
+      "expected": "لا أثر للقديم في قيمة/رسالة/تركيز؛ الحالي يُحسم في الصفحة نفسها بلا طلب بديل",
+      "measured": {
+        "القديم: لا قيمة/رسالة/تركيز": {
+          "op": "pending",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ تحديث الإعداد…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 1,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": true,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "الحالي حُسم بعده في الصفحة نفسها": {
+          "op": "saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 1,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "بلا reload": true,
+        "رد تحقق قديم: لا تغيير أثناء checking": {
+          "op": "checking",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 2,
+            "value": false
+          },
+          "attemptId": 2,
+          "checked": false,
+          "inputDisabled": true,
+          "pendingAttr": "true",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "info",
+            "title": "جارٍ التحقق من نتيجة آخر تحديث…",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": true,
+          "checkDisplay": "flex",
+          "checkRect": {
+            "w": 153,
+            "h": 48
+          },
+          "checkBusy": true,
+          "focusId": "f02s-check",
+          "updateCalls": 2,
+          "checkCalls": 1,
+          "staleIgnored": 2,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 1,
+            "pendingUpdate": false,
+            "pendingCheck": true,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "التحقق الحالي حُسم بعده": {
+          "op": "not-saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 2,
+            "value": false
+          },
+          "attemptId": 2,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "error",
+            "title": "لم يُحدَّث الإعداد.",
+            "text": "حاول مجددًا."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-switch-input",
+          "updateCalls": 2,
+          "checkCalls": 1,
+          "staleIgnored": 2,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 1,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-29",
+      "path": "الرسائل وقناة واحدة وإنهاء pending",
+      "expected": "قناة واحدة لكل حدث؛ لا نص تقني ولا toast؛ false قبل أي pending (متاح ومعطل أصلًا — R2-04-5) بلا أثر، وfalse المتكرر والمعطل الأصلي محفوظان، والدورة القائمة سليمة",
+      "measured": {
+        "رسالة الرفض باقية (لا toast)": {
+          "variant": "error",
+          "title": "لم يُحدَّث الإعداد.",
+          "text": "حاول مجددًا."
+        },
+        "قناة إعلان واحدة في الصفحة (role=status للعينة وحدها)": true,
+        "لا نص تقني/مفاتيح في الرسالة": {
+          "variant": "error",
+          "title": "لم يُحدَّث الإعداد.",
+          "text": "حاول مجددًا."
+        },
+        "وصف الانتظار قابل للتركيز برمجيًا ويبقى بعد الحسم": {
+          "op": "not-saved",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": false,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "error",
+            "title": "لم يُحدَّث الإعداد.",
+            "text": "حاول مجددًا."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "false قبل أي pending: المتاح لا يتغير (disabled/checked/op محفوظة)": {
+          "mainDisabled": false,
+          "mainChecked": false,
+          "lockedDisabled": true,
+          "op": "not-saved",
+          "mainDisabledAfter": false,
+          "mainCheckedAfter": false,
+          "opAfter": "not-saved",
+          "mainPending": "false",
+          "mainBusy": "false",
+          "lockedDisabledAfter": true,
+          "lockedPending": "false",
+          "lockedBusy": "false"
+        },
+        "false قبل أي pending: المعطل أصلًا يبقى معطلًا": {
+          "mainDisabled": false,
+          "mainChecked": false,
+          "lockedDisabled": true,
+          "op": "not-saved",
+          "mainDisabledAfter": false,
+          "mainCheckedAfter": false,
+          "opAfter": "not-saved",
+          "mainPending": "false",
+          "mainBusy": "false",
+          "lockedDisabledAfter": true,
+          "lockedPending": "false",
+          "lockedBusy": "false"
+        },
+        "false قبل أي pending: بلا آثار pending/aria-busy على الحالتين": {
+          "mainDisabled": false,
+          "mainChecked": false,
+          "lockedDisabled": true,
+          "op": "not-saved",
+          "mainDisabledAfter": false,
+          "mainCheckedAfter": false,
+          "opAfter": "not-saved",
+          "mainPending": "false",
+          "mainBusy": "false",
+          "lockedDisabledAfter": true,
+          "lockedPending": "false",
+          "lockedBusy": "false"
+        },
+        "المعطل أصلاً يبقى معطلًا بعد false متكرر": {
+          "op": "not-saved",
+          "confirmed": false,
+          "submitted": {
+            "attemptId": 1,
+            "value": true
+          },
+          "attemptId": 1,
+          "checked": false,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "error",
+            "title": "لم يُحدَّث الإعداد.",
+            "text": "حاول مجددًا."
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 1,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 1,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 1,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        },
+        "بعد الحسم: المفتاح متاح مرة أخرى": {
+          "op": "saved",
+          "confirmed": true,
+          "submitted": {
+            "attemptId": 2,
+            "value": true
+          },
+          "attemptId": 2,
+          "checked": true,
+          "inputDisabled": false,
+          "pendingAttr": "false",
+          "lockedInputDisabled": true,
+          "message": {
+            "variant": "success",
+            "title": "تم تحديث الإعداد.",
+            "text": ""
+          },
+          "noteFocusable": true,
+          "noteVisible": true,
+          "checkVisible": false,
+          "checkDisplay": "none",
+          "checkRect": {
+            "w": 0,
+            "h": 0
+          },
+          "checkBusy": false,
+          "focusId": "f02s-note",
+          "updateCalls": 2,
+          "checkCalls": 0,
+          "staleIgnored": 0,
+          "sim": {
+            "updateCalls": 2,
+            "checkCalls": 0,
+            "pendingUpdate": false,
+            "pendingCheck": false,
+            "lastAttempt": 2,
+            "nextUpdate": "saved",
+            "nextCheck": "saved"
+          }
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-30",
+      "path": "B07 داخل العينتين وحفظ تركيز المستخدم",
+      "expected": "Tab/Shift+Tab محصوران؛ opened/closed مرة لكل عملية؛ overflow يُسترجع؛ لا focus في body/hidden/inert ولا سرقة عند حسم غير حواري",
+      "measured": {
+        "اختيار: opened مرة واحدة": true,
+        "اختيار: Tab محصور": true,
+        "اختيار: Shift+Tab محصور": true,
+        "اختيار: closed مرة واحدة": true,
+        "اختيار: overflow يُسترجع": true,
+        "اختيار: لا تركيز في body بعد الإغلاق": true,
+        "فلاتر: فتح يعيد التركيز داخل الطبقة": true,
+        "فلاتر: التطبيق يعيد التركيز للمشغّل": "f02f-filter-btn",
+        "فلاتر: overflow يُسترجع": true,
+        "فلاتر: لا تركيز في body": true,
+        "القديم لا يسرق التركيز": "f02c-picker-search"
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-31",
+      "path": "المقاسات الأربعة لكل عينة + 200% + reduced-motion",
+      "expected": "لا خروج أفقي/قص في كل المقاسات والحالات المنطبقة؛ 200% بتضخيم فعلي مقاس قبل/بعد (بما فيها خيارات المنتقي بعد تجهيزها) ولا خروج أفقي عند 320/390؛ الحوار قابل للتمرير فعليًا وآخر نص مreachable؛ reduced-motion حقيقي للطبقتين",
+      "measured": {
+        "لا خروج أفقي في كل المقاسات والحالات": {
+          "choice-320-main": true,
+          "choice-320-layer": true,
+          "choice-360-main": true,
+          "choice-360-layer": true,
+          "choice-390-main": true,
+          "choice-390-layer": true,
+          "choice-430-main": true,
+          "choice-430-layer": true,
+          "filter-320-main": true,
+          "filter-320-layer": true,
+          "filter-360-main": true,
+          "filter-360-layer": true,
+          "filter-390-main": true,
+          "filter-390-layer": true,
+          "filter-430-main": true,
+          "filter-430-layer": true,
+          "switch-320-main": true,
+          "switch-320-unknown": {
+            "overflow": true,
+            "op": "unknown"
+          },
+          "switch-360-main": true,
+          "switch-360-unknown": {
+            "overflow": true,
+            "op": "unknown"
+          },
+          "switch-390-main": true,
+          "switch-390-unknown": {
+            "overflow": true,
+            "op": "unknown"
+          },
+          "switch-430-main": true,
+          "switch-430-unknown": {
+            "overflow": true,
+            "op": "unknown"
+          }
+        },
+        "حالة المفتاح في حلقة المقاسات unknown مقاسة (لا pending)": {
+          "switch-320-unknown": "unknown",
+          "switch-360-unknown": "unknown",
+          "switch-390-unknown": "unknown",
+          "switch-430-unknown": "unknown"
+        },
+        "200% @320: أحجام الخط تضاعفت فعليًا (قياس قبل/بعد)": {
+          "before": [
+            22,
+            13,
+            16,
+            16,
+            14,
+            16
+          ],
+          "after": [
+            44,
+            26,
+            32,
+            32,
+            28,
+            32
+          ],
+          "names": [
+            "h1",
+            ".f02-hint",
+            ".m-choice__text",
+            ".m-btn",
+            ".m-note__body",
+            ".m-picker__option"
+          ],
+          "doubled": true
+        },
+        "200% @320: خيارات المنتقي مغطاة بالتضخيم": [
+          {
+            "opt": 32,
+            "h1": 44
+          },
+          16
+        ],
+        "200% @320: لا خروج أفقي بعد التكبير": true,
+        "200% @320: لا حدود حروف خارج الصفحة": [],
+        "200% @320: الحوار بلا تجاوز": {
+          "sh": 336,
+          "ch": 336,
+          "overflowY": "auto",
+          "canScroll": false,
+          "lastReachable": true
+        },
+        "200% @320: الوظيفة باقية (مقطّع يعمل)": true,
+        "200% @390: أحجام الخط تضاعفت فعليًا (قياس قبل/بعد)": {
+          "before": [
+            22,
+            13,
+            16,
+            16,
+            14,
+            16
+          ],
+          "after": [
+            44,
+            26,
+            32,
+            32,
+            28,
+            32
+          ],
+          "names": [
+            "h1",
+            ".f02-hint",
+            ".m-choice__text",
+            ".m-btn",
+            ".m-note__body",
+            ".m-picker__option"
+          ],
+          "doubled": true
+        },
+        "200% @390: خيارات المنتقي مغطاة بالتضخيم": [
+          {
+            "opt": 32,
+            "h1": 44
+          },
+          16
+        ],
+        "200% @390: لا خروج أفقي بعد التكبير": true,
+        "200% @390: لا حدود حروف خارج الصفحة": [],
+        "200% @390: الحوار بلا تجاوز": {
+          "sh": 336,
+          "ch": 336,
+          "overflowY": "auto",
+          "canScroll": false,
+          "lastReachable": true
+        },
+        "200% @390: الوظيفة باقية (مقطّع يعمل)": true,
+        "200% @320 filter: تضخيم فعلي قبل/بعد": {
+          "before": [
+            22,
+            13,
+            16,
+            16,
+            16
+          ],
+          "after": [
+            44,
+            26,
+            32,
+            32,
+            32
+          ],
+          "names": [
+            "h1",
+            ".f02-hint",
+            ".m-choice__text",
+            ".m-btn",
+            ".f02f-row__label"
+          ],
+          "doubled": true
+        },
+        "200% @320 filter: لا خروج أفقي": true,
+        "200% @320 switch: تضخيم فعلي قبل/بعد": {
+          "before": [
+            22,
+            13,
+            16,
+            14,
+            16
+          ],
+          "after": [
+            44,
+            26,
+            32,
+            28,
+            32
+          ],
+          "names": [
+            "h1",
+            ".f02-hint",
+            ".m-btn",
+            ".m-note__body",
+            ".m-switch__label"
+          ],
+          "doubled": true
+        },
+        "200% @320 switch: لا خروج أفقي": true,
+        "reduced-motion choice: تفضيل فعلي مطبق في السياق": true,
+        "reduced-motion choice: زمن انتقال الطبقة صفر": "0s",
+        "reduced-motion choice: الطبقة تفتح وتعمل": true,
+        "reduced-motion choice: الإغلاق يعمل فورًا": true,
+        "reduced-motion filter: تفضيل فعلي مطبق في السياق": true,
+        "reduced-motion filter: زمن انتقال الطبقة صفر": "0s",
+        "reduced-motion filter: الإغلاق يعمل فورًا": true
+      },
+      "failed": [],
+      "status": "PASS"
+    },
+    {
+      "id": "F02-32",
+      "path": "مصدر قابل للتعديل + فحوص رجعية + أدلة نظيفة",
+      "expected": "تعديل fixture ينعكس؛ صفر pageerrors/404؛ فحوص B03/B07/F01 من مصدر مثبت مع تطابق commit/الشجرة وعدد الأحكام لا كلمة PASS؛ كاشف FAIL صحيح مُختبَر ذاتيًا؛ شجرة المصدر نظيفة من تعديلات غير أدلة الجولة؛ روابط READMEs لملفات موجودة",
+      "measured": {
+        "إضافة عنصر للـfixture ينعكس في العرض": [
+          "عينة أ",
+          "عينة ب",
+          "عينة ج",
+          "عينة د"
+        ],
+        "صفر pageerrors في الجلسة كلها": [],
+        "صفر موارد 4xx/5xx في الجلسة كلها": [],
+        "كاشف FAIL: سجل ناجح كامل يمر": true,
+        "كاشف FAIL: سجل مختلط PASS+FAIL يكشف": true,
+        "كاشف FAIL: FAIL داخل اسم اختبار لا يكشف (بداية سطر فقط)": true,
+        "كاشف FAIL: النمط القديم كان معطوبًا فعلًا": true,
+        "فحص رجعي B03: 25 PASS من مصدر مثبت (commit+شجرة+عدد)": "مفقود",
+        "فحص رجعي B07: 28 PASS من مصدر مثبت (commit+شجرة+عدد)": "مفقود",
+        "فحص رجعي F01: 20/20 PASS من نفس source commit": "مفقود",
+        "شجرة المصدر نظيفة عند التشغيل (الأدلة الجديدة مستثناة)": [
+          " M components/access-gateway/access-gateway.js",
+          " M components/access-gateway/specification.md",
+          " M components/carousel/carousel.js",
+          " M components/carousel/specification.md",
+          " M components/data/data.css",
+          " M components/data/specification.md",
+          " M components/fields/fields.css",
+          " M components/fields/specification.md"
+        ],
+        "روابط READMEs الداخلية لملفات موجودة": [],
+        "source commit مثبت في السجل": [
+          "eacfe8ac",
+          "11d196e3"
+        ]
+      },
+      "failed": [
+        "فحص رجعي B03: 25 PASS من مصدر مثبت (commit+شجرة+عدد) — مفقود",
+        "فحص رجعي B07: 28 PASS من مصدر مثبت (commit+شجرة+عدد) — مفقود",
+        "فحص رجعي F01: 20/20 PASS من نفس source commit — مفقود",
+        "شجرة المصدر نظيفة عند التشغيل (الأدلة الجديدة مستثناة) — [' M components/access-gateway/access-gateway.js', ' M components/access-gateway/specification.md', ' M components/carousel/carousel.js', ' M components/carousel/specification.md', ' M components/data/data.css', ' M components/data/specification.md', ' M components/fields/fields.css', ' M components/fields/specification.md']"
+      ],
+      "status": "FAIL"
+    }
+  ],
+  "not_run": [
+    {
+      "item": "WebKit/Safari (محرك آخر)",
+      "reason": "غير منفذ في بيئة التنفيذ — لم يُنفذ فعليًا"
+    },
+    {
+      "item": "أجهزة Android/iPhone حقيقية + TalkBack/VoiceOver",
+      "reason": "لا جهاز أو أداة قارئ شاشة في البيئة — لم تُنفذ"
+    },
+    {
+      "item": "native zoom للنظام/المتصفح",
+      "reason": "الفحص المنفذ محاكاة CSS 200% معلنة الآلية فقط"
+    },
+    {
+      "item": "لمس حقيقي وsafe areas فعلية ولوحة مفاتيح نظام",
+      "reason": "بيئة headless — لم تُنفذ"
+    }
+  ],
+  "fail_detector": "F02-R1-08-1: كاشف FAIL مثبت الأحكام ببداية السطر، مُختبَر ذاتيًا في F02-32 (ناجح كامل/مختلط/مفقود/النمط القديم المعطوب)",
+  "limits": [
+    "فحوص DOM ولوحة مفاتيح محاكاة لا تثبت سلوك قارئ شاشة فعلي",
+    "الصور أدلة شكل فقط — القيم والتركيز والعدادات هي أدلة السلوك",
+    "أدلة ما قبل التصحيح (PREFLIGHT) لشجرة 8791514 تاريخية وتحفظ كما هي"
+  ]
+}
