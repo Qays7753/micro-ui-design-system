@@ -1,3 +1,9 @@
+# أحدث مراجعة ومراجع جدول الطلبات — 2026-10-07
+
+- [مراجعة UI-R2 المستقلة](../reviews/UI-SOURCE-REPAIR-R2/CHATGPT-REVIEW-R1.md): CHANGES REQUIRED؛ [التشغيل المعاد118/118](../reviews/UI-SOURCE-REPAIR-R2/independent/r1/official-replay.json)، [الفجوات6/6](../reviews/UI-SOURCE-REPAIR-R2/independent/r1/checks.json)، وprobes/replay قابلان للإعادة دون تعديل المصدر.
+- [تكليف UI-R3 ثم جدول الطلبات](../prompts/UI-R3-AND-ORDER-SCHEDULE-ZAI.md) و[موجز القبول والتصميم](ux/ORDER-SCHEDULE-BRIEF.md): READY FOR OWNER TO SEND، التنفيذ لم يبدأ.
+- [مراجع الشكل الثلاثة](../references/order-schedule/README.md): REFERENCE ONLY؛02 الأساس، الألوان من هوية مايكرو الحالية.
+
 # أحدث جولة — UI-SOURCE-REPAIR-R2 / 2026-10-07
 
 - [تقرير جولة R2](../reviews/UI-SOURCE-REPAIR-R2/review.md): تنفيذ UI-R2-01..04 على main (`e517214`) — DRAFT FOR RE-REVIEW.

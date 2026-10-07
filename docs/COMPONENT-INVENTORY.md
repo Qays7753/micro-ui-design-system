@@ -1,3 +1,7 @@
+## توسعة مكلّف بها — جدول الطلبات / 2026-10-07
+
+[ORDER-SCHEDULE-BRIEF](ux/ORDER-SCHEDULE-BRIEF.md): شهر/يوم/قائمة زمنية، مؤشرات حالات من بيانات المستهلك، وفتح تفاصيل الطلب. المصدر المقترح `components/order-schedule/` **غير موجود بعد**؛ READY FOR IMPLEMENTATION AS DRAFT. لا يضاف إلى عدد العائلات المنفذة حتى التسليم؛ الصور REFERENCE والهوية الحالية محفوظة.
+
 # قائمة عناصر Micro — V1
 
 الحالة الحالية: العائلات الاثنتا عشرة مرجع تنفيذ UI مستقر تحت قواعد [الإصدار](UI-RELEASE.md) و[النظام البصري](UI-VISUAL-SYSTEM.md). حُسمت تفاصيل الأزرار بالتفويض الحالي، وإغلاق تدقيق 2026-10 موثق في [مصفوفة التدقيق](UI-COMPLETION-AUDIT-MATRIX.md) و[تقرير الإغلاق](../reviews/UI-COMPLETION/review.md). الأسس والاتجاه المنحني محفوظان؛ [عينة المصدر](../previews/surfaces/approved-curves.html)، [DESIGN.md](../DESIGN.md)، [المعرض](../previews/index.html)، و[الحالات](../previews/system/index.html). جداول الأدلة القديمة أدناه تاريخية، ولا تعني جاهزية تطبيق أو UX.

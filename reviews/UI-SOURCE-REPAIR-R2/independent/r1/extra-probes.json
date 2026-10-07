@@ -1,0 +1,451 @@
+{
+  "meta": {
+    "commit": "e5172140b17c74883287d6d736d80cb118d95b5e",
+    "tree": "1c569c901a21c66b52cd510162759c9ba25a64ce",
+    "source_clean": true,
+    "dirty_sample": [],
+    "branch": "HEAD",
+    "browser": "153.0.8010.0"
+  },
+  "screenshot_note": "Only fixed navbar visibility masked for isolated chart screenshots; geometry is measured unchanged.",
+  "results": [
+    {
+      "case": "resize-without-manual-render",
+      "tag": "src",
+      "before": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 398,
+          "plotL": 16,
+          "plotR": 414,
+          "scale": 1.2437,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 16.17,
+          "effs": [
+            16.17
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 430,
+          "docScrollW": 430
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 207",
+          "plotW": 398,
+          "plotL": 16,
+          "plotR": 414,
+          "scale": 1.2437,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 14.92,
+          "effs": [
+            14.92
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 430,
+          "docScrollW": 430
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ],
+      "after": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 11.7,
+          "effs": [
+            11.7
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 207",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 10.8,
+          "effs": [
+            10.8
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "case": "default-date-labels",
+      "tag": "src",
+      "labels": [
+        {
+          "source": "2026-09-10",
+          "shown": "962026-09-10"
+        },
+        {
+          "source": "2026-09-17",
+          "shown": "158.92026-09-17"
+        },
+        {
+          "source": "2026-09-24",
+          "shown": "64.22026-09-24"
+        },
+        {
+          "source": "2026-10-01",
+          "shown": "478.252026-10-01"
+        }
+      ]
+    },
+    {
+      "case": "single-word-labels",
+      "tag": "src",
+      "normal": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 13,
+          "effs": [
+            13
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 211.11111111111111",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 12,
+          "effs": [
+            12
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ],
+      "zoom": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 26,
+          "effs": [
+            26
+          ],
+          "collisions": [
+            {
+              "a": "المستلزمات",
+              "b": "المستهلكات",
+              "ox": 20.5,
+              "oy": 34
+            },
+            {
+              "a": "المستهلكات",
+              "b": "المستلزمات",
+              "ox": 20.5,
+              "oy": 34
+            }
+          ],
+          "outsideH": 2,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 211.11111111111111",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 24,
+          "effs": [
+            24
+          ],
+          "collisions": [],
+          "outsideH": 5,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "case": "resize-without-manual-render",
+      "tag": "standalone",
+      "before": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 398,
+          "plotL": 16,
+          "plotR": 414,
+          "scale": 1.2437,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 16.17,
+          "effs": [
+            16.17
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 430,
+          "docScrollW": 430
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 207",
+          "plotW": 398,
+          "plotL": 16,
+          "plotR": 414,
+          "scale": 1.2437,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 14.92,
+          "effs": [
+            14.92
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 430,
+          "docScrollW": 430
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ],
+      "after": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 11.7,
+          "effs": [
+            11.7
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 207",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 10.8,
+          "effs": [
+            10.8
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "case": "default-date-labels",
+      "tag": "standalone",
+      "labels": [
+        {
+          "source": "2026-09-10",
+          "shown": "962026-09-10"
+        },
+        {
+          "source": "2026-09-17",
+          "shown": "158.92026-09-17"
+        },
+        {
+          "source": "2026-09-24",
+          "shown": "64.22026-09-24"
+        },
+        {
+          "source": "2026-10-01",
+          "shown": "478.252026-10-01"
+        }
+      ]
+    },
+    {
+      "case": "single-word-labels",
+      "tag": "standalone",
+      "normal": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 13,
+          "effs": [
+            13
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 211.11111111111111",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 12,
+          "effs": [
+            12
+          ],
+          "collisions": [],
+          "outsideH": 0,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ],
+      "zoom": [
+        {
+          "chart": "f03-rep-bars",
+          "kind": "bars",
+          "vb": "0 0 320 180",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 6,
+          "nRects": 3,
+          "minEff": 26,
+          "effs": [
+            26
+          ],
+          "collisions": [
+            {
+              "a": "المستلزمات",
+              "b": "المستهلكات",
+              "ox": 20.5,
+              "oy": 34
+            },
+            {
+              "a": "المستهلكات",
+              "b": "المستلزمات",
+              "ox": 20.5,
+              "oy": 34
+            }
+          ],
+          "outsideH": 2,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-line",
+          "kind": "line",
+          "vb": "0 0 320 211.11111111111111",
+          "plotW": 288,
+          "plotL": 16,
+          "plotR": 304,
+          "scale": 0.9,
+          "nTexts": 12,
+          "nRects": 0,
+          "minEff": 24,
+          "effs": [
+            24
+          ],
+          "collisions": [],
+          "outsideH": 5,
+          "docW": 320,
+          "docScrollW": 320
+        },
+        {
+          "chart": "f03-rep-donut",
+          "hidden": true
+        }
+      ]
+    }
+  ]
+}
