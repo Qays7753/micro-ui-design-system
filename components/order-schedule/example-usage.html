@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>جدول الطلبات المجدولة — مثال الاستخدام — Micro</title>
+  <link rel="icon" href="data:,">
+  <!-- وثيقة استخدام (لا عينة هاتف): الخطوط والتوكنات محلية عبر
+       المسارات النسبية — تعمل بفتح مباشر file:// بلا إنترنت -->
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="order-schedule.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--micro-surface-page);
+      color: var(--micro-text-primary);
+      font: 400 16px/26px var(--micro-font-family);
+    }
+    main { max-width: 480px; margin-inline: auto; display: grid; gap: 32px; overflow-wrap: anywhere; /* الرموز اللاتينية الطويلة تلتف عند التكبير بدل توسيع الشبكة */ }
+    header { display: grid; gap: 8px; }
+    h1 { margin: 0; font-size: 22px; line-height: 36px; font-weight: 600; }
+    header p { margin: 0; font-size: 14px; line-height: 22px; color: var(--micro-text-secondary); }
+    section {
+      display: grid;
+      gap: 16px;
+      padding: 20px;
+      border-radius: var(--micro-radius-surface);
+      background: var(--micro-surface-base);
+    }
+    h2 { margin: 0; font-size: 18px; line-height: 28px; font-weight: 600; }
+    h3 { margin: 0; font-size: 14px; line-height: 22px; font-weight: 600; color: var(--micro-text-secondary); }
+    .hint { margin: 0; font-size: 13px; line-height: 20px; color: var(--micro-text-hint); }
+    .log {
+      list-style: none;
+      margin: 0;
+      padding: 12px;
+      max-height: 180px;
+      overflow: auto;
+      min-width: 0; /* عنصر شبكة: يسمح بالتقيد بعموده عند التكبير */
+      display: grid;
+      gap: 4px;
+      border-radius: var(--micro-radius-field);
+      background: var(--micro-surface-page);
+      font-size: 13px;
+      line-height: 20px;
+      color: var(--micro-text-secondary);
+    }
+    .log li { padding-block: 2px; border-block-end: 1px solid var(--micro-border-divider); overflow-wrap: anywhere; }
+    .log li:last-child { border-block-end: 0; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; }
+    .controls button {
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 1px solid var(--micro-border-divider);
+      border-radius: var(--micro-radius-chip);
+      background: var(--micro-surface-base);
+      color: var(--micro-brand-primary);
+      font: 500 14px/1 var(--micro-font-family);
+      cursor: pointer;
+    }
+    /* عند عرض الهاتف تتقارب هوامش الوثيقة كهاتف فعلي (16px) فيصل
+       المكوّن لعرض 288px عند 320 — نفس حساب PROPOSED للمواصفة */
+    @media (max-width: 400px) {
+      body { padding: 0; }
+      main { max-width: none; }
+      section { padding: 16px; }
+    }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>مكوّن جدول الطلبات المجدولة (MicroOrderSchedule)</h1>
+      <p>
+        وثيقة استخدام: ثلاث حالات حية على العقد نفسه — init ثم الأحداث
+        (day-select / order-open / add-request) وعمليات
+        setData / setSelectedDate / setView / setCalendarView / setLoading / setError / destroy.
+        بيانات العينة مثبتة حول 2026-10-07 (أمس/اليوم/غدًا/أسبوعان قادمان/ماضٍ/غير مجدول،
+        حالات مختلطة، مفتاح حالة غير معروف، وعنوان طويل جدًا). لا HTML من البيانات: أي نص
+        ممرر يظهر حرفيًا.
+      </p>
+    </header>
+
+    <section>
+      <h2>1) عرض الشهر</h2>
+      <p class="hint">weekStart = 6 (السبت). جرّب التنقل بين الشهور وزر «اليوم» ولوحة المفاتيح داخل الشبكة (الأسهم ثم Enter)، واختيار يوم يعرض طلباته أسفل الشبكة داخل الصفحة.</p>
+      <div id="demo-1"></div>
+      <h3>سجل الأحداث</h3>
+      <ul id="log-1" class="log" aria-label="سجل أحداث المثال الأول"></ul>
+    </section>
+
+    <section>
+      <h2>2) عرض اليوم</h2>
+      <p class="hint">calendarView = 'day': التاريخ الكامل والعدد وزرا اليوم السابق/التالي، ثم صفوف اليوم المدمجة. الوقت يظهر داخل الصف فقط إن وُجد.</p>
+      <div id="demo-2"></div>
+    </section>
+
+    <section>
+      <h2>3) القائمة + حالة الخطأ + حالة الفراغ</h2>
+      <p class="hint">القادمة بالأقرب موعدًا أولًا ثم السابقة (الأحدث أولًا) ثم غير المجدولة. «محاكاة فشل التحميل» تعرض الخطأ مع زر إعادة المحاولة الذي يستدعي callback المستهلك وينجح في المحاولة الثانية.</p>
+      <div class="controls">
+        <button id="btn-fail" type="button">محاكاة فشل التحميل</button>
+        <button id="btn-empty" type="button">عرض حالة الفراغ</button>
+        <button id="btn-restore" type="button">استعادة البيانات</button>
+      </div>
+      <div id="demo-3"></div>
+      <ul id="log-3" class="log" aria-label="سجل أحداث المثال الثالث"></ul>
+    </section>
+  </main>
+
+  <script src="order-schedule.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---- خريطة الحالات من المستهلك (العينة فقط — ليست آلة حالات منتج) ---- */
+      var STATUSES = {
+        progress: { label: 'قيد التنفيذ', tone: 'progress' },
+        done: { label: 'تم التسليم', tone: 'success' },
+        hold: { label: 'بانتظار العميل', tone: 'warning' }
+      };
+      /* مفتاح 'mystery' أدناه غير موجود في الخريطة عمدًا: يظهر محايدًا بنصه الخام */
+
+      var TODAY = '2026-10-07'; /* مثبت للاختبار — الافتراضي تاريخ اليوم المحلي */
+
+      var ORDERS = [
+        /* اليوم */
+        { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل' },
+        { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة' },
+        { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-07', time: '18:45', statusKey: 'progress' },
+        /* غدًا — منها العنوان الطويل جدًا (يلتف ولا يكسر الصف) */
+        { id: 'od-04', title: 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية', date: '2026-10-08', time: '11:15', statusKey: 'progress', customer: 'قاعة الملتقى' },
+        { id: 'od-05', title: 'طلب تعقيم غرف الاجتماعات', date: '2026-10-08', time: '16:00', statusKey: 'done' },
+        { id: 'od-06', title: 'طلب صيانة أجهزة العرض', date: '2026-10-08', time: null, statusKey: 'hold' },
+        /* يوم بطلب واحد (العدّاد «1») */
+        { id: 'od-07', title: 'طلب قرطاسية إدارية', date: '2026-10-09', time: '10:30', statusKey: 'done', customer: 'الإدارة العامة' },
+        /* يوم حقن الاختبار: العنوان يظهر نصًا حرفيًا — لا HTML من البيانات */
+        { id: 'od-inj', title: 'طلب <b>عنوان</b> <img onerror="window.__xss=1"> تجريبي', date: '2026-10-11', time: '13:00', statusKey: 'progress' },
+        /* الأسبوع القادم */
+        { id: 'od-08', title: 'طلب فطور اجتماع القسم', date: '2026-10-12', time: '08:00', statusKey: 'progress', customer: 'قسم التطوير' },
+        { id: 'od-09', title: 'طلب ماء وضيافة مسائية', date: '2026-10-12', time: '13:00', statusKey: 'done' },
+        /* مفتاح حالة غير معروف → محايد بنص المفتاح الخام */
+        { id: 'od-10', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'mystery', customer: 'وحدة التسويق' },
+        /* بعد أسبوعين */
+        { id: 'od-11', title: 'طلب صيانة دورية للمصاعد', date: '2026-10-20', time: '17:30', statusKey: 'hold' },
+        /* يوم 5 طلبات بثلاث حالات (3 نقاط مؤشرات) */
+        { id: 'od-22a', title: 'طلب ضيافة صباحية', date: '2026-10-22', time: '09:00', statusKey: 'progress', customer: 'البرج الشمالي' },
+        { id: 'od-22b', title: 'طلب تعقيم دوري', date: '2026-10-22', time: '10:30', statusKey: 'done' },
+        { id: 'od-22c', title: 'طلب مستلزمات ورش العمل', date: '2026-10-22', time: '12:15', statusKey: 'progress' },
+        { id: 'od-22d', title: 'طلب صيانة تكييف', date: '2026-10-22', time: '14:00', statusKey: 'hold', customer: 'الإدارة المالية' },
+        { id: 'od-22e', title: 'طلب تجهيز قاعة التدريب', date: '2026-10-22', time: '15:45', statusKey: 'progress' },
+        /* بعده */
+        { id: 'od-12', title: 'طلب أرشفة مستندات نهاية الشهر', date: '2026-10-25', time: null, statusKey: 'progress' },
+        /* الماضي (لا يتحول تلقائيًا إلى «متأخر» — الحالة من البيانات فقط) */
+        { id: 'od-p1', title: 'طلب نقل عفش مكتبي', date: '2026-10-06', time: '15:00', statusKey: 'done', customer: 'فرع الشمال' },
+        { id: 'od-p2', title: 'طلب صيانة سباكة', date: '2026-09-28', time: '10:00', statusKey: 'done' },
+        /* غير مجدولة */
+        { id: 'od-u1', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' },
+        { id: 'od-u2', title: 'طلب إطارات كراسي مكتبية', date: null, time: null, statusKey: 'done' }
+      ];
+
+      /* ---- سجل الأحداث ---- */
+      function attachLog(rootEl, listEl) {
+        ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request'].forEach(function (name) {
+          rootEl.addEventListener(name, function (e) {
+            var li = document.createElement('li');
+            li.textContent = name + ' — ' + JSON.stringify(e.detail);
+            listEl.insertBefore(li, listEl.firstChild);
+            while (listEl.childNodes.length > 40) listEl.removeChild(listEl.lastChild);
+          });
+        });
+      }
+
+      /* ---- الحالة 1: تقويم الشهر ---- */
+      var root1 = document.getElementById('demo-1');
+      var demo1 = MicroOrderSchedule.init(root1, {
+        orders: ORDERS,
+        statuses: STATUSES,
+        today: TODAY,
+        weekStart: 6,
+        selectedDate: TODAY,
+        view: 'calendar',
+        calendarView: 'month'
+      });
+      attachLog(root1, document.getElementById('log-1'));
+      window.__demo1 = demo1; /* للفحص الآلي — نفس العقد العمومي */
+      /* بيانات العينة معروضة للفحص الآلي (قراءة فقط) — نفس مصفوفة ORDERS */
+      window.__OCAL_DEMO = { orders: ORDERS, statuses: STATUSES, today: TODAY };
+
+      /* ---- الحالة 2: عرض اليوم ---- */
+      var root2 = document.getElementById('demo-2');
+      var demo2 = MicroOrderSchedule.init(root2, {
+        orders: ORDERS,
+        statuses: STATUSES,
+        today: TODAY,
+        weekStart: 6,
+        selectedDate: TODAY,
+        view: 'calendar',
+        calendarView: 'day'
+      });
+      window.__demo2 = demo2;
+
+      /* ---- الحالة 3: القائمة + الخطأ + الفراغ ---- */
+      var root3 = document.getElementById('demo-3');
+      var demo3 = MicroOrderSchedule.init(root3, {
+        orders: ORDERS,
+        statuses: STATUSES,
+        today: TODAY,
+        weekStart: 6,
+        selectedDate: TODAY,
+        view: 'list'
+      });
+      attachLog(root3, document.getElementById('log-3'));
+      window.__demo3 = demo3;
+
+      /* فشل التحميل: المحاولة الأولى تفشل والمحاولة الثانية (زر إعادة
+         المحاولة) تنجح — المكوّن لا يعيد التحميل بنفسه: callback
+         المستهلك هو من يقود الدورة */
+      var failAttempts = 0;
+      function consumerRetry() {
+        failAttempts++;
+        demo3.setLoading(true);
+        window.setTimeout(function () {
+          if (failAttempts >= 2) demo3.setData(ORDERS);
+          else demo3.setError(consumerRetry);
+        }, 500);
+      }
+      document.getElementById('btn-fail').addEventListener('click', function () {
+        failAttempts = 0;
+        demo3.setError(consumerRetry);
+      });
+      document.getElementById('btn-empty').addEventListener('click', function () {
+        demo3.setData([]);
+      });
+      document.getElementById('btn-restore').addEventListener('click', function () {
+        demo3.setData(ORDERS);
+      });
+    })();
+  </script>
+</body>
+</html>

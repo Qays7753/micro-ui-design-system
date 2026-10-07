@@ -1,0 +1,649 @@
+/* =========================================================
+   Micro UI — مكوّن جدول الطلبات المجدولة (order-schedule)
+   الملف: components/order-schedule/order-schedule.css
+   البادئة: m-ocal — يعتمد shared/tokens.css فقط (كل لون عبر
+   متغير توكن قائم — لا ألوان صلبة جديدة). خصائص منطقية
+   (inline/block) فيعمل في RTL بلا انعكاس يدوي.
+   الجذر: عنصر الحاوية الذي يُمرَّر إلى MicroOrderSchedule.init()
+   ويحمل classes/سمات m-ocal/data-ocal-root.
+
+   المرجع البصري (references/order-schedule/reference-02):
+   خلايا أيام مربعة بزوايا ناعمة (--micro-radius-chip)، فراغات
+   منتظمة (--micro-space-1)، رقم واضح ومؤشرات صغيرة أسفله،
+   اليوم المحدد كتلة بترولية، واليوم الحالي بحد/علامة مختلفة.
+
+   PROPOSED (استثناء موضعي معلن — خلايا الشهر فقط):
+   قاعدة المشروع لأهداف اللمس 48px (--micro-touch-min). سبعة
+   أعمدة × 48px = 336px قبل الفجوات، والمتاح عند هاتف 320 بهامش
+   16 لكل جانب = 288px فقط — لا يمكن تحقيق 48px لخلية شهر ضمن
+   الهوامش المشروعة. خلية الشهر إذن أكبر مساحة ممكنة:
+   width: calc((100% - 6 * var(--micro-space-1)) / 7) ≈ 37.7px
+   عند 320 (تُقاس فعليًا وتُوثق أرقامها). هذا أقل من قاعدة
+   المشروع ولا ندّعي تحقيقه؛ يحقق حد AA فقط في WCAG 2.5.8
+   (24px) وهو لا يحل محل القاعدة. كل الأفعال الرئيسية خارج
+   الخلايا (سهما الشهر، «اليوم»، التبديلات، صفوف الطلبات،
+   الإضافة، إعادة المحاولة) ≥ 48px، وعرضا اليوم/القائمة
+   (صفوف 48px+) بديل كامل، والاختيار من الشهر ممكن بلوحة
+   المفاتيح بلا اعتماد على دقة اللمس. التفصيل والبدائل في
+   specification.md (قسم استثناء خلايا الشهر PROPOSED).
+   ========================================================= */
+
+.m-ocal,
+.m-ocal *,
+.m-ocal *::before,
+.m-ocal *::after {
+  box-sizing: border-box;
+}
+
+.m-ocal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  font-family: var(--micro-font-family);
+  color: var(--micro-text-primary);
+}
+
+.m-ocal button {
+  font-family: var(--micro-font-family);
+}
+
+/* التركيز مرئي بوضوح — توكنات الحلقة القائمة */
+.m-ocal :focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: var(--micro-focus-gap);
+}
+
+/* ================= 1) شريط التبديل (تقويم/قائمة) ================= */
+/* زرا تبديل بحالة aria-pressed (اختيار موثق في المواصفة: أزرار
+   ضغط أصلية بسمة ضغط معلنة أرخص شكليًا من radiogroup يدوي
+   وأوسع دعمًا؛ الحالة ليست باللون وحده: aria-pressed + وزن 600
+   + خلفية/حد مميزان). */
+.m-ocal__views {
+  display: flex;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__views-btn {
+  flex: 1;
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  padding-inline: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-button-label-size);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.m-ocal__views-btn[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+  border-color: var(--micro-brand-primary);
+  color: var(--micro-brand-primary);
+  font-weight: 600;
+}
+
+/* ================= 2) الشاشات الفرعية ================= */
+.m-ocal__screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+}
+
+/* ---- رأس التقويم: سهم الشهر السابق/التالي + العنوان + «اليوم» ---- */
+.m-ocal__cal-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__cal-title {
+  flex: 1;
+  min-width: 0; /* يسمح بالالتفاف عند الضيق بدل الفيض */
+  margin: 0;
+  text-align: center;
+  font-size: var(--micro-button-label-size);
+  font-weight: 600;
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__navbtn {
+  flex: none;
+  width: var(--micro-icon-button-size);  /* 48px */
+  height: var(--micro-icon-button-size); /* 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-brand-primary);
+  cursor: pointer;
+}
+
+.m-ocal__navbtn svg {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+  fill: none;
+  stroke: currentColor;
+}
+
+.m-ocal__todaybtn {
+  flex: none;
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding-inline: var(--micro-space-4);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-brand-primary);
+  font-size: var(--micro-button-label-size);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ---- تبديل شهر/يوم داخل التقويم (نفس عقد aria-pressed) ---- */
+.m-ocal__modes {
+  display: flex;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__modes-btn {
+  flex: 1;
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  padding-inline: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-button-label-size);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.m-ocal__modes-btn[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+  border-color: var(--micro-brand-primary);
+  color: var(--micro-brand-primary);
+  font-weight: 600;
+}
+
+/* ================= 3) شبكة الشهر ================= */
+.m-ocal__weekdays {
+  display: flex;
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__weekday {
+  width: calc((100% - 6 * var(--micro-space-1)) / 7);
+  padding-block: var(--micro-space-1);
+  text-align: center;
+  font-size: var(--micro-secondary-size);
+  font-weight: 500;
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  /* إصلاح R3-2b (2026-10-08): الالتفاف في أي مكان — اسم يوم عربي كلمة
+     واحدة لا يتسع في عمود ~37px عند نص×2؛ المكوّن مكتفٍ ذاتيًا ولا
+     يعتمد على وراثة overflow-wrap من صفحة المستهلك */
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__gridrow {
+  display: flex;
+  gap: var(--micro-space-1);
+  /* إصلاح R3-2b (2026-10-08): أرضية ارتفاع الصف نسبية 2.7em (خط الصف
+     مثبت عند --micro-label-size → 37.8px عند 1× ≈ مربع الخلية، و75.6px
+     عند نص×2). لماذا هنا وليس على الخلية نفسها؟ العنصر الذي يجمع
+     aspect-ratio مع min-height محدد يحل المتصفح عرضه الجوهري على
+     الحجم المنقول من الارتفاع (75.6px عند ×2) فيتضخم الحجم الجوهري
+     للحاوية إلى 7×75.6+24 ≈ 553px ويوسّع أي أبٍ يحجم بالمحتوى (شبكة/
+     flex) خارج الشاشة. الصف بلا aspect-ratio فلا انقلاب، والخلايا
+     تتمدد (stretch) لأرضية الصف فيبقى المربع عند 1× وينمو عموديًا عند
+     التكبير — وهو السلوك الموثق في المواصفة (قسم PROPOSED). */
+  font-size: var(--micro-label-size);
+  min-height: 2.7em;
+}
+
+/* خلية فارغة (بادئة الشهر) — تحجز العمود بلا تفاعل */
+.m-ocal__cellblank {
+  width: calc((100% - 6 * var(--micro-space-1)) / 7);
+  border-radius: var(--micro-radius-chip);
+}
+
+/* PROPOSED: خلية اليوم — مربعة بزوايا ناعمة، أكبر مساحة ممكنة
+   (انظر رأس الملف). هوامش داخلية وفوارق 1px فقط لأن الخلية
+   ≈ 37.7px عند 320 لا تتسع سلم المسافات داخلها (موثق). */
+.m-ocal__cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1px;
+  width: calc((100% - 6 * var(--micro-space-1)) / 7);
+  aspect-ratio: 1; /* مربعة — المرجع02؛ الأرضية العمودية في .m-ocal__gridrow */
+  padding: 1px;
+  border: 0;
+  border-radius: var(--micro-radius-chip);
+  background-color: transparent; /* لا شبكة حاويات ثقيلة ولا ظل */
+  color: var(--micro-text-primary);
+  cursor: pointer;
+}
+
+.m-ocal__daynum {
+  font-size: var(--micro-label-size);
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* علامة اليوم الحالي: حد خارجي 2px + نقطة صغيرة تحت الرقم —
+   والمعنى ليس باللون وحده (aria-current + «اليوم» في aria-label) */
+.m-ocal__cell--today {
+  box-shadow: 0 0 0 2px var(--micro-brand-primary);
+}
+
+.m-ocal__cell--today .m-ocal__daynum::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-brand-primary);
+  margin: 1px auto 0;
+}
+
+/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) */
+.m-ocal__cell--selected {
+  background-color: var(--micro-brand-primary);
+  color: var(--micro-text-inverse);
+}
+
+.m-ocal__cell--selected .m-ocal__count {
+  background-color: var(--micro-text-inverse);
+  color: var(--micro-brand-primary);
+}
+
+.m-ocal__cell--selected .m-ocal__dot {
+  box-shadow: 0 0 0 1px var(--micro-text-inverse); /* تباين النقاط فوق التعبئة */
+}
+
+/* اجتماعهما: تبقى علامة اليوم ظاهرة مع التعبئة بلا اختلاط —
+   يتحول الحد والنقطة إلى معكوس فوق البترولي */
+.m-ocal__cell--today.m-ocal__cell--selected {
+  box-shadow: 0 0 0 2px var(--micro-text-inverse);
+}
+
+.m-ocal__cell--today.m-ocal__cell--selected .m-ocal__daynum::after {
+  background-color: var(--micro-text-inverse);
+}
+
+.m-ocal__cell:active:not(.m-ocal__cell--selected) {
+  background-color: var(--micro-surface-selected);
+}
+
+/* عدّاد الطلبات + مؤشرات الحالات تحت الرقم (المرجع02) */
+.m-ocal__badges {
+  margin-top: auto; /* يثبت المؤشرات أسفل الخلية ويباعد المربع الأكبر */
+  display: flex;
+  flex-wrap: wrap; /* عند تكبير النص تلتف بدل الفيض الأفقي */
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.m-ocal__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 3px;
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-counter-label-size);
+  font-weight: var(--micro-counter-label-weight);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.m-ocal__dots {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+/* نقطة الحالة: حد أدنى 6×6px (قيم ثابتة لا سلم مسافات — موثق) */
+.m-ocal__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--micro-radius-circle);
+}
+
+.m-ocal__dot--progress { background-color: var(--micro-info); }
+.m-ocal__dot--success { background-color: var(--micro-success); }
+.m-ocal__dot--warning { background-color: var(--micro-warning); }
+.m-ocal__dot--neutral { background-color: var(--micro-text-secondary); }
+
+/* ================= 4) مفتاح الحالات (legend) ================= */
+.m-ocal__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2) var(--micro-space-3);
+}
+
+.m-ocal__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* إصلاح R3-2b (2026-10-08): نص الحالة الخام (مفتاح مجهول طويل) يلتف
+   داخل شريحته/مفتاحه بدل توسيع الصف أو الصفحة عند تكبير النص */
+.m-ocal__legend-label,
+.m-ocal__row-statuslabel {
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__legend-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--micro-radius-circle);
+}
+
+.m-ocal__legend-dot--progress { background-color: var(--micro-info); }
+.m-ocal__legend-dot--success { background-color: var(--micro-success); }
+.m-ocal__legend-dot--warning { background-color: var(--micro-warning); }
+.m-ocal__legend-dot--neutral { background-color: var(--micro-text-secondary); }
+
+/* ================= 5) لوحة اليوم أسفل الشبكة وعرض اليوم ================= */
+.m-ocal__daypanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__daypanel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2) var(--micro-space-3);
+}
+
+.m-ocal__daypanel-title {
+  flex: 1 1 auto;
+  min-width: 140px;
+  margin: 0;
+  font-size: var(--micro-button-label-size);
+  font-weight: 600;
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__daypanel-count {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأسفل/القائمة) ================= */
+.m-ocal__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* محاذاة يمين RTL */
+  gap: 2px;
+  width: 100%;
+  min-height: var(--micro-touch-min); /* صف كامل ≥ 48px */
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+
+.m-ocal__row:active {
+  background-color: var(--micro-surface-selected);
+}
+
+/* عنوان طويل جدًا يلتف داخل الصف ولا يكسره */
+.m-ocal__row-title {
+  font-size: var(--micro-body-size);
+  font-weight: 500;
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.m-ocal__row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-1) var(--micro-space-2);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  /* إصلاح R3-2b (2026-10-08): العنصر بند flex عرضي (align flex-start على
+     الصف) فيُقاس على max-content دون قصّ من عرض الزر — سطر ثانٍ طويل
+     (عميل + وقت + حالة) عند نص×2 يتجاوز الصف ويفيض خارج المكوّن في أي
+     صفحة مستهلك لا ترث overflow-wrap: anywhere. max-width يقصّه للصف
+     فيلتف محتواه (flex-wrap) — بند الوقاية نفسه الموجود في العنوان. */
+  max-width: 100%;
+}
+
+.m-ocal__row-customer,
+.m-ocal__row-date {
+  overflow-wrap: anywhere;
+}
+
+/* شارة الوقت: أيقونة ساعة SVG مضمّنة + قيمة معزولة LTR */
+.m-ocal__row-time {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1) var(--micro-space-2);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-text-primary);
+}
+
+.m-ocal__row-time svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+}
+
+.m-ocal__row-time-value {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* الحالة: نقطة لون + النص معًا دائمًا (لا لونًا وحده) —
+   أزواج توكنات معتمدة فقط */
+.m-ocal__row-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  padding: var(--micro-space-1) var(--micro-space-2);
+  border-radius: var(--micro-radius-chip);
+}
+
+.m-ocal__row-statusdot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--micro-radius-circle);
+  background-color: currentColor;
+}
+
+.m-ocal__row-status--progress {
+  background-color: var(--micro-info-surface);
+  color: var(--micro-info);
+}
+
+.m-ocal__row-status--success {
+  background-color: var(--micro-success-surface);
+  color: var(--micro-success);
+}
+
+.m-ocal__row-status--warning {
+  background-color: var(--micro-warning-surface);
+  color: var(--micro-warning);
+}
+
+.m-ocal__row-status--neutral {
+  background-color: var(--micro-surface-page);
+  color: var(--micro-text-secondary);
+}
+
+/* ================= 7) شاشة القائمة ================= */
+.m-ocal__list-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__list-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__list-heading {
+  margin: 0;
+  font-size: var(--micro-label-size);
+  font-weight: 600;
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__list-count {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+}
+
+/* ================= 8) حالات العرض: انتظار/خطأ/فراغ ================= */
+.m-ocal__status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-6) var(--micro-space-4);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  text-align: center;
+}
+
+.m-ocal__status-text {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-secondary);
+}
+
+/* ================= 9) أزرار الإضافة وإعادة المحاولة ================= */
+.m-ocal__add,
+.m-ocal__retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding: var(--micro-button-padding-block) var(--micro-button-padding-inline);
+  border: 0;
+  border-radius: var(--micro-radius-button-long);
+  background-color: var(--micro-brand-primary);
+  color: var(--micro-text-inverse);
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-button-label-weight);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.m-ocal__add:active,
+.m-ocal__retry:active {
+  background-color: var(--micro-brand-pressed);
+}
+
+.m-ocal__add svg,
+.m-ocal__retry svg {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+}
+
+/* ================= 10) الحركة ================= */
+.m-ocal__cell,
+.m-ocal__views-btn,
+.m-ocal__modes-btn,
+.m-ocal__navbtn,
+.m-ocal__todaybtn,
+.m-ocal__row,
+.m-ocal__add,
+.m-ocal__retry {
+  transition:
+    background-color var(--micro-motion-selection) var(--micro-ease-standard),
+    color var(--micro-motion-selection) var(--micro-ease-standard),
+    border-color var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+/* prefers-reduced-motion: بلا انتقالات */
+@media (prefers-reduced-motion: reduce) {
+  .m-ocal,
+  .m-ocal * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
