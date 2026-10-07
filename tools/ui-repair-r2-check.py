@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Micro UI — أداة فحص جولة UI-SOURCE-REPAIR-R2 (UI-R2-04)
++ توسعة جولة UI-R3 (بند UI-R3-03: فحوص تغطي الحالات الجديدة نفسها)
 
 فحوص سببية لبنود المراجعة الأربعة على المصدر وstandalone معًا:
 R2-01 حقول الأرقام: قياس مواضع تحكمات الإدخال نفسها (input/وحدة/زرّا الخطوة)
@@ -18,6 +19,26 @@ R2-03 رسائل المقارنة: نص المستخدم موجز بلا تعل�
       ملاحظة) ولا يبقى بعد invalid→valid على العقدة نفسها.
 R2-04 loading الأزرار القصيرة/العريضة RTL/LTR: لا تداخل مؤشر/نص ولا
       ملامسة حافة الزر، بلا حجز حشو ساكن وبثبات الأبعاد.
+
+توسعة جولة UI-R3 (نفس الحالات الجديدة على المصدر وstandalone معًا؛
+الأدلة: فشلها قبل الإصلاح ومرورها بعده — إثبات قبل/بعد):
+R3-01 (UI-R3-01) رصد عرض الرسم: فتح التقارير عند 430 ثم تصغير العرض
+      إلى 320 دون أي نقرة إضافية ودون استدعاء render — الرصد وحده يعيد
+      القياس إلى الحد المعلن (13/12) بدل 11.7/10.8، مع عدّ صريح
+      للرسوم/النصوص الظاهرة (لا all([])) وصفر تصادم وخروج أفقي، وتسجيل
+      القياس قبل/بعد في تفصيل الفشل.
+R3-02a (UI-R3-02) كلمة عربية مفردة عند 200%: استبدال بيانات الأعمدة
+      بثلاث كلمات مفردة «المستلزمات/المستهلكات/المستلزمات» (آلية
+      probes.py المستقلة نفسها) — الحد المعلن وصفر تصادم وصفر خروج
+      لكل الرسوم الظاهرة (bars وline معًا).
+R3-02b (UI-R3-02) تواريخ ISO خام عند 200% (حالة المراجع الأصلية):
+      استبدال بيانات رسم الخط بتواريخ ISO فعلية (أربع نقاط إحداها
+      قيمة فارغة «—») — المكوّن نفسه يعالجها عند التكبير (مستهلك F03
+      يمرر الآن تسميات قصيرة فالبند يحتاج حالة ISO صريحة)؛ صفر تصادم
+      وصفر خروج لكل الرسوم الظاهرة.
+بيانات كل رسم تُحفظ (innerHTML) وتُستعاد بعد كل حالة R3 حتى لا تتلوث
+بقية الفحوص، مع لقطات شاشة لكل حالة (reports-r3-resize / r3-oneword-zoom
+/ r3-iso-zoom بوسم src/standalone).
 
 بيانات أصل الأدلة (metadata): commit/tree/نظافة المصدر/نسخة المتصفح/نوع
 التكبير. الإخراج: reviews/UI-SOURCE-REPAIR-R2/verification.{json,txt} +
@@ -216,6 +237,43 @@ UNZOOM = """() => {
     el.style.fontSize = ''; delete el.dataset.r2z;
   });
   return true;
+}"""
+
+# R3-02a: كلمة عربية مفردة في الأعمدة — آلية probes.py المستقلة نفسها
+# (سطرها 20): ثلاث كلمات مفردة بلا فراغات لا تُلف، القيم 2/3/4.
+R3_ONEWORD_BARS = """() => {
+  const ch = document.getElementById('f03-rep-bars');
+  ch.querySelector('.m-chart__data').innerHTML =
+    '<li data-series="a" data-value="2" data-label="المستلزمات"></li>'
+    + '<li data-series="b" data-value="3" data-label="المستهلكات"></li>'
+    + '<li data-series="c" data-value="4" data-label="المستلزمات"></li>';
+  window.MicroData.render(ch);
+  return true;
+}"""
+
+# R3-02b: تواريخ ISO خام في رسم الخط — حالة المراجع الأصلية: المكوّن
+# نفسه يعالج ISO عند التكبير (مستهلك F03 يمرر الآن تسميات قصيرة فيحتاج
+# البند حالة ISO صريحة). أربع نقاط؛ أولاها مفعلتان والثالثة قيمة فارغة
+# لاختبار «—» والرابعة 5.75.
+R3_ISO_LINE = """() => {
+  const ch = document.getElementById('f03-rep-line');
+  ch.querySelector('.m-chart__data').innerHTML =
+    '<li data-series="a" data-label="2026-09-10" data-value="4.5"></li>'
+    + '<li data-series="a" data-label="2026-09-17" data-value="6"></li>'
+    + '<li data-series="a" data-label="2026-09-24" data-value=""></li>'
+    + '<li data-series="a" data-label="2026-10-01" data-value="5.75"></li>';
+  window.MicroData.render(ch);
+  return true;
+}"""
+
+# R3: استعادة بيانات الرسم الأصلية بعد كل حالة (حفظ innerHTML قبل
+# الاستبدال) حتى لا تلوث الحالات الجديدة فحوص R2-03 اللاحقة — القائمة
+# المصدر تعود كما كانت والمستهلك يعيد البناء عند فتح التقارير بعدها.
+R3_RESTORE_DATA = """(payload) => {
+  const ch = document.getElementById(payload.id);
+  if (!ch) return -1;
+  ch.querySelector('.m-chart__data').innerHTML = payload.html;
+  return ch.querySelectorAll('.m-chart__data li').length;
 }"""
 
 # R2-03: دورة التشخيص كاملة على العقدة نفسها (invalid→valid)
@@ -487,6 +545,93 @@ def run_sample(t, page, tag, url, shots):
     t.check(f"R2-02[{tag}] الدونات 148 الثابتة محمية (خارج التعويض)",
             d is not None and 146 <= d["w"] <= 150, json.dumps(d))
     page.screenshot(path=str(shots / f"reports-donut-{tag}-320.png"))
+
+    # ---- R3-01 (UI-R3-01): تغيير العرض 430→320 دون نقرة ودون استدعاء render ----
+    page.set_viewport_size({"width": 430, "height": 900})
+    page.wait_for_timeout(300)
+    open_reports(page)  # فتح التقارير عند 430 — render عند 430 كما في الأداة
+    r3_before = page.evaluate(CHART_MEASURE)
+    page.set_viewport_size({"width": 320, "height": 900})
+    page.wait_for_timeout(600)  # لا نقرة إضافية ولا استدعاء render — الرصد وحده
+    r3_after = page.evaluate(CHART_MEASURE)
+    r3_vis = [c for c in r3_after if c.get("kind") in ("bars", "line") and not c.get("hidden")]
+    bmap = {c["chart"]: c for c in r3_before if not c.get("hidden")}
+    amap = {c["chart"]: c for c in r3_after if not c.get("hidden")}
+    for cid, kind in (("f03-rep-bars", "bars"), ("f03-rep-line", "line")):
+        declared = DECLARED[kind]
+        a = amap.get(cid)
+        ok = (len(r3_vis) == 2 and a is not None and a["nTexts"] > 0
+              and a["minEff"] is not None and a["minEff"] >= declared - 0.01
+              and len(a["collisions"]) == 0 and a["outsideH"] == 0)
+        t.check(f"R3-01[{tag} resize430-320] {cid}: رصد العرض يعيد القياس بلا نقرة ولا render يدوي (الحد {declared}px)",
+                ok,
+                json.dumps({"declared": declared, "visibleBarsLine": len(r3_vis),
+                            "before": {k: (bmap.get(cid) or {}).get(k) for k in ("minEff", "plotW", "scale", "nTexts")},
+                            "after": None if a is None else
+                            {k: a.get(k) for k in ("minEff", "plotW", "scale", "nTexts", "outsideH", "collisions")}},
+                           ensure_ascii=False))
+    page.screenshot(path=str(shots / f"reports-r3-resize-{tag}-320.png"), full_page=True)
+
+    # رسم نظيف عند 320 قبل حالتي التسميات (عزل سببي: الحالة لا الرصد)
+    open_reports(page)
+    page.wait_for_timeout(300)
+
+    # ---- R3-02a (UI-R3-02): كلمة عربية مفردة عند 200% ----
+    r3_bars_html = page.evaluate(
+        "() => document.querySelector('#f03-rep-bars .m-chart__data').innerHTML")
+    page.evaluate(R3_ONEWORD_BARS)
+    page.wait_for_timeout(150)
+    page.evaluate(ZOOM2_CLEAN)
+    page.wait_for_timeout(200)
+    charts = page.evaluate(CHART_MEASURE)
+    amap = {c["chart"]: c for c in charts if not c.get("hidden")}
+    vis_n = len([c for c in charts if c.get("kind") in ("bars", "line") and not c.get("hidden")])
+    for cid, kind in (("f03-rep-bars", "bars"), ("f03-rep-line", "line")):
+        declared = DECLARED[kind]
+        ch = amap.get(cid)
+        ok = (vis_n == 2 and ch is not None and ch["nTexts"] > 0
+              and ch["minEff"] is not None and ch["minEff"] >= declared - 0.01
+              and len(ch["collisions"]) == 0 and ch["outsideH"] == 0)
+        t.check(f"R3-02a[{tag} w320 zoom200] {cid}: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+                ok,
+                json.dumps({"declared": declared, "visibleBarsLine": vis_n,
+                            "nTexts": None if ch is None else ch["nTexts"],
+                            "minEff": None if ch is None else ch["minEff"],
+                            "collisions": None if ch is None else ch["collisions"][:4],
+                            "outsideH": None if ch is None else ch["outsideH"]},
+                           ensure_ascii=False))
+    page.screenshot(path=str(shots / f"r3-oneword-zoom-{tag}-320.png"), full_page=True)
+    page.evaluate(UNZOOM)
+    page.wait_for_timeout(200)
+    page.evaluate(R3_RESTORE_DATA, {"id": "f03-rep-bars", "html": r3_bars_html})
+    page.wait_for_timeout(150)
+
+    # ---- R3-02b (UI-R3-02): تواريخ ISO خام عند 200% — حالة المراجع الأصلية ----
+    r3_line_html = page.evaluate(
+        "() => document.querySelector('#f03-rep-line .m-chart__data').innerHTML")
+    page.evaluate(R3_ISO_LINE)
+    page.wait_for_timeout(150)
+    page.evaluate(ZOOM2_CLEAN)
+    page.wait_for_timeout(200)
+    charts = page.evaluate(CHART_MEASURE)
+    amap = {c["chart"]: c for c in charts if not c.get("hidden")}
+    vis_n = len([c for c in charts if c.get("kind") in ("bars", "line") and not c.get("hidden")])
+    for cid, kind in (("f03-rep-bars", "bars"), ("f03-rep-line", "line")):
+        ch = amap.get(cid)
+        ok = (vis_n == 2 and ch is not None and ch["nTexts"] > 0
+              and len(ch["collisions"]) == 0 and ch["outsideH"] == 0)
+        t.check(f"R3-02b[{tag} w320 zoom200] {cid}: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+                ok,
+                json.dumps({"visibleBarsLine": vis_n,
+                            "nTexts": None if ch is None else ch["nTexts"],
+                            "collisions": None if ch is None else ch["collisions"][:4],
+                            "outsideH": None if ch is None else ch["outsideH"]},
+                           ensure_ascii=False))
+    page.screenshot(path=str(shots / f"r3-iso-zoom-{tag}-320.png"), full_page=True)
+    page.evaluate(UNZOOM)
+    page.wait_for_timeout(200)
+    page.evaluate(R3_RESTORE_DATA, {"id": "f03-rep-line", "html": r3_line_html})
+    page.wait_for_timeout(150)
 
     # ---- R2-03: دورات التشخيص على العقدة نفسها ----
     page.set_viewport_size({"width": 360, "height": 760})
