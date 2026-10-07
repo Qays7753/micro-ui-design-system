@@ -1737,6 +1737,15 @@
     return new Date(Math.floor(days / 7) * 7 * 86400000).toISOString().slice(0, 10);
   }
 
+  /* R3-UI02: تسمية تاريخ قصيرة مقروءة بصيغة «يوم/شهر» من نص ISO نفسه —
+     regex نصي لا Date/UTC: لا انزياح زمني ولا منطق تقويم جديد هنا؛
+     القراءة الكاملة تبقى متاحة عبر data-label-full (عقد data.js: المكوّن
+     لا يفترض أن كل label تاريخ — يعرض ما مرره المستهلك). */
+  function shortDateAr(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+    return m ? (m[3] + '/' + m[2]) : String(iso || '');
+  }
+
   function renderReports() {
     var items = includedItems();
     var cats = store.categories();
@@ -1812,7 +1821,11 @@
     weeks.forEach(function (w) {
       var li = document.createElement('li');
       li.setAttribute('data-series', 'a');
-      li.setAttribute('data-label', w);
+      /* R3-UI02: تسمية قصيرة مقروءة (يوم/شهر) من نص الأسبوع نفسه،
+         والتاريخ الكامل قراءة متاحة عبر data-label-full — ISO الأصلي
+         بلا تحويل تاريخي (يُبنى من نص w مباشرة) */
+      li.setAttribute('data-label', shortDateAr(w));
+      li.setAttribute('data-label-full', w);
       li.setAttribute('data-value', buckets[w].known ? String(Math.round(buckets[w].sum * 100) / 100) : '');
       el.repLineData.appendChild(li);
     });

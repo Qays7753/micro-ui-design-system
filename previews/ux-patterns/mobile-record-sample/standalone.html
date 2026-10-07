@@ -6940,6 +6940,16 @@ body {
    - bubbles: نصف القطر √(القيمة/الأقصى) × الأقصى — بلا حد أدنى يضخّم
             مساحة الصغيرة (النسبة تبقى صادقة)؛ الصغيرة قيمتها بتسمية
             خارجية. لا دائرة سالبة (السالب/الصفر/الناقص حلقة شرطة).
+
+   R3-UI01: رسوم bars/line تراقب عرض حاويتها (ResizeObserver واحد لكل
+            رسم، العرض فقط) فتعيد القياس والرسم تلقائيًا عند تغيّر ≥0.5px
+            أو عند الإظهار — دون نقرة من المستخدم؛ الدونات (148 الثابت)
+            والفقاعات (تدفق DOM) خارج الرصد، وغياب ResizeObserver في بيئة
+            قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
+   R3-UI02: تسميات bars/line تُقاس فعليًا بعد إلحاق الرسم بالوثيقة
+            (getComputedTextLength بوحدات viewBox) فتُقصّ بمقطع «…» عند
+            تجاوز نصف ميزانية 200% مع قراءة كاملة (aria-label + <title>
+            + data-label-full الاختيارية) وحدود طرفين [8, W−8] وحدات.
    ========================================================= */
 
 (function () {
@@ -6966,6 +6976,11 @@ body {
       return {
         series: li.getAttribute('data-series') || 'a',
         label: li.getAttribute('data-label') || '',
+        /* R3-UI02: قراءة كاملة اختيارية يمررها المستهلك — إن غابت فهي
+           data-label نفسه؛ يستخدمها القصّ في aria-label/<title>.
+           المكوّن العام لا يفترض أن كل label تاريخ — يعرض ما مرره
+           المستهلك، والقراءة الكاملة سمة اختيارية (عقد specification.md) */
+        labelFull: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
         value: v,
         outlier: li.hasAttribute('data-outlier')
       };
@@ -6992,8 +7007,9 @@ body {
      ≥ المعلن، بينما تبقى هندسة الرسم (الأعمدة/المحاور/الخط) نسبية
      للعرض المتاح كما كانت. القيم والنسب وحالات البيانات لا تتغير،
      والدونات مقاس ثابت 148 فلا يدخل التعويض. الرسم في حاوية مخفية
-     (عرض 0) يصيّر بمعامل 1 (سلوك عرض التصميم) ويعيد المستهلك رسمه
-     عند الإظهار — عينة F03 ترسم رسوم التقارير عند فتح عرضها. */
+     (عرض 0) يصيّر بمعامل 1 (سلوك عرض التصميم) ثم يعيد رصد R3-UI01
+     القياس تلقائيًا عند إظهار الحاوية؛ وفي بيئة بلا ResizeObserver
+     يعود عقد R2: المستهلك يعيد رسمه عند الإظهار. */
   var DESIGN_W = 320;
   var BAR_TEXT_PX = 13;  /* مزدوج مع .m-chart--bars في data.css (عقد الأدنى) */
   var LINE_TEXT_PX = 12; /* مزدوج مع .m-chart--line في data.css (عقد الأدنى) */
@@ -7013,27 +7029,37 @@ body {
   /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
      R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
      مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
-     تبقى كاملة مهما طالت (حد معلن: كلمة مفردة أطول من ميزانية السطر
-     قد تجاور تسميتها عند 200%). */
+     تبقى كاملة (ودخلت عقد القياس الفعلي R3-UI02 أدناه: إن تجاوزت نصف
+     ميزانية 200% قُصّت بمقطع «…» مع قراءة كاملة).
+     R3-UI02a: «/» فاصل تقسيم مثله مثل الشرطة — تسمية يوم/شهر قصيرة مثل
+     10/09 تُقسّم إلى «10/» + «09» (سطران كاملان) بدل قصّها بمقطع؛
+     لا يفترض المكوّن نوع التاريخ — تقسيم نصي عام لأي رمز معلن. */
+  function splitWord(w, maxChars) {
+    var parts = w.split(/([-/])/); /* يبقي الفواصل عناصر مستقلة */
+    var segs = [];
+    for (var i = 0; i < parts.length; i += 2) {
+      var seg = parts[i];
+      if (parts[i + 1]) seg += parts[i + 1];
+      if (seg) segs.push(seg);
+    }
+    var merged = [];
+    segs.forEach(function (s) {
+      var last = merged[merged.length - 1];
+      if (last !== undefined && (last + s).length <= maxChars) merged[merged.length - 1] = last + s;
+      else merged.push(s);
+    });
+    return merged;
+  }
   function wrapLabel(text, maxChars) {
     text = String(text || '');
     if (text.length <= maxChars) return [text];
     var tokens = [];
     text.split(' ').forEach(function (w) {
-      if (w.length > maxChars && w.indexOf('-') >= 0) {
-        /* قسّم عند الشرطات ثم ادمج المقاطع المجاورة ما دامت ضمن السقف:
-           2026-09-10 بسقف 5 → «2026-» + «09-10» (سطران معقولان) لا 3 أسطر */
-        var segs = [];
-        w.split('-').forEach(function (seg, i, arr) {
-          segs.push(i < arr.length - 1 ? seg + '-' : seg);
-        });
-        var merged = [];
-        segs.forEach(function (s) {
-          var last = merged[merged.length - 1];
-          if (last !== undefined && (last + s).length <= maxChars) merged[merged.length - 1] = last + s;
-          else merged.push(s);
-        });
-        tokens = tokens.concat(merged);
+      if (w.length > maxChars && /[-/]/.test(w)) {
+        /* قسّم عند الشرطات/الشرائط ثم ادمج المقاطع المجاورة ما دامت ضمن
+           السقف: 2026-09-10 بسقف 5 → «2026-» + «09-10»، و10/09 بسقف 3 →
+           «10/» + «09» (سطران كاملان معقولان) لا 3 أسطر ولا بتر */
+        tokens = tokens.concat(splitWord(w, maxChars));
       } else if (w) {
         tokens.push(w);
       }
@@ -7047,6 +7073,140 @@ body {
     });
     if (cur) lines.push(cur);
     return lines;
+  }
+
+  /* ---- R3-UI02: دورة قياس وموائمة التسميات بعد الإلحاق ----
+     عدد الأحرف وحده (labelChars) لا يكفي: الكلمة العربية المفردة بلا
+     فراغات لا تُلف أصلًا، وتقدير 6.8/حرف تقريبي لا يطابق كل خط. بعد
+     بناء SVG وإلحاقه بالوثيقة (رسم مرئي) تُقاس كل تسمية فعليًا بـ
+     getComputedTextLength (بوحدات viewBox — يشمل تلقائيًا تعويض fontPx
+     السطري) ثم:
+       1) ميزانية 200%: نصف ميزانية العمود/النقطة (colW×0.92 للأعمدة
+          وتباعد النقاط×0.92 للخط، القسمة على 2 تخطّط لبيئة خط مضاعفة —
+          نفس فلسفة labelChars)؛ ما تجاوزها يُقصّ تدريجيًا بمقطع «…»
+          (سقف محاولات — لا حلقة مفتوحة) ولا يُصغّر الخط أبدًا عن الحد
+          المعلن: عند 1× تبدو الكلمة مختصرة قليلاً وعند 2× لا تتداخل —
+          هذا هو العقد الصادق المعلن.
+       2) القراءة الكاملة لا تضيع: النص المقتطع يحمل aria-label + عنصر
+          <title> ابناً للـ<text> بالنص الكامل (data-label-full إن مرره
+          المستهلك وإلا data-label)؛ <li data-label> المصدر يبقى كاملاً
+          في DOM كما هو.
+       3) حدود النقاط الطرفية: يثبّت x بحيث يبقى مدى النص المخطط عند
+          200% (الطول المقيس ×2 — نفس فلسفة الميزانية) داخل [8, W−8]
+          وحدات؛ نص middle: إذا cx−len < 8 فرفع x إلى 8+len، وإذا
+          cx+len > W−8 فخفضه.
+       4) تحقق زوجي أخير داخل كل صف تسميات: لو بقي تداخل مجاور بالمدى
+          المخطط قُصّ الأعرض حتى الفصل.
+     الرسم المخفي (عرض 0 — لا يمكن القياس) تتخطى المواءمة وتبقى خطة
+     الأحرف الحالية: المستهلك يعيد الرسم عند الإظهار، ورصد R3-UI01
+     يضمنه تلقائيًا حيثما وُجد ResizeObserver. */
+  var FIT_MAX_ROUNDS = 24; /* سقف محاولات القص التدريجي/الحلقة الزوجية */
+
+  function measuredLenOf(t) {
+    try { return t.getComputedTextLength(); }
+    catch (e) { return 0; } /* بيئة بلا قياس هندسي: اعتبره 0 (لا قص) */
+  }
+
+  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط */
+  function truncateToBudget(t, limit) {
+    var s = String(t.textContent || '');
+    var guard = 0;
+    while (measuredLenOf(t) > limit && s.length > 1 && guard < FIT_MAX_ROUNDS) {
+      guard += 1;
+      var cut = s.length - guard;
+      if (cut < 1) cut = 1;
+      t.textContent = s.slice(0, cut) + '…';
+    }
+    return guard > 0; /* هل حدث قص فعلي */
+  }
+
+  function fitMeasuredLabels(chart, svg, items, labelCls, budget) {
+    var plot = chart.querySelector('[data-plot]');
+    if (!plot || plot.getBoundingClientRect().width <= 1) return; /* مخفي */
+    var W = 320;
+    var half = budget / 2; /* ميزانية 200%: نصف الميزانية لكل نص */
+    var entries = [];
+    /* مجموعات الرسم بترتيب العناصر نفسه — التسمية تعرف نصها الكامل */
+    [].slice.call(svg.querySelectorAll('g')).forEach(function (g, i) {
+      var full = items[i] ? (items[i].labelFull || items[i].label || '') : '';
+      [].slice.call(g.querySelectorAll('.' + labelCls)).forEach(function (t) {
+        var e = {
+          t: t, full: full, cut: false,
+          cx0: parseFloat(t.getAttribute('x')) || 0, /* مركز العمود/النقطة قبل التثبيت */
+          y: t.getAttribute('y') /* مفتاح الصف — الصفوف تتقاسم قيم y */
+        };
+        if (measuredLenOf(t) > half) e.cut = truncateToBudget(t, half);
+        entries.push(e);
+      });
+    });
+    if (!entries.length) return;
+    /* حدود الطرفين: المدى المخطط عند 200% هو [x−len, x+len] وحدات */
+    function clampOf(e) {
+      var len = measuredLenOf(e.t);
+      var x = e.cx0;
+      if (x - len < 8) x = 8 + len;
+      if (x + len > W - 8) x = W - 8 - len;
+      if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: ثبّت الحد الأدنى */
+      e.t.setAttribute('x', x);
+    }
+    entries.forEach(clampOf);
+    /* تحقق زوجي داخل كل صف: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
+    var rows = {};
+    entries.forEach(function (e) { (rows[e.y] = rows[e.y] || []).push(e); });
+    Object.keys(rows).forEach(function (yk) {
+      var row = rows[yk];
+      row.sort(function (a, b) { return a.cx0 - b.cx0; });
+      var guard = 0, changed = true;
+      while (changed && guard < FIT_MAX_ROUNDS) {
+        guard += 1;
+        changed = false;
+        for (var i = 0; i < row.length - 1; i++) {
+          var a = row[i], b = row[i + 1];
+          var ax = parseFloat(a.t.getAttribute('x')) || 0;
+          var bx = parseFloat(b.t.getAttribute('x')) || 0;
+          var al = measuredLenOf(a.t), bl = measuredLenOf(b.t);
+          if (ax + al >= bx - bl - 1) { /* تداخل بالمدى المخطط (فجوة ≥1 وحدة) */
+            var wide;
+            if (bl > al) wide = b;
+            else if (al > bl) wide = a;
+            else { /* التعادل: الأقرب إلى طرف الرسم (قصّه أرخص — التثبيت يبعده عن جاره) */
+              wide = (Math.min(a.cx0, W - a.cx0) <= Math.min(b.cx0, W - b.cx0)) ? a : b;
+            }
+            var before = wide.t.textContent;
+            truncateToBudget(wide.t, measuredLenOf(wide.t) - 2);
+            if (wide.t.textContent !== before) {
+              wide.cut = true;
+              clampOf(wide);
+              changed = true;
+            }
+          }
+        }
+      }
+    });
+    /* القراءة الكاملة لكل نص مقتطع: aria-label + <title> ابن */
+    entries.forEach(function (e) {
+      if (!e.cut || !e.full) return;
+      e.t.setAttribute('aria-label', e.full);
+      var ti = svgEl('title', {});
+      ti.textContent = e.full;
+      e.t.appendChild(ti);
+    });
+    /* R3-UI02: حدود الطرفين تسري على كل نصوص الرسم لا التسميات وحدها:
+       القيم (فوق العمود/النقطة) قد تتجاوز حدود الطرف عند 200% أيضًا —
+       القيم لا تُقصّ أبدًا (عقد القيم كاملة) بل يثبّت موضعها x فقط بحيث
+       يبقى مداها المخطط [x−len, x+len] داخل [8, W−8]؛ التسميات مرّت
+       بالتثبيت أعلاه وهذا المرور لا يغيّرها (تثبيت متماثل). */
+    [].slice.call(svg.querySelectorAll('text')).forEach(function (t) {
+      var len = measuredLenOf(t);
+      if (!(len > 0)) return;
+      var x = parseFloat(t.getAttribute('x')) || 0;
+      if (x - len < 8 || x + len > W - 8) {
+        if (x - len < 8) x = 8 + len;
+        if (x + len > W - 8) x = W - 8 - len;
+        if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: الحد الأدنى */
+        t.setAttribute('x', x);
+      }
+    });
   }
 
   function appendWrappedLabel(svg, g, text, cx, yBottom, maxChars, cls, lineStep, fontPx) {
@@ -7221,6 +7381,8 @@ body {
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
+    /* R3-UI02: قياس وموائمة بعد الإلحاق (الرسم مرئي) — ميزانية العمود ×0.92 */
+    fitMeasuredLabels(chart, svg, items, 'm-chart__bar-label', colW * 0.92);
     if (scale.kind === 'over') {
       /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا.
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
@@ -7312,6 +7474,8 @@ body {
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
+    /* R3-UI02: قياس وموائمة بعد الإلحاق — ميزانية تباعد النقاط ×0.92 */
+    fitMeasuredLabels(chart, svg, items, 'm-chart__x-label', ((W - 48) / (n - 1)) * 0.92);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
@@ -7530,6 +7694,49 @@ body {
     plot.appendChild(wrap);
   }
 
+  /* ---- R3-UI01: رصد عرض الحاوية — إعادة قياس ورسم تلقائية (bars/line) ----
+     عقد R2-UI02 يقيس العرض عند الـrender فقط؛ تغيير عرض الحاوية بعد
+     الرسم بلا نقرة إضافية كان يُبقي مقاييس النص القديمة (430→320 دون
+     إعادة فتح: 11.7/10.8px بدل 13/12 المعلنة). الحل هنا: مراقب
+     ResizeObserver واحد لكل رسم (WeakMap — التهيئة المزدوجة لـ init()
+     لا تنشئ مراقبًا ثانيًا ولا تضاعف الأحداث)، يراقب العرض فقط
+     (contentRect.width) لا الارتفاع — الرسم لا يغيّر عرض حاويته فلا
+     حلقة رصد — ويعيد الرسم عند تغيّر ≥0.5px عن آخر عرض رُسم عنه
+     (يخزّنه render نفسه في renderWidths). الاختفاء (عرض 0) لا يعيد
+     الرسم: الإظهار يطلق الرصد بنفسه فيعيد القياس. الدونات (148 الثابت)
+     والفقاعات (تدفق DOM) خارج الرصد عقدًا. بيئة بلا ResizeObserver
+     تبقي سلوك R2: المستهلك يعيد الرسم عند الفتح (عقد specification.md).
+     كل إعادة رسم تطلق micro-data:rendered كما هي (لا تضاعف اصطناعيًا)،
+     وdisconnect(root) يفصل المراقبين تحت جذر لدورة التنظيف — معالج
+     DOMContentLoaded يسجّل مرة واحدة عند تحميل الوحدة ولا يتكرر. */
+  var renderWidths = new WeakMap(); /* chart → آخر عرض رُسم عنده (px) */
+  var plotObservers = new WeakMap(); /* chart → ResizeObserver وحيد */
+  var RESIZE_EPS = 0.5;
+
+  function observePlot(chart) {
+    if (typeof ResizeObserver !== 'function') return; /* R3-UI01: بيئة قديمة — عقد الرسم عند الفتح يبقى */
+    if (plotObservers.has(chart)) return; /* مراقب واحد لكل رسم — علامة الوجود */
+    var plot = chart.querySelector('[data-plot]');
+    if (!plot) return;
+    var ro = new ResizeObserver(function (entries) {
+      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
+      if (w <= 1) return; /* مخفي: احتفظ بآخر رسم — الإظهار يطلق الرصد */
+      var last = renderWidths.get(chart);
+      if (last !== undefined && Math.abs(w - last) < RESIZE_EPS) return;
+      render(chart); /* إعادة قياس ورسم كاملة — حدث rendered كما هو */
+    });
+    ro.observe(plot);
+    plotObservers.set(chart, ro);
+  }
+
+  /* R3-UI01: render نفسه يخزّن آخر عرض رُسم عنه ويلحق المراقب (مرة واحدة) */
+  function rememberRenderWidth(chart) {
+    var plot = chart.querySelector('[data-plot]');
+    if (!plot) return;
+    renderWidths.set(chart, plot.getBoundingClientRect().width);
+    observePlot(chart);
+  }
+
   function render(chart) {
     var kind = chart.getAttribute('data-chart');
     var items = itemsOf(chart);
@@ -7543,6 +7750,8 @@ body {
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
     else if (kind === 'bubbles') renderBubbles(chart, items);
+    /* R3-UI01: خزّن عرض الرسم الحالي وألحق المراقب — bars/line فقط */
+    if (kind === 'bars' || kind === 'line') rememberRenderWidth(chart);
     if (summary && !summary.textContent && chart.getAttribute('data-summary-text')) {
       summary.textContent = chart.getAttribute('data-summary-text');
     }
@@ -7556,7 +7765,17 @@ body {
       });
     },
     /* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
-    render: render
+    render: render,
+    /* R3-UI01: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init/render
+       يظلان متاحين ويعيدان الإلحاق عند الحاجة، ومعالج DOMContentLoaded
+       المسجل مرة واحدة عند تحميل الوحدة لا يتكرر */
+    disconnect: function (root) {
+      (root || document).querySelectorAll('[data-chart]').forEach(function (c) {
+        var ro = plotObservers.get(c);
+        if (ro) { ro.disconnect(); plotObservers.delete(c); }
+        renderWidths.delete(c);
+      });
+    }
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroData.init(); });
   if (document.readyState !== 'loading') window.MicroData.init();
@@ -11238,6 +11457,15 @@ body {
     return new Date(Math.floor(days / 7) * 7 * 86400000).toISOString().slice(0, 10);
   }
 
+  /* R3-UI02: تسمية تاريخ قصيرة مقروءة بصيغة «يوم/شهر» من نص ISO نفسه —
+     regex نصي لا Date/UTC: لا انزياح زمني ولا منطق تقويم جديد هنا؛
+     القراءة الكاملة تبقى متاحة عبر data-label-full (عقد data.js: المكوّن
+     لا يفترض أن كل label تاريخ — يعرض ما مرره المستهلك). */
+  function shortDateAr(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+    return m ? (m[3] + '/' + m[2]) : String(iso || '');
+  }
+
   function renderReports() {
     var items = includedItems();
     var cats = store.categories();
@@ -11313,7 +11541,11 @@ body {
     weeks.forEach(function (w) {
       var li = document.createElement('li');
       li.setAttribute('data-series', 'a');
-      li.setAttribute('data-label', w);
+      /* R3-UI02: تسمية قصيرة مقروءة (يوم/شهر) من نص الأسبوع نفسه،
+         والتاريخ الكامل قراءة متاحة عبر data-label-full — ISO الأصلي
+         بلا تحويل تاريخي (يُبنى من نص w مباشرة) */
+      li.setAttribute('data-label', shortDateAr(w));
+      li.setAttribute('data-label-full', w);
       li.setAttribute('data-value', buckets[w].known ? String(Math.round(buckets[w].sum * 100) / 100) : '');
       el.repLineData.appendChild(li);
     });
