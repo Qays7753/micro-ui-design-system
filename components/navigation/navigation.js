@@ -496,12 +496,26 @@
       var id = t.getAttribute('aria-controls');
       return id ? document.getElementById(id) : null;
     }
+    /* هدف تركيز فعلي داخل اللوحة: عنصر في ترتيب Tab حقًا — المستتر بسلف
+       hidden أو المعطل أصليًا لا يُحسب هدفًا داخليًا (لوحة هدفها الوحيد
+       مخفي تحتاج tabindex=0 بنفسها) */
+    function firstFocusableIn(panel) {
+      var candidates = panel.querySelectorAll(FOCUSABLE_IN);
+      for (var i = 0; i < candidates.length; i++) {
+        var el = candidates[i];
+        if (el.closest('[hidden]')) continue;
+        if (el.disabled) continue;
+        if (typeof el.checkVisibility === 'function' && !el.checkVisibility({ checkVisibilityCSS: true })) continue;
+        return el;
+      }
+      return null;
+    }
     function syncPanelTabindex(activeTab) {
       items.forEach(function (t) {
         var panel = panelOf(t);
         if (!panel) return;
         var ours = panel.getAttribute('data-micro-tabs-panel') === '1';
-        var focusableInside = panel.querySelector(FOCUSABLE_IN);
+        var focusableInside = firstFocusableIn(panel);
         if (t === activeTab && !focusableInside) {
           if (!panel.hasAttribute('tabindex')) {
             panel.setAttribute('tabindex', '0');

@@ -27,27 +27,27 @@
 
 | Finding ID | المكون/الملف | السبب الجذري | الحالة قبل | المالك | خطوة الخطة | Commit التنفيذ | الفحص/الدليل | حالة ما بعد | المراجع |
 |---|---|---|---|---|---|---|---|---|---|
-| A1-F01 / A3-F02 | m-tabs — `components/navigation/navigation.css(.js)` | لا عقد تخطيط للتبويبات عند ضيق العرض/طول النص: flex أفقي بلا overflow معلن | CONFIRMED (DOM) | Zed AI | W1.1 (D-UI-01) | — | — | IN PLAN | Audit §A1.2/§A3.3 |
-| A3-F01 | tabpanel — `components/navigation/navigation.js` | تبديل hidden/aria-selected فقط؛ اللوحة النشطة بلا tabindex تدخل Tab | CONFIRMED (repro) | Zed AI | W1.2 | — | — | IN PLAN | Audit §A3.2 |
-| A3-F03 | sticky-foot/actionbar/navbar — `previews/navigation/board.css` + `navigation.css` | تكرار inset بين المجموعة والمكونين (تطبيق ثلاثي عند inset موجب) | CONFIRMED (تركيبي) | Zed AI | W1.3 | — | — | IN PLAN | Audit §A3.4 |
-| A1-F04 | فصل أهداف اللمس — مكونات متعددة | لا قاعدة قياس للفصل بين bounding boxes الفعلية (4/5px حالات) | فجوة/خطر | Zed AI | W1.5 (D-UI-03) | — | — | IN PLAN | Audit §A1.5 |
-| A1-F08 | picker نص طويل — `components/selection/picker.css(.js)` | الخيار flex بلا `min-inline-size:0`/`overflow-wrap` والقائمة `overflow:hidden` | خطر محتمل | Zed AI | W1.6 | — | — | IN PLAN | Audit §A1.9 |
-| A2-F01 | aria-disabled — `components/selection/selection.css` | قواعد CSS تغطي `[disabled]` فقط بينما JS يحرس `aria-disabled` أيضًا | CONFIRMED (source) | Zed AI | W2.1 | — | — | IN PLAN | Audit §A2.2 |
-| A2-F03 | طبقات بلا عقد ARIA — `components/navigation/navigation.js` | role/aria-modal/اسم تُترك للمستهلك بلا افتراض أو تحقق | فجوة عقد | Zed AI | W2.2 (D-UI-02) | — | — | IN PLAN | Audit §A2.4 |
-| A2-F04 | أدوار m-note — `components/messages/messages.js` | لا دور افتراضي من النوع ولا تحقق للترميز الناقص | فجوة عقد | Zed AI | W2.2 (D-UI-02) | — | — | IN PLAN | Audit §A2.5 |
-| A2-F05 | live region واحدة + مؤقت 50ms — `components/messages/messages.js` | تبديل polite/assertive على عقدة واحدة ومسح/إعادة نص بمؤقت ثابت | خطر محتمل | Zed AI | W2.3 | — | — | IN PLAN | Audit §A2.6 |
-| A2-F02 | قيم صلبة — `components/selection/selection.css:347` + `metric-comparison.css:381` | rgba صلبة بلا اسم دلالي أو استثناء موثق | CONFIRMED (source) | Zed AI | W2.4 (D-UI-06) | — | — | IN PLAN | Audit §A2.3 |
-| A2-F06 / D-UI-06 | نطاقات توكنز محلية | لا توثيق لحدود override للتوكنز الخاصة | قرار مالك | المالك + Zed AI | W2.4 (توثيق) | — | — | IN PLAN | Audit §A2.7 |
-| A2-F07 / D-UI-05 | segmented 40px/48px | قرار بصري يحتاج تثبيتًا وتحققًا من عدم التداخل | قرار مالك | المالك + Zed AI | W1.5 (تحقق فقط) | — | — | IN PLAN | Audit §A2.8 |
-| A2-F08 | init(root) — selection/data/messages/navigation/picker | `querySelectorAll` على الجذر دون تضمين الجذر نفسه | فجوة API | Zed AI | W2.5 | — | — | IN PLAN | Audit §A2.9 |
-| A4-D01 | dataset دلالي للرسم — `components/data/data.js` | role=img بـaria-label قصير فقط؛ لا ربط title/summary؛ البيانات مخفية | CONFIRMED (source) | Zed AI | W3.1 (D-UI-04) | — | — | IN PLAN | Audit §A4.2 |
-| A4-D02 | جدول/CSV بديل | لا مسار بيانات بديل عام | فجوة تغطية | Zed AI | W3.1 (إفصاح داخلي) + CSV مؤجل | — | — | IN PLAN | Audit §A4.3 |
-| A4-D03 | مقياس bubbles — `components/data/data.js` | استبدال data-max غير الصالح صمتًا وتجاوز rmax دون رفض | CONFIRMED (source) | Zed AI | W3.2 | — | — | IN PLAN | Audit §A4.4 |
-| A4-D04 | انحراف الملخص — `components/data/data.js:862-880` | الملخص يكتب مرة واحدة عند الفراغ فقط | CONFIRMED (source) | Zed AI | W3.3 | — | — | IN PLAN | Audit §A4.5 |
-| A4-R02 | اسم الرسم لا يطابق العنوان المرئي | مصدران للاسم بلا aria-labelledby | خطر صيانة | Zed AI | W3.1 | — | — | IN PLAN | Audit §A4.7 |
-| A1-F02 | هامش المعرض 390/430 — `previews/index.css:95-97` | قاعدة عرض 32px حتى 700px تخالف عقد 20px من 390 | CONFIRMED (CSS) | Zed AI | W4.3 | — | — | IN PLAN | Audit §A1.3 |
-| A5-F04 | غلاف #results PRE — `previews/fields/example-usage.html` | PRE بلا التفاف عند 320+200% يوسّع الصفحة | CONFIRMED (probe) | Zed AI | W4.3 | — | — | IN PLAN | Audit §A5.5 |
-| A4-R01 | تباين علامات البيانات | ألوان فاتحة (b/c/e) دون 3:1 كعلامات مستقلة | خطر بصري | المالك لاحقًا | W3.4 (تسجيل فقط) | — | — | IN PLAN → COLOR PROPOSAL | Audit §A4.6 |
+|A1-F01 / A3-F02|m-tabs — `components/navigation/navigation.css(.js)`|لا عقد تخطيط للتبويبات عند ضيق العرض/طول النص: flex أفقي بلا overflow معلن|CONFIRMED (DOM)|Zed AI|W1.1 (D-UI-01)| `0064c4c` | tabs matrix 32/32 + End/Home + visibility | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A3-F01|tabpanel — `components/navigation/navigation.js`|تبديل hidden/aria-selected فقط؛ اللوحة النشطة بلا tabindex تدخل Tab|CONFIRMED (repro)|Zed AI|W1.2| `0064c4c` | tabpanel: init/switch/internal-target | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A3-F03|sticky-foot/actionbar/navbar — `previews/navigation/board.css` + `navigation.css`|تكرار inset بين المجموعة والمكونين (تطبيق ثلاثي عند inset موجب)|CONFIRMED (تركيبي)|Zed AI|W1.3| `0064c4c` | fixture موجب: 12px/4px/30px + آلية 34px + before هيكلي 3×env | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A1-F04|فصل أهداف اللمس — مكونات متعددة|لا قاعدة قياس للفصل بين bounding boxes الفعلية (4/5px حالات)|فجوة/خطر|Zed AI|W1.5 (D-UI-03)| `0064c4c` | قياس bounding boxes + استثناءات موثقة | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A1-F08|picker نص طويل — `components/selection/picker.css(.js)`|الخيار flex بلا `min-inline-size:0`/`overflow-wrap` والقائمة `overflow:hidden`|خطر محتمل|Zed AI|W1.6| `0064c4c` | picker longtext 320+200%: التفاف 211px مقابل 55px مقصوص قبل | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F01|aria-disabled — `components/selection/selection.css`|قواعد CSS تغطي `[disabled]` فقط بينما JS يحرس `aria-disabled` أيضًا|CONFIRMED (source)|Zed AI|W2.1| `6e16853` | مظهر/hover/أحداث ×3 | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F03|طبقات بلا عقد ARIA — `components/navigation/navigation.js`|role/aria-modal/اسم تُترك للمستهلك بلا افتراض أو تحقق|فجوة عقد|Zed AI|W2.2 (D-UI-02)| `6e16853` | role/modal/اسم + تحذير | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F04|أدوار m-note — `components/messages/messages.js`|لا دور افتراضي من النوع ولا تحقق للترميز الناقص|فجوة عقد|Zed AI|W2.2 (D-UI-02)| `6e16853` | أدوار خمسة + تحذير bare | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F05|live region واحدة + مؤقت 50ms — `components/messages/messages.js`|تبديل polite/assertive على عقدة واحدة ومسح/إعادة نص بمؤقت ثابت|خطر محتمل|Zed AI|W2.3| `6e16853` | قناتان + burst + rAF | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F02|قيم صلبة — `components/selection/selection.css:347` + `metric-comparison.css:381`|rgba صلبة بلا اسم دلالي أو استثناء موثق|CONFIRMED (source)|Zed AI|W2.4 (D-UI-06)| `6e16853` | توكنان مسميان + جرد 15 حالة | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A2-F06 / D-UI-06|نطاقات توكنز محلية|لا توثيق لحدود override للتوكنز الخاصة|قرار مالك|المالك + Zed AI|W2.4 (توثيق)| `6e16853` | توثيق النطاقات (specs) | reviews/ZAI-UI-REPAIR/{before,after} | OWNER DECISION — RESOLVED (D-UI-06) |
+|A2-F07 / D-UI-05|segmented 40px/48px|قرار بصري يحتاج تثبيتًا وتحققًا من عدم التداخل|قرار مالك|المالك + Zed AI|W1.5 (تحقق فقط)| — | قياس عدم التداخل (elementFromPoint) | reviews/ZAI-UI-REPAIR/{before,after} | OWNER DECISION — RESOLVED (D-UI-05) |
+|A2-F08|init(root) — selection/data/messages/navigation/picker|`querySelectorAll` على الجذر دون تضمين الجذر نفسه|فجوة API|Zed AI|W2.5| `6e16853` | init root-self ×2 + re-init | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A4-D01|dataset دلالي للرسم — `components/data/data.js`|role=img بـaria-label قصير فقط؛ لا ربط title/summary؛ البيانات مخفية|CONFIRMED (source)|Zed AI|W3.1 (D-UI-04)| `7065512` | aria-labelledby/describedby + إفصاح 13 رسمًا | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A4-D02|جدول/CSV بديل|لا مسار بيانات بديل عام|فجوة تغطية|Zed AI|W3.1 (إفصاح داخلي) + CSV مؤجل| `7065512` | الإفصاح الداخلي (D-UI-04)؛ CSV مؤجل | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) — CSV DEFERRED |
+|A4-D03|مقياس bubbles — `components/data/data.js`|استبدال data-max غير الصالح صمتًا وتجاوز rmax دون رفض|CONFIRMED (source)|Zed AI|W3.2| `7065512` | رفض/رفض/rescale/auto ×4 (قبل: 147px تجاوز صامت) | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A4-D04|انحراف الملخص — `components/data/data.js:862-880`|الملخص يكتب مرة واحدة عند الفراغ فقط|CONFIRMED (source)|Zed AI|W3.3| `7065512` | مزامنة كل render (قبل: قديم) | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A4-R02|اسم الرسم لا يطابق العنوان المرئي|مصدران للاسم بلا aria-labelledby|خطر صيانة|Zed AI|W3.1| `7065512` | labelledby=العنوان المرئي 8 رسوم | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A1-F02|هامش المعرض 390/430 — `previews/index.css:95-97`|قاعدة عرض 32px حتى 700px تخالف عقد 20px من 390|CONFIRMED (CSS)|Zed AI|W4.3| `7978b32` | هوامش 16/20/20 عند 320/390/430 (قبل 16/16/16) | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A5-F04|غلاف #results PRE — `previews/fields/example-usage.html`|PRE بلا التفاف عند 320+200% يوسّع الصفحة|CONFIRMED (probe)|Zed AI|W4.3| `7978b32` | sw=320=cw (قبل sw=359) | reviews/ZAI-UI-REPAIR/{before,after} | VERIFIED (Chromium) |
+|A4-R01|تباين علامات البيانات|ألوان فاتحة (b/c/e) دون 3:1 كعلامات مستقلة|خطر بصري|المالك لاحقًا|W3.4 (تسجيل فقط)| — | قيم ونسب دقيقة في التقرير النهائي | reviews/ZAI-UI-REPAIR/{before,after} | DEFERRED → COLOR PROPOSAL — NOT IMPLEMENTED |
 | A1-F03 | سلم غلاف المعرض خارج سلم المنتج | لا فصل موثق لتوكنات المعرض | قرار بصري | المالك | خارج الموجات | — | — | DEFERRED | Audit §A1.4 |
 | A1-F05 / A6-ADAPT-001 | نطاق landscape/Medium/Expanded | لا عقد نطاق معلن | قرار نطاق | المالك | خارج الموجات | — | — | DEFERRED | Audit §A1.6 |
 | A1-F06 / A6-MOBILE-001 | safe-area top/inline | غير معالجة/غير مثبتة (تتطلب جهازًا وviewport-fit) | فجوة جهاز | المالك + جهاز | خارج الموجات (top) | — | — | DEFERRED / NOT RUN | Audit §A1.7 |
@@ -75,11 +75,12 @@
 
 | الموجة | النطاق | الحالة | Commit | الفحوص | ملاحظات |
 |---|---|---|---|---|---|
-| Wave 1 | الهندسة والتنقل (W1.1–W1.6) | IN PLAN | — | — | — |
-| Wave 2 | الحالات والدلالات والتوكنز (W2.1–W2.5) | IN PLAN | — | — | — |
-| Wave 3 | البيانات والرسوم (W3.1–W3.5) | IN PLAN | — | — | — |
-| Wave 4 | RTL وسلامة المعاينات (W4.1–W4.3) | IN PLAN | — | — | — |
-| QA مستقل | مراجعة قراءة فقط + إعادة تشغيل الفحوص | IN PLAN | — | — | وكيل مستقل؛ لا يعدل المصدر |
+| Wave 1 | الهندسة والتنقل (W1.1–W1.6) | **IMPLEMENTED — VERIFIED (Chromium)** | `0064c4c` | tabs matrix 32/32 · tabpanel 3 سلوكيات · safe-area fixture · picker longtext · appbar gap | لقطات قبل/بعد: tabs/picker |
+| Wave 2 | الحالات والدلالات والتوكنز (W2.1–W2.5) | **IMPLEMENTED — VERIFIED (Chromium)** | `6e16853` | aria-disabled 3 فحوص · layer defaults/validation · note roles 5 · live burst · init root-self ×2 | تحذيرات console مفحوصة |
+| Wave 3 | البيانات والرسوم (W3.1–W3.5) | **IMPLEMENTED — VERIFIED (Chromium)** | `7065512` | bubbles A01 ×4 · summary sync · disclosure 13 رسمًا · linkage · caption | لقطة disclosure مفتوح |
+| Wave 4 | RTL وسلامة المعاينات (W4.1–W4.3) | **IMPLEMENTED — VERIFIED (Chromium)** | `7978b32` | gallery margins 320/390/430 · results wrapper 320+200% · reflow matrix 40 مسارًا | — |
+| الأدلة | probe + قبل/بعد | **GENERATED** | `7313201` | `reviews/ZAI-UI-REPAIR/after` **87/87** · `reviews/ZAI-UI-REPAIR/before` **37/37** (كل عيوب الأساس مُعادة الإنتاج بالقياسات) | `tools/zai-repair-probes.py` |
+| QA مستقل | مراجعة قراءة فقط + إعادة تشغيل | **PASS** (وكيل مستقل QA-1) | — | `reviews/ZAI-UI-REPAIR/qa-verdict.txt` + إعادة تشغيل مستقلة **87/87** (`qa-rerun-verification.txt`) | 0 CRITICAL/0 MAJOR؛ إصلاح ملاحظة QA-7 (أهداف مخفية لا تُحسب داخل اللوحة) مفحوص 87/87 |
 
 ## 3) سجل الالتزامات العابرة للبنود
 
