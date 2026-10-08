@@ -1,0 +1,398 @@
+{
+  "tool": "tools/sui-repair-a3-check.py",
+  "phase": "before",
+  "generated_at": "2026-10-07T21:45:29.230405+00:00",
+  "git": {
+    "commit": "eacfe8ac700a995d76ca450fc2aaca6f7530762a",
+    "tree": "11d196e330dc1f592508e59c7be5e3facd4d4a9b",
+    "status_clean": false,
+    "dirty_owned": [],
+    "branch": "main"
+  },
+  "browser": {
+    "name": "Chromium",
+    "path": "/home/z/my-project/evidence/bin/chromium"
+  },
+  "zoom_mechanism": "text x2, two clean passes (ZOOM2_CLEAN pattern) — not native zoom",
+  "summary": {
+    "total": 57,
+    "passed": 23,
+    "failed": 34,
+    "groups": {
+      "SUI-001": "FAIL",
+      "SUI-002": "FAIL",
+      "SUI-010": "FAIL",
+      "SUI-012": "FAIL",
+      "SUI-013+014": "FAIL",
+      "SUI-015": "FAIL",
+      "SUI-016/017/019/020": "FAIL",
+      "SUI-022/023/029": "FAIL"
+    },
+    "not_run": [
+      "قارئ شاشة فعلي (TalkBack/VoiceOver/NVDA) — الأدوار والإعلانات مقيسة DOM/mutations فقط",
+      "هاتف فعلي / لمس / Samsung Internet — بيئة Chromium headless",
+      "native zoom لنظام التشغيل — 200% هنا محاكاة نص ×2 بمرورين نظيفين معلنة",
+      "WebKit/Safari وsafe-area فعلي (headless = 0)",
+      "عرض الفقاعة الأصلية لـreportValidity بصريًا على متصفح مرئي — يقاس عدم الاستدعاء برمجيًا هنا"
+    ]
+  },
+  "groups": [
+    {
+      "id": "SUI-001",
+      "group": "توست F03 على مستوى التطبيق: مرئي مقيسًا في كل مسارات showToast",
+      "checks": [
+        {
+          "name": "delete-single @320px: توست rect>0 نص مرئي فجوة navbar قناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف العنصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 747, 'navbarH': 53, 'viewportH': 800, 'gapToNavbar': 747, 'gapFromBottom': 800, 'activeElement': 'f03-list-title', 'liveRegionText': 'تم حذف العنصر.'"
+        },
+        {
+          "name": "delete-single @360px: توست rect>0 نص مرئي فجوة navbar قناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف العنصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 747, 'navbarH': 53, 'viewportH': 800, 'gapToNavbar': 747, 'gapFromBottom': 800, 'activeElement': 'f03-list-title', 'liveRegionText': 'تم حذف العنصر.'"
+        },
+        {
+          "name": "delete-single @390px: توست rect>0 نص مرئي فجوة navbar قناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف العنصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 747, 'navbarH': 53, 'viewportH': 800, 'gapToNavbar': 747, 'gapFromBottom': 800, 'activeElement': 'f03-list-title', 'liveRegionText': 'تم حذف العنصر.'"
+        },
+        {
+          "name": "delete-single @430px: توست rect>0 نص مرئي فجوة navbar قناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف العنصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 747, 'navbarH': 53, 'viewportH': 800, 'gapToNavbar': 747, 'gapFromBottom': 800, 'activeElement': 'f03-list-title', 'liveRegionText': 'تم حذف العنصر.'"
+        },
+        {
+          "name": "add-order @390px: توست rect>0 نص مرئي بلا تراكب وقناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تمت إضافة الطلب.', 'toastParentId': 'view-account', 'navbarHidden': True, 'navbarTop': 0, 'navbarH': 0, 'viewportH': 800, 'gapToNavbar': None, 'gapFromBottom': 800, 'activeElement': 'BODY', 'liveRegionText': 'تمت إضافة الطلب.', 'liveRe"
+        },
+        {
+          "name": "edit-order @390px: توست rect>0 نص مرئي بلا تراكب وقناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حفظ تعديل الطلب.', 'toastParentId': 'view-account', 'navbarHidden': True, 'navbarTop': 0, 'navbarH': 0, 'viewportH': 800, 'gapToNavbar': None, 'gapFromBottom': 800, 'activeElement': 'BODY', 'liveRegionText': 'تم حفظ تعديل الطلب.', '"
+        },
+        {
+          "name": "bulk-delete @390px: توست rect>0 نص مرئي بلا تراكب وقناة واحدة",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف 2 عناصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 747, 'navbarH': 53, 'viewportH': 800, 'gapToNavbar': 747, 'gapFromBottom': 800, 'activeElement': 'f03-select-toggle', 'liveRegionText': 'تم حذف 2 عن"
+        },
+        {
+          "name": "delete-single @320+200%: توست rect>0 نص مرئي بلا تراكب مع navbar",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تم حذف العنصر.', 'toastParentId': 'view-account', 'navbarHidden': False, 'navbarTop': 729.02, 'navbarH': 70.98, 'viewportH': 800, 'gapToNavbar': 729.02, 'gapFromBottom': 800, 'activeElement': 'f03-list-title', 'liveRegionText': 'تم حذف"
+        },
+        {
+          "name": "add-order @320+200%: توست rect>0 نص مرئي بلا تراكب مع navbar",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'display': 'flex', 'position': 'fixed', 'w': 0, 'h': 0, 'bottom': 0, 'top': 0, 'textW': 0, 'textH': 0, 'glyphOk': False, 'glyphW': 0, 'text': 'تمت إضافة الطلب.', 'toastParentId': 'view-account', 'navbarHidden': True, 'navbarTop': 0, 'navbarH': 0, 'viewportH': 800, 'gapToNavbar': None, 'gapFromBottom': 800, 'activeElement': 'BODY', 'liveRegionText': 'تمت إضافة الطلب.', 'liveRe"
+        },
+        {
+          "name": "التوست لا يسرق التركيز (عنصر نشط ثابت)",
+          "ok": true,
+          "detail": "{'t0': 'f03-list-title', 't350': 'f03-list-title'}"
+        },
+        {
+          "name": "زوال تلقائي ~4s (3500..4800ms بعد القياس)",
+          "ok": true,
+          "detail": "{'ms': 3536}"
+        },
+        {
+          "name": "الإغلاق اليدوي يخفي التوست فورًا (الزر قابل للوصول)",
+          "ok": false,
+          "detail": "{'clickError': 'Page.click: Timeout 2500ms exceeded.'}"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-002",
+      "group": "ارتفاع navbar بمتغير CSS ديناميكي: صفر تراكب عند 200% و53px نفسها عند 1×",
+      "checks": [
+        {
+          "name": "الإقلاع (navbar مخفي): المتغير غير مضبوط — fallback 53px من CSS",
+          "ok": true,
+          "detail": "{'var': None}"
+        },
+        {
+          "name": "أول كشف (home): المتغير = الارتفاع المقيس",
+          "ok": false,
+          "detail": "{'var': None}"
+        },
+        {
+          "name": "الإخفاء (detail): آخر قيمة مقيسة تبقى (سياسة الحالة المخفية)",
+          "ok": true,
+          "detail": "{'varHidden': None, 'varHome': None}"
+        },
+        {
+          "name": "إعادة الكشف: المتغير يعود بقيمة الارتفاع",
+          "ok": true,
+          "detail": "{'var': None}"
+        },
+        {
+          "name": "رصد حي لتغير خط الـnavbar (ResizeObserver لا سطر resize)",
+          "ok": false,
+          "detail": "{'var': None}"
+        },
+        {
+          "name": "مراقب واحد فقط (لا تكرار عند إعادة التشغيل)",
+          "ok": false,
+          "detail": "{'navbarRO': None}"
+        },
+        {
+          "name": "1× @320: شريط التحديد ملاصق لـnavbar بلا تراكب (القيمة 53px نفسها)",
+          "ok": true,
+          "detail": "{'overlap': 0, 'inset': 53, 'footPad': 77}"
+        },
+        {
+          "name": "200% @320: صفر تراكب لشريط التحديد مع navbar (المتغير تتبع 71px)",
+          "ok": false,
+          "detail": "{'overlap': 17.98, 'inset': 53, 'navbarH': 70.98, 'var': None}"
+        },
+        {
+          "name": "200% @320 بعد التمرير للنهاية: رابط التذييل ظاهر بفجوة ≥4px عن navbar",
+          "ok": true,
+          "detail": "{'linkGap': 6.3, 'lineGap': 71.29, 'footPad': 77}"
+        },
+        {
+          "name": "محدد الإخفاء سليم بايتيًا (اكتشاف القائد «baridden]» = أثر عرض لا مصدر)",
+          "ok": true,
+          "detail": "{'ruleExists': True}"
+        },
+        {
+          "name": "الشريط يُخفى فعليًا بسمة hidden (مستطيل 0×0)",
+          "ok": true,
+          "detail": "{'hiddenAttr': True, 'w': 0, 'h': 0, 'display': 'none'}"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-010",
+      "group": "عقد role لملاحظة الحفظ: الخطأ alert، النجاح/المعلومة/التحذير status",
+      "checks": [
+        {
+          "name": "فشل الحفظ (خطأ قابل للتصرف): role=alert",
+          "ok": false,
+          "detail": "{'role': 'status', 'variant': 'error', 'text': 'يمكنك التصحيح والمحاولة مجددًا.', 'regions': 7, 'liveRegionText': None}"
+        },
+        {
+          "name": "نتيجة غير مؤكدة (تحذير): role=status — ليس إعلانًا مقاطعًا آليًا",
+          "ok": true,
+          "detail": "{'role': 'status', 'variant': 'warning'}"
+        },
+        {
+          "name": "نجاح الحفظ: role=status (كما كان)",
+          "ok": true,
+          "detail": "{'role': 'status', 'variant': 'success', 'inert': False}"
+        },
+        {
+          "name": "مواصفة messages تحمل العقد المحدث (alert للخطأ فقط + مرجع WCAG)",
+          "ok": false,
+          "detail": "None"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-012",
+      "group": "عقد التمييز في MicroMessages.announce: هوية الحدث لا النص",
+      "checks": [
+        {
+          "name": "حدث أول يُعلن (mutations>0)",
+          "ok": true,
+          "detail": "{'first': 1, 'same': 1, 'independentId': 1, 'noId': 1}"
+        },
+        {
+          "name": "الحدث ذاته (id نفسه) مكررًا: لا إعلان ثانٍ",
+          "ok": true,
+          "detail": "{'first': 1, 'same': 1, 'independentId': 1, 'noId': 1}"
+        },
+        {
+          "name": "حدث مستقل (id مختلف) بنفس النص: يُعلن",
+          "ok": false,
+          "detail": "{'first': 1, 'same': 1, 'independentId': 1, 'noId': 1}"
+        },
+        {
+          "name": "حدث بلا id بنفس النص: يُعلن (توافق خلفي للمستدعين بلا id)",
+          "ok": false,
+          "detail": "{'first': 1, 'same': 1, 'independentId': 1, 'noId': 1}"
+        },
+        {
+          "name": "التوافق الخلفي: الوسيط المنطقي assertive يعمل",
+          "ok": true,
+          "detail": "{'live': 'assertive'}"
+        },
+        {
+          "name": "مواصفة messages توثق متى تُمرر id (عقد {id})",
+          "ok": false,
+          "detail": "None"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-013+014",
+      "group": "بوابة الدخول: نصوص بشرية وقناة خطأ واحدة",
+      "checks": [
+        {
+          "name": "وضع العرض فقط: نص بشري بلا مصطلحات داخلية",
+          "ok": false,
+          "detail": "{'text': 'عرض فقط: لم تُرسل البيانات؛ لا توجد خدمة مصادقة موصولة.'}"
+        },
+        {
+          "name": "لا استدعاء reportValidity الأصلي (قناة واحدة: رسالة المكوّن)",
+          "ok": false,
+          "detail": "{'rvCalls': 1, 'emailAriaInvalid': 'true', 'fieldHasError': True, 'noteText': 'أدخل بريدًا إلكترونيًا صالحًا.', 'noteVisible': True, 'noteLinked': 'm-field-msg-1', 'statusText': 'تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.', 'focusId': 'f03-gw-email'}"
+        },
+        {
+          "name": "الرسالة العربية المرتبطة ظاهرة وaria-invalid مضبوط والتركيز على الحقل",
+          "ok": true,
+          "detail": "{'rvCalls': 1, 'emailAriaInvalid': 'true', 'fieldHasError': True, 'noteText': 'أدخل بريدًا إلكترونيًا صالحًا.', 'noteVisible': True, 'noteLinked': 'm-field-msg-1', 'statusText': 'تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.', 'focusId': 'f03-gw-email'}"
+        },
+        {
+          "name": "نص ما بعد الإرسال بشري (بلا المعالج/المستهلك)",
+          "ok": false,
+          "detail": "{'text': 'تم تمرير الطلب للمعالج؛ نتيجة الدخول يحددها المستهلك.'}"
+        },
+        {
+          "name": "مواصفة البوابة توثق القناة الواحدة (لا فقاعة أصلية)",
+          "ok": false,
+          "detail": "None"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-015",
+      "group": "أول تركيز في لوحات الفلاتر الثلاث = أول تحكم فعلي",
+      "checks": [
+        {
+          "name": "F03: التركيز الأول على أول تحكم (خانة فئة) لا زر الإغلاق",
+          "ok": false,
+          "detail": "{'focus': 'BUTTON', 'isCheckbox': False, 'closeLabel': 'إغلاق التصفية'}"
+        },
+        {
+          "name": "filter-lifecycle: التركيز الأول على حقل البحث لا زر الإغلاق",
+          "ok": false,
+          "detail": "{'focus': 'BUTTON'}"
+        },
+        {
+          "name": "لوحة navigation: التركيز الأول على حقل البحث لا زر الإغلاق",
+          "ok": false,
+          "detail": "{'focus': 'BUTTON'}"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-016/017/019/020",
+      "group": "هامش F03 وهرمية العناوين وحماية الحركة",
+      "checks": [
+        {
+          "name": "هامش 320px: 16px (main+foot) دون 390 و20 من 390",
+          "ok": true,
+          "detail": "{'mainL': 16, 'mainR': 16, 'footL': 16, 'footR': 16}"
+        },
+        {
+          "name": "هامش 360px: 16px (main+foot) دون 390 و20 من 390",
+          "ok": true,
+          "detail": "{'mainL': 16, 'mainR': 16, 'footL': 16, 'footR': 16}"
+        },
+        {
+          "name": "هامش 390px: 20px (main+foot) دون 390 و20 من 390",
+          "ok": false,
+          "detail": "{'mainL': 16, 'mainR': 16, 'footL': 16, 'footR': 16}"
+        },
+        {
+          "name": "هامش 430px: 20px (main+foot) دون 390 و20 من 390",
+          "ok": false,
+          "detail": "{'mainL': 16, 'mainR': 16, 'footL': 16, 'footR': 16}"
+        },
+        {
+          "name": "عنوان كتلة F03: 16/24 وزن 600 (عنوان مجموعة داخل وجهة)",
+          "ok": false,
+          "detail": "{'titleSize': 14, 'titleLine': 21.994, 'titleWeight': '600', 'subSize': 14, 'subLine': 21.994, 'subWeight': '500'}"
+        },
+        {
+          "name": "العنوان الفرعي يبقى 14/500",
+          "ok": true,
+          "detail": "{'titleSize': 14, 'titleLine': 21.994, 'titleWeight': '600', 'subSize': 14, 'subLine': 21.994, 'subWeight': '500'}"
+        },
+        {
+          "name": "SUI-019: العنوانان يستخدمان m-section-title (18/28/600) لا الصنف الميت",
+          "ok": false,
+          "detail": "[{'sel': '#f03-detail-activity .m-section__head span', 'cls': 'm-section__title', 'size': 16, 'line': 26, 'weight': '600'}, {'sel': '#f03-rep-extra .m-section__head span', 'cls': 'm-section__title', 'size': 16, 'line': 26, 'weight': '600'}]"
+        },
+        {
+          "name": "SUI-020: تحت reduced-motion انتقال الصف = none",
+          "ok": false,
+          "detail": "{'property': 'background-color', 'duration': '0.18s', 'reduced': True}"
+        },
+        {
+          "name": "الحالة الطبيعية: الانتقال باقٍ (background-color > 0s)",
+          "ok": true,
+          "detail": "{'property': 'background-color', 'duration': '0.18s', 'reduced': False}"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    },
+    {
+      "id": "SUI-022/023/029",
+      "group": "KEEP موثق + سؤال الحذف + عزل مدخل المراجعة",
+      "checks": [
+        {
+          "name": "SUI-022 (KEEP): الالتفاف عند الحافة محفوظ كما هو (سلوك مقصود)",
+          "ok": true,
+          "detail": "{'tabCount': 2, 'from': 'tab-b-btn', 'to': True, 'toFirst': True}"
+        },
+        {
+          "name": "سطر توثيق القرار موجود في مواصفة B07",
+          "ok": false,
+          "detail": "None"
+        },
+        {
+          "name": "SUI-023: نص الحذف سؤال (؟) مع بقاء عدم التراجع",
+          "ok": false,
+          "detail": "{'text': 'سيُحذف «عنصر جيم» من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.', 'focus': 'إلغاء', 'cancelFocused': True}"
+        },
+        {
+          "name": "SUI-023: الإلغاء الافتراضي الآمن يحمل التركيز عند الفتح",
+          "ok": true,
+          "detail": "{'text': 'سيُحذف «عنصر جيم» من هذه التجربة، ولا يمكن التراجع عن الحذف بعد التأكيد.', 'focus': 'إلغاء', 'cancelFocused': True}"
+        },
+        {
+          "name": "SUI-029: مدخل المراجعة مخفي فعليًا في شاشة الدخول",
+          "ok": false,
+          "detail": "{'hiddenAttr': False, 'w': 68.46875, 'h': 48, 'display': 'inline-block', 'view': 'gateway'}"
+        },
+        {
+          "name": "بعد الدخول: المدخل يعمل من التذييل (نطاق معلن)",
+          "ok": true,
+          "detail": "{'hiddenAttr': False, 'w': 68.46875, 'h': 48}"
+        },
+        {
+          "name": "أداة المراجعة تفتح من التذييل بعد الدخول",
+          "ok": true,
+          "detail": "None"
+        }
+      ],
+      "meta": {},
+      "page_errors": [],
+      "result": "FAIL"
+    }
+  ]
+}

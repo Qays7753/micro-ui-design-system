@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "نعم، شريط إجراءات التحديد (الكل/إلغاء التحديد/حذف المحدد) ظاهر فوق شريط التنقل السفلي دون أن يغطيه، وشريط التنقل نفسه ظاهر بالكامل.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791475173,
+  "id": "20261008235929300e7c7995964d7b",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008235929300e7c7995964d7b",
+  "usage": {
+    "completion_tokens": 62,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 443,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 505
+  }
+}

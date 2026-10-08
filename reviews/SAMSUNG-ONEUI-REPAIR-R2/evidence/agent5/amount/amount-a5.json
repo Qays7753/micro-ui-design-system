@@ -1,0 +1,97 @@
+{
+  "tool": "agent5 amount probe (SUI-R1-05) — TOKX2",
+  "page": "http://127.0.0.1:4481/previews/fields/index.html",
+  "checks": [
+    {
+      "id": "values-desc",
+      "label": "وصف القيمتين: 11 رقمًا/14 محرفًا و15 رقمًا/15 محرفًا",
+      "pass": true,
+      "detail": {
+        "formatted": [
+          11,
+          14
+        ],
+        "raw": [
+          15,
+          15
+        ]
+      }
+    },
+    {
+      "id": "formatted-fits",
+      "label": "123,456,789.50 (11 رقمًا/14 محرفًا): clientWidth == scrollWidth عند 320+200%",
+      "pass": true,
+      "detail": {
+        "client": 252,
+        "scroll": 252,
+        "fontSize": "32px",
+        "unitWrap": null,
+        "parentW": 286
+      }
+    },
+    {
+      "id": "raw-overflows",
+      "label": "123456789012345 (15 رقمًا): scrollWidth > clientWidth (يحتاج تمرير تحرير)",
+      "pass": true,
+      "detail": {
+        "client": 252,
+        "scroll": 288
+      }
+    },
+    {
+      "id": "end-tail",
+      "label": "End: scrollLeft > 0 والمؤشر في النهاية (الذيل ظاهر)",
+      "pass": true,
+      "detail": {
+        "scrollLeft": 36,
+        "selStart": 15,
+        "selEnd": 15
+      }
+    },
+    {
+      "id": "home-head",
+      "label": "Home: scrollLeft == 0 والمؤشر في البداية (البداية ظاهرة)",
+      "pass": true,
+      "detail": {
+        "scrollLeft": 0,
+        "selStart": 0,
+        "selEnd": 0
+      }
+    },
+    {
+      "id": "unit-wrap-structure",
+      "label": "بنية الوحدة موجودة والمدخل أحادي السطر (input بلا rows)",
+      "pass": true,
+      "detail": {
+        "hasUnit": true,
+        "unitRect": {
+          "x": 298.65625,
+          "y": 908.03125,
+          "width": 42.34375,
+          "height": 39.984375,
+          "top": 908.03125,
+          "right": 341,
+          "bottom": 948.015625,
+          "left": 298.65625
+        },
+        "ctrlRect": {
+          "x": 72,
+          "y": 847.03125,
+          "width": 286,
+          "height": 101.984375,
+          "top": 847.03125,
+          "right": 358,
+          "bottom": 949.015625,
+          "left": 72
+        },
+        "inputTag": "INPUT",
+        "inputRows": null,
+        "inputType": "text"
+      }
+    }
+  ],
+  "summary": {
+    "pass": 6,
+    "total": 6
+  }
+}

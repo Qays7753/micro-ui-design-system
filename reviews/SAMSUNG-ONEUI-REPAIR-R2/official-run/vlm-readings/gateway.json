@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "بناءً على الصورة المرفقة، إليك الإجابة:\n\n**نص رسالة الحالة الظاهرة:**\nتظهر الرسالة داخل مربع أزرق فاتح في الأسفل:\n> **\"أنر بالبيانات تجريبية لتسجيل الدخول.\"**\n\n**هل تظهر عبارة نجاح دخول؟**\n**لا**، لا تظهر عبارة مثل \"تم الدخول بنجاح\". الرسالة الظاهرة هي **تعليمات/إرشاد** للمستخدم بضرورة استخدام بيانات تجريبية (وليست تأكيداً على نجاح العملية).",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791475206,
+  "id": "2026100900000339930059f8124fdc",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "2026100900000339930059f8124fdc",
+  "usage": {
+    "completion_tokens": 144,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 463,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 607
+  }
+}

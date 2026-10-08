@@ -1,0 +1,6 @@
+# sui-r2-a3-check — after — 2026-10-08T15:57:40
+PASS  SUI-R1-03: 11/11 فحصًا
+PASS  SUI-R1-04: 144/144 فحصًا
+
+فحوص فاشلة (بنود): 0 / إجمالي الفحوص: 155
+NOT RUN: أجهزة فعلية ولمس حقيقي (القياس مستطيلات وRange عبر Chromium headless)؛ قارئ شاشة فعلي (TalkBack/VoiceOver/NVDA) — عدّ تحديثات المنطقة الحية قياس DOM بنيوي لا إثبات صوت؛ WebKit/Safari؛ native zoom لنظام التشغيل — 200% محاكاة نص بمرورين نظيفين معلنة؛ safe-area فعلي (headless = 0)

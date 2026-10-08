@@ -1,0 +1,42 @@
+# فحص الوكيل 4 — SAMSUNG-ONEUI-REPAIR-R1 — stage=after — 2026-10-08T15:55:05
+# الخادم: http://127.0.0.1:4400 (نطاق الوكيل 4) — meta: {"commit": "3a6adf0794c4df3577c704b523fcde829ccd787d", "tree": "295046a12728ea1257eb7382d5dcf06cb6941abf", "source_clean": true, "dirty_files": []}
+PASS  SUI-007/1 F03@320 أول كشف لوجهة التقارير: البطاقة النشطة موسّطة (فرق الحواف ≤2px) قبل أي تفاعل — {"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 288, "slideW": 228, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/2 F03@320 transform ≠ 0 عند أول كشف (قياس تم أثناء القسم مخفي) — transform=-30
+PASS  SUI-007/3 F03@320 الفرق بين «قبل أول تفاعل» و«بعده» = صفر (نفس transform ونفس rect) — before={"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 288, "slideW": 228, "leftInset": 30, "rightInset": 30, "index": 0} after={"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 288, "slideW": 228, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/1 F03@430 أول كشف لوجهة التقارير: البطاقة النشطة موسّطة (فرق الحواف ≤2px) قبل أي تفاعل — {"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 390, "slideW": 330, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/2 F03@430 transform ≠ 0 عند أول كشف (قياس تم أثناء القسم مخفي) — transform=-30
+PASS  SUI-007/3 F03@430 الفرق بين «قبل أول تفاعل» و«بعده» = صفر (نفس transform ونفس rect) — before={"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 390, "slideW": 330, "leftInset": 30, "rightInset": 30, "index": 0} after={"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 390, "slideW": 330, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/4 عزل: كشف بعد إخفاء → البطاقة النشطة موسّطة قبل أي تفاعل (transform ≠ 0) — {"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 320, "slideW": 260, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/5 عزل: تغير عرض الحاوية (بلا window resize) → إعادة توسيط البطاقة النشطة — {"transform": -30, "inlineTransform": "translateX(-30px)", "vpW": 360, "slideW": 300, "leftInset": 30, "rightInset": 30, "index": 0}
+PASS  SUI-007/6 عزل: التركيز داخل البطاقة النشطة يبقى مكانه عند إعادة التوسيط (لا إعادة ضبط) — focusKept=True
+PASS  SUI-007/7 عزل: الفهرس محفوظ عبر إخفاء/كشف (index=2 وموسّطة) وصفر أحداث micro-info-peek:change — geo={"transform": 514, "inlineTransform": "translateX(514px)", "vpW": 320, "slideW": 260, "leftInset": 30, "rightInset": 30, "index": 2} events=0
+PASS  SUI-007/8 عزل: سياسة العرض 0 — لا إعادة قياس على المخفي (inline transform يبقى على آخر توسيط) — hidden='translateX(514px)' afterHide='translateX(514px)'
+PASS  SUI-007/9 عزل: إعادة init (مرتان) لا تنشئ مراقبًا ثانيًا (WeakMap — عدّ عبر تغليف ResizeObserver) — built_before=1 built_after=1
+PASS  SUI-007/10 عزل: MicroInfoPeek.disconnect يفصل المراقب — تغير العرض بعده لا يعيد التوسيط — disconnected=1 geoAfterWidthChange={"transform": 514, "inlineTransform": "translateX(514px)", "vpW": 390, "slideW": 330, "leftInset": -110, "rightInset": 170, "index": 2}
+PASS  SUI-008/1 عند 1×: الرقم القصير (1,240.50) سطر واحد داخل البطاقة — لا انحدار بالحجم/القيمة — {"cardClientW": 288, "cardScrollW": 288, "numW": 140, "numH": 44, "overflowWrap": "anywhere", "fontSize": "36px", "numInsideCard": true, "text": "1,240.50"}
+PASS  SUI-008/2 بطاقة stat برقم 16 خانة عند 320+200%: scrollWidth ≤ clientWidth للبطاقة — scrollW=288 clientW=288
+PASS  SUI-008/3 القيمة كاملة مرئية بالتلف داخل حدود البطاقة (مستطيل الرقم داخل البطاقة) — {"cardClientW": 288, "cardScrollW": 288, "numW": 264, "numH": 264, "overflowWrap": "anywhere", "fontSize": "72px", "numInsideCard": true, "text": "1234567890123456"}
+PASS  SUI-008/4 القيمة في DOM كاملة بلا تغيير (لا تصغير ولا تغيير قيمة) — text='1234567890123456'
+INFO  SUI-008 قياس الرقم الطويل 16 خانة عند 320+200% — {"cardClientW": 288, "cardScrollW": 288, "numW": 264, "numH": 264, "overflowWrap": "anywhere", "fontSize": "72px", "numInsideCard": true, "text": "1234567890123456"}
+PASS  SUI-025/1 عزل (إعادة إنتاج): كشف العارض بعد إخفاء → البطاقة الحالية موسّطة قبل أول تفاعل — {"transform": -36, "inlineTransform": "translateX(-36px)", "vpW": 320, "slideW": 248, "leftInset": 36, "rightInset": 36, "index": 0}
+PASS  SUI-025/2 عزل: تغير عرض الحاوية (بلا window resize) → إعادة توسيط البطاقة الحالية — {"transform": -36, "inlineTransform": "translateX(-36px)", "vpW": 360, "slideW": 288, "leftInset": 36, "rightInset": 36, "index": 0}
+PASS  SUI-025/3 عزل: التركيز داخل البطاقة النشطة يبقى مكانه عند إعادة التوسيط — focusKept=True
+PASS  SUI-025/4 عزل: الفهرس محفوظ عبر إخفاء/كشف (index=1 وموسّطة) وصفر أحداث micro-carousel:change — geo={"transform": 224, "inlineTransform": "translateX(224px)", "vpW": 320, "slideW": 248, "leftInset": 36, "rightInset": 36, "index": 1} events=0
+PASS  SUI-025/5 عزل: إعادة init (مرتان) لا تنشئ مراقبًا ثانيًا (WeakMap — عدّ عبر تغليف ResizeObserver) — built_before=1 built_after=1
+PASS  SUI-025/6 عزل: MicroCarousel.disconnect يفصل المراقب — تغير العرض بعده لا يعيد التوسيط — disconnected=1 geoAfterWidthChange={"transform": 224, "inlineTransform": "translateX(224px)", "vpW": 390, "slideW": 318, "leftInset": -34, "rightInset": 106, "index": 1}
+PASS  SUI-024/1 comparison@320+200%: scrollWidth للصفحة = viewport (لا تمديد الصفحة كلها) — docScrollW=320 docClientW=320
+PASS  SUI-024/2 الجدول قابل للتمرير داخل حاويته (حاوية موجودة + scrollLeft يتغير فعلًا) — {"docScrollW": 320, "docClientW": 320, "tableW": 556, "hasScrollContainer": true, "scrollLeftAfter": 1, "boxClientW": 287, "boxScrollW": 556}
+PASS  SUI-017/1 لوحة data: .m-chart__title = 16px / 24px وزن 600 (عنوان مجموعة داخل وجهة) — {"fs": "16px", "lh": "24px", "fw": "600"}
+PASS  SUI-017/2 F03 التقارير: .m-chart__title = 16px / 24px وزن 600 (اتساق مع لوحة data) — {"fs": "16px", "lh": "24px", "fw": "600"}
+PASS  SUI-009/1 F03 المسار الافتراضي: لا 'mystery' في DOM (ولا في مفتاح الكالندر) ولا نص حقن — {"legendText": "قيد التنفيذتم التسليمبانتظار العميل", "legendItems": ["قيد التنفيذ", "قيد التنفيذ", "تم التسليم", "تم التسليم", "بانتظار العميل", "بانتظار العميل"], "mysteryInDom": false, "injectionLiteral": false, "xssArmed": false, "storeCount": 22}
+PASS  SUI-009/2 العينة المستقلة المسار الافتراضي نظيف: لا mystery ولا نص حقن — {"legendText": "قيد التنفيذتم التسليمبانتظار العميل", "mysteryInDom": false, "injectionLiteral": false, "storeCount": 22, "hasCreateStore": true, "hasEdgeFixtures": true}
+PASS  SUI-009/3 واجهة fixtures في الموصل: createStore(seed) + EDGE_FIXTURES معزولان — {"legendText": "قيد التنفيذتم التسليمبانتظار العميل", "mysteryInDom": false, "injectionLiteral": false, "storeCount": 22, "hasCreateStore": true, "hasEdgeFixtures": true}
+PASS  SUI-009/4 createStore معزولة عن المخزن الافتراضي (بذرة بديلة بلا تسريب) — {"isolatedCount": 1, "defaultCount": 22, "isolatedHas": true, "defaultHas": false, "edgeCount": 2}
+PASS  SUI-009/5 وضع fixtures (?fixtures=edge) يغطي الحالتين الحديتين: مفتاح مجهول محايد بنصه + حقن نصًا حرفيًا (لا b/img ولا __xss) — {"hasOd10": true, "hasOdInj": true, "mysteryLabel": "mystery", "mysteryNeutral": true, "injText": "طلب <b>عنوان</b> <img onerror=\"window.__xss=1\"> تجريبي", "injHasMarkup": false, "rootB": 0, "rootImg": 0, "xssArmed": false, "legendHasMystery": true, "storeCount": 24}
+PASS  SUI-009/6 زر وضع الفحص الظاهر في العينة يحمّل fixtures بلا reload (موسوم بـaria-pressed) — {"button": {"exists": true, "label": "حالات الحدود (وضع الفحص)", "pressed": "false"}, "after_click": {"hasOd10": true, "pressed": "true", "legendHasMystery": true, "xssArmed": false}}
+INFO  SUI-030 سياق: خلية الشهر في العينة المستقلة (CSSpx) — {"320": {"w": 37.7, "h": 37.8}, "360": {"w": 43.4, "h": 43.4}, "390": {"w": 47.7, "h": 47.7}, "430": {"w": 53.4, "h": 53.4}}
+INFO  SUI-030 سياق: خلية الشهر في تركيب F03 (CSSpx) — {"320": {"w": 37.7, "h": 37.8}, "360": {"w": 43.4, "h": 43.4}, "390": {"w": 46.6, "h": 46.6}, "430": {"w": 52.3, "h": 52.3}}
+INFO  SUI-031 سياق: تسميات أعمدة مرئية مقابل القراءة الكاملة عند 320 — [{"visible": "م…مبيعات", "aria": "مبيعات", "title": "مبيعات"}, {"visible": "م…مشتريات", "aria": "مشتريات", "title": "مشتريات"}, {"visible": "مر…مرتجعات", "aria": "مرتجعات", "title": "مرتجعات"}, {"visible": "خارج", "aria": null, "title": null}, {"visible": "الن…خارج النطاق", "aria": "خارج النطاق", "t
+PASS  SUI-META/1 صفر أخطاء JavaScript في كل الصفحات والتفاعلات أعلاه
+
+# النتيجة (after): 34/34 ناجح — info: 4

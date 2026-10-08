@@ -1,3 +1,10 @@
+# SAMSUNG-ONEUI-REPAIR-R2 (SUI-R1-01..06) — DRAFT FOR RE-REVIEW / 2026-10-08
+
+- [تقرير الجولة](../reviews/SAMSUNG-ONEUI-REPAIR-R2/REPORT.md): البنود الستة قبل/بعد بالأرقام + الطبقات المعدلة + NOT RUN.
+- [المصفوفة](../reviews/SAMSUNG-ONEUI-REPAIR-R2/MATRIX.md) و[التغطية](../reviews/SAMSUNG-ONEUI-REPAIR-R2/COVERAGE-REPAIR.csv): مصفوفة الأحكام (المستقل CONFIRMED ×6) + CSV ‏35×9 و14 عائلة.
+- [الأدلة الرسمية](../reviews/SAMSUNG-ONEUI-REPAIR-R2/official-run/README.md): من checkout نظيف للمصدر المثبت `3a6adf0` — سلسلة F02-32 كاملة (B03/B07/F01/F02 بمطابقة commit/الشجرة) + F03 ‏46/46 · 267 · 301 · 130 · 54 · أدوات R1/R2 · concepts ‏157/157 · b01 ‏49/49 · standalone حتمي · قراءات VLM.
+- [تقارير الوكلاء](../reviews/SAMSUNG-ONEUI-REPAIR-R2/README.md): خمسة وكلاء (1-3 متوازيون في worktrees + 4 + مستقل 111/111) وأدلة before/after (أدوات R2 أنتجت فشلًا حقيقيًا قبل الإصلاح).
+
 # مراجعة ChatGPT لتطوير Samsung — 2026-10-08
 
 - [المراجعة](../reviews/SAMSUNG-ONEUI-REPAIR-R1/CHATGPT-REVIEW-R1.md): CHANGES REQUIRED — أربع بقايا مصدر وتصحيحان للتوثيق والرجعية، مع حفظ النجاحات؛ لا إصلاح مصادر ضمن المراجعة.

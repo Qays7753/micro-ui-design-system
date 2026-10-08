@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A5 حاضنة إعادة الإلحاق — فحص مستقل</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/motion.css">
+  <link rel="stylesheet" href="/components/buttons/buttons.css">
+  <link rel="stylesheet" href="/components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="/components/info-strip/info-strip-peek.css">
+  <link rel="stylesheet" href="/components/carousel/carousel.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    [hidden] { display: none !important; }
+    .a5-wrap { width: 320px; margin-bottom: 24px; border: 1px dashed #999; padding: 8px; }
+    #a5-hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:16px">حاضنة الوكيل 5 — دورات disconnect→init</h1>
+
+  <div class="a5-wrap" id="wrap-peek">
+    <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="peek1">
+      <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="عارض الفحص">
+        <div class="m-info-strip__track" data-info-strip-track>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">بطاقة 1</span><div class="m-info-card__reading"><span class="m-info-card__number">101</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">بطاقة 2</span><div class="m-info-card__reading"><span class="m-info-card__number">202</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">بطاقة 3</span><div class="m-info-card__reading"><span class="m-info-card__number">303</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">بطاقة 4</span><div class="m-info-card__reading"><span class="m-info-card__number">404</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">بطاقة 5</span><div class="m-info-card__reading"><span class="m-info-card__number">505</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+        </div>
+      </div>
+      <div class="m-info-strip__controls" data-info-strip-controls>
+        <span class="m-info-strip__position">البطاقة <span data-info-strip-position></span></span>
+        <div class="m-info-strip__pages" data-info-strip-pages></div>
+        <div class="m-info-strip__arrows">
+          <button type="button" class="m-info-strip__arrow" data-info-strip-prev aria-label="السابقة"></button>
+          <button type="button" class="m-info-strip__arrow" data-info-strip-next aria-label="التالية"></button>
+        </div>
+      </div>
+      <p class="m-info-strip__status" data-info-strip-status role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="a5-wrap" id="wrap-car">
+    <div class="m-carousel" data-carousel data-carousel-label="عارض الفحص المستقل" id="car1">
+      <div class="m-carousel__viewport" data-viewport>
+        <ul class="m-carousel__track" data-track>
+          <li class="m-carousel__slide" data-carousel-slide data-card-label="شريحة 1"><div class="m-carousel__card"><h3 class="card-title" style="font-size:14px;margin:0">شريحة 1</h3><p style="font-size:12px;margin:4px 0">نص شريحة الفحص 1</p></div></li>
+          <li class="m-carousel__slide" data-carousel-slide data-card-label="شريحة 2"><div class="m-carousel__card"><h3 class="card-title" style="font-size:14px;margin:0">شريحة 2</h3><p style="font-size:12px;margin:4px 0">نص شريحة الفحص 2</p></div></li>
+          <li class="m-carousel__slide" data-carousel-slide data-card-label="شريحة 3"><div class="m-carousel__card"><h3 class="card-title" style="font-size:14px;margin:0">شريحة 3</h3><p style="font-size:12px;margin:4px 0">نص شريحة الفحص 3</p></div></li>
+          <li class="m-carousel__slide" data-carousel-slide data-card-label="شريحة 4"><div class="m-carousel__card"><h3 class="card-title" style="font-size:14px;margin:0">شريحة 4</h3><p style="font-size:12px;margin:4px 0">نص شريحة الفحص 4</p></div></li>
+          <li class="m-carousel__slide" data-carousel-slide data-card-label="شريحة 5"><div class="m-carousel__card"><h3 class="card-title" style="font-size:14px;margin:0">شريحة 5</h3><p style="font-size:12px;margin:4px 0">نص شريحة الفحص 5</p></div></li>
+        </ul>
+      </div>
+      <div class="m-carousel__controls">
+        <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"></button>
+        <p class="m-carousel__status" data-status aria-live="polite"></p>
+        <button type="button" class="m-carousel__btn" data-next aria-label="التالي"></button>
+      </div>
+      <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر"></div>
+    </div>
+  </div>
+
+  <!-- حاوية الإخفاء/الكشف -->
+  <div id="a5-hidden" class="a5-wrap" style="width:360px">
+    <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="peek-hidden">
+      <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="عارض مخفي">
+        <div class="m-info-strip__track" data-info-strip-track>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">مخفية 1</span><div class="m-info-card__reading"><span class="m-info-card__number">11</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">مخفية 2</span><div class="m-info-card__reading"><span class="m-info-card__number">22</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+          <div class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">مخفية 3</span><div class="m-info-card__reading"><span class="m-info-card__number">33</span><span class="m-info-card__unit">وحدة</span></div></article></div>
+        </div>
+      </div>
+      <div class="m-info-strip__controls" data-info-strip-controls>
+        <div class="m-info-strip__pages" data-info-strip-pages></div>
+        <div class="m-info-strip__arrows">
+          <button type="button" class="m-info-strip__arrow" data-info-strip-prev aria-label="السابقة"></button>
+          <button type="button" class="m-info-strip__arrow" data-info-strip-next aria-label="التالية"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/components/info-strip/info-strip.js"></script>
+  <script src="/components/info-strip/info-strip-peek.js"></script>
+  <script src="/components/carousel/carousel.js"></script>
+  <script>
+    // اتجاه الصفحة عبر وسيط الاستعلام dir=ltr
+    if (new URLSearchParams(location.search).get('dir') === 'ltr') {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.setAttribute('lang', 'en');
+    }
+    // عدّاد أحداث التغيير (لازدواج)
+    window.__peekEvents = 0;
+    window.__carEvents = 0;
+    document.addEventListener('micro-info-peek:change', () => { window.__peekEvents++; });
+    document.addEventListener('micro-carousel:change', () => { window.__carEvents++; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+{
+  "tool": "tools/sui-r2-a1-check.py",
+  "tag": "after",
+  "round": "SAMSUNG-ONEUI-REPAIR-R2 — الوكيل 1 — SUI-R2-A1 (SUI-R1-01 بوابة الدخول)",
+  "generated_at": "2026-10-08T15:56:34",
+  "git": {
+    "commit": "3a6adf0794c4df3577c704b523fcde829ccd787d",
+    "tree": "295046a12728ea1257eb7382d5dcf06cb6941abf",
+    "source_clean": true,
+    "dirty_files": [],
+    "note": "ملفات الوكيل غير المتتبعة (الأداة نفسها + مجلد أدلة الجولة) تظهر هنا إن وُجدت — لا مصدر مُعدّل خارج الملكية"
+  },
+  "browser": "Chromium 143.0.7499.4 (evidence/bin) — Playwright sync",
+  "pages": [
+    "/components/access-gateway/example-usage.html",
+    "/previews/concepts/",
+    "/previews/ux-patterns/mobile-record-sample/index.html"
+  ],
+  "not_run": [
+    "أجهزة فعلية/لمس",
+    "TalkBack/قارئ شاشة فعلي",
+    "WebKit",
+    "native zoom"
+  ],
+  "checks": [
+    {
+      "name": "A1-01 مزوّد يعيد undefined → النص المحايد حرفيًا (لا استنتاج نجاح من اكتمال المعالج)",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى الطلب دون نتيجة مؤكدة من التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-01b النص لا يحوي «تم الدخول بنجاح» ولا «تم التحقق»",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى الطلب دون نتيجة مؤكدة من التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-01c نبرة النص المحايد info",
+      "ok": true,
+      "detail": "tone=info"
+    },
+    {
+      "name": "A1-02 مزوّد يعيد {authenticated:true} → «تم الدخول بنجاح.» بنبرة info",
+      "ok": true,
+      "detail": "{\"text\": \"تم الدخول بنجاح.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-03 onSubmit يعيد undefined → النص المحايد حرفيًا (بلا ادعاء نجاح)",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى الطلب دون نتيجة مؤكدة من التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-03b نبرة المحايد info",
+      "ok": true,
+      "detail": "tone=info"
+    },
+    {
+      "name": "A1-04 onSubmit يعيد {authenticated:true} → «تم الدخول بنجاح.» وdata-tone=info",
+      "ok": true,
+      "detail": "{\"text\": \"تم الدخول بنجاح.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-05 onSubmit يعيد {authenticated:false} بلا message → «لم يتم الدخول.» وdata-tone=error",
+      "ok": true,
+      "detail": "{\"text\": \"لم يتم الدخول.\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-06 onSubmit يعيد {authenticated:false,message:'لم يتم الدخول'} → الرسالة تبقى حرفيًا بنبرة error (لا تُستبدل)",
+      "ok": true,
+      "detail": "{\"text\": \"لم يتم الدخول\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\", \"كانت تُستبدل بـ\": null}"
+    },
+    {
+      "name": "A1-07 onSubmit يعيد {ok:true} (مفتاح غير معروف) → النص المحايد (ليس مخططًا ملزمًا)",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى الطلب دون نتيجة مؤكدة من التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-08 result.message نص غير فارغ → يُعرض حرفيًا وresult.tone='error' يُحترم",
+      "ok": true,
+      "detail": "{\"text\": \"البريد غير مسجل في هذا العرض.\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-09 message مع authenticated:true → الرسالة تُعرض (لا تبتلعها رسالة الدخول)",
+      "ok": true,
+      "detail": "{\"text\": \"دخول تجريبي مقيد.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-10 مستمع micro-access:submitted يكتب رسالة → تبقى حرفيًا بعد اكتمال المسار (الكلمة الأخيرة للمستهلك)",
+      "ok": true,
+      "detail": "{\"text\": \"رسالة المستهلك بعد الحدث: الدخول معلّق بانتظار التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\", \"events\": 1, \"كانت تُمحى بـ\": null}"
+    },
+    {
+      "name": "A1-10b الحدث micro-access:submitted أُطلق مرة واحدة",
+      "ok": true,
+      "detail": "events=1"
+    },
+    {
+      "name": "A1-11 رفض Promise بخطأ → error.message بنبرة error",
+      "ok": true,
+      "detail": "{\"text\": \"تعذّر الاتصال بخدمة الدخول التجريبية.\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-12 طلبان متتاليان أثناء busy → معالج واحد يُستدعى (حارس microAccessBusy محفوظ)",
+      "ok": true,
+      "detail": "calls=1"
+    },
+    {
+      "name": "A1-12b aria-busy='true' أثناء المعالجة",
+      "ok": true,
+      "detail": "{\"text\": \"جارٍ التحقق من بيانات الدخول…\", \"tone\": \"info\", \"busy\": \"true\", \"busyFlag\": \"true\"}"
+    },
+    {
+      "name": "A1-12c بعد الإنجاز: aria-busy مُزالة وmicroAccessBusy='false'",
+      "ok": true,
+      "detail": "{\"text\": \"لم يتم الدخول.\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-12d نتيجة الطلب المعلّق تُطبق (لم يتم الدخول بنبرة error)",
+      "ok": true,
+      "detail": "{\"text\": \"لم يتم الدخول.\", \"tone\": \"error\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-13 detail حدث submitted لا يحمل كلمة المرور (يحمل {result} فقط)",
+      "ok": true,
+      "detail": "{\"detailJson\": \"{\\\"result\\\":{\\\"authenticated\\\":true}}\", \"detailHasPassword\": false, \"detailKeys\": [\"result\"], \"attrHits\": [], \"localStorageHit\": false, \"sessionStorageHit\": false}"
+    },
+    {
+      "name": "A1-13b لا سمة/dataset على البوابة أو النموذج تحمل كلمة المرور ولا في localStorage/sessionStorage",
+      "ok": true,
+      "detail": "{\"detailJson\": \"{\\\"result\\\":{\\\"authenticated\\\":true}}\", \"detailHasPassword\": false, \"detailKeys\": [\"result\"], \"attrHits\": [], \"localStorageHit\": false, \"sessionStorageHit\": false}"
+    },
+    {
+      "name": "A1-14 onRecovery بلا message → «انتهى طلب المساعدة دون تأكيد إرساله.» (لا ادعاء إرسال) بنبرة info",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى طلب المساعدة دون تأكيد إرساله.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-15 onRecovery يعيد message → تُعرض وتُحترم حرفيًا",
+      "ok": true,
+      "detail": "{\"text\": \"رسالة مساعدة من المستهلك: تعذر الإرسال في هذا العرض.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-16 بلا onSubmit (concepts) → نص العرض التجريبي الحالي حرفيًا",
+      "ok": true,
+      "detail": "{\"text\": \"هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-17 concepts: مزوّد يعيد undefined → النص المحايد (نفس العقد على مستضيف ثانٍ)",
+      "ok": true,
+      "detail": "{\"text\": \"انتهى الطلب دون نتيجة مؤكدة من التطبيق.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": null}"
+    },
+    {
+      "name": "A1-18 concepts: رسالة مستمع الحدث تبقى فوق منطقة الحالة (لا يمسحها المكوّن)",
+      "ok": true,
+      "detail": "{\"text\": \"لم يتم الدخول — هذا الحساب غير مفعل في العرض التجريبي.\", \"tone\": \"info\", \"busy\": null, \"busyFlag\": \"false\"}"
+    },
+    {
+      "name": "A1-19 F03: الإرسال الصالح يدخل التطبيق (entered=true وview=home)",
+      "ok": true,
+      "detail": "{\"view\": \"home\", \"entered\": true, \"text\": \"تم الدخول بنجاح.\", \"tone\": \"info\"}"
+    },
+    {
+      "name": "A1-19b F03: النص النهائي «تم الدخول بنجاح.» (المستهلك أكّد الدخول)",
+      "ok": true,
+      "detail": "{\"view\": \"home\", \"entered\": true, \"text\": \"تم الدخول بنجاح.\", \"tone\": \"info\"}"
+    },
+    {
+      "name": "A1-20 F03: المزوّد التجريبي يدخل التطبيق والنص «تم الدخول بنجاح.» (العرض يصرّح بالنتيجة)",
+      "ok": true,
+      "detail": "{\"view\": \"home\", \"entered\": true, \"text\": \"تم الدخول بنجاح.\", \"tone\": \"info\"}"
+    },
+    {
+      "name": "A1-21 صفر أخطاء صفحة عبر الجلسة كلها (pageerrors)",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "info_records": [],
+  "summary": {
+    "passed": 30,
+    "failed": 0,
+    "total": 30
+  }
+}

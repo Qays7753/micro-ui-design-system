@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "لا، التسميات لا تظهر بالكامل (يحدث قص عند الحواف)، والشريط يلتف إلى صفين.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1791475169,
+  "id": "20261008235928aea4f5f294f846f1",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261008235928aea4f5f294f846f1",
+  "usage": {
+    "completion_tokens": 33,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 444,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 477
+  }
+}

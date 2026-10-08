@@ -1,0 +1,125 @@
+{
+ "csv": "reviews/SAMSUNG-ONEUI-REPAIR-R1/COVERAGE-REPAIR.csv (نسخة R2 مطابقة)",
+ "rows": 35,
+ "columns_per_row": [
+  9
+ ],
+ "component_families_in_csv": [
+  "access-gateway",
+  "account-settings",
+  "buttons",
+  "carousel",
+  "data",
+  "fields",
+  "info-strip",
+  "messages",
+  "metric-comparison",
+  "navigation",
+  "order-schedule",
+  "organization",
+  "selection",
+  "surfaces"
+ ],
+ "n_component_families": 14,
+ "components_dir": [
+  "access-gateway",
+  "account-settings",
+  "buttons",
+  "carousel",
+  "data",
+  "fields",
+  "info-strip",
+  "messages",
+  "metric-comparison",
+  "navigation",
+  "order-schedule",
+  "organization",
+  "selection",
+  "surfaces"
+ ],
+ "n_components_dir": 14,
+ "components_missing_from_csv": [],
+ "review_groupings": [
+  "concepts",
+  "f03-experience",
+  "gallery",
+  "platforms"
+ ],
+ "distinct_paths": 38,
+ "paths_existing": 38,
+ "paths_missing": [],
+ "sample_existing_paths": [
+  "components/access-gateway/access-gateway.js",
+  "components/account-settings/",
+  "components/buttons/buttons.css",
+  "components/carousel/carousel.js",
+  "components/data/data.css",
+  "components/data/data.js",
+  "components/fields/fields.css",
+  "components/info-strip/info-strip-peek.js",
+  "components/messages/messages.css",
+  "components/messages/messages.js",
+  "components/metric-comparison/metric-comparison.css",
+  "components/navigation/navigation.js",
+  "components/order-schedule/order-schedule.css",
+  "components/selection/picker.js"
+ ],
+ "notrun_rows": [
+  [
+   "concepts",
+   "تشغيل جولة R1 الرسمية تعذر لمسار متصفح الأداة في بيئتها؛ الأداة تمس access-gatew"
+  ],
+  [
+   "platforms",
+   "أجهزة فعلية/لمس حقيقي/TalkBack/VoiceOver وقارئات صوتية فعلية/WebKit/Safari/nativ"
+  ]
+ ],
+ "repair_status_values": [
+  "-",
+  "evidence/agent1",
+  "evidence/agent2",
+  "evidence/agent2/regression",
+  "evidence/agent2;evidence/agent5",
+  "evidence/agent2;evidence/official-run/sui-a2",
+  "evidence/agent3",
+  "evidence/agent3/family-review.json",
+  "evidence/agent3;evidence/agent5",
+  "evidence/agent4",
+  "evidence/agent4/regression",
+  "evidence/agent4/regression/family-metric-comparison",
+  "evidence/agent4;evidence/agent5",
+  "independent/chatgpt-r1/concepts-verification.json",
+  "reviews/SAMSUNG-ONEUI-AUDIT/evidence/agent2/probe-d-lifecycles.py"
+ ],
+ "repair_status_vocab": [
+  "FIXED",
+  "FIXED+REVIEWED",
+  "IMPROVED",
+  "KEEP+DOC",
+  "NEEDS OWNER DECISION",
+  "NOT RUN",
+  "REVIEWED"
+ ],
+ "evidence_refs": 43,
+ "evidence_missing": [],
+ "family_counts": {
+  "access-gateway": 1,
+  "account-settings": 1,
+  "buttons": 1,
+  "carousel": 1,
+  "concepts": 2,
+  "data": 4,
+  "f03-experience": 1,
+  "fields": 3,
+  "gallery": 1,
+  "info-strip": 2,
+  "messages": 4,
+  "metric-comparison": 1,
+  "navigation": 3,
+  "order-schedule": 2,
+  "organization": 2,
+  "platforms": 1,
+  "selection": 4,
+  "surfaces": 1
+ }
+}

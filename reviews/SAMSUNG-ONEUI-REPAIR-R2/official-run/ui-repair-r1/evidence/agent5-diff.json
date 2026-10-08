@@ -1,0 +1,1023 @@
+{
+  "meta": {
+    "task": "UI-SOURCE-REPAIR-R1 — مقارنة بصرية ميكانيكية قبل/بعد",
+    "agent": "subagent-5-visual-mechanical",
+    "generated_at": "2026-10-06T18:36:07",
+    "pillow_version": "11.3.0",
+    "before_dir": "/home/z/my-project/evidence/before",
+    "after_dir": "/home/z/my-project/evidence/after",
+    "faces": [
+      "home-360",
+      "list-360",
+      "reports-360",
+      "form-edit-360"
+    ],
+    "pixel_diff_rule": "بكسل مختلف = |after - before| > 10 في أي قناة RGB (عتبة 10 لكل قناة)",
+    "strip_height_px": 80,
+    "top_strips_k": 5,
+    "resampling": "LANCZOS (عند خلاف الأبعاد فقط — خلاف الأبعاد = تغير طول الصفحة لا تشويه)",
+    "coordinate_space": "أبعاد صورة «بعد» لكل وجهة",
+    "disclaimer": "هذا تقرير ميكانيكي — لا يتضمن فهمًا للمحتوى"
+  },
+  "results": {
+    "home-360": {
+      "before_file": "/home/z/my-project/evidence/before/home-360.png",
+      "after_file": "/home/z/my-project/evidence/after/home-360.png",
+      "before_size": {
+        "w": 360,
+        "h": 1797
+      },
+      "after_size": {
+        "w": 360,
+        "h": 1607
+      },
+      "before_resized_to_after": true,
+      "resize_note": "خلاف أبعاد: أعيد قياس «قبل» من 360×1797 إلى 360×1607 (LANCZOS) قبل المقارنة — خلاف الأبعاد يعكس تغير طول الصفحة وليس تشويهًا",
+      "diff": {
+        "changed_px": 285307,
+        "total_px": 578520,
+        "changed_pct": 49.32,
+        "rule": "بكسل مختلف = فرق > 10 في أي قناة RGB",
+        "coordinate_space": "أبعاد صورة «بعد» (360×1607)"
+      },
+      "strips": {
+        "strip_height_px": 80,
+        "strips_count": 21,
+        "all": [
+          {
+            "index": 0,
+            "y_from": 0,
+            "y_to": 80,
+            "h": 80,
+            "changed_px": 1919,
+            "total_px": 28800,
+            "changed_pct": 6.66
+          },
+          {
+            "index": 1,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_px": 26090,
+            "total_px": 28800,
+            "changed_pct": 90.59,
+            "rank": 2
+          },
+          {
+            "index": 2,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_px": 26009,
+            "total_px": 28800,
+            "changed_pct": 90.31,
+            "rank": 3
+          },
+          {
+            "index": 3,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_px": 26094,
+            "total_px": 28800,
+            "changed_pct": 90.6,
+            "rank": 1
+          },
+          {
+            "index": 4,
+            "y_from": 320,
+            "y_to": 400,
+            "h": 80,
+            "changed_px": 25418,
+            "total_px": 28800,
+            "changed_pct": 88.26,
+            "rank": 4
+          },
+          {
+            "index": 5,
+            "y_from": 400,
+            "y_to": 480,
+            "h": 80,
+            "changed_px": 18229,
+            "total_px": 28800,
+            "changed_pct": 63.3
+          },
+          {
+            "index": 6,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_px": 13545,
+            "total_px": 28800,
+            "changed_pct": 47.03
+          },
+          {
+            "index": 7,
+            "y_from": 560,
+            "y_to": 640,
+            "h": 80,
+            "changed_px": 22553,
+            "total_px": 28800,
+            "changed_pct": 78.31
+          },
+          {
+            "index": 8,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_px": 22280,
+            "total_px": 28800,
+            "changed_pct": 77.36
+          },
+          {
+            "index": 9,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_px": 24096,
+            "total_px": 28800,
+            "changed_pct": 83.67,
+            "rank": 5
+          },
+          {
+            "index": 10,
+            "y_from": 800,
+            "y_to": 880,
+            "h": 80,
+            "changed_px": 8266,
+            "total_px": 28800,
+            "changed_pct": 28.7
+          },
+          {
+            "index": 11,
+            "y_from": 880,
+            "y_to": 960,
+            "h": 80,
+            "changed_px": 10764,
+            "total_px": 28800,
+            "changed_pct": 37.38
+          },
+          {
+            "index": 12,
+            "y_from": 960,
+            "y_to": 1040,
+            "h": 80,
+            "changed_px": 14703,
+            "total_px": 28800,
+            "changed_pct": 51.05
+          },
+          {
+            "index": 13,
+            "y_from": 1040,
+            "y_to": 1120,
+            "h": 80,
+            "changed_px": 5409,
+            "total_px": 28800,
+            "changed_pct": 18.78
+          },
+          {
+            "index": 14,
+            "y_from": 1120,
+            "y_to": 1200,
+            "h": 80,
+            "changed_px": 4634,
+            "total_px": 28800,
+            "changed_pct": 16.09
+          },
+          {
+            "index": 15,
+            "y_from": 1200,
+            "y_to": 1280,
+            "h": 80,
+            "changed_px": 15256,
+            "total_px": 28800,
+            "changed_pct": 52.97
+          },
+          {
+            "index": 16,
+            "y_from": 1280,
+            "y_to": 1360,
+            "h": 80,
+            "changed_px": 4269,
+            "total_px": 28800,
+            "changed_pct": 14.82
+          },
+          {
+            "index": 17,
+            "y_from": 1360,
+            "y_to": 1440,
+            "h": 80,
+            "changed_px": 12354,
+            "total_px": 28800,
+            "changed_pct": 42.9
+          },
+          {
+            "index": 18,
+            "y_from": 1440,
+            "y_to": 1520,
+            "h": 80,
+            "changed_px": 3251,
+            "total_px": 28800,
+            "changed_pct": 11.29
+          },
+          {
+            "index": 19,
+            "y_from": 1520,
+            "y_to": 1600,
+            "h": 80,
+            "changed_px": 168,
+            "total_px": 28800,
+            "changed_pct": 0.58
+          },
+          {
+            "index": 20,
+            "y_from": 1600,
+            "y_to": 1607,
+            "h": 7,
+            "changed_px": 0,
+            "total_px": 2520,
+            "changed_pct": 0.0
+          }
+        ],
+        "top5": [
+          {
+            "rank": 1,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_pct": 90.6
+          },
+          {
+            "rank": 2,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_pct": 90.59
+          },
+          {
+            "rank": 3,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_pct": 90.31
+          },
+          {
+            "rank": 4,
+            "y_from": 320,
+            "y_to": 400,
+            "h": 80,
+            "changed_pct": 88.26
+          },
+          {
+            "rank": 5,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_pct": 83.67
+          }
+        ]
+      },
+      "avg_brightness": {
+        "before_original": 218.2,
+        "before_resized": 218.08,
+        "after": 220.04,
+        "delta_after_minus_before_resized": 1.96,
+        "note": "متوسط تدرج الرمادي (ITU-R 601) لكل بكسلات الصورة كاملة"
+      }
+    },
+    "list-360": {
+      "before_file": "/home/z/my-project/evidence/before/list-360.png",
+      "after_file": "/home/z/my-project/evidence/after/list-360.png",
+      "before_size": {
+        "w": 360,
+        "h": 1103
+      },
+      "after_size": {
+        "w": 360,
+        "h": 1049
+      },
+      "before_resized_to_after": true,
+      "resize_note": "خلاف أبعاد: أعيد قياس «قبل» من 360×1103 إلى 360×1049 (LANCZOS) قبل المقارنة — خلاف الأبعاد يعكس تغير طول الصفحة وليس تشويهًا",
+      "diff": {
+        "changed_px": 77810,
+        "total_px": 377640,
+        "changed_pct": 20.6,
+        "rule": "بكسل مختلف = فرق > 10 في أي قناة RGB",
+        "coordinate_space": "أبعاد صورة «بعد» (360×1049)"
+      },
+      "strips": {
+        "strip_height_px": 80,
+        "strips_count": 14,
+        "all": [
+          {
+            "index": 0,
+            "y_from": 0,
+            "y_to": 80,
+            "h": 80,
+            "changed_px": 2330,
+            "total_px": 28800,
+            "changed_pct": 8.09
+          },
+          {
+            "index": 1,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_px": 4249,
+            "total_px": 28800,
+            "changed_pct": 14.75
+          },
+          {
+            "index": 2,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_px": 10416,
+            "total_px": 28800,
+            "changed_pct": 36.17,
+            "rank": 2
+          },
+          {
+            "index": 3,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_px": 16658,
+            "total_px": 28800,
+            "changed_pct": 57.84,
+            "rank": 1
+          },
+          {
+            "index": 4,
+            "y_from": 320,
+            "y_to": 400,
+            "h": 80,
+            "changed_px": 3326,
+            "total_px": 28800,
+            "changed_pct": 11.55
+          },
+          {
+            "index": 5,
+            "y_from": 400,
+            "y_to": 480,
+            "h": 80,
+            "changed_px": 4341,
+            "total_px": 28800,
+            "changed_pct": 15.07
+          },
+          {
+            "index": 6,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_px": 4297,
+            "total_px": 28800,
+            "changed_pct": 14.92
+          },
+          {
+            "index": 7,
+            "y_from": 560,
+            "y_to": 640,
+            "h": 80,
+            "changed_px": 3151,
+            "total_px": 28800,
+            "changed_pct": 10.94
+          },
+          {
+            "index": 8,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_px": 6792,
+            "total_px": 28800,
+            "changed_pct": 23.58,
+            "rank": 5
+          },
+          {
+            "index": 9,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_px": 9301,
+            "total_px": 28800,
+            "changed_pct": 32.3,
+            "rank": 4
+          },
+          {
+            "index": 10,
+            "y_from": 800,
+            "y_to": 880,
+            "h": 80,
+            "changed_px": 9825,
+            "total_px": 28800,
+            "changed_pct": 34.11,
+            "rank": 3
+          },
+          {
+            "index": 11,
+            "y_from": 880,
+            "y_to": 960,
+            "h": 80,
+            "changed_px": 3111,
+            "total_px": 28800,
+            "changed_pct": 10.8
+          },
+          {
+            "index": 12,
+            "y_from": 960,
+            "y_to": 1040,
+            "h": 80,
+            "changed_px": 13,
+            "total_px": 28800,
+            "changed_pct": 0.05
+          },
+          {
+            "index": 13,
+            "y_from": 1040,
+            "y_to": 1049,
+            "h": 9,
+            "changed_px": 0,
+            "total_px": 3240,
+            "changed_pct": 0.0
+          }
+        ],
+        "top5": [
+          {
+            "rank": 1,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_pct": 57.84
+          },
+          {
+            "rank": 2,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_pct": 36.17
+          },
+          {
+            "rank": 3,
+            "y_from": 800,
+            "y_to": 880,
+            "h": 80,
+            "changed_pct": 34.11
+          },
+          {
+            "rank": 4,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_pct": 32.3
+          },
+          {
+            "rank": 5,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_pct": 23.58
+          }
+        ]
+      },
+      "avg_brightness": {
+        "before_original": 246.17,
+        "before_resized": 245.99,
+        "after": 246.93,
+        "delta_after_minus_before_resized": 0.94,
+        "note": "متوسط تدرج الرمادي (ITU-R 601) لكل بكسلات الصورة كاملة"
+      }
+    },
+    "reports-360": {
+      "before_file": "/home/z/my-project/evidence/before/reports-360.png",
+      "after_file": "/home/z/my-project/evidence/after/reports-360.png",
+      "before_size": {
+        "w": 360,
+        "h": 2192
+      },
+      "after_size": {
+        "w": 360,
+        "h": 1600
+      },
+      "before_resized_to_after": true,
+      "resize_note": "خلاف أبعاد: أعيد قياس «قبل» من 360×2192 إلى 360×1600 (LANCZOS) قبل المقارنة — خلاف الأبعاد يعكس تغير طول الصفحة وليس تشويهًا",
+      "diff": {
+        "changed_px": 176046,
+        "total_px": 576000,
+        "changed_pct": 30.56,
+        "rule": "بكسل مختلف = فرق > 10 في أي قناة RGB",
+        "coordinate_space": "أبعاد صورة «بعد» (360×1600)"
+      },
+      "strips": {
+        "strip_height_px": 80,
+        "strips_count": 20,
+        "all": [
+          {
+            "index": 0,
+            "y_from": 0,
+            "y_to": 80,
+            "h": 80,
+            "changed_px": 2405,
+            "total_px": 28800,
+            "changed_pct": 8.35
+          },
+          {
+            "index": 1,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_px": 12960,
+            "total_px": 28800,
+            "changed_pct": 45.0,
+            "rank": 5
+          },
+          {
+            "index": 2,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_px": 14375,
+            "total_px": 28800,
+            "changed_pct": 49.91,
+            "rank": 4
+          },
+          {
+            "index": 3,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_px": 12577,
+            "total_px": 28800,
+            "changed_pct": 43.67
+          },
+          {
+            "index": 4,
+            "y_from": 320,
+            "y_to": 400,
+            "h": 80,
+            "changed_px": 7430,
+            "total_px": 28800,
+            "changed_pct": 25.8
+          },
+          {
+            "index": 5,
+            "y_from": 400,
+            "y_to": 480,
+            "h": 80,
+            "changed_px": 5157,
+            "total_px": 28800,
+            "changed_pct": 17.91
+          },
+          {
+            "index": 6,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_px": 15088,
+            "total_px": 28800,
+            "changed_pct": 52.39,
+            "rank": 3
+          },
+          {
+            "index": 7,
+            "y_from": 560,
+            "y_to": 640,
+            "h": 80,
+            "changed_px": 12812,
+            "total_px": 28800,
+            "changed_pct": 44.49
+          },
+          {
+            "index": 8,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_px": 11800,
+            "total_px": 28800,
+            "changed_pct": 40.97
+          },
+          {
+            "index": 9,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_px": 19995,
+            "total_px": 28800,
+            "changed_pct": 69.43,
+            "rank": 1
+          },
+          {
+            "index": 10,
+            "y_from": 800,
+            "y_to": 880,
+            "h": 80,
+            "changed_px": 3047,
+            "total_px": 28800,
+            "changed_pct": 10.58
+          },
+          {
+            "index": 11,
+            "y_from": 880,
+            "y_to": 960,
+            "h": 80,
+            "changed_px": 1999,
+            "total_px": 28800,
+            "changed_pct": 6.94
+          },
+          {
+            "index": 12,
+            "y_from": 960,
+            "y_to": 1040,
+            "h": 80,
+            "changed_px": 7205,
+            "total_px": 28800,
+            "changed_pct": 25.02
+          },
+          {
+            "index": 13,
+            "y_from": 1040,
+            "y_to": 1120,
+            "h": 80,
+            "changed_px": 18396,
+            "total_px": 28800,
+            "changed_pct": 63.88,
+            "rank": 2
+          },
+          {
+            "index": 14,
+            "y_from": 1120,
+            "y_to": 1200,
+            "h": 80,
+            "changed_px": 7444,
+            "total_px": 28800,
+            "changed_pct": 25.85
+          },
+          {
+            "index": 15,
+            "y_from": 1200,
+            "y_to": 1280,
+            "h": 80,
+            "changed_px": 7426,
+            "total_px": 28800,
+            "changed_pct": 25.78
+          },
+          {
+            "index": 16,
+            "y_from": 1280,
+            "y_to": 1360,
+            "h": 80,
+            "changed_px": 6519,
+            "total_px": 28800,
+            "changed_pct": 22.64
+          },
+          {
+            "index": 17,
+            "y_from": 1360,
+            "y_to": 1440,
+            "h": 80,
+            "changed_px": 5332,
+            "total_px": 28800,
+            "changed_pct": 18.51
+          },
+          {
+            "index": 18,
+            "y_from": 1440,
+            "y_to": 1520,
+            "h": 80,
+            "changed_px": 3665,
+            "total_px": 28800,
+            "changed_pct": 12.73
+          },
+          {
+            "index": 19,
+            "y_from": 1520,
+            "y_to": 1600,
+            "h": 80,
+            "changed_px": 414,
+            "total_px": 28800,
+            "changed_pct": 1.44
+          }
+        ],
+        "top5": [
+          {
+            "rank": 1,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_pct": 69.43
+          },
+          {
+            "rank": 2,
+            "y_from": 1040,
+            "y_to": 1120,
+            "h": 80,
+            "changed_pct": 63.88
+          },
+          {
+            "rank": 3,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_pct": 52.39
+          },
+          {
+            "rank": 4,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_pct": 49.91
+          },
+          {
+            "rank": 5,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_pct": 45.0
+          }
+        ]
+      },
+      "avg_brightness": {
+        "before_original": 222.35,
+        "before_resized": 222.29,
+        "after": 228.82,
+        "delta_after_minus_before_resized": 6.53,
+        "note": "متوسط تدرج الرمادي (ITU-R 601) لكل بكسلات الصورة كاملة"
+      }
+    },
+    "form-edit-360": {
+      "before_file": "/home/z/my-project/evidence/before/form-edit-360.png",
+      "after_file": "/home/z/my-project/evidence/after/form-edit-360.png",
+      "before_size": {
+        "w": 360,
+        "h": 1131
+      },
+      "after_size": {
+        "w": 360,
+        "h": 1105
+      },
+      "before_resized_to_after": true,
+      "resize_note": "خلاف أبعاد: أعيد قياس «قبل» من 360×1131 إلى 360×1105 (LANCZOS) قبل المقارنة — خلاف الأبعاد يعكس تغير طول الصفحة وليس تشويهًا",
+      "diff": {
+        "changed_px": 72899,
+        "total_px": 397800,
+        "changed_pct": 18.33,
+        "rule": "بكسل مختلف = فرق > 10 في أي قناة RGB",
+        "coordinate_space": "أبعاد صورة «بعد» (360×1105)"
+      },
+      "strips": {
+        "strip_height_px": 80,
+        "strips_count": 14,
+        "all": [
+          {
+            "index": 0,
+            "y_from": 0,
+            "y_to": 80,
+            "h": 80,
+            "changed_px": 1194,
+            "total_px": 28800,
+            "changed_pct": 4.15
+          },
+          {
+            "index": 1,
+            "y_from": 80,
+            "y_to": 160,
+            "h": 80,
+            "changed_px": 4094,
+            "total_px": 28800,
+            "changed_pct": 14.22
+          },
+          {
+            "index": 2,
+            "y_from": 160,
+            "y_to": 240,
+            "h": 80,
+            "changed_px": 3969,
+            "total_px": 28800,
+            "changed_pct": 13.78
+          },
+          {
+            "index": 3,
+            "y_from": 240,
+            "y_to": 320,
+            "h": 80,
+            "changed_px": 2824,
+            "total_px": 28800,
+            "changed_pct": 9.81
+          },
+          {
+            "index": 4,
+            "y_from": 320,
+            "y_to": 400,
+            "h": 80,
+            "changed_px": 1541,
+            "total_px": 28800,
+            "changed_pct": 5.35
+          },
+          {
+            "index": 5,
+            "y_from": 400,
+            "y_to": 480,
+            "h": 80,
+            "changed_px": 12536,
+            "total_px": 28800,
+            "changed_pct": 43.53,
+            "rank": 2
+          },
+          {
+            "index": 6,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_px": 14747,
+            "total_px": 28800,
+            "changed_pct": 51.2,
+            "rank": 1
+          },
+          {
+            "index": 7,
+            "y_from": 560,
+            "y_to": 640,
+            "h": 80,
+            "changed_px": 9881,
+            "total_px": 28800,
+            "changed_pct": 34.31,
+            "rank": 3
+          },
+          {
+            "index": 8,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_px": 6519,
+            "total_px": 28800,
+            "changed_pct": 22.64,
+            "rank": 4
+          },
+          {
+            "index": 9,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_px": 6320,
+            "total_px": 28800,
+            "changed_pct": 21.94,
+            "rank": 5
+          },
+          {
+            "index": 10,
+            "y_from": 800,
+            "y_to": 880,
+            "h": 80,
+            "changed_px": 4052,
+            "total_px": 28800,
+            "changed_pct": 14.07
+          },
+          {
+            "index": 11,
+            "y_from": 880,
+            "y_to": 960,
+            "h": 80,
+            "changed_px": 2789,
+            "total_px": 28800,
+            "changed_pct": 9.68
+          },
+          {
+            "index": 12,
+            "y_from": 960,
+            "y_to": 1040,
+            "h": 80,
+            "changed_px": 2433,
+            "total_px": 28800,
+            "changed_pct": 8.45
+          },
+          {
+            "index": 13,
+            "y_from": 1040,
+            "y_to": 1105,
+            "h": 65,
+            "changed_px": 0,
+            "total_px": 23400,
+            "changed_pct": 0.0
+          }
+        ],
+        "top5": [
+          {
+            "rank": 1,
+            "y_from": 480,
+            "y_to": 560,
+            "h": 80,
+            "changed_pct": 51.2
+          },
+          {
+            "rank": 2,
+            "y_from": 400,
+            "y_to": 480,
+            "h": 80,
+            "changed_pct": 43.53
+          },
+          {
+            "rank": 3,
+            "y_from": 560,
+            "y_to": 640,
+            "h": 80,
+            "changed_pct": 34.31
+          },
+          {
+            "rank": 4,
+            "y_from": 640,
+            "y_to": 720,
+            "h": 80,
+            "changed_pct": 22.64
+          },
+          {
+            "rank": 5,
+            "y_from": 720,
+            "y_to": 800,
+            "h": 80,
+            "changed_pct": 21.94
+          }
+        ]
+      },
+      "avg_brightness": {
+        "before_original": 238.25,
+        "before_resized": 238.03,
+        "after": 237.63,
+        "delta_after_minus_before_resized": -0.4,
+        "note": "متوسط تدرج الرمادي (ITU-R 601) لكل بكسلات الصورة كاملة"
+      }
+    }
+  },
+  "summary": [
+    {
+      "face": "home-360",
+      "before_size": "360×1797",
+      "after_size": "360×1607",
+      "before_resized_to_after": true,
+      "changed_pct": 49.32,
+      "top1_strip": "y 240–320: 90.60%",
+      "top5_y_ranges": [
+        "240–320",
+        "80–160",
+        "160–240",
+        "320–400",
+        "720–800"
+      ],
+      "brightness_before_original": 218.2,
+      "brightness_after": 220.04,
+      "brightness_delta": 1.96
+    },
+    {
+      "face": "list-360",
+      "before_size": "360×1103",
+      "after_size": "360×1049",
+      "before_resized_to_after": true,
+      "changed_pct": 20.6,
+      "top1_strip": "y 240–320: 57.84%",
+      "top5_y_ranges": [
+        "240–320",
+        "160–240",
+        "800–880",
+        "720–800",
+        "640–720"
+      ],
+      "brightness_before_original": 246.17,
+      "brightness_after": 246.93,
+      "brightness_delta": 0.94
+    },
+    {
+      "face": "reports-360",
+      "before_size": "360×2192",
+      "after_size": "360×1600",
+      "before_resized_to_after": true,
+      "changed_pct": 30.56,
+      "top1_strip": "y 720–800: 69.43%",
+      "top5_y_ranges": [
+        "720–800",
+        "1040–1120",
+        "480–560",
+        "160–240",
+        "80–160"
+      ],
+      "brightness_before_original": 222.35,
+      "brightness_after": 228.82,
+      "brightness_delta": 6.53
+    },
+    {
+      "face": "form-edit-360",
+      "before_size": "360×1131",
+      "after_size": "360×1105",
+      "before_resized_to_after": true,
+      "changed_pct": 18.33,
+      "top1_strip": "y 480–560: 51.20%",
+      "top5_y_ranges": [
+        "480–560",
+        "400–480",
+        "560–640",
+        "640–720",
+        "720–800"
+      ],
+      "brightness_before_original": 238.25,
+      "brightness_after": 237.63,
+      "brightness_delta": -0.4
+    }
+  ]
+}
