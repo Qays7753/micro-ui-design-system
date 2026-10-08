@@ -1,0 +1,663 @@
+{
+  "head": "1951b649edf5b00e5548f6ffbdfc1d6005608716",
+  "cases": [
+    {
+      "target": "src",
+      "selectionScroll": [
+        {
+          "requested": 0,
+          "scroll": 0,
+          "bodyHeight": 2428,
+          "fixed": true,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            489.96875,
+            2041.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 50,
+          "scroll": 50,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            439.96875,
+            2240.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 100,
+          "scroll": 100,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            389.96875,
+            2190.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 150,
+          "scroll": 150,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            339.96875,
+            2140.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 180,
+          "scroll": 180,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            309.96875,
+            2110.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 210,
+          "scroll": 210,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            279.96875,
+            2080.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 250,
+          "scroll": 250,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            239.96875,
+            2040.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 300,
+          "scroll": 300,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            189.96875,
+            1990.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 500,
+          "scroll": 500,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            -10.03125,
+            1790.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 10000,
+          "scroll": 1833,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            220.78125,
+            457.78125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            -1343.03125,
+            457.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 300,
+          "scroll": 300,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            189.96875,
+            1990.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 210,
+          "scroll": 210,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            279.96875,
+            2080.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 180,
+          "scroll": 180,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            309.96875,
+            2110.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 150,
+          "scroll": 150,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            339.96875,
+            2140.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 100,
+          "scroll": 100,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            389.96875,
+            2190.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 50,
+          "scroll": 50,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            439.96875,
+            2240.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 0,
+          "scroll": 0,
+          "bodyHeight": 2428,
+          "fixed": true,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            489.96875,
+            2041.78125
+          ],
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "target": "standalone",
+      "selectionScroll": [
+        {
+          "requested": 0,
+          "scroll": 0,
+          "bodyHeight": 2428,
+          "fixed": true,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            489.96875,
+            2041.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 50,
+          "scroll": 50,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            439.96875,
+            2240.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 100,
+          "scroll": 100,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            389.96875,
+            2190.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 150,
+          "scroll": 150,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            339.96875,
+            2140.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 180,
+          "scroll": 180,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            309.96875,
+            2110.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 210,
+          "scroll": 210,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            279.96875,
+            2080.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 250,
+          "scroll": 250,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            239.96875,
+            2040.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 300,
+          "scroll": 300,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            189.96875,
+            1990.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 500,
+          "scroll": 500,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            -10.03125,
+            1790.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 10000,
+          "scroll": 1833,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            220.78125,
+            457.78125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            -1343.03125,
+            457.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 300,
+          "scroll": 300,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            189.96875,
+            1990.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 210,
+          "scroll": 210,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            279.96875,
+            2080.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 180,
+          "scroll": 180,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            309.96875,
+            2110.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 150,
+          "scroll": 150,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            339.96875,
+            2140.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 100,
+          "scroll": 100,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            389.96875,
+            2190.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 50,
+          "scroll": 50,
+          "bodyHeight": 2677,
+          "fixed": false,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            439.96875,
+            2240.78125
+          ],
+          "overlap": 0
+        },
+        {
+          "requested": 0,
+          "scroll": 0,
+          "bodyHeight": 2428,
+          "fixed": true,
+          "bar": [
+            470.03125,
+            707.03125
+          ],
+          "nav": [
+            707.03125,
+            844
+          ],
+          "zone": [
+            489.96875,
+            2041.78125
+          ],
+          "overlap": 0
+        }
+      ]
+    }
+  ],
+  "browser": "153.0.8010.0",
+  "directCallbackStatus": "انتهى الطلب دون نتيجة مؤكدة من التطبيق."
+}

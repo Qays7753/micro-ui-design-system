@@ -1,0 +1,40 @@
+{
+  "reviewed_head": "1951b649edf5b00e5548f6ffbdfc1d6005608716",
+  "pinned_source": "3a6adf0794c4df3577c704b523fcde829ccd787d",
+  "source_unchanged_after_pin": true,
+  "browser": "Chromium 153.0.8010.0",
+  "playwright": "1.63.0",
+  "actual_reruns": {
+    "gateway": 30,
+    "lifecycle": 36,
+    "event_identity": 11,
+    "navbar": 144,
+    "concepts": 157,
+    "f03_paths": 46,
+    "f03_assertions": 207
+  },
+  "existing_evidence_only": [
+    "B03 25/25",
+    "B07 28/28",
+    "F01 20/20",
+    "F02 32/32 provenance in official-run verified; not independently re-run here",
+    "other suites in official-run not re-run here"
+  ],
+  "open_findings": [
+    "SUI-R2-01: old appbar title/add overlap at 320 text x2; source+standalone",
+    "SUI-R2-02: stale 15-digit/full-reading claim in CSV generator and two CSV copies"
+  ],
+  "delivery_manifest_found_and_corrected_in_review_records": {
+    "original_entries": 2422,
+    "missing_paths": 58,
+    "hash_mismatches_on_present_files": 0
+  },
+  "no_production_source_changes": true,
+  "not_run": [
+    "real phone/S25/Samsung Internet",
+    "physical touch/system keyboard/safe areas/back",
+    "TalkBack/VoiceOver audio",
+    "WebKit/Safari",
+    "native text zoom"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "head": "1951b649edf5b00e5548f6ffbdfc1d6005608716",
+  "checks": {
+    "provider": {
+      "text": "انتهى الطلب دون نتيجة مؤكدة من التطبيق.",
+      "calls": 1
+    },
+    "submit": {
+      "text": "لم يتم الدخول — النتيجة من المستهلك",
+      "result": {
+        "authenticated": false,
+        "message": "لم يتم الدخول"
+      },
+      "calls": 1
+    },
+    "announcement": {
+      "added": [
+        "نتيجة العملية",
+        "نتيجة العملية"
+      ],
+      "count": 2
+    },
+    "peek": {
+      "initial": {
+        "observers": 1,
+        "width": 320,
+        "left": 30,
+        "right": 30,
+        "transform": "matrix(1, 0, 0, 1, 242, 0)"
+      },
+      "after_disconnect_init_resize": {
+        "observers": 2,
+        "width": 360,
+        "left": 30,
+        "right": 30,
+        "transform": "matrix(1, 0, 0, 1, 282, 0)"
+      },
+      "manual_same_index": {
+        "observers": 2,
+        "width": 360,
+        "left": 30,
+        "right": 30,
+        "transform": "matrix(1, 0, 0, 1, 282, 0)"
+      }
+    },
+    "carousel": {
+      "initial": {
+        "observers": 1,
+        "width": 320,
+        "left": 36,
+        "right": 36,
+        "transform": "matrix(1, 0, 0, 1, 224, 0)"
+      },
+      "after_disconnect_init_resize": {
+        "observers": 2,
+        "width": 360,
+        "left": 36,
+        "right": 36,
+        "transform": "matrix(1, 0, 0, 1, 264, 0)"
+      },
+      "manual_same_index": {
+        "observers": 2,
+        "width": 360,
+        "left": 36,
+        "right": 36,
+        "transform": "matrix(1, 0, 0, 1, 264, 0)"
+      }
+    }
+  },
+  "browser": "153.0.8010.0"
+}
