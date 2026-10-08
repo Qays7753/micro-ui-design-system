@@ -881,8 +881,14 @@
   }
 
   window.MicroData = {
+    /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-chart] ثم
+       الأبناء — نفس عقد init الموحد للعائلات؛ إعادة init آمنة (render
+       idempotent والمراقب واحد لكل رسم عبر WeakMap). */
     init: function (root) {
-      (root || document).querySelectorAll('[data-chart]').forEach(function (c) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+      if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
+      charts.forEach(function (c) {
         render(c);
       });
     },

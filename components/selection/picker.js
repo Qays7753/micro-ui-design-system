@@ -195,8 +195,13 @@
   function syncRovingInit(picker) { setRoving(picker, null); }
 
   window.MicroPicker = {
+    /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-micro-picker]
+       ثم الأبناء — عقد init الموحد للعائلات. */
     init: function (root) {
-      (root || document).querySelectorAll('[data-micro-picker]').forEach(bindPicker);
+      var scope = root || document;
+      var pickers = [].slice.call(scope.querySelectorAll('[data-micro-picker]'));
+      if (scope.nodeType === 1 && scope.matches('[data-micro-picker]')) pickers.unshift(scope);
+      pickers.forEach(bindPicker);
     },
     /* بيانات المستهلك — بناء بعُقد DOM (التسمية نص حرفي دائمًا).
        R2-03: استبدال البيانات يحافظ على اختيار صالح أو يمسحه،

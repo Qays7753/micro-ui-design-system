@@ -52,6 +52,7 @@
   var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
   var escapeBound = false;
   var doc = document;
+  var layerTitleUid = 0;     /* W2.2: مولد id لعناوين الطبقات بلا id */
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
   function inDocument(el) {
@@ -198,11 +199,49 @@
     });
   }
 
+  /* ---- W2.2 (D-UI-02 — A2-F03): دلالات الطبقة — افتراضات آمنة + تحقق ----
+     عقد الطبقة فعليًا modal (عزل inert للأشقاء + حصر Tab + قفل تمرير +
+     استعادة تركيز)، لذلك:
+     - role غائب → `dialog` افتراضيًا (سلوك مطابق للدور، لا افتراض غامض).
+     - `aria-modal` غائب مع دور dialog/alertdialog → `true` (السلوك يعزل
+       الخلفية فعليًا — لا إعلان modal بلا عزل).
+     - الاسم: يملكه المستهلك عبر aria-labelledby/aria-label إن وُجد، وإلا
+       يُربط بعنوان `.m-layer__title` (id مولد إن لزم) — وإلا تحذير صريح
+       في console: لا تُفتح طبقة modal بلا اسم متاح.
+     - دور مختلف عن dialog/alertdialog (وضعه المستهلك) يُحترم ويُسجل بتحذير
+       عقد — القرار مرجعه المستهلك لا المكوّن.
+     حدود الدليل: هذه مطابقة DOM/ARIA — الفحص السمعي بقارئ شاشة فعلي
+     (TalkBack/VoiceOver/NVDA) لم يُشغّل (NOT RUN). */
+  function ensureLayerSemantics(layer) {
+    var role = layer.getAttribute('role');
+    if (role === null) {
+      layer.setAttribute('role', 'dialog');
+      role = 'dialog';
+    }
+    if (role === 'dialog' || role === 'alertdialog') {
+      if (layer.getAttribute('aria-modal') === null) layer.setAttribute('aria-modal', 'true');
+      var named = layer.getAttribute('aria-labelledby') || layer.getAttribute('aria-label');
+      if (!named) {
+        var title = layer.querySelector('.m-layer__title');
+        if (title) {
+          if (!title.id) title.id = 'micro-layer-title-' + (++layerTitleUid);
+          layer.setAttribute('aria-labelledby', title.id);
+        } else if (window.console && console.warn) {
+          console.warn('[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.', layer);
+        }
+      }
+    } else if (window.console && console.warn) {
+      console.warn('[micro-navigation] دور غير معتاد للطبقة "' + role + '" — عقد الطبقات: dialog/alertdialog (D-UI-02).', layer);
+    }
+  }
+
   function openLayer(layer, options) {
     options = options || {};
     if (!layer || layer.tagName !== 'DIV') return;
     /* R2-02: إلغاء أي دورة إغلاق قديمة أولًا — إعادة الفتح أثناء الخفوت آمنة */
     cancelScheduledClose(layer);
+    /* W2.2 (D-UI-02): افتراضات آمنة وتحقق قبل الفتح — role/modal/اسم */
+    ensureLayerSemantics(layer);
     /* فتح متكرر لنفس الطبقة: آمن — إعادة تركيز دون تكرار في المكدس */
     if (openLayers.some(function (o) { return o.layer === layer; })) {
       var cur = focusables(layer)[0];
@@ -523,10 +562,19 @@
     });
   }
 
+  /* W2.5 (A2-F08): عقد موحد لكل العائلات — init(root) يعالج الجذر نفسه
+     إن طابق المحدد ثم الأبناء (container-only سابقًا: تمرير عقدة التبويبات
+     ذاتها أو عقدة الطبقة ذاتها كان يُهمل). إعادة init آمنة: كل ربط محروس
+     بعلامة dataset فلا ازدواج listeners. */
   function init(root) {
     var scope = root || document;
     bindDocumentOnce();
-    scope.querySelectorAll('[data-layer-open]').forEach(function (btn) {
+    var inScope = function (selector) {
+      var list = [].slice.call(scope.querySelectorAll(selector));
+      if (scope.nodeType === 1 && scope.matches(selector)) list.unshift(scope);
+      return list;
+    };
+    inScope('[data-layer-open]').forEach(function (btn) {
       if (btn.dataset.microLayerOpenBound) return;
       btn.dataset.microLayerOpenBound = '1';
       btn.addEventListener('click', function () {
@@ -534,14 +582,14 @@
         if (layer) openLayer(layer, { trigger: btn });
       });
     });
-    scope.querySelectorAll('[data-layer-close]').forEach(function (btn) {
+    inScope('[data-layer-close]').forEach(function (btn) {
       if (btn.dataset.microLayerCloseBound) return;
       btn.dataset.microLayerCloseBound = '1';
       btn.addEventListener('click', function () {
         closeLayer(btn.closest('.m-layer'));
       });
     });
-    scope.querySelectorAll('.m-layer-backdrop[data-for]').forEach(function (bd) {
+    inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
       if (bd.dataset.microBackdropBound) return;
       bd.dataset.microBackdropBound = '1';
       bd.addEventListener('click', function () {
@@ -551,8 +599,8 @@
         if ((layer.getAttribute('data-backdrop') || 'close') === 'close') closeLayer(layer);
       });
     });
-    scope.querySelectorAll('[data-tabs]').forEach(initTabs);
-    scope.querySelectorAll('[data-filter-panel]').forEach(initFilterPanel);
+    inScope('[data-tabs]').forEach(initTabs);
+    inScope('[data-filter-panel]').forEach(initFilterPanel);
   }
 
   window.MicroNavigation = {

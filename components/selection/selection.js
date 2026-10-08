@@ -40,7 +40,11 @@
   }
 
   function bindGroups(root) {
-    root.querySelectorAll('[data-choice-group]').forEach(function (group) {
+    /* W2.5 (A2-F08): الجذر نفسه إن طابق المحدد ثم الأبناء — عقد init موحد */
+    var scope = root || document;
+    var groups = [].slice.call(scope.querySelectorAll('[data-choice-group]'));
+    if (scope.nodeType === 1 && scope.matches('[data-choice-group]')) groups.unshift(scope);
+    groups.forEach(function (group) {
       if (group.dataset.microChoicesBound) return;
       group.dataset.microChoicesBound = '1';
       var all = group.querySelector('[data-select-all]');
@@ -62,7 +66,12 @@
   }
 
   function bindSegmented(root) {
-    root.querySelectorAll('[data-seg]').forEach(function (seg) {
+    /* W2.5 (A2-F08): الجذر نفسه إن طابق المحدد ثم الأبناء — تمرير عقدة
+       segmented ذاتها إلى MicroSelection.init كان يُهمل قبل هذا التعديل */
+    var scope = root || document;
+    var segs = [].slice.call(scope.querySelectorAll('[data-seg]'));
+    if (scope.nodeType === 1 && scope.matches('[data-seg]')) segs.unshift(scope);
+    segs.forEach(function (seg) {
       if (seg.dataset.microSegBound) return;
       seg.dataset.microSegBound = '1';
       var items = [].slice.call(seg.querySelectorAll('.m-seg__item'));
