@@ -1,6 +1,30 @@
 #!/usr/bin/env python3
-"""Verify editable Micro components in a real, Nix-managed Chromium browser."""
+"""Verify editable Micro components in a real, Nix-managed Chromium browser.
 
+SUI-R2-A4 (SUI-R1-06): عائق مسار المتصفح لم يعد عذرًا — للأداة وسائط
+CLI تُمرّر صراحة، فأي بيئة تستطيع تشغيلها بتكييف المسارات دون تعديل
+الكود (جولة R1 سجلتها NOT RUN لغياب مسار chromium في بيئتها؛ المراجعة
+المستقلة كيّفت المسار خارجيًا 154/155 — الوسائط أدناه تجعل ذلك رسميًا):
+
+  python3 tools/concepts-check.py \
+      --chromium /home/z/my-project/evidence/bin/chromium \
+      --base http://127.0.0.1:4460 \
+      --out reviews/SAMSUNG-ONEUI-REPAIR-R2/evidence/agent4/concepts
+
+--chromium  مسار متصفح Chromium (الافتراض: shutil.which("chromium")).
+--base      عنوان خادم يجذر المستودع (الافتراض: متغير MICRO_TEST_BASE
+            ثم http://127.0.0.1:5000) — شغّل ThreadingHTTPServer من الجذر.
+--out       مجلد الإخراج (الافتراض reviews/CONCEPTS) — لا تكتب فوق أدلة
+            الجولات التاريخية؛ مرّر مجلد أدلة جولتك.
+
+وأُضيف فحص معنوي صادق لعقد البوابة بلا معالج (SUI-R1-06: التوقع الحرفي
+القديم «لا توجد خدمة مصادقة» استُبدل بفحص معنى: لا ادعاء دخول/نجاح/
+تحقق + إشعار عرض تجريبي صادق)، وفحوص صدق نتيجة callback للبوابة
+(SUI-R1-01: نتيجة معلنة بالرفض بنصها بنبرة error؛ اكتمال بلا نتيجة
+مؤكدة يبقى محايدًا بلا ادعاء نجاح؛ الرفض رسالة خطأ — فحص قائم أصلًا).
+"""
+
+import argparse
 import json
 import os
 import re
@@ -10,8 +34,20 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "reviews" / "CONCEPTS"
-BASE = os.environ.get("MICRO_TEST_BASE", "http://127.0.0.1:5000")
+
+_ap = argparse.ArgumentParser(
+    description="فحص صفحة المفاهيم بوسائط CLI صريحة (SUI-R2-A4/SUI-R1-06)")
+_ap.add_argument("--chromium", default=shutil.which("chromium"),
+                 help="مسار متصفح Chromium (الافتراض shutil.which('chromium'))")
+_ap.add_argument("--base", default=os.environ.get("MICRO_TEST_BASE", "http://127.0.0.1:5000"),
+                 help="عنوان خادم جذر المستودع (الافتراض MICRO_TEST_BASE ثم 127.0.0.1:5000)")
+_ap.add_argument("--out", default=str(ROOT / "reviews" / "CONCEPTS"),
+                 help="مجلد الإخراج (الافتراض reviews/CONCEPTS)")
+_ARGS = _ap.parse_args()
+CHROMIUM = _ARGS.chromium
+BASE = _ARGS.base.rstrip("/")
+OUT = Path(_ARGS.out).resolve()
+
 RESULTS = []
 CONTRAST = []
 
@@ -80,10 +116,9 @@ def main():
     errors = []
     failed_requests = []
     with sync_playwright() as p:
-        executable = shutil.which("chromium")
-        if not executable:
-            raise RuntimeError("Nix Chromium is required; install it via the project package manager.")
-        browser = p.chromium.launch(executable_path=executable, headless=True)
+        if not CHROMIUM:
+            raise RuntimeError("Chromium executable is required; pass --chromium or install it via the project package manager.")
+        browser = p.chromium.launch(executable_path=CHROMIUM, headless=True)
         context = browser.new_context(viewport={"width": 390, "height": 874}, has_touch=True)
         page = context.new_page()
         page.on("pageerror", lambda error: errors.append(str(error)))
@@ -327,7 +362,14 @@ def main():
         email.fill("sample@example.test")
         password.fill("sample-password")
         form.evaluate("el => el.requestSubmit()")
-        check("Unwired submit does not claim real login", "لا توجد خدمة مصادقة" in status.inner_text())
+        # SUI-R2-A4 (SUI-R1-06): فحص معنوي صادق للعقد بدل التوقع الحرفي
+        # القديم («لا توجد خدمة مصادقة») — النص لا يدّعي دخولًا/نجاحًا/تحققًا،
+        # ويُظهر إشعار العرض التجريبي الصادق (يحوي «عرض» أو «لن تُرسل»).
+        unwired = status.inner_text()
+        claims_login = any(phrase in unwired for phrase in ("تم الدخول", "نجاح", "تم التحقق"))
+        honest_demo = any(phrase in unwired for phrase in ("عرض", "لن تُرسل"))
+        check("Unwired submit does not claim real login",
+              not claims_login and honest_demo, unwired)
         page.screenshot(path=str(shots / "gateway.png"))
         gateway.evaluate("""el => {
           window.__submits = 0;
@@ -355,6 +397,35 @@ def main():
         form.evaluate("el => el.requestSubmit()")
         page.wait_for_function("document.querySelector('[data-access-status]').textContent.includes('تعذر الاتصال التجريبي')")
         check("Callback rejection displayed explicitly", status.get_attribute("data-tone") == "error")
+
+        # SUI-R2-A4 (SUI-R1-01): صدق نتيجة البوابة — المستهلك يملك النتيجة
+        # والرسالة، والمكوّن لا يستنتج دخولًا من مجرد اكتمال المعالج.
+        email.fill("sample@example.test")
+        password.fill("sample-password")
+        gateway.evaluate("""el => MicroAccessGateway.init(el, {
+          onSubmit: () => Promise.resolve({authenticated: false, message: 'لم يتم الدخول'})
+        })""")
+        form.evaluate("el => el.requestSubmit()")
+        page.wait_for_function(
+            "document.querySelector('[data-access-status]').textContent.includes('لم يتم الدخول')")
+        check("Consumer-denied result message shows verbatim with error tone",
+              status.inner_text().strip() == "لم يتم الدخول"
+              and status.get_attribute("data-tone") == "error",
+              status.inner_text())
+        page.wait_for_function("document.querySelector('[data-access-form]').dataset.microAccessBusy === 'false'")
+        gateway.evaluate("""el => MicroAccessGateway.init(el, {
+          onSubmit: () => Promise.resolve(undefined)
+        })""")
+        form.evaluate("el => el.requestSubmit()")
+        page.wait_for_function(
+            "document.querySelector('[data-access-status]').textContent.includes('دون نتيجة مؤكدة')")
+        neutral = status.inner_text()
+        check("Handler completion without confirmed result stays neutral — no success claim",
+              not any(phrase in neutral for phrase in ("تم الدخول", "نجاح", "تم التحقق"))
+              and "دون نتيجة مؤكدة" in neutral
+              and status.get_attribute("data-tone") == "info",
+              neutral)
+        page.wait_for_function("document.querySelector('[data-access-form]').dataset.microAccessBusy === 'false'")
         for family in ("info-strip", "metric-comparison", "account-settings", "access-gateway"):
             load(f"/components/{family}/example-usage.html")
             check(f"{family} works without gallery styles", fits(page))

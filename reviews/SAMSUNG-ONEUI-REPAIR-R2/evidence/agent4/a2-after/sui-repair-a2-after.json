@@ -1,0 +1,466 @@
+{
+  "meta": {
+    "commit": "66bc1a8132e7613ab293029f43898dc1adc1d0ff",
+    "tree": "21d74a98972f1c4ff3dbf02b91e7017d657498ac",
+    "source_clean": false,
+    "dirty_own": [
+      "M components/fields/specification.md",
+      " M tools/sui-repair-a2-check.py"
+    ],
+    "browser_hint": "Chromium executable_path=/home/z/my-project/evidence/bin/chromium",
+    "tag": "after",
+    "checked_at": "2026-10-08T14:42:34.389095+00:00",
+    "zoom_type": "محاكاة نص ×2 بمرورين نظيفين (ZOOM2_CLEAN) — ليست native zoom",
+    "server_port": 4460,
+    "browser": "143.0.7499.4"
+  },
+  "items": {
+    "SUI-003": {
+      "checks": [
+        {
+          "name": "لوحة selection (ترتيب رسمي): لون الحالة عند ON بترولي rgb(22,77,89)",
+          "ok": true,
+          "detail": "محسوب=rgb(22, 77, 89)"
+        },
+        {
+          "name": "لوحة selection: لون الحالة عند OFF رمادي تلميح rgb(95,115,120)",
+          "ok": true,
+          "detail": "محسوب=rgb(95, 115, 120)"
+        },
+        {
+          "name": "تركيب معاكس (input قبل النص): لون الحالة عند ON بترولي — مستقل عن الترتيب",
+          "ok": true,
+          "detail": "محسوب=rgb(22, 77, 89)"
+        },
+        {
+          "name": "تركيب معاكس: OFF رمادي تلميح",
+          "ok": true,
+          "detail": "محسوب=rgb(95, 115, 120)"
+        },
+        {
+          "name": "اللون متطابق بين الترتيبين (ON وON / OFF وOFF)",
+          "ok": true,
+          "detail": "ON: rgb(22, 77, 89) vs rgb(22, 77, 89) — OFF: rgb(95, 115, 120) vs rgb(95, 115, 120)"
+        },
+        {
+          "name": "المسار عند نهاية السطر (يسار RTL) في الترتيب الرسمي — لا قفز موضع",
+          "ok": true,
+          "detail": "{'trackX': 131.296875, 'textX': 195.296875}"
+        },
+        {
+          "name": "min-width:4ch محفوظ ونص الحالة (مُفعّل/مُعطّل) غير مقصوص",
+          "ok": true,
+          "detail": "[{\"mw\": \"31.2px\", \"sw\": 88, \"cw\": 88, \"text\": \"مُعطّل\"}, {\"mw\": \"31.2px\", \"sw\": 151, \"cw\": 151, \"text\": \"مُفعّل\"}]"
+        },
+        {
+          "name": "Space تبدّل المفتاح: checked ينقلب ونص الحالة يتبع ولونها يصير بتروليًا",
+          "ok": true,
+          "detail": "قبل={'checked': False, 'color': 'rgb(95, 115, 120)', 'text': 'مُعطّل'} بعد={'checked': True, 'color': 'rgb(22, 77, 89)', 'text': 'مُفعّل'}"
+        },
+        {
+          "name": "switch-lifecycle (قراءة فقط، قياس CSS): عند ON لون الحالة بترولي — القاعدة لم تعد ميتة",
+          "ok": true,
+          "detail": "{\"color\": \"rgb(22, 77, 89)\", \"checked\": true}"
+        },
+        {
+          "name": "account-settings (قراءة فقط): ON بترولي وOFF تلميح — نفس العقد الموحد",
+          "ok": true,
+          "detail": "{\"off\": \"rgb(95, 115, 120)\", \"on\": \"rgb(22, 77, 89)\"}"
+        }
+      ],
+      "ok": true
+    },
+    "SUI-004": {
+      "checks": [
+        {
+          "name": "عند 1× (320): عرض مدخل الكمية = توكن 64px (العقد مطبق فعليًا)",
+          "ok": true,
+          "detail": "العرض=64px"
+        },
+        {
+          "name": "عند 1× (320): «9999» ظاهرة كاملة (clientWidth ≥ scrollWidth)",
+          "ok": true,
+          "detail": "{'sw': 64, 'cw': 64, 'sh': 26, 'ch': 26}"
+        },
+        {
+          "name": "عند 1× (320): زرا الخطوة 48×48",
+          "ok": true,
+          "detail": "[{'w': 48, 'h': 48}, {'w': 48, 'h': 48}]"
+        },
+        {
+          "name": "أرضية قراءة ch مثبتة بالخط على مدخل الكمية (min-width محسوب > 0)",
+          "ok": true,
+          "detail": "minWidth=48.0001px (5ch عند 16px ≈ 44-48px)"
+        },
+        {
+          "name": "عند 320+200%: «9999» كاملة ظاهرة (clientWidth ≥ scrollWidth للحقل)",
+          "ok": true,
+          "detail": "client=96 scroll=96 rectW=96"
+        },
+        {
+          "name": "عند 320+200%: زرا الخطوة ≥48×48 (هدف اللمس لا يتقلص)",
+          "ok": true,
+          "detail": "[{'w': 48, 'h': 48}, {'w': 48, 'h': 48}]"
+        },
+        {
+          "name": "عند 320+200%: لا فيض أفقي للصفحة (scrollWidth ≤ clientWidth)",
+          "ok": true,
+          "detail": "{'sw': 320, 'cw': 320}"
+        },
+        {
+          "name": "عند 320+200%: وحدة الكمية داخل التحكم (تلف عند الحاجة) بلا قص",
+          "ok": true,
+          "detail": "{'inside': True, 'uSw': 42, 'uCw': 42}"
+        },
+        {
+          "name": "التركيب الرسمي (t-qty) عند 360 و1×: عرض 64px والقيمة كاملة",
+          "ok": true,
+          "detail": "عرض=64 fit={'sw': 64, 'cw': 64, 'sh': 26, 'ch': 26}"
+        }
+      ],
+      "ok": true
+    },
+    "SUI-005": {
+      "checks": [
+        {
+          "name": "عند 1× (320): المبلغ «1,240.50» (6 أرقام/7 محارف منسقة) والوحدة في سطر واحد (بلا التفاف) والقيمة كاملة",
+          "ok": true,
+          "detail": "sameRow={'sameRow': True, 'iCy': 5257.46875, 'uCy': 5257.46875} fit={'sw': 215, 'cw': 215, 'sh': 26, 'ch': 26}"
+        },
+        {
+          "name": "عند 320+200%: مبلغ «12,456,789.50» (10 أرقام/13 محرفًا منسقًا) مقروء كاملًا في سطر المدخل الواحد (clientWidth ≥ scrollWidth)",
+          "ok": true,
+          "detail": "client=252 scroll=252"
+        },
+        {
+          "name": "عند 320+200%: الوحدة «د.أ» ظاهرة كاملة داخل التحكم (لف الوحدة وحدها عند الحاجة — المدخل أحادي السطر) بلا قص",
+          "ok": true,
+          "detail": "{'inside': True, 'uSw': 42, 'uCw': 42, 'cSw': 284, 'cCw': 284, 'wrapped': True}"
+        },
+        {
+          "name": "عند 320+200%: التحكم بلا فيض داخلي (control scrollW ≤ clientW)",
+          "ok": true,
+          "detail": "{'inside': True, 'uSw': 42, 'uCw': 42, 'cSw': 284, 'cCw': 284, 'wrapped': True}"
+        },
+        {
+          "name": "عند 320+200%: لا فيض أفقي للصفحة",
+          "ok": true,
+          "detail": "{'sw': 320, 'cw': 320}"
+        },
+        {
+          "name": "عند 320+200%: مبلغ «123,456,789.50» (11 رقمًا/14 محرفًا منسقًا) يسع سطر المدخل كاملًا — المدخل أحادي السطر لا يلف أرقامًا على أسطر",
+          "ok": true,
+          "detail": "client=252 scroll=252"
+        },
+        {
+          "name": "عند 320+200%: قيمة قبول التدقيق «9,999,999.99» (9 أرقام/11 محرفًا منسقًا) كاملة والوحدة ظاهرة داخل الصف",
+          "ok": true,
+          "detail": "client=252 scroll=252 unit={'inside': True}"
+        },
+        {
+          "name": "الحد الصادق: «123456789012345» (15 رقمًا/15 محرفًا غير منسق) لا تسع سطر المدخل عند 320+200% — المدخل نفسه scroll>client = يحتاج تمريرًا أثناء التحرير (PASS بعقد صادق لا تصغير خط فيه ولا حد أعمال)",
+          "ok": true,
+          "detail": "client=252 scroll=288 (مقيس على المدخل نفسه — سعة كاملة للصف بلا قص فقدًا؛ قراءته بالتمرير الذي يتبع المؤشر)"
+        },
+        {
+          "name": "قراءة الذيل: End ينقل المؤشر إلى نهاية القيمة (selectionStart=15) ويظهر الذيل (scrollLeft > 0) — القيمة تُقرأ كاملة بالتمرير الذي يتبع المؤشر",
+          "ok": true,
+          "detail": "{'scrollLeft': 36, 'sel': 15, 'selEnd': 15}"
+        },
+        {
+          "name": "قراءة البداية: Home يعيد المؤشر والتمرير إلى البداية (selectionStart=0 وscrollLeft=0) — بداية القيمة ظاهرة",
+          "ok": true,
+          "detail": "{'scrollLeft': 0, 'sel': 0}"
+        },
+        {
+          "name": "عند 390+200%: لا فيض للصفحة والقيمة كاملة",
+          "ok": true,
+          "detail": "fit={'sw': 252, 'cw': 252, 'sh': 52, 'ch': 52} doc={'sw': 390, 'cw': 390}"
+        }
+      ],
+      "ok": true
+    },
+    "SUI-006": {
+      "checks": [
+        {
+          "name": "كل زر [data-step] في مثال الاستخدام ≥48×48 (عقد B01)",
+          "ok": true,
+          "detail": "[{\"w\": 48, \"h\": 48, \"label\": \"إنقاص الكمية\", \"cls\": \"m-btn m-btn--icon m-btn--secondary\", \"disabled\": false, \"step\": \"down\"}, {\"w\": 48, \"h\": 48, \"label\": \"زيادة الكمية\", \"cls\": \"m-btn m-btn--icon m-btn--secondary\", \"disabled\": false, \"step\": \"up\"}, {\"w\": 48, \"h\": 48, \"label\": \"إنقاص الكمية\", \"cls\": \"m-btn m-btn--icon m-btn--secondary\", \"disabled\": false, \"step\": \"down\"}, {\"w\": 48, \"h\": 48, \"label\""
+        },
+        {
+          "name": "كل زر [data-step] يحمل فئات B01 (m-btn m-btn--icon m-btn--secondary)",
+          "ok": true,
+          "detail": "[\"m-btn m-btn--icon m-btn--secondary\", \"m-btn m-btn--icon m-btn--secondary\", \"m-btn m-btn--icon m-btn--secondary\", \"m-btn m-btn--icon m-btn--secondary\"]"
+        },
+        {
+          "name": "كل زر [data-step] له aria-label عربي صريح",
+          "ok": true,
+          "detail": "[\"إنقاص الكمية\", \"زيادة الكمية\", \"إنقاص الكمية\", \"زيادة الكمية\"]"
+        },
+        {
+          "name": "المثال يعمل: الخطوة تزيد/تنقص فعليًا بالعقد (min/max/step من المستهلك)",
+          "ok": true,
+          "detail": "{\"before\": \"5\", \"afterUp\": \"10\", \"afterDown\": \"0\"}"
+        },
+        {
+          "name": "فحوص المثال الذاتية: 0 FAIL وبلا أخطاء صفحة",
+          "ok": true,
+          "detail": "PASS=11 FAIL=0 errors=[]"
+        }
+      ],
+      "ok": true
+    },
+    "SUI-011": {
+      "checks": [
+        {
+          "name": "السطر الواحد (900px): بلا التفاف والفجوة الأفقية 4px نفسها (كثافة محفوظة)",
+          "ok": true,
+          "detail": "{\"nRows\": 1, \"hgap\": 4, \"visualH\": 40}"
+        },
+        {
+          "name": "عند 320: المقاطع تلتف فعليًا (صفان أو أكثر)",
+          "ok": true,
+          "detail": "nRows=4"
+        },
+        {
+          "name": "عند 320: فراغ ≥4px بين أهداف اللمس الموسعة (touchGap = rowGap − 8 ≥ 4)",
+          "ok": true,
+          "detail": "touchGap=4px rowGap=12px"
+        },
+        {
+          "name": "عند 320: النقر في منتصف الفجوة بين الصفين (±1px فوق مراكز العناصر) لا يصيب أي هدف",
+          "ok": true,
+          "detail": "عيّنات=12 مصابة=0 منتصف=397.546875"
+        },
+        {
+          "name": "عند 320: الامتداد 4px يعمل (داخل أسفل الصف الأول وفوق الثاني يصيب الهدف 48px)",
+          "ok": true,
+          "detail": "{\"extHits\": [true, true, true, true], \"extHitsAll\": true}"
+        },
+        {
+          "name": "row-gap المحققة 12px (قيمة محققة لهذه البنية لا توكن عامًا)",
+          "ok": true,
+          "detail": "rowGap=12px"
+        },
+        {
+          "name": "عند 320+200%: التفاف مستمر وفراغ ≥4px بين الأهداف الموسعة",
+          "ok": true,
+          "detail": "{\"nRows\": 6, \"rowGapPx\": 12, \"touchGapPx\": 4, \"mid\": 326, \"badClean\": 0, \"cleanSamples\": 6, \"extHitsAll\": true, \"extHits\": [true, true, true, true]}"
+        },
+        {
+          "name": "عند 320+200%: النقر في منتصف الفجوة بين الصفين لا يصيب هدفًا",
+          "ok": true,
+          "detail": "{\"badClean\": 0, \"cleanSamples\": 6}"
+        }
+      ],
+      "ok": true
+    },
+    "SUI-032": {
+      "checks": [
+        {
+          "name": "المواصفة توثق حدود توسع المنتقي (متى يليق الاقتراح/كيف يوسَّع) — KEEP+DOC",
+          "ok": true,
+          "detail": "علامات التوثيق غير موجودة في specification.md"
+        },
+        {
+          "name": "السلوك محفوظ (KEEP): المنتقي يعرض كل الخيارات قبل الكتابة",
+          "ok": true,
+          "detail": "{\"n\": 4, \"search\": \"\"}"
+        }
+      ],
+      "ok": true
+    },
+    "REV-B02": {
+      "checks": [
+        {
+          "name": "أحجام الحقول حسب طبيعة البيانات: تحكم 52px/مساحة 52px أدنى، تسمية 14/500، جسم 16 (KEEP مقيس)",
+          "ok": true,
+          "detail": "{\"ctrlH\": 52, \"areaH\": 102, \"labelFont\": \"14px\", \"labelWeight\": \"500\", \"bodyFont\": \"16px\"}"
+        },
+        {
+          "name": "زر مسح البحث 48×48 ظاهر بوجود النص بتسمية عربية (KEEP)",
+          "ok": true,
+          "detail": "{'w': 48, 'h': 48, 'label': 'مسح البحث', 'visible': True}"
+        },
+        {
+          "name": "رسائل التحقق: خطأ بحد ورسالة مصححة مربوطة aria-described والقيمة باقية (KEEP)",
+          "ok": true,
+          "detail": "{'hasError': True, 'border': 'rgb(173, 48, 59)', 'msgColor': 'rgb(173, 48, 59)', 'value': '12..5', 'described': True}"
+        },
+        {
+          "name": "القراءة فقط ليست معطلة: نص كامل وقابل للتحديد (KEEP)",
+          "ok": true,
+          "detail": "{'color': 'rgb(23, 45, 50)', 'select': 'text', 'cursor': 'default', 'bg': 'rgb(247, 248, 244)'}"
+        },
+        {
+          "name": "المعطل: أرضية معطل بلا حلقة (KEEP)",
+          "ok": true,
+          "detail": "{'bg': 'rgb(228, 234, 232)', 'shadow': 'none'}"
+        },
+        {
+          "name": "عزل الأرقام في RTL وLTR معًا (مدخل المبلغ dir=ltr ثابت والقيمة ظاهرة)",
+          "ok": true,
+          "detail": "{'before': 'ltr|230.828125', 'afterDir': 'ltr', 'fits': True}"
+        },
+        {
+          "name": "لوحة الحقول عند 320px: لا تمرير أفقي للصفحة",
+          "ok": true,
+          "detail": "{'sw': 320, 'cw': 320}"
+        },
+        {
+          "name": "لوحة الحقول عند 360px: لا تمرير أفقي للصفحة",
+          "ok": true,
+          "detail": "{'sw': 360, 'cw': 360}"
+        },
+        {
+          "name": "لوحة الحقول عند 390px: لا تمرير أفقي للصفحة",
+          "ok": true,
+          "detail": "{'sw': 390, 'cw': 390}"
+        },
+        {
+          "name": "لوحة الحقول عند 430px: لا تمرير أفقي للصفحة",
+          "ok": true,
+          "detail": "{'sw': 430, 'cw': 430}"
+        },
+        {
+          "name": "لوحة الحقول عند 390+200%: لا فيض أفقي",
+          "ok": true,
+          "detail": "{'sw': 430, 'cw': 430}"
+        },
+        {
+          "name": "reduced-motion: انتقالات الحقل ملغاة (KEEP)",
+          "ok": true,
+          "detail": "duration=0s"
+        }
+      ],
+      "ok": true
+    },
+    "REV-B03": {
+      "checks": [
+        {
+          "name": "صفوف الاختيار هدف 48px والصندوق 24px والتسمية الطويلة تلف بلا قص (KEEP)",
+          "ok": true,
+          "detail": "{\"rowH\": 48, \"longH\": 52, \"longClipped\": false}"
+        },
+        {
+          "name": "المفتاح: مسار 52×32 ومقبض 24 وعند ON المقبض عند نهاية المسار (RTL) (KEEP)",
+          "ok": true,
+          "detail": "{\"trackW\": 52, \"trackH\": 32, \"thumbW\": 24, \"onEnd\": true, \"stateFont\": \"13px\", \"stateMinW\": \"31.2px\"}"
+        },
+        {
+          "name": "زر الوضع المضغوط: أرضية التحديد ولون بترولي (KEEP)",
+          "ok": true,
+          "detail": "{'bg': 'rgb(223, 238, 230)', 'color': 'rgb(22, 77, 89)', 'shadow': 'rgb(22, 77, 89) 0px 0px 0px 1px inset'}"
+        },
+        {
+          "name": "أسهم المقاطع بمنطق RTL: يسار = التالي (KEEP)",
+          "ok": true,
+          "detail": "{'landed': 'due'}"
+        },
+        {
+          "name": "المنتقي: بحث فرعي يصفّي (الوطنية → 2) داخل طبقة B07 (KEEP)",
+          "ok": true,
+          "detail": "{'visible': 2}"
+        },
+        {
+          "name": "المنتقي: Enter يحدد ويحدّث الملخص معًا (KEEP)",
+          "ok": true,
+          "detail": "{'summary': 'المحدد: شركة البترول الوطنية', 'selected': True}"
+        },
+        {
+          "name": "المفتاح المعطل: نص ومسار بحالة المعطل (KEEP)",
+          "ok": true,
+          "detail": "{'state': 'rgb(83, 103, 107)', 'trackBg': 'rgb(228, 234, 232)', 'opacity': '0.7'}"
+        },
+        {
+          "name": "لوحة الاختيار عند 320px: لا تمرير أفقي",
+          "ok": true,
+          "detail": "{'sw': 320, 'cw': 320}"
+        },
+        {
+          "name": "لوحة الاختيار عند 360px: لا تمرير أفقي",
+          "ok": true,
+          "detail": "{'sw': 360, 'cw': 360}"
+        },
+        {
+          "name": "لوحة الاختيار عند 390px: لا تمرير أفقي",
+          "ok": true,
+          "detail": "{'sw': 390, 'cw': 390}"
+        },
+        {
+          "name": "لوحة الاختيار عند 430px: لا تمرير أفقي",
+          "ok": true,
+          "detail": "{'sw': 430, 'cw': 430}"
+        },
+        {
+          "name": "reduced-motion: انتقالات الاختيار ملغاة (KEEP)",
+          "ok": true,
+          "detail": "{'seg': '0s', 'track': '0s'}"
+        }
+      ],
+      "ok": true
+    }
+  },
+  "summary": {
+    "items": {
+      "SUI-003": {
+        "ok": true,
+        "passed": 10,
+        "total": 10
+      },
+      "SUI-004": {
+        "ok": true,
+        "passed": 9,
+        "total": 9
+      },
+      "SUI-005": {
+        "ok": true,
+        "passed": 11,
+        "total": 11
+      },
+      "SUI-006": {
+        "ok": true,
+        "passed": 5,
+        "total": 5
+      },
+      "SUI-011": {
+        "ok": true,
+        "passed": 8,
+        "total": 8
+      },
+      "SUI-032": {
+        "ok": true,
+        "passed": 2,
+        "total": 2
+      },
+      "REV-B02": {
+        "ok": true,
+        "passed": 12,
+        "total": 12
+      },
+      "REV-B03": {
+        "ok": true,
+        "passed": 12,
+        "total": 12
+      }
+    },
+    "failed_items": 0,
+    "total_checks": 69,
+    "summary_lines": [
+      "PASS  SUI-003: 10/10 فحصًا",
+      "PASS  SUI-004: 9/9 فحصًا",
+      "PASS  SUI-005: 11/11 فحصًا",
+      "PASS  SUI-006: 5/5 فحصًا",
+      "PASS  SUI-011: 8/8 فحصًا",
+      "PASS  SUI-032: 2/2 فحصًا",
+      "PASS  REV-B02: 12/12 فحصًا",
+      "PASS  REV-B03: 12/12 فحصًا"
+    ]
+  },
+  "not_run": [
+    "لمس حقيقي وجهاز هاتف (hit-test بمستطيلات وelementFromPoint فقط)",
+    "قارئ شاشة فعلي (TalkBack/VoiceOver)",
+    "WebKit/Safari وnative zoom (التكبير محاكاة نص معلنة)",
+    "لوحة مفاتيح نظام حقيقية"
+  ]
+}

@@ -8,8 +8,12 @@ SUI-003 لون نص حالة المفتاح مستقل عن ترتيب DOM (:has
         وتركيبين معاكسين + صفحات خارج الملكية للتحقق فقط (قراءة).
 SUI-004 أرضية قراءة قيمة الكمية (ch مثبتة بالخط) + عقد 64px عند 1×
         + «9999» كاملة عند 320+200% (محاكاة ZOOM2 بمرورين نظيفين).
-SUI-005 أرضية قراءة مدخل المبلغ (11ch) + لف الوحدة عند الحاجة:
-        مبلغ 12,456,789.50 ومبلغ 15 خانة مقروءان كاملين عند 320+200%.
+SUI-005 أرضية قراءة مدخل المبلغ (11ch) + عقد قراءة صادق موحّد
+        (SUI-R2-A4 / SUI-R1-05): القيم المنسقة تُوصف بعدد أرقامها
+        ومحارفها (مثل 11 رقمًا/14 محرفًا) وتسع سطر المدخل عند 320+200%؛
+        15 رقمًا خامًا لا تسع (scroll>client مقيس على المدخل نفسه)
+        فتُقرأ بتمرير التحرير الذي يتبع المؤشر (End/Home مفحوصان)،
+        والوحدة وحدها تلف عند الحاجة — المدخل أحادي السطر لا يلف أرقامًا.
 SUI-006 زرا خطوة بعقد B01 (48×48 + aria-label) في مثال الاستخدام
         الرسمي + مثال خطوة عامل فعليًا (زيادة/إنقاص).
 SUI-011 فصل فجوات المقاطع: column-gap 4px وrow-gap 12px —
@@ -43,7 +47,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 CHROMIUM = "/home/z/my-project/evidence/bin/chromium"
-PORT_RANGE = (4200, 4219)  # نطاق الوكيل 2 المخصص
+PORT_RANGE = (4460, 4479)  # نطاق الوكيل 4 (R2-A4) المخصص — كان 4200-4219 (نطاق وكيل R1-A2)
 
 FIELDS_BOARD = "/previews/fields/index.html"
 FIELDS_EXAMPLE = "/previews/fields/example-usage.html"
@@ -403,6 +407,7 @@ def check_sui005(t, ctx, base):
     page.evaluate("() => document.fonts.ready")
 
     # 1× عند 320: بلا التفاف (سلوك محفوظ) والقيمة كاملة
+    # (SUI-R2-A4: «1,240.50» = 6 أرقام / 7 محارف منسقة — التمييز موثق)
     page.set_viewport_size({"width": 320, "height": 900})
     page.wait_for_timeout(250)
     set_val(page, "#p-amount-320", "1,240.50")
@@ -414,11 +419,11 @@ def check_sui005(t, ctx, base):
              return {sameRow: Math.abs((ir.top + ir.height/2) - (ur.top + ur.height/2)) < 2,
                      iCy: ir.top + ir.height/2, uCy: ur.top + ur.height/2}; }""")
     f_1x = fit(page, "#p-amount-320")
-    t.check("SUI-005", "عند 1× (320): المبلغ والوحدة في سطر واحد (بلا التفاف) والقيمة كاملة",
+    t.check("SUI-005", "عند 1× (320): المبلغ «1,240.50» (6 أرقام/7 محارف منسقة) والوحدة في سطر واحد (بلا التفاف) والقيمة كاملة",
             same_row["sameRow"] and f_1x["cw"] >= f_1x["sw"] - 1,
             f"sameRow={same_row} fit={f_1x}")
 
-    # 200% عند 320: مبلغ 12,456,789.50 كامل
+    # 200% عند 320: مبلغ منسق 10 أرقام/13 محرفًا كامل في سطر المدخل
     set_val(page, "#p-amount-320", "12,456,789.50")
     zoom(page)
     f_z = fit(page, "#p-amount-320")
@@ -433,10 +438,10 @@ def check_sui005(t, ctx, base):
                      wrapped: Math.abs(ur.top - (u.previousElementSibling
                         ? u.previousElementSibling.getBoundingClientRect().top : 0)) > 2}; }""")
     docf = doc_fit(page)
-    t.check("SUI-005", "عند 320+200%: مبلغ 12,456,789.50 مقروء كاملًا (clientWidth ≥ scrollWidth)",
+    t.check("SUI-005", "عند 320+200%: مبلغ «12,456,789.50» (10 أرقام/13 محرفًا منسقًا) مقروء كاملًا في سطر المدخل الواحد (clientWidth ≥ scrollWidth)",
             f_z is not None and f_z["cw"] >= f_z["sw"] - 1,
             f"client={f_z and f_z['cw']} scroll={f_z and f_z['sw']}")
-    t.check("SUI-005", "عند 320+200%: الوحدة «د.أ» ظاهرة كاملة داخل التحكم (لف عند الحاجة) بلا قص",
+    t.check("SUI-005", "عند 320+200%: الوحدة «د.أ» ظاهرة كاملة داخل التحكم (لف الوحدة وحدها عند الحاجة — المدخل أحادي السطر) بلا قص",
             unit_z is not None and unit_z["inside"] and unit_z["uSw"] <= unit_z["uCw"] + 1,
             str(unit_z))
     t.check("SUI-005", "عند 320+200%: التحكم بلا فيض داخلي (control scrollW ≤ clientW)",
@@ -444,11 +449,13 @@ def check_sui005(t, ctx, base):
     t.check("SUI-005", "عند 320+200%: لا فيض أفقي للصفحة", docf["sw"] <= docf["cw"] + 1, str(docf))
     page.screenshot(path=str(SHOTS / f"{TAG}-sui005-amount12-320-zoom200.png"), full_page=False)
 
-    # مبلغ 15 خانة (15 حرفًا بفواصل — قيمة الفحص 123,456,789.50) وقيمة قبول التدقيق 9,999,999.99
+    # مبلغ منسق 11 رقمًا / 14 محرفًا — أعلى قيمة تسع سطر المدخل كاملًا عند 320+200%
+    # (SUI-R2-A4/SUI-R1-05: تصحيح صياغة «15 خانة» القديمة — هذه القيمة 11 رقمًا
+    #  بعد التنسيق، والمدخل أحادي السطر لا يلف أرقامًا على أسطر.)
     set_val(page, "#p-amount-320", "123,456,789.50")
     page.wait_for_timeout(150)
     f15 = fit(page, "#p-amount-320")
-    t.check("SUI-005", "عند 320+200%: مبلغ 15 خانة (123,456,789.50) مقروء كاملًا — اللف مسموح",
+    t.check("SUI-005", "عند 320+200%: مبلغ «123,456,789.50» (11 رقمًا/14 محرفًا منسقًا) يسع سطر المدخل كاملًا — المدخل أحادي السطر لا يلف أرقامًا على أسطر",
             f15 is not None and f15["cw"] >= f15["sw"] - 1,
             f"client={f15 and f15['cw']} scroll={f15 and f15['sw']}")
     set_val(page, "#p-amount-320", "9,999,999.99")
@@ -459,20 +466,47 @@ def check_sui005(t, ctx, base):
              const ur = u.getBoundingClientRect();
              const pr = u.closest('.m-field__control').getBoundingClientRect();
              return {inside: ur.left >= pr.left - 0.5 && ur.right <= pr.right + 0.5}; }""")
-    t.check("SUI-005", "عند 320+200%: قيمة قبول التدقيق 9,999,999.99 كاملة والوحدة ظاهرة داخل الصف",
+    t.check("SUI-005", "عند 320+200%: قيمة قبول التدقيق «9,999,999.99» (9 أرقام/11 محرفًا منسقًا) كاملة والوحدة ظاهرة داخل الصف",
             fa is not None and fa["cw"] >= fa["sw"] - 1 and unit_a["inside"],
             f"client={fa and fa['cw']} scroll={fa and fa['sw']} unit={unit_a}")
-    # الحد الفيزيائي الصادق: سلسلة أطول من سعة الصف (مُوثق في المواصفة — لا تصغير خط)
-    set_val(page, "#p-amount-320", "123456789012345")
+
+    # الحد الصادق مقيسًا على المدخل نفسه (SUI-R2-A4/SUI-R1-05):
+    # 15 رقمًا خامًا (15 محرفًا غير منسق) لا تسع سطر المدخل عند 320+200% —
+    # scroll>client = تحتاج تمريرًا أثناء التحرير. هذا PASS بعقد صادق
+    # (لا تصغير خط ولا حد أعمال) — والقراءة الكاملة تُثبت بالمؤشر أدناه.
+    raw15 = "123456789012345"
+    set_val(page, "#p-amount-320", raw15)
     page.wait_for_timeout(150)
     fcap = fit(page, "#p-amount-320")
-    t.check("SUI-005", "الحد الفيزيائي: أطول من سعة صف 320+200% يأخذ الصف كاملًا (أقصى قراءة ممكنة بلا تصغير خط)",
+    t.check("SUI-005", "الحد الصادق: «123456789012345» (15 رقمًا/15 محرفًا غير منسق) لا تسع سطر المدخل عند 320+200% — المدخل نفسه scroll>client = يحتاج تمريرًا أثناء التحرير (PASS بعقد صادق لا تصغير خط فيه ولا حد أعمال)",
             fcap is not None and fcap["cw"] >= 250 and fcap["cw"] < fcap["sw"],
-            f"client={fcap and fcap['cw']} scroll={fcap and fcap['sw']} (مقيد بعرض الصف، موثق)")
+            f"client={fcap and fcap['cw']} scroll={fcap and fcap['sw']} (مقيس على المدخل نفسه — سعة كاملة للصف بلا قص فقدًا؛ قراءته بالتمرير الذي يتبع المؤشر)")
+
+    # كيف تُقرأ القيمة كاملة: التمرير يتبع المؤشر (End = الذيل، Home = البداية)
+    page.locator("#p-amount-320").click()  # تركيز حقيقي بنقرة (المؤشر داخل القيمة)
+    page.wait_for_timeout(120)
+    page.keyboard.press("End")
+    page.wait_for_timeout(150)
+    end_state = page.evaluate(
+        """() => { const i = document.querySelector('#p-amount-320');
+             return {scrollLeft: i.scrollLeft, sel: i.selectionStart, selEnd: i.selectionEnd}; }""")
+    t.check("SUI-005", "قراءة الذيل: End ينقل المؤشر إلى نهاية القيمة (selectionStart=15) ويظهر الذيل (scrollLeft > 0) — القيمة تُقرأ كاملة بالتمرير الذي يتبع المؤشر",
+            end_state["sel"] == len(raw15) and end_state["selEnd"] == len(raw15)
+            and end_state["scrollLeft"] > 0,
+            str(end_state))
+    page.screenshot(path=str(SHOTS / f"{TAG}-sui005-amount15-end-tail-320-zoom200.png"), full_page=False)
+    page.keyboard.press("Home")
+    page.wait_for_timeout(150)
+    home_state = page.evaluate(
+        """() => { const i = document.querySelector('#p-amount-320');
+             return {scrollLeft: i.scrollLeft, sel: i.selectionStart}; }""")
+    t.check("SUI-005", "قراءة البداية: Home يعيد المؤشر والتمرير إلى البداية (selectionStart=0 وscrollLeft=0) — بداية القيمة ظاهرة",
+            home_state["sel"] == 0 and home_state["scrollLeft"] == 0,
+            str(home_state))
     page.screenshot(path=str(SHOTS / f"{TAG}-sui005-amount15-320-zoom200.png"), full_page=False)
     unzoom(page)
 
-    # عند 390+200%: لا انحدار (القيم الأوسع تسع سطرًا واحدًا أو تلتف بلا قص)
+    # عند 390+200%: لا انحدار (القيم الأوسع تسع سطرًا واحدًا أو تلتف الوحدة بلا قص)
     page.set_viewport_size({"width": 390, "height": 900})
     page.wait_for_timeout(250)
     set_val(page, "#p-amount-320", "1,240.50")
