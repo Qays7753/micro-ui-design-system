@@ -385,6 +385,7 @@
         document.documentElement.style.setProperty('--f03-navbar-h', h + 'px');
       }
       /* h=0 (مخفي): آخر قيمة مقيسة تبقى — سياسة موثقة أعلاه */
+      syncSelectBarPinning(); /* تغير الارتفاع قد يبدّل نظام تقييد الشريط (SUI-R2) */
     };
     navbarObserver = new ResizeObserver(apply);
     navbarObserver.observe(el.navbar); /* content-box: يرصد تغير الخط والمحتوى */
@@ -394,6 +395,40 @@
       if (navbarObserver) navbarObserver.disconnect();
     });
   }
+
+  /* ---------- SUI-R2 (تكامل القائد): تثبيت شريط التحديد عند نظام التقييد ----------
+     شريط التحديد sticky داخل حامله (#f03-select-zone) بإزاحة سفلية
+     --f03-navbar-h (عقد SUI-002). عند تكبير النص 200% يصبح الشريط
+     أطول من المسافة بين أعلى الحامل وأعلى navbar عند التمرير العلوي،
+     فيقيّده نظام sticky بأعلى الحامل ويغطي navbar الثابت (z-index 40)
+     أزراره السفلية — عيب سابق ضخمه التفاف navbar إلى صفين (SUI-R1-04).
+     الحل على مستوى المستهلك (لا تغيير عقد m-actionbar): في «نظام
+     التقييد» فقط يتحول الشريط إلى position:fixed بإزاحة navbar نفسها
+     وموضع هندسي مطابق تمامًا لحالة الالتصاق الصحيح — فلا قفزة بصرية
+     عند انتقال الحالتين (كلاهما يضع أسفل الشريط على حافة navbar العلوية).
+     المشغلات: التمرير (passive)، تغير ارتفاع navbar (RO أعلاه)،
+     تفعيل/إلغاء التحديد، تغير العرض، تغيير حجم النافذة — بلا مؤقتات. */
+  function syncSelectBarPinning() {
+    var bar = el.selectBar;
+    if (!bar) return;
+    var zone = el.selectZone;
+    var navbar = el.navbar;
+    var navbarTop = navbar && !navbar.hidden ? navbar.getBoundingClientRect().top : 0;
+    if (bar.hidden || !zone || navbarTop <= 0 || zone.getBoundingClientRect().height <= 0) {
+      bar.classList.remove('f03-selectbar-fixed');
+      return;
+    }
+    var zoneTop = zone.getBoundingClientRect().top;
+    var barH = bar.offsetHeight;
+    var margin = parseFloat(getComputedStyle(bar).marginBlockStart) || 0;
+    /* نظام التقييد: موضع الشريط اللاصق المقيد (أعلى الحامل + حاشيته +
+       ارتفاعه) ينزل تحت حافة navbar العلوية → ثبّته بدل الالتصاق المقيد */
+    var clamped = zoneTop + margin + barH > navbarTop;
+    bar.classList.toggle('f03-selectbar-fixed', clamped);
+  }
+
+  window.addEventListener('scroll', syncSelectBarPinning, { passive: true });
+  window.addEventListener('resize', syncSelectBarPinning);
 
   /* ---------- تبديل العروض: تركيز وتمرير وnavbar موثقة ---------- */
   var MAIN_VIEWS = ['home', 'list', 'reports', 'account'];
@@ -457,12 +492,14 @@
 
   function bindGateway() {
     if (!el.gatewayRoot || !window.MicroAccessGateway) return;
-    var submitArmed = false;
     window.MicroAccessGateway.init(el.gatewayRoot, {
       onSubmit: function () {
-        /* محاكاة حتمية: نجاح بعد زمن ثابت — لا مصادقة ولا شبكة */
+        /* محاكاة حتمية: نجاح بعد زمن ثابت — لا مصادقة ولا شبكة.
+           SUI-R1-01: الموصل التجريبي نفسه يصرّح بنتيجة الدخول
+           (authenticated:true) فتُعرض رسالة الدخول من تصريح المستهلك
+           لا من مجرد اكتمال المعالج. */
         return new Promise(function (resolve) {
-          window.setTimeout(function () { resolve({ ok: true }); }, 600);
+          window.setTimeout(function () { resolve({ authenticated: true }); }, 600);
         });
       },
       onRecovery: function () {
@@ -472,9 +509,10 @@
       },
       providers: {
         demo: function () {
-          /* الطريق السهل: ضغطة واحدة للدخول إلى التجربة */
+          /* الطريق السهل: ضغطة واحدة للدخول إلى التجربة — والعرض نفسه
+             يصرّح بالنتيجة (SUI-R1-01: authenticated:true) */
           enterApp();
-          return Promise.resolve({ ok: true });
+          return Promise.resolve({ authenticated: true });
         }
       }
     });
@@ -817,6 +855,7 @@
   function syncSelectionUI(filtered) {
     if (state.selecting) {
       el.selectBar.hidden = false;
+      syncSelectBarPinning(); /* التفعيل: قيّم نظام التقييد فورًا (SUI-R2) */
       var n = selectedCount();
       el.selectDelete.disabled = n === 0;
       el.selectDelete.setAttribute('aria-label', n === 0

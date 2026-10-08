@@ -28,6 +28,28 @@
       || form.querySelector('input[name="' + role + '"]');
   }
 
+  /* SUI-R1-01: عقد النتيجة — المستهلك يملك النتيجة والرسالة، والمكوّن لا
+     يستنتج دخولًا من مجرد اكتمال المعالج:
+     - result.message نص غير فارغ → يُعرض حرفيًا في منطقة الحالة.
+     - النبرة: result.tone إن كانت 'info' أو 'error'؛ وإلا 'error' عند
+       result.authenticated === false؛ وإلا 'info'.
+     - بلا message: result.authenticated === true → نص الدخول المؤكد
+       (المستهلك أكّد الدخول صراحة)؛ result.authenticated === false → نص
+       عدم الدخول؛ أي نتيجة أخرى (undefined أو كائن بلا مفاتيح معروفة مثل
+       {ok:true} أو {handled:true}) → نص محايد صادق لا يدّعي شيئًا.
+     المفاتيح message/tone/authenticated اختيارية موثقة في المواصفة —
+     ليست مخطط أعمال ملزمًا. الرفض يبقى رسالة الخطأ بنبرة error. */
+  function resultOutcome(result, confirmedText, deniedText, neutralText) {
+    var hasMessage = !!(result && typeof result.message === 'string' && result.message.trim() !== '');
+    var tone = 'info';
+    if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
+    else if (result && result.authenticated === false) tone = 'error';
+    if (hasMessage) return { text: result.message, tone: tone };
+    if (result && result.authenticated === true && confirmedText) return { text: confirmedText, tone: tone };
+    if (result && result.authenticated === false && deniedText) return { text: deniedText, tone: tone };
+    return { text: neutralText, tone: 'info' };
+  }
+
   function initGateway(gateway, callbacks) {
     if (gateway.hasAttribute('data-access-ready')) {
       gateway.__microAccessCallbacks = callbacks || gateway.__microAccessCallbacks || {};
@@ -62,8 +84,14 @@
       if (typeof current.onRecovery !== 'function') return;
       Promise.resolve().then(function () { return current.onRecovery(); })
         .then(function (result) {
-          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها، وإلا رسالة المكوّن البسيطة */
-          setMessage(form, (result && typeof result.message === 'string' && result.message) || 'تم إرسال طلب المساعدة.', 'info');
+          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها.
+             SUI-R1-01: بلا message لا ندّعي الإرسال من مجرد اكتمال
+             المعالج — نص محايد بنبرة info. */
+          var hasMessage = !!(result && typeof result.message === 'string' && result.message.trim() !== '');
+          var tone = 'info';
+          if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
+          else if (hasMessage && result && result.authenticated === false) tone = 'error';
+          setMessage(form, hasMessage ? result.message : 'انتهى طلب المساعدة دون تأكيد إرساله.', tone);
         })
         .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر إرسال طلب المساعدة.', 'error'); });
     });
@@ -74,7 +102,12 @@
         var handler = current.providers && current.providers[key];
         if (typeof handler !== 'function') return;
         Promise.resolve().then(function () { return handler(); })
-          .then(function () { setMessage(form, 'تم الدخول بنجاح.', 'info'); })
+          .then(function (result) {
+            /* SUI-R1-01: عقد النتيجة — لا نجاح دخول من مجرد اكتمال
+               المعالج؛ المستهلك يصرّح بالنتيجة أو تبقى محايدة. */
+            var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+            setMessage(form, outcome.text, outcome.tone);
+          })
           .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر تنفيذ الدخول.', 'error'); });
       });
     });
@@ -136,9 +169,12 @@
           password: passwordInput ? passwordInput.value : ''
         });
       }).then(function (result) {
+        /* SUI-R1-01: المكوّن يكتب رسالة النتيجة أولًا ثم يُطلق الحدث بعدها —
+           فالكلمة الأخيرة فوق منطقة الحالة لمستمع المستهلك ولا تُمسح رسالته
+           لاحقًا. النتيجة مسؤولية المستهلك بصياغة بشرية (SUI-013). */
+        var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+        setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
-        /* SUI-013: النتيجة مسؤولية المستهلك — بصياغة بشرية */
-        setMessage(form, 'تم التحقق من بيانات الدخول.', 'info');
       }).catch(function (error) {
         setMessage(form, error && error.message ? error.message : 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.', 'error');
       }).then(function () {

@@ -1827,9 +1827,20 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 /* ================= 3) شريط التنقل السفلي (عينة) =================
    عناصره قابلة للتغيير من المستهلك (بيانات HTML) — لا تثبيت عددها
-   أو أسمائها، ولا هندسة تنقل جديدة. */
+   أو أسمائها، ولا هندسة تنقل جديدة.
+   SUI-R1-04: احتواء عناصر الشريط عند ضيق العرض/تكبير النص — التفاف
+   إلى صفوف إضافية (flex-wrap) مع بقاء كل تسمية كاملة بحجمها: لا
+   تصغير نص يلغي التكبير، لا حذف اسم، لا ellipsis، لا min-width:0.
+   أساس كل عنصر محتواه (flex-basis auto) فيتبع قرار الالتفاف العرض
+   الفعلي للتسميات، والنمو المتساوي يوزع الصف شبه بالتساوي، و
+   max-width: 50% يمنع تمدد عنصر وحيد في صف ثانٍ بعرض كامل (يبقى
+   متمركزًا عبر space-around). ارتفاع الشريط قد ينمو مع الصفوف —
+   المستهلك يقيس الارتفاع الفعلي (نمط --f03-navbar-h في F03 عبر
+   ResizeObserver) لإزاحات toast وشريط التحديد والحشو. min-height
+   (48px أهداف اللمس) محفوظ في كل صف. */
 .m-navbar {
   display: flex;
+  flex-wrap: wrap; /* SUI-R1-04: صفوف إضافية عند تجاوز مجموع أدنى العناصر لعرض الشريط */
   align-items: stretch;
   justify-content: space-around;
   background-color: var(--micro-surface-base);
@@ -1838,7 +1849,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   font-family: var(--micro-font-family);
 }
 .m-navbar__item {
-  flex: 1;
+  flex: 1 1 auto; /* SUI-R1-04: أساس المحتوى + نمو متساوٍ — قرار الالتفاف يتبع عرض التسمية الفعلي */
+  max-width: 50%; /* SUI-R1-04: عنصر وحيد في صف ثانٍ لا يتمدد كامل الصف — يبقى متمركزًا */
   min-height: var(--micro-touch-min);
   display: inline-flex;
   flex-direction: column;
@@ -4836,6 +4848,29 @@ body {
   inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
 }
 
+/* SUI-R2 (تكامل القائد — مع SUI-R1-04): في «نظام التقييد اللاصق» (أعلى
+   التمرير مع شريط أطول من المسافة إلى navbar — يحدث عند 200%) يقيّد
+   sticky الشريط بأعلى حامله فتغطيه navbar الثابتة. المثبّت أدناه يضعه
+   عند حافة navbar العلوية نفسها التي يضعها الالتصاق الصحيح — بلا قفزة
+   عند الانتقال. عرض المثبّت يطابق عمود المحتوى (حشو 16 دون 390 و20
+   من 390، بحد 560 للحاوية). التبديل من example.js
+   (syncSelectBarPinning) — بلا مؤقتات. z-index أعلى من navbar (40)
+   كي لا يُطمر الشريط لحظة تحديث المتغير. */
+.f03-selectbar-fixed {
+  position: fixed;
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
+  inset-inline: var(--micro-space-4);
+  max-width: calc(560px - 2 * var(--micro-space-4));
+  margin-inline: auto;
+  z-index: 45;
+}
+@media (min-width: 390px) {
+  .f03-selectbar-fixed {
+    inset-inline: var(--micro-space-5);
+    max-width: calc(560px - 2 * var(--micro-space-5));
+  }
+}
+
 #f03-select-bar[hidden] { display: none; }
 
 #f03-select-bar .m-btn { flex: none; }
@@ -7142,11 +7177,19 @@ body {
       يلغي المؤقت الحالي ويخفي العنصر فعليًا ويطلق حدث
       micro-messages:toast-closed — قابل للاستدعاء من زر داخل
       الـtoast أو من المستهلك مباشرة (لا يعود محصورًا باللوحة).
-   3) MicroMessages.announce(text, opts) — إعلان بهوية الحدث (SUI-012):
-      opts.id يميّز الحدث نفسه — الحدث ذاته (id نفسه والنص نفسه)
-      يُعلن مرة واحدة، والحدث المستقل (id مختلف أو بلا id) يُعلن
-      ولو تطابق النص. الوسيط الثاني يقبل أيضًا المنطقي القديم
-      (assertive) للتوافق الخلفي، وopts.assertive للإلحاح.
+   3) MicroMessages.announce(text, opts) — إعلان بهوية الحدث (SUI-012
+      وSUI-R1-03): opts.id يميّز الحدث نفسه — الحدث ذاته (id نفسه والنص
+      نفسه) يُعلن مرة واحدة داخل عمر الهوية، والحدث المستقل (id مختلف
+      أو بلا id) يُعلن ولو تطابق النص. سجل هوية محدود وموثق (SUI-R1-03):
+      آخر 12 هوية معلنة فقط، وعمر الهوية 60000ms — بعد انتهاء العمر أو
+      إقصاء الهوية من السجل (الأقدم عند تجاوز 12) تصبح الهوية حدثًا
+      جديدًا يُعلن من جديد؛ نفس id بنص مختلف = حدث محدّث المحتوى يُعلن
+      ويحدّث نص الهوية المسجلة. الدعوة بلا id حدث مستقل لا يمس السجل.
+      الوسيط الثاني يقبل أيضًا المنطقي القديم (assertive) للتوافق الخلفي،
+      وopts.assertive للإلحاح.
+   3b) MicroMessages.resetAnnouncements() — يمسح سجل هويات الإعلان
+      (كل الأحداث بعده جديدة) لاستخدام المستهلك عند تغيير السياق أو
+      الوجهة (SUI-R1-03).
    4) إغلاق الرسائل الثابتة ذات زر (.m-note__close) — يخفي
       الرسالة ويعيد التركيز عند الطلب: سمة data-return-focus
       على الزر أو على الرسالة (محدد CSS لعنصر هدف صالح).
@@ -7160,8 +7203,18 @@ body {
   'use strict';
 
   var liveRegion = null;
-  /* SUI-012: آخر إعلان بهوية الحدث — المنع لهوية الحدث نفسه لا للنص */
-  var lastAnnounced = { text: '', id: undefined };
+  /* SUI-012 + SUI-R1-03: سجل هوية محدود لمنع إعادة إعلان الحدث نفسه
+     بعد حدث مستقل (كان آخر-إعلان-فقط يسمح بذلك). عقد السجل:
+     - CAPACITY=12: آخر 12 هوية معلنة فقط؛ الأقدم تُقصى عند التجاوز —
+       الذاكرة محدودة دومًا والهوية المقصية تصبح حدثًا جديدًا.
+     - LIFETIME_MS=60000: عمر الهوية 60s؛ بعده تُعتبر جديدة (تنظيف كسول
+       عند كل استدعاء announce/reset — الزمن عبر Date.now داخل الصفحة).
+     - الهوية = id نفسه والنص نفسه (كائن {id, text, at}).
+     - نفس id بنص مختلف = حدث محدّث المحتوى: يُعلن ويحدّث نص الهوية ووقتها.
+     - الدعوة بلا id لا تمس السجل أصلًا (حدث مستقل). */
+  var ANNOUNCE_CAPACITY = 12;
+  var ANNOUNCE_LIFETIME_MS = 60000;
+  var announcedIds = [];
 
   function ensureLiveRegion() {
     if (liveRegion && document.body.contains(liveRegion)) return liveRegion;
@@ -7171,6 +7224,15 @@ body {
     liveRegion.setAttribute('aria-atomic', 'true');
     document.body.appendChild(liveRegion);
     return liveRegion;
+  }
+
+  function pruneAnnouncedIds(now) {
+    /* تنظيف كسول: احذف المنتهية (عمر > LIFETIME_MS) ثم الفائض عن
+       CAPACITY (الأقدم أولًا) — ذاكرة محدودة في كل استدعاء */
+    for (var i = announcedIds.length - 1; i >= 0; i--) {
+      if (now - announcedIds[i].at > ANNOUNCE_LIFETIME_MS) announcedIds.splice(i, 1);
+    }
+    while (announcedIds.length > ANNOUNCE_CAPACITY) announcedIds.shift();
   }
 
   function announce(text, opts) {
@@ -7186,14 +7248,36 @@ body {
     }
     var region = ensureLiveRegion();
     region.setAttribute('aria-live', assertive ? 'assertive' : 'polite');
-    /* الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة؛ حدث مستقل (id مختلف
-       أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32) */
-    if (id !== undefined && id !== null && id === lastAnnounced.id && text === lastAnnounced.text) {
-      return;
+    /* SUI-R1-03: الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة داخل عمر
+       الهوية حتى لو أعقبه أحداث مستقلة (A,B,A = إعلانان)؛ الحدث المستقل
+       (id مختلف أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32).
+       بلا id: يُعلن دائمًا ولا يمس السجل */
+    if (id !== undefined && id !== null) {
+      var now = Date.now();
+      pruneAnnouncedIds(now);
+      for (var i = 0; i < announcedIds.length; i++) {
+        if (announcedIds[i].id === id) {
+          if (announcedIds[i].text === text && now - announcedIds[i].at <= ANNOUNCE_LIFETIME_MS) {
+            return; /* ابتلاء: الحدث ذاته داخل عمره */
+          }
+          /* id نفسه بنص مختلف: حدث محدّث المحتوى — يُعلن ويحدّث الهوية */
+          announcedIds[i] = { id: id, text: text, at: now };
+          break;
+        }
+      }
+      if (i === announcedIds.length) {
+        announcedIds.push({ id: id, text: text, at: now }); /* سجّل الهوية */
+      }
+      pruneAnnouncedIds(now); /* إقصاء الفائض عن 12 فور التسجيل */
     }
-    lastAnnounced = { text: text, id: id };
     region.textContent = '';
     window.setTimeout(function () { region.textContent = text; }, 50);
+  }
+
+  function resetAnnouncements() {
+    /* SUI-R1-03: مسح سجل الهويات لاستخدام المستهلك عند تغيير السياق/الوجهة —
+       كل الأحداث بعده جديدة؛ لا يمس المنطقة الحية نفسها */
+    announcedIds = [];
   }
 
   function toastText(el) {
@@ -7269,6 +7353,7 @@ body {
     toast: toast,
     closeToast: closeToast,
     announce: announce,
+    resetAnnouncements: resetAnnouncements,
     init: function (root) { bindClose(root); }
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroMessages.init(); });
@@ -9188,7 +9273,21 @@ body {
   }
 
   function initStrip(strip) {
-    if (strip.hasAttribute('data-info-peek-ready')) return;
+    if (strip.hasAttribute('data-info-peek-ready')) {
+      /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للشريط الجاهز
+         بعد disconnect — init لا يعود صامتًا فيترك الشريط بلا مراقبة عرض.
+         لا إعادة بناء هنا: المستمعات والأزرار والنقاط لم يفصلها disconnect
+         أصلًا فلا تُربط ثانية (لا ازدواج أحداث ولا عناصر). يُلحق مراقبًا
+         واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
+         يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterStrip
+         القياس (الشريط المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
+      var reSt = stateOf.get(strip);
+      if (reSt && reSt.count > 0) {
+        observeViewport(strip, reSt);
+        recenterStrip(strip, reSt);
+      }
+      return;
+    }
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');
     var slides = track ? Array.prototype.slice.call(track.children).filter(function (n) {
@@ -9306,7 +9405,12 @@ body {
         var ro = viewportObservers.get(strip);
         if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
         var st = stateOf.get(strip);
-        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+        if (st) {
+          st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+          /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
+             كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */
+          if (st.raf) { cancelAnimationFrame(st.raf); st.raf = null; }
+        }
       });
     }
   };
@@ -9893,6 +9997,28 @@ body {
       || form.querySelector('input[name="' + role + '"]');
   }
 
+  /* SUI-R1-01: عقد النتيجة — المستهلك يملك النتيجة والرسالة، والمكوّن لا
+     يستنتج دخولًا من مجرد اكتمال المعالج:
+     - result.message نص غير فارغ → يُعرض حرفيًا في منطقة الحالة.
+     - النبرة: result.tone إن كانت 'info' أو 'error'؛ وإلا 'error' عند
+       result.authenticated === false؛ وإلا 'info'.
+     - بلا message: result.authenticated === true → نص الدخول المؤكد
+       (المستهلك أكّد الدخول صراحة)؛ result.authenticated === false → نص
+       عدم الدخول؛ أي نتيجة أخرى (undefined أو كائن بلا مفاتيح معروفة مثل
+       {ok:true} أو {handled:true}) → نص محايد صادق لا يدّعي شيئًا.
+     المفاتيح message/tone/authenticated اختيارية موثقة في المواصفة —
+     ليست مخطط أعمال ملزمًا. الرفض يبقى رسالة الخطأ بنبرة error. */
+  function resultOutcome(result, confirmedText, deniedText, neutralText) {
+    var hasMessage = !!(result && typeof result.message === 'string' && result.message.trim() !== '');
+    var tone = 'info';
+    if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
+    else if (result && result.authenticated === false) tone = 'error';
+    if (hasMessage) return { text: result.message, tone: tone };
+    if (result && result.authenticated === true && confirmedText) return { text: confirmedText, tone: tone };
+    if (result && result.authenticated === false && deniedText) return { text: deniedText, tone: tone };
+    return { text: neutralText, tone: 'info' };
+  }
+
   function initGateway(gateway, callbacks) {
     if (gateway.hasAttribute('data-access-ready')) {
       gateway.__microAccessCallbacks = callbacks || gateway.__microAccessCallbacks || {};
@@ -9927,8 +10053,14 @@ body {
       if (typeof current.onRecovery !== 'function') return;
       Promise.resolve().then(function () { return current.onRecovery(); })
         .then(function (result) {
-          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها، وإلا رسالة المكوّن البسيطة */
-          setMessage(form, (result && typeof result.message === 'string' && result.message) || 'تم إرسال طلب المساعدة.', 'info');
+          /* SUI-013: نص بشري — رسالة المستهلك إن قدمها.
+             SUI-R1-01: بلا message لا ندّعي الإرسال من مجرد اكتمال
+             المعالج — نص محايد بنبرة info. */
+          var hasMessage = !!(result && typeof result.message === 'string' && result.message.trim() !== '');
+          var tone = 'info';
+          if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
+          else if (hasMessage && result && result.authenticated === false) tone = 'error';
+          setMessage(form, hasMessage ? result.message : 'انتهى طلب المساعدة دون تأكيد إرساله.', tone);
         })
         .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر إرسال طلب المساعدة.', 'error'); });
     });
@@ -9939,7 +10071,12 @@ body {
         var handler = current.providers && current.providers[key];
         if (typeof handler !== 'function') return;
         Promise.resolve().then(function () { return handler(); })
-          .then(function () { setMessage(form, 'تم الدخول بنجاح.', 'info'); })
+          .then(function (result) {
+            /* SUI-R1-01: عقد النتيجة — لا نجاح دخول من مجرد اكتمال
+               المعالج؛ المستهلك يصرّح بالنتيجة أو تبقى محايدة. */
+            var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+            setMessage(form, outcome.text, outcome.tone);
+          })
           .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر تنفيذ الدخول.', 'error'); });
       });
     });
@@ -10001,9 +10138,12 @@ body {
           password: passwordInput ? passwordInput.value : ''
         });
       }).then(function (result) {
+        /* SUI-R1-01: المكوّن يكتب رسالة النتيجة أولًا ثم يُطلق الحدث بعدها —
+           فالكلمة الأخيرة فوق منطقة الحالة لمستمع المستهلك ولا تُمسح رسالته
+           لاحقًا. النتيجة مسؤولية المستهلك بصياغة بشرية (SUI-013). */
+        var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+        setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
-        /* SUI-013: النتيجة مسؤولية المستهلك — بصياغة بشرية */
-        setMessage(form, 'تم التحقق من بيانات الدخول.', 'info');
       }).catch(function (error) {
         setMessage(form, error && error.message ? error.message : 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.', 'error');
       }).then(function () {
@@ -12410,6 +12550,7 @@ body {
         document.documentElement.style.setProperty('--f03-navbar-h', h + 'px');
       }
       /* h=0 (مخفي): آخر قيمة مقيسة تبقى — سياسة موثقة أعلاه */
+      syncSelectBarPinning(); /* تغير الارتفاع قد يبدّل نظام تقييد الشريط (SUI-R2) */
     };
     navbarObserver = new ResizeObserver(apply);
     navbarObserver.observe(el.navbar); /* content-box: يرصد تغير الخط والمحتوى */
@@ -12419,6 +12560,40 @@ body {
       if (navbarObserver) navbarObserver.disconnect();
     });
   }
+
+  /* ---------- SUI-R2 (تكامل القائد): تثبيت شريط التحديد عند نظام التقييد ----------
+     شريط التحديد sticky داخل حامله (#f03-select-zone) بإزاحة سفلية
+     --f03-navbar-h (عقد SUI-002). عند تكبير النص 200% يصبح الشريط
+     أطول من المسافة بين أعلى الحامل وأعلى navbar عند التمرير العلوي،
+     فيقيّده نظام sticky بأعلى الحامل ويغطي navbar الثابت (z-index 40)
+     أزراره السفلية — عيب سابق ضخمه التفاف navbar إلى صفين (SUI-R1-04).
+     الحل على مستوى المستهلك (لا تغيير عقد m-actionbar): في «نظام
+     التقييد» فقط يتحول الشريط إلى position:fixed بإزاحة navbar نفسها
+     وموضع هندسي مطابق تمامًا لحالة الالتصاق الصحيح — فلا قفزة بصرية
+     عند انتقال الحالتين (كلاهما يضع أسفل الشريط على حافة navbar العلوية).
+     المشغلات: التمرير (passive)، تغير ارتفاع navbar (RO أعلاه)،
+     تفعيل/إلغاء التحديد، تغير العرض، تغيير حجم النافذة — بلا مؤقتات. */
+  function syncSelectBarPinning() {
+    var bar = el.selectBar;
+    if (!bar) return;
+    var zone = el.selectZone;
+    var navbar = el.navbar;
+    var navbarTop = navbar && !navbar.hidden ? navbar.getBoundingClientRect().top : 0;
+    if (bar.hidden || !zone || navbarTop <= 0 || zone.getBoundingClientRect().height <= 0) {
+      bar.classList.remove('f03-selectbar-fixed');
+      return;
+    }
+    var zoneTop = zone.getBoundingClientRect().top;
+    var barH = bar.offsetHeight;
+    var margin = parseFloat(getComputedStyle(bar).marginBlockStart) || 0;
+    /* نظام التقييد: موضع الشريط اللاصق المقيد (أعلى الحامل + حاشيته +
+       ارتفاعه) ينزل تحت حافة navbar العلوية → ثبّته بدل الالتصاق المقيد */
+    var clamped = zoneTop + margin + barH > navbarTop;
+    bar.classList.toggle('f03-selectbar-fixed', clamped);
+  }
+
+  window.addEventListener('scroll', syncSelectBarPinning, { passive: true });
+  window.addEventListener('resize', syncSelectBarPinning);
 
   /* ---------- تبديل العروض: تركيز وتمرير وnavbar موثقة ---------- */
   var MAIN_VIEWS = ['home', 'list', 'reports', 'account'];
@@ -12482,12 +12657,14 @@ body {
 
   function bindGateway() {
     if (!el.gatewayRoot || !window.MicroAccessGateway) return;
-    var submitArmed = false;
     window.MicroAccessGateway.init(el.gatewayRoot, {
       onSubmit: function () {
-        /* محاكاة حتمية: نجاح بعد زمن ثابت — لا مصادقة ولا شبكة */
+        /* محاكاة حتمية: نجاح بعد زمن ثابت — لا مصادقة ولا شبكة.
+           SUI-R1-01: الموصل التجريبي نفسه يصرّح بنتيجة الدخول
+           (authenticated:true) فتُعرض رسالة الدخول من تصريح المستهلك
+           لا من مجرد اكتمال المعالج. */
         return new Promise(function (resolve) {
-          window.setTimeout(function () { resolve({ ok: true }); }, 600);
+          window.setTimeout(function () { resolve({ authenticated: true }); }, 600);
         });
       },
       onRecovery: function () {
@@ -12497,9 +12674,10 @@ body {
       },
       providers: {
         demo: function () {
-          /* الطريق السهل: ضغطة واحدة للدخول إلى التجربة */
+          /* الطريق السهل: ضغطة واحدة للدخول إلى التجربة — والعرض نفسه
+             يصرّح بالنتيجة (SUI-R1-01: authenticated:true) */
           enterApp();
-          return Promise.resolve({ ok: true });
+          return Promise.resolve({ authenticated: true });
         }
       }
     });
@@ -12842,6 +13020,7 @@ body {
   function syncSelectionUI(filtered) {
     if (state.selecting) {
       el.selectBar.hidden = false;
+      syncSelectBarPinning(); /* التفعيل: قيّم نظام التقييد فورًا (SUI-R2) */
       var n = selectedCount();
       el.selectDelete.disabled = n === 0;
       el.selectDelete.setAttribute('aria-label', n === 0

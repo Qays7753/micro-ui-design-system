@@ -471,7 +471,19 @@
   }
 
   function setup(carousel) {
-    if (stateOf.get(carousel)) return; /* إعادة init آمنة */
+    var existing = stateOf.get(carousel);
+    if (existing) {
+      /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للعارض الجاهز
+         بعد disconnect — setup لا يعود صامتًا فيترك العارض بلا مراقبة عرض.
+         لا إعادة بناء هنا: المستمعات والأزرار والنقاط لم يفصلها disconnect
+         أصلًا فلا تُربط ثانية (لا ازدواج أحداث ولا عناصر). يُلحق مراقبًا
+         واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
+         يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterCarousel
+         القياس (العارض المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
+      observeViewport(carousel, existing);
+      recenterCarousel(carousel, existing);
+      return; /* إعادة init آمنة — بلا إعادة ربط */
+    }
     var st = parts(carousel);
     st.index = 0;
     st.x = 0;
@@ -514,7 +526,12 @@
 
   window.MicroCarousel = {
     init: function (root) {
-      (root || document).querySelectorAll('[data-carousel]').forEach(setup);
+      /* SUI-R2-A2 (إصلاح SUI-R1-02): الجذر-الذات إن كان عارضًا يُعالج هنا
+         — تطابقًا مع disconnect الذي يعالجه (كان التعارض موثقًا في
+         SUI-R1-02: disconnect يفصل الجذر-الذات وinit لا يصل إليه). */
+      var scope = root || document;
+      if (scope.matches && scope.matches('[data-carousel]')) setup(scope);
+      scope.querySelectorAll('[data-carousel]').forEach(setup);
     },
     goTo: goToIndex,
     next: next,
@@ -535,7 +552,12 @@
         var ro = viewportObservers.get(carousel);
         if (ro) { ro.disconnect(); viewportObservers.delete(carousel); }
         var st = stateOf.get(carousel);
-        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+        if (st) {
+          st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+          /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
+             كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */
+          if (st.raf) { cancelAnimationFrame(st.raf); st.raf = null; }
+        }
       });
     }
   };

@@ -1,0 +1,34 @@
+# فحص الوكيل 1 — SAMSUNG-ONEUI-REPAIR-R2 — SUI-R2-A1/SUI-R1-01 — tag=before — 2026-10-08T14:00:09
+# الخادم: http://127.0.0.1:4400 (نطاق الوكيل 1) — meta: {"commit": "be5263c474c066ee3a5136e37866a5ac82c3aa6a", "tree": "e8910134dac718f621ed5a4e79b441011f31e936", "source_clean": false, "dirty_files": ["?? reviews/SAMSUNG-ONEUI-REPAIR-R2/", "?? tools/sui-r2-a1-check.py"], "note": "ملفات الوكيل غير المتتبعة (الأداة نفسها + مجلد أدلة الجولة) تظهر هنا إن وُجدت — لا مصدر مُعدّل خارج الملكية"}
+FAIL  A1-01 مزوّد يعيد undefined → النص المحايد حرفيًا (لا استنتاج نجاح من اكتمال المعالج) — {"text": "تم الدخول بنجاح.", "tone": "info", "busy": null, "busyFlag": null}
+FAIL  A1-01b النص لا يحوي «تم الدخول بنجاح» ولا «تم التحقق» — {"text": "تم الدخول بنجاح.", "tone": "info", "busy": null, "busyFlag": null}
+PASS  A1-01c نبرة النص المحايد info — tone=info
+PASS  A1-02 مزوّد يعيد {authenticated:true} → «تم الدخول بنجاح.» بنبرة info — {"text": "تم الدخول بنجاح.", "tone": "info", "busy": null, "busyFlag": null}
+FAIL  A1-03 onSubmit يعيد undefined → النص المحايد حرفيًا (بلا ادعاء نجاح) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+PASS  A1-03b نبرة المحايد info — tone=info
+FAIL  A1-04 onSubmit يعيد {authenticated:true} → «تم الدخول بنجاح.» وdata-tone=info — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-05 onSubmit يعيد {authenticated:false} بلا message → «لم يتم الدخول.» وdata-tone=error — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-06 onSubmit يعيد {authenticated:false,message:'لم يتم الدخول'} → الرسالة تبقى حرفيًا بنبرة error (لا تُستبدل) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false", "كانت تُستبدل بـ": "تم التحقق من بيانات الدخول."}
+FAIL  A1-07 onSubmit يعيد {ok:true} (مفتاح غير معروف) → النص المحايد (ليس مخططًا ملزمًا) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-08 result.message نص غير فارغ → يُعرض حرفيًا وresult.tone='error' يُحترم — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-09 message مع authenticated:true → الرسالة تُعرض (لا تبتلعها رسالة الدخول) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-10 مستمع micro-access:submitted يكتب رسالة → تبقى حرفيًا بعد اكتمال المسار (الكلمة الأخيرة للمستهلك) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false", "events": 1, "كانت تُمحى بـ": "تم التحقق من بيانات الدخول."}
+PASS  A1-10b الحدث micro-access:submitted أُطلق مرة واحدة — events=1
+PASS  A1-11 رفض Promise بخطأ → error.message بنبرة error — {"text": "تعذّر الاتصال بخدمة الدخول التجريبية.", "tone": "error", "busy": null, "busyFlag": "false"}
+PASS  A1-12 طلبان متتاليان أثناء busy → معالج واحد يُستدعى (حارس microAccessBusy محفوظ) — calls=1
+PASS  A1-12b aria-busy='true' أثناء المعالجة — {"text": "جارٍ التحقق من بيانات الدخول…", "tone": "info", "busy": "true", "busyFlag": "true"}
+PASS  A1-12c بعد الإنجاز: aria-busy مُزالة وmicroAccessBusy='false' — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+FAIL  A1-12d نتيجة الطلب المعلّق تُطبق (لم يتم الدخول بنبرة error) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+PASS  A1-13 detail حدث submitted لا يحمل كلمة المرور (يحمل {result} فقط) — {"detailJson": "{\"result\":{\"authenticated\":true}}", "detailHasPassword": false, "detailKeys": ["result"], "attrHits": [], "localStorageHit": false, "sessionStorageHit": false}
+PASS  A1-13b لا سمة/dataset على البوابة أو النموذج تحمل كلمة المرور ولا في localStorage/sessionStorage — {"detailJson": "{\"result\":{\"authenticated\":true}}", "detailHasPassword": false, "detailKeys": ["result"], "attrHits": [], "localStorageHit": false, "sessionStorageHit": false}
+FAIL  A1-14 onRecovery بلا message → «انتهى طلب المساعدة دون تأكيد إرساله.» (لا ادعاء إرسال) بنبرة info — {"text": "تم إرسال طلب المساعدة.", "tone": "info", "busy": null, "busyFlag": null}
+PASS  A1-15 onRecovery يعيد message → تُعرض وتُحترم حرفيًا — {"text": "رسالة مساعدة من المستهلك: تعذر الإرسال في هذا العرض.", "tone": "info", "busy": null, "busyFlag": null}
+PASS  A1-16 بلا onSubmit (concepts) → نص العرض التجريبي الحالي حرفيًا — {"text": "هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.", "tone": "info", "busy": null, "busyFlag": null}
+FAIL  A1-17 concepts: مزوّد يعيد undefined → النص المحايد (نفس العقد على مستضيف ثانٍ) — {"text": "تم الدخول بنجاح.", "tone": "info", "busy": null, "busyFlag": null}
+FAIL  A1-18 concepts: رسالة مستمع الحدث تبقى فوق منطقة الحالة (لا يمسحها المكوّن) — {"text": "تم التحقق من بيانات الدخول.", "tone": "info", "busy": null, "busyFlag": "false"}
+PASS  A1-19 F03: الإرسال الصالح يدخل التطبيق (entered=true وview=home) — {"view": "home", "entered": true, "text": "تم التحقق من بيانات الدخول.", "tone": "info"}
+FAIL  A1-19b F03: النص النهائي «تم الدخول بنجاح.» (المستهلك أكّد الدخول) — {"view": "home", "entered": true, "text": "تم التحقق من بيانات الدخول.", "tone": "info"}
+PASS  A1-20 F03: المزوّد التجريبي يدخل التطبيق والنص «تم الدخول بنجاح.» (العرض يصرّح بالنتيجة) — {"view": "home", "entered": true, "text": "تم الدخول بنجاح.", "tone": "info"}
+PASS  A1-21 صفر أخطاء صفحة عبر الجلسة كلها (pageerrors) — []
+
+# النتيجة (before): 15/30 ناجح — info: 0

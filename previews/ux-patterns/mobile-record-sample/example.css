@@ -296,6 +296,29 @@ body {
   inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
 }
 
+/* SUI-R2 (تكامل القائد — مع SUI-R1-04): في «نظام التقييد اللاصق» (أعلى
+   التمرير مع شريط أطول من المسافة إلى navbar — يحدث عند 200%) يقيّد
+   sticky الشريط بأعلى حامله فتغطيه navbar الثابتة. المثبّت أدناه يضعه
+   عند حافة navbar العلوية نفسها التي يضعها الالتصاق الصحيح — بلا قفزة
+   عند الانتقال. عرض المثبّت يطابق عمود المحتوى (حشو 16 دون 390 و20
+   من 390، بحد 560 للحاوية). التبديل من example.js
+   (syncSelectBarPinning) — بلا مؤقتات. z-index أعلى من navbar (40)
+   كي لا يُطمر الشريط لحظة تحديث المتغير. */
+.f03-selectbar-fixed {
+  position: fixed;
+  inset-block-end: calc(var(--f03-navbar-h, 53px) + env(safe-area-inset-bottom, 0px));
+  inset-inline: var(--micro-space-4);
+  max-width: calc(560px - 2 * var(--micro-space-4));
+  margin-inline: auto;
+  z-index: 45;
+}
+@media (min-width: 390px) {
+  .f03-selectbar-fixed {
+    inset-inline: var(--micro-space-5);
+    max-width: calc(560px - 2 * var(--micro-space-5));
+  }
+}
+
 #f03-select-bar[hidden] { display: none; }
 
 #f03-select-bar .m-btn { flex: none; }

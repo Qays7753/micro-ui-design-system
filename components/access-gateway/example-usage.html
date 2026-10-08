@@ -63,5 +63,23 @@
   <script src="../fields/fields.js"></script>
   <script src="../buttons/buttons.js"></script>
   <script src="access-gateway.js"></script>
+  <script>
+    /* SUI-R1-01 — مثال عقد النتيجة (تعاقب موثق):
+       معالج محلي حتمي بلا شبكة يرجع كائنًا فيه message وauthenticated:false —
+       البوابة تعرض رسالة المستهلك حرفيًا بنبرة الخطأ ولا تستنتج نجاحًا من
+       مجرد اكتمال المعالج؛ والعدم إرسال أي بيانات يبقى مصرّحًا في الصفحة. */
+    document.addEventListener('DOMContentLoaded', function () {
+      var gateway = document.querySelector('[data-access-gateway]');
+      if (!gateway || !window.MicroAccessGateway) return;
+      window.MicroAccessGateway.init(gateway, {
+        onSubmit: function () {
+          return Promise.resolve({
+            authenticated: false,
+            message: 'عرض محلي: لم يتم الدخول — لا خدمة مصادقة متصلة.'
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>

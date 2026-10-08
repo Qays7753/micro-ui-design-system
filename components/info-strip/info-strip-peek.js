@@ -256,7 +256,21 @@
   }
 
   function initStrip(strip) {
-    if (strip.hasAttribute('data-info-peek-ready')) return;
+    if (strip.hasAttribute('data-info-peek-ready')) {
+      /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للشريط الجاهز
+         بعد disconnect — init لا يعود صامتًا فيترك الشريط بلا مراقبة عرض.
+         لا إعادة بناء هنا: المستمعات والأزرار والنقاط لم يفصلها disconnect
+         أصلًا فلا تُربط ثانية (لا ازدواج أحداث ولا عناصر). يُلحق مراقبًا
+         واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
+         يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterStrip
+         القياس (الشريط المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
+      var reSt = stateOf.get(strip);
+      if (reSt && reSt.count > 0) {
+        observeViewport(strip, reSt);
+        recenterStrip(strip, reSt);
+      }
+      return;
+    }
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');
     var slides = track ? Array.prototype.slice.call(track.children).filter(function (n) {
@@ -374,7 +388,12 @@
         var ro = viewportObservers.get(strip);
         if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
         var st = stateOf.get(strip);
-        if (st) st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+        if (st) {
+          st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
+          /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
+             كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */
+          if (st.raf) { cancelAnimationFrame(st.raf); st.raf = null; }
+        }
       });
     }
   };
