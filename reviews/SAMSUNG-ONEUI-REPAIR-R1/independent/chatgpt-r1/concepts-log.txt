@@ -1,0 +1,156 @@
+PASS Gallery loads real local fonts
+PASS Strip contains independent numeric, circle/bar and separated-circle cards
+PASS Previous is disabled on first card
+PASS Next changes the active card
+PASS Non-current cards inert
+PASS Last card disables next
+PASS RTL rightward swipe advances
+PASS Vertical touch does not advance
+PASS No automatic card advance
+PASS 320px card 1: no horizontal overflow
+PASS 320px card 1: no clipped internal reading
+PASS 320px card 2: no horizontal overflow
+PASS 320px card 2: no clipped internal reading
+PASS 320px card 3: no horizontal overflow
+PASS 320px card 3: no clipped internal reading
+PASS 320px separated circles are round and entirely inside the card
+PASS 320px separated circles do not touch
+PASS 320px area ratios match 64:25:9, not diameter ratios
+PASS 320px overlap circles are round and bounded
+PASS 320px overlap layout really overlaps
+PASS 320px card 1: text 200% fits
+PASS 320px card 1: text 200% not internally clipped
+PASS 320px card 2: text 200% fits
+PASS 320px card 2: text 200% not internally clipped
+PASS 320px card 3: text 200% fits
+PASS 320px card 3: text 200% not internally clipped
+PASS 320px 200%: inside-circle text fits or uses full external fallback
+PASS 360px card 1: no horizontal overflow
+PASS 360px card 1: no clipped internal reading
+PASS 360px card 2: no horizontal overflow
+PASS 360px card 2: no clipped internal reading
+PASS 360px card 3: no horizontal overflow
+PASS 360px card 3: no clipped internal reading
+PASS 360px separated circles are round and entirely inside the card
+PASS 360px separated circles do not touch
+PASS 360px area ratios match 64:25:9, not diameter ratios
+PASS 360px overlap circles are round and bounded
+PASS 360px overlap layout really overlaps
+PASS 360px card 1: text 200% fits
+PASS 360px card 1: text 200% not internally clipped
+PASS 360px card 2: text 200% fits
+PASS 360px card 2: text 200% not internally clipped
+PASS 360px card 3: text 200% fits
+PASS 360px card 3: text 200% not internally clipped
+PASS 360px 200%: inside-circle text fits or uses full external fallback
+PASS 390px card 1: no horizontal overflow
+PASS 390px card 1: no clipped internal reading
+PASS 390px card 2: no horizontal overflow
+PASS 390px card 2: no clipped internal reading
+PASS 390px card 3: no horizontal overflow
+PASS 390px card 3: no clipped internal reading
+PASS 390px separated circles are round and entirely inside the card
+PASS 390px separated circles do not touch
+PASS 390px area ratios match 64:25:9, not diameter ratios
+PASS 390px overlap circles are round and bounded
+PASS 390px overlap layout really overlaps
+PASS 390px card 1: text 200% fits
+PASS 390px card 1: text 200% not internally clipped
+PASS 390px card 2: text 200% fits
+PASS 390px card 2: text 200% not internally clipped
+PASS 390px card 3: text 200% fits
+PASS 390px card 3: text 200% not internally clipped
+PASS 390px 200%: inside-circle text fits or uses full external fallback
+PASS 430px card 1: no horizontal overflow
+PASS 430px card 1: no clipped internal reading
+PASS 430px card 2: no horizontal overflow
+PASS 430px card 2: no clipped internal reading
+PASS 430px card 3: no horizontal overflow
+PASS 430px card 3: no clipped internal reading
+PASS 430px separated circles are round and entirely inside the card
+PASS 430px separated circles do not touch
+PASS 430px area ratios match 64:25:9, not diameter ratios
+PASS 430px overlap circles are round and bounded
+PASS 430px overlap layout really overlaps
+PASS 430px card 1: text 200% fits
+PASS 430px card 1: text 200% not internally clipped
+PASS 430px card 2: text 200% fits
+PASS 430px card 2: text 200% not internally clipped
+PASS 430px card 3: text 200% fits
+PASS 430px card 3: text 200% not internally clipped
+PASS 430px 200%: inside-circle text fits or uses full external fallback
+PASS Comparison state standard: layout fits
+PASS Comparison state standard: known readings get magnitude circles or zero markers
+PASS Comparison state small: layout fits
+PASS Comparison state small: known readings get magnitude circles or zero markers
+PASS Comparison state negative: layout fits
+PASS Comparison state negative: known readings get magnitude circles or zero markers
+PASS Signed circles compare magnitude without hiding the negative sign
+PASS Zero marker is separate from the scaled magnitude circles
+PASS Negative bar ends at zero and positive bar starts at the same zero
+PASS Comparison state missing: layout fits
+PASS Comparison state missing: known readings get magnitude circles or zero markers
+PASS Comparison state invalid: layout fits
+PASS Comparison state invalid: known readings get magnitude circles or zero markers
+PASS Comparison state zero: layout fits
+PASS Comparison state zero: known readings get magnitude circles or zero markers
+PASS All-zero data is a normal state with three unfilled markers
+PASS Comparison state mixed: layout fits
+PASS Comparison state mixed: known readings get magnitude circles or zero markers
+PASS Different units never get misleading common bars
+PASS Comparison reset restores selection
+PASS Standard sample actually renders three independent bars
+PASS Invalid/insufficient declared maximum '' rejected without fallback geometry
+PASS Invalid/insufficient declared maximum '0' rejected without fallback geometry
+PASS Invalid/insufficient declared maximum '-1' rejected without fallback geometry
+PASS Invalid/insufficient declared maximum 'bad' rejected without fallback geometry
+PASS Invalid/insufficient declared maximum '1' rejected without fallback geometry
+PASS Invalid declared radius is explicitly rejected
+PASS Empty circle source has explicit empty state
+PASS All-negative data still renders magnitude circles, including Unicode minus
+PASS Negative magnitude areas preserve the 64:25:9 ratios
+PASS Editable labels propagate from source without duplicating the component
+PASS Existing shared surface token changes the real source-rendered card
+PASS Account settings opens as one dialog
+PASS Background is inert
+PASS Application settings replaces account content
+PASS Still only one dialog
+PASS Settings focus stays in dialog (Tab)
+PASS Settings focus stays in dialog (Tab)
+PASS Settings focus stays in dialog (Shift+Tab)
+PASS Settings focus stays in dialog (Tab)
+PASS Settings focus stays in dialog (Tab)
+PASS Settings focus stays in dialog (Tab)
+PASS Settings focus stays in dialog (Tab)
+PASS Setting control changes locally
+PASS Demo announces no persistence
+PASS Back returns to account
+PASS Closing restores settings launcher focus
+PASS Closing removes background inert
+PASS Settings reopens and closes cleanly
+PASS No unwired providers or recovery shown
+PASS Password reveal preserves value
+PASS Password conceal restores password type
+PASS Invalid email explicitly marked
+FAIL Unwired submit does not claim real login
+PASS Async submit prevents duplicate calls
+PASS Async submit announces busy state
+PASS Async completion clears busy
+PASS Recovery/provider appear only with callbacks
+PASS Callback rejection displayed explicitly
+PASS info-strip works without gallery styles
+PASS metric-comparison works without gallery styles
+PASS account-settings works without gallery styles
+PASS Independent settings example actually opens the dialog
+PASS access-gateway works without gallery styles
+PASS Category a: normal-sized circle readings meet 4.5:1 contrast
+PASS Category b: normal-sized circle readings meet 4.5:1 contrast
+PASS Category c: normal-sized circle readings meet 4.5:1 contrast
+PASS Category d: normal-sized circle readings meet 4.5:1 contrast
+PASS Category e: normal-sized circle readings meet 4.5:1 contrast
+PASS circle boundaries/zero markers distinguish light data colors at 3:1
+PASS bar boundaries/zero markers distinguish light data colors at 3:1
+PASS Reduced-motion carousel is stationary between states
+PASS No page JavaScript exceptions
+PASS All requested local assets load
+Result: 154/155

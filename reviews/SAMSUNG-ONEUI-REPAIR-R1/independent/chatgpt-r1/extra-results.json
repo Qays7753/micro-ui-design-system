@@ -1,0 +1,72 @@
+{
+  "head": "eab02bbc42ef8067572d4caf85b417df9bb8e928",
+  "checks": {
+    "provider": {
+      "text": "تم الدخول بنجاح.",
+      "calls": 1
+    },
+    "submit": {
+      "text": "تم التحقق من بيانات الدخول.",
+      "result": {
+        "authenticated": false,
+        "message": "لم يتم الدخول"
+      },
+      "calls": 1
+    },
+    "announcement": {
+      "added": [
+        "نتيجة العملية",
+        "نتيجة العملية",
+        "نتيجة العملية"
+      ],
+      "count": 3
+    },
+    "peek": {
+      "initial": {
+        "observers": 1,
+        "width": 320,
+        "left": 30,
+        "right": 30,
+        "transform": "matrix(1, 0, 0, 1, 242, 0)"
+      },
+      "after_disconnect_init_resize": {
+        "observers": 1,
+        "width": 360,
+        "left": -10,
+        "right": 70,
+        "transform": "matrix(1, 0, 0, 1, 242, 0)"
+      },
+      "manual_same_index": {
+        "observers": 1,
+        "width": 360,
+        "left": 30,
+        "right": 30,
+        "transform": "matrix(1, 0, 0, 1, 282, 0)"
+      }
+    },
+    "carousel": {
+      "initial": {
+        "observers": 1,
+        "width": 320,
+        "left": 36,
+        "right": 36,
+        "transform": "matrix(1, 0, 0, 1, 224, 0)"
+      },
+      "after_disconnect_init_resize": {
+        "observers": 1,
+        "width": 360,
+        "left": -4,
+        "right": 76,
+        "transform": "matrix(1, 0, 0, 1, 224, 0)"
+      },
+      "manual_same_index": {
+        "observers": 1,
+        "width": 360,
+        "left": 36,
+        "right": 36,
+        "transform": "matrix(1, 0, 0, 1, 264, 0)"
+      }
+    }
+  },
+  "browser": "153.0.8010.0"
+}
