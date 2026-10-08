@@ -159,6 +159,67 @@
 /* بيانات المستهلك (مصدر واحد قابل للتعديل) — مخفية بصريًا لأن المرسوم يعرضها */
 .m-chart__data[hidden] { display: none; }
 
+/* ---- W3.1 (D-UI-04 — قرار مالك): إفصاح بيانات الرسم ----
+   زر disclosure + جدول دلالي (caption/thead/scope) داخل .m-chart —
+   يعاد بناؤه في كل دورة تصيير من مصدر البيانات نفسه (data.js) فيبقى
+   متزامنًا مع dataset الحالي بنيويًا. الألوان والقياسات من التوكنز
+   القائمة حصرًا — لا قيم جديدة. */
+.m-chart__dataset-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+.m-chart__disclose {
+  align-self: flex-start;
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-4);
+  border: 0;
+  border-radius: var(--micro-radius-capsule);
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.m-chart__disclose:hover { background: var(--micro-surface-selected); }
+.m-chart__disclose:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-chart__dataset {
+  width: 100%;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  border-collapse: collapse;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-chart__dataset caption {
+  text-align: start;
+  padding: var(--micro-space-2) var(--micro-space-3);
+  color: var(--micro-text-secondary);
+}
+.m-chart__dataset th,
+.m-chart__dataset td {
+  text-align: start;
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+.m-chart__dataset thead th { color: var(--micro-text-secondary); font-weight: 600; }
+.m-chart__dataset tbody th { color: var(--micro-text-primary); font-weight: 500; }
+.m-chart__dataset tbody tr:last-child th,
+.m-chart__dataset tbody tr:last-child td { border-block-end: 0; }
+.m-chart__dataset td {
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ألوان الفئات — تعيين ثابت بالمفتاح (لا بالترتيب) من ألوان البيانات المعتمدة */
 .m-cat--a { --cat: var(--micro-data-a); }  /* #164D59 */
 .m-cat--b { --cat: var(--micro-data-b); }  /* #F4AD76 */

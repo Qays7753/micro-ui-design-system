@@ -770,15 +770,150 @@
     plot.appendChild(legend);
   }
 
+  /* ---- W3.1 (A4-D01/A4-R02 — D-UI-04): اسم ووصف الرسم مربوطان برمجيًا ----
+     العنوان المرئي (.m-chart__title) هو مصدر الاسم عندما يوجد (id مولد
+     إن لزم + aria-labelledby) — مصدر واحد بدل تكرار aria-label من
+     data-title بجانب عنوان مرئي مختلف؛ والملخص (p[data-summary]) يرتبط
+     بالرسم عبر aria-describedby فيقرأه قارئ الشاشة وصفًا للرسم لا نصًا
+     حائرًا بجواره. غياب العنوان المرئي يُبقي aria-label من data-title
+     كما كان. */
+  var chartUid = 0;
+
+  function ensureId(el, prefix) {
+    if (!el.id) el.id = prefix + '-' + (++chartUid);
+    return el.id;
+  }
+
+  function linkChartName(chart) {
+    var svg = chart.querySelector('[data-plot] > svg[role="img"]');
+    if (!svg) return;
+    var titleEl = chart.querySelector('.m-chart__title');
+    if (titleEl && String(titleEl.textContent || '').trim()) {
+      svg.setAttribute('aria-labelledby', ensureId(titleEl, 'micro-chart-title'));
+      svg.removeAttribute('aria-label'); /* المصدر واحد: العنوان المرئي */
+    }
+    var summary = chart.querySelector('[data-summary]');
+    if (summary) svg.setAttribute('aria-describedby', ensureId(summary, 'micro-chart-summary'));
+  }
+
+  /* ---- W3.1 (D-UI-04 — قرار مالك): إفصاح بيانات داخل الرسم ----
+     زر disclosure + جدول دلالي (caption/thead/tbody/scope) داخل .m-chart
+     نفسه — لا صفحة منتج ولا عائلة مكونات جديدة. الجدول يُعاد بناؤه في
+     كل دورة تصيير من مصدر البيانات نفسه فيبقى متزامنًا مع dataset الحالي
+     بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
+     aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
+  function valueStateText(it) {
+    if (it.value === null) return '— غير متاح';
+    if (it.value < 0) return fmt(it.value) + ' (سالب غير مرسوم)';
+    var base = fmt(it.value);
+    return it.outlier ? base + ' (قيمة شاذة)' : base;
+  }
+
+  function syncDatasetTable(chart, items) {
+    var wrap = chart.querySelector('.m-chart__dataset-wrap');
+    var btn, table;
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'm-chart__dataset-wrap';
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'm-chart__disclose';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'عرض البيانات كجدول';
+      table = document.createElement('table');
+      table.className = 'm-chart__dataset';
+      table.id = 'micro-chart-dataset-' + (++chartUid);
+      btn.setAttribute('aria-controls', table.id);
+      table.hidden = true;
+      wrap.appendChild(btn);
+      wrap.appendChild(table);
+      /* الإدراج بعد الملخص (آخر عنصر في بنية .m-chart) — ترتيب قراءة:
+         العنوان، الرسم، الملخص، ثم الإفصاح */
+      chart.appendChild(wrap);
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        table.hidden = open;
+        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+      });
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    if (!btn || !table) return;
+    /* إعادة البناء كل دورة — التزامن مضمون بنيويًا */
+    table.textContent = '';
+    var caption = document.createElement('caption');
+    var titleEl = chart.querySelector('.m-chart__title');
+    caption.textContent = String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim();
+    table.appendChild(caption);
+    var thead = document.createElement('thead');
+    var headRow = document.createElement('tr');
+    ['الفئة', 'القيمة'].forEach(function (h) {
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'col');
+      th.textContent = h;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    items.forEach(function (it) {
+      var tr = document.createElement('tr');
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'row');
+      th.textContent = it.label;
+      tr.appendChild(th);
+      var td = document.createElement('td');
+      td.textContent = valueStateText(it);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+  }
+
   /* ---- دوائر المساحة: المساحة ∝ القيمة (نصف القطر √) ---- */
   function renderBubbles(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var rmaxAttr = parseNum(chart.getAttribute('data-rmax')); /* R2-05: كامل لا بادئة */
     var Rmax = (rmaxAttr !== null && rmaxAttr > 0) ? rmaxAttr : 52;
     var positive = items.filter(function (i) { return i.value !== null && i.value > 0; });
-    var vmaxAttr = parseNum(chart.getAttribute('data-max'));
-    var vmax = (vmaxAttr !== null && vmaxAttr > 0) ? vmaxAttr :
-      Math.max.apply(null, positive.map(function (i) { return i.value; }).concat([1]));
+    /* W3.2 (A4-D03): عقد مقياس A01 نفسه المطبق على bars/line — لا
+       استبدال صامت لـdata-max غير الصالح ولا دائرة تتجاوز rmax:
+       - غائب → مقياس تلقائي موثق يستوعب أكبر قيمة موجبة (أرضية 1).
+       - معلن غير صالح (غير رقمي/0/سالب) → رفض صريح: رسالة سبب +
+         القراءات كاملة في قائمة بلا رسم نسبي (نفس renderScaleRefusal).
+       - معلن أصغر من أكبر قيمة → تجاوز: الافتراضي «رفض»؛ خيار صريح
+         data-overscale="rescale" يرسم بمقياس موسّع يستوعب القيم مع
+         ملاحظة ظاهرة — وفي كل الأحوال r = Rmax×√(value/vmax) ≤ Rmax
+         لأن vmax ≥ أكبر قيمة مرسومة (لا تجاوز صامت للحد المعلن). */
+    var rawMax = chart.getAttribute('data-max');
+    var hasDeclared = rawMax !== null && String(rawMax).trim() !== '';
+    var declared = hasDeclared ? parseNum(rawMax) : null;
+    var largest = positive.length
+      ? Math.max.apply(null, positive.map(function (i) { return i.value; }))
+      : 0;
+    var scaleKind = 'auto';
+    if (hasDeclared) {
+      if (declared === null || declared <= 0) scaleKind = 'invalid';
+      else if (largest > declared) scaleKind = 'over';
+      else scaleKind = 'ok';
+    }
+    if (scaleKind === 'invalid') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, { kind: 'invalid' },
+        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
+        'bubbles: data-max="' + rawMax + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
+      return;
+    }
+    if (scaleKind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, { kind: 'over' },
+        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
+        'bubbles: أكبر قيمة (' + fmt(largest) + ') تتجاوز data-max="' + fmt(declared) + '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
+      return;
+    }
+    var vmax = (scaleKind === 'ok') ? declared : Math.max(largest, 1);
     var wrap = document.createElement('div');
     wrap.className = 'm-bubbles';
     items.forEach(function (it) {
@@ -814,6 +949,15 @@
     });
     plot.innerHTML = '';
     plot.appendChild(wrap);
+    if (scaleKind === 'over') {
+      /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
+      var note = document.createElement('p');
+      note.className = 'm-chart__scale-note';
+      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + ' — القيم الأصلية دون تغيير.';
+      plot.appendChild(note);
+      chart.setAttribute('data-scale-state', 'over-rescaled');
+      chart.setAttribute('data-scale-detail', 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(declared) + ' إلى ' + fmt(vmax) + '؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.');
+    }
   }
 
   /* ---- R3-UI01: رصد عرض الحاوية — إعادة قياس ورسم تلقائية (bars/line) ----
@@ -872,9 +1016,20 @@
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
     else if (kind === 'bubbles') renderBubbles(chart, items);
+    /* W3.1: اسم ووصف الرسم مربوطان برمجيًا بعد التصيير (العنوان المرئي
+       مصدر الاسم، والملخص وصف مرتبط) — انظر linkChartName */
+    linkChartName(chart);
+    /* W3.1 (D-UI-04): إفصاح بيانات داخل الرسم — الجدول يعاد بناؤه من
+       dataset الحالي في كل دورة فلا انحراف بنيوي ممكن */
+    syncDatasetTable(chart, items);
     /* R3-UI01: خزّن عرض الرسم الحالي وألحق المراقب — bars/line فقط */
     if (kind === 'bars' || kind === 'line') rememberRenderWidth(chart);
-    if (summary && !summary.textContent && chart.getAttribute('data-summary-text')) {
+    /* W3.3 (A4-D04): الملخص يتبع المصدر في كل دورة تصيير — data-summary-text
+       هو مصدر نص الملخص ويُزامن دائمًا عند وجوده (كان يكتب مرة واحدة عند
+       الفراغ فقط فيبقى وصف قديم مرتبطًا برسم جديد بعد تغيير البيانات).
+       غياب السمة يترك نص المستهلك كما هو — الملكية موثقة: من يغيّر
+       البيانات يحدّث data-summary-text، والمكوّن يضمن المزامنة. */
+    if (summary && chart.getAttribute('data-summary-text') !== null) {
       summary.textContent = chart.getAttribute('data-summary-text');
     }
     chart.dispatchEvent(new CustomEvent('micro-data:rendered', { bubbles: true, detail: { kind: kind } }));
