@@ -94,8 +94,11 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .library-footer { display:flex; justify-content:space-between; gap:16px; width:min(100% - 40px,1080px); margin-inline:auto; padding:17px 0 30px; border-block-start:1px solid var(--micro-border-divider); color:var(--micro-text-hint); font-size:11px; }
 .library-footer span:first-child { direction:ltr; font-family:'IBM Plex Sans',sans-serif; letter-spacing:.06em; }
 .m-btn:focus-visible,.m-field__input:focus-visible,.family a:focus-visible { outline:2px solid var(--micro-focus-ring); outline-offset:3px; }
+/* W4.3 (A1-F02 — عقد هامش المعرض): من 390px فأعلى 20px لكل جانب
+   وفق عقد الأسس (كانت القاعدة حتى 700px تفرض 32px أي 16px عند 390
+   و430 خلافا للعقد). تحت 390 يبقى عقد 16px لكل جانب. */
 @media(max-width:700px) {
-  .library-head__inner,.library-main,.library-footer { width:calc(100% - 32px); }
+  .library-head__inner,.library-main,.library-footer { width: min(100% - 40px, 1080px); } /* 390–700: عقد 20px لكل جانب */
   .head-ornament { inset-inline-start:auto; inset-inline-end:-170px; opacity:.27; }
   .library-head h1 { margin-block-start:28px; font-size:46px; }
   .library-head__intro { max-width:460px; font-size:15px; }
@@ -110,5 +113,9 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
   .reference-end { grid-template-columns:minmax(0,1fr); gap:12px; margin-block-start:35px; }
   .reference-end__links { grid-template-columns:minmax(0,1fr); }
   .library-footer { flex-direction:column; gap:4px; }
+}
+@media(max-width:389.98px) {
+  /* W4.3: تحت 390 — عقد 16px لكل جانب */
+  .library-head__inner,.library-main,.library-footer { width: calc(100% - 32px); }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:0.01ms!important; } }
