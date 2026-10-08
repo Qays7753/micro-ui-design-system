@@ -1,0 +1,9 @@
+[PASS] CAL-15 — لقطات فعلية: شهر مختار، يوم بخمسة طلبات، القائمة، نموذج الإضافة، التفاصيل — مثبتة وغير فارغة (1 تحقيقًا)؛ أهداف: sample، src
+[PASS] CAL-AGG — صفر أخطاء صفحة وصفر فشل موارد لكل هدف على حدة (8 تحقيقًا)؛ أهداف: src، standalone، sample، comp
+
+الملخص: 16/16 مسارًا ناجحًا — 267 تحقيقًا
+أخطاء صفحة لكل هدف: src=0؛ standalone=0؛ sample=0؛ comp=0
+فشل موارد لكل هدف: src=0؛ standalone=0؛ sample=0؛ comp=0
+فحوص لكل هدف (تكافؤ): src 14/14؛ standalone 13/13؛ sample 15/15؛ comp 3/3
+NOT RUN: جهاز Samsung Galaxy S25 الحقيقي وSamsung Internet؛ أجهزة Android/iOS الفعلية واللمس ولوحة النظام وsafe areas ورجوع النظام؛ TalkBack/VoiceOver وقارئ شاشة فعلي؛ WebKit/Safari؛ native zoom (المستخدم محاكاة نص ×2 بمرورين معلنة)؛ القراءة البصرية البشرية للقطات CAL-15 (الأداة تثبت وجودها وغير فارغة — الحكم النهائي للقائد)
+exit=0

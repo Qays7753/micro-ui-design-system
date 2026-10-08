@@ -1,0 +1,330 @@
+# B02 سجل الفحص — 2026-10-07T23:57:31
+# commit المصدر: fd7ef9395d747a37ccbc5ed9d53a60ae3b565c7b
+# بصمة شجرة المصدر: 41d90ea2b526f0a958fefc9fa788cbb0cf8e63d5 (شجرة عمل معدلة (109 مدخلًا في git status) — الفحص على المحتوى الحالي للشجرة، لا على بصمة الـcommit)
+
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:31] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+PASS  A1 لا أخطاء console/pageerror
+PASS  A2 الأيقونات محملة من أصولها — symbols=32
+PASS  A3 الخطوط الفعلية محملة — {'ar': True, 'lat': True}
+PASS  A4 التسمية label[for] والرسالة aria-describedby مربوطتان — {'labelFor': True, 'described': True}
+PASS  A5 مسح البحث: يظهر بوجود النص ويمسحه ويعيد التركيز ويختفي — vis=True {'value': '', 'focused': True, 'visible': False}
+PASS  A6 عدّاد الأحرف يتبع الكتابة (حد معلن فقط) — count=11/40
+PASS  A7 خطوة الكمية تحترم الحدود والخطوة (من المستهلك) — up=20 max=99 down=89 min=0
+PASS  A8 القراءة فقط: قابلة للتحديد والنسخ بنص كامل الوضوح (ليست معطلة) — {'readonly': True, 'disabled': False, 'selected': 9, 'color': 'rgb(23, 45, 50)', 'bg': 'rgb(247, 248, 244)'}
+PASS  A9 الخطأ عند الخروج لا يمحو القيمة والكتابة تعفيه (سياسة موسومة) — {'hasError': True, 'value': '12..5', 'msg': 'قيمة غير رقمية — صحّح المبلغ (القيمة كما كتبتها باقية)'} after-fix=False
+PASS  A10 خطأ + تركيز: حد الخطأ والحلقة معًا — {'border': 'rgb(173, 48, 59)', 'ring': True}
+PASS  A11 المعطل: أرضية المعطل وبلا حلقة — {'bg': 'rgb(228, 234, 232)', 'shadow': 'none'}
+PASS  A12 حقول متطابقة: IDs رسائل فريدة + دمج وصف سابق بلا استبدال وبلا تكرار عند إعادة init — {'unique': True, 'msgIds': ['m-field-msg-10', 'm-field-msg-11', 'm-field-msg-12'], 'merged': True, 'priorStill': True}
+PASS  A13 حراسة الحالة: مسح/زيادة/نقصان على readOnly وdisabled يترك القيمة ويمنع حدث التغيير — {'roVal': '10', 'disVal': '20', 'roEvents': 0, 'disEvents': 0, 'clearKept': True}
+PASS  A14 (R2-06) معرف رسالة جديد يفحص المستند كله: لا تصادم مع m-field-msg-1 الموجود والموجود محفوظ لصاحبه — {'newId': 'm-field-msg-13', 'notColliding': True, 'bound': True}
+127.0.0.1 - - [07/Oct/2026 23:57:32] "GET /previews/fields/example-usage.html HTTP/1.1" 200 -
+PASS  EX مثال مستقل fields: 0 فشل بلا أخطاء — PASS معرفا رسالة فريدان لحقلين متطابقين — m-field-msg-1 / m-field-msg-2
+PASS  E1 تعديل توكن الارتفاع من المصدر ينعكس ثم يُستعاد (52→56→52) — قبل {'w': 302, 'h': 52} أثناء {'w': 302, 'h': 56} بعد {'w': 302, 'h': 52}
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:35] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:36] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+PASS  B1 320px: الصفحة بلا تمرير أفقي — {'sw': 320, 'cw': 320}
+PASS  B2 320px: العمود الكامل بعرضه الحقيقي وسالم داخليًا — عرض={'w': 320, 'h': 373.94} داخلي={'sw': 318, 'cw': 318}
+PASS  B3 320px زيادة حجم الخط 200%: التسمية والرسالة 28px (14×2) والمحتوى داخل العمود — {'labFont': '28px', 'msgFont': '28px', 'demoSw': 318, 'demoCw': 318}
+PASS  B4 320px الاستعادة الدقيقة بعد الإلغاء (14px) — font=14px
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:38] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+PASS  B1 390px: الصفحة بلا تمرير أفقي — {'sw': 390, 'cw': 390}
+PASS  B2 390px: العمود الكامل بعرضه الحقيقي وسالم داخليًا — عرض={'w': 390, 'h': 315.95} داخلي={'sw': 388, 'cw': 388}
+PASS  B3 390px زيادة حجم الخط 200%: التسمية والرسالة 28px (14×2) والمحتوى داخل العمود — {'labFont': '28px', 'msgFont': '28px', 'demoSw': 388, 'demoCw': 388}
+PASS  B4 390px الاستعادة الدقيقة بعد الإلغاء (14px) — font=14px
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:39] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+PASS  B1 430px: الصفحة بلا تمرير أفقي — {'sw': 430, 'cw': 430}
+PASS  B2 430px: العمود الكامل بعرضه الحقيقي وسالم داخليًا — عرض={'w': 430, 'h': 305.95} داخلي={'sw': 428, 'cw': 428}
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /previews/fields/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/fonts.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /shared/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /components/buttons/buttons.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /components/fields/fields.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /previews/board-base.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /components/fields/fields.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /previews/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /previews/fields/board.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /previews/fields/board.css HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /components/buttons/buttons.js HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/search-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/filter-horizontal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/add-01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/checkmark-circle-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/delete-02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/check.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/chevron-down.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/cancel01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/chevron-left.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/chevron-right.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/arrow-up02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/arrow-down02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/plus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/minus-sign.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/home02.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/image01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/clock01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/calendar03.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/alert01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/alert-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/information-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/user-circle.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/package01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/truck.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/inbox.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/menu01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/wallet01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/grid.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/refresh.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/more-vertical.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/home01.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/icons/eye.svg HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSans-Latin-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSans-Latin-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSans-Latin-500.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSansArabic-Arabic-600.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSansArabic-Arabic-400.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 23:57:40] "GET /assets/fonts/IBMPlexSansArabic-Arabic-500.woff2 HTTP/1.1" 200 -
+PASS  D1 تقليل الحركة: الانتقالات ملغاة — duration=0s
+
+# النتيجة: 27/27 ناجح
+
+OK — اللقطات في /home/z/my-project/evidence-official-wt/reviews/SAMSUNG-ONEUI-REPAIR-R1/evidence/official-run/b02/screenshots

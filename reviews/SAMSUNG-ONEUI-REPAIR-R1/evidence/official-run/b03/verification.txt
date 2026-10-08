@@ -1,0 +1,31 @@
+# B03 سجل الفحص — 2026-10-07T23:57:42
+# commit المصدر: fd7ef9395d747a37ccbc5ed9d53a60ae3b565c7b
+# بصمة شجرة المصدر: 41d90ea2b526f0a958fefc9fa788cbb0cf8e63d5 (شجرة عمل معدلة (109 مدخلًا في git status) — الفحص على المحتوى الحالي للشجرة، لا على بصمة الـcommit)
+
+PASS  A1 لا أخطاء
+PASS  A2 الأيقونات من الأصول — 32
+PASS  A3 المجموعة: تحديد الكل يصير جزئيًا عند بعض الصفوف — {'indeterminate': True, 'checked': False}
+PASS  A4 الراديو: واحد فقط محدد — [False, True, False]
+PASS  A5 المفتاح: role=switch ونص الحالة يتبع القيمة — {'role': 'switch', 'state': 'مُفعّل', 'checked': True}
+PASS  A6 الإعداد غير المتزامن: الفشل يرجع القيمة وينزع الانتظار — قبل=False بعد={'checked': False, 'pending': 'false'}
+PASS  A7 المقطّع: متبادل (المستحق فقط) — ['false', 'true', 'false']
+PASS  A7-b المفتاح (E05): الانتظار يعطّل فعليًا ويسترجع التعطيل الأصلي بدقة (معطل قبل → معطل بعد) — {'pendingDisabled': True, 'restoredDisabled': True}
+PASS  A7-c تحديد الكل (E05): يدير المفعّلة فقط — المعطل لم يُلمس في التحديد ولا المسح — {'enabledChecked': True, 'protectedUntouched': True, 'enabledCleared': True, 'stillUntouched': True}
+PASS  A7-d المقطّع (E05): الأسهم تتجاوز المعطل والهدف الفعلي لللمس 48px (بصري 40 + امتداد 8) — {'landed': 'c', 'visualHeight': 40, 'touchHeight': 48}
+PASS  A8 المنتقي في طبقة B07: محاكاة لا نتائج ثم نتائج سليمة (عقد المكوّن) واختيار ومسح يعملان — open=True empty=True options=4 selected=noor مسح={'none': True, 'summary': 'المحدد: لا شيء'}
+PASS  A9 بحث المنتقي: جزئي يصفّي، بلا نتائج يظهر صف حالة، ومسح الاستعلام يعيد كل الخيارات (لا عالقة) — {'partial': 1, 'noneRow': True, 'restored': True}
+PASS  A10 إغلاق المنتقي يغلق طبقة B07 المصححة (بلا مسارين) وإعادة الفتح تعمل — closed=True reopened=True
+PASS  A11 تركيز لوحة المفاتيح فعلي على صندوق الاختيار
+PASS  A12 المثال المستقل (بلا board.*): فتح/بحث/بلا نتائج/مسح/اختيار/مسح اختيار/إغلاق وإعادة فتح — 6 PASS / 0 FAIL; errors=[]
+PASS  A13 (R2-03) حالة قراءة موحدة: القديمة مخفية في loading/error/empty، والبحث لا يلغي الحالة، وretry يطلق حدثه، وready يعيد العرض — {'selBefore': 'المحدد: Alpha', 'loadingHidden': True, 'loadingRow': True, 'searchKeptState': True, 'retried': True, 'readyVisible': 2, 'emptyHidden': True}
+PASS  A14 (R2-03) استبدال البيانات: اختيار صالح يُحفظ ويطابق الملخص، وسقوطه يُمسح مع الملخص ويُعلن — لا «المحدد: Alpha» مع getSelected null — {'kept': {'sel': {'value': 'b', 'label': 'Beta2'}, 'summary': 'المحدد: Beta2'}, 'cleared': {'sel': None, 'summary': 'المحدد: لا شيء', 'changeDetail': {'value': None, 'label': None}}}
+PASS  A15 (R2-03) tabIndex متنقل: الأسهم تحرّك نقطة التبويب مع الحالي والاختيار يجعل المحدد نقطة التبويب — {'afterArrow': {'focused': 'Beta', 'tabStop': 'Beta'}, 'afterSelect': 'Delta'}
+PASS  A16 (R2-06) المفتاح: false قبل دورة ومرتين بعدها لا يغيّران الحالة، والمعطل أصلًا يبقى معطلًا، والإشعار البرمجي لا يُعكس كتبديل — {'falseFirst': False, 'afterCycle': False, 'falseTwice': False, 'preDisabled': True, 'progNotReverted': True}
+PASS  E1 تعديل توكن → انعكاس في المكوّن → استعادة الأصل — {'before': '52px', 'changed': '60px', 'restored': '52px'}
+PASS  B1 320px بلا تمرير أفقي — {'sw': 320, 'cw': 320}
+PASS  B2 320px تكبير 200%: نص المفتاح 32px والمحتوى داخل العمود — {'font': '32px', 'sw': 318, 'cw': 318}
+PASS  B1 390px بلا تمرير أفقي — {'sw': 390, 'cw': 390}
+PASS  B2 390px تكبير 200%: نص المفتاح 32px والمحتوى داخل العمود — {'font': '32px', 'sw': 388, 'cw': 388}
+PASS  B1 430px بلا تمرير أفقي — {'sw': 430, 'cw': 430}
+
+# النتيجة: 25/25 ناجح

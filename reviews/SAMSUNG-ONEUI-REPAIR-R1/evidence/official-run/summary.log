@@ -1,0 +1,28 @@
+[23:51:52] RESTART official run — head fd7ef9395d747a37ccbc5ed9d53a60ae3b565c7b tree 41d90ea2b526f0a958fefc9fa788cbb0cf8e63d5
+exit=0
+الملخص: 46/46 مسارًا ناجحًا — 207 تحقيقًا — أخطاء صفحة 0 — فشل موارد 0
+الملخص: 16/16 مسارًا ناجحًا — 267 تحقيقًا
+TOTAL 301/301
+الملخص: 130/130 — فشل 0
+الملخص: 54/54 — فشل 0
+ux-f02: PASS=31 FAIL=1
+  FAIL F02-32
+exit=0 b02
+exit=0 b03
+exit=0 b04
+exit=0 b05
+exit=0 s01
+exit=0 carousel
+exit=0 a05-peek
+exit=0 data-scale-state
+exit=0 b01 (النتيجة: 49/49)
+exit=0 sui-a1 (الملخص [after]: 32/32 — فشل 0)
+exit=0 sui-a2 ()
+PASS  SUI-011: 8/8 فحصًا
+PASS  SUI-032: 2/2 فحصًا
+PASS  REV-B02: 12/12 فحصًا
+PASS  REV-B03: 12/12 فحصًا
+exit=0 sui-a3 (total: 57 passed: 57 failed: 0)
+exit=0 sui-a4
+sui-a4 PASS lines: 34
+sui-a4 FAIL lines: 0

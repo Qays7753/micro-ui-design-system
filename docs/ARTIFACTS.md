@@ -1,3 +1,10 @@
+# إصلاح وتطوير Samsung One UI — REPAIR-R1 — DRAFT FOR REVIEW / 2026-10-08
+
+- [تقرير الجولة](../reviews/SAMSUNG-ONEUI-REPAIR-R1/REPORT.md): تنفيذ فعلي من `eacfe8a` بخمسة وكلاء — إغلاق SUI-001..012 و025/026 بدليل قبل/بعد + تحسينات P3 + مراجعة العائلات الـ14؛ المصدر النهائي `fd7ef93`.
+- [المصفوفة](../reviews/SAMSUNG-ONEUI-REPAIR-R1/MATRIX.md) و[التغطية](../reviews/SAMSUNG-ONEUI-REPAIR-R1/COVERAGE-REPAIR.csv) و[البروتوكول](../reviews/SAMSUNG-ONEUI-REPAIR-R1/PROTOCOL.md): مصفوفة بنود وحالات معايير القبول + تغطية صادقة.
+- [الأدلة الرسمية](../reviews/SAMSUNG-ONEUI-REPAIR-R1/evidence/official-run/README.md): من checkout نظيف للمصدر المثبت — F03 46/46 · الجدولة 16/16/267 · الرجعية 301/301 و130/130 و54/54 · أدوات الجولة 32/32 و67/67 و57/57 و34/34 · قراءات VLM.
+- [تقارير الوكلاء](../reviews/SAMSUNG-ONEUI-REPAIR-R1/README.md): تقارير الوكلاء الخمسة وأدلتهم القابلة لإعادة التشغيل (قبل/بعد) + التحقق المستقل 9/9 CONFIRMED بصفر مكذوب.
+
 # مراجعة ChatGPT لتدقيق Samsung — 2026-10-07
 
 - [المراجعة](../reviews/SAMSUNG-ONEUI-AUDIT/CHATGPT-REVIEW-R1.md): تقرير مفيد مع تصحيحات لازمة للحساب والصياغة والتغطية والخطة؛ لا إذن تنفيذ.
