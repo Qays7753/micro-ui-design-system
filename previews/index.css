@@ -51,7 +51,9 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .family__index span { color:var(--micro-brand-primary); font-size:11px; }
 .family__copy h3 { margin:0; font-size:19px; line-height:1.5; font-weight:600; }
 .family__copy p { max-width:440px; margin:5px 0 13px; color:var(--micro-text-secondary); font-size:13px; line-height:1.7; }
-.family__links { display:flex; flex-wrap:wrap; gap:5px 16px; }
+/* W1.5 (D-UI-03): روابط مستقلة متجاورة — قاعدة الفصل 8px بين مناطق
+   الإصابة الفعلية (كان 5px عموديًا). كانت أفقية 16px فتبقى. */
+.family__links { display:flex; flex-wrap:wrap; gap:8px 16px; }
 .family__links a { display:inline-flex;align-items:center;min-height:48px;font-size:12px;font-weight:500; }
 .family .m-field { width:min(100%,350px); }
 .family .m-field__msg { display:block; }
@@ -85,7 +87,7 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .reference-end { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,.8fr); gap:42px; margin-block:48px 38px; padding:26px 0 34px; border-block-start:1px solid var(--micro-border-control); }
 .reference-end h2 { max-width:430px; }
 .reference-end p:not(.section-kicker) { max-width:470px; color:var(--micro-text-secondary); font-size:14px; }
-.reference-end__links { display:grid; grid-template-columns:1fr 1fr; align-content:center; gap:4px 18px; }
+.reference-end__links { display:grid; grid-template-columns:1fr 1fr; align-content:center; gap:8px 18px; } /* W1.5 (D-UI-03): فصل 8px بين أهداف مستقلة (كان 4px) */
 .reference-end__links a { display:flex; justify-content:space-between; align-items:center; min-height:42px; border-block-end:1px solid var(--micro-border-divider); color:var(--micro-text-primary); font-size:13px; text-decoration:none; }
 .reference-end__links a:hover { color:var(--micro-brand-primary); }
 .reference-end__links b { color:var(--micro-brand-primary); font-weight:500; }

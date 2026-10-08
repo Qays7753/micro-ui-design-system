@@ -45,14 +45,27 @@
 
 /* ================= 2) تبويبات المحتوى =================
    تبويبات تغيّر محتوى مرتبطًا فعليًا (role=tablist/tab/tabpanel
-   + تنقّل أسهم). ليس بديلًا عن Segmented (الذي يغيّر قيمة/وضعًا — B03). */
+   + تنقّل أسهم). ليس بديلًا عن Segmented (الذي يغيّر قيمة/وضعًا — B03).
+   W1.1 (D-UI-01 — قرار مالك): سياسة الصف الواحد — تمرير أفقي مقصود:
+   التسميات الطويلة/الكثيرة لا تخرج من العرض ولا تُقص ولا يُصغّر خطها؛
+   الصف يبقى واحدًا (overflow-y hidden) والتمرير ملك الحاوية
+   (overscroll-behavior-x: contain) بمؤشر تمرير ظاهر (scrollbar-width)
+   — في RTL يبدأ التمرير من الطرف الأيمن تلقائيًا. التبويب المحدد
+   يُبقى مرئيًا عبر scrollIntoView(inline:'nearest') عند الاختيار
+   (navigation.js)، وHome/End ينقلان إلى طرفي القائمة وفق APG. */
 .m-tabs {
   display: flex;
   gap: var(--micro-space-1);
   border-block-end: 1px solid var(--micro-border-divider);
   font-family: var(--micro-font-family);
+  overflow-x: auto;                    /* D-UI-01: صف واحد يمرر أفقيًا */
+  overflow-y: hidden;                  /* لا أسطر تبويبات متعددة */
+  overscroll-behavior-x: contain;      /* ملكية التمرير للحاوية */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;               /* مؤشر التمرير — قابلية الاكتشاف */
 }
 .m-tabs__tab {
+  flex: 0 0 auto;                      /* D-UI-01: لا انكماش — التسمية كاملة بحجمها */
   min-height: var(--micro-touch-min);
   padding-inline: var(--micro-space-4);
   display: inline-flex;
@@ -96,7 +109,11 @@
    متمركزًا عبر space-around). ارتفاع الشريط قد ينمو مع الصفوف —
    المستهلك يقيس الارتفاع الفعلي (نمط --f03-navbar-h في F03 عبر
    ResizeObserver) لإزاحات toast وشريط التحديد والحشو. min-height
-   (48px أهداف اللمس) محفوظ في كل صف. */
+   (48px أهداف اللمس) محفوظ في كل صف.
+   W1.3 (A3-F03 — ملكية الحافة الآمنة): الحافة السفلية تُقرأ عبر
+   متغير الملكية --micro-inset-bottom (fallback إلى env الافتراضي) —
+   المستهلك الذي يملك سطحه الخارجي الحافةَ يضبطه إلى 0px فلا يتكرر
+   inset داخل التركيب (انظر previews/navigation/board.css). */
 .m-navbar {
   display: flex;
   flex-wrap: wrap; /* SUI-R1-04: صفوف إضافية عند تجاوز مجموع أدنى العناصر لعرض الشريط */
@@ -104,7 +121,7 @@
   justify-content: space-around;
   background-color: var(--micro-surface-base);
   border-block-start: 1px solid var(--micro-border-divider);
-  padding-block: var(--micro-space-1) calc(var(--micro-space-1) + env(safe-area-inset-bottom, 0px));
+  padding-block: var(--micro-space-1) calc(var(--micro-space-1) + var(--micro-inset-bottom, env(safe-area-inset-bottom, 0px)));
   font-family: var(--micro-font-family);
 }
 .m-navbar__item {
@@ -253,7 +270,10 @@
 .m-filter-summary b { color: var(--micro-text-primary); font-weight: 600; }
 
 /* ================= 6) شريط إجراء أساسي =================
-   ثابت أسفل المحتوى — المحتوى تحته حشو سفلي كي لا يُحجب. */
+   ثابت أسفل المحتوى — المحتوى تحته حشو سفلي كي لا يُحجب.
+   W1.3 (A3-F03): الحافة السفلية عبر متغير الملكية --micro-inset-bottom
+   — نفس عقد m-navbar أعلاه: المالك الخارجي للحافة يصفّرها على المكونات
+   الداخلية داخل تركيبه فلا يتكرر inset. */
 .m-actionbar {
   position: sticky;
   inset-block-end: 0;
@@ -262,7 +282,7 @@
                      بدل الخروج عن العمود — reflow بلا تمرير أفقي (WCAG 1.4.10)؛
                      الارتفاع حد أدنى يتمدد والشريط يبقى فوق المحتوى بحشوه */
   gap: var(--micro-space-3);
-  padding: var(--micro-space-3) var(--micro-space-5) calc(var(--micro-space-3) + env(safe-area-inset-bottom, 0px));
+  padding: var(--micro-space-3) var(--micro-space-5) calc(var(--micro-space-3) + var(--micro-inset-bottom, env(safe-area-inset-bottom, 0px)));
   background-color: var(--micro-surface-base);
   border-block-start: 1px solid var(--micro-border-divider);
   font-family: var(--micro-font-family);

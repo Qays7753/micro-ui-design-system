@@ -436,19 +436,59 @@
     };
   }
 
-  /* تبويبات المحتوى */
+  /* تبويبات المحتوى — W1.1/W1.2 (2026-10 إصلاح جذري):
+     - D-UI-01 (قرار مالك): سياسة الصف الواحد — `.m-tabs` يمرر أفقيًا
+       (overflow-x:auto في CSS)؛ عند الاختيار يُمرَّر التبويب المحدد
+       إلى الحيز المرئي (scrollIntoView بـinline:'nearest' وblock:'nearest'
+       كي لا يقفز التمرير الرأسي للصفحة)، وHome/End ينقلان إلى طرفي
+       القائمة وفق WAI-ARIA APG. لا قص ولا تصغير ولا التفاف لصفوف.
+     - A3-F01 (W1.2): اللوحة النشطة الخالية من أهداف تركيز داخلية تدخل
+       ترتيب Tab بـtabindex=0 وفق APG (النمط: tab نشط → Tab → اللوحة)؛
+       نتعقب ملكيتنا للسمة عبر data-micro-tabs-panel حتى لا نلمس tabindex
+       وضعه المستهلك؛ اللوحة ذات الأهداف الداخلية تُعاد لوضعها الطبيعي
+       (إزالة tabindex الذي أضفناه فقط)، واللوحات غير النشطة مخفية
+       (hidden) فتخرج من الترتيب تلقائيًا. */
   function initTabs(tabs) {
     if (tabs.dataset.microTabsBound) return;
     tabs.dataset.microTabsBound = '1';
     var items = [].slice.call(tabs.querySelectorAll('[role="tab"]'));
+    var FOCUSABLE_IN = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    function panelOf(t) {
+      var id = t.getAttribute('aria-controls');
+      return id ? document.getElementById(id) : null;
+    }
+    function syncPanelTabindex(activeTab) {
+      items.forEach(function (t) {
+        var panel = panelOf(t);
+        if (!panel) return;
+        var ours = panel.getAttribute('data-micro-tabs-panel') === '1';
+        var focusableInside = panel.querySelector(FOCUSABLE_IN);
+        if (t === activeTab && !focusableInside) {
+          if (!panel.hasAttribute('tabindex')) {
+            panel.setAttribute('tabindex', '0');
+            panel.setAttribute('data-micro-tabs-panel', '1');
+          }
+        } else if (ours) {
+          panel.removeAttribute('tabindex');
+          panel.removeAttribute('data-micro-tabs-panel');
+        }
+      });
+    }
+    function keepVisible(tab) {
+      if (tab && typeof tab.scrollIntoView === 'function') {
+        try { tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { /* بيئة بلا خيارات: السلوك الافتراضي */ }
+      }
+    }
     function select(tab) {
       items.forEach(function (t) {
         var on = t === tab;
         t.setAttribute('aria-selected', on ? 'true' : 'false');
         t.tabIndex = on ? 0 : -1;
-        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        var panel = panelOf(t);
         if (panel) panel.hidden = !on;
       });
+      syncPanelTabindex(tab);
+      keepVisible(tab); /* D-UI-01: التبويب المحدد يبقى مرئيًا */
     }
     items.forEach(function (t, i) {
       t.addEventListener('click', function () { select(t); });
@@ -456,9 +496,20 @@
         var next = null;
         if (e.key === 'ArrowLeft') next = items[(i + 1) % items.length];      /* RTL: يسار = التالي */
         else if (e.key === 'ArrowRight') next = items[(i - 1 + items.length) % items.length];
-        if (next) { e.preventDefault(); next.focus(); select(next); }
+        else if (e.key === 'Home') next = items[0];                           /* W1.1: APG — أول تبويب */
+        else if (e.key === 'End') next = items[items.length - 1];             /* W1.1: APG — آخر تبويب */
+        if (next) {
+          e.preventDefault();
+          next.focus();
+          keepVisible(next);
+          select(next);
+        }
       });
     });
+    /* الحالة الابتدائية: اللوحة الظاهرة (التبويب المحدد في الترميز) تدخل
+       ترتيب Tab إن كانت بلا أهداف داخلية — قبل أي تفاعل */
+    var initial = items.filter(function (t) { return t.getAttribute('aria-selected') === 'true'; })[0] || items[0];
+    if (initial) syncPanelTabindex(initial);
   }
 
   function bindDocumentOnce() {
