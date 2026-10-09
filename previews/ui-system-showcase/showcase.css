@@ -74,9 +74,6 @@ body {
 /* ---------- شريط تحكم المراجعة (ليس سلوك منتج) ---------- */
 
 .showcase-controls {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: 20;
   background: var(--micro-surface-page);
   border-block-end: 1px solid var(--micro-border-divider);
 }
