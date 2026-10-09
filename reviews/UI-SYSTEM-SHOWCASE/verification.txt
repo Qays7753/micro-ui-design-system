@@ -1,0 +1,132 @@
+UI SYSTEM SHOWCASE — VERIFICATION RUN
+التاريخ: 2026-10-09 · المنفّذ: Zed AI
+المصدر: zai/ui-system-showcase-prototype-2026-10-09 (من 788c2fd)
+البيئة: Chromium headless (Playwright) فقط — الأجهزة/قارئات الشاشة/WebKit/native zoom: NOT RUN
+الأهداف: editable (http محلي) + standalone.html (file://)
+
+PASS | [editable] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=356/230
+PASS | [editable] عرض 320 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=320
+PASS | [editable] عرض 320 + تصفية all: لا فيض أفقي | sw=320
+PASS | [editable] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=356/270
+PASS | [editable] عرض 360 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=360
+PASS | [editable] عرض 360 + تصفية all: لا فيض أفقي | sw=360
+PASS | [editable] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=356/300
+PASS | [editable] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=356/332
+PASS | [editable] فتح الصفحة بلا أخطاء موارد | index.html
+PASS | [editable] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=774/cw=300 h=True
+PASS | [editable] اختيار لسان يبدّل اللوحة المرتبطة
+PASS | [editable] Home/End داخل الألسنة | sc-tab-d-btn
+PASS | [editable] التبديل إلى LTR يقلب الاتجاه ويحدّث محور الخط | {'dir': 'ltr', 'lineAxis': 'ltr', 'sw': 390}
+PASS | [editable] لا فيض أفقي في LTR عند 390 | sw=390
+PASS | [editable] setLoading: aria-busy + is-loading + الاسم الإتاحي يتبديل والتسمية المرئية باقية (نمط B) | {'busy': 'true', 'cls': True, 'visible': 'حفظ العملية', 'accName': 'جارٍ الحفظ...'}
+PASS | [editable] إيقاف التحميل يرجع الحالة
+PASS | [editable] حالة الضغط .is-pressed
+PASS | [editable] التعطيل الأصلي
+PASS | [editable] حقل البحث: الإدخال يظهر زر المسح
+PASS | [editable] المسح يفرّغ ويعيد التركيز للحقل
+PASS | [editable] خطوة الكمية 10→15 بحدود المستهلك | 15
+PASS | [editable] حالة الخطأ: has-error + رسالة ظاهرة مرتبطة والقيمة باقية | {'err': True, 'msg': True, 'kept': 'قيمة معدلة', 'linked': True}
+PASS | [editable] مسح حالة الخطأ
+PASS | [editable] المنتقي يفتح داخل طبقة والتركيز محصور
+PASS | [editable] البحث الجزئي يرشّح الخيارات | ظاهرة=1
+PASS | [editable] الاختيار يحدّث ملخص المنتقي وقيمة المشغّل | {'summary': 'المحدد: شركة البترول الوطنية', 'value': 'القيمة الحالية: شركة البترول الوطنية'}
+PASS | [editable] مسح الاختيار يعيد «لا شيء» | المحدد: لا شيء
+PASS | [editable] الإغلاق يستعيد تركيز المشغّل
+PASS | [editable] الحوار المركزي يفتق التركيز داخله (Tab متكرر لا يخرج)
+PASS | [editable] Escape يغلق الحوار ويعيد التركيز
+PASS | [editable] اللوحة السفلية تفتح
+PASS | [editable] الضغط بالخلفية يغلق اللوحة (سياسة non-destructive)
+PASS | [editable] toast يظهر فوق الأقسام (rect>0)
+PASS | [editable] إغلاق toast اليدوي
+PASS | [editable] إغلاق ملاحظة يعيد التركيز لمصدرها (data-return-focus)
+PASS | [editable] إعادة إظهار الملاحظة
+PASS | [editable] الإعلان في القناة الحيّة المنفصلة (A2-F05) | {'count': 1, 'polite': True}
+PASS | [editable] إفصاح بيانات الرسم يفتح (aria-expanded + جدول)
+PASS | [editable] تبديل البيانات: الإفصاح أعيد بناؤه والقيمة والتسمية الجديدتان ظاهرتان (A4-D04) | {'summary': 'توزيع العمليات — البيانات في HTML المصدر وتتغير مع fixture العرض.',
+PASS | [editable] الملخص يتبع المصدر كل render (A4-D04) | ملخص محدث من الفحص — يتبع المصدر
+PASS | [editable] إغلاق الإفصاح
+PASS | [editable] صفر ومجهول ظاهران نصًا في الأعمدة | 8|0|—|11
+PASS | [editable] السالب في أشرطة المقارنة (موقعة حول الصفر) | طلبات32 عملية | مرتجعات-9 عملية | مراجعات0 عملية | معلق—غير متاح
+PASS | [editable] عقد الحالة data-scale-state مكتوب كل تصيير | ok,ok
+PASS | [editable] حوار الإعدادات يفتح
+PASS | [editable] المستويان: عرض التطبيق وزر العودة
+PASS | [editable] مفتاح التطبيق: تغيير + حالة عرض تجريبية | تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد.
+PASS | [editable] إغلاق الإعدادات يستعيد التركيز
+PASS | [editable] اختيار يوم في الجدول (order-schedule:day-select)
+PASS | [editable] تبديل عرض القائمة/التقويم
+PASS | [editable] حالة الفراغ في الجدول
+PASS | [editable] استعادة بيانات الجدول
+PASS | [editable] العارض: التالي يحدّث المؤشر صادقًا | البطاقة 2 من 3
+PASS | [editable] توسيع تفاصيل البطاقة (aria-expanded + المنطقة)
+PASS | [editable] الانتقال يطوي التفاصيل وArrowLeft=التالي في RTL
+PASS | [editable] نقاط العارض 48px | نقاط=3
+PASS | [editable] تصفية draft/proposed تظهر العائلات المسودة وتخفي المستقرة | {'ocal': True, 'carousel': True, 'packed': True, 'buttons': True}
+PASS | [editable] تصفية current/reference
+PASS | [editable] تصفية «الكل» تعيد كل الأقسام
+PASS | [standalone] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=356/230
+PASS | [standalone] عرض 320 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=320
+PASS | [standalone] عرض 320 + تصفية all: لا فيض أفقي | sw=320
+PASS | [standalone] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=356/270
+PASS | [standalone] عرض 360 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=360
+PASS | [standalone] عرض 360 + تصفية all: لا فيض أفقي | sw=360
+PASS | [standalone] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=356/300
+PASS | [standalone] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=356/332
+PASS | [standalone] فتح الصفحة بلا أخطاء موارد | standalone.html
+PASS | [standalone] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=774/cw=300 h=True
+PASS | [standalone] اختيار لسان يبدّل اللوحة المرتبطة
+PASS | [standalone] Home/End داخل الألسنة | sc-tab-d-btn
+PASS | [standalone] التبديل إلى LTR يقلب الاتجاه ويحدّث محور الخط | {'dir': 'ltr', 'lineAxis': 'ltr', 'sw': 390}
+PASS | [standalone] لا فيض أفقي في LTR عند 390 | sw=390
+PASS | [standalone] setLoading: aria-busy + is-loading + الاسم الإتاحي يتبديل والتسمية المرئية باقية (نمط B) | {'busy': 'true', 'cls': True, 'visible': 'حفظ العملية', 'accName': 'جارٍ الحفظ...'}
+PASS | [standalone] إيقاف التحميل يرجع الحالة
+PASS | [standalone] حالة الضغط .is-pressed
+PASS | [standalone] التعطيل الأصلي
+PASS | [standalone] حقل البحث: الإدخال يظهر زر المسح
+PASS | [standalone] المسح يفرّغ ويعيد التركيز للحقل
+PASS | [standalone] خطوة الكمية 10→15 بحدود المستهلك | 15
+PASS | [standalone] حالة الخطأ: has-error + رسالة ظاهرة مرتبطة والقيمة باقية | {'err': True, 'msg': True, 'kept': 'قيمة معدلة', 'linked': True}
+PASS | [standalone] مسح حالة الخطأ
+PASS | [standalone] المنتقي يفتح داخل طبقة والتركيز محصور
+PASS | [standalone] البحث الجزئي يرشّح الخيارات | ظاهرة=1
+PASS | [standalone] الاختيار يحدّث ملخص المنتقي وقيمة المشغّل | {'summary': 'المحدد: شركة البترول الوطنية', 'value': 'القيمة الحالية: شركة البترول الوطنية'}
+PASS | [standalone] مسح الاختيار يعيد «لا شيء» | المحدد: لا شيء
+PASS | [standalone] الإغلاق يستعيد تركيز المشغّل
+PASS | [standalone] الحوار المركزي يفتق التركيز داخله (Tab متكرر لا يخرج)
+PASS | [standalone] Escape يغلق الحوار ويعيد التركيز
+PASS | [standalone] اللوحة السفلية تفتح
+PASS | [standalone] الضغط بالخلفية يغلق اللوحة (سياسة non-destructive)
+PASS | [standalone] toast يظهر فوق الأقسام (rect>0)
+PASS | [standalone] إغلاق toast اليدوي
+PASS | [standalone] إغلاق ملاحظة يعيد التركيز لمصدرها (data-return-focus)
+PASS | [standalone] إعادة إظهار الملاحظة
+PASS | [standalone] الإعلان في القناة الحيّة المنفصلة (A2-F05) | {'count': 1, 'polite': True}
+PASS | [standalone] إفصاح بيانات الرسم يفتح (aria-expanded + جدول)
+PASS | [standalone] تبديل البيانات: الإفصاح أعيد بناؤه والقيمة والتسمية الجديدتان ظاهرتان (A4-D04) | {'summary': 'توزيع العمليات — البيانات في HTML المصدر وتتغير مع fixture العرض.',
+PASS | [standalone] الملخص يتبع المصدر كل render (A4-D04) | ملخص محدث من الفحص — يتبع المصدر
+PASS | [standalone] إغلاق الإفصاح
+PASS | [standalone] صفر ومجهول ظاهران نصًا في الأعمدة | 8|0|—|11
+PASS | [standalone] السالب في أشرطة المقارنة (موقعة حول الصفر) | طلبات32 عملية | مرتجعات-9 عملية | مراجعات0 عملية | معلق—غير متاح
+PASS | [standalone] عقد الحالة data-scale-state مكتوب كل تصيير | ok,ok
+PASS | [standalone] حوار الإعدادات يفتح
+PASS | [standalone] المستويان: عرض التطبيق وزر العودة
+PASS | [standalone] مفتاح التطبيق: تغيير + حالة عرض تجريبية | تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد.
+PASS | [standalone] إغلاق الإعدادات يستعيد التركيز
+PASS | [standalone] اختيار يوم في الجدول (order-schedule:day-select)
+PASS | [standalone] تبديل عرض القائمة/التقويم
+PASS | [standalone] حالة الفراغ في الجدول
+PASS | [standalone] استعادة بيانات الجدول
+PASS | [standalone] العارض: التالي يحدّث المؤشر صادقًا | البطاقة 2 من 3
+PASS | [standalone] توسيع تفاصيل البطاقة (aria-expanded + المنطقة)
+PASS | [standalone] الانتقال يطوي التفاصيل وArrowLeft=التالي في RTL
+PASS | [standalone] نقاط العارض 48px | نقاط=3
+PASS | [standalone] تصفية draft/proposed تظهر العائلات المسودة وتخفي المستقرة | {'ocal': True, 'carousel': True, 'packed': True, 'buttons': True}
+PASS | [standalone] تصفية current/reference
+PASS | [standalone] تصفية «الكل» تعيد كل الأقسام
+
+الخلاصة: 118 PASS / 0 FAIL — إجمالي 118
+أخطاء console: 0
+أخطاء صفحة: 0
+موارد فاشلة: 0
+
+ملاحظة الإخلاص: أي بند FAIL هنا عيب في العرض (prototype) يُصلح في ملفات العرض فقط؛
+عيب المكوّن الأساسي يُسجَّل PROTOTYPE_BLOCKED_BY_CORE_FINDING ولا يُرقَّع core من هذا الفرع.
