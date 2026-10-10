@@ -344,14 +344,15 @@ def run(page, base, width, tag):
       const rects = items.map(i => i.getBoundingClientRect());
       const rows = new Set(rects.map(r => Math.round(r.y))).size;
       const scrollable = seg.scrollWidth > seg.clientWidth + 1;
-      const overflowX = seg.scrollWidth > seg.clientWidth + 1;
+      const segRect = seg.getBoundingClientRect();
+      const allVisible = rects.every(r => r.left >= segRect.left - 1 && r.right <= segRect.right + 1);
       const h = Math.round(rects[0].height);
-      return { rows, scrollable, h, count: items.length, segW: Math.round(seg.getBoundingClientRect().width) };
+      return { rows, scrollable, allVisible, h, count: items.length, segW: Math.round(segRect.width) };
     }""")
     if f05:
         t(f"F-05 {P} مقطّع التسميات الطويلة: صف واحد (لا صف يتيم)", f05["rows"] == 1, f"rows={f05['rows']} items={f05['count']}")
-        t(f"F-05 {P} الخيارات كلها متاحة عبر التمرير الأفقي", f05["scrollable"] or f05["segW"] >= 300,
-          f"scrollable={f05['scrollable']} segW={f05['segW']}")
+        t(f"F-05 {P} الخيارات كلها متاحة (تمرير أو اتساع كامل)", f05["scrollable"] or f05["allVisible"],
+          f"scrollable={f05['scrollable']} allVisible={f05.get('allVisible')} segW={f05['segW']}")
         t(f"F-05 {P} ارتفاع 40px المرئي محفوظ", f05["h"] >= 39, f"h={f05['h']}")
 
     # ================= F-06: إغلاق الملاحظة =================
@@ -381,6 +382,8 @@ def run(page, base, width, tag):
       const i = input.getBoundingClientRect();
       const b = btns.map(x => x.getBoundingClientRect());
       const cluster = (b[0] ? b[0].width : 0) + i.width + (b[1] ? b[1].width : 0);
+      /* صف واحد أولًا (الكتلة الملتفة ليست توزيعًا مقصودًا هنا) */
+      const rows = new Set([b[0], i, b[1]].filter(Boolean).map(r => Math.round(r.y + r.height / 2))).size;
       /* المساحة المفسّرة: الحشو + الفجوات + الحدان — كل ما تبقى غير مفسّر */
       const cs = getComputedStyle(control);
       const padH = parseFloat(cs.paddingInlineStart) + parseFloat(cs.paddingInlineEnd);
@@ -388,13 +391,14 @@ def run(page, base, width, tag):
       const nChildren = control.children.length;
       const gaps = gap * Math.max(0, nChildren - 1);
       const borderH = parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
-      const unexplained = Math.round(c.width - cluster - padH - gaps - borderH);
+      const unexplained = rows === 1 ? Math.round(c.width - cluster - padH - gaps - borderH) : 9999;
       const inRTL = getComputedStyle(document.documentElement).direction === 'rtl';
       const startGap = Math.round(inRTL ? (c.right - (b[0] ? b[0].right : i.right)) : ((b[0] ? b[0].left : i.left) - c.left));
-      return { controlW: Math.round(c.width), cluster: Math.round(cluster), unexplained, startGap };
+      return { controlW: Math.round(c.width), cluster: Math.round(cluster), rows, unexplained, startGap };
     }""")
-    t(f"F-07 {P} عنصر التحكم يحتضن كتلة الخطوات بلا فراغ غير مفسّر (≤4px)", f07["unexplained"] <= 4,
-      f"control={f07['controlW']} cluster={f07['cluster']} unexplained={f07['unexplained']} startGap={f07['startGap']}")
+    t(f"F-07 {P} عنصر التحكم يحتضن كتلة الخطوات (صف واحد، بلا فراغ غير مفسّر ≤4px)",
+      f07["rows"] == 1 and f07["unexplained"] <= 4,
+      f"rows={f07['rows']} control={f07['controlW']} cluster={f07['cluster']} unexplained={f07['unexplained']} startGap={f07['startGap']}")
 
     # ================= F-08: هندسة التقويم في المعرض (قسم DRAFT — تصفية الكل) =================
     page.evaluate("() => { const b = document.querySelector('#sc-filter-seg [data-sc-filter=\"all\"]'); if (b) b.click(); }")

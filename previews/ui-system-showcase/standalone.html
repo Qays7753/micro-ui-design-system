@@ -5761,7 +5761,10 @@ body {
             <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح البحث"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
         </div>
-        <div class="sc-grid-2">
+        <!-- F-07 (2026-10-10، مراجعة الوكيل 3): رصّ عمودي — عمودَا الشبكة عند الأعرض
+             يضيقان عن الوحدة المتماسكة (186px) فتلتف الكتلة بفعل flex-wrap (عقد SUI-005)
+             فيظهر عنصر تحكم كسولين عرضيين؛ الصف الكامل يحفظ التماسك عند كل الأعراض. -->
+        <div class="sc-stack--tight">
           <div class="m-field" data-micro-field>
             <label class="m-field__label" for="sc-f-amount">قيمة الفاتورة</label>
             <div class="m-field__control">
