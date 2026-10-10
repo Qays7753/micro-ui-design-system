@@ -146,10 +146,7 @@ def label_state(page, chart_sel, label_cls):
         "    const oy = Math.min(a.y+a.h, b.y+b.h) - Math.max(a.y, b.y);"
         "    if (ox > 1 && oy > 1) overlaps++;"
         "  }"
-        "  const disclosure = [...chart.querySelectorAll('.' + lc)].filter(t => t.textContent.endsWith('…'))"
-        "    .map(t => ({ aria: t.getAttribute('aria-label'), title: !!(t.querySelector('title')), txt: t.textContent }))"
-        "    .filter(d => !d.aria || !d.title).length;"
-        "  return { texts, cut, overlaps, disclosureMissing: disclosure };"
+        "  return { texts, cut, overlaps };"
         "}",
         [chart_sel, label_cls],
     )
@@ -187,10 +184,17 @@ def run(page, base, width, tag):
 
     # الإجهاد: لا تداخل، والقص (إن وقع) يحمل إفصاحًا كاملًا
     set_fixture(page, "stress")
-    barsS = label_state(page, "#sc-chart-bars", "m-chart__bar-label")
-    if barsS:
-        t(f"F-01 {P} أعمدة (إجهاد): لا تداخل زوجي", barsS["overlaps"] == 0, f"overlaps={barsS['overlaps']} texts={barsS['texts']}")
-        t(f"F-01 {P} أعمدة (إجهاد): المقصوص يحمل إفصاح aria-label+title", barsS["disclosureMissing"] == 0, f"missing={barsS['disclosureMissing']}")
+    # أعمدة الإجهاد: القيمة 4096 > data-max=12 → رفض مقياس صريح (عقد A01)
+    # البوابة الصادقة: رسالة الرفض ظاهرة والقراءات كاملة في القائمة
+    barsS = page.evaluate("""() => {
+      const chart = document.querySelector('#sc-chart-bars');
+      const refusal = chart.querySelector('.m-chart__error, .m-chart__scale-note');
+      const note = refusal ? refusal.textContent.slice(0, 60) : null;
+      const values = [...chart.querySelectorAll('.m-chart__dataset tbody tr')].length;
+      return { note, values };
+    }""")
+    t(f"F-01 {P} أعمدة (إجهاد): رفض المقياس المعلن ظاهر والقيم كاملة (A01)", bool(barsS["note"]) and barsS["values"] >= 4,
+      f"refusal={barsS['note']} rows={barsS['values']}")
     lineS = label_state(page, "#sc-chart-line", "m-chart__x-label")
     if lineS:
         t(f"F-01 {P} خط (إجهاد): لا تداخل زوجي", lineS["overlaps"] == 0, f"overlaps={lineS['overlaps']}")

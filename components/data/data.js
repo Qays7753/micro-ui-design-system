@@ -468,7 +468,7 @@
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 40 * ts.k; /* R2-UI02: ~2.85× للخط 13px — صندوق السطر المضاعف (≈1.42em بارتفاع الخط العربي الكامل) لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× غير كافٍ للمضاعفة الكاملة */
+    var BAR_LABEL_STEP = 40 * ts.k; /* خطوة سطر التسمية (≈1.42em بارتفاع الخط العربي الكامل 13px — R1-UI09) */
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
        صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
@@ -561,7 +561,7 @@
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 37 * ts.k; /* R2-UI02: ~2.85× للخط 12px — صندوق السطر المضاعف لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× (18) غير كافٍ */
+    var X_LABEL_STEP = 37 * ts.k; /* خطوة سطر تسمية المحور (≈1.55em للخط 12px — R1-UI09) */
     var extra = (maxLines - 1) * X_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
        صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
