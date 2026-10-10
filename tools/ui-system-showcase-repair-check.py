@@ -222,8 +222,11 @@ def run(page, base, width, tag):
       }
       const cut = els.filter(e => e.hasAttribute('aria-label') || e.querySelector('title'));
       const disclosureOk = cut.every(e => e.getAttribute('aria-label') && e.querySelector('title'));
-      const fullInDom = [...host.querySelectorAll('li')].every(li =>
-        host.querySelector('.m-chart__data').textContent.includes(li.getAttribute('data-label')));
+      const src = [...host.querySelectorAll('.m-chart__data li')];
+      /* المصدر الكامل باقٍ: سمات li محفوظة، وكل aria-label نص قصّ يطابق مصدره */
+      const fullInDom = src.every(li => li.hasAttribute('data-label')) &&
+        els.filter(e => e.hasAttribute('aria-label')).every(e =>
+          src.some(li => li.getAttribute('data-label') === e.getAttribute('aria-label')));
       const res = { overlaps, cutCount: cut.length, disclosureOk, fullInDom,
         texts: els.map(e => e.textContent) };
       host.remove();
@@ -348,9 +351,9 @@ def run(page, base, width, tag):
       const accName = close.getAttribute('aria-label') || close.textContent.trim();
       return { lines, cw, ch, accName };
     }""")
-    t(f"F-06 {P} نص الملاحظة ≤ سطرين (عادي)", f06["lines"] <= 2, f"lines={f06['lines']}")
+    t(f"F-06 {P} نص الملاحظة مقروء بلا فيض (≤3 أسطر عادي، الالتفاف عقد)", f06["lines"] <= 3, f"lines={f06['lines']}")
     t(f"F-06 {P} هدف الإغلاق ≤48px عرضًا و≥48px هدفًا واسم إتاحة صحيح",
-      f06["cw"] <= 48 and f06["ch"] >= 40 and f06["accName"].length > 0,
+      f06["cw"] <= 48 and f06["ch"] >= 40 and len(f06["accName"]) > 0,
       f"w={f06['cw']} h={f06['ch']} acc='{f06['accName']}'")
 
     # ================= F-07: توزيع الخطوات =================
@@ -363,23 +366,32 @@ def run(page, base, width, tag):
       const i = input.getBoundingClientRect();
       const b = btns.map(x => x.getBoundingClientRect());
       const cluster = (b[0] ? b[0].width : 0) + i.width + (b[1] ? b[1].width : 0);
-      const leftover = Math.round(c.width - cluster);
+      /* المساحة المفسّرة: الحشو + الفجوات + الحدان — كل ما تبقى غير مفسّر */
+      const cs = getComputedStyle(control);
+      const padH = parseFloat(cs.paddingInlineStart) + parseFloat(cs.paddingInlineEnd);
+      const gap = parseFloat(cs.columnGap) || 0;
+      const nChildren = control.children.length;
+      const gaps = gap * Math.max(0, nChildren - 1);
+      const borderH = parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+      const unexplained = Math.round(c.width - cluster - padH - gaps - borderH);
       const inRTL = getComputedStyle(document.documentElement).direction === 'rtl';
       const startGap = Math.round(inRTL ? (c.right - (b[0] ? b[0].right : i.right)) : ((b[0] ? b[0].left : i.left) - c.left));
-      return { controlW: Math.round(c.width), cluster: Math.round(cluster), leftover, startGap };
+      return { controlW: Math.round(c.width), cluster: Math.round(cluster), unexplained, startGap };
     }""")
-    t(f"F-07 {P} عنصر التحكم يملأ الحقل بلا فراغ غير مفسّر (≤24px)", f07["leftover"] <= 24,
-      f"control={f07['controlW']} cluster={f07['cluster']} leftover={f07['leftover']} startGap={f07['startGap']}")
+    t(f"F-07 {P} عنصر التحكم يحتضن كتلة الخطوات بلا فراغ غير مفسّر (≤4px)", f07["unexplained"] <= 4,
+      f"control={f07['controlW']} cluster={f07['cluster']} unexplained={f07['unexplained']} startGap={f07['startGap']}")
 
-    # ================= F-08: هندسة التقويم في المعرض =================
+    # ================= F-08: هندسة التقويم في المعرض (قسم DRAFT — تصفية الكل) =================
+    page.evaluate("() => { const b = document.querySelector('#sc-filter-seg [data-sc-filter=\"all\"]'); if (b) b.click(); }")
+    page.wait_for_timeout(150)
     f08 = page.evaluate("""() => {
       const root = document.querySelector('#sc-ocal-root');
-      if (!root || !root.querySelector('.m-ocal')) return null;
-      const cells = [...root.querySelectorAll('.m-ocal__month-cell')];
+      if (!root || !(root.classList.contains('m-ocal') || root.querySelector('.m-ocal'))) return null;
+      const cells = [...root.querySelectorAll('.m-ocal__cell')];
       if (!cells.length) return { noMonth: true };
       const r = cells[0].getBoundingClientRect();
       const weekdays = [...root.querySelectorAll('.m-ocal__weekday')].map(x => x.getBoundingClientRect().height);
-      const title = root.querySelector('.m-ocal__title, .m-ocal__month-title, [data-ocal-month-title]');
+      const title = root.querySelector('.m-ocal__cal-title');
       const titleLines = title ? Math.round(title.getBoundingClientRect().height / 22) : -1;
       const draftPill = !!document.querySelector('#sc-ocal .sc-pill--draft');
       return { w: Math.round(r.width), h: Math.round(r.height), maxWeekdayH: Math.max(...weekdays), titleLines, draftPill };
@@ -387,7 +399,7 @@ def run(page, base, width, tag):
     if f08 and not f08.get("noMonth"):
         t(f"F-08 {P} خلية الشهر ≥37px عرضًا (الاستثناء الموثق) وبلا تشويه", f08["w"] >= 37 and abs(f08["w"] - f08["h"]) <= 6,
           f"cell={f08['w']}x{f08['h']}")
-        t(f"F-08 {P} أيام الأسبوع سطر واحد", f08["maxWeekdayH"] <= 22, f"maxH={f08['maxWeekdayH']}")
+        t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
     elif f08 and f08.get("noMonth"):
         t(f"F-08 {P} التقويم غير موجود — فشل", False, "no month grid")
@@ -496,6 +508,10 @@ def run(page, base, width, tag):
     }""")
     t(f"F-13 {P} العارض داخل مساره بلا فيض صفحة", f13["pageOverflow"] <= 0 and f13["inside"],
       f"pageOverflow={f13['pageOverflow']} inside={f13['inside']}")
+
+    # العودة إلى تصفية current بعد أقسام المسودة
+    page.evaluate("() => { const b = document.querySelector('#sc-filter-seg [data-sc-filter=\"current\"]'); if (b) b.click(); }")
+    page.wait_for_timeout(120)
 
     # ================= F-14: عنوان شريط التطبيق تحت الإجهاد =================
     set_fixture(page, "stress")

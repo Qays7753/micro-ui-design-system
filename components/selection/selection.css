@@ -341,6 +341,39 @@
   inset-block: calc((40px - var(--micro-touch-min)) / 2); /* -4px */
 }
 
+/* ================= 4b) سياسة العرض الضيق — نمطان صريحان (F-05 · 2026-10-10) =================
+   السياسة المسجلة في specification.md §4 قبل إضافة هذين النمطين: لا
+   كبسولة متعددة الصفوف عرضية أبدًا. الافتراضي بلا صنف يبقى التفاف SUI-011
+   بهندسته الموثقة (أداة a2 تظل تحكمه). عند التسميات الطويلة يختار
+   المستهلك صراحةً: */
+.m-seg--scroll {
+  /* صف واحد + تمرير أفقي — نفس سياسة الألسنة المعتمدة (D-UI-01):
+     لا حذف تسميات ولا تصغير نص ولا صف يتيم؛ حافة العنصر التالي الظاهرة
+     مفتاح الاكتشاف، والخصائص منطقية فتعمل في RTL/LTR كما هي. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.m-seg--scroll .m-seg__item { flex: 0 0 auto; }
+
+.m-seg--stack {
+  /* تكديس عمودي لخيارين إلى أربعة لا تتسع تسمياتها صفًا واحدًا: بنية
+     عمودية لا كبسولة — زوايا الحاوية radius-field، فجوة 12px بنفس حساب
+     لمس SUI-011 (أهداف 48px الموسعة بفراغ ≥4px بين العناصر)، والعناصر
+     بعرض كامل بمحاذاة البداية (قراءة قائمة). */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  row-gap: var(--micro-space-3);
+  border-radius: var(--micro-radius-field);
+}
+.m-seg--stack .m-seg__item {
+  width: 100%;
+  flex: 0 0 auto;
+  justify-content: flex-start;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m-choice__box,
   .m-choice__box svg,

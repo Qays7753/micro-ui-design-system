@@ -389,10 +389,21 @@
             <button type="button" class="m-seg__item" aria-pressed="false">هذا الشهر</button>
             <button type="button" class="m-seg__item" aria-pressed="false" aria-disabled="true">الربع (معطل)</button>
           </div>
-          <div class="m-seg" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
+          <!-- F-05 (2026-10-10): سياسة العرض الضيق المسجلة في مواصفة B03 §4 —
+               مع التسميات الطويلة يختار المستهلك نمطًا صريحًا بدل الالتفاف:
+               m-seg--scroll (صف واحد + تمرير، سياسة الألسنة D-UI-01) أو
+               m-seg--stack (تكديس عمودي). -->
+          <p class="sc-block__title">تسميات طويلة — سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
+          <div class="m-seg m-seg--scroll" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
             <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="تسمية طويلة جدًا بلا مسافات">الطلبات النشطة</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="تسمية أطول بكثير بلا أي مسافة">قيد التجهيز</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="ثالثة طويلة أيضًا">بانتظار الموافقة</button>
+          </div>
+          <p class="sc-block__title">m-seg--stack: تكديس عمودي عند عدم اتساع الصف أصلًا</p>
+          <div class="m-seg m-seg--stack" data-seg data-choice-group role="group" aria-label="نمط التكديس">
+            <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="خيار أول بعنوان طويل جدًا يلتف داخل الصف الكامل">الفحص الدوري الشامل</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="خيار ثانٍ بعنوان طويل أيضًا">الصيانة الطارئة فقط</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" aria-disabled="true">وضع مخصص (معطل)</button>
           </div>
         </div>
         <div class="sc-stack--tight">
@@ -782,12 +793,12 @@
           <div class="m-note m-note--info" id="sc-note-info">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
             <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك — الدور status من النوع.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--success" id="sc-note-success">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
             <span class="m-note__text"><b class="m-note__title">تم الحفظ</b><span class="m-note__body">رسالة تأكيد تبقى حتى يغلقها المستخدم وتعيد التركيز لمصدرها.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-success">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-success" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--warning" id="sc-note-warning">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
@@ -796,7 +807,7 @@
           <div class="m-note m-note--error" id="sc-note-error">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert-circle"/></svg>
             <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف — الدور alert من النوع تلقائيًا.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--help" id="sc-note-help">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
@@ -940,7 +951,7 @@
       <div class="sc-block">
         <main data-account-settings data-account-layer-id="sc-account-layer" id="sc-account-root">
           <button class="m-btn m-btn--secondary" type="button" data-account-open data-autofocus>فتح الإعدادات</button>
-          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز).</p>
+          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px) — سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
           <div class="m-layer-backdrop" id="sc-account-backdrop" data-for="sc-account-layer" hidden></div>
           <div class="m-layer m-layer--center" id="sc-account-layer" role="dialog" aria-modal="true" aria-labelledby="sc-account-main-title" data-account-settings-layer hidden>
             <header class="m-layer__head">
@@ -1018,7 +1029,10 @@
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عرضه هنا لا يعني اعتماده. استثناء خلية الشهر (~37.7px عند 320) PROPOSED موثق بانتظار توقيع المالك.</p>
       </div>
-      <div class="sc-block sc-stack">
+      <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
+           (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
+           عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
+      <div class="sc-block sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
@@ -1026,7 +1040,7 @@
         </div>
         <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند 320 يملأ التقويم البطاقة كاملة (بلا حشوة مزدوجة) حفاظًا على مربعية الخلية المرجعية.</p>
       </div>
     </section>
 

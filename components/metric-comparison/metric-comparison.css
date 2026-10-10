@@ -14,6 +14,16 @@
   color: var(--micro-text-primary);
 }
 
+/* F-12 (2026-10-10): عقدة حاوية للعرض الفعلي — تخطيط المقارنة الرئيسية
+   يتبع عرض المكوّن نفسه لا عرض نافذة المتصفح: حاوية اللوحة الثابتة
+   في المعرض والمكوّن داخل بطاقات مختلفة يقيسان بالقيمة الصحيحة.
+   التحول للعمودين (الدائرة بجوار الأشرطة) عند ≥420px فعلية فقط —
+   أسفل ذلك الأشرطة بعرض كامل مقروءة (كان عتبة viewport 390 تجعل
+   الأشرطة ~158px عند 390 فعلية). */
+.m-main-metric {
+  container-type: inline-size;
+}
+
 .m-metric-circles__title,
 .m-main-metric__title {
   margin: 0 0 var(--micro-space-4);
@@ -365,7 +375,11 @@
 .m-main-metric__row[data-series="d"] .m-main-metric__bar { background: var(--micro-data-d); }
 .m-main-metric__row[data-series="e"] .m-main-metric__bar { background: var(--micro-data-e); }
 
-@media (min-width: 390px) {
+/* F-12 (2026-10-10): التخطيط الجانبي عند عرض المكوّن الفعلي ≥420px
+   (container query) — لا عتبة viewport (كانت 390 تجعل عمود الأشرطة
+   ~158px عند 320 داخل اللوحات المركّبة). أسفل 420px: الدائرة فوق
+   الأشرطة بعرض كامل مقروء — تكديس مقصود موثق في المواصفة. */
+@container (min-width: 420px) {
   .m-main-metric__layout { grid-template-columns: minmax(144px, 0.85fr) minmax(0, 1.15fr); }
   .m-main-metric__hero { justify-self: start; }
 }

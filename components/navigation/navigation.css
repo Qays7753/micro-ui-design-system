@@ -39,7 +39,16 @@
   line-height: var(--micro-body-line);
   font-weight: 600;
   color: var(--micro-text-primary);
-  /* عنوان طويل يلتف — لا قص */
+  /* F-14 (2026-10-10، تكليف معرض النظام): التفاف محدود بسطرين ثم قطع
+     بمقطع «…» — القاعدة الشبيهة بالأصل: عنوان شريط التطبيق لا يجعل
+     الشريط نصف الشاشة مهما طال (كان: التفاف حر وصل 7-8 أسطر عند 320
+     بين هدفين 48px). النص الكامل باقٍ في DOM وشجرة الإتاحة (قراءة
+     كاملة لقارئ الشاشة ونسخ) — القطع بصري فقط. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 .m-appbar .m-btn { flex: none; }
 

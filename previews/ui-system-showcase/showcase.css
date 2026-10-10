@@ -233,6 +233,23 @@ body {
   .sc-grid-2 { grid-template-columns: 1fr 1fr; }
 }
 
+/* F-07 (2026-10-10): حقل الكمية وحدة متماسكة — النمط المعتمد نفسه في
+   عينة F03 (R2-UI01): عنصر التحكم يحتضن أزرار الخطوة والقيمة بلا
+   فراغ غير مفسّر خلفها (كان: عنصر تحكم بعرض العمود كاملًا وكتلة
+   160px في بدايته و96-166px فراغًا بعدها). قاعدة تركيب مستهلك —
+   الحقل يبقى بعقده، والتوزيع من التوكنات القائمة فقط. */
+#sc-field-qty .m-field__control {
+  width: fit-content;
+  padding-inline: var(--micro-space-2);
+  gap: var(--micro-space-1);
+}
+#sc-field-qty .m-field__input--num {
+  flex: none;
+  width: var(--micro-quantity-min-width);
+  min-width: 5ch;
+  text-align: center;
+}
+
 /* شريط أدوات الحالة (أزرار عرض تجريبية) */
 .sc-tools {
   display: flex;
@@ -272,6 +289,21 @@ body {
 .sc-surface-stage .m-surface__title { margin: 0; max-width: 100%; }
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }
 .sc-surface-stage .m-surface__sub { margin: 0; }
+
+/* F-08 (2026-10-10): بطاقة التقويم (DRAFT) بلا حشوة أفقية مزدوجة عند
+   الضيق — ميزانية 7 أعمدة مربعة (≈37.7px للخلية عند 320) تتطلب عرض
+   288px للمكوّن (320 − 2×16 هوامش الصفحة المرجعية كما في عينته
+   المستقلة)؛ حشوة اللوحة + حشوة البطاقة كانتا تزحانه إلى 256px فتتشوه
+   الخلية إلى 33×37.8 بدل المربع. عند حاوية أضيق من 360 تُزال حشوة
+   البطاقة الأفقية لهذا القسم وحده (التقويم full-bleed داخل السطح)
+   ويُعوّض باقي المحتوى بهوامش مطابقة. الاستثناء الموثق (~37.7px) وشارة
+   DRAFT محفوظان — لا ترقية حالة. */
+@container (max-width: 359.5px) {
+  .sc-block--ocal { padding-inline: 0; }
+  .sc-block--ocal > .sc-tools,
+  .sc-block--ocal > .sc-log,
+  .sc-block--ocal > .sc-hint { margin-inline: var(--micro-space-4); }
+}
 
 /* سجل أحداث تجريبي صغير — F-11 (2026-10-10): فارغًا لا يحجز مساحة
    مرئية (:empty يخفيه حتى أول حدث يُسجّله logEvent) — كان يحجز
