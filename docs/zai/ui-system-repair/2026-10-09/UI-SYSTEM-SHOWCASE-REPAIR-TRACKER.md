@@ -6,7 +6,7 @@
 
 **أدوات القياس (قبل/بعد بنفس الكود):** `tools/ui-system-showcase-repair-check.py --tag before|after`
 - قبل (على رأس الأساس fae9159 في worktree نظيف): **96 PASS / 68 FAIL** — `reviews/UI-SYSTEM-SHOWCASE/repair-check-before.txt` (الإخفاقات = إعادة إنتاج العيوب) + `screenshots/before/`.
-- بعد (على رأس الإصلاح): **168 PASS / 0 FAIL (بعد مراجعتي 1+2: بوابات سلوكية أقوى)** عند 320/360/390/430 RTL (بعد مراجعة الوكيل 1: أُزيلت بوابتان فارغتان — كشف إفصاح بنهاية النص وأعمدة إجهاد ترفض مقياسها أصلًا — وأُحلّت بوابات رفض المقياس الصادقة) — `reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt` + `screenshots/repair-after-*.png`.
+- بعد (على رأس الإصلاح): **176 PASS / 0 FAIL (بعد مراجعتي 1+2: بوابات سلوكية أقوى)** عند 320/360/390/430 RTL (بعد مراجعة الوكيل 1: أُزيلت بوابتان فارغتان — كشف إفصاح بنهاية النص وأعمدة إجهاد ترفض مقياسها أصلًا — وأُحلّت بوابات رفض المقياس الصادقة) — `reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt` + `screenshots/repair-after-*.png`.
 - **بوابات الدمج:** كل P1 مُصلح ومُتحقق؛ لا قرار مالك غير محسوم يوصف FIXED؛ أدلة لكل بند.
 
 ## ملخص الحالات النهائية
@@ -124,6 +124,7 @@
 - **الإصلاح (ملفات المعرض فقط):** (أ) `.sc-log:empty { display: none; }` — يظهر السجل عند أول حدث (logEvent)؛ (ب) `showcase.js` يثبت `indeterminate=true` للخانة عند التحميل وأُعيدت صياغة التسمية إلى «يبدأ غير محسوم» (المتصفح يزيلها عند أول تفاعل)؛ (ج) وسم مرئي أعلى شريط التحكم: «أدوات مراجعة العرض — ليست جزءًا من واجهة المنتج» + aria-label مطابق.
 - **قياسات:** قبل: emptyVisible>0 في الوضع المفتوح وindeterminate=False؛ بعد: emptyVisible=0، indeterminate=True، tag=True.
 - **التراجع:** `git revert` لتغييرات W2.
+- **ملاحظة الوكيل 4 (قائمة على الجولة، خارج نطاق البنود):** تمييز `input:indeterminate` المرئي في `m-choice` مطابق تمامًا للحالة المحددة (التعليق في selection.css يعد بمظهر «شرطة» غير موجود) — الحالة الدلالية حقيقية ومطابقة للتسمية (عقد F-11)، والتمييز البصري بين المحسوم والمحدد فجوة تنسيق سابقة في العائلة تُسجَّل ولا تُعدَّل ضمن هذه الجولة (خارج سجل البنود الأربعة عشر).
 
 ### F-12 — المقارنة العددية تفقد عرض الأشرطة بجوار الدائرة (P2) — FIXED_AND_VERIFIED
 
@@ -155,7 +156,7 @@
 
 | الفحص | النتيجة |
 |---|---|
-| `tools/ui-system-showcase-repair-check.py --tag after` | **168/168** عند 320/360/390/430 RTL (بعد إحلال بوابات صادقة) |
+| `tools/ui-system-showcase-repair-check.py --tag after` | **176/176** عند 320/360/390/430 RTL (بعد إحلال بوابات صادقة) |
 | `tools/ui-system-showcase-check.py` (مصفوفة العرض) | **118/118** (editable+standalone) |
 | `node tools/repair-regression.cjs` | **301/301** |
 | `tools/ui-repair-r1-check.py` | **54/54** |

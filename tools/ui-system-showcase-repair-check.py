@@ -416,8 +416,9 @@ def run(page, base, width, tag):
       return { w: Math.round(r.width), h: Math.round(r.height), maxWeekdayH: Math.max(...weekdays), titleLines, draftPill };
     }""")
     if f08 and not f08.get("noMonth"):
-        t(f"F-08 {P} خلية الشهر ≥37px عرضًا (الاستثناء الموثق) وبلا تشويه", f08["w"] >= 37 and abs(f08["w"] - f08["h"]) <= 6,
+        t(f"F-08 {P} خلية الشهر ≥37px مربعة (±2px)", f08["w"] >= 37 and abs(f08["w"] - f08["h"]) <= 2,
           f"cell={f08['w']}x{f08['h']}")
+        t(f"F-08 {P} عنوان الشهر سطر واحد", f08["titleLines"] == 1, f"lines={f08['titleLines']}")
         t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
     elif f08 and f08.get("noMonth"):
@@ -527,6 +528,21 @@ def run(page, base, width, tag):
     }""")
     t(f"F-13 {P} العارض داخل مساره بلا فيض صفحة", f13["pageOverflow"] <= 0 and f13["inside"],
       f"pageOverflow={f13['pageOverflow']} inside={f13['inside']}")
+    f13b = page.evaluate("""() => {
+      const next = document.querySelector('#sc-carousel-root [data-next]');
+      if (next && !next.disabled) next.click();
+      return true;
+    }""")
+    page.wait_for_timeout(350)
+    f13m = page.evaluate("""() => {
+      const root = document.querySelector('#sc-carousel-root');
+      const block = root.closest('.sc-block').getBoundingClientRect();
+      const r = root.getBoundingClientRect();
+      return { pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+               inside: r.left >= block.left - 1 && r.right <= block.right + 1 };
+    }""")
+    t(f"F-13 {P} العارض داخل مساره بعد الانتقال التالي أيضًا", f13m["pageOverflow"] <= 0 and f13m["inside"],
+      f"pageOverflow={f13m['pageOverflow']} inside={f13m['inside']}")
 
     # العودة إلى تصفية current بعد أقسام المسودة
     page.evaluate("() => { const b = document.querySelector('#sc-filter-seg [data-sc-filter=\"current\"]'); if (b) b.click(); }")
