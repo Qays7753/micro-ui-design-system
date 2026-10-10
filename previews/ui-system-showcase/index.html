@@ -1100,7 +1100,12 @@
   </div>
 
   <!-- ===== الطبقات (B07) — على مستوى التطبيق ===== -->
-  <!-- طبقة المنتقي: منتقي كيان B03 داخل طبقة حقيقية -->
+  <!-- طبقة المنتقي: منتقي كيان B03 داخل طبقة حقيقية.
+       F-02 (2026-10-10): عند وضع المنتقي داخل طبقة تملك الطبقة العنوان
+       والإغلاق الظاهرين — رأس المنتقي (.m-picker__head) اختياري في عقد
+       المكوّن ويُحذف هنا كي لا يتكرر زرّا إغلاق متتاليان وعنوانان.
+       الاستخدام المستقل (بلا طبقة) يبقي رأس المنتقي خاصته — عقد
+       selection/specification.md §منتقي الكيان. -->
   <div class="m-layer-backdrop" data-for="sc-picker-layer" hidden></div>
   <div class="m-layer" id="sc-picker-layer" role="dialog" aria-modal="true" aria-labelledby="sc-picker-title" data-backdrop="close" hidden>
     <div class="m-layer__head">
@@ -1109,10 +1114,6 @@
     </div>
     <div class="m-layer__body">
       <div class="m-picker" data-micro-picker id="sc-picker">
-        <div class="m-picker__head">
-          <span class="m-picker__title">ابحث واختر</span>
-          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-        </div>
         <input class="m-picker__input" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم">
         <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list></div>
         <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>

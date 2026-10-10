@@ -68,10 +68,19 @@
             أو عند الإظهار — دون نقرة من المستخدم؛ الدونات (148 الثابت)
             والفقاعات (تدفق DOM) خارج الرصد، وغياب ResizeObserver في بيئة
             قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
-   R3-UI02: تسميات bars/line تُقاس فعليًا بعد إلحاق الرسم بالوثيقة
-            (getComputedTextLength بوحدات viewBox) فتُقصّ بمقطع «…» عند
-            تجاوز نصف ميزانية 200% مع قراءة كاملة (aria-label + <title>
-            + data-label-full الاختيارية) وحدود طرفين [8, W−8] وحدات.
+   F-01 (2026-10-10، تكليف معرض النظام): تسميات bars/line تُقاس فعليًا
+            بعد إلحاق الرسم (getComputedTextLength بوحدات viewBox)
+            والميزانية الكاملة عند 1×: القص بمقطع «…» لا يقع إلا لسطر
+            أعرض من ميزانية عموده/تباعد نقطته كاملة (كلمة مفردة طويلة)،
+            مع قراءة كاملة (aria-label + <title> + data-label-full
+            الاختيارية) وحدود طرفين بالمدى الفعلي [x−len/2, x+len/2]
+            داخل [8, W−8]، وتحقق زوجي بالمدى الفعلي داخل كل صف.
+            جاهزية الخط: بعد fonts.ready تُعاد رسوم bars/line مرة واحدة
+            فأول تصيير مستقر = كل إعادة تصيير لاحقة (مرصود سابقًا:
+            اختلاف القياس بمقاييس الخط البديل قبل التحميل).
+            حل محل تخطيط «ميزانية 200%» (R2-UI02/R3-UI02) الذي كان
+            يقصّ التسميات عند نصف الميزانية عند الحجم الطبيعي — اتجاه
+            المنتج الحالي لا هدف تكبير فيه (تكليف 2026-10-09).
    ========================================================= */
 
 (function () {
@@ -151,8 +160,8 @@
   /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
      R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
      مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
-     تبقى كاملة (ودخلت عقد القياس الفعلي R3-UI02 أدناه: إن تجاوزت نصف
-     ميزانية 200% قُصّت بمقطع «…» مع قراءة كاملة).
+     تبقى كاملة (ودخلت عقد القياس الفعلي F-01 أدناه: إن تجاوزت ميزانيتها
+     الكاملة عند 1× قُصّت بمقطع «…» مع قراءة كاملة).
      R3-UI02a: «/» فاصل تقسيم مثله مثل الشرطة — تسمية يوم/شهر قصيرة مثل
      10/09 تُقسّم إلى «10/» + «09» (سطران كاملان) بدل قصّها بمقطع؛
      لا يفترض المكوّن نوع التاريخ — تقسيم نصي عام لأي رمز معلن. */
@@ -197,28 +206,28 @@
     return lines;
   }
 
-  /* ---- R3-UI02: دورة قياس وموائمة التسميات بعد الإلحاق ----
-     عدد الأحرف وحده (labelChars) لا يكفي: الكلمة العربية المفردة بلا
-     فراغات لا تُلف أصلًا، وتقدير 6.8/حرف تقريبي لا يطابق كل خط. بعد
-     بناء SVG وإلحاقه بالوثيقة (رسم مرئي) تُقاس كل تسمية فعليًا بـ
-     getComputedTextLength (بوحدات viewBox — يشمل تلقائيًا تعويض fontPx
-     السطري) ثم:
-       1) ميزانية 200%: نصف ميزانية العمود/النقطة (colW×0.92 للأعمدة
-          وتباعد النقاط×0.92 للخط، القسمة على 2 تخطّط لبيئة خط مضاعفة —
-          نفس فلسفة labelChars)؛ ما تجاوزها يُقصّ تدريجيًا بمقطع «…»
-          (سقف محاولات — لا حلقة مفتوحة) ولا يُصغّر الخط أبدًا عن الحد
-          المعلن: عند 1× تبدو الكلمة مختصرة قليلاً وعند 2× لا تتداخل —
-          هذا هو العقد الصادق المعلن.
-       2) القراءة الكاملة لا تضيع: النص المقتطع يحمل aria-label + عنصر
-          <title> ابناً للـ<text> بالنص الكامل (data-label-full إن مرره
-          المستهلك وإلا data-label)؛ <li data-label> المصدر يبقى كاملاً
-          في DOM كما هو.
-       3) حدود النقاط الطرفية: يثبّت x بحيث يبقى مدى النص المخطط عند
-          200% (الطول المقيس ×2 — نفس فلسفة الميزانية) داخل [8, W−8]
-          وحدات؛ نص middle: إذا cx−len < 8 فرفع x إلى 8+len، وإذا
-          cx+len > W−8 فخفضه.
-       4) تحقق زوجي أخير داخل كل صف تسميات: لو بقي تداخل مجاور بالمدى
-          المخطط قُصّ الأعرض حتى الفصل.
+  /* ---- F-01 (2026-10-10، تكليف معرض النظام): موائمة التسميات عند المقياس الفعلي 1× ----
+     العقد القديم (R2-UI02/R3-UI02) خطّط لبيئة خط مضاعفة (محاكاة 200%
+     محسوبة) فقصّ كل تسمية عند نصف ميزانية العمود/النقطة — النتيجة
+     المرصودة في المعرض: تسميات مقروءة جزئيًا عند الحجم الطبيعي
+     (مبيعات ← مبيع…، مشتريات ← مش…). اتجاه المنتج الحالي (تكليف
+     2026-10-09) لا هدف تكبير فيه — المقياس ثابت. العقد الجديد:
+       1) كل سطر تسمية يأخذ ميزانية العمود/تباعد النقاط الكاملة (×0.92)
+          عند 1×؛ القص بمقطع «…» لا يقع إلا لسطر أعرض من ميزانيته
+          كاملة (كلمة عربية مفردة طويلة مثلًا)، ولا يُصغّر خط أبدًا.
+       2) منع التصادم والحدود الطرفية تعمل بالمدى الفعلي المقيس
+          (نص مُوسّط: [x−len/2, x+len/2]) داخل [8, W−8] — لا مدى
+          مضاعفًا تخطيطيًا. تحقق زوجي داخل كل صف تسميات بفجوة ≥1 وحدة.
+       3) القراءة الكاملة لا تضيع عند القص: aria-label + عنصر <title>
+          ابن بالنص الكامل (data-label-full إن مرره المستهلك وإلا
+          data-label)؛ <li data-label> المصدر يبقى كاملاً في DOM،
+          وإفصاح بيانات الرسم (جدول) متاح دائمًا (D-UI-04).
+       4) جاهزية الخط: الرسم الأول قد يحدث قبل تحميل الخط العربي
+          (مقاييس خط بديل أضيق/أعرض) فيختلف أول تصيير عن إعادة
+          التصيير — مرصود فعليًا: «مش…» قبل الجاهزية و«مشتر…» بعدها.
+          بعد document.fonts.ready يُعاد رسم كل رسم مُهيّأ مرة واحدة
+          (نفس نمط packed-circle الموثق) فتستقر الحالة على قياسات
+          الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها.
      الرسم المخفي (عرض 0 — لا يمكن القياس) تتخطى المواءمة وتبقى خطة
      الأحرف الحالية: المستهلك يعيد الرسم عند الإظهار، ورصد R3-UI01
      يضمنه تلقائيًا حيثما وُجد ResizeObserver. */
@@ -229,7 +238,8 @@
     catch (e) { return 0; } /* بيئة بلا قياس هندسي: اعتبره 0 (لا قص) */
   }
 
-  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط */
+  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط.
+     F-01: limit الآن الميزانية الكاملة عند 1× (لا نصفها). */
   function truncateToBudget(t, limit) {
     var s = String(t.textContent || '');
     var guard = 0;
@@ -246,33 +256,34 @@
     var plot = chart.querySelector('[data-plot]');
     if (!plot || plot.getBoundingClientRect().width <= 1) return; /* مخفي */
     var W = 320;
-    var half = budget / 2; /* ميزانية 200%: نصف الميزانية لكل نص */
     var entries = [];
     /* مجموعات الرسم بترتيب العناصر نفسه — التسمية تعرف نصها الكامل */
     [].slice.call(svg.querySelectorAll('g')).forEach(function (g, i) {
       var full = items[i] ? (items[i].labelFull || items[i].label || '') : '';
       [].slice.call(g.querySelectorAll('.' + labelCls)).forEach(function (t) {
-        var e = {
+        entries.push({
           t: t, full: full, cut: false,
           cx0: parseFloat(t.getAttribute('x')) || 0, /* مركز العمود/النقطة قبل التثبيت */
           y: t.getAttribute('y') /* مفتاح الصف — الصفوف تتقاسم قيم y */
-        };
-        if (measuredLenOf(t) > half) e.cut = truncateToBudget(t, half);
-        entries.push(e);
+        });
       });
     });
     if (!entries.length) return;
-    /* حدود الطرفين: المدى المخطط عند 200% هو [x−len, x+len] وحدات */
+    /* F-01: القص الفردي عند تجاوز الميزانية الكاملة (1×) فقط */
+    entries.forEach(function (e) {
+      if (measuredLenOf(e.t) > budget) e.cut = truncateToBudget(e.t, budget);
+    });
+    /* حدود الطرفين بالمدى الفعلي المقيس: [x−len/2, x+len/2] داخل [8, W−8] */
     function clampOf(e) {
-      var len = measuredLenOf(e.t);
+      var half = measuredLenOf(e.t) / 2;
       var x = e.cx0;
-      if (x - len < 8) x = 8 + len;
-      if (x + len > W - 8) x = W - 8 - len;
-      if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: ثبّت الحد الأدنى */
+      if (x - half < 8) x = 8 + half;
+      if (x + half > W - 8) x = W - 8 - half;
+      if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: ثبّت الحد الأدنى */
       e.t.setAttribute('x', x);
     }
     entries.forEach(clampOf);
-    /* تحقق زوجي داخل كل صف: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
+    /* تحقق زوجي داخل كل صف بالمدى الفعلي: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
     var rows = {};
     entries.forEach(function (e) { (rows[e.y] = rows[e.y] || []).push(e); });
     Object.keys(rows).forEach(function (yk) {
@@ -286,11 +297,11 @@
           var a = row[i], b = row[i + 1];
           var ax = parseFloat(a.t.getAttribute('x')) || 0;
           var bx = parseFloat(b.t.getAttribute('x')) || 0;
-          var al = measuredLenOf(a.t), bl = measuredLenOf(b.t);
-          if (ax + al >= bx - bl - 1) { /* تداخل بالمدى المخطط (فجوة ≥1 وحدة) */
+          var aHalf = measuredLenOf(a.t) / 2, bHalf = measuredLenOf(b.t) / 2;
+          if (ax + aHalf >= bx - bHalf - 1) { /* تداخل فعلي (فجوة ≥1 وحدة) */
             var wide;
-            if (bl > al) wide = b;
-            else if (al > bl) wide = a;
+            if (bHalf > aHalf) wide = b;
+            else if (aHalf > bHalf) wide = a;
             else { /* التعادل: الأقرب إلى طرف الرسم (قصّه أرخص — التثبيت يبعده عن جاره) */
               wide = (Math.min(a.cx0, W - a.cx0) <= Math.min(b.cx0, W - b.cx0)) ? a : b;
             }
@@ -313,19 +324,21 @@
       ti.textContent = e.full;
       e.t.appendChild(ti);
     });
-    /* R3-UI02: حدود الطرفين تسري على كل نصوص الرسم لا التسميات وحدها:
-       القيم (فوق العمود/النقطة) قد تتجاوز حدود الطرف عند 200% أيضًا —
-       القيم لا تُقصّ أبدًا (عقد القيم كاملة) بل يثبّت موضعها x فقط بحيث
-       يبقى مداها المخطط [x−len, x+len] داخل [8, W−8]؛ التسميات مرّت
-       بالتثبيت أعلاه وهذا المرور لا يغيّرها (تثبيت متماثل). */
+    /* F-01 (2026-10-10): حدود الطرفين بالمدى الفعلي المقيس (1×) تسري على
+       كل نصوص الرسم لا التسميات وحدها: القيم (فوق العمود/النقطة) قد
+       تتجاوز حدود الطرف أيضًا — القيم لا تُقصّ أبدًا (عقد القيم كاملة)
+       بل يثبّت موضعها x فقط بحيث يبقى مداها الفعلي [x−len/2, x+len/2]
+       داخل [8, W−8]؛ التسميات مرّت بالتثبيت أعلاه وهذا المرور لا
+       يغيّرها (تثبيت متماثل). */
     [].slice.call(svg.querySelectorAll('text')).forEach(function (t) {
       var len = measuredLenOf(t);
       if (!(len > 0)) return;
+      var half = len / 2;
       var x = parseFloat(t.getAttribute('x')) || 0;
-      if (x - len < 8 || x + len > W - 8) {
-        if (x - len < 8) x = 8 + len;
-        if (x + len > W - 8) x = W - 8 - len;
-        if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: الحد الأدنى */
+      if (x - half < 8 || x + half > W - 8) {
+        if (x - half < 8) x = 8 + half;
+        if (x + half > W - 8) x = W - 8 - half;
+        if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: الحد الأدنى */
         t.setAttribute('x', x);
       }
     });
@@ -447,11 +460,11 @@
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? BAR_TEXT_PX * ts.k : null;
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (محاكاة 200%
-       المعلنة في المشروع): الحد/2 لكل سطر — النص الملفوف لا يصطدم بجاره
-       ولا يخرج عن عموده عند مضاعفة حجم الخط، والشرطات تقسم التواريخ.
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× — الحد الكامل لكل سطر
+       (لا تخطيط مضاعف): السطر الملفوف يقارب ميزانية العمود، والأسطر
+       الأعرض من الميزانية يعالجها قياس المواءمة الفعلي بعد الإلحاق.
        الأرضية 6 كما في R1. */
-    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / (6.8 * 2)));
+    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
@@ -542,9 +555,9 @@
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? LINE_TEXT_PX * ts.k : null;
     var n = Math.max(items.length, 2);
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (200%) كما في
-       الأعمدة — الحد/2 لكل سطر؛ الأرضية 5 كما في R1. */
-    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / (6.8 * 2)));
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× كما في الأعمدة — الحد
+       الكامل لكل سطر؛ الأرضية 5 كما في R1. */
+    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
@@ -1062,4 +1075,26 @@
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroData.init(); });
   if (document.readyState !== 'loading') window.MicroData.init();
+
+  /* F-01 (2026-10-10): جاهزية الخط — الرسم الأول قد يقيس بمقاييس خط
+     بديل قبل تحميل IBM Plex العربي فيختلف أول تصيير عن إعادة التصيير
+     (مرصود فعليًا: «مش…» قبل الجاهزية مقابل «مشتر…» بعدها في نفس
+     البيانات). بعد document.fonts.ready تُعاد رسوم bars/line المُهيّأة
+     مرة واحدة (نفس نمط packed-circle الموثق) فتستقر المواءمة على
+     قياسات الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها (render
+     idempotent والمراقب واحد لكل رسم — لا أثر جانبي). */
+  function refitChartsOnFontsReady() {
+    if (!document.fonts || !document.fonts.ready) return;
+    document.fonts.ready.then(function () {
+      [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
+        var kind = c.getAttribute('data-chart');
+        if (kind === 'bars' || kind === 'line') render(c);
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', refitChartsOnFontsReady, { once: true });
+  } else {
+    refitChartsOnFontsReady();
+  }
 })();
