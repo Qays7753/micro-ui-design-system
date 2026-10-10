@@ -1460,6 +1460,39 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   inset-block: calc((40px - var(--micro-touch-min)) / 2); /* -4px */
 }
 
+/* ================= 4b) سياسة العرض الضيق — نمطان صريحان (F-05 · 2026-10-10) =================
+   السياسة المسجلة في specification.md §4 قبل إضافة هذين النمطين: لا
+   كبسولة متعددة الصفوف عرضية أبدًا. الافتراضي بلا صنف يبقى التفاف SUI-011
+   بهندسته الموثقة (أداة a2 تظل تحكمه). عند التسميات الطويلة يختار
+   المستهلك صراحةً: */
+.m-seg--scroll {
+  /* صف واحد + تمرير أفقي — نفس سياسة الألسنة المعتمدة (D-UI-01):
+     لا حذف تسميات ولا تصغير نص ولا صف يتيم؛ حافة العنصر التالي الظاهرة
+     مفتاح الاكتشاف، والخصائص منطقية فتعمل في RTL/LTR كما هي. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.m-seg--scroll .m-seg__item { flex: 0 0 auto; }
+
+.m-seg--stack {
+  /* تكديس عمودي لخيارين إلى أربعة لا تتسع تسمياتها صفًا واحدًا: بنية
+     عمودية لا كبسولة — زوايا الحاوية radius-field، فجوة 12px بنفس حساب
+     لمس SUI-011 (أهداف 48px الموسعة بفراغ ≥4px بين العناصر)، والعناصر
+     بعرض كامل بمحاذاة البداية (قراءة قائمة). */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  row-gap: var(--micro-space-3);
+  border-radius: var(--micro-radius-field);
+}
+.m-seg--stack .m-seg__item {
+  width: 100%;
+  flex: 0 0 auto;
+  justify-content: flex-start;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m-choice__box,
   .m-choice__box svg,
@@ -2423,6 +2456,20 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   border: 1.5px dashed var(--micro-warning);
   background: var(--micro-warning-surface);
 }
+
+/* F-09 (2026-10-10): مصدر مرئي واحد للفئة/اللون/القيمة — عند وجود
+   المفتاح الكامل (الوضع الافتراضي بلا data-legend="off") تُخفى صفوف
+   التسميات (.m-packed__labels) لأن المفتاح يحمل الفئة واللون والقيمة
+   مرة واحدة لكل عنصر؛ كانت الصفوف والمفتاح يظهران معًا فيفاجأ
+   المستهلك بالفئة مرتين (عيب F-09 في المعرض — القاعدة نفسها التي
+   اعتمدها مستهلك after-direction في board.css، مرفوعة إلى المكوّن
+   كعقد عام). مع data-legend="off" (البطاقات المضغوطة) تعود الصفوف
+   هي المصدر الكامل: تسمية كل دائرة بجانبها، والقيمة التي لا تتسع
+   داخل دائرة صغيرة تنتقل إلى صفها (البديل الكامل الموثق). القيم
+   داخل الدوائر حبر الرسم الأساسي في الوضعين. */
+.m-chart--packed:not([data-legend="off"]) .m-packed__labels {
+  display: none;
+}
 </style>
   <style data-sc-from="components/messages/messages.css">
 /* =========================================================
@@ -2664,7 +2711,16 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   line-height: var(--micro-body-line);
   font-weight: 600;
   color: var(--micro-text-primary);
-  /* عنوان طويل يلتف — لا قص */
+  /* F-14 (2026-10-10، تكليف معرض النظام): التفاف محدود بسطرين ثم قطع
+     بمقطع «…» — القاعدة الشبيهة بالأصل: عنوان شريط التطبيق لا يجعل
+     الشريط نصف الشاشة مهما طال (كان: التفاف حر وصل 7-8 أسطر عند 320
+     بين هدفين 48px). النص الكامل باقٍ في DOM وشجرة الإتاحة (قراءة
+     كاملة لقارئ الشاشة ونسخ) — القطع بصري فقط. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 .m-appbar .m-btn { flex: none; }
 
@@ -3505,6 +3561,16 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-primary);
 }
 
+/* F-12 (2026-10-10): عقدة حاوية للعرض الفعلي — تخطيط المقارنة الرئيسية
+   يتبع عرض المكوّن نفسه لا عرض نافذة المتصفح: حاوية اللوحة الثابتة
+   في المعرض والمكوّن داخل بطاقات مختلفة يقيسان بالقيمة الصحيحة.
+   التحول للعمودين (الدائرة بجوار الأشرطة) عند ≥420px فعلية فقط —
+   أسفل ذلك الأشرطة بعرض كامل مقروءة (كان عتبة viewport 390 تجعل
+   الأشرطة ~158px عند 390 فعلية). */
+.m-main-metric {
+  container-type: inline-size;
+}
+
 .m-metric-circles__title,
 .m-main-metric__title {
   margin: 0 0 var(--micro-space-4);
@@ -3856,7 +3922,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-main-metric__row[data-series="d"] .m-main-metric__bar { background: var(--micro-data-d); }
 .m-main-metric__row[data-series="e"] .m-main-metric__bar { background: var(--micro-data-e); }
 
-@media (min-width: 390px) {
+/* F-12 (2026-10-10): التخطيط الجانبي عند عرض المكوّن الفعلي ≥420px
+   (container query) — لا عتبة viewport (كانت 390 تجعل عمود الأشرطة
+   ~158px عند 320 داخل اللوحات المركّبة). أسفل 420px: الدائرة فوق
+   الأشرطة بعرض كامل مقروء — تكديس مقصود موثق في المواصفة. */
+@container (min-width: 420px) {
   .m-main-metric__layout { grid-template-columns: minmax(144px, 0.85fr) minmax(0, 1.15fr); }
   .m-main-metric__hero { justify-self: start; }
 }
@@ -5196,9 +5266,25 @@ body {
 
 /* ---------- شريط تحكم المراجعة (ليس سلوك منتج) ---------- */
 
+/* F-11 (2026-10-10): وسم مرئي صريح أن هذا الشريط أدوات مراجعة للعرض
+   فقط وليس جزءًا من واجهة المنتج — يمنع الخلط بين كروم العرض
+   والمكوّنات المعروضة. */
 .showcase-controls {
   background: var(--micro-surface-page);
   border-block-end: 1px solid var(--micro-border-divider);
+}
+
+.sc-controls-tag {
+  margin: 0;
+  padding-block: 6px 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+}
+
+.sc-controls-tag .sc-controls-tag__mark {
+  color: var(--micro-brand-primary);
+  font-weight: 700;
 }
 
 .showcase-controls__inner {
@@ -5340,6 +5426,23 @@ body {
   .sc-grid-2 { grid-template-columns: 1fr 1fr; }
 }
 
+/* F-07 (2026-10-10): حقل الكمية وحدة متماسكة — النمط المعتمد نفسه في
+   عينة F03 (R2-UI01): عنصر التحكم يحتضن أزرار الخطوة والقيمة بلا
+   فراغ غير مفسّر خلفها (كان: عنصر تحكم بعرض العمود كاملًا وكتلة
+   160px في بدايته و96-166px فراغًا بعدها). قاعدة تركيب مستهلك —
+   الحقل يبقى بعقده، والتوزيع من التوكنات القائمة فقط. */
+#sc-field-qty .m-field__control {
+  width: fit-content;
+  padding-inline: var(--micro-space-2);
+  gap: var(--micro-space-1);
+}
+#sc-field-qty .m-field__input--num {
+  flex: none;
+  width: var(--micro-quantity-min-width);
+  min-width: 5ch;
+  text-align: center;
+}
+
 /* شريط أدوات الحالة (أزرار عرض تجريبية) */
 .sc-tools {
   display: flex;
@@ -5380,7 +5483,24 @@ body {
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }
 .sc-surface-stage .m-surface__sub { margin: 0; }
 
-/* سجل أحداث تجريبي صغير */
+/* F-08 (2026-10-10): بطاقة التقويم (DRAFT) بلا حشوة أفقية مزدوجة عند
+   الضيق — ميزانية 7 أعمدة مربعة (≈37.7px للخلية عند 320) تتطلب عرض
+   288px للمكوّن (320 − 2×16 هوامش الصفحة المرجعية كما في عينته
+   المستقلة)؛ حشوة اللوحة + حشوة البطاقة كانتا تزحانه إلى 256px فتتشوه
+   الخلية إلى 33×37.8 بدل المربع. عند حاوية أضيق من 360 تُزال حشوة
+   البطاقة الأفقية لهذا القسم وحده (التقويم full-bleed داخل السطح)
+   ويُعوّض باقي المحتوى بهوامش مطابقة. الاستثناء الموثق (~37.7px) وشارة
+   DRAFT محفوظان — لا ترقية حالة. */
+@container (max-width: 359.5px) {
+  .sc-block--ocal { padding-inline: 0; }
+  .sc-block--ocal > .sc-tools,
+  .sc-block--ocal > .sc-log,
+  .sc-block--ocal > .sc-hint { margin-inline: var(--micro-space-4); }
+}
+
+/* سجل أحداث تجريبي صغير — F-11 (2026-10-10): فارغًا لا يحجز مساحة
+   مرئية (:empty يخفيه حتى أول حدث يُسجّله logEvent) — كان يحجز
+   صندوقًا فارغًا بحشو 12px وخلفية في كل قسم قبل أي تفاعل. */
 .sc-log {
   list-style: none;
   margin: 0;
@@ -5395,6 +5515,7 @@ body {
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
 }
+.sc-log:empty { display: none; }
 .sc-log li { padding-block: 2px; border-block-end: 1px solid var(--micro-border-divider); overflow-wrap: anywhere; }
 .sc-log li:last-child { border-block-end: 0; }
 
@@ -5506,9 +5627,11 @@ body {
     </div>
   </header>
 
-  <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج) -->
-  <div class="showcase-controls" role="group" aria-label="أدوات مراجعة العرض">
+  <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج).
+       F-11 (2026-10-10): وسم مرئي صريح أعلى الشريط يفصله عن واجهة المنتج. -->
+  <div class="showcase-controls" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
     <div class="showcase-controls__inner">
+      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span> — ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
       <div class="sc-ctl">
         <span class="sc-ctl__label" id="sc-dir-label">الاتجاه</span>
         <div class="m-seg" data-seg role="group" aria-labelledby="sc-dir-label" id="sc-dir-seg">
@@ -5702,9 +5825,12 @@ body {
               <span class="m-choice__text">تنظيف مكاتب</span>
             </label>
             <label class="m-choice m-choice--check">
+              <!-- F-11 (2026-10-10): الحالة غير المحسومة حالة حقيقية للمكوّن —
+                   يثبتها showcase.js عند التحميل (indeterminate=true) فتطابق
+                   التسميةُ الواقع، ويزيلها المتصفح عند أول تفاعل. -->
               <input type="checkbox" id="sc-check-group">
               <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
-              <span class="m-choice__text">كل الخدمات (indeterminate)</span>
+              <span class="m-choice__text">كل الخدمات (يبدأ غير محسوم)</span>
             </label>
             <label class="m-choice m-choice--check">
               <input type="checkbox" disabled>
@@ -5757,10 +5883,21 @@ body {
             <button type="button" class="m-seg__item" aria-pressed="false">هذا الشهر</button>
             <button type="button" class="m-seg__item" aria-pressed="false" aria-disabled="true">الربع (معطل)</button>
           </div>
-          <div class="m-seg" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
+          <!-- F-05 (2026-10-10): سياسة العرض الضيق المسجلة في مواصفة B03 §4 —
+               مع التسميات الطويلة يختار المستهلك نمطًا صريحًا بدل الالتفاف:
+               m-seg--scroll (صف واحد + تمرير، سياسة الألسنة D-UI-01) أو
+               m-seg--stack (تكديس عمودي). -->
+          <p class="sc-block__title">تسميات طويلة — سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
+          <div class="m-seg m-seg--scroll" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
             <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="تسمية طويلة جدًا بلا مسافات">الطلبات النشطة</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="تسمية أطول بكثير بلا أي مسافة">قيد التجهيز</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="ثالثة طويلة أيضًا">بانتظار الموافقة</button>
+          </div>
+          <p class="sc-block__title">m-seg--stack: تكديس عمودي عند عدم اتساع الصف أصلًا</p>
+          <div class="m-seg m-seg--stack" data-seg data-choice-group role="group" aria-label="نمط التكديس">
+            <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="خيار أول بعنوان طويل جدًا يلتف داخل الصف الكامل">الفحص الدوري الشامل</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="خيار ثانٍ بعنوان طويل أيضًا">الصيانة الطارئة فقط</button>
+            <button type="button" class="m-seg__item" aria-pressed="false" aria-disabled="true">وضع مخصص (معطل)</button>
           </div>
         </div>
         <div class="sc-stack--tight">
@@ -5827,7 +5964,7 @@ body {
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
+        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -5883,8 +6020,11 @@ body {
           </div>
         </div>
         <div>
-          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek — ADOPTED)</p>
-          <div class="m-info-strip" data-info-strip data-info-peek id="sc-strip-peek">
+          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek — ADOPTED)</p>
+          <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
+               data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
+               النشطة بعرض كامل ولا تلمح المجاورة. -->
+          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="sc-strip-peek">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات peek التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">
@@ -6147,12 +6287,12 @@ body {
           <div class="m-note m-note--info" id="sc-note-info">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
             <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك — الدور status من النوع.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--success" id="sc-note-success">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-check"/></svg>
             <span class="m-note__text"><b class="m-note__title">تم الحفظ</b><span class="m-note__body">رسالة تأكيد تبقى حتى يغلقها المستخدم وتعيد التركيز لمصدرها.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-success">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-success" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--warning" id="sc-note-warning">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert"/></svg>
@@ -6161,7 +6301,7 @@ body {
           <div class="m-note m-note--error" id="sc-note-error">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert-circle"/></svg>
             <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف — الدور alert من النوع تلقائيًا.</span></span>
-            <button type="button" class="m-btn m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error">إغلاق</button>
+            <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--help" id="sc-note-help">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
@@ -6305,7 +6445,7 @@ body {
       <div class="sc-block">
         <main data-account-settings data-account-layer-id="sc-account-layer" id="sc-account-root">
           <button class="m-btn m-btn--secondary" type="button" data-account-open data-autofocus>فتح الإعدادات</button>
-          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز).</p>
+          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px) — سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
           <div class="m-layer-backdrop" id="sc-account-backdrop" data-for="sc-account-layer" hidden></div>
           <div class="m-layer m-layer--center" id="sc-account-layer" role="dialog" aria-modal="true" aria-labelledby="sc-account-main-title" data-account-settings-layer hidden>
             <header class="m-layer__head">
@@ -6383,7 +6523,10 @@ body {
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عرضه هنا لا يعني اعتماده. استثناء خلية الشهر (~37.7px عند 320) PROPOSED موثق بانتظار توقيع المالك.</p>
       </div>
-      <div class="sc-block sc-stack">
+      <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
+           (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
+           عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
+      <div class="sc-block sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
@@ -6391,7 +6534,7 @@ body {
         </div>
         <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند 320 يملأ التقويم البطاقة كاملة (بلا حشوة مزدوجة) حفاظًا على مربعية الخلية المرجعية.</p>
       </div>
     </section>
 
@@ -6473,7 +6616,12 @@ body {
   </div>
 
   <!-- ===== الطبقات (B07) — على مستوى التطبيق ===== -->
-  <!-- طبقة المنتقي: منتقي كيان B03 داخل طبقة حقيقية -->
+  <!-- طبقة المنتقي: منتقي كيان B03 داخل طبقة حقيقية.
+       F-02 (2026-10-10): عند وضع المنتقي داخل طبقة تملك الطبقة العنوان
+       والإغلاق الظاهرين — رأس المنتقي (.m-picker__head) اختياري في عقد
+       المكوّن ويُحذف هنا كي لا يتكرر زرّا إغلاق متتاليان وعنوانان.
+       الاستخدام المستقل (بلا طبقة) يبقي رأس المنتقي خاصته — عقد
+       selection/specification.md §منتقي الكيان. -->
   <div class="m-layer-backdrop" data-for="sc-picker-layer" hidden></div>
   <div class="m-layer" id="sc-picker-layer" role="dialog" aria-modal="true" aria-labelledby="sc-picker-title" data-backdrop="close" hidden>
     <div class="m-layer__head">
@@ -6482,10 +6630,6 @@ body {
     </div>
     <div class="m-layer__body">
       <div class="m-picker" data-micro-picker id="sc-picker">
-        <div class="m-picker__head">
-          <span class="m-picker__title">ابحث واختر</span>
-          <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-picker-close aria-label="إغلاق المنتقي"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-        </div>
         <input class="m-picker__input" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم">
         <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list></div>
         <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
@@ -7078,6 +7222,10 @@ body {
    </div>
 
    العقد:
+   - F-02 (2026-10-10): رأس المنتقي (.m-picker__head بعنوانه وزر
+     [data-picker-close]) اختياري في الترميز — عند التركيب داخل طبقة
+     B07 تملك الطبقة العنوان والإغلاق الظاهرين فيحذف المستهلك الرأس
+     (لا زرّي إغلاق متتاليين ولا عنوانين). الاستخدام المستقل يبقيه.
    - البحث: input[data-picker-search] يصفّي الخيارات بالسمة hidden
      (CSS يغلبها على display:flex) — مسح الاستعلام يعيد كل الخيارات
      فورًا، وعدم وجود نتائج يظهر صف حالة صريحًا ولا يترك نتائج عالقة.
@@ -8364,10 +8512,19 @@ body {
             أو عند الإظهار — دون نقرة من المستخدم؛ الدونات (148 الثابت)
             والفقاعات (تدفق DOM) خارج الرصد، وغياب ResizeObserver في بيئة
             قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
-   R3-UI02: تسميات bars/line تُقاس فعليًا بعد إلحاق الرسم بالوثيقة
-            (getComputedTextLength بوحدات viewBox) فتُقصّ بمقطع «…» عند
-            تجاوز نصف ميزانية 200% مع قراءة كاملة (aria-label + <title>
-            + data-label-full الاختيارية) وحدود طرفين [8, W−8] وحدات.
+   F-01 (2026-10-10، تكليف معرض النظام): تسميات bars/line تُقاس فعليًا
+            بعد إلحاق الرسم (getComputedTextLength بوحدات viewBox)
+            والميزانية الكاملة عند 1×: القص بمقطع «…» لا يقع إلا لسطر
+            أعرض من ميزانية عموده/تباعد نقطته كاملة (كلمة مفردة طويلة)،
+            مع قراءة كاملة (aria-label + <title> + data-label-full
+            الاختيارية) وحدود طرفين بالمدى الفعلي [x−len/2, x+len/2]
+            داخل [8, W−8]، وتحقق زوجي بالمدى الفعلي داخل كل صف.
+            جاهزية الخط: بعد fonts.ready تُعاد رسوم bars/line مرة واحدة
+            فأول تصيير مستقر = كل إعادة تصيير لاحقة (مرصود سابقًا:
+            اختلاف القياس بمقاييس الخط البديل قبل التحميل).
+            حل محل تخطيط «ميزانية 200%» (R2-UI02/R3-UI02) الذي كان
+            يقصّ التسميات عند نصف الميزانية عند الحجم الطبيعي — اتجاه
+            المنتج الحالي لا هدف تكبير فيه (تكليف 2026-10-09).
    ========================================================= */
 
 (function () {
@@ -8447,8 +8604,8 @@ body {
   /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
      R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
      مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
-     تبقى كاملة (ودخلت عقد القياس الفعلي R3-UI02 أدناه: إن تجاوزت نصف
-     ميزانية 200% قُصّت بمقطع «…» مع قراءة كاملة).
+     تبقى كاملة (ودخلت عقد القياس الفعلي F-01 أدناه: إن تجاوزت ميزانيتها
+     الكاملة عند 1× قُصّت بمقطع «…» مع قراءة كاملة).
      R3-UI02a: «/» فاصل تقسيم مثله مثل الشرطة — تسمية يوم/شهر قصيرة مثل
      10/09 تُقسّم إلى «10/» + «09» (سطران كاملان) بدل قصّها بمقطع؛
      لا يفترض المكوّن نوع التاريخ — تقسيم نصي عام لأي رمز معلن. */
@@ -8493,28 +8650,28 @@ body {
     return lines;
   }
 
-  /* ---- R3-UI02: دورة قياس وموائمة التسميات بعد الإلحاق ----
-     عدد الأحرف وحده (labelChars) لا يكفي: الكلمة العربية المفردة بلا
-     فراغات لا تُلف أصلًا، وتقدير 6.8/حرف تقريبي لا يطابق كل خط. بعد
-     بناء SVG وإلحاقه بالوثيقة (رسم مرئي) تُقاس كل تسمية فعليًا بـ
-     getComputedTextLength (بوحدات viewBox — يشمل تلقائيًا تعويض fontPx
-     السطري) ثم:
-       1) ميزانية 200%: نصف ميزانية العمود/النقطة (colW×0.92 للأعمدة
-          وتباعد النقاط×0.92 للخط، القسمة على 2 تخطّط لبيئة خط مضاعفة —
-          نفس فلسفة labelChars)؛ ما تجاوزها يُقصّ تدريجيًا بمقطع «…»
-          (سقف محاولات — لا حلقة مفتوحة) ولا يُصغّر الخط أبدًا عن الحد
-          المعلن: عند 1× تبدو الكلمة مختصرة قليلاً وعند 2× لا تتداخل —
-          هذا هو العقد الصادق المعلن.
-       2) القراءة الكاملة لا تضيع: النص المقتطع يحمل aria-label + عنصر
-          <title> ابناً للـ<text> بالنص الكامل (data-label-full إن مرره
-          المستهلك وإلا data-label)؛ <li data-label> المصدر يبقى كاملاً
-          في DOM كما هو.
-       3) حدود النقاط الطرفية: يثبّت x بحيث يبقى مدى النص المخطط عند
-          200% (الطول المقيس ×2 — نفس فلسفة الميزانية) داخل [8, W−8]
-          وحدات؛ نص middle: إذا cx−len < 8 فرفع x إلى 8+len، وإذا
-          cx+len > W−8 فخفضه.
-       4) تحقق زوجي أخير داخل كل صف تسميات: لو بقي تداخل مجاور بالمدى
-          المخطط قُصّ الأعرض حتى الفصل.
+  /* ---- F-01 (2026-10-10، تكليف معرض النظام): موائمة التسميات عند المقياس الفعلي 1× ----
+     العقد القديم (R2-UI02/R3-UI02) خطّط لبيئة خط مضاعفة (محاكاة 200%
+     محسوبة) فقصّ كل تسمية عند نصف ميزانية العمود/النقطة — النتيجة
+     المرصودة في المعرض: تسميات مقروءة جزئيًا عند الحجم الطبيعي
+     (مبيعات ← مبيع…، مشتريات ← مش…). اتجاه المنتج الحالي (تكليف
+     2026-10-09) لا هدف تكبير فيه — المقياس ثابت. العقد الجديد:
+       1) كل سطر تسمية يأخذ ميزانية العمود/تباعد النقاط الكاملة (×0.92)
+          عند 1×؛ القص بمقطع «…» لا يقع إلا لسطر أعرض من ميزانيته
+          كاملة (كلمة عربية مفردة طويلة مثلًا)، ولا يُصغّر خط أبدًا.
+       2) منع التصادم والحدود الطرفية تعمل بالمدى الفعلي المقيس
+          (نص مُوسّط: [x−len/2, x+len/2]) داخل [8, W−8] — لا مدى
+          مضاعفًا تخطيطيًا. تحقق زوجي داخل كل صف تسميات بفجوة ≥1 وحدة.
+       3) القراءة الكاملة لا تضيع عند القص: aria-label + عنصر <title>
+          ابن بالنص الكامل (data-label-full إن مرره المستهلك وإلا
+          data-label)؛ <li data-label> المصدر يبقى كاملاً في DOM،
+          وإفصاح بيانات الرسم (جدول) متاح دائمًا (D-UI-04).
+       4) جاهزية الخط: الرسم الأول قد يحدث قبل تحميل الخط العربي
+          (مقاييس خط بديل أضيق/أعرض) فيختلف أول تصيير عن إعادة
+          التصيير — مرصود فعليًا: «مش…» قبل الجاهزية و«مشتر…» بعدها.
+          بعد document.fonts.ready يُعاد رسم كل رسم مُهيّأ مرة واحدة
+          (نفس نمط packed-circle الموثق) فتستقر الحالة على قياسات
+          الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها.
      الرسم المخفي (عرض 0 — لا يمكن القياس) تتخطى المواءمة وتبقى خطة
      الأحرف الحالية: المستهلك يعيد الرسم عند الإظهار، ورصد R3-UI01
      يضمنه تلقائيًا حيثما وُجد ResizeObserver. */
@@ -8525,7 +8682,8 @@ body {
     catch (e) { return 0; } /* بيئة بلا قياس هندسي: اعتبره 0 (لا قص) */
   }
 
-  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط */
+  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط.
+     F-01: limit الآن الميزانية الكاملة عند 1× (لا نصفها). */
   function truncateToBudget(t, limit) {
     var s = String(t.textContent || '');
     var guard = 0;
@@ -8542,33 +8700,34 @@ body {
     var plot = chart.querySelector('[data-plot]');
     if (!plot || plot.getBoundingClientRect().width <= 1) return; /* مخفي */
     var W = 320;
-    var half = budget / 2; /* ميزانية 200%: نصف الميزانية لكل نص */
     var entries = [];
     /* مجموعات الرسم بترتيب العناصر نفسه — التسمية تعرف نصها الكامل */
     [].slice.call(svg.querySelectorAll('g')).forEach(function (g, i) {
       var full = items[i] ? (items[i].labelFull || items[i].label || '') : '';
       [].slice.call(g.querySelectorAll('.' + labelCls)).forEach(function (t) {
-        var e = {
+        entries.push({
           t: t, full: full, cut: false,
           cx0: parseFloat(t.getAttribute('x')) || 0, /* مركز العمود/النقطة قبل التثبيت */
           y: t.getAttribute('y') /* مفتاح الصف — الصفوف تتقاسم قيم y */
-        };
-        if (measuredLenOf(t) > half) e.cut = truncateToBudget(t, half);
-        entries.push(e);
+        });
       });
     });
     if (!entries.length) return;
-    /* حدود الطرفين: المدى المخطط عند 200% هو [x−len, x+len] وحدات */
+    /* F-01: القص الفردي عند تجاوز الميزانية الكاملة (1×) فقط */
+    entries.forEach(function (e) {
+      if (measuredLenOf(e.t) > budget) e.cut = truncateToBudget(e.t, budget);
+    });
+    /* حدود الطرفين بالمدى الفعلي المقيس: [x−len/2, x+len/2] داخل [8, W−8] */
     function clampOf(e) {
-      var len = measuredLenOf(e.t);
+      var half = measuredLenOf(e.t) / 2;
       var x = e.cx0;
-      if (x - len < 8) x = 8 + len;
-      if (x + len > W - 8) x = W - 8 - len;
-      if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: ثبّت الحد الأدنى */
+      if (x - half < 8) x = 8 + half;
+      if (x + half > W - 8) x = W - 8 - half;
+      if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: ثبّت الحد الأدنى */
       e.t.setAttribute('x', x);
     }
     entries.forEach(clampOf);
-    /* تحقق زوجي داخل كل صف: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
+    /* تحقق زوجي داخل كل صف بالمدى الفعلي: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
     var rows = {};
     entries.forEach(function (e) { (rows[e.y] = rows[e.y] || []).push(e); });
     Object.keys(rows).forEach(function (yk) {
@@ -8582,11 +8741,11 @@ body {
           var a = row[i], b = row[i + 1];
           var ax = parseFloat(a.t.getAttribute('x')) || 0;
           var bx = parseFloat(b.t.getAttribute('x')) || 0;
-          var al = measuredLenOf(a.t), bl = measuredLenOf(b.t);
-          if (ax + al >= bx - bl - 1) { /* تداخل بالمدى المخطط (فجوة ≥1 وحدة) */
+          var aHalf = measuredLenOf(a.t) / 2, bHalf = measuredLenOf(b.t) / 2;
+          if (ax + aHalf >= bx - bHalf - 1) { /* تداخل فعلي (فجوة ≥1 وحدة) */
             var wide;
-            if (bl > al) wide = b;
-            else if (al > bl) wide = a;
+            if (bHalf > aHalf) wide = b;
+            else if (aHalf > bHalf) wide = a;
             else { /* التعادل: الأقرب إلى طرف الرسم (قصّه أرخص — التثبيت يبعده عن جاره) */
               wide = (Math.min(a.cx0, W - a.cx0) <= Math.min(b.cx0, W - b.cx0)) ? a : b;
             }
@@ -8609,19 +8768,21 @@ body {
       ti.textContent = e.full;
       e.t.appendChild(ti);
     });
-    /* R3-UI02: حدود الطرفين تسري على كل نصوص الرسم لا التسميات وحدها:
-       القيم (فوق العمود/النقطة) قد تتجاوز حدود الطرف عند 200% أيضًا —
-       القيم لا تُقصّ أبدًا (عقد القيم كاملة) بل يثبّت موضعها x فقط بحيث
-       يبقى مداها المخطط [x−len, x+len] داخل [8, W−8]؛ التسميات مرّت
-       بالتثبيت أعلاه وهذا المرور لا يغيّرها (تثبيت متماثل). */
+    /* F-01 (2026-10-10): حدود الطرفين بالمدى الفعلي المقيس (1×) تسري على
+       كل نصوص الرسم لا التسميات وحدها: القيم (فوق العمود/النقطة) قد
+       تتجاوز حدود الطرف أيضًا — القيم لا تُقصّ أبدًا (عقد القيم كاملة)
+       بل يثبّت موضعها x فقط بحيث يبقى مداها الفعلي [x−len/2, x+len/2]
+       داخل [8, W−8]؛ التسميات مرّت بالتثبيت أعلاه وهذا المرور لا
+       يغيّرها (تثبيت متماثل). */
     [].slice.call(svg.querySelectorAll('text')).forEach(function (t) {
       var len = measuredLenOf(t);
       if (!(len > 0)) return;
+      var half = len / 2;
       var x = parseFloat(t.getAttribute('x')) || 0;
-      if (x - len < 8 || x + len > W - 8) {
-        if (x - len < 8) x = 8 + len;
-        if (x + len > W - 8) x = W - 8 - len;
-        if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: الحد الأدنى */
+      if (x - half < 8 || x + half > W - 8) {
+        if (x - half < 8) x = 8 + half;
+        if (x + half > W - 8) x = W - 8 - half;
+        if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: الحد الأدنى */
         t.setAttribute('x', x);
       }
     });
@@ -8743,11 +8904,11 @@ body {
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? BAR_TEXT_PX * ts.k : null;
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (محاكاة 200%
-       المعلنة في المشروع): الحد/2 لكل سطر — النص الملفوف لا يصطدم بجاره
-       ولا يخرج عن عموده عند مضاعفة حجم الخط، والشرطات تقسم التواريخ.
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× — الحد الكامل لكل سطر
+       (لا تخطيط مضاعف): السطر الملفوف يقارب ميزانية العمود، والأسطر
+       الأعرض من الميزانية يعالجها قياس المواءمة الفعلي بعد الإلحاق.
        الأرضية 6 كما في R1. */
-    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / (6.8 * 2)));
+    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
@@ -8838,9 +8999,9 @@ body {
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? LINE_TEXT_PX * ts.k : null;
     var n = Math.max(items.length, 2);
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (200%) كما في
-       الأعمدة — الحد/2 لكل سطر؛ الأرضية 5 كما في R1. */
-    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / (6.8 * 2)));
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× كما في الأعمدة — الحد
+       الكامل لكل سطر؛ الأرضية 5 كما في R1. */
+    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
@@ -9358,6 +9519,28 @@ body {
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroData.init(); });
   if (document.readyState !== 'loading') window.MicroData.init();
+
+  /* F-01 (2026-10-10): جاهزية الخط — الرسم الأول قد يقيس بمقاييس خط
+     بديل قبل تحميل IBM Plex العربي فيختلف أول تصيير عن إعادة التصيير
+     (مرصود فعليًا: «مش…» قبل الجاهزية مقابل «مشتر…» بعدها في نفس
+     البيانات). بعد document.fonts.ready تُعاد رسوم bars/line المُهيّأة
+     مرة واحدة (نفس نمط packed-circle الموثق) فتستقر المواءمة على
+     قياسات الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها (render
+     idempotent والمراقب واحد لكل رسم — لا أثر جانبي). */
+  function refitChartsOnFontsReady() {
+    if (!document.fonts || !document.fonts.ready) return;
+    document.fonts.ready.then(function () {
+      [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
+        var kind = c.getAttribute('data-chart');
+        if (kind === 'bars' || kind === 'line') render(c);
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', refitChartsOnFontsReady, { once: true });
+  } else {
+    refitChartsOnFontsReady();
+  }
 })();
 
 </script>
@@ -9396,9 +9579,12 @@ body {
    - الحجم يعكس القيمة الخام: مساحة الدائرة ∝ القيمة والقطر
      ∝ √القيمة — المقياس (data-max أو أكبر قيمة) توثيق نصي خارج
      الدوائر ولا يتحول إلى نسبة معروضة داخلها.
-   - data-legend="off" (اختياري): إخفاء المفتاح النصي تحت الرسم —
-     للبطاقات المضغوطة حيث القيم داخل الدوائر والتسميات تحتها؛
-     يبقى المفتاح الافتراضي ظاهرًا في بقية الحالات كمرجع قيم خام.
+   - data-legend="off" (اختياري): الوضع المضغوط — البطاقات المضغوطة
+     حيث القيم داخل الدوائر والتسميات في صفوفها الخارجية. F-09
+     (2026-10-10): في الوضع الافتراضي (المفتاح ظاهر) المفتاح الكامل هو
+     المصدر المرئي الوحيد للفئة/اللون/القيمة وصفوف التسميات مخفية
+     (قاعدة packed-circle.css)؛ مع off تعود الصفوف هي المصدر الكامل
+     والقيمة التي لا تتسع داخل دائرة صغيرة تنتقل إلى صفها.
    - data-display (اختياري): نص العرض المُنسّق من المستهلك —
      أساس المساحة يبقى data-value الرقمي دائمًا، ومع القيمة
      السالبة يُعرض مع دلالة الحالة ولا يحل محلها.
@@ -11104,7 +11290,12 @@ body {
     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
   var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-  var WEEKDAYS_SHORT = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+  /* F-08 (2026-10-10): اختصارات عمود رأس الأسبوع ثلاثية الأحرف (عرف
+     التقاويم الهاتفية) — الاسم الكامل يبقى في aria-label خلية كل يوم
+     (رأس الأسبوع aria-hidden بصري فقط). كان: أسماء 5-6 أحرف مثل
+     «ثلاثاء/أربعاء» لا تتسع عمود ~38px عند 1× فتنكسر الكلمة على سطرين
+     (mid-word) بلا قراءة سليمة. */
+  var WEEKDAYS_SHORT = ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'];
 
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -12888,6 +13079,12 @@ body {
     }
 
     /* --- 11) شريط التحكم: m-seg حقيقي يقود المتحكم --- */
+    /* F-11 (2026-10-10): صادقية fixture — خانة «كل الخدمات» تبدأ فعلًا في
+       الحالة غير المحسومة الموثقة للمكوّن (تسميتها تقول ذلك). إزالتها
+       تتم آليًا عند أول تفاعل (سلوك المتصفح الأصيل). */
+    var checkGroup = q('sc-check-group');
+    if (checkGroup) checkGroup.indeterminate = true;
+
     function bindSeg(segId, attr, apply) {
       var seg = q(segId);
       if (!seg) return;
