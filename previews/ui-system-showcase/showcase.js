@@ -239,6 +239,12 @@
     }
 
     /* --- 11) شريط التحكم: m-seg حقيقي يقود المتحكم --- */
+    /* F-11 (2026-10-10): صادقية fixture — خانة «كل الخدمات» تبدأ فعلًا في
+       الحالة غير المحسومة الموثقة للمكوّن (تسميتها تقول ذلك). إزالتها
+       تتم آليًا عند أول تفاعل (سلوك المتصفح الأصيل). */
+    var checkGroup = q('sc-check-group');
+    if (checkGroup) checkGroup.indeterminate = true;
+
     function bindSeg(segId, attr, apply) {
       var seg = q(segId);
       if (!seg) return;

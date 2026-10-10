@@ -456,6 +456,14 @@ def run(page, base, width, tag):
     }""")
     t(f"F-11 {P} لا مناطق سجل فارغة تحتجز مساحة", f11["emptyVisible"] == 0, f"emptyVisible={f11['emptyVisible']}")
     t(f"F-11 {P} الحالة غير المحسومة مطابقة لتسميتها (indeterminate=true)", f11["indet"] is True, f"indeterminate={f11['indet']}")
+    chrome = page.evaluate("""() => {
+      const tag = document.querySelector('.sc-controls-tag');
+      const vis = tag && tag.getClientRects().length > 0 && tag.textContent.includes('ليست جزء');
+      const aria = (document.querySelector('.showcase-controls').getAttribute('aria-label') || '');
+      return { vis, aria };
+    }""")
+    t(f"F-11 {P} كروم العرض موسوم مرئيًا «ليس واجهة منتج»", bool(chrome["vis"]) and 'ليست واجهة منتج' in chrome["aria"],
+      f"tag={chrome['vis']} aria={chrome['aria']}")
     shot(page, "#sc-selection")
 
     # ================= F-12: عرض الأشرطة بجوار الدائرة =================

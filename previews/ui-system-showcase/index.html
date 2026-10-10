@@ -133,9 +133,11 @@
     </div>
   </header>
 
-  <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج) -->
-  <div class="showcase-controls" role="group" aria-label="أدوات مراجعة العرض">
+  <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج).
+       F-11 (2026-10-10): وسم مرئي صريح أعلى الشريط يفصله عن واجهة المنتج. -->
+  <div class="showcase-controls" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
     <div class="showcase-controls__inner">
+      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span> — ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
       <div class="sc-ctl">
         <span class="sc-ctl__label" id="sc-dir-label">الاتجاه</span>
         <div class="m-seg" data-seg role="group" aria-labelledby="sc-dir-label" id="sc-dir-seg">
@@ -329,9 +331,12 @@
               <span class="m-choice__text">تنظيف مكاتب</span>
             </label>
             <label class="m-choice m-choice--check">
+              <!-- F-11 (2026-10-10): الحالة غير المحسومة حالة حقيقية للمكوّن —
+                   يثبتها showcase.js عند التحميل (indeterminate=true) فتطابق
+                   التسميةُ الواقع، ويزيلها المتصفح عند أول تفاعل. -->
               <input type="checkbox" id="sc-check-group">
               <span class="m-choice__box"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
-              <span class="m-choice__text">كل الخدمات (indeterminate)</span>
+              <span class="m-choice__text">كل الخدمات (يبدأ غير محسوم)</span>
             </label>
             <label class="m-choice m-choice--check">
               <input type="checkbox" disabled>
@@ -454,7 +459,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
+        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -510,8 +515,11 @@
           </div>
         </div>
         <div>
-          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek — ADOPTED)</p>
-          <div class="m-info-strip" data-info-strip data-info-peek id="sc-strip-peek">
+          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek — ADOPTED)</p>
+          <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
+               data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
+               النشطة بعرض كامل ولا تلمح المجاورة. -->
+          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="sc-strip-peek">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات peek التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">

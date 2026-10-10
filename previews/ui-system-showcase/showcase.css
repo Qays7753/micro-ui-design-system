@@ -73,9 +73,25 @@ body {
 
 /* ---------- شريط تحكم المراجعة (ليس سلوك منتج) ---------- */
 
+/* F-11 (2026-10-10): وسم مرئي صريح أن هذا الشريط أدوات مراجعة للعرض
+   فقط وليس جزءًا من واجهة المنتج — يمنع الخلط بين كروم العرض
+   والمكوّنات المعروضة. */
 .showcase-controls {
   background: var(--micro-surface-page);
   border-block-end: 1px solid var(--micro-border-divider);
+}
+
+.sc-controls-tag {
+  margin: 0;
+  padding-block: 6px 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+}
+
+.sc-controls-tag .sc-controls-tag__mark {
+  color: var(--micro-brand-primary);
+  font-weight: 700;
 }
 
 .showcase-controls__inner {
@@ -257,7 +273,9 @@ body {
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }
 .sc-surface-stage .m-surface__sub { margin: 0; }
 
-/* سجل أحداث تجريبي صغير */
+/* سجل أحداث تجريبي صغير — F-11 (2026-10-10): فارغًا لا يحجز مساحة
+   مرئية (:empty يخفيه حتى أول حدث يُسجّله logEvent) — كان يحجز
+   صندوقًا فارغًا بحشو 12px وخلفية في كل قسم قبل أي تفاعل. */
 .sc-log {
   list-style: none;
   margin: 0;
@@ -272,6 +290,7 @@ body {
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
 }
+.sc-log:empty { display: none; }
 .sc-log li { padding-block: 2px; border-block-end: 1px solid var(--micro-border-divider); overflow-wrap: anywhere; }
 .sc-log li:last-child { border-block-end: 0; }
 
