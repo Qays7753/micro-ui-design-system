@@ -21,7 +21,7 @@
 python3 -m http.server 8080   # من جذر المستودع فقط
 # اللوحة: http://localhost:8080/previews/carousel/
 # مثال مستقل بلا board.*: http://localhost:8080/previews/carousel/example-usage.html
-# فحص ولقطات من المصدر: python3 tools/carousel-screenshots.py
+# فحص ولقطات من المصدر: python3 tools/ui-system-showcase-repair-check.py --tag after
 ```
 
 ## الاستهلاك الأدنى في صفحتك
@@ -62,4 +62,4 @@ python3 -m http.server 8080   # من جذر المستودع فقط
 
 ## إثبات قابلية التعديل
 
-فحص E-series في `reviews/CAROUSEL/verification.txt`: تعديل `--_peek` انعكس على التوسّط والشريحة ثم أُعيد؛ تعديل `data-card-label` انعكس على `aria-label`/المؤشر؛ تعديل قيمة دائرة غيّر قطرها بتناسب √ ثم استُعيدت. كل ذلك من المصدر نفسه.
+فحص E-series في `reviews/UI-SYSTEM-SHOWCASE/verification.txt`: تعديل `--_peek` انعكس على التوسّط والشريحة ثم أُعيد؛ تعديل `data-card-label` انعكس على `aria-label`/المؤشر؛ تعديل قيمة دائرة غيّر قطرها بتناسب √ ثم استُعيدت. كل ذلك من المصدر نفسه.

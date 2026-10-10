@@ -1,53 +1,45 @@
-# بوابات إصلاح Micro UI
+# أدوات Micro UI الحالية
 
-`node tools/repair-regression.cjs` — الاختبارات الجديدة M1–M7، لقطات فعلية وتباين موضعي عبر PNG الخلفية المرسومة، مع تسجيل SHA المصدر ونظافة الشجرة. يمكن تمرير `--playwright-module /path/to/playwright` و`--chromium-path /path/to/chrome` في بيئة تستخدم متصفحًا مثبتًا مسبقًا؛ لا حاجة لتغيير اعتماديات المكتبة. مخرجاتها في `reviews/AFTER-DIRECTION/repair/`. التكبير محاكاة لحجم النص المحسوب 200%، لا اختبار هاتف/قارئ شاشة/تكبير متصفح أصلي.
+كل الأوامر تعمل من جذر المستودع ولا تحتاج شبكة أو أسرارًا، ما لم يذكر الأمر خلاف ذلك.
 
-أدوات Carousel وAfter القديمة تحتفظ بعدد اختبارات المصدر نفسه؛ قياس التداخل الآن ثنائي الأبعاد بدل إسقاط أفقي، وحالات Packed صفوف منفصلة بدل الحلقات طبقًا للتكليف. B01–B07 وS01 دون تغيير في عقد فحوصها.
-
-# أدوات الفحص — B01
-
-## b01-screenshots.py — سكربت اللقطات وفحوص المتصفح
-
-سكربت واحد قابل لإعادة التشغيل يخدم ملفات المستودع بخادم محلي مؤقت
-(لا يحتاج إنترنت ولا أسرارًا ولا مسارات خاصة — كل المسارات نسبية من
-جذر المستودع)، يشغّل Chromium headless عبر Playwright، وينفذ فحوص
-جولة التصحيح R1 كاملة ثم يلتقط لقطات `reviews/B01/screenshots/`
-من المصدر الحالي نفسه ويكتب سجل `reviews/B01/r2-verification.txt`.
-
-### المتطلبات
+## المعاينة
 
 ```bash
-pip install playwright
-playwright install chromium
+python3 tools/preview-server.py
 ```
 
-### التشغيل (من جذر المستودع)
+ثم افتح `previews/index.html` أو `previews/ui-system-showcase/index.html`.
+
+## المعرض الأخير
 
 ```bash
-python3 tools/b01-screenshots.py
+python3 tools/build-ui-system-showcase-standalone.py
+python3 tools/build-ui-system-showcase-standalone.py --check
+python3 tools/ui-system-showcase-check.py
+python3 tools/ui-system-showcase-repair-check.py --tag after
 ```
 
-- exit 0 = كل الفحوص ناجحة، exit 1 = يوجد فشل (راجع السجل).
-- يعاد إنتاج اللقطات كلها وسجل القياسات في كل تشغيل — لا لقطات يدوية.
+الملف `previews/ui-system-showcase/standalone.html` مولد؛ لا تعدله يدويًا.
 
-### ما يفحصه (ملخص)
+## فحوص المصدر
 
-1. لا أخطاء console/pageerror، تحميل 6 أيقونات من أصولها، الخط الفعلي
-   (IBM Plex Sans Arabic 500).
-2. عقد التحميل: التسمية الصريحة، الاسترجاع الدقيق، أمان التكرار،
-   عدم مسح aria-label على زر غير محمّل، حماية المعطل أصلًا.
-3. ثبات الأبعاد قبل/أثناء/بعد التحميل لأربعة أنواع (نص فقط، نص+أيقونة،
-   أيقونة دائري، تصفية بعدّاد).
-4. منع التفعيل أثناء التحميل: Enter وSpace والنقر (حراسة المكوّن)،
-   وعودة التفعيل بعد التوقف.
-5. رسالة النجاح: الحالة الأولية، أول حفظ، إعادة حفظ (تُخفى دائمًا عند
-   بدء محاولة جديدة).
-6. الحالات المتزامنة: تركيز+ضغط (الحلقة ظاهرة)، تركيز←تحميل←عودة.
-7. معاينات هاتف كاملة 320/390/430 بعرضها الحقيقي بلا تمرير أفقي،
-   وتكبير النص 200% داخل مساحة هاتف ثابتة (زر المحاكاة في اللوحة —
-   آلية CDP Emulation.setTextZoomFactor أُزيلت من Chromium الحديث)،
-   وتقليل الحركة (مؤشر ثابت).
-8. مثال الاستخدام خارج اللوحة (example-usage.html) بعقد المستهلك نفسه.
+```bash
+python3 tools/concepts-check.py
+python3 tools/data-scale-state-check.py
+python3 tools/ui-release-check.py
+```
 
-اللقطات الناتجة موثقة بأسمائها في `reviews/B01/review.md`، ورأس commit
-المصدر يُدوّن تلقائيًا داخل سجل الفحص.
+## الحزمة
+
+```bash
+python3 tools/manifest-build.py
+python3 tools/build-components-package.py
+python3 tools/split-components-package.py
+python3 tools/assemble-components-package.py
+```
+
+الحزمة مخرج نقل يمكن إعادة بنائه؛ المصدر الحقيقي هو `components/` و`shared/` و`assets/` و`previews/`.
+
+## حدود الأدلة
+
+الفحوص الحالية تستخدم Chromium/Playwright. لا تعني نجاحها اختبار Android أو iOS أو WebKit/Safari أو اللمس الحقيقي أو قارئات الشاشة أو native zoom.

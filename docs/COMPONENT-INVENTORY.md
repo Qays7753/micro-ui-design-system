@@ -1,98 +1,44 @@
-## تسليم جدول الطلبات (m-ocal) — DRAFT FOR REVIEW / 2026-10-07
+# فهرس مكونات Micro UI
 
-نُفّذ وفق [ORDER-SCHEDULE-BRIEF](ux/ORDER-SCHEDULE-BRIEF.md) و[بطاقة القبول](ux/ORDER-SCHEDULE-ACCEPTANCE.md): المصدر `components/order-schedule/` (order-schedule.css/js/specification.md/example-usage.html) — تقويم شهر/يوم وقائمة زمنية، حساب تقويم مدني صحيح (كبيسة/حدود الشهور) بلا UTC، حالات من خريطة المستهلك بأزواج توكنات فقط (لا استنتاج من التاريخ، لا أرباح)، لوحة مفاتيح roving RTL، تهيئة مزدوجة آمنة وdestroy. عينة مستقلة وموصل منفصل `previews/ux-patterns/order-schedule/` وعرض متصل داخل F03 وملف واحد مكتفٍ ذاتيًا. أداة القبول `tools/order-schedule-check.py` 16/16/267 على أربعة أهداف. استثناء خلايا الشهر عند 320 **PROPOSED** موثق في المواصفة — قرار التوقيع للمالك. الحالة DRAFT FOR REVIEW؛ لا يُعد عائلة معتمدة قبل اعتماد المالك.
+هذا الفهرس يصف مصدر UI الحالي فقط. لا يمثل خريطة UX أو شاشات منتج أو شهادة إنتاجية.
 
-# قائمة عناصر Micro — V1
+## قاعدة القراءة
 
-الحالة الحالية: العائلات الاثنتا عشرة مرجع تنفيذ UI مستقر تحت قواعد [الإصدار](UI-RELEASE.md) و[النظام البصري](UI-VISUAL-SYSTEM.md). حُسمت تفاصيل الأزرار بالتفويض الحالي، وإغلاق تدقيق 2026-10 موثق في [مصفوفة التدقيق](UI-COMPLETION-AUDIT-MATRIX.md) و[تقرير الإغلاق](../reviews/UI-COMPLETION/review.md). الأسس والاتجاه المنحني محفوظان؛ [عينة المصدر](../previews/surfaces/approved-curves.html)، [DESIGN.md](../DESIGN.md)، [المعرض](../previews/index.html)، و[الحالات](../previews/system/index.html). جداول الأدلة القديمة أدناه تاريخية، ولا تعني جاهزية تطبيق أو UX.
+لكل عائلة:
 
-| الدفعة | العائلات المطلوبة | حدودها |
-|---|---|---|
-| B01 الأفعال | أساسي، ثانوي، خفيف/نصي، أيقونة، إجراء متلف، زر تصفية بعدّاد | النص والأيقونة والعرض الكامل خيارات للمكوّن؛ ليست عائلات جديدة. لوحة الفلاتر خارج B01. |
-| B02 الإدخال | نص، نص طويل، بحث، مبلغ، كمية؛ تسميات ومساعدة وأخطاء | قيمة مجهولة ليست صفرًا؛ لا تغيير لقواعد الدقة أو تحقق الأعمال. |
-| B03 الاختيار | مفرد، متعدد، مفتاح تشغيل، قائمة خيارات، اختيار كيان، تاريخ ووقت/نطاق | دعم عام وفق استعمال المستهلك؛ منتقي التاريخ الأصلي منفذ، والتقويم المخصص مشروط بالحاجة. |
-| B04 العرض والتنظيم | عنوان ووصف، صف قابل للفتح، صف قراءة، فاصل، مجموعة، قسم قابل للطي، سطح/بطاقة، شارة، صورة وصورة بديلة | لا بطاقة لكل معلومة ولا افتراض أن كل صف قابل للنقر. مكوّن مرفقات تفاعلي مشروط بالحاجة. |
-| B05 البيانات | مبلغ ووحدة، قيمة مجهولة/غير متاحة، مؤشر وملخص، مقارنة، أعمدة/خط/توزيع، دوائر متفاوتة الحجم، تقدم/تسلسل زمني | كل رسم له تسميات وقيم؛ الدوائر تمثل المساحة. لا تصميم لوحة رئيسية أو معادلات مالية. |
-| B06 التغذية الراجعة | مساعدة، تنبيه، تأكيد، خطأ، تحميل، لا بيانات، لا نتائج، فشل قراءة | النمط العام يغطي الحالات؛ لا نصوص نهائية لكل خدمة، ولا اعتماد Toast أو منعه من التقرير وحده. |
-| B07 التنقل والطبقات | رجوع، تبويب، قائمة إجراءات، حوار، لوحة سفلية، شريط إجراء | عناصر قابلة لإعادة الاستخدام دون تغيير خريطة تنقل التطبيق أو تثبيت عدد تبويبات. |
+1. اقرأ `specification.md`.
+2. راجع ملفات CSS/JS داخل `components/<family>/`.
+3. افتح المعاينة المقابلة داخل `previews/`.
+4. استخدم الـshowcase الأخير للتحقق من التركيب المشترك.
 
-## روابط المصادر وحالة المراجعة
+## العائلات
 
-العائلات مرجع UI مستقر وفق الإصدار؛ عيوب التدقيق الجديد والنواقص تُتبع في handoff/WORK-TRACKER.md ولا يُستنتج منها سقوط جميع العائلات. الجدول لا يمنح شهادة إنتاجية.
+| العائلة | المصدر | المعاينة | الحالة |
+|---|---|---|---|
+| Buttons | `components/buttons/` | `previews/buttons/` | STABLE UI |
+| Fields | `components/fields/` | `previews/fields/` | STABLE UI |
+| Selection | `components/selection/` | `previews/selection/` | STABLE UI |
+| Organization | `components/organization/` | `previews/organization/` | STABLE UI |
+| Data | `components/data/` | `previews/data/` | STABLE UI |
+| Messages | `components/messages/` | `previews/messages/` | STABLE UI |
+| Navigation | `components/navigation/` | `previews/navigation/` | STABLE UI |
+| Surfaces | `components/surfaces/` | `previews/surfaces/` | STABLE UI |
+| Info strip | `components/info-strip/` | `previews/info-strip/` | STABLE UI؛ peek اختياري |
+| Metric comparison | `components/metric-comparison/` | `previews/concepts/` | STABLE UI وفق المواصفة |
+| Account settings | `components/account-settings/` | `previews/concepts/` | STABLE UI دون حفظ فعلي |
+| Access gateway | `components/access-gateway/` | `previews/concepts/` | STABLE UI دون مصادقة فعلية |
+| Order schedule | `components/order-schedule/` | المثال داخل المكون | DRAFT FOR REVIEW |
+| Carousel | `components/carousel/` | `previews/carousel/` | DRAFT FOR REVIEW |
+| Packed circle | `components/data/packed-circle.*` | `previews/concepts/` | PROPOSED/opt-in |
 
-| العائلة | المعاينة | المثال المستقل | المصدر والعقد | الحالة |
-|---|---|---|---|---|
-| الأزرار | [B01](../previews/buttons/) | [مثال](../previews/buttons/example-usage.html) | [مواصفات](../components/buttons/specification.md) | STABLE UI؛ 24px وB افتراضيان |
-| الحقول | [B02](../previews/fields/) | [مثال](../previews/fields/example-usage.html) | [مواصفات](../components/fields/specification.md) | STABLE UI؛ تدقيق 2026-10 مغلق |
-| الاختيار | [B03](../previews/selection/) | [مثال](../previews/selection/example-usage.html) | [مواصفات](../components/selection/specification.md) | STABLE UI؛ حصر التركيز مصحح (A02) |
-| التنظيم | [B04](../previews/organization/) | [مثال](../previews/organization/example-usage.html) | [مواصفات](../components/organization/specification.md) | STABLE UI |
-| البيانات | [B05](../previews/data/) | [مثال](../previews/data/example-usage.html) | [مواصفات](../components/data/specification.md) | STABLE UI؛ C2 مغلق + عقد المقياس الصريح (A01) |
-| الرسائل | [B06](../previews/messages/) | [مثال](../previews/messages/example-usage.html) | [مواصفات](../components/messages/specification.md) | STABLE UI |
-| التنقل والطبقات | [B07](../previews/navigation/) | [مثال](../previews/navigation/example-usage.html) | [مواصفات](../components/navigation/specification.md) | STABLE UI؛ الحصر مصحح (A02) + التفاف شريط الأفعال |
-| الأسطح | [S01](../previews/surfaces/) | [مثال](../previews/surfaces/example-usage.html) — على المنحنيات الحالية | [مواصفات](../components/surfaces/specification.md) | STABLE UI؛ الاتجاه الحالي curves (A04 مغلق)؛ C1 مغلق |
-| البطاقة وشريط المعلومات | [معاينة](../previews/info-strip/) | [مثال](../components/info-strip/example-usage.html) + [مقارنة A05](../previews/info-strip/comparison.html) | [مواصفات](../components/info-strip/specification.md) | مفهوم البطاقات المستقلة معتمد؛ variant peek ADOPTED بقرار المالك 2026-10-04، opt-in |
-| المقارنة العددية | [معاينة](../previews/concepts/#comparison) | [مثال](../components/metric-comparison/example-usage.html) | [مواصفات](../components/metric-comparison/specification.md) | الفصل والتداخل معتمدان مفهوميًا؛ التنفيذ للمراجعة |
-| الحساب والتطبيق | [معاينة](../previews/concepts/#settings) | [مثال](../components/account-settings/example-usage.html) | [مواصفات](../components/account-settings/specification.md) | STABLE UI دون حفظ |
-| بوابة الوصول | [معاينة](../previews/concepts/#gateway) | [مثال](../components/access-gateway/example-usage.html) | [مواصفات](../components/access-gateway/specification.md) | STABLE UI دون مصادقة |
+## القواعد المشتركة
 
-[التركيبات المصغرة](../previews/compositions/) عينات مراجعة من المصادر نفسها وليست عائلة جديدة. روابط CSS/JS المباشرة لكل عائلة في المعرض. [المراجع المعتمدة](ARTIFACTS.md) لا تحل محل هذه المصادر.
+- `shared/tokens.css` هو مصدر التوكنز الوحيد.
+- الألوان الحالية لا تُستبدل داخل المكونات بقيم صلبة جديدة.
+- كل مكون يوضح الحالات المنطبقة بدل إنشاء مصفوفة وهمية.
+- النص الطويل وRTL والبيانات المفقودة والسالبة حالات يجب أن تبقى قابلة للقراءة.
+- نجاح فحص المعاينة لا يثبت جهازًا فعليًا أو قارئ شاشة.
 
-## المكونات المنفذة الأحدث
+## المعرض الشامل
 
-| العائلة | المصدر والمثال المستقل | حدودها |
-|---|---|---|
-| شريط المعلومات | [المواصفة](../components/info-strip/specification.md) · [المثال](../components/info-strip/example-usage.html) | بطاقات مستقلة وتنقل RTL دون تبديل تلقائي؛ المحتوى غير مفروض |
-| المقارنة العددية | [المواصفة](../components/metric-comparison/specification.md) · [المثال](../components/metric-comparison/example-usage.html) | مساحة مقدار مع إشارة وصفر وغياب؛ عرضان للدوائر وقيمة رئيسية مع أشرطة مستقلة |
-| إعدادات الحساب والتطبيق | [المواصفة](../components/account-settings/specification.md) · [المثال](../components/account-settings/example-usage.html) | حوار بمستويين وأحداث تغيير؛ لا حفظ فعلي |
-| بوابة الوصول | [المواصفة](../components/access-gateway/specification.md) · [المثال](../components/access-gateway/example-usage.html) | تحقق وإرسال بمعالج المستهلك؛ لا مصادقة خفية |
-
-الأمثلة المصغرة المركبة في [معرض التركيب](../previews/compositions/index.html). ليست عائلات جديدة أو شاشات منتج.
-المفاهيم المعتمدة والتفاصيل المقترحة منفصلان في سجل القرارات؛ لا ننقل عبارة APPROVED إلى عائلة كاملة بسبب نجاح فحصها.
-
-## الاستثناءات والحدود
-
-PIN، رفع الملفات، ومعاينة المشاركة احتياجات مشروطة؛ تُحسم عند دفعتها دون تعطيل B01.
-
-معاينة الأثر والإيصال والمسودة والعربون ليست الآن وحدات أعمال مركبة مطلوب تنفيذها. نستخلص منها احتياجات عامة مثل مقارنة قبل/بعد، حالة، مبلغ وتأكيد.
-
-الأنواع الدقيقة لكل عائلة تُحدد في تكليفها. لا ننتج كل احتمال نظري ولا نعتبر هذه القائمة تدقيقًا شاملًا للكود.
-
-
-## التتبع التاريخي للدفعات
-
-هذا القسم سجل تاريخي للدمج والفحوص على مصادره، لا وصف رؤوس الفروع الحالية ولا اعتماد إنتاجي.
-
-B01: DRAFT FOR RE-REVIEW — مخرجات منفذة من ZAI على فرع `task/b01-buttons` بعد جولتي تصحيح R1 وR2؛ دُمجت في `main` عبر PR #1 دون اعتماد إنتاجي أو اعتماد ذاتي.
-
-B02–B07 ومعالجة S01: DRAFT FOR RE-REVIEW — مخرجات منفذة كمسودات على فرع `task/ui-library-expansion` عبر PR #2 المدموج في main، مع فحوص وأدلة الجولة الأخيرة، وبانتظار مراجعة ChatGPT واعتماد قيس. لا اعتماد ذاتي.
-
-### تغطية التوسعة
-
-- **B02 الحقول:** 27/27.
-- **B03 الاختيار:** 25/25.
-- **B04 التنظيم والمعلومات:** 15/15.
-- **S01 الأسطح والحركة:** 35/35.
-- **B05 البيانات والتتبّع:** 26/26.
-- **B06 الرسائل والحالات:** 17/17.
-- **B07 التنقّل والطبقات:** 28/28.
-
-التفاصيل والأدلة في `docs/UI-COVERAGE-RESULTS.md` وتقارير `reviews/`. هذه الأرقام نتائج الأدوات المسلّمة، وليست ادعاء اختبار جهاز حقيقي أو قارئ شاشة أو متصفح غير Chromium.
-
-## نطاق الدفعات الأصلي
-
-| الدفعة | العائلات المطلوبة | حدودها |
-|---|---|---|
-| B01 الأفعال | أساسي، ثانوي، خفيف/نصي، أيقونة، إجراء متلف، زر تصفية بعدّاد | النص والأيقونة والعرض الكامل خيارات للمكوّن؛ ليست عائلات جديدة. لوحة الفلاتر خارج B01. |
-| B02 الإدخال | نص، نص طويل، بحث، مبلغ، كمية؛ تسميات ومساعدة وأخطاء | قيمة مجهولة ليست صفرًا؛ لا تغيير لقواعد الدقة أو تحقق الأعمال. |
-| B03 الاختيار | مفرد، متعدد، مفتاح تشغيل، قائمة خيارات، اختيار كيان، تاريخ ووقت/نطاق | المتعدد دعم عام اختياري حتى وجود استعمال مؤكد؛ شكل منتقي التاريخ يحسم قبل هذه الدفعة. |
-| B04 العرض والتنظيم | عنوان ووصف، صف قابل للفتح، صف قراءة، فاصل، مجموعة، قسم قابل للطي، سطح/بطاقة، شارة، صورة وصورة بديلة | لا بطاقة لكل معلومة ولا افتراض أن كل صف قابل للنقر. مكوّن مرفقات تفاعلي مشروط بالحاجة. |
-| B05 البيانات | مبلغ ووحدة، قيمة مجهولة/غير متاحة، مؤشر وملخص، مقارنة، أعمدة/خط/توزيع، دوائر متفاوتة الحجم، تقدم/تسلسل زمني | كل رسم له تسميات وقيم؛ الدوائر تمثل المساحة. لا تصميم لوحة رئيسية أو معادلات مالية. |
-| B06 التغذية الراجعة | مساعدة، تنبيه، تأكيد، خطأ، تحميل، لا بيانات، لا نتائج، فشل قراءة | النمط العام يغطي الحالات؛ لا نصوص نهائية لكل خدمة، ولا اعتماد Toast أو منعه من التقرير وحده. |
-| B07 التنقل والطبقات | رجوع، تبويب، قائمة إجراءات، حوار، لوحة سفلية، شريط إجراء | عناصر قابلة لإعادة الاستخدام دون تغيير خريطة تنقل التطبيق أو تثبيت عدد تبويبات. |
-### دفعة العارض المستقلة (2026-09-29) — تاريخية
-
-عارض بطاقات ملخصات قابل للسحب + مثال مقارنة بدوائر متداخلة: **DRAFT FOR REVIEW** على فرع `task/carousel-packed-circles` عبر Draft PR باتجاه main — بداية من أحدث main فعليًا `7f281c9`، وcommit مصدر الأدلة `2940aa6` (بصمة `277b828c`) ثُبّت قبل توليد الأدلة. الفحوص: 38/38 (متصفح headless فعلي) + مثال مستقل 15/15. امتداد الدوائر المتداخلة `packed-circle.*` موسوم PROPOSED opt-in فوق عقد B05 بلا تغييره. المراجع المرفقة بالتكليف (صورة/فيديو) لم تصلا إلى بيئة التنفيذ — انظر التصريح في `references/motion/card-carousel-reference.md`.
-
-### دفعة اتجاه After (2026-09-29)
-
-ترجمة جودة اتجاه After إلى تركيب مرجعي قابل للتعديل بهوية Micro: **DRAFT FOR REVIEW** على فرع `task/after-direction-components` (دمج PR#5 كاملًا بدونه) — لوحة `previews/after-direction/` تعرض: تركيبًا كاملًا (سطح بارز S01 + قيم بلا بطاقات + دوائر متداخلة بقيم حقيقية + تقدم + صفوف B04 + رسالة B06 + إجراء رئيسي B01)، وملخصات بيانات مركبة ببنية واحدة × محتويات، ومصفوفة حالات الحقل الثماني فوق عقد B02، ومصفوفة حالات الدوائر (صفر/مجهول/سالب/مقامات) فوق امتداد packed PROPOSED دون تغييره، والأسطح الأربع، والعارض المُرحَّل. الفحوص: 41/41 + 22 لقطة من شجرة commit المصدر. لا مكوّن جديد في components/ — الدفعة طبقة تركيب ومعاينة، وكل قرار تركيب موسوم PROPOSED.
+[`previews/ui-system-showcase/`](../previews/ui-system-showcase/) هو المرجع التفاعلي الأخير لاستخدام العائلات معًا. مصدره قابل للتعديل، وملف standalone فيه مولد آليًا.

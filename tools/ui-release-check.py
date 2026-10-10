@@ -65,7 +65,7 @@ def resolve_chromium(pw):
 
 
 def main():
-    out = ROOT / "reviews/UI-RELEASE"
+    out = ROOT / "reviews/UI-SYSTEM-SHOWCASE/ui-release"
     (out / "screenshots").mkdir(parents=True, exist_ok=True)
     results, errors, assets = [], [], []
 

@@ -12,7 +12,7 @@ Micro UI — فحص R8-07: فصل نص المستخدم عن التشخيص ال
   مزامنة حدث micro-data:rendered مع التشخيص، ونقاء الرسائل الظاهرة من
   أسماء السمات/التعليمات، وغياب السمتين في الحالة السليمة (عقد R8-07b).
 
-الأدلة: reviews/UI-COMPLETION/verification-r8-07.txt (+ لاحقة -webkit عند تشغيله بمحرك آخر
+الأدلة: reviews/UI-SYSTEM-SHOWCASE/generated-data-scale/verification-r8-07.txt (+ لاحقة -webkit عند تشغيله بمحرك آخر
 عبر MICRO_TEST_ENGINE) + لقطة الحالات. المحرك الافتراضي Chromium؛ WebKit تشغيل آلي
 على نفس الفحوص لا يغني عن Safari حقيقي ولا جهاز — لا ادعاء جهاز/قارئ شاشة.
 """
@@ -27,7 +27,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "reviews" / "UI-COMPLETION"
+OUT = ROOT / "reviews" / "UI-SYSTEM-SHOWCASE" / "generated-data-scale"
 results, log_lines = [], []
 
 # T01 روح الحسم المعلن: MICRO_TEST_ENGINE يحدد محرك Playwright (chromium افتراضيًا؛
@@ -110,9 +110,7 @@ def ui_purity_ok(snap):
 
 def main(out_dir: Path = None, port: int = 0):
     global OUT
-    # SAMSUNG-ONEUI-REPAIR-R1 (الوكيل 4 — رجعية 2026-10-07): --out/--port
-    # لمخرجات معزولة دون الكتابة فوق reviews/UI-COMPLETION التاريخي
-    # + منفذ نطاق الوكيل 4 (4400-4419). الافتراضات كما كانت.
+    # مخرجات الفحص معزولة داخل مجلد generated، مع دعم --out/--port.
     if out_dir is not None:
         OUT = out_dir
     OUT.mkdir(parents=True, exist_ok=True)
@@ -311,7 +309,7 @@ def main(out_dir: Path = None, port: int = 0):
 if __name__ == "__main__":
     import argparse
     _ap = argparse.ArgumentParser()
-    _ap.add_argument("--out", default="", help="دليل إخراج معزول (افتراضي: reviews/UI-COMPLETION التاريخي)")
+    _ap.add_argument("--out", default="", help="دليل إخراج معزول (افتراضي: reviews/UI-SYSTEM-SHOWCASE/generated-data-scale)")
     _ap.add_argument("--port", type=int, default=0, help="منفذ الخادم (0 تلقائي؛ REPAIR-R1: 4400-4419)")
     _a = _ap.parse_args()
     main(Path(_a.out).resolve() if _a.out else None, _a.port)

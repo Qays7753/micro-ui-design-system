@@ -2,7 +2,7 @@
 
 الحالة: **DRAFT FOR REVIEW** — ما لم يُحسم موسوم «مقترح/PROPOSED».
 المرجع: `docs/components/CAROUSEL-COMPONENT-BRIEF.md` + `docs/SHARED-SPEC.md` + `docs/EDITABLE-DELIVERY.md`.
-الفرع: `task/carousel-packed-circles` — Draft PR باتجاه `main`.
+الحالة: DRAFT FOR REVIEW ضمن مصدر `main` الحالي.
 
 ## 1) الغرض والحدود
 
@@ -126,7 +126,7 @@
 1. بعد `next()` من البطاقة الأولى في صفحة `dir="rtl"`: `transform: translateX()` للـtrack يصير **موجبًا** (الحركة يمينًا) والمجاورة تظهر من اليسار — أي أن «التالي منطقيًا» تحرك بصريًا بعكس اتجاه القراءة كما يقتضي RTL.
 2. `ArrowLeft` في RTL يزيد المؤشر (تالي) و`ArrowRight` يُنقصه (سابق) — والقيم من `data-status` لا من الافتراض.
 3. سحب بمقدار يفوق العتبة يمينًا في RTL يلتزم «التالي» — ويسارًا «السابق».
-4. كل ما سبق فحوص آلية في `tools/carousel-screenshots.py` (A9/A12/A13) سجلّها في `reviews/CAROUSEL/verification.txt`.
+4. كل ما سبق فحوص آلية في `tools/ui-system-showcase-repair-check.py` والتحقق المحفوظ في `reviews/UI-SYSTEM-SHOWCASE/`.
 
 ## 9) العلاقة بالعائلات الأخرى (تركيب)
 

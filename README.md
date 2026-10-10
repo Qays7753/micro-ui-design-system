@@ -1,58 +1,86 @@
 # Micro UI Design System
 
-بيئة العمل المشتركة لهوية Micro ومكتبة UI مستقلة قابلة للتركيب. المخرجات للمراجعة، لا اعتماد إنتاجي.
+مكتبة UI مستقلة قابلة لإعادة الاستخدام والتعديل. هذا المستودع لا يحتوي UX لمنتج Micro، ولا شاشات إنتاجية، ولا منطق أعمال، ولا مصادقة أو حفظًا حقيقيًا.
 
-## العمل الأحدث: أساس UX مستقل
+## نقطة الدخول
 
-[حزمة UX-F00](docs/ux/README.md) تربط 28 قاعدة عامة بالمكتبة، وتحدد مسؤولية المكوّن والمستهلك والمراجع وعقد الـAgent. مراجعة القائد R1 مكتملة؛ القواعد العامة **DRAFT FOR REVIEW**، و[F01](prompts/UX-F01-ZAI.md) **جاهز للتنفيذ** وفق [بطاقة القبول](docs/ux/F01-ACCEPTANCE.md)، ولم يُنفذ بعد. لا شاشات أو رحلات أعمال مفترضة. اختبارات UI على الأجهزة الفعلية باقية. مصادر المستودع الحية هي الأحدث؛ ZIP المثبت أدناه إصدار إقفال UI ولا يشمل هذه الإضافة.
+اقرأ بالترتيب:
 
-## الحالة الحالية — 2026-10-04
+1. [`AGENTS.md`](AGENTS.md) — عقد العمل الحالي.
+2. [`DESIGN.md`](DESIGN.md) — الهوية والحدود.
+3. [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md) — الحالة الحالية المرتبطة بـ`main`.
+4. [`docs/UI-RELEASE.md`](docs/UI-RELEASE.md) — القواعد النهائية للنطاق الحالي.
+5. [`docs/COMPONENT-INVENTORY.md`](docs/COMPONENT-INVENTORY.md) — العائلات ومسارات المصدر.
+6. مواصفة العائلة داخل `components/` قبل تعديلها.
 
-اعتمد المالك توحيد التسليم في **main وحده** بعد إغلاق إصلاحات R8 وتنظيف N1. [ملخص الخطة والتسليم والمتبقي](docs/UI-FINAL-HANDOFF.md) هو نقطة الدخول الأحدث؛ التكليفات السابقة محفوظة للسجل. مصادر main مرجع العمل، والحزمة الكاملة محفوظة في `deliverables/` على أجزاء بسبب حد الرفع؛ أمر `python3 tools/assemble-components-package.py` ينتج `deliverables/micro-components-editable.zip` مع تحقق البصمات وCRC. تُولد الحزمة من مصدر الإقفال مع أدلته ووثائقه. لا شاشات إنتاجية أو UX أو ربط أعمال ضمن هذا الإصدار. اختبارات المنصات الفعلية وWebKit غير منفذة ومعلنة.
-## ابدأ هنا
-1. اقرأ AGENTS.md.
-2. اقرأ [DESIGN.md](DESIGN.md) ثم docs/CURRENT-STATE.md؛ يحددان الهوية والنطاق الأحدث وحالة القرارات.
-3. اقرأ docs/foundations/Micro-UI-Foundations-V1.md للأسس البصرية.
-4. راجع المراجع البصرية وفهرس docs/ARTIFACTS.md.
-5. نفّذ فقط الدفعة المكلّف بها، وسلّمها للمراجعة.
+## مصدر الحقيقة
 
-## إصدار UI الحالي
+- `components/`: CSS وJavaScript وHTML والمواصفات القابلة للتعديل.
+- `shared/tokens.css`: التوكنز التنفيذية الوحيدة.
+- `shared/motion.css` و`shared/icons.js`: القواعد المشتركة.
+- `assets/`: الخطوط والأيقونات والشعار والأصول المعتمدة.
+- `previews/`: أمثلة مستقلة للمكونات.
+- `previews/ui-system-showcase/`: معرض المكونات الأخير، بمصدر قابل للتعديل وملف standalone مولد.
 
-- [مرجع الإصدار](docs/UI-RELEASE.md) و[القواعد البصرية](docs/UI-VISUAL-SYSTEM.md).
-- [المعرض الموحد](previews/index.html) و[مرجع الحالات من المصدر](previews/system/index.html).
-- [تقرير التحقق](reviews/UI-RELEASE/review.md) و[حزمة إصدار UI المثبتة وأمر جمعها](deliverables/README.md).
-- فحص الإصدار: `python3 tools/ui-release-check.py`. المصادر مستقلة؛ لا إطار تطبيق ولا ربط إنتاجي.
+## المعرض الأخير
 
-## المحتويات
-- docs/: القرارات والأسس وحالة العمل.
-- references/: مراجع الاتجاه والتقرير الوارد؛ التقرير مرجع تحليلي، والصور مرجع للاتجاه.
-- components/: مصادر المكوّنات الحالية ومواصفاتها وأمثلتها.
-- previews/: معاينات مستقلة للمكوّنات، لا كود التطبيق الإنتاجي.
-- prompts/: تكليفات الأيجنت المعتمدة لاحقًا.
-- reviews/: نتائج المراجعات والتصحيحات.
-- handoff/: مراجع استمرارية الدور وسجل القرارات.
+للتشغيل من جذر المستودع:
 
-راجع [الفهرس](docs/COMPONENT-INVENTORY.md) و[الاختيارات](docs/UI-DECISIONS.md) لمعرفة الموجود والمعتمد والمقترح دون جرد شامل. المستودع عام بموافقة المالك، ولا يتضمن أسرارًا أو بيانات مستخدمين.
+```bash
+python3 tools/preview-server.py
+```
 
-## سجل الدفعات السابقة — تاريخي
-دفعة [الأزرار B01](prompts/B01-BUTTONS-ZAI.md) منفذة بمصدر قابل للتعديل ومعاينة، ودُمجت في `main` عبر [PR #1](https://github.com/Qays7753/micro-ui-design-system/pull/1) مع بقاء حالتها **DRAFT FOR RE-REVIEW** وعدم اعتمادها للإنتاج. أُنجزت جولتا تصحيح R1 وR2 على نفس الملفات (المراجعات: `reviews/B01/CHATGPT-REVIEW-R1.md` و`CHATGPT-REVIEW-R2.md`، النتائج: `reviews/B01/review.md`). المصدر القابل للتعديل إلزامي. راجع [القائمة](docs/COMPONENT-INVENTORY.md) و[عقد التسليم](docs/EDITABLE-DELIVERY.md).
+ثم افتح:
 
-## التكليف الأحدث — 2026-09-28
+```text
+http://localhost:5000/previews/ui-system-showcase/index.html
+```
 
-- [تكليف ZAI](prompts/UI-LIBRARY-EXPANSION-ZAI.md)
-- [المعايير والنطاق والتسليم](docs/UI-LIBRARY-EXECUTION-BRIEF.md)
-- [مصفوفة الحالات والسيناريوهات](docs/UI-COVERAGE-MATRIX.md)
+أو افتح مباشرة:
 
-توسعة B02–B07 وS01 منفذة كمسودات للمراجعة، ودُمجت في `main` عبر [PR #2](https://github.com/Qays7753/micro-ui-design-system/pull/2). لا تمثل هذه المخرجات اعتمادًا ذاتيًا أو إعلان اكتمال المكتبة أو جاهزية للإنتاج.
+```text
+previews/ui-system-showcase/standalone.html
+```
 
-## مكونات Micro العددية والإعدادات والدخول
+الملف الواحد مولد آليًا؛ عدّل `index.html` و`showcase.css` و`showcase.js` ثم أعد البناء، ولا تعدل `standalone.html` يدويًا.
 
-المدخل الحالي: [المعرض الموحد](previews/index.html)، مع [المفاهيم](previews/concepts/index.html) و[التركيبات](previews/compositions/index.html)، ويعمل عبر
-`python3 tools/preview-server.py` على المنفذ 5000 دون إطار تطبيق أو بناء.
+## الفحوص الحالية
 
-- [دليل التشغيل والتعديل](docs/MICRO-COMPONENTS-GUIDE.md)
-- [الفحوص وحدودها والصور](reviews/CONCEPTS/review.md)
-- [حزمة المصدر القابل للتعديل وأمر جمعها](deliverables/README.md)
+```bash
+python3 tools/build-ui-system-showcase-standalone.py --check
+python3 tools/ui-system-showcase-check.py
+python3 tools/ui-system-showcase-repair-check.py --tag after
+python3 tools/concepts-check.py
+python3 tools/data-scale-state-check.py
+```
 
-دوائر منفصلة داخل بطاقة واحدة، وعرض متداخل للمصدر نفسه؛ والصفر والسالب حالات طبيعية.
-الأمثلة مستقلة، والبيانات يحددها المستهلك. هذه مسودة للمراجعة، دون مصادقة فعلية أو حفظ إعدادات أو نشر.
+آخر دليل محفوظ في [`reviews/UI-SYSTEM-SHOWCASE/`](reviews/UI-SYSTEM-SHOWCASE/)، وآخر tracker وcoverage في `docs/UI-SYSTEM-SHOWCASE-*.md`.
+
+## العائلات
+
+| العائلة | المصدر | الحالة الحالية |
+|---|---|---|
+| buttons | `components/buttons/` | STABLE UI |
+| fields | `components/fields/` | STABLE UI |
+| selection | `components/selection/` | STABLE UI |
+| organization | `components/organization/` | STABLE UI |
+| data | `components/data/` | STABLE UI |
+| messages | `components/messages/` | STABLE UI |
+| navigation | `components/navigation/` | STABLE UI |
+| surfaces | `components/surfaces/` | STABLE UI |
+| info-strip | `components/info-strip/` | STABLE UI مع peek اختياري |
+| metric-comparison | `components/metric-comparison/` | STABLE UI |
+| account-settings | `components/account-settings/` | STABLE UI دون حفظ فعلي |
+| access-gateway | `components/access-gateway/` | STABLE UI دون مصادقة فعلية |
+| order-schedule | `components/order-schedule/` | DRAFT FOR REVIEW |
+| carousel وpacked-circle | `components/carousel/` و`components/data/packed-circle.*` | DRAFT/PROPOSED حسب المواصفة |
+
+## حدود مهمة
+
+التحقق الحالي قائم على Chromium/Playwright. لم يُثبت بعد توافق جهاز Android أو iOS فعلي، WebKit/Safari، اللمس الحقيقي، TalkBack/VoiceOver، safe areas أو native zoom. لا تحول نجاح الفحوص المكتبية إلى ادعاء جاهزية إنتاجية.
+
+لا تغيّر الهوية أو التوكنز أو الخطوط أو الأيقونات من دون قرار صريح. حافظ على العربية RTL، الأرقام المقروءة، الحالات الصادقة، وعدم قص البيانات المهمة.
+
+## الحزمة
+
+المصدر القابل للتعديل هو التسليم الأساسي. تعليمات إعادة بناء حزمة النقل موجودة في [`deliverables/README.md`](deliverables/README.md)، ولا تُعامل أي صورة أو build كبديل عن المصدر.

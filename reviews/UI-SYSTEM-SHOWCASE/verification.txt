@@ -1,19 +1,19 @@
 UI SYSTEM SHOWCASE — VERIFICATION RUN
 التاريخ: 2026-10-10 · المنفّذ: Zed AI
-المصدر: zai/ui-system-showcase-prototype-2026-10-09 (من 788c2fd)
+المصدر: main الحالي
 البيئة: Chromium headless (Playwright) فقط — الأجهزة/قارئات الشاشة/WebKit/native zoom: NOT RUN
 الأهداف: editable (http محلي) + standalone.html (file://)
 
-PASS | [editable] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=356/230
+PASS | [editable] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=358/230
 PASS | [editable] عرض 320 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=320
 PASS | [editable] عرض 320 + تصفية all: لا فيض أفقي | sw=320
-PASS | [editable] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=356/270
+PASS | [editable] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=358/270
 PASS | [editable] عرض 360 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=360
 PASS | [editable] عرض 360 + تصفية all: لا فيض أفقي | sw=360
-PASS | [editable] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=356/300
-PASS | [editable] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=356/332
+PASS | [editable] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=358/300
+PASS | [editable] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=358/332
 PASS | [editable] فتح الصفحة بلا أخطاء موارد | index.html
-PASS | [editable] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=774/cw=300 h=True
+PASS | [editable] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=777/cw=300 h=True
 PASS | [editable] اختيار لسان يبدّل اللوحة المرتبطة
 PASS | [editable] Home/End داخل الألسنة | sc-tab-d-btn
 PASS | [editable] التبديل إلى LTR يقلب الاتجاه ويحدّث محور الخط | {'dir': 'ltr', 'lineAxis': 'ltr', 'sw': 390}
@@ -63,16 +63,16 @@ PASS | [editable] نقاط العارض 48px | نقاط=3
 PASS | [editable] تصفية draft/proposed تظهر العائلات المسودة وتخفي المستقرة | {'ocal': True, 'carousel': True, 'packed': True, 'buttons': True}
 PASS | [editable] تصفية current/reference
 PASS | [editable] تصفية «الكل» تعيد كل الأقسام
-PASS | [standalone] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=356/230
+PASS | [standalone] عرض 320: لا فيض أفقي ولوحة بعرض العرض | sw=320 canvas=320 tabs=358/230
 PASS | [standalone] عرض 320 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=320
 PASS | [standalone] عرض 320 + تصفية all: لا فيض أفقي | sw=320
-PASS | [standalone] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=356/270
+PASS | [standalone] عرض 360: لا فيض أفقي ولوحة بعرض العرض | sw=360 canvas=360 tabs=358/270
 PASS | [standalone] عرض 360 + تصفية draft: لا فيض أفقي بعد كشف الأقسام | sw=360
 PASS | [standalone] عرض 360 + تصفية all: لا فيض أفقي | sw=360
-PASS | [standalone] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=356/300
-PASS | [standalone] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=356/332
+PASS | [standalone] عرض 390: لا فيض أفقي ولوحة بعرض العرض | sw=390 canvas=390 tabs=358/300
+PASS | [standalone] عرض 430: لا فيض أفقي ولوحة بعرض العرض | sw=430 canvas=430 tabs=358/332
 PASS | [standalone] فتح الصفحة بلا أخطاء موارد | standalone.html
-PASS | [standalone] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=774/cw=300 h=True
+PASS | [standalone] الألسنة صف واحد وتمرير أفقي بتسميات طويلة (D-UI-01) | sw=777/cw=300 h=True
 PASS | [standalone] اختيار لسان يبدّل اللوحة المرتبطة
 PASS | [standalone] Home/End داخل الألسنة | sc-tab-d-btn
 PASS | [standalone] التبديل إلى LTR يقلب الاتجاه ويحدّث محور الخط | {'dir': 'ltr', 'lineAxis': 'ltr', 'sw': 390}

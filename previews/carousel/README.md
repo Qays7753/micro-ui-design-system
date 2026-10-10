@@ -8,7 +8,7 @@
 python3 -m http.server 8080   # من جذر المستودع فقط (ليس من هذا المجلد)
 # اللوحة:        http://localhost:8080/previews/carousel/
 # مثال مستقل:   http://localhost:8080/previews/carousel/example-usage.html
-# فحص ولقطات:   python3 tools/carousel-screenshots.py
+# فحص ولقطات:   python3 tools/ui-system-showcase-repair-check.py --tag after
 ```
 
 ## أقسام اللوحة

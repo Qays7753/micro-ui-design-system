@@ -1,6 +1,0 @@
-PASS  حماية اللف overflow-wrap: anywhere على الرقم الرئيسي وتسميات fallback (مقيسة) — {'wrapValues': ['anywhere']}
-PASS  رقم 16 خانة عند 320+200%: مستطيله داخل البطاقة (يلتف لا يفيض) — {'numText': '1234567890123456', 'numInside': True, 'numRect': {'l': 76, 'r': 244, 't': 3317.9, 'b': 3845.8}, 'cardRect': {'l': 20, 'r': 300}, 'wrapAll': True, 'wrapValues': ['anywhere']}
-PASS  الغياب «غير متاح» (لا صفر مخترع) والصفر قراءة صريحة (عقد المواصفة) — {'hasUnavailable': True, 'fallbackHasLabel': True, 'liStates': ['zero']}
-PASS  صفر أخطاء JavaScript
-
-# النتيجة: 4/4

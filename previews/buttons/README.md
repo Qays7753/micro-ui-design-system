@@ -32,7 +32,7 @@ python3 -m http.server 8080
 | `../../shared/tokens.css` | القيم المشتركة (الألوان والمقاسات والحركة وخط العدّاد) |
 | `../../assets/fonts/` | خطوط IBM Plex المحلية وترخيصها |
 | `../../assets/icons/` | أصول HugeIcons Stroke Rounded الوحيدة وترخيصها |
-| `../../tools/b01-screenshots.py` | سكربت اللقطات وفحوص المتصفح القابل لإعادة التشغيل |
+| `../../tools/ui-system-showcase-check.py` | سكربت اللقطات وفحوص المتصفح القابل لإعادة التشغيل |
 
 ## مصدر الأيقونات — أصل واحد لا نسختان
 

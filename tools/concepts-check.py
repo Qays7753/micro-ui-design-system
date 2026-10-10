@@ -9,12 +9,12 @@ CLI تُمرّر صراحة، فأي بيئة تستطيع تشغيلها بتك
   python3 tools/concepts-check.py \
       --chromium /home/z/my-project/evidence/bin/chromium \
       --base http://127.0.0.1:4460 \
-      --out reviews/SAMSUNG-ONEUI-REPAIR-R2/evidence/agent4/concepts
+      --out reviews/UI-SYSTEM-SHOWCASE/concepts
 
 --chromium  مسار متصفح Chromium (الافتراض: shutil.which("chromium")).
 --base      عنوان خادم يجذر المستودع (الافتراض: متغير MICRO_TEST_BASE
             ثم http://127.0.0.1:5000) — شغّل ThreadingHTTPServer من الجذر.
---out       مجلد الإخراج (الافتراض reviews/CONCEPTS) — لا تكتب فوق أدلة
+--out       مجلد الإخراج (الافتراض reviews/UI-SYSTEM-SHOWCASE/concepts) — لا تكتب فوق الأدلة المختصرة المحفوظة
             الجولات التاريخية؛ مرّر مجلد أدلة جولتك.
 
 وأُضيف فحص معنوي صادق لعقد البوابة بلا معالج (SUI-R1-06: التوقع الحرفي
@@ -42,7 +42,7 @@ _ap.add_argument("--chromium", default=shutil.which("chromium"),
 _ap.add_argument("--base", default=os.environ.get("MICRO_TEST_BASE", "http://127.0.0.1:5000"),
                  help="عنوان خادم جذر المستودع (الافتراض MICRO_TEST_BASE ثم 127.0.0.1:5000)")
 _ap.add_argument("--out", default=str(ROOT / "reviews" / "CONCEPTS"),
-                 help="مجلد الإخراج (الافتراض reviews/CONCEPTS)")
+                 help="مجلد الإخراج (الافتراض reviews/UI-SYSTEM-SHOWCASE/concepts)")
 _ARGS = _ap.parse_args()
 CHROMIUM = _ARGS.chromium
 BASE = _ARGS.base.rstrip("/")

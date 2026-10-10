@@ -1,99 +1,55 @@
-# معرض نظام الواجهة — UI System Showcase Prototype
+# UI System Showcase
 
-**الحالة: PROTOTYPE — عرض تفاعلي لمكوّنات النظام بعد جولة الإصلاح الجذري + جولة إصلاح العرض F-01..F-14 (2026-10-10).**
-هذا **عرض مكوّنات ولوحة تكامل، وليس تطبيقًا إنتاجيًا ولا تصميم منتج**. كل البيانات fixtures محلية حتمية لتنشيط حالات المكوّنات فقط — لا شبكة، لا مصادقة، لا حفظ، لا منطق أعمال.
+**الحالة:** Prototype تفاعلي لعرض مكونات UI الحالية بعد إصلاحات F-01 إلى F-14.
 
-- **فرع المصدر:** `zai/ui-root-cause-repair-implementation` @ `788c2fdfe84cf12602870e7656c418e3d45f5c1b`
-- **فرع العرض:** `zai/ui-system-showcase-prototype-2026-10-09` (منشأ منه؛ جرت عليه إصلاحات العرض F-01..F-14)
-- **التاريخ:** 2026-10-09 (الإنشاء) · 2026-10-10 (إصلاح العرض) · **المنفّذ:** Zed AI · **مراجعة مستقلة:** `reviews/UI-SYSTEM-SHOWCASE/qa-verdict.txt`
+هذا المعرض ليس تطبيق Micro الإنتاجي ولا تصميم شاشة منتج. البيانات fixtures محلية حتمية، ولا توجد شبكة أو مصادقة أو حفظ أو منطق أعمال.
 
-## كيف تفتح العرض
-
-### 1) الملف الواحد المكتف ذاتيًا (الأسرع — يعمل مباشرة من الملف)
-
-افتح `previews/ui-system-showcase/standalone.html` مباشرة في المتصفح (يفتح من `file://` بلا خادم ولا إنترنت). كل CSS/JS/الخطوط/الأيقونات مضمّنة داخله.
-
-> الملف **مولّد آليًا** — لا تُعدّله يدويًا. عدّل المصادر ثم أعد البناء (أدناه).
-
-### 2) المصدر القابل للتحرير (للتطوير)
+## التشغيل
 
 من جذر المستودع:
 
 ```bash
-python3 tools/preview-server.py          # الخدمة القائمة للمعاينات (المنفذ 5000)
-# ثم افتح: http://localhost:5000/previews/ui-system-showcase/index.html
+python3 tools/preview-server.py
 ```
 
-المصادر القابلة للتحرير (مصدر الحقيقة): `index.html` · `showcase.css` (توكنات المكتبة فقط) · `showcase.js` (متحكم عرض ببيانات fixtures حتمية). كل عنصر معروض هو مكوّن حقيقي من `components/` بمسارات نسبية — لا نسخ ولا محاكاة.
+ثم افتح:
 
-### 3) إعادة البناء والتحقق (حتمية بايت-ببايت)
+```text
+http://localhost:5000/previews/ui-system-showcase/index.html
+```
+
+أو افتح `standalone.html` مباشرة من `file://`.
+
+## مصدر الحقيقة
+
+- `index.html`: تركيب المعرض.
+- `showcase.css`: CSS الخاص بالمعرض باستخدام توكنز المكتبة.
+- `showcase.js`: fixtures والتحكم في العرض.
+- المكونات الفعلية تأتي من `components/` عبر المسارات النسبية.
+- `standalone.html`: ملف مولد، لا تعدله يدويًا.
+
+## إعادة البناء والتحقق
 
 ```bash
-python3 tools/build-ui-system-showcase-standalone.py           # يولّد standalone.html
-python3 tools/build-ui-system-showcase-standalone.py --check    # يقارن إعادة التوليد بالملف القائم بلا كتابة
-python3 tools/ui-system-showcase-check.py                      # مصفوفة التحقق الكاملة + اللقطات (Chromium headless)
-python3 tools/ui-system-showcase-repair-check.py --tag after    # بوابات إصلاح F-01..F-14 (176 قياسًا عند 320/360/390/430)
+python3 tools/build-ui-system-showcase-standalone.py --check
+python3 tools/ui-system-showcase-check.py
+python3 tools/ui-system-showcase-repair-check.py --tag after
 ```
 
-`--check` يعيد التوليد في الذاكرة ويقارن البايتات؛ تكرار البناء بنفس المدخلات يعطي نفس الملف حرفيًا (لا أختام زمن). أداة البناء تتحقق أيضًا أن كل رمز أيقونة مضمّن يطابق أصله في `assets/icons` بايت-ببايت (نمط R1-02) وتفشل عند أي انحراف.
+الدليل الأخير:
 
-## شريط التحكم (أدوات مراجعة — ليست سلوك منتج)
+- [`verification.txt`](../../reviews/UI-SYSTEM-SHOWCASE/verification.txt)
+- [`qa-verdict.txt`](../../reviews/UI-SYSTEM-SHOWCASE/qa-verdict.txt)
+- [`repair-check-after.txt`](../../reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt)
+- [`UI-SYSTEM-SHOWCASE-COVERAGE`](../../docs/UI-SYSTEM-SHOWCASE-COVERAGE.md)
+- [`UI-SYSTEM-SHOWCASE-REPAIR-TRACKER`](../../docs/UI-SYSTEM-SHOWCASE-REPAIR-TRACKER.md)
 
-- **الاتجاه:** RTL (الافتراضي، عربي) / LTR (وضع مقارنة مضبوط).
-- **عرض المعاينة:** 320 / 360 / 390 / 430 — أداة مراجعة على الشاشات الواسعة؛ القياس الدقيق للمكونات يستمد من عرض المتصفح الفعلي (كما في لقطات التحقق). **لا يوجد تحكم تكبير** — المقياس ثابت.
-- **المحتوى:** عادي / إجهاد (نصوص طويلة وأرقام كبيرة وبيانات حافة — يختبر الالتفاف بلا قص).
-- **تصفية الحالة:** current/reference (12 عائلة مستقرة) · draft/proposed · الكل.
+## ما يغطيه
 
-## العائلات المغطاة (14 + ملحقان)
+يعرض المعرض العائلات الحالية: surfaces، buttons، fields، selection، organization، info-strip، data، metric-comparison، messages، navigation، access-gateway، account-settings، order-schedule، carousel وpacked-circle حسب حالة كل مكون.
 
-| # | العائلة | الحالة من المصدر | ملاحظات |
-|---|---|---|---|
-| 01 | surfaces (S01) | STABLE UI | curves (الاتجاه المعتمد) + plain؛ المتغيرات التاريخية غير معروضة |
-| 02 | buttons (B01) | STABLE UI | كل الأنواع + التحميل (نمط B) والضغط والتعطيل |
-| 03 | fields (B02) | STABLE UI | نص/طويل/بحث/مبلغ/كمية + الخطأ والنجاح والمعطل والقراءة فقط |
-| 04 | selection (B03) | STABLE UI | checkbox/radio/switch/toggle/segmented (مع سياسة العرض الضيق `m-seg--scroll`/`m-seg--stack` — F-05) + منتقي داخل طبقة B07 بملك إغلاق واحد (F-02) |
-| 05 | organization (B04) | STABLE UI | صفوف/فاصل/قسم قابل للطي/شارات/عدادات/هوية مع بديل صورة |
-| 06 | info-strip (SPEC-01) | STABLE UI · peek ADOPTED | بطاقات + شريط أسهم/نقاط + شريط peek (opt-in: صنف `m-info-peek` + سمة `data-info-peek` — F-03) |
-| 07 | data (B05) | STABLE UI | أعمدة/خط/دونات/فقاعات (تسميات كاملة عند 1× بعقد موائمة F-01) + صفر/مفقود/outlier + إفصاح متزامن + progress/steps |
-| 07b | data/packed-circle | **PROPOSED** | ملحق opt-in بمصدر مرئي واحد للفئة/القيمة (F-09) — معروض موسومًا؛ لا يعني اعتماده |
-| 08 | metric-comparison (SPEC-02) | STABLE UI | دوائر منفصلة/متداخلة + أشرطة موقعة حول الصفر؛ عتبة تكديس حاوية 420px موثقة (F-12) |
-| 09 | messages (B06) | STABLE UI | 5 أنواع ملاحظات + toast + wait/skeleton/empty + قناتا إعلان |
-| 10 | navigation (B07) | STABLE UI | appbar (عنوان بسطرين + «…» — F-14) + ألسنة بتمرير أفقي (D-UI-01) + navbar + حوار/لوحة سفلية/شريط أفعال |
-| 11 | access-gateway (SPEC-04) | STABLE UI (دون مصادقة) | معالج عرض محلي فقط — لا شبكة |
-| 12 | account-settings (SPEC-03) | STABLE UI (دون حفظ) | حوار موسّط بمستويين + مفاتيح تجريبية؛ إعادة التوسيط عند تغيّر الارتفاع سلوك النموذج الموثق (F-10) |
-| 13 | order-schedule (m-ocal) | **DRAFT FOR REVIEW** | شهر/قائمة + أحداث؛ بطاقة التقويم full-bleed عند الضيق لخلايا مربعة مرجعية (F-08)؛ معروض موسومًا |
-| 14 | carousel | **DRAFT FOR REVIEW** | أسهم/نقاط/لوحة مفاتيح RTL + توسيع داخل البطاقة (PROPOSED) |
+`DRAFT FOR REVIEW` و`PROPOSED` علامات حالة وليست اعتمادًا إنتاجيًا.
 
-**غير مغطى في هذا العرض** (مسجل في مصفوفة التغطية): المتغيرات التاريخية للأسطح (calm/waves/waves-v2/depth)، مفاتيح الموجات PROPOSED، حالة المقياس غير الصالح كبيانات عرض (عقدها مفحوص في جولة الإصلاح `tools/zai-repair-w3-check.py` لا في العرض). لا توجد عائلات مصدر أخرى خارج الـ14 (تحقق الحصر في `docs/zai/ui-system-repair/2026-10-09/UI-SYSTEM-SHOWCASE-COVERAGE.md`).
+## حدود الفحص
 
-## التفاعلات المفحوصة (مختصر)
-
-اختيار الألسنة وتمريرها الأفقي بتسميات طويلة (D-UI-01) · تبديل RTL/LTR · حالات الأزرار (تحميل/ضغط/تعطيل) · إدخال الحقول ومسحها وحالاتها وخطوة الكمية · المنتقي (فتح/بحث/اختيار/مسح/إغلاق باستعادة التركيز) · الحوار واللوحة السفلية (حصر تركيز/Escape/خلفية) · الملاحظات وtoast والإعلان الحي · إفصاح بيانات الرسوم ومزامنته مع تغيّر البيانات (D-UI-04/A4-D04) · صفر/مفقود/سالب موقعة · مفاتيح الإعدادات · الجدول (يوم/عرض/فراغ/استعادة) · العارض (تنقل/توسيع/طي عند الانتقال) · تصفية الحالة مع كشف الأقسام بلا فيض — **118/118 PASS** على الهدفين (المصدر http + الملف الواحد file://): `reviews/UI-SYSTEM-SHOWCASE/verification.txt`، مع مراجعة مستقلة `qa-verdict.txt` (PASS بعد إصلاح عيب تركيب وجده المراجع المستقل وأعيد فحصه).
-
-## جولة إصلاح العرض F-01..F-14 (2026-10-10)
-
-أُصلح على هذا الفرع 14 بند عرض مكوّناتها جذر العيوب مرصودًا بالقياس قبل/بعد — السجل الكامل والحالات النهائية في `docs/zai/ui-system-repair/2026-10-09/UI-SYSTEM-SHOWCASE-REPAIR-TRACKER.md`، والأدلة في `reviews/UI-SYSTEM-SHOWCASE/repair-check-before.txt` (68 إخفاقًا معادًا إنتاجها عند الأساس) مقابل `repair-check-after.txt` (**176/176** عند 320/360/390/430) + لقطات `screenshots/repair-after-*.png` و`screenshots/before/`. أبرز العقود المحدثة: موائمة تسميات الرسوم عند 1× بجاهزية خط (F-01) · مالك إغلاق واحد للمنتقي داخل طبقة (F-02) · صنف peek مع سمة (F-03) · سياسة عرض ضيق معلنة للمقطّع (F-05) · إغلاق ملاحظة أيقونة 48px (F-06) · وحدة كمية متماسكة (F-07) · تقويم بخلايا مربعة مرجعية (F-08) · مصدر واحد لملحق packed (F-09) · عتبة تكديس المقارنة بحاوية 420px (F-12) · عنوان شريط التطبيق بسطرين (F-14). أدوات الجولة المحدثة تاريخيًا: `tools/ui-repair-r2-check.py` (بوابات zoom200 أعيد توثيقها للعقد الحالي — راجع رأس الأداة).
-
-## حدود وأصناف NOT RUN (معلنة)
-
-- **كل الفحوص Chromium (Playwright headless) فقط.** NOT RUN فعليًا: الأجهزة الحقيقية واللمس الفعلي (بما فيه سحب peek/carousel بالإصبع — محاكى برمجيًا بأحداث المؤشر)، TalkBack/VoiceOver/NVDA (الدلالات DOM مطابقة والإثبات السمعي غير منفذ)، WebKit/Safari/Firefox، native zoom وDynamic Type، safe-area فعلية.
-- **تاريخ الملف الواحد:** `shared/icons.js` يتطلب http (fetch) — العرض يستخدم sprite مضمّنًا بنفس بايتات أصول `assets/icons` (يتحقق منه البناء). لا مكوّن في العرض يحتاج خادمًا.
-- تباين العلامات الفاتحة للبيانات (A4-R01) مسجل كاقتراح في تقرير الإصلاح — القيم كما هي ولم يُعرض حل ملون هنا.
-- أي عيب مصدر يظهر في العرض يُسجَّل `PROTOTYPE_BLOCKED_BY_CORE_FINDING` — **لم يُسجَّل أي بند من هذا النوع في هذه الجولة** (العيب الوحيد الذي وجده المراجع المستقل كان تركيب شبكة المستهلك في ملف العرض نفسه وأُصلح هناك).
-
-## الملفات
-
-```
-previews/ui-system-showcase/
-├── index.html        # المصدر القابل للتحرير (sprite الأيقونات مضمّن ومُتحقق منه بالبناء)
-├── showcase.css      # CSS العرض (chrome) — توكنات المكتبة فقط، لا لون جديد
-├── showcase.js       # متحكم العرض: شريط التحكم + fixtures حتمية + init الجدول/البوابة/المنتقي
-├── standalone.html   # مولّد آليًا (لا يُعدَّل يدويًا) — 919KB بكل الخطوط مضمّنة
-└── README.md         # هذا الملف
-tools/
-├── build-ui-system-showcase-standalone.py   # المولّد الحتمي (+--check)
-├── ui-system-showcase-check.py              # مصفوفة التحقق واللقطات
-└── ui-system-showcase-repair-check.py       # بوابات إصلاح F-01..F-14 (--tag before/after)
-docs/zai/ui-system-repair/2026-10-09/         # مصفوفة التغطية + سجل إصلاح العرض F-01..F-14
-reviews/UI-SYSTEM-SHOWCASE/   # verification.txt · qa-verdict.txt · repair-check-{before,after}.txt · screenshots/
-```
+الفحوص Chromium/Playwright فقط. الأجهزة الحقيقية، WebKit/Safari، اللمس الحقيقي، safe areas، TalkBack/VoiceOver وnative zoom ليست مثبتة بهذا المعرض.

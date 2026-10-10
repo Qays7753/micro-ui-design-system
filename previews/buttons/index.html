@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- =========================================================
   Micro UI — لوحة معاينة الأزرار (B01)
-  الحالة: DRAFT FOR RE-REVIEW — لقطات reviews/B01/screenshots مأخوذة من هذا الملف.
+  الحالة: DRAFT FOR RE-REVIEW — لقطات ../../reviews/UI-SYSTEM-SHOWCASE/screenshots مأخوذة من هذا الملف.
   التشغيل (من جذر المستودع فقط — الأصول والمكوّن خارج هذا المجلد):
     python3 -m http.server 8080
     ثم فتح http://localhost:8080/previews/buttons/
@@ -239,7 +239,7 @@
         </div>
 
       </div>
-      <p class="demo-note" style="margin-top:16px">فحص الخط الفعلي (بند 7): التسمية تُعرض بـ IBM Plex Sans Arabic وزن 500 فعليًا — التحقق البرمجي document.fonts.check في سجل الفحص tools/b01-screenshots.py، وليس بالاستدلال من صورة.</p>
+      <p class="demo-note" style="margin-top:16px">فحص الخط الفعلي (بند 7): التسمية تُعرض بـ IBM Plex Sans Arabic وزن 500 فعليًا — التحقق البرمجي document.fonts.check في سجل الفحص ../../tools/ui-system-showcase-check.py، وليس بالاستدلال من صورة.</p>
     </section>
 
     <!-- ================= 5) لوحة مقارنة جانبية (أداة فحص عريضة) ================= -->
@@ -362,7 +362,7 @@
       </div>
 
       <h2>محاكاة زيادة حجم الخط 200% داخل مساحة هاتف ثابتة</h2>
-      <p class="panel-note">زر المحاكاة أدناه («محاكاة زيادة حجم الخط») يضاعف حجم الخط المحسوب لكل عناصر العمود في مرورين: قراءة كل الأحجام الأصلية أولًا ثم تطبيق العامل (تصحيح R2-D: يمنع مضاعفة الابن الوارث مرتين — 16→32 لا 64). الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP (Emulation.setTextZoomFactor) غير متاحة في بيئة الفحص — هذه المحاكاة مكافئة للنص وليست تكبير متصفح/نظام مضمونًا لكل الحالات. القياسات في سجل الفحص tools/b01-screenshots.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا. العمود يضم: نصًا مباشرًا، النص نفسه داخل غلاف m-btn__label (زر تحميل ثابت)، وزرين طويلين (الحالي والمرشح R2-B) لفحص الشكل عند 100% و200%.</p>
+      <p class="panel-note">زر المحاكاة أدناه («محاكاة زيادة حجم الخط») يضاعف حجم الخط المحسوب لكل عناصر العمود في مرورين: قراءة كل الأحجام الأصلية أولًا ثم تطبيق العامل (تصحيح R2-D: يمنع مضاعفة الابن الوارث مرتين — 16→32 لا 64). الخط يتضاعف وتبقى الأيقونة والحشو والارتفاعات الدنيا، والسطر نسبة 1.5 فيتمدد مع الخط. عرض العمود = مساحة العرض الفعلية عند الفحص (390px على شاشة 390، و320px على شاشة 320). آلية CDP (Emulation.setTextZoomFactor) غير متاحة في بيئة الفحص — هذه المحاكاة مكافئة للنص وليست تكبير متصفح/نظام مضمونًا لكل الحالات. القياسات في سجل الفحص ../../tools/ui-system-showcase-check.py، ولا يُعتبر إخفاء تجاوز في تمرير دليلًا. العمود يضم: نصًا مباشرًا، النص نفسه داخل غلاف m-btn__label (زر تحميل ثابت)، وزرين طويلين (الحالي والمرشح R2-B) لفحص الشكل عند 100% و200%.</p>
       <div class="lab-controls">
         <button class="m-btn m-btn--secondary" data-lab="text-zoom" aria-pressed="false">محاكاة زيادة حجم الخط 200%</button>
         <span class="demo-note">تُطبّق على العمود أدناه فقط، وزر ثانٍ يلغيها ويعيد الأحجام بدقة.</span>
@@ -411,7 +411,7 @@
   </main>
 
   <footer class="board-footer">
-    المصدر: components/buttons/ (specification.md · buttons.css · buttons.js) — القيم: shared/tokens.css — مثال الاستخدام خارج اللوحة: previews/buttons/example-usage.html — طريقة التشغيل والتعديل: previews/buttons/README.md — نتائج الفحص: reviews/B01/review.md
+    المصدر: components/buttons/ (specification.md · buttons.css · buttons.js) — القيم: shared/tokens.css — مثال الاستخدام خارج اللوحة: previews/buttons/example-usage.html — طريقة التشغيل والتعديل: previews/buttons/README.md — نتائج الفحص: ../../reviews/UI-SYSTEM-SHOWCASE/verification.txt
   </footer>
 
   <script src="../../components/buttons/buttons.js"></script>

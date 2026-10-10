@@ -1,3 +1,0 @@
-ICON CHECK OK: 17 رمزًا يطابق أصول assets/icons (المحتوى وfill)
-CHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت
-exit=0

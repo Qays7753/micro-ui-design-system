@@ -11,3 +11,10 @@ replit.md
 
 # Complete ZIP is reconstructed from verified transport parts.
 /deliverables/micro-components-editable.zip
+
+# Browser-check outputs are regenerated, not source evidence.
+/reviews/CONCEPTS/
+/reviews/UI-COMPLETION/
+/reviews/UI-SYSTEM-SHOWCASE/generated-concepts/
+/reviews/UI-SYSTEM-SHOWCASE/generated-data-scale/
+/reviews/UI-SYSTEM-SHOWCASE/ui-release/
