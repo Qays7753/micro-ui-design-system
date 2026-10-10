@@ -1,0 +1,55 @@
+UI SYSTEM SHOWCASE — INDEPENDENT QA VERDICT (Agent 5)
+Date / environment: 2026-10-09 · Chromium headless only (Playwright sync API, file:// target)
+Method: own Playwright probes (file:// + http not required), implementer claims independently re-run
+Probe scripts: /home/z/my-project/scripts/agent5-qa.py (+ agent5-spotcheck.py, agent5-spotcheck2.py) · results JSON: agent5-qa-results.json
+
+1.  PASS — file:// open of standalone.html: 0 pageerrors, 0 console errors.
+2.  PASS — request listener: 1 request total (the file itself), 0 http/https/ws requests, 0 failed.
+3.  PASS — document.fonts.check('16px "IBM Plex Sans Arabic"')=true after fonts.ready; 6 loaded faces (IBM Plex Sans 400/500/600 + Arabic 400/500/600).
+4.  PASS — default dir=rtl; click '#sc-dir-seg [data-sc-dir="ltr"]' → dir=ltr with docSW=390 bodySW=390 at 390 viewport (no h-overflow); flipped back to rtl.
+5.  PASS — click '#sc-tab-c-btn' → panel sc-tab-c hidden=false/display=block; sc-tab-a/b/d hidden=true; aria-selected=true.
+6.  PASS — '#sc-dialog-trigger' (el.click()): layer hidden=false display=flex, focus inside layer; Escape → hidden=true and focus back on trigger.
+7.  PASS — '#sc-chart-bars .m-chart__disclose' click → aria-expanded=true + TABLE.m-chart__dataset present (not hidden); second click → expanded=false, table hidden=true.
+8.  PASS — '.m-chart__bar-value' texts in #sc-chart-bars = ['8','0','—','11'] (real zero bar + missing em-dash).
+9.  PASS — '[data-sc-fixture="stress"]' → first '#sc-surfaces .m-surface__amount' = '1,234,567.89'; back to normal → '58.4'.
+10. PASS — '#sc-carousel-root [data-next]' → status 'البطاقة 2 من 3' (mentions 2), prev button enabled (disabled=false).
+11. PASS — '#sc-ocal-root' childElementCount=2 (built); click '#sc-ocal-view' → data-ocal-view 'calendar'→'list'.
+12. PASS — '#sc-account-root [data-account-open]' (el.click()) → '#sc-account-layer' hidden=false, display=flex, visibility=visible.
+13. PASS — '[data-sc-filter="draft"]' → section #sc-ocal visible, #sc-buttons hidden.
+14. PASS — with filter=current: draft sections sc-ocal & sc-carousel have hidden attribute AND computed display:none.
+15. PASS — '[data-sc-w="320"]' → computed width of #sc-canvas = 320px; 2 'micro-data:rendered' events fired (ResizeObserver re-render); bar-values intact ['8','0','—','11'].
+16. PASS — standalone.html: zero hits for src="http / href="http / url(http (single+double-quote variants); only 4 benign http substrings = OFL license URL + 3× SVG xmlns namespace constants (no resource loads).
+17. PASS — own screenshots written: reviews/UI-SYSTEM-SHOWCASE/screenshots/agent5-file-390-rtl.png (390×844) and agent5-file-320-rtl.png (320×844), both RTL, file://.
+
+SPOT-CHECKS of implementer's verification.txt (3 most surprising claims, re-run independently):
+A. "الحوار المركزي يفتق التركيز داخله (Tab متكرر لا يخرج)" (lines 31/86) — PASS: 14 consecutive Tab presses, activeElement never left #sc-dialog-layer (cycled through dialog buttons incl. close button).
+B. "الألسنة صف واحد وتمرير أفقي بتسميات طويلة sw=774" (lines 12/67) — PASS (core): stress fixture at 320 → tabs oneRow=true, sc-tabs scrollWidth=774 > clientWidth, overflow-x=auto, no vertical wrap. Their "عرض 320: لا فيض أفقي sw=320" (lines 7/62) also reproduced under their conditions (default filter current: pageSW=320). BUT new finding (original run): with filter draft/all at viewport 320 or 360 the page DID overflow horizontally (pageSW=376) — unclipped offenders were the sc-carousel section (m-carousel viewport ≈328px + section box 360px); at 390 no overflow. The implementer's matrix never combined filter≠current with width<390 — coverage gap, minor prototype defect (review-tool path only). [FIXED — consumer-side CSS `.sc-block > .m-carousel { min-width: 0; max-width: 100% }` + standalone rebuilt; re-tested 2026-10-09 → PASS, see RE-VERIFICATION below.]
+C. "السالب في أشرطة المقارنة (موقعة حول الصفر)" (lines 45/100) — PASS and stronger than implementer's check (they only asserted the label 'مرتجعات' exists): rows = طلبات 32 / مرتجعات -9 / مراجعات 0 / معلق — غير متاح; geometry verified: positive bar +102px right of track center, negative bar -29px left of center ending at zero, zero row = hollow marker (data-zero), missing row = '— غير متاح'.
+   Related claim "data-scale-state مكتوب كل تصيير | ok,ok" (lines 46/101) — reproduced exactly as 'ok','ok' on #sc-circles and #sc-main-metric. Nuance: data.js m-chart roots (bars/line) intentionally keep data-scale-state ABSENT on the healthy path (R8-07b contract); the 'ok,ok' comes from metric-comparison roots — implementer's wording is family-ambiguous but the recorded evidence is genuine.
+
+NOT RUN (declared): real devices, touch, TalkBack/VoiceOver/NVDA, WebKit, native zoom, real drag gestures
+NOT PROVEN (concerns found, none blocking):
+- Page-level horizontal overflow (56px @320, 16px @360) when status filter = draft/all (carousel section visible): sc-carousel rendered ~376px wide regardless of canvas width. RESOLVED: fixed via consumer composition CSS in showcase.css (`.sc-block > .m-carousel { min-width: 0; max-width: 100% }`), standalone rebuilt — re-tested 2026-10-09, see RE-VERIFICATION below.
+- Implementer's per-claim probes are sometimes weaker than their PASS wording (e.g., negative-bar claim checked only a label; data-scale-state claim conflates component families) — conclusions were right in these cases, but rigor varies.
+- 110-PASS claim: my 17 mandatory items + 3 spot-checks all reproduced; I did not re-run the remaining ~90 claims individually.
+
+RE-VERIFICATION (2026-10-09, after implementer fix — own probes, /home/z/my-project/scripts/agent5-recheck.py, results: agent5-recheck-results.json):
+Defect re-tested: carousel overflow with status filter draft/all at narrow widths.
+  R1  PASS — viewport 320 + filter draft: documentElement.scrollWidth=320 (was 376), bodySW=320; carousel section now fits (carousel root 256px, section 288px).
+  R2  PASS — viewport 320 + filter all: scrollWidth=320 (was 376).
+  R3  PASS — viewport 360 + filter all: scrollWidth=360 (was 376).
+  R4  PASS — viewport 360 + filter draft: scrollWidth=360 (was 376).
+  R5  PASS — carousel still functional at 320+draft: [data-next] click → status 'البطاقة 2 من 3' (mentions 2), prev button enabled (disabled=false, aria-disabled none).
+  R6  PASS — rebuilt standalone loads clean: 0 pageerrors, 0 console errors, 0 external requests, fonts.check('IBM Plex Sans Arabic')=true.
+  R7  PASS — regression: viewport 320 + default filter current still scrollWidth=320.
+  S   PASS — new evidence screenshot: reviews/UI-SYSTEM-SHOWCASE/screenshots/agent5-recheck-carousel-320-draft.png (320×844, file://, draft filter, fixed state).
+Fix scope check: change is consumer-side in previews/ui-system-showcase/showcase.css only (mirrored into rebuilt standalone.html line ~5371); no component files touched.
+
+VERDICT: PASS  (overall — zero FAIL among items 1-16; item 17 PASS; all 3 spot-checks reproduced; defect found in original run fixed and re-verified PASS on 2026-10-09 — 8/8 re-check probes PASS)
+Core components modified? git status --short (re-run 2026-10-09 after fix) shows ONLY untracked additions:
+  ?? docs/zai/ui-system-repair/2026-10-09/
+  ?? previews/ui-system-showcase/
+  ?? reviews/UI-SYSTEM-SHOWCASE/
+  ?? tools/build-ui-system-showcase-standalone.py
+  ?? tools/ui-system-showcase-check.py
+Zero tracked modifications; nothing under components/ or shared/ touched (git diff empty). My additions: 3 screenshots in reviews/UI-SYSTEM-SHOWCASE/screenshots/ (agent5-file-390-rtl.png, agent5-file-320-rtl.png, agent5-recheck-carousel-320-draft.png — inside the untracked reviews dir) + probe scripts under /home/z/my-project/scripts/ (outside repo).

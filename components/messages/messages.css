@@ -172,8 +172,12 @@
 .m-empty__body { margin: 0; font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-secondary); max-width: 34ch; }
 .m-empty .m-btn { flex: none; }
 
-/* منطقة الإعلان المشتركة (تديرها messages.js — إعلان دون تكرار) */
-.m-live-region {
+/* منطقة الإعلان المشتركة (تديرها messages.js — إعلان دون تكرار).
+   W2.3 (A2-F05): قناتان منفصلتان — .m-live-region (polite) و
+   .m-live-region--assertive (الإلحاحي) — نفس الإخفاء البصري؛ المحدد
+   الإضافي وصلة تعريف لا تغيير شكل. */
+.m-live-region,
+.m-live-region--assertive {
   position: absolute;
   width: 1px; height: 1px;
   margin: -1px; padding: 0;

@@ -1,0 +1,819 @@
+{
+ "mode": "before",
+ "results": [
+  {
+   "name": "tabs 320 rtl baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=320 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 320 ltr baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=320 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 360 rtl baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=360 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 360 ltr baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=360 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 390 rtl baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=390 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 390 ltr baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=390 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 430 rtl baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=430 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs 430 ltr baseline overflow reproduced",
+   "ok": true,
+   "detail": "sw=699 cw=430 singleRow=True overflowX=visible"
+  },
+  {
+   "name": "tabs before: Home/End absent (baseline)",
+   "ok": true,
+   "detail": "baseline behavior documented"
+  },
+  {
+   "name": "tabpanel before: active panel has no tabindex",
+   "ok": true,
+   "detail": "{'aTi': None, 'aHidden': False, 'bHidden': True}"
+  },
+  {
+   "name": "tabpanel before: Tab skips panel",
+   "ok": true,
+   "detail": "activeElement="
+  },
+  {
+   "name": "tabpanel before: switching works but order broken",
+   "ok": true,
+   "detail": "baseline switch ok; order gap recorded above"
+  },
+  {
+   "name": "safe-area before: env() declared on 3 surfaces of the composition (A3-F03)",
+   "ok": true,
+   "detail": "hits=3 — التطبيق يتكرر عند قيمة موجبة"
+  },
+  {
+   "name": "aria-disabled before: looks enabled (baseline)",
+   "ok": true,
+   "detail": "cursor=pointer"
+  },
+  {
+   "name": "aria-disabled before: hover feedback present (baseline)",
+   "ok": true,
+   "detail": "hover bg=rgba(223, 238, 230, 0.616)"
+  },
+  {
+   "name": "aria-disabled before: event blocked by JS already (baseline guard)",
+   "ok": true,
+   "detail": "events=0 (الحرس البرمجي كان موجودًا — الفجوة كانت CSS)"
+  },
+  {
+   "name": "layer before: no defaults, no validation (baseline)",
+   "ok": true,
+   "detail": "{'role': None, 'modal': None, 'labelled': None}"
+  },
+  {
+   "name": "note before: no default roles (baseline)",
+   "ok": true,
+   "detail": "{'error': None, 'success': None, 'help': None, 'bare': None, 'consumer': 'status'}"
+  },
+  {
+   "name": "live before: single shared node (baseline)",
+   "ok": true,
+   "detail": "regions=1"
+  },
+  {
+   "name": "init(root) before: root-self ignored (baseline)",
+   "ok": true,
+   "detail": "{'eventsAfterReinit': 0, 'eventsFirst': 0, 'selected': None}"
+  },
+  {
+   "name": "MicroData.init(root) before: root ignored (baseline)",
+   "ok": true,
+   "detail": "{'svg': False, 'disclose': False}"
+  },
+  {
+   "name": "bubbles before: silent substitution + rmax overflow (baseline)",
+   "ok": true,
+   "detail": "over: maxDiameter=147.078 (متجاوز 104) بلا رفض"
+  },
+  {
+   "name": "bubbles before: invalid max silently replaced (baseline)",
+   "ok": true,
+   "detail": "{'error': False, 'state': None, 'circles': [104, 46.5102], 'note': False, 'maxDiameter': 104}"
+  },
+  {
+   "name": "summary before: stale after data change (baseline)",
+   "ok": true,
+   "detail": "{'before': 'مثال مستقل — البيانات في HTML المصدر.', 'after': 'مثال مستقل — البيانات في HTML المصدر.'}"
+  },
+  {
+   "name": "disclosure before: absent (baseline)",
+   "ok": true,
+   "detail": "buttons=0"
+  },
+  {
+   "name": "chart name before: aria-label only, no linkage (baseline)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "disclosure before: interaction impossible (no button)",
+   "ok": true,
+   "detail": "{'skipped': 'no disclosure button on baseline'}"
+  },
+  {
+   "name": "touch before: recorded for comparison",
+   "ok": true,
+   "detail": "{'appbarHGap': None}"
+  },
+  {
+   "name": "touch: stepper composite exception recorded (D-UI-03)",
+   "ok": true,
+   "detail": "{'note': 'stepper buttons not adjacent here'}"
+  },
+  {
+   "name": "picker before: long label stays single-line/clipped (baseline)",
+   "ok": true,
+   "detail": "height=55 (سطر واحد ≈55 عند 200 بالمئة؛ الملتف ≥90 — القص بالقائمة)"
+  },
+  {
+   "name": "gallery margin 320px before: 16px/side (baseline contract violation)",
+   "ok": true,
+   "detail": "left=16"
+  },
+  {
+   "name": "gallery margin 390px before: 16px/side (baseline contract violation)",
+   "ok": true,
+   "detail": "left=16"
+  },
+  {
+   "name": "gallery margin 430px before: 16px/side (baseline contract violation)",
+   "ok": true,
+   "detail": "left=16"
+  },
+  {
+   "name": "results wrapper before: page overflow (baseline)",
+   "ok": true,
+   "detail": "sw=359 cw=320"
+  },
+  {
+   "name": "navbar height measured (dynamic contract W1.4)",
+   "ok": true,
+   "detail": "height=130.953125"
+  },
+  {
+   "name": "reflow before: stock pages clean; tabs overflow reproduced by the tabs probe with long labels",
+   "ok": true,
+   "detail": "matrix failures=none — انظر فحص tabs للفيض المُعاد إنتاجه"
+  },
+  {
+   "name": "raw-color inventory recorded (A2-F02 probe)",
+   "ok": true,
+   "detail": "occurrences=15"
+  }
+ ],
+ "measurements": {
+  "tabs 320 rtl": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 190,
+   "pageSW": 699,
+   "pageCW": 320,
+   "labelIntact": true
+  },
+  "tabs 320 ltr": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 190,
+   "pageSW": 699,
+   "pageCW": 320,
+   "labelIntact": true
+  },
+  "tabs 360 rtl": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 230,
+   "pageSW": 699,
+   "pageCW": 360,
+   "labelIntact": true
+  },
+  "tabs 360 ltr": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 230,
+   "pageSW": 699,
+   "pageCW": 360,
+   "labelIntact": true
+  },
+  "tabs 390 rtl": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 260,
+   "pageSW": 699,
+   "pageCW": 390,
+   "labelIntact": true
+  },
+  "tabs 390 ltr": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 260,
+   "pageSW": 699,
+   "pageCW": 390,
+   "labelIntact": true
+  },
+  "tabs 430 rtl": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 300,
+   "pageSW": 699,
+   "pageCW": 430,
+   "labelIntact": true
+  },
+  "tabs 430 ltr": {
+   "singleRow": true,
+   "overflowX": "visible",
+   "tabsScroll": 634,
+   "tabsClient": 300,
+   "pageSW": 699,
+   "pageCW": 430,
+   "labelIntact": true
+  },
+  "tabpanel init": {
+   "aTi": null,
+   "aHidden": false,
+   "bHidden": true
+  },
+  "safe-area fixture (inset=30px)": {
+   "actionbarPb": "12px",
+   "navbarPb": "4px",
+   "footPb": "30px",
+   "neutralized": ""
+  },
+  "safe-area structural env() hits (before)": 3,
+  "aria-disabled appearance": {
+   "color": "rgb(80, 101, 106)",
+   "cursor": "pointer",
+   "bg": "rgba(0, 0, 0, 0)",
+   "naturalColor": "rgb(23, 45, 50)"
+  },
+  "layer semantics": {
+   "bare": {
+    "role": null,
+    "modal": null,
+    "labelled": null
+   },
+   "titled": {
+    "role": null,
+    "modal": null,
+    "labelled": null,
+    "titleId": ""
+   }
+  },
+  "layer console warnings": [],
+  "note roles": {
+   "error": null,
+   "success": null,
+   "help": null,
+   "bare": null,
+   "consumer": "status"
+  },
+  "note console warnings": [],
+  "live regions burst": [
+   {
+    "cls": "m-live-region",
+    "live": "assertive",
+    "text": ""
+   }
+  ],
+  "init root-self (selection)": {
+   "eventsAfterReinit": 0,
+   "eventsFirst": 0,
+   "selected": null
+  },
+  "init root-self (data)": {
+   "svg": false,
+   "disclose": false
+  },
+  "bubbles scale": {
+   "over": {
+    "error": false,
+    "state": null,
+    "circles": [
+     147.078,
+     65.7754
+    ],
+    "note": false,
+    "maxDiameter": 147.078
+   },
+   "invalid": {
+    "error": false,
+    "state": null,
+    "circles": [
+     104,
+     46.5102
+    ],
+    "note": false,
+    "maxDiameter": 104
+   },
+   "rescale": {
+    "error": false,
+    "state": null,
+    "circles": [
+     147.078,
+     65.7754
+    ],
+    "note": false,
+    "maxDiameter": 147.078
+   },
+   "auto": {
+    "error": false,
+    "state": null,
+    "circles": [
+     104,
+     46.5102
+    ],
+    "note": false,
+    "maxDiameter": 104
+   }
+  },
+  "summary sync": {
+   "before": "مثال مستقل — البيانات في HTML المصدر.",
+   "after": "مثال مستقل — البيانات في HTML المصدر."
+  },
+  "disclosure": [
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 4,
+    "caption": null,
+    "titleText": "توزيع العمليات (3 فئات)",
+    "svgLabelled": null,
+    "svgLabel": "توزيع العمليات على الفئات",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 5,
+    "caption": null,
+    "titleText": "توزيع العمليات (5 فئات)",
+    "svgLabelled": null,
+    "svgLabel": "توزيع العمليات — خمس فئات",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 5,
+    "caption": null,
+    "titleText": "مبيعات الأسبوع (السبت → الخميس)",
+    "svgLabelled": null,
+    "svgLabel": "مبيعات الأسبوع",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 3,
+    "caption": null,
+    "titleText": "حالات الطلبات (من 100 طلب)",
+    "svgLabelled": null,
+    "svgLabel": "توزيع حالات الطلبات",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 8,
+    "caption": null,
+    "titleText": "مبيعات الفروع (وحدة)",
+    "svgLabelled": "n/a",
+    "svgLabel": null,
+    "titleId": "",
+    "svgDescribed": "n/a",
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 3,
+    "caption": null,
+    "titleText": "عمود بقيمة سالبة (-5)",
+    "svgLabelled": null,
+    "svgLabel": "عمود بقيمة سالبة",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 2,
+    "caption": null,
+    "titleText": "كل القيم صفر (0 من 100)",
+    "svgLabelled": null,
+    "svgLabel": "توزيع بكل القيم صفر",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 3,
+    "caption": null,
+    "titleText": "مجموع 110 ومقام 100",
+    "svgLabelled": "n/a",
+    "svgLabel": null,
+    "titleId": "",
+    "svgDescribed": "n/a",
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 4,
+    "caption": null,
+    "titleText": "انقطاع عند القيمة المفقودة",
+    "svgLabelled": null,
+    "svgLabel": "خط بقيمة مفقودة (انقطاع حقيقي)",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 2,
+    "caption": null,
+    "titleText": "تجاوز المقياس المعلن — رفض (A01)",
+    "svgLabelled": "n/a",
+    "svgLabel": null,
+    "titleId": "",
+    "svgDescribed": "n/a",
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 2,
+    "caption": null,
+    "titleText": "توسيع المقياس بخيار معلن — rescale (A01)",
+    "svgLabelled": null,
+    "svgLabel": "توسيع المقياس بخيار معلن (A01) — مقياس موسّع إلى 10 بدل المعلن 5",
+    "titleId": "",
+    "svgDescribed": null,
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 2,
+    "caption": null,
+    "titleText": "مقياس معلن غير صالح — bad (A01)",
+    "svgLabelled": "n/a",
+    "svgLabel": null,
+    "titleId": "",
+    "svgDescribed": "n/a",
+    "summaryId": ""
+   },
+   {
+    "hasBtn": false,
+    "hasTable": false,
+    "hidden": null,
+    "btnExpanded": null,
+    "controls": null,
+    "tableId": null,
+    "rows": 0,
+    "items": 3,
+    "caption": null,
+    "titleText": null,
+    "svgLabelled": null,
+    "svgLabel": "توزيع مختصر",
+    "titleId": null,
+    "svgDescribed": null,
+    "summaryId": ""
+   }
+  ],
+  "disclosure interaction": {
+   "skipped": "no disclosure button on baseline"
+  },
+  "touch separation": {
+   "appbarHGap": null
+  },
+  "stepper exception": {
+   "note": "stepper buttons not adjacent here"
+  },
+  "segmented hit-area": {
+   "hitIsContainer": true,
+   "horizontalGap": 4,
+   "documented": "استثناء مركّب (D-UI-03) — امتداد ::after رأسي فقط"
+  },
+  "picker long text @320+200%": {
+   "optHeight": 55,
+   "optScroll": 939,
+   "optClient": 278,
+   "pageSW": 320,
+   "pageCW": 320,
+   "listOverflow": "hidden"
+  },
+  "gallery margin 320": {
+   "left": 16,
+   "rightGap": 16,
+   "width": 288
+  },
+  "gallery margin 390": {
+   "left": 16,
+   "rightGap": 16,
+   "width": 358
+  },
+  "gallery margin 430": {
+   "left": 16,
+   "rightGap": 16,
+   "width": 398
+  },
+  "results wrapper @320+200%": {
+   "sw": 359,
+   "cw": 320
+  },
+  "navbar wrap @320+200%": {
+   "navbarHeight": 130.953125,
+   "contentAboveBar": true,
+   "footBottom": 2980.4375,
+   "viewportH": 874
+  },
+  "reflow navigation 320 rtl": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow navigation 320 ltr": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow navigation 360 rtl": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow navigation 360 ltr": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow navigation 390 rtl": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow navigation 390 ltr": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow navigation 430 rtl": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow navigation 430 ltr": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow selection 320 rtl": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow selection 320 ltr": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow selection 360 rtl": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow selection 360 ltr": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow selection 390 rtl": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow selection 390 ltr": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow selection 430 rtl": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow selection 430 ltr": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow data 320 rtl": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow data 320 ltr": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow data 360 rtl": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow data 360 ltr": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow data 390 rtl": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow data 390 ltr": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow data 430 rtl": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow data 430 ltr": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow fields 320 rtl": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow fields 320 ltr": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow fields 360 rtl": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow fields 360 ltr": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow fields 390 rtl": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow fields 390 ltr": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow fields 430 rtl": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow fields 430 ltr": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow messages 320 rtl": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow messages 320 ltr": {
+   "sw": 320,
+   "cw": 320
+  },
+  "reflow messages 360 rtl": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow messages 360 ltr": {
+   "sw": 360,
+   "cw": 360
+  },
+  "reflow messages 390 rtl": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow messages 390 ltr": {
+   "sw": 390,
+   "cw": 390
+  },
+  "reflow messages 430 rtl": {
+   "sw": 430,
+   "cw": 430
+  },
+  "reflow messages 430 ltr": {
+   "sw": 430,
+   "cw": 430
+  },
+  "raw color inventory in components": [
+   "components/data/data.css:163 #164D59",
+   "components/data/data.css:164 #F4AD76",
+   "components/data/data.css:165 #B6A3D6",
+   "components/data/data.css:166 #496D92",
+   "components/data/data.css:167 #B3BD7B",
+   "components/surfaces/surfaces.css:34 rgba(255, 255, 255, var(--micro-surface-light, 0.12)",
+   "components/surfaces/surfaces.css:35 rgba(255, 255, 255, 0)",
+   "components/surfaces/surfaces.css:133 rgba(255,255,255,0.8)",
+   "components/surfaces/surfaces.css:139 rgba(255,255,255,0.72)",
+   "components/buttons/buttons.css:181 #103E48",
+   "components/selection/selection.css:187 rgba(23, 45, 50, 0.2)",
+   "components/selection/selection.css:302 #DFEEE6",
+   "components/selection/selection.css:347 rgba(223,238,230,.65)",
+   "components/navigation/navigation.css:151 rgba(23, 45, 50, 0.4)",
+   "components/metric-comparison/metric-comparison.css:381 rgba(255,255,255,.16)"
+  ]
+ },
+ "screenshots": [
+  "tabs-320-rtl-before.png",
+  "picker-longtext-320-before.png",
+  "results-320-200-before.png",
+  "navbar-wrap-320-200-before.png"
+ ]
+}

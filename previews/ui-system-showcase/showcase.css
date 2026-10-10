@@ -1,0 +1,346 @@
+/* =========================================================
+   Micro UI — لوحة عرض النظام (showcase chrome)
+   الملف: previews/ui-system-showcase/showcase.css
+   الحالة: CSS عرض فقط (chrome) — لا يعرّف مكونًا ولا لونًا جديدًا.
+   كل القيم من shared/tokens.css الحالية حصرًا (var(--micro-*))؛
+   أي مشكلة بصرية من قيمة حالية تُسجَّل ولا تُحل بلون مبتكر.
+   العرض المكوّن نفسه يأتي من components/*.css الحقيقية.
+   ========================================================= */
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100dvh;
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font: 400 var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family);
+}
+
+[hidden] { display: none !important; }
+
+:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: var(--micro-focus-gap);
+}
+
+/* ---------- ترويسة العرض ---------- */
+
+.showcase-header {
+  padding: 24px 20px 12px;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.showcase-header__eyebrow {
+  margin: 0 0 8px;
+  color: var(--micro-brand-primary);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+}
+
+.showcase-header__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 36px;
+  font-weight: 600;
+}
+
+.showcase-header__lede {
+  margin: 8px 0 12px;
+  max-width: 560px;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+
+.showcase-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  font-size: var(--micro-secondary-size);
+  color: var(--micro-text-hint);
+}
+
+.showcase-header__meta code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-secondary-size);
+}
+
+/* ---------- شريط تحكم المراجعة (ليس سلوك منتج) ---------- */
+
+/* F-11 (2026-10-10): وسم مرئي صريح أن هذا الشريط أدوات مراجعة للعرض
+   فقط وليس جزءًا من واجهة المنتج — يمنع الخلط بين كروم العرض
+   والمكوّنات المعروضة. */
+.showcase-controls {
+  background: var(--micro-surface-page);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+
+.sc-controls-tag {
+  margin: 0;
+  padding-block: 6px 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+}
+
+.sc-controls-tag .sc-controls-tag__mark {
+  color: var(--micro-brand-primary);
+  font-weight: 700;
+}
+
+.showcase-controls__inner {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 12px 20px 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.sc-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+
+.sc-ctl__label {
+  min-width: 72px;
+  flex: none;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size);
+  font-weight: 500;
+}
+
+.sc-ctl .m-seg { flex: 0 1 auto; }
+
+.sc-ctl__note {
+  margin: 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+}
+
+/* ---------- لوحة العرض (canvas) ---------- */
+
+.showcase-canvas {
+  container-type: inline-size;
+  width: var(--sc-canvas-width, 390px);
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0 var(--micro-space-4);
+  padding-block-end: 40px;
+}
+
+@container (min-width: 390px) {
+  .showcase-canvas { padding-inline: var(--sc-canvas-pad, 20px); }
+}
+
+/* ---------- قسم عائلة ---------- */
+
+.sc-section { margin-block: 32px; display: grid; gap: 16px; }
+
+@container (max-width: 359.5px) {
+  .sc-section { margin-block: 24px; }
+}
+
+.sc-section__head {
+  display: grid;
+  gap: 4px;
+  padding-inline: 4px;
+}
+
+.sc-section__kicker {
+  margin: 0;
+  color: var(--micro-brand-primary);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.sc-section__title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-section__desc {
+  margin: 0;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+
+/* حبة الحالة — ألوان من أزواج الحالات المعتمدة فقط */
+.sc-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--micro-radius-capsule);
+  font-size: var(--micro-secondary-size);
+  font-weight: 600;
+}
+.sc-pill--current  { background: var(--micro-success-surface); color: var(--micro-success); }
+.sc-pill--draft    { background: var(--micro-warning-surface); color: var(--micro-warning); }
+.sc-pill--proposed { background: var(--micro-info-surface); color: var(--micro-info); }
+
+/* ---------- كتلة عرض مكوّنات ---------- */
+
+.sc-block {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--micro-radius-surface);
+  background: var(--micro-surface-base);
+}
+
+@container (max-width: 359.5px) {
+  .sc-block { padding: 16px; gap: 12px; }
+}
+
+.sc-block--plain { background: transparent; padding: 0; }
+
+.sc-block__title {
+  margin: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  font-weight: 600;
+  color: var(--micro-text-secondary);
+}
+
+.sc-hint {
+  margin: 0;
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+
+/* صفوف عناصر العرض */
+.sc-row { display: flex; flex-wrap: wrap; gap: 12px 8px; align-items: center; }
+.sc-row--tight { gap: 8px; }
+.sc-stack { display: grid; gap: 16px; }
+.sc-stack--tight { gap: 12px; }
+
+.sc-grid-2 { display: grid; gap: 12px; }
+/* عناصر الشبكة تُتاح للانكماش (min-width:0) — قاعدة تركيب المستهلك
+   لشبكة عمودين حتى لا يدفع الحد الأدنى الجوهري للحقل (size السمة)
+   الأعمدة خارج مسارها؛ الحقل نفسه يتقلص بعقده (min-width:0/flex:1). */
+.sc-grid-2 > * { min-width: 0; }
+@container (min-width: 360px) {
+  .sc-grid-2 { grid-template-columns: 1fr 1fr; }
+}
+
+/* F-07 (2026-10-10): حقل الكمية وحدة متماسكة — النمط المعتمد نفسه في
+   عينة F03 (R2-UI01): عنصر التحكم يحتضن أزرار الخطوة والقيمة بلا
+   فراغ غير مفسّر خلفها (كان: عنصر تحكم بعرض العمود كاملًا وكتلة
+   160px في بدايته و96-166px فراغًا بعدها). قاعدة تركيب مستهلك —
+   الحقل يبقى بعقده، والتوزيع من التوكنات القائمة فقط. */
+#sc-field-qty .m-field__control {
+  width: fit-content;
+  padding-inline: var(--micro-space-2);
+  gap: var(--micro-space-1);
+}
+#sc-field-qty .m-field__input--num {
+  flex: none;
+  width: var(--micro-quantity-min-width);
+  min-width: 5ch;
+  text-align: center;
+}
+
+/* شريط أدوات الحالة (أزرار عرض تجريبية) */
+.sc-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-page);
+}
+.sc-tools .m-btn { min-height: 40px; padding-block: 8px; }
+
+/* إطار هاتف محدود للعناصر اللاصقة (appbar/navbar/actionbar) */
+.sc-frame {
+  position: relative;
+  height: 440px;
+  overflow: auto;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-page);
+}
+.sc-frame__inner { display: grid; gap: 12px; padding: 12px 12px 96px; }
+
+/* العارض داخل شبكة الكتلة: يُتاح للانكماش لمسار الشبكة — قاعدة تركيب
+   المستهلك (min-width:0/max-width:100%) وإلا دفعه حدّه الجوهري
+   (بطاقة + مجاورتا اللمح) خارج المسار عند الأعرض الضيقة. */
+.sc-block > .m-carousel { min-width: 0; max-width: 100%; }
+
+/* مسرح سطح S01 */
+.sc-surface-stage .m-surface { min-height: 240px; }
+.sc-surface-stage .m-surface__content {
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sc-surface-stage .m-surface__label { margin: 0 0 10px; }
+.sc-surface-stage .m-surface__title { margin: 0; max-width: 100%; }
+.sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }
+.sc-surface-stage .m-surface__sub { margin: 0; }
+
+/* F-08 (2026-10-10): بطاقة التقويم (DRAFT) بلا حشوة أفقية مزدوجة عند
+   الضيق — ميزانية 7 أعمدة مربعة (≈37.7px للخلية عند 320) تتطلب عرض
+   288px للمكوّن (320 − 2×16 هوامش الصفحة المرجعية كما في عينته
+   المستقلة)؛ حشوة اللوحة + حشوة البطاقة كانتا تزحانه إلى 256px فتتشوه
+   الخلية إلى 33×37.8 بدل المربع. عند حاوية أضيق من 360 تُزال حشوة
+   البطاقة الأفقية لهذا القسم وحده (التقويم full-bleed داخل السطح)
+   ويُعوّض باقي المحتوى بهوامش مطابقة. الاستثناء الموثق (~37.7px) وشارة
+   DRAFT محفوظان — لا ترقية حالة. */
+@container (max-width: 359.5px) {
+  .sc-block--ocal { padding-inline: 0; }
+  .sc-block--ocal > .sc-tools,
+  .sc-block--ocal > .sc-log,
+  .sc-block--ocal > .sc-hint { margin-inline: var(--micro-space-4); }
+}
+
+/* سجل أحداث تجريبي صغير — F-11 (2026-10-10): فارغًا لا يحجز مساحة
+   مرئية (:empty يخفيه حتى أول حدث يُسجّله logEvent) — كان يحجز
+   صندوقًا فارغًا بحشو 12px وخلفية في كل قسم قبل أي تفاعل. */
+.sc-log {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  max-height: 132px;
+  overflow: auto;
+  display: grid;
+  gap: 4px;
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-page);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.sc-log:empty { display: none; }
+.sc-log li { padding-block: 2px; border-block-end: 1px solid var(--micro-border-divider); overflow-wrap: anywhere; }
+.sc-log li:last-child { border-block-end: 0; }
+
+/* بوابة الوصول بحجم هاتف */
+.sc-gateway { max-width: 100%; }
+
+/* تذييل العرض */
+.showcase-footer {
+  padding: 24px 20px 40px;
+  max-width: 760px;
+  margin-inline: auto;
+  border-block-start: 1px solid var(--micro-border-divider);
+  color: var(--micro-text-hint);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  display: grid;
+  gap: 4px;
+}
+
+/* Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) */
+.sc-toast-host { position: fixed; inset-block-end: 16px; inset-inline: 16px; z-index: 60; display: grid; justify-items: center; }

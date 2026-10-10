@@ -68,10 +68,19 @@
             أو عند الإظهار — دون نقرة من المستخدم؛ الدونات (148 الثابت)
             والفقاعات (تدفق DOM) خارج الرصد، وغياب ResizeObserver في بيئة
             قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
-   R3-UI02: تسميات bars/line تُقاس فعليًا بعد إلحاق الرسم بالوثيقة
-            (getComputedTextLength بوحدات viewBox) فتُقصّ بمقطع «…» عند
-            تجاوز نصف ميزانية 200% مع قراءة كاملة (aria-label + <title>
-            + data-label-full الاختيارية) وحدود طرفين [8, W−8] وحدات.
+   F-01 (2026-10-10، تكليف معرض النظام): تسميات bars/line تُقاس فعليًا
+            بعد إلحاق الرسم (getComputedTextLength بوحدات viewBox)
+            والميزانية الكاملة عند 1×: القص بمقطع «…» لا يقع إلا لسطر
+            أعرض من ميزانية عموده/تباعد نقطته كاملة (كلمة مفردة طويلة)،
+            مع قراءة كاملة (aria-label + <title> + data-label-full
+            الاختيارية) وحدود طرفين بالمدى الفعلي [x−len/2, x+len/2]
+            داخل [8, W−8]، وتحقق زوجي بالمدى الفعلي داخل كل صف.
+            جاهزية الخط: بعد fonts.ready تُعاد رسوم bars/line مرة واحدة
+            فأول تصيير مستقر = كل إعادة تصيير لاحقة (مرصود سابقًا:
+            اختلاف القياس بمقاييس الخط البديل قبل التحميل).
+            حل محل تخطيط «ميزانية 200%» (R2-UI02/R3-UI02) الذي كان
+            يقصّ التسميات عند نصف الميزانية عند الحجم الطبيعي — اتجاه
+            المنتج الحالي لا هدف تكبير فيه (تكليف 2026-10-09).
    ========================================================= */
 
 (function () {
@@ -151,8 +160,8 @@
   /* لفّ التسميات الطويلة داخل SVG (E07): أسطر بحد أحرف — لا تداخل.
      R2-UI02: الكلمة الواحدة الأطول من السقف تُقسّم عند الشرطات (تواريخ
      مثل 2026-09-10 ونطاقات مقيدة) لا بالبتر — الكلمة العربية بلا شرطة
-     تبقى كاملة (ودخلت عقد القياس الفعلي R3-UI02 أدناه: إن تجاوزت نصف
-     ميزانية 200% قُصّت بمقطع «…» مع قراءة كاملة).
+     تبقى كاملة (ودخلت عقد القياس الفعلي F-01 أدناه: إن تجاوزت ميزانيتها
+     الكاملة عند 1× قُصّت بمقطع «…» مع قراءة كاملة).
      R3-UI02a: «/» فاصل تقسيم مثله مثل الشرطة — تسمية يوم/شهر قصيرة مثل
      10/09 تُقسّم إلى «10/» + «09» (سطران كاملان) بدل قصّها بمقطع؛
      لا يفترض المكوّن نوع التاريخ — تقسيم نصي عام لأي رمز معلن. */
@@ -197,28 +206,28 @@
     return lines;
   }
 
-  /* ---- R3-UI02: دورة قياس وموائمة التسميات بعد الإلحاق ----
-     عدد الأحرف وحده (labelChars) لا يكفي: الكلمة العربية المفردة بلا
-     فراغات لا تُلف أصلًا، وتقدير 6.8/حرف تقريبي لا يطابق كل خط. بعد
-     بناء SVG وإلحاقه بالوثيقة (رسم مرئي) تُقاس كل تسمية فعليًا بـ
-     getComputedTextLength (بوحدات viewBox — يشمل تلقائيًا تعويض fontPx
-     السطري) ثم:
-       1) ميزانية 200%: نصف ميزانية العمود/النقطة (colW×0.92 للأعمدة
-          وتباعد النقاط×0.92 للخط، القسمة على 2 تخطّط لبيئة خط مضاعفة —
-          نفس فلسفة labelChars)؛ ما تجاوزها يُقصّ تدريجيًا بمقطع «…»
-          (سقف محاولات — لا حلقة مفتوحة) ولا يُصغّر الخط أبدًا عن الحد
-          المعلن: عند 1× تبدو الكلمة مختصرة قليلاً وعند 2× لا تتداخل —
-          هذا هو العقد الصادق المعلن.
-       2) القراءة الكاملة لا تضيع: النص المقتطع يحمل aria-label + عنصر
-          <title> ابناً للـ<text> بالنص الكامل (data-label-full إن مرره
-          المستهلك وإلا data-label)؛ <li data-label> المصدر يبقى كاملاً
-          في DOM كما هو.
-       3) حدود النقاط الطرفية: يثبّت x بحيث يبقى مدى النص المخطط عند
-          200% (الطول المقيس ×2 — نفس فلسفة الميزانية) داخل [8, W−8]
-          وحدات؛ نص middle: إذا cx−len < 8 فرفع x إلى 8+len، وإذا
-          cx+len > W−8 فخفضه.
-       4) تحقق زوجي أخير داخل كل صف تسميات: لو بقي تداخل مجاور بالمدى
-          المخطط قُصّ الأعرض حتى الفصل.
+  /* ---- F-01 (2026-10-10، تكليف معرض النظام): موائمة التسميات عند المقياس الفعلي 1× ----
+     العقد القديم (R2-UI02/R3-UI02) خطّط لبيئة خط مضاعفة (محاكاة 200%
+     محسوبة) فقصّ كل تسمية عند نصف ميزانية العمود/النقطة — النتيجة
+     المرصودة في المعرض: تسميات مقروءة جزئيًا عند الحجم الطبيعي
+     (مبيعات ← مبيع…، مشتريات ← مش…). اتجاه المنتج الحالي (تكليف
+     2026-10-09) لا هدف تكبير فيه — المقياس ثابت. العقد الجديد:
+       1) كل سطر تسمية يأخذ ميزانية العمود/تباعد النقاط الكاملة (×0.92)
+          عند 1×؛ القص بمقطع «…» لا يقع إلا لسطر أعرض من ميزانيته
+          كاملة (كلمة عربية مفردة طويلة مثلًا)، ولا يُصغّر خط أبدًا.
+       2) منع التصادم والحدود الطرفية تعمل بالمدى الفعلي المقيس
+          (نص مُوسّط: [x−len/2, x+len/2]) داخل [8, W−8] — لا مدى
+          مضاعفًا تخطيطيًا. تحقق زوجي داخل كل صف تسميات بفجوة ≥1 وحدة.
+       3) القراءة الكاملة لا تضيع عند القص: aria-label + عنصر <title>
+          ابن بالنص الكامل (data-label-full إن مرره المستهلك وإلا
+          data-label)؛ <li data-label> المصدر يبقى كاملاً في DOM،
+          وإفصاح بيانات الرسم (جدول) متاح دائمًا (D-UI-04).
+       4) جاهزية الخط: الرسم الأول قد يحدث قبل تحميل الخط العربي
+          (مقاييس خط بديل أضيق/أعرض) فيختلف أول تصيير عن إعادة
+          التصيير — مرصود فعليًا: «مش…» قبل الجاهزية و«مشتر…» بعدها.
+          بعد document.fonts.ready يُعاد رسم كل رسم مُهيّأ مرة واحدة
+          (نفس نمط packed-circle الموثق) فتستقر الحالة على قياسات
+          الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها.
      الرسم المخفي (عرض 0 — لا يمكن القياس) تتخطى المواءمة وتبقى خطة
      الأحرف الحالية: المستهلك يعيد الرسم عند الإظهار، ورصد R3-UI01
      يضمنه تلقائيًا حيثما وُجد ResizeObserver. */
@@ -229,7 +238,8 @@
     catch (e) { return 0; } /* بيئة بلا قياس هندسي: اعتبره 0 (لا قص) */
   }
 
-  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط */
+  /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط.
+     F-01: limit الآن الميزانية الكاملة عند 1× (لا نصفها). */
   function truncateToBudget(t, limit) {
     var s = String(t.textContent || '');
     var guard = 0;
@@ -246,33 +256,34 @@
     var plot = chart.querySelector('[data-plot]');
     if (!plot || plot.getBoundingClientRect().width <= 1) return; /* مخفي */
     var W = 320;
-    var half = budget / 2; /* ميزانية 200%: نصف الميزانية لكل نص */
     var entries = [];
     /* مجموعات الرسم بترتيب العناصر نفسه — التسمية تعرف نصها الكامل */
     [].slice.call(svg.querySelectorAll('g')).forEach(function (g, i) {
       var full = items[i] ? (items[i].labelFull || items[i].label || '') : '';
       [].slice.call(g.querySelectorAll('.' + labelCls)).forEach(function (t) {
-        var e = {
+        entries.push({
           t: t, full: full, cut: false,
           cx0: parseFloat(t.getAttribute('x')) || 0, /* مركز العمود/النقطة قبل التثبيت */
           y: t.getAttribute('y') /* مفتاح الصف — الصفوف تتقاسم قيم y */
-        };
-        if (measuredLenOf(t) > half) e.cut = truncateToBudget(t, half);
-        entries.push(e);
+        });
       });
     });
     if (!entries.length) return;
-    /* حدود الطرفين: المدى المخطط عند 200% هو [x−len, x+len] وحدات */
+    /* F-01: القص الفردي عند تجاوز الميزانية الكاملة (1×) فقط */
+    entries.forEach(function (e) {
+      if (measuredLenOf(e.t) > budget) e.cut = truncateToBudget(e.t, budget);
+    });
+    /* حدود الطرفين بالمدى الفعلي المقيس: [x−len/2, x+len/2] داخل [8, W−8] */
     function clampOf(e) {
-      var len = measuredLenOf(e.t);
+      var half = measuredLenOf(e.t) / 2;
       var x = e.cx0;
-      if (x - len < 8) x = 8 + len;
-      if (x + len > W - 8) x = W - 8 - len;
-      if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: ثبّت الحد الأدنى */
+      if (x - half < 8) x = 8 + half;
+      if (x + half > W - 8) x = W - 8 - half;
+      if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: ثبّت الحد الأدنى */
       e.t.setAttribute('x', x);
     }
     entries.forEach(clampOf);
-    /* تحقق زوجي داخل كل صف: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
+    /* تحقق زوجي داخل كل صف بالمدى الفعلي: لو بقي تداخل مجاور قُصّ الأعرض حتى الفصل */
     var rows = {};
     entries.forEach(function (e) { (rows[e.y] = rows[e.y] || []).push(e); });
     Object.keys(rows).forEach(function (yk) {
@@ -286,11 +297,11 @@
           var a = row[i], b = row[i + 1];
           var ax = parseFloat(a.t.getAttribute('x')) || 0;
           var bx = parseFloat(b.t.getAttribute('x')) || 0;
-          var al = measuredLenOf(a.t), bl = measuredLenOf(b.t);
-          if (ax + al >= bx - bl - 1) { /* تداخل بالمدى المخطط (فجوة ≥1 وحدة) */
+          var aHalf = measuredLenOf(a.t) / 2, bHalf = measuredLenOf(b.t) / 2;
+          if (ax + aHalf >= bx - bHalf - 1) { /* تداخل فعلي (فجوة ≥1 وحدة) */
             var wide;
-            if (bl > al) wide = b;
-            else if (al > bl) wide = a;
+            if (bHalf > aHalf) wide = b;
+            else if (aHalf > bHalf) wide = a;
             else { /* التعادل: الأقرب إلى طرف الرسم (قصّه أرخص — التثبيت يبعده عن جاره) */
               wide = (Math.min(a.cx0, W - a.cx0) <= Math.min(b.cx0, W - b.cx0)) ? a : b;
             }
@@ -313,19 +324,21 @@
       ti.textContent = e.full;
       e.t.appendChild(ti);
     });
-    /* R3-UI02: حدود الطرفين تسري على كل نصوص الرسم لا التسميات وحدها:
-       القيم (فوق العمود/النقطة) قد تتجاوز حدود الطرف عند 200% أيضًا —
-       القيم لا تُقصّ أبدًا (عقد القيم كاملة) بل يثبّت موضعها x فقط بحيث
-       يبقى مداها المخطط [x−len, x+len] داخل [8, W−8]؛ التسميات مرّت
-       بالتثبيت أعلاه وهذا المرور لا يغيّرها (تثبيت متماثل). */
+    /* F-01 (2026-10-10): حدود الطرفين بالمدى الفعلي المقيس (1×) تسري على
+       كل نصوص الرسم لا التسميات وحدها: القيم (فوق العمود/النقطة) قد
+       تتجاوز حدود الطرف أيضًا — القيم لا تُقصّ أبدًا (عقد القيم كاملة)
+       بل يثبّت موضعها x فقط بحيث يبقى مداها الفعلي [x−len/2, x+len/2]
+       داخل [8, W−8]؛ التسميات مرّت بالتثبيت أعلاه وهذا المرور لا
+       يغيّرها (تثبيت متماثل). */
     [].slice.call(svg.querySelectorAll('text')).forEach(function (t) {
       var len = measuredLenOf(t);
       if (!(len > 0)) return;
+      var half = len / 2;
       var x = parseFloat(t.getAttribute('x')) || 0;
-      if (x - len < 8 || x + len > W - 8) {
-        if (x - len < 8) x = 8 + len;
-        if (x + len > W - 8) x = W - 8 - len;
-        if (x < 8 + len) x = 8 + len; /* نص أعرض من المجال: الحد الأدنى */
+      if (x - half < 8 || x + half > W - 8) {
+        if (x - half < 8) x = 8 + half;
+        if (x + half > W - 8) x = W - 8 - half;
+        if (x - half < 8) x = 8 + half; /* نص أعرض من المجال: الحد الأدنى */
         t.setAttribute('x', x);
       }
     });
@@ -447,15 +460,15 @@
     var max = (scale.kind === 'over') ? scale.largest : scale.max;
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? BAR_TEXT_PX * ts.k : null;
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (محاكاة 200%
-       المعلنة في المشروع): الحد/2 لكل سطر — النص الملفوف لا يصطدم بجاره
-       ولا يخرج عن عموده عند مضاعفة حجم الخط، والشرطات تقسم التواريخ.
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× — الحد الكامل لكل سطر
+       (لا تخطيط مضاعف): السطر الملفوف يقارب ميزانية العمود، والأسطر
+       الأعرض من الميزانية يعالجها قياس المواءمة الفعلي بعد الإلحاق.
        الأرضية 6 كما في R1. */
-    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / (6.8 * 2)));
+    var labelChars = Math.max(6, Math.floor((ts.refW / Math.max(items.length, 1)) * 0.9 / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 40 * ts.k; /* R2-UI02: ~2.85× للخط 13px — صندوق السطر المضاعف (≈1.42em بارتفاع الخط العربي الكامل) لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× غير كافٍ للمضاعفة الكاملة */
+    var BAR_LABEL_STEP = 40 * ts.k; /* خطوة سطر التسمية (≈1.42em بارتفاع الخط العربي الكامل 13px — R1-UI09) */
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
        صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
@@ -542,13 +555,13 @@
     var ts = textScaleOf(plot); /* R2-UI02: قياس العرض الفعلي عند كل render */
     var fontPx = ts.k > 1 ? LINE_TEXT_PX * ts.k : null;
     var n = Math.max(items.length, 2);
-    /* R2-UI02: ميزانية الالتفاف تخطّط لبيئة خط مضاعفة (200%) كما في
-       الأعمدة — الحد/2 لكل سطر؛ الأرضية 5 كما في R1. */
-    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / (6.8 * 2)));
+    /* F-01 (2026-10-10): تقدير الالتفاف عند 1× كما في الأعمدة — الحد
+       الكامل لكل سطر؛ الأرضية 5 كما في R1. */
+    var labelChars = Math.max(5, Math.floor(((ts.refW - 48) / n) / 6.8));
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 37 * ts.k; /* R2-UI02: ~2.85× للخط 12px — صندوق السطر المضاعف لا يتصادم عموديًا عند 200%؛ R1-UI09 كان 1.5× (18) غير كافٍ */
+    var X_LABEL_STEP = 37 * ts.k; /* خطوة سطر تسمية المحور (≈1.55em للخط 12px — R1-UI09) */
     var extra = (maxLines - 1) * X_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
        صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
@@ -770,15 +783,150 @@
     plot.appendChild(legend);
   }
 
+  /* ---- W3.1 (A4-D01/A4-R02 — D-UI-04): اسم ووصف الرسم مربوطان برمجيًا ----
+     العنوان المرئي (.m-chart__title) هو مصدر الاسم عندما يوجد (id مولد
+     إن لزم + aria-labelledby) — مصدر واحد بدل تكرار aria-label من
+     data-title بجانب عنوان مرئي مختلف؛ والملخص (p[data-summary]) يرتبط
+     بالرسم عبر aria-describedby فيقرأه قارئ الشاشة وصفًا للرسم لا نصًا
+     حائرًا بجواره. غياب العنوان المرئي يُبقي aria-label من data-title
+     كما كان. */
+  var chartUid = 0;
+
+  function ensureId(el, prefix) {
+    if (!el.id) el.id = prefix + '-' + (++chartUid);
+    return el.id;
+  }
+
+  function linkChartName(chart) {
+    var svg = chart.querySelector('[data-plot] > svg[role="img"]');
+    if (!svg) return;
+    var titleEl = chart.querySelector('.m-chart__title');
+    if (titleEl && String(titleEl.textContent || '').trim()) {
+      svg.setAttribute('aria-labelledby', ensureId(titleEl, 'micro-chart-title'));
+      svg.removeAttribute('aria-label'); /* المصدر واحد: العنوان المرئي */
+    }
+    var summary = chart.querySelector('[data-summary]');
+    if (summary) svg.setAttribute('aria-describedby', ensureId(summary, 'micro-chart-summary'));
+  }
+
+  /* ---- W3.1 (D-UI-04 — قرار مالك): إفصاح بيانات داخل الرسم ----
+     زر disclosure + جدول دلالي (caption/thead/tbody/scope) داخل .m-chart
+     نفسه — لا صفحة منتج ولا عائلة مكونات جديدة. الجدول يُعاد بناؤه في
+     كل دورة تصيير من مصدر البيانات نفسه فيبقى متزامنًا مع dataset الحالي
+     بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
+     aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
+  function valueStateText(it) {
+    if (it.value === null) return '— غير متاح';
+    if (it.value < 0) return fmt(it.value) + ' (سالب غير مرسوم)';
+    var base = fmt(it.value);
+    return it.outlier ? base + ' (قيمة شاذة)' : base;
+  }
+
+  function syncDatasetTable(chart, items) {
+    var wrap = chart.querySelector('.m-chart__dataset-wrap');
+    var btn, table;
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'm-chart__dataset-wrap';
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'm-chart__disclose';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'عرض البيانات كجدول';
+      table = document.createElement('table');
+      table.className = 'm-chart__dataset';
+      table.id = 'micro-chart-dataset-' + (++chartUid);
+      btn.setAttribute('aria-controls', table.id);
+      table.hidden = true;
+      wrap.appendChild(btn);
+      wrap.appendChild(table);
+      /* الإدراج بعد الملخص (آخر عنصر في بنية .m-chart) — ترتيب قراءة:
+         العنوان، الرسم، الملخص، ثم الإفصاح */
+      chart.appendChild(wrap);
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        table.hidden = open;
+        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+      });
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    if (!btn || !table) return;
+    /* إعادة البناء كل دورة — التزامن مضمون بنيويًا */
+    table.textContent = '';
+    var caption = document.createElement('caption');
+    var titleEl = chart.querySelector('.m-chart__title');
+    caption.textContent = String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim();
+    table.appendChild(caption);
+    var thead = document.createElement('thead');
+    var headRow = document.createElement('tr');
+    ['الفئة', 'القيمة'].forEach(function (h) {
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'col');
+      th.textContent = h;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    items.forEach(function (it) {
+      var tr = document.createElement('tr');
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'row');
+      th.textContent = it.label;
+      tr.appendChild(th);
+      var td = document.createElement('td');
+      td.textContent = valueStateText(it);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+  }
+
   /* ---- دوائر المساحة: المساحة ∝ القيمة (نصف القطر √) ---- */
   function renderBubbles(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var rmaxAttr = parseNum(chart.getAttribute('data-rmax')); /* R2-05: كامل لا بادئة */
     var Rmax = (rmaxAttr !== null && rmaxAttr > 0) ? rmaxAttr : 52;
     var positive = items.filter(function (i) { return i.value !== null && i.value > 0; });
-    var vmaxAttr = parseNum(chart.getAttribute('data-max'));
-    var vmax = (vmaxAttr !== null && vmaxAttr > 0) ? vmaxAttr :
-      Math.max.apply(null, positive.map(function (i) { return i.value; }).concat([1]));
+    /* W3.2 (A4-D03): عقد مقياس A01 نفسه المطبق على bars/line — لا
+       استبدال صامت لـdata-max غير الصالح ولا دائرة تتجاوز rmax:
+       - غائب → مقياس تلقائي موثق يستوعب أكبر قيمة موجبة (أرضية 1).
+       - معلن غير صالح (غير رقمي/0/سالب) → رفض صريح: رسالة سبب +
+         القراءات كاملة في قائمة بلا رسم نسبي (نفس renderScaleRefusal).
+       - معلن أصغر من أكبر قيمة → تجاوز: الافتراضي «رفض»؛ خيار صريح
+         data-overscale="rescale" يرسم بمقياس موسّع يستوعب القيم مع
+         ملاحظة ظاهرة — وفي كل الأحوال r = Rmax×√(value/vmax) ≤ Rmax
+         لأن vmax ≥ أكبر قيمة مرسومة (لا تجاوز صامت للحد المعلن). */
+    var rawMax = chart.getAttribute('data-max');
+    var hasDeclared = rawMax !== null && String(rawMax).trim() !== '';
+    var declared = hasDeclared ? parseNum(rawMax) : null;
+    var largest = positive.length
+      ? Math.max.apply(null, positive.map(function (i) { return i.value; }))
+      : 0;
+    var scaleKind = 'auto';
+    if (hasDeclared) {
+      if (declared === null || declared <= 0) scaleKind = 'invalid';
+      else if (largest > declared) scaleKind = 'over';
+      else scaleKind = 'ok';
+    }
+    if (scaleKind === 'invalid') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, { kind: 'invalid' },
+        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
+        'bubbles: data-max="' + rawMax + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
+      return;
+    }
+    if (scaleKind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
+      plot.innerHTML = '';
+      renderScaleRefusal(chart, items, plot, { kind: 'over' },
+        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
+        'bubbles: أكبر قيمة (' + fmt(largest) + ') تتجاوز data-max="' + fmt(declared) + '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
+      return;
+    }
+    var vmax = (scaleKind === 'ok') ? declared : Math.max(largest, 1);
     var wrap = document.createElement('div');
     wrap.className = 'm-bubbles';
     items.forEach(function (it) {
@@ -814,6 +962,15 @@
     });
     plot.innerHTML = '';
     plot.appendChild(wrap);
+    if (scaleKind === 'over') {
+      /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
+      var note = document.createElement('p');
+      note.className = 'm-chart__scale-note';
+      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + ' — القيم الأصلية دون تغيير.';
+      plot.appendChild(note);
+      chart.setAttribute('data-scale-state', 'over-rescaled');
+      chart.setAttribute('data-scale-detail', 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(declared) + ' إلى ' + fmt(vmax) + '؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.');
+    }
   }
 
   /* ---- R3-UI01: رصد عرض الحاوية — إعادة قياس ورسم تلقائية (bars/line) ----
@@ -872,17 +1029,34 @@
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
     else if (kind === 'bubbles') renderBubbles(chart, items);
+    /* W3.1: اسم ووصف الرسم مربوطان برمجيًا بعد التصيير (العنوان المرئي
+       مصدر الاسم، والملخص وصف مرتبط) — انظر linkChartName */
+    linkChartName(chart);
+    /* W3.1 (D-UI-04): إفصاح بيانات داخل الرسم — الجدول يعاد بناؤه من
+       dataset الحالي في كل دورة فلا انحراف بنيوي ممكن */
+    syncDatasetTable(chart, items);
     /* R3-UI01: خزّن عرض الرسم الحالي وألحق المراقب — bars/line فقط */
     if (kind === 'bars' || kind === 'line') rememberRenderWidth(chart);
-    if (summary && !summary.textContent && chart.getAttribute('data-summary-text')) {
+    /* W3.3 (A4-D04): الملخص يتبع المصدر في كل دورة تصيير — data-summary-text
+       هو مصدر نص الملخص ويُزامن دائمًا عند وجوده (كان يكتب مرة واحدة عند
+       الفراغ فقط فيبقى وصف قديم مرتبطًا برسم جديد بعد تغيير البيانات).
+       غياب السمة يترك نص المستهلك كما هو — الملكية موثقة: من يغيّر
+       البيانات يحدّث data-summary-text، والمكوّن يضمن المزامنة. */
+    if (summary && chart.getAttribute('data-summary-text') !== null) {
       summary.textContent = chart.getAttribute('data-summary-text');
     }
     chart.dispatchEvent(new CustomEvent('micro-data:rendered', { bubbles: true, detail: { kind: kind } }));
   }
 
   window.MicroData = {
+    /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-chart] ثم
+       الأبناء — نفس عقد init الموحد للعائلات؛ إعادة init آمنة (render
+       idempotent والمراقب واحد لكل رسم عبر WeakMap). */
     init: function (root) {
-      (root || document).querySelectorAll('[data-chart]').forEach(function (c) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+      if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
+      charts.forEach(function (c) {
         render(c);
       });
     },
@@ -901,4 +1075,26 @@
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroData.init(); });
   if (document.readyState !== 'loading') window.MicroData.init();
+
+  /* F-01 (2026-10-10): جاهزية الخط — الرسم الأول قد يقيس بمقاييس خط
+     بديل قبل تحميل IBM Plex العربي فيختلف أول تصيير عن إعادة التصيير
+     (مرصود فعليًا: «مش…» قبل الجاهزية مقابل «مشتر…» بعدها في نفس
+     البيانات). بعد document.fonts.ready تُعاد رسوم bars/line المُهيّأة
+     مرة واحدة (نفس نمط packed-circle الموثق) فتستقر المواءمة على
+     قياسات الخط الفعلي، وكل إعادة تصيير لاحقة مطابقة لها (render
+     idempotent والمراقب واحد لكل رسم — لا أثر جانبي). */
+  function refitChartsOnFontsReady() {
+    if (!document.fonts || !document.fonts.ready) return;
+    document.fonts.ready.then(function () {
+      [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
+        var kind = c.getAttribute('data-chart');
+        if (kind === 'bars' || kind === 'line') render(c);
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', refitChartsOnFontsReady, { once: true });
+  } else {
+    refitChartsOnFontsReady();
+  }
 })();

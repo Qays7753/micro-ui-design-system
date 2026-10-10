@@ -10,6 +10,13 @@
   padding-block-end: 0;
 }
 .sticky-foot {
+  /* W1.3 (A3-F03 — ملكية الحافة الآمنة): هذه المجموعة الخارجية هي
+     المالك الوحيد للحافة السفلية داخل هذا التركيب — تُصفَّر قيمة
+     الملكية للمكونين الداخليين (m-actionbar/m-navbar عبر
+     --micro-inset-bottom في navigation.css) ويُطبَّق inset مرة واحدة
+     هنا فقط. قبل الإصلاح كان inset يُطبق ثلاث مرات (المجموعة +
+     شريط الأفعال + شريط التنقل) عند أي قيمة موجبة. */
+  --micro-inset-bottom: 0px;
   position: sticky;
   inset-block-end: 0;
   z-index: 5;

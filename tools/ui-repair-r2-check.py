@@ -36,6 +36,20 @@ R3-02b (UI-R3-02) تواريخ ISO خام عند 200% (حالة المراجع �
       قيمة فارغة «—») — المكوّن نفسه يعالجها عند التكبير (مستهلك F03
       يمرر الآن تسميات قصيرة فالبند يحتاج حالة ISO صريحة)؛ صفر تصادم
       وصفر خروج لكل الرسوم الظاهرة.
+
+تعديل عقدي مؤرخ (F-01 — 2026-10-10، تكليف معرض النظام): حالات
+      «zoom200» في هذه الأداة (R2-02-long وR3-02a وR3-02b) كانت
+      تفحص صفر تصادم/خروج عند محاكاة نص×2 لأن عقد R2-UI02/R3-UI02
+      القديم كان يقصّ التسميات عند نصف ميزانيتها عند 1× تخطيطًا لبيئة
+      الخط المضاعف — وهو نفسه ما سبب عيب F-01 (تسميات مبتورة عند
+      الحجم الطبيعي: مبيعات ← مبيع…). اتجاه المنتج الحالي (تكليف
+      2026-10-09) لا هدف تكبير فيه؛ حل عقد موائمة التسميات محل التخطيط
+      المضاعف (مواصفة data specification.md §F-01). بوابات حالات zoom200
+      هنا صارت: الحد المعلن الفعلي (minEff ≥ 13/12) وأعداد نصوص موجبة
+      ولا فيض صفحة أفقي — وبوابات التصادم/الخروج عند zoom200 أُسقطت
+      كعقد متجاوَز موثقًا (بوابات 1× كلها كما هي: R2-02 الطويلة بلا
+      تكبير تفحص الالتفاف واللا-اصطدام عند 1×). إعادة التحقق التاريخية
+      للجولة القديمة تبقى في سجلاتها.
 بيانات كل رسم تُحفظ (innerHTML) وتُستعاد بعد كل حالة R3 حتى لا تتلوث
 بقية الفحوص، مع لقطات شاشة لكل حالة (reports-r3-resize / r3-oneword-zoom
 / r3-iso-zoom بوسم src/standalone).
@@ -530,9 +544,9 @@ def run_sample(t, page, tag, url, shots):
     for ch in charts:
         if ch.get("hidden"):
             continue
-        t.check(f"R2-02[{tag} long w320 zoom200] {ch['chart']}: لا اصطدام ولا فيض صفحة",
-                len(ch["collisions"]) == 0 and ch["docScrollW"] <= ch["docW"] + 1,
-                json.dumps({"collisions": ch["collisions"][:3], "docScrollW": ch["docScrollW"], "docW": ch["docW"]}))
+        t.check(f"R2-02[{tag} long w320 zoom200] {ch['chart']}: لا فيض صفحة (بوابة العقد الحالي F-01 — التصادم عند المحاكاة×2 عقد متجاوَز موثق)",
+                ch["nTexts"] > 0 and ch["docScrollW"] <= ch["docW"] + 1,
+                json.dumps({"nTexts": ch["nTexts"], "collisions": ch["collisions"][:3], "docScrollW": ch["docScrollW"], "docW": ch["docW"]}))
     page.screenshot(path=str(shots / f"reports-long-zoom200-{tag}-320.png"), full_page=True)
     page.evaluate(UNZOOM)
     page.wait_for_timeout(200)
@@ -591,12 +605,14 @@ def run_sample(t, page, tag, url, shots):
         ch = amap.get(cid)
         ok = (vis_n == 2 and ch is not None and ch["nTexts"] > 0
               and ch["minEff"] is not None and ch["minEff"] >= declared - 0.01
-              and len(ch["collisions"]) == 0 and ch["outsideH"] == 0)
-        t.check(f"R3-02a[{tag} w320 zoom200] {cid}: كلمة مفردة عند 200% — الحد المعلن وصفر تصادم وصفر خروج",
+              and ch["docScrollW"] <= ch["docW"] + 1)
+        t.check(f"R3-02a[{tag} w320 zoom200] {cid}: كلمة مفردة عند 200% — الحد المعلن ولا فيض صفحة (بوابة F-01 الحالية؛ لا-تصادم عند المحاكاة×2 عقد متجاوَز موثق)",
                 ok,
                 json.dumps({"declared": declared, "visibleBarsLine": vis_n,
                             "nTexts": None if ch is None else ch["nTexts"],
                             "minEff": None if ch is None else ch["minEff"],
+                            "docScrollW": None if ch is None else ch["docScrollW"],
+                            "docW": None if ch is None else ch["docW"],
                             "collisions": None if ch is None else ch["collisions"][:4],
                             "outsideH": None if ch is None else ch["outsideH"]},
                            ensure_ascii=False))
@@ -619,11 +635,13 @@ def run_sample(t, page, tag, url, shots):
     for cid, kind in (("f03-rep-bars", "bars"), ("f03-rep-line", "line")):
         ch = amap.get(cid)
         ok = (vis_n == 2 and ch is not None and ch["nTexts"] > 0
-              and len(ch["collisions"]) == 0 and ch["outsideH"] == 0)
-        t.check(f"R3-02b[{tag} w320 zoom200] {cid}: تواريخ ISO خام عند 200% — صفر تصادم وصفر خروج",
+              and ch["docScrollW"] <= ch["docW"] + 1)
+        t.check(f"R3-02b[{tag} w320 zoom200] {cid}: تواريخ ISO خام عند 200% — نصوص موجبة ولا فيض صفحة (بوابة F-01 الحالية؛ لا-تصادم عند المحاكاة×2 عقد متجاوَز موثق)",
                 ok,
                 json.dumps({"visibleBarsLine": vis_n,
                             "nTexts": None if ch is None else ch["nTexts"],
+                            "docScrollW": None if ch is None else ch["docScrollW"],
+                            "docW": None if ch is None else ch["docW"],
                             "collisions": None if ch is None else ch["collisions"][:4],
                             "outsideH": None if ch is None else ch["outsideH"]},
                            ensure_ascii=False))

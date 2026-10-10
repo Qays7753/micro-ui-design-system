@@ -52,6 +52,7 @@
   var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
   var escapeBound = false;
   var doc = document;
+  var layerTitleUid = 0;     /* W2.2: مولد id لعناوين الطبقات بلا id */
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
   function inDocument(el) {
@@ -198,11 +199,49 @@
     });
   }
 
+  /* ---- W2.2 (D-UI-02 — A2-F03): دلالات الطبقة — افتراضات آمنة + تحقق ----
+     عقد الطبقة فعليًا modal (عزل inert للأشقاء + حصر Tab + قفل تمرير +
+     استعادة تركيز)، لذلك:
+     - role غائب → `dialog` افتراضيًا (سلوك مطابق للدور، لا افتراض غامض).
+     - `aria-modal` غائب مع دور dialog/alertdialog → `true` (السلوك يعزل
+       الخلفية فعليًا — لا إعلان modal بلا عزل).
+     - الاسم: يملكه المستهلك عبر aria-labelledby/aria-label إن وُجد، وإلا
+       يُربط بعنوان `.m-layer__title` (id مولد إن لزم) — وإلا تحذير صريح
+       في console: لا تُفتح طبقة modal بلا اسم متاح.
+     - دور مختلف عن dialog/alertdialog (وضعه المستهلك) يُحترم ويُسجل بتحذير
+       عقد — القرار مرجعه المستهلك لا المكوّن.
+     حدود الدليل: هذه مطابقة DOM/ARIA — الفحص السمعي بقارئ شاشة فعلي
+     (TalkBack/VoiceOver/NVDA) لم يُشغّل (NOT RUN). */
+  function ensureLayerSemantics(layer) {
+    var role = layer.getAttribute('role');
+    if (role === null) {
+      layer.setAttribute('role', 'dialog');
+      role = 'dialog';
+    }
+    if (role === 'dialog' || role === 'alertdialog') {
+      if (layer.getAttribute('aria-modal') === null) layer.setAttribute('aria-modal', 'true');
+      var named = layer.getAttribute('aria-labelledby') || layer.getAttribute('aria-label');
+      if (!named) {
+        var title = layer.querySelector('.m-layer__title');
+        if (title) {
+          if (!title.id) title.id = 'micro-layer-title-' + (++layerTitleUid);
+          layer.setAttribute('aria-labelledby', title.id);
+        } else if (window.console && console.warn) {
+          console.warn('[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.', layer);
+        }
+      }
+    } else if (window.console && console.warn) {
+      console.warn('[micro-navigation] دور غير معتاد للطبقة "' + role + '" — عقد الطبقات: dialog/alertdialog (D-UI-02).', layer);
+    }
+  }
+
   function openLayer(layer, options) {
     options = options || {};
     if (!layer || layer.tagName !== 'DIV') return;
     /* R2-02: إلغاء أي دورة إغلاق قديمة أولًا — إعادة الفتح أثناء الخفوت آمنة */
     cancelScheduledClose(layer);
+    /* W2.2 (D-UI-02): افتراضات آمنة وتحقق قبل الفتح — role/modal/اسم */
+    ensureLayerSemantics(layer);
     /* فتح متكرر لنفس الطبقة: آمن — إعادة تركيز دون تكرار في المكدس */
     if (openLayers.some(function (o) { return o.layer === layer; })) {
       var cur = focusables(layer)[0];
@@ -436,19 +475,73 @@
     };
   }
 
-  /* تبويبات المحتوى */
+  /* تبويبات المحتوى — W1.1/W1.2 (2026-10 إصلاح جذري):
+     - D-UI-01 (قرار مالك): سياسة الصف الواحد — `.m-tabs` يمرر أفقيًا
+       (overflow-x:auto في CSS)؛ عند الاختيار يُمرَّر التبويب المحدد
+       إلى الحيز المرئي (scrollIntoView بـinline:'nearest' وblock:'nearest'
+       كي لا يقفز التمرير الرأسي للصفحة)، وHome/End ينقلان إلى طرفي
+       القائمة وفق WAI-ARIA APG. لا قص ولا تصغير ولا التفاف لصفوف.
+     - A3-F01 (W1.2): اللوحة النشطة الخالية من أهداف تركيز داخلية تدخل
+       ترتيب Tab بـtabindex=0 وفق APG (النمط: tab نشط → Tab → اللوحة)؛
+       نتعقب ملكيتنا للسمة عبر data-micro-tabs-panel حتى لا نلمس tabindex
+       وضعه المستهلك؛ اللوحة ذات الأهداف الداخلية تُعاد لوضعها الطبيعي
+       (إزالة tabindex الذي أضفناه فقط)، واللوحات غير النشطة مخفية
+       (hidden) فتخرج من الترتيب تلقائيًا. */
   function initTabs(tabs) {
     if (tabs.dataset.microTabsBound) return;
     tabs.dataset.microTabsBound = '1';
     var items = [].slice.call(tabs.querySelectorAll('[role="tab"]'));
+    var FOCUSABLE_IN = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    function panelOf(t) {
+      var id = t.getAttribute('aria-controls');
+      return id ? document.getElementById(id) : null;
+    }
+    /* هدف تركيز فعلي داخل اللوحة: عنصر في ترتيب Tab حقًا — المستتر بسلف
+       hidden أو المعطل أصليًا لا يُحسب هدفًا داخليًا (لوحة هدفها الوحيد
+       مخفي تحتاج tabindex=0 بنفسها) */
+    function firstFocusableIn(panel) {
+      var candidates = panel.querySelectorAll(FOCUSABLE_IN);
+      for (var i = 0; i < candidates.length; i++) {
+        var el = candidates[i];
+        if (el.closest('[hidden]')) continue;
+        if (el.disabled) continue;
+        if (typeof el.checkVisibility === 'function' && !el.checkVisibility({ checkVisibilityCSS: true })) continue;
+        return el;
+      }
+      return null;
+    }
+    function syncPanelTabindex(activeTab) {
+      items.forEach(function (t) {
+        var panel = panelOf(t);
+        if (!panel) return;
+        var ours = panel.getAttribute('data-micro-tabs-panel') === '1';
+        var focusableInside = firstFocusableIn(panel);
+        if (t === activeTab && !focusableInside) {
+          if (!panel.hasAttribute('tabindex')) {
+            panel.setAttribute('tabindex', '0');
+            panel.setAttribute('data-micro-tabs-panel', '1');
+          }
+        } else if (ours) {
+          panel.removeAttribute('tabindex');
+          panel.removeAttribute('data-micro-tabs-panel');
+        }
+      });
+    }
+    function keepVisible(tab) {
+      if (tab && typeof tab.scrollIntoView === 'function') {
+        try { tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { /* بيئة بلا خيارات: السلوك الافتراضي */ }
+      }
+    }
     function select(tab) {
       items.forEach(function (t) {
         var on = t === tab;
         t.setAttribute('aria-selected', on ? 'true' : 'false');
         t.tabIndex = on ? 0 : -1;
-        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        var panel = panelOf(t);
         if (panel) panel.hidden = !on;
       });
+      syncPanelTabindex(tab);
+      keepVisible(tab); /* D-UI-01: التبويب المحدد يبقى مرئيًا */
     }
     items.forEach(function (t, i) {
       t.addEventListener('click', function () { select(t); });
@@ -456,9 +549,20 @@
         var next = null;
         if (e.key === 'ArrowLeft') next = items[(i + 1) % items.length];      /* RTL: يسار = التالي */
         else if (e.key === 'ArrowRight') next = items[(i - 1 + items.length) % items.length];
-        if (next) { e.preventDefault(); next.focus(); select(next); }
+        else if (e.key === 'Home') next = items[0];                           /* W1.1: APG — أول تبويب */
+        else if (e.key === 'End') next = items[items.length - 1];             /* W1.1: APG — آخر تبويب */
+        if (next) {
+          e.preventDefault();
+          next.focus();
+          keepVisible(next);
+          select(next);
+        }
       });
     });
+    /* الحالة الابتدائية: اللوحة الظاهرة (التبويب المحدد في الترميز) تدخل
+       ترتيب Tab إن كانت بلا أهداف داخلية — قبل أي تفاعل */
+    var initial = items.filter(function (t) { return t.getAttribute('aria-selected') === 'true'; })[0] || items[0];
+    if (initial) syncPanelTabindex(initial);
   }
 
   function bindDocumentOnce() {
@@ -472,10 +576,19 @@
     });
   }
 
+  /* W2.5 (A2-F08): عقد موحد لكل العائلات — init(root) يعالج الجذر نفسه
+     إن طابق المحدد ثم الأبناء (container-only سابقًا: تمرير عقدة التبويبات
+     ذاتها أو عقدة الطبقة ذاتها كان يُهمل). إعادة init آمنة: كل ربط محروس
+     بعلامة dataset فلا ازدواج listeners. */
   function init(root) {
     var scope = root || document;
     bindDocumentOnce();
-    scope.querySelectorAll('[data-layer-open]').forEach(function (btn) {
+    var inScope = function (selector) {
+      var list = [].slice.call(scope.querySelectorAll(selector));
+      if (scope.nodeType === 1 && scope.matches(selector)) list.unshift(scope);
+      return list;
+    };
+    inScope('[data-layer-open]').forEach(function (btn) {
       if (btn.dataset.microLayerOpenBound) return;
       btn.dataset.microLayerOpenBound = '1';
       btn.addEventListener('click', function () {
@@ -483,14 +596,14 @@
         if (layer) openLayer(layer, { trigger: btn });
       });
     });
-    scope.querySelectorAll('[data-layer-close]').forEach(function (btn) {
+    inScope('[data-layer-close]').forEach(function (btn) {
       if (btn.dataset.microLayerCloseBound) return;
       btn.dataset.microLayerCloseBound = '1';
       btn.addEventListener('click', function () {
         closeLayer(btn.closest('.m-layer'));
       });
     });
-    scope.querySelectorAll('.m-layer-backdrop[data-for]').forEach(function (bd) {
+    inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
       if (bd.dataset.microBackdropBound) return;
       bd.dataset.microBackdropBound = '1';
       bd.addEventListener('click', function () {
@@ -500,8 +613,8 @@
         if ((layer.getAttribute('data-backdrop') || 'close') === 'close') closeLayer(layer);
       });
     });
-    scope.querySelectorAll('[data-tabs]').forEach(initTabs);
-    scope.querySelectorAll('[data-filter-panel]').forEach(initFilterPanel);
+    inScope('[data-tabs]').forEach(initTabs);
+    inScope('[data-filter-panel]').forEach(initFilterPanel);
   }
 
   window.MicroNavigation = {

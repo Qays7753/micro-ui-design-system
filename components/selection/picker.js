@@ -18,6 +18,10 @@
    </div>
 
    العقد:
+   - F-02 (2026-10-10): رأس المنتقي (.m-picker__head بعنوانه وزر
+     [data-picker-close]) اختياري في الترميز — عند التركيب داخل طبقة
+     B07 تملك الطبقة العنوان والإغلاق الظاهرين فيحذف المستهلك الرأس
+     (لا زرّي إغلاق متتاليين ولا عنوانين). الاستخدام المستقل يبقيه.
    - البحث: input[data-picker-search] يصفّي الخيارات بالسمة hidden
      (CSS يغلبها على display:flex) — مسح الاستعلام يعيد كل الخيارات
      فورًا، وعدم وجود نتائج يظهر صف حالة صريحًا ولا يترك نتائج عالقة.
@@ -195,8 +199,13 @@
   function syncRovingInit(picker) { setRoving(picker, null); }
 
   window.MicroPicker = {
+    /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-micro-picker]
+       ثم الأبناء — عقد init الموحد للعائلات. */
     init: function (root) {
-      (root || document).querySelectorAll('[data-micro-picker]').forEach(bindPicker);
+      var scope = root || document;
+      var pickers = [].slice.call(scope.querySelectorAll('[data-micro-picker]'));
+      if (scope.nodeType === 1 && scope.matches('[data-micro-picker]')) pickers.unshift(scope);
+      pickers.forEach(bindPicker);
     },
     /* بيانات المستهلك — بناء بعُقد DOM (التسمية نص حرفي دائمًا).
        R2-03: استبدال البيانات يحافظ على اختيار صالح أو يمسحه،

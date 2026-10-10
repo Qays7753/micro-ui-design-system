@@ -37,7 +37,13 @@
 (function () {
   'use strict';
 
-  var liveRegion = null;
+  var livePolite = null;
+  var liveAssertive = null;
+  /* W2.3 (A2-F05): قناتا إعلان منفصلتان — polite وassertive عقدتان
+     مستقلتان فلا يتنافس الإعلان المهذب مع الإلحاحي على عقدة واحدة، ولا
+     يصبح تبديل القناة عالميًا لكل المستهلكين (كانت قناة واحدة تُبدّل
+     aria-live عليها ثم يُمسح النص ويُعاد بعد setTimeout ثابت 50ms قد
+     يخسر الترتيب عند تزاحم أحداث burst). */
   /* SUI-012 + SUI-R1-03: سجل هوية محدود لمنع إعادة إعلان الحدث نفسه
      بعد حدث مستقل (كان آخر-إعلان-فقط يسمح بذلك). عقد السجل:
      - CAPACITY=12: آخر 12 هوية معلنة فقط؛ الأقدم تُقصى عند التجاوز —
@@ -51,14 +57,21 @@
   var ANNOUNCE_LIFETIME_MS = 60000;
   var announcedIds = [];
 
+  function ensureLiveChannel(kind) {
+    var existing = kind === 'assertive' ? liveAssertive : livePolite;
+    if (existing && document.body.contains(existing)) return existing;
+    var region = document.createElement('div');
+    region.className = 'm-live-region' + (kind === 'assertive' ? ' m-live-region--assertive' : '');
+    region.setAttribute('aria-live', kind === 'assertive' ? 'assertive' : 'polite');
+    region.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(region);
+    if (kind === 'assertive') liveAssertive = region; else livePolite = region;
+    return region;
+  }
+
   function ensureLiveRegion() {
-    if (liveRegion && document.body.contains(liveRegion)) return liveRegion;
-    liveRegion = document.createElement('div');
-    liveRegion.className = 'm-live-region';
-    liveRegion.setAttribute('aria-live', 'polite');
-    liveRegion.setAttribute('aria-atomic', 'true');
-    document.body.appendChild(liveRegion);
-    return liveRegion;
+    /* توافق الفحوص القائمة على اسم الدالة — القناة المهذبة الافتراضية */
+    return ensureLiveChannel('polite');
   }
 
   function pruneAnnouncedIds(now) {
@@ -81,8 +94,7 @@
       assertive = !!opts;
       id = undefined;
     }
-    var region = ensureLiveRegion();
-    region.setAttribute('aria-live', assertive ? 'assertive' : 'polite');
+    var region = ensureLiveChannel(assertive ? 'assertive' : 'polite');
     /* SUI-R1-03: الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة داخل عمر
        الهوية حتى لو أعقبه أحداث مستقلة (A,B,A = إعلانان)؛ الحدث المستقل
        (id مختلف أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32).
@@ -105,8 +117,19 @@
       }
       pruneAnnouncedIds(now); /* إقصاء الفائض عن 12 فور التسجيل */
     }
-    region.textContent = '';
-    window.setTimeout(function () { region.textContent = text; }, 50);
+    /* W2.3 (A2-F05): كتابة متزامنة بالترتيب داخل كل قناة — لا مسح/إعادة
+       بمؤقت ثابت. إعادة إعلان النص ذاته في القناة نفسها (حدث مستقل بنص
+       متطابق بلا id) تُدار بمسح ثم تعيين في إطار الرسم التالي (rAF) —
+       أسرع من 50ms ومرتبط بدورة العرض، ولا يُطغى النص الأحدث (الشرط
+       أدناه يحميه). */
+    if (region.textContent === String(text)) {
+      region.textContent = '';
+      (window.requestAnimationFrame || function (fn) { window.setTimeout(fn, 16); })(function () {
+        if (region.textContent === '') region.textContent = text;
+      });
+    } else {
+      region.textContent = text;
+    }
   }
 
   function resetAnnouncements() {
@@ -157,8 +180,43 @@
     try { return document.querySelector(sel); } catch (e) { return null; }
   }
 
+  /* ---- W2.2 (D-UI-02 — A2-F04): أدوار m-note الافتراضية من النوع ----
+     وفق عقد المواصفة (SUI-010): مساعدة `note`، معلومة/نجاح/تحذير `status`،
+     خطأ `alert` فقط — لا يُعمم alert على كل ملاحظة بحكم الاسم. الدور الصريح
+     من المستهلك مالك دائمًا (لا يُداس)؛ الترميز الناقص (لا نوع ولا دور)
+     يُكشف بتحذير صريح لا بصمت. مطابقة DOM/ARIA — الفحص السمعي بقارئ
+     شاشة فعلي NOT RUN. */
+  var NOTE_ROLE_BY_VARIANT = { help: 'note', info: 'status', success: 'status', warning: 'status', error: 'alert' };
+  function noteVariantOf(note) {
+    var cls = ' ' + (note.className || '') + ' ';
+    for (var v in NOTE_ROLE_BY_VARIANT) {
+      if (cls.indexOf(' m-note--' + v + ' ') >= 0) return v;
+    }
+    return null;
+  }
+  function ensureNoteRoles(scope) {
+    var base = (scope && scope.querySelectorAll) ? scope : document;
+    var list = [].slice.call(base.querySelectorAll('.m-note'));
+    if (scope && scope.nodeType === 1 && scope.matches && scope.matches('.m-note')) list.unshift(scope);
+    list.forEach(function (note) {
+      if (note.getAttribute('role')) return; /* دور المستهلك مالك */
+      var v = noteVariantOf(note);
+      if (v) note.setAttribute('role', NOTE_ROLE_BY_VARIANT[v]);
+      else if (window.console && console.warn) {
+        console.warn('[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا.', note);
+      }
+    });
+  }
+
+  /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق المحدد ثم الأبناء */
   function bindClose(root) {
-    (root || document).querySelectorAll('.m-note__close').forEach(function (btn) {
+    var scope = root || document;
+    var inScope = function (selector) {
+      var list = [].slice.call(scope.querySelectorAll(selector));
+      if (scope.nodeType === 1 && scope.matches(selector)) list.unshift(scope);
+      return list;
+    };
+    inScope('.m-note__close').forEach(function (btn) {
       if (btn.dataset.microNoteBound) return;
       btn.dataset.microNoteBound = '1';
       btn.addEventListener('click', function () {
@@ -175,7 +233,7 @@
       });
     });
     /* إغلاق toast اليدوي: أي عنصر [data-toast-close] داخل .m-toast */
-    (root || document).querySelectorAll('.m-toast [data-toast-close]').forEach(function (btn) {
+    inScope('.m-toast [data-toast-close]').forEach(function (btn) {
       if (btn.dataset.microToastCloseBound) return;
       btn.dataset.microToastCloseBound = '1';
       btn.addEventListener('click', function () {
@@ -189,7 +247,8 @@
     closeToast: closeToast,
     announce: announce,
     resetAnnouncements: resetAnnouncements,
-    init: function (root) { bindClose(root); }
+    /* W2.5: init(root) يشمل الجذر نفسه؛ W2.2: يضمن أدوار m-note قبل التفاعل */
+    init: function (root) { ensureNoteRoles(root); bindClose(root); }
   };
   document.addEventListener('DOMContentLoaded', function () { window.MicroMessages.init(); });
   if (document.readyState !== 'loading') window.MicroMessages.init();

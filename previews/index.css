@@ -51,7 +51,9 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .family__index span { color:var(--micro-brand-primary); font-size:11px; }
 .family__copy h3 { margin:0; font-size:19px; line-height:1.5; font-weight:600; }
 .family__copy p { max-width:440px; margin:5px 0 13px; color:var(--micro-text-secondary); font-size:13px; line-height:1.7; }
-.family__links { display:flex; flex-wrap:wrap; gap:5px 16px; }
+/* W1.5 (D-UI-03): روابط مستقلة متجاورة — قاعدة الفصل 8px بين مناطق
+   الإصابة الفعلية (كان 5px عموديًا). كانت أفقية 16px فتبقى. */
+.family__links { display:flex; flex-wrap:wrap; gap:8px 16px; }
 .family__links a { display:inline-flex;align-items:center;min-height:48px;font-size:12px;font-weight:500; }
 .family .m-field { width:min(100%,350px); }
 .family .m-field__msg { display:block; }
@@ -85,15 +87,18 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .reference-end { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,.8fr); gap:42px; margin-block:48px 38px; padding:26px 0 34px; border-block-start:1px solid var(--micro-border-control); }
 .reference-end h2 { max-width:430px; }
 .reference-end p:not(.section-kicker) { max-width:470px; color:var(--micro-text-secondary); font-size:14px; }
-.reference-end__links { display:grid; grid-template-columns:1fr 1fr; align-content:center; gap:4px 18px; }
+.reference-end__links { display:grid; grid-template-columns:1fr 1fr; align-content:center; gap:8px 18px; } /* W1.5 (D-UI-03): فصل 8px بين أهداف مستقلة (كان 4px) */
 .reference-end__links a { display:flex; justify-content:space-between; align-items:center; min-height:42px; border-block-end:1px solid var(--micro-border-divider); color:var(--micro-text-primary); font-size:13px; text-decoration:none; }
 .reference-end__links a:hover { color:var(--micro-brand-primary); }
 .reference-end__links b { color:var(--micro-brand-primary); font-weight:500; }
 .library-footer { display:flex; justify-content:space-between; gap:16px; width:min(100% - 40px,1080px); margin-inline:auto; padding:17px 0 30px; border-block-start:1px solid var(--micro-border-divider); color:var(--micro-text-hint); font-size:11px; }
 .library-footer span:first-child { direction:ltr; font-family:'IBM Plex Sans',sans-serif; letter-spacing:.06em; }
 .m-btn:focus-visible,.m-field__input:focus-visible,.family a:focus-visible { outline:2px solid var(--micro-focus-ring); outline-offset:3px; }
+/* W4.3 (A1-F02 — عقد هامش المعرض): من 390px فأعلى 20px لكل جانب
+   وفق عقد الأسس (كانت القاعدة حتى 700px تفرض 32px أي 16px عند 390
+   و430 خلافا للعقد). تحت 390 يبقى عقد 16px لكل جانب. */
 @media(max-width:700px) {
-  .library-head__inner,.library-main,.library-footer { width:calc(100% - 32px); }
+  .library-head__inner,.library-main,.library-footer { width: min(100% - 40px, 1080px); } /* 390–700: عقد 20px لكل جانب */
   .head-ornament { inset-inline-start:auto; inset-inline-end:-170px; opacity:.27; }
   .library-head h1 { margin-block-start:28px; font-size:46px; }
   .library-head__intro { max-width:460px; font-size:15px; }
@@ -108,5 +113,9 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
   .reference-end { grid-template-columns:minmax(0,1fr); gap:12px; margin-block-start:35px; }
   .reference-end__links { grid-template-columns:minmax(0,1fr); }
   .library-footer { flex-direction:column; gap:4px; }
+}
+@media(max-width:389.98px) {
+  /* W4.3: تحت 390 — عقد 16px لكل جانب */
+  .library-head__inner,.library-main,.library-footer { width: calc(100% - 32px); }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:0.01ms!important; } }
