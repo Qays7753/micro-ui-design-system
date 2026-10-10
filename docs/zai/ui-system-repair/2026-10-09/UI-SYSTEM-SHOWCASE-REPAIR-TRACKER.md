@@ -6,7 +6,7 @@
 
 **أدوات القياس (قبل/بعد بنفس الكود):** `tools/ui-system-showcase-repair-check.py --tag before|after`
 - قبل (على رأس الأساس fae9159 في worktree نظيف): **96 PASS / 68 FAIL** — `reviews/UI-SYSTEM-SHOWCASE/repair-check-before.txt` (الإخفاقات = إعادة إنتاج العيوب) + `screenshots/before/`.
-- بعد (على رأس الإصلاح): **160 PASS / 0 FAIL** عند 320/360/390/430 RTL (بعد مراجعة الوكيل 1: أُزيلت بوابتان فارغتان — كشف إفصاح بنهاية النص وأعمدة إجهاد ترفض مقياسها أصلًا — وأُحلّت بوابات رفض المقياس الصادقة) — `reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt` + `screenshots/repair-after-*.png`.
+- بعد (على رأس الإصلاح): **168 PASS / 0 FAIL (بعد مراجعتي 1+2: بوابات سلوكية أقوى)** عند 320/360/390/430 RTL (بعد مراجعة الوكيل 1: أُزيلت بوابتان فارغتان — كشف إفصاح بنهاية النص وأعمدة إجهاد ترفض مقياسها أصلًا — وأُحلّت بوابات رفض المقياس الصادقة) — `reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt` + `screenshots/repair-after-*.png`.
 - **بوابات الدمج:** كل P1 مُصلح ومُتحقق؛ لا قرار مالك غير محسوم يوصف FIXED؛ أدلة لكل بند.
 
 ## ملخص الحالات النهائية
@@ -155,7 +155,7 @@
 
 | الفحص | النتيجة |
 |---|---|
-| `tools/ui-system-showcase-repair-check.py --tag after` | **160/160** عند 320/360/390/430 RTL (بعد إحلال بوابات صادقة) |
+| `tools/ui-system-showcase-repair-check.py --tag after` | **168/168** عند 320/360/390/430 RTL (بعد إحلال بوابات صادقة) |
 | `tools/ui-system-showcase-check.py` (مصفوفة العرض) | **118/118** (editable+standalone) |
 | `node tools/repair-regression.cjs` | **301/301** |
 | `tools/ui-repair-r1-check.py` | **54/54** |

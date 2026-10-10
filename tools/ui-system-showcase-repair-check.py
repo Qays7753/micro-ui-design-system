@@ -257,6 +257,17 @@ def run(page, base, width, tag):
     t(f"F-02 {P} الطبقة: مالك إغلاق ظاهر واحد", f02["closes"] == 1, f"closes={f02['closes']}")
     t(f"F-02 {P} الطبقة: عنوان ظاهر واحد", f02["titles"] == 1, f"titles={f02['titles']}")
     t(f"F-02 {P} المنتقي داخل الطبقة يعمل (بحث/قائمة)", f02["pickerWorks"])
+    f02b = page.evaluate("""() => {
+      const layer = document.querySelector('#sc-picker-layer');
+      const input = layer.querySelector('[data-picker-search]');
+      input.value = 'البترول';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      const visibleOpts = [...layer.querySelectorAll('.m-picker__option')].filter(o => !o.hidden).length;
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      return { visibleOpts };
+    }""")
+    t(f"F-02 {P} بحث المنتقي يرشّح الخيارات فعليًا", f02b["visibleOpts"] == 1, f"visible={f02b['visibleOpts']}")
     shot(page, "#sc-picker-layer")
 
     # منتقي مستقل (خارج أي طبقة): إغلاقه الخاص صالح
@@ -456,10 +467,10 @@ def run(page, base, width, tag):
     page.wait_for_timeout(250)
     if f10m and f10b:
         delta = abs(f10b["y2"] - f10m["y1"])
-        t(f"F-10 {P} إزاحة زر الإغلاق عند تبديل المحتوى (موثقة ومستقرة)", delta > 0 or True,
+        t(f"F-10 {P} إزاحة زر الإغلاق عند تبديل المحتوى محدودة وموثقة (0<δ≤80)", 0 < delta <= 80,
           f"delta={delta}px centered={f10b['centered']}px layerH={f10b['layerH']}")
         t(f"F-10 {P} الطبقة تبقى موسّطة (≤8px عن مركز الشاشة)", f10b["centered"] <= 8, f"centered={f10b['centered']}")
-    page.evaluate("() => { const b = document.querySelector('#sc-account-layer [data-layer-close]'); if (b) b.click(); }")
+    page.evaluate("() => { const b = document.querySelector('#sc-account-layer [data-account-close]'); if (b) b.click(); }")
     page.wait_for_timeout(250)
 
     # ================= F-11: صدق fixtures العرض =================
@@ -527,10 +538,14 @@ def run(page, base, width, tag):
       const titleLines = Math.round(title.getBoundingClientRect().height / lh);
       const fullInDom = title.textContent.trim();
       const ellipsized = title.scrollWidth > title.clientWidth + 1;
-      return { barH: Math.round(r.height), titleLines, fullLen: fullInDom.length, ellipsized };
+      const ariaOverride = title.hasAttribute('aria-label');
+      const hidden = title.getAttribute('aria-hidden') === 'true' || title.closest('[aria-hidden="true"]') !== null;
+      return { barH: Math.round(r.height), titleLines, fullLen: fullInDom.length, ellipsized, ariaOverride, hidden };
     }""")
     t(f"F-14 {P} عنوان شريط التطبيق ≤ سطرين (إجهاد)", f14["titleLines"] <= 2, f"lines={f14['titleLines']} barH={f14['barH']}")
     t(f"F-14 {P} النص الكامل باقٍ في DOM (قراءة كاملة)", f14["fullLen"] > 40, f"chars={f14['fullLen']}")
+    t(f"F-14 {P} العنوان في شجرة الإتاحة بلا تجاوز (لا aria-label ولا إخفاء)",
+      not f14["ariaOverride"] and not f14["hidden"], f"ariaOverride={f14['ariaOverride']} hidden={f14['hidden']}")
     t(f"F-14 {P} شريط التطبيق مقيّد (≤96px)", f14["barH"] <= 96, f"barH={f14['barH']}px")
     shot(page, "#sc-navigation")
     set_fixture(page, "normal")
