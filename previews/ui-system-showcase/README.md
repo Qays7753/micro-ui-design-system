@@ -32,7 +32,7 @@ python3 tools/preview-server.py          # الخدمة القائمة للمع�
 python3 tools/build-ui-system-showcase-standalone.py           # يولّد standalone.html
 python3 tools/build-ui-system-showcase-standalone.py --check    # يقارن إعادة التوليد بالملف القائم بلا كتابة
 python3 tools/ui-system-showcase-check.py                      # مصفوفة التحقق الكاملة + اللقطات (Chromium headless)
-python3 tools/ui-system-showcase-repair-check.py --tag after    # بوابات إصلاح F-01..F-14 (164 قياسًا عند 320/360/390/430)
+python3 tools/ui-system-showcase-repair-check.py --tag after    # بوابات إصلاح F-01..F-14 (160 قياسًا عند 320/360/390/430)
 ```
 
 `--check` يعيد التوليد في الذاكرة ويقارن البايتات؛ تكرار البناء بنفس المدخلات يعطي نفس الملف حرفيًا (لا أختام زمن). أداة البناء تتحقق أيضًا أن كل رمز أيقونة مضمّن يطابق أصله في `assets/icons` بايت-ببايت (نمط R1-02) وتفشل عند أي انحراف.
@@ -72,7 +72,7 @@ python3 tools/ui-system-showcase-repair-check.py --tag after    # بوابات �
 
 ## جولة إصلاح العرض F-01..F-14 (2026-10-10)
 
-أُصلح على هذا الفرع 14 بند عرض مكوّناتها جذر العيوب مرصودًا بالقياس قبل/بعد — السجل الكامل والحالات النهائية في `docs/zai/ui-system-repair/2026-10-09/UI-SYSTEM-SHOWCASE-REPAIR-TRACKER.md`، والأدلة في `reviews/UI-SYSTEM-SHOWCASE/repair-check-before.txt` (68 إخفاقًا معادًا إنتاجها عند الأساس) مقابل `repair-check-after.txt` (**164/164** عند 320/360/390/430) + لقطات `screenshots/repair-after-*.png` و`screenshots/before/`. أبرز العقود المحدثة: موائمة تسميات الرسوم عند 1× بجاهزية خط (F-01) · مالك إغلاق واحد للمنتقي داخل طبقة (F-02) · صنف peek مع سمة (F-03) · سياسة عرض ضيق معلنة للمقطّع (F-05) · إغلاق ملاحظة أيقونة 48px (F-06) · وحدة كمية متماسكة (F-07) · تقويم بخلايا مربعة مرجعية (F-08) · مصدر واحد لملحق packed (F-09) · عتبة تكديس المقارنة بحاوية 420px (F-12) · عنوان شريط التطبيق بسطرين (F-14). أدوات الجولة المحدثة تاريخيًا: `tools/ui-repair-r2-check.py` (بوابات zoom200 أعيد توثيقها للعقد الحالي — راجع رأس الأداة).
+أُصلح على هذا الفرع 14 بند عرض مكوّناتها جذر العيوب مرصودًا بالقياس قبل/بعد — السجل الكامل والحالات النهائية في `docs/zai/ui-system-repair/2026-10-09/UI-SYSTEM-SHOWCASE-REPAIR-TRACKER.md`، والأدلة في `reviews/UI-SYSTEM-SHOWCASE/repair-check-before.txt` (68 إخفاقًا معادًا إنتاجها عند الأساس) مقابل `repair-check-after.txt` (**160/160** عند 320/360/390/430) + لقطات `screenshots/repair-after-*.png` و`screenshots/before/`. أبرز العقود المحدثة: موائمة تسميات الرسوم عند 1× بجاهزية خط (F-01) · مالك إغلاق واحد للمنتقي داخل طبقة (F-02) · صنف peek مع سمة (F-03) · سياسة عرض ضيق معلنة للمقطّع (F-05) · إغلاق ملاحظة أيقونة 48px (F-06) · وحدة كمية متماسكة (F-07) · تقويم بخلايا مربعة مرجعية (F-08) · مصدر واحد لملحق packed (F-09) · عتبة تكديس المقارنة بحاوية 420px (F-12) · عنوان شريط التطبيق بسطرين (F-14). أدوات الجولة المحدثة تاريخيًا: `tools/ui-repair-r2-check.py` (بوابات zoom200 أعيد توثيقها للعقد الحالي — راجع رأس الأداة).
 
 ## حدود وأصناف NOT RUN (معلنة)
 
