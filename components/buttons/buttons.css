@@ -21,6 +21,7 @@
   justify-content: center;
   gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
   min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
+  min-width: var(--micro-touch-min); /* التسمية القصيرة لا تجعل هدف اللمس أضيق من 48px */
   padding-block: var(--micro-button-padding-block);   /* 12px */
   padding-inline: var(--micro-button-padding-inline);
   border: 0;

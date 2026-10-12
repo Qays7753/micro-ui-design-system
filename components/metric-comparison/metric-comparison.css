@@ -180,7 +180,7 @@
 .m-main-metric__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--micro-space-6);
+  gap: var(--micro-space-4);
   align-items: center;
 }
 
@@ -191,7 +191,7 @@
   justify-content: center;
   justify-self: center;
   gap: var(--micro-space-2);
-  width: min(100%, 208px);
+  width: min(100%, 144px); /* إبراز متوازن مع مساحة الأشرطة؛ ليس هدف لمس */
   aspect-ratio: 1;
   padding: var(--micro-space-5);
   border-radius: var(--micro-radius-circle);

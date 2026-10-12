@@ -81,6 +81,7 @@
           it.setAttribute('aria-pressed', on ? 'true' : 'false');
           it.classList.toggle('is-selected', on);
         });
+        if (seg.scrollWidth > seg.clientWidth) item.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         seg.dispatchEvent(new CustomEvent('micro-selection:segment', {
           bubbles: true, detail: { value: item.getAttribute('data-value') || item.textContent.trim() }
         }));
@@ -96,8 +97,9 @@
         var i = items.indexOf(document.activeElement);
         if (i < 0) return;
         var dir = 0;
-        if (e.key === 'ArrowLeft') dir = 1;      /* RTL: يسار = التالي */
-        else if (e.key === 'ArrowRight') dir = -1;
+        var rtl = getComputedStyle(seg).direction === 'rtl';
+        if (e.key === 'ArrowLeft') dir = rtl ? 1 : -1;
+        else if (e.key === 'ArrowRight') dir = rtl ? -1 : 1;
         else if (e.key === 'ArrowDown') dir = 1;
         else if (e.key === 'ArrowUp') dir = -1;
         if (!dir) return;
