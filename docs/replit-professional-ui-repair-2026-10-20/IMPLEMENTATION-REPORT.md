@@ -9,10 +9,14 @@ Date: 2026-10-20. Scope: reusable **UI only**, not product UX, auth, persistence
 - Source SHA: `feb19f0f417307c1e41a5b87f214b51b8f29c727`
 - Repair: `replit/professional-ui-complete-repair-2026-10-20`
 - Final repair implementation SHA: `7ab7c4a5be93fca2218cfe35106fc7310bead0aa`. A documentation-only commit follows to bind this already-committed revision; it does not change the tested source fingerprint.
-- GitHub delivery: pending correction of the existing source-control connection's authentication. A dry-run was rejected with “Invalid username or token”; no remote repair branch or PR is claimed yet.
+- GitHub delivery checkpoint: `0ae1986d8e6a9c73c2e107e456ca6bdfb73f1887`, verified on the remote repair ref with the **same trees and commit SHAs** as local Git. A following documentation-only commit records this delivery.
+- [Repair branch](https://github.com/Qays7753/micro-ui-design-system/tree/replit/professional-ui-complete-repair-2026-10-20).
+- [Draft Pull Request](https://github.com/Qays7753/micro-ui-design-system/pull/10), targeting the source UI branch, not main. Not merged; no auto-merge enabled.
 - Main baseline preserved: `a27ff0fd22a488175b55f502ba6df082a7c4fd48`.
 
 The remote source was verified with `git ls-remote` before fetching. The tree was clean. The repair branch was absent remotely and created from the verified source head. No force-push, reset, clean, main modification or automatic merge was used.
+
+Native Git push authentication was rejected (“Invalid username or token”). The existing **GitHub App** connection independently confirmed write access. Delivery therefore used GitHub's documented Git Database API through the credential-injecting connector proxy: create trees/commit objects, assert their SHA equality against local Git, then create only the absent repair ref. No credential was read or copied. The final documentation-only update is a non-forced fast-forward on that ref. The native source-control connection itself still needs repair before future CLI pushes; it was not silently replaced.
 
 ## Findings and exact changes
 
