@@ -8,7 +8,8 @@ Date: 2026-10-20. Scope: reusable **UI only**, not product UX, auth, persistence
 - Verified source: `ui/native-svg-polish-2026-10-12`
 - Source SHA: `feb19f0f417307c1e41a5b87f214b51b8f29c727`
 - Repair: `replit/professional-ui-complete-repair-2026-10-20`
-- Implementation revision: the first repair commit containing this report; exact committed SHA is bound in the final documentation update and delivery.
+- Final repair implementation SHA: `7ab7c4a5be93fca2218cfe35106fc7310bead0aa`. A documentation-only commit follows to bind this already-committed revision; it does not change the tested source fingerprint.
+- GitHub delivery: pending correction of the existing source-control connection's authentication. A dry-run was rejected with “Invalid username or token”; no remote repair branch or PR is claimed yet.
 - Main baseline preserved: `a27ff0fd22a488175b55f502ba6df082a7c4fd48`.
 
 The remote source was verified with `git ls-remote` before fetching. The tree was clean. The repair branch was absent remotely and created from the verified source head. No force-push, reset, clean, main modification or automatic merge was used.

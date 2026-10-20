@@ -5,6 +5,7 @@
 - Date: 2026-10-20 UTC (Asia/Amman local date also 2026-10-20).
 - Source branch/SHA: `ui/native-svg-polish-2026-10-12` / `feb19f0f417307c1e41a5b87f214b51b8f29c727`.
 - Repair branch: `replit/professional-ui-complete-repair-2026-10-20`.
+- Final repair implementation SHA: `7ab7c4a5be93fca2218cfe35106fc7310bead0aa`; the following documentation-only commit binds the same tested source bytes.
 - Tested browser: **Chromium 152.0.7977.64**, Playwright 1.63.0, Linux headless.
 - Tested final source SHA-256: `ded163cc45e66f5279c45150511ff67f05fe5267d2ce55e2b565c076039ab7fe`.
 - Fingerprint input: sorted path names and file bytes under components/, shared/, previews/ui-system-showcase/ (includes specs and generated standalone). JSON binds every focused assertion to date, HEAD at execution, viewport, direction and this content identity. The same source bytes are subsequently committed; documentation-only changes outside those paths do not invalidate it.
@@ -30,6 +31,8 @@ The untouched-source baseline was reproduced before component changes with loade
 Initial browser commands were **NOT RUN** due to missing Python Playwright, then missing downloaded Chromium, then the downloaded binary's missing Nix shared library. These setup attempts are not treated as UI failures or PASS results. The existing project dependency was installed, available system Chromium selected, and every listed command subsequently completed successfully. Browser selection remains portable: explicit MICRO_CHROMIUM_PATH, otherwise system Chromium, otherwise Playwright bundled browser.
 
 Exact final logs: `generated-artifacts/professional-ui-repair/commands/*.log`, `focused.log`, and `existing-showcase/verification.txt`, `existing-repair/repair-check-replit-professional-repair.txt`.
+
+GitHub push gate: **BLOCKED (authentication)**. The dry-run before and after binding the existing source-control connection returned “Invalid username or token”. The implementation is committed locally; neither remote branch delivery nor a PR has been claimed. Main remains untouched.
 
 ## Focused regression coverage
 
