@@ -266,6 +266,7 @@
     var hero = chart.querySelector('.m-main-metric__hero');
     if (!hero) return;
     chart.removeAttribute('data-hero-reading');
+    if (chart.classList.contains('m-main-metric--flat')) return;
     var bounds = hero.getBoundingClientRect();
     var number = hero.querySelector('.m-main-metric__number');
     var lineHeight = number ? parseFloat(window.getComputedStyle(number).lineHeight) : 0;
@@ -390,6 +391,7 @@
   }
 
   function initOne(root) {
+    disconnected.delete(root);
     if (root.hasAttribute('data-metric-circles') && !root.hasAttribute('data-metric-ready')) {
       root.setAttribute('data-metric-ready', '');
       circleItems(root);
@@ -403,13 +405,17 @@
     }
   }
 
+  var disconnected = new WeakSet();
+
   function observeResponsive(root) {
+    disconnected.delete(root);
     var target = root.querySelector('[data-metric-items]')
       || (root.hasAttribute('data-main-comparison') ? root : null);
     if (!target || root.__microMetricResizeObserver || root.__microMetricResizeListener) return;
     root.__microMetricWidth = target.getBoundingClientRect().width;
     if (window.ResizeObserver) {
-      root.__microMetricResizeObserver = new ResizeObserver(function (entries) {
+      var observer = new ResizeObserver(function (entries) {
+        if (disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
         var nextWidth = entries[0] && entries[0].contentRect.width;
         if (typeof nextWidth === 'number' && Math.abs(nextWidth - root.__microMetricWidth) > 1) {
           root.__microMetricWidth = nextWidth;
@@ -417,9 +423,11 @@
           else fitHero(root);
         }
       });
-      root.__microMetricResizeObserver.observe(target);
+      root.__microMetricResizeObserver = observer;
+      observer.observe(target);
     } else {
       root.__microMetricResizeListener = function () {
+        if (disconnected.has(root)) return;
         var nextWidth = target.getBoundingClientRect().width;
         if (Math.abs(nextWidth - root.__microMetricWidth) > 1) {
           root.__microMetricWidth = nextWidth;
@@ -433,6 +441,7 @@
 
   function render(root) {
     var scope = root || document;
+    if (scope.matches) disconnected.delete(scope);
     if (scope.matches && scope.matches('[data-metric-circles]')) {
       circleItems(scope);
       observeResponsive(scope);
@@ -459,8 +468,29 @@
     scope.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(initOne);
   }
 
-  window.MicroMetricComparison = { init: init, render: render };
+  function disconnect(root) {
+    var scope = root || document;
+    var selector = '[data-metric-circles], [data-main-comparison]';
+    var items = [].slice.call(scope.querySelectorAll(selector));
+    if (scope.matches && scope.matches(selector)) items.unshift(scope);
+    items.forEach(function (chart) {
+      disconnected.add(chart);
+      if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
+      if (chart.__microMetricResizeListener) window.removeEventListener('resize', chart.__microMetricResizeListener);
+      delete chart.__microMetricResizeObserver;
+      delete chart.__microMetricResizeListener;
+      delete chart.__microMetricWidth;
+      chart.removeAttribute('data-metric-ready');
+      chart.removeAttribute('data-bars-ready');
+    });
+  }
+
+  window.MicroMetricComparison = { init: init, render: render, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
-  if (document.fonts) document.fonts.ready.then(function () { render(); });
+  if (document.fonts) document.fonts.ready.then(function () {
+    document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
+      if (!disconnected.has(chart)) render(chart);
+    });
+  });
 })();

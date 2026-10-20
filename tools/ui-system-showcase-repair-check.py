@@ -22,9 +22,10 @@ import threading
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = ROOT / "reviews" / "UI-SYSTEM-SHOWCASE"
+OUT_DIR = ROOT / "generated-artifacts" / "professional-ui-repair" / "existing-repair"
 SHOTS = OUT_DIR / "screenshots"
 
 results = []
@@ -63,7 +64,7 @@ def main() -> int:
     console_errors = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(**chromium_launch_options())
         for w in widths:
             ctx = browser.new_context(viewport={"width": w, "height": 844}, locale="ar")
             page = ctx.new_page()
@@ -80,7 +81,7 @@ def main() -> int:
     passed = sum(1 for _, ok, _ in results if ok)
     lines = []
     lines.append(f"UI SYSTEM SHOWCASE — REPAIR CHECK ({args.tag})")
-    lines.append(f"التاريخ: 2026-10-10 · المنفّذ: Zed AI · الأعراض: {widths} RTL")
+    lines.append(f"الأعراض: {widths} RTL — سجل تشغيل حالي، ليس الدليل التاريخي")
     lines.append("البيئة: Chromium headless (Playwright) فقط — الأجهزة/قارئات الشاشة/WebKit/native zoom: NOT RUN")
     lines.append("")
     for name, ok, detail in results:

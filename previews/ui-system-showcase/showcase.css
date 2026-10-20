@@ -278,13 +278,12 @@ body {
 .sc-block > .m-carousel { min-width: 0; max-width: 100%; }
 
 /* مسرح سطح S01 */
-.sc-surface-stage .m-surface { min-height: 240px; }
+.sc-surface-stage--comparison .m-surface { min-height: 240px; }
 .sc-surface-stage .m-surface__content {
-  min-height: 240px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
+.sc-surface-stage--comparison .m-surface__content { min-height: 240px; justify-content: center; }
 .sc-surface-stage .m-surface__label { margin: 0 0 10px; }
 .sc-surface-stage .m-surface__title { margin: 0; max-width: 100%; }
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }

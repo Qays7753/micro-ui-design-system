@@ -182,6 +182,10 @@
   gap: var(--micro-space-3);
   margin-block-start: var(--micro-space-3);
 }
+.m-carousel[data-controls="compact"] [data-dots] { display: none; }
+.m-carousel[data-controls="compact"] .m-carousel__controls {
+  margin-block-start: var(--micro-space-2);
+}
 .m-carousel__btn {
   flex: none;
   inline-size: var(--micro-icon-button-size);  /* 48 */

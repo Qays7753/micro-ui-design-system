@@ -15,6 +15,7 @@ import threading
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ["shared/tokens.css", "components/buttons/buttons.css", "components/buttons/buttons.js",
@@ -116,7 +117,7 @@ def main():
 
     try:
         with sync_playwright() as pw:
-            browser = pw.chromium.launch()
+            browser = pw.chromium.launch(**chromium_launch_options())
             context = browser.new_context(viewport={"width": 390, "height": 844},
                                           is_mobile=True, has_touch=True, reduced_motion="reduce")
             page = context.new_page()

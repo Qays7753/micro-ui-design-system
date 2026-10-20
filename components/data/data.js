@@ -113,6 +113,7 @@
            المستهلك، والقراءة الكاملة سمة اختيارية (عقد specification.md) */
         labelFull: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
         value: v,
+        display: li.getAttribute('data-display') || '',
         outlier: li.hasAttribute('data-outlier')
       };
     });
@@ -126,6 +127,69 @@
 
   function fmt(v) {
     return String(v);
+  }
+
+  function readingOf(item) {
+    if (item.value === null) return '— غير متاح';
+    if (item.value < 0) return fmt(item.value) + ' — سالب غير مرسوم';
+    return item.display || fmt(item.value);
+  }
+
+  /* Measure actual SVG ink after font readiness, not fixed 37/40px steps.
+     The Micro 4px gap is additional to a safe line box, including diacritics. */
+  function measuredLabelStep(plot, items, cls, fontPx) {
+    var probe = svgEl('svg', { width: 1, height: 1, 'aria-hidden': 'true' });
+    probe.style.cssText = 'position:absolute;visibility:hidden;overflow:visible;pointer-events:none';
+    var text = svgEl('text', { class: cls });
+    applyTextPx(text, fontPx);
+    probe.appendChild(text);
+    plot.appendChild(probe);
+    var height = fontPx * 1.45;
+    items.forEach(function (item) {
+      text.textContent = item.label;
+      height = Math.max(height, text.getBBox().height);
+    });
+    var gap = parseFloat(getComputedStyle(plot).getPropertyValue('--micro-space-1')) || 4;
+    probe.remove();
+    return Math.ceil(height + gap);
+  }
+
+  /* Full readings move to visible compact rows only when measured ink boxes
+     collide or exceed the plot. Never truncate a value or require disclosure. */
+  function fitValueReadings(chart, svg, items) {
+    var plot = chart.querySelector('[data-plot]');
+    var bounds = svg.getBoundingClientRect();
+    if (bounds.width <= 1) return;
+    var labels = [].slice.call(svg.querySelectorAll('.m-chart__bar-value, .m-chart__point-value'));
+    var boxes = labels.map(function (node) { return node.getBoundingClientRect(); });
+    var collision = boxes.some(function (a, i) {
+      if (a.left < bounds.left + 1 || a.right > bounds.right - 1 || a.top < bounds.top - 1) return true;
+      return boxes.some(function (b, j) {
+        return j > i && a.left < b.right + 4 && a.right + 4 > b.left
+          && a.top < b.bottom + 2 && a.bottom + 2 > b.top;
+      });
+    });
+    chart.setAttribute('data-value-layout', collision ? 'rows' : 'plot');
+    if (!collision) return;
+    labels.forEach(function (node) { node.style.display = 'none'; });
+    var rows = document.createElement('dl');
+    rows.className = 'm-chart__readings';
+    rows.setAttribute('aria-label', 'القراءات الكاملة للرسم');
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      var label = document.createElement('dt');
+      label.textContent = item.labelFull || item.label;
+      var value = document.createElement('dd');
+      var number = document.createElement('bdi');
+      number.dir = 'ltr';
+      number.textContent = readingOf(item);
+      value.appendChild(number);
+      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      row.appendChild(label);
+      row.appendChild(value);
+      rows.appendChild(row);
+    });
+    plot.appendChild(rows);
   }
 
   /* SVG geometry follows the measured component width. Text remains 13 CSS px
@@ -457,14 +521,14 @@
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 40; /* خطوة سطر التسمية (فاصل يحمي الالتفاف عند تكبير النص — R1-UI09) */
+    var BAR_LABEL_STEP = measuredLabelStep(plot, items, 'm-chart__bar-label', fontPx);
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
        صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
        عند 200% (كانت 22 غير كافية). */
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(128, Math.max(96, W * 0.32));
-    var base = top + plotHeight, H = base + 50 + extra;
+    var base = top + plotHeight, H = base + BAR_LABEL_STEP + 12 + extra;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
@@ -499,7 +563,7 @@
         }));
         var val = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - h - 6, 'text-anchor': 'middle' });
         applyTextPx(val, fontPx);
-        val.textContent = fmt(it.value); g.appendChild(val);
+        val.textContent = readingOf(it); g.appendChild(val);
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
           applyTextPx(o, fontPx);
@@ -513,6 +577,7 @@
     plot.appendChild(svg);
     /* R3-UI02: قياس وموائمة بعد الإلحاق (الرسم مرئي) — ميزانية العمود ×0.92 */
     fitMeasuredLabels(chart, svg, items, 'm-chart__bar-label', colW * 0.92);
+    fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا.
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
@@ -556,13 +621,13 @@
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 37; /* خطوة سطر تسمية المحور (فاصل يحمي الالتفاف عند تكبير النص — R1-UI09) */
+    var X_LABEL_STEP = measuredLabelStep(plot, items, 'm-chart__x-label', fontPx);
     var extra = (maxLines - 1) * X_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
        صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(144, Math.max(104, W * 0.34));
-    var base = top + plotHeight, H = base + 48 + extra;
+    var base = top + plotHeight, H = base + X_LABEL_STEP + 12 + extra;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
@@ -603,7 +668,7 @@
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
         applyTextPx(val, fontPx);
-        val.textContent = fmt(it.value); g.appendChild(val);
+        val.textContent = readingOf(it); g.appendChild(val);
       }
       appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP, fontPx);
       svg.appendChild(g);
@@ -612,6 +677,7 @@
     plot.appendChild(svg);
     /* R3-UI02: قياس وموائمة بعد الإلحاق — ميزانية تباعد النقاط ×0.92 */
     fitMeasuredLabels(chart, svg, items, 'm-chart__x-label', ((W - 48) / (n - 1)) * 0.92);
+    fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
@@ -1021,6 +1087,7 @@
      readings are measured again after reveal and font readiness. */
   var renderWidths = new WeakMap(); /* chart → آخر عرض رُسم عنده (px) */
   var plotObservers = new WeakMap(); /* chart → ResizeObserver وحيد */
+  var disconnectedCharts = new WeakSet();
   var RESIZE_EPS = 0.5;
 
   function observePlot(chart) {
@@ -1029,6 +1096,7 @@
     var plot = chart.querySelector('[data-plot]');
     if (!plot) return;
     var ro = new ResizeObserver(function (entries) {
+      if (disconnectedCharts.has(chart) || plotObservers.get(chart) !== ro) return;
       var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
       if (w <= 1) return; /* مخفي: احتفظ بآخر رسم — الإظهار يطلق الرصد */
       var last = renderWidths.get(chart);
@@ -1048,6 +1116,8 @@
   }
 
   function render(chart) {
+    disconnectedCharts.delete(chart);
+    chart.removeAttribute('data-value-layout');
     var kind = chart.getAttribute('data-chart');
     var items = itemsOf(chart);
     var summary = chart.querySelector('[data-summary]');
@@ -1097,7 +1167,11 @@
        يظلان متاحين ويعيدان الإلحاق عند الحاجة، ومعالج DOMContentLoaded
        المسجل مرة واحدة عند تحميل الوحدة لا يتكرر */
     disconnect: function (root) {
-      (root || document).querySelectorAll('[data-chart]').forEach(function (c) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+      if (scope.matches && scope.matches('[data-chart]')) charts.unshift(scope);
+      charts.forEach(function (c) {
+        disconnectedCharts.add(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
         renderWidths.delete(c);
@@ -1119,7 +1193,7 @@
     document.fonts.ready.then(function () {
       [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
         var kind = c.getAttribute('data-chart');
-        if (kind === 'bars' || kind === 'line' || kind === 'donut') render(c);
+        if (!disconnectedCharts.has(c) && (kind === 'bars' || kind === 'line' || kind === 'donut')) render(c);
       });
     });
   }

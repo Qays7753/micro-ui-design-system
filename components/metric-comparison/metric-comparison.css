@@ -225,6 +225,24 @@
 .m-main-metric--compact .m-main-metric__row { gap: 0; }
 .m-main-metric--compact .m-main-metric__track { height: var(--micro-space-2); } /* R1-UI17: 4→8px في الوضع المدمج */
 
+/* Restrained opt-in reading, not a replacement for the default circle. */
+.m-main-metric--flat .m-main-metric__layout { grid-template-columns: minmax(0, 1fr); }
+.m-main-metric--flat .m-main-metric__hero {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  padding: 0;
+  align-items: flex-start;
+  justify-self: stretch;
+  border-radius: 0;
+  background: transparent;
+  color: var(--micro-text-primary);
+  text-align: start;
+  box-shadow: none;
+}
+.m-main-metric--flat .m-main-metric__label,
+.m-main-metric--flat .m-main-metric__unit { color: var(--micro-text-secondary); }
+
 .m-main-metric[data-hero-reading] .m-main-metric__layout {
   grid-template-columns: minmax(0, 1fr);
 }

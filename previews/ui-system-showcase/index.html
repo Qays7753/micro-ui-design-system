@@ -181,7 +181,7 @@
         <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
       </div>
-      <div class="sc-block sc-surface-stage">
+      <div class="sc-block sc-block--plain sc-surface-stage">
         <article class="m-surface m-surface--curves">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
@@ -475,9 +475,10 @@
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
       </div>
-      <div class="sc-block sc-stack">
+      <div class="sc-block sc-block--plain sc-stack">
+        <p class="sc-hint">بطاقات القراءة الواحدة تستخدم m-info-card--compact اختياريًا؛ الافتراضي متاح دون الصنف.</p>
         <div class="sc-grid-2">
-          <article class="m-info-card" aria-label="طلبات اليوم، 18 طلب">
+          <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
             <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
           </article>
@@ -487,24 +488,24 @@
           </article>
         </div>
         <div>
-          <p class="sc-block__title">الشريط الأساسي (أسهم + نقاط)</p>
-          <div class="m-info-strip" data-info-strip id="sc-strip">
+          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ — النقاط اختيارية في العرض الكامل</p>
+          <div class="m-info-strip" data-info-strip data-controls="compact" id="sc-strip">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات الأرقام التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="طلبات اليوم، 18 طلب">
+                  <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
                     <span class="m-info-card__label">طلبات اليوم</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr" data-fx-text="18,456,900">18</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="قيمة عينة، 1,240.50 دينار أردني">
+                  <article class="m-info-card m-info-card--compact" aria-label="قيمة عينة، 1,240.50 دينار أردني">
                     <span class="m-info-card__label">قيمة عينة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr" data-fx-text="99,999,999.99">1,240.50</span><span class="m-info-card__unit">د.أ</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
+                  <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
                     <span class="m-info-card__label">مخزون عينة</span>
                     <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
                   </article>
@@ -533,23 +534,23 @@
           <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
                data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
                النشطة بعرض كامل ولا تلمح المجاورة. -->
-          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="sc-strip-peek">
+          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek data-controls="compact" id="sc-strip-peek">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات peek التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="قطع جاهزة، 7 قطع">
+                  <article class="m-info-card m-info-card--compact" aria-label="قطع جاهزة، 7 قطع">
                     <span class="m-info-card__label">قطع جاهزة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">7</span><span class="m-info-card__unit">قطعة</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="طلبات مجدولة غدًا، 4 طلبات">
+                  <article class="m-info-card m-info-card--compact" aria-label="طلبات مجدولة غدًا، 4 طلبات">
                     <span class="m-info-card__label">مجدولة غدًا</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">4</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="بانتظار الموافقة، 12 طلبًا">
+                  <article class="m-info-card m-info-card--compact" aria-label="بانتظار الموافقة، 12 طلبًا">
                     <span class="m-info-card__label">بانتظار الموافقة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">12</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
@@ -780,7 +781,24 @@
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط.</p>
+        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الدائرة الافتراضية أعلاه محفوظة؛ القراءة المسطحة التالية خيار كثافة صريح.</p>
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مثال القراءة المسطحة الاختيارية">
+          <div class="m-main-metric__layout">
+            <div class="m-main-metric__hero">
+              <span class="m-main-metric__label">القراءة الرئيسية — flat اختياري</span>
+              <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
+            </div>
+            <div>
+              <ul data-bar-source hidden>
+                <li data-label="مكتملة" data-value="12" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
+                <li data-label="غير متاح" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -914,7 +932,7 @@
         <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.</p>
       </div>
-      <div class="sc-block">
+      <div class="sc-block sc-block--plain">
         <section class="m-access-gateway sc-gateway" data-access-gateway id="sc-gateway-root" aria-labelledby="sc-gateway-heading">
           <h3 class="m-access-gateway__heading" id="sc-gateway-heading">الدخول إلى تجربة العرض</h3>
           <p class="m-access-gateway__intro">نسخة عرض محلية — البيانات لا تغادر هذا الملف.</p>
@@ -1035,7 +1053,7 @@
       <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
            (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
            عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
-      <div class="sc-block sc-stack sc-block--ocal">
+      <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
@@ -1054,8 +1072,8 @@
         <h2 class="sc-section__title" id="sc-carousel-title">عارض البطاقات <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.</p>
       </div>
-      <div class="sc-block">
-        <div class="m-carousel" data-carousel data-carousel-label="ملخصات العرض" id="sc-carousel-root" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
+      <div class="sc-block sc-block--plain">
+        <div class="m-carousel" data-carousel data-controls="compact" data-carousel-label="ملخصات العرض" id="sc-carousel-root" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
           <div class="m-carousel__viewport" data-viewport>
             <ol class="m-carousel__track" data-track>
               <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص الطلبات">

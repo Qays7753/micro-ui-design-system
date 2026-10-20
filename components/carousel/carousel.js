@@ -100,11 +100,30 @@
   var viewportObservers = new WeakMap(); /* carousel → ResizeObserver وحيد */
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
 
+  /* The flex row's natural height includes inactive cards. Measure the active
+     card instead, including the track's shadow padding. Never cap content. */
+  function measureActiveHeight(st) {
+    if (st.disconnected || !st.count || st.viewport.clientWidth <= 1) return;
+    var slide = st.slides[st.index];
+    var style = getComputedStyle(st.track);
+    var height = Math.ceil(slide.getBoundingClientRect().height
+      + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+    if (height > 0 && st.viewport.style.height !== height + 'px') st.viewport.style.height = height + 'px';
+    var observer = viewportObservers.get(st.root);
+    if (observer && st.heightSlide !== slide) {
+      if (st.heightSlide) observer.unobserve(st.heightSlide);
+      observer.observe(slide);
+      st.heightSlide = slide;
+    }
+  }
+
   function recenterCarousel(carousel, st) {
+    if (st.disconnected) return;
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
       if (st.count <= 0) return;
+      measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
       if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
@@ -114,15 +133,16 @@
   }
 
   function observeViewport(carousel, st) {
+    st.disconnected = false;
     if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
     if (viewportObservers.has(carousel)) return; /* مراقب واحد لكل عارض — علامة الوجود */
     var ro = new ResizeObserver(function (entries) {
-      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
-      if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
+      if (st.disconnected || viewportObservers.get(carousel) !== ro || st.viewport.clientWidth <= 1) return;
       recenterCarousel(carousel, st);
     });
     ro.observe(st.viewport);
     viewportObservers.set(carousel, ro);
+    measureActiveHeight(st);
   }
 
   function parts(carousel) {
@@ -191,6 +211,7 @@
 
   /* أزرار الحالة: معطل فعليًا عند الطرف — لا تفاعل مضلل */
   function update(carousel, st) {
+    measureActiveHeight(st);
     var rtl = directionOf(carousel) === 'rtl';
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
@@ -390,6 +411,7 @@
     setToggleLabel(btn, !open);
     var region = expandRegionOf(slide, btn);
     if (region) region.hidden = open; /* عند الفتح يُكشف الكامل — الارتفاع يتبع المحتوى */
+    measureActiveHeight(st);
   }
 
   function wireExpand(carousel, st) {
@@ -519,6 +541,13 @@
     /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) —
        يخزّن عرض العرض الأول في lastWidth (SUI-025) */
     recenterCarousel(carousel, st);
+    if (document.fonts) document.fonts.ready.then(function () {
+      if (!st.disconnected) {
+        measureActiveHeight(st);
+        st.lastWidth = undefined;
+        recenterCarousel(carousel, st);
+      }
+    });
   }
 
   function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
@@ -553,6 +582,8 @@
         if (ro) { ro.disconnect(); viewportObservers.delete(carousel); }
         var st = stateOf.get(carousel);
         if (st) {
+          st.disconnected = true;
+          st.heightSlide = null;
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
              كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */

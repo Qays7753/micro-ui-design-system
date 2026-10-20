@@ -2125,6 +2125,24 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
    .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
    الأعمدة/الخط تتمدد بعرض البطاقة كالمعتاد. */
 .m-chart__plot svg:not(.m-donut__svg) { display: block; width: 100%; height: auto; }
+
+/* Conditional full-value alternative; no extra card or closed-only table. */
+.m-chart__readings {
+  display: grid;
+  gap: var(--micro-space-1);
+  margin: var(--micro-space-2) 0 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-chart__readings > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--micro-space-3);
+  min-width: 0;
+}
+.m-chart__readings dt { flex: 1 1 8ch; min-width: 0; overflow-wrap: anywhere; color: var(--micro-text-secondary); }
+.m-chart__readings dd { margin: 0; max-width: 100%; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
   margin: 0;
@@ -2427,6 +2445,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* HTML span, not SVG: fill alone does not paint this representation. */
+  background-color: var(--cat, var(--micro-data-a));
+  border-radius: var(--micro-radius-circle);
 }
 .m-chart--packed .m-bubble__value {
   display: inline-block;
@@ -3017,8 +3038,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   border-block-start: 1px solid var(--micro-border-divider);
   font-family: var(--micro-font-family);
 }
-.m-actionbar .m-btn { flex: 1 1 auto; min-width: 0; }
-.m-actionbar--stack .m-btn { flex: none; width: 100%; }
+.m-actionbar .m-btn:not(.m-btn--icon) { flex: 1 1 auto; min-width: 0; }
+.m-actionbar .m-btn--icon { flex: 0 0 var(--micro-icon-button-size); }
+.m-actionbar--stack { flex-direction: column; align-items: stretch; }
+.m-actionbar--stack .m-btn:not(.m-btn--icon) { flex: none; width: 100%; }
+.m-actionbar--stack .m-btn--icon { flex: none; align-self: flex-start; }
 
 .m-tabs__tab:hover:not([aria-selected="true"]) { color: var(--micro-text-primary); background: var(--micro-surface-page); }
 .m-navbar__item:hover:not([aria-current="page"]) { background: var(--micro-surface-page); }
@@ -3262,6 +3286,20 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   line-height: var(--micro-label-line);
   font-weight: 500;
   overflow-wrap: anywhere;
+}
+
+/* Explicit one-reading density variant; the existing default is unchanged. */
+.m-info-card--compact {
+  padding: var(--micro-space-4);
+  gap: var(--micro-space-3);
+}
+.m-info-card--compact .m-info-card__number {
+  font-size: var(--micro-amount2-size);
+  line-height: var(--micro-amount2-line);
+}
+.m-info-strip[data-controls="compact"] [data-info-strip-pages] { display: none; }
+.m-info-strip[data-controls="compact"] .m-info-strip__controls {
+  margin-block-start: var(--micro-space-2);
 }
 
 .m-info-card__reading {
@@ -3820,6 +3858,24 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-main-metric--compact .m-main-metric__rows { gap: var(--micro-space-1); }
 .m-main-metric--compact .m-main-metric__row { gap: 0; }
 .m-main-metric--compact .m-main-metric__track { height: var(--micro-space-2); } /* R1-UI17: 4→8px في الوضع المدمج */
+
+/* Restrained opt-in reading, not a replacement for the default circle. */
+.m-main-metric--flat .m-main-metric__layout { grid-template-columns: minmax(0, 1fr); }
+.m-main-metric--flat .m-main-metric__hero {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  padding: 0;
+  align-items: flex-start;
+  justify-self: stretch;
+  border-radius: 0;
+  background: transparent;
+  color: var(--micro-text-primary);
+  text-align: start;
+  box-shadow: none;
+}
+.m-main-metric--flat .m-main-metric__label,
+.m-main-metric--flat .m-main-metric__unit { color: var(--micro-text-secondary); }
 
 .m-main-metric[data-hero-reading] .m-main-metric__layout {
   grid-template-columns: minmax(0, 1fr);
@@ -5133,6 +5189,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
   gap: var(--micro-space-3);
   margin-block-start: var(--micro-space-3);
 }
+.m-carousel[data-controls="compact"] [data-dots] { display: none; }
+.m-carousel[data-controls="compact"] .m-carousel__controls {
+  margin-block-start: var(--micro-space-2);
+}
 .m-carousel__btn {
   flex: none;
   inline-size: var(--micro-icon-button-size);  /* 48 */
@@ -5521,13 +5581,12 @@ body {
 .sc-block > .m-carousel { min-width: 0; max-width: 100%; }
 
 /* مسرح سطح S01 */
-.sc-surface-stage .m-surface { min-height: 240px; }
+.sc-surface-stage--comparison .m-surface { min-height: 240px; }
 .sc-surface-stage .m-surface__content {
-  min-height: 240px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
+.sc-surface-stage--comparison .m-surface__content { min-height: 240px; justify-content: center; }
 .sc-surface-stage .m-surface__label { margin: 0 0 10px; }
 .sc-surface-stage .m-surface__title { margin: 0; max-width: 100%; }
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }
@@ -5725,7 +5784,7 @@ body {
         <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
       </div>
-      <div class="sc-block sc-surface-stage">
+      <div class="sc-block sc-block--plain sc-surface-stage">
         <article class="m-surface m-surface--curves">
           <div class="m-surface__waves" aria-hidden="true"></div>
           <div class="m-surface__content">
@@ -6019,9 +6078,10 @@ body {
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
       </div>
-      <div class="sc-block sc-stack">
+      <div class="sc-block sc-block--plain sc-stack">
+        <p class="sc-hint">بطاقات القراءة الواحدة تستخدم m-info-card--compact اختياريًا؛ الافتراضي متاح دون الصنف.</p>
         <div class="sc-grid-2">
-          <article class="m-info-card" aria-label="طلبات اليوم، 18 طلب">
+          <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
             <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
           </article>
@@ -6031,24 +6091,24 @@ body {
           </article>
         </div>
         <div>
-          <p class="sc-block__title">الشريط الأساسي (أسهم + نقاط)</p>
-          <div class="m-info-strip" data-info-strip id="sc-strip">
+          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ — النقاط اختيارية في العرض الكامل</p>
+          <div class="m-info-strip" data-info-strip data-controls="compact" id="sc-strip">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات الأرقام التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="طلبات اليوم، 18 طلب">
+                  <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
                     <span class="m-info-card__label">طلبات اليوم</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr" data-fx-text="18,456,900">18</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="قيمة عينة، 1,240.50 دينار أردني">
+                  <article class="m-info-card m-info-card--compact" aria-label="قيمة عينة، 1,240.50 دينار أردني">
                     <span class="m-info-card__label">قيمة عينة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr" data-fx-text="99,999,999.99">1,240.50</span><span class="m-info-card__unit">د.أ</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
+                  <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
                     <span class="m-info-card__label">مخزون عينة</span>
                     <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
                   </article>
@@ -6077,23 +6137,23 @@ body {
           <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
                data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
                النشطة بعرض كامل ولا تلمح المجاورة. -->
-          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek id="sc-strip-peek">
+          <div class="m-info-strip m-info-peek" data-info-strip data-info-peek data-controls="compact" id="sc-strip-peek">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات peek التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="قطع جاهزة، 7 قطع">
+                  <article class="m-info-card m-info-card--compact" aria-label="قطع جاهزة، 7 قطع">
                     <span class="m-info-card__label">قطع جاهزة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">7</span><span class="m-info-card__unit">قطعة</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="طلبات مجدولة غدًا، 4 طلبات">
+                  <article class="m-info-card m-info-card--compact" aria-label="طلبات مجدولة غدًا، 4 طلبات">
                     <span class="m-info-card__label">مجدولة غدًا</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">4</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
                 </div>
                 <div class="m-info-strip__slide">
-                  <article class="m-info-card" aria-label="بانتظار الموافقة، 12 طلبًا">
+                  <article class="m-info-card m-info-card--compact" aria-label="بانتظار الموافقة، 12 طلبًا">
                     <span class="m-info-card__label">بانتظار الموافقة</span>
                     <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">12</span><span class="m-info-card__unit">طلب</span></span>
                   </article>
@@ -6324,7 +6384,24 @@ body {
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط.</p>
+        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الدائرة الافتراضية أعلاه محفوظة؛ القراءة المسطحة التالية خيار كثافة صريح.</p>
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مثال القراءة المسطحة الاختيارية">
+          <div class="m-main-metric__layout">
+            <div class="m-main-metric__hero">
+              <span class="m-main-metric__label">القراءة الرئيسية — flat اختياري</span>
+              <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
+            </div>
+            <div>
+              <ul data-bar-source hidden>
+                <li data-label="مكتملة" data-value="12" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
+                <li data-label="غير متاح" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -6458,7 +6535,7 @@ body {
         <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
         <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.</p>
       </div>
-      <div class="sc-block">
+      <div class="sc-block sc-block--plain">
         <section class="m-access-gateway sc-gateway" data-access-gateway id="sc-gateway-root" aria-labelledby="sc-gateway-heading">
           <h3 class="m-access-gateway__heading" id="sc-gateway-heading">الدخول إلى تجربة العرض</h3>
           <p class="m-access-gateway__intro">نسخة عرض محلية — البيانات لا تغادر هذا الملف.</p>
@@ -6579,7 +6656,7 @@ body {
       <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
            (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
            عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
-      <div class="sc-block sc-stack sc-block--ocal">
+      <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
@@ -6598,8 +6675,8 @@ body {
         <h2 class="sc-section__title" id="sc-carousel-title">عارض البطاقات <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.</p>
       </div>
-      <div class="sc-block">
-        <div class="m-carousel" data-carousel data-carousel-label="ملخصات العرض" id="sc-carousel-root" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
+      <div class="sc-block sc-block--plain">
+        <div class="m-carousel" data-carousel data-controls="compact" data-carousel-label="ملخصات العرض" id="sc-carousel-root" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
           <div class="m-carousel__viewport" data-viewport>
             <ol class="m-carousel__track" data-track>
               <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص الطلبات">
@@ -7113,7 +7190,9 @@ body {
 
   function init(root) {
     var scope = root || document;
-    scope.querySelectorAll('[data-micro-field]').forEach(function (f) {
+    var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
+    if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
+    fields.forEach(function (f) {
       if (f.dataset.microFieldBound) return;
       f.dataset.microFieldBound = '1';
       bindControlFocus(f);
@@ -8670,6 +8749,7 @@ body {
            المستهلك، والقراءة الكاملة سمة اختيارية (عقد specification.md) */
         labelFull: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
         value: v,
+        display: li.getAttribute('data-display') || '',
         outlier: li.hasAttribute('data-outlier')
       };
     });
@@ -8683,6 +8763,69 @@ body {
 
   function fmt(v) {
     return String(v);
+  }
+
+  function readingOf(item) {
+    if (item.value === null) return '— غير متاح';
+    if (item.value < 0) return fmt(item.value) + ' — سالب غير مرسوم';
+    return item.display || fmt(item.value);
+  }
+
+  /* Measure actual SVG ink after font readiness, not fixed 37/40px steps.
+     The Micro 4px gap is additional to a safe line box, including diacritics. */
+  function measuredLabelStep(plot, items, cls, fontPx) {
+    var probe = svgEl('svg', { width: 1, height: 1, 'aria-hidden': 'true' });
+    probe.style.cssText = 'position:absolute;visibility:hidden;overflow:visible;pointer-events:none';
+    var text = svgEl('text', { class: cls });
+    applyTextPx(text, fontPx);
+    probe.appendChild(text);
+    plot.appendChild(probe);
+    var height = fontPx * 1.45;
+    items.forEach(function (item) {
+      text.textContent = item.label;
+      height = Math.max(height, text.getBBox().height);
+    });
+    var gap = parseFloat(getComputedStyle(plot).getPropertyValue('--micro-space-1')) || 4;
+    probe.remove();
+    return Math.ceil(height + gap);
+  }
+
+  /* Full readings move to visible compact rows only when measured ink boxes
+     collide or exceed the plot. Never truncate a value or require disclosure. */
+  function fitValueReadings(chart, svg, items) {
+    var plot = chart.querySelector('[data-plot]');
+    var bounds = svg.getBoundingClientRect();
+    if (bounds.width <= 1) return;
+    var labels = [].slice.call(svg.querySelectorAll('.m-chart__bar-value, .m-chart__point-value'));
+    var boxes = labels.map(function (node) { return node.getBoundingClientRect(); });
+    var collision = boxes.some(function (a, i) {
+      if (a.left < bounds.left + 1 || a.right > bounds.right - 1 || a.top < bounds.top - 1) return true;
+      return boxes.some(function (b, j) {
+        return j > i && a.left < b.right + 4 && a.right + 4 > b.left
+          && a.top < b.bottom + 2 && a.bottom + 2 > b.top;
+      });
+    });
+    chart.setAttribute('data-value-layout', collision ? 'rows' : 'plot');
+    if (!collision) return;
+    labels.forEach(function (node) { node.style.display = 'none'; });
+    var rows = document.createElement('dl');
+    rows.className = 'm-chart__readings';
+    rows.setAttribute('aria-label', 'القراءات الكاملة للرسم');
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      var label = document.createElement('dt');
+      label.textContent = item.labelFull || item.label;
+      var value = document.createElement('dd');
+      var number = document.createElement('bdi');
+      number.dir = 'ltr';
+      number.textContent = readingOf(item);
+      value.appendChild(number);
+      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      row.appendChild(label);
+      row.appendChild(value);
+      rows.appendChild(row);
+    });
+    plot.appendChild(rows);
   }
 
   /* SVG geometry follows the measured component width. Text remains 13 CSS px
@@ -9014,14 +9157,14 @@ body {
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var BAR_LABEL_STEP = 40; /* خطوة سطر التسمية (فاصل يحمي الالتفاف عند تكبير النص — R1-UI09) */
+    var BAR_LABEL_STEP = measuredLabelStep(plot, items, 'm-chart__bar-label', fontPx);
     var extra = (maxLines - 1) * BAR_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر التسمية 50−12=38 وحدة تصميم —
        صندوق أعلى سطر مضاعف (≈35 وحدة) لا يخترق منطقة قيم الأعمدة
        عند 200% (كانت 22 غير كافية). */
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(128, Math.max(96, W * 0.32));
-    var base = top + plotHeight, H = base + 50 + extra;
+    var base = top + plotHeight, H = base + BAR_LABEL_STEP + 12 + extra;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
@@ -9056,7 +9199,7 @@ body {
         }));
         var val = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - h - 6, 'text-anchor': 'middle' });
         applyTextPx(val, fontPx);
-        val.textContent = fmt(it.value); g.appendChild(val);
+        val.textContent = readingOf(it); g.appendChild(val);
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
           applyTextPx(o, fontPx);
@@ -9070,6 +9213,7 @@ body {
     plot.appendChild(svg);
     /* R3-UI02: قياس وموائمة بعد الإلحاق (الرسم مرئي) — ميزانية العمود ×0.92 */
     fitMeasuredLabels(chart, svg, items, 'm-chart__bar-label', colW * 0.92);
+    fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       /* A01: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفيًا.
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
@@ -9113,13 +9257,13 @@ body {
     var maxLines = Math.max.apply(null, items.map(function (i) {
       return wrapLabel(i.label, labelChars).length;
     }).concat([1]));
-    var X_LABEL_STEP = 37; /* خطوة سطر تسمية المحور (فاصل يحمي الالتفاف عند تكبير النص — R1-UI09) */
+    var X_LABEL_STEP = measuredLabelStep(plot, items, 'm-chart__x-label', fontPx);
     var extra = (maxLines - 1) * X_LABEL_STEP;
     /* R2-UI02: المسافة بين المحور وأسطر تسميات المحور 48−8=40 وحدة تصميم —
        صندوق أعلى سطر مضاعف لا يخترق منطقة قيم النقاط عند 200% (كانت 22). */
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(144, Math.max(104, W * 0.34));
-    var base = top + plotHeight, H = base + 48 + extra;
+    var base = top + plotHeight, H = base + X_LABEL_STEP + 12 + extra;
     function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
@@ -9160,7 +9304,7 @@ body {
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
         applyTextPx(val, fontPx);
-        val.textContent = fmt(it.value); g.appendChild(val);
+        val.textContent = readingOf(it); g.appendChild(val);
       }
       appendWrappedLabel(svg, g, it.label, x, H - 8, labelChars, 'm-chart__x-label', X_LABEL_STEP, fontPx);
       svg.appendChild(g);
@@ -9169,6 +9313,7 @@ body {
     plot.appendChild(svg);
     /* R3-UI02: قياس وموائمة بعد الإلحاق — ميزانية تباعد النقاط ×0.92 */
     fitMeasuredLabels(chart, svg, items, 'm-chart__x-label', ((W - 48) / (n - 1)) * 0.92);
+    fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
@@ -9578,6 +9723,7 @@ body {
      readings are measured again after reveal and font readiness. */
   var renderWidths = new WeakMap(); /* chart → آخر عرض رُسم عنده (px) */
   var plotObservers = new WeakMap(); /* chart → ResizeObserver وحيد */
+  var disconnectedCharts = new WeakSet();
   var RESIZE_EPS = 0.5;
 
   function observePlot(chart) {
@@ -9586,6 +9732,7 @@ body {
     var plot = chart.querySelector('[data-plot]');
     if (!plot) return;
     var ro = new ResizeObserver(function (entries) {
+      if (disconnectedCharts.has(chart) || plotObservers.get(chart) !== ro) return;
       var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
       if (w <= 1) return; /* مخفي: احتفظ بآخر رسم — الإظهار يطلق الرصد */
       var last = renderWidths.get(chart);
@@ -9605,6 +9752,8 @@ body {
   }
 
   function render(chart) {
+    disconnectedCharts.delete(chart);
+    chart.removeAttribute('data-value-layout');
     var kind = chart.getAttribute('data-chart');
     var items = itemsOf(chart);
     var summary = chart.querySelector('[data-summary]');
@@ -9654,7 +9803,11 @@ body {
        يظلان متاحين ويعيدان الإلحاق عند الحاجة، ومعالج DOMContentLoaded
        المسجل مرة واحدة عند تحميل الوحدة لا يتكرر */
     disconnect: function (root) {
-      (root || document).querySelectorAll('[data-chart]').forEach(function (c) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+      if (scope.matches && scope.matches('[data-chart]')) charts.unshift(scope);
+      charts.forEach(function (c) {
+        disconnectedCharts.add(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
         renderWidths.delete(c);
@@ -9676,7 +9829,7 @@ body {
     document.fonts.ready.then(function () {
       [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
         var kind = c.getAttribute('data-chart');
-        if (kind === 'bars' || kind === 'line' || kind === 'donut') render(c);
+        if (!disconnectedCharts.has(c) && (kind === 'bars' || kind === 'line' || kind === 'donut')) render(c);
       });
     });
   }
@@ -10886,6 +11039,7 @@ body {
     var hero = chart.querySelector('.m-main-metric__hero');
     if (!hero) return;
     chart.removeAttribute('data-hero-reading');
+    if (chart.classList.contains('m-main-metric--flat')) return;
     var bounds = hero.getBoundingClientRect();
     var number = hero.querySelector('.m-main-metric__number');
     var lineHeight = number ? parseFloat(window.getComputedStyle(number).lineHeight) : 0;
@@ -11010,6 +11164,7 @@ body {
   }
 
   function initOne(root) {
+    disconnected.delete(root);
     if (root.hasAttribute('data-metric-circles') && !root.hasAttribute('data-metric-ready')) {
       root.setAttribute('data-metric-ready', '');
       circleItems(root);
@@ -11023,13 +11178,17 @@ body {
     }
   }
 
+  var disconnected = new WeakSet();
+
   function observeResponsive(root) {
+    disconnected.delete(root);
     var target = root.querySelector('[data-metric-items]')
       || (root.hasAttribute('data-main-comparison') ? root : null);
     if (!target || root.__microMetricResizeObserver || root.__microMetricResizeListener) return;
     root.__microMetricWidth = target.getBoundingClientRect().width;
     if (window.ResizeObserver) {
-      root.__microMetricResizeObserver = new ResizeObserver(function (entries) {
+      var observer = new ResizeObserver(function (entries) {
+        if (disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
         var nextWidth = entries[0] && entries[0].contentRect.width;
         if (typeof nextWidth === 'number' && Math.abs(nextWidth - root.__microMetricWidth) > 1) {
           root.__microMetricWidth = nextWidth;
@@ -11037,9 +11196,11 @@ body {
           else fitHero(root);
         }
       });
-      root.__microMetricResizeObserver.observe(target);
+      root.__microMetricResizeObserver = observer;
+      observer.observe(target);
     } else {
       root.__microMetricResizeListener = function () {
+        if (disconnected.has(root)) return;
         var nextWidth = target.getBoundingClientRect().width;
         if (Math.abs(nextWidth - root.__microMetricWidth) > 1) {
           root.__microMetricWidth = nextWidth;
@@ -11053,6 +11214,7 @@ body {
 
   function render(root) {
     var scope = root || document;
+    if (scope.matches) disconnected.delete(scope);
     if (scope.matches && scope.matches('[data-metric-circles]')) {
       circleItems(scope);
       observeResponsive(scope);
@@ -11079,10 +11241,31 @@ body {
     scope.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(initOne);
   }
 
-  window.MicroMetricComparison = { init: init, render: render };
+  function disconnect(root) {
+    var scope = root || document;
+    var selector = '[data-metric-circles], [data-main-comparison]';
+    var items = [].slice.call(scope.querySelectorAll(selector));
+    if (scope.matches && scope.matches(selector)) items.unshift(scope);
+    items.forEach(function (chart) {
+      disconnected.add(chart);
+      if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
+      if (chart.__microMetricResizeListener) window.removeEventListener('resize', chart.__microMetricResizeListener);
+      delete chart.__microMetricResizeObserver;
+      delete chart.__microMetricResizeListener;
+      delete chart.__microMetricWidth;
+      chart.removeAttribute('data-metric-ready');
+      chart.removeAttribute('data-bars-ready');
+    });
+  }
+
+  window.MicroMetricComparison = { init: init, render: render, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
-  if (document.fonts) document.fonts.ready.then(function () { render(); });
+  if (document.fonts) document.fonts.ready.then(function () {
+    document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
+      if (!disconnected.has(chart)) render(chart);
+    });
+  });
 })();
 </script>
   <script data-sc-from="components/account-settings/account-settings.js">
@@ -12514,11 +12697,30 @@ body {
   var viewportObservers = new WeakMap(); /* carousel → ResizeObserver وحيد */
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
 
+  /* The flex row's natural height includes inactive cards. Measure the active
+     card instead, including the track's shadow padding. Never cap content. */
+  function measureActiveHeight(st) {
+    if (st.disconnected || !st.count || st.viewport.clientWidth <= 1) return;
+    var slide = st.slides[st.index];
+    var style = getComputedStyle(st.track);
+    var height = Math.ceil(slide.getBoundingClientRect().height
+      + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+    if (height > 0 && st.viewport.style.height !== height + 'px') st.viewport.style.height = height + 'px';
+    var observer = viewportObservers.get(st.root);
+    if (observer && st.heightSlide !== slide) {
+      if (st.heightSlide) observer.unobserve(st.heightSlide);
+      observer.observe(slide);
+      st.heightSlide = slide;
+    }
+  }
+
   function recenterCarousel(carousel, st) {
+    if (st.disconnected) return;
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
       if (st.count <= 0) return;
+      measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
       if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
@@ -12528,15 +12730,16 @@ body {
   }
 
   function observeViewport(carousel, st) {
+    st.disconnected = false;
     if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
     if (viewportObservers.has(carousel)) return; /* مراقب واحد لكل عارض — علامة الوجود */
     var ro = new ResizeObserver(function (entries) {
-      var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
-      if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
+      if (st.disconnected || viewportObservers.get(carousel) !== ro || st.viewport.clientWidth <= 1) return;
       recenterCarousel(carousel, st);
     });
     ro.observe(st.viewport);
     viewportObservers.set(carousel, ro);
+    measureActiveHeight(st);
   }
 
   function parts(carousel) {
@@ -12605,6 +12808,7 @@ body {
 
   /* أزرار الحالة: معطل فعليًا عند الطرف — لا تفاعل مضلل */
   function update(carousel, st) {
+    measureActiveHeight(st);
     var rtl = directionOf(carousel) === 'rtl';
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
@@ -12804,6 +13008,7 @@ body {
     setToggleLabel(btn, !open);
     var region = expandRegionOf(slide, btn);
     if (region) region.hidden = open; /* عند الفتح يُكشف الكامل — الارتفاع يتبع المحتوى */
+    measureActiveHeight(st);
   }
 
   function wireExpand(carousel, st) {
@@ -12933,6 +13138,13 @@ body {
     /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) —
        يخزّن عرض العرض الأول في lastWidth (SUI-025) */
     recenterCarousel(carousel, st);
+    if (document.fonts) document.fonts.ready.then(function () {
+      if (!st.disconnected) {
+        measureActiveHeight(st);
+        st.lastWidth = undefined;
+        recenterCarousel(carousel, st);
+      }
+    });
   }
 
   function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
@@ -12967,6 +13179,8 @@ body {
         if (ro) { ro.disconnect(); viewportObservers.delete(carousel); }
         var st = stateOf.get(carousel);
         if (st) {
+          st.disconnected = true;
+          st.heightSlide = null;
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
              كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */

@@ -206,7 +206,9 @@
 
   function init(root) {
     var scope = root || document;
-    scope.querySelectorAll('[data-micro-field]').forEach(function (f) {
+    var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
+    if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
+    fields.forEach(function (f) {
       if (f.dataset.microFieldBound) return;
       f.dataset.microFieldBound = '1';
       bindControlFocus(f);

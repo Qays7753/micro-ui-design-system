@@ -25,6 +25,7 @@ from datetime import datetime
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "reviews" / "UI-SYSTEM-SHOWCASE" / "generated-data-scale"
@@ -131,7 +132,7 @@ def main(out_dir: Path = None, port: int = 0):
     with sync_playwright() as pw:
         if not hasattr(pw, ENGINE):
             raise RuntimeError(f"Unknown MICRO_TEST_ENGINE: {ENGINE}")
-        browser = getattr(pw, ENGINE).launch(headless=True)
+        browser = getattr(pw, ENGINE).launch(headless=True, **(chromium_launch_options() if ENGINE == "chromium" else {}))
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         page = ctx.new_page()
         page.on("pageerror", lambda e: errors.append(str(e)))
