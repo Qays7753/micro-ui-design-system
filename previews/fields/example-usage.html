@@ -40,7 +40,7 @@
     <p class="m-field__msg" data-field-msg hidden>رسالة ب</p>
   </div>
   <p id="prior-help" hidden>وصف مساعدة سابق</p>
-  <div class="m-field" data-micro-field>
+  <div class="m-field has-readonly" data-micro-field>
     <label class="m-field__label" for="u-3">كمية قراءة فقط</label>
     <div class="m-field__control">
       <div class="m-field__stepper">
@@ -117,6 +117,23 @@
       f4.querySelector('[data-step="down"]').click();
       var downV = q4.value;
       t('خطوة الكمية تعمل فعليًا (10 → 15 → 5) بحدود المستهلك', upV === '15' && downV === '5', upV + ' → ' + downV);
+      q4.value = '98';
+      MicroFields.sync(f4);
+      f4.querySelector('[data-step="up"]').click();
+      t('لا تقفز الخطوة جزئيًا إلى max=99 مع step=5', q4.value === '98'
+        && f4.querySelector('[data-step="up"]').getAttribute('aria-disabled') === 'true', q4.value);
+      q4.value = '10';
+      MicroFields.sync(f4);
+      q4.focus();
+      var arrowUp = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true });
+      q4.dispatchEvent(arrowUp);
+      t('ArrowUp يطبق خطوة ويبقي التركيز في الحقل', q4.value === '15'
+        && document.activeElement === q4 && arrowUp.defaultPrevented, q4.value);
+      var arrowLeft = new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true });
+      q4.dispatchEvent(arrowLeft);
+      t('ArrowLeft يبقى للتحرير ولا يغير القيمة', q4.value === '15' && !arrowLeft.defaultPrevented, q4.value);
+      q4.value = '10';
+      MicroFields.sync(f4);
       var steps = [].slice.call(document.querySelectorAll('[data-step]'));
       var sizesOk = steps.every(function (b) {
         var r = b.getBoundingClientRect();

@@ -223,17 +223,27 @@ def main():
                             .map(node => ({index:Number(node.parentElement.getAttribute('data-point-index')),
                                            x:Number(node.getAttribute('cx'))}));
                           const pointXs = [...svg.querySelectorAll('g[data-point-index]')].map(group => {
-                            const label=group.querySelector('.m-chart__x-label');
+                            // Endpoint category text may move inward to fit.
+                            // Measure the data point, not its presentation label.
+                            const point=group.querySelector('circle');
+                            const marker=group.querySelector('rect.m-chart__bar-unknown');
+                            const value=group.querySelector('.m-chart__point-value');
+                            if (!point && !marker && !value) throw new Error('Missing point coordinate');
                             return {index:Number(group.getAttribute('data-point-index')),
-                                    x:Number(label.getAttribute('x'))};
+                                    x:point ? Number(point.getAttribute('cx'))
+                                      : marker ? Number(marker.getAttribute('x')) + Number(marker.getAttribute('width')) / 2
+                                      : Number(value.getAttribute('x'))};
                           });
+                          const plotBox=svg.getBoundingClientRect();
+                          const labelsBounded=rects.every(r => r.left >= plotBox.left + 7.5
+                            && r.right <= plotBox.right - 7.5);
                           const rows = [...chart.querySelectorAll('.m-chart__readings dt')]
                             .map(node => node.textContent);
                           const source = [...chart.querySelectorAll('.m-chart__data [data-series]')]
                             .map(node => ({label:node.getAttribute('data-label'),
                               full:node.getAttribute('data-label-full') || node.getAttribute('data-label'),
                               value:node.hasAttribute('data-value') ? node.getAttribute('data-value') : null}));
-                          return {viewBoxWidth:Number(svg.viewBox.baseVal.width),rects,circles,pointXs,rows,source,
+                          return {viewBoxWidth:Number(svg.viewBox.baseVal.width),rects,circles,pointXs,labelsBounded,rows,source,
                             groups:svg.querySelectorAll('g[data-point-index]').length,
                             readings:chart.querySelectorAll('.m-chart__readings dt').length};
                         }""", chart)
@@ -242,6 +252,8 @@ def main():
                               and [entry["value"] for entry in geometry["source"]]
                               == [entry.get("value") for entry in items],
                               {"groups": geometry["groups"], "source": geometry["source"]})
+                        check(prefix + " whole visible labels remain inside the plot",
+                              geometry["labelsBounded"], geometry["rects"])
                         overlaps = []
                         for i, a in enumerate(geometry["rects"]):
                             for b in geometry["rects"][i + 1:]:

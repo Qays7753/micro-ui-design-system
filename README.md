@@ -65,7 +65,7 @@ python3 tools/data-scale-state-check.py
 [`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
 
 تقارير الإصلاح الحالي في
-[`docs/replit/micro-ui-professional-complete-repair-2026-10-21/`](docs/replit/micro-ui-professional-complete-repair-2026-10-21/).
+[`docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/`](docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/).
 أدلة `reviews/UI-SYSTEM-SHOWCASE/` و`docs/UI-SYSTEM-SHOWCASE-*.md` تاريخية،
 وليست بديلًا عن تشغيل الفحوص على المصدر الحالي.
 

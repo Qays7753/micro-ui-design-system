@@ -30,7 +30,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             return
         if path == "/":
             self.send_response(302)
-            self.send_header("Location", "/previews/")
+            self.send_header("Location", "/previews/ui-system-showcase/index.html")
             self.end_headers()
             return
         super().do_GET()

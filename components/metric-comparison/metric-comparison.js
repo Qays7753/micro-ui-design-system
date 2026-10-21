@@ -52,7 +52,7 @@
     if (!fallbackTarget) {
       fallbackTarget = make('ul', 'm-metric-circles__fallback');
       fallbackTarget.setAttribute('data-metric-fallback', '');
-      fallbackTarget.setAttribute('aria-label', 'قراءات القيم التي لا تتسع داخل الدوائر');
+      fallbackTarget.setAttribute('aria-label', 'القراءات الدقيقة لكل القيم');
       target.insertAdjacentElement('afterend', fallbackTarget);
     }
     var items = Array.prototype.slice.call(source.querySelectorAll('[data-label]')).map(function (node) {
@@ -66,6 +66,9 @@
       };
     });
     target.textContent = '';
+    /* Circle area is the only information encoded in the drawing. Keep the
+       complete, exact label/value key as one stable external reading surface. */
+    target.setAttribute('aria-hidden', 'true');
     if (fallbackTarget) fallbackTarget.textContent = '';
     var known = items.map(function (item) {
       return item.state === 'invalid' || item.state === 'unavailable'
@@ -201,47 +204,11 @@
         var bubble = make('span', 'm-metric-circles__bubble');
         bubble.setAttribute('aria-hidden', 'true');
         visual.appendChild(bubble);
-        var inside = make('span', 'm-metric-circles__bubble-content');
-        inside.hidden = true;
-        inside.appendChild(make('span', 'm-metric-circles__inside-label', item.label));
-        var insideValue = make('span', 'm-metric-circles__inside-reading', display);
-        insideValue.setAttribute('dir', 'ltr');
-        inside.appendChild(insideValue);
-        visual.appendChild(inside);
         li.appendChild(visual);
         target.appendChild(li);
-
-        inside.hidden = false;
-        inside.style.visibility = 'hidden';
-        var fits = !zeroMarker && diameter >= 72
-          && inside.scrollHeight <= inside.clientHeight + 1
-          && inside.scrollWidth <= inside.clientWidth + 1;
-        if (fits && layout === 'overlap') {
-          var centerX = geometry.x * width;
-          var centerY = geometry.y * overlapHeight;
-          for (var otherIndex = 0; otherIndex < itemGeometry.length; otherIndex++) {
-            if (otherIndex === index || itemGeometry[otherIndex].diameter <= 0) continue;
-            var other = itemGeometry[otherIndex];
-            var drawnAbove = other.diameter > geometry.diameter
-              || (other.diameter === geometry.diameter && otherIndex > index);
-            if (!drawnAbove) continue;
-            var dx = Math.max(0, Math.abs(centerX - other.x * width) - inside.clientWidth / 2);
-            var dy = Math.max(0, Math.abs(centerY - other.y * overlapHeight) - inside.clientHeight / 2);
-            if (dx * dx + dy * dy < Math.pow(other.diameter / 2, 2)) {
-              fits = false;
-              break;
-            }
-          }
-        }
-        inside.style.visibility = '';
-        inside.hidden = !fits;
-        li.setAttribute('data-inside', fits ? 'true' : 'false');
-        if (fits) {
-          visual.removeAttribute('aria-hidden');
-        } else if (fallbackTarget) {
-          fallbackTarget.appendChild(fallbackItem(item, display, stateText));
-        }
-      } else if (fallbackTarget) {
+        li.setAttribute('data-inside', 'false');
+      }
+      if (fallbackTarget) {
         fallbackTarget.appendChild(fallbackItem(item, display, stateText));
       }
     });

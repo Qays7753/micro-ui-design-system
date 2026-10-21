@@ -9,7 +9,7 @@
 3. القواعد البصرية: [`UI-VISUAL-SYSTEM.md`](UI-VISUAL-SYSTEM.md).
 4. العائلات والمصادر: [`COMPONENT-INVENTORY.md`](COMPONENT-INVENTORY.md).
 5. الحالات الحية: [`previews/system/index.html`](../previews/system/index.html).
-6. التحقق الحالي: [`تقرير الإصلاح والتحقق`](replit/micro-ui-professional-complete-repair-2026-10-21/VERIFICATION-REPORT.md).
+6. التحقق الحالي: [`تقرير الإصلاح والتحقق`](replit/professional-numeric-geometry-ui-polish-2026-10-21/VERIFICATION-REPORT.md).
    أدلة `reviews/UI-SYSTEM-SHOWCASE/` تبقى تاريخية لا إثباتًا للمصدر المعدّل.
 
 ## قواعد الإصدار

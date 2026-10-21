@@ -65,13 +65,68 @@
       var targetId = reveal.getAttribute('aria-controls');
       var password = targetId ? document.getElementById(targetId) : credential(form, 'password');
       if (password) {
-        reveal.addEventListener('click', function () {
+        var consumerDisabled = reveal.disabled;
+        var pointerSelection = null;
+        function syncRevealDisabled() {
+          reveal.disabled = consumerDisabled || password.disabled;
+          if (password.disabled && password.type !== 'password') {
+            password.type = 'password';
+            reveal.setAttribute('aria-pressed', 'false');
+          }
+        }
+        reveal.addEventListener('pointerdown', function () {
+          try {
+            pointerSelection = {
+              start: password.selectionStart,
+              end: password.selectionEnd,
+              direction: password.selectionDirection
+            };
+          } catch (error) {
+            pointerSelection = null;
+          }
+        });
+        reveal.addEventListener('click', function (event) {
+          if (reveal.disabled || password.disabled || reveal.getAttribute('aria-disabled') === 'true') return;
+          var selection = event.detail > 0 ? pointerSelection : null;
+          pointerSelection = null;
+          if (!selection) {
+            try {
+              selection = {
+                start: password.selectionStart,
+                end: password.selectionEnd,
+                direction: password.selectionDirection
+              };
+            } catch (error) {
+              selection = null;
+            }
+          }
           var showing = password.type === 'password';
           password.type = showing ? 'text' : 'password';
           reveal.setAttribute('aria-pressed', showing ? 'true' : 'false');
-          reveal.setAttribute('aria-label', showing ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور');
-          var status = reveal.querySelector('[data-access-reveal-status]');
-          if (status) status.textContent = showing ? 'إخفاء' : 'إظهار';
+          /* A pressed toggle has one stable name; aria-pressed conveys state. */
+          reveal.setAttribute('aria-label', 'إظهار كلمة المرور');
+          if (selection && typeof password.setSelectionRange === 'function') {
+            var start = Math.min(selection.start, password.value.length);
+            var end = Math.min(selection.end, password.value.length);
+            password.setSelectionRange(start, end, selection.direction || 'none');
+          }
+          /* Pointer users continue editing at the preserved caret. Keyboard
+             users keep focus on the toggle for repeated Enter/Space actions. */
+          if (event.detail > 0) {
+            password.focus({ preventScroll: true });
+            if (selection && typeof password.setSelectionRange === 'function') {
+              password.setSelectionRange(
+                Math.min(selection.start, password.value.length),
+                Math.min(selection.end, password.value.length),
+                selection.direction || 'none'
+              );
+            }
+          }
+        });
+        syncRevealDisabled();
+        new MutationObserver(syncRevealDisabled).observe(password, {
+          attributes: true,
+          attributeFilter: ['disabled']
         });
       }
     }

@@ -136,6 +136,32 @@
   display: inline-flex;
 }
 
+/* Embedded actions share the field shell instead of drawing a second
+   bordered control. The 48px hit area stays intact; selected/pressed color
+   is only a quiet local affordance. */
+/* A custom clear owns the single clear affordance and its event contract.
+   Unadorned native search inputs retain their browser control. */
+.m-field__control:has(.m-field__clear) .m-field__input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.m-field .m-field__control .m-field__clear,
+.m-field .m-field__control .m-field__stepper .m-btn[data-step] {
+  background: transparent;
+  box-shadow: none;
+}
+.m-field .m-field__control .m-field__clear:hover,
+.m-field .m-field__control .m-field__stepper .m-btn[data-step]:hover {
+  background: var(--micro-surface-page);
+  box-shadow: none;
+}
+.m-field .m-field__control .m-field__clear:active,
+.m-field .m-field__control .m-field__stepper .m-btn[data-step]:active {
+  background: var(--micro-surface-selected);
+  box-shadow: none;
+}
+
 /* ---- عدّاد الأحرف: عند حد معلن فقط ---- */
 .m-field__count {
   font-size: var(--micro-secondary-size);
@@ -147,7 +173,7 @@
   align-self: flex-end;
 }
 
-/* ---- خطوة الكمية (زيادة/نقصان) — أزرار B01 المستخدمة كما هي ---- */
+/* ---- خطوة الكمية: هدف B01 بقياس 48px ومعالجة B02 المدمجة ---- */
 .m-field__stepper {
   display: flex;
   align-items: center;
@@ -158,14 +184,10 @@
    aria-disabled يبقي الهدف في ترتيب Tab. لا ضغط يوحي بإمكان التعديل. */
 .m-field .m-field__stepper .m-btn[aria-disabled="true"] {
   background-image: none;
-  background-color: var(--micro-surface-disabled);
+  background-color: transparent;
   color: var(--micro-text-disabled);
   box-shadow: none;
   cursor: not-allowed;
-}
-.m-field .m-field__stepper .m-btn[aria-disabled="true"]:focus-visible {
-  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
-  outline-offset: var(--micro-focus-gap);
 }
 /* قيمة الكمية بين زرّي الخطوة: عزل اتجاهي وأدنى عرض للتفادي القفز.
    SUI-004 (REPAIR-R1): العقد مطبق فعليًا في شكلي التركيب المعتمدين:
@@ -197,6 +219,22 @@
   box-shadow:
     0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
     0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* When a nested action owns focus, keep the shell's active border but move
+   the single visible ring to that exact 48px action. This identifies whether
+   clear/up/down is focused without stacking the B01 and B02 outer rings. */
+.m-field__control:focus-within:has(.m-field__clear:focus-visible),
+.m-field__control:focus-within:has(.m-field__stepper .m-btn[data-step]:focus-visible) {
+  border-color: var(--micro-focus-ring);
+  box-shadow: none;
+}
+.m-field .m-field__control .m-field__clear:focus-visible,
+.m-field .m-field__control .m-field__stepper .m-btn[data-step]:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: -4px;
+  background: var(--micro-surface-selected);
+  box-shadow: none;
 }
 
 /* الخطأ: حد ولون خطأ + رسالة مرتبطة — لا يمحو القيمة (بيانات المستهلك) */
@@ -277,3 +315,9 @@
 .m-field.has-error .m-field__control { border-width: 1px; }
 .m-field.has-disabled .m-field__control { cursor: not-allowed; }
 .m-field.has-readonly .m-field__control:hover { border-color: var(--micro-border-control); }
+.m-field .m-field__control .m-field__stepper .m-btn[data-step][aria-disabled="true"]:hover,
+.m-field .m-field__control .m-field__stepper .m-btn[data-step][aria-disabled="true"]:active {
+  background: transparent;
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+}

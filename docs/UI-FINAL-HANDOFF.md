@@ -10,7 +10,7 @@
 - أمثلة المكونات في `previews/`.
 - المعرض الأخير في `previews/ui-system-showcase/`.
 - المواصفات والقرارات في `docs/`.
-- تقارير التحقق الحالية في `docs/replit/micro-ui-professional-complete-repair-2026-10-21/`.
+- تقارير التحقق الحالية في `docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/`.
   أدلة `reviews/UI-SYSTEM-SHOWCASE/` تاريخية؛ مخرجات الفحص الحالي مؤقتة
   أو تحت `generated-artifacts/` وليست ملفات أدلة مضمونة الوجود في Git.
 

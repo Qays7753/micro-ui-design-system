@@ -42,6 +42,9 @@
   white-space: nowrap;
   color: var(--micro-text-inverse);
 }
+.m-chart--packed:not([data-legend="off"]) .m-bubble__circle .m-bubble__value {
+  visibility: hidden;
+}
 .m-chart--packed .m-cat--b .m-bubble__circle .m-bubble__value,
 .m-chart--packed .m-cat--c .m-bubble__circle .m-bubble__value,
 .m-chart--packed .m-cat--e .m-bubble__circle .m-bubble__value {

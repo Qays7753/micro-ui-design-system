@@ -42,6 +42,21 @@ python3 tools/complete-repair-mobile-check.py --out /tmp/micro-complete-mobile
 هذه فحوص إضافية للمصدر، لا بديلًا عن الفحوص القائمة. مخرجاتها مؤقتة
 وليست مرفقات ملتزمًا بحفظها. تقيس Chromium ولا تدّعي أجهزة فعلية أو Safari.
 
+## فحوص الهندسة العددية والمكوّنات الدقيقة
+
+مع تشغيل خادم المعاينة:
+
+```bash
+python3 tools/numeric-geometry-check.py
+python3 tools/numeric-chart-geometry-check.py
+python3 tools/numeric-field-controls-check.py
+python3 tools/numeric-micro-consistency-check.py --out /tmp/micro-numeric-consistency
+```
+
+تضيف قياس المفتاح العددي الموحد، ملاءمة نهايات الخط، القراءة المفردة
+للدوائر المجمعة، تحرير كلمة المرور والخطوة والحدود، والتركيز وأهداف
+اللمس عبر العائلات. لا تستبدل الفحوص السابقة ولا تثبت أجهزة فعلية.
+
 ## الحزمة القابلة لإعادة البناء
 
 ```bash
