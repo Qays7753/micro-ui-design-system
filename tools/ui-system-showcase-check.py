@@ -550,8 +550,8 @@ def main() -> int:
     # ---- كتابة سجل التحقق ----
     lines = []
     lines.append("UI SYSTEM SHOWCASE — VERIFICATION RUN")
-    lines.append(f"التاريخ: {date.today().isoformat()} · المنفّذ: Zed AI")
-    lines.append("المصدر: zai/ui-system-showcase-prototype-2026-10-09 (من 788c2fd)")
+    lines.append(f"التاريخ: {date.today().isoformat()} · التشغيل: current working tree")
+    lines.append("المصدر: شجرة العمل الحالية (current working tree)")
     lines.append("البيئة: Chromium headless (Playwright) فقط — الأجهزة/قارئات الشاشة/WebKit/native zoom: NOT RUN")
     lines.append("الأهداف: editable (http محلي) + standalone.html (file://)")
     lines.append("")
