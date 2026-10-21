@@ -294,7 +294,10 @@ def main():
                         dots:[...c.querySelectorAll('[data-dots] button')].some(e=>e.offsetHeight>0)};
                     }""")
                     measurements.append(dict(viewport=width, direction=direction, showcase=data))
-                    check(f"{width}/{direction} F06 natural own-surface composition and centered peek", data["plain"] and abs(data["left"]-data["right"])<2 and data["left"]>0 and not data["overflow"], data)
+                    # Approved D7: full-width reading below 336px component
+                    # width; otherwise preserve the centered adjacent preview.
+                    fits_policy = (abs(data["left"]) < 1 if data["width"] < 336 else data["left"] > 0)
+                    check(f"{width}/{direction} F06 natural own-surface responsive reading/peek", data["plain"] and abs(data["left"]-data["right"])<2 and fits_policy and not data["overflow"], data)
                     check(f"{width}/{direction} F05/F13 compact controls and natural surface stage", not data["dots"] and data["controls"]==48 and data["stageMin"]!="240px", data)
                     for section in ["sc-carousel", "sc-info-strip", "sc-metric", "sc-carousel-root", "sc-strip", "sc-main-metric-flat"]:
                         page.locator("#" + section).screenshot(path=str(out / f"{section}-{width}-{direction}.png"))

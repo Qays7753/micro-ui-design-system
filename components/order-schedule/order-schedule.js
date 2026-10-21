@@ -237,6 +237,8 @@
     var listeners = []; /* مراجع كل مستمع — تنزع كلها في destroy() */
     var destroyed = false;
     var state = {};
+    var resizeObserver = null;
+    var resizeFallback = null;
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
@@ -252,6 +254,7 @@
     state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
     state.loading = !!options.loading;
     state.errorRetry = (typeof options.retry === 'function') ? options.retry : null;
+      state.autoDay = false;
 
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
@@ -375,7 +378,9 @@
       root.classList.add('m-ocal');
       root.setAttribute('data-ocal-root', '');
       root.setAttribute('data-ocal-view', state.view);
-      root.setAttribute('data-ocal-cal-view', state.calendarView);
+      root.setAttribute('data-ocal-cal-view', state.autoDay ? 'day' : state.calendarView);
+      root.setAttribute('data-ocal-preferred-cal-view', state.calendarView);
+      root.setAttribute('data-ocal-auto-view', state.autoDay ? 'day' : 'none');
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
@@ -390,7 +395,7 @@
       }
       root.appendChild(buildViewsBar());
       if (state.view === 'list') root.appendChild(buildListScreen());
-      else if (state.calendarView === 'day') root.appendChild(buildDayScreen());
+      else if (state.calendarView === 'day' || state.autoDay) root.appendChild(buildDayScreen());
       else root.appendChild(buildMonthScreen());
     }
 
@@ -421,9 +426,60 @@
       var bar = el('div', 'm-ocal__modes');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'نمط التقويم');
-      bar.appendChild(toggleBtn('cal-mode', 'month', 'شهر', state.calendarView === 'month'));
-      bar.appendChild(toggleBtn('cal-mode', 'day', 'يوم', state.calendarView === 'day'));
+      var effectiveDay = state.calendarView === 'day' || state.autoDay;
+      bar.appendChild(toggleBtn('cal-mode', 'month', 'شهر', !effectiveDay));
+      bar.appendChild(toggleBtn('cal-mode', 'day', 'يوم', effectiveDay));
       return bar;
+    }
+
+    /* لا نضغط أهداف خلايا الشهر دون 48px: استبدال تكيفي بعرض اليوم
+       عند ضيق الجذر، مع حفظ تفضيل الشهر/اليوم والتاريخ والبيانات. */
+    function updateResponsiveView(width) {
+      var gap = parseFloat(window.getComputedStyle(root).getPropertyValue('--micro-space-1')) || 4;
+      var required = 7 * 48 + 6 * gap;
+      var nextAutoDay = width > 0 && width < required &&
+        state.view === 'calendar' && state.calendarView === 'month';
+      if (nextAutoDay === state.autoDay) return;
+      var active = root.contains(document.activeElement) ? document.activeElement : null;
+      var focusSelector = null;
+      if (active) {
+        var control = active.closest('[data-ocal-action]');
+        if (control && control.hasAttribute('data-ocal-date')) {
+          focusSelector = '[data-ocal-date="' + control.getAttribute('data-ocal-date') + '"]';
+        } else if (control) {
+          var action = control.getAttribute('data-ocal-action');
+          if (action === 'prev-day' || action === 'prev-month') action = nextAutoDay ? 'prev-day' : 'prev-month';
+          if (action === 'next-day' || action === 'next-month') action = nextAutoDay ? 'next-day' : 'next-month';
+          focusSelector = '[data-ocal-action="' + action + '"]';
+          if (control.hasAttribute('data-ocal-value')) {
+            focusSelector += '[data-ocal-value="' + control.getAttribute('data-ocal-value') + '"]';
+          }
+        }
+      }
+      state.autoDay = nextAutoDay;
+      render();
+      if (active) {
+        var target = (focusSelector && root.querySelector(focusSelector)) ||
+          root.querySelector('[data-ocal-action="cal-mode"][aria-pressed="true"]') ||
+          root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+        if (target) target.focus();
+      }
+    }
+
+    function observeResponsiveWidth() {
+      if (typeof window.ResizeObserver === 'function') {
+        resizeObserver = new window.ResizeObserver(function (entries) {
+          if (destroyed || !entries.length) return;
+          updateResponsiveView(entries[0].contentRect.width);
+        });
+        resizeObserver.observe(root);
+      } else {
+        resizeFallback = function () {
+          if (!destroyed) updateResponsiveView(root.getBoundingClientRect().width);
+        };
+        window.addEventListener('resize', resizeFallback, false);
+      }
+      updateResponsiveView(root.getBoundingClientRect().width);
     }
 
     /* ---- رأس التقويم: [السابق][العنوان][التالي][اليوم] ----
@@ -921,10 +977,12 @@
       } else if (act === 'view') {
         state.view = (btn.getAttribute('data-ocal-value') === 'list') ? 'list' : 'calendar';
         render();
+        updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="view"][aria-pressed="true"]');
       } else if (act === 'cal-mode') {
         state.calendarView = (btn.getAttribute('data-ocal-value') === 'day') ? 'day' : 'month';
         render();
+        updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="cal-mode"][aria-pressed="true"]');
       } else if (act === 'prev-month') {
         shiftMonthCursor(-1);
@@ -949,6 +1007,7 @@
     on(root, 'click', guard(onClick));
 
     render();
+    observeResponsiveWidth();
 
     /* ---- الواجهة العمومية للمثيل ---- */
     return {
@@ -974,12 +1033,14 @@
         if (v === 'calendar' || v === 'list') {
           state.view = v;
           render();
+          updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
       setCalendarView: guard(function (v) {
         if (v === 'month' || v === 'day') {
           state.calendarView = v;
           render();
+          updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
       setLoading: guard(function (flag) {
@@ -999,6 +1060,14 @@
          بعده لا أحداث إطلاقًا */
       destroy: guard(function () {
         destroyed = true;
+        if (resizeObserver) {
+          resizeObserver.disconnect();
+          resizeObserver = null;
+        }
+        if (resizeFallback) {
+          window.removeEventListener('resize', resizeFallback, false);
+          resizeFallback = null;
+        }
         for (var i = listeners.length - 1; i >= 0; i--) {
           var L = listeners[i];
           L.el.removeEventListener(L.type, L.fn, false);
@@ -1010,6 +1079,8 @@
         root.removeAttribute('data-ocal-init');
         root.removeAttribute('data-ocal-view');
         root.removeAttribute('data-ocal-cal-view');
+        root.removeAttribute('data-ocal-preferred-cal-view');
+        root.removeAttribute('data-ocal-auto-view');
         instances.delete(root);
       })
     };

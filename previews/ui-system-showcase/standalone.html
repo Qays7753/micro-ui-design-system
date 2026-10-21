@@ -3583,6 +3583,10 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   box-sizing: border-box;
 }
 
+.m-info-peek {
+  container-type: inline-size;
+}
+
 /* الجار الظاهر جزئيًا: البطاقة النشطة موسّطة، والمجاورات على الجانبين.
    عكس info-strip الحالي: الشرائح المخفية لا تطوى (بلا height:0)
    كي يبقى جزء المجاور مرئيًا كمطلوب في مقارنة الفيديو. */
@@ -3590,6 +3594,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   flex: 0 0 calc(100% - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
   min-width: 0;
   padding: 0;
+}
+.m-info-peek .m-info-strip__slide:only-child {
+  flex-basis: 100%; /* single reading is static: no space reserved for neighbours */
 }
 
 .m-info-peek .m-info-strip__slide[aria-hidden="true"] {
@@ -3622,6 +3629,18 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
    يفصل البطاقة النشطة (قيمة مشتقة من حدود info-card الحالية) */
 .m-info-peek .m-info-strip__slide[aria-hidden="true"] .m-info-card {
   border-color: var(--micro-border-divider);
+}
+
+/* Peek يحتاج حيزًا فعليًا بعد خصم الجيران والفجوات. في الأعمدة
+   الأضيق من 280px نعيد البطاقة إلى العرض الكامل بدل ضغط محتواها. */
+@container (max-width: 280px) {
+  .m-info-peek .m-info-strip__slide {
+    flex-basis: 100%;
+  }
+
+  .m-info-peek .m-info-strip__track {
+    gap: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5051,6 +5070,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 .m-carousel {
   font-family: var(--micro-font-family);
+  container-type: inline-size;
   /* قيم داخلية للمكوّن (PROPOSED — بانتظار المراجعة):
      --_peek: شريحة البطاقة المجاورة الظاهرة على كل جانب.
      الحد يبقي النص الفعلي للبطاقة النشطة كاملًا داخل القناع
@@ -5070,8 +5090,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-carousel__viewport {
   overflow: hidden;
   touch-action: pan-y;
-  /* فراغ مستقر للحالة الفارغة (0 بطاقات) حتى لا تنهار المساحة (مقترح) */
-  min-height: 72px;
+  min-height: 0; /* empty state owns its natural height; no blank reservation */
 }
 /* أثناء السحب فقط: لا تحديد نص عَرَضي مع سحب المؤشر */
 .m-carousel.is-dragging .m-carousel__viewport {
@@ -5112,6 +5131,13 @@ button.m-setting-row:focus-visible { z-index: 1; }
   width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
   min-width: 0; /* يسمح بلفّ المحتوى الطويل داخل البطاقة */
 }
+/* Do not spend a narrow reading's width on decorative adjacent previews.
+   This follows component width, not the device viewport. */
+@container (max-width: 335px) {
+  .m-carousel__slide { width: 100%; }
+}
+.m-carousel[data-carousel-count="1"] .m-carousel__slide { width: 100%; }
+.m-carousel [hidden] { display: none !important; }
 /* البطاقة النشطة — وسام حالة يديره carousel.js (لا شكل خاص إلزامي) */
 .m-carousel__slide[data-current="true"] { }
 /* البطاقات المخفية كليًا خارج القناع تُعطَّل inert من السكربت —
@@ -5323,7 +5349,9 @@ body {
 
 [hidden] { display: none !important; }
 
-:focus-visible {
+/* Fields own their composite focus ring. Keep the showcase fallback on every
+   other control, without adding an inner outline to their input/textarea. */
+:focus-visible:not(:where(.m-field__input, .m-field__area)) {
   outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
   outline-offset: var(--micro-focus-gap);
 }
@@ -6075,16 +6103,16 @@ body {
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
+        <p class="sc-section__desc">القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.</p>
       </div>
       <div class="sc-block sc-block--plain sc-stack">
-        <p class="sc-hint">بطاقات القراءة الواحدة تستخدم m-info-card--compact اختياريًا؛ الافتراضي متاح دون الصنف.</p>
+        <p class="sc-hint">القراءة الواحدة الصغيرة توصي بـ m-info-card--compact؛ البطاقة القياسية تبقى متاحة دون الصنف عند الحاجة لمساحة أكبر.</p>
         <div class="sc-grid-2">
           <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
             <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
           </article>
-          <article class="m-info-card m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
+          <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
             <span class="m-info-card__label">مخزون عينة</span>
             <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
           </article>
@@ -6336,7 +6364,7 @@ body {
       <div class="sc-section__head">
         <p class="sc-section__kicker">08 · SPEC-02</p>
         <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">دوائر المساحة (منفصلة/متداخلة) + قيمة رئيسية بأشرطة مستقلة موقعة حول صفر مشترك. الصفر علامة مجوفة محايدة والغياب «غير متاح».</p>
+        <p class="sc-section__desc">دوائر المساحة (منفصلة/متداخلة) + مقارنة مسطحة موصى بها للقراءة العريضة. الدائرة القياسية محفوظة لقراءة رئيسية مقصودة؛ المتغيرات الثلاثة تعرض المصدر نفسه.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
@@ -6358,7 +6386,7 @@ body {
           <p class="m-metric-circles__empty" data-metric-scale></p>
           <p class="m-metric-circles__empty" data-metric-empty hidden></p>
         </section>
-        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="قيمة رئيسية ومؤشرات مستقلة">
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة">
           <h3 class="m-main-metric__title" hidden>قيمة رئيسية ومؤشرات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
@@ -6383,18 +6411,37 @@ body {
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الدائرة الافتراضية أعلاه محفوظة؛ القراءة المسطحة التالية خيار كثافة صريح.</p>
-        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مثال القراءة المسطحة الاختيارية">
+        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. المثال التالي هو إبراز صريح لقراءة رئيسية، ثم compact يعرضان بيانات المقارنة نفسها.</p>
+        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز مقصود لقيمة رئيسية ومقارنة مستقلة">
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
-              <span class="m-main-metric__label">القراءة الرئيسية — flat اختياري</span>
+              <span class="m-main-metric__label">قيمة العينة</span>
               <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
             </div>
             <div>
               <ul data-bar-source hidden>
-                <li data-label="مكتملة" data-value="12" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="طلبات" data-value="32" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مرتجعات" data-value="-9" data-unit="عملية" data-period="اليوم" data-series="b"></li>
                 <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
-                <li data-label="غير متاح" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+                <li data-label="معلق" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+        <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-compact" aria-label="مقارنة مدمجة بالبيانات نفسها">
+          <div class="m-main-metric__layout">
+            <div class="m-main-metric__hero">
+              <span class="m-main-metric__label">قيمة العينة</span>
+              <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
+            </div>
+            <div>
+              <ul data-bar-source hidden>
+                <li data-label="طلبات" data-value="32" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مرتجعات" data-value="-9" data-unit="عملية" data-period="اليوم" data-series="b"></li>
+                <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
+                <li data-label="معلق" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
               </ul>
               <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
               <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
@@ -6650,11 +6697,9 @@ body {
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عرضه هنا لا يعني اعتماده. استثناء خلية الشهر (~37.7px عند 320) PROPOSED موثق بانتظار توقيع المالك.</p>
+        <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عند عرض مكوّن أقل من 360px يتحول تلقائيًا إلى اليوم، وتعود تفضيلات الشهر عند اتساع المساحة.</p>
       </div>
-      <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
-           (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
-           عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
+      <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
@@ -6663,7 +6708,7 @@ body {
         </div>
         <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند 320 يملأ التقويم البطاقة كاملة (بلا حشوة مزدوجة) حفاظًا على مربعية الخلية المرجعية.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند ضيق الجذر تستخدم واجهة اليوم بدل خلايا شهر أصغر من هدف 48px؛ لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 
@@ -8703,13 +8748,10 @@ body {
             أو عند الإظهار — دون نقرة من المستخدم؛ الدونات تقيس القراءة
             داخل الحلقة، والفقاعات (تدفق DOM) خارج الرصد. غياب ResizeObserver في بيئة
             قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
-   F-01 (2026-10-10، تكليف معرض النظام): تسميات bars/line تُقاس فعليًا
-            بعد إلحاق الرسم (getComputedTextLength بوحدات viewBox)
-            والميزانية الكاملة عند 1×: القص بمقطع «…» لا يقع إلا لسطر
-            أعرض من ميزانية عموده/تباعد نقطته كاملة (كلمة مفردة طويلة)،
-            مع قراءة كاملة (aria-label + <title> + data-label-full
-            الاختيارية) وحدود طرفين بالمدى الفعلي [x−len/2, x+len/2]
-            داخل [8, W−8]، وتحقق زوجي بالمدى الفعلي داخل كل صف.
+   F-01: أعمدة bars تُقاس وتُواءم تسمياتها الفعلية وفق ميزانية العمود.
+            F4: تسميات line تُقاس بعد fonts.ready وعرض المكوّن، وتؤخذ منها
+            عينات كاملة بلا قص؛ النقاط/الفجوات/القيم لا تتغير، والنهايات
+            والحدود الدلالية تُحفظ أو تنتقل قراءاتها الكاملة إلى صفوف مرئية.
             جاهزية الخط: بعد fonts.ready تُعاد رسوم bars/line/donut مرة واحدة
             فأول تصيير مستقر = كل إعادة تصيير لاحقة (مرصود سابقًا:
             اختلاف القياس بمقاييس الخط البديل قبل التحميل).
@@ -8747,6 +8789,9 @@ body {
            المكوّن العام لا يفترض أن كل label تاريخ — يعرض ما مرره
            المستهلك، والقراءة الكاملة سمة اختيارية (عقد specification.md) */
         labelFull: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
+        axisX: li.getAttribute('data-x'),
+        axisBoundary: li.hasAttribute('data-axis-boundary') || li.hasAttribute('data-semantic-boundary'),
+        rawValue: raw,
         value: v,
         display: li.getAttribute('data-display') || '',
         outlier: li.hasAttribute('data-outlier')
@@ -8768,6 +8813,17 @@ body {
     if (item.value === null) return '— غير متاح';
     if (item.value < 0) return fmt(item.value) + ' — سالب غير مرسوم';
     return item.display || fmt(item.value);
+  }
+
+  function fullLabelOf(chart, item) {
+    var label = item.labelFull || item.label;
+    var isTimeAxis = chart.getAttribute('data-chart') === 'line'
+      && chart.getAttribute('data-axis-type') === 'time';
+    if (isTimeAxis && item.axisX !== null && item.axisX !== ''
+        && label.indexOf(String(item.axisX)) === -1) {
+      label += ' — ' + item.axisX;
+    }
+    return label;
   }
 
   /* Measure actual SVG ink after font readiness, not fixed 37/40px steps.
@@ -8792,6 +8848,9 @@ body {
   /* Full readings move to visible compact rows only when measured ink boxes
      collide or exceed the plot. Never truncate a value or require disclosure. */
   function fitValueReadings(chart, svg, items) {
+    /* The line-label sampler may already have moved every complete reading
+       into one visible list because mandatory labels cannot fit together. */
+    if (chart.getAttribute('data-value-layout') === 'rows') return;
     var plot = chart.querySelector('[data-plot]');
     var bounds = svg.getBoundingClientRect();
     if (bounds.width <= 1) return;
@@ -8813,7 +8872,7 @@ body {
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
-      label.textContent = item.labelFull || item.label;
+      label.textContent = fullLabelOf(chart, item);
       var value = document.createElement('dd');
       var number = document.createElement('bdi');
       number.dir = 'ltr';
@@ -8894,7 +8953,7 @@ body {
     return lines;
   }
 
-  /* ---- F-01 (2026-10-10، تكليف معرض النظام): موائمة التسميات عند المقياس الفعلي 1× ----
+  /* ---- F-01: موائمة تسميات الأعمدة عند المقياس الفعلي 1× ----
      العقد القديم (R2-UI02/R3-UI02) خطّط لبيئة خط مضاعفة (محاكاة 200%
      محسوبة) فقصّ كل تسمية عند نصف ميزانية العمود/النقطة — النتيجة
      المرصودة في المعرض: تسميات مقروءة جزئيًا عند الحجم الطبيعي
@@ -8927,7 +8986,7 @@ body {
   }
 
   /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط.
-     F-01: limit الآن الميزانية الكاملة عند 1× (لا نصفها). */
+     F-01: تستخدمه الأعمدة بميزانيتها الكاملة عند 1×. */
   function truncateToBudget(t, limit) {
     var s = String(t.textContent || '');
     var guard = 0;
@@ -8957,7 +9016,7 @@ body {
       });
     });
     if (!entries.length) return;
-    /* F-01: القص الفردي عند تجاوز الميزانية الكاملة (1×) فقط */
+    /* F-01: القص الفردي لتسميات الأعمدة عند تجاوز الميزانية الكاملة فقط */
     entries.forEach(function (e) {
       if (measuredLenOf(e.t) > budget) e.cut = truncateToBudget(e.t, budget);
     });
@@ -9229,6 +9288,30 @@ body {
   function renderLine(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var rtl = (chart.getAttribute('data-axis-dir') || 'rtl') !== 'ltr';
+    var axisType = chart.getAttribute('data-axis-type') || 'category';
+    var timeValues = null;
+    if (axisType === 'time') {
+      timeValues = items.map(function (item) { return axisTimeOf(item.axisX); });
+      if (timeValues.some(function (value) { return value === null; })) {
+        plot.innerHTML = '';
+        var axisError = document.createElement('p');
+        axisError.className = 'm-chart__error';
+        axisError.textContent = 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.';
+        plot.appendChild(axisError);
+        appendFullReadingRows(chart, plot, items, 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.');
+        chart.setAttribute('data-axis-state', 'invalid-time');
+        return;
+      }
+    } else if (axisType !== 'category') {
+      plot.innerHTML = '';
+      var typeError = document.createElement('p');
+      typeError.className = 'm-chart__error';
+      typeError.textContent = 'نوع المحور غير مدعوم. القراءات متاحة أدناه.';
+      plot.appendChild(typeError);
+      appendFullReadingRows(chart, plot, items, 'نوع المحور غير مدعوم.');
+      chart.setAttribute('data-axis-state', 'invalid-type');
+      return;
+    }
     /* A01: عقد المقياس الصريح نفسه المطبق على الأعمدة — لا نقطة خارج SVG */
     var scale = scaleStateOf(chart, items);
     if (scale.kind === 'invalid') {
@@ -9263,7 +9346,14 @@ body {
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(144, Math.max(104, W * 0.34));
     var base = top + plotHeight, H = base + X_LABEL_STEP + 12 + extra;
-    function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
+    var timeMin = timeValues ? Math.min.apply(null, timeValues) : 0;
+    var timeMax = timeValues ? Math.max.apply(null, timeValues) : 0;
+    function xAt(i) {
+      var t = timeValues
+        ? (timeMax === timeMin ? 0.5 : (timeValues[i] - timeMin) / (timeMax - timeMin))
+        : i / (n - 1);
+      return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48);
+    }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
     if (scale.kind === 'over') {
@@ -9292,7 +9382,7 @@ body {
     });
     items.forEach(function (it, i) {
       var x = xAt(i), y = yAt(it.value);
-      var g = svgEl('g', { class: 'm-cat--' + it.series });
+      var g = svgEl('g', { class: 'm-cat--' + it.series, 'data-point-index': i });
       if (y === null) {
         var u = svgEl('text', { class: 'm-chart__point-value', x: x, y: base - 6, 'text-anchor': 'middle', fill: 'var(--micro-text-hint)' });
         applyTextPx(u, fontPx);
@@ -9310,8 +9400,9 @@ body {
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
-    /* R3-UI02: قياس وموائمة بعد الإلحاق — ميزانية تباعد النقاط ×0.92 */
-    fitMeasuredLabels(chart, svg, items, 'm-chart__x-label', ((W - 48) / (n - 1)) * 0.92);
+    /* F4: label-only sampling from actual SVG ink at the rendered font/width.
+       The points, gaps and value readings remain untouched. */
+    sampleLineLabels(chart, svg, items, timeValues);
     fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
@@ -9321,6 +9412,123 @@ body {
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
     }
+  }
+
+  function axisTimeOf(raw) {
+    if (raw === null || raw === undefined || String(raw).trim() === '') return null;
+    var s = String(raw).trim();
+    var n;
+    if (NUM_RE.test(s)) {
+      n = Number(s); /* Date's finite millisecond range, not merely Number's */
+      return isFinite(n) && Math.abs(n) <= 8640000000000000 ? n : null;
+    }
+    /* Date.parse normalizes impossible days (Feb 31) and local timestamps
+       introduce a timezone the source did not supply. Accept calendar dates
+       or explicit-offset ISO instants only, after validating their components. */
+    var match = /^(\d{4})-(\d{2})-(\d{2})(?:[Tt](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?(Z|[+-]\d{2}:\d{2}))?$/.exec(s);
+    if (!match) return null;
+    var year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+    var leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+    var monthDays = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (month < 1 || month > 12 || day < 1 || day > monthDays[month - 1]) return null;
+    if (match[4] !== undefined) {
+      if (Number(match[4]) > 23 || Number(match[5]) > 59 || Number(match[6] || 0) > 59) return null;
+      if (match[8] !== 'Z') {
+        var offset = match[8].slice(1).split(':');
+        if (Number(offset[0]) > 23 || Number(offset[1]) > 59) return null;
+      }
+    }
+    n = Date.parse(s);
+    return isFinite(n) && Math.abs(n) <= 8640000000000000 ? n : null;
+  }
+
+  function appendFullReadingRows(chart, plot, items, ariaLabel) {
+    var rows = document.createElement('dl');
+    rows.className = 'm-chart__readings';
+    rows.setAttribute('aria-label', ariaLabel || 'القراءات الكاملة للرسم');
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      var label = document.createElement('dt');
+      label.textContent = fullLabelOf(chart, item);
+      var value = document.createElement('dd');
+      var number = document.createElement('bdi');
+      number.dir = 'ltr';
+      number.textContent = readingOf(item);
+      value.appendChild(number);
+      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      row.appendChild(label);
+      row.appendChild(value);
+      rows.appendChild(row);
+    });
+    plot.appendChild(rows);
+    return rows;
+  }
+
+  /* Select whole labels only. Protected source boundaries and endpoints are
+     considered first; when protected labels themselves cannot coexist, the
+     plot labels and duplicate point readings yield to complete visible rows. */
+  function sampleLineLabels(chart, svg, items, timeValues) {
+    var W = svg.viewBox.baseVal.width;
+    var candidates = [];
+    var timeMin = timeValues ? Math.min.apply(null, timeValues) : null;
+    var timeMax = timeValues ? Math.max.apply(null, timeValues) : null;
+    [].slice.call(svg.querySelectorAll('g[data-point-index]')).forEach(function (g) {
+      var index = Number(g.getAttribute('data-point-index'));
+      var endpoint = index === 0 || index === items.length - 1
+        || (timeValues && (timeValues[index] === timeMin || timeValues[index] === timeMax));
+      var labels = [].slice.call(g.querySelectorAll('.m-chart__x-label'));
+      var boxes = labels.map(function (label) {
+        var length = measuredLenOf(label);
+        var bbox;
+        try { bbox = label.getBBox(); } catch (e) { bbox = { y: 0, height: LINE_TEXT_PX * 1.45 }; }
+        var cx = parseFloat(label.getAttribute('x')) || 0;
+        return { left: cx - length / 2 - 1, right: cx + length / 2 + 1,
+          top: bbox.y - 1, bottom: bbox.y + bbox.height + 1 };
+      });
+      var splitFragment = labels.some(function (label) {
+        return String(label.textContent || '').trim().length === 1
+          && String(items[index].label || '').trim().length > 1;
+      });
+      candidates.push({
+        index: index, labels: labels, boxes: boxes,
+        protected: items[index].axisBoundary || endpoint,
+        priority: items[index].axisBoundary ? 0 : (endpoint ? 1 : 2),
+        splitFragment: splitFragment
+      });
+    });
+    candidates.sort(function (a, b) {
+      return a.priority - b.priority || a.index - b.index;
+    });
+    function intersects(a, b) {
+      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    }
+    var selected = [], protectedConflict = false;
+    candidates.forEach(function (candidate) {
+      var canFit = !candidate.splitFragment && candidate.boxes.every(function (box) {
+        return box.left >= 8 && box.right <= W - 8 && !selected.some(function (prior) {
+          return prior.boxes.some(function (priorBox) { return intersects(box, priorBox); });
+        });
+      });
+      if (canFit) selected.push(candidate);
+      else if (candidate.protected) protectedConflict = true;
+    });
+    if (protectedConflict) {
+      candidates.forEach(function (candidate) {
+        candidate.labels.forEach(function (label) { label.style.display = 'none'; });
+      });
+      [].slice.call(svg.querySelectorAll('.m-chart__point-value')).forEach(function (label) {
+        label.style.display = 'none';
+      });
+      chart.setAttribute('data-value-layout', 'rows');
+      appendFullReadingRows(chart, chart.querySelector('[data-plot]'), items,
+        'التسميات والقراءات الكاملة للرسم');
+      return;
+    }
+    var selectedSet = new Set(selected);
+    candidates.forEach(function (candidate) {
+      if (selectedSet.has(candidate)) return;
+      candidate.labels.forEach(function (label) { label.style.display = 'none'; });
+    });
   }
 
   /* ---- التوزيع الدائري (نسب بمقام معلن) ----
@@ -9555,8 +9763,8 @@ body {
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
     if (it.value === null) return '— غير متاح';
-    if (it.value < 0) return fmt(it.value) + ' (سالب غير مرسوم)';
-    var base = fmt(it.value);
+    var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
+    if (it.value < 0) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
   }
 
@@ -9600,7 +9808,9 @@ body {
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
-    ['الفئة', 'القيمة'].forEach(function (h) {
+    var hasTimeAxis = chart.getAttribute('data-chart') === 'line'
+      && chart.getAttribute('data-axis-type') === 'time';
+    (hasTimeAxis ? ['الفئة', 'وقت النقطة', 'القيمة'] : ['الفئة', 'القيمة']).forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -9613,8 +9823,13 @@ body {
       var tr = document.createElement('tr');
       var th = document.createElement('th');
       th.setAttribute('scope', 'row');
-      th.textContent = it.label;
+      th.textContent = fullLabelOf(chart, it);
       tr.appendChild(th);
+      if (hasTimeAxis) {
+        var time = document.createElement('td');
+        time.textContent = it.axisX === null || it.axisX === '' ? '— غير متاح' : it.axisX;
+        tr.appendChild(time);
+      }
       var td = document.createElement('td');
       td.textContent = valueStateText(it);
       tr.appendChild(td);
@@ -9761,6 +9976,7 @@ body {
        غائبتين بعقد المواصفة، والحالات غير السليمة تكتبهما من جديد. */
     chart.removeAttribute('data-scale-state');
     chart.removeAttribute('data-scale-detail');
+    chart.removeAttribute('data-axis-state');
     if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
@@ -10079,6 +10295,7 @@ body {
   function render(chart) {
     if (observers.has(chart)) observers.get(chart).disconnect();
     var plot = chart.querySelector('[data-plot]');
+    chart.removeAttribute('data-packed-state');
     var items = itemsOf(chart);
     var positives = items.filter(function (i) { return i.value !== null && i.value > 0; });
     var rmaxAttr = parseNum(chart.getAttribute('data-rmax'));
@@ -10102,6 +10319,24 @@ body {
       vmax = 1; /* صفر مع لا موجبين: لا رسم مساحي أصلًا — الحالات النصية تكفي */
     } else {
       vmax = declaredMax;
+    }
+
+    /* Packed circles are an opt-in approximation for a small category set,
+       never a dense or precise financial comparison. Keep every reading in
+       the textual key when the current contract's five category colors are
+       exceeded rather than silently packing a crowded population. */
+    if (positives.length > 5) {
+      plot.innerHTML = '';
+      var densityError = document.createElement('p');
+      densityError.className = 'm-chart__scale-error';
+      densityError.textContent = 'تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح.';
+      plot.appendChild(densityError);
+      renderKeyOnly(chart);
+      chart.setAttribute('data-packed-state', 'too-many-positive-categories');
+      chart.dispatchEvent(new CustomEvent('micro-packed:rendered', {
+        bubbles: true, detail: { ok: false, reason: 'too-many-positive-categories', vmaxDerived: !hasMaxAttr }
+      }));
+      return;
     }
 
     plot.innerHTML = '';
@@ -10213,6 +10448,12 @@ body {
 (function () {
   'use strict';
 
+  function isEditingTarget(target) {
+    return !!(target && (target.isContentEditable || (target.closest && target.closest(
+      'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
+      '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
+  }
+
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
     if (strip.hasAttribute('data-info-strip-ready')) return;
@@ -10295,14 +10536,20 @@ body {
     if (previous) previous.addEventListener('click', function () { setIndex(index - 1, false); });
     if (next) next.addEventListener('click', function () { setIndex(index + 1, false); });
 
-    viewport.addEventListener('keydown', function (event) {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
+    strip.addEventListener('keydown', function (event) {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (isEditingTarget(event.target)) return;
+      var control = event.target.closest && event.target.closest(
+        '[data-info-strip-prev], [data-info-strip-next], [data-info-strip-page]');
+      if (!viewport.contains(event.target) && !control) return;
+      if (!control && event.target.closest && event.target.closest('button, a[href], summary')) return;
+      var rtl = getComputedStyle(strip).direction === 'rtl';
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        setIndex(index + 1, false);
+        setIndex(index + (rtl ? 1 : -1), false);
       } else if (event.key === 'ArrowRight') {
         event.preventDefault();
-        setIndex(index - 1, false);
+        setIndex(index + (rtl ? -1 : 1), false);
       } else if (event.key === 'Home') {
         event.preventDefault();
         setIndex(0, false);
@@ -10313,6 +10560,7 @@ body {
     });
 
     viewport.addEventListener('pointerdown', function (event) {
+      if (isEditingTarget(event.target)) return;
       if (event.pointerType !== 'touch' || event.isPrimary === false) return;
       startX = event.clientX;
       startY = event.clientY;
@@ -10422,10 +10670,11 @@ body {
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
 
   function recenterStrip(strip, st) {
+    if (st.disconnected) return;
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
-      if (st.count <= 0) return;
+      if (st.disconnected || st.count <= 0) return;
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
       if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
@@ -10438,6 +10687,7 @@ body {
     if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
     if (viewportObservers.has(strip)) return; /* مراقب واحد لكل شريط — علامة الوجود */
     var ro = new ResizeObserver(function (entries) {
+      if (st.disconnected || viewportObservers.get(strip) !== ro) return;
       var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
       if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
       recenterStrip(strip, st);
@@ -10470,7 +10720,7 @@ body {
 
   function goToIndex(strip, i, opts) {
     var st = stateOf.get(strip);
-    if (!st || st.count === 0) return;
+    if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
     setX(st, slideX(st, clamped), animate);
@@ -10518,7 +10768,8 @@ body {
 
   /* ---------- السحب: تتبع المؤشر 1:1 (دورة حياة مغلقة على window) ---------- */
   function onPointerDown(strip, st, e) {
-    if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (st.disconnected || st.drag || st.count <= 1 || isEditingTarget(e.target) ||
+        (e.pointerType === 'mouse' && e.button !== 0)) return;
     st.drag = {
       id: e.pointerId,
       startX: e.clientX,
@@ -10592,6 +10843,11 @@ body {
     st.viewport.classList.remove('is-peek-grabbing');
     st.suppressClick = d.axis === 'x';
     try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
+    if (st.disconnected) {
+      setX(st, d.baseX, false);
+      st.suppressClick = false;
+      return; /* cleanup only: no navigation, focus transfer or callback */
+    }
     var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
     var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
     var dx = d.dx || 0;
@@ -10605,11 +10861,20 @@ body {
   }
 
   /* ---------- لوحة المفاتيح: ترتيب منطقي (RTL: التالي يسارًا) ---------- */
+  function isEditingTarget(target) {
+    return !!(target && (target.isContentEditable || (target.closest && target.closest(
+      'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
+      '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
+  }
+
   function wireKeys(strip, st) {
     strip.addEventListener('keydown', function (e) {
-      if (e.altKey || e.ctrlKey || e.metaKey || st.count === 0) return;
+      if (st.disconnected || e.defaultPrevented || e.isComposing ||
+          e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || st.count === 0) return;
       var target = e.target;
-      if (target && target.closest && target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (isEditingTarget(target)) return;
+      if (target && target.closest && target.closest('button, a[href], summary') &&
+          !target.closest('[data-info-strip-prev], [data-info-strip-next], [data-info-strip-page]')) return;
       var rtl = rtlOf(strip);
       var handled = true;
       if (e.key === 'ArrowRight') { rtl ? prev(strip) : next(strip); }
@@ -10621,19 +10886,38 @@ body {
     });
   }
 
+  function activate(strip, st) {
+    st.disconnected = false;
+    if (!st.resizeHandler) {
+      st.resizeHandler = function () { recenterStrip(strip, st); };
+      window.addEventListener('resize', st.resizeHandler);
+    }
+    if (reduceQuery && reduceQuery.addEventListener && !st.motionHandler) {
+      st.motionHandler = function () { goToIndex(strip, st.index, { animate: false }); };
+      reduceQuery.addEventListener('change', st.motionHandler);
+    }
+    observeViewport(strip, st);
+    recenterStrip(strip, st);
+    var generation = st.generation = (st.generation || 0) + 1;
+    if (document.fonts) document.fonts.ready.then(function () {
+      if (st.disconnected || st.generation !== generation) return;
+      st.lastWidth = undefined;
+      recenterStrip(strip, st);
+    });
+  }
+
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek-ready')) {
       /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للشريط الجاهز
          بعد disconnect — init لا يعود صامتًا فيترك الشريط بلا مراقبة عرض.
-         لا إعادة بناء هنا: المستمعات والأزرار والنقاط لم يفصلها disconnect
-         أصلًا فلا تُربط ثانية (لا ازدواج أحداث ولا عناصر). يُلحق مراقبًا
+         مستمعات DOM مربوطة مرة واحدة ومحروسة أثناء الفصل. يُلحق مراقبًا
          واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
          يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterStrip
          القياس (الشريط المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
       var reSt = stateOf.get(strip);
       if (reSt && reSt.count > 0) {
-        observeViewport(strip, reSt);
-        recenterStrip(strip, reSt);
+        if (reSt.disconnected) activate(strip, reSt);
+        else recenterStrip(strip, reSt);
       }
       return;
     }
@@ -10702,7 +10986,9 @@ body {
     if (nextBtn) nextBtn.addEventListener('click', function () { next(strip); });
 
     viewport.addEventListener('pointerdown', function (e) { onPointerDown(strip, st, e); });
-    viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    viewport.addEventListener('dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
     viewport.addEventListener('click', function (e) {
       if (st.suppressClick) { e.preventDefault(); e.stopPropagation(); st.suppressClick = false; }
     }, true);
@@ -10711,14 +10997,7 @@ body {
     /* SUI-007: window-resize يبقى (احتياط لبيئة بلا ResizeObserver
        ولتغيّر النافذة) ويُوجّه عبر recenterStrip نفسها — حماية EPS
        تمنع العمل المزدوج مع الرصد (rAF واحد لكل نبضة). */
-    window.addEventListener('resize', function () { recenterStrip(strip, st); });
-    observeViewport(strip, st);
-
-    if (reduceQuery && reduceQuery.addEventListener) {
-      reduceQuery.addEventListener('change', function () {
-        goToIndex(strip, st.index, { animate: false });
-      });
-    }
+    activate(strip, st);
 
     update(strip, st);
     /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) — يخزّن
@@ -10755,6 +11034,18 @@ body {
         if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
         var st = stateOf.get(strip);
         if (st) {
+          st.disconnected = true;
+          st.generation = (st.generation || 0) + 1;
+          endDrag(strip, st, true, null);
+          st.suppressClick = false;
+          if (st.resizeHandler) {
+            window.removeEventListener('resize', st.resizeHandler);
+            st.resizeHandler = null;
+          }
+          if (st.motionHandler) {
+            reduceQuery.removeEventListener('change', st.motionHandler);
+            st.motionHandler = null;
+          }
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
              كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */
@@ -11806,6 +12097,8 @@ body {
     var listeners = []; /* مراجع كل مستمع — تنزع كلها في destroy() */
     var destroyed = false;
     var state = {};
+    var resizeObserver = null;
+    var resizeFallback = null;
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
@@ -11821,6 +12114,7 @@ body {
     state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
     state.loading = !!options.loading;
     state.errorRetry = (typeof options.retry === 'function') ? options.retry : null;
+      state.autoDay = false;
 
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
@@ -11944,7 +12238,9 @@ body {
       root.classList.add('m-ocal');
       root.setAttribute('data-ocal-root', '');
       root.setAttribute('data-ocal-view', state.view);
-      root.setAttribute('data-ocal-cal-view', state.calendarView);
+      root.setAttribute('data-ocal-cal-view', state.autoDay ? 'day' : state.calendarView);
+      root.setAttribute('data-ocal-preferred-cal-view', state.calendarView);
+      root.setAttribute('data-ocal-auto-view', state.autoDay ? 'day' : 'none');
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
@@ -11959,7 +12255,7 @@ body {
       }
       root.appendChild(buildViewsBar());
       if (state.view === 'list') root.appendChild(buildListScreen());
-      else if (state.calendarView === 'day') root.appendChild(buildDayScreen());
+      else if (state.calendarView === 'day' || state.autoDay) root.appendChild(buildDayScreen());
       else root.appendChild(buildMonthScreen());
     }
 
@@ -11990,9 +12286,60 @@ body {
       var bar = el('div', 'm-ocal__modes');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'نمط التقويم');
-      bar.appendChild(toggleBtn('cal-mode', 'month', 'شهر', state.calendarView === 'month'));
-      bar.appendChild(toggleBtn('cal-mode', 'day', 'يوم', state.calendarView === 'day'));
+      var effectiveDay = state.calendarView === 'day' || state.autoDay;
+      bar.appendChild(toggleBtn('cal-mode', 'month', 'شهر', !effectiveDay));
+      bar.appendChild(toggleBtn('cal-mode', 'day', 'يوم', effectiveDay));
       return bar;
+    }
+
+    /* لا نضغط أهداف خلايا الشهر دون 48px: استبدال تكيفي بعرض اليوم
+       عند ضيق الجذر، مع حفظ تفضيل الشهر/اليوم والتاريخ والبيانات. */
+    function updateResponsiveView(width) {
+      var gap = parseFloat(window.getComputedStyle(root).getPropertyValue('--micro-space-1')) || 4;
+      var required = 7 * 48 + 6 * gap;
+      var nextAutoDay = width > 0 && width < required &&
+        state.view === 'calendar' && state.calendarView === 'month';
+      if (nextAutoDay === state.autoDay) return;
+      var active = root.contains(document.activeElement) ? document.activeElement : null;
+      var focusSelector = null;
+      if (active) {
+        var control = active.closest('[data-ocal-action]');
+        if (control && control.hasAttribute('data-ocal-date')) {
+          focusSelector = '[data-ocal-date="' + control.getAttribute('data-ocal-date') + '"]';
+        } else if (control) {
+          var action = control.getAttribute('data-ocal-action');
+          if (action === 'prev-day' || action === 'prev-month') action = nextAutoDay ? 'prev-day' : 'prev-month';
+          if (action === 'next-day' || action === 'next-month') action = nextAutoDay ? 'next-day' : 'next-month';
+          focusSelector = '[data-ocal-action="' + action + '"]';
+          if (control.hasAttribute('data-ocal-value')) {
+            focusSelector += '[data-ocal-value="' + control.getAttribute('data-ocal-value') + '"]';
+          }
+        }
+      }
+      state.autoDay = nextAutoDay;
+      render();
+      if (active) {
+        var target = (focusSelector && root.querySelector(focusSelector)) ||
+          root.querySelector('[data-ocal-action="cal-mode"][aria-pressed="true"]') ||
+          root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+        if (target) target.focus();
+      }
+    }
+
+    function observeResponsiveWidth() {
+      if (typeof window.ResizeObserver === 'function') {
+        resizeObserver = new window.ResizeObserver(function (entries) {
+          if (destroyed || !entries.length) return;
+          updateResponsiveView(entries[0].contentRect.width);
+        });
+        resizeObserver.observe(root);
+      } else {
+        resizeFallback = function () {
+          if (!destroyed) updateResponsiveView(root.getBoundingClientRect().width);
+        };
+        window.addEventListener('resize', resizeFallback, false);
+      }
+      updateResponsiveView(root.getBoundingClientRect().width);
     }
 
     /* ---- رأس التقويم: [السابق][العنوان][التالي][اليوم] ----
@@ -12490,10 +12837,12 @@ body {
       } else if (act === 'view') {
         state.view = (btn.getAttribute('data-ocal-value') === 'list') ? 'list' : 'calendar';
         render();
+        updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="view"][aria-pressed="true"]');
       } else if (act === 'cal-mode') {
         state.calendarView = (btn.getAttribute('data-ocal-value') === 'day') ? 'day' : 'month';
         render();
+        updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="cal-mode"][aria-pressed="true"]');
       } else if (act === 'prev-month') {
         shiftMonthCursor(-1);
@@ -12518,6 +12867,7 @@ body {
     on(root, 'click', guard(onClick));
 
     render();
+    observeResponsiveWidth();
 
     /* ---- الواجهة العمومية للمثيل ---- */
     return {
@@ -12543,12 +12893,14 @@ body {
         if (v === 'calendar' || v === 'list') {
           state.view = v;
           render();
+          updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
       setCalendarView: guard(function (v) {
         if (v === 'month' || v === 'day') {
           state.calendarView = v;
           render();
+          updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
       setLoading: guard(function (flag) {
@@ -12568,6 +12920,14 @@ body {
          بعده لا أحداث إطلاقًا */
       destroy: guard(function () {
         destroyed = true;
+        if (resizeObserver) {
+          resizeObserver.disconnect();
+          resizeObserver = null;
+        }
+        if (resizeFallback) {
+          window.removeEventListener('resize', resizeFallback, false);
+          resizeFallback = null;
+        }
         for (var i = listeners.length - 1; i >= 0; i--) {
           var L = listeners[i];
           L.el.removeEventListener(L.type, L.fn, false);
@@ -12579,6 +12939,8 @@ body {
         root.removeAttribute('data-ocal-init');
         root.removeAttribute('data-ocal-view');
         root.removeAttribute('data-ocal-cal-view');
+        root.removeAttribute('data-ocal-preferred-cal-view');
+        root.removeAttribute('data-ocal-auto-view');
         instances.delete(root);
       })
     };
@@ -12718,7 +13080,7 @@ body {
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
-      if (st.count <= 0) return;
+      if (st.disconnected || st.count <= 0) return;
       measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
@@ -12786,7 +13148,7 @@ body {
 
   function goToIndex(carousel, i, opts) {
     var st = stateOf.get(carousel);
-    if (!st || st.count === 0) return;
+    if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
     setX(st, slideX(st, clamped), animate);
@@ -12809,6 +13171,19 @@ body {
   function update(carousel, st) {
     measureActiveHeight(st);
     var rtl = directionOf(carousel) === 'rtl';
+    carousel.setAttribute('data-carousel-count', String(st.count));
+    var controls = carousel.querySelector('.m-carousel__controls');
+    if (controls) controls.hidden = st.count < 2;
+    st.viewport.hidden = st.count === 0;
+    var empty = carousel.querySelector('[data-carousel-empty]');
+    if (st.count === 0 && !empty) {
+      empty = document.createElement('p');
+      empty.setAttribute('data-carousel-empty', '');
+      empty.setAttribute('role', 'status');
+      empty.textContent = 'لا توجد بطاقات';
+      carousel.appendChild(empty);
+    }
+    if (empty) empty.hidden = st.count !== 0;
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
       slide.setAttribute('data-current', isCurrent ? 'true' : 'false');
@@ -12878,7 +13253,8 @@ body {
      من الصفحة، ويُنظَّف حتمًا عند pointerup/pointercancel/blur/إخفاء
      الصفحة — فلا تبقى is-dragging عالقة أبدًا. */
   function onPointerDown(carousel, st, e) {
-    if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (st.disconnected || st.drag || st.count <= 1 || isLocalArrowTarget(e.target) ||
+        (e.pointerType === 'mouse' && e.button !== 0)) return;
     st.drag = {
       id: e.pointerId,
       startX: e.clientX,
@@ -12954,6 +13330,11 @@ body {
        تُفسَّر كبطاقة/توسعة بعد الإفلات خارج البطاقة نفسها */
     st.suppressClick = d.axis === 'x';
     try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
+    if (st.disconnected) {
+      setX(st, d.baseX, false);
+      st.suppressClick = false;
+      return; /* release interaction without dispatching a navigation action */
+    }
     var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
     var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
     var dx = d.dx || 0;
@@ -13012,6 +13393,7 @@ body {
 
   function wireExpand(carousel, st) {
     carousel.addEventListener('click', function (e) {
+      if (st.disconnected) return;
       var btn = (e.target && e.target.closest) ? e.target.closest('[data-card-expand]') : null;
       if (!btn || !carousel.contains(btn)) return;
       /* السحب الأفقي لا يوسّع: النقرة المتبقية بعد سحب مثبت تُكبت —
@@ -13034,7 +13416,9 @@ body {
        السحب (attachDragWindow) حتى يعمل الإفلات خارج الـviewport. */
     st.viewport.addEventListener('pointerdown', function (e) { onPointerDown(carousel, st, e); });
     /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
-    st.viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    st.viewport.addEventListener('dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
   }
 
   /* ---------- لوحة المفاتيح (الترتيب المنطقي لا الفيزيائي) ----------
@@ -13044,9 +13428,9 @@ body {
      العارض وعناصر تحكمه. Enter/Space أصلية على الأزرار ولم تُلمس. */
   function isLocalArrowTarget(el) {
     if (!el || !el.closest) return false;
-    return !!el.closest(
-      'input:not([type="hidden"]), textarea, select, summary, a[href], ' +
-      '[contenteditable="true"], [contenteditable=""], [role="slider"]');
+    return el.isContentEditable || !!el.closest(
+      'input, textarea, select, option, summary, a[href], [role="textbox"], ' +
+      '[role="searchbox"], [role="combobox"], [role="spinbutton"], [role="slider"]');
   }
   function isCarouselControl(el, carousel) {
     if (!el || !el.closest) return false;
@@ -13060,7 +13444,8 @@ body {
   }
   function wireKeys(carousel, st) {
     carousel.addEventListener('keydown', function (e) {
-      if (st.count === 0) return;
+      if (st.disconnected || st.count === 0 || e.defaultPrevented || e.isComposing ||
+          e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
       var target = e.target;
       /* 1) حقول وعناصر تفاعلية تحتاج الأسهم محليًا: لا اعتراض ولا منع افتراضي */
       if (isLocalArrowTarget(target)) return;
@@ -13084,7 +13469,14 @@ body {
      SUI-025: window-resize يُوجّه عبر recenterCarousel (دمج rAF + حماية
      EPS) والرصد ResizeObserver يغطي الكشف وتغيّر عرض الحاوية الأب. */
   function wireResize(carousel, st) {
-    window.addEventListener('resize', function () { recenterCarousel(carousel, st); });
+    if (!st.resizeHandler) {
+      st.resizeHandler = function () { recenterCarousel(carousel, st); };
+      window.addEventListener('resize', st.resizeHandler);
+    }
+    if (reduceMotionQuery && reduceMotionQuery.addEventListener && !st.motionHandler) {
+      st.motionHandler = function () { goToIndex(carousel, st.index, { animate: false }); };
+      reduceMotionQuery.addEventListener('change', st.motionHandler);
+    }
     observeViewport(carousel, st);
   }
 
@@ -13098,7 +13490,7 @@ body {
          واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
          يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterCarousel
          القياس (العارض المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
-      observeViewport(carousel, existing);
+      wireResize(carousel, existing);
       recenterCarousel(carousel, existing);
       return; /* إعادة init آمنة — بلا إعادة ربط */
     }
@@ -13126,12 +13518,6 @@ body {
     wireDrag(carousel, st);
     wireExpand(carousel, st);
     wireResize(carousel, st);
-
-    if (reduceMotionQuery && reduceMotionQuery.addEventListener) {
-      reduceMotionQuery.addEventListener('change', function () {
-        goToIndex(carousel, st.index, { animate: false });
-      });
-    }
 
     update(carousel, st);
     /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) —
@@ -13179,6 +13565,16 @@ body {
         var st = stateOf.get(carousel);
         if (st) {
           st.disconnected = true;
+          endDrag(carousel, st, true, null);
+          st.suppressClick = false;
+          if (st.resizeHandler) {
+            window.removeEventListener('resize', st.resizeHandler);
+            st.resizeHandler = null;
+          }
+          if (st.motionHandler) {
+            reduceMotionQuery.removeEventListener('change', st.motionHandler);
+            st.motionHandler = null;
+          }
           st.heightSlide = null;
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
@@ -13474,6 +13870,18 @@ body {
       chart.setAttribute('data-axis-dir', dir);
       if (window.MicroData) window.MicroData.render(chart);
     });
+    /* Direction changes physical offsets without changing the width, so a
+       width-only ResizeObserver cannot recenter an already initialized track. */
+    [
+      { selector: '[data-carousel]', api: window.MicroCarousel },
+      { selector: '[data-info-peek]', api: window.MicroInfoPeek }
+    ].forEach(function (family) {
+      if (!family.api) return;
+      qa(family.selector).forEach(function (root) {
+        var index = family.api.getIndex(root);
+        if (index >= 0) family.api.goTo(root, index, { animate: false });
+      });
+    });
   }
 
   function applyWidth(w) {
@@ -13511,6 +13919,22 @@ body {
         window.MicroMetricComparison.render(chart);
       }
     });
+    /* بدائل القيمة/الأشرطة الثلاثة تعرض المصدر نفسه في المقارنة:
+       flat الموصى به، hero المقصود، وcompact. */
+    var primaryBars = q('sc-main-metric-flat');
+    if (primaryBars && window.MicroMetricComparison) {
+      var sourceRows = primaryBars.querySelector('[data-bar-source]');
+      ['sc-main-metric', 'sc-main-metric-compact'].forEach(function (id) {
+        var variant = q(id);
+        var targetRows = variant && variant.querySelector('[data-bar-source]');
+        if (!sourceRows || !targetRows) return;
+        while (targetRows.firstChild) targetRows.removeChild(targetRows.firstChild);
+        Array.prototype.forEach.call(sourceRows.children, function (row) {
+          if (row.tagName === 'LI') targetRows.appendChild(row.cloneNode(true));
+        });
+        window.MicroMetricComparison.render(variant);
+      });
+    }
     /* المنتقي والجدول */
     var picker = q('sc-picker');
     if (picker && window.MicroPicker) {

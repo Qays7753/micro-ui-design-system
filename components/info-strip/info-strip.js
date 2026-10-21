@@ -5,6 +5,12 @@
 (function () {
   'use strict';
 
+  function isEditingTarget(target) {
+    return !!(target && (target.isContentEditable || (target.closest && target.closest(
+      'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
+      '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
+  }
+
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
     if (strip.hasAttribute('data-info-strip-ready')) return;
@@ -87,14 +93,20 @@
     if (previous) previous.addEventListener('click', function () { setIndex(index - 1, false); });
     if (next) next.addEventListener('click', function () { setIndex(index + 1, false); });
 
-    viewport.addEventListener('keydown', function (event) {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
+    strip.addEventListener('keydown', function (event) {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (isEditingTarget(event.target)) return;
+      var control = event.target.closest && event.target.closest(
+        '[data-info-strip-prev], [data-info-strip-next], [data-info-strip-page]');
+      if (!viewport.contains(event.target) && !control) return;
+      if (!control && event.target.closest && event.target.closest('button, a[href], summary')) return;
+      var rtl = getComputedStyle(strip).direction === 'rtl';
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        setIndex(index + 1, false);
+        setIndex(index + (rtl ? 1 : -1), false);
       } else if (event.key === 'ArrowRight') {
         event.preventDefault();
-        setIndex(index - 1, false);
+        setIndex(index + (rtl ? -1 : 1), false);
       } else if (event.key === 'Home') {
         event.preventDefault();
         setIndex(0, false);
@@ -105,6 +117,7 @@
     });
 
     viewport.addEventListener('pointerdown', function (event) {
+      if (isEditingTarget(event.target)) return;
       if (event.pointerType !== 'touch' || event.isPrimary === false) return;
       startX = event.clientX;
       startY = event.clientY;

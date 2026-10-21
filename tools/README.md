@@ -31,7 +31,18 @@ python3 tools/data-scale-state-check.py
 python3 tools/ui-release-check.py
 ```
 
-## الحزمة
+## فحوص الإصلاح الكامل
+
+```bash
+python3 tools/complete-repair-lifecycle-check.py --out /tmp/micro-complete-lifecycle
+python3 tools/complete-repair-chart-check.py --out /tmp/micro-complete-charts
+python3 tools/complete-repair-mobile-check.py --out /tmp/micro-complete-mobile
+```
+
+هذه فحوص إضافية للمصدر، لا بديلًا عن الفحوص القائمة. مخرجاتها مؤقتة
+وليست مرفقات ملتزمًا بحفظها. تقيس Chromium ولا تدّعي أجهزة فعلية أو Safari.
+
+## الحزمة القابلة لإعادة البناء
 
 ```bash
 python3 tools/manifest-build.py

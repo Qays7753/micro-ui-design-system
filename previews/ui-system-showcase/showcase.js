@@ -277,6 +277,18 @@
       chart.setAttribute('data-axis-dir', dir);
       if (window.MicroData) window.MicroData.render(chart);
     });
+    /* Direction changes physical offsets without changing the width, so a
+       width-only ResizeObserver cannot recenter an already initialized track. */
+    [
+      { selector: '[data-carousel]', api: window.MicroCarousel },
+      { selector: '[data-info-peek]', api: window.MicroInfoPeek }
+    ].forEach(function (family) {
+      if (!family.api) return;
+      qa(family.selector).forEach(function (root) {
+        var index = family.api.getIndex(root);
+        if (index >= 0) family.api.goTo(root, index, { animate: false });
+      });
+    });
   }
 
   function applyWidth(w) {
@@ -314,6 +326,22 @@
         window.MicroMetricComparison.render(chart);
       }
     });
+    /* بدائل القيمة/الأشرطة الثلاثة تعرض المصدر نفسه في المقارنة:
+       flat الموصى به، hero المقصود، وcompact. */
+    var primaryBars = q('sc-main-metric-flat');
+    if (primaryBars && window.MicroMetricComparison) {
+      var sourceRows = primaryBars.querySelector('[data-bar-source]');
+      ['sc-main-metric', 'sc-main-metric-compact'].forEach(function (id) {
+        var variant = q(id);
+        var targetRows = variant && variant.querySelector('[data-bar-source]');
+        if (!sourceRows || !targetRows) return;
+        while (targetRows.firstChild) targetRows.removeChild(targetRows.firstChild);
+        Array.prototype.forEach.call(sourceRows.children, function (row) {
+          if (row.tagName === 'LI') targetRows.appendChild(row.cloneNode(true));
+        });
+        window.MicroMetricComparison.render(variant);
+      });
+    }
     /* المنتقي والجدول */
     var picker = q('sc-picker');
     if (picker && window.MicroPicker) {

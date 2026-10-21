@@ -408,7 +408,18 @@ def run(page, base, width, tag):
       const root = document.querySelector('#sc-ocal-root');
       if (!root || !(root.classList.contains('m-ocal') || root.querySelector('.m-ocal'))) return null;
       const cells = [...root.querySelectorAll('.m-ocal__cell')];
-      if (!cells.length) return { noMonth: true };
+      if (!cells.length) {
+        const buttons = [...root.querySelectorAll('button')].filter(b => b.getClientRects().length);
+        const rects = buttons.map(b => b.getBoundingClientRect());
+        const required = 7 * 48 + 6 * 4;
+        const safeTargets = rects.every(r => r.width >= 47.99 && r.height >= 47.99);
+        const overlaps = rects.some((a,i) => rects.slice(i+1).some(b =>
+          a.left < b.right-.1 && a.right > b.left+.1 && a.top < b.bottom-.1 && a.bottom > b.top+.1));
+        return { noMonth: true, actualDay: root.dataset.ocalCalView === 'day',
+          automatic: root.dataset.ocalAutoView === 'day',
+          width: root.getBoundingClientRect().width, required, safeTargets, overlaps,
+          draftPill: !!document.querySelector('#sc-ocal .sc-pill--draft') };
+      }
       const r = cells[0].getBoundingClientRect();
       const weekdays = [...root.querySelectorAll('.m-ocal__weekday')].map(x => x.getBoundingClientRect().height);
       const title = root.querySelector('.m-ocal__cal-title');
@@ -417,13 +428,19 @@ def run(page, base, width, tag):
       return { w: Math.round(r.width), h: Math.round(r.height), maxWeekdayH: Math.max(...weekdays), titleLines, draftPill };
     }""")
     if f08 and not f08.get("noMonth"):
-        t(f"F-08 {P} خلية الشهر ≥37px مربعة (±2px)", f08["w"] >= 37 and abs(f08["w"] - f08["h"]) <= 2,
+        t(f"F-08 {P} خلية الشهر ≥48px مربعة (±2px)", f08["w"] >= 48 and f08["h"] >= 48 and abs(f08["w"] - f08["h"]) <= 2,
           f"cell={f08['w']}x{f08['h']}")
         t(f"F-08 {P} عنوان الشهر سطر واحد", f08["titleLines"] == 1, f"lines={f08['titleLines']}")
         t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
     elif f08 and f08.get("noMonth"):
-        t(f"F-08 {P} التقويم غير موجود — فشل", False, "no month grid")
+        t(f"F-08 {P} عرض اليوم التكيفي عند ضيق المكوّن",
+          f08["actualDay"] and f08["automatic"] and f08["width"] < f08["required"], f08)
+        t(f"F-08 {P} الأهداف الفعلية ≥48px", f08["safeTargets"], f08)
+        t(f"F-08 {P} لا تداخل بين أهداف اللمس", not f08["overlaps"], f08)
+        t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
+    else:
+        t(f"F-08 {P} مكوّن التقويم موجود", False, f08)
 
     # ================= F-09: مصدر واحد للفئة/اللون/القيمة =================
     f09 = page.evaluate("""() => {

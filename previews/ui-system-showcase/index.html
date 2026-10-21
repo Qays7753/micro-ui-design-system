@@ -472,16 +472,16 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">بطاقات مستقلة + شريط تنقل يدوي بلا تبديل تلقائي. variant الـpeek معتمد (2026-10-04) opt-in عبر الصنف m-info-peek مع السمة data-info-peek — البطاقة النشطة في المركز والمجاورة تلمح.</p>
+        <p class="sc-section__desc">القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.</p>
       </div>
       <div class="sc-block sc-block--plain sc-stack">
-        <p class="sc-hint">بطاقات القراءة الواحدة تستخدم m-info-card--compact اختياريًا؛ الافتراضي متاح دون الصنف.</p>
+        <p class="sc-hint">القراءة الواحدة الصغيرة توصي بـ m-info-card--compact؛ البطاقة القياسية تبقى متاحة دون الصنف عند الحاجة لمساحة أكبر.</p>
         <div class="sc-grid-2">
           <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
             <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
           </article>
-          <article class="m-info-card m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
+          <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
             <span class="m-info-card__label">مخزون عينة</span>
             <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
           </article>
@@ -733,7 +733,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">08 · SPEC-02</p>
         <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">دوائر المساحة (منفصلة/متداخلة) + قيمة رئيسية بأشرطة مستقلة موقعة حول صفر مشترك. الصفر علامة مجوفة محايدة والغياب «غير متاح».</p>
+        <p class="sc-section__desc">دوائر المساحة (منفصلة/متداخلة) + مقارنة مسطحة موصى بها للقراءة العريضة. الدائرة القياسية محفوظة لقراءة رئيسية مقصودة؛ المتغيرات الثلاثة تعرض المصدر نفسه.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
@@ -755,7 +755,7 @@
           <p class="m-metric-circles__empty" data-metric-scale></p>
           <p class="m-metric-circles__empty" data-metric-empty hidden></p>
         </section>
-        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="قيمة رئيسية ومؤشرات مستقلة">
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة">
           <h3 class="m-main-metric__title" hidden>قيمة رئيسية ومؤشرات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
@@ -780,18 +780,37 @@
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الدائرة الافتراضية أعلاه محفوظة؛ القراءة المسطحة التالية خيار كثافة صريح.</p>
-        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مثال القراءة المسطحة الاختيارية">
+        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. المثال التالي هو إبراز صريح لقراءة رئيسية، ثم compact يعرضان بيانات المقارنة نفسها.</p>
+        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز مقصود لقيمة رئيسية ومقارنة مستقلة">
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
-              <span class="m-main-metric__label">القراءة الرئيسية — flat اختياري</span>
+              <span class="m-main-metric__label">قيمة العينة</span>
               <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
             </div>
             <div>
               <ul data-bar-source hidden>
-                <li data-label="مكتملة" data-value="12" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="طلبات" data-value="32" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مرتجعات" data-value="-9" data-unit="عملية" data-period="اليوم" data-series="b"></li>
                 <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
-                <li data-label="غير متاح" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+                <li data-label="معلق" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+        <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-compact" aria-label="مقارنة مدمجة بالبيانات نفسها">
+          <div class="m-main-metric__layout">
+            <div class="m-main-metric__hero">
+              <span class="m-main-metric__label">قيمة العينة</span>
+              <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">18</span><span class="m-main-metric__unit">عملية</span></span>
+            </div>
+            <div>
+              <ul data-bar-source hidden>
+                <li data-label="طلبات" data-value="32" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                <li data-label="مرتجعات" data-value="-9" data-unit="عملية" data-period="اليوم" data-series="b"></li>
+                <li data-label="مراجعات" data-value="0" data-unit="عملية" data-period="اليوم" data-series="c"></li>
+                <li data-label="معلق" data-value="" data-unit="عملية" data-period="اليوم" data-series="d"></li>
               </ul>
               <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
               <p class="m-main-metric__status" data-bar-status aria-live="polite"></p>
@@ -1047,11 +1066,9 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عرضه هنا لا يعني اعتماده. استثناء خلية الشهر (~37.7px عند 320) PROPOSED موثق بانتظار توقيع المالك.</p>
+        <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عند عرض مكوّن أقل من 360px يتحول تلقائيًا إلى اليوم، وتعود تفضيلات الشهر عند اتساع المساحة.</p>
       </div>
-      <!-- F-08 (2026-10-10): sc-block--ocal — التقويم full-bleed داخل البطاقة عند الضيق
-           (راجع تعليق showcase.css) — خانة الشهر تعود إلى المربع المرجعي ~37.7px
-           عند 320 (الاستثناء PROPOSED الموثق في المواصفة يبقى كما هو). -->
+      <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
@@ -1060,7 +1077,7 @@
         </div>
         <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند 320 يملأ التقويم البطاقة كاملة (بلا حشوة مزدوجة) حفاظًا على مربعية الخلية المرجعية.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند ضيق الجذر تستخدم واجهة اليوم بدل خلايا شهر أصغر من هدف 48px؛ لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 

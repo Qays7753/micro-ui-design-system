@@ -68,13 +68,10 @@
             أو عند الإظهار — دون نقرة من المستخدم؛ الدونات تقيس القراءة
             داخل الحلقة، والفقاعات (تدفق DOM) خارج الرصد. غياب ResizeObserver في بيئة
             قديمة يُبقي عقد R2: المستهلك يعيد الرسم عند الفتح.
-   F-01 (2026-10-10، تكليف معرض النظام): تسميات bars/line تُقاس فعليًا
-            بعد إلحاق الرسم (getComputedTextLength بوحدات viewBox)
-            والميزانية الكاملة عند 1×: القص بمقطع «…» لا يقع إلا لسطر
-            أعرض من ميزانية عموده/تباعد نقطته كاملة (كلمة مفردة طويلة)،
-            مع قراءة كاملة (aria-label + <title> + data-label-full
-            الاختيارية) وحدود طرفين بالمدى الفعلي [x−len/2, x+len/2]
-            داخل [8, W−8]، وتحقق زوجي بالمدى الفعلي داخل كل صف.
+   F-01: أعمدة bars تُقاس وتُواءم تسمياتها الفعلية وفق ميزانية العمود.
+            F4: تسميات line تُقاس بعد fonts.ready وعرض المكوّن، وتؤخذ منها
+            عينات كاملة بلا قص؛ النقاط/الفجوات/القيم لا تتغير، والنهايات
+            والحدود الدلالية تُحفظ أو تنتقل قراءاتها الكاملة إلى صفوف مرئية.
             جاهزية الخط: بعد fonts.ready تُعاد رسوم bars/line/donut مرة واحدة
             فأول تصيير مستقر = كل إعادة تصيير لاحقة (مرصود سابقًا:
             اختلاف القياس بمقاييس الخط البديل قبل التحميل).
@@ -112,6 +109,9 @@
            المكوّن العام لا يفترض أن كل label تاريخ — يعرض ما مرره
            المستهلك، والقراءة الكاملة سمة اختيارية (عقد specification.md) */
         labelFull: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
+        axisX: li.getAttribute('data-x'),
+        axisBoundary: li.hasAttribute('data-axis-boundary') || li.hasAttribute('data-semantic-boundary'),
+        rawValue: raw,
         value: v,
         display: li.getAttribute('data-display') || '',
         outlier: li.hasAttribute('data-outlier')
@@ -133,6 +133,17 @@
     if (item.value === null) return '— غير متاح';
     if (item.value < 0) return fmt(item.value) + ' — سالب غير مرسوم';
     return item.display || fmt(item.value);
+  }
+
+  function fullLabelOf(chart, item) {
+    var label = item.labelFull || item.label;
+    var isTimeAxis = chart.getAttribute('data-chart') === 'line'
+      && chart.getAttribute('data-axis-type') === 'time';
+    if (isTimeAxis && item.axisX !== null && item.axisX !== ''
+        && label.indexOf(String(item.axisX)) === -1) {
+      label += ' — ' + item.axisX;
+    }
+    return label;
   }
 
   /* Measure actual SVG ink after font readiness, not fixed 37/40px steps.
@@ -157,6 +168,9 @@
   /* Full readings move to visible compact rows only when measured ink boxes
      collide or exceed the plot. Never truncate a value or require disclosure. */
   function fitValueReadings(chart, svg, items) {
+    /* The line-label sampler may already have moved every complete reading
+       into one visible list because mandatory labels cannot fit together. */
+    if (chart.getAttribute('data-value-layout') === 'rows') return;
     var plot = chart.querySelector('[data-plot]');
     var bounds = svg.getBoundingClientRect();
     if (bounds.width <= 1) return;
@@ -178,7 +192,7 @@
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
-      label.textContent = item.labelFull || item.label;
+      label.textContent = fullLabelOf(chart, item);
       var value = document.createElement('dd');
       var number = document.createElement('bdi');
       number.dir = 'ltr';
@@ -259,7 +273,7 @@
     return lines;
   }
 
-  /* ---- F-01 (2026-10-10، تكليف معرض النظام): موائمة التسميات عند المقياس الفعلي 1× ----
+  /* ---- F-01: موائمة تسميات الأعمدة عند المقياس الفعلي 1× ----
      العقد القديم (R2-UI02/R3-UI02) خطّط لبيئة خط مضاعفة (محاكاة 200%
      محسوبة) فقصّ كل تسمية عند نصف ميزانية العمود/النقطة — النتيجة
      المرصودة في المعرض: تسميات مقروءة جزئيًا عند الحجم الطبيعي
@@ -292,7 +306,7 @@
   }
 
   /* قص تدريجي بمقطع «…» حتى طول ≤ limit — لا مساس بحجم الخط.
-     F-01: limit الآن الميزانية الكاملة عند 1× (لا نصفها). */
+     F-01: تستخدمه الأعمدة بميزانيتها الكاملة عند 1×. */
   function truncateToBudget(t, limit) {
     var s = String(t.textContent || '');
     var guard = 0;
@@ -322,7 +336,7 @@
       });
     });
     if (!entries.length) return;
-    /* F-01: القص الفردي عند تجاوز الميزانية الكاملة (1×) فقط */
+    /* F-01: القص الفردي لتسميات الأعمدة عند تجاوز الميزانية الكاملة فقط */
     entries.forEach(function (e) {
       if (measuredLenOf(e.t) > budget) e.cut = truncateToBudget(e.t, budget);
     });
@@ -594,6 +608,30 @@
   function renderLine(chart, items) {
     var plot = chart.querySelector('[data-plot]');
     var rtl = (chart.getAttribute('data-axis-dir') || 'rtl') !== 'ltr';
+    var axisType = chart.getAttribute('data-axis-type') || 'category';
+    var timeValues = null;
+    if (axisType === 'time') {
+      timeValues = items.map(function (item) { return axisTimeOf(item.axisX); });
+      if (timeValues.some(function (value) { return value === null; })) {
+        plot.innerHTML = '';
+        var axisError = document.createElement('p');
+        axisError.className = 'm-chart__error';
+        axisError.textContent = 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.';
+        plot.appendChild(axisError);
+        appendFullReadingRows(chart, plot, items, 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.');
+        chart.setAttribute('data-axis-state', 'invalid-time');
+        return;
+      }
+    } else if (axisType !== 'category') {
+      plot.innerHTML = '';
+      var typeError = document.createElement('p');
+      typeError.className = 'm-chart__error';
+      typeError.textContent = 'نوع المحور غير مدعوم. القراءات متاحة أدناه.';
+      plot.appendChild(typeError);
+      appendFullReadingRows(chart, plot, items, 'نوع المحور غير مدعوم.');
+      chart.setAttribute('data-axis-state', 'invalid-type');
+      return;
+    }
     /* A01: عقد المقياس الصريح نفسه المطبق على الأعمدة — لا نقطة خارج SVG */
     var scale = scaleStateOf(chart, items);
     if (scale.kind === 'invalid') {
@@ -628,7 +666,14 @@
     var W = ts.refW, top = 30;
     var plotHeight = Math.min(144, Math.max(104, W * 0.34));
     var base = top + plotHeight, H = base + X_LABEL_STEP + 12 + extra;
-    function xAt(i) { var t = i / (n - 1); return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48); }
+    var timeMin = timeValues ? Math.min.apply(null, timeValues) : 0;
+    var timeMax = timeValues ? Math.max.apply(null, timeValues) : 0;
+    function xAt(i) {
+      var t = timeValues
+        ? (timeMax === timeMin ? 0.5 : (timeValues[i] - timeMin) / (timeMax - timeMin))
+        : i / (n - 1);
+      return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48);
+    }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
     if (scale.kind === 'over') {
@@ -657,7 +702,7 @@
     });
     items.forEach(function (it, i) {
       var x = xAt(i), y = yAt(it.value);
-      var g = svgEl('g', { class: 'm-cat--' + it.series });
+      var g = svgEl('g', { class: 'm-cat--' + it.series, 'data-point-index': i });
       if (y === null) {
         var u = svgEl('text', { class: 'm-chart__point-value', x: x, y: base - 6, 'text-anchor': 'middle', fill: 'var(--micro-text-hint)' });
         applyTextPx(u, fontPx);
@@ -675,8 +720,9 @@
     });
     plot.innerHTML = '';
     plot.appendChild(svg);
-    /* R3-UI02: قياس وموائمة بعد الإلحاق — ميزانية تباعد النقاط ×0.92 */
-    fitMeasuredLabels(chart, svg, items, 'm-chart__x-label', ((W - 48) / (n - 1)) * 0.92);
+    /* F4: label-only sampling from actual SVG ink at the rendered font/width.
+       The points, gaps and value readings remain untouched. */
+    sampleLineLabels(chart, svg, items, timeValues);
     fitValueReadings(chart, svg, items);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
@@ -686,6 +732,123 @@
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
     }
+  }
+
+  function axisTimeOf(raw) {
+    if (raw === null || raw === undefined || String(raw).trim() === '') return null;
+    var s = String(raw).trim();
+    var n;
+    if (NUM_RE.test(s)) {
+      n = Number(s); /* Date's finite millisecond range, not merely Number's */
+      return isFinite(n) && Math.abs(n) <= 8640000000000000 ? n : null;
+    }
+    /* Date.parse normalizes impossible days (Feb 31) and local timestamps
+       introduce a timezone the source did not supply. Accept calendar dates
+       or explicit-offset ISO instants only, after validating their components. */
+    var match = /^(\d{4})-(\d{2})-(\d{2})(?:[Tt](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?(Z|[+-]\d{2}:\d{2}))?$/.exec(s);
+    if (!match) return null;
+    var year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+    var leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+    var monthDays = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (month < 1 || month > 12 || day < 1 || day > monthDays[month - 1]) return null;
+    if (match[4] !== undefined) {
+      if (Number(match[4]) > 23 || Number(match[5]) > 59 || Number(match[6] || 0) > 59) return null;
+      if (match[8] !== 'Z') {
+        var offset = match[8].slice(1).split(':');
+        if (Number(offset[0]) > 23 || Number(offset[1]) > 59) return null;
+      }
+    }
+    n = Date.parse(s);
+    return isFinite(n) && Math.abs(n) <= 8640000000000000 ? n : null;
+  }
+
+  function appendFullReadingRows(chart, plot, items, ariaLabel) {
+    var rows = document.createElement('dl');
+    rows.className = 'm-chart__readings';
+    rows.setAttribute('aria-label', ariaLabel || 'القراءات الكاملة للرسم');
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      var label = document.createElement('dt');
+      label.textContent = fullLabelOf(chart, item);
+      var value = document.createElement('dd');
+      var number = document.createElement('bdi');
+      number.dir = 'ltr';
+      number.textContent = readingOf(item);
+      value.appendChild(number);
+      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      row.appendChild(label);
+      row.appendChild(value);
+      rows.appendChild(row);
+    });
+    plot.appendChild(rows);
+    return rows;
+  }
+
+  /* Select whole labels only. Protected source boundaries and endpoints are
+     considered first; when protected labels themselves cannot coexist, the
+     plot labels and duplicate point readings yield to complete visible rows. */
+  function sampleLineLabels(chart, svg, items, timeValues) {
+    var W = svg.viewBox.baseVal.width;
+    var candidates = [];
+    var timeMin = timeValues ? Math.min.apply(null, timeValues) : null;
+    var timeMax = timeValues ? Math.max.apply(null, timeValues) : null;
+    [].slice.call(svg.querySelectorAll('g[data-point-index]')).forEach(function (g) {
+      var index = Number(g.getAttribute('data-point-index'));
+      var endpoint = index === 0 || index === items.length - 1
+        || (timeValues && (timeValues[index] === timeMin || timeValues[index] === timeMax));
+      var labels = [].slice.call(g.querySelectorAll('.m-chart__x-label'));
+      var boxes = labels.map(function (label) {
+        var length = measuredLenOf(label);
+        var bbox;
+        try { bbox = label.getBBox(); } catch (e) { bbox = { y: 0, height: LINE_TEXT_PX * 1.45 }; }
+        var cx = parseFloat(label.getAttribute('x')) || 0;
+        return { left: cx - length / 2 - 1, right: cx + length / 2 + 1,
+          top: bbox.y - 1, bottom: bbox.y + bbox.height + 1 };
+      });
+      var splitFragment = labels.some(function (label) {
+        return String(label.textContent || '').trim().length === 1
+          && String(items[index].label || '').trim().length > 1;
+      });
+      candidates.push({
+        index: index, labels: labels, boxes: boxes,
+        protected: items[index].axisBoundary || endpoint,
+        priority: items[index].axisBoundary ? 0 : (endpoint ? 1 : 2),
+        splitFragment: splitFragment
+      });
+    });
+    candidates.sort(function (a, b) {
+      return a.priority - b.priority || a.index - b.index;
+    });
+    function intersects(a, b) {
+      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    }
+    var selected = [], protectedConflict = false;
+    candidates.forEach(function (candidate) {
+      var canFit = !candidate.splitFragment && candidate.boxes.every(function (box) {
+        return box.left >= 8 && box.right <= W - 8 && !selected.some(function (prior) {
+          return prior.boxes.some(function (priorBox) { return intersects(box, priorBox); });
+        });
+      });
+      if (canFit) selected.push(candidate);
+      else if (candidate.protected) protectedConflict = true;
+    });
+    if (protectedConflict) {
+      candidates.forEach(function (candidate) {
+        candidate.labels.forEach(function (label) { label.style.display = 'none'; });
+      });
+      [].slice.call(svg.querySelectorAll('.m-chart__point-value')).forEach(function (label) {
+        label.style.display = 'none';
+      });
+      chart.setAttribute('data-value-layout', 'rows');
+      appendFullReadingRows(chart, chart.querySelector('[data-plot]'), items,
+        'التسميات والقراءات الكاملة للرسم');
+      return;
+    }
+    var selectedSet = new Set(selected);
+    candidates.forEach(function (candidate) {
+      if (selectedSet.has(candidate)) return;
+      candidate.labels.forEach(function (label) { label.style.display = 'none'; });
+    });
   }
 
   /* ---- التوزيع الدائري (نسب بمقام معلن) ----
@@ -920,8 +1083,8 @@
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
     if (it.value === null) return '— غير متاح';
-    if (it.value < 0) return fmt(it.value) + ' (سالب غير مرسوم)';
-    var base = fmt(it.value);
+    var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
+    if (it.value < 0) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
   }
 
@@ -965,7 +1128,9 @@
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
-    ['الفئة', 'القيمة'].forEach(function (h) {
+    var hasTimeAxis = chart.getAttribute('data-chart') === 'line'
+      && chart.getAttribute('data-axis-type') === 'time';
+    (hasTimeAxis ? ['الفئة', 'وقت النقطة', 'القيمة'] : ['الفئة', 'القيمة']).forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -978,8 +1143,13 @@
       var tr = document.createElement('tr');
       var th = document.createElement('th');
       th.setAttribute('scope', 'row');
-      th.textContent = it.label;
+      th.textContent = fullLabelOf(chart, it);
       tr.appendChild(th);
+      if (hasTimeAxis) {
+        var time = document.createElement('td');
+        time.textContent = it.axisX === null || it.axisX === '' ? '— غير متاح' : it.axisX;
+        tr.appendChild(time);
+      }
       var td = document.createElement('td');
       td.textContent = valueStateText(it);
       tr.appendChild(td);
@@ -1126,6 +1296,7 @@
        غائبتين بعقد المواصفة، والحالات غير السليمة تكتبهما من جديد. */
     chart.removeAttribute('data-scale-state');
     chart.removeAttribute('data-scale-detail');
+    chart.removeAttribute('data-axis-state');
     if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);

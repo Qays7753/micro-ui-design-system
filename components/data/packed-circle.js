@@ -236,6 +236,7 @@
   function render(chart) {
     if (observers.has(chart)) observers.get(chart).disconnect();
     var plot = chart.querySelector('[data-plot]');
+    chart.removeAttribute('data-packed-state');
     var items = itemsOf(chart);
     var positives = items.filter(function (i) { return i.value !== null && i.value > 0; });
     var rmaxAttr = parseNum(chart.getAttribute('data-rmax'));
@@ -259,6 +260,24 @@
       vmax = 1; /* صفر مع لا موجبين: لا رسم مساحي أصلًا — الحالات النصية تكفي */
     } else {
       vmax = declaredMax;
+    }
+
+    /* Packed circles are an opt-in approximation for a small category set,
+       never a dense or precise financial comparison. Keep every reading in
+       the textual key when the current contract's five category colors are
+       exceeded rather than silently packing a crowded population. */
+    if (positives.length > 5) {
+      plot.innerHTML = '';
+      var densityError = document.createElement('p');
+      densityError.className = 'm-chart__scale-error';
+      densityError.textContent = 'تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح.';
+      plot.appendChild(densityError);
+      renderKeyOnly(chart);
+      chart.setAttribute('data-packed-state', 'too-many-positive-categories');
+      chart.dispatchEvent(new CustomEvent('micro-packed:rendered', {
+        bubbles: true, detail: { ok: false, reason: 'too-many-positive-categories', vmaxDerived: !hasMaxAttr }
+      }));
+      return;
     }
 
     plot.innerHTML = '';
