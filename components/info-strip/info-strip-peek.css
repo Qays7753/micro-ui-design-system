@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+.m-info-peek {
+  container-type: inline-size;
+}
+
 /* الجار الظاهر جزئيًا: البطاقة النشطة موسّطة، والمجاورات على الجانبين.
    عكس info-strip الحالي: الشرائح المخفية لا تطوى (بلا height:0)
    كي يبقى جزء المجاور مرئيًا كمطلوب في مقارنة الفيديو. */
@@ -25,6 +29,9 @@
   flex: 0 0 calc(100% - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
   min-width: 0;
   padding: 0;
+}
+.m-info-peek .m-info-strip__slide:only-child {
+  flex-basis: 100%; /* single reading is static: no space reserved for neighbours */
 }
 
 .m-info-peek .m-info-strip__slide[aria-hidden="true"] {
@@ -57,6 +64,18 @@
    يفصل البطاقة النشطة (قيمة مشتقة من حدود info-card الحالية) */
 .m-info-peek .m-info-strip__slide[aria-hidden="true"] .m-info-card {
   border-color: var(--micro-border-divider);
+}
+
+/* Peek يحتاج حيزًا فعليًا بعد خصم الجيران والفجوات. في الأعمدة
+   الأضيق من 280px نعيد البطاقة إلى العرض الكامل بدل ضغط محتواها. */
+@container (max-width: 280px) {
+  .m-info-peek .m-info-strip__slide {
+    flex-basis: 100%;
+  }
+
+  .m-info-peek .m-info-strip__track {
+    gap: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

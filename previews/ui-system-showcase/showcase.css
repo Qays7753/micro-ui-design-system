@@ -20,7 +20,9 @@ body {
 
 [hidden] { display: none !important; }
 
-:focus-visible {
+/* Fields own their composite focus ring. Keep the showcase fallback on every
+   other control, without adding an inner outline to their input/textarea. */
+:focus-visible:not(:where(.m-field__input, .m-field__area)) {
   outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
   outline-offset: var(--micro-focus-gap);
 }

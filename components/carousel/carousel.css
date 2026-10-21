@@ -44,6 +44,7 @@
 
 .m-carousel {
   font-family: var(--micro-font-family);
+  container-type: inline-size;
   /* قيم داخلية للمكوّن (PROPOSED — بانتظار المراجعة):
      --_peek: شريحة البطاقة المجاورة الظاهرة على كل جانب.
      الحد يبقي النص الفعلي للبطاقة النشطة كاملًا داخل القناع
@@ -63,8 +64,7 @@
 .m-carousel__viewport {
   overflow: hidden;
   touch-action: pan-y;
-  /* فراغ مستقر للحالة الفارغة (0 بطاقات) حتى لا تنهار المساحة (مقترح) */
-  min-height: 72px;
+  min-height: 0; /* empty state owns its natural height; no blank reservation */
 }
 /* أثناء السحب فقط: لا تحديد نص عَرَضي مع سحب المؤشر */
 .m-carousel.is-dragging .m-carousel__viewport {
@@ -105,6 +105,13 @@
   width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
   min-width: 0; /* يسمح بلفّ المحتوى الطويل داخل البطاقة */
 }
+/* Do not spend a narrow reading's width on decorative adjacent previews.
+   This follows component width, not the device viewport. */
+@container (max-width: 335px) {
+  .m-carousel__slide { width: 100%; }
+}
+.m-carousel[data-carousel-count="1"] .m-carousel__slide { width: 100%; }
+.m-carousel [hidden] { display: none !important; }
 /* البطاقة النشطة — وسام حالة يديره carousel.js (لا شكل خاص إلزامي) */
 .m-carousel__slide[data-current="true"] { }
 /* البطاقات المخفية كليًا خارج القناع تُعطَّل inert من السكربت —

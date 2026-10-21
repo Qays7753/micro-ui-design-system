@@ -56,14 +56,18 @@
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
 
   function recenterStrip(strip, st) {
+    if (st.disconnected) return;
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
-      if (st.count <= 0) return;
+      if (st.disconnected || st.count <= 0) return;
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(strip).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(strip, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -72,6 +76,7 @@
     if (typeof ResizeObserver !== 'function') return; /* بيئة قديمة — عقد window-resize يبقى */
     if (viewportObservers.has(strip)) return; /* مراقب واحد لكل شريط — علامة الوجود */
     var ro = new ResizeObserver(function (entries) {
+      if (st.disconnected || viewportObservers.get(strip) !== ro) return;
       var w = entries.length ? entries[0].contentRect.width : 0; /* العرض فقط */
       if (w <= 1) return; /* مخفي: احتفظ بآخر توسيط — الإظهار يطلق الرصد */
       recenterStrip(strip, st);
@@ -104,7 +109,7 @@
 
   function goToIndex(strip, i, opts) {
     var st = stateOf.get(strip);
-    if (!st || st.count === 0) return;
+    if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
     setX(st, slideX(st, clamped), animate);
@@ -152,7 +157,8 @@
 
   /* ---------- السحب: تتبع المؤشر 1:1 (دورة حياة مغلقة على window) ---------- */
   function onPointerDown(strip, st, e) {
-    if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (st.disconnected || st.drag || st.count <= 1 || isEditingTarget(e.target) ||
+        (e.pointerType === 'mouse' && e.button !== 0)) return;
     st.drag = {
       id: e.pointerId,
       startX: e.clientX,
@@ -226,6 +232,11 @@
     st.viewport.classList.remove('is-peek-grabbing');
     st.suppressClick = d.axis === 'x';
     try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
+    if (st.disconnected) {
+      setX(st, d.baseX, false);
+      st.suppressClick = false;
+      return; /* cleanup only: no navigation, focus transfer or callback */
+    }
     var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
     var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
     var dx = d.dx || 0;
@@ -239,11 +250,20 @@
   }
 
   /* ---------- لوحة المفاتيح: ترتيب منطقي (RTL: التالي يسارًا) ---------- */
+  function isEditingTarget(target) {
+    return !!(target && (target.isContentEditable || (target.closest && target.closest(
+      'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
+      '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
+  }
+
   function wireKeys(strip, st) {
     strip.addEventListener('keydown', function (e) {
-      if (e.altKey || e.ctrlKey || e.metaKey || st.count === 0) return;
+      if (st.disconnected || e.defaultPrevented || e.isComposing ||
+          e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || st.count === 0) return;
       var target = e.target;
-      if (target && target.closest && target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (isEditingTarget(target)) return;
+      if (target && target.closest && target.closest('button, a[href], summary') &&
+          !target.closest('[data-info-strip-prev], [data-info-strip-next], [data-info-strip-page]')) return;
       var rtl = rtlOf(strip);
       var handled = true;
       if (e.key === 'ArrowRight') { rtl ? prev(strip) : next(strip); }
@@ -255,19 +275,49 @@
     });
   }
 
+  function activate(strip, st) {
+    st.disconnected = false;
+    if (!st.resizeHandler) {
+      st.resizeHandler = function () { recenterStrip(strip, st); };
+      window.addEventListener('resize', st.resizeHandler);
+    }
+    if (reduceQuery && reduceQuery.addEventListener && !st.motionHandler) {
+      st.motionHandler = function () { goToIndex(strip, st.index, { animate: false }); };
+      reduceQuery.addEventListener('change', st.motionHandler);
+    }
+    observeViewport(strip, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(strip).direction === st.lastDirection) return;
+        recenterStrip(strip, st);
+      });
+      st.directionObserver = observer;
+      for (var node = strip; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
+    recenterStrip(strip, st);
+    var generation = st.generation = (st.generation || 0) + 1;
+    if (document.fonts) document.fonts.ready.then(function () {
+      if (st.disconnected || st.generation !== generation) return;
+      st.lastWidth = undefined;
+      recenterStrip(strip, st);
+    });
+  }
+
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek-ready')) {
       /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للشريط الجاهز
          بعد disconnect — init لا يعود صامتًا فيترك الشريط بلا مراقبة عرض.
-         لا إعادة بناء هنا: المستمعات والأزرار والنقاط لم يفصلها disconnect
-         أصلًا فلا تُربط ثانية (لا ازدواج أحداث ولا عناصر). يُلحق مراقبًا
+         مستمعات DOM مربوطة مرة واحدة ومحروسة أثناء الفصل. يُلحق مراقبًا
          واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
          يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterStrip
          القياس (الشريط المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
       var reSt = stateOf.get(strip);
       if (reSt && reSt.count > 0) {
-        observeViewport(strip, reSt);
-        recenterStrip(strip, reSt);
+        if (reSt.disconnected) activate(strip, reSt);
+        else recenterStrip(strip, reSt);
       }
       return;
     }
@@ -336,7 +386,9 @@
     if (nextBtn) nextBtn.addEventListener('click', function () { next(strip); });
 
     viewport.addEventListener('pointerdown', function (e) { onPointerDown(strip, st, e); });
-    viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    viewport.addEventListener('dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
     viewport.addEventListener('click', function (e) {
       if (st.suppressClick) { e.preventDefault(); e.stopPropagation(); st.suppressClick = false; }
     }, true);
@@ -345,14 +397,7 @@
     /* SUI-007: window-resize يبقى (احتياط لبيئة بلا ResizeObserver
        ولتغيّر النافذة) ويُوجّه عبر recenterStrip نفسها — حماية EPS
        تمنع العمل المزدوج مع الرصد (rAF واحد لكل نبضة). */
-    window.addEventListener('resize', function () { recenterStrip(strip, st); });
-    observeViewport(strip, st);
-
-    if (reduceQuery && reduceQuery.addEventListener) {
-      reduceQuery.addEventListener('change', function () {
-        goToIndex(strip, st.index, { animate: false });
-      });
-    }
+    activate(strip, st);
 
     update(strip, st);
     /* تمركز أول بطاقة بعد الاستقرار (الخطوط قد تغيّر العرض) — يخزّن
@@ -389,6 +434,22 @@
         if (ro) { ro.disconnect(); viewportObservers.delete(strip); }
         var st = stateOf.get(strip);
         if (st) {
+          st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
+          st.generation = (st.generation || 0) + 1;
+          endDrag(strip, st, true, null);
+          st.suppressClick = false;
+          if (st.resizeHandler) {
+            window.removeEventListener('resize', st.resizeHandler);
+            st.resizeHandler = null;
+          }
+          if (st.motionHandler) {
+            reduceQuery.removeEventListener('change', st.motionHandler);
+            st.motionHandler = null;
+          }
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف
              كامل (لا نبضة متأخرة بعد فصل المراقب تعيد القياس بلا مراقبة) */

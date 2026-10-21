@@ -1,11 +1,14 @@
-# الحالة الحالية — فرع الإصلاح المهني
+# الحالة الحالية — مكتبة Micro UI
 
-**مصدر الجولة الموثق:** `ui/native-svg-polish-2026-10-12` عند `feb19f0f417307c1e41a5b87f214b51b8f29c727`
+**المرجع المفحوص:** `origin/main` عند `25fed21790f2c1e78b25e925edc62e9b76825d2e` بعد جلبه في 2026-10-21.
 **نطاق المستودع:** UI-only
-**فرع الإصلاح:** `replit/professional-ui-complete-repair-2026-10-20`
-**مهم:** هذا وصف لفرع الإصلاح المطلوب، وليس إعلان دمجه في `main`. بقي main دون تعديل أو دمج.
+**التنفيذ الجاري للمراجعة:** `replit/micro-ui-professional-complete-repair-2026-10-21`.
+الإصلاح السابق موجود بالفعل في هذا الرأس من `main`؛ وصفه سابقًا بأنه
+«غير مدمج» أصبح قديمًا. الإصلاح الحالي مستقل، ولا يدمج نفسه أو يغير `main`.
+تفاصيل الجولة الحالية ونتائجها في [متتبع الإصلاح](replit/micro-ui-professional-complete-repair-2026-10-21/REPAIR-TRACKER.md)
+و[تقرير التحقق](replit/micro-ui-professional-complete-repair-2026-10-21/VERIFICATION-REPORT.md).
 
-## التحقق الحالي — 2026-10-20
+## نتائج الأساس التاريخية — 2026-10-20 (ليست نتائج المصدر المعدل)
 
 Chromium 152.0.7977.64 / Playwright 1.63.0، مع IBM Plex الفعلي:
 
@@ -20,7 +23,9 @@ Chromium 152.0.7977.64 / Playwright 1.63.0، مع IBM Plex الفعلي:
 
 النتائج مربوطة ببصمة المصدر وتاريخ التشغيل والالتزام في [تقرير التحقق](replit-professional-ui-repair-2026-10-20/VERIFICATION-REPORT.md). [تقرير التنفيذ](replit-professional-ui-repair-2026-10-20/IMPLEMENTATION-REPORT.md) و[المتتبع](replit-professional-ui-repair-2026-10-20/REPAIR-TRACKER.md) يوضحان F-01 إلى F-14 لهذه الجولة، وهي معرّفات مختلفة عن جولة المعرض التاريخية.
 
-الأدلة الحالية تحت `generated-artifacts/professional-ui-repair/`، منفصلة عن reviews التاريخي. الملفات الناتجة مستثناة من Git والنشر؛ يعيد فحص الإصلاح توليدها.
+الأدلة القابلة لإعادة التوليد تحت `generated-artifacts/professional-ui-repair/`
+أو مجلد مؤقت حسب أمر الفحص؛ ليست مرفقات محفوظة في Git.
+نتائج الجولة الحالية وأوامر إعادة إنتاجها في تقرير التحقق الحالي أعلاه.
 
 ## ما هو موجود
 

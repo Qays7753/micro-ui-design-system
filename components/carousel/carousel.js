@@ -122,12 +122,15 @@
     if (st.raf) return; /* دمج النبضات المتتالية في إطار واحد */
     st.raf = requestAnimationFrame(function () {
       st.raf = null;
-      if (st.count <= 0) return;
+      if (st.disconnected || st.count <= 0) return;
       measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(carousel).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(carousel, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -190,7 +193,7 @@
 
   function goToIndex(carousel, i, opts) {
     var st = stateOf.get(carousel);
-    if (!st || st.count === 0) return;
+    if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
     setX(st, slideX(st, clamped), animate);
@@ -213,6 +216,19 @@
   function update(carousel, st) {
     measureActiveHeight(st);
     var rtl = directionOf(carousel) === 'rtl';
+    carousel.setAttribute('data-carousel-count', String(st.count));
+    var controls = carousel.querySelector('.m-carousel__controls');
+    if (controls) controls.hidden = st.count < 2;
+    st.viewport.hidden = st.count === 0;
+    var empty = carousel.querySelector('[data-carousel-empty]');
+    if (st.count === 0 && !empty) {
+      empty = document.createElement('p');
+      empty.setAttribute('data-carousel-empty', '');
+      empty.setAttribute('role', 'status');
+      empty.textContent = 'لا توجد بطاقات';
+      carousel.appendChild(empty);
+    }
+    if (empty) empty.hidden = st.count !== 0;
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
       slide.setAttribute('data-current', isCurrent ? 'true' : 'false');
@@ -282,7 +298,8 @@
      من الصفحة، ويُنظَّف حتمًا عند pointerup/pointercancel/blur/إخفاء
      الصفحة — فلا تبقى is-dragging عالقة أبدًا. */
   function onPointerDown(carousel, st, e) {
-    if (st.count <= 1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (st.disconnected || st.drag || st.count <= 1 || isLocalArrowTarget(e.target) ||
+        (e.pointerType === 'mouse' && e.button !== 0)) return;
     st.drag = {
       id: e.pointerId,
       startX: e.clientX,
@@ -358,6 +375,11 @@
        تُفسَّر كبطاقة/توسعة بعد الإفلات خارج البطاقة نفسها */
     st.suppressClick = d.axis === 'x';
     try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
+    if (st.disconnected) {
+      setX(st, d.baseX, false);
+      st.suppressClick = false;
+      return; /* release interaction without dispatching a navigation action */
+    }
     var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
     var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
     var dx = d.dx || 0;
@@ -416,6 +438,7 @@
 
   function wireExpand(carousel, st) {
     carousel.addEventListener('click', function (e) {
+      if (st.disconnected) return;
       var btn = (e.target && e.target.closest) ? e.target.closest('[data-card-expand]') : null;
       if (!btn || !carousel.contains(btn)) return;
       /* السحب الأفقي لا يوسّع: النقرة المتبقية بعد سحب مثبت تُكبت —
@@ -438,7 +461,9 @@
        السحب (attachDragWindow) حتى يعمل الإفلات خارج الـviewport. */
     st.viewport.addEventListener('pointerdown', function (e) { onPointerDown(carousel, st, e); });
     /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
-    st.viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    st.viewport.addEventListener('dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
   }
 
   /* ---------- لوحة المفاتيح (الترتيب المنطقي لا الفيزيائي) ----------
@@ -448,9 +473,9 @@
      العارض وعناصر تحكمه. Enter/Space أصلية على الأزرار ولم تُلمس. */
   function isLocalArrowTarget(el) {
     if (!el || !el.closest) return false;
-    return !!el.closest(
-      'input:not([type="hidden"]), textarea, select, summary, a[href], ' +
-      '[contenteditable="true"], [contenteditable=""], [role="slider"]');
+    return el.isContentEditable || !!el.closest(
+      'input, textarea, select, option, summary, a[href], [role="textbox"], ' +
+      '[role="searchbox"], [role="combobox"], [role="spinbutton"], [role="slider"]');
   }
   function isCarouselControl(el, carousel) {
     if (!el || !el.closest) return false;
@@ -464,7 +489,8 @@
   }
   function wireKeys(carousel, st) {
     carousel.addEventListener('keydown', function (e) {
-      if (st.count === 0) return;
+      if (st.disconnected || st.count === 0 || e.defaultPrevented || e.isComposing ||
+          e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
       var target = e.target;
       /* 1) حقول وعناصر تفاعلية تحتاج الأسهم محليًا: لا اعتراض ولا منع افتراضي */
       if (isLocalArrowTarget(target)) return;
@@ -488,8 +514,26 @@
      SUI-025: window-resize يُوجّه عبر recenterCarousel (دمج rAF + حماية
      EPS) والرصد ResizeObserver يغطي الكشف وتغيّر عرض الحاوية الأب. */
   function wireResize(carousel, st) {
-    window.addEventListener('resize', function () { recenterCarousel(carousel, st); });
+    if (!st.resizeHandler) {
+      st.resizeHandler = function () { recenterCarousel(carousel, st); };
+      window.addEventListener('resize', st.resizeHandler);
+    }
+    if (reduceMotionQuery && reduceMotionQuery.addEventListener && !st.motionHandler) {
+      st.motionHandler = function () { goToIndex(carousel, st.index, { animate: false }); };
+      reduceMotionQuery.addEventListener('change', st.motionHandler);
+    }
     observeViewport(carousel, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(carousel).direction === st.lastDirection) return;
+        recenterCarousel(carousel, st);
+      });
+      st.directionObserver = observer;
+      for (var node = carousel; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
   }
 
   function setup(carousel) {
@@ -502,7 +546,7 @@
          واحدًا فقط (علامة الوجود في viewportObservers تمنع التكرار) ثم
          يُعاد القياس فورًا: disconnect صفّر lastWidth فتعيد recenterCarousel
          القياس (العارض المخفي ينتظر الكشف — سياسة العرض 0 كما هي). */
-      observeViewport(carousel, existing);
+      wireResize(carousel, existing);
       recenterCarousel(carousel, existing);
       return; /* إعادة init آمنة — بلا إعادة ربط */
     }
@@ -530,12 +574,6 @@
     wireDrag(carousel, st);
     wireExpand(carousel, st);
     wireResize(carousel, st);
-
-    if (reduceMotionQuery && reduceMotionQuery.addEventListener) {
-      reduceMotionQuery.addEventListener('change', function () {
-        goToIndex(carousel, st.index, { animate: false });
-      });
-    }
 
     update(carousel, st);
     /* تمركز البطاقة الأولى بعد الاستقرار (خطوط الويب قد تغيّر العرض) —
@@ -583,6 +621,20 @@
         var st = stateOf.get(carousel);
         if (st) {
           st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
+          endDrag(carousel, st, true, null);
+          st.suppressClick = false;
+          if (st.resizeHandler) {
+            window.removeEventListener('resize', st.resizeHandler);
+            st.resizeHandler = null;
+          }
+          if (st.motionHandler) {
+            reduceMotionQuery.removeEventListener('change', st.motionHandler);
+            st.motionHandler = null;
+          }
           st.heightSlide = null;
           st.lastWidth = undefined; /* init لاحق يعيد القياس من جديد */
           /* SUI-R2-A2 (إصلاح SUI-R1-02): دورة rAF معلقة تُلغى — تنظيف

@@ -64,7 +64,10 @@ python3 tools/data-scale-state-check.py
 مرجع الأبعاد والهندسة والاستثناءات الحالية:
 [`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
 
-آخر دليل محفوظ في [`reviews/UI-SYSTEM-SHOWCASE/`](reviews/UI-SYSTEM-SHOWCASE/)، وآخر tracker وcoverage في `docs/UI-SYSTEM-SHOWCASE-*.md`.
+تقارير الإصلاح الحالي في
+[`docs/replit/micro-ui-professional-complete-repair-2026-10-21/`](docs/replit/micro-ui-professional-complete-repair-2026-10-21/).
+أدلة `reviews/UI-SYSTEM-SHOWCASE/` و`docs/UI-SYSTEM-SHOWCASE-*.md` تاريخية،
+وليست بديلًا عن تشغيل الفحوص على المصدر الحالي.
 
 ## العائلات
 
