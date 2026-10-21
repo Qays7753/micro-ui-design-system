@@ -48,11 +48,21 @@ previews/ui-system-showcase/standalone.html
 
 ```bash
 python3 tools/build-ui-system-showcase-standalone.py --check
+python3 tools/component-mobile-check.py
+python3 tools/chart-mobile-check.py
 python3 tools/ui-system-showcase-check.py
 python3 tools/ui-system-showcase-repair-check.py --tag after
 python3 tools/concepts-check.py
 python3 tools/data-scale-state-check.py
 ```
+
+`component-mobile-check.py` يفحص الحقول والاختيار مباشرة من مصدر المكوّنات،
+بمحاكاة لمس Chromium عند 320/360/390/430 وتكبير النص؛ يحفظ الأدلة في مجلد
+مؤقت افتراضيًا، أو في المسار المحدد بـ`--out`. لا يستخدم CSS المعرض ولا
+يثبت أجهزة أو قارئات شاشة فعلية.
+
+مرجع الأبعاد والهندسة والاستثناءات الحالية:
+[`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
 
 آخر دليل محفوظ في [`reviews/UI-SYSTEM-SHOWCASE/`](reviews/UI-SYSTEM-SHOWCASE/)، وآخر tracker وcoverage في `docs/UI-SYSTEM-SHOWCASE-*.md`.
 
@@ -84,3 +94,5 @@ python3 tools/data-scale-state-check.py
 ## الحزمة
 
 المصدر القابل للتعديل هو التسليم الأساسي. تعليمات إعادة بناء حزمة النقل موجودة في [`deliverables/README.md`](deliverables/README.md)، ولا تُعامل أي صورة أو build كبديل عن المصدر.
+
+مصدر الرسوم القابل للنقل: [`components/data/`](components/data/)، ومثاله المستقل [`example-usage.html`](components/data/example-usage.html). فحص `chart-mobile-check.py` يستخدم CSS/JS المصدر دون المعرض، ويثبت عرض SVG ونسبه والقراءات الكاملة وهندسة التنقل والاختيار؛ لا اختبار أجهزة فعلية.

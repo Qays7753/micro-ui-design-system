@@ -109,23 +109,19 @@
 /* ================= 3) شريط التنقل السفلي (عينة) =================
    عناصره قابلة للتغيير من المستهلك (بيانات HTML) — لا تثبيت عددها
    أو أسمائها، ولا هندسة تنقل جديدة.
-   SUI-R1-04: احتواء عناصر الشريط عند ضيق العرض/تكبير النص — التفاف
-   إلى صفوف إضافية (flex-wrap) مع بقاء كل تسمية كاملة بحجمها: لا
-   تصغير نص يلغي التكبير، لا حذف اسم، لا ellipsis، لا min-width:0.
-   أساس كل عنصر محتواه (flex-basis auto) فيتبع قرار الالتفاف العرض
-   الفعلي للتسميات، والنمو المتساوي يوزع الصف شبه بالتساوي، و
-   max-width: 50% يمنع تمدد عنصر وحيد في صف ثانٍ بعرض كامل (يبقى
-   متمركزًا عبر space-around). ارتفاع الشريط قد ينمو مع الصفوف —
-   المستهلك يقيس الارتفاع الفعلي (نمط --f03-navbar-h في F03 عبر
-   ResizeObserver) لإزاحات toast وشريط التحديد والحشو. min-height
-   (48px أهداف اللمس) محفوظ في كل صف.
+   2026-10-12: صف واحد بعناصر متساوية العرض، حد كل هدف 48px.
+   التسميات تلتف داخل العنصر عند التكبير دون حذفها أو تصغيرها.
+   عند تجاوز عدد العناصر المساحة المتاحة يكون التمرير داخل الشريط.
+   ارتفاع الشريط ديناميكي؛ المستهلك يقيسه لإزاحة الأشرطة المتجاورة.
    W1.3 (A3-F03 — ملكية الحافة الآمنة): الحافة السفلية تُقرأ عبر
    متغير الملكية --micro-inset-bottom (fallback إلى env الافتراضي) —
    المستهلك الذي يملك سطحه الخارجي الحافةَ يضبطه إلى 0px فلا يتكرر
    inset داخل التركيب (انظر previews/navigation/board.css). */
 .m-navbar {
   display: flex;
-  flex-wrap: wrap; /* SUI-R1-04: صفوف إضافية عند تجاوز مجموع أدنى العناصر لعرض الشريط */
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow-x: auto;
   align-items: stretch;
   justify-content: space-around;
   background-color: var(--micro-surface-base);
@@ -134,14 +130,17 @@
   font-family: var(--micro-font-family);
 }
 .m-navbar__item {
-  flex: 1 1 auto; /* SUI-R1-04: أساس المحتوى + نمو متساوٍ — قرار الالتفاف يتبع عرض التسمية الفعلي */
-  max-width: 50%; /* SUI-R1-04: عنصر وحيد في صف ثانٍ لا يتمدد كامل الصف — يبقى متمركزًا */
+  flex: 1 0 0;
+  min-width: var(--micro-touch-min);
   min-height: var(--micro-touch-min);
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 2px;
+  padding: var(--micro-space-1);
+  text-align: center;
+  overflow-wrap: anywhere;
   background: transparent;
   border: 0;
   border-radius: var(--micro-radius-field);
@@ -152,7 +151,8 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.m-navbar__item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-navbar__item svg { width: 22px; height: 22px; flex: none; align-self: center; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-navbar__item > span { min-width: 0; }
 .m-navbar__item[aria-current="page"] {
   color: var(--micro-brand-primary);
   background-color: var(--micro-surface-selected);
@@ -296,8 +296,11 @@
   border-block-start: 1px solid var(--micro-border-divider);
   font-family: var(--micro-font-family);
 }
-.m-actionbar .m-btn { flex: 1 1 auto; min-width: 0; }
-.m-actionbar--stack .m-btn { flex: none; width: 100%; }
+.m-actionbar .m-btn:not(.m-btn--icon) { flex: 1 1 auto; min-width: 0; }
+.m-actionbar .m-btn--icon { flex: 0 0 var(--micro-icon-button-size); }
+.m-actionbar--stack { flex-direction: column; align-items: stretch; }
+.m-actionbar--stack .m-btn:not(.m-btn--icon) { flex: none; width: 100%; }
+.m-actionbar--stack .m-btn--icon { flex: none; align-self: flex-start; }
 
 .m-tabs__tab:hover:not([aria-selected="true"]) { color: var(--micro-text-primary); background: var(--micro-surface-page); }
 .m-navbar__item:hover:not([aria-current="page"]) { background: var(--micro-surface-page); }

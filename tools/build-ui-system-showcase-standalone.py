@@ -184,7 +184,10 @@ def inline_css_urls(css_text: str, css_dir: Path) -> str:
             return m.group(0)
         if not rel.startswith("assets/") or not resolved.is_file():
             return m.group(0)
-        data = base64.b64encode(resolved.read_bytes()).decode("ascii")
+        # SVG نص: توحيد LF يجعل البناء مطابقًا بين checkouts Windows وUnix.
+        # الأصول الثنائية تبقى بايتاتها الأصلية.
+        payload = read(resolved).encode("utf-8") if resolved.suffix.lower() == ".svg" else resolved.read_bytes()
+        data = base64.b64encode(payload).decode("ascii")
         return f"url({quote}data:image/svg+xml;base64,{data}{quote})"
 
     return re.sub(r"url\((['\"]?)([^)'\"]+)\1\)", repl, css_text)

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro — أمثلة مصدر الرسوم</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="data.css">
+  <style>
+    /* Example framing only; charts use their source styles unchanged. */
+    body { margin: 0; background: var(--micro-surface-page); font-family: var(--micro-font-family); color: var(--micro-text-primary); }
+    main { max-width: 430px; margin-inline: auto; padding: var(--micro-space-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--micro-space-8); }
+    h1 { margin: 0; font-size: var(--micro-surface-title-size); line-height: var(--micro-surface-title-line); }
+    @media (min-width: 390px) { main { padding-inline: var(--micro-space-5); } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>أمثلة الرسوم المستقلة</h1>
+  <section class="m-chart m-chart--bars" data-chart="bars" data-max="12" id="bars">
+    <h2 class="m-chart__title">توزيع العمليات</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="مبيعات" data-value="8"></li>
+      <li data-series="b" data-label="مشتريات" data-value="4"></li>
+      <li data-series="c" data-label="مرتجعات" data-value="0"></li>
+      <li data-series="d" data-label="توريد" data-value="10"></li>
+    </ul>
+    <div class="m-chart__plot" data-plot></div>
+    <p class="m-chart__summary" data-summary>مثال ثابت؛ الصفر يظهر على خط الأساس.</p>
+  </section>
+  <section class="m-chart m-chart--line" data-chart="line" data-max="12" data-axis-dir="rtl" id="line">
+    <h2 class="m-chart__title">حركة الطلبات</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="السبت" data-value="2"></li>
+      <li data-series="a" data-label="الأحد" data-value="7"></li>
+      <li data-series="a" data-label="الاثنين" data-value=""></li>
+      <li data-series="a" data-label="الثلاثاء" data-value="4"></li>
+      <li data-series="a" data-label="الأربعاء" data-value="9"></li>
+    </ul>
+    <div class="m-chart__plot" data-plot></div>
+    <p class="m-chart__summary" data-summary>قراءة الاثنين غير متاحة؛ لا يصل الخط عبرها.</p>
+  </section>
+  <section class="m-chart m-chart--donut" data-chart="donut" data-total="25" id="donut">
+    <h2 class="m-chart__title">توزيع الحالات</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="مكتملة" data-value="12"></li>
+      <li data-series="b" data-label="قيد التوصيل" data-value="8"></li>
+      <li data-series="c" data-label="جديدة" data-value="5"></li>
+    </ul>
+    <div class="m-chart__plot m-donut" data-plot></div>
+    <p class="m-chart__summary" data-summary>نسب الفئات من المقام المعلن 25.</p>
+  </section>
+  <section class="m-chart m-chart--bubbles" data-chart="bubbles" data-max="100" id="bubbles">
+    <h2 class="m-chart__title">مقارنة المقادير</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="الفرع الشمالي" data-value="90"></li>
+      <li data-series="b" data-label="الفرع الجنوبي" data-value="3"></li>
+      <li data-series="c" data-label="الفرع الغربي" data-value="12"></li>
+    </ul>
+    <div class="m-chart__plot" data-plot></div>
+    <p class="m-chart__summary" data-summary>المساحة متناسبة مع القيمة؛ القراءات خارج الدوائر دائمًا.</p>
+  </section>
+  <section class="m-chart m-chart--donut" data-chart="donut" data-total="123456789" data-total-label="إجمالي القراءات المعلومة" id="long-donut">
+    <h2 class="m-chart__title">قراءة طويلة كاملة</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="الفئة الأولى" data-value="100000000"></li>
+      <li data-series="b" data-label="الفئة الثانية" data-value="23456789"></li>
+    </ul>
+    <div class="m-chart__plot m-donut" data-plot></div>
+    <p class="m-chart__summary" data-summary>عندما لا تتسع القراءة داخل الحلقة تظهر كاملة خارجها.</p>
+  </section>
+  <section class="m-chart m-chart--bubbles" data-chart="bubbles" data-max="10" id="bubble-states">
+    <h2 class="m-chart__title">الصفر والغياب والسالب</h2>
+    <ul class="m-chart__data" hidden>
+      <li data-series="a" data-label="صفر موثق" data-value="0"></li>
+      <li data-series="b" data-label="قراءة غائبة" data-value=""></li>
+      <li data-series="c" data-label="قيمة سالبة" data-value="-2"></li>
+    </ul>
+    <div class="m-chart__plot" data-plot></div>
+    <p class="m-chart__summary" data-summary>علامات محايدة مع حالة نصية؛ لا مساحة موجبة وهمية.</p>
+  </section>
+</main>
+<script src="data.js"></script>
+</body>
+</html>

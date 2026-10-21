@@ -110,7 +110,18 @@
   background-color: var(--micro-brand-primary);
   border-color: var(--micro-brand-primary);
 }
-.m-choice input:indeterminate + .m-choice__box svg { opacity: 1; }
+.m-choice input:indeterminate + .m-choice__box svg { opacity: 0; }
+.m-choice--check input:indeterminate + .m-choice__box::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  -webkit-mask: url("../../assets/icons/minus-sign.svg") center / contain no-repeat;
+  mask: url("../../assets/icons/minus-sign.svg") center / contain no-repeat;
+}
+/* علامة الجزئي تشغل موضع علامة الصح نفسه دون أن تغير قياس الصندوق. */
+.m-choice--check input:indeterminate + .m-choice__box { position: relative; }
+.m-choice--check input:indeterminate + .m-choice__box::after { position: absolute; }
 
 /* الراديو المحدد: نقطة داخلية بدل علامة صح */
 .m-choice--radio .m-choice__box svg { display: none; }
@@ -177,8 +188,9 @@
 }
 
 .m-switch__thumb {
+  --m-switch-slide-sign: 1;
   position: absolute;
-  top: 3px;
+  top: calc((var(--micro-switch-track-h) - var(--micro-switch-thumb)) / 2);
   inset-inline-start: 3px;
   width: var(--micro-switch-thumb);
   height: var(--micro-switch-thumb);
@@ -188,12 +200,13 @@
   transition: translate var(--micro-motion-selection) var(--micro-ease-standard);
   translate: 0 0; /* RTL: البداية يمين — الإزاحة باتجاه النهاية عند ON */
 }
+.m-switch__thumb:dir(rtl) { --m-switch-slide-sign: -1; }
 
 .m-switch input:checked + .m-switch__track {
   background-color: var(--micro-brand-primary);
 }
 .m-switch input:checked + .m-switch__track .m-switch__thumb {
-  translate: calc(-1 * (var(--micro-switch-track-w) - var(--micro-switch-thumb) - 6px)) 0;
+  translate: calc(var(--m-switch-slide-sign) * (var(--micro-switch-track-w) - var(--micro-switch-thumb) - 6px)) 0;
 }
 
 /* نص الحالة الظاهر — اللون لا يكفي وحده (قاعدة التكليف).
@@ -258,15 +271,13 @@
 
 /* ================= 4) المقطّع Segmented (اختيار قصير متبادل) ================= */
 .m-seg {
+  min-width: 0;
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap; /* عند التكبير 200% أو عمود 320: تلتف المقاطع بدل خروجها عن العمود */
-  /* SUI-011 (REPAIR-R1): فصل فجوات — الأفقية 4px كما كانت (كثافة السطر
-     الواحد بلا تغيير)، والرأسية 12px للصفوف الملتفة فقط. الحساب المصحح
-     (AUD-R1-01): هدف اللمس الموسع يزيد 4px من كل طرف (امتداد ::after أدناه)
-     فالمسافة الفعلية بين أهداف الصفين = rowGap − 8px؛ أي أن 12px تترك
-     فراغًا محققًا 4px بلا تداخل. 12px ليست توكنًا عامًا بل قيمة محققة لهذه
-     البنية بهذا الامتداد (توثيق كامل في مواصفة B03 §4). */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  /* Single row by default. The explicit stack variant retains 12px row gaps. */
   column-gap: var(--micro-space-1);
   row-gap: var(--micro-space-3);
   padding: var(--micro-space-1);
@@ -281,8 +292,10 @@
   --micro-seg-hover-surface: rgba(223, 238, 230, 0.65);
 }
 .m-seg__item {
+  flex: 0 0 auto;
   position: relative; /* لامتداد هدف اللمس دون تغيير الشكل */
   min-height: 40px;
+  min-width: var(--micro-touch-min); /* الامتداد الزائف رأسي فقط؛ العرض يحميه الحد الحقيقي */
   padding-inline: var(--micro-space-4);
   display: inline-flex;
   align-items: center;
@@ -341,11 +354,8 @@
   inset-block: calc((40px - var(--micro-touch-min)) / 2); /* -4px */
 }
 
-/* ================= 4b) سياسة العرض الضيق — نمطان صريحان (F-05 · 2026-10-10) =================
-   السياسة المسجلة في specification.md §4 قبل إضافة هذين النمطين: لا
-   كبسولة متعددة الصفوف عرضية أبدًا. الافتراضي بلا صنف يبقى التفاف SUI-011
-   بهندسته الموثقة (أداة a2 تظل تحكمه). عند التسميات الطويلة يختار
-   المستهلك صراحةً: */
+/* Explicit scroll class remains a compatible alias of the single-row default.
+   Use stack for a vertical group; never form a multi-row horizontal capsule. */
 .m-seg--scroll {
   /* صف واحد + تمرير أفقي — نفس سياسة الألسنة المعتمدة (D-UI-01):
      لا حذف تسميات ولا تصغير نص ولا صف يتيم؛ حافة العنصر التالي الظاهرة
@@ -357,6 +367,7 @@
 .m-seg--scroll .m-seg__item { flex: 0 0 auto; }
 
 .m-seg--stack {
+  overflow: visible;
   /* تكديس عمودي لخيارين إلى أربعة لا تتسع تسمياتها صفًا واحدًا: بنية
      عمودية لا كبسولة — زوايا الحاوية radius-field، فجوة 12px بنفس حساب
      لمس SUI-011 (أهداف 48px الموسعة بفراغ ≥4px بين العناصر)، والعناصر

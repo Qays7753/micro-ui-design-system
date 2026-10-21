@@ -13,7 +13,8 @@ CLI تُمرّر صراحة، فأي بيئة تستطيع تشغيلها بتك
 
 --chromium  مسار متصفح Chromium (الافتراض: shutil.which("chromium")).
 --base      عنوان خادم يجذر المستودع (الافتراض: متغير MICRO_TEST_BASE
-            ثم http://127.0.0.1:5000) — شغّل ThreadingHTTPServer من الجذر.
+            ثم http://127.0.0.1:5000) — شغّل `python3 tools/preview-server.py`
+            أولًا؛ الفحص لا يشغّل خادم المعاينة بنفسه.
 --out       مجلد الإخراج (الافتراض reviews/UI-SYSTEM-SHOWCASE/concepts) — لا تكتب فوق الأدلة المختصرة المحفوظة
             الجولات التاريخية؛ مرّر مجلد أدلة جولتك.
 

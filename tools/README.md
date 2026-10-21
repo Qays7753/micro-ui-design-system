@@ -23,6 +23,8 @@ python3 tools/ui-system-showcase-repair-check.py --tag after
 
 ## فحوص المصدر
 
+شغّل خادم المعاينة في طرفية أخرى قبل `concepts-check.py`؛ الفحص يتصل به ولا يشغّله بنفسه.
+
 ```bash
 python3 tools/concepts-check.py
 python3 tools/data-scale-state-check.py

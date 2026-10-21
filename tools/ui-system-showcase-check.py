@@ -27,10 +27,11 @@ from datetime import date
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLE = ROOT / "previews" / "ui-system-showcase"
-OUT_DIR = ROOT / "reviews" / "UI-SYSTEM-SHOWCASE"
+OUT_DIR = ROOT / "generated-artifacts" / "professional-ui-repair" / "existing-showcase"
 SHOTS = OUT_DIR / "screenshots"
 PORT = 0  # منفذ حر يُختار آليًا (يكتب في chosen_port)
 
@@ -505,7 +506,7 @@ def main() -> int:
 
     with sync_playwright() as p:
         global page
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(**chromium_launch_options())
         ctx = browser.new_context(viewport={"width": 390, "height": 844})
         ctx.set_default_timeout(9000)
         page = ctx.new_page()
@@ -549,8 +550,8 @@ def main() -> int:
     # ---- كتابة سجل التحقق ----
     lines = []
     lines.append("UI SYSTEM SHOWCASE — VERIFICATION RUN")
-    lines.append(f"التاريخ: {date.today().isoformat()} · المنفّذ: Zed AI")
-    lines.append("المصدر: zai/ui-system-showcase-prototype-2026-10-09 (من 788c2fd)")
+    lines.append(f"التاريخ: {date.today().isoformat()} · التشغيل: current working tree")
+    lines.append("المصدر: شجرة العمل الحالية (current working tree)")
     lines.append("البيئة: Chromium headless (Playwright) فقط — الأجهزة/قارئات الشاشة/WebKit/native zoom: NOT RUN")
     lines.append("الأهداف: editable (http محلي) + standalone.html (file://)")
     lines.append("")

@@ -137,7 +137,7 @@ body {
 
 /* ---------- قسم عائلة ---------- */
 
-.sc-section { margin-block: 32px; display: grid; gap: 16px; }
+.sc-section { margin-block: 32px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 
 @container (max-width: 359.5px) {
   .sc-section { margin-block: 24px; }
@@ -221,7 +221,7 @@ body {
 /* صفوف عناصر العرض */
 .sc-row { display: flex; flex-wrap: wrap; gap: 12px 8px; align-items: center; }
 .sc-row--tight { gap: 8px; }
-.sc-stack { display: grid; gap: 16px; }
+.sc-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .sc-stack--tight { gap: 12px; }
 
 .sc-grid-2 { display: grid; gap: 12px; }
@@ -278,13 +278,12 @@ body {
 .sc-block > .m-carousel { min-width: 0; max-width: 100%; }
 
 /* مسرح سطح S01 */
-.sc-surface-stage .m-surface { min-height: 240px; }
+.sc-surface-stage--comparison .m-surface { min-height: 240px; }
 .sc-surface-stage .m-surface__content {
-  min-height: 240px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
+.sc-surface-stage--comparison .m-surface__content { min-height: 240px; justify-content: center; }
 .sc-surface-stage .m-surface__label { margin: 0 0 10px; }
 .sc-surface-stage .m-surface__title { margin: 0; max-width: 100%; }
 .sc-surface-stage .m-surface__amount { margin: 12px 0 4px; }

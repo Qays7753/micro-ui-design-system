@@ -547,8 +547,9 @@
       t.addEventListener('click', function () { select(t); });
       t.addEventListener('keydown', function (e) {
         var next = null;
-        if (e.key === 'ArrowLeft') next = items[(i + 1) % items.length];      /* RTL: يسار = التالي */
-        else if (e.key === 'ArrowRight') next = items[(i - 1 + items.length) % items.length];
+        var rtl = getComputedStyle(tabs).direction === 'rtl';
+        if (e.key === 'ArrowLeft') next = items[(i + (rtl ? 1 : -1) + items.length) % items.length];
+        else if (e.key === 'ArrowRight') next = items[(i + (rtl ? -1 : 1) + items.length) % items.length];
         else if (e.key === 'Home') next = items[0];                           /* W1.1: APG — أول تبويب */
         else if (e.key === 'End') next = items[items.length - 1];             /* W1.1: APG — آخر تبويب */
         if (next) {

@@ -19,6 +19,7 @@
 .m-field {
   display: flex;
   flex-direction: column;
+  min-width: 0; /* يسمح بانكماش الحقل نفسه داخل grid/flex عند تكبير النص */
   gap: var(--micro-space-2); /* 8px بين التسمية والتحكم والرسالة */
   font-family: var(--micro-font-family);
 }
@@ -42,6 +43,7 @@
    بدل قص القيمة، ولا يلتف شيء ما لم يتجاوز سطر واحد مقاسه. */
 .m-field__control {
   display: flex;
+  min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
@@ -151,6 +153,19 @@
   align-items: center;
   gap: var(--micro-space-1);
   flex: none;
+}
+/* خطوة غير متاحة: نفس ألوان B01 المعطلة، مع تركيز ظاهر لأن
+   aria-disabled يبقي الهدف في ترتيب Tab. لا ضغط يوحي بإمكان التعديل. */
+.m-field .m-field__stepper .m-btn[aria-disabled="true"] {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.m-field .m-field__stepper .m-btn[aria-disabled="true"]:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: var(--micro-focus-gap);
 }
 /* قيمة الكمية بين زرّي الخطوة: عزل اتجاهي وأدنى عرض للتفادي القفز.
    SUI-004 (REPAIR-R1): العقد مطبق فعليًا في شكلي التركيب المعتمدين:

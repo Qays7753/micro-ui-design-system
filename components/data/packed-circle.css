@@ -24,6 +24,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* HTML span, not SVG: fill alone does not paint this representation. */
+  background-color: var(--cat, var(--micro-data-a));
+  border-radius: var(--micro-radius-circle);
 }
 .m-chart--packed .m-bubble__value {
   display: inline-block;

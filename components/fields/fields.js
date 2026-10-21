@@ -63,6 +63,19 @@
     for (var i = 0; i < list.length; i++) list[i]();
   }
 
+  /* كل مساحة التحكم المرئية تستجيب للمس؛ التحرير والأزرار الداخلية
+     تحتفظ بسلوكها الأصلي (لا تحريك للمؤشر عند النقر على النص). */
+  function bindControlFocus(f) {
+    var control = f.querySelector('.m-field__control');
+    var input = f.querySelector('.m-field__input, .m-field__area');
+    if (!control || !input) return;
+    control.addEventListener('click', function (e) {
+      if (e.defaultPrevented || input.disabled) return;
+      if (e.target.closest('input, textarea, select, button, a[href], [tabindex], [role="button"]')) return;
+      input.focus();
+    });
+  }
+
   function bindCount(f) {
     var input = f.querySelector('.m-field__input, .m-field__area');
     var count = f.querySelector('.m-field__count');
@@ -103,26 +116,69 @@
   function bindStepper(f) {
     var input = f.querySelector('.m-field__input--num');
     if (!f.querySelector('.m-field__stepper') || !input) return;
-    var min = input.hasAttribute('min') ? parseFloat(input.getAttribute('min')) : null;
-    var max = input.hasAttribute('max') ? parseFloat(input.getAttribute('max')) : null;
-    var step = parseFloat(input.getAttribute('step')) || 1;
-    var dec = (String(input.getAttribute('step') || '').split('.')[1] || '').length;
-    /* الاستماع على الغلاف نفسه: قد يكون هناك حايتا خطوة (إنقاص/زيادة) */
-    f.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-step]');
-      if (!btn || !f.contains(btn)) return;
-      /* E03: لا تغيير قيمة على حقل readOnly أو disabled — readonly يبقى قابلًا للقراءة والنسخ */
-      if (input.disabled || input.readOnly || btn.disabled) return;
+    var buttons = [].slice.call(f.querySelectorAll('[data-step]')).map(function (btn) {
+      return { el: btn, ariaDisabled: btn.getAttribute('aria-disabled') };
+    });
+    function nextValue(btn) {
+      var min = input.hasAttribute('min') ? parseFloat(input.getAttribute('min')) : null;
+      var max = input.hasAttribute('max') ? parseFloat(input.getAttribute('max')) : null;
+      var step = parseFloat(input.getAttribute('step')) || 1;
+      var dec = (String(input.getAttribute('step') || '').split('.')[1] || '').length;
       var dir = btn.getAttribute('data-step') === 'up' ? 1 : -1;
       var v = parseFloat(input.value);
       if (isNaN(v)) v = min !== null && min > 0 ? min : 0;
       v = Math.round((v + dir * step) * Math.pow(10, dec)) / Math.pow(10, dec);
-      if (min !== null && v < min) v = min; /* الحدود والخطوة والدقة من المستهلك */
+      if (min !== null && v < min) v = min;
       if (max !== null && v > max) v = max;
+      return v;
+    }
+    /* aria-disabled يُبقي الهدف قابلًا للاكتشاف بالكيبورد ويحفظ disabled
+       الأصلي الذي يملكه المستهلك. المظهر والحراسة كلاهما من المكوّن. */
+    function syncButtons() {
+      var current = parseFloat(input.value);
+      buttons.forEach(function (state) {
+        var btn = state.el;
+        var unavailable = input.disabled || input.readOnly || btn.disabled
+          || state.ariaDisabled === 'true' || nextValue(btn) === current;
+        if (unavailable) btn.setAttribute('aria-disabled', 'true');
+        else if (state.ariaDisabled === null) btn.removeAttribute('aria-disabled');
+        else btn.setAttribute('aria-disabled', state.ariaDisabled);
+      });
+    }
+    function stepButton(e) {
+      var btn = e.target.closest('[data-step]');
+      return btn && f.contains(btn) ? btn : null;
+    }
+    /* حراسة الالتقاط تمنع أيضًا المستمعات الخارجية والتفعيل الأصلي
+       (Enter/Space) عندما يكون زر الخطوة غير متاح. */
+    f.addEventListener('click', function (e) {
+      var btn = stepButton(e);
+      if (!btn) return;
+      syncButtons();
+      if (btn.disabled || btn.getAttribute('aria-disabled') === 'true') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }, true);
+    /* الاستماع على الغلاف نفسه: قد يكون هناك حايتا خطوة (إنقاص/زيادة) */
+    f.addEventListener('click', function (e) {
+      var btn = stepButton(e);
+      if (!btn || input.disabled || input.readOnly || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
+      var v = nextValue(btn);
+      if (v === parseFloat(input.value)) return; /* لا إشعار تعديل بلا تغيير */
       input.value = String(v);
+      syncButtons();
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('micro-field:changed', { bubbles: true }));
     });
+    input.addEventListener('input', syncButtons);
+    input.addEventListener('change', syncButtons);
+    registerSync(f, syncButtons);
+    new MutationObserver(syncButtons).observe(f, {
+      subtree: true, attributes: true,
+      attributeFilter: ['disabled', 'readonly', 'min', 'max', 'step']
+    });
+    syncButtons();
   }
 
   function bindMessage(f) {
@@ -150,9 +206,12 @@
 
   function init(root) {
     var scope = root || document;
-    scope.querySelectorAll('[data-micro-field]').forEach(function (f) {
+    var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
+    if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
+    fields.forEach(function (f) {
       if (f.dataset.microFieldBound) return;
       f.dataset.microFieldBound = '1';
+      bindControlFocus(f);
       bindCount(f);
       bindClear(f);
       bindStepper(f);

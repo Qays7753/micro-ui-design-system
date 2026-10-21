@@ -110,11 +110,14 @@
    ولا يعتمد hover. الملخص النصي أسفل كل رسم (قابل للقراءة من قارئ الشاشة). */
 .m-chart {
   display: flex;
+  min-width: 0;
+  container-type: inline-size;
   flex-direction: column;
   gap: var(--micro-space-3);
   font-family: var(--micro-font-family);
 }
 .m-chart__title {
+  margin: 0;
   font-size: var(--micro-body-size);
   /* SUI-017 (REPAIR-R1 2026-10-07): عنوان مجموعة داخل وجهة = 16/24 وزن 600
      (قرار قائد الوحدة — اتساق مع F03)؛ كان 16/26 (var(--micro-body-line)). */
@@ -122,17 +125,36 @@
   font-weight: 600;
   color: var(--micro-text-primary);
 }
-.m-chart__plot { width: 100%; }
+.m-chart__plot { width: 100%; min-width: 0; }
 /* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
    .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
    الأعمدة/الخط تتمدد بعرض البطاقة كالمعتاد. */
 .m-chart__plot svg:not(.m-donut__svg) { display: block; width: 100%; height: auto; }
+
+/* Conditional full-value alternative; no extra card or closed-only table. */
+.m-chart__readings {
+  display: grid;
+  gap: var(--micro-space-1);
+  margin: var(--micro-space-2) 0 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-chart__readings > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--micro-space-3);
+  min-width: 0;
+}
+.m-chart__readings dt { flex: 1 1 8ch; min-width: 0; overflow-wrap: anywhere; color: var(--micro-text-secondary); }
+.m-chart__readings dd { margin: 0; max-width: 100%; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
   margin: 0;
   padding: var(--micro-space-3) var(--micro-space-4);
-  border: 1.5px dashed var(--micro-warning);
-  border-radius: var(--micro-radius-field);
+  border: 0;
+  border-inline-start: var(--micro-space-1) solid var(--micro-warning);
+  border-radius: var(--micro-radius-chip);
   background-color: var(--micro-warning-surface);
   color: var(--micro-text-primary);
   font-size: var(--micro-secondary-size);
@@ -175,11 +197,11 @@
   padding-inline: var(--micro-space-4);
   border: 0;
   border-radius: var(--micro-radius-capsule);
-  background: var(--micro-surface-page);
+  background: transparent;
   color: var(--micro-text-primary);
   font-family: var(--micro-font-family);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
   font-weight: 500;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -219,6 +241,11 @@
   color: var(--micro-text-primary);
   font-variant-numeric: tabular-nums;
 }
+.m-chart__dataset th, .m-chart__dataset td { overflow-wrap: anywhere; }
+.m-chart__gridline { stroke: var(--micro-border-divider); stroke-width: 1; }
+.m-chart svg line, .m-chart svg polyline, .m-chart__dot {
+  vector-effect: non-scaling-stroke;
+}
 
 /* ألوان الفئات — تعيين ثابت بالمفتاح (لا بالترتيب) من ألوان البيانات المعتمدة */
 .m-cat--a { --cat: var(--micro-data-a); }  /* #164D59 */
@@ -229,11 +256,8 @@
 
 /* ---- الأعمدة (SVG يصيّره data.js) ----
    القيمة فوق العمود والفئة تحته دائمًا. صفر = عمود صفر ظاهر على الأساس. */
-/* R1-UI09 + R2-UI02: قفزة واحدة متدرجة لقراءة تسميات SVG على الهاتف —
-   أعمدة 12→13px وخط/دونات 11→12px (لا تكبير عشوائي). القيم هنا (13/12)
-   حد أدنى فعلي على الشاشة لا قيمة CSS وحسب: data.js يقيس عرض كل رسم
-   عند الـrender ويعوّض مقاييس النص حين يقل عرض SVG المعروض عن 320
-   (عقد الحجم الفعلي موثق في specification.md). */
+/* تسميات SVG بحجم فعلي 13px. عرض viewBox يطابق عرض المكوّن،
+   فلا يتقلص النص أو يتضخم بتغيّر العرض؛ العقد في specification.md. */
 .m-chart--bars .m-chart__bar-label {
   font-size: 13px;
   fill: var(--micro-text-secondary);
@@ -254,11 +278,11 @@
 .m-chart--line .m-chart__line { fill: none; stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
-  font-size: 12px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-size: 13px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart--line .m-chart__x-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart--line .m-chart__x-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {
@@ -272,29 +296,45 @@
 .m-legend__item { display: inline-flex; align-items: center; gap: var(--micro-space-2); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-primary); }
 .m-legend__swatch { width: 12px; height: 12px; border-radius: 4px; background-color: var(--cat); flex: none; }
 .m-legend__value { color: var(--micro-text-secondary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+.m-legend__label { min-width: 0; overflow-wrap: anywhere; }
 
 /* ---- التوزيع الدائري ----
    نسب بمقام معلن (الإجمالي من المستهلك) — لا نسب من مجموع وهمي. */
-.m-donut { display: flex; align-items: center; gap: var(--micro-space-5); flex-wrap: wrap; }
-.m-donut__svg { width: 148px; height: 148px; flex: none; }
+.m-donut { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: var(--micro-space-4); }
+.m-donut__svg { width: 148px; height: 148px; justify-self: center; }
+.m-donut > .m-legend { display: grid; gap: var(--micro-space-3); min-width: 0; }
+.m-donut .m-legend__item { display: flex; align-items: baseline; min-width: 0; }
+.m-donut .m-legend__label { flex: 1; }
+.m-donut .m-legend__swatch { align-self: center; }
+.m-donut .m-legend__value { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+@container (min-width: 340px) {
+  .m-donut:has(> .m-donut__svg) { grid-template-columns: 148px minmax(0, 1fr); }
+  .m-donut > .m-donut__svg { grid-column: 1; grid-row: 1; }
+  .m-donut:has(> .m-donut__svg) > .m-legend { grid-column: 2; grid-row: 1; }
+}
 .m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
-.m-donut__center-label { font-size: 12px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__reading { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--micro-space-2); grid-column: 1 / -1; min-width: 0; }
+.m-donut__number { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: 600; direction: ltr; unicode-bidi: isolate; overflow-wrap: anywhere; min-width: 0; }
+.m-donut__reading-label { font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
 
 /* ---- دوائر المساحة ----
    المساحة تتناسب مع القيمة: نصف القطر √القيمة. لا حد أدنى يزوّر
    المساحة؛ الصغيرة جدًا تسميتها خارجية. لا دائرة سالبة. */
 .m-bubbles { display: flex; align-items: flex-end; justify-content: center; gap: var(--micro-space-5); flex-wrap: wrap; }
-.m-bubble { display: flex; flex-direction: column; align-items: center; gap: var(--micro-space-2); }
-.m-bubble__circle { border-radius: var(--micro-radius-circle); background-color: var(--cat, var(--micro-data-a)); }
+.m-bubble { display: flex; flex-direction: column; align-items: center; gap: var(--micro-space-2); min-width: 0; max-width: 100%; }
+.m-bubble__circle { display: block; fill: var(--cat, var(--micro-data-a)); }
 .m-bubble--soft .m-bubble__circle { opacity: 0.85; } /* لقراءة التداخل المحدود إن وجد */
-.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
-.m-bubble__label { font-size: var(--micro-secondary-size); color: var(--micro-text-secondary); }
+.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
+.m-bubble__label { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-secondary); max-width: 12ch; overflow-wrap: anywhere; text-align: center; }
 /* التسمية خارجية دائمًا (فوق الدائرة) — لا نص داخل دائرة صغيرة */
 .m-bubble__circle--none {
-  background: transparent;
-  border: 1.5px dashed var(--micro-text-hint);
+  fill: none;
+  stroke: var(--micro-text-hint);
+  stroke-width: 1.5;
   width: 14px; height: 14px; /* بديل صفر/سالب/ناقص: حلقة شَرطة صغيرة موحدة */
 }
+.m-bubble__circle--none circle { vector-effect: non-scaling-stroke; }
 
 /* ================= 3) التقدم والتتبّع =================
    المحدد له قيمة معلومة؛ غير المحدد انتظار بلا نسبة — والتسمية
