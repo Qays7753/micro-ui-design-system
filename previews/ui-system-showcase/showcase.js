@@ -277,18 +277,6 @@
       chart.setAttribute('data-axis-dir', dir);
       if (window.MicroData) window.MicroData.render(chart);
     });
-    /* Direction changes physical offsets without changing the width, so a
-       width-only ResizeObserver cannot recenter an already initialized track. */
-    [
-      { selector: '[data-carousel]', api: window.MicroCarousel },
-      { selector: '[data-info-peek]', api: window.MicroInfoPeek }
-    ].forEach(function (family) {
-      if (!family.api) return;
-      qa(family.selector).forEach(function (root) {
-        var index = family.api.getIndex(root);
-        if (index >= 0) family.api.goTo(root, index, { animate: false });
-      });
-    });
   }
 
   function applyWidth(w) {

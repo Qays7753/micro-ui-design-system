@@ -442,12 +442,14 @@
       if (nextAutoDay === state.autoDay) return;
       var active = root.contains(document.activeElement) ? document.activeElement : null;
       var focusSelector = null;
+      var focusedOrderId = null;
       if (active) {
         var control = active.closest('[data-ocal-action]');
         if (control && control.hasAttribute('data-ocal-date')) {
           focusSelector = '[data-ocal-date="' + control.getAttribute('data-ocal-date') + '"]';
         } else if (control) {
           var action = control.getAttribute('data-ocal-action');
+          if (action === 'order-row') focusedOrderId = control.getAttribute('data-ocal-id');
           if (action === 'prev-day' || action === 'prev-month') action = nextAutoDay ? 'prev-day' : 'prev-month';
           if (action === 'next-day' || action === 'next-month') action = nextAutoDay ? 'next-day' : 'next-month';
           focusSelector = '[data-ocal-action="' + action + '"]';
@@ -459,7 +461,15 @@
       state.autoDay = nextAutoDay;
       render();
       if (active) {
-        var target = (focusSelector && root.querySelector(focusSelector)) ||
+        var orderTarget = null;
+        if (focusedOrderId !== null) {
+          Array.prototype.some.call(root.querySelectorAll('[data-ocal-action="order-row"]'), function (row) {
+            if (row.getAttribute('data-ocal-id') !== focusedOrderId) return false;
+            orderTarget = row;
+            return true;
+          });
+        }
+        var target = orderTarget || (focusedOrderId === null && focusSelector && root.querySelector(focusSelector)) ||
           root.querySelector('[data-ocal-action="cal-mode"][aria-pressed="true"]') ||
           root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
         if (target) target.focus();

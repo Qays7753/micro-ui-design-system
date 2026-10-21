@@ -115,7 +115,8 @@ def main():
               window.schedule = MicroOrderSchedule.init(root, {
                 today:'2026-10-07', selectedDate:'2026-10-07', weekStart:6,
                 orders:[{id:'a',title:'طلب ألف',date:'2026-10-07',time:'12:00',statusKey:''},
-                        {id:'b',title:'طلب باء',date:'2026-10-08',time:null,statusKey:''}]
+                        {id:'b',title:'طلب باء',date:'2026-10-08',time:null,statusKey:''},
+                        {id:'b2',title:'طلب ثان',date:'2026-10-08',time:null,statusKey:''}]
               });
             }""")
 
@@ -259,6 +260,19 @@ def main():
             }"""), "day navigation focus maps to month navigation on widening")
             check(page.evaluate("scheduleEvents.length") == 0,
                   "responsive focus restoration must not create selection events")
+            page.locator('#schedule [data-ocal-id="b2"]').focus()
+            set_width(320)
+            check(page.evaluate("document.activeElement.getAttribute('data-ocal-id')") == "b2",
+                  "narrow fallback preserves second order identity, not first same-action row")
+            set_width(430)
+            check(page.evaluate("document.activeElement.getAttribute('data-ocal-id')") == "b2",
+                  "widening preserves second order identity")
+            page.keyboard.press("Enter")
+            check(page.evaluate("""()=>scheduleEvents.length===1 &&
+              scheduleEvents[0][0]==='order-schedule:order-open' &&
+              scheduleEvents[0][1].id==='b2'"""),
+                  "Enter after responsive resize opens the exact focused order")
+            page.evaluate("scheduleEvents=[]")
             page.locator('#schedule [data-ocal-action="view"][data-ocal-value="list"]').focus()
             set_width(320)
             check(page.evaluate("""()=>{

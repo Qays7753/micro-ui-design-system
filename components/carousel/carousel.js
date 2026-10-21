@@ -126,8 +126,11 @@
       measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(carousel).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(carousel, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -520,6 +523,17 @@
       reduceMotionQuery.addEventListener('change', st.motionHandler);
     }
     observeViewport(carousel, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(carousel).direction === st.lastDirection) return;
+        recenterCarousel(carousel, st);
+      });
+      st.directionObserver = observer;
+      for (var node = carousel; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
   }
 
   function setup(carousel) {
@@ -607,6 +621,10 @@
         var st = stateOf.get(carousel);
         if (st) {
           st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
           endDrag(carousel, st, true, null);
           st.suppressClick = false;
           if (st.resizeHandler) {

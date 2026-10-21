@@ -10677,8 +10677,11 @@ body {
       if (st.disconnected || st.count <= 0) return;
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(strip).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(strip, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -10897,6 +10900,17 @@ body {
       reduceQuery.addEventListener('change', st.motionHandler);
     }
     observeViewport(strip, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(strip).direction === st.lastDirection) return;
+        recenterStrip(strip, st);
+      });
+      st.directionObserver = observer;
+      for (var node = strip; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
     recenterStrip(strip, st);
     var generation = st.generation = (st.generation || 0) + 1;
     if (document.fonts) document.fonts.ready.then(function () {
@@ -11035,6 +11049,10 @@ body {
         var st = stateOf.get(strip);
         if (st) {
           st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
           st.generation = (st.generation || 0) + 1;
           endDrag(strip, st, true, null);
           st.suppressClick = false;
@@ -12302,12 +12320,14 @@ body {
       if (nextAutoDay === state.autoDay) return;
       var active = root.contains(document.activeElement) ? document.activeElement : null;
       var focusSelector = null;
+      var focusedOrderId = null;
       if (active) {
         var control = active.closest('[data-ocal-action]');
         if (control && control.hasAttribute('data-ocal-date')) {
           focusSelector = '[data-ocal-date="' + control.getAttribute('data-ocal-date') + '"]';
         } else if (control) {
           var action = control.getAttribute('data-ocal-action');
+          if (action === 'order-row') focusedOrderId = control.getAttribute('data-ocal-id');
           if (action === 'prev-day' || action === 'prev-month') action = nextAutoDay ? 'prev-day' : 'prev-month';
           if (action === 'next-day' || action === 'next-month') action = nextAutoDay ? 'next-day' : 'next-month';
           focusSelector = '[data-ocal-action="' + action + '"]';
@@ -12319,7 +12339,15 @@ body {
       state.autoDay = nextAutoDay;
       render();
       if (active) {
-        var target = (focusSelector && root.querySelector(focusSelector)) ||
+        var orderTarget = null;
+        if (focusedOrderId !== null) {
+          Array.prototype.some.call(root.querySelectorAll('[data-ocal-action="order-row"]'), function (row) {
+            if (row.getAttribute('data-ocal-id') !== focusedOrderId) return false;
+            orderTarget = row;
+            return true;
+          });
+        }
+        var target = orderTarget || (focusedOrderId === null && focusSelector && root.querySelector(focusSelector)) ||
           root.querySelector('[data-ocal-action="cal-mode"][aria-pressed="true"]') ||
           root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
         if (target) target.focus();
@@ -13084,8 +13112,11 @@ body {
       measureActiveHeight(st);
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(carousel).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(carousel, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -13478,6 +13509,17 @@ body {
       reduceMotionQuery.addEventListener('change', st.motionHandler);
     }
     observeViewport(carousel, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(carousel).direction === st.lastDirection) return;
+        recenterCarousel(carousel, st);
+      });
+      st.directionObserver = observer;
+      for (var node = carousel; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
   }
 
   function setup(carousel) {
@@ -13565,6 +13607,10 @@ body {
         var st = stateOf.get(carousel);
         if (st) {
           st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
           endDrag(carousel, st, true, null);
           st.suppressClick = false;
           if (st.resizeHandler) {
@@ -13869,18 +13915,6 @@ body {
     qa('[data-axis-dir]').forEach(function (chart) {
       chart.setAttribute('data-axis-dir', dir);
       if (window.MicroData) window.MicroData.render(chart);
-    });
-    /* Direction changes physical offsets without changing the width, so a
-       width-only ResizeObserver cannot recenter an already initialized track. */
-    [
-      { selector: '[data-carousel]', api: window.MicroCarousel },
-      { selector: '[data-info-peek]', api: window.MicroInfoPeek }
-    ].forEach(function (family) {
-      if (!family.api) return;
-      qa(family.selector).forEach(function (root) {
-        var index = family.api.getIndex(root);
-        if (index >= 0) family.api.goTo(root, index, { animate: false });
-      });
     });
   }
 

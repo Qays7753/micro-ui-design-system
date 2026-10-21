@@ -210,6 +210,31 @@ def main():
                     page.locator(f"#{root} [data-info-strip-prev]").evaluate("e=>e.click()")
                     check(pre + f" {root} focus leaves slide before inert",
                           viewport.evaluate("e=>document.activeElement===e"))
+                for root_id, api_name in [("c7", "MicroCarousel"), ("p7", "MicroInfoPeek")]:
+                    page.evaluate("""([id,api])=>{
+                      const r=document.getElementById(id);window[api].goTo(r,1,{animate:false});
+                      r._directionChanges=0;r.addEventListener(api==='MicroCarousel'?
+                        'micro-carousel:change':'micro-info-peek:change',()=>r._directionChanges++);
+                    }""", [root_id, api_name])
+                    for level in ["root", "ancestor"]:
+                        for target_dir in ["ltr" if direction == "rtl" else "rtl", direction]:
+                            page.evaluate("""([id,level,dir])=>{
+                              (level==='root'?document.getElementById(id):document.body).setAttribute('dir',dir);
+                            }""", [root_id, level, target_dir])
+                            page.wait_for_timeout(80)
+                            check(pre + f" {root_id} fixed-width {level} direction {target_dir} recenters silently",
+                                  page.evaluate("""([id,api])=>{
+                                    const r=document.getElementById(id),index=window[api].getIndex(r),
+                                      v=r.querySelector('[data-viewport],[data-info-strip-viewport]').getBoundingClientRect(),
+                                      s=r.querySelectorAll('[data-carousel-slide],.m-info-strip__slide')[index].getBoundingClientRect();
+                                    return index===1 && !r._directionChanges &&
+                                      Math.abs((v.left+v.right)-(s.left+s.right))<2 &&
+                                      s.left>=v.left-1 && s.right<=v.right+1;
+                                  }""", [root_id, api_name]))
+                        page.evaluate("""([id,level])=>
+                          (level==='root'?document.getElementById(id):document.body).removeAttribute('dir')
+                        """, [root_id, level])
+                        page.wait_for_timeout(60)
                 for n in [0, 1, 2, 7]:
                     for prefix in ["s", "p", "c"]:
                         root = page.locator("#" + prefix + str(n))
@@ -231,7 +256,7 @@ def main():
                     data = page.evaluate("""({prefix,api,vp,tr,dragging})=>{
                       const a=document.getElementById(prefix+'2'),b=document.getElementById(prefix+'7');
                       const engine=window[api],v=a.querySelector(vp),t=a.querySelector(tr);
-                      engine.goTo(a,0);let events=0;a.addEventListener(
+                      engine.goTo(a,0);engine.goTo(b,0);let events=0;a.addEventListener(
                         api==='MicroCarousel'?'micro-carousel:change':'micro-info-peek:change',()=>events++);
                       v.dispatchEvent(new PointerEvent('pointerdown',{pointerId:9,clientX:100,clientY:100,bubbles:true}));
                       window.dispatchEvent(new PointerEvent('pointermove',{pointerId:9,clientX:180,clientY:102,bubbles:true,cancelable:true}));

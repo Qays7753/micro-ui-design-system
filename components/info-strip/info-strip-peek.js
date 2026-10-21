@@ -63,8 +63,11 @@
       if (st.disconnected || st.count <= 0) return;
       var w = st.viewport.clientWidth;
       if (w <= 1) return; /* مخفي (عرض 0): لا إعادة قياس */
-      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS) return;
+      var direction = getComputedStyle(strip).direction;
+      if (st.lastWidth !== undefined && Math.abs(w - st.lastWidth) < RESIZE_EPS &&
+          direction === st.lastDirection) return;
       st.lastWidth = w;
+      st.lastDirection = direction;
       goToIndex(strip, st.index, { animate: false }); /* الفهرس والتركيز محفوظان */
     });
   }
@@ -283,6 +286,17 @@
       reduceQuery.addEventListener('change', st.motionHandler);
     }
     observeViewport(strip, st);
+    if (!st.directionObserver && typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function () {
+        if (st.disconnected || st.directionObserver !== observer ||
+            getComputedStyle(strip).direction === st.lastDirection) return;
+        recenterStrip(strip, st);
+      });
+      st.directionObserver = observer;
+      for (var node = strip; node; node = node.parentElement) {
+        observer.observe(node, { attributes: true, attributeFilter: ['dir', 'class', 'style'] });
+      }
+    }
     recenterStrip(strip, st);
     var generation = st.generation = (st.generation || 0) + 1;
     if (document.fonts) document.fonts.ready.then(function () {
@@ -421,6 +435,10 @@
         var st = stateOf.get(strip);
         if (st) {
           st.disconnected = true;
+          if (st.directionObserver) {
+            st.directionObserver.disconnect();
+            st.directionObserver = null;
+          }
           st.generation = (st.generation || 0) + 1;
           endDrag(strip, st, true, null);
           st.suppressClick = false;
