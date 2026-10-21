@@ -15,7 +15,9 @@
    <div class="m-chart__plot" data-plot></div>
    <p class="m-chart__summary" data-summary></p>
 
-   مدخلات موحدة (E06 + R2-05): تحليل رقم كامل لا بادئة رقمية —
+   مدخلات موحدة (E06 + R2-05): data-value رقم خام قانوني غير منسق
+   (لا فواصل تجميع أو علامات محلية)؛ data-display للقراءة المعروضة فقط —
+   تحليل رقم كامل لا بادئة رقمية —
    `12oops` ليس 12 بل قيمة غير صالحة (مجهول)، والفارغ/غير الرقمي/
    NaN/∞ كلها null (مجهول) — لا استيفاء ولا تخمين صامت.
 
@@ -785,8 +787,9 @@
   }
 
   /* Select whole labels only. Protected source boundaries and endpoints are
-     considered first; when protected labels themselves cannot coexist, the
-     plot labels and duplicate point readings yield to complete visible rows. */
+     considered first. Endpoint labels may shift inward by their measured
+     overhang; point geometry and source order never move. If protected
+     labels still cannot coexist, complete readings move to visible rows. */
   function sampleLineLabels(chart, svg, items, timeValues) {
     var W = svg.viewBox.baseVal.width;
     var candidates = [];
@@ -797,6 +800,33 @@
       var endpoint = index === 0 || index === items.length - 1
         || (timeValues && (timeValues[index] === timeMin || timeValues[index] === timeMax));
       var labels = [].slice.call(g.querySelectorAll('.m-chart__x-label'));
+      /* F4: keep a protected endpoint label fully inside the plot before
+         deciding that the protected set cannot fit. Only its label x moves;
+         data points, values and source boundaries remain untouched. Measure
+         all wrapped lines as one label so they receive the same translation. */
+      if (endpoint && labels.length) {
+        var labelLeft = Infinity, labelRight = -Infinity;
+        labels.forEach(function (label) {
+          var length = measuredLenOf(label);
+          var cx = parseFloat(label.getAttribute('x')) || 0;
+          labelLeft = Math.min(labelLeft, cx - length / 2 - 1);
+          labelRight = Math.max(labelRight, cx + length / 2 + 1);
+        });
+        var shift = 0;
+        if (labelLeft < 8 && labelRight <= W - 8) {
+          var inwardFromLeft = 8 - labelLeft;
+          if (labelRight + inwardFromLeft <= W - 8) shift = inwardFromLeft;
+        } else if (labelRight > W - 8 && labelLeft >= 8) {
+          var inwardFromRight = W - 8 - labelRight;
+          if (labelLeft + inwardFromRight >= 8) shift = inwardFromRight;
+        }
+        if (shift) {
+          labels.forEach(function (label) {
+            var x = parseFloat(label.getAttribute('x')) || 0;
+            label.setAttribute('x', x + shift);
+          });
+        }
+      }
       var boxes = labels.map(function (label) {
         var length = measuredLenOf(label);
         var bbox;

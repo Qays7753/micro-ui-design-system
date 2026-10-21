@@ -395,9 +395,8 @@
   }
 }
 
-/* Selected values read from both surface and mark; hover never masks focus. */
+/* Hover is a separate pointer cue and never replaces the focus indication. */
 .m-choice:hover:not(:has(input:disabled)) { background: var(--micro-surface-page); }
-.m-choice:focus-within .m-choice__box { outline: 2px solid var(--micro-focus-ring); outline-offset: 2px; }
 .m-switch:hover:not(:has(input:disabled)) .m-switch__track { box-shadow: inset 0 0 0 1px var(--micro-brand-primary); }
 .m-seg__item:hover:not([disabled]):not([aria-disabled="true"]):not([aria-pressed="true"]) { color: var(--micro-text-primary); background: var(--micro-seg-hover-surface); }
 .m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: 600; }

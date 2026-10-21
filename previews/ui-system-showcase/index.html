@@ -299,11 +299,11 @@
           <p class="m-field__msg" data-field-msg hidden></p>
         </div>
         <div class="sc-grid-2">
-          <div class="m-field" data-micro-field>
+          <div class="m-field has-disabled" data-micro-field>
             <label class="m-field__label" for="sc-f-dis">حقل معطل</label>
             <div class="m-field__control"><input class="m-field__input" id="sc-f-dis" type="text" value="قيمة غير قابلة للتحرير" disabled></div>
           </div>
-          <div class="m-field" data-micro-field>
+          <div class="m-field has-readonly" data-micro-field>
             <label class="m-field__label" for="sc-f-ro">قراءة فقط (قابل للنسخ)</label>
             <div class="m-field__control"><input class="m-field__input" id="sc-f-ro" type="text" value="ORD-2026-001" readonly></div>
           </div>
@@ -740,6 +740,7 @@
           <button type="button" class="m-btn m-btn--secondary" id="sc-metric-layout" aria-pressed="false">تبديل ترتيب الدوائر (separated / overlap)</button>
         </div>
         <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="64" id="sc-circles" aria-label="مقارنة قيم تشغيلية">
+          <h3 class="m-metric-circles__title">أحجام نسبية — والقراءات الدقيقة في المفتاح</h3>
           <ul class="m-metric-circles__source" data-metric-source data-fx-live="sc-circles-src" hidden>
             <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
             <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
@@ -751,12 +752,12 @@
             <li data-label="عنصر ج" data-value="" data-unit="وحدة" data-series="c"></li>
           </template>
           <ol class="m-metric-circles__items" data-metric-items aria-label="المقارنة"></ol>
-          <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="التسميات والقراءات خارج الدوائر"></ul>
+          <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="مفتاح التسميات والقراءات الدقيقة"></ul>
           <p class="m-metric-circles__empty" data-metric-scale></p>
           <p class="m-metric-circles__empty" data-metric-empty hidden></p>
         </section>
         <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة">
-          <h3 class="m-main-metric__title" hidden>قيمة رئيسية ومؤشرات مستقلة</h3>
+          <h3 class="m-main-metric__title">مقارنة مسطّحة — للقراءة الدقيقة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -782,6 +783,7 @@
         </section>
         <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. المثال التالي هو إبراز صريح لقراءة رئيسية، ثم compact يعرضان بيانات المقارنة نفسها.</p>
         <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز مقصود لقيمة رئيسية ومقارنة مستقلة">
+          <h3 class="m-main-metric__title">قراءة رئيسية — مع مقارنات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -800,6 +802,7 @@
           </div>
         </section>
         <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-compact" aria-label="مقارنة مدمجة بالبيانات نفسها">
+          <h3 class="m-main-metric__title">قراءة مدمجة — نفس بيانات المقارنة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -972,7 +975,9 @@
                 <p class="m-field__msg" data-field-msg hidden></p>
               </div>
             </div>
-            <button class="m-btn m-btn--primary" type="submit">متابعة</button>
+            <div class="m-access-gateway__actions">
+              <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit">متابعة</button>
+            </div>
             <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
           </form>
         </section>

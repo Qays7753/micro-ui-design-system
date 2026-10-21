@@ -293,6 +293,11 @@
       var circ = document.createElement('span');
       var valTxt = document.createElement('span');
       valTxt.className = 'm-bubble__value';
+      /* Default mode has one exact-reading source: the visible full key.
+         The in-circle value is retained for the compact no-key variant only. */
+      if (chart.getAttribute('data-legend') !== 'off') {
+        valTxt.setAttribute('aria-hidden', 'true');
+      }
       var lab = document.createElement('span');
       lab.className = 'm-bubble__label';
       lab.textContent = it.label;

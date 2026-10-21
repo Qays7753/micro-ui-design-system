@@ -261,7 +261,7 @@ body {
   border-radius: var(--micro-radius-field);
   background: var(--micro-surface-page);
 }
-.sc-tools .m-btn { min-height: 40px; padding-block: 8px; }
+/* Review-only actions still use B01's actual 48px target, not a 40px override. */
 
 /* إطار هاتف محدود للعناصر اللاصقة (appbar/navbar/actionbar) */
 .sc-frame {

@@ -447,14 +447,25 @@ def main():
               item.setAttribute('data-value', '64');
               item.setAttribute('data-series', series);
               MicroMetricComparison.render(el);
+              const reading = el.querySelector('.m-metric-circles__fallback-reading');
+              let surface = reading;
+              while (surface && ['transparent', 'rgba(0, 0, 0, 0)'].includes(getComputedStyle(surface).backgroundColor)) {
+                surface = surface.parentElement;
+              }
+              if (!surface) throw new Error('No opaque surface found for the external reading');
               return {
-                foreground: getComputedStyle(el.querySelector('.m-metric-circles__inside-reading')).color,
-                background: getComputedStyle(el.querySelector('.m-metric-circles__bubble')).backgroundColor
+                foreground: getComputedStyle(reading).color,
+                background: getComputedStyle(surface).backgroundColor,
+                completeSingleReading: reading.getBoundingClientRect().width > 0
+                  && reading.textContent.includes('64')
+                  && el.querySelectorAll('.m-metric-circles__fallback-reading').length === 1
+                  && el.querySelectorAll('.m-metric-circles__inside-reading').length === 0
               };
             }""", series)
             ratio = contrast_ratio(colors["foreground"], colors["background"])
-            CONTRAST.append({"pair": "circle-" + series, "ratio": round(ratio, 2), "required": 4.5})
-            check(f"Category {series}: normal-sized circle readings meet 4.5:1 contrast", ratio >= 4.5,
+            CONTRAST.append({"pair": "circle-key-" + series, "ratio": round(ratio, 2), "required": 4.5})
+            check(f"Category {series}: exact external reading appears once", colors["completeSingleReading"])
+            check(f"Category {series}: normal-sized external readings meet 4.5:1 contrast", ratio >= 4.5,
                   round(ratio, 2))
         colors = page.evaluate("""() => {
           const root = getComputedStyle(document.documentElement);
