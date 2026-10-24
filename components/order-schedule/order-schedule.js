@@ -13,14 +13,20 @@
      setLoading(true|false)
      setError(retryCallback|null)
      destroy()
+   options: orders, statuses, today, weekStart, selectedDate, view,
+            calendarView, presentation, orderActions{edit,delete},
+            headingLevel, loading, retry
    أحداث CustomEvent على الجذر (bubbles):
-     order-schedule:day-select   {date:'YYYY-MM-DD'}
-     order-schedule:order-open   {id}
-     order-schedule:add-request  {date:'YYYY-MM-DD'|null}
+     order-schedule:day-select           {date:'YYYY-MM-DD'}
+     order-schedule:order-open           {id}
+     order-schedule:add-request          {date:'YYYY-MM-DD'|null}
+     order-schedule:order-edit-request   {id}
+     order-schedule:order-delete-request {id}
 
    قواعد ثابتة:
-   - عربي RTL (يُستكشف الاتجاه من الجذر؛ LTR يعمل معكوسًا
-     كأفضل مجهود — المنتج عربي أولًا).
+   - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
+     documentElement يجعل قلب الاتجاه الحي فوريًا ويُفصل في destroy؛
+     LTR يعمل معكوسًا كأفضل مجهود — المنتج عربي أولًا).
    - كل نص من البيانات عبر textContent/عُقد DOM — لا HTML من
      البيانات أبدًا (حقن `<img onerror>` يظهر نصًا حرفيًا).
    - كل التواريخ نصوص 'YYYY-MM-DD': ممنوع Date.parse/UTC/
@@ -29,10 +35,20 @@
    - الحالة تأتي من خريطة المستهلك فقط: مفتاح مجهول → محايد
      بنص المفتاح الخام (لا إخفاء ولا خطأ). لا استنتاج حالة من
      التاريخ ولا أي معنى مالي.
-   - مستمعان مفوّضان على الجذر فقط (click + keydown) يسجلان
-     مرة عند التهيئة وينتزعان في destroy() — إعادة التصيير لا
-     تضيف مستمعات، والتهيئة المزدوجة آمنة (data-ocal-init).
-   - لا مؤقتات دائمة ولا rAF داخل المكوّن.
+   - عقد 2026-10-25 (مرجع مفهوم التقويم): عرضان متناسقان لشبكة
+     الشهر — expanded (الشبكة الكاملة + لوحة اليوم أسفلها) وagenda
+     (الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد أسفلها).
+     اليوم داخل التقويم هو نقطة الدخول؛ لا زر إضافة عائم ولا Bottom
+     Sheet في هذا المسار؛ أفعال تعديل/حذف كل طلب على صفّه في لوحة
+     اليوم/الأجندة فقط، وحدثاهما مستهدفة على صفّهما host-owned.
+   - مستمعان مفوّضان على الجذر فقط (click + keydown) + focusout
+     يغلق منتقي الشهر عند مغادرة التركيز الجذر + مستمع Escape مفرد
+     على document أثناء فتح المنتقي فقط — تسجل مرة عند التهيئة
+     وتُنتزع في destroy() — إعادة التصيير لا تضيف مستمعات،
+     والتهيئة المزدوجة آمنة (data-ocal-init).
+   - لا مؤقتات دائمة ولا rAF دائم داخل المكوّن؛ الاستخدام الوحيد
+     rAF عابر لتجميع أحداث تغيّر المساحة (ResizeObserver) يُلغى في
+     destroy — صياغة العقد موثقة في المواصفة §3.
    ========================================================= */
 
 (function () {
@@ -57,6 +73,7 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   var instances = new WeakMap();
+  var AGENDA_ID_SEQ = 0; /* معرّفات فريدة لمناطق إفصاح الأجندة */
 
   /* =======================================================
      أدوات عامة
@@ -127,14 +144,21 @@
     return isoOf(t.getFullYear(), t.getMonth() + 1, t.getDate());
   }
 
-  /* عبارة العدد العربية الصحيحة: 0/1/2/3–10/11–99/100+ */
+  /* عبارة العدد العربية الصحيحة: 0/1/2/3–10/11–99؛ ومن 100 فأعلى
+     تُشتق الصيغة من آخر رقمين (قاعدة العدد المركب — 132 → «طلبًا»،
+     102 → «طلبان»، 100 → «طلب») */
   function countPhraseAr(n) {
     if (n === 0) return 'لا طلبات';
     if (n === 1) return 'طلب واحد';
     if (n === 2) return 'طلبان';
     if (n >= 3 && n <= 10) return n + ' طلبات';
     if (n >= 11 && n <= 99) return n + ' طلبًا';
-    return n + ' طلب';
+    var r = n % 100;
+    if (r === 0) return n + ' طلب';
+    if (r === 1) return n + ' طلب واحد';
+    if (r === 2) return n + ' طلبان';
+    if (r >= 3 && r <= 10) return n + ' طلبات';
+    return n + ' طلبًا';
   }
 
   /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» */
@@ -156,7 +180,7 @@
     s.setAttribute('height', size);
     s.setAttribute('fill', 'none');
     s.setAttribute('stroke', 'currentColor');
-    s.setAttribute('stroke-width', '2');
+    s.setAttribute('stroke-width', '1.5');
     s.setAttribute('stroke-linecap', 'round');
     s.setAttribute('stroke-linejoin', 'round');
     s.setAttribute('aria-hidden', 'true');
@@ -193,6 +217,30 @@
     return s;
   }
 
+  /* سهم أسفل لمنطقة الإفصاح (أجندة اليوم المحدد) — يدور عند الفتح */
+  function chevronDownIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('polyline', { points: '6 9 12 15 18 9' }));
+    return s;
+  }
+
+  /* قلم التعديل — عقد السماكة 1.5 نفسه (2026-10-25) */
+  function editIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('path', { d: 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z' }));
+    return s;
+  }
+
+  /* سلة الحذف — عقد السماكة 1.5 نفسه (2026-10-25) */
+  function trashIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('polyline', { points: '3 6 5 6 21 6' }));
+    s.appendChild(svgNode('path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }));
+    s.appendChild(svgNode('line', { x1: '10', y1: '11', x2: '10', y2: '17' }));
+    s.appendChild(svgNode('line', { x1: '14', y1: '11', x2: '14', y2: '17' }));
+    return s;
+  }
+
   /* =======================================================
      تطبيع مدخلات المستهلك (لا HTML من البيانات — كل النص خام)
      ======================================================= */
@@ -211,7 +259,9 @@
         /* وقت لا يطابق HH:mm → غائب (لا يُخترع وقت أبدًا) */
         time: (typeof o.time === 'string' && TIME_RE.test(o.time)) ? o.time : null,
         statusKey: (o.statusKey == null ? '' : String(o.statusKey)),
-        customer: (o.customer == null || o.customer === '') ? null : String(o.customer)
+        customer: (o.customer == null || o.customer === '') ? null : String(o.customer),
+        /* ملاحظة قصيرة اختيارية (بيانات وصفيّة فقط — لا معنى مالي) */
+        note: (o.note == null || o.note === '') ? null : String(o.note)
       });
     }
     return out;
@@ -245,6 +295,8 @@
     var resizeFrame = 0;
     var pendingResizeWidth = 0;
     var resizeFallback = null;
+    var dirObserver = null;    /* R-02: مراقب dir للقلب الحي للاتجاه */
+    var docEscapeRef = null;   /* R-14: مستمع Escape على document أثناء فتح المنتقي فقط */
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
@@ -258,6 +310,24 @@
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
     state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
+    /* عقد 2026-10-25 — عرضان متناسقان لشهر الشبكة:
+       expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
+       agenda: الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد
+       (data-ocal-agenda-open) — الطي يبدأ مغلقًا دائمًا (هادئًا). */
+    state.presentation = (options.presentation === 'agenda') ? 'agenda' : 'expanded';
+    state.agendaOpen = false;
+    /* أفعال صفوف الطلب (تعديل/حذف) host-owned: تُرسَم فقط عند تفعيلها
+       صراحة، وفقط على صفوف لوحة اليوم/الأجندة (سطح فعل اليوم المحدد)،
+       ولا تُرسَم في القائمة — الإضافة تبقى فعل اليوم دائمًا. */
+    state.orderActions = {
+      edit: !!(options.orderActions && options.orderActions.edit),
+      delete: !!(options.orderActions && options.orderActions.delete)
+    };
+    /* R-42: مستوى عناوين المكوّن قابل للضبط من المضيف (2–6، افتراضي 3)
+       كي لا يفرض المخطط التفصيلي مخططه على صفحة المضيف */
+    state.headingLevel = (typeof options.headingLevel === 'number' &&
+      options.headingLevel >= 2 && options.headingLevel <= 6 &&
+      Math.floor(options.headingLevel) === options.headingLevel) ? options.headingLevel : 3;
     state.loading = !!options.loading;
     state.errorRetry = (typeof options.retry === 'function') ? options.retry : null;
     state.compactMonth = false;
@@ -268,12 +338,18 @@
     state.monthCursor = { y: sp.y, m: sp.m };
     state.focusDate = state.selectedDate;
 
-    /* الاتجاه: RTL افتراضيًا؛ LTR يُعامل معكوسًا (منتج عربي) */
+    /* الاتجاه: RTL افتراضيًا؛ يُعاد تقييمه عند كل تصيير، ومراقب dir
+       على documentElement (يُفصل في destroy) يجعل قلب الاتجاه الحي
+       فوريًا — عقد R-02 2026-10-25 */
     state.rtl = true;
     try {
       var dir = window.getComputedStyle(root).direction;
       if (dir === 'ltr') state.rtl = false;
     } catch (err) { /* جذر غير ملحق بعد: RTL افتراضيًا */ }
+
+    function hTag() {
+      return 'h' + state.headingLevel;
+    }
 
     /* ---- مساعدات داخلية ---- */
 
@@ -382,6 +458,14 @@
 
     function render() {
       if (destroyed) return;
+      /* R-02: الاتجاه يُعاد تقييمه من الجذر عند كل تصيير — قلب dir
+         داخل أي حاوية يصحح السهام/لوحة المفاتيح عند أول إعادة تصيير،
+         ومراقب documentElement أدناه يجعل قلب مستوى الصفحة فوريًا */
+      try {
+        var dirNow = window.getComputedStyle(root).direction;
+        if (dirNow === 'ltr') state.rtl = false;
+        else if (dirNow === 'rtl') state.rtl = true;
+      } catch (err) { /* غير ملحق: القيمة الحالية تبقى */ }
       root.textContent = '';
       root.classList.add('m-ocal');
       root.setAttribute('data-ocal-root', '');
@@ -396,15 +480,28 @@
       root.setAttribute('data-ocal-layout', layout);
       root.setAttribute('data-ocal-compact', state.compactMonth ? 'true' : 'false');
       root.setAttribute('data-ocal-selected-date', state.selectedDate);
+      /* عقد 2026-10-25: عرضا شهر الشبكة — expanded/agenda على الجذر،
+         وحالة فتح منطقة إفصاح الأجندة (في عرض الأجندة فقط) */
+      root.setAttribute('data-ocal-presentation', state.presentation);
+      if (state.presentation === 'agenda' && state.view === 'calendar' &&
+          state.calendarView === 'month') {
+        root.setAttribute('data-ocal-agenda-open', state.agendaOpen ? 'true' : 'false');
+      } else {
+        root.removeAttribute('data-ocal-agenda-open');
+      }
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
-         (لا نجاح كاذب ولا بيانات قديمة فوق الرد الأخير) */
+         (لا نجاح كاذب ولا بيانات قديمة فوق الرد الأخير).
+         R-13 (2026-10-25): شريط تقويم/قائمة يبقى قابلًا للاستخدام فوق
+         صندوق الحالة — لا حالة بلا مخرج للتنقل. */
       if (state.loading) {
+        root.appendChild(buildViewsBar());
         root.appendChild(buildLoading());
         return;
       }
       if (state.errorRetry) {
+        root.appendChild(buildViewsBar());
         root.appendChild(buildError());
         return;
       }
@@ -438,6 +535,22 @@
       var bar = el('div', 'm-ocal__modes');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'نمط التقويم');
+      /* زر عرضَي الشهر (expanded/agenda) — المسار الصريح المُتاح
+         (بالإضافة إلى الأزرار) لطي/توسيع الشهر؛ لا سحب رأسيًا في هذا
+         المسار (قرار موثق: لا منافسة مع تمرير الصفحة ولا مع تنقل
+         الشهر الأفقي، ولا كود إيماءات بلا اختبار لمس حقيقي). */
+      if (state.calendarView === 'month') {
+        var collapsed = state.presentation === 'agenda';
+        var pres = el('button', 'm-ocal__modes-btn m-ocal__pres-btn',
+          collapsed ? 'توسيع الشهر' : 'طي الشهر');
+        pres.type = 'button';
+        pres.setAttribute('data-ocal-action', 'presentation');
+        pres.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+        pres.setAttribute('aria-label', collapsed
+          ? 'توسيع عرض الشهر الكامل'
+          : 'طي الشهر إلى أجندة اليوم المحدد');
+        bar.appendChild(pres);
+      }
       var nextMode = state.calendarView === 'day' ? 'month' : 'day';
       var switchMode = el('button', 'm-ocal__modes-btn',
         state.calendarView === 'day' ? 'عرض الشهر' : 'عرض اليوم');
@@ -509,7 +622,7 @@
     function buildCalBar(y, m) {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-month', 'الشهر السابق', prevIcon()));
-      var title = el('h3', 'm-ocal__cal-title');
+      var title = el(hTag(), 'm-ocal__cal-title');
       var pickerButton = el('button', 'm-ocal__month-trigger', MONTHS_AR[m - 1] + ' ' + y);
       pickerButton.type = 'button';
       pickerButton.setAttribute('data-ocal-action', 'month-picker');
@@ -540,7 +653,7 @@
       prevYear.setAttribute('aria-label', 'السنة السابقة');
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
-      var year = el('h4', 'm-ocal__picker-year', String(state.pickerYear));
+      var year = el(hTag(), 'm-ocal__picker-year', String(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
       var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
@@ -632,6 +745,17 @@
       var label = fullDateAr(iso);
       if (iso === state.today) label += '، اليوم';
       label += '، ' + countPhraseAr(orders.length);
+      /* ملخص الحالات في الاسم الإتاحي للخلية (التاريخ + العدد +
+         الحالات الموجود) — النقاط ليست القناة الوحيدة للمعنى */
+      var stLabels = [];
+      var seenK = {};
+      for (var j = 0; j < orders.length; j++) {
+        var k2 = orders[j].statusKey;
+        if (k2 === '' || seenK[k2]) continue;
+        seenK[k2] = true;
+        stLabels.push(resolveStatus(k2).label);
+      }
+      if (stLabels.length) label += ' (' + stLabels.join('، ') + ')';
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -705,10 +829,24 @@
       return b;
     }
 
-    /* ---- صف طلب موحّد (اليوم/الأسفل/القائمة) ----
+    /* ---- صف طلب موحّد (اليوم/الأجندة/الأسفل/القائمة) ----
        showDate: شارة تاريخ قصيرة تظهر في صفوف القائمة فقط (سياق
-       نطاق زمني) — موثق في المواصفة */
-    function buildOrderRow(order, showDate) {
+       نطاق زمني) — موثق في المواصفة.
+       withTools: أزرار تعديل/حذف على صفوف سطح فعل اليوم المحدد فقط
+       (لوحة اليوم المفصوصة ومنطقة إفصاح الأجندة) عند تفعيل المضيف
+       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل). */
+    function rowToolBtn(action, verb, icon, order) {
+      var b = el('button', 'm-ocal__row-tool' +
+        (action === 'order-delete' ? ' m-ocal__row-tool--danger' : ''));
+      b.type = 'button';
+      b.setAttribute('data-ocal-action', action);
+      b.setAttribute('data-ocal-id', order.id);
+      b.setAttribute('aria-label', verb + ' الطلب: ' + order.title);
+      b.appendChild(icon);
+      return b;
+    }
+
+    function buildOrderRow(order, showDate, withTools) {
       var li = el('li', 'm-ocal__rowitem');
       var btn = el('button', 'm-ocal__row');
       btn.type = 'button';
@@ -716,6 +854,10 @@
       btn.setAttribute('data-ocal-id', order.id);
       /* العنوان عبر textContent — أي HTML ممرر يظهر نصًا حرفيًا */
       btn.appendChild(el('span', 'm-ocal__row-title', order.title));
+      /* ملاحظة قصيرة اختيارية تحت العنوان (وصفية فقط) */
+      if (order.note) {
+        btn.appendChild(el('span', 'm-ocal__row-note', order.note));
+      }
 
       var meta = el('span', 'm-ocal__row-meta');
       if (showDate && order.date) {
@@ -734,20 +876,33 @@
       }
       if (order.statusKey !== '') {
         var st = resolveStatus(order.statusKey);
-        var schip = el('span', 'm-ocal__row-status m-ocal__row-status--' + st.tone);
-        schip.appendChild(el('span', 'm-ocal__row-statusdot'));
-        schip.appendChild(el('span', 'm-ocal__row-statuslabel', st.label));
+        /* R-24 (2026-10-25): بلا نقطة داخل شريحة الحالة — الكلمة
+           والتلوين الدلالي للشريحة يحملان الحالة (عقد anti-slop) */
+        var schip = el('span', 'm-ocal__row-status m-ocal__row-status--' + st.tone,
+          st.label);
         meta.appendChild(schip);
       }
       btn.appendChild(meta);
       li.appendChild(btn);
+      if (withTools && (state.orderActions.edit || state.orderActions.delete)) {
+        var tools = el('div', 'm-ocal__row-tools');
+        tools.setAttribute('role', 'group');
+        tools.setAttribute('aria-label', 'أفعال الطلب: ' + order.title);
+        if (state.orderActions.edit) {
+          tools.appendChild(rowToolBtn('order-edit', 'تعديل', editIcon(), order));
+        }
+        if (state.orderActions.delete) {
+          tools.appendChild(rowToolBtn('order-delete', 'حذف', trashIcon(), order));
+        }
+        li.appendChild(tools);
+      }
       return li;
     }
 
-    function buildRows(orders, showDate) {
+    function buildRows(orders, showDate, withTools) {
       var ul = el('ul', 'm-ocal__rows');
       for (var i = 0; i < orders.length; i++) {
-        ul.appendChild(buildOrderRow(orders[i], !!showDate));
+        ul.appendChild(buildOrderRow(orders[i], !!showDate, !!withTools));
       }
       return ul;
     }
@@ -784,7 +939,7 @@
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
-        head.appendChild(el('h3', 'm-ocal__daypanel-title',
+        head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
           'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
@@ -795,16 +950,74 @@
       var iso = state.selectedDate;
       var orders = sortedOrdersForDate(iso);
       if (withTitle) {
-        head.appendChild(el('h3', 'm-ocal__daypanel-title', fullDateAr(iso)));
+        head.appendChild(el(hTag(), 'm-ocal__daypanel-title', fullDateAr(iso)));
       }
       head.appendChild(el('p', 'm-ocal__daypanel-count', countPhraseAr(orders.length)));
       head.appendChild(buildAddButton());
       panel.appendChild(head);
-      panel.appendChild(buildRows(orders, false));
+      panel.appendChild(buildRows(orders, false, true));
       return panel;
     }
 
-    /* ---- شاشة التقويم (شهر) ---- */
+    /* ---- منطقة إفصاح الأجندة (عرض agenda فقط — عقد 2026-10-25) ----
+       منطقة هادئة تحت الشهر المضغوط: زر واحد يحمل اليوم المحدد
+       الكامل وعدد طلباته (aria-expanded + aria-controls)؛ الضغط يكشف
+       صفوف اليوم المحدد فقط داخل الصفحة — لا يغيّر التحديد ولا يطلق
+       day-select، ولا يكشف طلبات يوم/شهر آخر مهما كان شهر العرض
+       (المحتوى من selectedDate وحده). أثناء تصفّح شهر لا يحوي يوم
+       التحديد تُسبقها ملاحظة تصفّح صادقة (data-ocal-day-browsing). */
+    function buildAgendaDisclosure() {
+      var wrap = el('div', 'm-ocal__agenda');
+      wrap.setAttribute('data-ocal-agenda', '');
+      if (browsingMonthWithoutSelection()) {
+        wrap.setAttribute('data-ocal-day-browsing', 'true');
+        wrap.appendChild(el('p', 'm-ocal__agenda-note',
+          'لا يوم محدد في ' + MONTHS_AR[state.monthCursor.m - 1] + ' ' +
+          state.monthCursor.y));
+      }
+      var iso = state.selectedDate;
+      var orders = sortedOrdersForDate(iso);
+      if (!state.agendaBodyId) {
+        state.agendaBodyId = 'm-ocal-agenda-' + (++AGENDA_ID_SEQ);
+      }
+      var toggle = el('button', 'm-ocal__agenda-toggle');
+      toggle.type = 'button';
+      toggle.setAttribute('data-ocal-action', 'agenda-toggle');
+      toggle.setAttribute('aria-expanded', state.agendaOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-controls', state.agendaBodyId);
+      var dateTxt = el('span', 'm-ocal__agenda-date', fullDateAr(iso));
+      toggle.appendChild(dateTxt);
+      toggle.appendChild(el('span', 'm-ocal__agenda-count', countPhraseAr(orders.length)));
+      toggle.appendChild(chevronDownIcon());
+      wrap.appendChild(toggle);
+
+      var body = el('div', 'm-ocal__agenda-body');
+      body.id = state.agendaBodyId;
+      body.setAttribute('data-ocal-agenda-body', '');
+      if (state.agendaOpen) {
+        body.appendChild(el(hTag(), 'm-ocal__agenda-title', fullDateAr(iso)));
+        if (orders.length) {
+          body.appendChild(buildRows(orders, false, true));
+        } else {
+          var empty = el('div', 'm-ocal__status m-ocal__status--empty m-ocal__agenda-empty');
+          empty.setAttribute('data-ocal-status', 'empty');
+          empty.setAttribute('role', 'status');
+          empty.appendChild(el('p', 'm-ocal__status-text', 'لا طلبات في هذا اليوم.'));
+          body.appendChild(empty);
+        }
+        body.appendChild(buildAddButton());
+      } else {
+        body.hidden = true; /* نمط الإفصاح القياسي: مطوي = خارج شجرة الوصول */
+      }
+      wrap.appendChild(body);
+      return wrap;
+    }
+
+    /* ---- شاشة التقويم (شهر) — عرضان متناسقان لعقد 2026-10-25 ----
+       expanded: الشبكة الكاملة + مفتاح + لوحة اليوم المفصوصة أسفلها
+       (الوضع الافتراضي كما كان قبل 2026-10-25).
+       agenda: الشبكة نفسها بكل أيامها (مضغوطة بـCSS فقط) + منطقة
+       إفصاح الأجندة بدل لوحة اليوم — سياق الشهر يبقى محفوظًا. */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
@@ -815,7 +1028,11 @@
       screen.appendChild(buildMonthGrid(groupOrdersByDate()));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
       if (legend) screen.appendChild(legend);
-      screen.appendChild(buildDayPanel(true));
+      if (state.presentation === 'agenda') {
+        screen.appendChild(buildAgendaDisclosure());
+      } else {
+        screen.appendChild(buildDayPanel(true));
+      }
       return screen;
     }
 
@@ -829,7 +1046,7 @@
       var panel = buildDayPanel(false);
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
-      bar.appendChild(el('h3', 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
+      bar.appendChild(el(hTag(), 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
       bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
       panel.insertBefore(bar, panel.firstChild);
       screen.appendChild(panel);
@@ -865,7 +1082,7 @@
       if (sec) screen.appendChild(sec);
       sec = buildListSection('الطلبات السابقة', buckets.past);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection('طلبات غير مجدولة', buckets.unsched);
+      sec = buildListSection('الطلبات غير المجدولة', buckets.unsched);
       if (sec) screen.appendChild(sec);
       return screen;
     }
@@ -876,10 +1093,10 @@
       if (!orders.length) return null;
       var sec = el('section', 'm-ocal__list-section');
       var head = el('div', 'm-ocal__list-head');
-      head.appendChild(el('h3', 'm-ocal__list-heading', title));
+      head.appendChild(el(hTag(), 'm-ocal__list-heading', title));
       head.appendChild(el('p', 'm-ocal__list-count', countPhraseAr(orders.length)));
       sec.appendChild(head);
-      sec.appendChild(buildRows(orders, true));
+      sec.appendChild(buildRows(orders, true, false));
       return sec;
     }
 
@@ -896,7 +1113,7 @@
       var box = el('div', 'm-ocal__status m-ocal__status--error');
       box.setAttribute('data-ocal-status', 'error');
       box.setAttribute('role', 'alert');
-      box.appendChild(el('p', 'm-ocal__status-text', 'تعذر تحميل الطلبات.'));
+      box.appendChild(el('p', 'm-ocal__status-text', 'تعذّر تحميل الطلبات.'));
       /* إعادة المحاولة تستدعي callback المستهلك — المكوّن لا يعيد
          التحميل بنفسه (موثق) */
       var b = el('button', 'm-ocal__retry');
@@ -983,6 +1200,17 @@
         }
         return;
       }
+      /* Escape في عرض الأجندة المفتوحة: يطوي منطقة الإفصاح ويعيد
+         التركيز إلى زرها — المسار الكامل بلوحة المفاتيح (عقد 2026-10-25) */
+      if (e.key === 'Escape' && state.view === 'calendar' &&
+          state.calendarView === 'month' && state.presentation === 'agenda' &&
+          state.agendaOpen) {
+        e.preventDefault();
+        state.agendaOpen = false;
+        render();
+        refocus('[data-ocal-action="agenda-toggle"]');
+        return;
+      }
       if (state.view !== 'calendar' || state.calendarView !== 'month') return;
       var cell = (t && t.closest) ? t.closest('.m-ocal__cell[data-ocal-date]') : null;
       if (!cell || !root.contains(cell)) return;
@@ -1054,14 +1282,67 @@
       state.pickerOpen = true;
       state.pickerYear = state.monthCursor.y;
       render();
+      attachDocEscape();
       refocus('[data-ocal-action="picker-month"][data-ocal-value="' + (state.monthCursor.m - 1) + '"]');
     }
 
-    function closePicker() {
+    /* R-14 (2026-10-25): إغلاق المنتقي بمسارين إضافيين فوق Escape داخل
+       الجذر — (1) مستمع Escape مفرد على document أثناء فتحه فقط
+       (سابقة m-layer)، و(2) focusout يغلقه بصدق مع تحديث aria-expanded
+       عندما يغادر التركيز المكوّن كله (Tab بعيدًا لا يترك طبقة معلقة).
+       في مسار focusout لا يُستعاد التركيز — المستخدم غادره عمدًا. */
+    function attachDocEscape() {
+      if (docEscapeRef) return;
+      docEscapeRef = function (ev) {
+        if (destroyed || !state.pickerOpen) return;
+        if (ev.key === 'Escape') {
+          ev.preventDefault();
+          closePicker();
+        }
+      };
+      document.addEventListener('keydown', docEscapeRef, false);
+      listeners.push({ el: document, type: 'keydown', fn: docEscapeRef });
+    }
+
+    function detachDocEscape() {
+      if (!docEscapeRef) return;
+      document.removeEventListener('keydown', docEscapeRef, false);
+      for (var i = listeners.length - 1; i >= 0; i--) {
+        if (listeners[i].fn === docEscapeRef) listeners.splice(i, 1);
+      }
+      docEscapeRef = null;
+    }
+
+    function onRootFocusOut(e) {
+      if (!state.pickerOpen) return;
+      /* R-14 — تصنيف ثلاثي لمصدر focusout:
+         1) relatedTarget داخل الجذر: انتقال داخلي حتمي (زر داخل
+            المنتقي أو استعادة تركيز المكوّن) — لا إغلاق ولا فحص مؤجل
+            (الميكروتاسك قد يجري بين focusout وfocusin فيفسد الانتقال
+            نفسه — ثبت بالقياس).
+         2) relatedTarget خارج الجذر: مغادرة صريحة (Tab/نقر هدف آخر)
+            — إغلاق صادق فوري مع تحديث aria-expanded بلا استعادة تركيز.
+         3) relatedTarget=null: إما استبدال التصيير للعنصر المركّز
+            (يُستعاد التركيز فورًا بعده) أو مغادرة إلى body — يُحسم
+            في ميكروتاسك بفحص موضع التركيز الفعلي بعد الاستقرار. */
+      var to = e.relatedTarget;
+      if (to && root.contains(to)) return;
+      if (to) { closePicker(false); return; }
+      Promise.resolve().then(function () {
+        if (destroyed || !state.pickerOpen) return;
+        var active = document.activeElement;
+        if (active && active !== root && root.contains(active)) return;
+        if (active === root) return; /* الجذر نفسه داخل نطاق المكوّن */
+        closePicker(false);
+      });
+    }
+
+    function closePicker(restoreFocus) {
       if (!state.pickerOpen) return;
       state.pickerOpen = false;
+      detachDocEscape();
       render();
-      refocus('[data-ocal-action="month-picker"]');
+      if (restoreFocus !== false) refocus('[data-ocal-action="month-picker"]');
     }
 
     function changePickerYear(delta) {
@@ -1081,6 +1362,24 @@
         state.focusDate = state.selectedDate;
       }
       closePicker();
+    }
+
+    /* عقد 2026-10-25: تبديل عرضَي الشهر (expanded/agenda) — التحديد
+       والشهر المعروض لا يتغيران؛ الطي يبدأ منطقة الإفصاح هادئة. */
+    function togglePresentation() {
+      state.presentation = (state.presentation === 'agenda') ? 'expanded' : 'agenda';
+      state.agendaOpen = false;
+      render();
+      refocus('[data-ocal-action="presentation"]');
+    }
+
+    /* عقد 2026-10-25: فتح/طي منطقة إفصاح أجندة اليوم المحدد — يكشف
+       صفوف اليوم المحدد فقط (المحتوى من selectedDate) ولا يغيّر
+       التحديد ولا يطلق أي حدث (فعل عرض صرف). */
+    function toggleAgenda() {
+      state.agendaOpen = !state.agendaOpen;
+      render();
+      refocus('[data-ocal-action="agenda-toggle"]');
     }
 
     /* «اليوم» هو فعل اختيار صريح: يحدّث الشهر والتاريخ ويعلن الحدث. */
@@ -1118,6 +1417,19 @@
         /* حدث واحد لكل نقرة: معالج click واحد فقط (Enter/Space تمر
            عبر click الأصلي — لا معالج keyup مزدوج) */
         emit('order-schedule:order-open', { id: btn.getAttribute('data-ocal-id') });
+      } else if (act === 'order-edit') {
+        /* عقد 2026-10-25: فعل تعديل مملوك للمضيف — الحدث فقط؛
+           المحرر/المسار مسؤولية المضيف (لا Bottom Sheet هنا) */
+        emit('order-schedule:order-edit-request', { id: btn.getAttribute('data-ocal-id') });
+        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+      } else if (act === 'order-delete') {
+        /* عقد 2026-10-25: فعل حذف مملوك للمضيف — الحدث فقط */
+        emit('order-schedule:order-delete-request', { id: btn.getAttribute('data-ocal-id') });
+        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+      } else if (act === 'agenda-toggle') {
+        toggleAgenda();
+      } else if (act === 'presentation') {
+        togglePresentation();
       } else if (act === 'add') {
         /* التاريخ محمول على الزر نفسه: اليوم المحدد في لوحة اليوم،
            و"" (بلا يوم) في القائمة وفي شهر تصفّح بلا تحديد — بصدق */
@@ -1169,6 +1481,27 @@
     /* تسجيل المستمعين (مرة واحدة على الجذر) */
     on(root, 'keydown', guard(onKeydown));
     on(root, 'click', guard(onClick));
+    on(root, 'focusout', guard(onRootFocusOut));
+
+    /* R-02 (2026-10-25): مراقب واحد لسمة dir على documentElement — قلب
+       الاتجاه الحي (State Lab) يعيد التصيير فورًا فتصح السهام ولوحة
+       المفاتيح مع الشكل؛ يُفصل في destroy. قلب dir داخل حاوية أعمق
+       يلتقطه إعادة تقييم الاتجاه في render() عند أول إعادة تصيير. */
+    if (typeof MutationObserver === 'function') {
+      dirObserver = new MutationObserver(function () {
+        if (destroyed) return;
+        var rtl = true;
+        try {
+          var d = window.getComputedStyle(root).direction;
+          if (d === 'ltr') rtl = false;
+        } catch (err) { /* غير ملحق: القيمة الحالية تبقى */ }
+        if (rtl !== state.rtl) {
+          state.rtl = rtl;
+          render();
+        }
+      });
+      dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+    }
 
     render();
     observeResponsiveWidth();
@@ -1209,6 +1542,16 @@
           updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
+      /* عقد 2026-10-25: ضبط صامت لعرضَي الشهر (expanded/agenda) —
+         يحفظ selectedDate وmonthCursor؛ الطي يبدأ الإفصاح هادئًا */
+      setPresentation: guard(function (v) {
+        if (v === 'expanded' || v === 'agenda') {
+          state.pickerOpen = false;
+          state.agendaOpen = false;
+          state.presentation = v;
+          render();
+        }
+      }),
       setLoading: guard(function (flag) {
         state.loading = !!flag;
         if (state.loading) state.errorRetry = null; /* آخر استدعاء يملك الشاشة */
@@ -1222,8 +1565,10 @@
         if (state.errorRetry) state.loading = false; /* آخر استدعاء يملك الشاشة */
         render();
       }),
-      /* ينزع كل مستمع (المصفوفة أعلاه) ويعيد الجذر لسمة غير مهيأة —
-         بعده لا أحداث إطلاقًا */
+      /* ينزع كل مستمع (المصفوفة أعلاه) ويفصل مراقبي dir/العرض ويعيد
+         الجذر لسمة غير مهيأة — بعده لا أحداث إطلاقًا. R-27 (2026-10-25):
+         تُزال أيضًا سمات العقد المتبقية (layout/compact/selected-date/
+         presentation/agenda-open) فلا تُقرأ بحالة ما بعد الدمار */
       destroy: guard(function () {
         destroyed = true;
         if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
@@ -1231,6 +1576,10 @@
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;
+        }
+        if (dirObserver) {
+          dirObserver.disconnect();
+          dirObserver = null;
         }
         if (resizeFallback) {
           window.removeEventListener('resize', resizeFallback, false);
@@ -1241,6 +1590,7 @@
           L.el.removeEventListener(L.type, L.fn, false);
         }
         listeners.length = 0;
+        docEscapeRef = null;
         root.textContent = '';
         root.classList.remove('m-ocal');
         root.removeAttribute('data-ocal-root');
@@ -1249,6 +1599,11 @@
         root.removeAttribute('data-ocal-cal-view');
         root.removeAttribute('data-ocal-preferred-cal-view');
         root.removeAttribute('data-ocal-auto-view');
+        root.removeAttribute('data-ocal-layout');
+        root.removeAttribute('data-ocal-compact');
+        root.removeAttribute('data-ocal-selected-date');
+        root.removeAttribute('data-ocal-presentation');
+        root.removeAttribute('data-ocal-agenda-open');
         instances.delete(root);
       })
     };

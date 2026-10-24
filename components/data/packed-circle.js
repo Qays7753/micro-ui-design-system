@@ -137,7 +137,7 @@
       label.textContent = it.label;
       var value = document.createElement('bdi');
       value.className = 'm-legend__value';
-      value.textContent = it.value === 0 ? '0 — صفر' : stateText(it).text;
+      value.textContent = it.value === 0 ? '0 (صفر)' : stateText(it).text;
       li.appendChild(label);
       li.appendChild(value);
       list.appendChild(li);
@@ -173,29 +173,31 @@
      «-3,566 — سالب غير صالح للمساحة». وللقيم الموجبة بلا تغيير:
      data-display نص العرض كما هو. */
   function stateText(it) {
-    if (!it.hasAttr) return { text: '— غير معروف', none: true };
-    if (it.value === null) return { text: '— غير متاح', none: true };
+    if (!it.hasAttr) return { text: '(غير معروف)', none: true };
+    if (it.value === null) return { text: '(غير متاح)', none: true };
     if (it.value < 0) {
       var num = it.display || String(it.value);
-      return { text: num + ' — سالب غير صالح للمساحة', none: true };
+      return { text: num + ' (سالب غير صالح للمساحة)', none: true };
     }
     if (it.value === 0) return { text: '0', none: true };
     return { text: it.display || String(it.value), none: false };
   }
 
   function scaleError(chart, positiveExists, vmaxDerived) {
+    /* R-05 (2026-10-25): انفصال نص المستخدم عن التشخيص التقني كما في
+       data.js donutRefusal — نص موجز بلا أسماء سمات في الواجهة،
+       والتشخيص الكامل على سمة data-scale-detail يُقرأ من الكود/السجلات. */
     var raw = chart.getAttribute('data-max');
     var plot = chart.querySelector('[data-plot]');
     var err = document.createElement('p');
     err.className = 'm-chart__scale-error';
-    var base = 'تعذر رسم المقارنة: المقياس المعلن data-max="' + raw + '" ';
-    if (parseNum(raw) === 0) {
-      err.textContent = base + 'صفر' + (positiveExists
-        ? ' بينما توجد قيم موجبة — تعارض في البيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس. صحّح data-max أو القيم. القيم معروضة في المفتاح دون رسم.'
-        : '— لا توجد قيم موجبة للمقارنة. القيم معروضة في المفتاح.');
-    } else {
-      err.textContent = base + 'غير صالح (سالب أو غير رقمي) — المقياس السالب/غير الرقمي غير صالح للمقارنة المساحية. صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون رسم.';
-    }
+    err.textContent = 'تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.';
+    var devDetail = parseNum(raw) === 0
+      ? 'packed-circle: data-max="' + raw + '" صفر' + (positiveExists
+        ? ' بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.'
+        : ' ولا توجد قيم موجبة للمقارنة.')
+      : 'packed-circle: data-max="' + raw + '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.';
+    chart.setAttribute('data-scale-detail', devDetail);
     plot.innerHTML = '';
     plot.appendChild(err);
     if (!positiveExists) {

@@ -39,14 +39,14 @@
     normal: [
       { value: 'petrol', label: 'شركة البترول الوطنية' },
       { value: 'noor', label: 'مؤسسة النور للتوريدات' },
-      { value: 'waha', label: 'شركة الواحة للخدمات المتكاملة — فرع العاصمة' },
-      { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' }
+      { value: 'waha', label: 'شركة الواحة للخدمات المتكاملة (فرع العاصمة)' },
+      { value: 'fawry', label: 'مأمورية فوري (فرع وسط المدينة)' }
     ],
     stress: [
       { value: 'petrol', label: 'شركة البترول الوطنية للتوريدات المتكاملة بفرعها الرئيسي في العاصمة عمّان' },
       { value: 'noor', label: 'مؤسسة النور' },
-      { value: 'waha', label: 'شركة الواحة — فرع العاصمة ببيانات عنوان طويلة جدًا بلا مسافات لاختبار التفاف خيار المنتقي' },
-      { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' }
+      { value: 'waha', label: 'شركة الواحة: فرع العاصمة ببيانات عنوان طويلة جدًا بلا مسافات لاختبار التفاف خيار المنتقي' },
+      { value: 'fawry', label: 'مأمورية فوري (فرع وسط المدينة)' }
     ]
   };
 
@@ -58,18 +58,18 @@
   var OCAL_TODAY = '2026-10-07';
   var OCAL_ORDERS = {
     normal: [
-      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل' },
-      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة' },
-      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress' },
+      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل', note: 'تجهيز صالة الاستقبال' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
+      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress', note: 'يشمل أكوابًا ورقية' },
       { id: 'od-04', title: 'طلب تعقيم غرف الاجتماعات', date: '2026-10-09', time: '16:00', statusKey: 'done' },
-      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold' },
+      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold', note: 'بانتظار قطعة الغيار' },
       { id: 'od-06', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'progress', customer: 'وحدة التسويق' },
       { id: 'od-07', title: 'طلب نقل عفش مكتبي', date: '2026-10-06', time: '15:00', statusKey: 'done', customer: 'فرع الشمال' },
       { id: 'od-08', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
     ],
     stress: [
-      { id: 'od-01', title: 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'قاعة الملتقى' },
-      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة' },
+      { id: 'od-01', title: 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'قاعة الملتقى', note: 'تجهيز القاعة الرئيسية مع مصليات وضيافة صباحية' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
       { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress' },
       { id: 'od-04', title: 'طلب قرطاسية إدارية', date: '2026-10-09', time: '10:30', statusKey: 'done' },
       { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold' },
@@ -78,6 +78,9 @@
       { id: 'od-08', title: 'طلب عناية حدائق الحديقة الغربية الداخلية', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
     ]
   };
+  /* حالة العرض المحلية للجدول: نسخة قابلة للتعديل من fixtures فوق
+     بيانات العرض نفسها — إضافة/تعديل/حذف محاكاة موسومة لا استمرارية. */
+  var ocalDemo = { orders: null, editingId: null, addingFor: null, seq: 100 };
 
   /* ---------------- الحالة العامة للمتحكم ---------------- */
 
@@ -92,14 +95,19 @@
       });
     });
     window.addEventListener('hashchange', revealDeepLink);
-    /* --- 1) بوابة الوصول: معالج عرض محلي حتمي (لا مصادقة/لا شبكة) --- */
+    /* --- 1) بوابة الوصول: معالج عرض محلي حتمي (لا مصادقة/لا شبكة) ---
+       R-34 (2026-10-25): نجاح المحاكاة يُعلن بوسم محاكاة العرض في نص
+       الرسالة نفسها (message مسار المكوّن الموثق) — لا يُقرأ كدخول حقيقي. */
     var gateway = q('sc-gateway-root');
     if (window.MicroAccessGateway && gateway) {
       window.MicroAccessGateway.init(gateway, {
         onSubmit: function () {
           return new Promise(function (resolve) {
             window.setTimeout(function () {
-              resolve({ authenticated: true });
+              resolve({
+                authenticated: true,
+                message: 'تم الدخول في محاكاة العرض فقط: لا حساب حقيقي ولا اتصال بأي خدمة.'
+              });
             }, 600);
           });
         }
@@ -119,33 +127,170 @@
       });
     }
 
-    /* --- 3) جدول الطلبات: init صريح بعقد المكوّن --- */
+    /* --- 3) جدول الطلبات: عرض محلي حتمي بأفعال مضيف محاكاة ---
+       اليوم داخل التقويم نقطة الدخول؛ الإضافة/التعديل/الحذف أحداث
+       host-owned يحاكيها محرر داخل الصفحة أدناه بحالة محلية موسومة
+       «محاكاة عرض» — لا حفظ ولا شبكة ولا Bottom Sheet ولا زر عائم. */
     var ocalRoot = q('sc-ocal-root');
     var ocalInstance = null;
     if (window.MicroOrderSchedule && ocalRoot) {
+      ocalDemo.orders = OCAL_ORDERS[state.fixture].map(function (o) { return o; });
       ocalInstance = window.MicroOrderSchedule.init(ocalRoot, {
-        orders: OCAL_ORDERS[state.fixture],
+        orders: ocalDemo.orders,
         statuses: OCAL_STATUSES,
         today: OCAL_TODAY,
         weekStart: 6,
         selectedDate: OCAL_TODAY,
         view: 'calendar',
-        calendarView: 'month'
+        calendarView: 'month',
+        orderActions: { edit: true, delete: true }
       });
-      ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request'].forEach(function (name) {
+      ['order-schedule:day-select', 'order-schedule:order-open',
+        'order-schedule:add-request', 'order-schedule:order-edit-request',
+        'order-schedule:order-delete-request'].forEach(function (name) {
         ocalRoot.addEventListener(name, function (e) {
           logEvent(q('sc-ocal-log'), name + ' ' + JSON.stringify(e.detail));
         });
+      });
+      ocalRoot.addEventListener('order-schedule:add-request', function (e) {
+        openOcalEditor({ mode: 'add', date: (e.detail && e.detail.date) || null });
+      });
+      ocalRoot.addEventListener('order-schedule:order-edit-request', function (e) {
+        var order = findOcalOrder(e.detail && e.detail.id);
+        if (order) openOcalEditor({ mode: 'edit', order: order });
+      });
+      ocalRoot.addEventListener('order-schedule:order-delete-request', function (e) {
+        removeOcalOrder(e.detail && e.detail.id);
       });
       q('sc-ocal-view').addEventListener('click', function () {
         var isList = ocalRoot.getAttribute('data-ocal-view') === 'list';
         ocalInstance.setView(isList ? 'calendar' : 'list');
       });
       q('sc-ocal-empty').addEventListener('click', function () { ocalInstance.setData([]); });
+      q('sc-ocal-loading').addEventListener('click', function () {
+        ocalInstance.setLoading(true);
+        window.setTimeout(function () { ocalInstance.setLoading(false); }, 1200);
+      });
+      q('sc-ocal-error').addEventListener('click', function () {
+        ocalInstance.setError(function () {
+          ocalInstance.setError(null);
+          ocalInstance.setData(ocalDemo.orders);
+        });
+      });
       q('sc-ocal-restore').addEventListener('click', function () {
-        ocalInstance.setData(OCAL_ORDERS[state.fixture]);
+        ocalDemo.orders = OCAL_ORDERS[state.fixture].map(function (o) { return o; });
+        ocalInstance.setData(ocalDemo.orders);
       });
     }
+
+    function findOcalOrder(id) {
+      for (var i = 0; i < ocalDemo.orders.length; i++) {
+        if (ocalDemo.orders[i].id === id) return ocalDemo.orders[i];
+      }
+      return null;
+    }
+
+    function removeOcalOrder(id) {
+      ocalDemo.orders = ocalDemo.orders.filter(function (o) { return o.id !== id; });
+      ocalInstance.setData(ocalDemo.orders);
+      logEvent(q('sc-ocal-log'), 'حُذف الطلب محليًا في محاكاة العرض: ' + id);
+    }
+
+    /* محرر داخل الصفحة (تركيب حقول B02 القائمة): إضافة/تعديل بحالة
+       محلية فقط؛ الحفظ يكتب في ocalDemo.orders ثم setData؛ إلغاء/Escape
+       يستعيدان الحالة بلا تغيير. التاريخ للإضافة يأتي من الحدث نفسه. */
+    function openOcalEditor(opts) {
+      var panel = q('sc-ocal-editor');
+      var titleInput = q('sc-ocal-editor-title');
+      var timeInput = q('sc-ocal-editor-time');
+      var statusSelect = q('sc-ocal-editor-status');
+      var noteInput = q('sc-ocal-editor-note');
+      var heading = q('sc-ocal-editor-heading');
+      var dateLine = q('sc-ocal-editor-date');
+      if (!panel || !titleInput) return;
+      ocalDemo.editingId = opts.mode === 'edit' ? opts.order.id : null;
+      ocalDemo.addingFor = opts.mode === 'add' ? (opts.date || null) : null;
+      heading.textContent = opts.mode === 'edit'
+        ? 'تعديل طلب (محاكاة عرض محلية)'
+        : 'إضافة طلب (محاكاة عرض محلية)';
+      dateLine.textContent = opts.mode === 'edit'
+        ? 'التاريخ: ' + (opts.order.date || 'غير مجدول')
+        : (opts.date ? 'التاريخ: ' + opts.date : 'بلا يوم محدد');
+      titleInput.value = opts.mode === 'edit' ? opts.order.title : '';
+      timeInput.value = opts.mode === 'edit' && opts.order.time ? opts.order.time : '';
+      statusSelect.value = opts.mode === 'edit' ? opts.order.statusKey : 'progress';
+      noteInput.value = opts.mode === 'edit' && opts.order.note ? opts.order.note : '';
+      panel.hidden = false;
+      if (window.MicroFields) window.MicroFields.sync(titleInput.closest('.m-field'));
+      titleInput.focus({ preventScroll: false });
+    }
+
+    function closeOcalEditor() {
+      var panel = q('sc-ocal-editor');
+      if (panel) panel.hidden = true;
+      ocalDemo.editingId = null;
+      ocalDemo.addingFor = null;
+      var returnTo = ocalRoot.querySelector('[data-ocal-action="presentation"]')
+        || ocalRoot.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+      if (returnTo) returnTo.focus({ preventScroll: true });
+    }
+
+    function saveOcalEditor() {
+      var titleInput = q('sc-ocal-editor-title');
+      var timeInput = q('sc-ocal-editor-time');
+      var statusSelect = q('sc-ocal-editor-status');
+      var noteInput = q('sc-ocal-editor-note');
+      var title = titleInput.value.trim();
+      if (!title) {
+        titleInput.setAttribute('aria-invalid', 'true');
+        titleInput.focus();
+        return;
+      }
+      titleInput.removeAttribute('aria-invalid');
+      var time = TIME_OK(timeInput.value) ? timeInput.value : null;
+      var note = noteInput.value.trim() || null;
+      if (ocalDemo.editingId) {
+        var order = findOcalOrder(ocalDemo.editingId);
+        if (order) {
+          order.title = title;
+          order.time = time;
+          order.statusKey = statusSelect.value;
+          order.note = note;
+        }
+        logEvent(q('sc-ocal-log'), 'عُدّل الطلب محليًا في محاكاة العرض: ' + ocalDemo.editingId);
+      } else {
+        var id = 'demo-' + (++ocalDemo.seq);
+        ocalDemo.orders.push({
+          id: id,
+          title: title,
+          date: ocalDemo.addingFor,
+          time: time,
+          statusKey: statusSelect.value,
+          customer: null,
+          note: note
+        });
+        logEvent(q('sc-ocal-log'), 'أُضيف الطلب محليًا في محاكاة العرض: ' + id);
+      }
+      ocalInstance.setData(ocalDemo.orders);
+      closeOcalEditor();
+    }
+
+    function TIME_OK(v) {
+      return /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
+    }
+
+    (function bindOcalEditor() {
+      var panel = q('sc-ocal-editor');
+      if (!panel) return;
+      panel.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeOcalEditor();
+        }
+      });
+      q('sc-ocal-editor-save').addEventListener('click', saveOcalEditor);
+      q('sc-ocal-editor-cancel').addEventListener('click', closeOcalEditor);
+    })();
 
     /* --- 4) أدوات حالة الأزرار --- */
     var btnDemo = q('sc-btn-demo');
@@ -230,16 +375,9 @@
       });
     }
 
-    /* --- 8) تبديل ترتيب دوائر المقارنة --- */
-    var circles = q('sc-circles');
-    if (circles && window.MicroMetricComparison) {
-      q('sc-metric-layout').addEventListener('click', function (e) {
-        var overlap = circles.getAttribute('data-layout') === 'overlap';
-        circles.setAttribute('data-layout', overlap ? 'separated' : 'overlap');
-        window.MicroMetricComparison.render(circles);
-        e.currentTarget.setAttribute('aria-pressed', String(!overlap));
-      });
-    }
+    /* --- 8) تبديل ترتيب دوائر المقارنة — أُزيل مع قرار عرض 2026-10-25:
+       دوائر المقاييس استُبدلت في المعرض بصفوف مقاييس مدمجة بنفس المصدر
+       (قرار مفاهيم الرسوم باء بالدليل)؛ المكوّن يبقى opt-in في المكتبة --- */
 
     /* --- 9) الرسائل: toast + إعلان + إعادة إظهار الملاحظات --- */
     var toast = q('sc-toast');
@@ -373,7 +511,10 @@
     var ocalRoot = q('sc-ocal-root');
     if (ocalRoot && window.MicroOrderSchedule) {
       var inst = window.MicroOrderSchedule.getInstance(ocalRoot);
-      if (inst) inst.setData(OCAL_ORDERS[mode]);
+      if (inst) {
+        ocalDemo.orders = OCAL_ORDERS[mode].map(function (o) { return o; });
+        inst.setData(ocalDemo.orders);
+      }
     }
   }
 
@@ -397,7 +538,16 @@
       if (active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
-    applyFilter(state.view === 'state' ? 'all' : 'current');
+    var targetFilter = state.view === 'state' ? 'all' : 'current';
+    applyFilter(targetFilter);
+    /* R-52 (2026-10-25): حالة الضغط لشريط الفلاتر تُزامن مع الفلتر
+       المطبق فعليًا — لا يبقى زر «الحالي» مضغوطًا والعناصر كلها ظاهرة */
+    var seg = q('sc-filter-seg');
+    if (seg) {
+      Array.prototype.forEach.call(seg.querySelectorAll('button'), function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-sc-filter') === targetFilter));
+      });
+    }
   }
 
   var hashScrollGeneration = 0;

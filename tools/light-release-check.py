@@ -425,10 +425,12 @@ def main():
                                       }
                                       const circles=canvas.querySelector('#sc-circles');
                                       if(circles) {
-                                        circles.setAttribute('aria-label','Optional relative operational measurements');
-                                        circles.querySelectorAll('[data-metric-source] [data-label]').forEach((row,index)=>{
-                                          row.setAttribute('data-label',['Item A','Item B','Item C'][index]||'Item');
-                                          row.setAttribute('data-unit','units');
+                                        circles.setAttribute('aria-label','Compact operational reading cards; the phone-approved presentation');
+                                        circles.querySelectorAll('.m-stat__label').forEach((el,index)=>{
+                                          el.textContent=['Item A','Item B','Item C'][index]||'Item';
+                                        });
+                                        circles.querySelectorAll('.m-stat__unit').forEach((el)=>{
+                                          if(el.textContent.trim()==='وحدة') el.textContent='units';
                                         });
                                       }
                                       if(window.MicroMetricComparison) {

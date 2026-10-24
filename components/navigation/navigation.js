@@ -383,6 +383,21 @@
     return '';
   }
 
+  /* R-20 (2026-10-25): عبارة عدد الفلاتر العربية الكاملة — المثنى والجمع
+     وقاعدة العدد المركب فوق 100 (كانت «N فلاتر» فقط بلا مثنى) */
+  function filterCountAr(n) {
+    if (n === 1) return 'فلتر واحد';
+    if (n === 2) return 'فلتران';
+    if (n >= 3 && n <= 10) return n + ' فلاتر';
+    if (n >= 11 && n <= 99) return n + ' فلترًا';
+    var r = n % 100;
+    if (r === 0) return n + ' فلتر';
+    if (r === 1) return n + ' فلتر واحد';
+    if (r === 2) return n + ' فلتران';
+    if (r >= 3 && r <= 10) return n + ' فلاتر';
+    return n + ' فلترًا';
+  }
+
   function updateSummary(panel, phase) {
     var summary = panel.querySelector('[data-filter-summary]');
     if (!summary) return;
@@ -401,7 +416,7 @@
        سليمة كما هي — هذا النص عرض فقط. */
     summary.textContent = labels.length === actives.length
       ? phase + ': ' + labels.join('، ')
-      : phase + ': ' + (actives.length === 1 ? 'فلتر واحد' : actives.length + ' فلاتر');
+      : phase + ': ' + filterCountAr(actives.length);
   }
 
   function initFilterPanel(panel) {

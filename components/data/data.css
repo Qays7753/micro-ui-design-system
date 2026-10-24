@@ -44,7 +44,7 @@
 .m-stat__num {
   font-size: var(--micro-amount-size);      /* 36/44 مبلغ رئيسي */
   line-height: var(--micro-amount-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   /* SUI-008 (REPAIR-R1 2026-10-07): الرقم الطويل يلتف داخل البطاقة بدل
      الفيض غير القابل للوصول عند تكبير النص 200% — نفس نمط العائلات
@@ -83,7 +83,7 @@
   gap: var(--micro-space-1);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -122,7 +122,7 @@
   /* SUI-017 (REPAIR-R1 2026-10-07): عنوان مجموعة داخل وجهة = 16/24 وزن 600
      (قرار قائد الوحدة — اتساق مع F03)؛ كان 16/26 (var(--micro-body-line)). */
   line-height: 1.5; /* 24px عند 16px — يتبع الخط عند التكبير */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-chart__context {
@@ -137,7 +137,7 @@
 }
 .m-chart__context-item { display: inline-flex; flex-wrap: wrap; gap: var(--micro-space-1); min-width: 0; }
 .m-chart__context-value { color: var(--micro-text-primary); overflow-wrap: anywhere; }
-.m-chart__context-title { color: var(--micro-text-primary); font-weight: 600; overflow-wrap: anywhere; }
+.m-chart__context-title { color: var(--micro-text-primary); font-weight: var(--micro-weight-semibold); overflow-wrap: anywhere; }
 .m-chart__plot { width: 100%; min-width: 0; }
 /* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
    .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
@@ -163,10 +163,11 @@
 .m-chart__readings dd { margin: 0; max-width: 100%; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
+  /* R-26 (2026-10-25): بلا شريط جانبي — التلوين الدلالي للسطح ونص الحالة
+     يحملان المعنى (fixes.md O1: السماح بالتلوين دون الشرطة) */
   margin: 0;
   padding: var(--micro-space-3) var(--micro-space-4);
   border: 0;
-  border-inline-start: var(--micro-space-1) solid var(--micro-warning);
   border-radius: var(--micro-radius-chip);
   background-color: var(--micro-warning-surface);
   color: var(--micro-text-primary);
@@ -176,9 +177,9 @@
 /* A01: ملاحظة المقياس الموسّع لخيار data-overscale="rescale" الصريح —
    إعلان ظاهر بالتوسيع والمقياس المعلن، لا قيمة صامتة */
 .m-chart__scale-note {
+  /* R-26 (2026-10-25): بلا شريط جانبي — التلوين الدلالي يكفي */
   margin: var(--micro-space-2) 0 0;
   padding: var(--micro-space-2) var(--micro-space-3);
-  border-inline-start: 3px solid var(--micro-info);
   background-color: var(--micro-info-surface);
   color: var(--micro-text-primary);
   font-size: var(--micro-secondary-size);
@@ -215,7 +216,7 @@
   font-family: var(--micro-font-family);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -246,8 +247,8 @@
   padding: var(--micro-space-2) var(--micro-space-3);
   border-block-end: 1px solid var(--micro-border-divider);
 }
-.m-chart__dataset thead th { color: var(--micro-text-secondary); font-weight: 600; }
-.m-chart__dataset tbody th { color: var(--micro-text-primary); font-weight: 500; }
+.m-chart__dataset thead th { color: var(--micro-text-secondary); font-weight: var(--micro-weight-semibold); }
+.m-chart__dataset tbody th { color: var(--micro-text-primary); font-weight: var(--micro-weight-medium); }
 .m-chart__dataset tbody tr:last-child th,
 .m-chart__dataset tbody tr:last-child td { border-block-end: 0; }
 .m-chart__dataset td {
@@ -282,13 +283,13 @@
 /* تسميات SVG بحجم فعلي 13px. عرض viewBox يطابق عرض المكوّن،
    فلا يتقلص النص أو يتضخم بتغيّر العرض؛ العقد في specification.md. */
 .m-chart--bars .m-chart__bar-label {
-  font-size: 13px;
+  font-size: var(--micro-secondary-size);
   fill: var(--micro-text-secondary);
   font-family: var(--micro-font-family);
 }
 .m-chart--bars .m-chart__bar-value {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--micro-secondary-size);
+  font-weight: var(--micro-weight-semibold);
   fill: var(--micro-text-primary);
   font-variant-numeric: tabular-nums;
 }
@@ -301,11 +302,11 @@
 .m-chart--line .m-chart__line { fill: none; stroke: var(--micro-data-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--micro-data-line); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
-  font-size: 13px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-size: var(--micro-secondary-size); fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart .m-chart__x-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart .m-chart__x-label { font-size: var(--micro-secondary-size); fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {
@@ -335,10 +336,10 @@
   .m-donut > .m-donut__svg { grid-column: 1; grid-row: 1; }
   .m-donut:has(> .m-donut__svg) > .m-legend { grid-column: 2; grid-row: 1; }
 }
-.m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
-.m-donut__center-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__center { font-size: var(--micro-amount2-size); font-weight: var(--micro-weight-semibold); fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: var(--micro-secondary-size); fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 .m-donut__reading { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--micro-space-2); grid-column: 1 / -1; min-width: 0; }
-.m-donut__number { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: 600; direction: ltr; unicode-bidi: isolate; overflow-wrap: anywhere; min-width: 0; }
+.m-donut__number { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: var(--micro-weight-semibold); direction: ltr; unicode-bidi: isolate; overflow-wrap: anywhere; min-width: 0; }
 .m-donut__reading-label { font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
 
 /* ---- دوائر المساحة ----
@@ -354,7 +355,7 @@
   vector-effect: non-scaling-stroke;
 }
 .m-bubble--soft .m-bubble__circle { opacity: 0.85; } /* لقراءة التداخل المحدود إن وجد */
-.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
+.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: var(--micro-weight-semibold); color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
 .m-bubble__label { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-secondary); max-width: 12ch; overflow-wrap: anywhere; text-align: center; }
 /* التسمية خارجية دائمًا (فوق الدائرة) — لا نص داخل دائرة صغيرة */
 .m-bubble__circle--none {
@@ -434,7 +435,7 @@
   background-color: var(--micro-surface-base);
   color: var(--micro-text-inverse);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 .m-step__marker svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .m-step--complete .m-step__marker { background-color: var(--micro-success); border-color: var(--micro-success); }
@@ -444,8 +445,8 @@
 .m-step--complete .m-step__connector { background-color: var(--micro-success); }
 .m-step:last-child .m-step__connector { display: none; }
 .m-step__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.m-step__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); color: var(--micro-text-primary); font-weight: 500; }
-.m-step--upcoming .m-step__title { color: var(--micro-text-secondary); font-weight: 400; }
+.m-step__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); color: var(--micro-text-primary); font-weight: var(--micro-weight-medium); }
+.m-step--upcoming .m-step__title { color: var(--micro-text-secondary); font-weight: var(--micro-weight-regular); }
 .m-step--blocked .m-step__title { color: var(--micro-text-disabled); }
 .m-step__time { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-hint); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
 /* الشارة على الحالي (بدل الاعتماد على اللون وحده) */

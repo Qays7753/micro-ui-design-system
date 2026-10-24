@@ -37,26 +37,26 @@ SOFTWARE.
 <!-- =========================================================
   Micro UI — معرض نظام الواجهة (UI System Showcase Prototype)
   الملف: previews/ui-system-showcase/index.html
-  الحالة: PROTOTYPE — عرض تفاعلي لمكوّنات النظام، ليس تطبيقًا إنتاجيًا.
+  الحالة: PROTOTYPE؛ عرض تفاعلي لمكوّنات النظام، ليس تطبيقًا إنتاجيًا.
 
   المصدر: شجرة العمل الحالية (current working tree)
   كل عنصر معروض هو مكوّن حقيقي من components/ بتوكنات shared/tokens.css
-  وأصول assets/ الحالية — لا محاكاة شكلية ولا إعادة تنفيذ ولا لون جديد.
+  وأصول assets/ الحالية؛ لا محاكاة شكلية ولا إعادة تنفيذ ولا لون جديد.
 
-  شريط التحكم (أعلى): أدوات مراجعة فقط — RTL/LTR · عرض 320/360/390/430
+  شريط التحكم (أعلى): أدوات مراجعة فقط (RTL/LTR · عرض 320/360/390/430)
   · محتوى عادي/إجهاد · تصفية الحالة (current/draft-proposed/all).
   لا تحكم تكبير؛ المقياس ثابت.
 
-  السلوك: showcase.js (متحدات عرض حتمية محلية — لا شبكة/مصادقة/حفظ)
+  السلوك: showcase.js (متحدات عرض حتمية محلية؛ لا شبكة/مصادقة/حفظ)
   التنسيق: showcase.css (توكنات المكتبة فقط)
-  النسخة المكتفية ذاتيًا: standalone.html — مولدة بـ
+  النسخة المكتفية ذاتيًا: standalone.html مولدة بـ
   tools/build-ui-system-showcase-standalone.py (لا تُعدَّل يدويًا).
 ========================================================= -->
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — معرض نظام الواجهة (Prototype)</title>
+  <title>Micro معرض نظام الواجهة (Prototype)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIiBpZD0ibWljcm8tcGxhdGZvcm0taWNvbiIgd2lkdGg9IjIyNCIgaGVpZ2h0PSIyMjQiIHZpZXdCb3g9IjAgMCAyMjQgMjI0IiB2ZXJzaW9uPSIxLjEiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIiBkYXRhLXNvdXJjZS1yb2xlPSJwbGF0Zm9ybS1kZXJpdmVkIiBkYXRhLWRlcml2ZWQtZnJvbT0icGhhc2UtMi92YXJpYW50cyI+PHRpdGxlIGlkPSJ0aXRsZSI+TWljcm8gZmF2aWNvbiDigJQgZnVsbCBjb2xvcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkFwcHJvdmVkIE1pY3JvIHN5bWJvbCBmb3IgYnJvd3NlciBmYXZpY29uIHVzZS48L2Rlc2M+PG1ldGFkYXRhPnsicm9sZSI6InBsYXRmb3JtLWRlcml2ZWQiLCJzb3VyY2UiOiJtaWNyby1zeW1ib2wtbWFzdGVyLnN2ZyIsImdlb21ldHJ5IjoiT3V0c2lkZSBSMzYgQzggRzEyIiwicGF0aHNDaGFuZ2VkIjpmYWxzZSwic3ltYm9sT25seSI6dHJ1ZX08L21ldGFkYXRhPjxzdmcgd2lkdGg9IjIyNCIgaGVpZ2h0PSIyMjQiIHZpZXdCb3g9IjAgMCAyMjQgMjI0IiB2ZXJzaW9uPSIxLjEiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJtaWNyby1zeW1ib2wtbWFzdGVyLXRpdGxlIG1pY3JvLXN5bWJvbC1tYXN0ZXItZGVzYyIgZGF0YS1zZWxlY3RlZC1vcHRpb249IjAyIiBkYXRhLWdlb21ldHJ5PSJPdXRzaWRlIFIzNiBDOCBHMTIiIGlkPSJtaWNyby1zeW1ib2wtbWFzdGVyIiBkYXRhLXNvdXJjZS1yb2xlPSJkZXJpdmVkLXZhcmlhbnQiIGRhdGEtYXBwcm92ZWQtY29uY2VwdD0ib3B0aW9uLTAyIiBkYXRhLWRlcml2ZWQtZnJvbT0ibWFzdGVyL21pY3JvLXN5bWJvbC1tYXN0ZXIuc3ZnIiBkYXRhLXZhcmlhbnQ9ImZ1bGwtY29sb3IiIGRhdGEtdXNhZ2UtYmFja2dyb3VuZD0ibGlnaHQgb3IgbmV1dHJhbCI+PHRpdGxlIGlkPSJtaWNyby1zeW1ib2wtbWFzdGVyLXRpdGxlIj5NaWNybyDigJQgc3ltYm9sIOKAlCBGdWxsIENvbG9yPC90aXRsZT48ZGVzYyBpZD0ibWljcm8tc3ltYm9sLW1hc3Rlci1kZXNjIj5EZXJpdmVkIGNvbG9yIHZhcmlhbnQgZnJvbSB0aGUgYXBwcm92ZWQgTWFzdGVyLiBHZW9tZXRyeSwgcGF0aHMsIHRyYW5zZm9ybXMsIGFuZCB2aWV3Qm94IGFyZSB1bmNoYW5nZWQuIFZhcmlhbnQ6IEZ1bGwgQ29sb3IuPC9kZXNjPjxtZXRhZGF0YT57InJvbGUiOiJkZXJpdmVkLWNvbG9yLXZhcmlhbnQiLCJ2YXJpYW50IjoiZnVsbC1jb2xvciIsInZhcmlhbnRMYWJlbCI6IkZ1bGwgQ29sb3IiLCJzb3VyY2VNYXN0ZXIiOiJtYXN0ZXIvbWljcm8tc3ltYm9sLW1hc3Rlci5zdmciLCJnZW9tZXRyeSI6Ik91dHNpZGUgUjM2IEM4IEcxMiIsInBhdGhzQ2hhbmdlZCI6ZmFsc2UsInRyYW5zZm9ybXNDaGFuZ2VkIjpmYWxzZSwidmlld0JveENoYW5nZWQiOmZhbHNlLCJiYWNrZ3JvdW5kVXNlIjoibGlnaHQgb3IgbmV1dHJhbCIsInBhbGV0dGUiOnsicGV0cm9sIjoiIzE2NEQ1OSIsInRlcnJhY290dGEiOiIjRDk3NzU3IiwiYmx1ZV9wZXRyb2wiOiIjNTA3RjhCIn19PC9tZXRhZGF0YT48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNiAxNikiIGlkPSJtaWNyby1zeW1ib2wtbWFzdGVyLTIiIGlua3NjYXBlOmxhYmVsPSJNYXN0ZXIgc3ltYm9sIC8gZm91ciBlcXVhbCBtb2R1bGVzIj48ZyBpZD0ibW9kdWxlLXRvcCIgdHJhbnNmb3JtPSJyb3RhdGUoMCA5NiA5NikiPjxwYXRoIGlkPSJzaGFwZS10b3AiIGQ9Ik0zNiAwIEgxMDggUTExNiAwIDExNiA4IFY1NiBRMTE2IDY0IDEwOCA2NCBIMTIgUTAgNjQgMCA1MiBWMzYgQzAgMTYuMSAxNi4xIDAgMzYgMCBaIiBmaWxsPSIjMTY0RDU5Ii8+PC9nPjxnIGlkPSJtb2R1bGUtcmlnaHQiIHRyYW5zZm9ybT0icm90YXRlKDkwIDk2IDk2KSI+PHBhdGggaWQ9InNoYXBlLXJpZ2h0IiBkPSJNMzYgMCBIMTA4IFExMTYgMCAxMTYgOCBWNTYgUTExNiA2NCAxMDggNjQgSDEyIFEwIDY0IDAgNTIgVjM2IEMwIDE2LjEgMTYuMSAwIDM2IDAgWiIgZmlsbD0iI0Q5Nzc1NyIvPjwvZz48ZyBpZD0ibW9kdWxlLWJvdHRvbSIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwIDk2IDk2KSI+PHBhdGggaWQ9InNoYXBlLWJvdHRvbSIgZD0iTTM2IDAgSDEwOCBRMTE2IDAgMTE2IDggVjU2IFExMTYgNjQgMTA4IDY0IEgxMiBRMCA2NCAwIDUyIFYzNiBDMCAxNi4xIDE2LjEgMCAzNiAwIFoiIGZpbGw9IiMxNjRENTkiLz48L2c+PGcgaWQ9Im1vZHVsZS1sZWZ0IiB0cmFuc2Zvcm09InJvdGF0ZSgyNzAgOTYgOTYpIj48cGF0aCBpZD0ic2hhcGUtbGVmdCIgZD0iTTM2IDAgSDEwOCBRMTE2IDAgMTE2IDggVjU2IFExMTYgNjQgMTA4IDY0IEgxMiBRMCA2NCAwIDUyIFYzNiBDMCAxNi4xIDE2LjEgMCAzNiAwIFoiIGZpbGw9IiM1MDdGOEIiLz48L2c+PC9nPjwvc3ZnPjwvc3ZnPg==">
   <!-- Generated catalog payload: edit docs/COMPONENT-CATALOG.json, not this block. -->
   <script type="application/json" id="sc-component-catalog">{"schemaVersion":1,"scope":"independent-pre-transfer-ui-system","releaseTheme":"light-only","chartPolicy":{"preciseDefault":["bars","rows","table"],"specializedOptIn":["donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},"maturityVocabulary":["stable-ui","draft-for-review","proposed"],"families":[{"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},{"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},{"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},{"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},{"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},{"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},{"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},{"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},{"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},{"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},{"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},{"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},{"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},{"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}],"variants":[{"id":"donut","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"main-metric-featured","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"bubbles","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"metric-circles","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},{"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}]}</script>
@@ -257,7 +257,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --ui-surface-disabled: var(--micro-color-disabled);
   --ui-text: var(--micro-color-ink);
   --ui-text-secondary: var(--micro-color-ink-soft);
-  --ui-text-muted: #5F7378;
+  --ui-text-muted: #5F7378; /* مشتقة مباشرة (R-62): رمادية حبر مخففة — أغمق من ink-soft بدرجة قراءة ثانوية */
   --ui-text-inverse: var(--micro-color-white);
   --ui-border-control: var(--micro-color-border);
   --ui-border-divider: var(--micro-color-divider);
@@ -287,13 +287,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --micro-surface-light: 0.12;
   --micro-summary-gradient-start: #B8D9DC;
   --micro-summary-light-start: #B8D9DC;
-  --micro-summary-light-mid: #DFEEE6;
+  --micro-summary-light-mid: #DFEEE6; /* (R-62) تتطابق قيمةً مع surface-selected وتظل دورًا مستقلًا لتدرج الملخص */
   --micro-summary-light-end: #F7F8F4;
   --micro-text-primary: var(--ui-text);
   --micro-text-secondary: var(--ui-text-secondary);
   --micro-text-hint: var(--ui-text-muted);
   --micro-text-inverse: var(--ui-text-inverse);
-  --micro-text-disabled: #53676B;
+  --micro-text-disabled: #53676B; /* مشتقة مباشرة (R-62): قريب ink-soft بتقديم disabled */
   --micro-border-control: var(--ui-border-control);
   --micro-border-divider: var(--ui-border-divider);
   --micro-focus-ring: var(--ui-focus);
@@ -315,9 +315,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --micro-info-surface: #E9F1FA;
   --micro-data-a: #164D59;
   --micro-data-b: #D97757;
-  --micro-data-c: #B6A3D6;
+  /* R-06 (2026-10-25): تعتيم داخل الصبغة لسلسلتي c/e لبلوغ أرضية
+     WCAG 1.4.11 (3:1) فوق الأبيض: c #B6A3D6→#A189CA (2.28→3.02:1)،
+     e #B3BD7B→#8E9A4D (2.00→3.05:1). القيم المرجعية محفوظة هنا
+     للتوثيق؛ التمييز بين السلاسل المتجاورة يسنده حد --micro-data-boundary
+     + نص القراءات الكامل، لا فرق الإضاءة وحده (خمس سلاسل متجاورة
+     لا يمكن أن تبعد كلها 3:1 إضاءةً ضمن نطاق إضاءة صالح). */
+  --micro-data-c: #A189CA;
   --micro-data-d: #496D92;
-  --micro-data-e: #B3BD7B;
+  --micro-data-e: #8E9A4D;
 
   /* Geometry B — compact content, never compact touch targets. */
   --micro-space-1: 4px;
@@ -339,6 +345,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --micro-counter-height: 20px;
   --micro-counter-label-size: 13px;
   --micro-counter-label-weight: 500;
+  /* R-10 (2026-10-25): توكنز أوزان الخط — الأوزان المشحونة فقط
+     (400/500/600)؛ لا 700 ولا 800 (لا faux-bold). */
+  --micro-weight-regular: 400;
+  --micro-weight-medium: 500;
+  --micro-weight-semibold: 600;
+
+  /* R-11 (2026-10-25): مستوى عنوان القسم 18px بسطر نسبي (لا ارتفاع
+     مقفول يقص عند تكبير النص وحده) — كان مستوى خامًا خارج المصدر */
+  --micro-section-title-size: 18px;
+  --micro-section-title-line: 1.5556;
+
+  /* R-12 (2026-10-25): سلم الطبقات z الموثق — غشاء الطبقة < الطبقة
+     نفسها < toast. أي قيمة أعلى تُقرر صراحةً من المضيف خارج المكتبة. */
+  --micro-z-backdrop: 80;
+  --micro-z-layer: 85;
+  --micro-z-toast: 90;
+
   --micro-radius-capsule: 999px;
   --micro-radius-button-long: 12px;
   --micro-radius-field: 12px;
@@ -380,7 +403,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --micro-surface-title-line: 1.6364;
   --micro-surface-amount-size: 36px;
   --micro-surface-amount-line: 1.2222;
-  --micro-metric-hero-separator: 16px;
   --micro-inset-bottom: env(safe-area-inset-bottom, 0px);
 
   /* Motion categories; spatial movement only for purposeful transitions. */
@@ -396,7 +418,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --micro-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --micro-shadow-emphasis: 0 2px 6px rgb(22 77 89 / 14%);
   --micro-shadow-overlay: var(--ui-overlay-shadow);
-  --micro-seg-hover-surface: #EDF3EF;
+  --micro-seg-hover-surface: #EDF3EF; /* مشتقة مباشرة (R-62): بين surface وselected — تحويم المقاطع */
   --micro-button-primary-bg: linear-gradient(180deg, var(--micro-brand-gradient-start), var(--micro-brand-primary));
   --micro-surface-wave-height: 0px;
   --micro-surface-wave-opacity: 0;
@@ -575,10 +597,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
   min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
   min-width: var(--micro-touch-min); /* التسمية القصيرة لا تجعل هدف اللمس أضيق من 48px */
-  padding-block: var(--micro-button-padding-block);   /* 12px */
+  padding-block: var(--micro-button-padding-block);    /* التوكن: block padding (Geometry B 10px) */
   padding-inline: var(--micro-button-padding-inline);
   border: 0;
-  border-radius: min(var(--micro-radius-button-long), 50%); /* قصير كبسولة؛ متعدد الأسطر 24px */
+  border-radius: var(--micro-radius-button-long); /* R-46: 12px دائمًا — min(…,50%) كان متبقيًا بلا أثر (القيمة أبدًا لا تتجاوز 50%) */
   font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
   font-size: var(--micro-button-label-size);          /* 16px */
   line-height: var(--micro-button-label-line);        /* 24px */
@@ -632,7 +654,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 }
 
 /* الخفيف/النصي: دون حاوية ثقيلة، لون الهوية يكفي للتعرف عليه.
-   نفس حشو الزر المعتمد (20px) — الاختلاف في الغلاف لا في المساحة. */
+   نفس حشو الزر المعتمد (توكن padding-inline)؛ الاختلاف في الغلاف لا في المساحة. */
 .m-btn--light {
   background-color: transparent;
   color: var(--micro-brand-ink);
@@ -991,7 +1013,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-field__label {
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 
@@ -1012,10 +1034,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   align-items: center;
   gap: var(--micro-space-2);
   min-height: var(--micro-field-min-height); /* 52px */
-  padding-inline: var(--micro-space-4);      /* 16px */
+  padding-inline: var(--micro-space-4);      /* التوكن: space-4 */
   background-color: var(--micro-surface-base);
   border: 1px solid var(--micro-border-control);
-  border-radius: var(--micro-radius-field);  /* 16px */
+  border-radius: var(--micro-radius-field);  /* التوكن: radius-field (12px) */
   transition:
     border-color var(--micro-motion-press) var(--micro-ease-standard),
     box-shadow var(--micro-motion-press) var(--micro-ease-standard);
@@ -1076,7 +1098,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size); /* 13px */
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 /* ---- أيقونة البحث ومسحه ---- */
@@ -1508,7 +1530,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-switch__state {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-hint);
   min-width: 4ch; /* ثبات العرض بين الحالتين */
   text-align: start;
@@ -1597,7 +1619,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   font-family: var(--micro-font-family);
   font-size: var(--micro-button-label-size);
   line-height: var(--micro-button-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-secondary);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -1689,7 +1711,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-choice:hover:not(:has(input:disabled)) { background: var(--micro-surface-page); }
 .m-switch:hover:not(:has(input:disabled)) .m-switch__track { box-shadow: inset 0 0 0 1px var(--micro-brand-primary); }
 .m-seg__item:hover:not([disabled]):not([aria-disabled="true"]):not([aria-pressed="true"]) { color: var(--micro-text-primary); background: var(--micro-seg-hover-surface); }
-.m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: 600; }
+.m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: var(--micro-weight-semibold); }
 
 </style>
   <style data-sc-from="components/selection/picker.css">
@@ -1722,7 +1744,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   align-items: center;
   justify-content: space-between;
   gap: var(--micro-space-2);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
@@ -1837,7 +1859,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-picker__option:hover:not([hidden]):not([aria-selected="true"]) {
   background: var(--micro-surface-page);
 }
-.m-picker__option[aria-selected="true"] { font-weight: 500; }
+.m-picker__option[aria-selected="true"] { font-weight: var(--micro-weight-medium); }
 .m-picker__title { overflow-wrap: anywhere; }
 
 </style>
@@ -1866,9 +1888,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-section-title {
   margin: 0;
   font-family: var(--micro-font-family);
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
+  /* R-11: مستوى عنوان القسم من التوكنز — سطر نسبي لا يقص عند تكبير النص وحده */
+  font-size: var(--micro-section-title-size);
+  line-height: var(--micro-section-title-line);
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-section-title + .m-section-desc {
@@ -1937,7 +1960,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-row__title {
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 .m-row__subtitle {
@@ -2001,7 +2024,7 @@ a.m-row.is-focus {
   font-family: var(--micro-font-family);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   text-align: start;
   cursor: pointer;
@@ -2049,7 +2072,7 @@ a.m-row.is-focus {
   font-family: var(--micro-font-family);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   white-space: nowrap;
   background-color: var(--micro-surface-page);
   color: var(--micro-text-secondary);
@@ -2115,13 +2138,13 @@ a.m-row.is-focus {
   background-color: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 /* فشل تحميل الصورة: organization.js يستبدلها بالأحرف الأولى — بديل ظاهر */
 .m-identity__name {
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 .m-identity__sub {
@@ -2193,7 +2216,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-stat__num {
   font-size: var(--micro-amount-size);      /* 36/44 مبلغ رئيسي */
   line-height: var(--micro-amount-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   /* SUI-008 (REPAIR-R1 2026-10-07): الرقم الطويل يلتف داخل البطاقة بدل
      الفيض غير القابل للوصول عند تكبير النص 200% — نفس نمط العائلات
@@ -2232,7 +2255,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   gap: var(--micro-space-1);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -2271,7 +2294,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   /* SUI-017 (REPAIR-R1 2026-10-07): عنوان مجموعة داخل وجهة = 16/24 وزن 600
      (قرار قائد الوحدة — اتساق مع F03)؛ كان 16/26 (var(--micro-body-line)). */
   line-height: 1.5; /* 24px عند 16px — يتبع الخط عند التكبير */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-chart__context {
@@ -2286,7 +2309,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 }
 .m-chart__context-item { display: inline-flex; flex-wrap: wrap; gap: var(--micro-space-1); min-width: 0; }
 .m-chart__context-value { color: var(--micro-text-primary); overflow-wrap: anywhere; }
-.m-chart__context-title { color: var(--micro-text-primary); font-weight: 600; overflow-wrap: anywhere; }
+.m-chart__context-title { color: var(--micro-text-primary); font-weight: var(--micro-weight-semibold); overflow-wrap: anywhere; }
 .m-chart__plot { width: 100%; min-width: 0; }
 /* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
    .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
@@ -2312,10 +2335,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-chart__readings dd { margin: 0; max-width: 100%; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 /* E06: fallback صريح لمدخلات غير قابلة للنسب — رسالة ظاهرة لا رسم مضلل */
 .m-chart__error {
+  /* R-26 (2026-10-25): بلا شريط جانبي — التلوين الدلالي للسطح ونص الحالة
+     يحملان المعنى (fixes.md O1: السماح بالتلوين دون الشرطة) */
   margin: 0;
   padding: var(--micro-space-3) var(--micro-space-4);
   border: 0;
-  border-inline-start: var(--micro-space-1) solid var(--micro-warning);
   border-radius: var(--micro-radius-chip);
   background-color: var(--micro-warning-surface);
   color: var(--micro-text-primary);
@@ -2325,9 +2349,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 /* A01: ملاحظة المقياس الموسّع لخيار data-overscale="rescale" الصريح —
    إعلان ظاهر بالتوسيع والمقياس المعلن، لا قيمة صامتة */
 .m-chart__scale-note {
+  /* R-26 (2026-10-25): بلا شريط جانبي — التلوين الدلالي يكفي */
   margin: var(--micro-space-2) 0 0;
   padding: var(--micro-space-2) var(--micro-space-3);
-  border-inline-start: 3px solid var(--micro-info);
   background-color: var(--micro-info-surface);
   color: var(--micro-text-primary);
   font-size: var(--micro-secondary-size);
@@ -2364,7 +2388,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   font-family: var(--micro-font-family);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -2395,8 +2419,8 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   padding: var(--micro-space-2) var(--micro-space-3);
   border-block-end: 1px solid var(--micro-border-divider);
 }
-.m-chart__dataset thead th { color: var(--micro-text-secondary); font-weight: 600; }
-.m-chart__dataset tbody th { color: var(--micro-text-primary); font-weight: 500; }
+.m-chart__dataset thead th { color: var(--micro-text-secondary); font-weight: var(--micro-weight-semibold); }
+.m-chart__dataset tbody th { color: var(--micro-text-primary); font-weight: var(--micro-weight-medium); }
 .m-chart__dataset tbody tr:last-child th,
 .m-chart__dataset tbody tr:last-child td { border-block-end: 0; }
 .m-chart__dataset td {
@@ -2431,13 +2455,13 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 /* تسميات SVG بحجم فعلي 13px. عرض viewBox يطابق عرض المكوّن،
    فلا يتقلص النص أو يتضخم بتغيّر العرض؛ العقد في specification.md. */
 .m-chart--bars .m-chart__bar-label {
-  font-size: 13px;
+  font-size: var(--micro-secondary-size);
   fill: var(--micro-text-secondary);
   font-family: var(--micro-font-family);
 }
 .m-chart--bars .m-chart__bar-value {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--micro-secondary-size);
+  font-weight: var(--micro-weight-semibold);
   fill: var(--micro-text-primary);
   font-variant-numeric: tabular-nums;
 }
@@ -2450,11 +2474,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-chart--line .m-chart__line { fill: none; stroke: var(--micro-data-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--micro-data-line); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
-  font-size: 13px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
+  font-size: var(--micro-secondary-size); fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart .m-chart__x-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart .m-chart__x-label { font-size: var(--micro-secondary-size); fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {
@@ -2484,10 +2508,10 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   .m-donut > .m-donut__svg { grid-column: 1; grid-row: 1; }
   .m-donut:has(> .m-donut__svg) > .m-legend { grid-column: 2; grid-row: 1; }
 }
-.m-donut__center { font-size: var(--micro-amount2-size); font-weight: 600; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
-.m-donut__center-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-donut__center { font-size: var(--micro-amount2-size); font-weight: var(--micro-weight-semibold); fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
+.m-donut__center-label { font-size: var(--micro-secondary-size); fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 .m-donut__reading { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--micro-space-2); grid-column: 1 / -1; min-width: 0; }
-.m-donut__number { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: 600; direction: ltr; unicode-bidi: isolate; overflow-wrap: anywhere; min-width: 0; }
+.m-donut__number { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: var(--micro-weight-semibold); direction: ltr; unicode-bidi: isolate; overflow-wrap: anywhere; min-width: 0; }
 .m-donut__reading-label { font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
 
 /* ---- دوائر المساحة ----
@@ -2503,7 +2527,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   vector-effect: non-scaling-stroke;
 }
 .m-bubble--soft .m-bubble__circle { opacity: 0.85; } /* لقراءة التداخل المحدود إن وجد */
-.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
+.m-bubble__value { font-size: var(--micro-secondary-size); font-weight: var(--micro-weight-semibold); color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
 .m-bubble__label { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-secondary); max-width: 12ch; overflow-wrap: anywhere; text-align: center; }
 /* التسمية خارجية دائمًا (فوق الدائرة) — لا نص داخل دائرة صغيرة */
 .m-bubble__circle--none {
@@ -2583,7 +2607,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   background-color: var(--micro-surface-base);
   color: var(--micro-text-inverse);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 .m-step__marker svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .m-step--complete .m-step__marker { background-color: var(--micro-success); border-color: var(--micro-success); }
@@ -2593,8 +2617,8 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-step--complete .m-step__connector { background-color: var(--micro-success); }
 .m-step:last-child .m-step__connector { display: none; }
 .m-step__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.m-step__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); color: var(--micro-text-primary); font-weight: 500; }
-.m-step--upcoming .m-step__title { color: var(--micro-text-secondary); font-weight: 400; }
+.m-step__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); color: var(--micro-text-primary); font-weight: var(--micro-weight-medium); }
+.m-step--upcoming .m-step__title { color: var(--micro-text-secondary); font-weight: var(--micro-weight-regular); }
 .m-step--blocked .m-step__title { color: var(--micro-text-disabled); }
 .m-step__time { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-hint); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
 /* الشارة على الحالي (بدل الاعتماد على اللون وحده) */
@@ -2791,7 +2815,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   display: block;
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 .m-note__body {
   margin: 0;
@@ -2822,7 +2846,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   position: fixed;
   inset-block-end: calc(var(--micro-space-5) + env(safe-area-inset-bottom, 0px));
   inset-inline: var(--micro-space-5);
-  z-index: 90; /* فوق المحتوى ودون أن تحجب كل الشاشة */
+  z-index: var(--micro-z-toast, 90); /* R-12: أعلى السلم الموثق — فوق الطبقة ودون أن يحجب كل الشاشة */
   display: flex;
   align-items: center;
   gap: var(--micro-space-3);
@@ -2899,7 +2923,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.m-empty__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 600; color: var(--micro-text-primary); }
+.m-empty__title { font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: var(--micro-weight-semibold); color: var(--micro-text-primary); }
 .m-empty__body { margin: 0; font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-secondary); max-width: 34ch; }
 .m-empty .m-btn { flex: none; }
 
@@ -2920,7 +2944,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 }
 
 .m-note { border-radius: var(--micro-radius-field); }
-.m-note__title { font-weight: 600; }
+.m-note__title { font-weight: var(--micro-weight-semibold); }
 .m-note__body { overflow-wrap: anywhere; }
 .m-empty { border: 1px solid var(--micro-border-divider); }
 .m-skeleton__block--line { min-width: 0; }
@@ -2966,7 +2990,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   min-width: 0;
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   /* F-14 (2026-10-10، تكليف معرض النظام): التفاف محدود بسطرين ثم قطع
      بمقطع «…» — القاعدة الشبيهة بالأصل: عنوان شريط التطبيق لا يجعل
@@ -3016,7 +3040,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   font-family: var(--micro-font-family);
   font-size: var(--micro-button-label-size);
   line-height: var(--micro-button-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-secondary);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -3102,7 +3126,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-layer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: var(--micro-z-backdrop, 80); /* R-12: سلم z الموثق في التوكنز */
   background-color: rgba(23, 45, 50, 0.4); /* مقترح: غشاء الخلفية */
   font-family: var(--micro-font-family);
 }
@@ -3110,7 +3134,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 .m-layer {
   position: fixed;
-  z-index: 85;
+  z-index: var(--micro-z-layer, 85); /* R-12: فوق الغشاء ودون الـtoast */
   inset-inline: 0;
   inset-block-end: 0;
   max-height: 86%; /* يبقى شريط حالة مرئي — العنوان والغلق ظاهران دائمًا */
@@ -3171,7 +3195,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   min-width: 0;
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-layer__body {
@@ -3209,7 +3233,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
 }
-.m-filter-summary b { color: var(--micro-text-primary); font-weight: 600; }
+.m-filter-summary b { color: var(--micro-text-primary); font-weight: var(--micro-weight-semibold); }
 
 /* ================= 6) شريط إجراء أساسي =================
    ثابت أسفل المحتوى — المحتوى تحته حشو سفلي كي لا يُحجب.
@@ -3307,7 +3331,8 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 /* المقارنة 1: تدرج هادئ — بلا مستويات منحنية */
 .m-surface--calm .m-surface__waves { display: none; }
 
-/* المقارنة 2 (المرشح الأساسي): مستويان عريضان بانحناء هادئ */
+/* المقارنة 2 (تاريخية — كان «المرشح الأساسي» قبل اعتماد المنحنيات A04):
+   مستويان عريضان بانحناء هادئ؛ تبقى للمقارنة والرجوع فقط */
 .m-surface--waves .m-surface__waves {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzUgMTYwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj4KICA8IS0tIFMwMSDigJQg2YXYs9iq2YjZitin2YYg2LnYsdmK2LbYp9mGINmI2YfYp9iv2KbYp9mG2Iwg2YXYs9iq2YTZh9mF2KfZhiDZhdmGINin2YTYp9mG2K3Zhtin2KHYp9iqINin2YTZhNmI2YbZitipINin2YTZhdmG2KrYtNix2Kkg2YHZiiDYp9mE2YXYsdis2LkuCiAgICAgICDYtNmD2YTYp9mGINi62YrYsSDZhdiq2YXYp9ir2YTZitmGINio2KrYr9ix2Kwg2KrYr9ix2YrYrNmK2Jsg2KPZhNmI2KfZhiDYp9mE2KPYs9izINin2YTZhdi52KrZhdiv2Kkg2YHZgti3LiAtLT4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGxhbmUtbWludCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNERkVFRTYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii40MiIgc3RvcC1jb2xvcj0iI0RGRUVFNiIgc3RvcC1vcGFjaXR5PSIuMDM1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RGRUVFNiIgc3RvcC1vcGFjaXR5PSIuMTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InBsYW5lLWl2b3J5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y3RjhGNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjU4IiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjdGOEY0IiBzdG9wLW9wYWNpdHk9Ii4wNzUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGZpbGw9InVybCgjcGxhbmUtbWludCkiIGQ9Ik0wIDYzQzY3IDUyIDExNiA3OSAxNzIgNzNjNjQtNyAxMTMtMzcgMjAzLTI5djExNkgwWiIvPgogIDxwYXRoIGZpbGw9InVybCgjcGxhbmUtaXZvcnkpIiBkPSJNMCAxMDhjNzEtMTggMTI3IDkgMTg4IDggNzQtMSAxMjAtMjggMTg3LTE3djYxSDBaIi8+Cjwvc3ZnPgo=");
 }
@@ -3356,13 +3381,13 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-surface__title {
   font-size: var(--micro-surface-title-size, 22px);
   line-height: var(--micro-surface-title-line, 1.6364); /* نسبية: 22/36 */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-inverse);
 }
 .m-surface__amount {
   font-size: var(--micro-surface-amount-size, 36px);
   line-height: var(--micro-surface-amount-line, 1.2222); /* نسبية: 36/44 */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-inverse);
   font-variant-numeric: tabular-nums;
   direction: ltr;
@@ -3373,13 +3398,13 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-surface__label {
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500; /* C1: التمييز بالوزن لا الشفافية */
+  font-weight: var(--micro-weight-medium); /* C1: التمييز بالوزن لا الشفافية */
   color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.8) */
 }
 .m-surface__sub {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 400; /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
+  font-weight: var(--micro-weight-regular); /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
   color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.72) */
 }
 
@@ -3475,7 +3500,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-primary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -3548,7 +3573,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .m-info-card__values > .m-info-card__reading {
@@ -3561,7 +3586,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-primary);
   font-size: var(--micro-amount2-size);
   line-height: var(--micro-amount2-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -3578,7 +3603,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   font-family: var(--micro-font-family);
   direction: rtl;
   unicode-bidi: isolate;
@@ -3904,7 +3929,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   margin: 0 0 var(--micro-space-4);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-metric-circles__items {
@@ -3998,7 +4023,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-metric-circles__fallback-item[data-series="c"] { --m-series: var(--micro-data-c); }
 .m-metric-circles__fallback-item[data-series="d"] { --m-series: var(--micro-data-d); }
 .m-metric-circles__fallback-item[data-series="e"] { --m-series: var(--micro-data-e); }
-.m-metric-circles__fallback-label { min-width: 0; color: var(--micro-text-primary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); font-weight: 500; overflow-wrap: anywhere; }
+.m-metric-circles__fallback-label { min-width: 0; color: var(--micro-text-primary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); font-weight: var(--micro-weight-medium); overflow-wrap: anywhere; }
 .m-metric-circles__fallback-reading { min-width: 0; max-width: 100%; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; text-align: end; }
 .m-metric-circles__fallback-state { grid-column: 1 / -1; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
 
@@ -4103,7 +4128,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-main-metric__label {
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .m-main-metric__value {
@@ -4113,6 +4138,9 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   flex-wrap: wrap;
   gap: var(--micro-space-2);
   max-width: 100%;
+  /* R-54 (تعليق تبرير): جزيرة فيزيية مقصودة لمحور القيم الموقعة —
+     الرياضيات (يمين الصفر موجب/يساره سالب) اتجاهها ثابت بمعزل عن
+     اتجاه الصفحة، فلا يُقلب المحور مع RTL (نفس عزل الأرقام LTR) */
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -4123,7 +4151,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   max-width: 100%;
   font-size: var(--micro-amount2-size);
   line-height: var(--micro-amount2-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -4197,6 +4225,10 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 
 .m-main-metric__track[data-signed="true"] {
   height: var(--micro-space-3);
+  /* R-54 (تعليق تبرير): جزيرة فيزيائية مقصودة لمحور القيم الموقعة —
+     الهندسة (يمين الصفر موجب ويساره سالب، خط الصفر عند 50%) اتجاهها
+     ثابت بمعزل عن اتجاه الصفحة فلا يُقلب المحور مع RTL؛ نفس عقلية
+     عزل الأرقام LTR */
   direction: ltr;
 }
 .m-main-metric__track[data-signed="true"]::before {
@@ -4256,10 +4288,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-main-metric__row { padding-block: var(--micro-space-1); }
 .m-main-metric { /* W2.4 (A2-F02): توكن مكوّن مُسمّى لحافة الفصل الداخلية للدائرة البيضاء على
    أرضية فاتحة — اشتقاق موثق (أبيض بشفافية 16%)، قيمة هندسية داخلية لا لون هوية؛
-   القيمة كما كانت حرفيًا. */
-  --micro-metric-hero-separator: rgba(255, 255, 255, 0.16);
+   القيمة كما كانت حرفيًا. R-09 (2026-10-25): أُعيد التسمية إلى ...-color
+   لحسم تصادم الاسم مع طول 16px كان معرّفًا في tokens.css (حُذف اليتيم هناك). */
+  --micro-metric-hero-separator-color: rgba(255, 255, 255, 0.16);
 }
-.m-main-metric__hero { box-shadow: inset 0 0 0 1px var(--micro-metric-hero-separator, rgba(255, 255, 255, 0.16)); }
+.m-main-metric__hero { box-shadow: inset 0 0 0 1px var(--micro-metric-hero-separator-color, rgba(255, 255, 255, 0.16)); }
 
 </style>
   <style data-sc-from="components/account-settings/account-settings.css">
@@ -4293,11 +4326,11 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   background: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-account-profile__text { display: flex; flex-direction: column; min-width: 0; }
-.m-account-profile__name { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 600; overflow-wrap: anywhere; }
+.m-account-profile__name { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: var(--micro-weight-semibold); overflow-wrap: anywhere; }
 .m-account-profile__detail { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); overflow-wrap: anywhere; }
 
 .m-setting-group {
@@ -4310,7 +4343,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-setting-group__items {
@@ -4376,7 +4409,7 @@ button.m-setting-row:focus-visible {
 .m-setting-row__icon[data-icon="chevron"] { --m-account-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIKICAgICBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPHBhdGggZD0iTTE1IDE4QzE1IDE4IDkuMDAwMDEgMTMuNTgxMSA5IDEyQzguOTk5OTkgMTAuNDE4OCAxNSA2IDE1IDYiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMS41IiBrZXk9IjAiIC8+Cjwvc3ZnPgo="); }
 
 .m-setting-row__content { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-.m-setting-row__label { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 500; overflow-wrap: anywhere; }
+.m-setting-row__label { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: var(--micro-weight-medium); overflow-wrap: anywhere; }
 .m-setting-row__detail { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); overflow-wrap: anywhere; }
 .m-setting-row__end { flex: none; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
 .m-setting-row__end::before {
@@ -4442,9 +4475,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 .m-access-gateway__heading {
   margin: 0;
-  font-size: 22px;
-  line-height: 1.4545;
-  font-weight: 600;
+  /* R-11: زوج عنوان السطح الموثق بدل قيم خام خارج المصدر */
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-access-gateway__intro {
@@ -4619,6 +4653,13 @@ button.m-setting-row:focus-visible { z-index: 1; }
    الصف 48px فأكثر (max(2.7em, --micro-touch-min)) فتتمدد الخلايا رأسيًا
    — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
    لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
+
+   عقد 2026-10-25 (مرجع مفهوم التقويم) — عرضان متناسقان فوق الشبكة
+   نفسها عبر data-ocal-presentation:
+   expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
+   agenda (مضغوط): أرضية صف 40px (كثافة سياق مقصودة؛ ≥24×24) مع إخفاء
+   العدّاد بصريًا، وتحتها منطقة إفصاح هادئة (m-ocal__agenda) تكشف أجندة
+   اليوم المحدد داخل الصفحة — لا زر عائم ولا Bottom Sheet في هذا المسار.
    ========================================================= */
 
 .m-ocal,
@@ -4669,7 +4710,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   background-color: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
@@ -4678,7 +4719,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   background-color: var(--micro-surface-selected);
   border-color: var(--micro-brand-primary);
   color: var(--micro-brand-primary);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 /* ================= 2) الشاشات الفرعية ================= */
@@ -4702,7 +4743,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   margin: 0;
   text-align: center;
   font-size: var(--micro-button-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -4813,7 +4854,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   border-color: var(--micro-brand-primary);
   background-color: var(--micro-surface-selected);
   color: var(--micro-brand-primary);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-ocal__todaybtn {
@@ -4825,14 +4866,17 @@ button.m-setting-row:focus-visible { z-index: 1; }
   background-color: var(--micro-surface-base);
   color: var(--micro-brand-primary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-/* ---- إجراء بديل واحد لتغيير شهر/يوم يقلل تكديس الخيارات ---- */
+/* ---- إجراء بديل واحد لتغيير شهر/يوم يقلل تكديس الخيارات ----
+   2026-10-25: زرا الشريط (طي/توسيع + عرض اليوم) يلتفان عند ضيق الجذر
+   وتكبير النص (flex-wrap) بدل تجاوز حافة العرض — كل زر ≥48px يبقى. */
 .m-ocal__modes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
 }
 
@@ -4850,7 +4894,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   background-color: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
@@ -4859,10 +4903,28 @@ button.m-setting-row:focus-visible { z-index: 1; }
   border-color: var(--micro-border-divider);
   background-color: var(--micro-surface-base);
   color: var(--micro-brand-primary);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 /* ================= 3) شبكة الشهر ================= */
+/* عقد 2026-10-25 — عرض الأجندة (data-ocal-presentation="agenda"):
+   الشبكة نفسها بكل أيام الشهر مضغوطة رأسيًا (أرضية صف 40px — كثافة
+   سياق مقصودة يتطلبها الطي؛ ≥ الحد الأدنى WCAG 2.5.8 24×24) والعدّاد
+   يختفي بصريًا (المعنى يبقى في aria-label الخلية + زر الإفصاح +
+   الأجندة) فتبقى الخلايا هادئة قابلة للمسح. أزرار الأوامر كلها ≥48px. */
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__gridrow {
+  min-height: max(2.5em, 40px);
+}
+
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__cell {
+  aspect-ratio: auto;
+  min-height: 40px;
+}
+
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__count {
+  display: none;
+}
+
 .m-ocal__weekdays {
   display: flex;
   gap: var(--micro-space-1);
@@ -4872,7 +4934,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   padding-block: var(--micro-space-1);
   text-align: center;
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
   /* إصلاح R3-2b (2026-10-08): الالتفاف في أي مكان — اسم يوم عربي كلمة
@@ -4944,7 +5006,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 .m-ocal__daynum {
   font-size: var(--micro-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
 }
 
@@ -5094,7 +5156,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   min-width: 140px;
   margin: 0;
   font-size: var(--micro-button-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -5107,7 +5169,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   color: var(--micro-text-secondary);
 }
 
-/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأسفل/القائمة) ================= */
+/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأجندة/الأسفل/القائمة) ================= */
 .m-ocal__rows {
   list-style: none;
   margin: 0;
@@ -5117,12 +5179,21 @@ button.m-setting-row:focus-visible { z-index: 1; }
   gap: var(--micro-space-2);
 }
 
+/* الصف عنصر به زر رئيسي (فتح) وأدوات فعل اختيارية (تعديل/حذف)
+   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px */
+.m-ocal__rowitem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--micro-space-1);
+}
+
 .m-ocal__row {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* محاذاة يمين RTL */
   gap: 2px;
-  width: 100%;
+  flex: 1;
+  min-width: 0; /* يسمح بالالتفاف داخل الزر بدل توسيع الصف */
   min-height: var(--micro-touch-min); /* صف كامل ≥ 48px */
   padding: var(--micro-space-2) var(--micro-space-3);
   border: 1px solid var(--micro-border-divider);
@@ -5140,7 +5211,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 /* عنوان طويل جدًا يلتف داخل الصف ولا يكسره */
 .m-ocal__row-title {
   font-size: var(--micro-body-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -5192,22 +5263,15 @@ button.m-setting-row:focus-visible { z-index: 1; }
   font-variant-numeric: tabular-nums;
 }
 
-/* الحالة: نقطة لون + النص معًا دائمًا (لا لونًا وحده) —
-   أزواج توكنات معتمدة فقط */
+/* الحالة: نص داخل شريحة ملوّنة دلاليًا — بلا نقطة زائدة (R-24:
+   الكلمة والتلوين يحملان الحالة؛ أزواج توكنات معتمدة فقط) */
 .m-ocal__row-status {
   display: inline-flex;
   align-items: center;
-  gap: var(--micro-space-1);
   padding: var(--micro-space-1) var(--micro-space-2);
   border-radius: var(--micro-radius-chip);
-}
-
-.m-ocal__row-statusdot {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--micro-radius-circle);
-  background-color: currentColor;
+  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
 .m-ocal__row-status--progress {
@@ -5228,6 +5292,134 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__row-status--neutral {
   background-color: var(--micro-surface-page);
   color: var(--micro-text-secondary);
+}
+
+/* ملاحظة قصيرة تحت العنوان (وصفية فقط — عقد البيانات 2026-10-25) */
+.m-ocal__row-note {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+/* أدوات فعل الصف (تعديل/حذف) — على صفوف سطح فعل اليوم المحدد فقط
+   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات) */
+.m-ocal__row-tools {
+  flex: none;
+  display: flex;
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__row-tool {
+  width: var(--micro-icon-button-size);  /* 48px */
+  height: var(--micro-icon-button-size); /* 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+}
+
+.m-ocal__row-tool:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.m-ocal__row-tool svg {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+}
+
+.m-ocal__row-tool--danger {
+  color: var(--micro-danger);
+  border-color: var(--micro-danger-surface);
+}
+
+/* ================= 6b) منطقة إفصاح أجندة اليوم المحدد (عرض agenda) ================= */
+.m-ocal__agenda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__agenda-note {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__agenda-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-1) var(--micro-space-2);
+  width: 100%;
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+
+.m-ocal__agenda-toggle:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.m-ocal__agenda-date {
+  min-width: 0;
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__agenda-count {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__agenda-toggle svg {
+  flex: none;
+  margin-inline-start: auto;
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+.m-ocal__agenda-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.m-ocal__agenda-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__agenda-title {
+  margin: 0;
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__agenda-empty {
+  padding: var(--micro-space-3) var(--micro-space-4);
 }
 
 /* ================= 7) شاشة القائمة ================= */
@@ -5254,7 +5446,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__list-heading {
   margin: 0;
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
 }
@@ -5329,6 +5521,8 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__picker-back,
 .m-ocal__picker-month,
 .m-ocal__row,
+.m-ocal__row-tool,
+.m-ocal__agenda-toggle,
 .m-ocal__add,
 .m-ocal__retry {
   transition:
@@ -5504,7 +5698,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
   font-family: var(--micro-font-family);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   cursor: pointer;
   transition: background-color var(--micro-motion-press) var(--micro-ease-standard);
 }
@@ -5702,7 +5896,7 @@ body {
   margin-block-end: 14px;
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 .showcase-brand__logo { display: block; width: 92px; height: 32px; object-fit: contain; object-position: start center; }
 .showcase-brand__rule { width: 1px; height: 20px; background: var(--micro-border-divider); }
@@ -5711,14 +5905,14 @@ body {
   margin: 0 0 4px;
   color: var(--micro-brand-primary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-header__title {
   margin: 0;
   font-size: var(--micro-heading-large-size);
   line-height: var(--micro-heading-large-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-header__lede {
@@ -5762,7 +5956,7 @@ body {
   border-radius: var(--micro-radius-chip);
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   text-decoration: none;
 }
 .showcase-nav__link:hover,
@@ -5787,12 +5981,13 @@ body {
   padding-block: 6px 0;
   color: var(--micro-text-hint);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .sc-controls-tag .sc-controls-tag__mark {
   color: var(--micro-brand-primary);
-  font-weight: 700;
+  /* R-38 (2026-10-25): 600 لا 700 — لا ملفات وزن 700 مشحونة (لا faux-bold) */
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-controls__inner {
@@ -5810,7 +6005,7 @@ body {
   flex: none;
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .sc-ctl .m-seg { flex: 0 1 auto; }
@@ -5857,15 +6052,15 @@ body {
   margin: 0;
   color: var(--micro-brand-primary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   letter-spacing: 0;
 }
 
 .sc-section__title {
   margin: 0;
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
+  font-size: var(--micro-section-title-size);
+  line-height: var(--micro-section-title-line);
+  font-weight: var(--micro-weight-semibold);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -5888,7 +6083,7 @@ body {
   background: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 .sc-pill--current,
 .sc-pill--draft,
@@ -5914,7 +6109,7 @@ body {
   margin: 0;
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-secondary);
 }
 
@@ -6203,7 +6398,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 </head>
 <body data-view="overview">
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
-       — الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
+       الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
        أداة البناء تتحقق من كل رمز مقابل أصله بايت-ببايت (نمط F03 R1-02). -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
     <symbol id="i-info" viewBox="0 0 24 24" fill="none" data-icon-source="information-circle.svg"><!-- assets/icons/information-circle.svg -->
@@ -6260,9 +6455,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     <symbol id="i-account" viewBox="0 0 24 24" fill="none" data-icon-source="user-circle.svg"><!-- assets/icons/user-circle.svg -->
       <path d="M18.4984 19.1511C17.3377 17.4018 15.2947 16.2009 12.9313 16.0569L11.9984 16C11.6652 16.0083 11.3547 16.0194 11.0617 16.0325C8.71722 16.1376 6.66598 17.3796 5.5 19.1511" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M14.9961 10C14.9961 11.6569 13.6529 13 11.9961 13C10.3392 13 8.99609 11.6569 8.99609 10C8.99609 8.34315 10.3392 7 11.9961 7C13.6529 7 14.9961 8.34315 14.9961 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
     </symbol>
-    <symbol id="i-delete" viewBox="0 0 24 24" fill="none" data-icon-source="delete-02.svg"><!-- assets/icons/delete-02.svg -->
-      <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-    </symbol>
+    <symbol id="i-delete" viewBox="0 0 24 24" fill="none" data-icon-source="delete-02.svg"><!-- HugeIcons — Stroke Rounded | الأصل: Delete02Icon.js | ترخيص MIT | مصدر التحويل: assets/SOURCES.md -->
+  <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24" fill="none" data-icon-source="plus-sign.svg"><!-- assets/icons/plus-sign.svg -->
       <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
@@ -6299,9 +6496,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
   <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج).
        F-11 (2026-10-10): وسم مرئي صريح أعلى الشريط يفصله عن واجهة المنتج. -->
-  <div class="showcase-controls" id="state-lab" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
+  <div class="showcase-controls" id="state-lab" role="group" aria-label="أدوات مراجعة العرض؛ ليست واجهة منتج">
     <div class="showcase-controls__inner">
-      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span> — ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
+      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span>؛ ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
       <div class="sc-ctl">
         <span class="sc-ctl__label" id="sc-dir-label">الاتجاه</span>
         <div class="m-seg" data-seg role="group" aria-labelledby="sc-dir-label" id="sc-dir-seg">
@@ -6359,7 +6556,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">01 · S01</p>
         <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current" data-catalog-family="surfaces">STABLE UI</span></h2>
-        <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
+        <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة؛ الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
       </div>
       <div class="sc-block sc-block--plain sc-surface-stage">
         <article class="m-surface m-surface--curves">
@@ -6376,7 +6573,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             <p class="m-surface__label">سطح plain</p>
             <h3 class="m-surface__title">قراءة ثانوية هادئة</h3>
             <p class="m-surface__amount">12.5</p>
-            <p class="m-surface__sub">المتغير المسطح بلا أمواج — لنفس دور القراءة</p>
+            <p class="m-surface__sub">المتغير المسطح بلا أمواج؛ لنفس دور القراءة</p>
           </div>
         </article>
         <p class="sc-hint">المتغيرات التاريخية (calm / waves / waves-v2 / depth) موسومة تاريخية في المواصفة ولا تُعرض هنا. مفاتيح الموجات (knobs) كلها PROPOSED ولم تُستخدم.</p>
@@ -6412,7 +6609,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           <button type="button" class="m-btn m-btn--secondary" id="sc-btn-pressed" aria-pressed="false">تبديل الضغط (.is-pressed)</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-btn-disable" aria-pressed="false">تبديل التعطيل</button>
         </div>
-        <p class="sc-hint" id="sc-buttons-status" aria-live="polite">الحالة الافتراضية — استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».</p>
+        <p class="sc-hint" id="sc-buttons-status" aria-live="polite">الحالة الافتراضية؛ استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».</p>
       </div>
     </section>
 
@@ -6503,7 +6700,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">04 · B03</p>
         <h2 class="sc-section__title" id="sc-selection-title">الاختيار <span class="sc-pill sc-pill--current" data-catalog-family="selection">STABLE UI</span></h2>
-        <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس — D-UI-05).</p>
+        <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس؛ D-UI-05).</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -6576,7 +6773,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
                مع التسميات الطويلة يختار المستهلك نمطًا صريحًا بدل الالتفاف:
                m-seg--scroll (صف واحد + تمرير، سياسة الألسنة D-UI-01) أو
                m-seg--stack (تكديس عمودي). -->
-          <p class="sc-block__title">تسميات طويلة — سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
+          <p class="sc-block__title">تسميات طويلة؛ سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
           <div class="m-seg m-seg--scroll" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
             <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="تسمية طويلة جدًا بلا مسافات">الطلبات النشطة</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="تسمية أطول بكثير بلا أي مسافة">قيد التجهيز</button>
@@ -6626,11 +6823,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         <hr class="m-divider">
         <section class="m-section">
           <button type="button" class="m-section__head" aria-expanded="false" aria-controls="sc-org-body">
-            <span class="m-section-title" data-fx-text="تفاصيل التسوية — عنوان طويل يلتف على سطرين داخل رأس القسم القابل للطي دون قص">تفاصيل التسوية (قسم قابل للطي)</span>
+            <span class="m-section-title" data-fx-text="تفاصيل التسوية؛ عنوان طويل يلتف على سطرين داخل رأس القسم القابل للطي دون قص">تفاصيل التسوية (قسم قابل للطي)</span>
             <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
           </button>
           <div class="m-section__body" id="sc-org-body" hidden>
-            <p>محتوى القسم — الطي الفوري بلا حركة تغيّر التخطيط، وaria-expanded يديره المكوّن، والحدث micro-organization:toggle يفصح عن الحالة.</p>
+            <p>محتوى القسم؛ الطي الفوري بلا حركة تغيّر التخطيط، وaria-expanded يديره المكوّن، والحدث micro-organization:toggle يفصح عن الحالة.</p>
           </div>
         </section>
         <div class="sc-row sc-row--tight">
@@ -6664,11 +6861,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </article>
           <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
             <span class="m-info-card__label">مخزون عينة</span>
-            <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
+            <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">(غير متاح)</span><span class="m-info-card__unit"></span></span>
           </article>
         </div>
         <div>
-          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ — النقاط اختيارية في العرض الكامل</p>
+          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ؛ النقاط اختيارية في العرض الكامل</p>
           <div class="m-info-strip" data-info-strip data-controls="compact" id="sc-strip">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات الأرقام التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
@@ -6687,7 +6884,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
                 <div class="m-info-strip__slide">
                   <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
                     <span class="m-info-card__label">مخزون عينة</span>
-                    <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
+                    <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">(غير متاح)</span><span class="m-info-card__unit"></span></span>
                   </article>
                 </div>
               </div>
@@ -6710,7 +6907,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </div>
         </div>
         <div>
-          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek — ADOPTED)</p>
+          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek؛ ADOPTED)</p>
           <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
                data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
                النشطة بعرض كامل ولا تلمح المجاورة. -->
@@ -6753,7 +6950,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             </div>
             <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
           </div>
-          <p class="sc-hint">السحب 1:1 بإصبع حقيقي غير مفحوص هنا (Chromium فقط) — استخدم الأسهم/النقاط أو لوحة المفاتيح. لا تبديل تلقائي في كلا الشريطين (عقد العائلة).</p>
+          <p class="sc-hint">السحب 1:1 بإصبع حقيقي غير مفحوص هنا (Chromium فقط)؛ استخدم الأسهم/النقاط أو لوحة المفاتيح. لا تبديل تلقائي في كلا الشريطين (عقد العائلة).</p>
         </div>
       </div>
     </section>
@@ -6773,10 +6970,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </div>
           <div class="m-stat">
             <span class="m-stat__label">قيمة غير متاحة</span>
-            <span class="m-stat__value"><span class="m-stat__num" dir="ltr">—</span><span class="m-stat__unit">غير متاح</span></span>
+            <!-- R-04 (2026-10-25): حالة القيمة المفقودة بنص موسوم لا بشرطة em -->
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--unknown" dir="ltr">(غير متاح)</span><span class="m-stat__unit"></span></span>
           </div>
         </div>
-        <div class="m-chart m-chart--bars" id="sc-chart-bars" data-chart="bars" data-max="12" data-summary-text="توزيع العمليات — البيانات في HTML المصدر وتتغير مع fixture العرض.">
+        <div class="m-chart m-chart--bars" id="sc-chart-bars" data-chart="bars" data-max="12" data-summary-text="توزيع العمليات. البيانات في HTML المصدر وتتغير مع fixture العرض.">
           <h3 class="m-chart__title">توزيع العمليات (أعمدة)</h3>
           <ul class="m-chart__data" data-fx-live="sc-bars" hidden>
             <li data-series="a" data-label="مبيعات" data-value="8"></li>
@@ -6793,7 +6991,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           <div class="m-chart__plot" data-plot></div>
           <p class="m-chart__summary" data-summary></p>
         </div>
-        <div class="m-chart m-chart--line" id="sc-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع — البيانات المفقودة تقطع المسار ولا تصبح صفرًا.">
+        <div class="m-chart m-chart--line" id="sc-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع. البيانات المفقودة تقطع المسار ولا تصبح صفرًا.">
           <h3 class="m-chart__title">حركة الطلبات (خط)</h3>
           <ul class="m-chart__data" data-fx-live="sc-line" hidden>
             <li data-series="a" data-label="السبت" data-value="3"></li>
@@ -6814,7 +7012,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         </div>
         <div class="sc-grid-2">
           <div class="m-chart m-chart--donut" id="sc-chart-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="توزيع الطلبات حسب الحالة (مقام معلن 25).">
-            <h3 class="m-chart__title">توزيع الحالات — خيار حصص اختياري (donut)</h3>
+            <h3 class="m-chart__title">توزيع الحالات (خيار حصص اختياري donut)</h3>
             <ul class="m-chart__data" data-fx-live="sc-donut" hidden>
               <li data-series="a" data-label="مكتملة" data-value="11"></li>
               <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
@@ -6828,15 +7026,15 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             <div class="m-chart__plot m-donut" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
-          <div class="m-chart m-chart--bubbles" id="sc-chart-bubbles" data-chart="bubbles" data-rmax="52" data-summary-text="أحجام تشغيلية — مساحة الدائرة تتناسب مع القيمة.">
-            <h3 class="m-chart__title">فقاعات نسبية — عرض اختياري للتقريب (bubbles)</h3>
+          <div class="m-chart m-chart--bubbles" id="sc-chart-bubbles" data-chart="bubbles" data-rmax="52" data-summary-text="أحجام تشغيلية. مساحة الدائرة تتناسب مع القيمة.">
+            <h3 class="m-chart__title">فقاعات نسبية (عرض اختياري للتقريب bubbles)</h3>
             <ul class="m-chart__data" data-fx-live="sc-bubbles" hidden>
               <li data-series="a" data-label="الفرع الشمالي" data-value="40"></li>
               <li data-series="b" data-label="الفرع الجنوبي" data-value="12"></li>
               <li data-series="c" data-label="مستودع" data-value="5"></li>
             </ul>
             <template data-fx-alt="sc-bubbles">
-              <li data-series="a" data-label="الفرع الشمالي — تشغيل ربع سنوي كامل" data-value="90"></li>
+              <li data-series="a" data-label="الفرع الشمالي: تشغيل ربع سنوي كامل" data-value="90"></li>
               <li data-series="b" data-label="الفرع الجنوبي" data-value="3"></li>
               <li data-series="c" data-label="مستودع" data-value=""></li>
             </template>
@@ -6883,7 +7081,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       </div>
       <div class="sc-block sc-stack" id="sc-signed" aria-labelledby="sc-signed-title">
       <div class="sc-section__head">
-        <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع — Data</h2>
+        <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع (Data)</h2>
         <p class="sc-section__desc">امتداد للعائلة نفسها، لا عائلة جديدة. محور صفر مشترك، وقراءات كاملة، ولا تحويل للسالب إلى موجب.</p>
       </div>
       <div class="sc-stack">
@@ -6915,15 +7113,17 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       </div>
     </section>
 
-    <!-- ============ 07b · packed-circle (ملحق PROPOSED) ============ -->
+    <!-- ============ 07b · packed-circle (ملحق PROPOSED — قرار عرض 2026-10-25) ============ -->
     <section class="sc-section" id="sc-packed" data-status="proposed" aria-labelledby="sc-packed-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">07b · B05 ext</p>
         <h2 class="sc-section__title" id="sc-packed-title">الدوائر الملتصقة packed-circle <span class="sc-pill sc-pill--proposed" data-catalog-family="data" data-catalog-variant="packed-circle">PROPOSED</span></h2>
-        <p class="sc-section__desc">ملحق opt-in فوق B05 (m-chart--packed): دوائر متداخلة تمثل المساحة، قيم حقيقية داخلها بلا نسب. بحسب المصدر: «يحتاج مراجعة واعتماد المالك» — عرضه هنا لا يعني اعتماده.</p>
+        <p class="sc-section__desc">ملحق opt-in فوق B05. قرار عرض 2026-10-25 (دليل قياس وإخفاء بصري عند 320px): التداخل يخفي أجزاء الدوائر ويشوّه مقارنة المساحة على الهاتف، فالبيانات نفسها تُعرض هنا بالأعمدة (المفهوم الصحيح للمقارنة الدقيقة). يبقى الملحق PROPOSED في المكتبة لخيار المضيف الصريح بلا عرض افتراضي، وحدوده موثقة في مواصفته.</p>
       </div>
       <div class="sc-block">
-        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="64" data-max="100000" id="sc-chart-packed">
+        <!-- البديل المعتمد للعرض: أعمدة بنفس مصدر البيانات (المفهوم الصحيح للمقارنة الدقيقة) -->
+        <div class="m-chart m-chart--bars" data-chart="bars" data-max="100000" id="sc-chart-packed">
+          <h3 class="m-chart__title">الإيرادات والتكاليف والمصروفات (أعمدة؛ البديل المعتمد)</h3>
           <ul class="m-chart__data" data-fx-live="sc-packed" hidden>
             <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
             <li data-series="b" data-label="التكاليف" data-value="52100" data-display="52,100"></li>
@@ -6937,7 +7137,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           <div class="m-chart__plot" data-plot></div>
           <p class="m-chart__summary" data-summary></p>
         </div>
-        <p class="sc-hint">حالة القيم (صفر/سالب/مفقود) بنص صريح داخل الرسم — نفس عقد الحالة المنفصل للملحق.</p>
+        <p class="sc-hint">حالة القيم (صفر/سالب/مفقود) بنص صريح في الرسم والمفتاح. الأعمدة هي الافتراضي للمقارنة الدقيقة؛ الدوائر الملتصقة خيار مضيف صريح موثق بحدوده (ليست عرض هاتف) في مواصفة الملحق.</p>
       </div>
     </section>
 
@@ -6949,28 +7149,27 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا؛ الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
       </div>
       <div class="sc-block sc-stack">
-        <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
-          <button type="button" class="m-btn m-btn--secondary" id="sc-metric-layout" aria-pressed="false">تبديل ترتيب الدوائر (separated / overlap)</button>
+        <!-- قرار عرض 2026-10-25 (دليل قياس عند 320px): دوائر المقاييس بحجم 112/70/42px
+             فارغة ديكوريًا والقيم خارجها — استُبدل عرضها هنا ببطاقات قراءة مدمجة بنفس
+             المصدر (m-stat)؛ المكوّن نفسه يبقى opt-in في المكتبة بحدوده الموثقة. -->
+        <p class="sc-block__title">قراءات تشغيلية مدمجة (بطاقات)؛ البديل المعتمد للدوائر على الهاتف</p>
+        <div class="sc-grid-2" id="sc-circles" role="list" aria-label="بطاقات قراءات تشغيلية مدمجة؛ البديل المعتمد للهاتف">
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label" data-fx-text="عنصر أ بقيمة تشغيلية كبيرة جدًا">عنصر أ</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="98">64</span><span class="m-stat__unit">وحدة</span></span>
+          </div>
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label">عنصر ب</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="3">25</span><span class="m-stat__unit">وحدة</span></span>
+          </div>
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label">عنصر ج</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="(غير متاح)">9</span><span class="m-stat__unit" data-fx-text="">وحدة</span></span>
+          </div>
         </div>
-        <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="64" id="sc-circles" aria-label="عرض اختياري لأحجام نسبية لقراءات تشغيلية">
-          <h3 class="m-metric-circles__title">عرض اختياري للتقريب · أحجام نسبية والقراءات الدقيقة في المفتاح</h3>
-          <ul class="m-metric-circles__source" data-metric-source data-fx-live="sc-circles-src" hidden>
-            <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
-            <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
-            <li data-label="عنصر ج" data-value="9" data-unit="وحدة" data-series="c"></li>
-          </ul>
-          <template data-fx-alt="sc-circles-src">
-            <li data-label="عنصر أ بقيمة تشغيلية كبيرة جدًا" data-value="98" data-unit="وحدة" data-series="a"></li>
-            <li data-label="عنصر ب" data-value="3" data-unit="وحدة" data-series="b"></li>
-            <li data-label="عنصر ج" data-value="" data-unit="وحدة" data-series="c"></li>
-          </template>
-          <ol class="m-metric-circles__items" data-metric-items aria-label="المقارنة"></ol>
-          <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="مفتاح التسميات والقراءات الدقيقة"></ul>
-          <p class="m-metric-circles__empty" data-metric-scale></p>
-          <p class="m-metric-circles__empty" data-metric-empty hidden></p>
-        </section>
-        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة">
-          <h3 class="m-main-metric__title">مقارنة مسطّحة — للقراءة الدقيقة</h3>
+        <p class="sc-hint">القيمة نفسها هي المقارنة عند هذا الحجم: قراءة مباشرة بلا تخمين مساحة. المكوّن الدائري يبقى خيارًا صريحًا للمضيف بحدوده الموثقة (ليس عرض هاتف).</p>
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة؛ الموصى بها للقراءة العريضة">
+          <h3 class="m-main-metric__title">مقارنة مسطّحة؛ للقراءة الدقيقة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -6994,9 +7193,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
+        <p class="sc-hint">الأشرطة الموقعة: هندسة محور الصفر ثابتة الاتجاه بمعزل عن اتجاه الصفحة (الموجب والسالب على طرفي الصفر دائمًا)؛ لا تجميع ولا رياضيات مالية؛ القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
         <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز اختياري لقيمة رئيسية ومقارنة مستقلة">
-          <h3 class="m-main-metric__title">قراءة رئيسية — إبراز featured اختياري مع مقارنات مستقلة</h3>
+          <h3 class="m-main-metric__title">قراءة رئيسية؛ إبراز featured اختياري مع مقارنات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -7015,7 +7214,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </div>
         </section>
         <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-compact" aria-label="مقارنة مدمجة بالبيانات نفسها">
-          <h3 class="m-main-metric__title">قراءة مدمجة — نفس بيانات المقارنة</h3>
+          <h3 class="m-main-metric__title">قراءة مدمجة؛ نفس بيانات المقارنة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -7041,13 +7240,13 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">09 · B06</p>
         <h2 class="sc-section__title" id="sc-messages-title">الرسائل والحالات <span class="sc-pill sc-pill--current" data-catalog-family="messages">STABLE UI</span></h2>
-        <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert — D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
+        <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert؛ D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-stack--tight">
           <div class="m-note m-note--info" id="sc-note-info">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك — الدور status من النوع.</span></span>
+            <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك؛ الدور status من النوع.</span></span>
             <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--success" id="sc-note-success">
@@ -7061,12 +7260,12 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </div>
           <div class="m-note m-note--error" id="sc-note-error">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert-circle"/></svg>
-            <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف — الدور alert من النوع تلقائيًا.</span></span>
+            <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف؛ الدور alert من النوع تلقائيًا.</span></span>
             <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--help" id="sc-note-help">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <span class="m-note__text"><b class="m-note__title">مساعدة</b><span class="m-note__body">ملاحظة تعليمية — الدور note.</span></span>
+            <span class="m-note__text"><b class="m-note__title">مساعدة</b><span class="m-note__body">ملاحظة تعليمية؛ الدور note.</span></span>
           </div>
         </div>
         <div class="sc-row sc-row--tight">
@@ -7099,7 +7298,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             <p class="m-empty__body">جرّب مصطلحًا آخر أو امسح البحث.</p>
           </div>
         </div>
-        <p class="sc-hint" id="sc-announce-status" aria-live="polite">الإعلان يمر في قناتي المكوّن المنفصلتين (polite/assertive) — تحقق بفتح الإفصاح أو قراءة DOM. toast يعيش أعلى الصفحة خارج الأقسام (عقد rect &gt; 0).</p>
+        <p class="sc-hint" id="sc-announce-status" aria-live="polite">الإعلان يمر في قناتي المكوّن المنفصلتين (polite/assertive)؛ تحقق بفتح الإفصاح أو قراءة DOM. toast يعيش أعلى الصفحة خارج الأقسام (عقد rect &gt; 0).</p>
       </div>
     </section>
     <!-- ============ 10 · B07 التنقل والطبقات ============ -->
@@ -7118,7 +7317,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           <div class="sc-frame__inner">
             <div class="m-appbar">
               <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg></button>
-              <span class="m-appbar__title" data-fx-text="طلبات الفرع الرئيسي — عنوان طويل جدًا يلتف حتى سطرين ثم «…» والنص الكامل متاح لقارئ الشاشة داخل شريط التطبيق عند أصغر عرض">طلبات الفرع الرئيسي — عنوان طويل يلتف حتى سطرين</span>
+              <span class="m-appbar__title" data-fx-text="طلبات الفرع الرئيسي؛ عنوان طويل جدًا يلتف حتى سطرين ثم «…» والنص الكامل متاح لقارئ الشاشة داخل شريط التطبيق عند أصغر عرض">طلبات الفرع الرئيسي؛ عنوان طويل يلتف حتى سطرين</span>
               <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="المزيد"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-more"/></svg></button>
             </div>
             <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام الطلبات" id="sc-tabs">
@@ -7128,7 +7327,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
               <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="sc-tab-d" id="sc-tab-d-btn" tabindex="-1" data-fx-text="المرتجعات المعتمدة نهائيًا">المرتجعات</button>
             </div>
             <div id="sc-tab-a" role="tabpanel" aria-labelledby="sc-tab-a-btn">
-              <p class="m-section-desc">لوحة الطلبات النشطة — التبويب يبدّل المحتوى المرتبط فعليًا (جرّب الأسهم وHome/End والنقر).</p>
+              <p class="m-section-desc">لوحة الطلبات النشطة؛ التبويب يبدّل المحتوى المرتبط فعليًا (جرّب الأسهم وHome/End والنقر).</p>
             </div>
             <div id="sc-tab-b" role="tabpanel" aria-labelledby="sc-tab-b-btn" hidden>
               <p class="m-section-desc">لوحة الطلبات المكتملة.</p>
@@ -7155,7 +7354,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-account"/></svg>الحساب</button>
           </nav>
         </div>
-        <p class="sc-hint">الإطار أعلاه يجمع appbar + tabs + tabpanels + actionbar لاصق + navbar سفلي في عمود هاتف واحد داخل هذا القسم فقط — التجميع للعرض، وعدد الوجهات وأسماؤها عينة لا تثبيت لخريطة تنقل منتج.</p>
+        <p class="sc-hint">الإطار أعلاه يجمع appbar + tabs + tabpanels + actionbar لاصق + navbar سفلي في عمود هاتف واحد داخل هذا القسم فقط؛ التجميع للعرض، وعدد الوجهات وأسماؤها عينة لا تثبيت لخريطة تنقل منتج.</p>
       </div>
     </section>
 
@@ -7164,12 +7363,12 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">11 · SPEC-04</p>
         <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current" data-catalog-family="access-gateway">STABLE UI</span></h2>
-        <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.</p>
+        <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط؛ لا تُرسل بيانات إلى أي خدمة.</p>
       </div>
       <div class="sc-block sc-block--plain">
         <section class="m-access-gateway sc-gateway" data-access-gateway id="sc-gateway-root" aria-labelledby="sc-gateway-heading">
           <h3 class="m-access-gateway__heading" id="sc-gateway-heading">الدخول إلى تجربة العرض</h3>
-          <p class="m-access-gateway__intro">نسخة عرض محلية — البيانات لا تغادر هذا الملف.</p>
+          <p class="m-access-gateway__intro">نسخة عرض محلية؛ البيانات لا تغادر هذا الملف.</p>
           <form data-access-form novalidate>
             <div class="m-access-gateway__fields">
               <div class="m-field" data-micro-field>
@@ -7194,7 +7393,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
             <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
           </form>
         </section>
-        <p class="sc-hint">جرب: إرسال فارغ (رسالة مكوّن + تركيز أول حقل)، إظهار كلمة المرور، ثم إرسال صالح — pending ثم نتيجة المعالج المحلي. الاسترداد والمزودون يبقيان مخفيين لعدم وجود معالجات لهم (عقد العائلة).</p>
+        <p class="sc-hint">جرب: إرسال فارغ (رسالة مكوّن + تركيز أول حقل)، إظهار كلمة المرور، ثم إرسال صالح؛ pending ثم نتيجة المعالج المحلي. الاسترداد والمزودون يبقيان مخفيين لعدم وجود معالجات لهم (عقد العائلة).</p>
       </div>
     </section>
 
@@ -7203,12 +7402,12 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">12 · SPEC-03</p>
         <h2 class="sc-section__title" id="sc-account-title">إعدادات الحساب والتطبيق <span class="sc-pill sc-pill--current" data-catalog-family="account-settings">STABLE UI</span></h2>
-        <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير — دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
+        <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير؛ دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
       </div>
       <div class="sc-block">
         <main data-account-settings data-account-layer-id="sc-account-layer" id="sc-account-root">
           <button class="m-btn m-btn--secondary" type="button" data-account-open data-autofocus>فتح الإعدادات</button>
-          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px) — سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
+          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px)؛ سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
           <div class="m-layer-backdrop" id="sc-account-backdrop" data-for="sc-account-layer" hidden></div>
           <div class="m-layer m-layer--center" id="sc-account-layer" role="dialog" aria-modal="true" aria-labelledby="sc-account-main-title" data-account-settings-layer hidden>
             <header class="m-layer__head">
@@ -7284,18 +7483,57 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">يعرض الجدول التاريخ الحالي المحدد ويتكيف بين شبكة التقويم وعرض اليوم حسب مساحة المكوّن، مع قائمة زمنية اختيارية. تغيير مساحة العرض لا يغيّر التاريخ المحدد.</p>
+        <p class="sc-section__desc">تقويم شهري بعرضين متناسقين: الشهر الموسّع وأجندة اليوم المحدد المضغوطة. اليوم داخل التقويم هو نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة)؛ لا زر عائم ولا Bottom Sheet في هذا المسار.</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
+          <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-loading">حالة الانتظار</button>
+          <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-error">حالة الخطأ وإعادة المحاولة</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-restore">استعادة البيانات</button>
         </div>
-        <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
+        <div id="sc-ocal-root" role="region" aria-label="مكوّن جدول الطلبات"></div>
+        <!-- محرر داخل الصفحة يملكه العرض (تركيب حقول B02): محاكاة محلية موسومة
+             لأفعال المضيف — لا حفظ ولا شبكة ولا طبقة. -->
+        <section class="sc-block sc-block--plain" id="sc-ocal-editor" hidden aria-labelledby="sc-ocal-editor-heading">
+          <h3 class="sc-block__title" id="sc-ocal-editor-heading">إضافة طلب (محاكاة عرض محلية)</h3>
+          <p class="sc-hint" id="sc-ocal-editor-date">التاريخ:</p>
+          <div class="sc-stack--tight">
+            <label class="m-field" data-field>
+              <span class="m-field__label">عنوان الطلب</span>
+              <input class="m-field__input" id="sc-ocal-editor-title" type="text" autocomplete="off" required>
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+            <div class="sc-grid-2">
+              <label class="m-field" data-field>
+                <span class="m-field__label">الوقت (اختياري، HH:mm)</span>
+                <input class="m-field__input" id="sc-ocal-editor-time" type="time" autocomplete="off">
+              </label>
+              <label class="m-field" data-field>
+                <span class="m-field__label">الحالة</span>
+                <select class="m-field__input" id="sc-ocal-editor-status">
+                  <option value="progress">قيد التنفيذ</option>
+                  <option value="done">تم التسليم</option>
+                  <option value="hold">بانتظار العميل</option>
+                </select>
+              </label>
+            </div>
+            <label class="m-field" data-field>
+              <span class="m-field__label">ملاحظة قصيرة (اختياري)</span>
+              <input class="m-field__input" id="sc-ocal-editor-note" type="text" autocomplete="off">
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+          </div>
+          <div class="sc-tools" role="group" aria-label="أفعال المحرر">
+            <button type="button" class="m-btn m-btn--primary" id="sc-ocal-editor-save">حفظ (محاكاة محلية)</button>
+            <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-editor-cancel">إلغاء</button>
+          </div>
+          <p class="sc-hint">محرر العرض يكتب في حالة محلية لهذه الجلسة فقط (Escape للإلغاء). المكوّن نفسه لا يملك محررًا: أفعال الإضافة/التعديل/الحذف أحداث host-owned.</p>
+        </section>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. شبكة الشهر كاملة عند كل عرض جذر (عرض مدمج تحت 360px يحفظ كل الأيام وأرضية ارتفاع 48px)؛ لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب «طي الشهر» لعرض الأجندة المضغوطة ثم انقر منطقة الإفصاح لتكشف طلبات اليوم المحدد فقط، وانقر يومًا لتحدّث الأجندة ولوحة اليوم. لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 
@@ -7324,7 +7562,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
                     <svg aria-hidden="true"><use href="#i-chevron-down"/></svg>
                   </button>
                   <div class="m-carousel__card-details" id="sc-carousel-details-1" data-card-details hidden>
-                    <p class="sc-hint" data-fx-text="تفاصيل طويلة جدًا داخل البطاقة تختبر الالتفاف بلا قص عند أصغر عرض للمعاينة مع بطاقات مجاورة ظاهرة جزئيًا">التفاصيل الكاملة تظهر داخل مكانها بلا قص — 132 طلبًا جديدًا هذا الأسبوع بذروة يوم الثلاثاء.</p>
+                    <p class="sc-hint" data-fx-text="تفاصيل طويلة جدًا داخل البطاقة تختبر الالتفاف بلا قص عند أصغر عرض للمعاينة مع بطاقات مجاورة ظاهرة جزئيًا">التفاصيل الكاملة تظهر داخل مكانها بلا قص؛ 132 طلبًا جديدًا هذا الأسبوع بذروة يوم الثلاثاء.</p>
                   </div>
                 </div>
               </li>
@@ -7357,15 +7595,15 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           </div>
           <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
         </div>
-        <p class="sc-hint">جرّب الأسهم والنقاط ولوحة المفاتيح من سطح العارض (ArrowLeft = التالي في RTL، Home/End) والتوسيع في البطاقة الأولى — يُطوى تلقائيًا عند الانتقال.</p>
+        <p class="sc-hint">جرّب الأسهم والنقاط ولوحة المفاتيح من سطح العارض (ArrowLeft = التالي في RTL، Home/End) والتوسيع في البطاقة الأولى؛ يُطوى تلقائيًا عند الانتقال.</p>
       </div>
     </section>
   </main>
 
   <footer class="showcase-footer">
-    <p>هذا ملف عرض لمكوّنات نظام Micro UI — ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
+    <p>هذا ملف عرض لمكوّنات نظام Micro UI؛ ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
     <p>مستوى النضج يُقرأ من فهرس المكوّنات؛ ووسم العرض الحالي مستقل عن الحالة التشغيلية التي تتحكم بها أدوات المختبر. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.</p>
-    <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا — لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
+    <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا؛ لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
   </footer>
 
   <!-- Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) -->
@@ -7424,7 +7662,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
     </div>
     <div class="m-layer__body">
-      <p>لوحة سفلية بعقد الطبقات نفسه — تفتح من الأسفل بحركة 240ms من motion.css، والإغلاق من الزر الظاهر أو الخلفية (سياسة الضغط بالخلفية: يغلق هنا لأنها ليست حوارًا متلفًا).</p>
+      <p>لوحة سفلية بعقد الطبقات نفسه؛ تفتح من الأسفل بحركة 240ms من motion.css، والإغلاق من الزر الظاهر أو الخلفية (سياسة الضغط بالخلفية: يغلق هنا لأنها ليست حوارًا متلفًا).</p>
     </div>
   </div>
 
@@ -8274,6 +8512,15 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     }
     return { status: status, retry: retry };
   }
+  /* R-32 (2026-10-25): تطبيع البحث — توحيد الحالة + تجريد التشكيل (NFD)
+     قبل المقارنة كي لا تُنتج البحثات اللاتينية/المشكولة «لا نتائج» كاذبة؛
+     مصدر الخيارات نفسه لا يُمس (العرض كما كتبه المستهلك). */
+  function normalizeMatch(text) {
+    var s = String(text).toLowerCase();
+    if (!s.normalize) return s; /* بيئات بلا Intl: مقارنة الحالة فقط (موثق) */
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
   function apply(picker) {
     var state = stateOf(picker);
     var list = listOf(picker);
@@ -8282,8 +8529,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var active = document.activeElement;
     var ownedOption = optionsOf(picker).indexOf(active) >= 0;
     var ready = state.status === 'ready';
+    var queryNorm = state.query !== '' ? normalizeMatch(state.query) : '';
     optionsOf(picker).forEach(function (option) {
-      var hide = !ready || (state.query !== '' && option.textContent.indexOf(state.query) === -1);
+      var hide = !ready || (queryNorm !== '' && normalizeMatch(option.textContent).indexOf(queryNorm) === -1);
       // Move focus before hiding its owner. Never steal focus from outside options.
       if (hide && option === active) safeFocus(picker);
       option.hidden = hide;
@@ -8295,7 +8543,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     };
     var noResult = ready && state.query !== '' && !available(picker).length;
     var noData = ready && !optionsOf(picker).length;
-    var message = ready ? (noResult ? 'لا نتائج مطابقة — جرّب اسمًا آخر.' : noData ? defaults.empty : '')
+    var message = ready ? (noResult ? 'لا نتائج مطابقة. عدّل كلمة البحث.' : noData ? defaults.empty : '')
       : state.message || defaults[state.status] || '';
     var retryVisible = state.status === 'error' && !locked(picker);
     if (active === nodes.retry && !retryVisible) safeFocus(picker);
@@ -9075,6 +9323,21 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     return '';
   }
 
+  /* R-20 (2026-10-25): عبارة عدد الفلاتر العربية الكاملة — المثنى والجمع
+     وقاعدة العدد المركب فوق 100 (كانت «N فلاتر» فقط بلا مثنى) */
+  function filterCountAr(n) {
+    if (n === 1) return 'فلتر واحد';
+    if (n === 2) return 'فلتران';
+    if (n >= 3 && n <= 10) return n + ' فلاتر';
+    if (n >= 11 && n <= 99) return n + ' فلترًا';
+    var r = n % 100;
+    if (r === 0) return n + ' فلتر';
+    if (r === 1) return n + ' فلتر واحد';
+    if (r === 2) return n + ' فلتران';
+    if (r >= 3 && r <= 10) return n + ' فلاتر';
+    return n + ' فلترًا';
+  }
+
   function updateSummary(panel, phase) {
     var summary = panel.querySelector('[data-filter-summary]');
     if (!summary) return;
@@ -9093,7 +9356,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
        سليمة كما هي — هذا النص عرض فقط. */
     summary.textContent = labels.length === actives.length
       ? phase + ': ' + labels.join('، ')
-      : phase + ': ' + (actives.length === 1 ? 'فلتر واحد' : actives.length + ' فلاتر');
+      : phase + ': ' + filterCountAr(actives.length);
   }
 
   function initFilterPanel(panel) {
@@ -9590,8 +9853,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
   }
 
   function readingOf(item) {
-    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '— غير متاح';
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' — سالب غير مرسوم';
+    /* R-04/R-18 (2026-10-25): حالات القيمة بصيغة الأقواس الموحدة، لا شرطة
+       em — الشرطة تبقى ترميزًا مرسومًا للقيمة المفقودة داخل الرسم فقط */
+    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' (سالب غير مرسوم)';
     return item.display || item.rawValue || fmt(item.value);
   }
 
@@ -9601,7 +9866,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       && chart.getAttribute('data-axis-type') === 'time';
     if (isTimeAxis && item.axisX !== null && item.axisX !== ''
         && label.indexOf(String(item.axisX)) === -1) {
-      label += ' — ' + item.axisX;
+      label += '، ' + item.axisX;
     }
     return label;
   }
@@ -9710,7 +9975,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -10012,7 +10277,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       fill: 'var(--micro-warning)'
     });
     applyTextPx(t, fontPx);
-    t.textContent = fmt(value) + ' — ' + why;
+    t.textContent = fmt(value) + ' (' + why + ')';
     g.appendChild(t);
   }
 
@@ -10058,7 +10323,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
-      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -10109,7 +10374,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
@@ -10147,7 +10412,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var top = 24, height = Math.min(160, Math.max(112, width * 0.38)), bottom = top + height;
     var svg = svgEl('svg', {
       viewBox: '0 0 ' + width + ' ' + (bottom + 28), role: 'img',
-      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + ' — محور صفر مشترك؛ القراءات الكاملة أدناه'
+      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + '؛ محور صفر مشترك، والقراءات الكاملة أدناه'
     });
     function y(value) { return top + (b - value / magnitude) / (b - a) * height; }
     var zero = y(0);
@@ -10317,7 +10582,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
     if (scale.kind === 'over') {
-      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -10367,7 +10632,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
@@ -10415,7 +10680,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -10680,6 +10945,26 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           'vector-effect': 'non-scaling-stroke'
         }));
       });
+      /* R-07 (2026-10-25): فاصل شعاعي 1px غير مقياسي عند كل حد بين
+         الشريحة والتالية (نمط الحلقة الداخلية لpacked-circle) — الشرائح
+         المتجاورة لا تندمج حتى مع تقارب إضاءة السلاسل (R-06). */
+      if (known.length > 1) {
+        var bOff = 0;
+        known.forEach(function (it, k) {
+          if (k === 0) return; /* حد 0° يطابق حد 360° — يُرسم مرة */
+          bOff += (it.value / denom) * C;
+          var angle = (-90 + (bOff / C) * 360) * Math.PI / 180;
+          svg.appendChild(svgEl('line', {
+            x1: cx + (R - 8) * Math.cos(angle),
+            y1: cy + (R - 8) * Math.sin(angle),
+            x2: cx + (R + 8) * Math.cos(angle),
+            y2: cy + (R + 8) * Math.sin(angle),
+            'aria-hidden': 'true',
+            stroke: 'var(--micro-data-boundary)', 'stroke-width': 1,
+            'vector-effect': 'non-scaling-stroke'
+          }));
+        });
+      }
       var center = svgEl('text', { class: 'm-donut__center', x: cx, y: cy + 2, 'text-anchor': 'middle' });
       center.textContent = fmt(denom);
       svg.appendChild(center);
@@ -10725,7 +11010,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       li.appendChild(label);
       var val = document.createElement('span');
       val.className = 'm-legend__value';
-      val.textContent = it.value === null ? '— غير متاح' : fmt(it.value) + ' — غير صالح للنسب';
+      val.textContent = it.value === null ? '(غير متاح)' : fmt(it.value) + ' (غير صالح للنسب)';
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -10765,7 +11050,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
      بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
-    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '— غير متاح';
+    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
     if (it.value < 0 && !it.signed) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
@@ -10830,7 +11115,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');
-        time.textContent = it.axisX === null || it.axisX === '' ? '— غير متاح' : it.axisX;
+        time.textContent = it.axisX === null || it.axisX === '' ? '(غير متاح)' : it.axisX;
         tr.appendChild(time);
       }
       var td = document.createElement('td');
@@ -10896,7 +11181,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       lab.textContent = it.label;
       if (it.value === null) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = '— غير متاح';
+        valTxt.textContent = '(غير متاح)';
       } else if (it.value < 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
         valTxt.textContent = fmt(it.value) + ' (سالب غير صالح للمساحة)';
@@ -10928,7 +11213,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(declared) + ' إلى ' + fmt(vmax) + '؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.');
@@ -11230,7 +11515,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       label.textContent = it.label;
       var value = document.createElement('bdi');
       value.className = 'm-legend__value';
-      value.textContent = it.value === 0 ? '0 — صفر' : stateText(it).text;
+      value.textContent = it.value === 0 ? '0 (صفر)' : stateText(it).text;
       li.appendChild(label);
       li.appendChild(value);
       list.appendChild(li);
@@ -11266,29 +11551,31 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
      «-3,566 — سالب غير صالح للمساحة». وللقيم الموجبة بلا تغيير:
      data-display نص العرض كما هو. */
   function stateText(it) {
-    if (!it.hasAttr) return { text: '— غير معروف', none: true };
-    if (it.value === null) return { text: '— غير متاح', none: true };
+    if (!it.hasAttr) return { text: '(غير معروف)', none: true };
+    if (it.value === null) return { text: '(غير متاح)', none: true };
     if (it.value < 0) {
       var num = it.display || String(it.value);
-      return { text: num + ' — سالب غير صالح للمساحة', none: true };
+      return { text: num + ' (سالب غير صالح للمساحة)', none: true };
     }
     if (it.value === 0) return { text: '0', none: true };
     return { text: it.display || String(it.value), none: false };
   }
 
   function scaleError(chart, positiveExists, vmaxDerived) {
+    /* R-05 (2026-10-25): انفصال نص المستخدم عن التشخيص التقني كما في
+       data.js donutRefusal — نص موجز بلا أسماء سمات في الواجهة،
+       والتشخيص الكامل على سمة data-scale-detail يُقرأ من الكود/السجلات. */
     var raw = chart.getAttribute('data-max');
     var plot = chart.querySelector('[data-plot]');
     var err = document.createElement('p');
     err.className = 'm-chart__scale-error';
-    var base = 'تعذر رسم المقارنة: المقياس المعلن data-max="' + raw + '" ';
-    if (parseNum(raw) === 0) {
-      err.textContent = base + 'صفر' + (positiveExists
-        ? ' بينما توجد قيم موجبة — تعارض في البيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس. صحّح data-max أو القيم. القيم معروضة في المفتاح دون رسم.'
-        : '— لا توجد قيم موجبة للمقارنة. القيم معروضة في المفتاح.');
-    } else {
-      err.textContent = base + 'غير صالح (سالب أو غير رقمي) — المقياس السالب/غير الرقمي غير صالح للمقارنة المساحية. صحّح القيمة أو احذف السمة. القيم معروضة في المفتاح دون رسم.';
-    }
+    err.textContent = 'تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.';
+    var devDetail = parseNum(raw) === 0
+      ? 'packed-circle: data-max="' + raw + '" صفر' + (positiveExists
+        ? ' بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.'
+        : ' ولا توجد قيم موجبة للمقارنة.')
+      : 'packed-circle: data-max="' + raw + '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.';
+    chart.setAttribute('data-scale-detail', devDetail);
     plot.innerHTML = '';
     plot.appendChild(err);
     if (!positiveExists) {
@@ -11495,7 +11782,18 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 /* Micro — optional numeric-card carousel. Consumer supplies every card and value.
    R8-02: الجذر الذي يطلب variant الـpeek (data-info-peek) يملكه info-strip-peek
    وحده (مالك واحد للحالة والأحداث) — هذا المحرك يتخطاه مهما تقدّم ترتيب
-   التحميل، وسلوكه على الجذور غير peek لا يتغيّر. */
+   التحميل، وسلوكه على الجذور غير peek لا يتغيّر.
+
+   R-03/R-51 (2026-10-25): المسار المضغوط يفرض هندسة RTL صريحة
+   (direction: rtl على المسار — التمرير المكاني من اليمين لليسار)؛
+   لذلك تتبع لوحة المفاتيح والسحب **هندسة المسار نفسها** لا اتجاه
+   الصفحة: السهم الذي يزيد المؤشر هو «التالي البصري» دائمًا مهما كان
+   اتجاه المضيف. قناتا الإدخال لا تتناقضان مع الشكل ولا مع بعضهما.
+
+   R-15 (2026-10-25): دورة حياة قابلة لإعادة الاستخدام — init() تلتقط
+   البطاقات وقت التهيئة (المحتوى الثابت)، وrescan(root) يعيد الالتقاط
+   بعد إضافة/إزالة مضيفة غير متزامنة، وdisconnect(root) يفصل مستمعات
+   الجذر ويعيده لحالة غير مهيأة (init جديدة تعمل بعدها). لا مؤقتات. */
 (function () {
   'use strict';
 
@@ -11505,14 +11803,22 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
   }
 
+  var registry = new WeakMap(); /* root → teardown data (listeners + nodes) */
+
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
     if (strip.hasAttribute('data-info-strip-ready')) return;
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');
-    var slides = track ? Array.prototype.slice.call(track.children).filter(function (node) {
-      return node.classList.contains('m-info-strip__slide');
-    }) : [];
+    if (!viewport || !track) return;
+    strip.setAttribute('data-info-strip-ready', '');
+
+    var listeners = []; /* مراجع كل مستمع — ينزعها disconnect */
+    function on(elm, type, fn) {
+      elm.addEventListener(type, fn, false);
+      listeners.push({ el: elm, type: type, fn: fn });
+    }
+
     var controls = strip.querySelector('[data-info-strip-controls]');
     var previous = strip.querySelector('[data-info-strip-prev]');
     var next = strip.querySelector('[data-info-strip-next]');
@@ -11524,44 +11830,50 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var startX = null;
     var startY = null;
     var moved = false;
+    var pageButtons = [];
 
-    if (!viewport || !track) return;
-    strip.setAttribute('data-info-strip-ready', '');
-    if (!slides.length) {
-      if (controls) controls.hidden = true;
-      viewport.hidden = true;
-      if (empty) empty.hidden = false;
-      return;
+    function slides() {
+      return Array.prototype.slice.call(track.children).filter(function (node) {
+        return node.classList.contains('m-info-strip__slide');
+      });
     }
-    if (empty) empty.hidden = true;
-    if (slides.length < 2 && controls) controls.hidden = true;
+
+    function syncEmptyState(count) {
+      if (controls) controls.hidden = count === 0;
+      viewport.hidden = count === 0;
+      if (empty) empty.hidden = count > 0;
+    }
+
+    syncEmptyState(slides().length);
+    if (slides().length >= 2 && empty) empty.hidden = true;
 
     if (pageList) {
       pageList.setAttribute('role', 'group');
       if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', 'اختيار البطاقة');
     }
     function setIndex(target, focusViewport) {
-      var nextIndex = Math.max(0, Math.min(slides.length - 1, target));
+      var list = slides();
+      var nextIndex = Math.max(0, Math.min(list.length - 1, target));
       if (nextIndex === index && track.style.getPropertyValue('--m-info-index') !== '') return;
 
       var activeElement = document.activeElement;
-      if (slides[index] && slides[index].contains(activeElement)) {
+      if (list[index] && list[index].contains(activeElement)) {
         viewport.focus({ preventScroll: true });
       }
 
       index = nextIndex;
       track.style.setProperty('--m-info-index', String(index));
-      slides.forEach(function (slide, slideIndex) {
+      list.forEach(function (slide, slideIndex) {
         var active = slideIndex === index;
         slide.setAttribute('aria-hidden', active ? 'false' : 'true');
         slide.inert = !active;
       });
       if (previous) previous.disabled = index === 0;
-      if (next) next.disabled = index === slides.length - 1;
-      if (position) position.textContent = (index + 1) + ' / ' + slides.length;
-      if (status) status.textContent = 'البطاقة ' + (index + 1) + ' من ' + slides.length;
+      if (next) next.disabled = index === list.length - 1;
+      if (position) position.textContent = (index + 1) + ' / ' + list.length;
+      if (status) status.textContent = 'البطاقة ' + (index + 1) + ' من ' + list.length;
       if (pageList) {
-        Array.prototype.forEach.call(pageList.querySelectorAll('[data-info-strip-page]'), function (button, pageIndex) {
+        pageButtons.forEach(function (button, pageIndex) {
           button.setAttribute('aria-current', pageIndex === index ? 'true' : 'false');
           button.setAttribute('aria-pressed', pageIndex === index ? 'true' : 'false');
         });
@@ -11569,9 +11881,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (focusViewport) viewport.focus({ preventScroll: true });
     }
 
-    if (pageList) {
+    function rebuildPages() {
+      if (!pageList) return;
       pageList.textContent = '';
-      slides.forEach(function (_, pageIndex) {
+      pageButtons = [];
+      slides().forEach(function (_, pageIndex) {
         var page = document.createElement('button');
         page.type = 'button';
         page.className = 'm-info-strip__page';
@@ -11581,58 +11895,65 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         page.setAttribute('aria-pressed', pageIndex === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { setIndex(pageIndex, false); });
         pageList.appendChild(page);
+        pageButtons.push(page);
       });
     }
 
-    if (previous) previous.addEventListener('click', function () { setIndex(index - 1, false); });
-    if (next) next.addEventListener('click', function () { setIndex(index + 1, false); });
+    rebuildPages();
 
-    strip.addEventListener('keydown', function (event) {
+    if (previous) on(previous, 'click', function () { setIndex(index - 1, false); });
+    if (next) on(next, 'click', function () { setIndex(index + 1, false); });
+
+    /* R-03/R-51: الأسهم تتبع هندسة المسار المفروضة (RTL) لا اتجاه
+       الصفحة — في مضيف LTR أيضًا: السهم الأيسر = التالي البصري،
+       والأيمن = السابق، كاسلوك السحب تمامًا. */
+    on(strip, 'keydown', function (event) {
       if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
       if (isEditingTarget(event.target)) return;
       var control = event.target.closest && event.target.closest(
         '[data-info-strip-prev], [data-info-strip-next], [data-info-strip-page]');
       if (!viewport.contains(event.target) && !control) return;
       if (!control && event.target.closest && event.target.closest('button, a[href], summary')) return;
-      var rtl = getComputedStyle(strip).direction === 'rtl';
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        setIndex(index + (rtl ? 1 : -1), false);
+        setIndex(index + 1, false);
       } else if (event.key === 'ArrowRight') {
         event.preventDefault();
-        setIndex(index + (rtl ? -1 : 1), false);
+        setIndex(index - 1, false);
       } else if (event.key === 'Home') {
         event.preventDefault();
         setIndex(0, false);
       } else if (event.key === 'End') {
         event.preventDefault();
-        setIndex(slides.length - 1, false);
+        setIndex(slides().length - 1, false);
       }
     });
 
-    viewport.addEventListener('pointerdown', function (event) {
+    on(viewport, 'pointerdown', function (event) {
       if (isEditingTarget(event.target)) return;
       if (event.pointerType !== 'touch' || event.isPrimary === false) return;
       startX = event.clientX;
       startY = event.clientY;
       moved = false;
     });
-    viewport.addEventListener('pointerup', function (event) {
+    on(viewport, 'pointerup', function (event) {
       if (startX === null || startY === null) return;
       var dx = event.clientX - startX;
       var dy = event.clientY - startY;
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
         moved = true;
+        /* هندسة المسار RTL: السحب لليمين يكشف التالي (البطاقة التالية
+           تدخل من اليسار) — كما كان؛ السحب لليسار يعود للسابق */
         setIndex(index + (dx > 0 ? 1 : -1), false);
       }
       startX = null;
       startY = null;
     });
-    viewport.addEventListener('pointercancel', function () {
+    on(viewport, 'pointercancel', function () {
       startX = null;
       startY = null;
     });
-    viewport.addEventListener('click', function (event) {
+    on(viewport, 'click', function (event) {
       if (moved) {
         event.preventDefault();
         event.stopPropagation();
@@ -11640,15 +11961,46 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       }
     }, true);
 
-    slides.forEach(function (slide, slideIndex) {
+    var initial = slides();
+    initial.forEach(function (slide, slideIndex) {
       slide.setAttribute('aria-hidden', slideIndex === 0 ? 'false' : 'true');
       slide.inert = slideIndex !== 0;
     });
     track.style.setProperty('--m-info-index', '0');
     if (previous) previous.disabled = true;
-    if (next) next.disabled = slides.length < 2;
-    if (position) position.textContent = '1 / ' + slides.length;
-    if (status) status.textContent = 'البطاقة 1 من ' + slides.length;
+    if (next) next.disabled = initial.length < 2;
+    if (position) position.textContent = '1 / ' + initial.length;
+    if (status) status.textContent = 'البطاقة 1 من ' + initial.length;
+
+    registry.set(strip, {
+      listeners: listeners,
+      viewport: viewport,
+      track: track,
+      controls: controls,
+      empty: empty,
+      setIndex: setIndex,
+      slides: slides,
+      rebuildPages: rebuildPages,
+      syncEmptyState: syncEmptyState
+    });
+  }
+
+  function teardown(strip) {
+    var data = registry.get(strip);
+    if (!data) return;
+    data.listeners.forEach(function (L) {
+      L.el.removeEventListener(L.type, L.fn, false);
+    });
+    registry.delete(strip);
+    strip.removeAttribute('data-info-strip-ready');
+    data.track.style.removeProperty('--m-info-index');
+    data.slides().forEach(function (slide) {
+      slide.removeAttribute('aria-hidden');
+      slide.inert = false;
+    });
+    if (data.controls) data.controls.hidden = false;
+    if (data.empty) data.empty.hidden = true;
+    data.viewport.hidden = false;
   }
 
   function init(root) {
@@ -11657,10 +12009,33 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     scope.querySelectorAll('[data-info-strip]').forEach(initStrip);
   }
 
-  window.MicroInfoStrip = { init: init };
+  /* R-15: إعادة الالتقاط بعد محتوى مضيف غير متزامن — تفصل الربط القديم
+     ثم تهيئ من جديد (بطاقات جديدة/محذوفة، حالة أول صف، صفحات النقاط) */
+  function rescan(root) {
+    var scope = root || document;
+    var list = [];
+    if (scope.matches && scope.matches('[data-info-strip]')) list.push(scope);
+    Array.prototype.push.apply(list, scope.querySelectorAll('[data-info-strip]'));
+    list.forEach(function (strip) {
+      if (strip.hasAttribute('data-info-peek')) return; /* مالك آخر (R8-02) */
+      if (strip.hasAttribute('data-info-strip-ready')) teardown(strip);
+      initStrip(strip);
+    });
+  }
+
+  /* R-15: فصل مستمعات جذر بعينه — يعيد الشريط لحالة غير مهيأة
+     (init/rescan جديدان يعملان بعدها) */
+  function disconnect(root) {
+    var scope = root || document;
+    if (scope.matches && scope.matches('[data-info-strip]')) teardown(scope);
+    scope.querySelectorAll('[data-info-strip]').forEach(teardown);
+  }
+
+  window.MicroInfoStrip = { init: init, rescan: rescan, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();
+
 </script>
   <script data-sc-from="components/info-strip/info-strip-peek.js">
 /* =========================================================
@@ -12903,7 +13278,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, 'تعذّر تجهيز نموذج الدخول — تأكد من اكتمال حقوله.', 'error');
+        setMessage(form, 'نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.', 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -12930,7 +13305,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
         /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
-        setMessage(form, 'هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.', 'info');
+        setMessage(form, 'هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.', 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
@@ -12953,7 +13328,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
       }).catch(function (error) {
-        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.'), 'error');
+        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة.'), 'error');
       }).then(function () {
         if (!alive()) return;
         form.dataset.microAccessBusy = 'false';
@@ -13038,14 +13413,20 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
      setLoading(true|false)
      setError(retryCallback|null)
      destroy()
+   options: orders, statuses, today, weekStart, selectedDate, view,
+            calendarView, presentation, orderActions{edit,delete},
+            headingLevel, loading, retry
    أحداث CustomEvent على الجذر (bubbles):
-     order-schedule:day-select   {date:'YYYY-MM-DD'}
-     order-schedule:order-open   {id}
-     order-schedule:add-request  {date:'YYYY-MM-DD'|null}
+     order-schedule:day-select           {date:'YYYY-MM-DD'}
+     order-schedule:order-open           {id}
+     order-schedule:add-request          {date:'YYYY-MM-DD'|null}
+     order-schedule:order-edit-request   {id}
+     order-schedule:order-delete-request {id}
 
    قواعد ثابتة:
-   - عربي RTL (يُستكشف الاتجاه من الجذر؛ LTR يعمل معكوسًا
-     كأفضل مجهود — المنتج عربي أولًا).
+   - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
+     documentElement يجعل قلب الاتجاه الحي فوريًا ويُفصل في destroy؛
+     LTR يعمل معكوسًا كأفضل مجهود — المنتج عربي أولًا).
    - كل نص من البيانات عبر textContent/عُقد DOM — لا HTML من
      البيانات أبدًا (حقن `<img onerror>` يظهر نصًا حرفيًا).
    - كل التواريخ نصوص 'YYYY-MM-DD': ممنوع Date.parse/UTC/
@@ -13054,10 +13435,20 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
    - الحالة تأتي من خريطة المستهلك فقط: مفتاح مجهول → محايد
      بنص المفتاح الخام (لا إخفاء ولا خطأ). لا استنتاج حالة من
      التاريخ ولا أي معنى مالي.
-   - مستمعان مفوّضان على الجذر فقط (click + keydown) يسجلان
-     مرة عند التهيئة وينتزعان في destroy() — إعادة التصيير لا
-     تضيف مستمعات، والتهيئة المزدوجة آمنة (data-ocal-init).
-   - لا مؤقتات دائمة ولا rAF داخل المكوّن.
+   - عقد 2026-10-25 (مرجع مفهوم التقويم): عرضان متناسقان لشبكة
+     الشهر — expanded (الشبكة الكاملة + لوحة اليوم أسفلها) وagenda
+     (الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد أسفلها).
+     اليوم داخل التقويم هو نقطة الدخول؛ لا زر إضافة عائم ولا Bottom
+     Sheet في هذا المسار؛ أفعال تعديل/حذف كل طلب على صفّه في لوحة
+     اليوم/الأجندة فقط، وحدثاهما مستهدفة على صفّهما host-owned.
+   - مستمعان مفوّضان على الجذر فقط (click + keydown) + focusout
+     يغلق منتقي الشهر عند مغادرة التركيز الجذر + مستمع Escape مفرد
+     على document أثناء فتح المنتقي فقط — تسجل مرة عند التهيئة
+     وتُنتزع في destroy() — إعادة التصيير لا تضيف مستمعات،
+     والتهيئة المزدوجة آمنة (data-ocal-init).
+   - لا مؤقتات دائمة ولا rAF دائم داخل المكوّن؛ الاستخدام الوحيد
+     rAF عابر لتجميع أحداث تغيّر المساحة (ResizeObserver) يُلغى في
+     destroy — صياغة العقد موثقة في المواصفة §3.
    ========================================================= */
 
 (function () {
@@ -13082,6 +13473,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   var instances = new WeakMap();
+  var AGENDA_ID_SEQ = 0; /* معرّفات فريدة لمناطق إفصاح الأجندة */
 
   /* =======================================================
      أدوات عامة
@@ -13152,14 +13544,21 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     return isoOf(t.getFullYear(), t.getMonth() + 1, t.getDate());
   }
 
-  /* عبارة العدد العربية الصحيحة: 0/1/2/3–10/11–99/100+ */
+  /* عبارة العدد العربية الصحيحة: 0/1/2/3–10/11–99؛ ومن 100 فأعلى
+     تُشتق الصيغة من آخر رقمين (قاعدة العدد المركب — 132 → «طلبًا»،
+     102 → «طلبان»، 100 → «طلب») */
   function countPhraseAr(n) {
     if (n === 0) return 'لا طلبات';
     if (n === 1) return 'طلب واحد';
     if (n === 2) return 'طلبان';
     if (n >= 3 && n <= 10) return n + ' طلبات';
     if (n >= 11 && n <= 99) return n + ' طلبًا';
-    return n + ' طلب';
+    var r = n % 100;
+    if (r === 0) return n + ' طلب';
+    if (r === 1) return n + ' طلب واحد';
+    if (r === 2) return n + ' طلبان';
+    if (r >= 3 && r <= 10) return n + ' طلبات';
+    return n + ' طلبًا';
   }
 
   /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» */
@@ -13181,7 +13580,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     s.setAttribute('height', size);
     s.setAttribute('fill', 'none');
     s.setAttribute('stroke', 'currentColor');
-    s.setAttribute('stroke-width', '2');
+    s.setAttribute('stroke-width', '1.5');
     s.setAttribute('stroke-linecap', 'round');
     s.setAttribute('stroke-linejoin', 'round');
     s.setAttribute('aria-hidden', 'true');
@@ -13218,6 +13617,30 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     return s;
   }
 
+  /* سهم أسفل لمنطقة الإفصاح (أجندة اليوم المحدد) — يدور عند الفتح */
+  function chevronDownIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('polyline', { points: '6 9 12 15 18 9' }));
+    return s;
+  }
+
+  /* قلم التعديل — عقد السماكة 1.5 نفسه (2026-10-25) */
+  function editIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('path', { d: 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z' }));
+    return s;
+  }
+
+  /* سلة الحذف — عقد السماكة 1.5 نفسه (2026-10-25) */
+  function trashIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('polyline', { points: '3 6 5 6 21 6' }));
+    s.appendChild(svgNode('path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }));
+    s.appendChild(svgNode('line', { x1: '10', y1: '11', x2: '10', y2: '17' }));
+    s.appendChild(svgNode('line', { x1: '14', y1: '11', x2: '14', y2: '17' }));
+    return s;
+  }
+
   /* =======================================================
      تطبيع مدخلات المستهلك (لا HTML من البيانات — كل النص خام)
      ======================================================= */
@@ -13236,7 +13659,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         /* وقت لا يطابق HH:mm → غائب (لا يُخترع وقت أبدًا) */
         time: (typeof o.time === 'string' && TIME_RE.test(o.time)) ? o.time : null,
         statusKey: (o.statusKey == null ? '' : String(o.statusKey)),
-        customer: (o.customer == null || o.customer === '') ? null : String(o.customer)
+        customer: (o.customer == null || o.customer === '') ? null : String(o.customer),
+        /* ملاحظة قصيرة اختيارية (بيانات وصفيّة فقط — لا معنى مالي) */
+        note: (o.note == null || o.note === '') ? null : String(o.note)
       });
     }
     return out;
@@ -13270,6 +13695,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var resizeFrame = 0;
     var pendingResizeWidth = 0;
     var resizeFallback = null;
+    var dirObserver = null;    /* R-02: مراقب dir للقلب الحي للاتجاه */
+    var docEscapeRef = null;   /* R-14: مستمع Escape على document أثناء فتح المنتقي فقط */
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
@@ -13283,6 +13710,24 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
     state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
+    /* عقد 2026-10-25 — عرضان متناسقان لشهر الشبكة:
+       expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
+       agenda: الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد
+       (data-ocal-agenda-open) — الطي يبدأ مغلقًا دائمًا (هادئًا). */
+    state.presentation = (options.presentation === 'agenda') ? 'agenda' : 'expanded';
+    state.agendaOpen = false;
+    /* أفعال صفوف الطلب (تعديل/حذف) host-owned: تُرسَم فقط عند تفعيلها
+       صراحة، وفقط على صفوف لوحة اليوم/الأجندة (سطح فعل اليوم المحدد)،
+       ولا تُرسَم في القائمة — الإضافة تبقى فعل اليوم دائمًا. */
+    state.orderActions = {
+      edit: !!(options.orderActions && options.orderActions.edit),
+      delete: !!(options.orderActions && options.orderActions.delete)
+    };
+    /* R-42: مستوى عناوين المكوّن قابل للضبط من المضيف (2–6، افتراضي 3)
+       كي لا يفرض المخطط التفصيلي مخططه على صفحة المضيف */
+    state.headingLevel = (typeof options.headingLevel === 'number' &&
+      options.headingLevel >= 2 && options.headingLevel <= 6 &&
+      Math.floor(options.headingLevel) === options.headingLevel) ? options.headingLevel : 3;
     state.loading = !!options.loading;
     state.errorRetry = (typeof options.retry === 'function') ? options.retry : null;
     state.compactMonth = false;
@@ -13293,12 +13738,18 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     state.monthCursor = { y: sp.y, m: sp.m };
     state.focusDate = state.selectedDate;
 
-    /* الاتجاه: RTL افتراضيًا؛ LTR يُعامل معكوسًا (منتج عربي) */
+    /* الاتجاه: RTL افتراضيًا؛ يُعاد تقييمه عند كل تصيير، ومراقب dir
+       على documentElement (يُفصل في destroy) يجعل قلب الاتجاه الحي
+       فوريًا — عقد R-02 2026-10-25 */
     state.rtl = true;
     try {
       var dir = window.getComputedStyle(root).direction;
       if (dir === 'ltr') state.rtl = false;
     } catch (err) { /* جذر غير ملحق بعد: RTL افتراضيًا */ }
+
+    function hTag() {
+      return 'h' + state.headingLevel;
+    }
 
     /* ---- مساعدات داخلية ---- */
 
@@ -13407,6 +13858,14 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
     function render() {
       if (destroyed) return;
+      /* R-02: الاتجاه يُعاد تقييمه من الجذر عند كل تصيير — قلب dir
+         داخل أي حاوية يصحح السهام/لوحة المفاتيح عند أول إعادة تصيير،
+         ومراقب documentElement أدناه يجعل قلب مستوى الصفحة فوريًا */
+      try {
+        var dirNow = window.getComputedStyle(root).direction;
+        if (dirNow === 'ltr') state.rtl = false;
+        else if (dirNow === 'rtl') state.rtl = true;
+      } catch (err) { /* غير ملحق: القيمة الحالية تبقى */ }
       root.textContent = '';
       root.classList.add('m-ocal');
       root.setAttribute('data-ocal-root', '');
@@ -13421,15 +13880,28 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       root.setAttribute('data-ocal-layout', layout);
       root.setAttribute('data-ocal-compact', state.compactMonth ? 'true' : 'false');
       root.setAttribute('data-ocal-selected-date', state.selectedDate);
+      /* عقد 2026-10-25: عرضا شهر الشبكة — expanded/agenda على الجذر،
+         وحالة فتح منطقة إفصاح الأجندة (في عرض الأجندة فقط) */
+      root.setAttribute('data-ocal-presentation', state.presentation);
+      if (state.presentation === 'agenda' && state.view === 'calendar' &&
+          state.calendarView === 'month') {
+        root.setAttribute('data-ocal-agenda-open', state.agendaOpen ? 'true' : 'false');
+      } else {
+        root.removeAttribute('data-ocal-agenda-open');
+      }
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
-         (لا نجاح كاذب ولا بيانات قديمة فوق الرد الأخير) */
+         (لا نجاح كاذب ولا بيانات قديمة فوق الرد الأخير).
+         R-13 (2026-10-25): شريط تقويم/قائمة يبقى قابلًا للاستخدام فوق
+         صندوق الحالة — لا حالة بلا مخرج للتنقل. */
       if (state.loading) {
+        root.appendChild(buildViewsBar());
         root.appendChild(buildLoading());
         return;
       }
       if (state.errorRetry) {
+        root.appendChild(buildViewsBar());
         root.appendChild(buildError());
         return;
       }
@@ -13463,6 +13935,22 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var bar = el('div', 'm-ocal__modes');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'نمط التقويم');
+      /* زر عرضَي الشهر (expanded/agenda) — المسار الصريح المُتاح
+         (بالإضافة إلى الأزرار) لطي/توسيع الشهر؛ لا سحب رأسيًا في هذا
+         المسار (قرار موثق: لا منافسة مع تمرير الصفحة ولا مع تنقل
+         الشهر الأفقي، ولا كود إيماءات بلا اختبار لمس حقيقي). */
+      if (state.calendarView === 'month') {
+        var collapsed = state.presentation === 'agenda';
+        var pres = el('button', 'm-ocal__modes-btn m-ocal__pres-btn',
+          collapsed ? 'توسيع الشهر' : 'طي الشهر');
+        pres.type = 'button';
+        pres.setAttribute('data-ocal-action', 'presentation');
+        pres.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+        pres.setAttribute('aria-label', collapsed
+          ? 'توسيع عرض الشهر الكامل'
+          : 'طي الشهر إلى أجندة اليوم المحدد');
+        bar.appendChild(pres);
+      }
       var nextMode = state.calendarView === 'day' ? 'month' : 'day';
       var switchMode = el('button', 'm-ocal__modes-btn',
         state.calendarView === 'day' ? 'عرض الشهر' : 'عرض اليوم');
@@ -13534,7 +14022,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     function buildCalBar(y, m) {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-month', 'الشهر السابق', prevIcon()));
-      var title = el('h3', 'm-ocal__cal-title');
+      var title = el(hTag(), 'm-ocal__cal-title');
       var pickerButton = el('button', 'm-ocal__month-trigger', MONTHS_AR[m - 1] + ' ' + y);
       pickerButton.type = 'button';
       pickerButton.setAttribute('data-ocal-action', 'month-picker');
@@ -13565,7 +14053,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       prevYear.setAttribute('aria-label', 'السنة السابقة');
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
-      var year = el('h4', 'm-ocal__picker-year', String(state.pickerYear));
+      var year = el(hTag(), 'm-ocal__picker-year', String(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
       var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
@@ -13657,6 +14145,17 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var label = fullDateAr(iso);
       if (iso === state.today) label += '، اليوم';
       label += '، ' + countPhraseAr(orders.length);
+      /* ملخص الحالات في الاسم الإتاحي للخلية (التاريخ + العدد +
+         الحالات الموجود) — النقاط ليست القناة الوحيدة للمعنى */
+      var stLabels = [];
+      var seenK = {};
+      for (var j = 0; j < orders.length; j++) {
+        var k2 = orders[j].statusKey;
+        if (k2 === '' || seenK[k2]) continue;
+        seenK[k2] = true;
+        stLabels.push(resolveStatus(k2).label);
+      }
+      if (stLabels.length) label += ' (' + stLabels.join('، ') + ')';
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -13730,10 +14229,24 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       return b;
     }
 
-    /* ---- صف طلب موحّد (اليوم/الأسفل/القائمة) ----
+    /* ---- صف طلب موحّد (اليوم/الأجندة/الأسفل/القائمة) ----
        showDate: شارة تاريخ قصيرة تظهر في صفوف القائمة فقط (سياق
-       نطاق زمني) — موثق في المواصفة */
-    function buildOrderRow(order, showDate) {
+       نطاق زمني) — موثق في المواصفة.
+       withTools: أزرار تعديل/حذف على صفوف سطح فعل اليوم المحدد فقط
+       (لوحة اليوم المفصوصة ومنطقة إفصاح الأجندة) عند تفعيل المضيف
+       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل). */
+    function rowToolBtn(action, verb, icon, order) {
+      var b = el('button', 'm-ocal__row-tool' +
+        (action === 'order-delete' ? ' m-ocal__row-tool--danger' : ''));
+      b.type = 'button';
+      b.setAttribute('data-ocal-action', action);
+      b.setAttribute('data-ocal-id', order.id);
+      b.setAttribute('aria-label', verb + ' الطلب: ' + order.title);
+      b.appendChild(icon);
+      return b;
+    }
+
+    function buildOrderRow(order, showDate, withTools) {
       var li = el('li', 'm-ocal__rowitem');
       var btn = el('button', 'm-ocal__row');
       btn.type = 'button';
@@ -13741,6 +14254,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       btn.setAttribute('data-ocal-id', order.id);
       /* العنوان عبر textContent — أي HTML ممرر يظهر نصًا حرفيًا */
       btn.appendChild(el('span', 'm-ocal__row-title', order.title));
+      /* ملاحظة قصيرة اختيارية تحت العنوان (وصفية فقط) */
+      if (order.note) {
+        btn.appendChild(el('span', 'm-ocal__row-note', order.note));
+      }
 
       var meta = el('span', 'm-ocal__row-meta');
       if (showDate && order.date) {
@@ -13759,20 +14276,33 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       }
       if (order.statusKey !== '') {
         var st = resolveStatus(order.statusKey);
-        var schip = el('span', 'm-ocal__row-status m-ocal__row-status--' + st.tone);
-        schip.appendChild(el('span', 'm-ocal__row-statusdot'));
-        schip.appendChild(el('span', 'm-ocal__row-statuslabel', st.label));
+        /* R-24 (2026-10-25): بلا نقطة داخل شريحة الحالة — الكلمة
+           والتلوين الدلالي للشريحة يحملان الحالة (عقد anti-slop) */
+        var schip = el('span', 'm-ocal__row-status m-ocal__row-status--' + st.tone,
+          st.label);
         meta.appendChild(schip);
       }
       btn.appendChild(meta);
       li.appendChild(btn);
+      if (withTools && (state.orderActions.edit || state.orderActions.delete)) {
+        var tools = el('div', 'm-ocal__row-tools');
+        tools.setAttribute('role', 'group');
+        tools.setAttribute('aria-label', 'أفعال الطلب: ' + order.title);
+        if (state.orderActions.edit) {
+          tools.appendChild(rowToolBtn('order-edit', 'تعديل', editIcon(), order));
+        }
+        if (state.orderActions.delete) {
+          tools.appendChild(rowToolBtn('order-delete', 'حذف', trashIcon(), order));
+        }
+        li.appendChild(tools);
+      }
       return li;
     }
 
-    function buildRows(orders, showDate) {
+    function buildRows(orders, showDate, withTools) {
       var ul = el('ul', 'm-ocal__rows');
       for (var i = 0; i < orders.length; i++) {
-        ul.appendChild(buildOrderRow(orders[i], !!showDate));
+        ul.appendChild(buildOrderRow(orders[i], !!showDate, !!withTools));
       }
       return ul;
     }
@@ -13809,7 +14339,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
-        head.appendChild(el('h3', 'm-ocal__daypanel-title',
+        head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
           'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
@@ -13820,16 +14350,74 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var iso = state.selectedDate;
       var orders = sortedOrdersForDate(iso);
       if (withTitle) {
-        head.appendChild(el('h3', 'm-ocal__daypanel-title', fullDateAr(iso)));
+        head.appendChild(el(hTag(), 'm-ocal__daypanel-title', fullDateAr(iso)));
       }
       head.appendChild(el('p', 'm-ocal__daypanel-count', countPhraseAr(orders.length)));
       head.appendChild(buildAddButton());
       panel.appendChild(head);
-      panel.appendChild(buildRows(orders, false));
+      panel.appendChild(buildRows(orders, false, true));
       return panel;
     }
 
-    /* ---- شاشة التقويم (شهر) ---- */
+    /* ---- منطقة إفصاح الأجندة (عرض agenda فقط — عقد 2026-10-25) ----
+       منطقة هادئة تحت الشهر المضغوط: زر واحد يحمل اليوم المحدد
+       الكامل وعدد طلباته (aria-expanded + aria-controls)؛ الضغط يكشف
+       صفوف اليوم المحدد فقط داخل الصفحة — لا يغيّر التحديد ولا يطلق
+       day-select، ولا يكشف طلبات يوم/شهر آخر مهما كان شهر العرض
+       (المحتوى من selectedDate وحده). أثناء تصفّح شهر لا يحوي يوم
+       التحديد تُسبقها ملاحظة تصفّح صادقة (data-ocal-day-browsing). */
+    function buildAgendaDisclosure() {
+      var wrap = el('div', 'm-ocal__agenda');
+      wrap.setAttribute('data-ocal-agenda', '');
+      if (browsingMonthWithoutSelection()) {
+        wrap.setAttribute('data-ocal-day-browsing', 'true');
+        wrap.appendChild(el('p', 'm-ocal__agenda-note',
+          'لا يوم محدد في ' + MONTHS_AR[state.monthCursor.m - 1] + ' ' +
+          state.monthCursor.y));
+      }
+      var iso = state.selectedDate;
+      var orders = sortedOrdersForDate(iso);
+      if (!state.agendaBodyId) {
+        state.agendaBodyId = 'm-ocal-agenda-' + (++AGENDA_ID_SEQ);
+      }
+      var toggle = el('button', 'm-ocal__agenda-toggle');
+      toggle.type = 'button';
+      toggle.setAttribute('data-ocal-action', 'agenda-toggle');
+      toggle.setAttribute('aria-expanded', state.agendaOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-controls', state.agendaBodyId);
+      var dateTxt = el('span', 'm-ocal__agenda-date', fullDateAr(iso));
+      toggle.appendChild(dateTxt);
+      toggle.appendChild(el('span', 'm-ocal__agenda-count', countPhraseAr(orders.length)));
+      toggle.appendChild(chevronDownIcon());
+      wrap.appendChild(toggle);
+
+      var body = el('div', 'm-ocal__agenda-body');
+      body.id = state.agendaBodyId;
+      body.setAttribute('data-ocal-agenda-body', '');
+      if (state.agendaOpen) {
+        body.appendChild(el(hTag(), 'm-ocal__agenda-title', fullDateAr(iso)));
+        if (orders.length) {
+          body.appendChild(buildRows(orders, false, true));
+        } else {
+          var empty = el('div', 'm-ocal__status m-ocal__status--empty m-ocal__agenda-empty');
+          empty.setAttribute('data-ocal-status', 'empty');
+          empty.setAttribute('role', 'status');
+          empty.appendChild(el('p', 'm-ocal__status-text', 'لا طلبات في هذا اليوم.'));
+          body.appendChild(empty);
+        }
+        body.appendChild(buildAddButton());
+      } else {
+        body.hidden = true; /* نمط الإفصاح القياسي: مطوي = خارج شجرة الوصول */
+      }
+      wrap.appendChild(body);
+      return wrap;
+    }
+
+    /* ---- شاشة التقويم (شهر) — عرضان متناسقان لعقد 2026-10-25 ----
+       expanded: الشبكة الكاملة + مفتاح + لوحة اليوم المفصوصة أسفلها
+       (الوضع الافتراضي كما كان قبل 2026-10-25).
+       agenda: الشبكة نفسها بكل أيامها (مضغوطة بـCSS فقط) + منطقة
+       إفصاح الأجندة بدل لوحة اليوم — سياق الشهر يبقى محفوظًا. */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
@@ -13840,7 +14428,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       screen.appendChild(buildMonthGrid(groupOrdersByDate()));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
       if (legend) screen.appendChild(legend);
-      screen.appendChild(buildDayPanel(true));
+      if (state.presentation === 'agenda') {
+        screen.appendChild(buildAgendaDisclosure());
+      } else {
+        screen.appendChild(buildDayPanel(true));
+      }
       return screen;
     }
 
@@ -13854,7 +14446,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var panel = buildDayPanel(false);
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
-      bar.appendChild(el('h3', 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
+      bar.appendChild(el(hTag(), 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
       bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
       panel.insertBefore(bar, panel.firstChild);
       screen.appendChild(panel);
@@ -13890,7 +14482,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (sec) screen.appendChild(sec);
       sec = buildListSection('الطلبات السابقة', buckets.past);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection('طلبات غير مجدولة', buckets.unsched);
+      sec = buildListSection('الطلبات غير المجدولة', buckets.unsched);
       if (sec) screen.appendChild(sec);
       return screen;
     }
@@ -13901,10 +14493,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (!orders.length) return null;
       var sec = el('section', 'm-ocal__list-section');
       var head = el('div', 'm-ocal__list-head');
-      head.appendChild(el('h3', 'm-ocal__list-heading', title));
+      head.appendChild(el(hTag(), 'm-ocal__list-heading', title));
       head.appendChild(el('p', 'm-ocal__list-count', countPhraseAr(orders.length)));
       sec.appendChild(head);
-      sec.appendChild(buildRows(orders, true));
+      sec.appendChild(buildRows(orders, true, false));
       return sec;
     }
 
@@ -13921,7 +14513,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       var box = el('div', 'm-ocal__status m-ocal__status--error');
       box.setAttribute('data-ocal-status', 'error');
       box.setAttribute('role', 'alert');
-      box.appendChild(el('p', 'm-ocal__status-text', 'تعذر تحميل الطلبات.'));
+      box.appendChild(el('p', 'm-ocal__status-text', 'تعذّر تحميل الطلبات.'));
       /* إعادة المحاولة تستدعي callback المستهلك — المكوّن لا يعيد
          التحميل بنفسه (موثق) */
       var b = el('button', 'm-ocal__retry');
@@ -14008,6 +14600,17 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         }
         return;
       }
+      /* Escape في عرض الأجندة المفتوحة: يطوي منطقة الإفصاح ويعيد
+         التركيز إلى زرها — المسار الكامل بلوحة المفاتيح (عقد 2026-10-25) */
+      if (e.key === 'Escape' && state.view === 'calendar' &&
+          state.calendarView === 'month' && state.presentation === 'agenda' &&
+          state.agendaOpen) {
+        e.preventDefault();
+        state.agendaOpen = false;
+        render();
+        refocus('[data-ocal-action="agenda-toggle"]');
+        return;
+      }
       if (state.view !== 'calendar' || state.calendarView !== 'month') return;
       var cell = (t && t.closest) ? t.closest('.m-ocal__cell[data-ocal-date]') : null;
       if (!cell || !root.contains(cell)) return;
@@ -14079,14 +14682,67 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       state.pickerOpen = true;
       state.pickerYear = state.monthCursor.y;
       render();
+      attachDocEscape();
       refocus('[data-ocal-action="picker-month"][data-ocal-value="' + (state.monthCursor.m - 1) + '"]');
     }
 
-    function closePicker() {
+    /* R-14 (2026-10-25): إغلاق المنتقي بمسارين إضافيين فوق Escape داخل
+       الجذر — (1) مستمع Escape مفرد على document أثناء فتحه فقط
+       (سابقة m-layer)، و(2) focusout يغلقه بصدق مع تحديث aria-expanded
+       عندما يغادر التركيز المكوّن كله (Tab بعيدًا لا يترك طبقة معلقة).
+       في مسار focusout لا يُستعاد التركيز — المستخدم غادره عمدًا. */
+    function attachDocEscape() {
+      if (docEscapeRef) return;
+      docEscapeRef = function (ev) {
+        if (destroyed || !state.pickerOpen) return;
+        if (ev.key === 'Escape') {
+          ev.preventDefault();
+          closePicker();
+        }
+      };
+      document.addEventListener('keydown', docEscapeRef, false);
+      listeners.push({ el: document, type: 'keydown', fn: docEscapeRef });
+    }
+
+    function detachDocEscape() {
+      if (!docEscapeRef) return;
+      document.removeEventListener('keydown', docEscapeRef, false);
+      for (var i = listeners.length - 1; i >= 0; i--) {
+        if (listeners[i].fn === docEscapeRef) listeners.splice(i, 1);
+      }
+      docEscapeRef = null;
+    }
+
+    function onRootFocusOut(e) {
+      if (!state.pickerOpen) return;
+      /* R-14 — تصنيف ثلاثي لمصدر focusout:
+         1) relatedTarget داخل الجذر: انتقال داخلي حتمي (زر داخل
+            المنتقي أو استعادة تركيز المكوّن) — لا إغلاق ولا فحص مؤجل
+            (الميكروتاسك قد يجري بين focusout وfocusin فيفسد الانتقال
+            نفسه — ثبت بالقياس).
+         2) relatedTarget خارج الجذر: مغادرة صريحة (Tab/نقر هدف آخر)
+            — إغلاق صادق فوري مع تحديث aria-expanded بلا استعادة تركيز.
+         3) relatedTarget=null: إما استبدال التصيير للعنصر المركّز
+            (يُستعاد التركيز فورًا بعده) أو مغادرة إلى body — يُحسم
+            في ميكروتاسك بفحص موضع التركيز الفعلي بعد الاستقرار. */
+      var to = e.relatedTarget;
+      if (to && root.contains(to)) return;
+      if (to) { closePicker(false); return; }
+      Promise.resolve().then(function () {
+        if (destroyed || !state.pickerOpen) return;
+        var active = document.activeElement;
+        if (active && active !== root && root.contains(active)) return;
+        if (active === root) return; /* الجذر نفسه داخل نطاق المكوّن */
+        closePicker(false);
+      });
+    }
+
+    function closePicker(restoreFocus) {
       if (!state.pickerOpen) return;
       state.pickerOpen = false;
+      detachDocEscape();
       render();
-      refocus('[data-ocal-action="month-picker"]');
+      if (restoreFocus !== false) refocus('[data-ocal-action="month-picker"]');
     }
 
     function changePickerYear(delta) {
@@ -14106,6 +14762,24 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         state.focusDate = state.selectedDate;
       }
       closePicker();
+    }
+
+    /* عقد 2026-10-25: تبديل عرضَي الشهر (expanded/agenda) — التحديد
+       والشهر المعروض لا يتغيران؛ الطي يبدأ منطقة الإفصاح هادئة. */
+    function togglePresentation() {
+      state.presentation = (state.presentation === 'agenda') ? 'expanded' : 'agenda';
+      state.agendaOpen = false;
+      render();
+      refocus('[data-ocal-action="presentation"]');
+    }
+
+    /* عقد 2026-10-25: فتح/طي منطقة إفصاح أجندة اليوم المحدد — يكشف
+       صفوف اليوم المحدد فقط (المحتوى من selectedDate) ولا يغيّر
+       التحديد ولا يطلق أي حدث (فعل عرض صرف). */
+    function toggleAgenda() {
+      state.agendaOpen = !state.agendaOpen;
+      render();
+      refocus('[data-ocal-action="agenda-toggle"]');
     }
 
     /* «اليوم» هو فعل اختيار صريح: يحدّث الشهر والتاريخ ويعلن الحدث. */
@@ -14143,6 +14817,19 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         /* حدث واحد لكل نقرة: معالج click واحد فقط (Enter/Space تمر
            عبر click الأصلي — لا معالج keyup مزدوج) */
         emit('order-schedule:order-open', { id: btn.getAttribute('data-ocal-id') });
+      } else if (act === 'order-edit') {
+        /* عقد 2026-10-25: فعل تعديل مملوك للمضيف — الحدث فقط؛
+           المحرر/المسار مسؤولية المضيف (لا Bottom Sheet هنا) */
+        emit('order-schedule:order-edit-request', { id: btn.getAttribute('data-ocal-id') });
+        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+      } else if (act === 'order-delete') {
+        /* عقد 2026-10-25: فعل حذف مملوك للمضيف — الحدث فقط */
+        emit('order-schedule:order-delete-request', { id: btn.getAttribute('data-ocal-id') });
+        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+      } else if (act === 'agenda-toggle') {
+        toggleAgenda();
+      } else if (act === 'presentation') {
+        togglePresentation();
       } else if (act === 'add') {
         /* التاريخ محمول على الزر نفسه: اليوم المحدد في لوحة اليوم،
            و"" (بلا يوم) في القائمة وفي شهر تصفّح بلا تحديد — بصدق */
@@ -14194,6 +14881,27 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     /* تسجيل المستمعين (مرة واحدة على الجذر) */
     on(root, 'keydown', guard(onKeydown));
     on(root, 'click', guard(onClick));
+    on(root, 'focusout', guard(onRootFocusOut));
+
+    /* R-02 (2026-10-25): مراقب واحد لسمة dir على documentElement — قلب
+       الاتجاه الحي (State Lab) يعيد التصيير فورًا فتصح السهام ولوحة
+       المفاتيح مع الشكل؛ يُفصل في destroy. قلب dir داخل حاوية أعمق
+       يلتقطه إعادة تقييم الاتجاه في render() عند أول إعادة تصيير. */
+    if (typeof MutationObserver === 'function') {
+      dirObserver = new MutationObserver(function () {
+        if (destroyed) return;
+        var rtl = true;
+        try {
+          var d = window.getComputedStyle(root).direction;
+          if (d === 'ltr') rtl = false;
+        } catch (err) { /* غير ملحق: القيمة الحالية تبقى */ }
+        if (rtl !== state.rtl) {
+          state.rtl = rtl;
+          render();
+        }
+      });
+      dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+    }
 
     render();
     observeResponsiveWidth();
@@ -14234,6 +14942,16 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           updateResponsiveView(root.getBoundingClientRect().width);
         }
       }),
+      /* عقد 2026-10-25: ضبط صامت لعرضَي الشهر (expanded/agenda) —
+         يحفظ selectedDate وmonthCursor؛ الطي يبدأ الإفصاح هادئًا */
+      setPresentation: guard(function (v) {
+        if (v === 'expanded' || v === 'agenda') {
+          state.pickerOpen = false;
+          state.agendaOpen = false;
+          state.presentation = v;
+          render();
+        }
+      }),
       setLoading: guard(function (flag) {
         state.loading = !!flag;
         if (state.loading) state.errorRetry = null; /* آخر استدعاء يملك الشاشة */
@@ -14247,8 +14965,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         if (state.errorRetry) state.loading = false; /* آخر استدعاء يملك الشاشة */
         render();
       }),
-      /* ينزع كل مستمع (المصفوفة أعلاه) ويعيد الجذر لسمة غير مهيأة —
-         بعده لا أحداث إطلاقًا */
+      /* ينزع كل مستمع (المصفوفة أعلاه) ويفصل مراقبي dir/العرض ويعيد
+         الجذر لسمة غير مهيأة — بعده لا أحداث إطلاقًا. R-27 (2026-10-25):
+         تُزال أيضًا سمات العقد المتبقية (layout/compact/selected-date/
+         presentation/agenda-open) فلا تُقرأ بحالة ما بعد الدمار */
       destroy: guard(function () {
         destroyed = true;
         if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
@@ -14256,6 +14976,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;
+        }
+        if (dirObserver) {
+          dirObserver.disconnect();
+          dirObserver = null;
         }
         if (resizeFallback) {
           window.removeEventListener('resize', resizeFallback, false);
@@ -14266,6 +14990,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
           L.el.removeEventListener(L.type, L.fn, false);
         }
         listeners.length = 0;
+        docEscapeRef = null;
         root.textContent = '';
         root.classList.remove('m-ocal');
         root.removeAttribute('data-ocal-root');
@@ -14274,6 +14999,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         root.removeAttribute('data-ocal-cal-view');
         root.removeAttribute('data-ocal-preferred-cal-view');
         root.removeAttribute('data-ocal-auto-view');
+        root.removeAttribute('data-ocal-layout');
+        root.removeAttribute('data-ocal-compact');
+        root.removeAttribute('data-ocal-selected-date');
+        root.removeAttribute('data-ocal-presentation');
+        root.removeAttribute('data-ocal-agenda-open');
         instances.delete(root);
       })
     };
@@ -14522,7 +15252,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       empty = document.createElement('p');
       empty.setAttribute('data-carousel-empty', '');
       empty.setAttribute('role', 'status');
-      empty.textContent = 'لا توجد بطاقات';
+      empty.textContent = 'لا توجد بطاقات.'; /* R-22: عرف النقطة في سطور الفراغ */
       carousel.appendChild(empty);
     }
     if (empty) empty.hidden = st.count !== 0;
@@ -14553,7 +15283,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     /* مؤشر الموضع — نص إتاحي صريح */
     if (st.status) {
       st.status.textContent = st.count === 0
-        ? 'لا توجد بطاقات'
+        ? 'لا توجد بطاقات.'
         : 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
     }
 
@@ -15001,14 +15731,14 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     normal: [
       { value: 'petrol', label: 'شركة البترول الوطنية' },
       { value: 'noor', label: 'مؤسسة النور للتوريدات' },
-      { value: 'waha', label: 'شركة الواحة للخدمات المتكاملة — فرع العاصمة' },
-      { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' }
+      { value: 'waha', label: 'شركة الواحة للخدمات المتكاملة (فرع العاصمة)' },
+      { value: 'fawry', label: 'مأمورية فوري (فرع وسط المدينة)' }
     ],
     stress: [
       { value: 'petrol', label: 'شركة البترول الوطنية للتوريدات المتكاملة بفرعها الرئيسي في العاصمة عمّان' },
       { value: 'noor', label: 'مؤسسة النور' },
-      { value: 'waha', label: 'شركة الواحة — فرع العاصمة ببيانات عنوان طويلة جدًا بلا مسافات لاختبار التفاف خيار المنتقي' },
-      { value: 'fawry', label: 'مأمورية فوري — فرع وسط المدينة' }
+      { value: 'waha', label: 'شركة الواحة: فرع العاصمة ببيانات عنوان طويلة جدًا بلا مسافات لاختبار التفاف خيار المنتقي' },
+      { value: 'fawry', label: 'مأمورية فوري (فرع وسط المدينة)' }
     ]
   };
 
@@ -15020,18 +15750,18 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
   var OCAL_TODAY = '2026-10-07';
   var OCAL_ORDERS = {
     normal: [
-      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل' },
-      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة' },
-      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress' },
+      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل', note: 'تجهيز صالة الاستقبال' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
+      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress', note: 'يشمل أكوابًا ورقية' },
       { id: 'od-04', title: 'طلب تعقيم غرف الاجتماعات', date: '2026-10-09', time: '16:00', statusKey: 'done' },
-      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold' },
+      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold', note: 'بانتظار قطعة الغيار' },
       { id: 'od-06', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'progress', customer: 'وحدة التسويق' },
       { id: 'od-07', title: 'طلب نقل عفش مكتبي', date: '2026-10-06', time: '15:00', statusKey: 'done', customer: 'فرع الشمال' },
       { id: 'od-08', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
     ],
     stress: [
-      { id: 'od-01', title: 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'قاعة الملتقى' },
-      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة' },
+      { id: 'od-01', title: 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'قاعة الملتقى', note: 'تجهيز القاعة الرئيسية مع مصليات وضيافة صباحية' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
       { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress' },
       { id: 'od-04', title: 'طلب قرطاسية إدارية', date: '2026-10-09', time: '10:30', statusKey: 'done' },
       { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold' },
@@ -15040,6 +15770,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       { id: 'od-08', title: 'طلب عناية حدائق الحديقة الغربية الداخلية', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
     ]
   };
+  /* حالة العرض المحلية للجدول: نسخة قابلة للتعديل من fixtures فوق
+     بيانات العرض نفسها — إضافة/تعديل/حذف محاكاة موسومة لا استمرارية. */
+  var ocalDemo = { orders: null, editingId: null, addingFor: null, seq: 100 };
 
   /* ---------------- الحالة العامة للمتحكم ---------------- */
 
@@ -15054,14 +15787,19 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       });
     });
     window.addEventListener('hashchange', revealDeepLink);
-    /* --- 1) بوابة الوصول: معالج عرض محلي حتمي (لا مصادقة/لا شبكة) --- */
+    /* --- 1) بوابة الوصول: معالج عرض محلي حتمي (لا مصادقة/لا شبكة) ---
+       R-34 (2026-10-25): نجاح المحاكاة يُعلن بوسم محاكاة العرض في نص
+       الرسالة نفسها (message مسار المكوّن الموثق) — لا يُقرأ كدخول حقيقي. */
     var gateway = q('sc-gateway-root');
     if (window.MicroAccessGateway && gateway) {
       window.MicroAccessGateway.init(gateway, {
         onSubmit: function () {
           return new Promise(function (resolve) {
             window.setTimeout(function () {
-              resolve({ authenticated: true });
+              resolve({
+                authenticated: true,
+                message: 'تم الدخول في محاكاة العرض فقط: لا حساب حقيقي ولا اتصال بأي خدمة.'
+              });
             }, 600);
           });
         }
@@ -15081,33 +15819,170 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       });
     }
 
-    /* --- 3) جدول الطلبات: init صريح بعقد المكوّن --- */
+    /* --- 3) جدول الطلبات: عرض محلي حتمي بأفعال مضيف محاكاة ---
+       اليوم داخل التقويم نقطة الدخول؛ الإضافة/التعديل/الحذف أحداث
+       host-owned يحاكيها محرر داخل الصفحة أدناه بحالة محلية موسومة
+       «محاكاة عرض» — لا حفظ ولا شبكة ولا Bottom Sheet ولا زر عائم. */
     var ocalRoot = q('sc-ocal-root');
     var ocalInstance = null;
     if (window.MicroOrderSchedule && ocalRoot) {
+      ocalDemo.orders = OCAL_ORDERS[state.fixture].map(function (o) { return o; });
       ocalInstance = window.MicroOrderSchedule.init(ocalRoot, {
-        orders: OCAL_ORDERS[state.fixture],
+        orders: ocalDemo.orders,
         statuses: OCAL_STATUSES,
         today: OCAL_TODAY,
         weekStart: 6,
         selectedDate: OCAL_TODAY,
         view: 'calendar',
-        calendarView: 'month'
+        calendarView: 'month',
+        orderActions: { edit: true, delete: true }
       });
-      ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request'].forEach(function (name) {
+      ['order-schedule:day-select', 'order-schedule:order-open',
+        'order-schedule:add-request', 'order-schedule:order-edit-request',
+        'order-schedule:order-delete-request'].forEach(function (name) {
         ocalRoot.addEventListener(name, function (e) {
           logEvent(q('sc-ocal-log'), name + ' ' + JSON.stringify(e.detail));
         });
+      });
+      ocalRoot.addEventListener('order-schedule:add-request', function (e) {
+        openOcalEditor({ mode: 'add', date: (e.detail && e.detail.date) || null });
+      });
+      ocalRoot.addEventListener('order-schedule:order-edit-request', function (e) {
+        var order = findOcalOrder(e.detail && e.detail.id);
+        if (order) openOcalEditor({ mode: 'edit', order: order });
+      });
+      ocalRoot.addEventListener('order-schedule:order-delete-request', function (e) {
+        removeOcalOrder(e.detail && e.detail.id);
       });
       q('sc-ocal-view').addEventListener('click', function () {
         var isList = ocalRoot.getAttribute('data-ocal-view') === 'list';
         ocalInstance.setView(isList ? 'calendar' : 'list');
       });
       q('sc-ocal-empty').addEventListener('click', function () { ocalInstance.setData([]); });
+      q('sc-ocal-loading').addEventListener('click', function () {
+        ocalInstance.setLoading(true);
+        window.setTimeout(function () { ocalInstance.setLoading(false); }, 1200);
+      });
+      q('sc-ocal-error').addEventListener('click', function () {
+        ocalInstance.setError(function () {
+          ocalInstance.setError(null);
+          ocalInstance.setData(ocalDemo.orders);
+        });
+      });
       q('sc-ocal-restore').addEventListener('click', function () {
-        ocalInstance.setData(OCAL_ORDERS[state.fixture]);
+        ocalDemo.orders = OCAL_ORDERS[state.fixture].map(function (o) { return o; });
+        ocalInstance.setData(ocalDemo.orders);
       });
     }
+
+    function findOcalOrder(id) {
+      for (var i = 0; i < ocalDemo.orders.length; i++) {
+        if (ocalDemo.orders[i].id === id) return ocalDemo.orders[i];
+      }
+      return null;
+    }
+
+    function removeOcalOrder(id) {
+      ocalDemo.orders = ocalDemo.orders.filter(function (o) { return o.id !== id; });
+      ocalInstance.setData(ocalDemo.orders);
+      logEvent(q('sc-ocal-log'), 'حُذف الطلب محليًا في محاكاة العرض: ' + id);
+    }
+
+    /* محرر داخل الصفحة (تركيب حقول B02 القائمة): إضافة/تعديل بحالة
+       محلية فقط؛ الحفظ يكتب في ocalDemo.orders ثم setData؛ إلغاء/Escape
+       يستعيدان الحالة بلا تغيير. التاريخ للإضافة يأتي من الحدث نفسه. */
+    function openOcalEditor(opts) {
+      var panel = q('sc-ocal-editor');
+      var titleInput = q('sc-ocal-editor-title');
+      var timeInput = q('sc-ocal-editor-time');
+      var statusSelect = q('sc-ocal-editor-status');
+      var noteInput = q('sc-ocal-editor-note');
+      var heading = q('sc-ocal-editor-heading');
+      var dateLine = q('sc-ocal-editor-date');
+      if (!panel || !titleInput) return;
+      ocalDemo.editingId = opts.mode === 'edit' ? opts.order.id : null;
+      ocalDemo.addingFor = opts.mode === 'add' ? (opts.date || null) : null;
+      heading.textContent = opts.mode === 'edit'
+        ? 'تعديل طلب (محاكاة عرض محلية)'
+        : 'إضافة طلب (محاكاة عرض محلية)';
+      dateLine.textContent = opts.mode === 'edit'
+        ? 'التاريخ: ' + (opts.order.date || 'غير مجدول')
+        : (opts.date ? 'التاريخ: ' + opts.date : 'بلا يوم محدد');
+      titleInput.value = opts.mode === 'edit' ? opts.order.title : '';
+      timeInput.value = opts.mode === 'edit' && opts.order.time ? opts.order.time : '';
+      statusSelect.value = opts.mode === 'edit' ? opts.order.statusKey : 'progress';
+      noteInput.value = opts.mode === 'edit' && opts.order.note ? opts.order.note : '';
+      panel.hidden = false;
+      if (window.MicroFields) window.MicroFields.sync(titleInput.closest('.m-field'));
+      titleInput.focus({ preventScroll: false });
+    }
+
+    function closeOcalEditor() {
+      var panel = q('sc-ocal-editor');
+      if (panel) panel.hidden = true;
+      ocalDemo.editingId = null;
+      ocalDemo.addingFor = null;
+      var returnTo = ocalRoot.querySelector('[data-ocal-action="presentation"]')
+        || ocalRoot.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+      if (returnTo) returnTo.focus({ preventScroll: true });
+    }
+
+    function saveOcalEditor() {
+      var titleInput = q('sc-ocal-editor-title');
+      var timeInput = q('sc-ocal-editor-time');
+      var statusSelect = q('sc-ocal-editor-status');
+      var noteInput = q('sc-ocal-editor-note');
+      var title = titleInput.value.trim();
+      if (!title) {
+        titleInput.setAttribute('aria-invalid', 'true');
+        titleInput.focus();
+        return;
+      }
+      titleInput.removeAttribute('aria-invalid');
+      var time = TIME_OK(timeInput.value) ? timeInput.value : null;
+      var note = noteInput.value.trim() || null;
+      if (ocalDemo.editingId) {
+        var order = findOcalOrder(ocalDemo.editingId);
+        if (order) {
+          order.title = title;
+          order.time = time;
+          order.statusKey = statusSelect.value;
+          order.note = note;
+        }
+        logEvent(q('sc-ocal-log'), 'عُدّل الطلب محليًا في محاكاة العرض: ' + ocalDemo.editingId);
+      } else {
+        var id = 'demo-' + (++ocalDemo.seq);
+        ocalDemo.orders.push({
+          id: id,
+          title: title,
+          date: ocalDemo.addingFor,
+          time: time,
+          statusKey: statusSelect.value,
+          customer: null,
+          note: note
+        });
+        logEvent(q('sc-ocal-log'), 'أُضيف الطلب محليًا في محاكاة العرض: ' + id);
+      }
+      ocalInstance.setData(ocalDemo.orders);
+      closeOcalEditor();
+    }
+
+    function TIME_OK(v) {
+      return /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
+    }
+
+    (function bindOcalEditor() {
+      var panel = q('sc-ocal-editor');
+      if (!panel) return;
+      panel.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeOcalEditor();
+        }
+      });
+      q('sc-ocal-editor-save').addEventListener('click', saveOcalEditor);
+      q('sc-ocal-editor-cancel').addEventListener('click', closeOcalEditor);
+    })();
 
     /* --- 4) أدوات حالة الأزرار --- */
     var btnDemo = q('sc-btn-demo');
@@ -15192,16 +16067,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       });
     }
 
-    /* --- 8) تبديل ترتيب دوائر المقارنة --- */
-    var circles = q('sc-circles');
-    if (circles && window.MicroMetricComparison) {
-      q('sc-metric-layout').addEventListener('click', function (e) {
-        var overlap = circles.getAttribute('data-layout') === 'overlap';
-        circles.setAttribute('data-layout', overlap ? 'separated' : 'overlap');
-        window.MicroMetricComparison.render(circles);
-        e.currentTarget.setAttribute('aria-pressed', String(!overlap));
-      });
-    }
+    /* --- 8) تبديل ترتيب دوائر المقارنة — أُزيل مع قرار عرض 2026-10-25:
+       دوائر المقاييس استُبدلت في المعرض بصفوف مقاييس مدمجة بنفس المصدر
+       (قرار مفاهيم الرسوم باء بالدليل)؛ المكوّن يبقى opt-in في المكتبة --- */
 
     /* --- 9) الرسائل: toast + إعلان + إعادة إظهار الملاحظات --- */
     var toast = q('sc-toast');
@@ -15335,7 +16203,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var ocalRoot = q('sc-ocal-root');
     if (ocalRoot && window.MicroOrderSchedule) {
       var inst = window.MicroOrderSchedule.getInstance(ocalRoot);
-      if (inst) inst.setData(OCAL_ORDERS[mode]);
+      if (inst) {
+        ocalDemo.orders = OCAL_ORDERS[mode].map(function (o) { return o; });
+        inst.setData(ocalDemo.orders);
+      }
     }
   }
 
@@ -15359,7 +16230,16 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
-    applyFilter(state.view === 'state' ? 'all' : 'current');
+    var targetFilter = state.view === 'state' ? 'all' : 'current';
+    applyFilter(targetFilter);
+    /* R-52 (2026-10-25): حالة الضغط لشريط الفلاتر تُزامن مع الفلتر
+       المطبق فعليًا — لا يبقى زر «الحالي» مضغوطًا والعناصر كلها ظاهرة */
+    var seg = q('sc-filter-seg');
+    if (seg) {
+      Array.prototype.forEach.call(seg.querySelectorAll('button'), function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-sc-filter') === targetFilter));
+      });
+    }
   }
 
   var hashScrollGeneration = 0;

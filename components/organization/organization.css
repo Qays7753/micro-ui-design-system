@@ -22,9 +22,10 @@
 .m-section-title {
   margin: 0;
   font-family: var(--micro-font-family);
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
+  /* R-11: مستوى عنوان القسم من التوكنز — سطر نسبي لا يقص عند تكبير النص وحده */
+  font-size: var(--micro-section-title-size);
+  line-height: var(--micro-section-title-line);
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-section-title + .m-section-desc {
@@ -93,7 +94,7 @@
 .m-row__title {
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 .m-row__subtitle {
@@ -157,7 +158,7 @@ a.m-row.is-focus {
   font-family: var(--micro-font-family);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   text-align: start;
   cursor: pointer;
@@ -205,7 +206,7 @@ a.m-row.is-focus {
   font-family: var(--micro-font-family);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   white-space: nowrap;
   background-color: var(--micro-surface-page);
   color: var(--micro-text-secondary);
@@ -271,13 +272,13 @@ a.m-row.is-focus {
   background-color: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 /* فشل تحميل الصورة: organization.js يستبدلها بالأحرف الأولى — بديل ظاهر */
 .m-identity__name {
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 .m-identity__sub {

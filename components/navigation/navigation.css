@@ -37,7 +37,7 @@
   min-width: 0;
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
   /* F-14 (2026-10-10، تكليف معرض النظام): التفاف محدود بسطرين ثم قطع
      بمقطع «…» — القاعدة الشبيهة بالأصل: عنوان شريط التطبيق لا يجعل
@@ -87,7 +87,7 @@
   font-family: var(--micro-font-family);
   font-size: var(--micro-button-label-size);
   line-height: var(--micro-button-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-secondary);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -173,7 +173,7 @@
 .m-layer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: var(--micro-z-backdrop, 80); /* R-12: سلم z الموثق في التوكنز */
   background-color: rgba(23, 45, 50, 0.4); /* مقترح: غشاء الخلفية */
   font-family: var(--micro-font-family);
 }
@@ -181,7 +181,7 @@
 
 .m-layer {
   position: fixed;
-  z-index: 85;
+  z-index: var(--micro-z-layer, 85); /* R-12: فوق الغشاء ودون الـtoast */
   inset-inline: 0;
   inset-block-end: 0;
   max-height: 86%; /* يبقى شريط حالة مرئي — العنوان والغلق ظاهران دائمًا */
@@ -242,7 +242,7 @@
   min-width: 0;
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-primary);
 }
 .m-layer__body {
@@ -280,7 +280,7 @@
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
 }
-.m-filter-summary b { color: var(--micro-text-primary); font-weight: 600; }
+.m-filter-summary b { color: var(--micro-text-primary); font-weight: var(--micro-weight-semibold); }
 
 /* ================= 6) شريط إجراء أساسي =================
    ثابت أسفل المحتوى — المحتوى تحته حشو سفلي كي لا يُحجب.

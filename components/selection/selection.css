@@ -220,7 +220,7 @@
 .m-switch__state {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-hint);
   min-width: 4ch; /* ثبات العرض بين الحالتين */
   text-align: start;
@@ -309,7 +309,7 @@
   font-family: var(--micro-font-family);
   font-size: var(--micro-button-label-size);
   line-height: var(--micro-button-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   color: var(--micro-text-secondary);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -401,4 +401,4 @@
 .m-choice:hover:not(:has(input:disabled)) { background: var(--micro-surface-page); }
 .m-switch:hover:not(:has(input:disabled)) .m-switch__track { box-shadow: inset 0 0 0 1px var(--micro-brand-primary); }
 .m-seg__item:hover:not([disabled]):not([aria-disabled="true"]):not([aria-pressed="true"]) { color: var(--micro-text-primary); background: var(--micro-seg-hover-surface); }
-.m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: 600; }
+.m-seg__item[aria-pressed="true"],.m-seg__item.is-selected { font-weight: var(--micro-weight-semibold); }

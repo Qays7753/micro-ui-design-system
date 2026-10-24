@@ -16,9 +16,10 @@
 
 .m-access-gateway__heading {
   margin: 0;
-  font-size: 22px;
-  line-height: 1.4545;
-  font-weight: 600;
+  /* R-11: زوج عنوان السطح الموثق بدل قيم خام خارج المصدر */
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-access-gateway__intro {

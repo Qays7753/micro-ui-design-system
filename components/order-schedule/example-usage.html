@@ -165,7 +165,8 @@
 
       /* ---- سجل الأحداث ---- */
       function attachLog(rootEl, listEl) {
-        ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request'].forEach(function (name) {
+        ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request',
+         'order-schedule:order-edit-request', 'order-schedule:order-delete-request'].forEach(function (name) {
           rootEl.addEventListener(name, function (e) {
             var li = document.createElement('li');
             li.textContent = name + ' — ' + JSON.stringify(e.detail);
@@ -175,7 +176,7 @@
         });
       }
 
-      /* ---- الحالة 1: تقويم الشهر ---- */
+      /* ---- الحالة 1: تقويم الشهر (عرضان: expanded/agenda + أفعال المضيف) ---- */
       var root1 = document.getElementById('demo-1');
       var demo1 = MicroOrderSchedule.init(root1, {
         orders: ORDERS,
@@ -184,7 +185,8 @@
         weekStart: 6,
         selectedDate: TODAY,
         view: 'calendar',
-        calendarView: 'month'
+        calendarView: 'month',
+        orderActions: { edit: true, delete: true }
       });
       attachLog(root1, document.getElementById('log-1'));
       var calendarTitle = document.getElementById('demo-1-title');

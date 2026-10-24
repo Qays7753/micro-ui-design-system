@@ -22,10 +22,10 @@
   gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
   min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
   min-width: var(--micro-touch-min); /* التسمية القصيرة لا تجعل هدف اللمس أضيق من 48px */
-  padding-block: var(--micro-button-padding-block);   /* 12px */
+  padding-block: var(--micro-button-padding-block);    /* التوكن: block padding (Geometry B 10px) */
   padding-inline: var(--micro-button-padding-inline);
   border: 0;
-  border-radius: min(var(--micro-radius-button-long), 50%); /* قصير كبسولة؛ متعدد الأسطر 24px */
+  border-radius: var(--micro-radius-button-long); /* R-46: 12px دائمًا — min(…,50%) كان متبقيًا بلا أثر (القيمة أبدًا لا تتجاوز 50%) */
   font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
   font-size: var(--micro-button-label-size);          /* 16px */
   line-height: var(--micro-button-label-line);        /* 24px */
@@ -79,7 +79,7 @@
 }
 
 /* الخفيف/النصي: دون حاوية ثقيلة، لون الهوية يكفي للتعرف عليه.
-   نفس حشو الزر المعتمد (20px) — الاختلاف في الغلاف لا في المساحة. */
+   نفس حشو الزر المعتمد (توكن padding-inline)؛ الاختلاف في الغلاف لا في المساحة. */
 .m-btn--light {
   background-color: transparent;
   color: var(--micro-brand-ink);

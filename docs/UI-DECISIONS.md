@@ -2,7 +2,7 @@
 
 ## القرارات السارية
 
-حُسمت القرارات الأحدث في [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md): Purposeful Expressive Native UI، Geometry B، Dark الآن، v2 نشط، full-width carousel، compact summaries، bars/rows للقياس، ودورة حياة وتنظيف صريحان. مصدر النضج الكتالوج وحده. النصوص التالية سجل تاريخي للمقارنات، ولا تتقدم على العقود الحالية.
+حُسمت القرارات الأحدث في [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md): Purposeful Expressive Native UI، Geometry B، Dark الآن (تاريخيًا؛ أُلغي بقرار Light-only المعتمد 2026-10-24)، v2 نشط، full-width carousel، compact summaries، bars/rows للقياس، ودورة حياة وتنظيف صريحان. مصدر النضج الكتالوج وحده. النصوص التالية سجل تاريخي للمقارنات، ولا تتقدم على العقود الحالية.
 
 طلب المالك التنفيذ ورفع فرع العمل بعد الفحص، **دون merge أو PR تلقائيًا**. إذن الدمج الوارد في سجل سابق ليس إذنًا لهذه الدفعة، ولا يوجد إذن نشر.
 

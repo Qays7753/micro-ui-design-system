@@ -105,7 +105,7 @@ def main():
                       page.locator("#line .m-chart__line").count() == 2 and page.locator("#line .m-chart__dot").count() == 4)
                 check(f"{width}: zero/unknown/negative bubbles are decorative SVG markers with distinct readings",
                       page.locator("#bubble-states svg.m-bubble__circle--none[aria-hidden=true]").count() == 3 and
-                      page.locator("#bubble-states .m-bubble__value").all_text_contents() == ["0", "— غير متاح", "-2 (سالب غير صالح للمساحة)"])
+                      page.locator("#bubble-states .m-bubble__value").all_text_contents() == ["0", "(غير متاح)", "-2 (سالب غير صالح للمساحة)"])
                 diameters = page.locator("#bubbles .m-bubble__circle").evaluate_all("es=>es.map(e=>e.getBoundingClientRect().width)")
                 check(f"{width}: SVG bubble areas preserve 90:3:12", abs((diameters[0]/diameters[1])**2 - 30) < .08 and abs((diameters[2]/diameters[1])**2 - 4) < .04, diameters)
                 check(f"{width}: full donut total moves outside ring",

@@ -136,8 +136,10 @@
   }
 
   function readingOf(item) {
-    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '— غير متاح';
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' — سالب غير مرسوم';
+    /* R-04/R-18 (2026-10-25): حالات القيمة بصيغة الأقواس الموحدة، لا شرطة
+       em — الشرطة تبقى ترميزًا مرسومًا للقيمة المفقودة داخل الرسم فقط */
+    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' (سالب غير مرسوم)';
     return item.display || item.rawValue || fmt(item.value);
   }
 
@@ -147,7 +149,7 @@
       && chart.getAttribute('data-axis-type') === 'time';
     if (isTimeAxis && item.axisX !== null && item.axisX !== ''
         && label.indexOf(String(item.axisX)) === -1) {
-      label += ' — ' + item.axisX;
+      label += '، ' + item.axisX;
     }
     return label;
   }
@@ -256,7 +258,7 @@
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -558,7 +560,7 @@
       fill: 'var(--micro-warning)'
     });
     applyTextPx(t, fontPx);
-    t.textContent = fmt(value) + ' — ' + why;
+    t.textContent = fmt(value) + ' (' + why + ')';
     g.appendChild(t);
   }
 
@@ -604,7 +606,7 @@
     var colW = W / Math.max(items.length, 1);
     var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
     if (scale.kind === 'over') {
-      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -655,7 +657,7 @@
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
@@ -693,7 +695,7 @@
     var top = 24, height = Math.min(160, Math.max(112, width * 0.38)), bottom = top + height;
     var svg = svgEl('svg', {
       viewBox: '0 0 ' + width + ' ' + (bottom + 28), role: 'img',
-      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + ' — محور صفر مشترك؛ القراءات الكاملة أدناه'
+      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + '؛ محور صفر مشترك، والقراءات الكاملة أدناه'
     });
     function y(value) { return top + (b - value / magnitude) / (b - a) * height; }
     var zero = y(0);
@@ -863,7 +865,7 @@
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
     var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
     if (scale.kind === 'over') {
-      ariaLabel += ' — مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -913,7 +915,7 @@
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
@@ -961,7 +963,7 @@
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' — قيمة شاذة'));
+      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -1226,6 +1228,26 @@
           'vector-effect': 'non-scaling-stroke'
         }));
       });
+      /* R-07 (2026-10-25): فاصل شعاعي 1px غير مقياسي عند كل حد بين
+         الشريحة والتالية (نمط الحلقة الداخلية لpacked-circle) — الشرائح
+         المتجاورة لا تندمج حتى مع تقارب إضاءة السلاسل (R-06). */
+      if (known.length > 1) {
+        var bOff = 0;
+        known.forEach(function (it, k) {
+          if (k === 0) return; /* حد 0° يطابق حد 360° — يُرسم مرة */
+          bOff += (it.value / denom) * C;
+          var angle = (-90 + (bOff / C) * 360) * Math.PI / 180;
+          svg.appendChild(svgEl('line', {
+            x1: cx + (R - 8) * Math.cos(angle),
+            y1: cy + (R - 8) * Math.sin(angle),
+            x2: cx + (R + 8) * Math.cos(angle),
+            y2: cy + (R + 8) * Math.sin(angle),
+            'aria-hidden': 'true',
+            stroke: 'var(--micro-data-boundary)', 'stroke-width': 1,
+            'vector-effect': 'non-scaling-stroke'
+          }));
+        });
+      }
       var center = svgEl('text', { class: 'm-donut__center', x: cx, y: cy + 2, 'text-anchor': 'middle' });
       center.textContent = fmt(denom);
       svg.appendChild(center);
@@ -1271,7 +1293,7 @@
       li.appendChild(label);
       var val = document.createElement('span');
       val.className = 'm-legend__value';
-      val.textContent = it.value === null ? '— غير متاح' : fmt(it.value) + ' — غير صالح للنسب';
+      val.textContent = it.value === null ? '(غير متاح)' : fmt(it.value) + ' (غير صالح للنسب)';
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -1311,7 +1333,7 @@
      بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
-    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '— غير متاح';
+    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
     if (it.value < 0 && !it.signed) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
@@ -1376,7 +1398,7 @@
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');
-        time.textContent = it.axisX === null || it.axisX === '' ? '— غير متاح' : it.axisX;
+        time.textContent = it.axisX === null || it.axisX === '' ? '(غير متاح)' : it.axisX;
         tr.appendChild(time);
       }
       var td = document.createElement('td');
@@ -1442,7 +1464,7 @@
       lab.textContent = it.label;
       if (it.value === null) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = '— غير متاح';
+        valTxt.textContent = '(غير متاح)';
       } else if (it.value < 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
         valTxt.textContent = fmt(it.value) + ' (سالب غير صالح للمساحة)';
@@ -1474,7 +1496,7 @@
       /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + ' — القيم الأصلية دون تغيير.';
+      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + '. القيم الأصلية دون تغيير.';
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(declared) + ' إلى ' + fmt(vmax) + '؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.');

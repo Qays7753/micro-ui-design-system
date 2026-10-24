@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--micro-space-2);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
@@ -142,5 +142,5 @@
 .m-picker__option:hover:not([hidden]):not([aria-selected="true"]) {
   background: var(--micro-surface-page);
 }
-.m-picker__option[aria-selected="true"] { font-weight: 500; }
+.m-picker__option[aria-selected="true"] { font-weight: var(--micro-weight-medium); }
 .m-picker__title { overflow-wrap: anywhere; }

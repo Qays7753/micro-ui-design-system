@@ -28,11 +28,11 @@
   background: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-account-profile__text { display: flex; flex-direction: column; min-width: 0; }
-.m-account-profile__name { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 600; overflow-wrap: anywhere; }
+.m-account-profile__name { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: var(--micro-weight-semibold); overflow-wrap: anywhere; }
 .m-account-profile__detail { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); overflow-wrap: anywhere; }
 
 .m-setting-group {
@@ -45,7 +45,7 @@
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-setting-group__items {
@@ -111,7 +111,7 @@ button.m-setting-row:focus-visible {
 .m-setting-row__icon[data-icon="chevron"] { --m-account-icon: url("../../assets/icons/chevron-left.svg"); }
 
 .m-setting-row__content { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-.m-setting-row__label { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: 500; overflow-wrap: anywhere; }
+.m-setting-row__label { color: var(--micro-text-primary); font-size: var(--micro-body-size); line-height: var(--micro-body-line); font-weight: var(--micro-weight-medium); overflow-wrap: anywhere; }
 .m-setting-row__detail { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); overflow-wrap: anywhere; }
 .m-setting-row__end { flex: none; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
 .m-setting-row__end::before {

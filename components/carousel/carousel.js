@@ -231,7 +231,7 @@
       empty = document.createElement('p');
       empty.setAttribute('data-carousel-empty', '');
       empty.setAttribute('role', 'status');
-      empty.textContent = 'لا توجد بطاقات';
+      empty.textContent = 'لا توجد بطاقات.'; /* R-22: عرف النقطة في سطور الفراغ */
       carousel.appendChild(empty);
     }
     if (empty) empty.hidden = st.count !== 0;
@@ -262,7 +262,7 @@
     /* مؤشر الموضع — نص إتاحي صريح */
     if (st.status) {
       st.status.textContent = st.count === 0
-        ? 'لا توجد بطاقات'
+        ? 'لا توجد بطاقات.'
         : 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
     }
 

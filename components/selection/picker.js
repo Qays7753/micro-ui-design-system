@@ -89,6 +89,15 @@
     }
     return { status: status, retry: retry };
   }
+  /* R-32 (2026-10-25): تطبيع البحث — توحيد الحالة + تجريد التشكيل (NFD)
+     قبل المقارنة كي لا تُنتج البحثات اللاتينية/المشكولة «لا نتائج» كاذبة؛
+     مصدر الخيارات نفسه لا يُمس (العرض كما كتبه المستهلك). */
+  function normalizeMatch(text) {
+    var s = String(text).toLowerCase();
+    if (!s.normalize) return s; /* بيئات بلا Intl: مقارنة الحالة فقط (موثق) */
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
   function apply(picker) {
     var state = stateOf(picker);
     var list = listOf(picker);
@@ -97,8 +106,9 @@
     var active = document.activeElement;
     var ownedOption = optionsOf(picker).indexOf(active) >= 0;
     var ready = state.status === 'ready';
+    var queryNorm = state.query !== '' ? normalizeMatch(state.query) : '';
     optionsOf(picker).forEach(function (option) {
-      var hide = !ready || (state.query !== '' && option.textContent.indexOf(state.query) === -1);
+      var hide = !ready || (queryNorm !== '' && normalizeMatch(option.textContent).indexOf(queryNorm) === -1);
       // Move focus before hiding its owner. Never steal focus from outside options.
       if (hide && option === active) safeFocus(picker);
       option.hidden = hide;
@@ -110,7 +120,7 @@
     };
     var noResult = ready && state.query !== '' && !available(picker).length;
     var noData = ready && !optionsOf(picker).length;
-    var message = ready ? (noResult ? 'لا نتائج مطابقة — جرّب اسمًا آخر.' : noData ? defaults.empty : '')
+    var message = ready ? (noResult ? 'لا نتائج مطابقة. عدّل كلمة البحث.' : noData ? defaults.empty : '')
       : state.message || defaults[state.status] || '';
     var retryVisible = state.status === 'error' && !locked(picker);
     if (active === nodes.retry && !retryVisible) safeFocus(picker);

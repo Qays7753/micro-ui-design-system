@@ -405,8 +405,8 @@ def main() -> int:
                 f"packed zero/negative/unknown/unavailable remain distinct at {width} {direction.upper()}",
                 "0 — صفر" in states["text"]
                 and "-3 — سالب غير صالح للمساحة" in states["text"]
-                and "— غير معروف" in states["text"]
-                and "— غير متاح" in states["text"]
+                and "(غير معروف)" in states["text"]
+                and "(غير متاح)" in states["text"]
                 and states["stateCount"] == 4
                 and states["positiveCount"] == 3,
                 states,
@@ -422,7 +422,7 @@ def main() -> int:
                     keyCount: chart.querySelectorAll('.m-legend__item').length,
                     containsAllValues: ['84,300', '52,100', '12,000',
                       '0', '-3 — سالب غير صالح للمساحة',
-                      '— غير معروف', '— غير متاح'].every(value =>
+                      '(غير معروف)', '(غير متاح)'].every(value =>
                         chart.querySelector('.m-chart__plot').textContent.includes(value))
                   };
                 }"""

@@ -457,25 +457,31 @@ def run(page, base, width, tag):
     else:
         t(f"F-08 {P} مكوّن التقويم موجود", False, f08)
 
-    # ================= F-09: مصدر واحد للفئة/اللون/القيمة =================
+    # ================= F-09: قرار عرض packed-circle (2026-10-25) =================
+    # عقد قرار مفاهيم الرسوم: بديل الأعمدة المعتمد يعرض نفس مصدر البيانات، وكل
+    # القيم مقروءة في تسميات الأعمدة/القراءات، والقسم يوثق قرار الاستبدال، ولا
+    # يُعرض تمثيل الدوائر الملتصقة المتداخلة في المعرض (يبقى الملحق PROPOSED
+    # في المكتبة لخيار المضيف الصريح).
     f09 = page.evaluate("""() => {
       const chart = document.querySelector('#sc-chart-packed');
       const plot = chart.querySelector('[data-plot]');
-      const labels = plot.querySelector('.m-packed__labels');
-      const legend = plot.querySelector('.m-legend:not(.m-packed__states)');
       const vis = (e) => e && e.getClientRects().length > 0;
-      const valuesInCircles = [...plot.querySelectorAll('.m-bubble__circle .m-bubble__value')].filter(vis).map(v => v.textContent);
-      const legendValues = legend && vis(legend) ? [...legend.querySelectorAll('.m-legend__value')].map(v => v.textContent) : [];
-      const rowValues = labels && vis(labels) ? [...labels.querySelectorAll('.m-bubble__value')].map(v => v.textContent) : [];
+      const bars = [...plot.querySelectorAll('.m-chart__bar')].filter(vis);
+      const valueTexts = [...plot.querySelectorAll('.m-chart__bar-value, .m-chart__readings dd, .m-legend__value')]
+        .map(v => v.textContent.trim());
       const src = [...chart.querySelectorAll('.m-chart__data li')].map(li => li.getAttribute('data-display') || li.getAttribute('data-value'));
-      const allReadable = src.every(v => valuesInCircles.includes(v) || legendValues.includes(v) || rowValues.includes(v));
-      const visibleSources = (vis(labels) ? 1 : 0) + (vis(legend) ? 1 : 0);
-      return { visibleSources, allReadable, valuesInCircles, legendValues, rowValues };
+      const allReadable = src.every(v => valueTexts.some(t => t.includes(v)));
+      const sectionText = document.getElementById('sc-packed').textContent;
+      const decisionDocumented = sectionText.includes('قرار عرض 2026-10-25') || sectionText.includes('البديل المعتمد');
+      const packedDomGone = !document.querySelector('#sc-chart-packed[data-chart-packed]');
+      return { bars: bars.length, allReadable, decisionDocumented, packedDomGone, src, valueTexts };
     }""")
-    t(f"F-09 {P} مصدر مرئي واحد للفئة/القيمة (صفوف التسمية أو المفتاح)", f09["visibleSources"] == 1,
-      f"sources={f09['visibleSources']}")
-    t(f"F-09 {P} كل القيم مقروءة في مكان واحد على الأقل", f09["allReadable"],
-      f"inCircles={f09['valuesInCircles']} legend={f09['legendValues']} rows={f09['rowValues']}")
+    t(f"F-09 {P} بديل الأعمدة يعرض مصدر البيانات نفسه (3 أعمدة مرئية)", f09["bars"] == 3,
+      f"bars={f09['bars']}")
+    t(f"F-09 {P} كل القيم مقروءة في تسميات الأعمدة/القراءات", f09["allReadable"],
+      f"src={f09['src']} readings={f09['valueTexts']}")
+    t(f"F-09 {P} قرار الاستبدال موثق في القسم والعنوان يسمّي البديل", f09["decisionDocumented"])
+    t(f"F-09 {P} تمثيل الدوائر الملتصقة غير معروض (الملحق يبقى PROPOSED بالمكتبة)", f09["packedDomGone"])
     shot(page, "#sc-packed")
 
     # ================= F-10: استقرار طبقة الحساب =================

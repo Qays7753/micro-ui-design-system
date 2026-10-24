@@ -1,4 +1,22 @@
 :root {
+  /* R-39/R-50 (2026-10-25): متغيرات كروم هذه الصفحة (previews/index.html) فقط —
+     ليست جزءًا من مصدر توكنز المكتبة (shared/tokens.css) ولا تُستهلك من المكوّنات؛
+     نطاقها: واجهة فهرس المكتبة (hero بترولي وزخارفه). الترميز هنا يجعلها مسمّاة
+     وموثقة بدل قيم سحرية خام. */
+  --preview-hero-ink-soft: #d4e5e0;    /* نص ثانوي فوق البترولي */
+  --preview-hero-line: #73939a;        /* فواصل/حدود فوق البترولي */
+  --preview-hero-title-tint: #d8e9e1;  /* تدرج عنوان hero */
+  --preview-hero-body: #e8f1ec;        /* نص مقدمة hero */
+  --preview-hero-meta: #d9e8e3;        /* سطر البيانات الوصفية */
+  --preview-status-dot: #b3bd7b;       /* نقطة حبة الإصدار (لون حالة الكروم) */
+  --preview-ornament-line: #88a9a9;    /* خطوط الزخارة الدائرية */
+  --preview-demo-petrol-tint: #e8f0ed;   /* مساحات معاينة العائلات (كروم العرض) */
+  --preview-demo-warm-tint: #f4f0e8;
+  --preview-demo-mint-tint: #e7f0eb;
+  --preview-demo-paper-tint: #eff1ec;
+  --preview-demo-surface-tint: #edf0e8;
+}
+:root {
   font-family: var(--micro-font-family);
   color: var(--micro-text-primary);
   background: var(--micro-surface-page);
@@ -9,18 +27,18 @@ a { color: var(--micro-brand-ink); text-underline-offset: 3px; }
 .library-head { position: relative; overflow: hidden; color: var(--micro-text-inverse); background: var(--micro-brand-primary); }
 .library-head__inner { position: relative; z-index: 1; width: min(100% - 40px, 1080px); margin-inline: auto; padding-block: clamp(36px, 8vw, 76px) 38px; }
 .eyebrow,.section-kicker { margin: 0; font: 500 12px/1.6 var(--micro-font-family); }
-.eyebrow { display:flex; align-items:center; gap:10px; color:#d4e5e0; }
+.eyebrow { display:flex; align-items:center; gap:10px; color:var(--preview-hero-ink-soft); }
 .brand-mark { display:block; width:96px; height:32px; object-fit:contain; }
-.eyebrow__divider { width:22px; height:1px; background:#73939a; }
+.eyebrow__divider { width:22px; height:1px; background:var(--preview-hero-line); }
 .library-head h1 { max-width:740px; margin:35px 0 12px; font-size:clamp(38px,8vw,72px); line-height:1.13; font-weight:600; }
-.library-head h1 span { color:#d8e9e1; }
-.library-head__intro { max-width:575px; margin:0; color:#e8f1ec; font-size:16px; line-height:1.8; }
-.head-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px; margin-block-start:27px; color:#d9e8e3; font-size:13px; }
+.library-head h1 span { color:var(--preview-hero-title-tint); }
+.library-head__intro { max-width:575px; margin:0; color:var(--preview-hero-body); font-size:16px; line-height:1.8; }
+.head-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px; margin-block-start:27px; color:var(--preview-hero-meta); font-size:13px; }
 .head-meta a { color:var(--micro-text-inverse); text-decoration-thickness:1px; }
-.release-pill { display:inline-flex; align-items:center; gap:8px; padding:5px 10px; border:1px solid #73939a; border-radius:999px; font-weight:500; }
-.release-pill i { width:7px; height:7px; border-radius:50%; background:#b3bd7b; }
+.release-pill { display:inline-flex; align-items:center; gap:8px; padding:5px 10px; border:1px solid var(--preview-hero-line); border-radius:999px; font-weight:500; }
+.release-pill i { width:7px; height:7px; border-radius:50%; background:var(--preview-status-dot); }
 .head-ornament { position:absolute; inset-block:0; inset-inline-start:calc(50% + 300px); width:290px; opacity:.48; }
-.head-ornament span { position:absolute; inset-block-start:35px; inset-inline-start:0; width:235px; aspect-ratio:1; border:1px solid #88a9a9; border-radius:50%; }
+.head-ornament span { position:absolute; inset-block-start:35px; inset-inline-start:0; width:235px; aspect-ratio:1; border:1px solid var(--preview-ornament-line); border-radius:50%; }
 .head-ornament span:nth-child(2) { inset-block-start:115px; inset-inline-start:88px; width:195px; background:rgba(223,238,230,.12); }
 .head-ornament b { position:absolute; inset-block-end:40px; inset-inline-start:38px; color:var(--micro-brand-accent); font:500 42px/1 'IBM Plex Sans',sans-serif; }
 .library-main { width:min(100% - 40px,1080px); margin-inline:auto; }
@@ -35,11 +53,11 @@ a { color: var(--micro-brand-ink); text-underline-offset: 3px; }
 .family-list { border-block-start:1px solid var(--micro-border-control); }
 .family { display:grid; grid-template-columns:minmax(0, .94fr) minmax(0,1.06fr); min-height:206px; border-block-end:1px solid var(--micro-border-divider); }
 .family__demo { display:flex; flex-wrap:wrap; align-items:center; align-content:center; gap:14px; min-width:0; padding:24px clamp(14px,3vw,38px); }
-.demo--petrol { background:#e8f0ed; }
-.demo--warm { background:#f4f0e8; }
-.demo--mint { background:#e7f0eb; }
-.demo--paper { background:#eff1ec; }
-.demo--surface { background:#edf0e8; }
+.demo--petrol { background:var(--preview-demo-petrol-tint); }
+.demo--warm { background:var(--preview-demo-warm-tint); }
+.demo--mint { background:var(--preview-demo-mint-tint); }
+.demo--paper { background:var(--preview-demo-paper-tint); }
+.demo--surface { background:var(--preview-demo-surface-tint); }
 .family__info { display:grid; grid-template-columns:52px minmax(0,1fr); align-content:center; gap:15px; min-width:0; padding:24px clamp(16px,3vw,34px); }
 .family__index { display:flex; flex-direction:column; gap:5px; color:var(--micro-text-hint); font:500 12px/1.4 'IBM Plex Sans',sans-serif; }
 .family__index span { color:var(--micro-brand-ink); font-size:11px; }
@@ -89,8 +107,6 @@ a { color: var(--micro-brand-ink); text-underline-offset: 3px; }
 .library-footer span:first-child { direction:ltr; font-family:'IBM Plex Sans',sans-serif; letter-spacing:.06em; }
 .m-btn:focus-visible,.m-field__input:focus-visible,.family a:focus-visible { outline:2px solid var(--micro-focus-ring); outline-offset:3px; }
 .demo--petrol,.demo--warm,.demo--mint,.demo--paper,.demo--surface { background:var(--micro-surface-selected); }
-[data-theme="dark"] .family__demo { background-color:var(--micro-surface-base); }
-[data-theme="dark"] .intro-band { background:var(--micro-surface-selected); }
 .reference-end__links a:hover,.reference-end__links b { color:var(--micro-brand-ink); }
 /* W4.3 (A1-F02 — عقد هامش المعرض): من 390px فأعلى 20px لكل جانب
    وفق عقد الأسس (كانت القاعدة حتى 700px تفرض 32px أي 16px عند 390

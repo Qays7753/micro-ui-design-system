@@ -1,0 +1,222 @@
+{
+  "bars@320": {
+    "present": true,
+    "width": 256,
+    "height": 325,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "line@320": {
+    "present": true,
+    "width": 256,
+    "height": 333,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "donut@320": {
+    "present": true,
+    "width": 256,
+    "height": 416,
+    "svgCount": 1,
+    "legendItems": 3,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "bubbles@320": {
+    "present": true,
+    "width": 256,
+    "height": 329,
+    "svgCount": 3,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": null,
+    "overflow": false
+  },
+  "packed-circle@320": {
+    "present": true,
+    "width": 256,
+    "height": 198,
+    "svgCount": 0,
+    "legendItems": 3,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": null,
+    "overflow": false
+  },
+  "metric-circles@320": {
+    "present": true,
+    "width": 256,
+    "height": 310,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": null,
+    "overflow": false
+  },
+  "main-metric-rows@320": {
+    "present": true,
+    "width": 256,
+    "height": 400,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 4,
+    "svgRole": null,
+    "overflow": false
+  },
+  "main-metric-featured@320": {
+    "present": true,
+    "width": 256,
+    "height": 426,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 4,
+    "svgRole": null,
+    "overflow": false
+  },
+  "signed-bars@320": {
+    "present": true,
+    "width": 256,
+    "height": 452,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 5,
+    "rowCount": 5,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "signed-line@320": {
+    "present": true,
+    "width": 256,
+    "height": 452,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 5,
+    "rowCount": 5,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "bars@390": {
+    "present": true,
+    "width": 326,
+    "height": 313,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "line@390": {
+    "present": true,
+    "width": 326,
+    "height": 340,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "donut@390": {
+    "present": true,
+    "width": 326,
+    "height": 392,
+    "svgCount": 1,
+    "legendItems": 3,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "bubbles@390": {
+    "present": true,
+    "width": 326,
+    "height": 305,
+    "svgCount": 3,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 0,
+    "svgRole": null,
+    "overflow": false
+  },
+  "packed-circle@390": {
+    "present": true,
+    "width": 326,
+    "height": 198,
+    "svgCount": 0,
+    "legendItems": 3,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": null,
+    "overflow": false
+  },
+  "metric-circles@390": {
+    "present": true,
+    "width": 326,
+    "height": 326,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 3,
+    "svgRole": null,
+    "overflow": false
+  },
+  "main-metric-rows@390": {
+    "present": true,
+    "width": 326,
+    "height": 400,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 4,
+    "svgRole": null,
+    "overflow": false
+  },
+  "main-metric-featured@390": {
+    "present": true,
+    "width": 326,
+    "height": 426,
+    "svgCount": 0,
+    "legendItems": 0,
+    "readingsCount": 0,
+    "rowCount": 4,
+    "svgRole": null,
+    "overflow": false
+  },
+  "signed-bars@390": {
+    "present": true,
+    "width": 326,
+    "height": 464,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 5,
+    "rowCount": 5,
+    "svgRole": "img",
+    "overflow": false
+  },
+  "signed-line@390": {
+    "present": true,
+    "width": 326,
+    "height": 464,
+    "svgCount": 1,
+    "legendItems": 0,
+    "readingsCount": 5,
+    "rowCount": 5,
+    "svgRole": "img",
+    "overflow": false
+  }
+}

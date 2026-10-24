@@ -19,6 +19,13 @@
    الصف 48px فأكثر (max(2.7em, --micro-touch-min)) فتتمدد الخلايا رأسيًا
    — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
    لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
+
+   عقد 2026-10-25 (مرجع مفهوم التقويم) — عرضان متناسقان فوق الشبكة
+   نفسها عبر data-ocal-presentation:
+   expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
+   agenda (مضغوط): أرضية صف 40px (كثافة سياق مقصودة؛ ≥24×24) مع إخفاء
+   العدّاد بصريًا، وتحتها منطقة إفصاح هادئة (m-ocal__agenda) تكشف أجندة
+   اليوم المحدد داخل الصفحة — لا زر عائم ولا Bottom Sheet في هذا المسار.
    ========================================================= */
 
 .m-ocal,
@@ -69,7 +76,7 @@
   background-color: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
@@ -78,7 +85,7 @@
   background-color: var(--micro-surface-selected);
   border-color: var(--micro-brand-primary);
   color: var(--micro-brand-primary);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 /* ================= 2) الشاشات الفرعية ================= */
@@ -102,7 +109,7 @@
   margin: 0;
   text-align: center;
   font-size: var(--micro-button-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -213,7 +220,7 @@
   border-color: var(--micro-brand-primary);
   background-color: var(--micro-surface-selected);
   color: var(--micro-brand-primary);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-ocal__todaybtn {
@@ -225,14 +232,17 @@
   background-color: var(--micro-surface-base);
   color: var(--micro-brand-primary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-/* ---- إجراء بديل واحد لتغيير شهر/يوم يقلل تكديس الخيارات ---- */
+/* ---- إجراء بديل واحد لتغيير شهر/يوم يقلل تكديس الخيارات ----
+   2026-10-25: زرا الشريط (طي/توسيع + عرض اليوم) يلتفان عند ضيق الجذر
+   وتكبير النص (flex-wrap) بدل تجاوز حافة العرض — كل زر ≥48px يبقى. */
 .m-ocal__modes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
 }
 
@@ -250,7 +260,7 @@
   background-color: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-button-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
@@ -259,10 +269,28 @@
   border-color: var(--micro-border-divider);
   background-color: var(--micro-surface-base);
   color: var(--micro-brand-primary);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 /* ================= 3) شبكة الشهر ================= */
+/* عقد 2026-10-25 — عرض الأجندة (data-ocal-presentation="agenda"):
+   الشبكة نفسها بكل أيام الشهر مضغوطة رأسيًا (أرضية صف 40px — كثافة
+   سياق مقصودة يتطلبها الطي؛ ≥ الحد الأدنى WCAG 2.5.8 24×24) والعدّاد
+   يختفي بصريًا (المعنى يبقى في aria-label الخلية + زر الإفصاح +
+   الأجندة) فتبقى الخلايا هادئة قابلة للمسح. أزرار الأوامر كلها ≥48px. */
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__gridrow {
+  min-height: max(2.5em, 40px);
+}
+
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__cell {
+  aspect-ratio: auto;
+  min-height: 40px;
+}
+
+.m-ocal[data-ocal-presentation="agenda"] .m-ocal__count {
+  display: none;
+}
+
 .m-ocal__weekdays {
   display: flex;
   gap: var(--micro-space-1);
@@ -272,7 +300,7 @@
   padding-block: var(--micro-space-1);
   text-align: center;
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);
   /* إصلاح R3-2b (2026-10-08): الالتفاف في أي مكان — اسم يوم عربي كلمة
@@ -344,7 +372,7 @@
 
 .m-ocal__daynum {
   font-size: var(--micro-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: 1;
 }
 
@@ -494,7 +522,7 @@
   min-width: 140px;
   margin: 0;
   font-size: var(--micro-button-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -507,7 +535,7 @@
   color: var(--micro-text-secondary);
 }
 
-/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأسفل/القائمة) ================= */
+/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأجندة/الأسفل/القائمة) ================= */
 .m-ocal__rows {
   list-style: none;
   margin: 0;
@@ -517,12 +545,21 @@
   gap: var(--micro-space-2);
 }
 
+/* الصف عنصر به زر رئيسي (فتح) وأدوات فعل اختيارية (تعديل/حذف)
+   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px */
+.m-ocal__rowitem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--micro-space-1);
+}
+
 .m-ocal__row {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* محاذاة يمين RTL */
   gap: 2px;
-  width: 100%;
+  flex: 1;
+  min-width: 0; /* يسمح بالالتفاف داخل الزر بدل توسيع الصف */
   min-height: var(--micro-touch-min); /* صف كامل ≥ 48px */
   padding: var(--micro-space-2) var(--micro-space-3);
   border: 1px solid var(--micro-border-divider);
@@ -540,7 +577,7 @@
 /* عنوان طويل جدًا يلتف داخل الصف ولا يكسره */
 .m-ocal__row-title {
   font-size: var(--micro-body-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
@@ -592,22 +629,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* الحالة: نقطة لون + النص معًا دائمًا (لا لونًا وحده) —
-   أزواج توكنات معتمدة فقط */
+/* الحالة: نص داخل شريحة ملوّنة دلاليًا — بلا نقطة زائدة (R-24:
+   الكلمة والتلوين يحملان الحالة؛ أزواج توكنات معتمدة فقط) */
 .m-ocal__row-status {
   display: inline-flex;
   align-items: center;
-  gap: var(--micro-space-1);
   padding: var(--micro-space-1) var(--micro-space-2);
   border-radius: var(--micro-radius-chip);
-}
-
-.m-ocal__row-statusdot {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--micro-radius-circle);
-  background-color: currentColor;
+  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
 .m-ocal__row-status--progress {
@@ -628,6 +658,134 @@
 .m-ocal__row-status--neutral {
   background-color: var(--micro-surface-page);
   color: var(--micro-text-secondary);
+}
+
+/* ملاحظة قصيرة تحت العنوان (وصفية فقط — عقد البيانات 2026-10-25) */
+.m-ocal__row-note {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-hint);
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+/* أدوات فعل الصف (تعديل/حذف) — على صفوف سطح فعل اليوم المحدد فقط
+   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات) */
+.m-ocal__row-tools {
+  flex: none;
+  display: flex;
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__row-tool {
+  width: var(--micro-icon-button-size);  /* 48px */
+  height: var(--micro-icon-button-size); /* 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-circle);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  cursor: pointer;
+}
+
+.m-ocal__row-tool:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.m-ocal__row-tool svg {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+}
+
+.m-ocal__row-tool--danger {
+  color: var(--micro-danger);
+  border-color: var(--micro-danger-surface);
+}
+
+/* ================= 6b) منطقة إفصاح أجندة اليوم المحدد (عرض agenda) ================= */
+.m-ocal__agenda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__agenda-note {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__agenda-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-1) var(--micro-space-2);
+  width: 100%;
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+
+.m-ocal__agenda-toggle:active {
+  background-color: var(--micro-surface-selected);
+}
+
+.m-ocal__agenda-date {
+  min-width: 0;
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__agenda-count {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__agenda-toggle svg {
+  flex: none;
+  margin-inline-start: auto;
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+}
+
+.m-ocal__agenda-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.m-ocal__agenda-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
+.m-ocal__agenda-title {
+  margin: 0;
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__agenda-empty {
+  padding: var(--micro-space-3) var(--micro-space-4);
 }
 
 /* ================= 7) شاشة القائمة ================= */
@@ -654,7 +812,7 @@
 .m-ocal__list-heading {
   margin: 0;
   font-size: var(--micro-label-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
 }
@@ -729,6 +887,8 @@
 .m-ocal__picker-back,
 .m-ocal__picker-month,
 .m-ocal__row,
+.m-ocal__row-tool,
+.m-ocal__agenda-toggle,
 .m-ocal__add,
 .m-ocal__retry {
   transition:

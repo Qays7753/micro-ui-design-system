@@ -112,6 +112,18 @@ The two form screenshots above are references for information hierarchy only. Th
 - The selected/today/focus/error/success roles remain semantically distinct.
 - The visual result should feel native, calm, dense, and professional, but visibly belong to this independent system.
 
+## Implementation decisions recorded (2026-10-25)
+
+The implemented contract (documented in `components/order-schedule/specification.md` and verified by `tools/light-calendar-check.py`, 110 checks):
+
+1. **Two coordinated presentations implemented** over the same complete month grid: `expanded` (default: full grid + day panel below) and `agenda` (`data-ocal-presentation="agenda"`: the same grid with a documented 40px row floor + a quiet disclosure area). Switching is an explicit button («طي الشهر»/«توسيع الشهر», `aria-pressed`) that preserves `selectedDate`, `monthCursor`, and focus; collapsing always starts quiet.
+2. **No vertical drag/swipe was implemented — deliberate.** The reference video has a swipe gesture; this repository adds gesture code only when it is robust, testable, and does not compete with page scroll or horizontal month navigation, and no real-touch testing exists in scope. The explicit button + disclosure button are the full keyboard/touch paths.
+3. **The day is the entry point (owner decision enforced):** tapping a day updates selection, emits `day-select` once, and updates the day panel / disclosure label immediately. No floating thumb-zone Add button, no Bottom Sheet, no layer anywhere in this flow (asserted by regression: "no floating add control and no bottom-sheet layer exist in this flow").
+4. **Selected-day actions are host-owned:** Add via `add-request {date}`; per-row Edit/Delete only when the host enables `orderActions {edit,delete}`, rendered only on day-panel/agenda rows (the day-action surfaces), never in the list view. The component emits `order-edit-request`/`order-delete-request {id}` only — every actual editor/route is host-owned. The Showcase demonstrates the full loop with a clearly labelled local simulation editor (in-page, B02 fields composition, Escape/Cancel restoration).
+5. **Collapsed blank-area behavior:** the quiet disclosure area starts collapsed; tapping it reveals ONLY the selected day's items (content derives from `selectedDate` alone, so a stale `monthCursor` can never leak another day); it never changes the selection and emits no event. Keyboard: the disclosure button is a real button (`aria-expanded`/`aria-controls`); Escape collapses and restores focus. Empty day shows an honest empty state + Add.
+6. **Markers:** day cells keep the bounded contract (counter + max-3 semantic dots, both hidden visually in agenda where the disclosure + aria-label carry the meaning), and the cell `aria-label` now also summarizes the statuses («…، 5 طلبات (قيد التنفيذ، مكتمل، معلق)»). The agenda/list rows repeat status as text + semantic chip (no dot inside chips).
+7. **What was adopted conceptually vs deliberately not copied:** adopted — expand/collapse with preserved month context, selected-day agenda below the grid, day-as-entry-point actions, restrained markers, disclosure of only the selected day. Not copied — Samsung's exact grid density/typography/colors/icons, the bottom-sheet Add flow, the floating Add button, the swipe gesture (untestable here), and any form layout beyond the host-owned B02 composition.
+
 ## Required Z AI review output
 
 Before declaring the Calendar complete, provide:

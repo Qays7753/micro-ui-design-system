@@ -26,7 +26,7 @@
   color: var(--micro-text-primary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -99,7 +99,7 @@
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .m-info-card__values > .m-info-card__reading {
@@ -112,7 +112,7 @@
   color: var(--micro-text-primary);
   font-size: var(--micro-amount2-size);
   line-height: var(--micro-amount2-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -129,7 +129,7 @@
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   font-family: var(--micro-font-family);
   direction: rtl;
   unicode-bidi: isolate;

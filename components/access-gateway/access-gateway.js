@@ -204,7 +204,7 @@
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, 'تعذّر تجهيز نموذج الدخول — تأكد من اكتمال حقوله.', 'error');
+        setMessage(form, 'نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.', 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -231,7 +231,7 @@
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
         /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
-        setMessage(form, 'هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة.', 'info');
+        setMessage(form, 'هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.', 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
@@ -254,7 +254,7 @@
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
       }).catch(function (error) {
-        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.'), 'error');
+        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة.'), 'error');
       }).then(function () {
         if (!alive()) return;
         form.dataset.microAccessBusy = 'false';

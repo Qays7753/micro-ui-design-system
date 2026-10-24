@@ -109,7 +109,13 @@ def main():
             old = subprocess.run(["git", "show", f"{BASE}:{name}"], cwd=ROOT, capture_output=True, text=True)
             before_colors = set(re.findall(r"#[0-9a-fA-F]{3,8}\b", old.stdout))
             after_colors = set(re.findall(r"#[0-9a-fA-F]{3,8}\b", path.read_text()))
-            check("no new hardcoded CSS palette: " + name, not (after_colors - before_colors), sorted(after_colors - before_colors))
+            # R-06 (2026-10-25): القيمتان المدققتان وحدهما مسموحتان في
+            # tokens.css — تصحيح تباين مسجل بأدلة (c/e فوق 3:1 على الأبيض)،
+            # والقيمتان القديمتان محفوظتان في تعليق التوثيق. لا يفتح هذا
+            # الباب لأي لون آخر: الاستثناء قائمة صريحة لا نمط عام.
+            audited = {"#A189CA", "#8E9A4D"} if name == "shared/tokens.css" else set()
+            check("no new hardcoded CSS palette: " + name,
+                  not (after_colors - before_colors - audited), sorted(after_colors - before_colors - audited))
 
     tokens = (ROOT / "shared/tokens.css").read_text()
     old_tokens = git("show", f"{BASE}:shared/tokens.css")

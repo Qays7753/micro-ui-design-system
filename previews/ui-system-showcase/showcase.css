@@ -44,7 +44,7 @@ body {
   margin-block-end: 14px;
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 .showcase-brand__logo { display: block; width: 92px; height: 32px; object-fit: contain; object-position: start center; }
 .showcase-brand__rule { width: 1px; height: 20px; background: var(--micro-border-divider); }
@@ -53,14 +53,14 @@ body {
   margin: 0 0 4px;
   color: var(--micro-brand-primary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-header__title {
   margin: 0;
   font-size: var(--micro-heading-large-size);
   line-height: var(--micro-heading-large-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-header__lede {
@@ -104,7 +104,7 @@ body {
   border-radius: var(--micro-radius-chip);
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   text-decoration: none;
 }
 .showcase-nav__link:hover,
@@ -129,12 +129,13 @@ body {
   padding-block: 6px 0;
   color: var(--micro-text-hint);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .sc-controls-tag .sc-controls-tag__mark {
   color: var(--micro-brand-primary);
-  font-weight: 700;
+  /* R-38 (2026-10-25): 600 لا 700 — لا ملفات وزن 700 مشحونة (لا faux-bold) */
+  font-weight: var(--micro-weight-semibold);
 }
 
 .showcase-controls__inner {
@@ -152,7 +153,7 @@ body {
   flex: none;
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .sc-ctl .m-seg { flex: 0 1 auto; }
@@ -199,15 +200,15 @@ body {
   margin: 0;
   color: var(--micro-brand-primary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   letter-spacing: 0;
 }
 
 .sc-section__title {
   margin: 0;
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
+  font-size: var(--micro-section-title-size);
+  line-height: var(--micro-section-title-line);
+  font-weight: var(--micro-weight-semibold);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -230,7 +231,7 @@ body {
   background: var(--micro-surface-base);
   color: var(--micro-text-secondary);
   font-size: var(--micro-secondary-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 .sc-pill--current,
 .sc-pill--draft,
@@ -256,7 +257,7 @@ body {
   margin: 0;
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-secondary);
 }
 

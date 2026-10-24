@@ -312,7 +312,7 @@ def main():
                             table_times = ([row.locator("td").nth(0).inner_text() for row in table_rows]
                                            if kind == "time" else [])
                             expected_values = [
-                                "— غير متاح" if item.get("value") is None or item.get("value") == "غير رقمي"
+                                "(غير متاح)" if item.get("value") is None or item.get("value") == "غير رقمي"
                                 else ("-3 (سالب غير مرسوم)" if item.get("value") == "-3"
                                       else item.get("value", "— غير متاح"))
                                 for item in items

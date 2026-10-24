@@ -41,7 +41,9 @@ HTML = """<!doctype html><html lang="ar" dir="rtl"><head>
 html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--micro-text-primary)}
 #fixture{width:100%;padding:8px;box-sizing:border-box}
 #order-root{margin-inline:auto;max-width:100%;font-family:var(--micro-font-family)}
-</style></head><body><main id="fixture"><div id="order-root"></div></main>
+</style></head><body><main id="fixture"><div id="order-root"></div>
+<button type="button" id="after-root-focus" style="margin-top:8px">هدف تركيز خارج المكوّن</button>
+</main>
 <script src="/components/order-schedule/order-schedule.js"></script>
 <script>
 (() => {
@@ -61,10 +63,14 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
   ];
   window.fixtureOrders = orders;
   window.events = [];
-  ['order-schedule:day-select','order-schedule:order-open','order-schedule:add-request'].forEach(name =>
+  ['order-schedule:day-select','order-schedule:order-open','order-schedule:add-request',
+   'order-schedule:order-edit-request','order-schedule:order-delete-request'].forEach(name =>
     root.addEventListener(name, event => window.events.push({name,detail:event.detail})));
+  const withActions = q.get('actions') === '1';
   window.instance = MicroOrderSchedule.init(root,{
     orders, today:'2026-10-07', selectedDate:'2026-10-31', weekStart:6,
+    presentation: q.get('presentation') === 'agenda' ? 'agenda' : 'expanded',
+    orderActions: withActions ? { edit: true, delete: true } : {},
     statuses:{progress:{label:'قيد التنفيذ',tone:'progress'},done:{label:'مكتمل',tone:'success'},hold:{label:'معلق',tone:'warning'}}
   });
 })();
@@ -338,11 +344,13 @@ def main():
                   page.locator("[data-ocal-status='empty']").count() == 1
                   and page.locator("[data-ocal-status='empty'] [data-ocal-action='add']").count() == 1)
             page.evaluate("instance.setData(window.fixtureOrders);instance.setView('calendar');instance.setSelectedDate('2026-10-22')")
-            check("one and many order data are preserved in counts and rows",
-                  page.locator("[data-ocal-date='2026-10-22']").get_attribute("aria-label").endswith("5 طلبات")
+            check("one and many order data are preserved in counts, rows, and summarized statuses",
+                  page.locator("[data-ocal-date='2026-10-22']").get_attribute("aria-label").endswith(
+                      "5 طلبات (قيد التنفيذ، مكتمل، معلق)")
                   and page.locator("[data-ocal-day-panel] [data-ocal-id]").count() == 5)
-            check("one-order day count remains visible",
-                  page.locator("[data-ocal-date='2026-10-31']").get_attribute("aria-label").endswith("طلب واحد"))
+            check("one-order day count and status remain visible",
+                  page.locator("[data-ocal-date='2026-10-31']").get_attribute("aria-label").endswith(
+                      "طلب واحد (قيد التنفيذ)"))
 
             # ---------- F) Wide grid keyboard navigation (RTL/LTR) ----------
             page.goto(f"{base}?root=398&dir=rtl", wait_until="load")
@@ -373,7 +381,165 @@ def main():
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-07"
                   and page.evaluate("events.length===0"))
 
-            # ---------- G) Example page follows the compact contract ----------
+            # ---------- H) Expanded/agenda presentation, day-entry actions, disclosure area ----------
+            # عقد 2026-10-25 (مرجع مفهوم التقويم): expanded/agenda عرضان متناسقان
+            # لشبكة الشهر؛ اليوم نقطة الدخول؛ منطقة إفصاح هادئة تحت الشهر المضغوط
+            # تكشف طلبات اليوم المحدد فقط؛ أفعال تعديل/حذف host-owned على صفوف
+            # سطح فعل اليوم؛ لا زر عائم ولا Bottom Sheet في هذا المسار.
+            page.goto(f"{base}?root=358&dir=rtl&actions=1", wait_until="load")
+            check("expanded default: day panel with rows, no disclosure, presentation attribute",
+                  page.locator("#order-root").get_attribute("data-ocal-presentation") == "expanded"
+                  and page.locator("[data-ocal-day-panel]").count() == 1
+                  and page.locator("[data-ocal-agenda]").count() == 0
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='add']").count() == 1)
+            check("expanded day panel exposes host-owned edit/delete row actions at 48px",
+                  page.locator("[data-ocal-day-panel] [data-ocal-action='order-edit']").count() == 1
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-delete']").count() == 1
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-edit']")
+                      .evaluate("e=>{const r=e.getBoundingClientRect();return r.width>=48&&r.height>=48}")
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-delete']")
+                      .evaluate("e=>{const r=e.getBoundingClientRect();return r.width>=48&&r.height>=48}"))
+            page.locator("[data-ocal-day-panel] [data-ocal-action='order-edit']").click()
+            check("row edit action emits the host-owned edit-request event once",
+                  page.evaluate("events.length===1&&events[0].name==='order-schedule:order-edit-request'&&events[0].detail.id==='one'"))
+            page.locator("[data-ocal-day-panel] [data-ocal-action='order-delete']").click()
+            check("row delete action emits the host-owned delete-request event once",
+                  page.evaluate("events.length===2&&events[1].name==='order-schedule:order-delete-request'&&events[1].detail.id==='one'"))
+            check("no floating add control and no bottom-sheet layer exist in this flow",
+                  page.locator(".m-ocal__fab, .m-ocal__sheet, [role='dialog'][data-ocal-sheet]").count() == 0
+                  and page.evaluate("(()=>{const s=getComputedStyle(document.querySelector('.m-ocal'));"
+                                    "return !s.position||s.position!=='fixed';})()"))
+
+            # Presentation toggle: expanded -> agenda (compact month, quiet disclosure)
+            page.locator("[data-ocal-action='presentation']").click()
+            check("toggle collapses to agenda presentation with complete month and quiet disclosure",
+                  page.locator("#order-root").get_attribute("data-ocal-presentation") == "agenda"
+                  and page.locator("#order-root").get_attribute("data-ocal-agenda-open") == "false"
+                  and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 31
+                  and page.locator("[data-ocal-agenda]").count() == 1
+                  and page.locator("[data-ocal-agenda-body] > *").count() == 0
+                  and page.locator("[data-ocal-day-panel]").count() == 0
+                  and page.evaluate("document.activeElement.getAttribute('data-ocal-action')==='presentation'"))
+            agenda_cells = page.locator("[data-ocal-grid] [data-ocal-date]").evaluate_all(
+                "es=>es.every(e=>{const r=e.getBoundingClientRect();return r.height>=24&&r.width>=24})")
+            check("agenda month cells keep the documented compressed floor (>=24x24) with all days",
+                  agenda_cells)
+            check("agenda disclosure is keyboard-reachable with label and collapsed state",
+                  page.locator("[data-ocal-action='agenda-toggle']").count() == 1
+                  and page.locator("[data-ocal-action='agenda-toggle']").get_attribute("aria-expanded") == "false"
+                  and page.locator("[data-ocal-action='agenda-toggle']").get_attribute("aria-controls") ==
+                      page.locator("[data-ocal-agenda-body]").get_attribute("id")
+                  and "31 أكتوبر 2026" in page.locator(".m-ocal__agenda-date").inner_text()
+                  and "طلب واحد" in page.locator(".m-ocal__agenda-count").inner_text())
+
+            # Tap the disclosure area: reveals ONLY the selected day's items; no selection change/event
+            page.locator("[data-ocal-action='agenda-toggle']").click()
+            check("disclosure tap reveals the selected day's rows and actions without changing selection",
+                  page.locator("#order-root").get_attribute("data-ocal-agenda-open") == "true"
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row'][data-ocal-id='one']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='add']").count() == 1
+                  and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-31"
+                  and page.evaluate("events.length===2"))
+            check("agenda rows expose edit/delete actions and no status dot inside chips",
+                  page.locator("[data-ocal-agenda-body] [data-ocal-action='order-edit']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-delete']").count() == 1
+                  and page.locator(".m-ocal__row-statusdot").count() == 0)
+            page.keyboard.press("Escape")
+            check("Escape collapses the open agenda and restores focus to the disclosure button",
+                  page.locator("#order-root").get_attribute("data-ocal-agenda-open") == "false"
+                  and page.locator("[data-ocal-agenda-body]").is_hidden()
+                  and page.evaluate("document.activeElement.getAttribute('data-ocal-action')==='agenda-toggle'"))
+
+            # Stale monthCursor can never leak another day into the agenda
+            page.locator("[data-ocal-action='prev-month']").click()
+            check("browsing another month in agenda mode shows the honest browsing note",
+                  "سبتمبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  and page.locator("[data-ocal-agenda][data-ocal-day-browsing='true']").count() == 1
+                  and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-31")
+            page.locator("[data-ocal-action='agenda-toggle']").click()
+            check("agenda still reveals only the selected day's items while browsing another month",
+                  page.locator("#order-root").get_attribute("data-ocal-agenda-open") == "true"
+                  and "31 أكتوبر 2026" in page.locator(".m-ocal__agenda-date").inner_text()
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row'][data-ocal-id='one']").count() == 1)
+
+            # Empty selected day: honest empty disclosure state with add action
+            page.evaluate("instance.setSelectedDate('2026-10-02');instance.setPresentation('agenda')")
+            page.locator("[data-ocal-action='agenda-toggle']").click()
+            check("empty selected day reveals an honest empty state with add action",
+                  page.locator("[data-ocal-agenda-body] [data-ocal-status='empty']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='add']").count() == 1
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row']").count() == 0)
+
+            # Selected date remains stable through collapse/expand and view switches
+            page.locator("[data-ocal-action='presentation']").click()
+            check("expand restores the full day panel while selection stays stable",
+                  page.locator("#order-root").get_attribute("data-ocal-presentation") == "expanded"
+                  and page.locator("[data-ocal-day-panel]").count() == 1
+                  and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-02"
+                  and "2 أكتوبر 2026" in page.locator(".m-ocal__daypanel-title").inner_text())
+
+            # Agenda presentation initialized directly + LTR equivalence
+            page.goto(f"{base}?root=398&dir=ltr&presentation=agenda&actions=1", wait_until="load")
+            check("agenda presentation initializes directly in LTR with the disclosure contract",
+                  page.locator("#order-root").get_attribute("data-ocal-presentation") == "agenda"
+                  and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 31
+                  and page.locator("[data-ocal-action='agenda-toggle']").get_attribute("aria-expanded") == "false")
+            page.locator("[data-ocal-grid] [data-ocal-date='2026-10-22']").click()
+            check("day tap in agenda mode is the entry point: selects, emits, updates disclosure label",
+                  page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-22"
+                  and page.evaluate("events.length===1&&events[0].name==='order-schedule:day-select'&&events[0].detail.date==='2026-10-22'")
+                  and "22 أكتوبر 2026" in page.locator(".m-ocal__agenda-date").inner_text()
+                  and "5 طلبات" in page.locator(".m-ocal__agenda-count").inner_text())
+            page.locator("[data-ocal-action='agenda-toggle']").click()
+            check("disclosure in LTR reveals the day's five rows with per-row actions",
+                  page.locator("[data-ocal-agenda-body] [data-ocal-action='order-row']").count() == 5
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-edit']").count() == 5
+                  and page.locator("[data-ocal-agenda-body] [data-ocal-action='order-delete']").count() == 5)
+            add_btn = page.locator("[data-ocal-agenda-body] [data-ocal-action='add']")
+            add_btn.click()
+            check("agenda add button emits add-request with the selected day",
+                  page.evaluate("events.length===2&&events[1].name==='order-schedule:add-request'&&events[1].detail.date==='2026-10-22'"))
+            overflow = page.locator("#order-root").evaluate(
+                "e=>({client:e.clientWidth,scroll:e.scrollWidth,document:document.documentElement.scrollWidth})")
+            check("agenda presentation has no horizontal overflow at wide root",
+                  overflow["scroll"] <= overflow["client"] + 1, overflow)
+
+            # Loading/error keep the views bar usable (R-13) in agenda presentation too
+            page.evaluate("instance.setLoading(true)")
+            check("loading keeps the views bar usable above the status box",
+                  page.locator("[data-ocal-status='loading'][role='status']").count() == 1
+                  and page.locator(".m-ocal__views-btn[aria-pressed='true']").count() == 1
+                  and page.locator("[data-ocal-grid]").count() == 0)
+            page.evaluate("instance.setLoading(false);instance.setError(()=>{})")
+            check("error keeps the views bar usable and retry reachable",
+                  page.locator("[data-ocal-status='error'][role='alert']").count() == 1
+                  and page.locator(".m-ocal__views-btn[aria-pressed='true']").count() == 1
+                  and page.locator("[data-ocal-action='retry']").count() == 1)
+
+            # Picker focus recovery: tabbing away closes it honestly (R-14)
+            page.evaluate("instance.setError(null);instance.setView('calendar');instance.setCalendarView('month')")
+            page.locator(".m-ocal__cal-title [data-ocal-action='month-picker']").click()
+            check("picker opens with aria-expanded and dialog role",
+                  page.locator("[data-ocal-picker][role='dialog']").count() == 1
+                  and page.locator("[data-ocal-action='month-picker']").get_attribute("aria-expanded") == "true")
+            page.locator("#after-root-focus").focus()
+            page.wait_for_timeout(80)
+            check("focus leaving the component closes the picker honestly with updated aria-expanded",
+                  page.locator("[data-ocal-picker]").count() == 0
+                  and page.locator("[data-ocal-action='month-picker']").get_attribute("aria-expanded") == "false")
+
+            # destroy() removes every contract attribute (R-27)
+            page.evaluate("window.instance.destroy()")
+            check("destroy removes all contract attributes and content",
+                  page.evaluate("(()=>{const r=document.querySelector('#order-root');"
+                                "return ['data-ocal-root','data-ocal-init','data-ocal-layout','data-ocal-compact',"
+                                "'data-ocal-selected-date','data-ocal-presentation','data-ocal-agenda-open',"
+                                "'data-ocal-view','data-ocal-cal-view']"
+                                ".every(a=>!r.hasAttribute(a)) && r.children.length===0 && !r.classList.contains('m-ocal');})()"))
+
+            # ---------- I) Example page follows the compact contract ----------
             page.set_viewport_size({"width": 320, "height": 900})
             page.goto(f"http://127.0.0.1:{server.server_port}/components/order-schedule/example-usage.html",
                       wait_until="load")

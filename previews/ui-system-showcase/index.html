@@ -2,26 +2,26 @@
 <!-- =========================================================
   Micro UI — معرض نظام الواجهة (UI System Showcase Prototype)
   الملف: previews/ui-system-showcase/index.html
-  الحالة: PROTOTYPE — عرض تفاعلي لمكوّنات النظام، ليس تطبيقًا إنتاجيًا.
+  الحالة: PROTOTYPE؛ عرض تفاعلي لمكوّنات النظام، ليس تطبيقًا إنتاجيًا.
 
   المصدر: شجرة العمل الحالية (current working tree)
   كل عنصر معروض هو مكوّن حقيقي من components/ بتوكنات shared/tokens.css
-  وأصول assets/ الحالية — لا محاكاة شكلية ولا إعادة تنفيذ ولا لون جديد.
+  وأصول assets/ الحالية؛ لا محاكاة شكلية ولا إعادة تنفيذ ولا لون جديد.
 
-  شريط التحكم (أعلى): أدوات مراجعة فقط — RTL/LTR · عرض 320/360/390/430
+  شريط التحكم (أعلى): أدوات مراجعة فقط (RTL/LTR · عرض 320/360/390/430)
   · محتوى عادي/إجهاد · تصفية الحالة (current/draft-proposed/all).
   لا تحكم تكبير؛ المقياس ثابت.
 
-  السلوك: showcase.js (متحدات عرض حتمية محلية — لا شبكة/مصادقة/حفظ)
+  السلوك: showcase.js (متحدات عرض حتمية محلية؛ لا شبكة/مصادقة/حفظ)
   التنسيق: showcase.css (توكنات المكتبة فقط)
-  النسخة المكتفية ذاتيًا: standalone.html — مولدة بـ
+  النسخة المكتفية ذاتيًا: standalone.html مولدة بـ
   tools/build-ui-system-showcase-standalone.py (لا تُعدَّل يدويًا).
 ========================================================= -->
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — معرض نظام الواجهة (Prototype)</title>
+  <title>Micro معرض نظام الواجهة (Prototype)</title>
   <link rel="icon" type="image/svg+xml" href="../../assets/brand/micro-logo/v2/platform-icons/favicon/favicon.svg">
   <!-- Generated catalog payload: edit docs/COMPONENT-CATALOG.json, not this block. -->
   <script type="application/json" id="sc-component-catalog">{"schemaVersion":1,"scope":"independent-pre-transfer-ui-system","releaseTheme":"light-only","chartPolicy":{"preciseDefault":["bars","rows","table"],"specializedOptIn":["donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},"maturityVocabulary":["stable-ui","draft-for-review","proposed"],"families":[{"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},{"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},{"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},{"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},{"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},{"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},{"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},{"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},{"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},{"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},{"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},{"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},{"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},{"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}],"variants":[{"id":"donut","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"main-metric-featured","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"bubbles","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"metric-circles","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},{"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}]}</script>
@@ -50,7 +50,7 @@
 </head>
 <body data-view="overview">
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
-       — الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
+       الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
        أداة البناء تتحقق من كل رمز مقابل أصله بايت-ببايت (نمط F03 R1-02). -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
     <symbol id="i-info" viewBox="0 0 24 24" fill="none" data-icon-source="information-circle.svg"><!-- assets/icons/information-circle.svg -->
@@ -107,9 +107,11 @@
     <symbol id="i-account" viewBox="0 0 24 24" fill="none" data-icon-source="user-circle.svg"><!-- assets/icons/user-circle.svg -->
       <path d="M18.4984 19.1511C17.3377 17.4018 15.2947 16.2009 12.9313 16.0569L11.9984 16C11.6652 16.0083 11.3547 16.0194 11.0617 16.0325C8.71722 16.1376 6.66598 17.3796 5.5 19.1511" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M14.9961 10C14.9961 11.6569 13.6529 13 11.9961 13C10.3392 13 8.99609 11.6569 8.99609 10C8.99609 8.34315 10.3392 7 11.9961 7C13.6529 7 14.9961 8.34315 14.9961 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
     </symbol>
-    <symbol id="i-delete" viewBox="0 0 24 24" fill="none" data-icon-source="delete-02.svg"><!-- assets/icons/delete-02.svg -->
-      <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/> <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-    </symbol>
+    <symbol id="i-delete" viewBox="0 0 24 24" fill="none" data-icon-source="delete-02.svg"><!-- HugeIcons — Stroke Rounded | الأصل: Delete02Icon.js | ترخيص MIT | مصدر التحويل: assets/SOURCES.md -->
+  <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24" fill="none" data-icon-source="plus-sign.svg"><!-- assets/icons/plus-sign.svg -->
       <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
     </symbol>
@@ -146,9 +148,9 @@
 
   <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج).
        F-11 (2026-10-10): وسم مرئي صريح أعلى الشريط يفصله عن واجهة المنتج. -->
-  <div class="showcase-controls" id="state-lab" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
+  <div class="showcase-controls" id="state-lab" role="group" aria-label="أدوات مراجعة العرض؛ ليست واجهة منتج">
     <div class="showcase-controls__inner">
-      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span> — ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
+      <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span>؛ ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
       <div class="sc-ctl">
         <span class="sc-ctl__label" id="sc-dir-label">الاتجاه</span>
         <div class="m-seg" data-seg role="group" aria-labelledby="sc-dir-label" id="sc-dir-seg">
@@ -206,7 +208,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">01 · S01</p>
         <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current" data-catalog-family="surfaces">STABLE UI</span></h2>
-        <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
+        <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة؛ الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
       </div>
       <div class="sc-block sc-block--plain sc-surface-stage">
         <article class="m-surface m-surface--curves">
@@ -223,7 +225,7 @@
             <p class="m-surface__label">سطح plain</p>
             <h3 class="m-surface__title">قراءة ثانوية هادئة</h3>
             <p class="m-surface__amount">12.5</p>
-            <p class="m-surface__sub">المتغير المسطح بلا أمواج — لنفس دور القراءة</p>
+            <p class="m-surface__sub">المتغير المسطح بلا أمواج؛ لنفس دور القراءة</p>
           </div>
         </article>
         <p class="sc-hint">المتغيرات التاريخية (calm / waves / waves-v2 / depth) موسومة تاريخية في المواصفة ولا تُعرض هنا. مفاتيح الموجات (knobs) كلها PROPOSED ولم تُستخدم.</p>
@@ -259,7 +261,7 @@
           <button type="button" class="m-btn m-btn--secondary" id="sc-btn-pressed" aria-pressed="false">تبديل الضغط (.is-pressed)</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-btn-disable" aria-pressed="false">تبديل التعطيل</button>
         </div>
-        <p class="sc-hint" id="sc-buttons-status" aria-live="polite">الحالة الافتراضية — استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».</p>
+        <p class="sc-hint" id="sc-buttons-status" aria-live="polite">الحالة الافتراضية؛ استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».</p>
       </div>
     </section>
 
@@ -350,7 +352,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">04 · B03</p>
         <h2 class="sc-section__title" id="sc-selection-title">الاختيار <span class="sc-pill sc-pill--current" data-catalog-family="selection">STABLE UI</span></h2>
-        <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس — D-UI-05).</p>
+        <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس؛ D-UI-05).</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -423,7 +425,7 @@
                مع التسميات الطويلة يختار المستهلك نمطًا صريحًا بدل الالتفاف:
                m-seg--scroll (صف واحد + تمرير، سياسة الألسنة D-UI-01) أو
                m-seg--stack (تكديس عمودي). -->
-          <p class="sc-block__title">تسميات طويلة — سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
+          <p class="sc-block__title">تسميات طويلة؛ سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)</p>
           <div class="m-seg m-seg--scroll" data-seg data-choice-group role="group" aria-label="تسميات طويلة">
             <button type="button" class="m-seg__item" aria-pressed="true" data-fx-text="تسمية طويلة جدًا بلا مسافات">الطلبات النشطة</button>
             <button type="button" class="m-seg__item" aria-pressed="false" data-fx-text="تسمية أطول بكثير بلا أي مسافة">قيد التجهيز</button>
@@ -473,11 +475,11 @@
         <hr class="m-divider">
         <section class="m-section">
           <button type="button" class="m-section__head" aria-expanded="false" aria-controls="sc-org-body">
-            <span class="m-section-title" data-fx-text="تفاصيل التسوية — عنوان طويل يلتف على سطرين داخل رأس القسم القابل للطي دون قص">تفاصيل التسوية (قسم قابل للطي)</span>
+            <span class="m-section-title" data-fx-text="تفاصيل التسوية؛ عنوان طويل يلتف على سطرين داخل رأس القسم القابل للطي دون قص">تفاصيل التسوية (قسم قابل للطي)</span>
             <svg class="m-section__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
           </button>
           <div class="m-section__body" id="sc-org-body" hidden>
-            <p>محتوى القسم — الطي الفوري بلا حركة تغيّر التخطيط، وaria-expanded يديره المكوّن، والحدث micro-organization:toggle يفصح عن الحالة.</p>
+            <p>محتوى القسم؛ الطي الفوري بلا حركة تغيّر التخطيط، وaria-expanded يديره المكوّن، والحدث micro-organization:toggle يفصح عن الحالة.</p>
           </div>
         </section>
         <div class="sc-row sc-row--tight">
@@ -511,11 +513,11 @@
           </article>
           <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
             <span class="m-info-card__label">مخزون عينة</span>
-            <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
+            <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">(غير متاح)</span><span class="m-info-card__unit"></span></span>
           </article>
         </div>
         <div>
-          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ — النقاط اختيارية في العرض الكامل</p>
+          <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ؛ النقاط اختيارية في العرض الكامل</p>
           <div class="m-info-strip" data-info-strip data-controls="compact" id="sc-strip">
             <div class="m-info-strip__viewport" data-info-strip-viewport tabindex="0" aria-label="بطاقات الأرقام التجريبية">
               <div class="m-info-strip__track" data-info-strip-track>
@@ -534,7 +536,7 @@
                 <div class="m-info-strip__slide">
                   <article class="m-info-card m-info-card--compact m-info-card--unavailable" aria-label="مخزون عينة، غير متاح">
                     <span class="m-info-card__label">مخزون عينة</span>
-                    <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">—</span><span class="m-info-card__unit">غير متاح</span></span>
+                    <span class="m-info-card__reading m-info-card__reading--unavailable"><span class="m-info-card__number" dir="ltr">(غير متاح)</span><span class="m-info-card__unit"></span></span>
                   </article>
                 </div>
               </div>
@@ -557,7 +559,7 @@
           </div>
         </div>
         <div>
-          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek — ADOPTED)</p>
+          <p class="sc-block__title">شريط peek (opt-in بـ data-info-peek + صنف m-info-peek؛ ADOPTED)</p>
           <!-- F-03 (2026-10-10): عقد variant الـpeek يتطلب الصنف m-info-peek مع السمة
                data-info-peek (مفتاحا CSS الهندسية) — كان الصنف غائبًا فبقيت البطاقة
                النشطة بعرض كامل ولا تلمح المجاورة. -->
@@ -600,7 +602,7 @@
             </div>
             <span class="m-info-strip__status" data-info-strip-status aria-live="polite" aria-atomic="true"></span>
           </div>
-          <p class="sc-hint">السحب 1:1 بإصبع حقيقي غير مفحوص هنا (Chromium فقط) — استخدم الأسهم/النقاط أو لوحة المفاتيح. لا تبديل تلقائي في كلا الشريطين (عقد العائلة).</p>
+          <p class="sc-hint">السحب 1:1 بإصبع حقيقي غير مفحوص هنا (Chromium فقط)؛ استخدم الأسهم/النقاط أو لوحة المفاتيح. لا تبديل تلقائي في كلا الشريطين (عقد العائلة).</p>
         </div>
       </div>
     </section>
@@ -620,10 +622,11 @@
           </div>
           <div class="m-stat">
             <span class="m-stat__label">قيمة غير متاحة</span>
-            <span class="m-stat__value"><span class="m-stat__num" dir="ltr">—</span><span class="m-stat__unit">غير متاح</span></span>
+            <!-- R-04 (2026-10-25): حالة القيمة المفقودة بنص موسوم لا بشرطة em -->
+            <span class="m-stat__value"><span class="m-stat__num m-stat__num--unknown" dir="ltr">(غير متاح)</span><span class="m-stat__unit"></span></span>
           </div>
         </div>
-        <div class="m-chart m-chart--bars" id="sc-chart-bars" data-chart="bars" data-max="12" data-summary-text="توزيع العمليات — البيانات في HTML المصدر وتتغير مع fixture العرض.">
+        <div class="m-chart m-chart--bars" id="sc-chart-bars" data-chart="bars" data-max="12" data-summary-text="توزيع العمليات. البيانات في HTML المصدر وتتغير مع fixture العرض.">
           <h3 class="m-chart__title">توزيع العمليات (أعمدة)</h3>
           <ul class="m-chart__data" data-fx-live="sc-bars" hidden>
             <li data-series="a" data-label="مبيعات" data-value="8"></li>
@@ -640,7 +643,7 @@
           <div class="m-chart__plot" data-plot></div>
           <p class="m-chart__summary" data-summary></p>
         </div>
-        <div class="m-chart m-chart--line" id="sc-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع — البيانات المفقودة تقطع المسار ولا تصبح صفرًا.">
+        <div class="m-chart m-chart--line" id="sc-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع. البيانات المفقودة تقطع المسار ولا تصبح صفرًا.">
           <h3 class="m-chart__title">حركة الطلبات (خط)</h3>
           <ul class="m-chart__data" data-fx-live="sc-line" hidden>
             <li data-series="a" data-label="السبت" data-value="3"></li>
@@ -661,7 +664,7 @@
         </div>
         <div class="sc-grid-2">
           <div class="m-chart m-chart--donut" id="sc-chart-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="توزيع الطلبات حسب الحالة (مقام معلن 25).">
-            <h3 class="m-chart__title">توزيع الحالات — خيار حصص اختياري (donut)</h3>
+            <h3 class="m-chart__title">توزيع الحالات (خيار حصص اختياري donut)</h3>
             <ul class="m-chart__data" data-fx-live="sc-donut" hidden>
               <li data-series="a" data-label="مكتملة" data-value="11"></li>
               <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
@@ -675,15 +678,15 @@
             <div class="m-chart__plot m-donut" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
-          <div class="m-chart m-chart--bubbles" id="sc-chart-bubbles" data-chart="bubbles" data-rmax="52" data-summary-text="أحجام تشغيلية — مساحة الدائرة تتناسب مع القيمة.">
-            <h3 class="m-chart__title">فقاعات نسبية — عرض اختياري للتقريب (bubbles)</h3>
+          <div class="m-chart m-chart--bubbles" id="sc-chart-bubbles" data-chart="bubbles" data-rmax="52" data-summary-text="أحجام تشغيلية. مساحة الدائرة تتناسب مع القيمة.">
+            <h3 class="m-chart__title">فقاعات نسبية (عرض اختياري للتقريب bubbles)</h3>
             <ul class="m-chart__data" data-fx-live="sc-bubbles" hidden>
               <li data-series="a" data-label="الفرع الشمالي" data-value="40"></li>
               <li data-series="b" data-label="الفرع الجنوبي" data-value="12"></li>
               <li data-series="c" data-label="مستودع" data-value="5"></li>
             </ul>
             <template data-fx-alt="sc-bubbles">
-              <li data-series="a" data-label="الفرع الشمالي — تشغيل ربع سنوي كامل" data-value="90"></li>
+              <li data-series="a" data-label="الفرع الشمالي: تشغيل ربع سنوي كامل" data-value="90"></li>
               <li data-series="b" data-label="الفرع الجنوبي" data-value="3"></li>
               <li data-series="c" data-label="مستودع" data-value=""></li>
             </template>
@@ -730,7 +733,7 @@
       </div>
       <div class="sc-block sc-stack" id="sc-signed" aria-labelledby="sc-signed-title">
       <div class="sc-section__head">
-        <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع — Data</h2>
+        <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع (Data)</h2>
         <p class="sc-section__desc">امتداد للعائلة نفسها، لا عائلة جديدة. محور صفر مشترك، وقراءات كاملة، ولا تحويل للسالب إلى موجب.</p>
       </div>
       <div class="sc-stack">
@@ -762,15 +765,17 @@
       </div>
     </section>
 
-    <!-- ============ 07b · packed-circle (ملحق PROPOSED) ============ -->
+    <!-- ============ 07b · packed-circle (ملحق PROPOSED — قرار عرض 2026-10-25) ============ -->
     <section class="sc-section" id="sc-packed" data-status="proposed" aria-labelledby="sc-packed-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">07b · B05 ext</p>
         <h2 class="sc-section__title" id="sc-packed-title">الدوائر الملتصقة packed-circle <span class="sc-pill sc-pill--proposed" data-catalog-family="data" data-catalog-variant="packed-circle">PROPOSED</span></h2>
-        <p class="sc-section__desc">ملحق opt-in فوق B05 (m-chart--packed): دوائر متداخلة تمثل المساحة، قيم حقيقية داخلها بلا نسب. بحسب المصدر: «يحتاج مراجعة واعتماد المالك» — عرضه هنا لا يعني اعتماده.</p>
+        <p class="sc-section__desc">ملحق opt-in فوق B05. قرار عرض 2026-10-25 (دليل قياس وإخفاء بصري عند 320px): التداخل يخفي أجزاء الدوائر ويشوّه مقارنة المساحة على الهاتف، فالبيانات نفسها تُعرض هنا بالأعمدة (المفهوم الصحيح للمقارنة الدقيقة). يبقى الملحق PROPOSED في المكتبة لخيار المضيف الصريح بلا عرض افتراضي، وحدوده موثقة في مواصفته.</p>
       </div>
       <div class="sc-block">
-        <div class="m-chart m-chart--bubbles m-chart--packed" data-chart-packed data-rmax="64" data-max="100000" id="sc-chart-packed">
+        <!-- البديل المعتمد للعرض: أعمدة بنفس مصدر البيانات (المفهوم الصحيح للمقارنة الدقيقة) -->
+        <div class="m-chart m-chart--bars" data-chart="bars" data-max="100000" id="sc-chart-packed">
+          <h3 class="m-chart__title">الإيرادات والتكاليف والمصروفات (أعمدة؛ البديل المعتمد)</h3>
           <ul class="m-chart__data" data-fx-live="sc-packed" hidden>
             <li data-series="a" data-label="الإيرادات" data-value="84300" data-display="84,300"></li>
             <li data-series="b" data-label="التكاليف" data-value="52100" data-display="52,100"></li>
@@ -784,7 +789,7 @@
           <div class="m-chart__plot" data-plot></div>
           <p class="m-chart__summary" data-summary></p>
         </div>
-        <p class="sc-hint">حالة القيم (صفر/سالب/مفقود) بنص صريح داخل الرسم — نفس عقد الحالة المنفصل للملحق.</p>
+        <p class="sc-hint">حالة القيم (صفر/سالب/مفقود) بنص صريح في الرسم والمفتاح. الأعمدة هي الافتراضي للمقارنة الدقيقة؛ الدوائر الملتصقة خيار مضيف صريح موثق بحدوده (ليست عرض هاتف) في مواصفة الملحق.</p>
       </div>
     </section>
 
@@ -796,28 +801,27 @@
         <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا؛ الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
       </div>
       <div class="sc-block sc-stack">
-        <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
-          <button type="button" class="m-btn m-btn--secondary" id="sc-metric-layout" aria-pressed="false">تبديل ترتيب الدوائر (separated / overlap)</button>
+        <!-- قرار عرض 2026-10-25 (دليل قياس عند 320px): دوائر المقاييس بحجم 112/70/42px
+             فارغة ديكوريًا والقيم خارجها — استُبدل عرضها هنا ببطاقات قراءة مدمجة بنفس
+             المصدر (m-stat)؛ المكوّن نفسه يبقى opt-in في المكتبة بحدوده الموثقة. -->
+        <p class="sc-block__title">قراءات تشغيلية مدمجة (بطاقات)؛ البديل المعتمد للدوائر على الهاتف</p>
+        <div class="sc-grid-2" id="sc-circles" role="list" aria-label="بطاقات قراءات تشغيلية مدمجة؛ البديل المعتمد للهاتف">
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label" data-fx-text="عنصر أ بقيمة تشغيلية كبيرة جدًا">عنصر أ</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="98">64</span><span class="m-stat__unit">وحدة</span></span>
+          </div>
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label">عنصر ب</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="3">25</span><span class="m-stat__unit">وحدة</span></span>
+          </div>
+          <div class="m-stat" role="listitem">
+            <span class="m-stat__label">عنصر ج</span>
+            <span class="m-stat__value"><span class="m-stat__num" dir="ltr" data-fx-text="(غير متاح)">9</span><span class="m-stat__unit" data-fx-text="">وحدة</span></span>
+          </div>
         </div>
-        <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="64" id="sc-circles" aria-label="عرض اختياري لأحجام نسبية لقراءات تشغيلية">
-          <h3 class="m-metric-circles__title">عرض اختياري للتقريب · أحجام نسبية والقراءات الدقيقة في المفتاح</h3>
-          <ul class="m-metric-circles__source" data-metric-source data-fx-live="sc-circles-src" hidden>
-            <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
-            <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
-            <li data-label="عنصر ج" data-value="9" data-unit="وحدة" data-series="c"></li>
-          </ul>
-          <template data-fx-alt="sc-circles-src">
-            <li data-label="عنصر أ بقيمة تشغيلية كبيرة جدًا" data-value="98" data-unit="وحدة" data-series="a"></li>
-            <li data-label="عنصر ب" data-value="3" data-unit="وحدة" data-series="b"></li>
-            <li data-label="عنصر ج" data-value="" data-unit="وحدة" data-series="c"></li>
-          </template>
-          <ol class="m-metric-circles__items" data-metric-items aria-label="المقارنة"></ol>
-          <ul class="m-metric-circles__fallback" data-metric-fallback aria-label="مفتاح التسميات والقراءات الدقيقة"></ul>
-          <p class="m-metric-circles__empty" data-metric-scale></p>
-          <p class="m-metric-circles__empty" data-metric-empty hidden></p>
-        </section>
-        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة">
-          <h3 class="m-main-metric__title">مقارنة مسطّحة — للقراءة الدقيقة</h3>
+        <p class="sc-hint">القيمة نفسها هي المقارنة عند هذا الحجم: قراءة مباشرة بلا تخمين مساحة. المكوّن الدائري يبقى خيارًا صريحًا للمضيف بحدوده الموثقة (ليس عرض هاتف).</p>
+        <section class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-flat" aria-label="مقارنة مستقلة مسطحة؛ الموصى بها للقراءة العريضة">
+          <h3 class="m-main-metric__title">مقارنة مسطّحة؛ للقراءة الدقيقة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -841,9 +845,9 @@
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
+        <p class="sc-hint">الأشرطة الموقعة: هندسة محور الصفر ثابتة الاتجاه بمعزل عن اتجاه الصفحة (الموجب والسالب على طرفي الصفر دائمًا)؛ لا تجميع ولا رياضيات مالية؛ القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
         <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز اختياري لقيمة رئيسية ومقارنة مستقلة">
-          <h3 class="m-main-metric__title">قراءة رئيسية — إبراز featured اختياري مع مقارنات مستقلة</h3>
+          <h3 class="m-main-metric__title">قراءة رئيسية؛ إبراز featured اختياري مع مقارنات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -862,7 +866,7 @@
           </div>
         </section>
         <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric-compact" aria-label="مقارنة مدمجة بالبيانات نفسها">
-          <h3 class="m-main-metric__title">قراءة مدمجة — نفس بيانات المقارنة</h3>
+          <h3 class="m-main-metric__title">قراءة مدمجة؛ نفس بيانات المقارنة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -888,13 +892,13 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">09 · B06</p>
         <h2 class="sc-section__title" id="sc-messages-title">الرسائل والحالات <span class="sc-pill sc-pill--current" data-catalog-family="messages">STABLE UI</span></h2>
-        <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert — D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
+        <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert؛ D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-stack--tight">
           <div class="m-note m-note--info" id="sc-note-info">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك — الدور status من النوع.</span></span>
+            <span class="m-note__text"><b class="m-note__title">تحديث متاح</b><span class="m-note__body">ملاحظة معلوماتية بصياغة من المستهلك؛ الدور status من النوع.</span></span>
             <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-info" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--success" id="sc-note-success">
@@ -908,12 +912,12 @@
           </div>
           <div class="m-note m-note--error" id="sc-note-error">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-alert-circle"/></svg>
-            <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف — الدور alert من النوع تلقائيًا.</span></span>
+            <span class="m-note__text"><b class="m-note__title">فشل الإرسال</b><span class="m-note__body">خطأ بنص قابل للتصرف؛ الدور alert من النوع تلقائيًا.</span></span>
             <button type="button" class="m-btn m-btn--icon m-btn--light m-note__close" data-return-focus="#sc-note-reopen-error" aria-label="إغلاق الملاحظة"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
           </div>
           <div class="m-note m-note--help" id="sc-note-help">
             <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <span class="m-note__text"><b class="m-note__title">مساعدة</b><span class="m-note__body">ملاحظة تعليمية — الدور note.</span></span>
+            <span class="m-note__text"><b class="m-note__title">مساعدة</b><span class="m-note__body">ملاحظة تعليمية؛ الدور note.</span></span>
           </div>
         </div>
         <div class="sc-row sc-row--tight">
@@ -946,7 +950,7 @@
             <p class="m-empty__body">جرّب مصطلحًا آخر أو امسح البحث.</p>
           </div>
         </div>
-        <p class="sc-hint" id="sc-announce-status" aria-live="polite">الإعلان يمر في قناتي المكوّن المنفصلتين (polite/assertive) — تحقق بفتح الإفصاح أو قراءة DOM. toast يعيش أعلى الصفحة خارج الأقسام (عقد rect &gt; 0).</p>
+        <p class="sc-hint" id="sc-announce-status" aria-live="polite">الإعلان يمر في قناتي المكوّن المنفصلتين (polite/assertive)؛ تحقق بفتح الإفصاح أو قراءة DOM. toast يعيش أعلى الصفحة خارج الأقسام (عقد rect &gt; 0).</p>
       </div>
     </section>
     <!-- ============ 10 · B07 التنقل والطبقات ============ -->
@@ -965,7 +969,7 @@
           <div class="sc-frame__inner">
             <div class="m-appbar">
               <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg></button>
-              <span class="m-appbar__title" data-fx-text="طلبات الفرع الرئيسي — عنوان طويل جدًا يلتف حتى سطرين ثم «…» والنص الكامل متاح لقارئ الشاشة داخل شريط التطبيق عند أصغر عرض">طلبات الفرع الرئيسي — عنوان طويل يلتف حتى سطرين</span>
+              <span class="m-appbar__title" data-fx-text="طلبات الفرع الرئيسي؛ عنوان طويل جدًا يلتف حتى سطرين ثم «…» والنص الكامل متاح لقارئ الشاشة داخل شريط التطبيق عند أصغر عرض">طلبات الفرع الرئيسي؛ عنوان طويل يلتف حتى سطرين</span>
               <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="المزيد"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-more"/></svg></button>
             </div>
             <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام الطلبات" id="sc-tabs">
@@ -975,7 +979,7 @@
               <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="sc-tab-d" id="sc-tab-d-btn" tabindex="-1" data-fx-text="المرتجعات المعتمدة نهائيًا">المرتجعات</button>
             </div>
             <div id="sc-tab-a" role="tabpanel" aria-labelledby="sc-tab-a-btn">
-              <p class="m-section-desc">لوحة الطلبات النشطة — التبويب يبدّل المحتوى المرتبط فعليًا (جرّب الأسهم وHome/End والنقر).</p>
+              <p class="m-section-desc">لوحة الطلبات النشطة؛ التبويب يبدّل المحتوى المرتبط فعليًا (جرّب الأسهم وHome/End والنقر).</p>
             </div>
             <div id="sc-tab-b" role="tabpanel" aria-labelledby="sc-tab-b-btn" hidden>
               <p class="m-section-desc">لوحة الطلبات المكتملة.</p>
@@ -1002,7 +1006,7 @@
             <button type="button" class="m-navbar__item"><svg aria-hidden="true"><use href="#i-account"/></svg>الحساب</button>
           </nav>
         </div>
-        <p class="sc-hint">الإطار أعلاه يجمع appbar + tabs + tabpanels + actionbar لاصق + navbar سفلي في عمود هاتف واحد داخل هذا القسم فقط — التجميع للعرض، وعدد الوجهات وأسماؤها عينة لا تثبيت لخريطة تنقل منتج.</p>
+        <p class="sc-hint">الإطار أعلاه يجمع appbar + tabs + tabpanels + actionbar لاصق + navbar سفلي في عمود هاتف واحد داخل هذا القسم فقط؛ التجميع للعرض، وعدد الوجهات وأسماؤها عينة لا تثبيت لخريطة تنقل منتج.</p>
       </div>
     </section>
 
@@ -1011,12 +1015,12 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">11 · SPEC-04</p>
         <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current" data-catalog-family="access-gateway">STABLE UI</span></h2>
-        <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.</p>
+        <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط؛ لا تُرسل بيانات إلى أي خدمة.</p>
       </div>
       <div class="sc-block sc-block--plain">
         <section class="m-access-gateway sc-gateway" data-access-gateway id="sc-gateway-root" aria-labelledby="sc-gateway-heading">
           <h3 class="m-access-gateway__heading" id="sc-gateway-heading">الدخول إلى تجربة العرض</h3>
-          <p class="m-access-gateway__intro">نسخة عرض محلية — البيانات لا تغادر هذا الملف.</p>
+          <p class="m-access-gateway__intro">نسخة عرض محلية؛ البيانات لا تغادر هذا الملف.</p>
           <form data-access-form novalidate>
             <div class="m-access-gateway__fields">
               <div class="m-field" data-micro-field>
@@ -1041,7 +1045,7 @@
             <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
           </form>
         </section>
-        <p class="sc-hint">جرب: إرسال فارغ (رسالة مكوّن + تركيز أول حقل)، إظهار كلمة المرور، ثم إرسال صالح — pending ثم نتيجة المعالج المحلي. الاسترداد والمزودون يبقيان مخفيين لعدم وجود معالجات لهم (عقد العائلة).</p>
+        <p class="sc-hint">جرب: إرسال فارغ (رسالة مكوّن + تركيز أول حقل)، إظهار كلمة المرور، ثم إرسال صالح؛ pending ثم نتيجة المعالج المحلي. الاسترداد والمزودون يبقيان مخفيين لعدم وجود معالجات لهم (عقد العائلة).</p>
       </div>
     </section>
 
@@ -1050,12 +1054,12 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">12 · SPEC-03</p>
         <h2 class="sc-section__title" id="sc-account-title">إعدادات الحساب والتطبيق <span class="sc-pill sc-pill--current" data-catalog-family="account-settings">STABLE UI</span></h2>
-        <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير — دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
+        <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير؛ دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
       </div>
       <div class="sc-block">
         <main data-account-settings data-account-layer-id="sc-account-layer" id="sc-account-root">
           <button class="m-btn m-btn--secondary" type="button" data-account-open data-autofocus>فتح الإعدادات</button>
-          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px) — سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
+          <p class="sc-hint">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px)؛ سلوك النموذج الموسّط الموثق، لا خلل هندسي.</p>
           <div class="m-layer-backdrop" id="sc-account-backdrop" data-for="sc-account-layer" hidden></div>
           <div class="m-layer m-layer--center" id="sc-account-layer" role="dialog" aria-modal="true" aria-labelledby="sc-account-main-title" data-account-settings-layer hidden>
             <header class="m-layer__head">
@@ -1131,18 +1135,57 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">يعرض الجدول التاريخ الحالي المحدد ويتكيف بين شبكة التقويم وعرض اليوم حسب مساحة المكوّن، مع قائمة زمنية اختيارية. تغيير مساحة العرض لا يغيّر التاريخ المحدد.</p>
+        <p class="sc-section__desc">تقويم شهري بعرضين متناسقين: الشهر الموسّع وأجندة اليوم المحدد المضغوطة. اليوم داخل التقويم هو نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة)؛ لا زر عائم ولا Bottom Sheet في هذا المسار.</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
+          <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-loading">حالة الانتظار</button>
+          <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-error">حالة الخطأ وإعادة المحاولة</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-restore">استعادة البيانات</button>
         </div>
-        <div id="sc-ocal-root" aria-label="مكوّن جدول الطلبات"></div>
+        <div id="sc-ocal-root" role="region" aria-label="مكوّن جدول الطلبات"></div>
+        <!-- محرر داخل الصفحة يملكه العرض (تركيب حقول B02): محاكاة محلية موسومة
+             لأفعال المضيف — لا حفظ ولا شبكة ولا طبقة. -->
+        <section class="sc-block sc-block--plain" id="sc-ocal-editor" hidden aria-labelledby="sc-ocal-editor-heading">
+          <h3 class="sc-block__title" id="sc-ocal-editor-heading">إضافة طلب (محاكاة عرض محلية)</h3>
+          <p class="sc-hint" id="sc-ocal-editor-date">التاريخ:</p>
+          <div class="sc-stack--tight">
+            <label class="m-field" data-field>
+              <span class="m-field__label">عنوان الطلب</span>
+              <input class="m-field__input" id="sc-ocal-editor-title" type="text" autocomplete="off" required>
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+            <div class="sc-grid-2">
+              <label class="m-field" data-field>
+                <span class="m-field__label">الوقت (اختياري، HH:mm)</span>
+                <input class="m-field__input" id="sc-ocal-editor-time" type="time" autocomplete="off">
+              </label>
+              <label class="m-field" data-field>
+                <span class="m-field__label">الحالة</span>
+                <select class="m-field__input" id="sc-ocal-editor-status">
+                  <option value="progress">قيد التنفيذ</option>
+                  <option value="done">تم التسليم</option>
+                  <option value="hold">بانتظار العميل</option>
+                </select>
+              </label>
+            </div>
+            <label class="m-field" data-field>
+              <span class="m-field__label">ملاحظة قصيرة (اختياري)</span>
+              <input class="m-field__input" id="sc-ocal-editor-note" type="text" autocomplete="off">
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+          </div>
+          <div class="sc-tools" role="group" aria-label="أفعال المحرر">
+            <button type="button" class="m-btn m-btn--primary" id="sc-ocal-editor-save">حفظ (محاكاة محلية)</button>
+            <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-editor-cancel">إلغاء</button>
+          </div>
+          <p class="sc-hint">محرر العرض يكتب في حالة محلية لهذه الجلسة فقط (Escape للإلغاء). المكوّن نفسه لا يملك محررًا: أفعال الإضافة/التعديل/الحذف أحداث host-owned.</p>
+        </section>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. شبكة الشهر كاملة عند كل عرض جذر (عرض مدمج تحت 360px يحفظ كل الأيام وأرضية ارتفاع 48px)؛ لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب «طي الشهر» لعرض الأجندة المضغوطة ثم انقر منطقة الإفصاح لتكشف طلبات اليوم المحدد فقط، وانقر يومًا لتحدّث الأجندة ولوحة اليوم. لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 
@@ -1171,7 +1214,7 @@
                     <svg aria-hidden="true"><use href="#i-chevron-down"/></svg>
                   </button>
                   <div class="m-carousel__card-details" id="sc-carousel-details-1" data-card-details hidden>
-                    <p class="sc-hint" data-fx-text="تفاصيل طويلة جدًا داخل البطاقة تختبر الالتفاف بلا قص عند أصغر عرض للمعاينة مع بطاقات مجاورة ظاهرة جزئيًا">التفاصيل الكاملة تظهر داخل مكانها بلا قص — 132 طلبًا جديدًا هذا الأسبوع بذروة يوم الثلاثاء.</p>
+                    <p class="sc-hint" data-fx-text="تفاصيل طويلة جدًا داخل البطاقة تختبر الالتفاف بلا قص عند أصغر عرض للمعاينة مع بطاقات مجاورة ظاهرة جزئيًا">التفاصيل الكاملة تظهر داخل مكانها بلا قص؛ 132 طلبًا جديدًا هذا الأسبوع بذروة يوم الثلاثاء.</p>
                   </div>
                 </div>
               </li>
@@ -1204,15 +1247,15 @@
           </div>
           <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
         </div>
-        <p class="sc-hint">جرّب الأسهم والنقاط ولوحة المفاتيح من سطح العارض (ArrowLeft = التالي في RTL، Home/End) والتوسيع في البطاقة الأولى — يُطوى تلقائيًا عند الانتقال.</p>
+        <p class="sc-hint">جرّب الأسهم والنقاط ولوحة المفاتيح من سطح العارض (ArrowLeft = التالي في RTL، Home/End) والتوسيع في البطاقة الأولى؛ يُطوى تلقائيًا عند الانتقال.</p>
       </div>
     </section>
   </main>
 
   <footer class="showcase-footer">
-    <p>هذا ملف عرض لمكوّنات نظام Micro UI — ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
+    <p>هذا ملف عرض لمكوّنات نظام Micro UI؛ ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
     <p>مستوى النضج يُقرأ من فهرس المكوّنات؛ ووسم العرض الحالي مستقل عن الحالة التشغيلية التي تتحكم بها أدوات المختبر. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.</p>
-    <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا — لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
+    <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا؛ لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
   </footer>
 
   <!-- Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) -->
@@ -1271,7 +1314,7 @@
       <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
     </div>
     <div class="m-layer__body">
-      <p>لوحة سفلية بعقد الطبقات نفسه — تفتح من الأسفل بحركة 240ms من motion.css، والإغلاق من الزر الظاهر أو الخلفية (سياسة الضغط بالخلفية: يغلق هنا لأنها ليست حوارًا متلفًا).</p>
+      <p>لوحة سفلية بعقد الطبقات نفسه؛ تفتح من الأسفل بحركة 240ms من motion.css، والإغلاق من الزر الظاهر أو الخلفية (سياسة الضغط بالخلفية: يغلق هنا لأنها ليست حوارًا متلفًا).</p>
     </div>
   </div>
 

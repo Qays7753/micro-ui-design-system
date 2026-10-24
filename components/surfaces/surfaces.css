@@ -63,7 +63,8 @@
 /* المقارنة 1: تدرج هادئ — بلا مستويات منحنية */
 .m-surface--calm .m-surface__waves { display: none; }
 
-/* المقارنة 2 (المرشح الأساسي): مستويان عريضان بانحناء هادئ */
+/* المقارنة 2 (تاريخية — كان «المرشح الأساسي» قبل اعتماد المنحنيات A04):
+   مستويان عريضان بانحناء هادئ؛ تبقى للمقارنة والرجوع فقط */
 .m-surface--waves .m-surface__waves {
   background-image: url("../../assets/surfaces/waves-soft.svg");
 }
@@ -112,13 +113,13 @@
 .m-surface__title {
   font-size: var(--micro-surface-title-size, 22px);
   line-height: var(--micro-surface-title-line, 1.6364); /* نسبية: 22/36 */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-inverse);
 }
 .m-surface__amount {
   font-size: var(--micro-surface-amount-size, 36px);
   line-height: var(--micro-surface-amount-line, 1.2222); /* نسبية: 36/44 */
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   color: var(--micro-text-inverse);
   font-variant-numeric: tabular-nums;
   direction: ltr;
@@ -129,13 +130,13 @@
 .m-surface__label {
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500; /* C1: التمييز بالوزن لا الشفافية */
+  font-weight: var(--micro-weight-medium); /* C1: التمييز بالوزن لا الشفافية */
   color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.8) */
 }
 .m-surface__sub {
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  font-weight: 400; /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
+  font-weight: var(--micro-weight-regular); /* C1: أدنى مستوى — وزن عادي والتمييز بالحجم 13/14 */
   color: var(--micro-text-inverse); /* C1: أبيض مصمت — كانت rgba(255,255,255,0.72) */
 }
 

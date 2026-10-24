@@ -29,7 +29,7 @@
   margin: 0 0 var(--micro-space-4);
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
 }
 
 .m-metric-circles__items {
@@ -123,7 +123,7 @@
 .m-metric-circles__fallback-item[data-series="c"] { --m-series: var(--micro-data-c); }
 .m-metric-circles__fallback-item[data-series="d"] { --m-series: var(--micro-data-d); }
 .m-metric-circles__fallback-item[data-series="e"] { --m-series: var(--micro-data-e); }
-.m-metric-circles__fallback-label { min-width: 0; color: var(--micro-text-primary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); font-weight: 500; overflow-wrap: anywhere; }
+.m-metric-circles__fallback-label { min-width: 0; color: var(--micro-text-primary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); font-weight: var(--micro-weight-medium); overflow-wrap: anywhere; }
 .m-metric-circles__fallback-reading { min-width: 0; max-width: 100%; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; text-align: end; }
 .m-metric-circles__fallback-state { grid-column: 1 / -1; color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
 
@@ -228,7 +228,7 @@
 .m-main-metric__label {
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
 }
 
 .m-main-metric__value {
@@ -238,6 +238,9 @@
   flex-wrap: wrap;
   gap: var(--micro-space-2);
   max-width: 100%;
+  /* R-54 (تعليق تبرير): جزيرة فيزيية مقصودة لمحور القيم الموقعة —
+     الرياضيات (يمين الصفر موجب/يساره سالب) اتجاهها ثابت بمعزل عن
+     اتجاه الصفحة، فلا يُقلب المحور مع RTL (نفس عزل الأرقام LTR) */
   direction: ltr;
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -248,7 +251,7 @@
   max-width: 100%;
   font-size: var(--micro-amount2-size);
   line-height: var(--micro-amount2-line);
-  font-weight: 600;
+  font-weight: var(--micro-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -322,6 +325,10 @@
 
 .m-main-metric__track[data-signed="true"] {
   height: var(--micro-space-3);
+  /* R-54 (تعليق تبرير): جزيرة فيزيائية مقصودة لمحور القيم الموقعة —
+     الهندسة (يمين الصفر موجب ويساره سالب، خط الصفر عند 50%) اتجاهها
+     ثابت بمعزل عن اتجاه الصفحة فلا يُقلب المحور مع RTL؛ نفس عقلية
+     عزل الأرقام LTR */
   direction: ltr;
 }
 .m-main-metric__track[data-signed="true"]::before {
@@ -381,7 +388,8 @@
 .m-main-metric__row { padding-block: var(--micro-space-1); }
 .m-main-metric { /* W2.4 (A2-F02): توكن مكوّن مُسمّى لحافة الفصل الداخلية للدائرة البيضاء على
    أرضية فاتحة — اشتقاق موثق (أبيض بشفافية 16%)، قيمة هندسية داخلية لا لون هوية؛
-   القيمة كما كانت حرفيًا. */
-  --micro-metric-hero-separator: rgba(255, 255, 255, 0.16);
+   القيمة كما كانت حرفيًا. R-09 (2026-10-25): أُعيد التسمية إلى ...-color
+   لحسم تصادم الاسم مع طول 16px كان معرّفًا في tokens.css (حُذف اليتيم هناك). */
+  --micro-metric-hero-separator-color: rgba(255, 255, 255, 0.16);
 }
-.m-main-metric__hero { box-shadow: inset 0 0 0 1px var(--micro-metric-hero-separator, rgba(255, 255, 255, 0.16)); }
+.m-main-metric__hero { box-shadow: inset 0 0 0 1px var(--micro-metric-hero-separator-color, rgba(255, 255, 255, 0.16)); }

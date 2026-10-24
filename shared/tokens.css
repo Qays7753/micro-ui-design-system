@@ -33,7 +33,7 @@
   --ui-surface-disabled: var(--micro-color-disabled);
   --ui-text: var(--micro-color-ink);
   --ui-text-secondary: var(--micro-color-ink-soft);
-  --ui-text-muted: #5F7378;
+  --ui-text-muted: #5F7378; /* مشتقة مباشرة (R-62): رمادية حبر مخففة — أغمق من ink-soft بدرجة قراءة ثانوية */
   --ui-text-inverse: var(--micro-color-white);
   --ui-border-control: var(--micro-color-border);
   --ui-border-divider: var(--micro-color-divider);
@@ -63,13 +63,13 @@
   --micro-surface-light: 0.12;
   --micro-summary-gradient-start: #B8D9DC;
   --micro-summary-light-start: #B8D9DC;
-  --micro-summary-light-mid: #DFEEE6;
+  --micro-summary-light-mid: #DFEEE6; /* (R-62) تتطابق قيمةً مع surface-selected وتظل دورًا مستقلًا لتدرج الملخص */
   --micro-summary-light-end: #F7F8F4;
   --micro-text-primary: var(--ui-text);
   --micro-text-secondary: var(--ui-text-secondary);
   --micro-text-hint: var(--ui-text-muted);
   --micro-text-inverse: var(--ui-text-inverse);
-  --micro-text-disabled: #53676B;
+  --micro-text-disabled: #53676B; /* مشتقة مباشرة (R-62): قريب ink-soft بتقديم disabled */
   --micro-border-control: var(--ui-border-control);
   --micro-border-divider: var(--ui-border-divider);
   --micro-focus-ring: var(--ui-focus);
@@ -91,9 +91,15 @@
   --micro-info-surface: #E9F1FA;
   --micro-data-a: #164D59;
   --micro-data-b: #D97757;
-  --micro-data-c: #B6A3D6;
+  /* R-06 (2026-10-25): تعتيم داخل الصبغة لسلسلتي c/e لبلوغ أرضية
+     WCAG 1.4.11 (3:1) فوق الأبيض: c #B6A3D6→#A189CA (2.28→3.02:1)،
+     e #B3BD7B→#8E9A4D (2.00→3.05:1). القيم المرجعية محفوظة هنا
+     للتوثيق؛ التمييز بين السلاسل المتجاورة يسنده حد --micro-data-boundary
+     + نص القراءات الكامل، لا فرق الإضاءة وحده (خمس سلاسل متجاورة
+     لا يمكن أن تبعد كلها 3:1 إضاءةً ضمن نطاق إضاءة صالح). */
+  --micro-data-c: #A189CA;
   --micro-data-d: #496D92;
-  --micro-data-e: #B3BD7B;
+  --micro-data-e: #8E9A4D;
 
   /* Geometry B — compact content, never compact touch targets. */
   --micro-space-1: 4px;
@@ -115,6 +121,23 @@
   --micro-counter-height: 20px;
   --micro-counter-label-size: 13px;
   --micro-counter-label-weight: 500;
+  /* R-10 (2026-10-25): توكنز أوزان الخط — الأوزان المشحونة فقط
+     (400/500/600)؛ لا 700 ولا 800 (لا faux-bold). */
+  --micro-weight-regular: 400;
+  --micro-weight-medium: 500;
+  --micro-weight-semibold: 600;
+
+  /* R-11 (2026-10-25): مستوى عنوان القسم 18px بسطر نسبي (لا ارتفاع
+     مقفول يقص عند تكبير النص وحده) — كان مستوى خامًا خارج المصدر */
+  --micro-section-title-size: 18px;
+  --micro-section-title-line: 1.5556;
+
+  /* R-12 (2026-10-25): سلم الطبقات z الموثق — غشاء الطبقة < الطبقة
+     نفسها < toast. أي قيمة أعلى تُقرر صراحةً من المضيف خارج المكتبة. */
+  --micro-z-backdrop: 80;
+  --micro-z-layer: 85;
+  --micro-z-toast: 90;
+
   --micro-radius-capsule: 999px;
   --micro-radius-button-long: 12px;
   --micro-radius-field: 12px;
@@ -156,7 +179,6 @@
   --micro-surface-title-line: 1.6364;
   --micro-surface-amount-size: 36px;
   --micro-surface-amount-line: 1.2222;
-  --micro-metric-hero-separator: 16px;
   --micro-inset-bottom: env(safe-area-inset-bottom, 0px);
 
   /* Motion categories; spatial movement only for purposeful transitions. */
@@ -172,7 +194,7 @@
   --micro-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --micro-shadow-emphasis: 0 2px 6px rgb(22 77 89 / 14%);
   --micro-shadow-overlay: var(--ui-overlay-shadow);
-  --micro-seg-hover-surface: #EDF3EF;
+  --micro-seg-hover-surface: #EDF3EF; /* مشتقة مباشرة (R-62): بين surface وselected — تحويم المقاطع */
   --micro-button-primary-bg: linear-gradient(180deg, var(--micro-brand-gradient-start), var(--micro-brand-primary));
   --micro-surface-wave-height: 0px;
   --micro-surface-wave-opacity: 0;

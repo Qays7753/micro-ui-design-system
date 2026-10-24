@@ -154,7 +154,7 @@
   font-family: var(--micro-font-family);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
-  font-weight: 500;
+  font-weight: var(--micro-weight-medium);
   cursor: pointer;
   transition: background-color var(--micro-motion-press) var(--micro-ease-standard);
 }
