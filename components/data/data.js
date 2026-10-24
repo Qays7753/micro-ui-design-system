@@ -1486,6 +1486,7 @@
      readings are measured again after reveal and font readiness. */
   var renderWidths = new WeakMap(); /* chart → آخر عرض رُسم عنده (px) */
   var plotObservers = new WeakMap(); /* chart → ResizeObserver وحيد */
+  var plotFrames = new WeakMap();
   var disconnectedCharts = new WeakSet();
   var RESIZE_EPS = 0.5;
 
@@ -1500,7 +1501,16 @@
       if (w <= 1) return; /* مخفي: احتفظ بآخر رسم — الإظهار يطلق الرصد */
       var last = renderWidths.get(chart);
       if (last !== undefined && Math.abs(w - last) < RESIZE_EPS) return;
-      render(chart); /* إعادة قياس ورسم كاملة — حدث rendered كما هو */
+      /* Layout writes must leave the ResizeObserver delivery cycle. */
+      if (plotFrames.has(chart)) return;
+      plotFrames.set(chart, window.requestAnimationFrame(function () {
+        plotFrames.delete(chart);
+        if (!chart.isConnected || disconnectedCharts.has(chart) || plotObservers.get(chart) !== ro) return;
+        var width = plot.getBoundingClientRect().width;
+        var renderedWidth = renderWidths.get(chart);
+        if (width <= 1 || (renderedWidth !== undefined && Math.abs(width - renderedWidth) < RESIZE_EPS)) return;
+        render(chart);
+      }));
     });
     ro.observe(plot);
     plotObservers.set(chart, ro);
@@ -1593,6 +1603,8 @@
         disconnectedCharts.add(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
+        if (plotFrames.has(c)) window.cancelAnimationFrame(plotFrames.get(c));
+        plotFrames.delete(c);
         renderWidths.delete(c);
       });
     }

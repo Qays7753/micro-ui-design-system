@@ -242,6 +242,8 @@
     var destroyed = false;
     var state = {};
     var resizeObserver = null;
+    var resizeFrame = 0;
+    var pendingResizeWidth = 0;
     var resizeFallback = null;
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
@@ -491,7 +493,14 @@
       if (typeof window.ResizeObserver === 'function') {
         resizeObserver = new window.ResizeObserver(function (entries) {
           if (destroyed || !entries.length) return;
-          updateResponsiveView(entries[0].contentRect.width);
+          pendingResizeWidth = entries[0].contentRect.width;
+          if (resizeFrame) return;
+          resizeFrame = window.requestAnimationFrame(function () {
+            resizeFrame = 0;
+            if (!destroyed && root.isConnected && pendingResizeWidth > 0) {
+              updateResponsiveView(pendingResizeWidth);
+            }
+          });
         });
         resizeObserver.observe(root);
       } else {
@@ -1281,6 +1290,8 @@
          بعده لا أحداث إطلاقًا */
       destroy: guard(function () {
         destroyed = true;
+        if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = 0;
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;

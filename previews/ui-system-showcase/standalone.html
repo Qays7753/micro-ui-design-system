@@ -10964,6 +10964,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
      readings are measured again after reveal and font readiness. */
   var renderWidths = new WeakMap(); /* chart → آخر عرض رُسم عنده (px) */
   var plotObservers = new WeakMap(); /* chart → ResizeObserver وحيد */
+  var plotFrames = new WeakMap();
   var disconnectedCharts = new WeakSet();
   var RESIZE_EPS = 0.5;
 
@@ -10978,7 +10979,16 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (w <= 1) return; /* مخفي: احتفظ بآخر رسم — الإظهار يطلق الرصد */
       var last = renderWidths.get(chart);
       if (last !== undefined && Math.abs(w - last) < RESIZE_EPS) return;
-      render(chart); /* إعادة قياس ورسم كاملة — حدث rendered كما هو */
+      /* Layout writes must leave the ResizeObserver delivery cycle. */
+      if (plotFrames.has(chart)) return;
+      plotFrames.set(chart, window.requestAnimationFrame(function () {
+        plotFrames.delete(chart);
+        if (!chart.isConnected || disconnectedCharts.has(chart) || plotObservers.get(chart) !== ro) return;
+        var width = plot.getBoundingClientRect().width;
+        var renderedWidth = renderWidths.get(chart);
+        if (width <= 1 || (renderedWidth !== undefined && Math.abs(width - renderedWidth) < RESIZE_EPS)) return;
+        render(chart);
+      }));
     });
     ro.observe(plot);
     plotObservers.set(chart, ro);
@@ -11071,6 +11081,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         disconnectedCharts.add(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
+        if (plotFrames.has(c)) window.cancelAnimationFrame(plotFrames.get(c));
+        plotFrames.delete(c);
         renderWidths.delete(c);
       });
     }
@@ -11170,6 +11182,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
   var observers = new WeakMap();
+  var resizeFrames = new WeakMap();
 
   /* ترتيب حتمي: دائرة رئيسية وبجوارها دائرتان متدرجتان رأسيًا.
      كل مجموعة من ثلاث مستقلة؛ لا عشوائية أو مساحات مالية مشتقة.
@@ -11340,6 +11353,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
   function render(chart) {
     if (observers.has(chart)) observers.get(chart).disconnect();
+    observers.delete(chart);
+    if (resizeFrames.has(chart)) window.cancelAnimationFrame(resizeFrames.get(chart));
+    resizeFrames.delete(chart);
     var plot = chart.querySelector('[data-plot]');
     chart.removeAttribute('data-packed-state');
     var items = itemsOf(chart);
@@ -11430,7 +11446,15 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       plot.appendChild(labels);
       layoutPacked(chart, nodes, wrap);
       if (window.ResizeObserver) {
-        var observer = new ResizeObserver(function () { layoutPacked(chart, nodes, wrap); });
+        var observer = new ResizeObserver(function () {
+          if (resizeFrames.has(chart)) return;
+          resizeFrames.set(chart, window.requestAnimationFrame(function () {
+            resizeFrames.delete(chart);
+            if (chart.isConnected && observers.get(chart) === observer && plot.contains(wrap)) {
+              layoutPacked(chart, nodes, wrap);
+            }
+          }));
+        });
         observer.observe(chart);
         nodes.forEach(function (n) { observer.observe(n.value); });
         observers.set(chart, observer);
@@ -12517,9 +12541,16 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         if (disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
         var nextWidth = entries[0] && entries[0].contentRect.width;
         if (typeof nextWidth === 'number' && Math.abs(nextWidth - root.__microMetricWidth) > 1) {
-          root.__microMetricWidth = nextWidth;
-          if (root.hasAttribute('data-metric-circles')) circleItems(root);
-          else fitHero(root);
+          if (root.__microMetricResizeFrame) return;
+          root.__microMetricResizeFrame = window.requestAnimationFrame(function () {
+            delete root.__microMetricResizeFrame;
+            if (!root.isConnected || disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
+            var width = target.getBoundingClientRect().width;
+            if (width <= 1 || Math.abs(width - root.__microMetricWidth) <= 1) return;
+            root.__microMetricWidth = width;
+            if (root.hasAttribute('data-metric-circles')) circleItems(root);
+            else fitHero(root);
+          });
         }
       });
       root.__microMetricResizeObserver = observer;
@@ -12575,6 +12606,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     items.forEach(function (chart) {
       disconnected.add(chart);
       if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
+      if (chart.__microMetricResizeFrame) window.cancelAnimationFrame(chart.__microMetricResizeFrame);
+      delete chart.__microMetricResizeFrame;
       if (chart.__microMetricResizeListener) window.removeEventListener('resize', chart.__microMetricResizeListener);
       delete chart.__microMetricResizeObserver;
       delete chart.__microMetricResizeListener;
@@ -13258,6 +13291,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     var destroyed = false;
     var state = {};
     var resizeObserver = null;
+    var resizeFrame = 0;
+    var pendingResizeWidth = 0;
     var resizeFallback = null;
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
@@ -13507,7 +13542,14 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (typeof window.ResizeObserver === 'function') {
         resizeObserver = new window.ResizeObserver(function (entries) {
           if (destroyed || !entries.length) return;
-          updateResponsiveView(entries[0].contentRect.width);
+          pendingResizeWidth = entries[0].contentRect.width;
+          if (resizeFrame) return;
+          resizeFrame = window.requestAnimationFrame(function () {
+            resizeFrame = 0;
+            if (!destroyed && root.isConnected && pendingResizeWidth > 0) {
+              updateResponsiveView(pendingResizeWidth);
+            }
+          });
         });
         resizeObserver.observe(root);
       } else {
@@ -14297,6 +14339,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
          بعده لا أحداث إطلاقًا */
       destroy: guard(function () {
         destroyed = true;
+        if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = 0;
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;

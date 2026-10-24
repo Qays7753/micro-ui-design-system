@@ -385,9 +385,16 @@
         if (disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
         var nextWidth = entries[0] && entries[0].contentRect.width;
         if (typeof nextWidth === 'number' && Math.abs(nextWidth - root.__microMetricWidth) > 1) {
-          root.__microMetricWidth = nextWidth;
-          if (root.hasAttribute('data-metric-circles')) circleItems(root);
-          else fitHero(root);
+          if (root.__microMetricResizeFrame) return;
+          root.__microMetricResizeFrame = window.requestAnimationFrame(function () {
+            delete root.__microMetricResizeFrame;
+            if (!root.isConnected || disconnected.has(root) || root.__microMetricResizeObserver !== observer) return;
+            var width = target.getBoundingClientRect().width;
+            if (width <= 1 || Math.abs(width - root.__microMetricWidth) <= 1) return;
+            root.__microMetricWidth = width;
+            if (root.hasAttribute('data-metric-circles')) circleItems(root);
+            else fitHero(root);
+          });
         }
       });
       root.__microMetricResizeObserver = observer;
@@ -443,6 +450,8 @@
     items.forEach(function (chart) {
       disconnected.add(chart);
       if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
+      if (chart.__microMetricResizeFrame) window.cancelAnimationFrame(chart.__microMetricResizeFrame);
+      delete chart.__microMetricResizeFrame;
       if (chart.__microMetricResizeListener) window.removeEventListener('resize', chart.__microMetricResizeListener);
       delete chart.__microMetricResizeObserver;
       delete chart.__microMetricResizeListener;

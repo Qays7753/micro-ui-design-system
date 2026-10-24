@@ -65,6 +65,7 @@
 
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
   var observers = new WeakMap();
+  var resizeFrames = new WeakMap();
 
   /* ترتيب حتمي: دائرة رئيسية وبجوارها دائرتان متدرجتان رأسيًا.
      كل مجموعة من ثلاث مستقلة؛ لا عشوائية أو مساحات مالية مشتقة.
@@ -235,6 +236,9 @@
 
   function render(chart) {
     if (observers.has(chart)) observers.get(chart).disconnect();
+    observers.delete(chart);
+    if (resizeFrames.has(chart)) window.cancelAnimationFrame(resizeFrames.get(chart));
+    resizeFrames.delete(chart);
     var plot = chart.querySelector('[data-plot]');
     chart.removeAttribute('data-packed-state');
     var items = itemsOf(chart);
@@ -325,7 +329,15 @@
       plot.appendChild(labels);
       layoutPacked(chart, nodes, wrap);
       if (window.ResizeObserver) {
-        var observer = new ResizeObserver(function () { layoutPacked(chart, nodes, wrap); });
+        var observer = new ResizeObserver(function () {
+          if (resizeFrames.has(chart)) return;
+          resizeFrames.set(chart, window.requestAnimationFrame(function () {
+            resizeFrames.delete(chart);
+            if (chart.isConnected && observers.get(chart) === observer && plot.contains(wrap)) {
+              layoutPacked(chart, nodes, wrap);
+            }
+          }));
+        });
         observer.observe(chart);
         nodes.forEach(function (n) { observer.observe(n.value); });
         observers.set(chart, observer);

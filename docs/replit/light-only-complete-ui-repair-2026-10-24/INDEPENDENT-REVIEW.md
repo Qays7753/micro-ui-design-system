@@ -1,8 +1,10 @@
 # Independent light-only review
 
-**Date:** 2026-10-24  
-**Independent runner:** `tools/light-release-check.py`  
-**Evidence:** `generated-artifacts/light-only-repair/acceptance/`  
+**Date:** 2026-10-24
+
+**Independent runner:** `tools/light-release-check.py`
+
+**Evidence:** `generated-artifacts/light-only-repair/acceptance/`
 **Baseline for unchanged-logo and legacy-token checks:** `161bb71adbed86e0df4382174cb07bd2fcb8d62d`
 
 ## Judgment
