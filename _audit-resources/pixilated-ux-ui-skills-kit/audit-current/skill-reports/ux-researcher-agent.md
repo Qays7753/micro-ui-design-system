@@ -1,6 +1,6 @@
 # UX Researcher — skill application report
 
-**Audit finding:** `INT-001` (one confirmed component-state finding).  
+**Audit finding:** `INT-001` (one confirmed component-state finding).
 **Research verdict:** This repo supports a bounded expert inspection and automated behavior probe, not claims about a product user, consumer audience, or real workflow.
 
 ## Skill methodology and references read
@@ -21,8 +21,8 @@ This is scoped to the repo's design-system work and audit task. It is **not vali
 | Next step | The retry remains visible and emits its consumer event once, but the lost focus and lack of live-region semantics can make it harder to find. No actual consumer retry loop or network was tested. |
 | Forces | Real-world alternatives, habits, push/pull forces, emotional stakes, device contexts and adoption criteria are **NOT PROVABLE**. |
 
-**Functional job candidate:** maintain a usable component interaction while state changes.  
-**Emotional/social job:** unknown.  
+**Functional job candidate:** maintain a usable component interaction while state changes.
+**Emotional/social job:** unknown.
 **Desired outcomes (research hypotheses only):** keep the current focus discoverable during state changes; expose the updated status without requiring visual inference; make the recovery action findable and operable. These are measurable acceptance criteria, not reported user preferences.
 
 ### Hypothetical job map (design-system author, not external users)

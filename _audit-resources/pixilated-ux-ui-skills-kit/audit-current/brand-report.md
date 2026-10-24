@@ -1,8 +1,8 @@
 # Brand Auditor — current UI-system audit
 
-**Status:** APPLIED  
-**Scope:** Brand profile, palette roles/proportions, semantics, contrast, locally loaded type, icons, charts, identity assets, voice handoff, and current UI consistency.  
-**Findings:** 6 (`BRAND-01`–`BRAND-06`; one confirmed preview-palette issue, three likely/confirmed local presentation concerns, two not-provable policy risks).  
+**Status:** APPLIED
+**Scope:** Brand profile, palette roles/proportions, semantics, contrast, locally loaded type, icons, charts, identity assets, voice handoff, and current UI consistency.
+**Findings:** 6 (`BRAND-01`–`BRAND-06`; one confirmed preview-palette issue, three likely/confirmed local presentation concerns, two not-provable policy risks).
 **Source changes:** None. No product, documentation, preview, or configuration source was edited. Only this `audit-current/` report/profile/findings and `generated-artifacts/pixilated-audit/brand/` evidence were produced.
 
 ## Context and bounded conclusion
@@ -152,14 +152,14 @@ Full records—including the required category, status, selector/path evidence, 
 
 This handoff is intentionally a **brief in the audit report**, not a rewrite or a source edit. It should be considered alongside `_audit-resources/pixilated-ux-ui-skills-kit/audit-current/LANG-ux-writer-audit.md`, which has already applied the UX Writer method and contains detailed language findings and proposed copy. No owner-approved brand voice guide exists, so the following voice target is provisional and derived from `docs/UI-VISUAL-SYSTEM.md:6-8, 16-23`.
 
-> **VOICE BRIEF — Micro UI reference copy (not a future consumer-product voice approval)**  
-> **Pillars (derived):** calm and operational; clear and content-first; exact about values and states.  
-> **Provisional NN/g target:** humour 5/5 (serious), formality 3/5 (neutral/professional), respect 5/5, enthusiasm 4/5 (matter-of-fact).  
-> **Useful vocabulary:** clear names for value, state, component, selection, action, and measurement.  
-> **Avoid:** unsupported product promises, business claims, invented user journeys/personas, and generic emotional copy.  
-> **Context:** errors calm and actionable; success short and factual; labels exact; examples explicitly marked as fixtures; explanatory copy subordinate to the component it documents.  
-> **Constraints:** keep semantic severity and meaning; preserve exact demo values/units; do not reinterpret arbitrary consumer labels; keep Arabic MSA/RTL examples and bidi-safe number meaning; do not convert fixture text into production product defaults.  
-> **Strings to review through the existing LANG lane:** `LANG-002` (visible/accessible Arabic count fixture agreement); `LANG-003` (raw callback exception text at the component boundary); `LANG-004` (picker state nouns/clarity); and `LANG-001` (locale, digit, and string ownership contract). These are linked handoff items, not new brand findings.  
+> **VOICE BRIEF — Micro UI reference copy (not a future consumer-product voice approval)**
+> **Pillars (derived):** calm and operational; clear and content-first; exact about values and states.
+> **Provisional NN/g target:** humour 5/5 (serious), formality 3/5 (neutral/professional), respect 5/5, enthusiasm 4/5 (matter-of-fact).
+> **Useful vocabulary:** clear names for value, state, component, selection, action, and measurement.
+> **Avoid:** unsupported product promises, business claims, invented user journeys/personas, and generic emotional copy.
+> **Context:** errors calm and actionable; success short and factual; labels exact; examples explicitly marked as fixtures; explanatory copy subordinate to the component it documents.
+> **Constraints:** keep semantic severity and meaning; preserve exact demo values/units; do not reinterpret arbitrary consumer labels; keep Arabic MSA/RTL examples and bidi-safe number meaning; do not convert fixture text into production product defaults.
+> **Strings to review through the existing LANG lane:** `LANG-002` (visible/accessible Arabic count fixture agreement); `LANG-003` (raw callback exception text at the component boundary); `LANG-004` (picker state nouns/clarity); and `LANG-001` (locale, digit, and string ownership contract). These are linked handoff items, not new brand findings.
 > **Return requested from UX Writer:** string-id keyed short/standard rewrites and reasons only after owner approves the intended default voice and the applicable copy ownership; no words are applied by this report.
 
 Existing `_audit-resources/pixilated-ux-ui-skills-kit/audit-current/LANG-showcase-copy.json` contains the language worker’s 339-string HTML extraction for the showcase. It is a working inventory (not a complete JS/runtime catalog), and the language report treats copy as fixture/demo content. I did not claim an NN/g brand score or reuse fixture phrases as verified brand-channel evidence.

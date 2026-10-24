@@ -1,10 +1,10 @@
 # Anti-AI-Slop — independent skill application report
 
-**Status:** LOADED + APPLIED  
-**Parent audit:** `../anti-ai-slop-REPORT.md`  
-**Machine-readable source findings:** `../slop-findings.json`  
-**Finding IDs:** SLOP-01 through SLOP-03  
-**Reconciled output:** `../FINAL-REGISTER.json`  
+**Status:** LOADED + APPLIED
+**Parent audit:** `../anti-ai-slop-REPORT.md`
+**Machine-readable source findings:** `../slop-findings.json`
+**Finding IDs:** SLOP-01 through SLOP-03
+**Reconciled output:** `../FINAL-REGISTER.json`
 **Product/source edits:** None
 
 ## Method applied

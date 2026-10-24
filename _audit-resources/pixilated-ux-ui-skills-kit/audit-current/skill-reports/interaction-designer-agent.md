@@ -1,6 +1,6 @@
 # Interaction Designer — skill application report
 
-**Audit finding:** `INT-001` (one finding; four viewport repetitions of the same behavior, not four findings).  
+**Audit finding:** `INT-001` (one finding; four viewport repetitions of the same behavior, not four findings).
 **Verdict:** Interaction pathways exercised in the current UI-system fixtures are mostly coherent. Fix the picker asynchronous state transition before claiming a complete keyboard-recovery contract. This is not a product-readiness verdict.
 
 ## Skill methodology applied

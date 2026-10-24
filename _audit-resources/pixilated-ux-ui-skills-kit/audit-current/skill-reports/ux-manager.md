@@ -1,6 +1,6 @@
 # UX Manager — interaction track decision report
 
-**Track verdict:** **ACCEPT WITH CHANGES** for the tested interaction surface only.  
+**Track verdict:** **ACCEPT WITH CHANGES** for the tested interaction surface only.
 **Finding count:** 1 new interaction finding, `INT-001` (same root cause repeated at four widths). This does not sign off the complete design system, any product, or accessibility conformance.
 
 ## Manager methodology applied

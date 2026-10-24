@@ -1,10 +1,10 @@
 # Brand Auditor — independent skill application report
 
-**Status:** LOADED + APPLIED  
-**Parent audit:** `../brand-report.md`  
-**Machine-readable source findings:** `../brand-findings.json`  
-**Raw IDs:** BRAND-01 through BRAND-06  
-**Reconciled output:** `../FINAL-REGISTER.json`  
+**Status:** LOADED + APPLIED
+**Parent audit:** `../brand-report.md`
+**Machine-readable source findings:** `../brand-findings.json`
+**Raw IDs:** BRAND-01 through BRAND-06
+**Reconciled output:** `../FINAL-REGISTER.json`
 **Product/source edits:** None
 
 ## Method applied

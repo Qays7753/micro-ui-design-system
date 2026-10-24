@@ -339,7 +339,7 @@ Visual examples of correct and incorrect usage.
 
 **Standard pipeline**:
 ```
-Figma Variables → Tokens Studio → tokens/*.json → Style Dictionary → 
+Figma Variables → Tokens Studio → tokens/*.json → Style Dictionary →
 CSS Custom Properties (web) + Swift tokens (iOS) + Compose tokens (Android)
 ```
 

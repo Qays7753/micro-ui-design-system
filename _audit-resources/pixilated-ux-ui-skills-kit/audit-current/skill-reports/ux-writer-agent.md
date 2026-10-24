@@ -1,9 +1,9 @@
 # Individual skill report — `ux-writer-agent`
 
-**Status:** LOADED + APPLIED  
-**Parent audit:** [`../LANG-ux-writer-audit.md`](../LANG-ux-writer-audit.md)  
-**Machine-readable findings:** [`../LANG-findings.json`](../LANG-findings.json)  
-**Finding IDs:** LANG-001–LANG-004  
+**Status:** LOADED + APPLIED
+**Parent audit:** [`../LANG-ux-writer-audit.md`](../LANG-ux-writer-audit.md)
+**Machine-readable findings:** [`../LANG-findings.json`](../LANG-findings.json)
+**Finding IDs:** LANG-001–LANG-004
 **Product/source edits:** None
 
 ## Applied scope and method

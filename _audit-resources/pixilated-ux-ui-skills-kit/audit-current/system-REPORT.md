@@ -1,9 +1,9 @@
 # Design Systems Agent — current-source audit
 
-**Status:** APPLIED  
-**Scope:** Foundations, tokens, component contracts/lifecycle, layers, portability, dependencies, source/showcase/standalone consistency, delivery and related governance.  
-**Snapshot audited:** local `HEAD fc1e53e03048c38a451c8421e23cee58ab2b3a7a`; no remote refs or remote repositories queried.  
-**Findings:** 8 (`3 High`, `3 Medium`, `2 Low`; `6 CONFIRMED`, `1 LIKELY`, `1 NOT PROVABLE`).  
+**Status:** APPLIED
+**Scope:** Foundations, tokens, component contracts/lifecycle, layers, portability, dependencies, source/showcase/standalone consistency, delivery and related governance.
+**Snapshot audited:** local `HEAD fc1e53e03048c38a451c8421e23cee58ab2b3a7a`; no remote refs or remote repositories queried.
+**Findings:** 8 (`3 High`, `3 Medium`, `2 Low`; `6 CONFIRMED`, `1 LIKELY`, `1 NOT PROVABLE`).
 **Files changed:** audit artifacts only. No product/source/docs/showcase/config files changed; no commit, push, or branch created.
 
 ## Context and limits

@@ -1,10 +1,10 @@
 # Design Systems Agent — independent skill application report
 
-**Status:** LOADED + APPLIED  
-**Parent audit:** `../system-REPORT.md`  
-**Machine-readable source findings:** `../system-findings.json`  
-**Raw IDs:** SYS-DS-001 through SYS-DS-008  
-**Reconciled output:** `../FINAL-REGISTER.json`  
+**Status:** LOADED + APPLIED
+**Parent audit:** `../system-REPORT.md`
+**Machine-readable source findings:** `../system-findings.json`
+**Raw IDs:** SYS-DS-001 through SYS-DS-008
+**Reconciled output:** `../FINAL-REGISTER.json`
 **Product/source edits:** None
 
 ## Method applied

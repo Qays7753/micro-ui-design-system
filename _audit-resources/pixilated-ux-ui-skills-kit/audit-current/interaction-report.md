@@ -1,7 +1,7 @@
 # Interaction audit — current design-system behaviors
 
-**Track:** Interaction design, bounded UX-research application, and interaction management.  
-**Finding prefix:** `INT` (one independent finding: `INT-001`).  
+**Track:** Interaction design, bounded UX-research application, and interaction management.
+**Finding prefix:** `INT` (one independent finding: `INT-001`).
 **Scope:** The independent repository's UI-system components and demo fixtures only. No future Micro product, customer application, external site, real user, or production data was inspected. No product/component/source/spec/showcase/configuration files were edited.
 
 ## Bounded verdict

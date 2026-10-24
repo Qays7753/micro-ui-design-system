@@ -1,11 +1,11 @@
 # Edge Case Hunter — independent skill application report
 
-**Status:** LOADED + APPLIED  
-**Parent audit:** `../edge-report.md`  
-**Machine-readable source finding:** `../edge-findings.json`  
-**Coverage matrix:** `../edge-state-coverage.json`  
-**Finding IDs:** EDGE-001 (one finding)  
-**Reconciled output:** `../FINAL-REGISTER.json`  
+**Status:** LOADED + APPLIED
+**Parent audit:** `../edge-report.md`
+**Machine-readable source finding:** `../edge-findings.json`
+**Coverage matrix:** `../edge-state-coverage.json`
+**Finding IDs:** EDGE-001 (one finding)
+**Reconciled output:** `../FINAL-REGISTER.json`
 **Product/source edits:** None
 
 ## Method applied

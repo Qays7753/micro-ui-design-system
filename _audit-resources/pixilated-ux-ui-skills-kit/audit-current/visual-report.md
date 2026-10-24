@@ -1,6 +1,6 @@
 # Visual audit — UI density, hierarchy and future direction
 
-**Prefix:** `VISUAL`  
+**Prefix:** `VISUAL`
 **Scope:** Visual engineering and future-state recommendations for this independent UI/UX design-system repository. Fixtures and showcase content are demo data only; no user behavior, analytics, persona, or production use is inferred. The future Micro product was not opened, contacted, cloned, or compared. No product/source/spec/showcase/configuration file was changed.
 
 ## Scope and bounded verdict
