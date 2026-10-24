@@ -1,0 +1,1743 @@
+{
+  "adapter": "Original scanner invoked per file with 3-second CPU/wall guard after whole-folder invocation timed out; raw signals require human triage.",
+  "files": [
+    {
+      "path": "components/access-gateway/access-gateway.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/access-gateway/access-gateway.js",
+      "exit": 2,
+      "findings": 3
+    },
+    {
+      "path": "components/access-gateway/example-usage.html",
+      "exit": 2,
+      "findings": 2
+    },
+    {
+      "path": "components/account-settings/account-settings.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/account-settings/account-settings.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/account-settings/example-usage.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/buttons/buttons.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/buttons/buttons.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/carousel/carousel.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/carousel/carousel.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/data/data.css",
+      "exit": 2,
+      "findings": 2
+    },
+    {
+      "path": "components/data/data.js",
+      "exit": 2,
+      "findings": 37
+    },
+    {
+      "path": "components/data/example-usage.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/data/packed-circle.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/data/packed-circle.js",
+      "exit": 2,
+      "findings": 5
+    },
+    {
+      "path": "components/fields/fields.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/fields/fields.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/info-strip/example-usage.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/info-strip/info-strip-peek.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/info-strip/info-strip-peek.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/info-strip/info-strip.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/info-strip/info-strip.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/messages/messages.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/messages/messages.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/metric-comparison/example-usage.html",
+      "exit": 2,
+      "findings": 2
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.css",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.js",
+      "exit": 2,
+      "findings": 14
+    },
+    {
+      "path": "components/navigation/navigation.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/navigation/navigation.js",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/order-schedule/example-usage.html",
+      "exit": 2,
+      "findings": 3
+    },
+    {
+      "path": "components/order-schedule/order-schedule.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/order-schedule/order-schedule.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/organization/organization.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/organization/organization.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/selection/picker.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/selection/picker.js",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "components/selection/selection.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/selection/selection.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/surfaces/curves.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "components/surfaces/surfaces.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "shared/icons.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "shared/motion.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "shared/tokens.css",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/board-base.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/board.js",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/index.css",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/buttons/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/buttons/board.js",
+      "exit": 2,
+      "findings": 3
+    },
+    {
+      "path": "previews/buttons/example-usage.html",
+      "exit": 2,
+      "findings": 4
+    },
+    {
+      "path": "previews/buttons/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/carousel/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/carousel/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/carousel/example-usage.html",
+      "exit": 2,
+      "findings": 13
+    },
+    {
+      "path": "previews/carousel/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/compositions/compositions.css",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/compositions/compositions.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/compositions/form-example.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/compositions/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/compositions/row-example.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/compositions/summary-example.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/concepts/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/concepts/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/concepts/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/data/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/data/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/data/example-usage.html",
+      "exit": 2,
+      "findings": 4
+    },
+    {
+      "path": "previews/data/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/fields/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/fields/board.js",
+      "exit": 2,
+      "findings": 4
+    },
+    {
+      "path": "previews/fields/example-usage.html",
+      "exit": 2,
+      "findings": 3
+    },
+    {
+      "path": "previews/fields/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/info-strip/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/info-strip/comparison.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/info-strip/index.html",
+      "exit": 2,
+      "findings": 2
+    },
+    {
+      "path": "previews/messages/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/messages/board.js",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/messages/example-usage.html",
+      "exit": 2,
+      "findings": 3
+    },
+    {
+      "path": "previews/messages/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/navigation/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/navigation/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/navigation/example-usage.html",
+      "exit": 2,
+      "findings": 4
+    },
+    {
+      "path": "previews/navigation/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/organization/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/organization/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/organization/example-usage.html",
+      "exit": 2,
+      "findings": 6
+    },
+    {
+      "path": "previews/organization/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/selection/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/selection/board.js",
+      "exit": 2,
+      "findings": 5
+    },
+    {
+      "path": "previews/selection/example-usage.html",
+      "exit": 2,
+      "findings": 4
+    },
+    {
+      "path": "previews/selection/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/surfaces/approved-curves.html",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/surfaces/board.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/surfaces/board.js",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/surfaces/example-usage.html",
+      "exit": 2,
+      "findings": 8
+    },
+    {
+      "path": "previews/surfaces/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/system/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/system/system.css",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/system/system.js",
+      "exit": 2,
+      "findings": 1
+    },
+    {
+      "path": "previews/ui-system-showcase/index.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    },
+    {
+      "path": "previews/ui-system-showcase/showcase.css",
+      "exit": 0,
+      "findings": 0
+    },
+    {
+      "path": "previews/ui-system-showcase/showcase.js",
+      "exit": 2,
+      "findings": 5
+    },
+    {
+      "path": "previews/ui-system-showcase/standalone.html",
+      "status": "TIMEOUT",
+      "seconds": 3
+    }
+  ],
+  "findings": [
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/access-gateway/access-gateway.js",
+      "line": 186,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تعذّر تجهيز نموذج الدخول — تأكد من اكتمال حقوله."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/access-gateway/access-gateway.js",
+      "line": 213,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "هذه نسخة عرض تجريبية — لن تُرسل بياناتك إلى أي خدمة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/access-gateway/access-gateway.js",
+      "line": 234,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/access-gateway/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال بوابة الدخول — Micro"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/access-gateway/example-usage.html",
+      "line": 78,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "عرض محلي: لم يتم الدخول — لا خدمة مصادقة متصلة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/account-settings/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال إعدادات الحساب — Micro"
+    },
+    {
+      "id": "O1",
+      "sev": "P0",
+      "file": "components/data/data.css",
+      "line": 168,
+      "msg": "accent stripe border on one side",
+      "text": "border-inline-start: 3px solid var(--micro-info);"
+    },
+    {
+      "id": "K5",
+      "sev": "P1",
+      "file": "components/data/data.css",
+      "line": 252,
+      "msg": "cream/terracotta default",
+      "text": ".m-cat--b { --cat: var(--micro-data-b); }  /* #D97757 */"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 135,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 136,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— سالب غير مرسوم"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 146,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 182,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "bounds.right - 1 || a.top"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 203,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— قيمة شاذة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 350,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "W - 8) x = W - 8 - half; if (x - half"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 404,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "0)) return; var half = len / 2; var x = parseFloat(t.getAttribute('x')) || 0; if (x - half"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 409,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "W - 8) x = W - 8 - half; if (x - half"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 485,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 505,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 518,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 525,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescal"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 551,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— مقياس موسّع إلى"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 567,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 602,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— القيم الأصلية دون تغيير."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 605,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "bars: data-overscale=\"rescale\" — رسم بمقياس موسّع من"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 643,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 650,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale=\"rescale\""
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 682,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— مقياس موسّع إلى"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 711,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 732,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— القيم الأصلية دون تغيير."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 735,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "line: data-overscale=\"rescale\" — رسم بمقياس موسّع من"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 780,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— قيمة شاذة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 984,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون ن"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 989,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح "
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 990,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 995,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1000,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معرو"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1003,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1006,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1075,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1115,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1222,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1229,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو است"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1246,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1278,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— القيم الأصلية دون تغيير."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/data.js",
+      "line": 1281,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "bubbles: data-overscale=\"rescale\" — رسم بمقياس موسّع من"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — أمثلة مصدر الرسوم"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/packed-circle.js",
+      "line": 139,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "0 — صفر"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/packed-circle.js",
+      "line": 175,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير معروف"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/packed-circle.js",
+      "line": 176,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير متاح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/packed-circle.js",
+      "line": 179,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— سالب غير صالح للمساحة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/data/packed-circle.js",
+      "line": 194,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— لا توجد قيم موجبة للمقارنة. القيم معروضة في المفتاح."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/info-strip/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — بطاقة Micro العددية"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال المقارنة العددية — Micro"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/example-usage.html",
+      "line": 24,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "قيم تشغيلية — مثال"
+    },
+    {
+      "id": "O1",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.css",
+      "line": 340,
+      "msg": "accent stripe drawn with a pseudo-element",
+      "text": ".m-main-metric__track[data-zero=\"true\"]::after"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 124,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 128,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 132,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديل"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 136,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار)."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 143,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 144,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-circles: لا قيم معلومة — لا رسم."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 161,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale="
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 184,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 285,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-bars: مصدر فارغ — لا صفوف."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 293,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 297,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 311,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 314,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "metric-bars: لا قيم معلومة — لا مقياس."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/metric-comparison/metric-comparison.js",
+      "line": 325,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/navigation/navigation.js",
+      "line": 234,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "\" — عقد الطبقات: dialog/alertdialog (D-UI-02)."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/order-schedule/example-usage.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "جدول الطلبات المجدولة — مثال الاستخدام — Micro"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/order-schedule/example-usage.html",
+      "line": 78,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "وثيقة استخدام: ثلاث حالات حية على العقد نفسه — init ثم الأحداث (day-select / order-open / "
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/order-schedule/example-usage.html",
+      "line": 171,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "components/selection/picker.js",
+      "line": 109,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "لا نتائج مطابقة — جرّب اسمًا آخر"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/board.js",
+      "line": 84,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— شغّل اللوحة بخادم محلي من جذر المستودع (README)."
+    },
+    {
+      "id": "O1",
+      "sev": "P0",
+      "file": "previews/index.css",
+      "line": 33,
+      "msg": "accent stripe border on one side",
+      "text": ".intro-band { display:flex; align-items:center; justify-content:space-between; gap:20px; m"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/board.js",
+      "line": 58,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— شغّل اللوحة بخادم محلي من جذر المستودع (README)."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/board.js",
+      "line": 79,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تم الحفظ — رسالة تجريبية للعرض فقط"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/board.js",
+      "line": 118,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تصفية، 123 فلترًا نشطًا — مثال بعدد طويل"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/example-usage.html",
+      "line": 19,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال استخدام الأزرار خارج لوحة المعاينة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/example-usage.html",
+      "line": 62,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تم الحفظ — نتيجة المستهلك (ليست من المكوّن)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/example-usage.html",
+      "line": 64,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "زر ثانوي بنفس الواجهة، بلا أيقونة — أبعاده ثابتة أثناء التحميل:"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/buttons/example-usage.html",
+      "line": 106,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "كما في اللوحة — الأصل الواحد للمصدر. بديل مسموح:"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 17,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: عارض البطاقات"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 27,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — عارض البطاقات القابل للسحب"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 46,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "بطاقة أولى في مثال مستقل بلا لوحة — التفاصيل الكاملة تظهر داخل مكانها بلا قصّ."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 57,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "بطاقة ثانية — المجاورة ظاهرة جزئيًا، والأسهم داخل الحقل تبقى للحقل."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 71,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "القيم الحقيقية داخل الدوائر (لا نسب) — مساحة الدائرة ∝ القيمة والقطر ∝ √القيمة، والمكوّن ل"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 94,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 241,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "'; document.body.appendChild(host); MicroPacked.render(host.querySelector('[data-chart-pac"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 246,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "A17 سالب مع data-display: «-3,566 — سالب غير صالح للمساحة» بالتنسيق والدلالة معًا ولا دائر"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 247,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "-3,566 — سالب غير صالح للمساحة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 249,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "A18 حالات القيم: صفر «0» ومجهول «غير معروف» وغير متاح — نص صريح لا لون وحده"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 250,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— غير معروف"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/carousel/example-usage.html",
+      "line": 275,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "— مثال مستقل للعارض"
+    },
+    {
+      "id": "C7",
+      "sev": "P2",
+      "file": "previews/carousel/example-usage.html",
+      "line": 148,
+      "msg": "arrow appended to link/button",
+      "text": "right→"
+    },
+    {
+      "id": "O1",
+      "sev": "P0",
+      "file": "previews/compositions/compositions.css",
+      "line": 88,
+      "msg": "accent stripe border on one side",
+      "text": "border-inline-start: 3px solid var(--micro-info);"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/compositions/form-example.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال حقل ومساعدة وخطأ"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/compositions/row-example.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال صف وشارة وإجراء"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/compositions/summary-example.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال قراءة وقائمة تشغيلية"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/data/example-usage.html",
+      "line": 12,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: البيانات (B05)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/data/example-usage.html",
+      "line": 20,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — البيانات والتتبّع (B05)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/data/example-usage.html",
+      "line": 38,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/data/example-usage.html",
+      "line": 41,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تصيير من بيانات HTML: القيم 8/0/—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/board.js",
+      "line": 45,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "عرض نتائج تجريبية — العرض الفعلي مسؤولية المستهلك"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/board.js",
+      "line": 48,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "لا نتائج مطابقة — جرّب اسمًا آخر"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/board.js",
+      "line": 51,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تعذر قراءة النتائج — أعد المحاولة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/board.js",
+      "line": 73,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "قيمة غير رقمية — صحّح المبلغ (القيمة كما كتبتها باقية)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/example-usage.html",
+      "line": 18,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: الحقول (B02)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/example-usage.html",
+      "line": 27,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — الحقول (B02)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/fields/example-usage.html",
+      "line": 101,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/info-strip/index.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مراجعة البطاقة العددية"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/info-strip/index.html",
+      "line": 50,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/messages/board.js",
+      "line": 37,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "ثلاث عمليات جاهزة — هذا عرض تجريبي لا بيانات حقيقية."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/messages/example-usage.html",
+      "line": 17,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: الرسائل (B06)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/messages/example-usage.html",
+      "line": 31,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — الرسائل والحالات (B06)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/messages/example-usage.html",
+      "line": 76,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/navigation/example-usage.html",
+      "line": 12,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: التنقّل والطبقات (B07)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/navigation/example-usage.html",
+      "line": 21,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — التنقّل والطبقات (B07)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/navigation/example-usage.html",
+      "line": 37,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "محتوى الطبقة — عزل الخلفية وحصر التركيز داخلها."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/navigation/example-usage.html",
+      "line": 47,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 12,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: التنظيم (B04)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 21,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — التنظيم (B04)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 25,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تفاصيل التسوية — عنوان طويل يلتف على سطرين دون قص داخل رأس القسم القابل للطي"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 29,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "محتوى القسم — الطي الفوري بلا حركة تغيّر التخطيط، ومفتاح aria-expanded يديره المكوّن."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 46,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/organization/example-usage.html",
+      "line": 52,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "المفتاح زر أصلي — Enter/Space يفعّلانه أصلًا بلا مستمع إضافي"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/board.js",
+      "line": 37,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "فشل التحديث — أُعيدت القيمة السابقة (محاكاة)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/board.js",
+      "line": 58,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مأمورية فوري — فرع وسط المدينة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/board.js",
+      "line": 88,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "لا نتائج مطابقة — جرّب اسمًا آخر (محاكاة)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/board.js",
+      "line": 91,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تعذر القراءة (محاكاة) — زر إعادة المحاولة من المكوّن"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/board.js",
+      "line": 92,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "فشل قراءة — أعد المحاولة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/example-usage.html",
+      "line": 16,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: منتقي الكيان (B03+E04)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/example-usage.html",
+      "line": 30,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — منتقي كيان في طبقة B07"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/example-usage.html",
+      "line": 75,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/selection/example-usage.html",
+      "line": 86,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مأمورية فوري — فرع وسط المدينة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/approved-curves.html",
+      "line": 6,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — اتجاه السطح المنحني العريض"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 18,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "Micro — مثال مستقل: الأسطح S01 (الاتجاه الحالي — المنحنيات)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 28,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مثال مستقل — سطح S01 بالاتجاه الحالي (منحنيات واسعة خافتة)"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 30,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "لوحة S01 — منطقة الدراسات التاريخية"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 39,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "ريال يمني · د.أ — آخر تحديث اليوم 12:30"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 49,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "—"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 62,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "= R.top - 0.5 && r.bottom"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 68,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "الخلفية من curves.css (تدرج بدء الملخص الفاتح) — لا أصل موجات في خلفية السطح"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/surfaces/example-usage.html",
+      "line": 94,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "تباين النص الداكن على أفتح؟ لا — على أغمق توقف في التدرج ≥ 4.5:1"
+    },
+    {
+      "id": "O1",
+      "sev": "P0",
+      "file": "previews/system/system.css",
+      "line": 28,
+      "msg": "accent stripe border on one side",
+      "text": ".ref-state-sample { display:flex; flex-direction:column; gap:8px; padding:15px 16px; borde"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/system/system.js",
+      "line": 42,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "جارٍ الحفظ — التسمية ومكان المؤشر ثابتان."
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/ui-system-showcase/showcase.js",
+      "line": 24,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "شركة الواحة للخدمات المتكاملة — فرع العاصمة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/ui-system-showcase/showcase.js",
+      "line": 25,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مأمورية فوري — فرع وسط المدينة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/ui-system-showcase/showcase.js",
+      "line": 30,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "شركة الواحة — فرع العاصمة ببيانات عنوان طويلة جدًا بلا مسافات لاختبار التفاف خيار المنتقي"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/ui-system-showcase/showcase.js",
+      "line": 31,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "مأمورية فوري — فرع وسط المدينة"
+    },
+    {
+      "id": "O3",
+      "sev": "P0",
+      "file": "previews/ui-system-showcase/showcase.js",
+      "line": 159,
+      "msg": "dash in visible text (rewrite: full stop, comma, colon, \"to\")",
+      "text": "القيمة المطلوبة ناقصة أو غير صالحة — القيمة محفوظة كما هي."
+    }
+  ],
+  "counts": {
+    "P0": 150,
+    "P1": 1,
+    "P2": 1
+  }
+}

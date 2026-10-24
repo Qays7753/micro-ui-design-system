@@ -1,0 +1,207 @@
+{
+  "audit": "brand-auditor",
+  "scope": "Current repository UI system only; Micro consumer applications and repositories are out of scope.",
+  "brandProfile": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/brand.json",
+  "findings": [
+    {
+      "id": "BRAND-01",
+      "skill": "brand-auditor",
+      "category": "Brand role definition / 70-20-10 measurement",
+      "severity": "P2",
+      "status": "NOT PROVABLE",
+      "path": [
+        "shared/tokens.css:9-23, 29-51",
+        "docs/UI-VISUAL-SYSTEM.md:16-19",
+        "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/brand.json: profile_limits and colors"
+      ],
+      "selector": "N/A — token-role mapping",
+      "evidence": {
+        "basis": "Rendered measurement profile deliberately maps the light page field (#F7F8F4 plus assigned light neutrals) to the auditor's primary area role, petrol (#164D59) to supporting secondary, and terracotta (#D97757) to tertiary. Those are measurement roles, not source token names. In source, petrol is explicitly --micro-brand-primary and terracotta is --micro-brand-accent.",
+        "390pxExamples": {
+          "previews/buttons/index.html": "91.8 / 5.4 / 2.7 percent",
+          "previews/fields/index.html": "96.5 / 3.4 / 0.2 percent",
+          "previews/info-strip/index.html": "70.6 / 29.3 / 0 percent",
+          "previews/data/index.html": "94.8 / 4.7 / 0.5 percent",
+          "previews/ui-system-showcase/index.html": "93.8 / 6.2 / 0 percent"
+        },
+        "method": "First-viewport Chromium screenshots at 320/360/390/430; browser-canvas pixel sampling at quarter resolution, kit OKLab transform and nearest-color ΔE ≤0.08, semantic pixels excluded, chart/image boxes excluded, secondary/tertiary 100-900 ramps included. See generated-artifacts/pixilated-audit/brand/browser-results.json.",
+        "interpretation": "These ratios are measurements under a derived profile, not a confirmed violation: neutral-first sample pages intentionally use a large light canvas, some have no accent in the initial viewport, and the role mapping is not stated as an owner-approved policy. Do not paint component surfaces merely to force a ratio."
+      },
+      "problem": "A 70/20/10 compliance verdict changes materially depending on whether primary means the named petrol token or the dominant page field. Existing token names define action/support/accent roles, while the kit profile defines area roles.",
+      "rootCause": "The repository has an explicit token palette and composition direction but no approved brand-audit role/share mapping for screen-level area accounting.",
+      "impact": "A literal pass/fail can invite arbitrary colored surfaces, misreport actual component API semantics, or imply an owner decision that is not present. Current measurements are useful baselines only.",
+      "currentSolution": "Keep source token names intact; use the explicitly derived audit-role profile and report its assumptions alongside every ratio.",
+      "futureState": "Approve an area-role map for this UI kit separately from the CSS token vocabulary. Decide whether white/ivory page and component surfaces count as primary and whether 70/20/10 applies to reference boards, isolated examples, and future composed showcases. Use color on meaningful hierarchy only; allow token-labelled exceptions.",
+      "recommendedSolution": "Patch the audit profile and governance note only after owner confirmation; do not change shared tokens or repaint UI to meet the target.",
+      "changeType": "Owner-approved profile/governance patch; no component patch.",
+      "risk": "Using one target indiscriminately across an individual control specimen and a composed screen distorts the intended direction and makes measurement non-comparable.",
+      "acceptance": "Profile names each measurement role and neutral assignment; reruns identify route, viewport, semantic/chart/image exclusions, and measured percentages; a composition may miss target without receiving a forced surface change.",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "For area measurement, should the page ground and light cards count as auditor-primary while petrol remains source-token-primary, or should the named petrol token own the auditor-primary role? Should the same 70/20/10 target apply to isolated component previews?",
+      "recommendation": "Use a separate neutral-primary / petrol-secondary / terracotta-tertiary measurement profile for composed UI and classify isolated component boards as descriptive measurements, not color-change mandates.",
+      "blocks": "Final brand proportion sign-off only."
+    },
+    {
+      "id": "BRAND-02",
+      "skill": "brand-auditor",
+      "category": "Logo / distinctive asset consistency",
+      "severity": "P2",
+      "status": "LIKELY",
+      "path": [
+        "assets/brand/micro-logo/README.md:3, 7-25",
+        "assets/brand/micro-logo/v1/README-AR.md:16-45, 62-66",
+        "previews/index.html:29-36",
+        "previews/index.css:19, 31",
+        "previews/ui-system-showcase/index.html:24-32"
+      ],
+      "selector": ".brand-mark and the top identity headers of the family index and system showcase",
+      "evidence": "The owner-approved v1 symbol/Arabic/English lockups are in the repository; the brand README explicitly says they have not yet been installed in UI screens. The family index renders a lowercase text \"m\" inside .brand-mark, and the composed showcase uses a text eyebrow without the approved logo. Viewed evidence: generated-artifacts/pixilated-audit/brand/screenshots/previews--index-320.png and previews--ui-system-showcase--index-390.png. The approved guide specifies 240px minimum full lockup width, symbol-only at smaller sizes, and 0.3125× symbol-width wordmark gap; it does not specify screen placements.",
+      "problem": "A non-approved single-letter treatment currently stands in for the approved distinctive mark on the library index while the actual brand asset remains unplaced. This is a repository/showcase identity inconsistency, not a defect in reusable component families.",
+      "rootCause": "Brand asset approval and UI visual-system approval are documented as separate; the latter has not established logo placement or lockup ownership.",
+      "impact": "The central library preview is less recognizably the approved identity and risks making the improvised letter appear canonical. Primitive examples should remain brand-neutral enough to transfer.",
+      "currentSolution": "The approved vector source and derived exports are preserved locally with checksum/delivery evidence; their documented use and approval boundaries are clear.",
+      "futureState": "Decide whether the family index and composed system showcase should display the approved mark. If yes, use the approved Arabic or symbol lockup in the overview/header only; keep independent primitive examples unbranded. Do not redraw the logo from the CSS letter or edit the approved paths.",
+      "recommendedSolution": "Add a small preview-only placement using the approved v1 lockup (or symbol where width is below 240px) after deciding its placement; replace or remove the ad-hoc m.",
+      "changeType": "Preview-level patch after owner decision; placement is not currently governed.",
+      "risk": "Installing a wordmark into a design-system specimen can imply the future product host's shell/brand layout; reproducing it in component CSS would reduce portability.",
+      "acceptance": "Only approved local asset used; aspect ratio and clear space preserved; lockup ≥240 CSS px or symbol-only below that; light/neutral versus white/reversed variant follows its documented background; no mark is silently bundled into portable primitives.",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Should the repository's family index and system showcase use the approved Micro mark now, or remain deliberately text-only until a host placement contract is approved? Recommendation: mark the overview/showcase only, not every component.",
+      "blocks": "Brand identity sign-off for the showcase, not component reuse."
+    },
+    {
+      "id": "BRAND-03",
+      "skill": "brand-auditor",
+      "category": "Text contrast / accent use",
+      "severity": "P2",
+      "status": "LIKELY",
+      "path": [
+        "previews/index.html:31",
+        "previews/index.css:15, 19",
+        "shared/tokens.css:15, 18-20",
+        "assets/brand/micro-logo/README.md:19-23"
+      ],
+      "selector": ".library-head .brand-mark",
+      "evidence": "At the 390px browser probe, the glyph is 15px / weight 600 with computed foreground rgb(217,119,87) (#D97757) over opaque petrol rgb(22,77,89) (#164D59); measured WCAG contrast is 3.00:1. The exact values are in generated-artifacts/pixilated-audit/brand/browser-results.json → directContextProbes. The viewed 320px screenshot confirms the glyph is a visible lowercase m next to MICRO. This misses 4.5:1 if treated as ordinary text. The text is redundant branding next to MICRO and could be intended as a decorative mark, but it is not the approved vector symbol.",
+      "problem": "The terracotta accent is rendered as a small text glyph over petrol at only 3.00:1. The canonical UI token note describes the accent as a limited touch with dark text, not small terracotta text on petrol.",
+      "rootCause": "The preview styles a text monogram with --micro-brand-accent on the dark header instead of using a governed logo/symbol variant.",
+      "impact": "If users are expected to read the m, it is low-contrast text. If it is only ornament, it still substitutes an unapproved mark and is exposed as text to assistive technology.",
+      "currentSolution": "The larger MICRO label remains high contrast; the approved logo package includes a purpose-drawn symbol and background-appropriate variants.",
+      "futureState": "Use the approved vector symbol or remove the glyph. Preserve the base accent #D97757 for identity surfaces and accent fills; do not use a palette generator's text-safe shade as a replacement for the approved brand color.",
+      "recommendedSolution": "Replace the text m with the locally approved symbol variant appropriate to the petrol header, or make it purely decorative and visually use a documented high-contrast mark treatment after approval.",
+      "changeType": "Preview-only patch after logo placement decision.",
+      "risk": "Applying an unapproved recolor to the official logo could break its protected asset colors; using a generic white m could preserve contrast but retain the wrong mark.",
+      "acceptance": "If retained as text, measured contrast ≥4.5:1 on the actual opaque background; if replaced by the logo, use only an approved background variant and preserve logo geometry/clear space; accessibility tree does not announce an ornamental one-letter substitute.",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Is the m intended as a readable wordmark/monogram, decorative ornament, or temporary placeholder? Recommendation: remove it in favor of the approved symbol, which resolves both identity and contrast ambiguity.",
+      "blocks": "The current index mark's contrast/identity sign-off."
+    },
+    {
+      "id": "BRAND-04",
+      "skill": "brand-auditor",
+      "category": "Palette fidelity / preview links",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "path": [
+        "previews/surfaces/index.html:42, 283-286",
+        "previews/system/index.html:82",
+        "previews/system/system.css:37-40",
+        "components/organization/organization.css:108-118"
+      ],
+      "selector": "previews/surfaces/index.html: section#current-direction > p.panel-note > a; local inspection links",
+      "evidence": "The rendered surfaces preview uses browser-default link blue rgb(0,0,238) for 12 anchor occurrences at each tested viewport; generated-artifacts/pixilated-audit/brand/browser-results.json records the computed off-palette finding. The viewed generated-artifacts/pixilated-audit/visual-surfaces-390.jpg visibly shows blue and visited-purple documentation links in the first specimen. The component's .m-row anchor intentionally inherits color, but review-board prose has no shared branded link rule. A system-reference link also renders default blue once. The screenshot is board UI, not proof that component consumers inherit these colors.",
+      "problem": "Preview documentation links fall back to user-agent colors rather than a repository palette role, creating conspicuous blue/purple drift in an otherwise restrained petrol/ivory visual system.",
+      "rootCause": "The board styles use global text/surface tokens but do not consistently define link, visited, hover, and focus colors; .m-row intentionally uses inherited color and does not solve prose anchors.",
+      "impact": "Reference pages look partially unskinned and undermine brand consistency in the primary audit/learning surface. This does not establish a production component defect.",
+      "currentSolution": "Links are underlined and their text meaning remains explicit; focus rules exist in several boards, but palette mapping is inconsistent.",
+      "futureState": "Add a board-level link role mapped to the existing petrol token, with visible underline and explicit visited/focus/hover behavior. Preserve a distinction between links and plain text without relying on color alone. Keep this rule in preview styles rather than adding preview dependencies to component source.",
+      "recommendedSolution": "Patch preview board anchor states in the surfaces and system reference styles; consider a shared preview-only link alias after checking other boards.",
+      "changeType": "Patch to preview-only CSS; governance alias is optional.",
+      "risk": "A global preview selector could override component-specific links or flatten visited-state feedback; keep selectors scoped and preserve focus-visible outline.",
+      "acceptance": "No board text link computes to user-agent blue/purple; links remain underlined and distinct in grayscale; keyboard focus remains visible; component standalone rendering is unchanged.",
+      "ownerDecisionRequired": false,
+      "ownerQuestion": null,
+      "blocks": "No; safe preview-only consistency correction."
+    },
+    {
+      "id": "BRAND-05",
+      "skill": "brand-auditor",
+      "category": "Chart palette / color-vision distinction",
+      "severity": "P2",
+      "status": "LIKELY",
+      "path": [
+        "shared/tokens.css:120-125",
+        "components/data/data.css:250-255",
+        "previews/data/index.html:125-138"
+      ],
+      "selector": ".m-chart--bars [data-series=\"b\"], .m-chart--bars [data-series=\"e\"]",
+      "evidence": "The documented five-series fixture maps fixed keys b to #D97757 and e to #B3BD7B. Applying the kit's Machado et al. severity-1.0 deuteranopia transform to the current token values produces OKLab ΔE 0.097 for b/e, just below the kit's 0.10 warning threshold; the closest protanopia pair is a/d at 0.134. Actual chart screenshot generated-artifacts/pixilated-audit/brand/screenshots/chart-five-series-390.png was opened: all five columns have directly adjacent value and category labels, so the colors are not the sole identification channel. The kit palette script also produced four warnings for its generated candidate palette; those candidate colors are not applied and are not evidence about the current UI.",
+      "problem": "Two existing data-series colors are a near collision under the toolkit's deuteranopia simulation in the five-category specimen.",
+      "rootCause": "Category colors are stable token assignments, including logo accent terracotta and a light olive data color, with no chart-specific accessibility variant.",
+      "impact": "In a dense or spatially separated five-series chart, viewers with deuteranopia could have more difficulty distinguishing those two categories by hue alone. Current example labels/value placement reduce the risk; no user comprehension test was performed.",
+      "currentSolution": "Category keys map deterministically to tokens, labels and values are visibly present, and charts have text summaries. Good/bad values are assigned semantic colors separately from category identity.",
+      "futureState": "Keep category identity and the approved brand accent distinct from good/bad semantics. Test all rendered chart families and supported data-category counts under CVD simulation. If the near pair remains a practical risk, introduce a chart-only token or non-color cue (e.g. direct labels/pattern) without changing brand or semantic tokens.",
+      "recommendedSolution": "Validate the b/e pair in context with owner-approved chart policy; prefer direct labels/patterns or a chart-only adjustment over altering the approved global terracotta/olive tokens.",
+      "changeType": "Possible structural chart-palette contract; no immediate token change justified by this near-threshold, labelled fixture alone.",
+      "risk": "Changing a fixed category color can break cross-chart identity and diverge from the approved brand; patterns may add visual density.",
+      "acceptance": "CVD review covers every simultaneous categorical combination; where ΔE remains below 0.10, labels or another redundant cue keep each series identifiable at 320/360/390/430; success/error semantics are unchanged.",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Should chart category tokens remain fixed to global data colors, or may chart-specific colors/patterns be used to separate near CVD pairs? Recommendation: retain global tokens and add non-color/direct-label cues unless an actual chart comparison remains ambiguous.",
+      "blocks": "No for current examples; chart palette sign-off remains provisional."
+    },
+    {
+      "id": "BRAND-06",
+      "skill": "brand-auditor",
+      "category": "Semantic/brand color proximity",
+      "severity": "P2",
+      "status": "NOT PROVABLE",
+      "path": [
+        "shared/tokens.css:9-16, 43-47",
+        "docs/UI-VISUAL-SYSTEM.md:16-19",
+        "generated-artifacts/pixilated-audit/brand/browser-results.json"
+      ],
+      "selector": "Brand and semantic token palette; per-element semantic misuse not confirmed",
+      "evidence": "The injected script reports the petrol #164D59 close to success #176647 (ΔE 0.10) and info #265E91 (ΔE 0.10); gradient start #236675 is ΔE 0.08/0.06 from those roles; data blue-grey #496D92 is ΔE 0.06 from info. It emits these profile-pair warnings on every route. Manual source/screenshot review found explicit semantic icon/word/color treatments in the messages specimen and dedicated success/error styles; no instance of an error, success, or information status being recolored to the petrol brand token was confirmed.",
+      "problem": "Some brand and semantic colors are perceptually near under the kit's ΔE threshold, so the automated warning is a palette-separation risk signal, not proof of semantic misuse.",
+      "rootCause": "Brand petrol and blue-grey data colors occupy blue/green hues adjacent to the existing info/success status palette; the rule evaluates pair distance globally without determining text, chart, or status role.",
+      "impact": "At small sizes or in a dense UI, adjacent brand-action and status colors may be less distinct than the numeric token names imply. Current message examples also show labels and icons, which provide redundant cues.",
+      "currentSolution": "Semantic roles are explicit in tokens and documentation; status examples visually include text/icon pairing; data styles separate good/bad tones from direction.",
+      "futureState": "Retain semantic wins and evaluate actual foreground/background/size/context pairs rather than recoloring isolated swatches. Confirm whether current semantic green/info hues are owner-approved; use labels/icons and luminance or shape separation where hues intentionally remain near.",
+      "recommendedSolution": "Treat the toolkit warning as a review gate for screens where both roles coexist, not a global palette-change request. Add a reviewed deviation only after the owner confirms accepted pairs.",
+      "changeType": "Owner decision / token governance; no immediate product patch.",
+      "risk": "Changing semantic colors for abstract ΔE distance can lower contrast, alter established state meaning, or conflict with existing examples.",
+      "acceptance": "Same-screen pairs reviewed at actual size and backgrounds; statuses retain text/icon plus color; no brand action is used as the only status signal; any accepted proximity is documented.",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Are the current petrol / success / info color relationships intentional and approved as a palette, or should one semantic hue be adjusted after contextual contrast review? Recommendation: preserve current values pending a real overlapping use case; never recolor status to meet branding.",
+      "blocks": "No; it blocks a blanket claim that every color role is perceptually isolated."
+    }
+  ],
+  "falsePositiveAndScopeTriage": [
+    {
+      "toolSignal": "brand_audit.js color contrast may use an ancestor's backgroundColor even when the visible backdrop is a CSS gradient.",
+      "case": ".m-info-card__number",
+      "disposition": "Do not repeat a low contrast finding inferred from transparent ancestor fallback. Browser reports white text, transparent computed backgroundColor on the card, and actual background-image linear-gradient(145deg, #236675, #164D59 72%). Measured white-to-endpoint contrast is 6.50:1 and 9.38:1; screenshot confirms the gradient. This is not an AA failure."
+    },
+    {
+      "toolSignal": "brand_audit.js reports filled/mixed/off-size small SVGs as icons in data chart regions.",
+      "case": ".m-bubble__circle, including a 37px SVG and data-series circles",
+      "disposition": "False positive for icon style: these are data encodings, not UI icons. SVGs are not consistently marked data-brand-chart, and the script only excludes role=img/data-brand-chart. Do not normalize chart geometry or count chart strokes as icon-family inconsistency."
+    },
+    {
+      "toolSignal": "CSS computed font-family inspection sees only the first declared family.",
+      "case": "Arabic text with canonical stack 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif",
+      "disposition": "The script initially treated IBM Plex Sans as the sole brand role. CDP CSS.getPlatformFontsForNode with CSS enabled confirmed custom IBM Plex Sans Arabic glyphs on sampled Arabic headings and custom IBM Plex Sans Latin glyphs on mixed Latin text, at 19 route/viewport probes. Both font families/weights loaded locally; do not report a font fallback."
+    },
+    {
+      "toolSignal": "Toolkit proximity heuristic emits the same palette-pair warning on every page.",
+      "case": "Petrol/blue-grey vs semantic success/info",
+      "disposition": "Retained once as a NOT PROVABLE palette risk (BRAND-06), not duplicated as repeated per-route errors or presented as confirmed semantic misuse."
+    }
+  ],
+  "unscoredDimensions": [
+    "No 0-100 total brand score: the area-role assignment is derived, owner voice guidance is absent, and the approved logo has no UI placement contract.",
+    "Voice score: NOT PROVABLE as owner brand voice; a bounded UX Writer handoff is included in brand-report.md.",
+    "Image-direction score: NOT APPLICABLE to the inspected UI-only library previews; no product photography brief or image corpus is specified.",
+    "Logo/recognition score: NOT PROVABLE across all screens because logo placement is explicitly pending; existing approved assets were reviewed."
+  ]
+}

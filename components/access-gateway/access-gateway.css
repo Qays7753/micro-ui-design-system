@@ -106,7 +106,7 @@
   min-height: var(--micro-touch-min);
   display: inline-flex;
   align-items: center;
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
   text-decoration: underline;

@@ -92,7 +92,7 @@ button.m-setting-row:focus-visible {
   height: var(--micro-row-tile);
   border-radius: var(--micro-radius-field);
   background: var(--micro-surface-page);
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
 }
 
 .m-setting-row__icon::before {

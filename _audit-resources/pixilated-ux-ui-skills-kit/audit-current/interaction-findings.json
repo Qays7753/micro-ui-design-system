@@ -1,0 +1,175 @@
+{
+  "audit": "interaction-designer-agent",
+  "audit_prefix": "INT",
+  "source_head": "fc1e53e03048c38a451c8421e23cee58ab2b3a7a",
+  "scope": "Interaction behaviors in the independent Pixilated UI-system repository and local deterministic fixtures. No external product, user, real data, or production task was observed.",
+  "external_contact": false,
+  "product_files_modified": false,
+  "finding_count": 1,
+  "findings": [
+    {
+      "id": "INT-001",
+      "skills": [
+        "interaction-designer-agent",
+        "ux-researcher-agent"
+      ],
+      "category": "Asynchronous component state / keyboard focus and feedback",
+      "severity": "P2 / Moderate",
+      "status": "CONFIRMED",
+      "source": [
+        {
+          "path": "components/selection/picker.js",
+          "lines": "93-114,126-149,243-260",
+          "selectors": "applyState, stateRow, MicroPicker.setStatus"
+        },
+        {
+          "path": "components/selection/specification.md",
+          "lines": "23-30",
+          "selectors": "R2-03 async status, hidden stale options, retry event, roving tabindex"
+        }
+      ],
+      "evidence": "In the local running showcase, focus a visible role=option and call the documented MicroPicker.setStatus(picker, 'error', message) API. The options are hidden and Chromium moves document.activeElement to body. This reproduced at 320, 360, 390, and 430 CSS px RTL. The retry button remains visible and emits one micro-picker:retry event. The generated state node remains inside role=listbox and has no role=status, role=alert, or aria-live. interaction-browser-results.json records four repetitions of the same failing continuity/announcement assertion with 0 page/runtime errors. interaction-360-picker-error-layer.png was opened and visually inspected.",
+      "problem": "A keyboard user can lose their focus location on an async non-ready transition. The status is not explicitly exposed as a live announcement, and non-option status/retry content is placed inside the listbox semantic subtree.",
+      "root_cause": "applyState hides all options and does not transfer focus from a now-hidden option. stateRow inserts a generic message and optional retry button into the listbox without live-region semantics.",
+      "impact": "Keyboard recovery can require restarting navigation, and assistive-technology announcement/role behavior is likely ambiguous. Actual screen-reader impact is not verified; the issue applies when a consumer uses the documented async status API, not to a tested production workflow.",
+      "current_patch": "None. Audit-only. Preserve stale-option hiding, state-specific messages, the retry action, and its one-event behavior.",
+      "future_state": "Keep the listbox limited to options/option groups. Render loading/empty/error feedback in a stable adjacent live-status region and retry outside the listbox. If an update hides the focused option, move focus to a visible stable picker control (normally search); do not steal focus from outside the picker or from another visible control. Preserve query and valid selection through status recovery.",
+      "recommendation": "Targeted markup and state-transition patch. Choose a documented announcement-urgency rule: polite for routine status (recommended unless context proves urgency), alert for urgent blocking failures, or a caller-configurable mode.",
+      "change_type": "Patch / component interaction contract",
+      "risks": "Unconditional programmatic focus changes can interrupt users. Focus should move only when the focused node is about to become hidden. A live region can over-announce if every result update is emitted.",
+      "acceptance_tests": [
+        "With focus on an option, loading/error/empty changes keep focus on a visible picker control, never on body or hidden content.",
+        "A status update initiated while focus is outside the picker does not steal focus.",
+        "A live status region exposes the state and the listbox contains only valid option/group content.",
+        "Retry remains keyboard reachable and Enter/Space dispatches exactly one micro-picker:retry event.",
+        "Ready recovery preserves current query and any still-valid selection, without exposing stale options.",
+        "Repeat at 320/360/390/430px RTL inside the real layer; perform an owner-selected manual browser/AT screen-reader check before making any conformance claim."
+      ],
+      "owner_decision_required": true,
+      "owner_question": "Should asynchronous picker errors use polite status semantics, alert semantics, or a caller-configurable urgency mode?",
+      "decision_options": [
+        {
+          "option": "Polite status by default (recommended for ordinary loading/empty and non-urgent errors)",
+          "effect": "Avoids interrupting the current task; a blocking error may be announced later than desired."
+        },
+        {
+          "option": "Alert for all errors",
+          "effect": "Makes failures more interruptive and noticeable, but can disrupt navigation for recoverable/background updates."
+        },
+        {
+          "option": "Caller-configurable announcement urgency",
+          "effect": "Supports varied workflows but expands the API and requires documented defaults/testing."
+        }
+      ],
+      "blocks_patch": false,
+      "related_findings": []
+    }
+  ],
+  "skill_coverage": [
+    {
+      "skill": "interaction-designer-agent",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/interaction-designer-agent/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [],
+      "families_checked": [
+        "Buttons and fields",
+        "Access gateway",
+        "Selection and picker",
+        "Navigation and layers",
+        "Account settings",
+        "Carousel and info strip",
+        "Order schedule",
+        "Messages, organization, and data families (source review only)"
+      ],
+      "finding_ids": [
+        "INT-001"
+      ],
+      "finding_count": 1,
+      "limitations": "Chromium and local fixtures only; no physical touch, screen reader, Safari/WebKit, end-user usability or product workflow claim."
+    },
+    {
+      "skill": "ux-researcher-agent",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/ux-researcher-agent/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [
+        "_audit-resources/pixilated-ux-ui-skills-kit/ux-researcher-agent/references/jtbd.md"
+      ],
+      "families_checked": [
+        "Design-system author/reviewer task hypothesis",
+        "Picker async state and recovery",
+        "Local demo flow boundaries"
+      ],
+      "finding_ids": [
+        "INT-001"
+      ],
+      "finding_count": 1,
+      "limitations": "JTBD is a low-confidence repository/task hypothesis, not user-derived. No interviews, survey, analytics, timing, external product or persona."
+    },
+    {
+      "skill": "ux-manager",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/ux-manager/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [],
+      "families_checked": [
+        "Cross-family state/focus consistency",
+        "Picker recovery",
+        "Layers and account view focus",
+        "Calendar and carousel cross-checks"
+      ],
+      "finding_ids": [
+        "INT-001"
+      ],
+      "finding_count": 1,
+      "limitations": "Apple/Google/IBM are lenses described by the local skill; no independent external guideline/product review or product-readiness verdict."
+    }
+  ],
+  "checks": [
+    {
+      "name": "interaction-browser-audit.py on local running showcase",
+      "result": "84 passed / 4 failed / 0 runtime errors",
+      "evidence": "All four failing assertions are the same picker focus/live-region issue, reproduced at 320/360/390/430 CSS px RTL. Other tested tab, layer, account, password, form, quantity, carousel, and picker retry/selection assertions passed.",
+      "artifact": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-browser-results.json"
+    },
+    {
+      "name": "complete-repair-lifecycle-check.py",
+      "result": "383 passed / 0 failed",
+      "evidence": "The checked component fixtures' RTL/LTR keyboard guards, focus, lifecycle, disconnect/re-init, and state coverage.",
+      "artifact": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-lifecycle-results/results.json"
+    },
+    {
+      "name": "complete-repair-mobile-check.py",
+      "result": "55 passed / 0 failed",
+      "evidence": "Order-schedule root-width adaptation, selected data and focus remapping across narrow/wide changes; no calendar finding.",
+      "artifact": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-calendar-mobile-results/results.json"
+    },
+    {
+      "name": "component-mobile-check.py",
+      "result": "52 passed / 0 failed",
+      "evidence": "Mobile component state/geometry fixture checks at 320/360/390/430 CSS px under touch emulation and enlarged-text simulation.",
+      "artifact": "generated-artifacts/pixilated-audit/interaction-mobile-fixture/verification.json"
+    },
+    {
+      "name": "parent-owned default route sweep (consulted, not counted as this subaudit's test)",
+      "result": "36 routes x 4 widths; 144 default cases; 0 document-overflow, page-error, or resource-error cases",
+      "evidence": "Parent edge results; aggregate non-default modes also include intentional offscreen specimen bounds and are not a page-overflow verdict.",
+      "artifact": "generated-artifacts/pixilated-audit/edge/edge-results.json"
+    }
+  ],
+  "related_parent_findings": [
+    {
+      "id": "SYS-DS-004",
+      "relationship": "Broader system lifecycle API standardization; cross-reference only, not duplicated as an interaction finding."
+    },
+    {
+      "id": "VISUAL-02",
+      "relationship": "Independent carousel peek presentation/default question; interaction controls and keyboard behavior passed, no duplicate visual finding."
+    }
+  ],
+  "limitations": [
+    "No real users, personas, analytics, production data, or product/task claims.",
+    "No physical device or real-touch trial; browser pointer/touch emulation only.",
+    "No screen-reader, Safari/WebKit, full WCAG, or cross-browser audit.",
+    "No calendar issue is reported: root-width threshold and focus/data preservation were tested, not inferred from source arithmetic alone.",
+    "Messages, organization, and data-specific state paths were source-reviewed but not directly injected in this workstream."
+  ]
+}

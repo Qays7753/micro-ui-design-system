@@ -1,0 +1,73 @@
+{
+  "skill": "anti-ai-slop",
+  "findings": [
+    {
+      "id": "SLOP-01",
+      "skill": "anti-ai-slop",
+      "category": "UI visual hierarchy / optional polish",
+      "severity": "P2",
+      "rawKitSeverity": "O1 P0",
+      "status": "CONFIRMED",
+      "source": [{"path": "previews/index.css", "lines": "33", "selector": ".intro-band"}],
+      "evidence": "390px actual rendered element is 350×97.625px with border-inline-start 3px solid rgb(217,119,87). generated-artifacts/pixilated-audit/slop/intro-stripe.png was opened and inspected; measurements.json contains computed styles.",
+      "problem": "The introductory principles block uses an accent edge without an active, selected, error or other state meaning. The block contains a real link, but the edge decorates the whole informational group.",
+      "rootCause": "Brand accent is used as decoration rather than mapped to a specific action/state role.",
+      "impact": "Adds competing emphasis in the library index and weakens the connection between accent and meaningful state. This is not evidence of broken interaction or a production emergency.",
+      "currentPatch": "None applied. A patch can remove the edge while preserving the useful principles text and link.",
+      "futureState": "Use spacing and one neutral fill step for informational principles. Keep link emphasis on the link, not the group edge. Reserve strong edge treatments only if an explicit semantic pattern is approved and documented across the system.",
+      "recommendation": "Remove the ornamental accent edge during the approved preview cleanup; do not substitute a glow, gradient line or extra badge.",
+      "changeType": "Patch",
+      "risk": "Less visual separation; retain heading/spacing and sufficient fill difference.",
+      "acceptanceTests": ["No ornamental accent edge remains on .intro-band.", "The link remains discoverable and keyboard focus visible.", "320/360/390/430 layouts retain readable hierarchy without overflow."],
+      "ownerDecisionRequired": false,
+      "ownerQuestion": "Optional: approve this as part of preview-only cleanup?"
+    },
+    {
+      "id": "SLOP-02",
+      "skill": "anti-ai-slop",
+      "category": "UI/UX composition affordance",
+      "severity": "P2",
+      "rawKitSeverity": "O5 P0",
+      "status": "CONFIRMED",
+      "source": [{"path": "previews/compositions/index.html", "lines": "39-49", "selector": ".m-row > .m-row__tile"}],
+      "evidence": "The rendered read-only div.m-row contains a 48px tinted tile with a chevron-left image, while only the separate action button is interactive. generated-artifacts/pixilated-audit/slop/composition-tile.png was opened and inspected. Tile markup is aria-hidden; row has no link/button role.",
+      "problem": "A navigation chevron appears in a decorative icon tile on a row that does not navigate. At 390px the composition also stacks the status and wide action below, leaving the arrow visually detached from any action.",
+      "rootCause": "The composition reuses a directional asset as decoration instead of matching row affordance to its actual interaction contract.",
+      "impact": "The example teaches an ambiguous row pattern. The arrow can suggest row navigation that does not exist, and the tinted tile spends space without conveying entity identity.",
+      "currentPatch": "None applied. Remove the chevron tile from the read-only/action-row fixture.",
+      "futureState": "Specify separate read-only, navigational and action-row compositions. Navigational rows use a real link and a destination chevron; read-only rows have no navigation affordance; action rows show their explicit action without a decorative direction cue. An entity icon is optional inline content only when it communicates identity.",
+      "recommendation": "Patch the demo now after approval, then codify row-composition affordance rules and responsive label/status/action grouping.",
+      "changeType": "Patch plus composition contract",
+      "risk": "Removing the tile changes sample balance; real identity content must remain possible without forcing an icon.",
+      "acceptanceTests": ["Read-only rows contain no navigation chevron.", "Navigational row fixture has a real href and correct RTL cue.", "Action button remains independently named and 48px minimum.", "At all four widths, label, status and action retain clear grouping without nested targets."],
+      "ownerDecisionRequired": false,
+      "ownerQuestion": "No blocking product decision; use interaction semantics rather than an ornamental icon."
+    },
+    {
+      "id": "SLOP-03",
+      "skill": "anti-ai-slop",
+      "category": "Content and state visual conventions",
+      "severity": "P2",
+      "rawKitSeverity": "O3/O6 P0",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "components/organization/specification.md", "lines": "15,21", "selector": ".m-badge__dot, .m-missing"},
+        {"path": "previews/compositions/index.html", "lines": "48", "selector": ".m-badge"},
+        {"path": "components/order-schedule/order-schedule.css", "lines": "503-518", "selector": ".m-ocal__row-statusdot"},
+        {"path": "components/data/example-usage.html", "selector": ".m-missing"}
+      ],
+      "evidence": "The original kit rendered audit ran on all 36 current HTML routes at390: 423 raw dash and14 raw dot-in-chip signals across duplicated examples/output. These are NOT423+14 unique defects. The inspected composition screenshot visibly contains `جاهز — عينة` with a leading status dot. Existing source deliberately defines dot+text and missing dash.",
+      "problem": "Current conventions conflict with the requested Pixilated house rules: decorative dots repeat textual status, dash punctuation adds noise, and missing-value glyphs can be ambiguous unless a readable meaning accompanies them. Existing specification is evidence of intent, not proof of optimal design.",
+      "rootCause": "State and missing-value conventions were authored before explicit cross-system copy/visual policy; visible phrases and accessible readings are maintained separately.",
+      "impact": "Mostly consistency and content clarity. A missing value must never be hidden or converted into zero. Status text and chart legend keys are meaningful and must be preserved.",
+      "currentPatch": "None applied. Rewrite sentence punctuation case by case; use explicit missing-value copy where appropriate; remove redundant badge dots without removing state words.",
+      "futureState": "Adopt a semantic state renderer: neutral default text, restrained semantic tint/word for attention, optional meaningful icon only when it adds information. Preserve chart swatches as data keys. Define missing/unavailable/not-applicable separately and render the exact state meaning rather than a universal dash. Keep mathematical minus signs, identifiers and genuine data notation unchanged. Resolve visible and accessible wording from the same content contract.",
+      "recommendation": "Approve a system-wide convention first, then migrate fixtures and component-owned defaults in small audited groups. Do not blindly search/replace every dash or delete semantic data keys.",
+      "changeType": "Structural convention plus small source patches",
+      "risk": "Long Arabic missing-state words may increase row height; careless replacement could corrupt negative numbers, ranges, identifiers or data distinction.",
+      "acceptanceTests": ["No dash punctuation in reviewed component-owned UI copy after migration.", "Negative signs and identifiers remain unchanged.", "Missing, zero and not-applicable remain distinct visually and accessibly.", "Badges remain understandable without color.", "Chart legends retain their categorical color keys.", "Long Arabic state copy wraps at320 without hiding values."],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Approve text/tint state badges without redundant dots and explicit missing-state words? Recommended: yes; chart keys and numeric notation remain exceptions with meaning."
+    }
+  ]
+}

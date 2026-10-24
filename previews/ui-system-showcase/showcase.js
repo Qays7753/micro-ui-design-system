@@ -14,6 +14,24 @@
 
   function q(id) { return document.getElementById(id); }
   function qa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function renderCatalog() {
+    var catalog = JSON.parse(q('sc-component-catalog').textContent);
+    var labels = { 'stable-ui': 'STABLE UI', 'draft-for-review': 'DRAFT FOR REVIEW', proposed: 'PROPOSED' };
+    var families = catalog.families, variants = catalog.variants;
+    qa('[data-catalog-family]').forEach(function (badge) {
+      var id = badge.getAttribute('data-catalog-family'), variant = badge.getAttribute('data-catalog-variant');
+      var item = (variant ? variants : families).filter(function (entry) { return entry.id === (variant || id); })[0];
+      if (!item || !labels[item.maturity]) throw new Error('Invalid showcase maturity catalog entry');
+      badge.textContent = labels[item.maturity];
+      var section = badge.closest('.sc-section');
+      if (section) section.setAttribute('data-status', item.maturity === 'stable-ui' ? 'current' : item.maturity === 'draft-for-review' ? 'draft' : 'proposed');
+    });
+    qa('[data-catalog-summary]').forEach(function (node) {
+      var stable = families.filter(function (item) { return item.maturity === 'stable-ui'; }).length;
+      var draft = families.filter(function (item) { return item.maturity === 'draft-for-review'; }).length;
+      node.textContent = families.length + ' عائلة · ' + stable + ' STABLE UI · ' + draft + ' DRAFT FOR REVIEW';
+    });
+  }
 
   /* ---------------- Fixtures حتمية محلية ---------------- */
 
@@ -63,9 +81,26 @@
 
   /* ---------------- الحالة العامة للمتحكم ---------------- */
 
-  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current' };
+  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current', view: 'overview' };
 
   document.addEventListener('DOMContentLoaded', function () {
+    renderCatalog();
+    /* Theme is a presentation scope only; the host remains the owner. */
+    qa('[data-sc-theme]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var theme = button.getAttribute('data-sc-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        qa('[data-sc-theme]').forEach(function (item) {
+          item.setAttribute('aria-pressed', String(item === button));
+        });
+      });
+    });
+    qa('[data-showcase-view]').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setShowcaseView(link.getAttribute('data-showcase-view'));
+      });
+    });
+    window.addEventListener('hashchange', revealDeepLink);
     /* --- 1) بوابة الوصول: معالج عرض محلي حتمي (لا مصادقة/لا شبكة) --- */
     var gateway = q('sc-gateway-root');
     if (window.MicroAccessGateway && gateway) {
@@ -264,7 +299,8 @@
 
     applyDirection(state.dir);
     applyWidth(state.width);
-    applyFilter(state.filter);
+    if (window.location.hash) revealDeepLink();
+    else setShowcaseView('overview');
   });
 
   /* ---------------- تطبيقات شريط التحكم ---------------- */
@@ -351,6 +387,58 @@
         : (filter === 'current' ? status === 'current' : (status === 'draft' || status === 'proposed'));
       section.hidden = !show;
     });
+  }
+
+  function setShowcaseView(view) {
+    state.view = view === 'state' ? 'state' : 'overview';
+    document.body.setAttribute('data-view', state.view);
+    qa('[data-showcase-view]').forEach(function (link) {
+      var active = link.getAttribute('data-showcase-view') === state.view;
+      link.classList.toggle('is-current', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+    applyFilter(state.view === 'state' ? 'all' : 'current');
+  }
+
+  var hashScrollGeneration = 0;
+  function scrollAfterLayout(target) {
+    var generation = ++hashScrollGeneration;
+    var fonts = document.fonts ? document.fonts.ready : Promise.resolve();
+    fonts.then(function () {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          if (generation === hashScrollGeneration && target.isConnected) {
+            target.scrollIntoView({ block: 'start', behavior: 'instant' });
+          }
+        });
+      });
+    });
+  }
+  function revealDeepLink() {
+    hashScrollGeneration++;
+    var raw = window.location.hash.slice(1);
+    if (!raw) return;
+    var id;
+    try { id = decodeURIComponent(raw); } catch (error) { id = raw; }
+    if (id === 'sc-canvas') {
+      setShowcaseView('overview');
+      return;
+    }
+    if (id === 'state-lab' || id === 'brand-proof') {
+      setShowcaseView('state');
+      var labTarget = q(id);
+      if (labTarget) {
+        scrollAfterLayout(labTarget);
+      }
+      return;
+    }
+    var target = q(id);
+    if (!target) return;
+    var section = target.closest ? target.closest('.sc-section') : null;
+    if (!section) return;
+    setShowcaseView('state');
+    scrollAfterLayout(target);
   }
 
   /* ---------------- سجل أحداث صغير ---------------- */

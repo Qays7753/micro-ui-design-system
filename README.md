@@ -8,10 +8,12 @@
 
 1. [`AGENTS.md`](AGENTS.md) — عقد العمل الحالي.
 2. [`DESIGN.md`](DESIGN.md) — الهوية والحدود.
-3. [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md) — الحالة الحالية المرتبطة بـ`main`.
+3. [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md) — الحالة الحالية وحدود الدليل، دون افتراض الدمج في `main`.
 4. [`docs/UI-RELEASE.md`](docs/UI-RELEASE.md) — القواعد النهائية للنطاق الحالي.
 5. [`docs/COMPONENT-INVENTORY.md`](docs/COMPONENT-INVENTORY.md) — العائلات ومسارات المصدر.
 6. مواصفة العائلة داخل `components/` قبل تعديلها.
+7. [`docs/SYSTEM-CONTRACTS.md`](docs/SYSTEM-CONTRACTS.md) — Geometry B والثيم ودورة الحياة والبيانات وملكية المضيف.
+8. [`docs/COMPONENT-CATALOG.json`](docs/COMPONENT-CATALOG.json) — مصدر النضج الوحيد؛ 14 عائلة ومتغيرات صريحة.
 
 ## مصدر الحقيقة
 

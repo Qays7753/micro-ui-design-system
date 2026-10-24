@@ -61,11 +61,15 @@
 
 /* الأساسي: تدرج #236675 → #164D59 + ظل محدود (للأساسي فقط افتراضيًا) */
 .m-btn--primary {
+  border: 1px solid var(--micro-action-outline);
   background-image: var(--micro-button-primary-bg);
   background-color: var(--micro-brand-primary); /* أرضية احتياطية إن لم يُدعم التدرج */
   color: var(--micro-text-inverse);
-  box-shadow: var(--micro-shadow-emphasis);
+  box-shadow: none;
 }
+
+/* Capsule is a deliberate choice for compact, short actions only. */
+.m-btn--capsule { border-radius: var(--micro-radius-capsule); }
 
 /* الثانوي: أرضية هادئة وحد واضح وبروز أقل من الأساسي */
 .m-btn--secondary {
@@ -78,12 +82,12 @@
    نفس حشو الزر المعتمد (20px) — الاختلاف في الغلاف لا في المساحة. */
 .m-btn--light {
   background-color: transparent;
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
 }
 
 /* الإجراء المتلف: اللون المحدد له مع تسمية صريحة — ليس كل إجراء مهم أحمر */
 .m-btn--destructive {
-  background-color: var(--micro-danger);
+  background-color: var(--micro-danger-action);
   color: var(--micro-text-inverse);
 }
 

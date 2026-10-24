@@ -1,44 +1,41 @@
 # فهرس مكونات Micro UI
 
-هذا الفهرس يصف مصدر UI الحالي فقط. لا يمثل خريطة UX أو شاشات منتج أو شهادة إنتاجية.
+<!-- GENERATED: tools/component-catalog-build.py — edit COMPONENT-CATALOG.json -->
 
-## قاعدة القراءة
+مصدر حالة النضج الوحيد: [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json).
+هذه 14 عائلة؛ packed-circle متغير مقترح تحت Data وليس العائلة الخامسة عشرة.
+الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.
 
-لكل عائلة:
+| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية |
+|---|---|---|---|---|
+| Buttons | [`buttons`](../components/buttons/specification.md) | [فتح](../previews/buttons/index.html) | STABLE UI | لا توجد |
+| Fields | [`fields`](../components/fields/specification.md) | [فتح](../previews/fields/index.html) | STABLE UI | لا توجد |
+| Selection / Picker | [`selection`](../components/selection/specification.md) | [فتح](../previews/selection/index.html) | STABLE UI | navigation |
+| Organization | [`organization`](../components/organization/specification.md) | [فتح](../previews/organization/index.html) | STABLE UI | لا توجد |
+| Data | [`data`](../components/data/specification.md) | [فتح](../previews/data/index.html) | STABLE UI | لا توجد |
+| Messages | [`messages`](../components/messages/specification.md) | [فتح](../previews/messages/index.html) | STABLE UI | لا توجد |
+| Navigation | [`navigation`](../components/navigation/specification.md) | [فتح](../previews/navigation/index.html) | STABLE UI | لا توجد |
+| Surfaces | [`surfaces`](../components/surfaces/specification.md) | [فتح](../previews/surfaces/index.html) | STABLE UI | لا توجد |
+| Info strip | [`info-strip`](../components/info-strip/specification.md) | [فتح](../previews/info-strip/index.html) | STABLE UI | لا توجد |
+| Metric comparison | [`metric-comparison`](../components/metric-comparison/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | لا توجد |
+| Account settings | [`account-settings`](../components/account-settings/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | navigation, selection |
+| Access gateway | [`access-gateway`](../components/access-gateway/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | buttons, fields |
+| Order schedule | [`order-schedule`](../components/order-schedule/specification.md) | [فتح](../components/order-schedule/example-usage.html) | DRAFT FOR REVIEW | fields |
+| Carousel | [`carousel`](../components/carousel/specification.md) | [فتح](../previews/carousel/index.html) | DRAFT FOR REVIEW | لا توجد |
 
-1. اقرأ `specification.md`.
-2. راجع ملفات CSS/JS داخل `components/<family>/`.
-3. افتح المعاينة المقابلة داخل `previews/`.
-4. استخدم الـshowcase الأخير للتحقق من التركيب المشترك.
+## المتغيرات
 
-## العائلات
+| المتغير | العائلة | النضج | opt-in | المعاينة |
+|---|---|---|---|---|
+| packed-circle | data | PROPOSED | نعم | [فتح](../previews/concepts/index.html) |
+| info-strip-peek | info-strip | STABLE UI | نعم | [فتح](../previews/info-strip/comparison.html) |
 
-| العائلة | المصدر | المعاينة | الحالة |
-|---|---|---|---|
-| Buttons | `components/buttons/` | `previews/buttons/` | STABLE UI |
-| Fields | `components/fields/` | `previews/fields/` | STABLE UI |
-| Selection | `components/selection/` | `previews/selection/` | STABLE UI |
-| Organization | `components/organization/` | `previews/organization/` | STABLE UI |
-| Data | `components/data/` | `previews/data/` | STABLE UI |
-| Messages | `components/messages/` | `previews/messages/` | STABLE UI |
-| Navigation | `components/navigation/` | `previews/navigation/` | STABLE UI |
-| Surfaces | `components/surfaces/` | `previews/surfaces/` | STABLE UI |
-| Info strip | `components/info-strip/` | `previews/info-strip/` | STABLE UI؛ peek اختياري |
-| Metric comparison | `components/metric-comparison/` | `previews/concepts/` | STABLE UI وفق المواصفة |
-| Account settings | `components/account-settings/` | `previews/concepts/` | STABLE UI دون حفظ فعلي |
-| Access gateway | `components/access-gateway/` | `previews/concepts/` | STABLE UI دون مصادقة فعلية |
-| Order schedule | `components/order-schedule/` | المثال داخل المكون | DRAFT FOR REVIEW |
-| Carousel | `components/carousel/` | `previews/carousel/` | DRAFT FOR REVIEW |
-| Packed circle | `components/data/packed-circle.*` | `previews/concepts/` | PROPOSED/opt-in |
+## العقود العامة
 
-## القواعد المشتركة
-
-- `shared/tokens.css` هو مصدر التوكنز الوحيد.
-- الألوان الحالية لا تُستبدل داخل المكونات بقيم صلبة جديدة.
-- كل مكون يوضح الحالات المنطبقة بدل إنشاء مصفوفة وهمية.
-- النص الطويل وRTL والبيانات المفقودة والسالبة حالات يجب أن تبقى قابلة للقراءة.
-- نجاح فحص المعاينة لا يثبت جهازًا فعليًا أو قارئ شاشة.
-
-## المعرض الشامل
-
-[`previews/ui-system-showcase/`](../previews/ui-system-showcase/) هو المرجع التفاعلي الأخير لاستخدام العائلات معًا. مصدره قابل للتعديل، وملف standalone فيه مولد آليًا.
+- القواعد المعتمدة: [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md).
+- توكنز CSS مصدر التنفيذ؛ لا مسار DTCG موازٍ.
+- انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.
+- `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.
+- runtime success/error مختلف عن stable/draft/proposed.
+- المعرض: [`Overview / State Lab`](../previews/ui-system-showcase/index.html) و[`Composition Lab`](../previews/compositions/index.html).
+- المصدر والنسخة المولدة والمقارنات التاريخية وأدلة الاختبار فئات منفصلة.

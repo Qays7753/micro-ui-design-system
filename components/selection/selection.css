@@ -226,10 +226,12 @@
   text-align: start;
 }
 .m-switch:has(input:checked) .m-switch__state {
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
 }
 
 .m-switch__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -265,8 +267,8 @@
    زر B01 بصنف وضع: مفعّل = أرضية التحديد — لوضع مؤقت لا إعداد دائم. */
 .m-toggle[aria-pressed="true"] {
   background-color: var(--micro-surface-selected);
-  color: var(--micro-brand-primary);
-  box-shadow: inset 0 0 0 1px var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
+  box-shadow: inset 0 0 0 1px var(--micro-brand-ink);
 }
 
 /* ================= 4) المقطّع Segmented (اختيار قصير متبادل) ================= */
@@ -282,14 +284,14 @@
   row-gap: var(--micro-space-3);
   padding: var(--micro-space-1);
   background-color: var(--micro-surface-page);
-  border-radius: var(--micro-radius-capsule);
+  border-radius: var(--micro-radius-field);
   font-family: var(--micro-font-family);
   max-width: 100%;
   /* W2.4 (A2-F02 — D-UI-06): توكن مكوّن مُسمّى لسطح hover للمقطع بدل
      rgba صلبة — الاشتقاق موثق: --micro-surface-selected (#DFEEE6) بشفافية
      65% فوق أرضية الصفحة؛ القيمة كما كانت حرفيًا (لا تغيير لوني)، والاسم
      يجعل القرار قابلاً للتتبع والتغيير من موضع واحد. */
-  --micro-seg-hover-surface: rgba(223, 238, 230, 0.65);
+  --micro-seg-hover-surface: color-mix(in srgb, var(--micro-surface-selected) 65%, transparent);
 }
 .m-seg__item {
   flex: 0 0 auto;
@@ -302,7 +304,7 @@
   justify-content: center;
   gap: var(--micro-space-2);
   border: 0;
-  border-radius: var(--micro-radius-capsule);
+  border-radius: var(--micro-radius-field);
   background: transparent;
   font-family: var(--micro-font-family);
   font-size: var(--micro-button-label-size);

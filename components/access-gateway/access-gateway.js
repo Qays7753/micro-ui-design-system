@@ -2,6 +2,13 @@
 (function () {
   'use strict';
 
+  // Rejected exceptions are diagnostics, never interface copy. The consumer may
+  // explicitly supply userMessage; Error.message and stack are never displayed.
+  function userError(error, fallback) {
+    return error && typeof error.userMessage === 'string' && error.userMessage.trim()
+      ? error.userMessage : fallback;
+  }
+
   function setMessage(form, message, tone) {
     var status = form.querySelector('[data-access-status]');
     if (!status) return;
@@ -51,14 +58,24 @@
   }
 
   function initGateway(gateway, callbacks) {
-    if (gateway.hasAttribute('data-access-ready')) {
+    if (gateway.hasAttribute('data-access-ready') && gateway.__microAccessLifetime
+        && !gateway.__microAccessLifetime.controller.signal.aborted) {
       gateway.__microAccessCallbacks = callbacks || gateway.__microAccessCallbacks || {};
       return;
     }
-    gateway.setAttribute('data-access-ready', '');
-    gateway.__microAccessCallbacks = callbacks || {};
     var form = gateway.querySelector('form[data-access-form]');
     if (!form) return;
+    gateway.setAttribute('data-access-ready', '');
+    gateway.__microAccessCallbacks = callbacks || {};
+    var lifetime = { controller: new AbortController(), observer: null };
+    gateway.__microAccessLifetime = lifetime;
+    function alive() {
+      return gateway.isConnected && gateway.__microAccessLifetime === lifetime
+        && !lifetime.controller.signal.aborted;
+    }
+    function on(element, type, handler) {
+      element.addEventListener(type, handler, { signal: lifetime.controller.signal });
+    }
 
     var reveal = gateway.querySelector('[data-access-reveal]');
     if (reveal) {
@@ -66,6 +83,7 @@
       var password = targetId ? document.getElementById(targetId) : credential(form, 'password');
       if (password) {
         var consumerDisabled = reveal.disabled;
+        lifetime.restoreReveal = function () { reveal.disabled = consumerDisabled; };
         var pointerSelection = null;
         function syncRevealDisabled() {
           reveal.disabled = consumerDisabled || password.disabled;
@@ -74,7 +92,7 @@
             reveal.setAttribute('aria-pressed', 'false');
           }
         }
-        reveal.addEventListener('pointerdown', function () {
+        on(reveal, 'pointerdown', function () {
           try {
             pointerSelection = {
               start: password.selectionStart,
@@ -85,7 +103,7 @@
             pointerSelection = null;
           }
         });
-        reveal.addEventListener('click', function (event) {
+        on(reveal, 'click', function (event) {
           if (reveal.disabled || password.disabled || reveal.getAttribute('aria-disabled') === 'true') return;
           var selection = event.detail > 0 ? pointerSelection : null;
           pointerSelection = null;
@@ -124,7 +142,8 @@
           }
         });
         syncRevealDisabled();
-        new MutationObserver(syncRevealDisabled).observe(password, {
+        lifetime.observer = new MutationObserver(syncRevealDisabled);
+        lifetime.observer.observe(password, {
           attributes: true,
           attributeFilter: ['disabled']
         });
@@ -134,11 +153,12 @@
     var recovery = gateway.querySelector('[data-access-recovery]');
     var providers = Array.prototype.slice.call(gateway.querySelectorAll('[data-access-provider]'));
     syncOptional(gateway);
-    if (recovery) recovery.addEventListener('click', function () {
+    if (recovery) on(recovery, 'click', function () {
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onRecovery !== 'function') return;
-      Promise.resolve().then(function () { return current.onRecovery(); })
+      Promise.resolve().then(function () { if (alive()) return current.onRecovery(); })
         .then(function (result) {
+          if (!alive()) return;
           /* SUI-013: نص بشري — رسالة المستهلك إن قدمها.
              SUI-R1-01: بلا message لا ندّعي الإرسال من مجرد اكتمال
              المعالج — نص محايد بنبرة info. */
@@ -148,26 +168,27 @@
           else if (hasMessage && result && result.authenticated === false) tone = 'error';
           setMessage(form, hasMessage ? result.message : 'انتهى طلب المساعدة دون تأكيد إرساله.', tone);
         })
-        .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر إرسال طلب المساعدة.', 'error'); });
+        .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر إرسال طلب المساعدة. أعد المحاولة.'), 'error'); });
     });
     providers.forEach(function (button) {
-      button.addEventListener('click', function () {
+      on(button, 'click', function () {
         var key = button.getAttribute('data-access-provider');
         var current = gateway.__microAccessCallbacks || {};
         var handler = current.providers && current.providers[key];
         if (typeof handler !== 'function') return;
-        Promise.resolve().then(function () { return handler(); })
+        Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
+            if (!alive()) return;
             /* SUI-R1-01: عقد النتيجة — لا نجاح دخول من مجرد اكتمال
                المعالج؛ المستهلك يصرّح بالنتيجة أو تبقى محايدة. */
             var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
             setMessage(form, outcome.text, outcome.tone);
           })
-          .catch(function (error) { setMessage(form, error && error.message ? error.message : 'تعذّر تنفيذ الدخول.', 'error'); });
+          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); });
       });
     });
 
-    form.addEventListener('input', function () {
+    on(form, 'input', function () {
       var controls = Array.prototype.slice.call(form.querySelectorAll('input[required]'));
       controls.forEach(function (input) {
         if (input.validity.valid) {
@@ -177,7 +198,7 @@
       setMessage(form, '');
     });
 
-    form.addEventListener('submit', function (event) {
+    on(form, 'submit', function (event) {
       event.preventDefault();
       if (form.dataset.microAccessBusy === 'true') return;
       var email = credential(form, 'email');
@@ -219,11 +240,13 @@
       if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تسجيل الدخول' });
       setMessage(form, 'جارٍ التحقق من بيانات الدخول…', 'info');
       Promise.resolve().then(function () {
+        if (!alive()) return;
         return current.onSubmit({
           email: email ? email.value : '',
           password: passwordInput ? passwordInput.value : ''
         });
       }).then(function (result) {
+        if (!alive()) return;
         /* SUI-R1-01: المكوّن يكتب رسالة النتيجة أولًا ثم يُطلق الحدث بعدها —
            فالكلمة الأخيرة فوق منطقة الحالة لمستمع المستهلك ولا تُمسح رسالته
            لاحقًا. النتيجة مسؤولية المستهلك بصياغة بشرية (SUI-013). */
@@ -231,8 +254,9 @@
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
       }).catch(function (error) {
-        setMessage(form, error && error.message ? error.message : 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.', 'error');
+        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول — تحقق من بياناتك وحاول مجددًا.'), 'error');
       }).then(function () {
+        if (!alive()) return;
         form.dataset.microAccessBusy = 'false';
         form.removeAttribute('aria-busy');
         if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
@@ -268,7 +292,33 @@
     });
   }
 
-  window.MicroAccessGateway = { init: init };
+  function disconnect(root) {
+    var scope = root || document;
+    var gateways = [].slice.call(scope.querySelectorAll('[data-access-gateway]'));
+    if (scope.matches && scope.matches('[data-access-gateway]')) gateways.unshift(scope);
+    gateways.forEach(function (gateway) {
+      var lifetime = gateway.__microAccessLifetime;
+      if (lifetime) {
+        lifetime.controller.abort();
+        if (lifetime.observer) lifetime.observer.disconnect();
+        if (lifetime.restoreReveal) lifetime.restoreReveal();
+      }
+      delete gateway.__microAccessLifetime;
+      gateway.removeAttribute('data-access-ready');
+      var form = gateway.querySelector('[data-access-form]');
+      if (form) {
+        form.dataset.microAccessBusy = 'false';
+        form.removeAttribute('aria-busy');
+        var submit = form.querySelector('[type="submit"]');
+        if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
+        var password = credential(form, 'password');
+        if (password) password.type = 'password';
+      }
+      var reveal = gateway.querySelector('[data-access-reveal]');
+      if (reveal) reveal.setAttribute('aria-pressed', 'false');
+    });
+  }
+  window.MicroAccessGateway = { init: init, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

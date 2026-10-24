@@ -1,0 +1,2375 @@
+[
+ {
+  "line": 24,
+  "tag": "title",
+  "kind": "text",
+  "text": "Micro — معرض نظام الواجهة (Prototype)",
+  "id": "s1"
+ },
+ {
+  "line": 126,
+  "tag": "p",
+  "kind": "text",
+  "text": "MICRO · UI SYSTEM SHOWCASE",
+  "id": "s2"
+ },
+ {
+  "line": 127,
+  "tag": "h1",
+  "kind": "text",
+  "text": "معرض نظام الواجهة",
+  "id": "s3"
+ },
+ {
+  "line": 128,
+  "tag": "p",
+  "kind": "text",
+  "text": "عرض تفاعلي واحد يجمع العائلات الأربع عشرة كما تُركّب معًا — المصادر الفعلية بعد جولة الإصلاح الجذري، بحالاتها واتجاهها العربي RTL ووضع مقارنة LTR. هذا عرض مكوّنات ولوحة تكامل، وليس تصميم منتج ولا تطبيقًا إنتاجيًا.",
+  "id": "s4"
+ },
+ {
+  "line": 130,
+  "tag": "span",
+  "kind": "text",
+  "text": "المصدر:",
+  "id": "s5"
+ },
+ {
+  "line": 130,
+  "tag": "code",
+  "kind": "text",
+  "text": "current working tree",
+  "id": "s6"
+ },
+ {
+  "line": 131,
+  "tag": "span",
+  "kind": "text",
+  "text": "12 عائلة STABLE · 2 DRAFT · ملحقان PROPOSED",
+  "id": "s7"
+ },
+ {
+  "line": 137,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أدوات مراجعة العرض — ليست واجهة منتج",
+  "id": "s8"
+ },
+ {
+  "line": 139,
+  "tag": "span",
+  "kind": "text",
+  "text": "أدوات مراجعة العرض",
+  "id": "s9"
+ },
+ {
+  "line": 139,
+  "tag": "p",
+  "kind": "text",
+  "text": "— ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط",
+  "id": "s10"
+ },
+ {
+  "line": 141,
+  "tag": "span",
+  "kind": "text",
+  "text": "الاتجاه",
+  "id": "s11"
+ },
+ {
+  "line": 143,
+  "tag": "button",
+  "kind": "text",
+  "text": "RTL (الافتراضي)",
+  "id": "s12"
+ },
+ {
+  "line": 144,
+  "tag": "button",
+  "kind": "text",
+  "text": "LTR للمقارنة",
+  "id": "s13"
+ },
+ {
+  "line": 148,
+  "tag": "span",
+  "kind": "text",
+  "text": "عرض المعاينة",
+  "id": "s14"
+ },
+ {
+  "line": 150,
+  "tag": "button",
+  "kind": "text",
+  "text": "320",
+  "id": "s15"
+ },
+ {
+  "line": 151,
+  "tag": "button",
+  "kind": "text",
+  "text": "360",
+  "id": "s16"
+ },
+ {
+  "line": 152,
+  "tag": "button",
+  "kind": "text",
+  "text": "390",
+  "id": "s17"
+ },
+ {
+  "line": 153,
+  "tag": "button",
+  "kind": "text",
+  "text": "430",
+  "id": "s18"
+ },
+ {
+  "line": 155,
+  "tag": "p",
+  "kind": "text",
+  "text": "أداة مراجعة على الشاشات الواسعة؛ القياس الدقيق للمكونات يستمد من عرض المتصفح الفعلي (كما في لقطات التحقق).",
+  "id": "s19"
+ },
+ {
+  "line": 158,
+  "tag": "span",
+  "kind": "text",
+  "text": "المحتوى",
+  "id": "s20"
+ },
+ {
+  "line": 160,
+  "tag": "button",
+  "kind": "text",
+  "text": "عادي",
+  "id": "s21"
+ },
+ {
+  "line": 161,
+  "tag": "button",
+  "kind": "text",
+  "text": "إجهاد (نصوص طويلة وأرقام كبيرة)",
+  "id": "s22"
+ },
+ {
+  "line": 165,
+  "tag": "span",
+  "kind": "text",
+  "text": "تصفية الحالة",
+  "id": "s23"
+ },
+ {
+  "line": 167,
+  "tag": "button",
+  "kind": "text",
+  "text": "current / reference",
+  "id": "s24"
+ },
+ {
+  "line": 168,
+  "tag": "button",
+  "kind": "text",
+  "text": "draft / proposed",
+  "id": "s25"
+ },
+ {
+  "line": 169,
+  "tag": "button",
+  "kind": "text",
+  "text": "الكل",
+  "id": "s26"
+ },
+ {
+  "line": 179,
+  "tag": "p",
+  "kind": "text",
+  "text": "01 · S01",
+  "id": "s27"
+ },
+ {
+  "line": 180,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الأسطح",
+  "id": "s28"
+ },
+ {
+  "line": 180,
+  "tag": "span",
+  "kind": "text",
+  "text": "STABLE UI",
+  "id": "s29"
+ },
+ {
+  "line": 181,
+  "tag": "p",
+  "kind": "text",
+  "text": "السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.",
+  "id": "s30"
+ },
+ {
+  "line": 187,
+  "tag": "p",
+  "kind": "text",
+  "text": "قراءة عينة",
+  "id": "s31"
+ },
+ {
+  "line": 188,
+  "tag": "h3",
+  "kind": "text",
+  "text": "ملخّص تجريبي موجز",
+  "id": "s32"
+ },
+ {
+  "line": 189,
+  "tag": "span",
+  "kind": "text",
+  "text": "58.4",
+  "id": "s33"
+ },
+ {
+  "line": 190,
+  "tag": "p",
+  "kind": "text",
+  "text": "بيانات عرض ثابتة · ليست قراءة منتج أو قيمة مالية",
+  "id": "s34"
+ },
+ {
+  "line": 195,
+  "tag": "p",
+  "kind": "text",
+  "text": "سطح plain",
+  "id": "s35"
+ },
+ {
+  "line": 196,
+  "tag": "h3",
+  "kind": "text",
+  "text": "قراءة ثانوية هادئة",
+  "id": "s36"
+ },
+ {
+  "line": 197,
+  "tag": "p",
+  "kind": "text",
+  "text": "12.5",
+  "id": "s37"
+ },
+ {
+  "line": 198,
+  "tag": "p",
+  "kind": "text",
+  "text": "المتغير المسطح بلا أمواج — لنفس دور القراءة",
+  "id": "s38"
+ },
+ {
+  "line": 201,
+  "tag": "p",
+  "kind": "text",
+  "text": "المتغيرات التاريخية (calm / waves / waves-v2 / depth) موسومة تاريخية في المواصفة ولا تُعرض هنا. مفاتيح الموجات (knobs) كلها PROPOSED ولم تُستخدم.",
+  "id": "s39"
+ },
+ {
+  "line": 208,
+  "tag": "p",
+  "kind": "text",
+  "text": "02 · B01",
+  "id": "s40"
+ },
+ {
+  "line": 209,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الأزرار",
+  "id": "s41"
+ },
+ {
+  "line": 210,
+  "tag": "p",
+  "kind": "text",
+  "text": "الأنواع لا تتنافس في البروز؛ الأساسي هو التأكيد الوحيد. التحميل بالنمط B: التسمية باقية والمؤشر بفتة ثابتة بلا إزاحة محتوى.",
+  "id": "s42"
+ },
+ {
+  "line": 213,
+  "tag": "p",
+  "kind": "text",
+  "text": "الأنواع والمقاسات",
+  "id": "s43"
+ },
+ {
+  "line": 215,
+  "tag": "button",
+  "kind": "text",
+  "text": "حفظ العملية",
+  "id": "s44"
+ },
+ {
+  "line": 217,
+  "tag": "button",
+  "kind": "text",
+  "text": "تصفية",
+  "id": "s45"
+ },
+ {
+  "line": 220,
+  "tag": "button",
+  "kind": "text",
+  "text": "إجراء نصي خفيف",
+  "id": "s46"
+ },
+ {
+  "line": 222,
+  "tag": "button",
+  "kind": "text",
+  "text": "حذف نهائي",
+  "id": "s47"
+ },
+ {
+  "line": 224,
+  "tag": "button",
+  "kind": "text",
+  "text": "إزالة من القائمة",
+  "id": "s48"
+ },
+ {
+  "line": 225,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "خيارات إضافية",
+  "id": "s49"
+ },
+ {
+  "line": 226,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "بحث",
+  "id": "s50"
+ },
+ {
+  "line": 228,
+  "tag": "button",
+  "kind": "text",
+  "text": "زر بعرض كامل متعدد الأسطر",
+  "id": "s51"
+ },
+ {
+  "line": 229,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أدوات حالة الأزرار",
+  "id": "s52"
+ },
+ {
+  "line": 230,
+  "tag": "button",
+  "kind": "text",
+  "text": "تبديل التحميل",
+  "id": "s53"
+ },
+ {
+  "line": 231,
+  "tag": "button",
+  "kind": "text",
+  "text": "تبديل الضغط (.is-pressed)",
+  "id": "s54"
+ },
+ {
+  "line": 232,
+  "tag": "button",
+  "kind": "text",
+  "text": "تبديل التعطيل",
+  "id": "s55"
+ },
+ {
+  "line": 234,
+  "tag": "p",
+  "kind": "text",
+  "text": "الحالة الافتراضية — استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».",
+  "id": "s56"
+ },
+ {
+  "line": 241,
+  "tag": "p",
+  "kind": "text",
+  "text": "03 · B02",
+  "id": "s57"
+ },
+ {
+  "line": 242,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الحقول",
+  "id": "s58"
+ },
+ {
+  "line": 243,
+  "tag": "p",
+  "kind": "text",
+  "text": "التسمية ظاهرة وليست placeholder؛ فارغ ≠ صفر؛ الخطأ يبقي القيمة ويرتبط برسالة عبر aria-describedby تلقائيًا.",
+  "id": "s59"
+ },
+ {
+  "line": 247,
+  "tag": "label",
+  "kind": "text",
+  "text": "اسم الصنف",
+  "id": "s60"
+ },
+ {
+  "line": 251,
+  "tag": "p",
+  "kind": "text",
+  "text": "اسم يظهر في قائمة المنتجات.",
+  "id": "s61"
+ },
+ {
+  "line": 255,
+  "tag": "label",
+  "kind": "text",
+  "text": "ملاحظات الطلب",
+  "id": "s62"
+ },
+ {
+  "line": 257,
+  "tag": "textarea",
+  "kind": "text",
+  "text": "تجهيز قبل التسليم",
+  "id": "s63"
+ },
+ {
+  "line": 262,
+  "tag": "label",
+  "kind": "text",
+  "text": "بحث في العناصر",
+  "id": "s64"
+ },
+ {
+  "line": 266,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "مسح البحث",
+  "id": "s65"
+ },
+ {
+  "line": 274,
+  "tag": "label",
+  "kind": "text",
+  "text": "قيمة الفاتورة",
+  "id": "s66"
+ },
+ {
+  "line": 277,
+  "tag": "span",
+  "kind": "text",
+  "text": "د.أ",
+  "id": "s67"
+ },
+ {
+  "line": 282,
+  "tag": "label",
+  "kind": "text",
+  "text": "الكمية",
+  "id": "s68"
+ },
+ {
+  "line": 285,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "إنقاص الكمية",
+  "id": "s69"
+ },
+ {
+  "line": 289,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "زيادة الكمية",
+  "id": "s70"
+ },
+ {
+  "line": 295,
+  "tag": "label",
+  "kind": "text",
+  "text": "حقل تجربة الحالات",
+  "id": "s71"
+ },
+ {
+  "line": 303,
+  "tag": "label",
+  "kind": "text",
+  "text": "حقل معطل",
+  "id": "s72"
+ },
+ {
+  "line": 307,
+  "tag": "label",
+  "kind": "text",
+  "text": "قراءة فقط (قابل للنسخ)",
+  "id": "s73"
+ },
+ {
+  "line": 311,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أدوات حالة الحقول",
+  "id": "s74"
+ },
+ {
+  "line": 312,
+  "tag": "button",
+  "kind": "text",
+  "text": "إظهار حالة الخطأ",
+  "id": "s75"
+ },
+ {
+  "line": 313,
+  "tag": "button",
+  "kind": "text",
+  "text": "إظهار حالة النجاح",
+  "id": "s76"
+ },
+ {
+  "line": 314,
+  "tag": "button",
+  "kind": "text",
+  "text": "مسح الحالات",
+  "id": "s77"
+ },
+ {
+  "line": 316,
+  "tag": "p",
+  "kind": "text",
+  "text": "الخطأ/النجاح هنا تفعيل لحالة المكوّن الموثقة (has-error/has-success + رسالة مرتبطة) — سياسة التحقق نفسها مسؤولية المستهلك بحسب المواصفة.",
+  "id": "s78"
+ },
+ {
+  "line": 323,
+  "tag": "p",
+  "kind": "text",
+  "text": "04 · B03",
+  "id": "s79"
+ },
+ {
+  "line": 324,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الاختيار",
+  "id": "s80"
+ },
+ {
+  "line": 325,
+  "tag": "p",
+  "kind": "text",
+  "text": "checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس — D-UI-05).",
+  "id": "s81"
+ },
+ {
+  "line": 329,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "مربعات اختيار",
+  "id": "s82"
+ },
+ {
+  "line": 333,
+  "tag": "span",
+  "kind": "text",
+  "text": "تنظيف مكاتب",
+  "id": "s83"
+ },
+ {
+  "line": 341,
+  "tag": "span",
+  "kind": "text",
+  "text": "كل الخدمات (يبدأ غير محسوم)",
+  "id": "s84"
+ },
+ {
+  "line": 346,
+  "tag": "span",
+  "kind": "text",
+  "text": "خدمة غير متاحة",
+  "id": "s85"
+ },
+ {
+  "line": 351,
+  "tag": "span",
+  "kind": "text",
+  "text": "تعقيم غرف الاجتماعات",
+  "id": "s86"
+ },
+ {
+  "line": 354,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أزرار اختيار",
+  "id": "s87"
+ },
+ {
+  "line": 358,
+  "tag": "span",
+  "kind": "text",
+  "text": "أسبوعي",
+  "id": "s88"
+ },
+ {
+  "line": 363,
+  "tag": "span",
+  "kind": "text",
+  "text": "شهري",
+  "id": "s89"
+ },
+ {
+  "line": 368,
+  "tag": "span",
+  "kind": "text",
+  "text": "سنوي",
+  "id": "s90"
+ },
+ {
+  "line": 374,
+  "tag": "span",
+  "kind": "text",
+  "text": "تنبيهات الطلبات",
+  "id": "s91"
+ },
+ {
+  "line": 374,
+  "tag": "span",
+  "kind": "text",
+  "text": "إعداد دائم",
+  "id": "s92"
+ },
+ {
+  "line": 379,
+  "tag": "span",
+  "kind": "text",
+  "text": "مفتاح بفترة انتظار",
+  "id": "s93"
+ },
+ {
+  "line": 379,
+  "tag": "span",
+  "kind": "text",
+  "text": "setSwitchPending",
+  "id": "s94"
+ },
+ {
+  "line": 385,
+  "tag": "p",
+  "kind": "text",
+  "text": "toggle (وضع مؤقت بـ aria-pressed)",
+  "id": "s95"
+ },
+ {
+  "line": 386,
+  "tag": "button",
+  "kind": "text",
+  "text": "تتبّع التغييرات",
+  "id": "s96"
+ },
+ {
+  "line": 387,
+  "tag": "p",
+  "kind": "text",
+  "text": "segmented بتبديل قيمة",
+  "id": "s97"
+ },
+ {
+  "line": 388,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "نطاق الفترة",
+  "id": "s98"
+ },
+ {
+  "line": 389,
+  "tag": "button",
+  "kind": "text",
+  "text": "اليوم",
+  "id": "s99"
+ },
+ {
+  "line": 390,
+  "tag": "button",
+  "kind": "text",
+  "text": "هذا الأسبوع",
+  "id": "s100"
+ },
+ {
+  "line": 391,
+  "tag": "button",
+  "kind": "text",
+  "text": "هذا الشهر",
+  "id": "s101"
+ },
+ {
+  "line": 392,
+  "tag": "button",
+  "kind": "text",
+  "text": "الربع (معطل)",
+  "id": "s102"
+ },
+ {
+  "line": 398,
+  "tag": "p",
+  "kind": "text",
+  "text": "تسميات طويلة — سياسة العرض الضيق (m-seg--scroll: صف واحد وتمرير)",
+  "id": "s103"
+ },
+ {
+  "line": 399,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "تسميات طويلة",
+  "id": "s104"
+ },
+ {
+  "line": 400,
+  "tag": "button",
+  "kind": "text",
+  "text": "الطلبات النشطة",
+  "id": "s105"
+ },
+ {
+  "line": 401,
+  "tag": "button",
+  "kind": "text",
+  "text": "قيد التجهيز",
+  "id": "s106"
+ },
+ {
+  "line": 402,
+  "tag": "button",
+  "kind": "text",
+  "text": "بانتظار الموافقة",
+  "id": "s107"
+ },
+ {
+  "line": 404,
+  "tag": "p",
+  "kind": "text",
+  "text": "m-seg--stack: تكديس عمودي عند عدم اتساع الصف أصلًا",
+  "id": "s108"
+ },
+ {
+  "line": 405,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "نمط التكديس",
+  "id": "s109"
+ },
+ {
+  "line": 406,
+  "tag": "button",
+  "kind": "text",
+  "text": "الفحص الدوري الشامل",
+  "id": "s110"
+ },
+ {
+  "line": 407,
+  "tag": "button",
+  "kind": "text",
+  "text": "الصيانة الطارئة فقط",
+  "id": "s111"
+ },
+ {
+  "line": 408,
+  "tag": "button",
+  "kind": "text",
+  "text": "وضع مخصص (معطل)",
+  "id": "s112"
+ },
+ {
+  "line": 412,
+  "tag": "p",
+  "kind": "text",
+  "text": "منتقي الكيان (picker) داخل طبقة B07",
+  "id": "s113"
+ },
+ {
+  "line": 413,
+  "tag": "button",
+  "kind": "text",
+  "text": "اختيار مورد",
+  "id": "s114"
+ },
+ {
+  "line": 414,
+  "tag": "p",
+  "kind": "text",
+  "text": "القيمة الحالية: لا شيء",
+  "id": "s115"
+ },
+ {
+  "line": 422,
+  "tag": "p",
+  "kind": "text",
+  "text": "05 · B04",
+  "id": "s116"
+ },
+ {
+  "line": 423,
+  "tag": "h2",
+  "kind": "text",
+  "text": "التنظيم",
+  "id": "s117"
+ },
+ {
+  "line": 424,
+  "tag": "p",
+  "kind": "text",
+  "text": "تجميع بالعناوين والمسافات والفواصل؛ الصفوف المفتوحة بلا ظل؛ الشارات معلوماتية لا أزرار؛ سهم التفاصيل يسارًا في RTL.",
+  "id": "s118"
+ },
+ {
+  "line": 428,
+  "tag": "h3",
+  "kind": "text",
+  "text": "طلبات هذا الأسبوع",
+  "id": "s119"
+ },
+ {
+  "line": 429,
+  "tag": "p",
+  "kind": "text",
+  "text": "مجموعة فرعية من طلبات العينة لعرض بنية الصفوف والقراءات.",
+  "id": "s120"
+ },
+ {
+  "line": 431,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "صفوف قراءة",
+  "id": "s121"
+ },
+ {
+  "line": 433,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلب ضيافة استقبال",
+  "id": "s122"
+ },
+ {
+  "line": 437,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلب تعقيم غرف الاجتماعات",
+  "id": "s123"
+ },
+ {
+  "line": 438,
+  "tag": "span",
+  "kind": "text",
+  "text": "14:30",
+  "id": "s124"
+ },
+ {
+  "line": 441,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلب تجهيز القاعة الرئيسية",
+  "id": "s125"
+ },
+ {
+  "line": 448,
+  "tag": "span",
+  "kind": "text",
+  "text": "تفاصيل التسوية (قسم قابل للطي)",
+  "id": "s126"
+ },
+ {
+  "line": 452,
+  "tag": "p",
+  "kind": "text",
+  "text": "محتوى القسم — الطي الفوري بلا حركة تغيّر التخطيط، وaria-expanded يديره المكوّن، والحدث micro-organization:toggle يفصح عن الحالة.",
+  "id": "s127"
+ },
+ {
+  "line": 456,
+  "tag": "span",
+  "kind": "text",
+  "text": "قيد التنفيذ",
+  "id": "s128"
+ },
+ {
+  "line": 457,
+  "tag": "span",
+  "kind": "text",
+  "text": "بانتظار العميل",
+  "id": "s129"
+ },
+ {
+  "line": 460,
+  "tag": "span",
+  "kind": "text",
+  "text": "123",
+  "id": "s130"
+ },
+ {
+  "line": 461,
+  "tag": "span",
+  "kind": "text",
+  "text": "9999",
+  "id": "s131"
+ },
+ {
+  "line": 464,
+  "tag": "img",
+  "kind": "alt",
+  "text": "شعار المورد",
+  "id": "s132"
+ },
+ {
+  "line": 465,
+  "tag": "span",
+  "kind": "text",
+  "text": "شركة البترول الوطنية",
+  "id": "s133"
+ },
+ {
+  "line": 467,
+  "tag": "p",
+  "kind": "text",
+  "text": "الصورة عمدًا غير صورية: يفشل تحميلها فيُظهر المكوّن بديل الأحرف الأولى من الاسم (data-avatar-fallback).",
+  "id": "s134"
+ },
+ {
+  "line": 473,
+  "tag": "p",
+  "kind": "text",
+  "text": "06 · SPEC-01",
+  "id": "s135"
+ },
+ {
+  "line": 474,
+  "tag": "h2",
+  "kind": "text",
+  "text": "بطاقة القراءة وشريط المعلومات",
+  "id": "s136"
+ },
+ {
+  "line": 475,
+  "tag": "p",
+  "kind": "text",
+  "text": "القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.",
+  "id": "s137"
+ },
+ {
+  "line": 478,
+  "tag": "p",
+  "kind": "text",
+  "text": "القراءة الواحدة الصغيرة توصي بـ m-info-card--compact؛ البطاقة القياسية تبقى متاحة دون الصنف عند الحاجة لمساحة أكبر.",
+  "id": "s138"
+ },
+ {
+  "line": 480,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "طلبات اليوم، 18 طلب",
+  "id": "s139"
+ },
+ {
+  "line": 481,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلبات اليوم",
+  "id": "s140"
+ },
+ {
+  "line": 482,
+  "tag": "span",
+  "kind": "text",
+  "text": "18",
+  "id": "s141"
+ },
+ {
+  "line": 482,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلب",
+  "id": "s142"
+ },
+ {
+  "line": 484,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "مخزون عينة، غير متاح",
+  "id": "s143"
+ },
+ {
+  "line": 485,
+  "tag": "span",
+  "kind": "text",
+  "text": "مخزون عينة",
+  "id": "s144"
+ },
+ {
+  "line": 486,
+  "tag": "span",
+  "kind": "text",
+  "text": "غير متاح",
+  "id": "s145"
+ },
+ {
+  "line": 490,
+  "tag": "p",
+  "kind": "text",
+  "text": "تنقل مضغوط: أسهم وموضع حيّ — النقاط اختيارية في العرض الكامل",
+  "id": "s146"
+ },
+ {
+  "line": 492,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "بطاقات الأرقام التجريبية",
+  "id": "s147"
+ },
+ {
+  "line": 501,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "قيمة عينة، 1,240.50 دينار أردني",
+  "id": "s148"
+ },
+ {
+  "line": 502,
+  "tag": "span",
+  "kind": "text",
+  "text": "قيمة عينة",
+  "id": "s149"
+ },
+ {
+  "line": 503,
+  "tag": "span",
+  "kind": "text",
+  "text": "1,240.50",
+  "id": "s150"
+ },
+ {
+  "line": 516,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "البطاقة السابقة",
+  "id": "s151"
+ },
+ {
+  "line": 519,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "البطاقة التالية",
+  "id": "s152"
+ },
+ {
+  "line": 523,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "موضع البطاقة",
+  "id": "s153"
+ },
+ {
+  "line": 524,
+  "tag": "span",
+  "kind": "text",
+  "text": "1 / 3",
+  "id": "s154"
+ },
+ {
+  "line": 525,
+  "tag": "span",
+  "kind": "aria-label",
+  "text": "اختيار البطاقة",
+  "id": "s155"
+ },
+ {
+  "line": 532,
+  "tag": "p",
+  "kind": "text",
+  "text": "شريط peek (opt-in بـ data-info-peek + صنف m-info-peek — ADOPTED)",
+  "id": "s156"
+ },
+ {
+  "line": 537,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "بطاقات peek التجريبية",
+  "id": "s157"
+ },
+ {
+  "line": 540,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "قطع جاهزة، 7 قطع",
+  "id": "s158"
+ },
+ {
+  "line": 541,
+  "tag": "span",
+  "kind": "text",
+  "text": "قطع جاهزة",
+  "id": "s159"
+ },
+ {
+  "line": 542,
+  "tag": "span",
+  "kind": "text",
+  "text": "قطعة",
+  "id": "s160"
+ },
+ {
+  "line": 546,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "طلبات مجدولة غدًا، 4 طلبات",
+  "id": "s161"
+ },
+ {
+  "line": 547,
+  "tag": "span",
+  "kind": "text",
+  "text": "مجدولة غدًا",
+  "id": "s162"
+ },
+ {
+  "line": 552,
+  "tag": "article",
+  "kind": "aria-label",
+  "text": "بانتظار الموافقة، 12 طلبًا",
+  "id": "s163"
+ },
+ {
+  "line": 554,
+  "tag": "span",
+  "kind": "text",
+  "text": "12",
+  "id": "s164"
+ },
+ {
+  "line": 575,
+  "tag": "p",
+  "kind": "text",
+  "text": "السحب 1:1 بإصبع حقيقي غير مفحوص هنا (Chromium فقط) — استخدم الأسهم/النقاط أو لوحة المفاتيح. لا تبديل تلقائي في كلا الشريطين (عقد العائلة).",
+  "id": "s165"
+ },
+ {
+  "line": 583,
+  "tag": "p",
+  "kind": "text",
+  "text": "07 · B05",
+  "id": "s166"
+ },
+ {
+  "line": 584,
+  "tag": "h2",
+  "kind": "text",
+  "text": "البيانات والرسوم",
+  "id": "s167"
+ },
+ {
+  "line": 585,
+  "tag": "p",
+  "kind": "text",
+  "text": "كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح.",
+  "id": "s168"
+ },
+ {
+  "line": 590,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلبات جديدة",
+  "id": "s169"
+ },
+ {
+  "line": 591,
+  "tag": "span",
+  "kind": "text",
+  "text": "132",
+  "id": "s170"
+ },
+ {
+  "line": 594,
+  "tag": "span",
+  "kind": "text",
+  "text": "قيمة غير متاحة",
+  "id": "s171"
+ },
+ {
+  "line": 599,
+  "tag": "h3",
+  "kind": "text",
+  "text": "توزيع العمليات (أعمدة)",
+  "id": "s172"
+ },
+ {
+  "line": 616,
+  "tag": "h3",
+  "kind": "text",
+  "text": "حركة الطلبات (خط)",
+  "id": "s173"
+ },
+ {
+  "line": 636,
+  "tag": "h3",
+  "kind": "text",
+  "text": "توزيع الحالات (donut)",
+  "id": "s174"
+ },
+ {
+  "line": 651,
+  "tag": "h3",
+  "kind": "text",
+  "text": "أحجام نسبية (bubbles)",
+  "id": "s175"
+ },
+ {
+  "line": 670,
+  "tag": "span",
+  "kind": "text",
+  "text": "تحصيل فواتير الأسبوع",
+  "id": "s176"
+ },
+ {
+  "line": 671,
+  "tag": "span",
+  "kind": "text",
+  "text": "68%",
+  "id": "s177"
+ },
+ {
+  "line": 675,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "مزامنة جارٍ",
+  "id": "s178"
+ },
+ {
+  "line": 677,
+  "tag": "span",
+  "kind": "text",
+  "text": "جارٍ تحديث البيانات...",
+  "id": "s179"
+ },
+ {
+  "line": 682,
+  "tag": "ol",
+  "kind": "aria-label",
+  "text": "تسلسل حالة الطلب",
+  "id": "s180"
+ },
+ {
+  "line": 685,
+  "tag": "span",
+  "kind": "text",
+  "text": "استلام الطلب",
+  "id": "s181"
+ },
+ {
+  "line": 685,
+  "tag": "span",
+  "kind": "text",
+  "text": "09:00",
+  "id": "s182"
+ },
+ {
+  "line": 689,
+  "tag": "span",
+  "kind": "text",
+  "text": "الحالي",
+  "id": "s183"
+ },
+ {
+  "line": 689,
+  "tag": "span",
+  "kind": "text",
+  "text": "11:30",
+  "id": "s184"
+ },
+ {
+  "line": 697,
+  "tag": "span",
+  "kind": "text",
+  "text": "التسليم",
+  "id": "s185"
+ },
+ {
+  "line": 697,
+  "tag": "span",
+  "kind": "text",
+  "text": "16:00",
+  "id": "s186"
+ },
+ {
+  "line": 701,
+  "tag": "p",
+  "kind": "text",
+  "text": "كل رسم أعلاه يفتح إفصاح بياناته من زر داخلي (aria-expanded + جدول دلالي) ويُعاد بناؤه كل تصيير. جرّب تبديل «إجهاد» أعلى الصفحة ثم افتح الإفصاح — القيم والملخص يتزامنان مع المصدر (A4-D04). تباين العلامات الفاتحة (b/c/e) مسجل كاقتراح A4-R01 ولم تُغيَّر أي قيمة.",
+  "id": "s187"
+ },
+ {
+  "line": 708,
+  "tag": "p",
+  "kind": "text",
+  "text": "07b · B05 ext",
+  "id": "s188"
+ },
+ {
+  "line": 709,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الدوائر الملتصقة packed-circle",
+  "id": "s189"
+ },
+ {
+  "line": 709,
+  "tag": "span",
+  "kind": "text",
+  "text": "PROPOSED",
+  "id": "s190"
+ },
+ {
+  "line": 710,
+  "tag": "p",
+  "kind": "text",
+  "text": "ملحق opt-in فوق B05 (m-chart--packed): دوائر متداخلة تمثل المساحة، قيم حقيقية داخلها بلا نسب. بحسب المصدر: «يحتاج مراجعة واعتماد المالك» — عرضه هنا لا يعني اعتماده.",
+  "id": "s191"
+ },
+ {
+  "line": 727,
+  "tag": "p",
+  "kind": "text",
+  "text": "حالة القيم (صفر/سالب/مفقود) بنص صريح داخل الرسم — نفس عقد الحالة المنفصل للملحق.",
+  "id": "s192"
+ },
+ {
+  "line": 734,
+  "tag": "p",
+  "kind": "text",
+  "text": "08 · SPEC-02",
+  "id": "s193"
+ },
+ {
+  "line": 735,
+  "tag": "h2",
+  "kind": "text",
+  "text": "المقارنة العددية",
+  "id": "s194"
+ },
+ {
+  "line": 736,
+  "tag": "p",
+  "kind": "text",
+  "text": "دوائر المساحة (منفصلة/متداخلة) + مقارنة مسطحة موصى بها للقراءة العريضة. الدائرة القياسية محفوظة لقراءة رئيسية مقصودة؛ المتغيرات الثلاثة تعرض المصدر نفسه.",
+  "id": "s195"
+ },
+ {
+  "line": 739,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أدوات المقارنة",
+  "id": "s196"
+ },
+ {
+  "line": 740,
+  "tag": "button",
+  "kind": "text",
+  "text": "تبديل ترتيب الدوائر (separated / overlap)",
+  "id": "s197"
+ },
+ {
+  "line": 742,
+  "tag": "section",
+  "kind": "aria-label",
+  "text": "مقارنة قيم تشغيلية",
+  "id": "s198"
+ },
+ {
+  "line": 743,
+  "tag": "h3",
+  "kind": "text",
+  "text": "أحجام نسبية — والقراءات الدقيقة في المفتاح",
+  "id": "s199"
+ },
+ {
+  "line": 754,
+  "tag": "ol",
+  "kind": "aria-label",
+  "text": "المقارنة",
+  "id": "s200"
+ },
+ {
+  "line": 755,
+  "tag": "ul",
+  "kind": "aria-label",
+  "text": "مفتاح التسميات والقراءات الدقيقة",
+  "id": "s201"
+ },
+ {
+  "line": 759,
+  "tag": "section",
+  "kind": "aria-label",
+  "text": "مقارنة مستقلة مسطحة — الموصى بها للقراءة العريضة",
+  "id": "s202"
+ },
+ {
+  "line": 760,
+  "tag": "h3",
+  "kind": "text",
+  "text": "مقارنة مسطّحة — للقراءة الدقيقة",
+  "id": "s203"
+ },
+ {
+  "line": 763,
+  "tag": "span",
+  "kind": "text",
+  "text": "قيمة العينة",
+  "id": "s204"
+ },
+ {
+  "line": 764,
+  "tag": "span",
+  "kind": "text",
+  "text": "عملية",
+  "id": "s205"
+ },
+ {
+  "line": 779,
+  "tag": "ul",
+  "kind": "aria-label",
+  "text": "مؤشرات مستقلة",
+  "id": "s206"
+ },
+ {
+  "line": 784,
+  "tag": "p",
+  "kind": "text",
+  "text": "الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. المثال التالي هو إبراز صريح لقراءة رئيسية، ثم compact يعرضان بيانات المقارنة نفسها.",
+  "id": "s207"
+ },
+ {
+  "line": 785,
+  "tag": "section",
+  "kind": "aria-label",
+  "text": "إبراز مقصود لقيمة رئيسية ومقارنة مستقلة",
+  "id": "s208"
+ },
+ {
+  "line": 786,
+  "tag": "h3",
+  "kind": "text",
+  "text": "قراءة رئيسية — مع مقارنات مستقلة",
+  "id": "s209"
+ },
+ {
+  "line": 804,
+  "tag": "section",
+  "kind": "aria-label",
+  "text": "مقارنة مدمجة بالبيانات نفسها",
+  "id": "s210"
+ },
+ {
+  "line": 805,
+  "tag": "h3",
+  "kind": "text",
+  "text": "قراءة مدمجة — نفس بيانات المقارنة",
+  "id": "s211"
+ },
+ {
+  "line": 829,
+  "tag": "p",
+  "kind": "text",
+  "text": "09 · B06",
+  "id": "s212"
+ },
+ {
+  "line": 830,
+  "tag": "h2",
+  "kind": "text",
+  "text": "الرسائل والحالات",
+  "id": "s213"
+ },
+ {
+  "line": 831,
+  "tag": "p",
+  "kind": "text",
+  "text": "أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert — D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.",
+  "id": "s214"
+ },
+ {
+  "line": 837,
+  "tag": "b",
+  "kind": "text",
+  "text": "تحديث متاح",
+  "id": "s215"
+ },
+ {
+  "line": 837,
+  "tag": "span",
+  "kind": "text",
+  "text": "ملاحظة معلوماتية بصياغة من المستهلك — الدور status من النوع.",
+  "id": "s216"
+ },
+ {
+  "line": 838,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "إغلاق الملاحظة",
+  "id": "s217"
+ },
+ {
+  "line": 842,
+  "tag": "b",
+  "kind": "text",
+  "text": "تم الحفظ",
+  "id": "s218"
+ },
+ {
+  "line": 842,
+  "tag": "span",
+  "kind": "text",
+  "text": "رسالة تأكيد تبقى حتى يغلقها المستخدم وتعيد التركيز لمصدرها.",
+  "id": "s219"
+ },
+ {
+  "line": 847,
+  "tag": "b",
+  "kind": "text",
+  "text": "مخزون منخفض",
+  "id": "s220"
+ },
+ {
+  "line": 847,
+  "tag": "span",
+  "kind": "text",
+  "text": "تنبيه بصياغة المستهلك.",
+  "id": "s221"
+ },
+ {
+  "line": 851,
+  "tag": "b",
+  "kind": "text",
+  "text": "فشل الإرسال",
+  "id": "s222"
+ },
+ {
+  "line": 851,
+  "tag": "span",
+  "kind": "text",
+  "text": "خطأ بنص قابل للتصرف — الدور alert من النوع تلقائيًا.",
+  "id": "s223"
+ },
+ {
+  "line": 856,
+  "tag": "b",
+  "kind": "text",
+  "text": "مساعدة",
+  "id": "s224"
+ },
+ {
+  "line": 856,
+  "tag": "span",
+  "kind": "text",
+  "text": "ملاحظة تعليمية — الدور note.",
+  "id": "s225"
+ },
+ {
+  "line": 860,
+  "tag": "button",
+  "kind": "text",
+  "text": "إعادة إظهار المعلوماتية",
+  "id": "s226"
+ },
+ {
+  "line": 861,
+  "tag": "button",
+  "kind": "text",
+  "text": "إعادة إظهار النجاح",
+  "id": "s227"
+ },
+ {
+  "line": 862,
+  "tag": "button",
+  "kind": "text",
+  "text": "إعادة إظهار الخطأ",
+  "id": "s228"
+ },
+ {
+  "line": 863,
+  "tag": "button",
+  "kind": "text",
+  "text": "إظهار رسالة عابرة (toast)",
+  "id": "s229"
+ },
+ {
+  "line": 864,
+  "tag": "button",
+  "kind": "text",
+  "text": "إعلان في القناة الحيّة (polite)",
+  "id": "s230"
+ },
+ {
+  "line": 869,
+  "tag": "span",
+  "kind": "text",
+  "text": "جارٍ تجهيز التقرير...",
+  "id": "s231"
+ },
+ {
+  "line": 880,
+  "tag": "span",
+  "kind": "text",
+  "text": "لا توجد بيانات بعد",
+  "id": "s232"
+ },
+ {
+  "line": 881,
+  "tag": "p",
+  "kind": "text",
+  "text": "ستظهر القراءات هنا عند توفرها.",
+  "id": "s233"
+ },
+ {
+  "line": 885,
+  "tag": "span",
+  "kind": "text",
+  "text": "لا نتائج مطابقة",
+  "id": "s234"
+ },
+ {
+  "line": 886,
+  "tag": "p",
+  "kind": "text",
+  "text": "جرّب مصطلحًا آخر أو امسح البحث.",
+  "id": "s235"
+ },
+ {
+  "line": 889,
+  "tag": "p",
+  "kind": "text",
+  "text": "الإعلان يمر في قناتي المكوّن المنفصلتين (polite/assertive) — تحقق بفتح الإفصاح أو قراءة DOM. toast يعيش أعلى الصفحة خارج الأقسام (عقد rect > 0).",
+  "id": "s236"
+ },
+ {
+  "line": 895,
+  "tag": "p",
+  "kind": "text",
+  "text": "10 · B07",
+  "id": "s237"
+ },
+ {
+  "line": 896,
+  "tag": "h2",
+  "kind": "text",
+  "text": "التنقل والطبقات",
+  "id": "s238"
+ },
+ {
+  "line": 897,
+  "tag": "p",
+  "kind": "text",
+  "text": "الألسنة بصف واحد وتمرير أفقي مقصود مع Home/End (D-UI-01)؛ الطبقات بعزل خلفية وحصر تركيز واستعادة المشغّل؛ شريط الأفعال يلتف عند التكبير.",
+  "id": "s239"
+ },
+ {
+  "line": 901,
+  "tag": "button",
+  "kind": "text",
+  "text": "فتح حوار مركزي",
+  "id": "s240"
+ },
+ {
+  "line": 902,
+  "tag": "button",
+  "kind": "text",
+  "text": "فتح لوحة سفلية",
+  "id": "s241"
+ },
+ {
+  "line": 904,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "إطار هاتف تجريبي للتنقل",
+  "id": "s242"
+ },
+ {
+  "line": 907,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "رجوع",
+  "id": "s243"
+ },
+ {
+  "line": 908,
+  "tag": "span",
+  "kind": "text",
+  "text": "طلبات الفرع الرئيسي — عنوان طويل يلتف حتى سطرين",
+  "id": "s244"
+ },
+ {
+  "line": 909,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "المزيد",
+  "id": "s245"
+ },
+ {
+  "line": 911,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أقسام الطلبات",
+  "id": "s246"
+ },
+ {
+  "line": 912,
+  "tag": "button",
+  "kind": "text",
+  "text": "النشطة",
+  "id": "s247"
+ },
+ {
+  "line": 913,
+  "tag": "button",
+  "kind": "text",
+  "text": "المكتملة",
+  "id": "s248"
+ },
+ {
+  "line": 914,
+  "tag": "button",
+  "kind": "text",
+  "text": "المجدولة",
+  "id": "s249"
+ },
+ {
+  "line": 915,
+  "tag": "button",
+  "kind": "text",
+  "text": "المرتجعات",
+  "id": "s250"
+ },
+ {
+  "line": 918,
+  "tag": "p",
+  "kind": "text",
+  "text": "لوحة الطلبات النشطة — التبويب يبدّل المحتوى المرتبط فعليًا (جرّب الأسهم وHome/End والنقر).",
+  "id": "s251"
+ },
+ {
+  "line": 921,
+  "tag": "p",
+  "kind": "text",
+  "text": "لوحة الطلبات المكتملة.",
+  "id": "s252"
+ },
+ {
+  "line": 924,
+  "tag": "p",
+  "kind": "text",
+  "text": "لوحة الطلبات المجدولة.",
+  "id": "s253"
+ },
+ {
+  "line": 927,
+  "tag": "p",
+  "kind": "text",
+  "text": "لوحة المرتجعات.",
+  "id": "s254"
+ },
+ {
+  "line": 929,
+  "tag": "p",
+  "kind": "text",
+  "text": "اللسان المحدد: النشطة.",
+  "id": "s255"
+ },
+ {
+  "line": 931,
+  "tag": "button",
+  "kind": "text",
+  "text": "اعتماد الطلب",
+  "id": "s256"
+ },
+ {
+  "line": 935,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "خيارات",
+  "id": "s257"
+ },
+ {
+  "line": 938,
+  "tag": "nav",
+  "kind": "aria-label",
+  "text": "التنقل الرئيسي (عينة عرض)",
+  "id": "s258"
+ },
+ {
+  "line": 939,
+  "tag": "button",
+  "kind": "text",
+  "text": "مشروعي",
+  "id": "s259"
+ },
+ {
+  "line": 940,
+  "tag": "button",
+  "kind": "text",
+  "text": "العمل",
+  "id": "s260"
+ },
+ {
+  "line": 941,
+  "tag": "button",
+  "kind": "text",
+  "text": "الطلبات",
+  "id": "s261"
+ },
+ {
+  "line": 942,
+  "tag": "button",
+  "kind": "text",
+  "text": "الحساب",
+  "id": "s262"
+ },
+ {
+  "line": 945,
+  "tag": "p",
+  "kind": "text",
+  "text": "الإطار أعلاه يجمع appbar + tabs + tabpanels + actionbar لاصق + navbar سفلي في عمود هاتف واحد داخل هذا القسم فقط — التجميع للعرض، وعدد الوجهات وأسماؤها عينة لا تثبيت لخريطة تنقل منتج.",
+  "id": "s263"
+ },
+ {
+  "line": 952,
+  "tag": "p",
+  "kind": "text",
+  "text": "11 · SPEC-04",
+  "id": "s264"
+ },
+ {
+  "line": 953,
+  "tag": "h2",
+  "kind": "text",
+  "text": "بوابة الوصول",
+  "id": "s265"
+ },
+ {
+  "line": 954,
+  "tag": "p",
+  "kind": "text",
+  "text": "تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.",
+  "id": "s266"
+ },
+ {
+  "line": 958,
+  "tag": "h3",
+  "kind": "text",
+  "text": "الدخول إلى تجربة العرض",
+  "id": "s267"
+ },
+ {
+  "line": 959,
+  "tag": "p",
+  "kind": "text",
+  "text": "نسخة عرض محلية — البيانات لا تغادر هذا الملف.",
+  "id": "s268"
+ },
+ {
+  "line": 963,
+  "tag": "label",
+  "kind": "text",
+  "text": "البريد الإلكتروني",
+  "id": "s269"
+ },
+ {
+  "line": 970,
+  "tag": "label",
+  "kind": "text",
+  "text": "كلمة المرور",
+  "id": "s270"
+ },
+ {
+  "line": 973,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "إظهار كلمة المرور",
+  "id": "s271"
+ },
+ {
+  "line": 979,
+  "tag": "button",
+  "kind": "text",
+  "text": "متابعة",
+  "id": "s272"
+ },
+ {
+  "line": 984,
+  "tag": "p",
+  "kind": "text",
+  "text": "جرب: إرسال فارغ (رسالة مكوّن + تركيز أول حقل)، إظهار كلمة المرور، ثم إرسال صالح — pending ثم نتيجة المعالج المحلي. الاسترداد والمزودون يبقيان مخفيين لعدم وجود معالجات لهم (عقد العائلة).",
+  "id": "s273"
+ },
+ {
+  "line": 991,
+  "tag": "p",
+  "kind": "text",
+  "text": "12 · SPEC-03",
+  "id": "s274"
+ },
+ {
+  "line": 992,
+  "tag": "h2",
+  "kind": "text",
+  "text": "إعدادات الحساب والتطبيق",
+  "id": "s275"
+ },
+ {
+  "line": 993,
+  "tag": "p",
+  "kind": "text",
+  "text": "حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير — دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.",
+  "id": "s276"
+ },
+ {
+  "line": 997,
+  "tag": "button",
+  "kind": "text",
+  "text": "فتح الإعدادات",
+  "id": "s277"
+ },
+ {
+  "line": 998,
+  "tag": "p",
+  "kind": "text",
+  "text": "تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ. جرّب الانتقال إلى «إعدادات التطبيق» ثم العودة والإغلاق (Escape/زر الإغلاق يعيدان التركيز). الحوار موسّط بعقد B07: عند تبديل المنظور يتغير ارتفاع المحتوى فتُعاد إزاحة مركز الطبقة (وزر الإغلاق مع رأسها ~38px) — سلوك النموذج الموسّط الموثق، لا خلل هندسي.",
+  "id": "s278"
+ },
+ {
+  "line": 1002,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "العودة إلى إعدادات الحساب",
+  "id": "s279"
+ },
+ {
+  "line": 1006,
+  "tag": "h2",
+  "kind": "text",
+  "text": "إعدادات التطبيق",
+  "id": "s280"
+ },
+ {
+  "line": 1007,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "إغلاق الإعدادات",
+  "id": "s281"
+ },
+ {
+  "line": 1014,
+  "tag": "span",
+  "kind": "text",
+  "text": "لم",
+  "id": "s282"
+ },
+ {
+  "line": 1016,
+  "tag": "span",
+  "kind": "text",
+  "text": "ليان منصور",
+  "id": "s283"
+ },
+ {
+  "line": 1017,
+  "tag": "span",
+  "kind": "text",
+  "text": "lian@example.test",
+  "id": "s284"
+ },
+ {
+  "line": 1025,
+  "tag": "span",
+  "kind": "text",
+  "text": "الملف الشخصي",
+  "id": "s285"
+ },
+ {
+  "line": 1025,
+  "tag": "span",
+  "kind": "text",
+  "text": "معلومات الحساب",
+  "id": "s286"
+ },
+ {
+  "line": 1030,
+  "tag": "h3",
+  "kind": "text",
+  "text": "التطبيق",
+  "id": "s287"
+ },
+ {
+  "line": 1035,
+  "tag": "span",
+  "kind": "text",
+  "text": "اللغة والتفضيلات",
+  "id": "s288"
+ },
+ {
+  "line": 1043,
+  "tag": "p",
+  "kind": "text",
+  "text": "هذه التفضيلات عينة محلية مؤقتة.",
+  "id": "s289"
+ },
+ {
+  "line": 1045,
+  "tag": "h3",
+  "kind": "text",
+  "text": "تفضيلات التطبيق",
+  "id": "s290"
+ },
+ {
+  "line": 1050,
+  "tag": "span",
+  "kind": "text",
+  "text": "تغيير تجريبي فقط",
+  "id": "s291"
+ },
+ {
+  "line": 1057,
+  "tag": "span",
+  "kind": "text",
+  "text": "ملخص أسبوعي",
+  "id": "s292"
+ },
+ {
+  "line": 1072,
+  "tag": "p",
+  "kind": "text",
+  "text": "13 · m-ocal",
+  "id": "s293"
+ },
+ {
+  "line": 1073,
+  "tag": "h2",
+  "kind": "text",
+  "text": "جدول الطلبات المجدولة",
+  "id": "s294"
+ },
+ {
+  "line": 1073,
+  "tag": "span",
+  "kind": "text",
+  "text": "DRAFT FOR REVIEW",
+  "id": "s295"
+ },
+ {
+  "line": 1074,
+  "tag": "p",
+  "kind": "text",
+  "text": "تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عند عرض مكوّن أقل من 360px يتحول تلقائيًا إلى اليوم، وتعود تفضيلات الشهر عند اتساع المساحة.",
+  "id": "s296"
+ },
+ {
+  "line": 1078,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "أدوات الجدول",
+  "id": "s297"
+ },
+ {
+  "line": 1079,
+  "tag": "button",
+  "kind": "text",
+  "text": "تبديل عرض القائمة/التقويم",
+  "id": "s298"
+ },
+ {
+  "line": 1080,
+  "tag": "button",
+  "kind": "text",
+  "text": "حالة الفراغ",
+  "id": "s299"
+ },
+ {
+  "line": 1081,
+  "tag": "button",
+  "kind": "text",
+  "text": "استعادة البيانات",
+  "id": "s300"
+ },
+ {
+  "line": 1083,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "مكوّن جدول الطلبات",
+  "id": "s301"
+ },
+ {
+  "line": 1084,
+  "tag": "ul",
+  "kind": "aria-label",
+  "text": "سجل أحداث الجدول",
+  "id": "s302"
+ },
+ {
+  "line": 1085,
+  "tag": "p",
+  "kind": "text",
+  "text": "أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request. البيانات fixtures مثبتة حول 2026-10-07. عند ضيق الجذر تستخدم واجهة اليوم بدل خلايا شهر أصغر من هدف 48px؛ لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.",
+  "id": "s303"
+ },
+ {
+  "line": 1092,
+  "tag": "p",
+  "kind": "text",
+  "text": "14 · SYS-02",
+  "id": "s304"
+ },
+ {
+  "line": 1093,
+  "tag": "h2",
+  "kind": "text",
+  "text": "عارض البطاقات",
+  "id": "s305"
+ },
+ {
+  "line": 1094,
+  "tag": "p",
+  "kind": "text",
+  "text": "سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.",
+  "id": "s306"
+ },
+ {
+  "line": 1102,
+  "tag": "h3",
+  "kind": "text",
+  "text": "ملخص الطلبات",
+  "id": "s307"
+ },
+ {
+  "line": 1110,
+  "tag": "span",
+  "kind": "text",
+  "text": "عرض التفاصيل",
+  "id": "s308"
+ },
+ {
+  "line": 1114,
+  "tag": "p",
+  "kind": "text",
+  "text": "التفاصيل الكاملة تظهر داخل مكانها بلا قص — 132 طلبًا جديدًا هذا الأسبوع بذروة يوم الثلاثاء.",
+  "id": "s309"
+ },
+ {
+  "line": 1120,
+  "tag": "h3",
+  "kind": "text",
+  "text": "ملخص التسليم",
+  "id": "s310"
+ },
+ {
+  "line": 1122,
+  "tag": "span",
+  "kind": "text",
+  "text": "جاهزة للتسليم",
+  "id": "s311"
+ },
+ {
+  "line": 1123,
+  "tag": "span",
+  "kind": "text",
+  "text": "45",
+  "id": "s312"
+ },
+ {
+  "line": 1125,
+  "tag": "p",
+  "kind": "text",
+  "text": "البطاقة المجاورة ظاهرة جزئيًا (peek 24px) — الأسهم داخل أي حقل تبقى للحقل.",
+  "id": "s313"
+ },
+ {
+  "line": 1130,
+  "tag": "h3",
+  "kind": "text",
+  "text": "ملخص التحصيل",
+  "id": "s314"
+ },
+ {
+  "line": 1132,
+  "tag": "span",
+  "kind": "text",
+  "text": "محصّل اليوم",
+  "id": "s315"
+ },
+ {
+  "line": 1135,
+  "tag": "p",
+  "kind": "text",
+  "text": "الأرقام معزولة LTR داخل RTL.",
+  "id": "s316"
+ },
+ {
+  "line": 1141,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "السابق",
+  "id": "s317"
+ },
+ {
+  "line": 1143,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "التالي",
+  "id": "s318"
+ },
+ {
+  "line": 1145,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "الانتقال المباشر إلى بطاقة",
+  "id": "s319"
+ },
+ {
+  "line": 1147,
+  "tag": "p",
+  "kind": "text",
+  "text": "جرّب الأسهم والنقاط ولوحة المفاتيح من سطح العارض (ArrowLeft = التالي في RTL، Home/End) والتوسيع في البطاقة الأولى — يُطوى تلقائيًا عند الانتقال.",
+  "id": "s320"
+ },
+ {
+  "line": 1153,
+  "tag": "p",
+  "kind": "text",
+  "text": "هذا ملف عرض لمكوّنات نظام Micro UI — ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.",
+  "id": "s321"
+ },
+ {
+  "line": 1154,
+  "tag": "p",
+  "kind": "text",
+  "text": "الحالات مستمدة من مواصفات العائلات نفسها: 12 عائلة STABLE UI · order-schedule وcarousel عائلتان DRAFT FOR REVIEW · ملحقا packed-circle وأزرار المنحنيات PROPOSED. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.",
+  "id": "s322"
+ },
+ {
+  "line": 1155,
+  "tag": "p",
+  "kind": "text",
+  "text": "النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا — لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py",
+  "id": "s323"
+ },
+ {
+  "line": 1159,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "منطقة الرسائل العابرة",
+  "id": "s324"
+ },
+ {
+  "line": 1161,
+  "tag": "span",
+  "kind": "text",
+  "text": "تم حفظ إعداد العرض محليًا لهذه الجلسة (مثال).",
+  "id": "s325"
+ },
+ {
+  "line": 1162,
+  "tag": "button",
+  "kind": "text",
+  "text": "حسنًا",
+  "id": "s326"
+ },
+ {
+  "line": 1176,
+  "tag": "h2",
+  "kind": "text",
+  "text": "اختيار المورد",
+  "id": "s327"
+ },
+ {
+  "line": 1177,
+  "tag": "button",
+  "kind": "aria-label",
+  "text": "إغلاق",
+  "id": "s328"
+ },
+ {
+  "line": 1181,
+  "tag": "input",
+  "kind": "aria-label",
+  "text": "بحث بالاسم",
+  "id": "s329"
+ },
+ {
+  "line": 1182,
+  "tag": "div",
+  "kind": "aria-label",
+  "text": "النتائج",
+  "id": "s330"
+ },
+ {
+  "line": 1183,
+  "tag": "p",
+  "kind": "text",
+  "text": "المحدد: لا شيء",
+  "id": "s331"
+ },
+ {
+  "line": 1185,
+  "tag": "p",
+  "kind": "text",
+  "text": "القيمة الحالية تُعرض أسفل المنتقي وفي حقل المشغّل. جرّب البحث الجزئي ثم مسح الاستعلام واختيارًا ثم مسح الاختيار.",
+  "id": "s332"
+ },
+ {
+  "line": 1186,
+  "tag": "ul",
+  "kind": "aria-label",
+  "text": "سجل أحداث المنتقي",
+  "id": "s333"
+ },
+ {
+  "line": 1194,
+  "tag": "h2",
+  "kind": "text",
+  "text": "تأكيد إجراء (حوار)",
+  "id": "s334"
+ },
+ {
+  "line": 1198,
+  "tag": "p",
+  "kind": "text",
+  "text": "هذا حوار مركزي بعقد B07: role=dialog مع aria-modal، إغلاق ظاهر، خلفية معزولة، والتركيز محصور داخل الطبقة ويُستعاد للمشغّل عند الإغلاق (جرب Tab وEscape).",
+  "id": "s335"
+ },
+ {
+  "line": 1201,
+  "tag": "button",
+  "kind": "text",
+  "text": "إلغاء",
+  "id": "s336"
+ },
+ {
+  "line": 1202,
+  "tag": "button",
+  "kind": "text",
+  "text": "تأكيد",
+  "id": "s337"
+ },
+ {
+  "line": 1210,
+  "tag": "h2",
+  "kind": "text",
+  "text": "لوحة سفلية (sheet)",
+  "id": "s338"
+ },
+ {
+  "line": 1214,
+  "tag": "p",
+  "kind": "text",
+  "text": "لوحة سفلية بعقد الطبقات نفسه — تفتح من الأسفل بحركة 240ms من motion.css، والإغلاق من الزر الظاهر أو الخلفية (سياسة الضغط بالخلفية: يغلق هنا لأنها ليست حوارًا متلفًا).",
+  "id": "s339"
+ }
+]

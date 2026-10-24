@@ -50,7 +50,7 @@
      الحد يبقي النص الفعلي للبطاقة النشطة كاملًا داخل القناع
      (قناع viewport يؤثر على ظهور المجاورة فقط) ويستوعب ظل
      التمييز (3px 8px) دون قصّه. عدّلها على .m-carousel نفسه. */
-  --_peek: 24px;
+  --_peek: 0px;
   /* فاصل بين البطاقات: من سلم المسافات المعتمد */
   --_gap: var(--micro-space-3);
 }
@@ -93,7 +93,7 @@
   padding: 0;
   padding-block: var(--micro-space-2); /* مساحة ظل البطاقة — لا قصّ */
   list-style: none;
-  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
+  transition: transform var(--micro-motion-carousel) var(--micro-ease-standard);
 }
 
 /* البطاقة النشطة في المنتصف: عرضها = 100% − 2×(peek + gap)
@@ -102,8 +102,13 @@
    بصرف النظر عن عدد البطاقات (لا قفزة تخطيط عند إضافة بطاقة). */
 .m-carousel__slide {
   flex: 0 0 auto;
-  width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
+  width: 100%;
   min-width: 0; /* يسمح بلفّ المحتوى الطويل داخل البطاقة */
+}
+/* Teaser is explicit; the default slide fills the available width. */
+.m-carousel[data-peek="true"] { --_peek: 24px; }
+.m-carousel[data-peek="true"] .m-carousel__slide {
+  width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
 }
 /* Do not spend a narrow reading's width on decorative adjacent previews.
    This follows component width, not the device viewport. */
@@ -279,7 +284,7 @@
 }
 .m-carousel__dot[aria-current="true"]::before {
   inline-size: 20px;
-  background-color: var(--micro-brand-primary);
+  background-color: var(--micro-brand-ink);
 }
 .m-carousel__dot:focus-visible {
   outline: none;

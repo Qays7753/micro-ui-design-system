@@ -1,5 +1,13 @@
 # الحالة الحالية — مكتبة Micro UI
 
+## تحديث التنفيذ المهني المعتمد
+
+العقود النشطة في [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md): Geometry B، Light/Dark/System الآن، v2 شعار رسمي، Carousel بعرض كامل، مقارنة bars/rows وملخص compact افتراضيًا، ونطاق signed صريح للأعمدة والخط. مصدر النضج [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json)، لا MANIFEST.
+
+العمل على فرع تنفيذ واحد بطلب صريح، ولا يعني هذا دمجه في main. الرأس والأرقام الواردة في الأقسام التالية **توثيق تاريخي** وليست نتيجة للمصدر المعدّل. الدليل الجديد في [`IMPLEMENTATION-VERIFICATION.md`](IMPLEMENTATION-VERIFICATION.md)، وأدواته تعيد إنشاء النتائج من المصدر.
+
+## الحالة السابقة المحفوظة للمقارنة
+
 **المرجع المفحوص:** `origin/main` عند `91351b4a23d52c0b1e0f6e6a04c4c631ca1332bd` بعد جلبه في 2026-10-21؛ يتضمن دمج PR #11.
 **نطاق المستودع:** UI-only
 **التنفيذ الجاري للمراجعة:** `replit/professional-numeric-geometry-ui-polish-2026-10-21`.

@@ -387,7 +387,7 @@ def main():
         page.wait_for_function("document.querySelector('[data-access-form]').dataset.microAccessBusy === 'false'")
         check("Async completion clears busy", form.get_attribute("aria-busy") is None)
         gateway.evaluate("""el => MicroAccessGateway.init(el, {
-          onSubmit: () => Promise.reject(new Error('تعذر الاتصال التجريبي')),
+          onSubmit: () => Promise.reject(Object.assign(new Error('INTERNAL_ONLY_NOT_FOR_UI'), {userMessage: 'تعذر الاتصال التجريبي'})),
           onRecovery: () => Promise.resolve(),
           providers: {google: () => Promise.resolve()}
         })""")
@@ -397,7 +397,9 @@ def main():
               and not gateway.locator('[data-access-provider="apple"]').is_visible())
         form.evaluate("el => el.requestSubmit()")
         page.wait_for_function("document.querySelector('[data-access-status]').textContent.includes('تعذر الاتصال التجريبي')")
-        check("Callback rejection displayed explicitly", status.get_attribute("data-tone") == "error")
+        check("Safe callback rejection displayed; raw exception hidden",
+              status.get_attribute("data-tone") == "error"
+              and "INTERNAL_ONLY" not in status.inner_text())
 
         # SUI-R2-A4 (SUI-R1-01): صدق نتيجة البوابة — المستهلك يملك النتيجة
         # والرسالة، والمكوّن لا يستنتج دخولًا من مجرد اكتمال المعالج.

@@ -1,0 +1,163 @@
+{
+  "prefix": "LANG",
+  "skill": "ux-writer-agent",
+  "scope": "Arabic/RTL copy, visible and accessible strings, state language, count agreement, locale/readiness, reusable content contracts across current UI component families",
+  "external_contact": false,
+  "product_files_edited": false,
+  "findings": [
+    {
+      "id": "LANG-001",
+      "skill": "ux-writer-agent",
+      "category": "Localization/content architecture",
+      "severity": "Moderate",
+      "status": "LIKELY",
+      "sources": [
+        {"path": "components/order-schedule/order-schedule.js", "lines": "45-55, 126-140", "selector": "MONTHS_AR, WEEKDAYS_FULL, WEEKDAYS_SHORT, countPhraseAr, fullDateAr"},
+        {"path": "components/order-schedule/specification.md", "lines": "3, 81-83", "selector": "locale/date/digit contract"},
+        {"path": "components/info-strip/info-strip.js", "lines": "47, 67-88", "selector": "status/page label construction"},
+        {"path": "components/carousel/carousel.js", "lines": "228-260, 280-291", "selector": "empty and generated position labels"},
+        {"path": "components/selection/picker.js", "lines": "247-258", "selector": "fallback state strings"},
+        {"path": "components/access-gateway/access-gateway.js", "lines": "107, 149-166, 186-234", "selector": "fallback accessible/error/status strings"},
+        {"path": "components/data/data.js", "lines": "130-138", "selector": "fmt/readingOf"}
+      ],
+      "evidence": "Arabic defaults are distributed as literal JS/HTML; the order schedule alone declares Arabic/Gregorian/Western digits, other components concatenate Arabic templates or accept caller formatting, and no shared locale/string contract was located in the inspected material. This proves fragmentation, not a requirement for any additional language.",
+      "root_cause": "Arabic-first component defaults, examples, consumer-owned data, locale and formatting decisions are split across sources without one explicit shared policy.",
+      "impact": "Future changes can drift between visual copy, ARIA/live announcements, fixtures, numbers and dates. No current translation failure or user impact is claimed.",
+      "current_patch": "None; retain the existing Arabic default and consumer ownership until owner decisions.",
+      "future_state": "Decide Arabic-only versus locale-ready. Centralize stable IDs for component-owned states, provide locale message/number/date/plural helpers, keep consumer labels/outcomes/data caller-owned, resolve one string for both visible and accessible output, and define missing-key behavior. If Arabic-only, still document MSA, digit, date and bidi rules centrally.",
+      "recommendation": "Structural content-contract and formatting work; inventory ownership first, then centralize shared state copy and locale helpers. Do not bulk-replace fixture or caller content.",
+      "change_type": "Structural",
+      "risk": "Overbuilt localization framework; incorrect Arabic agreement from naïve plural interpolation; unintended changes to consumer fixture wording.",
+      "acceptance_tests": [
+        "Arabic defaults and overrides are explicit; missing-key behavior is deterministic.",
+        "Arabic count cases 0, 1, 2, 3, 10, 11, 99 and 100 are verified.",
+        "Mixed Arabic/Latin identifiers and long numbers remain readable in visual and accessible output.",
+        "Date/number helpers test declared locale boundaries and preserve consumer-supplied display strings.",
+        "State announcements resolve the same localized string exactly once."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Is the kit strictly Arabic MSA, or locale-ready for English/other Arabic regional conventions at transfer; which digit family applies to dates, metrics and entered values?",
+        "options": [
+          {"option": "Arabic MSA and Western digits only", "effect": "Smallest API; explicitly limits portability."},
+          {"option": "Arabic-first with locale adapter", "effect": "Moderate upfront work; avoids rewriting core copy later."},
+          {"option": "Full locale catalog and formatting", "effect": "Most flexible; highest maintenance without a confirmed target."}
+        ],
+        "recommendation": "Arabic-first locale adapter with current MSA/Western-digit defaults.",
+        "blocks": "Blocks final shared content-contract design; does not block non-locale work."
+      }
+    },
+    {
+      "id": "LANG-002",
+      "skill": "ux-writer-agent",
+      "category": "Arabic grammar / fixture consistency",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "sources": [
+        {"path": "components/info-strip/example-usage.html", "lines": "23-28", "selector": ".m-info-card__number + .m-info-card__unit"},
+        {"path": "previews/info-strip/index.html", "lines": "36-38", "selector": ".m-info-card[aria-label]"},
+        {"path": "previews/ui-system-showcase/index.html", "lines": "480-482, 495-497, 546-554", "selector": ".m-info-card__number, .m-info-card__unit, article[aria-label]"}
+      ],
+      "evidence": "Viewed generated-artifacts/pixilated-audit/visual-info-strip-390.jpg shows the visible fixture `18 طلب`. In a standard MSA count phrase, `18 طلبًا` is the recommended fully inflected reading (singular accusative tamyiz, not nominative); because the card visually splits number and unit without a complete clause, isolated `18 طلب` is not treated as a proven grammatical error. The definite mismatch is a separate fixture: visible 4 + `طلب` while its aria-label says `4 طلبات`; `4 طلبات` is standard for the intended count phrase.",
+      "root_cause": "Value, unit and accessible reading are manually authored separately without a fixture-level Arabic agreement check.",
+      "impact": "The confirmed 4 fixture can present different grammatical forms to sighted and screen-reader users. The 18 fixture has a recommended complete count phrase, but its split-card syntax is not asserted as a confirmed defect. This is a fixture issue, not runtime pluralization responsibility for generic cards.",
+      "current_patch": "None. Recommended complete count phrases: `18 طلبًا` in visible/accessibility text when that count reading is intended; correct the confirmed 4 mismatch to `4 طلبات` in both.",
+      "future_state": "Keep the generic card consumer-owned and literal; coordinate label/value/unit/accessibility copy from a single fixture authoring source. Add reviewed Arabic count examples for applicable ranges. Avoid inferring grammar for arbitrary units.",
+      "recommendation": "Small fixture-only wording correction after owner approval; shared formatter is structural and belongs to LANG-001.",
+      "change_type": "Patch for fixtures; structural if a shared count formatter is approved",
+      "risk": "A generic runtime pluralizer can corrupt currency, measurement or invariant unit text.",
+      "acceptance_tests": [
+        "Visible phrase and accessible name have the same numeric reading and meaning.",
+        "Arabic fixture counts are reviewed across 0/1/2/3-10/11-99/100+ when applicable.",
+        "Arbitrary consumer units stay literal and are never grammatically transformed by the generic card."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Approve `18 طلبًا` and `4 طلبات` as the complete count phrases in these fixtures?",
+        "options": [
+          {"option": "Correct the fixture phrases now", "effect": "Improves demo copy without changing component behavior."},
+          {"option": "Keep the noun invariant as an explicit sample convention", "effect": "Requires a different noun/unit phrase and matching accessible name."}
+        ],
+        "recommendation": "Correct count agreement while preserving generic unit ownership.",
+        "blocks": "Wording approval only."
+      }
+    },
+    {
+      "id": "LANG-003",
+      "skill": "ux-writer-agent",
+      "category": "Error messaging / content boundary",
+      "severity": "Major",
+      "status": "CONFIRMED",
+      "sources": [
+        {"path": "components/access-gateway/access-gateway.js", "lines": "149-151, 163-166, 230-234", "selector": ".m-access-gateway [data-access-status] promise rejection"},
+        {"path": "components/access-gateway/specification.md", "lines": "26-30", "selector": "callback rejection result contract"}
+      ],
+      "evidence": "Dynamically reproduced at http://127.0.0.1:5000/previews/concepts/index.html#gateway through the public MicroAccessGateway.init API: onSubmit returned Promise.reject(new Error(\"FixtureTransportError: E_DEMO_UNAVAILABLE\")) with only valid synthetic form fixtures. The status DOM text was exactly `FixtureTransportError: E_DEMO_UNAVAILABLE`, role=status, aria-live=polite, data-tone=error, one status node, and one exact occurrence in status and gateway text. No external request was made. Cropped screenshot: generated-artifacts/pixilated-audit/LANG-003-synthetic-error-status-crop.png. This confirms the local raw-error-display path, not an observed real-user/production leak.",
+      "root_cause": "The implementation treats an arbitrary Error object's message as reviewed user-facing localized copy.",
+      "impact": "A technical Error.message in a consumer rejection is displayed verbatim in a DOM node exposed as a polite status live region; the synthetic local reproduction confirms this path, not an audible screen-reader announcement or real-user leak. No real integration, user, network request or production error was involved.",
+      "current_patch": "None. Safe fallbacks proposed: `تعذّر إكمال تسجيل الدخول. حاول مرة أخرى.`; provider/recovery equivalents should be contextual and consumer-overridable.",
+      "future_state": "Distinguish explicit user-facing localized message from exception diagnostics. Map safe error kinds or accept a userMessage/error mapper; otherwise show neutral actionable Arabic fallback. Keep raw diagnostics out of UI/live region and ensure any private diagnostics callback never receives credential values.",
+      "recommendation": "Add a clear error boundary/API and safe fallback; don't attempt to sanitize or translate arbitrary error prose.",
+      "change_type": "Patch-sized boundary fix plus structural contract",
+      "risk": "Neutral fallback may conceal cause; diagnostics handling could create a separate privacy risk; preserve consumer result.message semantics.",
+      "acceptance_tests": [
+        "Reject with HTTP/code, English, long and empty error objects; only approved safe copy appears.",
+        "Explicit user-facing localized message appears as documented.",
+        "No raw Error object, stack, response body or credential appears in DOM/live text/events.",
+        "Result is announced once in an accessible status region."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Should callback results accept an explicit user-facing error message/error mapper while raw `error.message` is never rendered?",
+        "options": [
+          {"option": "Use safe library fallback unless a documented user message is passed", "effect": "Safer consistent default; requires caller mapping for contextual errors."},
+          {"option": "Continue exposing arbitrary exception message", "effect": "Maximizes caller control but permits technical/unlocalized copy."}
+        ],
+        "recommendation": "Use safe fallback plus explicit user-facing override.",
+        "blocks": "Blocks final error callback content contract."
+      }
+    },
+    {
+      "id": "LANG-004",
+      "skill": "ux-writer-agent",
+      "category": "State microcopy / clarity",
+      "severity": "Minor",
+      "status": "CONFIRMED",
+      "sources": [
+        {"path": "components/selection/picker.js", "lines": "106-110, 126-148, 247-259", "selector": ".m-picker__state and search-empty state"},
+        {"path": "components/selection/specification.md", "lines": "25-30", "selector": "picker ready/search-empty/loading/error/empty distinctions"}
+      ],
+      "evidence": "True data-empty fallback is `لا نتائج`, error is `تعذر القراءة`, loading is `جارٍ القراءة…`; search no-match separately reads `لا نتائج مطابقة — جرّب اسمًا آخر`. setStatus permits a caller-provided override.",
+      "root_cause": "Generic fallbacks describe a state but do not name the affected result/options context.",
+      "impact": "Empty data can be confused with no search matches; read failure message is vague despite a separate retry action.",
+      "current_patch": "None. Proposed: `جارٍ تحميل الخيارات…`, `لا توجد خيارات متاحة.`, `لا توجد نتائج مطابقة. غيّر عبارة البحث أو امسحها.`, `تعذّر تحميل الخيارات.` + `إعادة المحاولة`.",
+      "future_state": "Keep loaded-empty, filtered-no-match, loading and failure copy distinct. Use safe caller-provided noun interpolation only if generic options is insufficient; retry remains its own CTA.",
+      "recommendation": "Small default-copy patch; locale catalog can follow LANG-001.",
+      "change_type": "Patch",
+      "risk": "The picker may select entities other than options; allow consumer override and do not add business-specific first-use CTA.",
+      "acceptance_tests": [
+        "Ready+zero search matches, loaded-empty, loading and error have separate expected strings.",
+        "Error state alone has retry CTA.",
+        "Custom msg remains literal; copy wraps at 320px RTL and accessible name/state match."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Should generic empty copy say `options`, or should consumer-provided subject copy be required?",
+        "options": [
+          {"option": "Generic options fallback with full override", "effect": "Usable out of box without assuming business entity."},
+          {"option": "Require consumer message for empty/error", "effect": "Maximum contextual accuracy but raises integration burden."}
+        ],
+        "recommendation": "Keep generic fallback plus full override.",
+        "blocks": "Wording approval only."
+      }
+    }
+  ],
+  "summary": {
+    "finding_count": 4,
+    "confirmed": 3,
+    "likely": 1,
+    "not_provable": 0,
+    "not_applicable": 0,
+    "severity_counts": {"Major": 1, "Moderate": 2, "Minor": 1}
+  }
+}

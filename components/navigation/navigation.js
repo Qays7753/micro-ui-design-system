@@ -54,6 +54,19 @@
   var doc = document;
   var layerTitleUid = 0;     /* W2.2: مولد id لعناوين الطبقات بلا id */
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  function on(owner, element, type, handler) {
+    if (!owner.__microNavigationLifetime) owner.__microNavigationLifetime = new AbortController();
+    element.addEventListener(type, handler, { signal: owner.__microNavigationLifetime.signal });
+  }
+  function transitionMilliseconds(layer) {
+    var css = getComputedStyle(layer);
+    function time(value) { return parseFloat(value) * (value.trim().endsWith('ms') ? 1 : 1000) || 0; }
+    var durations = css.transitionDuration.split(',').map(time);
+    var delays = css.transitionDelay.split(',').map(time);
+    return Math.max.apply(null, durations.map(function (duration, i) {
+      return duration + delays[i % delays.length];
+    }).concat([0]));
+  }
 
   function inDocument(el) {
     return !!(el && el.nodeType === 1 && doc.contains(el));
@@ -114,8 +127,7 @@
 
   function transitionInstant(layer) {
     if (reduceQuery && reduceQuery.matches) return true;
-    var d = getComputedStyle(layer).transitionDuration;
-    return d === '0s' || d === '';
+    return transitionMilliseconds(layer) === 0;
   }
 
   /* ---- عزل الخلفية: inert على أبناء خارج سلسلة أسلاف الطبقة (R2-02) ----
@@ -169,7 +181,7 @@
   function bindTrap(layer) {
     if (layer.dataset.microTrapBound) return;
     layer.dataset.microTrapBound = '1';
-    layer.addEventListener('keydown', function (e) {
+    on(layer, layer, 'keydown', function (e) {
       if (e.key !== 'Tab' || !openLayers.length) return;
       if (openLayers[openLayers.length - 1].layer !== layer) return;
       var f = focusables(layer);
@@ -194,7 +206,7 @@
     var myGen = s.gen;
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
-        if (s.gen === myGen) layer.removeAttribute('data-opening');
+        if (layer.isConnected && s.gen === myGen) layer.removeAttribute('data-opening');
       });
     });
   }
@@ -327,7 +339,8 @@
     s.closing = true; /* قفل معلّق حتى يكتمل onEnd أو يُلغى */
     if (entry.trigger) s.lastTrigger = entry.trigger; /* R2-02: لإعادة الفتح أثناء الخفوت */
     var done = false;
-    function onEnd() {
+    function onEnd(event) {
+      if (event && event.target !== layer) return;
       if (done || s.gen !== myGen) return; /* R2-02: فتح جديد ألغى هذا الإغلاق */
       done = true;
       s.closing = false;
@@ -337,7 +350,7 @@
     }
     s.onEnd = onEnd;
     layer.addEventListener('transitionend', onEnd);
-    s.timer = window.setTimeout(onEnd, 320); /* احتياط لو لم يُطلق transitionend */
+    s.timer = window.setTimeout(onEnd, transitionMilliseconds(layer) + 34);
   }
 
   /* فلاتر: عقد الجاري/المطبّق — كل input ذو data-filter-key جزء من العقد */
@@ -394,8 +407,8 @@
   function initFilterPanel(panel) {
     if (panel.dataset.microFilterBound) return;
     panel.dataset.microFilterBound = '1';
-    var applied = {}; /* المطبّق: آخر قيم أُقرّت — checkbox: true/false، نص: string */
-    panel.addEventListener('micro-navigation:opened', function () {
+    var applied = panel.__microApplied || {}; /* Preserve consumer-applied state on reattach. */
+    on(panel, panel, 'micro-navigation:opened', function () {
       /* الجاري يبدأ نسخة من المطبّق عند كل فتح — لكل الأنواع */
       draftInputs(panel).forEach(function (input) {
         var key = input.getAttribute('data-filter-key');
@@ -411,16 +424,16 @@
       updateSummary(panel, 'الجاري');
     });
     /* الملخص يتبع الجاري فعليًا عند أي تغيير (وليس عند الفتح/التطبيق فقط) */
-    panel.addEventListener('change', function (e) {
+    on(panel, panel, 'change', function (e) {
       if (e.target.closest && e.target.closest('[data-filter-key]')) updateSummary(panel, 'الجاري');
     });
-    panel.addEventListener('input', function (e) {
+    on(panel, panel, 'input', function (e) {
       if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
         updateSummary(panel, 'الجاري');
       }
     });
     var apply = panel.querySelector('[data-filter-apply]');
-    if (apply) apply.addEventListener('click', function () {
+    if (apply) on(panel, apply, 'click', function () {
       applied = {};
       draftInputs(panel).forEach(function (input) {
         var key = input.getAttribute('data-filter-key');
@@ -439,7 +452,7 @@
       closeLayer(panel);
     });
     var clear = panel.querySelector('[data-filter-clear]');
-    if (clear) clear.addEventListener('click', function () {
+    if (clear) on(panel, clear, 'click', function () {
       draftInputs(panel).forEach(function (input) {
         if (input.disabled || input.readOnly) return;
         if (input.type === 'checkbox') input.checked = false;
@@ -448,7 +461,7 @@
       updateSummary(panel, 'الجاري');
     });
     var cancel = panel.querySelector('[data-filter-cancel]');
-    if (cancel) cancel.addEventListener('click', function () { closeLayer(panel); }); /* يرمي الجاري */
+    if (cancel) on(panel, cancel, 'click', function () { closeLayer(panel); }); /* يرمي الجاري */
     /* (F03-R2-03) مزامنة المطبّق من الخارج بعقد موثق: يحدّث المتغير الداخلي
        `applied` نفسه (لا نسخة عرض) ومسودة الفتح التالي والملخص و
        __microApplied معًا — بقية العقد (مسح/إلغاء داخل اللوحة ترمي الجاري
@@ -544,8 +557,8 @@
       keepVisible(tab); /* D-UI-01: التبويب المحدد يبقى مرئيًا */
     }
     items.forEach(function (t, i) {
-      t.addEventListener('click', function () { select(t); });
-      t.addEventListener('keydown', function (e) {
+      on(tabs, t, 'click', function () { select(t); });
+      on(tabs, t, 'keydown', function (e) {
         var next = null;
         var rtl = getComputedStyle(tabs).direction === 'rtl';
         if (e.key === 'ArrowLeft') next = items[(i + (rtl ? 1 : -1) + items.length) % items.length];
@@ -592,7 +605,7 @@
     inScope('[data-layer-open]').forEach(function (btn) {
       if (btn.dataset.microLayerOpenBound) return;
       btn.dataset.microLayerOpenBound = '1';
-      btn.addEventListener('click', function () {
+      on(btn, btn, 'click', function () {
         var layer = document.getElementById(btn.getAttribute('data-layer-open'));
         if (layer) openLayer(layer, { trigger: btn });
       });
@@ -600,14 +613,14 @@
     inScope('[data-layer-close]').forEach(function (btn) {
       if (btn.dataset.microLayerCloseBound) return;
       btn.dataset.microLayerCloseBound = '1';
-      btn.addEventListener('click', function () {
+      on(btn, btn, 'click', function () {
         closeLayer(btn.closest('.m-layer'));
       });
     });
     inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
       if (bd.dataset.microBackdropBound) return;
       bd.dataset.microBackdropBound = '1';
-      bd.addEventListener('click', function () {
+      on(bd, bd, 'click', function () {
         var layer = document.getElementById(bd.getAttribute('data-for'));
         if (!layer) return;
         /* سياسة الضغط بالخلفية من السمة: close (افتراضي) أو keep للمتلف */
@@ -620,6 +633,35 @@
 
   window.MicroNavigation = {
     init: init,
+    disconnect: function (root) {
+      var scope = root || document;
+      // End owned layers synchronously, including closing layers whose entry
+      // has already been removed from openLayers. Restore the original lock.
+      var all = [scope].concat([].slice.call(scope.querySelectorAll('*')));
+      all.forEach(function (element) {
+        if (element.matches && element.matches('.m-layer')) {
+          cancelScheduledClose(element);
+          var index = openLayers.findIndex(function (entry) { return entry.layer === element; });
+          if (index >= 0) {
+            var entry = openLayers.splice(index, 1)[0];
+            if (entry.backdrop) entry.backdrop.hidden = true;
+            unlockScroll();
+          }
+          element.hidden = true;
+          element.inert = false;
+        }
+        if (element.__microNavigationLifetime) {
+          element.__microNavigationLifetime.abort();
+          delete element.__microNavigationLifetime;
+        }
+        if (element.dataset) {
+          ['microTrapBound', 'microTabsBound', 'microFilterBound', 'microLayerOpenBound',
+            'microLayerCloseBound', 'microBackdropBound'].forEach(function (key) { delete element.dataset[key]; });
+        }
+      });
+      if (openLayers.length) applyBackgroundInert();
+      else releaseBackgroundInert();
+    },
     openLayer: openLayer,
     closeLayer: closeLayer,
     /* قراءة المطبّق الحالي — للفحص والمستهلك */

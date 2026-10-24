@@ -1,0 +1,1003 @@
+{
+  "audit": "Independent reconciliation of current UI-system evidence",
+  "sourceHead": "fc1e53e03048c38a451c8421e23cee58ab2b3a7a",
+  "scope": "Local independent UI/UX design-system repository only; no consumer Micro app, repository, external URL, or real user was accessed.",
+  "productFilesEdited": false,
+  "severityPolicy": {
+    "High": "Directly reproduced behavior with a material interface consequence in a documented component contract.",
+    "Moderate": "Meaningful visual, reusable-contract, or cross-family governance issue supported by source/render evidence; not automatically a production emergency.",
+    "Low": "Preview, fixture, optional quality, or delivery/governance improvement with bounded current impact.",
+    "rawSeverity": "Each source track's original severity is retained in rawMetadata; skill-house-rule P0/P1 is not reinterpreted as application outage priority."
+  },
+  "summary": {
+    "uniqueActionableFindings": 22,
+    "confirmed": 19,
+    "likely": 3,
+    "notProvenObservations": 3,
+    "rejectedAsCurrentDefect": 1,
+    "duplicateSourceIDsMerged": [
+      {
+        "originalIDs": ["BRAND-02", "BRAND-03"],
+        "canonicalID": "BRAND-02-03",
+        "reason": "Both report on the same temporary .brand-mark text glyph and converge on one owner decision/action: use or omit the approved symbol/lockup in preview chrome, rather than preserve an undocumented low-contrast letter."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "SYS-DS-001",
+      "title_ar": "طبقات التوكنز الدلالية غير مفصولة",
+      "recommendationAr": "أضف aliases دلالية تدريجيًا فوق CSS الحالي، ولا تبدأ DTCG بلا هدف إخراج ثانٍ.",
+      "originalIDs": ["SYS-DS-001"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/0", "findingID": "SYS-DS-001"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Design-system foundations / token architecture",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-001", "severity": "High", "status": "CONFIRMED", "note": "Severity normalized down: flat CSS is a confirmed architecture characteristic, not measured evidence of a wrong palette or current visual failure."}],
+      "fileLineSelector": [
+        {"path": "shared/tokens.css", "lines": "9-155", "selector": ":root; --micro-*"},
+        {"path": "docs/SHARED-SPEC.md", "lines": "5-6"},
+        {"path": "components/fields/fields.css", "lines": "53-55, 303-315", "selector": ".m-field__control, :focus-within"}
+      ],
+      "evidence": "One CSS :root layer combines brand, surface, text, feedback and scale values. Color, spacing, radius, type, shadows and motion variables exist; no primitive→semantic→component alias model or shared border-width, opacity, layer-role and responsive-threshold vocabulary was found. This is a maintainability/transfer finding, not proof that the light palette looks wrong. No screenshot defect is claimed.",
+      "screenshots": [],
+      "exactProblem": "Usage roles and source values are not separately named, despite the shared spec describing tokens as semantic; theme/role changes therefore require edits to variables directly consumed throughout components.",
+      "rootCause": "The token vocabulary evolved incrementally in one hand-maintained stylesheet around current feature values rather than an explicit role layer.",
+      "impact": "Raises coupling and makes future role changes harder to audit. The present single light CSS theme remains usable; a second theme/output target is not established.",
+      "currentSafePatch": "No source patch is indicated or applied. Preserve current --micro-* names and rendered values while planning any aliases.",
+      "futureState": "Keep the current CSS file and light-only direction as the compatibility base. If approved, add a small semantic alias layer for repeated theme-dependent roles, then migrate consumers incrementally. Add border, opacity, layer, breakpoint or elevation roles only where repeated source decisions justify them. Defer DTCG/build tooling until a second output platform or explicit typed-token workflow is approved.",
+      "recommendedApproach": "Treat as a low-disruption structural improvement, not a High defect. Define roles and compatibility aliases first; test for cycles/unmapped aliases and preserve existing screenshot values.",
+      "patchVsStructural": "Structural, staged; no immediate component patch.",
+      "risks": ["Vague aliases can hide rather than clarify meaning.", "Parallel token sources can increase drift.", "Tokenizing one-off geometry creates noise."],
+      "acceptance": ["Each semantic alias maps to a primitive or documented literal without cycles.", "Theme-dependent consumer styles use roles rather than unrelated raw values.", "Current approved light screenshots remain stable.", "Static checks detect unregistered global layer values and unapproved raw palette colors."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Approve a staged semantic CSS layer now, keep the one-layer contract, or adopt DTCG/build tooling?",
+        "options": [
+          {"option": "Keep one CSS layer", "effect": "Lowest migration cost; future theme changes remain coupled."},
+          {"option": "Add semantic CSS aliases (recommended)", "effect": "Improves role clarity while preserving current values and API."},
+          {"option": "Adopt DTCG plus build pipeline", "effect": "Typed multi-target source, with tooling/governance cost not yet justified."}
+        ],
+        "recommendation": "Add semantic CSS aliases gradually; defer DTCG until a second output target is approved.",
+        "blocking": "Blocks final token-governance sign-off, not isolated current UI fixes."
+      }
+    },
+    {
+      "id": "SYS-DS-002",
+      "title_ar": "أدوار الطبقات العامة غير محكومة",
+      "recommendationAr": "عرّف أدوارًا مشتركة واختبر التركيب؛ لا تصف الأرقام الحالية كعطل تراكب مثبت.",
+      "originalIDs": ["SYS-DS-002"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/1", "findingID": "SYS-DS-002"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Layers / composition contract",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-002", "severity": "High", "status": "CONFIRMED", "note": "Confirmed governance gap only; no current overlay malfunction was proven."}],
+      "fileLineSelector": [
+        {"path": "components/navigation/navigation.css", "lines": "173-185", "selector": ".m-layer-backdrop, .m-layer"},
+        {"path": "components/messages/messages.css", "lines": "87-104", "selector": ".m-toast"},
+        {"path": "previews/ui-system-showcase/showcase.css", "line": "347", "selector": ".sc-toast-host"},
+        {"path": "components/data/packed-circle.css", "lines": "21-22", "selector": ".m-chart--packed .m-bubble[data-size]"}
+      ],
+      "evidence": "Global-looking values 80, 85 and 90 encode backdrop, layer and toast ordering; showcase chrome uses 60, and other values 1/2/5 are local. Current backdrops/layers/toasts have an explicit numeric ordering. Parent-reported operational overlay paths passed; there is no confirmed visual obstruction or stacking malfunction.",
+      "screenshots": [],
+      "exactProblem": "Global layer roles are scattered as numeric literals without a shared explanation or stacking-context/host ownership contract.",
+      "rootCause": "Families and preview chrome were added incrementally without a cross-family layer-role policy.",
+      "impact": "Future composed overlays can be difficult to reason about, especially across stacking contexts; risk is governance/composition uncertainty, not current broken order.",
+      "currentSafePatch": "Do not change numbers based on this audit alone. Retain current ordering until a composition contract is approved.",
+      "futureState": "Define concise roles for content, sticky chrome, popover, backdrop, dialog surface and transient feedback. Document stacking-context boundaries, safe-area/viewport ownership and host override points. Keep decorative bubble stacking local. Add a composed fixture for dialog, picker, toast, sticky actionbar and navigation, including focus and close-target visibility.",
+      "recommendedApproach": "Structural layer roles followed by an additive CSS replacement; validate composition rather than asserting isolated numeric constants.",
+      "patchVsStructural": "Structural policy with later small literal replacements.",
+      "risks": ["A numeric scale alone cannot cross stacking contexts.", "Over-prescriptive global roles constrain host composition.", "Toast ordering may depend on modal ownership."],
+      "acceptance": ["No unexplained global overlay z-index remains.", "Backdrop/layer and toast/modal order is deterministic in approved compositions.", "Nested overlay fixture has no obscured close/action target at all four widths in RTL/LTR.", "Focus visibility and reduced motion remain intact."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should toast always outrank dialogs, should the modal own the top layer, or should a host map roles?",
+        "options": [
+          {"option": "Toast above all layers", "effect": "Confirmation remains visible but may cover dialog content/actions."},
+          {"option": "Dialog above toast (recommended default pending accessibility review)", "effect": "Protects dialog focus/context; transient feedback may wait until dialog closes."},
+          {"option": "Host-configurable mapping", "effect": "Flexible but requires an integration contract."}
+        ],
+        "recommendation": "Modal above toast by default, with documented host control if needed.",
+        "blocking": "Blocks final layer-role mapping, not current component use."
+      }
+    },
+    {
+      "id": "SYS-DS-004",
+      "title_ar": "عقود دورة حياة JavaScript متفاوتة",
+      "recommendationAr": "وحّد اصطلاح init/update/dispose تدريجيًا مع الحفاظ على واجهات التوافق الحالية.",
+      "originalIDs": ["SYS-DS-004"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/3", "findingID": "SYS-DS-004"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Component API / lifecycle",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-004", "severity": "Medium", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "components/fields/fields.js", "lines": "17-23, 329-334", "selector": "window.MicroFields"},
+        {"path": "components/access-gateway/access-gateway.js", "lines": "271-273", "selector": "window.MicroAccessGateway"},
+        {"path": "components/account-settings/account-settings.js", "lines": "68-75", "selector": "window.MicroAccountSettings"},
+        {"path": "components/data/data.js", "lines": "1353-1382", "selector": "window.MicroData"},
+        {"path": "components/carousel/carousel.js", "lines": "594-649", "selector": "window.MicroCarousel"},
+        {"path": "components/order-schedule/order-schedule.js", "lines": "1-35, 1074-1099", "selector": "MicroOrderSchedule.destroy"}
+      ],
+      "evidence": "Families expose differing combinations of init, sync, disconnect and destroy; sources also register DOM/event/observer listeners. Existing lifecycle checks passed for exercised families; this finding is the uneven public convention, not a claim of leak in every family.",
+      "screenshots": [],
+      "exactProblem": "Consumers must learn family-specific initialization, idempotence, update and teardown behavior because there is no common documented convention for JS-enhanced families.",
+      "rootCause": "Lifecycle support was introduced incrementally as observers and interactive behavior required it.",
+      "impact": "Dynamic mount/removal and repeated initialization are harder to integrate consistently. Static CSS-only families do not need a lifecycle abstraction.",
+      "currentSafePatch": "No renaming or breaking API change now. Preserve global names and methods.",
+      "futureState": "Document a lightweight family-appropriate convention: idempotent init(root), explicit update/render only where data changes, and destroy/disconnect for owned observers/listeners. Document static families as no-JS-lifecycle. Test mount twice, update, detach, dispose, reattach and event count. Keep vanilla core until a host target is selected.",
+      "recommendedApproach": "Structural convention with additive compatibility aliases, rolled out by family and covered by shared lifecycle fixtures.",
+      "patchVsStructural": "Structural/API convention.",
+      "risks": ["A universal abstraction can hide real family differences.", "Cleanup cannot necessarily restore host-owned state or focus.", "Changing globals may break the current standalone contract."],
+      "acceptance": ["Every enhanced family documents ownership of listeners, observers, timers and generated nodes.", "Repeated init is idempotent; dispose/re-init adds no duplicate behavior.", "No owned observer/global listener remains after documented disposal.", "Compatibility aliases remain tested through a versioned change."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Keep the global vanilla API and standardize lifecycle, or make ESM/custom elements primary?",
+        "options": [
+          {"option": "Standardize globals (recommended for least disruption)", "effect": "No runtime/build dependency; globals remain public API."},
+          {"option": "ES modules primary", "effect": "Explicit imports/tree-shaking but requires module/build policy."},
+          {"option": "Custom elements", "effect": "Encapsulated lifecycle with broader accessibility/style integration work."}
+        ],
+        "recommendation": "Standardize lifecycle on the current vanilla global API until a target requires another format.",
+        "blocking": "Blocks final public API freeze, not existing component usage."
+      }
+    },
+    {
+      "id": "SYS-DS-005",
+      "title_ar": "مدقق المخرج المستقل يتحقق من العدد لا ترتيب الاعتمادات",
+      "recommendationAr": "اجعل HTML أو manifest واحدًا مرجعًا، واختبر الترتيب والحذف صراحة.",
+      "originalIDs": ["SYS-DS-005"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/4", "findingID": "SYS-DS-005"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Portability / dependency graph / showcase delivery",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-005", "severity": "Medium", "status": "CONFIRMED", "note": "Current output itself was verified correct; weakness is checker assertion coverage."}],
+      "fileLineSelector": [
+        {"path": "tools/build-ui-system-showcase-standalone.py", "lines": "38-80, 223-238", "selector": "EXPECTED_CSS, EXPECTED_JS and count checks"},
+        {"path": "previews/ui-system-showcase/index.html", "lines": "1-1236", "selector": "ordered stylesheet and script links"}
+      ],
+      "evidence": "Read-only `python3 tools/build-ui-system-showcase-standalone.py --check` passed: current standalone output is byte-identical and 23 embedded icon symbols match. The builder maintains expected CSS/JS lists but checks matched link counts rather than exact ordered path equality.",
+      "screenshots": [],
+      "exactProblem": "A reorder or substitution preserving the number of link tags may pass despite changed cascade/script semantics.",
+      "rootCause": "The dependency graph is represented in source HTML and duplicated expected arrays without an exact comparison.",
+      "impact": "Future dependency drift can alter standalone behavior without a path-specific failure; no current output mismatch was found.",
+      "currentSafePatch": "No output/source edits. Keep generated standalone untouched; current check remains a pass.",
+      "futureState": "Choose source HTML order or a single explicit dependency manifest as canonical. Assert exact membership and order, include assets/licenses as appropriate, and add negative tests for reorder, omission and unregistered inputs. Distinguish portable component dependencies from showcase-only chrome.",
+      "recommendedApproach": "Tighten exact-path validation before expanding package tooling; retain the verified output.",
+      "patchVsStructural": "Small checker patch plus source-of-truth clarification.",
+      "risks": ["Moving the duplicate catalog elsewhere may not remove drift.", "A source HTML list must distinguish demo chrome from component dependencies."],
+      "acceptance": ["Existing standalone remains byte-identical.", "Reorder/removal/unregistered-link negative tests fail with a path-specific message.", "Every portable dependency is listed exactly once.", "Package smoke tests do not pull showcase-only chrome."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should source HTML order or an explicit dependency manifest be canonical?",
+        "options": [
+          {"option": "HTML is canonical (recommended for this vanilla library)", "effect": "Fewer sources of truth; builder validates declared order."},
+          {"option": "Explicit dependency manifest", "effect": "Supports multiple packagers but requires catalog drift tests."}
+        ],
+        "recommendation": "Make HTML order canonical unless a second packager is approved.",
+        "blocking": "Does not block current UI; blocks stronger packaging-integrity sign-off."
+      }
+    },
+    {
+      "id": "SYS-DS-006",
+      "title_ar": "ملخصات الحالة والفهرس قديمة ومتعارضة",
+      "recommendationAr": "اعتمد سجلًا واحدًا للعائلات والحالة وحدّث الإشارات التاريخية بدل فتح عيب تقويم منفصل.",
+      "originalIDs": ["SYS-DS-006"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/5", "findingID": "SYS-DS-006"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Documentation / governance",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-006", "severity": "Low", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "components/README.md", "lines": "1-2"},
+        {"path": "docs/COMPONENT-INVENTORY.md", "lines": "14-44"},
+        {"path": "docs/CURRENT-STATE.md", "lines": "1-10, 31-45"},
+        {"path": "docs/UI-RELEASE.md", "lines": "5-13"}
+      ],
+      "evidence": "`components/README.md` says the library is not approved and asks to add families, while the inventory lists 14 folders with current maturity status and release docs point to that registry. `CURRENT-STATE.md` cites a different older HEAD. The calendar geometry appendix also contains dated historical measurements; those are history, not current runtime proof.",
+      "screenshots": [],
+      "exactProblem": "Current-facing summaries provide conflicting library/status/revision cues and do not consistently distinguish historical measurements from current behavior.",
+      "rootCause": "A starter README and dated status reports coexist with newer inventory/release documentation; status and verification revision are duplicated.",
+      "impact": "Contributors may use stale maturity or evidence when making transfer decisions. This is documentation/governance impact only.",
+      "currentSafePatch": "No docs changed. After approval, correct the stale overview pointer and clearly label historical commit/geometry evidence.",
+      "futureState": "Create one authoritative family/status registry or explicitly name the existing inventory as source of truth. Include source/spec/example/preview links, maturity, and evidence revision. Keep dated reports but distinguish archived figures from current verified thresholds.",
+      "recommendedApproach": "Small documentation correction plus a lightweight consistency check; do not generate a large governance system unless useful.",
+      "patchVsStructural": "Patch / governance.",
+      "risks": ["Automatic documentation generation may be unnecessary.", "A registry must not equate library maturity with consumer-product readiness or erase history."],
+      "acceptance": ["No current-facing overview contradicts the family inventory.", "Historical measurements/revisions are labelled as historical.", "Each family has one declared maturity and source evidence link.", "A read-only check detects stale hashes/status contradictions."],
+      "ownerDecision": {
+        "required": false,
+        "question": "None required for the minimal correction. Optional choice: patch docs only or introduce a canonical family registry.",
+        "options": [
+          {"option": "Patch current docs and retain dated reports (recommended)", "effect": "Low effort and preserves history."},
+          {"option": "Add canonical registry and generated checks", "effect": "Less drift but adds governance/tooling."}
+        ],
+        "recommendation": "Patch the misleading summary and clearly cross-reference historical calendar evidence.",
+        "blocking": "No."
+      }
+    },
+    {
+      "id": "SYS-DS-007",
+      "title_ar": "MANIFEST لا يطابق الملفات المؤهلة في HEAD",
+      "recommendationAr": "احسم هل هو snapshot أم manifest حالي، ثم ولّد نسخة معتمدة وأضف فحصًا للقراءة فقط.",
+      "originalIDs": ["SYS-DS-007"],
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/6", "findingID": "SYS-DS-007"}
+      ],
+      "discoverers": ["design-systems-agent"],
+      "category": "Tooling / delivery integrity",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SYS-DS-007", "severity": "Medium", "status": "CONFIRMED", "note": "Delivery/governance problem, not a rendered UI defect."}],
+      "fileLineSelector": [
+        {"path": "MANIFEST.json", "lines": "entire manifest"},
+        {"path": "tools/manifest-build.py", "lines": "14-47"},
+        {"path": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-inventory.json", "selector": "trackedFiles, head"}
+      ],
+      "evidence": "Read-only comparison against manifest-builder eligibility rules: 434 eligible tracked files versus 286 manifest entries; 148 omitted, 66 present hashes differ, 220 match, no manifest-only paths. The manifest builder was inspected but not run because normal mode overwrites MANIFEST.json.",
+      "screenshots": [],
+      "exactProblem": "If MANIFEST is intended to represent current HEAD, it is incomplete and has stale hashes; the file does not identify a frozen generation revision.",
+      "rootCause": "The manifest was not refreshed after source changes, or represents an undocumented frozen package snapshot.",
+      "impact": "Delivery consumers cannot rely on it as complete current-tree integrity evidence until its intended domain is clarified.",
+      "currentSafePatch": "Do not regenerate automatically. Confirm inclusion/exclusion policy first; no file was overwritten.",
+      "futureState": "Decide current-HEAD integrity manifest versus immutable delivery snapshot. Then regenerate or rename/document it, record revision, and add a non-writing check for missing/extra/hash-mismatched eligible files. Keep audit artifacts excluded intentionally.",
+      "recommendedApproach": "Owner-approved regeneration followed by read-only validation; treat as delivery gate, not a visual redesign.",
+      "patchVsStructural": "Patch / delivery governance.",
+      "risks": ["Blind regeneration could legitimize unintended files or expand the public package.", "Inclusion policy and hidden/binary/audit exclusions need confirmation."],
+      "acceptance": ["Read-only validator reports zero missing/extra/hash mismatch.", "Representative inclusion/exclusion rules are tested.", "Validation never rewrites MANIFEST.json."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Does MANIFEST describe current HEAD or a frozen delivery snapshot, and should eligible tracked files be its exact domain?",
+        "options": [
+          {"option": "Current-HEAD manifest (recommended)", "effect": "Regenerate after approval and detect stale files in release checks."},
+          {"option": "Immutable snapshot", "effect": "Keep old hashes, label/rename the snapshot, and add separate current-source integrity data."}
+        ],
+        "recommendation": "Current-HEAD integrity manifest after confirming policy.",
+        "blocking": "Blocks release-integrity sign-off; not current component or visual work."
+      }
+    },
+    {
+      "id": "VISUAL-01",
+      "title_ar": "لوحة عينات الأزرار كثيفة ومؤطرة على الهاتف",
+      "recommendationAr": "افصل المعاينة المختصرة عن مختبر الحالات؛ لا تصغّر الأزرار أو أهداف اللمس.",
+      "originalIDs": ["VISUAL-01"],
+      "sourceReport": [
+        {"report": "visual-report.md", "machineReadable": "visual-findings.json#/findings/0", "findingID": "VISUAL-01"}
+      ],
+      "discoverers": ["ui-designer-agent", "ui-manager"],
+      "category": "Visual composition and density / preview information architecture",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "VISUAL-01", "severity": "P2", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "previews/board-base.css", "lines": "51-63,84-97", "selector": "main, section.panel, .example-grid, .example, .caption"},
+        {"path": "previews/buttons/index.html", "lines": "36-115", "selector": "#types .example-grid"}
+      ],
+      "evidence": "At 320 CSS px, Chromium measured the first buttons specimen panel at 280×784px with 24px padding and radius. The viewed `generated-artifacts/pixilated-audit/visual-buttons-320.jpg` shows multiple examples/captions in one long rounded specimen. Sampled buttons themselves remain 48px high.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-buttons-320.jpg"],
+      "exactProblem": "The preview wrapper and repeated card treatment dominate mobile scanning; individual types are not organized as a compact overview versus a deep state lab.",
+      "rootCause": "Shared board CSS applies a 24px padded/radius panel while all examples and captions flow together.",
+      "impact": "Slows review of family differences on narrow screens and makes a library reference feel like nested cards. No defect in button geometry is shown.",
+      "currentSafePatch": "No component patch. Retain 48px targets and current component spacing; any change belongs in the review-board shell.",
+      "futureState": "Separate compact family overview, exhaustive state-comparison lab, and contextual composition. Use flat labeled rows on mobile, reserve surfaces for independent examples, and keep captions adjacent to their exact specimen. Move long explanation into spec links.",
+      "recommendedApproach": "Structural preview information-architecture/composition change, not button CSS redesign.",
+      "patchVsStructural": "Structural, preview-only.",
+      "risks": ["Flattening all surfaces can make samples harder to distinguish; preserve grouping with hierarchy, section rules and spacing."],
+      "acceptance": ["At 320/360/390/430, sample and family labels remain visible without page overflow.", "Captions map unambiguously to specimens.", "Variable copy is not clipped.", "A board-only change does not alter component dimensions."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should family previews prioritize compact inventory scanning or exhaustive state comparison?",
+        "options": [
+          {"option": "Compact overview first (recommended)", "effect": "Fast family scan; move deep matrix to a dedicated state lab."},
+          {"option": "State matrix first", "effect": "QA detail remains immediate but mobile page stays long."},
+          {"option": "Keep current board", "effect": "No migration; current scan cost remains."}
+        ],
+        "recommendation": "Compact overview first, with state lab as a separate destination.",
+        "blocking": "Does not block component work."
+      }
+    },
+    {
+      "id": "VISUAL-02",
+      "title_ar": "معاينة البطاقة المجاورة في Carousel شريط مقصوص",
+      "recommendationAr": "اجعل البطاقة المركّزة هي الافتراضية، وقدم peek اختياريًا فقط عندما يكون مقروءًا.",
+      "originalIDs": ["VISUAL-02"],
+      "sourceReport": [
+        {"report": "visual-report.md", "machineReadable": "visual-findings.json#/findings/1", "findingID": "VISUAL-02"}
+      ],
+      "discoverers": ["design-direction", "ui-designer-agent", "ui-manager"],
+      "category": "Component hierarchy / carousel presentation",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "VISUAL-02", "severity": "P2", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "components/carousel/carousel.css", "lines": "99-113", "selector": ".m-carousel__slide, @container (max-width: 335px)"},
+        {"path": "previews/carousel/index.html", "selector": ".m-carousel"}
+      ],
+      "evidence": "At 430px viewport, measured sample panel 390px and carousel viewport about 342px; active card width 270px and neighboring card exposed only about 24px. Viewed `visual-carousel-430.jpg` shows a clipped sliver, while document width stays 430px; this is not page overflow.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-carousel-430.jpg"],
+      "exactProblem": "The adjacent-card peek exposes too little content to be a useful preview and reads like accidental clipping.",
+      "rootCause": "A fixed peek/gap equation is retained just above the ≤335px full-width fallback, leaving an unreadable sliver at measured 342px inner width.",
+      "impact": "The extra edge space consumes readable area without adding meaningful orientation; arrows, dots and position text already identify location.",
+      "currentSafePatch": "A threshold-only CSS patch could hide the measured sliver, but do not apply it until the default focused-vs-strip contract is decided.",
+      "futureState": "Make a full readable focused card the default, with explicit position and visible controls. Offer a separate browse-strip/peek mode only for short teaser-safe content at a component-inline-size threshold. Preserve swipe parity; never shrink active content to manufacture peek.",
+      "recommendedApproach": "Resolve the presentation API and default, then adjust the container threshold. A one-off threshold patch alone leaves the contract ambiguous.",
+      "patchVsStructural": "Structural variant/API decision with a bounded follow-up CSS patch.",
+      "risks": ["Removing peek may reduce swipe discoverability; retain visible navigation controls.", "A teaser mode needs content suitable for preview."],
+      "acceptance": ["At component widths 288/328/342/350/390, focused mode shows no clipped neighboring copy.", "Browse mode exposes a deliberate legible cue.", "Active content never clips.", "RTL keyboard, position announcement, one-card state and reduced motion pass."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Is the desired default a focused active card, browse strip, or explicit variants?",
+        "options": [
+          {"option": "Focused active-card default (recommended)", "effect": "Maximizes content width and supports varied copy; peek is optional."},
+          {"option": "Browse-strip default", "effect": "Promotes browsing but requires teaser-safe content and wider bounds."},
+          {"option": "Both as explicit variants", "effect": "Flexible but expands API and test surface."}
+        ],
+        "recommendation": "Focused default with opt-in browse/peek.",
+        "blocking": "Blocks final carousel default approval."
+      }
+    },
+    {
+      "id": "VISUAL-03",
+      "title_ar": "وسوم Stable وDraft تحمل لون التحذير نفسه",
+      "recommendationAr": "افصل maturity عن runtime status، واستخدم حياديًا لـstable وتحذيرًا للمراجعة.",
+      "originalIDs": ["VISUAL-03"],
+      "sourceReport": [
+        {"report": "visual-report.md", "machineReadable": "visual-findings.json#/findings/2", "findingID": "VISUAL-03"}
+      ],
+      "discoverers": ["ui-designer-agent", "ui-manager"],
+      "category": "Visual semantics / maturity metadata",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "VISUAL-03", "severity": "P2", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "previews/board-base.css", "lines": "37-48", "selector": ".status-chip"},
+        {"path": "previews/buttons/index.html", "lines": "29-31"},
+        {"path": "previews/carousel/index.html", "lines": "30-31"}
+      ],
+      "evidence": "Rendered boards label stable components and draft components with the same pale warning styling; `.status-chip` always uses warning surface/text tokens irrespective of maturity label. Text remains explicit, so color is not the sole signal.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-buttons-320.jpg", "generated-artifacts/pixilated-audit/visual-carousel-430.jpg"],
+      "exactProblem": "A stable implementation and a draft-for-review implementation carry the same caution cue, weakening quick maturity scanning.",
+      "rootCause": "One generic chip class has no explicit status-to-tone mapping.",
+      "impact": "Reviewers may read stability metadata as a warning. This is preview governance, not a component runtime state failure.",
+      "currentSafePatch": "No code changes. Confirm canonical vocabulary before styling distinct maturity roles.",
+      "futureState": "Define stable/reference as neutral, draft/review as restrained warning, and proposed as informational. Use explicit state classes/data attributes and keep lifecycle maturity separate from runtime error/success/warning colors.",
+      "recommendedApproach": "Small preview-only state mapping plus a concise maturity contract.",
+      "patchVsStructural": "Patch plus small documentation rule.",
+      "risks": ["Too many colors add noise; keep a small vocabulary and preserve text labels."],
+      "acceptance": ["Stable is not warning-colored.", "Draft differs visibly from stable.", "Proposed does not mimic runtime error.", "Status remains understandable without color and actual background contrast is checked."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Which maturity vocabulary is canonical?",
+        "options": [
+          {"option": "stable / draft / proposed (recommended)", "effect": "Matches current repository language and supports three tones."},
+          {"option": "stable / review", "effect": "Simpler but loses proposed distinction."},
+          {"option": "Per-family labels", "effect": "Flexible but weakens consistency."}
+        ],
+        "recommendation": "Keep stable/draft/proposed.",
+        "blocking": "Does not block component APIs; blocks reliable status signaling."
+      }
+    },
+    {
+      "id": "VISUAL-04",
+      "title_ar": "تداخل دوائر المقارنة يحجب مساحة البيانات",
+      "recommendationAr": "اعتمد أشرطة أو جدولًا للدقة، واجعل الدوائر المنفصلة اختيارية والتداخل توضيحيًا فقط.",
+      "originalIDs": ["VISUAL-04"],
+      "sourceReport": [
+        {"report": "visual-report.md", "machineReadable": "visual-findings.json#/findings/3", "findingID": "VISUAL-04"}
+      ],
+      "discoverers": ["design-direction", "ui-designer-agent", "ui-manager"],
+      "category": "Data encoding / quantitative visual semantics",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "VISUAL-04", "severity": "P2", "status": "CONFIRMED", "note": "Updated visual deep review; confirmed by measured rendered occlusion, not preference."}],
+      "fileLineSelector": [
+        {"path": "components/metric-comparison/example-usage.html", "lines": "23-40", "selector": "[data-metric-circles][data-layout='overlap']"},
+        {"path": "components/metric-comparison/metric-comparison.js", "lines": "91-103, 165-202", "selector": "circle size, position and z-order"},
+        {"path": "components/metric-comparison/metric-comparison.css", "lines": "87-100", "selector": ".m-metric-circles__items[data-layout='overlap']"}
+      ],
+      "evidence": "Viewed 320px and 390px crops show 64/25/9 circles interlocking despite a no-relationship caption. At 390px diameters are 144/90/54px; measured foreground A occludes about 40.1% of B's disk and 35.6% of C's. Base diameter formula is square-root scaled, but visible areas no longer compare as 64:25:9. Exact external readings remain visible.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-metric-circles-overlap-320.png", "generated-artifacts/pixilated-audit/visual-metric-circles-overlap-390.png", "generated-artifacts/pixilated-audit/visual-metric-circles-separated-390.png", "generated-artifacts/pixilated-audit/visual-metric-circles-zero-negative-missing-huge-390.png"],
+      "exactProblem": "The default overlap hides meaningful areas of smaller quantitative marks and creates a Venn-like relationship cue that the data do not encode; a disclaimer cannot restore the visible comparison.",
+      "rootCause": "The example defaults to overlap and renderer places larger circles in front at fixed relative centers to create a compact cluster.",
+      "impact": "Visible circle area is not proportionate to the stated 64:25:9 values even though underlying diameters are; exact labels mitigate data loss but do not make that visual encoding sound.",
+      "currentSafePatch": "No source change. The exact key and zero/missing/negative copy provide recovery. Do not alter area math or global data colors.",
+      "futureState": "Use aligned bars/list/table for precision. If area circles remain, make them disjoint, optional, and explicitly a coarse magnitude view with a meaningful shared scale and exact key. Keep overlap illustration-only or remove it from metric comparison. Preserve exact negative, zero and missing semantics.",
+      "recommendedApproach": "Structural/default decision for metric comparison; remove overlap from quantitative use rather than applying a cosmetic spacing tweak.",
+      "patchVsStructural": "Structural API/default/example decision.",
+      "risks": ["Disjoint circles require a common meaningful scale.", "Incomparable units should use rows rather than area marks.", "Tables preserve exactness but reduce preattentive magnitude emphasis."],
+      "acceptance": ["Disjoint circles remain fully visible and area tracks values.", "Exercise 64/25/9 with huge/zero/negative/missing cases.", "Exact text remains present and negative/missing do not receive positive area.", "Overlap, if retained, is non-default and explicitly illustrative."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Keep overlap illustration-only or remove it from metric comparison?",
+        "options": [
+          {"option": "Remove overlap from quantitative comparison (recommended)", "effect": "Preserves visible area encoding; bars/tables remain precision path."},
+          {"option": "Keep overlap illustration-only", "effect": "Retains a decorative layered graphic without data-precision claim."},
+          {"option": "Keep overlap as comparison default", "effect": "Compact, but occlusion and unsupported relation cues remain."}
+        ],
+        "recommendation": "Aligned linear/table for precision; disjoint circles optional; overlap illustration-only or removed.",
+        "blocking": "Blocks final metric-comparison visual sign-off."
+      }
+    },
+    {
+      "id": "INT-001",
+      "title_ar": "حالة Picker غير الجاهزة تُسقط التركيز من الخيار",
+      "recommendationAr": "انقل status إلى منطقة live مجاورة، وانقل التركيز فقط عند إخفاء العنصر المركّز.",
+      "originalIDs": ["INT-001"],
+      "sourceReport": [
+        {"report": "interaction-report.md", "machineReadable": "interaction-findings.json#/findings/0", "findingID": "INT-001"}
+      ],
+      "discoverers": ["interaction-designer-agent", "ux-researcher-agent", "ux-manager"],
+      "category": "Asynchronous component state / keyboard focus and feedback",
+      "severity": "High",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "INT-001", "severity": "P2 / Moderate", "status": "CONFIRMED", "note": "Normalized upward relative to nearby polish because focus loss is dynamically reproduced in a documented API path; actual screen-reader impact remains untested."}],
+      "fileLineSelector": [
+        {"path": "components/selection/picker.js", "lines": "93-114, 126-149, 243-260", "selector": "applyState, stateRow, MicroPicker.setStatus"},
+        {"path": "components/selection/specification.md", "lines": "23-30"}
+      ],
+      "evidence": "At 320/360/390/430 RTL, focus a visible role=option then call documented `MicroPicker.setStatus(picker, 'error', message)`. Options hide and Chromium moves activeElement to body. Retry remains visible and emits once. State text is inside the listbox and has no status/alert/live semantics. Browser results: 84 pass / 4 fail, with all four failures the same issue; 0 runtime errors. Viewed `interaction-360-picker-error-layer.png`.",
+      "screenshots": ["generated-artifacts/pixilated-audit/interaction-360-picker-error-layer.png"],
+      "exactProblem": "A focused option is removed from view without focus transfer. Loading/empty/error content and retry are inserted into the listbox rather than a status region outside its option subtree.",
+      "rootCause": "State transition hides options but does not relocate focus; stateRow has no live announcement role and lives in listbox semantics.",
+      "impact": "Keyboard continuity is directly broken for this supported async transition. Assistive-technology announcement/role confusion is plausible but not established by a real screen reader.",
+      "currentSafePatch": "No source change. Preserve stale-option hiding, state-specific messages, retry action and its one-event behavior.",
+      "futureState": "Keep listbox to options/groups; render loading/empty/error in an adjacent stable live-status region and retry outside the listbox. Move focus to a visible stable picker control only if the currently focused node is about to be hidden; never steal focus from outside or another visible control. Preserve query and still-valid selection.",
+      "recommendedApproach": "Targeted markup/state-transition patch, not a broad picker redesign. Polite is the default recommendation for routine states.",
+      "patchVsStructural": "Patch to component interaction contract.",
+      "risks": ["Unconditional focus changes can interrupt users.", "Too-frequent live updates can over-announce.", "Screen-reader output must be manually verified before conformance claims."],
+      "acceptance": ["Focused option transitions leave focus on visible picker control, not body/hidden content.", "Updates do not steal focus when initiated elsewhere.", "Status has live semantics and listbox contains only valid options/groups.", "Retry is reachable and dispatches exactly one event.", "Ready recovery retains query and valid selection; repeat at four widths RTL inside a layer."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should async picker errors use polite status, alert, or caller-configurable urgency?",
+        "options": [
+          {"option": "Polite by default (recommended)", "effect": "Avoids interrupting routine/recoverable updates."},
+          {"option": "Alert for every error", "effect": "More interruptive, including background/recoverable failures."},
+          {"option": "Caller-configurable", "effect": "Flexible but expands API/test surface."}
+        ],
+        "recommendation": "Polite default; reserve alert for explicitly urgent cases.",
+        "blocking": "Does not block the focus repair; blocks final announcement-priority contract."
+      }
+    },
+    {
+      "id": "LANG-001",
+      "title_ar": "سياسة اللغة والتنسيق موزعة بين العائلات",
+      "recommendationAr": "احسم Arabic-only مقابل locale adapter، ثم اجمع رسائل المكوّن وصيغ الأرقام دون لمس بيانات المستهلك.",
+      "originalIDs": ["LANG-001"],
+      "sourceReport": [
+        {"report": "LANG-ux-writer-audit.md", "machineReadable": "LANG-findings.json#/findings/0", "findingID": "LANG-001"}
+      ],
+      "discoverers": ["ux-writer-agent"],
+      "category": "Localization/content architecture",
+      "severity": "Moderate",
+      "status": "LIKELY",
+      "rawMetadata": [{"id": "LANG-001", "severity": "Moderate", "status": "LIKELY", "note": "Fragmented ownership is confirmed; no defect exists unless owner selects broader locale support."}],
+      "fileLineSelector": [
+        {"path": "components/order-schedule/order-schedule.js", "lines": "45-55, 126-140", "selector": "Arabic names/count and date formatting"},
+        {"path": "components/order-schedule/specification.md", "lines": "3, 81-83"},
+        {"path": "components/info-strip/info-strip.js", "lines": "47, 67-88"},
+        {"path": "components/carousel/carousel.js", "lines": "228-260, 280-291"},
+        {"path": "components/selection/picker.js", "lines": "247-258"},
+        {"path": "components/access-gateway/access-gateway.js", "lines": "107, 149-166, 186-234"},
+        {"path": "components/data/data.js", "lines": "130-138"}
+      ],
+      "evidence": "Arabic strings and generated numeric labels are embedded per component; calendar explicitly declares Arabic/Gregorian/Western digits, while other families compose text or accept caller formatting. Showcase HTML extraction found 339 unique strings but is not a complete JS/runtime catalog. This proves fragmentation, not a requirement for another language.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-info-strip-390.jpg", "generated-artifacts/pixilated-audit/visual-fields-360.jpg"],
+      "exactProblem": "No single shared policy was found for component-owned strings, date/number/plural formatting, overrides and missing keys.",
+      "rootCause": "Arabic-first defaults, fixture copy and consumer-owned values evolved in separate sources without a stable locale/string ownership contract.",
+      "impact": "Future changes may drift between visible copy, ARIA/live text, dates, digits and fixtures; no current translation failure is proven.",
+      "currentSafePatch": "Do not bulk-replace fixture or caller copy. No source changes.",
+      "futureState": "First inventory string ownership and defaults. If Arabic-only, document MSA, date, Western/Eastern digit and bidi rules centrally. If locale-ready, introduce a small adapter with stable UI-state IDs, typed interpolation, plural/date/number helpers and clear missing-key behavior. Consumer labels, units, data and business outcomes remain caller-owned; one resolved string feeds visible and accessible output.",
+      "recommendedApproach": "Structural content-contract decision before building infrastructure; centralize only shared state copy and formatting, avoiding a general-purpose framework without target demand.",
+      "patchVsStructural": "Structural content/API policy.",
+      "risks": ["Overbuilt localization layer.", "Naïve Arabic pluralization can be wrong.", "Arbitrary units/business copy can be corrupted by automatic grammar."],
+      "acceptance": ["Approved Arabic defaults/overrides and missing-key behavior are deterministic.", "Plural edge cases 0/1/2/3/10/11/99/100 tested where relevant.", "Mixed Arabic/Latin identifiers and both digit families remain legible.", "Visible/live string agrees and date/number formatting respects consumer-supplied displays."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Is the kit strictly Arabic MSA or Arabic-first/locale-ready; which digit family applies to dates, metrics and entered values?",
+        "options": [
+          {"option": "Arabic MSA and Western digits only", "effect": "Smallest API; explicitly limits locale portability."},
+          {"option": "Arabic-first locale adapter (recommended)", "effect": "Moderate upfront work and clearer future seam."},
+          {"option": "Full locale catalog/formatting", "effect": "Most flexible with highest maintenance."}
+        ],
+        "recommendation": "Arabic-first adapter only if locale-ready transfer is an approved goal; keep current MSA/Western defaults.",
+        "blocking": "Blocks shared localization contract, not unrelated visual work."
+      }
+    },
+    {
+      "id": "LANG-002",
+      "title_ar": "مثال 4 طلب يختلف بين النص والاسم الميسّر",
+      "recommendationAr": "صحح fixture المؤكد وحده؛ لا تضف pluralizer عامًا لوحدة يملكها المستهلك.",
+      "originalIDs": ["LANG-002"],
+      "sourceReport": [
+        {"report": "LANG-ux-writer-audit.md", "machineReadable": "LANG-findings.json#/findings/1", "findingID": "LANG-002"}
+      ],
+      "discoverers": ["ux-writer-agent"],
+      "category": "Arabic grammar / fixture consistency",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "LANG-002", "severity": "Moderate", "status": "CONFIRMED", "note": "Only the 4-item visible/accessibility mismatch is confirmed. Isolated 18 طلب is not classified as a definitive grammar defect."}],
+      "fileLineSelector": [
+        {"path": "components/info-strip/example-usage.html", "lines": "23-28"},
+        {"path": "previews/info-strip/index.html", "lines": "36-38"},
+        {"path": "previews/ui-system-showcase/index.html", "lines": "480-482, 495-497, 546-554"}
+      ],
+      "evidence": "In the showcase fixture, visible `4` + `طلب` conflicts with the article aria-label `4 طلبات`. The 18 request specimen was viewed, but because its number/unit are visually split and lack a full clause, isolated `18 طلب` is only a recommended complete-phrase rewrite, not a proven grammar error. Image: `visual-info-strip-390.jpg`.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-info-strip-390.jpg"],
+      "exactProblem": "One demo card exposes inconsistent count wording to sighted and assistive-technology users.",
+      "rootCause": "Fixture value/unit and accessible summary are authored independently.",
+      "impact": "Demo output can disagree semantically; this is fixture copy, not runtime pluralization failure.",
+      "currentSafePatch": "After wording approval, align the visible and accessible 4-item phrase to `4 طلبات`; do not change generic unit behavior.",
+      "futureState": "Author a complete count phrase and accessible name from one reviewed fixture value. Keep consumer-owned arbitrary units literal; add reviewed count examples only where count grammar is known.",
+      "recommendedApproach": "Small fixture-only correction. Treat `18 طلبًا` as a professional wording recommendation when intended as a complete count phrase, not a current defect claim.",
+      "patchVsStructural": "Fixture patch; a reusable formatter belongs to LANG-001.",
+      "risks": ["Runtime pluralization can corrupt currency/measure/invariant units.", "Fixture style/digit policy needs owner sign-off."],
+      "acceptance": ["Visible and accessible wording agree for count fixtures.", "Reviewed Arabic count ranges are used where applicable.", "Generic consumer units remain literal."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Approve the fixture phrasing `18 طلبًا` where a full count reading is intended and align the confirmed 4-item phrase?",
+        "options": [
+          {"option": "Correct the sample phrase(s) (recommended)", "effect": "Improves demo copy without changing runtime component behavior."},
+          {"option": "Keep an invariant unit convention", "effect": "Requires a clearly matching alternative visible/accessible phrase."}
+        ],
+        "recommendation": "Correct only the confirmed 4/aria mismatch and review the 18 phrasing as a complete phrase.",
+        "blocking": "Wording approval only."
+      }
+    },
+    {
+      "id": "LANG-003",
+      "title_ar": "خطأ callback التقني يظهر للمستخدم كما هو",
+      "recommendationAr": "اعرض userMessage آمنًا أو fallback محليًا؛ أبقِ exception diagnostics خارج الواجهة.",
+      "originalIDs": ["LANG-003"],
+      "sourceReport": [
+        {"report": "LANG-ux-writer-audit.md", "machineReadable": "LANG-findings.json#/findings/2", "findingID": "LANG-003"}
+      ],
+      "discoverers": ["ux-writer-agent"],
+      "category": "Error messaging / callback content boundary",
+      "severity": "Moderate",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "LANG-003", "severity": "Major", "status": "CONFIRMED", "note": "Confirmed only for a local synthetic rejection through the documented callback; no real integration or production disclosure is claimed."}],
+      "fileLineSelector": [
+        {"path": "components/access-gateway/access-gateway.js", "lines": "149-151, 163-166, 230-234", "selector": "recovery, provider and submit rejection handlers"},
+        {"path": "components/access-gateway/specification.md", "lines": "26-30"}
+      ],
+      "evidence": "Local `MicroAccessGateway.init` test rejected with synthetic `FixtureTransportError: E_DEMO_UNAVAILABLE`; exact text appeared once in the `[data-access-status]` live status via `error.message`. The test used synthetic valid fixtures and made no network request. Screenshot `LANG-003-synthetic-error-status-crop.png` was viewed. This is a reproduced UI path, not a real-world leak.",
+      "screenshots": ["generated-artifacts/pixilated-audit/LANG-003-synthetic-error-status-crop.png"],
+      "exactProblem": "An arbitrary Error object's message is treated as reviewed localized user-facing copy and rendered in a live status node.",
+      "rootCause": "Promise rejection handlers pass `error.message` directly to `setMessage` instead of resolving safe copy from a documented error boundary.",
+      "impact": "Technical codes, English jargon or internal messages can reach visible and announced UI. No production request, credentials leak or real user impact was tested.",
+      "currentSafePatch": "Do not display arbitrary exception prose. Retain explicit consumer-authored result.message only if documented as user-facing; use a neutral Arabic fallback otherwise.",
+      "futureState": "Separate user-facing presentation from diagnostics. Accept a reviewed `userMessage` or safe error-kind mapper; when absent use contextual neutral Arabic fallback. Keep stack, response body, internal code and credential values out of DOM/live region. If diagnostics callback exists, define its privacy boundary.",
+      "recommendedApproach": "Patch-sized boundary correction plus a small API contract; do not translate or sanitize arbitrary technical prose.",
+      "patchVsStructural": "Patch plus limited structural contract.",
+      "risks": ["Generic fallback may hide an actionable cause.", "Diagnostic forwarding introduces privacy risk if credentials are included.", "Preserve current result outcome semantics."],
+      "acceptance": ["Reject synthetic HTTP/code, English, long and empty errors; only approved safe copy appears.", "Documented user-facing override is honored.", "No stack/body/credentials appear in DOM, events or live text.", "One announcement per result."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should callback results accept explicit user-facing copy/error mapping and never render arbitrary `error.message`?",
+        "options": [
+          {"option": "Safe library fallback unless explicit userMessage (recommended)", "effect": "Consistent safe default; caller maps contextual errors."},
+          {"option": "Continue displaying exception message", "effect": "Caller controls copy but permits technical/unlocalized strings."}
+        ],
+        "recommendation": "Safe fallback plus explicit user-facing override.",
+        "blocking": "Blocks final callback content contract; not unrelated component work."
+      }
+    },
+    {
+      "id": "LANG-004",
+      "title_ar": "رسائل Picker الافتراضية لا تميز نوع النتيجة بوضوح",
+      "recommendationAr": "افصل نص empty عن no-match وعن error، واسمح برسالة مستهلك مخصصة.",
+      "originalIDs": ["LANG-004"],
+      "sourceReport": [
+        {"report": "LANG-ux-writer-audit.md", "machineReadable": "LANG-findings.json#/findings/3", "findingID": "LANG-004"}
+      ],
+      "discoverers": ["ux-writer-agent"],
+      "category": "State microcopy / clarity",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "LANG-004", "severity": "Minor", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "components/selection/picker.js", "lines": "106-110, 126-148, 247-259", "selector": ".m-picker__state and status defaults"},
+        {"path": "components/selection/specification.md", "lines": "25-30"}
+      ],
+      "evidence": "Source defaults are `لا نتائج` for true empty and `تعذر القراءة` for error; loading is `جارٍ القراءة…`. Search-no-match is more explicit and distinct. Caller can override message. The interaction state was also visually reviewed, but human comprehension was not tested.",
+      "screenshots": ["generated-artifacts/pixilated-audit/interaction-360-picker-error-layer.png"],
+      "exactProblem": "Generic empty/error copy does not name available options/results context and can be confused with no search matches.",
+      "rootCause": "Component-owned fallback text labels state generically while the search-empty path already has contextual copy.",
+      "impact": "Recovery information is less specific; retry remains available. Low copy-quality concern, not a broken retry interaction.",
+      "currentSafePatch": "After copy approval, make loading, data-empty, search-no-match and failure distinct; retain full caller override and retry CTA.",
+      "futureState": "Use concise contextual option/result wording and keep ready-empty distinct from no query matches, loading and failure. Do not invent a business entity or cause. Coordinate visible and live-region copy with INT-001.",
+      "recommendedApproach": "Small default-copy patch; later align keys with the localization contract.",
+      "patchVsStructural": "Patch.",
+      "risks": ["Some pickers select entities other than options; allow full override.", "Avoid adding business-specific first-use actions."],
+      "acceptance": ["Each state has distinct expected copy.", "Retry appears only on error.", "Custom text remains literal.", "Arabic copy wraps at 320px RTL and matches accessible output."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Use generic `options` fallback or require caller-provided subject copy?",
+        "options": [
+          {"option": "Generic options wording with full override (recommended)", "effect": "Works out of box without assuming business context."},
+          {"option": "Require consumer message", "effect": "Contextual but raises integration burden."}
+        ],
+        "recommendation": "Keep a neutral generic fallback and allow complete override.",
+        "blocking": "Copy approval only."
+      }
+    },
+    {
+      "id": "SLOP-01",
+      "title_ar": "شريط تراكوتا زخرفي في مقدمة الفهرس",
+      "recommendationAr": "احذف الإشارة الزخرفية دون إضافة مؤثر بديل، إذا اعتُمد تنظيف لوحة المعاينة.",
+      "originalIDs": ["SLOP-01"],
+      "sourceReport": [
+        {"report": "anti-ai-slop-REPORT.md", "machineReadable": "slop-findings.json#/findings/0", "findingID": "SLOP-01"}
+      ],
+      "discoverers": ["anti-ai-slop"],
+      "category": "Preview visual hierarchy / optional polish",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SLOP-01", "severity": "P2", "rawKitSeverity": "O1 P0", "status": "CONFIRMED", "note": "Raw house-rule P0 is not a runtime priority."}],
+      "fileLineSelector": [{"path": "previews/index.css", "line": "33", "selector": ".intro-band"}],
+      "evidence": "At 390px, rendered intro band measured 350×97.625px with a 3px terracotta inline-start border. The viewed `generated-artifacts/pixilated-audit/slop/intro-stripe.png` shows an informational principles block with a separate link; no selection/error state is represented.",
+      "screenshots": ["generated-artifacts/pixilated-audit/slop/intro-stripe.png"],
+      "exactProblem": "The informational group receives an accent edge with no documented state/action meaning; link emphasis could remain on the link.",
+      "rootCause": "Brand accent is used as a decorative group treatment rather than a semantic action/state cue.",
+      "impact": "Adds mild competing emphasis to the index; not interaction malfunction or production emergency.",
+      "currentSafePatch": "No patch applied. Preserve the principles content, link and focus styling.",
+      "futureState": "Use spacing and a neutral fill step for this information block. Reserve strong strokes for documented interaction/state roles; do not replace the edge with glow, gradient or another badge.",
+      "recommendedApproach": "Optional preview-only cleanup after approval; keep typography and link hierarchy.",
+      "patchVsStructural": "Patch.",
+      "risks": ["Removing the stripe can reduce separation; retain heading, spacing and sufficient neutral fill contrast."],
+      "acceptance": ["No ornamental edge remains if policy is adopted.", "Link remains discoverable and keyboard-focus visible.", "Four widths reflow without overflow."],
+      "ownerDecision": {
+        "required": false,
+        "question": "Optional approval to include this in preview-only cleanup.",
+        "options": [
+          {"option": "Remove the stripe (recommended)", "effect": "Aligns accent with intentional semantic use."},
+          {"option": "Keep it as an approved exception", "effect": "Retains current separation; exception should be documented."}
+        ],
+        "recommendation": "Remove without adding replacement decoration.",
+        "blocking": "No."
+      }
+    },
+    {
+      "id": "SLOP-02",
+      "title_ar": "صف الإجراء يحمل سهمًا يوحي بتنقل غير موجود",
+      "recommendationAr": "احذف بلاطة السهم من مثال الصف الساكن، وافصل عقود القراءة والرابط والإجراء.",
+      "originalIDs": ["SLOP-02"],
+      "sourceReport": [
+        {"report": "anti-ai-slop-REPORT.md", "machineReadable": "slop-findings.json#/findings/1", "findingID": "SLOP-02"}
+      ],
+      "discoverers": ["anti-ai-slop"],
+      "category": "Composition affordance / example contract",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SLOP-02", "severity": "P2", "rawKitSeverity": "O5 P0", "status": "CONFIRMED"}],
+      "fileLineSelector": [{"path": "previews/compositions/index.html", "lines": "39-49", "selector": ".m-row > .m-row__tile"}],
+      "evidence": "Viewed `composition-tile.png` shows a read-only div row with a 48px tinted tile and chevron-left asset; only the separate action button is interactive. Tile is aria-hidden; row has no link/button role. At 390px the status/action stack beneath while arrow remains detached.",
+      "screenshots": ["generated-artifacts/pixilated-audit/slop/composition-tile.png", "generated-artifacts/pixilated-audit/visual-composition-390.jpg"],
+      "exactProblem": "The specimen teaches an ambiguous composition: a directional icon is used on a row that does not navigate.",
+      "rootCause": "A navigation asset is reused as decoration rather than matching the row's interaction contract.",
+      "impact": "Can imply a non-existent row action and spends space without identifying the example entity. This concerns the specimen pattern, not a consumer UI navigation failure.",
+      "currentSafePatch": "Remove the chevron tile from the read-only/action-row fixture after approval; leave its real action button unchanged.",
+      "futureState": "Document separate read-only, navigational and action-row compositions. Only a real link receives a destination chevron; action rows keep an independent named button without nested targets. Identity icon remains optional and meaningful.",
+      "recommendedApproach": "Small demo patch, then codify composition affordance guidance.",
+      "patchVsStructural": "Patch plus small composition contract.",
+      "risks": ["Removing tile changes sample balance; do not force an identity icon to replace it."],
+      "acceptance": ["Read-only row has no navigation cue.", "Navigational fixture uses a real href with correct RTL cue.", "Action button remains independent and target-sized.", "At four widths, label/status/action remain grouped without nested targets."],
+      "ownerDecision": {
+        "required": false,
+        "question": null,
+        "options": [],
+        "recommendation": "Use interaction semantics rather than ornamental direction icon.",
+        "blocking": "No."
+      }
+    },
+    {
+      "id": "SLOP-03",
+      "title_ar": "سياسة النقاط والشرطات وحالات الغياب غير موحدة",
+      "recommendationAr": "اعتمد سياسة معنوية صغيرة؛ احتفظ بمفاتيح الرسوم والإشارات الرياضية ولا تحذف الرموز آليًا.",
+      "originalIDs": ["SLOP-03"],
+      "sourceReport": [
+        {"report": "anti-ai-slop-REPORT.md", "machineReadable": "slop-findings.json#/findings/2", "findingID": "SLOP-03"}
+      ],
+      "discoverers": ["anti-ai-slop"],
+      "category": "State and missing-value convention",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "SLOP-03", "severity": "P2", "rawKitSeverity": "O3/O6 P0", "status": "CONFIRMED", "note": "Confirmed convention/policy opportunity, not every dot or dash a defect."}],
+      "fileLineSelector": [
+        {"path": "components/organization/specification.md", "lines": "15,21", "selector": ".m-badge__dot, .m-missing"},
+        {"path": "previews/compositions/index.html", "line": "48", "selector": ".m-badge"},
+        {"path": "components/order-schedule/order-schedule.css", "lines": "503-518", "selector": ".m-ocal__row-statusdot"},
+        {"path": "components/data/example-usage.html", "selector": ".m-missing"}
+      ],
+      "evidence": "Original rendered scan produced 423 dash and 14 dot-in-chip signals across repeated source/standalone examples; these are not unique defects. Viewed composition includes `جاهز — عينة` with a dot; specs intentionally define dot+text and missing glyph. Existing exact descriptions, chart swatches and mathematical signs are meaningful exceptions.",
+      "screenshots": ["generated-artifacts/pixilated-audit/slop/composition-tile.png"],
+      "exactProblem": "House-rule preferences against punctuation dashes/redundant status dots and ambiguity of a missing-value glyph are not expressed as a consistent semantic policy across examples.",
+      "rootCause": "Status and missing-value patterns predate a shared content/visual policy; visible copy and accessible reading are maintained in multiple places.",
+      "impact": "Mostly consistency and clarity opportunity. Missing must remain distinct from zero; chart keys, negative signs, ranges and identifiers must not be erased.",
+      "currentSafePatch": "No blind search/replace. Review each occurrence; preserve meaningful math, category keys, labels and explicit missing meaning.",
+      "futureState": "Define a small semantic state renderer: neutral default text, restrained tint for attention, optional icon only when informative. Distinguish missing, unavailable and not-applicable. Use explicit wording where the glyph alone is ambiguous; derive accessible and visible readings from one contract.",
+      "recommendedApproach": "Resolve policy first; migrate reviewed component-owned copy and fixtures in small batches. Do not overstate this as hundreds of unique critical defects.",
+      "patchVsStructural": "Structural convention plus scoped patches.",
+      "risks": ["Long Arabic wording can increase row height.", "Blind edits can corrupt negative values, ranges, identifiers, chart keys or missing/zero distinctions."],
+      "acceptance": ["Missing/zero/not-applicable remain distinct in text and accessible output.", "Negative signs, range notation and chart legend swatches remain.", "Any removed badge dot retains state clarity.", "Long Arabic labels wrap at 320px."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Approve a no-redundant-dot and explicit missing-state convention with meaningful data/math exceptions?",
+        "options": [
+          {"option": "Use text/tint and explicit missing words; retain semantic keys/signs (recommended)", "effect": "Clearer policy while preserving data encodings."},
+          {"option": "Keep current patterns case by case", "effect": "No migration but retains inconsistent visual convention."},
+          {"option": "Remove all dots/dashes mechanically", "effect": "Not recommended; damages status/data meaning."}
+        ],
+        "recommendation": "Adopt a semantic policy with exceptions, not global deletion.",
+        "blocking": "Blocks broad migration only."
+      }
+    },
+    {
+      "id": "EDGE-001",
+      "title_ar": "تكبير النص المحاكى يكشف قصًا في تذييل لوحات المعاينة",
+      "recommendationAr": "اجعل chrome المعاينة يلتف ويتمدد؛ لا تخلط محاكاة حجم الخط بالتكبير الأصلي.",
+      "originalIDs": ["EDGE-001"],
+      "sourceReport": [
+        {"report": "edge-report.md", "machineReadable": "edge-findings.json#/findings/0", "findingID": "EDGE-001"}
+      ],
+      "discoverers": ["edge-case-hunter"],
+      "category": "Device resilience / preview-shell typography and overflow",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "EDGE-001", "severity": "LOW (P3; preview-only)", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "previews/board-base.css", "lines": "26-30", "selector": ".board-header h1"},
+        {"path": "previews/board-base.css", "lines": "253-260", "selector": ".board-footer"}
+      ],
+      "evidence": "Edge sweep: 36 routes×8 modes=288 Chromium cases; 144 default route/viewport captures at 320/360/390/430 had no document overflow or page/resource errors. In separate font-size-only 200% DOM simulation at 320, messages footer scrollWidth 408px against 320px client width and overlaps fixed 22px line boxes; similar footer overflow in data/navigation/organization/selection. Viewed screenshots show this specific preview-shell stress state. The simulation is not native zoom/OS text scaling.",
+      "screenshots": ["generated-artifacts/pixilated-audit/edge/previews--messages--font200-footer.png", "generated-artifacts/pixilated-audit/edge/previews--messages--index-font200-viewport.png"],
+      "exactProblem": "Preview heading/footer use fixed pixel line heights and long source/audit paths without deliberate break opportunities; text-only enlargement makes the preview footer collide and overflow.",
+      "rootCause": "Fixed line-height and no path wrapping meet a harness that enlarges font-size only while holding other geometry fixed.",
+      "impact": "Low direct transfer risk; may mislead a reviewer in this preview-only stress mode. No default-state component overflow is confirmed.",
+      "currentSafePatch": "No source changes. Do not hide overflow or shrink text; interpret this run as a shell diagnostic, not native zoom evidence.",
+      "futureState": "If 200% text enlargement is an intended preview requirement, let headings/footer line boxes grow, add wrap opportunities at path separators or wrap-anywhere while preserving full selectable text, and permit footer height growth. Evaluate actual browser zoom separately before accessibility claims.",
+      "recommendedApproach": "Patch preview shell only after deciding this stress mode is a requirement; otherwise label it diagnostic-only.",
+      "patchVsStructural": "Patch to preview scaffolding, not a component/API rewrite.",
+      "risks": ["Arbitrary path breaks can reduce copy/paste clarity.", "Longer footer increases page height.", "DOM font mutation differs from actual browser zoom."],
+      "acceptance": ["At four widths and both directions, default pages do not overflow.", "Declared simulation has no line collision or horizontal document overflow.", "Source paths remain fully readable/selectable.", "Separate browser-zoom check is performed before conformance claim."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Is the font-only 200% simulation an acceptance condition for specimen chrome or diagnostic-only?",
+        "options": [
+          {"option": "Treat as preview-shell requirement (recommended if retained)", "effect": "Approve shell-only CSS patch and regression test."},
+          {"option": "Keep diagnostic-only", "effect": "Label simulation and use true browser zoom/OS evidence for accessibility."}
+        ],
+        "recommendation": "Make preview copy resilient if retaining the mode, while never treating it as native zoom.",
+        "blocking": "Does not block component work."
+      }
+    },
+    {
+      "id": "BRAND-02-03",
+      "title_ar": "علامة m المؤقتة غير معتمدة وتباينها منخفض",
+      "recommendationAr": "استخدم الرمز المعتمد في رأس المعاينة فقط بعد قرار موضعه، أو أزل العلامة المؤقتة.",
+      "originalIDs": ["BRAND-02", "BRAND-03"],
+      "sourceReport": [
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/1", "findingID": "BRAND-02"},
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/2", "findingID": "BRAND-03"}
+      ],
+      "discoverers": ["brand-auditor"],
+      "category": "Preview identity / distinctive asset and contrast",
+      "severity": "Low",
+      "status": "LIKELY",
+      "rawMetadata": [
+        {"id": "BRAND-02", "severity": "P2", "status": "LIKELY", "category": "Logo / distinctive asset consistency"},
+        {"id": "BRAND-03", "severity": "P2", "status": "LIKELY", "category": "Text contrast / accent use"}
+      ],
+      "fileLineSelector": [
+        {"path": "assets/brand/micro-logo/README.md", "lines": "3, 7-25"},
+        {"path": "assets/brand/micro-logo/v1/README-AR.md", "lines": "16-45, 62-66"},
+        {"path": "previews/index.html", "lines": "29-36", "selector": ".brand-mark"},
+        {"path": "previews/index.css", "lines": "19,31", "selector": ".brand-mark"},
+        {"path": "previews/ui-system-showcase/index.html", "lines": "24-32"}
+      ],
+      "evidence": "Approved v1 symbol/lockups exist, but asset README says they are not installed in screens and placement is unspecified. Index uses text `m`; at 390px it is 15px/600 terracotta `#D97757` over petrol `#164D59`, measured 3.00:1 if treated as text. It is adjacent to the high-contrast MICRO word. Viewed brand index/showcase screenshots.",
+      "screenshots": ["generated-artifacts/pixilated-audit/brand/screenshots/previews--index-320.png", "generated-artifacts/pixilated-audit/brand/screenshots/previews--ui-system-showcase--index-390.png"],
+      "exactProblem": "The same temporary glyph is an undocumented substitute for the distinctive mark and, if readable text, is below 4.5:1. Whether it is intended as text or decoration is unknown.",
+      "rootCause": "Approved asset provenance and visual-system direction do not establish logo placement for previews; a text monogram was added in the index.",
+      "impact": "The library overview may imply a non-approved mark is canonical; if text, contrast is low. This is preview identity only, not component-family portability.",
+      "currentSafePatch": "No change pending placement approval. Do not alter approved vector colors or add the logo to portable primitives.",
+      "futureState": "Decide whether the overview and composed showcase display the approved v1 symbol/lockup. If yes, use only the approved local variant, symbol below the 240px full-lockup threshold, preserving geometry and clear space; otherwise remove the m and stay text-only. Keep independent primitive demos unbranded.",
+      "recommendedApproach": "One preview-level identity decision resolves both original findings; no logo/token change in components.",
+      "patchVsStructural": "Patch after owner placement decision.",
+      "risks": ["Branding the kit shell can imply future host layout.", "A white text m fixes contrast only, not identity.", "Logo placement in primitives harms portability."],
+      "acceptance": ["Only approved local asset or no mark.", "If text remains, actual background contrast is at least 4.5:1 and role is documented.", "If logo is used, approved variant, clear space and size rules are preserved.", "Accessibility tree does not announce an ornamental substitute."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should index/showcase use the approved v1 mark or remain text-only until a host placement contract exists; is the lowercase m text or ornament?",
+        "options": [
+          {"option": "Use approved symbol/lockup in overview/showcase only (recommended)", "effect": "Improves identity while keeping primitives portable."},
+          {"option": "Remain text-only and remove m", "effect": "Avoids implying any placement decision."},
+          {"option": "Keep m as text", "effect": "Requires explicit identity role and corrected contrast; remains a substitute mark."}
+        ],
+        "recommendation": "Approved local symbol in overview/showcase only, or remove m until placement is decided.",
+        "blocking": "Blocks preview identity sign-off, not component reuse."
+      }
+    },
+    {
+      "id": "BRAND-04",
+      "title_ar": "روابط صفحات المراجع تعرض ألوان المتصفح الافتراضية",
+      "recommendationAr": "أضف حالات روابط scoped في CSS المعاينة باستخدام لون البترولي مع إبقاء التسطير والتركيز.",
+      "originalIDs": ["BRAND-04"],
+      "sourceReport": [
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/3", "findingID": "BRAND-04"}
+      ],
+      "discoverers": ["brand-auditor"],
+      "category": "Palette fidelity / preview link consistency",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "rawMetadata": [{"id": "BRAND-04", "severity": "P2", "status": "CONFIRMED"}],
+      "fileLineSelector": [
+        {"path": "previews/surfaces/index.html", "lines": "42, 283-286", "selector": "#current-direction .panel-note a"},
+        {"path": "previews/system/index.html", "line": "82"},
+        {"path": "previews/system/system.css", "lines": "37-40"},
+        {"path": "components/organization/organization.css", "lines": "108-118"}
+      ],
+      "evidence": "Rendered surfaces preview contains 12 user-agent blue links per viewport and visited purple links in viewed `visual-surfaces-390.jpg`; a system reference link is also default blue. The issue is in prose preview styling; `.m-row` component link inheritance does not style those board anchors.",
+      "screenshots": ["generated-artifacts/pixilated-audit/visual-surfaces-390.jpg"],
+      "exactProblem": "Some reference-board links use browser-default blue/purple instead of the otherwise tokenized palette and explicit state styling.",
+      "rootCause": "Preview prose anchors lack a shared, scoped link/visited/hover/focus color role.",
+      "impact": "The primary learning/reference surface appears partly unskinned. No consumer component color defect is established.",
+      "currentSafePatch": "After audit approval, scope link-state styling to the affected preview boards; keep component CSS unchanged.",
+      "futureState": "Define preview-only link role using existing petrol color with underline and explicit visited, hover and focus-visible behavior. Keep link identity clear in grayscale and avoid overriding component-specific links.",
+      "recommendedApproach": "Small preview CSS patch; optionally share an alias among preview boards after inspecting each.",
+      "patchVsStructural": "Patch.",
+      "risks": ["Global selector may flatten component anchors.", "A color-only distinction or removed underline harms recognition."],
+      "acceptance": ["No board prose anchor computes to user-agent blue/purple.", "Links remain underlined and discernible in grayscale.", "Keyboard focus is visible.", "Standalone component rendering is unchanged."],
+      "ownerDecision": {"required": false, "question": null, "options": [], "recommendation": "Apply a scoped preview-only link treatment.", "blocking": "No."}
+    },
+    {
+      "id": "BRAND-05",
+      "title_ar": "زوج ألوان السلاسل b/e متقارب في محاكاة deuteranopia",
+      "recommendationAr": "أبقِ ألوان الهوية؛ راجع السياق وأضف cue غير لوني إذا بقي الالتباس.",
+      "originalIDs": ["BRAND-05"],
+      "sourceReport": [
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/4", "findingID": "BRAND-05"}
+      ],
+      "discoverers": ["brand-auditor"],
+      "category": "Chart palette / color-vision differentiation",
+      "severity": "Low",
+      "status": "LIKELY",
+      "rawMetadata": [{"id": "BRAND-05", "severity": "P2", "status": "LIKELY", "note": "Near-threshold simulated pair, but current fixture labels categories and values directly; no comprehension failure proven."}],
+      "fileLineSelector": [
+        {"path": "shared/tokens.css", "lines": "120-125", "selector": "data-series color tokens"},
+        {"path": "components/data/data.css", "lines": "250-255", "selector": "bar-series styling"},
+        {"path": "previews/data/index.html", "lines": "125-138", "selector": "five-series fixture"}
+      ],
+      "evidence": "Current series b (#D97757) and e (#B3BD7B) produce OKLab ΔE 0.097 under the kit's severity-1 deuteranopia transform, just below its 0.10 warning threshold. Viewed five-series chart has direct category/value labels; hue is not the only cue. Candidate generated palette warnings are not applied source colors.",
+      "screenshots": ["generated-artifacts/pixilated-audit/brand/screenshots/chart-five-series-390.png"],
+      "exactProblem": "Two fixed category colors are near a simulation threshold when displayed together, potentially harder to distinguish in denser charts.",
+      "rootCause": "Global series tokens include terracotta and olive and no chart-specific color-vision variant is defined.",
+      "impact": "Potential distinguishability risk in dense/separated multi-series charts; current example labels reduce concern. No user comprehension test or confirmed current failure.",
+      "currentSafePatch": "No token change justified by one labelled near-threshold example. Keep all values and semantic colors intact.",
+      "futureState": "Test co-present series across supported chart families/counts and CVD transforms. If contextual ambiguity remains, add a chart-only cue (direct labels/pattern or scoped token) without recoloring global brand accent or success/error semantics.",
+      "recommendedApproach": "Evidence-led follow-up, not immediate token replacement.",
+      "patchVsStructural": "Potential structural chart palette contract; no current patch.",
+      "risks": ["Changing global category identity breaks cross-chart consistency.", "Patterns add visual density.", "Generated candidate palette is not an approved replacement."],
+      "acceptance": ["All simultaneous category sets receive contextual CVD review at four widths.", "Where near colors coexist, a redundant label/pattern keeps each series identifiable.", "Brand and semantic status roles remain unchanged."],
+      "ownerDecision": {
+        "required": true,
+        "question": "Should chart categories remain global tokens or may charts use a chart-only cue for near color-vision pairs?",
+        "options": [
+          {"option": "Retain global tokens and add non-color cues if needed (recommended)", "effect": "Preserves category identity while adding redundancy."},
+          {"option": "Allow chart-only colors/patterns", "effect": "More separation but a new chart-specific palette contract."},
+          {"option": "Change global tokens", "effect": "Changes brand/data identity across all charts; not justified yet."}
+        ],
+        "recommendation": "Keep global tokens pending contextual evidence; use redundant cues first.",
+        "blocking": "No for current examples; chart palette sign-off remains provisional."
+      }
+    }
+  ],
+  "notProvenOrRejected": [
+    {
+      "id": "SYS-DS-003",
+      "originalStatus": "LIKELY",
+      "disposition": "REJECTED AS CURRENT UI DEFECT",
+      "titleAr": "اشتباه هندسة تقويم الهاتف كان استنتاجًا من المصدر فقط",
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/2", "findingID": "SYS-DS-003"}
+      ],
+      "evidence": "Dedicated current root-width adaptation checks passed 55/55: month/day fallback, selected date/data preservation, and focus remapping. Current `components/order-schedule/specification.md:101` explicitly switches to day view when root inline width <360px; the test covers root widths, not viewport-name guesses.",
+      "reason": "Source-only historic cell dimensions do not prove a current mobile UI failure once the live root-width fallback is verified. Do not list it as an active calendar issue.",
+      "historyCrossReference": "Retain the dated/historic geometry and stale explanatory wording as a documentation-history cleanup cross-reference under SYS-DS-006 only. Do not duplicate the issue as a second current defect.",
+      "limits": "55 Chromium fixture checks are not real-device, screen-reader, WebKit, timezone-policy or all-consumer proof."
+    },
+    {
+      "id": "SYS-DS-008",
+      "originalStatus": "NOT PROVABLE",
+      "disposition": "NOT PROVABLE / OWNER CONTRACT GAP, NOT CURRENT COMPATIBILITY FAILURE",
+      "titleAr": "مضيف النقل المستقبلي غير محدد",
+      "sourceReport": [
+        {"report": "system-REPORT.md", "machineReadable": "system-findings.json#/findings/7", "findingID": "SYS-DS-008"}
+      ],
+      "evidence": "Current source is dependency-light HTML/CSS/vanilla JS with window globals; no target framework, CSS isolation, supported-browser baseline or preferred module format is defined. No consumer application was opened.",
+      "reason": "Host compatibility cannot be inferred without an approved host contract; current code is not proven unusable.",
+      "decision": "Decide vanilla browser core, ESM, or a named adapter only when needed; avoid premature dependency/framework work.",
+      "limits": "Blocks final portability sign-off, not current independent-system UI work."
+    },
+    {
+      "id": "BRAND-01",
+      "originalStatus": "NOT PROVABLE",
+      "disposition": "NOT PROVABLE; MEASUREMENT BASELINE ONLY",
+      "titleAr": "نسبة 70/20/10 تعتمد على ملف أدوار مشتق",
+      "sourceReport": [
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/0", "findingID": "BRAND-01"}
+      ],
+      "evidence": "Measured 390px examples span 91.8/5.4/2.7 on buttons, 96.5/3.4/0.2 on fields, and 70.6/29.3/0 on info strip under a derived profile assigning light ground to area-primary and petrol to area-secondary. Source token `--micro-brand-primary` remains petrol.",
+      "reason": "There is no owner-approved area-role mapping or evidence that isolated component boards should follow the same color-area target. Do not paint components to force a ratio.",
+      "ownerDecision": "Approve measurement roles and define whether the target applies to composed showcases only or component specimens too.",
+      "limits": "No numeric brand score is issued."
+    },
+    {
+      "id": "BRAND-06",
+      "originalStatus": "NOT PROVABLE",
+      "disposition": "NOT PROVABLE PALETTE PROXIMITY RISK; NO SEMANTIC MISUSE FINDING",
+      "titleAr": "تقارب ألوان البترولي والدلالات لا يثبت تلوينًا مضللًا",
+      "sourceReport": [
+        {"report": "brand-report.md", "machineReadable": "brand-findings.json#/findings/5", "findingID": "BRAND-06"}
+      ],
+      "evidence": "Palette analyzer repeats pair-distance warnings globally. Manual source/render review found semantic word/icon/color treatment and no confirmed instance of brand petrol replacing success/error/info state.",
+      "reason": "Color-distance warning alone ignores actual size, background and role; do not alter semantic colors or call current misuse.",
+      "ownerDecision": "Review co-present pairs contextually only if a real composed screen places those roles together."
+    },
+    {
+      "id": "EDGE-NONFINDINGS",
+      "disposition": "REJECTED SIGNALS / BOUNDED NON-FINDINGS",
+      "sourceReport": "edge-findings.json#/nonFindings",
+      "observations": [
+        "Hidden 1px live-region boxes are intentional; not visual clipping defects.",
+        "Visually hidden selection inputs have label-wrapper target unions at least 48px high in 12 inspected examples; do not use native input box as target size.",
+        "Internal carousel, segmented-control, phone-lane and showcase scroll extents are not page overflow without visible clipping evidence.",
+        "Calendar suspicion is rejected by current 55/55 evidence."
+      ]
+    },
+    {
+      "id": "SLOP-RAW-SCAN",
+      "disposition": "RAW COUNTS ARE NOT UNIQUE DEFECTS OR PRIORITY",
+      "sourceReport": "anti-ai-slop-REPORT.md",
+      "observations": [
+        "Original P0 counts include house-rule signals, duplicated examples and analyzer false positives; they are not outage severity.",
+        "K4 info-card contrast signal was wrong because the analyzer did not resolve the visible gradient; actual endpoint checks were 6.50:1 and 9.38:1.",
+        "O2 field border serves field recognition; O4 button geometry is not padding; B1 multiple primary specimens are a test matrix; L2 repeated entity rows are not nested feature cards.",
+        "Chart swatches, negative signs, fixture values and explicit missing-value states are meaningful and must not be removed mechanically."
+      ]
+    }
+  ],
+  "crossSourceReconciliation": [
+    "SYS-DS-003's rejected calendar suspicion is cross-referenced to SYS-DS-006 historical documentation cleanup; no active calendar UI defect remains.",
+    "SYS-DS-002 confirms missing shared layer-role governance only. Current operational overlay paths passed; no current z-index overlap malfunction is claimed.",
+    "SYS-DS-001 confirms a flat token architecture but is normalized to Moderate and does not assert an incorrect palette. A full DTCG pipeline is optional and unapproved.",
+    "VISUAL-04 is separate from chart-color CVD risk BRAND-05: one is measured geometric occlusion; the other is a near-threshold color pair with labels.",
+    "LANG-004 and INT-001 both touch Picker but are not duplicates: one is default wording specificity; the other is reproduced focus/live-region behavior.",
+    "BRAND-02 and BRAND-03 are merged because one element, one root cause and one owner placement decision lead to the same preview-only action.",
+    "No source track's P0/P1/High label is used directly as normalized urgency; raw metadata remains traceable."
+  ],
+  "coverageAndLimits": {
+    "parentDefaultSweep": "36 routes × 4 widths = 144 default cases; no document overflow, page error or resource error.",
+    "edgeModes": "36 routes × 8 modes = 288 cases, including default widths, reduced motion, forced colors, landscape and DOM font-size-only 200% simulation.",
+    "focusedSuites": ["Interaction browser latest 84 pass / 4 repeated failures (INT-001) / 0 runtime errors", "Lifecycle 383/383", "Calendar root-width adaptation 55/55", "Component mobile 52/52", "Chart mobile 59/59", "Numeric field controls 184/184", "Data scale state 23/23"],
+    "visualReview": "Targeted crop review at 320/360/390/430 for chart, metric, quantity and password/stepper geometry; no exhaustive family × state × viewport proof.",
+    "brandReview": "16 routes × 4 widths = 64 rendered checks; font platform verification, contextual palette and contrast review; no total numeric brand score.",
+    "notTested": ["Physical iOS/Android devices and real touch", "Safari/WebKit/Firefox", "Real screen readers and audible announcements", "Native browser zoom/OS dynamic type", "Full WCAG conformance", "Real user studies, analytics, production data or product journey", "Backend/network/session/permission states", "All state/variant/viewport combinations"]
+  },
+  "implementationBoundary": "This is audit and Future State recommendation only. No product/source/specification/docs/showcase/configuration changes, commit, push or branch were made."
+}

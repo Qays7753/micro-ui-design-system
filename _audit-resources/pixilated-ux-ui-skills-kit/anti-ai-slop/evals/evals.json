@@ -1,0 +1,8 @@
+{
+  "skill_name": "anti-ai-slop",
+  "evals": [
+    {"id": 1, "name": "orchestra-dashboard", "prompt": "We're about to film this admin dashboard for a promo. Run the final anti-slop pass on it: kill anything that looks AI-made, fix it, and tell me what you changed. Keep every interaction working.", "expected_output": "Fixed index.html with 0 P0 tells (no card strokes on info blocks, no queue stripe, no icon tiles, no dash cells, proper button padding), retry/panel flows intact, a report with before/after counts.", "files": ["inputs/orchestra-dashboard/index.html"]},
+    {"id": 2, "name": "vibe-coded-dashboard", "prompt": "this dashboard looks so vibe coded lol. can you de-slop it? keep the same data", "expected_output": "Fixed dashboard: KPI icon cards dissolved, emoji logo gone, Welcome back greeting replaced, status colours only where needed, dash cells replaced, same 10 subscribers and numbers.", "files": ["inputs/vibe-coded-dashboard/index.html"]},
+    {"id": 3, "name": "coffee-landing", "prompt": "final polish on our coffee subscription landing page before launch. remove anything that screams AI made this, especially in the copy", "expected_output": "Fixed landing page: no dashes in copy, no uppercase eyebrow pills, no italic accent word, no stat tiles, buttons padded, same content meaning.", "files": ["inputs/coffee-landing/index.html"]}
+  ]
+}

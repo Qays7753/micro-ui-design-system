@@ -17,12 +17,14 @@
   النسخة المكتفية ذاتيًا: standalone.html — مولدة بـ
   tools/build-ui-system-showcase-standalone.py (لا تُعدَّل يدويًا).
 ========================================================= -->
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Micro — معرض نظام الواجهة (Prototype)</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand/micro-logo/v2/platform-icons/favicon/favicon.svg">
+  <!-- Generated catalog payload: edit docs/COMPONENT-CATALOG.json, not this block. -->
+  <script type="application/json" id="sc-component-catalog">{"schemaVersion":1,"scope":"independent-pre-transfer-ui-system","maturityVocabulary":["stable-ui","draft-for-review","proposed"],"families":[{"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},{"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},{"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},{"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},{"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},{"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},{"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},{"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},{"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},{"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},{"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},{"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},{"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},{"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}],"variants":[{"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},{"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}]}</script>
   <link rel="stylesheet" href="../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../shared/tokens.css">
   <link rel="stylesheet" href="../../shared/motion.css">
@@ -46,7 +48,7 @@
   <link rel="stylesheet" href="../../components/carousel/carousel.css">
   <link rel="stylesheet" href="showcase.css">
 </head>
-<body>
+<body data-view="overview">
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
        — الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
        أداة البناء تتحقق من كل رمز مقابل أصله بايت-ببايت (نمط F03 R1-02). -->
@@ -123,18 +125,34 @@
   </svg>
 
   <header class="showcase-header">
+    <div class="showcase-brand">
+      <img class="showcase-brand__logo showcase-brand__logo--light" src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" alt="Micro">
+      <img class="showcase-brand__logo showcase-brand__logo--dark" src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-arabic.svg" alt="" aria-hidden="true">
+      <span class="showcase-brand__rule" aria-hidden="true"></span>
+      <span>مكتبة واجهات عربية</span>
+    </div>
     <p class="showcase-header__eyebrow">MICRO · UI SYSTEM SHOWCASE</p>
     <h1 class="showcase-header__title">معرض نظام الواجهة</h1>
-    <p class="showcase-header__lede">عرض تفاعلي واحد يجمع العائلات الأربع عشرة كما تُركّب معًا — المصادر الفعلية بعد جولة الإصلاح الجذري، بحالاتها واتجاهها العربي RTL ووضع مقارنة LTR. هذا عرض مكوّنات ولوحة تكامل، وليس تصميم منتج ولا تطبيقًا إنتاجيًا.</p>
+    <p class="showcase-header__lede">مكوّنات عربية قابلة لإعادة الاستخدام. المصدر الحقيقي، وحالات واضحة، وتفاصيل مضبوطة من الهاتف إلى الشاشة الواسعة.</p>
     <div class="showcase-header__meta">
-      <span>المصدر: <code>current working tree</code></span>
-      <span>12 عائلة STABLE · 2 DRAFT · ملحقان PROPOSED</span>
+      <span data-catalog-summary>حالة النضج تُقرأ من فهرس المكوّنات</span>
+      <span>المتغيرات المقترحة تبقى اختيارية</span>
     </div>
+    <nav class="showcase-nav" aria-label="أقسام مكتبة الواجهة">
+      <a class="showcase-nav__link is-current" href="#sc-canvas" data-showcase-view="overview" aria-current="page">نظرة عامة</a>
+      <a class="showcase-nav__link" href="#state-lab" data-showcase-view="state">مختبر الحالات</a>
+      <a class="showcase-nav__link" href="../compositions/index.html">مختبر التركيبات</a>
+      <div class="showcase-theme" role="group" aria-label="مظهر العرض">
+        <button type="button" data-sc-theme="light" aria-pressed="true">فاتح</button>
+        <button type="button" data-sc-theme="dark" aria-pressed="false">داكن</button>
+        <button type="button" data-sc-theme="system" aria-pressed="false">النظام</button>
+      </div>
+    </nav>
   </header>
 
   <!-- شريط أدوات المراجعة — أدوات عرض فقط (ليست سلوك منتج).
        F-11 (2026-10-10): وسم مرئي صريح أعلى الشريط يفصله عن واجهة المنتج. -->
-  <div class="showcase-controls" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
+  <div class="showcase-controls" id="state-lab" role="group" aria-label="أدوات مراجعة العرض — ليست واجهة منتج">
     <div class="showcase-controls__inner">
       <p class="sc-controls-tag"><span class="sc-controls-tag__mark">أدوات مراجعة العرض</span> — ليست جزءًا من واجهة المنتج؛ تتحكم في هذه الصفحة فقط</p>
       <div class="sc-ctl">
@@ -172,12 +190,34 @@
     </div>
   </div>
 
+  <section class="brand-proof" id="brand-proof" aria-labelledby="brand-proof-title">
+    <div class="brand-proof__head">
+      <div>
+        <p class="sc-section__kicker">BRAND ASSETS · V2</p>
+        <h2 id="brand-proof-title">عينات الشعار المعتمدة</h2>
+      </div>
+      <p>أصول عربية وإنجليزية ورمز مستقل، كما وردت. هذه معاينة استخدام وليست قاعدة رسمية للحجم الأدنى أو المسافة الآمنة.</p>
+    </div>
+    <div class="brand-proof__plate" data-theme="light" role="group" aria-label="تطبيقات الشعار على سطح فاتح">
+      <span class="brand-proof__mode">فاتح · full-color</span>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" alt="شعار Micro العربي، النسخة الملونة"><figcaption>قفل عربي</figcaption></figure>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-english.svg" alt="شعار Micro الإنجليزي، النسخة الملونة"><figcaption>قفل إنجليزي</figcaption></figure>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-symbol.svg" alt="رمز Micro المستقل، النسخة الملونة"><figcaption>الرمز</figcaption></figure>
+    </div>
+    <div class="brand-proof__plate" data-theme="dark" role="group" aria-label="تطبيقات الشعار على سطح داكن">
+      <span class="brand-proof__mode">داكن · reversed-dark</span>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-arabic.svg" alt="شعار Micro العربي، النسخة المعكوسة الداكنة"><figcaption>قفل عربي</figcaption></figure>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-english.svg" alt="شعار Micro الإنجليزي، النسخة المعكوسة الداكنة"><figcaption>قفل إنجليزي</figcaption></figure>
+      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-symbol.svg" alt="رمز Micro المستقل، النسخة المعكوسة الداكنة"><figcaption>الرمز</figcaption></figure>
+    </div>
+  </section>
+
   <main class="showcase-canvas" id="sc-canvas">
     <!-- ============ 01 · S01 الأسطح ============ -->
-    <section class="sc-section" id="sc-surfaces" data-status="current" aria-labelledby="sc-surfaces-title">
+    <section class="sc-section" id="sc-surfaces" data-status="current" data-overview="true" aria-labelledby="sc-surfaces-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">01 · S01</p>
-        <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current" data-catalog-family="surfaces">STABLE UI</span></h2>
         <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة — الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
       </div>
       <div class="sc-block sc-block--plain sc-surface-stage">
@@ -203,10 +243,10 @@
     </section>
 
     <!-- ============ 02 · B01 الأزرار ============ -->
-    <section class="sc-section" id="sc-buttons" data-status="current" aria-labelledby="sc-buttons-title">
+    <section class="sc-section" id="sc-buttons" data-status="current" data-overview="true" aria-labelledby="sc-buttons-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">02 · B01</p>
-        <h2 class="sc-section__title" id="sc-buttons-title">الأزرار <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-buttons-title">الأزرار <span class="sc-pill sc-pill--current" data-catalog-family="buttons">STABLE UI</span></h2>
         <p class="sc-section__desc">الأنواع لا تتنافس في البروز؛ الأساسي هو التأكيد الوحيد. التحميل بالنمط B: التسمية باقية والمؤشر بفتة ثابتة بلا إزاحة محتوى.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -236,10 +276,10 @@
     </section>
 
     <!-- ============ 03 · B02 الحقول ============ -->
-    <section class="sc-section" id="sc-fields" data-status="current" aria-labelledby="sc-fields-title">
+    <section class="sc-section" id="sc-fields" data-status="current" data-overview="true" aria-labelledby="sc-fields-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">03 · B02</p>
-        <h2 class="sc-section__title" id="sc-fields-title">الحقول <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-fields-title">الحقول <span class="sc-pill sc-pill--current" data-catalog-family="fields">STABLE UI</span></h2>
         <p class="sc-section__desc">التسمية ظاهرة وليست placeholder؛ فارغ ≠ صفر؛ الخطأ يبقي القيمة ويرتبط برسالة عبر aria-describedby تلقائيًا.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -321,7 +361,7 @@
     <section class="sc-section" id="sc-selection" data-status="current" aria-labelledby="sc-selection-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">04 · B03</p>
-        <h2 class="sc-section__title" id="sc-selection-title">الاختيار <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-selection-title">الاختيار <span class="sc-pill sc-pill--current" data-catalog-family="selection">STABLE UI</span></h2>
         <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس — D-UI-05).</p>
       </div>
       <div class="sc-block sc-stack">
@@ -420,7 +460,7 @@
     <section class="sc-section" id="sc-organization" data-status="current" aria-labelledby="sc-organization-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">05 · B04</p>
-        <h2 class="sc-section__title" id="sc-organization-title">التنظيم <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-organization-title">التنظيم <span class="sc-pill sc-pill--current" data-catalog-family="organization">STABLE UI</span></h2>
         <p class="sc-section__desc">تجميع بالعناوين والمسافات والفواصل؛ الصفوف المفتوحة بلا ظل؛ الشارات معلوماتية لا أزرار؛ سهم التفاصيل يسارًا في RTL.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -468,14 +508,14 @@
       </div>
     </section>
     <!-- ============ 06 · SPEC-01 بطاقة القراءة والشريط ============ -->
-    <section class="sc-section" id="sc-info-strip" data-status="current" aria-labelledby="sc-info-title">
+    <section class="sc-section" id="sc-info-strip" data-status="current" data-overview="true" aria-labelledby="sc-info-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
-        <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current" data-catalog-family="info-strip">STABLE UI</span></h2>
         <p class="sc-section__desc">القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.</p>
       </div>
       <div class="sc-block sc-block--plain sc-stack">
-        <p class="sc-hint">القراءة الواحدة الصغيرة توصي بـ m-info-card--compact؛ البطاقة القياسية تبقى متاحة دون الصنف عند الحاجة لمساحة أكبر.</p>
+        <p class="sc-hint">الكثافة المدمجة هي الافتراضية؛ استخدم m-info-card--featured لقيمة محورية واحدة عند الحاجة لبروز حقيقي.</p>
         <div class="sc-grid-2">
           <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
@@ -581,7 +621,7 @@
     <section class="sc-section" id="sc-data" data-status="current" aria-labelledby="sc-data-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">07 · B05</p>
-        <h2 class="sc-section__title" id="sc-data-title">البيانات والرسوم <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-data-title">البيانات والرسوم <span class="sc-pill sc-pill--current" data-catalog-family="data">STABLE UI</span></h2>
         <p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -698,7 +738,39 @@
             </li>
           </ol>
         </div>
-        <p class="sc-hint">كل رسم أعلاه يفتح إفصاح بياناته من زر داخلي (aria-expanded + جدول دلالي) ويُعاد بناؤه كل تصيير. جرّب تبديل «إجهاد» أعلى الصفحة ثم افتح الإفصاح — القيم والملخص يتزامنان مع المصدر (A4-D04). تباين العلامات الفاتحة (b/c/e) مسجل كاقتراح A4-R01 ولم تُغيَّر أي قيمة.</p>
+        <p class="sc-hint">لكل رسم جدول دلالي من مصدره نفسه. جرّب «إجهاد» ثم افتح البيانات: القيم والملخص يتزامنان. بقيت ألوان الفئات الأصلية، وأضيفت حدود دلالية للعلامات الفاتحة والحلقة؛ لا يعتمد فهم القراءة على اللون وحده.</p>
+      </div>
+      <div class="sc-block sc-stack" id="sc-signed" aria-labelledby="sc-signed-title">
+      <div class="sc-section__head">
+        <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع — Data</h2>
+        <p class="sc-section__desc">امتداد للعائلة نفسها، لا عائلة جديدة. محور صفر مشترك، وقراءات كاملة، ولا تحويل للسالب إلى موجب.</p>
+      </div>
+      <div class="sc-stack">
+        <section class="m-chart m-chart--bars" data-chart="bars" data-value-domain="signed" id="sc-signed-bars">
+          <h3 class="m-chart__title">مقارنة تغيّر القراءات</h3>
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="القيمة الأولى" data-value="120"></li>
+            <li data-series="b" data-label="القيمة الثانية" data-value="-60"></li>
+            <li data-series="c" data-label="القيمة الثالثة" data-value="0"></li>
+            <li data-series="d" data-label="قراءة مفقودة" data-value=""></li>
+            <li data-series="e" data-label="مدخل غير صالح" data-value="invalid"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary>الموجب أعلى الصفر والسالب أسفله. الفهرس أسفل كل علامة يقابله الاسم والقيمة دون اختصار.</p>
+        </section>
+        <section class="m-chart m-chart--line" data-chart="line" data-value-domain="signed" data-axis-type="time" data-axis-dir="rtl" id="sc-signed-time">
+          <h3 class="m-chart__title">اتجاه زمني بفجوة معلنة</h3>
+          <ul class="m-chart__data" hidden>
+            <li data-series="a" data-label="1 يناير 2026" data-x="2026-01-01" data-value="-20"></li>
+            <li data-series="a" data-label="2 يناير 2026" data-x="2026-01-02" data-value="40"></li>
+            <li data-series="a" data-label="12 يناير 2026" data-x="2026-01-12" data-value=""></li>
+            <li data-series="a" data-label="20 يناير 2026" data-x="2026-01-20" data-value="0"></li>
+            <li data-series="a" data-label="1 فبراير 2026" data-x="2026-02-01" data-value="80"></li>
+          </ul>
+          <div class="m-chart__plot" data-plot></div>
+          <p class="m-chart__summary" data-summary>المسافة تمثل الزمن المنقضي لا تساوي الفئات. لا مسار يصل عبر قراءة 12 يناير المفقودة.</p>
+        </section>
+      </div>
       </div>
     </section>
 
@@ -706,7 +778,7 @@
     <section class="sc-section" id="sc-packed" data-status="proposed" aria-labelledby="sc-packed-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">07b · B05 ext</p>
-        <h2 class="sc-section__title" id="sc-packed-title">الدوائر الملتصقة packed-circle <span class="sc-pill sc-pill--proposed">PROPOSED</span></h2>
+        <h2 class="sc-section__title" id="sc-packed-title">الدوائر الملتصقة packed-circle <span class="sc-pill sc-pill--proposed" data-catalog-family="data" data-catalog-variant="packed-circle">PROPOSED</span></h2>
         <p class="sc-section__desc">ملحق opt-in فوق B05 (m-chart--packed): دوائر متداخلة تمثل المساحة، قيم حقيقية داخلها بلا نسب. بحسب المصدر: «يحتاج مراجعة واعتماد المالك» — عرضه هنا لا يعني اعتماده.</p>
       </div>
       <div class="sc-block">
@@ -729,11 +801,11 @@
     </section>
 
     <!-- ============ 08 · SPEC-02 المقارنة العددية ============ -->
-    <section class="sc-section" id="sc-metric" data-status="current" aria-labelledby="sc-metric-title">
+    <section class="sc-section" id="sc-metric" data-status="current" data-overview="true" aria-labelledby="sc-metric-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">08 · SPEC-02</p>
-        <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
-        <p class="sc-section__desc">دوائر المساحة (منفصلة/متداخلة) + مقارنة مسطحة موصى بها للقراءة العريضة. الدائرة القياسية محفوظة لقراءة رئيسية مقصودة؛ المتغيرات الثلاثة تعرض المصدر نفسه.</p>
+        <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current" data-catalog-family="metric-comparison">STABLE UI</span></h2>
+        <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا؛ الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
@@ -781,7 +853,7 @@
             </div>
           </div>
         </section>
-        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. المثال التالي هو إبراز صريح لقراءة رئيسية، ثم compact يعرضان بيانات المقارنة نفسها.</p>
+        <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
         <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز مقصود لقيمة رئيسية ومقارنة مستقلة">
           <h3 class="m-main-metric__title">قراءة رئيسية — مع مقارنات مستقلة</h3>
           <div class="m-main-metric__layout">
@@ -827,7 +899,7 @@
     <section class="sc-section" id="sc-messages" data-status="current" aria-labelledby="sc-messages-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">09 · B06</p>
-        <h2 class="sc-section__title" id="sc-messages-title">الرسائل والحالات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-messages-title">الرسائل والحالات <span class="sc-pill sc-pill--current" data-catalog-family="messages">STABLE UI</span></h2>
         <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert — D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -893,7 +965,7 @@
     <section class="sc-section" id="sc-navigation" data-status="current" aria-labelledby="sc-navigation-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">10 · B07</p>
-        <h2 class="sc-section__title" id="sc-navigation-title">التنقل والطبقات <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-navigation-title">التنقل والطبقات <span class="sc-pill sc-pill--current" data-catalog-family="navigation">STABLE UI</span></h2>
         <p class="sc-section__desc">الألسنة بصف واحد وتمرير أفقي مقصود مع Home/End (D-UI-01)؛ الطبقات بعزل خلفية وحصر تركيز واستعادة المشغّل؛ شريط الأفعال يلتف عند التكبير.</p>
       </div>
       <div class="sc-block sc-stack">
@@ -950,7 +1022,7 @@
     <section class="sc-section" id="sc-gateway" data-status="current" aria-labelledby="sc-gateway-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">11 · SPEC-04</p>
-        <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current" data-catalog-family="access-gateway">STABLE UI</span></h2>
         <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط — لا تُرسل بيانات إلى أي خدمة.</p>
       </div>
       <div class="sc-block sc-block--plain">
@@ -989,7 +1061,7 @@
     <section class="sc-section" id="sc-account" data-status="current" aria-labelledby="sc-account-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">12 · SPEC-03</p>
-        <h2 class="sc-section__title" id="sc-account-title">إعدادات الحساب والتطبيق <span class="sc-pill sc-pill--current">STABLE UI</span></h2>
+        <h2 class="sc-section__title" id="sc-account-title">إعدادات الحساب والتطبيق <span class="sc-pill sc-pill--current" data-catalog-family="account-settings">STABLE UI</span></h2>
         <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير — دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
       </div>
       <div class="sc-block">
@@ -1070,7 +1142,7 @@
     <section class="sc-section" id="sc-ocal" data-status="draft" aria-labelledby="sc-ocal-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
-        <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
+        <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عند عرض مكوّن أقل من 360px يتحول تلقائيًا إلى اليوم، وتعود تفضيلات الشهر عند اتساع المساحة.</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
@@ -1090,7 +1162,7 @@
     <section class="sc-section" id="sc-carousel" data-status="draft" aria-labelledby="sc-carousel-title">
       <div class="sc-section__head">
         <p class="sc-section__kicker">14 · SYS-02</p>
-        <h2 class="sc-section__title" id="sc-carousel-title">عارض البطاقات <span class="sc-pill sc-pill--draft">DRAFT FOR REVIEW</span></h2>
+        <h2 class="sc-section__title" id="sc-carousel-title">عارض البطاقات <span class="sc-pill sc-pill--draft" data-catalog-family="carousel">DRAFT FOR REVIEW</span></h2>
         <p class="sc-section__desc">سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.</p>
       </div>
       <div class="sc-block sc-block--plain">
@@ -1122,7 +1194,7 @@
                     <span class="m-stat__label">جاهزة للتسليم</span>
                     <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary" dir="ltr">45</span><span class="m-stat__unit">طلب</span></span>
                   </div>
-                  <p class="sc-hint">البطاقة المجاورة ظاهرة جزئيًا (peek 24px) — الأسهم داخل أي حقل تبقى للحقل.</p>
+                  <p class="sc-hint">البطاقة النشطة كاملة العرض؛ peek خيار تركيبي صريح ولا يُستخدم هنا.</p>
                 </div>
               </li>
               <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص التحصيل">
@@ -1151,7 +1223,7 @@
 
   <footer class="showcase-footer">
     <p>هذا ملف عرض لمكوّنات نظام Micro UI — ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
-    <p>الحالات مستمدة من مواصفات العائلات نفسها: 12 عائلة STABLE UI · order-schedule وcarousel عائلتان DRAFT FOR REVIEW · ملحقا packed-circle وأزرار المنحنيات PROPOSED. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.</p>
+    <p>مستوى النضج يُقرأ من فهرس المكوّنات؛ ووسم العرض الحالي مستقل عن الحالة التشغيلية التي تتحكم بها أدوات المختبر. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.</p>
     <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا — لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
   </footer>
 

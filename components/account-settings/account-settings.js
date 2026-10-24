@@ -8,6 +8,11 @@
     var layer = layerId ? document.getElementById(layerId) : panel.closest('.m-layer');
     if (!layer) return;
     panel.setAttribute('data-account-settings-ready', '');
+    var controller = new AbortController();
+    panel.__microAccountLifetime = controller;
+    function on(element, type, handler) {
+      element.addEventListener(type, handler, { signal: controller.signal });
+    }
     var backdropId = layer.getAttribute('data-backdrop-id');
     var backdrop = backdropId ? document.getElementById(backdropId)
       : document.querySelector('.m-layer-backdrop[data-for="' + layer.id + '"]');
@@ -33,21 +38,21 @@
     }
 
     panel.querySelectorAll('[data-account-open]').forEach(function (trigger) {
-      trigger.addEventListener('click', function () {
+      on(trigger, 'click', function () {
         if (!window.MicroNavigation) return;
         showView('account', false);
         window.MicroNavigation.openLayer(layer, { trigger: trigger, backdropEl: backdrop });
       });
     });
-    if (appEntry) appEntry.addEventListener('click', function () { showView('application', true); });
-    if (back) back.addEventListener('click', function () { showView('account', true); });
+    if (appEntry) on(appEntry, 'click', function () { showView('application', true); });
+    if (back) on(back, 'click', function () { showView('account', true); });
     panel.querySelectorAll('[data-account-close]').forEach(function (button) {
-      button.addEventListener('click', function () {
+      on(button, 'click', function () {
         if (window.MicroNavigation) window.MicroNavigation.closeLayer(layer);
       });
     });
 
-    panel.addEventListener('change', function (event) {
+    on(panel, 'change', function (event) {
       var input = event.target;
       if (!input.matches || !input.matches('[data-account-setting]')) return;
       var name = input.getAttribute('data-account-setting') || '';
@@ -70,7 +75,17 @@
     scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
   }
 
-  window.MicroAccountSettings = { init: init };
+  function disconnect(root) {
+    var scope = root || document;
+    var panels = [].slice.call(scope.querySelectorAll('[data-account-settings]'));
+    if (scope.matches && scope.matches('[data-account-settings]')) panels.unshift(scope);
+    panels.forEach(function (panel) {
+      if (panel.__microAccountLifetime) panel.__microAccountLifetime.abort();
+      delete panel.__microAccountLifetime;
+      panel.removeAttribute('data-account-settings-ready');
+    });
+  }
+  window.MicroAccountSettings = { init: init, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

@@ -1,56 +1,101 @@
-/* =========================================================
-   Micro UI — القيم المشتركة (shared/tokens.css)
-   المصدر: docs/SHARED-SPEC.md + docs/foundations/Micro-UI-Foundations-V1.md
-   الحالة: قيم عمل مشتقة من الأسس المعتمدة (V1.1) — أي تعديل بصري جديد يبقى مقترحًا.
-   النطاق: دفعة B01 (الأزرار) وما سبق اعتماده من قيم مشتركة فقط.
-   ملاحظة RTL: كل قيم المكوّنات تستخدم الخصائص المنطقية (inline/block) فلا تتأثر باتجاه الصفحة.
-   ========================================================= */
+/* Micro UI foundations — three intentional layers:
+   1. brand/data primitives; 2. adaptive semantic roles; 3. component aliases.
+   CSS is the runtime source of truth. The host owns data-theme and persistence. */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --micro-color-brand-primary: #164D59;
+  --micro-color-brand-pressed: #103E48;
+  --micro-color-brand-gradient: #236675;
+  --micro-color-brand-support: #507F8B;
+  --micro-color-brand-accent: #D97757;
+  --micro-color-white: #FFFFFF;
+  --micro-color-ink: #172D32;
+  --micro-color-ink-soft: #50656A;
+  --micro-color-canvas: #F7F8F4;
+  --micro-color-surface: #FFFFFF;
+  --micro-color-raised: #FFFFFF;
+  --micro-color-selected: #DFEEE6;
+  --micro-color-disabled: #E4EAE8;
+  --micro-color-border: #71868B;
+  --micro-color-divider: #DCE5E2;
+  --micro-color-focus: #164D59;
+  --micro-color-danger: #AD303B;
+  --micro-color-success: #176647;
+  --micro-color-warning: #815400;
+  --micro-color-info: #265E91;
 
-:root {
-  /* ---- الهوية البترولية ---- */
-  --micro-brand-primary: #164D59;        /* الأزرار الرئيسية، الروابط المهمة، التحديد */
-  --micro-brand-pressed: #103E48;        /* الضغط على الإجراء الرئيسي */
-  --micro-brand-gradient-start: #236675; /* طرف تدرج الزر الأساسي، والنهاية primary */
-  --micro-brand-support: #507F8B;        /* لون مساعد للتدرجات والزخرفة فقط — لا نص أبيض صغير فوقه */
-  --micro-brand-accent: #D97757;         /* لمسة التراكوتا: عدّاد التصفية وشارات محدودة، بنص داكن */
+  /* Semantic roles */
+  --ui-canvas: var(--micro-color-canvas);
+  --ui-surface: var(--micro-color-surface);
+  --ui-surface-raised: var(--micro-color-raised);
+  --ui-surface-selected: var(--micro-color-selected);
+  --ui-surface-disabled: var(--micro-color-disabled);
+  --ui-text: var(--micro-color-ink);
+  --ui-text-secondary: var(--micro-color-ink-soft);
+  --ui-text-muted: #5F7378;
+  --ui-text-inverse: var(--micro-color-white);
+  --ui-border-control: var(--micro-color-border);
+  --ui-border-divider: var(--micro-color-divider);
+  --ui-focus: var(--micro-color-focus);
+  --ui-action: var(--micro-color-brand-primary);
+  --ui-action-ink: var(--micro-color-brand-primary);
+  --ui-action-outline: transparent;
+  --ui-action-pressed: var(--micro-color-brand-pressed);
+  --ui-danger: var(--micro-color-danger);
+  --ui-success: var(--micro-color-success);
+  --ui-warning: var(--micro-color-warning);
+  --ui-info: var(--micro-color-info);
+  --ui-overlay-shadow: 0 12px 32px rgb(23 45 50 / 16%);
 
-  /* ---- الأسطح ---- */
-  --micro-surface-page: #F7F8F4;      /* الخلفية العامة */
-  --micro-surface-base: #FFFFFF;      /* أرضية صافية: حقول ونوافذ وأزرار ثانوية */
-  --micro-surface-selected: #DFEEE6;  /* اختيار خفيف أو احتواء هادئ */
-  --micro-summary-gradient-start: #B8D9DC; /* طرف الملخص الفاتح المعتمد في الأسس §3؛ ليس لون هوية جديدًا */
-  --micro-surface-disabled: #E4EAE8;  /* خلفية العنصر المعطل */
-
-  /* ---- ملخص After الفاتح (تركيب PROPOSED) ---- */
+  /* Component aliases retained for current source consumers */
+  --micro-brand-primary: var(--ui-action);
+  --micro-brand-ink: var(--ui-action-ink);
+  --micro-action-outline: var(--ui-action-outline);
+  --micro-brand-pressed: var(--ui-action-pressed);
+  --micro-brand-gradient-start: var(--micro-color-brand-gradient);
+  --micro-brand-support: var(--micro-color-brand-support);
+  --micro-brand-accent: var(--micro-color-brand-accent);
+  --micro-surface-page: var(--ui-canvas);
+  --micro-surface-base: var(--ui-surface);
+  --micro-surface-selected: var(--ui-surface-selected);
+  --micro-surface-disabled: var(--ui-surface-disabled);
+  --micro-surface-light: 0.12;
+  --micro-summary-gradient-start: #B8D9DC;
   --micro-summary-light-start: #B8D9DC;
   --micro-summary-light-mid: #DFEEE6;
   --micro-summary-light-end: #F7F8F4;
+  --micro-text-primary: var(--ui-text);
+  --micro-text-secondary: var(--ui-text-secondary);
+  --micro-text-hint: var(--ui-text-muted);
+  --micro-text-inverse: var(--ui-text-inverse);
+  --micro-text-disabled: #53676B;
+  --micro-border-control: var(--ui-border-control);
+  --micro-border-divider: var(--ui-border-divider);
+  --micro-focus-ring: var(--ui-focus);
+  --micro-focus-ring-width: 2px;
+  --micro-focus-gap: 2px;
+  --micro-data-boundary: var(--micro-text-secondary);
+  --micro-data-line: var(--micro-brand-ink);
 
-  /* ---- النصوص ---- */
-  --micro-text-primary: #172D32;   /* العناوين والنص والمبالغ الأساسية */
-  --micro-text-secondary: #50656A; /* نص ثانوي يبقى مقروءًا */
-  --micro-text-hint: #5F7378;      /* تلميحات على الأبيض أو خلفية الصفحة */
-  --micro-text-inverse: #FFFFFF;   /* نص فوق البترولي أو تدرج الزر */
-  --micro-text-disabled: #53676B;  /* نص العنصر المعطل */
-
-  /* ---- الحدود والتركيز ---- */
-  --micro-border-control: #71868B; /* حد التحكم عندما يلزم للتعرف عليه */
-  --micro-border-divider: #DCE5E2; /* فاصل خفيف تكميلي */
-  --micro-focus-ring: #164D59;     /* حلقة تركيز واضحة */
-  --micro-focus-ring-width: 2px;   /* سماكة حلقة التركيز */
-  --micro-focus-gap: 2px;          /* الفاصل الأبيض بين الزر والحلقة */
-
-  /* ---- ألوان المعنى (ألوان البيانات منفصلة عن هذه الدفعة) ---- */
-  --micro-success: #176647;        --micro-success-surface: #E5F3EA;
-  --micro-danger: #AD303B;         --micro-danger-surface: #FBEAEC;
-  --micro-warning: #815400;        --micro-warning-surface: #FFF1CD;
-  --micro-info: #265E91;           --micro-info-surface: #E9F1FA;
-
-  /* مقترح بانتظار المراجعة: لون ضغط الإجراء المتلف (أغمق درجة من #AD303B).
-     لم يُحدد في الأسس؛ يظهر في review.md ضمن القرارات المطلوبة. */
+  /* Meaning and data remain distinct from brand, even where a value matches. */
+  --micro-success: var(--ui-success);
+  --micro-success-surface: #E5F3EA;
+  --micro-danger: var(--ui-danger);
+  --micro-danger-action: var(--micro-color-danger);
+  --micro-danger-surface: #FBEAEC;
   --micro-danger-pressed: #8F2730;
+  --micro-warning: var(--ui-warning);
+  --micro-warning-surface: #FFF1CD;
+  --micro-info: var(--ui-info);
+  --micro-info-surface: #E9F1FA;
+  --micro-data-a: #164D59;
+  --micro-data-b: #D97757;
+  --micro-data-c: #B6A3D6;
+  --micro-data-d: #496D92;
+  --micro-data-e: #B3BD7B;
 
-  /* ---- سلم المسافات ---- */
+  /* Geometry B — compact content, never compact touch targets. */
   --micro-space-1: 4px;
   --micro-space-2: 8px;
   --micro-space-3: 12px;
@@ -59,97 +104,150 @@
   --micro-space-6: 24px;
   --micro-space-8: 32px;
   --micro-space-10: 40px;
+  --micro-touch-min: 48px;
+  --micro-button-min-height: 48px;
+  --micro-button-padding-inline: 16px;
+  --micro-button-padding-block: 10px;
+  --micro-button-gap: 8px;
+  --micro-icon-in-button: 20px;
+  --micro-icon-button-size: 48px;
+  --micro-icon-button-icon: 24px;
+  --micro-counter-height: 20px;
+  --micro-counter-label-size: 13px;
+  --micro-counter-label-weight: 500;
+  --micro-radius-capsule: 999px;
+  --micro-radius-button-long: 12px;
+  --micro-radius-field: 12px;
+  --micro-radius-surface: 16px;
+  --micro-radius-overlay: 20px;
+  --micro-radius-hero: 24px;
+  --micro-radius-chip: 8px;
+  --micro-radius-choice: 8px;
+  --micro-radius-circle: 50%;
 
-  /* ---- مقاسات التحكم ---- */
-  --micro-touch-min: 48px;               /* هدف لمس مستقل: 48 × 48px كقاعدة مشروع */
-  --micro-button-min-height: 48px;       /* ارتفاع أدنى للزر — يتمدد مع النص ولا يقصه */
-  --micro-button-padding-inline: 20px;   /* الحشو الأفقي للزر */
-  --micro-button-padding-block: 12px;    /* الحشو العمودي للزر */
-  --micro-button-gap: 8px;               /* الفراغ الافتراضي بين الأيقونة والنص (8–12 حسب السياق) */
-  --micro-icon-in-button: 20px;          /* أيقونة داخل زر بنص */
-  --micro-icon-button-size: 48px;        /* زر الأيقونة الدائري */
-  --micro-icon-button-icon: 24px;        /* الأيقونة داخل زر الأيقونة */
-  --micro-counter-height: 20px;          /* عدّاد التصفية داخل الزر */
-  --micro-counter-label-size: 13px;      /* خط العدّاد — مشترك بين أمثلة المكوّن */
-  --micro-counter-label-weight: 500;     /* وزن خط العدّاد */
-
-  /* ---- الانحناءات ---- */
-  --micro-radius-capsule: 999px; /* كبسولة للزر القصير */
-  /* انحناء متعدد الأسطر للزر: يبقى القصير كبسولة ويُحد الطويل عند 24px.
-     نفس انحناء السطح 24px من سلم الأسس؛ على الزر القصير (48px) يعطي
-     الكبسولة نفسها بصريًا، وعند التفاف النص يبقى الشكل متزنًا بدل
-     البيضوي الضخم. لا تصغير خط أو قص نص أو ارتفاع ثابت. */
-  --micro-radius-button-long: 24px;
-  --micro-radius-field: 16px;    /* للحقل — قيمة مشتركة لدفعة الإدخال */
-  --micro-radius-surface: 24px;  /* لسطح مستقل — قيمة مشتركة */
-  --micro-radius-circle: 50%;    /* زر الأيقونة */
-
-  /* ---- الخط والأرقام ----
-     IBM Plex Sans أولًا ليأخذ الأرقام 0–9 واللاتيني منها،
-     والعربية تسقط تلقائيًا إلى IBM Plex Sans Arabic. لا تباعد أحرف مصطنع. */
+  /* IBM Plex: Latin/numerals and Arabic fallbacks remain authoritative. */
   --micro-font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-  --micro-button-label-size: 16px;
-  --micro-button-label-line: 1.5;        /* نسبة لا بكسل: 16×1.5 = 24px نفس القيمة المعتمدة،
-                                            وتتمدد مع النص عند تكبيره 200% بدل تجاوز السطر */
-  --micro-button-label-weight: 500;
-
-  /* ---- طبقات النص المشتركة (تكليف التوسعة — ارتفاعات أسطر نسب ليتمدد الخط) ---- */
-  --micro-body-size: 16px;            /* نص 16/26 */
+  --micro-body-size: 16px;
   --micro-body-line: 1.625;
-  --micro-label-size: 14px;           /* تسمية ومساعدة 14/22 */
+  --micro-label-size: 14px;
   --micro-label-line: 1.571;
-  --micro-secondary-size: 13px;       /* ثانوي قصير 13/20 */
+  --micro-secondary-size: 13px;
   --micro-secondary-line: 1.538;
-
-  /* ---- حقول (B02) ---- */
-  --micro-field-min-height: 52px;       /* الحقل يبدأ 52 قابلًا للتمدد */
-  --micro-radius-chip: 12px;            /* مقترح: شريحة الوحدة — قيمة انحناء جديدة واحدة موسومة */
-  --micro-quantity-min-width: 64px;     /* مقترح: أدنى عرض لقيمة الكمية لمنع قفز العرض */
-
-  /* ---- اختيار (B03) ---- */
-  --micro-radius-choice: 8px;           /* مقترح: صندوق مربع الاختيار — قيمة جديدة واحدة موسومة */
-  --micro-choice-size: 24px;            /* مربع الاختيار/الراديو */
-  --micro-switch-track-w: 52px;         /* مسار المفتاح */
+  --micro-heading-size: 20px;
+  --micro-heading-line: 1.4;
+  --micro-heading-large-size: 24px;
+  --micro-heading-large-line: 1.333;
+  --micro-amount-size: 36px;
+  --micro-amount-line: 1.2222;
+  --micro-amount2-size: 22px;
+  --micro-amount2-line: 1.4545;
+  --micro-button-label-size: 16px;
+  --micro-button-label-line: 1.5;
+  --micro-button-label-weight: 500;
+  --micro-field-min-height: 52px;
+  --micro-quantity-min-width: 64px;
+  --micro-choice-size: 24px;
+  --micro-switch-track-w: 52px;
   --micro-switch-track-h: 32px;
   --micro-switch-thumb: 24px;
+  --micro-row-min-height: 72px;
+  --micro-row-tile: 48px;
+  --micro-surface-title-size: 22px;
+  --micro-surface-title-line: 1.6364;
+  --micro-surface-amount-size: 36px;
+  --micro-surface-amount-line: 1.2222;
+  --micro-metric-hero-separator: 16px;
+  --micro-inset-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* ---- تنظيم (B04) ---- */
-  --micro-row-min-height: 72px;         /* صف السطرين — حد أدنى يتسع 48px هدف لمس + سطر ثانٍ */
-  --micro-row-tile: 48px;               /* بلاط الأيقونة/الصورة — نفس هدف اللمس */
-
-  /* ---- بيانات (B05) — ألوان البيانات المعتمدة: تعيين ثابت بالمفتاح ---- */
-  --micro-data-a: #164D59;              /* الفئة a — بترولي */
-  --micro-data-b: #D97757;              /* الفئة b — تراكوتا */
-  --micro-data-c: #B6A3D6;              /* الفئة c — بنفسجي فاتح */
-  --micro-data-d: #496D92;              /* إضافية عند الحاجة — أزرق رمادي */
-  --micro-data-e: #B3BD7B;              /* إضافية عند الحاجة — زيتوني فاتح */
-  --micro-amount-size: 36px;            /* مبلغ رئيسي 36/44 */
-  --micro-amount-line: 1.2222;
-  --micro-amount2-size: 22px;           /* مبلغ ثانوي 22/32 */
-  --micro-amount2-line: 1.4545;
-
-  /* ---- نصوص السطح البترولي S01: توكنات موحدة بدل تكرار القيم
-     R2-01: ارتفاع السطر نسبة لا بكسل — القيم الثابتة 36px/44px كانت
-     تُبقي صندوق السطر ثابتًا بينما يتضاعف الخط عند تكبير النص
-     (44px/72px) فتتداخل الأسطر ويخرج الرقم خارج السطح. النسبة
-     تعطي نفس الأرقام المعتمدة عند الحجم الأساسي وتتمدد معه. ---- */
-  --micro-surface-title-size: 22px;     /* عنوان السطح 22/36 */
-  --micro-surface-title-line: 1.6364;   /* 22 × 1.6364 ≈ 36px — نسبية (R2-01) */
-  --micro-surface-amount-size: 36px;    /* مبلغ السطح 36/44 — نفس المبلغ الرئيسي */
-  --micro-surface-amount-line: 1.2222;  /* 36 × 1.2222 ≈ 44px — نسبية (R2-01) */
-
-  /* ---- العمق ---- */
-  --micro-shadow-emphasis: 0 3px 8px rgba(22, 77, 89, 0.14); /* ظل الزر البارز — للأساسي فقط افتراضيًا */
-  --micro-shadow-overlay: 0 10px 28px rgba(23, 45, 50, 0.12); /* سطح مؤقت مرتفع — دفعات الطبقات */
-
-  /* ---- الحركة ---- */
-  --micro-motion-press: 120ms;     /* الضغط */
-  --micro-motion-selection: 180ms; /* تغيّر اللون/التحديد */
-  --micro-motion-open: 240ms;      /* فتح سطح مؤقت — دفعات الطبقات */
+  /* Motion categories; spatial movement only for purposeful transitions. */
+  --micro-motion-press: 110ms;
+  --micro-motion-focus: 120ms;
+  --micro-motion-selection: 180ms;
+  --micro-motion-enter: 240ms;
+  --micro-motion-exit: 180ms;
+  --micro-motion-carousel: 220ms;
+  --micro-motion-open: var(--micro-motion-enter);
   --micro-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --micro-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --micro-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --micro-shadow-emphasis: 0 2px 6px rgb(22 77 89 / 14%);
+  --micro-shadow-overlay: var(--ui-overlay-shadow);
+  --micro-seg-hover-surface: #EDF3EF;
+  --micro-button-primary-bg: linear-gradient(180deg, var(--micro-brand-gradient-start), var(--micro-brand-primary));
+  --micro-surface-wave-height: 0px;
+  --micro-surface-wave-opacity: 0;
+  --micro-surface-wave-pos: 50%;
+  --micro-surface-wave-scale: 1;
+}
 
-  /* ---- تدرج الزر الأساسي ----
-     #236675 → #164D59 وفق الأسس؛ عمودي ليظل ثابتًا في RTL وLTR.
-     البديل المصمت: اجعل القيمة لونًا واحدًا عند صغر المساحة. */
-  --micro-button-primary-bg: linear-gradient(180deg, var(--micro-brand-gradient-start) 0%, var(--micro-brand-primary) 100%);
+[data-theme="dark"] {
+  color-scheme: dark;
+  --micro-color-canvas: #101A1D;
+  --micro-color-surface: #17262A;
+  --micro-color-raised: #213237;
+  --micro-color-selected: #29464B;
+  --micro-color-disabled: #29383B;
+  --micro-summary-gradient-start: #29464B;
+  --micro-color-ink: #F2F5F4;
+  --micro-color-ink-soft: #B7C4C5;
+  --micro-color-border: #74AAB3;
+  --micro-color-divider: #324448;
+  --micro-color-focus: #A7D5DB;
+  --ui-action-ink: #9DD3DB;
+  --ui-action-outline: #74AAB3;
+  --ui-text-muted: #91A4A6;
+  --ui-text-disabled: #A2B0B1;
+  --micro-text-disabled: var(--ui-text-disabled);
+  --micro-surface-light: 0.08;
+  --micro-seg-hover-surface: #2A4146;
+  --micro-success: #80D0A5;
+  --micro-success-surface: #203B32;
+  --micro-danger: #FF9A9F;
+  --micro-danger-action: #8F2730;
+  --micro-danger-surface: #482B30;
+  --micro-danger-pressed: #F27B82;
+  --micro-warning: #F4CF78;
+  --micro-warning-surface: #443A25;
+  --micro-info: #9DC9F1;
+  --micro-info-surface: #263A4B;
+  --ui-overlay-shadow: 0 16px 36px rgb(0 0 0 / 38%);
+  --micro-shadow-emphasis: 0 0 0 1px #74AAB3;
+}
+
+/* Explicit system mode is adaptive, while absent host attributes remain light. */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"],
+  [data-theme="system"] {
+    color-scheme: dark;
+    --micro-color-canvas: #101A1D;
+    --micro-color-surface: #17262A;
+    --micro-color-raised: #213237;
+    --micro-color-selected: #29464B;
+    --micro-color-disabled: #29383B;
+    --micro-summary-gradient-start: #29464B;
+    --micro-color-ink: #F2F5F4;
+    --micro-color-ink-soft: #B7C4C5;
+    --micro-color-border: #74AAB3;
+    --micro-color-divider: #324448;
+    --micro-color-focus: #A7D5DB;
+    --ui-action-ink: #9DD3DB;
+    --ui-action-outline: #74AAB3;
+    --ui-text-muted: #91A4A6;
+    --ui-text-disabled: #A2B0B1;
+    --micro-text-disabled: var(--ui-text-disabled);
+    --micro-surface-light: 0.08;
+    --micro-seg-hover-surface: #2A4146;
+    --micro-success: #80D0A5;
+    --micro-success-surface: #203B32;
+    --micro-danger: #FF9A9F;
+    --micro-danger-action: #8F2730;
+    --micro-danger-surface: #482B30;
+    --micro-danger-pressed: #F27B82;
+    --micro-warning: #F4CF78;
+    --micro-warning-surface: #443A25;
+    --micro-info: #9DC9F1;
+    --micro-info-surface: #263A4B;
+    --ui-overlay-shadow: 0 16px 36px rgb(0 0 0 / 38%);
+    --micro-shadow-emphasis: 0 0 0 1px #74AAB3;
+  }
 }

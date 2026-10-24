@@ -1,0 +1,1138 @@
+{
+  "scope": "Running repository-local showcase only; Chromium Playwright; fixture/demo data",
+  "url": "http://127.0.0.1:5000/previews/ui-system-showcase/index.html",
+  "browser": "152.0.7977.64",
+  "viewports": [
+    {
+      "width": 320,
+      "height": 844,
+      "direction": "rtl"
+    },
+    {
+      "width": 360,
+      "height": 844,
+      "direction": "rtl"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "direction": "rtl"
+    },
+    {
+      "width": 430,
+      "height": 844,
+      "direction": "rtl"
+    }
+  ],
+  "passed": 84,
+  "failed": 4,
+  "checks": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "local preview route loaded",
+      "passed": true,
+      "evidence": {
+        "status": 200,
+        "url": "http://127.0.0.1:5000/previews/ui-system-showcase/index.html"
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel compact mode starts named and hides optional dots",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "active carousel card disclosure state is synchronized",
+      "passed": true,
+      "evidence": {
+        "expanded": true,
+        "detailsVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel disclosure closes on second activation",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel next button advances exactly once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL carousel ArrowLeft follows logical next",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "full carousel variant exposes working direct-dot selection",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel horizontal pointer swipe commits one logical step in RTL",
+      "passed": true,
+      "evidence": {
+        "before": 1,
+        "after": 2,
+        "slideCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "quantity field ArrowUp/Down steps only its declared increment",
+      "passed": true,
+      "evidence": {
+        "up": "15",
+        "afterDown": "10"
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password reveal keyboard toggle preserves value, selection and toggle focus",
+      "passed": true,
+      "evidence": {
+        "type": "text",
+        "focus": true,
+        "pressed": "true",
+        "value": "demo-only-secret",
+        "selection": [
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password keyboard toggle remasks on repeat",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "credential submit exposes linked field error and focuses first invalid field",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "invalid": true,
+        "linked": true,
+        "visibleError": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL tabs keep focus, selected state and one visible panel in sync",
+      "passed": true,
+      "evidence": {
+        "active": 1,
+        "focused": true,
+        "visiblePanels": 1
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal opens with focus contained, semantics and inert background",
+      "passed": true,
+      "evidence": {
+        "focusInside": true,
+        "modal": "true",
+        "role": "dialog",
+        "named": true,
+        "backgroundInert": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal Shift+Tab wraps first focus target to last",
+      "passed": true,
+      "evidence": {
+        "focusableCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "Escape closes modal and restores opener focus",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings view switch updates visible view, focus and dialog name",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "visible": true,
+        "named": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings back restores account heading focus and name",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account layer close restores original trigger",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker empty-search recovery and keyboard selection update summary",
+      "passed": true,
+      "evidence": {
+        "emptyMessage": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "roving": true,
+        "selectedSummary": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker async error preserves a visible local focus target and announces status",
+      "passed": false,
+      "evidence": {
+        "focusRetained": false,
+        "retryVisible": true,
+        "statusInsideListbox": true,
+        "hasLiveAnnouncement": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker error retry remains keyboard-activatable and emits once",
+      "passed": true,
+      "evidence": {
+        "retryEventCount": 1,
+        "retryVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "local preview route loaded",
+      "passed": true,
+      "evidence": {
+        "status": 200,
+        "url": "http://127.0.0.1:5000/previews/ui-system-showcase/index.html"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel compact mode starts named and hides optional dots",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "active carousel card disclosure state is synchronized",
+      "passed": true,
+      "evidence": {
+        "expanded": true,
+        "detailsVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel disclosure closes on second activation",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel next button advances exactly once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL carousel ArrowLeft follows logical next",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "full carousel variant exposes working direct-dot selection",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel horizontal pointer swipe commits one logical step in RTL",
+      "passed": true,
+      "evidence": {
+        "before": 1,
+        "after": 2,
+        "slideCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "quantity field ArrowUp/Down steps only its declared increment",
+      "passed": true,
+      "evidence": {
+        "up": "15",
+        "afterDown": "10"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password reveal keyboard toggle preserves value, selection and toggle focus",
+      "passed": true,
+      "evidence": {
+        "type": "text",
+        "focus": true,
+        "pressed": "true",
+        "value": "demo-only-secret",
+        "selection": [
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password keyboard toggle remasks on repeat",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "credential submit exposes linked field error and focuses first invalid field",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "invalid": true,
+        "linked": true,
+        "visibleError": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL tabs keep focus, selected state and one visible panel in sync",
+      "passed": true,
+      "evidence": {
+        "active": 1,
+        "focused": true,
+        "visiblePanels": 1
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal opens with focus contained, semantics and inert background",
+      "passed": true,
+      "evidence": {
+        "focusInside": true,
+        "modal": "true",
+        "role": "dialog",
+        "named": true,
+        "backgroundInert": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal Shift+Tab wraps first focus target to last",
+      "passed": true,
+      "evidence": {
+        "focusableCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "Escape closes modal and restores opener focus",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings view switch updates visible view, focus and dialog name",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "visible": true,
+        "named": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings back restores account heading focus and name",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account layer close restores original trigger",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker empty-search recovery and keyboard selection update summary",
+      "passed": true,
+      "evidence": {
+        "emptyMessage": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "roving": true,
+        "selectedSummary": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker async error preserves a visible local focus target and announces status",
+      "passed": false,
+      "evidence": {
+        "focusRetained": false,
+        "retryVisible": true,
+        "statusInsideListbox": true,
+        "hasLiveAnnouncement": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker error retry remains keyboard-activatable and emits once",
+      "passed": true,
+      "evidence": {
+        "retryEventCount": 1,
+        "retryVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "local preview route loaded",
+      "passed": true,
+      "evidence": {
+        "status": 200,
+        "url": "http://127.0.0.1:5000/previews/ui-system-showcase/index.html"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel compact mode starts named and hides optional dots",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "active carousel card disclosure state is synchronized",
+      "passed": true,
+      "evidence": {
+        "expanded": true,
+        "detailsVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel disclosure closes on second activation",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel next button advances exactly once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL carousel ArrowLeft follows logical next",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "full carousel variant exposes working direct-dot selection",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel horizontal pointer swipe commits one logical step in RTL",
+      "passed": true,
+      "evidence": {
+        "before": 1,
+        "after": 2,
+        "slideCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "quantity field ArrowUp/Down steps only its declared increment",
+      "passed": true,
+      "evidence": {
+        "up": "15",
+        "afterDown": "10"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password reveal keyboard toggle preserves value, selection and toggle focus",
+      "passed": true,
+      "evidence": {
+        "type": "text",
+        "focus": true,
+        "pressed": "true",
+        "value": "demo-only-secret",
+        "selection": [
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password keyboard toggle remasks on repeat",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "credential submit exposes linked field error and focuses first invalid field",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "invalid": true,
+        "linked": true,
+        "visibleError": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL tabs keep focus, selected state and one visible panel in sync",
+      "passed": true,
+      "evidence": {
+        "active": 1,
+        "focused": true,
+        "visiblePanels": 1
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal opens with focus contained, semantics and inert background",
+      "passed": true,
+      "evidence": {
+        "focusInside": true,
+        "modal": "true",
+        "role": "dialog",
+        "named": true,
+        "backgroundInert": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal Shift+Tab wraps first focus target to last",
+      "passed": true,
+      "evidence": {
+        "focusableCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "Escape closes modal and restores opener focus",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings view switch updates visible view, focus and dialog name",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "visible": true,
+        "named": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings back restores account heading focus and name",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account layer close restores original trigger",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker empty-search recovery and keyboard selection update summary",
+      "passed": true,
+      "evidence": {
+        "emptyMessage": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "roving": true,
+        "selectedSummary": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker async error preserves a visible local focus target and announces status",
+      "passed": false,
+      "evidence": {
+        "focusRetained": false,
+        "retryVisible": true,
+        "statusInsideListbox": true,
+        "hasLiveAnnouncement": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker error retry remains keyboard-activatable and emits once",
+      "passed": true,
+      "evidence": {
+        "retryEventCount": 1,
+        "retryVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "local preview route loaded",
+      "passed": true,
+      "evidence": {
+        "status": 200,
+        "url": "http://127.0.0.1:5000/previews/ui-system-showcase/index.html"
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel compact mode starts named and hides optional dots",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "active carousel card disclosure state is synchronized",
+      "passed": true,
+      "evidence": {
+        "expanded": true,
+        "detailsVisible": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel disclosure closes on second activation",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel next button advances exactly once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL carousel ArrowLeft follows logical next",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "full carousel variant exposes working direct-dot selection",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "carousel horizontal pointer swipe commits one logical step in RTL",
+      "passed": true,
+      "evidence": {
+        "before": 1,
+        "after": 2,
+        "slideCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "quantity field ArrowUp/Down steps only its declared increment",
+      "passed": true,
+      "evidence": {
+        "up": "15",
+        "afterDown": "10"
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password reveal keyboard toggle preserves value, selection and toggle focus",
+      "passed": true,
+      "evidence": {
+        "type": "text",
+        "focus": true,
+        "pressed": "true",
+        "value": "demo-only-secret",
+        "selection": [
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "password keyboard toggle remasks on repeat",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "credential submit exposes linked field error and focuses first invalid field",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "invalid": true,
+        "linked": true,
+        "visibleError": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "RTL tabs keep focus, selected state and one visible panel in sync",
+      "passed": true,
+      "evidence": {
+        "active": 1,
+        "focused": true,
+        "visiblePanels": 1
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal opens with focus contained, semantics and inert background",
+      "passed": true,
+      "evidence": {
+        "focusInside": true,
+        "modal": "true",
+        "role": "dialog",
+        "named": true,
+        "backgroundInert": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "modal Shift+Tab wraps first focus target to last",
+      "passed": true,
+      "evidence": {
+        "focusableCount": 3
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "Escape closes modal and restores opener focus",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings view switch updates visible view, focus and dialog name",
+      "passed": true,
+      "evidence": {
+        "focused": true,
+        "visible": true,
+        "named": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account settings back restores account heading focus and name",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "account layer close restores original trigger",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker empty-search recovery and keyboard selection update summary",
+      "passed": true,
+      "evidence": {
+        "emptyMessage": "لا نتائج مطابقة — جرّب اسمًا آخر",
+        "roving": true,
+        "selectedSummary": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker async error preserves a visible local focus target and announces status",
+      "passed": false,
+      "evidence": {
+        "focusRetained": false,
+        "retryVisible": true,
+        "statusInsideListbox": true,
+        "hasLiveAnnouncement": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 430,
+        "height": 844,
+        "direction": "rtl"
+      },
+      "name": "picker error retry remains keyboard-activatable and emits once",
+      "passed": true,
+      "evidence": {
+        "retryEventCount": 1,
+        "retryVisible": true
+      }
+    }
+  ],
+  "runtime_errors": [],
+  "runtime_error_count": 0,
+  "limitations": [
+    "No real users, analytics, screen readers, real devices, non-Chromium engines, or consumer-product flows were tested.",
+    "Pointer swipe uses Chromium mouse pointer events; native touch hardware behavior is not proven.",
+    "Results apply only to the observed build and the targeted interactions listed here."
+  ]
+}

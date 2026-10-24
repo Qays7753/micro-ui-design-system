@@ -46,6 +46,11 @@
 
   var msgUid = 0; /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
 
+  function on(field, element, type, listener, capture) {
+    element.addEventListener(type, listener, {
+      capture: !!capture, signal: field.__microFieldLifetime.signal
+    });
+  }
   function fieldOf(el) { return el.closest('[data-micro-field]'); }
 
   /* UI-05/UI-06: عقد مزامنة القيم المعينة برمجيًا — دوال التحديث
@@ -74,7 +79,7 @@
        later click coordinates. Inspect the original touch pointer position:
        a tap outside the actual 48px button focuses the shell, never clears
        or steps a value. Keyboard/synthetic activation remains unchanged. */
-    control.addEventListener('pointerdown', function (e) {
+    on(f, control, 'pointerdown', function (e) {
       outsideTouchButton = null;
       if (e.pointerType !== 'touch') return;
       var button = e.target.closest('button');
@@ -86,7 +91,7 @@
       e.preventDefault();
       if (!input.disabled) input.focus({ preventScroll: true });
     }, true);
-    control.addEventListener('click', function (e) {
+    on(f, control, 'click', function (e) {
       var outside = outsideTouchButton;
       outsideTouchButton = null;
       if (!outside || e.detail === 0 || e.target.closest('button') !== outside) return;
@@ -94,7 +99,7 @@
       e.stopImmediatePropagation();
       if (!input.disabled) input.focus({ preventScroll: true });
     }, true);
-    control.addEventListener('click', function (e) {
+    on(f, control, 'click', function (e) {
       if (e.defaultPrevented || input.disabled) return;
       if (e.target.closest('input, textarea, select, button, a[href], [tabindex], [role="button"]')) return;
       input.focus();
@@ -110,7 +115,7 @@
     function update() {
       count.textContent = input.value.length + '/' + max;
     }
-    input.addEventListener('input', update);
+    on(f, input, 'input', update);
     registerSync(f, update); /* UI-05: نفس دالة الحدث للمزامنة البرمجية */
     update();
   }
@@ -124,7 +129,7 @@
     function sync() {
       clear.classList.toggle('is-visible', input.value !== '' && !locked());
     }
-    clear.addEventListener('click', function () {
+    on(f, clear, 'click', function () {
       if (locked()) return; /* حراسة وقت النقر — الحالة قد تتغير بعد الربط */
       input.value = '';
       sync();
@@ -132,7 +137,7 @@
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('micro-field:cleared', { bubbles: true }));
     });
-    input.addEventListener('input', sync);
+    on(f, input, 'input', sync);
     registerSync(f, sync); /* UI-06: نفس دالة الحدث للمزامنة البرمجية —
                               دالة locked تُحترم فيها أيضا (readonly/disabled بلا مسح) */
     sync();
@@ -235,7 +240,7 @@
     }
     /* حراسة الالتقاط تمنع أيضًا المستمعات الخارجية والتفعيل الأصلي
        (Enter/Space) عندما يكون زر الخطوة غير متاح. */
-    f.addEventListener('click', function (e) {
+    on(f, f, 'click', function (e) {
       var btn = stepButton(e);
       if (!btn) return;
       syncButtons();
@@ -245,12 +250,12 @@
       }
     }, true);
     /* الاستماع على الغلاف نفسه: قد يكون هناك حايتا خطوة (إنقاص/زيادة) */
-    f.addEventListener('click', function (e) {
+    on(f, f, 'click', function (e) {
       var btn = stepButton(e);
       if (!btn || input.disabled || input.readOnly || btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
       applyStep(btn);
     });
-    input.addEventListener('keydown', function (e) {
+    on(f, input, 'keydown', function (e) {
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
       if (input.disabled || input.readOnly) return;
       var btn = buttons.find(function (state) {
@@ -265,10 +270,11 @@
       e.preventDefault();
       applyStep(btn.el);
     });
-    input.addEventListener('input', syncButtons);
-    input.addEventListener('change', syncButtons);
+    on(f, input, 'input', syncButtons);
+    on(f, input, 'change', syncButtons);
     registerSync(f, syncButtons);
-    new MutationObserver(syncButtons).observe(f, {
+    f.__microFieldObserver = new MutationObserver(syncButtons);
+    f.__microFieldObserver.observe(f, {
       subtree: true, attributes: true,
       attributeFilter: ['disabled', 'readonly', 'min', 'max', 'step']
     });
@@ -303,8 +309,9 @@
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
     fields.forEach(function (f) {
-      if (f.dataset.microFieldBound) return;
+      if (f.dataset.microFieldBound && f.__microFieldLifetime && !f.__microFieldLifetime.signal.aborted) return;
       f.dataset.microFieldBound = '1';
+      f.__microFieldLifetime = new AbortController();
       bindControlFocus(f);
       bindCount(f);
       bindClear(f);
@@ -328,7 +335,26 @@
 
   /* واجهة عامة: init تهيئة يدوية للمحتوى المضاف لاحقًا؛
      sync مزامنة العدّاد/المسح بعد تعيين القيم برمجيًا. */
-  window.MicroFields = { init: init, sync: sync };
+  function disconnect(root) {
+    var scope = root || document;
+    var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
+    if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
+    fields.forEach(function (field) {
+      if (field.__microFieldLifetime) field.__microFieldLifetime.abort();
+      if (field.__microFieldObserver) field.__microFieldObserver.disconnect();
+      delete field.__microFieldLifetime;
+      delete field.__microFieldObserver;
+      delete field.__microFieldSyncs;
+      delete field.dataset.microFieldBound;
+      field.querySelectorAll('[data-micro-step-aria-origin]').forEach(function (button) {
+        var original = button.getAttribute('data-micro-step-aria-origin');
+        if (original === 'unset') button.removeAttribute('aria-disabled');
+        else button.setAttribute('aria-disabled', original);
+        button.removeAttribute('data-micro-step-aria-origin');
+      });
+    });
+  }
+  window.MicroFields = { init: init, sync: sync, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

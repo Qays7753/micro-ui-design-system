@@ -36,6 +36,7 @@
   /* أزرار رُكّبت لها حراسة التفعيل مرة واحدة؛ المستمعون يفحصون
      حالة aria-busy لحظة الحدث فتصلح لكل دورات التحميل المتكررة. */
   var guarded = new WeakSet();
+  var guardControllers = new WeakMap();
 
   /* حراسة تفعيل أثناء التحميل — جزء من عقد المكوّن وليست من اللوحة:
      pointer-events:none يمنع المؤشر فقط؛ أما Enter/Space بلوحة المفاتيح
@@ -45,16 +46,18 @@
   function ensureActivationGuard(btn) {
     if (guarded.has(btn)) return;
     guarded.add(btn);
+    var controller = new AbortController();
+    guardControllers.set(btn, controller);
     function busy() { return btn.getAttribute('aria-busy') === 'true'; }
     btn.addEventListener('click', function (e) {
       if (busy()) { e.preventDefault(); e.stopImmediatePropagation(); }
-    }, true);
+    }, { capture: true, signal: controller.signal });
     btn.addEventListener('keydown', function (e) {
       if (busy() && (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar')) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
-    }, true);
+    }, { capture: true, signal: controller.signal });
   }
 
   /* زر نصي بلا أيقونة: يُغلّف النص الظاهر في span.m-btn__label كي يمكن
@@ -177,5 +180,19 @@
   }
 
   /* واجهة عامة للاستهلاك المباشر ولفحص العقد خارج لوحة المعاينة */
-  window.MicroButtons = { setLoading: setLoading };
+  window.MicroButtons = {
+    setLoading: setLoading,
+    disconnect: function (root) {
+      var scope = root || document;
+      var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
+      if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
+      buttons.forEach(function (button) {
+        setLoading(button, false);
+        var controller = guardControllers.get(button);
+        if (controller) controller.abort();
+        guardControllers.delete(button);
+        guarded.delete(button);
+      });
+    }
+  };
 })();

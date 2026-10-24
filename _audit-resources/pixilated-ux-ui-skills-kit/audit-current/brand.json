@@ -1,0 +1,257 @@
+{
+  "name": "Micro UI (repository brand; audit covers this local UI system only)",
+  "source": [
+    "DESIGN.md:17-31 (identity constraints and local source-of-truth boundary)",
+    "assets/brand/micro-logo/README.md:1-25 (owner-approved v1 brand asset and explicit uninstalled-in-UI status)",
+    "assets/brand/micro-logo/v1/README-AR.md:27-45,62-66 (logo palette, geometry, clear space, and digital size guidance)",
+    "assets/SOURCES.md:38-40 (approved logo asset provenance)",
+    "shared/tokens.css:9-51 (color and semantic tokens)",
+    "shared/tokens.css:87-94 (font family and weights)",
+    "shared/tokens.css:141-154 (surface depth and motion)",
+    "docs/UI-VISUAL-SYSTEM.md:6-27 (visual direction and icon/font choices)",
+    "assets/fonts/fonts.css:10-60 (locally bundled IBM Plex files)",
+    "assets/icons/*.svg (local HugeIcons Stroke Rounded assets)"
+  ],
+  "profile_limits": {
+    "status": "PARTLY DEFINED; source-derived audit profile, not owner-approved brand guidelines",
+    "role_mapping": "The skill's primary/secondary/tertiary are measured-area roles, not source token names. Primary is the dominant page/surface field; secondary is supporting petrol ink/surface; tertiary is limited terracotta emphasis. The source token --micro-brand-primary remains petrol (#164D59).",
+    "derived_fields": [
+      "70/20/10 audit-role mapping and share targets",
+      "secondary and tertiary area roles",
+      "voice pillars and tone targets",
+      "icon grid, live area, corner radius, and permitted-size summary",
+      "imagery direction and distinctive asset absence",
+      "logo minimum and clear-space policy (not specified by the repository)"
+    ],
+    "not_inferred": [
+      "No photo/illustration campaign or brand imagery guidelines are specified.",
+      "No separate future consumer-product UI or user requirements are inferred."
+    ]
+  },
+  "colors": {
+    "primary": {
+      "hex": "#F7F8F4",
+      "name": "Page ground (audit role)",
+      "role": "derived dominant field: page canvas and large light surfaces",
+      "share": 70,
+      "derived": true,
+      "source_token": "--micro-surface-page"
+    },
+    "secondary": {
+      "hex": "#164D59",
+      "name": "Petrol (source brand primary)",
+      "role": "derived supporting role: action ink and high-emphasis surfaces",
+      "share": 20,
+      "derived": true,
+      "source_token": "--micro-brand-primary"
+    },
+    "tertiary": {
+      "hex": "#D97757",
+      "name": "Terracotta",
+      "role": "derived limited accent role: selected emphasis and sparse decorative marker; never runtime warning",
+      "share": 10,
+      "derived": true,
+      "source_token": "--micro-brand-accent"
+    },
+    "extended": [
+      {
+        "hex": "#236675",
+        "name": "Petrol gradient start",
+        "role": "primary-action gradient endpoint",
+        "source_token": "--micro-brand-gradient-start"
+      },
+      {
+        "hex": "#103E48",
+        "name": "Pressed petrol",
+        "role": "pressed primary-action state",
+        "source_token": "--micro-brand-pressed"
+      },
+      {
+        "hex": "#507F8B",
+        "name": "Support petrol",
+        "role": "supporting gradient/decorative color; not small white-text background",
+        "source_token": "--micro-brand-support"
+      },
+      {
+        "hex": "#DFEEE6",
+        "name": "Selected surface",
+        "role": "quiet selected/contained surface",
+        "source_token": "--micro-surface-selected"
+      },
+      {
+        "hex": "#B8D9DC",
+        "name": "Summary aqua",
+        "role": "summary gradient start",
+        "source_token": "--micro-summary-gradient-start"
+      },
+      {
+        "hex": "#B6A3D6",
+        "name": "Data purple",
+        "role": "categorical data series",
+        "source_token": "--micro-data-c"
+      },
+      {
+        "hex": "#496D92",
+        "name": "Data blue-grey",
+        "role": "categorical data series",
+        "source_token": "--micro-data-d"
+      },
+      {
+        "hex": "#B3BD7B",
+        "name": "Data olive",
+        "role": "categorical data series",
+        "source_token": "--micro-data-e"
+      }
+    ],
+    "neutrals": [
+      {
+        "hex": "#FFFFFF",
+        "counts_as": "primary",
+        "source_token": "--micro-surface-base"
+      },
+      {
+        "hex": "#E4EAE8",
+        "counts_as": "primary",
+        "source_token": "--micro-surface-disabled"
+      },
+      {
+        "hex": "#172D32",
+        "counts_as": "secondary",
+        "source_token": "--micro-text-primary"
+      },
+      {
+        "hex": "#50656A",
+        "counts_as": "secondary",
+        "source_token": "--micro-text-secondary"
+      },
+      {
+        "hex": "#5F7378",
+        "counts_as": "secondary",
+        "source_token": "--micro-text-hint"
+      },
+      {
+        "hex": "#DCE5E2",
+        "counts_as": "primary",
+        "source_token": "--micro-border-divider"
+      }
+    ],
+    "semantic": {
+      "error": "#AD303B",
+      "success": "#176647",
+      "warning": "#815400",
+      "info": "#265E91"
+    },
+    "semantic_surfaces": {
+      "error": "#FBEAEC",
+      "success": "#E5F3EA",
+      "warning": "#FFF1CD",
+      "info": "#E9F1FA"
+    },
+    "tolerance": 10
+  },
+  "type": {
+    "display": {
+      "family": "IBM Plex Sans",
+      "weights": [400, 500, 600],
+      "source": "First family in the canonical shared CSS stack; Arabic glyphs use the loaded IBM Plex Sans Arabic fallback.",
+      "derived": true
+    },
+    "body": {
+      "family": "IBM Plex Sans",
+      "weights": [400, 500, 600],
+      "source": "First family in --micro-font-family; Arabic fallback is IBM Plex Sans Arabic as declared in assets/fonts/fonts.css.",
+      "derived": true
+    },
+    "mono": {
+      "family": null,
+      "use": "IBM Plex Sans with tabular-nums for numeric comparison",
+      "source": "shared/tokens.css:87-94 and docs/UI-VISUAL-SYSTEM.md:19-21"
+    },
+    "arabic": {
+      "family": "IBM Plex Sans Arabic",
+      "weights": [400, 500, 600],
+      "source": "Local assets/fonts/fonts.css"
+    },
+    "latin_and_digits": {
+      "family": "IBM Plex Sans",
+      "weights": [400, 500, 600],
+      "source": "Local assets/fonts/fonts.css and shared/tokens.css:87-94"
+    },
+    "scale": [11, 12, 13, 14, 15, 16, 18, 19, 20, 22, 23, 26, 27, 28, 32, 33, 36, 38, 40, 42, 43, 46, 48, 72],
+    "derived": true,
+    "scale_note": "Core roles from docs/UI-VISUAL-SYSTEM.md:19-22 plus sizes observed in implemented component and preview contexts; this audit-tool allowlist is not a proposal that every size become a universal typography token. Core text roles remain 13/14/16/18/22px, with a 36px primary numeric reading."
+  },
+  "icons": {
+    "style": "outline",
+    "grid": 24,
+    "live_area": 20,
+    "stroke": 1.5,
+    "linecap": "round",
+    "linejoin": "round",
+    "corner_radius": 2,
+    "fill": "none",
+    "color": "currentColor",
+    "sizes": [14, 16, 18, 20, 22, 24],
+    "metaphors": "Functional interface metaphors; no repository-defined proprietary icon metaphor set.",
+    "base_set": "HugeIcons Stroke Rounded, with locally vendored SVG assets",
+    "source": "docs/UI-VISUAL-SYSTEM.md:25; assets/icons/*.svg",
+    "derived": true,
+    "limits": "The icon auditor's one-stroke ideal is a measurement profile, not a claim that every status mark, check, chart glyph, or compact icon uses identical geometry."
+  },
+  "radius": {
+    "control": 16,
+    "card": 24,
+    "pill": 999,
+    "source": "shared/tokens.css:76-85 and docs/UI-VISUAL-SYSTEM.md:24"
+  },
+  "voice": {
+    "pillars": [
+      "Derived: quiet and operational",
+      "Derived: clear and content-first",
+      "Derived: exact about values and states"
+    ],
+    "nng": {
+      "humor": "serious",
+      "formality": "neutral",
+      "respect": "respectful",
+      "enthusiasm": "matter-of-fact"
+    },
+    "say": ["واضح", "قيمة", "حالة", "إجراء"],
+    "avoid": ["unsubstantiated product promises", "decorative or ambiguous status wording"],
+    "examples": {
+      "good": "Example text should identify the value, state, or available action plainly.",
+      "bad": "Claims about a real product journey, saved account, or user result not supported by this UI-kit repository."
+    },
+    "derived": true,
+    "limits": "The repository defines a visual system, not owner-approved brand voice guidelines. UI copy in previews is fixture/demo content and is not treated as verified brand-channel copy."
+  },
+  "imagery": {
+    "kind": "No brand photography direction is defined; local UI examples use CSS/SVG surface motifs.",
+    "light": "Not specified.",
+    "palette": "Use repository surface and semantic tokens only where an illustration needs color.",
+    "treatment": "No general image treatment contract identified.",
+    "avoid": "Invented proprietary photography, logo, mascot, or future product imagery.",
+    "derived": true
+  },
+  "motion": {
+    "personality": "calm and functional",
+    "easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "durations": [120, 180, 240],
+    "source": "shared/tokens.css:145-149"
+  },
+  "logo": {
+    "status": "Owner-approved brand asset exists under assets/brand/micro-logo/v1; repository documentation says it has not yet been installed into UI screens.",
+    "source": "assets/brand/micro-logo/v1/source/micro-brand-master.svg (canonical editable source); derived export assets in assets/brand/micro-logo/v1/exports/svg/",
+    "min_px": 240,
+    "min_px_scope": "Full lockup width in CSS px. Below that, the approved guidance says to use the symbol alone; physically test its context before setting a permanent minimum.",
+    "clear_space": "0.3125 × symbol width between symbol and wordmark; 40-unit outer margins in the approved source composition. See v1/README-AR.md:39-45.",
+    "placements": [],
+    "placement_note": "No UI placement contract is specified. Any preview/showcase placement is an owner decision.",
+    "derived": false
+  },
+  "distinctive_assets": [
+    "Approved four-part geometric Micro symbol (two petrol segments, terracotta and blue-petrol segments) — assets/brand/micro-logo/v1/source/micro-brand-master.svg",
+    "Custom outlined Arabic and English Micro lockups drawn as editable vector paths, not font text — assets/brand/micro-logo/v1/README-AR.md:7-14"
+  ],
+  "deviations": []
+}

@@ -161,6 +161,12 @@
     };
   }
 
+  function onLocal(carousel, element, type, handler) {
+    var st = stateOf.get(carousel);
+    if (!st.controller) st.controller = new AbortController();
+    element.addEventListener(type, handler, { signal: st.controller.signal });
+  }
+
   function directionOf(carousel) {
     return getComputedStyle(carousel).direction === 'rtl' ? 'rtl' : 'ltr';
   }
@@ -285,7 +291,7 @@
       b.className = 'm-carousel__dot';
       b.setAttribute('aria-label', 'الانتقال إلى البطاقة ' + (i + 1) + ' من ' + st.count);
       (function (idx) {
-        b.addEventListener('click', function () { goToIndex(carousel, idx); });
+        onLocal(carousel, b, 'click', function () { goToIndex(carousel, idx); });
       })(i);
       st.dots.appendChild(b);
     }
@@ -437,7 +443,7 @@
   }
 
   function wireExpand(carousel, st) {
-    carousel.addEventListener('click', function (e) {
+    onLocal(carousel, carousel, 'click', function (e) {
       if (st.disconnected) return;
       var btn = (e.target && e.target.closest) ? e.target.closest('[data-card-expand]') : null;
       if (!btn || !carousel.contains(btn)) return;
@@ -459,9 +465,9 @@
   function wireDrag(carousel, st) {
     /* البداية على الـviewport فقط؛ المتابعة والنهاية على window أثناء
        السحب (attachDragWindow) حتى يعمل الإفلات خارج الـviewport. */
-    st.viewport.addEventListener('pointerdown', function (e) { onPointerDown(carousel, st, e); });
+    onLocal(carousel, st.viewport, 'pointerdown', function (e) { onPointerDown(carousel, st, e); });
     /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
-    st.viewport.addEventListener('dragstart', function (e) {
+    onLocal(carousel, st.viewport, 'dragstart', function (e) {
       if (!st.disconnected) e.preventDefault();
     });
   }
@@ -488,7 +494,7 @@
     return !!btn && carousel.contains(btn) && !!btn.closest('[data-carousel-slide]');
   }
   function wireKeys(carousel, st) {
-    carousel.addEventListener('keydown', function (e) {
+    onLocal(carousel, carousel, 'keydown', function (e) {
       if (st.disconnected || st.count === 0 || e.defaultPrevented || e.isComposing ||
           e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
       var target = e.target;
@@ -567,8 +573,8 @@
     }
     st.track.setAttribute('data-track-state', 'idle');
 
-    if (st.prev) st.prev.addEventListener('click', function () { prev(carousel); });
-    if (st.next) st.next.addEventListener('click', function () { next(carousel); });
+    if (st.prev) onLocal(carousel, st.prev, 'click', function () { prev(carousel); });
+    if (st.next) onLocal(carousel, st.next, 'click', function () { next(carousel); });
 
     wireKeys(carousel, st);
     wireDrag(carousel, st);
@@ -580,7 +586,7 @@
        يخزّن عرض العرض الأول في lastWidth (SUI-025) */
     recenterCarousel(carousel, st);
     if (document.fonts) document.fonts.ready.then(function () {
-      if (!st.disconnected) {
+      if (carousel.isConnected && !st.disconnected) {
         measureActiveHeight(st);
         st.lastWidth = undefined;
         recenterCarousel(carousel, st);
@@ -606,6 +612,18 @@
     getIndex: function (carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;
+    },
+    destroy: function (root) {
+      var scope = root || document;
+      window.MicroCarousel.disconnect(scope);
+      var items = [].slice.call(scope.querySelectorAll('[data-carousel]'));
+      if (scope.matches && scope.matches('[data-carousel]')) items.unshift(scope);
+      items.forEach(function (carousel) {
+        var st = stateOf.get(carousel);
+        if (st && st.controller) st.controller.abort();
+        if (st && st.dots) st.dots.textContent = '';
+        stateOf.delete(carousel);
+      });
     },
     /* SUI-025: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
        ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).

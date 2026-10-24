@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DIRECTORY = ROOT / "deliverables"
+DIRECTORY = ROOT / "generated-artifacts" / "deliverables"
 ARCHIVE = DIRECTORY / "micro-components-editable.zip"
 PART_SIZE = 8 * 1024 * 1024
 
