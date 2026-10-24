@@ -1,0 +1,747 @@
+{
+  "cases": [
+    {
+      "viewport": {},
+      "innerWidth": 320,
+      "canvasWidth": "320px",
+      "documentScrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "clientWidth": 320,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 16,
+          "right": 304,
+          "top": 148,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal": {
+          "left": 16,
+          "right": 304,
+          "top": 148,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__cal-bar": {
+          "left": 16,
+          "right": 304,
+          "top": 208,
+          "width": 288,
+          "height": 48,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__todaybtn": {
+          "left": 16,
+          "right": 80,
+          "top": 208,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 16,
+          "right": 304,
+          "top": 719.97,
+          "width": 288,
+          "height": 80,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__add": {
+          "left": 172,
+          "right": 304,
+          "top": 751.97,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 0,
+          "right": 320,
+          "top": -15569.09,
+          "width": 320,
+          "height": 17241.95,
+          "scrollW": 320,
+          "clientW": 320
+        },
+        ".sc-block--ocal": {
+          "left": 16,
+          "right": 304,
+          "top": 4,
+          "width": 288,
+          "height": 1095.84,
+          "scrollW": 288,
+          "clientW": 288
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 172,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "320-canvas320",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 360,
+      "canvasWidth": "360px",
+      "documentScrollWidth": 360,
+      "bodyScrollWidth": 360,
+      "clientWidth": 360,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 16,
+          "right": 344,
+          "top": 162.22,
+          "width": 328,
+          "height": 783.94,
+          "scrollW": 328,
+          "clientW": 328
+        },
+        ".m-ocal": {
+          "left": 16,
+          "right": 344,
+          "top": 162.22,
+          "width": 328,
+          "height": 783.94,
+          "scrollW": 328,
+          "clientW": 328
+        },
+        ".m-ocal__cal-bar": {
+          "left": 16,
+          "right": 344,
+          "top": 222.22,
+          "width": 328,
+          "height": 48,
+          "scrollW": 328,
+          "clientW": 328
+        },
+        ".m-ocal__todaybtn": {
+          "left": 16,
+          "right": 80,
+          "top": 222.22,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 16,
+          "right": 344,
+          "top": 734.19,
+          "width": 328,
+          "height": 48,
+          "scrollW": 328,
+          "clientW": 328
+        },
+        ".m-ocal__add": {
+          "left": 16,
+          "right": 148,
+          "top": 734.19,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 0,
+          "right": 360,
+          "top": -14892.06,
+          "width": 360,
+          "height": 16505.17,
+          "scrollW": 360,
+          "clientW": 360
+        },
+        ".sc-block--ocal": {
+          "left": 16,
+          "right": 344,
+          "top": 18.22,
+          "width": 328,
+          "height": 1043.86,
+          "scrollW": 328,
+          "clientW": 328
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "360-canvas360",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 390,
+      "canvasWidth": "390px",
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "clientWidth": 390,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 16,
+          "right": 374,
+          "top": 144.13,
+          "width": 358,
+          "height": 783.94,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal": {
+          "left": 16,
+          "right": 374,
+          "top": 144.13,
+          "width": 358,
+          "height": 783.94,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__cal-bar": {
+          "left": 16,
+          "right": 374,
+          "top": 204.13,
+          "width": 358,
+          "height": 48,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__todaybtn": {
+          "left": 16,
+          "right": 80,
+          "top": 204.13,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 16,
+          "right": 374,
+          "top": 716.09,
+          "width": 358,
+          "height": 48,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__add": {
+          "left": 16,
+          "right": 148,
+          "top": 716.09,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 0,
+          "right": 390,
+          "top": -14644.19,
+          "width": 390,
+          "height": 16239.2,
+          "scrollW": 390,
+          "clientW": 390
+        },
+        ".sc-block--ocal": {
+          "left": 16,
+          "right": 374,
+          "top": 0.13,
+          "width": 358,
+          "height": 1043.86,
+          "scrollW": 358,
+          "clientW": 358
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "390-canvas390",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 430,
+      "canvasWidth": "430px",
+      "documentScrollWidth": 430,
+      "bodyScrollWidth": 430,
+      "clientWidth": 430,
+      "compact": "false",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 16,
+          "right": 414,
+          "top": 138.8,
+          "width": 398,
+          "height": 816.47,
+          "scrollW": 398,
+          "clientW": 398
+        },
+        ".m-ocal": {
+          "left": 16,
+          "right": 414,
+          "top": 138.8,
+          "width": 398,
+          "height": 816.47,
+          "scrollW": 398,
+          "clientW": 398
+        },
+        ".m-ocal__cal-bar": {
+          "left": 16,
+          "right": 414,
+          "top": 198.8,
+          "width": 398,
+          "height": 48,
+          "scrollW": 398,
+          "clientW": 398
+        },
+        ".m-ocal__todaybtn": {
+          "left": 16,
+          "right": 80,
+          "top": 198.8,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 16,
+          "right": 414,
+          "top": 743.3,
+          "width": 398,
+          "height": 48,
+          "scrollW": 398,
+          "clientW": 398
+        },
+        ".m-ocal__add": {
+          "left": 16,
+          "right": 148,
+          "top": 743.3,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 0,
+          "right": 430,
+          "top": -13609.31,
+          "width": 430,
+          "height": 15211.56,
+          "scrollW": 430,
+          "clientW": 430
+        },
+        ".sc-block--ocal": {
+          "left": 16,
+          "right": 414,
+          "top": -5.2,
+          "width": 398,
+          "height": 1056.41,
+          "scrollW": 398,
+          "clientW": 398
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 16,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "430-canvas430",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 525,
+      "canvasWidth": "390px",
+      "documentScrollWidth": 525,
+      "bodyScrollWidth": 525,
+      "clientWidth": 525,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 83.5,
+          "right": 441.5,
+          "top": 144.5,
+          "width": 358,
+          "height": 783.94,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal": {
+          "left": 83.5,
+          "right": 441.5,
+          "top": 144.5,
+          "width": 358,
+          "height": 783.94,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__cal-bar": {
+          "left": 83.5,
+          "right": 441.5,
+          "top": 204.5,
+          "width": 358,
+          "height": 48,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__todaybtn": {
+          "left": 83.5,
+          "right": 147.5,
+          "top": 204.5,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 83.5,
+          "right": 441.5,
+          "top": 716.47,
+          "width": 358,
+          "height": 48,
+          "scrollW": 358,
+          "clientW": 358
+        },
+        ".m-ocal__add": {
+          "left": 83.5,
+          "right": 215.5,
+          "top": 716.47,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 67.5,
+          "right": 457.5,
+          "top": -14643.81,
+          "width": 390,
+          "height": 16239.2,
+          "scrollW": 390,
+          "clientW": 390
+        },
+        ".sc-block--ocal": {
+          "left": 83.5,
+          "right": 441.5,
+          "top": 0.5,
+          "width": 358,
+          "height": 1043.86,
+          "scrollW": 358,
+          "clientW": 358
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 83.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 83.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "525-canvas390-default",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 525,
+      "canvasWidth": "320px",
+      "documentScrollWidth": 525,
+      "bodyScrollWidth": 525,
+      "clientWidth": 525,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 147.28,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 147.28,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__cal-bar": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 207.28,
+          "width": 288,
+          "height": 48,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__todaybtn": {
+          "left": 118.5,
+          "right": 182.5,
+          "top": 207.28,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 719.25,
+          "width": 288,
+          "height": 80,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__add": {
+          "left": 274.5,
+          "right": 406.5,
+          "top": 751.25,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 102.5,
+          "right": 422.5,
+          "top": -15569.81,
+          "width": 320,
+          "height": 17241.95,
+          "scrollW": 320,
+          "clientW": 320
+        },
+        ".sc-block--ocal": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 3.28,
+          "width": 288,
+          "height": 1095.84,
+          "scrollW": 288,
+          "clientW": 288
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 118.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 274.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "525-canvas320-narrowest",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    },
+    {
+      "viewport": {},
+      "innerWidth": 525,
+      "canvasWidth": "320px",
+      "documentScrollWidth": 525,
+      "bodyScrollWidth": 525,
+      "clientWidth": 525,
+      "compact": "true",
+      "layout": "month-grid",
+      "elements": {
+        "#sc-ocal-root": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 147.28,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 147.28,
+          "width": 288,
+          "height": 815.94,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__cal-bar": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 207.28,
+          "width": 288,
+          "height": 48,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__todaybtn": {
+          "left": 118.5,
+          "right": 182.5,
+          "top": 207.28,
+          "width": 64,
+          "height": 48,
+          "scrollW": 62,
+          "clientW": 62
+        },
+        ".m-ocal__daypanel-head": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 719.25,
+          "width": 288,
+          "height": 80,
+          "scrollW": 288,
+          "clientW": 288
+        },
+        ".m-ocal__add": {
+          "left": 274.5,
+          "right": 406.5,
+          "top": 751.25,
+          "width": 132,
+          "height": 48,
+          "scrollW": 132,
+          "clientW": 132
+        },
+        ".showcase-canvas": {
+          "left": 102.5,
+          "right": 422.5,
+          "top": -15569.81,
+          "width": 320,
+          "height": 17241.95,
+          "scrollW": 320,
+          "clientW": 320
+        },
+        ".sc-block--ocal": {
+          "left": 118.5,
+          "right": 406.5,
+          "top": 3.28,
+          "width": 288,
+          "height": 1095.84,
+          "scrollW": 288,
+          "clientW": 288
+        }
+      },
+      "railTrack": null,
+      "clipping": {
+        "todayBtn": {
+          "left": 118.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        },
+        "addBtn": {
+          "left": 274.5,
+          "viewport": {},
+          "leftClipped": false,
+          "rightOver": false
+        }
+      },
+      "tag": "525-canvas320-narrowest2",
+      "consoleErrors": [],
+      "verdict": {
+        "documentOverflowsViewport": false,
+        "clippedControls": {},
+        "rootScrollOverflow": false
+      }
+    }
+  ],
+  "browser": "143.0.7499.4"
+}

@@ -87,7 +87,7 @@
 
     <section>
       <h2 id="demo-1-title">1) تقويم الشهر</h2>
-      <p class="hint">weekStart = 6 (السبت). اختر الشهر والسنة من العنوان، واستخدم مسار التواريخ القريب عند ضيق العرض أو الشبكة عند اتساعها. التنقل لا يغيّر اليوم المحدد حتى تختار تاريخًا؛ تظهر طلباته أسفل التقويم.</p>
+      <p class="hint">weekStart = 6 (السبت). اختر الشهر والسنة من العنوان، وشبكة الشهر كاملة عند كل عرض — بعرض مدمج عند ضيق الجذر يبقي كل أيام الشهر. التنقل لا يغيّر اليوم المحدد حتى تختار تاريخًا؛ تظهر طلباته أسفل التقويم.</p>
       <div id="demo-1"></div>
       <h3>سجل الأحداث</h3>
       <ul id="log-1" class="log" aria-label="سجل أحداث المثال الأول"></ul>
@@ -190,13 +190,15 @@
       var calendarTitle = document.getElementById('demo-1-title');
       function syncCalendarTitle() {
         var layout = root1.getAttribute('data-ocal-layout');
-        var label = layout === 'date-rail' ? 'مسار التواريخ القريبة' :
-          (layout === 'day' ? 'عرض اليوم' : (layout === 'list' ? 'عرض القائمة' : 'تقويم الشهر'));
+        var compact = root1.getAttribute('data-ocal-compact') === 'true';
+        var label = layout === 'day' ? 'عرض اليوم'
+          : (layout === 'list' ? 'عرض القائمة'
+          : (compact ? 'شبكة الشهر المدمجة' : 'تقويم الشهر'));
         calendarTitle.textContent = '1) ' + label;
       }
       syncCalendarTitle();
       var calendarTitleObserver = new MutationObserver(syncCalendarTitle);
-      calendarTitleObserver.observe(root1, { attributes: true, attributeFilter: ['data-ocal-layout'] });
+      calendarTitleObserver.observe(root1, { attributes: true, attributeFilter: ['data-ocal-layout', 'data-ocal-compact'] });
       window.__demo1 = demo1; /* للفحص الآلي — نفس العقد العمومي */
       /* بيانات العينة معروضة للفحص الآلي (قراءة فقط) — نفس مصفوفة ORDERS */
       window.__OCAL_DEMO = { orders: ORDERS, statuses: STATUSES, today: TODAY };

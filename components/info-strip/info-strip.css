@@ -116,7 +116,16 @@
   overflow-wrap: anywhere;
 }
 
+/* إصلاح 2026-10-24: الوحدة نص مضيف قد يكون كلمة إنجليزية طويلة
+   غير قابلة للكسر («Unavailable»). بنفس عقد القياس المطبق على
+   __number و__label: min-width:0 يسمح للبند بالانكماش داخل سطر
+   القراءة الملتف، وoverflow-wrap:anywhere يلفّ الكلمة داخل بطاقتها
+   بدل توسيع سطر القراءة والبطاقة والصفحة عند RTL ونص مكبّر.
+   الكلمة تبقى كاملة حاضرًا ومقروءة — لا قصّ ولا إخفاء ولا تصغير خط. */
 .m-info-card__unit {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   color: var(--micro-text-secondary);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);

@@ -545,11 +545,15 @@ def main():
                                 )
                                 page.goto(calendar_url, wait_until="load")
                                 page.evaluate("document.fonts.ready")
-                                expected_layout = "date-rail" if root_width < 360 else "month-grid"
+                                # عقد 2026-10-24: شبكة الشهر الكاملة عند كل عرض؛
+                                # الضيق حالة عرض مدمج (data-ocal-compact) لا تخطيط بديل.
+                                expected_layout = "month-grid"
+                                expected_compact = "true" if root_width < 360 else "false"
                                 page.wait_for_function(
-                                    "(expected)=>document.querySelector('#order-root')"
-                                    ".getAttribute('data-ocal-layout')===expected",
-                                    arg=expected_layout,
+                                    "(expected)=>{const root=document.querySelector('#order-root');"
+                                    "return root.getAttribute('data-ocal-layout')===expected.layout"
+                                    "&&root.getAttribute('data-ocal-compact')===expected.compact;}",
+                                    arg={"layout": expected_layout, "compact": expected_compact},
                                 )
 
                                 type_metrics = {"scale": type_level, "baseline": [], "scaled": []}
@@ -623,6 +627,8 @@ def main():
                                   const rows=[...root.querySelectorAll('[data-ocal-day-panel] .m-ocal__row-title')]
                                     .map(node=>node.textContent.trim());
                                   return {layout:root.getAttribute('data-ocal-layout'),
+                                    compact:root.getAttribute('data-ocal-compact'),
+                                    gridDays:root.querySelectorAll('[data-ocal-grid] [data-ocal-date]').length,
                                     rootWidth:r.width,rootClient:root.clientWidth,rootScroll:root.scrollWidth,
                                     documentWidth:document.documentElement.scrollWidth,viewport:innerWidth,
                                     selected,displayed,rows,documentLanguage:document.documentElement.lang,
@@ -639,6 +645,8 @@ def main():
                                 check(f"{case}: root width, adaptive layout, selected/displayed dates and actual host text",
                                       abs(initial["rootWidth"] - root_width) < 1
                                       and initial["layout"] == expected_layout
+                                      and initial["compact"] == expected_compact
+                                      and initial["gridDays"] == 31
                                       and initial["selected"] == "2026-10-07"
                                       and "أكتوبر 2026" in initial["displayed"]
                                       and normal_title in initial["rows"]
@@ -650,14 +658,29 @@ def main():
                                                   and item["line"] >= item["baselineLine"] * 1.99
                                                   for item in type_metrics["scaled"]))),
                                       {"initial": initial, "typeMetrics": type_metrics})
-                                check(f"{case}: no page/root horizontal overflow and all applicable calendar actions are 48px",
+                                # عقد 2026-10-24: أزرار الأوامر ≥48px؛ خلايا الأيام
+                                # المدمجة (جذر <360px) ارتفاع ≥48 وعرض ≥24 (WCAG 2.5.8)،
+                                # والممتدة ≥48×48. القياس نفسه سابقًا كان يُسقط الشبكة
+                                # نفسها تحت 360px (مسار خمسة تواريخ) — عقد قديم أُلغي.
+                                def _targets_ok(buttons, compact_flag):
+                                    for b in buttons:
+                                        if b["action"] == "day-cell":
+                                            if compact_flag:
+                                                if not (b["height"] >= 48 and b["width"] >= 24):
+                                                    return False
+                                            elif not (b["width"] >= 48 and b["height"] >= 48):
+                                                return False
+                                        elif not (b["width"] >= 48 and b["height"] >= 48):
+                                            return False
+                                    return True
+                                check(f"{case}: no page/root horizontal overflow and all targets meet the documented geometry contract",
                                       initial["documentWidth"] <= viewport_width
                                       and initial["rootScroll"] <= initial["rootClient"] + 1
                                       and bool(initial["interactiveButtons"])
-                                      and all(button["width"] >= 48 and button["height"] >= 48
-                                              for button in initial["interactiveButtons"]),
+                                      and _targets_ok(initial["interactiveButtons"], expected_compact == "true"),
                                       {"document": initial["documentWidth"], "viewport": viewport_width,
                                        "rootScroll": initial["rootScroll"], "rootClient": initial["rootClient"],
+                                       "compact": expected_compact,
                                        "buttons": initial["interactiveButtons"]})
 
                                 page.evaluate("""() => {
@@ -747,14 +770,18 @@ def main():
                                   selected:document.querySelector('#order-root').getAttribute('data-ocal-selected-date'),
                                   pickerCount:document.querySelectorAll('#order-root [data-ocal-picker]').length,
                                   events:calendarEvents.length,
-                                  focus:document.activeElement.getAttribute('data-ocal-action')
+                                  focus:document.activeElement.getAttribute('data-ocal-action'),
+                                  browsing:document.querySelector('[data-ocal-day-panel]')?.getAttribute('data-ocal-day-browsing')||'false',
+                                  panelTitle:document.querySelector('.m-ocal__daypanel-title')?.textContent.trim()||''
                                 })""")
-                                check(f"{case}: picker changes displayed month only and preserves the selected date",
+                                check(f"{case}: picker changes displayed month only, preserves the selected date, and the day panel stays honest",
                                       "يناير 2027" in switched["title"]
                                       and switched["selected"] == selected_before
                                       and switched["pickerCount"] == 0
                                       and switched["events"] == event_count
-                                      and switched["focus"] == "month-picker", switched)
+                                      and switched["focus"] == "month-picker"
+                                      and switched["browsing"] == "true"
+                                      and "لا يوم محدد في يناير 2027" in switched["panelTitle"], switched)
                                 page.locator("#order-root [data-ocal-action='month-picker']").click()
                                 page.keyboard.press("Escape")
                                 escaped = page.evaluate("""() => ({

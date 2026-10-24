@@ -12,9 +12,13 @@
    منتظمة (--micro-space-1)، رقم واضح ومؤشرات صغيرة أسفله،
    اليوم المحدد كتلة بترولية، واليوم الحالي بحد/علامة مختلفة.
 
-   شبكة الشهر تظهر فقط عند عرض جذر ≥360px: سبعة أهداف ×48px
-   مع ست فجوات ×4px. تحت ذلك تبقى حالة الشهر متاحة عبر مسار
-   تواريخ ذي أهداف 48px وتمرير محلي. لا تصغير لأهداف اللمس.
+   عقد 2026-10-24 — شبكة الشهر الكاملة عند كل عرض جذر:
+   من 360px فأكثر: سبعة أهداف ×48px مع ست فجوات ×4px (خلايا مربعة).
+   تحت 360px تبقى الشبكة نفسها بكل أيام الشهر (data-ocal-compact="true"):
+   العرض (100%−24px)/7 ≥ 24px (الحد الأدنى WCAG 2.5.8) وأرضية ارتفاع
+   الصف 48px فأكثر (max(2.7em, --micro-touch-min)) فتتمدد الخلايا رأسيًا
+   — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
+   لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
    ========================================================= */
 
 .m-ocal,
@@ -263,7 +267,6 @@
   display: flex;
   gap: var(--micro-space-1);
 }
-
 .m-ocal__weekday {
   width: calc((100% - 6 * var(--micro-space-1)) / 7);
   padding-block: var(--micro-space-1);
@@ -300,54 +303,18 @@
   min-height: 2.7em;
 }
 
-.m-ocal__rail {
-  min-width: 0;
-  max-width: 100%;
+/* ---- العرض المدمج للشبكة الكاملة (جذر < 360px؛ data-ocal-compact) ----
+   نفس بنية الشبكة: أرضية ارتفاع الصف ترتفع إلى هدف اللمس 48px
+   (max(2.7em, --micro-touch-min))، والخلية تستقل عن التربيع فعرضها
+   (100%−24px)/7 (≥ 24px — الحد الأدنى WCAG 2.5.8) وارتفاعها ≥ 48px.
+   كل أيام الشهر حاضرة وممكنة بلوحة المفاتيح — لا قصّ ولا إخفاء. */
+.m-ocal[data-ocal-compact="true"] .m-ocal__gridrow {
+  min-height: max(2.7em, var(--micro-touch-min));
 }
 
-.m-ocal__rail-track {
-  display: flex;
-  gap: var(--micro-space-1);
-  max-width: 100%;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  padding: var(--micro-space-1);
-}
-
-.m-ocal__rail-day {
-  flex: 0 0 52px;
-  min-height: 72px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  padding: var(--micro-space-1);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-text-secondary);
-  font-family: var(--micro-font-family);
-  cursor: pointer;
-}
-
-.m-ocal__rail-weekday,
-.m-ocal__rail-month {
-  font-size: var(--micro-counter-label-size);
-  line-height: var(--micro-secondary-line);
-  overflow-wrap: anywhere;
-}
-
-.m-ocal__rail-number {
-  font-size: var(--micro-label-size);
-  font-weight: 600;
-  line-height: var(--micro-label-line);
-}
-
-.m-ocal__rail-day--selected {
-  border-color: var(--micro-brand-primary);
-  background-color: var(--micro-brand-primary);
-  color: var(--micro-text-inverse);
+.m-ocal[data-ocal-compact="true"] .m-ocal__cell {
+  aspect-ratio: auto;
+  min-height: var(--micro-touch-min);
 }
 
 /* خلية فارغة (بادئة الشهر) — تحجز العمود بلا تفاعل */
@@ -356,7 +323,8 @@
   border-radius: var(--micro-radius-chip);
 }
 
-/* خلية الشهر لا تظهر إلا عندما تحافظ هندسة الأعمدة على 48px فأكثر. */
+/* خلية الشهر: مربعة عند الاتساع (≥360px)، وأرضية ارتفاع 48px عند
+   الضيق عبر عقد العرض المدمج أدناه. */
 .m-ocal__cell {
   position: relative;
   display: flex;
@@ -760,7 +728,6 @@
 .m-ocal__picker-yearbtn,
 .m-ocal__picker-back,
 .m-ocal__picker-month,
-.m-ocal__rail-day,
 .m-ocal__row,
 .m-ocal__add,
 .m-ocal__retry {
