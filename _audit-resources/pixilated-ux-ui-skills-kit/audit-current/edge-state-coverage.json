@@ -1,0 +1,567 @@
+{
+  "audit": "edge-case-hunter",
+  "matrixEncoding": {
+    "description": "Each state row is a complete 14-family matrix. Its defaultStatus applies to every family in familyOrder; overrides replace that cell for the named families. This avoids hiding unsupported states behind a generic 'covered' mark.",
+    "statuses": [
+      "INSPECTED SOURCE",
+      "DEFAULT OBSERVED",
+      "DYNAMICALLY EXERCISED",
+      "NOT APPLICABLE",
+      "NOT PROVABLE"
+    ],
+    "familyOrder": [
+      "access-gateway",
+      "account-settings",
+      "buttons",
+      "carousel",
+      "data",
+      "fields",
+      "info-strip",
+      "metric-comparison",
+      "navigation",
+      "order-schedule",
+      "organization",
+      "selection",
+      "surfaces",
+      "messages"
+    ],
+    "importantInterpretation": [
+      "DEFAULT OBSERVED means a current specimen/example rendered; it does not imply every variant or transition was approved.",
+      "DYNAMICALLY EXERCISED means the named local Chromium state was actually attempted. It does not mean the state passed or was approved; row evidence must record both passes and failures.",
+      "INSPECTED SOURCE is not a runtime claim.",
+      "NOT PROVABLE identifies consumer-owned service/context behavior absent from this standalone UI kit; it is not an invented missing-backend defect.",
+      "NOT APPLICABLE means the named state is not a state owned by that family in this kit, not that a future consumer never needs it."
+    ]
+  },
+  "families": [
+    {
+      "id": "access-gateway",
+      "routes": ["components/access-gateway/example-usage.html"],
+      "evidence": "Credential specimen; invalid submit, password reveal, readonly/disabled, focus, and mobile geometry are dynamically exercised by local interaction/numeric suites."
+    },
+    {
+      "id": "account-settings",
+      "routes": ["components/account-settings/example-usage.html"],
+      "evidence": "Settings/layer example; view switch, back, close, naming, focus movement, and restoration are exercised by the interaction browser suite."
+    },
+    {
+      "id": "buttons",
+      "routes": ["previews/buttons/index.html", "previews/buttons/example-usage.html"],
+      "evidence": "Variants and touch target geometry are observed; focus/disabled/boundary behavior is covered by the component/mobile and lifecycle suites where applicable."
+    },
+    {
+      "id": "carousel",
+      "routes": ["previews/carousel/index.html", "previews/carousel/example-usage.html"],
+      "evidence": "Count 0/1/2/7, RTL, keyboard, pointer swipe, disclosure, boundaries, resize, disconnect, re-init, and long content have bounded dynamic evidence."
+    },
+    {
+      "id": "data",
+      "routes": ["components/data/example-usage.html", "previews/data/index.html"],
+      "evidence": "Chart geometry, large/unknown/negative values, long amount, resize, progress, reduced motion, and 23 same-node scale-state/error-recovery checks are exercised. The original data-scale suite was run with its --out override."
+    },
+    {
+      "id": "fields",
+      "routes": ["previews/fields/index.html", "previews/fields/example-usage.html"],
+      "evidence": "Field default/error/readonly/disabled/focus geometry, step boundaries, exact decimal/scientific values, long numeric input, and 200% representative stress are exercised by local suites."
+    },
+    {
+      "id": "info-strip",
+      "routes": ["components/info-strip/example-usage.html", "previews/info-strip/index.html", "previews/info-strip/comparison.html"],
+      "evidence": "Default variants and info-peek count, resize, drag-disconnect, re-init, hidden-reveal, and boundary lifecycle are covered; no service-backed loading/stale semantics are proven."
+    },
+    {
+      "id": "metric-comparison",
+      "routes": ["components/metric-comparison/example-usage.html"],
+      "evidence": "Static example and source contract inspected; consumer-supplied metrics are fixture content, not real account data."
+    },
+    {
+      "id": "navigation",
+      "routes": ["previews/navigation/index.html", "previews/navigation/example-usage.html"],
+      "evidence": "Tabs, carousel keyboard boundaries, modal focus/inert/restoration, menu/layer examples, and 200% chart-mobile navigation geometry have bounded browser evidence."
+    },
+    {
+      "id": "order-schedule",
+      "routes": ["components/order-schedule/example-usage.html"],
+      "evidence": "Calendar/mobile contract has existing 55-pass/0-fail component-width and data-equivalence evidence; it does not establish service, timezone, or real-device behavior."
+    },
+    {
+      "id": "organization",
+      "routes": ["components/organization/example-usage.html", "previews/organization/index.html"],
+      "evidence": "Static long labels, rows, disabled examples, and 672-character transient title stress are inspected/observed; actual permission or data service outcomes are not present."
+    },
+    {
+      "id": "selection",
+      "routes": ["previews/selection/index.html", "previews/selection/example-usage.html"],
+      "evidence": "Checkbox/radio/switch/segmented/picker examples; partial select, empty-search recovery, keyboard selection, long label, and 48 px label-wrapper unions are dynamically checked. The supported simulated async-error path reproduces INT-001 at all four tested widths; it is cross-referenced, not duplicated as an edge finding."
+    },
+    {
+      "id": "surfaces",
+      "routes": ["previews/surfaces/index.html", "previews/surfaces/example-usage.html", "previews/surfaces/approved-curves.html"],
+      "evidence": "Default surface/curve specimens observed; no consumer theme variant was inferred."
+    },
+    {
+      "id": "messages",
+      "routes": ["previews/messages/index.html", "previews/messages/example-usage.html"],
+      "evidence": "Static success/warning/error/empty/skeleton specimens observed; long message and reduced-motion visibility are dynamically stressed; real service delivery is not implemented."
+    }
+  ],
+  "stateRows": [
+    {
+      "category": "A. Universal",
+      "states": ["Default/steady screen"],
+      "trigger": "Open a current component/example or preview route.",
+      "recommendedTreatment": "Present the component’s default state and retain its semantics; do not infer that a fixture equals a live user/account.",
+      "priority": "Must-design",
+      "defaultStatus": "DEFAULT OBSERVED",
+      "overrides": {},
+      "evidence": "36 local HTML routes × four default widths = 144 screenshots; Arabic/RTL fixtures, no default document overflow, no page/resource errors."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Loading: initial", "Loading: partial", "Loading: slow network"],
+      "trigger": "A consumer waits for or incrementally receives asynchronous data.",
+      "recommendedTreatment": "Keep usable partial content stable; use a semantically named skeleton/progress indicator only when the consumer can determine load status; avoid layout jumps and motion when reduced motion is requested.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["messages", "data"],
+        "INSPECTED SOURCE": ["account-settings", "carousel", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection"]
+      },
+      "evidence": "Messages route contains a static skeleton specimen and data route a progress example. These do not establish an initial/partial/slow service transition; no backend exists."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Empty: first-time", "Empty: after deletion"],
+      "trigger": "A consumer collection has no records initially or becomes empty after removal.",
+      "recommendedTreatment": "Differentiate first-use guidance from an emptied collection; state why it is empty and offer only an action the consumer can actually perform.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"],
+        "INSPECTED SOURCE": ["data", "messages", "selection"]
+      },
+      "evidence": "No live collection or deletion flow is defined by this UI kit; static empty-state copy does not prove consumer journey handling."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Empty: after filter", "Empty: no results"],
+      "trigger": "A search/filter yields no matches.",
+      "recommendedTreatment": "Explain that the current query/filter has no matches and preserve a direct way to edit or clear it; keep it distinct from a first-time empty list.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"],
+        "DYNAMICALLY EXERCISED": ["selection"],
+        "INSPECTED SOURCE": ["data", "messages", "organization"]
+      },
+      "evidence": "The picker no-results recovery and keyboard selection/summary are separate passing checks in the latest 88-check interaction run. That run has 84 PASS / 4 FAIL; all four failures are the distinct picker async-error INT-001 repeated at 320/360/390/430 px. A real filter data set or other-family no-results state was not exercised."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Error: client validation"],
+      "trigger": "A required or constrained value is invalid at blur/submit/change.",
+      "recommendedTreatment": "Keep the user value, associate concise corrective copy with the field, expose invalid state, and focus the first invalid control when submit is blocked.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "fields"],
+        "INSPECTED SOURCE": ["account-settings", "selection"]
+      },
+      "evidence": "Interaction suite confirms access-gateway invalid submit, linked error, invalid flag, and first-invalid focus; lifecycle/component checks cover field error geometry and related state."
+    },
+    {
+      "category": "A. Universal / data configuration",
+      "states": ["Error: invalid/over/conflicting visualization scale configuration"],
+      "trigger": "A chart's declared maximum/total is invalid, below the data, or conflicts with its values.",
+      "recommendedTreatment": "Reject an unsafe relative visualization with concise user-facing copy; retain full readings; keep technical detail separate; clear stale diagnostics on valid recovery and recalculate on the same chart node.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["data"],
+        "INSPECTED SOURCE": ["messages"]
+      },
+      "evidence": "python3 tools/data-scale-state-check.py --out generated-artifacts/pixilated-audit/edge-tests/data-scale: 23/23 pass, covering invalid/over/rescaled/conflict transitions, recovery, event synchronization, and no JavaScript errors."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Error: server", "Error: network"],
+      "trigger": "A consumer service rejects or cannot complete a request.",
+      "recommendedTreatment": "Use a brief user-facing error, preserve entered data, provide a safe retry/recovery action, and keep technical diagnostics out of user copy.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "surfaces"]
+      },
+      "evidence": "The message family has static error examples, but no network/server call exists to trigger, retry, or verify one."
+    },
+    {
+      "category": "A. Universal / selection picker",
+      "states": ["Supported simulated asynchronous picker error state (not a real network result)"],
+      "trigger": "A user has focused a picker option and the fixture invokes the component's supported non-ready error state.",
+      "recommendedTreatment": "Keep focus on a visible persistent target, move status feedback outside listbox option semantics, announce it with appropriate live status semantics, and keep retry operable.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["selection"]
+      },
+      "evidence": "Latest interaction-browser-results.json: the assertion fails at 320/360/390/430 px RTL. At each width focusRetained=false and hasLiveAnnouncement=false; retryVisible=true and statusInsideListbox=true. This is one repeated interaction finding, INT-001, not four edge findings. No real network request occurred."
+    },
+    {
+      "category": "A. Universal / D. Permission-auth",
+      "states": ["Error: permission denied", "Error: expired session"],
+      "trigger": "A consumer authorization check fails or the session expires.",
+      "recommendedTreatment": "Explain the next allowed action without leaking protected content; preserve a safe return location after sign-in where product policy permits.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "INSPECTED SOURCE": ["access-gateway", "account-settings", "messages"]
+      },
+      "evidence": "Credential/settings/message specimens are presentation only; role, expiry, redirect, and session lifecycle are absent."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Success feedback"],
+      "trigger": "A consumer action completes positively.",
+      "recommendedTreatment": "Provide concise confirmation with a stable/non-duplicated announcement; persistent feedback remains until dismissed/cleared according to its declared contract.",
+      "priority": "Should-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["messages"]
+      },
+      "evidence": "The messages page displays static success/status examples; no real save operation or backend success is implied."
+    },
+    {
+      "category": "A. Universal",
+      "states": ["Disabled: waiting on prerequisite or boundary"],
+      "trigger": "An action is unavailable because of a boundary, prerequisite, or readonly/disabled control.",
+      "recommendedTreatment": "Keep a visible disabled state, preserve keyboard/touch behavior, and expose a reason when users can resolve the prerequisite.",
+      "priority": "Should-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["selection", "navigation"],
+        "DYNAMICALLY EXERCISED": ["access-gateway", "buttons", "carousel", "fields", "info-strip"]
+      },
+      "evidence": "Field step min/max/readonly/disabled boundaries, password reveal gating, carousel/info-peek count/boundary behavior, and keyboard focus were exercised. Selection/navigation show disabled examples."
+    },
+    {
+      "category": "B. Content",
+      "states": ["Skeleton loader / shimmer"],
+      "trigger": "A content region is loading and its approximate geometry is known.",
+      "recommendedTreatment": "Keep the skeleton decorative to assistive technology unless it carries status; announce loading separately; stop shimmer under reduced motion.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["messages"],
+        "INSPECTED SOURCE": ["data", "carousel", "info-strip", "metric-comparison", "organization", "order-schedule"]
+      },
+      "evidence": "Messages skeleton is a static specimen and remains visible with zero running animations under reduced-motion emulation; it does not model async lifecycle."
+    },
+    {
+      "category": "B. Content",
+      "states": ["Partial load / lazy load / pagination boundary"],
+      "trigger": "Only part of a larger consumer data set is available or a page/slide boundary is reached.",
+      "recommendedTreatment": "Name current position and available next/previous actions; keep loading state distinct from a fully loaded last page; announce only meaningful position changes.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"],
+        "DYNAMICALLY EXERCISED": ["carousel", "info-strip", "navigation"],
+        "INSPECTED SOURCE": ["order-schedule", "selection"]
+      },
+      "evidence": "Carousel/info-peek position, controls, counts, and navigation boundaries are exercised. These are local presentation/navigation boundaries, not lazy network pagination."
+    },
+    {
+      "category": "B. Content",
+      "states": ["Truncation / long names / long descriptions"],
+      "trigger": "Text or an amount exceeds its comfortable line/column width.",
+      "recommendedTreatment": "Prefer wrap and content growth for important names, values, and corrective copy; truncate only secondary text with an accessible full-value route.",
+      "priority": "Must-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["carousel", "data", "messages", "organization", "selection"]
+      },
+      "evidence": "Transient 320 px probes used 72 digits, a 1,500-character message, a 672-character organization title, a 792-character carousel title, and a 672-character selection label; all grew vertically without horizontal overflow. Other families were source/default-reviewed, not stress-mutated."
+    },
+    {
+      "category": "B. Content",
+      "states": ["Maximum content / extreme numeric value"],
+      "trigger": "A consumer supplies the longest supported name, amount, count, unit, or chart value.",
+      "recommendedTreatment": "Define input limits/formatting at the contract boundary; preserve the exact value, wrap where meaningful, and provide an accessible full reading without hiding outliers.",
+      "priority": "Must-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["carousel", "data", "messages", "organization", "selection"]
+      },
+      "evidence": "Long-value probes cover representative families; numeric-field-controls-check exercised very long numeric/non-arithmetic strings and exact decimal/scientific increments. No consumer-wide maximum policy exists."
+    },
+    {
+      "category": "B. Content",
+      "states": ["Stale cached data / needs refresh"],
+      "trigger": "A consumer displays a value that may be older than its source.",
+      "recommendedTreatment": "Show provenance/last-updated context and a refresh or safe stale-data warning only when the consumer can establish freshness.",
+      "priority": "Should-design",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"],
+        "INSPECTED SOURCE": ["data", "info-strip", "metric-comparison", "messages"]
+      },
+      "evidence": "Static labels and indicators do not carry cache timestamps or refresh semantics; no stale-data service is present."
+    },
+    {
+      "category": "C. Input",
+      "states": ["Input default / hover / focus / active / filled / valid"],
+      "trigger": "A user reaches, focuses, edits, or completes a supported control.",
+      "recommendedTreatment": "Keep labels and focus visible, retain native text editing/caret keys, communicate selection without color alone, and separate hover/active from persistent selected state.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["account-settings"],
+        "DYNAMICALLY EXERCISED": ["access-gateway", "buttons", "carousel", "fields", "navigation", "selection"]
+      },
+      "evidence": "Field lifecycle, 48 px targets, native editing, keyboard navigation, focus visibility, carousel controls, tabs, picker, and password reveal have bounded Chromium tests. Account-settings view/layer focus is dynamically checked; other settings editing remains source-only."
+    },
+    {
+      "category": "C. Input",
+      "states": ["Input error / real-time vs on-blur vs on-submit validation"],
+      "trigger": "The chosen validation policy detects an invalid or missing value.",
+      "recommendedTreatment": "Choose timing per form and error cost; avoid interruptive validation while typing; associate and focus the corrective error at the declared decision point.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "fields"],
+        "INSPECTED SOURCE": ["account-settings", "selection"]
+      },
+      "evidence": "Submit-error flow and field error geometry are exercised; the full range of live/on-blur/on-submit policies across all consumer forms is not proven."
+    },
+    {
+      "category": "C. Input",
+      "states": ["Help text / placeholder / character count"],
+      "trigger": "A control needs instructions, an example, or a bounded-length hint.",
+      "recommendedTreatment": "Keep a persistent programmatic label; connect help/error text; do not make placeholder the only label; show a count only when an actual maximum exists.",
+      "priority": "Should-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "NOT APPLICABLE": ["carousel", "data", "info-strip", "metric-comparison", "messages", "surfaces"],
+        "DEFAULT OBSERVED": ["access-gateway", "fields", "selection"]
+      },
+      "evidence": "Static examples are inspected/observed; a consumer character-limit contract is not implied."
+    },
+    {
+      "category": "C. Input",
+      "states": ["Input disabled / readonly"],
+      "trigger": "A value is unavailable for editing or an action is blocked.",
+      "recommendedTreatment": "Use native disabled/readonly semantics consistently; keep explanatory text separate from the value; do not silently mutate a disabled/readonly value.",
+      "priority": "Must-design",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {
+        "DEFAULT OBSERVED": ["selection"],
+        "DYNAMICALLY EXERCISED": ["access-gateway", "buttons", "fields"]
+      },
+      "evidence": "Selection wrappers include visible disabled cases; numeric and password tests exercise readonly/disabled gating. Hidden choice inputs are not their hit target: 12 label unions measured ≥48 px high."
+    },
+    {
+      "category": "D. Permission/auth",
+      "states": ["Not logged in", "Logged in but no permission", "Session expired", "Account suspended/limited", "2FA required mid-flow"],
+      "trigger": "Identity, session, authorization, account policy, or step-up verification changes.",
+      "recommendedTreatment": "Set a consumer-owned state contract for access, safe recovery, return routing, and support; avoid suggesting successful authentication from a presentation-only credential specimen.",
+      "priority": "Must-design before product integration",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "INSPECTED SOURCE": ["access-gateway", "account-settings", "messages"]
+      },
+      "evidence": "No identity provider, session, roles, suspension policy, or 2FA integration exists; gateway layout and client-side invalid input are not actual auth."
+    },
+    {
+      "category": "E. Network",
+      "states": ["Offline with cache", "Offline without cache", "Slow connection/degraded experience", "Reconnecting", "Sync conflict"],
+      "trigger": "Connectivity or consumer write synchronization is interrupted.",
+      "recommendedTreatment": "Decide read/write queue and conflict policy in the future consumer; surface retry/sync state without discarding entered content or promising cached availability that is not implemented.",
+      "priority": "Must-design before product integration",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"]
+      },
+      "evidence": "This repository is a standalone UI kit with no network-backed workflow/cache; no real offline or synchronization state was fabricated."
+    },
+    {
+      "category": "F. Device",
+      "states": ["Small screen: 320 px reflow", "Standard mobile: 360/390/430 px"],
+      "trigger": "A route/component is rendered at a narrow viewport.",
+      "recommendedTreatment": "Keep primary reading order and controls usable; wrap important content; permit horizontal scrolling only for explicitly scrollable patterns.",
+      "priority": "Must-design",
+      "defaultStatus": "DEFAULT OBSERVED",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "data", "fields", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection", "surfaces", "messages"]
+      },
+      "evidence": "Every listed route was loaded at the four sweep widths; focused suites add touch/keyboard geometry. Default screenshots are observations; not physical-device checks."
+    },
+    {
+      "category": "F. Device",
+      "states": ["Large screen/max-width", "Landscape vs portrait"],
+      "trigger": "Viewport width/height or orientation changes.",
+      "recommendedTreatment": "Keep reading measure bounded and usable, remeasure responsive charts, and ensure layers/controls remain reachable without implying safe-area/device validation.",
+      "priority": "Should-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "data", "fields", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection", "surfaces", "messages"]
+      },
+      "evidence": "All 36 routes were measured at 844×390 landscape; chart suite also resizes/re-measures SVG. No real device/safe-area check."
+    },
+    {
+      "category": "F. Device",
+      "states": ["Reduced motion preference"],
+      "trigger": "The browser reports prefers-reduced-motion: reduce.",
+      "recommendedTreatment": "Remove nonessential transitions/shimmers while preserving state and progress information; keep state changes immediate and understandable.",
+      "priority": "Must-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "data", "fields", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection", "surfaces", "messages"]
+      },
+      "evidence": "Browser media emulation was applied to all routes; direct message/data probes confirmed visible examples and zero running animations on those two pages. Not an OS/device test."
+    },
+    {
+      "category": "F. Device",
+      "states": ["High contrast / forced colors"],
+      "trigger": "The browser reports forced-colors: active.",
+      "recommendedTreatment": "Retain control boundaries, text, focus, and non-color state distinctions using system colors/visible geometry; test representative states with the target OS/browser before claiming support.",
+      "priority": "Must-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "data", "fields", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection", "surfaces", "messages"]
+      },
+      "evidence": "Forced-colors emulation was applied to all 36 routes; representative showcase screenshot and computed visibility for button, input, note, and skeleton show visible content. Chromium emulation is not a real OS high-contrast session."
+    },
+    {
+      "category": "F. Device",
+      "states": ["Dark mode variant"],
+      "trigger": "A consumer/theme context requests a dark or reversed appearance.",
+      "recommendedTreatment": "Decide whether this system must expose a second semantic token context; if yes, design and validate surfaces, boundaries, focus, states, and data colors as a coherent variant rather than applying a global inversion.",
+      "priority": "Should-design / owner decision",
+      "defaultStatus": "NOT APPLICABLE",
+      "overrides": {},
+      "evidence": "Current source demonstrates a single appearance contract. No dark mode was added or inferred; owner decides whether it is required before transfer."
+    },
+    {
+      "category": "G. Context",
+      "states": ["First-time user / onboarding", "Returning user"],
+      "trigger": "A consumer distinguishes a new account from a familiar one.",
+      "recommendedTreatment": "Design education/progressive disclosure only when product context and audience evidence support it; do not invent a journey or persona from fixture labels.",
+      "priority": "Nice-to-have until product context exists",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "NOT APPLICABLE": ["buttons", "fields", "surfaces"]
+      },
+      "evidence": "No real users, analytics, product journey, or onboarding requirement exists in this repository."
+    },
+    {
+      "category": "G. Context",
+      "states": ["Power user: keyboard shortcuts / bulk actions"],
+      "trigger": "A consumer supports frequent keyboard operation or bulk selection.",
+      "recommendedTreatment": "Document shortcuts only when implemented; avoid intercepting native text-editing/IME/modified keys; provide a visible, reversible bulk-selection state.",
+      "priority": "Should-design",
+      "defaultStatus": "INSPECTED SOURCE",
+      "overrides": {
+        "NOT APPLICABLE": ["surfaces"],
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "fields", "navigation", "selection"]
+      },
+      "evidence": "Keyboard focus, native caret/editing keys, carousel navigation, tabs, selection, password action, and account layer focus are covered by existing local suites. No product-wide shortcuts policy is proven."
+    },
+    {
+      "category": "G. Context",
+      "states": ["Regional: RTL / Arabic / mixed-direction text"],
+      "trigger": "The consumer renders Arabic/RTL labels with numbers, Latin IDs, or mixed currency.",
+      "recommendedTreatment": "Use logical properties, preserve reading order, isolate mixed-direction values where required, and verify long copy under the actual target locale.",
+      "priority": "Must-design",
+      "defaultStatus": "DEFAULT OBSERVED",
+      "overrides": {
+        "DYNAMICALLY EXERCISED": ["access-gateway", "account-settings", "buttons", "carousel", "data", "fields", "info-strip", "metric-comparison", "navigation", "order-schedule", "organization", "selection", "surfaces", "messages"]
+      },
+      "evidence": "All default route captures use Arabic RTL; interaction checks exercise representative RTL keyboard/swipe behavior. Browser locale ar-JO does not prove all locale formats."
+    },
+    {
+      "category": "G. Context",
+      "states": ["Regional currency/date/number format and timezone"],
+      "trigger": "A consumer locale or timezone changes the display/interpretation of values.",
+      "recommendedTreatment": "Choose a single formatter/timezone ownership contract and test negative, zero, unknown, long, and mixed-script values; keep the full underlying value available.",
+      "priority": "Should-design / owner decision",
+      "defaultStatus": "NOT PROVABLE",
+      "overrides": {
+        "INSPECTED SOURCE": ["data", "metric-comparison", "order-schedule", "organization"]
+      },
+      "evidence": "Fixture examples contain Arabic currency and dates as literal sample content; no locale-aware formatter or timezone data service is asserted."
+    }
+  ],
+  "runtimeEvidence": {
+    "broadSweep": {
+      "artifact": "generated-artifacts/pixilated-audit/edge/edge-results.json",
+      "routes": 36,
+      "cases": 288,
+      "defaultScreenshots": 144,
+      "defaultWidthsPx": [320, 360, 390, 430],
+      "otherModes": ["reduced-motion", "forced-colors", "landscape 844x390", "text-size-200%-simulation"],
+      "defaultDocumentOverflow": false,
+      "pageErrors": 0,
+      "resourceErrors": 0,
+      "textSizeSimulationLimit": "Inline doubling of pre-snapshotted computed font sizes; not native zoom or OS dynamic type."
+    },
+    "focusedSuites": [
+      {
+        "command": "python3 tools/component-mobile-check.py --out generated-artifacts/pixilated-audit/edge-tests/component-mobile",
+        "result": "52 PASS / 0 FAIL",
+        "artifact": "generated-artifacts/pixilated-audit/edge-tests/component-mobile/verification.json"
+      },
+      {
+        "command": "python3 tools/chart-mobile-check.py --out generated-artifacts/pixilated-audit/edge-tests/chart-mobile",
+        "result": "59 PASS / 0 FAIL",
+        "artifact": "generated-artifacts/pixilated-audit/edge-tests/chart-mobile/verification.json"
+      },
+      {
+        "command": "python3 tools/numeric-field-controls-check.py",
+        "result": "184 PASS / 0 FAIL (console-only)",
+        "artifact": "Console output only; uses the already-running local preview."
+      },
+      {
+        "command": "python3 tools/data-scale-state-check.py --out generated-artifacts/pixilated-audit/edge-tests/data-scale",
+        "result": "23 PASS / 0 FAIL",
+        "artifact": "generated-artifacts/pixilated-audit/edge-tests/data-scale/verification-r8-07.txt and generated-artifacts/pixilated-audit/edge-tests/data-scale/screenshots/"
+      }
+    ],
+    "crossTrackEvidenceReviewed": {
+      "interactionBrowser": {
+        "artifact": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-browser-results.json",
+        "assertions": 88,
+        "passed": 84,
+        "failed": 4,
+        "runtimeErrors": 0,
+        "repeatedFailureCount": 4,
+        "singleRootFinding": "INT-001",
+        "failureName": "picker async error preserves a visible local focus target and announces status",
+        "widthsPx": [320, 360, 390, 430],
+        "direction": "RTL",
+        "failedEvidence": {
+          "focusRetained": false,
+          "retryVisible": true,
+          "statusInsideListbox": true,
+          "hasLiveAnnouncement": false
+        },
+        "separatePickerNoResultsRecovery": "PASS",
+        "handling": "Dynamically exercised means the state was run; this failure is explicitly not treated as approved. It is cross-referenced to the interaction track and not duplicated in edge-findings.json."
+      }
+    },
+    "preexistingEvidenceReviewed": [
+      "interaction-lifecycle-results/results.json: 383 PASS / 0 FAIL",
+      "interaction-calendar-mobile-results/results.json: 55 PASS / 0 FAIL"
+    ],
+    "transientFixtureProbes": {
+      "artifact": "generated-artifacts/pixilated-audit/edge/edge-dynamic-probes.json",
+      "cases": "Long numeric/message/organization/carousel/selection content injected into browser DOM only; no fixture or source file was written.",
+      "labelTargetUnion": "12 choice labels measured; every label hit area is at least 48 px high. Hidden native input is 1×1 by design."
+    }
+  },
+  "limitations": [
+    "No external repository/application was contacted.",
+    "No production service, auth, role, analytics, user journey, or real user data exists in the audited scope.",
+    "No real screen reader, physical device, native zoom, OS high-contrast mode, safe area, WebKit, or Firefox was tested.",
+    "The JSON reports demonstrated kit states and explicit unknowns; it does not propose implementing a product backend."
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "audit": "edge-case-hunter",
+  "scope": "Read-only UI/UX audit of the open UI system repository and its local preview routes only; no Micro or external repository/application was accessed.",
+  "findingCount": 1,
+  "findings": [
+    {
+      "id": "EDGE-001",
+      "skill": "edge-case-hunter",
+      "category": "Device resilience / preview-shell typography and overflow",
+      "severity": "LOW (P3; preview-only)",
+      "status": "CONFIRMED",
+      "file": "previews/board-base.css",
+      "location": [
+        ".board-header h1 (lines 26-30)",
+        ".board-footer (lines 253-260)"
+      ],
+      "evidence": {
+        "method": "Chromium 152.0.7977.64 at 320 CSS px, Arabic/RTL. The existing edge sweep snapshots each computed font size and doubles font-size inline on body descendants. This is an explicit DOM font-size simulation, not browser zoom, OS text scaling, or native dynamic type.",
+        "observations": [
+          "Default sweep: 144 route/viewport screenshots (36 routes × 320/360/390/430); zero document-width overflow and zero page/resource errors.",
+          "200% simulation: reported document scroll widths include buttons 388, carousel 471, data 344, messages 408, navigation 412, organization 434, selection 421, surfaces 386, and showcase 467 px at a 320 px viewport.",
+          "At previews/messages/index.html, footer.board-footer measured scrollWidth 408 px versus clientWidth 320 px; its source-path and audit-reference text extends beyond the viewport. The same footer is a measurable cause on data (344), navigation (412), organization (434), and selection (398 of its 421 px document width).",
+          "The viewed evidence screenshot generated-artifacts/pixilated-audit/edge/previews--messages--font200-footer.png shows the doubled text crossing the footer's fixed 22 px line boxes and colliding; generated-artifacts/pixilated-audit/edge/previews--messages--index-font200-viewport.png shows the same stress mode in context.",
+          "The simulation doubles font-size but does not scale fixed line-height, padding, or JavaScript layout geometry. Carousel tracks and segmented controls also deliberately retain offscreen/scrollable content; their scroll extents and showcase-only controls are not evidence that a consumer component's default layout overflows."
+        ],
+        "artifacts": [
+          "generated-artifacts/pixilated-audit/edge/edge-results.json",
+          "generated-artifacts/pixilated-audit/edge/edge-text-simulation-attribution.json",
+          "generated-artifacts/pixilated-audit/edge/previews--messages--font200-footer.png",
+          "generated-artifacts/pixilated-audit/edge/previews--messages--index-font200-viewport.png",
+          "generated-artifacts/pixilated-audit/edge/previews--data--index-font200-viewport.png",
+          "generated-artifacts/pixilated-audit/edge/previews--carousel--index-font200-viewport.png"
+        ]
+      },
+      "problem": "The specimen-page shell is not resilient to the audit's font-only enlargement: its heading/footer use fixed pixel line heights and footer references include long path-like strings without a deliberate break opportunity. The footer is a confirmed source of real scroll overflow in several board routes under this specific stress mode. The wider aggregate maxima on carousel/showcase pages also include intentionally offscreen track/control geometry and must not be attributed to the reusable component contract.",
+      "rootCause": "previews/board-base.css sets .board-header h1 to 22px/32px and .board-footer to a fixed 22px line-height; the board footer has no overflow-wrap policy. The browser harness multiplies computed font-size only, leaving those fixed line boxes and the preview's horizontal geometry unchanged. Long internal paths and audit references then overflow/collide in specimen chrome. This is not a default-state component finding and is not proof of failure under native zoom.",
+      "impact": {
+        "ui": "Internal specimen pages can become horizontally scrollable and their footer text can collide during the font-only 200% stress simulation; source paths are less readable.",
+        "ux": "A developer using this preview stress mode may misdiagnose preview-shell overflow as a reusable component defect.",
+        "designSystem": "If preview shells are expected to demonstrate text enlargement, their own typography and wrapping rules need a distinct resilient contract.",
+        "futureTransfer": "Low direct product risk: this selector belongs to preview scaffolding, not a component primitive. There is no confirmed default-width defect in the examined routes."
+      },
+      "currentWorkaround": "Use the default-state route/viewport screenshots and component-level text stress checks as the decision evidence. Treat the document-width values from font-size-only simulation as a diagnostic signal, not a native zoom conformance result; exclude hidden screen-reader-only .m-info-strip__status/.m-live-region 1 px boxes and label-wrapped native input dimensions from visual findings.",
+      "futureState": "Make specimen chrome resilient before using it as a portability reference: headings should wrap with line boxes that grow with text; footer paths should break at intentional path separators or wrap anywhere without losing their full readable content; source and audit references should remain selectable and have no overlap at 200% text enlargement. Keep this shell-only and do not change component density or truncate labels to satisfy the harness.",
+      "recommendedSolution": {
+        "approach": "Patch the preview-shell rules only after owner approval: use content-proportional/unitless line-height for headings and footer copy; apply overflow-wrap:anywhere or add explicit <wbr> opportunities to long path-like references; preserve full text and allow footer height to grow.",
+        "changeType": "PATCH (preview scaffolding only), not a component/API rewrite.",
+        "avoid": [
+          "Do not hide overflow or clip the long references.",
+          "Do not shrink text or change reusable component dimensions based on the simulation alone.",
+          "Do not claim native browser zoom/OS text-size conformance from this DOM mutation."
+        ]
+      },
+      "risks": [
+        "Breaking a path at arbitrary characters can make copy/paste less clear; prefer word-break opportunities at separators or preserve an unbroken selectable source value.",
+        "Changing line-height may lengthen specimen pages, which is appropriate, but screenshot baselines may need updating after approval.",
+        "A DOM-only text-size simulator can still diverge from browser zoom and operating-system accessibility settings."
+      ],
+      "acceptanceCriteria": [
+        "At 320 CSS px in RTL and LTR, default preview routes keep document scrollWidth equal to viewport width.",
+        "Under the declared font-size-only stress mode, heading/footer lines do not overlap, paths remain fully readable, and the footer/document do not gain horizontal overflow.",
+        "Repeat the check with actual Chromium browser zoom/text enlargement separately; do not equate that result with this simulation.",
+        "Verify 360/390/430 widths and a wide viewport; ensure content height grows instead of clipping."
+      ],
+      "priority": "Should-design",
+      "ownerDecisionRequired": true,
+      "ownerQuestion": {
+        "decision": "Is font-only 200% enlargement an intended acceptance condition for specimen chrome, or only a diagnostic simulation?",
+        "whyNeeded": "The measurement demonstrably enlarges text but leaves fixed line-height and layout metrics unchanged, so it cannot stand in for native zoom without an explicit contract.",
+        "options": [
+          {
+            "option": "Treat 200% as a preview-shell requirement",
+            "recommended": true,
+            "effects": "Approve a small shell-only CSS patch and retain the mode as a regression test; consumer components remain evaluated independently."
+          },
+          {
+            "option": "Keep it as a diagnostic-only stress probe",
+            "effects": "Label results as simulation-only and use real browser zoom/OS text settings for any accessibility verdict; no product implementation is blocked."
+          }
+        ],
+        "blocksRepair": false
+      }
+    }
+  ],
+  "nonFindings": [
+    {
+      "subject": "1 px .m-info-strip__status/.m-live-region clipping",
+      "status": "NOT A FINDING",
+      "reason": "Intentional screen-reader-only geometry; excluded from visual clipping findings."
+    },
+    {
+      "subject": "Visually hidden choice inputs measured as 1 × 1 px",
+      "status": "NOT A FINDING",
+      "reason": "Verified the associated label hit-area union on 12 selection examples: every measured label is at least 48 px high (some long labels are taller). Do not report the native input's hidden box as the touch target."
+    },
+    {
+      "subject": "Calendar/order-schedule narrow layout",
+      "status": "NOT A FINDING",
+      "reason": "Do not repeat the earlier source-only suspicion: the supplied local calendar/mobile evidence records 55 pass, 0 fail. This is bounded Chromium component-width/data-equivalence evidence, not a claim about real devices, date-service behavior, or timezone policy."
+    },
+    {
+      "subject": "Large document scroll widths inside hidden carousel tracks, scrollable segmented controls, phone comparison lanes, and showcase-only controls",
+      "status": "NOT A FINDING BY ITSELF",
+      "reason": "Their horizontal extents are intentionally clipped or scrollable. No default document overflow was observed in the 144 default viewport captures; do not classify an internal scrollWidth as visible page clipping without a visible-content check."
+    }
+  ]
+}

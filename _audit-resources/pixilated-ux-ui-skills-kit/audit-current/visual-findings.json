@@ -1,0 +1,469 @@
+{
+  "audit_prefix": "VISUAL",
+  "scope": "Visual UI engineering, density, hierarchy, and future direction for the independent UI/UX design-system repository only.",
+  "external_micro_access": false,
+  "product_files_modified": false,
+  "findings": [
+    {
+      "id": "VISUAL-01",
+      "skill": ["ui-designer-agent", "ui-manager"],
+      "category": "Visual composition and density",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "source": [
+        {
+          "path": "previews/board-base.css",
+          "lines": "51-63,84-97",
+          "selector": "main, section.panel, .example-grid, .example, .caption"
+        },
+        {
+          "path": "previews/buttons/index.html",
+          "lines": "36-115",
+          "selector": "#types .example-grid"
+        }
+      ],
+      "evidence": "Local Chromium at 320 CSS px measured the first buttons specimen panel at 280x784px, 24px padding and 24px radius; sampled actual buttons remain 48px high. Screenshot generated-artifacts/pixilated-audit/visual-buttons-320.jpg was opened and inspected: a long vertical run of controls/captions sits in one rounded panel.",
+      "problem": "On narrow widths, the preview-board wrapper dominates the scan and combines all button types/captions into one tall specimen. This is a review-board composition issue, not evidence that the button component itself is oversized.",
+      "root_cause": "The board applies uniform 24px panel padding/radius, while all examples are wrapped into a single flow with centered captions; the page does not distinguish compact family overview, exhaustive state lab, and contextual usage composition.",
+      "impact": "Makes family comparison and scanning slower on mobile; rounded board chrome competes with the actual control variants and encourages treating the gallery as a stack of cards.",
+      "current_patch": "None; audit-only. Existing mitigation is responsive wrapping and true narrow viewport preview. Core component 48px targets are not the problem and should not be reduced.",
+      "future_state": "Separate the family overview, state comparison lab, and contextual composition. Use a compact flat family index and reserve padded surfaces for independent samples that earn their own boundary. Align variants with labels; on mobile stack as labeled rows and move long rationale into linked/expandable specification content.",
+      "recommendation": "Structural preview information-architecture/composition change; no core button CSS redesign.",
+      "patch_vs_structural": "Structural",
+      "risk": "Flattening the board may make examples harder to distinguish; preserve grouping via headings, row rules, spacing, and restrained background changes.",
+      "acceptance_tests": [
+        "At 320, 360, 390, and 430 CSS px, family and sample are visible without horizontal page overflow.",
+        "Every sample remains unambiguously paired with its caption.",
+        "No fixed-height wrapper clips variable text.",
+        "Compare compact overview, state lab, and contextual composition separately.",
+        "Changing board layout does not alter component geometry."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Should family previews prioritize compact inventory scanning or exhaustive state comparison?",
+        "options": [
+          {
+            "option": "Compact overview first",
+            "effect": "Faster family scanning; detailed state QA moves to a dedicated lab."
+          },
+          {
+            "option": "State matrix first",
+            "effect": "Better QA visibility but retains a long mobile page."
+          },
+          {
+            "option": "Keep current long board",
+            "effect": "Lowest migration cost; current narrow-screen scan cost remains."
+          }
+        ],
+        "recommendation": "Compact overview first, with state lab as a separate destination.",
+        "blocks_fix": false
+      }
+    },
+    {
+      "id": "VISUAL-02",
+      "skill": ["design-direction", "ui-designer-agent", "ui-manager"],
+      "category": "Component hierarchy",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "source": [
+        {
+          "path": "components/carousel/carousel.css",
+          "lines": "99-113",
+          "selector": ".m-carousel__slide, @container (max-width: 335px)"
+        },
+        {
+          "path": "previews/carousel/index.html",
+          "lines": "carousel specimen",
+          "selector": ".m-carousel"
+        }
+      ],
+      "evidence": "At 430px viewport, local Chromium measured sample panel width 390px, carousel inner viewport about 342px, active card x=80 width=270px and previous card x=-202 width=270px; only about 24px of the previous card is exposed. The viewed generated-artifacts/pixilated-audit/visual-carousel-430.jpg shows clipped neighboring content rather than a legible teaser. Document width equals viewport width (430px).",
+      "problem": "Adjacent-card peek is visible but too narrow to communicate content; clipped glyphs read as accidental cropping even though the active card, position label, arrows, and dots work as designed.",
+      "root_cause": "The active-slide width reserves fixed peek and gap on both sides; peek is suppressed only when the carousel container is <=335px, leaving a roughly 342px inner-width configuration that exposes an unreadable sliver.",
+      "impact": "Consumes visual edge space without meaningful preview or comparison. The position label and controls already communicate location, so the peek is not essential to orientation.",
+      "current_patch": "None; audit-only. Existing strengths include no autoplay, an explicit position status, visible controls, a one-item full-width rule, and a <=335px container fallback.",
+      "future_state": "Define a focused carousel as the default: full-width active card with no adjacent copy clipped, explicit position, and visible arrow/dot controls. Offer a separate opt-in browse-strip mode only for teaser-safe short content; choose its behavior from component inline size, not device width. Do not shrink active content to manufacture a peek.",
+      "recommendation": "Structural variant/API decision plus component-width threshold adjustment. A CSS threshold-only patch can remove the measured sliver but does not settle the default contract.",
+      "patch_vs_structural": "Structural",
+      "risk": "Removing peek may reduce swipe discoverability; retain visible button navigation. Wider teaser mode requires content-specific preview discipline.",
+      "acceptance_tests": [
+        "At component widths 288, 328, 342, 350, and 390px, focused mode exposes no clipped neighboring copy.",
+        "Browse mode exposes a deliberate legible preview cue.",
+        "Active card content never clips.",
+        "RTL previous/next order, keyboard control, position announcement, and one-item state remain correct.",
+        "Reduced-motion behavior remains intact."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Is the intended default an active-card carousel or a browseable horizontal strip?",
+        "options": [
+          {
+            "option": "Focused active-card default",
+            "effect": "Highest content area and broadest content compatibility; peek becomes opt-in."
+          },
+          {
+            "option": "Browse strip default",
+            "effect": "Stronger browsing cue; needs teaser-safe content and wider component bounds."
+          },
+          {
+            "option": "Both as explicit variants",
+            "effect": "Flexible but adds API and design/test surface."
+          }
+        ],
+        "recommendation": "Focused active-card default with browse/peek as an opt-in variant.",
+        "blocks_fix": true
+      }
+    },
+    {
+      "id": "VISUAL-03",
+      "skill": ["ui-designer-agent", "ui-manager"],
+      "category": "Visual semantics",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "source": [
+        {
+          "path": "previews/board-base.css",
+          "lines": "37-48",
+          "selector": ".status-chip"
+        },
+        {
+          "path": "previews/buttons/index.html",
+          "lines": "29-31",
+          "selector": ".status-chip"
+        },
+        {
+          "path": "previews/carousel/index.html",
+          "lines": "30-31",
+          "selector": ".status-chip"
+        }
+      ],
+      "evidence": "Viewed button/fields/data/selection/navigation/messages boards show pale warning-colored STABLE UI labels; viewed carousel/surfaces boards use the same styling for DRAFT FOR REVIEW. `.status-chip` always uses --micro-warning-surface and --micro-warning.",
+      "problem": "Stable and draft lifecycle states share one warning color treatment. Wording remains explicit, but the visual scan cue suggests equivalent caution.",
+      "root_cause": "A single generic badge selector is applied to distinct maturity values without a state-to-token mapping.",
+      "impact": "Maturity metadata is less scannable and warning color is diluted; reviewers can mistake stable implementation for a review-needed component.",
+      "current_patch": "None; audit-only. Explicit text remains present, so color is not the sole signal.",
+      "future_state": "Create documented maturity states with distinct restrained treatments: stable/reference neutral, draft/review warning, proposed/experimental informational. Keep these separate from runtime success/error/warning semantics, and assign state explicitly rather than parsing label copy.",
+      "recommendation": "Small preview CSS/state patch plus semantic contract documentation; no component runtime change.",
+      "patch_vs_structural": "Patch",
+      "risk": "Too many badge colors can add noise; cap the vocabulary, reuse existing semantic/neutral tokens, and retain readable text labels.",
+      "acceptance_tests": [
+        "Snapshot stable, draft/review, and proposed on all board layouts.",
+        "Stable is not warning-colored; draft/review is visibly distinct from stable.",
+        "Proposed remains distinguishable without resembling a runtime error.",
+        "Labels remain understandable without color.",
+        "Check contrast on actual badge backgrounds."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Which maturity statuses are canonical?",
+        "options": [
+          {
+            "option": "stable / draft / proposed",
+            "effect": "Matches repository language and supports three distinct treatments."
+          },
+          {
+            "option": "stable / review",
+            "effect": "Simpler mapping but loses proposed/experimental distinction."
+          },
+          {
+            "option": "Per-family custom labels",
+            "effect": "Flexible but weakens library-wide consistency."
+          }
+        ],
+        "recommendation": "stable / draft / proposed.",
+        "blocks_fix": false
+      }
+    },
+    {
+      "id": "VISUAL-04",
+      "skill": ["design-direction", "ui-designer-agent", "ui-manager"],
+      "category": "Data encoding and visual semantics",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "source": [
+        {
+          "path": "components/metric-comparison/example-usage.html",
+          "lines": "23-40",
+          "selector": "[data-metric-circles][data-layout='overlap']"
+        },
+        {
+          "path": "components/metric-comparison/metric-comparison.js",
+          "lines": "91-103,165-202",
+          "selector": "circle layout/position/diameter and z-order"
+        },
+        {
+          "path": "components/metric-comparison/metric-comparison.css",
+          "lines": "87-100",
+          "selector": ".m-metric-circles__items[data-layout='overlap']"
+        }
+      ],
+      "evidence": "Viewed 320px and 390px crops show 64/25/9 circles interlocking as a Venn-like cluster, despite the no-relationship caption. Local Chromium at 390px measured circle diameters 144/90/54px and z-order with the largest in front. Circle-intersection geometry shows foreground A occludes about 40.1% of B's disk and 35.6% of C's disk. Base circles follow the intended square-root scale, but visible colored areas do not.",
+      "problem": "The default quantitative overlap hides meaningful portions of smaller data marks, distorting their visible area, and suggests intersection/relationship that the values do not encode. The external key preserves exact values but cannot restore the visual comparison.",
+      "root_cause": "The example defaults to overlap. The renderer uses fixed relative centers and stacks larger circles in the foreground (layer follows diameter), prioritizing compact composition over fully visible area and semantic neutrality.",
+      "impact": "The visible area no longer compares as 64:25:9, and a Venn-like overlap cue contradicts the intended independent-value reading. This is a measured geometry issue, not a claim about human preference.",
+      "current_patch": "None; audit-only. The exact visible key, state copy, and no-relationship caption mitigate data loss. In the huge-value state, zero is a fixed 20px hollow state marker; the negative area approaches zero beside 10^15 and is recoverable from its always-visible exact row. Those safeguards do not make overlap appropriate for quantitative comparison.",
+      "future_state": "Use aligned bars/list/table for precision. If area-scaled circles are useful as an optional coarse magnitude view, keep them disjoint and preserve the exact key. Keep overlap illustration-only or remove it from metric comparison; a disclaimer cannot undo occlusion.",
+      "recommendation": "Confirmed structural/default decision for metric-comparison; preserve the area formula but do not approve overlap as a quantitative comparison mode merely because the source documents its intended encoding.",
+      "patch_vs_structural": "Structural",
+      "risk": "Separated circles still need a shared meaningful scale; for incomparable units, rows are safer. A table preserves exactness but has less preattentive magnitude emphasis.",
+      "acceptance_tests": [
+        "In disjoint area mode, each circle remains fully visible and visible area tracks its data value.",
+        "Exercise 64/25/9 and huge / zero / negative / missing together.",
+        "Keep exact textual readings visible; if area encodes magnitude, make the negative sign explicit and never let an unlabelled filled disk imply a positive sign; missing has no area.",
+        "If overlap remains, it is illustration-only, not the default quantitative view."
+      ],
+      "owner_decision": {
+        "required": true,
+        "question": "Should overlap remain as an illustrative-only mode or be removed from metric comparison?",
+        "options": [
+          {
+            "option": "Remove overlap from quantitative comparison",
+            "effect": "Preserves visible area encoding; aligned bars/tables remain the precision path."
+          },
+          {
+            "option": "Keep overlap as illustration-only",
+            "effect": "Retains decorative layered circles but makes no data-precision claim."
+          },
+          {
+            "option": "Keep overlap as comparison default",
+            "effect": "Compact cluster remains, but occluded area and Venn-like cue remain unresolved."
+          }
+        ],
+        "recommendation": "Use aligned linear/table comparison for precision; keep disjoint area circles optional; overlap illustration-only or remove it.",
+        "blocks_fix": true
+      }
+    }
+  ],
+  "skill_coverage": [
+    {
+      "skill": "design-direction",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/design-direction/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/technique-index.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/catalogue.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01b.md"
+      ],
+      "families_checked": [
+        "Carousel",
+        "Foundations",
+        "Metric comparison: circles vs linear",
+        "Data charts and responsive legend",
+        "Compositions",
+        "Showcase"
+      ],
+      "finding_ids": ["VISUAL-02", "VISUAL-04"],
+      "finding_count": 2,
+      "limitations": "No owner-signed design intake was present. No external trend or reference search was run because the user explicitly prohibited external URL access. Circle-vs-linear default remains a future owner decision; overlap's measurable area distortion is a confirmed design risk, independent of user preference."
+    },
+    {
+      "skill": "ui-designer-agent",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/technique-index.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/catalogue.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01a.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01b.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-09a.md"
+      ],
+      "families_checked": [
+        "Foundations",
+        "Buttons",
+        "Fields",
+        "Selection",
+        "Navigation",
+        "Data and charts",
+        "Metric comparison",
+        "Carousel",
+        "Info strip",
+        "Messages",
+        "Organization",
+        "Surfaces",
+        "Account settings",
+        "Access gateway",
+        "Order schedule",
+        "Packed circle",
+        "Compositions",
+        "Showcase"
+      ],
+      "finding_ids": ["VISUAL-01", "VISUAL-02", "VISUAL-03", "VISUAL-04"],
+      "finding_count": 4,
+      "limitations": "Screenshots and measurements are representative, with targeted chart/metric/quantity/password crops at 320/360/390/430; this is not a complete family x state x viewport matrix. External trend search was prohibited. No full WCAG or physical-device claim."
+    },
+    {
+      "skill": "ui-manager",
+      "skill_path": "_audit-resources/pixilated-ux-ui-skills-kit/ui-manager/SKILL.md",
+      "status": "APPLIED",
+      "references_consulted": [
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/technique-index.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01a.md",
+        "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-09a.md",
+        "shared/tokens.css",
+        "docs/COMPONENT-GEOMETRY.md"
+      ],
+      "families_checked": [
+        "Buttons",
+        "Fields",
+        "Carousel",
+        "Data charts at 320/360/390/430: bars, line, donut, bubbles, zero/missing/negative",
+        "Metric comparison at 320/360/390/430: default, flat, zero, negative, huge, missing",
+        "Quantity and password fields at 320/360/390/430",
+        "Info strip",
+        "Board status badges",
+        "Representative composed previews"
+      ],
+      "finding_ids": ["VISUAL-01", "VISUAL-02", "VISUAL-03", "VISUAL-04"],
+      "finding_count": 4,
+      "limitations": "Measured component/preview CSS geometry in local Chromium only. Shared interaction results were referenced, not independently reproduced. Did not perform exhaustive state, screen-reader, contrast, or device testing."
+    }
+  ],
+  "deep_visual_review": {
+    "status": "ONE_CONFIRMED_METRIC_FINDING",
+    "new_finding_ids": ["VISUAL-04"],
+    "viewports_css_px": [320, 360, 390, 430],
+    "families": {
+      "data_charts": {
+        "result": "PASS_NO_FINDING_FOR_SHOWN_FIXTURES",
+        "samples": ["bars 8/4/0/10", "line with missing Monday", "donut 12/8/5 total 25", "bubbles 90/12/3", "bubble states 0/missing/-2"],
+        "observations": [
+          "Bar and line axis labels fit in the four target crops.",
+          "Line missing point is explicitly marked and the polyline remains discontinuous.",
+          "Donut legend stacks at 320/360 and sits beside its 148px SVG at 390/430.",
+          "Zero, missing and invalid negative area values remain textually distinct in adjacent labels; their 14px state rings are shared, so visible text/table fallback remains essential."
+        ]
+      },
+      "metric_comparison": {
+        "result": "CONFIRMED_FINDING_VISUAL-04",
+        "samples": ["default main 18 with rows 32/9/2", "main hero 98765432109876543210", "main rows 10^12/0/-450/missing", "circles 64/25/9", "circles 10^15/0/-2/missing"],
+        "observations": [
+          "Hero circle remains 144px; the 20-digit value wraps, but is not clipped.",
+          "Exact circle labels/readings remain in an external key.",
+          "Base diameters follow the square-root area rule, but overlap occludes about 40.1% of the 25 disk and 35.6% of the 9 disk at 390px.",
+          "Huge/zero/negative/missing states remain recoverable in the always-visible key; zero is a fixed hollow marker and negative area can become subpixel."
+        ],
+        "future_direction": "Use aligned bars/list/table for precision; offer disjoint area-scaled circles only as an optional shared-scale magnitude view. Keep overlap illustration-only or remove it; preserve real demo values and the exact key."
+      },
+      "fields": {
+        "result": "PASS_NO_VISUAL_FINDING",
+        "samples": ["quantity stepper", "password reveal control"],
+        "observations": [
+          "Element crops were inspected at all four widths.",
+          "Quantity unit reflows beneath at 320px and remains inline at 360px and wider.",
+          "Password reveal action remains aligned inside its control shell."
+        ],
+        "shared_interaction_evidence": "Latest interaction-browser-results.json reports 88 assertions: 84 pass / 4 fail / 0 runtime errors. All four failures repeat INT-001, picker async-error focus/announcement, at 320/360/390/430px. Quantity increment and password reveal/remask/focus checks pass at all four target widths; interaction suite was not duplicated."
+      }
+    },
+    "script": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/visual-targeted-captures.py",
+    "detailed_reports": [
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/design-direction.md",
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/ui-designer-agent.md",
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/ui-manager.md"
+    ],
+    "limitations": "Fixtures are representative and do not cover arbitrary axis cardinality, all long labels, every chart error/scaling state, consumer number localization, physical devices, WebKit, screen readers, or full WCAG conformance."
+  },
+  "screenshots_viewed": [
+    "generated-artifacts/pixilated-audit/visual-buttons-320.jpg",
+    "generated-artifacts/pixilated-audit/visual-data-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-fields-360.jpg",
+    "generated-artifacts/pixilated-audit/visual-carousel-430.jpg",
+    "generated-artifacts/pixilated-audit/visual-composition-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-navigation-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-selection-320.jpg",
+    "generated-artifacts/pixilated-audit/visual-messages-430.jpg",
+    "generated-artifacts/pixilated-audit/visual-organization-360.jpg",
+    "generated-artifacts/pixilated-audit/visual-surfaces-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-info-strip-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-showcase-430.jpg",
+    "generated-artifacts/pixilated-audit/visual-system-320.jpg",
+    "generated-artifacts/pixilated-audit/visual-charts-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-concepts-390.jpg",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-overlap-320.png",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-overlap-360.png",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-overlap-390.png",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-overlap-430.png",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-separated-390.png",
+    "generated-artifacts/pixilated-audit/visual-metric-circles-zero-negative-missing-huge-390.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-default-320.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-default-360.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-default-390.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-default-430.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-flat-390.png",
+    "generated-artifacts/pixilated-audit/visual-main-comparison-extreme-states-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bars-320.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bars-360.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bars-zero-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bars-430.png",
+    "generated-artifacts/pixilated-audit/visual-chart-line-320.png",
+    "generated-artifacts/pixilated-audit/visual-chart-line-360.png",
+    "generated-artifacts/pixilated-audit/visual-chart-line-gap-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-line-430.png",
+    "generated-artifacts/pixilated-audit/visual-chart-donut-320.png",
+    "generated-artifacts/pixilated-audit/visual-chart-donut-360.png",
+    "generated-artifacts/pixilated-audit/visual-chart-donut-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-donut-430.png",
+    "generated-artifacts/pixilated-audit/visual-chart-donut-huge-total-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-320.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-360.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-range-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-430.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-states-320.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-states-360.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-states-390.png",
+    "generated-artifacts/pixilated-audit/visual-chart-bubbles-states-430.png",
+    "generated-artifacts/pixilated-audit/visual-field-stepper-320.png",
+    "generated-artifacts/pixilated-audit/visual-field-stepper-360.png",
+    "generated-artifacts/pixilated-audit/visual-field-stepper-390.png",
+    "generated-artifacts/pixilated-audit/visual-field-stepper-430.png",
+    "generated-artifacts/pixilated-audit/visual-field-password-320.png",
+    "generated-artifacts/pixilated-audit/visual-field-password-360.png",
+    "generated-artifacts/pixilated-audit/visual-field-password-390.png",
+    "generated-artifacts/pixilated-audit/visual-field-password-430.png"
+  ],
+  "consulted_paths": [
+    "attached_assets/Pasted--Prompt-Replit-UI-UX-Design-System-Future-State--179283_1792833646913.txt",
+    "DESIGN.md",
+    "shared/tokens.css",
+    "shared/motion.css",
+    "docs/COMPONENT-GEOMETRY.md",
+    "docs/COMPONENT-INVENTORY.md",
+    "docs/UI-VISUAL-SYSTEM.md",
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-inventory.json",
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-findings.json",
+      "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/LANG-findings.json",
+    "previews/board-base.css",
+    "previews/index.css",
+    "_audit-resources/pixilated-ux-ui-skills-kit/design-direction/SKILL.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/SKILL.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-manager/SKILL.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/technique-index.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/catalogue.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01a.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-01b.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/ui-designer-agent/references/notes/batch-09a.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/visual-targeted-captures.py",
+    "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-browser-results.json",
+    "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/design-direction.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/ui-designer-agent.md",
+    "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/skill-reports/ui-manager.md"
+  ],
+  "not_run_or_not_provable": [
+    {
+      "item": "External design trend/reference search",
+      "reason": "Prohibited by the user; source-local analysis only."
+    },
+    {
+      "item": "All component states at all four viewport widths",
+      "reason": "Parent audit is running broad route/state coverage; this worker captured representative visual evidence and does not claim exhaustive coverage."
+    },
+    {
+      "item": "Physical mobile devices, Safari/WebKit, screen readers, real touch, full WCAG conformance",
+      "reason": "Not tested in this visual pass; screenshots and CSS-pixel measurements cannot prove these."
+    },
+    {
+      "item": "Future product priority and real user preference",
+      "reason": "No real users, production data, analytics, or consumer application are in scope."
+    }
+  ]
+}

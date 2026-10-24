@@ -1,0 +1,298 @@
+{
+  "audit": "design-systems-agent",
+  "sourceHead": "fc1e53e03048c38a451c8421e23cee58ab2b3a7a",
+  "scope": "Foundations, token roles, component contracts/lifecycle, layers, transfer architecture, delivery integrity, manifest/docs. No product/source files changed.",
+  "findingCount": 8,
+  "findings": [
+    {
+      "id": "SYS-DS-001",
+      "skill": "design-systems-agent",
+      "category": "Design-system foundations / token architecture",
+      "severity": "High",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "shared/tokens.css", "lines": "9-155", "selectors": ":root; --micro-*"},
+        {"path": "docs/SHARED-SPEC.md", "lines": "5-6"},
+        {"path": "components/fields/fields.css", "lines": "53-55, 303-315", "selectors": ".m-field__control, :focus-within"}
+      ],
+      "evidence": "The token source contains a single :root set of raw brand/surface/text/feedback values and component-scale values. It has useful CSS variables for color, spacing, radii, type, two shadows and three motion durations, but no primitive→semantic→component alias layers. The shared spec explicitly says tokens are semantic, but the source names/values combine brand and usage. Cross-family roles for border width, opacity, z-index and responsive thresholds are absent; components still author these dimensions locally. This is an implementation architecture gap, not evidence that the currently declared light palette is visually wrong.",
+      "rootCause": "Tokens evolved per delivery batch in one hand-maintained CSS file; the vocabulary is organized by current values/feature rather than separating raw values, stable semantic roles, and narrowly scoped component aliases.",
+      "impact": "Changing theme or brand roles requires editing raw variables used directly throughout components, increases override coupling, and leaves system-wide geometry decisions hard to audit. The source remains usable as a single light CSS theme, but is less predictable to adapt/transport and govern than the declared single-source rule suggests.",
+      "currentPatch": "None applied. No product source was edited. Existing CSS custom properties and focused role groupings are a solid base and should remain the compatibility surface during a staged migration.",
+      "futureState": "Introduce a documented semantic CSS layer first: primitive palette values; semantic roles (surface, content, border, feedback, focus, data-series); then only justified component aliases. Keep the current light theme as the sole implemented theme; dark mode remains out of scope until requested. Add missing shared dimensions only where repeated decisions are evidenced: border width, opacity, layer roles, breakpoint/container thresholds, and a fuller elevation/motion vocabulary. Preserve existing --micro-* names as aliases for one deprecation cycle rather than breaking every component. Consider a typed DTCG source/export only after another output platform or token tooling is an approved requirement; do not add a bulky pipeline solely to satisfy a template.",
+      "recommendation": "Structural foundation increment, followed by small compatibility patches in consumers; do not perform an all-at-once token rename.",
+      "changeType": "Structural",
+      "risks": "Semantic names can hide meaning if definitions are vague; parallel token sources could worsen drift; unnecessary tokenization of one-off geometry creates noise. Migration must preserve visual values and should not introduce an unapproved dark theme.",
+      "acceptanceTests": [
+        "A token audit can map every semantic alias to a primitive or documented fixed literal, with no cycles.",
+        "Component CSS uses semantic aliases for theme-dependent color/feedback roles; existing light-theme screenshots remain pixel-stable except approved changes.",
+        "Static lint identifies unapproved raw palette colors and unregistered global layer values.",
+        "RTL/LTR and current 320/360/390/430 viewport checks pass for components that consume shared responsive tokens."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Approve a staged semantic CSS token layer now, or keep the one-layer CSS contract until a specific second theme/output format is required?",
+      "decisionOptions": [
+        {"option": "Keep one CSS token layer", "effect": "Lowest migration cost; future theme/brand adaptation remains override-heavy.", "blocking": false},
+        {"option": "Add semantic CSS aliases over current variables (recommended)", "effect": "Improves role clarity and theme seam while preserving the current theme and compatibility.", "blocking": false},
+        {"option": "Adopt DTCG JSON plus build pipeline now", "effect": "Typed multi-target source but creates tooling/dependency/governance cost without an evidenced second target.", "blocking": true}
+      ]
+    },
+    {
+      "id": "SYS-DS-002",
+      "skill": "design-systems-agent",
+      "category": "Layers / composition contract",
+      "severity": "High",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "components/navigation/navigation.css", "lines": "173-185", "selectors": ".m-layer-backdrop, .m-layer"},
+        {"path": "components/messages/messages.css", "lines": "87-104", "selectors": ".m-toast"},
+        {"path": "previews/ui-system-showcase/showcase.css", "line": "347", "selector": ".sc-toast-host"},
+        {"path": "components/data/packed-circle.css", "lines": "21-22", "selectors": ".m-chart--packed .m-bubble[data-size]"}
+      ],
+      "evidence": "Layer ordering is scattered: the component backdrop is z-index 80, its surface 85, toast 90; showcase chrome uses 60; local ordering uses 1/2 and preview chrome 5. No shared layer-role tokens exist. These numbers currently encode stack policy in unrelated stylesheets.",
+      "rootCause": "Layered components and showcase chrome were added incrementally without a shared stack-role contract or a check for the full composition.",
+      "impact": "A consumer composition can place a toast, sheet, nested picker, fixed navigation, and preview/application chrome in unexpected order. Numeric ordering also fails to communicate whether a layer is global or local; stacking contexts can defeat even large values.",
+      "currentPatch": "None applied. Current backdrop<layer<toast ordering is explicit and should be retained as behavior while replacing unexplained literals.",
+      "futureState": "Define a short layer contract by role (base/content, sticky chrome, popover, backdrop, modal surface, toast/live feedback) with values centralized as shared tokens. Document which components create stacking contexts and which component owns safe-area and viewport edges. Keep local z-index values only for internal decorative ordering (for example bubble overlap), separate from global overlays. Add a composition fixture that opens each overlay while action bar/navigation/toast are present, rather than asserting values in isolation.",
+      "recommendation": "Structural shared layer roles plus a local patch replacing global literals; validate stacking-context behavior in composed fixtures.",
+      "changeType": "Structural",
+      "risks": "A numeric scale alone cannot cross stacking contexts; overly prescriptive global roles can constrain host composition. Preserve explicit component ownership and allow a documented host override.",
+      "acceptanceTests": [
+        "No component-level global overlay uses an unexplained raw z-index; internal decorative z-index is explicitly local.",
+        "Backdrop is below its active layer; toast and any approved popover/modal ordering is deterministic.",
+        "Nested layer, toast, sticky actionbar and navbar fixture has no obscured close/action target at 320/360/390/430 and RTL/LTR.",
+        "Opening, closing and reduced-motion states preserve stacking and focus visibility."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Should transient toast feedback always outrank dialogs, or should host-level modal/toast ownership determine that ordering?",
+      "decisionOptions": [
+        {"option": "Toast globally above all layers", "effect": "Confirmations stay visible but can cover modal content/actions.", "blocking": false},
+        {"option": "Modal surface above toast (recommended default pending accessibility review)", "effect": "Preserves dialog focus/visual ownership; transient confirmation may be hidden until dialog closes.", "blocking": true},
+        {"option": "Host-configurable role mapping", "effect": "Most flexible but requires an explicit host integration contract.", "blocking": false}
+      ]
+    },
+    {
+      "id": "SYS-DS-003",
+      "skill": "design-systems-agent",
+      "category": "Component geometry / touch-target policy",
+      "severity": "High",
+      "status": "LIKELY",
+      "source": [
+        {"path": "shared/tokens.css", "line": "64", "selector": "--micro-touch-min"},
+        {"path": "docs/COMPONENT-GEOMETRY.md", "lines": "48-66"},
+        {"path": "components/order-schedule/order-schedule.css", "lines": "203-251", "selectors": ".m-ocal__grid, .m-ocal__cell"},
+        {"path": "components/order-schedule/specification.md", "lines": "1-25"}
+      ],
+      "evidence": "The project token defines 48px as the touch-target floor. Current geometry documentation calculates calendar day cells around 37.7px at 320px viewport, 43.4px at 360px and 46.6px at 390px, and says seven 48px targets plus gaps need 360px of content. Order schedule remains DRAFT/PROPOSED, so this is a documented draft exception rather than a claim of an approved production defect. The current CSS uses a seven-column calendar grid; no viewport run was made in this sub-audit.",
+      "rootCause": "A fixed seven-column month layout competes with the library-wide 48px target rule below the documented 360px content width; the draft proposes alternate views but does not settle the default narrow-width policy.",
+      "impact": "If the month grid is presented at narrow widths as ordinary interactive day cells, its targets are below the library's own design rule. Enlarging hit boxes into neighboring days would make target ownership ambiguous.",
+      "currentPatch": "None applied. The source already labels the family draft and geometry notes explicitly warn against overlapping enlarged hit areas or calling the reduced targets compliant.",
+      "futureState": "Keep the month view only where seven independent day targets genuinely fit the chosen target rule. At narrower content widths, use a named day/list mode (already part of this component's views) or a user-selectable view; do not silently shrink the shared touch token or create overlapping invisible targets. Define whether the breakpoint is based on component inline-size rather than viewport width. Confirm first-day locale/week start separately; it is product-context dependent and must not be inferred from fixture dates.",
+      "recommendation": "Hold the monthly compact-grid contract as draft pending an owner decision; prefer narrow-width list/day mode over weakening the system target policy.",
+      "changeType": "Structural",
+      "risks": "Automatically switching views can surprise users and needs a clear mode label/return path; always-list mode loses month overview. A minimum viewport threshold must account for component width, not device-name assumptions.",
+      "acceptanceTests": [
+        "Measure every interactive day cell and hit box at component widths corresponding to 320/360/390/430 viewports under RTL and LTR.",
+        "No expanded hit regions overlap adjacent date targets.",
+        "At widths below the selected threshold, each date remains operable with an unambiguous target or the component presents an explicit alternate view.",
+        "Month/day/list switching preserves the selected date and keyboard focus."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "At 320/360/390 viewport widths, is calendar month overview essential, or should day/list become the default until seven 48px targets fit?",
+      "decisionOptions": [
+        {"option": "Keep month grid with sub-48px cells", "effect": "Preserves all-month overview but contradicts the project's 48px component rule; not recommended.", "blocking": true},
+        {"option": "Switch to explicit day/list mode below the component-width threshold (recommended)", "effect": "Preserves target geometry and selection semantics but gives up month overview in constrained layouts.", "blocking": true},
+        {"option": "Use a different month interaction such as week-row pagination", "effect": "May preserve more context but is a structural redesign requiring separate keyboard/state review.", "blocking": true}
+      ]
+    },
+    {
+      "id": "SYS-DS-004",
+      "skill": "design-systems-agent",
+      "category": "Component API / lifecycle",
+      "severity": "Medium",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "components/fields/fields.js", "lines": "17-23, 329-334", "selector": "window.MicroFields"},
+        {"path": "components/access-gateway/access-gateway.js", "lines": "271-273", "selector": "window.MicroAccessGateway"},
+        {"path": "components/account-settings/account-settings.js", "lines": "68-75", "selector": "window.MicroAccountSettings"},
+        {"path": "components/data/data.js", "lines": "1353-1382", "selector": "window.MicroData"},
+        {"path": "components/carousel/carousel.js", "lines": "594-649", "selector": "window.MicroCarousel"},
+        {"path": "components/order-schedule/order-schedule.js", "lines": "1-35, 1074-1099", "selector": "MicroOrderSchedule.destroy"}
+      ],
+      "evidence": "The library uses per-family window globals and DOMContentLoaded auto-init. Public APIs differ: fields exposes init/sync; access-gateway and account-settings expose init; data and carousel expose init/disconnect; order-schedule returns an instance with destroy. Source also contains DOM/event/MutationObserver/ResizeObserver listeners. The lifecycle is not described by one common mount/unmount/update contract.",
+      "rootCause": "Families have different complexity and were shipped incrementally; lifecycle needs were introduced where observers/drag behavior made them visible, without a baseline contract for all families.",
+      "impact": "A host integrating fragments dynamically must know per-family init idempotence, whether mutation is observed, what update means, and whether teardown is needed. This increases transfer friction and makes repeated mount/remove tests inconsistent. Not every static component needs a heavyweight lifecycle.",
+      "currentPatch": "None applied. Existing per-family APIs remain usable; their actual methods must not be renamed without compatibility planning.",
+      "futureState": "Keep the dependency-light vanilla implementation as the core unless the owner selects a target framework. Publish one lifecycle convention for JS-enhanced families: init(root) is idempotent and root-inclusive; update/render is explicit where data changes; destroy/disconnect(root) removes observers/global listeners and permits clean re-init. Static CSS-only families document that no JS lifecycle exists. Provide a small shared test harness for mount twice, update, detach, dispose, reattach, and event count. A no-op disposer is acceptable for a purely static enhancement, not a required abstraction layer.",
+      "recommendation": "Structural API convention with additive compatibility aliases and family-by-family lifecycle work.",
+      "changeType": "Structural",
+      "risks": "A universal API can obscure families with real state differences. Destroying after a consumer removes the root may not restore external state or focus; ownership boundaries must be explicit.",
+      "acceptanceTests": [
+        "Each JS family has a documented public API and explicit ownership for listeners, observers, timers, and generated children.",
+        "Repeated init is idempotent; dispose followed by re-init works without duplicated handlers or stale generated UI.",
+        "No observer or window/document listener remains after the documented dispose path.",
+        "Existing global names/methods remain covered by compatibility tests until a versioned breaking release."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Keep the current global vanilla API and standardize its lifecycle, or approve ESM exports as the primary contract with globals retained only for standalone demos?",
+      "decisionOptions": [
+        {"option": "Standardize global API (recommended as least disruptive)", "effect": "No runtime/build dependency; easier direct HTML transfer but global naming remains part of the public surface.", "blocking": false},
+        {"option": "ES modules as primary API", "effect": "Better composition/tree-shaking and explicit imports; requires bundler/module-support policy and standalone adaptation.", "blocking": true},
+        {"option": "Custom elements", "effect": "Encapsulated lifecycle/markup contract; larger redesign and accessibility/style integration concerns.", "blocking": true}
+      ]
+    },
+    {
+      "id": "SYS-DS-005",
+      "skill": "design-systems-agent",
+      "category": "Portability / dependency graph / showcase delivery",
+      "severity": "Medium",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "tools/build-ui-system-showcase-standalone.py", "lines": "38-80, 223-238"},
+        {"path": "previews/ui-system-showcase/index.html", "lines": "1-1236", "selector": "stylesheet and script link order"}
+      ],
+      "evidence": "The source HTML declares the actual ordered stylesheet/script inputs; the builder separately hard-codes EXPECTED_CSS and EXPECTED_JS. The comments say order matters, but build_html checks only the number of matched links against the lengths of these lists (n_css/n_js), not equality of actual ordered paths to the expected arrays. The safe deterministic standalone check was run and passed: standalone.html is byte-identical to the output derived from current inputs; 23 embedded icon symbols also match source assets. Thus current equality is confirmed, while the guard's contract is weaker than its declared intent.",
+      "rootCause": "The showcase source and generator's expected input catalog duplicate ownership of the dependency graph; the present check validates output determinism and counts but not membership/order against that catalog.",
+      "impact": "A reorder with unchanged counts can silently change cascade/script semantics; future family additions require synchronized edits in HTML, arrays, and any delivery packager. This is maintenance coupling, not a current standalone mismatch.",
+      "currentPatch": "None applied. Read-only `python3 tools/build-ui-system-showcase-standalone.py --check` passed; the checker created no product edits.",
+      "futureState": "Choose one canonical dependency graph. Either make the source HTML order authoritative and remove unused expected arrays, or compare the exact extracted ordered paths to a canonical list. Have package assembly and any standalone builder consume the same declaration, including token/font/icon dependencies and licenses. Keep standalone generated, never hand-edited. Add a negative test that deliberately changes order or omits a required family link and confirms --check fails.",
+      "recommendation": "Tighten the checker with exact membership/order assertions before broadening the package pipeline; retain the verified current source/standalone output.",
+      "changeType": "Patch with a small structural source-of-truth cleanup",
+      "risks": "A canonical list that is itself duplicated in another script merely moves the drift. If HTML is authoritative, distinguish demo chrome from portable component dependencies.",
+      "acceptanceTests": [
+        "Current `--check` remains byte-identical and leaves the worktree unchanged.",
+        "Changing order, removing one linked component stylesheet/script, or introducing an unregistered linked file makes check fail with a path-specific message.",
+        "All component CSS/JS dependencies and licenses used in standalone are listed exactly once.",
+        "A package smoke test includes the same supported families without depending on the showcase-only chrome."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Should showcase HTML order or an explicit dependency manifest be authoritative for source bundling and standalone output?",
+      "decisionOptions": [
+        {"option": "HTML is canonical (recommended for this vanilla library)", "effect": "Fewer sources of truth; builder validates links and preserves declaration order.", "blocking": false},
+        {"option": "Add one explicit dependency manifest", "effect": "Enables multiple packagers but introduces a maintained catalog and requires drift tests.", "blocking": false}
+      ]
+    },
+    {
+      "id": "SYS-DS-006",
+      "skill": "design-systems-agent",
+      "category": "Documentation / governance",
+      "severity": "Low",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "components/README.md", "lines": "1-2"},
+        {"path": "docs/COMPONENT-INVENTORY.md", "lines": "14-44"},
+        {"path": "docs/CURRENT-STATE.md", "lines": "1-10, 31-45"},
+        {"path": "docs/UI-RELEASE.md", "lines": "5-13"}
+      ],
+      "evidence": "`components/README.md` says the component library is not approved and asks for families to be added, while the current inventory lists 14 family folders and stable/draft/proposed statuses and the release reference points to the current component inventory. CURRENT-STATE.md describes a different source reference (`91351b4…`, 2026-10-21) than this local HEAD (`fc1e53e…`). The historical date explains why it may have been true then, but the current-facing document has not been refreshed for this snapshot.",
+      "rootCause": "A minimal starter README and dated status reports coexist with a newer inventory/release registry; component status is duplicated in prose and table form.",
+      "impact": "Contributors and future integrators can receive contradictory signals about whether the library exists, which families are stable, and which verification evidence applies to the current snapshot.",
+      "currentPatch": "None applied. Existing more detailed inventory and release docs remain intact.",
+      "futureState": "Make one machine-readable or explicitly authoritative family registry that records source/spec/example/showcase status, maturity, and evidence revision. Render or validate summary docs against it. Replace the misleading starter sentence with a pointer to the current catalog. Keep historical reports dated and clearly label their commit as historical rather than current.",
+      "recommendation": "Documentation patch plus a lightweight consistency check; do not infer runtime quality from the word STABLE.",
+      "changeType": "Patch / governance",
+      "risks": "Generating all documentation from one registry may be unnecessary. The registry must differentiate library UI stability from product readiness and not erase valuable history.",
+      "acceptanceTests": [
+        "No current-facing component overview contradicts the authoritative inventory.",
+        "Every family has exactly one declared maturity/status and links to source/spec/example/preview or an explicit absence.",
+        "Current-state verification records the exact local source HEAD it tested and labels historical evidence separately.",
+        "A read-only documentation check fails on contradictory statuses or stale source hashes."
+      ],
+      "ownerDecisionRequired": false,
+      "ownerQuestion": null,
+      "decisionOptions": [
+        {"option": "Patch current docs and retain dated reports", "effect": "Low effort and preserves existing traceability.", "blocking": false},
+        {"option": "Add a canonical family registry and generate checks", "effect": "Less drift at added governance/tooling cost.", "blocking": false}
+      ]
+    },
+    {
+      "id": "SYS-DS-007",
+      "skill": "design-systems-agent",
+      "category": "Tooling / delivery integrity",
+      "severity": "Medium",
+      "status": "CONFIRMED",
+      "source": [
+        {"path": "MANIFEST.json", "lines": "entire JSON manifest"},
+        {"path": "tools/manifest-build.py", "lines": "14-47"},
+        {"path": "_audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-inventory.json", "selector": "trackedFiles, head"}
+      ],
+      "evidence": "Using the current tracked-file inventory and the inclusion/exclusion rules in manifest-build.py, 434 tracked files are eligible for the manifest but MANIFEST.json has 286 entries: 148 are missing; 66 present entries have different SHA-256 hashes; 220 present hashes match; no manifest-only paths were found. The working source head is fc1e53e03048c38a451c8421e23cee58ab2b3a7a. This was a read-only comparison, not a run of the manifest builder.",
+      "rootCause": "MANIFEST.json has not been refreshed after files were added or changed, or the checked snapshot intentionally uses an older delivery index; the file contains no recorded generation HEAD to distinguish these cases.",
+      "impact": "Consumers cannot use the manifest as a complete integrity inventory for the current tracked delivery. It is a delivery/governance defect, not a visual UI defect.",
+      "currentPatch": "None applied. `tools/manifest-build.py` was inspected but not run because its normal mode overwrites MANIFEST.json; product/documentation artifacts are read-only in this audit.",
+      "futureState": "After owner approval, rebuild and inspect a small, explainable diff; verify that the manifest's public/excluded path policy is intentional. Record a generated-from source revision or make the delivery check compare current eligible paths/hashes without writing. Ensure audit artifacts remain excluded by policy and explain tracked assets not included.",
+      "recommendation": "Owner-approved regeneration and a read-only check in release validation.",
+      "changeType": "Patch / delivery",
+      "risks": "Blind regeneration could legitimize unwanted files or broaden the public package. Confirm the 434-file inclusion policy and exclusions before replacing the integrity baseline.",
+      "acceptanceTests": [
+        "A read-only manifest checker reports zero missing/extra eligible tracked files and zero hash mismatches.",
+        "The manifest generator's public/excluded policy is tested against representative ignored, hidden, binary, and audit files.",
+        "Running the check does not alter MANIFEST.json or any product file."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "Is MANIFEST.json intended to describe current HEAD or a frozen delivery snapshot, and should eligible tracked files be the exact manifest domain?",
+      "decisionOptions": [
+        {"option": "Current-HEAD integrity manifest (recommended)", "effect": "Regenerate after approval; release checks can detect stale files.", "blocking": true},
+        {"option": "Immutable delivery snapshot", "effect": "Retain old checksums but rename/document the snapshot and add an independent current-source manifest.", "blocking": true}
+      ]
+    },
+    {
+      "id": "SYS-DS-008",
+      "skill": "design-systems-agent",
+      "category": "Portability / host integration contract",
+      "severity": "Low",
+      "status": "NOT PROVABLE",
+      "source": [
+        {"path": "components/fields/fields.js", "lines": "17-23, 331-334"},
+        {"path": "components/access-gateway/access-gateway.js", "lines": "271-273"},
+        {"path": "components/navigation/navigation.js", "lines": "621-636"},
+        {"path": "tools/build-components-package.py", "lines": "6-24"}
+      ],
+      "evidence": "Current sources are dependency-light HTML/CSS/vanilla JS that publish window.Micro* globals and auto-initialize; package delivery zips files. These facts are confirmed. The consuming runtime, framework, CSS isolation strategy, supported browsers, and preferred module format are not defined in this repository. No consumer repository/application was opened or contacted, so compatibility with a target cannot be established.",
+      "rootCause": "The design system has no explicit host-integration/versioned API target beyond standalone browser use.",
+      "impact": "Whether globals, CSS global selectors, fixed font/icon paths, and automatic initialization are acceptable at transfer time cannot be judged until the host contract is known. Do not treat this limitation as proof the current vanilla implementation is unusable.",
+      "currentPatch": "None applied. No external system was contacted, and no framework/bundler dependency was added.",
+      "futureState": "Define a host-neutral integration contract in this repository only: supported baseline browser features, CSS asset/root assumptions, font/icon path ownership, direction/theme override mechanism, script loading mode, lifecycle API, and semver policy. Retain vanilla CSS/JS as a portable core if the future host supports it; add framework adapters or package metadata only after the owner selects those targets. Avoid binding core UI primitives to product routing, authentication, storage, or network.",
+      "recommendation": "Resolve the host contract before choosing ESM/custom-element/framework packaging. This decision can be deferred for current CSS/HTML quality work but blocks final portability sign-off.",
+      "changeType": "Structural decision, not a current bug patch",
+      "risks": "Premature framework adapters create dependency and maintenance burden; no portability contract risks a costly retrofit.",
+      "acceptanceTests": [
+        "A clean consumer fixture in the owner-selected supported runtime loads one documented family using only documented dependencies.",
+        "CSS/fonts/icons resolve from a relocatable package location or an explicit host mapping.",
+        "Mount, update, unmount, RTL and reduced-motion behaviors work within the documented host contract.",
+        "A standalone file preview remains independent and is not mistaken for the package contract."
+      ],
+      "ownerDecisionRequired": true,
+      "ownerQuestion": "What future host contract should the library target: direct vanilla HTML/CSS/JS, ESM package, or selected framework adapters? No external app is needed to answer; decide the intended interface here.",
+      "decisionOptions": [
+        {"option": "Vanilla browser core only (recommended until a target is approved)", "effect": "Keeps zero runtime dependencies and direct portability; requires documented file/module order and lifecycle.", "blocking": false},
+        {"option": "ESM package plus vanilla core", "effect": "Enables explicit imports/tree-shaking but introduces package/build/version requirements.", "blocking": true},
+        {"option": "Framework-specific wrappers", "effect": "Most ergonomic for chosen host, but couples deliveries and test matrices to named framework versions.", "blocking": true}
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "tools/build-ui-system-showcase-standalone.py --check",
+      "result": "PASS",
+      "evidence": "Byte-for-byte regenerated output matched current standalone.html; embedded icon source validation checked 23 symbols.",
+      "sideEffects": "Read-only path inspected before execution; no product/source changes."
+    },
+    {
+      "name": "MANIFEST.json eligible tracked-path/hash comparison",
+      "result": "FAIL",
+      "evidence": "434 eligible tracked files vs 286 manifest entries; 148 missing, 66 present hashes mismatched, 220 matched, 0 extra."
+    },
+    {
+      "name": "system-inventory.py",
+      "result": "PASS",
+      "evidence": "Enumerated 492 tracked files and parsed 14 component source folders; selectors and spec-state excerpts are lexical inventories only."
+    }
+  ],
+  "limitations": [
+    "No broad runtime viewport sweep or screenshot was repeated; parent agent owns that sweep. Calendar dimension numbers are cited from the current geometry document and classified LIKELY pending current runtime confirmation.",
+    "No WCAG, real device, real touch, screen-reader, Safari/WebKit, or end-user usability claim is made.",
+    "No real user, persona, analytics, or production data were used or inferred; examples are fixtures.",
+    "No external URL, repository, or consumer application was contacted."
+  ]
+}

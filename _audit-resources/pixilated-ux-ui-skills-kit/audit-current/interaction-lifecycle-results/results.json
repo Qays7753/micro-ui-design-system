@@ -1,0 +1,2492 @@
+{
+  "browser": "152.0.7977.64",
+  "passed": 383,
+  "failed": 0,
+  "results": [
+    {
+      "name": "320/rtl field normal geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-1",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(113, 134, 139)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "320/rtl field error geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-2",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(173, 48, 59)",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px"
+        }
+      }
+    },
+    {
+      "name": "320/rtl error has full corrective message and ring",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl field readonly geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(247, 248, 244)",
+        "focused": true,
+        "described": "m-field-msg-3",
+        "before": {
+          "bg": "rgb(247, 248, 244)",
+          "border": "rgb(220, 229, 226)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "320/rtl field disabled geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "none",
+        "bg": "rgb(228, 234, 232)",
+        "focused": false,
+        "described": "m-field-msg-4",
+        "before": {
+          "bg": "rgb(228, 234, 232)",
+          "border": "rgba(0, 0, 0, 0)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "320/rtl non-field keyboard focus remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl s2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "320/rtl p2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl s7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl p7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl c7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl single peek reading uses the full viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl MicroInfoPeek disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-30px)"
+      }
+    },
+    {
+      "name": "320/rtl MicroInfoPeek resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl MicroInfoPeek double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "320/rtl MicroInfoPeek hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl MicroCarousel disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(0px)"
+      }
+    },
+    {
+      "name": "320/rtl MicroCarousel resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl MicroCarousel double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "320/rtl MicroCarousel hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "320/rtl no page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl field normal geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-1",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(113, 134, 139)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "360/rtl field error geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-2",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(173, 48, 59)",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px"
+        }
+      }
+    },
+    {
+      "name": "360/rtl error has full corrective message and ring",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl field readonly geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(247, 248, 244)",
+        "focused": true,
+        "described": "m-field-msg-3",
+        "before": {
+          "bg": "rgb(247, 248, 244)",
+          "border": "rgb(220, 229, 226)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "360/rtl field disabled geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "none",
+        "bg": "rgb(228, 234, 232)",
+        "focused": false,
+        "described": "m-field-msg-4",
+        "before": {
+          "bg": "rgb(228, 234, 232)",
+          "border": "rgba(0, 0, 0, 0)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "360/rtl non-field keyboard focus remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl s2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "360/rtl p2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl s7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl p7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl c7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl single peek reading uses the full viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl MicroInfoPeek disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-30px)"
+      }
+    },
+    {
+      "name": "360/rtl MicroInfoPeek resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl MicroInfoPeek double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "360/rtl MicroInfoPeek hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl MicroCarousel disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(0px)"
+      }
+    },
+    {
+      "name": "360/rtl MicroCarousel resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl MicroCarousel double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "360/rtl MicroCarousel hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360/rtl no page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl field normal geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-1",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(113, 134, 139)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/rtl field error geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-2",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(173, 48, 59)",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px"
+        }
+      }
+    },
+    {
+      "name": "390/rtl error has full corrective message and ring",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl field readonly geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(247, 248, 244)",
+        "focused": true,
+        "described": "m-field-msg-3",
+        "before": {
+          "bg": "rgb(247, 248, 244)",
+          "border": "rgb(220, 229, 226)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/rtl field disabled geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "none",
+        "bg": "rgb(228, 234, 232)",
+        "focused": false,
+        "described": "m-field-msg-4",
+        "before": {
+          "bg": "rgb(228, 234, 232)",
+          "border": "rgba(0, 0, 0, 0)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/rtl non-field keyboard focus remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl s2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/rtl p2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl s7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl p7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl c7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl single peek reading uses the full viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl MicroInfoPeek disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-30px)"
+      }
+    },
+    {
+      "name": "390/rtl MicroInfoPeek resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl MicroInfoPeek double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "390/rtl MicroInfoPeek hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl MicroCarousel disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-36px)"
+      }
+    },
+    {
+      "name": "390/rtl MicroCarousel resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl MicroCarousel double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "390/rtl MicroCarousel hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/rtl no page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl field normal geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-1",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(113, 134, 139)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "430/rtl field error geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-2",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(173, 48, 59)",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px"
+        }
+      }
+    },
+    {
+      "name": "430/rtl error has full corrective message and ring",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl field readonly geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(247, 248, 244)",
+        "focused": true,
+        "described": "m-field-msg-3",
+        "before": {
+          "bg": "rgb(247, 248, 244)",
+          "border": "rgb(220, 229, 226)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "430/rtl field disabled geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "none",
+        "bg": "rgb(228, 234, 232)",
+        "focused": false,
+        "described": "m-field-msg-4",
+        "before": {
+          "bg": "rgb(228, 234, 232)",
+          "border": "rgba(0, 0, 0, 0)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "430/rtl non-field keyboard focus remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl s2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "430/rtl p2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl s7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl p7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl c7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl single peek reading uses the full viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl MicroInfoPeek disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-30px)"
+      }
+    },
+    {
+      "name": "430/rtl MicroInfoPeek resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl MicroInfoPeek double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "430/rtl MicroInfoPeek hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl MicroCarousel disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-36px)"
+      }
+    },
+    {
+      "name": "430/rtl MicroCarousel resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl MicroCarousel double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "430/rtl MicroCarousel hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "430/rtl no page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr field normal geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-1",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(113, 134, 139)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/ltr field error geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px",
+        "bg": "rgb(255, 255, 255)",
+        "focused": true,
+        "described": "m-field-msg-2",
+        "before": {
+          "bg": "rgb(255, 255, 255)",
+          "border": "rgb(173, 48, 59)",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(173, 48, 59) 0px 0px 0px 4px"
+        }
+      }
+    },
+    {
+      "name": "390/ltr error has full corrective message and ring",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr field readonly geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+        "bg": "rgb(247, 248, 244)",
+        "focused": true,
+        "described": "m-field-msg-3",
+        "before": {
+          "bg": "rgb(247, 248, 244)",
+          "border": "rgb(220, 229, 226)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/ltr field disabled geometry/focus isolation",
+      "passed": true,
+      "detail": {
+        "outline": "none",
+        "h": 52,
+        "shadow": "none",
+        "bg": "rgb(228, 234, 232)",
+        "focused": false,
+        "described": "m-field-msg-4",
+        "before": {
+          "bg": "rgb(228, 234, 232)",
+          "border": "rgba(0, 0, 0, 0)",
+          "shadow": "none"
+        }
+      }
+    },
+    {
+      "name": "390/ltr non-field keyboard focus remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr s2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 native input caret, no navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 native End",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 native Home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 editing/local guard input",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard textarea",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard select",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard option",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard [contenteditable] span",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard [contenteditable=\"plaintext-only\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard [role=\"textbox\"]",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 editing/local guard button",
+      "passed": true,
+      "detail": {
+        "same": true,
+        "prevented": false
+      }
+    },
+    {
+      "name": "390/ltr p2 prevented key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 composing key not intercepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 Alt shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 Control shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 Meta shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 Shift shortcut not captured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 End navigates and makes inactive inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 directional next",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 focus leaves slide before inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p7 fixed-width root direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p7 fixed-width root direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p7 fixed-width ancestor direction rtl recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p7 fixed-width ancestor direction ltr recenters silently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c0 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c1 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c2 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr s7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr p7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr c7 empty/single/control policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr single peek reading uses the full viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr MicroInfoPeek disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(-30px)"
+      }
+    },
+    {
+      "name": "390/ltr MicroInfoPeek resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr MicroInfoPeek double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "390/ltr MicroInfoPeek hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr MicroCarousel disconnect releases active drag without callbacks",
+      "passed": true,
+      "detail": {
+        "active": true,
+        "clean": true,
+        "blocked": true,
+        "independent": true,
+        "transform": "translateX(36px)"
+      }
+    },
+    {
+      "name": "390/ltr MicroCarousel resize/rAF after disconnect stays silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr MicroCarousel double re-init one action/event",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "events": 1
+      }
+    },
+    {
+      "name": "390/ltr MicroCarousel hidden re-init centers after reveal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "390/ltr no page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "late fonts-ready cannot reanimate disconnected peek",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fonts-ready reconnect retains index",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no console/resource/JavaScript errors",
+      "passed": true,
+      "detail": []
+    }
+  ]
+}
