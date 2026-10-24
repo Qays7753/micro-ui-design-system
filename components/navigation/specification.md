@@ -1,5 +1,9 @@
 # مواصفات التنقّل والطبقات — B07
 
+## تحديث الطبقات وملكية المضيف
+
+[عقود النظام](../../docs/SYSTEM-CONTRACTS.md): overlay radius 20 وLight/Dark/System وهدف 48؛ enter 220–240ms وexit 160–200ms، وfallback الإغلاق مشتق من transitionDuration+delay الفعليين. reduced-motion فوري. `disconnect(root)` يفصل الربط المحلي وحصر Tab، يلغي الإغلاق/الفتح المتأخر، يخفي طبقاته ويستعيد scroll/inert؛ مستمع Escape على document مفرد للمكتبة. إعادة init تحفظ applied filters. history/Back وsafe areas العامة ولوحة المفاتيح مسؤولية المضيف، لا يضيف المكوّن سجلًا أو محاكاة native.
+
 ### عقد actionbar — إصلاح 2026-10-20
 
 الأزرار النصية فقط تتمدد لتملأ العرض. `.m-btn--icon` يحتفظ بمربع `--micro-icon-button-size` وهدف اللمس الحالي (48px)، ولا يتحول إلى زر بيضاوي عريض. في `m-actionbar--stack` تتكدس الأزرار، النصية بعرض الصف والأيقونية مربعة ومحاذاة للبداية المنطقية. التفاف التسميات الطويلة وحلقة التركيز من عقد B01 دون تغيير.

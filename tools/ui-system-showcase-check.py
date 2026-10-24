@@ -517,8 +517,8 @@ def main() -> int:
         page.on("requestfailed", lambda r: failed_requests.setdefault("target", []).append(r.url))
         page.on("response", lambda r: failed_requests.setdefault("target", []).append(f"{r.status} {r.url}") if r.status >= 400 else None)
 
-        editable = f"http://127.0.0.1:{port}/previews/ui-system-showcase/index.html"
-        standalone = (SAMPLE / "standalone.html").as_uri()
+        editable = f"http://127.0.0.1:{port}/previews/ui-system-showcase/index.html#state-lab"
+        standalone = (SAMPLE / "standalone.html").as_uri() + "#state-lab"
 
         run_width_matrix(editable, "editable", "sc-w")
         run_interaction_matrix(editable, "editable", "sc-i")

@@ -1,22 +1,16 @@
 :root {
-  color-scheme: light;
-  --ink: #172d32;
-  --muted: #50656a;
-  --paper: #f7f8f4;
-  --petrol: #164d59;
-  --line: #dce5e2;
   font-family: var(--micro-font-family);
   color: var(--micro-text-primary);
   background: var(--micro-surface-page);
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; background: var(--micro-surface-page); font-size: var(--micro-body-size); line-height: var(--micro-body-line); }
-a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
+a { color: var(--micro-brand-ink); text-underline-offset: 3px; }
 .library-head { position: relative; overflow: hidden; color: var(--micro-text-inverse); background: var(--micro-brand-primary); }
 .library-head__inner { position: relative; z-index: 1; width: min(100% - 40px, 1080px); margin-inline: auto; padding-block: clamp(36px, 8vw, 76px) 38px; }
 .eyebrow,.section-kicker { margin: 0; font: 500 12px/1.6 var(--micro-font-family); }
 .eyebrow { display:flex; align-items:center; gap:10px; color:#d4e5e0; }
-.brand-mark { display:grid; place-items:center; width:26px; height:26px; border:1px solid #73939a; border-radius:50%; color:var(--micro-brand-accent); font-size:15px; font-weight:600; letter-spacing:0; }
+.brand-mark { display:block; width:96px; height:32px; object-fit:contain; }
 .eyebrow__divider { width:22px; height:1px; background:#73939a; }
 .library-head h1 { max-width:740px; margin:35px 0 12px; font-size:clamp(38px,8vw,72px); line-height:1.13; font-weight:600; }
 .library-head h1 span { color:#d8e9e1; }
@@ -30,7 +24,7 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .head-ornament span:nth-child(2) { inset-block-start:115px; inset-inline-start:88px; width:195px; background:rgba(223,238,230,.12); }
 .head-ornament b { position:absolute; inset-block-end:40px; inset-inline-start:38px; color:var(--micro-brand-accent); font:500 42px/1 'IBM Plex Sans',sans-serif; }
 .library-main { width:min(100% - 40px,1080px); margin-inline:auto; }
-.intro-band { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-block:28px 54px; padding:14px 18px; border-inline-start:3px solid var(--micro-brand-accent); border-radius:0 14px 14px 0; background:#edf2ec; }
+.intro-band { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-block:28px 54px; padding:14px 18px; border-inline-start:3px solid var(--micro-brand-accent); border-radius:0 14px 14px 0; background:var(--micro-surface-selected); }
 .intro-band p { margin:0; color:var(--micro-text-secondary); font-size:14px; }
 .intro-band strong { color:var(--micro-text-primary); font-weight:600; }
 .intro-band a { flex:none; font-size:13px; font-weight:500; }
@@ -48,7 +42,7 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .demo--surface { background:#edf0e8; }
 .family__info { display:grid; grid-template-columns:52px minmax(0,1fr); align-content:center; gap:15px; min-width:0; padding:24px clamp(16px,3vw,34px); }
 .family__index { display:flex; flex-direction:column; gap:5px; color:var(--micro-text-hint); font:500 12px/1.4 'IBM Plex Sans',sans-serif; }
-.family__index span { color:var(--micro-brand-primary); font-size:11px; }
+.family__index span { color:var(--micro-brand-ink); font-size:11px; }
 .family__copy h3 { margin:0; font-size:19px; line-height:1.5; font-weight:600; }
 .family__copy p { max-width:440px; margin:5px 0 13px; color:var(--micro-text-secondary); font-size:13px; line-height:1.7; }
 /* W1.5 (D-UI-03): روابط مستقلة متجاورة — قاعدة الفصل 8px بين مناطق
@@ -57,11 +51,11 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .family__links a { display:inline-flex;align-items:center;min-height:48px;font-size:12px;font-weight:500; }
 .family .m-field { width:min(100%,350px); }
 .family .m-field__msg { display:block; }
-.family .m-info-card { width:min(100%,315px); min-height:145px; padding:18px; }
-.family .m-info-card__number { font-size:28px; }
+.family .m-info-card { width:min(100%,315px); min-height:104px; padding:16px; }
+.family .m-info-card__number { font-size:22px; line-height:1.4545; }
 .family .m-main-metric { max-width:390px; }
 .family .m-main-metric__title { margin:0 0 10px; }
-.family .m-main-metric__hero { max-width:88px; }
+.family .m-main-metric__hero { max-width:none; }
 .family .m-main-metric__number { font-size:22px; }
 .family .m-access-gateway { max-width:380px; }
 .family .m-access-gateway__heading { font-size:20px; }
@@ -94,6 +88,10 @@ a { color: var(--micro-brand-primary); text-underline-offset: 3px; }
 .library-footer { display:flex; justify-content:space-between; gap:16px; width:min(100% - 40px,1080px); margin-inline:auto; padding:17px 0 30px; border-block-start:1px solid var(--micro-border-divider); color:var(--micro-text-hint); font-size:11px; }
 .library-footer span:first-child { direction:ltr; font-family:'IBM Plex Sans',sans-serif; letter-spacing:.06em; }
 .m-btn:focus-visible,.m-field__input:focus-visible,.family a:focus-visible { outline:2px solid var(--micro-focus-ring); outline-offset:3px; }
+.demo--petrol,.demo--warm,.demo--mint,.demo--paper,.demo--surface { background:var(--micro-surface-selected); }
+[data-theme="dark"] .family__demo { background-color:var(--micro-surface-base); }
+[data-theme="dark"] .intro-band { background:var(--micro-surface-selected); }
+.reference-end__links a:hover,.reference-end__links b { color:var(--micro-brand-ink); }
 /* W4.3 (A1-F02 — عقد هامش المعرض): من 390px فأعلى 20px لكل جانب
    وفق عقد الأسس (كانت القاعدة حتى 700px تفرض 32px أي 16px عند 390
    و430 خلافا للعقد). تحت 390 يبقى عقد 16px لكل جانب. */

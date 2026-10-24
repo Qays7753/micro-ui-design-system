@@ -59,7 +59,7 @@ def main() -> int:
     port = srv.server_address[1]
     thr = threading.Thread(target=srv.serve_forever, daemon=True)
     thr.start()
-    base = f"http://127.0.0.1:{port}/previews/ui-system-showcase/index.html"
+    base = f"http://127.0.0.1:{port}/previews/ui-system-showcase/index.html#state-lab"
 
     console_errors = []
 

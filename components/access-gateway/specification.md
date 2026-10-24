@@ -1,5 +1,9 @@
 # بوابة الدخول — SPEC-04
 
+## العقد الحالي الإضافي
+
+تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight/Dark/System وملكية المضيف. الاستثناء يعرض `userMessage` الصريح فقط أو fallback عربيًا آمنًا؛ لا `.message` أو `.stack`. `init(root, callbacks)` قابل للتكرار، و`disconnect(root)`/`destroy(root)` يفصلان listeners ومراقب reveal ويخفيان كلمة المرور ويُنهيان busy؛ تُهمل النتائج المتأخرة بعد الفصل أو إعادة التهيئة. لا يلغي ذلك الشبكة التي يملكها callback. قيم الحقول وcallbacks ملك المضيف؛ لا مصادقة حقيقية داخل المكتبة.
+
 **الحالة: STABLE UI — [UI-RELEASE](../../docs/UI-RELEASE.md).** مجموعة إدخال وتركيب فقط؛ لا مصادقة افتراضية.
 
 ## الأجزاء

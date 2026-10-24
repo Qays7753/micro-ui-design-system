@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DIRECTORY = ROOT / "deliverables"
+DIRECTORY = ROOT / "generated-artifacts" / "deliverables"
 
 def main():
     record = json.loads((DIRECTORY / "package-parts.json").read_text())

@@ -22,6 +22,7 @@ Micro UI — توليد النسخة المكتفية ذاتيًا لمعرض ن
 """
 import argparse
 import base64
+import mimetypes
 import re
 import sys
 from pathlib import Path
@@ -173,8 +174,10 @@ def inline_css_urls(css_text: str, css_dir: Path) -> str:
 
     def repl(m: re.Match) -> str:
         quote, path = m.group(1) or "", m.group(2)
-        if path.startswith("data:") or path.startswith("http://") or path.startswith("https://"):
+        if path.startswith("data:") or path.startswith("#"):
             return m.group(0)
+        if path.startswith(("http://", "https://", "//")):
+            raise SystemExit(f"BUILD ERROR: standalone CSS must not request a network asset: {path}")
         if path.endswith(".woff2"):
             return m.group(0)
         resolved = (css_dir / path).resolve()
@@ -188,7 +191,8 @@ def inline_css_urls(css_text: str, css_dir: Path) -> str:
         # الأصول الثنائية تبقى بايتاتها الأصلية.
         payload = read(resolved).encode("utf-8") if resolved.suffix.lower() == ".svg" else resolved.read_bytes()
         data = base64.b64encode(payload).decode("ascii")
-        return f"url({quote}data:image/svg+xml;base64,{data}{quote})"
+        mime = mimetypes.guess_type(resolved.name)[0] or "application/octet-stream"
+        return f"url({quote}data:{mime};base64,{data}{quote})"
 
     return re.sub(r"url\((['\"]?)([^)'\"]+)\1\)", repl, css_text)
 
@@ -207,6 +211,33 @@ def script_block(src_rel: str, js: str) -> str:
 
 def build_html() -> str:
     html = read(SAMPLE / "index.html")
+    # A matching count can hide a reordered, duplicated, or substituted
+    # dependency. Verify the complete ordered path list before inlining.
+    css_paths = [repo_rel((SAMPLE / href).resolve()) for href in
+                 re.findall(r'<link rel="stylesheet" href="([^"]+)">', html)]
+    js_paths = [repo_rel((SAMPLE / src).resolve()) for src in
+                re.findall(r'<script src="([^"]+)"></script>', html)]
+    if css_paths != EXPECTED_CSS:
+        raise SystemExit(f"BUILD ERROR: stylesheet paths/order differ:\n{css_paths!r}")
+    if js_paths != EXPECTED_JS:
+        raise SystemExit(f"BUILD ERROR: script paths/order differ:\n{js_paths!r}")
+
+    # Logos remain the approved original bytes; embedding is transport, not a
+    # redraw/recolor. Also handles local favicons without a wrong SVG MIME.
+    def asset_uri(value: str) -> str:
+        if value.startswith(("data:", "#")):
+            return value
+        if value.startswith(("http:", "https:", "//")):
+            raise SystemExit(f"BUILD ERROR: network image in standalone: {value}")
+        path = (SAMPLE / value).resolve()
+        if not repo_rel(path).startswith("assets/") or not path.is_file():
+            raise SystemExit(f"BUILD ERROR: unknown local image: {value}")
+        mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        return "data:" + mime + ";base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+
+    html = re.sub(r'(<img\b[^>]*\bsrc=")([^"]+)(")', lambda m: m[1] + asset_uri(m[2]) + m[3], html)
+    html = re.sub(r'(<link\b[^>]*rel="(?:icon|apple-touch-icon)"[^>]*href=")([^"]+)(")',
+                  lambda m: m[1] + asset_uri(m[2]) + m[3], html)
 
     # 1) أوراق الأنماط: fonts.css تُضمّن بخطوط base64؛ والبقية مع حشو
     #    url() الأصول بـ data URIs (استقلالية الملف الواحد)

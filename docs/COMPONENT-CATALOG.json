@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "scope": "independent-pre-transfer-ui-system",
+  "maturityVocabulary": ["stable-ui", "draft-for-review", "proposed"],
+  "families": [
+    {"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},
+    {"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},
+    {"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},
+    {"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},
+    {"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},
+    {"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},
+    {"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},
+    {"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},
+    {"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},
+    {"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},
+    {"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},
+    {"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},
+    {"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},
+    {"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}
+  ],
+  "variants": [
+    {"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},
+    {"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}
+  ]
+}

@@ -243,6 +243,16 @@
 }
 .m-chart__dataset th, .m-chart__dataset td { overflow-wrap: anywhere; }
 .m-chart__gridline { stroke: var(--micro-border-divider); stroke-width: 1; }
+.m-chart__bar,
+.m-chart__point {
+  stroke: var(--micro-data-boundary);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.m-chart [data-zero-axis] { stroke: var(--micro-data-boundary); stroke-width: 1; }
+.m-chart .m-chart__point-value,
+.m-chart .m-chart__bar-value { fill: var(--micro-text-primary); }
+.m-legend__swatch { border: 1px solid var(--micro-data-boundary); }
 .m-chart svg line, .m-chart svg polyline, .m-chart__dot {
   vector-effect: non-scaling-stroke;
 }
@@ -275,8 +285,8 @@
 }
 
 /* ---- الخط ---- */
-.m-chart--line .m-chart__line { fill: none; stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--cat, var(--micro-data-a)); stroke-width: 2; }
+.m-chart--line .m-chart__line { fill: none; stroke: var(--micro-data-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-chart--line .m-chart__dot { fill: var(--micro-surface-base); stroke: var(--micro-data-line); stroke-width: 2; }
 .m-chart--line .m-chart__point-value {
   font-size: 13px; fill: var(--micro-text-primary); font-variant-numeric: tabular-nums;
   font-family: var(--micro-font-family);
@@ -357,7 +367,7 @@
 .m-progress__bar {
   height: 100%;
   border-radius: var(--micro-radius-capsule);
-  background-color: var(--micro-brand-primary);
+  background-color: var(--micro-brand-ink);
   width: var(--progress, 0%);
   transition: width var(--micro-motion-selection) var(--micro-ease-standard);
 }

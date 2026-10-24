@@ -72,7 +72,7 @@
   justify-content: center;
   border-radius: var(--micro-radius-field);
   background-color: var(--micro-surface-selected);
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
 }
 .m-row__tile svg {
   width: var(--micro-icon-button-icon);
@@ -232,7 +232,7 @@ a.m-row.is-focus {
   padding-inline: var(--micro-space-2);
   border-radius: var(--micro-radius-capsule);
   background-color: var(--micro-surface-selected);
-  color: var(--micro-brand-primary);
+  color: var(--micro-brand-ink);
   font-family: var(--micro-font-family);
   font-size: var(--micro-counter-label-size);
   line-height: 1;

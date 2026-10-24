@@ -47,9 +47,13 @@
     groups.forEach(function (group) {
       if (group.dataset.microChoicesBound) return;
       group.dataset.microChoicesBound = '1';
+      group.__microSelectionLifetime = new AbortController();
+      function on(element, type, handler) {
+        element.addEventListener(type, handler, { signal: group.__microSelectionLifetime.signal });
+      }
       var all = group.querySelector('[data-select-all]');
       if (all) {
-        all.addEventListener('change', function () {
+        on(all, 'change', function () {
           [].slice.call(group.querySelectorAll('input[type="checkbox"][data-choice-item]'))
             .forEach(function (b) { if (!b.disabled) b.checked = all.checked; }); /* E05: المعطل لا يُلمس */
           /* F02-P01: إعادة حساب بعد كل تغيير — نقر «تحديد الكل» في مجموعة
@@ -58,7 +62,7 @@
           group.dispatchEvent(new Event('micro-selection:changed', { bubbles: true }));
         });
       }
-      group.addEventListener('change', function (e) {
+      on(group, 'change', function (e) {
         if (e.target.matches('input[type="checkbox"][data-choice-item]')) syncGroup(group);
       });
       syncGroup(group);
@@ -74,6 +78,10 @@
     segs.forEach(function (seg) {
       if (seg.dataset.microSegBound) return;
       seg.dataset.microSegBound = '1';
+      seg.__microSelectionLifetime = new AbortController();
+      function on(element, type, handler) {
+        element.addEventListener(type, handler, { signal: seg.__microSelectionLifetime.signal });
+      }
       var items = [].slice.call(seg.querySelectorAll('.m-seg__item'));
       function select(item) {
         items.forEach(function (it) {
@@ -90,10 +98,10 @@
         /* F02-P02: نفس حراسة الأسهم (isDisabled) في النقر — المعطّل
            أصليًا أو aria-disabled=true لا يغيّر الاختيار ولا يطلق حدث
            micro-selection:segment، بما يشمل Enter/Space (أصله click). */
-        it.addEventListener('click', function () { if (!isDisabled(it)) select(it); });
+        on(it, 'click', function () { if (!isDisabled(it)) select(it); });
       });
       /* تنقل أسهم مثل مجموعة راديو — يتجاوز المعطل (E05) ولا يقف عنده */
-      seg.addEventListener('keydown', function (e) {
+      on(seg, 'keydown', function (e) {
         var i = items.indexOf(document.activeElement);
         if (i < 0) return;
         var dir = 0;
@@ -137,6 +145,20 @@
   /* عقد المفتاح: انتظار تحديث إعداد — المستهلك يضبط ويرجع عند الفشل */
   window.MicroSelection = {
     init: init,
+    disconnect: function (root) {
+      var scope = root || document;
+      var nodes = [].slice.call(scope.querySelectorAll('[data-choice-group], [data-seg]'));
+      if (scope.matches && scope.matches('[data-choice-group], [data-seg]')) nodes.unshift(scope);
+      nodes.forEach(function (element) {
+        if (element.__microSelectionLifetime) element.__microSelectionLifetime.abort();
+        delete element.__microSelectionLifetime;
+        delete element.dataset.microChoicesBound;
+        delete element.dataset.microSegBound;
+      });
+      var switches = [].slice.call(scope.querySelectorAll('.m-switch'));
+      if (scope.matches && scope.matches('.m-switch')) switches.unshift(scope);
+      switches.forEach(function (element) { window.MicroSelection.setSwitchPending(element, false); });
+    },
     setSwitchPending: function (switchEl, pending) {
       if (!switchEl || switchEl.nodeType !== 1) return;
       switchEl.setAttribute('data-pending', pending ? 'true' : 'false');

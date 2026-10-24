@@ -10,12 +10,22 @@
 
 (function () {
   'use strict';
+  function nodes(root, selector) {
+    var scope = root || document;
+    var found = [].slice.call(scope.querySelectorAll(selector));
+    if (scope.matches && scope.matches(selector)) found.unshift(scope);
+    return found;
+  }
+  function on(element, type, handler) {
+    if (!element.__microOrganizationLifetime) element.__microOrganizationLifetime = new AbortController();
+    element.addEventListener(type, handler, { signal: element.__microOrganizationLifetime.signal });
+  }
 
   function initSections(root) {
-    (root || document).querySelectorAll('.m-section__head').forEach(function (head) {
+    nodes(root, '.m-section__head').forEach(function (head) {
       if (head.dataset.microSectionBound) return;
       head.dataset.microSectionBound = '1';
-      head.addEventListener('click', function () {
+      on(head, 'click', function () {
         var section = head.closest('.m-section');
         var body = section ? section.querySelector('.m-section__body') : null;
         if (!body) return;
@@ -30,7 +40,7 @@
   }
 
   function initAvatars(root) {
-    (root || document).querySelectorAll('img[data-avatar-fallback]').forEach(function (img) {
+    nodes(root, 'img[data-avatar-fallback]').forEach(function (img) {
       if (img.dataset.microAvatarBound) return;
       img.dataset.microAvatarBound = '1';
       function fallback() {
@@ -44,14 +54,22 @@
         span.textContent = initials || '؟';
         img.replaceWith(span);
       }
-      img.addEventListener('error', fallback);
+      on(img, 'error', fallback);
       /* صورة فشلت قبل ربط المستمع (تحميل سريع): نفحص الحالة الحالية */
       if (img.complete && img.naturalWidth === 0) fallback();
     });
   }
 
   window.MicroOrganization = {
-    init: function (root) { initSections(root); initAvatars(root); }
+    init: function (root) { initSections(root); initAvatars(root); },
+    disconnect: function (root) {
+      nodes(root, '.m-section__head, img[data-avatar-fallback]').forEach(function (element) {
+        if (element.__microOrganizationLifetime) element.__microOrganizationLifetime.abort();
+        delete element.__microOrganizationLifetime;
+        delete element.dataset.microSectionBound;
+        delete element.dataset.microAvatarBound;
+      });
+    }
   };
 
   document.addEventListener('DOMContentLoaded', function () { window.MicroOrganization.init(); });

@@ -1,5 +1,9 @@
 # إعدادات الحساب والتطبيق — SPEC-03
 
+## العقد الحالي الإضافي
+
+تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight/Dark/System. `disconnect(root)` و`destroy(root)` يفصلان أحداث التركيب؛ التنظيف الطبقي عبر `MicroNavigation.disconnect` أيضًا، وتنظيف أي Selection مضمّن عبر API العائلة. لا حفظ إعدادات فعليًا ولا history/Back أو ثيم دائم يملكه المكوّن.
+
 **الحالة: STABLE UI — [UI-RELEASE](../../docs/UI-RELEASE.md).** أجزاء قابلة للتركيب، لا شاشة منتج أو صلاحيات إدارية.
 
 ## أجزاء مستقلة

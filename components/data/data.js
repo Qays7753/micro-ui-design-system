@@ -114,6 +114,10 @@
         axisX: li.getAttribute('data-x'),
         axisBoundary: li.hasAttribute('data-axis-boundary') || li.hasAttribute('data-semantic-boundary'),
         rawValue: raw,
+        invalid: v === null && raw !== null && String(raw).trim() !== ''
+          && li.getAttribute('data-state') !== 'unavailable',
+        signed: chart.getAttribute('data-value-domain') === 'signed'
+          && /^(bars|line)$/.test(chart.getAttribute('data-chart')),
         value: v,
         display: li.getAttribute('data-display') || '',
         outlier: li.hasAttribute('data-outlier')
@@ -132,9 +136,9 @@
   }
 
   function readingOf(item) {
-    if (item.value === null) return '— غير متاح';
-    if (item.value < 0) return fmt(item.value) + ' — سالب غير مرسوم';
-    return item.display || fmt(item.value);
+    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '— غير متاح';
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' — سالب غير مرسوم';
+    return item.display || item.rawValue || fmt(item.value);
   }
 
   function fullLabelOf(chart, item) {
@@ -482,7 +486,7 @@
       li.appendChild(label);
       var val = document.createElement('span');
       val.className = 'm-legend__value';
-      val.textContent = it.value === null ? '— غير متاح' : fmt(it.value);
+      val.textContent = readingOf(it);
       li.appendChild(val);
       list.appendChild(li);
     });
@@ -564,7 +568,7 @@
         g.appendChild(svgEl('rect', { class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle' });
         applyTextPx(u, fontPx);
-        u.textContent = '—'; g.appendChild(u);
+        u.textContent = it.invalid ? 'غير صالح' : '—'; g.appendChild(u);
       } else if (it.value < 0) {
         /* E06: سالب في الأعمدة — رفض بوضوح، لا رسم كموجب */
         invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم', fontPx);
@@ -603,6 +607,134 @@
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
       chart.setAttribute('data-scale-detail', 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
+    }
+  }
+
+  /* Explicit signed domain, shared zero, exact visible readings.
+     Normalized arithmetic avoids overflow for mixed ±1e308. This is not a
+     multi-series API. Missing/invalid points break line segments. */
+  function renderSigned(chart, items, kind) {
+    var plot = chart.querySelector('[data-plot]');
+    plot.textContent = '';
+    var known = items.filter(function (item) { return item.value !== null; });
+    var low = Math.min.apply(null, known.map(function (item) { return item.value; }).concat([0]));
+    var high = Math.max.apply(null, known.map(function (item) { return item.value; }).concat([0]));
+    var minRaw = chart.getAttribute('data-min'), maxRaw = chart.getAttribute('data-max');
+    var minDeclared = minRaw !== null && minRaw.trim() !== '';
+    var maxDeclared = maxRaw !== null && maxRaw.trim() !== '';
+    var min = minDeclared ? parseNum(minRaw) : low;
+    var max = maxDeclared ? parseNum(maxRaw) : high;
+    var invalid = min === null || max === null || min > 0 || max < 0 || min > max
+      || ((minDeclared || maxDeclared) && min === max);
+    var exceeds = !invalid && (low < min || high > max);
+    if (invalid || (exceeds && chart.getAttribute('data-overscale') !== 'rescale')) {
+      renderScaleRefusal(chart, items, plot, { kind: invalid ? 'invalid' : 'over' },
+        'تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.',
+        'signed: bounds must include zero and every known value; no clipping or absolute-value conversion.');
+      return;
+    }
+    if (exceeds) { min = Math.min(low, min); max = Math.max(high, max); }
+    var magnitude = Math.max(Math.abs(min), Math.abs(max), Number.MIN_VALUE);
+    var a = min / magnitude, b = max / magnitude;
+    if (a === b) { a = 0; b = 1; }
+    var width = plotGeometryOf(plot).refW;
+    var top = 24, height = Math.min(160, Math.max(112, width * 0.38)), bottom = top + height;
+    var svg = svgEl('svg', {
+      viewBox: '0 0 ' + width + ' ' + (bottom + 28), role: 'img',
+      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + ' — محور صفر مشترك؛ القراءات الكاملة أدناه'
+    });
+    function y(value) { return top + (b - value / magnitude) / (b - a) * height; }
+    var zero = y(0);
+    svg.appendChild(svgEl('line', {
+      class: 'm-chart__baseline', 'data-zero-axis': '', x1: 16, x2: width - 16, y1: zero, y2: zero
+    }));
+    var zeroLabel = svgEl('text', { x: 8, y: Math.max(14, zero - 6), class: 'm-chart__bar-value' });
+    applyTextPx(zeroLabel, BAR_TEXT_PX); zeroLabel.textContent = '0'; svg.appendChild(zeroLabel);
+    var time = kind === 'line' && chart.getAttribute('data-axis-type') === 'time';
+    var axisType = chart.getAttribute('data-axis-type') || 'category';
+    var times = time ? items.map(function (item) { return axisTimeOf(item.axisX); }) : null;
+    if (kind === 'line' && ((axisType !== 'time' && axisType !== 'category')
+        || (times && times.some(function (value) { return value === null; })))) {
+      chart.setAttribute('data-axis-state', time ? 'invalid-time' : 'invalid-type');
+      var error = document.createElement('p');
+      error.className = 'm-chart__error';
+      error.textContent = 'تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.';
+      plot.appendChild(error);
+      appendFullReadingRows(chart, plot, items, '');
+      return;
+    }
+    var earliest = times ? Math.min.apply(null, times) : 0;
+    var latest = times ? Math.max.apply(null, times) : 0;
+    var rtl = (chart.getAttribute('data-axis-dir') || 'rtl') !== 'ltr';
+    function x(index) {
+      var fraction = times ? (latest === earliest ? 0.5 : (times[index] - earliest) / (latest - earliest))
+        : (index + 0.5) / Math.max(items.length, 1);
+      return 24 + (rtl ? 1 - fraction : fraction) * (width - 48);
+    }
+    var segment = [], indexLabels = [];
+    function flush() {
+      if (segment.length > 1) svg.appendChild(svgEl('polyline', {
+        class: 'm-chart__line', points: segment.join(' '), fill: 'none',
+        stroke: 'var(--micro-data-line)', 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke'
+      }));
+      segment = [];
+    }
+    items.forEach(function (item, index) {
+      if (item.value === null) { flush(); return; }
+      var px = x(index), py = y(item.value), mark;
+      if (kind === 'bars') {
+        var barWidth = Math.min(32, (width - 48) / Math.max(items.length, 1) * 0.55);
+        mark = svgEl('rect', {
+          class: 'm-chart__bar', x: px - barWidth / 2, y: Math.min(py, zero),
+          width: barWidth, height: Math.abs(py - zero), rx: 2,
+          fill: 'var(--micro-data-' + item.series + ')'
+        });
+      } else {
+        segment.push(px + ',' + py);
+        mark = svgEl('circle', {
+          class: 'm-chart__point', cx: px, cy: py, r: 4, fill: 'var(--micro-data-a)'
+        });
+      }
+      mark.setAttribute('data-source-index', String(index));
+      var title = svgEl('title', {});
+      title.textContent = fullLabelOf(chart, item) + ': ' + readingOf(item);
+      mark.appendChild(title); svg.appendChild(mark);
+      // Numeric index links geometry to the complete reading, without truncating labels.
+      var label = svgEl('text', {
+        x: px, y: bottom + 20, 'text-anchor': 'middle', class: 'm-chart__x-label'
+      });
+      applyTextPx(label, LINE_TEXT_PX); label.textContent = String(index + 1); svg.appendChild(label);
+      indexLabels.push(label);
+    });
+    flush();
+    plot.appendChild(svg);
+    // Time positions can be very close (e.g. consecutive days in a month).
+    // Sample axis indexes, never their complete rows or numeric readings.
+    var accepted = [], sampled = false;
+    var priority = indexLabels.length > 1 ? [indexLabels[0], indexLabels[indexLabels.length - 1]]
+      .concat(indexLabels.slice(1, -1)) : indexLabels;
+    priority.forEach(function (label) {
+      var box = label.getBoundingClientRect();
+      var collision = accepted.some(function (other) {
+        return box.left < other.right + 4 && box.right + 4 > other.left;
+      });
+      if (collision) { label.style.display = 'none'; sampled = true; }
+      else accepted.push(box);
+    });
+    chart.setAttribute('data-index-label-layout', sampled ? 'sampled' : 'all');
+    appendFullReadingRows(chart, plot, items, '');
+    chart.setAttribute('data-value-layout', 'rows');
+    var rows = plot.querySelector('.m-chart__readings');
+    if (rows) [].slice.call(rows.querySelectorAll('dt')).forEach(function (label, index) {
+      label.textContent = (index + 1) + '. ' + label.textContent;
+    });
+    chart.setAttribute('data-scale-state', exceeds ? 'over-rescaled' : known.length ? 'signed' : 'empty');
+    chart.setAttribute('data-scale-detail', 'signed: min=' + min + ';max=' + max + ';zero=' + zero);
+    if (exceeds) {
+      var note = document.createElement('p');
+      note.className = 'm-chart__scale-note';
+      note.textContent = 'وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.';
+      plot.appendChild(note);
     }
   }
 
@@ -944,6 +1076,7 @@
     var total = hasDeclared ? declared : 0;
     var known = items.filter(function (i) { return i.value !== null && i.value >= 0; });
     var invalid = items.filter(function (i) { return i.value !== null && i.value < 0; });
+    var malformed = items.some(function (i) { return i.invalid; });
     var missing = items.filter(function (i) { return i.value === null; });
     var sum = known.reduce(function (a, i) { return a + i.value; }, 0);
     var R = 58, C = 2 * Math.PI * R, cx = 74, cy = 74;
@@ -982,6 +1115,12 @@
          R8-07a: رسالة المستخدم موحدة موجزة والتشخيص يحمل السبب والقيمة الخام */
       donutRefusal(chart, plot, 'invalid',
         'donut: data-total="' + declaredRaw + '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
+    } else if (!isFinite(sum)) {
+      donutRefusal(chart, plot, 'invalid',
+        'donut: sum exceeds the finite Number range; proportions refused and original readings retained.');
+    } else if (malformed) {
+      donutRefusal(chart, plot, 'invalid',
+        'donut: invalid category value; proportions refused rather than treating malformed input as a missing or zero quantity.');
     } else if (hasInvalid || sumExceeds) {
       /* نفس أسبقية الحالات السابقة: قيم سالبة تأخذ الأولوية عند اجتماع الاثنين */
       donutRefusal(chart, plot, hasInvalid ? 'invalid' : 'over',
@@ -1026,6 +1165,14 @@
         });
         svg.appendChild(segC);
         offset += len;
+      });
+      // Boundary outlines retain the original palette and segment geometry.
+      [R - 8, R + 8].forEach(function (radius) {
+        svg.appendChild(svgEl('circle', {
+          cx: cx, cy: cy, r: radius, fill: 'none', 'aria-hidden': 'true',
+          stroke: 'var(--micro-data-boundary)', 'stroke-width': 1,
+          'vector-effect': 'non-scaling-stroke'
+        }));
       });
       var center = svgEl('text', { class: 'm-donut__center', x: cx, y: cy + 2, 'text-anchor': 'middle' });
       center.textContent = fmt(denom);
@@ -1112,9 +1259,9 @@
      بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
-    if (it.value === null) return '— غير متاح';
+    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '— غير متاح';
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0) return base + ' (سالب غير مرسوم)';
+    if (it.value < 0 && !it.signed) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
   }
 
@@ -1318,6 +1465,7 @@
   function render(chart) {
     disconnectedCharts.delete(chart);
     chart.removeAttribute('data-value-layout');
+    chart.removeAttribute('data-index-label-layout');
     var kind = chart.getAttribute('data-chart');
     var items = itemsOf(chart);
     var summary = chart.querySelector('[data-summary]');
@@ -1327,7 +1475,24 @@
     chart.removeAttribute('data-scale-state');
     chart.removeAttribute('data-scale-detail');
     chart.removeAttribute('data-axis-state');
-    if (kind === 'bars') renderBars(chart, items);
+    var domain = chart.getAttribute('data-value-domain') || 'non-negative';
+    if ((kind === 'bars' || kind === 'line') && items.length === 0) {
+      var emptyPlot = chart.querySelector('[data-plot]');
+      emptyPlot.textContent = '';
+      var empty = document.createElement('p');
+      empty.className = 'm-chart__empty';
+      empty.setAttribute('role', 'status');
+      empty.textContent = 'لا توجد بيانات لعرضها.';
+      emptyPlot.appendChild(empty);
+      chart.setAttribute('data-scale-state', 'empty');
+    }
+    else if ((kind === 'bars' || kind === 'line') && domain === 'signed') renderSigned(chart, items, kind);
+    else if ((kind === 'bars' || kind === 'line') && domain !== 'non-negative') {
+      chart.querySelector('[data-plot]').textContent = '';
+      renderScaleRefusal(chart, items, chart.querySelector('[data-plot]'), { kind: 'invalid-domain' },
+        'نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.', 'Expected non-negative or signed value domain.');
+    }
+    else if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
     else if (kind === 'bubbles') renderBubbles(chart, items);
@@ -1394,7 +1559,7 @@
     document.fonts.ready.then(function () {
       [].slice.call(document.querySelectorAll('[data-chart]')).forEach(function (c) {
         var kind = c.getAttribute('data-chart');
-        if (!disconnectedCharts.has(c) && (kind === 'bars' || kind === 'line' || kind === 'donut')) render(c);
+        if (c.isConnected && !disconnectedCharts.has(c) && (kind === 'bars' || kind === 'line' || kind === 'donut')) render(c);
       });
     });
   }

@@ -1,7 +1,7 @@
 /* =========================================================
    Micro UI — الحركة المشتركة (shared/motion.css)
    يستخدمه فرع التوسعة (S01 وما بعده). الأزمنة والمنحنى في
-   shared/tokens.css (ضغط 120ms · تحديد 180ms · طبقة 240ms،
+   shared/tokens.css (ضغط 110ms · تحديد 180ms · enter 240ms / exit 180ms،
    easing موحد cubic-bezier(0.2,0,0,1) — يوسم مقترحًا إن لم
    يثبت في الأسس).
    قواعد العمل:
@@ -23,12 +23,14 @@
    على العنصر الظاهر؛ الحالة مخفية عبر [hidden] وطور الظهور هنا. */
 .micro-layer {
   transition:
-    opacity var(--micro-motion-open) var(--micro-ease-standard),
-    translate var(--micro-motion-open) var(--micro-ease-standard);
+    opacity var(--micro-motion-enter) var(--micro-ease-enter),
+    translate var(--micro-motion-enter) var(--micro-ease-enter);
 }
 .micro-layer[data-closing="true"] {
   opacity: 0;
   translate: 0 8px;
+  transition-duration: var(--micro-motion-exit);
+  transition-timing-function: var(--micro-ease-exit);
 }
 
 /* تحديد/تبديل لوني — نفس زمن التحديد (180ms) */
@@ -52,12 +54,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .micro-layer,
-  .micro-layer[data-closing="true"],
-  .micro-select {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
-  .micro-layer[data-closing="true"] {
-    translate: none;
-  }
+  .micro-layer[data-closing="true"] { translate: none; }
 }

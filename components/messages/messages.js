@@ -56,6 +56,11 @@
   var ANNOUNCE_CAPACITY = 12;
   var ANNOUNCE_LIFETIME_MS = 60000;
   var announcedIds = [];
+  var announcementEpoch = 0;
+  function on(element, type, handler) {
+    if (!element.__microMessageLifetime) element.__microMessageLifetime = new AbortController();
+    element.addEventListener(type, handler, { signal: element.__microMessageLifetime.signal });
+  }
 
   function ensureLiveChannel(kind) {
     var existing = kind === 'assertive' ? liveAssertive : livePolite;
@@ -124,8 +129,9 @@
        أدناه يحميه). */
     if (region.textContent === String(text)) {
       region.textContent = '';
+      var epoch = announcementEpoch;
       (window.requestAnimationFrame || function (fn) { window.setTimeout(fn, 16); })(function () {
-        if (region.textContent === '') region.textContent = text;
+        if (epoch === announcementEpoch && region.isConnected && region.textContent === '') region.textContent = text;
       });
     } else {
       region.textContent = text;
@@ -136,6 +142,7 @@
     /* SUI-R1-03: مسح سجل الهويات لاستخدام المستهلك عند تغيير السياق/الوجهة —
        كل الأحداث بعده جديدة؛ لا يمس المنطقة الحية نفسها */
     announcedIds = [];
+    announcementEpoch++;
   }
 
   function toastText(el) {
@@ -151,6 +158,7 @@
     el.hidden = false;
     announce(toastText(el), false); /* مسار الإعلان الوحيد: المنطقة الحية */
     var timer = window.setTimeout(function () {
+      if (!el.isConnected) { delete el.dataset.toastTimer; return; }
       hideToast(el);
       el.dispatchEvent(new Event('micro-messages:toast-dismissed', { bubbles: true }));
     }, duration);
@@ -219,7 +227,7 @@
     inScope('.m-note__close').forEach(function (btn) {
       if (btn.dataset.microNoteBound) return;
       btn.dataset.microNoteBound = '1';
-      btn.addEventListener('click', function () {
+      on(btn, 'click', function () {
         var note = btn.closest('.m-note');
         if (!note) return;
         var target = returnFocusTarget(btn, note); /* قبل الإخفاء */
@@ -236,13 +244,34 @@
     inScope('.m-toast [data-toast-close]').forEach(function (btn) {
       if (btn.dataset.microToastCloseBound) return;
       btn.dataset.microToastCloseBound = '1';
-      btn.addEventListener('click', function () {
+      on(btn, 'click', function () {
         closeToast(btn.closest('.m-toast'));
       });
     });
   }
 
   window.MicroMessages = {
+    disconnect: function (root) {
+      var scope = root || document;
+      var nodes = [scope].concat([].slice.call(scope.querySelectorAll('*')));
+      nodes.forEach(function (element) {
+        if (element.__microMessageLifetime) element.__microMessageLifetime.abort();
+        delete element.__microMessageLifetime;
+        if (element.dataset) {
+          delete element.dataset.microNoteBound;
+          delete element.dataset.microToastCloseBound;
+          if (element.dataset.toastTimer) hideToast(element);
+        }
+      });
+      // Live channels are module-owned, shared by all instances; only the
+      // document-level teardown removes them or resets their pending replay.
+      if (scope === document) {
+        resetAnnouncements();
+        if (livePolite) livePolite.remove();
+        if (liveAssertive) liveAssertive.remove();
+        livePolite = liveAssertive = null;
+      }
+    },
     toast: toast,
     closeToast: closeToast,
     announce: announce,

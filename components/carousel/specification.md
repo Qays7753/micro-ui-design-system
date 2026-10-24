@@ -1,3 +1,9 @@
+# Carousel — العقد الحالي
+
+[عقود النظام](../../docs/SYSTEM-CONTRACTS.md) ملزمة: full-width للبطاقة النشطة افتراضيًا؛ peek عبر `data-peek="true"` فقط. لا autoplay أو bounce. زمن الحركة 180–220ms من التوكنز، وreduced-motion فوري. الأزرار للـ0/1 لا توحي بتبديل متاح.
+
+`init` idempotent، و`disconnect(root)` ينهي ResizeObserver وdirection observer وwindow listeners وdrag وrAF ويحفظ الموضع والربط المحلي المحروس لإعادة الإلحاق. `destroy(root)` يضيف فصل local listeners وحذف الحالة والنقاط المولدة؛ `init` بعده يعيد البناء. لا callback fonts متأخر يعيد قياس عقدة مفصولة. Light/Dark/System وGeometry B من المصدر المشترك. تبقى العائلة DRAFT FOR REVIEW؛ مرور اختبار لا يرقيها تلقائيًا.
+
 ### تغيّر الاتجاه بعد التهيئة
 
 تغيير `dir` أو صنف/نمط يؤثر على الاتجاه في الجذر أو أسلافه يعيد توسيط

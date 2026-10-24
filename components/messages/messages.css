@@ -78,7 +78,7 @@
 .m-note--success { background-color: var(--micro-success-surface); color: var(--micro-success); }
 .m-note--warning { background-color: var(--micro-warning-surface); color: var(--micro-warning); }
 .m-note--error   { background-color: var(--micro-danger-surface);  color: var(--micro-danger); }
-.m-note--help    { background-color: var(--micro-surface-page);    color: var(--micro-brand-primary); }
+.m-note--help    { background-color: var(--micro-surface-page);    color: var(--micro-brand-ink); }
 
 /* زر إغلاق اختياري (المستهلك يقرر) — من أزرار B01 */
 .m-note .m-note__close { margin-inline-start: auto; flex: none; }

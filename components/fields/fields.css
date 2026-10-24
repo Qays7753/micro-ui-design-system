@@ -240,9 +240,7 @@
 /* الخطأ: حد ولون خطأ + رسالة مرتبطة — لا يمحو القيمة (بيانات المستهلك) */
 .m-field.has-error .m-field__control {
   border-color: var(--micro-danger);
-  box-shadow:
-    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
-    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-danger);
+  box-shadow: none;
 }
 .m-field.has-error .m-field__msg {
   color: var(--micro-danger);
@@ -253,7 +251,7 @@
   border-color: var(--micro-danger);
   box-shadow:
     0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
-    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-danger);
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
 }
 
 /* النجاح: عند تحقق ذي معنى فقط — رسالة نجاح */
