@@ -249,7 +249,7 @@
 
 /* ألوان الفئات — تعيين ثابت بالمفتاح (لا بالترتيب) من ألوان البيانات المعتمدة */
 .m-cat--a { --cat: var(--micro-data-a); }  /* #164D59 */
-.m-cat--b { --cat: var(--micro-data-b); }  /* #F4AD76 */
+.m-cat--b { --cat: var(--micro-data-b); }  /* #D97757 */
 .m-cat--c { --cat: var(--micro-data-c); }  /* #B6A3D6 */
 .m-cat--d { --cat: var(--micro-data-d); }  /* #496D92 */
 .m-cat--e { --cat: var(--micro-data-e); }  /* #B3BD7B */

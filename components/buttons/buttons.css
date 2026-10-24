@@ -137,7 +137,7 @@
   min-height: var(--micro-counter-height);
   padding-inline: var(--micro-space-2);
   border-radius: var(--micro-radius-capsule);
-  background-color: var(--micro-brand-accent);   /* مشمشي بنص داكن — 7.60:1 */
+  background-color: var(--micro-brand-accent);   /* تراكوتا بنص داكن — 4.61:1 */
   color: var(--micro-text-primary);
   font-size: var(--micro-counter-label-size);
   line-height: 1;

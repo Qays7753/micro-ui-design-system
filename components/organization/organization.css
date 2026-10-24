@@ -220,7 +220,7 @@ a.m-row.is-focus {
 .m-badge--error   { background-color: var(--micro-danger-surface);  color: var(--micro-danger); }
 .m-badge--warning { background-color: var(--micro-warning-surface); color: var(--micro-warning); }
 .m-badge--info    { background-color: var(--micro-info-surface);    color: var(--micro-info); }
-.m-badge--accent  { background-color: var(--micro-brand-accent);    color: var(--micro-text-primary); } /* مشمشي بنص داكن */
+.m-badge--accent  { background-color: var(--micro-brand-accent);    color: var(--micro-text-primary); } /* تراكوتا بنص داكن */
 
 /* عدّاد: يتمدد مع الرقم (min-width لا width) ويخفي 0 بصرية إن طلب المستهلك */
 .m-counter {

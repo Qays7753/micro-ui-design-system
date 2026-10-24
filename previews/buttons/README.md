@@ -47,7 +47,7 @@ python3 -m http.server 8080
 
 | أريد تغيير | المكان |
 |---|---|
-| **لون** (بترولي، خطأ، مشمشي…) | `shared/tokens.css` — مثل `--micro-brand-primary` أو `--micro-danger`؛ الانعكاس فوري على كل الأنواع والحالات |
+| **لون** (بترولي، خطأ، تراكوتا…) | `shared/tokens.css` — مثل `--micro-brand-primary` أو `--micro-danger`؛ الانعكاس فوري على كل الأنواع والحالات |
 | **لون تدرج الزر الأساسي أو تحويله مصمتًا** | `shared/tokens.css` — `--micro-button-primary-bg` (استبدل التدرج بلون واحد) |
 | **مقاس** (ارتفاع الزر، الحشو، هدف اللمس، مقاس الأيقونة) | `shared/tokens.css` — `--micro-button-min-height`، `--micro-button-padding-inline`، `--micro-icon-button-size`، `--micro-icon-in-button` |
 | **خط العدّاد** | `shared/tokens.css` — `--micro-counter-label-size` / `--micro-counter-label-weight` |
