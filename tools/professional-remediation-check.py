@@ -185,6 +185,15 @@ def main():
         page.wait_for_timeout(200)
         top = page.locator("#sc-signed").evaluate("(el)=>el.getBoundingClientRect().top")
         records.append({"name": "showcase.deep-link-after-font-layout", "pass": abs(top) < 4, "detail": top})
+        label_colors = page.evaluate("""()=>{
+          document.documentElement.dataset.theme='dark';
+          const probe=document.createElement('span');probe.style.color='var(--micro-text-secondary)';document.body.append(probe);
+          const expected=getComputedStyle(probe).color;probe.remove();
+          const fills=Array.from(document.querySelectorAll('#sc-signed .m-chart__x-label')).map(n=>getComputedStyle(n).fill);
+          document.documentElement.dataset.theme='light';
+          return {expected,fills,ok:fills.length>0&&fills.every(fill=>fill===expected)};
+        }""")
+        records.append({"name": "chart.signed-dark-label-color", "pass": label_colors["ok"], "detail": label_colors})
         indexes = page.locator("#sc-signed-time .m-chart__x-label").evaluate_all("(nodes)=>nodes.map(n=>n.getBoundingClientRect()).filter(r=>r.width>0).map(r=>({left:r.left,right:r.right}))")
         collision = any(a["left"] < b["right"] + 3 and a["right"] + 3 > b["left"] for i, a in enumerate(indexes) for b in indexes[i + 1:])
         records.append({"name": "chart.time-index-no-collision", "pass": not collision, "detail": indexes})

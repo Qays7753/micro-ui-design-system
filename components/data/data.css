@@ -292,7 +292,7 @@
   font-family: var(--micro-font-family);
 }
 .m-chart--line .m-chart__axis { stroke: var(--micro-border-divider); stroke-width: 1; }
-.m-chart--line .m-chart__x-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
+.m-chart .m-chart__x-label { font-size: 13px; fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }
 
 /* ---- المفتاح/الوصlegend (للتوزيع والدوائر) ---- */
 .m-legend {

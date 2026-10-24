@@ -6,7 +6,7 @@
 
 | الفحص | النتيجة | التغطية وحدودها |
 |---|---|---|
-| professional-remediation-check | 105/105 PASS | Picker، fields، safe errors، async cleanup، signed data، invalid/overflow donut، deep links، sampled time indexes، visible line stroke، 32 تركيبة عرض/اتجاه/ثيم/حجم نص، 20 زوج تباين، system theme وreduced-motion |
+| professional-remediation-check | 106/106 PASS | Picker، fields، safe errors، async cleanup، signed data، invalid/overflow donut، deep links، sampled time indexes، visible line stroke، actual dark label fill، 32 تركيبة عرض/اتجاه/ثيم/حجم نص، 20 زوج تباين، system theme وreduced-motion |
 | ui-system-showcase-check | 118/118 PASS | editable + file:// standalone، حالات وتفاعلات المكونات الأصلية |
 | ui-system-showcase-repair-check | 176/176 PASS | عروض 320/360/390/430 RTL؛ ليست قائمة فحوص القرارات الجديدة نفسها |
 | concepts-check | 162/162 PASS | أمثلة مستقلة، مسارات العرض، safe callback rejection، موارد وJavaScript |
@@ -28,6 +28,7 @@
 - نص switch طويل: min-width:0 ولفّ آمن دون تغيير مسار أو حجم إصابة المفتاح.
 - hash scroll قبل استقرار الخطوط/الرسم: الانتظار لـfonts.ready وإطارَي layout، مع إبطال الطلب القديم.
 - فحص الصورة أظهر alias لون خط غير محلول كان يخفي stroke، وفهارس زمنية متقاربة: صُحح alias وأضيف قياس فعلي لظهور الخط وأخذ عينة فهارس دون حذف القراءات. فحص التباين يتحقق الآن من وجود التوكن المحلول قبل حساب النسبة.
+- الصورة الداكنة أظهرت فهارس signed bars بلون SVG الافتراضي لأن محدد x-label كان مقصورًا على line: عُمّم الدور على الرسم، وأضيف فحص computed fill الفعلي للفهارس الموقعة في الثيم الداكن.
 - فحص قديم ينتظر عرض Error.message: صُحح إلى userMessage المعتمد مع التأكد من عدم تسرب النص الداخلي؛ لم تُستعد الثغرة لإرضاء الاختبار.
 
 ## البوابات
