@@ -16,7 +16,7 @@
 
 ## الثوابت
 
-العربية RTL والهاتف، IBM Plex Sans Arabic وIBM Plex، وأصول الأيقونات الموجودة في `assets/icons/`. يدعم النظام Light/Dark/System الآن، وفق `data-theme` الذي يملكه المضيف. مرجع العلامة النشط `assets/brand/micro-logo/v2/`؛ v1 تاريخي، ولا يُستخدم حرف m مؤقت.
+العربية RTL والهاتف، IBM Plex Sans Arabic وIBM Plex، وأصول الأيقونات الموجودة في `assets/icons/`. الإصدار الحالي **Light-only**؛ تفعيل Dark/System القديم معطل دون تعديل لوحة Dark أو اختبارها. مرجع العلامة النشط `assets/brand/micro-logo/v2/`؛ v1 تاريخي، ولا يُستخدم حرف m مؤقت.
 
 الاتجاه المعتمد **Purposeful Expressive Native UI**، والهندسة **Geometry B**. ألوان العلامة الأصلية لا تتغير؛ التوكنز الدلالية المتكيفة وقيمها التنفيذية في `shared/tokens.css`. القاعدة الحالية المفصلة في [`docs/SYSTEM-CONTRACTS.md`](docs/SYSTEM-CONTRACTS.md) تتقدم على القياسات أو التأجيلات التاريخية.
 

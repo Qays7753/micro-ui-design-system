@@ -125,6 +125,19 @@
   font-weight: 600;
   color: var(--micro-text-primary);
 }
+.m-chart__context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-1) var(--micro-space-4);
+  min-width: 0;
+  margin-block: calc(-1 * var(--micro-space-2)) var(--micro-space-1);
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-chart__context-item { display: inline-flex; flex-wrap: wrap; gap: var(--micro-space-1); min-width: 0; }
+.m-chart__context-value { color: var(--micro-text-primary); overflow-wrap: anywhere; }
+.m-chart__context-title { color: var(--micro-text-primary); font-weight: 600; overflow-wrap: anywhere; }
 .m-chart__plot { width: 100%; min-width: 0; }
 /* R1-UI08: الدونات ليست أعمدة تتمدد — الرسم الدائري مقاس ثابت 148×148 من
    .m-donut__svg (viewBox 148) ولا يخضع لقاعدة عرض الحاوية العامة؛
@@ -334,6 +347,12 @@
 .m-bubbles { display: flex; align-items: flex-end; justify-content: center; gap: var(--micro-space-5); flex-wrap: wrap; }
 .m-bubble { display: flex; flex-direction: column; align-items: center; gap: var(--micro-space-2); min-width: 0; max-width: 100%; }
 .m-bubble__circle { display: block; fill: var(--cat, var(--micro-data-a)); }
+.m-chart--bubbles .m-bubble__circle { overflow: visible; }
+.m-chart--bubbles .m-bubble__circle circle {
+  stroke: var(--micro-data-boundary);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
 .m-bubble--soft .m-bubble__circle { opacity: 0.85; } /* لقراءة التداخل المحدود إن وجد */
 .m-bubble__value { font-size: var(--micro-secondary-size); font-weight: 600; color: var(--micro-text-primary); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; max-width: 100%; overflow-wrap: anywhere; }
 .m-bubble__label { font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-secondary); max-width: 12ch; overflow-wrap: anywhere; text-align: center; }

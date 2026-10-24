@@ -2,7 +2,7 @@
 
 ## تحديث Geometry B والثيم والتنظيف
 
-[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md): radius التحكم 12، min-height الحقل 52، stepper hit-area 48 مع glyph أصغر، body 16/26، focus 2+2. الخطأ resting حد ورسالة، لا halo دائم؛ Light/Dark/System دلالي. `MicroFields.disconnect(root)`/`destroy(root)` يفصلان events ومراقب attrs ويستعيدان aria-disabled المشتق، دون تغيير قيمة المضيف. `init` بعد الفصل يعيد ربطًا واحدًا، و`sync` صامت دون input/change/micro-field event. readonly/disabled والحدود وstep العشري تبقى من عقد المصدر.
+[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md): radius التحكم 12، min-height الحقل 52، stepper hit-area 48 مع glyph أصغر، body 16/26، focus 2+2. الخطأ resting حد ورسالة، لا halo دائم؛ الإصدار Light-only. `MicroFields.disconnect(root)`/`destroy(root)` يفصلان events ومراقب attrs ويستعيدان aria-disabled المشتق، دون تغيير قيمة المضيف. `init` بعد الفصل يعيد ربطًا واحدًا، و`sync` صامت دون input/change/micro-field event. readonly/disabled والحدود وstep العشري تبقى من عقد المصدر.
 
 إصلاح الجذر 2026-10-20: `MicroFields.init(root)` يعالج `root` نفسه إذا طابق `[data-micro-field]`، ثم حقوله الفرعية. حارس `data-micro-field-bound` يمنع تكرار الربط سواء تكرر تهيئة الحقل أو غلافه. العدّاد والمسح والخطوة والرسالة والتركيز وحالات readonly/disabled لا تتغير.
 

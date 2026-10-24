@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
   "scope": "independent-pre-transfer-ui-system",
+  "releaseTheme": "light-only",
+  "chartPolicy": {"preciseDefault":["bars","rows","table"],"specializedOptIn":["donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},
   "maturityVocabulary": ["stable-ui", "draft-for-review", "proposed"],
   "families": [
     {"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},
@@ -19,6 +21,10 @@
     {"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}
   ],
   "variants": [
+    {"id":"donut","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},
+    {"id":"main-metric-featured","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},
+    {"id":"bubbles","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},
+    {"id":"metric-circles","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},
     {"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},
     {"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}
   ]

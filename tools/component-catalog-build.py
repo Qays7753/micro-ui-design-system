@@ -19,7 +19,8 @@ def build():
         "<!-- GENERATED: tools/component-catalog-build.py — edit COMPONENT-CATALOG.json -->",
         "",
         "مصدر حالة النضج الوحيد: [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json).",
-        "هذه 14 عائلة؛ packed-circle متغير مقترح تحت Data وليس العائلة الخامسة عشرة.",
+        f"هذه {len(families)} عائلة؛ متغيرات الرسوم والشريط ليست عائلات إضافية.",
+        "الإصدار Light-only. المقارنة الدقيقة bars/rows/table؛ الأشكال الدائرية المتخصصة opt-in صريح.",
         "الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.",
         "",
         "| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية |",
@@ -36,6 +37,8 @@ def build():
         assert item["family"] in {family["id"] for family in families}
         for path in item["source"]:
             assert (ROOT / path).is_file(), path
+        assert item["optIn"] is True, item
+        assert (ROOT / item["preview"]).is_file(), item
         lines.append(f"| {item['id']} | {item['family']} | {LABELS[item['maturity']]} | نعم | [فتح](../{item['preview']}) |")
     lines += [
         "", "## العقود العامة", "",
@@ -71,7 +74,7 @@ def main():
             raise SystemExit("Catalog inventory is stale")
         if generated != html:
             raise SystemExit("Showcase catalog payload is stale")
-        print("Catalog: 14 families, 2 explicit variants, paths and inventory OK")
+        print(f"Catalog: {len(catalog['families'])} families, {len(catalog['variants'])} explicit variants, paths and inventory OK")
     else:
         output.write_text(content)
         showcase.write_text(generated)

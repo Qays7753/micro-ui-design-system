@@ -12,20 +12,9 @@
    منتظمة (--micro-space-1)، رقم واضح ومؤشرات صغيرة أسفله،
    اليوم المحدد كتلة بترولية، واليوم الحالي بحد/علامة مختلفة.
 
-   PROPOSED (استثناء موضعي معلن — خلايا الشهر فقط):
-   قاعدة المشروع لأهداف اللمس 48px (--micro-touch-min). سبعة
-   أعمدة × 48px = 336px قبل الفجوات، والمتاح عند هاتف 320 بهامش
-   16 لكل جانب = 288px فقط — لا يمكن تحقيق 48px لخلية شهر ضمن
-   الهوامش المشروعة. خلية الشهر إذن أكبر مساحة ممكنة:
-   width: calc((100% - 6 * var(--micro-space-1)) / 7) ≈ 37.7px
-   عند 320 (تُقاس فعليًا وتُوثق أرقامها). هذا أقل من قاعدة
-   المشروع ولا ندّعي تحقيقه؛ يحقق حد AA فقط في WCAG 2.5.8
-   (24px) وهو لا يحل محل القاعدة. كل الأفعال الرئيسية خارج
-   الخلايا (سهما الشهر، «اليوم»، التبديلات، صفوف الطلبات،
-   الإضافة، إعادة المحاولة) ≥ 48px، وعرضا اليوم/القائمة
-   (صفوف 48px+) بديل كامل، والاختيار من الشهر ممكن بلوحة
-   المفاتيح بلا اعتماد على دقة اللمس. التفصيل والبدائل في
-   specification.md (قسم استثناء خلايا الشهر PROPOSED).
+   شبكة الشهر تظهر فقط عند عرض جذر ≥360px: سبعة أهداف ×48px
+   مع ست فجوات ×4px. تحت ذلك تبقى حالة الشهر متاحة عبر مسار
+   تواريخ ذي أهداف 48px وتمرير محلي. لا تصغير لأهداف اللمس.
    ========================================================= */
 
 .m-ocal,
@@ -98,6 +87,7 @@
 /* ---- رأس التقويم: سهم الشهر السابق/التالي + العنوان + «اليوم» ---- */
 .m-ocal__cal-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
 }
@@ -112,6 +102,23 @@
   line-height: var(--micro-button-label-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
+}
+
+.m-ocal__month-trigger {
+  width: 100%;
+  min-height: var(--micro-touch-min);
+  padding: var(--micro-space-1) var(--micro-space-2);
+  border: 0;
+  border-radius: var(--micro-radius-chip);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__month-trigger:hover {
+  background-color: var(--micro-surface-selected);
 }
 
 .m-ocal__navbtn {
@@ -135,6 +142,76 @@
   stroke: currentColor;
 }
 
+/* Month/year picker is an in-flow local layer, not a new navigation route. */
+.m-ocal__picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  padding: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+}
+
+.m-ocal__picker-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__picker-yearbtn,
+.m-ocal__picker-back {
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-2);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-brand-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.m-ocal__picker-yearbtn:disabled {
+  color: var(--micro-text-hint);
+  cursor: default;
+}
+
+.m-ocal__picker-year {
+  flex: 1;
+  min-width: 48px;
+  margin: 0;
+  text-align: center;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+}
+
+.m-ocal__picker-months {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--micro-space-1);
+}
+
+.m-ocal__picker-month {
+  min-width: 0;
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-1);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  font: inherit;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.m-ocal__picker-month[aria-pressed="true"] {
+  border-color: var(--micro-brand-primary);
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-primary);
+  font-weight: 600;
+}
+
 .m-ocal__todaybtn {
   flex: none;
   min-height: var(--micro-touch-min); /* ≥ 48px */
@@ -149,14 +226,15 @@
   cursor: pointer;
 }
 
-/* ---- تبديل شهر/يوم داخل التقويم (نفس عقد aria-pressed) ---- */
+/* ---- إجراء بديل واحد لتغيير شهر/يوم يقلل تكديس الخيارات ---- */
 .m-ocal__modes {
   display: flex;
-  gap: var(--micro-space-2);
+  justify-content: flex-start;
 }
 
 .m-ocal__modes-btn {
-  flex: 1;
+  flex: none;
+  min-width: 120px;
   min-height: var(--micro-touch-min); /* ≥ 48px */
   display: inline-flex;
   align-items: center;
@@ -173,11 +251,11 @@
   cursor: pointer;
 }
 
-.m-ocal__modes-btn[aria-pressed="true"] {
-  background-color: var(--micro-surface-selected);
-  border-color: var(--micro-brand-primary);
+.m-ocal__modes-btn {
+  border-color: var(--micro-border-divider);
+  background-color: var(--micro-surface-base);
   color: var(--micro-brand-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* ================= 3) شبكة الشهر ================= */
@@ -217,9 +295,59 @@
      للحاوية إلى 7×75.6+24 ≈ 553px ويوسّع أي أبٍ يحجم بالمحتوى (شبكة/
      flex) خارج الشاشة. الصف بلا aspect-ratio فلا انقلاب، والخلايا
      تتمدد (stretch) لأرضية الصف فيبقى المربع عند 1× وينمو عموديًا عند
-     التكبير — وهو السلوك الموثق في المواصفة (قسم PROPOSED). */
+     التكبير — وهو السلوك الموثق في المواصفة. */
   font-size: var(--micro-label-size);
   min-height: 2.7em;
+}
+
+.m-ocal__rail {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.m-ocal__rail-track {
+  display: flex;
+  gap: var(--micro-space-1);
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: var(--micro-space-1);
+}
+
+.m-ocal__rail-day {
+  flex: 0 0 52px;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: var(--micro-space-1);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-secondary);
+  font-family: var(--micro-font-family);
+  cursor: pointer;
+}
+
+.m-ocal__rail-weekday,
+.m-ocal__rail-month {
+  font-size: var(--micro-counter-label-size);
+  line-height: var(--micro-secondary-line);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__rail-number {
+  font-size: var(--micro-label-size);
+  font-weight: 600;
+  line-height: var(--micro-label-line);
+}
+
+.m-ocal__rail-day--selected {
+  border-color: var(--micro-brand-primary);
+  background-color: var(--micro-brand-primary);
+  color: var(--micro-text-inverse);
 }
 
 /* خلية فارغة (بادئة الشهر) — تحجز العمود بلا تفاعل */
@@ -228,9 +356,7 @@
   border-radius: var(--micro-radius-chip);
 }
 
-/* PROPOSED: خلية اليوم — مربعة بزوايا ناعمة، أكبر مساحة ممكنة
-   (انظر رأس الملف). هوامش داخلية وفوارق 1px فقط لأن الخلية
-   ≈ 37.7px عند 320 لا تتسع سلم المسافات داخلها (موثق). */
+/* خلية الشهر لا تظهر إلا عندما تحافظ هندسة الأعمدة على 48px فأكثر. */
 .m-ocal__cell {
   position: relative;
   display: flex;
@@ -630,6 +756,11 @@
 .m-ocal__modes-btn,
 .m-ocal__navbtn,
 .m-ocal__todaybtn,
+.m-ocal__month-trigger,
+.m-ocal__picker-yearbtn,
+.m-ocal__picker-back,
+.m-ocal__picker-month,
+.m-ocal__rail-day,
 .m-ocal__row,
 .m-ocal__add,
 .m-ocal__retry {

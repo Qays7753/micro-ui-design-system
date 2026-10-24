@@ -2,7 +2,7 @@
 
 ## تحديث الثيم ودورة الحياة
 
-تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight/Dark/System، والقسم العادي يبدأ بالتسلسل والمسافة قبل إضافة بطاقة. `MicroOrganization.init(root)` يعالج الجذر المطابق أيضًا، و`disconnect(root)` يفصل listeners للقسم والصورة. طي القسم فوري بلا layout animation؛ فشل الصورة ينتج initials ظاهرًا من الاسم، لا شعارًا مؤقتًا أو m.
+تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight-only، والقسم العادي يبدأ بالتسلسل والمسافة قبل إضافة بطاقة. `MicroOrganization.init(root)` يعالج الجذر المطابق أيضًا، و`disconnect(root)` يفصل listeners للقسم والصورة. طي القسم فوري بلا layout animation؛ فشل الصورة ينتج initials ظاهرًا من الاسم، لا شعارًا مؤقتًا أو m.
 
 الحالة: **STABLE UI** — القيم والحالات الحالية تتبع [UI-RELEASE](../../docs/UI-RELEASE.md)؛ لا بطاقة أو ظل لكل صف، والعقود أدناه محفوظة.
 

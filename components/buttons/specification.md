@@ -2,7 +2,7 @@
 
 ## تحديث Geometry B والثيم ودورة الحياة
 
-[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md) تتقدم على قياسات سابقة هنا: control radius 12، capsule opt-in، وهدف 48 حيث ينطبق. Light/Dark/System دلالي مع حدود وforeground مناسبين. `MicroButtons.disconnect(root)` ينهي loading المملوك ويستعيد الاسم ويفصل activation guards؛ `setLoading` يعيد الربط عند الحاجة، ولا مؤقت إكمال افتراضي داخل المكوّن.
+[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md) تتقدم على قياسات سابقة هنا: control radius 12، capsule opt-in، وهدف 48 حيث ينطبق. الإصدار الحالي Light-only؛ حدود وforeground الحالات دلالية. `MicroButtons.disconnect(root)` ينهي loading المملوك ويستعيد الاسم ويفصل activation guards؛ `setLoading` يعيد الربط عند الحاجة، ولا مؤقت إكمال افتراضي داخل المكوّن.
 
 الحالة: **STABLE UI** — تفاصيل الإصدار في [UI-RELEASE](../../docs/UI-RELEASE.md). حُسمت البدائل بتفويض المالك الحالي؛ عقود السلوك محفوظة، وأدلة R1/R2 تاريخية وليست فحصًا جديدًا.
 

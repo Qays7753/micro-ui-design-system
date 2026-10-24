@@ -17,6 +17,8 @@
 
 ## مصدر الحقيقة
 
+**الإصدار الحالي Light-only.** لا دعم أو إصلاح أو اختبارات Dark/System-dark في هذه الدفعة. توثيق التنفيذ والأدلة الحالية في [`تقرير الإصلاح`](docs/replit/light-only-complete-ui-repair-2026-10-24/REPORT.md)، لا في نتائج الجولات التاريخية.
+
 - `components/`: CSS وJavaScript وHTML والمواصفات القابلة للتعديل.
 - `shared/tokens.css`: التوكنز التنفيذية الوحيدة.
 - `shared/motion.css` و`shared/icons.js`: القواعد المشتركة.
@@ -66,7 +68,7 @@ python3 tools/data-scale-state-check.py
 مرجع الأبعاد والهندسة والاستثناءات الحالية:
 [`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
 
-تقارير الإصلاح الحالي في
+تقارير الإصلاح السابق **التاريخية** في
 [`docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/`](docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/).
 أدلة `reviews/UI-SYSTEM-SHOWCASE/` و`docs/UI-SYSTEM-SHOWCASE-*.md` تاريخية،
 وليست بديلًا عن تشغيل الفحوص على المصدر الحالي.
@@ -88,7 +90,9 @@ python3 tools/data-scale-state-check.py
 | account-settings | `components/account-settings/` | STABLE UI دون حفظ فعلي |
 | access-gateway | `components/access-gateway/` | STABLE UI دون مصادقة فعلية |
 | order-schedule | `components/order-schedule/` | DRAFT FOR REVIEW |
-| carousel وpacked-circle | `components/carousel/` و`components/data/packed-circle.*` | DRAFT/PROPOSED حسب المواصفة |
+| carousel | `components/carousel/` | DRAFT FOR REVIEW |
+
+`packed-circle` متغير مقترح opt-in تحت Data، وليس عائلة خامسة عشرة. Donut وBubbles وMetric Circles وMain Metric featured متغيرات متخصصة opt-in أيضًا؛ مصدر القائمة والنضج هو الكتالوج.
 
 ## حدود مهمة
 
@@ -101,3 +105,9 @@ python3 tools/data-scale-state-check.py
 المصدر القابل للتعديل هو التسليم الأساسي. تعليمات إعادة بناء حزمة النقل موجودة في [`deliverables/README.md`](deliverables/README.md)، ولا تُعامل أي صورة أو build كبديل عن المصدر.
 
 مصدر الرسوم القابل للنقل: [`components/data/`](components/data/)، ومثاله المستقل [`example-usage.html`](components/data/example-usage.html). فحص `chart-mobile-check.py` يستخدم CSS/JS المصدر دون المعرض، ويثبت عرض SVG ونسبه والقراءات الكاملة وهندسة التنقل والاختيار؛ لا اختبار أجهزة فعلية.
+
+## العرض النظيف ومختبر الحالات
+
+المعرض يبدأ بـOverview للمكونات الفعلية دون السجلات؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
+
+فحوص الإصدار: `tools/light-calendar-check.py`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.

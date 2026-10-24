@@ -47,13 +47,6 @@ body {
   font-weight: 500;
 }
 .showcase-brand__logo { display: block; width: 92px; height: 32px; object-fit: contain; object-position: start center; }
-.showcase-brand__logo--dark { display: none; }
-[data-theme="dark"] .showcase-brand__logo--light { display: none; }
-[data-theme="dark"] .showcase-brand__logo--dark { display: block; }
-@media (prefers-color-scheme: dark) {
-  [data-theme="system"] .showcase-brand__logo--light { display: none; }
-  [data-theme="system"] .showcase-brand__logo--dark { display: block; }
-}
 .showcase-brand__rule { width: 1px; height: 20px; background: var(--micro-border-divider); }
 
 .showcase-header__eyebrow {
@@ -118,28 +111,6 @@ body {
 .showcase-nav__link:focus-visible { background: var(--micro-surface-selected); color: var(--micro-text-primary); }
 .showcase-nav__link.is-current { background: var(--micro-surface-selected); color: var(--micro-brand-ink); }
 .showcase-nav__link[aria-current="page"] { background: var(--micro-surface-selected); color: var(--micro-brand-ink); }
-.showcase-theme {
-  display: flex;
-  gap: 2px;
-  margin-inline-start: auto;
-  padding: 2px;
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background: var(--micro-surface-base);
-}
-.showcase-theme button {
-  min-width: 44px;
-  min-height: 48px;
-  padding-inline: 8px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--micro-text-secondary);
-  font: 500 12px/1.4 var(--micro-font-family);
-  cursor: pointer;
-}
-.showcase-theme button[aria-pressed="true"] { background: var(--micro-brand-primary); color: var(--micro-text-inverse); border-color: var(--micro-action-outline); }
-
 /* ---------- شريط تحكم المراجعة (ليس سلوك منتج) ---------- */
 
 /* F-11 (2026-10-10): وسم مرئي صريح أن هذا الشريط أدوات مراجعة للعرض
@@ -424,8 +395,6 @@ body {
   .showcase-header { padding-inline: 16px; }
   .showcase-nav { gap: 2px; }
   .showcase-nav__link { padding-inline: 9px; font-size: 12px; }
-  .showcase-theme { margin-inline-start: 0; }
-  .showcase-theme button { min-width: 42px; }
 }
 
 /* ---------- Overview / State Lab modes ---------- */
@@ -435,16 +404,27 @@ body[data-view="state"] .showcase-controls { display: block; }
 body[data-view="state"] .brand-proof { display: grid; }
 
 body[data-view="overview"] .showcase-canvas {
-  width: min(100%, 760px);
+  width: min(100%, 940px);
   padding-inline: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
 }
 body[data-view="overview"] .sc-section:not([data-overview="true"]) { display: none; }
 body[data-view="overview"] .sc-section[data-overview="true"] {
-  gap: 10px;
-  margin-block: 18px;
+  min-width: 0;
+  align-content: start;
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  background: var(--micro-surface-base);
 }
+body[data-view="overview"] #sc-surfaces { grid-column: 1 / -1; }
 body[data-view="overview"] .sc-section[data-overview="true"] .sc-section__head {
-  display: block;
+  gap: 2px;
   padding-inline: 0;
 }
 body[data-view="overview"] .sc-section[data-overview="true"] .sc-section__kicker,
@@ -453,23 +433,42 @@ body[data-view="overview"] .sc-section[data-overview="true"] .sc-section__title 
   font-size: var(--micro-heading-size);
   line-height: var(--micro-heading-line);
 }
+body[data-view="overview"] .sc-section[data-overview="true"] > .sc-block {
+  padding: 0;
+  background: transparent;
+}
 body[data-view="overview"] #sc-surfaces .m-surface--plain,
 body[data-view="overview"] #sc-surfaces .sc-hint,
 body[data-view="overview"] #sc-buttons .sc-block__title,
 body[data-view="overview"] #sc-buttons .m-btn--block,
 body[data-view="overview"] #sc-buttons .sc-tools,
 body[data-view="overview"] #sc-buttons .sc-hint,
+body[data-view="overview"] #sc-buttons .sc-log,
 body[data-view="overview"] #sc-fields .sc-stack--tight,
-body[data-view="overview"] #sc-info .sc-block--plain > :not(.sc-grid-2),
+body[data-view="overview"] #sc-fields .sc-grid-2,
+body[data-view="overview"] #sc-fields .sc-tools,
+body[data-view="overview"] #sc-fields .sc-hint,
+body[data-view="overview"] #sc-info-strip .sc-block--plain > :not(.sc-grid-2),
+body[data-view="overview"] #sc-info-strip .sc-grid-2 > :nth-child(n + 3),
 body[data-view="overview"] #sc-metric .sc-tools,
 body[data-view="overview"] #sc-metric .sc-hint,
 body[data-view="overview"] #sc-metric .m-metric-circles,
-body[data-view="overview"] #sc-metric .m-main-metric:not(.m-main-metric--flat) { display: none; }
+body[data-view="overview"] #sc-metric .m-main-metric:not(.m-main-metric--flat),
+body[data-view="overview"] .sc-section[data-overview="true"] .sc-log { display: none; }
 body[data-view="overview"] #sc-buttons .sc-row > :nth-child(n + 4) { display: none; }
-body[data-view="overview"] #sc-fields .m-field:not(#sc-field-name) { display: none; }
-body[data-view="overview"] #sc-info .sc-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body[data-view="overview"] #sc-fields .m-field:not(#sc-field-name):not(#sc-field-search) { display: none; }
+body[data-view="overview"] #sc-info-strip .sc-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 body[data-view="overview"] #sc-metric .m-main-metric--flat { display: block; }
-body[data-view="overview"] .showcase-footer { padding-block-start: 16px; }
+body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none; }
+
+@media (max-width: 600px) {
+  body[data-view="overview"] .showcase-canvas {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 16px;
+  }
+  body[data-view="overview"] #sc-surfaces { grid-column: auto; }
+  body[data-view="overview"] .sc-section[data-overview="true"] { padding: 12px; }
+}
 
 .brand-proof {
   display: none;
@@ -531,7 +530,6 @@ body[data-view="overview"] .showcase-footer { padding-block-start: 16px; }
 .brand-proof__plate figcaption { color: var(--micro-text-secondary); font-size: 10px; line-height: 1.3; }
 
 @media (max-width: 600px) {
-  body[data-view="overview"] .showcase-canvas { padding-inline: 16px; }
   .brand-proof { width: calc(100% - 32px); padding: 12px; }
   .brand-proof__head { display: grid; }
   .brand-proof__head > p { max-width: none; }

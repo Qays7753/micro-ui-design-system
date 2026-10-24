@@ -2,7 +2,7 @@
 
 ## التحديث الحالي
 
-[عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight/Dark/System، compact/flat للقراءة العادية، وfeatured/hero صريح عندما يستحق المحتوى. الأسطح البترولية التعبيرية خيار مقصود وليست بطاقة مفروضة حول كل معلومة. radius السطح 16–20 والـhero 24، ordinary numeric 22/32 وfeatured 36/44. لا إعادة تشكيل للعلامة لتكوين خلفية، وreduced-motion يوقف الزخرفة المتحركة. هذا CSS-only بلا lifecycle listeners.
+[عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight-only، compact/flat للقراءة العادية، وfeatured/hero صريح عندما يستحق المحتوى. الأسطح البترولية التعبيرية خيار مقصود وليست بطاقة مفروضة حول كل معلومة. radius السطح 16–20 والـhero 24، ordinary numeric 22/32 وfeatured 36/44. لا إعادة تشكيل للعلامة لتكوين خلفية، وreduced-motion يوقف الزخرفة المتحركة. هذا CSS-only بلا lifecycle listeners.
 
 الحالة: **STABLE UI** — الدور والحالات يتبعان [UI-RELEASE](../../docs/UI-RELEASE.md). الاتجاه الواسع الخافت (المنحنيات) هو المرجع الحالي الوحيد الافتراضي؛ دراسات الموجات أدناه تاريخية/توافقية واضحة الوسم وليست افتراضيات متنافسة (A04).
 

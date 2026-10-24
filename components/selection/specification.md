@@ -2,7 +2,7 @@
 
 ## تحديث الاختيار وPicker
 
-[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md) ملزمة: Geometry B وLight/Dark/System، والنضج منفصل عن checked/pending/error. `MicroSelection.disconnect(root)` يفصل group/segmented listeners ويستعيد pending المملوك؛ حماية switch المشتركة على document مفردة.
+[العقود الحالية](../../docs/SYSTEM-CONTRACTS.md) ملزمة: Geometry B وLight-only، والنضج منفصل عن checked/pending/error. `MicroSelection.disconnect(root)` يفصل group/segmented listeners ويستعيد pending المملوك؛ حماية switch المشتركة على document مفردة.
 
 `MicroPicker`: status وretry خارج listbox، ولا خيارات في loading/empty/error/initial/disabled قابلة للتنقل. البحث بلا نتائج غير قائمة مصدر فارغة. setOptions يحفظ التركيز والاختيار بالمفتاح؛ إزالة الخيار تنقل التركيز إلى البحث/جذر ثابت وتعلن زوال الاختيار. التحديث الخارجي لا يسرق التركيز. `disconnect` يفصل الأحداث ويحفظ DOM والحالة، و`destroy` يحذف الحالة الداخلية أيضًا؛ كلاهما لا يحذف خيارات المضيف. init بعد الفصل يربط مرة واحدة. الأسهم وHome/End وroving tabindex تتجاوز المخفي والمعطل.
 

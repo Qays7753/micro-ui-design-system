@@ -83,14 +83,18 @@
     return { y: +p[0], m: +p[1], d: +p[2] };
   }
 
-  /* عدد أيام الشهر — new Date(y, m, 0) محلي: فبراير 2028=29 و2027=28 */
+  /* عدد أيام الشهر محليًا، مع ضبط السنة صراحة لتجنب تحويل 0–99 إلى 1900–1999 */
   function daysInMonth(y, m) {
-    return new Date(y, m, 0).getDate();
+    var date = new Date(0);
+    date.setFullYear(y, m, 0);
+    return date.getDate();
   }
 
-  /* يوم الأسبوع ليوم مدني — getDay() المحلي آمن (لا يتغير بالمنطقة) */
+  /* يوم الأسبوع لتاريخ مدني — setFullYear يحافظ على السنوات 0001–0099 */
   function weekdayOf(y, m, d) {
-    return new Date(y, m - 1, d).getDay();
+    var date = new Date(0);
+    date.setFullYear(y, m - 1, d);
+    return date.getDay();
   }
 
   /* التنقل بين الشهور بحساب (y*12+m) عائم — ديسمبر→يناير وم31→فبراير
@@ -254,7 +258,10 @@
     state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
     state.loading = !!options.loading;
     state.errorRetry = (typeof options.retry === 'function') ? options.retry : null;
-      state.autoDay = false;
+    state.compactMonth = false;
+    state.pickerOpen = false;
+    state.pickerYear = null;
+    state.railCursorDate = state.selectedDate;
 
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
@@ -378,9 +385,12 @@
       root.classList.add('m-ocal');
       root.setAttribute('data-ocal-root', '');
       root.setAttribute('data-ocal-view', state.view);
-      root.setAttribute('data-ocal-cal-view', state.autoDay ? 'day' : state.calendarView);
+      root.setAttribute('data-ocal-cal-view', state.calendarView);
       root.setAttribute('data-ocal-preferred-cal-view', state.calendarView);
-      root.setAttribute('data-ocal-auto-view', state.autoDay ? 'day' : 'none');
+      var layout = state.view === 'list' ? 'list' :
+        (state.calendarView === 'day' ? 'day' : (state.compactMonth ? 'date-rail' : 'month-grid'));
+      root.setAttribute('data-ocal-layout', layout);
+      root.setAttribute('data-ocal-selected-date', state.selectedDate);
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
@@ -395,14 +405,11 @@
       }
       root.appendChild(buildViewsBar());
       if (state.view === 'list') root.appendChild(buildListScreen());
-      else if (state.calendarView === 'day' || state.autoDay) root.appendChild(buildDayScreen());
+      else if (state.calendarView === 'day') root.appendChild(buildDayScreen());
       else root.appendChild(buildMonthScreen());
     }
 
-    /* ---- زرا التبديل (تقويم/قائمة وشهر/يوم): أزرار ضغط أصلية
-       بسمة aria-pressed — قرار موثق: أوسع دعمًا وأرخص شكليًا من
-       radiogroup يدوي، والحالة ليست باللون وحده (aria-pressed +
-       وزن 600 + خلفية/حد) ---- */
+    /* ---- أزرار تقويم/قائمة الأصلية تعلن حالتها عبر aria-pressed ---- */
     function toggleBtn(action, value, text, pressed) {
       var b = el('button', 'm-ocal__' + (action === 'view' ? 'views' : 'modes') + '-btn');
       b.type = 'button';
@@ -426,51 +433,55 @@
       var bar = el('div', 'm-ocal__modes');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'نمط التقويم');
-      var effectiveDay = state.calendarView === 'day' || state.autoDay;
-      bar.appendChild(toggleBtn('cal-mode', 'month', 'شهر', !effectiveDay));
-      bar.appendChild(toggleBtn('cal-mode', 'day', 'يوم', effectiveDay));
+      var nextMode = state.calendarView === 'day' ? 'month' : 'day';
+      var switchMode = el('button', 'm-ocal__modes-btn',
+        state.calendarView === 'day' ? 'عرض الشهر' : 'عرض اليوم');
+      switchMode.type = 'button';
+      switchMode.setAttribute('data-ocal-action', 'cal-mode');
+      switchMode.setAttribute('data-ocal-value', nextMode);
+      switchMode.setAttribute('aria-label', state.calendarView === 'day' ?
+        'الانتقال إلى عرض الشهر' : 'الانتقال إلى عرض اليوم');
+      bar.appendChild(switchMode);
       return bar;
     }
 
-    /* لا نضغط أهداف خلايا الشهر دون 48px: استبدال تكيفي بعرض اليوم
-       عند ضيق الجذر، مع حفظ تفضيل الشهر/اليوم والتاريخ والبيانات. */
+    /* لا نصغّر أهداف خلايا الشهر دون 48px: نبقي اختيار الشهر متاحًا
+       بمسار تواريخ قريب، ونحفظ التاريخ المحدد والشهر المعروض مستقلين. */
     function updateResponsiveView(width) {
-      var gap = parseFloat(window.getComputedStyle(root).getPropertyValue('--micro-space-1')) || 4;
-      var required = 7 * 48 + 6 * gap;
-      var nextAutoDay = width > 0 && width < required &&
-        state.view === 'calendar' && state.calendarView === 'month';
-      if (nextAutoDay === state.autoDay) return;
+      var compactMonth = width > 0 && width < 360;
+      if (compactMonth === state.compactMonth) return;
       var active = root.contains(document.activeElement) ? document.activeElement : null;
-      var focusSelector = null;
-      var focusedOrderId = null;
+      var focusAction = null;
+      var focusDate = null;
+      var focusValue = null;
+      var focusId = null;
       if (active) {
         var control = active.closest('[data-ocal-action]');
         if (control && control.hasAttribute('data-ocal-date')) {
-          focusSelector = '[data-ocal-date="' + control.getAttribute('data-ocal-date') + '"]';
-        } else if (control) {
-          var action = control.getAttribute('data-ocal-action');
-          if (action === 'order-row') focusedOrderId = control.getAttribute('data-ocal-id');
-          if (action === 'prev-day' || action === 'prev-month') action = nextAutoDay ? 'prev-day' : 'prev-month';
-          if (action === 'next-day' || action === 'next-month') action = nextAutoDay ? 'next-day' : 'next-month';
-          focusSelector = '[data-ocal-action="' + action + '"]';
-          if (control.hasAttribute('data-ocal-value')) {
-            focusSelector += '[data-ocal-value="' + control.getAttribute('data-ocal-value') + '"]';
+          focusDate = control.getAttribute('data-ocal-date');
+          var focusedDate = parseIso(focusDate);
+          if (compactMonth) {
+            state.railCursorDate = focusDate;
+          } else if (!focusedDate || focusedDate.y !== state.monthCursor.y ||
+            focusedDate.m !== state.monthCursor.m) {
+            focusDate = isoOf(state.monthCursor.y, state.monthCursor.m, 1);
+            state.focusDate = focusDate;
           }
+        } else if (control) {
+          focusAction = control.getAttribute('data-ocal-action');
+          focusValue = control.getAttribute('data-ocal-value');
+          focusId = control.getAttribute('data-ocal-id');
         }
       }
-      state.autoDay = nextAutoDay;
+      state.compactMonth = compactMonth;
       render();
       if (active) {
-        var orderTarget = null;
-        if (focusedOrderId !== null) {
-          Array.prototype.some.call(root.querySelectorAll('[data-ocal-action="order-row"]'), function (row) {
-            if (row.getAttribute('data-ocal-id') !== focusedOrderId) return false;
-            orderTarget = row;
-            return true;
-          });
-        }
-        var target = orderTarget || (focusedOrderId === null && focusSelector && root.querySelector(focusSelector)) ||
-          root.querySelector('[data-ocal-action="cal-mode"][aria-pressed="true"]') ||
+        var selector = focusDate ? '[data-ocal-date="' + focusDate + '"]' :
+          (focusAction ? '[data-ocal-action="' + focusAction + '"]' +
+            (focusValue !== null ? '[data-ocal-value="' + focusValue + '"]' : '') +
+            (focusId !== null ? '[data-ocal-id="' + focusId + '"]' : '') : null);
+        var target = (selector && root.querySelector(selector)) ||
+          root.querySelector('[data-ocal-action="cal-mode"]') ||
           root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
         if (target) target.focus();
       }
@@ -515,7 +526,15 @@
     function buildCalBar(y, m) {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-month', 'الشهر السابق', prevIcon()));
-      bar.appendChild(el('h3', 'm-ocal__cal-title', MONTHS_AR[m - 1] + ' ' + y));
+      var title = el('h3', 'm-ocal__cal-title');
+      var pickerButton = el('button', 'm-ocal__month-trigger', MONTHS_AR[m - 1] + ' ' + y);
+      pickerButton.type = 'button';
+      pickerButton.setAttribute('data-ocal-action', 'month-picker');
+      pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
+      pickerButton.setAttribute('aria-haspopup', 'dialog');
+      pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
+      title.appendChild(pickerButton);
+      bar.appendChild(title);
       bar.appendChild(navBtn('next-month', 'الشهر التالي', nextIcon()));
       var today = el('button', 'm-ocal__todaybtn');
       today.type = 'button';
@@ -523,6 +542,51 @@
       today.textContent = 'اليوم'; /* يبقى مرئيًا دائمًا حتى في الشهر الحالي */
       bar.appendChild(today);
       return bar;
+    }
+
+    function buildMonthPicker() {
+      var picker = el('section', 'm-ocal__picker');
+      picker.setAttribute('data-ocal-picker', '');
+      picker.setAttribute('data-ocal-year', String(state.pickerYear));
+      picker.setAttribute('role', 'dialog');
+      picker.setAttribute('aria-label', 'اختيار الشهر والسنة');
+      var heading = el('div', 'm-ocal__picker-head');
+      var prevYear = el('button', 'm-ocal__picker-yearbtn', 'السنة السابقة');
+      prevYear.type = 'button';
+      prevYear.setAttribute('data-ocal-action', 'picker-prev-year');
+      prevYear.setAttribute('aria-label', 'السنة السابقة');
+      prevYear.disabled = state.pickerYear <= 1;
+      heading.appendChild(prevYear);
+      var year = el('h4', 'm-ocal__picker-year', String(state.pickerYear));
+      year.setAttribute('aria-live', 'polite');
+      heading.appendChild(year);
+      var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
+      nextYear.type = 'button';
+      nextYear.setAttribute('data-ocal-action', 'picker-next-year');
+      nextYear.setAttribute('aria-label', 'السنة التالية');
+      nextYear.disabled = state.pickerYear >= 9999;
+      heading.appendChild(nextYear);
+      var back = el('button', 'm-ocal__picker-back', 'رجوع للتقويم');
+      back.type = 'button';
+      back.setAttribute('data-ocal-action', 'picker-back');
+      heading.appendChild(back);
+      picker.appendChild(heading);
+
+      var months = el('div', 'm-ocal__picker-months');
+      months.setAttribute('role', 'group');
+      months.setAttribute('aria-label', 'أشهر السنة');
+      var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
+      for (var i = 0; i < MONTHS_AR.length; i++) {
+        var month = el('button', 'm-ocal__picker-month', MONTHS_AR[i]);
+        month.type = 'button';
+        month.setAttribute('data-ocal-action', 'picker-month');
+        month.setAttribute('data-ocal-value', String(i));
+        month.setAttribute('aria-pressed', i + 1 === currentMonth ? 'true' : 'false');
+        month.setAttribute('aria-label', MONTHS_AR[i] + ' ' + state.pickerYear);
+        months.appendChild(month);
+      }
+      picker.appendChild(months);
+      return picker;
     }
 
     function buildWeekdays() {
@@ -555,7 +619,12 @@
         cell.className += ' m-ocal__cell--today';
         cell.setAttribute('aria-current', 'date');
       }
-      if (iso === state.focusDate) cell.tabIndex = 0; /* roving: توقف Tab واحد */
+      var focusedDate = parseIso(state.focusDate);
+      if (iso === state.focusDate ||
+        (d === 1 && (!focusedDate || focusedDate.y !== state.monthCursor.y ||
+          focusedDate.m !== state.monthCursor.m))) {
+        cell.tabIndex = 0; /* roving: توقف Tab واحد */
+      }
 
       cell.appendChild(el('span', 'm-ocal__daynum', String(d)));
 
@@ -613,6 +682,37 @@
         row.appendChild(buildDayCell(isoOf(y, m, d), d, groups));
       }
       return grid;
+    }
+
+    /* مسار تواريخ قريب على الجذر الضيق: أهداف مستقلة ≥48px،
+       ويتحرك مركزه مع الاختيار أو استكشاف لوحة المفاتيح. */
+    function buildDateRail() {
+      var rail = el('div', 'm-ocal__rail');
+      rail.setAttribute('data-ocal-date-rail', '');
+      rail.setAttribute('role', 'group');
+      rail.setAttribute('aria-label', 'التواريخ القريبة');
+      var track = el('div', 'm-ocal__rail-track');
+      var center = parseIso(state.railCursorDate) || parseIso(state.selectedDate);
+      var groups = groupOrdersByDate();
+      for (var offset = -2; offset <= 2; offset++) {
+        var p = normalizeYmd(center.y, center.m, center.d + offset);
+        var iso = isoOf(p.y, p.m, p.d);
+        var cell = el('button', 'm-ocal__rail-day');
+        cell.type = 'button';
+        cell.setAttribute('data-ocal-action', 'date-rail-day');
+        cell.setAttribute('data-ocal-date', iso);
+        cell.setAttribute('aria-label', fullDateAr(iso) + '، ' + countPhraseAr((groups[iso] || []).length));
+        cell.setAttribute('aria-selected', iso === state.selectedDate ? 'true' : 'false');
+        if (iso === state.selectedDate) cell.className += ' m-ocal__rail-day--selected';
+        cell.appendChild(el('span', 'm-ocal__rail-weekday', WEEKDAYS_SHORT[weekdayOf(p.y, p.m, p.d)]));
+        cell.appendChild(el('span', 'm-ocal__rail-number', String(p.d)));
+        if (p.d === 1 || offset === -3) {
+          cell.appendChild(el('span', 'm-ocal__rail-month', MONTHS_AR[p.m - 1]));
+        }
+        track.appendChild(cell);
+      }
+      rail.appendChild(track);
+      return rail;
     }
 
     /* ---- مفتاح الحالات: الحالات الموجودة فعلاً في النطاق المعروض ---- */
@@ -730,11 +830,16 @@
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
       screen.appendChild(buildCalBar(state.monthCursor.y, state.monthCursor.m));
+      if (state.pickerOpen) screen.appendChild(buildMonthPicker());
       screen.appendChild(buildModesBar());
-      screen.appendChild(buildWeekdays());
-      screen.appendChild(buildMonthGrid(groupOrdersByDate()));
-      var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
-      if (legend) screen.appendChild(legend);
+      if (state.compactMonth) {
+        screen.appendChild(buildDateRail());
+      } else {
+        screen.appendChild(buildWeekdays());
+        screen.appendChild(buildMonthGrid(groupOrdersByDate()));
+        var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
+        if (legend) screen.appendChild(legend);
+      }
       screen.appendChild(buildDayPanel(true));
       return screen;
     }
@@ -878,9 +983,61 @@
       focusDayCell(isoOf(p.y, p.m, home ? firstD : lastD), true);
     }
 
+    function focusRailDate(iso) {
+      var target = root.querySelector('[data-ocal-date-rail] [data-ocal-date="' + iso + '"]');
+      if (!target) {
+        state.railCursorDate = iso;
+        render();
+        target = root.querySelector('[data-ocal-date-rail] [data-ocal-date="' + iso + '"]');
+      }
+      if (target) target.focus();
+    }
+
     function onKeydown(e) {
-      if (state.view !== 'calendar' || state.calendarView !== 'month') return;
       var t = e.target;
+      if (state.pickerOpen) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closePicker();
+          return;
+        }
+        var monthOption = (t && t.closest) ? t.closest('[data-ocal-action="picker-month"]') : null;
+        if (monthOption && root.contains(monthOption)) {
+          var index = +monthOption.getAttribute('data-ocal-value');
+          var delta = 0;
+          if (e.key === 'ArrowDown') delta = 4;
+          else if (e.key === 'ArrowUp') delta = -4;
+          else if (e.key === 'ArrowLeft') delta = state.rtl ? 1 : -1;
+          else if (e.key === 'ArrowRight') delta = state.rtl ? -1 : 1;
+          else if (e.key === 'Home') index = 0;
+          else if (e.key === 'End') index = 11;
+          else return;
+          e.preventDefault();
+          index = Math.max(0, Math.min(11, index + delta));
+          refocus('[data-ocal-action="picker-month"][data-ocal-value="' + index + '"]');
+        }
+        return;
+      }
+      if (state.view !== 'calendar' || state.calendarView !== 'month') return;
+      var railDay = (t && t.closest) ? t.closest('[data-ocal-action="date-rail-day"]') : null;
+      if (railDay && root.contains(railDay)) {
+        var railIso = railDay.getAttribute('data-ocal-date');
+        var railParts = parseIso(railIso);
+        if (!railParts) return;
+        var railStep = 0;
+        if (e.key === 'ArrowLeft') railStep = state.rtl ? 1 : -1;
+        else if (e.key === 'ArrowRight') railStep = state.rtl ? -1 : 1;
+        else if (e.key === 'ArrowDown') railStep = 7;
+        else if (e.key === 'ArrowUp') railStep = -7;
+        else if (e.key === 'Home' || e.key === 'End') {
+          var offset = (weekdayOf(railParts.y, railParts.m, railParts.d) - state.weekStart + 7) % 7;
+          railStep = e.key === 'Home' ? -offset : 6 - offset;
+        } else return;
+        e.preventDefault();
+        var targetDate = normalizeYmd(railParts.y, railParts.m, railParts.d + railStep);
+        focusRailDate(isoOf(targetDate.y, targetDate.m, targetDate.d));
+        return;
+      }
       var cell = (t && t.closest) ? t.closest('.m-ocal__cell[data-ocal-date]') : null;
       if (!cell || !root.contains(cell)) return;
       var k = e.key;
@@ -922,33 +1079,70 @@
     function selectDate(iso, fromUser) {
       if (!DATE_RE.test(iso)) return;
       state.selectedDate = iso;
-      state.focusDate = iso;
       var p = parseIso(iso);
-      state.monthCursor = { y: p.y, m: p.m };
+      state.railCursorDate = iso;
+      if (p.y === state.monthCursor.y && p.m === state.monthCursor.m) {
+        state.focusDate = iso;
+      } else {
+        var focused = parseIso(state.focusDate);
+        if (!focused || focused.y !== state.monthCursor.y || focused.m !== state.monthCursor.m) {
+          state.focusDate = isoOf(state.monthCursor.y, state.monthCursor.m, 1);
+        }
+      }
       render();
       if (fromUser) emit('order-schedule:day-select', { date: iso });
       refocus('[data-ocal-date="' + iso + '"]');
     }
 
-    /* قرار موثق: عند التنقل بين الشهور بأزرار السهمين يُقصّ اليوم
-       المحدد إلى أقرب يوم صالح في الشهر الجديد (نفس اليوم من الشهر
-       وإلا آخر يوم) ويُعلن day-select — لا يبقى محددًا خارج الشهر */
+    /* السابق/التالي يستكشفان الشهر المعروض فقط؛ الاختيار يظل مستقلًا
+       ولا يصدر day-select أو يغيّر بيانات المضيف. */
     function shiftMonthCursor(delta) {
       var nm = shiftMonth(state.monthCursor.y, state.monthCursor.m, delta);
       state.monthCursor = { y: nm.y, m: nm.m };
-      var sp = parseIso(state.selectedDate) || parseIso(state.today);
-      var d = Math.min(sp.d, daysInMonth(nm.y, nm.m));
-      var iso = isoOf(nm.y, nm.m, d);
-      state.selectedDate = iso;
-      state.focusDate = iso;
+      var focused = parseIso(state.focusDate);
+      var day = focused ? Math.min(focused.d, daysInMonth(nm.y, nm.m)) : 1;
+      state.focusDate = isoOf(nm.y, nm.m, day);
       render();
-      emit('order-schedule:day-select', { date: iso });
     }
 
-    /* «اليوم»: يعيد الشهر والتحديد لليوم الحالي ويعلن الاختيار */
+    function openPicker() {
+      state.pickerOpen = true;
+      state.pickerYear = state.monthCursor.y;
+      render();
+      refocus('[data-ocal-action="picker-month"][data-ocal-value="' + (state.monthCursor.m - 1) + '"]');
+    }
+
+    function closePicker() {
+      if (!state.pickerOpen) return;
+      state.pickerOpen = false;
+      render();
+      refocus('[data-ocal-action="month-picker"]');
+    }
+
+    function changePickerYear(delta) {
+      state.pickerYear = Math.max(1, Math.min(9999, state.pickerYear + delta));
+      render();
+      refocus('[data-ocal-action="picker-' + (delta < 0 ? 'prev' : 'next') + '-year"]');
+    }
+
+    function choosePickerMonth(month) {
+      var m = +month + 1;
+      if (m < 1 || m > 12) return;
+      state.monthCursor = { y: state.pickerYear, m: m };
+      var selected = parseIso(state.selectedDate);
+      if (!selected || selected.y !== state.pickerYear || selected.m !== m) {
+        state.focusDate = isoOf(state.pickerYear, m, 1);
+      } else {
+        state.focusDate = state.selectedDate;
+      }
+      closePicker();
+    }
+
+    /* «اليوم» هو فعل اختيار صريح: يحدّث الشهر والتاريخ ويعلن الحدث. */
     function gotoToday() {
       state.selectedDate = state.today;
       state.focusDate = state.today;
+      state.railCursorDate = state.today;
       var p = parseIso(state.today);
       state.monthCursor = { y: p.y, m: p.m };
       render();
@@ -963,6 +1157,7 @@
       var iso = isoOf(t.y, t.m, t.d);
       state.selectedDate = iso;
       state.focusDate = iso;
+      state.railCursorDate = iso;
       state.monthCursor = { y: t.y, m: t.m };
       render();
       emit('order-schedule:day-select', { date: iso });
@@ -974,7 +1169,7 @@
       if (!btn || !root.contains(btn)) return;
       var act = btn.getAttribute('data-ocal-action');
 
-      if (act === 'day-cell') {
+      if (act === 'day-cell' || act === 'date-rail-day') {
         selectDate(btn.getAttribute('data-ocal-date'), true);
       } else if (act === 'order-row') {
         /* حدث واحد لكل نقرة: معالج click واحد فقط (Enter/Space تمر
@@ -985,15 +1180,17 @@
       } else if (act === 'retry') {
         if (typeof state.errorRetry === 'function') state.errorRetry();
       } else if (act === 'view') {
+        state.pickerOpen = false;
         state.view = (btn.getAttribute('data-ocal-value') === 'list') ? 'list' : 'calendar';
         render();
         updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="view"][aria-pressed="true"]');
       } else if (act === 'cal-mode') {
+        state.pickerOpen = false;
         state.calendarView = (btn.getAttribute('data-ocal-value') === 'day') ? 'day' : 'month';
         render();
         updateResponsiveView(root.getBoundingClientRect().width);
-        refocus('[data-ocal-action="cal-mode"][aria-pressed="true"]');
+        refocus('[data-ocal-action="cal-mode"]');
       } else if (act === 'prev-month') {
         shiftMonthCursor(-1);
         refocus('[data-ocal-action="prev-month"]');
@@ -1003,6 +1200,17 @@
       } else if (act === 'today') {
         gotoToday();
         refocus('[data-ocal-action="today"]');
+      } else if (act === 'month-picker') {
+        if (state.pickerOpen) closePicker();
+        else openPicker();
+      } else if (act === 'picker-back') {
+        closePicker();
+      } else if (act === 'picker-prev-year') {
+        changePickerYear(-1);
+      } else if (act === 'picker-next-year') {
+        changePickerYear(1);
+      } else if (act === 'picker-month') {
+        choosePickerMonth(btn.getAttribute('data-ocal-value'));
       } else if (act === 'prev-day') {
         shiftDay(-1);
         refocus('[data-ocal-action="prev-day"]');
@@ -1035,12 +1243,14 @@
         if (typeof date !== 'string' || !DATE_RE.test(date)) return;
         state.selectedDate = date;
         state.focusDate = date;
+        state.railCursorDate = date;
         var p = parseIso(date);
         state.monthCursor = { y: p.y, m: p.m };
         render();
       }),
       setView: guard(function (v) {
         if (v === 'calendar' || v === 'list') {
+          state.pickerOpen = false;
           state.view = v;
           render();
           updateResponsiveView(root.getBoundingClientRect().width);
@@ -1048,6 +1258,7 @@
       }),
       setCalendarView: guard(function (v) {
         if (v === 'month' || v === 'day') {
+          state.pickerOpen = false;
           state.calendarView = v;
           render();
           updateResponsiveView(root.getBoundingClientRect().width);

@@ -24,7 +24,7 @@
   <title>Micro — معرض نظام الواجهة (Prototype)</title>
   <link rel="icon" type="image/svg+xml" href="../../assets/brand/micro-logo/v2/platform-icons/favicon/favicon.svg">
   <!-- Generated catalog payload: edit docs/COMPONENT-CATALOG.json, not this block. -->
-  <script type="application/json" id="sc-component-catalog">{"schemaVersion":1,"scope":"independent-pre-transfer-ui-system","maturityVocabulary":["stable-ui","draft-for-review","proposed"],"families":[{"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},{"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},{"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},{"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},{"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},{"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},{"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},{"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},{"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},{"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},{"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},{"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},{"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},{"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}],"variants":[{"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},{"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}]}</script>
+  <script type="application/json" id="sc-component-catalog">{"schemaVersion":1,"scope":"independent-pre-transfer-ui-system","releaseTheme":"light-only","chartPolicy":{"preciseDefault":["bars","rows","table"],"specializedOptIn":["donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},"maturityVocabulary":["stable-ui","draft-for-review","proposed"],"families":[{"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},{"id":"fields","name":"Fields","maturity":"stable-ui","preview":"previews/fields/index.html","api":"MicroFields","dependencies":[]},{"id":"selection","name":"Selection / Picker","maturity":"stable-ui","preview":"previews/selection/index.html","api":"MicroSelection / MicroPicker","dependencies":["navigation"]},{"id":"organization","name":"Organization","maturity":"stable-ui","preview":"previews/organization/index.html","api":"MicroOrganization","dependencies":[]},{"id":"data","name":"Data","maturity":"stable-ui","preview":"previews/data/index.html","api":"MicroData","dependencies":[]},{"id":"messages","name":"Messages","maturity":"stable-ui","preview":"previews/messages/index.html","api":"MicroMessages","dependencies":[]},{"id":"navigation","name":"Navigation","maturity":"stable-ui","preview":"previews/navigation/index.html","api":"MicroNavigation","dependencies":[]},{"id":"surfaces","name":"Surfaces","maturity":"stable-ui","preview":"previews/surfaces/index.html","api":null,"dependencies":[]},{"id":"info-strip","name":"Info strip","maturity":"stable-ui","preview":"previews/info-strip/index.html","api":"MicroInfoStrip / MicroInfoPeek","dependencies":[]},{"id":"metric-comparison","name":"Metric comparison","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroMetricComparison","dependencies":[]},{"id":"account-settings","name":"Account settings","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccountSettings","dependencies":["navigation","selection"]},{"id":"access-gateway","name":"Access gateway","maturity":"stable-ui","preview":"previews/concepts/index.html","api":"MicroAccessGateway","dependencies":["buttons","fields"]},{"id":"order-schedule","name":"Order schedule","maturity":"draft-for-review","preview":"components/order-schedule/example-usage.html","api":"MicroOrderSchedule","dependencies":["fields"]},{"id":"carousel","name":"Carousel","maturity":"draft-for-review","preview":"previews/carousel/index.html","api":"MicroCarousel","dependencies":[]}],"variants":[{"id":"donut","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"main-metric-featured","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"bubbles","family":"data","maturity":"stable-ui","optIn":true,"preview":"components/data/example-usage.html","source":["components/data/data.css","components/data/data.js"]},{"id":"metric-circles","family":"metric-comparison","maturity":"stable-ui","optIn":true,"preview":"previews/concepts/index.html","source":["components/metric-comparison/metric-comparison.css","components/metric-comparison/metric-comparison.js"]},{"id":"packed-circle","family":"data","maturity":"proposed","optIn":true,"preview":"previews/concepts/index.html","source":["components/data/packed-circle.css","components/data/packed-circle.js"]},{"id":"info-strip-peek","family":"info-strip","maturity":"stable-ui","optIn":true,"preview":"previews/info-strip/comparison.html","source":["components/info-strip/info-strip-peek.css","components/info-strip/info-strip-peek.js"]}]}</script>
   <link rel="stylesheet" href="../../assets/fonts/fonts.css">
   <link rel="stylesheet" href="../../shared/tokens.css">
   <link rel="stylesheet" href="../../shared/motion.css">
@@ -127,7 +127,6 @@
   <header class="showcase-header">
     <div class="showcase-brand">
       <img class="showcase-brand__logo showcase-brand__logo--light" src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" alt="Micro">
-      <img class="showcase-brand__logo showcase-brand__logo--dark" src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-arabic.svg" alt="" aria-hidden="true">
       <span class="showcase-brand__rule" aria-hidden="true"></span>
       <span>مكتبة واجهات عربية</span>
     </div>
@@ -142,11 +141,6 @@
       <a class="showcase-nav__link is-current" href="#sc-canvas" data-showcase-view="overview" aria-current="page">نظرة عامة</a>
       <a class="showcase-nav__link" href="#state-lab" data-showcase-view="state">مختبر الحالات</a>
       <a class="showcase-nav__link" href="../compositions/index.html">مختبر التركيبات</a>
-      <div class="showcase-theme" role="group" aria-label="مظهر العرض">
-        <button type="button" data-sc-theme="light" aria-pressed="true">فاتح</button>
-        <button type="button" data-sc-theme="dark" aria-pressed="false">داكن</button>
-        <button type="button" data-sc-theme="system" aria-pressed="false">النظام</button>
-      </div>
     </nav>
   </header>
 
@@ -203,12 +197,6 @@
       <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" alt="شعار Micro العربي، النسخة الملونة"><figcaption>قفل عربي</figcaption></figure>
       <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-english.svg" alt="شعار Micro الإنجليزي، النسخة الملونة"><figcaption>قفل إنجليزي</figcaption></figure>
       <figure><img src="../../assets/brand/micro-logo/v2/variants/full-color/micro-symbol.svg" alt="رمز Micro المستقل، النسخة الملونة"><figcaption>الرمز</figcaption></figure>
-    </div>
-    <div class="brand-proof__plate" data-theme="dark" role="group" aria-label="تطبيقات الشعار على سطح داكن">
-      <span class="brand-proof__mode">داكن · reversed-dark</span>
-      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-arabic.svg" alt="شعار Micro العربي، النسخة المعكوسة الداكنة"><figcaption>قفل عربي</figcaption></figure>
-      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-english.svg" alt="شعار Micro الإنجليزي، النسخة المعكوسة الداكنة"><figcaption>قفل إنجليزي</figcaption></figure>
-      <figure><img src="../../assets/brand/micro-logo/v2/variants/reversed-dark/micro-symbol.svg" alt="رمز Micro المستقل، النسخة المعكوسة الداكنة"><figcaption>الرمز</figcaption></figure>
     </div>
   </section>
 
@@ -351,9 +339,9 @@
         <div class="sc-tools" role="group" aria-label="أدوات حالة الحقول">
           <button type="button" class="m-btn m-btn--secondary" id="sc-fx-error" aria-pressed="false">إظهار حالة الخطأ</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-fx-success" aria-pressed="false">إظهار حالة النجاح</button>
-          <button type="button" class="m-btn m-btn--secondary" id="sc-fx-clear">مسح الحالات</button>
+          <button type="button" class="m-btn m-btn--secondary" id="sc-fx-clear">مسح الحالة (الإبقاء على القيمة)</button>
         </div>
-        <p class="sc-hint">الخطأ/النجاح هنا تفعيل لحالة المكوّن الموثقة (has-error/has-success + رسالة مرتبطة) — سياسة التحقق نفسها مسؤولية المستهلك بحسب المواصفة.</p>
+        <p class="sc-hint">تطبيق المستهلك يبدّل has-error أو has-success ويحدّث aria-invalid؛ يبقى عنصر الرسالة نفسه مرتبطًا عبر aria-describedby. مسح الحالة يخفي الرسالة ويزيل aria-invalid دون تعديل قيمة المدخل، والكتابة تعيد الحالة الطبيعية.</p>
       </div>
     </section>
 
@@ -517,7 +505,7 @@
       <div class="sc-block sc-block--plain sc-stack">
         <p class="sc-hint">الكثافة المدمجة هي الافتراضية؛ استخدم m-info-card--featured لقيمة محورية واحدة عند الحاجة لبروز حقيقي.</p>
         <div class="sc-grid-2">
-          <article class="m-info-card m-info-card--compact" aria-label="طلبات اليوم، 18 طلب">
+          <article class="m-info-card m-info-card--compact m-info-card--accent" aria-label="طلبات اليوم، 18 طلب">
             <span class="m-info-card__label">طلبات اليوم</span>
             <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
           </article>
@@ -673,7 +661,7 @@
         </div>
         <div class="sc-grid-2">
           <div class="m-chart m-chart--donut" id="sc-chart-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="توزيع الطلبات حسب الحالة (مقام معلن 25).">
-            <h3 class="m-chart__title">توزيع الحالات (donut)</h3>
+            <h3 class="m-chart__title">توزيع الحالات — خيار حصص اختياري (donut)</h3>
             <ul class="m-chart__data" data-fx-live="sc-donut" hidden>
               <li data-series="a" data-label="مكتملة" data-value="11"></li>
               <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
@@ -688,7 +676,7 @@
             <p class="m-chart__summary" data-summary></p>
           </div>
           <div class="m-chart m-chart--bubbles" id="sc-chart-bubbles" data-chart="bubbles" data-rmax="52" data-summary-text="أحجام تشغيلية — مساحة الدائرة تتناسب مع القيمة.">
-            <h3 class="m-chart__title">أحجام نسبية (bubbles)</h3>
+            <h3 class="m-chart__title">فقاعات نسبية — عرض اختياري للتقريب (bubbles)</h3>
             <ul class="m-chart__data" data-fx-live="sc-bubbles" hidden>
               <li data-series="a" data-label="الفرع الشمالي" data-value="40"></li>
               <li data-series="b" data-label="الفرع الجنوبي" data-value="12"></li>
@@ -811,8 +799,8 @@
         <div class="sc-tools" role="group" aria-label="أدوات المقارنة">
           <button type="button" class="m-btn m-btn--secondary" id="sc-metric-layout" aria-pressed="false">تبديل ترتيب الدوائر (separated / overlap)</button>
         </div>
-        <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="64" id="sc-circles" aria-label="مقارنة قيم تشغيلية">
-          <h3 class="m-metric-circles__title">أحجام نسبية — والقراءات الدقيقة في المفتاح</h3>
+        <section class="m-metric-circles" data-metric-circles data-layout="separated" data-radius="64" id="sc-circles" aria-label="عرض اختياري لأحجام نسبية لقراءات تشغيلية">
+          <h3 class="m-metric-circles__title">عرض اختياري للتقريب · أحجام نسبية والقراءات الدقيقة في المفتاح</h3>
           <ul class="m-metric-circles__source" data-metric-source data-fx-live="sc-circles-src" hidden>
             <li data-label="عنصر أ" data-value="64" data-unit="وحدة" data-series="a"></li>
             <li data-label="عنصر ب" data-value="25" data-unit="وحدة" data-series="b"></li>
@@ -854,8 +842,8 @@
           </div>
         </section>
         <p class="sc-hint">الأشرطة الموقعة: موجب يمين الصفر وسالب يساره في RTL. لا تجميع ولا رياضيات مالية — القيم من المصدر فقط. الصفوف هي العرض الافتراضي؛ إبراز القراءة الرئيسية خيار صريح.</p>
-        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز مقصود لقيمة رئيسية ومقارنة مستقلة">
-          <h3 class="m-main-metric__title">قراءة رئيسية — مع مقارنات مستقلة</h3>
+        <section class="m-main-metric" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="sc-main-metric" aria-label="إبراز اختياري لقيمة رئيسية ومقارنة مستقلة">
+          <h3 class="m-main-metric__title">قراءة رئيسية — إبراز featured اختياري مع مقارنات مستقلة</h3>
           <div class="m-main-metric__layout">
             <div class="m-main-metric__hero">
               <span class="m-main-metric__label">قيمة العينة</span>
@@ -1143,7 +1131,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم شهر/يوم وقائمة زمنية بحالات من خريطة المستهلك — عند عرض مكوّن أقل من 360px يتحول تلقائيًا إلى اليوم، وتعود تفضيلات الشهر عند اتساع المساحة.</p>
+        <p class="sc-section__desc">يعرض الجدول التاريخ الحالي المحدد ويتكيف بين شبكة التقويم وعرض اليوم حسب مساحة المكوّن، مع قائمة زمنية اختيارية. تغيير مساحة العرض لا يغيّر التاريخ المحدد.</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">

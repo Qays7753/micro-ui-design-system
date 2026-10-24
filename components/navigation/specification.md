@@ -2,7 +2,7 @@
 
 ## تحديث الطبقات وملكية المضيف
 
-[عقود النظام](../../docs/SYSTEM-CONTRACTS.md): overlay radius 20 وLight/Dark/System وهدف 48؛ enter 220–240ms وexit 160–200ms، وfallback الإغلاق مشتق من transitionDuration+delay الفعليين. reduced-motion فوري. `disconnect(root)` يفصل الربط المحلي وحصر Tab، يلغي الإغلاق/الفتح المتأخر، يخفي طبقاته ويستعيد scroll/inert؛ مستمع Escape على document مفرد للمكتبة. إعادة init تحفظ applied filters. history/Back وsafe areas العامة ولوحة المفاتيح مسؤولية المضيف، لا يضيف المكوّن سجلًا أو محاكاة native.
+[عقود النظام](../../docs/SYSTEM-CONTRACTS.md): overlay radius 20 وLight-only وهدف 48؛ enter 220–240ms وexit 160–200ms، وfallback الإغلاق مشتق من transitionDuration+delay الفعليين. reduced-motion فوري. `disconnect(root)` يفصل الربط المحلي وحصر Tab، يلغي الإغلاق/الفتح المتأخر، يخفي طبقاته ويستعيد scroll/inert؛ مستمع Escape على document مفرد للمكتبة. إعادة init تحفظ applied filters. history/Back وsafe areas العامة ولوحة المفاتيح مسؤولية المضيف، لا يضيف المكوّن سجلًا أو محاكاة native.
 
 ### عقد actionbar — إصلاح 2026-10-20
 

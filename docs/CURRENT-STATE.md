@@ -1,10 +1,12 @@
 # الحالة الحالية — مكتبة Micro UI
 
-## تحديث التنفيذ المهني المعتمد
+## الإصدار الحالي — Light-only
 
-العقود النشطة في [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md): Geometry B، Light/Dark/System الآن، v2 شعار رسمي، Carousel بعرض كامل، مقارنة bars/rows وملخص compact افتراضيًا، ونطاق signed صريح للأعمدة والخط. مصدر النضج [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json)، لا MANIFEST.
+العقود النشطة في [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md): Geometry B، **Light-only**، v2 ثابت، Carousel بعرض كامل، مقارنة bars/rows وملخص compact افتراضيًا، ونطاق signed صريح للأعمدة والخط. الكتالوج هو مصدر العائلات والنضج، لا MANIFEST. لا Backend أو منتج مستهلك أو مستودع آخر.
 
-العمل على فرع تنفيذ واحد بطلب صريح، ولا يعني هذا دمجه في main. الرأس والأرقام الواردة في الأقسام التالية **توثيق تاريخي** وليست نتيجة للمصدر المعدّل. الدليل الجديد في [`IMPLEMENTATION-VERIFICATION.md`](IMPLEMENTATION-VERIFICATION.md)، وأدواته تعيد إنشاء النتائج من المصدر.
+العمل على فرع تنفيذ واحد بطلب صريح، دون دمج أو نشر. العقد الحالي للتقويم يفصل شهر العرض عن التاريخ المحدد ويقدم Picker وDate Rail عند الضيق، والشبكة عند اتساع الجذر. Overview نظيف وState Lab يحتفظ بالتشخيص. Bubbles/Packed/Metric Circles خيارات متخصصة وليست افتراضي المقارنة الدقيقة.
+
+الدليل الحالي والأوامر والقيود في [`تقرير Light-only`](replit/light-only-complete-ui-repair-2026-10-24/REPORT.md). لا تُعتبر أي أرقام أدناه نتائج لهذا الإصدار، ولا تُشغّل فحوص Dark التاريخية لقبوله.
 
 ## الحالة السابقة المحفوظة للمقارنة
 

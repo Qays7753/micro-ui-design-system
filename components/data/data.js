@@ -152,6 +152,58 @@
     return label;
   }
 
+  /* Optional host-owned context. Never infer currency, timezone, unit,
+     period, or a title from labels or values. A visible title heading remains
+     the source of the chart name; data-title is shown only when no heading is
+     present. */
+  function syncChartContext(chart) {
+    var heading = chart.querySelector('.m-chart__title');
+    var title = chart.getAttribute('data-title');
+    var contextTitle = !heading && title ? String(title).trim() : '';
+    var entries = [
+      ['data-unit', 'الوحدة'],
+      ['data-period', 'الفترة']
+    ].map(function (entry) {
+      return { key: entry[0], label: entry[1], value: String(chart.getAttribute(entry[0]) || '').trim() };
+    }).filter(function (entry) { return entry.value !== ''; });
+
+    var context = chart.querySelector('.m-chart__context');
+    if (!contextTitle && !entries.length) {
+      if (context) context.remove();
+      return;
+    }
+    if (!context) {
+      context = document.createElement('div');
+      context.className = 'm-chart__context';
+      if (heading) heading.insertAdjacentElement('afterend', context);
+      else {
+        var plot = chart.querySelector('[data-plot]');
+        if (plot) chart.insertBefore(context, plot);
+        else chart.insertBefore(context, chart.firstChild);
+      }
+    }
+    context.textContent = '';
+    if (contextTitle) {
+      var titleNode = document.createElement('span');
+      titleNode.className = 'm-chart__context-title';
+      titleNode.textContent = contextTitle;
+      context.appendChild(titleNode);
+    }
+    entries.forEach(function (entry) {
+      var item = document.createElement('span');
+      item.className = 'm-chart__context-item';
+      var label = document.createElement('span');
+      label.textContent = entry.label;
+      var value = document.createElement('bdi');
+      value.className = 'm-chart__context-value';
+      value.setAttribute('dir', 'auto');
+      value.textContent = entry.value;
+      item.appendChild(label);
+      item.appendChild(value);
+      context.appendChild(item);
+    });
+  }
+
   /* Measure actual SVG ink after font readiness, not fixed 37/40px steps.
      The Micro 4px gap is additional to a safe line box, including diacritics. */
   function measuredLabelStep(plot, items, cls, fontPx) {
@@ -1496,6 +1548,7 @@
     else if (kind === 'line') renderLine(chart, items);
     else if (kind === 'donut') renderDonut(chart, items);
     else if (kind === 'bubbles') renderBubbles(chart, items);
+    syncChartContext(chart);
     /* W3.1: اسم ووصف الرسم مربوطان برمجيًا بعد التصيير (العنوان المرئي
        مصدر الاسم، والملخص وصف مرتبط) — انظر linkChartName */
     linkChartName(chart);

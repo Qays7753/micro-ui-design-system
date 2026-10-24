@@ -1,4 +1,6 @@
-# سجل تحقق التنفيذ المهني
+# سجل تحقق التنفيذ المهني — تاريخي
+
+هذه نتائج الجولة السابقة، لا دليل قبول للإصدار Light-only الحالي. لا تُشغّل أوامر Dark الواردة هنا ضمن نطاقه. المرجع الحالي: [`تقرير Light-only`](replit/light-only-complete-ui-repair-2026-10-24/REPORT.md).
 
 تاريخ التحقق: 2026-10-24. البيئة: Chromium headless / Playwright في مساحة التطوير. المرجع الدقيق للفحص الجديد وبصمة مدخلاته في `generated-artifacts/ui-system-remediation/verification/results.json` عند إعادة تشغيل الأداة؛ لا تستنتج أن main دُمج من وجود هذه الوثيقة.
 

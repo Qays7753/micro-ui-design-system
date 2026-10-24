@@ -3,7 +3,8 @@
 <!-- GENERATED: tools/component-catalog-build.py — edit COMPONENT-CATALOG.json -->
 
 مصدر حالة النضج الوحيد: [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json).
-هذه 14 عائلة؛ packed-circle متغير مقترح تحت Data وليس العائلة الخامسة عشرة.
+هذه 14 عائلة؛ متغيرات الرسوم والشريط ليست عائلات إضافية.
+الإصدار Light-only. المقارنة الدقيقة bars/rows/table؛ الأشكال الدائرية المتخصصة opt-in صريح.
 الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.
 
 | العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية |
@@ -27,6 +28,10 @@
 
 | المتغير | العائلة | النضج | opt-in | المعاينة |
 |---|---|---|---|---|
+| donut | data | STABLE UI | نعم | [فتح](../components/data/example-usage.html) |
+| main-metric-featured | metric-comparison | STABLE UI | نعم | [فتح](../previews/concepts/index.html) |
+| bubbles | data | STABLE UI | نعم | [فتح](../components/data/example-usage.html) |
+| metric-circles | metric-comparison | STABLE UI | نعم | [فتح](../previews/concepts/index.html) |
 | packed-circle | data | PROPOSED | نعم | [فتح](../previews/concepts/index.html) |
 | info-strip-peek | info-strip | STABLE UI | نعم | [فتح](../previews/info-strip/comparison.html) |
 

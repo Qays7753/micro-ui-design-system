@@ -180,6 +180,10 @@
   --micro-surface-wave-scale: 1;
 }
 
+/* Light-only release: legacy dark definitions below are intentionally inert.
+   Values are retained unchanged for reference, not repaired or supported.
+   Device preferences and historical host attributes cannot activate them. */
+@media not all {
 [data-theme="dark"] {
   color-scheme: dark;
   --micro-color-canvas: #101A1D;
@@ -250,4 +254,5 @@
     --ui-overlay-shadow: 0 16px 36px rgb(0 0 0 / 38%);
     --micro-shadow-emphasis: 0 0 0 1px #74AAB3;
   }
+}
 }

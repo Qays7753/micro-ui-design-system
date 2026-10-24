@@ -30,6 +30,13 @@
   overflow-wrap: anywhere;
 }
 
+/* Optional reference-summary emphasis; not a selected/status/focus state.
+   Only the label edge is branded. The reading and neutral surface stay intact. */
+.m-info-card--accent .m-info-card__label {
+  border-inline-start: 3px solid var(--micro-brand-accent);
+  padding-inline-start: var(--micro-space-2);
+}
+
 /* Compact is the reusable default; feature treatment is opt-in. */
 .m-info-card--compact {
   padding: var(--micro-space-4);

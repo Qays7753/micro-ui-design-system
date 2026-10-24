@@ -85,16 +85,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     renderCatalog();
-    /* Theme is a presentation scope only; the host remains the owner. */
-    qa('[data-sc-theme]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        var theme = button.getAttribute('data-sc-theme');
-        document.documentElement.setAttribute('data-theme', theme);
-        qa('[data-sc-theme]').forEach(function (item) {
-          item.setAttribute('aria-pressed', String(item === button));
-        });
-      });
-    });
+    document.documentElement.setAttribute('data-theme', 'light');
     qa('[data-showcase-view]').forEach(function (link) {
       link.addEventListener('click', function () {
         setShowcaseView(link.getAttribute('data-showcase-view'));
@@ -183,7 +174,12 @@
     function clearFieldState() {
       if (!demoField) return;
       demoField.classList.remove('has-error', 'has-success');
-      if (demoMsg) { demoMsg.hidden = true; demoMsg.textContent = ''; }
+      if (demoMsg) {
+        demoMsg.hidden = true;
+        demoMsg.classList.remove('is-visible');
+        demoMsg.textContent = '';
+      }
+      if (demoInput) demoInput.removeAttribute('aria-invalid');
       qa('#sc-fx-error, #sc-fx-success').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
     }
     if (demoField) {
@@ -191,13 +187,16 @@
         clearFieldState();
         demoField.classList.add('has-error');
         demoMsg.hidden = false;
-        demoMsg.textContent = 'القيمة المطلوبة ناقصة أو غير صالحة — القيمة محفوظة كما هي.';
+        demoMsg.classList.add('is-visible');
+        demoMsg.textContent = 'أكمل القيمة المطلوبة ثم أعد التحقق؛ لم تتغير القيمة.';
+        demoInput.setAttribute('aria-invalid', 'true');
         e.currentTarget.setAttribute('aria-pressed', 'true');
       });
       q('sc-fx-success').addEventListener('click', function (e) {
         clearFieldState();
         demoField.classList.add('has-success');
         demoMsg.hidden = false;
+        demoMsg.classList.add('is-visible');
         demoMsg.textContent = 'تم التحقق من القيمة بنجاح.';
         e.currentTarget.setAttribute('aria-pressed', 'true');
       });

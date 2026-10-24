@@ -10,15 +10,15 @@
 4. العائلات والمصادر: [`COMPONENT-INVENTORY.md`](COMPONENT-INVENTORY.md).
 5. الحالات الحية: [`previews/system/index.html`](../previews/system/index.html).
 6. العقود المعتمدة: [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md).
-7. فحص التنفيذ: `python3 tools/professional-remediation-check.py`؛ JSON واللقطات ينتجان داخل `generated-artifacts/ui-system-remediation/verification/`.
-8. ملخص الدليل الحالي: [`IMPLEMENTATION-VERIFICATION.md`](IMPLEMENTATION-VERIFICATION.md).
+7. فحوص الإصدار Light-only: `light-calendar-check.py` و`light-data-check.py` و`light-release-check.py` داخل `tools/`؛ تفاصيل الأوامر والنتائج في التقرير الحالي.
+8. ملخص الدليل الحالي: [`تقرير Light-only`](replit/light-only-complete-ui-repair-2026-10-24/REPORT.md). `IMPLEMENTATION-VERIFICATION.md` سجل تاريخي لا قبول لهذا الفرع.
 
 تقارير 2026-10-21 وأدلة `reviews/UI-SYSTEM-SHOWCASE/` تاريخية، وليست PASS للمصدر المعدّل. لا إذن دمج يُستمد من إصدار سابق.
 
 ## قواعد الإصدار
 
 - حافظ على هوية Micro الحالية وألوان التوكنز وخطوط IBM Plex وأصول الأيقونات الموجودة.
-- عربي RTL، هاتف، Light/Dark/System، Geometry B، وأرقام كاملة قابلة للقراءة.
+- عربي RTL مع LTR للمراجعة، هاتف، Light-only، Geometry B، وأرقام كاملة قابلة للقراءة. Dark مستثنى ولا يُختبر.
 - لا تقص البيانات المهمة أو تصغّرها لإخفاء ازدحام التخطيط.
 - استخدم العمق والبطاقات عندما يكون لهما سبب بنيوي، لا كزخرفة عامة.
 - الحركة وظيفية وتحترم `prefers-reduced-motion` ولا تستخدم autoplay.

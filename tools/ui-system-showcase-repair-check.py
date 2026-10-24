@@ -415,27 +415,37 @@ def run(page, base, width, tag):
         const safeTargets = rects.every(r => r.width >= 47.99 && r.height >= 47.99);
         const overlaps = rects.some((a,i) => rects.slice(i+1).some(b =>
           a.left < b.right-.1 && a.right > b.left+.1 && a.top < b.bottom-.1 && a.bottom > b.top+.1));
-        return { noMonth: true, actualDay: root.dataset.ocalCalView === 'day',
-          automatic: root.dataset.ocalAutoView === 'day',
+        return { noMonth: true, calendarMode: root.dataset.ocalCalView,
+          layout: root.dataset.ocalLayout,
+          railDates: root.querySelectorAll('[data-ocal-action="date-rail-day"]').length,
+          monthPicker: !!root.querySelector('[data-ocal-action="month-picker"]'),
           width: root.getBoundingClientRect().width, required, safeTargets, overlaps,
           draftPill: !!document.querySelector('#sc-ocal .sc-pill--draft') };
       }
       const r = cells[0].getBoundingClientRect();
       const weekdays = [...root.querySelectorAll('.m-ocal__weekday')].map(x => x.getBoundingClientRect().height);
-      const title = root.querySelector('.m-ocal__cal-title');
-      const titleLines = title ? Math.round(title.getBoundingClientRect().height / 22) : -1;
+      const title = root.querySelector('[data-ocal-action="month-picker"]');
+      let titleReadable = false;
+      if (title && title.textContent.trim()) {
+        const box = title.getBoundingClientRect(), range = document.createRange();
+        range.selectNodeContents(title);
+        titleReadable = box.width >= 48 && box.height >= 48 &&
+          [...range.getClientRects()].every(r => r.left >= box.left-.5 &&
+            r.right <= box.right+.5 && r.top >= box.top-.5 && r.bottom <= box.bottom+.5);
+      }
       const draftPill = !!document.querySelector('#sc-ocal .sc-pill--draft');
-      return { w: Math.round(r.width), h: Math.round(r.height), maxWeekdayH: Math.max(...weekdays), titleLines, draftPill };
+      return { w: Math.round(r.width), h: Math.round(r.height), maxWeekdayH: Math.max(...weekdays), titleReadable, draftPill };
     }""")
     if f08 and not f08.get("noMonth"):
         t(f"F-08 {P} خلية الشهر ≥48px مربعة (±2px)", f08["w"] >= 48 and f08["h"] >= 48 and abs(f08["w"] - f08["h"]) <= 2,
           f"cell={f08['w']}x{f08['h']}")
-        t(f"F-08 {P} عنوان الشهر سطر واحد", f08["titleLines"] == 1, f"lines={f08['titleLines']}")
+        t(f"F-08 {P} عنوان الشهر زر Picker مقروء دون قص وهدف ≥48px", f08["titleReadable"], f08)
         t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
     elif f08 and f08.get("noMonth"):
-        t(f"F-08 {P} عرض اليوم التكيفي عند ضيق المكوّن",
-          f08["actualDay"] and f08["automatic"] and f08["width"] < f08["required"], f08)
+        t(f"F-08 {P} الشهر متاح بمسار تواريخ وPicker عند الضيق",
+          f08["calendarMode"] == "month" and f08["layout"] == "date-rail" and
+          f08["railDates"] > 0 and f08["monthPicker"] and f08["width"] < f08["required"], f08)
         t(f"F-08 {P} الأهداف الفعلية ≥48px", f08["safeTargets"], f08)
         t(f"F-08 {P} لا تداخل بين أهداف اللمس", not f08["overlaps"], f08)
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])

@@ -86,8 +86,8 @@
     </header>
 
     <section>
-      <h2>1) عرض الشهر</h2>
-      <p class="hint">weekStart = 6 (السبت). جرّب التنقل بين الشهور وزر «اليوم» ولوحة المفاتيح داخل الشبكة (الأسهم ثم Enter)، واختيار يوم يعرض طلباته أسفل الشبكة داخل الصفحة.</p>
+      <h2 id="demo-1-title">1) تقويم الشهر</h2>
+      <p class="hint">weekStart = 6 (السبت). اختر الشهر والسنة من العنوان، واستخدم مسار التواريخ القريب عند ضيق العرض أو الشبكة عند اتساعها. التنقل لا يغيّر اليوم المحدد حتى تختار تاريخًا؛ تظهر طلباته أسفل التقويم.</p>
       <div id="demo-1"></div>
       <h3>سجل الأحداث</h3>
       <ul id="log-1" class="log" aria-label="سجل أحداث المثال الأول"></ul>
@@ -187,6 +187,16 @@
         calendarView: 'month'
       });
       attachLog(root1, document.getElementById('log-1'));
+      var calendarTitle = document.getElementById('demo-1-title');
+      function syncCalendarTitle() {
+        var layout = root1.getAttribute('data-ocal-layout');
+        var label = layout === 'date-rail' ? 'مسار التواريخ القريبة' :
+          (layout === 'day' ? 'عرض اليوم' : (layout === 'list' ? 'عرض القائمة' : 'تقويم الشهر'));
+        calendarTitle.textContent = '1) ' + label;
+      }
+      syncCalendarTitle();
+      var calendarTitleObserver = new MutationObserver(syncCalendarTitle);
+      calendarTitleObserver.observe(root1, { attributes: true, attributeFilter: ['data-ocal-layout'] });
       window.__demo1 = demo1; /* للفحص الآلي — نفس العقد العمومي */
       /* بيانات العينة معروضة للفحص الآلي (قراءة فقط) — نفس مصفوفة ORDERS */
       window.__OCAL_DEMO = { orders: ORDERS, statuses: STATUSES, today: TODAY };

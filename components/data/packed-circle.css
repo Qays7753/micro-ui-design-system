@@ -27,6 +27,7 @@
   /* HTML span, not SVG: fill alone does not paint this representation. */
   background-color: var(--cat, var(--micro-data-a));
   border-radius: var(--micro-radius-circle);
+  box-shadow: inset 0 0 0 1px var(--micro-data-boundary);
 }
 .m-chart--packed .m-bubble__value {
   display: inline-block;
