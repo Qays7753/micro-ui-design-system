@@ -637,7 +637,9 @@ def main():
                                     documentWidth:document.documentElement.scrollWidth,viewport:innerWidth,
                                     selected,displayed,rows,documentLanguage:document.documentElement.lang,
                                     hostLang:root.lang||'',direction:getComputedStyle(root).direction,
-                                    interactiveButtons:[...root.querySelectorAll('button')].map(button=>{
+                                    interactiveButtons:[...root.querySelectorAll('button')]
+                                      .filter(button=>button.getClientRects().length>0)
+                                      .map(button=>{
                                       const b=button.getBoundingClientRect();
                                       return {action:button.getAttribute('data-ocal-action'),
                                         width:b.width,height:b.height};
@@ -654,7 +656,7 @@ def main():
                                       and initial["gridTotal"] == 35
                                       and initial["gridOut"] == 4
                                       and initial["selected"] == "2026-10-07"
-                                      and "تشرين الأول 2026" in initial["displayed"]
+                                      and "10 / 2026" in initial["displayed"]
                                       and normal_title in initial["rows"]
                                       and initial["documentLanguage"] == "ar"
                                       and initial["direction"] == direction
@@ -787,13 +789,13 @@ def main():
                                   panelTitle:document.querySelector('.m-ocal__daypanel-title')?.textContent.trim()||''
                                 })""")
                                 check(f"{case}: picker changes displayed month only, preserves the selected date, and the day panel stays honest",
-                                      "كانون الثاني 2027" in switched["title"]
+                                      "01 / 2027" in switched["title"]
                                       and switched["selected"] == selected_before
                                       and switched["pickerCount"] == 0
                                       and switched["events"] == event_count
                                       and switched["focus"] == "month-picker"
                                       and switched["browsing"] == "true"
-                                      and "لا يوم محدد في كانون الثاني 2027" in switched["panelTitle"], switched)
+                                      and "لا يوم محدد في 01 / 2027" in switched["panelTitle"], switched)
                                 page.locator("#order-root [data-ocal-action='month-picker']").click()
                                 page.keyboard.press("Escape")
                                 escaped = page.evaluate("""() => ({

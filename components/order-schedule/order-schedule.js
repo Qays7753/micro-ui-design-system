@@ -46,8 +46,7 @@
 
    عقد 2026-10-25 (CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS —
    المرجع الأعلى لتقديم شهر التقويم؛ يسقط ما تعارض معه مما سبق):
-   أ) رأس الشهر = اسم الشهر + السنة («تشرين الأول 2026» بأسماء
-      الأشهر الشامية/الأردنية) — يلغي «MM / YYYY» الرقمي.
+   أ) [مُلغى بعقد 2026-10-26 أدناه — رأس الشهر رقمي «10 / 2026»]
    ب) محدد واحد مقسّم (يوم/أسبوع/شهر) role=tablist/tab/aria-selected
       بسطح غارق ومقطع نشط brand-tint — لا تعبئة brand.
    ج) لا خطوط شبكة داخلية إطلاقًا — الإيقاع من الفراغ؛ البطاقة حد
@@ -57,10 +56,30 @@
    هـ) التحديد = chip بتعبئة brand-tint وchip اليوم بحلقة 1px
       divider-strong — الخلية نفسها لا تُملأ أبدًا.
    و) مفتاح الحالات داخل البطاقة أسفل الشبكة.
-   ز) بطاقة الطلب بلا أزرار تعديل/حذف دائرية على وجهها: البطاقة كلها
-      زر فتح تفاصيل الطلب (order-open) مع سهم اتجاهي، وأفعال
-      التعديل/الحذف تبقى في سطح تفاصيل الطلب host-owned
-      (orderActions وأحداثا الطلب في العقد العام بقاءً للتوافق).
+   ز) [مُعدّل بعقد 2026-10-26 أدناه] بطاقة الطلب بلا أزرار تعديل/حذف
+      دائرية على وجهها: البطاقة مشغّل أكورديون داخلي (التفاصيل
+      والأفعال داخل الصف نفسه).
+
+   عقد 2026-10-26 (تعليمات المالك الأحدث — «الأرقام فقط + مبدّل
+   تقويم/قائمة + أكورديون داخلي»؛ يسقط ما تعارض معه مما سبق):
+   1) الأرقام فقط على كل السطح: رأس الشهر «10 / 2026» (شهر/سنة
+      رقميان بتدرّج وزن/لون) — لا اسم شهر مرئيًا في أي مكان، ولا
+      في الأسماء الإتاحية (خلية اليوم «07/10/2026، طلبان» وخيارات
+      المنتقي «10 / 2026» رقمية أيضًا). أسماء الأيام تبقى (ليست
+      أسماء أشهر). يلغي بند (أ) أعلاه.
+   2) مبدّل تقويم/قائمة مستقل (data-ocal-action="mode-toggle") في
+      صف التحكم منفصلًا عن المحدد المقسّم: التسمية تصف فعل الضغط
+      («عرض القائمة» في وضع التقويم، «عرض التقويم» في القائمة)
+      وaria-pressed يعرض الحالة الحقيقية (true = القائمة فاعلة).
+      المحدد المقسّم يُرسم في وضع التقويم فقط.
+   3) أكورديون داخلي أحادي الفتح لصفوف الطلب: الضغط على البطاقة
+      يفتح منطقة إفصاح داخل صف الطلب نفسه (لا صندوق منفصل أسفل
+      القائمة) بـrole=region ومعرف فريد يربطه aria-expanded/
+      aria-controls بالمشغّل؛ فتح طلب يغلق غيره، وضغط المفتوح
+      يطويه، وorder-open يطلق مرة واحدة عند الفتح. أزرار تعديل/
+      حذف داخل المنطقة (عند تفعيل orderActions) — نقرها لا يطوي
+      الصف؛ التفاصيل: العنوان الكامل + التاريخ/الوقت/المورد/
+      الحالة/الملاحظة. يعدّل بند (ز) أعلاه.
 
    قواعد ثابتة:
    - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
@@ -93,10 +112,10 @@
   var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
   /* ---- أسماء عربية داخلية (لا مكتبة خارجية) ----
-     عقد 2026-10-25 (المرجع الأعلى): أسماء الأشهر الشامية/الأردنية
-     «تشرين الأول» لأكتوبر — المثال الصريح في تعليمات المالك. */
-  var MONTHS_AR = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران',
-    'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'];
+     عقد 2026-10-26 (تعليمات المالك الأحدث — الأرقام فقط): أسماء
+     الأشهر أُزيلت من المكوّن كليًا (لا اسم شهر مرئيًا ولا في الأسماء
+     الإتاحية) — كل التواريخ رقمية DD/MM/YYYY ورأس الشهر «MM / YYYY».
+     أسماء الأيام (ليست أشهرًا) تبقى لعناوين اليوم والأسماء الإتاحية. */
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
   var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
@@ -112,6 +131,9 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   var instances = new WeakMap();
+
+  /* تسلسل عالمي لمعرّفات DOM فريدة لكل مثيل (aria-controls/region) */
+  var instanceSeq = 0;
 
   /* =======================================================
      أدوات عامة
@@ -199,13 +221,13 @@
     return n + ' طلبًا';
   }
 
-  /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» — أسماء الأشهر
-     في الأسماء الإتاحية فقط (aria-label) لا على السطح المرئي (عقد
-     2026-10-25: أرقام فقط مرئية). */
+  /* الاسم الإتاحي الكامل للتاريخ: اسم اليوم (معجمي — ليس اسم شهر)
+     + تاريخ رقمي DD/MM/YYYY (عقد الأرقام 2026-10-26 — لا اسم شهر
+     في الأسماء الإتاحية أيضًا). */
   function fullDateAr(iso) {
     var p = parseIso(iso);
     if (!p) return '';
-    return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + p.d + ' ' + MONTHS_AR[p.m - 1] + ' ' + p.y;
+    return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + dateNumeric(iso);
   }
 
   /* التاريخ المرئي الرقمي DD/MM/YYYY بأرقام لاتينية (عقد 2026-10-25) */
@@ -263,6 +285,26 @@
     var s = baseSvg(20);
     s.appendChild(svgNode('line', { x1: '12', y1: '5', x2: '12', y2: '19' }));
     s.appendChild(svgNode('line', { x1: '5', y1: '12', x2: '19', y2: '12' }));
+    return s;
+  }
+
+  /* أيقونة قائمة (هدف مبدّل التقويم/القائمة في وضع التقويم) —
+     خطوط Lucide-style داخلية بلا معرفات خارجية */
+  function listIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('line', { x1: '4', y1: '6', x2: '20', y2: '6' }));
+    s.appendChild(svgNode('line', { x1: '4', y1: '12', x2: '20', y2: '12' }));
+    s.appendChild(svgNode('line', { x1: '4', y1: '18', x2: '20', y2: '18' }));
+    return s;
+  }
+
+  /* أيقونة تقويم (هدف مبدّل التقويم/القائمة في وضع القائمة) */
+  function calendarIcon() {
+    var s = baseSvg(20);
+    s.appendChild(svgNode('rect', { x: '3', y: '4', width: '18', height: '18', rx: '2' }));
+    s.appendChild(svgNode('line', { x1: '8', y1: '2', x2: '8', y2: '6' }));
+    s.appendChild(svgNode('line', { x1: '16', y1: '2', x2: '16', y2: '6' }));
+    s.appendChild(svgNode('line', { x1: '3', y1: '10', x2: '21', y2: '10' }));
     return s;
   }
 
@@ -329,6 +371,9 @@
     var resizeFallback = null;
     var dirObserver = null;    /* R-02: مراقب dir للقلب الحي للاتجاه */
     var docEscapeRef = null;   /* R-14: مستمع Escape على document أثناء فتح المنتقي فقط */
+    /* معرف فريد للمثيل — أساس معرّفات DOM لأكورديون الصفوف
+       (aria-controls/region) كي لا تتصادم بين مثيلين على الصفحة */
+    var uid = 'm-ocal-' + (++instanceSeq);
 
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
@@ -366,6 +411,10 @@
     state.compactMonth = false;
     state.pickerOpen = false;
     state.pickerYear = null;
+    /* عقد 2026-10-26 — أكورديون داخلي أحادي الفتح: معرف الطلب
+       المفتوح (أو null). فتح طلب آخر يغلق الأول؛ حذف الطلب من
+       البيانات يطويه بصدق (setData أدناه). */
+    state.expandedId = null;
 
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
@@ -581,11 +630,32 @@
       return bar;
     }
 
-    /* صف التحكم (ترتيب القراءة للمرجع): المحدّد أول عنصر في المكوّن
-       ثم شريط الشهر/الأسبوع/اليوم — سطر 48px واحد يلتف عند الضيق. */
+    /* ---- مبدّل التقويم/القائمة (عقد 2026-10-26 — تعليمات المالك
+       2.8): زر مستقل واضح التوسيم منفصل عن محدّد يوم/أسبوع/شهر —
+       التسمية تصف فعل الضغط («عرض القائمة» في وضع التقويم،
+       «عرض التقويم» في وضع القائمة) وaria-pressed يعرض الحالة
+       الحقيقية (true = وضع القائمة فاعل). يغيّر نوع السطح فقط
+       (بيانات الطلبات وأفعالها محفوظة في الوضعين)؛ المحدد المقسّم
+       يغيّر نطاق التقويم داخل وضع التقويم وحده. ---- */
+    function buildModeToggle() {
+      var listActive = state.view === 'list';
+      var btn = el('button', 'm-ocal__mode-toggle');
+      btn.type = 'button';
+      btn.setAttribute('data-ocal-action', 'mode-toggle');
+      btn.setAttribute('aria-pressed', listActive ? 'true' : 'false');
+      btn.appendChild(listActive ? calendarIcon() : listIcon());
+      btn.appendChild(el('span', 'm-ocal__mode-toggle-text',
+        listActive ? 'عرض التقويم' : 'عرض القائمة'));
+      return btn;
+    }
+
+    /* صف التحكم (ترتيب القراءة للمرجع): المحدّد المقسّم في وضع
+       التقويم فقط (القائمة ليست مقطعًا فيه) + مبدّل التقويم/القائمة
+       المستقل نهاية السطر — سطر 48px واحد يلتف عند الضيق. */
     function buildControlsRow() {
       var row = el('div', 'm-ocal__controls');
-      row.appendChild(buildViewSeg());
+      if (state.view === 'calendar') row.appendChild(buildViewSeg());
+      row.appendChild(buildModeToggle());
       return row;
     }
 
@@ -688,14 +758,16 @@
       pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
-      /* عقد 2026-10-25 (المرجع الأعلى 2.3): رأس الشهر = اسم الشهر +
-         السنة («تشرين الأول 2026» بأسماء الشهور الأردنية) — اسم الشهر
-         محوري (17px/600/ink-primary) والسنة بنفس المقاس بوزن 400
-         ولون ink-secondary، وشيفرون هابط 20px يعلن المنتقي الحقيقي
-         داخل مساحة الضغط نفسها. */
-      pickerButton.appendChild(el('span', 'm-ocal__month-label', MONTHS_AR[m - 1]));
-      pickerButton.appendChild(document.createTextNode(' '));
-      pickerButton.appendChild(el('span', 'm-ocal__year', String(y)));
+      /* عقد 2026-10-26 (تعليمات المالك — الأرقام فقط): رأس الشهر رقمي
+         «10 / 2026» بتدرّج واضح (رقم الشهر 18/600/ink-primary والسنة
+         18/400/ink-secondary) داخل عزل LTR كي لا يقلب ترتيب الأجزاء
+         في سياق RTL، وشيفرون هابط 20px يعلن المنتقي الحقيقي داخل
+         مساحة الضغط نفسها — لا اسم شهر مرئيًا. */
+      var range = el('span', 'm-ocal__month-range');
+      range.appendChild(el('span', 'm-ocal__month-label', pad2(m)));
+      range.appendChild(document.createTextNode(' / '));
+      range.appendChild(el('span', 'm-ocal__year', String(y)));
+      pickerButton.appendChild(range);
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
       bar.appendChild(title);
@@ -735,16 +807,16 @@
       months.setAttribute('role', 'group');
       months.setAttribute('aria-label', 'أشهر السنة');
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
-      /* عقد 2026-10-25 (أرقام فقط على المرئي): خيارات المنتقي أرقام
-         شهرية 01..12، واسم الشهر الكامل يبقى في aria-label وحده لصدق
-         القراءة الصوتية (اختيار موثق في المواصفة). */
+      /* عقد 2026-10-26 (الأرقام فقط): خيارات المنتقي أرقام شهرية
+         01..12 مرئية، والاسم الإتاحي رقمي أيضًا «10 / 2026» — لا اسم
+         شهر لا مرئيًا ولا إتاحيًا (تفضيل المالك الصريح للأرقام). */
       for (var i = 0; i < 12; i++) {
         var month = el('button', 'm-ocal__picker-month', pad2(i + 1));
         month.type = 'button';
         month.setAttribute('data-ocal-action', 'picker-month');
         month.setAttribute('data-ocal-value', String(i));
         month.setAttribute('aria-pressed', i + 1 === currentMonth ? 'true' : 'false');
-        month.setAttribute('aria-label', MONTHS_AR[i] + ' ' + state.pickerYear);
+        month.setAttribute('aria-label', pad2(i + 1) + ' / ' + state.pickerYear);
         months.appendChild(month);
       }
       picker.appendChild(months);
@@ -836,10 +908,10 @@
       }
       cell.appendChild(dots);
 
-      /* الاسم الإتاحي بنمط المرجع الأعلى: اليوم، الشهر، العدد
-         («7 تشرين الأول، طلبان») — أرقام لاتينية (عقد الأرقام) */
-      var p = parseIso(iso);
-      var label = p.d + ' ' + MONTHS_AR[p.m - 1] + ' ' + p.y + '، ' + countPhraseAr(orders.length);
+      /* الاسم الإتاحي رقمي بالكامل (عقد 2026-10-26 — الأرقام فقط):
+         التاريخ الكامل DD/MM/YYYY + عبارة العدد («07/10/2026، طلبان»)
+         — لا اسم شهر ولا في الأسماء الإتاحية، بأرقام لاتينية معزولة. */
+      var label = dateNumeric(iso) + '، ' + countPhraseAr(orders.length);
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -858,7 +930,7 @@
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', 'طلبات ' + MONTHS_AR[m - 1] + ' ' + y);
+      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + y);
       grid.setAttribute('data-ocal-grid', '');
 
       var row = el('div', 'm-ocal__gridrow');
@@ -982,22 +1054,36 @@
       return b;
     }
 
-    /* ---- بطاقة طلب موحّدة (اليوم/الأسفل/القائمة) — عقد 2026-10-25
-       (المرجع الأعلى 2.6): بلا أزرار تعديل/حذف على الوجه — البطاقة
-       كلها زر فتح تفاصيل الطلب (order-open) مع سهم اتجاهي 20px في
-       نهاية السطر المضمن، وأفعال التعديل/الحذف يعيشها المضيف في سطح
-       التفاصيل (بحدود تأكيد للحذف). الشبكة: عمود محتوى + سهم؛ سطر
-       العنوان + الوقت (نص عادي بلا أيقونة/شريحة) وسطر العميل + شارة
-       الحالة. الملاحظة القصيرة تُعرض في سطح التفاصيل لدى المضيف —
-       البيانات باقية في النموذج كما هي. ----
-       showDate: شارة تاريخ قصيرة تظهر في صفوف القائمة فقط (سياق
-       نطاق زمني) — موثق في المواصفة. */
-    function buildOrderRow(order, showDate) {
+    /* ---- صف طلب موحّد (اليوم/الأسفل/القائمة) — عقد 2026-10-26
+       (أكورديون داخلي أحادي الفتح): الصف = مشغّل البطاقة + منطقة
+       إفصاح داخل الصف نفسه (لا صندوق تفاصيل منفصل أسفل القائمة).
+       المشغّل (data-ocal-action="order-row") يحمل aria-expanded +
+       aria-controls، والمنطقة role=region بمعرّف فريد (معرّف المثيل
+       + فهرس الصف + معرف الطلب المطهّر) يشير إليها aria-labelledby.
+       فتح طلب يغلق غيره (expandedId واحدة)؛ ضغط المشغّل المفتوح
+       يطويه؛ Enter/Space تمر عبر click الأصلي (لوحة مفاتيح = مؤشر).
+       أزرار التعديل/الحذف داخل المنطقة (عند تفعيل orderActions) —
+       نقرها لا يطوي الصف (أقرب data-ocal-action لها فعلها نفسه،
+       والمشغّل ليس سلفًا لها). الشبكة: عمود محتوى + سهم اتجاهي
+       يدور نحو الأسفل عند الفتح (الحالة ليست باللون وحده)؛ سطر
+       العنوان + الوقت نصًا عاديًا، وسطر العميل + شارة الحالة.
+       showDate: شارة تاريخ قصيرة تظهر في صفوف القائمة فقط. ---- */
+    function safeId(s) {
+      return String(s).replace(/[^a-zA-Z0-9_-]/g, '_');
+    }
+
+    function buildOrderRow(order, showDate, idx) {
+      var expanded = state.expandedId === order.id;
+      var domKey = uid + '-row-' + idx + '-' + safeId(order.id);
       var li = el('li', 'm-ocal__rowitem');
+      if (expanded) li.className += ' m-ocal__rowitem--expanded';
       var btn = el('button', 'm-ocal__row');
       btn.type = 'button';
+      btn.id = domKey + '-trigger';
       btn.setAttribute('data-ocal-action', 'order-row');
       btn.setAttribute('data-ocal-id', order.id);
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      btn.setAttribute('aria-controls', domKey + '-panel');
       var main = el('span', 'm-ocal__row-main');
 
       /* السطر 1: العنوان (سطر واحد بقطع) + الوقت نصًا عاديًا */
@@ -1032,18 +1118,98 @@
       main.appendChild(line2);
       btn.appendChild(main);
 
-      /* سهم اتجاهي 20px (يسار في RTL نحو التفاصيل، يمين في LTR) */
+      /* سهم اتجاهي 20px (يسار في RTL نحو الفتح، يمين في LTR) —
+         يدور نحو الأسفل عند الفتح فيصحح الاتجاه منطقيًا */
       var chev = chevronIcon(state.rtl ? 'left' : 'right', 20);
       chev.setAttribute('class', 'm-ocal__row-chev');
+      if (expanded) {
+        chev.style.transform = 'rotate(' + (state.rtl ? '-90' : '90') + 'deg)';
+      }
       btn.appendChild(chev);
       li.appendChild(btn);
+
+      /* منطقة الإفصاح داخل الصف نفسه — تفاصيل + أفعال */
+      li.appendChild(buildOrderPanel(order, domKey, expanded));
       return li;
+    }
+
+    /* منطقة إفصاح الطلب: العنوان الكامل (بلا قطع) + صفوف تعريف
+       رقمية (التاريخ/الوقت بـbdi معزول LTR) + شارة الحالة + الملاحظة،
+       ثم أزرار التعديل/الحذف عند تفعيل orderActions (أفعال مملوكة
+       للمضيف — الحدثان فقط كما في العقد العمومي). */
+    function buildOrderPanel(order, domKey, expanded) {
+      var panel = el('div', 'm-ocal__rowpanel');
+      panel.id = domKey + '-panel';
+      panel.setAttribute('data-ocal-rowpanel', '');
+      panel.setAttribute('role', 'region');
+      panel.setAttribute('aria-labelledby', domKey + '-trigger');
+      if (!expanded) panel.hidden = true;
+      panel.appendChild(el('p', 'm-ocal__rowpanel-title', order.title));
+      var dl = el('dl', 'm-ocal__rowdetails');
+      dl.appendChild(detailRow('التاريخ',
+        order.date ? dateNumeric(order.date) : 'غير مجدول', true));
+      dl.appendChild(detailRow('الوقت', order.time || '—', true));
+      dl.appendChild(detailRow('المورد', order.customer || '—', false));
+      if (order.statusKey !== '') {
+        var st = resolveStatus(order.statusKey);
+        var chip = el('span',
+          'm-ocal__row-status m-ocal__row-status--' + st.tone, st.label);
+        dl.appendChild(detailRow('الحالة', chip, false));
+      }
+      if (order.note) {
+        dl.appendChild(detailRow('الملاحظة', order.note, false));
+      }
+      panel.appendChild(dl);
+      if (state.orderActions.edit || state.orderActions.delete) {
+        panel.appendChild(buildOrderTools(order));
+      }
+      return panel;
+    }
+
+    /* صف تعريف واحد: التسمية بداية السطر والقيمة نهايته — القيم
+       الرقمية داخل bdi معزول LTR بأرقام لاتينية ثابتة العرض */
+    function detailRow(label, value, ltr) {
+      var div = el('div', 'm-ocal__rowdetail');
+      div.appendChild(el('dt', null, label));
+      var dd = el('dd', null);
+      if (ltr) {
+        var b = el('bdi', 'm-ocal__rowdetail-num', value);
+        b.setAttribute('dir', 'ltr');
+        dd.appendChild(b);
+      } else if (typeof value === 'string') {
+        dd.textContent = value;
+      } else {
+        dd.appendChild(value);
+      }
+      div.appendChild(dd);
+      return div;
+    }
+
+    /* أفعال الصف المفتوح: أزرار محدودة بلا تعبئة brand (السطح
+       المملوء الوحيد «إضافة طلب») — الحذف بلون الخطر النصي */
+    function buildOrderTools(order) {
+      var row = el('div', 'm-ocal__rowtools');
+      if (state.orderActions.edit) {
+        var editBtn = el('button', 'm-ocal__rowtool', 'تعديل');
+        editBtn.type = 'button';
+        editBtn.setAttribute('data-ocal-action', 'order-edit');
+        editBtn.setAttribute('data-ocal-id', order.id);
+        row.appendChild(editBtn);
+      }
+      if (state.orderActions.delete) {
+        var delBtn = el('button', 'm-ocal__rowtool m-ocal__rowtool--danger', 'حذف');
+        delBtn.type = 'button';
+        delBtn.setAttribute('data-ocal-action', 'order-delete');
+        delBtn.setAttribute('data-ocal-id', order.id);
+        row.appendChild(delBtn);
+      }
+      return row;
     }
 
     function buildRows(orders, showDate) {
       var ul = el('ul', 'm-ocal__rows');
       for (var i = 0; i < orders.length; i++) {
-        ul.appendChild(buildOrderRow(orders[i], !!showDate));
+        ul.appendChild(buildOrderRow(orders[i], !!showDate, i));
       }
       return ul;
     }
@@ -1095,9 +1261,10 @@
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
-        /* نفس تقديم رأس الشهر: اسم الشهر + السنة (عقد المرجع الأعلى) */
+        /* نفس تقديم رأس الشهر الرقمي (عقد الأرقام 2026-10-26):
+           «لا يوم محدد في 01 / 2027» — لا اسم شهر */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
+          'لا يوم محدد في ' + pad2(m) + ' / ' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -1200,8 +1367,9 @@
       return bar;
     }
 
-    /* ---- شاشة القائمة (سطح منفصل يستدعيه المضيف عبر setView('list') —
-       ليس زرًا في محدّد يوم/أسبوع/شهر) ---- */
+    /* ---- شاشة القائمة (عقد 2026-10-26: مبدّل التقويم/القائمة
+       المكوّني في صف التحكم أعلاه — محدّد يوم/أسبوع/شهر لا يُرسم
+       هنا لأنه يخصّ وضع التقويم وحده) ---- */
     function buildListScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'list');
@@ -1586,9 +1754,30 @@
       if (act === 'day-cell') {
         selectDate(btn.getAttribute('data-ocal-date'), true);
       } else if (act === 'order-row') {
-        /* حدث واحد لكل نقرة: معالج click واحد فقط (Enter/Space تمر
-           عبر click الأصلي — لا معالج keyup مزدوج) */
-        emit('order-schedule:order-open', { id: btn.getAttribute('data-ocal-id') });
+        /* أكورديون داخلي أحادي الفتح (عقد 2026-10-26): الضغطة الأولى
+           تفتح منطقة إفصاح هذا الطلب داخل صفّه وتطلق order-open مرة
+           واحدة، وضغط المشغّل المفتوح يطويه، وفتح طلب آخر يغلق
+           الأول — لا صندوق تفاصيل منفصل أسفل القائمة أبدًا.
+           التركيز يبقى على المشغّل بعد إعادة التصيير (لوحة المفاتيح
+           تمر عبر click الأصلي — الفعل نفسه للجميع). */
+        var rowId = btn.getAttribute('data-ocal-id');
+        if (state.expandedId === rowId) {
+          state.expandedId = null;
+        } else {
+          state.expandedId = rowId;
+          emit('order-schedule:order-open', { id: rowId });
+        }
+        render();
+        refocus('[data-ocal-id="' + rowId + '"][data-ocal-action="order-row"]');
+      } else if (act === 'mode-toggle') {
+        /* عقد 2026-10-26 — مبدّل التقويم/القائمة المستقل: يغيّر نوع
+           السطح فقط (بيانات الطلبات وأفعالها محفوظة)؛ اليوم/الأسبوع/
+           الشهر يبقى نطاقًا داخل وضع التقويم وحده */
+        state.pickerOpen = false;
+        state.view = (state.view === 'list') ? 'calendar' : 'list';
+        render();
+        updateResponsiveView(root.getBoundingClientRect().width);
+        refocus('[data-ocal-action="mode-toggle"]');
       } else if (act === 'order-edit') {
         /* عقد 2026-10-25: فعل تعديل مملوك للمضيف — الحدث فقط؛
            المحرر/المسار مسؤولية المضيف (لا Bottom Sheet هنا) */
@@ -1702,9 +1891,17 @@
     return {
       root: root,
       /* تحديث كامل بلا إعادة تهيئة؛ يحفظ selected/view/c-calendar إن
-         بقيت صالحة، ويمسح حالتي الانتظار/الخطأ (آخر كتابة تفوز) */
+         بقيت صالحة، ويمسح حالتي الانتظار/الخطأ (آخر كتابة تفوز).
+         عقد 2026-10-26: حذف الطلب المفتوح من البيانات يطويه بصدق */
       setData: guard(function (orders) {
         state.orders = normalizeOrders(orders);
+        if (state.expandedId !== null) {
+          var stillThere = false;
+          for (var i = 0; i < state.orders.length; i++) {
+            if (state.orders[i].id === state.expandedId) { stillThere = true; break; }
+          }
+          if (!stillThere) state.expandedId = null;
+        }
         state.loading = false;
         state.errorRetry = null;
         render();

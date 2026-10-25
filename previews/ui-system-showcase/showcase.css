@@ -619,6 +619,14 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   background: var(--micro-seg-hover-surface);
 }
 
+/* عقد 2026-10-26 (عقد منتج التقويم — لا صورة رمزية على شاشة
+   الطلبات/التقويم): السمة hidden تكفي منطقيًا لكن display:inline-flex
+   للفئة يتغلب عليها — قاعدة صريحة تكفل الإخفاء الحقيقي. تبقى
+   الصورة الرمزية في بقية الشاشات. */
+.app-avatar[hidden] {
+  display: none;
+}
+
 /* جسم الشاشة: تمرير المستند الطبيعي — لا تمرير متشعّب */
 .app-screen {
   flex: 1;
@@ -686,52 +694,10 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   background: var(--micro-surface-base);
 }
 
-/* تفاصيل الطلب (عقد المرجع الأعلى 2.6): صفوف تعريف بسيطة —
-   التسمية بداية السطر والقيمة نهايته */
-.app-details__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-2);
-  min-width: 0;
-}
-.app-details__title {
-  font-size: var(--micro-body-size);
-  font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-body-line);
-  color: var(--micro-text-primary);
-  overflow-wrap: anywhere;
-}
-.app-details__rows {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-1);
-  min-width: 0;
-}
-.app-details__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--micro-space-3);
-  min-width: 0;
-}
-.app-details__row dt {
-  flex: none;
-  font-size: var(--micro-label-size);
-  line-height: var(--micro-label-line);
-  color: var(--micro-text-secondary);
-}
-.app-details__row dd {
-  margin: 0;
-  min-width: 0;
-  text-align: end;
-  font-size: var(--micro-label-size);
-  line-height: var(--micro-label-line);
-  color: var(--micro-text-primary);
-  font-variant-numeric: tabular-nums lining-nums;
-  overflow-wrap: anywhere;
-}
-.app-details__row .m-ocal__row-status { flex: none; }
+/* عقد 2026-10-26 (أكورديون داخلي أحادي الفتح): سطح تفاصيل الطلب
+   المنفصل أُزيل — التفاصيل وأزرار التعديل/الحذف تعيش داخل صفّ
+   الطلب نفسه في المكوّن (m-ocal__rowpanel)؛ المحرر أدناه هو سطح
+   الفعل الوحيد المتبقي للمضيف مع حوار تأكيد الحذف. */
 .app-editor-date {
   margin: 0;
   font-size: var(--micro-secondary-size);

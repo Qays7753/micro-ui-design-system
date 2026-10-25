@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
 """Independent light-only order-schedule browser check (source files only).
 
-Contract under test (2026-10-25 — owner reference calendar-reference-implementation.html
-+ calendar-target-latest-owner.png): a real Day/Week/Month selector above the grid; the
-month grid carries the month's days plus muted, selectable adjacent-month days (view
-follows selection); an always-visible events region for the selected day sits below the
-calendar card; Week shows the selected week's seven real days (deriving from selection)
-with ±7 navigation; Day shows the selected day's event surface. The week starts on
-Sunday by default (weekStart=0 — Sunday-first contract; explicit weekStart values stay
-supported). The visible surface is numeric-only: month header «MM / YYYY», full dates
-DD/MM/YYYY, no visible month names anywhere (month names remain in aria-labels only).
-Weekday headers and grid columns share the exact 100%/7 column geometry inside one
-calendar-card surface with restrained dividers. Below a 360px root the grid flips to
-the compact presentation (`data-ocal-compact="true"` — CSS-only state, single DOM
-structure): cell width (100%)/7 ≥ 24px (WCAG 2.5.8 minimum) with a 48px row height
-floor; all command controls stay ≥48px. Browsing a month without a selected day shows
-the honest browsing region (`data-ocal-day-browsing`) instead of a contradictory
-selected day from another month.
-
-The previous month/day/list selector contract and the expanded/agenda
-presentation contract (2026-10-25 morning) were replaced by the owner's
-corrective brief: Week must be a real state, the events region is always
-visible, and List stays a separate host-invoked surface (setView('list')).
-Checks encoding the old contract were updated to the corrected one.
+Contract under test (2026-10-26 — owner "final numeric Calendar and full showcase"
+brief, superseding the 2026-10-25 month-name refinement where they conflict):
+a real Day/Week/Month selector above the grid; the month grid carries the month's
+days plus muted, selectable adjacent-month days (view follows selection); an
+always-visible events region for the selected day sits below the calendar card;
+Week shows the selected week's seven real days with ±7 navigation; Day shows the
+selected day's event surface. The week starts on Sunday by default. The visible
+surface is NUMERIC-ONLY: month header «MM / YYYY» (e.g. 10 / 2026), full dates
+DD/MM/YYYY, and NO visible Arabic or English month names anywhere (accessible
+names are numeric too: cells «07/10/2026، طلبان», picker options «10 / 2026»).
+A built-in Calendar/List mode toggle (data-ocal-action="mode-toggle") switches
+the orders surface between calendar mode (viewseg + grid + events) and list
+mode (grouped sections) with truthful aria-pressed. Order rows are a single-open
+inline accordion: the whole card is the trigger (aria-expanded + aria-controls),
+the expanded region (role=region) renders INSIDE the same row with the full
+details plus Edit/Delete actions (when orderActions is enabled) — never a
+detached global details box below the list. Weekday headers and grid columns
+share the exact 100%/7 column geometry inside one calendar-card surface with
+no inner grid lines. Below a 360px root the grid flips to the compact
+presentation. Browsing a month without a selected day shows the honest browsing
+region (numeric month).
 
 Examples:
   python3 tools/light-calendar-check.py
@@ -69,9 +68,27 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
     {id:'many-4',title:'طلب رابع',date:'2026-10-22',time:'11:00',statusKey:'progress'},
     {id:'many-5',title:'طلب خامس',date:'2026-10-22',time:'12:00',statusKey:'done'},
     {id:'unscheduled',title:'طلب غير مجدول',date:null,statusKey:'progress'},
-    {id:'sep-1',title:'طلب سبتمبر',date:'2026-09-15',time:'10:00',statusKey:'progress'},
+    {id:'sep-1',title:'طلب أرشيف قديم',date:'2026-09-15',time:'10:00',statusKey:'progress'},
     {id:'sep-adj',title:'طلب يوم مجاور',date:'2026-09-28',time:'10:30',statusKey:'progress'}
   ];
+  /* عقد 2026-10-26 (اختبارات العدد 1/2/20/100): طلبات إضافية حتمية
+     على اليوم المحدد مبدئيًا (10-31) عبر معامل extra — عناوين عربية
+     طويلة عند long=1 لاختبار القطع على الوجه والالتفاف في المنطقة. */
+  const extra = parseInt(q.get('extra') || '0', 10) || 0;
+  for (let i = 0; i < extra; i++) {
+    const times = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
+                   '12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'];
+    const keys = ['progress','done','hold'];
+    orders.push({
+      id: 'x-' + (i + 1),
+      title: (q.get('long') === '1' && i === 0)
+        ? 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية'
+        : 'طلب إضافي رقم ' + (i + 1),
+      date: '2026-10-31',
+      time: times[i % times.length],
+      statusKey: keys[i % keys.length]
+    });
+  }
   window.fixtureOrders = orders;
   window.events = [];
   ['order-schedule:day-select','order-schedule:order-open','order-schedule:add-request',
@@ -288,7 +305,7 @@ def main():
             check("clicking the muted out-month day selects it and follows it into its month",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-09-28"
                   and page.evaluate("events.length===4&&events[3].detail.date==='2026-09-28'")
-                  and page.locator(".m-ocal__month-label").first.inner_text() == "أيلول"
+                  and page.locator(".m-ocal__month-label").first.inner_text() == "09"
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 0)
             page.evaluate("instance.setSelectedDate('2026-10-31')")
             hierarchy = page.evaluate(
@@ -297,7 +314,7 @@ def main():
                     const mn = trig.querySelector('.m-ocal__month-label');
                     const yr = trig.querySelector('.m-ocal__year');
                     return {
-                        text: (mn ? mn.textContent.trim() : '') + ' ' + (yr ? yr.textContent.trim() : ''),
+                        text: trig.textContent.trim().replace(/\\s+/g, ' '),
                         month: mn ? getComputedStyle(mn).fontSize : null,
                         year: yr ? getComputedStyle(yr).fontSize : null,
                         monthWeight: mn ? getComputedStyle(mn).fontWeight : null,
@@ -305,8 +322,8 @@ def main():
                         chevron: !!trig.querySelector('svg')
                     };
                 }""")
-            check("month header = month name + year (Levantine name 18px/600 primary, year 18px/400 secondary, picker chevron)",
-                  hierarchy["text"] == "تشرين الأول 2026" and hierarchy["month"] == "18px"
+            check("month header = numeric month / year (10 / 2026; month 18px/600 primary, year 18px/400 secondary, picker chevron)",
+                  hierarchy["text"] == "10 / 2026" and hierarchy["month"] == "18px"
                   and hierarchy["year"] == "18px" and hierarchy["monthWeight"] == "600"
                   and hierarchy["yearWeight"] == "400" and hierarchy["chevron"] is True,
                   hierarchy)
@@ -351,13 +368,13 @@ def main():
                   and page.evaluate("events.length") == 0)
             page.locator("[data-ocal-picker] [data-ocal-value='0']").click()
             check("month choice updates displayed month only and returns focus to title",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "كانون الثاني" and page.locator(".m-ocal__year").first.inner_text() == "2027"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "01" and page.locator(".m-ocal__year").first.inner_text() == "2027"
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == selected_before
                   and page.evaluate("events.length") == 0
                   and page.evaluate("document.activeElement.matches('.m-ocal__cal-title [data-ocal-action=month-picker]')"))
             check("browsing January 2027 without a selected day shows the honest browsing panel",
                   page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1
-                  and "لا يوم محدد في كانون الثاني 2027" in page.locator(".m-ocal__daypanel-title").inner_text()
+                  and "لا يوم محدد في 01 / 2027" in page.locator(".m-ocal__daypanel-title").inner_text()
                   and page.locator("[data-ocal-day-panel] .m-ocal__row").count() == 0)
             title = page.locator(".m-ocal__cal-title [data-ocal-action='month-picker']")
             title.click()
@@ -391,7 +408,7 @@ def main():
             choose_month(2027, 12)
             page.locator("[data-ocal-action='next-month']").click()
             check("December-to-January month arrow changes displayed month without selecting",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "كانون الثاني" and page.locator(".m-ocal__year").first.inner_text() == "2028"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "01" and page.locator(".m-ocal__year").first.inner_text() == "2028"
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == selected_before
                   and page.evaluate("events.length") == 0
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1
@@ -406,12 +423,12 @@ def main():
                   and "طلبات 31/10/2026" in page.locator(".m-ocal__daypanel-title").inner_text())
             page.locator("[data-ocal-action='prev-month']").click()
             check("prev-month from October: heading, grid and events region describe September coherently",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "أيلول" and page.locator(".m-ocal__year").first.inner_text() == "2026"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "09" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-grid] [data-ocal-date^='2026-09']").count() == 30
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-09-01']").count() == 1
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-09-30']").count() == 1
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1
-                  and "لا يوم محدد في أيلول 2026" in page.locator(".m-ocal__daypanel-title").inner_text()
+                  and "لا يوم محدد في 09 / 2026" in page.locator(".m-ocal__daypanel-title").inner_text()
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-31"
                   and page.evaluate("events.length") == 0)
             browsing_add = page.locator("[data-ocal-day-browsing] [data-ocal-action='add']")
@@ -421,7 +438,7 @@ def main():
                   page.evaluate("JSON.stringify(events)"))
             page.locator("[data-ocal-action='next-month']").click()
             check("next-month returns to October and restores the selected day events region",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "تشرين الأول" and page.locator(".m-ocal__year").first.inner_text() == "2026"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "10" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 0
                   and "طلبات 31/10/2026" in page.locator(".m-ocal__daypanel-title").inner_text()
                   and page.evaluate("events.length") == 1)
@@ -453,7 +470,7 @@ def main():
             for _ in range(15):  # 2026-09-16 -> ... -> 2026-09-30 -> 2026-10-01
                 page.keyboard.press("ArrowLeft")
             check("compact grid focus crossing the month boundary updates month and focus only",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "تشرين الأول" and page.locator(".m-ocal__year").first.inner_text() == "2026"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "10" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-09-15"
                   and page.evaluate("events.length") == 4
@@ -480,12 +497,12 @@ def main():
             # Compact December→January across the year boundary.
             choose_month(2026, 12)
             check("compact picker reaches December 2026 with 31 days and honest browsing panel",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "كانون الأول" and page.locator(".m-ocal__year").first.inner_text() == "2026"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "12" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-grid] [data-ocal-date^='2026-12']").count() == 31
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1)
             page.locator("[data-ocal-action='next-month']").click()
             check("compact December-to-January arrow crosses the year boundary coherently",
-                  page.locator(".m-ocal__month-label").first.inner_text() == "كانون الثاني" and page.locator(".m-ocal__year").first.inner_text() == "2027"
+                  page.locator(".m-ocal__month-label").first.inner_text() == "01" and page.locator(".m-ocal__year").first.inner_text() == "2027"
                   and page.locator("[data-ocal-grid] [data-ocal-date^='2027-01']").count() == 31
                   and page.locator("[data-ocal-grid] [data-ocal-date='2027-01-01']").count() == 1
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01"
@@ -545,10 +562,11 @@ def main():
                   and page.evaluate("events.length===0"))
 
             # ---------- H) Events region contract, week keyboard, day-entry actions ----------
-            # عقد 2026-10-25 (مرجع المالك calendar-reference-implementation.html):
-            # منطقة أحداث اليوم المحدد ظاهرة دائمًا أسفل الشبكة («Events today»)،
-            # والأسبوع حالة فاعلة مشتقة من التحديد؛ أفعال تعديل/حذف host-owned
-            # على صفوف سطح فعل اليوم؛ لا زر عائم ولا Bottom Sheet في هذا المسار.
+            # عقد 2026-10-26 (أكورديون داخلي أحادي الفتح): منطقة أحداث
+            # اليوم المحدد ظاهرة دائمًا أسفل الشبكة، والبطاقة مشغّل
+            # أكورديون — منطقة الإفصاح (role=region) وأزرار تعديل/حذف
+            # داخل الصف نفسه؛ لا زر عائم ولا Bottom Sheet ولا صندوق
+            # تفاصيل منفصل أسفل القائمة.
             page.goto(f"{base}?root=358&dir=rtl&actions=1", wait_until="load")
             check("month view: events region below the grid with title, count, add and rows",
                   page.locator("[data-ocal-grid]").count() == 1
@@ -557,39 +575,104 @@ def main():
                   and "طلب واحد" in page.locator(".m-ocal__daypanel-count").get_attribute("aria-label")
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='add']").count() == 1
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").count() == 1)
-            # عقد 2026-10-25 (المرجع الأعلى 2.6): بلا أزرار تعديل/حذف دائرية
-            # على وجه البطاقة — البطاقة كلها زر order-open بسهم اتجاهي،
-            # والأفعال تعيشها أسطح تفاصيل الطلب لدى المضيف.
-            check("order cards carry no edit/delete buttons; whole card opens order details",
-                  page.locator("[data-ocal-action='order-edit']").count() == 0
-                  and page.locator("[data-ocal-action='order-delete']").count() == 0
-                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one'] svg").count() >= 1
-                  and page.locator(".m-ocal__rowitem--tools, .m-ocal__row-tool").count() == 0)
-            # عقد المرجع الأعلى 2.6: هندسة البطاقة — شبكة (1fr 20px)،
-            # ارتفاع أدنى 76px، سطح واحد بحد خافت بلا ظل، سهم 20px في
-            # نهاية السطر المضمن، والعنوان سطر واحد بقطع بصري.
+            # عقد 2026-10-26: المشغّل يحمل aria-expanded/aria-controls ويشير
+            # إلى منطقة region فريدة داخل الصف نفسه — والأزرار مخفية قبل
+            # الفتح (لا أزرار تعديل/حذف على وجه البطاقة).
+            accordion_static = page.evaluate("""() => {
+                const trig = document.querySelector(
+                  "[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']");
+                if (!trig) return {present: false};
+                const controls = trig.getAttribute('aria-controls');
+                const panel = controls ? document.getElementById(controls) : null;
+                return {
+                  present: true,
+                  expanded: trig.getAttribute('aria-expanded'),
+                  controls: controls,
+                  panelFound: !!panel,
+                  panelRole: panel ? panel.getAttribute('role') : null,
+                  panelHidden: panel ? panel.hidden : null,
+                  panelInsideRow: panel
+                    ? !!panel.closest('.m-ocal__rowitem').querySelector('[data-ocal-action="order-row"]')
+                    : false,
+                  visiblePanels: document.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+                  editInPanel: panel ? panel.querySelectorAll('[data-ocal-action="order-edit"]').length : 0,
+                  deleteInPanel: panel ? panel.querySelectorAll('[data-ocal-action="order-delete"]').length : 0,
+                  legacyTools: document.querySelectorAll('.m-ocal__rowitem--tools, .m-ocal__row-tool').length
+                };
+            }""")
+            check("order card is an accordion trigger: aria-expanded/aria-controls to a unique in-row region; actions hidden before opening",
+                  accordion_static["present"] and accordion_static["expanded"] == "false"
+                  and accordion_static["panelFound"] and accordion_static["panelRole"] == "region"
+                  and accordion_static["panelHidden"] is True
+                  and accordion_static["panelInsideRow"]
+                  and accordion_static["visiblePanels"] == 0
+                  and accordion_static["editInPanel"] == 1 and accordion_static["deleteInPanel"] == 1
+                  and accordion_static["legacyTools"] == 0,
+                  accordion_static)
+            # عقد هندسة البطاقة: سطح البطاقة على الصف (rowitem) — حد خافت
+            # واحد وزوايا 16 بلا ظل؛ المشغّل شبكة (1fr 20px) بارتفاع أدنى
+            # 76px وسهم 20px في نهاية السطر المضمن.
             card_shape = page.evaluate("""() => {
-                const row = document.querySelector("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']");
-                if (!row) return {present: false};
-                const r = row.getBoundingClientRect();
-                const cs = getComputedStyle(row);
-                const chev = row.querySelector('.m-ocal__row-chev');
+                const trig = document.querySelector(
+                  "[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']");
+                if (!trig) return {present: false};
+                const item = trig.closest('.m-ocal__rowitem');
+                const r = trig.getBoundingClientRect();
+                const cs = getComputedStyle(trig);
+                const is = getComputedStyle(item);
+                const chev = trig.querySelector('.m-ocal__row-chev');
                 return {present: true, h: r.height, cols: cs.gridTemplateColumns,
-                  radius: cs.borderTopLeftRadius, shadow: cs.boxShadow,
-                  border: cs.borderTopWidth, titleLines: getComputedStyle(
-                    row.querySelector('.m-ocal__row-title')).webkitLineClamp || 'none',
-                  titleOverflow: getComputedStyle(row.querySelector('.m-ocal__row-title')).textOverflow,
+                  radius: is.borderTopLeftRadius, shadow: is.boxShadow,
+                  border: is.borderTopWidth,
+                  titleOverflow: getComputedStyle(trig.querySelector('.m-ocal__row-title')).textOverflow,
                   chev: chev ? Math.round(chev.getBoundingClientRect().width) : null};
             }""")
-            check("order card follows the refinement grid anatomy (76px+, 1fr/20px, radius-lg, no shadow, 20px chevron)",
+            check("order card keeps the refinement anatomy on the row surface (76px+, 1fr/20px, radius-lg, 1px border, no shadow, 20px chevron)",
                   card_shape["present"] and card_shape["h"] >= 76
                   and card_shape["cols"].split(" ")[-1] == "20px"
                   and card_shape["radius"] == "16px" and card_shape["shadow"] == "none"
                   and card_shape["border"] == "1px" and card_shape["chev"] == 20,
                   card_shape)
             page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").click()
-            check("tapping the whole order card emits the order-open event once",
-                  page.evaluate("events.length===1&&events[0].name==='order-schedule:order-open'&&events[0].detail.id==='one'"))
+            check("tapping the whole order card expands it in place and emits order-open once",
+                  page.evaluate("events.length===1&&events[0].name==='order-schedule:order-open'&&events[0].detail.id==='one'")
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").get_attribute("aria-expanded") == "true"
+                  and page.locator("[data-ocal-rowpanel]:not([hidden])").count() == 1
+                  and page.evaluate("document.activeElement.getAttribute('data-ocal-action')==='order-row'"))
+            panel_content = page.evaluate("""() => {
+                const panel = document.querySelector('[data-ocal-rowpanel]:not([hidden])');
+                const txt = panel ? panel.textContent : '';
+                return {
+                  title: (panel?.querySelector('.m-ocal__rowpanel-title')||{}).textContent || null,
+                  hasDate: /31\\/10\\/2026/.test(txt), hasTime: /09:15/.test(txt),
+                  hasStatus: /قيد التنفيذ/.test(txt),
+                  editBtn: !!panel.querySelector('[data-ocal-action="order-edit"]'),
+                  deleteBtn: !!panel.querySelector('[data-ocal-action="order-delete"]'),
+                  editRect: (() => { const b = panel.querySelector('[data-ocal-action="order-edit"]');
+                    if (!b) return null; const r = b.getBoundingClientRect();
+                    return {w: Math.round(r.width), h: Math.round(r.height)}; })()
+                };
+            }""")
+            check("expanded region shows the numeric details (title/date/time/status) with in-row edit/delete at 48px targets",
+                  panel_content["title"] == "طلب واحد"
+                  and panel_content["hasDate"] and panel_content["hasTime"] and panel_content["hasStatus"]
+                  and panel_content["editBtn"] and panel_content["deleteBtn"]
+                  and panel_content["editRect"]["w"] >= 48 and panel_content["editRect"]["h"] >= 48,
+                  panel_content)
+            # نقر أزرار الفعل لا يطوي الصف (لا انفصال منطقة الفعل عن المشغّل)
+            page.locator("[data-ocal-day-panel] [data-ocal-rowpanel] [data-ocal-action='order-edit']").click()
+            page.wait_for_timeout(120)
+            page.locator("[data-ocal-day-panel] [data-ocal-rowpanel] [data-ocal-action='order-delete']").click()
+            page.wait_for_timeout(120)
+            check("clicking edit/delete inside the expanded row emits their events without collapsing the row",
+                  page.evaluate("events.length===3"
+                                "&&events[1].name==='order-schedule:order-edit-request'&&events[1].detail.id==='one'"
+                                "&&events[2].name==='order-schedule:order-delete-request'&&events[2].detail.id==='one'")
+                  and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").get_attribute("aria-expanded") == "true")
+            page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").click()
+            check("tapping the expanded trigger collapses it honestly",
+                  page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").get_attribute("aria-expanded") == "false"
+                  and page.locator("[data-ocal-rowpanel]:not([hidden])").count() == 0)
             check("no floating add control and no bottom-sheet layer exist in this flow",
                   page.locator(".m-ocal__fab, .m-ocal__sheet, [role='dialog'][data-ocal-sheet]").count() == 0
                   and page.evaluate("(()=>{const s=getComputedStyle(document.querySelector('.m-ocal'));"
@@ -623,31 +706,31 @@ def main():
             page.keyboard.press("ArrowLeft")  # RTL: left = next day
             check("week RTL ArrowLeft steps the selection one day and emits once",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-23"
-                  and page.evaluate("events.length===2&&events[1].name==='order-schedule:day-select'&&events[1].detail.date==='2026-10-23'")
+                  and page.evaluate("events.length===4&&events[3].name==='order-schedule:day-select'&&events[3].detail.date==='2026-10-23'")
                   and page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-23'"))
             page.keyboard.press("ArrowDown")
             check("week ArrowDown steps the selection one week (+7) and emits once",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-30"
-                  and page.evaluate("events.length===3&&events[2].detail.date==='2026-10-30'")
+                  and page.evaluate("events.length===5&&events[4].detail.date==='2026-10-30'")
                   and "25–31" in page.locator(".m-ocal__week-range").inner_text())
             page.keyboard.press("ArrowUp")
             check("week ArrowUp steps the selection one week back (-7) and emits once",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-23"
-                  and page.evaluate("events.length===4&&events[3].detail.date==='2026-10-23'"))
+                  and page.evaluate("events.length===6&&events[5].detail.date==='2026-10-23'"))
             page.keyboard.press("Home")
             check("week Home selects the first (Sunday) day of the shown week",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-18"
-                  and page.evaluate("events.length===5&&events[4].detail.date==='2026-10-18'"))
+                  and page.evaluate("events.length===7&&events[6].detail.date==='2026-10-18'"))
             page.keyboard.press("End")
             check("week End selects the last (Saturday) day of the shown week",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-24"
-                  and page.evaluate("events.length===6&&events[5].detail.date==='2026-10-24'"))
+                  and page.evaluate("events.length===8&&events[7].detail.date==='2026-10-24'"))
 
             # «اليوم» في عرض الأسبوع ينقل إلى أسبوع اليوم الحالي بتحديد معلن
             page.locator("[data-ocal-action='today']").click()
             check("today button in week view jumps to today's week with an announced selection",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-07"
-                  and page.evaluate("events.length===7&&events[6].name==='order-schedule:day-select'&&events[6].detail.date==='2026-10-07'")
+                  and page.evaluate("events.length===9&&events[8].name==='order-schedule:day-select'&&events[8].detail.date==='2026-10-07'")
                   and "4–10" in page.locator(".m-ocal__week-range").inner_text()
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-10-07'][aria-current='date']").count() == 1
                   and page.locator(".m-ocal__daypanel-title").inner_text() == "طلبات اليوم")
@@ -667,7 +750,7 @@ def main():
             page.locator("[data-ocal-action='next-day']").click()
             check("next-day in day view announces the new selected day and reveals اليوم",
                   page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-08"
-                  and page.evaluate("events.length===8&&events[7].detail.date==='2026-10-08'")
+                  and page.evaluate("events.length===10&&events[9].detail.date==='2026-10-08'")
                   and page.locator("[data-ocal-action='today']").count() == 1)
 
             # LTR: أسبوع بترتيب معكوس وفعالية كاملة للمحدّد
@@ -678,7 +761,7 @@ def main():
                   and "25–31" in page.locator(".m-ocal__week-range").inner_text()
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-10-31'][aria-selected='true']").count() == 1
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").count() == 1
-                  and page.locator("[data-ocal-action='order-edit'], [data-ocal-action='order-delete']").count() == 0
+                  and page.locator("[data-ocal-rowpanel]:not([hidden])").count() == 0
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'] .m-ocal__row-chev").count() == 1)
             ltr_week_cell = page.locator("[data-ocal-grid] [data-ocal-date='2026-10-31']")
             ltr_week_cell.focus()
@@ -750,12 +833,17 @@ def main():
             page.wait_for_function("document.querySelector('#demo-1-title').textContent==='1) عرض القائمة'")
             check("example title follows explicit list mode", page.locator("#demo-1-title").inner_text() == "1) عرض القائمة")
 
-            # ---------- J) Sunday-first + refined month presentation (2026-10-25) ----------
-            # عقد المرجع الأعلى (CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS):
-            # الأسبوع يبدأ الأحد افتراضيًا في الاتجاهين (RTL يعكس الصف
-            # المنطقي بلا عكس التواريخ)، ورأس الشهر اسم الشهر + السنة
-            # («تشرين الأول 2026»)، وبطاقة بلا خطوط شبكة داخلية إطلاقًا
+            # ---------- J) Sunday-first + refined month presentation (2026-10-26) ----------
+            # عقد الأرقام (2026-10-26): الأسبوع يبدأ الأحد افتراضيًا في
+            # الاتجاهين (RTL يعكس الصف المنطقي بلا عكس التواريخ)، ورأس
+            # الشهر رقمي «10 / 2026»، وبطاقة بلا خطوط شبكة داخلية إطلاقًا
             # (حد البطاقة وحده) ورأس أيام محاذٍ تمامًا لأعمدة الشبكة.
+            AR_MONTHS = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران',
+                         'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول',
+                         'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو',
+                         'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+            EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                         'August', 'September', 'October', 'November', 'December']
             for direction in ("rtl", "ltr"):
                 page.goto(f"{base}?root=358&dir={direction}", wait_until="load")
                 page.evaluate("document.fonts.ready")
@@ -797,7 +885,13 @@ def main():
                         triggerText: document.querySelector('.m-ocal__month-trigger').textContent.trim().replace(/\\s+/g, ' '),
                         eventsTitleNumeric: /^(اليوم|\\d{2}\\/\\d{2}\\/\\d{4})$/.test(
                           document.querySelector('.m-ocal__daypanel-title').textContent.trim()
-                            .replace(/^طلبات\\s+/, ''))
+                            .replace(/^طلبات\\s+/, '')),
+                        cellAriaNumeric: /^\\d{2}\\/\\d{2}\\/\\d{4}، /.test(
+                          document.querySelector('[data-ocal-date="2026-10-07"]').getAttribute('aria-label') || ''),
+                        pickerAriaNumeric: null,
+                        visibleText: document.querySelector('#order-root').textContent,
+                        ariaText: Array.from(document.querySelectorAll('#order-root [aria-label]'))
+                          .map(e => e.getAttribute('aria-label')).join(' ')
                     };
                 }""")
                 check(f"{direction}: Sunday-first weekday header in both directions (أحد..سبت logical order)",
@@ -812,10 +906,223 @@ def main():
                       and header["cardBg"].startswith("rgb("), header)
                 check(f"{direction}: no inner grid lines anywhere (cells and weekday rule all borderless)",
                       header["innerLines"] == 0 and header["headerRule"] == "0px", header)
-                check(f"{direction}: month header shows the Levantine month name + year",
-                      header["monthLabel"] == "تشرين الأول" and header["yearText"] == "2026"
-                      and header["triggerText"] == "تشرين الأول 2026"
+                check(f"{direction}: month header is numeric month / year (10 / 2026)",
+                      header["monthLabel"] == "10" and header["yearText"] == "2026"
+                      and header["triggerText"] == "10 / 2026"
                       and header["eventsTitleNumeric"], header)
+                check(f"{direction}: day-cell accessible name is the full numeric date + count",
+                      header["cellAriaNumeric"], header)
+                leaked = [m for m in (AR_MONTHS + EN_MONTHS)
+                          if m in (header["visibleText"] or "") or m in (header["ariaText"] or "")]
+                check(f"{direction}: no Arabic or English month names anywhere (visible or accessible)",
+                      not leaked, {"leaked": leaked})
+
+            # ---------- K) Calendar/List mode toggle + inline accordion (2026-10-26) ----------
+            # المبدّل المستقل (عرض القائمة/عرض التقويم): تغيير سطح حقيقي
+            # بتسمية صادقة وaria-pressed؛ المحدّد المقسّم لوضع التقويم
+            # وحده؛ القائمة تجمعات حقيقية بنفس البيانات وأفعالها؛
+            # والأكورديون أحادي الفتح في القائمة أيضًا.
+            page.set_viewport_size({"width": 390, "height": 980})
+            page.goto(f"{base}?root=358&dir=rtl&actions=1", wait_until="load")
+            toggle_state = page.evaluate("""() => {
+                const t = document.querySelector('#order-root [data-ocal-action="mode-toggle"]');
+                const r = t.getBoundingClientRect();
+                return {
+                    present: !!t, pressed: t.getAttribute('aria-pressed'),
+                    label: t.textContent.trim(),
+                    view: document.querySelector('#order-root').getAttribute('data-ocal-view'),
+                    viewseg: !!document.querySelector('#order-root .m-ocal__viewseg'),
+                    w: Math.round(r.width), h: Math.round(r.height)
+                };
+            }""")
+            check("mode toggle renders beside the viewseg with truthful label and aria-pressed=false in calendar mode",
+                  toggle_state["present"] and toggle_state["pressed"] == "false"
+                  and toggle_state["label"] == "عرض القائمة"
+                  and toggle_state["view"] == "calendar" and toggle_state["viewseg"]
+                  and toggle_state["w"] >= 48 and toggle_state["h"] >= 48,
+                  toggle_state)
+            page.locator("[data-ocal-action='mode-toggle']").click()
+            list_state = page.evaluate("""() => {
+                const r = document.querySelector('#order-root');
+                const t = r.querySelector('[data-ocal-action="mode-toggle"]');
+                return {
+                    view: r.getAttribute('data-ocal-view'),
+                    layout: r.getAttribute('data-ocal-layout'),
+                    pressed: t.getAttribute('aria-pressed'),
+                    label: t.textContent.trim(),
+                    viewseg: !!r.querySelector('.m-ocal__viewseg'),
+                    calbar: !!r.querySelector('.m-ocal__cal-bar'),
+                    sections: Array.from(r.querySelectorAll('.m-ocal__list-heading')).map(e=>e.textContent.trim()),
+                    rows: r.querySelectorAll('[data-ocal-action="order-row"]').length,
+                    triggerIds: Array.from(r.querySelectorAll('[data-ocal-action="order-row"]')).map(e=>e.getAttribute('data-ocal-id')),
+                    docWidth: document.documentElement.scrollWidth, viewport: innerWidth
+                };
+            }""")
+            check("mode toggle switches to the real list surface (viewseg/calbar gone, grouped sections, same orders)",
+                  list_state["view"] == "list" and list_state["layout"] == "list"
+                  and list_state["pressed"] == "true" and list_state["label"] == "عرض التقويم"
+                  and not list_state["viewseg"] and not list_state["calbar"]
+                  and "الطلبات القادمة" in list_state["sections"]
+                  and "الطلبات السابقة" in list_state["sections"]
+                  and "الطلبات غير المجدولة" in list_state["sections"]
+                  and list_state["rows"] == 9
+                  and "one" in list_state["triggerIds"] and "unscheduled" in list_state["triggerIds"]
+                  and list_state["docWidth"] <= list_state["viewport"],
+                  list_state)
+            # أكورديون في وضع القائمة: نفس عقد aria + أحادي الفتح بالتبديل
+            page.locator("[data-ocal-action='order-row'][data-ocal-id='one']").click()
+            page.wait_for_timeout(120)
+            first_expanded = page.evaluate("""() => {
+                const t = document.querySelector('[data-ocal-action="order-row"][data-ocal-id="one"]');
+                return { expanded: t.getAttribute('aria-expanded'),
+                         visible: document.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length };
+            }""")
+            check("list mode rows are the same accordion triggers (expansion works)",
+                  first_expanded["expanded"] == "true" and first_expanded["visible"] == 1, first_expanded)
+            page.locator("[data-ocal-action='order-row'][data-ocal-id='many-1']").click()
+            page.wait_for_timeout(120)
+            switched = page.evaluate("""() => {
+                const one = document.querySelector('[data-ocal-action="order-row"][data-ocal-id="one"]');
+                const other = document.querySelector('[data-ocal-action="order-row"][data-ocal-id="many-1"]');
+                return {
+                    oneExpanded: one.getAttribute('aria-expanded'),
+                    otherExpanded: other.getAttribute('aria-expanded'),
+                    visible: document.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+                    orderOpenEvents: events.filter(e => e.name === 'order-schedule:order-open').map(e => e.detail.id),
+                    focus: document.activeElement.getAttribute('data-ocal-id')
+                };
+            }""")
+            check("switching expansion to another order closes the first (single-open, order-open per open)",
+                  switched["oneExpanded"] == "false" and switched["otherExpanded"] == "true"
+                  and switched["visible"] == 1
+                  and switched["orderOpenEvents"] == ["one", "many-1"]
+                  and switched["focus"] == "many-1",
+                  switched)
+            # لوحة المفاتيح: Enter على المشغّل = نقرة المؤشر (زر أصلي)
+            page.locator("[data-ocal-action='order-row'][data-ocal-id='many-1']").focus()
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(120)
+            keyboard_state = page.evaluate("""() => ({
+                expanded: document.querySelector('[data-ocal-action="order-row"][data-ocal-id="many-1"]').getAttribute('aria-expanded'),
+                visible: document.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+                focus: document.activeElement.getAttribute('data-ocal-id')
+            })""")
+            check("keyboard Enter on the trigger collapses exactly like pointer activation",
+                  keyboard_state["expanded"] == "false" and keyboard_state["visible"] == 0
+                  and keyboard_state["focus"] == "many-1", keyboard_state)
+            # العودة إلى التقويم: التحديد محفوظ والمحدّد عائد
+            page.locator("[data-ocal-action='mode-toggle']").click()
+            page.wait_for_timeout(120)
+            back_state = page.evaluate("""() => {
+                const r = document.querySelector('#order-root');
+                return {
+                    view: r.getAttribute('data-ocal-view'),
+                    calView: r.getAttribute('data-ocal-cal-view'),
+                    selected: r.getAttribute('data-ocal-selected-date'),
+                    viewseg: !!r.querySelector('.m-ocal__viewseg'),
+                    toggleLabel: r.querySelector('[data-ocal-action="mode-toggle"]').textContent.trim(),
+                    togglePressed: r.querySelector('[data-ocal-action="mode-toggle"]').getAttribute('aria-pressed')
+                };
+            }""")
+            check("mode toggle returns to calendar mode preserving the selection and the segmented control",
+                  back_state["view"] == "calendar" and back_state["calView"] == "month"
+                  and back_state["selected"] == "2026-10-31"
+                  and back_state["viewseg"]
+                  and back_state["toggleLabel"] == "عرض القائمة" and back_state["togglePressed"] == "false",
+                  back_state)
+
+            # قائمة فارغة: فراغ صادق + المبدّل باقٍ فوقه
+            page.evaluate("instance.setView('list'); instance.setData([])")
+            empty_list = page.evaluate("""() => {
+                const r = document.querySelector('#order-root');
+                const status = r.querySelector('[data-ocal-status]');
+                return {
+                    empty: !!status,
+                    text: status ? status.textContent : null,
+                    toggle: !!r.querySelector('[data-ocal-action=mode-toggle]'),
+                    rows: r.querySelectorAll('[data-ocal-action=order-row]').length
+                };
+            }""")
+            check("empty list keeps the honest empty state with the mode toggle still reachable",
+                  empty_list["empty"] and "لا توجد طلبات" in (empty_list["text"] or "")
+                  and empty_list["toggle"] and empty_list["rows"] == 0, empty_list)
+            page.evaluate("instance.setData(window.fixtureOrders)")
+
+            # ---------- L) Count matrix: 1/2/20/100 orders + long title ----------
+            # الأكورديون الداخلي يجب أن يبقى ملاصقًا للطلب المنقور مع أي
+            # عدد من الصفوف: المنطقة داخل صفّه دومًا، وأحادية الفتح محفوظة،
+            # ولا فيض أفقي، ولا صندوق إفصاح منفصل خارج الصفوف.
+            # (النقر عبر locator خارج evaluate — إعادة التصيير تستبدل العقد
+            #  فأي مرجع داخل evaluate نفسه سيصبح منفصلًا بعد النقرة.)
+            for extra, label in ((1, "2 orders"), (19, "20 orders"), (99, "100 orders")):
+                page.goto(f"{base}?root=358&dir=rtl&actions=1&extra={extra}", wait_until="load")
+                page.wait_for_timeout(60)
+                middle_id = page.evaluate(
+                    "() => { const rows = document.querySelectorAll("
+                    "'#order-root [data-ocal-action=order-row]');"
+                    "return rows[Math.floor(rows.length / 2)].getAttribute('data-ocal-id'); }")
+                page.locator(f"[data-ocal-action='order-row'][data-ocal-id='{middle_id}']").click()
+                page.wait_for_timeout(120)
+                matrix = page.evaluate("""(mid) => {
+                    const r = document.querySelector('#order-root');
+                    const middle = r.querySelector(
+                      '[data-ocal-action=order-row][data-ocal-id=\\'' + mid + '\\']');
+                    const panel = r.querySelector('[data-ocal-rowpanel]:not([hidden])');
+                    return {
+                        rows: r.querySelectorAll('[data-ocal-action=order-row]').length,
+                        middleId: mid,
+                        expanded: middle ? middle.getAttribute('aria-expanded') : null,
+                        panelInsideRow: panel
+                          ? panel.closest('.m-ocal__rowitem').contains(middle) : false,
+                        visiblePanels: r.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+                        panelsOutsideRows: Array.from(r.querySelectorAll('[data-ocal-rowpanel]'))
+                          .filter(p => !p.closest('.m-ocal__rowitem')).length,
+                        detachedGlobalBoxes: r.querySelectorAll(
+                          '.m-ocal__details, .m-ocal__order-details, [data-ocal-details]').length,
+                        rootScroll: r.scrollWidth, rootClient: r.clientWidth,
+                        docWidth: document.documentElement.scrollWidth, viewport: innerWidth
+                    };
+                }""", middle_id)
+                check(f"{label}: expansion stays inline inside the clicked row (no detached global box, single-open)",
+                      matrix["rows"] == 1 + extra
+                      and matrix["expanded"] == "true"
+                      and matrix["panelInsideRow"]
+                      and matrix["visiblePanels"] == 1
+                      and matrix["panelsOutsideRows"] == 0
+                      and matrix["detachedGlobalBoxes"] == 0,
+                      matrix)
+                check(f"{label}: no horizontal overflow with one row expanded",
+                      matrix["rootScroll"] <= matrix["rootClient"] + 1
+                      and matrix["docWidth"] <= matrix["viewport"], matrix)
+
+            # عنوان عربي طويل: قطع على الوجه + النص الكامل داخل المنطقة
+            page.goto(f"{base}?root=358&dir=rtl&actions=1&extra=1&long=1", wait_until="load")
+            page.wait_for_timeout(60)
+            first_id = page.evaluate(
+                "() => document.querySelector("
+                "'#order-root [data-ocal-action=order-row]').getAttribute('data-ocal-id')")
+            page.locator(f"[data-ocal-action='order-row'][data-ocal-id='{first_id}']").click()
+            page.wait_for_timeout(120)
+            long_title = page.evaluate("""() => {
+                const r = document.querySelector('#order-root');
+                const first = r.querySelector('[data-ocal-action=order-row]');
+                const titleEl = first.querySelector('.m-ocal__row-title');
+                const panel = r.querySelector('[data-ocal-rowpanel]:not([hidden])');
+                const full = 'طلب ضيافة استقبال شركة الوفادة المرافقة لوفد المنطقة الغربية مع تجهيز القاعة الرئيسية والمستلزمات الكاملة للفعالية المقامة يوم الخميس القادم بتجهيزات صباحية إضافية';
+                return {
+                    clipped: getComputedStyle(titleEl).textOverflow === 'ellipsis'
+                      && titleEl.scrollWidth > titleEl.clientWidth,
+                    timeStillVisible: !!first.querySelector('.m-ocal__row-time'),
+                    chevStillVisible: !!first.querySelector('.m-ocal__row-chev'),
+                    panelTitleFull: (panel?.querySelector('.m-ocal__rowpanel-title')||{}).textContent === full,
+                    docWidth: document.documentElement.scrollWidth, viewport: innerWidth
+                };
+            }""")
+            check("long Arabic title ellipsizes on the face (time/chevron intact) and shows in full inside the panel",
+                  long_title["clipped"] and long_title["timeStillVisible"]
+                  and long_title["chevStillVisible"] and long_title["panelTitleFull"]
+                  and long_title["docWidth"] <= long_title["viewport"],
+                  long_title)
 
             check("no browser, console, or resource errors", not errors, errors)
             browser.close()

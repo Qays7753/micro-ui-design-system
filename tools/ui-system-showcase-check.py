@@ -428,7 +428,7 @@ def run_interaction_matrix(base_url, label, screenshot_prefix):
     wait(200)
     t(f"[{label}] اختيار يوم في الجدول (order-schedule:day-select)",
       ocal["clicked"] and "day-select" in page.evaluate("() => document.getElementById('sc-ocal-log').textContent"))
-    jclick("#sc-ocal-view")
+    jclick('#sc-ocal-root [data-ocal-action="mode-toggle"]')
     wait(200)
     t(f"[{label}] تبديل عرض القائمة/التقويم",
       page.evaluate("() => document.getElementById('sc-ocal-root').getAttribute('data-ocal-view')") == "list")
@@ -438,7 +438,7 @@ def run_interaction_matrix(base_url, label, screenshot_prefix):
       page.evaluate("() => !!document.querySelector('#sc-ocal-root [data-ocal-status=empty]')"))
     jclick("#sc-ocal-restore")
     wait(200)
-    jclick("#sc-ocal-view")
+    jclick('#sc-ocal-root [data-ocal-action="mode-toggle"]')
     wait(200)
 
     # عودة عرض التقويم عبر الزر (list -> calendar)

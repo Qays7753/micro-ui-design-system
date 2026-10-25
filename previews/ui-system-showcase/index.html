@@ -293,43 +293,6 @@
           </div>
         </section>
 
-        <!-- تفاصيل الطلب (سطح مضيف داخل الصفحة): نقطة الوصول لأفعال
-             التعديل/الحذف بعد انتقالهما من وجه بطاقة الطلب (عقد المرجع
-             الأعلى 2.6) — البطاقة كلها تفتح هذا السطح عبر order-open،
-             والحذف يمر من حوار التأكيد القائم -->
-        <section class="app-editor app-details" id="app-ocal-details" hidden aria-labelledby="app-ocal-details-title">
-          <h2 class="m-section-title" id="app-ocal-details-title">تفاصيل الطلب</h2>
-          <div class="app-details__body">
-            <span class="app-details__title" id="app-ocal-details-order-title"></span>
-            <dl class="app-details__rows">
-              <div class="app-details__row">
-                <dt>التاريخ</dt>
-                <dd><bdi id="app-ocal-details-date" dir="ltr">—</bdi></dd>
-              </div>
-              <div class="app-details__row">
-                <dt>الوقت</dt>
-                <dd><bdi id="app-ocal-details-time" dir="ltr">—</bdi></dd>
-              </div>
-              <div class="app-details__row">
-                <dt>المورد</dt>
-                <dd id="app-ocal-details-customer">—</dd>
-              </div>
-              <div class="app-details__row">
-                <dt>الحالة</dt>
-                <dd><span class="m-ocal__row-status" id="app-ocal-details-status" hidden></span><span id="app-ocal-details-status-empty">—</span></dd>
-              </div>
-              <div class="app-details__row">
-                <dt>ملاحظة</dt>
-                <dd id="app-ocal-details-note">—</dd>
-              </div>
-            </dl>
-          </div>
-          <div class="app-actions-row">
-            <button type="button" class="m-btn m-btn--primary" id="app-ocal-details-edit">تعديل</button>
-            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-delete">حذف</button>
-            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-close">رجوع للجدول</button>
-          </div>
-        </section>
       </div>
 
       <!-- ============ الشاشة 3: التقارير ============ -->
@@ -429,6 +392,25 @@
             <span class="m-note__text"><span class="m-note__body">تُطبّق التغييرات على هذا الجهاز فقط.</span></span>
           </div>
         </section>
+        <!-- مدخل مراجعة نظام الواجهات (عقد 2026-10-26 — تعليمات المالك 2.9:
+             معرض المكونات الكامل في متناول واضح لا مراسي مخفية): صف
+             واحد في شاشة حسابي يفتح سطح مختبر الحالات (14 عائلة + 6
+             متغيرات + الحالات) — مسمّى بصدق بأنه مراجعة، لا عنصر منتج */ -->
+        <section class="m-section" aria-labelledby="app-uireview-title">
+          <h2 class="m-section-title" id="app-uireview-title">نظام الواجهات</h2>
+          <ul class="app-setting-list">
+            <li>
+              <button type="button" class="m-row app-setting-row" id="app-showcase-open">
+                <span class="m-row__text">
+                  <span class="m-row__title">عرض نظام الواجهات</span>
+                  <span class="m-row__subtitle">مراجعة المالك: كل العائلات والحالات</span>
+                </span>
+                <svg class="m-row__open" aria-hidden="true"><use href="#i-grid"/></svg>
+              </button>
+            </li>
+          </ul>
+        </section>
+
         <section class="m-section" aria-labelledby="app-session-title">
           <h2 class="m-section-title" id="app-session-title">الجلسة</h2>
           <ul class="app-setting-list">
@@ -1628,12 +1610,11 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم بمحدّد يوم/أسبوع/شهر حقيقي (مرجع المالك 2026-10-25): شبكة شهر بسبعة أعمدة تحوي أيام الشهر وأيام الأشهر المجاورة خافتة قابلة للتحديد، ومنطقة «طلبات اليوم/اليوم المحدد» أسفل الشبكة ببطاقات مدمجة. اليوم داخل التقويم نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة)؛ لا زر عائم ولا Bottom Sheet في هذا المسار. القائمة سطح منفصل يستدعيه المضيف عبر setView.</p>
+        <p class="sc-section__desc">تقويم بمحدّد يوم/أسبوع/شهر حقيقي (عقد 2026-10-26): رأس شهر رقمي «10 / 2026» بلا أسماء أشهر مرئية، ومبدّل تقويم/قائمة مكوّني مستقل عن المحدد، وصفوف الطلب أكورديون داخلي أحادي الفتح — التفاصيل وأزرار تعديل/حذف داخل الصف نفسه لا في صندوق منفصل. اليوم داخل التقويم نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة).</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
         <div class="sc-tools" role="group" aria-label="أدوات الجدول">
-          <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-view" aria-pressed="false">تبديل عرض القائمة/التقويم</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-loading">حالة الانتظار</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-error">حالة الخطأ وإعادة المحاولة</button>
           <button type="button" class="m-btn m-btn--secondary" id="sc-ocal-empty">حالة الفراغ</button>
@@ -1678,7 +1659,7 @@
           <p class="sc-hint">محرر العرض يكتب في حالة محلية لهذه الجلسة فقط (Escape للإلغاء). المكوّن نفسه لا يملك محررًا: أفعال الإضافة/التعديل/الحذف أحداث host-owned.</p>
         </section>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب محدّد يوم/أسبوع/شهر، وانقر يومًا (بما فيه أيام الأشهر المجاورة الخافتة) لتحدّث منطقة «طلبات اليوم»، وجرّب أزرار ±7 أيام في عرض الأسبوع. لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب محدّد يوم/أسبوع/شهر، ومبدّل عرض القائمة/التقويم المكوّني، وانقر بطاقة طلب لتفتح تفاصيلها وأفعالها داخل صفّها (أكورديون أحادي الفتح — فتح طلب يغلق غيره). لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 

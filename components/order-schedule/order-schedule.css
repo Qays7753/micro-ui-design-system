@@ -28,11 +28,19 @@
    شبكة داخلية (الإيقاع من الفراغ)، وتشريح خلية ثابت: chip رقم
    32×28 + خانة نقاط محجوزة دائمًا (6px) فلا قفز أساس، وتحديد =
    chip brand-tint (الخلية لا تُملأ)، واليوم = حلقة 1px divider-strong
-   على chip، ومفتاح الحالات داخل البطاقة، وبطاقة طلب شبكية (1fr 20px)
-   قابلة للنقر كليًا بسهم اتجاهي — بلا أزرار تعديل/حذف على وجهها
-   (تنتقل لسطح تفاصيل الطلب لدى المضيف). الحركة: ضغط 80–110ms،
+   على chip، ومفتاح الحالات داخل البطاقة. الحركة: ضغط 80–110ms،
    حالة 120ms، تلاشٍ 200ms لتغيّر الشهر فقط، وprefers-reduced-motion
    يلغي الجميع.
+
+   عقد 2026-10-26 (تعليمات المالك الأحدث — الأرقام فقط + مبدّل
+   تقويم/قائمة + أكورديون داخلي): رأس الشهر رقمي «10 / 2026» بعزل
+   LTR (لا اسم شهر)؛ مبدّل تقويم/قائمة مستقل في صف التحكم (حدودي
+   حبّي، aria-pressed=true يلوّنه brand-tint/brand-ink كحالات التحديد
+   — لا تعبئة brand قط)؛ وصف الطلب أكورديون داخلي أحادي الفتح:
+   السطح (حد خافت واحد، زوايا 16، بلا ظل) على .m-ocal__rowitem
+   والمشغّل بداخله بلا حدود، ومنطقة الإفصاح (role=region) داخل
+   الصف نفسه بتفاصيل رقمية وأزرار تعديل/حذف محدودة (بلا تعبئة
+   brand — الحذف بلون الخطر النصي).
    ========================================================= */
 
 .m-ocal,
@@ -66,7 +74,8 @@
    بزوايا radius-md 12 بلا حدود، والنشط brand-tint + brand-ink
    بوزن 600 (لا تعبئة brand). الحالة ليست باللون وحده:
    role=tab + aria-selected + وزن + تعبئة مميزة.
-   القائمة ليست مقطعًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
+   عقد 2026-10-26: يُرسم في وضع التقويم فقط — القائمة ليست مقطعًا
+   فيه (مبدّل مستقل أدناه). */
 .m-ocal__viewseg {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -101,12 +110,56 @@
   font-weight: var(--micro-weight-semibold);
 }
 
-/* صف التحكم: المحدّد وحده — سطر 48px واحد؛ الالتفاف عند الضيق
-   وتكبير النص (flex-wrap) */
+/* صف التحكم: المحدّد المقسّم (وضع التقويم فقط) + مبدّل
+   التقويم/القائمة نهاية السطر — سطر 48px واحد؛ الالتفاف عند
+   الضيق وتكبير النص (flex-wrap) */
 .m-ocal__controls {
   display: flex;
   flex-wrap: wrap;
   gap: var(--micro-space-1);
+}
+
+/* مبدّل التقويم/القائمة (عقد 2026-10-26 — تعليمات المالك 2.8):
+   زر حبّي مستقل بحد خافت في صف التحكم نفسه (منفصل عن المسار
+   المقسّم — ليس مقطعًا رابعًا فيه)؛ التسمية تصف فعل الضغط،
+   وaria-pressed=true (وضع القائمة فاعل) يلوّنه بتعبئة brand-tint
+   وbrand-ink كحالات التحديد القائمة — لا تعبئة brand قط (السطح
+   المملوء الوحيد «إضافة طلب»). */
+.m-ocal__mode-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding: var(--micro-button-padding-block) var(--micro-button-padding-inline);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-button-long);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.m-ocal__mode-toggle svg {
+  flex: none;
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  fill: none;
+  stroke: currentColor;
+}
+
+.m-ocal__mode-toggle:hover {
+  background-color: var(--micro-seg-hover-surface);
+}
+
+.m-ocal__mode-toggle[aria-pressed="true"] {
+  background-color: var(--micro-surface-selected);
+  border-color: transparent;
+  color: var(--micro-brand-ink);
+  font-weight: var(--micro-weight-semibold);
 }
 
 /* ================= 2) الشاشات الفرعية ================= */
@@ -162,14 +215,24 @@
   overflow-wrap: anywhere;
 }
 
-/* عقد المرجع الأعلى 2.3: اسم الشهر محوري (600/ink-primary) والسنة
-   بنفس المقاس بوزن 400 ولون ink-secondary — تدرّج بالوزن واللون.
-   أرقام السنة بأرقام لاتينية ثابتة العرض. */
+/* عقد 2026-10-26 (الأرقام فقط): تعبير «10 / 2026» معزول LTR كي لا
+   يقلب ترتيب أجزائه في سياق RTL — رقم الشهر والسنة بترتيب ثابت
+   في الاتجاهين (نمط نطاق الأسبوع نفسه). */
+.m-ocal__month-range {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+/* رقم الشهر محوري (600/ink-primary) والسنة بنفس المقاس بوزن 400
+   ولون ink-secondary — تدرّج بالوزن واللون (عقد رأس الشهر الرقمي)؛
+   أرقام لاتينية ثابتة العرض. */
 .m-ocal__month-label {
   font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .m-ocal__year {
@@ -589,21 +652,17 @@
   padding: var(--micro-space-6) var(--micro-space-4);
   text-align: center;
 }
-.m-ocal__rows {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-2);
-}
 
-/* ================= 6) بطاقات الطلبات (اليوم/الأسفل/القائمة) =================
-   عقد المرجع الأعلى 2.6: البطاقة كلها زر فتح تفاصيل الطلب — سطح
-   (radius-lg 16، حد خافت واحد، بلا ظل، حشو 12/16، ارتفاع أدنى 76)،
-   شبكة «عمود محتوى + سهم اتجاهي 20px» بفجوة 12؛ عمود المحتوى سطران
-   (فجوة 4): العنوان + الوقت نصًا عاديًا، ثم العميل + شارة الحالة.
-   البطاقات تتباعد 8px، والضغط طبقة 8% ink-primary. */
+/* ================= 6) صفوف الطلبات: أكورديون داخلي أحادي الفتح =================
+   عقد 2026-10-26 (تعليمات المالك — التوسيع داخل الصف): سطح البطاقة
+   (radius-lg 16، حد خافت واحد، بلا ظل) على .m-ocal__rowitem نفسه،
+   والمشغّل .m-ocal__row بداخله بلا حدود (شبكة «عمود محتوى + سهم
+   اتجاهي 20px» بفجوة 12، ارتفاع أدنى 76px، حشو 12/16) — منطقة
+   الإفصاح .m-ocal__rowpanel تُرسم داخل الصف نفسه أسفل المشغّل فتبقى
+   التفاصيل والأفعال ملاصقة للطلب المحدد (لا صندوق منفصل أسفل
+   القائمة). عمود المحتوى سطران (فجوة 4): العنوان + الوقت نصًا
+   عاديًا، ثم العميل + شارة الحالة. البطاقات تتباعد 8px، والضغط
+   طبقة 8% ink-primary، والسهم يدور نحو الأسفل عند الفتح. */
 .m-ocal__rows {
   list-style: none;
   margin: 0;
@@ -615,7 +674,11 @@
 
 .m-ocal__rowitem {
   display: flex;
+  flex-direction: column;
   min-width: 0;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-surface-base);
 }
 
 .m-ocal__row {
@@ -627,9 +690,9 @@
   min-width: 0;
   min-height: 76px;
   padding: var(--micro-space-3) var(--micro-space-4);
-  border: 1px solid var(--micro-border-divider);
+  border: 0;
   border-radius: var(--micro-radius-surface);
-  background-color: var(--micro-surface-base);
+  background-color: transparent;
   color: var(--micro-text-primary);
   text-align: start;
   cursor: pointer;
@@ -699,13 +762,104 @@
 .m-ocal__row-placeholder { flex: 1 1 0; }
 
 /* سهم البطاقة الاتجاهي 20px بلون ink-tertiary (توكن التلميح) —
-   يتبع الاتجاه من المكوّن (يسار في RTL، يمين في LTR) */
+   يتبع الاتجاه من المكوّن (يسار في RTL، يمين في LTR) ويدور نحو
+   الأسفل عند الفتح (الحالة ليست باللون وحده) */
 .m-ocal__row-chev {
   width: 20px;
   height: 20px;
   fill: none;
   stroke: currentColor;
   color: var(--micro-text-hint);
+  transition: transform var(--micro-motion-focus) var(--micro-ease-standard);
+}
+
+/* ---- منطقة الإفصاح داخل الصف (عقد 2026-10-26): تفاصيل + أفعال
+   ملاصقة للطلب المحدد — العنوان الكامل (يلتف بلا قطع)، صفوف تعريف
+   رقمية (التسمية بداية السطر والقيمة نهايته)، ثم أزرار الفعل ---- */
+.m-ocal__rowpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  padding: var(--micro-space-1) var(--micro-space-4) var(--micro-space-3);
+}
+
+.m-ocal__rowpanel[hidden] { display: none; }
+
+.m-ocal__rowpanel-title {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__rowdetails {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: 0;
+}
+
+.m-ocal__rowdetail {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-3);
+  min-width: 0;
+}
+
+.m-ocal__rowdetail dt {
+  flex: none;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+
+.m-ocal__rowdetail dd {
+  margin: 0;
+  min-width: 0;
+  text-align: end;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+  overflow-wrap: anywhere;
+}
+
+.m-ocal__rowdetail .m-ocal__row-status { flex: none; }
+
+/* أفعال الصف المفتوح: أزرار محدودة (بلا تعبئة brand — السطح
+   المملوء الوحيد «إضافة طلب»)؛ الحذف بلون الخطر النصي على
+   السطح القائم (الكلمة تحمل المعنى والتلوين ثانوي) */
+.m-ocal__rowtools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+  margin-block-start: var(--micro-space-1);
+}
+
+.m-ocal__rowtool {
+  min-height: var(--micro-touch-min); /* ≥ 48px */
+  padding: var(--micro-button-padding-block) var(--micro-button-padding-inline);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-button-long);
+  background-color: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.m-ocal__rowtool:hover,
+.m-ocal__rowtool:active {
+  background-color: var(--micro-seg-hover-surface);
+}
+
+.m-ocal__rowtool--danger {
+  color: var(--micro-danger);
 }
 
 /* الحالة: شارة نصية بلون الحالة الدلالي على تينته — النص وحده
@@ -743,7 +897,7 @@
   color: var(--micro-text-secondary);
 }
 
-/* ملاحظة الطلب القصيرة لم تعد على وجه البطاقة (عقد المرجع الأعلى 2.6 — تعرضها أسطح تفاصيل الطلب لدى المضيف؛ البيانات باقية). */
+/* الملاحظة القصيرة تُعرض في منطقة الإفصاح داخل الصف (عقد 2026-10-26) — لا عنصر مخصص على وجه البطاقة. */
 .m-ocal__row-note { display: none; }
 
 /* ================= 6b) نطاق الأسبوع =================
@@ -862,6 +1016,8 @@
 .m-ocal__picker-back,
 .m-ocal__picker-month,
 .m-ocal__row,
+.m-ocal__mode-toggle,
+.m-ocal__rowtool,
 .m-ocal__add,
 .m-ocal__retry {
   transition:

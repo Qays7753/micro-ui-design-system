@@ -146,12 +146,28 @@ def run_suite(page, base_url, label, results, out_dir, capture):
         monthYear: (document.querySelector('#app-ocal-root .m-ocal__month-trigger') || {}).textContent || null,
         card: !!document.querySelector('#app-ocal-root .m-ocal__calcard'),
         todayCell: !!document.querySelector('#app-ocal-root [data-ocal-date="2026-10-07"][aria-current="date"]'),
-        width: document.documentElement.scrollWidth
+        avatarHidden: document.querySelector('.app-avatar').hidden,
+        toggleLabel: (document.querySelector('#app-ocal-root .m-ocal__mode-toggle-text') || {}).textContent || null,
+        togglePressed: document.querySelector('#app-ocal-root [data-ocal-action=mode-toggle]').getAttribute('aria-pressed'),
+        width: document.documentElement.scrollWidth,
+        surfaceText: document.getElementById('app-ocal-root').textContent
     })""")
-    check("orders screen opens the real calendar with the Levantine month-name header",
+    AR_MONTHS = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', 'أيلول',
+                 'تشرين الأول', 'تشرين الثاني', 'كانون الأول', 'يناير', 'فبراير', 'مارس', 'أبريل',
+                 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                 'August', 'September', 'October', 'November', 'December']
+    leaked_months = [m for m in (AR_MONTHS + EN_MONTHS) if m in (orders_state["surfaceText"] or "")]
+    check("orders screen opens the real calendar with the numeric month header and no avatar",
           orders_state["screen"] == "orders" and orders_state["title"] == "الطلبات"
-          and orders_state["ocalLayout"] == "month" and orders_state["monthLabel"] == "تشرين الأول"
-          and "2026" in orders_state["monthYear"] and orders_state["card"] and orders_state["todayCell"], orders_state)
+          and orders_state["ocalLayout"] == "month" and orders_state["monthLabel"] == "10"
+          and "2026" in orders_state["monthYear"] and orders_state["card"]
+          and orders_state["todayCell"] and orders_state["avatarHidden"], orders_state)
+    check("calendar surface is numeric-only (no visible Arabic or English month names)",
+          not leaked_months, {"leaked": leaked_months})
+    check("calendar/list mode toggle is present with the truthful calendar-mode label",
+          orders_state["toggleLabel"] == "عرض القائمة" and orders_state["togglePressed"] == "false",
+          orders_state)
     page.click('#app-ocal-root .m-ocal__viewseg [data-ocal-value="week"]')
     page.wait_for_timeout(250)
     week_state = page.evaluate("""() => ({
@@ -174,6 +190,105 @@ def run_suite(page, base_url, label, results, out_dir, capture):
     page.wait_for_timeout(250)
     if capture:
         page.screenshot(path=str(out_dir / f"{label}-app-calendar-month-360.png"))
+
+    # Calendar/List toggle: real state change with truthful aria-pressed
+    page.click('#app-ocal-root [data-ocal-action="mode-toggle"]')
+    page.wait_for_timeout(300)
+    list_state = page.evaluate("""() => ({
+        view: document.getElementById('app-ocal-root').getAttribute('data-ocal-view'),
+        pressed: document.querySelector('#app-ocal-root [data-ocal-action=mode-toggle]').getAttribute('aria-pressed'),
+        label: document.querySelector('#app-ocal-root .m-ocal__mode-toggle-text').textContent,
+        viewseg: !!document.querySelector('#app-ocal-root .m-ocal__viewseg'),
+        sections: [...document.querySelectorAll('#app-ocal-root .m-ocal__list-heading')].map(e => e.textContent.trim()),
+        rows: document.querySelectorAll('#app-ocal-root [data-ocal-action=order-row]').length,
+        width: document.documentElement.scrollWidth
+    })""")
+    check("calendar/list toggle switches to the real list surface (same orders, no viewseg)",
+          list_state["view"] == "list" and list_state["pressed"] == "true"
+          and list_state["label"] == "عرض التقويم" and not list_state["viewseg"]
+          and any('القادمة' in s for s in list_state["sections"])
+          and list_state["rows"] >= 6 and list_state["width"] <= 360, list_state)
+    if capture:
+        page.screenshot(path=str(out_dir / f"{label}-app-calendar-list-360.png"))
+    # Inline accordion in list mode: expand one order with its actions in-row
+    page.click('#app-ocal-root [data-ocal-action="order-row"]')
+    page.wait_for_timeout(300)
+    acc_list = page.evaluate("""() => {
+        const r = document.getElementById('app-ocal-root');
+        const trig = r.querySelector('[data-ocal-action=order-row]');
+        const panel = r.querySelector('[data-ocal-rowpanel]:not([hidden])');
+        return {
+            expanded: trig.getAttribute('aria-expanded'),
+            panelRole: panel ? panel.getAttribute('role') : null,
+            panelInsideRow: panel ? !!panel.closest('.m-ocal__rowitem').querySelector('[data-ocal-action=order-row]') : false,
+            visiblePanels: r.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+            editBtn: !!panel.querySelector('[data-ocal-action=order-edit]'),
+            deleteBtn: !!panel.querySelector('[data-ocal-action=order-delete]')
+        };
+    }""")
+    check("order row expands inline in list mode (region inside the row with edit/delete)",
+          acc_list["expanded"] == "true" and acc_list["panelRole"] == "region"
+          and acc_list["panelInsideRow"] and acc_list["visiblePanels"] == 1
+          and acc_list["editBtn"] and acc_list["deleteBtn"], acc_list)
+    # Back to calendar; the selection is preserved
+    page.click('#app-ocal-root [data-ocal-action="mode-toggle"]')
+    page.wait_for_timeout(300)
+    back_cal = page.evaluate("""() => ({
+        view: document.getElementById('app-ocal-root').getAttribute('data-ocal-view'),
+        selected: document.getElementById('app-ocal-root').getAttribute('data-ocal-selected-date'),
+        viewseg: !!document.querySelector('#app-ocal-root .m-ocal__viewseg'),
+        pressed: document.querySelector('#app-ocal-root [data-ocal-action=mode-toggle]').getAttribute('aria-pressed')
+    })""")
+    check("calendar/list toggle returns to calendar preserving the selected day",
+          back_cal["view"] == "calendar" and back_cal["selected"] == "2026-10-07"
+          and back_cal["viewseg"] and back_cal["pressed"] == "false", back_cal)
+
+    # Inline accordion in calendar mode + host edit/delete flows.
+    # (The row expanded in list mode stays expanded — clicking the SECOND
+    #  row demonstrates the single-open switch instead of collapsing.)
+    page.locator('#app-ocal-root [data-ocal-action="order-row"]').nth(1).click()
+    page.wait_for_timeout(300)
+    acc_cal = page.evaluate("""() => {
+        const r = document.getElementById('app-ocal-root');
+        const trig = r.querySelector('[data-ocal-action=order-row][aria-expanded=true]');
+        const panel = r.querySelector('[data-ocal-rowpanel]:not([hidden])');
+        return {
+            expanded: trig ? trig.getAttribute('aria-expanded') : null,
+            visiblePanels: r.querySelectorAll('[data-ocal-rowpanel]:not([hidden])').length,
+            editVisible: !!panel.querySelector('[data-ocal-action=order-edit]'),
+            detailsText: panel ? panel.textContent : ''
+        };
+    }""")
+    check("order row expands inline in calendar mode with numeric details in-row",
+          acc_cal["expanded"] == "true" and acc_cal["visiblePanels"] == 1
+          and acc_cal["editVisible"] and '/2026' in acc_cal["detailsText"], acc_cal)
+    page.click('#app-ocal-root [data-ocal-rowpanel]:not([hidden]) [data-ocal-action="order-edit"]')
+    page.wait_for_timeout(300)
+    editor_from_row = page.evaluate("""() => ({
+        open: !document.getElementById('app-ocal-editor').hidden,
+        stillExpanded: (document.querySelector('#app-ocal-root [data-ocal-action=order-row][aria-expanded=true]') || {}).getAttribute('data-ocal-id') || null
+    })""")
+    check("in-row edit action opens the host editor without collapsing the row",
+          editor_from_row["open"] and editor_from_row["stillExpanded"] == "od-01", editor_from_row)
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(200)
+    page.click('#app-ocal-root [data-ocal-rowpanel]:not([hidden]) [data-ocal-action="order-delete"]')
+    page.wait_for_timeout(350)
+    dialog_state2 = page.evaluate("""() => ({
+        open: !document.getElementById('app-dialog-layer').hidden,
+        text: document.getElementById('app-dialog-text').textContent,
+        rows: document.querySelectorAll('#app-ocal-root [data-ocal-action=order-row]').length
+    })""")
+    check("in-row delete action opens the existing confirmation dialog",
+          dialog_state2["open"] and 'لا يمكن التراجع' in dialog_state2["text"], dialog_state2)
+    page.click('#app-dialog-confirm')
+    page.wait_for_timeout(350)
+    after_confirm = page.evaluate("""() => ({
+        closed: document.getElementById('app-dialog-layer').hidden,
+        rows: document.querySelectorAll('#app-ocal-root [data-ocal-action=order-row]').length
+    })""")
+    check("confirming the dialog deletes the order and collapses it honestly",
+          after_confirm["closed"] and after_confirm["rows"] == dialog_state2["rows"] - 1, after_confirm)
 
     # Editor + overlays reachable in the flow
     page.click('#app-ocal-root [data-ocal-action="add"]')
@@ -233,6 +348,35 @@ def run_suite(page, base_url, label, results, out_dir, capture):
     page.wait_for_timeout(250)
     if capture:
         page.screenshot(path=str(out_dir / f"{label}-app-account-360.png"))
+
+    # Full Component Showcase reachable from the clean app (no hidden anchors):
+    # one clearly labelled row in the account screen opens the state view with
+    # every catalog section; the showcase header link returns to the app.
+    page.click('#app-showcase-open')
+    page.wait_for_timeout(450)
+    showcase_state = page.evaluate("""() => ({
+        view: document.body.getAttribute('data-view'),
+        sections: document.querySelectorAll('.sc-section').length,
+        visibleSections: [...document.querySelectorAll('.sc-section')]
+          .filter(s => s.getClientRects().length > 0).length,
+        headerNav: !!document.querySelector('.showcase-header [data-showcase-view=app]'),
+        ocalTools: document.querySelectorAll('#sc-ocal-root').length
+    })""")
+    check("full component showcase is reachable from the account screen (all sections, no hidden anchor)",
+          showcase_state["view"] == "state" and showcase_state["sections"] >= 14
+          and showcase_state["visibleSections"] >= 14
+          and showcase_state["headerNav"] and showcase_state["ocalTools"] == 1,
+          showcase_state)
+    if capture:
+        page.screenshot(path=str(out_dir / f"{label}-full-showcase-360.png"))
+    page.click('.showcase-header [data-showcase-view="app"]')
+    page.wait_for_timeout(350)
+    back_app = page.evaluate("""() => ({
+        view: document.body.getAttribute('data-view'),
+        appVisible: document.getElementById('app-preview').getClientRects().length > 0
+    })""")
+    check("showcase header returns to the clean app preview",
+          back_app["view"] == "app" and back_app["appVisible"], back_app)
 
     # ---- 4) Robustness: widths × directions + simulated 200% typography ----
     for direction in ("rtl", "ltr"):

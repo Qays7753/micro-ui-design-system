@@ -1,0 +1,180 @@
+{
+  "count": 43,
+  "dimensionFailures": [],
+  "consoleErrors": [],
+  "errorCount": 0,
+  "files": {
+    "ltr-01-home-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-02-orders-month-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-03-orders-week-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-04-orders-day-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-05-orders-list-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-06-orders-list-expanded-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-07-switching-expansion-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-08-order-expanded-one-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-09-add-editor-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-10-delete-dialog-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-11-month-picker-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-12-reports-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-13-account-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-14-full-showcase-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-15-20orders-expanded-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-16-orders-200pct-360x780.png": [
+      360,
+      780
+    ],
+    "ltr-orders-320x640.png": [
+      320,
+      640
+    ],
+    "ltr-orders-320x780.png": [
+      320,
+      780
+    ],
+    "ltr-orders-390x780.png": [
+      390,
+      780
+    ],
+    "ltr-orders-430x780.png": [
+      430,
+      780
+    ],
+    "rtl-01-home-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-02-orders-month-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-03-orders-week-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-04-orders-day-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-05-orders-list-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-06-orders-list-expanded-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-07-switching-expansion-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-08-order-expanded-one-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-09-add-editor-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-10-delete-dialog-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-11-month-picker-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-12-reports-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-13-account-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-14-full-showcase-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-15-20orders-expanded-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-16-orders-200pct-360x780.png": [
+      360,
+      780
+    ],
+    "rtl-orders-320x640.png": [
+      320,
+      640
+    ],
+    "rtl-orders-320x780.png": [
+      320,
+      780
+    ],
+    "rtl-orders-390x780.png": [
+      390,
+      780
+    ],
+    "rtl-orders-430x780.png": [
+      430,
+      780
+    ],
+    "standalone-app-entry-360x780.png": [
+      360,
+      780
+    ],
+    "standalone-orders-list-expanded-360x780.png": [
+      360,
+      780
+    ],
+    "standalone-orders-month-360x780.png": [
+      360,
+      780
+    ]
+  }
+}

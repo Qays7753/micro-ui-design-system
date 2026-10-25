@@ -163,10 +163,6 @@
       ocalRoot.addEventListener('order-schedule:order-delete-request', function (e) {
         removeOcalOrder(e.detail && e.detail.id);
       });
-      q('sc-ocal-view').addEventListener('click', function () {
-        var isList = ocalRoot.getAttribute('data-ocal-view') === 'list';
-        ocalInstance.setView(isList ? 'calendar' : 'list');
-      });
       q('sc-ocal-empty').addEventListener('click', function () { ocalInstance.setData([]); });
       q('sc-ocal-loading').addEventListener('click', function () {
         ocalInstance.setLoading(true);
@@ -638,6 +634,10 @@
       });
       if (title) title.textContent = APP_TITLES[name] || '';
       if (backBtn) backBtn.hidden = name !== 'signin';
+      /* عقد 2026-10-26 (عقد منتج التقويم): لا صورة رمزية على شاشة
+         الطلبات/التقويم — تُخفى هناك فقط وتبقى في بقية الشاشات */
+      var avatarBtn = root.querySelector('.app-avatar');
+      if (avatarBtn) avatarBtn.hidden = (name === 'orders');
       /* شاشة فرعية كاملة العرض: شريط الألسنة يختفي كما في تطبيقات الهاتف */
       root.classList.toggle('app-shell--subscreen', name === 'signin');
       var navKey = name === 'signin' ? 'account' : name;
@@ -876,74 +876,10 @@
         var order = findOrder(e.detail && e.detail.id);
         if (order) openDeleteDialog(order);
       });
-
-      /* ---- تفاصيل الطلب (عقد المرجع الأعلى 2.6): البطاقة كلها زر
-         order-open — أفعال التعديل/الحذف تعيش هنا بدل وجه البطاقة،
-         والحذف يمر من حوار التأكيد القائم نفسه ---- */
-      var details = document.getElementById('app-ocal-details');
-      var detailsOrderId = null;
-      function openDetails(order) {
-        if (!details) return;
-        detailsOrderId = order.id;
-        document.getElementById('app-ocal-details-order-title').textContent = order.title;
-        document.getElementById('app-ocal-details-date').textContent = numericDate(order.date) || 'غير مجدول';
-        document.getElementById('app-ocal-details-time').textContent = order.time || '—';
-        document.getElementById('app-ocal-details-customer').textContent = order.customer || '—';
-        document.getElementById('app-ocal-details-note').textContent = order.note || '—';
-        var statusEl = document.getElementById('app-ocal-details-status');
-        var statusEmpty = document.getElementById('app-ocal-details-status-empty');
-        if (order.statusKey !== '') {
-          var st = APP_STATUSES[order.statusKey] ||
-            { label: String(order.statusKey), tone: 'neutral' };
-          statusEl.hidden = false;
-          if (statusEmpty) statusEmpty.hidden = true;
-          statusEl.textContent = st.label;
-          statusEl.className = 'm-ocal__row-status m-ocal__row-status--' + st.tone;
-        } else {
-          statusEl.hidden = true;
-          if (statusEmpty) statusEmpty.hidden = false;
-        }
-        editor.hidden = true;
-        details.hidden = false;
-        /* فتح سطح التفاصيل أمام عين المستخدم: التركيز يظهر السطح تلقائيًا */
-        document.getElementById('app-ocal-details-edit').focus({ preventScroll: false });
-      }
-      function closeDetails() {
-        if (!details) return;
-        details.hidden = true;
-        var openId = detailsOrderId;
-        detailsOrderId = null;
-        var row = openId
-          ? ocalRoot.querySelector('[data-ocal-id="' + openId + '"][data-ocal-action="order-row"]')
-          : null;
-        if (row && row.focus) row.focus({ preventScroll: true });
-      }
-      if (details) {
-        ocalRoot.addEventListener('order-schedule:order-open', function (e) {
-          var order = findOrder(e.detail && e.detail.id);
-          if (order) openDetails(order);
-        });
-        document.getElementById('app-ocal-details-edit').addEventListener('click', function () {
-          var order = findOrder(detailsOrderId);
-          details.hidden = true;
-          if (order) openEditor({ mode: 'edit', order: order });
-          else details.hidden = false;
-        });
-        document.getElementById('app-ocal-details-delete').addEventListener('click', function () {
-          var order = findOrder(detailsOrderId);
-          if (!order) return;
-          appDemo.detailsReturn = detailsOrderId;
-          details.hidden = true;
-          openDeleteDialog(order);
-        });
-        document.getElementById('app-ocal-details-close').addEventListener('click', closeDetails);
-        details.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') {
-            e.preventDefault();
-            closeDetails();
-          }
-        });
-      }
+      /* عقد 2026-10-26 (أكورديون داخلي أحادي الفتح): order-open يطلقه
+         المكوّن عند فتح صفّ الطلب — لا سطح تفاصيل منفصلًا أسفل
+         القائمة بعد الآن؛ التفاصيل وأزرار تعديل/حذف داخل الصف نفسه
+         (المحرر وحوار تأكيد الحذف القائمان أعلاه هما سطحا الفعلين). */
     }
 
     /* ---- منتجقي المورد (عقد المنتقي B03 نفسه) ---- */
@@ -991,6 +927,16 @@
     var signinOpen = document.getElementById('app-signin-open');
     if (signinOpen) signinOpen.addEventListener('click', function () {
       showScreen('signin');
+    });
+
+    /* عقد 2026-10-26 (معرض المكونات الكامل في متناول واضح): صف واحد
+       في شاشة حسابي يفتح سطح مختبر الحالات (14 عائلة + 6 متغيرات)
+       بلا مراسي مخفية — والعودة عبر رابط «المعاينة المحمولة» في
+       رأس المعرض نفسه. */
+    var showcaseOpen = document.getElementById('app-showcase-open');
+    if (showcaseOpen) showcaseOpen.addEventListener('click', function () {
+      setShowcaseView('state');
+      window.scrollTo({ top: 0, behavior: 'instant' });
     });
 
     showScreen('home');
