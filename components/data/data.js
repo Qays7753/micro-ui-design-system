@@ -671,6 +671,21 @@
     var plot = chart.querySelector('[data-plot]');
     plot.textContent = '';
     var known = items.filter(function (item) { return item.value !== null; });
+    /* 2026-10-25 (عقد المالك): كل القيم مجهولة/غير قابلة للقراءة في
+       النطاق الموقّع = لا بيانات قابلة للرسم — لا محور صفر ولا تسمية
+       «0» توحيان بقيمة موجودة؛ رسالة فراغ صادقة + القراءات الكاملة
+       بكل حالاتها (نفس عقد bars/line للفراغ، والتمييز صفر/مجهول محفوظ
+       في القراءات والجدول) */
+    if (known.length === 0) {
+      var emptySigned = document.createElement('p');
+      emptySigned.className = 'm-chart__empty';
+      emptySigned.setAttribute('role', 'status');
+      emptySigned.textContent = 'لا توجد بيانات لعرضها.';
+      plot.appendChild(emptySigned);
+      appendFullReadingRows(chart, plot, items, '');
+      chart.setAttribute('data-scale-state', 'empty');
+      return;
+    }
     var low = Math.min.apply(null, known.map(function (item) { return item.value; }).concat([0]));
     var high = Math.max.apply(null, known.map(function (item) { return item.value; }).concat([0]));
     var minRaw = chart.getAttribute('data-min'), maxRaw = chart.getAttribute('data-max');
@@ -1375,7 +1390,21 @@
     table.textContent = '';
     var caption = document.createElement('caption');
     var titleEl = chart.querySelector('.m-chart__title');
-    caption.textContent = String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim();
+    /* 2026-10-25 (عقد المالك — اكتمال العرض البديل): العنوان + الوحدة
+       + الفترة (+ المقام المعلن للتوزيع) داخل الجدول نفسه — لا تُترك
+       خارج العرض البديل في شريط السياق وحده */
+    var captionParts = [String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim()];
+    var unitTxt = String(chart.getAttribute('data-unit') || '').trim();
+    var periodTxt = String(chart.getAttribute('data-period') || '').trim();
+    if (unitTxt) captionParts.push('الوحدة: ' + unitTxt);
+    if (periodTxt) captionParts.push('الفترة: ' + periodTxt);
+    if (chart.getAttribute('data-chart') === 'donut') {
+      var totalRaw = chart.getAttribute('data-total');
+      if (totalRaw !== null && String(totalRaw).trim() !== '') {
+        captionParts.push((chart.getAttribute('data-total-label') || 'الإجمالي') + ': ' + String(totalRaw).trim());
+      }
+    }
+    caption.textContent = captionParts.filter(function (p) { return p !== ''; }).join('، ');
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
@@ -1560,7 +1589,9 @@
     chart.removeAttribute('data-scale-detail');
     chart.removeAttribute('data-axis-state');
     var domain = chart.getAttribute('data-value-domain') || 'non-negative';
-    if ((kind === 'bars' || kind === 'line') && items.length === 0) {
+    /* 2026-10-25 (عقد المالك): الفراغ يشمل الدوائر المساحية أيضًا — لا
+       إطار فارغ صامت؛ نفس حالة «لا توجد بيانات» الموثقة bars/line */
+    if ((kind === 'bars' || kind === 'line' || kind === 'bubbles') && items.length === 0) {
       var emptyPlot = chart.querySelector('[data-plot]');
       emptyPlot.textContent = '';
       var empty = document.createElement('p');

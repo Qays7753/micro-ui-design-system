@@ -612,7 +612,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">07 · B05</p>
         <h2 class="sc-section__title" id="sc-data-title">البيانات والرسوم <span class="sc-pill sc-pill--current" data-catalog-family="data">STABLE UI</span></h2>
-        <p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح.</p>
+        <p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير ويحمل الوحدة والفترة في تسميته (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح، ولا بيانات تُعرض كحالة فراغ صادقة لا كصفر.</p>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -691,6 +691,24 @@
               <li data-series="c" data-label="مستودع" data-value=""></li>
             </template>
             <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+        <!-- 2026-10-25 (عقد المالك): لا بيانات ≠ صفر حقيقي — عرضان صادقان
+             في فتحة الرسم نفسها: مصدر فارغ = رسالة فراغ (لا محاور/حلقات
+             وهمية)، والصفر الصريح يظهر كعلامة صفر معروضة (راجع عمود
+             «مشتريات» في أعمدة التوزيع أعلاه). -->
+        <div class="sc-grid-2" id="sc-chart-nodata">
+          <div class="m-chart m-chart--bars" id="sc-chart-empty-bars" data-chart="bars" data-max="12" data-summary-text="مصدر فارغ تمامًا: حالة لا بيانات، لا صفر مفترض ولا محاور.">
+            <h3 class="m-chart__title">لا بيانات (أعمدة)</h3>
+            <ul class="m-chart__data" hidden></ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--donut" id="sc-chart-empty-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="مصدر فارغ تمامًا: حلقة فراغ صادقة، لا نسب مختلقة.">
+            <h3 class="m-chart__title">لا بيانات (توزيع)</h3>
+            <ul class="m-chart__data" hidden></ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
         </div>
@@ -798,7 +816,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">08 · SPEC-02</p>
         <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current" data-catalog-family="metric-comparison">STABLE UI</span></h2>
-        <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا؛ الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
+        <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا (flat الموصى بها؛ compact للكثافة الأعلى بنفس العقد)، والبطاقات المدمجة للقراءات المحورية، وfeatured إبرازًا اختياريًا واحدًا. الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
       </div>
       <div class="sc-block sc-stack">
         <!-- قرار عرض 2026-10-25 (دليل قياس عند 320px): دوائر المقاييس بحجم 112/70/42px

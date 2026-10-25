@@ -351,6 +351,31 @@ def run_interaction_matrix(base_url, label, screenshot_prefix):
     t(f"[{label}] السالب في أشرطة المقارنة (موقعة حول الصفر)", "مرتجعات" in zvals["metric"], zvals["metric"][:80])
     t(f"[{label}] عقد الحالة data-scale-state مكتوب كل تصيير", len(zvals["scaleStates"]) > 0, zvals["scaleStates"][:60])
 
+    # ---- 9b) لا بيانات مقابل صفر حقيقي (عقد المالك 2026-10-25) ----
+    nodata = page.evaluate("""() => {
+      const bars = document.querySelector('#sc-chart-empty-bars');
+      const donut = document.querySelector('#sc-chart-empty-donut');
+      if (!bars || !donut) return { present: false };
+      const barsEmpty = bars.querySelector('.m-chart__empty');
+      const donutEmpty = donut.querySelector('.m-chart__empty') || donut.textContent.includes('لا توجد بيانات');
+      return {
+        present: true,
+        barsMsg: barsEmpty ? barsEmpty.textContent.trim() : '',
+        barsState: bars.getAttribute('data-scale-state'),
+        barsNoAxes: bars.querySelectorAll('.m-chart__bar, .m-chart__baseline, svg').length === 0,
+        donutHonest: donut.textContent.includes('لا توجد بيانات'),
+        donutNoSlices: donut.querySelectorAll('.m-donut__svg circle[stroke^="var(--micro-data"]').length === 0,
+        realZeroNearby: document.querySelector('#sc-chart-bars').textContent.includes('0')
+      };
+    }""")
+    t(f"[{label}] عرض لا بيانات: أعمدة فارغة تعرض رسالة فراغ بلا محاور",
+      nodata["present"] and nodata["barsMsg"] == "لا توجد بيانات لعرضها."
+      and nodata["barsState"] == "empty" and nodata["barsNoAxes"], str(nodata)[:120])
+    t(f"[{label}] عرض لا بيانات: توزيع فارغ بحلقة فراغ صادقة بلا شرائح",
+      nodata["present"] and nodata["donutHonest"] and nodata["donutNoSlices"], str(nodata)[:120])
+    t(f"[{label}] الصفر الحقيقي مميز عن لا بيانات في القسم نفسه",
+      nodata["present"] and nodata["realZeroNearby"], str(nodata)[:120])
+
     # ---- 10) مفاتيح الإعدادات ----
     jclick("#sc-account-root [data-account-open]")
     wait(350)

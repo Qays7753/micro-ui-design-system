@@ -118,6 +118,21 @@ main{width:100%;max-width:430px;margin:auto;padding:12px;display:grid;gap:24px}
 <section class="m-chart m-chart--bars" data-chart="bars" data-max="10" data-unit="نقطة من المضيف" data-period="فترة يحددها المضيف" data-title="عنوان سياق المضيف" id="metadata">
 <h2 class="m-chart__title">عنوان الرسم المرئي</h2><ul class="m-chart__data" hidden>
 <li data-series="a" data-label="قراءة" data-value="4"></li></ul><div class="m-chart__plot" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--bubbles" data-chart="bubbles" data-max="10" id="bubbles-empty">
+<h2 class="m-chart__title">دوائر بلا بيانات</h2>
+<ul class="m-chart__data" hidden></ul>
+<div class="m-chart__plot" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--bars" data-chart="bars" data-value-domain="signed" id="signed-empty">
+<h2 class="m-chart__title">موقّع كله مجهول</h2><ul class="m-chart__data" hidden>
+<li data-series="a" data-label="مجهول أول" data-value=""></li>
+<li data-series="b" data-label="مجهول ثانٍ" data-value=""></li></ul>
+<div class="m-chart__plot" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-unit="طلب" data-period="أكتوبر" id="donut-unit">
+<h2 class="m-chart__title">توزيع موثّق الوحدة والفترة</h2><ul class="m-chart__data" hidden>
+<li data-series="a" data-label="فئة أ" data-value="11"></li>
+<li data-series="b" data-label="فئة ب" data-value="6"></li>
+<li data-series="c" data-label="صفر" data-value="0"></li></ul>
+<div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
 </main><script src="/components/data/data.js"></script><script src="/components/data/packed-circle.js"></script>
 <script src="/components/metric-comparison/metric-comparison.js"></script></body></html>"""
 
@@ -285,6 +300,110 @@ def main():
                                 page.screenshot(path=str(out / f"light-data-{width}-{direction}-200-type.png"), full_page=True)
                         page.close()
                         context.close()
+
+            # ---------- 2026-10-25 owner contracts ----------
+            if not args.capture_only:
+                context = browser.new_context(
+                    viewport={"width": 320, "height": 900},
+                    device_scale_factor=1,
+                    color_scheme="light",
+                )
+                page = context.new_page()
+                page.on("pageerror", lambda exc: errors.append(str(exc)))
+                page.on("console", lambda msg: errors.append(msg.text) if msg.type == "error" else None)
+                page.on("requestfailed", lambda req: errors.append(req.url + ": " + str(req.failure)))
+                page.goto(url)
+                page.evaluate("() => document.fonts.ready")
+                page.wait_for_timeout(80)
+
+                check("bubbles with an empty dataset renders the honest no-data state (no blank frame)",
+                      page.locator("#bubbles-empty .m-chart__empty").count() == 1
+                      and page.locator("#bubbles-empty .m-bubbles").count() == 0
+                      and page.locator("#bubbles-empty .m-bubble").count() == 0
+                      and page.locator("#bubbles-empty[data-scale-state=empty]").count() == 1
+                      and "لا توجد بيانات" in page.locator("#bubbles-empty .m-chart__empty").inner_text())
+                check("signed chart with all-unknown values renders no axes and keeps complete readings",
+                      page.locator("#signed-empty .m-chart__empty").count() == 1
+                      and page.locator("#signed-empty [data-zero-axis]").count() == 0
+                      and page.locator("#signed-empty .m-chart__readings dt").count() == 2
+                      and page.locator("#signed-empty[data-scale-state=empty]").count() == 1)
+                page.locator("#donut-unit .m-chart__disclose").click()
+                donut_caption = page.locator("#donut-unit table.m-chart__dataset caption").inner_text()
+                donut_rows = page.locator("#donut-unit table.m-chart__dataset tbody tr").all_text_contents()
+                check("donut alternate table caption carries unit, period and declared denominator",
+                      "الوحدة: طلب" in donut_caption and "الفترة: أكتوبر" in donut_caption
+                      and "إجمالي الطلبات: 25" in donut_caption, donut_caption)
+                check("donut mixed zero dataset keeps the zero category in the table",
+                      len(donut_rows) == 3 and any("0" in r for r in donut_rows)
+                      and "فئة أ" in donut_rows[0] and "صفر" in donut_rows[2], donut_rows)
+                compact = page.evaluate("""()=>{
+                    const chart=document.querySelector('#donut');
+                    const svg=chart.querySelector('.m-donut__svg');
+                    const legend=chart.querySelector('.m-legend');
+                    if(!svg||!legend) return {ok:false};
+                    const s=svg.getBoundingClientRect(), l=legend.getBoundingClientRect();
+                    return {ok:true, svgW:Math.round(s.width), beside: l.left < s.right - 2 || l.right > s.left + 2,
+                            sameRow: Math.abs(l.top - s.top) < s.height};
+                }""")
+                check("donut compact presentation at 320px: 112px ring with the legend beside it",
+                      compact.get("ok") and compact.get("svgW") == 112
+                      and compact.get("beside") and compact.get("sameRow"), compact)
+                wide_ctx = browser.new_context(viewport={"width": 430, "height": 900}, device_scale_factor=1, color_scheme="light")
+                wide_page = wide_ctx.new_page()
+                wide_page.goto(url)
+                wide_page.evaluate("() => document.fonts.ready")
+                wide_page.wait_for_timeout(80)
+                wide_donut = wide_page.evaluate("""()=>{
+                    const svg=document.querySelector('#donut').querySelector('.m-donut__svg');
+                    return Math.round(svg.getBoundingClientRect().width);
+                }""")
+                check("donut keeps the 148px ring at a wide container (responsive contract)",
+                      wide_donut == 148, wide_donut)
+                wide_page.close()
+                wide_ctx.close()
+
+                check("packed-circle gains the complete table switch with every category and state",
+                      page.locator("#packed .m-chart__disclose").count() == 1
+                      and page.locator("#packed .m-chart__disclose").get_attribute("aria-expanded") == "false")
+                page.locator("#packed .m-chart__disclose").click()
+                packed_rows = page.locator("#packed table.m-chart__dataset tbody tr").all_text_contents()
+                check("packed-circle table opens with all three readings and a semantic structure",
+                      page.locator("#packed .m-chart__disclose").get_attribute("aria-expanded") == "true"
+                      and len(packed_rows) == 3
+                      and page.locator("#packed table.m-chart__dataset tbody th[scope=row]").count() == 3,
+                      packed_rows)
+                page.locator("#packed .m-chart__disclose").click()
+                check("packed-circle table hides again with the button label restored",
+                      page.locator("#packed table.m-chart__dataset").is_hidden()
+                      and page.locator("#packed .m-chart__disclose").inner_text() == "عرض البيانات كجدول")
+
+                check("metric-circles gains the complete table switch",
+                      page.locator("#metric-circles .m-main-metric__disclose").count() == 1)
+                page.locator("#metric-circles .m-main-metric__disclose").click()
+                circles_rows = page.locator("#metric-circles table.m-main-metric__dataset tbody tr").all_text_contents()
+                check("metric-circles table opens with label, value and state for every reading",
+                      page.locator("#metric-circles .m-main-metric__disclose").get_attribute("aria-expanded") == "true"
+                      and len(circles_rows) == 3
+                      and any("صفر" in r for r in circles_rows)
+                      and page.locator("#metric-circles table.m-main-metric__dataset thead th[scope=col]").count() == 3,
+                      circles_rows)
+                page.locator("#main-flat .m-main-metric__disclose").click()
+                flat_rows = page.locator("#main-flat table.m-main-metric__dataset tbody tr").all_text_contents()
+                flat_headers = page.locator("#main-flat table.m-main-metric__dataset thead th").all_text_contents()
+                check("metric-bars table opens with value, unit and period columns for every reading",
+                      page.locator("#main-flat .m-main-metric__disclose").get_attribute("aria-expanded") == "true"
+                      and len(flat_rows) == 3 and flat_headers == ["الفئة", "القيمة", "الوحدة", "الفترة"]
+                      and any("(سالب)" in r for r in flat_rows)
+                      and any("(غير متاح)" in r for r in flat_rows),
+                      {"rows": flat_rows, "headers": flat_headers})
+                overflow = page.evaluate(
+                    "()=>({doc: document.documentElement.scrollWidth, view: innerWidth})")
+                check("all new tables keep the page free of horizontal overflow at 320px",
+                      overflow["doc"] <= overflow["view"] + 1, overflow)
+                page.screenshot(path=str(out / "light-data-2026-10-25-contracts-320-rtl.png"), full_page=True)
+                page.close()
+                context.close()
+
             check("no browser, console, or resource errors", not errors, errors)
             browser.close()
     finally:

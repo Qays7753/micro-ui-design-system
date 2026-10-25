@@ -183,6 +183,82 @@
     return { text: it.display || String(it.value), none: false };
   }
 
+  /* 2026-10-25 (عقد المالك — D-UI-04 موحّد): إفصاح جدول كامل لكل
+     رسم كمّي — نفس عقد DOM وأصناف data.js (m-chart__dataset-wrap +
+     m-chart__disclose + m-chart__dataset) لأن هذا الامتداد يستعير عقد
+     B05 وdata.css أصلًا. الجدول يعاد بناؤه كل دورة من المصدر نفسه
+     فيبقى متزامنًا بنيويًا؛ الحالات النصية نفسها (صفر/مجهول/غير
+     متاح/سالب) هي خلايا القيمة — لا فقد لأي فئة أو حالة. */
+  var packedUid = 0;
+
+  function packedValueState(it) {
+    if (!it.hasAttr) return '(غير معروف)';
+    if (it.value === null) return '(غير متاح)';
+    if (it.value < 0) return (it.display || String(it.value)) + ' (سالب غير صالح للمساحة)';
+    if (it.value === 0) return '0 (صفر)';
+    return it.display || String(it.value);
+  }
+
+  function syncPackedTable(chart) {
+    var items = itemsOf(chart);
+    var wrap = chart.querySelector('.m-chart__dataset-wrap');
+    var btn, table;
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'm-chart__dataset-wrap';
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'm-chart__disclose';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'عرض البيانات كجدول';
+      table = document.createElement('table');
+      table.className = 'm-chart__dataset';
+      table.id = 'micro-packed-dataset-' + (++packedUid);
+      btn.setAttribute('aria-controls', table.id);
+      table.hidden = true;
+      wrap.appendChild(btn);
+      wrap.appendChild(table);
+      chart.appendChild(wrap);
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        table.hidden = open;
+        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+      });
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    if (!btn || !table) return;
+    table.textContent = '';
+    var caption = document.createElement('caption');
+    caption.textContent = String(chart.getAttribute('data-title') || '').trim();
+    table.appendChild(caption);
+    var thead = document.createElement('thead');
+    var headRow = document.createElement('tr');
+    ['الفئة', 'القيمة'].forEach(function (h) {
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'col');
+      th.textContent = h;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    items.forEach(function (it) {
+      var tr = document.createElement('tr');
+      var th = document.createElement('th');
+      th.setAttribute('scope', 'row');
+      th.textContent = it.label;
+      tr.appendChild(th);
+      var td = document.createElement('td');
+      td.textContent = packedValueState(it);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+  }
+
   function scaleError(chart, positiveExists, vmaxDerived) {
     /* R-05 (2026-10-25): انفصال نص المستخدم عن التشخيص التقني كما في
        data.js donutRefusal — نص موجز بلا أسماء سمات في الواجهة،
@@ -236,7 +312,7 @@
     plot.appendChild(legend);
   }
 
-  function render(chart) {
+  function renderPacked(chart) {
     if (observers.has(chart)) observers.get(chart).disconnect();
     observers.delete(chart);
     if (resizeFrames.has(chart)) window.cancelAnimationFrame(resizeFrames.get(chart));
@@ -386,6 +462,13 @@
     chart.dispatchEvent(new CustomEvent('micro-packed:rendered', {
       bubbles: true, detail: { ok: true, vmaxDerived: !hasMaxAttr }
     }));
+  }
+
+  /* render العام: جسم الرسم ثم مزامنة جدول الإفصاح في كل مسار
+     (نجاح/رفض مقياس/كثافة) — العرض البديل الكامل دائمًا (عقد المالك) */
+  function render(chart) {
+    renderPacked(chart);
+    syncPackedTable(chart);
   }
 
   window.MicroPacked = {

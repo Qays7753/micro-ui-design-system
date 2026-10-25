@@ -135,9 +135,12 @@ def main():
             }""")
             check(geometry["compactText"] == geometry["standardText"] == "18",
                   "compact/standard info cards must retain identical readings")
-            check(geometry["compactPadding"] != geometry["standardPadding"] and
-                  geometry["compactNumberSize"] != geometry["standardNumberSize"],
-                  "compact card must use its existing compact spacing and reading scale")
+            # 2026-10-25: عقد «ال compact هو الافتراضي القابل لإعادة الاستخدام»
+            # (موثق في info-strip.css) — modifier الـcompact مطابق للأساس بتعمد؛
+            # الفحص يثبت التطابق (لا انحراف قراءة أو حشو) بدل الاختلاف القديم.
+            check(geometry["compactPadding"] == geometry["standardPadding"] and
+                  geometry["compactNumberSize"] == geometry["standardNumberSize"],
+                  "compact card matches the documented reusable default scale (identical readings)")
             check(geometry["peekWidth"] >= geometry["peekContainer"] - 1,
                   "narrow peek container must fall back to a full-width slide")
 
@@ -158,7 +161,7 @@ def main():
 
             showcase_page = browser.new_page(viewport={"width": 1280, "height": 900})
             showcase_page.goto(
-                f"http://127.0.0.1:{server.server_port}/previews/ui-system-showcase/index.html",
+                f"http://127.0.0.1:{server.server_port}/previews/ui-system-showcase/index.html#state-lab",
                 wait_until="networkidle",
             )
             showcase_page.wait_for_function("window.MicroOrderSchedule && document.querySelector('#sc-main-metric-flat [data-bar-source] li')")
@@ -198,13 +201,16 @@ def main():
                   let overlap=false, undersized=[];
                   boxes.forEach((a,i)=>{
                     if (!a.cell && (a.w<48 || a.h<48)) undersized.push(i);
-                    if (a.cell && (a.w<48 || a.h<48)) undersized.push(i);
+                    /* عقد 2026-10-24/25: خلية الشهر المدمجة >=24 عرضًا و>=48 ارتفاعًا
+                       (WCAG 2.5.8 موثق)؛ الممتدة مربع >=48 */
+                    if (a.cell && (a.w<24 || a.h<48)) undersized.push(i);
                     boxes.slice(i+1).forEach(b=>{
                       if (a.x < b.x+b.w-.1 && a.x+a.w > b.x+.1 &&
                           a.y < b.y+b.h-.1 && a.y+a.h > b.y+.1) overlap=true;
                     });
                   });
                   return {width:root.getBoundingClientRect().width,view:root.getAttribute('data-ocal-view'),
+                    compact:root.getAttribute('data-ocal-compact'),auto:root.getAttribute('data-ocal-auto-view'),
                     calView:root.getAttribute('data-ocal-cal-view'),
                     preferredCalView:root.getAttribute('data-ocal-preferred-cal-view'),
                     auto:root.getAttribute('data-ocal-auto-view'),
@@ -213,13 +219,21 @@ def main():
                     undersized:undersized.length,overlap,buttonCount:buttons.length};
                 }""")
 
+            # 2026-10-24/25 contract: the complete month grid renders at EVERY
+            # root width; <360px flips data-ocal-compact (CSS-only, no re-render,
+            # no focus loss); the old auto-day fallback and its data-ocal-auto-view
+            # attribute were removed — this section asserts the current contract.
             for width in (320, 360, 390, 430):
                 result = set_width(width)
-                expected = "day" if width < 360 else "none"
-                check(result["auto"] == expected,
-                      f"{width}px schedule width should select {expected} responsive mode")
-                check(result["cellCount"] == 0 if width < 360 else result["cellCount"] > 0,
-                      f"{width}px schedule should show the appropriate existing calendar alternative")
+                expected_compact = "true" if width < 360 else "false"
+                check(result["auto"] is None,
+                      f"{width}px schedule must not carry the removed auto-view attribute")
+                check(result["compact"] == expected_compact,
+                      f"{width}px schedule width should set compact={expected_compact}")
+                check(result["cellCount"] == 31,
+                      f"{width}px schedule shows the complete month grid (31 days)")
+                check(result["calView"] == "month",
+                      f"{width}px schedule keeps the month presentation (no auto-day)")
                 check(result["undersized"] == 0 and not result["overlap"],
                       f"{width}px schedule has an undersized/overlapping touch target")
                 check(result["buttonCount"] > 0, f"{width}px schedule should remain interactive")
@@ -228,36 +242,34 @@ def main():
             page.evaluate("schedule.setView('list')")
             for width in (680, 540, 359, 720, 390, 320, 430):
                 result = set_width(width)
-                check(result["view"] == "list" and result["auto"] == "none",
+                check(result["view"] == "list" and result["auto"] is None,
                       f"nested resize to {width}px must preserve explicit list mode")
                 check(result["undersized"] == 0 and not result["overlap"],
                       f"list at {width}px has an undersized/overlapping touch target")
             page.evaluate("schedule.setView('calendar')")
             result = set_width(320)
-            check(result["calView"] == "day" and result["preferredCalView"] == "month" and result["auto"] == "day",
-                  "responsive fallback must preserve user's month preference")
+            check(result["calView"] == "month" and result["preferredCalView"] == "month",
+                  "compact flip must preserve the user's month presentation")
             check(page.evaluate("document.querySelector('#schedule').getAttribute('data-ocal-view')") == "calendar",
-                  "responsive fallback must preserve calendar view state")
+                  "compact flip must preserve calendar view state")
             check("8 أكتوبر" in page.locator("#schedule [data-ocal-day-panel]").inner_text(),
-                  "responsive fallback must preserve the selected civil date")
+                  "compact flip must preserve the selected civil date")
             check(page.evaluate("scheduleEvents.length") == 0,
                   "programmatic changes and resize must not emit user selection events")
-            check(page.evaluate("document.querySelector('#schedule [data-ocal-id]')?.getAttribute('data-ocal-id')") == "b",
-                  "day screen should preserve the selected date's corresponding order")
             set_width(390)
             page.locator('#schedule [data-ocal-date="2026-10-08"]').focus()
             set_width(320)
             check(page.evaluate("""()=>{
               const a=document.activeElement;
               return document.querySelector('#schedule').contains(a) &&
-                a.getAttribute('data-ocal-action')==='cal-mode' &&
-                a.getAttribute('data-ocal-value')==='day';
-            }"""), "focused month cell moves to the visible day-mode control on narrowing")
-            page.locator('#schedule [data-ocal-action="prev-day"]').focus()
+                a.getAttribute('data-ocal-date')==='2026-10-08';
+            }"""), "focused month cell keeps focus on narrowing (CSS-only compact flip)")
             set_width(390)
             check(page.evaluate("""()=>{
-              return document.activeElement.getAttribute('data-ocal-action')==='prev-month';
-            }"""), "day navigation focus maps to month navigation on widening")
+              const a=document.activeElement;
+              return document.querySelector('#schedule').contains(a) &&
+                a.getAttribute('data-ocal-date')==='2026-10-08';
+            }"""), "focused month cell keeps focus on widening back")
             check(page.evaluate("scheduleEvents.length") == 0,
                   "responsive focus restoration must not create selection events")
             page.locator('#schedule [data-ocal-id="b2"]').focus()
@@ -281,8 +293,11 @@ def main():
             }"""), "responsive rerender preserves the exact focused view toggle")
             page.evaluate("schedule.setCalendarView('day')")
             page.evaluate("schedule.setCalendarView('month')")
-            check(page.evaluate("schedule.root.getAttribute('data-ocal-auto-view')") == "day",
-                  "explicit month preference at narrow width should remain automatically adapted")
+            check(page.evaluate("""()=>{
+              const r=schedule.root;
+              return r.getAttribute('data-ocal-cal-view')==='month' &&
+                !r.hasAttribute('data-ocal-auto-view');
+            }"""), "explicit month presentation persists at narrow width (no auto-day in the current contract)")
             page.evaluate("schedule.destroy()")
             check(page.evaluate("""() => !document.querySelector('#schedule').hasAttribute('data-ocal-init') &&
               MicroOrderSchedule.getInstance(document.querySelector('#schedule')) === null"""),

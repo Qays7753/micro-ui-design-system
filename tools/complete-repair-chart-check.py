@@ -312,14 +312,15 @@ def main():
                             table_times = ([row.locator("td").nth(0).inner_text() for row in table_rows]
                                            if kind == "time" else [])
                             expected_values = [
-                                "(غير متاح)" if item.get("value") is None or item.get("value") == "غير رقمي"
+                                ("قيمة غير صالحة" if item.get("value") == "غير رقمي" else "(غير متاح)")
+                                if item.get("value") is None or item.get("value") == "غير رقمي"
                                 else ("-3 (سالب غير مرسوم)" if item.get("value") == "-3"
                                       else item.get("value", "— غير متاح"))
                                 for item in items
                             ]
                             check(prefix + " full labels and exact values in table",
                                   table_labels == [
-                                      expected + ((" — " + item["x"])
+                                      expected + (("، " + item["x"])
                                                   if kind == "time" and item["x"] not in expected else "")
                                       for expected, item in zip(expected_readings, items)
                                   ] and table_values == expected_values
@@ -450,8 +451,8 @@ def main():
             }""", packed_states)
             check("packed values and zero/negative/unknown/unavailable states remain exact",
                   states_result["circles"] == 5
-                  and states_result["stateText"] == ["0 — صفر", "-3 — سالب غير صالح للمساحة",
-                                                      "— غير معروف", "— غير متاح"],
+                  and states_result["stateText"] == ["0 (صفر)", "-3 (سالب غير صالح للمساحة)",
+                                                      "(غير معروف)", "(غير متاح)"],
                   states_result)
             check("no browser JavaScript errors", not errors, errors)
             browser.close()

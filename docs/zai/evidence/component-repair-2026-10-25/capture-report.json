@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "case": "calendar-320-rtl",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    },
+    {
+      "case": "calendar-320-ltr",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    },
+    {
+      "case": "calendar-390-rtl",
+      "overflow": true,
+      "doc": 390,
+      "view": 390
+    },
+    {
+      "case": "calendar-390-ltr",
+      "overflow": true,
+      "doc": 390,
+      "view": 390
+    },
+    {
+      "case": "calendar-430-rtl",
+      "overflow": true,
+      "doc": 430,
+      "view": 430
+    },
+    {
+      "case": "calendar-430-ltr",
+      "overflow": true,
+      "doc": 430,
+      "view": 430
+    },
+    {
+      "case": "data-320-rtl",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    },
+    {
+      "case": "data-320-ltr",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    },
+    {
+      "case": "data-390-rtl",
+      "overflow": true,
+      "doc": 390,
+      "view": 390
+    },
+    {
+      "case": "data-390-ltr",
+      "overflow": true,
+      "doc": 390,
+      "view": 390
+    },
+    {
+      "case": "metric-table-320-rtl",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    },
+    {
+      "case": "calendar-example-320-rtl",
+      "overflow": true,
+      "doc": 320,
+      "view": 320
+    }
+  ],
+  "errors": []
+}

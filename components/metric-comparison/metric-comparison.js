@@ -216,6 +216,7 @@
       empty.hidden = items.length > 0;
       if (!items.length) empty.textContent = chart.getAttribute('data-empty-message') || 'لا توجد بيانات للمقارنة.';
     }
+    syncCirclesTable(chart, items);
   }
 
   function fallbackItem(item, display, stateText) {
@@ -227,6 +228,119 @@
     row.appendChild(reading);
     if (stateText) row.appendChild(make('span', 'm-metric-circles__fallback-state', stateText));
     return row;
+  }
+
+  /* 2026-10-25 (عقد المالك — D-UI-04 لكل رسم كمّي): إفصاح جدول كامل
+     للعائلة نفسها بأصنافها الذاتية (m-main-metric__dataset*) — لا
+     اعتماد على data.css؛ نفس سلوك زر data.js (aria-expanded +
+     aria-controls + hidden) والجدول يعاد بناؤه كل دورة من المصدر.
+     الجدول يشمل كل فئة وقيمة ووحدة وفترة وحالة (صفر/مفقود/غير صالح)
+     — العرض البديل الكامل، لا مفتاح مختصر. */
+  var metricTableUid = 0;
+
+  function ensureDatasetWrap(chart) {
+    var wrap = chart.querySelector('.m-main-metric__dataset-wrap');
+    var btn, table;
+    if (!wrap) {
+      wrap = make('div', 'm-main-metric__dataset-wrap');
+      btn = make('button', 'm-main-metric__disclose', 'عرض البيانات كجدول');
+      btn.type = 'button';
+      btn.setAttribute('aria-expanded', 'false');
+      table = make('table', 'm-main-metric__dataset');
+      table.id = 'micro-metric-dataset-' + (++metricTableUid);
+      btn.setAttribute('aria-controls', table.id);
+      table.hidden = true;
+      wrap.appendChild(btn);
+      wrap.appendChild(table);
+      chart.appendChild(wrap);
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        table.hidden = open;
+        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+      });
+    } else {
+      btn = wrap.querySelector('.m-main-metric__disclose');
+      table = wrap.querySelector('.m-main-metric__dataset');
+    }
+    return { wrap: wrap, btn: btn, table: table };
+  }
+
+  function buildTableHead(table, headers) {
+    var thead = make('thead');
+    var headRow = make('tr');
+    headers.forEach(function (h) {
+      var th = make('th', null, h);
+      th.setAttribute('scope', 'col');
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+  }
+
+  function appendRow(tbody, cells) {
+    var tr = make('tr');
+    var th = make('th', null, cells[0]);
+    th.setAttribute('scope', 'row');
+    tr.appendChild(th);
+    for (var i = 1; i < cells.length; i++) tr.appendChild(make('td', null, cells[i]));
+    tbody.appendChild(tr);
+  }
+
+  function tableCaptionBase(chart) {
+    var title = chart.querySelector('.m-main-metric__title');
+    return String((title && title.textContent) || '').trim();
+  }
+
+  /* جدول المقارنة الشريطية: فئة/قيمة/وحدة/فترة + الحالة داخل خلية
+     القيمة نصًا صريحًا (صفر/غير متاح/غير صالح) */
+  function syncBarsTable(chart, entries, parsed) {
+    var parts = ensureDatasetWrap(chart);
+    if (!parts.btn || !parts.table) return;
+    var table = parts.table;
+    table.textContent = '';
+    var caption = make('caption', null, tableCaptionBase(chart));
+    table.appendChild(caption);
+    buildTableHead(table, ['الفئة', 'القيمة', 'الوحدة', 'الفترة']);
+    var tbody = make('tbody');
+    entries.forEach(function (entry, index) {
+      var value = parsed[index];
+      var valueText;
+      if (value.state === 'missing') valueText = '— (غير متاح)';
+      else if (value.state === 'invalid') valueText = 'قيمة غير صالحة';
+      else if (value.state === 'zero') valueText = (entry.display || entry.raw || '0') + ' (صفر)';
+      else valueText = (entry.display || entry.raw) + (value.state === 'negative' ? ' (سالب)' : '');
+      appendRow(tbody, [entry.label, valueText, entry.unit || '—', entry.period || '—']);
+    });
+    table.appendChild(tbody);
+  }
+
+  /* جدول دوائر المقارنة: فئة/قيمة/حالة — الوحدة داخل القيمة كما في
+     القائمة البديلة المرئية */
+  function syncCirclesTable(chart, items) {
+    var parts = ensureDatasetWrap(chart);
+    if (!parts.btn || !parts.table) return;
+    var table = parts.table;
+    table.textContent = '';
+    var caption = make('caption', null, tableCaptionBase(chart));
+    table.appendChild(caption);
+    buildTableHead(table, ['الفئة', 'القيمة', 'الحالة']);
+    var tbody = make('tbody');
+    items.forEach(function (item) {
+      var state = item.state === 'unavailable' ? 'missing'
+        : item.state === 'invalid' ? 'invalid' : readNumber(item.raw).state;
+      var valueText, stateText;
+      if (state === 'missing') { valueText = '—'; stateText = 'غير متاح'; }
+      else if (state === 'invalid') { valueText = item.display || item.raw || 'قيمة غير صالحة'; stateText = 'قيمة غير صالحة'; }
+      else {
+        valueText = (item.display || item.raw) + (item.unit && !item.display ? ' ' + item.unit : '');
+        stateText = state === 'zero' ? 'صفر'
+          : state === 'negative' ? 'سالب — معروض بالقيمة والإشارة لا بالمساحة'
+          : '';
+      }
+      appendRow(tbody, [item.label, valueText, stateText]);
+    });
+    table.appendChild(tbody);
   }
 
   function fitHero(chart) {
@@ -355,6 +469,7 @@
       status.textContent = userText;
       status.setAttribute('data-valid', String(max !== null));
     }
+    syncBarsTable(chart, entries, parsed);
   }
 
   function initOne(root) {

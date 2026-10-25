@@ -171,6 +171,96 @@ def main():
                 print(f"Captured 8 fixture screenshots in {capture_dir}")
                 return 0
 
+            # ---------- A2) 2026-10-25 cell anatomy + unified control contract ----------
+            page.goto(f"{base}?root=288&dir=rtl", wait_until="load")
+            check("2026-10-25 anatomy: no counter chip inside month cells (dots-only system)",
+                  page.locator(".m-ocal__count").count() == 0
+                  and page.locator(".m-ocal__badges").count() == 0)
+            check("day with three status types renders exactly three semantic dots",
+                  page.locator(".m-ocal__cell[data-ocal-date='2026-10-22'] .m-ocal__dot").count() == 3)
+            grouping = page.locator(".m-ocal__cell[data-ocal-date='2026-10-22']").evaluate(
+                """cell => {
+                    const num = cell.querySelector('.m-ocal__daynum');
+                    const dots = cell.querySelector('.m-ocal__dots');
+                    if (!num || !dots) return {ok: false, why: 'missing'};
+                    const nr = num.getBoundingClientRect();
+                    const dr = dots.getBoundingClientRect();
+                    const ownGap = dr.top - nr.bottom;
+                    const row = cell.closest('[role="row"]');
+                    const grid = row.parentElement;
+                    const rows = Array.from(grid.querySelectorAll(':scope > [role="row"]'));
+                    const idx = rows.indexOf(row);
+                    const nextRow = rows[idx + 1];
+                    if (!nextRow) return {ok: true, ownGap, nextGap: null};
+                    const nextCell = nextRow.children[Array.from(row.children).indexOf(cell)];
+                    const nextNum = nextCell && nextCell.querySelector('.m-ocal__daynum');
+                    const nextGap = nextNum ? nextNum.getBoundingClientRect().top - dr.bottom : null;
+                    return {ok: true, ownGap, nextGap};
+                }""")
+            check("dots sit directly below their own day number (fixed tight gap)",
+                  grouping.get("ok") and grouping.get("ownGap") is not None
+                  and 0 <= grouping["ownGap"] <= 5, grouping)
+            check("indicator-to-next-row distance exceeds the own-number gap (ambiguity resolved)",
+                  grouping.get("nextGap") is not None and grouping["nextGap"] > grouping["ownGap"] + 8,
+                  grouping)
+            check("unified view segment renders month/day/list with month pressed",
+                  page.locator(".m-ocal__viewseg [data-ocal-action='view']").count() == 3
+                  and page.locator(".m-ocal__viewseg [data-ocal-value='month'][aria-pressed='true']").count() == 1
+                  and page.locator(".m-ocal__viewseg [data-ocal-value='day'][aria-pressed='false']").count() == 1
+                  and page.locator(".m-ocal__viewseg [data-ocal-value='list'][aria-pressed='false']").count() == 1)
+            page.locator(".m-ocal__viewseg [data-ocal-value='day']").click()
+            check("day segment composes view=calendar with cal-view=day",
+                  page.locator("#order-root").get_attribute("data-ocal-view") == "calendar"
+                  and page.locator("#order-root").get_attribute("data-ocal-cal-view") == "day"
+                  and page.locator(".m-ocal__viewseg [data-ocal-value='day'][aria-pressed='true']").count() == 1)
+            page.locator(".m-ocal__viewseg [data-ocal-value='list']").click()
+            check("list segment switches to the list view",
+                  page.locator("#order-root").get_attribute("data-ocal-view") == "list"
+                  and page.locator(".m-ocal__viewseg [data-ocal-value='list'][aria-pressed='true']").count() == 1)
+            page.locator(".m-ocal__viewseg [data-ocal-value='month']").click()
+            check("month segment returns to the full month grid",
+                  page.locator("#order-root").get_attribute("data-ocal-view") == "calendar"
+                  and page.locator("#order-root").get_attribute("data-ocal-cal-view") == "month"
+                  and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 31)
+            hierarchy = page.evaluate(
+                """() => {
+                    const trig = document.querySelector('.m-ocal__month-trigger');
+                    const mn = trig.querySelector('.m-ocal__month-name');
+                    const yr = trig.querySelector('.m-ocal__year');
+                    return {
+                        month: mn ? getComputedStyle(mn).fontSize : null,
+                        year: yr ? getComputedStyle(yr).fontSize : null,
+                        monthWeight: mn ? getComputedStyle(mn).fontWeight : null,
+                        chevron: !!trig.querySelector('svg')
+                    };
+                }""")
+            check("month/year hierarchy: month primary, year secondary, picker chevron present",
+                  hierarchy["month"] == "16px" and hierarchy["year"] == "13px"
+                  and hierarchy["monthWeight"] == "600" and hierarchy["chevron"] is True,
+                  hierarchy)
+            today_num = page.locator(".m-ocal__cell[data-ocal-date='2026-10-07'] .m-ocal__daynum")
+            today_weight = today_num.evaluate("n=>getComputedStyle(n).fontWeight")
+            today_dot = page.evaluate(
+                """() => getComputedStyle(
+                        document.querySelector(".m-ocal__cell[data-ocal-date='2026-10-07'] .m-ocal__daynum"),
+                        '::after').content""")
+            check("today = ring + semibold number with no under-dot (two focused marks)",
+                  today_weight == "600" and today_dot == "none")
+            sel_fill = page.locator(".m-ocal__cell--selected").evaluate(
+                "c=>getComputedStyle(c).backgroundColor")
+            check("selected day keeps the solid petrol fill (single strongest act)",
+                  sel_fill == "rgb(22, 77, 89)", sel_fill)
+            page.goto(f"{base}?root=288&dir=rtl&presentation=agenda", wait_until="load")
+            agenda_row_h = page.locator("[data-ocal-grid] [role='row']").first.evaluate(
+                "r=>r.getBoundingClientRect().height")
+            check("agenda 40px floor wins over compact on phone root (cascade fixed)",
+                  38 <= agenda_row_h <= 46, agenda_row_h)
+            agenda_label = page.locator("[data-ocal-action='agenda-toggle']").get_attribute("aria-label")
+            check("agenda toggle accessible name carries date and count with an explicit separator",
+                  agenda_label is not None and "\u060c" in agenda_label
+                  and "31 أكتوبر 2026" in agenda_label and "طلب واحد" in agenda_label,
+                  agenda_label)
+
             # ---------- B) Picker contract (wide root) ----------
             page.goto(f"{base}?root=398&dir=rtl", wait_until="load")
             title = page.locator(".m-ocal__cal-title [data-ocal-action='month-picker']")
@@ -189,7 +279,7 @@ def main():
                   and page.evaluate("events.length") == 0)
             page.locator("[data-ocal-picker] [data-ocal-value='0']").click()
             check("month choice updates displayed month only and returns focus to title",
-                  "يناير 2027" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "يناير" and page.locator(".m-ocal__year").first.inner_text() == "2027"
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == selected_before
                   and page.evaluate("events.length") == 0
                   and page.evaluate("document.activeElement.matches('.m-ocal__cal-title [data-ocal-action=month-picker]')"))
@@ -229,7 +319,7 @@ def main():
             choose_month(2027, 12)
             page.locator("[data-ocal-action='next-month']").click()
             check("December-to-January month arrow changes displayed month without selecting",
-                  "يناير 2028" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "يناير" and page.locator(".m-ocal__year").first.inner_text() == "2028"
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == selected_before
                   and page.evaluate("events.length") == 0
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1
@@ -244,7 +334,7 @@ def main():
                   and "31 أكتوبر 2026" in page.locator(".m-ocal__daypanel-title").inner_text())
             page.locator("[data-ocal-action='prev-month']").click()
             check("prev-month from October: heading, grid and day panel describe September coherently",
-                  "سبتمبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "سبتمبر" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 30
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-09-01']").count() == 1
                   and page.locator("[data-ocal-grid] [data-ocal-date='2026-09-30']").count() == 1
@@ -259,7 +349,7 @@ def main():
                   page.evaluate("JSON.stringify(events)"))
             page.locator("[data-ocal-action='next-month']").click()
             check("next-month returns to October and restores the selected day panel",
-                  "أكتوبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "أكتوبر" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 0
                   and "31 أكتوبر 2026" in page.locator(".m-ocal__daypanel-title").inner_text()
                   and page.evaluate("events.length") == 1)
@@ -290,7 +380,7 @@ def main():
             for _ in range(15):  # 2026-09-16 -> ... -> 2026-09-30 -> 2026-10-01
                 page.keyboard.press("ArrowLeft")
             check("compact grid focus crossing the month boundary updates month and focus only",
-                  "أكتوبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "أكتوبر" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-09-15"
                   and page.evaluate("events.length") == 4
@@ -317,12 +407,12 @@ def main():
             # Compact December→January across the year boundary.
             choose_month(2026, 12)
             check("compact picker reaches December 2026 with 31 days and honest browsing panel",
-                  "ديسمبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "ديسمبر" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 31
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 1)
             page.locator("[data-ocal-action='next-month']").click()
             check("compact December-to-January arrow crosses the year boundary coherently",
-                  "يناير 2027" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "يناير" and page.locator(".m-ocal__year").first.inner_text() == "2027"
                   and page.locator("[data-ocal-grid] [data-ocal-date]").count() == 31
                   and page.locator("[data-ocal-grid] [data-ocal-date='2027-01-01']").count() == 1
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01"
@@ -454,7 +544,7 @@ def main():
             # Stale monthCursor can never leak another day into the agenda
             page.locator("[data-ocal-action='prev-month']").click()
             check("browsing another month in agenda mode shows the honest browsing note",
-                  "سبتمبر 2026" in page.locator(".m-ocal__cal-title").inner_text()
+                  page.locator(".m-ocal__month-name").first.inner_text() == "سبتمبر" and page.locator(".m-ocal__year").first.inner_text() == "2026"
                   and page.locator("[data-ocal-agenda][data-ocal-day-browsing='true']").count() == 1
                   and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-31")
             page.locator("[data-ocal-action='agenda-toggle']").click()
@@ -510,12 +600,12 @@ def main():
             page.evaluate("instance.setLoading(true)")
             check("loading keeps the views bar usable above the status box",
                   page.locator("[data-ocal-status='loading'][role='status']").count() == 1
-                  and page.locator(".m-ocal__views-btn[aria-pressed='true']").count() == 1
+                  and page.locator(".m-ocal__viewseg-btn[aria-pressed='true']").count() == 1
                   and page.locator("[data-ocal-grid]").count() == 0)
             page.evaluate("instance.setLoading(false);instance.setError(()=>{})")
             check("error keeps the views bar usable and retry reachable",
                   page.locator("[data-ocal-status='error'][role='alert']").count() == 1
-                  and page.locator(".m-ocal__views-btn[aria-pressed='true']").count() == 1
+                  and page.locator(".m-ocal__viewseg-btn[aria-pressed='true']").count() == 1
                   and page.locator("[data-ocal-action='retry']").count() == 1)
 
             # Picker focus recovery: tabbing away closes it honestly (R-14)

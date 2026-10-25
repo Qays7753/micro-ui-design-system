@@ -323,18 +323,26 @@
 .m-legend__label { min-width: 0; overflow-wrap: anywhere; }
 
 /* ---- التوزيع الدائري ----
-   نسب بمقام معلن (الإجمالي من المستهلك) — لا نسب من مجموع وهمي. */
-.m-donut { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: var(--micro-space-4); }
-.m-donut__svg { width: 148px; height: 148px; justify-self: center; }
-.m-donut > .m-legend { display: grid; gap: var(--micro-space-3); min-width: 0; }
+   نسب بمقام معلن (الإجمالي من المستهلك) — لا نسب من مجموع وهمي.
+   2026-10-25 (مرجع المالك chart-target — عرض مدمج): الحلقة والمفتاح
+   جنبًا إلى جنب في كل عرض حاوية — تحت 360px حلقة 112px (مقياس CSS
+   لنفس viewBox 148؛ النسب والهندسة والحدود الداخلية بلا تغيير)، ومن
+   360px حلقة 148px. رُفع الترصّ الرأسي القديم (كانت الحاوية <340px
+   ترصّ المفتاح تحت الحلقة فتبلغ الكتلة ~400px ارتفاعًا). R1-UI08 معدّل:
+   مقاس متجاوب موثق بدل الثابت 148. */
+.m-donut { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: var(--micro-space-3); }
+.m-donut__svg { width: 112px; height: 112px; justify-self: center; }
+.m-donut:has(> .m-donut__svg) { grid-template-columns: 112px minmax(0, 1fr); }
+.m-donut:has(> .m-donut__svg) > .m-donut__svg { grid-column: 1; grid-row: 1; }
+.m-donut:has(> .m-donut__svg) > .m-legend { grid-column: 2; grid-row: 1; }
+.m-donut > .m-legend { display: grid; gap: var(--micro-space-2); min-width: 0; }
 .m-donut .m-legend__item { display: flex; align-items: baseline; min-width: 0; }
 .m-donut .m-legend__label { flex: 1; }
 .m-donut .m-legend__swatch { align-self: center; }
 .m-donut .m-legend__value { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
-@container (min-width: 340px) {
+@container (min-width: 360px) {
   .m-donut:has(> .m-donut__svg) { grid-template-columns: 148px minmax(0, 1fr); }
-  .m-donut > .m-donut__svg { grid-column: 1; grid-row: 1; }
-  .m-donut:has(> .m-donut__svg) > .m-legend { grid-column: 2; grid-row: 1; }
+  .m-donut:has(> .m-donut__svg) > .m-donut__svg { width: 148px; height: 148px; }
 }
 .m-donut__center { font-size: var(--micro-amount2-size); font-weight: var(--micro-weight-semibold); fill: var(--micro-text-primary); font-variant-numeric: tabular-nums; font-family: var(--micro-font-family); }
 .m-donut__center-label { font-size: var(--micro-secondary-size); fill: var(--micro-text-secondary); font-family: var(--micro-font-family); }

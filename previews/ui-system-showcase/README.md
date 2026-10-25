@@ -46,7 +46,9 @@ python3 tools/ui-system-showcase-repair-check.py --tag after
 
 ## ما يغطيه
 
-يعرض المعرض العائلات الحالية: surfaces، buttons، fields، selection، organization، info-strip، data، metric-comparison، messages، navigation، access-gateway، account-settings، order-schedule، carousel وpacked-circle حسب حالة كل مكون.
+يعرض المعرض العائلات الحالية: surfaces، buttons، fields، selection، organization، info-strip، data، metric-comparison، messages، navigation، access-gateway، account-settings، order-schedule وcarousel. عرض packed-circle في المعرض أُبدل بأعمدة بنفس المصدر بقرار 2026-10-25 الموثق (يبقى الملحق PROPOSED opt-in في المكتبة)، ودوائر المقاييس استُبدلت ببطاقات قراءة مدمجة.
+
+**نموذج التصفح (موثق 2026-10-25):** المعرض وثيقة صفحة واحدة بنموذج عرضين — **«نظرة عامة»** (الافتراضي: خمس عائلات أساسية data-overview: surfaces/buttons/fields/info-strip/metric) للانطباع السريع، و**«مختبر الحالات»** (كل الأقسام الـ15 مع أزرار الاتجاه/العرض/الإجهاد وسجلات الأحداث) للفحص التفصيلي؛ لا شريط تنقل منتج ولا خريطة وجهات — الكروم موسوم «ليست واجهة منتج». قسم البيانات يعرض عقد 2026-10-25: حالة «لا بيانات» الصادقة مقابل الصفر الحقيقي، وجدول إفصاح كامل (وحدة/فترة/مقام) لكل رسم كمّي.
 
 `DRAFT FOR REVIEW` و`PROPOSED` علامات حالة وليست اعتمادًا إنتاجيًا.
 

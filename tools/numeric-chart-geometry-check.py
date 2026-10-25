@@ -277,9 +277,14 @@ def main() -> int:
             )
             page.close()
 
+        # ---- Showcase packed section: قرار الاستبدال 2026-10-25 (F-09) ----
+        # المعرض يعرض نفس مصدر packed بعرض أعمدة؛ دوائر packed الملتصقة
+        # لم تعد تُعرض في المعرض (تبقى PROPOSED opt-in في المكتبة).
+        # سلوكيات المكوّن نفسه (حالات/رفض/كثافة) تفحصها light-data-check
+        # وcomplete-repair-chart-check على fixtures مخصصة.
         for width, direction in VIEWPORTS:
             page, page_errors = open_page(
-                browser, "/previews/ui-system-showcase/index.html", width, direction
+                browser, "/previews/ui-system-showcase/index.html#state-lab", width, direction
             )
             page.locator('[data-sc-filter="all"]').click()
             page.wait_for_timeout(60)
@@ -287,197 +292,42 @@ def main() -> int:
             if direction == "ltr":
                 packed.evaluate("element => element.style.direction = 'ltr'")
             page.evaluate("document.fonts.ready")
-
-            default_readings = packed.evaluate(
+            replacement = packed.evaluate(
                 """chart => {
                   const visible = element => {
                     const style = getComputedStyle(element);
                     return element.getClientRects().length > 0
                       && style.display !== 'none' && style.visibility !== 'hidden';
                   };
-                  const readings = [...chart.querySelectorAll(
-                    '.m-bubble__value, .m-legend__value'
-                  )].filter(visible).map(node => node.textContent.trim());
+                  const plotText = chart.querySelector('.m-chart__plot').textContent;
                   return {
-                    width: chart.getBoundingClientRect().width,
-                    values: readings,
-                    hiddenCircleValues: [...chart.querySelectorAll(
-                      '.m-bubble__circle .m-bubble__value'
-                    )].every(node => getComputedStyle(node).visibility === 'hidden'
-                      && node.getAttribute('aria-hidden') === 'true'),
-                    keyCount: chart.querySelectorAll('.m-legend__item').length,
-                    circleDiameters: [...chart.querySelectorAll('.m-bubble__circle')]
-                      .map(circle => circle.getBoundingClientRect().width)
+                    kind: chart.getAttribute('data-chart'),
+                    bars: [...chart.querySelectorAll('.m-chart__bar')].filter(visible).length,
+                    readable: ['84,300', '52,100', '12,000'].every(v => plotText.includes(v)),
+                    noPackedDom: !chart.hasAttribute('data-chart-packed'),
+                    table: !!chart.querySelector('.m-chart__disclose'),
+                    overflow: document.documentElement.scrollWidth > innerWidth
                   };
                 }"""
             )
             checks.check(
-                f"packed default has one exact-reading source at {width} {direction.upper()}",
-                all(default_readings["values"].count(value) == 1
-                    for value in ("84,300", "52,100", "12,000"))
-                and default_readings["hiddenCircleValues"]
-                and default_readings["keyCount"] == 3,
-                default_readings,
-            )
-            checks.check(
-                f"packed area ratios remain proportional at {width} {direction.upper()}",
-                len(default_readings["circleDiameters"]) == 3
-                and abs(
-                    default_readings["circleDiameters"][0] ** 2
-                    / default_readings["circleDiameters"][1] ** 2
-                    - 84300 / 52100
-                ) < 0.03
-                and abs(
-                    default_readings["circleDiameters"][1] ** 2
-                    / default_readings["circleDiameters"][2] ** 2
-                    - 52100 / 12000
-                ) < 0.08,
-                default_readings,
-            )
-            print(
-                f"MEASURE packed viewport={width} {direction.upper()} "
-                f"component={default_readings['width']:.1f}px "
-                f"diameters={','.join(f'{diameter:.1f}' for diameter in default_readings['circleDiameters'])}px"
-            )
-
-            if width == 320 and direction == "rtl":
-                packed.screenshot(path=str(SCREENSHOT_DIR / "packed-key-320-rtl.png"))
-
-            packed.evaluate(
-                """chart => {
-                  chart.setAttribute('data-legend', 'off');
-                  window.MicroPacked.render(chart);
-                }"""
-            )
-            page.wait_for_timeout(40)
-            compact_readings = packed.evaluate(
-                """chart => {
-                  const visible = element => {
-                    const style = getComputedStyle(element);
-                    return element.getClientRects().length > 0
-                      && style.display !== 'none' && style.visibility !== 'hidden';
-                  };
-                  return {
-                    values: [...chart.querySelectorAll('.m-bubble__value')]
-                      .filter(visible).map(node => node.textContent.trim()),
-                    keyCount: chart.querySelectorAll('.m-legend__item').length,
-                    externalReadings: [...chart.querySelectorAll(
-                      '.m-packed__value-row .m-bubble__value'
-                    )].filter(visible).map(node => node.textContent.trim()),
-                    placements: [...chart.querySelectorAll('.m-bubble')]
-                      .map(node => node.getAttribute('data-value-placement'))
-                  };
-                }"""
-            )
-            checks.check(
-                f"packed legend-off keeps each complete value once at {width} {direction.upper()}",
-                all(compact_readings["values"].count(value) == 1
-                    for value in ("84,300", "52,100", "12,000"))
-                and compact_readings["keyCount"] == 0
-                and "outside" in compact_readings["placements"]
-                and len(compact_readings["externalReadings"]) == 1,
-                compact_readings,
+                f"showcase packed replacement renders bars with the same source at {width} {direction.upper()}",
+                replacement["kind"] == "bars"
+                and replacement["bars"] == 3
+                and replacement["readable"]
+                and replacement["noPackedDom"]
+                and replacement["table"],
+                replacement,
             )
             if width == 320 and direction == "rtl":
-                packed.screenshot(
-                    path=str(SCREENSHOT_DIR / "packed-legend-off-320-rtl.png")
-                )
-
-            states = packed.evaluate(
-                """chart => {
-                  const source = chart.querySelector('.m-chart__data');
-                  source.insertAdjacentHTML('beforeend',
-                    '<li data-series="d" data-label="صفر" data-value="0"></li>' +
-                    '<li data-series="e" data-label="سالب" data-value="-3"></li>' +
-                    '<li data-series="d" data-label="مجهول"></li>' +
-                    '<li data-series="e" data-label="غير متاح" data-value=""></li>');
-                  window.MicroPacked.render(chart);
-                  const stateText = chart.querySelector('.m-packed__states')?.textContent || '';
-                  return {
-                    text: stateText,
-                    stateCount: chart.querySelectorAll('.m-packed__states .m-legend__item').length,
-                    positiveCount: chart.querySelectorAll('.m-bubble').length,
-                    legendCount: chart.querySelectorAll('.m-legend__item').length
-                  };
-                }"""
-            )
-            checks.check(
-                f"packed zero/negative/unknown/unavailable remain distinct at {width} {direction.upper()}",
-                "0 — صفر" in states["text"]
-                and "-3 — سالب غير صالح للمساحة" in states["text"]
-                and "(غير معروف)" in states["text"]
-                and "(غير متاح)" in states["text"]
-                and states["stateCount"] == 4
-                and states["positiveCount"] == 3,
-                states,
-            )
-
-            refusal = packed.evaluate(
-                """chart => {
-                  chart.setAttribute('data-max', 'bad');
-                  window.MicroPacked.render(chart);
-                  return {
-                    error: chart.querySelector('.m-chart__scale-error')?.textContent || '',
-                    circles: chart.querySelectorAll('.m-bubble').length,
-                    keyCount: chart.querySelectorAll('.m-legend__item').length,
-                    containsAllValues: ['84,300', '52,100', '12,000',
-                      '0', '-3 — سالب غير صالح للمساحة',
-                      '(غير معروف)', '(غير متاح)'].every(value =>
-                        chart.querySelector('.m-chart__plot').textContent.includes(value))
-                  };
-                }"""
-            )
-            checks.check(
-                f"invalid packed scale refuses geometry and preserves all readings at {width} {direction.upper()}",
-                bool(refusal["error"])
-                and refusal["circles"] == 0
-                and refusal["keyCount"] == 7
-                and refusal["containsAllValues"],
-                refusal,
-            )
-
-            density = packed.evaluate(
-                """chart => {
-                  const dense = chart.cloneNode(true);
-                  dense.removeAttribute('id');
-                  dense.removeAttribute('data-legend');
-                  dense.setAttribute('data-max', '100000');
-                  const source = dense.querySelector('.m-chart__data');
-                  source.textContent = '';
-                  [100, 80, 60, 40, 20, 10].forEach((value, index) => {
-                    const li = document.createElement('li');
-                    li.setAttribute('data-series', 'abcde'[index % 5]);
-                    li.setAttribute('data-label', 'فئة ' + index);
-                    li.setAttribute('data-value', String(value));
-                    source.appendChild(li);
-                  });
-                  chart.insertAdjacentElement('afterend', dense);
-                  window.MicroPacked.render(dense);
-                  return {
-                    state: dense.getAttribute('data-packed-state'),
-                    error: dense.querySelector('.m-chart__scale-error')?.textContent || '',
-                    circleCount: dense.querySelectorAll('.m-bubble').length,
-                    legendCount: dense.querySelectorAll('.m-legend__item').length,
-                    values: [...dense.querySelectorAll('.m-legend__value')]
-                      .map(node => node.textContent.trim())
-                  };
-                }"""
-            )
-            checks.check(
-                f"packed density refusal preserves all six raw values at {width} {direction.upper()}",
-                density["state"] == "too-many-positive-categories"
-                and bool(density["error"])
-                and density["circleCount"] == 0
-                and density["legendCount"] == 6
-                and density["values"] == ["100", "80", "60", "40", "20", "10"],
-                density,
-            )
+                packed.screenshot(path=str(SCREENSHOT_DIR / "packed-replacement-320-rtl.png"))
             checks.check(
                 f"no uncaught browser exceptions in packed showcase at {width} {direction.upper()}",
                 not page_errors,
                 page_errors,
             )
             page.close()
+
 
         page, page_errors = open_page(browser, "/previews/data/index.html", 320, "rtl")
         donut_error = page.locator('#edge-cases .m-chart[data-chart="donut"]').nth(1)
