@@ -1,12 +1,15 @@
 # Owner-approved visual concept references — 2026-10-25
 
-These two PNG files and one HTML reference implementation were supplied by the system owner as visual direction for the next component-level repair pass:
+These three PNG files and one HTML reference implementation were supplied by the system owner as visual direction for the next component-level repair pass:
 
 - `calendar-target.png`
+- `calendar-target-latest-owner.png`
 - `chart-target.png`
 - `calendar-reference-implementation.html`
 
 They are reference assets, not production assets and not branding assets.
+
+`calendar-target-latest-owner.png` is the latest owner-supplied Calendar screenshot and is the primary visual reference for the current pass. It clarifies the required mobile hierarchy, weekday/date alignment, numeric date treatment, restrained grid dividers, Calendar surface, typography, and compact phone composition. It does not authorize copying the reference palette, fonts, phone frame, avatar, or sample data.
 
 ## How to use these references
 
@@ -16,7 +19,7 @@ The reference does not authorize adding an unrelated product shell to the reusab
 
 ## Calendar direction
 
-`calendar-target.png` is the owner-approved direction for the Calendar concept:
+`calendar-target-latest-owner.png` is the primary current direction for the Calendar concept; `calendar-target.png` remains a supporting earlier reference:
 
 - a compact, confident mobile calendar with a clear month/year header;
 - an obvious view-mode control and readable navigation;

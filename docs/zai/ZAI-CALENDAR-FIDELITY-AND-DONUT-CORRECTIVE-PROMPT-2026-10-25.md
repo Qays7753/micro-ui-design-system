@@ -1,8 +1,6 @@
-# ZAI — Calendar Reference-Fidelity Correction and Donut Closure
+# ZAI — Calendar Visual Fidelity and Clean Mobile Preview Repair
 
 ## Execution mode
-
-This is a corrective implementation pass on the existing independent UI Design System repository.
 
 Work on the same existing feature branch only:
 
@@ -10,158 +8,163 @@ Work on the same existing feature branch only:
 replit/light-only-complete-ui-repair-2026-10-24
 ```
 
-Implementation baseline before this corrective pass:
+Current remote tip before this pass:
 
 ```text
-f33534580131b714ffad59a28829aa0d442cd8c0
+b31675d160c9ebaade22b7b36e4659cc80dbe071
 ```
 
-The branch may contain later prompt/reference-only commits after this implementation baseline. Use the latest remote tip as the working starting point; do not reset, drop, or rewrite those commits.
+Do not create another branch. Do not modify `main`. Do not merge. Pull the latest tip first and preserve all existing commits, including the previous order-bar containment fix.
 
-Do not create another branch. Do not modify `main`. Do not merge. Push the finished work back to this same branch.
+This repository is an independent UI Design System. Do not open, clone, link, compare against, or import anything from the old Micro repository.
 
-The repository is independent. Do not open, clone, link, or compare against the old Micro repository.
+Dark Mode is completely out of scope. Do not redesign, activate, repair, or extend Dark Mode in this pass.
 
-## Why this corrective pass is required
+## Owner intent
 
-The previous Calendar implementation improved several implementation details, but it does not faithfully implement the owner-approved Calendar concept. It treated the reference image as a collection of isolated details instead of implementing the complete Calendar composition. In particular, it replaced the visible `Day / Week / Month` concept with `Month / Day / List` and left the resulting Calendar materially different from the owner-provided target.
+The latest owner reference is the visual direction for the Calendar screen. It is not a request for a decorative clone or for a new unrelated product shell. Rebuild the same useful mobile composition using this repository's official tokens, typography, semantic colors, secure DOM construction, Arabic RTL/LTR support, and reusable component boundaries.
 
-Do not defend the previous result merely because its existing tests pass. The existing result is the baseline to correct, not the target to preserve.
-
-The authoritative visual reference is:
-
-```text
-docs/zai/references/owner-visual-concepts-2026-10-25/calendar-target.png
-```
-
-Read its accompanying rules first:
+Read all of these before editing:
 
 ```text
 docs/zai/references/owner-visual-concepts-2026-10-25/README.md
-```
-
-The owner also supplied a reference implementation that explains the intended structure and interaction more precisely than the screenshot alone:
-
-```text
+docs/zai/references/owner-visual-concepts-2026-10-25/calendar-target-latest-owner.png
+docs/zai/references/owner-visual-concepts-2026-10-25/calendar-target.png
 docs/zai/references/owner-visual-concepts-2026-10-25/calendar-reference-implementation.html
 ```
 
-The image is the owner's approved visual and interaction direction. Rebuild the Calendar concept close to the reference's overall structure, hierarchy, density, and reading flow, while using this repository's official identity, tokens, typography, Arabic RTL/LTR support, order-schedule data, events, and component boundaries.
+The latest owner PNG is the most important visual reference for the current corrections. The HTML is an executable concept reference, not production code to paste. Do not copy its violet palette, Google Font, avatar, phone frame, sample data, external assets, unsafe HTML interpolation, or global event model.
 
-Treat `calendar-reference-implementation.html` as a reference implementation/specification for the exact composition and behavior: header row, controls row, `Day / Week / Month` selector, month navigator, seven-column grid, day-number-plus-dot anatomy, selected-day treatment, events-today region, compact event cards, and the vertical reading order. Use its structure to remove ambiguity about what the owner means by “make it like the reference.” It is not production code to paste into the repository. Reimplement the behavior inside the reusable component using the existing architecture, DOM safety rules, tokens, accessibility contract, RTL/LTR behavior, and host-owned order data.
+## Scope: two related deliverables
 
-The reference code is intentionally a prototype and may contain choices that must not be copied literally: external Google Fonts, a new violet palette, hardcoded sample data, `innerHTML` from data, a phone frame, external/sample icons, and a standalone global event model. Do not import those dependencies or unsafe patterns. Preserve the visual composition and interaction intent while making the implementation reusable, secure, token-driven, and specific to this system. The host-level Showcase preview must still reproduce the reference screen's structural composition, including its header, control row, and bottom-navigation placement, using our own tokens and icons.
+This pass has two deliverables:
 
-Do not copy the reference's purple palette, logo, external icons, wording, sample data, or phone-frame implementation. The reference screen composition is required in the Showcase host, while the reusable Calendar component must remain independent of the product shell. A profile avatar, bottom navigation bar, and other application-shell chrome belong to the host-level Showcase composition, not inside the reusable `order-schedule` component. Recreate their structural positions with repository-owned markup, icons, and tokens so the owner can compare the complete screen visually.
+1. Correct the reusable Calendar visual contract and its real mobile behavior.
+2. Provide a clean, product-like mobile preview of the real components so the owner can inspect them as they would appear on a phone before future integration.
 
-## Phase 0 — architecture inquiry before editing
+Do not solve this with a Showcase-only fake visual patch. Keep reusable component behavior in the reusable component and keep host/product composition in the preview host.
 
-Before changing code, inspect the actual current source and write a short architecture note in the final report. Do not ask the owner a question and stop; answer these questions from the repository:
+## Phase 0 — inspect before editing
 
-0. Inventory the current workspace: branch/head, relevant files, existing reports, reference assets, examples, tests, generated evidence, and any uncommitted changes. Do this before editing.
-1. What is owned by the reusable `components/order-schedule/` component and what is owned by the Showcase host?
-2. Where are the Calendar header, view selector, month grid, week/day content, events/agenda region, Add action, and Edit/Delete actions generated?
-3. What is the current public API and state model for `view`, `calendarView`, `presentation`, `selectedDate`, and `monthCursor`?
-4. How are host-owned orders and `order-schedule:*` events passed between the component and the Showcase?
-5. What is required to add a real reusable Week presentation without breaking existing consumers or creating a fake tab?
-6. Which existing tests and examples must change if the Calendar contract becomes `Day / Week / Month`?
-7. Which pieces of the reference image must remain outside the component because they belong to an application shell?
+Before changing code:
 
-Cite the actual files and functions. Do not use the architecture note as an excuse to postpone implementation. After answering it, implement the corrected contract in the same pass.
+1. Pull the latest branch tip and record the exact starting commit.
+2. Inspect the current Calendar source, CSS, specification, examples, Showcase host, standalone builder, catalog, and all relevant checks.
+3. Inspect the existing order-bar containment implementation and verify that it already wraps the two existing circular Edit/Delete buttons without changing their content, size, icons, order, or actions.
+4. Map which UI belongs to `components/order-schedule/`, which belongs to the Showcase host, and which elements are test-only diagnostics.
+5. Inventory every current component family in the catalog and map each family to at least one clean mobile-preview context. Do not cram every component into one unreadable screen; use a small coherent set of mobile screens if needed.
+6. Write this inventory and ownership map in the final report. Do not pause for a question unless a decision is genuinely impossible from the repository.
 
-## Phase 1 — Calendar must match the owner concept
+## Phase 1 — Calendar visual fidelity
 
-Implement a real, reusable Calendar composition that is recognizably aligned with `calendar-target.png`.
+### 1. Correct weekday order and date mapping
 
-### Required top structure
+The current default `weekStart` is Saturday, which causes the visible weekday/date relationship to differ from the owner reference. Correct the Calendar contract so the reference concept is Sunday-first:
 
-The Calendar region must have:
+- LTR visual order: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday from left to right.
+- RTL visual order: the same logical week is mirrored correctly, with Sunday at the logical RTL start and Saturday at the opposite edge. Do not merely reverse labels while leaving dates attached to the wrong columns.
+- The date number, weekday label, event dots, selected state, and current-day state must remain attached to the same date in both directions.
+- Week View must use the same corrected week-start contract.
+- Update the API/specification and all tests/examples consistently. Do not silently break consumers that explicitly pass a different `weekStart` unless the contract documents the migration.
 
-1. A compact mobile header with clear hierarchy and month/year navigation.
-2. A real, visible, functional `Day / Week / Month` view selector. `Week` must not be replaced by `List` in this selector. All three states must be functional and tested. If the existing list view remains useful, keep it as a separate supported surface, but it is not a substitute for Week in the reference selector.
-3. A compact Month header with previous/next navigation and a real Month/Year picker.
-4. The initial Showcase state must open in the Month presentation so the owner can compare it with the supplied Month reference.
-5. A complete month grid at narrow widths, with stable column alignment and no accidental horizontal page overflow.
+### 2. Numeric month and date presentation
 
-### Required month-grid concept
+Remove visible month names from the Calendar UI. The owner explicitly wants numeric month presentation:
 
-The month grid must follow the reference's reading behavior, not merely pass geometry checks:
+- Month header: use a concise numeric form such as `07 / 2026` with a clear hierarchy and picker affordance.
+- Full visible dates: use `DD/MM/YYYY`, for example `22/07/2026`.
+- Use English digits `0–9` for day, month, year, and time values across the visual Calendar surface.
+- Do not display Arabic or English month names in the visible Calendar, event heading, month navigator, day title, or visible date labels.
+- Localized weekday abbreviations may remain localized, but must follow the corrected Sunday-first logical order and must not become multi-line or clipped.
+- Keep accessible names truthful and complete; if a month name is useful for an accessibility label, do not expose it in the visible UI unless the repository's accessibility contract requires it. Document the choice.
 
-- Day numbers must have clear ownership of their event markers.
-- Markers must remain compact, aligned, and visually separated from the next week.
-- The selected day must have one clear branded selected treatment.
-- The current day must be distinct from selection without competing with it.
-- Grid separators and grouping may be subtle, but the seven columns and week rows must be easy to scan.
-- Do not create excessive blank vertical space merely to pass a minimum size.
-- Use existing identity and semantic data tokens. Do not introduce a new palette.
-- Arabic RTL and LTR must both have correct logical and visual order.
-- Long labels and simulated 200% typography must grow or reflow without clipping or hiding information.
+### 3. Calendar card and grid
 
-### Required events region
+Bring the Calendar grid visually closer to the owner reference without introducing a new palette:
 
-The reference is not only a month grid. It clearly continues into an events area below the calendar. Implement the reusable equivalent for this repository:
+- Place the month grid in a distinct mobile Calendar surface/card with a restrained border, radius, and elevation/surface separation using existing tokens.
+- Add subtle horizontal and vertical grid dividers so rows and columns are visually scannable. Do not use heavy black lines or decorative noise.
+- Keep seven stable columns and complete 5/6-week coverage, including adjacent-month dates according to the existing contract.
+- Keep the weekday header aligned exactly with the date columns.
+- Keep event dots directly owned by their date cell, compact, and visually separated from the next row.
+- Keep selected-day and current-day states distinct. The shape and hierarchy should follow the reference concept, but use the repository's official Petrol/semantic tokens rather than copying violet colors.
+- Preserve touch targets, keyboard navigation, visible focus, RTL/LTR behavior, and no horizontal page overflow at 320/360/390/430px.
 
-- A clear localized equivalent of `Events today` for the selected date.
-- Keep the current order/event content, title, time, secondary information, status, typography, colors, spacing, sizing, and layout exactly as they are now.
-- Apply one narrow geometry correction only: extend the existing order bar's outer visible surface behind the current Edit/Delete button area so the bar continues continuously up to and around those controls.
-- The existing Edit and Delete buttons remain two separate circular buttons with their current icons, visual style, hit targets, actions, and relative order. Do not merge them, redesign them, move them into the text content, or replace them with a new control.
-- The only intended relationship change is containment: the buttons must become visually and structurally part of the same outer order-bar row instead of appearing as detached circles outside the bar. The bar boundary/background must include the button area; do not add new content to the bar.
-- Preserve the current RTL/LTR placement logic. The buttons stay at the same logical edge and the existing order information stays in its current content area. Do not reorder or rewrite the title, time, status, or secondary information.
-- Preserve the current Add placement and all other Calendar, Showcase, header, controls, navigation, color, and component behavior. This correction must not introduce Filter, Bottom Navigation, a new Header, a new card design, a new event hierarchy, or any unrelated visual change.
-- The extended outer bar must remain safe for long Arabic/English content and simulated 200% typography without clipping or horizontal overflow. Do not shrink existing text or hide data to achieve the containment.
-- Empty, loading, error, retry, no-selected-day, long-title, long-note, and many-order states must remain honest and usable.
+### 4. Typography and spatial hierarchy
 
-### Scope lock for this corrective pass
+Correct the visual hierarchy where it is genuinely inconsistent with the reference:
 
-This is a narrow order-bar containment correction, not a new Calendar redesign. Keep the current Showcase composition and reusable component visuals unchanged except for the outer order-bar boundary described above. Do not add, remove, or rearrange the Header, controls, Filter, Add action, Bottom Navigation, view modes, Calendar grid, event content, colors, tokens, or navigation in this pass.
+- Screen title, month/year control, weekday header, date numbers, event heading, and secondary metadata must have clearly differentiated scale, weight, and contrast.
+- Do not make all text equally small or equally light.
+- Do not add explanatory paragraphs, component names, diagnostic labels, or redundant helper copy to the product-like Calendar surface.
+- Keep wording concise and scannable for fast mobile users. Show the important date, number, status, and action first.
+- Preserve the existing event content and the existing order-bar containment behavior unless a specific Calendar contract requires a change. Do not rewrite the order hierarchy as part of this visual pass.
 
-### Existing Showcase composition
+### 5. Preserve the completed order-bar containment correction
 
-The existing Showcase composition remains authoritative for this pass. Keep its current Header, controls, navigation, Add placement, and host/component ownership exactly as implemented. Do not add a new reference-screen shell or a new Filter action as part of the order-bar correction.
+The previous correction is already correct and must not regress:
 
-### Interaction and contract requirements
+- The existing two circular Edit/Delete buttons remain separate.
+- Their icons, size, hit targets, order, actions, and current content layout remain unchanged.
+- The existing order bar's outer surface continues behind and around the button area so the buttons are contained by the same visible bar boundary.
+- Do not move the buttons into the title, time, status, or secondary text.
+- Do not merge, redesign, or replace the buttons.
+- Verify the containment in RTL and LTR at all required widths after Calendar changes.
 
-- `Day`, `Week`, and `Month` must be real functioning states, not visual labels.
-- The reference implementation is the minimum behavior target for the three view modes: Month shows the full grid, Week shows the selected week's seven days with the selected day's events, and Day shows the selected day's event surface. Do not substitute List for Week in the reference selector. A separate List surface may remain for compatibility, but it is not the reference's Week mode.
-- Week view must use a documented reusable contract appropriate to scheduled orders: dates, selected day, order markers/rows, navigation, empty state, and keyboard behavior.
-- Preserve host-owned data and event boundaries. The component renders and emits events; it does not persist data or call a backend.
-- Preserve RTL/LTR, keyboard navigation, focus recovery, accessible names, and visible focus.
-- Keep command targets at or above the repository's command target. Do not shrink controls to imitate the screenshot.
-- Do not introduce a Bottom Sheet or floating Add action into this Calendar flow.
-- Do not leave Edit/Delete visually detached outside the order bar. Keep both as the same two separate circular buttons, but extend the existing outer bar surface/row so the buttons are contained by that same bar boundary without changing their current appearance or content layout.
-- Update `components/order-schedule/specification.md`, the isolated example, Showcase fixtures, and regression tests together with the implementation.
-- Do not silently delete the existing list surface. If a contract is changed, document compatibility and migration behavior.
+## Phase 2 — clean product-like mobile preview
 
-## Phase 2 — close the remaining Donut defects
+The current Showcase contains diagnostic and component-lab material that is useful for tests but is not what the owner will transfer into the real application. Create or update a clean mobile-review mode using the real components and host contracts.
 
-Fix these two confirmed component-level defects from the previous pass.
+### Clean preview requirements
 
-### A. No-data must not render a chart ring
+- Render at real phone viewport sizes: 320, 360, 390, and 430 CSS pixels, portrait.
+- Support RTL and LTR.
+- The preview must feel like a real mobile application surface, not a documentation page and not a desktop catalogue squeezed into a phone.
+- Use the real reusable components, real component CSS, real public APIs, and concise realistic fixtures.
+- Every component family in the current catalog must appear at least once in a coherent product-like context, using multiple short screens or states where necessary. Do not cram all families into one giant screen.
+- Remove from the clean preview anything that would not be transferred into the real system: test harness chrome, State Lab labels, component-family headings, explanatory paragraphs, implementation notes, PASS/FAIL badges, measurement overlays, debug controls, source-path text, fixture-switch controls, and duplicate showcase scaffolding.
+- Keep those test fixtures and diagnostic paths in the repository if the tests need them, but isolate them from the clean mobile-review surface. Do not delete test infrastructure merely to make the clean preview look better.
+- Do not add a decorative phone frame around the preview. The browser viewport itself is the phone preview; a frame that will not exist in the real application is not product UI.
+- Do not add invented business features. Use only the current component contracts and host-owned fixture data necessary to demonstrate them.
+- Keep text direct and minimal. Every visible label in the clean preview must be a real product label, action, status, date, or value—not an explanation of the component.
+- Ensure the clean preview can be opened directly and captured without first opening a diagnostic lab or toggling hidden test controls.
+- Keep the previous standalone build deterministic and update it from source.
 
-When the Donut dataset is absent, null, or empty:
+### Calendar in the clean preview
 
-- Do not render an SVG ring, empty circle, axes, slices, or fake marks.
-- Render only a compact honest no-data state inside the chart slot.
-- Keep the state accessible and consistent with the other chart families.
-- A real explicit zero is different: retain a deliberate zero-state with a readable `0` and truthful wording. Do not hide real zero data.
+The clean mobile preview must show the corrected Calendar as a real mobile screen:
 
-Add a regression test that asserts no SVG/ring geometry exists for the no-data Donut and that the real-zero Donut remains distinct.
+- numeric month/year;
+- corrected Sunday-first date mapping;
+- visible but restrained grid lines;
+- selected/current-day distinction and event dots;
+- events below the Calendar;
+- existing order bars with Edit/Delete contained within their existing outer bar surface;
+- no additional explanatory text or debug chrome.
 
-### B. Malformed values must have consistent semantics
+### Other component preview coverage
 
-When any Donut category contains a malformed value such as `12oops`:
+Review all current component families in the clean preview for obvious visual defects that would make them look like a web demo rather than a native-feeling mobile UI. Fix only confirmed reusable defects exposed by this pass. Do not redesign unrelated components by taste or invent new product flows. Keep charts compact, readable, semantically correct, and table-discoverable according to the existing chart contract.
 
-- Refuse proportional drawing.
-- Do not display percentages for any category in the refusal path.
-- Make the Legend and the alternate table use the same state classification.
-- Distinguish malformed/invalid from missing/null.
-- Preserve the original category and raw reading in the complete fallback view.
+## Phase 3 — tests and regression coverage
 
-Add regression coverage for malformed values, including Legend text, table text, and the absence of percentage output.
+Add or update deterministic regression checks for:
 
-## Verification requirements
+1. Sunday-first weekday/date alignment in LTR and RTL.
+2. Numeric month/year and `DD/MM/YYYY` visible Calendar output with no visible month names.
+3. Weekday header and grid column alignment.
+4. Calendar card surface and restrained divider geometry, without relying only on screenshot pixels.
+5. Selected/current-day and dot ownership.
+6. Existing order-bar containment with two separate circular tools in RTL/LTR.
+7. No horizontal overflow at 320/360/390/430px and simulated 200% typography.
+8. Clean mobile preview: direct entry, no diagnostic chrome, no test-only labels, no desktop overflow, and all catalog component families covered by real component roots or documented screens.
+9. No console, network, or resource errors in source and standalone previews.
 
-Run the complete required repository gates after the changes:
+Do not weaken or remove an existing test to make it pass. Update an expectation only when the documented component contract genuinely changed.
+
+## Required verification commands
+
+Run every relevant gate after implementation:
 
 ```bash
 python3 tools/light-release-check.py
@@ -171,7 +174,7 @@ python3 tools/light-data-check.py
 python3 tools/chart-mobile-check.py
 python3 tools/component-mobile-check.py
 python3 tools/ui-system-showcase-check.py
-python3 tools/ui-system-showcase-repair-check.py --tag calendar-fidelity-donut-final
+python3 tools/ui-system-showcase-repair-check.py --tag calendar-visual-fidelity-mobile-preview
 python3 tools/component-catalog-build.py --check
 python3 tools/build-ui-system-showcase-standalone.py --check
 python3 tools/manifest-build.py --check
@@ -181,25 +184,23 @@ node --check components/data/data.js
 git diff --check
 ```
 
-Required result: zero failures in every required gate. Do not change a test only to make it pass; update expectations only when the component contract genuinely changed and document the change.
+Required result: zero failures in every gate. If a new clean-preview check is added, run it explicitly and include its exact total.
 
 Capture fresh evidence at 320, 360, 390, and 430px in RTL and LTR for:
 
-- Month view matching the owner reference structure.
-- Week view.
-- Day view.
-- Event region with populated orders.
-- Existing order bars with the outer surface extended behind the existing Edit/Delete buttons.
-- Empty/no-selected-day state.
-- Donut no-data state with no SVG ring.
-- Donut real-zero state.
-- Donut malformed-value fallback and table.
+- clean mobile preview entry;
+- Calendar Month screen;
+- Calendar Week screen;
+- Calendar Day screen;
+- numeric month/date and corrected weekday order;
+- visible grid dividers and selected/current-day/dot states;
+- normal and long-text order bars with contained circular Edit/Delete buttons;
+- representative clean screens covering every catalog component family;
+- no-data, real-zero, malformed Donut states where applicable.
 
-Compare the updated evidence against the immediately previous branch state using this checklist: unchanged Calendar composition, unchanged order content, continuous outer order-bar surface, Edit/Delete buttons still circular and in their current positions, buttons visually contained by the same bar boundary, RTL/LTR placement, long-text behavior, no overflow, and no unrelated visual or behavioral changes.
+## Required final report and delivery
 
-## Required report and delivery
-
-Update or create:
+Update:
 
 ```text
 docs/zai/FINAL-CALENDAR-FIDELITY-AND-DONUT-REPAIR-2026-10-25.md
@@ -207,16 +208,18 @@ docs/zai/FINAL-CALENDAR-FIDELITY-AND-DONUT-REPAIR-2026-10-25.md
 
 The report must include:
 
-1. Starting and ending commits, branch name, and confirmation that `main` was untouched.
-2. The architecture inquiry answers with source paths and function names.
-3. A before/after comparison against `calendar-target.png`, including every deliberate deviation and why.
-4. Confirmation that `Day / Week / Month` are all functional, with the exact state/API contract.
-5. Files changed at component versus Showcase level.
-6. No-data versus real-zero versus malformed Donut behavior and regression results.
-7. The order-bar contract: full-width surface, internal content hierarchy, embedded actions, RTL/LTR action placement, and long-title behavior.
-8. Exact commands and real PASS/FAIL totals, never invented totals.
-9. Untested limits such as real-device, Safari/WebKit, screen readers, and true touch.
-10. A clear statement that the branch is ready for human visual review and merge consideration only after all required gates are green.
-11. Paste the same concise completion summary directly in the agent chat, including the final remote HEAD and all gate totals.
+1. Exact starting and ending commits, branch, and proof that `main` was untouched.
+2. The Calendar visual defects found and the exact reusable/host files changed for each.
+3. The final weekday/week-start contract for LTR and RTL.
+4. The visible numeric date contract and confirmation that month names are absent from the product-like surface.
+5. The Calendar card/grid/typography changes and why they are token-driven rather than a palette copy.
+6. Confirmation that the order-bar containment fix was preserved without changing the two circular buttons or order content.
+7. The clean mobile-preview architecture, what was removed from the clean surface, and what diagnostic/test paths remain isolated.
+8. Component-family coverage map for the clean preview.
+9. Exact commands and real PASS/FAIL totals. Never invent totals.
+10. Fresh evidence paths for every required width and direction.
+11. Untested limits such as real-device rendering, Safari/WebKit, screen readers, and true touch.
+12. A clear statement that the same branch is ready for human visual review and merge consideration only after every required gate is green.
+13. Paste a concise completion summary directly in the agent chat, including the final remote HEAD.
 
-Commit and push to the same existing feature branch. Do not merge. Do not modify `main`.
+Commit and push all implementation, tests, evidence, standalone, manifest, and report updates to the same feature branch. Do not merge and do not modify `main`.
