@@ -917,7 +917,12 @@
        نطاق زمني) — موثق في المواصفة.
        withTools: أزرار تعديل/حذف على صفوف سطح فعل اليوم المحدد فقط
        (لوحة اليوم المفصوصة ومنطقة إفصاح الأجندة) عند تفعيل المضيف
-       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل). */
+       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل).
+       عقد 2026-10-25 (احتواء شريط الطلب): الصف ذو الأدوات يحمل
+       m-ocal__rowitem--tools فيصبح سطح الشريط الخارجي (حد/تعبئة/
+       زوايا CSS) على حاوية الصف نفسها ممتدًا خلف الزرين وطايفًا لهما
+       داخل الشريط المستمر — الزران كما هما: دائرتان منفصلتان
+       48×48 بنفس الأيقونات والأهداف والأفعال والترتيب المنطقي. */
     function rowToolBtn(action, verb, icon, order) {
       var b = el('button', 'm-ocal__row-tool' +
         (action === 'order-delete' ? ' m-ocal__row-tool--danger' : ''));
@@ -968,6 +973,7 @@
       btn.appendChild(meta);
       li.appendChild(btn);
       if (withTools && (state.orderActions.edit || state.orderActions.delete)) {
+        li.classList.add('m-ocal__rowitem--tools');
         var tools = el('div', 'm-ocal__row-tools');
         tools.setAttribute('role', 'group');
         tools.setAttribute('aria-label', 'أفعال الطلب: ' + order.title);

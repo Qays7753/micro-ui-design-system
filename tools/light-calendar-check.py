@@ -543,6 +543,43 @@ def main():
                       .evaluate("e=>{const r=e.getBoundingClientRect();return r.width>=48&&r.height>=48}")
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-delete']")
                       .evaluate("e=>{const r=e.getBoundingClientRect();return r.width>=48&&r.height>=48}"))
+            # عقد احتواء 2026-10-25 (تصحيح هندسة ضيق): سطح الشريط الخارجي
+            # (حد/تعبئة/زوايا) على حاوية الصف m-ocal__rowitem--tools ممتدًا
+            # خلف زرّي التعديل/حذف ويطوّقهما؛ الزران دائرتان منفصلتان 48×48
+            # بموضعهما المنطقي نفسه، ومنطقة المحتوى بلا سطح خاص و≥ 48px.
+            containment = page.evaluate("""() => {
+                const li = document.querySelector('[data-ocal-day-panel] .m-ocal__rowitem--tools');
+                if (!li) return {present: false};
+                const row = li.querySelector('.m-ocal__row');
+                const tools = li.querySelector('.m-ocal__row-tools');
+                const lr = li.getBoundingClientRect();
+                const rr = row.getBoundingClientRect();
+                const tr = tools.getBoundingClientRect();
+                const lis = getComputedStyle(li), rs = getComputedStyle(row);
+                return {
+                  present: true,
+                  barSurface: lis.backgroundColor + '/' + lis.borderTopWidth + '/' + lis.borderTopLeftRadius,
+                  contentSurface: rs.backgroundColor + '/' + rs.borderTopWidth,
+                  toolsInside: tr.x >= lr.x - 1 && tr.y >= lr.y - 1
+                    && tr.x + tr.width <= lr.x + lr.width + 1
+                    && tr.y + tr.height <= lr.y + lr.height + 1,
+                  contentInside: rr.x >= lr.x - 1 && rr.y >= lr.y - 1
+                    && rr.x + rr.width <= lr.x + lr.width + 1
+                    && rr.y + rr.height <= lr.y + lr.height + 1,
+                  toolsAtLogicalEnd: getComputedStyle(document.querySelector('#order-root')).direction === 'rtl'
+                    ? tr.x < rr.x : tr.x > rr.x,
+                  contentHitHeight: rr.height >= 48
+                };
+            }""")
+            check("order-bar containment: outer bar surface wraps content and both circular tools",
+                  containment["present"]
+                  and containment["barSurface"].startswith("rgb(")
+                  and containment["barSurface"].split("/")[1] == "1px"
+                  and containment["barSurface"].split("/")[2] == "12px"
+                  and containment["contentSurface"].startswith("rgba(0, 0, 0, 0)")
+                  and containment["toolsInside"] and containment["contentInside"]
+                  and containment["toolsAtLogicalEnd"]
+                  and containment["contentHitHeight"], containment)
             page.locator("[data-ocal-day-panel] [data-ocal-action='order-edit']").click()
             check("row edit action emits the host-owned edit-request event once",
                   page.evaluate("events.length===1&&events[0].name==='order-schedule:order-edit-request'&&events[0].detail.id==='one'"))
@@ -637,6 +674,26 @@ def main():
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-row'][data-ocal-id='one']").count() == 1
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-edit']").count() == 1
                   and page.locator("[data-ocal-day-panel] [data-ocal-action='order-delete']").count() == 1)
+            ltr_containment = page.evaluate("""() => {
+                const li = document.querySelector('[data-ocal-day-panel] .m-ocal__rowitem--tools');
+                if (!li) return {present: false};
+                const row = li.querySelector('.m-ocal__row');
+                const tools = li.querySelector('.m-ocal__row-tools');
+                const lr = li.getBoundingClientRect();
+                const rr = row.getBoundingClientRect();
+                const tr = tools.getBoundingClientRect();
+                return {
+                  present: true,
+                  toolsInside: tr.x >= lr.x - 1 && tr.x + tr.width <= lr.x + lr.width + 1,
+                  toolsAtLogicalEnd: tr.x > rr.x,
+                  barSurface: getComputedStyle(li).backgroundColor
+                };
+            }""")
+            check("LTR order-bar containment keeps tools inside the bar at the logical end",
+                  ltr_containment["present"]
+                  and ltr_containment["toolsInside"]
+                  and ltr_containment["toolsAtLogicalEnd"]
+                  and ltr_containment["barSurface"].startswith("rgb("), ltr_containment)
             ltr_week_cell = page.locator("[data-ocal-grid] [data-ocal-date='2026-10-31']")
             ltr_week_cell.focus()
             page.keyboard.press("ArrowLeft")  # LTR: left = previous day

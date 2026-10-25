@@ -5243,11 +5243,40 @@ button.m-setting-row:focus-visible { z-index: 1; }
 }
 
 /* الصف عنصر به زر رئيسي (فتح) وأدوات فعل اختيارية (تعديل/حذف)
-   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px */
+   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px.
+   عقد 2026-10-25 (تصحيح هندسة ضيق — احتواء شريط الطلب): في الصفوف
+   ذات أدوات الفعل ينتقل السطح الخارجي نفسه للشريط (نفس حد
+   --micro-border-divider وتعبئة --micro-surface-base وزوايا
+   --micro-radius-field وحشو الصف 8/12) إلى حاوية الصف
+   m-ocal__rowitem--tools فيمتد خلف زرّي التعديل/الحذف ويطوّقهما
+   داخل الشريط المستمر نفسه — لا دائرتان معلّقتان خارجه. منطقة
+   المحتوى (m-ocal__row) تفقد سطحها الخاص لكنها تحتفظ بحد أدى 48px
+   (هدف اللمس) وبنصف قطر ضغط مطابق، فيبقى إيقاع الحشو والالتفاف
+   ونص العنوان/الوقت/الحالة كما هو (نفس عرض النص المتاح حرفيًا).
+   الصفوف بلا أدوات (القائمة) لا تتغير إطلاقًا: بقيت هندستها على
+   m-ocal__row كما هي — العمق المتعمد لهذا التصحيح ضيق عمدًا. */
 .m-ocal__rowitem {
   display: flex;
   align-items: flex-start;
   gap: var(--micro-space-1);
+}
+
+.m-ocal__rowitem--tools {
+  padding: var(--micro-space-2) var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background-color: var(--micro-surface-base);
+}
+
+.m-ocal__rowitem--tools .m-ocal__row {
+  padding: 0;
+  border: 0;
+  border-radius: var(--micro-radius-field); /* حالة الضغط داخل الشريط */
+  background-color: transparent;
+}
+
+.m-ocal__rowitem--tools .m-ocal__row:active {
+  background-color: var(--micro-surface-selected);
 }
 
 .m-ocal__row {
@@ -5367,7 +5396,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
 }
 
 /* أدوات فعل الصف (تعديل/حذف) — على صفوف سطح فعل اليوم المحدد فقط
-   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات) */
+   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات).
+   عقد 2026-10-25: تبقى دائرتين منفصلتين بأسلوبها نفسه داخل امتداد
+   سطح الشريط الخارجي (m-ocal__rowitem--tools) — لا دمج ولا إعادة
+   تصميم ولا تغيير أهداف أو أفعال. */
 .m-ocal__row-tools {
   flex: none;
   display: flex;
@@ -14608,7 +14640,12 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
        نطاق زمني) — موثق في المواصفة.
        withTools: أزرار تعديل/حذف على صفوف سطح فعل اليوم المحدد فقط
        (لوحة اليوم المفصوصة ومنطقة إفصاح الأجندة) عند تفعيل المضيف
-       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل). */
+       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل).
+       عقد 2026-10-25 (احتواء شريط الطلب): الصف ذو الأدوات يحمل
+       m-ocal__rowitem--tools فيصبح سطح الشريط الخارجي (حد/تعبئة/
+       زوايا CSS) على حاوية الصف نفسها ممتدًا خلف الزرين وطايفًا لهما
+       داخل الشريط المستمر — الزران كما هما: دائرتان منفصلتان
+       48×48 بنفس الأيقونات والأهداف والأفعال والترتيب المنطقي. */
     function rowToolBtn(action, verb, icon, order) {
       var b = el('button', 'm-ocal__row-tool' +
         (action === 'order-delete' ? ' m-ocal__row-tool--danger' : ''));
@@ -14659,6 +14696,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       btn.appendChild(meta);
       li.appendChild(btn);
       if (withTools && (state.orderActions.edit || state.orderActions.delete)) {
+        li.classList.add('m-ocal__rowitem--tools');
         var tools = el('div', 'm-ocal__row-tools');
         tools.setAttribute('role', 'group');
         tools.setAttribute('aria-label', 'أفعال الطلب: ' + order.title);

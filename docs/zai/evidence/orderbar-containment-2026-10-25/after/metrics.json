@@ -1,0 +1,3276 @@
+{
+ "phase": "after",
+ "cases": [
+  {
+   "case": "showcase-normal-320-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 811.8,
+       "w": 288,
+       "h": 132
+      },
+      "row": {
+       "x": 133,
+       "y": 820.8,
+       "w": 158,
+       "h": 114
+      },
+      "tools": {
+       "x": 29,
+       "y": 820.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 820.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 820.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 951.8,
+       "w": 288,
+       "h": 128
+      },
+      "row": {
+       "x": 133,
+       "y": 960.8,
+       "w": 158,
+       "h": 110
+      },
+      "tools": {
+       "x": 29,
+       "y": 960.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 960.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 960.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-320-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 811.8,
+       "w": 288,
+       "h": 132
+      },
+      "row": {
+       "x": 29,
+       "y": 820.8,
+       "w": 158,
+       "h": 114
+      },
+      "tools": {
+       "x": 191,
+       "y": 820.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 820.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 820.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 951.8,
+       "w": 288,
+       "h": 128
+      },
+      "row": {
+       "x": 29,
+       "y": 960.8,
+       "w": 158,
+       "h": 110
+      },
+      "tools": {
+       "x": 191,
+       "y": 960.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 960.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 960.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-360-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 837.6,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 133,
+       "y": 846.6,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 29,
+       "y": 846.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 846.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 846.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 951.5,
+       "w": 328,
+       "h": 128
+      },
+      "row": {
+       "x": 133,
+       "y": 960.5,
+       "w": 198,
+       "h": 110
+      },
+      "tools": {
+       "x": 29,
+       "y": 960.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 960.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 960.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-360-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 837.6,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 29,
+       "y": 846.6,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 231,
+       "y": 846.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 846.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 846.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 951.5,
+       "w": 328,
+       "h": 128
+      },
+      "row": {
+       "x": 29,
+       "y": 960.5,
+       "w": 198,
+       "h": 110
+      },
+      "tools": {
+       "x": 231,
+       "y": 960.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 960.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 960.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-390-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 870.5,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 133,
+       "y": 879.5,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 29,
+       "y": 879.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 879.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 879.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 952.5,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 133,
+       "y": 961.5,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 29,
+       "y": 961.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 961.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 961.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-390-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 870.5,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 29,
+       "y": 879.5,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 261,
+       "y": 879.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 879.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 879.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 952.5,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 29,
+       "y": 961.5,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 261,
+       "y": 961.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 961.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 961.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-430-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 870.4,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 153,
+       "y": 879.4,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 49,
+       "y": 879.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 101,
+       "y": 879.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 49,
+       "y": 879.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 952.3,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 153,
+       "y": 961.3,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 49,
+       "y": 961.3,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 101,
+       "y": 961.3,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 49,
+       "y": 961.3,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-normal-430-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 870.4,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 49,
+       "y": 879.4,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 281,
+       "y": 879.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 281,
+       "y": 879.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 333,
+       "y": 879.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 952.3,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 49,
+       "y": 961.3,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 281,
+       "y": 961.3,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 281,
+       "y": 961.3,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 333,
+       "y": 961.3,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-320-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 348.6,
+       "w": 288,
+       "h": 132
+      },
+      "row": {
+       "x": 133,
+       "y": 357.6,
+       "w": 158,
+       "h": 114
+      },
+      "tools": {
+       "x": 29,
+       "y": 357.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 357.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 357.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 488.6,
+       "w": 288,
+       "h": 329.9
+      },
+      "row": {
+       "x": 133,
+       "y": 497.6,
+       "w": 158,
+       "h": 311.9
+      },
+      "tools": {
+       "x": 29,
+       "y": 497.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 497.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 497.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-320-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 348.6,
+       "w": 288,
+       "h": 132
+      },
+      "row": {
+       "x": 29,
+       "y": 357.6,
+       "w": 158,
+       "h": 114
+      },
+      "tools": {
+       "x": 191,
+       "y": 357.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 357.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 357.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 488.6,
+       "w": 288,
+       "h": 329.9
+      },
+      "row": {
+       "x": 29,
+       "y": 497.6,
+       "w": 158,
+       "h": 311.9
+      },
+      "tools": {
+       "x": 191,
+       "y": 497.6,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 497.6,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 497.6,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-360-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 688.4,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 133,
+       "y": 697.4,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 29,
+       "y": 697.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 697.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 697.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 802.4,
+       "w": 328,
+       "h": 277.9
+      },
+      "row": {
+       "x": 133,
+       "y": 811.4,
+       "w": 198,
+       "h": 259.9
+      },
+      "tools": {
+       "x": 29,
+       "y": 811.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 811.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 811.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-360-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 688.4,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 29,
+       "y": 697.4,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 231,
+       "y": 697.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 697.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 697.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 802.4,
+       "w": 328,
+       "h": 277.9
+      },
+      "row": {
+       "x": 29,
+       "y": 811.4,
+       "w": 198,
+       "h": 259.9
+      },
+      "tools": {
+       "x": 231,
+       "y": 811.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 811.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 811.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-390-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 778,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 133,
+       "y": 787,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 29,
+       "y": 787,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 787,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 787,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 860,
+       "w": 358,
+       "h": 220
+      },
+      "row": {
+       "x": 133,
+       "y": 869,
+       "w": 228,
+       "h": 202
+      },
+      "tools": {
+       "x": 29,
+       "y": 869,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 869,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 869,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-390-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 778,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 29,
+       "y": 787,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 261,
+       "y": 787,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 787,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 787,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 860,
+       "w": 358,
+       "h": 220
+      },
+      "row": {
+       "x": 29,
+       "y": 869,
+       "w": 228,
+       "h": 202
+      },
+      "tools": {
+       "x": 261,
+       "y": 869,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 869,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 869,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-430-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 777.9,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 153,
+       "y": 786.9,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 49,
+       "y": 786.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 101,
+       "y": 786.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 49,
+       "y": 786.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 859.9,
+       "w": 358,
+       "h": 220
+      },
+      "row": {
+       "x": 153,
+       "y": 868.9,
+       "w": 228,
+       "h": 202
+      },
+      "tools": {
+       "x": 49,
+       "y": 868.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 101,
+       "y": 868.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 49,
+       "y": 868.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "showcase-stress-430-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 777.9,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 49,
+       "y": 786.9,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 281,
+       "y": 786.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 281,
+       "y": 786.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 333,
+       "y": 786.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 36,
+       "y": 859.9,
+       "w": 358,
+       "h": 220
+      },
+      "row": {
+       "x": 49,
+       "y": 868.9,
+       "w": 228,
+       "h": 202
+      },
+      "tools": {
+       "x": 281,
+       "y": 868.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 281,
+       "y": 868.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 333,
+       "y": 868.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "type2-normal-320-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 241.8,
+       "w": 288,
+       "h": 297
+      },
+      "row": {
+       "x": 133,
+       "y": 250.8,
+       "w": 158,
+       "h": 279
+      },
+      "tools": {
+       "x": 29,
+       "y": 250.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 250.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 250.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 546.8,
+       "w": 288,
+       "h": 378.8
+      },
+      "row": {
+       "x": 133,
+       "y": 555.8,
+       "w": 158,
+       "h": 360.8
+      },
+      "tools": {
+       "x": 29,
+       "y": 555.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 555.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 555.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "type2-normal-320-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 241.8,
+       "w": 288,
+       "h": 297
+      },
+      "row": {
+       "x": 29,
+       "y": 250.8,
+       "w": 158,
+       "h": 279
+      },
+      "tools": {
+       "x": 191,
+       "y": 250.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 250.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 250.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 546.8,
+       "w": 288,
+       "h": 378.8
+      },
+      "row": {
+       "x": 29,
+       "y": 555.8,
+       "w": 158,
+       "h": 360.8
+      },
+      "tools": {
+       "x": 191,
+       "y": 555.8,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 555.8,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 555.8,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "type2-stress-320-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": -16.4,
+       "w": 288,
+       "h": 297
+      },
+      "row": {
+       "x": 133,
+       "y": -7.4,
+       "w": 158,
+       "h": 279
+      },
+      "tools": {
+       "x": 29,
+       "y": -7.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": -7.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": -7.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 288.7,
+       "w": 288,
+       "h": 896.4
+      },
+      "row": {
+       "x": 133,
+       "y": 297.7,
+       "w": 158,
+       "h": 878.4
+      },
+      "tools": {
+       "x": 29,
+       "y": 297.7,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 297.7,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 297.7,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "type2-stress-320-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": -16.4,
+       "w": 288,
+       "h": 297
+      },
+      "row": {
+       "x": 29,
+       "y": -7.4,
+       "w": 158,
+       "h": 279
+      },
+      "tools": {
+       "x": 191,
+       "y": -7.4,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": -7.4,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": -7.4,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 288.7,
+       "w": 288,
+       "h": 896.4
+      },
+      "row": {
+       "x": 29,
+       "y": 297.7,
+       "w": 158,
+       "h": 878.4
+      },
+      "tools": {
+       "x": 191,
+       "y": 297.7,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 297.7,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 297.7,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "view-week-390-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 823.5,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 133,
+       "y": 832.5,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 29,
+       "y": 832.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 832.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 832.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 905.5,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 133,
+       "y": 914.5,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 29,
+       "y": 914.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 914.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 914.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "view-day-390-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 691.5,
+       "w": 358,
+       "h": 74
+      },
+      "row": {
+       "x": 133,
+       "y": 700.5,
+       "w": 228,
+       "h": 56
+      },
+      "tools": {
+       "x": 29,
+       "y": 700.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 700.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 700.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 773.5,
+       "w": 358,
+       "h": 128
+      },
+      "row": {
+       "x": 133,
+       "y": 782.5,
+       "w": 228,
+       "h": 110
+      },
+      "tools": {
+       "x": 29,
+       "y": 782.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 782.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 782.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "en-320-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 590,
+       "w": 288,
+       "h": 124
+      },
+      "row": {
+       "x": 133,
+       "y": 599,
+       "w": 158,
+       "h": 106
+      },
+      "tools": {
+       "x": 29,
+       "y": 599,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 599,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 599,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 721.9,
+       "w": 288,
+       "h": 357.9
+      },
+      "row": {
+       "x": 133,
+       "y": 730.9,
+       "w": 158,
+       "h": 339.9
+      },
+      "tools": {
+       "x": 29,
+       "y": 730.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 730.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 730.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "en-320-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 590,
+       "w": 288,
+       "h": 124
+      },
+      "row": {
+       "x": 29,
+       "y": 599,
+       "w": 158,
+       "h": 106
+      },
+      "tools": {
+       "x": 191,
+       "y": 599,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 599,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 599,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 721.9,
+       "w": 288,
+       "h": 357.9
+      },
+      "row": {
+       "x": 29,
+       "y": 730.9,
+       "w": 158,
+       "h": 339.9
+      },
+      "tools": {
+       "x": 191,
+       "y": 730.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 191,
+       "y": 730.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 243,
+       "y": 730.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 320,
+     "view": 320,
+     "rootScroll": 288,
+     "rootClient": 288
+    }
+   }
+  },
+  {
+   "case": "en-360-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 596,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 133,
+       "y": 605,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 29,
+       "y": 605,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 709.9,
+       "w": 328,
+       "h": 228
+      },
+      "row": {
+       "x": 133,
+       "y": 718.9,
+       "w": 198,
+       "h": 210
+      },
+      "tools": {
+       "x": 29,
+       "y": 718.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "en-360-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 596,
+       "w": 328,
+       "h": 106
+      },
+      "row": {
+       "x": 29,
+       "y": 605,
+       "w": 198,
+       "h": 88
+      },
+      "tools": {
+       "x": 231,
+       "y": 605,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 709.9,
+       "w": 328,
+       "h": 228
+      },
+      "row": {
+       "x": 29,
+       "y": 718.9,
+       "w": 198,
+       "h": 210
+      },
+      "tools": {
+       "x": 231,
+       "y": 718.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 231,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 283,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 360,
+     "view": 360,
+     "rootScroll": 328,
+     "rootClient": 328
+    }
+   }
+  },
+  {
+   "case": "en-390-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 596,
+       "w": 358,
+       "h": 106
+      },
+      "row": {
+       "x": 133,
+       "y": 605,
+       "w": 228,
+       "h": 88
+      },
+      "tools": {
+       "x": 29,
+       "y": 605,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 709.9,
+       "w": 358,
+       "h": 228
+      },
+      "row": {
+       "x": 133,
+       "y": 718.9,
+       "w": 228,
+       "h": 210
+      },
+      "tools": {
+       "x": 29,
+       "y": 718.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "en-390-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 596,
+       "w": 358,
+       "h": 106
+      },
+      "row": {
+       "x": 29,
+       "y": 605,
+       "w": 228,
+       "h": 88
+      },
+      "tools": {
+       "x": 261,
+       "y": 605,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 605,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 709.9,
+       "w": 358,
+       "h": 228
+      },
+      "row": {
+       "x": 29,
+       "y": 718.9,
+       "w": 228,
+       "h": 210
+      },
+      "tools": {
+       "x": 261,
+       "y": 718.9,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 261,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 313,
+       "y": 718.9,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 390,
+     "view": 390,
+     "rootScroll": 358,
+     "rootClient": 358
+    }
+   }
+  },
+  {
+   "case": "en-430-rtl",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 628.5,
+       "w": 398,
+       "h": 74
+      },
+      "row": {
+       "x": 133,
+       "y": 637.5,
+       "w": 268,
+       "h": 56
+      },
+      "tools": {
+       "x": 29,
+       "y": 637.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 637.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 637.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 710.5,
+       "w": 398,
+       "h": 210
+      },
+      "row": {
+       "x": 133,
+       "y": 719.5,
+       "w": 268,
+       "h": 192
+      },
+      "tools": {
+       "x": 29,
+       "y": 719.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 81,
+       "y": 719.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 29,
+       "y": 719.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 398,
+     "rootClient": 398
+    }
+   }
+  },
+  {
+   "case": "en-430-ltr",
+   "metrics": {
+    "present": true,
+    "rows": 2,
+    "items": [
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 628.5,
+       "w": 398,
+       "h": 74
+      },
+      "row": {
+       "x": 29,
+       "y": 637.5,
+       "w": 268,
+       "h": 56
+      },
+      "tools": {
+       "x": 301,
+       "y": 637.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 301,
+       "y": 637.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 353,
+       "y": 637.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     },
+     {
+      "rowitem": {
+       "x": 16,
+       "y": 710.5,
+       "w": 398,
+       "h": 210
+      },
+      "row": {
+       "x": 29,
+       "y": 719.5,
+       "w": 268,
+       "h": 192
+      },
+      "tools": {
+       "x": 301,
+       "y": 719.5,
+       "w": 100,
+       "h": 48
+      },
+      "edit": {
+       "x": 301,
+       "y": 719.5,
+       "w": 48,
+       "h": 48
+      },
+      "del": {
+       "x": 353,
+       "y": 719.5,
+       "w": 48,
+       "h": 48
+      },
+      "toolsInsideRowButton": false,
+      "toolsInsideRowitem": true,
+      "contentInsideRowitem": true,
+      "rowitemSurface": {
+       "bg": "rgb(255, 255, 255)",
+       "borderTop": "1px rgb(220, 229, 226)",
+       "radius": "12px"
+      },
+      "rowButtonSurface": {
+       "bg": "rgba(0, 0, 0, 0)",
+       "borderTop": "0px rgb(23, 45, 50)",
+       "radius": "12px"
+      },
+      "edit48": true,
+      "delete48": true
+     }
+    ],
+    "overflow": {
+     "doc": 430,
+     "view": 430,
+     "rootScroll": 398,
+     "rootClient": 398
+    }
+   }
+  }
+ ],
+ "errors": []
+}
