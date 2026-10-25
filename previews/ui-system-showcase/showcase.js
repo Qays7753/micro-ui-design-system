@@ -876,6 +876,74 @@
         var order = findOrder(e.detail && e.detail.id);
         if (order) openDeleteDialog(order);
       });
+
+      /* ---- تفاصيل الطلب (عقد المرجع الأعلى 2.6): البطاقة كلها زر
+         order-open — أفعال التعديل/الحذف تعيش هنا بدل وجه البطاقة،
+         والحذف يمر من حوار التأكيد القائم نفسه ---- */
+      var details = document.getElementById('app-ocal-details');
+      var detailsOrderId = null;
+      function openDetails(order) {
+        if (!details) return;
+        detailsOrderId = order.id;
+        document.getElementById('app-ocal-details-order-title').textContent = order.title;
+        document.getElementById('app-ocal-details-date').textContent = numericDate(order.date) || 'غير مجدول';
+        document.getElementById('app-ocal-details-time').textContent = order.time || '—';
+        document.getElementById('app-ocal-details-customer').textContent = order.customer || '—';
+        document.getElementById('app-ocal-details-note').textContent = order.note || '—';
+        var statusEl = document.getElementById('app-ocal-details-status');
+        var statusEmpty = document.getElementById('app-ocal-details-status-empty');
+        if (order.statusKey !== '') {
+          var st = APP_STATUSES[order.statusKey] ||
+            { label: String(order.statusKey), tone: 'neutral' };
+          statusEl.hidden = false;
+          if (statusEmpty) statusEmpty.hidden = true;
+          statusEl.textContent = st.label;
+          statusEl.className = 'm-ocal__row-status m-ocal__row-status--' + st.tone;
+        } else {
+          statusEl.hidden = true;
+          if (statusEmpty) statusEmpty.hidden = false;
+        }
+        editor.hidden = true;
+        details.hidden = false;
+        /* فتح سطح التفاصيل أمام عين المستخدم: التركيز يظهر السطح تلقائيًا */
+        document.getElementById('app-ocal-details-edit').focus({ preventScroll: false });
+      }
+      function closeDetails() {
+        if (!details) return;
+        details.hidden = true;
+        var openId = detailsOrderId;
+        detailsOrderId = null;
+        var row = openId
+          ? ocalRoot.querySelector('[data-ocal-id="' + openId + '"][data-ocal-action="order-row"]')
+          : null;
+        if (row && row.focus) row.focus({ preventScroll: true });
+      }
+      if (details) {
+        ocalRoot.addEventListener('order-schedule:order-open', function (e) {
+          var order = findOrder(e.detail && e.detail.id);
+          if (order) openDetails(order);
+        });
+        document.getElementById('app-ocal-details-edit').addEventListener('click', function () {
+          var order = findOrder(detailsOrderId);
+          details.hidden = true;
+          if (order) openEditor({ mode: 'edit', order: order });
+          else details.hidden = false;
+        });
+        document.getElementById('app-ocal-details-delete').addEventListener('click', function () {
+          var order = findOrder(detailsOrderId);
+          if (!order) return;
+          appDemo.detailsReturn = detailsOrderId;
+          details.hidden = true;
+          openDeleteDialog(order);
+        });
+        document.getElementById('app-ocal-details-close').addEventListener('click', closeDetails);
+        details.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeDetails();
+          }
+        });
+      }
     }
 
     /* ---- منتجقي المورد (عقد المنتقي B03 نفسه) ---- */

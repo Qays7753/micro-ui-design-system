@@ -101,8 +101,17 @@
     <symbol id="i-items" viewBox="0 0 24 24" fill="none" data-icon-source="package01.svg"><!-- assets/icons/package01.svg -->
       <path d="M2.5 7.5V13.5C2.5 17.2712 2.5 19.1569 3.67157 20.3284C4.84315 21.5 6.72876 21.5 10.5 21.5H13.5C17.2712 21.5 19.1569 21.5 20.3284 20.3284C21.5 19.1569 21.5 17.2712 21.5 13.5V7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M3.86909 5.31461L2.5 7.5H21.5L20.2478 5.41303C19.3941 3.99021 18.9673 3.2788 18.2795 2.8894C17.5918 2.5 16.7621 2.5 15.1029 2.5H8.95371C7.32998 2.5 6.51812 2.5 5.84013 2.8753C5.16215 3.2506 4.73113 3.93861 3.86909 5.31461Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M12 7.5V2.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" /> <path d="M10 10.5H14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
     </symbol>
-    <symbol id="i-reports" viewBox="0 0 24 24" fill="none" data-icon-source="arrow-up02.svg"><!-- assets/icons/arrow-up02.svg -->
+    <symbol id="i-reports" viewBox="0 0 24 24" fill="none" data-icon-source="arrow-up02.svg"><!-- assets/icons/arrow-up02.svg — لم يعد مستخدمًا في شريط التنقل (عقد المرجع الأعلى 2.7: السهم الأعلى يُقرأ «رفع») -->
       <path d="M12 5.5V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M18 11C18 11 13.5811 5.00001 12 5C10.4188 4.99999 6 11 6 11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+    </symbol>
+    <symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" data-icon-source="chart-column.svg"><!-- assets/icons/chart-column.svg — عقد المرجع الأعلى 2.7: Lucide chart-column، ترخيص ISC -->
+  <!-- عقد المرجع الأعلى 2026-10-25 (2.7): أيقونة التقارير = أعمدة بيانية.
+       الأصل: Lucide «chart-column» (lucide/static/svg) — المسار كما هو،
+       سماكة 1.5 مطابقة لعقد الأيقونات. الترخيص: ISC — النص: LICENSE-lucide.txt -->
+  <path d="M3 3v16a2 2 0 0 0 2 2h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+  <path d="M18 17V9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+  <path d="M13 17V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
+  <path d="M8 17v-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
     </symbol>
     <symbol id="i-account" viewBox="0 0 24 24" fill="none" data-icon-source="user-circle.svg"><!-- assets/icons/user-circle.svg -->
       <path d="M18.4984 19.1511C17.3377 17.4018 15.2947 16.2009 12.9313 16.0569L11.9984 16C11.6652 16.0083 11.3547 16.0194 11.0617 16.0325C8.71722 16.1376 6.66598 17.3796 5.5 19.1511" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M14.9961 10C14.9961 11.6569 13.6529 13 11.9961 13C10.3392 13 8.99609 11.6569 8.99609 10C8.99609 8.34315 10.3392 7 11.9961 7C13.6529 7 14.9961 8.34315 14.9961 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
@@ -138,13 +147,17 @@
     <div class="app-shell">
 
       <!-- شريط التطبيق (عائلة التنقل B07): عنوان كل شاشة + حركة الرجوع -->
+      <!-- المنطقة العلوية (عقد المرجع الأعلى 2.1): مدمجة في الصفحة —
+           نفس كانبة الصفحة بلا شريط خلفي ولا فاصل سفلي؛ العنوان 22/600
+           بداية السطر، والصورة الرمزية 40px داخل هدف 44 نهايته تفتح
+           قائمة الملف/الإعدادات الحالية (شاشة حسابي) -->
       <header class="m-appbar app-topbar">
         <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-back aria-label="رجوع" hidden>
           <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
         </button>
         <span class="m-appbar__title" id="app-title">الرئيسية</span>
-        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-goto="account" aria-label="حسابي">
-          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-account"/></svg>
+        <button type="button" class="app-avatar" data-app-goto="account" aria-label="حسابي">
+          <span class="app-avatar__circle" aria-hidden="true">لم</span>
         </button>
       </header>
 
@@ -277,6 +290,44 @@
           <div class="app-actions-row">
             <button type="button" class="m-btn m-btn--primary" id="app-ocal-editor-save">حفظ</button>
             <button type="button" class="m-btn m-btn--secondary" id="app-ocal-editor-cancel">إلغاء</button>
+          </div>
+        </section>
+
+        <!-- تفاصيل الطلب (سطح مضيف داخل الصفحة): نقطة الوصول لأفعال
+             التعديل/الحذف بعد انتقالهما من وجه بطاقة الطلب (عقد المرجع
+             الأعلى 2.6) — البطاقة كلها تفتح هذا السطح عبر order-open،
+             والحذف يمر من حوار التأكيد القائم -->
+        <section class="app-editor app-details" id="app-ocal-details" hidden aria-labelledby="app-ocal-details-title">
+          <h2 class="m-section-title" id="app-ocal-details-title">تفاصيل الطلب</h2>
+          <div class="app-details__body">
+            <span class="app-details__title" id="app-ocal-details-order-title"></span>
+            <dl class="app-details__rows">
+              <div class="app-details__row">
+                <dt>التاريخ</dt>
+                <dd><bdi id="app-ocal-details-date" dir="ltr">—</bdi></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>الوقت</dt>
+                <dd><bdi id="app-ocal-details-time" dir="ltr">—</bdi></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>المورد</dt>
+                <dd id="app-ocal-details-customer">—</dd>
+              </div>
+              <div class="app-details__row">
+                <dt>الحالة</dt>
+                <dd><span class="m-ocal__row-status" id="app-ocal-details-status" hidden></span><span id="app-ocal-details-status-empty">—</span></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>ملاحظة</dt>
+                <dd id="app-ocal-details-note">—</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="app-actions-row">
+            <button type="button" class="m-btn m-btn--primary" id="app-ocal-details-edit">تعديل</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-delete">حذف</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-close">رجوع للجدول</button>
           </div>
         </section>
       </div>
@@ -490,7 +541,7 @@
           <svg aria-hidden="true"><use href="#i-items"/></svg><span>الطلبات</span>
         </button>
         <button type="button" class="m-navbar__item" data-app-nav-item="reports">
-          <svg aria-hidden="true"><use href="#i-reports"/></svg><span>التقارير</span>
+          <svg aria-hidden="true"><use href="#i-chart-column"/></svg><span>التقارير</span>
         </button>
         <button type="button" class="m-navbar__item" data-app-nav-item="account">
           <svg aria-hidden="true"><use href="#i-account"/></svg><span>حسابي</span>

@@ -134,12 +134,12 @@ TYPOGRAPHY_CSS = """
 
 CALENDAR_TEXT_SELECTORS = (
     ".m-ocal__views-btn,.m-ocal__modes-btn,.m-ocal__navbtn,.m-ocal__month-trigger,"
-    ".m-ocal__todaybtn,.m-ocal__picker-yearbtn,.m-ocal__picker-back,.m-ocal__picker-month,"
+    ".m-ocal__month-label,.m-ocal__year,.m-ocal__todaybtn,.m-ocal__picker-yearbtn,.m-ocal__picker-back,.m-ocal__picker-month,"
     ".m-ocal__weekday,.m-ocal__cell,.m-ocal__daynum,.m-ocal__count,.m-ocal__rail-day,"
     ".m-ocal__rail-weekday,.m-ocal__rail-number,.m-ocal__rail-month,.m-ocal__row,"
-    ".m-ocal__row-title,.m-ocal__row-customer,.m-ocal__row-statuslabel,.m-ocal__row-date,"
-    ".m-ocal__row-time-value,.m-ocal__daypanel-title,.m-ocal__daypanel-count,"
-    ".m-ocal__add,.m-ocal__list-title,.m-ocal__section-title,.m-ocal__status-text,"
+    ".m-ocal__row-title,.m-ocal__row-customer,.m-ocal__row-time,.m-ocal__row-statuslabel,.m-ocal__row-date,"
+    ".m-ocal__row-time-value,.m-ocal__daypanel-title,.m-ocal__daypanel-count,.m-ocal__daypanel-date,"
+    ".m-ocal__legend-label,.m-ocal__add,.m-ocal__list-title,.m-ocal__section-title,.m-ocal__status-text,"
     ".m-ocal__loading-text,.m-ocal__error-text"
 )
 
@@ -654,7 +654,7 @@ def main():
                                       and initial["gridTotal"] == 35
                                       and initial["gridOut"] == 4
                                       and initial["selected"] == "2026-10-07"
-                                      and "10 / 2026" in initial["displayed"]
+                                      and "تشرين الأول 2026" in initial["displayed"]
                                       and normal_title in initial["rows"]
                                       and initial["documentLanguage"] == "ar"
                                       and initial["direction"] == direction
@@ -675,6 +675,12 @@ def main():
                                                 if not (b["height"] >= 48 and b["width"] >= 24):
                                                     return False
                                             elif not (b["width"] >= 48 and b["height"] >= 48):
+                                                return False
+                                        elif b["action"] == "view":
+                                            # عقد المرجع الأعلى 2.2: مقاطع المحدّد
+                                            # 40px داخل مسار غارق 48px — بقية
+                                            # الأزرار 48px كاملة.
+                                            if not (b["width"] >= 48 and b["height"] >= 40):
                                                 return False
                                         elif not (b["width"] >= 48 and b["height"] >= 48):
                                             return False
@@ -781,13 +787,13 @@ def main():
                                   panelTitle:document.querySelector('.m-ocal__daypanel-title')?.textContent.trim()||''
                                 })""")
                                 check(f"{case}: picker changes displayed month only, preserves the selected date, and the day panel stays honest",
-                                      "01 / 2027" in switched["title"]
+                                      "كانون الثاني 2027" in switched["title"]
                                       and switched["selected"] == selected_before
                                       and switched["pickerCount"] == 0
                                       and switched["events"] == event_count
                                       and switched["focus"] == "month-picker"
                                       and switched["browsing"] == "true"
-                                      and "لا يوم محدد في 01/2027" in switched["panelTitle"], switched)
+                                      and "لا يوم محدد في كانون الثاني 2027" in switched["panelTitle"], switched)
                                 page.locator("#order-root [data-ocal-action='month-picker']").click()
                                 page.keyboard.press("Escape")
                                 escaped = page.evaluate("""() => ({

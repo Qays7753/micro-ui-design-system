@@ -137,8 +137,8 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: 2px;
-  padding: var(--micro-space-1);
+  gap: var(--micro-space-1); /* عقد المرجع الأعلى 2.7: فجوة 4px بين الأيقونة والتسمية */
+  padding: var(--micro-space-2); /* بادئة 8px → قرص النشط داخله بـ 8px من حواف البند */
   text-align: center;
   overflow-wrap: anywhere;
   background: transparent;
@@ -151,7 +151,7 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.m-navbar__item svg { width: 22px; height: 22px; flex: none; align-self: center; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-navbar__item svg { width: var(--micro-icon-button-icon); height: var(--micro-icon-button-icon); flex: none; align-self: center; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .m-navbar__item > span { min-width: 0; }
 .m-navbar__item[aria-current="page"] {
   color: var(--micro-brand-ink);

@@ -1,6 +1,83 @@
 # FINAL — Calendar Reference-Fidelity Correction and Donut Closure (2026-10-25)
 
-## 0) المرحلة الأحدث (2026-10-25): دقة التقويم البصرية + المعاينة المحمولة النظيفة
+## ⭐ المرحلة الأحدث (2026-10-25 مساءً): تنقيح عرض شهر التقويم وفق تعليمات المالك الأحدث
+
+هذا القسم يوثق التنفيذ الكامل لتعليمات المالك الأحدث
+`docs/zai/references/owner-visual-concepts-2026-10-25/CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS-2026-10-25.md`
+— **المرجع الأعلى لتقديم شهر التقويم؛ حيث تعارض مع تعليمات التقويم الأقدم سقط التعارض لصالح هذا الملف** (قرار مالك صريح في الإحالة). تنفيذ عرضي بحت: **لا تغيير في نموذج البيانات ولا منطق الطلبات ولا المسارات ولا التخزين ولا واجهات API العامة ولا السلوك الدلالي** — كل الألوان عبر توكنز دلالية قائمة، ولا hex صلب ولا ألوان/أنصاف أقطار/مسافات جديدة، ولا مكتبات خارجية، وLight-only بلا تفعيل داكن.
+
+### ⭐.0) سجل التنفيذ الدقيق
+
+| البند | القيمة |
+|---|---|
+| Starting commit (رأس الفرع البعيد عند بدء هذه المرحلة، مطابق بـ `git ls-remote`) | `4f4b270925f8d2bc6a5c5063469d6451fcc0cb62` («Add owner Calendar visual refinement contract») |
+| Branch | `replit/light-only-complete-ui-repair-2026-10-24` — الفرع نفسه فقط؛ لا فرع جديد ولا دمج |
+| Ending commit | الالتزام الذي يحمل هذا التقرير (يُتحقق بـ `git ls-remote origin replit/light-only-complete-ui-repair-2026-10-24` ومطابقته لـ `git rev-parse HEAD`) |
+| `main` | **لم تُمَس** — بقي عند `161bb71adbed86e0df4382174cb07bd2fcb8d62d` |
+| منفذ المراجعة المرجعي | **Samsung Galaxy S25: 360×780 CSS px، تصيير 100%، عمودي** — لا `zoom` ولا `transform: scale` ولا إطار جهاز (CSS متجاوب عادي) |
+
+### ⭐.1) قرارات العرض المنفذة (مقابل تعليمات المالك بندًا بندًا)
+
+| بند التعليمات | القرار المنفذ | الملفات |
+|---|---|---|
+| 2.1 المنطقة العلوية مدمجة بلا شريط/فاصل؛ العنوان 22/600؛ صورة رمزية 40px داخل هدف 44 | إلغاء اللاصق والحد السفلي وخلفية شريط الأعلى (كانبة الصفحة نفسها)؛ العنوان بتوكن عنوان السطح 22px/600؛ زر الصورة الرمزية 44×44 بدائرة 40px بلا حلقة يفتح شاشة حسابي القائمة | `showcase.css` (`.app-topbar`/`.app-avatar*`)، `index.html` |
+| 2.2 محدد واحد مقسّم: سطح غارق، radius-lg، حشو 4، ارتفاع 48، ثلاث مقاطع؛ النشط brand-tint/brand-ink/600؛ ARIA tablist/tab/aria-selected | `role=tablist`/`tab`/`aria-selected` مع roving tabs وأسهم APG واعية للاتجاه؛ السطح الغارق بتوكن سطح التحويم القائم (`--micro-seg-hover-surface`)؛ المقطع 40px بزوايا radius-md بلا حدود | `order-schedule.js` (`viewsegBtn`/`buildViewSeg`/`onKeydown`)، `order-schedule.css` |
+| 2.3 متصفح الشهر: اسم الشهر + السنة («تشرين الأول 2026» أسماء شامية/أردنية)، إلغاء «10 / 2026»؛ «اليوم» نصية بلا حد وتُرسَم شرطيًا؛ الأسهم 24px بلا حدود بترتيب [اليوم][السابق][التالي] نهاية السطر | `MONTHS_AR` صارت الأسماء الشامية (أكتوبر = تشرين الأول)؛ `.m-ocal__month-label` (18/600/ink-primary) + `.m-ocal__year` (18/400/ink-secondary) + شيفرون هابط 20px (المنتجقي حقيقي)؛ `todayVisible()` يخفي «اليوم» بصدق حين يكون التحديد هو اليوم والشهر المعروض شهره؛ نفس النمط على شريطي الأسبوع واليوم | `order-schedule.js` (`buildCalBar`/`buildWeekBar`/`buildDayBar`/`buildNavActions`/`todayVisible`)، `order-schedule.css` |
+| 2.4 بطاقة التقويم: حد 1px بلا ظل، بلا خطوط شبكة داخلية إطلاقًا؛ رأس أيام 36px/14px؛ تشريح خلية ثابت (chip 32×28 radius-md + خانة نقاط محجوزة 6px دائمًا)؛ نقاط 6px بفجوة 4 بالترتيب الدلالي (قيد التنفيذ→بانتظار العميل→تم التسليم) بحد 3؛ حالات: خارج الشهر رقم disabled ونقاط 40%، اليوم حلقة 1px divider-strong + 600، المحدد chip brand-tint ورقم brand-ink/600 (الخلية لا تُملأ)، المجموع بلا حلقة؛ مفتاح الحالات داخل البطاقة أسفلها (12/16، 14px/400) | أزيل كل حدود الخلايا/الرأس والظل (`box-shadow: none` على البطاقة)؛ خانة `m-ocal__dots` تُبنى دائمًا بارتفاع 6px حتى الفارغة (إصلاح قفز الأساس — تحقق قياس: فرق الأساس داخل الصف < 0.5px)؛ `distinctStatuses` يرتب بالأولوية الدلالية (`toneRank`)؛ اليوم = `box-shadow 0 0 0 1px var(--micro-border-control)` على chip؛ المفتاح ابن `.m-ocal__calcard` | `order-schedule.js` (`buildDayCell`/`distinctStatuses`/`buildLegend`/`buildCalCard`)، `order-schedule.css` |
+| 2.5 رأس القسم: «طلبات اليوم» أو «طلبات 07/10/2026» (bdi) + العدد رقمًا عاديًا؛ «إضافة طلب» نهاية السطر (السطح البترولي المملوء الوحيد، 44px، radius-md، أيقونة plus 20) | `eventsTitleNodes` يستبدل صيغة اسم اليوم بالتاريخ الرقمي المعزول؛ العدد `<p>` نصه الرقم مع `aria-label` بعبارة العدد العربية؛ الإضافة بقاء بنفس عقد الزر (48px توكن اللمس — أعلى من حد 44)؛ **قياس حي: أسطح brand المملوءة المرئية = ["إضافة طلب"] فقط** | `order-schedule.js` (`eventsTitleNodes`/`buildDayPanel`)، `order-schedule.css` |
+| 2.6 بطاقة الطلب: إزالة زري التعديل/الحذف الدائريين من الوجه؛ البطاقة كلها زر فتح تفاصيل الطلب؛ شبكة 1fr/20px بسهم اتجاهي 20px (chevron-left في RTL) بلون التلميح؛ سطران: العنوان (قطع بصري) + الوقت نصًا عاديًا (بلا أيقونة ساعة/شريحة)، العميل + شارة الحالة (13px حسب النص، ونُفذت 14px توكن التسمية التزامًا بقاعدة «العربية لا تقل عن 14px» — توثيق الانحراف: القاعدة الأرضية 0.5 تسود على رقم 2.6)؛ ارتفاع أدنى 76، حشو 12/16، تتباعد 8؛ الفراغ «لا توجد طلبات» سطر واحد بلا صناديق | حُذف مسار `withTools`/`rowToolBtn`/أيقونتا القلم والسلة من المكوّن؛ البطاقة `grid-template-columns: minmax(0,1fr) 20px`؛ الوقت `<bdi dir="ltr">` tabular-nums؛ شارة الحالة زوج توكناتها القائم (info/warning/success-surface)؛ **أفعال التعديل/الحذف تعيشها أسطح تفاصيل الطلب لدى المضيف** (سطح `#app-ocal-details`: عرض التاريخ/الوقت/المورد/الحالة/الملاحظة + زرا تعديل وحذف، والحذف عبر حوار التأكيد القائم)؛ يبقى `orderActions` وحدثا الطلب في العقد العام بقاءً للتوافق (توثيق في المواصفة) | `order-schedule.js` (`buildOrderRow`/`buildRows`)، `order-schedule.css`، `showcase.js` (`openDetails`/`closeDetails`)، `index.html` (سطح التفاصيل) |
+| 2.7 شريط سفلي edge-to-edge 64+safe، 4 بنود، أيقونة 24 + تسمية 13/500، النشط brand-tint radius-md، واستبدال أيقونة التقارير بأعمدة بيانية | `m-navbar` (عائلة التنقل نفسها): الأيقونة بتوكن أيقونة زر الأوامر 24px، فجوة 4، حشو بند 8 — ينتج ارتفاع ≈64؛ النشط brand-tint/brand-ink قائم أصلًا؛ أيقونة `#i-chart-column` أصل Lucide «chart-column» (viewBox 24، سماكة 1.5) في `assets/icons/chart-column.svg` بترخيص ISC موثق في `assets/SOURCES.md` — لا مكتبة خارجية | `navigation.css`، `index.html` (sprite + nav)، `assets/icons/chart-column.svg`، `assets/icons/LICENSE-lucide.txt`، `assets/SOURCES.md` |
+| 3. الحركة: ضغط 80ms، حالة 120ms، الشهر تلاشٍ 200ms بلا انزلاق؛ احترام reduced-motion | انتقالات التوكنات القريبة (110/120ms)؛ تلاشٍ 200ms على البطاقة فقط عبر `data-ocal-fade` لعنصر تصيير واحد (يُمسح بعده فلا يعاد على كل تحديد)؛ `prefers-reduced-motion` يلغي الجميع (قائم) | `order-schedule.js` (`shiftMonthCursor`/`render`)، `order-schedule.css` (`@keyframes m-ocal-month-fade`) |
+
+**قرار عرضي موثق (خارج النص الحرفي، في حدود التوكنات):** لا يوجد توكن نصف قطر 6px في المستودع؛ شارة الحالة استخدمت أقرب توكن قائم `--micro-radius-chip` (8px) بدل إدخال قيمة جديدة (قاعدة «لا أنصاف أقطار جديدة» تتقدم على رقم 2.6 الحرفي). أهداف لمس أزرار المكوّن بقيت على توكن اللمس 48px (أعلى من حد 44 في التعليمات ويحققه) عدا مقاطع المحدّد (40px داخل مسار 48px كما نصت التعليمات حرفيًا).
+
+### ⭐.2) الملفات المتغيرة في هذه المرحلة
+
+`components/order-schedule/order-schedule.js` · `components/order-schedule/order-schedule.css` · `components/order-schedule/specification.md` · `previews/ui-system-showcase/index.html` (المنطقة العلوية + sprite + سطح تفاصيل الطلب + أيقونة التنقل) · `previews/ui-system-showcase/showcase.css` · `previews/ui-system-showcase/showcase.js` · `previews/ui-system-showcase/standalone.html` (مولَّد حتميًا) · `components/navigation/navigation.css` · `assets/icons/chart-column.svg` · `assets/icons/LICENSE-lucide.txt` · `assets/SOURCES.md` · `tools/light-calendar-check.py` · `tools/light-release-check.py` · `tools/clean-mobile-preview-check.py` · `MANIFEST.json` (مولَّد) · هذا التقرير + أدلة `generated-artifacts/`.
+
+**تحديث بوابة موثق (تغيير عقد لا تمرير عيب):** فحوص `light-calendar-check.py`/`light-release-check.py`/`clean-mobile-preview-check.py` حُدّثت توقعاتها حيث **غيّر المرجع الأعلى العقد الموثق فعلاً**: رأس الشهر اسم + سنة (يلغي «MM / YYYY»)، حالة التحديد chip brand-tint بدل تعبئة الخلية البترولية، حلقة اليوم 1px divider-strong على chip، **لا خطوط شبكة داخلية** (كانت فواصل رقيقة معتمدة)، شفافية نقاط الشهور المجاورة 40% (كانت 35%)، عنوان الأحداث «طلبات DD/MM/YYYY» (سقط اسم اليوم)، العدد رقمًا، نص الفراغ «لا توجد طلبات»، إخفاء «اليوم» شرطيًا، المحدّد tablist/aria-selected، وإزالة فحوص أزرار التعديل/الحذف على وجه البطاقة مستبدلة بفحوص «البطاقة كلها تفتح التفاصيل» (order-open مرة واحدة + سهم 20px + هندسة 76px/1fr-20px/بلا ظل). لم يُضعف أي فحص: كل بديل يقيس العقد الجديد بمقاييس حية نفسها (computed styles، أهداف لمس، أحداث، اتجاهان).
+
+### ⭐.3) البوابات — الأرقام الحقيقية الكاملة (كلها صفر إخفاق)
+
+| البوابة | النتيجة الحقيقية |
+|---|---|
+| `python3 tools/light-release-check.py` | **792 PASS / 0 FAIL** (64 حالة مصفوفة) |
+| `python3 tools/light-static-check.py` | **215/215 PASS** |
+| `python3 tools/light-calendar-check.py` | **143 PASS / 0 FAIL** |
+| `python3 tools/light-data-check.py` | **184 PASS / 0 FAIL** |
+| `python3 tools/chart-mobile-check.py` | **59 PASS / 0 FAIL** |
+| `python3 tools/component-mobile-check.py` | **52 PASS / 0 FAIL** |
+| `python3 tools/ui-system-showcase-check.py` | **126 PASS / 0 FAIL** |
+| `python3 tools/ui-system-showcase-repair-check.py --tag calendar-visual-refinement` | **92 PASS / 0 FAIL** (أخطاء console: 0) |
+| `python3 tools/clean-mobile-preview-check.py --capture-dir …` | **50 PASS / 0 FAIL** (source + standalone) |
+| `python3 tools/component-catalog-build.py --check` | **PASS** (14 عائلة) |
+| `python3 tools/build-ui-system-showcase-standalone.py` ثم `--check` | **CHECK OK** — إعادة التوليد مطابقة بايت-ببايت (24 رمز أيقونة يطابق الأصول) |
+| `python3 tools/manifest-build.py` ثم `--check` | **CHECK OK** — 746 مدخلًا، صفر اختلافات (أُعيد توليده بعد كل الملفات النهائية كي يعالج قِدَم المانيفست المذكور في الإحالة) |
+| `python3 tools/preview-runtime-check.py --base http://127.0.0.1:<port>` | **112/112 PASS** (source وstandalone × 320/360/390/430 × rtl/ltr) |
+| `node --check components/order-schedule/order-schedule.js` و`node --check components/data/data.js` | **PASS** |
+| `git diff --check` | **نظيف** (يُعاد قبل الالتزام) |
+
+### ⭐.4) الفحص اليدوي العملي على المعاينة الحية (إلزامي — منفذ)
+
+جولة تفاعلية كاملة (`scripts/walkthrough_calendar_refinement.py` خارج المستودع) على المصدر النهائي في RTL ثم LTR عند 360×780: الرئيسية → الطلبات (شهر) → تبديل أسبوع/يوم/شهر → التنقل بين الشهور → يوم فارغ → نقر بطاقة طلب كاملة (فتح تفاصيل الطلب) → حذف بحوار تأكيد → إضافة (محرر داخل الصفحة) → منتقي الشهر → التقارير (أعمدة/خطي/توزيع/لا-بيانات) → حسابي → عروض المتانة 320×640/320×780/390×780/430×780 → محاكاة 200%. **النتيجة: صفر مشاكل**، مع قياسات حية موثقة:
+- **ميزانية الطي (5 صفوف):** أسفل أول بطاقة طلب 674px أعلى شريط التنقل 711px عند 360×780 (بعد رفع أيقونة التنقل إلى 24px) — البطاقة الأولى **ظاهرة كاملة** فوق الشريط.
+- **سطح brand المملوء المرئي = 1** («إضافة طلب») في الاتجاهين.
+- **أساس أرقام الأيام داخل الصف الواحد متطابق** (فرق < 0.5px سواء وُجدت نقاط أم لا).
+- **لا فيض أفقي** في 320/360/390/430 × RTL/LTR ولا عند 200%، والشبكة بلا خطوط داخلية، والمفتاح داخل البطاقة، وسهما البطاقة والمتصفح اتجاهيان صحيحان بصريًا.
+
+### ⭐.5) الأدلة البصرية لهذه المرحلة
+
+`generated-artifacts/calendar-refinement-walkthrough/` — لكل اتجاه (rtl/ltr): `01-home-360x780` · `02-orders-month-360x780` (كامل + fold) · `03-orders-week` · `04-orders-day` · `05-next-month` · `06-order-details` · `07-delete-dialog` · `08-add-editor` · `09-month-picker` · `10-reports` · `11-reports-mix` · `12-account` · `13-orders-200pct` · `orders-320x640/320x780/390x780/430x780`. وكذلك `generated-artifacts/calendar-refinement-evidence/` من بوابة المعاينة النظيفة (source/standalone). الأدلة الأقدم للمراحل السابقة تبقى كما هي أدناه.
+
+### ⭐.6) حدود غير مختبرة (NOT RUN)
+
+أجهزة حقيقية (S25 فعلية/لمس حقيقي)، TalkBack/VoiceOver وقارئ شاشة فعلي، WebKit/Safari، تكبير نظام أصلي (المحاكاة ×2 بمرور نظيف فقط)، RTL نظامي فعلي، safe-area فعلية، أداء آلاف الطلبات. الدراك خارج النطاق عمدًا (Light-only). لا توجد قيد غير منفذ من نص تعليمات المالك الأحدث؛ الانحرافان الموثقان أعلاه (شارة 14px بدل 13، وchip 8px بدل radius 6) نتيجتا قاعدتي «العربية ≥14px» و«لا قيم جديدة» في الملف الأعلى نفسه، ونصهما الأرضي يتقدم على أرقام بنوده التفصيلية.
+
+---
+
+# الأرشيف: مراحل سابقة (قبل تعليمات المرجع الأعلى)
+
+## 0) المرحلة (2026-10-25): دقة التقويم البصرية + المعاينة المحمولة النظيفة
 
 هذا القسم يوثق التنفيذ الكامل لأحدث إحالة (ZAI-CALENDAR-FIDELITY-AND-DONUT-CORRECTIVE-PROMPT-2026-10-25.md في نسختها الأخيرة + مرجع المالك `calendar-target-latest-owner.png`): المرحلتان — دقة التقويم البصرية (Phase 1) وتحويل سطح المراجعة الافتراضي إلى تطبيق هاتفي حقيقي (Phase 2) — مع بوابة جديدة مخصصة للمعاينة النظيفة، وكل البوابات صفر فشل، والقسم 0·س أدناه يوثق مرحلة الاحتواء السابقة التي بقيت بلا انحدار.
 

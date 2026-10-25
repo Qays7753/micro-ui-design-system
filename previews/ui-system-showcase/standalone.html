@@ -3098,8 +3098,8 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: 2px;
-  padding: var(--micro-space-1);
+  gap: var(--micro-space-1); /* عقد المرجع الأعلى 2.7: فجوة 4px بين الأيقونة والتسمية */
+  padding: var(--micro-space-2); /* بادئة 8px → قرص النشط داخله بـ 8px من حواف البند */
   text-align: center;
   overflow-wrap: anywhere;
   background: transparent;
@@ -3112,7 +3112,7 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.m-navbar__item svg { width: 22px; height: 22px; flex: none; align-self: center; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.m-navbar__item svg { width: var(--micro-icon-button-icon); height: var(--micro-icon-button-icon); flex: none; align-self: center; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .m-navbar__item > span { min-width: 0; }
 .m-navbar__item[aria-current="page"] {
   color: var(--micro-brand-ink);
@@ -4723,13 +4723,19 @@ button.m-setting-row:focus-visible { z-index: 1; }
    — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
    لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
 
-   عقد 2026-10-25 (مرجع المالك calendar-reference-implementation.html) —
-   محدّد يوم/أسبوع/شهر حقيقي بثلاث حالات فاعلة، وشبكة الشهر تحوي
-   أيام الأشهر المجاورة خافتة قابلة للتحديد (m-ocal__cell--out:
-   رقم أهدأ ونقاط بشفافية .35) فيكتمل مستطيل الشبكة كما في المرجع،
-   وعرض الأسبوع صف واحد من الشبكة نفسه بأيام حقيقية، ومنطقة أحداث
-   اليوم المحدد (m-ocal__daypanel) ظاهرة دائمًا أسفل الشبكة — لا
-   عرضا expanded/agenda ولا منطقة إفصاح (عقد ملغى 2026-10-25).
+   عقد 2026-10-25 (CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS —
+   المرجع الأعلى لتقديم شهر التقويم؛ يسقط ما تعارض معه مما سبق):
+   محدد واحد مقسّم بسطح غارق (المقطع النشط brand-tint بلا تعبئة
+   brand)، ومتصفح شهر بلا صناديق (تسمية بداية السطر + «اليوم»/السهمان
+   نهايته، «اليوم» شرطيًا)، وبطاقة تقويم بحد واحد بلا ظل ولا خطوط
+   شبكة داخلية (الإيقاع من الفراغ)، وتشريح خلية ثابت: chip رقم
+   32×28 + خانة نقاط محجوزة دائمًا (6px) فلا قفز أساس، وتحديد =
+   chip brand-tint (الخلية لا تُملأ)، واليوم = حلقة 1px divider-strong
+   على chip، ومفتاح الحالات داخل البطاقة، وبطاقة طلب شبكية (1fr 20px)
+   قابلة للنقر كليًا بسهم اتجاهي — بلا أزرار تعديل/حذف على وجهها
+   (تنتقل لسطح تفاصيل الطلب لدى المضيف). الحركة: ضغط 80–110ms،
+   حالة 120ms، تلاشٍ 200ms لتغيّر الشهر فقط، وprefers-reduced-motion
+   يلغي الجميع.
    ========================================================= */
 
 .m-ocal,
@@ -4757,44 +4763,44 @@ button.m-setting-row:focus-visible { z-index: 1; }
   outline-offset: var(--micro-focus-gap);
 }
 
-/* ================= 1) محدّد العرض الموحّد (يوم/أسبوع/شهر) ================= */
-/* 2026-10-25 (مرجع المالك calendar-reference-implementation.html): عنصر
-   واحد بثلاث حالات فاعلة بترتيب المرجع (Day|Week|Month) — أزرار ضغط
-   أصلية بسمة aria-pressed (نمط المكوّن الموثق)؛ المضغوط بتعبئة
-   البترولي ونص معكوس — لغة تحديد المكوّن نفسها (خلية اليوم المحدد).
-   الحالة ليست باللون وحده: aria-pressed + وزن + تعبئة مميزة.
-   القائمة ليست زرًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
+/* ================= 1) محدّد العرض الموحّد (يوم/أسبوع/شهر) =================
+   عقد 2026-10-25 (المرجع الأعلى 2.2): عنصر واحد بثلاث مقاطع متساوية
+   داخل سطح غارق (radius-lg 16، حشو 4، ارتفاع 48) — المقطع 40px
+   بزوايا radius-md 12 بلا حدود، والنشط brand-tint + brand-ink
+   بوزن 600 (لا تعبئة brand). الحالة ليست باللون وحده:
+   role=tab + aria-selected + وزن + تعبئة مميزة.
+   القائمة ليست مقطعًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
 .m-ocal__viewseg {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--micro-space-1);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
   flex: 1;
   min-width: 0;
+  padding: var(--micro-space-1);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-seg-hover-surface);
 }
 
 .m-ocal__viewseg-btn {
-  flex: 1 1 0;
-  min-width: 48px; /* ≥ هدف اللمس — WCAG 2.5.8 والعقد 48px */
-  min-height: var(--micro-touch-min); /* ≥ 48px */
+  min-width: 48px; /* ≥ هدف اللمس العرضي — WCAG 2.5.8 */
+  min-height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--micro-space-2);
   padding-inline: var(--micro-space-2);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-base);
+  border: 0;
+  border-radius: var(--micro-radius-field);
+  background-color: transparent;
   color: var(--micro-text-secondary);
-  font-size: var(--micro-button-label-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-.m-ocal__viewseg-btn[aria-pressed="true"] {
-  background-color: var(--micro-brand-primary);
-  border-color: var(--micro-brand-primary);
-  color: var(--micro-text-inverse);
+.m-ocal__viewseg-btn[aria-selected="true"] {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
   font-weight: var(--micro-weight-semibold);
 }
 
@@ -4813,36 +4819,45 @@ button.m-setting-row:focus-visible { z-index: 1; }
   gap: var(--micro-space-3);
 }
 
-/* ---- رأس التقويم: سهم الشهر السابق/التالي + العنوان + «اليوم» ---- */
+/* ---- متصفح الشهر/الأسبوع/اليوم (عقد المرجع الأعلى 2.3): صف واحد
+   بلا صناديق — التسمية في بداية السطر المضمن (flex:1) ومجموعة
+   الأفعال في نهايته؛ الضغط على الجميع بطبقة 8% من ink-primary
+   (سطح selected القائم) — عناصر ثانوية بلا حدود. */
 .m-ocal__cal-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min);
+}
+
+.m-ocal__cal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  margin-inline-start: auto;
 }
 
 .m-ocal__cal-title {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0; /* يسمح بالالتفاف عند الضيق بدل الفيض */
   margin: 0;
-  text-align: center;
-  font-size: var(--micro-button-label-size);
+  text-align: start;
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
 }
 
 .m-ocal__month-trigger {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  justify-content: center;
   gap: var(--micro-space-1);
   min-height: var(--micro-touch-min);
-  padding: var(--micro-space-1) var(--micro-space-2);
+  padding: 0 var(--micro-space-2);
   border: 0;
-  border-radius: var(--micro-radius-chip);
+  border-radius: var(--micro-radius-field);
   background: transparent;
   color: inherit;
   font: inherit;
@@ -4850,24 +4865,22 @@ button.m-setting-row:focus-visible { z-index: 1; }
   overflow-wrap: anywhere;
 }
 
-/* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
-   تدرّج رأس الشهر الرقمي «MM / YYYY» داخل زر المنتقي — رقم الشهر
-   محوري (توكن عنوان القسم 18px/600) والسنة ثانوية (توكن التسمية
-   14px/400) + شيفرون هابط يعلن المنتقي. لا أسماء أشهر مرئية. */
-.m-ocal__month-num {
+/* عقد المرجع الأعلى 2.3: اسم الشهر محوري (600/ink-primary) والسنة
+   بنفس المقاس بوزن 400 ولون ink-secondary — تدرّج بالوزن واللون.
+   أرقام السنة بأرقام لاتينية ثابتة العرض. */
+.m-ocal__month-label {
   font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
-  font-variant-numeric: tabular-nums;
 }
 
 .m-ocal__year {
-  font-size: var(--micro-label-size);
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-regular);
-  line-height: var(--micro-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-secondary);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .m-ocal__month-trigger svg {
@@ -4880,9 +4893,11 @@ button.m-setting-row:focus-visible { z-index: 1; }
 }
 
 .m-ocal__month-trigger:hover {
-  background-color: var(--micro-surface-selected);
+  background-color: var(--micro-seg-hover-surface);
 }
 
+/* الأسهم: بلا حدود ولا تعبئة — أيقونة 24px بلون ink-secondary
+   داخل هدف لمس كامل (48px) */
 .m-ocal__navbtn {
   flex: none;
   width: var(--micro-icon-button-size);  /* 48px */
@@ -4890,10 +4905,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--micro-border-divider);
+  border: 0;
   border-radius: var(--micro-radius-circle);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-brand-primary);
+  background-color: transparent;
+  color: var(--micro-text-secondary);
   cursor: pointer;
 }
 
@@ -4902,6 +4917,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
   height: var(--micro-icon-button-icon);
   fill: none;
   stroke: currentColor;
+}
+
+.m-ocal__navbtn:hover {
+  background-color: var(--micro-seg-hover-surface);
 }
 
 /* Month/year picker is an in-flow local layer, not a new navigation route. */
@@ -4974,50 +4993,66 @@ button.m-setting-row:focus-visible { z-index: 1; }
   font-weight: var(--micro-weight-semibold);
 }
 
+/* «اليوم»: زر نصي بلا حد ولا تعبئة (عقد المرجع الأعلى 2.3) —
+   يُرسَم شرطيًا فقط حين لا يكون التحديد/الشهر المعروض هو اليوم */
 .m-ocal__todaybtn {
   flex: none;
-  min-height: var(--micro-touch-min); /* ≥ 48px */
-  padding-inline: var(--micro-space-4);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-brand-primary);
-  font-size: var(--micro-button-label-size);
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-3);
+  border: 0;
+  border-radius: var(--micro-radius-field);
+  background-color: transparent;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-/* ---- زر «اليوم» في شريط الشهر/الأسبوع/اليوم: فعل اختيار صريح ---- */
+.m-ocal__todaybtn:hover {
+  background-color: var(--micro-seg-hover-surface);
+}
 
 /* ================= 3) بطاقة التقويم: شبكة الشهر وشبكة الأسبوع =================
-   عقد 2026-10-25 (calendar-target-latest-owner.png): رؤوس الأيام + الشبكة
-   داخل سطح متميز واحد (تعبئة السطح، حد خافت، زوايا سطح، ارتفاع خفيف —
-   كلها توكنز قائمة) وفواصل صفوف/أعمدة رقيقة بحد الفواصل نفسه.
+   عقد المرجع الأعلى 2.4: رؤوس الأيام + الشبكة + المفتاح داخل سطح
+   واحد (تعبئة السطح، حد خافت واحد، زوايا سطح، بلا ظل) — لا خطوط
+   شبكة داخلية إطلاقًا: الإيقاع من الفراغ والارتفاع الثابت للخلايا.
    الأعمدة السبعة ثابتة: بلا فجوات — كل عمود 100%/7 بالضبط، ورأس الأيام
    يستخدم القسمة نفسها فيمحاذاة تمامًا فوق أعمدة التواريخ في RTL وLTR.
-   شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد. */
+   شبكة الأسبوع هي الشبكة نفسها بصف واحد. */
 .m-ocal__calcard {
   border: 1px solid var(--micro-border-divider);
   border-radius: var(--micro-radius-surface);
   background-color: var(--micro-surface-base);
-  box-shadow: var(--micro-shadow-emphasis);
   overflow: hidden;
+}
+
+/* عقد المرجع الأعلى 3: تلاشٍ 200ms لتغيّر الشهر فقط (بلا انزلاق) —
+   وتُلغى الحركة كاملة تحت prefers-reduced-motion أسفل الملف. */
+.m-ocal[data-ocal-fade="1"] .m-ocal__calcard {
+  animation: m-ocal-month-fade 200ms var(--micro-ease-standard);
+}
+
+@keyframes m-ocal-month-fade {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
 }
 
 .m-ocal__weekdays {
   display: flex;
-  border-block-end: 1px solid var(--micro-border-divider);
   background-color: var(--micro-surface-base);
 }
 .m-ocal__weekday {
   width: calc(100% / 7);
   min-width: 0;
-  padding-block: var(--micro-space-2);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  font-size: var(--micro-secondary-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
-  line-height: var(--micro-secondary-line);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
   /* إصلاح R3-2b (2026-10-08): الالتفاف في أي مكان — اسم يوم عربي كلمة
      واحدة لا يتسع في عمود ~37px عند نص×2؛ المكوّن مكتفٍ ذاتيًا ولا
@@ -5028,162 +5063,132 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__grid {
   display: flex;
   flex-direction: column;
-  /* 2026-10-25 (بطاقة التقويم): فواصل الصفوف رقيقة عبر حدود الخلايا
-     السفلية بدل فجوات — مجموعة الرقم+النقاط المتمركزة تبقي النقاط
-     بعيدة عن الصف التالي لأن محتوى الخلية متمركز ضمن أرضية الصف. */
+  /* عقد المرجع الأعلى 2.4: لا خطوط شبكة — الإيقاع من الفراغ بين
+     صفوف بأرضية ارتفاع ثابتة. */
   gap: 0;
 }
 
 .m-ocal__gridrow {
   display: flex;
-  /* إصلاح R3-2b (2026-10-08): أرضية ارتفاع الصف نسبية 2.7em (خط الصف
-     مثبت عند --micro-label-size → 37.8px عند 1× ≈ مربع الخلية، و75.6px
-     عند نص×2). لماذا هنا وليس على الخلية نفسها؟ العنصر الذي يجمع
-     aspect-ratio مع min-height محدد يحل المتصفح عرضه الجوهري على
-     الحجم المنقول من الارتفاع (75.6px عند ×2) فيتضخم الحجم الجوهري
-     للحاوية إلى 7×75.6+24 ≈ 553px ويوسّع أي أبٍ يحجم بالمحتوى (شبكة/
-     flex) خارج الشاشة. الصف بلا aspect-ratio فلا انقلاب، والخلايا
-     تتمدد (stretch) لأرضية الصف فيبقى المربع عند 1× وينمو عموديًا عند
-     التكبير — وهو السلوك الموثق في المواصفة. */
+  /* عقد المرجع الأعلى 2.4: أرضية ارتفاع الصف ثابتة 48px (هدف اللمس)
+     — التشريح الثابت (chip 28 + فجوة 4 + خانة 6) يجلس متمركزًا
+     داخلها فتتقاسم الأسس صفًا كاملًا سواء وُجدت أحداث أم لا.
+     عند تكبير النص تنمو الأرضية مع المحتوى (min-height) فلا قصّ. */
   font-size: var(--micro-label-size);
-  min-height: 2.7em;
+  min-height: var(--micro-touch-min);
 }
 
 /* ---- العرض المدمج للشبكة الكاملة (جذر < 360px؛ data-ocal-compact) ----
-   نفس بنية الشبكة: أرضية ارتفاع الصف ترتفع إلى هدف اللمس 48px
-   (max(2.7em, --micro-touch-min))، والخلية تستقل عن التربيع فعرضها
-   (100%−24px)/7 (≥ 24px — الحد الأدنى WCAG 2.5.8) وارتفاعها ≥ 48px.
+   نفس بنية الشبكة والتشريح نفسه: عرض الخلية (100%−24px)/7
+   (≥ 24px — الحد الأدنى WCAG 2.5.8) وارتفاعها ≥ 48px.
    كل أيام الشهر حاضرة وممكنة بلوحة المفاتيح — لا قصّ ولا إخفاء. */
 .m-ocal[data-ocal-compact="true"] .m-ocal__gridrow {
-  min-height: max(2.7em, var(--micro-touch-min));
+  min-height: var(--micro-touch-min);
 }
 
 .m-ocal[data-ocal-compact="true"] .m-ocal__cell {
-  aspect-ratio: auto;
   min-height: var(--micro-touch-min);
 }
 
 /* خلية فارغة — لم تعد تُستخدم (عقد 2026-10-25: أيام الأشهر المجاورة
    خلايا حقيقية خافتة بدل الفراغات؛ الصنف يبقى محذوفًا من المصدر) */
 
-/* خلية الشهر: مربعة عند الاتساع (≥360px)، وأرضية ارتفاع 48px عند
-   الضيق عبر عقد العرض المدمج أدناه.
-   2026-10-25 (مرجع المالك calendar-reference-implementation.html): الرقم
-   + النقاط مجموعة واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم
-   يومها مباشرة فلا تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل
-   المجموعة حيث يباعد بين الأسابيع.
-   2026-10-25 (بطاقة التقويم): فواصل أعمدة/صفوف رقيقة — حدود منطقية
-   (inline-start/block-start) فتعمل في RTL وLTR بلا انعكاس يدوي؛
-   العمود الأول بلا حد بداية والصف الأول بلا حد علوى عبر :nth-child
-   على بنية الأعمدة السبعة الثابتة. */
+/* خلية الشهر (عقد المرجع الأعلى 2.4): تشريح ثابت متطابق لكل خلية
+   — chip رقم 32×28 ثم فجوة 4px ثم خانة نقاط محجوزة (6px حتى
+   الفارغة) فلا يقفز أساس الرقم بين الخلايا أبدًا. بلا حدود ولا
+   تعبئة على الخلية نفسها؛ أرضية ارتفاع الصف 48px أعلاه. */
 .m-ocal__cell {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 2026-10-25: مجموعة الرقم+النقاط متمركزة (مرجع المالك) */
-  gap: 2px;
+  justify-content: center; /* المجموعة متمركزة داخل أرضية الصف */
+  gap: var(--micro-space-1);
   width: calc(100% / 7);
   min-width: 0;
-  aspect-ratio: 1; /* مربعة — المرجع02؛ الأرضية العمودية في .m-ocal__gridrow */
-  padding: 1px;
+  padding: 2px 0;
   border: 0;
-  border-inline-start: 1px solid var(--micro-border-divider);
   border-radius: 0;
-  background-color: transparent; /* لا شبكة حاويات ثقيلة ولا ظل */
+  background-color: transparent; /* لا خطوط شبكة ولا تعبئة خلايا */
   color: var(--micro-text-primary);
   cursor: pointer;
 }
 
-/* العمود الأول (بداية الأسبوع منطقيًا) بلا حد بداية */
-.m-ocal__cell:nth-child(7n + 1) {
-  border-inline-start: 0;
-}
-
-/* حد الصفوف: أول صف في الشبكة بلا حد علوى (رأس الأيام يحمل خطه
-   السفلي الخاص)، وبقية الصفوف تحمل الحد على أول خلية فيه ليكون
-   الخط مستمرًا عبر الصف كله بلا ازدواج */
-.m-ocal__gridrow + .m-ocal__gridrow .m-ocal__cell {
-  border-block-start: 1px solid var(--micro-border-divider);
-}
-
+/* chip الرقم: 32×28 بزوايا radius-md — سطح الحالة الوحيد في الخلية
+   (تحديد/اليوم/الضغط) — الخلية نفسها لا تُملأ أبدًا */
 .m-ocal__daynum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  border-radius: var(--micro-radius-field);
   font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* يوم من شهر مجاور (عقد 2026-10-25 — مرجع المالك: «grey number, dots
-   at 35% opacity»): رقم أهدأ ونقاط أخف شفافية — لكنه يوم حقيقي
-   قابل للتحديد (اختياره ينقل العرض إلى شهره). التحديد/اليوم الحالي
-   يظلان بعلامتيهما الكاملتين فوق الخفوت. */
+/* يوم من شهر مجاور (عقد المرجع الأعلى 2.4): رقم ink-disabled ونقاط
+   بشفافية 40% — لكنه يوم حقيقي قابل للتحديد (اختياره ينقل العرض
+   إلى شهره). التحديد/اليوم الحالي يظلان بعلامتيهما الكاملتين فوق
+   الخفوت. */
 .m-ocal__cell--out .m-ocal__daynum {
-  color: var(--micro-text-hint);
+  color: var(--micro-text-disabled);
 }
 
 .m-ocal__cell--out .m-ocal__dot {
-  opacity: 0.35;
+  opacity: 0.4;
 }
 
 .m-ocal__cell--out.m-ocal__cell--selected .m-ocal__daynum {
-  color: var(--micro-text-inverse);
+  color: var(--micro-brand-ink);
 }
 
 .m-ocal__cell--out.m-ocal__cell--selected .m-ocal__dot {
   opacity: 1;
 }
 
-/* علامة اليوم الحالي (2026-10-25، مرجع المالك): حد خارجي 2px + رقم
-   شبه عريض — علامتان محوريتان بدل أربع (كانت نقطة الرقم تزاحم نقاط
-   الحالات)؛ والمعنى ليس باللون وحده (aria-current + «اليوم» في
-   aria-label) */
-.m-ocal__cell--today {
-  box-shadow: 0 0 0 2px var(--micro-brand-primary);
-}
-
+/* اليوم الحالي (غير المحدد) — عقد المرجع الأعلى 2.4: وزن 600 +
+   حلقة 1px divider-strong على chip وحدها. والمعنى ليس باللون وحده
+   (aria-current + «اليوم» في aria-label) */
 .m-ocal__cell--today .m-ocal__daynum {
+  box-shadow: 0 0 0 1px var(--micro-border-control);
   font-weight: var(--micro-weight-semibold);
 }
 
-/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) — المربع البارز
-   فوق الفواصل كما في المرجع (الحدود الخافتة تبقى تحته) */
-.m-ocal__cell--selected {
-  background-color: var(--micro-brand-primary);
-  color: var(--micro-text-inverse);
-  border-radius: var(--micro-radius-chip);
-}
-
+/* اليوم المحدد — عقد المرجع الأعلى 2.4: chip بتعبئة brand-tint
+   ورقم brand-ink بوزن 600. الخلية نفسها لا تُملأ، والنقاط تحتفظ
+   بألوانها (لا حلقات بيضاء ولا حدود) */
 .m-ocal__cell--selected .m-ocal__daynum {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
   font-weight: var(--micro-weight-semibold);
 }
 
-.m-ocal__cell--selected .m-ocal__dot {
-  box-shadow: 0 0 0 1px var(--micro-text-inverse); /* تباين النقاط فوق التعبئة */
+/* اجتماعهما: نمط التحديد نفسه بلا حلقة (عقد المرجع الأعلى:
+   Selected + today = selected style plus weight 600 — no ring) */
+.m-ocal__cell--today.m-ocal__cell--selected .m-ocal__daynum {
+  box-shadow: none;
 }
 
-/* اجتماعهما: تبقى علامة اليوم ظاهرة مع التعبئة بلا اختلاط —
-   يتحول الحد والنقطة إلى معكوس فوق البترولي */
-.m-ocal__cell--today.m-ocal__cell--selected {
-  box-shadow: 0 0 0 2px var(--micro-text-inverse);
-}
-
-.m-ocal__cell:active:not(.m-ocal__cell--selected) {
+/* الضغط: طبقة 8% ink-primary على chip وحده (سطح selected القائم) */
+.m-ocal__cell:active:not(.m-ocal__cell--selected) .m-ocal__daynum {
   background-color: var(--micro-surface-selected);
 }
 
-/* نقاط الحالات تحت الرقم مباشرة (2026-10-25، مرجع المالك):
-   نظام مؤشر وحيد — لا عدّاد داخل خلية الشهر (العدد في aria-label
-   الخلية ولوحة اليوم/الأجندة)؛ سقف 3 نقاط بأنواع دلالية.
-   الترتيب الرأسي: الرقم ثم 2px ثم النقاط — ملكية غير ملتبسة. */
+/* نقاط الحالات تحت chip الرقم بفجوة 4px (عقد المرجع الأعلى 2.4):
+   خانة محجوزة تُرسَم دائمًا بارتفاع 6px حتى بلا أحداث — إصلاح
+   قفز الأساس؛ النقاط 6px دائرية صلبة بلا حلقات ولا توهج */
 .m-ocal__dots {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  min-height: 6px;
+  gap: var(--micro-space-1);
+  height: 6px;
 }
 
-/* نقطة الحالة: حد أدنى 6×6px (قيم ثابتة لا سلم مسافات — موثق) */
+/* نقطة الحالة: 6×6px صلبة (قيم ثابتة لا سلم مسافات — موثق) */
 .m-ocal__dot {
   flex: none;
   width: 6px;
@@ -5196,23 +5201,27 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__dot--warning { background-color: var(--micro-warning); }
 .m-ocal__dot--neutral { background-color: var(--micro-text-secondary); }
 
-/* ================= 4) مفتاح الحالات (legend) ================= */
+/* ================= 4) مفتاح الحالات (داخل بطاقة التقويم) =================
+   عقد المرجع الأعلى 2.4: المفتاح يسكن البطاقة أسفل الشبكة (حشو
+   12/16، بلا فاصل أعلاه): ثلاث بنود في صف واحد (فجوة 16، التفاف)،
+   كل بند نقطة 6px + تسمية 14px/400 بلون ink-secondary (فجوة 8)،
+   بالترتيب والألوان نفسهما للنقاط. */
 .m-ocal__legend {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: var(--micro-space-3) var(--micro-space-4);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--micro-space-2) var(--micro-space-3);
+  gap: var(--micro-space-2) var(--micro-space-4);
 }
 
 .m-ocal__legend-item {
   display: inline-flex;
   align-items: center;
-  gap: var(--micro-space-1);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
+  gap: var(--micro-space-2);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
 }
 
@@ -5225,8 +5234,8 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 .m-ocal__legend-dot {
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: var(--micro-radius-circle);
 }
 
@@ -5235,11 +5244,15 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__legend-dot--warning { background-color: var(--micro-warning); }
 .m-ocal__legend-dot--neutral { background-color: var(--micro-text-secondary); }
 
-/* ================= 5) لوحة اليوم أسفل الشبكة وعرض اليوم ================= */
+/* ================= 5) رأس منطقة أحداث اليوم وعرض اليوم =================
+   عقد المرجع الأعلى 2.5: صف واحد (ارتفاع 44) — «طلبات اليوم» أو
+   «طلبات DD/MM/YYYY» بداية السطر (17px≈18 توكن عنوان القسم/600)،
+   يليه بعد 8px العدد رقمًا عاديًا (400/ink-secondary)، وزر
+   «إضافة طلب» نهاية السطر (السطح البترولي المملوء الوحيد). */
 .m-ocal__daypanel {
   display: flex;
   flex-direction: column;
-  gap: var(--micro-space-2);
+  gap: var(--micro-space-3);
 }
 
 .m-ocal__daypanel-head {
@@ -5247,27 +5260,38 @@ button.m-setting-row:focus-visible { z-index: 1; }
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2) var(--micro-space-3);
+  min-height: var(--micro-touch-min);
 }
 
 .m-ocal__daypanel-title {
   flex: 1 1 auto;
   min-width: 140px;
   margin: 0;
-  font-size: var(--micro-button-label-size);
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
 }
 
-.m-ocal__daypanel-count {
-  margin: 0;
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
+.m-ocal__daypanel-date {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأجندة/الأسفل/القائمة) ================= */
+.m-ocal__daypanel-count {
+  margin: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* اليوم الفارغ (عقد المرجع الأعلى 2.6): سطر واحد ممركز بلا
+   صناديق ولا رسوم — حشو 24/16 */
+.m-ocal__daypanel-empty {
+  padding: var(--micro-space-6) var(--micro-space-4);
+  text-align: center;
+}
 .m-ocal__rows {
   list-style: none;
   margin: 0;
@@ -5277,54 +5301,37 @@ button.m-setting-row:focus-visible { z-index: 1; }
   gap: var(--micro-space-2);
 }
 
-/* الصف عنصر به زر رئيسي (فتح) وأدوات فعل اختيارية (تعديل/حذف)
-   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px.
-   عقد 2026-10-25 (تصحيح هندسة ضيق — احتواء شريط الطلب): في الصفوف
-   ذات أدوات الفعل ينتقل السطح الخارجي نفسه للشريط (نفس حد
-   --micro-border-divider وتعبئة --micro-surface-base وزوايا
-   --micro-radius-field وحشو الصف 8/12) إلى حاوية الصف
-   m-ocal__rowitem--tools فيمتد خلف زرّي التعديل/الحذف ويطوّقهما
-   داخل الشريط المستمر نفسه — لا دائرتان معلّقتان خارجه. منطقة
-   المحتوى (m-ocal__row) تفقد سطحها الخاص لكنها تحتفظ بحد أدى 48px
-   (هدف اللمس) وبنصف قطر ضغط مطابق، فيبقى إيقاع الحشو والالتفاف
-   ونص العنوان/الوقت/الحالة كما هو (نفس عرض النص المتاح حرفيًا).
-   الصفوف بلا أدوات (القائمة) لا تتغير إطلاقًا: بقيت هندستها على
-   m-ocal__row كما هي — العمق المتعمد لهذا التصحيح ضيق عمدًا. */
+/* ================= 6) بطاقات الطلبات (اليوم/الأسفل/القائمة) =================
+   عقد المرجع الأعلى 2.6: البطاقة كلها زر فتح تفاصيل الطلب — سطح
+   (radius-lg 16، حد خافت واحد، بلا ظل، حشو 12/16، ارتفاع أدنى 76)،
+   شبكة «عمود محتوى + سهم اتجاهي 20px» بفجوة 12؛ عمود المحتوى سطران
+   (فجوة 4): العنوان + الوقت نصًا عاديًا، ثم العميل + شارة الحالة.
+   البطاقات تتباعد 8px، والضغط طبقة 8% ink-primary. */
+.m-ocal__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
 .m-ocal__rowitem {
   display: flex;
-  align-items: flex-start;
-  gap: var(--micro-space-1);
-}
-
-.m-ocal__rowitem--tools {
-  padding: var(--micro-space-2) var(--micro-space-3);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
-  background-color: var(--micro-surface-base);
-}
-
-.m-ocal__rowitem--tools .m-ocal__row {
-  padding: 0;
-  border: 0;
-  border-radius: var(--micro-radius-field); /* حالة الضغط داخل الشريط */
-  background-color: transparent;
-}
-
-.m-ocal__rowitem--tools .m-ocal__row:active {
-  background-color: var(--micro-surface-selected);
+  min-width: 0;
 }
 
 .m-ocal__row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* محاذاة يمين RTL */
-  gap: 2px;
-  flex: 1;
-  min-width: 0; /* يسمح بالالتفاف داخل الزر بدل توسيع الصف */
-  min-height: var(--micro-touch-min); /* صف كامل ≥ 48px */
-  padding: var(--micro-space-2) var(--micro-space-3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  column-gap: var(--micro-space-3);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 76px;
+  padding: var(--micro-space-3) var(--micro-space-4);
   border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
+  border-radius: var(--micro-radius-surface);
   background-color: var(--micro-surface-base);
   color: var(--micro-text-primary);
   text-align: start;
@@ -5332,71 +5339,89 @@ button.m-setting-row:focus-visible { z-index: 1; }
 }
 
 .m-ocal__row:active {
-  background-color: var(--micro-surface-selected);
+  background-color: var(--micro-seg-hover-surface);
 }
 
-/* عنوان طويل جدًا يلتف داخل الصف ولا يكسره */
+/* عمود المحتوى: سطران بفجوة 4px */
+.m-ocal__row-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: 0;
+}
+
+.m-ocal__row-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  min-width: 0;
+}
+
+/* العنوان: سطر واحد بقطع بصري — النص الكامل باقٍ في DOM وشجرة
+   الإتاحة (قراءة كاملة لقارئ الشاشة)؛ العنوان الطويل لا يدفع
+   الوقت ولا السهم (عقد المرجع الأعلى 5.5) */
 .m-ocal__row-title {
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: var(--micro-body-size);
   font-weight: var(--micro-weight-medium);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
-  overflow-wrap: anywhere;
-  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.m-ocal__row-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--micro-space-1) var(--micro-space-2);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
-  /* إصلاح R3-2b (2026-10-08): العنصر بند flex عرضي (align flex-start على
-     الصف) فيُقاس على max-content دون قصّ من عرض الزر — سطر ثانٍ طويل
-     (عميل + وقت + حالة) عند نص×2 يتجاوز الصف ويفيض خارج المكوّن في أي
-     صفحة مستهلك لا ترث overflow-wrap: anywhere. max-width يقصّه للصف
-     فيلتف محتواه (flex-wrap) — بند الوقاية نفسه الموجود في العنوان. */
-  max-width: 100%;
+/* الوقت: نص عادي 15px≈14 توكن التسمية/500/ink-strong بأرقام
+   ثابتة العرض داخل bdi معزول — بلا أيقونة ساعة ولا شريحة (عقد
+   المرجع الأعلى 2.6: الوقت ليس حالة) */
+.m-ocal__row-time {
+  flex: none;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .m-ocal__row-customer,
 .m-ocal__row-date {
-  overflow-wrap: anywhere;
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* شارة الوقت: أيقونة ساعة SVG مضمّنة + قيمة معزولة LTR */
-.m-ocal__row-time {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--micro-space-1);
-  padding: var(--micro-space-1) var(--micro-space-2);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-selected);
-  color: var(--micro-text-primary);
-}
+.m-ocal__row-placeholder { flex: 1 1 0; }
 
-.m-ocal__row-time svg {
-  width: 14px;
-  height: 14px;
+/* سهم البطاقة الاتجاهي 20px بلون ink-tertiary (توكن التلميح) —
+   يتبع الاتجاه من المكوّن (يسار في RTL، يمين في LTR) */
+.m-ocal__row-chev {
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
+  color: var(--micro-text-hint);
 }
 
-.m-ocal__row-time-value {
-  direction: ltr;
-  unicode-bidi: isolate;
-  font-variant-numeric: tabular-nums;
-}
-
-/* الحالة: نص داخل شريحة ملوّنة دلاليًا — بلا نقطة زائدة (R-24:
-   الكلمة والتلوين يحملان الحالة؛ أزواج توكنات معتمدة فقط) */
+/* الحالة: شارة نصية بلون الحالة الدلالي على تينته — النص وحده
+   يحمل المعنى (R-24)؛ عقد المرجع الأعلى 2.6: حشو 2/8 وزوايا chip
+   (أقرب توكن قائم لradius-sm — لا نصف قطر جديد) */
 .m-ocal__row-status {
   display: inline-flex;
   align-items: center;
-  padding: var(--micro-space-1) var(--micro-space-2);
+  padding: 2px var(--micro-space-2);
   border-radius: var(--micro-radius-chip);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: var(--micro-label-line);
   overflow-wrap: anywhere;
   max-width: 100%;
 }
@@ -5421,68 +5446,13 @@ button.m-setting-row:focus-visible { z-index: 1; }
   color: var(--micro-text-secondary);
 }
 
-/* ملاحظة قصيرة تحت العنوان (وصفية فقط — عقد البيانات 2026-10-25) */
-.m-ocal__row-note {
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-hint);
-  overflow-wrap: anywhere;
-  max-width: 100%;
-}
+/* ملاحظة الطلب القصيرة لم تعد على وجه البطاقة (عقد المرجع الأعلى 2.6 — تعرضها أسطح تفاصيل الطلب لدى المضيف؛ البيانات باقية). */
+.m-ocal__row-note { display: none; }
 
-/* أدوات فعل الصف (تعديل/حذف) — على صفوف سطح فعل اليوم المحدد فقط
-   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات).
-   عقد 2026-10-25: تبقى دائرتين منفصلتين بأسلوبها نفسه داخل امتداد
-   سطح الشريط الخارجي (m-ocal__rowitem--tools) — لا دمج ولا إعادة
-   تصميم ولا تغيير أهداف أو أفعال. */
-.m-ocal__row-tools {
-  flex: none;
-  display: flex;
-  gap: var(--micro-space-1);
-}
-
-.m-ocal__row-tool {
-  width: var(--micro-icon-button-size);  /* 48px */
-  height: var(--micro-icon-button-size); /* 48px */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-circle);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-text-secondary);
-  cursor: pointer;
-}
-
-.m-ocal__row-tool:active {
-  background-color: var(--micro-surface-selected);
-}
-
-.m-ocal__row-tool svg {
-  width: var(--micro-icon-in-button);
-  height: var(--micro-icon-in-button);
-  fill: none;
-  stroke: currentColor;
-}
-
-.m-ocal__row-tool--danger {
-  color: var(--micro-danger);
-  border-color: var(--micro-danger-surface);
-}
-
-/* ================= 6b) منطقة أحداث اليوم المحدد (Event cards) ================= */
-/* عقد 2026-10-25 (مرجع المالك «Events today»): العنوان الموجز +
-   العد + الإضافة في رأس المنطقة، وبطاقات الصفوف المدمجة تحتها —
-   تظهر دائمًا أسفل الشبكة في عرضَي الشهر والأسبوع وفي شاشة اليوم.
-   فراغ اليوم المحدد حالة صادقة داخل المنطقة. */
-.m-ocal__daypanel-empty {
-  padding: var(--micro-space-3) var(--micro-space-4);
-}
-
-/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري).
-   2026-10-25 (عقد الأرقام المرئية): النطاق تعبير رقمي خالص
-   «4–10/10/2026» — يُعزل LTR كي لا يقلب ترتيب أجزائه في سياق RTL
-   (التصيير المرجعي: أرقام لاتينية 0-9 في كل الاتجاهات). */
+/* ================= 6b) نطاق الأسبوع =================
+   نطاق الأسبوع في شريط الأسبوع — تعبير رقمي خالص يُعزل LTR كي
+   لا يقلب ترتيب أجزائه في سياق RTL (أرقام لاتينية 0-9 في كل
+   الاتجاهات). */
 .m-ocal__week-range {
   direction: ltr;
   unicode-bidi: isolate;
@@ -5582,7 +5552,10 @@ button.m-setting-row:focus-visible { z-index: 1; }
   stroke: currentColor;
 }
 
-/* ================= 10) الحركة ================= */
+/* ================= 10) الحركة =================
+   عقد المرجع الأعلى 3: الضغط ~80ms، تغيّر الحالة 120ms، تلاشٍ
+   200ms لتغيّر الشهر (أعلاه) — أقرب توكنات الحركة القائمة
+   (110ms/120ms)، وبلا ارتداد ولا عدّادات. */
 .m-ocal__cell,
 .m-ocal__viewseg-btn,
 .m-ocal__navbtn,
@@ -5592,13 +5565,12 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__picker-back,
 .m-ocal__picker-month,
 .m-ocal__row,
-.m-ocal__row-tool,
 .m-ocal__add,
 .m-ocal__retry {
   transition:
-    background-color var(--micro-motion-selection) var(--micro-ease-standard),
-    color var(--micro-motion-selection) var(--micro-ease-standard),
-    border-color var(--micro-motion-selection) var(--micro-ease-standard);
+    background-color var(--micro-motion-press) var(--micro-ease-standard),
+    color var(--micro-motion-focus) var(--micro-ease-standard),
+    border-color var(--micro-motion-focus) var(--micro-ease-standard);
 }
 
 /* prefers-reduced-motion: بلا انتقالات */
@@ -6495,13 +6467,50 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   }
 }
 
-/* شريط التطبيق أعلى الشاشة (m-appbar) — لاصق أعلى */
+/* المنطقة العلوية (عقد المرجع الأعلى 2.1): مدمجة في الصفحة — نفس
+   كانبة الصفحة بلا شريط خلفي ولا فاصل سفلي (لا لاصق ولا حدود). */
 .app-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--micro-surface-base);
-  border-block-end: 1px solid var(--micro-border-divider);
+  background: var(--micro-surface-page);
+  border-block-end: 0;
+  min-height: 56px;
+}
+
+/* عنوان المنطقة العلوية: 22px/600/ink-primary (توكن عنوان السطح) */
+.app-topbar .m-appbar__title {
+  font-size: var(--micro-surface-title-size);
+  line-height: var(--micro-surface-title-line);
+}
+
+/* الصورة الرمزية (عقد المرجع الأعلى 2.1): دائرة 40px بلا حلقة ولا
+   حد داخل هدف لمس 44×44 — تفتح قائمة الملف/الإعدادات الحالية */
+.app-avatar {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--micro-radius-circle);
+  background: transparent;
+  cursor: pointer;
+}
+
+.app-avatar__circle {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--micro-radius-circle);
+  background: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-semibold);
+}
+
+.app-avatar:active .app-avatar__circle {
+  background: var(--micro-seg-hover-surface);
 }
 
 /* جسم الشاشة: تمرير المستند الطبيعي — لا تمرير متشعّب */
@@ -6570,6 +6579,53 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   border-radius: var(--micro-radius-field);
   background: var(--micro-surface-base);
 }
+
+/* تفاصيل الطلب (عقد المرجع الأعلى 2.6): صفوف تعريف بسيطة —
+   التسمية بداية السطر والقيمة نهايته */
+.app-details__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+  min-width: 0;
+}
+.app-details__title {
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+  overflow-wrap: anywhere;
+}
+.app-details__rows {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: 0;
+}
+.app-details__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-3);
+  min-width: 0;
+}
+.app-details__row dt {
+  flex: none;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+}
+.app-details__row dd {
+  margin: 0;
+  min-width: 0;
+  text-align: end;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+  overflow-wrap: anywhere;
+}
+.app-details__row .m-ocal__row-status { flex: none; }
 .app-editor-date {
   margin: 0;
   font-size: var(--micro-secondary-size);
@@ -6754,8 +6810,17 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     <symbol id="i-items" viewBox="0 0 24 24" fill="none" data-icon-source="package01.svg"><!-- assets/icons/package01.svg -->
       <path d="M2.5 7.5V13.5C2.5 17.2712 2.5 19.1569 3.67157 20.3284C4.84315 21.5 6.72876 21.5 10.5 21.5H13.5C17.2712 21.5 19.1569 21.5 20.3284 20.3284C21.5 19.1569 21.5 17.2712 21.5 13.5V7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M3.86909 5.31461L2.5 7.5H21.5L20.2478 5.41303C19.3941 3.99021 18.9673 3.2788 18.2795 2.8894C17.5918 2.5 16.7621 2.5 15.1029 2.5H8.95371C7.32998 2.5 6.51812 2.5 5.84013 2.8753C5.16215 3.2506 4.73113 3.93861 3.86909 5.31461Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M12 7.5V2.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" /> <path d="M10 10.5H14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
     </symbol>
-    <symbol id="i-reports" viewBox="0 0 24 24" fill="none" data-icon-source="arrow-up02.svg"><!-- assets/icons/arrow-up02.svg -->
+    <symbol id="i-reports" viewBox="0 0 24 24" fill="none" data-icon-source="arrow-up02.svg"><!-- assets/icons/arrow-up02.svg — لم يعد مستخدمًا في شريط التنقل (عقد المرجع الأعلى 2.7: السهم الأعلى يُقرأ «رفع») -->
       <path d="M12 5.5V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M18 11C18 11 13.5811 5.00001 12 5C10.4188 4.99999 6 11 6 11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+    </symbol>
+    <symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" data-icon-source="chart-column.svg"><!-- assets/icons/chart-column.svg — عقد المرجع الأعلى 2.7: Lucide chart-column، ترخيص ISC -->
+  <!-- عقد المرجع الأعلى 2026-10-25 (2.7): أيقونة التقارير = أعمدة بيانية.
+       الأصل: Lucide «chart-column» (lucide/static/svg) — المسار كما هو،
+       سماكة 1.5 مطابقة لعقد الأيقونات. الترخيص: ISC — النص: LICENSE-lucide.txt -->
+  <path d="M3 3v16a2 2 0 0 0 2 2h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" />
+  <path d="M18 17V9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" />
+  <path d="M13 17V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
+  <path d="M8 17v-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="3" />
     </symbol>
     <symbol id="i-account" viewBox="0 0 24 24" fill="none" data-icon-source="user-circle.svg"><!-- assets/icons/user-circle.svg -->
       <path d="M18.4984 19.1511C17.3377 17.4018 15.2947 16.2009 12.9313 16.0569L11.9984 16C11.6652 16.0083 11.3547 16.0194 11.0617 16.0325C8.71722 16.1376 6.66598 17.3796 5.5 19.1511" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="0" /> <path d="M14.9961 10C14.9961 11.6569 13.6529 13 11.9961 13C10.3392 13 8.99609 11.6569 8.99609 10C8.99609 8.34315 10.3392 7 11.9961 7C13.6529 7 14.9961 8.34315 14.9961 10Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="1" /> <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" key="2" />
@@ -6791,13 +6856,17 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     <div class="app-shell">
 
       <!-- شريط التطبيق (عائلة التنقل B07): عنوان كل شاشة + حركة الرجوع -->
+      <!-- المنطقة العلوية (عقد المرجع الأعلى 2.1): مدمجة في الصفحة —
+           نفس كانبة الصفحة بلا شريط خلفي ولا فاصل سفلي؛ العنوان 22/600
+           بداية السطر، والصورة الرمزية 40px داخل هدف 44 نهايته تفتح
+           قائمة الملف/الإعدادات الحالية (شاشة حسابي) -->
       <header class="m-appbar app-topbar">
         <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-back aria-label="رجوع" hidden>
           <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
         </button>
         <span class="m-appbar__title" id="app-title">الرئيسية</span>
-        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-goto="account" aria-label="حسابي">
-          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-account"/></svg>
+        <button type="button" class="app-avatar" data-app-goto="account" aria-label="حسابي">
+          <span class="app-avatar__circle" aria-hidden="true">لم</span>
         </button>
       </header>
 
@@ -6930,6 +6999,44 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
           <div class="app-actions-row">
             <button type="button" class="m-btn m-btn--primary" id="app-ocal-editor-save">حفظ</button>
             <button type="button" class="m-btn m-btn--secondary" id="app-ocal-editor-cancel">إلغاء</button>
+          </div>
+        </section>
+
+        <!-- تفاصيل الطلب (سطح مضيف داخل الصفحة): نقطة الوصول لأفعال
+             التعديل/الحذف بعد انتقالهما من وجه بطاقة الطلب (عقد المرجع
+             الأعلى 2.6) — البطاقة كلها تفتح هذا السطح عبر order-open،
+             والحذف يمر من حوار التأكيد القائم -->
+        <section class="app-editor app-details" id="app-ocal-details" hidden aria-labelledby="app-ocal-details-title">
+          <h2 class="m-section-title" id="app-ocal-details-title">تفاصيل الطلب</h2>
+          <div class="app-details__body">
+            <span class="app-details__title" id="app-ocal-details-order-title"></span>
+            <dl class="app-details__rows">
+              <div class="app-details__row">
+                <dt>التاريخ</dt>
+                <dd><bdi id="app-ocal-details-date" dir="ltr">—</bdi></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>الوقت</dt>
+                <dd><bdi id="app-ocal-details-time" dir="ltr">—</bdi></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>المورد</dt>
+                <dd id="app-ocal-details-customer">—</dd>
+              </div>
+              <div class="app-details__row">
+                <dt>الحالة</dt>
+                <dd><span class="m-ocal__row-status" id="app-ocal-details-status" hidden></span><span id="app-ocal-details-status-empty">—</span></dd>
+              </div>
+              <div class="app-details__row">
+                <dt>ملاحظة</dt>
+                <dd id="app-ocal-details-note">—</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="app-actions-row">
+            <button type="button" class="m-btn m-btn--primary" id="app-ocal-details-edit">تعديل</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-delete">حذف</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-details-close">رجوع للجدول</button>
           </div>
         </section>
       </div>
@@ -7143,7 +7250,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
           <svg aria-hidden="true"><use href="#i-items"/></svg><span>الطلبات</span>
         </button>
         <button type="button" class="m-navbar__item" data-app-nav-item="reports">
-          <svg aria-hidden="true"><use href="#i-reports"/></svg><span>التقارير</span>
+          <svg aria-hidden="true"><use href="#i-chart-column"/></svg><span>التقارير</span>
         </button>
         <button type="button" class="m-navbar__item" data-app-nav-item="account">
           <svg aria-hidden="true"><use href="#i-account"/></svg><span>حسابي</span>
@@ -14451,15 +14558,26 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       التحديد/اليوم تبقى مرتبطة بالتاريخ نفسه في الاتجاهين.
       المستهلك الذي يمرر weekStart صريحًا يبقى مدعومًا — الهجرة
       موثقة في specification.md.
-   2) أرقام فقط على السطح المرئي: رأس الشهر «MM / YYYY»، والتواريخ
-      الكاملة DD/MM/YYYY، وأرقام لاتينية 0-9 لليوم/الشهر/السنة/الوقت
-      — لا أسماء أشهر عربية أو إنجليزية ظاهرة في رأس الشهر أو
-      متصفحه أو عنوان اليوم أو عنوان الأحداث أو شارات الصفوف.
-      أسماء الأشهر تبقى في الأسماء الإتاحية (aria-label) وحدها
-      لصدق القراءة الصوتية الكاملة — اختيار موثق في المواصفة.
-   3) بطاقة التقويم: رؤوس الأيام + الشبكة داخل سطح متميز (حد
-      خافت وزوايا وارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة
-      رقيقة تحافظ على ثبات الأعمدة السبعة ومحاذاة الرأس.
+   2) أرقام فقط على السطح المرئي: التواريخ الكاملة DD/MM/YYYY،
+      وأرقام لاتينية 0-9 لليوم/الشهر/السنة/الوقت.
+
+   عقد 2026-10-25 (CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS —
+   المرجع الأعلى لتقديم شهر التقويم؛ يسقط ما تعارض معه مما سبق):
+   أ) رأس الشهر = اسم الشهر + السنة («تشرين الأول 2026» بأسماء
+      الأشهر الشامية/الأردنية) — يلغي «MM / YYYY» الرقمي.
+   ب) محدد واحد مقسّم (يوم/أسبوع/شهر) role=tablist/tab/aria-selected
+      بسطح غارق ومقطع نشط brand-tint — لا تعبئة brand.
+   ج) لا خطوط شبكة داخلية إطلاقًا — الإيقاع من الفراغ؛ البطاقة حد
+      خافت واحد بلا ظل.
+   د) تشريح خلية ثابت: chip رقم 32×28 radius-md + خانة نقاط محجوزة
+      تُرسَم دائمًا (ارتفاع 6px حتى الفارغة) فلا قفز أساس الرقم.
+   هـ) التحديد = chip بتعبئة brand-tint وchip اليوم بحلقة 1px
+      divider-strong — الخلية نفسها لا تُملأ أبدًا.
+   و) مفتاح الحالات داخل البطاقة أسفل الشبكة.
+   ز) بطاقة الطلب بلا أزرار تعديل/حذف دائرية على وجهها: البطاقة كلها
+      زر فتح تفاصيل الطلب (order-open) مع سهم اتجاهي، وأفعال
+      التعديل/الحذف تبقى في سطح تفاصيل الطلب host-owned
+      (orderActions وأحداثا الطلب في العقد العام بقاءً للتوافق).
 
    قواعد ثابتة:
    - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
@@ -14491,9 +14609,11 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
-  /* ---- أسماء عربية داخلية (لا مكتبة خارجية) ---- */
-  var MONTHS_AR = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  /* ---- أسماء عربية داخلية (لا مكتبة خارجية) ----
+     عقد 2026-10-25 (المرجع الأعلى): أسماء الأشهر الشامية/الأردنية
+     «تشرين الأول» لأكتوبر — المثال الصريح في تعليمات المالك. */
+  var MONTHS_AR = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران',
+    'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'];
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
   var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
@@ -14646,19 +14766,13 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     return n;
   }
 
-  /* سهم: في RTL «السابق» يشير يمينًا و«التالي» يسارًا (والعكس في LTR) */
-  function chevronIcon(dir) {
-    var s = baseSvg(24);
+  /* سهم: في RTL «السابق» يشير يمينًا و«التالي» يسارًا (والعكس في LTR).
+     الحجم قابل للضبط: 24 للتنقل الشهري، 20 لسهم بطاقة الطلب (عقد المرجع الأعلى). */
+  function chevronIcon(dir, size) {
+    var s = baseSvg(size || 24);
     s.appendChild(svgNode('polyline', {
       points: dir === 'left' ? '15 5 8 12 15 19' : '9 5 16 12 9 19'
     }));
-    return s;
-  }
-
-  function clockIcon() {
-    var s = baseSvg(14);
-    s.appendChild(svgNode('circle', { cx: '12', cy: '12', r: '9' }));
-    s.appendChild(svgNode('polyline', { points: '12 7 12 12 15.5 13.5' }));
     return s;
   }
 
@@ -14673,23 +14787,6 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   function chevronDownIcon() {
     var s = baseSvg(20);
     s.appendChild(svgNode('polyline', { points: '6 9 12 15 18 9' }));
-    return s;
-  }
-
-  /* قلم التعديل — عقد السماكة 1.5 نفسه (2026-10-25) */
-  function editIcon() {
-    var s = baseSvg(20);
-    s.appendChild(svgNode('path', { d: 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z' }));
-    return s;
-  }
-
-  /* سلة الحذف — عقد السماكة 1.5 نفسه (2026-10-25) */
-  function trashIcon() {
-    var s = baseSvg(20);
-    s.appendChild(svgNode('polyline', { points: '3 6 5 6 21 6' }));
-    s.appendChild(svgNode('path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }));
-    s.appendChild(svgNode('line', { x1: '10', y1: '11', x2: '10', y2: '17' }));
-    s.appendChild(svgNode('line', { x1: '14', y1: '11', x2: '14', y2: '17' }));
     return s;
   }
 
@@ -14936,6 +15033,15 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       root.setAttribute('data-ocal-layout', layout);
       root.setAttribute('data-ocal-compact', state.compactMonth ? 'true' : 'false');
       root.setAttribute('data-ocal-selected-date', state.selectedDate);
+      /* عقد المرجع الأعلى (3): تلاشٍ 200ms لتغيّر الشهر فقط — سمة
+         لهذا التصيير وحده تُمسح فورًا بعدها فلا تعاد الحركة على
+         كل تحديد/إعادة تصيير. */
+      if (state.monthFade) {
+        root.setAttribute('data-ocal-fade', '1');
+        state.monthFade = false;
+      } else {
+        root.removeAttribute('data-ocal-fade');
+      }
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
@@ -14959,22 +15065,21 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       else root.appendChild(buildMonthScreen());
     }
 
-    /* ---- عنصر التبديل الموحّد (عقد 2026-10-25 — مرجع المالك
-       calendar-reference-implementation.html): عنصر واحد بثلاث حالات
-       فاعلة «يوم/أسبوع/شهر» بترتيب المرجع (Day|Week|Month) — أزرار
-       ضغط أصلية بسمة aria-pressed معلنة؛ الزر المضغوط بتعبئة البترولي
-       ونص معكوس (لغة التحديد نفسها لخلية اليوم المحدد).
-       يوم = view:calendar + cal-view:day؛ أسبوع = view:calendar +
-       cal-view:week؛ شهر = view:calendar + cal-view:month.
-       القائمة ليست زرًا في هذا المحدّد (قرار مرجع المالك): سطح منفصل
-       يستدعيه المضيف عبر setView('list')، والمحدّد نفسه يبقى ظاهرًا
-       في شاشة القائمة للعودة إلى أي عرض تقويم. */
-    function viewsegBtn(value, text, pressed) {
+    /* ---- عنصر التبديل الموحّد (عقد 2026-10-25 — المرجع الأعلى
+       CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS): عنصر واحد بثلاث
+       مقاطع متساوية (يوم/أسبوع/شهر) بدور tablist/tab وaria-selected
+       — المقطع النشط brand-tint + brand-ink (لا تعبئة brand) داخل
+       سطح غارق واحد. الحالة ليست باللون وحده: الدور + الوزن +
+       التعبئة المميزة. القائمة ليست مقطعًا هنا (سطح منفصل يستدعيه
+       المضيف عبر setView). */
+    function viewsegBtn(value, text, selected) {
       var b = el('button', 'm-ocal__viewseg-btn');
       b.type = 'button';
       b.setAttribute('data-ocal-action', 'view');
       b.setAttribute('data-ocal-value', value);
-      b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', selected ? 'true' : 'false');
+      if (!selected) b.tabIndex = -1; /* roving tabs: المقطع النشط وحده في سلسلة Tab */
       b.textContent = text;
       return b;
     }
@@ -14985,7 +15090,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
     function buildViewSeg() {
       var bar = el('div', 'm-ocal__viewseg');
-      bar.setAttribute('role', 'group');
+      bar.setAttribute('role', 'tablist');
       bar.setAttribute('aria-label', 'طريقة العرض');
       bar.appendChild(viewsegBtn('day', 'يوم', viewPressed('day')));
       bar.appendChild(viewsegBtn('week', 'أسبوع', viewPressed('week')));
@@ -15037,9 +15142,12 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       updateResponsiveView(root.getBoundingClientRect().width);
     }
 
-    /* ---- رأس التقويم: [السابق][العنوان][التالي][اليوم] ----
-       في RTL يقع السابق يمينًا بسهم لليمين، والتالي يسارًا بسهم
-       لليسار (اتجاه الزمن في RTL) — معكوسان في LTR */
+    /* ---- رأس التقويم (عقد 2026-10-25 — المرجع الأعلى 2.3): صف واحد
+       بلا صناديق — التسمية في بداية السطر المضمن، ومجموعة الأفعال في
+       نهايته بهذا الترتيب: «اليوم» (نصّي بلا حد، يُرسَم فقط حين لا
+       يكون التحديد/الشهر المعروض هو اليوم) ثم سهم السابق ثم سهم
+       التالي. في RTL «السابق» يشير يمينًا (نحو بداية السطر المضمن)
+       والعكس في LTR — أسهم اتجاهية بلا قلب CSS. ---- */
     function navBtn(action, ariaLabel, icon) {
       var b = el('button', 'm-ocal__navbtn');
       b.type = 'button';
@@ -15047,6 +15155,37 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       b.setAttribute('aria-label', ariaLabel);
       b.appendChild(icon);
       return b;
+    }
+
+    function todayNavBtn() {
+      var today = el('button', 'm-ocal__todaybtn');
+      today.type = 'button';
+      today.setAttribute('data-ocal-action', 'today');
+      today.textContent = 'اليوم';
+      return today;
+    }
+
+    /* «اليوم» يظهر فقط حين لا يكون التحديد هو اليوم أو حين يكون
+       شهر التقويم المعروض (عرض الشهر) شهرًا آخر — وإلا يخفى بصدق. */
+    function todayVisible() {
+      var t = parseIso(state.today);
+      var s = parseIso(state.selectedDate);
+      if (!t || !s) return true;
+      if (s.y !== t.y || s.m !== t.m || s.d !== t.d) return true;
+      if (state.view === 'calendar' && state.calendarView === 'month') {
+        return t.y !== state.monthCursor.y || t.m !== state.monthCursor.m;
+      }
+      return false;
+    }
+
+    function buildNavActions(prevAction, nextAction) {
+      var group = el('div', 'm-ocal__cal-actions');
+      if (todayVisible()) group.appendChild(todayNavBtn());
+      group.appendChild(navBtn(prevAction, prevAction === 'prev-month' ? 'الشهر السابق' :
+        (prevAction === 'prev-week' ? 'الأسبوع السابق' : 'اليوم السابق'), prevIcon()));
+      group.appendChild(navBtn(nextAction, nextAction === 'next-month' ? 'الشهر التالي' :
+        (nextAction === 'next-week' ? 'الأسبوع التالي' : 'اليوم التالي'), nextIcon()));
+      return group;
     }
 
     function prevIcon() {
@@ -15059,7 +15198,6 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
     function buildCalBar(y, m) {
       var bar = el('div', 'm-ocal__cal-bar');
-      bar.appendChild(navBtn('prev-month', 'الشهر السابق', prevIcon()));
       var title = el(hTag(), 'm-ocal__cal-title');
       var pickerButton = el('button', 'm-ocal__month-trigger');
       pickerButton.type = 'button';
@@ -15067,25 +15205,18 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
-      /* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
-         رأس شهري رقمي «MM / YYYY» — رقم الشهر محوري (18/600) والسنة
-         ثانوية (14/400) + شيفرون هابط يعلن المنتقي الحقيقي. لا أسماء
-         أشهر ظاهرة (عقد الأرقام فقط)؛ اسم الشهر الكامل يبقى في
-         aria-label المنتقي لصدق القراءة الصوتية (موثق).
-         عقدة نص مسافة بين العنصرين تحفظ textContent «10 / 2026» بمسافة
-         صحيحة للنسخ/المطابقة النصية. */
-      pickerButton.appendChild(el('span', 'm-ocal__month-num', pad2(m)));
-      pickerButton.appendChild(document.createTextNode(' / '));
+      /* عقد 2026-10-25 (المرجع الأعلى 2.3): رأس الشهر = اسم الشهر +
+         السنة («تشرين الأول 2026» بأسماء الشهور الأردنية) — اسم الشهر
+         محوري (17px/600/ink-primary) والسنة بنفس المقاس بوزن 400
+         ولون ink-secondary، وشيفرون هابط 20px يعلن المنتقي الحقيقي
+         داخل مساحة الضغط نفسها. */
+      pickerButton.appendChild(el('span', 'm-ocal__month-label', MONTHS_AR[m - 1]));
+      pickerButton.appendChild(document.createTextNode(' '));
       pickerButton.appendChild(el('span', 'm-ocal__year', String(y)));
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
       bar.appendChild(title);
-      bar.appendChild(navBtn('next-month', 'الشهر التالي', nextIcon()));
-      var today = el('button', 'm-ocal__todaybtn');
-      today.type = 'button';
-      today.setAttribute('data-ocal-action', 'today');
-      today.textContent = 'اليوم'; /* يبقى مرئيًا دائمًا حتى في الشهر الحالي */
-      bar.appendChild(today);
+      bar.appendChild(buildNavActions('prev-month', 'next-month'));
       return bar;
     }
 
@@ -15148,15 +15279,40 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return row;
     }
 
-    /* ---- خلية يوم (مرجع المالك 2026-10-25): رقم + ≤3 نقاط حالات
-       كنظام مؤشر وحيد — النقاط تحت الرقم مباشرة (المجموعة تتوسّط
-       الخلية) فتكون ملكية اليوم غير ملتبسة عبر الصفوف؛ العدّ خارج
-       الخلية (aria-label الخلية + منطقة الأحداث يحملان «كم»).
-       سقف 3 أنواع حالات؛ النوع الرابع+ يبقى في aria-label والمفتاح
-       (فجوة معلومات مرئية موثقة).
-       عقد 2026-10-25 (مرجع المالك): خلايا الأشهر المجاورة خافتة
-       (رقم أهدأ + نقاط بشفافية أخف) لكنها أيام حقيقية قابلة للتحديد
-       — اختيارها ينقل العرض إلى شهرها (العرض يتبع التحديد). */
+    /* ترتيب دلالي ثابت للنقاط (عقد 2026-10-25 — المرجع الأعلى 2.4):
+       قيد التنفيذ (info) → بانتظار العميل (warning) → تم التسليم
+       (positive) — لا ترتيب ظهور. النوع الرابع+ يبقى في aria-label
+       الخلية (فجوة معلومات مرئية موثقة). */
+    function toneRank(tone) {
+      if (tone === 'progress') return 0;
+      if (tone === 'warning') return 1;
+      if (tone === 'success') return 2;
+      return 3;
+    }
+
+    function distinctStatuses(orders, max) {
+      var seen = {};
+      var out = [];
+      for (var i = 0; i < orders.length; i++) {
+        var k = orders[i].statusKey;
+        if (k === '' || seen[k]) continue;
+        seen[k] = true;
+        out.push({ key: k, tone: resolveStatus(k).tone, label: resolveStatus(k).label });
+      }
+      out.sort(function (a, b) { return toneRank(a.tone) - toneRank(b.tone); });
+      return max ? out.slice(0, max) : out;
+    }
+
+    /* ---- خلية يوم (عقد 2026-10-25 — المرجع الأعلى 2.4): تشريح
+       ثابت متطابق لكل خلية: chip رقم 32×28 ثم خانة نقاط محجوزة
+       تُرسَم دائمًا (ارتفاع 6px حتى بلا أحداث) فلا يقفز أساس
+       الرقم بين الخلايا. النقاط 6px دائرية صلبة، واحدة لكل حالة
+       مميزة بحد أقصى 3 بالترتيب الدلالي الثابت.
+       اليوم (غير المحدد): وزن 600 + حلقة 1px divider-strong على
+       chip. المحدد: chip بتعبئة brand-tint ورقم brand-ink — الخلية
+       نفسها لا تُملأ أبدًا. الشهور المجاورة: رقم ink-disabled ونقاط
+       بشفافية 40% لكنها أيام حقيقية قابلة للتحديد — اختيارها ينقل
+       العرض إلى شهرها (العرض يتبع التحديد). */
     function buildDayCell(iso, d, groups, outOfMonth) {
       var orders = groups[iso] || [];
       var cell = el('button', 'm-ocal__cell');
@@ -15169,8 +15325,10 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       if (iso === state.selectedDate) {
         cell.className += ' m-ocal__cell--selected';
         cell.setAttribute('aria-selected', 'true');
+        cell.setAttribute('aria-pressed', 'true');
       } else {
         cell.setAttribute('aria-selected', 'false');
+        cell.setAttribute('aria-pressed', 'false');
       }
       if (iso === state.today) {
         cell.className += ' m-ocal__cell--today';
@@ -15186,35 +15344,19 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
       cell.appendChild(el('span', 'm-ocal__daynum', String(d)));
 
-      if (orders.length) {
-        var dots = el('span', 'm-ocal__dots');
-        dots.setAttribute('aria-hidden', 'true'); /* aria-label الخلية يحمل العدد */
-        var seen = {};
-        var nDots = 0;
-        for (var i = 0; i < orders.length && nDots < 3; i++) {
-          var k = orders[i].statusKey;
-          if (k === '' || seen[k]) continue; /* سقف 3 نقاط لأنواع الحالات */
-          seen[k] = true;
-          nDots++;
-          dots.appendChild(el('span', 'm-ocal__dot m-ocal__dot--' + resolveStatus(k).tone));
-        }
-        if (nDots) cell.appendChild(dots);
+      /* خانة النقاط محجوزة دائمًا (حتى الفارغة) — إصلاح قفز الأساس */
+      var dots = el('span', 'm-ocal__dots');
+      dots.setAttribute('aria-hidden', 'true'); /* aria-label الخلية يحمل العدد */
+      var visibleStatuses = distinctStatuses(orders, 3);
+      for (var i = 0; i < visibleStatuses.length; i++) {
+        dots.appendChild(el('span', 'm-ocal__dot m-ocal__dot--' + visibleStatuses[i].tone));
       }
+      cell.appendChild(dots);
 
-      var label = fullDateAr(iso);
-      if (iso === state.today) label += '، اليوم';
-      label += '، ' + countPhraseAr(orders.length);
-      /* ملخص الحالات في الاسم الإتاحي للخلية (التاريخ + العدد +
-         الحالات الموجود) — النقاط ليست القناة الوحيدة للمعنى */
-      var stLabels = [];
-      var seenK = {};
-      for (var j = 0; j < orders.length; j++) {
-        var k2 = orders[j].statusKey;
-        if (k2 === '' || seenK[k2]) continue;
-        seenK[k2] = true;
-        stLabels.push(resolveStatus(k2).label);
-      }
-      if (stLabels.length) label += ' (' + stLabels.join('، ') + ')';
+      /* الاسم الإتاحي بنمط المرجع الأعلى: اليوم، الشهر، العدد
+         («7 تشرين الأول، طلبان») — أرقام لاتينية (عقد الأرقام) */
+      var p = parseIso(iso);
+      var label = p.d + ' ' + MONTHS_AR[p.m - 1] + ' ' + p.y + '، ' + countPhraseAr(orders.length);
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -15282,23 +15424,18 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return dateNumeric(isoOf(a.y, a.m, a.d)) + ' – ' + dateNumeric(isoOf(b.y, b.m, b.d));
     }
 
-    /* شريط الأسبوع: [الأسبوع السابق][نطاق الأسبوع][الأسبوع التالي][اليوم]
+    /* شريط الأسبوع: التسمية نطاق الأسبوع في بداية السطر المضمن،
+       ومجموعة الأفعال في نهايته (اليوم + السابق + التالي)
        — سهم ±7 أيام يحدّث التحديد ويطلق day-select (مثل سهمي اليوم)،
        ولا منتقي شهر هنا: الأسبوع مشتق من التحديد فقفزة الشهر ستغير
        التحديد بصمت أو تفصل منطقة الأحداث عن الأسبوع المعروض (انحراف
        موثق عن شريط الشهر). */
     function buildWeekBar(dates) {
       var bar = el('div', 'm-ocal__cal-bar');
-      bar.appendChild(navBtn('prev-week', 'الأسبوع السابق', prevIcon()));
       var title = el(hTag(), 'm-ocal__cal-title');
       title.appendChild(el('span', 'm-ocal__week-range', weekRangeTitle(dates)));
       bar.appendChild(title);
-      bar.appendChild(navBtn('next-week', 'الأسبوع التالي', nextIcon()));
-      var today = el('button', 'm-ocal__todaybtn');
-      today.type = 'button';
-      today.setAttribute('data-ocal-action', 'today');
-      today.textContent = 'اليوم';
-      bar.appendChild(today);
+      bar.appendChild(buildNavActions('prev-week', 'next-week'));
       return bar;
     }
 
@@ -15328,15 +15465,11 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return grid;
     }
 
-    /* ---- مفتاح الحالات: الحالات الموجودة فعلاً في النطاق المعروض ---- */
+    /* ---- مفتاح الحالات: الحالات الموجودة فعلاً في النطاق المعروض،
+       بالترتيب الدلالي الثابت نفسه ترتيب النقاط (عقد المرجع الأعلى:
+       قيد التنفيذ → بانتظار العميل → تم التسليم) ---- */
     function buildLegend(scopeOrders) {
-      var seen = {};
-      var keys = [];
-      for (var i = 0; i < scopeOrders.length; i++) {
-        var k = scopeOrders[i].statusKey;
-        if (k === '') continue;
-        if (!seen[k]) { seen[k] = true; keys.push(k); }
-      }
+      var keys = distinctStatuses(scopeOrders, 0).map(function (s) { return s.key; });
       if (!keys.length) return null; /* لا حالات معروضة → يختفي */
       var ul = el('ul', 'm-ocal__legend');
       ul.setAttribute('data-ocal-legend', '');
@@ -15366,55 +15499,44 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return b;
     }
 
-    /* ---- صف طلب موحّد (اليوم/الأجندة/الأسفل/القائمة) ----
+    /* ---- بطاقة طلب موحّدة (اليوم/الأسفل/القائمة) — عقد 2026-10-25
+       (المرجع الأعلى 2.6): بلا أزرار تعديل/حذف على الوجه — البطاقة
+       كلها زر فتح تفاصيل الطلب (order-open) مع سهم اتجاهي 20px في
+       نهاية السطر المضمن، وأفعال التعديل/الحذف يعيشها المضيف في سطح
+       التفاصيل (بحدود تأكيد للحذف). الشبكة: عمود محتوى + سهم؛ سطر
+       العنوان + الوقت (نص عادي بلا أيقونة/شريحة) وسطر العميل + شارة
+       الحالة. الملاحظة القصيرة تُعرض في سطح التفاصيل لدى المضيف —
+       البيانات باقية في النموذج كما هي. ----
        showDate: شارة تاريخ قصيرة تظهر في صفوف القائمة فقط (سياق
-       نطاق زمني) — موثق في المواصفة.
-       withTools: أزرار تعديل/حذف على صفوف سطح فعل اليوم المحدد فقط
-       (لوحة اليوم المفصوصة ومنطقة إفصاح الأجندة) عند تفعيل المضيف
-       لorderActions — لا تُرسَم في القائمة (سطح تصفّح لا سطح فعل).
-       عقد 2026-10-25 (احتواء شريط الطلب): الصف ذو الأدوات يحمل
-       m-ocal__rowitem--tools فيصبح سطح الشريط الخارجي (حد/تعبئة/
-       زوايا CSS) على حاوية الصف نفسها ممتدًا خلف الزرين وطايفًا لهما
-       داخل الشريط المستمر — الزران كما هما: دائرتان منفصلتان
-       48×48 بنفس الأيقونات والأهداف والأفعال والترتيب المنطقي. */
-    function rowToolBtn(action, verb, icon, order) {
-      var b = el('button', 'm-ocal__row-tool' +
-        (action === 'order-delete' ? ' m-ocal__row-tool--danger' : ''));
-      b.type = 'button';
-      b.setAttribute('data-ocal-action', action);
-      b.setAttribute('data-ocal-id', order.id);
-      b.setAttribute('aria-label', verb + ' الطلب: ' + order.title);
-      b.appendChild(icon);
-      return b;
-    }
-
-    function buildOrderRow(order, showDate, withTools) {
+       نطاق زمني) — موثق في المواصفة. */
+    function buildOrderRow(order, showDate) {
       var li = el('li', 'm-ocal__rowitem');
       var btn = el('button', 'm-ocal__row');
       btn.type = 'button';
       btn.setAttribute('data-ocal-action', 'order-row');
       btn.setAttribute('data-ocal-id', order.id);
-      /* العنوان عبر textContent — أي HTML ممرر يظهر نصًا حرفيًا */
-      btn.appendChild(el('span', 'm-ocal__row-title', order.title));
-      /* ملاحظة قصيرة اختيارية تحت العنوان (وصفية فقط) */
-      if (order.note) {
-        btn.appendChild(el('span', 'm-ocal__row-note', order.note));
-      }
+      var main = el('span', 'm-ocal__row-main');
 
-      var meta = el('span', 'm-ocal__row-meta');
+      /* السطر 1: العنوان (سطر واحد بقطع) + الوقت نصًا عاديًا */
+      var line1 = el('span', 'm-ocal__row-line');
+      /* العنوان عبر textContent — أي HTML ممرر يظهر نصًا حرفيًا */
+      line1.appendChild(el('span', 'm-ocal__row-title', order.title));
+      if (order.time) {
+        var t = el('bdi', 'm-ocal__row-time', order.time);
+        t.setAttribute('dir', 'ltr');
+        line1.appendChild(t);
+      }
+      main.appendChild(line1);
+
+      /* السطر 2: العميل + شارة الحالة في نهاية السطر */
+      var line2 = el('span', 'm-ocal__row-line');
       if (showDate && order.date) {
-        meta.appendChild(el('span', 'm-ocal__row-date', shortDateAr(order.date)));
+        line2.appendChild(el('span', 'm-ocal__row-date', shortDateAr(order.date)));
       }
       if (order.customer) {
-        meta.appendChild(el('span', 'm-ocal__row-customer', order.customer));
-      }
-      if (order.time) {
-        var chip = el('span', 'm-ocal__row-time');
-        chip.appendChild(clockIcon());
-        var v = el('span', 'm-ocal__row-time-value', order.time);
-        v.setAttribute('dir', 'ltr');
-        chip.appendChild(v);
-        meta.appendChild(chip);
+        line2.appendChild(el('span', 'm-ocal__row-customer', order.customer));
+      } else if (!showDate || !order.date) {
+        line2.appendChild(el('span', 'm-ocal__row-placeholder', ''));
       }
       if (order.statusKey !== '') {
         var st = resolveStatus(order.statusKey);
@@ -15422,30 +15544,23 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
            والتلوين الدلالي للشريحة يحملان الحالة (عقد anti-slop) */
         var schip = el('span', 'm-ocal__row-status m-ocal__row-status--' + st.tone,
           st.label);
-        meta.appendChild(schip);
+        line2.appendChild(schip);
       }
-      btn.appendChild(meta);
+      main.appendChild(line2);
+      btn.appendChild(main);
+
+      /* سهم اتجاهي 20px (يسار في RTL نحو التفاصيل، يمين في LTR) */
+      var chev = chevronIcon(state.rtl ? 'left' : 'right', 20);
+      chev.setAttribute('class', 'm-ocal__row-chev');
+      btn.appendChild(chev);
       li.appendChild(btn);
-      if (withTools && (state.orderActions.edit || state.orderActions.delete)) {
-        li.classList.add('m-ocal__rowitem--tools');
-        var tools = el('div', 'm-ocal__row-tools');
-        tools.setAttribute('role', 'group');
-        tools.setAttribute('aria-label', 'أفعال الطلب: ' + order.title);
-        if (state.orderActions.edit) {
-          tools.appendChild(rowToolBtn('order-edit', 'تعديل', editIcon(), order));
-        }
-        if (state.orderActions.delete) {
-          tools.appendChild(rowToolBtn('order-delete', 'حذف', trashIcon(), order));
-        }
-        li.appendChild(tools);
-      }
       return li;
     }
 
-    function buildRows(orders, showDate, withTools) {
+    function buildRows(orders, showDate) {
       var ul = el('ul', 'm-ocal__rows');
       for (var i = 0; i < orders.length; i++) {
-        ul.appendChild(buildOrderRow(orders[i], !!showDate, !!withTools));
+        ul.appendChild(buildOrderRow(orders[i], !!showDate));
       }
       return ul;
     }
@@ -15475,12 +15590,18 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
        منطقة يوم من شهر آخر توحي بتحديد متناقض. «إضافة طلب» هناك
        بلا يوم (date:null) — لا اختيار مُختلق. عرضا الأسبوع واليوم
        مشتقان من التحديد فلا حالة تصفّح فيهما. */
-    function eventsTitleAr(iso) {
-      if (iso === state.today) return 'طلبات اليوم';
-      var p = parseIso(iso);
-      if (!p) return 'طلبات';
-      /* المرئي أرقام فقط (عقد 2026-10-25): اسم اليوم معجمي + تاريخ رقمي */
-      return 'طلبات ' + dayTitleNumeric(iso);
+    /* عنوان منطقة الأحداث (عقد المرجع الأعلى 2.5): «طلبات اليوم»
+       أو «طلبات 07/10/2026» (DD/MM/YYYY بأرقام لاتينية). */
+    function eventsTitleNodes(iso) {
+      var title = el(hTag(), 'm-ocal__daypanel-title');
+      if (iso === state.today) {
+        title.textContent = 'طلبات اليوم';
+        return title;
+      }
+      title.appendChild(document.createTextNode('طلبات '));
+      var bdi = el('bdi', 'm-ocal__daypanel-date', dateNumeric(iso));
+      title.appendChild(bdi);
+      return title;
     }
 
     function buildDayPanel(withTitle) {
@@ -15491,9 +15612,9 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
-        /* مرئي أرقام فقط (عقد 2026-10-25): «لا يوم محدد في 01/2027» */
+        /* نفس تقديم رأس الشهر: اسم الشهر + السنة (عقد المرجع الأعلى) */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + pad2(m) + '/' + y));
+          'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -15503,57 +15624,60 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var iso = state.selectedDate;
       var orders = sortedOrdersForDate(iso);
       if (withTitle) {
-        head.appendChild(el(hTag(), 'm-ocal__daypanel-title', eventsTitleAr(iso)));
+        head.appendChild(eventsTitleNodes(iso));
       }
-      head.appendChild(el('p', 'm-ocal__daypanel-count', countPhraseAr(orders.length)));
+      /* العدد رقم عادي بسيط (عقد المرجع الأعلى 2.5 — يلغي عبارة
+         «طلبان» العائمة) */
+      var count = el('p', 'm-ocal__daypanel-count', String(orders.length));
+      count.setAttribute('aria-label', countPhraseAr(orders.length));
+      head.appendChild(count);
       head.appendChild(buildAddButton());
       panel.appendChild(head);
       if (orders.length) {
-        panel.appendChild(buildRows(orders, false, true));
+        panel.appendChild(buildRows(orders, false));
       } else {
-        /* فراغ صادق لليوم المحدد — مع مرشد الإضافة داخل المنطقة */
-        var empty = el('div', 'm-ocal__status m-ocal__status--empty m-ocal__daypanel-empty');
+        /* فراغ صادق لليوم المحدد — سطر واحد بلا صناديق (عقد المرجع
+           الأعلى 2.6) مع بقاء الإضافة في رأس المنطقة */
+        var empty = el('div', 'm-ocal__daypanel-empty');
         empty.setAttribute('data-ocal-status', 'empty');
         empty.setAttribute('role', 'status');
-        empty.appendChild(el('p', 'm-ocal__status-text', 'لا طلبات في هذا اليوم.'));
+        empty.appendChild(el('p', 'm-ocal__status-text', 'لا توجد طلبات'));
         panel.appendChild(empty);
       }
       return panel;
     }
 
-    /* ---- بطاقة التقويم (عقد 2026-10-25 — calendar-target-latest-owner.png):
-       رؤوس الأيام + الشبكة داخل سطح متميز واحد (حد خافت، زوايا،
-       ارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة رقيقة — الهندسة
-       في CSS (m-ocal__calcard) والبنية هنا فقط. ---- */
-    function buildCalCard(weekdays, grid) {
+    /* ---- بطاقة التقويم (عقد المرجع الأعلى 2.4): رؤوس الأيام +
+       الشبكة + المفتاح داخل سطح واحد (حد خافت واحد، زوايا، بلا ظل،
+       بلا خطوط شبكة داخلية — الإيقاع من الفراغ) ---- */
+    function buildCalCard(weekdays, grid, legend) {
       var card = el('div', 'm-ocal__calcard');
       card.setAttribute('data-ocal-calcard', '');
       card.appendChild(weekdays);
       card.appendChild(grid);
+      if (legend) card.appendChild(legend);
       return card;
     }
 
-    /* ---- شاشة التقويم (شهر) — عقد 2026-10-25 (ترتيب القراءة للمرجع):
-       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][بطاقة التقويم:
-       رؤوس الأيام + شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
+    /* ---- شاشة التقويم (شهر) — ترتيب القراءة (المرجع الأعلى 2):
+       [محدّد يوم/أسبوع/شهر][متصفح الشهر][بطاقة التقويم: رؤوس الأيام
+       + شبكة الشهر الكاملة بأيامها المجاورة + المفتاح داخل البطاقة]
        [منطقة أحداث اليوم المحدد] — منطقة الأحداث ظاهرة دائمًا أسفل
-       البطاقة كما في مرجع المالك (لا عرضا expanded/agenda). */
+       البطاقة (لا عرضا expanded/agenda). */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
       screen.appendChild(buildControlsRow());
       screen.appendChild(buildCalBar(state.monthCursor.y, state.monthCursor.m));
       if (state.pickerOpen) screen.appendChild(buildMonthPicker());
-      screen.appendChild(buildCalCard(buildWeekdays(), buildMonthGrid(groupOrdersByDate())));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
-      if (legend) screen.appendChild(legend);
+      screen.appendChild(buildCalCard(buildWeekdays(), buildMonthGrid(groupOrdersByDate()), legend));
       screen.appendChild(buildDayPanel(true));
       return screen;
     }
 
-    /* ---- شاشة التقويم (أسبوع) — عقد 2026-10-25 (مرجع المالك):
-       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][بطاقة التقويم بصف
-       الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
+    /* ---- شاشة التقويم (أسبوع): [المحدّد][شريط الأسبوع ±7 أيام]
+       [بطاقة التقويم بصف الأسبوع + المفتاح داخل البطاقة]
        [منطقة أحداث اليوم المحدد] — الأسبوع مشتق من التحديد. */
     function buildWeekScreen() {
       var screen = el('div', 'm-ocal__screen');
@@ -15562,14 +15686,12 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var dates = weekDatesOf(state.selectedDate) || weekDatesOf(state.today);
       screen.appendChild(buildWeekBar(dates));
       var groups = groupOrdersByDate();
-      screen.appendChild(buildCalCard(buildWeekdays(), buildWeekGrid(dates, groups)));
       var scope = [];
       for (var i = 0; i < dates.length; i++) {
         var iso = isoOf(dates[i].y, dates[i].m, dates[i].d);
         scope = scope.concat(groups[iso] || []);
       }
-      var legend = buildLegend(scope);
-      if (legend) screen.appendChild(legend);
+      screen.appendChild(buildCalCard(buildWeekdays(), buildWeekGrid(dates, groups), buildLegend(scope)));
       screen.appendChild(buildDayPanel(true));
       return screen;
     }
@@ -15589,15 +15711,9 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
     function buildDayBar() {
       var bar = el('div', 'm-ocal__cal-bar');
-      bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
       /* عنوان اليوم المرئي: اسم اليوم + تاريخ رقمي (لا أسماء أشهر) */
       bar.appendChild(el(hTag(), 'm-ocal__cal-title', dayTitleNumeric(state.selectedDate)));
-      bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
-      var today = el('button', 'm-ocal__todaybtn');
-      today.type = 'button';
-      today.setAttribute('data-ocal-action', 'today');
-      today.textContent = 'اليوم';
-      bar.appendChild(today);
+      bar.appendChild(buildNavActions('prev-day', 'next-day'));
       return bar;
     }
 
@@ -15646,7 +15762,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       head.appendChild(el(hTag(), 'm-ocal__list-heading', title));
       head.appendChild(el('p', 'm-ocal__list-count', countPhraseAr(orders.length)));
       sec.appendChild(head);
-      sec.appendChild(buildRows(orders, true, false));
+      sec.appendChild(buildRows(orders, true));
       return sec;
     }
 
@@ -15746,6 +15862,23 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         return;
       }
       if (state.view !== 'calendar') return;
+
+      /* مقاطع المحدّد (tablist): أسهم أفقية تنقل التركيز وتفعّل
+         المقطع المجاور بترتيب منطقي واعٍ للاتجاه (APG tabs). */
+      var seg = (t && t.closest) ? t.closest('[data-ocal-action="view"][role="tab"]') : null;
+      if (seg && root.contains(seg)) {
+        var segs = [].slice.call(root.querySelectorAll('.m-ocal__viewseg [data-ocal-action="view"]'));
+        var at = segs.indexOf(seg);
+        if (at !== -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          var stepSeg = (e.key === 'ArrowLeft') ? (state.rtl ? -1 : 1) : (state.rtl ? 1 : -1);
+          var next = segs[Math.max(0, Math.min(segs.length - 1, at + stepSeg))];
+          if (next && next !== seg) next.click();
+          else seg.focus();
+        }
+        return;
+      }
+
       var cell = (t && t.closest) ? t.closest('.m-ocal__cell[data-ocal-date]') : null;
       if (!cell || !root.contains(cell)) return;
       var k = e.key;
@@ -15839,13 +15972,16 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     }
 
     /* السابق/التالي يستكشفان الشهر المعروض فقط؛ الاختيار يظل مستقلًا
-       ولا يصدر day-select أو يغيّر بيانات المضيف. */
+       ولا يصدر day-select أو يغيّر بيانات المضيف.
+       عقد المرجع الأعلى (3. الحركة): تغيّر الشهر = تلاشٍ 200ms فقط —
+       سمة data-ocal-fade على الجذر لهذا التصيير وحده. */
     function shiftMonthCursor(delta) {
       var nm = shiftMonth(state.monthCursor.y, state.monthCursor.m, delta);
       state.monthCursor = { y: nm.y, m: nm.m };
       var focused = parseIso(state.focusDate);
       var day = focused ? Math.min(focused.d, daysInMonth(nm.y, nm.m)) : 1;
       state.focusDate = isoOf(nm.y, nm.m, day);
+      state.monthFade = true;
       render();
     }
 
@@ -16005,8 +16141,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         }
         render();
         updateResponsiveView(root.getBoundingClientRect().width);
-        var pressedBtn = root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
-        if (pressedBtn) pressedBtn.focus();
+        var selectedSeg = root.querySelector('[data-ocal-action="view"][aria-selected="true"]');
+        if (selectedSeg) selectedSeg.focus();
         else refocus('[data-ocal-action="view"]');
       } else if (act === 'cal-mode') {
         state.pickerOpen = false;
@@ -17729,6 +17865,74 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         var order = findOrder(e.detail && e.detail.id);
         if (order) openDeleteDialog(order);
       });
+
+      /* ---- تفاصيل الطلب (عقد المرجع الأعلى 2.6): البطاقة كلها زر
+         order-open — أفعال التعديل/الحذف تعيش هنا بدل وجه البطاقة،
+         والحذف يمر من حوار التأكيد القائم نفسه ---- */
+      var details = document.getElementById('app-ocal-details');
+      var detailsOrderId = null;
+      function openDetails(order) {
+        if (!details) return;
+        detailsOrderId = order.id;
+        document.getElementById('app-ocal-details-order-title').textContent = order.title;
+        document.getElementById('app-ocal-details-date').textContent = numericDate(order.date) || 'غير مجدول';
+        document.getElementById('app-ocal-details-time').textContent = order.time || '—';
+        document.getElementById('app-ocal-details-customer').textContent = order.customer || '—';
+        document.getElementById('app-ocal-details-note').textContent = order.note || '—';
+        var statusEl = document.getElementById('app-ocal-details-status');
+        var statusEmpty = document.getElementById('app-ocal-details-status-empty');
+        if (order.statusKey !== '') {
+          var st = APP_STATUSES[order.statusKey] ||
+            { label: String(order.statusKey), tone: 'neutral' };
+          statusEl.hidden = false;
+          if (statusEmpty) statusEmpty.hidden = true;
+          statusEl.textContent = st.label;
+          statusEl.className = 'm-ocal__row-status m-ocal__row-status--' + st.tone;
+        } else {
+          statusEl.hidden = true;
+          if (statusEmpty) statusEmpty.hidden = false;
+        }
+        editor.hidden = true;
+        details.hidden = false;
+        /* فتح سطح التفاصيل أمام عين المستخدم: التركيز يظهر السطح تلقائيًا */
+        document.getElementById('app-ocal-details-edit').focus({ preventScroll: false });
+      }
+      function closeDetails() {
+        if (!details) return;
+        details.hidden = true;
+        var openId = detailsOrderId;
+        detailsOrderId = null;
+        var row = openId
+          ? ocalRoot.querySelector('[data-ocal-id="' + openId + '"][data-ocal-action="order-row"]')
+          : null;
+        if (row && row.focus) row.focus({ preventScroll: true });
+      }
+      if (details) {
+        ocalRoot.addEventListener('order-schedule:order-open', function (e) {
+          var order = findOrder(e.detail && e.detail.id);
+          if (order) openDetails(order);
+        });
+        document.getElementById('app-ocal-details-edit').addEventListener('click', function () {
+          var order = findOrder(detailsOrderId);
+          details.hidden = true;
+          if (order) openEditor({ mode: 'edit', order: order });
+          else details.hidden = false;
+        });
+        document.getElementById('app-ocal-details-delete').addEventListener('click', function () {
+          var order = findOrder(detailsOrderId);
+          if (!order) return;
+          appDemo.detailsReturn = detailsOrderId;
+          details.hidden = true;
+          openDeleteDialog(order);
+        });
+        document.getElementById('app-ocal-details-close').addEventListener('click', closeDetails);
+        details.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeDetails();
+          }
+        });
+      }
     }
 
     /* ---- منتجقي المورد (عقد المنتقي B03 نفسه) ---- */

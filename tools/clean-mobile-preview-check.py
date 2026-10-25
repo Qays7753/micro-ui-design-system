@@ -142,15 +142,16 @@ def run_suite(page, base_url, label, results, out_dir, capture):
         screen: document.getElementById('app-preview').__appCurrentScreen(),
         title: document.getElementById('app-title').textContent,
         ocalLayout: document.getElementById('app-ocal-root').getAttribute('data-ocal-cal-view'),
-        monthNum: (document.querySelector('#app-ocal-root .m-ocal__month-num') || {}).textContent || null,
+        monthLabel: (document.querySelector('#app-ocal-root .m-ocal__month-label') || {}).textContent || null,
+        monthYear: (document.querySelector('#app-ocal-root .m-ocal__month-trigger') || {}).textContent || null,
         card: !!document.querySelector('#app-ocal-root .m-ocal__calcard'),
         todayCell: !!document.querySelector('#app-ocal-root [data-ocal-date="2026-10-07"][aria-current="date"]'),
         width: document.documentElement.scrollWidth
     })""")
-    check("orders screen opens the real calendar with numeric month header",
+    check("orders screen opens the real calendar with the Levantine month-name header",
           orders_state["screen"] == "orders" and orders_state["title"] == "الطلبات"
-          and orders_state["ocalLayout"] == "month" and orders_state["monthNum"] == "10"
-          and orders_state["card"] and orders_state["todayCell"], orders_state)
+          and orders_state["ocalLayout"] == "month" and orders_state["monthLabel"] == "تشرين الأول"
+          and "2026" in orders_state["monthYear"] and orders_state["card"] and orders_state["todayCell"], orders_state)
     page.click('#app-ocal-root .m-ocal__viewseg [data-ocal-value="week"]')
     page.wait_for_timeout(250)
     week_state = page.evaluate("""() => ({
@@ -247,7 +248,7 @@ def run_suite(page, base_url, label, results, out_dir, capture):
                 viewport: innerWidth,
                 appVisible: document.getElementById('app-preview').getClientRects().length > 0,
                 firstWeekday: (document.querySelector('#app-ocal-root .m-ocal__weekday') || {}).textContent || null,
-                monthNum: (document.querySelector('#app-ocal-root .m-ocal__month-num') || {}).textContent || null
+                monthLabel: (document.querySelector('#app-ocal-root .m-ocal__month-label') || {}).textContent || null
             })""", direction)
             check(f"{direction} {width}px: app surface renders without horizontal overflow",
                   state["width"] <= state["viewport"] and state["appVisible"], state)

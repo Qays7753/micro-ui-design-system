@@ -20,13 +20,19 @@
    — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
    لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
 
-   عقد 2026-10-25 (مرجع المالك calendar-reference-implementation.html) —
-   محدّد يوم/أسبوع/شهر حقيقي بثلاث حالات فاعلة، وشبكة الشهر تحوي
-   أيام الأشهر المجاورة خافتة قابلة للتحديد (m-ocal__cell--out:
-   رقم أهدأ ونقاط بشفافية .35) فيكتمل مستطيل الشبكة كما في المرجع،
-   وعرض الأسبوع صف واحد من الشبكة نفسه بأيام حقيقية، ومنطقة أحداث
-   اليوم المحدد (m-ocal__daypanel) ظاهرة دائمًا أسفل الشبكة — لا
-   عرضا expanded/agenda ولا منطقة إفصاح (عقد ملغى 2026-10-25).
+   عقد 2026-10-25 (CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS —
+   المرجع الأعلى لتقديم شهر التقويم؛ يسقط ما تعارض معه مما سبق):
+   محدد واحد مقسّم بسطح غارق (المقطع النشط brand-tint بلا تعبئة
+   brand)، ومتصفح شهر بلا صناديق (تسمية بداية السطر + «اليوم»/السهمان
+   نهايته، «اليوم» شرطيًا)، وبطاقة تقويم بحد واحد بلا ظل ولا خطوط
+   شبكة داخلية (الإيقاع من الفراغ)، وتشريح خلية ثابت: chip رقم
+   32×28 + خانة نقاط محجوزة دائمًا (6px) فلا قفز أساس، وتحديد =
+   chip brand-tint (الخلية لا تُملأ)، واليوم = حلقة 1px divider-strong
+   على chip، ومفتاح الحالات داخل البطاقة، وبطاقة طلب شبكية (1fr 20px)
+   قابلة للنقر كليًا بسهم اتجاهي — بلا أزرار تعديل/حذف على وجهها
+   (تنتقل لسطح تفاصيل الطلب لدى المضيف). الحركة: ضغط 80–110ms،
+   حالة 120ms، تلاشٍ 200ms لتغيّر الشهر فقط، وprefers-reduced-motion
+   يلغي الجميع.
    ========================================================= */
 
 .m-ocal,
@@ -54,44 +60,44 @@
   outline-offset: var(--micro-focus-gap);
 }
 
-/* ================= 1) محدّد العرض الموحّد (يوم/أسبوع/شهر) ================= */
-/* 2026-10-25 (مرجع المالك calendar-reference-implementation.html): عنصر
-   واحد بثلاث حالات فاعلة بترتيب المرجع (Day|Week|Month) — أزرار ضغط
-   أصلية بسمة aria-pressed (نمط المكوّن الموثق)؛ المضغوط بتعبئة
-   البترولي ونص معكوس — لغة تحديد المكوّن نفسها (خلية اليوم المحدد).
-   الحالة ليست باللون وحده: aria-pressed + وزن + تعبئة مميزة.
-   القائمة ليست زرًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
+/* ================= 1) محدّد العرض الموحّد (يوم/أسبوع/شهر) =================
+   عقد 2026-10-25 (المرجع الأعلى 2.2): عنصر واحد بثلاث مقاطع متساوية
+   داخل سطح غارق (radius-lg 16، حشو 4، ارتفاع 48) — المقطع 40px
+   بزوايا radius-md 12 بلا حدود، والنشط brand-tint + brand-ink
+   بوزن 600 (لا تعبئة brand). الحالة ليست باللون وحده:
+   role=tab + aria-selected + وزن + تعبئة مميزة.
+   القائمة ليست مقطعًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
 .m-ocal__viewseg {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--micro-space-1);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
   flex: 1;
   min-width: 0;
+  padding: var(--micro-space-1);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-seg-hover-surface);
 }
 
 .m-ocal__viewseg-btn {
-  flex: 1 1 0;
-  min-width: 48px; /* ≥ هدف اللمس — WCAG 2.5.8 والعقد 48px */
-  min-height: var(--micro-touch-min); /* ≥ 48px */
+  min-width: 48px; /* ≥ هدف اللمس العرضي — WCAG 2.5.8 */
+  min-height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--micro-space-2);
   padding-inline: var(--micro-space-2);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-base);
+  border: 0;
+  border-radius: var(--micro-radius-field);
+  background-color: transparent;
   color: var(--micro-text-secondary);
-  font-size: var(--micro-button-label-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-.m-ocal__viewseg-btn[aria-pressed="true"] {
-  background-color: var(--micro-brand-primary);
-  border-color: var(--micro-brand-primary);
-  color: var(--micro-text-inverse);
+.m-ocal__viewseg-btn[aria-selected="true"] {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
   font-weight: var(--micro-weight-semibold);
 }
 
@@ -110,36 +116,45 @@
   gap: var(--micro-space-3);
 }
 
-/* ---- رأس التقويم: سهم الشهر السابق/التالي + العنوان + «اليوم» ---- */
+/* ---- متصفح الشهر/الأسبوع/اليوم (عقد المرجع الأعلى 2.3): صف واحد
+   بلا صناديق — التسمية في بداية السطر المضمن (flex:1) ومجموعة
+   الأفعال في نهايته؛ الضغط على الجميع بطبقة 8% من ink-primary
+   (سطح selected القائم) — عناصر ثانوية بلا حدود. */
 .m-ocal__cal-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min);
+}
+
+.m-ocal__cal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-1);
+  margin-inline-start: auto;
 }
 
 .m-ocal__cal-title {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0; /* يسمح بالالتفاف عند الضيق بدل الفيض */
   margin: 0;
-  text-align: center;
-  font-size: var(--micro-button-label-size);
+  text-align: start;
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
 }
 
 .m-ocal__month-trigger {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  justify-content: center;
   gap: var(--micro-space-1);
   min-height: var(--micro-touch-min);
-  padding: var(--micro-space-1) var(--micro-space-2);
+  padding: 0 var(--micro-space-2);
   border: 0;
-  border-radius: var(--micro-radius-chip);
+  border-radius: var(--micro-radius-field);
   background: transparent;
   color: inherit;
   font: inherit;
@@ -147,24 +162,22 @@
   overflow-wrap: anywhere;
 }
 
-/* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
-   تدرّج رأس الشهر الرقمي «MM / YYYY» داخل زر المنتقي — رقم الشهر
-   محوري (توكن عنوان القسم 18px/600) والسنة ثانوية (توكن التسمية
-   14px/400) + شيفرون هابط يعلن المنتقي. لا أسماء أشهر مرئية. */
-.m-ocal__month-num {
+/* عقد المرجع الأعلى 2.3: اسم الشهر محوري (600/ink-primary) والسنة
+   بنفس المقاس بوزن 400 ولون ink-secondary — تدرّج بالوزن واللون.
+   أرقام السنة بأرقام لاتينية ثابتة العرض. */
+.m-ocal__month-label {
   font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
-  font-variant-numeric: tabular-nums;
 }
 
 .m-ocal__year {
-  font-size: var(--micro-label-size);
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-regular);
-  line-height: var(--micro-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-secondary);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .m-ocal__month-trigger svg {
@@ -177,9 +190,11 @@
 }
 
 .m-ocal__month-trigger:hover {
-  background-color: var(--micro-surface-selected);
+  background-color: var(--micro-seg-hover-surface);
 }
 
+/* الأسهم: بلا حدود ولا تعبئة — أيقونة 24px بلون ink-secondary
+   داخل هدف لمس كامل (48px) */
 .m-ocal__navbtn {
   flex: none;
   width: var(--micro-icon-button-size);  /* 48px */
@@ -187,10 +202,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--micro-border-divider);
+  border: 0;
   border-radius: var(--micro-radius-circle);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-brand-primary);
+  background-color: transparent;
+  color: var(--micro-text-secondary);
   cursor: pointer;
 }
 
@@ -199,6 +214,10 @@
   height: var(--micro-icon-button-icon);
   fill: none;
   stroke: currentColor;
+}
+
+.m-ocal__navbtn:hover {
+  background-color: var(--micro-seg-hover-surface);
 }
 
 /* Month/year picker is an in-flow local layer, not a new navigation route. */
@@ -271,50 +290,66 @@
   font-weight: var(--micro-weight-semibold);
 }
 
+/* «اليوم»: زر نصي بلا حد ولا تعبئة (عقد المرجع الأعلى 2.3) —
+   يُرسَم شرطيًا فقط حين لا يكون التحديد/الشهر المعروض هو اليوم */
 .m-ocal__todaybtn {
   flex: none;
-  min-height: var(--micro-touch-min); /* ≥ 48px */
-  padding-inline: var(--micro-space-4);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-brand-primary);
-  font-size: var(--micro-button-label-size);
+  min-height: var(--micro-touch-min);
+  padding-inline: var(--micro-space-3);
+  border: 0;
+  border-radius: var(--micro-radius-field);
+  background-color: transparent;
+  color: var(--micro-text-primary);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
   cursor: pointer;
 }
 
-/* ---- زر «اليوم» في شريط الشهر/الأسبوع/اليوم: فعل اختيار صريح ---- */
+.m-ocal__todaybtn:hover {
+  background-color: var(--micro-seg-hover-surface);
+}
 
 /* ================= 3) بطاقة التقويم: شبكة الشهر وشبكة الأسبوع =================
-   عقد 2026-10-25 (calendar-target-latest-owner.png): رؤوس الأيام + الشبكة
-   داخل سطح متميز واحد (تعبئة السطح، حد خافت، زوايا سطح، ارتفاع خفيف —
-   كلها توكنز قائمة) وفواصل صفوف/أعمدة رقيقة بحد الفواصل نفسه.
+   عقد المرجع الأعلى 2.4: رؤوس الأيام + الشبكة + المفتاح داخل سطح
+   واحد (تعبئة السطح، حد خافت واحد، زوايا سطح، بلا ظل) — لا خطوط
+   شبكة داخلية إطلاقًا: الإيقاع من الفراغ والارتفاع الثابت للخلايا.
    الأعمدة السبعة ثابتة: بلا فجوات — كل عمود 100%/7 بالضبط، ورأس الأيام
    يستخدم القسمة نفسها فيمحاذاة تمامًا فوق أعمدة التواريخ في RTL وLTR.
-   شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد. */
+   شبكة الأسبوع هي الشبكة نفسها بصف واحد. */
 .m-ocal__calcard {
   border: 1px solid var(--micro-border-divider);
   border-radius: var(--micro-radius-surface);
   background-color: var(--micro-surface-base);
-  box-shadow: var(--micro-shadow-emphasis);
   overflow: hidden;
+}
+
+/* عقد المرجع الأعلى 3: تلاشٍ 200ms لتغيّر الشهر فقط (بلا انزلاق) —
+   وتُلغى الحركة كاملة تحت prefers-reduced-motion أسفل الملف. */
+.m-ocal[data-ocal-fade="1"] .m-ocal__calcard {
+  animation: m-ocal-month-fade 200ms var(--micro-ease-standard);
+}
+
+@keyframes m-ocal-month-fade {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
 }
 
 .m-ocal__weekdays {
   display: flex;
-  border-block-end: 1px solid var(--micro-border-divider);
   background-color: var(--micro-surface-base);
 }
 .m-ocal__weekday {
   width: calc(100% / 7);
   min-width: 0;
-  padding-block: var(--micro-space-2);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  font-size: var(--micro-secondary-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
-  line-height: var(--micro-secondary-line);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
   /* إصلاح R3-2b (2026-10-08): الالتفاف في أي مكان — اسم يوم عربي كلمة
      واحدة لا يتسع في عمود ~37px عند نص×2؛ المكوّن مكتفٍ ذاتيًا ولا
@@ -325,162 +360,132 @@
 .m-ocal__grid {
   display: flex;
   flex-direction: column;
-  /* 2026-10-25 (بطاقة التقويم): فواصل الصفوف رقيقة عبر حدود الخلايا
-     السفلية بدل فجوات — مجموعة الرقم+النقاط المتمركزة تبقي النقاط
-     بعيدة عن الصف التالي لأن محتوى الخلية متمركز ضمن أرضية الصف. */
+  /* عقد المرجع الأعلى 2.4: لا خطوط شبكة — الإيقاع من الفراغ بين
+     صفوف بأرضية ارتفاع ثابتة. */
   gap: 0;
 }
 
 .m-ocal__gridrow {
   display: flex;
-  /* إصلاح R3-2b (2026-10-08): أرضية ارتفاع الصف نسبية 2.7em (خط الصف
-     مثبت عند --micro-label-size → 37.8px عند 1× ≈ مربع الخلية، و75.6px
-     عند نص×2). لماذا هنا وليس على الخلية نفسها؟ العنصر الذي يجمع
-     aspect-ratio مع min-height محدد يحل المتصفح عرضه الجوهري على
-     الحجم المنقول من الارتفاع (75.6px عند ×2) فيتضخم الحجم الجوهري
-     للحاوية إلى 7×75.6+24 ≈ 553px ويوسّع أي أبٍ يحجم بالمحتوى (شبكة/
-     flex) خارج الشاشة. الصف بلا aspect-ratio فلا انقلاب، والخلايا
-     تتمدد (stretch) لأرضية الصف فيبقى المربع عند 1× وينمو عموديًا عند
-     التكبير — وهو السلوك الموثق في المواصفة. */
+  /* عقد المرجع الأعلى 2.4: أرضية ارتفاع الصف ثابتة 48px (هدف اللمس)
+     — التشريح الثابت (chip 28 + فجوة 4 + خانة 6) يجلس متمركزًا
+     داخلها فتتقاسم الأسس صفًا كاملًا سواء وُجدت أحداث أم لا.
+     عند تكبير النص تنمو الأرضية مع المحتوى (min-height) فلا قصّ. */
   font-size: var(--micro-label-size);
-  min-height: 2.7em;
+  min-height: var(--micro-touch-min);
 }
 
 /* ---- العرض المدمج للشبكة الكاملة (جذر < 360px؛ data-ocal-compact) ----
-   نفس بنية الشبكة: أرضية ارتفاع الصف ترتفع إلى هدف اللمس 48px
-   (max(2.7em, --micro-touch-min))، والخلية تستقل عن التربيع فعرضها
-   (100%−24px)/7 (≥ 24px — الحد الأدنى WCAG 2.5.8) وارتفاعها ≥ 48px.
+   نفس بنية الشبكة والتشريح نفسه: عرض الخلية (100%−24px)/7
+   (≥ 24px — الحد الأدنى WCAG 2.5.8) وارتفاعها ≥ 48px.
    كل أيام الشهر حاضرة وممكنة بلوحة المفاتيح — لا قصّ ولا إخفاء. */
 .m-ocal[data-ocal-compact="true"] .m-ocal__gridrow {
-  min-height: max(2.7em, var(--micro-touch-min));
+  min-height: var(--micro-touch-min);
 }
 
 .m-ocal[data-ocal-compact="true"] .m-ocal__cell {
-  aspect-ratio: auto;
   min-height: var(--micro-touch-min);
 }
 
 /* خلية فارغة — لم تعد تُستخدم (عقد 2026-10-25: أيام الأشهر المجاورة
    خلايا حقيقية خافتة بدل الفراغات؛ الصنف يبقى محذوفًا من المصدر) */
 
-/* خلية الشهر: مربعة عند الاتساع (≥360px)، وأرضية ارتفاع 48px عند
-   الضيق عبر عقد العرض المدمج أدناه.
-   2026-10-25 (مرجع المالك calendar-reference-implementation.html): الرقم
-   + النقاط مجموعة واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم
-   يومها مباشرة فلا تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل
-   المجموعة حيث يباعد بين الأسابيع.
-   2026-10-25 (بطاقة التقويم): فواصل أعمدة/صفوف رقيقة — حدود منطقية
-   (inline-start/block-start) فتعمل في RTL وLTR بلا انعكاس يدوي؛
-   العمود الأول بلا حد بداية والصف الأول بلا حد علوى عبر :nth-child
-   على بنية الأعمدة السبعة الثابتة. */
+/* خلية الشهر (عقد المرجع الأعلى 2.4): تشريح ثابت متطابق لكل خلية
+   — chip رقم 32×28 ثم فجوة 4px ثم خانة نقاط محجوزة (6px حتى
+   الفارغة) فلا يقفز أساس الرقم بين الخلايا أبدًا. بلا حدود ولا
+   تعبئة على الخلية نفسها؛ أرضية ارتفاع الصف 48px أعلاه. */
 .m-ocal__cell {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 2026-10-25: مجموعة الرقم+النقاط متمركزة (مرجع المالك) */
-  gap: 2px;
+  justify-content: center; /* المجموعة متمركزة داخل أرضية الصف */
+  gap: var(--micro-space-1);
   width: calc(100% / 7);
   min-width: 0;
-  aspect-ratio: 1; /* مربعة — المرجع02؛ الأرضية العمودية في .m-ocal__gridrow */
-  padding: 1px;
+  padding: 2px 0;
   border: 0;
-  border-inline-start: 1px solid var(--micro-border-divider);
   border-radius: 0;
-  background-color: transparent; /* لا شبكة حاويات ثقيلة ولا ظل */
+  background-color: transparent; /* لا خطوط شبكة ولا تعبئة خلايا */
   color: var(--micro-text-primary);
   cursor: pointer;
 }
 
-/* العمود الأول (بداية الأسبوع منطقيًا) بلا حد بداية */
-.m-ocal__cell:nth-child(7n + 1) {
-  border-inline-start: 0;
-}
-
-/* حد الصفوف: أول صف في الشبكة بلا حد علوى (رأس الأيام يحمل خطه
-   السفلي الخاص)، وبقية الصفوف تحمل الحد على أول خلية فيه ليكون
-   الخط مستمرًا عبر الصف كله بلا ازدواج */
-.m-ocal__gridrow + .m-ocal__gridrow .m-ocal__cell {
-  border-block-start: 1px solid var(--micro-border-divider);
-}
-
+/* chip الرقم: 32×28 بزوايا radius-md — سطح الحالة الوحيد في الخلية
+   (تحديد/اليوم/الضغط) — الخلية نفسها لا تُملأ أبدًا */
 .m-ocal__daynum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  border-radius: var(--micro-radius-field);
   font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* يوم من شهر مجاور (عقد 2026-10-25 — مرجع المالك: «grey number, dots
-   at 35% opacity»): رقم أهدأ ونقاط أخف شفافية — لكنه يوم حقيقي
-   قابل للتحديد (اختياره ينقل العرض إلى شهره). التحديد/اليوم الحالي
-   يظلان بعلامتيهما الكاملتين فوق الخفوت. */
+/* يوم من شهر مجاور (عقد المرجع الأعلى 2.4): رقم ink-disabled ونقاط
+   بشفافية 40% — لكنه يوم حقيقي قابل للتحديد (اختياره ينقل العرض
+   إلى شهره). التحديد/اليوم الحالي يظلان بعلامتيهما الكاملتين فوق
+   الخفوت. */
 .m-ocal__cell--out .m-ocal__daynum {
-  color: var(--micro-text-hint);
+  color: var(--micro-text-disabled);
 }
 
 .m-ocal__cell--out .m-ocal__dot {
-  opacity: 0.35;
+  opacity: 0.4;
 }
 
 .m-ocal__cell--out.m-ocal__cell--selected .m-ocal__daynum {
-  color: var(--micro-text-inverse);
+  color: var(--micro-brand-ink);
 }
 
 .m-ocal__cell--out.m-ocal__cell--selected .m-ocal__dot {
   opacity: 1;
 }
 
-/* علامة اليوم الحالي (2026-10-25، مرجع المالك): حد خارجي 2px + رقم
-   شبه عريض — علامتان محوريتان بدل أربع (كانت نقطة الرقم تزاحم نقاط
-   الحالات)؛ والمعنى ليس باللون وحده (aria-current + «اليوم» في
-   aria-label) */
-.m-ocal__cell--today {
-  box-shadow: 0 0 0 2px var(--micro-brand-primary);
-}
-
+/* اليوم الحالي (غير المحدد) — عقد المرجع الأعلى 2.4: وزن 600 +
+   حلقة 1px divider-strong على chip وحدها. والمعنى ليس باللون وحده
+   (aria-current + «اليوم» في aria-label) */
 .m-ocal__cell--today .m-ocal__daynum {
+  box-shadow: 0 0 0 1px var(--micro-border-control);
   font-weight: var(--micro-weight-semibold);
 }
 
-/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) — المربع البارز
-   فوق الفواصل كما في المرجع (الحدود الخافتة تبقى تحته) */
-.m-ocal__cell--selected {
-  background-color: var(--micro-brand-primary);
-  color: var(--micro-text-inverse);
-  border-radius: var(--micro-radius-chip);
-}
-
+/* اليوم المحدد — عقد المرجع الأعلى 2.4: chip بتعبئة brand-tint
+   ورقم brand-ink بوزن 600. الخلية نفسها لا تُملأ، والنقاط تحتفظ
+   بألوانها (لا حلقات بيضاء ولا حدود) */
 .m-ocal__cell--selected .m-ocal__daynum {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
   font-weight: var(--micro-weight-semibold);
 }
 
-.m-ocal__cell--selected .m-ocal__dot {
-  box-shadow: 0 0 0 1px var(--micro-text-inverse); /* تباين النقاط فوق التعبئة */
+/* اجتماعهما: نمط التحديد نفسه بلا حلقة (عقد المرجع الأعلى:
+   Selected + today = selected style plus weight 600 — no ring) */
+.m-ocal__cell--today.m-ocal__cell--selected .m-ocal__daynum {
+  box-shadow: none;
 }
 
-/* اجتماعهما: تبقى علامة اليوم ظاهرة مع التعبئة بلا اختلاط —
-   يتحول الحد والنقطة إلى معكوس فوق البترولي */
-.m-ocal__cell--today.m-ocal__cell--selected {
-  box-shadow: 0 0 0 2px var(--micro-text-inverse);
-}
-
-.m-ocal__cell:active:not(.m-ocal__cell--selected) {
+/* الضغط: طبقة 8% ink-primary على chip وحده (سطح selected القائم) */
+.m-ocal__cell:active:not(.m-ocal__cell--selected) .m-ocal__daynum {
   background-color: var(--micro-surface-selected);
 }
 
-/* نقاط الحالات تحت الرقم مباشرة (2026-10-25، مرجع المالك):
-   نظام مؤشر وحيد — لا عدّاد داخل خلية الشهر (العدد في aria-label
-   الخلية ولوحة اليوم/الأجندة)؛ سقف 3 نقاط بأنواع دلالية.
-   الترتيب الرأسي: الرقم ثم 2px ثم النقاط — ملكية غير ملتبسة. */
+/* نقاط الحالات تحت chip الرقم بفجوة 4px (عقد المرجع الأعلى 2.4):
+   خانة محجوزة تُرسَم دائمًا بارتفاع 6px حتى بلا أحداث — إصلاح
+   قفز الأساس؛ النقاط 6px دائرية صلبة بلا حلقات ولا توهج */
 .m-ocal__dots {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  min-height: 6px;
+  gap: var(--micro-space-1);
+  height: 6px;
 }
 
-/* نقطة الحالة: حد أدنى 6×6px (قيم ثابتة لا سلم مسافات — موثق) */
+/* نقطة الحالة: 6×6px صلبة (قيم ثابتة لا سلم مسافات — موثق) */
 .m-ocal__dot {
   flex: none;
   width: 6px;
@@ -493,23 +498,27 @@
 .m-ocal__dot--warning { background-color: var(--micro-warning); }
 .m-ocal__dot--neutral { background-color: var(--micro-text-secondary); }
 
-/* ================= 4) مفتاح الحالات (legend) ================= */
+/* ================= 4) مفتاح الحالات (داخل بطاقة التقويم) =================
+   عقد المرجع الأعلى 2.4: المفتاح يسكن البطاقة أسفل الشبكة (حشو
+   12/16، بلا فاصل أعلاه): ثلاث بنود في صف واحد (فجوة 16، التفاف)،
+   كل بند نقطة 6px + تسمية 14px/400 بلون ink-secondary (فجوة 8)،
+   بالترتيب والألوان نفسهما للنقاط. */
 .m-ocal__legend {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: var(--micro-space-3) var(--micro-space-4);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--micro-space-2) var(--micro-space-3);
+  gap: var(--micro-space-2) var(--micro-space-4);
 }
 
 .m-ocal__legend-item {
   display: inline-flex;
   align-items: center;
-  gap: var(--micro-space-1);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
+  gap: var(--micro-space-2);
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
 }
 
@@ -522,8 +531,8 @@
 
 .m-ocal__legend-dot {
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: var(--micro-radius-circle);
 }
 
@@ -532,11 +541,15 @@
 .m-ocal__legend-dot--warning { background-color: var(--micro-warning); }
 .m-ocal__legend-dot--neutral { background-color: var(--micro-text-secondary); }
 
-/* ================= 5) لوحة اليوم أسفل الشبكة وعرض اليوم ================= */
+/* ================= 5) رأس منطقة أحداث اليوم وعرض اليوم =================
+   عقد المرجع الأعلى 2.5: صف واحد (ارتفاع 44) — «طلبات اليوم» أو
+   «طلبات DD/MM/YYYY» بداية السطر (17px≈18 توكن عنوان القسم/600)،
+   يليه بعد 8px العدد رقمًا عاديًا (400/ink-secondary)، وزر
+   «إضافة طلب» نهاية السطر (السطح البترولي المملوء الوحيد). */
 .m-ocal__daypanel {
   display: flex;
   flex-direction: column;
-  gap: var(--micro-space-2);
+  gap: var(--micro-space-3);
 }
 
 .m-ocal__daypanel-head {
@@ -544,27 +557,38 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--micro-space-2) var(--micro-space-3);
+  min-height: var(--micro-touch-min);
 }
 
 .m-ocal__daypanel-title {
   flex: 1 1 auto;
   min-width: 140px;
   margin: 0;
-  font-size: var(--micro-button-label-size);
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
   overflow-wrap: anywhere;
 }
 
-.m-ocal__daypanel-count {
-  margin: 0;
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
+.m-ocal__daypanel-date {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* ================= 6) صفوف الطلبات (موحّدة في اليوم/الأجندة/الأسفل/القائمة) ================= */
+.m-ocal__daypanel-count {
+  margin: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* اليوم الفارغ (عقد المرجع الأعلى 2.6): سطر واحد ممركز بلا
+   صناديق ولا رسوم — حشو 24/16 */
+.m-ocal__daypanel-empty {
+  padding: var(--micro-space-6) var(--micro-space-4);
+  text-align: center;
+}
 .m-ocal__rows {
   list-style: none;
   margin: 0;
@@ -574,54 +598,37 @@
   gap: var(--micro-space-2);
 }
 
-/* الصف عنصر به زر رئيسي (فتح) وأدوات فعل اختيارية (تعديل/حذف)
-   جنبًا إلى جنب — لا تداخل أزرار، والأدوات ≥48px.
-   عقد 2026-10-25 (تصحيح هندسة ضيق — احتواء شريط الطلب): في الصفوف
-   ذات أدوات الفعل ينتقل السطح الخارجي نفسه للشريط (نفس حد
-   --micro-border-divider وتعبئة --micro-surface-base وزوايا
-   --micro-radius-field وحشو الصف 8/12) إلى حاوية الصف
-   m-ocal__rowitem--tools فيمتد خلف زرّي التعديل/الحذف ويطوّقهما
-   داخل الشريط المستمر نفسه — لا دائرتان معلّقتان خارجه. منطقة
-   المحتوى (m-ocal__row) تفقد سطحها الخاص لكنها تحتفظ بحد أدى 48px
-   (هدف اللمس) وبنصف قطر ضغط مطابق، فيبقى إيقاع الحشو والالتفاف
-   ونص العنوان/الوقت/الحالة كما هو (نفس عرض النص المتاح حرفيًا).
-   الصفوف بلا أدوات (القائمة) لا تتغير إطلاقًا: بقيت هندستها على
-   m-ocal__row كما هي — العمق المتعمد لهذا التصحيح ضيق عمدًا. */
+/* ================= 6) بطاقات الطلبات (اليوم/الأسفل/القائمة) =================
+   عقد المرجع الأعلى 2.6: البطاقة كلها زر فتح تفاصيل الطلب — سطح
+   (radius-lg 16، حد خافت واحد، بلا ظل، حشو 12/16، ارتفاع أدنى 76)،
+   شبكة «عمود محتوى + سهم اتجاهي 20px» بفجوة 12؛ عمود المحتوى سطران
+   (فجوة 4): العنوان + الوقت نصًا عاديًا، ثم العميل + شارة الحالة.
+   البطاقات تتباعد 8px، والضغط طبقة 8% ink-primary. */
+.m-ocal__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-2);
+}
+
 .m-ocal__rowitem {
   display: flex;
-  align-items: flex-start;
-  gap: var(--micro-space-1);
-}
-
-.m-ocal__rowitem--tools {
-  padding: var(--micro-space-2) var(--micro-space-3);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
-  background-color: var(--micro-surface-base);
-}
-
-.m-ocal__rowitem--tools .m-ocal__row {
-  padding: 0;
-  border: 0;
-  border-radius: var(--micro-radius-field); /* حالة الضغط داخل الشريط */
-  background-color: transparent;
-}
-
-.m-ocal__rowitem--tools .m-ocal__row:active {
-  background-color: var(--micro-surface-selected);
+  min-width: 0;
 }
 
 .m-ocal__row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* محاذاة يمين RTL */
-  gap: 2px;
-  flex: 1;
-  min-width: 0; /* يسمح بالالتفاف داخل الزر بدل توسيع الصف */
-  min-height: var(--micro-touch-min); /* صف كامل ≥ 48px */
-  padding: var(--micro-space-2) var(--micro-space-3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  column-gap: var(--micro-space-3);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 76px;
+  padding: var(--micro-space-3) var(--micro-space-4);
   border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
+  border-radius: var(--micro-radius-surface);
   background-color: var(--micro-surface-base);
   color: var(--micro-text-primary);
   text-align: start;
@@ -629,71 +636,89 @@
 }
 
 .m-ocal__row:active {
-  background-color: var(--micro-surface-selected);
+  background-color: var(--micro-seg-hover-surface);
 }
 
-/* عنوان طويل جدًا يلتف داخل الصف ولا يكسره */
+/* عمود المحتوى: سطران بفجوة 4px */
+.m-ocal__row-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+  min-width: 0;
+}
+
+.m-ocal__row-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  min-width: 0;
+}
+
+/* العنوان: سطر واحد بقطع بصري — النص الكامل باقٍ في DOM وشجرة
+   الإتاحة (قراءة كاملة لقارئ الشاشة)؛ العنوان الطويل لا يدفع
+   الوقت ولا السهم (عقد المرجع الأعلى 5.5) */
 .m-ocal__row-title {
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: var(--micro-body-size);
   font-weight: var(--micro-weight-medium);
   line-height: var(--micro-body-line);
   color: var(--micro-text-primary);
-  overflow-wrap: anywhere;
-  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.m-ocal__row-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--micro-space-1) var(--micro-space-2);
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
-  /* إصلاح R3-2b (2026-10-08): العنصر بند flex عرضي (align flex-start على
-     الصف) فيُقاس على max-content دون قصّ من عرض الزر — سطر ثانٍ طويل
-     (عميل + وقت + حالة) عند نص×2 يتجاوز الصف ويفيض خارج المكوّن في أي
-     صفحة مستهلك لا ترث overflow-wrap: anywhere. max-width يقصّه للصف
-     فيلتف محتواه (flex-wrap) — بند الوقاية نفسه الموجود في العنوان. */
-  max-width: 100%;
+/* الوقت: نص عادي 15px≈14 توكن التسمية/500/ink-strong بأرقام
+   ثابتة العرض داخل bdi معزول — بلا أيقونة ساعة ولا شريحة (عقد
+   المرجع الأعلى 2.6: الوقت ليس حالة) */
+.m-ocal__row-time {
+  flex: none;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .m-ocal__row-customer,
 .m-ocal__row-date {
-  overflow-wrap: anywhere;
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: var(--micro-label-size);
+  line-height: var(--micro-label-line);
+  color: var(--micro-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* شارة الوقت: أيقونة ساعة SVG مضمّنة + قيمة معزولة LTR */
-.m-ocal__row-time {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--micro-space-1);
-  padding: var(--micro-space-1) var(--micro-space-2);
-  border-radius: var(--micro-radius-chip);
-  background-color: var(--micro-surface-selected);
-  color: var(--micro-text-primary);
-}
+.m-ocal__row-placeholder { flex: 1 1 0; }
 
-.m-ocal__row-time svg {
-  width: 14px;
-  height: 14px;
+/* سهم البطاقة الاتجاهي 20px بلون ink-tertiary (توكن التلميح) —
+   يتبع الاتجاه من المكوّن (يسار في RTL، يمين في LTR) */
+.m-ocal__row-chev {
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
+  color: var(--micro-text-hint);
 }
 
-.m-ocal__row-time-value {
-  direction: ltr;
-  unicode-bidi: isolate;
-  font-variant-numeric: tabular-nums;
-}
-
-/* الحالة: نص داخل شريحة ملوّنة دلاليًا — بلا نقطة زائدة (R-24:
-   الكلمة والتلوين يحملان الحالة؛ أزواج توكنات معتمدة فقط) */
+/* الحالة: شارة نصية بلون الحالة الدلالي على تينته — النص وحده
+   يحمل المعنى (R-24)؛ عقد المرجع الأعلى 2.6: حشو 2/8 وزوايا chip
+   (أقرب توكن قائم لradius-sm — لا نصف قطر جديد) */
 .m-ocal__row-status {
   display: inline-flex;
   align-items: center;
-  padding: var(--micro-space-1) var(--micro-space-2);
+  padding: 2px var(--micro-space-2);
   border-radius: var(--micro-radius-chip);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-medium);
+  line-height: var(--micro-label-line);
   overflow-wrap: anywhere;
   max-width: 100%;
 }
@@ -718,68 +743,13 @@
   color: var(--micro-text-secondary);
 }
 
-/* ملاحظة قصيرة تحت العنوان (وصفية فقط — عقد البيانات 2026-10-25) */
-.m-ocal__row-note {
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-hint);
-  overflow-wrap: anywhere;
-  max-width: 100%;
-}
+/* ملاحظة الطلب القصيرة لم تعد على وجه البطاقة (عقد المرجع الأعلى 2.6 — تعرضها أسطح تفاصيل الطلب لدى المضيف؛ البيانات باقية). */
+.m-ocal__row-note { display: none; }
 
-/* أدوات فعل الصف (تعديل/حذف) — على صفوف سطح فعل اليوم المحدد فقط
-   عند تفعيل المضيف؛ أهداف 48×48 وأيقونة 1.5 (عقد الأيقونات).
-   عقد 2026-10-25: تبقى دائرتين منفصلتين بأسلوبها نفسه داخل امتداد
-   سطح الشريط الخارجي (m-ocal__rowitem--tools) — لا دمج ولا إعادة
-   تصميم ولا تغيير أهداف أو أفعال. */
-.m-ocal__row-tools {
-  flex: none;
-  display: flex;
-  gap: var(--micro-space-1);
-}
-
-.m-ocal__row-tool {
-  width: var(--micro-icon-button-size);  /* 48px */
-  height: var(--micro-icon-button-size); /* 48px */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-circle);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-text-secondary);
-  cursor: pointer;
-}
-
-.m-ocal__row-tool:active {
-  background-color: var(--micro-surface-selected);
-}
-
-.m-ocal__row-tool svg {
-  width: var(--micro-icon-in-button);
-  height: var(--micro-icon-in-button);
-  fill: none;
-  stroke: currentColor;
-}
-
-.m-ocal__row-tool--danger {
-  color: var(--micro-danger);
-  border-color: var(--micro-danger-surface);
-}
-
-/* ================= 6b) منطقة أحداث اليوم المحدد (Event cards) ================= */
-/* عقد 2026-10-25 (مرجع المالك «Events today»): العنوان الموجز +
-   العد + الإضافة في رأس المنطقة، وبطاقات الصفوف المدمجة تحتها —
-   تظهر دائمًا أسفل الشبكة في عرضَي الشهر والأسبوع وفي شاشة اليوم.
-   فراغ اليوم المحدد حالة صادقة داخل المنطقة. */
-.m-ocal__daypanel-empty {
-  padding: var(--micro-space-3) var(--micro-space-4);
-}
-
-/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري).
-   2026-10-25 (عقد الأرقام المرئية): النطاق تعبير رقمي خالص
-   «4–10/10/2026» — يُعزل LTR كي لا يقلب ترتيب أجزائه في سياق RTL
-   (التصيير المرجعي: أرقام لاتينية 0-9 في كل الاتجاهات). */
+/* ================= 6b) نطاق الأسبوع =================
+   نطاق الأسبوع في شريط الأسبوع — تعبير رقمي خالص يُعزل LTR كي
+   لا يقلب ترتيب أجزائه في سياق RTL (أرقام لاتينية 0-9 في كل
+   الاتجاهات). */
 .m-ocal__week-range {
   direction: ltr;
   unicode-bidi: isolate;
@@ -879,7 +849,10 @@
   stroke: currentColor;
 }
 
-/* ================= 10) الحركة ================= */
+/* ================= 10) الحركة =================
+   عقد المرجع الأعلى 3: الضغط ~80ms، تغيّر الحالة 120ms، تلاشٍ
+   200ms لتغيّر الشهر (أعلاه) — أقرب توكنات الحركة القائمة
+   (110ms/120ms)، وبلا ارتداد ولا عدّادات. */
 .m-ocal__cell,
 .m-ocal__viewseg-btn,
 .m-ocal__navbtn,
@@ -889,13 +862,12 @@
 .m-ocal__picker-back,
 .m-ocal__picker-month,
 .m-ocal__row,
-.m-ocal__row-tool,
 .m-ocal__add,
 .m-ocal__retry {
   transition:
-    background-color var(--micro-motion-selection) var(--micro-ease-standard),
-    color var(--micro-motion-selection) var(--micro-ease-standard),
-    border-color var(--micro-motion-selection) var(--micro-ease-standard);
+    background-color var(--micro-motion-press) var(--micro-ease-standard),
+    color var(--micro-motion-focus) var(--micro-ease-standard),
+    border-color var(--micro-motion-focus) var(--micro-ease-standard);
 }
 
 /* prefers-reduced-motion: بلا انتقالات */
