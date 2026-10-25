@@ -7,8 +7,8 @@
 | البند | القيمة |
 |---|---|
 | Starting head | `5ac1132571b194a47a02d03119f778d662092bb8` (رأس الفرع البعيد المحدد في الإحالة؛ سُحب fast-forward نظيفًا بلا إعادة تعيين ولا حذف التزامات) |
-| Implementation ending commit | يُسجَّل في الالتزام التالي مباشرة (تسجيل الرأس النهائي) |
-| Delivery tip | الالتزام الأخير على الفرع — يُتحقق منه بـ `git ls-remote origin replit/light-only-complete-ui-repair-2026-10-24` |
+| Implementation ending commit | `9f1aeae433188f06bbe6778c8bfbb508d0f996d1` (التزام التنفيذ الكامل: 85 ملفًا — الكود والمواصفة والبوابة والدليل و standalone و MANIFEST وهذا التقرير) |
+| Delivery tip | الالتزام الذي يسجّل هذا السطر (إعادة بصم MANIFEST بعد تحديث هذا الجدول) — يُتحقق منه بـ `git ls-remote origin replit/light-only-complete-ui-repair-2026-10-24` |
 | `main` | **لم تُمَس** — بقي عند `161bb71adbed86e0df4382174cb07bd2fcb8d62d` محليًا وعلى البعيد (تحقق `git rev-parse main` + `git ls-remote origin main`) |
 | الدمج | لا يوجد — لا دمج ولا rebase ولا دفع إلى أي فرع آخر؛ الفرع جاهز للمراجعة البشرية وقرار الدمج للمالك |
 
