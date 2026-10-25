@@ -9,7 +9,7 @@
 | البند | القيمة |
 |---|---|
 | Starting commit (رأس الفرع البعيد عند بدء هذه المرحلة، مطابق بـ `git ls-remote`) | `bc1de1b0e8805afe57b2ade5f038d8b0d7956793` («Define final numeric Calendar and full showcase contract») |
-| Ending commit (آخر التزام يحمل العمل: التنفيذ + الاختبارات + الأدلة + التقرير والمانيفست) | `__ENDING_COMMIT_HASH__` (يُثبَّت في التزام تسليم التقرير أدناه) |
+| Ending commit (آخر التزام يحمل العمل: التنفيذ + الاختبارات + الأدلة + التقرير والمانيفست) | `6a3cf51d2b771891648b9088fa350c92376c8abf` («Numeric-only Calendar + Calendar/List toggle + single-open inline order accordion + reachable full showcase» — 58 ملفًا) |
 | Branch | `replit/light-only-complete-ui-repair-2026-10-24` — الفرع نفسه فقط؛ لا فرع جديد ولا دمج |
 | `main` | **لم تُمَس** — بقي عند `161bb71adbed86e0df4382174cb07bd2fcb8d62d` |
 | منفذ المراجعة المرجعي | **Samsung Galaxy S25: 360×780 CSS px، تصيير 100%، عمودي** — لا `zoom` ولا `transform: scale` ولا إطار جهاز |
