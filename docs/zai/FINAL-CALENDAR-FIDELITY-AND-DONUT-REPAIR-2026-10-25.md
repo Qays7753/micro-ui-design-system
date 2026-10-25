@@ -42,7 +42,7 @@
 | البوابة | النتيجة الحقيقية |
 |---|---|
 | `python3 tools/light-release-check.py` | **792 PASS / 0 FAIL** (64 حالة مصفوفة) |
-| `python3 tools/light-static-check.py` | **215/215 PASS** |
+| `python3 tools/light-static-check.py` | **216/216 PASS** |
 | `python3 tools/light-calendar-check.py` | **143 PASS / 0 FAIL** |
 | `python3 tools/light-data-check.py` | **184 PASS / 0 FAIL** |
 | `python3 tools/chart-mobile-check.py` | **59 PASS / 0 FAIL** |
@@ -52,7 +52,7 @@
 | `python3 tools/clean-mobile-preview-check.py --capture-dir …` | **50 PASS / 0 FAIL** (source + standalone) |
 | `python3 tools/component-catalog-build.py --check` | **PASS** (14 عائلة) |
 | `python3 tools/build-ui-system-showcase-standalone.py` ثم `--check` | **CHECK OK** — إعادة التوليد مطابقة بايت-ببايت (24 رمز أيقونة يطابق الأصول) |
-| `python3 tools/manifest-build.py` ثم `--check` | **CHECK OK** — 746 مدخلًا، صفر اختلافات (أُعيد توليده بعد كل الملفات النهائية كي يعالج قِدَم المانيفست المذكور في الإحالة) |
+| `python3 tools/manifest-build.py` ثم `--check` | **CHECK OK** — 794 مدخلًا، صفر اختلافات (أُعيد توليده بعد كل الملفات النهائية كي يعالج قِدَم المانيفست المذكور في الإحالة؛ أُعيد التحقق 2026-10-26) |
 | `python3 tools/preview-runtime-check.py --base http://127.0.0.1:<port>` | **112/112 PASS** (source وstandalone × 320/360/390/430 × rtl/ltr) |
 | `node --check components/order-schedule/order-schedule.js` و`node --check components/data/data.js` | **PASS** |
 | `git diff --check` | **نظيف** (يُعاد قبل الالتزام) |
