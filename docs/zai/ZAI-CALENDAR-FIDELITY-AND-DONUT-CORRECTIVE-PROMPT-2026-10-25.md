@@ -13,7 +13,7 @@ replit/light-only-complete-ui-repair-2026-10-24
 Current starting head:
 
 ```text
-fd1940a05879b5c2eaeea1b242d9c508358eef1a
+318118e3f745568b58028f12c73390ad2739ea10
 ```
 
 Do not create another branch. Do not modify `main`. Do not merge. Push the finished work back to this same branch.
@@ -38,7 +38,17 @@ Read its accompanying rules first:
 docs/zai/references/owner-visual-concepts-2026-10-25/README.md
 ```
 
+The owner also supplied a reference implementation that explains the intended structure and interaction more precisely than the screenshot alone:
+
+```text
+docs/zai/references/owner-visual-concepts-2026-10-25/calendar-reference-implementation.html
+```
+
 The image is the owner's approved visual and interaction direction. Rebuild the Calendar concept close to the reference's overall structure, hierarchy, density, and reading flow, while using this repository's official identity, tokens, typography, Arabic RTL/LTR support, order-schedule data, events, and component boundaries.
+
+Treat `calendar-reference-implementation.html` as a reference implementation/specification for the exact composition and behavior: header row, controls row, `Day / Week / Month` selector, month navigator, seven-column grid, day-number-plus-dot anatomy, selected-day treatment, events-today region, compact event cards, and the vertical reading order. Use its structure to remove ambiguity about what the owner means by “make it like the reference.” It is not production code to paste into the repository. Reimplement the behavior inside the reusable component using the existing architecture, DOM safety rules, tokens, accessibility contract, RTL/LTR behavior, and host-owned order data.
+
+The reference code is intentionally a prototype and may contain choices that must not be copied: external Google Fonts, a new violet palette, hardcoded sample data, `innerHTML` from data, a phone frame, an avatar, a floating bottom navigation shell, and a standalone global event model. Do not import those dependencies or unsafe patterns. Preserve the visual composition and interaction intent while making the implementation reusable, secure, token-driven, and specific to this system.
 
 Do not copy the reference's purple palette, logo, avatar, external icons, wording, sample data, or unrelated product shell. The Calendar region is the required reference. A profile avatar, bottom navigation bar, and other application-shell chrome are host/product concerns, not automatic parts of the reusable Calendar component.
 
@@ -102,6 +112,7 @@ Do not add the reference's bottom navigation, avatar, product title bar, or unre
 ### Interaction and contract requirements
 
 - `Day`, `Week`, and `Month` must be real functioning states, not visual labels.
+- The reference implementation is the minimum behavior target for the three view modes: Month shows the full grid, Week shows the selected week's seven days with the selected day's events, and Day shows the selected day's event surface. Do not substitute List for Week in the reference selector. A separate List surface may remain for compatibility, but it is not the reference's Week mode.
 - Week view must use a documented reusable contract appropriate to scheduled orders: dates, selected day, order markers/rows, navigation, empty state, and keyboard behavior.
 - Preserve host-owned data and event boundaries. The component renders and emits events; it does not persist data or call a backend.
 - Preserve RTL/LTR, keyboard navigation, focus recovery, accessible names, and visible focus.

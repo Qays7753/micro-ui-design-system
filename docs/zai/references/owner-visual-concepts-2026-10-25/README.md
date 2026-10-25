@@ -1,9 +1,10 @@
 # Owner-approved visual concept references — 2026-10-25
 
-These two PNG files were supplied by the system owner as visual direction for the next component-level repair pass:
+These two PNG files and one HTML reference implementation were supplied by the system owner as visual direction for the next component-level repair pass:
 
 - `calendar-target.png`
 - `chart-target.png`
+- `calendar-reference-implementation.html`
 
 They are reference assets, not production assets and not branding assets.
 
@@ -28,6 +29,24 @@ The reference does not authorize adding an unrelated product shell to the reusab
 Treat this as the target concept, not as a pixel-copy instruction. The reusable component must provide the appropriate equivalent of the reference's day/week/month control only when those presentations are real, fully implemented, documented, keyboard-accessible, RTL/LTR-safe, and useful for this component. Never add a fake or non-functional tab merely to imitate the image. Do not silently reintroduce a floating thumb-zone Add button or a Bottom Sheet; the current repository contract explicitly excludes them from this Calendar flow.
 
 If the current Calendar anatomy cannot express this concept cleanly, redesign the reusable Calendar contract and implementation, update its specification, isolated example, Showcase, standalone build, and regression tests together. Do not make a Showcase-only visual patch.
+
+## Calendar reference implementation
+
+`calendar-reference-implementation.html` is an owner-supplied executable prototype/specification. It removes ambiguity that a screenshot alone can leave about the intended composition and behavior. Read its design-spec comment and source structure before implementing the reusable component.
+
+It defines the intended vertical reading order and the minimum concept target:
+
+1. Mobile header row with back/title/profile positions.
+2. Controls row with a filter action, a flexible `Day / Week / Month` selector, and an add-event action.
+3. Month navigator with previous/next controls and month/year hierarchy.
+4. A seven-column month grid with computed 5/6-week coverage, day number plus dot row, selected-day treatment, and event dots.
+5. An `Events today` region below the grid.
+6. Compact event cards containing title, time, and group/calendar context.
+7. A host-level bottom navigation shell in the prototype.
+
+The reusable `order-schedule` component must implement the Calendar region and its real Day/Week/Month behavior, event data, and host-owned actions. The bottom navigation, avatar, phone frame, and other product-shell elements stay outside the reusable component unless the Showcase host deliberately demonstrates them as host chrome.
+
+The HTML is reference code, not code to paste. Do not copy its Google Font dependency, violet palette, hardcoded data, phone frame, external/sample icons, unsafe `innerHTML` data interpolation, or global standalone event model. Rebuild the same useful composition with the repository's existing tokens, typography, semantic status colors, secure text construction, accessibility contract, RTL/LTR behavior, and order-schedule API. The agent may improve a detail when required by the repository's semantics or accessibility, but must not silently remove the reference's major structural regions or replace Week with List.
 
 ## Charts direction
 
