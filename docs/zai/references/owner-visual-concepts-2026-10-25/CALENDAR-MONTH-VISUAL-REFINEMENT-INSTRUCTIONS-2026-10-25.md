@@ -40,7 +40,7 @@ Vertical rhythm at 360px (side padding 16 everywhere):
 ### 2.1 Top zone
 - Integrated into the page: **no background strip, no bottom divider**, same `canvas` as the page.
 - Title "الطلبات": 22px / 600 / `ink-primary`, at inline-start.
-- Avatar at inline-end: 40px circle, **no ring/border**, 44×44 hit area. Opens the existing profile/settings list.
+- Do **not** add a centered "Calendar" title, a back button, or an avatar to the Calendar screen. Keep the existing `الطلبات` title only.
 
 ### 2.2 View switcher (يوم / أسبوع / شهر)
 - **One** container, not three buttons: `sunken` background, `radius-lg` (16), padding 4, height 48, three equal segments (`grid-template-columns: repeat(3, 1fr)`).
@@ -51,7 +51,7 @@ Vertical rhythm at 360px (side padding 16 everywhere):
 
 ### 2.3 Month navigator
 - Single row, height 44, no boxes around any control.
-- Inline-start: month label as **month name + year**, e.g. "تشرين الأول 2026" (Jordanian month names). Month name 17px / 600 / `ink-primary`; year 17px / 400 / `ink-secondary`. Delete the "10 / 2026" numeric format and the small dropdown chevron (unless it opens a real month picker; if so use a 20px chevron-down, `ink-secondary`, inside the same 44px hit area as the label).
+- Inline-start: a **numeric month + year** label such as "10 / 2026". Never expose Arabic or English month names visually. Keep a 20px dropdown chevron only when it opens the real month picker, inside the same 44px hit area as the label.
 - Inline-end group, in this order: "اليوم" text button, previous chevron, next chevron.
   - "اليوم": no border, no fill, 14px / 500 / `ink-strong`, min 44px hit area. **Render only when the selected date or visible month is not today.**
   - Chevrons: Lucide `chevron-right` / `chevron-left` 24px, `ink-secondary`, 44×44, no border. Previous points toward inline-start (right in RTL). They are directional, so they follow RTL; do not flip them with global CSS.
@@ -73,7 +73,7 @@ Vertical rhythm at 360px (side padding 16 everywhere):
   - Selected + today: selected style plus weight 600 (no ring).
   - Pressed: 8% `ink-primary` overlay on the chip only, 80ms.
   - Focus-visible: 2px outline `ink-strong`, offset 2.
-- Accessibility: each cell `aria-label="٧ تشرين الأول، طلبان"` pattern (day, month, event count), `aria-pressed` on the selected cell.
+- Accessibility: each cell exposes a complete numeric date and event count, for example `07/10/2026، طلبان`, with safe bidi isolation and `aria-pressed` on the selected cell. Do not leak visible month-name text into the product surface.
 - **Legend** lives **inside the card, at the bottom**, padding 12 16, no divider above it: three items in one flex row (`gap: 16`, `flex-wrap: wrap`), each a 6px dot + label 14px / 400 / `ink-secondary` (gap 8). Same order and colors as the dots. Remove the legend that currently floats outside the card.
 
 ### 2.5 Section header
@@ -100,6 +100,20 @@ Remove the circular edit and delete buttons from the card face.
 - Active item: `brand-tint` rounded background (`radius-md` 12, inset 8px from the item edges), `brand-ink` icon and label, weight 600. Inactive: `ink-secondary`.
 - Replace the التقارير icon (up arrow reads as "upload") with Lucide `chart-column` (or `bar-chart-3` depending on the installed Lucide version).
 - Content scroll container gets `padding-bottom: 64px + safe-area + 16px` so the last card clears the nav.
+
+### 2.8 Calendar/List view toggle
+- Add one independent, clearly labelled toggle separate from the Day/Week/Month segmented control.
+- In Calendar mode it opens List mode; in List mode it opens Calendar mode. This must be a real state change using the same order data and existing actions, not a decorative label.
+- Use a truthful visible label and accessibility state, such as `عرض القائمة` while Calendar is active and `عرض التقويم` while List is active, with `aria-pressed` or the repository's equivalent.
+- Day/Week/Month controls affect only the Calendar mode and must not be conflated with Calendar/List.
+- Do not add Settings or Filter controls at this stage because no confirmed product role exists for them.
+
+## 2.9 Review surfaces
+- Keep the Clean App Preview as a natural product-like surface without component names, implementation notes, fixture controls, or diagnostic chrome.
+- Also provide a clearly reachable Full Component Showcase for owner review. Do not hide it behind guessed anchors only.
+- The Full Component Showcase must make every catalog family (14) and every explicit optional variant (6) reachable in organized sections or short review screens, including the important states available for each component: default, selected, disabled, error, success, empty/no-data, loading where applicable, long text, RTL/LTR, stress typography, and Calendar/List.
+- Do not cram all components into one giant screen. Use a clear review navigation or categorized sections.
+- The Full Component Showcase may use component names and review labels because it is explicitly a review surface; the Clean App Preview may not.
 
 ## 3. Motion
 Press 80ms, state changes 120ms, month change 200ms (fade only, no slide). No bounce, no count-up. Respect `prefers-reduced-motion`.
@@ -132,4 +146,5 @@ Press 80ms, state changes 120ms, month change 200ms (fade only, no slide). No bo
 7. Every tappable element ≥44×44; focus-visible outline present; selected/active states exposed to assistive tech.
 8. No raw hex, no new radii, no spacing outside the allowed scale. If the repo includes `scripts/micro_visual_guard_scan.py`, run it and fix any finding it reports for this screen.
 9. Switching to dark mode on the device does not change the screen.
-10. Report back with: the screenshots at 360×780 and 320×640, the list of files changed, and any rule above you could not apply with the reason.
+10. Capture actual viewport screenshots at exactly 360×780 and 320×640. Do not use full-page screenshots under viewport filenames; if full-page evidence is needed, state its real dimensions in the filename and report.
+11. Report back with the screenshots, the Calendar/List interaction proof, the Full Component Showcase coverage, the list of files changed, exact starting and ending commits, exact remote HEAD, and any rule above that could not be applied with the reason.

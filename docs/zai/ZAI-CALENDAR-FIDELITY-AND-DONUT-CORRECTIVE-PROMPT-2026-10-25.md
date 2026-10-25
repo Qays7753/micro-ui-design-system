@@ -57,6 +57,95 @@ Before changing code:
 
 ## Phase 1 — Calendar visual fidelity
 
+### Owner's final product and review contract — highest priority
+
+This is the owner's latest authoritative correction. It supersedes every conflicting Calendar or Showcase presentation rule elsewhere in this prompt and in earlier reports. Do not preserve two competing visual contracts. Keep data models, order logic, routes, storage, export formats, public props, services, and semantic event/data ownership unchanged.
+
+Read and apply the companion contract as well:
+
+```text
+docs/zai/references/owner-visual-concepts-2026-10-25/CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS-2026-10-25.md
+```
+
+#### 1. Calendar identity and structure
+
+- The screen title remains `الطلبات`.
+- Do not add a centered `Calendar` title.
+- Do not add a back button to the Calendar screen.
+- Do not add an avatar to the Calendar screen or its top zone.
+- Do not copy the reference image's content, sample event names, avatar, violet colors, phone frame, or product chrome. Use the reference only for contrast, hierarchy, proportions, spacing, control shape, calendar-card composition, event clarity, and mobile density.
+- Keep one real Day/Week/Month segmented control. It controls the Calendar mode only.
+- Add one separate, clearly labelled Calendar/List toggle. It must actually switch the orders surface between:
+  - Calendar mode: Day/Week/Month calendar views, date navigation, dots, legend, and the selected-day event region.
+  - List mode: an organized order list using the same real order data and actions.
+- The Calendar/List toggle must have an unambiguous visible purpose and truthful `aria-label`, `aria-pressed`, and state. Its label should describe the view it will open, such as `عرض القائمة` while Calendar is active and `عرض التقويم` while List is active.
+- Day/Week/Month must not be confused with Calendar/List. Calendar/List changes the surface type; Day/Week/Month changes the calendar range within Calendar mode.
+- Do not add Settings or Filter controls at this stage. A control without a confirmed product role must not be shown merely for decoration.
+
+#### 2. Final numeric-only date contract
+
+The owner's current decision is numeric dates only. The earlier `month name + year` instruction is revoked and must not be implemented.
+
+- Never show a visible Arabic or English month name anywhere in the Calendar surface, including the month navigator, day title, event heading, week range, list heading, empty state, or visible picker options.
+- The visible month header must use a numeric form such as `10 / 2026`, with a clear month/year hierarchy and a real picker affordance if the picker is exposed.
+- Full visible dates must use `DD/MM/YYYY`, such as `07/10/2026`.
+- Week ranges must use numeric dates only, such as `04–10/10/2026`.
+- Day numbers, month numbers, year numbers, and times use Latin digits `0–9` and safe bidi isolation (`<bdi>` or equivalent).
+- Weekday abbreviations may remain localized Arabic weekday labels (`أحد، إثن، ثلا، أرب، خمي، جمع، سبت`) because they are weekday labels, not month names.
+- Accessible names must remain complete and truthful; they must not cause visible month-name text to leak into the product surface. Prefer numeric date names when the accessibility contract permits it and document any necessary non-visible localization.
+
+#### 3. Visual contract for the Calendar screen
+
+- Use existing repository semantic tokens, IBM Plex Sans Arabic, existing repository-owned icon assets, logical RTL/LTR properties, and Light-only behavior. Never hardcode hex, add a new color, add an external icon dependency, or add a new spacing/radius value.
+- Keep the mobile hierarchy compact and readable at 360×780, while remaining robust at 320/360/390/430px.
+- Keep exactly one filled brand surface in the viewport: `إضافة طلب`. Active/selected states use `brand-tint` and `brand-ink`.
+- Use one segmented Day/Week/Month container, borderless secondary navigation controls, and clear contrast between canvas, control surface, Calendar card, events, and bottom navigation.
+- Keep fixed cell geometry and an always-reserved dots slot so event presence never moves day-number baselines.
+- Keep the Sunday-first contract in LTR and RTL, with dates, weekday labels, dots, selected state, and today state attached to the same date.
+- Keep selected state on the number chip only, not the whole cell. Keep today distinct. Keep dots solid, compact, semantically ordered, and owned by their date cell.
+- Keep the Calendar card restrained and token-driven. Follow the companion contract's rule about no inner grid lines; do not reintroduce the old grid-divider treatment merely to pass an old screenshot expectation.
+- Keep the status legend inside the Calendar card and remove any detached/floating legend.
+- Keep the event area below the Calendar with concise real labels, count, empty state, and the primary `إضافة طلب` action.
+- Keep order cards as one tappable surface with a directional chevron. Do not restore circular Edit/Delete buttons on the card face. Edit/Delete remain reachable from the existing details flow with confirmation for deletion.
+- Keep the edge-to-edge bottom navigation and the repository's existing navigation contract.
+
+#### 4. Two separate review surfaces are required
+
+The default app-like preview and the complete component review are different deliverables. Do not claim that a hidden DOM root is equivalent to a visible review experience.
+
+**Clean App Preview:**
+
+- Keep a natural product-like app entry with concise product labels only: Home, Orders, Reports, Account, Calendar/List, and real reachable states.
+- Do not show component names, implementation notes, PASS/FAIL labels, fixture controls, measurement overlays, or diagnostic chrome in this surface.
+- The Calendar/List control must be reachable from the Orders screen and visibly demonstrate both states.
+
+**Full Component Showcase:**
+
+- Provide a clearly reachable, separate review surface for the owner. It may be a dedicated view, route, or clearly labelled review link; it must not require guessing hidden anchors such as `#sc-canvas` or `#state-lab`.
+- Show every current component family from the catalog (14 families) and every explicit optional variant (6 variants) in organized sections or short review screens. Do not cram everything into one giant unreadable screen.
+- Include the relevant states where they exist: default, selected, disabled, error, success, empty/no-data, loading, long text, RTL/LTR, text stress, and the real Calendar/List states.
+- The Full Component Showcase may use component names and review labels because it is explicitly a review surface. The Clean App Preview must not.
+- Each showcased component must use the real reusable component, public API, CSS, and realistic deterministic fixture data. Do not create screenshot-only mocks or a second fake implementation.
+- Keep the existing diagnostic/test infrastructure available for automated checks, but make the owner-facing Full Component Showcase easy to reach and visually understandable.
+
+#### 5. Proof required before delivery
+
+- Perform a real visual walkthrough at RTL and LTR. Open the Orders screen, switch Calendar/List, switch Day/Week/Month inside Calendar mode, navigate dates/months, inspect dots and legend, open an order, edit it, delete it with confirmation, add an order, and inspect the Full Component Showcase.
+- Capture actual viewport screenshots at exactly `360×780` CSS pixels and `320×640` CSS pixels, plus robustness screenshots at 320/360/390/430 where applicable. Do not use `full_page` screenshots while naming them as viewport screenshots. If full-page evidence is also useful, give it a separate filename that states its real dimensions.
+- Verify there is no horizontal overflow, no clipping, no unexpected scroll ownership, no visible month names, no central Calendar title, no back button, and no Calendar-screen avatar.
+- Verify the first order card is visible at the canonical viewport and that the Calendar/List toggle has a real state change, not merely a visual label.
+- Run every relevant gate from this prompt, regenerate `MANIFEST.json` after all final files/evidence/report changes, and ensure every gate is green.
+- The final report must include the exact starting commit, exact ending commit, exact remote HEAD returned by `git ls-remote`, exact gate totals, exact screenshot dimensions, changed files, and any untested limits. Do not write placeholders such as “the commit carrying this report”.
+- Commit and push only to `replit/light-only-complete-ui-repair-2026-10-24`. Do not create another branch, modify `main`, or merge.
+
+If GitHub authentication is required, use this manual placeholder only in the agent conversation:
+
+```text
+[INSERT_RESTRICTED_GITHUB_TOKEN_HERE]
+```
+
+Never save a real token in the repository, prompt, report, evidence, or commit.
+
 ### 1. Correct weekday order and date mapping
 
 The current default `weekStart` is Saturday, which causes the visible weekday/date relationship to differ from the owner reference. Correct the Calendar contract so the reference concept is Sunday-first:
