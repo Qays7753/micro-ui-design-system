@@ -10,11 +10,13 @@ Work directly on the existing single feature branch:
 replit/light-only-complete-ui-repair-2026-10-24
 ```
 
-Current known head before this task:
+Current branch head containing the owner visual references before the repair task:
 
 ```text
-df53cc7bd660efca585dde33de63ed978d501216
+04e635f96da9a0d1a286e31dc4f5faa0906bde8f
 ```
+
+The previous implementation head was `df53cc7bd660efca585dde33de63ed978d501216`; do not reset to it. Start from the latest remote head so the owner-provided Calendar and Charts references remain available.
 
 Do not create another branch. Do not modify `main`. Do not merge. Push all work to the same existing feature branch and leave it ready for review and later merge.
 
