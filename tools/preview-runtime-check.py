@@ -67,12 +67,16 @@ def main():
                     page.goto(url, wait_until="load")
                     page.evaluate("document.fonts.ready")
                     before = page.evaluate(SNAPSHOT)
-                    page.locator('[data-showcase-view="state"]').first.click()
+                    # عقد 2026-10-25: الدخول الافتراضي هو المعاينة المحمولة؛
+                    # الفحص يدخل مختبر الحالات عبر رابط العمق الموثق.
+                    page.evaluate("location.hash = '#state-lab'")
+                    page.wait_for_timeout(350)
                     page.locator(f'[data-sc-dir="{direction}"]').click()
                     page.locator(f'[data-sc-w="{width}"]').click()
                     for _ in range(2):
-                        page.locator('[data-showcase-view="overview"]').first.click()
-                        page.locator('[data-showcase-view="state"]').first.click()
+                        page.evaluate("location.hash = '#sc-canvas'")
+                        page.wait_for_timeout(160)
+                        page.evaluate("location.hash = '#state-lab'")
                         page.wait_for_timeout(160)
                     trigger = page.locator('#sc-ocal-root [data-ocal-action="month-picker"]')
                     trigger.click()

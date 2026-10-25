@@ -4850,19 +4850,22 @@ button.m-setting-row:focus-visible { z-index: 1; }
   overflow-wrap: anywhere;
 }
 
-/* 2026-10-25 (مرجع المالك): تدرّج الشهر/السنة داخل زر المنتقي —
-   الشهر محوري والسنة ثانوية + شيفرون هابط يعلن المنتقي */
-.m-ocal__month-name {
-  font-size: var(--micro-button-label-size);
+/* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
+   تدرّج رأس الشهر الرقمي «MM / YYYY» داخل زر المنتقي — رقم الشهر
+   محوري (توكن عنوان القسم 18px/600) والسنة ثانوية (توكن التسمية
+   14px/400) + شيفرون هابط يعلن المنتقي. لا أسماء أشهر مرئية. */
+.m-ocal__month-num {
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .m-ocal__year {
-  font-size: var(--micro-secondary-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-regular);
-  line-height: var(--micro-secondary-line);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
   font-variant-numeric: tabular-nums;
 }
@@ -4987,17 +4990,30 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 /* ---- زر «اليوم» في شريط الشهر/الأسبوع/اليوم: فعل اختيار صريح ---- */
 
-/* ================= 3) شبكة الشهر وشبكة الأسبوع ================= */
-/* شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد — نفس
-   أعمدة الخلايا/الأرضيات/الفجوات، ودالة display حسب عرض الجذر
-   (data-ocal-compact) كما في الشهر. */
+/* ================= 3) بطاقة التقويم: شبكة الشهر وشبكة الأسبوع =================
+   عقد 2026-10-25 (calendar-target-latest-owner.png): رؤوس الأيام + الشبكة
+   داخل سطح متميز واحد (تعبئة السطح، حد خافت، زوايا سطح، ارتفاع خفيف —
+   كلها توكنز قائمة) وفواصل صفوف/أعمدة رقيقة بحد الفواصل نفسه.
+   الأعمدة السبعة ثابتة: بلا فجوات — كل عمود 100%/7 بالضبط، ورأس الأيام
+   يستخدم القسمة نفسها فيمحاذاة تمامًا فوق أعمدة التواريخ في RTL وLTR.
+   شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد. */
+.m-ocal__calcard {
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-surface-base);
+  box-shadow: var(--micro-shadow-emphasis);
+  overflow: hidden;
+}
+
 .m-ocal__weekdays {
   display: flex;
-  gap: var(--micro-space-1);
+  border-block-end: 1px solid var(--micro-border-divider);
+  background-color: var(--micro-surface-base);
 }
 .m-ocal__weekday {
-  width: calc((100% - 6 * var(--micro-space-1)) / 7);
-  padding-block: var(--micro-space-1);
+  width: calc(100% / 7);
+  min-width: 0;
+  padding-block: var(--micro-space-2);
   text-align: center;
   font-size: var(--micro-secondary-size);
   font-weight: var(--micro-weight-medium);
@@ -5012,15 +5028,14 @@ button.m-setting-row:focus-visible { z-index: 1; }
 .m-ocal__grid {
   display: flex;
   flex-direction: column;
-  /* 2026-10-25 (مرجع المالك): فصل أسابيع 8px — مجموعة الرقم+النقاط
-     المتمركزة تنتهي قبل نهاية الخلية فيقع الفصل أسفلها بين الأسابيع
-     ولا تلتبس النقاط بالصف التالي */
-  gap: var(--micro-space-2);
+  /* 2026-10-25 (بطاقة التقويم): فواصل الصفوف رقيقة عبر حدود الخلايا
+     السفلية بدل فجوات — مجموعة الرقم+النقاط المتمركزة تبقي النقاط
+     بعيدة عن الصف التالي لأن محتوى الخلية متمركز ضمن أرضية الصف. */
+  gap: 0;
 }
 
 .m-ocal__gridrow {
   display: flex;
-  gap: var(--micro-space-1);
   /* إصلاح R3-2b (2026-10-08): أرضية ارتفاع الصف نسبية 2.7em (خط الصف
      مثبت عند --micro-label-size → 37.8px عند 1× ≈ مربع الخلية، و75.6px
      عند نص×2). لماذا هنا وليس على الخلية نفسها؟ العنصر الذي يجمع
@@ -5056,7 +5071,11 @@ button.m-setting-row:focus-visible { z-index: 1; }
    2026-10-25 (مرجع المالك calendar-reference-implementation.html): الرقم
    + النقاط مجموعة واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم
    يومها مباشرة فلا تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل
-   المجموعة حيث يباعد بين الأسابيع. */
+   المجموعة حيث يباعد بين الأسابيع.
+   2026-10-25 (بطاقة التقويم): فواصل أعمدة/صفوف رقيقة — حدود منطقية
+   (inline-start/block-start) فتعمل في RTL وLTR بلا انعكاس يدوي؛
+   العمود الأول بلا حد بداية والصف الأول بلا حد علوى عبر :nth-child
+   على بنية الأعمدة السبعة الثابتة. */
 .m-ocal__cell {
   position: relative;
   display: flex;
@@ -5064,14 +5083,28 @@ button.m-setting-row:focus-visible { z-index: 1; }
   align-items: center;
   justify-content: center; /* 2026-10-25: مجموعة الرقم+النقاط متمركزة (مرجع المالك) */
   gap: 2px;
-  width: calc((100% - 6 * var(--micro-space-1)) / 7);
+  width: calc(100% / 7);
+  min-width: 0;
   aspect-ratio: 1; /* مربعة — المرجع02؛ الأرضية العمودية في .m-ocal__gridrow */
   padding: 1px;
   border: 0;
-  border-radius: var(--micro-radius-chip);
+  border-inline-start: 1px solid var(--micro-border-divider);
+  border-radius: 0;
   background-color: transparent; /* لا شبكة حاويات ثقيلة ولا ظل */
   color: var(--micro-text-primary);
   cursor: pointer;
+}
+
+/* العمود الأول (بداية الأسبوع منطقيًا) بلا حد بداية */
+.m-ocal__cell:nth-child(7n + 1) {
+  border-inline-start: 0;
+}
+
+/* حد الصفوف: أول صف في الشبكة بلا حد علوى (رأس الأيام يحمل خطه
+   السفلي الخاص)، وبقية الصفوف تحمل الحد على أول خلية فيه ليكون
+   الخط مستمرًا عبر الصف كله بلا ازدواج */
+.m-ocal__gridrow + .m-ocal__gridrow .m-ocal__cell {
+  border-block-start: 1px solid var(--micro-border-divider);
 }
 
 .m-ocal__daynum {
@@ -5112,10 +5145,12 @@ button.m-setting-row:focus-visible { z-index: 1; }
   font-weight: var(--micro-weight-semibold);
 }
 
-/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) */
+/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) — المربع البارز
+   فوق الفواصل كما في المرجع (الحدود الخافتة تبقى تحته) */
 .m-ocal__cell--selected {
   background-color: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
+  border-radius: var(--micro-radius-chip);
 }
 
 .m-ocal__cell--selected .m-ocal__daynum {
@@ -5444,8 +5479,13 @@ button.m-setting-row:focus-visible { z-index: 1; }
   padding: var(--micro-space-3) var(--micro-space-4);
 }
 
-/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري) */
+/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري).
+   2026-10-25 (عقد الأرقام المرئية): النطاق تعبير رقمي خالص
+   «4–10/10/2026» — يُعزل LTR كي لا يقلب ترتيب أجزائه في سياق RTL
+   (التصيير المرجعي: أرقام لاتينية 0-9 في كل الاتجاهات). */
 .m-ocal__week-range {
+  direction: ltr;
+  unicode-bidi: isolate;
   font-size: var(--micro-button-label-size);
   font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);
@@ -6424,9 +6464,244 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 /* Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) */
 .sc-toast-host { position: fixed; inset-block-end: 16px; inset-inline: 16px; z-index: 60; display: grid; justify-items: center; }
 
+/* =========================================================
+   المعاينة المحمولة النظيفة (عقد 2026-10-25 — سطح المراجعة الافتراضي)
+   تطبيق هاتفي من مكونات المكتبة الحقيقية. منفذ العرض هو الهاتف:
+   CSS متجاوب عادي يرسم طبيعيًا عند 360×780 — لا تحجيم ولا إطار جهاز.
+   كل القيم بتوكنز المكتبة؛ لا ألوان جديدة.
+   ========================================================= */
+
+/* رؤية الأسطح: التطبيق افتراضيًا؛ أسطح الفحص تُعزل خلف روابط العمق */
+.app-preview { display: block; }
+body:not([data-view="app"]) .app-preview { display: none; }
+body[data-view="app"] .showcase-header,
+body[data-view="app"] .showcase-controls,
+body[data-view="app"] .brand-proof,
+body[data-view="app"] .showcase-canvas,
+body[data-view="app"] .showcase-footer,
+body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin-inline: auto;
+  background: var(--micro-surface-page);
+}
+@media (min-width: 481px) {
+  .app-shell {
+    border-inline: 1px solid var(--micro-border-divider);
+  }
+}
+
+/* شريط التطبيق أعلى الشاشة (m-appbar) — لاصق أعلى */
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--micro-surface-base);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+
+/* جسم الشاشة: تمرير المستند الطبيعي — لا تمرير متشعّب */
+.app-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-8);
+  min-width: 0;
+}
+.app-screen[hidden] { display: none; }
+
+/* بطاقة اليوم البارزة (عائلة الأسطح) — قارئة أولى بترولية */
+.app-hero { border-radius: var(--micro-radius-hero); }
+.app-hero .m-surface__sub {
+  display: block;
+  margin-block-start: var(--micro-space-2);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* صف بطاقات الأرقام المدمجة */
+.app-cards-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-2);
+}
+.app-cards-row .m-info-card { min-width: 0; }
+
+/* عناوين أقسام الشاشة والبطاقات داخل العارض */
+.app-card-title {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+.app-card-body {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* صف الأفعال الرئيسي — أهداف اللمس من عقد الأزرار */
+.app-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+}
+.app-actions-row .m-btn { flex: 1 1 auto; }
+
+/* شاشة الطلبات: سطح التقويم يتوسع بعرض الشاشة */
+.app-screen[data-app-screen="orders"] { gap: var(--micro-space-3); }
+
+/* محرر الطلب (سطح مضيف داخل الصفحة) */
+.app-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-editor-date {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.app-editor-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  min-width: 0;
+}
+.app-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-2);
+}
+.app-editor-grid .m-field { min-width: 0; }
+.app-supplier-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  width: 100%;
+  text-align: start;
+  cursor: pointer;
+}
+.app-supplier-trigger .m-btn__icon { color: var(--micro-text-secondary); flex: none; }
+
+/* شاشة التقارير: الألسنة + لوحاتها */
+.app-tabpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  min-width: 0;
+}
+.app-tabpanel[hidden] { display: none; }
+
+/* شاشة حسابي: الملف والصفوف والإعدادات */
+.app-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-profile__avatar,
+.app-profile__text { min-width: 0; }
+.app-profile__avatar {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  border-radius: var(--micro-radius-circle);
+  background: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-semibold);
+}
+.app-profile__text { display: flex; flex-direction: column; gap: 2px; }
+.app-profile__name {
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+.app-profile__detail {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  overflow-wrap: anywhere;
+}
+.app-setting-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+}
+.app-setting-row {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-switch-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--micro-row-min-height);
+  padding: var(--micro-space-2) var(--micro-space-3);
+}
+.app-note { margin-block-start: var(--micro-space-2); }
+
+/* شاشة تسجيل الدخول */
+.app-gateway { padding-block: var(--micro-space-2); }
+
+/* الحوار المركزي للمعاينة */
+.app-dialog-text {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+/* شريط التنقل السفلي (m-navbar): لاصق أسفل مع مساحة الأمان */
+.app-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding-block-end: var(--micro-inset-bottom);
+  background: var(--micro-surface-base);
+  border-block-start: 1px solid var(--micro-border-divider);
+}
+.app-shell--subscreen .app-nav { display: none; }
+
+/* توست المعاينة — نفس عقد توست النظام (فوق كل شيء) */
+.app-toast-host { z-index: var(--micro-z-toast); }
+
+/* تكبير النص (محاكاة 200%): الالتفاف بلا فيض — لا قصّ ولا تحجيم */
+@media (min-width: 481px) {
+  .app-shell { border-inline-width: 1px; }
+}
+
 </style>
 </head>
-<body data-view="overview">
+<body data-view="app">
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
        الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
        أداة البناء تتحقق من كل رمز مقابل أصله بايت-ببايت (نمط F03 R1-02). -->
@@ -6504,6 +6779,417 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     </symbol>
   </svg>
 
+  <!-- =========================================================
+       المعاينة المحمولة النظيفة — سطح المراجعة الافتراضي (عقد 2026-10-25)
+       تطبيق هاتفي متماسك يركّب مكونات المكتبة الحقيقية نفسها: appbar +
+       navbar من عائلة التنقل، وشاشات مضيف ببيانات محلية حتمية.
+       منفذ العرض نفسه هو الهاتف (360×780 قياسًا مرجعيًا) — لا إطار جهاز
+       ولا تحجيم مصطنع. أسطح الفحص (نظرة عامة/مختبر الحالات) تبقى معزولة
+       خلف روابط العمق الموثقة في README ولا تظهر في هذا السطح.
+       ========================================================= -->
+  <section class="app-preview" id="app-preview" aria-label="معاينة التطبيق">
+    <div class="app-shell">
+
+      <!-- شريط التطبيق (عائلة التنقل B07): عنوان كل شاشة + حركة الرجوع -->
+      <header class="m-appbar app-topbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-back aria-label="رجوع" hidden>
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <span class="m-appbar__title" id="app-title">الرئيسية</span>
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-goto="account" aria-label="حسابي">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-account"/></svg>
+        </button>
+      </header>
+
+      <!-- ============ الشاشة 1: الرئيسية ============ -->
+      <div class="app-screen" data-app-screen="home" role="group" aria-label="الرئيسية">
+        <div class="m-surface app-hero">
+          <div class="m-surface__content">
+            <span class="m-surface__label">ملخص اليوم</span>
+            <span class="m-surface__title">عمليات الفرع الرئيسي</span>
+            <span class="m-surface__amount"><span dir="ltr">36</span> عملية</span>
+            <span class="m-surface__sub">آخر تحديث 07:30 صباحًا</span>
+          </div>
+        </div>
+
+        <div class="app-cards-row">
+          <article class="m-info-card m-info-card--compact m-info-card--accent" aria-label="طلبات اليوم، 18 طلب">
+            <span class="m-info-card__label">طلبات اليوم</span>
+            <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
+          </article>
+          <article class="m-info-card m-info-card--compact" aria-label="بانتظار الموافقة، 12 طلبًا">
+            <span class="m-info-card__label">بانتظار الموافقة</span>
+            <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">12</span><span class="m-info-card__unit">طلب</span></span>
+          </article>
+        </div>
+
+        <section class="m-section" aria-labelledby="app-ann-title">
+          <h2 class="m-section-title" id="app-ann-title">إعلانات العمليات</h2>
+          <div class="m-carousel" data-carousel data-controls="compact" data-carousel-label="إعلانات العمليات" id="app-carousel" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
+            <div class="m-carousel__viewport" data-viewport>
+              <ol class="m-carousel__track" data-track>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="صيانة مجدولة">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">صيانة مجدولة</h3>
+                    <p class="app-card-body">صيانة أجهزة العرض في قاعة الاجتماعات يوم الخميس 08/10/2026.</p>
+                  </div>
+                </li>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="تسليم مستلزمات">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">تسليم مستلزمات</h3>
+                    <p class="app-card-body">وصلت مستلزمات الضيافة للمستودع الرئيسي وجاهزة للتوزيع.</p>
+                  </div>
+                </li>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="عطاء التوريد">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">عطاء التوريد</h3>
+                    <p class="app-card-body">يُفتح عطاء توريد قرطاسية الربع القادم يوم 15/10/2026.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+            <div class="m-carousel__controls">
+              <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
+              <p class="m-carousel__status" data-status aria-live="polite"></p>
+              <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+            </div>
+            <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+          </div>
+        </section>
+
+        <section class="m-section" aria-labelledby="app-vol-title">
+          <h2 class="m-section-title" id="app-vol-title">حجم العمليات</h2>
+          <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="app-metric" aria-label="مقارنة مدمجة لحجم العمليات">
+            <h3 class="m-main-metric__title">مؤشرات اليوم</h3>
+            <div class="m-main-metric__layout">
+              <div class="m-main-metric__hero">
+                <span class="m-main-metric__label">إجمالي اليوم</span>
+                <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">36</span><span class="m-main-metric__unit">عملية</span></span>
+              </div>
+              <div>
+                <ul data-bar-source hidden>
+                  <li data-label="استقبال" data-value="34" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="تجهيز" data-value="28" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="تسليم" data-value="21" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="صيانة" data-value="9" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                </ul>
+                <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <div class="app-actions-row">
+          <button type="button" class="m-btn m-btn--primary" data-app-goto="orders">
+            <svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg>طلب جديد
+          </button>
+          <button type="button" class="m-btn m-btn--secondary" data-app-goto="reports">آخر التقارير</button>
+        </div>
+      </div>
+
+      <!-- ============ الشاشة 2: الطلبات (تقويم order-schedule الحقيقي) ============ -->
+      <div class="app-screen" data-app-screen="orders" role="group" aria-label="الطلبات" hidden>
+        <div id="app-ocal-root" role="region" aria-label="جدول الطلبات المجدولة"></div>
+        <!-- محرر الطلب (سطح مضيف داخل الصفحة): تركيب حقول حقيقي —
+             الإضافة/التعديل/الحذف أحداث يملكها المضيف (عقد التقويم) -->
+        <section class="app-editor" id="app-ocal-editor" hidden aria-labelledby="app-ocal-editor-heading">
+          <h2 class="m-section-title" id="app-ocal-editor-heading">إضافة طلب</h2>
+          <p class="app-editor-date" id="app-ocal-editor-date">التاريخ: —</p>
+          <div class="app-editor-fields">
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">عنوان الطلب</span>
+              <input class="m-field__input" id="app-ocal-editor-title" type="text" autocomplete="off" required>
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">المورد</span>
+              <button type="button" class="m-field__input app-supplier-trigger" id="app-supplier-trigger" data-layer-open="app-picker-layer" aria-haspopup="dialog">
+                <span id="app-supplier-value">بدون مورد</span>
+                <svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+              </button>
+            </label>
+            <div class="app-editor-grid">
+              <label class="m-field" data-micro-field>
+                <span class="m-field__label">الوقت (اختياري)</span>
+                <input class="m-field__input" id="app-ocal-editor-time" type="time" autocomplete="off">
+              </label>
+              <label class="m-field" data-micro-field>
+                <span class="m-field__label">الحالة</span>
+                <select class="m-field__input" id="app-ocal-editor-status">
+                  <option value="progress">قيد التنفيذ</option>
+                  <option value="done">تم التسليم</option>
+                  <option value="hold">بانتظار العميل</option>
+                </select>
+              </label>
+            </div>
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">ملاحظة قصيرة (اختياري)</span>
+              <input class="m-field__input" id="app-ocal-editor-note" type="text" autocomplete="off">
+            </label>
+          </div>
+          <div class="app-actions-row">
+            <button type="button" class="m-btn m-btn--primary" id="app-ocal-editor-save">حفظ</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-editor-cancel">إلغاء</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ الشاشة 3: التقارير ============ -->
+      <div class="app-screen" data-app-screen="reports" role="group" aria-label="التقارير" hidden>
+        <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام التقارير" id="app-tabs">
+          <button type="button" class="m-tabs__tab" role="tab" aria-selected="true" aria-controls="app-tab-perf" id="app-tab-perf-btn">الأداء</button>
+          <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="app-tab-mix" id="app-tab-mix-btn" tabindex="-1">التوزيع</button>
+        </div>
+        <div id="app-tab-perf" role="tabpanel" aria-labelledby="app-tab-perf-btn" class="app-tabpanel">
+          <div class="m-chart m-chart--bars" id="app-chart-bars" data-chart="bars" data-max="12" data-summary-text="أداء الفروع هذا الأسبوع حسب عدد العمليات.">
+            <h3 class="m-chart__title">أداء الفروع (أسبوعي)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الفرع الرئيسي" data-value="12"></li>
+              <li data-series="a" data-label="فرع الشمال" data-value="8"></li>
+              <li data-series="a" data-label="فرع الغرب" data-value="0"></li>
+              <li data-series="a" data-label="المستودع" data-value="5"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--line" id="app-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع. الفجوات تقطع المسار ولا تصبح صفرًا.">
+            <h3 class="m-chart__title">حركة الطلبات</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الأحد" data-value="4"></li>
+              <li data-series="a" data-label="الاثنين" data-value="7"></li>
+              <li data-series="a" data-label="الثلاثاء" data-value=""></li>
+              <li data-series="a" data-label="الأربعاء" data-value="9"></li>
+              <li data-series="a" data-label="الخميس" data-value="6"></li>
+              <li data-series="a" data-label="الجمعة" data-value="11"></li>
+              <li data-series="a" data-label="السبت" data-value="3"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+        <div id="app-tab-mix" role="tabpanel" aria-labelledby="app-tab-mix-btn" class="app-tabpanel" hidden>
+          <div class="m-chart m-chart--donut" id="app-chart-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="توزيع الطلبات حسب الحالة (مقام معلن 25).">
+            <h3 class="m-chart__title">توزيع الحالات</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتملة" data-value="11"></li>
+              <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
+              <li data-series="c" data-label="جديدة" data-value="8"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--bars" id="app-chart-nodata" data-chart="bars" data-max="12" data-summary-text="مؤشر لم يُقاس بعد: حالة لا بيانات صادقة، لا صفر مفترض.">
+            <h3 class="m-chart__title">استهلاك المياه</h3>
+            <ul class="m-chart__data" hidden></ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ الشاشة 4: حسابي ============ -->
+      <div class="app-screen" data-app-screen="account" role="group" aria-label="حسابي" hidden data-account-settings data-account-layer-id="app-account-layer">
+        <section class="m-section" aria-labelledby="app-profile-title">
+          <h2 class="m-section-title" id="app-profile-title">الملف الشخصي</h2>
+          <div class="app-profile">
+            <span class="app-profile__avatar" aria-hidden="true">لم</span>
+            <span class="app-profile__text">
+              <span class="app-profile__name">ليان منصور</span>
+              <span class="app-profile__detail" dir="ltr">lian@example.test</span>
+            </span>
+          </div>
+        </section>
+        <section class="m-section" aria-labelledby="app-pref-title">
+          <h2 class="m-section-title" id="app-pref-title">التفضيلات</h2>
+          <ul class="app-setting-list">
+            <li>
+              <button type="button" class="m-row app-setting-row" id="app-account-open" data-account-open>
+                <span class="m-row__text">
+                  <span class="m-row__title">الحساب وإعدادات التطبيق</span>
+                  <span class="m-row__subtitle">الملف واللغة والتفضيلات</span>
+                </span>
+                <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+              </button>
+            </li>
+            <li class="app-setting-row">
+              <label class="m-switch app-switch-row">
+                <input type="checkbox" role="switch" id="app-sw-notifications" checked>
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span></span>
+              </label>
+            </li>
+            <li class="app-setting-row">
+              <label class="m-switch app-switch-row">
+                <input type="checkbox" role="switch" id="app-sw-weekly">
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">الملخص الأسبوعي</span></span>
+              </label>
+            </li>
+          </ul>
+          <div class="m-note m-note--info app-note">
+            <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <span class="m-note__text"><span class="m-note__body">تُطبّق التغييرات على هذا الجهاز فقط.</span></span>
+          </div>
+        </section>
+        <section class="m-section" aria-labelledby="app-session-title">
+          <h2 class="m-section-title" id="app-session-title">الجلسة</h2>
+          <ul class="app-setting-list">
+            <li>
+              <button type="button" class="m-row app-setting-row" id="app-signin-open">
+                <span class="m-row__text">
+                  <span class="m-row__title">تسجيل الدخول بحساب آخر</span>
+                  <span class="m-row__subtitle">تبديل الحساب الحالي</span>
+                </span>
+                <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <!-- حوار إعدادات الحساب والتطبيق (مكوّن SPEC-03 الحقيقي) -->
+        <div class="m-layer-backdrop" data-for="app-account-layer" hidden></div>
+        <div class="m-layer m-layer--center" id="app-account-layer" role="dialog" aria-modal="true" aria-labelledby="app-account-main-title" data-account-settings-layer hidden>
+          <header class="m-layer__head">
+            <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب" hidden>
+              <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg>
+            </button>
+            <h2 class="m-layer__title" id="app-account-main-title" data-account-title="account" tabindex="-1">الحساب</h2>
+            <h2 class="m-layer__title" id="app-account-app-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h2>
+            <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات">
+              <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"/></svg>
+            </button>
+          </header>
+          <div class="m-layer__body m-account-settings">
+            <div class="m-account-settings__view" data-account-view="account">
+              <div class="m-account-profile">
+                <span class="m-account-profile__avatar" aria-hidden="true">لم</span>
+                <span class="m-account-profile__text">
+                  <span class="m-account-profile__name">ليان منصور</span>
+                  <span class="m-account-profile__detail" dir="ltr">lian@example.test</span>
+                </span>
+              </div>
+              <section class="m-setting-group">
+                <h3 class="m-setting-group__title">التطبيق</h3>
+                <ul class="m-setting-group__items">
+                  <li>
+                    <button class="m-setting-row" type="button" data-account-to-application>
+                      <span class="m-setting-row__icon" data-icon="info" aria-hidden="true"></span>
+                      <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات التطبيق</span><span class="m-setting-row__detail">اللغة والتفضيلات</span></span>
+                      <span class="m-setting-row__end" aria-hidden="true"></span>
+                    </button>
+                  </li>
+                </ul>
+              </section>
+            </div>
+            <div class="m-account-settings__view" data-account-view="application" hidden>
+              <section class="m-setting-group">
+                <h3 class="m-setting-group__title">تفضيلات التطبيق</h3>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="notifications" checked>
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span></span>
+                  </label>
+                </div>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="weekly-summary">
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">الملخص الأسبوعي</span></span>
+                  </label>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ شاشة فرعية: تسجيل الدخول (بوابة الوصول SPEC-04) ============ -->
+      <div class="app-screen" data-app-screen="signin" role="group" aria-label="تسجيل الدخول" hidden>
+        <section class="m-access-gateway app-gateway" data-access-gateway id="app-gateway-root" aria-labelledby="app-gateway-heading">
+          <h2 class="m-access-gateway__heading" id="app-gateway-heading">تسجيل الدخول</h2>
+          <form data-access-form novalidate>
+            <div class="m-access-gateway__fields">
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="app-gw-email">البريد الإلكتروني</label>
+                <div class="m-field__control">
+                  <input class="m-field__input" id="app-gw-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username" required>
+                </div>
+                <p class="m-field__msg" data-field-msg hidden></p>
+              </div>
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="app-gw-password">كلمة المرور</label>
+                <div class="m-field__control m-access-gateway__password-control">
+                  <input class="m-field__input" id="app-gw-password" name="secret" data-access-credential="password" type="password" autocomplete="current-password" required>
+                  <button class="m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal" type="button" data-access-reveal aria-controls="app-gw-password" aria-label="إظهار كلمة المرور" aria-pressed="false"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
+                </div>
+                <p class="m-field__msg" data-field-msg hidden></p>
+              </div>
+            </div>
+            <div class="m-access-gateway__actions">
+              <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit">متابعة</button>
+            </div>
+            <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <!-- شريط التنقل الرئيسي (m-navbar من عائلة التنقل) -->
+      <nav class="m-navbar app-nav" data-app-nav aria-label="التنقل الرئيسي">
+        <button type="button" class="m-navbar__item" data-app-nav-item="home" aria-current="page">
+          <svg aria-hidden="true"><use href="#i-home"/></svg><span>الرئيسية</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="orders">
+          <svg aria-hidden="true"><use href="#i-items"/></svg><span>الطلبات</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="reports">
+          <svg aria-hidden="true"><use href="#i-reports"/></svg><span>التقارير</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="account">
+          <svg aria-hidden="true"><use href="#i-account"/></svg><span>حسابي</span>
+        </button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- طبقات المعاينة المحمولة (عائلة التنقل B07 نفسها — مثيلات معاينة مستقلة) -->
+  <div class="m-layer-backdrop" data-for="app-picker-layer" hidden></div>
+  <div class="m-layer" id="app-picker-layer" role="dialog" aria-modal="true" aria-labelledby="app-picker-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <h2 class="m-layer__title" id="app-picker-title">اختيار المورد</h2>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <div class="m-picker" data-micro-picker id="app-picker">
+        <input class="m-picker__input" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم">
+        <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list></div>
+        <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-layer-backdrop" data-for="app-dialog-layer" hidden></div>
+  <div class="m-layer m-layer--center" id="app-dialog-layer" role="dialog" aria-modal="true" aria-labelledby="app-dialog-title" data-backdrop="keep" hidden>
+    <div class="m-layer__head">
+      <h2 class="m-layer__title" id="app-dialog-title">حذف الطلب؟</h2>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <p class="app-dialog-text" id="app-dialog-text">لا يمكن التراجع عن حذف الطلب من جدول هذا اليوم.</p>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--secondary" data-layer-close>إلغاء</button>
+      <button type="button" class="m-btn m-btn--destructive" id="app-dialog-confirm">حذف</button>
+    </div>
+  </div>
+
+  <div class="sc-toast-host app-toast-host" aria-label="منطقة الرسائل العابرة">
+    <div class="m-toast" id="app-toast" hidden>
+      <span class="m-toast__text" id="app-toast-text"></span>
+      <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+    </div>
+  </div>
+
   <header class="showcase-header">
     <div class="showcase-brand">
       <img class="showcase-brand__logo showcase-brand__logo--light" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIiB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI0NTAiIHZpZXdCb3g9IjAgMCAxNDQwIDQ1MCIgdmVyc2lvbj0iMS4xIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyIgZGF0YS1zZWxlY3RlZC1vcHRpb249IjAyIiBkYXRhLWdlb21ldHJ5PSJPdXRzaWRlIFIzNiBDOCBHMTIiIGlkPSJtaWNyby1hci1tYXN0ZXIiIGRhdGEtc291cmNlLXJvbGU9ImRlcml2ZWQtdmFyaWFudCIgZGF0YS1hcHByb3ZlZC1jb25jZXB0PSJvcHRpb24tMDIiIGRhdGEtZGVyaXZlZC1mcm9tPSJtYXN0ZXIvbWljcm8tbG9ja3VwLWFyYWJpYy1tYXN0ZXIuc3ZnIiBkYXRhLXZhcmlhbnQ9ImZ1bGwtY29sb3IiIGRhdGEtdXNhZ2UtYmFja2dyb3VuZD0ibGlnaHQgb3IgbmV1dHJhbCI+PHRpdGxlIGlkPSJ0aXRsZSI+TWljcm8g4oCUIGFyIOKAlCBGdWxsIENvbG9yPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+RGVyaXZlZCBjb2xvciB2YXJpYW50IGZyb20gdGhlIGFwcHJvdmVkIE1hc3Rlci4gR2VvbWV0cnksIHBhdGhzLCB0cmFuc2Zvcm1zLCBhbmQgdmlld0JveCBhcmUgdW5jaGFuZ2VkLiBWYXJpYW50OiBGdWxsIENvbG9yLjwvZGVzYz48bWV0YWRhdGE+eyJyb2xlIjoiZGVyaXZlZC1jb2xvci12YXJpYW50IiwidmFyaWFudCI6ImZ1bGwtY29sb3IiLCJ2YXJpYW50TGFiZWwiOiJGdWxsIENvbG9yIiwic291cmNlTWFzdGVyIjoibWFzdGVyL21pY3JvLWxvY2t1cC1hcmFiaWMtbWFzdGVyLnN2ZyIsImdlb21ldHJ5IjoiT3V0c2lkZSBSMzYgQzggRzEyIiwicGF0aHNDaGFuZ2VkIjpmYWxzZSwidHJhbnNmb3Jtc0NoYW5nZWQiOmZhbHNlLCJ2aWV3Qm94Q2hhbmdlZCI6ZmFsc2UsImJhY2tncm91bmRVc2UiOiJsaWdodCBvciBuZXV0cmFsIiwicGFsZXR0ZSI6eyJwZXRyb2wiOiIjMTY0RDU5IiwidGVycmFjb3R0YSI6IiNEOTc3NTciLCJibHVlX3BldHJvbCI6IiM1MDdGOEIifX08L21ldGFkYXRhPjxnIGlkPSJsb2NrdXAtYXIiIGlua3NjYXBlOmxhYmVsPSJBcmFiaWMgLyDZhdin2YrZg9ix2YgiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDgwIDUwKSBzY2FsZSgxLjA0MTQ5NykiIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiPgogICAgPGcgaWQ9ImFyLWxldHRlcmluZy1wb3NpdGlvbiIgaW5rc2NhcGU6bGFiZWw9IldvcmRtYXJrIHBsYWNlbWVudCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAgNDAuMDApIj4KICAgICAgPGcgaWQ9IndvcmRtYXJrLWFyIiBpbmtzY2FwZTpsYWJlbD0iQXJhYmljIC8g2YXYp9mK2YPYsdmIIiBkYXRhLW5hdGl2ZS13aWR0aD0iODMzIiBkYXRhLW5hdGl2ZS1oZWlnaHQ9IjI2OCI+CiAgICAgICAgPGcgaWQ9ImFyLWxldHRlci1tZWVtIiBpbmtzY2FwZTpsYWJlbD0ibWVlbSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAgMCkiPgogICAgICAgICAgPHBhdGggaWQ9ImFyLW1lZW0tcGFydC00IiBkPSJNNS45LDEyOC4xIEMzLjYsMTI2LjIgMy41LDEyNS43IDMuMiwxMDkuOCBDMi45LDk0LjcgMyw5My4yIDQuOCw5MC45IEM2LjgsODguNSA2LjgsODguNSA1OC4yLDg4IEM4Ni40LDg3LjcgMTEwLjEsODcuMSAxMTAuOSw4Ni42IEMxMTMuOCw4NC43IDExNSw3OS4xIDExNSw2Ny43IEMxMTUsNTUuNCAxMTMuOSw1MC42IDExMC44LDQ4LjkgQzEwOS42LDQ4LjIgMTAwLjQsNDcuOCA4Ni4yLDQ3LjkgQzYzLjcsNDcuOSA2My43LDQ3LjkgNjEuMSw1MC41IEM1OC42LDUzIDU4LjUsNTMuNSA1OC4yLDY3LjMgQzU4LDc1LjEgNTcuMyw4Mi4xIDU2LjgsODIuOCBDNTYsODMuNyA0OS40LDg0IDMwLDg0IEM4LjksODQgNCw4My43IDMuMSw4Mi42IEMyLjIsODEuNSAyLDczLjkgMi4yLDU0LjMgQzIuNSwyOS4yIDIuNywyNy4yIDQuNywyMi44IEM3LjQsMTcgMTQuMyw5LjkgMjAsNyBDMjguOSwyLjQgMzQuMywyIDg2LjcsMiBDMTE5LjQsMiAxMzcuNywyLjQgMTQxLjIsMy4xIEMxNTIuNyw1LjYgMTYxLjcsMTIuNyAxNjYuNywyMy41IEMxNjkuNSwyOS41IDE2OS41LDI5LjUgMTY5LjUsNjcgQzE2OS41LDEwNC40IDE2OS41LDEwNC41IDE2Ny4xLDEwOS44IEMxNjQuMSwxMTYuNSAxNTUuOCwxMjQuMSAxNDguMiwxMjcuMiBDMTQyLjUsMTI5LjUgMTQyLjUsMTI5LjUgNzUuNCwxMjkuOCBDMTAuMiwxMzAuMSA4LjIsMTMwIDUuOSwxMjguMSBaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTMgODgpIiBmaWxsPSIjMTY0RDU5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGRhdGEtY29sb3Itcm9sZT0icGV0cm9sIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJhci1sZXR0ZXItYWxpZiIgaW5rc2NhcGU6bGFiZWw9ImFsaWYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkgMCkiPgogICAgICAgICAgPHBhdGggaWQ9ImFyLWFsaWYtcGFydC0xIiBkPSJNMzMuMSwyMTguNCBDMjEsMjE1LjIgMTIuNiwyMDguMiA3LDE5Ni42IEM1LjQsMTkzLjIgMy42LDE4Ny42IDMsMTg0IEMyLjMsMTc5LjYgMiwxNTAuMiAyLjIsOTQuOCBDMi41LDEyLjYgMi41LDEyLjEgNC42LDkuMyBDNS44LDcuOCA4LjIsNS42IDEwLjEsNC41IEMxMy4xLDIuOCAxNS43LDIuNSAzMC4xLDIuMiBDNDMuNCwxLjkgNDcuNCwyLjEgNTAuNCwzLjQgQzU3LjMsNi4zIDU3LDIuOCA1Nyw5MC4zIEM1NywxNjUgNTcuMSwxNjguOCA1OC44LDE3MC4zIEM2MC4zLDE3MS43IDYyLjksMTcyIDcyLjksMTcyIEM4NC41LDE3MiA4NS4yLDE3Mi4xIDg3LjUsMTc0LjUgQzkwLDE3Ni45IDkwLDE3Ny4xIDkwLDE5NiBDOTAsMjIyIDkyLjQsMjIwIDYxLjgsMjE5LjkgQzQ0LjgsMjE5LjkgMzcsMjE5LjUgMzMuMSwyMTguNCBaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1NjAgLTIpIiBmaWxsPSIjMTY0RDU5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGRhdGEtY29sb3Itcm9sZT0icGV0cm9sIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJhci1sZXR0ZXIteWFhIiBpbmtzY2FwZTpsYWJlbD0ieWFhIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5IDApIj4KICAgICAgICAgIDxwYXRoIGlkPSJhci15YWEtcGFydC0zIiBkPSJNNy40LDEyNyBDMi4xLDEyNC45IDAuNSwxMTYuOCAzLjYsMTA4IEM0LjUsMTA1LjUgNS42LDk5LjEgNS45LDkzLjcgQzYuNSw4Ni41IDcuMSw4My41IDguNCw4Mi4yIEM5LjgsODAuNyAxMyw4MC40IDMwLDgwIEM0NC40LDc5LjYgNTAuMyw3OS4xIDUxLjIsNzguMiBDNTIuMiw3Ny4yIDUyLjYsNjkuMSA1Myw0NCBDNTMuNSwxMS4xIDUzLjUsMTEuMSA1Nyw3LjUgQzU4LjksNS42IDYyLDMuNSA2NCwzIEM2NS45LDIuNSA3NS4zLDIgODQuOCwyIEMxMTAuMSwyIDEwOCwtMi4yIDEwOCw0OCBDMTA4LDgxLjMgMTA3LjcsODkuMyAxMDYuNCw5NC40IEMxMDQuNSwxMDEuNyAxMDEuMiwxMDcuOCA5NS42LDExMy44IEM5MC4xLDExOS44IDg0LjUsMTIzLjUgNzcuMiwxMjUuOSBDNzEuNSwxMjcuOSA2OC44LDEyOCA0MC4zLDEyNy45IEMyMy40LDEyNy45IDguNSwxMjcuNSA3LjQsMTI3IFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ0MiA4NikiIGZpbGw9IiMxNjRENTkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZGF0YS1jb2xvci1yb2xlPSJwZXRyb2wiLz4KICAgICAgICAgIDxwYXRoIGlkPSJhci15YWEtcGFydC03IiBkPSJNMTEuMSw0MSBDOS4zLDQwLjYgNi42LDM5IDUuMSwzNy42IEMyLjYsMzUuMSAyLjUsMzQuNCAyLjIsMjMuMSBDMS45LDEzLjcgMi4yLDEwLjYgMy40LDguMSBDNi4yLDIuOCA5LjEsMiAyNi40LDIgQzM2LDIgNDIuOSwyLjQgNDQuNCwzLjIgQzQ5LjEsNS4zIDUwLjQsOC42IDUwLjgsMTkuNSBDNTEuMywzMiA0OS45LDM2LjYgNDUsMzkuNCBDNDIsNDEuMiAzOS42LDQxLjUgMjgsNDEuNyBDMjAuNiw0MS44IDEzLDQxLjUgMTEuMSw0MSBaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MjYgMjI2KSIgZmlsbD0iIzE2NEQ1OSIgZmlsbC1ydWxlPSJldmVub2RkIiBkYXRhLWNvbG9yLXJvbGU9InBldHJvbCIvPgogICAgICAgICAgPHBhdGggaWQ9ImFyLXlhYS1wYXJ0LTgiIGQ9Ik0xMS4xLDQxIEM5LjMsNDAuNiA2LjYsMzkgNS4xLDM3LjYgQzIuNiwzNS4xIDIuNSwzNC4zIDIuMiwyMy42IEMxLjgsMTAuNiAzLjEsNiA4LjEsMy41IEMxMi4xLDEuNCA0MC45LDEuNCA0NC45LDMuNSBDNDkuMiw1LjcgNTAuNSwxMCA1MC41LDIyLjEgQzUwLjUsMzkuNiA0OC41LDQxLjMgMjgsNDEuNyBDMjAuNiw0MS44IDEzLDQxLjUgMTEuMSw0MSBaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0ODIgMjI2KSIgZmlsbD0iIzE2NEQ1OSIgZmlsbC1ydWxlPSJldmVub2RkIiBkYXRhLWNvbG9yLXJvbGU9InBldHJvbCIvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBpZD0iYXItbGV0dGVyLWthZiIgaW5rc2NhcGU6bGFiZWw9ImthZiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNCAwKSI+CiAgICAgICAgICA8cGF0aCBpZD0iYXIta2FmLXBhcnQtMiIgZD0iTTUuNSwyMTAuOCBDNC40LDIxMC4yIDMuMiwyMDkuMiAyLjgsMjA4LjYgQzEuOCwyMDcuMiAxLjgsMTY4LjggMi44LDE2Ny40IEM0LjgsMTY0LjMgOC41LDE2NC4xIDgwLjUsMTYzLjYgQzEyOS45LDE2My4yIDE1My43LDE2Mi43IDE1NC40LDE2MiBDMTU1LDE2MS40IDE1NS43LDE1NiAxNTUuOCwxNDkuOSBDMTU2LjQsMTMyLjMgMTYyLjIsMTM0IDEwMS44LDEzNCBDNjQuMywxMzQgNDkuNiwxMzMuNyA0Ni42LDEzMi44IEM0MC42LDEzMSAzNC41LDEyNC40IDMyLjYsMTE3LjggQzMwLjcsMTExLjMgMzAuMSw2OSAzMS44LDY0LjkgQzMzLjgsNTkuOCAzOC40LDU1LjkgNTAuMyw0OC45IEM2My45LDQwLjggMTAxLjUsMTcgMTEzLjcsOC43IEMxMjMuMSwyLjMgMTI3LjYsMS4xIDEzMi44LDMuNyBDMTM1LjQsNSAxMzcuMyw3LjIgMTM5LjksMTIgQzE0MywxNy42IDE0My41LDE5LjUgMTQzLjgsMjcgQzE0NC4xLDMzLjkgMTQzLjgsMzYuNiAxNDIuMSw0MSBDMTQwLjksNDQuMyAxMzguNCw0OC4xIDEzNi4zLDUwLjIgQzEzNC4yLDUyLjIgMTI2LjIsNTggMTE4LjUsNjMuMiBDMTA0LjEsNzMgMTAxLjQsNzQgOTEuMSw3NCBDODksNzQgODYuOSw3NC41IDg2LjIsNzUuMiBDODQuNiw3Ni44IDg0LjcsODMuNyA4Ni4yLDg0LjcgQzg2LjksODUuMSAxMDguNyw4NS43IDEzNC41LDg2IEMxNzcuMiw4Ni41IDE4MS45LDg2LjcgMTg1LjQsODguNCBDMTk0LjMsOTIuNSAyMDAuMyw5OS4yIDIwMy4zLDEwOC41IEMyMDQuNiwxMTIuNiAyMDQuOSwxMTkuNSAyMDUuMSwxNDguNSBDMjA1LjMsMTg1LjIgMjA1LjIsMTg1LjkgMjAwLjcsMTk0LjYgQzE5OC4xLDE5OS42IDE5MS44LDIwNS4yIDE4NSwyMDguNCBDMTc4LjUsMjExLjUgMTc4LjUsMjExLjUgOTMsMjExLjcgQzMwLjIsMjExLjkgNywyMTEuNyA1LjUsMjEwLjggWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjM3IDIpIiBmaWxsPSIjMTY0RDU5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGRhdGEtY29sb3Itcm9sZT0icGV0cm9sIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJhci1sZXR0ZXItcmFhIiBpbmtzY2FwZTpsYWJlbD0icmFhIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0IDApIj4KICAgICAgICAgIDxwYXRoIGlkPSJhci1yYWEtcGFydC02IiBkPSJNOS4xLDE3NyBDMywxNzUuNiAyLjUsMTc0LjMgMi41LDE2MS4xIEMyLjUsMTQ1LjIgNC4yLDE0Mi4yIDE0LjUsMTQwLjUgQzE2LjcsMTQwLjEgMjAsMTM5LjQgMjEuOCwxMzguOCBDMjguMSwxMzYuOSAyOCwxMzguMyAyOCw3NCBDMjgsMTEuNiAyNy45LDEzLjIgMzMuMiw4LjQgQzM4LjYsMy40IDQxLjcsMi42IDU3LjUsMi4yIEM3NC4yLDEuNyA4MC4xLDIuNyA4Mi41LDYuNCBDODMuOSw4LjQgODQsMTYuNiA4My44LDcxLjYgQzgzLjUsMTM0LjUgODMuNSwxMzQuNSA4MC43LDE0MC41IEM3Ni45LDE0OC42IDcwLjgsMTU2LjIgNjIuNywxNjMuMSBDNTMuMywxNzEgNDMuOSwxNzUuNyAzNS40LDE3NyBDMjcuNCwxNzguMSAxNCwxNzguMSA5LjEsMTc3IFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0OSA5MCkiIGZpbGw9IiMxNjRENTkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZGF0YS1jb2xvci1yb2xlPSJwZXRyb2wiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9ImFyLWxldHRlci13YXciIGlua3NjYXBlOmxhYmVsPSJ3YXciPgogICAgICAgICAgPHBhdGggaWQ9ImFyLXdhdy1wYXJ0LTUiIGQ9Ik0yMy4yLDE3OC4xIEMxNS45LDE3Ni44IDE1LjUsMTc1LjkgMTUuNSwxNTkuNSBDMTUuNSwxNDYuNiAxNS43LDE0NC45IDE3LjYsMTQyLjMgQzE4LjcsMTQwLjggMjEuOCwxMzguNCAyNC42LDEzNyBDMjkuNSwxMzQuNSAyOS43LDEzNC41IDYxLjgsMTM0LjEgQzg4LjUsMTMzLjkgOTQuMywxMzMuNSA5NS41LDEzMi4zIEM5Ni44LDEzMS4xIDk3LDEyNC43IDk3LDkwLjkgQzk3LDY2LjcgOTYuNiw1MC4xIDk2LDQ5IEM5NC4zLDQ1LjggODkuMyw0NSA3Mi4xLDQ1IEM1Ny40LDQ1IDU1LjEsNDUuMiA1Mi4zLDQ3IEM0OC4xLDQ5LjUgNDcsNTQgNDcuNiw2NiBDNDgsNzQuNSA0OC4zLDc1LjcgNTAuNSw3OCBDNTMsODAuNCA1My41LDgwLjUgNzEuMSw4MSBDODcuNSw4MS41IDg5LjMsODEuNyA5MC42LDgzLjQgQzkxLjcsODQuOSA5Miw4OS4xIDkyLDEwMS4xIEM5MiwxMjIuOSA5NC44LDEyMS4yIDU4LjUsMTIwLjggQzMwLjQsMTIwLjUgMzAuNCwxMjAuNSAyMy44LDExNy4yIEMxMy40LDExMi4xIDYuNiwxMDIuOSAzLjUsODkuOCBDMS40LDgxIDEuNCw0OC42IDMuNSw0MC42IEM3LjMsMjYuMiAxNywxNCAyOS40LDguMSBDNDEuMywyLjQgNDYuNSwxLjggODUsMi4yIEMxMTguMiwyLjUgMTE5LjcsMi42IDEyNS4zLDQuOCBDMTM2LjcsOS40IDE0NS40LDE4LjcgMTUwLjMsMzEuNSBDMTUyLjQsMzcuMyAxNTIuNSwzOC43IDE1Mi44LDgwLjEgQzE1My4xLDEyNy42IDE1Mi44LDEzMC45IDE0Ni43LDE0Mi40IEMxNDAuMSwxNTQuOSAxMjAsMTcxLjYgMTA2LjIsMTc2LjEgQzk5LjksMTc4LjIgOTcuNCwxNzguMyA2My41LDE3OC42IEM0My43LDE3OC43IDI1LjYsMTc4LjUgMjMuMiwxNzguMSBaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMiA4OSkiIGZpbGw9IiMxNjRENTkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZGF0YS1jb2xvci1yb2xlPSJwZXRyb2wiLz4KICAgICAgICA8L2c+CiAgICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJhci1zeW1ib2wtcG9zaXRpb24iIGlua3NjYXBlOmxhYmVsPSJTeW1ib2wgcGxhY2VtZW50IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5NDUgNTIuMDApIHNjYWxlKDEuMjcwODMzKSI+CiAgICAgIDxnIGlkPSJtaWNyby1zeW1ib2wtbWFzdGVyIiBpbmtzY2FwZTpsYWJlbD0iTWFzdGVyIHN5bWJvbCAvIGZvdXIgZXF1YWwgbW9kdWxlcyIgZGF0YS1uYXRpdmUtd2lkdGg9IjE5MiIgZGF0YS1uYXRpdmUtaGVpZ2h0PSIxOTIiPgogICAgICAgIDxnIGlkPSJtb2R1bGUtdG9wIiBpbmtzY2FwZTpsYWJlbD0iTW9kdWxlIHRvcCIgdHJhbnNmb3JtPSJyb3RhdGUoMCA5NiA5NikiPjxwYXRoIGlkPSJzaGFwZS10b3AiIGQ9Ik0zNiAwIEgxMDggUTExNiAwIDExNiA4IFY1NiBRMTE2IDY0IDEwOCA2NCBIMTIgUTAgNjQgMCA1MiBWMzYgQzAgMTYuMSAxNi4xIDAgMzYgMCBaIiBmaWxsPSIjMTY0RDU5IiBkYXRhLWNvbG9yLXJvbGU9InBldHJvbCIvPjwvZz4KICAgICAgICA8ZyBpZD0ibW9kdWxlLXJpZ2h0IiBpbmtzY2FwZTpsYWJlbD0iTW9kdWxlIHJpZ2h0IiB0cmFuc2Zvcm09InJvdGF0ZSg5MCA5NiA5NikiPjxwYXRoIGlkPSJzaGFwZS1yaWdodCIgZD0iTTM2IDAgSDEwOCBRMTE2IDAgMTE2IDggVjU2IFExMTYgNjQgMTA4IDY0IEgxMiBRMCA2NCAwIDUyIFYzNiBDMCAxNi4xIDE2LjEgMCAzNiAwIFoiIGZpbGw9IiNEOTc3NTciIGRhdGEtY29sb3Itcm9sZT0idGVycmFjb3R0YSIvPjwvZz4KICAgICAgICA8ZyBpZD0ibW9kdWxlLWJvdHRvbSIgaW5rc2NhcGU6bGFiZWw9Ik1vZHVsZSBib3R0b20iIHRyYW5zZm9ybT0icm90YXRlKDE4MCA5NiA5NikiPjxwYXRoIGlkPSJzaGFwZS1ib3R0b20iIGQ9Ik0zNiAwIEgxMDggUTExNiAwIDExNiA4IFY1NiBRMTE2IDY0IDEwOCA2NCBIMTIgUTAgNjQgMCA1MiBWMzYgQzAgMTYuMSAxNi4xIDAgMzYgMCBaIiBmaWxsPSIjMTY0RDU5IiBkYXRhLWNvbG9yLXJvbGU9InBldHJvbCIvPjwvZz4KICAgICAgICA8ZyBpZD0ibW9kdWxlLWxlZnQiIGlua3NjYXBlOmxhYmVsPSJNb2R1bGUgbGVmdCIgdHJhbnNmb3JtPSJyb3RhdGUoMjcwIDk2IDk2KSI+PHBhdGggaWQ9InNoYXBlLWxlZnQiIGQ9Ik0zNiAwIEgxMDggUTExNiAwIDExNiA4IFY1NiBRMTE2IDY0IDEwOCA2NCBIMTIgUTAgNjQgMCA1MiBWMzYgQzAgMTYuMSAxNi4xIDAgMzYgMCBaIiBmaWxsPSIjNTA3RjhCIiBkYXRhLWNvbG9yLXJvbGU9ImJsdWUtcGV0cm9sIi8+PC9nPgogICAgICA8L2c+CiAgICA8L2c+CiAgPC9nPgogIDwvc3ZnPg==" alt="Micro">
@@ -6518,7 +7204,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       <span>المتغيرات المقترحة تبقى اختيارية</span>
     </div>
     <nav class="showcase-nav" aria-label="أقسام مكتبة الواجهة">
-      <a class="showcase-nav__link is-current" href="#sc-canvas" data-showcase-view="overview" aria-current="page">نظرة عامة</a>
+      <a class="showcase-nav__link" href="#app" data-showcase-view="app">المعاينة المحمولة</a>
+      <a class="showcase-nav__link" href="#sc-canvas" data-showcase-view="overview">نظرة عامة</a>
       <a class="showcase-nav__link" href="#state-lab" data-showcase-view="state">مختبر الحالات</a>
       <a class="showcase-nav__link" href="../compositions/index.html">مختبر التركيبات</a>
     </nav>
@@ -13757,6 +14444,23 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
    expanded/agenda بعد الآن (عقد ملغٍ 2026-10-25 — منطقة الأحداث
    ظاهرة دائمًا أسفل الشبكة كما في المرجع).
 
+   عقد 2026-10-25 (calendar-target-latest-owner.png — دقة بصرية):
+   1) بداية الأسبوع الأحد: الافتراضي weekStart=0 (كان 6/السبت) —
+      الترتيب المرئي LTR: أحد..سبت يسارًا-يمينًا، وRTL يعكس الأسبوع
+      المنطقي نفسه (الأحد في بداية RTL المنطقية) والرقم/النقاط/
+      التحديد/اليوم تبقى مرتبطة بالتاريخ نفسه في الاتجاهين.
+      المستهلك الذي يمرر weekStart صريحًا يبقى مدعومًا — الهجرة
+      موثقة في specification.md.
+   2) أرقام فقط على السطح المرئي: رأس الشهر «MM / YYYY»، والتواريخ
+      الكاملة DD/MM/YYYY، وأرقام لاتينية 0-9 لليوم/الشهر/السنة/الوقت
+      — لا أسماء أشهر عربية أو إنجليزية ظاهرة في رأس الشهر أو
+      متصفحه أو عنوان اليوم أو عنوان الأحداث أو شارات الصفوف.
+      أسماء الأشهر تبقى في الأسماء الإتاحية (aria-label) وحدها
+      لصدق القراءة الصوتية الكاملة — اختيار موثق في المواصفة.
+   3) بطاقة التقويم: رؤوس الأيام + الشبكة داخل سطح متميز (حد
+      خافت وزوايا وارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة
+      رقيقة تحافظ على ثبات الأعمدة السبعة ومحاذاة الرأس.
+
    قواعد ثابتة:
    - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
      documentElement يجعل قلب الاتجاه الحي فوريًا ويُفصل في destroy؛
@@ -13792,6 +14496,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
   var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
+     (الأحد أولًا) يجعل العمود الأول أحدًا في الاتجاهين (RTL يعكس
+     الصف المنطقي بصريًا بلا عكس تواريخ). */
   /* F-08 (2026-10-10): اختصارات عمود رأس الأسبوع ثلاثية الأحرف (عرف
      التقاويم الهاتفية) — الاسم الكامل يبقى في aria-label خلية كل يوم
      (رأس الأسبوع aria-hidden بصري فقط). كان: أسماء 5-6 أحرف مثل
@@ -13889,11 +14596,28 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     return n + ' طلبًا';
   }
 
-  /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» */
+  /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» — أسماء الأشهر
+     في الأسماء الإتاحية فقط (aria-label) لا على السطح المرئي (عقد
+     2026-10-25: أرقام فقط مرئية). */
   function fullDateAr(iso) {
     var p = parseIso(iso);
     if (!p) return '';
     return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + p.d + ' ' + MONTHS_AR[p.m - 1] + ' ' + p.y;
+  }
+
+  /* التاريخ المرئي الرقمي DD/MM/YYYY بأرقام لاتينية (عقد 2026-10-25) */
+  function dateNumeric(iso) {
+    var p = parseIso(iso);
+    if (!p) return '';
+    return pad2(p.d) + '/' + pad2(p.m) + '/' + p.y;
+  }
+
+  /* عنوان اليوم المرئي: اسم اليوم معلّن محليًا + تاريخ رقمي —
+     «الخميس 22/10/2026» (اليوم اسم معجمي وليس اسم شهر؛ عقد الأرقام) */
+  function dayTitleNumeric(iso) {
+    var p = parseIso(iso);
+    if (!p) return '';
+    return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + dateNumeric(iso);
   }
 
   /* =======================================================
@@ -14030,10 +14754,12 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     state.orders = normalizeOrders(options.orders);
     state.statuses = (options.statuses && typeof options.statuses === 'object') ? options.statuses : {};
     state.today = (typeof options.today === 'string' && DATE_RE.test(options.today)) ? options.today : localTodayIso();
-    /* weekStart: الافتراضي 6 (السبت — سياق عربي أولًا) قابل للتعديل
-       لكل مثيل؛ ليس معيارًا مفروضًا عالميًا (موثق) */
+    /* weekStart: عقد 2026-10-25 (مرجع المالك الأحدث): الافتراضي 0
+       (الأحد أولًا — Sunday-first كما في calendar-target-latest-owner.png)
+       قابل للتعديل لكل مثيل؛ المستهلك الذي يمرر قيمة صريحة (مثل 6)
+       يبقى مدعومًا كما هو — الهجرة موثقة في specification.md */
     state.weekStart = (typeof options.weekStart === 'number' && options.weekStart >= 0 &&
-      options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 6;
+      options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 0;
     state.selectedDate = (typeof options.selectedDate === 'string' && DATE_RE.test(options.selectedDate))
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
@@ -14341,14 +15067,15 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
-      /* 2026-10-25 (مرجع المالك): تدرّج الشهر/السنة — الشهر محوري
-         (16/600) والسنة ثانوية (13/400) + شيفرون هابط يعلن المنتقي
-         الحقيقي؛ التدرّج داخل زر واحد (منبثق واحد) بلا تغيير عقد.
-         عقدة نص مسافة بين العنصرين: عناصر flex المجهولة البيضاء-only
-         لا تُرسم (مواصفة Flexbox) فلا أثر تخطيطيًا، ويبقى textContent
-         «أكتوبر 2026» بمسافة صحيحة للنسخ/المطابقة النصية. */
-      pickerButton.appendChild(el('span', 'm-ocal__month-name', MONTHS_AR[m - 1]));
-      pickerButton.appendChild(document.createTextNode(' '));
+      /* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
+         رأس شهري رقمي «MM / YYYY» — رقم الشهر محوري (18/600) والسنة
+         ثانوية (14/400) + شيفرون هابط يعلن المنتقي الحقيقي. لا أسماء
+         أشهر ظاهرة (عقد الأرقام فقط)؛ اسم الشهر الكامل يبقى في
+         aria-label المنتقي لصدق القراءة الصوتية (موثق).
+         عقدة نص مسافة بين العنصرين تحفظ textContent «10 / 2026» بمسافة
+         صحيحة للنسخ/المطابقة النصية. */
+      pickerButton.appendChild(el('span', 'm-ocal__month-num', pad2(m)));
+      pickerButton.appendChild(document.createTextNode(' / '));
       pickerButton.appendChild(el('span', 'm-ocal__year', String(y)));
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
@@ -14394,8 +15121,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       months.setAttribute('role', 'group');
       months.setAttribute('aria-label', 'أشهر السنة');
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
-      for (var i = 0; i < MONTHS_AR.length; i++) {
-        var month = el('button', 'm-ocal__picker-month', MONTHS_AR[i]);
+      /* عقد 2026-10-25 (أرقام فقط على المرئي): خيارات المنتقي أرقام
+         شهرية 01..12، واسم الشهر الكامل يبقى في aria-label وحده لصدق
+         القراءة الصوتية (اختيار موثق في المواصفة). */
+      for (var i = 0; i < 12; i++) {
+        var month = el('button', 'm-ocal__picker-month', pad2(i + 1));
         month.type = 'button';
         month.setAttribute('data-ocal-action', 'picker-month');
         month.setAttribute('data-ocal-value', String(i));
@@ -14537,18 +15267,19 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       return out;
     }
 
-    /* عنوان نطاق الأسبوع: «24–30 أكتوبر 2026» داخل الشهر نفسه،
-       و«31 أكتوبر – 6 نوفمبر 2026» عند عبور حد الشهر/السنة */
+    /* عنوان نطاق الأسبوع الرقمي (عقد 2026-10-25 — لا أسماء أشهر مرئية):
+       «25–31/10/2026» داخل الشهر نفسه، و«31/10 – 06/11/2026» عند عبور
+       حد الشهر، و«28/12/2026 – 03/01/2027» عند عبور حد السنة. */
     function weekRangeTitle(dates) {
       var a = dates[0];
       var b = dates[6];
       if (a.y === b.y && a.m === b.m) {
-        return a.d + '–' + b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
+        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + b.y;
       }
-      var sameYear = a.y === b.y;
-      var aTxt = a.d + ' ' + MONTHS_AR[a.m - 1] + (sameYear ? '' : ' ' + a.y);
-      var bTxt = b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
-      return aTxt + ' – ' + bTxt;
+      if (a.y === b.y) {
+        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + b.y;
+      }
+      return dateNumeric(isoOf(a.y, a.m, a.d)) + ' – ' + dateNumeric(isoOf(b.y, b.m, b.d));
     }
 
     /* شريط الأسبوع: [الأسبوع السابق][نطاق الأسبوع][الأسبوع التالي][اليوم]
@@ -14719,14 +15450,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       return ul;
     }
 
-    /* تاريخ قصير لصف القائمة: «8 أكتوبر» + السنة إن خالفت سنة اليوم */
+    /* تاريخ قصير رقمي لصف القائمة: «08/10/2026» (عقد الأرقام المرئية؛
+       السنة دائمًا لأن القائمة تعبر السنوات بلا سياق شهر ثابت) */
     function shortDateAr(iso) {
-      var p = parseIso(iso);
-      if (!p) return '';
-      var t = parseIso(state.today);
-      var s = p.d + ' ' + MONTHS_AR[p.m - 1];
-      if (!t || t.y !== p.y) s += ' ' + p.y;
-      return s;
+      return dateNumeric(iso);
     }
 
     /* هل يُصفّح شهر بلا يوم محدد فيه؟ (الشهر المعروض ≠ شهر التحديد) */
@@ -14752,11 +15479,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       if (iso === state.today) return 'طلبات اليوم';
       var p = parseIso(iso);
       if (!p) return 'طلبات';
-      var s = 'طلبات ' + WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' +
-        p.d + ' ' + MONTHS_AR[p.m - 1];
-      var t = parseIso(state.today);
-      if (!t || t.y !== p.y) s += ' ' + p.y;
-      return s;
+      /* المرئي أرقام فقط (عقد 2026-10-25): اسم اليوم معجمي + تاريخ رقمي */
+      return 'طلبات ' + dayTitleNumeric(iso);
     }
 
     function buildDayPanel(withTitle) {
@@ -14767,8 +15491,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
+        /* مرئي أرقام فقط (عقد 2026-10-25): «لا يوم محدد في 01/2027» */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
+          'لا يوم محدد في ' + pad2(m) + '/' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -14796,19 +15521,30 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       return panel;
     }
 
+    /* ---- بطاقة التقويم (عقد 2026-10-25 — calendar-target-latest-owner.png):
+       رؤوس الأيام + الشبكة داخل سطح متميز واحد (حد خافت، زوايا،
+       ارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة رقيقة — الهندسة
+       في CSS (m-ocal__calcard) والبنية هنا فقط. ---- */
+    function buildCalCard(weekdays, grid) {
+      var card = el('div', 'm-ocal__calcard');
+      card.setAttribute('data-ocal-calcard', '');
+      card.appendChild(weekdays);
+      card.appendChild(grid);
+      return card;
+    }
+
     /* ---- شاشة التقويم (شهر) — عقد 2026-10-25 (ترتيب القراءة للمرجع):
-       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][رؤوس الأيام]
-       [شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
+       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][بطاقة التقويم:
+       رؤوس الأيام + شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
        [منطقة أحداث اليوم المحدد] — منطقة الأحداث ظاهرة دائمًا أسفل
-       الشبكة كما في مرجع المالك (لا عرضا expanded/agenda). */
+       البطاقة كما في مرجع المالك (لا عرضا expanded/agenda). */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
       screen.appendChild(buildControlsRow());
       screen.appendChild(buildCalBar(state.monthCursor.y, state.monthCursor.m));
       if (state.pickerOpen) screen.appendChild(buildMonthPicker());
-      screen.appendChild(buildWeekdays());
-      screen.appendChild(buildMonthGrid(groupOrdersByDate()));
+      screen.appendChild(buildCalCard(buildWeekdays(), buildMonthGrid(groupOrdersByDate())));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
       if (legend) screen.appendChild(legend);
       screen.appendChild(buildDayPanel(true));
@@ -14816,8 +15552,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     }
 
     /* ---- شاشة التقويم (أسبوع) — عقد 2026-10-25 (مرجع المالك):
-       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][رؤوس الأيام]
-       [صف الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
+       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][بطاقة التقويم بصف
+       الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
        [منطقة أحداث اليوم المحدد] — الأسبوع مشتق من التحديد. */
     function buildWeekScreen() {
       var screen = el('div', 'm-ocal__screen');
@@ -14825,9 +15561,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
       screen.appendChild(buildControlsRow());
       var dates = weekDatesOf(state.selectedDate) || weekDatesOf(state.today);
       screen.appendChild(buildWeekBar(dates));
-      screen.appendChild(buildWeekdays());
       var groups = groupOrdersByDate();
-      screen.appendChild(buildWeekGrid(dates, groups));
+      screen.appendChild(buildCalCard(buildWeekdays(), buildWeekGrid(dates, groups)));
       var scope = [];
       for (var i = 0; i < dates.length; i++) {
         var iso = isoOf(dates[i].y, dates[i].m, dates[i].d);
@@ -14855,7 +15590,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     function buildDayBar() {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
-      bar.appendChild(el(hTag(), 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
+      /* عنوان اليوم المرئي: اسم اليوم + تاريخ رقمي (لا أسماء أشهر) */
+      bar.appendChild(el(hTag(), 'm-ocal__cal-title', dayTitleNumeric(state.selectedDate)));
       bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
       var today = el('button', 'm-ocal__todaybtn');
       today.type = 'button';
@@ -16201,7 +16937,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
   /* ---------------- الحالة العامة للمتحكم ---------------- */
 
-  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current', view: 'overview' };
+  /* عقد 2026-10-25: «المعاينة المحمولة» سطح المراجعة الافتراضي (data-view=app)
+     — أسطح الفحص (نظرة عامة/مختبر الحالات) تبقى معزولة خلف روابط العمق. */
+  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current', view: 'app' };
 
   document.addEventListener('DOMContentLoaded', function () {
     renderCatalog();
@@ -16256,7 +16994,6 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
         orders: ocalDemo.orders,
         statuses: OCAL_STATUSES,
         today: OCAL_TODAY,
-        weekStart: 6,
         selectedDate: OCAL_TODAY,
         view: 'calendar',
         calendarView: 'month',
@@ -16553,8 +17290,9 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
     applyDirection(state.dir);
     applyWidth(state.width);
+    initAppPreview();
     if (window.location.hash) revealDeepLink();
-    else setShowcaseView('overview');
+    else setShowcaseView('app');
   });
 
   /* ---------------- تطبيقات شريط التحكم ---------------- */
@@ -16647,7 +17385,10 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
   }
 
   function setShowcaseView(view) {
-    state.view = view === 'state' ? 'state' : 'overview';
+    /* عقد 2026-10-25: ثلاثة أسطح — app (المعاينة المحمولة الافتراضية)،
+       overview (نظرة عامة)، state (مختبر الحالات). القيم الأخرى تسقط
+       إلى الافتراضي الموثق. */
+    state.view = (view === 'state' || view === 'overview' || view === 'app') ? view : 'app';
     document.body.setAttribute('data-view', state.view);
     qa('[data-showcase-view]').forEach(function (link) {
       var active = link.getAttribute('data-showcase-view') === state.view;
@@ -16687,6 +17428,11 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     if (!raw) return;
     var id;
     try { id = decodeURIComponent(raw); } catch (error) { id = raw; }
+    /* عقد 2026-10-25: #app يعيد سطح المعاينة المحمولة الافتراضي */
+    if (id === 'app' || id === 'app-preview') {
+      setShowcaseView('app');
+      return;
+    }
     if (id === 'sc-canvas') {
       setShowcaseView('overview');
       return;
@@ -16705,6 +17451,334 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
     if (!section) return;
     setShowcaseView('state');
     scrollAfterLayout(target);
+  }
+
+  /* =========================================================
+     المعاينة المحمولة النظيفة (عقد 2026-10-25 — السطح الافتراضي)
+     تركيب مضيف لمكونات المكتبة الحقيقية ببيانات محلية حتمية:
+     الرئيسية/الطلبات/التقارير/حسابي + تسجيل الدخول، وطبقات
+     المنتقي/الحوار/التوست من عقود التنقل والرسائل نفسها.
+     لا شبكة ولا مصادقة ولا حفظ — نفس حدود العرض الموثقة.
+     ========================================================= */
+
+  var APP_TITLES = {
+    home: 'الرئيسية',
+    orders: 'الطلبات',
+    reports: 'التقارير',
+    account: 'حسابي',
+    signin: 'تسجيل الدخول'
+  };
+
+  function initAppPreview() {
+    var root = document.getElementById('app-preview');
+    if (!root || root.dataset.appInit) return;
+    root.dataset.appInit = '1';
+
+    var screens = {};
+    qa('[data-app-screen]', root).forEach(function (screen) {
+      screens[screen.getAttribute('data-app-screen')] = screen;
+    });
+    var title = document.getElementById('app-title');
+    var backBtn = root.querySelector('[data-app-back]');
+    var navItems = qa('[data-app-nav-item]', root);
+    var currentScreen = 'home';
+
+    function showScreen(name) {
+      if (!screens[name]) return;
+      currentScreen = name;
+      Object.keys(screens).forEach(function (key) {
+        screens[key].hidden = key !== name;
+      });
+      if (title) title.textContent = APP_TITLES[name] || '';
+      if (backBtn) backBtn.hidden = name !== 'signin';
+      /* شاشة فرعية كاملة العرض: شريط الألسنة يختفي كما في تطبيقات الهاتف */
+      root.classList.toggle('app-shell--subscreen', name === 'signin');
+      var navKey = name === 'signin' ? 'account' : name;
+      navItems.forEach(function (item) {
+        var active = item.getAttribute('data-app-nav-item') === navKey;
+        if (active) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
+      });
+      /* الرسوم داخل اللوحات المكشوفة حديثًا تُعاد قياسها بعد الظهور */
+      if (name === 'reports') refreshReports();
+      if (name === 'home') refreshHomeMetric();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    root.__appShowScreen = showScreen;
+    root.__appCurrentScreen = function () { return currentScreen; };
+
+    function refreshChartsIn(container) {
+      if (!container) return;
+      qa('[data-chart]', container).forEach(function (chart) {
+        if (window.MicroData) window.MicroData.render(chart);
+      });
+      qa('[data-main-comparison]', container).forEach(function (metric) {
+        if (window.MicroMetricComparison) window.MicroMetricComparison.render(metric);
+      });
+    }
+
+    function refreshReports() {
+      var active = root.querySelector('.app-tabpanel:not([hidden])') || screens.reports;
+      refreshChartsIn(active);
+    }
+
+    function refreshHomeMetric() {
+      refreshChartsIn(screens.home);
+    }
+
+    qa('[data-app-goto]', root).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        showScreen(btn.getAttribute('data-app-goto'));
+      });
+    });
+    navItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        showScreen(item.getAttribute('data-app-nav-item'));
+      });
+    });
+    if (backBtn) backBtn.addEventListener('click', function () { showScreen('account'); });
+
+    /* ---- الرسائل: توست + إعلان المعاينة (عقد B06/A2-F05 نفسه) ---- */
+    var toast = document.getElementById('app-toast');
+    var toastText = document.getElementById('app-toast-text');
+    function showToast(text) {
+      if (!toast || !window.MicroMessages) return;
+      if (toastText) toastText.textContent = text;
+      window.MicroMessages.toast(toast);
+    }
+    function announce(text) {
+      if (window.MicroMessages) window.MicroMessages.announce(text, { id: 'app-announce' });
+    }
+
+    /* ---- شاشة الطلبات: order-schedule الحقيقي + محرر المضيف ---- */
+    var APP_STATUSES = {
+      progress: { label: 'قيد التنفيذ', tone: 'progress' },
+      done: { label: 'تم التسليم', tone: 'success' },
+      hold: { label: 'بانتظار العميل', tone: 'warning' }
+    };
+    var APP_TODAY = '2026-10-07';
+    var appOrders = [
+      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل', note: 'تجهيز صالة الاستقبال' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
+      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress', note: 'يشمل أكوابًا ورقية' },
+      { id: 'od-04', title: 'طلب تعقيم غرف الاجتماعات', date: '2026-10-09', time: '16:00', statusKey: 'done' },
+      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold', note: 'بانتظار قطعة الغيار' },
+      { id: 'od-06', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'progress', customer: 'وحدة التسويق' },
+      { id: 'od-07', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
+    ];
+    var appDemo = { editingId: null, addingFor: null, supplier: null, pendingDelete: null, seq: 100 };
+
+    var ocalRoot = document.getElementById('app-ocal-root');
+    var ocalInstance = null;
+    if (ocalRoot && window.MicroOrderSchedule) {
+      ocalInstance = window.MicroOrderSchedule.init(ocalRoot, {
+        orders: appOrders,
+        statuses: APP_STATUSES,
+        today: APP_TODAY,
+        selectedDate: APP_TODAY,
+        view: 'calendar',
+        calendarView: 'month',
+        orderActions: { edit: true, delete: true }
+      });
+
+      function findOrder(id) {
+        for (var i = 0; i < appOrders.length; i++) {
+          if (appOrders[i].id === id) return appOrders[i];
+        }
+        return null;
+      }
+
+      var editor = document.getElementById('app-ocal-editor');
+      var editorHeading = document.getElementById('app-ocal-editor-heading');
+      var editorDate = document.getElementById('app-ocal-editor-date');
+      var editorTitle = document.getElementById('app-ocal-editor-title');
+      var editorTime = document.getElementById('app-ocal-editor-time');
+      var editorStatus = document.getElementById('app-ocal-editor-status');
+      var editorNote = document.getElementById('app-ocal-editor-note');
+      var supplierValue = document.getElementById('app-supplier-value');
+
+      function pad2(n) { return (n < 10 ? '0' : '') + n; }
+      /* التاريخ المرئي للمحرر رقمي (عقد الأرقام في سطح المنتج) */
+      function numericDate(iso) {
+        var p = iso && /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+        return p ? p[3] + '/' + p[2] + '/' + p[1] : null;
+      }
+
+      function openEditor(opts) {
+        if (!editor) return;
+        appDemo.editingId = opts.mode === 'edit' ? opts.order.id : null;
+        appDemo.addingFor = opts.mode === 'add' ? (opts.date || null) : null;
+        appDemo.supplier = opts.mode === 'edit' ? (opts.order.customer || null) : null;
+        if (editorHeading) {
+          editorHeading.textContent = opts.mode === 'edit' ? 'تعديل الطلب' : 'إضافة طلب';
+        }
+        if (editorDate) {
+          var d = opts.mode === 'edit' ? opts.order.date : appDemo.addingFor;
+          editorDate.textContent = 'التاريخ: ' + (numericDate(d) || 'غير مجدول');
+        }
+        editorTitle.value = opts.mode === 'edit' ? opts.order.title : '';
+        editorTime.value = (opts.mode === 'edit' && opts.order.time) ? opts.order.time : '';
+        editorStatus.value = opts.mode === 'edit' ? opts.order.statusKey : 'progress';
+        editorNote.value = (opts.mode === 'edit' && opts.order.note) ? opts.order.note : '';
+        if (supplierValue) supplierValue.textContent = appDemo.supplier || 'بدون مورد';
+        editor.hidden = false;
+        if (window.MicroFields) {
+          var field = editorTitle.closest('.m-field');
+          if (field) window.MicroFields.sync(field);
+        }
+        editorTitle.focus({ preventScroll: false });
+      }
+
+      function closeEditor() {
+        if (!editor) return;
+        editor.hidden = true;
+        var editingId = appDemo.editingId;
+        appDemo.editingId = null;
+        appDemo.addingFor = null;
+        var row = editingId
+          ? ocalRoot.querySelector('[data-ocal-id="' + editingId + '"][data-ocal-action="order-row"]')
+          : null;
+        if (!row) row = ocalRoot.querySelector('[data-ocal-action="add"]');
+        if (row && row.focus) row.focus({ preventScroll: true });
+      }
+
+      function saveEditor() {
+        var title = editorTitle.value.trim();
+        if (!title) {
+          editorTitle.setAttribute('aria-invalid', 'true');
+          editorTitle.focus();
+          return;
+        }
+        editorTitle.removeAttribute('aria-invalid');
+        var timeOk = /^([01]\d|2[0-3]):[0-5]\d$/.test(editorTime.value);
+        if (appDemo.editingId) {
+          var order = findOrder(appDemo.editingId);
+          if (order) {
+            order.title = title;
+            order.time = timeOk ? editorTime.value : null;
+            order.statusKey = editorStatus.value;
+            order.note = editorNote.value.trim() || null;
+            order.customer = appDemo.supplier;
+            showToast('تم حفظ تعديل الطلب');
+            announce('تم حفظ تعديل الطلب');
+          }
+        } else {
+          appDemo.seq++;
+          appOrders.push({
+            id: 'app-' + appDemo.seq,
+            title: title,
+            date: appDemo.addingFor,
+            time: timeOk ? editorTime.value : null,
+            statusKey: editorStatus.value,
+            customer: appDemo.supplier,
+            note: editorNote.value.trim() || null
+          });
+          showToast('أُضيف الطلب إلى جدول اليوم');
+          announce('أُضيف الطلب إلى جدول اليوم');
+        }
+        if (ocalInstance) ocalInstance.setData(appOrders);
+        closeEditor();
+      }
+
+      if (editor) {
+        editor.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeEditor();
+          }
+        });
+        document.getElementById('app-ocal-editor-save').addEventListener('click', saveEditor);
+        document.getElementById('app-ocal-editor-cancel').addEventListener('click', closeEditor);
+      }
+
+      /* الحوار المركزي لتأكيد الحذف (عقد الطبقات B07 نفسه) */
+      var dialogLayer = document.getElementById('app-dialog-layer');
+      var dialogText = document.getElementById('app-dialog-text');
+      var dialogConfirm = document.getElementById('app-dialog-confirm');
+      function openDeleteDialog(order) {
+        if (!dialogLayer || !window.MicroNavigation) return;
+        appDemo.pendingDelete = order.id;
+        if (dialogText) dialogText.textContent = 'سيُحذف «' + order.title + '» من الجدول. لا يمكن التراجع.';
+        window.MicroNavigation.openLayer(dialogLayer, {
+          trigger: ocalRoot.querySelector('[data-ocal-id="' + order.id + '"][data-ocal-action="order-delete"]'),
+          backdropEl: document.querySelector('.m-layer-backdrop[data-for="app-dialog-layer"]')
+        });
+      }
+      if (dialogConfirm) {
+        dialogConfirm.addEventListener('click', function () {
+          var id = appDemo.pendingDelete;
+          if (id) {
+            appOrders = appOrders.filter(function (o) { return o.id !== id; });
+            if (ocalInstance) ocalInstance.setData(appOrders);
+            showToast('حُذف الطلب من الجدول');
+            announce('حُذف الطلب من الجدول');
+          }
+          appDemo.pendingDelete = null;
+          if (window.MicroNavigation) window.MicroNavigation.closeLayer(dialogLayer);
+        });
+      }
+
+      ocalRoot.addEventListener('order-schedule:add-request', function (e) {
+        openEditor({ mode: 'add', date: (e.detail && e.detail.date) || null });
+      });
+      ocalRoot.addEventListener('order-schedule:order-edit-request', function (e) {
+        var order = findOrder(e.detail && e.detail.id);
+        if (order) openEditor({ mode: 'edit', order: order });
+      });
+      ocalRoot.addEventListener('order-schedule:order-delete-request', function (e) {
+        var order = findOrder(e.detail && e.detail.id);
+        if (order) openDeleteDialog(order);
+      });
+    }
+
+    /* ---- منتجقي المورد (عقد المنتقي B03 نفسه) ---- */
+    var appPicker = document.getElementById('app-picker');
+    var supplierValueEl = document.getElementById('app-supplier-value');
+    if (appPicker && window.MicroPicker) {
+      window.MicroPicker.setOptions(appPicker, PICKER_DATA.normal);
+      appPicker.addEventListener('micro-picker:change', function (e) {
+        var label = e.detail && e.detail.label ? e.detail.label : null;
+        appDemo.supplier = label;
+        if (supplierValueEl) supplierValueEl.textContent = label || 'بدون مورد';
+        showToast('تم تحديد المورد');
+        /* سلوك تطبيق: الاختيار يغلق طبقة المنتقي ويستعيد تركيز المشغّل */
+        var pickerLayer = document.getElementById('app-picker-layer');
+        if (pickerLayer && window.MicroNavigation) {
+          window.MicroNavigation.closeLayer(pickerLayer);
+        }
+      });
+    }
+
+    /* ---- بوابة الدخول (SPEC-04): معالج محلي حتمي بلا شبكة ---- */
+    var gateway = document.getElementById('app-gateway-root');
+    if (window.MicroAccessGateway && gateway) {
+      window.MicroAccessGateway.init(gateway, {
+        onSubmit: function () {
+          return new Promise(function (resolve) {
+            window.setTimeout(function () {
+              resolve({
+                authenticated: true,
+                message: 'تم تسجيل الدخول في محاكاة العرض فقط: لا حساب حقيقي.'
+              });
+            }, 600);
+          });
+        }
+      });
+      gateway.addEventListener('micro-access:submitted', function (e) {
+        var result = e.detail && e.detail.result;
+        if (!result || !result.authenticated) return;
+        showToast('تم تسجيل الدخول');
+        announce('تم تسجيل الدخول');
+        showScreen('account');
+      });
+    }
+
+    var signinOpen = document.getElementById('app-signin-open');
+    if (signinOpen) signinOpen.addEventListener('click', function () {
+      showScreen('signin');
+    });
+
+    showScreen('home');
   }
 
   /* ---------------- سجل أحداث صغير ---------------- */

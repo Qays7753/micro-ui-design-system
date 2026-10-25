@@ -181,7 +181,7 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
   window.calendarEvents=[];
   root.addEventListener('order-schedule:day-select',e=>calendarEvents.push(e.detail));
   window.calendarInstance=MicroOrderSchedule.init(root,{orders:normal,statuses,today:'2026-10-07',
-    selectedDate:'2026-10-07',weekStart:6,view:'calendar',calendarView:'month'});
+    selectedDate:'2026-10-07',view:'calendar',calendarView:'month'});
 })();
 </script></body></html>"""
 
@@ -330,7 +330,7 @@ def main():
                                 )
                                 page = context.new_page()
                                 error_listener(page)
-                                page.goto(url, wait_until="load")
+                                page.goto(url + "#sc-canvas", wait_until="load")
                                 page.evaluate("""({direction,language}) => {
                                   document.documentElement.dir = direction;
                                   document.documentElement.lang = 'ar';
@@ -651,10 +651,10 @@ def main():
                                       and initial["layout"] == expected_layout
                                       and initial["compact"] == expected_compact
                                       and initial["gridDays"] == 31
-                                      and initial["gridTotal"] == 42
-                                      and initial["gridOut"] == 11
+                                      and initial["gridTotal"] == 35
+                                      and initial["gridOut"] == 4
                                       and initial["selected"] == "2026-10-07"
-                                      and "أكتوبر 2026" in initial["displayed"]
+                                      and "10 / 2026" in initial["displayed"]
                                       and normal_title in initial["rows"]
                                       and initial["documentLanguage"] == "ar"
                                       and initial["direction"] == direction
@@ -781,13 +781,13 @@ def main():
                                   panelTitle:document.querySelector('.m-ocal__daypanel-title')?.textContent.trim()||''
                                 })""")
                                 check(f"{case}: picker changes displayed month only, preserves the selected date, and the day panel stays honest",
-                                      "يناير 2027" in switched["title"]
+                                      "01 / 2027" in switched["title"]
                                       and switched["selected"] == selected_before
                                       and switched["pickerCount"] == 0
                                       and switched["events"] == event_count
                                       and switched["focus"] == "month-picker"
                                       and switched["browsing"] == "true"
-                                      and "لا يوم محدد في يناير 2027" in switched["panelTitle"], switched)
+                                      and "لا يوم محدد في 01/2027" in switched["panelTitle"], switched)
                                 page.locator("#order-root [data-ocal-action='month-picker']").click()
                                 page.keyboard.press("Escape")
                                 escaped = page.evaluate("""() => ({
@@ -829,16 +829,20 @@ def main():
                     standalone_start = standalone.evaluate("""() => ({
                       view:document.body.getAttribute('data-view'),
                       theme:document.documentElement.getAttribute('data-theme'),
-                      canvas:!!document.querySelector('#sc-canvas'),
-                      fields:!!document.querySelector('#sc-fields .m-field'),
-                      metric:!!document.querySelector('#sc-metric [data-main-comparison]'),
+                      appVisible:!!document.querySelector('#app-preview') && document.querySelector('#app-preview').getClientRects().length>0,
+                      reviewChromeHidden:['.showcase-header','.showcase-controls','.brand-proof','.showcase-canvas']
+                        .every(s=>{const e=document.querySelector(s);return !e||getComputedStyle(e).display==='none'}),
+                      ocal:!!document.querySelector('#app-ocal-root[data-ocal-init]'),
+                      fields:!!document.querySelector('#app-gateway-root .m-field'),
+                      metric:!!document.querySelector('#app-metric[data-main-comparison]'),
                       visibleLogs:[...document.querySelectorAll('.sc-log')]
                         .filter(e=>e.getClientRects().length&&getComputedStyle(e).display!=='none').length,
                       width:document.documentElement.scrollWidth,viewport:innerWidth
                     })""")
-                    check("rebuilt standalone starts on clean Light Overview with real embedded components",
-                          standalone_start["view"] == "overview" and standalone_start["theme"] == "light"
-                          and standalone_start["canvas"] and standalone_start["fields"]
+                    check("rebuilt standalone starts on the clean mobile app preview with real embedded components",
+                          standalone_start["view"] == "app" and standalone_start["theme"] == "light"
+                          and standalone_start["appVisible"] and standalone_start["reviewChromeHidden"]
+                          and standalone_start["ocal"] and standalone_start["fields"]
                           and standalone_start["metric"] and standalone_start["visibleLogs"] == 0
                           and standalone_start["width"] <= standalone_start["viewport"], standalone_start)
                     standalone.screenshot(path=str(out / "standalone-startup.png"))

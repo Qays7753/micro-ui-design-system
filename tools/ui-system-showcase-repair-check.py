@@ -444,19 +444,22 @@ def run(page, base, width, tag):
         maxWeekdayH: Math.max(...weekdays), titleReadable, draftPill };
     }""")
     if f08 and not f08.get("noGrid"):
+        # عقد 2026-10-25 (الأحد أولًا): أكتوبر 2026 يبدأ خميسًا → 4 أيام
+        # مجاورة (سبتمبر) في شبكة 35 خلية (كان 11 مع weekStart=6).
         if f08.get("compact"):
-            t(f"F-08 {P} العرض المدمج: الشهر كامل (31 يومًا + 11 مجاورًا) وخلية ≥48px ارتفاعًا و≥24px عرضًا",
-              f08["days"] == 31 and f08["outDays"] == 11 and f08["minH"] >= 48 and f08["minW"] >= 24,
+            t(f"F-08 {P} العرض المدمج: الشهر كامل (31 يومًا + 4 مجاورة — الأحد أولًا) وخلية ≥48px ارتفاعًا و≥24px عرضًا",
+              f08["days"] == 31 and f08["outDays"] == 4 and f08["minH"] >= 48 and f08["minW"] >= 24,
               f"days={f08['days']} out={f08['outDays']} minCell={f08['minW']}x{f08['minH']}")
         else:
             t(f"F-08 {P} خلية الشهر ≥48px مربعة (±2px)",
               f08["w"] >= 48 and f08["h"] >= 48 and abs(f08["w"] - f08["h"]) <= 2,
               f"cell={f08['w']}x{f08['h']}")
-            t(f"F-08 {P} الشهر المعروض كامل (31 يومًا + 11 مجاورًا خافتًا)",
-              f08["days"] == 31 and f08["outDays"] == 11,
+            t(f"F-08 {P} الشهر المعروض كامل (31 يومًا + 4 مجاورة — الأحد أولًا)",
+              f08["days"] == 31 and f08["outDays"] == 4,
               f"days={f08['days']} out={f08['outDays']}")
         t(f"F-08 {P} عنوان الشهر زر Picker مقروء دون قص وهدف ≥48px", f08["titleReadable"], f08)
-        t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
+        # بطاقة 2026-10-25: رأس الأيام بحشو 8px أعلى/أسفل (سطر 20 + 16 ≈ 36)
+        t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 16 ≈ 36)", f08["maxWeekdayH"] <= 40, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])
     elif f08 and f08.get("noGrid"):
         t(f"F-08 {P} شبكة الشهر الكاملة متاحة عند كل عرض جذر (عقد 2026-10-24)", False, f08)
@@ -596,7 +599,9 @@ def run(page, base, width, tag):
     # ================= F-14: عنوان شريط التطبيق تحت الإجهاد =================
     set_fixture(page, "stress")
     f14 = page.evaluate("""() => {
-      const bar = document.querySelector('.m-appbar');
+      /* المعاينة المحمولة لها appbar خاص؛ فحص F-14 يستهدف appbar مختبر
+         الحالات (عينة الإجهاد) صراحةً منذ 2026-10-25. */
+      const bar = document.querySelector('#sc-navigation .m-appbar');
       const title = bar.querySelector('.m-appbar__title');
       const r = bar.getBoundingClientRect();
       const lh = parseFloat(getComputedStyle(title).lineHeight) || 22;

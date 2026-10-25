@@ -34,6 +34,23 @@
    expanded/agenda بعد الآن (عقد ملغٍ 2026-10-25 — منطقة الأحداث
    ظاهرة دائمًا أسفل الشبكة كما في المرجع).
 
+   عقد 2026-10-25 (calendar-target-latest-owner.png — دقة بصرية):
+   1) بداية الأسبوع الأحد: الافتراضي weekStart=0 (كان 6/السبت) —
+      الترتيب المرئي LTR: أحد..سبت يسارًا-يمينًا، وRTL يعكس الأسبوع
+      المنطقي نفسه (الأحد في بداية RTL المنطقية) والرقم/النقاط/
+      التحديد/اليوم تبقى مرتبطة بالتاريخ نفسه في الاتجاهين.
+      المستهلك الذي يمرر weekStart صريحًا يبقى مدعومًا — الهجرة
+      موثقة في specification.md.
+   2) أرقام فقط على السطح المرئي: رأس الشهر «MM / YYYY»، والتواريخ
+      الكاملة DD/MM/YYYY، وأرقام لاتينية 0-9 لليوم/الشهر/السنة/الوقت
+      — لا أسماء أشهر عربية أو إنجليزية ظاهرة في رأس الشهر أو
+      متصفحه أو عنوان اليوم أو عنوان الأحداث أو شارات الصفوف.
+      أسماء الأشهر تبقى في الأسماء الإتاحية (aria-label) وحدها
+      لصدق القراءة الصوتية الكاملة — اختيار موثق في المواصفة.
+   3) بطاقة التقويم: رؤوس الأيام + الشبكة داخل سطح متميز (حد
+      خافت وزوايا وارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة
+      رقيقة تحافظ على ثبات الأعمدة السبعة ومحاذاة الرأس.
+
    قواعد ثابتة:
    - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
      documentElement يجعل قلب الاتجاه الحي فوريًا ويُفصل في destroy؛
@@ -69,6 +86,9 @@
     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
   var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
+     (الأحد أولًا) يجعل العمود الأول أحدًا في الاتجاهين (RTL يعكس
+     الصف المنطقي بصريًا بلا عكس تواريخ). */
   /* F-08 (2026-10-10): اختصارات عمود رأس الأسبوع ثلاثية الأحرف (عرف
      التقاويم الهاتفية) — الاسم الكامل يبقى في aria-label خلية كل يوم
      (رأس الأسبوع aria-hidden بصري فقط). كان: أسماء 5-6 أحرف مثل
@@ -166,11 +186,28 @@
     return n + ' طلبًا';
   }
 
-  /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» */
+  /* التاريخ الكامل بالعربية: «الأربعاء 7 أكتوبر 2026» — أسماء الأشهر
+     في الأسماء الإتاحية فقط (aria-label) لا على السطح المرئي (عقد
+     2026-10-25: أرقام فقط مرئية). */
   function fullDateAr(iso) {
     var p = parseIso(iso);
     if (!p) return '';
     return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + p.d + ' ' + MONTHS_AR[p.m - 1] + ' ' + p.y;
+  }
+
+  /* التاريخ المرئي الرقمي DD/MM/YYYY بأرقام لاتينية (عقد 2026-10-25) */
+  function dateNumeric(iso) {
+    var p = parseIso(iso);
+    if (!p) return '';
+    return pad2(p.d) + '/' + pad2(p.m) + '/' + p.y;
+  }
+
+  /* عنوان اليوم المرئي: اسم اليوم معلّن محليًا + تاريخ رقمي —
+     «الخميس 22/10/2026» (اليوم اسم معجمي وليس اسم شهر؛ عقد الأرقام) */
+  function dayTitleNumeric(iso) {
+    var p = parseIso(iso);
+    if (!p) return '';
+    return WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' + dateNumeric(iso);
   }
 
   /* =======================================================
@@ -307,10 +344,12 @@
     state.orders = normalizeOrders(options.orders);
     state.statuses = (options.statuses && typeof options.statuses === 'object') ? options.statuses : {};
     state.today = (typeof options.today === 'string' && DATE_RE.test(options.today)) ? options.today : localTodayIso();
-    /* weekStart: الافتراضي 6 (السبت — سياق عربي أولًا) قابل للتعديل
-       لكل مثيل؛ ليس معيارًا مفروضًا عالميًا (موثق) */
+    /* weekStart: عقد 2026-10-25 (مرجع المالك الأحدث): الافتراضي 0
+       (الأحد أولًا — Sunday-first كما في calendar-target-latest-owner.png)
+       قابل للتعديل لكل مثيل؛ المستهلك الذي يمرر قيمة صريحة (مثل 6)
+       يبقى مدعومًا كما هو — الهجرة موثقة في specification.md */
     state.weekStart = (typeof options.weekStart === 'number' && options.weekStart >= 0 &&
-      options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 6;
+      options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 0;
     state.selectedDate = (typeof options.selectedDate === 'string' && DATE_RE.test(options.selectedDate))
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
@@ -618,14 +657,15 @@
       pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
-      /* 2026-10-25 (مرجع المالك): تدرّج الشهر/السنة — الشهر محوري
-         (16/600) والسنة ثانوية (13/400) + شيفرون هابط يعلن المنتقي
-         الحقيقي؛ التدرّج داخل زر واحد (منبثق واحد) بلا تغيير عقد.
-         عقدة نص مسافة بين العنصرين: عناصر flex المجهولة البيضاء-only
-         لا تُرسم (مواصفة Flexbox) فلا أثر تخطيطيًا، ويبقى textContent
-         «أكتوبر 2026» بمسافة صحيحة للنسخ/المطابقة النصية. */
-      pickerButton.appendChild(el('span', 'm-ocal__month-name', MONTHS_AR[m - 1]));
-      pickerButton.appendChild(document.createTextNode(' '));
+      /* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
+         رأس شهري رقمي «MM / YYYY» — رقم الشهر محوري (18/600) والسنة
+         ثانوية (14/400) + شيفرون هابط يعلن المنتقي الحقيقي. لا أسماء
+         أشهر ظاهرة (عقد الأرقام فقط)؛ اسم الشهر الكامل يبقى في
+         aria-label المنتقي لصدق القراءة الصوتية (موثق).
+         عقدة نص مسافة بين العنصرين تحفظ textContent «10 / 2026» بمسافة
+         صحيحة للنسخ/المطابقة النصية. */
+      pickerButton.appendChild(el('span', 'm-ocal__month-num', pad2(m)));
+      pickerButton.appendChild(document.createTextNode(' / '));
       pickerButton.appendChild(el('span', 'm-ocal__year', String(y)));
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
@@ -671,8 +711,11 @@
       months.setAttribute('role', 'group');
       months.setAttribute('aria-label', 'أشهر السنة');
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
-      for (var i = 0; i < MONTHS_AR.length; i++) {
-        var month = el('button', 'm-ocal__picker-month', MONTHS_AR[i]);
+      /* عقد 2026-10-25 (أرقام فقط على المرئي): خيارات المنتقي أرقام
+         شهرية 01..12، واسم الشهر الكامل يبقى في aria-label وحده لصدق
+         القراءة الصوتية (اختيار موثق في المواصفة). */
+      for (var i = 0; i < 12; i++) {
+        var month = el('button', 'm-ocal__picker-month', pad2(i + 1));
         month.type = 'button';
         month.setAttribute('data-ocal-action', 'picker-month');
         month.setAttribute('data-ocal-value', String(i));
@@ -814,18 +857,19 @@
       return out;
     }
 
-    /* عنوان نطاق الأسبوع: «24–30 أكتوبر 2026» داخل الشهر نفسه،
-       و«31 أكتوبر – 6 نوفمبر 2026» عند عبور حد الشهر/السنة */
+    /* عنوان نطاق الأسبوع الرقمي (عقد 2026-10-25 — لا أسماء أشهر مرئية):
+       «25–31/10/2026» داخل الشهر نفسه، و«31/10 – 06/11/2026» عند عبور
+       حد الشهر، و«28/12/2026 – 03/01/2027» عند عبور حد السنة. */
     function weekRangeTitle(dates) {
       var a = dates[0];
       var b = dates[6];
       if (a.y === b.y && a.m === b.m) {
-        return a.d + '–' + b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
+        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + b.y;
       }
-      var sameYear = a.y === b.y;
-      var aTxt = a.d + ' ' + MONTHS_AR[a.m - 1] + (sameYear ? '' : ' ' + a.y);
-      var bTxt = b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
-      return aTxt + ' – ' + bTxt;
+      if (a.y === b.y) {
+        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + b.y;
+      }
+      return dateNumeric(isoOf(a.y, a.m, a.d)) + ' – ' + dateNumeric(isoOf(b.y, b.m, b.d));
     }
 
     /* شريط الأسبوع: [الأسبوع السابق][نطاق الأسبوع][الأسبوع التالي][اليوم]
@@ -996,14 +1040,10 @@
       return ul;
     }
 
-    /* تاريخ قصير لصف القائمة: «8 أكتوبر» + السنة إن خالفت سنة اليوم */
+    /* تاريخ قصير رقمي لصف القائمة: «08/10/2026» (عقد الأرقام المرئية؛
+       السنة دائمًا لأن القائمة تعبر السنوات بلا سياق شهر ثابت) */
     function shortDateAr(iso) {
-      var p = parseIso(iso);
-      if (!p) return '';
-      var t = parseIso(state.today);
-      var s = p.d + ' ' + MONTHS_AR[p.m - 1];
-      if (!t || t.y !== p.y) s += ' ' + p.y;
-      return s;
+      return dateNumeric(iso);
     }
 
     /* هل يُصفّح شهر بلا يوم محدد فيه؟ (الشهر المعروض ≠ شهر التحديد) */
@@ -1029,11 +1069,8 @@
       if (iso === state.today) return 'طلبات اليوم';
       var p = parseIso(iso);
       if (!p) return 'طلبات';
-      var s = 'طلبات ' + WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' +
-        p.d + ' ' + MONTHS_AR[p.m - 1];
-      var t = parseIso(state.today);
-      if (!t || t.y !== p.y) s += ' ' + p.y;
-      return s;
+      /* المرئي أرقام فقط (عقد 2026-10-25): اسم اليوم معجمي + تاريخ رقمي */
+      return 'طلبات ' + dayTitleNumeric(iso);
     }
 
     function buildDayPanel(withTitle) {
@@ -1044,8 +1081,9 @@
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
+        /* مرئي أرقام فقط (عقد 2026-10-25): «لا يوم محدد في 01/2027» */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + MONTHS_AR[m - 1] + ' ' + y));
+          'لا يوم محدد في ' + pad2(m) + '/' + y));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -1073,19 +1111,30 @@
       return panel;
     }
 
+    /* ---- بطاقة التقويم (عقد 2026-10-25 — calendar-target-latest-owner.png):
+       رؤوس الأيام + الشبكة داخل سطح متميز واحد (حد خافت، زوايا،
+       ارتفاع خفيف بتوكنز قائمة) مع فواصل صفوف/أعمدة رقيقة — الهندسة
+       في CSS (m-ocal__calcard) والبنية هنا فقط. ---- */
+    function buildCalCard(weekdays, grid) {
+      var card = el('div', 'm-ocal__calcard');
+      card.setAttribute('data-ocal-calcard', '');
+      card.appendChild(weekdays);
+      card.appendChild(grid);
+      return card;
+    }
+
     /* ---- شاشة التقويم (شهر) — عقد 2026-10-25 (ترتيب القراءة للمرجع):
-       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][رؤوس الأيام]
-       [شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
+       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][بطاقة التقويم:
+       رؤوس الأيام + شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
        [منطقة أحداث اليوم المحدد] — منطقة الأحداث ظاهرة دائمًا أسفل
-       الشبكة كما في مرجع المالك (لا عرضا expanded/agenda). */
+       البطاقة كما في مرجع المالك (لا عرضا expanded/agenda). */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
       screen.appendChild(buildControlsRow());
       screen.appendChild(buildCalBar(state.monthCursor.y, state.monthCursor.m));
       if (state.pickerOpen) screen.appendChild(buildMonthPicker());
-      screen.appendChild(buildWeekdays());
-      screen.appendChild(buildMonthGrid(groupOrdersByDate()));
+      screen.appendChild(buildCalCard(buildWeekdays(), buildMonthGrid(groupOrdersByDate())));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
       if (legend) screen.appendChild(legend);
       screen.appendChild(buildDayPanel(true));
@@ -1093,8 +1142,8 @@
     }
 
     /* ---- شاشة التقويم (أسبوع) — عقد 2026-10-25 (مرجع المالك):
-       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][رؤوس الأيام]
-       [صف الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
+       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][بطاقة التقويم بصف
+       الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
        [منطقة أحداث اليوم المحدد] — الأسبوع مشتق من التحديد. */
     function buildWeekScreen() {
       var screen = el('div', 'm-ocal__screen');
@@ -1102,9 +1151,8 @@
       screen.appendChild(buildControlsRow());
       var dates = weekDatesOf(state.selectedDate) || weekDatesOf(state.today);
       screen.appendChild(buildWeekBar(dates));
-      screen.appendChild(buildWeekdays());
       var groups = groupOrdersByDate();
-      screen.appendChild(buildWeekGrid(dates, groups));
+      screen.appendChild(buildCalCard(buildWeekdays(), buildWeekGrid(dates, groups)));
       var scope = [];
       for (var i = 0; i < dates.length; i++) {
         var iso = isoOf(dates[i].y, dates[i].m, dates[i].d);
@@ -1132,7 +1180,8 @@
     function buildDayBar() {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
-      bar.appendChild(el(hTag(), 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
+      /* عنوان اليوم المرئي: اسم اليوم + تاريخ رقمي (لا أسماء أشهر) */
+      bar.appendChild(el(hTag(), 'm-ocal__cal-title', dayTitleNumeric(state.selectedDate)));
       bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
       var today = el('button', 'm-ocal__todaybtn');
       today.type = 'button';

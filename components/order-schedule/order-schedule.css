@@ -147,19 +147,22 @@
   overflow-wrap: anywhere;
 }
 
-/* 2026-10-25 (مرجع المالك): تدرّج الشهر/السنة داخل زر المنتقي —
-   الشهر محوري والسنة ثانوية + شيفرون هابط يعلن المنتقي */
-.m-ocal__month-name {
-  font-size: var(--micro-button-label-size);
+/* 2026-10-25 (calendar-target-latest-owner.png + عقد الأرقام):
+   تدرّج رأس الشهر الرقمي «MM / YYYY» داخل زر المنتقي — رقم الشهر
+   محوري (توكن عنوان القسم 18px/600) والسنة ثانوية (توكن التسمية
+   14px/400) + شيفرون هابط يعلن المنتقي. لا أسماء أشهر مرئية. */
+.m-ocal__month-num {
+  font-size: var(--micro-section-title-size);
   font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
+  line-height: var(--micro-section-title-line);
   color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .m-ocal__year {
-  font-size: var(--micro-secondary-size);
+  font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-regular);
-  line-height: var(--micro-secondary-line);
+  line-height: var(--micro-label-line);
   color: var(--micro-text-secondary);
   font-variant-numeric: tabular-nums;
 }
@@ -284,17 +287,30 @@
 
 /* ---- زر «اليوم» في شريط الشهر/الأسبوع/اليوم: فعل اختيار صريح ---- */
 
-/* ================= 3) شبكة الشهر وشبكة الأسبوع ================= */
-/* شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد — نفس
-   أعمدة الخلايا/الأرضيات/الفجوات، ودالة display حسب عرض الجذر
-   (data-ocal-compact) كما في الشهر. */
+/* ================= 3) بطاقة التقويم: شبكة الشهر وشبكة الأسبوع =================
+   عقد 2026-10-25 (calendar-target-latest-owner.png): رؤوس الأيام + الشبكة
+   داخل سطح متميز واحد (تعبئة السطح، حد خافت، زوايا سطح، ارتفاع خفيف —
+   كلها توكنز قائمة) وفواصل صفوف/أعمدة رقيقة بحد الفواصل نفسه.
+   الأعمدة السبعة ثابتة: بلا فجوات — كل عمود 100%/7 بالضبط، ورأس الأيام
+   يستخدم القسمة نفسها فيمحاذاة تمامًا فوق أعمدة التواريخ في RTL وLTR.
+   شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد. */
+.m-ocal__calcard {
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-surface);
+  background-color: var(--micro-surface-base);
+  box-shadow: var(--micro-shadow-emphasis);
+  overflow: hidden;
+}
+
 .m-ocal__weekdays {
   display: flex;
-  gap: var(--micro-space-1);
+  border-block-end: 1px solid var(--micro-border-divider);
+  background-color: var(--micro-surface-base);
 }
 .m-ocal__weekday {
-  width: calc((100% - 6 * var(--micro-space-1)) / 7);
-  padding-block: var(--micro-space-1);
+  width: calc(100% / 7);
+  min-width: 0;
+  padding-block: var(--micro-space-2);
   text-align: center;
   font-size: var(--micro-secondary-size);
   font-weight: var(--micro-weight-medium);
@@ -309,15 +325,14 @@
 .m-ocal__grid {
   display: flex;
   flex-direction: column;
-  /* 2026-10-25 (مرجع المالك): فصل أسابيع 8px — مجموعة الرقم+النقاط
-     المتمركزة تنتهي قبل نهاية الخلية فيقع الفصل أسفلها بين الأسابيع
-     ولا تلتبس النقاط بالصف التالي */
-  gap: var(--micro-space-2);
+  /* 2026-10-25 (بطاقة التقويم): فواصل الصفوف رقيقة عبر حدود الخلايا
+     السفلية بدل فجوات — مجموعة الرقم+النقاط المتمركزة تبقي النقاط
+     بعيدة عن الصف التالي لأن محتوى الخلية متمركز ضمن أرضية الصف. */
+  gap: 0;
 }
 
 .m-ocal__gridrow {
   display: flex;
-  gap: var(--micro-space-1);
   /* إصلاح R3-2b (2026-10-08): أرضية ارتفاع الصف نسبية 2.7em (خط الصف
      مثبت عند --micro-label-size → 37.8px عند 1× ≈ مربع الخلية، و75.6px
      عند نص×2). لماذا هنا وليس على الخلية نفسها؟ العنصر الذي يجمع
@@ -353,7 +368,11 @@
    2026-10-25 (مرجع المالك calendar-reference-implementation.html): الرقم
    + النقاط مجموعة واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم
    يومها مباشرة فلا تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل
-   المجموعة حيث يباعد بين الأسابيع. */
+   المجموعة حيث يباعد بين الأسابيع.
+   2026-10-25 (بطاقة التقويم): فواصل أعمدة/صفوف رقيقة — حدود منطقية
+   (inline-start/block-start) فتعمل في RTL وLTR بلا انعكاس يدوي؛
+   العمود الأول بلا حد بداية والصف الأول بلا حد علوى عبر :nth-child
+   على بنية الأعمدة السبعة الثابتة. */
 .m-ocal__cell {
   position: relative;
   display: flex;
@@ -361,14 +380,28 @@
   align-items: center;
   justify-content: center; /* 2026-10-25: مجموعة الرقم+النقاط متمركزة (مرجع المالك) */
   gap: 2px;
-  width: calc((100% - 6 * var(--micro-space-1)) / 7);
+  width: calc(100% / 7);
+  min-width: 0;
   aspect-ratio: 1; /* مربعة — المرجع02؛ الأرضية العمودية في .m-ocal__gridrow */
   padding: 1px;
   border: 0;
-  border-radius: var(--micro-radius-chip);
+  border-inline-start: 1px solid var(--micro-border-divider);
+  border-radius: 0;
   background-color: transparent; /* لا شبكة حاويات ثقيلة ولا ظل */
   color: var(--micro-text-primary);
   cursor: pointer;
+}
+
+/* العمود الأول (بداية الأسبوع منطقيًا) بلا حد بداية */
+.m-ocal__cell:nth-child(7n + 1) {
+  border-inline-start: 0;
+}
+
+/* حد الصفوف: أول صف في الشبكة بلا حد علوى (رأس الأيام يحمل خطه
+   السفلي الخاص)، وبقية الصفوف تحمل الحد على أول خلية فيه ليكون
+   الخط مستمرًا عبر الصف كله بلا ازدواج */
+.m-ocal__gridrow + .m-ocal__gridrow .m-ocal__cell {
+  border-block-start: 1px solid var(--micro-border-divider);
 }
 
 .m-ocal__daynum {
@@ -409,10 +442,12 @@
   font-weight: var(--micro-weight-semibold);
 }
 
-/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) */
+/* اليوم المحدد: تعبئة البترولي ونص معكوس (المرجع02) — المربع البارز
+   فوق الفواصل كما في المرجع (الحدود الخافتة تبقى تحته) */
 .m-ocal__cell--selected {
   background-color: var(--micro-brand-primary);
   color: var(--micro-text-inverse);
+  border-radius: var(--micro-radius-chip);
 }
 
 .m-ocal__cell--selected .m-ocal__daynum {
@@ -741,8 +776,13 @@
   padding: var(--micro-space-3) var(--micro-space-4);
 }
 
-/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري) */
+/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري).
+   2026-10-25 (عقد الأرقام المرئية): النطاق تعبير رقمي خالص
+   «4–10/10/2026» — يُعزل LTR كي لا يقلب ترتيب أجزائه في سياق RTL
+   (التصيير المرجعي: أرقام لاتينية 0-9 في كل الاتجاهات). */
 .m-ocal__week-range {
+  direction: ltr;
+  unicode-bidi: isolate;
   font-size: var(--micro-button-label-size);
   font-weight: var(--micro-weight-semibold);
   line-height: var(--micro-button-label-line);

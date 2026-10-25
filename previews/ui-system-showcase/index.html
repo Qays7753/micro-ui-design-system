@@ -48,7 +48,7 @@
   <link rel="stylesheet" href="../../components/carousel/carousel.css">
   <link rel="stylesheet" href="showcase.css">
 </head>
-<body data-view="overview">
+<body data-view="app">
   <!-- أصول الأيقونات: نفس محتوى ملفات assets/icons (HugeIcons Stroke Rounded)
        الرموز المستخدمة في هذا العرض فقط، بلا مكتبة خارجية جديدة.
        أداة البناء تتحقق من كل رمز مقابل أصله بايت-ببايت (نمط F03 R1-02). -->
@@ -126,6 +126,417 @@
     </symbol>
   </svg>
 
+  <!-- =========================================================
+       المعاينة المحمولة النظيفة — سطح المراجعة الافتراضي (عقد 2026-10-25)
+       تطبيق هاتفي متماسك يركّب مكونات المكتبة الحقيقية نفسها: appbar +
+       navbar من عائلة التنقل، وشاشات مضيف ببيانات محلية حتمية.
+       منفذ العرض نفسه هو الهاتف (360×780 قياسًا مرجعيًا) — لا إطار جهاز
+       ولا تحجيم مصطنع. أسطح الفحص (نظرة عامة/مختبر الحالات) تبقى معزولة
+       خلف روابط العمق الموثقة في README ولا تظهر في هذا السطح.
+       ========================================================= -->
+  <section class="app-preview" id="app-preview" aria-label="معاينة التطبيق">
+    <div class="app-shell">
+
+      <!-- شريط التطبيق (عائلة التنقل B07): عنوان كل شاشة + حركة الرجوع -->
+      <header class="m-appbar app-topbar">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-back aria-label="رجوع" hidden>
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <span class="m-appbar__title" id="app-title">الرئيسية</span>
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-app-goto="account" aria-label="حسابي">
+          <svg class="m-btn__icon" aria-hidden="true"><use href="#i-account"/></svg>
+        </button>
+      </header>
+
+      <!-- ============ الشاشة 1: الرئيسية ============ -->
+      <div class="app-screen" data-app-screen="home" role="group" aria-label="الرئيسية">
+        <div class="m-surface app-hero">
+          <div class="m-surface__content">
+            <span class="m-surface__label">ملخص اليوم</span>
+            <span class="m-surface__title">عمليات الفرع الرئيسي</span>
+            <span class="m-surface__amount"><span dir="ltr">36</span> عملية</span>
+            <span class="m-surface__sub">آخر تحديث 07:30 صباحًا</span>
+          </div>
+        </div>
+
+        <div class="app-cards-row">
+          <article class="m-info-card m-info-card--compact m-info-card--accent" aria-label="طلبات اليوم، 18 طلب">
+            <span class="m-info-card__label">طلبات اليوم</span>
+            <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
+          </article>
+          <article class="m-info-card m-info-card--compact" aria-label="بانتظار الموافقة، 12 طلبًا">
+            <span class="m-info-card__label">بانتظار الموافقة</span>
+            <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">12</span><span class="m-info-card__unit">طلب</span></span>
+          </article>
+        </div>
+
+        <section class="m-section" aria-labelledby="app-ann-title">
+          <h2 class="m-section-title" id="app-ann-title">إعلانات العمليات</h2>
+          <div class="m-carousel" data-carousel data-controls="compact" data-carousel-label="إعلانات العمليات" id="app-carousel" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
+            <div class="m-carousel__viewport" data-viewport>
+              <ol class="m-carousel__track" data-track>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="صيانة مجدولة">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">صيانة مجدولة</h3>
+                    <p class="app-card-body">صيانة أجهزة العرض في قاعة الاجتماعات يوم الخميس 08/10/2026.</p>
+                  </div>
+                </li>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="تسليم مستلزمات">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">تسليم مستلزمات</h3>
+                    <p class="app-card-body">وصلت مستلزمات الضيافة للمستودع الرئيسي وجاهزة للتوزيع.</p>
+                  </div>
+                </li>
+                <li class="m-carousel__slide" data-carousel-slide data-card-label="عطاء التوريد">
+                  <div class="m-carousel__card">
+                    <h3 class="app-card-title">عطاء التوريد</h3>
+                    <p class="app-card-body">يُفتح عطاء توريد قرطاسية الربع القادم يوم 15/10/2026.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+            <div class="m-carousel__controls">
+              <button type="button" class="m-carousel__btn" data-prev aria-label="السابق"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
+              <p class="m-carousel__status" data-status aria-live="polite"></p>
+              <button type="button" class="m-carousel__btn" data-next aria-label="التالي"><svg aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+            </div>
+            <div class="m-carousel__dots" data-dots role="group" aria-label="الانتقال المباشر إلى بطاقة"></div>
+          </div>
+        </section>
+
+        <section class="m-section" aria-labelledby="app-vol-title">
+          <h2 class="m-section-title" id="app-vol-title">حجم العمليات</h2>
+          <section class="m-main-metric m-main-metric--compact" data-main-comparison data-common-unit="عملية" data-common-period="اليوم" data-max="40" id="app-metric" aria-label="مقارنة مدمجة لحجم العمليات">
+            <h3 class="m-main-metric__title">مؤشرات اليوم</h3>
+            <div class="m-main-metric__layout">
+              <div class="m-main-metric__hero">
+                <span class="m-main-metric__label">إجمالي اليوم</span>
+                <span class="m-main-metric__value"><span class="m-main-metric__number" dir="ltr">36</span><span class="m-main-metric__unit">عملية</span></span>
+              </div>
+              <div>
+                <ul data-bar-source hidden>
+                  <li data-label="استقبال" data-value="34" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="تجهيز" data-value="28" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="تسليم" data-value="21" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                  <li data-label="صيانة" data-value="9" data-unit="عملية" data-period="اليوم" data-series="a"></li>
+                </ul>
+                <ul class="m-main-metric__rows" data-bar-items aria-label="مؤشرات مستقلة"></ul>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <div class="app-actions-row">
+          <button type="button" class="m-btn m-btn--primary" data-app-goto="orders">
+            <svg class="m-btn__icon" aria-hidden="true"><use href="#i-plus"/></svg>طلب جديد
+          </button>
+          <button type="button" class="m-btn m-btn--secondary" data-app-goto="reports">آخر التقارير</button>
+        </div>
+      </div>
+
+      <!-- ============ الشاشة 2: الطلبات (تقويم order-schedule الحقيقي) ============ -->
+      <div class="app-screen" data-app-screen="orders" role="group" aria-label="الطلبات" hidden>
+        <div id="app-ocal-root" role="region" aria-label="جدول الطلبات المجدولة"></div>
+        <!-- محرر الطلب (سطح مضيف داخل الصفحة): تركيب حقول حقيقي —
+             الإضافة/التعديل/الحذف أحداث يملكها المضيف (عقد التقويم) -->
+        <section class="app-editor" id="app-ocal-editor" hidden aria-labelledby="app-ocal-editor-heading">
+          <h2 class="m-section-title" id="app-ocal-editor-heading">إضافة طلب</h2>
+          <p class="app-editor-date" id="app-ocal-editor-date">التاريخ: —</p>
+          <div class="app-editor-fields">
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">عنوان الطلب</span>
+              <input class="m-field__input" id="app-ocal-editor-title" type="text" autocomplete="off" required>
+              <span class="m-field__msg" data-field-msg hidden></span>
+            </label>
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">المورد</span>
+              <button type="button" class="m-field__input app-supplier-trigger" id="app-supplier-trigger" data-layer-open="app-picker-layer" aria-haspopup="dialog">
+                <span id="app-supplier-value">بدون مورد</span>
+                <svg class="m-btn__icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+              </button>
+            </label>
+            <div class="app-editor-grid">
+              <label class="m-field" data-micro-field>
+                <span class="m-field__label">الوقت (اختياري)</span>
+                <input class="m-field__input" id="app-ocal-editor-time" type="time" autocomplete="off">
+              </label>
+              <label class="m-field" data-micro-field>
+                <span class="m-field__label">الحالة</span>
+                <select class="m-field__input" id="app-ocal-editor-status">
+                  <option value="progress">قيد التنفيذ</option>
+                  <option value="done">تم التسليم</option>
+                  <option value="hold">بانتظار العميل</option>
+                </select>
+              </label>
+            </div>
+            <label class="m-field" data-micro-field>
+              <span class="m-field__label">ملاحظة قصيرة (اختياري)</span>
+              <input class="m-field__input" id="app-ocal-editor-note" type="text" autocomplete="off">
+            </label>
+          </div>
+          <div class="app-actions-row">
+            <button type="button" class="m-btn m-btn--primary" id="app-ocal-editor-save">حفظ</button>
+            <button type="button" class="m-btn m-btn--secondary" id="app-ocal-editor-cancel">إلغاء</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ الشاشة 3: التقارير ============ -->
+      <div class="app-screen" data-app-screen="reports" role="group" aria-label="التقارير" hidden>
+        <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام التقارير" id="app-tabs">
+          <button type="button" class="m-tabs__tab" role="tab" aria-selected="true" aria-controls="app-tab-perf" id="app-tab-perf-btn">الأداء</button>
+          <button type="button" class="m-tabs__tab" role="tab" aria-selected="false" aria-controls="app-tab-mix" id="app-tab-mix-btn" tabindex="-1">التوزيع</button>
+        </div>
+        <div id="app-tab-perf" role="tabpanel" aria-labelledby="app-tab-perf-btn" class="app-tabpanel">
+          <div class="m-chart m-chart--bars" id="app-chart-bars" data-chart="bars" data-max="12" data-summary-text="أداء الفروع هذا الأسبوع حسب عدد العمليات.">
+            <h3 class="m-chart__title">أداء الفروع (أسبوعي)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الفرع الرئيسي" data-value="12"></li>
+              <li data-series="a" data-label="فرع الشمال" data-value="8"></li>
+              <li data-series="a" data-label="فرع الغرب" data-value="0"></li>
+              <li data-series="a" data-label="المستودع" data-value="5"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--line" id="app-chart-line" data-chart="line" data-axis-dir="rtl" data-summary-text="حركة الطلبات خلال الأسبوع. الفجوات تقطع المسار ولا تصبح صفرًا.">
+            <h3 class="m-chart__title">حركة الطلبات</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الأحد" data-value="4"></li>
+              <li data-series="a" data-label="الاثنين" data-value="7"></li>
+              <li data-series="a" data-label="الثلاثاء" data-value=""></li>
+              <li data-series="a" data-label="الأربعاء" data-value="9"></li>
+              <li data-series="a" data-label="الخميس" data-value="6"></li>
+              <li data-series="a" data-label="الجمعة" data-value="11"></li>
+              <li data-series="a" data-label="السبت" data-value="3"></li>
+            </ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+        <div id="app-tab-mix" role="tabpanel" aria-labelledby="app-tab-mix-btn" class="app-tabpanel" hidden>
+          <div class="m-chart m-chart--donut" id="app-chart-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="توزيع الطلبات حسب الحالة (مقام معلن 25).">
+            <h3 class="m-chart__title">توزيع الحالات</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="مكتملة" data-value="11"></li>
+              <li data-series="b" data-label="قيد التوصيل" data-value="6"></li>
+              <li data-series="c" data-label="جديدة" data-value="8"></li>
+            </ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--bars" id="app-chart-nodata" data-chart="bars" data-max="12" data-summary-text="مؤشر لم يُقاس بعد: حالة لا بيانات صادقة، لا صفر مفترض.">
+            <h3 class="m-chart__title">استهلاك المياه</h3>
+            <ul class="m-chart__data" hidden></ul>
+            <div class="m-chart__plot" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ الشاشة 4: حسابي ============ -->
+      <div class="app-screen" data-app-screen="account" role="group" aria-label="حسابي" hidden data-account-settings data-account-layer-id="app-account-layer">
+        <section class="m-section" aria-labelledby="app-profile-title">
+          <h2 class="m-section-title" id="app-profile-title">الملف الشخصي</h2>
+          <div class="app-profile">
+            <span class="app-profile__avatar" aria-hidden="true">لم</span>
+            <span class="app-profile__text">
+              <span class="app-profile__name">ليان منصور</span>
+              <span class="app-profile__detail" dir="ltr">lian@example.test</span>
+            </span>
+          </div>
+        </section>
+        <section class="m-section" aria-labelledby="app-pref-title">
+          <h2 class="m-section-title" id="app-pref-title">التفضيلات</h2>
+          <ul class="app-setting-list">
+            <li>
+              <button type="button" class="m-row app-setting-row" id="app-account-open" data-account-open>
+                <span class="m-row__text">
+                  <span class="m-row__title">الحساب وإعدادات التطبيق</span>
+                  <span class="m-row__subtitle">الملف واللغة والتفضيلات</span>
+                </span>
+                <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+              </button>
+            </li>
+            <li class="app-setting-row">
+              <label class="m-switch app-switch-row">
+                <input type="checkbox" role="switch" id="app-sw-notifications" checked>
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span></span>
+              </label>
+            </li>
+            <li class="app-setting-row">
+              <label class="m-switch app-switch-row">
+                <input type="checkbox" role="switch" id="app-sw-weekly">
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">الملخص الأسبوعي</span></span>
+              </label>
+            </li>
+          </ul>
+          <div class="m-note m-note--info app-note">
+            <svg class="m-note__icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <span class="m-note__text"><span class="m-note__body">تُطبّق التغييرات على هذا الجهاز فقط.</span></span>
+          </div>
+        </section>
+        <section class="m-section" aria-labelledby="app-session-title">
+          <h2 class="m-section-title" id="app-session-title">الجلسة</h2>
+          <ul class="app-setting-list">
+            <li>
+              <button type="button" class="m-row app-setting-row" id="app-signin-open">
+                <span class="m-row__text">
+                  <span class="m-row__title">تسجيل الدخول بحساب آخر</span>
+                  <span class="m-row__subtitle">تبديل الحساب الحالي</span>
+                </span>
+                <svg class="m-row__open" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <!-- حوار إعدادات الحساب والتطبيق (مكوّن SPEC-03 الحقيقي) -->
+        <div class="m-layer-backdrop" data-for="app-account-layer" hidden></div>
+        <div class="m-layer m-layer--center" id="app-account-layer" role="dialog" aria-modal="true" aria-labelledby="app-account-main-title" data-account-settings-layer hidden>
+          <header class="m-layer__head">
+            <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب" hidden>
+              <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg>
+            </button>
+            <h2 class="m-layer__title" id="app-account-main-title" data-account-title="account" tabindex="-1">الحساب</h2>
+            <h2 class="m-layer__title" id="app-account-app-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h2>
+            <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات">
+              <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"/></svg>
+            </button>
+          </header>
+          <div class="m-layer__body m-account-settings">
+            <div class="m-account-settings__view" data-account-view="account">
+              <div class="m-account-profile">
+                <span class="m-account-profile__avatar" aria-hidden="true">لم</span>
+                <span class="m-account-profile__text">
+                  <span class="m-account-profile__name">ليان منصور</span>
+                  <span class="m-account-profile__detail" dir="ltr">lian@example.test</span>
+                </span>
+              </div>
+              <section class="m-setting-group">
+                <h3 class="m-setting-group__title">التطبيق</h3>
+                <ul class="m-setting-group__items">
+                  <li>
+                    <button class="m-setting-row" type="button" data-account-to-application>
+                      <span class="m-setting-row__icon" data-icon="info" aria-hidden="true"></span>
+                      <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات التطبيق</span><span class="m-setting-row__detail">اللغة والتفضيلات</span></span>
+                      <span class="m-setting-row__end" aria-hidden="true"></span>
+                    </button>
+                  </li>
+                </ul>
+              </section>
+            </div>
+            <div class="m-account-settings__view" data-account-view="application" hidden>
+              <section class="m-setting-group">
+                <h3 class="m-setting-group__title">تفضيلات التطبيق</h3>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="notifications" checked>
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span></span>
+                  </label>
+                </div>
+                <div class="m-setting-row m-setting-row--toggle">
+                  <label class="m-switch">
+                    <input type="checkbox" role="switch" data-account-setting="weekly-summary">
+                    <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                    <span class="m-switch__text"><span class="m-switch__label">الملخص الأسبوعي</span></span>
+                  </label>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ شاشة فرعية: تسجيل الدخول (بوابة الوصول SPEC-04) ============ -->
+      <div class="app-screen" data-app-screen="signin" role="group" aria-label="تسجيل الدخول" hidden>
+        <section class="m-access-gateway app-gateway" data-access-gateway id="app-gateway-root" aria-labelledby="app-gateway-heading">
+          <h2 class="m-access-gateway__heading" id="app-gateway-heading">تسجيل الدخول</h2>
+          <form data-access-form novalidate>
+            <div class="m-access-gateway__fields">
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="app-gw-email">البريد الإلكتروني</label>
+                <div class="m-field__control">
+                  <input class="m-field__input" id="app-gw-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username" required>
+                </div>
+                <p class="m-field__msg" data-field-msg hidden></p>
+              </div>
+              <div class="m-field" data-micro-field>
+                <label class="m-field__label" for="app-gw-password">كلمة المرور</label>
+                <div class="m-field__control m-access-gateway__password-control">
+                  <input class="m-field__input" id="app-gw-password" name="secret" data-access-credential="password" type="password" autocomplete="current-password" required>
+                  <button class="m-btn m-btn--secondary m-btn--icon m-access-gateway__reveal" type="button" data-access-reveal aria-controls="app-gw-password" aria-label="إظهار كلمة المرور" aria-pressed="false"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
+                </div>
+                <p class="m-field__msg" data-field-msg hidden></p>
+              </div>
+            </div>
+            <div class="m-access-gateway__actions">
+              <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit">متابعة</button>
+            </div>
+            <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <!-- شريط التنقل الرئيسي (m-navbar من عائلة التنقل) -->
+      <nav class="m-navbar app-nav" data-app-nav aria-label="التنقل الرئيسي">
+        <button type="button" class="m-navbar__item" data-app-nav-item="home" aria-current="page">
+          <svg aria-hidden="true"><use href="#i-home"/></svg><span>الرئيسية</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="orders">
+          <svg aria-hidden="true"><use href="#i-items"/></svg><span>الطلبات</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="reports">
+          <svg aria-hidden="true"><use href="#i-reports"/></svg><span>التقارير</span>
+        </button>
+        <button type="button" class="m-navbar__item" data-app-nav-item="account">
+          <svg aria-hidden="true"><use href="#i-account"/></svg><span>حسابي</span>
+        </button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- طبقات المعاينة المحمولة (عائلة التنقل B07 نفسها — مثيلات معاينة مستقلة) -->
+  <div class="m-layer-backdrop" data-for="app-picker-layer" hidden></div>
+  <div class="m-layer" id="app-picker-layer" role="dialog" aria-modal="true" aria-labelledby="app-picker-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <h2 class="m-layer__title" id="app-picker-title">اختيار المورد</h2>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <div class="m-picker" data-micro-picker id="app-picker">
+        <input class="m-picker__input" type="search" data-picker-search autocomplete="off" aria-label="بحث بالاسم">
+        <div class="m-picker__list" role="listbox" aria-label="النتائج" data-picker-list></div>
+        <p class="m-picker__foot" data-picker-summary>المحدد: لا شيء</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-layer-backdrop" data-for="app-dialog-layer" hidden></div>
+  <div class="m-layer m-layer--center" id="app-dialog-layer" role="dialog" aria-modal="true" aria-labelledby="app-dialog-title" data-backdrop="keep" hidden>
+    <div class="m-layer__head">
+      <h2 class="m-layer__title" id="app-dialog-title">حذف الطلب؟</h2>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg class="m-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <p class="app-dialog-text" id="app-dialog-text">لا يمكن التراجع عن حذف الطلب من جدول هذا اليوم.</p>
+    </div>
+    <div class="m-layer__foot">
+      <button type="button" class="m-btn m-btn--secondary" data-layer-close>إلغاء</button>
+      <button type="button" class="m-btn m-btn--destructive" id="app-dialog-confirm">حذف</button>
+    </div>
+  </div>
+
+  <div class="sc-toast-host app-toast-host" aria-label="منطقة الرسائل العابرة">
+    <div class="m-toast" id="app-toast" hidden>
+      <span class="m-toast__text" id="app-toast-text"></span>
+      <button type="button" class="m-btn m-btn--light" data-toast-close>حسنًا</button>
+    </div>
+  </div>
+
   <header class="showcase-header">
     <div class="showcase-brand">
       <img class="showcase-brand__logo showcase-brand__logo--light" src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" alt="Micro">
@@ -140,7 +551,8 @@
       <span>المتغيرات المقترحة تبقى اختيارية</span>
     </div>
     <nav class="showcase-nav" aria-label="أقسام مكتبة الواجهة">
-      <a class="showcase-nav__link is-current" href="#sc-canvas" data-showcase-view="overview" aria-current="page">نظرة عامة</a>
+      <a class="showcase-nav__link" href="#app" data-showcase-view="app">المعاينة المحمولة</a>
+      <a class="showcase-nav__link" href="#sc-canvas" data-showcase-view="overview">نظرة عامة</a>
       <a class="showcase-nav__link" href="#state-lab" data-showcase-view="state">مختبر الحالات</a>
       <a class="showcase-nav__link" href="../compositions/index.html">مختبر التركيبات</a>
     </nav>

@@ -541,3 +541,238 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 
 /* Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) */
 .sc-toast-host { position: fixed; inset-block-end: 16px; inset-inline: 16px; z-index: 60; display: grid; justify-items: center; }
+
+/* =========================================================
+   المعاينة المحمولة النظيفة (عقد 2026-10-25 — سطح المراجعة الافتراضي)
+   تطبيق هاتفي من مكونات المكتبة الحقيقية. منفذ العرض هو الهاتف:
+   CSS متجاوب عادي يرسم طبيعيًا عند 360×780 — لا تحجيم ولا إطار جهاز.
+   كل القيم بتوكنز المكتبة؛ لا ألوان جديدة.
+   ========================================================= */
+
+/* رؤية الأسطح: التطبيق افتراضيًا؛ أسطح الفحص تُعزل خلف روابط العمق */
+.app-preview { display: block; }
+body:not([data-view="app"]) .app-preview { display: none; }
+body[data-view="app"] .showcase-header,
+body[data-view="app"] .showcase-controls,
+body[data-view="app"] .brand-proof,
+body[data-view="app"] .showcase-canvas,
+body[data-view="app"] .showcase-footer,
+body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin-inline: auto;
+  background: var(--micro-surface-page);
+}
+@media (min-width: 481px) {
+  .app-shell {
+    border-inline: 1px solid var(--micro-border-divider);
+  }
+}
+
+/* شريط التطبيق أعلى الشاشة (m-appbar) — لاصق أعلى */
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--micro-surface-base);
+  border-block-end: 1px solid var(--micro-border-divider);
+}
+
+/* جسم الشاشة: تمرير المستند الطبيعي — لا تمرير متشعّب */
+.app-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  padding: var(--micro-space-4) var(--micro-space-4) var(--micro-space-8);
+  min-width: 0;
+}
+.app-screen[hidden] { display: none; }
+
+/* بطاقة اليوم البارزة (عائلة الأسطح) — قارئة أولى بترولية */
+.app-hero { border-radius: var(--micro-radius-hero); }
+.app-hero .m-surface__sub {
+  display: block;
+  margin-block-start: var(--micro-space-2);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+
+/* صف بطاقات الأرقام المدمجة */
+.app-cards-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-2);
+}
+.app-cards-row .m-info-card { min-width: 0; }
+
+/* عناوين أقسام الشاشة والبطاقات داخل العارض */
+.app-card-title {
+  margin: 0 0 var(--micro-space-2);
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+.app-card-body {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* صف الأفعال الرئيسي — أهداف اللمس من عقد الأزرار */
+.app-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+}
+.app-actions-row .m-btn { flex: 1 1 auto; }
+
+/* شاشة الطلبات: سطح التقويم يتوسع بعرض الشاشة */
+.app-screen[data-app-screen="orders"] { gap: var(--micro-space-3); }
+
+/* محرر الطلب (سطح مضيف داخل الصفحة) */
+.app-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-editor-date {
+  margin: 0;
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.app-editor-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-3);
+  min-width: 0;
+}
+.app-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--micro-space-2);
+}
+.app-editor-grid .m-field { min-width: 0; }
+.app-supplier-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-2);
+  width: 100%;
+  text-align: start;
+  cursor: pointer;
+}
+.app-supplier-trigger .m-btn__icon { color: var(--micro-text-secondary); flex: none; }
+
+/* شاشة التقارير: الألسنة + لوحاتها */
+.app-tabpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-4);
+  min-width: 0;
+}
+.app-tabpanel[hidden] { display: none; }
+
+/* شاشة حسابي: الملف والصفوف والإعدادات */
+.app-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-profile__avatar,
+.app-profile__text { min-width: 0; }
+.app-profile__avatar {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--micro-row-tile);
+  height: var(--micro-row-tile);
+  border-radius: var(--micro-radius-circle);
+  background: var(--micro-surface-selected);
+  color: var(--micro-brand-ink);
+  font-size: var(--micro-label-size);
+  font-weight: var(--micro-weight-semibold);
+}
+.app-profile__text { display: flex; flex-direction: column; gap: 2px; }
+.app-profile__name {
+  font-size: var(--micro-body-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+.app-profile__detail {
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+  overflow-wrap: anywhere;
+}
+.app-setting-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--micro-space-1);
+}
+.app-setting-row {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+}
+.app-switch-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--micro-row-min-height);
+  padding: var(--micro-space-2) var(--micro-space-3);
+}
+.app-note { margin-block-start: var(--micro-space-2); }
+
+/* شاشة تسجيل الدخول */
+.app-gateway { padding-block: var(--micro-space-2); }
+
+/* الحوار المركزي للمعاينة */
+.app-dialog-text {
+  margin: 0;
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  color: var(--micro-text-primary);
+}
+
+/* شريط التنقل السفلي (m-navbar): لاصق أسفل مع مساحة الأمان */
+.app-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding-block-end: var(--micro-inset-bottom);
+  background: var(--micro-surface-base);
+  border-block-start: 1px solid var(--micro-border-divider);
+}
+.app-shell--subscreen .app-nav { display: none; }
+
+/* توست المعاينة — نفس عقد توست النظام (فوق كل شيء) */
+.app-toast-host { z-index: var(--micro-z-toast); }
+
+/* تكبير النص (محاكاة 200%): الالتفاف بلا فيض — لا قصّ ولا تحجيم */
+@media (min-width: 481px) {
+  .app-shell { border-inline-width: 1px; }
+}

@@ -84,7 +84,9 @@
 
   /* ---------------- الحالة العامة للمتحكم ---------------- */
 
-  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current', view: 'overview' };
+  /* عقد 2026-10-25: «المعاينة المحمولة» سطح المراجعة الافتراضي (data-view=app)
+     — أسطح الفحص (نظرة عامة/مختبر الحالات) تبقى معزولة خلف روابط العمق. */
+  var state = { dir: 'rtl', width: 390, fixture: 'normal', filter: 'current', view: 'app' };
 
   document.addEventListener('DOMContentLoaded', function () {
     renderCatalog();
@@ -139,7 +141,6 @@
         orders: ocalDemo.orders,
         statuses: OCAL_STATUSES,
         today: OCAL_TODAY,
-        weekStart: 6,
         selectedDate: OCAL_TODAY,
         view: 'calendar',
         calendarView: 'month',
@@ -436,8 +437,9 @@
 
     applyDirection(state.dir);
     applyWidth(state.width);
+    initAppPreview();
     if (window.location.hash) revealDeepLink();
-    else setShowcaseView('overview');
+    else setShowcaseView('app');
   });
 
   /* ---------------- تطبيقات شريط التحكم ---------------- */
@@ -530,7 +532,10 @@
   }
 
   function setShowcaseView(view) {
-    state.view = view === 'state' ? 'state' : 'overview';
+    /* عقد 2026-10-25: ثلاثة أسطح — app (المعاينة المحمولة الافتراضية)،
+       overview (نظرة عامة)، state (مختبر الحالات). القيم الأخرى تسقط
+       إلى الافتراضي الموثق. */
+    state.view = (view === 'state' || view === 'overview' || view === 'app') ? view : 'app';
     document.body.setAttribute('data-view', state.view);
     qa('[data-showcase-view]').forEach(function (link) {
       var active = link.getAttribute('data-showcase-view') === state.view;
@@ -570,6 +575,11 @@
     if (!raw) return;
     var id;
     try { id = decodeURIComponent(raw); } catch (error) { id = raw; }
+    /* عقد 2026-10-25: #app يعيد سطح المعاينة المحمولة الافتراضي */
+    if (id === 'app' || id === 'app-preview') {
+      setShowcaseView('app');
+      return;
+    }
     if (id === 'sc-canvas') {
       setShowcaseView('overview');
       return;
@@ -588,6 +598,334 @@
     if (!section) return;
     setShowcaseView('state');
     scrollAfterLayout(target);
+  }
+
+  /* =========================================================
+     المعاينة المحمولة النظيفة (عقد 2026-10-25 — السطح الافتراضي)
+     تركيب مضيف لمكونات المكتبة الحقيقية ببيانات محلية حتمية:
+     الرئيسية/الطلبات/التقارير/حسابي + تسجيل الدخول، وطبقات
+     المنتقي/الحوار/التوست من عقود التنقل والرسائل نفسها.
+     لا شبكة ولا مصادقة ولا حفظ — نفس حدود العرض الموثقة.
+     ========================================================= */
+
+  var APP_TITLES = {
+    home: 'الرئيسية',
+    orders: 'الطلبات',
+    reports: 'التقارير',
+    account: 'حسابي',
+    signin: 'تسجيل الدخول'
+  };
+
+  function initAppPreview() {
+    var root = document.getElementById('app-preview');
+    if (!root || root.dataset.appInit) return;
+    root.dataset.appInit = '1';
+
+    var screens = {};
+    qa('[data-app-screen]', root).forEach(function (screen) {
+      screens[screen.getAttribute('data-app-screen')] = screen;
+    });
+    var title = document.getElementById('app-title');
+    var backBtn = root.querySelector('[data-app-back]');
+    var navItems = qa('[data-app-nav-item]', root);
+    var currentScreen = 'home';
+
+    function showScreen(name) {
+      if (!screens[name]) return;
+      currentScreen = name;
+      Object.keys(screens).forEach(function (key) {
+        screens[key].hidden = key !== name;
+      });
+      if (title) title.textContent = APP_TITLES[name] || '';
+      if (backBtn) backBtn.hidden = name !== 'signin';
+      /* شاشة فرعية كاملة العرض: شريط الألسنة يختفي كما في تطبيقات الهاتف */
+      root.classList.toggle('app-shell--subscreen', name === 'signin');
+      var navKey = name === 'signin' ? 'account' : name;
+      navItems.forEach(function (item) {
+        var active = item.getAttribute('data-app-nav-item') === navKey;
+        if (active) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
+      });
+      /* الرسوم داخل اللوحات المكشوفة حديثًا تُعاد قياسها بعد الظهور */
+      if (name === 'reports') refreshReports();
+      if (name === 'home') refreshHomeMetric();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    root.__appShowScreen = showScreen;
+    root.__appCurrentScreen = function () { return currentScreen; };
+
+    function refreshChartsIn(container) {
+      if (!container) return;
+      qa('[data-chart]', container).forEach(function (chart) {
+        if (window.MicroData) window.MicroData.render(chart);
+      });
+      qa('[data-main-comparison]', container).forEach(function (metric) {
+        if (window.MicroMetricComparison) window.MicroMetricComparison.render(metric);
+      });
+    }
+
+    function refreshReports() {
+      var active = root.querySelector('.app-tabpanel:not([hidden])') || screens.reports;
+      refreshChartsIn(active);
+    }
+
+    function refreshHomeMetric() {
+      refreshChartsIn(screens.home);
+    }
+
+    qa('[data-app-goto]', root).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        showScreen(btn.getAttribute('data-app-goto'));
+      });
+    });
+    navItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        showScreen(item.getAttribute('data-app-nav-item'));
+      });
+    });
+    if (backBtn) backBtn.addEventListener('click', function () { showScreen('account'); });
+
+    /* ---- الرسائل: توست + إعلان المعاينة (عقد B06/A2-F05 نفسه) ---- */
+    var toast = document.getElementById('app-toast');
+    var toastText = document.getElementById('app-toast-text');
+    function showToast(text) {
+      if (!toast || !window.MicroMessages) return;
+      if (toastText) toastText.textContent = text;
+      window.MicroMessages.toast(toast);
+    }
+    function announce(text) {
+      if (window.MicroMessages) window.MicroMessages.announce(text, { id: 'app-announce' });
+    }
+
+    /* ---- شاشة الطلبات: order-schedule الحقيقي + محرر المضيف ---- */
+    var APP_STATUSES = {
+      progress: { label: 'قيد التنفيذ', tone: 'progress' },
+      done: { label: 'تم التسليم', tone: 'success' },
+      hold: { label: 'بانتظار العميل', tone: 'warning' }
+    };
+    var APP_TODAY = '2026-10-07';
+    var appOrders = [
+      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-10-07', time: '14:30', statusKey: 'progress', customer: 'مطزاوية الفيصل', note: 'تجهيز صالة الاستقبال' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-10-07', time: '09:00', statusKey: 'done', customer: 'شركة الواحة', note: null },
+      { id: 'od-03', title: 'طلب مستلزمات الضيافة', date: '2026-10-08', time: '18:45', statusKey: 'progress', note: 'يشمل أكوابًا ورقية' },
+      { id: 'od-04', title: 'طلب تعقيم غرف الاجتماعات', date: '2026-10-09', time: '16:00', statusKey: 'done' },
+      { id: 'od-05', title: 'طلب صيانة أجهزة العرض', date: '2026-10-12', time: null, statusKey: 'hold', note: 'بانتظار قطعة الغيار' },
+      { id: 'od-06', title: 'طلب تجهيز معرض المنتجات', date: '2026-10-15', time: '12:00', statusKey: 'progress', customer: 'وحدة التسويق' },
+      { id: 'od-07', title: 'طلب عناية حدائق', date: null, time: null, statusKey: 'progress', customer: 'الحديقة الغربية' }
+    ];
+    var appDemo = { editingId: null, addingFor: null, supplier: null, pendingDelete: null, seq: 100 };
+
+    var ocalRoot = document.getElementById('app-ocal-root');
+    var ocalInstance = null;
+    if (ocalRoot && window.MicroOrderSchedule) {
+      ocalInstance = window.MicroOrderSchedule.init(ocalRoot, {
+        orders: appOrders,
+        statuses: APP_STATUSES,
+        today: APP_TODAY,
+        selectedDate: APP_TODAY,
+        view: 'calendar',
+        calendarView: 'month',
+        orderActions: { edit: true, delete: true }
+      });
+
+      function findOrder(id) {
+        for (var i = 0; i < appOrders.length; i++) {
+          if (appOrders[i].id === id) return appOrders[i];
+        }
+        return null;
+      }
+
+      var editor = document.getElementById('app-ocal-editor');
+      var editorHeading = document.getElementById('app-ocal-editor-heading');
+      var editorDate = document.getElementById('app-ocal-editor-date');
+      var editorTitle = document.getElementById('app-ocal-editor-title');
+      var editorTime = document.getElementById('app-ocal-editor-time');
+      var editorStatus = document.getElementById('app-ocal-editor-status');
+      var editorNote = document.getElementById('app-ocal-editor-note');
+      var supplierValue = document.getElementById('app-supplier-value');
+
+      function pad2(n) { return (n < 10 ? '0' : '') + n; }
+      /* التاريخ المرئي للمحرر رقمي (عقد الأرقام في سطح المنتج) */
+      function numericDate(iso) {
+        var p = iso && /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+        return p ? p[3] + '/' + p[2] + '/' + p[1] : null;
+      }
+
+      function openEditor(opts) {
+        if (!editor) return;
+        appDemo.editingId = opts.mode === 'edit' ? opts.order.id : null;
+        appDemo.addingFor = opts.mode === 'add' ? (opts.date || null) : null;
+        appDemo.supplier = opts.mode === 'edit' ? (opts.order.customer || null) : null;
+        if (editorHeading) {
+          editorHeading.textContent = opts.mode === 'edit' ? 'تعديل الطلب' : 'إضافة طلب';
+        }
+        if (editorDate) {
+          var d = opts.mode === 'edit' ? opts.order.date : appDemo.addingFor;
+          editorDate.textContent = 'التاريخ: ' + (numericDate(d) || 'غير مجدول');
+        }
+        editorTitle.value = opts.mode === 'edit' ? opts.order.title : '';
+        editorTime.value = (opts.mode === 'edit' && opts.order.time) ? opts.order.time : '';
+        editorStatus.value = opts.mode === 'edit' ? opts.order.statusKey : 'progress';
+        editorNote.value = (opts.mode === 'edit' && opts.order.note) ? opts.order.note : '';
+        if (supplierValue) supplierValue.textContent = appDemo.supplier || 'بدون مورد';
+        editor.hidden = false;
+        if (window.MicroFields) {
+          var field = editorTitle.closest('.m-field');
+          if (field) window.MicroFields.sync(field);
+        }
+        editorTitle.focus({ preventScroll: false });
+      }
+
+      function closeEditor() {
+        if (!editor) return;
+        editor.hidden = true;
+        var editingId = appDemo.editingId;
+        appDemo.editingId = null;
+        appDemo.addingFor = null;
+        var row = editingId
+          ? ocalRoot.querySelector('[data-ocal-id="' + editingId + '"][data-ocal-action="order-row"]')
+          : null;
+        if (!row) row = ocalRoot.querySelector('[data-ocal-action="add"]');
+        if (row && row.focus) row.focus({ preventScroll: true });
+      }
+
+      function saveEditor() {
+        var title = editorTitle.value.trim();
+        if (!title) {
+          editorTitle.setAttribute('aria-invalid', 'true');
+          editorTitle.focus();
+          return;
+        }
+        editorTitle.removeAttribute('aria-invalid');
+        var timeOk = /^([01]\d|2[0-3]):[0-5]\d$/.test(editorTime.value);
+        if (appDemo.editingId) {
+          var order = findOrder(appDemo.editingId);
+          if (order) {
+            order.title = title;
+            order.time = timeOk ? editorTime.value : null;
+            order.statusKey = editorStatus.value;
+            order.note = editorNote.value.trim() || null;
+            order.customer = appDemo.supplier;
+            showToast('تم حفظ تعديل الطلب');
+            announce('تم حفظ تعديل الطلب');
+          }
+        } else {
+          appDemo.seq++;
+          appOrders.push({
+            id: 'app-' + appDemo.seq,
+            title: title,
+            date: appDemo.addingFor,
+            time: timeOk ? editorTime.value : null,
+            statusKey: editorStatus.value,
+            customer: appDemo.supplier,
+            note: editorNote.value.trim() || null
+          });
+          showToast('أُضيف الطلب إلى جدول اليوم');
+          announce('أُضيف الطلب إلى جدول اليوم');
+        }
+        if (ocalInstance) ocalInstance.setData(appOrders);
+        closeEditor();
+      }
+
+      if (editor) {
+        editor.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeEditor();
+          }
+        });
+        document.getElementById('app-ocal-editor-save').addEventListener('click', saveEditor);
+        document.getElementById('app-ocal-editor-cancel').addEventListener('click', closeEditor);
+      }
+
+      /* الحوار المركزي لتأكيد الحذف (عقد الطبقات B07 نفسه) */
+      var dialogLayer = document.getElementById('app-dialog-layer');
+      var dialogText = document.getElementById('app-dialog-text');
+      var dialogConfirm = document.getElementById('app-dialog-confirm');
+      function openDeleteDialog(order) {
+        if (!dialogLayer || !window.MicroNavigation) return;
+        appDemo.pendingDelete = order.id;
+        if (dialogText) dialogText.textContent = 'سيُحذف «' + order.title + '» من الجدول. لا يمكن التراجع.';
+        window.MicroNavigation.openLayer(dialogLayer, {
+          trigger: ocalRoot.querySelector('[data-ocal-id="' + order.id + '"][data-ocal-action="order-delete"]'),
+          backdropEl: document.querySelector('.m-layer-backdrop[data-for="app-dialog-layer"]')
+        });
+      }
+      if (dialogConfirm) {
+        dialogConfirm.addEventListener('click', function () {
+          var id = appDemo.pendingDelete;
+          if (id) {
+            appOrders = appOrders.filter(function (o) { return o.id !== id; });
+            if (ocalInstance) ocalInstance.setData(appOrders);
+            showToast('حُذف الطلب من الجدول');
+            announce('حُذف الطلب من الجدول');
+          }
+          appDemo.pendingDelete = null;
+          if (window.MicroNavigation) window.MicroNavigation.closeLayer(dialogLayer);
+        });
+      }
+
+      ocalRoot.addEventListener('order-schedule:add-request', function (e) {
+        openEditor({ mode: 'add', date: (e.detail && e.detail.date) || null });
+      });
+      ocalRoot.addEventListener('order-schedule:order-edit-request', function (e) {
+        var order = findOrder(e.detail && e.detail.id);
+        if (order) openEditor({ mode: 'edit', order: order });
+      });
+      ocalRoot.addEventListener('order-schedule:order-delete-request', function (e) {
+        var order = findOrder(e.detail && e.detail.id);
+        if (order) openDeleteDialog(order);
+      });
+    }
+
+    /* ---- منتجقي المورد (عقد المنتقي B03 نفسه) ---- */
+    var appPicker = document.getElementById('app-picker');
+    var supplierValueEl = document.getElementById('app-supplier-value');
+    if (appPicker && window.MicroPicker) {
+      window.MicroPicker.setOptions(appPicker, PICKER_DATA.normal);
+      appPicker.addEventListener('micro-picker:change', function (e) {
+        var label = e.detail && e.detail.label ? e.detail.label : null;
+        appDemo.supplier = label;
+        if (supplierValueEl) supplierValueEl.textContent = label || 'بدون مورد';
+        showToast('تم تحديد المورد');
+        /* سلوك تطبيق: الاختيار يغلق طبقة المنتقي ويستعيد تركيز المشغّل */
+        var pickerLayer = document.getElementById('app-picker-layer');
+        if (pickerLayer && window.MicroNavigation) {
+          window.MicroNavigation.closeLayer(pickerLayer);
+        }
+      });
+    }
+
+    /* ---- بوابة الدخول (SPEC-04): معالج محلي حتمي بلا شبكة ---- */
+    var gateway = document.getElementById('app-gateway-root');
+    if (window.MicroAccessGateway && gateway) {
+      window.MicroAccessGateway.init(gateway, {
+        onSubmit: function () {
+          return new Promise(function (resolve) {
+            window.setTimeout(function () {
+              resolve({
+                authenticated: true,
+                message: 'تم تسجيل الدخول في محاكاة العرض فقط: لا حساب حقيقي.'
+              });
+            }, 600);
+          });
+        }
+      });
+      gateway.addEventListener('micro-access:submitted', function (e) {
+        var result = e.detail && e.detail.result;
+        if (!result || !result.authenticated) return;
+        showToast('تم تسجيل الدخول');
+        announce('تم تسجيل الدخول');
+        showScreen('account');
+      });
+    }
+
+    var signinOpen = document.getElementById('app-signin-open');
+    if (signinOpen) signinOpen.addEventListener('click', function () {
+      showScreen('signin');
+    });
+
+    showScreen('home');
   }
 
   /* ---------------- سجل أحداث صغير ---------------- */

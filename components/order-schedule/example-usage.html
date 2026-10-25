@@ -88,7 +88,7 @@
 
     <section>
       <h2 id="demo-1-title">1) تقويم الشهر</h2>
-      <p class="hint">weekStart = 6 (السبت). محدّد يوم/أسبوع/شهر أعلى المكوّن ثم شريط الشهر مع منتقي الشهر/السنة ثم الشبكة بسبعة أعمدة — أيام الشهر كاملة وأيام الأشهر المجاورة خافتة قابلة للتحديد (العرض يتبع التحديد). أسفل الشبكة منطقة «طلبات اليوم/طلبات اليوم المحدد» بعدد وصفوف مدمجة وزر إضافة داخل الصفحة.</p>
+      <p class="hint">الأسبوع يبدأ الأحد (الافتراضي الموثق 2026-10-25؛ weekStart قابل للتعديل لكل مثيل). محدّد يوم/أسبوع/شهر أعلى المكوّن ثم شريط الشهر مع منتقي الشهر/السنة ثم الشبكة بسبعة أعمدة — أيام الشهر كاملة وأيام الأشهر المجاورة خافتة قابلة للتحديد (العرض يتبع التحديد). أسفل الشبكة منطقة «طلبات اليوم/طلبات اليوم المحدد» بعدد وصفوف مدمجة وزر إضافة داخل الصفحة.</p>
       <div id="demo-1"></div>
       <h3>سجل الأحداث</h3>
       <ul id="log-1" class="log" aria-label="سجل أحداث المثال الأول"></ul>
@@ -189,7 +189,6 @@
         orders: ORDERS,
         statuses: STATUSES,
         today: TODAY,
-        weekStart: 6,
         selectedDate: TODAY,
         view: 'calendar',
         calendarView: 'month',
@@ -219,7 +218,6 @@
         orders: ORDERS,
         statuses: STATUSES,
         today: TODAY,
-        weekStart: 6,
         selectedDate: TODAY,
         view: 'calendar',
         calendarView: 'week'
@@ -232,7 +230,6 @@
         orders: ORDERS,
         statuses: STATUSES,
         today: TODAY,
-        weekStart: 6,
         selectedDate: TODAY,
         view: 'calendar',
         calendarView: 'day'
@@ -245,7 +242,6 @@
         orders: ORDERS,
         statuses: STATUSES,
         today: TODAY,
-        weekStart: 6,
         selectedDate: TODAY,
         view: 'list'
       });
