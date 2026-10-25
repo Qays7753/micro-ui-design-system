@@ -6,7 +6,8 @@
 |---|---|
 | Branch | `replit/light-only-complete-ui-repair-2026-10-24` (نفس الفرع — لا فرع جديد) |
 | Starting head | `204495f7c463e2502f668bafdcf73a9746e95332` (رأس الفرع البعيد المحدد في الإحالة) |
-| Ending head | مسجَّل في وصف الالتزام أدناه (يُقرأ بـ `git rev-parse HEAD` بعد الدفع) |
+| Implementation ending commit | `95c893f2ed321b18156e4e3e6ccab354d838684b` (التزام التنفيذ الكامل: 81 ملفًا — البوابات والدليل وهذا التقرير) |
+| Delivery tip | هذا الالتزام نفسه (تسجيل السطر أعلاه) — يُتحقق منه بـ `git ls-remote origin replit/light-only-complete-ui-repair-2026-10-24` (دفع fast-forward نظيف من 204495f) |
 | `main` | **لم يُمَس** — بقي عند `161bb71adbed86e0df4382174cb07bd2fcb8d62d` محليًا وعلى البعيد طوال الجلسة (تحقق `git rev-parse main` + `git ls-remote origin main`) |
 | الدمج | لا يوجد — لا دمج ولا rebase ولا دفع إلى أي فرع آخر |
 
