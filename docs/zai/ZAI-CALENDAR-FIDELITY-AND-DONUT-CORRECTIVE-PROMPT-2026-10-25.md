@@ -102,30 +102,22 @@ The month grid must follow the reference's reading behavior, not merely pass geo
 The reference is not only a month grid. It clearly continues into an events area below the calendar. Implement the reusable equivalent for this repository:
 
 - A clear localized equivalent of `Events today` for the selected date.
-- Compact, polished event/order cards or rows directly below the grid.
-- Each event must expose its title, time when present, relevant secondary information, and semantic status.
-- Status must use this repository's semantic tokens and text, not the reference colors.
-- Each order/event must be rendered as an **extended horizontal bar/card spanning the available content width** inside the events region. Do not render narrow floating tiles or detached mini-cards.
-- The extended bar must preserve the reference's information hierarchy: title, time, secondary group/context, and semantic status belong inside the same bar/surface. Use our official semantic tokens and brand surfaces instead of copying the reference violet/blue/lavender values literally.
-- Edit and Delete actions must be embedded **inside the same order bar**, in a dedicated action cluster at the logical edge appropriate to RTL/LTR. They must not appear as separate circular buttons floating outside the bar, beside it, or detached from the order surface.
-- Embedded action controls must retain the repository's command hit target, remain visually compact, stay visible when titles wrap, and never clip or hide the title/time/status information. Use a responsive grid/flex contract with an action column; do not solve it by shrinking text below the component token contract.
-- The bar may grow vertically for long Arabic/English titles and notes, but its horizontal surface must remain full-width and its internal hierarchy must remain clear.
-- Add must be an obvious in-page action in the reference control/header and/or events region, not a floating thumb-zone button. Keep the host-level reference placement and the component contract consistent; do not create a dead decorative Add control.
+- Keep the current order/event content, title, time, secondary information, status, typography, colors, spacing, sizing, and layout exactly as they are now.
+- Apply one narrow geometry correction only: extend the existing order bar's outer visible surface behind the current Edit/Delete button area so the bar continues continuously up to and around those controls.
+- The existing Edit and Delete buttons remain two separate circular buttons with their current icons, visual style, hit targets, actions, and relative order. Do not merge them, redesign them, move them into the text content, or replace them with a new control.
+- The only intended relationship change is containment: the buttons must become visually and structurally part of the same outer order-bar row instead of appearing as detached circles outside the bar. The bar boundary/background must include the button area; do not add new content to the bar.
+- Preserve the current RTL/LTR placement logic. The buttons stay at the same logical edge and the existing order information stays in its current content area. Do not reorder or rewrite the title, time, status, or secondary information.
+- Preserve the current Add placement and all other Calendar, Showcase, header, controls, navigation, color, and component behavior. This correction must not introduce Filter, Bottom Navigation, a new Header, a new card design, a new event hierarchy, or any unrelated visual change.
+- The extended outer bar must remain safe for long Arabic/English content and simulated 200% typography without clipping or horizontal overflow. Do not shrink existing text or hide data to achieve the containment.
 - Empty, loading, error, retry, no-selected-day, long-title, long-note, and many-order states must remain honest and usable.
 
-Do not add the reference's bottom navigation, avatar, product title bar, or unrelated shell to the reusable Calendar. Implement the complete reference-screen shell only in the Showcase host and document the ownership. The final Showcase screenshot must visibly include the host-level header/control/nav composition so the owner can compare it with the supplied reference. Do not use component/host separation as a reason to omit the required visual regions from the Showcase.
+### Scope lock for this corrective pass
 
-### Required full-screen Showcase composition
+This is a narrow order-bar containment correction, not a new Calendar redesign. Keep the current Showcase composition and reusable component visuals unchanged except for the outer order-bar boundary described above. Do not add, remove, or rearrange the Header, controls, Filter, Add action, Bottom Navigation, view modes, Calendar grid, event content, colors, tokens, or navigation in this pass.
 
-The Showcase must provide a reference-screen mode that is visually comparable to the supplied HTML, while still mounting the real reusable Calendar component. It must include, using this repository's tokens and icons:
+### Existing Showcase composition
 
-1. Header row: back affordance, centered Calendar title, and profile/avatar position.
-2. Controls row: a meaningful host-owned filter action based on existing order/status semantics, the real `Day / Week / Month` selector, and a real Add Event/Order action.
-3. Month/week/day navigator and the real Calendar component.
-4. The extended full-width order bars described above.
-5. Host-level bottom navigation placement as reference chrome, without moving it into the reusable component.
-
-The filter and Add controls must not be dead visual placeholders. If the current host has no filter contract, implement the smallest honest filter over existing statuses/orders or document the exact host contract added. Do not silently omit these major reference regions.
+The existing Showcase composition remains authoritative for this pass. Keep its current Header, controls, navigation, Add placement, and host/component ownership exactly as implemented. Do not add a new reference-screen shell or a new Filter action as part of the order-bar correction.
 
 ### Interaction and contract requirements
 
@@ -136,7 +128,7 @@ The filter and Add controls must not be dead visual placeholders. If the current
 - Preserve RTL/LTR, keyboard navigation, focus recovery, accessible names, and visible focus.
 - Keep command targets at or above the repository's command target. Do not shrink controls to imitate the screenshot.
 - Do not introduce a Bottom Sheet or floating Add action into this Calendar flow.
-- Do not place Edit/Delete as detached circles outside an order bar; both actions belong inside the bar's action cluster.
+- Do not leave Edit/Delete visually detached outside the order bar. Keep both as the same two separate circular buttons, but extend the existing outer bar surface/row so the buttons are contained by that same bar boundary without changing their current appearance or content layout.
 - Update `components/order-schedule/specification.md`, the isolated example, Showcase fixtures, and regression tests together with the implementation.
 - Do not silently delete the existing list surface. If a contract is changed, document compatibility and migration behavior.
 
@@ -197,14 +189,13 @@ Capture fresh evidence at 320, 360, 390, and 430px in RTL and LTR for:
 - Week view.
 - Day view.
 - Event region with populated orders.
-- Extended full-width order bars with embedded Edit/Delete actions.
-- Complete reference-screen Showcase composition with header, controls, and host navigation chrome.
+- Existing order bars with the outer surface extended behind the existing Edit/Delete buttons.
 - Empty/no-selected-day state.
 - Donut no-data state with no SVG ring.
 - Donut real-zero state.
 - Donut malformed-value fallback and table.
 
-Compare the Calendar evidence against the owner image and HTML reference using this checklist: overall composition, header row, controls row, `Day / Week / Month` control, month header, grid scanability, selected/current-day distinction, full-width order bars, embedded Edit/Delete actions, event hierarchy, compact spacing, status treatment, host navigation chrome, and identity adaptation.
+Compare the updated evidence against the immediately previous branch state using this checklist: unchanged Calendar composition, unchanged order content, continuous outer order-bar surface, Edit/Delete buttons still circular and in their current positions, buttons visually contained by the same bar boundary, RTL/LTR placement, long-text behavior, no overflow, and no unrelated visual or behavioral changes.
 
 ## Required report and delivery
 
