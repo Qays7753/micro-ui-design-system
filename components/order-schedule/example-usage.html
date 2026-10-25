@@ -76,39 +76,46 @@
     <header>
       <h1>مكوّن جدول الطلبات المجدولة (MicroOrderSchedule)</h1>
       <p>
-        وثيقة استخدام: ثلاث حالات حية على العقد نفسه — init ثم الأحداث
+        وثيقة استخدام: أربع حالات حية على العقد نفسه — init ثم الأحداث
         (day-select / order-open / add-request) وعمليات
         setData / setSelectedDate / setView / setCalendarView / setLoading / setError / destroy.
         بيانات العينة مثبتة حول 2026-10-07 (أمس/اليوم/غدًا/أسبوعان قادمان/ماضٍ/غير مجدول،
         حالات مختلطة، مفتاح حالة غير معروف، وعنوان طويل جدًا). لا HTML من البيانات: أي نص
-        ممرر يظهر حرفيًا.
+        ممرر يظهر حرفيًا. محدّد يوم/أسبوع/شهر حقيقي (مرجع المالك 2026-10-25)؛ القائمة سطح
+        منفصل يستدعيه المستهلك عبر setView('list').
       </p>
     </header>
 
     <section>
       <h2 id="demo-1-title">1) تقويم الشهر</h2>
-      <p class="hint">weekStart = 6 (السبت). اختر الشهر والسنة من العنوان، وشبكة الشهر كاملة عند كل عرض — بعرض مدمج عند ضيق الجذر يبقي كل أيام الشهر. التنقل لا يغيّر اليوم المحدد حتى تختار تاريخًا؛ تظهر طلباته أسفل التقويم.</p>
+      <p class="hint">weekStart = 6 (السبت). محدّد يوم/أسبوع/شهر أعلى المكوّن ثم شريط الشهر مع منتقي الشهر/السنة ثم الشبكة بسبعة أعمدة — أيام الشهر كاملة وأيام الأشهر المجاورة خافتة قابلة للتحديد (العرض يتبع التحديد). أسفل الشبكة منطقة «طلبات اليوم/طلبات اليوم المحدد» بعدد وصفوف مدمجة وزر إضافة داخل الصفحة.</p>
       <div id="demo-1"></div>
       <h3>سجل الأحداث</h3>
       <ul id="log-1" class="log" aria-label="سجل أحداث المثال الأول"></ul>
     </section>
 
     <section>
-      <h2>2) عرض اليوم</h2>
-      <p class="hint">calendarView = 'day': التاريخ الكامل والعدد وزرا اليوم السابق/التالي، ثم صفوف اليوم المدمجة. الوقت يظهر داخل الصف فقط إن وُجد.</p>
+      <h2>2) عرض الأسبوع</h2>
+      <p class="hint">calendarView = 'week': صف الأسبوع الذي يحوي اليوم المحدد (سبعة أيام حقيقية قد تعبر حد الشهر) بنفس تشريح خلية الشهر، وشريط أسبوع بأزرار ±7 أيام وزر «اليوم»، ومنطقة أحداث اليوم المحدد أسفل الصف. الأسهم تمشي يومًا/أسبوعًا بالتحديد نفسه.</p>
       <div id="demo-2"></div>
     </section>
 
     <section>
-      <h2>3) القائمة + حالة الخطأ + حالة الفراغ</h2>
-      <p class="hint">القادمة بالأقرب موعدًا أولًا ثم السابقة (الأحدث أولًا) ثم غير المجدولة. «محاكاة فشل التحميل» تعرض الخطأ مع زر إعادة المحاولة الذي يستدعي callback المستهلك وينجح في المحاولة الثانية.</p>
+      <h2>3) عرض اليوم</h2>
+      <p class="hint">calendarView = 'day': التاريخ الكامل وزرا اليوم السابق/التالي وزر «اليوم»، ثم منطقة أحداثه (العدد + الإضافة + الصفوف المدمجة). الوقت يظهر داخل الصف فقط إن وُجد.</p>
+      <div id="demo-3"></div>
+    </section>
+
+    <section>
+      <h2>4) القائمة + حالة الخطأ + حالة الفراغ</h2>
+      <p class="hint">سطح منفصل يستدعيه المستهلك عبر setView('list') — ليس زرًا في محدّد يوم/أسبوع/شهر. القادمة بالأقرب موعدًا أولًا ثم السابقة (الأحدث أولًا) ثم غير المجدولة. «محاكاة فشل التحميل» تعرض الخطأ مع زر إعادة المحاولة الذي يستدعي callback المستهلك وينجح في المحاولة الثانية.</p>
       <div class="controls">
         <button id="btn-fail" type="button">محاكاة فشل التحميل</button>
         <button id="btn-empty" type="button">عرض حالة الفراغ</button>
         <button id="btn-restore" type="button">استعادة البيانات</button>
       </div>
-      <div id="demo-3"></div>
-      <ul id="log-3" class="log" aria-label="سجل أحداث المثال الثالث"></ul>
+      <div id="demo-4"></div>
+      <ul id="log-4" class="log" aria-label="سجل أحداث المثال الرابع"></ul>
     </section>
   </main>
 
@@ -176,7 +183,7 @@
         });
       }
 
-      /* ---- الحالة 1: تقويم الشهر (عرضان: expanded/agenda + أفعال المضيف) ---- */
+      /* ---- الحالة 1: تقويم الشهر (شبكة كاملة + منطقة أحداث اليوم) ---- */
       var root1 = document.getElementById('demo-1');
       var demo1 = MicroOrderSchedule.init(root1, {
         orders: ORDERS,
@@ -194,8 +201,9 @@
         var layout = root1.getAttribute('data-ocal-layout');
         var compact = root1.getAttribute('data-ocal-compact') === 'true';
         var label = layout === 'day' ? 'عرض اليوم'
+          : (layout === 'week-grid' ? 'عرض الأسبوع'
           : (layout === 'list' ? 'عرض القائمة'
-          : (compact ? 'شبكة الشهر المدمجة' : 'تقويم الشهر'));
+          : (compact ? 'شبكة الشهر المدمجة' : 'تقويم الشهر')));
         calendarTitle.textContent = '1) ' + label;
       }
       syncCalendarTitle();
@@ -205,7 +213,7 @@
       /* بيانات العينة معروضة للفحص الآلي (قراءة فقط) — نفس مصفوفة ORDERS */
       window.__OCAL_DEMO = { orders: ORDERS, statuses: STATUSES, today: TODAY };
 
-      /* ---- الحالة 2: عرض اليوم ---- */
+      /* ---- الحالة 2: عرض الأسبوع (صف أسبوع اليوم المحدد + أحداثه) ---- */
       var root2 = document.getElementById('demo-2');
       var demo2 = MicroOrderSchedule.init(root2, {
         orders: ORDERS,
@@ -214,11 +222,11 @@
         weekStart: 6,
         selectedDate: TODAY,
         view: 'calendar',
-        calendarView: 'day'
+        calendarView: 'week'
       });
       window.__demo2 = demo2;
 
-      /* ---- الحالة 3: القائمة + الخطأ + الفراغ ---- */
+      /* ---- الحالة 3: عرض اليوم ---- */
       var root3 = document.getElementById('demo-3');
       var demo3 = MicroOrderSchedule.init(root3, {
         orders: ORDERS,
@@ -226,10 +234,23 @@
         today: TODAY,
         weekStart: 6,
         selectedDate: TODAY,
+        view: 'calendar',
+        calendarView: 'day'
+      });
+      window.__demo3 = demo3;
+
+      /* ---- الحالة 4: القائمة + الخطأ + الفراغ ---- */
+      var root4 = document.getElementById('demo-4');
+      var demo4 = MicroOrderSchedule.init(root4, {
+        orders: ORDERS,
+        statuses: STATUSES,
+        today: TODAY,
+        weekStart: 6,
+        selectedDate: TODAY,
         view: 'list'
       });
-      attachLog(root3, document.getElementById('log-3'));
-      window.__demo3 = demo3;
+      attachLog(root4, document.getElementById('log-4'));
+      window.__demo4 = demo4;
 
       /* فشل التحميل: المحاولة الأولى تفشل والمحاولة الثانية (زر إعادة
          المحاولة) تنجح — المكوّن لا يعيد التحميل بنفسه: callback
@@ -237,21 +258,21 @@
       var failAttempts = 0;
       function consumerRetry() {
         failAttempts++;
-        demo3.setLoading(true);
+        demo4.setLoading(true);
         window.setTimeout(function () {
-          if (failAttempts >= 2) demo3.setData(ORDERS);
-          else demo3.setError(consumerRetry);
+          if (failAttempts >= 2) demo4.setData(ORDERS);
+          else demo4.setError(consumerRetry);
         }, 500);
       }
       document.getElementById('btn-fail').addEventListener('click', function () {
         failAttempts = 0;
-        demo3.setError(consumerRetry);
+        demo4.setError(consumerRetry);
       });
       document.getElementById('btn-empty').addEventListener('click', function () {
-        demo3.setData([]);
+        demo4.setData([]);
       });
       document.getElementById('btn-restore').addEventListener('click', function () {
-        demo3.setData(ORDERS);
+        demo4.setData(ORDERS);
       });
     })();
   </script>

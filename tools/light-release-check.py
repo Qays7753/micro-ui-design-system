@@ -630,7 +630,9 @@ def main():
                                     .map(node=>node.textContent.trim());
                                   return {layout:root.getAttribute('data-ocal-layout'),
                                     compact:root.getAttribute('data-ocal-compact'),
-                                    gridDays:root.querySelectorAll('[data-ocal-grid] [data-ocal-date]').length,
+                                    gridDays:root.querySelectorAll('[data-ocal-grid] [data-ocal-date^="2026-10"]').length,
+                                    gridTotal:root.querySelectorAll('[data-ocal-grid] [data-ocal-date]').length,
+                                    gridOut:root.querySelectorAll('[data-ocal-grid] .m-ocal__cell--out').length,
                                     rootWidth:r.width,rootClient:root.clientWidth,rootScroll:root.scrollWidth,
                                     documentWidth:document.documentElement.scrollWidth,viewport:innerWidth,
                                     selected,displayed,rows,documentLanguage:document.documentElement.lang,
@@ -649,6 +651,8 @@ def main():
                                       and initial["layout"] == expected_layout
                                       and initial["compact"] == expected_compact
                                       and initial["gridDays"] == 31
+                                      and initial["gridTotal"] == 42
+                                      and initial["gridOut"] == 11
                                       and initial["selected"] == "2026-10-07"
                                       and "أكتوبر 2026" in initial["displayed"]
                                       and normal_title in initial["rows"]

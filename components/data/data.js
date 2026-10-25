@@ -1091,7 +1091,14 @@
      R8-07a: نفس فصل نص المستخدم عن تشخيص المطور المطبق على bars/line —
      رسالة موحدة موجزة بلا أسماء سمات أو تعليمات، والسبب/القيم في
      data-scale-state/data-scale-detail على جذر الرسم (عقد موثق في
-     specification.md؛ حالات donut: invalid/over/conflict). */
+     specification.md؛ حالات donut: invalid/over/conflict).
+     2026-10-25 (تصحيح المالك — عيبا الدونات): (أ) لا بيانات ≠ حلقة
+     فراغ: لا هندسة SVG إطلاقًا في مسار اللا-بيانات — حالة فراغ
+     صادقة موحّدة مع بقية العائلات (الصفر الحقيقي يبقى بحالته
+     المتعمدة بحلقة صفرية مقروءة). (ب) القيم المشوهة: رفض النسب
+     يشمل المفتاح فعلًا (لا نسب لأي فئة)، وتصنيف الحالة موحّد بين
+     المفتاح والجدول (الخام محفوظ + «قيمة غير صالحة»)، مميزًا عن
+     المفقود/المجهول («(غير متاح)»). */
 
   /* R8-07a: رسالة رفض donut — نص مستخدم موجز موحد + تشخيص تقني كامل
      على الجذر (يُقرأ من الكود/السجلات لا من الواجهة). لا HTML ولا
@@ -1207,8 +1214,16 @@
       donutRefusal(chart, plot, 'conflict',
         'donut: data-total="0" بينما مجموع الفئات ' + fmt(sum) + ' — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
     } else if (noData) {
-      /* R2-05: عدم توفر البيانات ليس صفرًا — «— / لا توجد بيانات» */
-      emptyRing('—', 'لا توجد بيانات');
+      /* 2026-10-25 (تصحيح المالك أ): لا بيانات ليست حلقة فراغ ولا صفرًا —
+         لا SVG ولا حلقة ولا علامات وهمية إطلاقًا؛ حالة فراغ صادقة
+         موحّدة مع بقية العائلات داخل خانة الرسم، والفئات الموجودة
+         (كلها مجهولة القيمة) تبقى في المفتاح بإفصاح كامل */
+      var emptyDonut = document.createElement('p');
+      emptyDonut.className = 'm-chart__empty';
+      emptyDonut.setAttribute('role', 'status');
+      emptyDonut.textContent = 'لا توجد بيانات لعرضها.';
+      plot.appendChild(emptyDonut);
+      chart.setAttribute('data-scale-state', 'empty');
     } else if (unknownTotal) {
       /* R2-05: خلط مجهول/صفر والمجموع صفر بلا مقام معلن — لا دعوى بإجمالي صفر */
       emptyRing('—', 'الإجمالي غير معلوم');
@@ -1276,8 +1291,13 @@
     }
 
     /* مفتاح بقيم كاملة — عقد DOM وtextContent دائمًا (لا innerHTML:
-       تسمية المستهلك تعرض كنص حرفي) */
-    var noPercent = declaredInvalid || declaredNegative || (declaredZero && sum > 0)
+       تسمية المستهلك تعرض كنص حرفي).
+       2026-10-25 (تصحيح المالك ب): رفض النسب يشمل المفتاح فعلًا —
+       `malformed` في noPercent فلا تظهر أي نسب في مسار الرفض،
+       وتصنيف الحالة موحّد مع الجدول: القيمة المشوهة تعرض قراءتها
+       الخام + «(قيمة غير صالحة)»، والمفقودة/المجهولة «(غير متاح)»،
+       والسالبة تبقى «(غير صالح للنسب)» */
+    var noPercent = malformed || declaredInvalid || declaredNegative || (declaredZero && sum > 0)
       || sumExceeds || hasInvalid || noData || unknownTotal || zeroCase;
     var legend = document.createElement('ul');
     legend.className = 'm-legend';
@@ -1308,11 +1328,14 @@
       li.appendChild(label);
       var val = document.createElement('span');
       val.className = 'm-legend__value';
-      val.textContent = it.value === null ? '(غير متاح)' : fmt(it.value) + ' (غير صالح للنسب)';
+      /* 2026-10-25: نفس تصنيف الجدول — المشوه بقراءته الخام، والمفقود مجهول */
+      val.textContent = (it.value === null)
+        ? (it.invalid ? String(it.rawValue) + ' (قيمة غير صالحة)' : '(غير متاح)')
+        : fmt(it.value) + ' (غير صالح للنسب)';
       li.appendChild(val);
       legend.appendChild(li);
     });
-    plot.appendChild(legend);
+    if (items.length) plot.appendChild(legend);
   }
 
   /* ---- W3.1 (A4-D01/A4-R02 — D-UI-04): اسم ووصف الرسم مربوطان برمجيًا ----
@@ -1348,7 +1371,16 @@
      بنيويًا (لا انحراف ممكن)، ويُفتح بالمفتاح المجهز (aria-expanded +
      aria-controls) — مسار الوصول الكامل للقراءات مستقلًا عن الرسم. */
   function valueStateText(it) {
-    if (it.value === null) return it.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
+    if (it.value === null) {
+      /* 2026-10-25 (تصحيح المالك ب): القراءة الخام محفوظة مع تصنيف
+         «قيمة غير صالحة» — نفس عبارتي المفتاح والرسم (readingOf) */
+      if (it.invalid) {
+        var raw = (it.rawValue !== null && String(it.rawValue).trim() !== '')
+          ? String(it.rawValue) + ' ' : '';
+        return raw + '(قيمة غير صالحة)';
+      }
+      return '(غير متاح)';
+    }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
     if (it.value < 0 && !it.signed) return base + ' (سالب غير مرسوم)';
     return it.outlier ? base + ' (قيمة شاذة)' : base;
@@ -1589,8 +1621,10 @@
     chart.removeAttribute('data-scale-detail');
     chart.removeAttribute('data-axis-state');
     var domain = chart.getAttribute('data-value-domain') || 'non-negative';
-    /* 2026-10-25 (عقد المالك): الفراغ يشمل الدوائر المساحية أيضًا — لا
-       إطار فارغ صامت؛ نفس حالة «لا توجد بيانات» الموثقة bars/line */
+    /* 2026-10-25 (عقد المالك): الفراغ يشمل الدوائر المساحية والتوزيع
+       الدائري أيضًا — لا إطار فارغ صامت؛ نفس حالة «لا توجد بيانات»
+       الموثقة bars/line (التوزيع يعالج داخليًا أيضًا مسار كل القيم
+       مجهولة بنفس الحالة — انظر renderDonut) */
     if ((kind === 'bars' || kind === 'line' || kind === 'bubbles') && items.length === 0) {
       var emptyPlot = chart.querySelector('[data-plot]');
       emptyPlot.textContent = '';

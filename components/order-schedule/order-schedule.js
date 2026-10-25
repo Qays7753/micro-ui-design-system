@@ -9,12 +9,12 @@
      setData(orders)             تحديث كامل بلا إعادة تهيئة
      setSelectedDate('YYYY-MM-DD')
      setView('calendar'|'list')
-     setCalendarView('month'|'day')
+     setCalendarView('month'|'week'|'day')
      setLoading(true|false)
      setError(retryCallback|null)
      destroy()
    options: orders, statuses, today, weekStart, selectedDate, view,
-            calendarView, presentation, orderActions{edit,delete},
+            calendarView ('month'|'week'|'day'), orderActions{edit,delete},
             headingLevel, loading, retry
    أحداث CustomEvent على الجذر (bubbles):
      order-schedule:day-select           {date:'YYYY-MM-DD'}
@@ -22,6 +22,17 @@
      order-schedule:add-request          {date:'YYYY-MM-DD'|null}
      order-schedule:order-edit-request   {id}
      order-schedule:order-delete-request {id}
+
+   عقد 2026-10-25 (مرجع المالك calendar-reference-implementation.html):
+   محدّد يوم/أسبوع/شهر حقيقي بثلاث حالات فاعلة (لا بديل «قائمة»
+   فيه — القائمة سطح منفصل عبر setView('list') يستدعيه المضيف).
+   الشهر: شبكة سبعة أعمدة بأيام الشهر المعروض + أيام الأشهر
+   المجاورة خافتة قابلة للتحديد (العرض يتبع التحديد)، ثم منطقة
+   «طلبات اليوم» أسفل الشبكة (عنوان + عبارة عدد + إضافة + بطاقات
+   صفوف مدمجة). الأسبوع: صف الأسبوع الذي يحوي اليوم المحدد +
+   نفس منطقة الأحداث. اليوم: شريط اليوم + صفوفه. لا عرضا
+   expanded/agenda بعد الآن (عقد ملغٍ 2026-10-25 — منطقة الأحداث
+   ظاهرة دائمًا أسفل الشبكة كما في المرجع).
 
    قواعد ثابتة:
    - عربي RTL (يُعاد تقييم الاتجاه عند كل تصيير، ومراقب dir على
@@ -35,20 +46,15 @@
    - الحالة تأتي من خريطة المستهلك فقط: مفتاح مجهول → محايد
      بنص المفتاح الخام (لا إخفاء ولا خطأ). لا استنتاج حالة من
      التاريخ ولا أي معنى مالي.
-   - عقد 2026-10-25 (مرجع مفهوم التقويم): عرضان متناسقان لشبكة
-     الشهر — expanded (الشبكة الكاملة + لوحة اليوم أسفلها) وagenda
-     (الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد أسفلها).
-     اليوم داخل التقويم هو نقطة الدخول؛ لا زر إضافة عائم ولا Bottom
-     Sheet في هذا المسار؛ أفعال تعديل/حذف كل طلب على صفّه في لوحة
-     اليوم/الأجندة فقط، وحدثاهما مستهدفة على صفّهما host-owned.
+   - عقد 2026-10-24 (مرجع المالك): اليوم داخل التقويم هو نقطة
+     الدخول؛ لا زر إضافة عائم ولا Bottom Sheet في هذا المسار؛ أفعال
+     تعديل/حذف كل طلب على صفّه في منطقة أحداث اليوم فقط، وحدثاهما
+     مستهدفتان على صفّهما host-owned.
    - مستمعان مفوّضان على الجذر فقط (click + keydown) + focusout
      يغلق منتقي الشهر عند مغادرة التركيز الجذر + مستمع Escape مفرد
      على document أثناء فتح المنتقي فقط — تسجل مرة عند التهيئة
      وتُنتزع في destroy() — إعادة التصيير لا تضيف مستمعات،
      والتهيئة المزدوجة آمنة (data-ocal-init).
-   - لا مؤقتات دائمة ولا rAF دائم داخل المكوّن؛ الاستخدام الوحيد
-     rAF عابر لتجميع أحداث تغيّر المساحة (ResizeObserver) يُلغى في
-     destroy — صياغة العقد موثقة في المواصفة §3.
    ========================================================= */
 
 (function () {
@@ -73,7 +79,6 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   var instances = new WeakMap();
-  var AGENDA_ID_SEQ = 0; /* معرّفات فريدة لمناطق إفصاح الأجندة */
 
   /* =======================================================
      أدوات عامة
@@ -309,16 +314,15 @@
     state.selectedDate = (typeof options.selectedDate === 'string' && DATE_RE.test(options.selectedDate))
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
-    state.calendarView = (options.calendarView === 'day') ? 'day' : 'month';
-    /* عقد 2026-10-25 — عرضان متناسقان لشهر الشبكة:
-       expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
-       agenda: الشبكة نفسها مضغوطة + منطقة إفصاح هادئة ليوم التحديد
-       (data-ocal-agenda-open) — الطي يبدأ مغلقًا دائمًا (هادئًا). */
-    state.presentation = (options.presentation === 'agenda') ? 'agenda' : 'expanded';
-    state.agendaOpen = false;
+    /* عقد 2026-10-25 (مرجع المالك — محدّد يوم/أسبوع/شهر): ثلاث
+       حالات فاعلة لعرض التقويم؛ خيار غير صالح يسقط إلى الشهر
+       (حالة المقارنة مع المرجع). القائمة سطح منفصل عبر view:'list'
+       يستدعيه المضيف — ليست زرًا في المحدّد. */
+    state.calendarView = (options.calendarView === 'day' || options.calendarView === 'week')
+      ? options.calendarView : 'month';
     /* أفعال صفوف الطلب (تعديل/حذف) host-owned: تُرسَم فقط عند تفعيلها
-       صراحة، وفقط على صفوف لوحة اليوم/الأجندة (سطح فعل اليوم المحدد)،
-       ولا تُرسَم في القائمة — الإضافة تبقى فعل اليوم دائمًا. */
+       صراحة، وفقط على صفوف منطقة أحداث اليوم المحدد (سطح فعل
+       اليوم)، ولا تُرسَم في القائمة — الإضافة تبقى فعل اليوم دائمًا. */
     state.orderActions = {
       edit: !!(options.orderActions && options.orderActions.edit),
       delete: !!(options.orderActions && options.orderActions.delete)
@@ -471,24 +475,18 @@
       root.setAttribute('data-ocal-root', '');
       root.setAttribute('data-ocal-view', state.view);
       root.setAttribute('data-ocal-cal-view', state.calendarView);
-      root.setAttribute('data-ocal-preferred-cal-view', state.calendarView);
-      /* عقد 2026-10-24: شبكة الشهر الكاملة عرضًا واحدًا عند كل عرض جذر؛
+      /* عقد 2026-10-24: شبكة التقويم الكاملة عرضًا واحدًا عند كل عرض جذر؛
          الضيق (<360px) حالة عرض CSS على الجذر عبر data-ocal-compact
-         وليست تخطيطًا بديلًا — لا مسار تواريخ ولا أيام مفقودة. */
+         وليست تخطيطًا بديلًا — لا مسار تواريخ ولا أيام مفقودة.
+         عقد 2026-10-25 (مرجع المالك): الشبكة تحوي أيضًا أيام الأشهر
+         المجاورة (خافتة قابلة للتحديد) فتكتمل مستطيل الشبكة كما في
+         المرجع — عرض الأسبوع صفّ الأسبوع نفسه. */
       var layout = state.view === 'list' ? 'list' :
-        (state.calendarView === 'day' ? 'day' : 'month-grid');
+        (state.calendarView === 'day' ? 'day' :
+          (state.calendarView === 'week' ? 'week-grid' : 'month-grid'));
       root.setAttribute('data-ocal-layout', layout);
       root.setAttribute('data-ocal-compact', state.compactMonth ? 'true' : 'false');
       root.setAttribute('data-ocal-selected-date', state.selectedDate);
-      /* عقد 2026-10-25: عرضا شهر الشبكة — expanded/agenda على الجذر،
-         وحالة فتح منطقة إفصاح الأجندة (في عرض الأجندة فقط) */
-      root.setAttribute('data-ocal-presentation', state.presentation);
-      if (state.presentation === 'agenda' && state.view === 'calendar' &&
-          state.calendarView === 'month') {
-        root.setAttribute('data-ocal-agenda-open', state.agendaOpen ? 'true' : 'false');
-      } else {
-        root.removeAttribute('data-ocal-agenda-open');
-      }
 
       /* أسبقية حالات العرض: آخر استدعاء يملك الشاشة — setError يمسح
          الانتظار وsetLoading(true) يمسح الخطأ وsetData يمسحهما معًا
@@ -496,29 +494,32 @@
          R-13 (2026-10-25): شريط تقويم/قائمة يبقى قابلًا للاستخدام فوق
          صندوق الحالة — لا حالة بلا مخرج للتنقل. */
       if (state.loading) {
-        root.appendChild(buildControlsRow(false));
+        root.appendChild(buildControlsRow());
         root.appendChild(buildLoading());
         return;
       }
       if (state.errorRetry) {
-        root.appendChild(buildControlsRow(false));
+        root.appendChild(buildControlsRow());
         root.appendChild(buildError());
         return;
       }
-      /* عنصر التبديل يسكن صف التحكم داخل كل شاشة — نسخة واحدة
-         (شهر: مع زر الطي؛ يوم/قائمة/انتظار/خطأ: العنصر وحده) */
+      /* عنصر التبديل يسكن صف التحكم داخل كل شاشة — نسخة واحدة */
       if (state.view === 'list') root.appendChild(buildListScreen());
       else if (state.calendarView === 'day') root.appendChild(buildDayScreen());
+      else if (state.calendarView === 'week') root.appendChild(buildWeekScreen());
       else root.appendChild(buildMonthScreen());
     }
 
-    /* ---- شريط التبديل الموحّد (2026-10-25، مرجع المالك) — عنصر واحد
-       بثلاث حالات مضغوطة: شهر/يوم/قائمة — أزرار ضغط أصلية بسمة
-       aria-pressed معلنة (نمط المكوّن الموثق)؛ الزر المضغوط بتعبئة
-       البترولي ونص معكوس (لغة التحديد نفسها لخلية اليوم المحدد).
-       قائمة = view:list؛ يوم = view:calendar + cal-view:day؛
-       شهر = view:calendar + cal-view:month — تركيب الحالتين القائمتين
-       بلا API جديد (setView/setCalendarView كما هما). */
+    /* ---- عنصر التبديل الموحّد (عقد 2026-10-25 — مرجع المالك
+       calendar-reference-implementation.html): عنصر واحد بثلاث حالات
+       فاعلة «يوم/أسبوع/شهر» بترتيب المرجع (Day|Week|Month) — أزرار
+       ضغط أصلية بسمة aria-pressed معلنة؛ الزر المضغوط بتعبئة البترولي
+       ونص معكوس (لغة التحديد نفسها لخلية اليوم المحدد).
+       يوم = view:calendar + cal-view:day؛ أسبوع = view:calendar +
+       cal-view:week؛ شهر = view:calendar + cal-view:month.
+       القائمة ليست زرًا في هذا المحدّد (قرار مرجع المالك): سطح منفصل
+       يستدعيه المضيف عبر setView('list')، والمحدّد نفسه يبقى ظاهرًا
+       في شاشة القائمة للعودة إلى أي عرض تقويم. */
     function viewsegBtn(value, text, pressed) {
       var b = el('button', 'm-ocal__viewseg-btn');
       b.type = 'button';
@@ -530,39 +531,24 @@
     }
 
     function viewPressed(value) {
-      if (value === 'list') return state.view === 'list';
-      if (value === 'day') return state.view === 'calendar' && state.calendarView === 'day';
-      return state.view === 'calendar' && state.calendarView === 'month';
+      return state.view === 'calendar' && state.calendarView === value;
     }
 
     function buildViewSeg() {
       var bar = el('div', 'm-ocal__viewseg');
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'طريقة العرض');
-      bar.appendChild(viewsegBtn('month', 'شهر', viewPressed('month')));
       bar.appendChild(viewsegBtn('day', 'يوم', viewPressed('day')));
-      bar.appendChild(viewsegBtn('list', 'قائمة', viewPressed('list')));
+      bar.appendChild(viewsegBtn('week', 'أسبوع', viewPressed('week')));
+      bar.appendChild(viewsegBtn('month', 'شهر', viewPressed('month')));
       return bar;
     }
 
-    /* صف التحكم: [شهر|يوم|قائمة] + زر طي/توسيع الشهر الهادئ
-       (عرض agenda فقط) — سطر 48px واحد بدل ثلاثة (مرجع المالك:
-       ضغط كروم الرأس فوق الشبكة). */
-    function buildControlsRow(showPres) {
+    /* صف التحكم (ترتيب القراءة للمرجع): المحدّد أول عنصر في المكوّن
+       ثم شريط الشهر/الأسبوع/اليوم — سطر 48px واحد يلتف عند الضيق. */
+    function buildControlsRow() {
       var row = el('div', 'm-ocal__controls');
       row.appendChild(buildViewSeg());
-      if (showPres) {
-        var collapsed = state.presentation === 'agenda';
-        var pres = el('button', 'm-ocal__pres-btn',
-          collapsed ? 'توسيع الشهر' : 'طي الشهر');
-        pres.type = 'button';
-        pres.setAttribute('data-ocal-action', 'presentation');
-        pres.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
-        pres.setAttribute('aria-label', collapsed
-          ? 'توسيع عرض الشهر الكامل'
-          : 'طي الشهر إلى أجندة اليوم المحدد');
-        row.appendChild(pres);
-      }
       return row;
     }
 
@@ -712,10 +698,13 @@
     /* ---- خلية يوم (مرجع المالك 2026-10-25): رقم + ≤3 نقاط حالات
        كنظام مؤشر وحيد — النقاط تحت الرقم مباشرة (المجموعة تتوسّط
        الخلية) فتكون ملكية اليوم غير ملتبسة عبر الصفوف؛ العدّ خارج
-       الخلية (aria-label الخلية + لوحة اليوم/الأجندة يحملان «كم»).
+       الخلية (aria-label الخلية + منطقة الأحداث يحملان «كم»).
        سقف 3 أنواع حالات؛ النوع الرابع+ يبقى في aria-label والمفتاح
-       (فجوة معلومات مرئية موثقة). */
-    function buildDayCell(iso, d, groups) {
+       (فجوة معلومات مرئية موثقة).
+       عقد 2026-10-25 (مرجع المالك): خلايا الأشهر المجاورة خافتة
+       (رقم أهدأ + نقاط بشفافية أخف) لكنها أيام حقيقية قابلة للتحديد
+       — اختيارها ينقل العرض إلى شهرها (العرض يتبع التحديد). */
+    function buildDayCell(iso, d, groups, outOfMonth) {
       var orders = groups[iso] || [];
       var cell = el('button', 'm-ocal__cell');
       cell.type = 'button';
@@ -723,6 +712,7 @@
       cell.setAttribute('data-ocal-action', 'day-cell');
       cell.setAttribute('data-ocal-date', iso);
       cell.tabIndex = -1;
+      if (outOfMonth) cell.className += ' m-ocal__cell--out';
       if (iso === state.selectedDate) {
         cell.className += ' m-ocal__cell--selected';
         cell.setAttribute('aria-selected', 'true');
@@ -734,9 +724,10 @@
         cell.setAttribute('aria-current', 'date');
       }
       var focusedDate = parseIso(state.focusDate);
-      if (iso === state.focusDate ||
-        (d === 1 && (!focusedDate || focusedDate.y !== state.monthCursor.y ||
-          focusedDate.m !== state.monthCursor.m))) {
+      var focusedInCursor = focusedDate &&
+        focusedDate.y === state.monthCursor.y && focusedDate.m === state.monthCursor.m;
+      var firstIso = isoOf(state.monthCursor.y, state.monthCursor.m, 1);
+      if (iso === state.focusDate || (!focusedInCursor && iso === firstIso)) {
         cell.tabIndex = 0; /* roving: توقف Tab واحد */
       }
 
@@ -775,12 +766,17 @@
       return cell;
     }
 
-    /* ---- شبكة الشهر: role=grid حقيقي (صفوف + gridcell + roving) ---- */
+    /* ---- شبكة الشهر: role=grid حقيقي (صفوف + gridcell + roving).
+       عقد 2026-10-25 (مرجع المالك gridDays): مستطيل كامل من
+       ceil((lead + أيام الشهر) / 7) × 7 خلية — الأيام المجاورة
+       (البادئة/اللاحقة) تُحسب من 1 − lead عبر normalizeYmd وتُرسم
+       خافتة قابلة للتحديد كما في المرجع (لا خلايا فارغة). */
     function buildMonthGrid(groups) {
       var y = state.monthCursor.y;
       var m = state.monthCursor.m;
       var dim = daysInMonth(y, m);
       var lead = (weekdayOf(y, m, 1) - state.weekStart + 7) % 7;
+      var totalCells = Math.ceil((lead + dim) / 7) * 7;
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
@@ -790,18 +786,90 @@
       var row = el('div', 'm-ocal__gridrow');
       row.setAttribute('role', 'row');
       grid.appendChild(row);
-      for (var i = 0; i < lead; i++) {
-        var blank = el('div', 'm-ocal__cellblank');
-        blank.setAttribute('aria-hidden', 'true');
-        row.appendChild(blank);
-      }
-      for (var d = 1; d <= dim; d++) {
+      for (var i = 0; i < totalCells; i++) {
         if (row.childNodes.length === 7) {
           row = el('div', 'm-ocal__gridrow');
           row.setAttribute('role', 'row');
           grid.appendChild(row);
         }
-        row.appendChild(buildDayCell(isoOf(y, m, d), d, groups));
+        var t = normalizeYmd(y, m, 1 - lead + i);
+        row.appendChild(buildDayCell(isoOf(t.y, t.m, t.d), t.d, groups, t.m !== m));
+      }
+      return grid;
+    }
+
+    /* ---- أدوات الأسبوع (عقد 2026-10-25 — محدّد يوم/أسبوع/شهر) ----
+       الأسبوع المعروض مشتق من اليوم المحدد (كما في مرجع المالك):
+       بدايته weekStart والذي يحوي selectedDate عبر normalizeYmd
+       للإزاحة السالبة — بلا Date/UTC. */
+    function weekDatesOf(iso) {
+      var p = parseIso(iso);
+      if (!p) return null;
+      var back = (weekdayOf(p.y, p.m, p.d) - state.weekStart + 7) % 7;
+      var s = normalizeYmd(p.y, p.m, p.d - back);
+      var out = [];
+      for (var i = 0; i < 7; i++) {
+        out.push(normalizeYmd(s.y, s.m, s.d + i));
+      }
+      return out;
+    }
+
+    /* عنوان نطاق الأسبوع: «24–30 أكتوبر 2026» داخل الشهر نفسه،
+       و«31 أكتوبر – 6 نوفمبر 2026» عند عبور حد الشهر/السنة */
+    function weekRangeTitle(dates) {
+      var a = dates[0];
+      var b = dates[6];
+      if (a.y === b.y && a.m === b.m) {
+        return a.d + '–' + b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
+      }
+      var sameYear = a.y === b.y;
+      var aTxt = a.d + ' ' + MONTHS_AR[a.m - 1] + (sameYear ? '' : ' ' + a.y);
+      var bTxt = b.d + ' ' + MONTHS_AR[b.m - 1] + ' ' + b.y;
+      return aTxt + ' – ' + bTxt;
+    }
+
+    /* شريط الأسبوع: [الأسبوع السابق][نطاق الأسبوع][الأسبوع التالي][اليوم]
+       — سهم ±7 أيام يحدّث التحديد ويطلق day-select (مثل سهمي اليوم)،
+       ولا منتقي شهر هنا: الأسبوع مشتق من التحديد فقفزة الشهر ستغير
+       التحديد بصمت أو تفصل منطقة الأحداث عن الأسبوع المعروض (انحراف
+       موثق عن شريط الشهر). */
+    function buildWeekBar(dates) {
+      var bar = el('div', 'm-ocal__cal-bar');
+      bar.appendChild(navBtn('prev-week', 'الأسبوع السابق', prevIcon()));
+      var title = el(hTag(), 'm-ocal__cal-title');
+      title.appendChild(el('span', 'm-ocal__week-range', weekRangeTitle(dates)));
+      bar.appendChild(title);
+      bar.appendChild(navBtn('next-week', 'الأسبوع التالي', nextIcon()));
+      var today = el('button', 'm-ocal__todaybtn');
+      today.type = 'button';
+      today.setAttribute('data-ocal-action', 'today');
+      today.textContent = 'اليوم';
+      bar.appendChild(today);
+      return bar;
+    }
+
+    /* صف الأسبوع: نفس تشريح خلية الشهر (رقم + نقاط + تحديد + اليوم
+       الحالي) على سبعة أيام حقيقية — أيام الشهر المجاور تُوسم خافتة
+       لأنها خارج الشهر الذي يحمل العنوان التالي في التدرّج. */
+    function buildWeekGrid(dates, groups) {
+      /* ضمان التوقف الواحد: التركيز يتبع التحديد في عرض الأسبوع —
+         تحوّل من تصفّح الشهر بتركيز خارج الأسبوع يعيده ليوم التحديد */
+      var isos = dates.map(function (t) { return isoOf(t.y, t.m, t.d); });
+      if (isos.indexOf(state.focusDate) === -1) {
+        state.focusDate = state.selectedDate;
+      }
+      var monthOfTitle = parseIso(state.selectedDate);
+      var grid = el('div', 'm-ocal__grid');
+      grid.setAttribute('role', 'grid');
+      grid.setAttribute('aria-label', 'طلبات الأسبوع ' + weekRangeTitle(dates));
+      grid.setAttribute('data-ocal-grid', '');
+      var row = el('div', 'm-ocal__gridrow');
+      row.setAttribute('role', 'row');
+      grid.appendChild(row);
+      for (var i = 0; i < dates.length; i++) {
+        var t = dates[i];
+        var outOfMonth = !monthOfTitle || t.m !== monthOfTitle.m || t.y !== monthOfTitle.y;
+        row.appendChild(buildDayCell(isos[i], t.d, groups, outOfMonth));
       }
       return grid;
     }
@@ -938,19 +1006,35 @@
       return !s || s.y !== state.monthCursor.y || s.m !== state.monthCursor.m;
     }
 
-    /* ---- لوحة اليوم: التاريخ الكامل + العد + صفوف الطلبات
-       (داخل الصفحة — لا نافذة لكل يوم). في شاشة اليوم يُحذف عنوان
-       اللوحة (العنوان في شريط سابقا/تاليا) ويبقى العدد والإضافة ----
+    /* ---- منطقة أحداث اليوم المحدد (عقد 2026-10-25 — مرجع المالك
+       «Events today»): تحت الشبكة دائمًا في عرضَي الشهر والأسبوع —
+       عنوان موجز («طلبات اليوم» أو «طلبات الأربعاء 22 أكتوبر») +
+       عبارة العدد + زر الإضافة داخل الصفحة + بطاقات الصفوف المدمجة
+       بأدوات الفعل. لا نافذة لكل يوم. في شاشة اليوم يُحذف عنوان
+       المنطقة (العنوان في شريط سابقا/تاليا) ويبقى العدد والإضافة.
 
-       إصلاح تعارض 2026-10-24: أثناء تصفّح شهر لا يحوي التاريخ المحدد
-       تُعرض حالة تصفّح صادقة (data-ocal-day-browsing) باسم الشهر
-       المعروض وعدد طلباته، بدل لوحة يوم من شهر آخر توحي بتحديد متناقض.
-       «إضافة طلب» هناك بلا يوم (date:null) — لا اختيار مُختلق. */
+       إصلاح تعارض 2026-10-24 (مُبقى): أثناء تصفّح شهر (عرض الشهر
+       فقط) لا يحوي التاريخ المحدد تُعرض حالة تصفّح صادقة
+       (data-ocal-day-browsing) باسم الشهر المعروض وعدد طلباته، بدل
+       منطقة يوم من شهر آخر توحي بتحديد متناقض. «إضافة طلب» هناك
+       بلا يوم (date:null) — لا اختيار مُختلق. عرضا الأسبوع واليوم
+       مشتقان من التحديد فلا حالة تصفّح فيهما. */
+    function eventsTitleAr(iso) {
+      if (iso === state.today) return 'طلبات اليوم';
+      var p = parseIso(iso);
+      if (!p) return 'طلبات';
+      var s = 'طلبات ' + WEEKDAYS_FULL[weekdayOf(p.y, p.m, p.d)] + ' ' +
+        p.d + ' ' + MONTHS_AR[p.m - 1];
+      var t = parseIso(state.today);
+      if (!t || t.y !== p.y) s += ' ' + p.y;
+      return s;
+    }
+
     function buildDayPanel(withTitle) {
       var panel = el('section', 'm-ocal__daypanel');
       panel.setAttribute('data-ocal-day-panel', '');
       var head = el('div', 'm-ocal__daypanel-head');
-      if (withTitle && browsingMonthWithoutSelection()) {
+      if (withTitle && state.calendarView === 'month' && browsingMonthWithoutSelection()) {
         var y = state.monthCursor.y;
         var m = state.monthCursor.m;
         panel.setAttribute('data-ocal-day-browsing', 'true');
@@ -965,117 +1049,99 @@
       var iso = state.selectedDate;
       var orders = sortedOrdersForDate(iso);
       if (withTitle) {
-        head.appendChild(el(hTag(), 'm-ocal__daypanel-title', fullDateAr(iso)));
+        head.appendChild(el(hTag(), 'm-ocal__daypanel-title', eventsTitleAr(iso)));
       }
       head.appendChild(el('p', 'm-ocal__daypanel-count', countPhraseAr(orders.length)));
       head.appendChild(buildAddButton());
       panel.appendChild(head);
-      panel.appendChild(buildRows(orders, false, true));
+      if (orders.length) {
+        panel.appendChild(buildRows(orders, false, true));
+      } else {
+        /* فراغ صادق لليوم المحدد — مع مرشد الإضافة داخل المنطقة */
+        var empty = el('div', 'm-ocal__status m-ocal__status--empty m-ocal__daypanel-empty');
+        empty.setAttribute('data-ocal-status', 'empty');
+        empty.setAttribute('role', 'status');
+        empty.appendChild(el('p', 'm-ocal__status-text', 'لا طلبات في هذا اليوم.'));
+        panel.appendChild(empty);
+      }
       return panel;
     }
 
-    /* ---- منطقة إفصاح الأجندة (عرض agenda فقط — عقد 2026-10-25) ----
-       منطقة هادئة تحت الشهر المضغوط: زر واحد يحمل اليوم المحدد
-       الكامل وعدد طلباته (aria-expanded + aria-controls)؛ الضغط يكشف
-       صفوف اليوم المحدد فقط داخل الصفحة — لا يغيّر التحديد ولا يطلق
-       day-select، ولا يكشف طلبات يوم/شهر آخر مهما كان شهر العرض
-       (المحتوى من selectedDate وحده). أثناء تصفّح شهر لا يحوي يوم
-       التحديد تُسبقها ملاحظة تصفّح صادقة (data-ocal-day-browsing). */
-    function buildAgendaDisclosure() {
-      var wrap = el('div', 'm-ocal__agenda');
-      wrap.setAttribute('data-ocal-agenda', '');
-      if (browsingMonthWithoutSelection()) {
-        wrap.setAttribute('data-ocal-day-browsing', 'true');
-        wrap.appendChild(el('p', 'm-ocal__agenda-note',
-          'لا يوم محدد في ' + MONTHS_AR[state.monthCursor.m - 1] + ' ' +
-          state.monthCursor.y));
-      }
-      var iso = state.selectedDate;
-      var orders = sortedOrdersForDate(iso);
-      if (!state.agendaBodyId) {
-        state.agendaBodyId = 'm-ocal-agenda-' + (++AGENDA_ID_SEQ);
-      }
-      var toggle = el('button', 'm-ocal__agenda-toggle');
-      toggle.type = 'button';
-      toggle.setAttribute('data-ocal-action', 'agenda-toggle');
-      toggle.setAttribute('aria-expanded', state.agendaOpen ? 'true' : 'false');
-      toggle.setAttribute('aria-controls', state.agendaBodyId);
-      /* 2026-10-25: اسم إتاحي واحد بفواصل صريحة بدل دمج نصوص
-         الأبناء المتلاصقة («…20263 طلبات») في قارئات الشاشة */
-      toggle.setAttribute('aria-label',
-        'أجندة ' + fullDateAr(iso) + '، ' + countPhraseAr(orders.length));
-      var dateTxt = el('span', 'm-ocal__agenda-date', fullDateAr(iso));
-      toggle.appendChild(dateTxt);
-      toggle.appendChild(el('span', 'm-ocal__agenda-count', countPhraseAr(orders.length)));
-      toggle.appendChild(chevronDownIcon());
-      wrap.appendChild(toggle);
-
-      var body = el('div', 'm-ocal__agenda-body');
-      body.id = state.agendaBodyId;
-      body.setAttribute('data-ocal-agenda-body', '');
-      if (state.agendaOpen) {
-        body.appendChild(el(hTag(), 'm-ocal__agenda-title', fullDateAr(iso)));
-        if (orders.length) {
-          body.appendChild(buildRows(orders, false, true));
-        } else {
-          var empty = el('div', 'm-ocal__status m-ocal__status--empty m-ocal__agenda-empty');
-          empty.setAttribute('data-ocal-status', 'empty');
-          empty.setAttribute('role', 'status');
-          empty.appendChild(el('p', 'm-ocal__status-text', 'لا طلبات في هذا اليوم.'));
-          body.appendChild(empty);
-        }
-        body.appendChild(buildAddButton());
-      } else {
-        body.hidden = true; /* نمط الإفصاح القياسي: مطوي = خارج شجرة الوصول */
-      }
-      wrap.appendChild(body);
-      return wrap;
-    }
-
-    /* ---- شاشة التقويم (شهر) — عرضان متناسقان لعقد 2026-10-25 ----
-       expanded: الشبكة الكاملة + مفتاح + لوحة اليوم المفصوصة أسفلها
-       (الوضع الافتراضي كما كان قبل 2026-10-25).
-       agenda: الشبكة نفسها بكل أيامها (مضغوطة بـCSS فقط) + منطقة
-       إفصاح الأجندة بدل لوحة اليوم — سياق الشهر يبقى محفوظًا. */
+    /* ---- شاشة التقويم (شهر) — عقد 2026-10-25 (ترتيب القراءة للمرجع):
+       [محدّد يوم/أسبوع/شهر][شريط الشهر مع المنتقي][رؤوس الأيام]
+       [شبكة الشهر الكاملة بأيامها المجاورة][مفتاح الحالات]
+       [منطقة أحداث اليوم المحدد] — منطقة الأحداث ظاهرة دائمًا أسفل
+       الشبكة كما في مرجع المالك (لا عرضا expanded/agenda). */
     function buildMonthScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
+      screen.appendChild(buildControlsRow());
       screen.appendChild(buildCalBar(state.monthCursor.y, state.monthCursor.m));
       if (state.pickerOpen) screen.appendChild(buildMonthPicker());
-      screen.appendChild(buildControlsRow(true));
       screen.appendChild(buildWeekdays());
       screen.appendChild(buildMonthGrid(groupOrdersByDate()));
       var legend = buildLegend(ordersInMonth(state.monthCursor.y, state.monthCursor.m));
       if (legend) screen.appendChild(legend);
-      if (state.presentation === 'agenda') {
-        screen.appendChild(buildAgendaDisclosure());
-      } else {
-        screen.appendChild(buildDayPanel(true));
-      }
+      screen.appendChild(buildDayPanel(true));
       return screen;
     }
 
-    /* ---- شاشة التقويم (يوم): سابقا/تاليا + التاريخ الكامل + العد
-       ثم الصفوف (لا سطر زمني بالساعات — الوقت داخل الصف فقط) ---- */
+    /* ---- شاشة التقويم (أسبوع) — عقد 2026-10-25 (مرجع المالك):
+       [المحدّد][شريط الأسبوع ±7 أيام + اليوم][رؤوس الأيام]
+       [صف الأسبوع السبعة بأيام حقيقية][مفتاح حالات الأسبوع]
+       [منطقة أحداث اليوم المحدد] — الأسبوع مشتق من التحديد. */
+    function buildWeekScreen() {
+      var screen = el('div', 'm-ocal__screen');
+      screen.setAttribute('data-ocal-screen', 'calendar');
+      screen.appendChild(buildControlsRow());
+      var dates = weekDatesOf(state.selectedDate) || weekDatesOf(state.today);
+      screen.appendChild(buildWeekBar(dates));
+      screen.appendChild(buildWeekdays());
+      var groups = groupOrdersByDate();
+      screen.appendChild(buildWeekGrid(dates, groups));
+      var scope = [];
+      for (var i = 0; i < dates.length; i++) {
+        var iso = isoOf(dates[i].y, dates[i].m, dates[i].d);
+        scope = scope.concat(groups[iso] || []);
+      }
+      var legend = buildLegend(scope);
+      if (legend) screen.appendChild(legend);
+      screen.appendChild(buildDayPanel(true));
+      return screen;
+    }
+
+    /* ---- شاشة التقويم (يوم): [المحدّد][سابقا/تاليا + التاريخ الكامل
+       + اليوم] ثم منطقة أحداثه (العدد + الإضافة + الصفوف) — لا سطر
+       زمني بالساعات (الوقت داخل الصف فقط)، كما يخفي مرجع المالك
+       بطاقة التقويم في وضع Day ويبقي سطح أحداث اليوم. ---- */
     function buildDayScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'calendar');
-      screen.appendChild(buildControlsRow(false));
-      var panel = buildDayPanel(false);
+      screen.appendChild(buildControlsRow());
+      screen.appendChild(buildDayBar());
+      screen.appendChild(buildDayPanel(false));
+      return screen;
+    }
+
+    function buildDayBar() {
       var bar = el('div', 'm-ocal__cal-bar');
       bar.appendChild(navBtn('prev-day', 'اليوم السابق', prevIcon()));
       bar.appendChild(el(hTag(), 'm-ocal__cal-title', fullDateAr(state.selectedDate)));
       bar.appendChild(navBtn('next-day', 'اليوم التالي', nextIcon()));
-      panel.insertBefore(bar, panel.firstChild);
-      screen.appendChild(panel);
-      return screen;
+      var today = el('button', 'm-ocal__todaybtn');
+      today.type = 'button';
+      today.setAttribute('data-ocal-action', 'today');
+      today.textContent = 'اليوم';
+      bar.appendChild(today);
+      return bar;
     }
 
-    /* ---- شاشة القائمة ---- */
+    /* ---- شاشة القائمة (سطح منفصل يستدعيه المضيف عبر setView('list') —
+       ليس زرًا في محدّد يوم/أسبوع/شهر) ---- */
     function buildListScreen() {
       var screen = el('div', 'm-ocal__screen');
       screen.setAttribute('data-ocal-screen', 'list');
-      screen.appendChild(buildControlsRow(false));
+      screen.appendChild(buildControlsRow());
 
       /* فراغ صادق: لا طلبات في كل النطاقات + مرشد إضافة */
       if (state.orders.length === 0) {
@@ -1174,24 +1240,19 @@
       focusDayCell(iso, true);
     }
 
-    /* Home/End: أول/آخر خلية في صف الأسبوع الحالي للخلية المركّزة */
+    /* Home/End: أول/آخر خلية في صف الأسبوع الحالي للخلية المركّزة —
+       حساب من DOM نفسه (يعمل مع أيام الأشهر المجاورة داخل الصف
+       وفي صف الأسبوع الفردي؛ كان الحساب القديم بأرقام أيام الشهر
+       وحده يفترض خلايا فارغة بادئة) */
     function moveRowEdge(fromIso, home) {
-      var p = parseIso(fromIso);
-      if (!p) return;
-      if (p.y !== state.monthCursor.y || p.m !== state.monthCursor.m) {
-        p = parseIso(state.selectedDate);
-        if (!p) return;
-      }
-      var lead = (weekdayOf(p.y, p.m, 1) - state.weekStart + 7) % 7;
-      var gi = lead + p.d - 1;
-      var rowStart = Math.floor(gi / 7) * 7;
-      /* إصلاح R3-2b (2026-10-08): الصف الأول يسبقه خلايا فارغة بادئة، فأول
-         خلية فعلية فيه هي اليوم 1 — بلا Math.max كان الحساب يعطي يومًا
-         سالبًا (rowStart - lead + 1) فلا يجد focusDayCell خلية ولا يتحرك
-         التركيز من مكانه */
-      var firstD = Math.max(1, rowStart - lead + 1);
-      var lastD = Math.min(rowStart - lead + 7, daysInMonth(p.y, p.m));
-      focusDayCell(isoOf(p.y, p.m, home ? firstD : lastD), true);
+      var cell = root.querySelector('[data-ocal-date="' + fromIso + '"]');
+      if (!cell) return;
+      var row = cell.closest('[role="row"]');
+      if (!row) return;
+      var cells = row.querySelectorAll('.m-ocal__cell[data-ocal-date]');
+      if (!cells.length) return;
+      var target = home ? cells[0] : cells[cells.length - 1];
+      focusDayCell(target.getAttribute('data-ocal-date'), true);
     }
 
     function onKeydown(e) {
@@ -1219,29 +1280,55 @@
         }
         return;
       }
-      /* Escape في عرض الأجندة المفتوحة: يطوي منطقة الإفصاح ويعيد
-         التركيز إلى زرها — المسار الكامل بلوحة المفاتيح (عقد 2026-10-25) */
-      if (e.key === 'Escape' && state.view === 'calendar' &&
-          state.calendarView === 'month' && state.presentation === 'agenda' &&
-          state.agendaOpen) {
-        e.preventDefault();
-        state.agendaOpen = false;
-        render();
-        refocus('[data-ocal-action="agenda-toggle"]');
-        return;
-      }
-      if (state.view !== 'calendar' || state.calendarView !== 'month') return;
+      if (state.view !== 'calendar') return;
       var cell = (t && t.closest) ? t.closest('.m-ocal__cell[data-ocal-date]') : null;
       if (!cell || !root.contains(cell)) return;
       var k = e.key;
       var fromIso = cell.getAttribute('data-ocal-date');
+
+      /* عرض الأسبوع (عقد 2026-10-25 — الأسبوع مشتق من التحديد):
+         الأسهم تمشي يومًا/أسبوعًا بالتحديد نفسه (كل فعلة تطلق
+         day-select مرة واحدة مثل سهمي شريط اليوم) — التركيز يتبع
+         التحديد فلا انفصال بين الصف المعروض ومنطقة الأحداث.
+         RTL: السهم الأيسر = اليوم التالي (+1) والعكس في LTR. */
+      if (state.calendarView === 'week') {
+        var step = 0;
+        if (k === 'ArrowLeft' || k === 'ArrowRight') {
+          e.preventDefault();
+          step = (k === 'ArrowLeft') ? 1 : -1;
+          if (!state.rtl) step = -step;
+        } else if (k === 'ArrowDown') {
+          e.preventDefault();
+          step = 7;
+        } else if (k === 'ArrowUp') {
+          e.preventDefault();
+          step = -7;
+        } else if (k === 'Home' || k === 'End') {
+          e.preventDefault();
+          var dates = weekDatesOf(state.selectedDate);
+          if (dates) {
+            var edge = (k === 'Home') ? dates[0] : dates[6];
+            selectDate(isoOf(edge.y, edge.m, edge.d), true);
+          }
+          return;
+        } else {
+          return;
+        }
+        var p = parseIso(fromIso);
+        if (!p) return;
+        var tt = normalizeYmd(p.y, p.m, p.d + step);
+        selectDate(isoOf(tt.y, tt.m, tt.d), true);
+        return;
+      }
+
+      if (state.calendarView !== 'month') return;
       /* RTL: السهم الأيسر = اليوم التالي (+1) والأيمن = السابق،
          والعكس في LTR (عكس الاتجاه المنطقي — موثق). Up/Down ±7. */
       if (k === 'ArrowLeft' || k === 'ArrowRight') {
         e.preventDefault();
-        var step = (k === 'ArrowLeft') ? 1 : -1;
-        if (!state.rtl) step = -step;
-        moveFocus(fromIso, step);
+        var stepm = (k === 'ArrowLeft') ? 1 : -1;
+        if (!state.rtl) stepm = -stepm;
+        moveFocus(fromIso, stepm);
       } else if (k === 'ArrowDown') {
         e.preventDefault();
         moveFocus(fromIso, 7);
@@ -1268,19 +1355,19 @@
       if (elm && typeof elm.focus === 'function') elm.focus();
     }
 
-    /* اختيار يوم: تحديث + إعادة تصيير + إعلان (إن كان من المستخدم) */
+    /* اختيار يوم: تحديث + إعادة تصيير + إعلان (إن كان من المستخدم).
+       عقد 2026-10-25 (مرجع المالك setSelected): اختيار يوم من شهر
+       مجاور (خلايا الأشهر المجاورة الآن قابلة للتحديد) ينقل الشهر
+       المعروض إلى شهره — العرض يتبع التحديد؛ سهم الشهر/المنتقي
+       يبقيان تصفّحًا بلا تحديد كما هما. */
     function selectDate(iso, fromUser) {
       if (!DATE_RE.test(iso)) return;
       state.selectedDate = iso;
       var p = parseIso(iso);
-      if (p.y === state.monthCursor.y && p.m === state.monthCursor.m) {
-        state.focusDate = iso;
-      } else {
-        var focused = parseIso(state.focusDate);
-        if (!focused || focused.y !== state.monthCursor.y || focused.m !== state.monthCursor.m) {
-          state.focusDate = isoOf(state.monthCursor.y, state.monthCursor.m, 1);
-        }
+      if (p.y !== state.monthCursor.y || p.m !== state.monthCursor.m) {
+        state.monthCursor = { y: p.y, m: p.m };
       }
+      state.focusDate = iso;
       render();
       if (fromUser) emit('order-schedule:day-select', { date: iso });
       refocus('[data-ocal-date="' + iso + '"]');
@@ -1383,24 +1470,6 @@
       closePicker();
     }
 
-    /* عقد 2026-10-25: تبديل عرضَي الشهر (expanded/agenda) — التحديد
-       والشهر المعروض لا يتغيران؛ الطي يبدأ منطقة الإفصاح هادئة. */
-    function togglePresentation() {
-      state.presentation = (state.presentation === 'agenda') ? 'expanded' : 'agenda';
-      state.agendaOpen = false;
-      render();
-      refocus('[data-ocal-action="presentation"]');
-    }
-
-    /* عقد 2026-10-25: فتح/طي منطقة إفصاح أجندة اليوم المحدد — يكشف
-       صفوف اليوم المحدد فقط (المحتوى من selectedDate) ولا يغيّر
-       التحديد ولا يطلق أي حدث (فعل عرض صرف). */
-    function toggleAgenda() {
-      state.agendaOpen = !state.agendaOpen;
-      render();
-      refocus('[data-ocal-action="agenda-toggle"]');
-    }
-
     /* «اليوم» هو فعل اختيار صريح: يحدّث الشهر والتاريخ ويعلن الحدث. */
     function gotoToday() {
       state.selectedDate = state.today;
@@ -1445,12 +1514,8 @@
         /* عقد 2026-10-25: فعل حذف مملوك للمضيف — الحدث فقط */
         emit('order-schedule:order-delete-request', { id: btn.getAttribute('data-ocal-id') });
         refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
-      } else if (act === 'agenda-toggle') {
-        toggleAgenda();
-      } else if (act === 'presentation') {
-        togglePresentation();
       } else if (act === 'add') {
-        /* التاريخ محمول على الزر نفسه: اليوم المحدد في لوحة اليوم،
+        /* التاريخ محمول على الزر نفسه: اليوم المحدد في منطقة الأحداث،
            و"" (بلا يوم) في القائمة وفي شهر تصفّح بلا تحديد — بصدق */
         var addDate = btn.getAttribute('data-ocal-add-date');
         emit('order-schedule:add-request', { date: addDate || null });
@@ -1458,27 +1523,30 @@
         if (typeof state.errorRetry === 'function') state.errorRetry();
       } else if (act === 'view') {
         state.pickerOpen = false;
-        /* 2026-10-25: القيم الثلاث للعنصر الموحّد (شهر/يوم/قائمة)
-           تركّب view+calendarView معًا؛ القيمتان التاريخيتان
-           (calendar/list) تبقيان مدعومتين (توافق اختبارات/مضيفين) */
+        /* 2026-10-25 (مرجع المالك): القيم الثلاث للمحدّد
+           (يوم/أسبوع/شهر) تركّب view+calendarView معًا؛ القيمتان
+           التاريخيتان (calendar/list) تبقيان مدعومتين (توافق
+           اختبارات/مضيفين — «قائمة» هنا مسار مستدعى من خارج
+           المحدّد لكن الزر التاريخي يبقى فعالًا إن وُجد) */
         var seg = btn.getAttribute('data-ocal-value');
         if (seg === 'list') {
           state.view = 'list';
-        } else if (seg === 'day') {
+        } else if (seg === 'day' || seg === 'week' || seg === 'month') {
           state.view = 'calendar';
-          state.calendarView = 'day';
-        } else if (seg === 'month') {
-          state.view = 'calendar';
-          state.calendarView = 'month';
+          state.calendarView = seg;
+          if (seg === 'week') state.focusDate = state.selectedDate;
         } else {
           state.view = (seg === 'list') ? 'list' : 'calendar';
         }
         render();
         updateResponsiveView(root.getBoundingClientRect().width);
-        refocus('[data-ocal-action="view"][aria-pressed="true"]');
+        var pressedBtn = root.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+        if (pressedBtn) pressedBtn.focus();
+        else refocus('[data-ocal-action="view"]');
       } else if (act === 'cal-mode') {
         state.pickerOpen = false;
-        state.calendarView = (btn.getAttribute('data-ocal-value') === 'day') ? 'day' : 'month';
+        var cm = btn.getAttribute('data-ocal-value');
+        state.calendarView = (cm === 'day' || cm === 'week') ? cm : 'month';
         render();
         updateResponsiveView(root.getBoundingClientRect().width);
         refocus('[data-ocal-action="cal-mode"]');
@@ -1488,6 +1556,13 @@
       } else if (act === 'next-month') {
         shiftMonthCursor(1);
         refocus('[data-ocal-action="next-month"]');
+      } else if (act === 'prev-week') {
+        /* عرض الأسبوع: السهم ±7 أيام بتحديد معلن (كما سهمي اليوم) */
+        shiftDay(-7);
+        refocus('[data-ocal-action="prev-week"]');
+      } else if (act === 'next-week') {
+        shiftDay(7);
+        refocus('[data-ocal-action="next-week"]');
       } else if (act === 'today') {
         gotoToday();
         refocus('[data-ocal-action="today"]');
@@ -1568,21 +1643,12 @@
         }
       }),
       setCalendarView: guard(function (v) {
-        if (v === 'month' || v === 'day') {
+        if (v === 'month' || v === 'week' || v === 'day') {
           state.pickerOpen = false;
           state.calendarView = v;
+          if (v === 'week') state.focusDate = state.selectedDate;
           render();
           updateResponsiveView(root.getBoundingClientRect().width);
-        }
-      }),
-      /* عقد 2026-10-25: ضبط صامت لعرضَي الشهر (expanded/agenda) —
-         يحفظ selectedDate وmonthCursor؛ الطي يبدأ الإفصاح هادئًا */
-      setPresentation: guard(function (v) {
-        if (v === 'expanded' || v === 'agenda') {
-          state.pickerOpen = false;
-          state.agendaOpen = false;
-          state.presentation = v;
-          render();
         }
       }),
       setLoading: guard(function (flag) {
@@ -1600,8 +1666,8 @@
       }),
       /* ينزع كل مستمع (المصفوفة أعلاه) ويفصل مراقبي dir/العرض ويعيد
          الجذر لسمة غير مهيأة — بعده لا أحداث إطلاقًا. R-27 (2026-10-25):
-         تُزال أيضًا سمات العقد المتبقية (layout/compact/selected-date/
-         presentation/agenda-open) فلا تُقرأ بحالة ما بعد الدمار */
+         تُزال أيضًا سمات العقد المتبقية (layout/compact/selected-date)
+         فلا تُقرأ بحالة ما بعد الدمار */
       destroy: guard(function () {
         destroyed = true;
         if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
@@ -1630,13 +1696,10 @@
         root.removeAttribute('data-ocal-init');
         root.removeAttribute('data-ocal-view');
         root.removeAttribute('data-ocal-cal-view');
-        root.removeAttribute('data-ocal-preferred-cal-view');
         root.removeAttribute('data-ocal-auto-view');
         root.removeAttribute('data-ocal-layout');
         root.removeAttribute('data-ocal-compact');
         root.removeAttribute('data-ocal-selected-date');
-        root.removeAttribute('data-ocal-presentation');
-        root.removeAttribute('data-ocal-agenda-open');
         instances.delete(root);
       })
     };

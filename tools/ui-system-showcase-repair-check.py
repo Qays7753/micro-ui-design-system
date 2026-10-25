@@ -427,28 +427,34 @@ def run(page, base, width, tag):
             r.right <= box.right+.5 && r.top >= box.top-.5 && r.bottom <= box.bottom+.5);
       }
       const draftPill = !!document.querySelector('#sc-ocal .sc-pill--draft');
-      /* عقد 2026-10-24: الشبكة الكاملة عند كل عرض؛ الضيق (<360px جذر)
-         عرض مدمج: ارتفاع الخلية ≥48 وعرضها ≥24 (WCAG 2.5.8)، والممتد
-         مربع ≥48. عدد أيام الشهر المعروض كاملًا في الحالتين. */
+      /* عقد 2026-10-25 (مرجع المالك): الشبكة الكاملة عند كل عرض مع أيام
+         الأشهر المجاورة خافتة قابلة للتحديد — عدد أيام الشهر المعروض
+         كاملًا (31 لأكتوبر) والأيام المجاورة 11 (5 سبتمبر + 6 نوفمبر).
+         الضيق (<360px جذر) عرض مدمج: ارتفاع الخلية ≥48 وعرضها ≥24
+         (WCAG 2.5.8)، والممتد مربع ≥48. */
       const compact = root.getAttribute('data-ocal-compact') === 'true';
-      const days = new Set([...root.querySelectorAll('[data-ocal-grid] [data-ocal-date]')]
-        .map(e => e.getAttribute('data-ocal-date'))).size;
+      const allDates = [...root.querySelectorAll('[data-ocal-grid] [data-ocal-date]')]
+        .map(e => e.getAttribute('data-ocal-date'));
+      const days = allDates.filter(d => d.startsWith('2026-10')).length;
+      const outDays = allDates.filter(d => !d.startsWith('2026-10')).length;
       const widths = cells.map(c => c.getBoundingClientRect().width);
       const heights = cells.map(c => c.getBoundingClientRect().height);
-      return { compact, days, w: Math.round(r.width), h: Math.round(r.height),
+      return { compact, days, outDays, w: Math.round(r.width), h: Math.round(r.height),
         minW: Math.min(...widths), minH: Math.min(...heights),
         maxWeekdayH: Math.max(...weekdays), titleReadable, draftPill };
     }""")
     if f08 and not f08.get("noGrid"):
         if f08.get("compact"):
-            t(f"F-08 {P} العرض المدمج: الشهر كامل (31 يومًا) وخلية ≥48px ارتفاعًا و≥24px عرضًا",
-              f08["days"] == 31 and f08["minH"] >= 48 and f08["minW"] >= 24,
-              f"days={f08['days']} minCell={f08['minW']}x{f08['minH']}")
+            t(f"F-08 {P} العرض المدمج: الشهر كامل (31 يومًا + 11 مجاورًا) وخلية ≥48px ارتفاعًا و≥24px عرضًا",
+              f08["days"] == 31 and f08["outDays"] == 11 and f08["minH"] >= 48 and f08["minW"] >= 24,
+              f"days={f08['days']} out={f08['outDays']} minCell={f08['minW']}x{f08['minH']}")
         else:
             t(f"F-08 {P} خلية الشهر ≥48px مربعة (±2px)",
               f08["w"] >= 48 and f08["h"] >= 48 and abs(f08["w"] - f08["h"]) <= 2,
               f"cell={f08['w']}x{f08['h']}")
-            t(f"F-08 {P} الشهر المعروض كامل (31 يومًا)", f08["days"] == 31, f"days={f08['days']}")
+            t(f"F-08 {P} الشهر المعروض كامل (31 يومًا + 11 مجاورًا خافتًا)",
+              f08["days"] == 31 and f08["outDays"] == 11,
+              f"days={f08['days']} out={f08['outDays']}")
         t(f"F-08 {P} عنوان الشهر زر Picker مقروء دون قص وهدف ≥48px", f08["titleReadable"], f08)
         t(f"F-08 {P} أيام الأسبوع سطر واحد (ارتفاع = سطر 20 + حشو 8 ≈ 28)", f08["maxWeekdayH"] <= 30, f"maxH={f08['maxWeekdayH']}")
         t(f"F-08 {P} شارة DRAFT محفوظة", f08["draftPill"])

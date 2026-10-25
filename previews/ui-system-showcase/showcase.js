@@ -230,8 +230,8 @@
       if (panel) panel.hidden = true;
       ocalDemo.editingId = null;
       ocalDemo.addingFor = null;
-      var returnTo = ocalRoot.querySelector('[data-ocal-action="presentation"]')
-        || ocalRoot.querySelector('[data-ocal-action="view"][aria-pressed="true"]');
+      var returnTo = ocalRoot.querySelector('[data-ocal-action="view"][aria-pressed="true"]')
+        || ocalRoot.querySelector('[data-ocal-action="view"]');
       if (returnTo) returnTo.focus({ preventScroll: true });
     }
 

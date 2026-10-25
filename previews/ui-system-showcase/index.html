@@ -694,10 +694,12 @@
             <p class="m-chart__summary" data-summary></p>
           </div>
         </div>
-        <!-- 2026-10-25 (عقد المالك): لا بيانات ≠ صفر حقيقي — عرضان صادقان
-             في فتحة الرسم نفسها: مصدر فارغ = رسالة فراغ (لا محاور/حلقات
-             وهمية)، والصفر الصريح يظهر كعلامة صفر معروضة (راجع عمود
-             «مشتريات» في أعمدة التوزيع أعلاه). -->
+        <!-- 2026-10-25 (عقد المالك + التصحيح): لا بيانات ≠ صفر حقيقي ≠ قيمة
+             مشوهة — ثلاثة مسارات صادقة في فتحة الرسم نفسها: مصدر فارغ =
+             رسالة فراغ (لا محاور ولا حلقة SVG إطلاقًا)، والقيمة المشوهة
+             ترفض النسب وتحفظ القراءة الخام في المفتاح والجدول، والصفر
+             الصريح يظهر كعلامة صفر معروضة (راجع عمود «مشتريات» في
+             أعمدة التوزيع أعلاه). -->
         <div class="sc-grid-2" id="sc-chart-nodata">
           <div class="m-chart m-chart--bars" id="sc-chart-empty-bars" data-chart="bars" data-max="12" data-summary-text="مصدر فارغ تمامًا: حالة لا بيانات، لا صفر مفترض ولا محاور.">
             <h3 class="m-chart__title">لا بيانات (أعمدة)</h3>
@@ -705,9 +707,19 @@
             <div class="m-chart__plot" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
-          <div class="m-chart m-chart--donut" id="sc-chart-empty-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="مصدر فارغ تمامًا: حلقة فراغ صادقة، لا نسب مختلقة.">
+          <div class="m-chart m-chart--donut" id="sc-chart-empty-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="مصدر فارغ تمامًا: حالة فراغ بلا أي هندسة SVG — لا حلقة ولا صفر مفترض.">
             <h3 class="m-chart__title">لا بيانات (توزيع)</h3>
             <ul class="m-chart__data" hidden></ul>
+            <div class="m-chart__plot m-donut" data-plot></div>
+            <p class="m-chart__summary" data-summary></p>
+          </div>
+          <div class="m-chart m-chart--donut" id="sc-chart-malformed-donut" data-chart="donut" data-total="25" data-total-label="إجمالي الطلبات" data-summary-text="قيمة مشوهة (12oops): رفض النسب كاملًا؛ القراءة الخام محفوظة في المفتاح والجدول بتصنيف موحّد.">
+            <h3 class="m-chart__title">قيمة مشوهة (توزيع)</h3>
+            <ul class="m-chart__data" hidden>
+              <li data-series="a" data-label="الفرع الشمالي" data-value="12oops"></li>
+              <li data-series="b" data-label="الفرع الجنوبي" data-value="8"></li>
+              <li data-series="c" data-label="مستودع" data-value=""></li>
+            </ul>
             <div class="m-chart__plot m-donut" data-plot></div>
             <p class="m-chart__summary" data-summary></p>
           </div>
@@ -1153,7 +1165,7 @@
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم شهري بعرضين متناسقين: الشهر الموسّع وأجندة اليوم المحدد المضغوطة. اليوم داخل التقويم هو نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة)؛ لا زر عائم ولا Bottom Sheet في هذا المسار.</p>
+        <p class="sc-section__desc">تقويم بمحدّد يوم/أسبوع/شهر حقيقي (مرجع المالك 2026-10-25): شبكة شهر بسبعة أعمدة تحوي أيام الشهر وأيام الأشهر المجاورة خافتة قابلة للتحديد، ومنطقة «طلبات اليوم/اليوم المحدد» أسفل الشبكة ببطاقات مدمجة. اليوم داخل التقويم نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة)؛ لا زر عائم ولا Bottom Sheet في هذا المسار. القائمة سطح منفصل يستدعيه المضيف عبر setView.</p>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
@@ -1203,7 +1215,7 @@
           <p class="sc-hint">محرر العرض يكتب في حالة محلية لهذه الجلسة فقط (Escape للإلغاء). المكوّن نفسه لا يملك محررًا: أفعال الإضافة/التعديل/الحذف أحداث host-owned.</p>
         </section>
         <ul class="sc-log" id="sc-ocal-log" aria-label="سجل أحداث الجدول"></ul>
-        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب «طي الشهر» لعرض الأجندة المضغوطة ثم انقر منطقة الإفصاح لتكشف طلبات اليوم المحدد فقط، وانقر يومًا لتحدّث الأجندة ولوحة اليوم. لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
+        <p class="sc-hint">أحداث المكوّن تُسجَّل أعلاه: day-select / order-open / add-request / order-edit-request / order-delete-request. البيانات fixtures مثبتة حول 2026-10-07. جرّب محدّد يوم/أسبوع/شهر، وانقر يومًا (بما فيه أيام الأشهر المجاورة الخافتة) لتحدّث منطقة «طلبات اليوم»، وجرّب أزرار ±7 أيام في عرض الأسبوع. لا يتغير التاريخ ولا تصدر أحداث من إعادة القياس.</p>
       </div>
     </section>
 

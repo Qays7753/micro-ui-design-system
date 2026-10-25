@@ -127,7 +127,18 @@ def main():
     check("no removed source or dead removed-chart imports", not git("diff", "--name-only", "--diff-filter=D", BASE).strip())
     check("branch descends from recorded main", git("merge-base", BASE, "HEAD").strip() == BASE)
     whitespace = subprocess.run(["git", "diff", "--check", BASE], cwd=ROOT, capture_output=True, text=True)
-    check("git diff --check", whitespace.returncode == 0, whitespace.stdout or whitespace.stderr or None)
+    # 2026-10-25 (تصحيح نطاق): أصول المرجع التي يزوّد بها المالك
+    # (docs/zai/references/**) تصل بأسطرها الأصلية (CRLF في
+    # calendar-reference-implementation.html كما سلّمها المالك في
+    # 318118e/d3bdf5d/204495f) ويجب أن تبقى بايت-ببايت أمينة للمصدر —
+    # ليست مصدر النظام. بوابة المسافة البيضاء تحدد نطاقها بملفات
+    # المستودع المملوكة له؛ فشلٌ في أصل المالك لا يعني عيب مصدر.
+    ws_issues = [line for line in (whitespace.stdout or "").splitlines()
+                 if re.match(r"^\S+:\d+: ", line)
+                 and not line.startswith("docs/zai/references/")]
+    check("git diff --check (repository-owned files)",
+          whitespace.returncode == 0 or not ws_issues,
+          ws_issues[:10] or (whitespace.stderr or None))
     diff = git("diff", "--no-ext-diff", "--unified=0", BASE)
     additions = "\n".join(line[1:] for line in diff.splitlines() if line.startswith("+") and not line.startswith("+++"))
     # High-signal signatures only. This is not a full security certification.

@@ -20,12 +20,13 @@
    — هندسة تقاويم الهاتف المعتادة. أزرار الأوامر كلها تبقى ≥48px.
    لا مسار تواريخ جانبي ولا أيام مخفية ولا تمرير أفقي ولا تصغير خط.
 
-   عقد 2026-10-25 (مرجع مفهوم التقويم) — عرضان متناسقان فوق الشبكة
-   نفسها عبر data-ocal-presentation:
-   expanded (افتراضي): الشبكة الكاملة + لوحة اليوم المفصوصة أسفلها.
-   agenda (مضغوط): أرضية صف 40px (كثافة سياق مقصودة؛ ≥24×24) مع إخفاء
-   العدّاد بصريًا، وتحتها منطقة إفصاح هادئة (m-ocal__agenda) تكشف أجندة
-   اليوم المحدد داخل الصفحة — لا زر عائم ولا Bottom Sheet في هذا المسار.
+   عقد 2026-10-25 (مرجع المالك calendar-reference-implementation.html) —
+   محدّد يوم/أسبوع/شهر حقيقي بثلاث حالات فاعلة، وشبكة الشهر تحوي
+   أيام الأشهر المجاورة خافتة قابلة للتحديد (m-ocal__cell--out:
+   رقم أهدأ ونقاط بشفافية .35) فيكتمل مستطيل الشبكة كما في المرجع،
+   وعرض الأسبوع صف واحد من الشبكة نفسه بأيام حقيقية، ومنطقة أحداث
+   اليوم المحدد (m-ocal__daypanel) ظاهرة دائمًا أسفل الشبكة — لا
+   عرضا expanded/agenda ولا منطقة إفصاح (عقد ملغى 2026-10-25).
    ========================================================= */
 
 .m-ocal,
@@ -53,12 +54,13 @@
   outline-offset: var(--micro-focus-gap);
 }
 
-/* ================= 1) عنصر التبديل الموحّد (شهر/يوم/قائمة) ================= */
-/* 2026-10-25 (مرجع المالك calendar-target): عنصر واحد بثلاث حالات
-   بدل شريطَي تقويم/قائمة + نمط — أزرار ضغط أصلية بسمة aria-pressed
-   (نمط المكوّن الموثق)؛ المضغوط بتعبئة البترولي ونص معكوس — لغة
-   تحديد المكوّن نفسها (خلية اليوم المحدد). الحالة ليست باللون
-   وحده: aria-pressed + وزن + تعبئة مميزة. */
+/* ================= 1) محدّد العرض الموحّد (يوم/أسبوع/شهر) ================= */
+/* 2026-10-25 (مرجع المالك calendar-reference-implementation.html): عنصر
+   واحد بثلاث حالات فاعلة بترتيب المرجع (Day|Week|Month) — أزرار ضغط
+   أصلية بسمة aria-pressed (نمط المكوّن الموثق)؛ المضغوط بتعبئة
+   البترولي ونص معكوس — لغة تحديد المكوّن نفسها (خلية اليوم المحدد).
+   الحالة ليست باللون وحده: aria-pressed + وزن + تعبئة مميزة.
+   القائمة ليست زرًا هنا (سطح منفصل يستدعيه المضيف عبر setView). */
 .m-ocal__viewseg {
   display: flex;
   flex-wrap: wrap;
@@ -93,35 +95,12 @@
   font-weight: var(--micro-weight-semibold);
 }
 
-/* صف التحكم: العنصر + زر طي/توسيع الشهر الهادئ (عرض agenda فقط) —
-   سطر 48px واحد؛ الالتفاف عند الضيق وتكبير النص (flex-wrap) */
+/* صف التحكم: المحدّد وحده — سطر 48px واحد؛ الالتفاف عند الضيق
+   وتكبير النص (flex-wrap) */
 .m-ocal__controls {
   display: flex;
   flex-wrap: wrap;
   gap: var(--micro-space-1);
-}
-
-.m-ocal__pres-btn {
-  flex: none;
-  min-height: var(--micro-touch-min); /* ≥ 48px */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding-inline: var(--micro-space-3);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-chip);
-  background-color: transparent;
-  color: var(--micro-text-secondary);
-  font-size: var(--micro-secondary-size);
-  font-weight: var(--micro-weight-medium);
-  line-height: 1;
-  cursor: pointer;
-}
-
-.m-ocal__pres-btn[aria-pressed="true"] {
-  border-color: var(--micro-brand-primary);
-  color: var(--micro-brand-primary);
-  font-weight: var(--micro-weight-semibold);
 }
 
 /* ================= 2) الشاشات الفرعية ================= */
@@ -303,37 +282,12 @@
   cursor: pointer;
 }
 
-/* ---- إجراء بديل واحد لتغيير عرضَي الشهر — زر هادئ في صف التحكم
-   (2026-10-25، مرجع المالك): ثانوي بصريًا (13px/شفاف) لأنه تفضيل
-   عرض لا فعل تنقل؛ يلتف عند ضيق الجذر وتكبير النص (flex-wrap). */
+/* ---- زر «اليوم» في شريط الشهر/الأسبوع/اليوم: فعل اختيار صريح ---- */
 
-/* ================= 3) شبكة الشهر ================= */
-/* عقد 2026-10-25 — عرض الأجندة (data-ocal-presentation="agenda"):
-   الشبكة نفسها بكل أيام الشهر مضغوطة رأسيًا (أرضية صف 40px — كثافة
-   سياق مقصودة يتطلبها الطي؛ ≥ الحد الأدنى WCAG 2.5.8 24×24)
-   فتبقى الخلايا هادئة قابلة للمسح. أزرار الأوامر كلها ≥48px. */
-.m-ocal[data-ocal-presentation="agenda"] .m-ocal__gridrow {
-  min-height: max(2.5em, 40px);
-}
-
-.m-ocal[data-ocal-presentation="agenda"] .m-ocal__cell {
-  aspect-ratio: auto;
-  min-height: 40px;
-}
-
-/* إصلاح التتابع 2026-10-25: عرض الأجندة يتفوق على العرض المدمج
-   (<360px) — أرضية 40px هي العقد الموثق للطي على الهاتف أيضًا؛
-   كان قالب compact (48px) يعلوه بالترتيب فيُلغي وعد الضغط.
-   التحديد أدق (سمتان على الجذر) فيغلب بلا الاعتماد على الترتيب. */
-.m-ocal[data-ocal-presentation="agenda"][data-ocal-compact="true"] .m-ocal__gridrow {
-  min-height: max(2.5em, 40px);
-}
-
-.m-ocal[data-ocal-presentation="agenda"][data-ocal-compact="true"] .m-ocal__cell {
-  aspect-ratio: auto;
-  min-height: 40px;
-}
-
+/* ================= 3) شبكة الشهر وشبكة الأسبوع ================= */
+/* شبكة الأسبوع (عقد 2026-10-25) هي الشبكة نفسها بصف واحد — نفس
+   أعمدة الخلايا/الأرضيات/الفجوات، ودالة display حسب عرض الجذر
+   (data-ocal-compact) كما في الشهر. */
 .m-ocal__weekdays {
   display: flex;
   gap: var(--micro-space-1);
@@ -391,18 +345,15 @@
   min-height: var(--micro-touch-min);
 }
 
-/* خلية فارغة (بادئة الشهر) — تحجز العمود بلا تفاعل */
-.m-ocal__cellblank {
-  width: calc((100% - 6 * var(--micro-space-1)) / 7);
-  border-radius: var(--micro-radius-chip);
-}
+/* خلية فارغة — لم تعد تُستخدم (عقد 2026-10-25: أيام الأشهر المجاورة
+   خلايا حقيقية خافتة بدل الفراغات؛ الصنف يبقى محذوفًا من المصدر) */
 
 /* خلية الشهر: مربعة عند الاتساع (≥360px)، وأرضية ارتفاع 48px عند
    الضيق عبر عقد العرض المدمج أدناه.
-   2026-10-25 (مرجع المالك calendar-target): الرقم + النقاط مجموعة
-   واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم يومها مباشرة فلا
-   تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل المجموعة حيث
-   يباعد بين الأسابيع. */
+   2026-10-25 (مرجع المالك calendar-reference-implementation.html): الرقم
+   + النقاط مجموعة واحدة متمركزة بفجوة ثابتة 2px — النقطة تحت رقم
+   يومها مباشرة فلا تلتبس بصف الأسبوع التالي؛ فراغ الفصل يقع أسفل
+   المجموعة حيث يباعد بين الأسابيع. */
 .m-ocal__cell {
   position: relative;
   display: flex;
@@ -424,6 +375,26 @@
   font-size: var(--micro-label-size);
   font-weight: var(--micro-weight-medium);
   line-height: 1;
+}
+
+/* يوم من شهر مجاور (عقد 2026-10-25 — مرجع المالك: «grey number, dots
+   at 35% opacity»): رقم أهدأ ونقاط أخف شفافية — لكنه يوم حقيقي
+   قابل للتحديد (اختياره ينقل العرض إلى شهره). التحديد/اليوم الحالي
+   يظلان بعلامتيهما الكاملتين فوق الخفوت. */
+.m-ocal__cell--out .m-ocal__daynum {
+  color: var(--micro-text-hint);
+}
+
+.m-ocal__cell--out .m-ocal__dot {
+  opacity: 0.35;
+}
+
+.m-ocal__cell--out.m-ocal__cell--selected .m-ocal__daynum {
+  color: var(--micro-text-inverse);
+}
+
+.m-ocal__cell--out.m-ocal__cell--selected .m-ocal__dot {
+  opacity: 1;
 }
 
 /* علامة اليوم الحالي (2026-10-25، مرجع المالك): حد خارجي 2px + رقم
@@ -729,86 +700,23 @@
   border-color: var(--micro-danger-surface);
 }
 
-/* ================= 6b) منطقة إفصاح أجندة اليوم المحدد (عرض agenda) ================= */
-.m-ocal__agenda {
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-2);
-}
-
-.m-ocal__agenda-note {
-  margin: 0;
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
-}
-
-.m-ocal__agenda-toggle {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--micro-space-1) var(--micro-space-2);
-  width: 100%;
-  min-height: var(--micro-touch-min); /* ≥ 48px */
-  padding: var(--micro-space-2) var(--micro-space-3);
-  border: 1px solid var(--micro-border-divider);
-  border-radius: var(--micro-radius-field);
-  background-color: var(--micro-surface-base);
-  color: var(--micro-text-primary);
-  text-align: start;
-  cursor: pointer;
-}
-
-.m-ocal__agenda-toggle:active {
-  background-color: var(--micro-surface-selected);
-}
-
-.m-ocal__agenda-date {
-  min-width: 0;
-  font-size: var(--micro-button-label-size);
-  font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
-  color: var(--micro-text-primary);
-  overflow-wrap: anywhere;
-}
-
-.m-ocal__agenda-count {
-  font-size: var(--micro-secondary-size);
-  line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
-}
-
-.m-ocal__agenda-toggle svg {
-  flex: none;
-  margin-inline-start: auto;
-  width: var(--micro-icon-in-button);
-  height: var(--micro-icon-in-button);
-  fill: none;
-  stroke: currentColor;
-  transition: transform var(--micro-motion-selection) var(--micro-ease-standard);
-}
-
-.m-ocal__agenda-toggle[aria-expanded="true"] svg {
-  transform: rotate(180deg);
-}
-
-.m-ocal__agenda-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--micro-space-2);
-}
-
-.m-ocal__agenda-title {
-  margin: 0;
-  font-size: var(--micro-button-label-size);
-  font-weight: var(--micro-weight-semibold);
-  line-height: var(--micro-button-label-line);
-  color: var(--micro-text-primary);
-  overflow-wrap: anywhere;
-}
-
-.m-ocal__agenda-empty {
+/* ================= 6b) منطقة أحداث اليوم المحدد (Event cards) ================= */
+/* عقد 2026-10-25 (مرجع المالك «Events today»): العنوان الموجز +
+   العد + الإضافة في رأس المنطقة، وبطاقات الصفوف المدمجة تحتها —
+   تظهر دائمًا أسفل الشبكة في عرضَي الشهر والأسبوع وفي شاشة اليوم.
+   فراغ اليوم المحدد حالة صادقة داخل المنطقة. */
+.m-ocal__daypanel-empty {
   padding: var(--micro-space-3) var(--micro-space-4);
+}
+
+/* نطاق الأسبوع في شريط الأسبوع — نفس تدرّج عنوان الشهر (محوري) */
+.m-ocal__week-range {
+  font-size: var(--micro-button-label-size);
+  font-weight: var(--micro-weight-semibold);
+  line-height: var(--micro-button-label-line);
+  color: var(--micro-text-primary);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 /* ================= 7) شاشة القائمة ================= */
@@ -902,7 +810,6 @@
 /* ================= 10) الحركة ================= */
 .m-ocal__cell,
 .m-ocal__viewseg-btn,
-.m-ocal__pres-btn,
 .m-ocal__navbtn,
 .m-ocal__todaybtn,
 .m-ocal__month-trigger,
@@ -911,7 +818,6 @@
 .m-ocal__picker-month,
 .m-ocal__row,
 .m-ocal__row-tool,
-.m-ocal__agenda-toggle,
 .m-ocal__add,
 .m-ocal__retry {
   transition:

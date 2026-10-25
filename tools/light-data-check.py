@@ -133,6 +133,26 @@ main{width:100%;max-width:430px;margin:auto;padding:12px;display:grid;gap:24px}
 <li data-series="b" data-label="فئة ب" data-value="6"></li>
 <li data-series="c" data-label="صفر" data-value="0"></li></ul>
 <div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--donut" data-chart="donut" data-total="25" id="donut-empty">
+<h2 class="m-chart__title">توزيع بلا بيانات</h2>
+<ul class="m-chart__data" hidden></ul>
+<div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--donut" data-chart="donut" id="donut-null">
+<h2 class="m-chart__title">توزيع كل قيمه مجهولة</h2><ul class="m-chart__data" hidden>
+<li data-series="a" data-label="مجهولة أولى" data-value=""></li>
+<li data-series="b" data-label="مجهولة ثانية" data-value=""></li></ul>
+<div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--donut" data-chart="donut" id="donut-zero">
+<h2 class="m-chart__title">توزيع صفر حقيقي</h2><ul class="m-chart__data" hidden>
+<li data-series="a" data-label="صفر أ" data-value="0"></li>
+<li data-series="b" data-label="صفر ب" data-value="0"></li></ul>
+<div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
+<section class="m-chart m-chart--donut" data-chart="donut" data-total="25" id="donut-malformed">
+<h2 class="m-chart__title">توزيع بقيمة مشوهة</h2><ul class="m-chart__data" hidden>
+<li data-series="a" data-label="مشوهة" data-value="12oops"></li>
+<li data-series="b" data-label="سليمة" data-value="8"></li>
+<li data-series="c" data-label="مفقودة" data-value=""></li></ul>
+<div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
 </main><script src="/components/data/data.js"></script><script src="/components/data/packed-circle.js"></script>
 <script src="/components/metric-comparison/metric-comparison.js"></script></body></html>"""
 
@@ -361,6 +381,43 @@ def main():
                       wide_donut == 148, wide_donut)
                 wide_page.close()
                 wide_ctx.close()
+
+                # ---------- 2026-10-25 corrective brief: donut no-data / real-zero / malformed ----------
+                check("donut with an empty dataset renders no SVG ring at all (no fake geometry)",
+                      page.locator("#donut-empty .m-chart__empty").count() == 1
+                      and "لا توجد بيانات" in page.locator("#donut-empty .m-chart__empty").inner_text()
+                      and page.locator("#donut-empty [data-plot] svg").count() == 0
+                      and page.locator("#donut-empty .m-legend").count() == 0
+                      and page.locator("#donut-empty[data-scale-state=empty]").count() == 1)
+                check("donut with all-unknown values stays no-data with honest legend disclosure",
+                      page.locator("#donut-null .m-chart__empty").count() == 1
+                      and page.locator("#donut-null [data-plot] svg").count() == 0
+                      and page.locator("#donut-null[data-scale-state=empty]").count() == 1
+                      and page.locator("#donut-null .m-legend__item").count() == 2
+                      and all("(غير متاح)" in v for v in
+                              page.locator("#donut-null .m-legend__value").all_text_contents()))
+                check("donut real zero stays distinct from no-data: deliberate ring with a readable 0",
+                      page.locator("#donut-zero .m-chart__empty").count() == 0
+                      and page.locator("#donut-zero .m-donut__svg").count() == 1
+                      and "0" in page.locator("#donut-zero").inner_text()
+                      and page.locator("#donut-zero .m-legend__value").all_text_contents() == ["0", "0"])
+                check("donut malformed value refuses proportions for every category (no % anywhere)",
+                      page.locator("#donut-malformed .m-chart__error").count() == 1
+                      and page.locator("#donut-malformed[data-scale-state=invalid]").count() == 1
+                      and page.locator("#donut-malformed [data-plot] svg").count() == 0
+                      and all("%" not in v for v in
+                              page.locator("#donut-malformed .m-legend__value").all_text_contents()))
+                malformed_legend = page.locator("#donut-malformed .m-legend__value").all_text_contents()
+                check("donut malformed legend uses the unified invalid/missing classification with the raw reading",
+                      malformed_legend == ["8", "12oops (قيمة غير صالحة)", "(غير متاح)"], malformed_legend)
+                page.locator("#donut-malformed .m-chart__disclose").click()
+                malformed_rows = page.locator("#donut-malformed table.m-chart__dataset tbody tr").all_text_contents()
+                check("donut malformed table matches the legend classification and keeps every reading",
+                      len(malformed_rows) == 3
+                      and "12oops (قيمة غير صالحة)" in malformed_rows[0]
+                      and "8" in malformed_rows[1]
+                      and "(غير متاح)" in malformed_rows[2]
+                      and all("%" not in r for r in malformed_rows), malformed_rows)
 
                 check("packed-circle gains the complete table switch with every category and state",
                       page.locator("#packed .m-chart__disclose").count() == 1
