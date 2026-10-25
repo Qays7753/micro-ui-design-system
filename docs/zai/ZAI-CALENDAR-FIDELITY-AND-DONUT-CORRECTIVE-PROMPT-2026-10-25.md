@@ -11,7 +11,7 @@ replit/light-only-complete-ui-repair-2026-10-24
 Current remote tip before this pass:
 
 ```text
-b31675d160c9ebaade22b7b36e4659cc80dbe071
+2608485bb3dabc41ad25c557c25329cd11f44b8e
 ```
 
 Do not create another branch. Do not modify `main`. Do not merge. Pull the latest tip first and preserve all existing commits, including the previous order-bar containment fix.
@@ -113,22 +113,60 @@ The previous correction is already correct and must not regress:
 
 ## Phase 2 — clean product-like mobile preview
 
-The current Showcase contains diagnostic and component-lab material that is useful for tests but is not what the owner will transfer into the real application. Create or update a clean mobile-review mode using the real components and host contracts.
+The current Showcase is a component catalogue/lab. The owner does not want that as the default experience. Convert the default review surface into a small real mobile application experience that happens to use every reusable component family. It must feel like a natural phone app, not a page that labels and displays components for inspection. Use the real components and host contracts.
+
+### Canonical review device and scale
+
+Use the standard Samsung Galaxy S25 profile as the canonical visual review target:
+
+- CSS viewport: `360 × 780` in portrait.
+- Browser/CSS zoom: exactly `100%`.
+- Device pixel ratio: `3` may be used only when capturing a device-faithful screenshot; it must not change CSS layout decisions.
+- Physical `1080 × 2340` pixels are not CSS layout dimensions and must not be used to scale the UI.
+- Do not use `zoom`, `transform: scale(...)`, canvas fitting, artificial min/max scaling, or a device-specific shrink/expand workaround.
+- Do not add a Galaxy-specific production breakpoint or user-agent branch. Build normal responsive CSS that naturally renders at the canonical viewport.
+
+The `320`, `390`, and `430` CSS-pixel cases remain robustness checks. They are not permission to make the default Showcase look like a responsive component catalogue. The canonical owner-facing screenshot and first visual review must be the natural `360 × 780` app surface.
+
+Device reference URLs used for this target:
+
+```text
+https://phone-simulator.com/devices/samsung-galaxy-s25
+https://www.screensize.io/blog/galaxy-s25.html
+```
 
 ### Clean preview requirements
 
-- Render at real phone viewport sizes: 320, 360, 390, and 430 CSS pixels, portrait.
+- Render the default app surface at the canonical Samsung S25 viewport: `360 × 780` CSS pixels, portrait, at 100% CSS zoom. Also test 320, 390, and 430 CSS pixels for robustness.
 - Support RTL and LTR.
-- The preview must feel like a real mobile application surface, not a documentation page and not a desktop catalogue squeezed into a phone.
+- The default preview must feel like a real mobile application surface, not a documentation page and not a desktop catalogue squeezed into a phone.
+- The default entry must open directly into the app-like mobile experience. The owner must not need to open State Lab, expand a component section, toggle fixture controls, or dismiss documentation before seeing the product-like surface.
+- Organize the component families across a small number of coherent app-like screens or real navigation states. It is acceptable that one screen does not show every component at once; the owner must be able to reach all of them through natural app navigation or actual product surfaces.
+- Use real app structure and hierarchy: a plausible app header, real navigation, content sections, actual actions, and concise domain fixtures. Do not label a screen with component names such as `m-chart`, `Fields`, `Order Schedule`, `State Lab`, `Variant`, or `Demo` unless that label would genuinely exist in the product.
 - Use the real reusable components, real component CSS, real public APIs, and concise realistic fixtures.
 - Every component family in the current catalog must appear at least once in a coherent product-like context, using multiple short screens or states where necessary. Do not cram all families into one giant screen.
 - Remove from the clean preview anything that would not be transferred into the real system: test harness chrome, State Lab labels, component-family headings, explanatory paragraphs, implementation notes, PASS/FAIL badges, measurement overlays, debug controls, source-path text, fixture-switch controls, and duplicate showcase scaffolding.
 - Keep those test fixtures and diagnostic paths in the repository if the tests need them, but isolate them from the clean mobile-review surface. Do not delete test infrastructure merely to make the clean preview look better.
-- Do not add a decorative phone frame around the preview. The browser viewport itself is the phone preview; a frame that will not exist in the real application is not product UI.
+- Do not add a decorative phone frame around the preview. The browser viewport itself is the Samsung S25 phone preview; a frame that will not exist in the real application is not product UI.
 - Do not add invented business features. Use only the current component contracts and host-owned fixture data necessary to demonstrate them.
 - Keep text direct and minimal. Every visible label in the clean preview must be a real product label, action, status, date, or value—not an explanation of the component.
 - Ensure the clean preview can be opened directly and captured without first opening a diagnostic lab or toggling hidden test controls.
 - Keep the previous standalone build deterministic and update it from source.
+
+The clean preview is a review surface, not a second production app. Do not duplicate component implementations or create fake screenshots. Mount the same reusable components that will later be integrated into the real system, and isolate only the host composition and fixture data.
+
+### Mandatory hands-on visual acceptance loop
+
+Do not deliver based only on source inspection or automated gate totals. Before the final commit:
+
+1. Start the real local Preview from the final source and the final standalone output.
+2. Open the clean app-like entry at the canonical Samsung S25 profile (`360 × 780` CSS px, 100% zoom, portrait).
+3. Interact with it as a user: navigate between the available mobile screens, open the Calendar, switch Day/Week/Month, move between dates, inspect event rows, press the existing actions, open representative forms/overlays, and exercise the component states that are reachable in the clean app flow.
+4. Repeat at RTL and LTR and at the robustness widths. Check the first screen, the content above the fold, scroll ownership, focus/pressed states, text wrapping, visual hierarchy, and whether any component still looks like a labelled demo instead of a native-feeling app surface.
+5. If anything is visibly broken, inconsistent, clipped, oversized, too empty, too web-like, mislabeled, non-functional, or not appropriate for the real mobile product, fix the reusable component or the correct host layer immediately. Do not merely document the issue as a limitation.
+6. Reopen and retest the changed flow after every correction. Recapture the evidence and rerun the relevant regression checks, then rerun the complete gates before delivery.
+
+The final evidence must demonstrate an actual usable app-like Mobile Preview, not just isolated component screenshots. Do not stop at “technically passes” if the visual result still looks like a component laboratory.
 
 ### Calendar in the clean preview
 
@@ -157,7 +195,7 @@ Add or update deterministic regression checks for:
 5. Selected/current-day and dot ownership.
 6. Existing order-bar containment with two separate circular tools in RTL/LTR.
 7. No horizontal overflow at 320/360/390/430px and simulated 200% typography.
-8. Clean mobile preview: direct entry, no diagnostic chrome, no test-only labels, no desktop overflow, and all catalog component families covered by real component roots or documented screens.
+8. Clean mobile preview: direct app-like entry at `360 × 780`, no diagnostic chrome, no test-only labels, no device frame or artificial scaling, no desktop overflow, and all catalog component families covered by real component roots or documented screens.
 9. No console, network, or resource errors in source and standalone previews.
 
 Do not weaken or remove an existing test to make it pass. Update an expectation only when the documented component contract genuinely changed.
@@ -189,6 +227,7 @@ Required result: zero failures in every gate. If a new clean-preview check is ad
 Capture fresh evidence at 320, 360, 390, and 430px in RTL and LTR for:
 
 - clean mobile preview entry;
+- canonical Samsung Galaxy S25 app surface at `360 × 780` CSS pixels and 100% zoom;
 - Calendar Month screen;
 - Calendar Week screen;
 - Calendar Day screen;
@@ -221,5 +260,6 @@ The report must include:
 11. Untested limits such as real-device rendering, Safari/WebKit, screen readers, and true touch.
 12. A clear statement that the same branch is ready for human visual review and merge consideration only after every required gate is green.
 13. Paste a concise completion summary directly in the agent chat, including the final remote HEAD.
+14. Record the canonical preview viewport (`360 × 780` CSS px, 100% zoom) and confirm that no artificial scaling or device-specific layout hack was used.
 
 Commit and push all implementation, tests, evidence, standalone, manifest, and report updates to the same feature branch. Do not merge and do not modify `main`.
