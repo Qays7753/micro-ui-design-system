@@ -1,0 +1,298 @@
+{
+  "sourceRef": "0fcaff4e81a12ae7fb516d481317f8342641e59d",
+  "browser": "156.0.8078.79",
+  "scope": "360x780 Light; RTL and numeric-direction LTR; controlled clock for toast",
+  "passed": 33,
+  "failed": 4,
+  "checks": [
+    {
+      "name": "single icon-close modal traps Tab in both directions",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "modal restores its opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker clone selects and emits exactly once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker reconnect remains single-bound",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "replacement loading hides its visible label",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "default loading preserves its text",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "recovery action uses library font and no native button chrome",
+      "passed": true,
+      "detail": {
+        "font": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+        "border": "none",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "name": "signed: negative sign precedes digits / rtl",
+      "passed": true,
+      "detail": {
+        "text": "-60",
+        "sign": 225.109375,
+        "digit": 230.28125,
+        "valid": true
+      }
+    },
+    {
+      "name": "metric: negative sign precedes digits / rtl",
+      "passed": true,
+      "detail": {
+        "text": "-9 (سالب)",
+        "sign": 239.484375,
+        "digit": 244.65625,
+        "valid": true
+      }
+    },
+    {
+      "name": "circles: negative sign precedes digits / rtl",
+      "passed": true,
+      "detail": {
+        "text": "-5",
+        "sign": 271.03125,
+        "digit": 276.203125,
+        "valid": true
+      }
+    },
+    {
+      "name": "packed: negative sign precedes digits / rtl",
+      "passed": true,
+      "detail": {
+        "text": "-5 (سالب غير صالح للمساحة)",
+        "sign": 235.828125,
+        "digit": 241,
+        "valid": true
+      }
+    },
+    {
+      "name": "visible time reading: explicit ISO year-month-day order / rtl",
+      "passed": false,
+      "detail": {
+        "text": "1. قراءة صباحية، 2026-01-02",
+        "year": {
+          "x": 227.796875,
+          "y": 703.421875
+        },
+        "month": {
+          "x": 207,
+          "y": 703.421875
+        },
+        "day": {
+          "x": 186.203125,
+          "y": 703.421875
+        },
+        "valid": false
+      }
+    },
+    {
+      "name": "time table label: explicit ISO year-month-day order / rtl",
+      "passed": false,
+      "detail": {
+        "text": "قراءة صباحية، 2026-01-02",
+        "year": {
+          "x": 227.125,
+          "y": 381.359375
+        },
+        "month": {
+          "x": 206.296875,
+          "y": 381.359375
+        },
+        "day": {
+          "x": 185.46875,
+          "y": 381.359375
+        },
+        "valid": false
+      }
+    },
+    {
+      "name": "signed: negative sign precedes digits / ltr",
+      "passed": true,
+      "detail": {
+        "text": "-60",
+        "sign": 114.09375,
+        "digit": 119.265625,
+        "valid": true
+      }
+    },
+    {
+      "name": "metric: negative sign precedes digits / ltr",
+      "passed": true,
+      "detail": {
+        "text": "-9 (سالب)",
+        "sign": 107.515625,
+        "digit": 112.6875,
+        "valid": true
+      }
+    },
+    {
+      "name": "circles: negative sign precedes digits / ltr",
+      "passed": true,
+      "detail": {
+        "text": "-5",
+        "sign": 75.96875,
+        "digit": 81.140625,
+        "valid": true
+      }
+    },
+    {
+      "name": "packed: negative sign precedes digits / ltr",
+      "passed": true,
+      "detail": {
+        "text": "-5 (سالب غير صالح للمساحة)",
+        "sign": 111.15625,
+        "digit": 116.328125,
+        "valid": true
+      }
+    },
+    {
+      "name": "visible time reading: explicit ISO year-month-day order / ltr",
+      "passed": false,
+      "detail": {
+        "text": "1. قراءة صباحية، 2026-01-02",
+        "year": {
+          "x": 72,
+          "y": 703.421875
+        },
+        "month": {
+          "x": 51.203125,
+          "y": 703.421875
+        },
+        "day": {
+          "x": 30.40625,
+          "y": 703.421875
+        },
+        "valid": false
+      }
+    },
+    {
+      "name": "time table label: explicit ISO year-month-day order / ltr",
+      "passed": false,
+      "detail": {
+        "text": "قراءة صباحية، 2026-01-02",
+        "year": {
+          "x": 70.65625,
+          "y": 381.359375
+        },
+        "month": {
+          "x": 49.828125,
+          "y": 381.359375
+        },
+        "day": {
+          "x": 29,
+          "y": 381.359375
+        },
+        "valid": false
+      }
+    },
+    {
+      "name": "data table retains invalid raw input and state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric table retains zero and Arabic state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "toast appearance never steals focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "focused toast survives its original expiry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "manual close returns focus to declared target once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "manual close cancels pending expiry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "focus movement between toast children stays paused",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "focus exit resumes remaining lifetime",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "resumed expiry hides without stealing outside focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "programmatic close never steals outside focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "disconnect cleans paused toast and leaves no late expiry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "caller can declare a dynamic Element return target",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "re-show while focused starts a paused fresh lifetime",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fresh lifetime is not shortened by old callbacks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fresh session expires normally after focus leaves",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "explicit close-button return target overrides root target",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "disabled return target is never focused",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no source JavaScript or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ]
+}

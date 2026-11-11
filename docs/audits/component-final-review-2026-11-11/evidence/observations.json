@@ -1,0 +1,361 @@
+{
+  "sha": "8adbe8f7220338fd2d6b42d2b85be8e34f05136e",
+  "viewport": [
+    360,
+    780
+  ],
+  "direction": "rtl",
+  "theme": "light",
+  "families": {
+    "buttons": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-buttons",
+          "width": 328,
+          "height": 495.03125
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة الأزرار (B01)"
+      }
+    },
+    "fields": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-fields",
+          "width": 328,
+          "height": 1120.859375
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة الحقول (B02)"
+      }
+    },
+    "selection": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-selection",
+          "width": 328,
+          "height": 1192.953125
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة الاختيار (B03)"
+      }
+    },
+    "organization": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-organization",
+          "width": 328,
+          "height": 756.015625
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة التنظيم والمعلومات (B04)"
+      }
+    },
+    "data": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-data",
+          "width": 328,
+          "height": 3983.375
+        },
+        {
+          "id": "sc-packed",
+          "width": 328,
+          "height": 971.171875
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة البيانات والتتبّع (B05)"
+      }
+    },
+    "messages": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-messages",
+          "width": 328,
+          "height": 1480.90625
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة الرسائل والحالات العامة (B06)"
+      }
+    },
+    "navigation": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-navigation",
+          "width": 328,
+          "height": 1018
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة التنقّل والطبقات (B07)"
+      }
+    },
+    "surfaces": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-surfaces",
+          "width": 328,
+          "height": 662.9375
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — الأسطح البترولية والحركة (S01)"
+      }
+    },
+    "info-strip": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-info-strip",
+          "width": 328,
+          "height": 1040.78125
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — مراجعة البطاقة العددية"
+      }
+    },
+    "metric-comparison": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-metric",
+          "width": 328,
+          "height": 2598.375
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — مراجعة المكونات"
+      }
+    },
+    "account-settings": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-account",
+          "width": 328,
+          "height": 338.984375
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — مراجعة المكونات"
+      }
+    },
+    "access-gateway": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-gateway",
+          "width": 328,
+          "height": 532.984375
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — مراجعة المكونات"
+      }
+    },
+    "order-schedule": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-ocal",
+          "width": 328,
+          "height": 1105.078125
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "جدول الطلبات المجدولة — مثال الاستخدام — Micro"
+      }
+    },
+    "carousel": {
+      "dir": "rtl",
+      "scroll": 360,
+      "width": 360,
+      "sections": [
+        {
+          "id": "sc-carousel",
+          "width": 328,
+          "height": 457.03125
+        }
+      ],
+      "preview": {
+        "dir": "rtl",
+        "width": 360,
+        "scroll": 360,
+        "title": "Micro — معاينة عارض البطاقات (Carousel)"
+      }
+    }
+  },
+  "errors": [],
+  "failedRequests": [],
+  "states": [
+    "buttons",
+    "fields",
+    "selection",
+    "organization",
+    "data",
+    "data-1",
+    "messages",
+    "navigation",
+    "surfaces",
+    "info-strip",
+    "metric-comparison",
+    "account-settings",
+    "access-gateway",
+    "order-schedule",
+    "carousel",
+    "variant-donut",
+    "variant-bubbles",
+    "variant-packed-circle",
+    "signed-data",
+    "variant-metric-circles",
+    "variant-main-metric-featured",
+    "variant-info-strip-peek",
+    "navigation-scrolled",
+    "fields-filled-focus",
+    "field-error",
+    "gateway-validation",
+    "carousel-expanded",
+    "table-sc-chart-bars",
+    "table-sc-chart-line",
+    "table-sc-chart-donut",
+    "table-sc-chart-bubbles",
+    "table-sc-review-packed",
+    "table-sc-signed-bars",
+    "table-sc-signed-time",
+    "metric-zero",
+    "metric-negative",
+    "metric-missing",
+    "metric-invalid",
+    "metric-mixed",
+    "carousel-peek"
+  ],
+  "browser": "156.0.8078.79",
+  "navigationInitial": {
+    "button": {
+      "x": 259,
+      "y": 305.421875,
+      "width": 48,
+      "height": 48,
+      "top": 305.421875,
+      "right": 307,
+      "bottom": 353.421875,
+      "left": 259
+    },
+    "frame": {
+      "x": 32,
+      "y": -0.59375,
+      "width": 296,
+      "height": 440,
+      "top": -0.59375,
+      "right": 328,
+      "bottom": 439.40625,
+      "left": 32
+    },
+    "hit": "<use href=\"#i-more\"></use>",
+    "covered": false
+  },
+  "navigationAfterScroll": {
+    "button": {
+      "x": 259,
+      "y": 305.359375,
+      "width": 48,
+      "height": 48,
+      "top": 305.359375,
+      "right": 307,
+      "bottom": 353.359375,
+      "left": 259
+    },
+    "frame": {
+      "x": 32,
+      "y": -0.59375,
+      "width": 296,
+      "height": 440,
+      "top": -0.59375,
+      "right": 328,
+      "bottom": 439.40625,
+      "left": 32
+    },
+    "hit": "<use href=\"#i-more\"></use>",
+    "covered": false
+  }
+}

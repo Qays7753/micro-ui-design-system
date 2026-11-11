@@ -1,0 +1,3563 @@
+{
+  "commit": "8adbe8f7220338fd2d6b42d2b85be8e34f05136e",
+  "browser": "156.0.8078.79",
+  "scope": "Light,360x780 RTL; emulated keyboard and touch; not a screen reader test",
+  "passed": 67,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "buttons: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 8,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "fields: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 10,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "selection: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 21,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "organization: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 1,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "data: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 11,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "messages: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 8,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "navigation: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 18,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "surfaces: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 0,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "info-strip: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 4,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "metric-comparison: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 4,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "account-settings: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 1,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "access-gateway: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 4,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "order-schedule: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 10,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "carousel: exposed controls have accessible names",
+      "passed": true,
+      "detail": {
+        "controls": 3,
+        "unnamed": []
+      }
+    },
+    {
+      "name": "quantity: upper bound remains 99",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "quantity: lower bound remains zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "readonly: keyboard cannot edit and value can be selected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "search: keyboard clears and restores input focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields sync: no fake user edit events",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "segmented: RTL ArrowLeft skips aria-disabled option",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "segmented: disabled does not activate with Enter/Space",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "switch: pending exposes busy+disabled and preserves value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "switch: completion restores enabled state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "switch: keyboard changes actual checked state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: End focuses last enabled option",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: Enter selection matches exposed selected state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: removed selection clears value and summary with one event",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: loading moves focus before hiding options",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: retry emits once and does not load invented data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: disabled hides options/retry and exposes state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: Escape restores opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "layer: keyboard open names modal and contains focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "layer: Tab and reverse Tab remain inside modal",
+      "passed": true,
+      "detail": [
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true,
+          "active": "<button type=\"button\" class=\"m-btn m-btn--icon m-btn--secondary\" data-layer-close=\"\" aria-label=\"إغلاق\" data-micro-layer-close-bound=\"1\"><svg class=\"m-btn__icon\" aria-hidden=\"true\"><use href=\"#i-close"
+        }
+      ]
+    },
+    {
+      "name": "layer: AX tree exposes named dialog",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "layer: close restores opener focus and scroll lock",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "tabs: RTL next selects and reveals matching panel",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "tabs: Tab reaches content panel, no skipped content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filters: applied search + checkbox update count",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filters: cancel restores applied search",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filters: clear+apply hide zero count",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "destructive dialog: backdrop tap respects keep policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "destructive dialog: Escape remains available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "organization: Space opens real disclosure and aria-expanded",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "organization: Enter closes without losing focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-chart-donut: keyboard disclosure names and opens real table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-chart-donut: Space closes table and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-chart-bubbles: keyboard disclosure names and opens real table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-chart-bubbles: Space closes table and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-review-packed: keyboard disclosure names and opens real table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-review-packed: Space closes table and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-main-metric: keyboard disclosure names and opens real table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-main-metric: Space closes table and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "[data-review-variant=metric-circles]: keyboard disclosure names and opens real table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "[data-review-variant=metric-circles]: Space closes table and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "settings: keyboard reaches application view and visible title",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "settings: native switch state changes by keyboard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "settings: Escape restores account opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: invalid submit focuses and describes first invalid input",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: keyboard reveal retains focus, fixed name and pressed state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: busy blocks duplicate submit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: result text is exact and event omits credentials",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: undefined result never claims successful authentication",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel: RTL ArrowLeft advances one position",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel: expansion exposes details with aria-expanded",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel: End collapses previous details and inactive slides are inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: initialized clone owns working listeners exactly once",
+      "passed": true,
+      "detail": {
+        "events": 1,
+        "value": {
+          "value": "b",
+          "label": "ثان"
+        },
+        "bound": true
+      }
+    },
+    {
+      "name": "runtime: no uncaught JavaScript errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "ax": {
+    "buttons": [
+      {
+        "role": "button",
+        "name": "حفظ العملية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "تصفية 2",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إجراء نصي خفيف",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "حذف نهائي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إزالة من القائمة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "خيارات إضافية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "بحث",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "زر بعرض كامل متعدد الأسطر",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "fields": [
+      {
+        "role": "textbox",
+        "name": "اسم الصنف",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "describedby",
+            "value": {
+              "type": "idrefList",
+              "value": "m-field-msg-4",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1287,
+                  "idref": "m-field-msg-4"
+                }
+              ]
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1284,
+                  "text": "اسم الصنف"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "ملاحظات الطلب",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1290,
+                  "text": "ملاحظات الطلب"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "searchbox",
+        "name": "بحث في العناصر",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1295,
+                  "text": "بحث في العناصر"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "قيمة الفاتورة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "describedby",
+            "value": {
+              "type": "idrefList",
+              "value": "m-field-msg-5",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1317,
+                  "idref": "m-field-msg-5"
+                }
+              ]
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1313,
+                  "text": "قيمة الفاتورة"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إنقاص الكمية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "الكمية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1319,
+                  "text": "الكمية"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "زيادة الكمية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "حقل تجربة الحالات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "describedby",
+            "value": {
+              "type": "idrefList",
+              "value": "m-field-msg-6",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1338,
+                  "idref": "m-field-msg-6"
+                }
+              ]
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1335,
+                  "text": "حقل تجربة الحالات"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "حقل معطل",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1341,
+                  "text": "حقل معطل"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "قراءة فقط (قابل للنسخ)",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1345,
+                  "text": "قراءة فقط (قابل للنسخ)"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "selection": [
+      {
+        "role": "checkbox",
+        "name": "تنظيف مكاتب",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1361,
+                  "text": "تنظيف مكاتب"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "checkbox",
+        "name": "كل الخدمات (يبدأ غير محسوم)",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "mixed"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1368,
+                  "text": "كل الخدمات (يبدأ غير محسوم)"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "checkbox",
+        "name": "خدمة غير متاحة",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1375,
+                  "text": "خدمة غير متاحة"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "checkbox",
+        "name": "تعقيم غرف الاجتماعات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1382,
+                  "text": "تعقيم غرف الاجتماعات"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "radio",
+        "name": "أسبوعي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1390,
+                  "text": "أسبوعي"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "radio",
+        "name": "شهري",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1397,
+                  "text": "شهري"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "radio",
+        "name": "سنوي",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1404,
+                  "text": "سنوي"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "switch",
+        "name": "تنبيهات الطلبات إعداد دائم",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1412,
+                  "text": "تنبيهات الطلبات إعداد دائم"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "switch",
+        "name": "مفتاح بفترة انتظار setSwitchPending",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1418,
+                  "idref": "sc-switch-pending-demo",
+                  "text": "مفتاح بفترة انتظار setSwitchPending"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "تتبّع التغييرات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "اليوم",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "هذا الأسبوع",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "هذا الشهر",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الربع (معطل)",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الطلبات النشطة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "قيد التجهيز",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "بانتظار الموافقة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الفحص الدوري الشامل",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الصيانة الطارئة فقط",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "وضع مخصص (معطل)",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "اختيار مورد",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "organization": [
+      {
+        "role": "button",
+        "name": "تفاصيل التسوية (قسم قابل للطي)",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      }
+    ],
+    "data": [
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      }
+    ],
+    "messages": [
+      {
+        "role": "button",
+        "name": "إغلاق الملاحظة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إغلاق الملاحظة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إغلاق الملاحظة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إعادة إظهار المعلوماتية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إعادة إظهار النجاح",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إعادة إظهار الخطأ",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إظهار رسالة عابرة (toast)",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إعلان في القناة الحيّة (polite)",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "navigation": [
+      {
+        "role": "button",
+        "name": "فتح حوار مركزي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "فتح لوحة سفلية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "رجوع",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "المزيد",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "النشطة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "controls",
+            "value": {
+              "type": "idrefList",
+              "value": "sc-tab-a",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 2678,
+                  "idref": "sc-tab-a"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "المكتملة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "المجدولة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "المرتجعات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "اعتماد الطلب",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "تصفية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "خيارات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "مشروعي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "العمل",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الطلبات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الحساب",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "اعتماد الطلب",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إلغاء",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "خيارات المثال",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "surfaces": [],
+    "info-strip": [
+      {
+        "role": "button",
+        "name": "البطاقة السابقة",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "البطاقة التالية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "البطاقة السابقة",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "البطاقة التالية",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "metric-comparison": [
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض البيانات كجدول",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      }
+    ],
+    "account-settings": [
+      {
+        "role": "button",
+        "name": "فتح الإعدادات",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "access-gateway": [
+      {
+        "role": "textbox",
+        "name": "البريد الإلكتروني",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "describedby",
+            "value": {
+              "type": "idrefList",
+              "value": "m-field-msg-7",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 2758,
+                  "idref": "m-field-msg-7"
+                }
+              ]
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 2755,
+                  "text": "البريد الإلكتروني"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "textbox",
+        "name": "كلمة المرور",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "multiline",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "readonly",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "describedby",
+            "value": {
+              "type": "idrefList",
+              "value": "m-field-msg-8",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 2769,
+                  "idref": "m-field-msg-8"
+                }
+              ]
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 2760,
+                  "text": "كلمة المرور"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إظهار كلمة المرور",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          },
+          {
+            "name": "controls",
+            "value": {
+              "type": "idrefList",
+              "value": "sc-gw-password",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 34,
+                  "idref": "sc-gw-password"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "متابعة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ],
+    "order-schedule": [
+      {
+        "role": "tab",
+        "name": "يوم",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "أسبوع",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "tab",
+        "name": "شهر",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "selected",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "عرض القائمة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "pressed",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "اختيار الشهر والسنة",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "hasPopup",
+            "value": {
+              "type": "token",
+              "value": "dialog"
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الشهر السابق",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "الشهر التالي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "إضافة طلب ليوم الأربعاء 07/10/2026",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "طلب تجهيز مكتب الاستقبال 09:00 شركة الواحة تم التسليم",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "طلب القهوة العربية 14:30 مطزاوية الفيصل قيد التنفيذ",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      }
+    ],
+    "carousel": [
+      {
+        "role": "button",
+        "name": "عرض التفاصيل",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "السابق",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "التالي",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "errors": []
+}

@@ -1,0 +1,98 @@
+{
+  "baseCommit": "8adbe8f7220338fd2d6b42d2b85be8e34f05136e",
+  "workingTree": true,
+  "scope": "360x780 RTL Light",
+  "passed": 8,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "navigation initial: bottom navbar never covers icon action",
+      "passed": true,
+      "detail": {
+        "icon": {
+          "x": 259,
+          "y": 647.421875,
+          "width": 48,
+          "height": 48,
+          "top": 647.421875,
+          "right": 307,
+          "bottom": 695.421875,
+          "left": 259
+        },
+        "navbar": {
+          "x": 33,
+          "y": 707.421875,
+          "width": 294,
+          "height": 72.984375,
+          "top": 707.421875,
+          "right": 327,
+          "bottom": 780.40625,
+          "left": 33
+        },
+        "clear": true
+      }
+    },
+    {
+      "name": "navigation scrolled: bottom navbar never covers icon action",
+      "passed": true,
+      "detail": {
+        "icon": {
+          "x": 259,
+          "y": 647.359375,
+          "width": 48,
+          "height": 48,
+          "top": 647.359375,
+          "right": 307,
+          "bottom": 695.359375,
+          "left": 259
+        },
+        "navbar": {
+          "x": 33,
+          "y": 707.359375,
+          "width": 294,
+          "height": 72.984375,
+          "top": 707.359375,
+          "right": 327,
+          "bottom": 780.34375,
+          "left": 33
+        },
+        "clear": true
+      }
+    },
+    {
+      "name": "stack option: text fills row while icon remains square",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "featured card has an actual visible example",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "time coordinate is isolated without losing its exact value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "recovery option fits its component",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "narrow row: reading receives its own line before actions",
+      "passed": true,
+      "detail": {
+        "textWidth": 320,
+        "rowWidth": 320,
+        "textBottom": 191.84375,
+        "actionTop": 203.84375
+      }
+    },
+    {
+      "name": "visual pages have no runtime/resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ]
+}

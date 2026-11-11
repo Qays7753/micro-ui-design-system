@@ -1,0 +1,8 @@
+Catalog: 14 families, 6 explicit variants, paths and inventory OK
+
+ICON CHECK OK: 24 رمزًا يطابق أصول assets/icons (المحتوى وfill)
+CHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت
+
+CHECK OK: MANIFEST.json مطابق للمصدر (923 مدخلًا، قراءة فقط)
+
+Source hashes match audited code: 270 files; tokens/assets/maturity unchanged; diff --check clean
