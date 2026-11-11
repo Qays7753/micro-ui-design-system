@@ -35,6 +35,7 @@ BODY = '''
 <div class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="طلب" data-common-period="اليوم" id="metric"><h2 class="m-main-metric__title">مقارنة</h2><div class="m-main-metric__hero"><span class="m-main-metric__label">قيمة رئيسية</span><span class="m-main-metric__number">18</span><span class="m-main-metric__unit">طلب</span></div><ul data-bar-source hidden><li data-series="a" data-label="سالب" data-value="-9" data-unit="طلب" data-period="اليوم"></li><li data-series="a" data-label="صفر" data-value="0" data-unit="طلب" data-period="اليوم"></li><li data-series="a" data-label="مشوه" data-value="12oops" data-unit="طلب" data-period="اليوم"></li></ul><ul class="m-main-metric__rows" data-bar-items></ul><p data-bar-status></p></div>
 <div class="m-metric-circles" data-metric-circles data-layout="separated" id="circles"><h2 class="m-metric-circles__title">دوائر</h2><ul data-metric-source hidden><li data-series="a" data-label="سالب" data-value="-5" data-unit="طلب"></li><li data-series="a" data-label="موجب" data-value="10" data-unit="طلب"></li></ul><ol data-metric-items></ol><ul data-metric-fallback></ul><p data-metric-empty hidden></p><p data-metric-scale></p></div>
 <div class="m-chart m-chart--packed" data-chart="bubbles" data-chart-packed id="packed"><h2 class="m-chart__title">مساحات اختيارية</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="سالب" data-value="-5"></li><li data-series="a" data-label="موجب" data-value="10"></li></ul><div data-plot></div><p data-chart-summary></p></div>
+<div class="m-chart" data-chart="line" data-value-domain="signed" data-axis-type="time" id="time"><h2 class="m-chart__title">زمن معلن</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="قراءة صباحية" data-x="2026-01-02" data-value="-20"></li><li data-series="a" data-label="قراءة مسائية" data-x="2026-02-13" data-value="40"></li></ul><div data-plot></div><p data-chart-summary></p></div>
 <div class="m-toast" id="toast" data-return-focus="#opener" hidden><span class="m-toast__text">تأكيد غير حرج</span><button class="m-btn" data-toast-close>إغلاق</button><button class="m-btn" id="toast-second">إجراء محلي</button></div>
 '''
 FIXTURE = ('<!doctype html><html lang="ar" dir="rtl" data-theme="light"><head><meta charset="utf-8">'
@@ -125,7 +126,7 @@ def main():
             check('recovery action uses library font and no native button chrome',
                   'IBM Plex' in style['font'] and style['border'] == 'none'
                   and style['background'] == 'rgba(0, 0, 0, 0)', style)
-            for root in ['signed', 'metric', 'circles', 'packed']:
+            for root in ['signed', 'metric', 'circles', 'packed', 'time']:
                 page.locator('#' + root + ' button[aria-expanded]').click()
             # Compare actual glyph positions, not just dir attributes.
             order_probe = """e=>{const w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let n;
@@ -140,6 +141,17 @@ def main():
                     cell.scroll_into_view_if_needed()
                     order = cell.evaluate(order_probe)
                     check(root + ': negative sign precedes digits / ' + direction, order['valid'], order)
+                date_probe = """e=>{const w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let n;
+                  while(n=w.nextNode()){const i=n.textContent.indexOf('2026-01-02');if(i<0)continue;
+                    const point=o=>{const r=document.createRange();r.setStart(n,i+o);r.setEnd(n,i+o+1);const b=r.getBoundingClientRect();return {x:b.x,y:b.y}};
+                    const a=point(0),b=point(5),c=point(8),before=(l,r)=>l.y<r.y-1||Math.abs(l.y-r.y)<1&&l.x<r.x;
+                    return {text:e.textContent,year:a,month:b,day:c,valid:before(a,b)&&before(b,c)};}return {text:e.textContent,valid:false}}"""
+                for label, locator in [('visible time reading', page.locator('#time .m-chart__readings dt').first),
+                                       ('time table label', page.locator('#time tbody th').first)]:
+                    locator.scroll_into_view_if_needed()
+                    order = locator.evaluate(date_probe)
+                    check(label + ': explicit ISO year-month-day order / ' + direction, order['valid'], order)
+
             check('data table retains invalid raw input and state', '12oops' in page.locator('#signed table').inner_text() and 'قيمة غير صالحة' in page.locator('#signed table').inner_text())
             check('metric table retains zero and Arabic state', '0 (صفر)' in page.locator('#metric table').inner_text())
             page.evaluate("document.documentElement.dir='rtl'")

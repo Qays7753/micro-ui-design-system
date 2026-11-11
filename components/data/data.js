@@ -154,6 +154,29 @@
     return label;
   }
 
+  function writeFullLabel(node, chart, item) {
+    var label = fullLabelOf(chart, item);
+    var coordinate = item.axisX === null ? '' : String(item.axisX);
+    var isTimeAxis = chart.getAttribute('data-chart') === 'line'
+      && chart.getAttribute('data-axis-type') === 'time';
+    node.textContent = '';
+    if (!isTimeAxis || !coordinate || label.indexOf(coordinate) === -1) {
+      node.textContent = label;
+      return;
+    }
+    // Only the explicitly declared coordinate is isolated; never infer a
+    // date from an arbitrary category label or change its source spelling.
+    label.split(coordinate).forEach(function (part, index) {
+      if (index) {
+        var time = document.createElement('bdi');
+        time.dir = 'ltr';
+        time.textContent = coordinate;
+        node.appendChild(time);
+      }
+      node.appendChild(document.createTextNode(part));
+    });
+  }
+
   /* Optional host-owned context. Never infer currency, timezone, unit,
      period, or a title from labels or values. A visible title heading remains
      the source of the chart name; data-title is shown only when no heading is
@@ -252,7 +275,7 @@
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
-      label.textContent = fullLabelOf(chart, item);
+      writeFullLabel(label, chart, item);
       var value = document.createElement('dd');
       var number = document.createElement('bdi');
       number.dir = 'ltr';
@@ -795,7 +818,7 @@
     chart.setAttribute('data-value-layout', 'rows');
     var rows = plot.querySelector('.m-chart__readings');
     if (rows) [].slice.call(rows.querySelectorAll('dt')).forEach(function (label, index) {
-      label.textContent = (index + 1) + '. ' + label.textContent;
+      label.insertBefore(document.createTextNode((index + 1) + '. '), label.firstChild);
     });
     chart.setAttribute('data-scale-state', exceeds ? 'over-rescaled' : known.length ? 'signed' : 'empty');
     chart.setAttribute('data-scale-detail', 'signed: min=' + min + ';max=' + max + ';zero=' + zero);
@@ -972,7 +995,7 @@
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
-      label.textContent = fullLabelOf(chart, item);
+      writeFullLabel(label, chart, item);
       var value = document.createElement('dd');
       var number = document.createElement('bdi');
       number.dir = 'ltr';
@@ -1463,7 +1486,7 @@
       var tr = document.createElement('tr');
       var th = document.createElement('th');
       th.setAttribute('scope', 'row');
-      th.textContent = fullLabelOf(chart, it);
+      writeFullLabel(th, chart, it);
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');

@@ -116,7 +116,7 @@ python3 tools/data-scale-state-check.py
 
 المعرض يبدأ بمعاينة App المحلية؛ افتح `#overview` لنظرة المكونات، و`#component-review` لمراجعة عائلة معزولة؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
 
-فحوص الإصدار: `tools/light-calendar-check.py`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.
+فحوص الإصدار للهاتف: `python3 tools/light-calendar-check.py --review-scope`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.
 
 ## مراجعة المكونات الحالية
 

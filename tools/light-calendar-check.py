@@ -129,6 +129,9 @@ def main():
                         help="save representative fixture screenshots to this external directory")
     parser.add_argument("--capture-only", action="store_true",
                         help="capture initial screenshots without running behavioral assertions")
+    parser.add_argument('--review-scope', action='store_true',
+                        help='360x780 RTL + directional LTR; targeted 320 compact example; no wide phone matrix')
+    parser.add_argument('--out', type=Path, help='external JSON report path')
     args = parser.parse_args()
     capture_dir = args.capture_dir
     if capture_dir:
@@ -148,17 +151,17 @@ def main():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**chromium_launch_options())
             browser_version = browser.version
-            page = browser.new_page(viewport={"width": 390, "height": 980}, reduced_motion="reduce")
+            page = browser.new_page(viewport={"width": 360 if args.review_scope else 390, "height": 780 if args.review_scope else 980}, reduced_motion="reduce")
             page.on("pageerror", lambda err: errors.append(str(err)))
             page.on("console", lambda msg: errors.append(msg.text) if msg.type == "error" else None)
             page.on("requestfailed", lambda req: errors.append(req.url))
             page.on("response", lambda res: errors.append(f"{res.status} {res.url}") if res.status >= 400 else None)
 
             # ---------- A) Layout contract at every root width, RTL and LTR ----------
-            viewport_for_root = {288: 320, 328: 360, 358: 390, 398: 430}
+            viewport_for_root = {328: 360} if args.review_scope else {288: 320, 328: 360, 358: 390, 398: 430}
             for root_width, viewport_width in viewport_for_root.items():
                 for direction in ("rtl", "ltr"):
-                    page.set_viewport_size({"width": viewport_width, "height": 980})
+                    page.set_viewport_size({"width": viewport_width, "height": 780 if args.review_scope else 980})
                     page.goto(f"{base}?root={root_width}&dir={direction}", wait_until="load")
                     page.evaluate("document.fonts.ready")
                     compact = "true" if root_width < 360 else "false"
@@ -351,7 +354,7 @@ def main():
                   and combo["weight"] == "600" and combo["color"] == "rgb(22, 77, 89)", combo)
 
             # ---------- B) Picker contract (wide root) ----------
-            page.goto(f"{base}?root=398&dir=rtl", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 398}&dir=rtl", wait_until="load")
             title = page.locator(".m-ocal__cal-title [data-ocal-action='month-picker']")
             title.click()
             check("picker opens as a real local dialog and receives focus",
@@ -481,18 +484,20 @@ def main():
                   and page.evaluate("events.length===5&&events[4].detail.date==='2026-10-01'")
                   and page.locator("[data-ocal-day-panel][data-ocal-day-browsing='true']").count() == 0)
 
-            # Live resize flips the compact flag without losing focus (single DOM structure).
-            page.locator("#order-root").evaluate("e=>e.style.width='398px'")
-            page.wait_for_function("document.querySelector('#order-root').dataset.ocalCompact==='false'")
-            check("live resize to wide flips compact flag and keeps the focused date element",
-                  page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
-                  and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01"
-                  and page.locator("[data-ocal-grid] [data-ocal-date^='2026-10']").count() == 31)
-            page.locator("#order-root").evaluate("e=>e.style.width='288px'")
-            page.wait_for_function("document.querySelector('#order-root').dataset.ocalCompact==='true'")
-            check("live resize back to compact keeps focus and selection without re-render",
-                  page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
-                  and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01")
+            # Wide-root transitions do not apply to this compact phone scope.
+            if not args.review_scope:
+                # Live resize flips the compact flag without losing focus (single DOM structure).
+                page.locator("#order-root").evaluate("e=>e.style.width='398px'")
+                page.wait_for_function("document.querySelector('#order-root').dataset.ocalCompact==='false'")
+                check("live resize to wide flips compact flag and keeps the focused date element",
+                      page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
+                      and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01"
+                      and page.locator("[data-ocal-grid] [data-ocal-date^='2026-10']").count() == 31)
+                page.locator("#order-root").evaluate("e=>e.style.width='288px'")
+                page.wait_for_function("document.querySelector('#order-root').dataset.ocalCompact==='true'")
+                check("live resize back to compact keeps focus and selection without re-render",
+                      page.evaluate("document.activeElement.getAttribute('data-ocal-date')==='2026-10-01'")
+                      and page.locator("#order-root").get_attribute("data-ocal-selected-date") == "2026-10-01")
 
             # Compact December→January across the year boundary.
             choose_month(2026, 12)
@@ -509,7 +514,7 @@ def main():
                   and page.evaluate("events.length") == 5)
 
             # ---------- E) Component data states and event/data integrity ----------
-            page.goto(f"{base}?root=398&dir=ltr", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 398}&dir=ltr", wait_until="load")
             page.evaluate("instance.setLoading(true)")
             check("loading state remains outside calendar and is announced",
                   page.locator("[data-ocal-status='loading'][role='status']").count() == 1
@@ -533,7 +538,7 @@ def main():
                       "طلب واحد"))
 
             # ---------- F) Wide grid keyboard navigation (RTL/LTR) ----------
-            page.goto(f"{base}?root=398&dir=rtl", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 398}&dir=rtl", wait_until="load")
             page.evaluate("instance.setSelectedDate('2026-10-07')")
             day = page.locator("[data-ocal-grid] [data-ocal-date='2026-10-07']")
             day.focus()
@@ -551,7 +556,7 @@ def main():
                   and page.evaluate("events.length===1&&events[0].detail.date==='2026-10-08'"),
                   page.evaluate("()=>({selected:document.querySelector('#order-root').dataset.ocalSelectedDate,events})"))
 
-            page.goto(f"{base}?root=398&dir=ltr", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 398}&dir=ltr", wait_until="load")
             page.evaluate("instance.setSelectedDate('2026-10-07')")
             day = page.locator("[data-ocal-grid] [data-ocal-date='2026-10-07']")
             day.focus()
@@ -567,7 +572,7 @@ def main():
             # أكورديون — منطقة الإفصاح (role=region) وأزرار تعديل/حذف
             # داخل الصف نفسه؛ لا زر عائم ولا Bottom Sheet ولا صندوق
             # تفاصيل منفصل أسفل القائمة.
-            page.goto(f"{base}?root=358&dir=rtl&actions=1", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 358}&dir=rtl&actions=1", wait_until="load")
             check("month view: events region below the grid with title, count, add and rows",
                   page.locator("[data-ocal-grid]").count() == 1
                   and page.locator("[data-ocal-day-panel]").count() == 1
@@ -754,7 +759,7 @@ def main():
                   and page.locator("[data-ocal-action='today']").count() == 1)
 
             # LTR: أسبوع بترتيب معكوس وفعالية كاملة للمحدّد
-            page.goto(f"{base}?root=398&dir=ltr&actions=1", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 398}&dir=ltr&actions=1", wait_until="load")
             page.locator(".m-ocal__viewseg [data-ocal-value='week']").click()
             check("LTR week view renders the selected week with the events region",
                   page.locator("[data-ocal-grid] [data-ocal-date]").count() == 7
@@ -811,7 +816,7 @@ def main():
                                 ".every(a=>!r.hasAttribute(a)) && r.children.length===0 && !r.classList.contains('m-ocal');})()"))
 
             # ---------- I) Example page follows the compact contract ----------
-            page.set_viewport_size({"width": 320, "height": 900})
+            page.set_viewport_size({"width": 320, "height": 780 if args.review_scope else 900})
             page.goto(f"http://127.0.0.1:{server.server_port}/components/order-schedule/example-usage.html",
                       wait_until="load")
             page.wait_for_function("document.querySelector('#demo-1').dataset.ocalCompact==='true'")
@@ -845,7 +850,7 @@ def main():
             EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                          'August', 'September', 'October', 'November', 'December']
             for direction in ("rtl", "ltr"):
-                page.goto(f"{base}?root=358&dir={direction}", wait_until="load")
+                page.goto(f"{base}?root={328 if args.review_scope else 358}&dir={direction}", wait_until="load")
                 page.evaluate("document.fonts.ready")
                 page.wait_for_timeout(40)
                 header = page.evaluate("""() => {
@@ -927,8 +932,8 @@ def main():
             # بتسمية صادقة وaria-pressed؛ المحدّد المقسّم لوضع التقويم
             # وحده؛ القائمة تجمعات حقيقية بنفس البيانات وأفعالها؛
             # والأكورديون أحادي الفتح في القائمة أيضًا.
-            page.set_viewport_size({"width": 390, "height": 980})
-            page.goto(f"{base}?root=358&dir=rtl&actions=1", wait_until="load")
+            page.set_viewport_size({"width": 360 if args.review_scope else 390, "height": 780 if args.review_scope else 980})
+            page.goto(f"{base}?root={328 if args.review_scope else 358}&dir=rtl&actions=1", wait_until="load")
             toggle_state = page.evaluate("""() => {
                 const t = document.querySelector('#order-root [data-ocal-action="mode-toggle"]');
                 const r = t.getBoundingClientRect();
@@ -1060,7 +1065,7 @@ def main():
             # (النقر عبر locator خارج evaluate — إعادة التصيير تستبدل العقد
             #  فأي مرجع داخل evaluate نفسه سيصبح منفصلًا بعد النقرة.)
             for extra, label in ((1, "2 orders"), (19, "20 orders"), (99, "100 orders")):
-                page.goto(f"{base}?root=358&dir=rtl&actions=1&extra={extra}", wait_until="load")
+                page.goto(f"{base}?root={328 if args.review_scope else 358}&dir=rtl&actions=1&extra={extra}", wait_until="load")
                 page.wait_for_timeout(60)
                 middle_id = page.evaluate(
                     "() => { const rows = document.querySelectorAll("
@@ -1101,7 +1106,7 @@ def main():
                       and matrix["docWidth"] <= matrix["viewport"], matrix)
 
             # عنوان عربي طويل: قطع على الوجه + النص الكامل داخل المنطقة
-            page.goto(f"{base}?root=358&dir=rtl&actions=1&extra=1&long=1", wait_until="load")
+            page.goto(f"{base}?root={328 if args.review_scope else 358}&dir=rtl&actions=1&extra=1&long=1", wait_until="load")
             page.wait_for_timeout(60)
             first_id = page.evaluate(
                 "() => document.querySelector("
@@ -1138,8 +1143,11 @@ def main():
     passed = sum(row["passed"] for row in checks)
     report = {"browser": browser_version, "passed": passed, "failed": len(checks) - passed,
               "checks": checks, "errors": errors,
+              "reviewScope": args.review_scope,
+              "excluded": (["390/430 viewport cases", "compact-to-wide root resize"] if args.review_scope else []),
               "scope": "Source-only fixture; light appearance; Chromium; no Dark tests or real-device/Safari/screen-reader claims"}
-    output = Path(tempfile.gettempdir()) / "micro-light-calendar-check.json"
+    output = args.out or Path(tempfile.gettempdir()) / "micro-light-calendar-check.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"{passed} PASS / {len(checks) - passed} FAIL — report {output}")
     return 0 if passed == len(checks) else 1
