@@ -15,6 +15,16 @@
 (function () {
   'use strict';
 
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   /* E05: استرجاع دقيق لحالة التعطيل الأصلية للمفتاح بعد الانتظار */
   var pendingRestore = new WeakMap();
 
@@ -45,9 +55,8 @@
     var groups = [].slice.call(scope.querySelectorAll('[data-choice-group]'));
     if (scope.nodeType === 1 && scope.matches('[data-choice-group]')) groups.unshift(scope);
     groups.forEach(function (group) {
-      if (group.dataset.microChoicesBound) return;
-      group.dataset.microChoicesBound = '1';
-      group.__microSelectionLifetime = new AbortController();
+      if (!claimBinding(group, 'microChoicesBound')) return;
+      if (!group.__microSelectionLifetime) group.__microSelectionLifetime = new AbortController();
       function on(element, type, handler) {
         element.addEventListener(type, handler, { signal: group.__microSelectionLifetime.signal });
       }
@@ -76,9 +85,8 @@
     var segs = [].slice.call(scope.querySelectorAll('[data-seg]'));
     if (scope.nodeType === 1 && scope.matches('[data-seg]')) segs.unshift(scope);
     segs.forEach(function (seg) {
-      if (seg.dataset.microSegBound) return;
-      seg.dataset.microSegBound = '1';
-      seg.__microSelectionLifetime = new AbortController();
+      if (!claimBinding(seg, 'microSegBound')) return;
+      if (!seg.__microSelectionLifetime) seg.__microSelectionLifetime = new AbortController();
       function on(element, type, handler) {
         element.addEventListener(type, handler, { signal: seg.__microSelectionLifetime.signal });
       }
@@ -150,6 +158,7 @@
       var nodes = [].slice.call(scope.querySelectorAll('[data-choice-group], [data-seg]'));
       if (scope.matches && scope.matches('[data-choice-group], [data-seg]')) nodes.unshift(scope);
       nodes.forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microSelectionLifetime) element.__microSelectionLifetime.abort();
         delete element.__microSelectionLifetime;
         delete element.dataset.microChoicesBound;

@@ -66,6 +66,7 @@
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
   var observers = new WeakMap();
   var resizeFrames = new WeakMap();
+  var disconnected = new WeakSet();
 
   /* ترتيب حتمي: دائرة رئيسية وبجوارها دائرتان متدرجتان رأسيًا.
      كل مجموعة من ثلاث مستقلة؛ لا عشوائية أو مساحات مالية مشتقة.
@@ -217,21 +218,29 @@
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
-      table.id = 'micro-packed-dataset-' + (++packedUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-packed-dataset-' + (++packedUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-chart__disclose');
-      table = wrap.querySelector('.m-chart__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     if (!btn || !table) return;
     table.textContent = '';
@@ -421,7 +430,7 @@
           if (resizeFrames.has(chart)) return;
           resizeFrames.set(chart, window.requestAnimationFrame(function () {
             resizeFrames.delete(chart);
-            if (chart.isConnected && observers.get(chart) === observer && plot.contains(wrap)) {
+            if (chart.isConnected && !disconnected.has(chart) && observers.get(chart) === observer && plot.contains(wrap)) {
               layoutPacked(chart, nodes, wrap);
             }
           }));
@@ -431,7 +440,7 @@
         observers.set(chart, observer);
       }
       if (document.fonts) document.fonts.ready.then(function () {
-        if (plot.contains(wrap)) layoutPacked(chart, nodes, wrap);
+        if (chart.isConnected && !disconnected.has(chart) && plot.contains(wrap)) layoutPacked(chart, nodes, wrap);
       });
     } else {
       var empty = document.createElement('p');
@@ -477,15 +486,30 @@
   /* render العام: جسم الرسم ثم مزامنة جدول الإفصاح في كل مسار
      (نجاح/رفض مقياس/كثافة) — العرض البديل الكامل دائمًا (عقد المالك) */
   function render(chart) {
+    disconnected.delete(chart);
     renderPacked(chart);
     syncPackedTable(chart);
   }
 
   window.MicroPacked = {
     init: function (root) {
-      (root || document).querySelectorAll('[data-chart-packed]').forEach(render);
+      var scope = root || document;
+      if (scope.matches && scope.matches('[data-chart-packed]')) render(scope);
+      scope.querySelectorAll('[data-chart-packed]').forEach(render);
     },
-    render: render
+    render: render,
+    disconnect: function (root) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
+      if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
+      charts.forEach(function (chart) {
+        disconnected.add(chart);
+        if (observers.has(chart)) observers.get(chart).disconnect();
+        observers.delete(chart);
+        if (resizeFrames.has(chart)) window.cancelAnimationFrame(resizeFrames.get(chart));
+        resizeFrames.delete(chart);
+      });
+    }
   };
 
   document.addEventListener('DOMContentLoaded', function () { window.MicroPacked.init(); });

@@ -29,3 +29,7 @@
 لا شهادة WCAG كاملة، ولا اختبار جهاز فعلي أو قارئ شاشة أو Safari من محاكاة Chromium. لا يشمل هذا المستودع UX أو منطق الأعمال أو المصادقة أو الحفظ أو النشر.
 
 ثلاث بوابات مستقلة: Source/API، Visual/Interaction، Platform. لا تسمية «جاهز للنقل» بينما بوابة المنصة غير مشغلة، ولا ترقية draft/proposed نتيجة مرور Chromium وحده.
+
+## تدقيق المكونات — 2026-11-11
+
+[تقرير التدقيق المستقل](audits/component-audit-2026-11-11/REPORT.md) يثبت حالات المراجعة والإصلاحات المركزة وحدود البيئة، دون تغيير الهوية أو Light-only أو نضج الكتالوج. الفحوص الجديدة: `component-audit-check.py` و`calendar-contract-check.py` و`clone-lifecycle-check.py` داخل `tools/`.

@@ -109,7 +109,7 @@ def ui_purity_ok(snap):
     return all(not any(f in t for f in FORBIDDEN_UI) for t in texts)
 
 
-def main(out_dir: Path = None, port: int = 0):
+def main(out_dir: Path = None, port: int = 0, width: int = 390):
     global OUT
     # مخرجات الفحص معزولة داخل مجلد generated، مع دعم --out/--port.
     if out_dir is not None:
@@ -133,7 +133,7 @@ def main(out_dir: Path = None, port: int = 0):
         if not hasattr(pw, ENGINE):
             raise RuntimeError(f"Unknown MICRO_TEST_ENGINE: {ENGINE}")
         browser = getattr(pw, ENGINE).launch(headless=True, **(chromium_launch_options() if ENGINE == "chromium" else {}))
-        ctx = browser.new_context(viewport={"width": 390, "height": 844})
+        ctx = browser.new_context(viewport={"width": width, "height": 780 if width == 360 else 844}, color_scheme="light")
         page = ctx.new_page()
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.set_content(PAGE.format(base=BASE, css=BASE_CSS))
@@ -312,5 +312,6 @@ if __name__ == "__main__":
     _ap = argparse.ArgumentParser()
     _ap.add_argument("--out", default="", help="دليل إخراج معزول (افتراضي: reviews/UI-SYSTEM-SHOWCASE/generated-data-scale)")
     _ap.add_argument("--port", type=int, default=0, help="منفذ الخادم (0 تلقائي؛ REPAIR-R1: 4400-4419)")
+    _ap.add_argument("--width", type=int, default=390, help="viewport width; 360 for the focused audit")
     _a = _ap.parse_args()
-    main(Path(_a.out).resolve() if _a.out else None, _a.port)
+    main(Path(_a.out).resolve() if _a.out else None, _a.port, _a.width)

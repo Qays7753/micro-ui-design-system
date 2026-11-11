@@ -180,6 +180,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, help="report and screenshot directory")
     parser.add_argument("--capture-only", action="store_true", help="capture baseline without repair assertions")
+    parser.add_argument('--review-scope', action='store_true', help='360x780 RTL/LTR DPR1; targeted 320 donut; no zoom or wide-container matrix')
     args = parser.parse_args()
     out = args.out or Path(tempfile.mkdtemp(prefix="micro-light-data-"))
     out.mkdir(parents=True, exist_ok=True)
@@ -197,11 +198,11 @@ def main():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**chromium_launch_options())
             version = browser.version
-            for width in (320, 360, 390, 430):
+            for width in ((360,) if args.review_scope else (320, 360, 390, 430)):
                 for direction in ("rtl", "ltr"):
-                    for dpr in (1, 2):
+                    for dpr in ((1,) if args.review_scope else (1, 2)):
                         context = browser.new_context(
-                            viewport={"width": width, "height": 900},
+                            viewport={"width": width, "height": 780 if args.review_scope else 900},
                             device_scale_factor=dpr,
                             color_scheme="light",
                         )
@@ -212,7 +213,7 @@ def main():
                         page.goto(url)
                         page.evaluate("(dir) => { document.documentElement.dir = dir; return document.fonts.ready; }", direction)
                         page.wait_for_timeout(50)
-                        if width in (320, 390) and dpr == 1:
+                        if (args.review_scope or width in (320, 390)) and dpr == 1:
                             page.screenshot(path=str(out / f"light-data-{width}-{direction}-1x.png"), full_page=True)
 
                         if args.capture_only:
@@ -324,7 +325,7 @@ def main():
             # ---------- 2026-10-25 owner contracts ----------
             if not args.capture_only:
                 context = browser.new_context(
-                    viewport={"width": 320, "height": 900},
+                    viewport={"width": 320, "height": 780 if args.review_scope else 900},
                     device_scale_factor=1,
                     color_scheme="light",
                 )
@@ -368,19 +369,20 @@ def main():
                 check("donut compact presentation at 320px: 112px ring with the legend beside it",
                       compact.get("ok") and compact.get("svgW") == 112
                       and compact.get("beside") and compact.get("sameRow"), compact)
-                wide_ctx = browser.new_context(viewport={"width": 430, "height": 900}, device_scale_factor=1, color_scheme="light")
-                wide_page = wide_ctx.new_page()
-                wide_page.goto(url)
-                wide_page.evaluate("() => document.fonts.ready")
-                wide_page.wait_for_timeout(80)
-                wide_donut = wide_page.evaluate("""()=>{
-                    const svg=document.querySelector('#donut').querySelector('.m-donut__svg');
-                    return Math.round(svg.getBoundingClientRect().width);
-                }""")
-                check("donut keeps the 148px ring at a wide container (responsive contract)",
-                      wide_donut == 148, wide_donut)
-                wide_page.close()
-                wide_ctx.close()
+                if not args.review_scope:
+                    wide_ctx = browser.new_context(viewport={"width": 430, "height": 780 if args.review_scope else 900}, device_scale_factor=1, color_scheme="light")
+                    wide_page = wide_ctx.new_page()
+                    wide_page.goto(url)
+                    wide_page.evaluate("() => document.fonts.ready")
+                    wide_page.wait_for_timeout(80)
+                    wide_donut = wide_page.evaluate("""()=>{
+                        const svg=document.querySelector('#donut').querySelector('.m-donut__svg');
+                        return Math.round(svg.getBoundingClientRect().width);
+                    }""")
+                    check("donut keeps the 148px ring at a wide container (responsive contract)",
+                          wide_donut == 148, wide_donut)
+                    wide_page.close()
+                    wide_ctx.close()
 
                 # ---------- 2026-10-25 corrective brief: donut no-data / real-zero / malformed ----------
                 check("donut with an empty dataset renders no SVG ring at all (no fake geometry)",
@@ -488,7 +490,7 @@ def main():
     report = {
         "browser": version,
         "theme": "Light only",
-        "scope": "Chromium source fixture; 320/360/390/430 CSS px, RTL/LTR, DPR 1/2; 200% is simulated CSS enlargement, not native zoom",
+        "scope": ("Chromium source fixture; 360x780 RTL/LTR DPR1, targeted 320 donut; no zoom" if args.review_scope else "Chromium source fixture; 320/360/390/430 CSS px, RTL/LTR, DPR 1/2; 200% is simulated CSS enlargement, not native zoom"),
         "capture_only": args.capture_only,
         "source_sha256": {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in SOURCES},
         "passed": sum(1 for item in checks if item["passed"]),

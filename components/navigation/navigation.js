@@ -45,6 +45,16 @@
 (function () {
   'use strict';
 
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   var openLayers = [];
   var lockCount = 0;         /* R2-02: عدّاد قفل التمرير — لا تلف قيمة overflow السابقة */
   var prevOverflow = null;   /* قيمة overflow السابقة على body */
@@ -179,8 +189,7 @@
 
   /* ---- حصر التركيز داخل الطبقة العليا ---- */
   function bindTrap(layer) {
-    if (layer.dataset.microTrapBound) return;
-    layer.dataset.microTrapBound = '1';
+    if (!claimBinding(layer, 'microTrapBound')) return;
     on(layer, layer, 'keydown', function (e) {
       if (e.key !== 'Tab' || !openLayers.length) return;
       if (openLayers[openLayers.length - 1].layer !== layer) return;
@@ -420,8 +429,7 @@
   }
 
   function initFilterPanel(panel) {
-    if (panel.dataset.microFilterBound) return;
-    panel.dataset.microFilterBound = '1';
+    if (!claimBinding(panel, 'microFilterBound')) return;
     var applied = panel.__microApplied || {}; /* Preserve consumer-applied state on reattach. */
     on(panel, panel, 'micro-navigation:opened', function () {
       /* الجاري يبدأ نسخة من المطبّق عند كل فتح — لكل الأنواع */
@@ -516,8 +524,7 @@
        (إزالة tabindex الذي أضفناه فقط)، واللوحات غير النشطة مخفية
        (hidden) فتخرج من الترتيب تلقائيًا. */
   function initTabs(tabs) {
-    if (tabs.dataset.microTabsBound) return;
-    tabs.dataset.microTabsBound = '1';
+    if (!claimBinding(tabs, 'microTabsBound')) return;
     var items = [].slice.call(tabs.querySelectorAll('[role="tab"]'));
     var FOCUSABLE_IN = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     function panelOf(t) {
@@ -618,23 +625,20 @@
       return list;
     };
     inScope('[data-layer-open]').forEach(function (btn) {
-      if (btn.dataset.microLayerOpenBound) return;
-      btn.dataset.microLayerOpenBound = '1';
+      if (!claimBinding(btn, 'microLayerOpenBound')) return;
       on(btn, btn, 'click', function () {
         var layer = document.getElementById(btn.getAttribute('data-layer-open'));
         if (layer) openLayer(layer, { trigger: btn });
       });
     });
     inScope('[data-layer-close]').forEach(function (btn) {
-      if (btn.dataset.microLayerCloseBound) return;
-      btn.dataset.microLayerCloseBound = '1';
+      if (!claimBinding(btn, 'microLayerCloseBound')) return;
       on(btn, btn, 'click', function () {
         closeLayer(btn.closest('.m-layer'));
       });
     });
     inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
-      if (bd.dataset.microBackdropBound) return;
-      bd.dataset.microBackdropBound = '1';
+      if (!claimBinding(bd, 'microBackdropBound')) return;
       on(bd, bd, 'click', function () {
         var layer = document.getElementById(bd.getAttribute('data-for'));
         if (!layer) return;
@@ -665,6 +669,7 @@
           element.hidden = true;
           element.inert = false;
         }
+        liveBindings.delete(element);
         if (element.__microNavigationLifetime) {
           element.__microNavigationLifetime.abort();
           delete element.__microNavigationLifetime;

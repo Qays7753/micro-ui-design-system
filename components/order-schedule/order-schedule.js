@@ -10,14 +10,17 @@
      setSelectedDate('YYYY-MM-DD')
      setView('calendar'|'list')
      setCalendarView('month'|'week'|'day')
+     getState()                 نسخة من حالة العرض والتحديد
+     setDisplayedMonth('YYYY-MM') تصفح شهر مستقل وصامت
      setLoading(true|false)
      setError(retryCallback|null)
      destroy()
-   options: orders, statuses, today, weekStart, selectedDate, view,
+   options: orders, statuses, today, weekStart, selectedDate, displayedMonth, view,
             calendarView ('month'|'week'|'day'), orderActions{edit,delete},
             headingLevel, loading, retry
    أحداث CustomEvent على الجذر (bubbles):
      order-schedule:day-select           {date:'YYYY-MM-DD'}
+     order-schedule:state-change         {view,calendarView,selectedDate,displayedMonth}
      order-schedule:order-open           {id}
      order-schedule:add-request          {date:'YYYY-MM-DD'|null}
      order-schedule:order-edit-request   {id}
@@ -151,13 +154,19 @@
   }
 
   function isoOf(y, m, d) {
-    return y + '-' + pad2(m) + '-' + pad2(d);
+    return yearText(y) + '-' + pad2(m) + '-' + pad2(d);
+  }
+
+  function yearText(y) {
+    return ('0000' + y).slice(-4);
   }
 
   function parseIso(s) {
     if (typeof s !== 'string' || !DATE_RE.test(s)) return null;
     var p = s.split('-');
-    return { y: +p[0], m: +p[1], d: +p[2] };
+    var y = +p[0], m = +p[1], d = +p[2];
+    if (y < 1 || y > 9999 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return null;
+    return { y: y, m: m, d: d };
   }
 
   /* عدد أيام الشهر محليًا، مع ضبط السنة صراحة لتجنب تحويل 0–99 إلى 1900–1999 */
@@ -234,7 +243,7 @@
   function dateNumeric(iso) {
     var p = parseIso(iso);
     if (!p) return '';
-    return pad2(p.d) + '/' + pad2(p.m) + '/' + p.y;
+    return pad2(p.d) + '/' + pad2(p.m) + '/' + yearText(p.y);
   }
 
   /* عنوان اليوم المرئي: اسم اليوم معلّن محليًا + تاريخ رقمي —
@@ -328,8 +337,8 @@
       out.push({
         id: (o.id == null ? '' : String(o.id)),
         title: (o.title == null ? '' : String(o.title)),
-        /* تاريخ غير نصي/لا يطابق YYYY-MM-DD → غير مجدول (موثق) */
-        date: (typeof o.date === 'string' && DATE_RE.test(o.date)) ? o.date : null,
+        /* تاريخ مدني غير صالح → غير مجدول، لا يوم مستحيل داخل التقويم. */
+        date: parseIso(o.date) ? o.date : null,
         /* وقت لا يطابق HH:mm → غائب (لا يُخترع وقت أبدًا) */
         time: (typeof o.time === 'string' && TIME_RE.test(o.time)) ? o.time : null,
         statusKey: (o.statusKey == null ? '' : String(o.statusKey)),
@@ -378,14 +387,14 @@
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
     state.statuses = (options.statuses && typeof options.statuses === 'object') ? options.statuses : {};
-    state.today = (typeof options.today === 'string' && DATE_RE.test(options.today)) ? options.today : localTodayIso();
+    state.today = parseIso(options.today) ? options.today : localTodayIso();
     /* weekStart: عقد 2026-10-25 (مرجع المالك الأحدث): الافتراضي 0
        (الأحد أولًا — Sunday-first كما في calendar-target-latest-owner.png)
        قابل للتعديل لكل مثيل؛ المستهلك الذي يمرر قيمة صريحة (مثل 6)
        يبقى مدعومًا كما هو — الهجرة موثقة في specification.md */
     state.weekStart = (typeof options.weekStart === 'number' && options.weekStart >= 0 &&
       options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 0;
-    state.selectedDate = (typeof options.selectedDate === 'string' && DATE_RE.test(options.selectedDate))
+    state.selectedDate = parseIso(options.selectedDate)
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
     /* عقد 2026-10-25 (مرجع المالك — محدّد يوم/أسبوع/شهر): ثلاث
@@ -419,6 +428,8 @@
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
     state.focusDate = state.selectedDate;
+    var displayed = parseIso(typeof options.displayedMonth === 'string' ? options.displayedMonth + '-01' : null);
+    if (displayed) state.monthCursor = { y: displayed.y, m: displayed.m };
 
     /* الاتجاه: RTL افتراضيًا؛ يُعاد تقييمه عند كل تصيير، ومراقب dir
        على documentElement (يُفصل في destroy) يجعل قلب الاتجاه الحي
@@ -450,6 +461,31 @@
     function emit(name, detail) {
       if (destroyed) return;
       root.dispatchEvent(new CustomEvent(name, { bubbles: true, detail: detail }));
+    }
+
+    /* Copies of public navigation state only; no persistence or host routing. */
+    function getState() {
+      return {
+        view: state.view, calendarView: state.calendarView,
+        selectedDate: state.selectedDate,
+        displayedMonth: yearText(state.monthCursor.y) + '-' + pad2(state.monthCursor.m)
+      };
+    }
+
+    var userActionDepth = 0;
+    function userAction(fn) {
+      return guard(function (event) {
+        var outer = userActionDepth === 0;
+        var before = outer ? JSON.stringify(getState()) : null;
+        userActionDepth++;
+        try { fn(event); }
+        finally {
+          userActionDepth--;
+          if (outer && !destroyed && before !== JSON.stringify(getState())) {
+            emit('order-schedule:state-change', getState());
+          }
+        }
+      });
     }
 
     /* الحالة من خريطة المستهلك فقط؛ المجهول/الغائب: محايد بنص
@@ -766,7 +802,7 @@
       var range = el('span', 'm-ocal__month-range');
       range.appendChild(el('span', 'm-ocal__month-label', pad2(m)));
       range.appendChild(document.createTextNode(' / '));
-      range.appendChild(el('span', 'm-ocal__year', String(y)));
+      range.appendChild(el('span', 'm-ocal__year', yearText(y)));
       pickerButton.appendChild(range);
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
@@ -778,7 +814,7 @@
     function buildMonthPicker() {
       var picker = el('section', 'm-ocal__picker');
       picker.setAttribute('data-ocal-picker', '');
-      picker.setAttribute('data-ocal-year', String(state.pickerYear));
+      picker.setAttribute('data-ocal-year', yearText(state.pickerYear));
       picker.setAttribute('role', 'dialog');
       picker.setAttribute('aria-label', 'اختيار الشهر والسنة');
       var heading = el('div', 'm-ocal__picker-head');
@@ -788,7 +824,7 @@
       prevYear.setAttribute('aria-label', 'السنة السابقة');
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
-      var year = el(hTag(), 'm-ocal__picker-year', String(state.pickerYear));
+      var year = el(hTag(), 'm-ocal__picker-year', yearText(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
       var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
@@ -816,7 +852,7 @@
         month.setAttribute('data-ocal-action', 'picker-month');
         month.setAttribute('data-ocal-value', String(i));
         month.setAttribute('aria-pressed', i + 1 === currentMonth ? 'true' : 'false');
-        month.setAttribute('aria-label', pad2(i + 1) + ' / ' + state.pickerYear);
+        month.setAttribute('aria-label', pad2(i + 1) + ' / ' + yearText(state.pickerYear));
         months.appendChild(month);
       }
       picker.appendChild(months);
@@ -869,6 +905,11 @@
        بشفافية 40% لكنها أيام حقيقية قابلة للتحديد — اختيارها ينقل
        العرض إلى شهرها (العرض يتبع التحديد). */
     function buildDayCell(iso, d, groups, outOfMonth) {
+      if (!parseIso(iso)) {
+        var outside = el('span', 'm-ocal__cell m-ocal__cell--out');
+        outside.setAttribute('aria-hidden', 'true');
+        return outside;
+      }
       var orders = groups[iso] || [];
       var cell = el('button', 'm-ocal__cell');
       cell.type = 'button';
@@ -930,7 +971,7 @@
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + y);
+      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + yearText(y));
       grid.setAttribute('data-ocal-grid', '');
 
       var row = el('div', 'm-ocal__gridrow');
@@ -971,10 +1012,10 @@
       var a = dates[0];
       var b = dates[6];
       if (a.y === b.y && a.m === b.m) {
-        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + b.y;
+        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + yearText(b.y);
       }
       if (a.y === b.y) {
-        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + b.y;
+        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + yearText(b.y);
       }
       return dateNumeric(isoOf(a.y, a.m, a.d)) + ' – ' + dateNumeric(isoOf(b.y, b.m, b.d));
     }
@@ -1264,7 +1305,7 @@
         /* نفس تقديم رأس الشهر الرقمي (عقد الأرقام 2026-10-26):
            «لا يوم محدد في 01 / 2027» — لا اسم شهر */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + pad2(m) + ' / ' + y));
+          'لا يوم محدد في ' + pad2(m) + ' / ' + yearText(y)));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -1464,6 +1505,7 @@
       if (!p) return;
       var t = normalizeYmd(p.y, p.m, p.d + step);
       var iso = isoOf(t.y, t.m, t.d);
+      if (t.y < 1 || t.y > 9999) return;
       if (t.y !== state.monthCursor.y || t.m !== state.monthCursor.m) {
         state.monthCursor = { y: t.y, m: t.m };
         state.focusDate = iso;
@@ -1604,13 +1646,21 @@
       if (elm && typeof elm.focus === 'function') elm.focus();
     }
 
+    /* IDs are opaque host data, never interpolated into a CSS selector. */
+    function refocusOrderRow(id) {
+      var rows = root.querySelectorAll('[data-ocal-action="order-row"]');
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].getAttribute('data-ocal-id') === id) { rows[i].focus(); return; }
+      }
+    }
+
     /* اختيار يوم: تحديث + إعادة تصيير + إعلان (إن كان من المستخدم).
        عقد 2026-10-25 (مرجع المالك setSelected): اختيار يوم من شهر
        مجاور (خلايا الأشهر المجاورة الآن قابلة للتحديد) ينقل الشهر
        المعروض إلى شهره — العرض يتبع التحديد؛ سهم الشهر/المنتقي
        يبقيان تصفّحًا بلا تحديد كما هما. */
     function selectDate(iso, fromUser) {
-      if (!DATE_RE.test(iso)) return;
+      if (!parseIso(iso)) return;
       state.selectedDate = iso;
       var p = parseIso(iso);
       if (p.y !== state.monthCursor.y || p.m !== state.monthCursor.m) {
@@ -1628,6 +1678,7 @@
        سمة data-ocal-fade على الجذر لهذا التصيير وحده. */
     function shiftMonthCursor(delta) {
       var nm = shiftMonth(state.monthCursor.y, state.monthCursor.m, delta);
+      if (nm.y < 1 || nm.y > 9999) return;
       state.monthCursor = { y: nm.y, m: nm.m };
       var focused = parseIso(state.focusDate);
       var day = focused ? Math.min(focused.d, daysInMonth(nm.y, nm.m)) : 1;
@@ -1738,6 +1789,7 @@
       if (!p) return;
       var t = normalizeYmd(p.y, p.m, p.d + delta);
       var iso = isoOf(t.y, t.m, t.d);
+      if (t.y < 1 || t.y > 9999) return;
       state.selectedDate = iso;
       state.focusDate = iso;
       state.monthCursor = { y: t.y, m: t.m };
@@ -1768,7 +1820,7 @@
           emit('order-schedule:order-open', { id: rowId });
         }
         render();
-        refocus('[data-ocal-id="' + rowId + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(rowId);
       } else if (act === 'mode-toggle') {
         /* عقد 2026-10-26 — مبدّل التقويم/القائمة المستقل: يغيّر نوع
            السطح فقط (بيانات الطلبات وأفعالها محفوظة)؛ اليوم/الأسبوع/
@@ -1782,11 +1834,11 @@
         /* عقد 2026-10-25: فعل تعديل مملوك للمضيف — الحدث فقط؛
            المحرر/المسار مسؤولية المضيف (لا Bottom Sheet هنا) */
         emit('order-schedule:order-edit-request', { id: btn.getAttribute('data-ocal-id') });
-        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(btn.getAttribute('data-ocal-id'));
       } else if (act === 'order-delete') {
         /* عقد 2026-10-25: فعل حذف مملوك للمضيف — الحدث فقط */
         emit('order-schedule:order-delete-request', { id: btn.getAttribute('data-ocal-id') });
-        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(btn.getAttribute('data-ocal-id'));
       } else if (act === 'add') {
         /* التاريخ محمول على الزر نفسه: اليوم المحدد في منطقة الأحداث،
            و"" (بلا يوم) في القائمة وفي شهر تصفّح بلا تحديد — بصدق */
@@ -1860,8 +1912,8 @@
     }
 
     /* تسجيل المستمعين (مرة واحدة على الجذر) */
-    on(root, 'keydown', guard(onKeydown));
-    on(root, 'click', guard(onClick));
+    on(root, 'keydown', userAction(onKeydown));
+    on(root, 'click', userAction(onClick));
     on(root, 'focusout', guard(onRootFocusOut));
 
     /* R-02 (2026-10-25): مراقب واحد لسمة dir على documentElement — قلب
@@ -1890,6 +1942,16 @@
     /* ---- الواجهة العمومية للمثيل ---- */
     return {
       root: root,
+      getState: guard(getState),
+      setDisplayedMonth: guard(function (month) {
+        var p = parseIso(typeof month === 'string' ? month + '-01' : null);
+        if (!p) return;
+        state.monthCursor = { y: p.y, m: p.m };
+        var focused = parseIso(state.focusDate);
+        state.focusDate = isoOf(p.y, p.m, focused ? Math.min(focused.d, daysInMonth(p.y, p.m)) : 1);
+        state.pickerOpen = false;
+        render();
+      }),
       /* تحديث كامل بلا إعادة تهيئة؛ يحفظ selected/view/c-calendar إن
          بقيت صالحة، ويمسح حالتي الانتظار/الخطأ (آخر كتابة تفوز).
          عقد 2026-10-26: حذف الطلب المفتوح من البيانات يطويه بصدق */
@@ -1908,7 +1970,7 @@
       }),
       /* ضبط صامت (بلا أحداث) — الأحداث لأفعال المستخدم فقط (موثق) */
       setSelectedDate: guard(function (date) {
-        if (typeof date !== 'string' || !DATE_RE.test(date)) return;
+        if (!parseIso(date)) return;
         state.selectedDate = date;
         state.focusDate = date;
         var p = parseIso(date);

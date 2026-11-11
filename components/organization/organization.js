@@ -10,6 +10,17 @@
 
 (function () {
   'use strict';
+
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   function nodes(root, selector) {
     var scope = root || document;
     var found = [].slice.call(scope.querySelectorAll(selector));
@@ -23,8 +34,7 @@
 
   function initSections(root) {
     nodes(root, '.m-section__head').forEach(function (head) {
-      if (head.dataset.microSectionBound) return;
-      head.dataset.microSectionBound = '1';
+      if (!claimBinding(head, 'microSectionBound')) return;
       on(head, 'click', function () {
         var section = head.closest('.m-section');
         var body = section ? section.querySelector('.m-section__body') : null;
@@ -41,8 +51,7 @@
 
   function initAvatars(root) {
     nodes(root, 'img[data-avatar-fallback]').forEach(function (img) {
-      if (img.dataset.microAvatarBound) return;
-      img.dataset.microAvatarBound = '1';
+      if (!claimBinding(img, 'microAvatarBound')) return;
       function fallback() {
         var wrap = img.closest('.m-identity');
         if (!wrap) return;
@@ -64,6 +73,7 @@
     init: function (root) { initSections(root); initAvatars(root); },
     disconnect: function (root) {
       nodes(root, '.m-section__head, img[data-avatar-fallback]').forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microOrganizationLifetime) element.__microOrganizationLifetime.abort();
         delete element.__microOrganizationLifetime;
         delete element.dataset.microSectionBound;

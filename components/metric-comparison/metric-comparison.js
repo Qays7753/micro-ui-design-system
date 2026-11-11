@@ -248,21 +248,29 @@
       btn.type = 'button';
       btn.setAttribute('aria-expanded', 'false');
       table = make('table', 'm-main-metric__dataset');
-      table.id = 'micro-metric-dataset-' + (++metricTableUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-main-metric__disclose');
+      table = wrap.querySelector('.m-main-metric__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-metric-dataset-' + (++metricTableUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-main-metric__disclose');
-      table = wrap.querySelector('.m-main-metric__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     return { wrap: wrap, btn: btn, table: table };
   }
@@ -489,12 +497,12 @@
 
   function initOne(root) {
     disconnected.delete(root);
-    if (root.hasAttribute('data-metric-circles') && !root.hasAttribute('data-metric-ready')) {
+    if (root.hasAttribute('data-metric-circles') && !(root.__microMetricResizeObserver || root.__microMetricResizeListener)) {
       root.setAttribute('data-metric-ready', '');
       circleItems(root);
       observeResponsive(root);
     }
-    if (root.hasAttribute('data-main-comparison') && !root.hasAttribute('data-bars-ready')) {
+    if (root.hasAttribute('data-main-comparison') && !(root.__microMetricResizeObserver || root.__microMetricResizeListener)) {
       root.setAttribute('data-bars-ready', '');
       barItems(root);
       fitHero(root);

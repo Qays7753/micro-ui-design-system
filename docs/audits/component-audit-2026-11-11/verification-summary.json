@@ -1,0 +1,101 @@
+{
+  "baseCommit": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "scope": {
+    "viewport": [
+      360,
+      780
+    ],
+    "direction": "rtl",
+    "appearance": "light",
+    "targetedNarrowWidth": 320,
+    "zoom": "NOT RUN",
+    "dark": "NOT RUN"
+  },
+  "gates": {
+    "families": {
+      "passed": 65,
+      "failed": 0,
+      "browser": "156.0.8078.79",
+      "scope": "360x780 Light RTL, normal text; source components exercised in review; source-only regression gates run separately"
+    },
+    "calendar": {
+      "passed": 41,
+      "failed": 0,
+      "browser": "156.0.8078.79",
+      "scope": "Light only; 360x780 RTL; directional LTR; targeted 320; no zoom/Dark/device claims"
+    },
+    "clones": {
+      "passed": 31,
+      "failed": 0,
+      "browser": "156.0.8078.79",
+      "scope": "source only, 360x780 RTL, Light; no Showcase styles, no Dark/zoom"
+    },
+    "lifecycle": {
+      "passed": 155,
+      "failed": 0,
+      "browser": "156.0.8078.79"
+    },
+    "lightData": {
+      "passed": 40,
+      "failed": 0,
+      "browser": "156.0.8078.79",
+      "scope": "Chromium source fixture; 360x780 RTL/LTR DPR1, targeted 320 donut; no zoom"
+    },
+    "runtime": {
+      "passed": 28,
+      "failed": 0,
+      "scope": "Light-only Chromium source + standalone over HTTP; no Dark tests"
+    },
+    "dataScale": {
+      "passed": 23,
+      "failed": 0,
+      "width": 360,
+      "logTail": "# النتيجة: 23/23"
+    },
+    "release": {
+      "passed": 35,
+      "failed": 0,
+      "browser": "156.0.8078.79"
+    },
+    "static": {
+      "passed": 223,
+      "failed": 0
+    }
+  },
+  "sourceSha256": {
+    "components/access-gateway/access-gateway.js": "6a36bcb36d5197dde20b5aac423d1d523216c7e88bf005aa056ee9b3673eeaff",
+    "components/account-settings/account-settings.js": "66aae7739446c51e520a54c1ddf1b948da95a9deccf594b177bb6fd40b62041e",
+    "components/buttons/buttons.js": "dc96d2ac84a0e5ca7cf716358a547fee3ab35c53e8cdb100d624a2aa84451a07",
+    "components/carousel/carousel.js": "9af5019569170f09cd020e12961113820deb4a8f2b84c9fa26cb37a31292fafa",
+    "components/data/data.js": "74c09ca7992cdd525ee59259df00f88ebf07cfb4e2e214c8ec345592f1fca87e",
+    "components/data/packed-circle.js": "5c7b3bbe84867c216478385b85f8195add59fea85ca6b819433cbcdaeed0113f",
+    "components/fields/fields.js": "9962d2548dacd463f149b57a0160d803e4c3877566540a96edc6e32453f161e2",
+    "components/info-strip/info-strip-peek.js": "e443229fbcbeb6d2eea901745d7eb10f0d6a530f1673d4fa708d50a8e4683711",
+    "components/info-strip/info-strip.js": "3c161028f2e699f8973269967dd54df640f6071f3eca7ad9400f0b5aa8802134",
+    "components/messages/messages.js": "5e389dfacf101213edb6b714bf18ba5413fa22768bcb6aca0a7dedf96a09a9de",
+    "components/metric-comparison/metric-comparison.js": "91dfc3ec43f1dd2e188ca40e622d9ea22f2001c74dbba702e501eb5142e42214",
+    "components/navigation/navigation.js": "2fe4c1c094baf496a2229fabd6809782b942de98c00e4e92c5bceafc7b72d55d",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "components/organization/organization.js": "dbe3d39c1444aa74ed61ae8df1026d15c57e12c0228ec511e1022493b3b0b445",
+    "components/selection/picker.js": "8f36be36f7f033417cffdca9e60c01422db4a02214cde9efbdf28d288452b169",
+    "components/selection/selection.js": "388df54a1cd49fb0013d9ea1291d3a27db6dc782e43d58f103431188aa8b2fcf"
+  },
+  "unchangedTokens": true,
+  "standaloneFileTransport": {
+    "status": "BLOCKED_BY_ENVIRONMENT",
+    "error": "net::ERR_BLOCKED_BY_ADMINISTRATOR",
+    "validatedAlternative": "same generated standalone over HTTP"
+  },
+  "deterministicChecks": {
+    "catalog": {
+      "families": 14,
+      "variants": 6,
+      "passed": true
+    },
+    "standaloneBytesAndIcons": true,
+    "manifestCheck": true,
+    "diffCheck": true,
+    "sourceAndAssetsUnchangedOutsideAuthorizedComponents": true
+  }
+}

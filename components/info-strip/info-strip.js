@@ -26,7 +26,7 @@
 
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
-    if (strip.hasAttribute('data-info-strip-ready')) return;
+    if (registry.has(strip)) return; /* A cloned ready marker carries no listeners. */
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');
     if (!viewport || !track) return;

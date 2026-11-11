@@ -78,7 +78,8 @@
       <p>
         وثيقة استخدام: أربع حالات حية على العقد نفسه — init ثم الأحداث
         (day-select / order-open / add-request) وعمليات
-        setData / setSelectedDate / setView / setCalendarView / setLoading / setError / destroy.
+        setData / setSelectedDate / setView / setCalendarView / getState / setDisplayedMonth / setLoading / setError / destroy.
+        الحدث state-change يحمل نسخة حالة العرض؛ setDisplayedMonth يضبط شهر التصفح مستقلاً عن الاختيار وبلا أحداث. لا حفظ أو روابط داخل المكوّن.
         بيانات العينة مثبتة حول 2026-10-07 (أمس/اليوم/غدًا/أسبوعان قادمان/ماضٍ/غير مجدول،
         حالات مختلطة، مفتاح حالة غير معروف، وعنوان طويل جدًا). لا HTML من البيانات: أي نص
         ممرر يظهر حرفيًا. محدّد يوم/أسبوع/شهر حقيقي (مرجع المالك 2026-10-25)؛ القائمة سطح
@@ -172,7 +173,7 @@
 
       /* ---- سجل الأحداث ---- */
       function attachLog(rootEl, listEl) {
-        ['order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request',
+        ['order-schedule:state-change', 'order-schedule:day-select', 'order-schedule:order-open', 'order-schedule:add-request',
          'order-schedule:order-edit-request', 'order-schedule:order-delete-request'].forEach(function (name) {
           rootEl.addEventListener(name, function (e) {
             var li = document.createElement('li');

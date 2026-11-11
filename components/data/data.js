@@ -1399,23 +1399,31 @@
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
-      table.id = 'micro-chart-dataset-' + (++chartUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       /* الإدراج بعد الملخص (آخر عنصر في بنية .m-chart) — ترتيب قراءة:
          العنوان، الرسم، الملخص، ثم الإفصاح */
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-chart-dataset-' + (++chartUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-chart__disclose');
-      table = wrap.querySelector('.m-chart__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     if (!btn || !table) return;
     /* إعادة البناء كل دورة — التزامن مضمون بنيويًا */

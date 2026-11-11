@@ -3,7 +3,8 @@
   'use strict';
 
   function initPanel(panel) {
-    if (panel.hasAttribute('data-account-settings-ready')) return;
+    if (panel.hasAttribute('data-account-settings-ready') && panel.__microAccountLifetime
+        && !panel.__microAccountLifetime.signal.aborted) return;
     var layerId = panel.getAttribute('data-account-layer-id');
     var layer = layerId ? document.getElementById(layerId) : panel.closest('.m-layer');
     if (!layer) return;

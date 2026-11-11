@@ -91,6 +91,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path)
+    ap.add_argument('--review-scope', action='store_true', help='360x780 RTL + directional LTR, no zoom')
     args = ap.parse_args()
     out = args.out or Path(tempfile.mkdtemp(prefix="micro-complete-lifecycle-"))
     out.mkdir(parents=True, exist_ok=True)
@@ -119,9 +120,9 @@ def main():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**chromium_launch_options())
             version = browser.version
-            for width, direction in [(320, "rtl"), (360, "rtl"), (390, "rtl"),
-                                     (430, "rtl"), (390, "ltr")]:
-                page = browser.new_page(viewport={"width": width, "height": 844},
+            for width, direction in ([(360, "rtl"), (360, "ltr")] if args.review_scope else
+                                     [(320, "rtl"), (360, "rtl"), (390, "rtl"), (430, "rtl"), (390, "ltr")]):
+                page = browser.new_page(viewport={"width": width, "height": 780 if args.review_scope else 844},
                                         reduced_motion="reduce")
                 page.on("pageerror", lambda e: errors.append(str(e)))
                 page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
@@ -146,7 +147,8 @@ def main():
                           data["focused"] == (state != "disabled"), data)
                     if state == "error":
                         check(pre + " error has full corrective message and ring",
-                              bool(data["described"]) and "173, 48, 59" in data["shadow"])
+                              bool(data["described"]) and "22, 77, 89" in data["shadow"]
+                              and "173, 48, 59" in data["before"]["border"])
                 page.locator("#fallback").focus()
                 check(pre + " non-field keyboard focus remains visible",
                       page.locator("#fallback").evaluate("""e=>{
@@ -202,7 +204,8 @@ def main():
                           page.locator(f"#{root} [data-info-strip-position]").inner_text() == "2 / 2" and
                           page.locator(f"#{root} .m-info-strip__slide").first.evaluate("e=>e.inert"))
                     viewport.press("Home")
-                    viewport.press("ArrowLeft" if direction == "rtl" else "ArrowRight")
+                    # The ordinary strip deliberately owns an RTL track even in an LTR host.
+                    viewport.press("ArrowLeft" if root == "s2" or direction == "rtl" else "ArrowRight")
                     check(pre + f" {root} directional next", page.locator(
                         f"#{root} [data-info-strip-position]").inner_text() == "2 / 2")
                     # A focused descendant must never be left in an inert slide.
@@ -306,7 +309,7 @@ def main():
                       page.evaluate("()=>document.documentElement.scrollWidth<=innerWidth"))
                 page.close()
             # Explicitly hold font readiness across disconnect/reconnect.
-            page = browser.new_page(viewport={"width": 390, "height": 844})
+            page = browser.new_page(viewport={"width": 360 if args.review_scope else 390, "height": 780 if args.review_scope else 844})
             page.add_init_script("""Object.defineProperty(document,'fonts',{value:{
               ready:new Promise(resolve=>{window.resolveFonts=resolve;})}});""")
             page.goto(base + "/complete-lifecycle.html")
@@ -327,7 +330,7 @@ def main():
     finally:
         srv.shutdown()
     check("no console/resource/JavaScript errors", not errors, errors)
-    report = {"browser": version, "passed": sum(r["passed"] for r in results),
+    report = {"browser": version, "reviewScope": args.review_scope, "passed": sum(r["passed"] for r in results),
               "failed": sum(not r["passed"] for r in results), "results": results}
     (out / "results.json").write_text(json.dumps(report, ensure_ascii=False, indent=2))
     print(json.dumps({k: report[k] for k in ["browser", "passed", "failed"]}) + " " + str(out))

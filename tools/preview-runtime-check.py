@@ -47,6 +47,8 @@ def main():
     domain = os.environ.get("REPLIT_DEV_DOMAIN")
     parser.add_argument("--base", default="https://" + domain if domain else None)
     parser.add_argument("--out", type=Path, default=ROOT / "generated-artifacts/runtime-fix")
+    parser.add_argument('--review-scope', action='store_true', help='360x780 RTL/LTR; targeted 320 resize only; no zoom')
+    parser.add_argument('--standalone-http', action='store_true', help='serve the same generated file over HTTP when browser policy blocks file://; does not establish file:// support')
     args = parser.parse_args()
     if not args.base:
         parser.error("--base is required outside Replit")
@@ -55,12 +57,13 @@ def main():
         browser = playwright.chromium.launch(**chromium_launch_options())
         targets = {
             "source": args.base.rstrip("/") + "/previews/ui-system-showcase/index.html",
-            "standalone": (ROOT / "previews/ui-system-showcase/standalone.html").as_uri(),
+            "standalone": (args.base.rstrip("/") + "/previews/ui-system-showcase/standalone.html"
+                           if args.standalone_http else (ROOT / "previews/ui-system-showcase/standalone.html").as_uri()),
         }
         for version, url in targets.items():
-            for width in (320, 360, 390, 430):
+            for width in ((360,) if args.review_scope else (320, 360, 390, 430)):
                 for direction in ("rtl", "ltr"):
-                    page = browser.new_page(viewport={"width": width, "height": 844})
+                    page = browser.new_page(viewport={"width": width, "height": 780 if args.review_scope else 844})
                     page.add_init_script(INSTRUMENT)
                     page_errors = []
                     page.on("pageerror", lambda error, errors=page_errors: errors.append(str(error)))
@@ -82,9 +85,9 @@ def main():
                     trigger.click()
                     page.locator("#sc-ocal-root [data-ocal-picker]").wait_for(state="visible")
                     page.keyboard.press("Escape")
-                    page.set_viewport_size({"width": 460 if width < 390 else 320, "height": 844})
+                    page.set_viewport_size({"width": 320 if args.review_scope else (460 if width < 390 else 320), "height": 780 if args.review_scope else 844})
                     page.wait_for_timeout(180)
-                    page.set_viewport_size({"width": width, "height": 844})
+                    page.set_viewport_size({"width": width, "height": 780 if args.review_scope else 844})
                     page.wait_for_timeout(350)
                     deliveries = page.evaluate("__resizeDeliveries")
                     page.wait_for_timeout(250)
@@ -114,7 +117,8 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "verification.json").write_text(json.dumps({
         "passed": passed, "failed": total - passed, "cases": results,
-        "scope": "Light-only, Chromium, source plus file:// standalone; no Dark tests",
+        "scope": "Light-only Chromium source + standalone over " + ("HTTP" if args.standalone_http else "file://") + "; no Dark tests",
+        "reviewScope": args.review_scope,
     }, indent=2), encoding="utf-8")
     print(f"{passed}/{total} PASS")
     return 0 if passed == total else 1

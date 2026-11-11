@@ -9277,6 +9277,16 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 (function () {
   'use strict';
 
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   /* E05: استرجاع دقيق لحالة التعطيل الأصلية للمفتاح بعد الانتظار */
   var pendingRestore = new WeakMap();
 
@@ -9307,9 +9317,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     var groups = [].slice.call(scope.querySelectorAll('[data-choice-group]'));
     if (scope.nodeType === 1 && scope.matches('[data-choice-group]')) groups.unshift(scope);
     groups.forEach(function (group) {
-      if (group.dataset.microChoicesBound) return;
-      group.dataset.microChoicesBound = '1';
-      group.__microSelectionLifetime = new AbortController();
+      if (!claimBinding(group, 'microChoicesBound')) return;
+      if (!group.__microSelectionLifetime) group.__microSelectionLifetime = new AbortController();
       function on(element, type, handler) {
         element.addEventListener(type, handler, { signal: group.__microSelectionLifetime.signal });
       }
@@ -9338,9 +9347,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     var segs = [].slice.call(scope.querySelectorAll('[data-seg]'));
     if (scope.nodeType === 1 && scope.matches('[data-seg]')) segs.unshift(scope);
     segs.forEach(function (seg) {
-      if (seg.dataset.microSegBound) return;
-      seg.dataset.microSegBound = '1';
-      seg.__microSelectionLifetime = new AbortController();
+      if (!claimBinding(seg, 'microSegBound')) return;
+      if (!seg.__microSelectionLifetime) seg.__microSelectionLifetime = new AbortController();
       function on(element, type, handler) {
         element.addEventListener(type, handler, { signal: seg.__microSelectionLifetime.signal });
       }
@@ -9412,6 +9420,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var nodes = [].slice.call(scope.querySelectorAll('[data-choice-group], [data-seg]'));
       if (scope.matches && scope.matches('[data-choice-group], [data-seg]')) nodes.unshift(scope);
       nodes.forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microSelectionLifetime) element.__microSelectionLifetime.abort();
         delete element.__microSelectionLifetime;
         delete element.dataset.microChoicesBound;
@@ -9719,6 +9728,16 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 (function () {
   'use strict';
 
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   var livePolite = null;
   var liveAssertive = null;
   /* W2.3 (A2-F05): قناتا إعلان منفصلتان — polite وassertive عقدتان
@@ -9907,8 +9926,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return list;
     };
     inScope('.m-note__close').forEach(function (btn) {
-      if (btn.dataset.microNoteBound) return;
-      btn.dataset.microNoteBound = '1';
+      if (!claimBinding(btn, 'microNoteBound')) return;
       on(btn, 'click', function () {
         var note = btn.closest('.m-note');
         if (!note) return;
@@ -9924,8 +9942,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     });
     /* إغلاق toast اليدوي: أي عنصر [data-toast-close] داخل .m-toast */
     inScope('.m-toast [data-toast-close]').forEach(function (btn) {
-      if (btn.dataset.microToastCloseBound) return;
-      btn.dataset.microToastCloseBound = '1';
+      if (!claimBinding(btn, 'microToastCloseBound')) return;
       on(btn, 'click', function () {
         closeToast(btn.closest('.m-toast'));
       });
@@ -9937,6 +9954,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var scope = root || document;
       var nodes = [scope].concat([].slice.call(scope.querySelectorAll('*')));
       nodes.forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microMessageLifetime) element.__microMessageLifetime.abort();
         delete element.__microMessageLifetime;
         if (element.dataset) {
@@ -10013,6 +10031,16 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
 (function () {
   'use strict';
+
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
 
   var openLayers = [];
   var lockCount = 0;         /* R2-02: عدّاد قفل التمرير — لا تلف قيمة overflow السابقة */
@@ -10148,8 +10176,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
   /* ---- حصر التركيز داخل الطبقة العليا ---- */
   function bindTrap(layer) {
-    if (layer.dataset.microTrapBound) return;
-    layer.dataset.microTrapBound = '1';
+    if (!claimBinding(layer, 'microTrapBound')) return;
     on(layer, layer, 'keydown', function (e) {
       if (e.key !== 'Tab' || !openLayers.length) return;
       if (openLayers[openLayers.length - 1].layer !== layer) return;
@@ -10389,8 +10416,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   }
 
   function initFilterPanel(panel) {
-    if (panel.dataset.microFilterBound) return;
-    panel.dataset.microFilterBound = '1';
+    if (!claimBinding(panel, 'microFilterBound')) return;
     var applied = panel.__microApplied || {}; /* Preserve consumer-applied state on reattach. */
     on(panel, panel, 'micro-navigation:opened', function () {
       /* الجاري يبدأ نسخة من المطبّق عند كل فتح — لكل الأنواع */
@@ -10485,8 +10511,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
        (إزالة tabindex الذي أضفناه فقط)، واللوحات غير النشطة مخفية
        (hidden) فتخرج من الترتيب تلقائيًا. */
   function initTabs(tabs) {
-    if (tabs.dataset.microTabsBound) return;
-    tabs.dataset.microTabsBound = '1';
+    if (!claimBinding(tabs, 'microTabsBound')) return;
     var items = [].slice.call(tabs.querySelectorAll('[role="tab"]'));
     var FOCUSABLE_IN = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     function panelOf(t) {
@@ -10587,23 +10612,20 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       return list;
     };
     inScope('[data-layer-open]').forEach(function (btn) {
-      if (btn.dataset.microLayerOpenBound) return;
-      btn.dataset.microLayerOpenBound = '1';
+      if (!claimBinding(btn, 'microLayerOpenBound')) return;
       on(btn, btn, 'click', function () {
         var layer = document.getElementById(btn.getAttribute('data-layer-open'));
         if (layer) openLayer(layer, { trigger: btn });
       });
     });
     inScope('[data-layer-close]').forEach(function (btn) {
-      if (btn.dataset.microLayerCloseBound) return;
-      btn.dataset.microLayerCloseBound = '1';
+      if (!claimBinding(btn, 'microLayerCloseBound')) return;
       on(btn, btn, 'click', function () {
         closeLayer(btn.closest('.m-layer'));
       });
     });
     inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
-      if (bd.dataset.microBackdropBound) return;
-      bd.dataset.microBackdropBound = '1';
+      if (!claimBinding(bd, 'microBackdropBound')) return;
       on(bd, bd, 'click', function () {
         var layer = document.getElementById(bd.getAttribute('data-for'));
         if (!layer) return;
@@ -10634,6 +10656,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
           element.hidden = true;
           element.inert = false;
         }
+        liveBindings.delete(element);
         if (element.__microNavigationLifetime) {
           element.__microNavigationLifetime.abort();
           delete element.__microNavigationLifetime;
@@ -10676,6 +10699,17 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
 (function () {
   'use strict';
+
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   function nodes(root, selector) {
     var scope = root || document;
     var found = [].slice.call(scope.querySelectorAll(selector));
@@ -10689,8 +10723,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
   function initSections(root) {
     nodes(root, '.m-section__head').forEach(function (head) {
-      if (head.dataset.microSectionBound) return;
-      head.dataset.microSectionBound = '1';
+      if (!claimBinding(head, 'microSectionBound')) return;
       on(head, 'click', function () {
         var section = head.closest('.m-section');
         var body = section ? section.querySelector('.m-section__body') : null;
@@ -10707,8 +10740,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
   function initAvatars(root) {
     nodes(root, 'img[data-avatar-fallback]').forEach(function (img) {
-      if (img.dataset.microAvatarBound) return;
-      img.dataset.microAvatarBound = '1';
+      if (!claimBinding(img, 'microAvatarBound')) return;
       function fallback() {
         var wrap = img.closest('.m-identity');
         if (!wrap) return;
@@ -10730,6 +10762,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     init: function (root) { initSections(root); initAvatars(root); },
     disconnect: function (root) {
       nodes(root, '.m-section__head, img[data-avatar-fallback]').forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microOrganizationLifetime) element.__microOrganizationLifetime.abort();
         delete element.__microOrganizationLifetime;
         delete element.dataset.microSectionBound;
@@ -12145,23 +12178,31 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
-      table.id = 'micro-chart-dataset-' + (++chartUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       /* الإدراج بعد الملخص (آخر عنصر في بنية .m-chart) — ترتيب قراءة:
          العنوان، الرسم، الملخص، ثم الإفصاح */
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-chart-dataset-' + (++chartUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-chart__disclose');
-      table = wrap.querySelector('.m-chart__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     if (!btn || !table) return;
     /* إعادة البناء كل دورة — التزامن مضمون بنيويًا */
@@ -12538,6 +12579,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
   var observers = new WeakMap();
   var resizeFrames = new WeakMap();
+  var disconnected = new WeakSet();
 
   /* ترتيب حتمي: دائرة رئيسية وبجوارها دائرتان متدرجتان رأسيًا.
      كل مجموعة من ثلاث مستقلة؛ لا عشوائية أو مساحات مالية مشتقة.
@@ -12689,21 +12731,29 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
-      table.id = 'micro-packed-dataset-' + (++packedUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-chart__disclose');
+      table = wrap.querySelector('.m-chart__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-packed-dataset-' + (++packedUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-chart__disclose');
-      table = wrap.querySelector('.m-chart__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     if (!btn || !table) return;
     table.textContent = '';
@@ -12893,7 +12943,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
           if (resizeFrames.has(chart)) return;
           resizeFrames.set(chart, window.requestAnimationFrame(function () {
             resizeFrames.delete(chart);
-            if (chart.isConnected && observers.get(chart) === observer && plot.contains(wrap)) {
+            if (chart.isConnected && !disconnected.has(chart) && observers.get(chart) === observer && plot.contains(wrap)) {
               layoutPacked(chart, nodes, wrap);
             }
           }));
@@ -12903,7 +12953,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         observers.set(chart, observer);
       }
       if (document.fonts) document.fonts.ready.then(function () {
-        if (plot.contains(wrap)) layoutPacked(chart, nodes, wrap);
+        if (chart.isConnected && !disconnected.has(chart) && plot.contains(wrap)) layoutPacked(chart, nodes, wrap);
       });
     } else {
       var empty = document.createElement('p');
@@ -12949,15 +12999,30 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   /* render العام: جسم الرسم ثم مزامنة جدول الإفصاح في كل مسار
      (نجاح/رفض مقياس/كثافة) — العرض البديل الكامل دائمًا (عقد المالك) */
   function render(chart) {
+    disconnected.delete(chart);
     renderPacked(chart);
     syncPackedTable(chart);
   }
 
   window.MicroPacked = {
     init: function (root) {
-      (root || document).querySelectorAll('[data-chart-packed]').forEach(render);
+      var scope = root || document;
+      if (scope.matches && scope.matches('[data-chart-packed]')) render(scope);
+      scope.querySelectorAll('[data-chart-packed]').forEach(render);
     },
-    render: render
+    render: render,
+    disconnect: function (root) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
+      if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
+      charts.forEach(function (chart) {
+        disconnected.add(chart);
+        if (observers.has(chart)) observers.get(chart).disconnect();
+        observers.delete(chart);
+        if (resizeFrames.has(chart)) window.cancelAnimationFrame(resizeFrames.get(chart));
+        resizeFrames.delete(chart);
+      });
+    }
   };
 
   document.addEventListener('DOMContentLoaded', function () { window.MicroPacked.init(); });
@@ -12994,7 +13059,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
-    if (strip.hasAttribute('data-info-strip-ready')) return;
+    if (registry.has(strip)) return; /* A cloned ready marker carries no listeners. */
     var viewport = strip.querySelector('[data-info-strip-viewport]');
     var track = strip.querySelector('[data-info-strip-track]');
     if (!viewport || !track) return;
@@ -13942,21 +14007,29 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       btn.type = 'button';
       btn.setAttribute('aria-expanded', 'false');
       table = make('table', 'm-main-metric__dataset');
-      table.id = 'micro-metric-dataset-' + (++metricTableUid);
-      btn.setAttribute('aria-controls', table.id);
       table.hidden = true;
       wrap.appendChild(btn);
       wrap.appendChild(table);
       chart.appendChild(wrap);
-      btn.addEventListener('click', function () {
+    } else {
+      btn = wrap.querySelector('.m-main-metric__disclose');
+      table = wrap.querySelector('.m-main-metric__dataset');
+    }
+    // A copied disclosure has DOM state but no listener or unique owned ID.
+    var binding = btn && btn.__microDatasetDisclosure;
+    if (btn && table && (!binding || binding.table !== table)) {
+      if (binding) btn.removeEventListener('click', binding.handler);
+      do { table.id = 'micro-metric-dataset-' + (++metricTableUid); }
+      while (document.getElementById(table.id) && document.getElementById(table.id) !== table);
+      btn.setAttribute('aria-controls', table.id);
+      var handler = function () {
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
         btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
-      });
-    } else {
-      btn = wrap.querySelector('.m-main-metric__disclose');
-      table = wrap.querySelector('.m-main-metric__dataset');
+      };
+      btn.__microDatasetDisclosure = { table: table, handler: handler };
+      btn.addEventListener('click', handler);
     }
     return { wrap: wrap, btn: btn, table: table };
   }
@@ -14183,12 +14256,12 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
   function initOne(root) {
     disconnected.delete(root);
-    if (root.hasAttribute('data-metric-circles') && !root.hasAttribute('data-metric-ready')) {
+    if (root.hasAttribute('data-metric-circles') && !(root.__microMetricResizeObserver || root.__microMetricResizeListener)) {
       root.setAttribute('data-metric-ready', '');
       circleItems(root);
       observeResponsive(root);
     }
-    if (root.hasAttribute('data-main-comparison') && !root.hasAttribute('data-bars-ready')) {
+    if (root.hasAttribute('data-main-comparison') && !(root.__microMetricResizeObserver || root.__microMetricResizeListener)) {
       root.setAttribute('data-bars-ready', '');
       barItems(root);
       fitHero(root);
@@ -14302,7 +14375,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   'use strict';
 
   function initPanel(panel) {
-    if (panel.hasAttribute('data-account-settings-ready')) return;
+    if (panel.hasAttribute('data-account-settings-ready') && panel.__microAccountLifetime
+        && !panel.__microAccountLifetime.signal.aborted) return;
     var layerId = panel.getAttribute('data-account-layer-id');
     var layer = layerId ? document.getElementById(layerId) : panel.closest('.m-layer');
     if (!layer) return;
@@ -14728,14 +14802,17 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
      setSelectedDate('YYYY-MM-DD')
      setView('calendar'|'list')
      setCalendarView('month'|'week'|'day')
+     getState()                 نسخة من حالة العرض والتحديد
+     setDisplayedMonth('YYYY-MM') تصفح شهر مستقل وصامت
      setLoading(true|false)
      setError(retryCallback|null)
      destroy()
-   options: orders, statuses, today, weekStart, selectedDate, view,
+   options: orders, statuses, today, weekStart, selectedDate, displayedMonth, view,
             calendarView ('month'|'week'|'day'), orderActions{edit,delete},
             headingLevel, loading, retry
    أحداث CustomEvent على الجذر (bubbles):
      order-schedule:day-select           {date:'YYYY-MM-DD'}
+     order-schedule:state-change         {view,calendarView,selectedDate,displayedMonth}
      order-schedule:order-open           {id}
      order-schedule:add-request          {date:'YYYY-MM-DD'|null}
      order-schedule:order-edit-request   {id}
@@ -14869,13 +14946,19 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   }
 
   function isoOf(y, m, d) {
-    return y + '-' + pad2(m) + '-' + pad2(d);
+    return yearText(y) + '-' + pad2(m) + '-' + pad2(d);
+  }
+
+  function yearText(y) {
+    return ('0000' + y).slice(-4);
   }
 
   function parseIso(s) {
     if (typeof s !== 'string' || !DATE_RE.test(s)) return null;
     var p = s.split('-');
-    return { y: +p[0], m: +p[1], d: +p[2] };
+    var y = +p[0], m = +p[1], d = +p[2];
+    if (y < 1 || y > 9999 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return null;
+    return { y: y, m: m, d: d };
   }
 
   /* عدد أيام الشهر محليًا، مع ضبط السنة صراحة لتجنب تحويل 0–99 إلى 1900–1999 */
@@ -14952,7 +15035,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   function dateNumeric(iso) {
     var p = parseIso(iso);
     if (!p) return '';
-    return pad2(p.d) + '/' + pad2(p.m) + '/' + p.y;
+    return pad2(p.d) + '/' + pad2(p.m) + '/' + yearText(p.y);
   }
 
   /* عنوان اليوم المرئي: اسم اليوم معلّن محليًا + تاريخ رقمي —
@@ -15046,8 +15129,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       out.push({
         id: (o.id == null ? '' : String(o.id)),
         title: (o.title == null ? '' : String(o.title)),
-        /* تاريخ غير نصي/لا يطابق YYYY-MM-DD → غير مجدول (موثق) */
-        date: (typeof o.date === 'string' && DATE_RE.test(o.date)) ? o.date : null,
+        /* تاريخ مدني غير صالح → غير مجدول، لا يوم مستحيل داخل التقويم. */
+        date: parseIso(o.date) ? o.date : null,
         /* وقت لا يطابق HH:mm → غائب (لا يُخترع وقت أبدًا) */
         time: (typeof o.time === 'string' && TIME_RE.test(o.time)) ? o.time : null,
         statusKey: (o.statusKey == null ? '' : String(o.statusKey)),
@@ -15096,14 +15179,14 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     /* ---- الخيارات (قيم غير صالحة تسقط إلى الافتراضي الموثق) ---- */
     state.orders = normalizeOrders(options.orders);
     state.statuses = (options.statuses && typeof options.statuses === 'object') ? options.statuses : {};
-    state.today = (typeof options.today === 'string' && DATE_RE.test(options.today)) ? options.today : localTodayIso();
+    state.today = parseIso(options.today) ? options.today : localTodayIso();
     /* weekStart: عقد 2026-10-25 (مرجع المالك الأحدث): الافتراضي 0
        (الأحد أولًا — Sunday-first كما في calendar-target-latest-owner.png)
        قابل للتعديل لكل مثيل؛ المستهلك الذي يمرر قيمة صريحة (مثل 6)
        يبقى مدعومًا كما هو — الهجرة موثقة في specification.md */
     state.weekStart = (typeof options.weekStart === 'number' && options.weekStart >= 0 &&
       options.weekStart <= 6 && Math.floor(options.weekStart) === options.weekStart) ? options.weekStart : 0;
-    state.selectedDate = (typeof options.selectedDate === 'string' && DATE_RE.test(options.selectedDate))
+    state.selectedDate = parseIso(options.selectedDate)
       ? options.selectedDate : state.today;
     state.view = (options.view === 'list') ? 'list' : 'calendar';
     /* عقد 2026-10-25 (مرجع المالك — محدّد يوم/أسبوع/شهر): ثلاث
@@ -15137,6 +15220,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     var sp = parseIso(state.selectedDate) || parseIso(state.today);
     state.monthCursor = { y: sp.y, m: sp.m };
     state.focusDate = state.selectedDate;
+    var displayed = parseIso(typeof options.displayedMonth === 'string' ? options.displayedMonth + '-01' : null);
+    if (displayed) state.monthCursor = { y: displayed.y, m: displayed.m };
 
     /* الاتجاه: RTL افتراضيًا؛ يُعاد تقييمه عند كل تصيير، ومراقب dir
        على documentElement (يُفصل في destroy) يجعل قلب الاتجاه الحي
@@ -15168,6 +15253,31 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     function emit(name, detail) {
       if (destroyed) return;
       root.dispatchEvent(new CustomEvent(name, { bubbles: true, detail: detail }));
+    }
+
+    /* Copies of public navigation state only; no persistence or host routing. */
+    function getState() {
+      return {
+        view: state.view, calendarView: state.calendarView,
+        selectedDate: state.selectedDate,
+        displayedMonth: yearText(state.monthCursor.y) + '-' + pad2(state.monthCursor.m)
+      };
+    }
+
+    var userActionDepth = 0;
+    function userAction(fn) {
+      return guard(function (event) {
+        var outer = userActionDepth === 0;
+        var before = outer ? JSON.stringify(getState()) : null;
+        userActionDepth++;
+        try { fn(event); }
+        finally {
+          userActionDepth--;
+          if (outer && !destroyed && before !== JSON.stringify(getState())) {
+            emit('order-schedule:state-change', getState());
+          }
+        }
+      });
     }
 
     /* الحالة من خريطة المستهلك فقط؛ المجهول/الغائب: محايد بنص
@@ -15484,7 +15594,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var range = el('span', 'm-ocal__month-range');
       range.appendChild(el('span', 'm-ocal__month-label', pad2(m)));
       range.appendChild(document.createTextNode(' / '));
-      range.appendChild(el('span', 'm-ocal__year', String(y)));
+      range.appendChild(el('span', 'm-ocal__year', yearText(y)));
       pickerButton.appendChild(range);
       pickerButton.appendChild(chevronDownIcon());
       title.appendChild(pickerButton);
@@ -15496,7 +15606,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     function buildMonthPicker() {
       var picker = el('section', 'm-ocal__picker');
       picker.setAttribute('data-ocal-picker', '');
-      picker.setAttribute('data-ocal-year', String(state.pickerYear));
+      picker.setAttribute('data-ocal-year', yearText(state.pickerYear));
       picker.setAttribute('role', 'dialog');
       picker.setAttribute('aria-label', 'اختيار الشهر والسنة');
       var heading = el('div', 'm-ocal__picker-head');
@@ -15506,7 +15616,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       prevYear.setAttribute('aria-label', 'السنة السابقة');
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
-      var year = el(hTag(), 'm-ocal__picker-year', String(state.pickerYear));
+      var year = el(hTag(), 'm-ocal__picker-year', yearText(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
       var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
@@ -15534,7 +15644,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         month.setAttribute('data-ocal-action', 'picker-month');
         month.setAttribute('data-ocal-value', String(i));
         month.setAttribute('aria-pressed', i + 1 === currentMonth ? 'true' : 'false');
-        month.setAttribute('aria-label', pad2(i + 1) + ' / ' + state.pickerYear);
+        month.setAttribute('aria-label', pad2(i + 1) + ' / ' + yearText(state.pickerYear));
         months.appendChild(month);
       }
       picker.appendChild(months);
@@ -15587,6 +15697,11 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
        بشفافية 40% لكنها أيام حقيقية قابلة للتحديد — اختيارها ينقل
        العرض إلى شهرها (العرض يتبع التحديد). */
     function buildDayCell(iso, d, groups, outOfMonth) {
+      if (!parseIso(iso)) {
+        var outside = el('span', 'm-ocal__cell m-ocal__cell--out');
+        outside.setAttribute('aria-hidden', 'true');
+        return outside;
+      }
       var orders = groups[iso] || [];
       var cell = el('button', 'm-ocal__cell');
       cell.type = 'button';
@@ -15648,7 +15763,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + y);
+      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + yearText(y));
       grid.setAttribute('data-ocal-grid', '');
 
       var row = el('div', 'm-ocal__gridrow');
@@ -15689,10 +15804,10 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       var a = dates[0];
       var b = dates[6];
       if (a.y === b.y && a.m === b.m) {
-        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + b.y;
+        return a.d + '–' + b.d + '/' + pad2(b.m) + '/' + yearText(b.y);
       }
       if (a.y === b.y) {
-        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + b.y;
+        return a.d + '/' + pad2(a.m) + ' – ' + b.d + '/' + pad2(b.m) + '/' + yearText(b.y);
       }
       return dateNumeric(isoOf(a.y, a.m, a.d)) + ' – ' + dateNumeric(isoOf(b.y, b.m, b.d));
     }
@@ -15982,7 +16097,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         /* نفس تقديم رأس الشهر الرقمي (عقد الأرقام 2026-10-26):
            «لا يوم محدد في 01 / 2027» — لا اسم شهر */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + pad2(m) + ' / ' + y));
+          'لا يوم محدد في ' + pad2(m) + ' / ' + yearText(y)));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
           countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
         head.appendChild(buildAddButton(null));
@@ -16182,6 +16297,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       if (!p) return;
       var t = normalizeYmd(p.y, p.m, p.d + step);
       var iso = isoOf(t.y, t.m, t.d);
+      if (t.y < 1 || t.y > 9999) return;
       if (t.y !== state.monthCursor.y || t.m !== state.monthCursor.m) {
         state.monthCursor = { y: t.y, m: t.m };
         state.focusDate = iso;
@@ -16322,13 +16438,21 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       if (elm && typeof elm.focus === 'function') elm.focus();
     }
 
+    /* IDs are opaque host data, never interpolated into a CSS selector. */
+    function refocusOrderRow(id) {
+      var rows = root.querySelectorAll('[data-ocal-action="order-row"]');
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].getAttribute('data-ocal-id') === id) { rows[i].focus(); return; }
+      }
+    }
+
     /* اختيار يوم: تحديث + إعادة تصيير + إعلان (إن كان من المستخدم).
        عقد 2026-10-25 (مرجع المالك setSelected): اختيار يوم من شهر
        مجاور (خلايا الأشهر المجاورة الآن قابلة للتحديد) ينقل الشهر
        المعروض إلى شهره — العرض يتبع التحديد؛ سهم الشهر/المنتقي
        يبقيان تصفّحًا بلا تحديد كما هما. */
     function selectDate(iso, fromUser) {
-      if (!DATE_RE.test(iso)) return;
+      if (!parseIso(iso)) return;
       state.selectedDate = iso;
       var p = parseIso(iso);
       if (p.y !== state.monthCursor.y || p.m !== state.monthCursor.m) {
@@ -16346,6 +16470,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
        سمة data-ocal-fade على الجذر لهذا التصيير وحده. */
     function shiftMonthCursor(delta) {
       var nm = shiftMonth(state.monthCursor.y, state.monthCursor.m, delta);
+      if (nm.y < 1 || nm.y > 9999) return;
       state.monthCursor = { y: nm.y, m: nm.m };
       var focused = parseIso(state.focusDate);
       var day = focused ? Math.min(focused.d, daysInMonth(nm.y, nm.m)) : 1;
@@ -16456,6 +16581,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       if (!p) return;
       var t = normalizeYmd(p.y, p.m, p.d + delta);
       var iso = isoOf(t.y, t.m, t.d);
+      if (t.y < 1 || t.y > 9999) return;
       state.selectedDate = iso;
       state.focusDate = iso;
       state.monthCursor = { y: t.y, m: t.m };
@@ -16486,7 +16612,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
           emit('order-schedule:order-open', { id: rowId });
         }
         render();
-        refocus('[data-ocal-id="' + rowId + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(rowId);
       } else if (act === 'mode-toggle') {
         /* عقد 2026-10-26 — مبدّل التقويم/القائمة المستقل: يغيّر نوع
            السطح فقط (بيانات الطلبات وأفعالها محفوظة)؛ اليوم/الأسبوع/
@@ -16500,11 +16626,11 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         /* عقد 2026-10-25: فعل تعديل مملوك للمضيف — الحدث فقط؛
            المحرر/المسار مسؤولية المضيف (لا Bottom Sheet هنا) */
         emit('order-schedule:order-edit-request', { id: btn.getAttribute('data-ocal-id') });
-        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(btn.getAttribute('data-ocal-id'));
       } else if (act === 'order-delete') {
         /* عقد 2026-10-25: فعل حذف مملوك للمضيف — الحدث فقط */
         emit('order-schedule:order-delete-request', { id: btn.getAttribute('data-ocal-id') });
-        refocus('[data-ocal-id="' + btn.getAttribute('data-ocal-id') + '"][data-ocal-action="order-row"]');
+        refocusOrderRow(btn.getAttribute('data-ocal-id'));
       } else if (act === 'add') {
         /* التاريخ محمول على الزر نفسه: اليوم المحدد في منطقة الأحداث،
            و"" (بلا يوم) في القائمة وفي شهر تصفّح بلا تحديد — بصدق */
@@ -16578,8 +16704,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     }
 
     /* تسجيل المستمعين (مرة واحدة على الجذر) */
-    on(root, 'keydown', guard(onKeydown));
-    on(root, 'click', guard(onClick));
+    on(root, 'keydown', userAction(onKeydown));
+    on(root, 'click', userAction(onClick));
     on(root, 'focusout', guard(onRootFocusOut));
 
     /* R-02 (2026-10-25): مراقب واحد لسمة dir على documentElement — قلب
@@ -16608,6 +16734,16 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     /* ---- الواجهة العمومية للمثيل ---- */
     return {
       root: root,
+      getState: guard(getState),
+      setDisplayedMonth: guard(function (month) {
+        var p = parseIso(typeof month === 'string' ? month + '-01' : null);
+        if (!p) return;
+        state.monthCursor = { y: p.y, m: p.m };
+        var focused = parseIso(state.focusDate);
+        state.focusDate = isoOf(p.y, p.m, focused ? Math.min(focused.d, daysInMonth(p.y, p.m)) : 1);
+        state.pickerOpen = false;
+        render();
+      }),
       /* تحديث كامل بلا إعادة تهيئة؛ يحفظ selected/view/c-calendar إن
          بقيت صالحة، ويمسح حالتي الانتظار/الخطأ (آخر كتابة تفوز).
          عقد 2026-10-26: حذف الطلب المفتوح من البيانات يطويه بصدق */
@@ -16626,7 +16762,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       }),
       /* ضبط صامت (بلا أحداث) — الأحداث لأفعال المستخدم فقط (موثق) */
       setSelectedDate: guard(function (date) {
-        if (typeof date !== 'string' || !DATE_RE.test(date)) return;
+        if (!parseIso(date)) return;
         state.selectedDate = date;
         state.focusDate = date;
         var p = parseIso(date);

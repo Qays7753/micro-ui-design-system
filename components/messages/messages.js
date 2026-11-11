@@ -37,6 +37,16 @@
 (function () {
   'use strict';
 
+  var liveBindings = new WeakMap();
+  function claimBinding(element, key) {
+    var keys = liveBindings.get(element);
+    if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
+    if (keys.has(key)) return false;
+    keys.add(key);
+    element.dataset[key] = '1';
+    return true;
+  }
+
   var livePolite = null;
   var liveAssertive = null;
   /* W2.3 (A2-F05): قناتا إعلان منفصلتان — polite وassertive عقدتان
@@ -225,8 +235,7 @@
       return list;
     };
     inScope('.m-note__close').forEach(function (btn) {
-      if (btn.dataset.microNoteBound) return;
-      btn.dataset.microNoteBound = '1';
+      if (!claimBinding(btn, 'microNoteBound')) return;
       on(btn, 'click', function () {
         var note = btn.closest('.m-note');
         if (!note) return;
@@ -242,8 +251,7 @@
     });
     /* إغلاق toast اليدوي: أي عنصر [data-toast-close] داخل .m-toast */
     inScope('.m-toast [data-toast-close]').forEach(function (btn) {
-      if (btn.dataset.microToastCloseBound) return;
-      btn.dataset.microToastCloseBound = '1';
+      if (!claimBinding(btn, 'microToastCloseBound')) return;
       on(btn, 'click', function () {
         closeToast(btn.closest('.m-toast'));
       });
@@ -255,6 +263,7 @@
       var scope = root || document;
       var nodes = [scope].concat([].slice.call(scope.querySelectorAll('*')));
       nodes.forEach(function (element) {
+        liveBindings.delete(element);
         if (element.__microMessageLifetime) element.__microMessageLifetime.abort();
         delete element.__microMessageLifetime;
         if (element.dataset) {
