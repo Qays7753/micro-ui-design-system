@@ -116,7 +116,7 @@ window.makePackedStates = function() {
   }
   [
     {label:'صفر', value:'0'}, {label:'سالب', value:'-3'},
-    {label:'مجهول'}, {label:'غير متاح', value:'bad'}
+    {label:'مجهول'}, {label:'فارغ', value:''}, {label:'مشوه', value:'bad'}
   ].forEach(function(item, i) {
     var li = document.createElement('li');
     li.setAttribute('data-series', 'abcde'[i]);
@@ -450,13 +450,29 @@ def main():
             states_result = page.evaluate("""id => {
               const chart=document.getElementById(id);
               return {circles:chart.querySelectorAll('.m-bubble__circle').length,
-                stateText:[...chart.querySelectorAll('.m-packed__states .m-legend__value')]
-                  .map(node=>node.textContent)};
+                states:[...chart.querySelectorAll('.m-packed__states .m-legend__item')]
+                  .map(node=>[node.querySelector('span').textContent,
+                              node.querySelector('.m-legend__value').textContent]),
+                headers:[...chart.querySelectorAll('.m-chart__dataset thead th[scope=col]')]
+                  .map(node=>node.textContent),
+                rowScopes:chart.querySelectorAll('.m-chart__dataset tbody th[scope=row]').length,
+                table:[...chart.querySelectorAll('.m-chart__dataset tbody tr')]
+                  .map(row=>[...row.querySelectorAll('th,td')].map(cell=>cell.textContent))};
             }""", packed_states)
-            check("packed values and zero/negative/unknown/unavailable states remain exact",
+            expected_states = [
+                ["صفر", "0 (صفر)"],
+                ["سالب", "-3 (سالب غير صالح للمساحة)"],
+                ["مجهول", "(غير معروف)"],
+                ["فارغ", "(غير متاح)"],
+                ["مشوه", "bad (قيمة غير صالحة)"],
+            ]
+            expected_positives = [[f"موجب {i + 1}", str(20 + i)] for i in range(5)]
+            check("packed keeps exact positive, zero, negative, missing, empty and raw malformed readings in key and table",
                   states_result["circles"] == 5
-                  and states_result["stateText"] == ["0 (صفر)", "-3 (سالب غير صالح للمساحة)",
-                                                      "(غير معروف)", "(غير متاح)"],
+                  and states_result["states"] == expected_states
+                  and states_result["headers"] == ["الفئة", "القيمة"]
+                  and states_result["rowScopes"] == 10
+                  and states_result["table"] == expected_positives + expected_states,
                   states_result)
             check("no browser JavaScript errors", not errors, errors)
             browser.close()

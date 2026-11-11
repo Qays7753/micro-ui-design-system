@@ -26,6 +26,8 @@ docs/review-evidence-repairs-2026-11-11/evidence/calendar-tools-after.png
 docs/review-evidence-repairs-2026-11-11/evidence/calendar-tools-before.png
 docs/review-evidence-repairs-2026-11-11/evidence/component-review-after.png
 docs/review-evidence-repairs-2026-11-11/focused-after.json
+docs/review-evidence-repairs-2026-11-11/followup-complete-chart.json
+docs/review-evidence-repairs-2026-11-11/followup-light-data.json
 docs/review-evidence-repairs-2026-11-11/narrow-tables.json
 docs/review-evidence-repairs-2026-11-11/release-gate.json
 docs/zai/references/owner-visual-concepts-2026-10-25/README.md
@@ -38,6 +40,7 @@ tools/build-ui-system-showcase-standalone.py
 tools/complete-repair-chart-check.py
 tools/evidence-repair-check.py
 tools/light-calendar-check.py
+tools/light-data-check.py
 tools/light-release-check.py
 tools/professional-ui-repair-check.py
 tools/standalone-checkout-check.py

@@ -83,7 +83,7 @@ main{width:100%;max-width:430px;margin:auto;padding:12px;display:grid;gap:24px}
 <li data-series="c" data-label="الأصغر" data-value="1"></li>
 <li data-series="e" data-label="متوسط" data-value="4"></li></ul>
 <div class="m-chart__plot" data-plot></div><p data-summary></p></section>
-<section class="m-metric-circles" data-metric-circles data-layout="separated" id="metric-circles">
+<section class="m-metric-circles" data-metric-circles data-layout="separated" data-unit="نقطة" data-period="الفترة التي حددها المضيف" id="metric-circles">
 <h2 class="m-metric-circles__title">دوائر المقدار الاختيارية</h2>
 <ul class="m-metric-circles__source" data-metric-source hidden>
 <li data-label="الأكبر" data-value="10" data-series="a"></li>
@@ -437,22 +437,40 @@ def main():
                 check("metric-circles gains the complete table switch",
                       page.locator("#metric-circles .m-main-metric__disclose").count() == 1)
                 page.locator("#metric-circles .m-main-metric__disclose").click()
-                circles_rows = page.locator("#metric-circles table.m-main-metric__dataset tbody tr").all_text_contents()
-                check("metric-circles table opens with label, value and state for every reading",
+                circles_table = page.locator("#metric-circles table.m-main-metric__dataset")
+                circles_headers = circles_table.locator("thead th[scope=col]").all_text_contents()
+                circles_rows = [row.locator("th, td").all_text_contents()
+                                for row in circles_table.locator("tbody tr").all()]
+                period = "الفترة التي حددها المضيف"
+                check("metric-circles table opens with all five columns and every exact reading",
                       page.locator("#metric-circles .m-main-metric__disclose").get_attribute("aria-expanded") == "true"
-                      and len(circles_rows) == 3
-                      and any("صفر" in r for r in circles_rows)
-                      and page.locator("#metric-circles table.m-main-metric__dataset thead th[scope=col]").count() == 3,
-                      circles_rows)
-                page.locator("#main-flat .m-main-metric__disclose").click()
-                flat_rows = page.locator("#main-flat table.m-main-metric__dataset tbody tr").all_text_contents()
-                flat_headers = page.locator("#main-flat table.m-main-metric__dataset thead th").all_text_contents()
-                check("metric-bars table opens with value, unit and period columns for every reading",
-                      page.locator("#main-flat .m-main-metric__disclose").get_attribute("aria-expanded") == "true"
-                      and len(flat_rows) == 3 and flat_headers == ["الفئة", "القيمة", "الوحدة", "الفترة"]
-                      and any("(سالب)" in r for r in flat_rows)
-                      and any("(غير متاح)" in r for r in flat_rows),
-                      {"rows": flat_rows, "headers": flat_headers})
+                      and circles_headers == ["الفئة", "القيمة", "الحالة", "الوحدة", "الفترة"]
+                      and circles_table.locator("tbody th[scope=row]").count() == 3
+                      and circles_rows == [
+                          ["الأكبر", "10", "", "نقطة", period],
+                          ["الأصغر", "1", "", "نقطة", period],
+                          ["صفر", "0", "صفر", "نقطة", period],
+                      ], {"headers": circles_headers, "rows": circles_rows})
+                expected_comparisons = [
+                    ["قيمة أ", "8", "نقطة", period],
+                    ["قيمة ب", "-3 (سالب)", "نقطة", period],
+                    ["قيمة مفقودة", "— (غير متاح)", "نقطة", period],
+                ]
+                for chart_id, comparisons in [("main-flat", expected_comparisons),
+                                               ("main-featured", expected_comparisons[:2])]:
+                    disclosure = page.locator(f"#{chart_id} .m-main-metric__disclose")
+                    disclosure.click()
+                    table = page.locator(f"#{chart_id} table.m-main-metric__dataset")
+                    rows = [row.locator("th, td").all_text_contents()
+                            for row in table.locator("tbody tr").all()]
+                    headers = table.locator("thead th[scope=col]").all_text_contents()
+                    expected_rows = [["القيمة الرئيسية", "12", "نقطة", period]] + comparisons
+                    check(f"{chart_id} table keeps the primary reading and every comparison with unit and period",
+                          disclosure.get_attribute("aria-expanded") == "true"
+                          and table.is_visible()
+                          and headers == ["الفئة", "القيمة", "الوحدة", "الفترة"]
+                          and table.locator("tbody th[scope=row]").count() == len(expected_rows)
+                          and rows == expected_rows, {"headers": headers, "rows": rows})
                 overflow = page.evaluate(
                     "()=>({doc: document.documentElement.scrollWidth, view: innerWidth})")
                 check("all new tables keep the page free of horizontal overflow at 320px",

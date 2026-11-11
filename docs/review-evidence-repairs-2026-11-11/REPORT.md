@@ -34,6 +34,8 @@ Commit التسليم التالي يضيف هذا التقرير والأدلة
 | توقع Carousel عند عرض مكوّن 360 | الحالي PASS، المتقادم FAIL؛ [القياسات](carousel-default-360.json). |
 | `python3 tools/standalone-checkout-check.py --out <file>` | PASS؛ SHA واحد لـautocrlf=false/true، [التفاصيل](checkout-after.json). |
 | `python3 tools/light-release-check.py --review-scope --out <out>` | **35 PASS / 0 FAIL**؛ حالة Overview واحدة + حالة Calendar واحدة + تحقق startup/interactions، [تقرير البوابة](release-gate.json). اسم الملف الداخلي independent-review تاريخي؛ لا ادعاء مراجعة بشرية أو وكيل مستقل. |
+| `python3 tools/light-data-check.py` — متابعة توقعات الاختبار | **185 PASS / 0 FAIL**، [النتائج](followup-light-data.json). |
+| `python3 tools/complete-repair-chart-check.py` — متابعة توقعات الاختبار | **270 PASS / 0 FAIL**، [النتائج](followup-complete-chart.json). |
 | البناء والكتالوج | standalone byte check PASS، **24** رمزًا مطابقًا للأصول، **14** عائلة و**6** متغيرات متسقة. |
 | التحقق الروتيني | Python compilation وJavaScript syntax و`git diff --check` و`manifest-build.py --check`: PASS. |
 
@@ -53,3 +55,9 @@ Commit التسليم التالي يضيف هذا التقرير والأدلة
 الحدود المتبقية: لا إخفاق متبقٍ في الفحوص المنفذة. فتح standalone عبر HTTP تحقق؛ `file://` محجوب بسياسة متصفح البيئة كما في المراجعة السابقة ولم يُدّعَ اختباره. الأجهزة الفعلية وSafari/WebKit واللمس الحقيقي وقارئات الشاشة وsafe areas وnative zoom ليست ضمن هذا التحقق. لا تغيير في shared/assets أو Carousel أو `order-schedule.js`، ولا ادعاء اعتماد منصة أو جاهزية منتج.
 
 الملفات المتغيرة مدرجة كاملة في [CHANGED-FILES.txt](CHANGED-FILES.txt). الرفع على الفرع المسمى للمراجعة فقط.
+
+متابعة الاختبارات — 2026-11-11، على الفرع نفسه، Starting commit: `4f4bb5bad3530b5d27695f5a9a94e4a0c0d6496a`.
+
+عولجت الإخفاقات الثلاثة في التوقعات فقط: اختبار Metric Circles يطابق رؤوس الأعمدة الخمسة بالترتيب وكل خلية في الصفوف الثلاثة، بما فيها الوحدة والفترة وحالة الصفر. اختبار Main Metric يطابق صف القراءة الرئيسية ثم جميع المقارنات بقيمها وإشاراتها ووحدتها وفترتها، لكل من flat وfeatured؛ ولهذا ارتفع عدد light-data من 184 إلى 185. اختبار Packed يطابق المفتاح والجدول كاملين: خمس قيم موجبة، صفر، سالب، سمة مفقودة، قيمة فارغة، و`bad (قيمة غير صالحة)`؛ لا تُرسم دائرة للمدخل المشوه.
+
+شُغّل الفحصان المذكوران فقط في هذه المتابعة، بالوسائط الافتراضية: **185/185** و**270/270**. لم تُعَد بوابة الإصدار أو الفحوص والمصفوفات الأخرى؛ أرقامها السابقة أعلاه تخص تسليم الإصلاح الأصلي. لا تغيير في كود المكونات أو المصدر البصري أو standalone، ولا فرع أو PR جديد ولا merge. حُدث جرد MANIFEST المشتق مع نتائج الفحصين وهذا التقرير. Ending commit الكامل لهذه المتابعة مذكور في رد التسليم النهائي.
