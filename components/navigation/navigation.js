@@ -88,7 +88,7 @@
 
   function focusables(layer) {
     return [].slice.call(layer.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]'
+      'button, a[href], area[href], input, select, textarea, [tabindex]'
     )).filter(function (el) {
       /* A02: العناصر في ترتيب Tab فعليًا فقط — استبعاد أي tabindex سالب
          على أي عنصر (كان الاستبعاد في فرع [tabindex] وحده فيمرّ أزرار

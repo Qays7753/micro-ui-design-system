@@ -314,6 +314,8 @@ body {
 
 /* إطار هاتف محدود للعناصر اللاصقة (appbar/navbar/actionbar) */
 .sc-frame {
+  display: flex;
+  flex-direction: column;
   position: relative;
   height: 440px;
   overflow: auto;
@@ -321,7 +323,11 @@ body {
   border-radius: var(--micro-radius-field);
   background: var(--micro-surface-page);
 }
-.sc-frame__inner { display: grid; gap: 12px; padding: 12px 12px 96px; }
+.sc-frame__inner { display: grid; flex: 1 0 auto; gap: var(--micro-space-3); padding: var(--micro-space-3); }
+.sc-frame__footer { position: sticky; bottom: 0; flex: none; z-index: 1; background: var(--micro-surface-base); }
+.sc-frame__footer > .m-actionbar,
+.sc-frame__footer > .m-navbar,
+.sc-actionbar-example { position: static; }
 
 /* العارض داخل شبكة الكتلة: يُتاح للانكماش لمسار الشبكة — قاعدة تركيب
    المستهلك (min-width:0/max-width:100%) وإلا دفعه حدّه الجوهري

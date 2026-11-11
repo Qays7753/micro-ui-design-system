@@ -1,0 +1,4 @@
+/* A narrow row composition: give the reading its own line before actions. */
+.composition-row { flex-wrap: wrap; }
+.composition-row > .m-row__text { flex: 1 0 100%; }
+.composition-row > .m-row__action { display: inline-flex; flex-wrap: wrap; margin-inline-start: auto; }

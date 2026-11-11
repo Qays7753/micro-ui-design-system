@@ -1,0 +1,46 @@
+{
+  "baseCommit": "382780f3dc0f1263311af78f16ac4ba85ce38e64",
+  "stage": 5,
+  "sourceSha256": {
+    "components/navigation/navigation.js": "52e740cb3a208ac921c20cb0773bc0e26e09d879cf72e639c3f822efd968cb72",
+    "components/selection/picker.js": "811a37d04850351930676221bec1f684f6519a16a1aeb2fa4b1ad2cd9d86aad1",
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/access-gateway/access-gateway.css": "dd35979a3254f1a387cfcfd88b01777d96dbf18049c3cf6db1f9ff6f1926f12c",
+    "components/data/data.js": "c318803e7aa1201fb20d77bee8dc7cdfc27dac10926f6617fac2e04f94fa50c0",
+    "components/data/packed-circle.js": "73bb5707e9233149bd8a049cda74e8377e68be88755f041e186dc647a58b3a82",
+    "components/metric-comparison/metric-comparison.js": "7d2565c9c48364ba0cdf0f5fa9cee7f11047cd94cd8fc2f388c228019e593404",
+    "components/messages/messages.js": "1d32d98cc0c5ddae9c4ae29fecae6ca2943d0839b57a8f0cc3452c60bf9c92b6"
+  },
+  "scope": "Light only; 360x780 RTL, numeric-direction LTR; no zoom/Dark/real devices",
+  "tests": {
+    "contracts": {
+      "passed": 33,
+      "failed": 0
+    },
+    "families": {
+      "passed": 65,
+      "failed": 0
+    },
+    "clones": {
+      "passed": 31,
+      "failed": 0
+    },
+    "visual": {
+      "passed": 8,
+      "failed": 0
+    },
+    "phase3Focused": {
+      "passed": 67,
+      "failed": 0
+    },
+    "lightStatic": {
+      "passed": 233,
+      "failed": 0
+    },
+    "dataScale": {
+      "passed": 23,
+      "failed": 0,
+      "evidence": "data-scale-state-check.py --width 360; final log 23/23"
+    }
+  }
+}

@@ -67,6 +67,7 @@
   var ANNOUNCE_LIFETIME_MS = 60000;
   var announcedIds = [];
   var announcementEpoch = 0;
+  var toastStates = new WeakMap();
   function on(element, type, handler) {
     if (!element.__microMessageLifetime) element.__microMessageLifetime = new AbortController();
     element.addEventListener(type, handler, { signal: element.__microMessageLifetime.signal });
@@ -160,34 +161,77 @@
     return (t || el).textContent;
   }
 
+  function endToastSession(el) {
+    var state = toastStates.get(el);
+    if (state) {
+      if (state.timer !== null) window.clearTimeout(state.timer);
+      el.removeEventListener('focusin', state.focusin);
+      el.removeEventListener('focusout', state.focusout);
+      toastStates.delete(el);
+    }
+    // A copied data attribute is not ownership of another toast's timer.
+    delete el.dataset.toastTimer;
+  }
+
   function toast(el, options) {
     if (!el || el.nodeType !== 1) return;
     options = options || {};
-    var duration = typeof options.duration === 'number' ? options.duration : 4000;
-    if (el.dataset.toastTimer) window.clearTimeout(parseInt(el.dataset.toastTimer, 10));
+    endToastSession(el);
+    var state = { timer: null, remaining: typeof options.duration === 'number' ? options.duration : 4000,
+      startedAt: 0, returnFocus: options.returnFocus || null };
+    function pause() {
+      if (state.timer === null) return;
+      window.clearTimeout(state.timer);
+      state.remaining = Math.max(0, state.remaining - (Date.now() - state.startedAt));
+      state.timer = null;
+      delete el.dataset.toastTimer;
+    }
+    function resume() {
+      if (toastStates.get(el) !== state || state.timer !== null || el.contains(document.activeElement)) return;
+      state.startedAt = Date.now();
+      state.timer = window.setTimeout(function () {
+        if (toastStates.get(el) !== state) return;
+        if (!el.isConnected) { endToastSession(el); return; }
+        if (el.contains(document.activeElement)) { pause(); return; }
+        hideToast(el);
+        el.dispatchEvent(new Event('micro-messages:toast-dismissed', { bubbles: true }));
+      }, state.remaining);
+      el.dataset.toastTimer = String(state.timer);
+    }
+    state.focusin = pause;
+    state.focusout = function () {
+      // Focus may be moving to another child. Recheck after that move completes.
+      Promise.resolve().then(resume);
+    };
+    toastStates.set(el, state);
+    el.addEventListener('focusin', state.focusin);
+    el.addEventListener('focusout', state.focusout);
     el.hidden = false;
-    announce(toastText(el), false); /* مسار الإعلان الوحيد: المنطقة الحية */
-    var timer = window.setTimeout(function () {
-      if (!el.isConnected) { delete el.dataset.toastTimer; return; }
-      hideToast(el);
-      el.dispatchEvent(new Event('micro-messages:toast-dismissed', { bubbles: true }));
-    }, duration);
-    el.dataset.toastTimer = String(timer);
+    announce(toastText(el), false);
+    resume();
   }
 
   /* الإخفاء بلا آثار مؤقت قديم — يعاد استخدام العنصر بأمان */
   function hideToast(el) {
-    if (el.dataset.toastTimer) {
-      window.clearTimeout(parseInt(el.dataset.toastTimer, 10));
-      delete el.dataset.toastTimer;
-    }
+    endToastSession(el);
     el.hidden = true; /* messages.css تجعله مخفيًا فعليًا */
   }
 
   /* الإغلاق اليدوي من المصدر (زر داخل العنصر أو استدعاء مباشر) */
-  function closeToast(el) {
+  function closeToast(el, trigger) {
     if (!el || el.nodeType !== 1) return;
+    var hadFocus = el.contains(document.activeElement);
+    var state = toastStates.get(el);
+    var target = returnFocusTarget(trigger || document.activeElement || el, el)
+      || (state && state.returnFocus);
     hideToast(el);
+    if (hadFocus && target && target.nodeType === 1 && target.isConnected
+        && !target.disabled && target.getAttribute('aria-disabled') !== 'true'
+        && !target.closest('[hidden], [inert]')
+        && (typeof target.checkVisibility !== 'function'
+          || target.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }))) {
+      target.focus();
+    }
     el.dispatchEvent(new Event('micro-messages:toast-closed', { bubbles: true }));
   }
 
@@ -253,7 +297,7 @@
     inScope('.m-toast [data-toast-close]').forEach(function (btn) {
       if (!claimBinding(btn, 'microToastCloseBound')) return;
       on(btn, 'click', function () {
-        closeToast(btn.closest('.m-toast'));
+        closeToast(btn.closest('.m-toast'), btn);
       });
     });
   }
@@ -269,7 +313,7 @@
         if (element.dataset) {
           delete element.dataset.microNoteBound;
           delete element.dataset.microToastCloseBound;
-          if (element.dataset.toastTimer) hideToast(element);
+          if (toastStates.has(element) || element.dataset.toastTimer) hideToast(element);
         }
       });
       // Live channels are module-owned, shared by all instances; only the

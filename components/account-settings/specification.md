@@ -43,4 +43,5 @@
 
 ## اعتماد
 
-`account-settings.css` و`account-settings.js` يتطلبان `navigation.css/js` للمشهد الحواري، و`buttons.css` للأزرار، و`selection.css/js` للمفاتيح، إضافة للتوكنات والخطوط. مثال مستقل كامل في `example-usage.html`.
+`account-settings.css` و`account-settings.js` يتطلبان `navigation.css/js` للمشهد الحواري، و`buttons.css` للأزرار، و`selection.css` للمفاتيح الأصلية؛ حمّل `selection.js` عند استعمال سلوك المجموعات أو pending المشترك، إضافة للتوكنات والخطوط. مثال مستقل كامل في `example-usage.html`.
+تفاصيل التهيئة وتنظيف الطبقة والأطفال: [بطاقة الاستهلاك](../../docs/FAMILY-CONSUMPTION.md).

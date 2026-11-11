@@ -398,7 +398,7 @@
 .m-btn--loading-replace:not(.m-btn--icon):not(:has(.m-btn__icon)) {
   padding-inline: var(--micro-button-padding-inline);
 }
-.m-btn--loading-replace.is-loading--text .m-btn__label { opacity: 0; }
+.m-btn--loading-replace:not(.m-btn--icon).is-loading--text .m-btn__label { opacity: 0; }
 .m-btn--loading-replace.is-loading--text .m-btn__spinner {
   inset: 0;
   margin: auto;

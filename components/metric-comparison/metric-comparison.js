@@ -292,8 +292,23 @@
     var th = make('th', null, cells[0]);
     th.setAttribute('scope', 'row');
     tr.appendChild(th);
-    for (var i = 1; i < cells.length; i++) tr.appendChild(make('td', null, cells[i]));
+    for (var i = 1; i < cells.length; i++) {
+      var td = make('td');
+      if (cells[i] && cells[i].nodeType) td.appendChild(cells[i]);
+      else td.textContent = cells[i];
+      tr.appendChild(td);
+    }
     tbody.appendChild(tr);
+  }
+
+  // Keep signs with the reading; Arabic state text keeps its own direction.
+  function datasetReading(value, suffix, numeric) {
+    var fragment = document.createDocumentFragment();
+    var reading = make('bdi', null, value);
+    reading.dir = numeric === false ? 'auto' : 'ltr';
+    fragment.appendChild(reading);
+    if (suffix) fragment.appendChild(document.createTextNode(' ' + suffix));
+    return fragment;
   }
 
   function tableCaptionBase(chart) {
@@ -323,16 +338,16 @@
       var mainLabel = hero.querySelector('.m-main-metric__label');
       var mainUnit = hero.querySelector('.m-main-metric__unit');
       appendRow(tbody, [(mainLabel && mainLabel.textContent) || 'القيمة الرئيسية',
-        mainNumber.textContent, (mainUnit && mainUnit.textContent) || chart.getAttribute('data-common-unit') || '—',
+        datasetReading(mainNumber.textContent), (mainUnit && mainUnit.textContent) || chart.getAttribute('data-common-unit') || '—',
         chart.getAttribute('data-common-period') || chart.getAttribute('data-period') || '—']);
     }
     entries.forEach(function (entry, index) {
       var value = parsed[index];
       var valueText;
       if (value.state === 'missing') valueText = '— (غير متاح)';
-      else if (value.state === 'invalid') valueText = entry.raw + ' (قيمة غير صالحة)';
-      else if (value.state === 'zero') valueText = (entry.display || entry.raw || '0') + ' (صفر)';
-      else valueText = (entry.display || entry.raw) + (value.state === 'negative' ? ' (سالب)' : '');
+      else if (value.state === 'invalid') valueText = datasetReading(entry.raw, '(قيمة غير صالحة)', false);
+      else if (value.state === 'zero') valueText = datasetReading(entry.display || entry.raw || '0', '(صفر)');
+      else valueText = datasetReading(entry.display || entry.raw, value.state === 'negative' ? '(سالب)' : '');
       appendRow(tbody, [entry.label, valueText, entry.unit || '—', entry.period || '—']);
     });
     table.appendChild(tbody);
@@ -361,7 +376,9 @@
           : state === 'negative' ? 'سالب — معروض بالقيمة والإشارة لا بالمساحة'
           : '';
       }
-      appendRow(tbody, [item.label, valueText, stateText, item.unit || '—', item.period || '—']);
+      appendRow(tbody, [item.label,
+        state === 'missing' ? valueText : datasetReading(valueText, '', state !== 'invalid'),
+        stateText, item.unit || '—', item.period || '—']);
     });
     table.appendChild(tbody);
   }

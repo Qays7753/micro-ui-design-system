@@ -7,11 +7,11 @@
 الإصدار Light-only. المقارنة الدقيقة bars/rows/table؛ الأشكال الدائرية المتخصصة opt-in صريح.
 الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.
 
-| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية |
+| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية الأساسية |
 |---|---|---|---|---|
 | Buttons | [`buttons`](../components/buttons/specification.md) | [فتح](../previews/buttons/index.html) | STABLE UI | لا توجد |
 | Fields | [`fields`](../components/fields/specification.md) | [فتح](../previews/fields/index.html) | STABLE UI | لا توجد |
-| Selection / Picker | [`selection`](../components/selection/specification.md) | [فتح](../previews/selection/index.html) | STABLE UI | navigation |
+| Selection / Picker | [`selection`](../components/selection/specification.md) | [فتح](../previews/selection/index.html) | STABLE UI | لا توجد |
 | Organization | [`organization`](../components/organization/specification.md) | [فتح](../previews/organization/index.html) | STABLE UI | لا توجد |
 | Data | [`data`](../components/data/specification.md) | [فتح](../previews/data/index.html) | STABLE UI | لا توجد |
 | Messages | [`messages`](../components/messages/specification.md) | [فتح](../previews/messages/index.html) | STABLE UI | لا توجد |
@@ -19,10 +19,26 @@
 | Surfaces | [`surfaces`](../components/surfaces/specification.md) | [فتح](../previews/surfaces/index.html) | STABLE UI | لا توجد |
 | Info strip | [`info-strip`](../components/info-strip/specification.md) | [فتح](../previews/info-strip/index.html) | STABLE UI | لا توجد |
 | Metric comparison | [`metric-comparison`](../components/metric-comparison/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | لا توجد |
-| Account settings | [`account-settings`](../components/account-settings/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | navigation, selection |
+| Account settings | [`account-settings`](../components/account-settings/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | navigation, selection, buttons |
 | Access gateway | [`access-gateway`](../components/access-gateway/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | buttons, fields |
-| Order schedule | [`order-schedule`](../components/order-schedule/specification.md) | [فتح](../components/order-schedule/example-usage.html) | DRAFT FOR REVIEW | fields |
+| Order schedule | [`order-schedule`](../components/order-schedule/specification.md) | [فتح](../components/order-schedule/example-usage.html) | DRAFT FOR REVIEW | لا توجد |
 | Carousel | [`carousel`](../components/carousel/specification.md) | [فتح](../previews/carousel/index.html) | DRAFT FOR REVIEW | لا توجد |
+
+## اعتماديات خيارات التركيب
+
+الخطوط والتوكنز والأصول المشتركة من دليل الاستهلاك. غياب اعتماد أساسي لا يلغي متطلبات الخيار المستخدم.
+
+| العائلة | الاعتماد | متى يلزم | CSS | JavaScript |
+|---|---|---|---|---|
+| fields | buttons | مسح البحث أو أزرار خطوة الكمية من B01 | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| selection | navigation | عرض Picker داخل طبقة حوارية | `components/navigation/navigation.css` | `components/navigation/navigation.js` |
+| selection | buttons | أزرار B01 في مشغّل أو طبقة Picker | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| organization | buttons | إجراء B01 داخل الصف | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| messages | buttons | زر B01 ضمن الرسالة أو الحالة الفارغة | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| navigation | buttons | أزرار B01 في appbar أو الطبقة أو actionbar | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| navigation | fields | حقول B02 في لوحة التصفية | `components/fields/fields.css` | `components/fields/fields.js` |
+| navigation | selection | اختيارات B03 في لوحة التصفية | `components/selection/selection.css` | `components/selection/selection.js` |
+| order-schedule | fields | محرر خارجي من B02 يركبه المستهلك بجوار التقويم | `components/fields/fields.css` | `components/fields/fields.js` |
 
 ## المتغيرات
 
@@ -38,6 +54,7 @@
 ## العقود العامة
 
 - القواعد المعتمدة: [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md).
+- التركيب والتنظيف والاستثناءات: [`COMPONENT-CONSUMPTION.md`](COMPONENT-CONSUMPTION.md) و[`FAMILY-CONSUMPTION.md`](FAMILY-CONSUMPTION.md).
 - توكنز CSS مصدر التنفيذ؛ لا مسار DTCG موازٍ.
 - انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.
 - `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.

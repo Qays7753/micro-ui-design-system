@@ -390,7 +390,7 @@
     var toast = q('sc-toast');
     if (toast && window.MicroMessages) {
       q('sc-toast-open').addEventListener('click', function () {
-        window.MicroMessages.toast(toast);
+        window.MicroMessages.toast(toast, { returnFocus: document.activeElement });
       });
       q('sc-announce').addEventListener('click', function () {
         window.MicroMessages.announce('إعلان تجريبي في القناة المهذبة (polite).', { id: 'sc-announce-demo' });
@@ -722,7 +722,7 @@
     function showToast(text) {
       if (!toast || !window.MicroMessages) return;
       if (toastText) toastText.textContent = text;
-      window.MicroMessages.toast(toast);
+      window.MicroMessages.toast(toast, { returnFocus: document.activeElement });
     }
     function announce(text) {
       if (window.MicroMessages) window.MicroMessages.announce(text, { id: 'app-announce' });

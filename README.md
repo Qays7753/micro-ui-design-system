@@ -50,6 +50,8 @@ previews/ui-system-showcase/standalone.html
 
 ## الفحوص الحالية
 
+الفحص المركّز لعقود التركيب والإصلاحات: `python3 tools/component-consumption-contract-check.py` (Light، 360×780، دون zoom).
+
 ```bash
 python3 tools/build-ui-system-showcase-standalone.py --check
 python3 tools/component-mobile-check.py
@@ -100,6 +102,10 @@ python3 tools/data-scale-state-check.py
 
 لا تغيّر الهوية أو التوكنز أو الخطوط أو الأيقونات من دون قرار صريح. حافظ على العربية RTL، الأرقام المقروءة، الحالات الصادقة، وعدم قص البيانات المهمة.
 
+## استهلاك المكونات
+
+ابدأ من [دليل الاستهلاك وSOP التركيب](docs/COMPONENT-CONSUMPTION.md) ثم [بطاقات العائلات الـ14](docs/FAMILY-CONSUMPTION.md). ملفات المعرض أدوات فحص؛ بنية DOM للمكوّن تُعرّف مرة في غلاف مشترك مناسب للمضيف لاحقًا. لا تُنسخ شاشة المعرض إلى المنتج.
+
 ## الحزمة
 
 المصدر القابل للتعديل هو التسليم الأساسي. تعليمات إعادة بناء حزمة النقل موجودة في [`deliverables/README.md`](deliverables/README.md)، ولا تُعامل أي صورة أو build كبديل عن المصدر.
@@ -108,7 +114,7 @@ python3 tools/data-scale-state-check.py
 
 ## العرض النظيف ومختبر الحالات
 
-المعرض يبدأ بـOverview للمكونات الفعلية دون السجلات؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
+المعرض يبدأ بمعاينة App المحلية؛ افتح `#overview` لنظرة المكونات، و`#component-review` لمراجعة عائلة معزولة؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
 
 فحوص الإصدار: `tools/light-calendar-check.py`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.
 

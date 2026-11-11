@@ -271,7 +271,17 @@
       th.textContent = it.fullLabel;
       tr.appendChild(th);
       var td = document.createElement('td');
-      td.textContent = packedValueState(it);
+      var fullValue = packedValueState(it);
+      var rawValue = !it.hasAttr ? null : it.value === null
+        ? (it.raw && it.raw.trim() ? it.raw : null)
+        : it.value === 0 ? '0' : it.display || it.raw || String(it.value);
+      if (rawValue !== null) {
+        var number = document.createElement('bdi');
+        number.dir = it.value === null ? 'auto' : 'ltr';
+        number.textContent = rawValue;
+        td.appendChild(number);
+        td.appendChild(document.createTextNode(fullValue.slice(rawValue.length)));
+      } else td.textContent = fullValue;
       tr.appendChild(td);
       tbody.appendChild(tr);
     });

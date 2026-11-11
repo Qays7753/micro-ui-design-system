@@ -1467,11 +1467,26 @@
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');
-        time.textContent = it.axisX === null || it.axisX === '' ? '(غير متاح)' : it.axisX;
+        if (it.axisX === null || it.axisX === '') time.textContent = '(غير متاح)';
+        else {
+          var coordinate = document.createElement('bdi');
+          coordinate.dir = 'ltr';
+          coordinate.textContent = it.axisX;
+          time.appendChild(coordinate);
+        }
         tr.appendChild(time);
       }
       var td = document.createElement('td');
-      td.textContent = valueStateText(it);
+      var fullValue = valueStateText(it);
+      var rawValue = it.value !== null ? (it.rawValue === null ? fmt(it.value) : String(it.rawValue))
+        : it.invalid && it.rawValue !== null && String(it.rawValue).trim() ? String(it.rawValue) : null;
+      if (rawValue !== null) {
+        var number = document.createElement('bdi');
+        number.dir = it.value === null ? 'auto' : 'ltr';
+        number.textContent = rawValue;
+        td.appendChild(number);
+        td.appendChild(document.createTextNode(fullValue.slice(rawValue.length)));
+      } else td.textContent = fullValue;
       tr.appendChild(td);
       tbody.appendChild(tr);
     });

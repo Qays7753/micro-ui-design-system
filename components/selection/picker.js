@@ -7,7 +7,7 @@
   function stateOf(picker) {
     var state = states.get(picker);
     if (!state) {
-      state = { status: 'ready', query: '', message: '', listeners: [] };
+      state = { status: 'ready', query: '', message: '', listeners: [], bound: false };
       states.set(picker, state);
     }
     return state;
@@ -133,7 +133,8 @@
     roving(picker, ownedOption && !active.hidden ? active : null);
   }
   function bind(picker) {
-    if (picker.hasAttribute('data-micro-picker-bound') || !listOf(picker)) return;
+    if (stateOf(picker).bound || !listOf(picker)) return;
+    stateOf(picker).bound = true;
     picker.setAttribute('data-micro-picker-bound', '1');
     var nodes = statusNodes(picker);
     listen(picker, searchOf(picker), 'input', function () {
@@ -178,6 +179,7 @@
   }
   function disconnect(picker) {
     stateOf(picker).listeners.splice(0).forEach(function (remove) { remove(); });
+    stateOf(picker).bound = false;
     picker.removeAttribute('data-micro-picker-bound');
   }
   window.MicroPicker = {

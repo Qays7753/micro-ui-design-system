@@ -16,16 +16,15 @@
     main { width: min(100%, 420px); margin-inline: auto; }
     h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.45; }
     .demo-note { margin: 0 0 24px; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
-    .m-row { flex-wrap: wrap; }
-    .m-row__action { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     [dir="ltr"] { unicode-bidi: isolate; }
   </style>
+  <link rel="stylesheet" href="row-composition.css">
 </head>
 <body>
   <main id="row-example">
     <h1>موعد استلام عينة</h1>
     <p class="demo-note">مثال تركيب فقط · يتغير الوسم محليًا عند الضغط، دون حفظ بيانات.</p>
-    <div class="m-row">
+    <div class="m-row composition-row">
       <div class="m-row__text">
         <span class="m-row__title">طلب من سارة الخطيب</span>
         <span class="m-row__subtitle">قطعة كعك بالتمر · اليوم، 4:30 م</span>

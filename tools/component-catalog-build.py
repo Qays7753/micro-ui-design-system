@@ -23,7 +23,7 @@ def build():
         "الإصدار Light-only. المقارنة الدقيقة bars/rows/table؛ الأشكال الدائرية المتخصصة opt-in صريح.",
         "الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.",
         "",
-        "| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية |",
+        "| العائلة | المواصفة والمصدر | المعاينة | النضج | التبعيات العائلية الأساسية |",
         "|---|---|---|---|---|",
     ]
     for item in families:
@@ -31,7 +31,22 @@ def build():
         for path in (source, item["preview"]):
             assert (ROOT / path).is_file(), path
         assert item["maturity"] in LABELS, item
+        assert set(item['dependencies']) <= {family['id'] for family in families}, item
         lines.append(f"| {item['name']} | [`{item['id']}`](../{source}) | [فتح](../{item['preview']}) | {LABELS[item['maturity']]} | {', '.join(item['dependencies']) or 'لا توجد'} |")
+    lines += ["", "## اعتماديات خيارات التركيب", "",
+              "الخطوط والتوكنز والأصول المشتركة من دليل الاستهلاك. غياب اعتماد أساسي لا يلغي متطلبات الخيار المستخدم.", "",
+              "| العائلة | الاعتماد | متى يلزم | CSS | JavaScript |", "|---|---|---|---|---|"]
+    for item in families:
+        for dep in item.get('conditionalDependencies', []):
+            assert dep['family'] in {family['id'] for family in families}, dep
+            assert isinstance(dep['when'], str) and dep['when'].strip(), dep
+            for kind in ['css', 'js']:
+                for path in dep[kind]:
+                    assert path.startswith('components/') and path.endswith('.' + kind), path
+                    assert (ROOT / path).is_file(), path
+            css = '<br>'.join(f'`{path}`' for path in dep['css']) or '—'
+            js = '<br>'.join(f'`{path}`' for path in dep['js']) or 'لا يلزم لهذا الخيار'
+            lines.append(f"| {item['id']} | {dep['family']} | {dep['when']} | {css} | {js} |")
     lines += ["", "## المتغيرات", "", "| المتغير | العائلة | النضج | opt-in | المعاينة |", "|---|---|---|---|---|"]
     for item in catalog["variants"]:
         assert item["family"] in {family["id"] for family in families}
@@ -43,6 +58,7 @@ def build():
     lines += [
         "", "## العقود العامة", "",
         "- القواعد المعتمدة: [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md).",
+        "- التركيب والتنظيف والاستثناءات: [`COMPONENT-CONSUMPTION.md`](COMPONENT-CONSUMPTION.md) و[`FAMILY-CONSUMPTION.md`](FAMILY-CONSUMPTION.md).",
         "- توكنز CSS مصدر التنفيذ؛ لا مسار DTCG موازٍ.",
         "- انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.",
         "- `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.",
