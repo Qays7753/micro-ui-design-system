@@ -60,7 +60,8 @@
         label: node.getAttribute('data-label') || '',
         raw: node.getAttribute('data-value'),
         display: node.getAttribute('data-display-value'),
-        unit: node.getAttribute('data-unit') || '',
+        unit: node.getAttribute('data-unit') || chart.getAttribute('data-unit') || '',
+        period: node.getAttribute('data-period') || chart.getAttribute('data-period') || '',
         state: node.getAttribute('data-state'),
         series: seriesOf(node)
       };
@@ -288,8 +289,13 @@
   }
 
   function tableCaptionBase(chart) {
-    var title = chart.querySelector('.m-main-metric__title');
-    return String((title && title.textContent) || '').trim();
+    var title = chart.querySelector('.m-main-metric__title, .m-metric-circles__title');
+    var parts = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
+    var unit = chart.getAttribute('data-common-unit') || chart.getAttribute('data-unit');
+    var period = chart.getAttribute('data-common-period') || chart.getAttribute('data-period');
+    if (unit) parts.push('الوحدة: ' + unit);
+    if (period) parts.push('الفترة: ' + period);
+    return parts.filter(Boolean).join('، ');
   }
 
   /* جدول المقارنة الشريطية: فئة/قيمة/وحدة/فترة + الحالة داخل خلية
@@ -303,11 +309,20 @@
     table.appendChild(caption);
     buildTableHead(table, ['الفئة', 'القيمة', 'الوحدة', 'الفترة']);
     var tbody = make('tbody');
+    var hero = chart.querySelector('.m-main-metric__hero');
+    var mainNumber = hero && hero.querySelector('.m-main-metric__number');
+    if (mainNumber) {
+      var mainLabel = hero.querySelector('.m-main-metric__label');
+      var mainUnit = hero.querySelector('.m-main-metric__unit');
+      appendRow(tbody, [(mainLabel && mainLabel.textContent) || 'القيمة الرئيسية',
+        mainNumber.textContent, (mainUnit && mainUnit.textContent) || chart.getAttribute('data-common-unit') || '—',
+        chart.getAttribute('data-common-period') || chart.getAttribute('data-period') || '—']);
+    }
     entries.forEach(function (entry, index) {
       var value = parsed[index];
       var valueText;
       if (value.state === 'missing') valueText = '— (غير متاح)';
-      else if (value.state === 'invalid') valueText = 'قيمة غير صالحة';
+      else if (value.state === 'invalid') valueText = entry.raw + ' (قيمة غير صالحة)';
       else if (value.state === 'zero') valueText = (entry.display || entry.raw || '0') + ' (صفر)';
       else valueText = (entry.display || entry.raw) + (value.state === 'negative' ? ' (سالب)' : '');
       appendRow(tbody, [entry.label, valueText, entry.unit || '—', entry.period || '—']);
@@ -324,21 +339,21 @@
     table.textContent = '';
     var caption = make('caption', null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, ['الفئة', 'القيمة', 'الحالة']);
+    buildTableHead(table, ['الفئة', 'القيمة', 'الحالة', 'الوحدة', 'الفترة']);
     var tbody = make('tbody');
     items.forEach(function (item) {
       var state = item.state === 'unavailable' ? 'missing'
         : item.state === 'invalid' ? 'invalid' : readNumber(item.raw).state;
       var valueText, stateText;
       if (state === 'missing') { valueText = '—'; stateText = 'غير متاح'; }
-      else if (state === 'invalid') { valueText = item.display || item.raw || 'قيمة غير صالحة'; stateText = 'قيمة غير صالحة'; }
+      else if (state === 'invalid') { valueText = item.raw || 'قيمة غير صالحة'; stateText = 'قيمة غير صالحة'; }
       else {
-        valueText = (item.display || item.raw) + (item.unit && !item.display ? ' ' + item.unit : '');
+        valueText = item.display || item.raw;
         stateText = state === 'zero' ? 'صفر'
           : state === 'negative' ? 'سالب — معروض بالقيمة والإشارة لا بالمساحة'
           : '';
       }
-      appendRow(tbody, [item.label, valueText, stateText]);
+      appendRow(tbody, [item.label, valueText, stateText, item.unit || '—', item.period || '—']);
     });
     table.appendChild(tbody);
   }

@@ -19,7 +19,7 @@ the expanded region (role=region) renders INSIDE the same row with the full
 details plus Edit/Delete actions (when orderActions is enabled) — never a
 detached global details box below the list. Weekday headers and grid columns
 share the exact 100%/7 column geometry inside one calendar-card surface with
-no inner grid lines. Below a 360px root the grid flips to the compact
+owner-approved 1px/60% day-grid-only dividers. Below a 360px root the grid flips to the compact
 presentation. Browsing a month without a selected day shows the honest browsing
 region (numeric month).
 
@@ -880,6 +880,9 @@ def main():
                         cardShadow: cs ? cs.boxShadow : null,
                         headerRule: ws[0] ? getComputedStyle(ws[0].parentElement).borderBlockEndWidth : null,
                         innerLines: innerLines,
+                        horizontalLine: getComputedStyle(firstRow, '::after').height,
+                        dividerColor: getComputedStyle(secondCell).borderInlineStartColor,
+                        legendLine: getComputedStyle(document.querySelector('.m-ocal__legend')).borderTopWidth,
                         monthLabel: (document.querySelector('.m-ocal__month-label') || {}).textContent || null,
                         yearText: (document.querySelector('.m-ocal__year') || {}).textContent || null,
                         triggerText: document.querySelector('.m-ocal__month-trigger').textContent.trim().replace(/\\s+/g, ' '),
@@ -904,8 +907,10 @@ def main():
                       and header["cardRadius"] == "16px" and header["cardOverflow"] == "hidden"
                       and header["cardShadow"] == "none"
                       and header["cardBg"].startswith("rgb("), header)
-                check(f"{direction}: no inner grid lines anywhere (cells and weekday rule all borderless)",
-                      header["innerLines"] == 0 and header["headerRule"] == "0px", header)
+                check(f"{direction}: owner B: day grid has 1px/60% dividers; header and legend stay borderless",
+                      header["innerLines"] > 0 and header["horizontalLine"] == "1px"
+                      and "0.6" in header["dividerColor"] and header["headerRule"] == "0px"
+                      and header["legendLine"] == "0px", header)
                 check(f"{direction}: month header is numeric month / year (10 / 2026)",
                       header["monthLabel"] == "10" and header["yearText"] == "2026"
                       and header["triggerText"] == "10 / 2026"

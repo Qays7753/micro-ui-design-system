@@ -305,8 +305,8 @@ def main() -> int:
         if not OUT.is_file():
             print(f"CHECK FAIL: {repo_rel(OUT)} غير موجود")
             return 1
-        existing = OUT.read_text(encoding="utf-8")
-        if existing == html:
+        existing = OUT.read_bytes()
+        if existing == html.encode("utf-8"):
             print("CHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت")
             return 0
         print("CHECK FAIL: standalone.html يختلف عن إعادة التوليد — أعد البناء من المصادر")

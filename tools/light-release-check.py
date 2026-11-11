@@ -269,6 +269,7 @@ def used_fixture_manifest(hashes):
 
 
 def main():
+    global WIDTHS, DIRECTIONS, LANGUAGES, TYPOGRAPHY, DPRS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--out", type=Path,
@@ -283,7 +284,11 @@ def main():
         "--defer-standalone", action="store_true",
         help="defer generated standalone startup until the owner rebuilds it from integrated source",
     )
+    parser.add_argument('--review-scope', action='store_true',
+                        help='owner 2026-11-11: 360x780 RTL, normal text/DPR1; targeted risks run separately')
     args = parser.parse_args()
+    if args.review_scope:
+        WIDTHS, DIRECTIONS, LANGUAGES, TYPOGRAPHY, DPRS = (360,), ('rtl',), ('ar',), (1,), (1,)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     hashes = source_hashes()
@@ -323,7 +328,7 @@ def main():
                             for dpr in DPRS:
                                 case = f"{width}-{direction}-{language}-type{type_level}-dpr{dpr}"
                                 context = browser.new_context(
-                                    viewport={"width": width, "height": 900},
+                                    viewport={"width": width, "height": 780 if args.review_scope else 900},
                                     device_scale_factor=dpr,
                                     locale="en-US" if language == "en" else "ar",
                                     color_scheme="light",
@@ -535,7 +540,7 @@ def main():
                                 case = (f"calendar-{root_width}-{direction}-{language}-"
                                         f"type{type_level}-dpr{dpr}")
                                 context = browser.new_context(
-                                    viewport={"width": viewport_width, "height": 900},
+                                    viewport={"width": viewport_width, "height": 780 if args.review_scope else 900},
                                     device_scale_factor=dpr,
                                     locale="ar", color_scheme="light",
                                 )
@@ -825,7 +830,7 @@ def main():
                 # The owner rebuilds this generated artifact after all source work is integrated.
                 if not args.defer_standalone:
                     standalone = browser.new_page(
-                        viewport={"width": 390, "height": 900}, device_scale_factor=1,
+                        viewport={"width": 360 if args.review_scope else 390, "height": 780 if args.review_scope else 900}, device_scale_factor=1,
                         color_scheme="light",
                     )
                     error_listener(standalone)
@@ -858,7 +863,7 @@ def main():
 
                 # Exercise the real controls in the actual State Lab; no synthetic component replacement.
                 context = browser.new_context(
-                    viewport={"width": 390, "height": 900}, device_scale_factor=1,
+                    viewport={"width": 360 if args.review_scope else 390, "height": 780 if args.review_scope else 900}, device_scale_factor=1,
                     locale="ar", color_scheme="light",
                 )
                 page = context.new_page()
@@ -875,8 +880,8 @@ def main():
                 })""")
                 check("direct State Lab route keeps its tools and selects the active navigation link",
                       controls["view"] == "state" and controls["stateLink"] == "page" and controls["controls"], controls)
-                page.locator('#sc-dir-seg [data-sc-dir="ltr"]').click()
-                page.locator('#sc-w-seg [data-sc-w="320"]').click()
+                page.locator('#sc-dir-seg [data-sc-dir="' + ('rtl' if args.review_scope else 'ltr') + '"]').click()
+                page.locator('#sc-w-seg [data-sc-w="' + ('360' if args.review_scope else '320') + '"]').click()
                 page.locator('#sc-fx-seg [data-sc-fixture="stress"]').click()
                 page.locator('#sc-filter-seg [data-sc-filter="all"]').click()
                 control_state = page.evaluate("""() => ({
@@ -890,7 +895,7 @@ def main():
                   stateView:document.body.getAttribute('data-view')
                 })""")
                 check("State Lab control changes persist as actual direction, width, fixture, filter and diagnostics",
-                      control_state["dir"] == "ltr" and control_state["width"] == "320px"
+                      control_state["dir"] == ("rtl" if args.review_scope else "ltr") and control_state["width"] == ("360px" if args.review_scope else "320px")
                       and control_state["fixture"] == "true" and control_state["filter"] == "true"
                       and control_state["logRoot"] and control_state["stateView"] == "state", control_state)
                 segment_targets = page.evaluate("""() => {
@@ -1129,6 +1134,7 @@ def main():
         "matrix": {"widths": WIDTHS, "directions": DIRECTIONS, "languages": LANGUAGES,
                    "typographyLevels": TYPOGRAPHY, "deviceScaleFactors": DPRS},
         "captureOnly": args.capture_only,
+        "ownerReviewScope": args.review_scope,
         "standaloneDeferred": args.defer_standalone,
         "sourceSha256": hashes,
         "logoV2": {"baselineFileCount": len(logo_before), "currentFileCount": len(logo_after),

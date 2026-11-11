@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "scope": "independent-pre-transfer-ui-system",
   "releaseTheme": "light-only",
-  "chartPolicy": {"preciseDefault":["bars","rows","table"],"specializedOptIn":["donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},
+  "chartPolicy": {"preciseDefault":["bars","rows","table"],"specializedOptIn":["line","donut","bubbles","packed-circle","metric-circles","main-metric-featured"],"donutUse":"few-category-share"},
   "maturityVocabulary": ["stable-ui", "draft-for-review", "proposed"],
   "families": [
     {"id":"buttons","name":"Buttons","maturity":"stable-ui","preview":"previews/buttons/index.html","api":"MicroButtons","dependencies":[]},

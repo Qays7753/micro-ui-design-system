@@ -24,8 +24,8 @@
    المرجع الأعلى لتقديم شهر التقويم؛ يسقط ما تعارض معه مما سبق):
    محدد واحد مقسّم بسطح غارق (المقطع النشط brand-tint بلا تعبئة
    brand)، ومتصفح شهر بلا صناديق (تسمية بداية السطر + «اليوم»/السهمان
-   نهايته، «اليوم» شرطيًا)، وبطاقة تقويم بحد واحد بلا ظل ولا خطوط
-   شبكة داخلية (الإيقاع من الفراغ)، وتشريح خلية ثابت: chip رقم
+   نهايته، «اليوم» شرطيًا)، وبطاقة تقويم بحد واحد بلا ظل؛ قرار B
+   2026-11-11 يضيف فواصل 1px/60% داخل الأيام فقط. تشريح خلية ثابت: chip رقم
    32×28 + خانة نقاط محجوزة دائمًا (6px) فلا قفز أساس، وتحديد =
    chip brand-tint (الخلية لا تُملأ)، واليوم = حلقة 1px divider-strong
    على chip، ومفتاح الحالات داخل البطاقة. الحركة: ضغط 80–110ms،
@@ -80,8 +80,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 auto;
+  min-width: min(100%, 12em);
   padding: var(--micro-space-1);
   border-radius: var(--micro-radius-surface);
   background-color: var(--micro-seg-hover-surface);
@@ -423,19 +423,32 @@
 .m-ocal__grid {
   display: flex;
   flex-direction: column;
-  /* عقد المرجع الأعلى 2.4: لا خطوط شبكة — الإيقاع من الفراغ بين
-     صفوف بأرضية ارتفاع ثابتة. */
+  /* Owner B (2026-11-11): subtle internal day-grid dividers only. */
   gap: 0;
 }
 
 .m-ocal__gridrow {
   display: flex;
+  position: relative;
   /* عقد المرجع الأعلى 2.4: أرضية ارتفاع الصف ثابتة 48px (هدف اللمس)
      — التشريح الثابت (chip 28 + فجوة 4 + خانة 6) يجلس متمركزًا
      داخلها فتتقاسم الأسس صفًا كاملًا سواء وُجدت أحداث أم لا.
      عند تكبير النص تنمو الأرضية مع المحتوى (min-height) فلا قصّ. */
   font-size: var(--micro-label-size);
   min-height: var(--micro-touch-min);
+}
+
+.m-ocal__gridrow:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: 1px;
+  background-color: color-mix(in srgb, var(--micro-border-divider) 60%, transparent);
+  pointer-events: none;
+}
+.m-ocal__gridrow > .m-ocal__cell + .m-ocal__cell {
+  border-inline-start: 1px solid color-mix(in srgb, var(--micro-border-divider) 60%, transparent);
 }
 
 /* ---- العرض المدمج للشبكة الكاملة (جذر < 360px؛ data-ocal-compact) ----

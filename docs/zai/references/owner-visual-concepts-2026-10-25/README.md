@@ -1,3 +1,5 @@
+> Active precedence update — owner approval 2026-11-11: Calendar B now uses internal day-grid dividers, 1px of `--micro-border-divider` at 60% opacity, with no added legend/order dividers or shadows. Numeric dates, real Day/Week/Month, independent Calendar/List, and inline order accordion follow `components/order-schedule/specification.md` and `docs/SYSTEM-CONTRACTS.md`. The supplied reference instructions below remain historical evidence where they conflict. No product-shell additions are authorized.
+
 # Owner-approved visual concept references — 2026-10-25
 
 These three PNG files and one HTML reference implementation were supplied by the system owner as visual direction for the next component-level repair pass:

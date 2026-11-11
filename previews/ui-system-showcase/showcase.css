@@ -399,6 +399,35 @@ body {
 }
 
 /* ---------- Overview / State Lab modes ---------- */
+.sc-review-nav, .sc-review-only { display: none; }
+body[data-view="review"] .sc-review-nav {
+  display: grid;
+  gap: var(--micro-space-2);
+  max-width: 430px;
+  margin-inline: auto;
+  padding: var(--micro-space-4);
+}
+.sc-review-nav select {
+  width: 100%;
+  min-height: var(--micro-touch-min);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-field);
+  background: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  font: inherit;
+}
+.sc-review-nav p { margin: 0; }
+body[data-view="review"] .showcase-controls,
+body[data-view="review"] .brand-proof,
+body[data-view="review"] .sc-tools,
+body[data-view="review"] .sc-log { display: none; }
+body[data-view="review"] .showcase-canvas {
+  width: min(100%, 430px);
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline: var(--micro-space-4);
+}
+body[data-view="review"] .sc-review-only { display: block; }
+body[data-view="review"] .sc-grid-2 { grid-template-columns: minmax(0, 1fr); }
 body[data-view="overview"] .showcase-controls,
 body[data-view="overview"] .brand-proof { display: none; }
 body[data-view="state"] .showcase-controls { display: block; }
@@ -638,6 +667,9 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 }
 .app-screen[hidden] { display: none; }
 
+/* Keep the first six-row-month order above the host navbar at 360×780. */
+.app-screen[data-app-screen="orders"] { padding-block-start: var(--micro-space-2); }
+
 /* بطاقة اليوم البارزة (عائلة الأسطح) — قارئة أولى بترولية */
 .app-hero { border-radius: var(--micro-radius-hero); }
 .app-hero .m-surface__sub {
@@ -645,7 +677,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   margin-block-start: var(--micro-space-2);
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
-  color: var(--micro-text-secondary);
+  color: var(--micro-text-inverse);
 }
 
 /* صف بطاقات الأرقام المدمجة */

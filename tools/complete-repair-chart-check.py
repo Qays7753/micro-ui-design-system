@@ -19,6 +19,16 @@ from browser_support import chromium_launch_options
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def expected_table_value(item):
+    raw = item.get('value')
+    if raw is None:
+        return '(غير متاح)'
+    if raw == 'غير رقمي':
+        return raw + ' (قيمة غير صالحة)'
+    return '-3 (سالب غير مرسوم)' if raw == '-3' else raw
+
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
@@ -311,13 +321,7 @@ def main():
                             table_values = [row.locator("td").last.inner_text() for row in table_rows]
                             table_times = ([row.locator("td").nth(0).inner_text() for row in table_rows]
                                            if kind == "time" else [])
-                            expected_values = [
-                                ("قيمة غير صالحة" if item.get("value") == "غير رقمي" else "(غير متاح)")
-                                if item.get("value") is None or item.get("value") == "غير رقمي"
-                                else ("-3 (سالب غير مرسوم)" if item.get("value") == "-3"
-                                      else item.get("value", "— غير متاح"))
-                                for item in items
-                            ]
+                            expected_values = [expected_table_value(item) for item in items]
                             check(prefix + " full labels and exact values in table",
                                   table_labels == [
                                       expected + (("، " + item["x"])

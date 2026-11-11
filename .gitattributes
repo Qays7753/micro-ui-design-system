@@ -1,0 +1,4 @@
+# Raw SVG image embedding must keep the approved LF bytes on every Git checkout.
+# CSS SVG assets already use the builder's text-normalized path.
+assets/brand/micro-logo/v2/**/*.svg text eol=lf
+previews/ui-system-showcase/standalone.html text eol=lf

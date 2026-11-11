@@ -160,7 +160,9 @@
       return {
         series: li.getAttribute('data-series') || 'a',
         label: li.getAttribute('data-label') || '',
+        fullLabel: li.getAttribute('data-label-full') || li.getAttribute('data-label') || '',
         hasAttr: hasAttr,
+        raw: li.getAttribute('data-value'),
         value: hasAttr ? parseNum(li.getAttribute('data-value')) : null,
         display: li.getAttribute('data-display') || ''
       };
@@ -174,13 +176,14 @@
      data-display نص العرض كما هو. */
   function stateText(it) {
     if (!it.hasAttr) return { text: '(غير معروف)', none: true };
-    if (it.value === null) return { text: '(غير متاح)', none: true };
+    if (it.value === null) return { text: it.raw && it.raw.trim()
+      ? it.raw + ' (قيمة غير صالحة)' : '(غير متاح)', none: true };
     if (it.value < 0) {
-      var num = it.display || String(it.value);
+      var num = it.display || it.raw || String(it.value);
       return { text: num + ' (سالب غير صالح للمساحة)', none: true };
     }
     if (it.value === 0) return { text: '0', none: true };
-    return { text: it.display || String(it.value), none: false };
+    return { text: it.display || it.raw || String(it.value), none: false };
   }
 
   /* 2026-10-25 (عقد المالك — D-UI-04 موحّد): إفصاح جدول كامل لكل
@@ -193,10 +196,11 @@
 
   function packedValueState(it) {
     if (!it.hasAttr) return '(غير معروف)';
-    if (it.value === null) return '(غير متاح)';
-    if (it.value < 0) return (it.display || String(it.value)) + ' (سالب غير صالح للمساحة)';
+    if (it.value === null) return it.raw && it.raw.trim()
+      ? it.raw + ' (قيمة غير صالحة)' : '(غير متاح)';
+    if (it.value < 0) return (it.display || it.raw || String(it.value)) + ' (سالب غير صالح للمساحة)';
     if (it.value === 0) return '0 (صفر)';
-    return it.display || String(it.value);
+    return it.display || it.raw || String(it.value);
   }
 
   function syncPackedTable(chart) {
@@ -232,7 +236,13 @@
     if (!btn || !table) return;
     table.textContent = '';
     var caption = document.createElement('caption');
-    caption.textContent = String(chart.getAttribute('data-title') || '').trim();
+    var title = chart.querySelector('.m-chart__title');
+    var context = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
+    [['data-unit', 'الوحدة'], ['data-period', 'الفترة'], ['data-max', 'المقياس']].forEach(function (part) {
+      var value = chart.getAttribute(part[0]);
+      if (value && value.trim()) context.push(part[1] + ': ' + value.trim());
+    });
+    caption.textContent = context.filter(Boolean).join('، ');
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
@@ -249,7 +259,7 @@
       var tr = document.createElement('tr');
       var th = document.createElement('th');
       th.setAttribute('scope', 'row');
-      th.textContent = it.label;
+      th.textContent = it.fullLabel;
       tr.appendChild(th);
       var td = document.createElement('td');
       td.textContent = packedValueState(it);

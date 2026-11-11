@@ -111,3 +111,7 @@ python3 tools/data-scale-state-check.py
 المعرض يبدأ بـOverview للمكونات الفعلية دون السجلات؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
 
 فحوص الإصدار: `tools/light-calendar-check.py`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.
+
+## مراجعة المكونات الحالية
+
+Full Component Review مستقل عن مختبر الحالات: افتح `previews/ui-system-showcase/index.html#component-review` واختر العائلة. الأمثلة الفعلية للمتغيرات الستة محفوظة مع نضجها في الكتالوج. `#state-lab` للتشخيص، و`#app` للمعاينة النظيفة. Line خيار للتسلسل المرتب أو الزمني، وBars/Rows/Tables هي افتراض المقارنة الدقيقة.

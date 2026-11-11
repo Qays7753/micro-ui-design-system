@@ -58,7 +58,7 @@
     }
 
     function syncEmptyState(count) {
-      if (controls) controls.hidden = count === 0;
+      if (controls) controls.hidden = count < 2;
       viewport.hidden = count === 0;
       if (empty) empty.hidden = count > 0;
     }

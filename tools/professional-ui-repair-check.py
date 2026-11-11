@@ -12,6 +12,12 @@ from playwright.sync_api import sync_playwright
 from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def fits_carousel_policy(data):
+    """Full width is default; adjacent preview requires explicit opt-in."""
+    return data['left'] > 0 if data['peek'] and data['width'] >= 336 else abs(data['left']) < 1
+
 CSS = ["assets/fonts/fonts.css", "shared/tokens.css", "components/buttons/buttons.css",
        "components/fields/fields.css", "components/navigation/navigation.css",
        "components/data/data.css", "components/data/packed-circle.css",
@@ -288,7 +294,7 @@ def main():
                       const b=c.getBoundingClientRect(),vb=v.getBoundingClientRect(),sb=s.getBoundingClientRect();
                       const stage=document.querySelector('.sc-surface-stage .m-surface__content');
                       return {plain:c.closest('.sc-block').classList.contains('sc-block--plain'),width:b.width,
-                        left:sb.left-vb.left,right:vb.right-sb.right,stageMin:getComputedStyle(stage).minHeight,
+                        left:sb.left-vb.left,right:vb.right-sb.right,peek:c.dataset.peek==='true',stageMin:getComputedStyle(stage).minHeight,
                         overflow:document.documentElement.scrollWidth>innerWidth,
                         controls:c.querySelector('.m-carousel__controls').getBoundingClientRect().height,
                         dots:[...c.querySelectorAll('[data-dots] button')].some(e=>e.offsetHeight>0)};
@@ -296,7 +302,7 @@ def main():
                     measurements.append(dict(viewport=width, direction=direction, showcase=data))
                     # Approved D7: full-width reading below 336px component
                     # width; otherwise preserve the centered adjacent preview.
-                    fits_policy = (abs(data["left"]) < 1 if data["width"] < 336 else data["left"] > 0)
+                    fits_policy = fits_carousel_policy(data)
                     check(f"{width}/{direction} F06 natural own-surface responsive reading/peek", data["plain"] and abs(data["left"]-data["right"])<2 and fits_policy and not data["overflow"], data)
                     check(f"{width}/{direction} F05/F13 compact controls and natural surface stage", not data["dots"] and data["controls"]==48 and data["stageMin"]!="240px", data)
                     for section in ["sc-carousel", "sc-info-strip", "sc-metric", "sc-carousel-root", "sc-strip", "sc-main-metric-flat"]:

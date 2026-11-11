@@ -55,3 +55,13 @@ python3 tools/ui-system-showcase-repair-check.py --tag after
 ## حدود الفحص
 
 الفحوص Chromium/Playwright فقط. الأجهزة الحقيقية، WebKit/Safari، اللمس الحقيقي، safe areas، TalkBack/VoiceOver وnative zoom ليست مثبتة بهذا المعرض.
+
+## Owner review surfaces — 2026-11-11
+
+- Clean App Preview: `index.html#app` (default).
+- Full Component Review: `index.html#component-review`. Use the labelled family selector: 14 families, one family at a time in a phone-width surface. Donut, Bubbles, real Packed Circle (PROPOSED), Metric Circles, Main Metric featured, and Info Strip peek are working examples, not coverage badges. Bars remain the exact-comparison alternative beside the optional Packed example.
+- Diagnostic State Lab: `index.html#state-lab`. Width/direction/fixture controls and event logs belong here. Overview remains a short optional summary, not full coverage.
+
+The account preview's component-library action opens Full Component Review. Chart defaults: Bars/Rows/Tables for exact comparison; Line is opt-in only for a meaningful ordered/time sequence. Maturity remains catalog-owned.
+
+Focused verification: `python3 tools/evidence-repair-check.py --out /tmp/micro-review-check`; final release gate: `python3 tools/light-release-check.py --review-scope --out /tmp/micro-review-release`. The owner-scoped gate uses 360×780 RTL at normal text/DPR1. The focused check alone adds narrow 320 risks, one Calendar LTR comparison, and one Calendar-tools-only simulated 200% text case.

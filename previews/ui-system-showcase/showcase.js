@@ -26,6 +26,16 @@
       var section = badge.closest('.sc-section');
       if (section) section.setAttribute('data-status', item.maturity === 'stable-ui' ? 'current' : item.maturity === 'draft-for-review' ? 'draft' : 'proposed');
     });
+    var review = q('sc-review-family');
+    families.forEach(function (family) {
+      var badge = document.querySelector('.sc-section [data-catalog-family="' + family.id + '"]');
+      var option = document.createElement('option');
+      option.value = family.id;
+      option.textContent = badge && badge.parentElement.firstChild
+        ? badge.parentElement.firstChild.textContent.trim() : family.name;
+      review.appendChild(option);
+    });
+    review.addEventListener('change', applyReviewFamily);
     qa('[data-catalog-summary]').forEach(function (node) {
       var stable = families.filter(function (item) { return item.maturity === 'stable-ui'; }).length;
       var draft = families.filter(function (item) { return item.maturity === 'draft-for-review'; }).length;
@@ -458,6 +468,9 @@
 
   function applyFixture(mode) {
     state.fixture = mode;
+    qa('[data-sc-fixture]').forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-sc-fixture') === mode));
+    });
     /* نصوص data-fx-text */
     qa('[data-fx-text]').forEach(function (el) {
       if (el.dataset.fxOriginal === undefined) el.dataset.fxOriginal = el.textContent;
@@ -528,10 +541,9 @@
   }
 
   function setShowcaseView(view) {
-    /* عقد 2026-10-25: ثلاثة أسطح — app (المعاينة المحمولة الافتراضية)،
-       overview (نظرة عامة)، state (مختبر الحالات). القيم الأخرى تسقط
-       إلى الافتراضي الموثق. */
-    state.view = (view === 'state' || view === 'overview' || view === 'app') ? view : 'app';
+    /* Owner 2026-11-11: clean app, categorized full review, diagnostic
+       state lab, plus the optional short overview. */
+    state.view = (view === 'state' || view === 'review' || view === 'overview' || view === 'app') ? view : 'app';
     document.body.setAttribute('data-view', state.view);
     qa('[data-showcase-view]').forEach(function (link) {
       var active = link.getAttribute('data-showcase-view') === state.view;
@@ -539,8 +551,12 @@
       if (active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
-    var targetFilter = state.view === 'state' ? 'all' : 'current';
+    var targetFilter = (state.view === 'state' || state.view === 'review') ? 'all' : 'current';
     applyFilter(targetFilter);
+    if (state.view === 'review') {
+      if (state.fixture !== 'normal') applyFixture('normal');
+      applyReviewFamily();
+    }
     /* R-52 (2026-10-25): حالة الضغط لشريط الفلاتر تُزامن مع الفلتر
        المطبق فعليًا — لا يبقى زر «الحالي» مضغوطًا والعناصر كلها ظاهرة */
     var seg = q('sc-filter-seg');
@@ -549,6 +565,17 @@
         btn.setAttribute('aria-pressed', String(btn.getAttribute('data-sc-filter') === targetFilter));
       });
     }
+  }
+
+  function applyReviewFamily() {
+    if (state.view !== 'review') return;
+    var family = q('sc-review-family').value;
+    qa('.sc-section', q('sc-canvas')).forEach(function (section) {
+      section.hidden = !section.querySelector('[data-catalog-family="' + family + '"]');
+    });
+    if (window.MicroData) window.MicroData.init(q('sc-canvas'));
+    if (window.MicroPacked) window.MicroPacked.init(q('sc-canvas'));
+    if (window.MicroMetricComparison) window.MicroMetricComparison.render(q('sc-canvas'));
   }
 
   var hashScrollGeneration = 0;
@@ -578,6 +605,10 @@
     }
     if (id === 'sc-canvas') {
       setShowcaseView('overview');
+      return;
+    }
+    if (id === 'component-review') {
+      setShowcaseView('review');
       return;
     }
     if (id === 'state-lab' || id === 'brand-proof') {
@@ -930,13 +961,15 @@
     });
 
     /* عقد 2026-10-26 (معرض المكونات الكامل في متناول واضح): صف واحد
-       في شاشة حسابي يفتح سطح مختبر الحالات (14 عائلة + 6 متغيرات)
+       في شاشة حسابي يفتح مراجعة المكونات (14 عائلة + 6 متغيرات)
        بلا مراسي مخفية — والعودة عبر رابط «المعاينة المحمولة» في
        رأس المعرض نفسه. */
     var showcaseOpen = document.getElementById('app-showcase-open');
     if (showcaseOpen) showcaseOpen.addEventListener('click', function () {
-      setShowcaseView('state');
+      window.location.hash = 'component-review';
+      setShowcaseView('review');
       window.scrollTo({ top: 0, behavior: 'instant' });
+      q('sc-review-family').focus({ preventScroll: true });
     });
 
     showScreen('home');
