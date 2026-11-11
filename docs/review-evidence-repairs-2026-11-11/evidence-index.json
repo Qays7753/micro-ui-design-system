@@ -1,0 +1,50 @@
+[
+  {
+    "file": "evidence/calendar-five-rows-after.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+    "sha256": "f00ca54494afd3ad1b4aeedf8c1004e5de28087e057b0581d87343a0f7e7ae70",
+    "textStress": "normal"
+  },
+  {
+    "file": "evidence/calendar-six-rows-before.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+    "sha256": "59a5f21b2a7f12006ba079bc6729a2ef1fb49e26a71f9ca0a8938b6d06d83d93",
+    "textStress": "normal"
+  },
+  {
+    "file": "evidence/calendar-six-rows-after.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+    "sha256": "eb2dbe825fd5ebba072bf2bd3feec2c3d2f41f576d97cb15f1892fc013d26223",
+    "textStress": "normal"
+  },
+  {
+    "file": "evidence/calendar-tools-before.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+    "sha256": "eab1b228f4b1351ababde854d8111e58f824cb7d103d44ab3f7d8b99ad593feb",
+    "textStress": "Calendar controls only, simulated 200%"
+  },
+  {
+    "file": "evidence/calendar-tools-after.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+    "sha256": "c18ec1adb855ebd5fdff2526ddc3b8de8be0fb7f4899d9be6e62b9184776d1b2",
+    "textStress": "Calendar controls only, simulated 200%"
+  },
+  {
+    "file": "evidence/component-review-after.png",
+    "viewport": "360x780",
+    "direction": "rtl",
+    "sourceCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+    "sha256": "08c35513a6a5f79f5f057f9e00c0366b4b563dadf3dd06dbdfe2d88a9294a07a",
+    "textStress": "normal"
+  }
+]

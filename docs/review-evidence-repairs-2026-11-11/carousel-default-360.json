@@ -1,0 +1,10 @@
+{
+  "testedImplementationCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+  "result": {
+    "width": 360,
+    "left": 0,
+    "peek": false,
+    "currentExpectationPass": true,
+    "obsoleteExpectationPass": false
+  }
+}

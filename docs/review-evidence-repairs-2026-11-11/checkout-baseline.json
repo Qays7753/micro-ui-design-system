@@ -1,0 +1,22 @@
+{
+  "testedImplementationCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+  "result": {
+    "input": "HEAD",
+    "startingCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+    "equal": false,
+    "checkouts": [
+      {
+        "autocrlf": "false",
+        "sha256": "15b8f1e371048a193cfb29642ab5b32816a0e247225da0f938ec9ca92e586166",
+        "logoCRLF": 0,
+        "logoSHA256": "267cca777a2fb649620d6ea838741de9111c3311c503ea76f01a03c454fcc4e4"
+      },
+      {
+        "autocrlf": "true",
+        "sha256": "86a1803e29a3c6bc038c205451c513a78efe029f68afb02a6890c73dbec52f16",
+        "logoCRLF": 35,
+        "logoSHA256": "fde5c88649ea6669ed4031f2233467a3933bd79ad645f9ca2b496f1a2185449b"
+      }
+    ]
+  }
+}

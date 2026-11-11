@@ -1,0 +1,347 @@
+{
+  "testedImplementationCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+  "result": {
+    "startingCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+    "browser": "156.0.8078.79",
+    "checks": [
+      {
+        "name": "F01 hero secondary text contrast >=4.5",
+        "passed": true,
+        "detail": {
+          "ratio": 9.3753379211963,
+          "fg": [
+            255,
+            255,
+            255
+          ],
+          "bg": [
+            22,
+            77,
+            89
+          ]
+        }
+      },
+      {
+        "name": "F08 first order fully above navbar in six-row month",
+        "passed": true,
+        "detail": {
+          "rows": 6,
+          "orderBottom": 708.96875,
+          "navTop": 711.015625
+        }
+      },
+      {
+        "name": "Calendar B dividers only in day grid",
+        "passed": true,
+        "detail": {
+          "rowBorder": "0px",
+          "cellBorder": "1px",
+          "cellColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+          "legendBorder": "0px"
+        }
+      },
+      {
+        "name": "Calendar LTR date order follows physical columns",
+        "passed": true,
+        "detail": [
+          {
+            "x": 17,
+            "date": "2026-07-26"
+          },
+          {
+            "x": 63.5625,
+            "date": "2026-07-27"
+          },
+          {
+            "x": 110.125,
+            "date": "2026-07-28"
+          },
+          {
+            "x": 156.6875,
+            "date": "2026-07-29"
+          },
+          {
+            "x": 203.25,
+            "date": "2026-07-30"
+          },
+          {
+            "x": 249.8125,
+            "date": "2026-07-31"
+          },
+          {
+            "x": 296.375,
+            "date": "2026-08-01"
+          }
+        ]
+      },
+      {
+        "name": "Calendar/List retains the selected order",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "order accordion exposes inline edit/delete",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "narrow Calendar controls fit at 320",
+        "passed": true,
+        "detail": {
+          "overlaps": [],
+          "clipped": [],
+          "overflow": false
+        }
+      },
+      {
+        "name": "F09 Calendar tools at simulated 200% do not overlap or clip",
+        "passed": true,
+        "detail": {
+          "overlaps": [],
+          "clipped": [],
+          "overflow": false
+        }
+      },
+      {
+        "name": "F04 Full Component Review has its own mode",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 review navigation covers 14 families",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 organized family buttons",
+        "passed": true,
+        "detail": [
+          "buttons"
+        ]
+      },
+      {
+        "name": "F04 organized family fields",
+        "passed": true,
+        "detail": [
+          "fields"
+        ]
+      },
+      {
+        "name": "F04 organized family selection",
+        "passed": true,
+        "detail": [
+          "selection"
+        ]
+      },
+      {
+        "name": "F04 organized family organization",
+        "passed": true,
+        "detail": [
+          "organization"
+        ]
+      },
+      {
+        "name": "F04 organized family data",
+        "passed": true,
+        "detail": [
+          "data"
+        ]
+      },
+      {
+        "name": "F04 organized family messages",
+        "passed": true,
+        "detail": [
+          "messages"
+        ]
+      },
+      {
+        "name": "F04 organized family navigation",
+        "passed": true,
+        "detail": [
+          "navigation"
+        ]
+      },
+      {
+        "name": "F04 organized family surfaces",
+        "passed": true,
+        "detail": [
+          "surfaces"
+        ]
+      },
+      {
+        "name": "F04 organized family info-strip",
+        "passed": true,
+        "detail": [
+          "info-strip"
+        ]
+      },
+      {
+        "name": "F04 organized family metric-comparison",
+        "passed": true,
+        "detail": [
+          "metric-comparison"
+        ]
+      },
+      {
+        "name": "F04 organized family account-settings",
+        "passed": true,
+        "detail": [
+          "account-settings"
+        ]
+      },
+      {
+        "name": "F04 organized family access-gateway",
+        "passed": true,
+        "detail": [
+          "access-gateway"
+        ]
+      },
+      {
+        "name": "F04 organized family order-schedule",
+        "passed": true,
+        "detail": [
+          "order-schedule"
+        ]
+      },
+      {
+        "name": "F04 organized family carousel",
+        "passed": true,
+        "detail": [
+          "carousel"
+        ]
+      },
+      {
+        "name": "F04 actual review variant [data-chart=\"donut\"]",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 actual review variant [data-chart=\"bubbles\"]:not([data-chart-packed])",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 actual review variant [data-chart-packed]",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 actual review variant [data-metric-circles]",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 actual review variant .m-main-metric--featured",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 actual review variant [data-info-peek]",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F04 diagnostic fixture controls hidden in review",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F05 current Carousel matches full-width default expectation",
+        "passed": true,
+        "detail": {
+          "left": 0,
+          "width": 328,
+          "peek": false
+        }
+      },
+      {
+        "name": "F05 table expectation preserves raw malformed reading",
+        "passed": true,
+        "detail": "غير رقمي (قيمة غير صالحة)"
+      },
+      {
+        "name": "F06 packed preserves malformed raw reading visibly",
+        "passed": true,
+        "detail": {
+          "visible": "تجميع بصري اختياري\nمشوهة\n12oops (قيمة غير صالحة)\nمفقودة\n(غير معروف)\nفارغة\n(غير متاح)\nصفر\n0 (صفر)\nسالبة\n-2 (سالب غير صالح للمساحة)\nصالحة\n8\n\nعرض البيانات كجدول",
+          "table": "تجميع بصري اختياري، الوحدة: وحدة تحقق، الفترة: فترة تحقق، المقياس: 10الفئةالقيمةمشوهة12oops (قيمة غير صالحة)مفقودة(غير معروف)فارغة(غير متاح)صفر0 (صفر)سالبة-2 (سالب غير صالح للمساحة)صالحة8"
+        }
+      },
+      {
+        "name": "F06 packed table distinguishes malformed/missing/zero",
+        "passed": true,
+        "detail": {
+          "visible": "تجميع بصري اختياري\nمشوهة\n12oops (قيمة غير صالحة)\nمفقودة\n(غير معروف)\nفارغة\n(غير متاح)\nصفر\n0 (صفر)\nسالبة\n-2 (سالب غير صالح للمساحة)\nصالحة\n8\n\nعرض البيانات كجدول",
+          "table": "تجميع بصري اختياري، الوحدة: وحدة تحقق، الفترة: فترة تحقق، المقياس: 10الفئةالقيمةمشوهة12oops (قيمة غير صالحة)مفقودة(غير معروف)فارغة(غير متاح)صفر0 (صفر)سالبة-2 (سالب غير صالح للمساحة)صالحة8"
+        }
+      },
+      {
+        "name": "F07 packed table includes visible title/unit/period",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "F07 metric circles table retains title and context",
+        "passed": true,
+        "detail": "دوائر المقدار الاختيارية، الوحدة: وحدة تحقق، الفترة: فترة تحققالفئةالقيمةالحالةالوحدةالفترةالأكبر10وحدة تحققفترة تحققالأصغر1وحدة تحققفترة تحققصفر0صفروحدة تحققفترة تحقق"
+      },
+      {
+        "name": "F07 Main Metric table includes primary reading and raw invalid",
+        "passed": true,
+        "detail": "قراءة مسطحة وأشرطة مقارنة، الوحدة: نقطة، الفترة: الفترة التي حددها المضيفالفئةالقيمةالوحدةالفترةالقيمة الرئيسية12نقطةالفترة التي حددها المضيفقيمة أ12oops (قيمة غير صالحة)نقطةالفترة التي حددها المضيفقيمة ب-3 (سالب)نقطةالفترة التي حددها المضيفقيمة مفقودة— (غير متاح)نقطةالفترة التي حددها المضيف"
+      },
+      {
+        "name": "table stays open after source rerender",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "narrow tables preserve readings without document overflow",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "Info Strip hides navigation for one reading",
+        "passed": true,
+        "detail": {
+          "controlsVisible": false
+        }
+      },
+      {
+        "name": "no browser JavaScript/resource errors",
+        "passed": true,
+        "detail": []
+      },
+      {
+        "name": "F03 SVG checkout pins LF",
+        "passed": true,
+        "detail": "assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg: eol: lf"
+      },
+      {
+        "name": "F02 active Calendar summary describes real week and list modes",
+        "passed": true,
+        "detail": null
+      }
+    ],
+    "measurements": {
+      "fold": {
+        "rows": 6,
+        "orderBottom": 708.96875,
+        "navTop": 711.015625
+      },
+      "calendarTools200": {
+        "overlaps": [],
+        "clipped": [],
+        "overflow": false
+      },
+      "carousel": {
+        "left": 0,
+        "width": 328,
+        "peek": false
+      }
+    },
+    "passed": 44,
+    "failed": 0,
+    "matrix": "360x780 RTL; 320 narrow risks; Calendar LTR once; Calendar tools 200% once"
+  }
+}

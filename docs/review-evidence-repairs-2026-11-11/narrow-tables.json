@@ -1,0 +1,20 @@
+{
+  "testedImplementationCommit": "883b1ad4e0af08723c303c5aec763afdf6090565",
+  "result": [
+    {
+      "chart": "packed",
+      "tableVisible": true,
+      "documentFits": true
+    },
+    {
+      "chart": "metric-circles",
+      "tableVisible": true,
+      "documentFits": true
+    },
+    {
+      "chart": "main-flat",
+      "tableVisible": true,
+      "documentFits": true
+    }
+  ]
+}

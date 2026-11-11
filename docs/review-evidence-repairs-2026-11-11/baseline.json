@@ -1,0 +1,209 @@
+{
+  "testedImplementationCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+  "result": {
+    "startingCommit": "389e40a1a68e4468ffa77736b0e94618c018f242",
+    "browser": "Chromium",
+    "checks": [
+      {
+        "name": "F01 hero secondary text contrast >=4.5",
+        "passed": false,
+        "detail": {
+          "ratio": 1.5226836109329478,
+          "fg": [
+            80,
+            101,
+            106
+          ],
+          "bg": [
+            22,
+            77,
+            89
+          ]
+        }
+      },
+      {
+        "name": "F08 first order fully above navbar in six-row month",
+        "passed": false,
+        "detail": {
+          "rows": 6,
+          "orderBottom": 716.96875,
+          "navTop": 711.015625
+        }
+      },
+      {
+        "name": "Calendar B dividers only in day grid",
+        "passed": false,
+        "detail": {
+          "rowBorder": "0px",
+          "cellBorder": "0px",
+          "cellColor": "rgb(23, 45, 50)",
+          "legendBorder": "0px"
+        }
+      },
+      {
+        "name": "Calendar LTR date order follows physical columns",
+        "passed": true,
+        "detail": [
+          {
+            "x": 17,
+            "date": "2026-07-26"
+          },
+          {
+            "x": 63.5625,
+            "date": "2026-07-27"
+          },
+          {
+            "x": 110.125,
+            "date": "2026-07-28"
+          },
+          {
+            "x": 156.6875,
+            "date": "2026-07-29"
+          },
+          {
+            "x": 203.25,
+            "date": "2026-07-30"
+          },
+          {
+            "x": 249.8125,
+            "date": "2026-07-31"
+          },
+          {
+            "x": 296.375,
+            "date": "2026-08-01"
+          }
+        ]
+      },
+      {
+        "name": "Calendar/List retains the selected order",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "order accordion exposes inline edit/delete",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "narrow Calendar controls fit at 320",
+        "passed": true,
+        "detail": {
+          "overlaps": [],
+          "clipped": [],
+          "overflow": false
+        }
+      },
+      {
+        "name": "F09 Calendar tools at simulated 200% do not overlap or clip",
+        "passed": false,
+        "detail": {
+          "overlaps": [
+            [
+              "شهر",
+              "عرض القائمة"
+            ]
+          ],
+          "clipped": [
+            "أسبوع"
+          ],
+          "overflow": false
+        }
+      },
+      {
+        "name": "F04 Full Component Review has its own mode",
+        "passed": false,
+        "detail": null
+      },
+      {
+        "name": "F04 review navigation covers 14 families",
+        "passed": false,
+        "detail": null
+      },
+      {
+        "name": "F06 packed preserves malformed raw reading visibly",
+        "passed": false,
+        "detail": {
+          "visible": "تجميع بصري اختياري\nمشوهة\n(غير متاح)\nمفقودة\n(غير معروف)\nفارغة\n(غير متاح)\nصفر\n0 (صفر)\nسالبة\n-2 (سالب غير صالح للمساحة)\nصالحة\n8\n\nعرض البيانات كجدول",
+          "table": "الفئةالقيمةمشوهة(غير متاح)مفقودة(غير معروف)فارغة(غير متاح)صفر0 (صفر)سالبة-2 (سالب غير صالح للمساحة)صالحة8"
+        }
+      },
+      {
+        "name": "F06 packed table distinguishes malformed/missing/zero",
+        "passed": false,
+        "detail": {
+          "visible": "تجميع بصري اختياري\nمشوهة\n(غير متاح)\nمفقودة\n(غير معروف)\nفارغة\n(غير متاح)\nصفر\n0 (صفر)\nسالبة\n-2 (سالب غير صالح للمساحة)\nصالحة\n8\n\nعرض البيانات كجدول",
+          "table": "الفئةالقيمةمشوهة(غير متاح)مفقودة(غير معروف)فارغة(غير متاح)صفر0 (صفر)سالبة-2 (سالب غير صالح للمساحة)صالحة8"
+        }
+      },
+      {
+        "name": "F07 packed table includes visible title/unit/period",
+        "passed": false,
+        "detail": null
+      },
+      {
+        "name": "F07 metric circles table retains title and context",
+        "passed": false,
+        "detail": "الفئةالقيمةالحالةالأكبر10الأصغر1صفر0صفر"
+      },
+      {
+        "name": "F07 Main Metric table includes primary reading and raw invalid",
+        "passed": false,
+        "detail": "قراءة مسطحة وأشرطة مقارنةالفئةالقيمةالوحدةالفترةقيمة أقيمة غير صالحةنقطةالفترة التي حددها المضيفقيمة ب-3 (سالب)نقطةالفترة التي حددها المضيفقيمة مفقودة— (غير متاح)نقطةالفترة التي حددها المضيف"
+      },
+      {
+        "name": "table stays open after source rerender",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "narrow tables preserve readings without document overflow",
+        "passed": true,
+        "detail": null
+      },
+      {
+        "name": "Info Strip hides navigation for one reading",
+        "passed": false,
+        "detail": {
+          "controlsVisible": true
+        }
+      },
+      {
+        "name": "no browser JavaScript/resource errors",
+        "passed": true,
+        "detail": []
+      },
+      {
+        "name": "F03 SVG checkout pins LF",
+        "passed": false,
+        "detail": "assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg: eol: unspecified"
+      },
+      {
+        "name": "F02 active Calendar summary describes real week and list modes",
+        "passed": false,
+        "detail": null
+      }
+    ],
+    "measurements": {
+      "fold": {
+        "rows": 6,
+        "orderBottom": 716.96875,
+        "navTop": 711.015625
+      },
+      "calendarTools200": {
+        "overlaps": [
+          [
+            "شهر",
+            "عرض القائمة"
+          ]
+        ],
+        "clipped": [
+          "أسبوع"
+        ],
+        "overflow": false
+      }
+    },
+    "passed": 7,
+    "failed": 14,
+    "matrix": "360x780 RTL; 320 narrow risks; Calendar LTR once; Calendar tools 200% once"
+  }
+}
