@@ -1,0 +1,388 @@
+{
+  "browser": "156.0.8078.79",
+  "theme": "Light only",
+  "scope": "Chromium source fixture; 360x780 RTL/LTR DPR1, targeted 320 donut; no zoom",
+  "capture_only": false,
+  "source_sha256": {
+    "components/data/data.css": "b4b5d100aae448e9ceeb9964589d34235027e1504d8426471ef275f92e757ac1",
+    "components/data/data.js": "00155beb60b5917a62d7879fe42d6aa82c30921e245d7fb2c49f5fd99756ba4a",
+    "components/data/packed-circle.css": "0c8d7fb6cb072257ef29f9ee2da808f265a875f18eeb022954b44a1145621a8b",
+    "components/data/packed-circle.js": "73bb5707e9233149bd8a049cda74e8377e68be88755f041e186dc647a58b3a82",
+    "components/metric-comparison/metric-comparison.css": "081d199f5b665a4015d1885797c3e1500474f8f8b6f6eba2e4e2b8bbf6aeef34",
+    "components/metric-comparison/metric-comparison.js": "708fef2e7947531d26f6e5b6817dfdb187f13c794b2d1c41bb299f3d544c3ab1",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7"
+  },
+  "passed": 40,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "360 rtl 1x: zero, missing, negative and long source readings retained",
+      "passed": true,
+      "detail": {
+        "labels": 8,
+        "zero": true,
+        "missing": true,
+        "negative": true,
+        "long": "قيمة صفرية"
+      }
+    },
+    {
+      "name": "360 rtl 1x: invalid scale refuses relative drawing",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 rtl 1x: signed axis preserves negative geometry and zero",
+      "passed": true,
+      "detail": {
+        "zero": 1,
+        "lines": 1,
+        "readings": 3,
+        "negative": true,
+        "text": "قراءات حول الصفر\n0\n1\n2\n3\n1. موجب\n4\n2. صفر\n0\n3. سالب\n-2\n\nعرض البيانات كجدول"
+      }
+    },
+    {
+      "name": "360 rtl 1x: donut shares and disclosure rows remain complete",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 rtl 1x: disclosure opens its semantic table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 rtl 1x: optional host metadata appears only when provided",
+      "passed": true,
+      "detail": "الوحدة\nنقطة من المضيف\nالفترة\nفترة يحددها المضيف"
+    },
+    {
+      "name": "360 rtl 1x: host title is shown only when a visible title is absent",
+      "passed": true,
+      "detail": "عنوان سياق المضيف"
+    },
+    {
+      "name": "360 rtl 1x: only weakly bounded marks gain direct Light boundary",
+      "passed": true,
+      "detail": {
+        "bubble": {
+          "stroke": "rgb(80, 101, 106)",
+          "width": "1px",
+          "r": "50"
+        },
+        "packed": "rgb(80, 101, 106) 0px 0px 0px 1px inset",
+        "metric": "rgb(23, 45, 50) 0px 0px 0px 1px inset",
+        "bar": "color(srgb 0.0901961 0.176471 0.196078 / 0.3) 0px 0px 0px 1px inset",
+        "donut": {
+          "stroke": "rgb(80, 101, 106)",
+          "width": "1px"
+        }
+      }
+    },
+    {
+      "name": "360 rtl 1x: zero and area geometry stay unchanged",
+      "passed": true,
+      "detail": {
+        "zeroMarkers": 3
+      }
+    },
+    {
+      "name": "360 rtl 1x: long readings wrap without page-level horizontal loss",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 ltr 1x: zero, missing, negative and long source readings retained",
+      "passed": true,
+      "detail": {
+        "labels": 8,
+        "zero": true,
+        "missing": true,
+        "negative": true,
+        "long": "قيمة صفرية"
+      }
+    },
+    {
+      "name": "360 ltr 1x: invalid scale refuses relative drawing",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 ltr 1x: signed axis preserves negative geometry and zero",
+      "passed": true,
+      "detail": {
+        "zero": 1,
+        "lines": 1,
+        "readings": 3,
+        "negative": true,
+        "text": "قراءات حول الصفر\n0\n1\n2\n3\n1. موجب\n4\n2. صفر\n0\n3. سالب\n-2\n\nعرض البيانات كجدول"
+      }
+    },
+    {
+      "name": "360 ltr 1x: donut shares and disclosure rows remain complete",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 ltr 1x: disclosure opens its semantic table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 ltr 1x: optional host metadata appears only when provided",
+      "passed": true,
+      "detail": "الوحدة\nنقطة من المضيف\nالفترة\nفترة يحددها المضيف"
+    },
+    {
+      "name": "360 ltr 1x: host title is shown only when a visible title is absent",
+      "passed": true,
+      "detail": "عنوان سياق المضيف"
+    },
+    {
+      "name": "360 ltr 1x: only weakly bounded marks gain direct Light boundary",
+      "passed": true,
+      "detail": {
+        "bubble": {
+          "stroke": "rgb(80, 101, 106)",
+          "width": "1px",
+          "r": "50"
+        },
+        "packed": "rgb(80, 101, 106) 0px 0px 0px 1px inset",
+        "metric": "rgb(23, 45, 50) 0px 0px 0px 1px inset",
+        "bar": "color(srgb 0.0901961 0.176471 0.196078 / 0.3) 0px 0px 0px 1px inset",
+        "donut": {
+          "stroke": "rgb(80, 101, 106)",
+          "width": "1px"
+        }
+      }
+    },
+    {
+      "name": "360 ltr 1x: zero and area geometry stay unchanged",
+      "passed": true,
+      "detail": {
+        "zeroMarkers": 3
+      }
+    },
+    {
+      "name": "360 ltr 1x: long readings wrap without page-level horizontal loss",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bubbles with an empty dataset renders the honest no-data state (no blank frame)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "signed chart with all-unknown values renders no axes and keeps complete readings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "donut alternate table caption carries unit, period and declared denominator",
+      "passed": true,
+      "detail": "توزيع موثّق الوحدة والفترة، الوحدة: طلب، الفترة: أكتوبر، إجمالي الطلبات: 25"
+    },
+    {
+      "name": "donut mixed zero dataset keeps the zero category in the table",
+      "passed": true,
+      "detail": [
+        "فئة أ11",
+        "فئة ب6",
+        "صفر0"
+      ]
+    },
+    {
+      "name": "donut compact presentation at 320px: 112px ring with the legend beside it",
+      "passed": true,
+      "detail": {
+        "ok": true,
+        "svgW": 112,
+        "beside": true,
+        "sameRow": true
+      }
+    },
+    {
+      "name": "donut with an empty dataset renders no SVG ring at all (no fake geometry)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "donut with all-unknown values stays no-data with honest legend disclosure",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "donut real zero stays distinct from no-data: deliberate ring with a readable 0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "donut malformed value refuses proportions for every category (no % anywhere)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "donut malformed legend uses the unified invalid/missing classification with the raw reading",
+      "passed": true,
+      "detail": [
+        "8",
+        "12oops (قيمة غير صالحة)",
+        "(غير متاح)"
+      ]
+    },
+    {
+      "name": "donut malformed table matches the legend classification and keeps every reading",
+      "passed": true,
+      "detail": [
+        "مشوهة12oops (قيمة غير صالحة)",
+        "سليمة8",
+        "مفقودة(غير متاح)"
+      ]
+    },
+    {
+      "name": "packed-circle gains the complete table switch with every category and state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "packed-circle table opens with all three readings and a semantic structure",
+      "passed": true,
+      "detail": [
+        "الأكبر10",
+        "الأصغر1",
+        "متوسط4"
+      ]
+    },
+    {
+      "name": "packed-circle table hides again with the button label restored",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric-circles gains the complete table switch",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric-circles table opens with all five columns and every exact reading",
+      "passed": true,
+      "detail": {
+        "headers": [
+          "الفئة",
+          "القيمة",
+          "الحالة",
+          "الوحدة",
+          "الفترة"
+        ],
+        "rows": [
+          [
+            "الأكبر",
+            "10",
+            "",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "الأصغر",
+            "1",
+            "",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "صفر",
+            "0",
+            "صفر",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "main-flat table keeps the primary reading and every comparison with unit and period",
+      "passed": true,
+      "detail": {
+        "headers": [
+          "الفئة",
+          "القيمة",
+          "الوحدة",
+          "الفترة"
+        ],
+        "rows": [
+          [
+            "القيمة الرئيسية",
+            "12",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "قيمة أ",
+            "8",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "قيمة ب",
+            "-3 (سالب)",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "قيمة مفقودة",
+            "— (غير متاح)",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "main-featured table keeps the primary reading and every comparison with unit and period",
+      "passed": true,
+      "detail": {
+        "headers": [
+          "الفئة",
+          "القيمة",
+          "الوحدة",
+          "الفترة"
+        ],
+        "rows": [
+          [
+            "القيمة الرئيسية",
+            "12",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "قيمة أ",
+            "8",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ],
+          [
+            "قيمة ب",
+            "-3 (سالب)",
+            "نقطة",
+            "الفترة التي حددها المضيف"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "all new tables keep the page free of horizontal overflow at 320px",
+      "passed": true,
+      "detail": {
+        "doc": 320,
+        "view": 320
+      }
+    },
+    {
+      "name": "no browser, console, or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ]
+}

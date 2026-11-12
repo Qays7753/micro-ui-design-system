@@ -1,0 +1,331 @@
+{
+  "sourceCommitAtRun": "b9f0ae833c53ea391774dd43b0f4ba51001364ca",
+  "captureOnly": true,
+  "browser": "156.0.8078.79",
+  "emulatedPhone": true,
+  "physicalDevice": false,
+  "theme": "light",
+  "primary": "360x780 RTL touch",
+  "targeted": [
+    "320 mixed-period table",
+    "360 LTR table"
+  ],
+  "passed": 20,
+  "failed": 12,
+  "checks": [
+    {
+      "name": "Mobile emulation activates touch capability",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch next reads next real item",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch previous restores original item",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Native range accepts touch without loss of exact reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch donut selects full category row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disclosure opens with touch and preserves previous amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disclosure closes with touch",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "normal-sales360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-expenses360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-rows360",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-progress360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Visible complete caption permits context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ancestor-clipped caption restores unit",
+      "passed": false,
+      "detail": {
+        "captionHeight": 26,
+        "clipHeight": 0,
+        "unitClass": "m-reading-unit--contextual"
+      }
+    },
+    {
+      "name": "Hidden descendant cannot supply a currency caption",
+      "passed": false,
+      "detail": {
+        "visibleCaption": "هذا الأسبوع",
+        "textContent": "هذا الأسبوع د.أ",
+        "unitClass": "m-reading-unit--contextual"
+      }
+    },
+    {
+      "name": "Transparent descendant cannot supply a currency caption",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Screen-reader-only currency cannot hide visible units",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Visible nested currency still supports context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unclipped overflow container remains valid context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Invalid value announces raw value and invalid state instead of stale display",
+      "passed": false,
+      "detail": {
+        "aria": "سبت، 150 د.أ",
+        "visible": "سبتbad (قيمة غير صالحة) د.أ",
+        "raw": "bad"
+      }
+    },
+    {
+      "name": "Unrendered negative is qualified in accessible reading",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Missing value never announces stale formatted amount",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Mixed-period chart refuses geometry without dropping real values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed-period table has a semantic period column",
+      "passed": false,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة"
+        ],
+        "rows": [
+          "مواد150 د.أ",
+          "مواد145 د.أ"
+        ],
+        "caption": "القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Each table row retains its own declared period",
+      "passed": false,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة"
+        ],
+        "rows": [
+          "مواد150 د.أ",
+          "مواد145 د.أ"
+        ],
+        "caption": "القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Mixed table caption retains visible component title",
+      "passed": false,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة"
+        ],
+        "rows": [
+          "مواد150 د.أ",
+          "مواد145 د.أ"
+        ],
+        "caption": "القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Mixed-period table360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Missing per-row period is explicit rather than inferred",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Returning to homogeneous context removes extra period column",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Repeated render never duplicates period column",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Targeted320 mixed table",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "width": 288,
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "Directional LTR mixed table",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "normal-sales360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-expenses360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-rows360",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-progress360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Mixed-period table360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Targeted320 mixed table",
+      "left": 16,
+      "right": 304,
+      "width": 288,
+      "scroll": 320,
+      "viewport": 320
+    },
+    {
+      "name": "Directional LTR mixed table",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    }
+  ],
+  "sourceSha256": {
+    "components/compositions/reading-context.js": "e3e665463699ef64258643450b0c6c7fad91327bfb03580b13d764c4a2585fdd",
+    "components/compositions/reading-layout.css": "52741a4f2f79a1ffe7cb4fc928a11a9d08c8bd3dc31fbb9686e4c1205a6c5500",
+    "components/data/data.js": "b2cefb8d39d9c4269c551a222810a618699cfb5895c66186e61a6dab4115f327",
+    "components/data/data.css": "b4b5d100aae448e9ceeb9964589d34235027e1504d8426471ef275f92e757ac1",
+    "components/metric-comparison/metric-comparison.js": "708fef2e7947531d26f6e5b6817dfdb187f13c794b2d1c41bb299f3d544c3ab1",
+    "components/metric-comparison/metric-comparison.css": "081d199f5b665a4015d1885797c3e1500474f8f8b6f6eba2e4e2b8bbf6aeef34",
+    "tools/readable-acceptance-check.py": "e0d70afee243f017a49e490409d8fd2a9de4b535ac7fe605d57a6c93f7bfc01b"
+  },
+  "limits": [
+    "Chromium mobile/touch emulation is not an actual Android/iOS device or screen-reader test."
+  ]
+}

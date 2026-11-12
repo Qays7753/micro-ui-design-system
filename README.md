@@ -4,7 +4,11 @@
 
 ## نقطة الدخول
 
-آخر استكمال: [تقرير المرحلة5 — حدود التركيب](docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md)، و[دليل الحاضنات](docs/BOUNDARY-FIXTURES.md)، و[المعاينات المستقلة](previews/integration-boundaries/index.html). أصلح عزل الخلفية المتغيرة في Navigation؛ التراكيب C01/C02/C03 باقية Draft، وD01 غير منفذ. لا وصول أو تعديل أو اختبار في Micro.
+الحالي: [تقرير قبول المصدر على الهاتف](docs/audits/readable-acceptance-2026-11-12/REPORT.md)، [معاينة المصدر](previews/readable-source/index.html)، و[حالات القبول التفاعلية](previews/readable-acceptance/index.html). إصلاح وضوح سياق الوحدة، القراءة المتاحة للحالات غير الصالحة، فترات الجدول، واستمرار التركيز. تحقق الهاتف الفعلي واعتماد المالك البصري ما زالا منفصلين ومعلقين؛ لا تغيير لنضج Draft أو عدد العائلات.
+
+**التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
+
+استكمال سابق: [تقرير المرحلة5 — حدود التركيب](docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md)، و[دليل الحاضنات](docs/BOUNDARY-FIXTURES.md)، و[المعاينات المستقلة](previews/integration-boundaries/index.html). أصلح عزل الخلفية المتغيرة في Navigation؛ التراكيب C01/C02/C03 باقية Draft، وD01 غير منفذ. لا وصول أو تعديل أو اختبار في Micro.
 
 مقترح المرحلة6: [تنفيذ التنظيم والقراءة المباشرة في المعاينة](docs/proposals/charts-2026-11-12/ORGANIZATION-PASS.md)، و[معاينة المؤشرات](docs/proposals/charts-2026-11-12/review.html) و[معاينة الطلبات المستقلة](docs/proposals/charts-2026-11-12/review-orders.html). للمراجعة فقط؛ لم تتغير مصادر المكونات أو عقودها.
 

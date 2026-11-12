@@ -1,0 +1,638 @@
+{
+  "scope": "independent synthetic UX fixtures only; Light; no product host",
+  "viewport": "360x780 RTL; directional LTR; focused 320 container",
+  "sourceRef": null,
+  "commitAtRun": "b9f0ae833c53ea391774dd43b0f4ba51001364ca",
+  "browser": "156.0.8078.79",
+  "passed": 77,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "hub exposes all three fixtures",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 nested grid and flex container",
+      "passed": true,
+      "detail": {
+        "width": 296,
+        "left": 16,
+        "right": 312,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F01 actual container is 296px inside 360 viewport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 host really uses conflicting inherited font",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 source typography .m-info-card",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 source typography .m-row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 source typography .m-field",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 source typography .m-btn",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 source typography .m-form-surface",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 numeric sign precision and unit independent",
+      "passed": true,
+      "detail": {
+        "text": "−123,456.750",
+        "left": 16,
+        "right": 312,
+        "rects": [
+          {
+            "left": 128,
+            "right": 272.8125
+          }
+        ],
+        "ellipsis": "clip"
+      }
+    },
+    {
+      "name": "F01 full row reading",
+      "passed": true,
+      "detail": {
+        "text": "123,456,789.125",
+        "left": 16,
+        "right": 312,
+        "rects": [
+          {
+            "left": 183.734375,
+            "right": 312
+          }
+        ],
+        "ellipsis": "clip"
+      }
+    },
+    {
+      "name": "F01 zero false validation is not implicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 keyboard reaches native summary",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 native disclosure opens",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 documented disclosure icon remains20x20",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 disclosure text has full row space",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 directional LTR in same narrow container",
+      "passed": true,
+      "detail": {
+        "width": 296,
+        "left": 48,
+        "right": 344,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F01 hidden composition removes layout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 reveal retains geometry",
+      "passed": true,
+      "detail": {
+        "width": 296,
+        "left": 16,
+        "right": 312,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F01 negative control exposes host CSS violation",
+      "passed": true,
+      "detail": {
+        "height": 20,
+        "font": "serif"
+      }
+    },
+    {
+      "name": "F01 scoped host reset restores source targets",
+      "passed": true,
+      "detail": {
+        "width": 296,
+        "left": 16,
+        "right": 312,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F01 no important or source override used in fixture",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F01 focused narrow container264px at320",
+      "passed": true,
+      "detail": {
+        "width": 256,
+        "left": 16,
+        "right": 272,
+        "viewport": 320,
+        "documentWidth": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "F01 narrow numeric reading stays complete",
+      "passed": true,
+      "detail": {
+        "text": "123,456,789.125",
+        "left": 16,
+        "right": 272,
+        "rects": [
+          {
+            "left": 143.734375,
+            "right": 272
+          }
+        ],
+        "ellipsis": "clip"
+      }
+    },
+    {
+      "name": "F02 prefill is valid and clean",
+      "passed": true,
+      "detail": {
+        "raw": "CODE-001",
+        "valid": true,
+        "dirty": false,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "F02 clear uses documented48px B01 target",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 all consumer IDs unique",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 prefill synchronizes without user events",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 one input after repeated init",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 independent row action fires once after repeated binding",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 invalid raw remains dirty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 invalid submit retains raw without callback",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 reading update preserves focus and caret",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 update keeps form raw dirty and sibling isolated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 zero is a real reading",
+      "passed": true,
+      "detail": {
+        "text": "0",
+        "left": 16,
+        "right": 344,
+        "rects": [
+          {
+            "left": 291.609375,
+            "right": 304.8125
+          }
+        ],
+        "ellipsis": "clip"
+      }
+    },
+    {
+      "name": "F02 signed reading is not parsed",
+      "passed": true,
+      "detail": {
+        "text": "−17.250",
+        "left": 16,
+        "right": 344,
+        "rects": [
+          {
+            "left": 282.296875,
+            "right": 344
+          }
+        ],
+        "ellipsis": "clip"
+      }
+    },
+    {
+      "name": "F02 callback replacement does not duplicate submit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 pending duplicate submit blocked",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 old result qualified after raw edit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 source clear dispatches one user input",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 restoring default resets baseline",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 two consumers can wait independently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 teardown restores owned source busy state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 teardown does not cancel sibling",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 detached consumer listeners aborted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 stale response cannot write to remounted form",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 independent pending consumer completes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F02 independent form geometry",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F02 no component or consumer History writes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 transformed parent constrains fixed layer as expected",
+      "passed": true,
+      "detail": {
+        "layer": {
+          "x": 17,
+          "y": 424.1875,
+          "width": 326,
+          "height": 154.796875,
+          "top": 424.1875,
+          "right": 343,
+          "bottom": 578.984375,
+          "left": 17
+        },
+        "trap": {
+          "x": 16,
+          "y": 397.984375,
+          "width": 328,
+          "height": 182,
+          "top": 397.984375,
+          "right": 344,
+          "bottom": 579.984375,
+          "left": 16
+        },
+        "viewport": 780
+      }
+    },
+    {
+      "name": "F03 consumer portal moves source roots to body",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 portaled layer covers viewport width",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "left": 0,
+        "right": 360,
+        "viewport": 360,
+        "documentWidth": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "F03 Navigation owns one lock and focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 second engine refused by consumer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 nested source layer isolates parent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 nested close restores focus within parent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 final close restores opener and scroll",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 alternative native dialog has one engine",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 consumer denies native dirty Escape",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 native close restores own scroll and focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 newly mounted background inherits modal isolation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 dynamic background cannot take focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 live region exception remains available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 initially inert late node remains inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 close restores late sibling and prior inert state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 pre-inert late node restoration",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 previous body overflow restored exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 observer survives a second open lifetime",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 disconnect releases lock and dynamic isolation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 no observer isolation after disconnect",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 nested ancestor sibling is also isolated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 nested ancestor restoration",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 no History ownership introduced",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Standalone embedded Navigation isolates dynamic sibling",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Standalone embedded Navigation prevents background focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Standalone embedded Navigation restores dynamic sibling",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "F01 nested grid and flex container",
+      "width": 296,
+      "left": 16,
+      "right": 312,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    },
+    {
+      "name": "F01 directional LTR in same narrow container",
+      "width": 296,
+      "left": 48,
+      "right": 344,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    },
+    {
+      "name": "F01 reveal retains geometry",
+      "width": 296,
+      "left": 16,
+      "right": 312,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    },
+    {
+      "name": "negative CSS control",
+      "height": 20,
+      "font": "serif"
+    },
+    {
+      "name": "F01 scoped host reset restores source targets",
+      "width": 296,
+      "left": 16,
+      "right": 312,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    },
+    {
+      "name": "F01 focused narrow container264px at320",
+      "width": 256,
+      "left": 16,
+      "right": 272,
+      "viewport": 320,
+      "documentWidth": 320,
+      "bad": []
+    },
+    {
+      "name": "F02 independent form geometry",
+      "width": 328,
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    },
+    {
+      "name": "negative containing-block control",
+      "layer": {
+        "x": 17,
+        "y": 424.1875,
+        "width": 326,
+        "height": 154.796875,
+        "top": 424.1875,
+        "right": 343,
+        "bottom": 578.984375,
+        "left": 17
+      },
+      "trap": {
+        "x": 16,
+        "y": 397.984375,
+        "width": 328,
+        "height": 182,
+        "top": 397.984375,
+        "right": 344,
+        "bottom": 579.984375,
+        "left": 16
+      },
+      "viewport": 780
+    },
+    {
+      "name": "F03 portaled layer covers viewport width",
+      "width": 360,
+      "left": 0,
+      "right": 360,
+      "viewport": 360,
+      "documentWidth": 360,
+      "bad": []
+    }
+  ],
+  "errors": [],
+  "servedNavigationSha256": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+  "workspaceSha256": {
+    "previews/integration-boundaries/index.html": "4cf7091f635eb0a7160980e3c366541c4932d5c25d5b8bf69c79b06076a89616",
+    "previews/integration-boundaries/boundaries.js": "b438e93ff587e678f063fcc694c9cfb188654e07986729ca3b10e542ec6999db",
+    "previews/integration-boundaries/boundaries.css": "05cf5d1c14114a144ee33779d0dcd1b66b9cfcd115f88db9876a1854f4364dfd",
+    "previews/integration-boundaries/containers.html": "766e1e26bc5f0a79e9181c76f5f3839ed21a53157029de3b48a65587c6adddee",
+    "previews/integration-boundaries/lifecycle.html": "2676373c76da662052166cc8aa0118595f811aefebe9e8bc9ac739ca0bf8a00b",
+    "previews/integration-boundaries/layers.html": "25ded3d8933a71a962a34c859ffd860aa81a1684f66c99121c6db2f526aef594",
+    "components/navigation/navigation.js": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+    "tools/integration-boundaries-check.py": "f054eb98d50790d50b674a27ee0f306529009e8eb9128e8b3513fbf9b624fc6d",
+    "previews/ui-system-showcase/standalone.html": "f0cba7f19f5ff9e165ebdc6137db18c5e10f4d37df7cbb6b2c911fdba3617caf"
+  }
+}

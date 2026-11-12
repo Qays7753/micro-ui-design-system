@@ -1,0 +1,885 @@
+{
+  "sourceCommitAtRun": "b9f0ae833c53ea391774dd43b0f4ba51001364ca",
+  "browser": "156.0.8078.79",
+  "scope": "C01/C02/C03 independent library recipes;360x780 RTL Light;320 row containment only;directional LTR;no Dark/zoom/Micro",
+  "passed": 91,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "C01 count context contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 225.9375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C01 amount context contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 215.90625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C01 signed amount and precision preserved",
+      "passed": true,
+      "detail": {
+        "text": "−1,250.750",
+        "rects": [
+          {
+            "left": 186.40625,
+            "right": 304.8125
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C01 unit stays outside the numeric isolate",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 absent action/status is not synthesized",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 source action meets touch geometry",
+      "passed": true,
+      "detail": {
+        "count": 1,
+        "bad": []
+      }
+    },
+    {
+      "name": "C01 zero value visible without coercion",
+      "passed": true,
+      "detail": {
+        "text": "0",
+        "rects": [
+          {
+            "left": 278.53125,
+            "right": 291.734375
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C01 zero missing unit is explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 missing value visible without coercion",
+      "passed": true,
+      "detail": {
+        "text": "غير متاح",
+        "rects": [
+          {
+            "left": 258.203125,
+            "right": 327
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C01 missing missing unit is explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 signed value visible without coercion",
+      "passed": true,
+      "detail": {
+        "text": "−12.500",
+        "rects": [
+          {
+            "left": 206.296875,
+            "right": 291.734375
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C01 signed missing unit is explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 long value visible without coercion",
+      "passed": true,
+      "detail": {
+        "text": "123,456,789.125",
+        "rects": [
+          {
+            "left": 113.59375,
+            "right": 291.734375
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C01 long missing unit is explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 pending keeps and qualifies previous reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 pending busy state is consumer controlled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 error keeps and qualifies previous reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 error busy state is consumer controlled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 optional footer hidden actually removes layout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 featured context and note use the existing inverse token",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 both contexts have semantic list items",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 no nested link/button/summary targets",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 row #collection-row contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 187.96875,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 row #single-link-row contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 131.96875,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 row #stock-row contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 181.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 row #disclosure-row contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 110.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 list actions are48px and nonoverlapping",
+      "passed": true,
+      "detail": {
+        "count": 5,
+        "bad": []
+      }
+    },
+    {
+      "name": "C02 one keyboard action invokes consumer once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 native disclosure opens associated details",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 internal action does not toggle disclosure",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 disclosure closes with keyboard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 collapsed disclosure points to the RTL opening direction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 single target is a real local destination",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 empty keeps data separate from empty/pending state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 pending keeps data separate from empty/pending state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 error keeps data separate from empty/pending state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 ready keeps data separate from empty/pending state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 exact long value preserved",
+      "passed": true,
+      "detail": {
+        "text": "123,456,789.125",
+        "rects": [
+          {
+            "left": 215.734375,
+            "right": 344
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C02 targeted320 actions and long value contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "width": 288,
+        "height": 181.984375,
+        "documentWidth": 320,
+        "viewport": 320,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 targeted320 actions do not overlap or shrink",
+      "passed": true,
+      "detail": {
+        "count": 5,
+        "bad": []
+      }
+    },
+    {
+      "name": "C02 directional LTR row contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 181.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C02 LTR independent actions retain geometry",
+      "passed": true,
+      "detail": {
+        "count": 5,
+        "bad": []
+      }
+    },
+    {
+      "name": "C02 collapsed disclosure follows inherited LTR direction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 initial prefilled readonly field is not dirty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 inline surface contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 540.890625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C03 prefill updates source silently without dirty/input events",
+      "passed": true,
+      "detail": {
+        "raw": {
+          "title": "عنوان عينة مسبق",
+          "note": "نص من مصدر المثال"
+        },
+        "dirty": false,
+        "pending": false,
+        "inputsSeen": 0,
+        "submissions": 0
+      }
+    },
+    {
+      "name": "C03 invalid raw text survives validation and keeps focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 hint/error references are unique and linked",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 pending blocks repeated submit without a success timer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 undefined result stays neutral",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 rejected promise preserves raw values and gives a persistent error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 changing callbacks does not duplicate submission or listeners",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 false result is not success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 disposal does not leave a false pending announcement",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 teardown cancels UI ownership and ignores late promise result",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 new consumer lifetime clears old feedback without clearing raw values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 only explicit confirmation produces success feedback",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 edits during pending retain new invalid raw text and qualify old result",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 native dialog opens focused and contained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 native layer contained at360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 535.90625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "auto"
+      }
+    },
+    {
+      "name": "C03 native form actions are48px without overlap",
+      "passed": true,
+      "detail": {
+        "count": 2,
+        "bad": []
+      }
+    },
+    {
+      "name": "C03 native modal prevents outside focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 Tab remains inside native dialog",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 clean close restores focus and scroll ownership",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 dialog prefill remains clean with readonly source",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 native pattern rejects invalid reference and retains raw text",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 invalid raw edit is dirty and denied close remains visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 rejecting close keeps raw text and returns focus to editor",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 accepted explicit close releases controller and modal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 clean backdrop request uses consumer close policy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 dirty backdrop request is denied by consumer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 close during pending cleans up and ignores later resolution",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 real in-dialog consumer controls can resolve the example",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 prefilled confirmed example closes without a false dirty prompt",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "value has no preview stylesheet dependency",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "value source-only layout contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 225.9375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "value source-only typography belongs to component",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "value source-only targets preserve touch geometry",
+      "passed": true,
+      "detail": {
+        "count": 1,
+        "bad": []
+      }
+    },
+    {
+      "name": "row has no preview stylesheet dependency",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "row source-only layout contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 181.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "row source-only typography belongs to component",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "row source-only targets preserve touch geometry",
+      "passed": true,
+      "detail": {
+        "count": 3,
+        "bad": []
+      }
+    },
+    {
+      "name": "form has no preview stylesheet dependency",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "form source-only layout contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 596.890625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "form source-only typography belongs to component",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "form source-only targets preserve touch geometry",
+      "passed": true,
+      "detail": {
+        "count": 1,
+        "bad": []
+      }
+    },
+    {
+      "name": "C03 source-only dialog carrier keeps the approved font",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C03 source-only long error stays inside form",
+      "passed": true,
+      "detail": {
+        "text": "رسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواءرسالةخطأطويلةمتصلةتحتاجاحتواء",
+        "rects": [
+          {
+            "left": 52.484375,
+            "right": 311
+          },
+          {
+            "left": 52.734375,
+            "right": 311
+          },
+          {
+            "left": 52.359375,
+            "right": 311
+          },
+          {
+            "left": 51.34375,
+            "right": 311
+          },
+          {
+            "left": 54.984375,
+            "right": 311
+          },
+          {
+            "left": 184.484375,
+            "right": 311
+          }
+        ],
+        "left": 16,
+        "right": 344,
+        "ellipsis": false
+      }
+    },
+    {
+      "name": "C03 source-only long error keeps form contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 798.78125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "C03 directional LTR source-only form contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 798.78125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "no JavaScript/console/resource errors",
+      "passed": true,
+      "detail": {
+        "errors": [],
+        "resources": []
+      }
+    }
+  ],
+  "measurements": [
+    {
+      "name": "C01 count context contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 225.9375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C01 amount context contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 215.90625,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 row #collection-row contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 187.96875,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 row #single-link-row contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 131.96875,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 row #stock-row contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 181.984375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 row #disclosure-row contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 110.984375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 targeted320 actions and long value contained",
+      "left": 16,
+      "right": 304,
+      "width": 288,
+      "height": 181.984375,
+      "documentWidth": 320,
+      "viewport": 320,
+      "overflow": "visible"
+    },
+    {
+      "name": "C02 directional LTR row contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 181.984375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C03 inline surface contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 540.890625,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C03 native layer contained at360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 535.90625,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "auto"
+    },
+    {
+      "name": "value source-only layout contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 225.9375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "row source-only layout contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 181.984375,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "form source-only layout contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 596.890625,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C03 source-only long error keeps form contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 798.78125,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    },
+    {
+      "name": "C03 directional LTR source-only form contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 798.78125,
+      "documentWidth": 360,
+      "viewport": 360,
+      "overflow": "visible"
+    }
+  ],
+  "sourceSha256": {
+    "components/info-strip/value-context.css": "0fcebb8ebc882adea99d20838cce43842cc3bc4244953baa7320d948c477f70a",
+    "components/organization/operational-row.css": "e05be9646bac2c9414c4fc70f61face921e24f1b6630189ad1150914840d2e26",
+    "components/compositions/form-surface.css": "59004a6896f6baac2552869c9710ab1bc610ba698bc482370cdcab86bab40e25",
+    "previews/compositions/compositions.css": "3fd3853ad46d65ba24388f4a16f24f0ad129f174bbe611918f8c4d012fea2841",
+    "previews/compositions/compositions.js": "c5eb90e701b2b30d19854569a7f915ea80b146c4af44409aa4d39c9445089fb3",
+    "previews/compositions/summary-example.html": "ce568aa386f65dac38ad036339cec321e9d9dcd6b03a65dd700c4753d249cace",
+    "previews/compositions/row-example.html": "50130c4a40caf6b3362217ef96702e17de6897a659be7eb93b57744801c64a6e",
+    "previews/compositions/form-example.html": "e09f3606234d7b03df91eb6b64965457403e61d8366f6d51718192c58cb1e0b2"
+  },
+  "limitations": [
+    "Chromium automation, no physical device or actual screen reader.",
+    "Form validation/results/dirty/Promise/dialog ownership in preview consumer only.",
+    "Native dialog browser API is used; Navigation guarded-close proposal D01 is not implemented.",
+    "Source-only routes verify CSS independence; broad host boundary fixtures remain stage5."
+  ]
+}

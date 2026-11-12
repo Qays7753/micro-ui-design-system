@@ -9,12 +9,29 @@
   }
   function visible(el) {
     if (!el || !el.isConnected || el.closest('[hidden], [inert]')) return false;
-    var style = getComputedStyle(el), rect = el.getBoundingClientRect();
-    return el.getClientRects().length > 0 && rect.width > 1 && rect.height > 1
-      && style.visibility !== 'hidden' && style.visibility !== 'collapse' && style.display !== 'none' && Number(style.opacity) !== 0
-      && style.clipPath === 'none' && style.textOverflow !== 'ellipsis'
-      && !(style.overflowX === 'hidden' && el.scrollWidth > el.clientWidth)
-      && !(style.overflowY === 'hidden' && el.scrollHeight > el.clientHeight) && (!el.checkVisibility || el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }));
+    var rect = el.getBoundingClientRect();
+    if (!el.getClientRects().length || rect.width <= 1 || rect.height <= 1) return false;
+    for (var node = el; node; node = node.parentElement) {
+      var style = getComputedStyle(node);
+      if (style.visibility === 'hidden' || style.visibility === 'collapse' || style.display === 'none' || Number(style.opacity) === 0
+        || style.clipPath !== 'none' || style.clip !== 'auto' || style.textOverflow === 'ellipsis') return false;
+      var clipsX = /^(hidden|clip|auto|scroll)$/.test(style.overflowX);
+      var clipsY = /^(hidden|clip|auto|scroll)$/.test(style.overflowY);
+      var bounds = node.getBoundingClientRect();
+      if ((clipsX && (rect.left < bounds.left - 1 || rect.right > bounds.right + 1))
+        || (clipsY && (rect.top < bounds.top - 1 || rect.bottom > bounds.bottom + 1))) return false;
+      if (node === el && ((clipsX && el.scrollWidth > el.clientWidth) || (clipsY && el.scrollHeight > el.clientHeight))) return false;
+    }
+    return !el.checkVisibility || el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true });
+  }
+  function visibleText(el) {
+    var walker = el.ownerDocument.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    var text = '', node;
+    while ((node = walker.nextNode())) {
+      if (node.nodeValue.trim() && visible(node.parentElement)) text += node.nodeValue;
+      else if (!node.nodeValue.trim()) text += node.nodeValue;
+    }
+    return text;
   }
   function contextFor(el) {
     var group = el.closest('[data-reading-context]');
@@ -22,7 +39,7 @@
     var unit = el.getAttribute('data-reading-unit');
     var common = group.getAttribute('data-unit') || group.getAttribute('data-common-unit') || '';
     var label = group.ownerDocument.getElementById(group.getAttribute('data-reading-context'));
-    if (!unit || unit !== common || label === el || (label && el.contains(label)) || !visible(label) || label.textContent.indexOf(unit) < 0) return null;
+    if (!unit || unit !== common || label === el || (label && el.contains(label)) || !visible(label) || visibleText(label).indexOf(unit) < 0) return null;
     /* A mixed group never hides units, even if its heading mentions money. */
     if (within(group).some(function (node) {
       return node.closest('[data-reading-context]') === group && node.getAttribute('data-reading-unit') !== common;

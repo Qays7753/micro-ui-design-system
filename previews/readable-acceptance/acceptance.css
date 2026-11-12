@@ -1,0 +1,6 @@
+/* Diagnostic page framing only. Component layout remains in components/. */
+.acceptance-control{display:grid;gap:var(--micro-space-2);font-size:var(--micro-label-size)}
+.acceptance-control select{min-width:0;width:100%;min-height:var(--micro-touch-min);padding-inline:var(--micro-space-3);border:1px solid var(--micro-border-control);border-radius:var(--micro-radius-field);background:var(--micro-surface-base);color:var(--micro-text-primary);font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family)}
+.acceptance-control select:focus-visible{outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap)}
+.acceptance-clipped{height:0;overflow:hidden}
+[data-case][hidden]{display:none}

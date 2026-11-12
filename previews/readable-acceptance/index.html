@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حالات قبول القراءة — Micro UI</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../components/data/data.css">
+<link rel="stylesheet" href="../../components/compositions/reading-layout.css">
+<link rel="stylesheet" href="../readable-source/preview.css">
+<link rel="stylesheet" href="acceptance.css">
+</head>
+<body><main>
+<header class="preview-intro"><h1>حالات قبول القراءة</h1><p>أداة فحص للمكونات المشتركة. البيانات هنا عينات لحالات الخطأ والسياق، وليست شاشة منتج.</p></header>
+<label class="acceptance-control" for="acceptance-case"><span>حالة المراجعة</span><select id="acceptance-case"><option value="clipped">عنوان السياق مقصوص</option><option value="hidden">العملة مخفية داخل العنوان</option><option value="invalid">قراءة غير صالحة</option><option value="periods">فترتان مختلفتان</option></select></label>
+<section class="m-reading-group" data-case="clipped" data-reading-context="clipped-caption" data-unit="د.أ" aria-labelledby="clipped-title">
+<h2 class="m-reading-group__title" id="clipped-title">الوحدة تبقى ظاهرة</h2><div class="acceptance-clipped"><p id="clipped-caption">هذا الأسبوع · د.أ</p></div>
+<p><bdi dir="ltr">150</bdi> <span data-reading-unit="د.أ">د.أ</span></p><p class="preview-note">عنوان الوحدة مقصوص عمدًا في هذه العينة، لذلك لا يجوز اختصار العملة بجانب الرقم.</p>
+</section>
+<section class="m-reading-group" data-case="hidden" data-reading-context="hidden-caption" data-unit="د.أ" aria-labelledby="hidden-title" hidden>
+<h2 class="m-reading-group__title" id="hidden-title">النص الظاهر هو المرجع</h2><p id="hidden-caption">هذا الأسبوع <span hidden>د.أ</span></p>
+<p><bdi dir="ltr">150</bdi> <span data-reading-unit="د.أ">د.أ</span></p><p class="preview-note">العملة مخفية داخل العنوان عمدًا. تبقى ظاهرة بجانب الرقم.</p>
+</section>
+<section class="m-reading-group m-chart" data-case="invalid" data-chart="bars" data-presentation="readable" data-selection="single" data-selected-key="invalid" data-unit="د.أ" aria-labelledby="invalid-title" hidden>
+<h2 class="m-chart__title" id="invalid-title">الخطأ لا يتحول إلى مبلغ</h2><ul class="m-chart__data" hidden><li data-key="invalid" data-series="a" data-label="قراءة عينة" data-value="bad" data-display="150"></li><li data-key="known" data-series="a" data-label="قراءة معلومة" data-value="120"></li></ul><div class="m-chart__plot" data-plot></div><p class="preview-note">القيمة الأولى غير صالحة، حتى لو بقي لها نص منسق قديم. يجب أن تطابق قراءة أداة الاختيار الحالة المرئية.</p>
+</section>
+<section class="m-reading-group m-chart" data-case="periods" data-chart="bars" data-presentation="readable" data-unit="د.أ" aria-labelledby="periods-title" hidden>
+<h2 class="m-chart__title" id="periods-title">قراءات بفترتين</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="مواد" data-value="150" data-period="هذا الشهر"></li><li data-series="b" data-label="مواد" data-value="145" data-period="الشهر السابق"></li></ul><div class="m-chart__plot" data-plot></div>
+</section>
+<p class="preview-note">القراءة والمقياس والتحديد والجدول من مصدر Data وC04 نفسه. حالة الهاتف الفعلي تسجل منفصلة عن محاكاة المتصفح.</p>
+</main>
+<script src="../../components/compositions/reading-context.js"></script>
+<script src="../../components/data/data.js"></script>
+<script src="acceptance.js"></script>
+</body></html>

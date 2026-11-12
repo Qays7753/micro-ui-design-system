@@ -1732,8 +1732,14 @@
       button.disabled = true; button.removeAttribute('aria-pressed');
     });
   }
+  function focusAvailableReading(chart, preferred) {
+    var candidates = [preferred].concat([].slice.call(chart.querySelectorAll('[data-reading-choice], .m-chart__select-range, .m-chart__select-step, .m-chart__disclose')));
+    var available = candidates.find(function (el) { return el && !el.disabled && el.getClientRects().length && !el.closest('[hidden]'); });
+    if (available) available.focus({ preventScroll: true });
+  }
   function updateReadingSelection(chart, items) {
     var life = readingLives.get(chart), selected = selectionSnapshot(chart, items);
+    var focusedControl = life && life.controls.contains(document.activeElement) ? document.activeElement : null;
     if (life) {
       var index = selected ? items.findIndex(function (it) { return it.key === selected.key; }) : -1;
       life.range.max = Math.max(0, items.length - 1);
@@ -1741,13 +1747,13 @@
       life.range.disabled = !selected || items.length < 2;
       life.prev.disabled = index <= 0;
       life.next.disabled = index === items.length - 1;
-      life.range.setAttribute('aria-valuetext', selected ? selected.label + '، ' + (selected.display || selected.rawValue || '(غير متاح)') + ' ' + selected.unit : 'لم يُحدد عنصر');
       life.status.textContent = '';
       if (selected) {
         life.status.appendChild(readingNode('span', 'm-chart__selected-label', selected.label));
         var value = readingNode('span', 'm-chart__selected-value');
         appendReadableValue(value, items[index], chart.getAttribute('data-chart') === 'donut'); appendReadingUnit(value, selected.unit); life.status.appendChild(value);
       } else life.status.textContent = 'اختر عنصرًا لقراءة تفاصيله';
+      life.range.setAttribute('aria-valuetext', selected ? selected.label + '، ' + value.textContent : 'لم يُحدد عنصر');
     }
     [].slice.call(chart.querySelectorAll('[data-reading-choice]')).forEach(function (button) {
       var active = !!selected && button.getAttribute('data-reading-choice') === selected.key;
@@ -1759,6 +1765,7 @@
       el.setAttribute('data-reading-selected', String(!!selected && el.getAttribute('data-reading-key') === selected.key));
     });
     if (window.MicroReadings) window.MicroReadings.sync(chart);
+    if (focusedControl && focusedControl.disabled && (document.activeElement === focusedControl || document.activeElement === document.body)) focusAvailableReading(chart, life.range);
   }
   function readableLegend(chart, items, legend, denominator) {
     if (!isReadable(chart) && chart.getAttribute('data-selection') !== 'single') return;
@@ -1800,13 +1807,22 @@
     var readable = isReadable(chart), valid = selectionItems(chart, items);
     if (!readable && chart.getAttribute('data-selection') !== 'single') { chart.removeAttribute('data-selection-state'); disposeReading(chart); return; }
     if (readable) {
+      var mixed = mixedReadingContext(items);
       var rows = chart.querySelectorAll('.m-chart__dataset tbody tr');
       [].slice.call(rows).forEach(function (row, i) {
         var cell = row.querySelector('td:last-of-type'); if (cell && items[i]) appendReadingUnit(cell, items[i].unit);
+        if (mixed && items[i]) {
+          var periodCell = readingNode('td'), period = readingNode('bdi', null, items[i].period || '(فترة غير محددة)');
+          period.dir = 'auto'; periodCell.appendChild(period); row.appendChild(periodCell);
+        }
       });
-      if (mixedReadingContext(items)) {
+      if (mixed) {
+        var head = chart.querySelector('.m-chart__dataset thead tr');
+        if (head) { var periodHead = readingNode('th', null, 'الفترة'); periodHead.scope = 'col'; head.appendChild(periodHead); }
         var caption = chart.querySelector('.m-chart__dataset caption');
-        if (caption) caption.textContent = 'القراءات بوحداتها وفتراتها';
+        var title = chart.querySelector('.m-chart__title');
+        var titleText = title ? title.textContent.trim() : (chart.getAttribute('data-title') || '').trim();
+        if (caption) caption.textContent = (titleText ? titleText + ' — ' : '') + 'القراءات بوحداتها وفتراتها';
       }
     }
     if (!valid) {
@@ -1861,6 +1877,8 @@
   }
 
   function render(chart) {
+    var focusControl = document.activeElement && chart.contains(document.activeElement)
+      && document.activeElement.matches('.m-chart__select-range, .m-chart__select-step') ? document.activeElement : null;
     var focusChoice = document.activeElement && chart.contains(document.activeElement) && document.activeElement.closest('[data-reading-choice]');
     var focusKey = focusChoice ? focusChoice.getAttribute('data-reading-choice') : null;
     donutReadings.delete(chart);
@@ -1915,6 +1933,9 @@
       var replacement = [].slice.call(chart.querySelectorAll('[data-reading-choice]')).find(function (el) { return el.getAttribute('data-reading-choice') === focusKey; });
       if (!replacement) replacement = [].slice.call(chart.querySelectorAll('[data-reading-choice], .m-chart__select-range, .m-chart__disclose')).find(function (el) { return !el.disabled && el.getClientRects().length; });
       if (replacement && !replacement.disabled) replacement.focus({ preventScroll: true });
+    } else if (focusControl && (document.activeElement === document.body || document.activeElement === focusControl)
+      && (!chart.contains(focusControl) || focusControl.disabled || !focusControl.getClientRects().length)) {
+      focusAvailableReading(chart, chart.querySelector('.m-chart__select-range'));
     }
     /* R3-UI01: خزّن عرض الرسم الحالي وألحق المراقب — bars/line/donut */
     if (kind === 'bars' || kind === 'line' || kind === 'donut') rememberRenderWidth(chart);

@@ -1,0 +1,62 @@
+{
+  "startCommit": "b9f0ae833c53ea391774dd43b0f4ba51001364ca",
+  "baselineComponents": [
+    {
+      "path": "components/compositions/reading-context.js",
+      "baselineSha256": "e3e665463699ef64258643450b0c6c7fad91327bfb03580b13d764c4a2585fdd",
+      "matchesStartCommit": true
+    },
+    {
+      "path": "components/compositions/reading-layout.css",
+      "baselineSha256": "52741a4f2f79a1ffe7cb4fc928a11a9d08c8bd3dc31fbb9686e4c1205a6c5500",
+      "matchesStartCommit": true
+    },
+    {
+      "path": "components/data/data.js",
+      "baselineSha256": "b2cefb8d39d9c4269c551a222810a618699cfb5895c66186e61a6dab4115f327",
+      "matchesStartCommit": true
+    },
+    {
+      "path": "components/data/data.css",
+      "baselineSha256": "b4b5d100aae448e9ceeb9964589d34235027e1504d8426471ef275f92e757ac1",
+      "matchesStartCommit": true
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.js",
+      "baselineSha256": "708fef2e7947531d26f6e5b6817dfdb187f13c794b2d1c41bb299f3d544c3ab1",
+      "matchesStartCommit": true
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.css",
+      "baselineSha256": "081d199f5b665a4015d1885797c3e1500474f8f8b6f6eba2e4e2b8bbf6aeef34",
+      "matchesStartCommit": true
+    }
+  ],
+  "ordinaryVisuals": [
+    {
+      "file": "normal-sales360.png",
+      "byteIdentical": true,
+      "beforeSha256": "ac98e78a08d766b67c205095ced5af8c2ce25f557071d4876a9d503341f80ca3",
+      "afterSha256": "ac98e78a08d766b67c205095ced5af8c2ce25f557071d4876a9d503341f80ca3"
+    },
+    {
+      "file": "normal-expenses360.png",
+      "byteIdentical": true,
+      "beforeSha256": "81224e16d39f63bda3b83480af3b4d5978ccb76a2a7147817e6ac7f1c92a991b",
+      "afterSha256": "81224e16d39f63bda3b83480af3b4d5978ccb76a2a7147817e6ac7f1c92a991b"
+    },
+    {
+      "file": "normal-rows360.png",
+      "byteIdentical": true,
+      "beforeSha256": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+      "afterSha256": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408"
+    },
+    {
+      "file": "normal-progress360.png",
+      "byteIdentical": true,
+      "beforeSha256": "57ed90580e4c48a63c473c28ec67169f76ce9c0ed0c11094453a3d16903483f4",
+      "afterSha256": "57ed90580e4c48a63c473c28ec67169f76ce9c0ed0c11094453a3d16903483f4"
+    }
+  ],
+  "scope": "Four ordinary screenshots only; edge scenarios are reviewed separately."
+}

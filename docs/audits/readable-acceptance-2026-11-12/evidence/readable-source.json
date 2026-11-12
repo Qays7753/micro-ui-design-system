@@ -1,0 +1,665 @@
+{
+  "sourceCommitAtRun": "b9f0ae833c53ea391774dd43b0f4ba51001364ca",
+  "workingTree": true,
+  "browser": "156.0.8078.79",
+  "theme": "light",
+  "primary": "360x780 RTL",
+  "targeted": [
+    "320 long rows/legend",
+    "360 LTR directional rows"
+  ],
+  "passed": 85,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Default money150 and quantity149 keep distinct visible units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Explicit homogeneous visible heading permits contextual money",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Contextual units remain text and are not aria-hidden",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Positive bars preserve physical source order and selection direction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected SVG mark is linked by stable key without a tiny hit target",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Initial caller-owned selection reads exact source",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Programmatic setter silent and preserves units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Snapshot is a fresh copy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Native keyboard selection emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unchanged selection does not emit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Home selects first source item",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch-sized step invokes one transition",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selection focus outline is visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Rerender retains range node and focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Keyed reorder keeps identity rather than index",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected removal clears without an invented fallback/event",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Caller cleared selection can explicitly choose first",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "duplicate keys disable selection without hiding data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "empty keys disable selection without hiding data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "missing keys disable selection without hiding data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Opaque hostile key is handled without selector interpolation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unknown programmatic key is ignored",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Clear setter is silent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Clone rebuilds unique generated status id",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Multi-instance selection is isolated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disconnect aborts stale controls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reinit is idempotent and binds once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Feature opt-out removes controls and diagnostic state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut selected share is secondary to exact amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut keyboard button uses same public selection contract",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Focused legend key survives rerender",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selection flag alone gives donut real controls and valid share",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selection alone remains operable by keyboard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Invalid donut denominator refuses shares and retains amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Hidden context fails safe to visible units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Clipped context fails safe",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed amount/count group never suppresses units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Context disconnect restores all inline units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Nested groups own their context independently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Transparent context restores inline units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Heading without explicit unit cannot suppress it",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Optional helper absent keeps newly rendered units visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed unit refuses relative geometry with full readings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed unit disables comparison selection honestly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed period refuses relative geometry with full readings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed period disables comparison selection honestly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact selected state '0'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact selected state ''",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact selected state 'bad'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact selected state '-20'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Signed axis honors existing explicit LTR and exact negative",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Time coordinate cell never gets a monetary unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Line time coordinates and explicit direction remain consumer owned",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Line default axis remains RTL",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Empty source keeps honest empty message without selectable fake0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Known zero series remains drawn separately from empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Readable metric retains full long amount and label",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric explicit state '0'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric explicit state ''",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric explicit state 'oops'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric explicit state '-20'",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric mixed units refuses shared scale",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Sales360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Donut360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Metric360 contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Progress360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "New native controls and disclosures meet48px",
+      "passed": true,
+      "detail": [
+        {
+          "tag": "BUTTON",
+          "w": 51.78125,
+          "h": 48
+        },
+        {
+          "tag": "INPUT",
+          "w": 178.21875,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 145.953125,
+          "h": 48
+        },
+        {
+          "tag": "SUMMARY",
+          "w": 294,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 294,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 294,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 294,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 145.953125,
+          "h": 48
+        },
+        {
+          "tag": "BUTTON",
+          "w": 145.953125,
+          "h": 48
+        },
+        {
+          "tag": "SUMMARY",
+          "w": 294,
+          "h": 48
+        }
+      ]
+    },
+    {
+      "name": "Donut selection has no duplicate visual readout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selection controls precede optional data table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Real source renderers, not copied prototype",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Readable labels never use ellipsis",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Targeted320 long metric",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 287,
+        "width": 254,
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "Targeted320 legend",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "width": 288,
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "Shared row columns keep equal scales without overlap",
+      "passed": true,
+      "detail": [
+        {
+          "track": 84.453125,
+          "overlap": false
+        },
+        {
+          "track": 84.453125,
+          "overlap": false
+        },
+        {
+          "track": 84.453125,
+          "overlap": false
+        }
+      ]
+    },
+    {
+      "name": "Directional LTR rows",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Directional LTR donut",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Generic progress overflow clips fill while actual130% stays visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unknown progress has no fabricated percentage/current",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Source-only grouping contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Source-only shared row columns contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Source-only grouping preserves tokens and layout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file source review works with subresource network blocked and actual API",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file source review requests no external assets",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Browser errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Missing resources",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "Sales360 contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Donut360 contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Metric360 contained",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Progress360 contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Targeted320 long metric",
+      "left": 33,
+      "right": 287,
+      "width": 254,
+      "scroll": 320,
+      "viewport": 320
+    },
+    {
+      "name": "Targeted320 legend",
+      "left": 16,
+      "right": 304,
+      "width": 288,
+      "scroll": 320,
+      "viewport": 320
+    },
+    {
+      "name": "Directional LTR rows",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Directional LTR donut",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Source-only grouping contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Source-only shared row columns contained",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "scroll": 360,
+      "viewport": 360
+    }
+  ],
+  "sourceSha256": {
+    "components/data/data.js": "00155beb60b5917a62d7879fe42d6aa82c30921e245d7fb2c49f5fd99756ba4a",
+    "components/data/data.css": "b4b5d100aae448e9ceeb9964589d34235027e1504d8426471ef275f92e757ac1",
+    "components/metric-comparison/metric-comparison.js": "708fef2e7947531d26f6e5b6817dfdb187f13c794b2d1c41bb299f3d544c3ab1",
+    "components/metric-comparison/metric-comparison.css": "081d199f5b665a4015d1885797c3e1500474f8f8b6f6eba2e4e2b8bbf6aeef34",
+    "components/compositions/reading-context.js": "6924b6a6abd0c24c058ead22786793e19d54c8cdde532e03019139edb8870569",
+    "components/compositions/reading-layout.css": "52741a4f2f79a1ffe7cb4fc928a11a9d08c8bd3dc31fbb9686e4c1205a6c5500",
+    "previews/readable-source/index.html": "f0af554069d39068c05aceb0442aef71a2c23fc6423ae0896e66773f03d66a85",
+    "previews/readable-source/preview.css": "850cd2533a13ff3b6b18c9a969034a370242b6cd0a12c2af87b0282a6cae17ae"
+  },
+  "limits": [
+    "Chromium automation; no physical Android/iOS, WebKit or screen reader.",
+    "Consumer provides totals, differences, progress ratio and business states."
+  ]
+}

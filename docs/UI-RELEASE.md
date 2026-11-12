@@ -40,3 +40,7 @@
 ## بوابة امتداد المصدر المقروء — 2026-11-12
 
 شغّل `python3 tools/readable-source-check.py --out /tmp/readable-source` مع بوابات Light الحالية وكتالوج/standalone/MANIFEST. المعاينة المستقلة للمصدر تُولد عبر `tools/build-chart-proposal-review.py --check`؛ ملفا prototype السابقان تاريخيان. لا تغير حالة Draft تلقائيًا، وأبلغ عن استمرار D01/UX-06 وUX-07 وUX-08 من سجل القرارات. [العقد](READABLE-SOURCE.md).
+
+## بوابة القبول الحالية — 2026-11-12
+
+`python3 tools/readable-acceptance-check.py --out /tmp/readable-acceptance` فحص Light360 RTL بمحاكاة لمس، و320 موجه للجدول وLTR اتجاهي، يضاف إلى readable-source وبوابات Light الحالية. وضع capture-only يسجل إخفاق baseline ولا يصلح بوابة تسليم. [التقرير الحالي](audits/readable-acceptance-2026-11-12/REPORT.md) و[بوابة الهاتف الفعلي غير المنفذة](audits/readable-acceptance-2026-11-12/PHONE-CHECK.md). محاكاة اللمس لا ترفع Platform إلى ناجح أو Draft إلى Stable.
