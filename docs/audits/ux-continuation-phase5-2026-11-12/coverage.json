@@ -1,0 +1,161 @@
+{
+  "scope": "Phase5 boundaries exercise C01/C02/C03 and their base families plus Navigation. Existing full-family gate is a regression, not a new synthetic boundary test for every family.",
+  "families": [
+    {
+      "id": "buttons",
+      "name": "Buttons",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "fields",
+      "name": "Fields",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "selection",
+      "name": "Selection / Picker",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "organization",
+      "name": "Organization",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "data",
+      "name": "Data",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "messages",
+      "name": "Messages",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "navigation",
+      "name": "Navigation",
+      "result": "fixed",
+      "reason": "BND-01 dynamic modal background isolation fixed",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "surfaces",
+      "name": "Surfaces",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "info-strip",
+      "name": "Info strip",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "metric-comparison",
+      "name": "Metric comparison",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "account-settings",
+      "name": "Account settings",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "access-gateway",
+      "name": "Access gateway",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "order-schedule",
+      "name": "Order schedule",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel",
+      "result": "passed-existing-regression",
+      "reason": "Existing family-specific review gate passed; no source change or maturity upgrade",
+      "evidence": "gates/families.json"
+    }
+  ],
+  "variants": [
+    {
+      "id": "donut",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "main-metric-featured",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "bubbles",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "metric-circles",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "packed-circle",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "info-strip-peek",
+      "result": "passed-existing-regression",
+      "reason": "Documented option remains accessible and contained; no redesign",
+      "evidence": "gates/families.json"
+    }
+  ],
+  "compositions": [
+    {
+      "id": "C01",
+      "result": "passed-independent-boundaries",
+      "maturity": "draft-for-review",
+      "evidence": "boundary-verification.json"
+    },
+    {
+      "id": "C02",
+      "result": "passed-independent-boundaries",
+      "maturity": "draft-for-review",
+      "evidence": "boundary-verification.json"
+    },
+    {
+      "id": "C03",
+      "result": "passed-independent-boundaries",
+      "maturity": "draft-for-review",
+      "evidence": "boundary-verification.json"
+    }
+  ]
+}

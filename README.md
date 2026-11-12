@@ -4,7 +4,9 @@
 
 ## نقطة الدخول
 
-آخر استكمال: [تقرير المرحلة4 — التراكيب الثلاثة](docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md)، و[دليل الاستهلاك](docs/COMPOSITIONS.md)، و[المعاينات المستقلة](previews/compositions/index.html). C01/C02/C03 وصفات Draft منفذة، مع بقاء العائلات14 والمتغيرات6 بنضجها السابق. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) مستقلة عن سياسات الأمثلة، وD01 المقترح غير منفذ. لا اختبار أو إصلاح داخل Micro.
+آخر استكمال: [تقرير المرحلة5 — حدود التركيب](docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md)، و[دليل الحاضنات](docs/BOUNDARY-FIXTURES.md)، و[المعاينات المستقلة](previews/integration-boundaries/index.html). أصلح عزل الخلفية المتغيرة في Navigation؛ التراكيب C01/C02/C03 باقية Draft، وD01 غير منفذ. لا وصول أو تعديل أو اختبار في Micro.
+
+تسليم المرحلة4:  [تقرير المرحلة4 — التراكيب الثلاثة](docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md)، و[دليل الاستهلاك](docs/COMPOSITIONS.md)، و[المعاينات المستقلة](previews/compositions/index.html). C01/C02/C03 وصفات Draft منفذة، مع بقاء العائلات14 والمتغيرات6 بنضجها السابق. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) مستقلة عن سياسات الأمثلة، وD01 المقترح غير منفذ. لا اختبار أو إصلاح داخل Micro.
 
 اقرأ بالترتيب:
 

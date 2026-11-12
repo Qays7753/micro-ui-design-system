@@ -10148,6 +10148,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   var lockCount = 0;         /* R2-02: عدّاد قفل التمرير — لا تلف قيمة overflow السابقة */
   var prevOverflow = null;   /* قيمة overflow السابقة على body */
   var inertRestore = [];     /* [{el, inert}] — استرجاع دقيق */
+  var isolationObserver = null;
   var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
   var escapeBound = false;
   var doc = document;
@@ -10252,9 +10253,25 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     if (!openLayers.length) return;
     var top = openLayers[openLayers.length - 1];
     isolateSiblings(doc.body, top.layer, top.backdrop);
+    /* A consumer may mount siblings while a modal is open. Observe only for
+       that modal lifetime; descendants of already-inert siblings inherit the
+       isolation, while new siblings along the active layer's ancestor chain
+       need the same treatment as those present at open time. */
+    isolationObserver = new MutationObserver(function (records) {
+      if (!openLayers.length) return;
+      var active = openLayers[openLayers.length - 1].layer;
+      var changed = records.some(function (record) {
+        return record.target !== active && record.target.contains(active)
+          && [].slice.call(record.addedNodes).concat([].slice.call(record.removedNodes))
+            .some(function (node) { return node.nodeType === 1; });
+      });
+      if (changed) applyBackgroundInert();
+    });
+    isolationObserver.observe(doc.body, { childList: true, subtree: true });
   }
 
   function releaseBackgroundInert() {
+    if (isolationObserver) { isolationObserver.disconnect(); isolationObserver = null; }
     inertRestore.forEach(function (r) { r.el.inert = r.inert; });
     inertRestore = [];
   }

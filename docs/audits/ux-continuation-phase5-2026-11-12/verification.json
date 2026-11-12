@@ -1,0 +1,166 @@
+{
+  "stage": 5,
+  "startCommit": "4433f195a7838f8a9c6ccaed6988ff87457c840e",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "mainReadOnly": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "runtimePassed": 588,
+  "runtimeFailed": 0,
+  "gates": [
+    {
+      "name": "boundaries",
+      "command": "python3 tools/integration-boundaries-check.py --out OUT",
+      "passed": 77,
+      "failed": 0,
+      "evidence": "boundary-verification.json"
+    },
+    {
+      "name": "families",
+      "command": "python3 tools/ux-continuation-phase3-check.py --out OUT",
+      "passed": 82,
+      "failed": 0,
+      "evidence": "gates/families.json"
+    },
+    {
+      "name": "compositions",
+      "command": "python3 tools/composition-recipes-check.py --out OUT",
+      "passed": 91,
+      "failed": 0,
+      "evidence": "gates/compositions.json"
+    },
+    {
+      "name": "release",
+      "command": "python3 tools/light-release-check.py --review-scope --out OUT",
+      "passed": 35,
+      "failed": 0,
+      "evidence": "gates/release.json"
+    },
+    {
+      "name": "data",
+      "command": "python3 tools/light-data-check.py --review-scope --out OUT",
+      "passed": 40,
+      "failed": 0,
+      "evidence": "gates/data.json"
+    },
+    {
+      "name": "calendar",
+      "command": "python3 tools/light-calendar-check.py --review-scope --out OUT/calendar.json",
+      "passed": 126,
+      "failed": 0,
+      "evidence": "gates/calendar.json"
+    },
+    {
+      "name": "calendar-contract",
+      "command": "python3 tools/calendar-contract-check.py --out OUT",
+      "passed": 41,
+      "failed": 0,
+      "evidence": "gates/calendar-contract.json"
+    },
+    {
+      "name": "consumption",
+      "command": "python3 tools/component-consumption-contract-check.py --out OUT",
+      "passed": 37,
+      "failed": 0,
+      "evidence": "gates/consumption.json"
+    },
+    {
+      "name": "clones",
+      "command": "python3 tools/clone-lifecycle-check.py --out OUT",
+      "passed": 31,
+      "failed": 0,
+      "evidence": "gates/clones.json"
+    },
+    {
+      "name": "runtime",
+      "command": "python3 tools/preview-runtime-check.py --base http://127.0.0.1:8765 --review-scope --standalone-http --out OUT",
+      "passed": 28,
+      "failed": 0,
+      "evidence": "gates/runtime.json"
+    }
+  ],
+  "confirmedSourceDefects": [
+    {
+      "id": "BND-01",
+      "family": "navigation",
+      "source": "components/navigation/navigation.js",
+      "before": "New siblings can receive focus while modal is open",
+      "repair": "Lifetime-bound childList observer re-isolates siblings along active ancestor chain; restores originals and disconnects on release",
+      "beforeEvidence": "before-isolation-verification.json",
+      "beforePassed": 10,
+      "beforeFailed": 4
+    }
+  ],
+  "sourceComparison": {
+    "changed": [
+      "components/navigation/navigation.js",
+      "components/navigation/specification.md"
+    ],
+    "unchangedAssetShared": 207,
+    "unchangedExistingComponentRuntime": 36
+  },
+  "sourceSha256": {
+    "components/navigation/navigation.js": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+    "components/navigation/specification.md": "45ebf5f06ddbb64573f2b12d8f3293c9e2d9b47b637f114bf5cd21850f2ddaed",
+    "previews/ui-system-showcase/standalone.html": "0892cc6f9827d5838541eff170ff90f84eb6cfa2fb58ef9249f5399f3e2e0076",
+    "tools/integration-boundaries-check.py": "f054eb98d50790d50b674a27ee0f306529009e8eb9128e8b3513fbf9b624fc6d",
+    "previews/integration-boundaries/index.html": "4cf7091f635eb0a7160980e3c366541c4932d5c25d5b8bf69c79b06076a89616",
+    "previews/integration-boundaries/boundaries.js": "b438e93ff587e678f063fcc694c9cfb188654e07986729ca3b10e542ec6999db",
+    "previews/integration-boundaries/boundaries.css": "05cf5d1c14114a144ee33779d0dcd1b66b9cfcd115f88db9876a1854f4364dfd",
+    "previews/integration-boundaries/containers.html": "766e1e26bc5f0a79e9181c76f5f3839ed21a53157029de3b48a65587c6adddee",
+    "previews/integration-boundaries/lifecycle.html": "2676373c76da662052166cc8aa0118595f811aefebe9e8bc9ac739ca0bf8a00b",
+    "previews/integration-boundaries/layers.html": "25ded3d8933a71a962a34c859ffd860aa81a1684f66c99121c6db2f526aef594"
+  },
+  "limitations": [
+    "Synthetic consumers only; no access, test or changes in Micro",
+    "Chromium Light desktop emulation only; no actual iOS/Android/WebKit/screen-reader/OS keyboard test",
+    "No Dark, zoom or broad viewport matrix",
+    "Draft compositions retain maturity; no chart redesign; D01 remains unimplemented"
+  ],
+  "static": {
+    "command": "python3 tools/light-static-check.py --out OUT",
+    "passed": 273,
+    "failed": 0,
+    "evidence": "gates/static.json",
+    "note": "Existing Light gate; syntax/integrity checks do not execute a Dark UI session"
+  },
+  "deterministicChecks": [
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "result": "PASS: 14 families, 6 explicit variants, 3 compositions"
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "result": "PASS: byte identical; 24 icon sources"
+    },
+    {
+      "command": "python3 tools/manifest-build.py --check",
+      "result": "PASS",
+      "entries": 1056
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "evidenceSha256": {
+    "gates/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "gates/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "gates/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "gates/compositions.json": "826bc3508a3d6fe05e45927061fdd9ef825927dd6786b3c9076b25273808e668",
+    "gates/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "gates/data.json": "d295d24c81f10bdf2bd718f8a259defb38a66af57946c89a2059fffffc96200d",
+    "gates/families.json": "1aed0a89f7afe4cb1e0d53edbb11f032ad51c674f6f62757fc4bcbe8c74388e3",
+    "gates/release.json": "463bc9fb77cefea075b9ff75c2f4e757c41bd1cc41a869e58e47c3357edc603e",
+    "gates/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "gates/static.json": "3993275dd1dbff8fee6dff6316219ee1c2d6556a64e57e2d9ac1b5a0eafbfd6d",
+    "evidence/before-dynamic-isolation-360-rtl.png": "1993c063e8e97c42be6ab9f5a4b49ae068628a6494c882498715addf736d766b",
+    "evidence/container-264-320-rtl.png": "87d47ba8e324c554b2f00ebbbaaa3c66f35a36d808264a2ef12feed6d130ae27",
+    "evidence/container-296-360-ltr.png": "a73177bc9ed2d9b29c1716fdc9f9367750389128613ab1d1ffa2da3e082dd68b",
+    "evidence/container-296-360-rtl.png": "874ca3f743b8f2b2071c83bc07eec397f3e69e33008f0fcc1967e45c5a45025b",
+    "evidence/dynamic-isolation-360-rtl.png": "1993c063e8e97c42be6ab9f5a4b49ae068628a6494c882498715addf736d766b",
+    "evidence/lifecycle-independent-form-360-rtl.png": "f5c29f4067310cb3e43d2bccce48ea8d55ce841cf7938bf4cd7b1a864adba2d8",
+    "evidence/native-dirty-decision-360-rtl.png": "939e5927852f37512f61533c5668801114ec0b99180f53cfbeef803081faf02b",
+    "evidence/negative-containing-block-360-rtl.png": "ac9df50e6e7f1b02214d8699bc83376edfbf865331cab5b586f050807cc44f11",
+    "evidence/portaled-layer-360-rtl.png": "7712ef512e42305f6d76a64f4f94d4bba1128fc7566930a5b497b80a8692b45d"
+  },
+  "documentationLinksCheck": "PASS: new guide/report relative links resolve"
+}

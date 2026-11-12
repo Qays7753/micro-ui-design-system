@@ -1,0 +1,95 @@
+{
+  "scope": "independent synthetic UX fixtures only; Light; no product host",
+  "viewport": "360x780 RTL; directional LTR; focused 320 container",
+  "sourceRef": "4433f195a7838f8a9c6ccaed6988ff87457c840e",
+  "commitAtRun": "4433f195a7838f8a9c6ccaed6988ff87457c840e",
+  "browser": "156.0.8078.79",
+  "passed": 10,
+  "failed": 4,
+  "checks": [
+    {
+      "name": "F03 newly mounted background inherits modal isolation",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "F03 dynamic background cannot take focus",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "F03 live region exception remains available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 initially inert late node remains inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 close restores late sibling and prior inert state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 pre-inert late node restoration",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 previous body overflow restored exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 observer survives a second open lifetime",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "F03 disconnect releases lock and dynamic isolation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 no observer isolation after disconnect",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 nested ancestor sibling is also isolated",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "F03 nested ancestor restoration",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "F03 no History ownership introduced",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [],
+  "errors": [],
+  "servedNavigationSha256": "52e740cb3a208ac921c20cb0773bc0e26e09d879cf72e639c3f822efd968cb72",
+  "workspaceSha256": {
+    "previews/integration-boundaries/index.html": "4cf7091f635eb0a7160980e3c366541c4932d5c25d5b8bf69c79b06076a89616",
+    "previews/integration-boundaries/boundaries.js": "b438e93ff587e678f063fcc694c9cfb188654e07986729ca3b10e542ec6999db",
+    "previews/integration-boundaries/boundaries.css": "05cf5d1c14114a144ee33779d0dcd1b66b9cfcd115f88db9876a1854f4364dfd",
+    "previews/integration-boundaries/containers.html": "766e1e26bc5f0a79e9181c76f5f3839ed21a53157029de3b48a65587c6adddee",
+    "previews/integration-boundaries/lifecycle.html": "2676373c76da662052166cc8aa0118595f811aefebe9e8bc9ac739ca0bf8a00b",
+    "previews/integration-boundaries/layers.html": "25ded3d8933a71a962a34c859ffd860aa81a1684f66c99121c6db2f526aef594",
+    "components/navigation/navigation.js": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+    "tools/integration-boundaries-check.py": "f054eb98d50790d50b674a27ee0f306529009e8eb9128e8b3513fbf9b624fc6d",
+    "previews/ui-system-showcase/standalone.html": "0892cc6f9827d5838541eff170ff90f84eb6cfa2fb58ef9249f5399f3e2e0076"
+  }
+}
