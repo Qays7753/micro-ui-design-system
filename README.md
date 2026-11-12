@@ -4,6 +4,8 @@
 
 ## نقطة الدخول
 
+آخر استكمال: [تقرير المرحلة2 — العقود](docs/audits/ux-continuation-phase2-2026-11-12/REPORT.md)، [API الحالية](docs/COMPONENT-API-CONTRACTS.md)، و[التراكيب المقترحة](docs/COMPOSITION-CONTRACTS.md). العقود المقترحة غير منفذة؛ لا اختبار أو إصلاح داخل Micro ضمن هذه الخطة.
+
 اقرأ بالترتيب:
 
 1. [`AGENTS.md`](AGENTS.md) — عقد العمل الحالي.

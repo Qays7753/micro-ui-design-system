@@ -1,0 +1,245 @@
+{
+  "stage": 2,
+  "startCommit": "9eba336d26120f880969bb18668abb0cf836a308",
+  "passed": 59,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "14 families exactly match catalog in order",
+      "passed": true
+    },
+    {
+      "name": "6 variants exactly match catalog",
+      "passed": true
+    },
+    {
+      "name": "all 14 current contract sections present",
+      "passed": true
+    },
+    {
+      "name": "catalog bytes and maturity unchanged",
+      "passed": true
+    },
+    {
+      "name": "all 379 implementation/source files unchanged",
+      "passed": true
+    },
+    {
+      "name": "all specification and preview paths resolve",
+      "passed": true
+    },
+    {
+      "name": "MicroButtons exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroButtons export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "buttons complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroFields exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroFields export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "fields complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroSelection exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroSelection export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "MicroPicker exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroPicker export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "selection complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroOrganization exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroOrganization export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "organization complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroData exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroData export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "MicroPacked exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroPacked export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "data complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroMessages exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroMessages export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "messages complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroNavigation exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroNavigation export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "navigation complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "surfaces complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroInfoStrip exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroInfoStrip export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "MicroInfoPeek exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroInfoPeek export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "info-strip complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroMetricComparison exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroMetricComparison export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "metric-comparison complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroAccountSettings exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroAccountSettings export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "account-settings complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroAccessGateway exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroAccessGateway export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "access-gateway complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "MicroOrderSchedule exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroOrderSchedule export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "order-schedule complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "Order Schedule exact instance members",
+      "passed": true
+    },
+    {
+      "name": "MicroCarousel exact exported methods",
+      "passed": true
+    },
+    {
+      "name": "MicroCarousel export anchor resolves",
+      "passed": true
+    },
+    {
+      "name": "carousel complete event source anchors",
+      "passed": true
+    },
+    {
+      "name": "all 16 globals covered",
+      "passed": true
+    },
+    {
+      "name": "all 30 event occurrences covered",
+      "passed": true
+    },
+    {
+      "name": "all 6 variants documented explicitly",
+      "passed": true
+    },
+    {
+      "name": "three composition contracts marked unimplemented",
+      "passed": true
+    },
+    {
+      "name": "three conditional decisions resolve to separate sections",
+      "passed": true
+    },
+    {
+      "name": "close request proposal is not accidentally implemented",
+      "passed": true
+    }
+  ],
+  "scope": "documentation integrity and source identity only; no UI runtime or visual acceptance"
+}

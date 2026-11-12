@@ -1,0 +1,78 @@
+{
+  "stage": 2,
+  "startCommit": "9eba336d26120f880969bb18668abb0cf836a308",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "checks": [
+    {
+      "command": "python3 docs/audits/ux-continuation-phase2-2026-11-12/verify-contracts.py",
+      "passed": 59,
+      "failed": 0,
+      "evidence": "contract-verification.json"
+    },
+    {
+      "command": "python3 tools/light-static-check.py --out /tmp/ux-phase2-static-final.json",
+      "passed": 243,
+      "failed": 0,
+      "evidence": "static-records.json"
+    },
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "passed": true,
+      "families": 14,
+      "variants": 6
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "passed": true,
+      "byteEqual": true,
+      "iconsMatch": 24
+    },
+    {
+      "command": "git diff --check; git diff --cached --check; git diff --check 041c5a1096424047ebacccc9ca19c4b49e20aac1",
+      "passed": true
+    },
+    {
+      "command": "python3 tools/manifest-build.py --check",
+      "performedAfterFinalEvidence": true,
+      "passed": true
+    }
+  ],
+  "sourceFilesUnchanged": 379,
+  "catalogAndMaturityUnchanged": true,
+  "csvNormalization": {
+    "path": "docs/audits/ux-continuation-phase1-2026-11-12/requirements.csv",
+    "sameParsedRows": true,
+    "requirements": 50,
+    "changedCRLFToLF": 51
+  },
+  "initialRuns": [
+    {
+      "check": "contract registry verifier",
+      "passed": 56,
+      "failed": 3,
+      "cause": "Verifier initially parsed API names in block comments and searched past the instance object opener. Corrected scanner and export anchors; implementation unchanged.",
+      "resolvedBy": "skip source comments while retaining line numbers and start at the actual object opener"
+    },
+    {
+      "check": "Light static",
+      "passed": 241,
+      "failed": 2,
+      "evidence": "initial-static-records.json",
+      "cause": "Two report-relative links; previous stage CSV CRLF flagged by full diff whitespace gate.",
+      "resolvedBy": "correct relative links and normalize CSV EOL without changing data; gate unchanged"
+    }
+  ],
+  "runtimeTestsRun": false,
+  "visualChecksRun": false,
+  "newScreenshots": 0,
+  "viewportChecksRun": [],
+  "darkTestsRun": false,
+  "newMicroAccess": false,
+  "limits": [
+    "Documentation-only stage; no new visual or runtime acceptance.",
+    "Static Light check reads legacy theme gating as source only; no Dark execution.",
+    "API source anchors and unchanged-source hashes are verified, not every runtime behavior.",
+    "Static evidence sourceSha256 records gate input files at execution, not a self-hash of the generated report.",
+    "D01 requestClose and C01/C02/C03 remain unimplemented proposals; D02 deferred, D03 external-first."
+  ]
+}
