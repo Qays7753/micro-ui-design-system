@@ -1422,7 +1422,7 @@
       wrap.className = 'm-chart__dataset-wrap';
       btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'm-chart__disclose';
+      btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
@@ -1438,6 +1438,7 @@
       table = wrap.querySelector('.m-chart__dataset');
     }
     // A copied disclosure has DOM state but no listener or unique owned ID.
+    if (btn) btn.classList.add('m-btn', 'm-btn--secondary');
     var binding = btn && btn.__microDatasetDisclosure;
     if (btn && table && (!binding || binding.table !== table)) {
       if (binding) btn.removeEventListener('click', binding.handler);
@@ -1847,9 +1848,9 @@
       var box = readingNode('div', 'm-chart__selection'); box.setAttribute('data-reading-owned', 'selection');
       var status = readingNode('p', 'm-chart__selection-value'); status.id = 'micro-data-selection-' + (++readingUid); status.setAttribute('role', 'status'); box.appendChild(status);
       var controls = readingNode('div', 'm-chart__selection-controls');
-      var prev = readingNode('button', 'm-chart__select-step', 'السابق'); prev.type = 'button';
+      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'السابق'); prev.type = 'button';
       var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', 'تحديد عنصر لقراءة قيمته'); range.setAttribute('aria-describedby', status.id);
-      var next = readingNode('button', 'm-chart__select-step', 'التالي'); next.type = 'button';
+      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'التالي'); next.type = 'button';
       controls.appendChild(prev); controls.appendChild(range); controls.appendChild(next); box.appendChild(controls);
       if (chart.getAttribute('data-chart') === 'donut') controls.hidden = true;
       chart.appendChild(box);

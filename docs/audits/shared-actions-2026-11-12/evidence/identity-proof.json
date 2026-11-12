@@ -1,0 +1,27 @@
+{
+  "startCommit": "c549699d114cc2741bcc7e7ab22c00306ff1d572",
+  "unchangedFiles": [
+    {
+      "path": "components/buttons/buttons.css",
+      "unchanged": true,
+      "sha256": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb"
+    },
+    {
+      "path": "components/buttons/buttons.js",
+      "unchanged": true,
+      "sha256": "dc96d2ac84a0e5ca7cf716358a547fee3ab35c53e8cdb100d624a2aa84451a07"
+    },
+    {
+      "path": "shared/tokens.css",
+      "unchanged": true,
+      "sha256": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7"
+    },
+    {
+      "path": "shared/motion.css",
+      "unchanged": true,
+      "sha256": "37e7b88c188df77f2c834b02cb29bd2db58192520fb476a1d20f59d7b85b25dd"
+    }
+  ],
+  "changedProtectedAssets": [],
+  "scope": "Documentation typo correction in Buttons specification is excluded from visual-source hashes."
+}

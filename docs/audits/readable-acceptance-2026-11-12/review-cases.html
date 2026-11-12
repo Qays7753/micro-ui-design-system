@@ -448,6 +448,417 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 </style>
 <style>
 /* =========================================================
+   Micro UI — مكوّن الأزرار (B01)
+   الملف: components/buttons/buttons.css
+   يعتمد على: shared/tokens.css — القيم المشتركة (الألوان والمقاسات والحركة)
+   تأتي منه كلها. الاستثناءات الداخلية بالمكوّن وحده موثقة عند مواضعها:
+   سماكة حد المؤشر 2px، ومقاس خط العدّاد (توكن مشترك مضاف:
+   --micro-counter-label-*). لا ألوان مكررة هنا إطلاقًا.
+   الاتجاه: كل القيم بخصائص منطقية (inline/block) فتعمل في RTL دون قلب يدوي.
+    مرجع التنفيذ: الأنواع والحالات وعقد التحميل موثقة في مواصفة B01.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) الأساس المشترك لكل الأنواع
+   <button class="m-btn m-btn--primary">…</button>
+   ------------------------------------------------------------ */
+.m-btn {
+  box-sizing: border-box;
+  position: relative;                /* مرجع لموضع مؤشر التحميل في الزر النصي */
+  display: inline-flex;              /* يتمدد مع النص أفقيًا */
+  align-items: center;
+  justify-content: center;
+  gap: var(--micro-button-gap);      /* 8px بين الأيقونة والنص افتراضيًا */
+  min-height: var(--micro-button-min-height); /* 48px حد أدنى — الارتفاع لا يقص النص */
+  min-width: var(--micro-touch-min); /* التسمية القصيرة لا تجعل هدف اللمس أضيق من 48px */
+  padding-block: var(--micro-button-padding-block);    /* التوكن: block padding (Geometry B 10px) */
+  padding-inline: var(--micro-button-padding-inline);
+  border: 0;
+  border-radius: var(--micro-radius-button-long); /* R-46: 12px دائمًا — min(…,50%) كان متبقيًا بلا أثر (القيمة أبدًا لا تتجاوز 50%) */
+  font-family: var(--micro-font-family);              /* IBM Plex Sans للأرقام + Plex Sans Arabic للعربية */
+  font-size: var(--micro-button-label-size);          /* 16px */
+  line-height: var(--micro-button-label-line);        /* 24px */
+  font-weight: var(--micro-button-label-weight);      /* 500 */
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;        /* منع تأخير/تكبير النقر المزدوج على الهاتف */
+  transition:
+    background-color var(--micro-motion-press) var(--micro-ease-standard),
+    border-color var(--micro-motion-press) var(--micro-ease-standard),
+    color var(--micro-motion-press) var(--micro-ease-standard),
+    box-shadow var(--micro-motion-press) var(--micro-ease-standard);
+}
+
+/* لا اعتماد على hover — أداة الهاتف لا تستخدم التحويم (قاعدة الأسس) */
+
+/* استقلال المقاسات عن أي reset خارجي (تصحيح R2-C):
+   box-sizing لا يورَّث تلقائيًا للأبناء؛ لو اعتمد المكوّن على reset اللوحة
+   (border-box لكل العناصر) لصار المؤشر (عرض 20px + حد 2px) خارجيًا 24px
+   خارج اللوحة، والمؤشر الدائري 28px بدل 24px. النطاق أدناه يجعل كل أجزاء
+   المكوّن مستقلة عن لوحة العرض ومتطابقة القياس في الموضعين. */
+.m-btn,
+.m-btn *,
+.m-btn *::before,
+.m-btn *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   2) الأنواع
+   ------------------------------------------------------------ */
+
+/* الأساسي: تدرج #236675 → #164D59 + ظل محدود (للأساسي فقط افتراضيًا) */
+.m-btn--primary {
+  border: 1px solid var(--micro-action-outline);
+  background-image: var(--micro-button-primary-bg);
+  background-color: var(--micro-brand-primary); /* أرضية احتياطية إن لم يُدعم التدرج */
+  color: var(--micro-text-inverse);
+  box-shadow: none;
+}
+
+/* Capsule is a deliberate choice for compact, short actions only. */
+.m-btn--capsule { border-radius: var(--micro-radius-capsule); }
+
+/* الثانوي: أرضية هادئة وحد واضح وبروز أقل من الأساسي */
+.m-btn--secondary {
+  background-color: var(--micro-surface-base);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control); /* حد 1px داخلي لا يغيّر المقاس */
+  color: var(--micro-text-primary);
+}
+
+/* الخفيف/النصي: دون حاوية ثقيلة، لون الهوية يكفي للتعرف عليه.
+   نفس حشو الزر المعتمد (توكن padding-inline)؛ الاختلاف في الغلاف لا في المساحة. */
+.m-btn--light {
+  background-color: transparent;
+  color: var(--micro-brand-ink);
+}
+
+/* الإجراء المتلف: اللون المحدد له مع تسمية صريحة — ليس كل إجراء مهم أحمر */
+.m-btn--destructive {
+  background-color: var(--micro-danger-action);
+  color: var(--micro-text-inverse);
+}
+
+/* الإجراء المتلف الهادئ (مقترح): للسياقات الثانوية مثل قائمة إجراءات */
+.m-btn--destructive-soft {
+  background-color: var(--micro-danger-surface);
+  color: var(--micro-danger);
+}
+
+/* زر الأيقونة: تعديل شكل دائري فوق أي نوع — ليس عائلة مستقلة.
+   الاستخدام الغامض يحتاج تسمية مرئية في السياق + aria-label دائمًا. */
+.m-btn--icon {
+  width: var(--micro-icon-button-size);
+  min-height: var(--micro-icon-button-size);
+  height: var(--micro-icon-button-size);
+  padding-block: 0;
+  padding-inline: 0;
+  border-radius: var(--micro-radius-circle);
+  flex: none;
+}
+
+.m-btn--icon .m-btn__icon {
+  width: var(--micro-icon-button-icon); /* 24px داخل الزر الدائري */
+  height: var(--micro-icon-button-icon);
+}
+
+/* عرض كامل: خيار مكوّن، لا تصميم منفصل */
+.m-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   3) عدّاد التصفية داخل الزر
+   زر التصفية = ثانوي + أيقونة + «تصفية» + عدّاد عند وجود فلاتر.
+   الفلاتر النشطة ليست حالة ضغط ولا حالة فتح لوحة.
+   توجيه جولة التصحيح R2: الشارة تُخفى عند 0 — الاسم الإتاحي
+   (aria-label) هو الذي يوضح «لا فلاتر نشطة»، والعدد يظهر عند وجوده.
+   الارتفاع حد أدنى (min-height) وليس ثابتًا: عند تكبير النص 200%
+   يتمدد العدّاد مع الخط بدل قصّه (فحص تكبير النص في reviews). */
+.m-btn__counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* لا انكماش الشارة تحت محتواها وحشوها (تصحيح R2-A): min-width وحدها
+     تستبدل الحد الأدنى التلقائي للعنصر المرن فيسمح flex بتقزيمها عن
+     الأرقام المكبّرة (خروج 123 عن الكبسولة عند تكبير الخط). الشارة
+     غير قابلة للانكماش، والتسمية هي التي تلتّف عند الضيق. */
+  flex: none;
+  min-width: var(--micro-counter-height);
+  min-height: var(--micro-counter-height);
+  padding-inline: var(--micro-space-2);
+  border-radius: var(--micro-radius-capsule);
+  background-color: var(--micro-brand-accent);   /* تراكوتا بنص داكن — 4.61:1 */
+  color: var(--micro-text-primary);
+  font-size: var(--micro-counter-label-size);
+  line-height: 1;
+  font-weight: var(--micro-counter-label-weight);
+  /* أرقام 0–9: اتجاه معزول وعرض متساوٍ للمقارنة */
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* شارة العدد صفر: مخفية بصريةً — الدلالة على «لا فلاتر» في الاسم الإتاحي */
+.m-btn__counter--zero {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   4) الأيقونة داخل الزر
+   لا قلب آلي لأي أيقونة؛ الرموز الاتجاهية تُختار مناسبةً لـ RTL من أصلها.
+   ------------------------------------------------------------ */
+.m-btn__icon {
+  width: var(--micro-icon-in-button); /* 20px داخل زر بنص */
+  height: var(--micro-icon-in-button);
+  flex: none; /* لا تنضغط الأيقونة عند النص الطويل */
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* شارة «تجريبي» في العرض التجريبي فقط — ليست جزءًا من المكوّن */
+.m-btn__sim-tag { display: none; }
+
+/* ---------------------------------------------------------
+   5) الحالات — تفاعلية وثابتة للمقارنة
+   التركيز ≠ الضغط، والمعطل ≠ التحميل (قاعدة الأسس)
+   ------------------------------------------------------------ */
+
+/* الضغط: فعلي (:active) وثابت للمقارنة (.is-pressed) */
+.m-btn--primary:active,
+.m-btn--primary.is-pressed {
+  background-image: none;
+  background-color: var(--micro-brand-pressed); /* #103E48 */
+  box-shadow: none; /* ينخفض العمق عند الضغط */
+}
+
+/* ضغط الثانوي والخفيف — مقترح بانتظار المراجعة (غير محسوم في SHARED-SPEC) */
+.m-btn--secondary:active,
+.m-btn--secondary.is-pressed {
+  background-color: var(--micro-surface-selected);
+  box-shadow: inset 0 0 0 1px var(--micro-border-control);
+}
+.m-btn--light:active,
+.m-btn--light.is-pressed {
+  background-color: var(--micro-surface-selected);
+}
+.m-btn--destructive:active,
+.m-btn--destructive.is-pressed {
+  background-color: var(--micro-danger-pressed); /* مقترح: أغمق من خطأ المعنى */
+}
+.m-btn--destructive-soft:active,
+.m-btn--destructive-soft.is-pressed {
+  background-color: var(--micro-surface-selected);
+  color: var(--micro-danger);
+}
+
+/* التركيز: حلقة 2px بفاصل أبيض 2px — فعلي (لوحة المفاتيح) وثابت للمقارنة.
+   الأساسي: يبقى ظله كي لا يقفز العنصر بين الحالات.
+   الثانوي: يحتفظ بحدّه الداخلي مع الحلقة. */
+.m-btn:focus-visible,
+.m-btn.is-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--primary:focus-visible,
+.m-btn--primary.is-focus {
+  box-shadow:
+    var(--micro-shadow-emphasis),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+.m-btn--secondary:focus-visible,
+.m-btn--secondary.is-focus {
+  box-shadow:
+    inset 0 0 0 1px var(--micro-border-control),
+    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
+    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
+}
+
+/* المعطل: أرضية ونص معطل من القيم المشتركة، بلا ظل ولا حد.
+   التفعيل ممنوع فعليًا عبر خاصية disabled الأصلية. */
+.m-btn[disabled],
+.m-btn.is-disabled {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.m-btn[disabled] .m-btn__counter,
+.m-btn.is-disabled .m-btn__counter {
+  background-color: transparent;
+  color: var(--micro-text-disabled);
+}
+
+/* المعطل: لا ضغط ولا حلقة تركيز — ليس عنصرًا نشطًا. قواعد صريحة فوق
+   قواعد الضغط والتركيز لأن أعلى منها خصوصية وتمنع أي حالة مضللة. */
+.m-btn[disabled]:active,
+.m-btn.is-disabled:active {
+  background-image: none;
+  background-color: var(--micro-surface-disabled);
+  color: var(--micro-text-disabled);
+  box-shadow: none;
+}
+.m-btn[disabled]:focus-visible,
+.m-btn.is-disabled.is-focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* التحميل: يمنع التكرار مع ثبات المساحة.
+   - زر بأيقونة: المؤشر يشغل فتحة الأيقونة نفسها فلا يتغير عرض الزر.
+   - زر نصي: لا حجز لمساحة المؤشر في الحالة العادية (R1-UI02)؛ أثناء
+     التحميل يتمركز المؤشر داخل حشو بداية السطر نفسه فتبقى التسمية
+     في مكانها ويبقى العرض والارتفاع ثابتين في الأطوار الثلاثة.
+   pointer-events:none يمنع المؤشر؛ ومنع التفعيل الكامل (Enter/Space)
+   عبر حراسة أحداث في buttons.js — جزء من عقد المكوّن. */
+.m-btn.is-loading,
+.m-btn[aria-busy="true"] {
+  pointer-events: none; /* يمنع نقر المؤشر دون تغيير المظهر عن المعطل */
+}
+.m-btn.is-loading .m-btn__icon,
+.m-btn[aria-busy="true"] .m-btn__icon {
+  display: none; /* فتحة الأيقونة يستبدلها المؤشر بنفس المقاس */
+}
+
+.m-btn__spinner {
+  width: var(--micro-icon-in-button);
+  height: var(--micro-icon-in-button);
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid currentColor; /* سماكة داخلية بالمكوّن — موثقة في الترويسة */
+  border-inline-start-color: transparent; /* قوس متصل — اتجاه الدوران محايد للـ RTL */
+  animation: micro-spin 900ms linear infinite;
+}
+
+/* زر الأيقونة الدائري: فتحة الأيقونة 24px — المؤشر بنفس المقاس */
+.m-btn--icon .m-btn__spinner {
+  width: var(--micro-icon-button-icon);
+  height: var(--micro-icon-button-icon);
+}
+
+/* نمط A القديم، متاح حصريًا مع m-btn--loading-replace:
+   التسمية تبقى في شجرة الإتاحة، والمؤشر يحل محل ظهورها. */
+.m-btn.is-loading--text .m-btn__label {
+  opacity: 0;
+}
+.m-btn.is-loading--text .m-btn__spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  /* مقاس المؤشر من القاعدة الأساسية .m-btn__spinner بالتوكن
+     (--micro-icon-in-button) — لا مقاس صريح هنا (تصحيح R2-C:
+     تغيير التوكن ينعكس على كل الأنواع دون استثناء). */
+}
+
+/* Compatibility class; bounded multiline radius is the shared default. */
+.m-btn--radius-limited {
+  border-radius: var(--micro-radius-button-long);
+}
+
+/* Legacy opt-in hook: explicitly reserves the loading slot (48px inline
+   padding per side). Since R1-UI02 the production default reserves nothing
+   in the resting state — this class is the explicit way to opt back into
+   the old reservation. The matching spinner rule is declared after the
+   default-B block below: equal specificity (0,3,0), so source order keeps
+   its reserved-slot offset (padding+gap)/2 = 14px unchanged. */
+.m-btn--loading-slot {
+  padding-inline: calc(var(--micro-button-padding-inline) + var(--micro-icon-in-button) + var(--micro-button-gap));
+}
+
+@keyframes micro-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* تقليل الحركة: تُلغى الانتقالات غير الجوهرية، ومؤشر التحميل يصير
+   ثابتًا (قوسًا ساكنًا) — الحالة تُفهم من تسمية التحميل الصريحة
+   (data-loading-label أو options.loadingLabel) ومن aria-busy.
+   توجيه جولة التصحيح R2: مؤشر ثابت بدل دوران أبطأ. */
+@media (prefers-reduced-motion: reduce) {
+  .m-btn {
+    transition: none;
+  }
+  .m-btn__spinner {
+    animation: none;
+  }
+}
+
+/* عقد B الافتراضي للتحميل النصي — إصلاح R1-UI02 (جولة UI-SOURCE-REPAIR-R1):
+   - لا حجز في الحالة العادية: حشو الزر النصي يبقى توكنه (20px لكل جانب)
+     لأي زر نصي بلا أيقونة (قاعدة الحجز السابقة كانت تضيف 20+8=28px لكل
+     جانب فتضخّم كل زر نصي ساكن 56px إجمالًا — عيب مكوّن مشترك).
+   - أثناء التحميل: المؤشر (20px) يتمركز عموديًا داخل حشو بداية السطر
+     نفسه — inset-inline-start = (padding − icon)/2 = 0px عند تساوي
+     التوكنين — فلا تداخل مع التسمية ولا تغيّر في العرض/الارتفاع.
+   - الأبعاد ثابتة قبل/أثناء/بعد التحميل بلا تضخيم.
+   - الأزرار ذات الأيقونة كما هي: المؤشر في فتحة الأيقونة نفسها.
+   - التوافق الصريح بلا تغيير: m-btn--loading-slot (حجز فتحة مسبقة)
+     وm-btn--loading-replace (نمط A القديم بتوسيط المؤشر). */
+.m-btn:not(.m-btn--icon) .m-btn__spinner {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button)) / 2);
+  margin-block: auto;
+  visibility: hidden;
+}
+.m-btn:not(.m-btn--icon):has(.m-btn__icon) .m-btn__spinner {
+  position: static;
+  visibility: visible;
+  margin: 0;
+}
+.m-btn:not(.m-btn--icon).is-loading .m-btn__spinner,
+.m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__spinner { visibility: visible; }
+.m-btn:not(.m-btn--icon).is-loading .m-btn__label,
+.m-btn:not(.m-btn--icon)[aria-busy="true"] .m-btn__label { opacity: 1; }
+.m-btn--icon { padding-inline: 0; }
+.m-btn--icon .m-btn__spinner { position: static; visibility: visible; }
+
+/* R2-UI02-loading (جولة UI-SOURCE-REPAIR-R2): أثناء تحميل الزر النصي
+   فقط (بلا أيقونة وبلا أنماط التوافق الصريحة) يرسم المؤشر قوسًا أصغر
+   نسبيًا (0.8 × توكن الأيقونة = 16px من 20px) متمركزًا في فتحة حشو
+   بداية السطر نفسها — بهامش 2px من حافة الزر ومن التسمية، فلا ملامسة
+   حافة ولا تداخل مع النص. المؤشر خارج التدفق فلا يتغير عرض الزر ولا
+   ارتفاعه ولا يُحجز أي حشو في الحالة الساكنة (عقد B بعد R1-UI02 قائم).
+   أزرار الأيقونة (48px دائرية) وأزرار النص+أيقونة (فتحة 20px داخل حشو
+   20px) وأنماط التوافق loading-slot/loading-replace خارج هذا الضبط. */
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon)).is-loading .m-btn__spinner,
+.m-btn:not(.m-btn--icon):not(.m-btn--loading-slot):not(.m-btn--loading-replace):not(:has(.m-btn__icon))[aria-busy="true"] .m-btn__spinner {
+  width: calc(var(--micro-icon-in-button) * 0.8);
+  height: calc(var(--micro-icon-in-button) * 0.8);
+  inset-inline-start: calc((var(--micro-button-padding-inline) - var(--micro-icon-in-button) * 0.8) / 2);
+}
+
+.m-btn--loading-slot.is-loading .m-btn__spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: calc((var(--micro-button-padding-inline) + var(--micro-button-gap)) / 2);
+  margin-block: auto; /* توسيط عمودي بلا transform كي لا يتعارض مع الدوران */
+}
+
+/* Explicit legacy A compatibility; never the default. */
+.m-btn--loading-replace:not(.m-btn--icon):not(:has(.m-btn__icon)) {
+  padding-inline: var(--micro-button-padding-inline);
+}
+.m-btn--loading-replace:not(.m-btn--icon).is-loading--text .m-btn__label { opacity: 0; }
+.m-btn--loading-replace.is-loading--text .m-btn__spinner {
+  inset: 0;
+  margin: auto;
+}
+.m-btn--light:hover:not(:disabled) { background-color: var(--micro-surface-selected); }
+.m-btn--secondary:hover:not(:disabled) { background-color: var(--micro-surface-page); }
+.m-btn--destructive-soft:hover:not(:disabled) { background-color: var(--micro-danger-surface); }
+
+</style>
+  <style>
+/* =========================================================
    Micro UI — مكوّن البيانات والتتبّع (B05)
    الملف: components/data/data.css
    يعتمد على shared/tokens.css. الرسوم SVG/CSS بلا مكتبات —
@@ -654,28 +1065,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   flex-direction: column;
   gap: var(--micro-space-2);
 }
-.m-chart__disclose {
-  align-self: flex-start;
-  min-height: var(--micro-touch-min);
-  padding-inline: var(--micro-space-4);
-  border: 0;
-  border-radius: var(--micro-radius-capsule);
-  background: transparent;
-  color: var(--micro-text-primary);
-  font-family: var(--micro-font-family);
-  font-size: var(--micro-label-size);
-  line-height: var(--micro-label-line);
-  font-weight: var(--micro-weight-medium);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.m-chart__disclose:hover { background: var(--micro-surface-selected); }
-.m-chart__disclose:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 var(--micro-focus-gap) var(--micro-surface-base),
-    0 0 0 calc(var(--micro-focus-gap) + var(--micro-focus-ring-width)) var(--micro-focus-ring);
-}
+.m-chart__disclose { align-self:flex-start; max-width:100%; }
 .m-chart__dataset {
   width: 100%;
   border: 1px solid var(--micro-border-divider);
@@ -922,10 +1312,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-chart__reading-unit,.m-chart__reading-period,.m-chart__reading-state { direction:rtl; unicode-bidi:isolate; font-size:var(--micro-secondary-size); color:var(--micro-text-secondary); }
 .m-chart__selection-controls { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:var(--micro-space-2); }
 .m-chart__selection-controls[hidden], .m-chart__share[hidden] { display:none; }
-.m-chart__select-step { min-width:var(--micro-touch-min); min-height:var(--micro-touch-min); padding:var(--micro-space-2); border:0; border-radius:var(--micro-radius-button-long); background:transparent; color:var(--micro-brand-primary); font:var(--micro-label-size)/var(--micro-label-line) var(--micro-font-family); cursor:pointer; }
-.m-chart__select-step:disabled { color:var(--micro-text-disabled); cursor:default; }
 .m-chart__select-range { min-width:0; width:100%; height:var(--micro-touch-min); margin:0; accent-color:var(--micro-brand-primary); }
-.m-chart__select-step:focus-visible,.m-chart__select-range:focus-visible,.m-chart__legend-row:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
+.m-chart__select-range:focus-visible,.m-chart__legend-row:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
 .m-chart__legend-row { display:grid; grid-template-columns:12px minmax(0,1fr) auto; align-items:baseline; gap:var(--micro-space-2); width:100%; min-height:var(--micro-touch-min); padding:var(--micro-space-2) 0; border:0; border-block-start:1px solid var(--micro-border-divider); background:transparent; color:var(--micro-text-primary); font:var(--micro-label-size)/var(--micro-label-line) var(--micro-font-family); text-align:start; }
 button.m-chart__legend-row { cursor:pointer; }
 .m-chart__legend-row .m-legend__swatch { align-self:center; }
@@ -952,7 +1340,7 @@ button.m-chart__legend-row { cursor:pointer; }
 .m-reading-group__period { margin:0; color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
 .m-reading-group__main { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:var(--micro-space-3); margin-block:var(--micro-space-2) var(--micro-space-3); }
 .m-reading-group__section { border-block-start:1px solid var(--micro-border-divider); padding-block-start:var(--micro-space-3); margin-block-start:var(--micro-space-3); }
-.m-reading-details > summary { display:flex; align-items:center; min-height:var(--micro-touch-min); min-width:var(--micro-touch-min); color:var(--micro-brand-primary); cursor:pointer; font-size:var(--micro-label-size); }
+.m-reading-details > summary { box-sizing:border-box; display:list-item; list-style-position:inside; min-height:var(--micro-touch-min); min-width:var(--micro-touch-min); padding-block:var(--micro-space-3); color:var(--micro-brand-primary); cursor:pointer; font-size:var(--micro-label-size); line-height:var(--micro-label-line); }
 .m-reading-details > summary:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
 .m-reading-details > p { margin:0; font-size:var(--micro-label-size); line-height:var(--micro-label-line); }
 /* Keep the unit in the accessibility tree. Never author this class manually. */
@@ -2490,7 +2878,7 @@ button.m-chart__legend-row { cursor:pointer; }
       wrap.className = 'm-chart__dataset-wrap';
       btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'm-chart__disclose';
+      btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
@@ -2506,6 +2894,7 @@ button.m-chart__legend-row { cursor:pointer; }
       table = wrap.querySelector('.m-chart__dataset');
     }
     // A copied disclosure has DOM state but no listener or unique owned ID.
+    if (btn) btn.classList.add('m-btn', 'm-btn--secondary');
     var binding = btn && btn.__microDatasetDisclosure;
     if (btn && table && (!binding || binding.table !== table)) {
       if (binding) btn.removeEventListener('click', binding.handler);
@@ -2915,9 +3304,9 @@ button.m-chart__legend-row { cursor:pointer; }
       var box = readingNode('div', 'm-chart__selection'); box.setAttribute('data-reading-owned', 'selection');
       var status = readingNode('p', 'm-chart__selection-value'); status.id = 'micro-data-selection-' + (++readingUid); status.setAttribute('role', 'status'); box.appendChild(status);
       var controls = readingNode('div', 'm-chart__selection-controls');
-      var prev = readingNode('button', 'm-chart__select-step', 'السابق'); prev.type = 'button';
+      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'السابق'); prev.type = 'button';
       var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', 'تحديد عنصر لقراءة قيمته'); range.setAttribute('aria-describedby', status.id);
-      var next = readingNode('button', 'm-chart__select-step', 'التالي'); next.type = 'button';
+      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'التالي'); next.type = 'button';
       controls.appendChild(prev); controls.appendChild(range); controls.appendChild(next); box.appendChild(controls);
       if (chart.getAttribute('data-chart') === 'donut') controls.hidden = true;
       chart.appendChild(box);

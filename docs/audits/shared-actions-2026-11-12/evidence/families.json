@@ -1,0 +1,1963 @@
+{
+  "sourceCommitAtRun": "c549699d114cc2741bcc7e7ab22c00306ff1d572",
+  "readOnlySourceRef": null,
+  "textOnly": false,
+  "textScreenshotMethod": "CDP Page.captureScreenshot fromSurface=false, captureBeyondViewport=false; actual 360x780 viewport",
+  "browser": "156.0.8078.79",
+  "viewport": {
+    "width": 360,
+    "height": 780
+  },
+  "theme": "light",
+  "passed": 84,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "buttons review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 551,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "buttons busy blocks keyboard activation and preserves geometry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1120.859375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "fields raw text survives silent programmatic sync",
+      "passed": true,
+      "detail": {
+        "value": "نص خام غير صالح كرقم",
+        "events": 0,
+        "count": "20/60"
+      }
+    },
+    {
+      "name": "selection review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1192.953125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "picker loading hides stale options",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker keyboard selects a real source value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "organization review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 756.015625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "organization repeated init toggles once and reveals content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 4077.328125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "data documented two-period comparison is exposed in review",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data disclosure exposes readable semantic data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1560.90625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "messages skeleton uses visible source blocks and stays decorative",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages keyboard close actually removes note from layout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "navigation review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1018,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "navigation modal focus, Escape and trigger restoration",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surfaces review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 662.9375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "surfaces content is independent of decorative layer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "info-strip review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1180.734375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "info card documented multiple-reading option is exposed in review",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "info strip next reveals one active reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "peek next updates index and keeps inactive slides inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric-comparison review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 2598.375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "metric-comparison disclosure exposes readable semantic data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "account-settings review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 338.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "account settings application view has correct focus and name",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "access-gateway review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 532.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "access invalid input is retained, marked and focused",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "access resolved handler without result stays neutral",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "order-schedule review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 1105.078125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "calendar displayed month changes silently without losing selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel review layout contained at 360 RTL",
+      "passed": true,
+      "detail": {
+        "width": 328,
+        "height": 457.03125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "name": "carousel next updates index without exposing inactive controls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 0 cards keep honest limits and active content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 0 cards destroy releases instance",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 1 cards keep honest limits and active content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 1 cards destroy releases instance",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 6 cards keep honest limits and active content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel disconnect/reinit preserves last index and boundary",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel 6 cards destroy releases instance",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel explicit expansion reveals its associated details",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel changing card collapses prior details",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "empty info strip hides viewport and controls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "empty info strip announces no cards rather than card one of zero",
+      "passed": true,
+      "detail": "لا توجد بطاقات."
+    },
+    {
+      "name": "single info card remains visible without navigation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "multi-card info strip restores navigation after empty and single",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "cloned peek 0 cards initializes independent truthful state once",
+      "passed": true,
+      "detail": {
+        "index": -1,
+        "status": "لا توجد بطاقات.",
+        "viewportHidden": true,
+        "controlsHidden": true
+      }
+    },
+    {
+      "name": "cloned peek 1 cards initializes independent truthful state once",
+      "passed": true,
+      "detail": {
+        "index": 0,
+        "status": "البطاقة 1 من 1",
+        "viewportHidden": false,
+        "controlsHidden": true
+      }
+    },
+    {
+      "name": "cloned peek 3 cards initializes independent truthful state once",
+      "passed": true,
+      "detail": {
+        "index": 1,
+        "status": "البطاقة 2 من 3",
+        "viewportHidden": false,
+        "controlsHidden": false
+      }
+    },
+    {
+      "name": "buttons default loading keeps dimensions and restores accessible label",
+      "passed": true,
+      "detail": {
+        "busy": true,
+        "stable": true,
+        "restored": true
+      }
+    },
+    {
+      "name": "buttons replace loading keeps dimensions and restores accessible label",
+      "passed": true,
+      "detail": {
+        "busy": true,
+        "stable": true,
+        "restored": true
+      }
+    },
+    {
+      "name": "buttons slot loading keeps dimensions and restores accessible label",
+      "passed": true,
+      "detail": {
+        "busy": true,
+        "stable": true,
+        "restored": true
+      }
+    },
+    {
+      "name": "donut optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "main-metric-featured optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "bubbles optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "metric-circles optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "packed-circle optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "info-strip-peek optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "data-readable optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "metric-readable optional preview accessible and contained",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "name": "identity-name rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 32,
+          "right": 268,
+          "top": 26.046875,
+          "bottom": 130.046875
+        },
+        "rects": [
+          {
+            "left": 38.734375,
+            "right": 268,
+            "top": 29.046875,
+            "bottom": 49.046875
+          },
+          {
+            "left": 32.765625,
+            "right": 268,
+            "top": 55.046875,
+            "bottom": 75.046875
+          },
+          {
+            "left": 36.265625,
+            "right": 268,
+            "top": 81.046875,
+            "bottom": 101.046875
+          },
+          {
+            "left": 216.09375,
+            "right": 268,
+            "top": 107.046875,
+            "bottom": 127.046875
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "مؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدوية",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-name",
+        "family": "organization",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "identity-sub rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 32,
+          "right": 268,
+          "top": 208.03125,
+          "bottom": 248
+        },
+        "rects": [
+          {
+            "left": 34.1875,
+            "right": 268,
+            "top": 209.03125,
+            "bottom": 226.03125
+          },
+          {
+            "left": 133.03125,
+            "right": 268,
+            "top": 229.015625,
+            "bottom": 246.015625
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "business.contact@long-small-business-domain-name.example",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-sub",
+        "family": "organization",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "identity-sub-unbroken rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 32,
+          "right": 268,
+          "top": 284,
+          "bottom": 343.953125
+        },
+        "rects": [
+          {
+            "left": 32.875,
+            "right": 268,
+            "top": 285,
+            "bottom": 302
+          },
+          {
+            "left": 42.984375,
+            "right": 268,
+            "top": 304.984375,
+            "bottom": 321.984375
+          },
+          {
+            "left": 238.4375,
+            "right": 268,
+            "top": 324.96875,
+            "bottom": 341.96875
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "contact@smallbusinessdomainsmallbusinessdomainsmallbusinessdomain.example",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-sub-unbroken",
+        "family": "organization",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "section-title rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 72,
+          "right": 320,
+          "top": 347.953125,
+          "bottom": 431.953125
+        },
+        "rects": [
+          {
+            "left": 79.0625,
+            "right": 320,
+            "top": 349.953125,
+            "bottom": 372.953125
+          },
+          {
+            "left": 79.0625,
+            "right": 320,
+            "top": 377.953125,
+            "bottom": 400.953125
+          },
+          {
+            "left": 79.0625,
+            "right": 320,
+            "top": 405.953125,
+            "bottom": 428.953125
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "متابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرة",
+        "clipped": false,
+        "contained": true,
+        "id": "section-title",
+        "family": "organization",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "section-desc rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 32,
+          "right": 328,
+          "top": 443.953125,
+          "bottom": 487.921875
+        },
+        "rects": [
+          {
+            "left": 35.296875,
+            "right": 328,
+            "top": 444.953125,
+            "bottom": 462.953125
+          },
+          {
+            "left": 88.921875,
+            "right": 328,
+            "top": 466.9375,
+            "bottom": 484.9375
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "وصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغير",
+        "clipped": false,
+        "contained": true,
+        "id": "section-desc",
+        "family": "organization",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "note-title rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 108,
+          "right": 280,
+          "top": 459.921875,
+          "bottom": 569.84375
+        },
+        "rects": [
+          {
+            "left": 110.78125,
+            "right": 280,
+            "top": 460.921875,
+            "bottom": 478.921875
+          },
+          {
+            "left": 108.375,
+            "right": 280,
+            "top": 482.90625,
+            "bottom": 500.90625
+          },
+          {
+            "left": 113.015625,
+            "right": 280,
+            "top": 504.890625,
+            "bottom": 522.890625
+          },
+          {
+            "left": 111.53125,
+            "right": 280,
+            "top": 526.875,
+            "bottom": 544.875
+          },
+          {
+            "left": 268.84375,
+            "right": 280,
+            "top": 548.859375,
+            "bottom": 566.859375
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "تعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولة",
+        "clipped": false,
+        "contained": true,
+        "id": "note-title",
+        "family": "messages",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "note-body-control rtl complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 48,
+          "right": 312,
+          "top": 671.796875,
+          "bottom": 715.765625
+        },
+        "rects": [
+          {
+            "left": 54.1875,
+            "right": 312,
+            "top": 672.796875,
+            "bottom": 690.796875
+          },
+          {
+            "left": 166.640625,
+            "right": 312,
+            "top": 694.78125,
+            "bottom": 712.78125
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "request.reference@long-small-business-domain-name.example",
+        "clipped": false,
+        "contained": true,
+        "id": "note-body-control",
+        "family": "messages",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "text fixture rtl has no horizontal page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long disclosure title rtl remains keyboard usable",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long note rtl close target remains contained and 48px",
+      "passed": true,
+      "detail": {
+        "x": 48,
+        "y": 455.921875,
+        "width": 48,
+        "height": 48
+      }
+    },
+    {
+      "name": "long note rtl keyboard close works",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "identity-name ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 92,
+          "right": 328,
+          "top": 26.046875,
+          "bottom": 130.046875
+        },
+        "rects": [
+          {
+            "left": 92,
+            "right": 321.265625,
+            "top": 29.046875,
+            "bottom": 49.046875
+          },
+          {
+            "left": 92,
+            "right": 327.234375,
+            "top": 55.046875,
+            "bottom": 75.046875
+          },
+          {
+            "left": 92,
+            "right": 323.734375,
+            "top": 81.046875,
+            "bottom": 101.046875
+          },
+          {
+            "left": 92,
+            "right": 143.90625,
+            "top": 107.046875,
+            "bottom": 127.046875
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "مؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدوية",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-name",
+        "family": "organization",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "identity-sub ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 92,
+          "right": 328,
+          "top": 208.03125,
+          "bottom": 248
+        },
+        "rects": [
+          {
+            "left": 92,
+            "right": 325.8125,
+            "top": 209.03125,
+            "bottom": 226.03125
+          },
+          {
+            "left": 92,
+            "right": 226.96875,
+            "top": 229.015625,
+            "bottom": 246.015625
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "business.contact@long-small-business-domain-name.example",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-sub",
+        "family": "organization",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "identity-sub-unbroken ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 92,
+          "right": 328,
+          "top": 284,
+          "bottom": 343.953125
+        },
+        "rects": [
+          {
+            "left": 92,
+            "right": 327.125,
+            "top": 285,
+            "bottom": 302
+          },
+          {
+            "left": 92,
+            "right": 317.015625,
+            "top": 304.984375,
+            "bottom": 321.984375
+          },
+          {
+            "left": 92,
+            "right": 121.5625,
+            "top": 324.96875,
+            "bottom": 341.96875
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "contact@smallbusinessdomainsmallbusinessdomainsmallbusinessdomain.example",
+        "clipped": false,
+        "contained": true,
+        "id": "identity-sub-unbroken",
+        "family": "organization",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "section-title ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 40,
+          "right": 288,
+          "top": 347.953125,
+          "bottom": 431.953125
+        },
+        "rects": [
+          {
+            "left": 40,
+            "right": 280.9375,
+            "top": 349.953125,
+            "bottom": 372.953125
+          },
+          {
+            "left": 40,
+            "right": 280.9375,
+            "top": 377.953125,
+            "bottom": 400.953125
+          },
+          {
+            "left": 40,
+            "right": 280.9375,
+            "top": 405.953125,
+            "bottom": 428.953125
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "متابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرة",
+        "clipped": false,
+        "contained": true,
+        "id": "section-title",
+        "family": "organization",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "section-desc ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 32,
+          "right": 328,
+          "top": 443.953125,
+          "bottom": 487.921875
+        },
+        "rects": [
+          {
+            "left": 32,
+            "right": 324.703125,
+            "top": 444.953125,
+            "bottom": 462.953125
+          },
+          {
+            "left": 32,
+            "right": 271.078125,
+            "top": 466.9375,
+            "bottom": 484.9375
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "وصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغير",
+        "clipped": false,
+        "contained": true,
+        "id": "section-desc",
+        "family": "organization",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "note-title ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 80,
+          "right": 252,
+          "top": 459.921875,
+          "bottom": 569.84375
+        },
+        "rects": [
+          {
+            "left": 80,
+            "right": 249.21875,
+            "top": 460.921875,
+            "bottom": 478.921875
+          },
+          {
+            "left": 80,
+            "right": 251.625,
+            "top": 482.90625,
+            "bottom": 500.90625
+          },
+          {
+            "left": 80,
+            "right": 246.984375,
+            "top": 504.890625,
+            "bottom": 522.890625
+          },
+          {
+            "left": 80,
+            "right": 248.46875,
+            "top": 526.875,
+            "bottom": 544.875
+          },
+          {
+            "left": 80,
+            "right": 91.15625,
+            "top": 548.859375,
+            "bottom": 566.859375
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "تعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولة",
+        "clipped": false,
+        "contained": true,
+        "id": "note-title",
+        "family": "messages",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "note-body-control ltr complete text stays within component",
+      "passed": true,
+      "detail": {
+        "box": {
+          "left": 48,
+          "right": 312,
+          "top": 671.796875,
+          "bottom": 715.765625
+        },
+        "rects": [
+          {
+            "left": 48,
+            "right": 305.8125,
+            "top": 672.796875,
+            "bottom": 690.796875
+          },
+          {
+            "left": 48,
+            "right": 193.359375,
+            "top": 694.78125,
+            "bottom": 712.78125
+          }
+        ],
+        "root": {
+          "left": 16,
+          "right": 344
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "text": "request.reference@long-small-business-domain-name.example",
+        "clipped": false,
+        "contained": true,
+        "id": "note-body-control",
+        "family": "messages",
+        "direction": "ltr"
+      }
+    },
+    {
+      "name": "text fixture ltr has no horizontal page overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long disclosure title ltr remains keyboard usable",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long note ltr close target remains contained and 48px",
+      "passed": true,
+      "detail": {
+        "x": 264,
+        "y": 455.921875,
+        "width": 48,
+        "height": 48
+      }
+    },
+    {
+      "name": "long note ltr keyboard close works",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no browser or HTTP resource errors",
+      "passed": true,
+      "detail": {
+        "errors": [],
+        "resources": []
+      }
+    }
+  ],
+  "families": [
+    {
+      "id": "buttons",
+      "screenshot": "buttons.png",
+      "geometry": {
+        "width": 328,
+        "height": 551,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "fields",
+      "screenshot": "fields.png",
+      "geometry": {
+        "width": 328,
+        "height": 1120.859375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "selection",
+      "screenshot": "selection.png",
+      "geometry": {
+        "width": 328,
+        "height": 1192.953125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "organization",
+      "screenshot": "organization.png",
+      "geometry": {
+        "width": 328,
+        "height": 756.015625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "data",
+      "screenshot": "data.png",
+      "geometry": {
+        "width": 328,
+        "height": 4077.328125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "messages",
+      "screenshot": "messages.png",
+      "geometry": {
+        "width": 328,
+        "height": 1560.90625,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "navigation",
+      "screenshot": "navigation.png",
+      "geometry": {
+        "width": 328,
+        "height": 1018,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "surfaces",
+      "screenshot": "surfaces.png",
+      "geometry": {
+        "width": 328,
+        "height": 662.9375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "info-strip",
+      "screenshot": "info-strip.png",
+      "geometry": {
+        "width": 328,
+        "height": 1180.734375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "metric-comparison",
+      "screenshot": "metric-comparison.png",
+      "geometry": {
+        "width": 328,
+        "height": 2598.375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "account-settings",
+      "screenshot": "account-settings.png",
+      "geometry": {
+        "width": 328,
+        "height": 338.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "access-gateway",
+      "screenshot": "access-gateway.png",
+      "geometry": {
+        "width": 328,
+        "height": 532.984375,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "order-schedule",
+      "screenshot": "order-schedule.png",
+      "geometry": {
+        "width": 328,
+        "height": 1105.078125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    },
+    {
+      "id": "carousel",
+      "screenshot": "carousel.png",
+      "geometry": {
+        "width": 328,
+        "height": 457.03125,
+        "documentWidth": 360,
+        "viewport": 360,
+        "visible": true
+      }
+    }
+  ],
+  "variants": [
+    {
+      "id": "donut",
+      "screenshot": "variant-donut.png",
+      "geometry": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "main-metric-featured",
+      "screenshot": "variant-main-metric-featured.png",
+      "geometry": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "bubbles",
+      "screenshot": "variant-bubbles.png",
+      "geometry": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "metric-circles",
+      "screenshot": "variant-metric-circles.png",
+      "geometry": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "packed-circle",
+      "screenshot": "variant-packed-circle.png",
+      "geometry": {
+        "visible": true,
+        "width": 296,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "info-strip-peek",
+      "screenshot": "variant-info-strip-peek.png",
+      "geometry": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "data-readable",
+      "screenshot": "variant-data-readable.png",
+      "geometry": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    },
+    {
+      "id": "metric-readable",
+      "screenshot": "variant-metric-readable.png",
+      "geometry": {
+        "visible": true,
+        "width": 328,
+        "viewport": 360,
+        "documentWidth": 360
+      }
+    }
+  ],
+  "textGeometry": [
+    {
+      "box": {
+        "left": 32,
+        "right": 268,
+        "top": 26.046875,
+        "bottom": 130.046875
+      },
+      "rects": [
+        {
+          "left": 38.734375,
+          "right": 268,
+          "top": 29.046875,
+          "bottom": 49.046875
+        },
+        {
+          "left": 32.765625,
+          "right": 268,
+          "top": 55.046875,
+          "bottom": 75.046875
+        },
+        {
+          "left": 36.265625,
+          "right": 268,
+          "top": 81.046875,
+          "bottom": 101.046875
+        },
+        {
+          "left": 216.09375,
+          "right": 268,
+          "top": 107.046875,
+          "bottom": 127.046875
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "مؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدوية",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-name",
+      "family": "organization",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 32,
+        "right": 268,
+        "top": 208.03125,
+        "bottom": 248
+      },
+      "rects": [
+        {
+          "left": 34.1875,
+          "right": 268,
+          "top": 209.03125,
+          "bottom": 226.03125
+        },
+        {
+          "left": 133.03125,
+          "right": 268,
+          "top": 229.015625,
+          "bottom": 246.015625
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "business.contact@long-small-business-domain-name.example",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-sub",
+      "family": "organization",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 32,
+        "right": 268,
+        "top": 284,
+        "bottom": 343.953125
+      },
+      "rects": [
+        {
+          "left": 32.875,
+          "right": 268,
+          "top": 285,
+          "bottom": 302
+        },
+        {
+          "left": 42.984375,
+          "right": 268,
+          "top": 304.984375,
+          "bottom": 321.984375
+        },
+        {
+          "left": 238.4375,
+          "right": 268,
+          "top": 324.96875,
+          "bottom": 341.96875
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "contact@smallbusinessdomainsmallbusinessdomainsmallbusinessdomain.example",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-sub-unbroken",
+      "family": "organization",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 72,
+        "right": 320,
+        "top": 347.953125,
+        "bottom": 431.953125
+      },
+      "rects": [
+        {
+          "left": 79.0625,
+          "right": 320,
+          "top": 349.953125,
+          "bottom": 372.953125
+        },
+        {
+          "left": 79.0625,
+          "right": 320,
+          "top": 377.953125,
+          "bottom": 400.953125
+        },
+        {
+          "left": 79.0625,
+          "right": 320,
+          "top": 405.953125,
+          "bottom": 428.953125
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "متابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرة",
+      "clipped": false,
+      "contained": true,
+      "id": "section-title",
+      "family": "organization",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 32,
+        "right": 328,
+        "top": 443.953125,
+        "bottom": 487.921875
+      },
+      "rects": [
+        {
+          "left": 35.296875,
+          "right": 328,
+          "top": 444.953125,
+          "bottom": 462.953125
+        },
+        {
+          "left": 88.921875,
+          "right": 328,
+          "top": 466.9375,
+          "bottom": 484.9375
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "وصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغير",
+      "clipped": false,
+      "contained": true,
+      "id": "section-desc",
+      "family": "organization",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 108,
+        "right": 280,
+        "top": 459.921875,
+        "bottom": 569.84375
+      },
+      "rects": [
+        {
+          "left": 110.78125,
+          "right": 280,
+          "top": 460.921875,
+          "bottom": 478.921875
+        },
+        {
+          "left": 108.375,
+          "right": 280,
+          "top": 482.90625,
+          "bottom": 500.90625
+        },
+        {
+          "left": 113.015625,
+          "right": 280,
+          "top": 504.890625,
+          "bottom": 522.890625
+        },
+        {
+          "left": 111.53125,
+          "right": 280,
+          "top": 526.875,
+          "bottom": 544.875
+        },
+        {
+          "left": 268.84375,
+          "right": 280,
+          "top": 548.859375,
+          "bottom": 566.859375
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "تعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولة",
+      "clipped": false,
+      "contained": true,
+      "id": "note-title",
+      "family": "messages",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 48,
+        "right": 312,
+        "top": 671.796875,
+        "bottom": 715.765625
+      },
+      "rects": [
+        {
+          "left": 54.1875,
+          "right": 312,
+          "top": 672.796875,
+          "bottom": 690.796875
+        },
+        {
+          "left": 166.640625,
+          "right": 312,
+          "top": 694.78125,
+          "bottom": 712.78125
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "request.reference@long-small-business-domain-name.example",
+      "clipped": false,
+      "contained": true,
+      "id": "note-body-control",
+      "family": "messages",
+      "direction": "rtl"
+    },
+    {
+      "box": {
+        "left": 92,
+        "right": 328,
+        "top": 26.046875,
+        "bottom": 130.046875
+      },
+      "rects": [
+        {
+          "left": 92,
+          "right": 321.265625,
+          "top": 29.046875,
+          "bottom": 49.046875
+        },
+        {
+          "left": 92,
+          "right": 327.234375,
+          "top": 55.046875,
+          "bottom": 75.046875
+        },
+        {
+          "left": 92,
+          "right": 323.734375,
+          "top": 81.046875,
+          "bottom": 101.046875
+        },
+        {
+          "left": 92,
+          "right": 143.90625,
+          "top": 107.046875,
+          "bottom": 127.046875
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "مؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدويةمؤسسةالمشاريعالصغيرةوالصناعاتاليدوية",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-name",
+      "family": "organization",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 92,
+        "right": 328,
+        "top": 208.03125,
+        "bottom": 248
+      },
+      "rects": [
+        {
+          "left": 92,
+          "right": 325.8125,
+          "top": 209.03125,
+          "bottom": 226.03125
+        },
+        {
+          "left": 92,
+          "right": 226.96875,
+          "top": 229.015625,
+          "bottom": 246.015625
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "business.contact@long-small-business-domain-name.example",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-sub",
+      "family": "organization",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 92,
+        "right": 328,
+        "top": 284,
+        "bottom": 343.953125
+      },
+      "rects": [
+        {
+          "left": 92,
+          "right": 327.125,
+          "top": 285,
+          "bottom": 302
+        },
+        {
+          "left": 92,
+          "right": 317.015625,
+          "top": 304.984375,
+          "bottom": 321.984375
+        },
+        {
+          "left": 92,
+          "right": 121.5625,
+          "top": 324.96875,
+          "bottom": 341.96875
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "contact@smallbusinessdomainsmallbusinessdomainsmallbusinessdomain.example",
+      "clipped": false,
+      "contained": true,
+      "id": "identity-sub-unbroken",
+      "family": "organization",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 40,
+        "right": 288,
+        "top": 347.953125,
+        "bottom": 431.953125
+      },
+      "rects": [
+        {
+          "left": 40,
+          "right": 280.9375,
+          "top": 349.953125,
+          "bottom": 372.953125
+        },
+        {
+          "left": 40,
+          "right": 280.9375,
+          "top": 377.953125,
+          "bottom": 400.953125
+        },
+        {
+          "left": 40,
+          "right": 280.9375,
+          "top": 405.953125,
+          "bottom": 428.953125
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "متابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرةمتابعةتفاصيلطلباتالمشاريعالصغيرة",
+      "clipped": false,
+      "contained": true,
+      "id": "section-title",
+      "family": "organization",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 32,
+        "right": 328,
+        "top": 443.953125,
+        "bottom": 487.921875
+      },
+      "rects": [
+        {
+          "left": 32,
+          "right": 324.703125,
+          "top": 444.953125,
+          "bottom": 462.953125
+        },
+        {
+          "left": 32,
+          "right": 271.078125,
+          "top": 466.9375,
+          "bottom": 484.9375
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "وصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغيروصفالطلباتالخاصةبالمشروعالصغير",
+      "clipped": false,
+      "contained": true,
+      "id": "section-desc",
+      "family": "organization",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 80,
+        "right": 252,
+        "top": 459.921875,
+        "bottom": 569.84375
+      },
+      "rects": [
+        {
+          "left": 80,
+          "right": 249.21875,
+          "top": 460.921875,
+          "bottom": 478.921875
+        },
+        {
+          "left": 80,
+          "right": 251.625,
+          "top": 482.90625,
+          "bottom": 500.90625
+        },
+        {
+          "left": 80,
+          "right": 246.984375,
+          "top": 504.890625,
+          "bottom": 522.890625
+        },
+        {
+          "left": 80,
+          "right": 248.46875,
+          "top": 526.875,
+          "bottom": 544.875
+        },
+        {
+          "left": 80,
+          "right": 91.15625,
+          "top": 548.859375,
+          "bottom": 566.859375
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "تعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولةتعذرإتمامطلبتحديثالبياناتيرجىإعادةالمحاولة",
+      "clipped": false,
+      "contained": true,
+      "id": "note-title",
+      "family": "messages",
+      "direction": "ltr"
+    },
+    {
+      "box": {
+        "left": 48,
+        "right": 312,
+        "top": 671.796875,
+        "bottom": 715.765625
+      },
+      "rects": [
+        {
+          "left": 48,
+          "right": 305.8125,
+          "top": 672.796875,
+          "bottom": 690.796875
+        },
+        {
+          "left": 48,
+          "right": 193.359375,
+          "top": 694.78125,
+          "bottom": 712.78125
+        }
+      ],
+      "root": {
+        "left": 16,
+        "right": 344
+      },
+      "documentWidth": 360,
+      "viewport": 360,
+      "text": "request.reference@long-small-business-domain-name.example",
+      "clipped": false,
+      "contained": true,
+      "id": "note-body-control",
+      "family": "messages",
+      "direction": "ltr"
+    }
+  ],
+  "sourceSha256": {
+    "components/organization/organization.css": "6371103224c283eb925a783b4f8cb81b1632b7f0df2a140ac6ba0d2612e7e48f",
+    "components/messages/messages.css": "3ce1d3b13670bc9b3ae1e6124237916d52b1016b4a592b4ad801e35eaf7597cb",
+    "components/info-strip/info-strip.js": "2e823aef8484b9e03d512ad3c62e88de44f6accbb50825fab2f3c1560aad8824",
+    "components/info-strip/info-strip-peek.js": "777ea3c923febbd180b6fdd7f1d1337cf820f6320150a4a22bba3eb914b90f74",
+    "previews/ui-system-showcase/index.html": "df7103de60fac5f28ad7578211b623aac7dd7c9e7593478575183f1764845dc3",
+    "previews/ui-system-showcase/showcase.js": "18394acdd76c10c4ed7ae9cab23ad9015874a4e5b686dcbebfe494a17f547d58"
+  },
+  "limits": [
+    "Chromium automation and inspected screenshots; no physical device or screen reader.",
+    "Historical SourceRef serves CSS/JS without checking out a branch.",
+    "This audit does not implement compositions or establish Micro integration acceptance."
+  ]
+}

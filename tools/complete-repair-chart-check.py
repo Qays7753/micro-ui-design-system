@@ -44,6 +44,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/shared/tokens.css">
 <link rel="stylesheet" href="/shared/motion.css">
+<link rel="stylesheet" href="/components/buttons/buttons.css">
 <link rel="stylesheet" href="/components/data/data.css">
 <link rel="stylesheet" href="/components/data/packed-circle.css">
 <style>html,body{margin:0;width:100%;min-width:0}#host{width:100%;min-width:0}

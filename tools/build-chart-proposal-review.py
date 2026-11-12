@@ -36,7 +36,7 @@ def build(source=SOURCE):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');a=p.parse_args()
-    pages=[(SOURCE,OUT),(SOURCE.parent/'orders.html',OUT.parent/'review-orders.html'),(ROOT/'previews/readable-source/index.html',ROOT/'docs/audits/readable-source-2026-11-12/review.html'),(ROOT/'previews/readable-acceptance/index.html',ROOT/'docs/audits/readable-acceptance-2026-11-12/review-cases.html')]
+    pages=[(SOURCE,OUT),(SOURCE.parent/'orders.html',OUT.parent/'review-orders.html'),(ROOT/'previews/readable-source/index.html',ROOT/'docs/audits/readable-source-2026-11-12/review.html'),(ROOT/'previews/readable-acceptance/index.html',ROOT/'docs/audits/readable-acceptance-2026-11-12/review-cases.html'),(ROOT/'previews/readable-source/index.html',ROOT/'docs/audits/shared-actions-2026-11-12/review.html')]
     failed=False
     for source,dest in pages:
         html=build(source)

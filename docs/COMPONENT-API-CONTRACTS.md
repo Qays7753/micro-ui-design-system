@@ -169,3 +169,7 @@
 ## امتدادات المصدر الاختيارية 2026-11-12
 
 Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init/sync/disconnect(root?) لاختصار تكرار وحدة بسياق صريح. [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](READABLE-SOURCE.md). D01/Menu/Calendar metadata مستمرة التأجيل.
+
+## استهلاك B01 داخل الرسوم — 2026-11-12
+
+لا تغيير في API أو أسماء الأحداث أو IDs/hooks الجداول. أضيفت أصناف B01 secondary للأفعال المولدة، ويعاد تطبيقها على جدول منسوخ/قديم عند init/render. الاعتماد CSS على buttons.css شرط تحميل معلن؛ لا يلزم buttons.js بلا API تحميل. [عقد الأفعال والتغيير الاستهلاكي](SHARED-ACTIONS.md).

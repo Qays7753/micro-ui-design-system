@@ -1,0 +1,461 @@
+{
+  "snapshotMethod": "Ordinary screenshots after neutral heading tap, cleared text selection, and completed finite animations; state comparisons are independent.",
+  "sourceCommitAtRun": "c549699d114cc2741bcc7e7ab22c00306ff1d572",
+  "workingTree": true,
+  "captureOnly": false,
+  "browser": "156.0.8078.79",
+  "theme": "light",
+  "primary": "360x780 RTL",
+  "targeted": [
+    "320 controls",
+    "360 LTR"
+  ],
+  "physicalDevice": false,
+  "passed": 40,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Active JavaScript chart consumers declare B01 CSS exactly once",
+      "passed": true,
+      "detail": {
+        "consumers": [
+          "components/data/example-usage.html",
+          "components/metric-comparison/example-usage.html",
+          "previews/index.html",
+          "previews/ui-system-showcase/index.html",
+          "previews/data/index.html",
+          "previews/data/example-usage.html",
+          "previews/readable-acceptance/index.html",
+          "previews/carousel/index.html",
+          "previews/carousel/example-usage.html",
+          "previews/concepts/index.html",
+          "previews/readable-source/index.html"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "Page loads B01 CSS exactly once",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "Previous uses shared B01 classes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Previous computed appearance matches canonical secondary",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Previous standard48px target",
+      "passed": true,
+      "detail": {
+        "x": 253.015625,
+        "y": 591.671875,
+        "width": 73.984375,
+        "height": 48
+      }
+    },
+    {
+      "name": "Next uses shared B01 classes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Next computed appearance matches canonical secondary",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Next standard48px target",
+      "passed": true,
+      "detail": {
+        "x": 33,
+        "y": 591.671875,
+        "width": 61.6875,
+        "height": 48
+      }
+    },
+    {
+      "name": "Data disclosure uses shared B01 classes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Data disclosure computed appearance matches canonical secondary",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Data disclosure standard48px target",
+      "passed": true,
+      "detail": {
+        "x": 164.765625,
+        "y": 651.671875,
+        "width": 162.234375,
+        "height": 48
+      }
+    },
+    {
+      "name": "Metric disclosure uses shared B01 classes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Metric disclosure computed appearance matches canonical secondary",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Metric disclosure standard48px target",
+      "passed": true,
+      "detail": {
+        "x": 164.765625,
+        "y": 1415.625,
+        "width": 162.234375,
+        "height": 48
+      }
+    },
+    {
+      "name": "C04 disclosure retains a visible native closed marker",
+      "passed": true,
+      "detail": {
+        "display": "list-item",
+        "type": "disclosure-closed",
+        "height": 48
+      }
+    },
+    {
+      "name": "Native disclosure opens with its matching marker",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Native disclosure closes with one activation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disabled appearance remains shared",
+      "passed": true,
+      "detail": {
+        "actual": {
+          "backgroundColor": "rgb(228, 234, 232)",
+          "backgroundImage": "none",
+          "boxShadow": "none",
+          "borderRadius": "12px",
+          "color": "rgb(83, 103, 107)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        },
+        "reference": {
+          "backgroundColor": "rgb(228, 234, 232)",
+          "backgroundImage": "none",
+          "boxShadow": "none",
+          "borderRadius": "12px",
+          "color": "rgb(83, 103, 107)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        }
+      }
+    },
+    {
+      "name": "Keyboard focus appearance remains shared",
+      "passed": true,
+      "detail": {
+        "actual": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset, rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        },
+        "reference": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset, rgb(255, 255, 255) 0px 0px 0px 2px, rgb(22, 77, 89) 0px 0px 0px 4px",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        }
+      }
+    },
+    {
+      "name": "B01 pressed state inherited without a local visual override",
+      "passed": true,
+      "detail": {
+        "actual": {
+          "backgroundColor": "rgb(223, 238, 230)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        },
+        "reference": {
+          "backgroundColor": "rgb(223, 238, 230)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        }
+      }
+    },
+    {
+      "name": "Next touch changes actual item exactly once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Previous touch changes actual item exactly once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Shared table action opens native disclosure",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Rerender retains one binding and closes once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Legacy-shaped cloned disclosure is upgraded on init",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Clone owns exactly one selection box",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Boundary disables native Previous without changing selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360 source actions fit without overlap",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Targeted320 source actions fit without shrinking",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "Directional LTR source actions fit",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Page loads B01 CSS exactly once",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "Packed disclosure uses shared B01 classes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Packed disclosure computed appearance matches canonical secondary",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Packed disclosure standard48px target",
+      "passed": true,
+      "detail": {
+        "x": 165.765625,
+        "y": 5721.03125,
+        "width": 162.234375,
+        "height": 48
+      }
+    },
+    {
+      "name": "Packed disclosure opens once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Packed disclosure closes once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Candidate file preserves canonical B01 appearance with subresources blocked",
+      "passed": true,
+      "detail": {
+        "actual": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        },
+        "reference": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "backgroundImage": "none",
+          "boxShadow": "rgb(113, 134, 139) 0px 0px 0px 1px inset",
+          "borderRadius": "12px",
+          "color": "rgb(23, 45, 50)",
+          "fontFamily": "\"IBM Plex Sans\", \"IBM Plex Sans Arabic\", sans-serif",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "paddingTop": "10px",
+          "paddingBottom": "10px",
+          "paddingLeft": "16px",
+          "paddingRight": "16px",
+          "minHeight": "48px",
+          "touchAction": "manipulation"
+        }
+      }
+    },
+    {
+      "name": "Candidate file Next preserves actual780 reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Candidate file requests no external assets",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "No browser or missing resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "360 source actions fit without overlap",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Targeted320 source actions fit without shrinking",
+      "left": 16,
+      "right": 304,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "Directional LTR source actions fit",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    }
+  ],
+  "sourceSha256": {
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/compositions/reading-layout.css": "9c02da5f030a5eafb0cecb5a8951c1051d0be3fa33e7189be73d4ae31c912460",
+    "components/data/data.js": "e75985be43c79caabfa0855100c062773240b1f3f16cf9278896cbc40101ce95",
+    "components/data/data.css": "a9b91bb348cd652c8aa27768a17eadbba04a5bd18a30ac240d7fbb532a753950",
+    "components/data/packed-circle.js": "c5090d30b33e85aa020827f730ddfef55ad475cbbdd3df55f822aec864feed20",
+    "components/metric-comparison/metric-comparison.js": "8e714c846dc3124db2d242e738f5067198719fe563585d82ff4a9abdf59ccb72",
+    "components/metric-comparison/metric-comparison.css": "06392fb294b1595247571613aec00ba4cdda8b2b88410806659ad0791361b546",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7",
+    "tools/shared-actions-check.py": "4234e8d4e454e20b8c48d7ea036f20d65474511fbdbdf09dc813fedf36181b1f"
+  },
+  "limits": [
+    "Canonical CSS comparison establishes reuse, not a complete usability study.",
+    "Final owner phone review deferred by instruction; no new physical-device test."
+  ]
+}

@@ -34,10 +34,12 @@
 | selection | navigation | عرض Picker داخل طبقة حوارية | `components/navigation/navigation.css` | `components/navigation/navigation.js` |
 | selection | buttons | أزرار B01 في مشغّل أو طبقة Picker | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
 | organization | buttons | إجراء B01 داخل الصف | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
+| data | buttons | عند تشغيل data.js أو packed-circle.js لجداول الإفصاح، أو data-selection=single؛ لا يلزم لسطوح Data الثابتة CSS-only | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
 | messages | buttons | زر B01 ضمن الرسالة أو الحالة الفارغة | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
 | navigation | buttons | أزرار B01 في appbar أو الطبقة أو actionbar | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
 | navigation | fields | حقول B02 في لوحة التصفية | `components/fields/fields.css` | `components/fields/fields.js` |
 | navigation | selection | اختيارات B03 في لوحة التصفية | `components/selection/selection.css` | `components/selection/selection.js` |
+| metric-comparison | buttons | عند تشغيل metric-comparison.js لتوليد جداول الإفصاح؛ لا يلزم للهيكل الساكن غير المهيأ | `components/buttons/buttons.css` | لا يلزم لهذا الخيار |
 | order-schedule | fields | محرر خارجي من B02 يركبه المستهلك بجوار التقويم | `components/fields/fields.css` | `components/fields/fields.js` |
 
 ## التراكيب المشتركة

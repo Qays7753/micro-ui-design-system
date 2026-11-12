@@ -18,6 +18,7 @@ from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = [
+    "components/buttons/buttons.css",
     "components/data/data.css",
     "components/data/data.js",
     "components/data/packed-circle.css",
@@ -33,6 +34,7 @@ FIXTURE = """<!doctype html>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:,">
 <base href="/"><link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/shared/tokens.css">
+<link rel="stylesheet" href="/components/buttons/buttons.css">
 <link rel="stylesheet" href="/components/data/data.css">
 <link rel="stylesheet" href="/components/data/packed-circle.css">
 <link rel="stylesheet" href="/components/metric-comparison/metric-comparison.css">

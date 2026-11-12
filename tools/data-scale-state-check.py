@@ -62,6 +62,7 @@ BASE_CSS = """
 PAGE = """<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
 <base href="{base}/">
 {css}
+<link rel="stylesheet" href="components/buttons/buttons.css">
 <link rel="stylesheet" href="components/data/data.css">
 <script src="components/data/data.js"></script>
 </head><body>

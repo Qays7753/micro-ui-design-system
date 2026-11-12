@@ -213,7 +213,7 @@
       wrap.className = 'm-chart__dataset-wrap';
       btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'm-chart__disclose';
+      btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
       btn.textContent = 'عرض البيانات كجدول';
       table = document.createElement('table');
@@ -227,6 +227,7 @@
       table = wrap.querySelector('.m-chart__dataset');
     }
     // A copied disclosure has DOM state but no listener or unique owned ID.
+    if (btn) btn.classList.add('m-btn', 'm-btn--secondary');
     var binding = btn && btn.__microDatasetDisclosure;
     if (btn && table && (!binding || binding.table !== table)) {
       if (binding) btn.removeEventListener('click', binding.handler);

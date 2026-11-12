@@ -44,3 +44,7 @@
 ## بوابة القبول الحالية — 2026-11-12
 
 `python3 tools/readable-acceptance-check.py --out /tmp/readable-acceptance` فحص Light360 RTL بمحاكاة لمس، و320 موجه للجدول وLTR اتجاهي، يضاف إلى readable-source وبوابات Light الحالية. وضع capture-only يسجل إخفاق baseline ولا يصلح بوابة تسليم. [التقرير الحالي](audits/readable-acceptance-2026-11-12/REPORT.md) و[بوابة الهاتف الفعلي غير المنفذة](audits/readable-acceptance-2026-11-12/PHONE-CHECK.md). محاكاة اللمس لا ترفع Platform إلى ناجح أو Draft إلى Stable.
+
+## بوابة الأفعال المشتركة والمرشح الحالي
+
+`python3 tools/shared-actions-check.py --out /tmp/shared-actions` يقارن الشكل المحسوب للأفعال بمرجع B01 المحمّل، في الحالات العادية والمعطلة والتركيز والضغط، مع النسخ والأحداث وعدم التداخل والأصول داخل الملف المستقل. لا يكفي وجود button أو نجاح click وحدهما لقبول المظهر. [مرشح الإقفال](audits/shared-actions-2026-11-12/CANDIDATE.md) و[تغيير التحميل](SHARED-ACTIONS.md). المعاينة الهاتفية مؤجلة بقرار المالك إلى نهاية التجهيز؛ لا إغلاق تلقائي لبوابة المنصة أو رفع Draft.

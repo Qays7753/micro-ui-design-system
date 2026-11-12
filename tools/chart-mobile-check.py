@@ -17,7 +17,7 @@ from playwright.sync_api import sync_playwright
 from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCES = ["shared/tokens.css", "components/data/data.css", "components/data/data.js",
+SOURCES = ["shared/tokens.css", "components/buttons/buttons.css", "components/data/data.css", "components/data/data.js",
            "components/data/example-usage.html", "components/navigation/navigation.css",
            "components/navigation/navigation.js", "components/selection/selection.css",
            "components/selection/selection.js"]

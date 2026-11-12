@@ -102,7 +102,17 @@
       "maturity": "stable-ui",
       "preview": "previews/data/index.html",
       "api": "MicroData",
-      "dependencies": []
+      "dependencies": [],
+      "conditionalDependencies": [
+        {
+          "family": "buttons",
+          "when": "عند تشغيل data.js أو packed-circle.js لجداول الإفصاح، أو data-selection=single؛ لا يلزم لسطوح Data الثابتة CSS-only",
+          "css": [
+            "components/buttons/buttons.css"
+          ],
+          "js": []
+        }
+      ]
     },
     {
       "id": "messages",
@@ -182,7 +192,17 @@
       "maturity": "stable-ui",
       "preview": "previews/concepts/index.html",
       "api": "MicroMetricComparison",
-      "dependencies": []
+      "dependencies": [],
+      "conditionalDependencies": [
+        {
+          "family": "buttons",
+          "when": "عند تشغيل metric-comparison.js لتوليد جداول الإفصاح؛ لا يلزم للهيكل الساكن غير المهيأ",
+          "css": [
+            "components/buttons/buttons.css"
+          ],
+          "js": []
+        }
+      ]
     },
     {
       "id": "account-settings",

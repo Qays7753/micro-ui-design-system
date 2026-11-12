@@ -7,7 +7,7 @@
 .m-reading-group__period { margin:0; color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
 .m-reading-group__main { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:var(--micro-space-3); margin-block:var(--micro-space-2) var(--micro-space-3); }
 .m-reading-group__section { border-block-start:1px solid var(--micro-border-divider); padding-block-start:var(--micro-space-3); margin-block-start:var(--micro-space-3); }
-.m-reading-details > summary { display:flex; align-items:center; min-height:var(--micro-touch-min); min-width:var(--micro-touch-min); color:var(--micro-brand-primary); cursor:pointer; font-size:var(--micro-label-size); }
+.m-reading-details > summary { box-sizing:border-box; display:list-item; list-style-position:inside; min-height:var(--micro-touch-min); min-width:var(--micro-touch-min); padding-block:var(--micro-space-3); color:var(--micro-brand-primary); cursor:pointer; font-size:var(--micro-label-size); line-height:var(--micro-label-line); }
 .m-reading-details > summary:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
 .m-reading-details > p { margin:0; font-size:var(--micro-label-size); line-height:var(--micro-label-line); }
 /* Keep the unit in the accessibility tree. Never author this class manually. */

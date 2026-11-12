@@ -244,7 +244,7 @@
     var btn, table;
     if (!wrap) {
       wrap = make('div', 'm-main-metric__dataset-wrap');
-      btn = make('button', 'm-main-metric__disclose', 'عرض البيانات كجدول');
+      btn = make('button', 'm-btn m-btn--secondary m-main-metric__disclose', 'عرض البيانات كجدول');
       btn.type = 'button';
       btn.setAttribute('aria-expanded', 'false');
       table = make('table', 'm-main-metric__dataset');
@@ -257,6 +257,7 @@
       table = wrap.querySelector('.m-main-metric__dataset');
     }
     // A copied disclosure has DOM state but no listener or unique owned ID.
+    if (btn) btn.classList.add('m-btn', 'm-btn--secondary');
     var binding = btn && btn.__microDatasetDisclosure;
     if (btn && table && (!binding || binding.table !== table)) {
       if (binding) btn.removeEventListener('click', binding.handler);
