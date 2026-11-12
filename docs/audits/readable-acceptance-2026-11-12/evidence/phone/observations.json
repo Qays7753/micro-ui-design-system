@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-12",
+  "deviceReportedByOwner": "Samsung Galaxy S25",
+  "browserReportedByOwner": "Chrome",
+  "androidVersion": null,
+  "chromeVersion": null,
+  "cssViewport": null,
+  "dpr": null,
+  "previewSourceTarget": "18cfa85985df44044c8ac5c728872a299526a1f3",
+  "phoneFileHashVerified": false,
+  "addressSchemeVisible": "content://",
+  "physicalScreenshots": true,
+  "interactionVerified": false,
+  "visualApprovalGranted": false,
+  "files": [
+    {
+      "originalFilename": "2-1000153249.jpg",
+      "file": "s25-chrome-sales.jpg",
+      "sha256": "93bf5f21954523e43c25aa58b7569ebc36917387260c485ee54c73a5b81bced3",
+      "kind": "owner-supplied phone screenshot; unchanged"
+    },
+    {
+      "originalFilename": "1-1000153251.jpg",
+      "file": "s25-chrome-expenses-rows.jpg",
+      "sha256": "46c78ceae170be4bfd471adb58e0dd25c95f8c7023edb21f989e9d70668f1e0e",
+      "kind": "owner-supplied phone screenshot; unchanged"
+    }
+  ],
+  "observed": [
+    "Distinct visible150 د.أ and149 قطعة",
+    "Sales4820 and selectedWednesday920; previous and next labels visible around range",
+    "Expense rows480,320,200 د.أ;48% secondary on selectedmaterials",
+    "Quantity rows149,82,36 قطعة",
+    "Only top of progress card visible"
+  ],
+  "notVerified": [
+    "Actual taps or selection changes",
+    "Table/disclosure interaction",
+    "Phone keyboard",
+    "Complete progress card",
+    "CSS viewport, browser and OS versions",
+    "Screen reader and accessibility interaction"
+  ],
+  "usabilityNote": "Owner initially reported no buttons because this is one page. The image shows previous/next chart controls; clarify their function before attributing a component defect."
+}
