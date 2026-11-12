@@ -1,0 +1,28 @@
+/* C01: optional composition over info-strip.css. Text/data/actions belong to
+   the consumer. Load Organization for badges and Buttons for actions if used. */
+.m-info-card--context[hidden],
+.m-info-card--context [hidden] { display: none; }
+.m-info-card__heading,
+.m-info-card__meta,
+.m-info-card__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2) var(--micro-space-3);
+  min-width: 0;
+}
+.m-info-card__heading > .m-info-card__label { flex: 1 1 10ch; }
+.m-info-card__context,
+.m-info-card__qualifier,
+.m-info-card__note {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--micro-text-secondary);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+}
+.m-info-card__footer > .m-info-card__note { flex: 1 1 16ch; }
+.m-info-card--featured .m-info-card__context,
+.m-info-card--featured .m-info-card__qualifier,
+.m-info-card--featured .m-info-card__note { color: var(--micro-text-inverse); }

@@ -304,5 +304,64 @@
       ]
     }
   ],
-  "dependencyPolicy": "dependencies للعائلات الأساسية؛ conditionalDependencies لخيارات التركيب المحددة. CSS وJS والأصول وتوقيعات API موثقة في FAMILY-CONSUMPTION.md."
+  "dependencyPolicy": "dependencies للعائلات الأساسية؛ conditionalDependencies لخيارات التركيب المحددة. CSS وJS والأصول وتوقيعات API موثقة في FAMILY-CONSUMPTION.md.",
+  "compositions": [
+    {
+      "id": "value-context",
+      "contract": "C01",
+      "name": "Value with context",
+      "maturity": "draft-for-review",
+      "preview": "previews/compositions/summary-example.html",
+      "source": [
+        "components/info-strip/value-context.css"
+      ],
+      "baseFamilies": [
+        "info-strip"
+      ],
+      "optionalFamilies": [
+        "organization",
+        "buttons",
+        "messages"
+      ],
+      "api": null
+    },
+    {
+      "id": "operational-row",
+      "contract": "C02",
+      "name": "Operational row and list",
+      "maturity": "draft-for-review",
+      "preview": "previews/compositions/row-example.html",
+      "source": [
+        "components/organization/operational-row.css"
+      ],
+      "baseFamilies": [
+        "organization"
+      ],
+      "optionalFamilies": [
+        "buttons",
+        "messages"
+      ],
+      "api": null
+    },
+    {
+      "id": "form-surface",
+      "contract": "C03",
+      "name": "Controlled form surface",
+      "maturity": "draft-for-review",
+      "preview": "previews/compositions/form-example.html",
+      "source": [
+        "components/compositions/form-surface.css"
+      ],
+      "baseFamilies": [
+        "fields",
+        "buttons"
+      ],
+      "optionalFamilies": [
+        "messages",
+        "selection",
+        "navigation"
+      ],
+      "api": null
+    }
+  ]
 }

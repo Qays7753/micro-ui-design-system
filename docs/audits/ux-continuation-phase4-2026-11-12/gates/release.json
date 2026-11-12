@@ -1,0 +1,1240 @@
+{
+  "browser": "156.0.8078.79",
+  "baselineCommit": "161bb71adbed86e0df4382174cb07bd2fcb8d62d",
+  "appearance": "Light",
+  "matrixCaseCount": 1,
+  "calendarMatrixCaseCount": 1,
+  "matrix": {
+    "widths": [
+      360
+    ],
+    "directions": [
+      "rtl"
+    ],
+    "languages": [
+      "ar"
+    ],
+    "typographyLevels": [
+      1
+    ],
+    "deviceScaleFactors": [
+      1
+    ]
+  },
+  "captureOnly": false,
+  "ownerReviewScope": true,
+  "standaloneDeferred": false,
+  "sourceSha256": {
+    "assets/fonts/fonts.css": "856fb8958b820c8d2493ee14a6bdb6f0e0d29663240b5eeba20344b0db346d32",
+    "assets/fonts/IBMPlexSans-Latin-400.woff2": "3b646991d30055a93a4ecc499713d4347953a74a947ecab435ab72070cbdab0e",
+    "assets/fonts/IBMPlexSans-Latin-500.woff2": "0717336fb31fcdcde4b8deb3675bb4a0f7f6d484864afcd6751ac29975962203",
+    "assets/fonts/IBMPlexSans-Latin-600.woff2": "8960851d691c054ed38e259bdcf1a6190d157b4203ed5bb32c632a863fb8ec2f",
+    "assets/fonts/IBMPlexSansArabic-Arabic-400.woff2": "6010e7fd0dce5d527583951750728cbe3c895efbd16aa0f809ab8c824878c9d8",
+    "assets/fonts/IBMPlexSansArabic-Arabic-500.woff2": "90aef64fea9794f232332e907d45810ab268d1a11721340025eba2a2cdb36d5c",
+    "assets/fonts/IBMPlexSansArabic-Arabic-600.woff2": "16734a5adb27b0f363e566cbbeacec480da0dc0baa19c8f0053251c2e2bc0eac",
+    "previews/ui-system-showcase/index.html": "080c4311f6809af433d1bbe60491efc7641dd896dca9c564e82915c959ed64c9",
+    "previews/ui-system-showcase/showcase.css": "84fe20a7d8e64fc0c248c990f1378bc533e770db9bea4027790b78402fe3dadf",
+    "previews/ui-system-showcase/showcase.js": "18394acdd76c10c4ed7ae9cab23ad9015874a4e5b686dcbebfe494a17f547d58",
+    "previews/ui-system-showcase/standalone.html": "4b6e79dcfa498e7bf3fbea1c3140b8451d1fa5e3c5e963eedad934db4d9bcdf1",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7",
+    "shared/motion.css": "37e7b88c188df77f2c834b02cb29bd2db58192520fb476a1d20f59d7b85b25dd",
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/buttons/buttons.js": "dc96d2ac84a0e5ca7cf716358a547fee3ab35c53e8cdb100d624a2aa84451a07",
+    "components/fields/fields.css": "b661a5bcf5f1b653165e2bc622c8a9ef735a262fccd1c68224efeaa510799275",
+    "components/fields/fields.js": "9962d2548dacd463f149b57a0160d803e4c3877566540a96edc6e32453f161e2",
+    "components/selection/selection.css": "78a7aa84c7c891680705d46c545436b57a0e47bca8b1999ebde725df967c533e",
+    "components/selection/selection.js": "388df54a1cd49fb0013d9ea1291d3a27db6dc782e43d58f103431188aa8b2fcf",
+    "components/selection/picker.css": "7aa8b7aedff1f9ada3090ffeafc3f99e4717c7eae5a4d9d77b3931eab6cf7dff",
+    "components/selection/picker.js": "811a37d04850351930676221bec1f684f6519a16a1aeb2fa4b1ad2cd9d86aad1",
+    "components/organization/organization.css": "6371103224c283eb925a783b4f8cb81b1632b7f0df2a140ac6ba0d2612e7e48f",
+    "components/organization/organization.js": "dbe3d39c1444aa74ed61ae8df1026d15c57e12c0228ec511e1022493b3b0b445",
+    "components/data/data.css": "398bb6ae17aa319dd41bd6d8cf95e3ee71c9b145ec0299dee9cd020e235efef6",
+    "components/data/data.js": "7377df639eb86df3a62f1f4db7daa2bf1b2666ce82f1878603e421e1062f0815",
+    "components/data/packed-circle.css": "0c8d7fb6cb072257ef29f9ee2da808f265a875f18eeb022954b44a1145621a8b",
+    "components/data/packed-circle.js": "73bb5707e9233149bd8a049cda74e8377e68be88755f041e186dc647a58b3a82",
+    "components/messages/messages.css": "3ce1d3b13670bc9b3ae1e6124237916d52b1016b4a592b4ad801e35eaf7597cb",
+    "components/messages/messages.js": "1d32d98cc0c5ddae9c4ae29fecae6ca2943d0839b57a8f0cc3452c60bf9c92b6",
+    "components/navigation/navigation.css": "45112b123b228d31f55a880eb6c026ec9f2dfad5e0598e28c2713b0dc244a58c",
+    "components/navigation/navigation.js": "52e740cb3a208ac921c20cb0773bc0e26e09d879cf72e639c3f822efd968cb72",
+    "components/surfaces/surfaces.css": "e6003efe59e48522f827cf7b0e8d6a7208ec02a3202657ba58276f67e7ab9845",
+    "components/surfaces/curves.css": "fa4d0058d92c5f34938951f65b795d12139388cbe2f758b307a902bb51ca12d6",
+    "components/info-strip/info-strip.css": "c0b471dd3379e7d5d907759f1350a4c8a6d9459baa2406eea4909912c0fa20d0",
+    "components/info-strip/info-strip.js": "2e823aef8484b9e03d512ad3c62e88de44f6accbb50825fab2f3c1560aad8824",
+    "components/info-strip/info-strip-peek.css": "98a8c9e9acfcf191980d2e890531f8c6a12419b130c7efda18c906d7a6bc3173",
+    "components/info-strip/info-strip-peek.js": "777ea3c923febbd180b6fdd7f1d1337cf820f6320150a4a22bba3eb914b90f74",
+    "components/metric-comparison/metric-comparison.css": "a808ac005dcf0734446dbb3e39031e6e3544571dcd5a675b793253a1434d3e3d",
+    "components/metric-comparison/metric-comparison.js": "7d2565c9c48364ba0cdf0f5fa9cee7f11047cd94cd8fc2f388c228019e593404",
+    "components/account-settings/account-settings.css": "bb7016c8fd8e481e5a7679435287591a5f69756380a1533a136233f78ce1199e",
+    "components/account-settings/account-settings.js": "66aae7739446c51e520a54c1ddf1b948da95a9deccf594b177bb6fd40b62041e",
+    "components/access-gateway/access-gateway.css": "dd35979a3254f1a387cfcfd88b01777d96dbf18049c3cf6db1f9ff6f1926f12c",
+    "components/access-gateway/access-gateway.js": "6a36bcb36d5197dde20b5aac423d1d523216c7e88bf005aa056ee9b3673eeaff",
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "components/carousel/carousel.css": "5b7fcfcfa521066d7116cc4eee13894e42f4ef7810b0b375977f353317692b8e",
+    "components/carousel/carousel.js": "9af5019569170f09cd020e12961113820deb4a8f2b84c9fa26cb37a31292fafa"
+  },
+  "logoV2": {
+    "baselineFileCount": 121,
+    "currentFileCount": 121,
+    "unchanged": true
+  },
+  "matrixCases": [
+    {
+      "case": "360-rtl-ar-type1-dpr1",
+      "theme": "light",
+      "colorScheme": "light",
+      "lang": "ar",
+      "canvasLang": "ar",
+      "fixtureLang": "ar",
+      "componentLanguages": [
+        "ar",
+        "ar",
+        "ar",
+        "ar",
+        "ar"
+      ],
+      "dir": "rtl",
+      "view": "overview",
+      "visibleComponents": [
+        {
+          "selector": ".m-btn",
+          "visible": 3
+        },
+        {
+          "selector": ".m-field",
+          "visible": 2
+        },
+        {
+          "selector": ".m-info-card",
+          "visible": 2
+        },
+        {
+          "selector": "[data-main-comparison]",
+          "visible": 1
+        }
+      ],
+      "visibleLogs": 0,
+      "visibleDebug": 0,
+      "pageWidth": 360,
+      "viewport": 360,
+      "accentCount": 1,
+      "applicableControls": [
+        {
+          "name": "حفظ العملية",
+          "width": 111.3125,
+          "height": 48
+        },
+        {
+          "name": "تصفية\n            2",
+          "width": 130.75,
+          "height": 48
+        },
+        {
+          "name": "إجراء نصي خفيف",
+          "width": 135.90625,
+          "height": 48
+        }
+      ],
+      "fieldValue": "صابون زيت الزيتون",
+      "fieldInViewport": true,
+      "demoValue": "قيمة تبقى عند الخطأ",
+      "englishHostLabel": "اسم الصنف",
+      "englishSurfaceTitle": "الأسطح STABLE UI",
+      "englishAction": "حفظ العملية",
+      "fieldLabelPx": 14,
+      "sourceCanvas": true
+    }
+  ],
+  "calendarMatrixCases": [
+    {
+      "case": "calendar-328-rtl-ar-type1-dpr1",
+      "viewportWidth": 360,
+      "rootWidth": 328,
+      "direction": "rtl",
+      "hostLanguage": "ar",
+      "typographyLevel": 1,
+      "deviceScaleFactor": 1,
+      "layout": "month-grid",
+      "typeMetrics": {
+        "scale": 1,
+        "baseline": [],
+        "scaled": []
+      },
+      "finalGeometry": {
+        "root": {
+          "x": 16,
+          "y": 8,
+          "width": 328,
+          "height": 542,
+          "top": 8,
+          "right": 344,
+          "bottom": 550,
+          "left": 16
+        },
+        "documentWidth": 360,
+        "viewport": 360,
+        "selected": "2026-10-07"
+      }
+    }
+  ],
+  "browserErrors": [],
+  "passed": 35,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "360-rtl-ar-type1-dpr1: pinned Light rendering, real source view and fixture language",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "360-rtl-ar-type1-dpr1: visible real components with clean Overview and no horizontal page overflow",
+      "passed": true,
+      "detail": {
+        "theme": "light",
+        "colorScheme": "light",
+        "lang": "ar",
+        "canvasLang": "ar",
+        "fixtureLang": "ar",
+        "componentLanguages": [
+          "ar",
+          "ar",
+          "ar",
+          "ar",
+          "ar"
+        ],
+        "dir": "rtl",
+        "view": "overview",
+        "visibleComponents": [
+          {
+            "selector": ".m-btn",
+            "visible": 3
+          },
+          {
+            "selector": ".m-field",
+            "visible": 2
+          },
+          {
+            "selector": ".m-info-card",
+            "visible": 2
+          },
+          {
+            "selector": "[data-main-comparison]",
+            "visible": 1
+          }
+        ],
+        "visibleLogs": 0,
+        "visibleDebug": 0,
+        "pageWidth": 360,
+        "viewport": 360,
+        "accentCount": 1,
+        "applicableControls": [
+          {
+            "name": "حفظ العملية",
+            "width": 111.3125,
+            "height": 48
+          },
+          {
+            "name": "تصفية\n            2",
+            "width": 130.75,
+            "height": 48
+          },
+          {
+            "name": "إجراء نصي خفيف",
+            "width": 135.90625,
+            "height": 48
+          }
+        ],
+        "fieldValue": "صابون زيت الزيتون",
+        "fieldInViewport": true,
+        "demoValue": "قيمة تبقى عند الخطأ",
+        "englishHostLabel": "اسم الصنف",
+        "englishSurfaceTitle": "الأسطح STABLE UI",
+        "englishAction": "حفظ العملية",
+        "fieldLabelPx": 14,
+        "sourceCanvas": true
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: root width, adaptive layout, selected/displayed dates and actual host text",
+      "passed": true,
+      "detail": {
+        "initial": {
+          "layout": "month-grid",
+          "compact": "true",
+          "gridDays": 31,
+          "gridTotal": 35,
+          "gridOut": 4,
+          "rootWidth": 328,
+          "rootClient": 328,
+          "rootScroll": 328,
+          "documentWidth": 360,
+          "viewport": 360,
+          "selected": "2026-10-07",
+          "displayed": "10 / 2026",
+          "rows": [
+            "طلب تنظيف موقع العمل"
+          ],
+          "documentLanguage": "ar",
+          "hostLang": "",
+          "direction": "rtl",
+          "interactiveButtons": [
+            {
+              "action": "view",
+              "width": 61.640625,
+              "height": 40
+            },
+            {
+              "action": "view",
+              "width": 61.65625,
+              "height": 40
+            },
+            {
+              "action": "view",
+              "width": 61.65625,
+              "height": 40
+            },
+            {
+              "action": "mode-toggle",
+              "width": 131.046875,
+              "height": 48
+            },
+            {
+              "action": "month-picker",
+              "width": 121.1875,
+              "height": 48
+            },
+            {
+              "action": "prev-month",
+              "width": 48,
+              "height": 48
+            },
+            {
+              "action": "next-month",
+              "width": 48,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "day-cell",
+              "width": 46.5625,
+              "height": 48
+            },
+            {
+              "action": "add",
+              "width": 132.40625,
+              "height": 48
+            },
+            {
+              "action": "order-row",
+              "width": 326,
+              "height": 79.984375
+            }
+          ]
+        },
+        "typeMetrics": {
+          "scale": 1,
+          "baseline": [],
+          "scaled": []
+        }
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: no page/root horizontal overflow and all targets meet the documented geometry contract",
+      "passed": true,
+      "detail": {
+        "document": 360,
+        "viewport": 360,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "compact": "true",
+        "buttons": [
+          {
+            "action": "view",
+            "width": 61.640625,
+            "height": 40
+          },
+          {
+            "action": "view",
+            "width": 61.65625,
+            "height": 40
+          },
+          {
+            "action": "view",
+            "width": 61.65625,
+            "height": 40
+          },
+          {
+            "action": "mode-toggle",
+            "width": 131.046875,
+            "height": 48
+          },
+          {
+            "action": "month-picker",
+            "width": 121.1875,
+            "height": 48
+          },
+          {
+            "action": "prev-month",
+            "width": 48,
+            "height": 48
+          },
+          {
+            "action": "next-month",
+            "width": 48,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "day-cell",
+            "width": 46.5625,
+            "height": 48
+          },
+          {
+            "action": "add",
+            "width": 132.40625,
+            "height": 48
+          },
+          {
+            "action": "order-row",
+            "width": 326,
+            "height": 79.984375
+          }
+        ]
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: host-provided empty state is exposed without stale rows",
+      "passed": true,
+      "detail": {
+        "emptyStatusCount": 1
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: single long Arabic/English host order remains intact and selected",
+      "passed": true,
+      "detail": {
+        "rows": [
+          "طلب تجهيز استقبال الوفد في قاعة الاجتماعات الرئيسية مع تنسيق المستلزمات"
+        ],
+        "selected": "2026-10-07"
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: multiple orders preserve all five source rows and truthful day count",
+      "passed": true,
+      "detail": {
+        "rows": [
+          "طلب تجهيز استقبال الوفد في قاعة الاجتماعات الرئيسية مع تنسيق المستلزمات",
+          "طلب تجهيز مكتب الاستقبال",
+          "طلب مستلزمات الضيافة",
+          "طلب قرطاسية إدارية",
+          "طلب صيانة أجهزة العرض"
+        ],
+        "count": "07/10/2026، 5 طلبات",
+        "selected": "2026-10-07"
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: real loading/error/retry states remain accessible",
+      "passed": true,
+      "detail": {
+        "loading": true,
+        "error": true,
+        "retryCount": 1
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: month/year picker opens with real focus, 48px month targets and no overflow",
+      "passed": true,
+      "detail": {
+        "open": true,
+        "expanded": "true",
+        "active": "picker-month",
+        "monthTargets": [
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          },
+          {
+            "width": 98,
+            "height": 48
+          }
+        ],
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: picker changes displayed month only, preserves the selected date, and the day panel stays honest",
+      "passed": true,
+      "detail": {
+        "title": "01 / 2027",
+        "selected": "2026-10-07",
+        "pickerCount": 0,
+        "events": 0,
+        "focus": "month-picker",
+        "browsing": "true",
+        "panelTitle": "لا يوم محدد في 01 / 2027"
+      }
+    },
+    {
+      "name": "calendar-328-rtl-ar-type1-dpr1: Escape closes the picker and restores trigger focus",
+      "passed": true,
+      "detail": {
+        "closed": true,
+        "focus": "month-picker"
+      }
+    },
+    {
+      "name": "rebuilt standalone starts on the clean mobile app preview with real embedded components",
+      "passed": true,
+      "detail": {
+        "view": "app",
+        "theme": "light",
+        "appVisible": true,
+        "reviewChromeHidden": true,
+        "ocal": true,
+        "fields": true,
+        "metric": true,
+        "visibleLogs": 0,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "direct State Lab route keeps its tools and selects the active navigation link",
+      "passed": true,
+      "detail": {
+        "view": "state",
+        "stateLink": "page",
+        "controls": true
+      }
+    },
+    {
+      "name": "State Lab control changes persist as actual direction, width, fixture, filter and diagnostics",
+      "passed": true,
+      "detail": {
+        "dir": "rtl",
+        "width": "360px",
+        "fixture": "true",
+        "filter": "true",
+        "logRoot": true,
+        "stateView": "state"
+      }
+    },
+    {
+      "name": "State Lab segmented controls retain the contracted expanded 48px touch hitbox",
+      "passed": true,
+      "detail": [
+        {
+          "text": "RTL (الافتراضي)",
+          "width": 131.265625,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "LTR للمقارنة",
+          "width": 109.65625,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "320",
+          "width": 60.8125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "360",
+          "width": 60.8125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "390",
+          "width": 60.8125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "430",
+          "width": 60.8125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "عادي",
+          "width": 64.53125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "إجهاد (نصوص طويلة وأرقام كبيرة)",
+          "width": 243.09375,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "current / reference",
+          "width": 170.140625,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "draft / proposed",
+          "width": 150.984375,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        },
+        {
+          "text": "الكل",
+          "width": 59.578125,
+          "height": 40,
+          "minWidth": "48px",
+          "hitStart": "-4px",
+          "hitEnd": "-4px"
+        }
+      ]
+    },
+    {
+      "name": "deep link #state-lab exposes State Lab and brings its real target into view",
+      "passed": true,
+      "detail": {
+        "view": "state",
+        "found": true,
+        "visible": true,
+        "scrollY": 360,
+        "targetTop": 0.328125,
+        "controls": true
+      }
+    },
+    {
+      "name": "deep link #brand-proof exposes State Lab and brings its real target into view",
+      "passed": true,
+      "detail": {
+        "view": "state",
+        "found": true,
+        "visible": true,
+        "scrollY": 869,
+        "targetTop": 0.453125,
+        "controls": true
+      }
+    },
+    {
+      "name": "deep link #sc-fields exposes State Lab and brings its real target into view",
+      "passed": true,
+      "detail": {
+        "view": "state",
+        "found": true,
+        "visible": true,
+        "scrollY": 2694,
+        "targetTop": -0.09375,
+        "controls": true
+      }
+    },
+    {
+      "name": "deep link #sc-ocal exposes State Lab and brings its real target into view",
+      "passed": true,
+      "detail": {
+        "view": "state",
+        "found": true,
+        "visible": true,
+        "scrollY": 17711,
+        "targetTop": 0.234375,
+        "controls": true
+      }
+    },
+    {
+      "name": "field fixture starts normal with one host-associated message node",
+      "passed": true,
+      "detail": {
+        "count": 1,
+        "msgId": "m-field-msg-6",
+        "describedby": [
+          "m-field-msg-6"
+        ],
+        "value": "قيمة تبقى عند الخطأ"
+      }
+    },
+    {
+      "name": "field error is visible once, invalid, described and preserves the value",
+      "passed": true,
+      "detail": {
+        "classes": "m-field has-error",
+        "visible": true,
+        "visibleMessages": 1,
+        "invalid": "true",
+        "describedby": [
+          "m-field-msg-6"
+        ],
+        "value": "قيمة تبقى عند الخطأ",
+        "text": "أكمل القيمة المطلوبة ثم أعد التحقق؛ لم تتغير القيمة."
+      }
+    },
+    {
+      "name": "field success replaces error in the same single visible node and clears invalid",
+      "passed": true,
+      "detail": {
+        "classes": "m-field has-success",
+        "visible": true,
+        "count": 1,
+        "invalid": null,
+        "value": "قيمة تبقى عند الخطأ",
+        "text": "تم التحقق من القيمة بنجاح."
+      }
+    },
+    {
+      "name": "field clear removes state/message without clearing the user value",
+      "passed": true,
+      "detail": {
+        "classes": "m-field",
+        "hidden": true,
+        "text": "",
+        "invalid": null,
+        "value": "قيمة تبقى عند الخطأ"
+      }
+    },
+    {
+      "name": "field input returns to normal while retaining the newly typed value",
+      "passed": true,
+      "detail": {
+        "value": "Typed after clear",
+        "classes": "m-field",
+        "hidden": true
+      }
+    },
+    {
+      "name": "FIELD-001: actual focused error input retains a visible non-stacked focus boundary",
+      "passed": true,
+      "detail": {
+        "focusWithin": true,
+        "shadow": "rgba(255, 255, 255, 0.004) 0px 0px 0px 0.00673154px, rgba(22, 77, 89, 0.004) 0px 0px 0px 0.0134631px",
+        "border": "rgb(113, 134, 139)",
+        "focused": true,
+        "rect": {
+          "width": 296,
+          "height": 52
+        }
+      }
+    },
+    {
+      "name": "FIELD-002: repeated error uses one referenced message, never duplicates",
+      "passed": true,
+      "detail": {
+        "messageNodes": 1,
+        "visible": 1,
+        "describedby": [
+          "m-field-msg-6"
+        ]
+      }
+    },
+    {
+      "name": "FIELD-003: exactly three applicable step/reveal targets are at least 48px with 24px icons",
+      "passed": true,
+      "detail": {
+        "count": 3,
+        "targets": [
+          {
+            "name": "إنقاص الكمية",
+            "w": 48,
+            "h": 48,
+            "iconW": 24,
+            "iconH": 24
+          },
+          {
+            "name": "زيادة الكمية",
+            "w": 48,
+            "h": 48,
+            "iconW": 24,
+            "iconH": 24
+          },
+          {
+            "name": "إظهار كلمة المرور",
+            "w": 48,
+            "h": 48,
+            "iconW": 24,
+            "iconH": 24
+          }
+        ]
+      }
+    },
+    {
+      "name": "FIELD-003 focus boundary and icon target #sc-field-qty [data-step='up']",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "width": 48,
+        "height": 48,
+        "iconWidth": 24,
+        "iconHeight": 24
+      }
+    },
+    {
+      "name": "FIELD-003 focus boundary and icon target #sc-field-qty [data-step='down']",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "width": 48,
+        "height": 48,
+        "iconWidth": 24,
+        "iconHeight": 24
+      }
+    },
+    {
+      "name": "FIELD-003 focus boundary and icon target #sc-gateway-root [data-access-reveal]",
+      "passed": true,
+      "detail": {
+        "visible": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "width": 48,
+        "height": 48,
+        "iconWidth": 24,
+        "iconHeight": 24
+      }
+    },
+    {
+      "name": "logo v2 SHA-256 file set and contents match the 161bb71 baseline",
+      "passed": true,
+      "detail": {
+        "baselineFiles": 121,
+        "currentFiles": 121,
+        "changedOrMissing": []
+      }
+    },
+    {
+      "name": "Light-only stylesheet wraps existing legacy token definitions in a nonmatching gate unchanged",
+      "passed": true,
+      "detail": {
+        "gateFound": true,
+        "legacyBaselineSha256": "b57c24619621cfa94ac0fa12fe8bdebe7e378982083c1d28576fd0ac45b205d8",
+        "legacyCurrentSha256": "b57c24619621cfa94ac0fa12fe8bdebe7e378982083c1d28576fd0ac45b205d8"
+      }
+    },
+    {
+      "name": "brand accent remains official and distinct semantically from the data channel",
+      "passed": true,
+      "detail": {
+        "brandAccent": "#D97757",
+        "dataRole": "separately named --micro-data-b"
+      }
+    },
+    {
+      "name": "original Petrol token is unchanged from the 161bb71 baseline",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no browser script, console, or network errors",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "limitations": [
+    "Chromium source fixture only; not a real-device, Safari, screen-reader, or native-zoom claim.",
+    "Calendar and Data dedicated tool results are reported separately, not included in these counts.",
+    "Standalone startup was checked from the generated artifact."
+  ]
+}

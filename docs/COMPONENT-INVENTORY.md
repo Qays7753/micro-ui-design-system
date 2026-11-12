@@ -40,6 +40,16 @@
 | navigation | selection | اختيارات B03 في لوحة التصفية | `components/selection/selection.css` | `components/selection/selection.js` |
 | order-schedule | fields | محرر خارجي من B02 يركبه المستهلك بجوار التقويم | `components/fields/fields.css` | `components/fields/fields.js` |
 
+## التراكيب المشتركة
+
+وصفات فوق العائلات الحالية، وليست عائلات أو API JavaScript إضافية. [التحميل والملكية](COMPOSITIONS.md).
+
+| التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |
+|---|---|---|---|---|---|
+| C01 · Value with context | [`components/info-strip/value-context.css`](../components/info-strip/value-context.css) | [فتح](../previews/compositions/summary-example.html) | DRAFT FOR REVIEW | info-strip | organization, buttons, messages |
+| C02 · Operational row and list | [`components/organization/operational-row.css`](../components/organization/operational-row.css) | [فتح](../previews/compositions/row-example.html) | DRAFT FOR REVIEW | organization | buttons, messages |
+| C03 · Controlled form surface | [`components/compositions/form-surface.css`](../components/compositions/form-surface.css) | [فتح](../previews/compositions/form-example.html) | DRAFT FOR REVIEW | fields, buttons | messages, selection, navigation |
+
 ## المتغيرات
 
 | المتغير | العائلة | النضج | opt-in | المعاينة |

@@ -1,0 +1,69 @@
+/* C02: optional layout over organization.css; one reading line before metadata
+   and independent actions. No record store, row-click proxy or business state. */
+.m-operational-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.m-operational-list > .m-row + .m-row {
+  border-block-start: 1px solid var(--micro-border-divider);
+}
+.m-operational-list > li + li { border-block-start: 1px solid var(--micro-border-divider); }
+.m-row--operational {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--micro-space-2) var(--micro-space-3);
+}
+.m-row--operational > .m-row__text,
+.m-row--operational > .m-row__details { flex: 1 0 100%; min-width: 0; }
+.m-row__reading,
+.m-row__meta,
+.m-row--operational > .m-row__action {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--micro-space-2);
+  min-width: 0;
+}
+.m-row__reading { font-size: var(--micro-body-size); line-height: var(--micro-body-line); }
+.m-row__meta { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); }
+.m-row--operational > .m-row__action {
+  align-items: center;
+  margin-inline-start: auto;
+  max-width: 100%;
+}
+.m-row__primary {
+  display: flex;
+  align-items: center;
+  gap: var(--micro-space-2);
+  min-height: var(--micro-touch-min);
+  min-width: var(--micro-touch-min);
+  max-width: 100%;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--micro-radius-field);
+  cursor: pointer;
+}
+.m-row__primary > .m-row__text { min-width: 0; }
+.m-row__primary:focus-visible {
+  outline: var(--micro-focus-ring-width) solid var(--micro-focus-ring);
+  outline-offset: var(--micro-focus-gap);
+}
+.m-row__details > .m-row__primary { list-style: none; }
+.m-row__details > .m-row__primary::-webkit-details-marker { display: none; }
+.m-row__details > .m-row__primary .m-section__chevron { transform: rotate(90deg); }
+.m-row__details:dir(ltr) > .m-row__primary .m-section__chevron { transform: rotate(-90deg); }
+.m-row__details[open] > .m-row__primary .m-section__chevron { transform: none; }
+.m-row__disclosure {
+  display: grid;
+  gap: var(--micro-space-3);
+  min-width: 0;
+  padding-block: var(--micro-space-3);
+  overflow-wrap: anywhere;
+}
+.m-row__disclosure > p { margin: 0; }
+.m-operational-list[hidden],
+.m-row--operational[hidden],
+.m-row--operational [hidden] { display: none; }

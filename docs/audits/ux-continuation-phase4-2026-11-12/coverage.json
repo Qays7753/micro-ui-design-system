@@ -1,0 +1,150 @@
+{
+  "stage": 4,
+  "status": "implemented-recipes-draft-for-review",
+  "recipes": [
+    {
+      "contract": "C01",
+      "id": "value-context",
+      "source": "components/info-strip/value-context.css",
+      "ownerFamily": "info-strip",
+      "javascriptAPI": null,
+      "contexts": [
+        "count with source/state/action",
+        "amount with unit/period/qualifier and no action"
+      ],
+      "states": [
+        "zero",
+        "unavailable",
+        "signed",
+        "long",
+        "pending previous reading",
+        "error previous reading",
+        "featured optional",
+        "hidden optional footer"
+      ],
+      "consumerOwns": [
+        "formatted display value",
+        "unit",
+        "period",
+        "qualifier",
+        "state",
+        "action destination"
+      ],
+      "sourceOwns": [
+        "layout and typography via existing Info Card",
+        "wrapping and hidden semantics"
+      ],
+      "screenshots": [
+        "evidence/c01-count-360-rtl.png",
+        "evidence/c01-amount-360-rtl.png"
+      ]
+    },
+    {
+      "contract": "C02",
+      "id": "operational-row",
+      "source": "components/organization/operational-row.css",
+      "ownerFamily": "organization",
+      "javascriptAPI": null,
+      "contexts": [
+        "collection list",
+        "material list"
+      ],
+      "states": [
+        "static reading",
+        "real single link",
+        "sibling primary link and independent actions",
+        "disabled action",
+        "native details disclosure",
+        "zero",
+        "long value",
+        "empty",
+        "pending",
+        "error"
+      ],
+      "consumerOwns": [
+        "records",
+        "values",
+        "state labels",
+        "dates",
+        "action handlers"
+      ],
+      "sourceOwns": [
+        "layout and dividers",
+        "wrapping and target geometry",
+        "directional disclosure icon styling",
+        "hidden semantics"
+      ],
+      "screenshots": [
+        "evidence/c02-collection-360-rtl.png",
+        "evidence/c02-stock-360-rtl.png",
+        "evidence/c02-stock-320-rtl.png"
+      ]
+    },
+    {
+      "contract": "C03",
+      "id": "form-surface",
+      "source": "components/compositions/form-surface.css",
+      "ownerFamily": null,
+      "sharedRecipeNotNewFamily": true,
+      "javascriptAPI": null,
+      "contexts": [
+        "inline form",
+        "native HTML dialog form"
+      ],
+      "states": [
+        "prefill silent",
+        "invalid raw text",
+        "readonly",
+        "validation error",
+        "pending",
+        "duplicate submit",
+        "undefined or false neutral outcome",
+        "explicit confirmed outcome",
+        "rejected promise",
+        "editing during pending",
+        "callback replacement",
+        "teardown",
+        "late result",
+        "clean/denied/accepted close",
+        "backdrop request",
+        "persistent long error"
+      ],
+      "consumerOwns": [
+        "raw/valid/committed/dirty",
+        "handlers and result policy",
+        "pending",
+        "close policy",
+        "listener and child cleanup",
+        "scroll ownership in native example"
+      ],
+      "browserOwns": [
+        "native dialog focus and modal inert",
+        "native cancel/close platform API"
+      ],
+      "sourceOwns": [
+        "surface framing and slots",
+        "wrapping and action geometry",
+        "optional native dialog carrier style"
+      ],
+      "screenshots": [
+        "evidence/c03-inline-360-rtl.png",
+        "evidence/c03-dialog-360-rtl.png",
+        "evidence/c03-close-decision-360-rtl.png"
+      ]
+    }
+  ],
+  "catalog": {
+    "families": 14,
+    "variants": 6,
+    "newCompositions": 3,
+    "existingFamiliesAndVariantsUnchanged": true
+  },
+  "boundaryDecisions": {
+    "D01": "not implemented; Navigation byte-identical; native cancel is browser API in a preview consumer",
+    "D02": "Menu not implemented",
+    "D03": "calendar internal metadata not implemented",
+    "Micro": "no access or edits",
+    "stage5": "not started; source-only CSS dependency checks are narrower than host-boundary fixtures",
+    "stage6": "new chart design deferred"
+  }
+}

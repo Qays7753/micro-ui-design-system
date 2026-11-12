@@ -47,6 +47,20 @@ def build():
             css = '<br>'.join(f'`{path}`' for path in dep['css']) or '—'
             js = '<br>'.join(f'`{path}`' for path in dep['js']) or 'لا يلزم لهذا الخيار'
             lines.append(f"| {item['id']} | {dep['family']} | {dep['when']} | {css} | {js} |")
+    lines += ["", "## التراكيب المشتركة", "",
+              "وصفات فوق العائلات الحالية، وليست عائلات أو API JavaScript إضافية. [التحميل والملكية](COMPOSITIONS.md).", "",
+              "| التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |",
+              "|---|---|---|---|---|---|"]
+    compositions = catalog.get('compositions', [])
+    assert len({item['id'] for item in compositions}) == len(compositions)
+    for item in compositions:
+        assert item['maturity'] in LABELS, item
+        assert set(item['baseFamilies'] + item['optionalFamilies']) <= {family['id'] for family in families}, item
+        assert item['api'] is None, 'Recipes introduce no Micro* JavaScript API'
+        for path in item['source'] + [item['preview']]:
+            assert (ROOT / path).is_file(), path
+        sources = '<br>'.join(f'[`{path}`](../{path})' for path in item['source'])
+        lines.append(f"| {item['contract']} · {item['name']} | {sources} | [فتح](../{item['preview']}) | {LABELS[item['maturity']]} | {', '.join(item['baseFamilies'])} | {', '.join(item['optionalFamilies']) or '—'} |")
     lines += ["", "## المتغيرات", "", "| المتغير | العائلة | النضج | opt-in | المعاينة |", "|---|---|---|---|---|"]
     for item in catalog["variants"]:
         assert item["family"] in {family["id"] for family in families}
@@ -90,7 +104,7 @@ def main():
             raise SystemExit("Catalog inventory is stale")
         if generated != html:
             raise SystemExit("Showcase catalog payload is stale")
-        print(f"Catalog: {len(catalog['families'])} families, {len(catalog['variants'])} explicit variants, paths and inventory OK")
+        print(f"Catalog: {len(catalog['families'])} families, {len(catalog['variants'])} explicit variants, {len(catalog.get('compositions', []))} compositions, paths and inventory OK")
     else:
         output.write_text(content)
         showcase.write_text(generated)

@@ -1,0 +1,383 @@
+{
+  "stage": 4,
+  "date": "2026-11-12",
+  "timezone": "Asia/Amman",
+  "repository": "Qays7753/micro-ui-design-system",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "startCommit": "e206fab7da9c71af91e43a9b4626bcdae54a370e",
+  "mainAtStart": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "runtimeGates": [
+    {
+      "id": "release",
+      "command": "python3 tools/light-release-check.py --review-scope --out OUT/release",
+      "passed": 35,
+      "failed": 0,
+      "evidence": "gates/release.json"
+    },
+    {
+      "id": "data",
+      "command": "python3 tools/light-data-check.py --review-scope --out OUT/data",
+      "passed": 40,
+      "failed": 0,
+      "evidence": "gates/data.json"
+    },
+    {
+      "id": "calendar",
+      "command": "python3 tools/light-calendar-check.py --review-scope --out OUT/calendar.json",
+      "passed": 126,
+      "failed": 0,
+      "evidence": "gates/calendar.json"
+    },
+    {
+      "id": "calendar-contract",
+      "command": "python3 tools/calendar-contract-check.py --out OUT/calendar-contract",
+      "passed": 41,
+      "failed": 0,
+      "evidence": "gates/calendar-contract.json"
+    },
+    {
+      "id": "consumption",
+      "command": "python3 tools/component-consumption-contract-check.py --out OUT/consumption",
+      "passed": 37,
+      "failed": 0,
+      "evidence": "gates/consumption.json"
+    },
+    {
+      "id": "clone",
+      "command": "python3 tools/clone-lifecycle-check.py --out OUT/clone",
+      "passed": 31,
+      "failed": 0,
+      "evidence": "gates/clone.json"
+    },
+    {
+      "id": "runtime",
+      "command": "python3 tools/preview-runtime-check.py --base BASE_URL --review-scope --standalone-http --out OUT/runtime",
+      "passed": 28,
+      "failed": 0,
+      "evidence": "gates/runtime.json"
+    },
+    {
+      "id": "families",
+      "command": "python3 tools/ux-continuation-phase3-check.py --out OUT/families",
+      "passed": 82,
+      "failed": 0,
+      "evidence": "gates/families.json"
+    },
+    {
+      "id": "compositions",
+      "command": "python3 tools/composition-recipes-check.py --out OUT/recipes",
+      "passed": 91,
+      "failed": 0,
+      "evidence": "evidence/recipes-verification.json"
+    }
+  ],
+  "runtimePassed": 511,
+  "runtimeFailed": 0,
+  "sourceSha256": {
+    "components/info-strip/value-context.css": "0fcebb8ebc882adea99d20838cce43842cc3bc4244953baa7320d948c477f70a",
+    "components/organization/operational-row.css": "e05be9646bac2c9414c4fc70f61face921e24f1b6630189ad1150914840d2e26",
+    "components/compositions/form-surface.css": "59004a6896f6baac2552869c9710ab1bc610ba698bc482370cdcab86bab40e25",
+    "components/compositions/specification.md": "0721c2f9ea83bce4ac7b34870d3ca0fafc0aacc4814e3dcfaf6eb3ef725d102f",
+    "tools/composition-recipes-check.py": "bbae47237b910df54cdcb8fee6ba5eb82b59cb5113fe3fc108a8317dd403f632",
+    "tools/component-catalog-build.py": "d9f0228b410e75bebbe8b506ecfa55163847fddb336ab3f3033071904fd1df29",
+    "docs/COMPONENT-CATALOG.json": "1cd682966fbde4393322daf54f3de8b7823ffd401f83d724325b9d28593d3b91",
+    "docs/COMPONENT-INVENTORY.md": "35c0302129f891d9d1830c9640e21aee3ff21b4ef43e59647a15682deaa713b4",
+    "previews/compositions/index.html": "110ba12904dbbb6642fb9de0918c6db9b9643fc40181ad300e9f105c38a18b49",
+    "previews/compositions/compositions.js": "c5eb90e701b2b30d19854569a7f915ea80b146c4af44409aa4d39c9445089fb3",
+    "previews/compositions/row-example.html": "50130c4a40caf6b3362217ef96702e17de6897a659be7eb93b57744801c64a6e",
+    "previews/compositions/compositions.css": "3fd3853ad46d65ba24388f4a16f24f0ad129f174bbe611918f8c4d012fea2841",
+    "previews/compositions/form-example.html": "e09f3606234d7b03df91eb6b64965457403e61d8366f6d51718192c58cb1e0b2",
+    "previews/compositions/row-composition.css": "2d31d52a53a170ab84501a6ded821f9e2b61a5c15567b0991fcfb10d499bd17c",
+    "previews/compositions/summary-example.html": "ce568aa386f65dac38ad036339cec321e9d9dcd6b03a65dd700c4753d249cace",
+    "previews/ui-system-showcase/index.html": "080c4311f6809af433d1bbe60491efc7641dd896dca9c564e82915c959ed64c9",
+    "previews/ui-system-showcase/standalone.html": "4b6e79dcfa498e7bf3fbea1c3140b8451d1fa5e3c5e963eedad934db4d9bcdf1"
+  },
+  "identitySharedUnchanged": {
+    "count": 207,
+    "passed": true
+  },
+  "existingComponentRuntimeUnchanged": {
+    "count": 34,
+    "passed": true,
+    "files": [
+      "components/access-gateway/access-gateway.css",
+      "components/access-gateway/access-gateway.js",
+      "components/account-settings/account-settings.css",
+      "components/account-settings/account-settings.js",
+      "components/buttons/buttons.css",
+      "components/buttons/buttons.js",
+      "components/carousel/carousel.css",
+      "components/carousel/carousel.js",
+      "components/data/data.css",
+      "components/data/data.js",
+      "components/data/packed-circle.css",
+      "components/data/packed-circle.js",
+      "components/fields/fields.css",
+      "components/fields/fields.js",
+      "components/info-strip/info-strip-peek.css",
+      "components/info-strip/info-strip-peek.js",
+      "components/info-strip/info-strip.css",
+      "components/info-strip/info-strip.js",
+      "components/messages/messages.css",
+      "components/messages/messages.js",
+      "components/metric-comparison/metric-comparison.css",
+      "components/metric-comparison/metric-comparison.js",
+      "components/navigation/navigation.css",
+      "components/navigation/navigation.js",
+      "components/order-schedule/order-schedule.css",
+      "components/order-schedule/order-schedule.js",
+      "components/organization/organization.css",
+      "components/organization/organization.js",
+      "components/selection/picker.css",
+      "components/selection/picker.js",
+      "components/selection/selection.css",
+      "components/selection/selection.js",
+      "components/surfaces/curves.css",
+      "components/surfaces/surfaces.css"
+    ]
+  },
+  "catalogChange": {
+    "addedTopLevelField": "compositions",
+    "newRecipes": 3,
+    "maturity": "draft-for-review",
+    "existingFamiliesAndVariantsByteEquivalentAsObjects": true,
+    "schemaVersionUnchanged": true
+  },
+  "newMicroAccess": false,
+  "newMicroJavaScriptAPI": false,
+  "navigationD01Implemented": false,
+  "navigationSourceUnchanged": true,
+  "sourceOnlyChecks": "Three original example pages without preview stylesheet; not phase5 host simulation",
+  "measurements": {
+    "primary": "360x780 RTL Light DPR1",
+    "narrow": "320x780 only C02 long value/actions",
+    "ltr": "C02 layout/icon direction and C03 source-only form",
+    "zoomTestsRun": false,
+    "darkTestsRun": false,
+    "standalone": "HTTP transport in runtime gate; file:// not established"
+  },
+  "developmentFindings": [
+    {
+      "owner": "preview test harness",
+      "finding": "An escaped selector string initially aborted the checker; corrected quoting without changing assertions."
+    },
+    {
+      "owner": "preview consumer",
+      "finding": "A queued native close event could dispose a newly prepared controller; cleanup now uses the controller of the opened session."
+    },
+    {
+      "owner": "preview markup",
+      "finding": "HTML pattern required escaping the hyphen under the browser v flag. Completed development run84 passed/1 failed (console error); fixed pattern and added direct invalid-reference rejection assertion.",
+      "evidence": "evidence/development-pattern-check.json"
+    },
+    {
+      "owner": "preview consumer",
+      "finding": "Disposed/reopened examples must not retain a false pending announcement; cleanup and new-lifetime initialization now handle owned feedback."
+    }
+  ],
+  "staticGate": {
+    "command": "python3 tools/light-static-check.py --out OUT/static.json",
+    "passed": 262,
+    "failed": 0,
+    "evidence": "static-records.json"
+  },
+  "manifest": {
+    "command": "python3 tools/manifest-build.py --check",
+    "performedAfterFinalEvidence": true,
+    "passed": true,
+    "entries": 1024
+  },
+  "limits": [
+    "CSS/HTML recipes implemented; no shared form/business/dirty/modal JavaScript engine.",
+    "Preview consumer and CompositionPreview hooks do not belong in a product.",
+    "Native HTML dialog is a browser API, not an OS-native app or Navigation D01.",
+    "No physical device, WebKit/Safari, actual screen-reader, keyboard/safe-area acceptance.",
+    "Current-gate metadata can describe historical default matrices; executed review-scope commands are recorded.",
+    "Static source hashes record gate inputs at execution, not self-hashes of later generated verification evidence; implementation source hashes are recorded separately."
+  ],
+  "integrityChecks": [
+    {
+      "name": "14 existing families and their maturity unchanged",
+      "passed": true
+    },
+    {
+      "name": "6 existing optional variants and maturity unchanged",
+      "passed": true
+    },
+    {
+      "name": "3 unique CSS/HTML recipe contracts with no JavaScript API",
+      "passed": true
+    },
+    {
+      "name": "each recipe has two independent contexts and retained images",
+      "passed": true
+    },
+    {
+      "name": "all 91 recipe assertions and420 current guard assertions pass",
+      "passed": true
+    },
+    {
+      "name": "actual tested recipe source bytes match final working tree",
+      "passed": true
+    },
+    {
+      "name": "components/access-gateway/access-gateway.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/access-gateway/access-gateway.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/account-settings/account-settings.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/account-settings/account-settings.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/buttons/buttons.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/buttons/buttons.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/carousel/carousel.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/carousel/carousel.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/data/data.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/data/data.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/data/packed-circle.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/data/packed-circle.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/fields/fields.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/fields/fields.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/info-strip/info-strip-peek.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/info-strip/info-strip-peek.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/info-strip/info-strip.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/info-strip/info-strip.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/messages/messages.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/messages/messages.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/metric-comparison/metric-comparison.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/metric-comparison/metric-comparison.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/navigation/navigation.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/navigation/navigation.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/order-schedule/order-schedule.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/order-schedule/order-schedule.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/organization/organization.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/organization/organization.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/selection/picker.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/selection/picker.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/selection/selection.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/selection/selection.js runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/surfaces/curves.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "components/surfaces/surfaces.css runtime source unchanged",
+      "passed": true
+    },
+    {
+      "name": "Navigation D01 not implemented",
+      "passed": true
+    }
+  ],
+  "deterministicGates": [
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "passed": true,
+      "families": 14,
+      "variants": 6,
+      "compositions": 3
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "passed": true,
+      "byteEqual": true,
+      "iconsMatch": 24
+    },
+    {
+      "command": "git diff --check;git diff --cached --check",
+      "passed": true
+    }
+  ]
+}

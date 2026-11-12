@@ -1,81 +1,49 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micro — مثال حقل ومساعدة وخطأ</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
-  <link rel="stylesheet" href="../../shared/tokens.css">
-  <link rel="stylesheet" href="../../components/fields/fields.css">
-  <link rel="stylesheet" href="../../components/buttons/buttons.css">
-  <style>
-    * { box-sizing: border-box; }
-    a { color: var(--micro-primary); display: inline-flex; align-items: center; min-height: var(--micro-touch-min); }
-    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
-    main { width: min(100%, 420px); margin-inline: auto; }
-    h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.45; }
-    .demo-note { margin: 0 0 24px; color: var(--micro-text-secondary); font-size: var(--micro-label-size); line-height: var(--micro-label-line); }
-    form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
-    .m-btn { justify-self: start; }
-    .feedback { margin: 0; min-height: calc(var(--micro-label-size) * var(--micro-label-line)); font-size: var(--micro-label-size); line-height: var(--micro-label-line); color: var(--micro-text-secondary); }
-    .feedback.is-error { color: var(--micro-danger); }
-    .feedback.is-success { color: var(--micro-success); }
-  </style>
-</head>
-<body>
-  <main id="form-example">
-    <h1>جهّز طلبك للاستلام</h1>
-    <p class="demo-note">مثال محلي: اكتب اسمًا ثم اضغط متابعة. لا إرسال ولا تخزين.</p>
-    <form id="composition-form" novalidate>
-      <div class="m-field" data-micro-field>
-        <label class="m-field__label" for="composition-name">اسم المستلم</label>
-        <div class="m-field__control">
-          <input class="m-field__input" id="composition-name" name="name" type="text" autocomplete="off" aria-describedby="composition-help composition-error">
-        </div>
-        <p class="m-field__msg is-visible" id="composition-help">أدخل الاسم الذي سيستلم الطلب.</p>
-        <p class="m-field__msg" id="composition-error" aria-live="polite"></p>
-      </div>
-      <button class="m-btn m-btn--primary" id="composition-submit" type="submit">متابعة</button>
-      <p class="feedback" id="composition-feedback" role="status" aria-live="polite"></p>
-    </form>
-    <p><a href="index.html">العودة إلى أمثلة التركيب</a></p>
-  </main>
-  <script>
-    (function () {
-      var form = document.getElementById('composition-form');
-      var input = document.getElementById('composition-name');
-      var field = input.closest('[data-micro-field]');
-      var error = document.getElementById('composition-error');
-      var feedback = document.getElementById('composition-feedback');
-      function clearError() {
-        field.classList.remove('has-error');
-        input.removeAttribute('aria-invalid');
-        error.textContent = '';
-        error.classList.remove('is-visible');
-      }
-      input.addEventListener('input', function () {
-        clearError();
-        feedback.textContent = '';
-        feedback.className = 'feedback';
-      });
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (!input.value.trim()) {
-          field.classList.add('has-error');
-          input.setAttribute('aria-invalid', 'true');
-          error.textContent = 'اكتب اسم المستلم للمتابعة.';
-          error.classList.add('is-visible');
-          feedback.textContent = 'لم يتغير النص؛ صحّح الحقل وحاول مرة أخرى.';
-          feedback.className = 'feedback is-error';
-          input.focus();
-          return;
-        }
-        clearError();
-        feedback.textContent = 'تم التحقق محليًا من الاسم؛ لم يُرسل أو يُحفظ.';
-        feedback.className = 'feedback is-success';
-      });
-    }());
-  </script>
-</body>
-</html>
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">
+<title>Micro — سطح نموذج قابل للتحكم</title>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/motion.css">
+<link rel="stylesheet" href="../../components/buttons/buttons.css">
+<link rel="stylesheet" href="../../components/organization/organization.css">
+<link rel="stylesheet" href="../../components/fields/fields.css">
+<link rel="stylesheet" href="../../components/messages/messages.css">
+<link rel="stylesheet" href="../../components/compositions/form-surface.css">
+<link rel="stylesheet" href="compositions.css"></head><body>
+<main class="example-page"><header class="example-header"><a href="index.html">التراكيب المشتركة</a><h1>سطح نموذج قابل للتحكم</h1><p>C03 · حقول وأزرار ورسالة ضمن سطح واحد. البيانات والتحقق والانتظار وسياسة الإغلاق عند المستهلك.</p><p class="example-caption">أمثلة UI محلية ببيانات عينة معلنة؛ لا إرسال أو حفظ أو اتصال بخدمة.</p></header>
+
+<section class="demo-section" aria-labelledby="inline-context"><h2 id="inline-context">سياق 1 — نموذج داخل التدفق</h2>
+<form class="m-form-surface" id="inline-form" data-example-form novalidate aria-labelledby="inline-heading">
+<header class="m-form-surface__head"><h3 class="m-form-surface__title" id="inline-heading">عنوان ملاحظة</h3><p class="m-form-surface__description">تجربة تحقق محلية. النص الخام يبقى عند الخطأ.</p></header>
+<div class="m-form-surface__body">
+<div class="m-field" data-micro-field><label class="m-field__label" for="inline-title">العنوان</label><div class="m-field__control"><input class="m-field__input" id="inline-title" name="title" type="text" required minlength="3" maxlength="60" aria-describedby="inline-title-help inline-title-error" autocomplete="off"></div><p class="m-field__msg is-visible" id="inline-title-help">ثلاثة أحرف على الأقل، بحد60 حرفًا.</p><p class="m-field__msg" id="inline-title-error" data-field-msg data-example-error></p><span class="m-field__count" aria-hidden="true"></span></div>
+<div class="m-field" data-micro-field><label class="m-field__label" for="inline-note">ملاحظة اختيارية</label><div class="m-field__control"><textarea class="m-field__area" id="inline-note" name="note" rows="3" maxlength="120" aria-describedby="inline-note-help inline-note-error"></textarea></div><p class="m-field__msg is-visible" id="inline-note-help">لا تُرسل الملاحظة إلى خدمة.</p><p class="m-field__msg" id="inline-note-error" data-field-msg data-example-error></p><span class="m-field__count" aria-hidden="true"></span></div>
+<div class="m-form-surface__feedback m-note m-note--info" role="status" data-form-feedback hidden><div class="m-note__text"><strong class="m-note__title" data-feedback-title></strong><p class="m-note__body" data-feedback-body></p></div></div>
+</div><footer class="m-form-surface__actions"><button class="m-btn m-btn--primary" type="submit" data-loading-label="جارٍ انتظار نتيجة العينة">إرسال للعينة المحلية</button></footer></form>
+</section>
+<section class="demo-section" aria-labelledby="dialog-context"><h2 id="dialog-context">سياق 2 — نموذج داخل حوار أصلي</h2><p>الحوار يملكه المتصفح. سياسة dirty والانتظار والإغلاق يحددها مستهلك المثال؛ Navigation غير مربوط به.</p><button class="m-btn m-btn--secondary" id="open-form-dialog" type="button" aria-haspopup="dialog" aria-controls="form-dialog">فتح عينة الطبقة</button><p class="example-feedback" id="dialog-feedback" role="status"></p></section>
+<dialog class="m-form-dialog" id="form-dialog" aria-labelledby="dialog-heading">
+<form class="m-form-surface" id="dialog-form" data-example-form novalidate aria-labelledby="dialog-heading">
+<header class="m-form-surface__head"><h3 class="m-form-surface__title" id="dialog-heading">مرجع عنصر</h3><p class="m-form-surface__description">مثال تحقق آخر ببيانات مستقلة. غياب نتيجة صريحة لا يعني اعتمادًا.</p></header>
+<div class="m-form-surface__body">
+<div class="m-field" data-micro-field><label class="m-field__label" for="dialog-reference">المرجع</label><div class="m-field__control"><input class="m-field__input" id="dialog-reference" name="reference" type="text" required pattern="[A-Z0-9\-]{3,20}" maxlength="20" aria-describedby="dialog-reference-help dialog-reference-error" autocomplete="off" autofocus></div><p class="m-field__msg is-visible" id="dialog-reference-help">من3 إلى20 حرفًا لاتينيًا كبيرًا أو رقمًا أو شرطة.</p><p class="m-field__msg" id="dialog-reference-error" data-field-msg data-example-error></p></div>
+<div class="m-field has-readonly" data-micro-field><label class="m-field__label" for="dialog-origin">مصدر القراءة</label><div class="m-field__control"><input class="m-field__input" id="dialog-origin" name="origin" type="text" value="DEMO" readonly aria-describedby="dialog-origin-help"></div><p class="m-field__msg is-visible" id="dialog-origin-help">قيمة مسبقة للقراءة فقط؛ ليست تعديلًا من المستخدم.</p></div>
+<div class="m-form-surface__feedback m-note m-note--info" role="status" data-form-feedback hidden><div class="m-note__text"><strong class="m-note__title" data-feedback-title></strong><p class="m-note__body" data-feedback-body></p></div></div>
+<section class="m-note m-note--warning" data-close-confirm aria-labelledby="close-confirm-heading" hidden><div class="m-note__text"><strong class="m-note__title" id="close-confirm-heading">إغلاق المعاينة؟</strong><p class="m-note__body">للعينة نص تغيّر أو طلب ينتظر. لم يُعتمد شيء.</p><div class="demo-actions"><button class="m-btn m-btn--secondary" type="button" data-keep-editing>متابعة المعاينة</button><button class="m-btn m-btn--secondary" type="button" data-discard-example>إغلاق دون اعتماد</button></div></div></section>
+</div><footer class="m-form-surface__actions"><button class="m-btn m-btn--primary" type="submit" data-loading-label="جارٍ انتظار نتيجة العينة">إرسال للعينة المحلية</button><button class="m-btn m-btn--secondary" type="button" data-example-close>إغلاق</button></footer>
+</form>
+<details class="demo-tools"><summary>نتيجة عينة الحوار</summary><p>أدوات محلية لحل أو رفض Promise العينة؛ ليست إجراءات منتج.</p><div class="demo-actions"><button class="m-btn m-btn--secondary" type="button" data-resolve-form="dialog-form" data-result="confirmed">نتيجة معلنة</button><button class="m-btn m-btn--secondary" type="button" data-resolve-form="dialog-form" data-result="neutral">بلا نتيجة</button><button class="m-btn m-btn--secondary" type="button" data-resolve-form="dialog-form" data-result="error">رفض العينة</button></div></details>
+</dialog>
+<details class="demo-tools" id="form-tools"><summary>أدوات اختبار المستهلك المحلي</summary><p>الإرسال ينتظر Promise يقدمه هذا المثال. اختر النتيجة صراحة؛ لا مؤقت نجاح أو خدمة خلفية.</p><div class="demo-actions">
+<button class="m-btn m-btn--secondary" type="button" data-prefill-form="inline-form">قيمة مسبقة للنموذج الأول</button>
+<button class="m-btn m-btn--secondary" type="button" data-prefill-form="dialog-form">قيمة مسبقة للمرجع</button>
+</div>
+<div class="demo-actions" aria-label="نتيجة النموذج الأول"><span>النموذج الأول:</span><button class="m-btn m-btn--secondary" type="button" data-resolve-form="inline-form" data-result="confirmed">نتيجة معلنة</button><button class="m-btn m-btn--secondary" type="button" data-resolve-form="inline-form" data-result="neutral">بلا نتيجة</button><button class="m-btn m-btn--secondary" type="button" data-resolve-form="inline-form" data-result="error">رفض العينة</button></div>
+
+<p class="example-feedback" id="tools-feedback" role="status">الأدوات تتحكم في مستهلك المثال فقط.</p></details>
+
+<footer class="example-footer"><a href="../../docs/COMPOSITIONS.md">عقد الاستهلاك والملكية</a><a href="../ui-system-showcase/index.html#component-review">مراجعة عائلات المكونات</a></footer></main>
+<script src="../../components/buttons/buttons.js"></script>
+<script src="../../components/fields/fields.js"></script>
+<script src="compositions.js"></script></body></html>

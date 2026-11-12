@@ -4,7 +4,7 @@
 
 ## نقطة الدخول
 
-آخر استكمال: [تقرير المرحلة3 — التدقيق والإصلاح](docs/audits/ux-continuation-phase3-2026-11-12/REPORT.md)، مع السجلات واللقطات وتغطية14 عائلة و6 خيارات. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) و[التراكيب المقترحة](docs/COMPOSITION-CONTRACTS.md) منفصلتان؛ التراكيب غير منفذة. لا اختبار أو إصلاح داخل Micro ضمن هذه الخطة.
+آخر استكمال: [تقرير المرحلة4 — التراكيب الثلاثة](docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md)، و[دليل الاستهلاك](docs/COMPOSITIONS.md)، و[المعاينات المستقلة](previews/compositions/index.html). C01/C02/C03 وصفات Draft منفذة، مع بقاء العائلات14 والمتغيرات6 بنضجها السابق. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) مستقلة عن سياسات الأمثلة، وD01 المقترح غير منفذ. لا اختبار أو إصلاح داخل Micro.
 
 اقرأ بالترتيب:
 

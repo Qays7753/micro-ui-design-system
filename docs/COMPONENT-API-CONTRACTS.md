@@ -2,7 +2,7 @@
 
 المرحلة2، 2026-11-12. هذا المرجع يصف **المصدر الموجود** على فرع تدقيق UX؛ لا يعلن قبولًا بصريًا جديدًا أو جاهزية للتركيب داخل Micro. يغطي العائلات14 والمتغيرات6. المواصفة التفصيلية لكل عائلة والكتالوج يحتفظان بسلطتهما؛ [عقود النظام](SYSTEM-CONTRACTS.md) تحسم التعارضات التاريخية. تفاصيل مصدر كل API وأحداثه في [السجل القابل للتحقق](audits/ux-continuation-phase2-2026-11-12/contracts.json).
 
-اقرأ [SOP الاستهلاك](COMPONENT-CONSUMPTION.md) و[بطاقات التحميل والاعتماديات](FAMILY-CONSUMPTION.md) أيضًا. [عقود التراكيب](COMPOSITION-CONTRACTS.md) مقترحات لاحقة وليست API منفذة.
+اقرأ [SOP الاستهلاك](COMPONENT-CONSUMPTION.md) و[بطاقات التحميل والاعتماديات](FAMILY-CONSUMPTION.md) أيضًا. [التراكيب C01/C02/C03](COMPOSITIONS.md) وصفات HTML/CSS منفذة بحالة Draft، دون JavaScript API جديدة؛ [طلب الإغلاق D01](COMPOSITION-CONTRACTS.md) ما زال مقترحًا غير منفذ.
 
 ## قواعد مشتركة وحدود مهمة
 
