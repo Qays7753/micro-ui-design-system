@@ -1,0 +1,226 @@
+{
+  "scope": "Existing independent source fixture only; no redesign or Micro access",
+  "viewport": "360x780 RTL Light",
+  "sourceSha256": {
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "tools/light-calendar-check.py": "93572e836490f869e71697d347ecf8cdf7f389f3167d0eae77e29e43dad97e13"
+  },
+  "measurements": [
+    {
+      "name": "orders-current-month-360-rtl",
+      "width": 328,
+      "documentWidth": 360,
+      "viewport": 360,
+      "state": {
+        "view": "calendar",
+        "calendarView": "month",
+        "selectedDate": "2026-10-31",
+        "displayedMonth": "2026-10"
+      },
+      "layout": "month-grid",
+      "gridCells": [
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        }
+      ],
+      "expanded": 0
+    },
+    {
+      "name": "orders-current-week-360-rtl",
+      "width": 328,
+      "documentWidth": 360,
+      "viewport": 360,
+      "state": {
+        "view": "calendar",
+        "calendarView": "week",
+        "selectedDate": "2026-10-22",
+        "displayedMonth": "2026-10"
+      },
+      "layout": "week-grid",
+      "gridCells": [
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        },
+        {
+          "width": 46.5625,
+          "height": 48
+        }
+      ],
+      "expanded": 0
+    },
+    {
+      "name": "orders-current-day-expanded-360-rtl",
+      "width": 328,
+      "documentWidth": 360,
+      "viewport": 360,
+      "state": {
+        "view": "calendar",
+        "calendarView": "day",
+        "selectedDate": "2026-10-22",
+        "displayedMonth": "2026-10"
+      },
+      "layout": "day",
+      "gridCells": [],
+      "expanded": 1
+    }
+  ]
+}

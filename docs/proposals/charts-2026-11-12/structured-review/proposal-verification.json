@@ -1,0 +1,738 @@
+{
+  "scope": "Proposal only; not source component acceptance or product host validation",
+  "sourceCommitAtRun": "a7dd5fa1d408de8af11f3e6174956cd958095406",
+  "browser": "156.0.8078.79",
+  "passed": 76,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Approved type size retained body",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained .proposal-intro h1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained #trend-title",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained #week-total",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained #clients-title",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained #goal-value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained .proposal-share-hero .proposal-reading bdi",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Approved type size retained [data-share=\"0\"] [data-category]",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Customer primary reading retains36px",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut retains112px diameter",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Explicit sample data notice visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Absolute weekly total from seven declared daily values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Absolute prior-period delta, no percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Seven bar marks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Full selected reading outside plot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "activity360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "activity360 RTL: targets, readings, overflow shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Structured activity content remains in natural scroll flow",
+      "passed": true,
+      "detail": {
+        "id": "activity",
+        "top": 123.984375,
+        "width": 328,
+        "height": 570.953125,
+        "bottom": 694.9375,
+        "surfaces": 2,
+        "cards": [
+          {
+            "title": "المبيعات",
+            "height": 364.953125
+          },
+          {
+            "title": "الأكثر مبيعًا",
+            "height": 194
+          }
+        ],
+        "numbers": [
+          "4,820",
+          "4,180",
+          "+640",
+          "820",
+          "36",
+          "24",
+          "18"
+        ],
+        "allNumbers": [
+          "4,820",
+          "4,180",
+          "+640",
+          "820",
+          "580",
+          "720",
+          "640",
+          "810",
+          "690",
+          "560",
+          "820",
+          "36",
+          "24",
+          "18"
+        ]
+      }
+    },
+    {
+      "name": "Native keyboard changes selected point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Plot focus ring visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Home selects first point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Previous control disabled at first point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "End selects last point and next disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch-sized navigation uses same point state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Pointer selects actual middle day and amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Line is straight segments across explicit dates",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mode change preserves value and selected date",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Table keeps all seven exact readings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reading disclosure exposes table and expanded state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reading disclosure closes without changing day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected context compare retains brand fill while hovered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Independent money comparison, not percentage",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cash delta not claimed as profit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Customer balance sum shown exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Signed comparison keeps negative and true zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "comparison360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 14,
+        "bad": []
+      }
+    },
+    {
+      "name": "comparison360 RTL: targets, readings, overflow shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Structured compare content remains in natural scroll flow",
+      "passed": true,
+      "detail": {
+        "id": "compare",
+        "top": 123.984375,
+        "width": 328,
+        "height": 663.1875,
+        "bottom": 787.171875,
+        "surfaces": 1,
+        "cards": [
+          {
+            "title": "المقبوض والمدفوع",
+            "height": 663.1875
+          }
+        ],
+        "numbers": [
+          "3,120",
+          "2,480",
+          "+640",
+          "1,560",
+          "820",
+          "460",
+          "280",
+          "32",
+          "−9",
+          "0"
+        ],
+        "allNumbers": [
+          "3,120",
+          "2,480",
+          "+640",
+          "1,560",
+          "820",
+          "460",
+          "280",
+          "32",
+          "−9",
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "long row name and amount retain separate columns",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 14,
+        "bad": []
+      }
+    },
+    {
+      "name": "long row name and amount retain separate columns shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Long row text and amount remain exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected context share retains brand fill while hovered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut absolute denominator and all four amounts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Category and amount remain on one baseline",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Only actual part-of-whole percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Category selection updates explicit share and focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Progress numerator and denominator exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Progress remaining amount exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "share360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 18,
+        "bad": []
+      }
+    },
+    {
+      "name": "share360 RTL: targets, readings, overflow shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Structured share content remains in natural scroll flow",
+      "passed": true,
+      "detail": {
+        "id": "share",
+        "top": 123.984375,
+        "width": 328,
+        "height": 405.71875,
+        "bottom": 529.703125,
+        "surfaces": 1,
+        "cards": [
+          {
+            "title": "أين صُرفت المبالغ؟",
+            "height": 405.71875
+          }
+        ],
+        "numbers": [
+          "1,260",
+          "600",
+          "360",
+          "180",
+          "120",
+          "1,260",
+          "70%"
+        ],
+        "allNumbers": [
+          "1,260",
+          "600",
+          "360",
+          "180",
+          "120",
+          "1,260",
+          "70%"
+        ]
+      }
+    },
+    {
+      "name": "long category remains inside its48px-plus target",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 18,
+        "bad": []
+      }
+    },
+    {
+      "name": "long category remains inside its48px-plus target shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Long category is not truncated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Over-target amount and130 percent retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Over-target accessible text retains uncapped amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unknown denominator never invents percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Zero denominator never invents percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing sample day does not become zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing day cuts line path",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Known all-zero dataset remains real zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Negative numeric sign preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Negative remains below same zero line",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Long reading retained exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long reading360 RTL",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "long reading360 RTL shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "targeted320: full long reading and plot target",
+      "passed": true,
+      "detail": {
+        "viewport": 320,
+        "docWidth": 320,
+        "container": 288,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "targeted320: full long reading and plot target shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "directional360 LTR",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "directional360 LTR shared scale columns align",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Chronological axis stays stable across UI direction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No public source API loaded or modified",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review keeps absolute weekly total",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review keeps interactions",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review needs no asset network requests",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "No browser/console/resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "activity360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "density activity",
+      "id": "activity",
+      "top": 123.984375,
+      "width": 328,
+      "height": 570.953125,
+      "bottom": 694.9375,
+      "surfaces": 2,
+      "cards": [
+        {
+          "title": "المبيعات",
+          "height": 364.953125
+        },
+        {
+          "title": "الأكثر مبيعًا",
+          "height": 194
+        }
+      ],
+      "numbers": [
+        "4,820",
+        "4,180",
+        "+640",
+        "820",
+        "36",
+        "24",
+        "18"
+      ],
+      "allNumbers": [
+        "4,820",
+        "4,180",
+        "+640",
+        "820",
+        "580",
+        "720",
+        "640",
+        "810",
+        "690",
+        "560",
+        "820",
+        "36",
+        "24",
+        "18"
+      ]
+    },
+    {
+      "name": "comparison360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 14,
+      "bad": []
+    },
+    {
+      "name": "density compare",
+      "id": "compare",
+      "top": 123.984375,
+      "width": 328,
+      "height": 663.1875,
+      "bottom": 787.171875,
+      "surfaces": 1,
+      "cards": [
+        {
+          "title": "المقبوض والمدفوع",
+          "height": 663.1875
+        }
+      ],
+      "numbers": [
+        "3,120",
+        "2,480",
+        "+640",
+        "1,560",
+        "820",
+        "460",
+        "280",
+        "32",
+        "−9",
+        "0"
+      ],
+      "allNumbers": [
+        "3,120",
+        "2,480",
+        "+640",
+        "1,560",
+        "820",
+        "460",
+        "280",
+        "32",
+        "−9",
+        "0"
+      ]
+    },
+    {
+      "name": "long row name and amount retain separate columns",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 14,
+      "bad": []
+    },
+    {
+      "name": "share360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 18,
+      "bad": []
+    },
+    {
+      "name": "density share",
+      "id": "share",
+      "top": 123.984375,
+      "width": 328,
+      "height": 405.71875,
+      "bottom": 529.703125,
+      "surfaces": 1,
+      "cards": [
+        {
+          "title": "أين صُرفت المبالغ؟",
+          "height": 405.71875
+        }
+      ],
+      "numbers": [
+        "1,260",
+        "600",
+        "360",
+        "180",
+        "120",
+        "1,260",
+        "70%"
+      ],
+      "allNumbers": [
+        "1,260",
+        "600",
+        "360",
+        "180",
+        "120",
+        "1,260",
+        "70%"
+      ]
+    },
+    {
+      "name": "long category remains inside its48px-plus target",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 18,
+      "bad": []
+    },
+    {
+      "name": "long reading360 RTL",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "targeted320: full long reading and plot target",
+      "viewport": 320,
+      "docWidth": 320,
+      "container": 288,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "directional360 LTR",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    }
+  ],
+  "errors": [],
+  "sourceSha256": {
+    "previews/chart-proposal/index.html": "fc92d8763deb944a094ecd1447482372c3a4c30d7765a5ff29065eeed17a0b98",
+    "previews/chart-proposal/proposal.js": "6ff432ace90ea59f97a34d27bfa38733fdff6c71661a041337dc8a4d06d72308",
+    "previews/chart-proposal/proposal.css": "8908987b778492dd58348afe7e2c556ae768051de3cf7b892d2be240f7ffc1d3",
+    "tools/chart-proposal-check.py": "25b61be6933404bc98b43e72807187c6442c3e6ed454d76280a806b5ceeccd84",
+    "tools/build-chart-proposal-review.py": "68899d504c91962329b7014de40104919b059238bc98ffd8bb8960495b463fca",
+    "docs/proposals/charts-2026-11-12/review.html": "41cee2c15858b5ce6618a5b932b304f7d735d32fd7bf7ee88f06663523d1de7b"
+  }
+}

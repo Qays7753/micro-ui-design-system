@@ -1,0 +1,142 @@
+{
+  "scope": "Stage6 proposal revision only; fixed approved sizes; no source component implementation",
+  "baseline": "a7dd5fa1d408de8af11f3e6174956cd958095406",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "mainReadOnly": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "proposal": {
+    "passed": 76,
+    "failed": 0,
+    "evidence": "proposal-verification.json"
+  },
+  "orderSourceGates": [
+    {
+      "command": "python3 tools/light-calendar-check.py --review-scope --out OUT",
+      "passed": 126,
+      "failed": 0,
+      "evidence": "orders/light-calendar.json"
+    },
+    {
+      "command": "python3 tools/calendar-contract-check.py --out OUT",
+      "passed": 41,
+      "failed": 0,
+      "evidence": "orders/calendar-contract.json"
+    }
+  ],
+  "comparisons": [
+    {
+      "view": "activity",
+      "width": 328,
+      "beforeHeight": 745.90625,
+      "afterHeight": 570.953125,
+      "heightReductionPercent": 23.5,
+      "beforeSurfaces": 2,
+      "afterSurfaces": 2,
+      "visibleNumbersIdentical": true,
+      "allReadingsIncludingCollapsedTableIdentical": true
+    },
+    {
+      "view": "compare",
+      "width": 328,
+      "beforeHeight": 915.140625,
+      "afterHeight": 663.1875,
+      "heightReductionPercent": 27.5,
+      "beforeSurfaces": 3,
+      "afterSurfaces": 1,
+      "visibleNumbersIdentical": true,
+      "allReadingsIncludingCollapsedTableIdentical": true
+    },
+    {
+      "view": "share",
+      "width": 328,
+      "beforeHeight": 670.65625,
+      "afterHeight": 405.71875,
+      "heightReductionPercent": 39.5,
+      "beforeSurfaces": 2,
+      "afterSurfaces": 1,
+      "visibleNumbersIdentical": true,
+      "allReadingsIncludingCollapsedTableIdentical": true
+    }
+  ],
+  "sourceUnchanged": [
+    "components",
+    "assets",
+    "shared",
+    "docs/COMPONENT-CATALOG.json",
+    "previews/ui-system-showcase/standalone.html"
+  ],
+  "geometry": {
+    "viewport": "360x780 RTL Light",
+    "container": 328,
+    "targeted320": "long numeric reading only",
+    "ltr": "chart axis only",
+    "typography": "16 body / 24 preview heading / 18 section heading / 36 primary / 22 secondary / 16 row reading / 14 category / 13 unit-caption",
+    "donut": 112,
+    "barHeight": 8,
+    "touchMin": 48
+  },
+  "limitations": [
+    "No Micro repository access or actual product orders-concept verification",
+    "No Dark, zoom or broad viewport matrix",
+    "Chromium only; no real device, WebKit/Safari, screen reader or timed comprehension study",
+    "Subgrid evaluated in prototype only; production compatibility and public contracts remain for source implementation approval",
+    "Natural vertical scroll replaces experimental all-sections-in-one-viewport criterion to preserve approved sizes per latest user constraint"
+  ],
+  "sourceSha256": {
+    "previews/chart-proposal/index.html": "fc92d8763deb944a094ecd1447482372c3a4c30d7765a5ff29065eeed17a0b98",
+    "previews/chart-proposal/proposal.js": "6ff432ace90ea59f97a34d27bfa38733fdff6c71661a041337dc8a4d06d72308",
+    "previews/chart-proposal/proposal.css": "8908987b778492dd58348afe7e2c556ae768051de3cf7b892d2be240f7ffc1d3",
+    "tools/chart-proposal-check.py": "25b61be6933404bc98b43e72807187c6442c3e6ed454d76280a806b5ceeccd84",
+    "tools/build-chart-proposal-review.py": "68899d504c91962329b7014de40104919b059238bc98ffd8bb8960495b463fca",
+    "docs/proposals/charts-2026-11-12/review.html": "41cee2c15858b5ce6618a5b932b304f7d735d32fd7bf7ee88f06663523d1de7b"
+  },
+  "static": {
+    "passed": 283,
+    "failed": 0,
+    "evidence": "static-verification.json"
+  },
+  "deterministicChecks": [
+    {
+      "command": "python3 tools/build-chart-proposal-review.py --check",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "result": "PASS:14 families/6 variants/3 compositions, unchanged"
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "result": "PASS:unchanged, byte-identical"
+    },
+    {
+      "command": "python3 tools/manifest-build.py --check",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "evidenceSha256": {
+    "before/activity-360-rtl.png": "7059dd0146f963e8d647ef08e8c63aa5f8f8979183fa9cce10912488087fb656",
+    "before/activity-component.png": "1f5c8a2ec20ee7a405f8f1c526c6b879e9ddd398b44fa905aebfc5660e2c24e2",
+    "before/compare-360-rtl.png": "7f6a9316d99b99a8254750684121a820d6678d5f3d1c3a99b45a59b1df8335eb",
+    "before/compare-component.png": "968b36067ba3424b69c413c024cbaf68ca7357116e71aff91a951c8a8d3fc883",
+    "before/measurements.json": "5bd7d79731bc4bb2c5ffe0814e75b3c7e37da51fc6bcf63ddb37aa2efe6bb911",
+    "before/share-360-rtl.png": "d0aeb755348ae248595ebb1ce059a50182cdc3a408b96df6e7fa30e86b153101",
+    "before/share-component.png": "bfdbd6db64d13ac52874be08e44d51e0eee54346b3ef27c7b3500875b9751582",
+    "evidence/01-activity-360-rtl.png": "b1aa3780ad3dd40bf3b4169e55c9b43f05e1360b2695207193ebc27fc849e2e0",
+    "evidence/02-line-360-rtl.png": "16b77e6eff7f8d7bc2ef911c600a40b6a6a84d949b97740680f385a231d5def8",
+    "evidence/03-comparison-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "evidence/04-signed-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "evidence/05-share-components.png": "4403d0314740d7f4d9a6b29de114a855d66052239420363ff353a201f30e4536",
+    "evidence/05-share-progress-360-rtl.png": "90b15c4b06822004d5cd333c213753e6f03c7e52885ea171f852aa0b7d71f223",
+    "evidence/06-long-320-rtl.png": "b9f9c4b50152ce96665c3aca29fb3181ecd514f8339a758d8391979e9346534b",
+    "evidence/07-axis-360-ltr.png": "31a5297b679d1cde01e60aa4f77bc28bf9122e47a74a563b1cc3394592faa16c",
+    "orders/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "orders/light-calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "orders/measurements.json": "4d414b9d19b6e7ee3ededad53a6949b36411532bc81573325b8a63126bfaa577",
+    "orders/orders-current-day-expanded-360-rtl-component.png": "a1a04264e6b746880f0b619e9423f10087fdfbcc38dc240ddf758eeffa0a16d2",
+    "orders/orders-current-month-360-rtl-component.png": "0182a7b59d37e701c21b2b7cdc264dd7d95a4c3765d98a569126ac0f05203164",
+    "orders/orders-current-week-360-rtl-component.png": "a4d379d8c15e6567bd865eca22fa73bf280429166735556746c1d3b85d3048d0"
+  }
+}

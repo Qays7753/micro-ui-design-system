@@ -856,14 +856,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 *, *::before, *::after { box-sizing:border-box; }
 body { margin:0; background:var(--micro-surface-page); color:var(--micro-text-primary); font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
 .proposal-view[hidden], .proposal-progress[hidden] { display:none; }
-.proposal-page { width:min(100% - 32px, 400px); margin-inline:auto; padding-block:20px; }
-.proposal-intro { margin-block-end:16px; }
+.proposal-page { width:min(100% - 32px, 400px); margin-inline:auto; padding-block:16px; }
+.proposal-intro { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-block-end:12px; }
 .proposal-kicker,.proposal-caption,.proposal-footnote,.proposal-comparison { color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
-.proposal-intro h1 { margin:4px 0; font-size:var(--micro-heading-large-size); line-height:var(--micro-heading-large-line); font-weight:600; }
-.proposal-intro p { margin:0; font-size:14px; color:var(--micro-text-secondary); }
+.proposal-intro h1 { margin:0; font-size:var(--micro-heading-large-size); line-height:var(--micro-heading-large-line); font-weight:600; }
 .proposal-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-block-end:16px; }
 .proposal-tabs .m-btn { padding-inline:8px; }
-.proposal-view { display:grid; gap:16px; }
+.proposal-view { display:grid; gap:12px; }
 .proposal-card { padding:16px; background:var(--micro-surface-base); border:1px solid var(--micro-border-divider); border-radius:var(--micro-radius-surface); min-width:0; }
 .proposal-card-head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:4px 8px; }
 .proposal-card h2 { font-size:var(--micro-section-title-size); line-height:var(--micro-section-title-line); font-weight:600; margin:0; }
@@ -874,11 +873,11 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-reading > span { font-size:14px; color:var(--micro-text-secondary); }
 .proposal-reading-small bdi { font-size:var(--micro-amount2-size); }
 .proposal-chart-toolbar { display:flex; align-items:center; justify-content:space-between; gap:4px; margin-block-start:8px; }
-.proposal-switch { display:flex; gap:0; }
+.proposal-switch { display:flex; gap:8px; }
 .proposal-control { font:500 14px/22px var(--micro-font-family); color:var(--micro-text-primary); background:transparent; border:0; border-radius:var(--micro-radius-chip); min-width:48px; min-height:48px; padding:8px; cursor:pointer; }
 .proposal-control[aria-pressed=true] { color:var(--micro-brand-primary); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:6px; }
 .proposal-control:disabled { color:var(--micro-text-disabled); cursor:default; }
-.proposal-control:focus-visible,.proposal-details summary:focus-visible,.proposal-tools summary:focus-visible,.proposal-share-item:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
+.proposal-control:focus-visible,.proposal-tools summary:focus-visible,.proposal-share-item:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
 .proposal-plot { position:relative; direction:ltr; border-radius:8px; }
 .proposal-plot:focus-within { outline:2px solid var(--micro-focus-ring); outline-offset:2px; }
 .proposal-plot svg { width:100%; height:126px; display:block; overflow:visible; }
@@ -889,14 +888,14 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-mark { fill:var(--micro-data-a); }
 .proposal-line { stroke:var(--micro-data-a); stroke-width:2.5; fill:none; stroke-linejoin:round; }
 .proposal-axis { display:flex; justify-content:space-between; direction:ltr; font-size:13px; }
-.proposal-selected { display:grid; grid-template-columns:48px minmax(0,1fr) 48px; direction:ltr; align-items:center; gap:8px; border-block:1px solid var(--micro-border-divider); margin-block-start:8px; }
+.proposal-selected { display:grid; grid-template-columns:48px minmax(0,1fr) 48px auto; direction:ltr; align-items:center; gap:8px; border-block-start:1px solid var(--micro-border-divider); margin-block-start:8px; }
 .proposal-selected p { text-align:center; direction:rtl; font-size:14px; line-height:22px; min-width:0; }
 .proposal-selected strong { font-weight:600; }
-.proposal-details summary,.proposal-tools summary { min-height:48px; display:flex; align-items:center; cursor:pointer; color:var(--micro-brand-primary); font-size:14px; }
-.proposal-details summary::after { content:'+'; margin-inline-start:auto; } .proposal-details[open] summary::after { content:'−'; }
+.proposal-tools summary { min-height:48px; display:flex; align-items:center; cursor:pointer; color:var(--micro-brand-primary); font-size:14px; }
+
 .proposal-details table { width:100%; border-collapse:collapse; font-size:14px; }
 .proposal-details th,.proposal-details td { padding:8px 0; text-align:start; border-block-start:1px solid var(--micro-border-divider); }
-.proposal-rankings { list-style:none; margin:12px 0 0; padding:0; display:grid; gap:12px; }
+.proposal-rankings { list-style:none; margin:12px 0 0; padding:0; display:grid; gap:8px; }
 .proposal-row-head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; font-size:14px; }
 .proposal-row-head strong { display:inline-flex; flex-wrap:wrap; gap:4px; align-items:baseline; font-size:16px; font-weight:500; }
 .proposal-row-head bdi { overflow-wrap:anywhere; min-width:0; }
@@ -904,20 +903,20 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-bar { position:relative; height:8px; border-radius:var(--micro-radius-capsule); background:var(--micro-surface-disabled); margin-block-start:6px; direction:ltr; }
 .proposal-bar > span { position:absolute; inset-block:0; border-radius:inherit; background:var(--micro-data-a); }
 .proposal-bar.is-signed::before { content:''; position:absolute; inset-block:-3px; inset-inline-start:50%; border-inline-start:1px solid var(--micro-text-primary); }
-.proposal-large-rows { gap:20px; margin-block:20px; }
-.proposal-large-rows .proposal-row-head strong { font-size:var(--micro-amount2-size); }
+
 .proposal-delta { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; padding-block-start:12px; border-block-start:1px solid var(--micro-border-divider); font-size:14px; }
 .proposal-delta strong { font-weight:600; }
-.proposal-footnote { margin-block-start:12px; }
-.proposal-share-hero { display:grid; grid-template-columns:112px minmax(0,1fr); gap:12px; align-items:center; margin-block:16px; }
-.proposal-share-hero svg { width:112px; height:112px; }
+.proposal-footnote { margin-block-start:8px; }
+.proposal-share-hero { display:grid; grid-template-columns:112px minmax(0,1fr); gap:12px; align-items:center; margin-block:8px; }
+.proposal-share-hero svg { width:112px; height:112px; display:block; }
 .proposal-share-hero svg circle { fill:none; stroke-width:10px; transform:rotate(-90deg); transform-origin:center; }
-.proposal-share-list { display:grid; }
-.proposal-share-item { display:flex; align-items:center; gap:8px; width:100%; min-height:48px; padding:8px 0; border:0; border-block-start:1px solid var(--micro-border-divider); background:transparent; color:var(--micro-text-primary); font:14px/22px var(--micro-font-family); cursor:pointer; text-align:start; }
-.proposal-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.proposal-share-item [data-amount] { margin-inline-start:auto; font-weight:500; }
+.proposal-share-list { display:grid; grid-template-columns:8px minmax(0,1fr) auto; column-gap:8px; align-content:start; }
+.proposal-share-item { display:grid; grid-column:1/-1; grid-template-columns:subgrid; align-items:baseline; align-content:center; gap:8px; width:100%; min-height:48px; padding:8px 0; border:0; border-block-start:1px solid var(--micro-border-divider); background:transparent; color:var(--micro-text-primary); font:14px/22px var(--micro-font-family); cursor:pointer; text-align:start; }
+.proposal-dot { align-self:center; width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.proposal-share-item [data-amount] { min-width:0; font-weight:500; overflow-wrap:anywhere; }
+.proposal-share-item [data-category] { min-width:0; overflow-wrap:anywhere; }
 .proposal-share-item[aria-pressed=true] [data-category] { font-weight:600; text-decoration:underline; text-underline-offset:4px; }
-.proposal-progress { height:8px; border-radius:var(--micro-radius-capsule); background:var(--micro-surface-disabled); margin-block:20px 12px; overflow:hidden; }
+.proposal-progress { height:8px; border-radius:var(--micro-radius-capsule); background:var(--micro-surface-disabled); margin-block:8px; overflow:hidden; }
 .proposal-progress > span { height:100%; display:block; background:var(--micro-data-a); border-radius:inherit; }
 .proposal-goal-caption { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:14px; }
 .proposal-tools { margin-block-start:20px; border-block-start:1px solid var(--micro-border-divider); color:var(--micro-text-secondary); font-size:14px; }
@@ -925,30 +924,57 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-tools a { display:inline-flex; min-height:48px; align-items:center; color:var(--micro-brand-primary); }
 .proposal-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 
+/* Density follows the role of the reading, never the length of its digits. */
+.proposal-metric-head { align-items:center; gap:8px; }
+.proposal-metric-head .proposal-heading { flex:1 1 96px; min-width:0; }
+.proposal-metric-head .proposal-reading { flex:0 1 auto; max-width:100%; margin:0; justify-content:flex-end; }
+.proposal-heading .proposal-caption { margin:0; }
+.proposal-selected bdi { overflow-wrap:anywhere; }
+.proposal-data-toggle { padding-inline:4px; }
+.proposal-data-toggle[aria-expanded=true] { text-decoration:underline; text-underline-offset:4px; }
+/* One shared set of columns: labels, comparable tracks, exact readings. */
+.proposal-grid-rows { grid-template-columns:minmax(80px,1fr) minmax(48px,1fr) minmax(0,auto); gap:12px; }
+.proposal-grid-rows > li { display:grid; grid-column:1/-1; grid-template-columns:subgrid; align-items:center; gap:12px; min-width:0; min-height:32px; }
+.proposal-grid-rows .proposal-row-head { display:contents; }
+.proposal-grid-rows .proposal-row-head > span { grid-column:1; grid-row:1; min-width:0; overflow-wrap:anywhere; }
+.proposal-grid-rows .proposal-row-head > strong { grid-column:3; grid-row:1; min-width:0; }
+.proposal-grid-rows .proposal-bar { grid-column:2; grid-row:1; margin:0; }
+.proposal-cash-rows .proposal-row-head strong { font-size:var(--micro-amount2-size); }
+.proposal-goal-section, .proposal-subsection { border-block-start:1px solid var(--micro-border-divider); margin-block-start:12px; padding-block-start:12px; }
+
+.proposal-card-head > .proposal-caption { margin:0; }
+
+.proposal-ring-column { display:grid; justify-items:center; align-content:start; gap:4px; min-width:0; text-align:center; }
+.proposal-ring-column .proposal-caption { margin:0; }
+.proposal-ring-wrap { position:relative; width:112px; height:112px; }
+.proposal-ring-wrap .proposal-reading { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-wrap:nowrap; gap:0; margin:0; pointer-events:none; }
+.proposal-grid-rows .proposal-row-head > strong { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px; align-items:baseline; }
+.proposal-grid-rows .proposal-row-head > strong bdi { text-align:end; }
+
 </style></head><body>
-<main class="proposal-page"><header class="proposal-intro"><span class="proposal-kicker">مقترح للمراجعة · بيانات توضيحية</span><h1>الأرقام أولًا.</h1><p>قراءة سريعة، وتفاصيل عند الحاجة.</p></header>
+<main class="proposal-page"><header class="proposal-intro"><h1>مقترح الرسوم</h1><span class="proposal-kicker">بيانات توضيحية</span></header>
 <nav class="proposal-tabs" aria-label="سياقات مراجعة الرسوم"><button type="button" class="m-btn m-btn--primary" data-view="activity" aria-pressed="true">النشاط</button><button type="button" class="m-btn m-btn--secondary" data-view="compare" aria-pressed="false">المقارنة</button><button type="button" class="m-btn m-btn--secondary" data-view="share" aria-pressed="false">التوزيع</button></nav>
 <section class="proposal-view" id="activity" aria-label="اتجاه ومقارنة فئات">
-<article class="proposal-card" aria-labelledby="trend-title"><header class="proposal-card-head"><div><h2 id="trend-title">المبيعات</h2><p class="proposal-caption">6–12 نوفمبر 2026</p></div><span class="proposal-tag">هذا الأسبوع</span></header>
-<p class="proposal-reading"><bdi dir="ltr" id="week-total">4,820</bdi><span>د.أ</span></p><p class="proposal-comparison">الأسبوع السابق <bdi dir="ltr">4,180</bdi> · الفرق <bdi dir="ltr" id="week-difference">+640</bdi> د.أ</p>
+<article class="proposal-card" aria-labelledby="trend-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="trend-title">المبيعات</h2><p class="proposal-caption">6–12 نوفمبر 2026</p></div><p class="proposal-reading"><bdi dir="ltr" id="week-total">4,820</bdi><span>د.أ</span></p></header>
+<p class="proposal-comparison">الأسبوع السابق <bdi dir="ltr">4,180</bdi> · الفرق <bdi dir="ltr" id="week-difference">+640</bdi> د.أ</p>
 <div class="proposal-chart-toolbar"><span class="proposal-caption">المبيعات اليومية · د.أ</span><div class="proposal-switch" aria-label="طريقة عرض الاتجاه"><button type="button" class="proposal-control" data-mode="bars" aria-pressed="true">أعمدة</button><button type="button" class="proposal-control" data-mode="line" aria-pressed="false">خط</button></div></div>
 <div class="proposal-plot" id="trend-plot"><svg viewBox="0 0 296 126" aria-hidden="true" id="trend-svg"></svg><input id="point-picker" type="range" min="0" max="6" value="6" aria-label="اختيار يوم لقراءة المبيعات" aria-describedby="trend-help"></div>
 <p class="proposal-caption proposal-axis" aria-hidden="true"><span>6 نوفمبر</span><span>12 نوفمبر</span></p>
-<div class="proposal-selected"><button class="proposal-control proposal-arrow" type="button" id="point-prev" aria-label="اليوم السابق">←</button><p role="status" id="point-reading"></p><button class="proposal-control proposal-arrow" type="button" id="point-next" aria-label="اليوم التالي">→</button></div>
+<div class="proposal-selected"><button class="proposal-control proposal-arrow" type="button" id="point-prev" aria-label="اليوم السابق">←</button><p role="status" id="point-reading"></p><button class="proposal-control proposal-arrow" type="button" id="point-next" aria-label="اليوم التالي">→</button><button class="proposal-control proposal-data-toggle" type="button" id="data-toggle" aria-expanded="false" aria-controls="trend-data">القراءات</button></div>
 <p id="trend-help" class="proposal-sr-only">المس الرسم أو استخدم أسهم لوحة المفاتيح أو زري اليوم السابق والتالي. الزمن يتقدم من اليسار لليمين.</p>
-<details class="proposal-details"><summary>كل القراءات</summary><table><caption class="proposal-sr-only">المبيعات اليومية بالدينار</caption><thead><tr><th scope="col">التاريخ</th><th scope="col">د.أ</th></tr></thead><tbody id="trend-table"></tbody></table></details></article>
-<article class="proposal-card" aria-labelledby="ranking-title"><header class="proposal-card-head"><h2 id="ranking-title">الأكثر مبيعًا</h2><span class="proposal-caption">نفس الأسبوع</span></header><ul class="proposal-rankings" id="ranking-list"></ul><p class="proposal-footnote">عدد القطع المباعة لكل صنف.</p></article>
+<div class="proposal-details" id="trend-data" hidden><table><caption class="proposal-sr-only">المبيعات اليومية بالدينار</caption><thead><tr><th scope="col">التاريخ</th><th scope="col">د.أ</th></tr></thead><tbody id="trend-table"></tbody></table></div></article>
+<article class="proposal-card" aria-labelledby="ranking-title"><header class="proposal-card-head"><h2 id="ranking-title">الأكثر مبيعًا</h2><span class="proposal-caption">نفس الأسبوع</span></header><ul class="proposal-rankings proposal-grid-rows" id="ranking-list"></ul></article>
 </section>
 <section class="proposal-view" id="compare" aria-label="مقارنة مبالغ دقيقة" hidden>
-<article class="proposal-card" aria-labelledby="cash-title"><header class="proposal-card-head"><h2 id="cash-title">المقبوض والمدفوع</h2><span class="proposal-tag">هذا الأسبوع</span></header><p class="proposal-caption">6–12 نوفمبر 2026 · د.أ</p><ul class="proposal-rankings proposal-large-rows" id="cash-list"></ul><div class="proposal-delta"><span>الفرق بين القراءتين</span><strong><bdi dir="ltr">+640</bdi> د.أ</strong></div><p class="proposal-footnote">فرق الحركة النقدية لا يعبّر وحده عن الربح.</p></article>
-<article class="proposal-card" aria-labelledby="clients-title"><header class="proposal-card-head"><h2 id="clients-title">أرصدة حسب العميل</h2><span class="proposal-caption">12 نوفمبر 2026</span></header><p class="proposal-reading"><bdi dir="ltr">1,560</bdi><span>د.أ</span></p><p class="proposal-caption">إجمالي الأرصدة المعروضة</p><ul class="proposal-rankings" id="clients-list"></ul></article>
-<article class="proposal-card" aria-labelledby="signed-title"><header class="proposal-card-head"><h2 id="signed-title">صافي حركة الصنف</h2></header><p class="proposal-caption">هذا الأسبوع · قطعة</p><ul class="proposal-rankings" id="signed-list"></ul><p class="proposal-footnote">الموجب مبيعات، والسالب مرتجعات. الصفر قراءة معلومة.</p></article>
+<article class="proposal-card proposal-combined-surface" aria-label="أمثلة المقارنة الدقيقة"><section aria-labelledby="cash-title"><header class="proposal-card-head"><h2 id="cash-title">المقبوض والمدفوع</h2><span class="proposal-tag">هذا الأسبوع</span></header><p class="proposal-caption">6–12 نوفمبر 2026 · د.أ</p><ul class="proposal-rankings proposal-grid-rows proposal-cash-rows" id="cash-list"></ul><div class="proposal-delta"><span>الفرق بين القراءتين</span><strong><bdi dir="ltr">+640</bdi> د.أ</strong></div><p class="proposal-footnote">فرق الحركة النقدية لا يعبّر وحده عن الربح.</p></section>
+<section class="proposal-subsection" aria-labelledby="clients-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="clients-title">أرصدة حسب العميل</h2><p class="proposal-caption">12 نوفمبر 2026</p></div><p class="proposal-reading" aria-label="إجمالي الأرصدة المعروضة"><bdi dir="ltr">1,560</bdi><span>د.أ</span></p></header><ul class="proposal-rankings proposal-grid-rows" id="clients-list"></ul></section>
+<section class="proposal-subsection" aria-labelledby="signed-title"><header class="proposal-card-head"><h2 id="signed-title">صافي حركة الصنف</h2><span class="proposal-caption">هذا الأسبوع · قطعة</span></header><ul class="proposal-rankings proposal-grid-rows" id="signed-list"></ul><p class="proposal-footnote">الموجب مبيعات، والسالب مرتجعات.</p></section></article>
 </section>
 <section class="proposal-view" id="share" aria-label="توزيع وتقدم بمقام معلوم" hidden>
-<article class="proposal-card" aria-labelledby="share-title"><header class="proposal-card-head"><h2 id="share-title">أين صُرفت المبالغ؟</h2><span class="proposal-caption">هذا الأسبوع</span></header><div class="proposal-share-hero"><svg viewBox="0 0 112 112" id="share-ring" aria-hidden="true"></svg><div><p class="proposal-caption">إجمالي المصروفات</p><p class="proposal-reading proposal-reading-small"><bdi dir="ltr">1,260</bdi><span>د.أ</span></p><p class="proposal-caption" id="share-selected" role="status"></p></div></div><div class="proposal-share-list" id="share-list" aria-label="فئات المصروفات"></div><p class="proposal-footnote">المبلغ هو القراءة الأساسية؛ النسبة حصة من هذا الإجمالي فقط.</p></article>
-<article class="proposal-card" aria-labelledby="goal-title"><header class="proposal-card-head"><h2 id="goal-title">تحصيل الفواتير</h2><span class="proposal-caption">نوفمبر 2026</span></header><p class="proposal-reading"><bdi dir="ltr" id="goal-value">1,260</bdi><span>د.أ</span></p><p class="proposal-caption" id="goal-context"></p><div class="proposal-progress" id="goal-track" role="progressbar" aria-label="المحصّل من قيمة الفواتير"><span id="goal-fill"></span></div><div class="proposal-goal-caption"><span id="goal-remainder"></span><bdi dir="ltr" id="goal-percent"></bdi></div></article>
+<article class="proposal-card proposal-combined-surface" aria-label="توزيع المصروفات والتحصيل"><section aria-labelledby="share-title"><header class="proposal-card-head"><h2 id="share-title">أين صُرفت المبالغ؟</h2><span class="proposal-caption">هذا الأسبوع</span></header><div class="proposal-share-hero"><div class="proposal-ring-column"><p class="proposal-caption">إجمالي المصروفات</p><div class="proposal-ring-wrap"><svg viewBox="0 0 112 112" id="share-ring" aria-hidden="true"></svg><p class="proposal-reading proposal-reading-small"><bdi dir="ltr">1,260</bdi><span>د.أ</span></p></div><p class="proposal-caption" id="share-selected" role="status"></p></div><div class="proposal-share-list" id="share-list" aria-label="فئات المصروفات"></div></div></section>
+<section class="proposal-goal-section" aria-labelledby="goal-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="goal-title">تحصيل الفواتير</h2><p class="proposal-caption">نوفمبر 2026</p></div><p class="proposal-reading"><bdi dir="ltr" id="goal-value">1,260</bdi><span>د.أ</span></p></header><p class="proposal-caption" id="goal-context"></p><div class="proposal-progress" id="goal-track" role="progressbar" aria-label="المحصّل من قيمة الفواتير"><span id="goal-fill"></span></div><div class="proposal-goal-caption"><span id="goal-remainder"></span><bdi dir="ltr" id="goal-percent"></bdi></div></section></article>
 </section>
-<details class="proposal-tools"><summary>حالات المقترح وحدوده</summary><p>هذا نموذج بصري مستقل، وليس مكوّنًا منفذًا أو شاشة منتج. البيانات ثابتة ومعلنة، ولا اتصال أو حفظ. الحالة تغيّر العينة محليًا فقط.</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-state="ready">العينة الأساسية</button><button type="button" class="proposal-control" data-state="zero">صفر</button><button type="button" class="proposal-control" data-state="missing">قيمة مفقودة</button><button type="button" class="proposal-control" data-state="negative">قيمة سالبة</button><button type="button" class="proposal-control" data-state="long">رقم طويل</button></div><p>حالات التحصيل:</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-goal="normal">جزئي</button><button type="button" class="proposal-control" data-goal="over">تجاوز</button><button type="button" class="proposal-control" data-goal="unknown">هدف مجهول</button><button type="button" class="proposal-control" data-goal="zero">هدف صفر</button></div><p><a href="https://github.com/Qays7753/micro-ui-design-system/blob/feature/ui-system-component-audit-repair-2026-11-11/docs/proposals/charts-2026-11-12/PROPOSAL.md">القرارات المطلوبة وخريطة المكونات</a></p></details>
+<details class="proposal-tools"><summary>حالات المقترح وحدوده</summary><p>هذا نموذج بصري مستقل، وليس مكوّنًا منفذًا أو شاشة منتج. البيانات ثابتة ومعلنة، ولا اتصال أو حفظ. الحالة تغيّر العينة محليًا فقط. المبلغ هو القراءة الأساسية؛ النسبة حصة من الإجمالي المعلن فقط.</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-state="ready">العينة الأساسية</button><button type="button" class="proposal-control" data-state="zero">صفر</button><button type="button" class="proposal-control" data-state="missing">قيمة مفقودة</button><button type="button" class="proposal-control" data-state="negative">قيمة سالبة</button><button type="button" class="proposal-control" data-state="long">رقم طويل</button></div><p>حالات التحصيل:</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-goal="normal">جزئي</button><button type="button" class="proposal-control" data-goal="over">تجاوز</button><button type="button" class="proposal-control" data-goal="unknown">هدف مجهول</button><button type="button" class="proposal-control" data-goal="zero">هدف صفر</button></div><p><a href="https://github.com/Qays7753/micro-ui-design-system/blob/feature/ui-system-component-audit-repair-2026-11-11/docs/proposals/charts-2026-11-12/PROPOSAL.md">القرارات المطلوبة وخريطة المكونات</a></p></details>
 </main><script>
 /* Disposable review model, not a MicroData API or reusable implementation.
    Explicit synthetic daily records; no random series or product calls. */
@@ -999,7 +1025,7 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
     });
     $('#trend-svg').innerHTML=svg;
     const i=state.point, reading=`${names[i]} ${i+6} نوفمبر · ${fmt(a[i])}${a[i]===null?'':' د.أ'}`;
-    $('#point-reading').innerHTML=`${names[i]} ${i+6} نوفمبر<br><strong><bdi dir="ltr">${fmt(a[i])}</bdi>${a[i]===null?'':' د.أ'}</strong>`;
+    $('#point-reading').innerHTML=`${names[i]} ${i+6} نوفمبر<br><strong><bdi dir="ltr">${fmt(a[i]).replaceAll(',',',<wbr>')}</bdi>${a[i]===null?'':' د.أ'}</strong>`;
     $('#point-picker').value=i;$('#point-picker').setAttribute('aria-valuetext',reading);
     $('#point-prev').disabled=i===0;$('#point-next').disabled=i===6;
     $('#trend-table').innerHTML=a.map((v,j)=>`<tr><th scope="row">${names[j]} ${j+6} نوفمبر</th><td><bdi dir="ltr">${fmt(v)}</bdi></td></tr>`).join('');
@@ -1032,6 +1058,7 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
     const goal=e.target.closest('[data-goal]');if(goal){const key=goal.dataset.goal;state.goal=key==='unknown'?null:key==='zero'?0:1800;state.received=key==='over'?2340:1260;renderGoal();}
     const sample=e.target.closest('[data-state]');if(sample){state.values=baseline.slice();const key=sample.dataset.state;if(key==='zero')state.values=state.values.map(()=>0);if(key==='missing')state.values[3]=null;if(key==='negative')state.values[3]=-160;if(key==='long')state.values[6]=123456789.125;state.point=key==='missing'||key==='negative'?3:6;renderTrend();setView('activity');}
   });
+  $('#data-toggle').addEventListener('click',()=>{const open=$('#data-toggle').getAttribute('aria-expanded')!=='true';$('#data-toggle').setAttribute('aria-expanded',String(open));$('#trend-data').hidden=!open;});
   $('#point-picker').addEventListener('input',e=>{state.point=Number(e.target.value);renderTrend();});
   $('#point-prev').addEventListener('click',()=>{state.point=Math.max(0,state.point-1);renderTrend();});
   $('#point-next').addEventListener('click',()=>{state.point=Math.min(6,state.point+1);renderTrend();});

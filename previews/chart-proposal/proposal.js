@@ -47,7 +47,7 @@
     });
     $('#trend-svg').innerHTML=svg;
     const i=state.point, reading=`${names[i]} ${i+6} نوفمبر · ${fmt(a[i])}${a[i]===null?'':' د.أ'}`;
-    $('#point-reading').innerHTML=`${names[i]} ${i+6} نوفمبر<br><strong><bdi dir="ltr">${fmt(a[i])}</bdi>${a[i]===null?'':' د.أ'}</strong>`;
+    $('#point-reading').innerHTML=`${names[i]} ${i+6} نوفمبر<br><strong><bdi dir="ltr">${fmt(a[i]).replaceAll(',',',<wbr>')}</bdi>${a[i]===null?'':' د.أ'}</strong>`;
     $('#point-picker').value=i;$('#point-picker').setAttribute('aria-valuetext',reading);
     $('#point-prev').disabled=i===0;$('#point-next').disabled=i===6;
     $('#trend-table').innerHTML=a.map((v,j)=>`<tr><th scope="row">${names[j]} ${j+6} نوفمبر</th><td><bdi dir="ltr">${fmt(v)}</bdi></td></tr>`).join('');
@@ -80,6 +80,7 @@
     const goal=e.target.closest('[data-goal]');if(goal){const key=goal.dataset.goal;state.goal=key==='unknown'?null:key==='zero'?0:1800;state.received=key==='over'?2340:1260;renderGoal();}
     const sample=e.target.closest('[data-state]');if(sample){state.values=baseline.slice();const key=sample.dataset.state;if(key==='zero')state.values=state.values.map(()=>0);if(key==='missing')state.values[3]=null;if(key==='negative')state.values[3]=-160;if(key==='long')state.values[6]=123456789.125;state.point=key==='missing'||key==='negative'?3:6;renderTrend();setView('activity');}
   });
+  $('#data-toggle').addEventListener('click',()=>{const open=$('#data-toggle').getAttribute('aria-expanded')!=='true';$('#data-toggle').setAttribute('aria-expanded',String(open));$('#trend-data').hidden=!open;});
   $('#point-picker').addEventListener('input',e=>{state.point=Number(e.target.value);renderTrend();});
   $('#point-prev').addEventListener('click',()=>{state.point=Math.max(0,state.point-1);renderTrend();});
   $('#point-next').addEventListener('click',()=>{state.point=Math.min(6,state.point+1);renderTrend();});
