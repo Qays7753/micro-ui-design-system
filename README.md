@@ -6,6 +6,8 @@
 
 آخر استكمال: [تقرير المرحلة5 — حدود التركيب](docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md)، و[دليل الحاضنات](docs/BOUNDARY-FIXTURES.md)، و[المعاينات المستقلة](previews/integration-boundaries/index.html). أصلح عزل الخلفية المتغيرة في Navigation؛ التراكيب C01/C02/C03 باقية Draft، وD01 غير منفذ. لا وصول أو تعديل أو اختبار في Micro.
 
+مقترح المرحلة6: [صور الرسوم والقرارات المطلوبة](docs/proposals/charts-2026-11-12/PROPOSAL.md)، و[ملف معاينة تفاعلي واحد](docs/proposals/charts-2026-11-12/review.html). للمراجعة فقط؛ لم تتغير مصادر المكونات أو عقودها.
+
 تسليم المرحلة4:  [تقرير المرحلة4 — التراكيب الثلاثة](docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md)، و[دليل الاستهلاك](docs/COMPOSITIONS.md)، و[المعاينات المستقلة](previews/compositions/index.html). C01/C02/C03 وصفات Draft منفذة، مع بقاء العائلات14 والمتغيرات6 بنضجها السابق. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) مستقلة عن سياسات الأمثلة، وD01 المقترح غير منفذ. لا اختبار أو إصلاح داخل Micro.
 
 اقرأ بالترتيب:

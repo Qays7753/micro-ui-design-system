@@ -1,0 +1,400 @@
+{
+  "scope": "Proposal only; not source component acceptance or product host validation",
+  "sourceCommitAtRun": "c75587205fd36c359b1a4b7f5312576933cae66f",
+  "browser": "156.0.8078.79",
+  "passed": 48,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Explicit sample data notice visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Absolute weekly total from seven declared daily values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Absolute prior-period delta, no percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Seven bar marks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Full selected reading outside plot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "activity360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "Native keyboard changes selected point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Plot focus ring visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Home selects first point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Previous control disabled at first point",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "End selects last point and next disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch-sized navigation uses same point state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Pointer selects actual middle day and amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Line is straight segments across explicit dates",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mode change preserves value and selected date",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Table keeps all seven exact readings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected context compare retains brand fill while hovered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Independent money comparison, not percentage",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cash delta not claimed as profit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Customer balance sum shown exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Signed comparison keeps negative and true zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "comparison360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 14,
+        "bad": []
+      }
+    },
+    {
+      "name": "Selected context share retains brand fill while hovered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut absolute denominator and all four amounts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Only actual part-of-whole percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Category selection updates explicit share and focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Progress numerator and denominator exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Progress remaining amount exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "share360 RTL: targets, readings, overflow",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 18,
+        "bad": []
+      }
+    },
+    {
+      "name": "Over-target amount and130 percent retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Over-target accessible text retains uncapped amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unknown denominator never invents percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Zero denominator never invents percent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing sample day does not become zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing day cuts line path",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Known all-zero dataset remains real zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Negative numeric sign preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Negative remains below same zero line",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Long reading retained exactly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "long reading360 RTL",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "targeted320: full long reading and plot target",
+      "passed": true,
+      "detail": {
+        "viewport": 320,
+        "docWidth": 320,
+        "container": 288,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "directional360 LTR",
+      "passed": true,
+      "detail": {
+        "viewport": 360,
+        "docWidth": 360,
+        "container": 328,
+        "targets": 20,
+        "bad": []
+      }
+    },
+    {
+      "name": "Chronological axis stays stable across UI direction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No public source API loaded or modified",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review keeps absolute weekly total",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review keeps interactions",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Single-file review needs no asset network requests",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "No browser/console/resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "activity360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "comparison360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 14,
+      "bad": []
+    },
+    {
+      "name": "share360 RTL: targets, readings, overflow",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 18,
+      "bad": []
+    },
+    {
+      "name": "long reading360 RTL",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "targeted320: full long reading and plot target",
+      "viewport": 320,
+      "docWidth": 320,
+      "container": 288,
+      "targets": 20,
+      "bad": []
+    },
+    {
+      "name": "directional360 LTR",
+      "viewport": 360,
+      "docWidth": 360,
+      "container": 328,
+      "targets": 20,
+      "bad": []
+    }
+  ],
+  "errors": [],
+  "sourceSha256": {
+    "previews/chart-proposal/index.html": "2cad6481861700f6fc77cff192e33e41b9efb8fc092c8ae70b1d26451c906b8e",
+    "previews/chart-proposal/proposal.js": "863288679d1c57b38b7ac886add07a10e398b72f8f989497208f8835d6dfa960",
+    "previews/chart-proposal/proposal.css": "a597fde569c3f02f1a216bade3aef44a9d3cf0a364ab7a8df9a6b63d018de435",
+    "tools/chart-proposal-check.py": "ff446daedb1d17ed7382ba4216193c5296dfd8d8977326dc4f3e5fcc667daf92",
+    "tools/build-chart-proposal-review.py": "68899d504c91962329b7014de40104919b059238bc98ffd8bb8960495b463fca",
+    "docs/proposals/charts-2026-11-12/review.html": "20552bf2f19140d6780881b6fcf03e11ef7d6258a84a91e7ac24fd796acd0991"
+  },
+  "stage": "6 visual proposal only; await visual approval before component implementation",
+  "baseline": "c75587205fd36c359b1a4b7f5312576933cae66f",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "mainReadOnly": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "immutableSources": {
+    "components": "git diff baseline -- components: empty",
+    "assetsShared": "git diff baseline -- assets shared: empty",
+    "catalog": "unchanged",
+    "maturity": "unchanged",
+    "showcaseStandalone": "unchanged"
+  },
+  "deterministicChecks": [
+    {
+      "command": "python3 tools/build-chart-proposal-review.py --check",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "result": "PASS: 14 families / 6 variants / 3 compositions"
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "result": "PASS: unchanged, byte-identical"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    },
+    {
+      "command": "python3 tools/manifest-build.py --check",
+      "result": "PASS"
+    }
+  ],
+  "limitations": [
+    "Desktop Chromium Light viewport only; no actual device, WebKit, screen reader or OS keyboard",
+    "Single-file review tested over HTTP with zero additional asset HTTP requests; file:// denied by managed browser policy ERR_BLOCKED_BY_ADMINISTRATOR, not bypassed or claimed as tested",
+    "48 tests validate this disposable prototype only, not public component APIs or Micro integration",
+    "Component implementation, API/default/contract changes and removal/deprecation remain unapproved",
+    "No Dark tests or zoom; 320 only for long reading; LTR only for axis direction"
+  ],
+  "screenshotSha256": {
+    "01-activity-360-rtl.png": "7059dd0146f963e8d647ef08e8c63aa5f8f8979183fa9cce10912488087fb656",
+    "02-line-360-rtl.png": "7a6cf200e6918923ce0aadf82944073cc1e35e1c2f2eb5837ad86e332e21726c",
+    "03-comparison-360-rtl.png": "f6846e673fff477d829653cf86e03297869e9bdcea0f951687e6abcdfa587068",
+    "04-signed-360-rtl.png": "b10212086667af21f8f9b27b16e3b4fa76079eca95977dafcfde8f0230f7c39a",
+    "05-share-components.png": "bfdbd6db64d13ac52874be08e44d51e0eee54346b3ef27c7b3500875b9751582",
+    "05-share-progress-360-rtl.png": "d0aeb755348ae248595ebb1ce059a50182cdc3a408b96df6e7fa30e86b153101",
+    "06-long-320-rtl.png": "9471807d2be816c76488704344b6a53fe891da599f2747e26cc8b3d0b5a03b90",
+    "07-axis-360-ltr.png": "9d99f55d794885867efd1d9f6e7e99e945bd2965489ecd3eb1c9bfe046212339"
+  },
+  "static": {
+    "passed": 282,
+    "failed": 0,
+    "command": "python3 tools/light-static-check.py --out OUT",
+    "evidence": "static-verification.json"
+  }
+}
