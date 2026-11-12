@@ -1,0 +1,38 @@
+{
+  "reviewDate": "2026-11-12 Asia/Amman",
+  "references": [
+    {
+      "reference": "Copilot Money",
+      "page": "https://www.copilot.money/",
+      "asset": "https://www.copilot.money/img/home/hero/screen-clean.webp",
+      "sha256": "a656e7bb2162a40d6a2f250a624c4106e8d247a029e37412b258c1be275fa857",
+      "bytes": 72544,
+      "observed": "Light marketing composition: summary, review task and category groups; header figures partly overlaid by webpage, not baked into screen-clean asset"
+    },
+    {
+      "reference": "Shopify Analytics",
+      "page": "https://www.shopify.com/analytics",
+      "asset": "https://cdn.shopify.com/b/shopify-brochure2-assets/728d989249c56184cc2bce5904c43fef.png?height=243&width=318",
+      "sha256": "0105b0608990fd9efd2d6b0eaab65106d856e989fab58b3a6c13fbf92b430186",
+      "bytes": 28305,
+      "observed": "Customers over time; actual asset visually reviewed"
+    },
+    {
+      "reference": "Shopify Analytics",
+      "page": "https://www.shopify.com/analytics",
+      "asset": "https://cdn.shopify.com/b/shopify-brochure2-assets/dc2c754d67a2c663975bde98be1f8ed1.png?height=243&width=318",
+      "sha256": "a334fb1faa67c69bf34c7b54664e8c602318267bafbd64ff69373eeaadf2bba2",
+      "bytes": 37592,
+      "observed": "Total sales; actual asset visually reviewed"
+    },
+    {
+      "reference": "Square Dashboard",
+      "page": "https://squareup.com/us/en/point-of-sale/features/dashboard",
+      "asset": "https://images.ctfassets.net/2d5q1td6cyxq/5HR1UN1Xia81rV1hOfsrEE/76508208d2f5cf42c158bda991c16890/PD01143_-_dashboard_reports_1.svg",
+      "sha256": "e531e2dd9687a71603900a01f091e3b29be25b2aca3e7f95c39ce1f1b3e57b1d",
+      "bytes": 8874,
+      "observed": "Illustration of distribution and reports, not a screenshot of the live application"
+    }
+  ],
+  "policy": "Reference assets reviewed externally; not copied into repository or prototype"
+}

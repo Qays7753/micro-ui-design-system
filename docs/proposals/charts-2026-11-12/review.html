@@ -858,7 +858,7 @@ body { margin:0; background:var(--micro-surface-page); color:var(--micro-text-pr
 .proposal-view[hidden], .proposal-progress[hidden] { display:none; }
 .proposal-page { width:min(100% - 32px, 400px); margin-inline:auto; padding-block:16px; }
 .proposal-intro { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-block-end:12px; }
-.proposal-kicker,.proposal-caption,.proposal-footnote,.proposal-comparison { color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
+.proposal-kicker,.proposal-caption,.proposal-footnote { color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
 .proposal-intro h1 { margin:0; font-size:var(--micro-heading-large-size); line-height:var(--micro-heading-large-line); font-weight:600; }
 .proposal-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-block-end:16px; }
 .proposal-tabs .m-btn { padding-inline:8px; }
@@ -867,12 +867,10 @@ body { margin:0; background:var(--micro-surface-page); color:var(--micro-text-pr
 .proposal-card-head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:4px 8px; }
 .proposal-card h2 { font-size:var(--micro-section-title-size); line-height:var(--micro-section-title-line); font-weight:600; margin:0; }
 p { margin:0; } .proposal-caption { margin-block:4px; }
-.proposal-tag { font-size:13px; line-height:20px; padding:2px 8px; border-radius:var(--micro-radius-chip); background:var(--micro-surface-selected); color:var(--micro-brand-primary); }
 .proposal-reading { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; margin-block:8px 4px; }
 .proposal-reading bdi { font-size:var(--micro-amount-size); line-height:var(--micro-amount-line); font-weight:600; overflow-wrap:anywhere; min-width:0; }
 .proposal-reading > span { font-size:14px; color:var(--micro-text-secondary); }
 .proposal-reading-small bdi { font-size:var(--micro-amount2-size); }
-.proposal-chart-toolbar { display:flex; align-items:center; justify-content:space-between; gap:4px; margin-block-start:8px; }
 .proposal-switch { display:flex; gap:8px; }
 .proposal-control { font:500 14px/22px var(--micro-font-family); color:var(--micro-text-primary); background:transparent; border:0; border-radius:var(--micro-radius-chip); min-width:48px; min-height:48px; padding:8px; cursor:pointer; }
 .proposal-control[aria-pressed=true] { color:var(--micro-brand-primary); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:6px; }
@@ -887,7 +885,6 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-zero-line { stroke:var(--micro-text-secondary); stroke-width:1; }
 .proposal-mark { fill:var(--micro-data-a); }
 .proposal-line { stroke:var(--micro-data-a); stroke-width:2.5; fill:none; stroke-linejoin:round; }
-.proposal-axis { display:flex; justify-content:space-between; direction:ltr; font-size:13px; }
 .proposal-selected { display:grid; grid-template-columns:48px minmax(0,1fr) 48px auto; direction:ltr; align-items:center; gap:8px; border-block-start:1px solid var(--micro-border-divider); margin-block-start:8px; }
 .proposal-selected p { text-align:center; direction:rtl; font-size:14px; line-height:22px; min-width:0; }
 .proposal-selected strong { font-weight:600; }
@@ -907,13 +904,13 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-delta { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; padding-block-start:12px; border-block-start:1px solid var(--micro-border-divider); font-size:14px; }
 .proposal-delta strong { font-weight:600; }
 .proposal-footnote { margin-block-start:8px; }
-.proposal-share-hero { display:grid; grid-template-columns:112px minmax(0,1fr); gap:12px; align-items:center; margin-block:8px; }
+.proposal-share-hero { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px; margin-block:8px; }
 .proposal-share-hero svg { width:112px; height:112px; display:block; }
 .proposal-share-hero svg circle { fill:none; stroke-width:10px; transform:rotate(-90deg); transform-origin:center; }
-.proposal-share-list { display:grid; grid-template-columns:8px minmax(0,1fr) auto; column-gap:8px; align-content:start; }
+.proposal-share-list { flex:1 0 166px; min-width:0; display:grid; grid-template-columns:8px minmax(0,1fr) auto; column-gap:8px; align-content:start; }
 .proposal-share-item { display:grid; grid-column:1/-1; grid-template-columns:subgrid; align-items:baseline; align-content:center; gap:8px; width:100%; min-height:48px; padding:8px 0; border:0; border-block-start:1px solid var(--micro-border-divider); background:transparent; color:var(--micro-text-primary); font:14px/22px var(--micro-font-family); cursor:pointer; text-align:start; }
 .proposal-dot { align-self:center; width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.proposal-share-item [data-amount] { min-width:0; font-weight:500; overflow-wrap:anywhere; }
+.proposal-share-item [data-amount] { display:inline-flex; align-items:baseline; flex-wrap:wrap; justify-content:flex-end; gap:4px; min-width:0; font-weight:500; overflow-wrap:anywhere; }
 .proposal-share-item [data-category] { min-width:0; overflow-wrap:anywhere; }
 .proposal-share-item[aria-pressed=true] [data-category] { font-weight:600; text-decoration:underline; text-underline-offset:4px; }
 .proposal-progress { height:8px; border-radius:var(--micro-radius-capsule); background:var(--micro-surface-disabled); margin-block:8px; overflow:hidden; }
@@ -937,44 +934,56 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
 .proposal-grid-rows > li { display:grid; grid-column:1/-1; grid-template-columns:subgrid; align-items:center; gap:12px; min-width:0; min-height:32px; }
 .proposal-grid-rows .proposal-row-head { display:contents; }
 .proposal-grid-rows .proposal-row-head > span { grid-column:1; grid-row:1; min-width:0; overflow-wrap:anywhere; }
-.proposal-grid-rows .proposal-row-head > strong { grid-column:3; grid-row:1; min-width:0; }
+.proposal-grid-rows .proposal-row-head > strong { grid-column:3; grid-row:1; min-width:0; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px; align-items:baseline; }
 .proposal-grid-rows .proposal-bar { grid-column:2; grid-row:1; margin:0; }
 .proposal-cash-rows .proposal-row-head strong { font-size:var(--micro-amount2-size); }
 .proposal-goal-section, .proposal-subsection { border-block-start:1px solid var(--micro-border-divider); margin-block-start:12px; padding-block-start:12px; }
 
 .proposal-card-head > .proposal-caption { margin:0; }
 
-.proposal-ring-column { display:grid; justify-items:center; align-content:start; gap:4px; min-width:0; text-align:center; }
+.proposal-ring-column { flex:0 0 112px; display:grid; justify-items:center; align-content:start; gap:4px; min-width:0; text-align:center; }
 .proposal-ring-column .proposal-caption { margin:0; }
 .proposal-ring-wrap { position:relative; width:112px; height:112px; }
 .proposal-ring-wrap .proposal-reading { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-wrap:nowrap; gap:0; margin:0; pointer-events:none; }
-.proposal-grid-rows .proposal-row-head > strong { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px; align-items:baseline; }
 .proposal-grid-rows .proposal-row-head > strong bdi { text-align:end; }
 
+/* Organization pass: keep existing type/shape tokens, clarify reading order. */
+.proposal-primary-summary { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 16px; margin-block:8px 12px; }
+.proposal-primary-summary .proposal-reading { margin:0; }
+.proposal-comparison-toggle { max-width:100%; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; padding:4px 0; text-align:end; }
+.proposal-comparison-toggle strong { max-width:100%; min-width:0; flex-wrap:wrap; display:flex; align-items:baseline; gap:4px; font-size:16px; font-weight:500; }
+.proposal-comparison-toggle > span { font-size:13px; line-height:20px; color:var(--micro-text-secondary); text-decoration:underline; text-underline-offset:3px; }
+.proposal-comparison-detail { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; padding-block:8px; border-block-start:1px solid var(--micro-border-divider); font-size:14px; }
+.proposal-comparison-detail[hidden], .proposal-plot[hidden] { display:none; }
+.proposal-bar-label,.proposal-date-label { font-family:var(--micro-font-family); font-size:var(--micro-secondary-size); fill:var(--micro-text-primary); }
+.proposal-date-label { fill:var(--micro-text-secondary); }
+.proposal-share-percent { font-size:13px; line-height:20px; color:var(--micro-text-secondary); unicode-bidi:isolate; white-space:nowrap; }
+.proposal-comparison-toggle strong bdi { min-width:0; overflow-wrap:anywhere; }
+.proposal-back-link { margin-block-end:12px; }
+
 </style></head><body>
-<main class="proposal-page"><header class="proposal-intro"><h1>مقترح الرسوم</h1><span class="proposal-kicker">بيانات توضيحية</span></header>
-<nav class="proposal-tabs" aria-label="سياقات مراجعة الرسوم"><button type="button" class="m-btn m-btn--primary" data-view="activity" aria-pressed="true">النشاط</button><button type="button" class="m-btn m-btn--secondary" data-view="compare" aria-pressed="false">المقارنة</button><button type="button" class="m-btn m-btn--secondary" data-view="share" aria-pressed="false">التوزيع</button></nav>
+<main class="proposal-page"><header class="proposal-intro"><h1>المؤشرات</h1><span class="proposal-kicker">بيانات توضيحية</span></header>
+<nav class="proposal-tabs" aria-label="سياقات مراجعة الرسوم"><button type="button" class="m-btn m-btn--primary" data-view="activity" aria-pressed="true">المبيعات</button><button type="button" class="m-btn m-btn--secondary" data-view="compare" aria-pressed="false">المقارنة</button><button type="button" class="m-btn m-btn--secondary" data-view="share" aria-pressed="false">التوزيع</button></nav>
 <section class="proposal-view" id="activity" aria-label="اتجاه ومقارنة فئات">
-<article class="proposal-card" aria-labelledby="trend-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="trend-title">المبيعات</h2><p class="proposal-caption">6–12 نوفمبر 2026</p></div><p class="proposal-reading"><bdi dir="ltr" id="week-total">4,820</bdi><span>د.أ</span></p></header>
-<p class="proposal-comparison">الأسبوع السابق <bdi dir="ltr">4,180</bdi> · الفرق <bdi dir="ltr" id="week-difference">+640</bdi> د.أ</p>
-<div class="proposal-chart-toolbar"><span class="proposal-caption">المبيعات اليومية · د.أ</span><div class="proposal-switch" aria-label="طريقة عرض الاتجاه"><button type="button" class="proposal-control" data-mode="bars" aria-pressed="true">أعمدة</button><button type="button" class="proposal-control" data-mode="line" aria-pressed="false">خط</button></div></div>
+<article class="proposal-card" aria-labelledby="trend-title"><header class="proposal-card-head"><h2 id="trend-title">المبيعات</h2><p class="proposal-caption">6–12 نوفمبر 2026</p></header>
+<div class="proposal-primary-summary"><p class="proposal-reading"><bdi dir="ltr" id="week-total">4,820</bdi><span>د.أ</span></p><button type="button" class="proposal-control proposal-comparison-toggle" id="comparison-toggle" aria-expanded="false" aria-controls="trend-comparison"><strong><bdi dir="ltr" id="week-difference">+640</bdi><span>د.أ</span></strong><span>عن الأسبوع السابق</span></button></div>
+<div class="proposal-comparison-detail" id="trend-comparison" hidden><span>الأسبوع السابق</span><span><bdi dir="ltr">4,180</bdi> د.أ</span></div>
 <div class="proposal-plot" id="trend-plot"><svg viewBox="0 0 296 126" aria-hidden="true" id="trend-svg"></svg><input id="point-picker" type="range" min="0" max="6" value="6" aria-label="اختيار يوم لقراءة المبيعات" aria-describedby="trend-help"></div>
-<p class="proposal-caption proposal-axis" aria-hidden="true"><span>6 نوفمبر</span><span>12 نوفمبر</span></p>
 <div class="proposal-selected"><button class="proposal-control proposal-arrow" type="button" id="point-prev" aria-label="اليوم السابق">←</button><p role="status" id="point-reading"></p><button class="proposal-control proposal-arrow" type="button" id="point-next" aria-label="اليوم التالي">→</button><button class="proposal-control proposal-data-toggle" type="button" id="data-toggle" aria-expanded="false" aria-controls="trend-data">القراءات</button></div>
 <p id="trend-help" class="proposal-sr-only">المس الرسم أو استخدم أسهم لوحة المفاتيح أو زري اليوم السابق والتالي. الزمن يتقدم من اليسار لليمين.</p>
 <div class="proposal-details" id="trend-data" hidden><table><caption class="proposal-sr-only">المبيعات اليومية بالدينار</caption><thead><tr><th scope="col">التاريخ</th><th scope="col">د.أ</th></tr></thead><tbody id="trend-table"></tbody></table></div></article>
 <article class="proposal-card" aria-labelledby="ranking-title"><header class="proposal-card-head"><h2 id="ranking-title">الأكثر مبيعًا</h2><span class="proposal-caption">نفس الأسبوع</span></header><ul class="proposal-rankings proposal-grid-rows" id="ranking-list"></ul></article>
 </section>
 <section class="proposal-view" id="compare" aria-label="مقارنة مبالغ دقيقة" hidden>
-<article class="proposal-card proposal-combined-surface" aria-label="أمثلة المقارنة الدقيقة"><section aria-labelledby="cash-title"><header class="proposal-card-head"><h2 id="cash-title">المقبوض والمدفوع</h2><span class="proposal-tag">هذا الأسبوع</span></header><p class="proposal-caption">6–12 نوفمبر 2026 · د.أ</p><ul class="proposal-rankings proposal-grid-rows proposal-cash-rows" id="cash-list"></ul><div class="proposal-delta"><span>الفرق بين القراءتين</span><strong><bdi dir="ltr">+640</bdi> د.أ</strong></div><p class="proposal-footnote">فرق الحركة النقدية لا يعبّر وحده عن الربح.</p></section>
+<article class="proposal-card proposal-combined-surface" aria-label="أمثلة المقارنة الدقيقة"><section aria-labelledby="cash-title"><header class="proposal-card-head"><h2 id="cash-title">المقبوض والمدفوع</h2><span class="proposal-caption">6–12 نوفمبر 2026</span></header><ul class="proposal-rankings proposal-grid-rows proposal-cash-rows" id="cash-list"></ul><div class="proposal-delta"><span>الفرق النقدي</span><strong><bdi dir="ltr">+640</bdi> د.أ</strong></div><p class="proposal-footnote">فرق الحركة النقدية لا يعبّر وحده عن الربح.</p></section>
 <section class="proposal-subsection" aria-labelledby="clients-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="clients-title">أرصدة حسب العميل</h2><p class="proposal-caption">12 نوفمبر 2026</p></div><p class="proposal-reading" aria-label="إجمالي الأرصدة المعروضة"><bdi dir="ltr">1,560</bdi><span>د.أ</span></p></header><ul class="proposal-rankings proposal-grid-rows" id="clients-list"></ul></section>
-<section class="proposal-subsection" aria-labelledby="signed-title"><header class="proposal-card-head"><h2 id="signed-title">صافي حركة الصنف</h2><span class="proposal-caption">هذا الأسبوع · قطعة</span></header><ul class="proposal-rankings proposal-grid-rows" id="signed-list"></ul><p class="proposal-footnote">الموجب مبيعات، والسالب مرتجعات.</p></section></article>
+<section class="proposal-subsection" aria-labelledby="signed-title"><header class="proposal-card-head"><h2 id="signed-title">بيع ومرتجعات</h2><span class="proposal-caption">هذا الأسبوع · قطعة</span></header><ul class="proposal-rankings proposal-grid-rows" id="signed-list"></ul><p class="proposal-footnote">الموجب مبيعات، والسالب مرتجعات.</p></section></article>
 </section>
 <section class="proposal-view" id="share" aria-label="توزيع وتقدم بمقام معلوم" hidden>
-<article class="proposal-card proposal-combined-surface" aria-label="توزيع المصروفات والتحصيل"><section aria-labelledby="share-title"><header class="proposal-card-head"><h2 id="share-title">أين صُرفت المبالغ؟</h2><span class="proposal-caption">هذا الأسبوع</span></header><div class="proposal-share-hero"><div class="proposal-ring-column"><p class="proposal-caption">إجمالي المصروفات</p><div class="proposal-ring-wrap"><svg viewBox="0 0 112 112" id="share-ring" aria-hidden="true"></svg><p class="proposal-reading proposal-reading-small"><bdi dir="ltr">1,260</bdi><span>د.أ</span></p></div><p class="proposal-caption" id="share-selected" role="status"></p></div><div class="proposal-share-list" id="share-list" aria-label="فئات المصروفات"></div></div></section>
+<article class="proposal-card proposal-combined-surface" aria-label="توزيع المصروفات والتحصيل"><section aria-labelledby="share-title"><header class="proposal-card-head"><h2 id="share-title">أين صُرفت المبالغ؟</h2><span class="proposal-caption">هذا الأسبوع</span></header><div class="proposal-share-hero"><div class="proposal-ring-column"><p class="proposal-caption">إجمالي المصروفات</p><div class="proposal-ring-wrap"><svg viewBox="0 0 112 112" id="share-ring" aria-hidden="true"></svg><p class="proposal-reading proposal-reading-small"><bdi dir="ltr">1,260</bdi><span>د.أ</span></p></div><p class="proposal-sr-only" id="share-selected" role="status"></p></div><div class="proposal-share-list" id="share-list" aria-label="فئات المصروفات"></div></div></section>
 <section class="proposal-goal-section" aria-labelledby="goal-title"><header class="proposal-card-head proposal-metric-head"><div class="proposal-heading"><h2 id="goal-title">تحصيل الفواتير</h2><p class="proposal-caption">نوفمبر 2026</p></div><p class="proposal-reading"><bdi dir="ltr" id="goal-value">1,260</bdi><span>د.أ</span></p></header><p class="proposal-caption" id="goal-context"></p><div class="proposal-progress" id="goal-track" role="progressbar" aria-label="المحصّل من قيمة الفواتير"><span id="goal-fill"></span></div><div class="proposal-goal-caption"><span id="goal-remainder"></span><bdi dir="ltr" id="goal-percent"></bdi></div></section></article>
 </section>
-<details class="proposal-tools"><summary>حالات المقترح وحدوده</summary><p>هذا نموذج بصري مستقل، وليس مكوّنًا منفذًا أو شاشة منتج. البيانات ثابتة ومعلنة، ولا اتصال أو حفظ. الحالة تغيّر العينة محليًا فقط. المبلغ هو القراءة الأساسية؛ النسبة حصة من الإجمالي المعلن فقط.</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-state="ready">العينة الأساسية</button><button type="button" class="proposal-control" data-state="zero">صفر</button><button type="button" class="proposal-control" data-state="missing">قيمة مفقودة</button><button type="button" class="proposal-control" data-state="negative">قيمة سالبة</button><button type="button" class="proposal-control" data-state="long">رقم طويل</button></div><p>حالات التحصيل:</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-goal="normal">جزئي</button><button type="button" class="proposal-control" data-goal="over">تجاوز</button><button type="button" class="proposal-control" data-goal="unknown">هدف مجهول</button><button type="button" class="proposal-control" data-goal="zero">هدف صفر</button></div><p><a href="https://github.com/Qays7753/micro-ui-design-system/blob/feature/ui-system-component-audit-repair-2026-11-11/docs/proposals/charts-2026-11-12/PROPOSAL.md">القرارات المطلوبة وخريطة المكونات</a></p></details>
+<details class="proposal-tools"><summary>حالات المقترح وحدوده</summary><p>هذا نموذج بصري مستقل، وليس مكوّنًا منفذًا أو شاشة منتج. البيانات ثابتة ومعلنة، ولا اتصال أو حفظ. الحالة تغيّر العينة محليًا فقط. المبلغ هو القراءة الأساسية؛ النسبة حصة من الإجمالي المعلن فقط.</p><p>عرض الاتجاه الزمني المتخصص:</p><div class="proposal-switch" aria-label="طريقة عرض الاتجاه"><button type="button" class="proposal-control" data-mode="bars" aria-pressed="true">أعمدة</button><button type="button" class="proposal-control" data-mode="line" aria-pressed="false">خط</button></div><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-state="ready">العينة الأساسية</button><button type="button" class="proposal-control" data-state="zero">صفر</button><button type="button" class="proposal-control" data-state="missing">قيمة مفقودة</button><button type="button" class="proposal-control" data-state="negative">قيمة سالبة</button><button type="button" class="proposal-control" data-state="long">رقم طويل</button></div><p>حالات التحصيل:</p><div class="proposal-tools-actions"><button type="button" class="proposal-control" data-goal="normal">جزئي</button><button type="button" class="proposal-control" data-goal="over">تجاوز</button><button type="button" class="proposal-control" data-goal="unknown">هدف مجهول</button><button type="button" class="proposal-control" data-goal="zero">هدف صفر</button></div><p><a href="review-orders.html">معاينة الطلبات المستقلة</a></p><p><a href="https://github.com/Qays7753/micro-ui-design-system/blob/feature/ui-system-component-audit-repair-2026-11-11/docs/proposals/charts-2026-11-12/PROPOSAL.md">القرارات المطلوبة وخريطة المكونات</a></p></details>
 </main><script>
 /* Disposable review model, not a MicroData API or reusable implementation.
    Explicit synthetic daily records; no random series or product calls. */
@@ -986,7 +995,7 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
   const names = ['الجمعة','السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
   const colors = ['--micro-data-a','--micro-data-b','--micro-data-d','--micro-data-e'];
   const distribution = [{label:'مواد',value:600},{label:'توصيل',value:360},{label:'تشغيل',value:180},{label:'أخرى',value:120}];
-  const state = { values: baseline.slice(), mode:'bars', point:6, goal:1800, received:1260, selectedShare:0 };
+  const state = { values: baseline.slice(), mode:'bars', point:6, goal:1800, received:1260, selectedShare:0, readingsOpen:false };
   const fmt = n => n === null ? 'غير متاح' : (n < 0 ? '−' : '') + Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:3});
   function rows(selector, data, unit, signed=false) {
     const max = Math.max(1,...data.filter(d=>d.value!==null).map(d=>Math.abs(d.value)));
@@ -1007,10 +1016,10 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
     const delta=sum-4180;
     $('#week-difference').textContent=known.length===a.length?(delta>0?'+':'')+fmt(delta):'غير متاح';
     const lo=Math.min(0,...known),hi=Math.max(0,...known),range=hi-lo||1;
-    const y=v=>108-(v-lo)/range*96;
+    const y=v=>100-(v-lo)/range*72;
     const x=i=>20+i*256/6;
     const zero=y(0);
-    let svg=`<line class="proposal-grid-line" x1="8" y1="12" x2="288" y2="12"/><line class="proposal-grid-line" x1="8" y1="60" x2="288" y2="60"/><line class="proposal-zero-line" x1="8" y1="${zero}" x2="288" y2="${zero}"/>`;
+    let svg=`<line class="proposal-grid-line" x1="8" y1="28" x2="288" y2="28"/><line class="proposal-grid-line" x1="8" y1="64" x2="288" y2="64"/><line class="proposal-zero-line" x1="8" y1="${zero}" x2="288" y2="${zero}"/>`;
     if(state.mode==='line') {
       let path='',active=false;
       a.forEach((v,i)=>{if(v===null){active=false;return;}path+=(active?'L':'M')+x(i)+','+y(v)+' ';active=true;});
@@ -1021,9 +1030,17 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
       const selected=i===state.point;
       if(state.mode==='bars')svg+=`<rect class="proposal-mark" x="${x(i)-11}" y="${Math.min(y(v),zero)}" width="22" height="${Math.max(2,Math.abs(y(v)-zero))}" rx="5" ${selected?'stroke="var(--micro-text-primary)" stroke-width="2"':''}/>`;
       else svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="${selected?5:3}" fill="var(--micro-surface-base)" stroke="var(--micro-data-a)" stroke-width="2"/>`;
-      if(selected)svg+=`<path d="M${x(i)-4},120h8" stroke="var(--micro-data-a)" stroke-width="3" stroke-linecap="round"/>`;
+      if(state.mode==='bars'&&fmt(v).length<=6)svg+=`<text class="proposal-bar-label" direction="ltr" unicode-bidi="isolate" x="${x(i)}" y="${Math.min(y(v),zero)-6}" text-anchor="middle">${fmt(v)}</text>`;
     });
+    a.forEach((_,i)=>{svg+=`<text class="proposal-date-label" direction="ltr" unicode-bidi="isolate" x="${x(i)}" y="122" text-anchor="middle" font-weight="${i===state.point?600:400}">${String(i+6).padStart(2,'0')}/11</text>`;});
     $('#trend-svg').innerHTML=svg;
+    const fallback=state.mode==='bars'&&known.some(v=>fmt(v).length>6);
+    $('#trend-plot').hidden=fallback;
+    $('#trend-plot').dataset.readingLayout=fallback?'readings':'chart';
+    $('#trend-data').hidden=!(fallback||state.readingsOpen);
+    $('#data-toggle').setAttribute('aria-expanded',String(fallback||state.readingsOpen));
+    $('#data-toggle').disabled=fallback;
+    $('#data-toggle').setAttribute('aria-label',fallback?'القراءات الكاملة معروضة':'عرض القراءات الكاملة');
     const i=state.point, reading=`${names[i]} ${i+6} نوفمبر · ${fmt(a[i])}${a[i]===null?'':' د.أ'}`;
     $('#point-reading').innerHTML=`${names[i]} ${i+6} نوفمبر<br><strong><bdi dir="ltr">${fmt(a[i]).replaceAll(',',',<wbr>')}</bdi>${a[i]===null?'':' د.أ'}</strong>`;
     $('#point-picker').value=i;$('#point-picker').setAttribute('aria-valuetext',reading);
@@ -1039,16 +1056,16 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
       offset+=part;return result;
     }).join('');
     const selected=distribution[state.selectedShare];
-    $('#share-selected').textContent=selected.label+' · '+Math.round(selected.value/total*100)+'% من الإجمالي';
-    $('#share-list').innerHTML=distribution.map((d,i)=>`<button type="button" class="proposal-share-item" data-share="${i}" aria-pressed="${i===state.selectedShare}"><span class="proposal-dot" style="background:var(${colors[i]})" aria-hidden="true"></span><span data-category>${d.label}</span><span data-amount><bdi dir="ltr">${fmt(d.value)}</bdi> <span class="proposal-unit">د.أ</span></span></button>`).join('');
+    $('#share-selected').textContent=selected.label+'، '+fmt(selected.value)+' د.أ، '+Math.round(selected.value/total*100)+'% من إجمالي المصروفات';
+    $('#share-list').innerHTML=distribution.map((d,i)=>`<button type="button" class="proposal-share-item" data-share="${i}" aria-pressed="${i===state.selectedShare}"><span class="proposal-dot" style="background:var(${colors[i]})" aria-hidden="true"></span><span data-category>${d.label}</span><span data-amount><bdi dir="ltr">${fmt(d.value)}</bdi> <span class="proposal-unit">د.أ</span>${i===state.selectedShare?`<span class="proposal-share-percent" data-share-percent dir="ltr" aria-label="${Math.round(d.value/total*100)}% من إجمالي المصروفات">${Math.round(d.value/total*100)}%</span>`:''}</span></button>`).join('');
   }
   function renderGoal() {
     const valid=Number.isFinite(state.goal)&&state.goal>0;
     $('#goal-value').textContent=fmt(state.received);
-    $('#goal-context').textContent=valid?'محصّل من '+fmt(state.goal)+' د.أ قيمة فواتير معلنة':state.goal===0?'قيمة الفواتير المعلنة صفر؛ لا نسبة تحصيل.':'قيمة الفواتير غير معلومة؛ لا نسبة تحصيل.';
+    $('#goal-context').textContent=valid?'من أصل '+fmt(state.goal)+' د.أ':state.goal===0?'إجمالي الفواتير: صفر':'إجمالي الفواتير غير متاح';
     $('#goal-track').hidden=!valid;
     if(valid){const ratio=state.received/state.goal;$('#goal-fill').style.width=Math.min(100,ratio*100)+'%';$('#goal-percent').textContent=Math.round(ratio*100)+'%';$('#goal-remainder').textContent=(ratio>1?'زيادة على القيمة المعلنة: ':'المتبقي: ')+fmt(Math.abs(state.goal-state.received))+' د.أ';$('#goal-track').setAttribute('aria-valuemin','0');$('#goal-track').setAttribute('aria-valuemax',state.goal);$('#goal-track').setAttribute('aria-valuenow',Math.min(state.received,state.goal));$('#goal-track').setAttribute('aria-valuetext',fmt(state.received)+' من '+fmt(state.goal)+' د.أ، '+Math.round(ratio*100)+'%');}
-    else {$('#goal-percent').textContent='';$('#goal-remainder').textContent='المبلغ ظاهر دون مقام مفترض.';['aria-valuemin','aria-valuemax','aria-valuenow','aria-valuetext'].forEach(a=>$('#goal-track').removeAttribute(a));}
+    else {$('#goal-percent').textContent='';$('#goal-remainder').textContent=state.goal===0?'لا نسبة تحصيل لقيمة صفرية.':'المتبقي غير متاح';['aria-valuemin','aria-valuemax','aria-valuenow','aria-valuetext'].forEach(a=>$('#goal-track').removeAttribute(a));}
   }
   function setView(id) { $$('.proposal-view').forEach(x=>x.hidden=x.id!==id);$$('[data-view]').forEach(x=>{const selected=x.dataset.view===id;x.setAttribute('aria-pressed',String(selected));x.classList.toggle('m-btn--primary',selected);x.classList.toggle('m-btn--secondary',!selected);}); }
   document.addEventListener('click',e=>{
@@ -1058,7 +1075,8 @@ p { margin:0; } .proposal-caption { margin-block:4px; }
     const goal=e.target.closest('[data-goal]');if(goal){const key=goal.dataset.goal;state.goal=key==='unknown'?null:key==='zero'?0:1800;state.received=key==='over'?2340:1260;renderGoal();}
     const sample=e.target.closest('[data-state]');if(sample){state.values=baseline.slice();const key=sample.dataset.state;if(key==='zero')state.values=state.values.map(()=>0);if(key==='missing')state.values[3]=null;if(key==='negative')state.values[3]=-160;if(key==='long')state.values[6]=123456789.125;state.point=key==='missing'||key==='negative'?3:6;renderTrend();setView('activity');}
   });
-  $('#data-toggle').addEventListener('click',()=>{const open=$('#data-toggle').getAttribute('aria-expanded')!=='true';$('#data-toggle').setAttribute('aria-expanded',String(open));$('#trend-data').hidden=!open;});
+  $('#data-toggle').addEventListener('click',()=>{state.readingsOpen=!state.readingsOpen;renderTrend();});
+  $('#comparison-toggle').addEventListener('click',()=>{const open=$('#comparison-toggle').getAttribute('aria-expanded')!=='true';$('#comparison-toggle').setAttribute('aria-expanded',String(open));$('#trend-comparison').hidden=!open;});
   $('#point-picker').addEventListener('input',e=>{state.point=Number(e.target.value);renderTrend();});
   $('#point-prev').addEventListener('click',()=>{state.point=Math.max(0,state.point-1);renderTrend();});
   $('#point-next').addEventListener('click',()=>{state.point=Math.min(6,state.point+1);renderTrend();});

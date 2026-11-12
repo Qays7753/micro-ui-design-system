@@ -1,0 +1,131 @@
+{
+  "scope": "Seven organization points implemented in independent previews only; audience emphasis: direct numeric readings, no specialist-chart knowledge assumed",
+  "startCommit": "6aea8e363992d24d23cc799e3e519ba89df287ab",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "mainReadOnly": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "proposal": {
+    "command": "python3 tools/chart-proposal-check.py --out OUT",
+    "passed": 105,
+    "failed": 0,
+    "evidence": "proposal-verification.json"
+  },
+  "sourceOrderChecks": [
+    {
+      "command": "python3 tools/light-calendar-check.py --review-scope --out OUT",
+      "passed": 126,
+      "failed": 0,
+      "evidence": "orders/light-calendar.json"
+    },
+    {
+      "command": "python3 tools/calendar-contract-check.py --out OUT",
+      "passed": 41,
+      "failed": 0,
+      "evidence": "orders/calendar-contract.json"
+    }
+  ],
+  "comparisons": [
+    {
+      "view": "activity",
+      "beforeHeight": 570.953125,
+      "afterHeight": 521,
+      "allNumericReadingsIncludingDisclosuresIdentical": true,
+      "notes": "Node order and initial visibility may change intentionally for reading priority; all values remain reachable and disclosed by tested controls"
+    },
+    {
+      "view": "compare",
+      "beforeHeight": 663.1875,
+      "afterHeight": 639.203125,
+      "allNumericReadingsIncludingDisclosuresIdentical": true,
+      "notes": "Node order and initial visibility may change intentionally for reading priority; all values remain reachable and disclosed by tested controls"
+    },
+    {
+      "view": "share",
+      "beforeHeight": 405.71875,
+      "afterHeight": 405.71875,
+      "allNumericReadingsIncludingDisclosuresIdentical": true,
+      "notes": "Node order and initial visibility may change intentionally for reading priority; all values remain reachable and disclosed by tested controls"
+    }
+  ],
+  "declaredFinancialArraysUnchanged": true,
+  "canonicalSourcesUnchanged": [
+    "components",
+    "assets",
+    "shared",
+    "docs/COMPONENT-CATALOG.json",
+    "previews/ui-system-showcase/standalone.html"
+  ],
+  "sourceSha256": {
+    "previews/chart-proposal/index.html": "1da7ae01bd66ee7e097d16bc909221f80867578888076d66379c78b133d43a00",
+    "previews/chart-proposal/proposal.js": "da53d235e9d9fcc441850b1d20a3f1a1194a728ad397d7112efd4a66ea5fe95b",
+    "previews/chart-proposal/proposal.css": "8f457c2989fadda4f71c1ab44646ce69da176e36724d9ddd094e41036013a037",
+    "previews/chart-proposal/orders.js": "69081b4f67bbec7aad8243b937a0bf00645e3fe93ba6211cf3f054ae36faae31",
+    "previews/chart-proposal/orders.html": "795ff3582b8b17cef8179da5752bae7577959846e13c1f2502010189c0ff18af",
+    "tools/chart-proposal-check.py": "bf6854163ca8f4b3be46669938970780495649300c8453bf02fa98eb8e3c64ae",
+    "tools/build-chart-proposal-review.py": "4e55cdd3002116d7930697335e988372bf00fb15b19170f16e4402ed49ce95d7",
+    "docs/proposals/charts-2026-11-12/review.html": "23792aa628da025b425e3344bd5fbf5c86b75296ceb76f1b9c806cbc39815ee0",
+    "docs/proposals/charts-2026-11-12/review-orders.html": "4fa201792c2c7acb6dca464913238ad72a34c409b18f435f8fc18dfe59753ec5",
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42"
+  },
+  "reviewFiles": [
+    "../review.html",
+    "../review-orders.html"
+  ],
+  "limits": [
+    "Micro repository not accessed; no product-host validation",
+    "No source component API, catalog maturity, token, font, icon, logo or color changes",
+    "Light Chromium360 RTL, targeted320 for long reading/category layout, LTR for chart axis; no Dark, zoom or wide matrix",
+    "No real Android/iOS, WebKit/Safari, screen reader, timed comprehension or user research",
+    "Single-file previews tested via HTTP; file:// blocked by existing browser policy, not bypassed",
+    "No PR, merge, deployment or main changes"
+  ],
+  "static": {
+    "passed": 287,
+    "failed": 0,
+    "evidence": "static-verification.json"
+  },
+  "deterministicChecks": [
+    {
+      "command": "python3 tools/build-chart-proposal-review.py --check",
+      "result": "PASS: both review files"
+    },
+    {
+      "command": "python3 tools/component-catalog-build.py --check",
+      "result": "PASS: unchanged14/6/3"
+    },
+    {
+      "command": "python3 tools/build-ui-system-showcase-standalone.py --check",
+      "result": "PASS: unchanged, byte-identical"
+    },
+    {
+      "command": "python3 tools/manifest-build.py --check",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "evidenceSha256": {
+    "evidence/01-activity-360-rtl.png": "c8b2109886dcfd4664a1be35e22b8f61064fe6890710eab4dbf4bff314599e93",
+    "evidence/02-line-360-rtl.png": "cd0492ece2dad4125f5ce07e505c6f01617b7e2cc6da1eb0109b0beeb558c102",
+    "evidence/03-comparison-360-rtl.png": "52d8c2df9e2e4ddb4c4205598ca85c22a4408ca228c46d514562d0062137ec54",
+    "evidence/04-signed-360-rtl.png": "52d8c2df9e2e4ddb4c4205598ca85c22a4408ca228c46d514562d0062137ec54",
+    "evidence/05-share-components.png": "1c732c006d8c5f4054f261e6786a4195959d6cab75b29eb258f525d4ff7bfb4b",
+    "evidence/05-share-progress-360-rtl.png": "7fb30253b89f63200afbeac9b93606a0190b2ca59b75ac75ed79d059a99ecfbd",
+    "evidence/06-long-320-rtl.png": "ca485df78375ce5a22a1fd093731034f652e3dbd063d7e70193289b0d4e13ba1",
+    "evidence/07-axis-360-ltr.png": "19329c225b1d973a94e85c2f5abe976c7b8f767fd5461f09fd763fb9c030ca74",
+    "evidence/08-share-320-rtl.png": "7e4998823a2cdd8fbfca8c43a3603ddc9e0d33cf034e063700c3d521c086093f",
+    "evidence/09-orders-month-360-rtl.png": "4eebc275d9958abfbce32c73393118f6cf9967000ba2a7d43fccce183f12c761",
+    "evidence/10-orders-day-360-rtl.png": "bfa694c6a782f840d116aa38575f2885eaadd4fa801d5b19bf0e5193a333c8e8",
+    "before/activity-360-rtl.png": "b1aa3780ad3dd40bf3b4169e55c9b43f05e1360b2695207193ebc27fc849e2e0",
+    "before/activity-component.png": "00ad74223e3a75220a56982de04d7ebace11f74c3aacb3dfa4f02e7e0ccbaa49",
+    "before/compare-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "before/compare-component.png": "00f090741126054f32015960ca98fa96bf5885f1683196908e98c0aabe8b6b91",
+    "before/measurements.json": "3dd748433fd5f49709fc82126afb62058dd6822788a8134fad92dbbb9806cb86",
+    "before/share-360-rtl.png": "90b15c4b06822004d5cd333c213753e6f03c7e52885ea171f852aa0b7d71f223",
+    "before/share-component.png": "4403d0314740d7f4d9a6b29de114a855d66052239420363ff353a201f30e4536",
+    "orders/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "orders/light-calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875"
+  }
+}
