@@ -1,0 +1,1544 @@
+{
+  "date": "2026-11-12",
+  "timezone": "Asia/Amman",
+  "stage": 1,
+  "auditedCommit": "51bf442584e1fef25f2a01018f0b1161c41bc500",
+  "mainAtStart": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "branch": "feature/ui-system-component-audit-repair-2026-11-11",
+  "allowedRepository": "Qays7753/micro-ui-design-system",
+  "newMicroAccess": false,
+  "sourceImplementationChanged": false,
+  "runtimeTestsRun": false,
+  "darkTestsRun": false,
+  "historicalRequirementsInputSha256": "b9a98a1bceb3149df73129d1d32ff25c6cfec37739bb6ba0143b777f1d40adae",
+  "sourceSha256": {
+    "assets/SOURCES.md": "e2af7650a4cbec0bc5c255c96aca40f41f1a024e982e487b3825624c6b9077c1",
+    "assets/brand/micro-logo/FUTURE-DEVELOPMENT.md": "cd5efa020fd16d2e85d5e3f8aa7b6abb39977931fe3dbd7a99f9418861075da6",
+    "assets/brand/micro-logo/README.md": "a60c2b43ddd7b76ac2a339a928b5c71a3488b5653539590b6741401d16dd3d29",
+    "assets/brand/micro-logo/v1/ARCHIVE-SHA256.json": "3c4f9837dc1e6b2ba7691510c8a878e25b0afd60bbbe62d4caa90bbb90fed58a",
+    "assets/brand/micro-logo/v1/README-AR.md": "814ec77fff47f212dc3ea437e4e442b799baf50ae34b7dfa91e3e44797b93ee5",
+    "assets/brand/micro-logo/v1/SHA256.json": "01185efd53877a0686a27b563858776385c3491ed76631c2b6b27831defa9af0",
+    "assets/brand/micro-logo/v1/docs/delivery-checks.json": "73e0f055e7f147748e5626d13b6811b75fa53d619a047eaff699afde7449fb1a",
+    "assets/brand/micro-logo/v1/docs/small-size-proof.png": "bd541f02b85d44513f372d88f14ecb68d0c528c19edd35e467b35153c121007e",
+    "assets/brand/micro-logo/v1/docs/vector-validation.json": "b9f05d387a5f8550118adb4a809413b5f0660c826c68c2ae9862432da2246958",
+    "assets/brand/micro-logo/v1/download/micro-brand-source-v1.zip": "449b100a996bb3e2002ce2b658973fa41a7f06415d206f7945fa4ecc7928f1c4",
+    "assets/brand/micro-logo/v1/exports/pdf/micro-arabic-color-rgb.pdf": "af3f0592e9ce63792ac194238116aa9231cc222993d40a4780489f6e617deb54",
+    "assets/brand/micro-logo/v1/exports/pdf/micro-english-color-rgb.pdf": "cb6eff2a70de49f9a571a01c5da73063fc9197834d6af652c9a0aee9875174f4",
+    "assets/brand/micro-logo/v1/exports/pdf/micro-symbol-color-rgb.pdf": "2b16a118de27a40c501daa801ed7c76850c5e5d8f017eec4cb476da8445a3392",
+    "assets/brand/micro-logo/v1/exports/png/micro-arabic-color.png": "65ee0c8b3ca075cd8c624e7b10b92a312f68ce2d88d86a6277c7c2970817362b",
+    "assets/brand/micro-logo/v1/exports/png/micro-arabic-mono-petrol.png": "177bd60b7486d0cfe03c3e08f48737d30c31059787de16131a03326f080331f8",
+    "assets/brand/micro-logo/v1/exports/png/micro-arabic-white.png": "cb08269709aa45ad935fc1dfbd345c052b24cf25a85a62a4d4e7b644b85dfe0b",
+    "assets/brand/micro-logo/v1/exports/png/micro-english-color.png": "855e49e90b50baa9074d935e5b8c8c55d8fde400ab087152afde3ccba31ce683",
+    "assets/brand/micro-logo/v1/exports/png/micro-english-mono-petrol.png": "4e906ee2e6f685b08d371ba55ba5ac745356f7669ad14a4b2fa04c8d3fe4ce9b",
+    "assets/brand/micro-logo/v1/exports/png/micro-english-white.png": "edfb64a68a7f21edfac05faf9eff9f5d816c38d7bf59a6204a0a56f7112e5c09",
+    "assets/brand/micro-logo/v1/exports/png/micro-symbol-color.png": "a7bb0ff9e88873574629c2e7cc16fdbbc451113bc767537ea3dc5f0bebf52629",
+    "assets/brand/micro-logo/v1/exports/png/micro-symbol-mono-petrol.png": "7231dada8cbbb7c95b0897469646974c0f39a7030db8b14f65739faa7e07d321",
+    "assets/brand/micro-logo/v1/exports/png/micro-symbol-white.png": "ac8968c7df1cf4baa48205ea928c9964eb8601af4f34b4cd3e3e4c99e05e428a",
+    "assets/brand/micro-logo/v1/exports/svg/micro-arabic-color.svg": "e2ff95cc120fe759710de512217fddaf6feeeec1676d8b1347b7b89dcc4b3c86",
+    "assets/brand/micro-logo/v1/exports/svg/micro-arabic-mono-petrol.svg": "87535abd0c0cb96975241c88d85c446668f807ce14e4809dc1a02133b2390eeb",
+    "assets/brand/micro-logo/v1/exports/svg/micro-arabic-white.svg": "390fc62226bff817714bc00ff4838f4bfc9e315e9b656dd5e73f0a432df0f43a",
+    "assets/brand/micro-logo/v1/exports/svg/micro-english-color.svg": "3ee8599e08db32e22850f5794b736abc43b32820c9eda70481d07475368db9fc",
+    "assets/brand/micro-logo/v1/exports/svg/micro-english-mono-petrol.svg": "c16fc70b6ee2f11fd35e554db3281fc02acf39d2affc53d701a4743df226d2b1",
+    "assets/brand/micro-logo/v1/exports/svg/micro-english-white.svg": "f9e19e5eb6b9cd6af93eb2b8171f08c97df905d5a0df4c56d0d4446cbcaa3d78",
+    "assets/brand/micro-logo/v1/exports/svg/micro-symbol-color.svg": "b8d939e2cad5003d188b278952cea30d8e26f47ff70c82dd4b1a225ebe064395",
+    "assets/brand/micro-logo/v1/exports/svg/micro-symbol-mono-petrol.svg": "f78985190de87d9dec7043ff1e86d5f63360274311dc1934e5ea2056935e5690",
+    "assets/brand/micro-logo/v1/exports/svg/micro-symbol-white.svg": "a59508d867f64abd591713c48d170ad38129685f5046600c932bc763fc3a400a",
+    "assets/brand/micro-logo/v1/micro-brand-preview.png": "1d4ae6d10c8ce7dad4434bb0f8e7aec677d34bba6f6d3fae627857d6e72adaee",
+    "assets/brand/micro-logo/v1/phone/micro-symbol-light-2048.png": "2779cd6cf11bdf6a90708dfda0413de31e51f0c0ef736214622a0a2f335c014c",
+    "assets/brand/micro-logo/v1/phone/micro-symbol-transparent-2048.png": "474a764bd8c0bbd95c300d66bdbfcc95c0fb8b3cb8b4d832a8cbdf0c0335605b",
+    "assets/brand/micro-logo/v1/phone/micro-symbol.svg": "b8d939e2cad5003d188b278952cea30d8e26f47ff70c82dd4b1a225ebe064395",
+    "assets/brand/micro-logo/v1/source/micro-brand-master.svg": "b6923460bf8ca98f23c1160b73821cb91ead357590cf2cea8867b7991dc8571a",
+    "assets/brand/micro-logo/v1/tools/export_brand.py": "4429c41187eef5bcb039066446aaa2de85694e0f6ef5ac537c2334f55cf138e1",
+    "assets/brand/micro-logo/v2/master/micro-brand-master.svg": "09d90a9286abdf231581cddb694fa3e7d5a913d17abbdd4acbc159548bf7e6d4",
+    "assets/brand/micro-logo/v2/master/micro-lockup-arabic-master.svg": "e3c53dc6166c42f076ce711d008396f07f3d95c2bf1e2cfb975b058825ff6137",
+    "assets/brand/micro-logo/v2/master/micro-lockup-english-master.svg": "f31a1cf811a71571f298a90879cd985c431c5d114faeb1c1f06f440d5079c83f",
+    "assets/brand/micro-logo/v2/master/micro-symbol-master.svg": "9766c658bdc4887d56213b36c4dca352f4b87316865c19f5bc807ea38a4b2799",
+    "assets/brand/micro-logo/v2/platform-icons/android/res/drawable-nodpi/micro_adaptive_foreground.png": "3e01575a61d68f4226d759757200ac3ffc3a13fae137a64578627a363d9dbc36",
+    "assets/brand/micro-logo/v2/platform-icons/android/res/mipmap-anydpi-v26/ic_launcher.xml": "8f7e5eda27f8a54ce17d4f20f9f318d2c533b85f3b6cab18431c790f6ba56906",
+    "assets/brand/micro-logo/v2/platform-icons/android/res/values/colors.xml": "54e5794f9d04cb4f63fee1c68a2dba228c44429b4b59b4064aa6ed8f67eca563",
+    "assets/brand/micro-logo/v2/platform-icons/android/source/adaptive-background.svg": "c60ac328fe11b8f92a0b0ee84dcf11d875ada4f7e86c15c3fc578c51a5adfd0a",
+    "assets/brand/micro-logo/v2/platform-icons/android/source/adaptive-foreground.svg": "f9e00e937cf1b2880dd57da3b5b4ecd961f66d941f5cb1df29a0bd215b64bd94",
+    "assets/brand/micro-logo/v2/platform-icons/apple/apple-touch-icon-180.png": "2738798b2dd0c71687248a39fc213a605f9364e8d0cec720196f3b01d1a191f6",
+    "assets/brand/micro-logo/v2/platform-icons/apple/apple-touch-icon-source.svg": "a1a5c852939c6c4f7e939964d035dd59303a64ebbec8230985be7b0debc5bb07",
+    "assets/brand/micro-logo/v2/platform-icons/favicon/favicon-16.png": "f0617cefb7bf844b24698f7df780ed8ba670424742fa245236e2914f10b0022b",
+    "assets/brand/micro-logo/v2/platform-icons/favicon/favicon-32.png": "c592b11c7b2f5618551e73c08fdf4aff5aa7a3139d6a25fa5e8122c4c0380517",
+    "assets/brand/micro-logo/v2/platform-icons/favicon/favicon-48.png": "94d87001737601987b2b15df17a7e004ea9f401dd5533b6352db9b5d1ba0f874",
+    "assets/brand/micro-logo/v2/platform-icons/favicon/favicon.ico": "d8ecff068d572cd6d31db5bad3dab27a094588bd82b3d4939c33d8ac8bbff1e6",
+    "assets/brand/micro-logo/v2/platform-icons/favicon/favicon.svg": "495f9e26dde032680fb8a274276ecd1b2cd9263df2982e7f279442bd240fc116",
+    "assets/brand/micro-logo/v2/platform-icons/pwa/icon-192.png": "701551c6bc30e498ae87e12886b597c43eb17afcdd91c16830c78898f8fce5eb",
+    "assets/brand/micro-logo/v2/platform-icons/pwa/icon-512.png": "31dd93793c621ebafa9487aa6a1682c19ba8a35f6829a599c54f03f9263a3f32",
+    "assets/brand/micro-logo/v2/platform-icons/pwa/maskable-icon-192.png": "cbd539ebaaa303cf0411c2a804921f09e9ee3c36a2d95c0d90813bc7de8315cb",
+    "assets/brand/micro-logo/v2/platform-icons/pwa/maskable-icon-512.png": "5ef4c02cf95fa3ca0e163e92e6ac0ddd01a8b610090b3cef81859b411e1aa429",
+    "assets/brand/micro-logo/v2/platform-icons/pwa/maskable-icon.svg": "9b89ec0c3cbcc6579083ed6dd410e1438a09cb672043676f9fe8433d60db0990",
+    "assets/brand/micro-logo/v2/png/full-color/arabic/arabic-1024.png": "23ff9e5f147c829e77f59529399ea5627b701fec22a43f57ba221dcea4f5c7f5",
+    "assets/brand/micro-logo/v2/png/full-color/arabic/arabic-2048.png": "6979732e048f1680bbe8c82a54ced450002377dd56f7f4b11171466802101ce7",
+    "assets/brand/micro-logo/v2/png/full-color/arabic/arabic-256.png": "69722914aaf5a726dadb1a150c28933a70fb249c31c5ced55005254b384b9777",
+    "assets/brand/micro-logo/v2/png/full-color/arabic/arabic-512.png": "8e4ecff8b315a1159266abafe21c812cb056cdebbcfc48e702bd02121b78afe9",
+    "assets/brand/micro-logo/v2/png/full-color/english/english-1024.png": "ed32a4e9f299b75c0dcab0703432e6c43d846e713a5dccb411f7003fe7cf7c72",
+    "assets/brand/micro-logo/v2/png/full-color/english/english-2048.png": "3d0581a3588d60e843635f509438ab8b04906deed6cf2bb745e88de33875ada4",
+    "assets/brand/micro-logo/v2/png/full-color/english/english-256.png": "47feed8fe45b52b7c46ffde95dd661cfe029dc1303ad7de17da7d3f3d4e66801",
+    "assets/brand/micro-logo/v2/png/full-color/english/english-512.png": "1dc557b790e321ca0dc634a31b1f931ca96bbc20c41e7cd78735fa475ef2fddb",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-1024.png": "b9b31bbb4bfc6ace77dc9a87ea445879a97a6fd7797bf62cf88c1f56a67d02d7",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-128.png": "76be27b6c4def2045a15dec02883fbb117bc83b01992d5308111b1d7561a8d66",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-16.png": "f0617cefb7bf844b24698f7df780ed8ba670424742fa245236e2914f10b0022b",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-24.png": "81ea4a8f895afc660e12bebd2c6c3bd0bd424cf35e48a34a5fb9805f6b0aa63f",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-256.png": "44209e1579c074dd7c4a2c1d1fb7dca64f55c789f211f654d1eefda950de0087",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-32.png": "c592b11c7b2f5618551e73c08fdf4aff5aa7a3139d6a25fa5e8122c4c0380517",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-48.png": "94d87001737601987b2b15df17a7e004ea9f401dd5533b6352db9b5d1ba0f874",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-512.png": "31dd93793c621ebafa9487aa6a1682c19ba8a35f6829a599c54f03f9263a3f32",
+    "assets/brand/micro-logo/v2/png/full-color/symbol/symbol-64.png": "0114592d4f57307a09d1bb42f74adcd21bc77cc5ae04a7c7e8318a1a2c914dc1",
+    "assets/brand/micro-logo/v2/png/monochrome-black/arabic/arabic-1024.png": "87d51331c826a072b5e651f75da0011518e06f28f82fd3d52c90e5f55406de3d",
+    "assets/brand/micro-logo/v2/png/monochrome-black/arabic/arabic-2048.png": "bc9d7639cae53fedd49a064786c047cd4bbe46960b53d651b508026549528420",
+    "assets/brand/micro-logo/v2/png/monochrome-black/arabic/arabic-256.png": "3cf278b737a125a311adda69200971322a04d0f9b2ef15254c69c2f5985d2b1c",
+    "assets/brand/micro-logo/v2/png/monochrome-black/arabic/arabic-512.png": "ea5a7dc60ef263504b6809304621fb7c0dac6388a5bfc70c3ead86926e602431",
+    "assets/brand/micro-logo/v2/png/monochrome-black/english/english-1024.png": "f242980c8dce3877c9f7ed01dafa050a9d62f124ee2eaadae1b5c7c189cb8267",
+    "assets/brand/micro-logo/v2/png/monochrome-black/english/english-2048.png": "e3040a8998e5d13af4ee67c9a621f587871f0ced4f0d045f3c4094adf18f0eb0",
+    "assets/brand/micro-logo/v2/png/monochrome-black/english/english-256.png": "3c6fd9e9e96be94442c8b4c0a3e10c04653eda968c26490cdcc7954f60ec910f",
+    "assets/brand/micro-logo/v2/png/monochrome-black/english/english-512.png": "cc068b48790c9fc57c18436759c21729090f2a652c062e4e5669cbdbcc19ce3a",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-1024.png": "8fd6596e805bcbba63dc42413170cd11788e86cec1e66e3df64648940090ed1d",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-128.png": "4b105dd729c0ca46f462781252f38029748038af1b61b2dbb385137a2be927ea",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-16.png": "ab0f38525709bdc92e641f39b32a7c543d7dcf911b123373fc29b6760bafc449",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-24.png": "582e60fbc35d68ddf45e70ac49523093533af9a79ccd756916a42d8a9dfbf3f2",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-256.png": "abbe2cbaa7645a42e786ed75645fd1c1b33ee11cba388461966d4a54d939a124",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-32.png": "9922061214477f31043d56731a562760cfdced431ee907d72b326e81fdffb7e0",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-48.png": "6436a18de8d03b4473cef897680aaa4e08a2f0afab319f6a76b03a3084152a82",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-512.png": "178c0f32e5befcafb38d5172a89b4c98194e34c35ea07e7713d7feef051a0401",
+    "assets/brand/micro-logo/v2/png/monochrome-black/symbol/symbol-64.png": "4c24512cb36b1741ffda731342e224e1b76e0075192d2851043413836582e9e3",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/arabic/arabic-1024.png": "3c4ffa672260170d4555c715fcbfebb60ad3dd8eaa8144945f46286dd4014eba",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/arabic/arabic-2048.png": "9a5839db244d1fdaa209892ab373cbfc3c7693968434293f11ee178ba40e500b",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/arabic/arabic-256.png": "bb1015545fda19754c732fddb1d7b7edfc073dc7c717c8934e7a3d237965bb45",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/arabic/arabic-512.png": "fee9055a39b02be96d4a5557308b4b28ab9e5069689400f09a95563c781a3a3d",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/english/english-1024.png": "a3c38410c8b240744e1653d4503d3fd3c17de052dff7e30297c7d94b2e3a6b98",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/english/english-2048.png": "08dac9c3d9dda9ad01a540430c49468186a0252dc7a2c84cca4e837a8f18793c",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/english/english-256.png": "3fe5887b6d1d0bccdcebc7d39b1e3b3e605e9330d5727e65ef2c524700abcb7e",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/english/english-512.png": "c1fb520accedd49659cef95699383f9004f39cad55532e8de173d4c9da2d9f5c",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-1024.png": "1ab9ecfc839a2bd9b29c53e4d21b5ee42dd2e0cbba4cae9be44d48cfbc40625e",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-128.png": "63af11f78b3a7b69c71cffb6d85df6509ba1fca2c73e38c69e87e9f6dbd0c931",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-16.png": "178079249c1d02f1f0b98554d07ae83ce7c400d78f53d3d654d8d8fbcdcea763",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-24.png": "a4e03e79c834d6c7f6aa2a3be3d6d621478652fa2e3c7ecb0924f72f28444eb8",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-256.png": "aed57ac51e28903b8c70484a4b58cc43075e814d39fce5ed74b2a542b0bf0f9f",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-32.png": "a771ad554ad6240b765918cbde53e61f18d9f447db9dff2c4c4d52629a6212cf",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-48.png": "e2b94e8a971e20eafbd5f15076471283e62506368965fd5e11aed976068bbafa",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-512.png": "da3cb4b6c137bd60434e53372fde5c5abfdaa194b1d1c68c407b0ecc964dc56c",
+    "assets/brand/micro-logo/v2/png/monochrome-petrol/symbol/symbol-64.png": "3f02e90ad205961e82c5eb74c8a19b3614aefcd1d27aa8c3b76cc36a8c9db793",
+    "assets/brand/micro-logo/v2/png/monochrome-white/arabic/arabic-1024.png": "fa2fb383dc80fe16de1bb89bc8d5f0ac0eefaa9c80e46f9c16678eae2f6f6826",
+    "assets/brand/micro-logo/v2/png/monochrome-white/arabic/arabic-2048.png": "6d59559e389591d258afc42b9f8384f9b14f1119e6604ddcc87c5bc1bd8d40a3",
+    "assets/brand/micro-logo/v2/png/monochrome-white/arabic/arabic-256.png": "895d2130dd2e8d6958fcbb715df08a751538b2852e0f01f3cbbe3139824b0431",
+    "assets/brand/micro-logo/v2/png/monochrome-white/arabic/arabic-512.png": "291708085205af76965c37517733b4cb7915070271c79d1db2073adc95039dc1",
+    "assets/brand/micro-logo/v2/png/monochrome-white/english/english-1024.png": "af690b7e0e37963d115ecaaf534afad419ebd03a347549dc84031147b12f8608",
+    "assets/brand/micro-logo/v2/png/monochrome-white/english/english-2048.png": "ca9fa47dbe1789e026faa55c7fdbe5dd81688ab1376abdfe5ab48c3a606b4923",
+    "assets/brand/micro-logo/v2/png/monochrome-white/english/english-256.png": "aff9c1073d77a0c5313043c222e5129380fa66056714cf7e07e23d8b31706656",
+    "assets/brand/micro-logo/v2/png/monochrome-white/english/english-512.png": "0a2081229e24f21ea13c3e6a750f480ac8e2fa734adfdac31afdf8ce8615c23a",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-1024.png": "9168dab74a8db185934a0bc121804dba5a8c6d12e4257ff32a774f1f31a1068f",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-128.png": "c54a38d275075e81f4ad7be0b210c805d95b050a1d37b191197d13da0b166c62",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-16.png": "113a0d82bdf2fe420272ca55afbf55421c9e52f24cd7cc1227704eced30e09fa",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-24.png": "372afc323612e743540ec5734122f2959964dc56c4a0ef9d85ba6be2bacaabbd",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-256.png": "c84d10f71b1d22580a594609769930af14594908a5fd79b1900cc682a7e50e82",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-32.png": "1531e10db32a8d3eb443a5f4852d4083ae378c236ef6dd302c70fcc2ab3e5e37",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-48.png": "62bd9105ef4f277683d30ce36545038360e5be0a1cce7eda1a83100307d2d14b",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-512.png": "7a80f4bc63fe28f7d1dbe9343d4e7a3288c34a1a56b0967cd9ed6c128db4691d",
+    "assets/brand/micro-logo/v2/png/monochrome-white/symbol/symbol-64.png": "ce96a7d6b85db07bc73ec948a05db18a07e8b2e59f439b863fd4ced23f1ccc97",
+    "assets/brand/micro-logo/v2/png/reversed-dark/arabic/arabic-1024.png": "fa2fb383dc80fe16de1bb89bc8d5f0ac0eefaa9c80e46f9c16678eae2f6f6826",
+    "assets/brand/micro-logo/v2/png/reversed-dark/arabic/arabic-2048.png": "6d59559e389591d258afc42b9f8384f9b14f1119e6604ddcc87c5bc1bd8d40a3",
+    "assets/brand/micro-logo/v2/png/reversed-dark/arabic/arabic-256.png": "895d2130dd2e8d6958fcbb715df08a751538b2852e0f01f3cbbe3139824b0431",
+    "assets/brand/micro-logo/v2/png/reversed-dark/arabic/arabic-512.png": "291708085205af76965c37517733b4cb7915070271c79d1db2073adc95039dc1",
+    "assets/brand/micro-logo/v2/png/reversed-dark/english/english-1024.png": "af690b7e0e37963d115ecaaf534afad419ebd03a347549dc84031147b12f8608",
+    "assets/brand/micro-logo/v2/png/reversed-dark/english/english-2048.png": "ca9fa47dbe1789e026faa55c7fdbe5dd81688ab1376abdfe5ab48c3a606b4923",
+    "assets/brand/micro-logo/v2/png/reversed-dark/english/english-256.png": "aff9c1073d77a0c5313043c222e5129380fa66056714cf7e07e23d8b31706656",
+    "assets/brand/micro-logo/v2/png/reversed-dark/english/english-512.png": "0a2081229e24f21ea13c3e6a750f480ac8e2fa734adfdac31afdf8ce8615c23a",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-1024.png": "9168dab74a8db185934a0bc121804dba5a8c6d12e4257ff32a774f1f31a1068f",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-128.png": "c54a38d275075e81f4ad7be0b210c805d95b050a1d37b191197d13da0b166c62",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-16.png": "113a0d82bdf2fe420272ca55afbf55421c9e52f24cd7cc1227704eced30e09fa",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-24.png": "372afc323612e743540ec5734122f2959964dc56c4a0ef9d85ba6be2bacaabbd",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-256.png": "c84d10f71b1d22580a594609769930af14594908a5fd79b1900cc682a7e50e82",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-32.png": "1531e10db32a8d3eb443a5f4852d4083ae378c236ef6dd302c70fcc2ab3e5e37",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-48.png": "62bd9105ef4f277683d30ce36545038360e5be0a1cce7eda1a83100307d2d14b",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-512.png": "7a80f4bc63fe28f7d1dbe9343d4e7a3288c34a1a56b0967cd9ed6c128db4691d",
+    "assets/brand/micro-logo/v2/png/reversed-dark/symbol/symbol-64.png": "ce96a7d6b85db07bc73ec948a05db18a07e8b2e59f439b863fd4ced23f1ccc97",
+    "assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg": "267cca777a2fb649620d6ea838741de9111c3311c503ea76f01a03c454fcc4e4",
+    "assets/brand/micro-logo/v2/variants/full-color/micro-lockup-english.svg": "001997a1a213c7c245a182064a45fac9d0498421a9c4eb81c8e6e18c0fe31cf3",
+    "assets/brand/micro-logo/v2/variants/full-color/micro-symbol.svg": "a0b4288c191167d245265919e59eb5db5b72941333e9b6898f3238cca5c0da5e",
+    "assets/brand/micro-logo/v2/variants/monochrome-black/micro-lockup-arabic.svg": "9e85ee61f0d3ba6fe9d9e8ee44da5e98d30d31a9da7c9ee554c7647995f2120a",
+    "assets/brand/micro-logo/v2/variants/monochrome-black/micro-lockup-english.svg": "229523258810d3d33cf846f32d29053724b7040bd25afa335098536b9755eb5d",
+    "assets/brand/micro-logo/v2/variants/monochrome-black/micro-symbol.svg": "8fec20ecd8f9ab18b7e05cdf9cc6e4b0a7693397aa0a0986a00ac1b6a29b2cfe",
+    "assets/brand/micro-logo/v2/variants/monochrome-petrol/micro-lockup-arabic.svg": "b132a394401e76a22d4d17930b244b31a59593a6a3f8a7b24a4016b5e8c093b4",
+    "assets/brand/micro-logo/v2/variants/monochrome-petrol/micro-lockup-english.svg": "0d2f23e6cc6d67b62051ddbcc48a638258a685368db831afb86221e9bad73662",
+    "assets/brand/micro-logo/v2/variants/monochrome-petrol/micro-symbol.svg": "3b7fccfa73c20f28dc4689ab561fb8f0417dd7a9111de4180f151336c7e93a30",
+    "assets/brand/micro-logo/v2/variants/monochrome-white/micro-lockup-arabic.svg": "af957f81f7cda3a61b72ff2e65498f4c8ec0728d2b680da06f7c7b5fd56c5307",
+    "assets/brand/micro-logo/v2/variants/monochrome-white/micro-lockup-english.svg": "9168fb3961a5416d604b970c338310802812506f449f706a3bf43e7cae0a0819",
+    "assets/brand/micro-logo/v2/variants/monochrome-white/micro-symbol.svg": "7e889e50cd93ab62a1a42154bd6663fbaf38b2033af9ee408d0226d2d628adc0",
+    "assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-arabic.svg": "ff7af2c53654d84ab70681dfb44d59490780685c7e1fea31ce52b11e01c33f43",
+    "assets/brand/micro-logo/v2/variants/reversed-dark/micro-lockup-english.svg": "da0b0ade20188fb01e5cda6d283eb6314adedd323ff27a922318e10269a55ca8",
+    "assets/brand/micro-logo/v2/variants/reversed-dark/micro-symbol.svg": "2b323c44d3623f242213e1c90043723e7861e3b624a5f52fd104e5b22cbab231",
+    "assets/fonts/IBMPlexSans-Latin-400.woff2": "3b646991d30055a93a4ecc499713d4347953a74a947ecab435ab72070cbdab0e",
+    "assets/fonts/IBMPlexSans-Latin-500.woff2": "0717336fb31fcdcde4b8deb3675bb4a0f7f6d484864afcd6751ac29975962203",
+    "assets/fonts/IBMPlexSans-Latin-600.woff2": "8960851d691c054ed38e259bdcf1a6190d157b4203ed5bb32c632a863fb8ec2f",
+    "assets/fonts/IBMPlexSansArabic-Arabic-400.woff2": "6010e7fd0dce5d527583951750728cbe3c895efbd16aa0f809ab8c824878c9d8",
+    "assets/fonts/IBMPlexSansArabic-Arabic-500.woff2": "90aef64fea9794f232332e907d45810ab268d1a11721340025eba2a2cdb36d5c",
+    "assets/fonts/IBMPlexSansArabic-Arabic-600.woff2": "16734a5adb27b0f363e566cbbeacec480da0dc0baa19c8f0053251c2e2bc0eac",
+    "assets/fonts/LICENSE-IBM-Plex-OFL.txt": "1c32ddc3fc6efd167cdcbe475195287f2dc26ed1a4c92fbe31c87ceaffe44f98",
+    "assets/fonts/fonts.css": "856fb8958b820c8d2493ee14a6bdb6f0e0d29663240b5eeba20344b0db346d32",
+    "assets/icons/LICENSE-hugeicons.txt": "1658d8213209df7b9b86dfc05d724ede48d00dbc27abc15976ec7adec9601cde",
+    "assets/icons/LICENSE-lucide.txt": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57",
+    "assets/icons/add-01.svg": "76d2e3b0dbeb6f6b4e0b7d1b59cda2769a5cd82ee121e557c8d2afd3cc5ccd9d",
+    "assets/icons/alert-circle.svg": "1083e1da0ff1debe83fbca7580f5cc8eee19a43edf1aad848e6f5687eadc4973",
+    "assets/icons/alert01.svg": "7d300395a9b7d5492d692d915fc7012b4f86e7a12ff20260de3f57955dad831e",
+    "assets/icons/arrow-down02.svg": "1ecfa4135cb3c95ebee711a69706807fae047e258c6a275a37447d0a226db918",
+    "assets/icons/arrow-up02.svg": "c736000595af7a3dd55f24854c2a3c2d9e86dc6bef3d695e6b791cdf02b6eb56",
+    "assets/icons/calendar03.svg": "3461657a7c067a9ca94fa9cefb60000ff15e178f3e35f08686b60d47d5d40a9c",
+    "assets/icons/cancel01.svg": "9da96e4aba74689ccd8894c66187c8d291e67f5a4ab95bb21de4e7ab39c99099",
+    "assets/icons/chart-column.svg": "3a80034e409caf6a083cc32329dab44b642110409b991f932a617aab43d67b68",
+    "assets/icons/check.svg": "566bde52d93b6111ee334a24540be6a66415fe741c197b0755cb0f4789455519",
+    "assets/icons/checkmark-circle-02.svg": "8427c4af6cb222bb72cd747f8827dc998cb8c8618e01c531148d14b40cc62bc5",
+    "assets/icons/chevron-down.svg": "2a3fe580a0717b0cbaca1eeabb25416b554acb16bf25013e8c9e874d5af5f088",
+    "assets/icons/chevron-left.svg": "aff6bbd47e161b6d75eac70c9d9f3d45317df0a617d3994700547daf6463f638",
+    "assets/icons/chevron-right.svg": "f1f84ccf715b2ee53ac38ccaea1d087165687967a1363ea2247d861b579360ce",
+    "assets/icons/clock01.svg": "d150a60421022ed7a80546d63803c9ecc45ebd088a59a1cd9ba4f7f4e48aa6a9",
+    "assets/icons/delete-02.svg": "ae1710bec2e599a06842295c0a7dc502f2111191d71ed53ee1a18a7124d75425",
+    "assets/icons/eye.svg": "86d8be1e315725483bfbdce5c8dec19e9438fe8a160f519039b4d3e65f3ebc6c",
+    "assets/icons/filter-horizontal.svg": "35917e615243d252512f7d665c1b8600616d8583b172855b8cb5c8305ccaa24c",
+    "assets/icons/grid.svg": "bb665b8da9ed1929deae98d6d52273f148b7b0b5fca2878bef808a019c094c27",
+    "assets/icons/home01.svg": "ffa30d473cef100276651724bbfc8881280edcf9f9c9c890fcc820bb3ed40fcc",
+    "assets/icons/home02.svg": "e30c23feed920612a604bb151494ec55463f08b63b11da7c153d365f4fd42688",
+    "assets/icons/image01.svg": "9ea43eabbb7885e0483401edace00c612cb5a0f1f39f7f673f20a558f541f277",
+    "assets/icons/inbox.svg": "c5dac94b2aa402babadb3ecd69bc46d83879f2f11a3e02335515c6dc797305b7",
+    "assets/icons/information-circle.svg": "a9b72509628c00d2c8c2c227bc2098c0a66a02d827d5c1c5425da203a46a9cf2",
+    "assets/icons/menu01.svg": "309859029f059172db5cb14a7772029779a7e1d2013d2c76dd477da957bcb352",
+    "assets/icons/minus-sign.svg": "03885a2aea0f29c59bbe24aa44fd6b131812d3e26a156c20258a244d08f1aa5d",
+    "assets/icons/more-vertical.svg": "8583d6f67aceca906a0922e6fb9905a7d0cc2de7da40f619dc2ae509e9d73427",
+    "assets/icons/package01.svg": "bb341152ddda9da177303572063c269cd5e4feaa5dfe911c6d0f24d425ce92b1",
+    "assets/icons/plus-sign.svg": "12a8617f0971234ca995a3092cc4056d57808bf7999fbdf0222441108871cb4c",
+    "assets/icons/refresh.svg": "db85eed4281646adad0579db1c27ef054ee1b377bc19b7ec7781de73384cf95c",
+    "assets/icons/search-01.svg": "37b7c3b9f6f8d06fb0d16f4b2d5e81a217d0fdeb64128b8957c045059fbf9b38",
+    "assets/icons/truck.svg": "169110b9b0b74a8078b59318a282b5c10c8f5c9920f8c7f906d9dc2c7f8eb28b",
+    "assets/icons/user-circle.svg": "40120bcbaef71e8abfaa90b6a0d2df231113da3217bf396907c21330126ebf1e",
+    "assets/icons/wallet01.svg": "b66e31232e71513bfd6215875cdf1f5be9da399de01b050ff4625b7b965612bb",
+    "assets/surfaces/waves-depth.svg": "390ccad2d302bf1cb1063d3e93e4865be9816f24e82ccc583f8fa1077427b818",
+    "assets/surfaces/waves-soft-v2.svg": "6ba20b775aca08bc8f98fac6a840225146f5634eba387efd0241c2f50be0e70c",
+    "assets/surfaces/waves-soft.svg": "2ff1f22c44ed7b58c9f84b2e7522628fecac21cc1f2c9022136fbf79d396b306",
+    "components/README.md": "2dc61e9cc0f333b6e637da2d29a6e950e51df53c5fcb539e244d86feb60ee689",
+    "components/access-gateway/README.md": "5db78fb04b41877f48c700c9c1268e3cdeb87f6d1952c4175c39429656c25896",
+    "components/access-gateway/access-gateway.css": "dd35979a3254f1a387cfcfd88b01777d96dbf18049c3cf6db1f9ff6f1926f12c",
+    "components/access-gateway/access-gateway.js": "6a36bcb36d5197dde20b5aac423d1d523216c7e88bf005aa056ee9b3673eeaff",
+    "components/access-gateway/example-usage.html": "aaed07645e9770b045398a529de5cce347b6929154b282d408f663e1c7b15fe8",
+    "components/access-gateway/specification.md": "a46332b8ee0bb04a222a9fa73cb20ccc8a73849d889b146a214d37a332635a4b",
+    "components/account-settings/README.md": "c1ac45e81467e2ed32e15d39c83dfbda5bb0e97e5af6b414657a97898087d3df",
+    "components/account-settings/account-settings.css": "bb7016c8fd8e481e5a7679435287591a5f69756380a1533a136233f78ce1199e",
+    "components/account-settings/account-settings.js": "66aae7739446c51e520a54c1ddf1b948da95a9deccf594b177bb6fd40b62041e",
+    "components/account-settings/example-usage.html": "5460c2e03b4ee7e0943d717a54bcd06747b0ef060081bfa3aa7ea1682ca5c0e3",
+    "components/account-settings/specification.md": "1dd71b9c65297b269d2ba066f2012b4f62aa976b299c04f445204ca193be9afd",
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/buttons/buttons.js": "dc96d2ac84a0e5ca7cf716358a547fee3ab35c53e8cdb100d624a2aa84451a07",
+    "components/buttons/specification.md": "cb5d9677a46506287c265885244f0c0d7766722614502c38e048bceb02aa9573",
+    "components/carousel/README.md": "43cae02b9b2d0ccc2dc1def2113ea358b3959b1c1948fbea984a4f806db6940f",
+    "components/carousel/carousel.css": "5b7fcfcfa521066d7116cc4eee13894e42f4ef7810b0b375977f353317692b8e",
+    "components/carousel/carousel.js": "9af5019569170f09cd020e12961113820deb4a8f2b84c9fa26cb37a31292fafa",
+    "components/carousel/specification.md": "0c27fd3d74615b56701a6f6083763aca57c403d521aac234cddaf4f7d2e26718",
+    "components/data/PACKED-PATTERN.md": "f14c05c6dc94c7f8bd5fd83a38da9698f1b62038005bcde031bbd74179187498",
+    "components/data/data.css": "398bb6ae17aa319dd41bd6d8cf95e3ee71c9b145ec0299dee9cd020e235efef6",
+    "components/data/data.js": "7377df639eb86df3a62f1f4db7daa2bf1b2666ce82f1878603e421e1062f0815",
+    "components/data/example-usage.html": "6104e780ea47b74c7d6f8a088bd2b75e52bcdac2596389b458b74b38448a468a",
+    "components/data/packed-circle.css": "0c8d7fb6cb072257ef29f9ee2da808f265a875f18eeb022954b44a1145621a8b",
+    "components/data/packed-circle.js": "73bb5707e9233149bd8a049cda74e8377e68be88755f041e186dc647a58b3a82",
+    "components/data/specification.md": "9ce9906050f56b7b41b40e3c75b8daf5a580b96c624d178303fa50593e4db2c0",
+    "components/fields/fields.css": "b661a5bcf5f1b653165e2bc622c8a9ef735a262fccd1c68224efeaa510799275",
+    "components/fields/fields.js": "9962d2548dacd463f149b57a0160d803e4c3877566540a96edc6e32453f161e2",
+    "components/fields/specification.md": "935ba3144f2c5dd3c7255731fb2598e2b8060494b374b970c54e387c06bf5fa2",
+    "components/info-strip/README.md": "11b0ed34c424a6dfe6eb959dba335fa27e0ddc30ebb2e4bde16171a74de2397a",
+    "components/info-strip/example-usage.html": "9b59824a14e1d13e37d3fdfd36d33cae57d09d0eeda4317b7d3128e5cc1f51ad",
+    "components/info-strip/info-strip-peek.css": "98a8c9e9acfcf191980d2e890531f8c6a12419b130c7efda18c906d7a6bc3173",
+    "components/info-strip/info-strip-peek.js": "e443229fbcbeb6d2eea901745d7eb10f0d6a530f1673d4fa708d50a8e4683711",
+    "components/info-strip/info-strip.css": "c0b471dd3379e7d5d907759f1350a4c8a6d9459baa2406eea4909912c0fa20d0",
+    "components/info-strip/info-strip.js": "3c161028f2e699f8973269967dd54df640f6071f3eca7ad9400f0b5aa8802134",
+    "components/info-strip/specification.md": "b0f728e884de3b8a182efc086e1d11b163bdd0e14686eb7ff2df1f68dcbb5dd6",
+    "components/messages/messages.css": "945680a7203f965b513a0d99660d8ad1fe13e2f5d8092eb4b6a7177cb1d8df29",
+    "components/messages/messages.js": "1d32d98cc0c5ddae9c4ae29fecae6ca2943d0839b57a8f0cc3452c60bf9c92b6",
+    "components/messages/specification.md": "89aa984c1e82aa43ad4d28f83a194e8fdf9ef31f459ba7c9abda7c54577b8785",
+    "components/metric-comparison/README.md": "19c27af3ea4798970e6abe5ff3a66204e76d2fc58aca57049c1da406433e7cb7",
+    "components/metric-comparison/example-usage.html": "05d83a4d3c361c7f0052b4aa9c8aaf30dc15d884db89a1df975a5caf4a53e87d",
+    "components/metric-comparison/metric-comparison.css": "a808ac005dcf0734446dbb3e39031e6e3544571dcd5a675b793253a1434d3e3d",
+    "components/metric-comparison/metric-comparison.js": "7d2565c9c48364ba0cdf0f5fa9cee7f11047cd94cd8fc2f388c228019e593404",
+    "components/metric-comparison/specification.md": "2ab3b8d7dad9d49be105680649cc29ac0e1850eab15326cd2dab03ce3ad23890",
+    "components/navigation/navigation.css": "45112b123b228d31f55a880eb6c026ec9f2dfad5e0598e28c2713b0dc244a58c",
+    "components/navigation/navigation.js": "52e740cb3a208ac921c20cb0773bc0e26e09d879cf72e639c3f822efd968cb72",
+    "components/navigation/specification.md": "6859ee378fbca7710aaaeaab83c967786c8830a177fa4115e0a946265b36c57b",
+    "components/order-schedule/example-usage.html": "f1f43b118e7fec0b561b1136096f130f4fab4f44914877eedadd2b5ba4d6d6c9",
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "components/order-schedule/specification.md": "fc779d758a92d59c717f34ce84f174c4f572fbdd2cc0350a0975c3375f3c0268",
+    "components/organization/organization.css": "69ee2461e2bcf433c8d622c0a49782ede85cd2592c3898601dfc3de16d7c39ca",
+    "components/organization/organization.js": "dbe3d39c1444aa74ed61ae8df1026d15c57e12c0228ec511e1022493b3b0b445",
+    "components/organization/specification.md": "66412b8cc7839adc0bd692b7c2ec07a167281c75d6bfbdfe1b679ae919a7a8ac",
+    "components/selection/picker.css": "7aa8b7aedff1f9ada3090ffeafc3f99e4717c7eae5a4d9d77b3931eab6cf7dff",
+    "components/selection/picker.js": "811a37d04850351930676221bec1f684f6519a16a1aeb2fa4b1ad2cd9d86aad1",
+    "components/selection/selection.css": "78a7aa84c7c891680705d46c545436b57a0e47bca8b1999ebde725df967c533e",
+    "components/selection/selection.js": "388df54a1cd49fb0013d9ea1291d3a27db6dc782e43d58f103431188aa8b2fcf",
+    "components/selection/specification.md": "1cafee031ad0fae5b3fe5177f53e7189b7d1929b49487ee8b3dd1dfeee6db08a",
+    "components/surfaces/curves.css": "fa4d0058d92c5f34938951f65b795d12139388cbe2f758b307a902bb51ca12d6",
+    "components/surfaces/specification.md": "0f8ece86b7e6bcaf5876fdbd68967d79febd7b5ccf1346f17b8d31874cf09a7f",
+    "components/surfaces/surfaces.css": "e6003efe59e48522f827cf7b0e8d6a7208ec02a3202657ba58276f67e7ab9845",
+    "previews/README.md": "71f9fdf302f80b72da6f0db3a91647f75328642b6b96018ed3190bc597f25a22",
+    "previews/board-base.css": "2375f8eb1e70a0754e2c691209f527a7aca686704e2df171c158187058e74589",
+    "previews/board.js": "fc5e04c1b0a3f42a3404076abdc59dea5a4efe5ceda3c5f3539ec06a67ffb2f6",
+    "previews/buttons/README.md": "3911ad06c583346c7a83dacc5540c42e0fb45cb7639c88c83412b3af3cc76e17",
+    "previews/buttons/board.css": "96185b2c590388696219d882a2bc184c8ee07c8d5822bcec6cdba4ae96f0c93e",
+    "previews/buttons/board.js": "83e1122868ea450d8abad15f775c3b076895b1f7b1a6b67d80cc94a1e4edbe65",
+    "previews/buttons/example-usage.html": "ba02ad127473798c88ee2ec42fe3fcb5d0800a0877a72ddcb86b4e0a2b6f7cfd",
+    "previews/buttons/index.html": "04d3ac723c230563c9b74b7d56ce241ecb0905e7564c80b4fb43710f4cf983c7",
+    "previews/carousel/README.md": "4e472ad9d0115bcbc0b2fcefd63e1ab935200aa1bcf88cf334cabb7e192f74f4",
+    "previews/carousel/board.css": "228fa99753c382abdb8698d5a40dfda62d4b9d637ee64ea2ff63496679a3b490",
+    "previews/carousel/board.js": "899645d8348a0d798731c6975d85d81e50e38da0939b9cf062e273f637728455",
+    "previews/carousel/example-usage.html": "de4a8b20d118fd29b59c8ddd90d94c33cfc00a231a1facc2749cf1b58eac2d1c",
+    "previews/carousel/index.html": "648b908dc786cd947ab2b6b49798a390cf7ca50a11ec1f261e423c30b730a336",
+    "previews/compositions/compositions.css": "302a65236724e8be9481f4e9ace77e53bbaf13639c1e27864f6b05b1d7434393",
+    "previews/compositions/compositions.js": "55781dee182661683832cc94c2302ed5c1970f328ab06dbeb8c71ddfba37caf2",
+    "previews/compositions/form-example.html": "30ecb8dfea97b4a8d8bea24290e4f3425a38f2d34b20c9833265fbfcf6b34e3b",
+    "previews/compositions/index.html": "118d76bfbbb30105c574332e484de7a8c8cf98fbcd8ac22c436f3a0cc56ad6ef",
+    "previews/compositions/row-composition.css": "e26006fcaf0a1f26beaee2effe0ec78513c78e3b1737d413e6fb3fbd1f7ee792",
+    "previews/compositions/row-example.html": "e0507aca50e0dcc8572636b39c36ee4f2dee49945804d872693eff4fffab43ff",
+    "previews/compositions/summary-example.html": "5a0aa374f05086506bd2c904af71efd82449096a1c5d5fe977b4b16fe63b9af7",
+    "previews/concepts/README.md": "99d49c25078b4d00b0740609e6bfe333481b3fbc9c12d2b33bd6a2b7b8751ef3",
+    "previews/concepts/board.css": "342ee168b3c89262efef17a1cfe374521aeda2cbb7eb2d53160e34e819ed6a43",
+    "previews/concepts/board.js": "6b083c4339695a27f1edcbb1c5ecd1612bd3668a4de68ad1141adf17a3196ff2",
+    "previews/concepts/index.html": "989217ee42d51ba88873070f43165f1daa15bee6bdf90794c6586e5b26fcce62",
+    "previews/data/README.md": "9bfb1f2a9f08ee8fcb972037752b49e3ad8695cee6868c5d2552b33537c338fc",
+    "previews/data/board.css": "961a9c9e72b098dac5960e8925587644e2ee1b5804c1cfe6655d00916cd26ac0",
+    "previews/data/board.js": "c61c005842f97243f99f691fda2dca418b834ac10f2beb87d256e6e1f99ad989",
+    "previews/data/example-usage.html": "94b7e465e352a3e20f51d90f800ca870dc65d71bc7e7ffa685b9c9663835493a",
+    "previews/data/index.html": "08d1b66a03da76382c4501b937ccc89ef667bb12402df1c6d499437cb1f01a4b",
+    "previews/fields/README.md": "b366094211d65920382bb7921ad6f1c3cb6d4dfb894f6a02dfbb7657875eb582",
+    "previews/fields/board.css": "f9db7d2ee6b7a8aa6fa047c176b944a2c89b95a39e307280cf6d3f95efc2de45",
+    "previews/fields/board.js": "b259a5c1f0c4811bae810047afcce98394347e4a81243660b1bee30b7560945b",
+    "previews/fields/example-usage.html": "4f3cba43816c6c792e5ae64b974a95dd0c89903c52585bca41e81e4015743920",
+    "previews/fields/index.html": "89277c7c02b25b608ab28f45f359a873ed5c8339a723a0bbc2fe29efbf2ea9e0",
+    "previews/index.css": "662733762f9419b68ae3367e40b8e557574a49e53f83dbced8f8cf04bf20adc1",
+    "previews/index.html": "afe4d2c045222b210fb6c66f67c7a9589fb4b528c8cc9c35ff68d46c10df894f",
+    "previews/info-strip/board.css": "557fce7e206e516bcd1dfc380dd27fd638ed66f3105030e2b6c5aa41632697b5",
+    "previews/info-strip/comparison.html": "9282a9f03851842e06445678feee93f3dc570a6a3eb83d66d2e84c49b2e8ad0e",
+    "previews/info-strip/index.html": "09aa322b5367a17429186e97cf6ee2b7b23126a326689104ef971786c4feb087",
+    "previews/messages/README.md": "a0f7bf2fa83870654d53ab9aa11cea0760cdf156f203a53c0b0f37b1e359c010",
+    "previews/messages/board.css": "965fcaec95489420c21bc82dd0211d5d441e82305bfcd4d1b6ab6ff6617eed96",
+    "previews/messages/board.js": "80f60420117c97f651e83acedea15454849c51bfb5003d89a7fda32483927457",
+    "previews/messages/example-usage.html": "ea0372195c6b399b808fdea555000cdaa2a64cb887c3973f7c638e2c2f987f49",
+    "previews/messages/index.html": "a5041b7f018fd18699aed641fa7b568aae727dffd392af7b96215f16766221ec",
+    "previews/navigation/README.md": "92b00d8997027f9a72f18436cdab1578147f796cc713d248362367e1b496e832",
+    "previews/navigation/board.css": "c2488316dce259fef52b03b84ab1187e2067fc421fc04e6b09df4fb3bb0b93cd",
+    "previews/navigation/board.js": "a343d32b13965a8e6cebc251419c4a79336be9c820600ef41bf03d1930b1b154",
+    "previews/navigation/example-usage.html": "dc8a106b7081835c83bb2b3cdf56e54ea8650b80282603de06ccffff7c989e93",
+    "previews/navigation/index.html": "d9993e829c39589f9f51dd3577278d849355c45ecc4b31416a17f700be8c4692",
+    "previews/organization/README.md": "08ed0c190f10fe28d60622326b883b77c02739a532b14ae76e1b3fc3756c6613",
+    "previews/organization/board.css": "09dba4ea95a7d32a1f509e7312820d6db10b3a091aeb08a37c0ae63d8d3c2d9a",
+    "previews/organization/board.js": "8ba2b3ce583193d708b9042ff5ccc669cb9e29a197669522b56c4ebda34fdffd",
+    "previews/organization/example-usage.html": "819449b13887f268fadc46fe737374e786a97bf1521f5ac931ee6dfe8796ef9a",
+    "previews/organization/index.html": "488db07921a13780f41b377a826cadce48e187a1b5ddee375c375cc6eb577d7f",
+    "previews/selection/README.md": "361b5bb2036412950e222afc0cbed2b92292e78f012b3ad4f199d86c9d7f9550",
+    "previews/selection/board.css": "378fe8eef79f4d974d35b84338cfca237ae3be1d9a90422367a4d70e6dbcf21b",
+    "previews/selection/board.js": "6fd68788b0a8d8a09810c5f5875304d4463f89f9f3f92b9e3b1a2ee4894e3ef6",
+    "previews/selection/example-usage.html": "bc52854b0d2dbb0ec5d631839fb22836951889165d2bc6a781c4e40304324935",
+    "previews/selection/index.html": "61d2b85364fccf707273c469bec4442a2f65d69fc9e4b52527a53e6edc71cd82",
+    "previews/surfaces/README.md": "73d06a502148f888c148ece3b5c2196276beab0e926ff5d11f0dbb9231e1af98",
+    "previews/surfaces/approved-curves.html": "baf7bd2a8194086cfb02a1050807f966f387c963342310cd4b4ac96727acfd4d",
+    "previews/surfaces/board.css": "c31d26ab12f1346b17a347ea529dd70c152207b501e5be672e8570b2d7a9cf78",
+    "previews/surfaces/board.js": "2855fbb662bcfe24ddfb45761a628fe32d702bf9f4176dd3669c0784adb5c037",
+    "previews/surfaces/example-usage.html": "4720ea650a2fbf6f0feaa1cfd353e22043cae5ca13ad8a724af72f8431f1c6e0",
+    "previews/surfaces/index.html": "5973f8feaf7fb2469515ae0c635ddbe07c91156cebfa53e8098d70fb263c75cb",
+    "previews/system/index.html": "2a3ca80de228970f969faadc8cf2b7f78df39d19917ae3354a0592dc578e3f1f",
+    "previews/system/system.css": "06399055917681fec941e83b54572643eec907037e0485267e58096159515e1e",
+    "previews/system/system.js": "b0fc0d76b4fbae90a9e3baea234a547794a1953d60bb9fb62e4ef4e22e169afa",
+    "previews/ui-system-showcase/README.md": "51d68c72de160f14abeb3a75e9015bee68a8bb39288557b1a52c24d9e89999c1",
+    "previews/ui-system-showcase/index.html": "48e0b94be04a267957d9788e2d88f67e79b54d21154b7bdc9fe4eb72e335656e",
+    "previews/ui-system-showcase/showcase.css": "84fe20a7d8e64fc0c248c990f1378bc533e770db9bea4027790b78402fe3dadf",
+    "previews/ui-system-showcase/showcase.js": "18394acdd76c10c4ed7ae9cab23ad9015874a4e5b686dcbebfe494a17f547d58",
+    "previews/ui-system-showcase/standalone.html": "f72dc46c41663ba88ef1459111e2d632d24535a247621fcfffd89237ea2ff3f8",
+    "shared/icons.js": "0f0d9dfcf14a86e885b74e308fc3bdb1baa08c721e1d798ff8641e5273989969",
+    "shared/motion.css": "37e7b88c188df77f2c834b02cb29bd2db58192520fb476a1d20f59d7b85b25dd",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7",
+    "tools/README.md": "166e0a8db0d16da0a43aab14c8b571330016988754b9968ecf56a693fa64500a",
+    "tools/assemble-components-package.py": "f163d9bb46860e6c64729613fd6b4eb94d01239c3a2c97bc933cd4824d725bbe",
+    "tools/browser_support.py": "8b564613cf944e0e10c2cfb88eaafee95a454b1ed2f1e29678682b5219bcae75",
+    "tools/build-components-package.py": "bcb3de22ac61359e8d4ff12f04e004f0f056de0eb42c2d7c2775545a87067642",
+    "tools/build-ui-system-showcase-standalone.py": "7983b7232ed0bc51c3a590534d7b6be65e0a6731d1d672f2dceb5978bf6b21f1",
+    "tools/calendar-contract-check.py": "448f0130feddd89f665864f096f2a60f86efc2381a059fa151d2b977ada2fd3b",
+    "tools/chart-mobile-check.py": "a36ef5b05623639c71c7429bba8d6ecbd9c7a06d6b262554abbd767f5911f233",
+    "tools/clean-mobile-preview-check.py": "a14c9c6442e2e60b9bb106e8df0de2f35f82bb3bfad16ec79c14a35a9cd13313",
+    "tools/clone-lifecycle-check.py": "3814feb9d908ebce65d6037ae65283baa404e7c48bef4bdf5f03b5bec7d140dc",
+    "tools/complete-repair-chart-check.py": "d1e90c3ac4a2e8fca25f936d2b153263be7478071688eb924d6c8453e4f2b3fb",
+    "tools/complete-repair-lifecycle-check.py": "03bfa9852336a14c9e16c2d39f872e84070be569f0aab68a45d7d428c294ab83",
+    "tools/complete-repair-mobile-check.py": "efd0d62a2283abd971727f37f98e0c996e7b501b7925c4c3b5ba2321b817fd14",
+    "tools/component-audit-check.py": "d272ef74a6ae07be8c9265c246be52753465b6092d06beb980e7a11d3629c795",
+    "tools/component-catalog-build.py": "6619a85cdc461bbab728f97d84a83541f93489fc4edfdf17b9a921f61605b896",
+    "tools/component-consumption-contract-check.py": "b5b25a943b09fa1987b5b951f43f6d93d8356003c34aa62b236ed22cd69cee3b",
+    "tools/component-mobile-check.py": "7758acf6c36f4319c03ff8f68da2d89981f28c89061268965c9cca20da80e107",
+    "tools/concepts-check.py": "62bfabcc1392a379c323ce5b5e0d47eed7bdb64b1a273f9212b240dead88a71b",
+    "tools/data-scale-state-check.py": "664eab384b4e730c6be11f9841cbea70ed348fa3b39bb2bee6b16f86c1986239",
+    "tools/evidence-repair-check.py": "3acef6e4c7e35bfe5ef9795631703e272ff0178be609885b702c6811c847df37",
+    "tools/light-calendar-check.py": "93572e836490f869e71697d347ecf8cdf7f389f3167d0eae77e29e43dad97e13",
+    "tools/light-data-check.py": "1f550429d61431534b0d3594ad6dc6c3cfc0e3d0f1a37fffe37ff86f76a87667",
+    "tools/light-evidence-capture.py": "3910fc8af3ec1a389f4a3d0221e2973ce303e4e3e95a29bf6f4670240ba02cbe",
+    "tools/light-release-check.py": "b07e4fc957f8c3f275ef34f513c44ddc07e8b8c68a3cb8b0f5fcffeb40750680",
+    "tools/light-static-check.py": "7b43332602a1a615de5a7045a1a1edda40535278a70cd9a6b55eefeda40ac5aa",
+    "tools/manifest-build.py": "23fe5fe5df52f59750ba3b57a0ced244ca420d52fe66048bb44178694ccbd01c",
+    "tools/numeric-chart-geometry-check.py": "185815def1fbb69d092999616e770ef5e19d11fbc699efbc450c6225650b6736",
+    "tools/numeric-field-controls-check.py": "21b05f236ecd095e7b408c63a3d0e244afdef556494879f9bbecbe796a9fac74",
+    "tools/numeric-geometry-check.py": "7bd2d123dcafd922c49f894ad48cf8e2ecf1a3a5d5b43e2d7a013b7514e6b54f",
+    "tools/numeric-micro-consistency-check.py": "fa29caf6cbe79aa7ff73a516f2d8daec23f00565a1991a1a8f1e177a9620389c",
+    "tools/preview-runtime-check.py": "9aced9c50cbc86b7e19f680c1c6b8fc68bc3bd6851423233683ccdd223a28a31",
+    "tools/preview-server.py": "f3363ca479a0b1352a6663c67573b654610f431cf96a2e8cd6a00fbce0176952",
+    "tools/professional-remediation-check.py": "bb951ab39701c1ec3e2fdc1a99e22f18884319d7b8e06a6b2751b191b938575b",
+    "tools/professional-ui-repair-check.py": "cc9543a72cdfd92778961b73b6448c95e6b1c116cf1870b3cc3532174be9f661",
+    "tools/split-components-package.py": "4ea08374ef6aea23cb07bcd2957d830240357127714f62c45faac5f8c573f2a0",
+    "tools/standalone-checkout-check.py": "07d893d14598a1862108d8aecbe3837cc1c97223f1e2bda2f0e44cdeeaa07dd8",
+    "tools/ui-release-check.py": "729718923fffa66a4dc01cb1da4858682a85348ea4a86ba8bbb420dbd74105c7",
+    "tools/ui-system-showcase-check.py": "02e3575b45f50e7b8d9700901aaa86fef4aa55fb11107dfc779d0cd24c31bfea",
+    "tools/ui-system-showcase-repair-check.py": "fc142b0aa4b47255c34fb6c556028bab712e74b05bb258e80ce149eb452d5379"
+  },
+  "dispositionCounts": {
+    "existing-contract": 12,
+    "shared-composition": 14,
+    "conditional-extension": 3,
+    "host-owned-no-work": 16,
+    "out-of-current-use": 3,
+    "deferred-charts": 1,
+    "fixture-acceptance": 1
+  },
+  "confirmedNewComponentDefects": 0,
+  "scopeRule": "Micro defects are historical lessons for generic UX fixtures, never implementation work or prerequisites in Micro. Charts remain deferred until the preceding UX stages are complete.",
+  "families": [
+    {
+      "id": "buttons",
+      "maturity": "stable-ui",
+      "spec": "components/buttons/specification.md",
+      "preview": "previews/buttons/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-04",
+        "UX-05",
+        "UX-09"
+      ],
+      "decision": "لا إعادة تصميم غير مسندة؛ السلوك العام والأنواع ثابتة، وتصنيف الأفعال التجارية للمضيف."
+    },
+    {
+      "id": "fields",
+      "maturity": "stable-ui",
+      "spec": "components/fields/specification.md",
+      "preview": "previews/fields/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-05",
+        "UX-09"
+      ],
+      "decision": "الخام والصحة والقيمة المعتمدة منفصلة؛ لا محللات مال أو مسودات مضيف داخل Fields."
+    },
+    {
+      "id": "selection",
+      "maturity": "stable-ui",
+      "spec": "components/selection/specification.md",
+      "preview": "previews/selection/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-05",
+        "UX-07",
+        "UX-09"
+      ],
+      "decision": "الاختيار والتحديث البرمجي والحالات موثقة؛ لا تحويل Picker إلى قائمة أوامر."
+    },
+    {
+      "id": "organization",
+      "maturity": "stable-ui",
+      "spec": "components/organization/specification.md",
+      "preview": "previews/organization/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-04",
+        "UX-05",
+        "UX-09"
+      ],
+      "decision": "صفوف وشارات وهوية وطي قائمة؛ توحيد وصفة الكثافة والslots قبل إضافة مصادر متوازية."
+    },
+    {
+      "id": "data",
+      "maturity": "stable-ui",
+      "spec": "components/data/specification.md",
+      "preview": "previews/data/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-09",
+        "UX-10"
+      ],
+      "decision": "قراءات ومقياس وجدول وسياق موجودة؛ تصميم الرسوم والتحديد الجديد مؤجلان."
+    },
+    {
+      "id": "messages",
+      "maturity": "stable-ui",
+      "spec": "components/messages/specification.md",
+      "preview": "previews/messages/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-05",
+        "UX-09"
+      ],
+      "decision": "الحالات والإعلانات قائمة؛ تركيب feedback ثابت، دون فرض Toast على أي مضيف."
+    },
+    {
+      "id": "navigation",
+      "maturity": "stable-ui",
+      "spec": "components/navigation/specification.md",
+      "preview": "previews/navigation/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-05",
+        "UX-06",
+        "UX-07",
+        "UX-09"
+      ],
+      "decision": "محرك الطبقة العام فقط؛ close veto مشروط، وHistory وBack خارج المكتبة."
+    },
+    {
+      "id": "surfaces",
+      "maturity": "stable-ui",
+      "spec": "components/surfaces/specification.md",
+      "preview": "previews/surfaces/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-09"
+      ],
+      "decision": "CSS فقط؛ لا تُفرض عليها دورة موارد أو حالات حفظ/تحميل لا تملكها."
+    },
+    {
+      "id": "info-strip",
+      "maturity": "stable-ui",
+      "spec": "components/info-strip/specification.md",
+      "preview": "previews/info-strip/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-09",
+        "UX-10"
+      ],
+      "decision": "قراءة واحدة أو متعددة ووحدات موجودة؛ استكمال وصفة السياق والحالة والمصدر."
+    },
+    {
+      "id": "metric-comparison",
+      "maturity": "stable-ui",
+      "spec": "components/metric-comparison/specification.md",
+      "preview": "previews/concepts/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-09",
+        "UX-10"
+      ],
+      "decision": "القيمة والوحدة والفترة والجدول قائمة؛ لا معنى مالي أو نسبة مفروضة، والرسوم لاحقًا."
+    },
+    {
+      "id": "account-settings",
+      "maturity": "stable-ui",
+      "spec": "components/account-settings/specification.md",
+      "preview": "previews/concepts/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-05",
+        "UX-06",
+        "UX-09"
+      ],
+      "decision": "أجزاء وتركيب عام دون حفظ؛ لا نقل إعدادات المنتج أو فرض مثال المعرض."
+    },
+    {
+      "id": "access-gateway",
+      "maturity": "stable-ui",
+      "spec": "components/access-gateway/specification.md",
+      "preview": "previews/concepts/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-09"
+      ],
+      "decision": "مستقل ضمن تدقيق UX رغم عدم انطباق Auth على المضيف الحالي؛ لا إسقاط أو إضافة مصادقة."
+    },
+    {
+      "id": "order-schedule",
+      "maturity": "draft-for-review",
+      "spec": "components/order-schedule/specification.md",
+      "preview": "components/order-schedule/example-usage.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-08",
+        "UX-09"
+      ],
+      "decision": "الحالة والشهر والأحداث قائمة؛ تقييم تركيب ملخص حول الجذر قبل metadata داخلية؛ النضج محفوظ."
+    },
+    {
+      "id": "carousel",
+      "maturity": "draft-for-review",
+      "spec": "components/carousel/specification.md",
+      "preview": "previews/carousel/index.html",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-09"
+      ],
+      "decision": "اختياري للمحتوى المناسب، بلا autoplay؛ لا يفرض لإخفاء قراءات مقارنة؛ النضج محفوظ."
+    }
+  ],
+  "variants": [
+    {
+      "id": "donut",
+      "family": "data",
+      "maturity": "stable-ui",
+      "source": [
+        "components/data/data.css",
+        "components/data/data.js"
+      ],
+      "decision": "اختيار لتوزيع محدود بمقام معلوم؛ إعادة التصميم مؤجلة مع الرسوم، ولا يلغى الآن."
+    },
+    {
+      "id": "main-metric-featured",
+      "family": "metric-comparison",
+      "maturity": "stable-ui",
+      "source": [
+        "components/metric-comparison/metric-comparison.css",
+        "components/metric-comparison/metric-comparison.js"
+      ],
+      "decision": "إبراز اختياري، مع سياق وحالة من المستهلك؛ لا اعتماد شكل جديد الآن."
+    },
+    {
+      "id": "bubbles",
+      "family": "data",
+      "maturity": "stable-ui",
+      "source": [
+        "components/data/data.css",
+        "components/data/data.js"
+      ],
+      "decision": "متخصص تقريبي؛ لا استخدام إلزامي، ولا حذف أو إعادة تصميم في المرحلة الأولى."
+    },
+    {
+      "id": "metric-circles",
+      "family": "metric-comparison",
+      "maturity": "stable-ui",
+      "source": [
+        "components/metric-comparison/metric-comparison.css",
+        "components/metric-comparison/metric-comparison.js"
+      ],
+      "decision": "متخصص، ليس افتراض المقارنة الدقيقة؛ لا تغيير الآن."
+    },
+    {
+      "id": "packed-circle",
+      "family": "data",
+      "maturity": "proposed",
+      "source": [
+        "components/data/packed-circle.css",
+        "components/data/packed-circle.js"
+      ],
+      "decision": "يبقى proposed وopt-in؛ قرار البديل لاحقًا بعد مراجعة الرسوم."
+    },
+    {
+      "id": "info-strip-peek",
+      "family": "info-strip",
+      "maturity": "stable-ui",
+      "source": [
+        "components/info-strip/info-strip-peek.css",
+        "components/info-strip/info-strip-peek.js"
+      ],
+      "decision": "اختياري ثانوي؛ مراجعة حدود الحاوية ودورة الحياة لاحقًا دون فرض استخدامه."
+    }
+  ],
+  "jobs": [
+    {
+      "id": "UX-01",
+      "title": "استكمال بطاقات العقود دون إعادة كتابة الموجود",
+      "phase": 2,
+      "priority": "P0",
+      "kind": "contract-review",
+      "families": [
+        "all"
+      ],
+      "reason": "SOP وملكية DOM والتنظيف موجودة؛ يلزم جمع تفاصيل المدخلات والأحداث والتحديث والحالات والقيود لكل عائلة والتحقق من اتساقها مع المصدر، لا ادعاء أن هذه القدرات مفقودة كلها.",
+      "deliverable": "بطاقات عقود ومصفوفة أحداث وملكية، مع بنود لم يتغير عقدها وأسبابها.",
+      "acceptance": [
+        "14 عائلة و6 متغيرات بلا إسقاط صامت",
+        "تحديد الخام/المعروض وصلاحية الإدخال ومالكها",
+        "التحديث البرمجي لا يصنف مدخل مستخدم افتراضيًا؛ الأحداث المقصودة الحالية محفوظة",
+        "لا React أو History أو قواعد مال في المصدر العام"
+      ],
+      "evidence": [
+        {
+          "path": "docs/COMPONENT-CONSUMPTION.md",
+          "line": 17,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "docs/FAMILY-CONSUMPTION.md",
+          "line": 1,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/fields/fields.js",
+          "line": 20,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-02",
+      "title": "إعادة التدقيق المستقل المنظم",
+      "phase": 3,
+      "priority": "P0",
+      "kind": "audit-not-a-confirmed-defect",
+      "families": [
+        "all"
+      ],
+      "reason": "هذه المرحلة جرد مصدر؛ لا تعيد اعتماد المرئيات أو كل التفاعل على الرأس الحالي. إصلاحات الجولة السابقة لا تعاد كعمل جديد.",
+      "deliverable": "سجل مراجعة لكل عائلة ومتغير؛ أي عيب جديد له دليل قبل الإصلاح واختبار مركز.",
+      "acceptance": [
+        "360×780 RTL Light أساسًا",
+        "320 أو LTR لسبب محدد فقط",
+        "الفشل في مثال لا ينسب للمكوّن قبل عزله",
+        "لا تعاد أرقام894 القديمة كتشغيل جديد"
+      ],
+      "evidence": [
+        {
+          "path": "docs/UI-RELEASE.md",
+          "line": 31,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "docs/audits/component-final-review-2026-11-11/REPORT.md",
+          "line": 86,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-03",
+      "title": "تركيب قراءة قيمة مع سياقها",
+      "phase": 4,
+      "priority": "P0",
+      "kind": "shared-composition",
+      "families": [
+        "info-strip",
+        "organization",
+        "metric-comparison"
+      ],
+      "reason": "البطاقة تدعم قراءات ووحدة وfeatured بالفعل؛ المتبقي وصفة موثقة تجمع سياقًا وحالة وعلامة ومؤهلًا وإجراء مصدر دون معنى مالي مدمج.",
+      "deliverable": "تركيب عام مستهلك من أمثلة مستقلة، بالاستفادة من المصدر الحالي قبل إضافة CSS أو API.",
+      "acceptance": [
+        "سياقان مستقلان على الأقل",
+        "0/مفقود/نص طويل/سالب واضحون",
+        "اسم ووحدة وحالة ومصدر من المستهلك",
+        "لا حساب ربح أو عملة أو تسمية حالة Micro"
+      ],
+      "evidence": [
+        {
+          "path": "components/info-strip/specification.md",
+          "line": 59,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/organization/specification.md",
+          "line": 26,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/data/data.js",
+          "line": 19,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-04",
+      "title": "تركيب صف وقائمة مضغوطين",
+      "phase": 4,
+      "priority": "P0",
+      "kind": "shared-composition",
+      "families": [
+        "organization",
+        "buttons",
+        "messages"
+      ],
+      "reason": "الصف الأساسي موجود. وصفة الالتفاف الضيق موجودة في previews/compositions فقط؛ يلزم تثبيت وصفة قابلة للاستهلاك إن أثبتها سياقان، دون نسخ تنسيق كل صف.",
+      "deliverable": "صف بقيمة وحالة ووصف وإجراء/توسعة وقائمة ذات فواصل باستخدام العائلات القائمة.",
+      "acceptance": [
+        "القراءة كاملة قبل الحالة والإجراء عند الضيق",
+        "لا زر داخل رابط أو مناطق إصابة متداخلة",
+        "لا مخزن سجلات أو pagination تجاري أو Table شامل دون حاجة",
+        "المصدر المشترك تحت العائلة المالكة؛ المعاينات تستهلكه"
+      ],
+      "evidence": [
+        {
+          "path": "components/organization/organization.css",
+          "line": 11,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "previews/compositions/row-composition.css",
+          "line": 2,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "previews/compositions/row-example.html",
+          "line": 21,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-05",
+      "title": "سطح نموذج وطبقة قابلان للتحكم",
+      "phase": 4,
+      "priority": "P0",
+      "kind": "shared-composition",
+      "families": [
+        "fields",
+        "selection",
+        "navigation",
+        "messages",
+        "buttons"
+      ],
+      "reason": "الحقول والرسائل والطبقات موجودة؛ يلزم وصفة عامة تظهر الإدخال والخطأ والانتظار وتتيح قرار الإغلاق للمستهلك دون امتلاك dirty أو الحفظ.",
+      "deliverable": "نموذجان مستقلان مع مستهلك تجريبي يعلن الصلاحية وقرار الإغلاق وحالة الانتظار.",
+      "acceptance": [
+        "حقل النص العادي يحفظ الخام؛ أي تسوية مقصودة في متغير كمي توثق بعقدها ولا تعد عيبًا تلقائيًا",
+        "حفظ مزيف بالمعاينة لا يدعي عملية منتج",
+        "قرار الإغلاق عند المستهلك؛ لا مسودات أو History",
+        "وصفة الملف أو البنود المتكررة مشروطة بثبوت الاستخدام العام"
+      ],
+      "evidence": [
+        {
+          "path": "components/fields/specification.md",
+          "line": 15,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/messages/specification.md",
+          "line": 22,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "docs/COMPONENT-CONSUMPTION.md",
+          "line": 22,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-06",
+      "title": "عقد طلب إغلاق يمكن للمستهلك منعه",
+      "phase": 2,
+      "priority": "P0",
+      "kind": "conditional-public-api",
+      "families": [
+        "navigation",
+        "account-settings",
+        "selection"
+      ],
+      "reason": "closeLayer وEscape يغلقان مباشرة، وأحداث opened/closed لاحقة وغير قابلة لمنع الطلب. هذه فجوة قدرة عند اختيار محرك المكتبة لمدخلات محروسة، وليست مخالفة مثبتة لعقده الحالي.",
+      "deliverable": "اقتراح عقد متوافق خلفيًا، يفرق طلب الإغلاق من إغلاق/تنظيف إجباري. يراجع قبل التنفيذ؛ يمكن للمستهلك الاحتفاظ بمحركه بدل الإضافة.",
+      "acceptance": [
+        "يغطي الزر والخلفية وEscape عبر مسار عام",
+        "Back يبقى مسؤولية موصل المضيف",
+        "غياب المعالج يبقي السلوك الحالي",
+        "disconnect/destroy لا يعلقان بسبب رفض إغلاق",
+        "لا تحقق مالي أو سياسة dirty داخل Navigation"
+      ],
+      "evidence": [
+        {
+          "path": "components/navigation/navigation.js",
+          "line": 304,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/navigation/navigation.js",
+          "line": 609,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/navigation/navigation.js",
+          "line": 338,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-07",
+      "title": "تقييم قائمة أوامر مستقلة عن Picker",
+      "phase": 2,
+      "priority": "P1",
+      "kind": "conditional-public-api",
+      "families": [
+        "navigation",
+        "selection"
+      ],
+      "reason": "Picker listbox لا يمثل قائمة أوامر. لا دليل يبرر افتراض أن Menu مفقودة مطلوبة لكل مستهلك أو تنفيذها الآن.",
+      "deliverable": "قرار عقد: إبقاء قائمة المضيف، أو إضافة خيار عام ضمن Navigation عند إثبات الحاجة. لا عائلة جديدة تلقائيًا.",
+      "acceptance": [
+        "تمييز menu/menuitem عن listbox/option",
+        "مفاتيح وتركيز واسترجاع واسم واضح إن اعتمدت",
+        "لا نسخ ترويسة Micro أو إجراءاتها"
+      ],
+      "evidence": [
+        {
+          "path": "components/selection/picker.js",
+          "line": 1,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/navigation/specification.md",
+          "line": 26,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-08",
+      "title": "تقييم ملخصات وبيانات وصفية للتقويم",
+      "phase": 2,
+      "priority": "P1",
+      "kind": "conditional-public-api",
+      "families": [
+        "order-schedule",
+        "organization",
+        "info-strip"
+      ],
+      "reason": "التقويم يطبع حقول طلب محدودة. الملخص حول الجذر يمكن أن يكون تركيبًا؛ بيانات داخل اليوم/الصف تحتاج عقدًا عامًا إن اختيرت.",
+      "deliverable": "ترجيح التركيب الخارجي أولًا؛ metadata/slot فقط لحاجة لا يغطيها ذلك، دون أي حساب سعة أو تكرار.",
+      "acceptance": [
+        "لا تعدل DOM الذي يملكه التقويم من خارج API",
+        "بيانات المستهلك لا تتحول إلى حساب أعمال",
+        "الحالة والتواريخ والتحديث والتنظيف الحالية محفوظة",
+        "Draft لا يترقى صامتًا"
+      ],
+      "evidence": [
+        {
+          "path": "components/order-schedule/order-schedule.js",
+          "line": 331,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/order-schedule/order-schedule.js",
+          "line": 344,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/order-schedule/specification.md",
+          "line": 7,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-09",
+      "title": "حاضنات حدود التركيب ودروس المضيف",
+      "phase": 5,
+      "priority": "P0",
+      "kind": "acceptance-fixtures",
+      "families": [
+        "all"
+      ],
+      "reason": "صلاحية المكوّن منفردًا لا تضمن حاوية أو CSS أو مالك حالة آخر. تستخدم الدروس السابقة كحالات عامة دون إعادة تشغيل Micro أو نسخ كوده.",
+      "deliverable": "حاضنات مستقلة محدودة لقراءة وصف ونموذج محروس، مع قياسات وتفاعل ودليل مصدر.",
+      "acceptance": [
+        "قياس الحاوية لا viewport فقط",
+        "لا تكرار مستمعات عند تحديث القيمة أو callback",
+        "الخام والصالح والقيمة الافتراضية ومدخل المستخدم حالات مختلفة",
+        "History لا يملكه المكوّن؛ لا محركي تركيز أو تمرير",
+        "CSS المضيف لا يعالج بـ!important متناثر أو تغيير توكن",
+        "لا ادعاء قبول Micro أو جهاز فعلي"
+      ],
+      "evidence": [
+        {
+          "path": "docs/COMPONENT-CONSUMPTION.md",
+          "line": 32,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "docs/SYSTEM-CONTRACTS.md",
+          "line": 122,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "docs/COMPONENT-CONSUMPTION.md",
+          "line": 34,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    },
+    {
+      "id": "UX-10",
+      "title": "الرسوم والاختيار التفاعلي والخيارات المتخصصة",
+      "phase": 6,
+      "priority": "P1",
+      "kind": "deferred-chart-work",
+      "families": [
+        "data",
+        "metric-comparison",
+        "info-strip"
+      ],
+      "reason": "المبالغ والقيم والوحدات والفترات والجدول موجودة. التصميم المضغوط والتحديد الجديد وProgress أمور لاحقة، لا تنفذ في مرحلة النطاق.",
+      "deliverable": "عند العودة للرسوم: نموذج تفاعلي بالاتجاه المعتمد ثم تنفيذ بعد المراجعة. لا حذف للمتغيرات أو تغيير افتراضاتها صامتًا.",
+      "acceptance": [
+        "الأرقام المطلقة أساس والنسب لمعنى واضح فقط",
+        "لا سلسلة أيام من مجموع فترة أو هدف مبيعات من صورة",
+        "المقارنة الدقيقة تبقى rows/bars/table",
+        "قيمة الهدف والتجاوز والمجهول لا تختزل في نسبة",
+        "لا رسوم قبل إغلاق مراحل UX السابقة، ولا اشتراط إصلاح Micro"
+      ],
+      "evidence": [
+        {
+          "path": "docs/COMPONENT-CATALOG.json",
+          "line": 6,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/data/data.js",
+          "line": 19,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        },
+        {
+          "path": "components/metric-comparison/specification.md",
+          "line": 61,
+          "commit": "51bf442584e1fef25f2a01018f0b1161c41bc500"
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R01",
+      "title": "مصدر التصميم وجسر التوكنز",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R02",
+      "title": "ملكية React وDOM",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R03",
+      "title": "دورة الحياة والتحديث المتكرر",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02",
+        "UX-09"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R04",
+      "title": "حالة الانتظار ومنع تكرار العملية",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R05",
+      "title": "ترجمة أصناف الأفعال الثمانية",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R06",
+      "title": "الحقول الأساسية والتسمية والخطأ",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R07",
+      "title": "إدخال المال المتحكم به",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R08",
+      "title": "الكميات والوحدات الكسرية",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R09",
+      "title": "استعادة النص الخام داخل المسودة",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R10",
+      "title": "الرقم مع حالة معرفته ومصدره",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-03"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R11",
+      "title": "علامات الحالة المحايدة غير اللونية",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-03",
+        "UX-04"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R12",
+      "title": "الحقيقة المالية وسياق needs_review",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R13",
+      "title": "الاختيار والمفاتيح والمقاطع",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R14",
+      "title": "اختيار سجل موجود والبحث فيه",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-01",
+        "UX-04"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R15",
+      "title": "قائمة أوامر الترويسة",
+      "previousClassification": "توسيع عام مشروط",
+      "uxDisposition": "conditional-extension",
+      "jobs": [
+        "UX-07"
+      ],
+      "action": "عقد قدرة عامة مشروطة؛ يراجع البديل القائم والحاجة قبل أي تنفيذ."
+    },
+    {
+      "id": "R16",
+      "title": "اختيار الفترة ونطاق المقارنة",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R17",
+      "title": "تاريخ العمل والتوقيت المحلي",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R18",
+      "title": "الرجوع والروابط العميقة ونطاقها",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R19",
+      "title": "الشريط السفلي والقشرة",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-02",
+        "UX-09"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R20",
+      "title": "ملكية التركيز والطبقات",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05",
+        "UX-09"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R21",
+      "title": "طلب إغلاق قابل للمنع أثناء الكتابة والحفظ",
+      "previousClassification": "توسيع عام مشروط",
+      "uxDisposition": "conditional-extension",
+      "jobs": [
+        "UX-06",
+        "UX-05"
+      ],
+      "action": "عقد قدرة عامة مشروطة؛ يراجع البديل القائم والحاجة قبل أي تنفيذ."
+    },
+    {
+      "id": "R22",
+      "title": "حفظ/ترك/إلغاء التغييرات غير المحفوظة",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-09"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R23",
+      "title": "أخطاء الحفظ والتحقق المركب",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R24",
+      "title": "النجاح الهادئ داخل السياق",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R25",
+      "title": "الفراغ وفشل القراءة وعدم النتائج",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R26",
+      "title": "قوائم تشغيلية كثيفة وتحميل المزيد",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-04"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R27",
+      "title": "كشف الحركات والمصادر والتفصيل",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-04"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R28",
+      "title": "مراجعة وتصحيح وعكس عملية",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-05"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R29",
+      "title": "نماذج متعددة البنود والاعتماديات",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R30",
+      "title": "بطاقات المؤشرات وروابط مصدرها",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-03"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R31",
+      "title": "مقارنة فترتين بالقيمة المطلقة",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-02",
+        "UX-10"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R32",
+      "title": "رسوم زمنية قابلة لتحديد نقطة",
+      "previousClassification": "توسيع عام مشروط",
+      "uxDisposition": "deferred-charts",
+      "jobs": [
+        "UX-10"
+      ],
+      "action": "مؤجل إلى مرحلة الرسوم بعد استكمال نطاق وعقود وتراكيب UX؛ لا تغيير أو نموذج جديد الآن."
+    },
+    {
+      "id": "R33",
+      "title": "الميزانية والمتبقي والتجاوز",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-03",
+        "UX-10"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R34",
+      "title": "القيم الخام والمنسقة والجداول البديلة",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R35",
+      "title": "التقويم الأساسي ومزامنة حالته",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-01",
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R36",
+      "title": "غنى يوم التقويم بالسعة والوقت المجهول",
+      "previousClassification": "توسيع عام مشروط",
+      "uxDisposition": "conditional-extension",
+      "jobs": [
+        "UX-08"
+      ],
+      "action": "عقد قدرة عامة مشروطة؛ يراجع البديل القائم والحاجة قبل أي تنفيذ."
+    },
+    {
+      "id": "R37",
+      "title": "التكرار المحدود وتوقفه وتغيير موعد",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R38",
+      "title": "إعدادات حقيقية متعددة الأقسام",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R39",
+      "title": "هوية المالك المحلية",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-02"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R40",
+      "title": "بوابة الدخول والمزودون",
+      "previousClassification": "خارج النطاق الحالي",
+      "uxDisposition": "out-of-current-use",
+      "jobs": [
+        "UX-02"
+      ],
+      "action": "ليس فجوة ملزمة من احتياجات المضيف الحالية. المكوّن المستقل إن وجد يبقى ضمن مراجعة المكتبة ولا يحذف."
+    },
+    {
+      "id": "R41",
+      "title": "اختيار ملف محلي ومعاينة محتواه",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "shared-composition",
+      "jobs": [
+        "UX-05"
+      ],
+      "action": "متطلب عرض أو تركيب عام؛ يضم إلى التراكيب الثلاثة، دون نقل المعنى أو البيانات أو الحفظ من المضيف."
+    },
+    {
+      "id": "R42",
+      "title": "الاستعادة الذرية والتراجع وفحص البيانات",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R43",
+      "title": "البدء وفشل التخزين وPWA والتحديث",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01",
+        "UX-05"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R44",
+      "title": "تنزيل كشف ونسخ نتيجة ومشاركة عند الطلب",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    },
+    {
+      "id": "R45",
+      "title": "عرض عدة بطاقات والسحب",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-02",
+        "UX-10"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R46",
+      "title": "صفوف وهوية وأقسام قابلة للطي",
+      "previousClassification": "مغطى",
+      "uxDisposition": "existing-contract",
+      "jobs": [
+        "UX-04"
+      ],
+      "action": "تغطية موجودة في المصدر/العقد؛ تثبيت الاستعمال وإعادة التحقق في مرحلته، لا إعادة بناء تلقائية."
+    },
+    {
+      "id": "R47",
+      "title": "أدوار متعددة وصلاحيات ومزامنة",
+      "previousClassification": "خارج النطاق الحالي",
+      "uxDisposition": "out-of-current-use",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "ليس فجوة ملزمة من احتياجات المضيف الحالية. المكوّن المستقل إن وجد يبقى ضمن مراجعة المكتبة ولا يحذف."
+    },
+    {
+      "id": "R48",
+      "title": "Market/Delivery وواجهات الأطراف",
+      "previousClassification": "خارج النطاق الحالي",
+      "uxDisposition": "out-of-current-use",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "ليس فجوة ملزمة من احتياجات المضيف الحالية. المكوّن المستقل إن وجد يبقى ضمن مراجعة المكتبة ولا يحذف."
+    },
+    {
+      "id": "R49",
+      "title": "RTL والكثافة وأهداف اللمس ولوحة المفاتيح",
+      "previousClassification": "تركيب مشترك",
+      "uxDisposition": "fixture-acceptance",
+      "jobs": [
+        "UX-09"
+      ],
+      "action": "اختبارات وقياسات داخل حاضنة مكتبة مستقلة؛ لا اختبار أو تعديل Micro ولا قبول منصة مزعوم."
+    },
+    {
+      "id": "R50",
+      "title": "الميزانية التقنية وحدود القبول",
+      "previousClassification": "خاص بالتطبيق",
+      "uxDisposition": "host-owned-no-work",
+      "jobs": [
+        "UX-01"
+      ],
+      "action": "لا تنفيذ لهذا المنطق في المكتبة. توثق حدود الاستهلاك فقط؛ موصل React والمال والمسودات وHistory وخدمات التطبيق خارج النطاق."
+    }
+  ]
+}

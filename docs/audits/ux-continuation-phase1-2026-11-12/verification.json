@@ -1,0 +1,60 @@
+{
+  "auditedCommit": "51bf442584e1fef25f2a01018f0b1161c41bc500",
+  "stage": 1,
+  "checks": [
+    {
+      "name": "14 families exactly match catalog",
+      "passed": true
+    },
+    {
+      "name": "6 variants exactly match catalog",
+      "passed": true
+    },
+    {
+      "name": "50 requirements covered once",
+      "passed": true
+    },
+    {
+      "name": "all family and requirement jobs resolve",
+      "passed": true
+    },
+    {
+      "name": "source379 files unchanged",
+      "passed": true
+    },
+    {
+      "name": "catalog and maturity unchanged",
+      "passed": true
+    },
+    {
+      "name": "all work-item source anchors resolve",
+      "passed": true
+    }
+  ],
+  "staticGates": {
+    "lightStatic": {
+      "passed": 239,
+      "failed": 0,
+      "evidence": "static-records.json"
+    },
+    "catalog": {
+      "passed": true,
+      "families": 14,
+      "variants": 6
+    },
+    "standalone": {
+      "byteEqual": true,
+      "iconsMatch": 24
+    },
+    "manifest": {
+      "check": "tools/manifest-build.py --check",
+      "performedAfterFinalEvidence": true,
+      "passed": true,
+      "entries": 928
+    },
+    "diffCheck": true
+  },
+  "runtimeTestsRun": false,
+  "darkTestsRun": false,
+  "microAccessInThisStage": false
+}
