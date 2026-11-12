@@ -165,3 +165,7 @@
 | info-strip-peek | Info Peek وmarkup مستقل، API وأحداثه أعلاه | opt-in؛ لا double-init مع الشريط العادي. |
 
 هذه تغطية **عقود ومراجعة مصدر** وليست نتائج فحص بصري/تفاعلي لهذه المرحلة. تفاصيل كل خيار CSS أو markup تبقى في المواصفة، ولا تُحذف منها خيارات لأنها لا تمتلك API JavaScript. اختبار360×780 RTL Light أساس المرحلة3، و320 للحاجة المثبتة وLTR حين يؤثر الاتجاه؛ لا Dark أو مصفوفة مقاسات واسعة.
+
+## امتدادات المصدر الاختيارية 2026-11-12
+
+Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init/sync/disconnect(root?) لاختصار تكرار وحدة بسياق صريح. [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](READABLE-SOURCE.md). D01/Menu/Calendar metadata مستمرة التأجيل.

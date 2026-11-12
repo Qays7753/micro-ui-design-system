@@ -479,8 +479,19 @@
       var display = value.state === 'missing' ? '—'
         : value.state === 'invalid' ? 'قيمة غير صالحة'
           : (entry.display || entry.raw) + (entry.unit && !entry.display ? ' ' + entry.unit : '');
-      var val = make('span', 'm-main-metric__row-value', display);
-      val.setAttribute('dir', 'ltr');
+      var val = make('span', 'm-main-metric__row-value');
+      if (chart.classList.contains('m-main-metric--readable')) {
+        var number = make('bdi', '', value.state === 'missing' ? '(غير متاح)'
+          : value.state === 'invalid' ? entry.raw : (entry.display || entry.raw));
+        number.dir = value.value === null ? 'auto' : 'ltr';
+        val.appendChild(number);
+        if (value.state === 'invalid') val.appendChild(make('span', 'm-main-metric__reading-state', ' (قيمة غير صالحة)'));
+        if (entry.unit) {
+          val.appendChild(document.createTextNode(' '));
+          var unit = make('span', 'm-main-metric__reading-unit', entry.unit);
+          unit.setAttribute('data-reading-unit', entry.unit); val.appendChild(unit);
+        }
+      } else { val.textContent = display; val.setAttribute('dir', 'ltr'); }
       head.appendChild(val);
       li.appendChild(head);
       var track = make('span', 'm-main-metric__track');
@@ -510,6 +521,7 @@
       status.setAttribute('data-valid', String(max !== null));
     }
     syncBarsTable(chart, entries, parsed);
+    if (window.MicroReadings) window.MicroReadings.sync(chart);
   }
 
   function initOne(root) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate the review-only offline concept from its preview, using local fonts.
-No dependency on, or modification of, the system showcase standalone builder.
+Includes the separate canonical-source review; does not modify the showcase builder.
 """
 import argparse,base64,re
 from pathlib import Path
@@ -31,11 +31,12 @@ def build(source=SOURCE):
     html=html.replace('href="orders.html"','href="review-orders.html"').replace('href="index.html"','href="review.html"')
     license=(ROOT/'assets/fonts/LICENSE-IBM-Plex-OFL.txt').read_text()
     assert '-->' not in license
-    return '<!-- GENERATED: review concept only; run tools/build-chart-proposal-review.py -->\n<!-- Embedded fonts license:\n'+license+'\n-->\n'+html
+    kind = 'canonical source review (Draft)' if source.parent.name == 'readable-source' else 'review concept only'
+    return '<!-- GENERATED: '+kind+'; run tools/build-chart-proposal-review.py -->\n<!-- Embedded fonts license:\n'+license+'\n-->\n'+html
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');a=p.parse_args()
-    pages=[(SOURCE,OUT),(SOURCE.parent/'orders.html',OUT.parent/'review-orders.html')]
+    pages=[(SOURCE,OUT),(SOURCE.parent/'orders.html',OUT.parent/'review-orders.html'),(ROOT/'previews/readable-source/index.html',ROOT/'docs/audits/readable-source-2026-11-12/review.html')]
     failed=False
     for source,dest in pages:
         html=build(source)

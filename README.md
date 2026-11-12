@@ -129,3 +129,7 @@ python3 tools/data-scale-state-check.py
 ## مراجعة المكونات الحالية
 
 Full Component Review مستقل عن مختبر الحالات: افتح `previews/ui-system-showcase/index.html#component-review` واختر العائلة. الأمثلة الفعلية للمتغيرات الستة محفوظة مع نضجها في الكتالوج. `#state-lab` للتشخيص، و`#app` للمعاينة النظيفة. Line خيار للتسلسل المرتب أو الزمني، وBars/Rows/Tables هي افتراض المقارنة الدقيقة.
+
+## أحدث امتداد مصدر اختياري — قراءات منظمة
+
+[المعاينة الفعلية](previews/readable-source/index.html) و[العقد](docs/READABLE-SOURCE.md): Data/Metric readable + C04 بحالة Draft، وحدات ظاهرة افتراضيًا واختيار عام اختياري بمفاتيح ثابتة. لا تغيير هوية أو محور افتراضي أو تركيب في تطبيق. [ملف مراجعة مستقل](docs/audits/readable-source-2026-11-12/review.html).

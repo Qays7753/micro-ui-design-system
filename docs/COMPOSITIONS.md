@@ -1,6 +1,6 @@
-# استهلاك التراكيب المشتركة — C01/C02/C03
+# استهلاك التراكيب المشتركة — C01/C02/C03/C04
 
-ثلاث وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، فوق العائلات الحالية. الكتالوج يدرجها في compositions؛ لا تزيد عدد العائلات14 أو المتغيرات6، ولا تضيف Micro* API أو framework. [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
+C01/C02/C03 وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`. الكتالوج يدرج4 تراكيب و8 متغيرات فوق14 عائلة؛ لا framework أو عائلة جديدة. [C04 والعرض المقروء](READABLE-SOURCE.md). [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
 
 CSS وبنية DOM الدلالية جزء من المكوّن. صفحات المعاينة ومتحكمها لا تنتقل إلى المنتج. عند اختيار إطار المضيف لاحقًا يُعرّف markup مرة في غلاف مشترك ثم تمرر الصفحات البيانات والأفعال؛ لا نسخ CSS لكل شاشة أو نقل controller الأمثلة.
 

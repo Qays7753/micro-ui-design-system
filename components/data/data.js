@@ -105,6 +105,9 @@
       var v = parseNum(raw);
       return {
         series: li.getAttribute('data-series') || 'a',
+        key: li.getAttribute('data-key'),
+        unit: li.hasAttribute('data-unit') ? li.getAttribute('data-unit') : (chart.getAttribute('data-unit') || ''),
+        period: li.hasAttribute('data-period') ? li.getAttribute('data-period') : (chart.getAttribute('data-period') || ''),
         label: li.getAttribute('data-label') || '',
         /* R3-UI02: قراءة كاملة اختيارية يمررها المستهلك — إن غابت فهي
            data-label نفسه؛ يستخدمها القصّ في aria-label/<title>.
@@ -223,7 +226,8 @@
       value.className = 'm-chart__context-value';
       value.setAttribute('dir', 'auto');
       value.textContent = entry.value;
-      item.appendChild(label);
+      if (!isReadable(chart)) item.appendChild(label);
+      if (isReadable(chart) && entry.key === 'data-unit') value.setAttribute('data-reading-unit', entry.value);
       item.appendChild(value);
       context.appendChild(item);
     });
@@ -1359,6 +1363,7 @@
       legend.appendChild(li);
     });
     if (items.length) plot.appendChild(legend);
+    readableLegend(chart, items, legend, !noPercent && isFinite(hasDeclared ? total : sum) ? (hasDeclared ? total : sum) : null);
   }
 
   /* ---- W3.1 (A4-D01/A4-R02 — D-UI-04): اسم ووصف الرسم مربوطان برمجيًا ----
@@ -1653,7 +1658,213 @@
     observePlot(chart);
   }
 
+  /* Optional readable presentation and selection. Legacy rendering stays intact. */
+  var readingLives = new WeakMap();
+  var donutReadings = new WeakMap();
+  var readingUid = 0;
+  function isReadable(chart) { return chart.getAttribute('data-presentation') === 'readable'; }
+  function readingNode(tag, cls, text) {
+    var el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+  function appendReadingUnit(parent, unit) {
+    if (!unit) return;
+    parent.appendChild(document.createTextNode(' '));
+    var node = readingNode('span', 'm-chart__reading-unit', unit);
+    node.setAttribute('data-reading-unit', unit);
+    parent.appendChild(node);
+  }
+  function appendReadableValue(parent, it, donut) {
+    var full = valueStateText(it);
+    var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue)
+      : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
+    if (donut && it.value !== null && it.value < 0) full = raw + ' (غير صالح للنسب)';
+    if (raw === null) parent.appendChild(readingNode('span', null, full));
+    else {
+      var bdi = readingNode('bdi', null, it.value !== null && it.display ? it.display : raw);
+      bdi.dir = it.value === null ? 'auto' : 'ltr'; parent.appendChild(bdi);
+      if (full.length > raw.length) parent.appendChild(readingNode('span', 'm-chart__reading-state', full.slice(raw.length)));
+    }
+  }
+  function selectionItems(chart, items) {
+    if (chart.getAttribute('data-selection') !== 'single' || !/^(bars|line|donut)$/.test(chart.getAttribute('data-chart'))) return null;
+    if (isReadable(chart) && mixedReadingContext(items)) return null;
+    var seen = new Set();
+    if (!items.length || items.some(function (it) {
+      if (it.key === null || !it.key.trim() || seen.has(it.key)) return true;
+      seen.add(it.key); return false;
+    })) return null;
+    return items;
+  }
+  function selectionSnapshot(chart, items) {
+    items = items || itemsOf(chart);
+    if (!selectionItems(chart, items)) return null;
+    var key = chart.getAttribute('data-selected-key');
+    var it = items.find(function (item) { return item.key === key; });
+    if (!it) return null;
+    var meta = donutReadings.get(chart);
+    return { key: it.key, label: fullLabelOf(chart, it), value: it.value,
+      rawValue: it.rawValue, display: it.display, invalid: it.invalid,
+      unit: it.unit, period: it.period,
+      share: meta && meta.denominator > 0 && it.value !== null && it.value >= 0 ? it.value / meta.denominator : null };
+  }
+  function setReadingSelection(chart, key, user) {
+    var items = itemsOf(chart);
+    if (!selectionItems(chart, items)) return null;
+    if (disconnectedCharts.has(chart)) return selectionSnapshot(chart, items);
+    if (key !== null && !items.some(function (it) { return it.key === key; })) return selectionSnapshot(chart, items);
+    var old = chart.getAttribute('data-selected-key');
+    if (key === null) chart.removeAttribute('data-selected-key');
+    else chart.setAttribute('data-selected-key', key);
+    updateReadingSelection(chart, items);
+    var result = selectionSnapshot(chart, items);
+    if (user && old !== chart.getAttribute('data-selected-key')) {
+      chart.dispatchEvent(new CustomEvent('micro-data:selection-change', { bubbles: true, detail: result }));
+    }
+    return result;
+  }
+  function disposeReading(chart) {
+    var life = readingLives.get(chart);
+    if (life) { life.controller.abort(); life.box.remove(); readingLives.delete(chart); }
+    [].slice.call(chart.querySelectorAll('[data-reading-choice]')).forEach(function (button) {
+      button.disabled = true; button.removeAttribute('aria-pressed');
+    });
+  }
+  function updateReadingSelection(chart, items) {
+    var life = readingLives.get(chart), selected = selectionSnapshot(chart, items);
+    if (life) {
+      var index = selected ? items.findIndex(function (it) { return it.key === selected.key; }) : -1;
+      life.range.max = Math.max(0, items.length - 1);
+      life.range.value = Math.max(0, index);
+      life.range.disabled = !selected || items.length < 2;
+      life.prev.disabled = index <= 0;
+      life.next.disabled = index === items.length - 1;
+      life.range.setAttribute('aria-valuetext', selected ? selected.label + '، ' + (selected.display || selected.rawValue || '(غير متاح)') + ' ' + selected.unit : 'لم يُحدد عنصر');
+      life.status.textContent = '';
+      if (selected) {
+        life.status.appendChild(readingNode('span', 'm-chart__selected-label', selected.label));
+        var value = readingNode('span', 'm-chart__selected-value');
+        appendReadableValue(value, items[index], chart.getAttribute('data-chart') === 'donut'); appendReadingUnit(value, selected.unit); life.status.appendChild(value);
+      } else life.status.textContent = 'اختر عنصرًا لقراءة تفاصيله';
+    }
+    [].slice.call(chart.querySelectorAll('[data-reading-choice]')).forEach(function (button) {
+      var active = !!selected && button.getAttribute('data-reading-choice') === selected.key;
+      button.setAttribute('aria-pressed', String(active));
+      var pct = button.querySelector('[data-reading-share]');
+      if (pct) pct.hidden = !active;
+    });
+    [].slice.call(chart.querySelectorAll('[data-reading-key]')).forEach(function (el) {
+      el.setAttribute('data-reading-selected', String(!!selected && el.getAttribute('data-reading-key') === selected.key));
+    });
+    if (window.MicroReadings) window.MicroReadings.sync(chart);
+  }
+  function readableLegend(chart, items, legend, denominator) {
+    if (!isReadable(chart) && chart.getAttribute('data-selection') !== 'single') return;
+    donutReadings.set(chart, { denominator: denominator });
+    legend.textContent = '';
+    var enabled = !!selectionItems(chart, items);
+    items.forEach(function (it) {
+      var li = readingNode('li', 'm-legend__item m-cat--' + it.series);
+      var row = readingNode(enabled ? 'button' : 'div', 'm-chart__legend-row');
+      if (enabled) { row.type = 'button'; row.setAttribute('data-reading-choice', it.key); row.setAttribute('aria-pressed', 'false'); }
+      var swatch = readingNode('span', 'm-legend__swatch'); swatch.setAttribute('aria-hidden', 'true'); row.appendChild(swatch);
+      row.appendChild(readingNode('span', 'm-legend__label', fullLabelOf(chart, it)));
+      var value = readingNode('span', 'm-legend__value');
+      appendReadableValue(value, it, true); appendReadingUnit(value, it.unit);
+      if (enabled && denominator > 0 && it.value !== null && it.value >= 0) {
+        var share = readingNode('span', 'm-chart__share', Math.round(it.value / denominator * 100) + '%');
+        share.dir = 'ltr'; share.setAttribute('data-reading-share', ''); share.setAttribute('aria-label', share.textContent + ' من الإجمالي'); share.hidden = true;
+        value.appendChild(share);
+      }
+      row.appendChild(value); li.appendChild(row); legend.appendChild(li);
+    });
+  }
+  function mixedReadingContext(items) {
+    return items.length > 0 && items.some(function (it) { return it.unit !== items[0].unit || it.period !== items[0].period; });
+  }
+  function readableFallback(chart, items) {
+    var plot = chart.querySelector('[data-plot]'); plot.textContent = '';
+    var list = readingNode('dl', 'm-chart__readings');
+    items.forEach(function (it) {
+      var row = readingNode('div'); row.appendChild(readingNode('dt', null, fullLabelOf(chart, it)));
+      var value = readingNode('dd'); appendReadableValue(value, it, chart.getAttribute('data-chart') === 'donut');
+      appendReadingUnit(value, it.unit || '(وحدة غير محددة)');
+      if (it.period) value.appendChild(readingNode('span', 'm-chart__reading-period', ' · ' + it.period));
+      row.appendChild(value); list.appendChild(row);
+    });
+    plot.appendChild(list); chart.setAttribute('data-reading-state', 'mixed-context');
+  }
+  function syncReadable(chart, items) {
+    var readable = isReadable(chart), valid = selectionItems(chart, items);
+    if (!readable && chart.getAttribute('data-selection') !== 'single') { chart.removeAttribute('data-selection-state'); disposeReading(chart); return; }
+    if (readable) {
+      var rows = chart.querySelectorAll('.m-chart__dataset tbody tr');
+      [].slice.call(rows).forEach(function (row, i) {
+        var cell = row.querySelector('td:last-of-type'); if (cell && items[i]) appendReadingUnit(cell, items[i].unit);
+      });
+      if (mixedReadingContext(items)) {
+        var caption = chart.querySelector('.m-chart__dataset caption');
+        if (caption) caption.textContent = 'القراءات بوحداتها وفتراتها';
+      }
+    }
+    if (!valid) {
+      disposeReading(chart);
+      if (chart.getAttribute('data-selection') === 'single') { chart.setAttribute('data-selection-state', readable && mixedReadingContext(items) ? 'mixed-context' : items.length ? 'invalid-keys' : 'empty'); chart.removeAttribute('data-selected-key'); }
+      else chart.removeAttribute('data-selection-state');
+      if (window.MicroReadings) window.MicroReadings.sync(chart);
+      return;
+    }
+    chart.setAttribute('data-selection-state', 'ready');
+    var marks = chart.querySelectorAll('[data-plot] > svg > [data-source-index], [data-plot] > svg > g');
+    [].slice.call(marks).forEach(function (mark, index) {
+      var sourceIndex = mark.hasAttribute('data-source-index') ? Number(mark.getAttribute('data-source-index'))
+        : mark.hasAttribute('data-point-index') ? Number(mark.getAttribute('data-point-index')) : index;
+      if (items[sourceIndex]) mark.setAttribute('data-reading-key', items[sourceIndex].key);
+    });
+    if (!items.some(function (it) { return it.key === chart.getAttribute('data-selected-key'); })) chart.removeAttribute('data-selected-key');
+    var life = readingLives.get(chart);
+    if (!life || !chart.contains(life.box)) {
+      if (life) life.controller.abort();
+      [].slice.call(chart.querySelectorAll('[data-reading-owned="selection"]')).forEach(function (el) { el.remove(); });
+      var box = readingNode('div', 'm-chart__selection'); box.setAttribute('data-reading-owned', 'selection');
+      var status = readingNode('p', 'm-chart__selection-value'); status.id = 'micro-data-selection-' + (++readingUid); status.setAttribute('role', 'status'); box.appendChild(status);
+      var controls = readingNode('div', 'm-chart__selection-controls');
+      var prev = readingNode('button', 'm-chart__select-step', 'السابق'); prev.type = 'button';
+      var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', 'تحديد عنصر لقراءة قيمته'); range.setAttribute('aria-describedby', status.id);
+      var next = readingNode('button', 'm-chart__select-step', 'التالي'); next.type = 'button';
+      controls.appendChild(prev); controls.appendChild(range); controls.appendChild(next); box.appendChild(controls);
+      if (chart.getAttribute('data-chart') === 'donut') controls.hidden = true;
+      chart.appendChild(box);
+      var controller = new AbortController(); life = { box: box, controls: controls, status: status, range: range, prev: prev, next: next, controller: controller }; readingLives.set(chart, life);
+      function on(el, type, fn) { el.addEventListener(type, fn, { signal: controller.signal }); }
+      on(range, 'input', function () { var current = itemsOf(chart); if (current[Number(range.value)]) setReadingSelection(chart, current[Number(range.value)].key, true); });
+      function step(amount) {
+        var current = itemsOf(chart), key = chart.getAttribute('data-selected-key');
+        var index = current.findIndex(function (it) { return it.key === key; });
+        var target = index < 0 ? (amount > 0 ? 0 : current.length - 1) : Math.max(0, Math.min(current.length - 1, index + amount));
+        if (current[target]) setReadingSelection(chart, current[target].key, true);
+      }
+      on(prev, 'click', function () { step(-1); }); on(next, 'click', function () { step(1); });
+      on(chart, 'click', function (event) {
+        var button = event.target.closest('[data-reading-choice]');
+        if (button && chart.contains(button) && !button.disabled) setReadingSelection(chart, button.getAttribute('data-reading-choice'), true);
+      });
+    }
+    life.controls.hidden = chart.getAttribute('data-chart') === 'donut';
+    var disclosure = chart.querySelector('.m-chart__dataset-wrap');
+    if (disclosure && disclosure.parentNode === chart && life.box.nextElementSibling !== disclosure) chart.insertBefore(life.box, disclosure);
+    /* Match the renderer's existing direction; do not change the chart axis. */
+    life.range.dir = chart.getAttribute('data-chart') === 'bars' && chart.getAttribute('data-value-domain') !== 'signed' ? 'ltr' : (chart.getAttribute('data-axis-dir') || 'rtl');
+    updateReadingSelection(chart, items);
+  }
+
   function render(chart) {
+    var focusChoice = document.activeElement && chart.contains(document.activeElement) && document.activeElement.closest('[data-reading-choice]');
+    var focusKey = focusChoice ? focusChoice.getAttribute('data-reading-choice') : null;
+    donutReadings.delete(chart);
+    chart.removeAttribute('data-reading-state');
     disconnectedCharts.delete(chart);
     chart.removeAttribute('data-value-layout');
     chart.removeAttribute('data-index-label-layout');
@@ -1671,7 +1882,8 @@
        الدائري أيضًا — لا إطار فارغ صامت؛ نفس حالة «لا توجد بيانات»
        الموثقة bars/line (التوزيع يعالج داخليًا أيضًا مسار كل القيم
        مجهولة بنفس الحالة — انظر renderDonut) */
-    if ((kind === 'bars' || kind === 'line' || kind === 'bubbles') && items.length === 0) {
+    if (isReadable(chart) && mixedReadingContext(items)) readableFallback(chart, items);
+    else if ((kind === 'bars' || kind === 'line' || kind === 'bubbles') && items.length === 0) {
       var emptyPlot = chart.querySelector('[data-plot]');
       emptyPlot.textContent = '';
       var empty = document.createElement('p');
@@ -1698,6 +1910,12 @@
     /* W3.1 (D-UI-04): إفصاح بيانات داخل الرسم — الجدول يعاد بناؤه من
        dataset الحالي في كل دورة فلا انحراف بنيوي ممكن */
     syncDatasetTable(chart, items);
+    syncReadable(chart, items);
+    if (focusKey !== null) {
+      var replacement = [].slice.call(chart.querySelectorAll('[data-reading-choice]')).find(function (el) { return el.getAttribute('data-reading-choice') === focusKey; });
+      if (!replacement) replacement = [].slice.call(chart.querySelectorAll('[data-reading-choice], .m-chart__select-range, .m-chart__disclose')).find(function (el) { return !el.disabled && el.getClientRects().length; });
+      if (replacement && !replacement.disabled) replacement.focus({ preventScroll: true });
+    }
     /* R3-UI01: خزّن عرض الرسم الحالي وألحق المراقب — bars/line/donut */
     if (kind === 'bars' || kind === 'line' || kind === 'donut') rememberRenderWidth(chart);
     /* W3.3 (A4-D04): الملخص يتبع المصدر في كل دورة تصيير — data-summary-text
@@ -1725,6 +1943,8 @@
     },
     /* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
     render: render,
+    getSelection: function (chart) { return chart && chart.matches && chart.matches('[data-chart]') ? selectionSnapshot(chart) : null; },
+    setSelection: function (chart, key) { return chart && chart.matches && chart.matches('[data-chart]') ? setReadingSelection(chart, key, false) : null; },
     /* R3-UI01: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init/render
        يظلان متاحين ويعيدان الإلحاق عند الحاجة، ومعالج DOMContentLoaded
        المسجل مرة واحدة عند تحميل الوحدة لا يتكرر */
@@ -1734,6 +1954,8 @@
       if (scope.matches && scope.matches('[data-chart]')) charts.unshift(scope);
       charts.forEach(function (c) {
         disconnectedCharts.add(c);
+        disposeReading(c);
+        if (window.MicroReadings) window.MicroReadings.disconnect(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
         if (plotFrames.has(c)) window.cancelAnimationFrame(plotFrames.get(c));

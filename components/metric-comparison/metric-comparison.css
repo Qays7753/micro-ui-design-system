@@ -386,6 +386,20 @@
 .m-metric-circles__title,.m-main-metric__title { overflow-wrap: anywhere; }
 .m-metric-circles__fallback-item { border-inline-start-width: 3px; }
 .m-main-metric__row { padding-block: var(--micro-space-1); }
+
+/* Optional shared columns. Long readings wrap without shortening the track
+   of just one category. Older engines retain the existing full-width rows. */
+.m-main-metric--readable .m-main-metric__row-value { font-size:var(--micro-body-size); line-height:var(--micro-body-line); overflow-wrap:anywhere; }
+.m-main-metric__reading-unit,.m-main-metric__reading-state { direction:rtl; unicode-bidi:isolate; font-size:var(--micro-secondary-size); color:var(--micro-text-secondary); }
+@supports (grid-template-columns:subgrid) {
+  .m-main-metric--readable .m-main-metric__rows { display:grid; grid-template-columns:minmax(0,1fr) minmax(48px,1.1fr) minmax(0,1fr); gap:var(--micro-space-2); }
+  .m-main-metric--readable .m-main-metric__row { display:grid; grid-template-columns:subgrid; grid-column:1 / -1; align-items:center; column-gap:var(--micro-space-2); row-gap:var(--micro-space-1); }
+  .m-main-metric--readable .m-main-metric__row-head { display:contents; }
+  .m-main-metric--readable .m-main-metric__row-label { grid-column:1; grid-row:1; min-width:0; overflow-wrap:anywhere; }
+  .m-main-metric--readable .m-main-metric__track { grid-column:2; grid-row:1; width:100%; }
+  .m-main-metric--readable .m-main-metric__row-value { grid-column:3; grid-row:1; min-width:0; max-width:100%; }
+  .m-main-metric--readable .m-main-metric__state { grid-column:1 / -1; }
+}
 .m-main-metric { /* W2.4 (A2-F02): توكن مكوّن مُسمّى لحافة الفصل الداخلية للدائرة البيضاء على
    أرضية فاتحة — اشتقاق موثق (أبيض بشفافية 16%)، قيمة هندسية داخلية لا لون هوية؛
    القيمة كما كانت حرفيًا. R-09 (2026-10-25): أُعيد التسمية إلى ...-color

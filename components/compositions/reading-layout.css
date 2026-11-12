@@ -1,0 +1,22 @@
+/* C04: source composition; tokens unchanged. Load family CSS for its children. */
+.m-reading-group, .m-reading-group * { box-sizing:border-box; }
+.m-reading-group { min-width:0; padding:var(--micro-space-4); border:1px solid var(--micro-border-divider); border-radius:var(--micro-radius-surface); background:var(--micro-surface-base); color:var(--micro-text-primary); font-family:var(--micro-font-family); }
+.m-reading-group [hidden] { display:none; }
+.m-reading-group__head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:var(--micro-space-2); min-width:0; }
+.m-reading-group__title { margin:0; font-size:var(--micro-section-title-size); line-height:var(--micro-section-title-line); font-weight:var(--micro-weight-semibold); overflow-wrap:anywhere; }
+.m-reading-group__period { margin:0; color:var(--micro-text-secondary); font-size:var(--micro-secondary-size); line-height:var(--micro-secondary-line); }
+.m-reading-group__main { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:var(--micro-space-3); margin-block:var(--micro-space-2) var(--micro-space-3); }
+.m-reading-group__section { border-block-start:1px solid var(--micro-border-divider); padding-block-start:var(--micro-space-3); margin-block-start:var(--micro-space-3); }
+.m-reading-details > summary { display:flex; align-items:center; min-height:var(--micro-touch-min); min-width:var(--micro-touch-min); color:var(--micro-brand-primary); cursor:pointer; font-size:var(--micro-label-size); }
+.m-reading-details > summary:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:var(--micro-focus-gap); }
+.m-reading-details > p { margin:0; font-size:var(--micro-label-size); line-height:var(--micro-label-line); }
+/* Keep the unit in the accessibility tree. Never author this class manually. */
+.m-reading-unit--contextual { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+
+.m-reading-group__pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--micro-space-4); margin:var(--micro-space-3) 0 0; }
+.m-reading-group__pair > div { min-width:0; }
+.m-reading-group__pair dt { font-size:var(--micro-label-size); color:var(--micro-text-secondary); }
+.m-reading-group__pair dd { margin:var(--micro-space-1) 0 0; overflow-wrap:anywhere; }
+.m-reading-group__amount { font-size:var(--micro-amount-size); line-height:var(--micro-amount-line); font-weight:var(--micro-weight-semibold); overflow-wrap:anywhere; }
+.m-reading-group__comparison { font-size:var(--micro-label-size); color:var(--micro-text-secondary); }
+.m-reading-group__foot { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--micro-space-2); font-size:var(--micro-label-size); margin:var(--micro-space-2) 0 0; }

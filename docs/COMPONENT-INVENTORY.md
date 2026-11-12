@@ -42,13 +42,14 @@
 
 ## التراكيب المشتركة
 
-وصفات فوق العائلات الحالية، وليست عائلات أو API JavaScript إضافية. [التحميل والملكية](COMPOSITIONS.md).
+تراكيب فوق العائلات الحالية؛ C01–C03 وصفات CSS، وC04 مساعد اختياري لسياق الوحدات. [التحميل والملكية](COMPOSITIONS.md).
 
 | التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |
 |---|---|---|---|---|---|
 | C01 · Value with context | [`components/info-strip/value-context.css`](../components/info-strip/value-context.css) | [فتح](../previews/compositions/summary-example.html) | DRAFT FOR REVIEW | info-strip | organization, buttons, messages |
 | C02 · Operational row and list | [`components/organization/operational-row.css`](../components/organization/operational-row.css) | [فتح](../previews/compositions/row-example.html) | DRAFT FOR REVIEW | organization | buttons, messages |
 | C03 · Controlled form surface | [`components/compositions/form-surface.css`](../components/compositions/form-surface.css) | [فتح](../previews/compositions/form-example.html) | DRAFT FOR REVIEW | fields, buttons | messages, selection, navigation |
+| C04 · Structured readings and explicit unit context | [`components/compositions/reading-layout.css`](../components/compositions/reading-layout.css)<br>[`components/compositions/reading-context.js`](../components/compositions/reading-context.js) | [فتح](../previews/readable-source/index.html) | DRAFT FOR REVIEW |  | data, metric-comparison, info-strip, organization |
 
 ## المتغيرات
 
@@ -60,6 +61,8 @@
 | metric-circles | metric-comparison | STABLE UI | نعم | [فتح](../previews/concepts/index.html) |
 | packed-circle | data | PROPOSED | نعم | [فتح](../previews/concepts/index.html) |
 | info-strip-peek | info-strip | STABLE UI | نعم | [فتح](../previews/info-strip/comparison.html) |
+| data-readable | data | DRAFT FOR REVIEW | نعم | [فتح](../previews/readable-source/index.html) |
+| metric-readable | metric-comparison | DRAFT FOR REVIEW | نعم | [فتح](../previews/readable-source/index.html) |
 
 ## العقود العامة
 

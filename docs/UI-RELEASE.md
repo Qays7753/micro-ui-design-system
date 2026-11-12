@@ -36,3 +36,7 @@
 ## تدقيق المكونات — 2026-11-11
 
 [تقرير التدقيق المستقل](audits/component-audit-2026-11-11/REPORT.md) يثبت حالات المراجعة والإصلاحات المركزة وحدود البيئة، دون تغيير الهوية أو Light-only أو نضج الكتالوج. الفحوص الجديدة: `component-audit-check.py` و`calendar-contract-check.py` و`clone-lifecycle-check.py` داخل `tools/`.
+
+## بوابة امتداد المصدر المقروء — 2026-11-12
+
+شغّل `python3 tools/readable-source-check.py --out /tmp/readable-source` مع بوابات Light الحالية وكتالوج/standalone/MANIFEST. المعاينة المستقلة للمصدر تُولد عبر `tools/build-chart-proposal-review.py --check`؛ ملفا prototype السابقان تاريخيان. لا تغير حالة Draft تلقائيًا، وأبلغ عن استمرار D01/UX-06 وUX-07 وUX-08 من سجل القرارات. [العقد](READABLE-SOURCE.md).

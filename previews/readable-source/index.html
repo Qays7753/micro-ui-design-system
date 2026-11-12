@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قراءات واضحة — مصدر Micro UI</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../components/data/data.css">
+<link rel="stylesheet" href="../../components/metric-comparison/metric-comparison.css">
+<link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+<link rel="stylesheet" href="../../components/info-strip/value-context.css">
+<link rel="stylesheet" href="../../components/compositions/reading-layout.css">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body><main>
+<header class="preview-intro"><h1>قراءات واضحة</h1><p>معاينة المصدر المشترك · بيانات توضيحية مقدّمة من المستهلك · Light</p></header>
+<section class="m-reading-group" id="units-default" aria-labelledby="units-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title" id="units-title">المبلغ والكمية</h2><p class="m-reading-group__period">الوحدات ظاهرة افتراضيًا</p></div>
+<dl class="m-reading-group__pair"><div><dt>المصاريف</dt><dd><bdi dir="ltr">150</bdi> <span data-reading-unit="د.أ">د.أ</span></dd></div><div><dt>المخزون</dt><dd><bdi dir="ltr">149</bdi> <span data-reading-unit="قطعة">قطعة</span></dd></div></dl>
+</section>
+<section class="m-reading-group" id="sales-group" data-reading-context="money-label" data-unit="د.أ" aria-labelledby="sales-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title" id="sales-title">المبيعات</h2><p class="m-reading-group__period" id="money-label">هذا الأسبوع · د.أ</p></div>
+<div class="m-reading-group__main"><strong class="m-reading-group__amount"><bdi dir="ltr">4,820</bdi> <span data-reading-unit="د.أ">د.أ</span></strong><span class="m-reading-group__comparison">زيادة <bdi dir="ltr">640</bdi> <span data-reading-unit="د.أ">د.أ</span></span></div>
+<section class="m-chart" id="sales-bars" data-chart="bars" data-presentation="readable" data-selection="single" data-selected-key="wed" data-unit="د.أ" aria-label="المبيعات اليومية">
+<ul class="m-chart__data" hidden>
+<li data-key="sat" data-period="هذا الأسبوع" data-series="a" data-label="سبت" data-value="640"></li>
+<li data-key="sun" data-period="هذا الأسبوع" data-series="a" data-label="أحد" data-value="720"></li>
+<li data-key="mon" data-period="هذا الأسبوع" data-series="a" data-label="اثنين" data-value="510"></li>
+<li data-key="tue" data-period="هذا الأسبوع" data-series="a" data-label="ثلاثاء" data-value="810"></li>
+<li data-key="wed" data-period="هذا الأسبوع" data-series="a" data-label="أربعاء" data-value="920"></li>
+<li data-key="thu" data-period="هذا الأسبوع" data-series="a" data-label="خميس" data-value="780"></li>
+<li data-key="fri" data-period="هذا الأسبوع" data-series="a" data-label="جمعة" data-value="440"></li>
+</ul><div class="m-chart__plot" data-plot></div>
+</section>
+<details class="m-reading-details"><summary>المقارنة بالفترة السابقة</summary><p>الأسبوع السابق <bdi dir="ltr">4,180</bdi> <span data-reading-unit="د.أ">د.أ</span>. المقارنة والقيم مقدّمة من المستهلك، وليست حسابات ينفذها الرسم.</p></details>
+</section>
+<section class="m-reading-group m-chart" id="expenses-group" data-chart="donut" data-presentation="readable" data-selection="single" data-selected-key="materials" data-unit="د.أ" data-total="1000" aria-labelledby="expense-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title m-chart__title" id="expense-title">المصاريف حسب النوع</h2><p class="m-reading-group__period">هذا الشهر</p></div>
+
+<ul class="m-chart__data" hidden><li data-key="materials" data-period="هذا الشهر" data-series="a" data-label="مواد" data-value="480"></li><li data-key="delivery" data-period="هذا الشهر" data-series="b" data-label="توصيل" data-value="320"></li><li data-key="other" data-period="هذا الشهر" data-series="c" data-label="أخرى" data-value="200"></li></ul><div class="m-chart__plot m-donut" data-plot></div>
+</section>
+<section class="m-reading-group" aria-labelledby="rows-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title" id="rows-title">الكميات حسب الصنف</h2><p class="m-reading-group__period">اليوم</p></div>
+<section class="m-main-metric m-main-metric--compact m-main-metric--readable" id="stock-rows" data-main-comparison data-common-unit="قطعة" data-common-period="اليوم">
+<ul class="m-main-metric__source" data-bar-source hidden><li data-label="صابون" data-value="149" data-unit="قطعة" data-period="اليوم" data-series="a"></li><li data-label="شموع" data-value="82" data-unit="قطعة" data-period="اليوم" data-series="b"></li><li data-label="هدايا" data-value="36" data-unit="قطعة" data-period="اليوم" data-series="c"></li></ul>
+<ul class="m-main-metric__rows" data-bar-items aria-label="الكميات حسب الصنف"></ul><p class="m-main-metric__status" data-bar-status></p>
+</section>
+</section>
+<section class="m-reading-group" id="progress-example" aria-labelledby="progress-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title" id="progress-title">التحصيل</h2><p class="m-reading-group__period">مثال تقدّم عام</p></div>
+<div class="m-reading-group__main"><span>المحصّل <bdi dir="ltr">130</bdi> <span data-reading-unit="د.أ">د.أ</span></span><span>من <bdi dir="ltr">200</bdi> <span data-reading-unit="د.أ">د.أ</span></span></div>
+<div class="m-progress" role="progressbar" aria-labelledby="progress-title" aria-valuemin="0" aria-valuemax="200" aria-valuenow="130" aria-valuetext="130 د.أ من 200 د.أ، 65%"><div class="m-progress__track"><div class="m-progress__bar" style="--progress:65%"></div></div></div>
+<p class="m-reading-group__foot"><span>المتبقي <bdi dir="ltr">70</bdi> <span data-reading-unit="د.أ">د.أ</span></span><span><bdi dir="ltr">65%</bdi> مكتمل</span></p>
+<details class="m-reading-details"><summary>عن هذا المثال</summary><p>القيمة والهدف والمتبقي والنسبة وحالة التجاوز يوفّرها المستهلك. شريط التقدم عام ولا يحسب فواتير أو مدفوعات.</p></details>
+</section>
+<p class="preview-note">المتغيران الجديدان وC04: مسودة للمراجعة. الأشكال المتخصصة الأخرى متاحة في كتالوج النظام؛ هذه المعاينة ليست شاشة منتج.</p>
+</main>
+<script src="../../components/compositions/reading-context.js"></script>
+<script src="../../components/data/data.js"></script>
+<script src="../../components/metric-comparison/metric-comparison.js"></script>
+</body></html>

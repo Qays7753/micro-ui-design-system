@@ -59,6 +59,7 @@ EXPECTED_CSS = [
     "components/access-gateway/access-gateway.css",
     "components/order-schedule/order-schedule.css",
     "components/carousel/carousel.css",
+    "components/compositions/reading-layout.css",
     "previews/ui-system-showcase/showcase.css",
 ]
 EXPECTED_JS = [
@@ -69,6 +70,7 @@ EXPECTED_JS = [
     "components/messages/messages.js",
     "components/navigation/navigation.js",
     "components/organization/organization.js",
+    "components/compositions/reading-context.js",
     "components/data/data.js",
     "components/data/packed-circle.js",
     "components/info-strip/info-strip.js",

@@ -302,6 +302,28 @@
         "components/info-strip/info-strip-peek.css",
         "components/info-strip/info-strip-peek.js"
       ]
+    },
+    {
+      "id": "data-readable",
+      "family": "data",
+      "maturity": "draft-for-review",
+      "optIn": true,
+      "preview": "previews/readable-source/index.html",
+      "source": [
+        "components/data/data.css",
+        "components/data/data.js"
+      ]
+    },
+    {
+      "id": "metric-readable",
+      "family": "metric-comparison",
+      "maturity": "draft-for-review",
+      "optIn": true,
+      "preview": "previews/readable-source/index.html",
+      "source": [
+        "components/metric-comparison/metric-comparison.css",
+        "components/metric-comparison/metric-comparison.js"
+      ]
     }
   ],
   "dependencyPolicy": "dependencies للعائلات الأساسية؛ conditionalDependencies لخيارات التركيب المحددة. CSS وJS والأصول وتوقيعات API موثقة في FAMILY-CONSUMPTION.md.",
@@ -362,6 +384,25 @@
         "navigation"
       ],
       "api": null
+    },
+    {
+      "id": "reading-context",
+      "contract": "C04",
+      "name": "Structured readings and explicit unit context",
+      "maturity": "draft-for-review",
+      "preview": "previews/readable-source/index.html",
+      "source": [
+        "components/compositions/reading-layout.css",
+        "components/compositions/reading-context.js"
+      ],
+      "baseFamilies": [],
+      "optionalFamilies": [
+        "data",
+        "metric-comparison",
+        "info-strip",
+        "organization"
+      ],
+      "api": "MicroReadings"
     }
   ]
 }

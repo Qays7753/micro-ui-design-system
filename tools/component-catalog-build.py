@@ -48,7 +48,7 @@ def build():
             js = '<br>'.join(f'`{path}`' for path in dep['js']) or 'لا يلزم لهذا الخيار'
             lines.append(f"| {item['id']} | {dep['family']} | {dep['when']} | {css} | {js} |")
     lines += ["", "## التراكيب المشتركة", "",
-              "وصفات فوق العائلات الحالية، وليست عائلات أو API JavaScript إضافية. [التحميل والملكية](COMPOSITIONS.md).", "",
+              "تراكيب فوق العائلات الحالية؛ C01–C03 وصفات CSS، وC04 مساعد اختياري لسياق الوحدات. [التحميل والملكية](COMPOSITIONS.md).", "",
               "| التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |",
               "|---|---|---|---|---|---|"]
     compositions = catalog.get('compositions', [])
@@ -56,7 +56,7 @@ def build():
     for item in compositions:
         assert item['maturity'] in LABELS, item
         assert set(item['baseFamilies'] + item['optionalFamilies']) <= {family['id'] for family in families}, item
-        assert item['api'] is None, 'Recipes introduce no Micro* JavaScript API'
+        assert item['api'] == ('MicroReadings' if item['id'] == 'reading-context' and item['contract'] == 'C04' else None), 'Only C04 has the explicit optional unit-context API'
         for path in item['source'] + [item['preview']]:
             assert (ROOT / path).is_file(), path
         sources = '<br>'.join(f'[`{path}`](../{path})' for path in item['source'])

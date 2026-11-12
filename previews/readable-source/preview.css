@@ -1,0 +1,2 @@
+/* Preview framing only; reusable layout is in components/. */
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--micro-surface-page);color:var(--micro-text-primary);font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family)}main{display:grid;gap:16px;max-width:430px;margin-inline:auto}h1{font-size:var(--micro-heading-large-size);line-height:var(--micro-heading-large-line);margin:0}.preview-intro p,.preview-note{font-size:var(--micro-secondary-size);line-height:var(--micro-secondary-line);color:var(--micro-text-secondary);margin:8px 0}
