@@ -58,6 +58,7 @@
 .m-note__text { min-width: 0; }
 .m-note__title {
   display: block;
+  overflow-wrap: anywhere;
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
   font-weight: var(--micro-weight-semibold);

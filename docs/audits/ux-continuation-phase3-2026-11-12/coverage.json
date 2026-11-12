@@ -1,0 +1,351 @@
+{
+  "stage": 3,
+  "startCommit": "7e56f62b8d54f8691cfbe812bafa0868cb7e1665",
+  "families": [
+    {
+      "id": "buttons",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Current source plus loading compatibility checks; no identity or default changes.",
+      "specification": "components/buttons/specification.md",
+      "documentedOptionsReviewed": [
+        "primary/secondary/light/destructive/destructive-soft",
+        "text/icon/text+icon/block",
+        "native disabled/focus/pressed/loading",
+        "default loading B; replace and slot explicit deprecated candidates",
+        "counter zero/positive; radius-limited compatibility alias"
+      ],
+      "currentScreenshot": "evidence/after/buttons.png",
+      "additionalEvidence": [
+        "consumption",
+        "focused",
+        "release"
+      ]
+    },
+    {
+      "id": "fields",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Silent sync and raw-value behavior, focus/error geometry and quantity contract verified.",
+      "specification": "components/fields/specification.md",
+      "documentedOptionsReviewed": [
+        "text/search/textarea/amount/quantity",
+        "label/unit/message/counter/clear/stepper",
+        "empty/zero/filled/error/success/disabled/readonly/focus",
+        "silent prefill sync; raw text; quantity normalization is intentional"
+      ],
+      "currentScreenshot": "evidence/after/fields.png",
+      "additionalEvidence": [
+        "consumption",
+        "release",
+        "focused"
+      ]
+    },
+    {
+      "id": "selection",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Picker statuses and keyboard selection, native selection behavior and loading ownership retained.",
+      "specification": "components/selection/specification.md",
+      "documentedOptionsReviewed": [
+        "checkbox/radio/group/partial",
+        "switch normal/pending/disabled; toggle via B01 aria-pressed",
+        "segmented normal/scroll/stack",
+        "Picker initial/ready/loading/empty/error/disabled; search/no-result/retry/lost selection"
+      ],
+      "currentScreenshot": "evidence/after/selection.png",
+      "additionalEvidence": [
+        "consumption",
+        "clone",
+        "focused"
+      ]
+    },
+    {
+      "id": "organization",
+      "maturityUnchanged": "stable-ui",
+      "status": "repaired",
+      "reason": "C01: long unbroken title/description/name/reference contained by source CSS.",
+      "specification": "components/organization/specification.md",
+      "documentedOptionsReviewed": [
+        "group/title/description/divider",
+        "row read/link/action/tile/missing",
+        "section disclosure",
+        "badge meaning/counter zero and long counts",
+        "identity image/initials/failure; long name/reference"
+      ],
+      "currentScreenshot": "evidence/after/organization.png",
+      "additionalEvidence": [
+        "focused",
+        "clone"
+      ]
+    },
+    {
+      "id": "data",
+      "maturityUnchanged": "stable-ui",
+      "status": "preview-repaired-design-decision-deferred",
+      "reason": "P03: expose existing two-period reading. Technical checks pass; chart redesign deferred to stage6.",
+      "specification": "components/data/specification.md",
+      "documentedOptionsReviewed": [
+        "stat number/unit/missing/delta",
+        "two-period m-compare",
+        "bars/line; nonnegative and signed",
+        "declared time coordinate/gaps; scales and errors",
+        "data table; progress determinate/indeterminate; steps",
+        "donut/bubbles/packed-circle opt-in"
+      ],
+      "currentScreenshot": "evidence/after/data.png",
+      "additionalEvidence": [
+        "data",
+        "focused",
+        "runtime"
+      ]
+    },
+    {
+      "id": "messages",
+      "maturityUnchanged": "stable-ui",
+      "status": "repaired-and-preview-repaired",
+      "reason": "C02 long title wrapping; P01 skeleton uses source row/block classes.",
+      "specification": "components/messages/specification.md",
+      "documentedOptionsReviewed": [
+        "note help/info/success/warning/error; close/reopen",
+        "inline waiting/toast/announcement polite/assertive",
+        "skeleton line/icon decorative",
+        "empty no-data/no-results/read-error+retry consumer preview",
+        "long title/body; hidden means removed layout; return focus"
+      ],
+      "currentScreenshot": "evidence/after/messages.png",
+      "additionalEvidence": [
+        "consumption",
+        "focused",
+        "clone"
+      ]
+    },
+    {
+      "id": "navigation",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Current closeLayer is a direct command; guarded close proposal D01 remains unimplemented.",
+      "specification": "components/navigation/specification.md",
+      "documentedOptionsReviewed": [
+        "appbar/tabs/tabpanel/navbar",
+        "center dialog/bottom layer/backdrop close/keep/nested layers",
+        "filters applied/draft/clear/cancel; direct close command",
+        "actionbar row/stack; icon retains touch target"
+      ],
+      "currentScreenshot": "evidence/after/navigation.png",
+      "additionalEvidence": [
+        "consumption",
+        "clone",
+        "focused"
+      ]
+    },
+    {
+      "id": "surfaces",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Only approved curves/plain evaluated as current; historical studies are not required new variants.",
+      "specification": "components/surfaces/specification.md",
+      "documentedOptionsReviewed": [
+        "approved curves/plain",
+        "decoration separate from semantic content",
+        "historical calm/waves/waves-v2/depth excluded as unapproved current defaults"
+      ],
+      "currentScreenshot": "evidence/after/surfaces.png",
+      "additionalEvidence": [
+        "focused",
+        "release"
+      ]
+    },
+    {
+      "id": "info-strip",
+      "maturityUnchanged": "stable-ui",
+      "status": "repaired-and-preview-repaired",
+      "reason": "C03 truthful empty announcement; C04 cloned Peek own WeakMap state; P02 expose multi-reading card.",
+      "specification": "components/info-strip/specification.md",
+      "documentedOptionsReviewed": [
+        "basic/compact/featured/accent/unavailable",
+        "one/multiple readings with optional item labels",
+        "normal strip controls compact/full and zero/one/multiple",
+        "Peek opt-in zero/one/multiple; clone/repeat init/disconnect",
+        "empty live announcement; inactive slides inert"
+      ],
+      "currentScreenshot": "evidence/after/info-strip.png",
+      "additionalEvidence": [
+        "focused",
+        "runtime"
+      ]
+    },
+    {
+      "id": "metric-comparison",
+      "maturityUnchanged": "stable-ui",
+      "status": "technical-pass-design-decision-deferred",
+      "reason": "Exact readings/tables pass; specialized circle suitability remains stage6 decision.",
+      "specification": "components/metric-comparison/specification.md",
+      "documentedOptionsReviewed": [
+        "flat/compact/featured",
+        "signed reading/missing/zero/invalid scale; unit/period",
+        "table disclosure",
+        "metric-circles separated/overlap specialized; exact fallback"
+      ],
+      "currentScreenshot": "evidence/after/metric-comparison.png",
+      "additionalEvidence": [
+        "data",
+        "focused"
+      ]
+    },
+    {
+      "id": "account-settings",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Centered layer recenters when view height changes by its documented contract; not changed.",
+      "specification": "components/account-settings/specification.md",
+      "documentedOptionsReviewed": [
+        "account profile/group/read/action/switch rows",
+        "account/application views and return focus",
+        "native setting intent, pending externally; no persistence"
+      ],
+      "currentScreenshot": "evidence/after/account-settings.png",
+      "additionalEvidence": [
+        "focused",
+        "clone"
+      ]
+    },
+    {
+      "id": "access-gateway",
+      "maturityUnchanged": "stable-ui",
+      "status": "no-new-component-defect",
+      "reason": "Invalid raw input retained; handlers without explicit result remain neutral; no actual service.",
+      "specification": "components/access-gateway/specification.md",
+      "documentedOptionsReviewed": [
+        "email/password/reveal/validation",
+        "submit pending/error/neutral/confirmed consumer result",
+        "optional recovery/providers; callbacks update; teardown",
+        "no network/authentication implementation"
+      ],
+      "currentScreenshot": "evidence/after/access-gateway.png",
+      "additionalEvidence": [
+        "focused",
+        "consumption",
+        "release"
+      ]
+    },
+    {
+      "id": "order-schedule",
+      "maturityUnchanged": "draft-for-review",
+      "status": "no-new-component-defect-draft-retained",
+      "reason": "126 calendar and41 contract checks; no new metadata/URL/host behavior.",
+      "specification": "components/order-schedule/specification.md",
+      "documentedOptionsReviewed": [
+        "calendar month/week/day; list; month picker",
+        "selected date/displayed month independent; silent setters",
+        "adjacent days/week start/month-year boundaries",
+        "accordion single open/edit/delete/add request options",
+        "empty/unscheduled/zero/one/many/long title/loading/error/retry/destroy"
+      ],
+      "currentScreenshot": "evidence/after/order-schedule.png",
+      "additionalEvidence": [
+        "calendar",
+        "calendar-contract",
+        "runtime",
+        "focused"
+      ]
+    },
+    {
+      "id": "carousel",
+      "maturityUnchanged": "draft-for-review",
+      "status": "no-new-component-defect-draft-retained",
+      "reason": "Counts, explicit expansion, inactive state and cleanup verified; specialized card charts not redesigned.",
+      "specification": "components/carousel/specification.md",
+      "documentedOptionsReviewed": [
+        "zero/one/two/three/six cards; first/middle/last",
+        "next/prev/points/keyboard; nonactive inert",
+        "compact/explicit expansion/collapse-on-navigation",
+        "pointer axis/threshold/cancel via existing contract source; no autoplay",
+        "disconnect/reinit/destroy; peek opt-in retains maturity"
+      ],
+      "currentScreenshot": "evidence/after/carousel.png",
+      "additionalEvidence": [
+        "focused",
+        "runtime"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "donut",
+      "family": "data",
+      "maturityUnchanged": "stable-ui",
+      "optInUnchanged": true,
+      "status": "technical-pass-design-decision-deferred",
+      "screenshot": "evidence/after/variant-donut.png"
+    },
+    {
+      "id": "main-metric-featured",
+      "family": "metric-comparison",
+      "maturityUnchanged": "stable-ui",
+      "optInUnchanged": true,
+      "status": "no-new-component-defect",
+      "screenshot": "evidence/after/variant-main-metric-featured.png"
+    },
+    {
+      "id": "bubbles",
+      "family": "data",
+      "maturityUnchanged": "stable-ui",
+      "optInUnchanged": true,
+      "status": "technical-pass-design-decision-deferred",
+      "screenshot": "evidence/after/variant-bubbles.png"
+    },
+    {
+      "id": "metric-circles",
+      "family": "metric-comparison",
+      "maturityUnchanged": "stable-ui",
+      "optInUnchanged": true,
+      "status": "technical-pass-design-decision-deferred",
+      "screenshot": "evidence/after/variant-metric-circles.png"
+    },
+    {
+      "id": "packed-circle",
+      "family": "data",
+      "maturityUnchanged": "proposed",
+      "optInUnchanged": true,
+      "status": "technical-pass-design-decision-deferred",
+      "screenshot": "evidence/after/variant-packed-circle.png"
+    },
+    {
+      "id": "info-strip-peek",
+      "family": "info-strip",
+      "maturityUnchanged": "stable-ui",
+      "optInUnchanged": true,
+      "status": "repaired-clone-and-empty-contract",
+      "screenshot": "evidence/after/variant-info-strip-peek.png"
+    }
+  ],
+  "reviewModes": [
+    "source contract inspection",
+    "manual screenshot inspection at360x780 RTL",
+    "real Chromium interaction and geometry gates"
+  ],
+  "warning": "Option lists combine source review with the cited browser suites; they are not a claim that each CSS modifier has its own independent automated test. No physical-device or screen-reader acceptance.",
+  "excluded": [
+    {
+      "item": "Dark/System-dark",
+      "reason": "Explicitly excluded by owner; no evaluation or execution."
+    },
+    {
+      "item": "historical surface studies",
+      "reason": "calm/waves/waves-v2/depth are historical comparisons, not current approved defaults."
+    },
+    {
+      "item": "new chart design / point selection",
+      "reason": "Stage6 after compositions and independent fixtures; no redesign or new percent-based data."
+    },
+    {
+      "item": "D01 guarded-close proposal / Menu / calendar metadata",
+      "reason": "Contracts from stage2 remain proposals/conditional decisions; not implemented in stage3."
+    },
+    {
+      "item": "Micro host",
+      "reason": "No inspection, repair, runtime or integration acceptance in this repository-only task."
+    }
+  ]
+}

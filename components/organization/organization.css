@@ -21,6 +21,7 @@
 /* ================= 1) العنوان والوصف والفاصل ================= */
 .m-section-title {
   margin: 0;
+  overflow-wrap: anywhere;
   font-family: var(--micro-font-family);
   /* R-11: مستوى عنوان القسم من التوكنز — سطر نسبي لا يقص عند تكبير النص وحده */
   font-size: var(--micro-section-title-size);
@@ -32,6 +33,7 @@
   margin-top: var(--micro-space-1);
 }
 .m-section-desc {
+  overflow-wrap: anywhere;
   font-family: var(--micro-font-family);
   font-size: var(--micro-label-size);
   line-height: var(--micro-label-line);
@@ -276,12 +278,14 @@ a.m-row.is-focus {
 }
 /* فشل تحميل الصورة: organization.js يستبدلها بالأحرف الأولى — بديل ظاهر */
 .m-identity__name {
+  overflow-wrap: anywhere;
   font-size: var(--micro-body-size);
   line-height: var(--micro-body-line);
   font-weight: var(--micro-weight-medium);
   color: var(--micro-text-primary);
 }
 .m-identity__sub {
+  overflow-wrap: anywhere;
   font-size: var(--micro-secondary-size);
   line-height: var(--micro-secondary-line);
   color: var(--micro-text-secondary);

@@ -714,6 +714,7 @@
           <button type="button" class="m-btn m-btn--secondary" id="sc-btn-disable" aria-pressed="false">تبديل التعطيل</button>
         </div>
         <p class="sc-hint" id="sc-buttons-status" aria-live="polite">الحالة الافتراضية؛ استخدم الأزرار أعلاه لتبديل التحميل (MicroButtons.setLoading بعقد data-loading-label) والضغط والتعطيل على زر «حفظ العملية».</p>
+        <p class="sc-hint sc-review-only"><a href="../buttons/index.html#live">معاينة خيارات التحميل والتوافق الموثقة</a>؛ تبقى خيارات التوافق صريحة وليست الافتراضي.</p>
       </div>
     </section>
 
@@ -972,6 +973,19 @@
           <span class="m-info-card__label">إبراز اختياري لقراءة واحدة</span>
           <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
         </article>
+        <div class="sc-review-only"><article class="m-info-card" aria-label="بطاقة بعدة قراءات من المصدر">
+          <span class="m-info-card__label">قراءات العينة — خيار البطاقة الأساسي</span>
+          <div class="m-info-card__values">
+            <div class="m-info-card__item">
+              <span class="m-info-card__item-label">طلبات مستلمة</span>
+              <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">18</span><span class="m-info-card__unit">طلب</span></span>
+            </div>
+            <div class="m-info-card__item">
+              <span class="m-info-card__item-label">طلبات مسلّمة</span>
+              <span class="m-info-card__reading"><span class="m-info-card__number" dir="ltr">12</span><span class="m-info-card__unit">طلب</span></span>
+            </div>
+          </div>
+        </article></div>
         <div>
           <p class="sc-block__title">تنقل مضغوط: أسهم وموضع حيّ؛ النقاط اختيارية في العرض الكامل</p>
           <div class="m-info-strip" data-info-strip data-controls="compact" id="sc-strip">
@@ -1071,6 +1085,19 @@
         <p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير ويحمل الوحدة والفترة في تسميته (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح، ولا بيانات تُعرض كحالة فراغ صادقة لا كصفر.</p>
       </div>
       <div class="sc-block sc-stack">
+        <div class="sc-review-only">
+          <h3 class="sc-block__title">مقارنة فترتين — قراءات كاملة من المصدر</h3>
+          <div class="m-compare">
+            <div class="m-compare__item">
+              <span class="m-stat__label">هذا الأسبوع</span>
+              <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">18</span><span class="m-stat__unit">طلب</span></span>
+            </div>
+            <div class="m-compare__item">
+              <span class="m-stat__label">الأسبوع السابق</span>
+              <span class="m-stat__value"><span class="m-stat__num m-stat__num--secondary">14</span><span class="m-stat__unit">طلب</span></span>
+            </div>
+          </div>
+        </div>
         <div class="sc-grid-2">
           <div class="m-stat">
             <span class="m-stat__label">طلبات جديدة</span>
@@ -1439,9 +1466,9 @@
             <span class="m-wait__label">جارٍ تجهيز التقرير...</span>
           </div>
           <div class="m-skeleton" aria-hidden="true">
-            <div class="m-skeleton__line"></div>
-            <div class="m-skeleton__line"></div>
-            <div class="m-skeleton__line m-skeleton__line--short"></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--icon"></span><span class="m-skeleton__block m-skeleton__block--line is-w40"></span></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--line is-w70"></span></div>
+            <div class="m-skeleton__row"><span class="m-skeleton__block m-skeleton__block--line"></span></div>
           </div>
         </div>
         <div class="sc-grid-2">

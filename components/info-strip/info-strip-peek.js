@@ -307,7 +307,7 @@
   }
 
   function initStrip(strip) {
-    if (strip.hasAttribute('data-info-peek-ready')) {
+    if (stateOf.has(strip)) {
       /* SUI-R2-A2 (إصلاح SUI-R1-02): مسار «إعادة الإلحاق» للشريط الجاهز
          بعد disconnect — init لا يعود صامتًا فيترك الشريط بلا مراقبة عرض.
          مستمعات DOM مربوطة مرة واحدة ومحروسة أثناء الفصل. يُلحق مراقبًا
@@ -345,6 +345,8 @@
       viewport.hidden = true;
       if (controls) controls.hidden = true;
       if (empty) empty.hidden = false;
+      if (position) position.textContent = '';
+      if (status) status.textContent = 'لا توجد بطاقات.';
       stateOf.set(strip, {
         viewport: viewport, track: track, slides: [],
         prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,

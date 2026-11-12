@@ -188,8 +188,8 @@
     track.style.setProperty('--m-info-index', '0');
     if (previous) previous.disabled = true;
     if (next) next.disabled = initial.length < 2;
-    if (position) position.textContent = '1 / ' + initial.length;
-    if (status) status.textContent = 'البطاقة 1 من ' + initial.length;
+    if (position) position.textContent = initial.length ? '1 / ' + initial.length : '';
+    if (status) status.textContent = initial.length ? 'البطاقة 1 من ' + initial.length : 'لا توجد بطاقات.';
 
     registry.set(strip, {
       listeners: listeners,
