@@ -4,7 +4,7 @@
 
 ## نقطة الدخول
 
-الحالي: [مراجعة الإقفال وتفويض دمج المصدر](docs/audits/final-source-review-2026-11-13/REPORT.md)، و[المعاينة المستقلة](docs/audits/shared-actions-2026-11-12/review.html). أجاز المالك الدمج بعد المراجعة بتاريخ2026-11-13؛ فحص الهاتف النهائي يبقى مؤجلًا، ولا تغيير تلقائيًا لنضج الكتالوج. [دليل الاستهلاك](docs/audits/shared-actions-2026-11-12/CANDIDATE.md) و[عقد الأفعال](docs/SHARED-ACTIONS.md).
+الحالي: [تنقيحات الإقفال البصري](docs/audits/visual-closure-2026-11-13/REPORT.md)، و[قواعد التنظيم](docs/VISUAL-ACCEPTANCE.md)، و[قاعدة الشعار](assets/brand/micro-logo/USAGE.md). [معاينة القراءات الحالية](docs/audits/shared-actions-2026-11-12/review.html). البداية2946fad المدمجة؛ التنقيحات الجديدة على فرع Feature للمراجعة. الهاتف مؤجل والنضج محفوظ؛ [مراجعة الدمج السابقة](docs/audits/final-source-review-2026-11-13/REPORT.md).
 
 **التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
 

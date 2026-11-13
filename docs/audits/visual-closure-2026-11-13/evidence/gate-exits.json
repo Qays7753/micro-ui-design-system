@@ -1,0 +1,185 @@
+[
+  {
+    "name": "visual",
+    "command": [
+      "python3",
+      "tools/visual-closure-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/visual"
+    ],
+    "exitCode": 0,
+    "seconds": 8.35
+  },
+  {
+    "name": "units",
+    "command": [
+      "python3",
+      "tools/unit-context-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/units"
+    ],
+    "exitCode": 0,
+    "seconds": 3.46
+  },
+  {
+    "name": "audit",
+    "command": [
+      "python3",
+      "tools/component-audit-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/audit"
+    ],
+    "exitCode": 0,
+    "seconds": 8.97
+  },
+  {
+    "name": "shared",
+    "command": [
+      "python3",
+      "tools/shared-actions-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/shared"
+    ],
+    "exitCode": 0,
+    "seconds": 7.01
+  },
+  {
+    "name": "readable",
+    "command": [
+      "python3",
+      "tools/readable-source-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/readable"
+    ],
+    "exitCode": 0,
+    "seconds": 6.61
+  },
+  {
+    "name": "acceptance",
+    "command": [
+      "python3",
+      "tools/readable-acceptance-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/acceptance"
+    ],
+    "exitCode": 0,
+    "seconds": 9.8
+  },
+  {
+    "name": "data",
+    "command": [
+      "python3",
+      "tools/light-data-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/visual-closure/gates/data"
+    ],
+    "exitCode": 0,
+    "seconds": 4.03
+  },
+  {
+    "name": "families",
+    "command": [
+      "python3",
+      "tools/ux-continuation-phase3-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/families"
+    ],
+    "exitCode": 0,
+    "seconds": 15.2
+  },
+  {
+    "name": "release",
+    "command": [
+      "python3",
+      "tools/light-release-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/visual-closure/gates/release"
+    ],
+    "exitCode": 0,
+    "seconds": 6.52
+  },
+  {
+    "name": "calendar",
+    "command": [
+      "python3",
+      "tools/light-calendar-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/visual-closure/gates/calendar.json"
+    ],
+    "exitCode": 0,
+    "seconds": 8.47
+  },
+  {
+    "name": "calendar-contract",
+    "command": [
+      "python3",
+      "tools/calendar-contract-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/calendar-contract"
+    ],
+    "exitCode": 0,
+    "seconds": 3.67
+  },
+  {
+    "name": "consumption",
+    "command": [
+      "python3",
+      "tools/component-consumption-contract-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/consumption"
+    ],
+    "exitCode": 0,
+    "seconds": 3.69
+  },
+  {
+    "name": "clones",
+    "command": [
+      "python3",
+      "tools/clone-lifecycle-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/clones"
+    ],
+    "exitCode": 0,
+    "seconds": 2.21
+  },
+  {
+    "name": "compositions",
+    "command": [
+      "python3",
+      "tools/composition-recipes-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/compositions"
+    ],
+    "exitCode": 0,
+    "seconds": 8.36
+  },
+  {
+    "name": "boundaries",
+    "command": [
+      "python3",
+      "tools/integration-boundaries-check.py",
+      "--out",
+      "/tmp/visual-closure/gates/boundaries"
+    ],
+    "exitCode": 0,
+    "seconds": 9.25
+  },
+  {
+    "name": "runtime",
+    "command": [
+      "python3",
+      "tools/preview-runtime-check.py",
+      "--base",
+      "http://127.0.0.1:35541",
+      "--review-scope",
+      "--standalone-http",
+      "--out",
+      "/tmp/visual-closure/gates/runtime"
+    ],
+    "exitCode": 0,
+    "seconds": 11.78
+  }
+]

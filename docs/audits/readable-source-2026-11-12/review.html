@@ -2191,7 +2191,7 @@ button.m-chart__legend-row { cursor:pointer; }
 <section class="m-reading-group" id="sales-group" data-reading-context="money-label" data-unit="د.أ" aria-labelledby="sales-title">
 <div class="m-reading-group__head"><h2 class="m-reading-group__title" id="sales-title">المبيعات</h2><p class="m-reading-group__period" id="money-label">هذا الأسبوع · د.أ</p></div>
 <div class="m-reading-group__main"><strong class="m-reading-group__amount"><bdi dir="ltr">4,820</bdi> <span data-reading-unit="د.أ">د.أ</span></strong><span class="m-reading-group__comparison">زيادة <bdi dir="ltr">640</bdi> <span data-reading-unit="د.أ">د.أ</span></span></div>
-<section class="m-chart" id="sales-bars" data-chart="bars" data-presentation="readable" data-selection="single" data-selected-key="wed" data-unit="د.أ" aria-label="المبيعات اليومية">
+<section class="m-chart" id="sales-bars" data-chart="bars" data-presentation="readable" data-unit="د.أ" aria-label="المبيعات اليومية">
 <ul class="m-chart__data" hidden>
 <li data-key="sat" data-period="هذا الأسبوع" data-series="a" data-label="سبت" data-value="640"></li>
 <li data-key="sun" data-period="هذا الأسبوع" data-series="a" data-label="أحد" data-value="720"></li>
@@ -2204,10 +2204,13 @@ button.m-chart__legend-row { cursor:pointer; }
 </section>
 <details class="m-reading-details"><summary>المقارنة بالفترة السابقة</summary><p>الأسبوع السابق <bdi dir="ltr">4,180</bdi> <span data-reading-unit="د.أ">د.أ</span>. المقارنة والقيم مقدّمة من المستهلك، وليست حسابات ينفذها الرسم.</p></details>
 </section>
-<section class="m-reading-group m-chart" id="expenses-group" data-chart="donut" data-presentation="readable" data-selection="single" data-selected-key="materials" data-unit="د.أ" data-total="1000" aria-labelledby="expense-title">
-<div class="m-reading-group__head"><h2 class="m-reading-group__title m-chart__title" id="expense-title">المصاريف حسب النوع</h2><p class="m-reading-group__period">هذا الشهر</p></div>
-
-<ul class="m-chart__data" hidden><li data-key="materials" data-period="هذا الشهر" data-series="a" data-label="مواد" data-value="480"></li><li data-key="delivery" data-period="هذا الشهر" data-series="b" data-label="توصيل" data-value="320"></li><li data-key="other" data-period="هذا الشهر" data-series="c" data-label="أخرى" data-value="200"></li></ul><div class="m-chart__plot m-donut" data-plot></div>
+<section class="m-reading-group" id="expenses-rows-group" aria-labelledby="expense-rows-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title" id="expense-rows-title">المصاريف حسب النوع</h2><p class="m-reading-group__period">هذا الشهر</p></div>
+<div class="m-reading-group__main"><span>الإجمالي</span><span><bdi dir="ltr">1,000</bdi> د.أ</span></div>
+<section class="m-main-metric m-main-metric--compact m-main-metric--readable" id="expenses-rows" data-main-comparison data-common-unit="د.أ" data-common-period="هذا الشهر">
+<ul class="m-main-metric__source" data-bar-source hidden><li data-label="مواد" data-value="480" data-unit="د.أ" data-period="هذا الشهر" data-series="a"></li><li data-label="توصيل" data-value="320" data-unit="د.أ" data-period="هذا الشهر" data-series="b"></li><li data-label="أخرى" data-value="200" data-unit="د.أ" data-period="هذا الشهر" data-series="c"></li></ul>
+<ul class="m-main-metric__rows" data-bar-items aria-label="المصاريف حسب النوع"></ul><p class="m-main-metric__status" data-bar-status></p>
+</section>
 </section>
 <section class="m-reading-group" aria-labelledby="rows-title">
 <div class="m-reading-group__head"><h2 class="m-reading-group__title" id="rows-title">الكميات حسب الصنف</h2><p class="m-reading-group__period">اليوم</p></div>
@@ -2223,7 +2226,16 @@ button.m-chart__legend-row { cursor:pointer; }
 <p class="m-reading-group__foot"><span>المتبقي <bdi dir="ltr">70</bdi> <span data-reading-unit="د.أ">د.أ</span></span><span><bdi dir="ltr">65%</bdi> مكتمل</span></p>
 <details class="m-reading-details"><summary>عن هذا المثال</summary><p>القيمة والهدف والمتبقي والنسبة وحالة التجاوز يوفّرها المستهلك. شريط التقدم عام ولا يحسب فواتير أو مدفوعات.</p></details>
 </section>
-<p class="preview-note">المتغيران الجديدان وC04: مسودة للمراجعة. الأشكال المتخصصة الأخرى متاحة في كتالوج النظام؛ هذه المعاينة ليست شاشة منتج.</p>
+<details class="m-reading-details" id="distribution-example"><summary>مثال اختياري: الحصة من الإجمالي</summary>
+<section class="m-reading-group m-chart" id="expenses-group" data-chart="donut" data-presentation="readable" data-selection="single" data-selected-key="materials" data-unit="د.أ" data-total="1000" aria-labelledby="expense-title">
+<div class="m-reading-group__head"><h2 class="m-reading-group__title m-chart__title" id="expense-title">توزيع المصاريف</h2><p class="m-reading-group__period">هذا الشهر</p></div>
+<ul class="m-chart__data" hidden><li data-key="materials" data-period="هذا الشهر" data-series="a" data-label="مواد" data-value="480"></li><li data-key="delivery" data-period="هذا الشهر" data-series="b" data-label="توصيل" data-value="320"></li><li data-key="other" data-period="هذا الشهر" data-series="c" data-label="أخرى" data-value="200"></li></ul><div class="m-chart__plot m-donut" data-plot></div>
+</section></details>
+<details class="m-reading-details" id="reading-options"><summary>خيارات معاينة المكونات</summary>
+<p>عرض القيم مباشرة هو الأساس. جرّب وضع التحديد الاختياري عندما تحتاج قراءة يوم محدد.</p>
+<button type="button" class="m-btn m-btn--secondary" id="preview-sales-selection" aria-pressed="false" aria-controls="sales-bars">تحديد يوم في الرسم</button>
+</details>
+<p class="preview-note">العرض المقروء وC04 مسودات في الكتالوج؛ اعتمد المالك اتجاه تنظيمها. خيارات المعاينة أدوات فحص محلية؛ هذه ليست شاشة منتج.</p>
 </main>
 <script>
 /* C04: explicit, fail-safe unit context. No data parsing or business state. */
@@ -4773,12 +4785,12 @@ button.m-chart__legend-row { cursor:pointer; }
         'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared) {
       max = declared.value;
-      userText = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = 'الأشرطة حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      userText = 'الأشرطة حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (hasKnown) {
@@ -4959,6 +4971,31 @@ button.m-chart__legend-row { cursor:pointer; }
     });
   });
 })();
+
+</script>
+<script>
+/* Preview-only controls. Consumer data and chart options are not product policy. */
+(function () {
+  'use strict';
+  var toggle = document.getElementById('preview-sales-selection');
+  var chart = document.getElementById('sales-bars');
+  toggle.addEventListener('click', function () {
+    var enabled = toggle.getAttribute('aria-pressed') !== 'true';
+    toggle.setAttribute('aria-pressed', String(enabled));
+    if (enabled) {
+      chart.setAttribute('data-selection', 'single');
+      chart.setAttribute('data-selected-key', 'wed');
+    } else {
+      chart.removeAttribute('data-selection');
+      chart.removeAttribute('data-selected-key');
+    }
+    window.MicroData.render(chart);
+  });
+  var distribution = document.getElementById('distribution-example');
+  distribution.addEventListener('toggle', function () {
+    if (distribution.open) window.MicroData.render(document.getElementById('expenses-group'));
+  });
+}());
 
 </script>
 </body></html>

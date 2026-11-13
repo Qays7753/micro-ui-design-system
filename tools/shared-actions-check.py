@@ -44,6 +44,8 @@ def main():
   def ev(js):return p.evaluate(js)
   def go(path='/previews/readable-source/index.html'):
    p.goto(base+path,wait_until='networkidle');ev('document.fonts.ready')
+   if p.locator('#preview-sales-selection').count():
+    p.locator('#reading-options > summary').tap();p.locator('#preview-sales-selection').tap();p.locator('#reading-options > summary').tap()
   def reference():
    present=ev("[...document.styleSheets].filter(s=>s.href&&s.href.endsWith('/components/buttons/buttons.css')).length")
    ck('Page loads B01 CSS exactly once',present==1,present)
@@ -90,6 +92,7 @@ def main():
   offline=browser.new_page(viewport={'width':360,'height':780},has_touch=True,is_mobile=True,color_scheme='light');requests=[]
   offline.on('pageerror',lambda e:errors.append(str(e)));offline.on('request',lambda r:requests.append(r.url) if r.resource_type!='document' and r.url.startswith('http') else None);offline.route('**/*',lambda r:r.continue_() if r.request.resource_type=='document' else r.abort())
   offline.goto(base+'/docs/audits/shared-actions-2026-11-12/review.html',wait_until='networkidle');offline.evaluate('document.fonts.ready')
+  offline.locator('#reading-options > summary').tap();offline.locator('#preview-sales-selection').tap();offline.locator('#reading-options > summary').tap()
   actual=style(offline.locator('#sales-bars .m-chart__select-step').last);ck('Candidate file preserves canonical B01 appearance with subresources blocked',actual==canonicalNormal,{'actual':actual,'reference':canonicalNormal})
   offline.locator('#sales-bars .m-chart__select-step').last.tap();ck('Candidate file Next preserves actual780 reading',offline.evaluate("MicroData.getSelection(document.querySelector('#sales-bars')).value===780"))
   ck('Candidate file requests no external assets',not requests,requests);offline.close()

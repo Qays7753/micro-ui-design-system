@@ -1,0 +1,261 @@
+{
+  "sourceCommitAtRun": "2946fad108e5fec2f00104e233decbb7e58c2855",
+  "workingTree": true,
+  "captureOnly": true,
+  "browser": "156.0.8078.79",
+  "physicalDevice": false,
+  "theme": "Light",
+  "scope": "360x780 RTL; targeted320 stock note; directional360 LTR; no Dark/zoom",
+  "passed": 12,
+  "failed": 14,
+  "checks": [
+    {
+      "name": "Default sales is static readable, without duplicate selected value or controls",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Seven exact sales values, total and previous amount remain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Primary expenses uses real monetary rows with unchanged source values",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Donut is clearly optional and initially collapsed",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "sales-default360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 501.96875,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "stock360 contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "height": 217.96875,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "progress360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 194.75,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "expense-rows360 contained",
+      "passed": false,
+      "detail": "Primary row example absent"
+    },
+    {
+      "name": "Normal scale note is concise and keeps value, unit and period",
+      "passed": false,
+      "detail": "مقياس مشترك تلقائي: حتى 149 قطعة · اليوم (أكبر مقدار معلوم)."
+    },
+    {
+      "name": "Auto scale diagnostics remain available to developers",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Declared retains honest scale, all rows and diagnostics",
+      "passed": false,
+      "detail": {
+        "text": "مقياس مشترك: حتى 200 قطعة · اليوم.",
+        "state": "ok",
+        "rows": 3,
+        "detail": "metric-bars: scale=declared data-max=200؛ common-unit=قطعة؛ common-period=اليوم."
+      }
+    },
+    {
+      "name": "Signed retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "مقياس مشترك تلقائي: حتى 149 قطعة · اليوم (أكبر مقدار معلوم). خط الوسط صفر؛ الموجب يمينه والسالب يساره.",
+        "state": "ok",
+        "rows": 3,
+        "detail": "metric-bars: scale=auto-largest-known=149؛ common-unit=قطعة؛ common-period=اليوم."
+      }
+    },
+    {
+      "name": "Invalid retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.",
+        "state": "invalid-scale",
+        "rows": 3,
+        "detail": "metric-bars: data-max='bad' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Below known retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.",
+        "state": "scale-below-known",
+        "rows": 3,
+        "detail": "metric-bars: data-max=50 أصغر من أكبر مقدار معلوم (149) — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Mixed retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.",
+        "state": "inconsistent",
+        "rows": 3,
+        "detail": "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Explicit opt-in silently selects the supplied Wednesday",
+      "passed": false,
+      "detail": "Explicit preview opt-in absent"
+    },
+    {
+      "name": "Opt-in remains operable once by touch",
+      "passed": false,
+      "detail": "Explicit preview opt-in absent"
+    },
+    {
+      "name": "Turning selection off leaves data, table and focus available",
+      "passed": false,
+      "detail": "Explicit preview opt-in absent"
+    },
+    {
+      "name": "Repeated opt-in preserves a single binding",
+      "passed": false,
+      "detail": "Explicit preview opt-in absent"
+    },
+    {
+      "name": "Optional donut still selects exact amount and valid share",
+      "passed": false,
+      "detail": "Optional example absent"
+    },
+    {
+      "name": "stock-targeted320 contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 287,
+        "width": 254,
+        "height": 217.96875,
+        "document": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "stock-directional-ltr contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "height": 217.96875,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Showcase lockup meets96px minimum, retains ratio and original colors",
+      "passed": false,
+      "detail": {
+        "width": 0,
+        "height": 0,
+        "fit": "contain",
+        "filter": "none",
+        "loaded": true
+      }
+    },
+    {
+      "name": "Digital brand usage guide exists",
+      "passed": false,
+      "detail": null
+    },
+    {
+      "name": "Brand sample minima, clear space, ratios and no recoloring",
+      "passed": false,
+      "detail": "Brand usage preview absent"
+    },
+    {
+      "name": "No browser or missing resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "sales-default360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 501.96875,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "stock360",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "height": 217.96875,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "progress360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 194.75,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "stock-targeted320",
+      "left": 33,
+      "right": 287,
+      "width": 254,
+      "height": 217.96875,
+      "document": 320,
+      "viewport": 320
+    },
+    {
+      "name": "stock-directional-ltr",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "height": 217.96875,
+      "document": 360,
+      "viewport": 360
+    }
+  ],
+  "sourceSha256": {
+    "components/metric-comparison/metric-comparison.js": "8e714c846dc3124db2d242e738f5067198719fe563585d82ff4a9abdf59ccb72",
+    "previews/readable-source/index.html": "fcbb072e41004f5010785a9d0196582f1569d0f59cdd4b33a4c4ec198e41468f",
+    "previews/ui-system-showcase/showcase.css": "84fe20a7d8e64fc0c248c990f1378bc533e770db9bea4027790b78402fe3dadf"
+  }
+}

@@ -23,6 +23,8 @@ def main():
         p.on('pageerror',lambda e:errors.append(str(e)));p.on('console',lambda m:errors.append(m.text) if m.type=='error' else None);p.on('response',lambda r:resources.append(r.url) if r.status>=400 else None)
         def go():
             p.goto(base+'/previews/readable-source/index.html',wait_until='networkidle');p.evaluate('document.fonts.ready')
+            # Selection is an explicit preview option; retain all interaction assertions.
+            p.locator('#reading-options > summary').click();p.locator('#preview-sales-selection').click();p.locator('#reading-options > summary').click();p.locator('#distribution-example > summary').click()
         def ev(js):return p.evaluate(js)
         def geom(name,selector):
             d=p.locator(selector).evaluate('''e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width,scroll:document.documentElement.scrollWidth,viewport:innerWidth}}''');measurements.append(dict(name=name,**d));ck(name,d['left']>=-1 and d['right']<=d['viewport']+1 and d['scroll']<=d['viewport'],d)
@@ -148,6 +150,7 @@ def main():
         ck('Source-only grouping preserves tokens and layout',ev("getComputedStyle(document.querySelector('.m-reading-group')).padding==='16px'&&getComputedStyle(document.querySelector('.m-main-metric__rows')).display==='grid'"))
         offline=b.new_page(viewport={'width':360,'height':780},color_scheme='light');requests=[];offline.on('request',lambda r:requests.append(r.url) if r.resource_type!='document' and r.url.startswith('http') else None);offline.on('pageerror',lambda e:errors.append(str(e)))
         offline.route('**/*',lambda r:r.continue_() if r.request.resource_type=='document' else r.abort());offline.goto(base+'/docs/audits/readable-source-2026-11-12/review.html',wait_until='networkidle');offline.evaluate('document.fonts.ready')
+        offline.locator('#reading-options > summary').click();offline.locator('#preview-sales-selection').click()
         ck('Single-file source review works with subresource network blocked and actual API',offline.evaluate("!!window.MicroReadings&&MicroData.setSelection(document.querySelector('#sales-bars'),'fri').value===440"))
         ck('Single-file source review requests no external assets',not requests,requests);offline.close()
         ck('Browser errors',not errors,errors);ck('Missing resources',not resources,resources)

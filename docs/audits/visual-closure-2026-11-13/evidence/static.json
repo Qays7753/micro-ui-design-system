@@ -1,0 +1,2649 @@
+{
+  "baseline": "161bb71adbed86e0df4382174cb07bd2fcb8d62d",
+  "sourceCommitAtRun": "2946fad108e5fec2f00104e233decbb7e58c2855",
+  "sourceSha256": {
+    ".gitattributes": "61db41846178fc008cc0512028530412203423c65ed9e6e1c3c6c4b360d4e4c3",
+    "AGENTS.md": "8904bad935f79692edb4ebb55b0ca9bc4e49505692e8a8306457c53d76fbbd92",
+    "DESIGN.md": "218d2ee96478373eccfe4af809857df99c1397301b56149edc342f12b4ddd4c9",
+    "MANIFEST.json": "fbbe6dae32924bf7bfd82da9879b0bf0c6bab75564f5dd4eec59448844c940cc",
+    "README.md": "849a1617e4e95badf8a1a27c2e6383a1ef6a40c9ceed71e7ed703c0ace6d1e83",
+    "assets/SOURCES.md": "e2af7650a4cbec0bc5c255c96aca40f41f1a024e982e487b3825624c6b9077c1",
+    "assets/brand/micro-logo/README.md": "ddc0d60d54a8ea3bfbdfd00ae013f769b45ab8ddde5b6dd21e444e7da0fe0fa6",
+    "assets/brand/micro-logo/USAGE.md": "2fb9c41e8c0570a408b6f8081973b4c9f04f5ca41b6145cd23ee60e32526b337",
+    "assets/icons/LICENSE-lucide.txt": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57",
+    "assets/icons/chart-column.svg": "3a80034e409caf6a083cc32329dab44b642110409b991f932a617aab43d67b68",
+    "assets/icons/delete-02.svg": "ae1710bec2e599a06842295c0a7dc502f2111191d71ed53ee1a18a7124d75425",
+    "components/access-gateway/access-gateway.css": "dd35979a3254f1a387cfcfd88b01777d96dbf18049c3cf6db1f9ff6f1926f12c",
+    "components/access-gateway/access-gateway.js": "6a36bcb36d5197dde20b5aac423d1d523216c7e88bf005aa056ee9b3673eeaff",
+    "components/access-gateway/specification.md": "a46332b8ee0bb04a222a9fa73cb20ccc8a73849d889b146a214d37a332635a4b",
+    "components/account-settings/account-settings.css": "bb7016c8fd8e481e5a7679435287591a5f69756380a1533a136233f78ce1199e",
+    "components/account-settings/account-settings.js": "66aae7739446c51e520a54c1ddf1b948da95a9deccf594b177bb6fd40b62041e",
+    "components/account-settings/specification.md": "1dd71b9c65297b269d2ba066f2012b4f62aa976b299c04f445204ca193be9afd",
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/buttons/specification.md": "26f71d67c7aef8f054fbdedf8f166a7f7265c90b655138fac027e137bd7bec8a",
+    "components/carousel/carousel.css": "5b7fcfcfa521066d7116cc4eee13894e42f4ef7810b0b375977f353317692b8e",
+    "components/carousel/carousel.js": "9af5019569170f09cd020e12961113820deb4a8f2b84c9fa26cb37a31292fafa",
+    "components/carousel/specification.md": "0c27fd3d74615b56701a6f6083763aca57c403d521aac234cddaf4f7d2e26718",
+    "components/compositions/form-surface.css": "59004a6896f6baac2552869c9710ab1bc610ba698bc482370cdcab86bab40e25",
+    "components/compositions/reading-context.js": "2b722711116fa94105a7161cd0195222729e0717adc2b7fb0423d23723100858",
+    "components/compositions/reading-layout.css": "9c02da5f030a5eafb0cecb5a8951c1051d0be3fa33e7189be73d4ae31c912460",
+    "components/compositions/specification.md": "0721c2f9ea83bce4ac7b34870d3ca0fafc0aacc4814e3dcfaf6eb3ef725d102f",
+    "components/data/PACKED-PATTERN.md": "f14c05c6dc94c7f8bd5fd83a38da9698f1b62038005bcde031bbd74179187498",
+    "components/data/data.css": "a9b91bb348cd652c8aa27768a17eadbba04a5bd18a30ac240d7fbb532a753950",
+    "components/data/data.js": "e75985be43c79caabfa0855100c062773240b1f3f16cf9278896cbc40101ce95",
+    "components/data/example-usage.html": "22e372eec00868b928a607dd320931587b528a6cd3551d47e4179a8402f0c29e",
+    "components/data/packed-circle.css": "0c8d7fb6cb072257ef29f9ee2da808f265a875f18eeb022954b44a1145621a8b",
+    "components/data/packed-circle.js": "c5090d30b33e85aa020827f730ddfef55ad475cbbdd3df55f822aec864feed20",
+    "components/data/specification.md": "1f248e4e6e0d15ecf89f0b8971b5e095e677b35a44064197c619ac6525543278",
+    "components/fields/fields.css": "b661a5bcf5f1b653165e2bc622c8a9ef735a262fccd1c68224efeaa510799275",
+    "components/fields/specification.md": "935ba3144f2c5dd3c7255731fb2598e2b8060494b374b970c54e387c06bf5fa2",
+    "components/info-strip/example-usage.html": "9b59824a14e1d13e37d3fdfd36d33cae57d09d0eeda4317b7d3128e5cc1f51ad",
+    "components/info-strip/info-strip-peek.js": "777ea3c923febbd180b6fdd7f1d1337cf820f6320150a4a22bba3eb914b90f74",
+    "components/info-strip/info-strip.css": "c0b471dd3379e7d5d907759f1350a4c8a6d9459baa2406eea4909912c0fa20d0",
+    "components/info-strip/info-strip.js": "2e823aef8484b9e03d512ad3c62e88de44f6accbb50825fab2f3c1560aad8824",
+    "components/info-strip/specification.md": "0afaec15f5532ec191a940e2b22a017196cb794a7463d9895c8a5e8045a06fbf",
+    "components/info-strip/value-context.css": "0fcebb8ebc882adea99d20838cce43842cc3bc4244953baa7320d948c477f70a",
+    "components/messages/messages.css": "3ce1d3b13670bc9b3ae1e6124237916d52b1016b4a592b4ad801e35eaf7597cb",
+    "components/messages/messages.js": "1d32d98cc0c5ddae9c4ae29fecae6ca2943d0839b57a8f0cc3452c60bf9c92b6",
+    "components/messages/specification.md": "04115fcec61c529ed7b49a745361d85f880199141d4bec4d57974201d8bc5d15",
+    "components/metric-comparison/example-usage.html": "f40a33fb59c13936e14ddf7d343b6ec0b59a757d7ae3bc47de8e1d91ab6016fb",
+    "components/metric-comparison/metric-comparison.css": "06392fb294b1595247571613aec00ba4cdda8b2b88410806659ad0791361b546",
+    "components/metric-comparison/metric-comparison.js": "d9cc0801356778e3186487653db08cae9844279942a228d1d022e23e18572d4d",
+    "components/metric-comparison/specification.md": "70c6a7fde4c20fad744268fdb23aefd51092726a67555326f5fd8e50366004cc",
+    "components/navigation/navigation.css": "45112b123b228d31f55a880eb6c026ec9f2dfad5e0598e28c2713b0dc244a58c",
+    "components/navigation/navigation.js": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+    "components/navigation/specification.md": "45ebf5f06ddbb64573f2b12d8f3293c9e2d9b47b637f114bf5cd21850f2ddaed",
+    "components/order-schedule/example-usage.html": "f1f43b118e7fec0b561b1136096f130f4fab4f44914877eedadd2b5ba4d6d6c9",
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "components/order-schedule/specification.md": "fc779d758a92d59c717f34ce84f174c4f572fbdd2cc0350a0975c3375f3c0268",
+    "components/organization/operational-row.css": "e05be9646bac2c9414c4fc70f61face921e24f1b6630189ad1150914840d2e26",
+    "components/organization/organization.css": "6371103224c283eb925a783b4f8cb81b1632b7f0df2a140ac6ba0d2612e7e48f",
+    "components/organization/organization.js": "dbe3d39c1444aa74ed61ae8df1026d15c57e12c0228ec511e1022493b3b0b445",
+    "components/organization/specification.md": "01430b19e4d9676c1900d82add07ac213e8d6d767066ab654c901759f284bbbf",
+    "components/selection/picker.css": "7aa8b7aedff1f9ada3090ffeafc3f99e4717c7eae5a4d9d77b3931eab6cf7dff",
+    "components/selection/picker.js": "811a37d04850351930676221bec1f684f6519a16a1aeb2fa4b1ad2cd9d86aad1",
+    "components/selection/selection.css": "78a7aa84c7c891680705d46c545436b57a0e47bca8b1999ebde725df967c533e",
+    "components/selection/selection.js": "388df54a1cd49fb0013d9ea1291d3a27db6dc782e43d58f103431188aa8b2fcf",
+    "components/selection/specification.md": "1cafee031ad0fae5b3fe5177f53e7189b7d1929b49487ee8b3dd1dfeee6db08a",
+    "components/surfaces/specification.md": "0f8ece86b7e6bcaf5876fdbd68967d79febd7b5ccf1346f17b8d31874cf09a7f",
+    "components/surfaces/surfaces.css": "e6003efe59e48522f827cf7b0e8d6a7208ec02a3202657ba58276f67e7ab9845",
+    "docs/BOUNDARY-FIXTURES.md": "521b58196c03a22106e23c9c2304cb11778bc7e9e42c325fe1686b53e80d4809",
+    "docs/COMPONENT-API-CONTRACTS.md": "738073695fe036ba356ef71942984c9a8c484aa9e0a297462495c2f3195b8678",
+    "docs/COMPONENT-CATALOG.json": "89ad82b2d677bc525e6208a4540cf480d01ed1368c3920ad8c111c29243201a7",
+    "docs/COMPONENT-CONSUMPTION.md": "9cd844bf7bc3274f4d7c4e94f7c90a6a0baf5d8b40cdadb2efda64645f03afdb",
+    "docs/COMPONENT-INVENTORY.md": "8d2f498059559626c6a73f60ec95363d9bfb9e4e03c954e83f7f006bd4289ed9",
+    "docs/COMPOSITION-CONTRACTS.md": "6112374b771960de88031f43812598c685bcbf8360acf03f2af0b2d7fe00a569",
+    "docs/COMPOSITIONS.md": "49c0fb26275ee20fd8ef4850aa4d3392832bf5b5ffc725f7ffc13bc5cc17cb22",
+    "docs/CURRENT-STATE.md": "a4eed74b960fefab2d9db29c5cce5bca50dcfb625ed38e84557a1d6322db993c",
+    "docs/FAMILY-CONSUMPTION.md": "8dc656b46b3c144dfc10592406842e1e9ed38ceb09ccbd524fe029fc886eff16",
+    "docs/IMPLEMENTATION-VERIFICATION.md": "4037f0461a0c4ba3543b2b617ef50b6258bcb247b4cebb87c96cf5fd38562a0f",
+    "docs/READABLE-SOURCE.md": "237354baea1066cd2547a376390a5de4fa3cf991c83bafa6111b1ff3c9320113",
+    "docs/SHARED-ACTIONS.md": "319d257df66fafe155fd774dd2dbdd69da7b7adc1b39776d0d641598829cdc10",
+    "docs/SYSTEM-CONTRACTS.md": "18863a3952615c7133199be0b424384658327d3eff20b3de0fe69dfb825bb5c3",
+    "docs/UI-DECISIONS.md": "897929f0cb64a89747bb232b37daec56d79a4756b735cc532499a46409e8c076",
+    "docs/UI-RELEASE.md": "44a562e20f00a0ae7ba765dc2bbf09c877fbc1472b697acae4854c425c70e115",
+    "docs/UI-SYSTEM-SHOWCASE-COVERAGE.md": "8e3a3fc9cecc4e73c9d23ceaf4b358194ebe6ba9a91918c2a77a277d545a4779",
+    "docs/UI-VISUAL-SYSTEM.md": "6ad6868896e1abe458e15f0d7f9ce95550259edac3638bfdd2539d4b5b7f196e",
+    "docs/VISUAL-ACCEPTANCE.md": "11f61d29f45753e218dff65831171fefff08e93a10707858c7b143d4833d98cd",
+    "docs/audits/component-audit-2026-11-11/REPORT.md": "e14516d9491ca65c7693dfdb8f32c36f5f7d28cf2d3780cdd9227df4a2a74734",
+    "docs/audits/component-audit-2026-11-11/evidence/calendar-360-rtl.png": "15a0985b0b2f1ba6a86321483ce42134b9abbc765bb198d62257527523dbe78c",
+    "docs/audits/component-audit-2026-11-11/evidence/calendar-before.json": "aa6e3a537efeb7faed79af89e64c8385b671f9ad527f27799930d38985265c75",
+    "docs/audits/component-audit-2026-11-11/evidence/carousel-360-rtl.png": "3e46c39397dae58ae3d6d7b26e7217c4600acc8520212129a12573a5f678de50",
+    "docs/audits/component-audit-2026-11-11/evidence/clones-before.json": "feb3781d88c2e3dfd1f61f1ce2481fc23c680a51553fd1e5645a4deff07983f6",
+    "docs/audits/component-audit-2026-11-11/evidence/fields-360-rtl.png": "d12fd7cccf0aff080f3d05e3baca909a96b7d75dff26932bb8547d30c6555f01",
+    "docs/audits/component-audit-2026-11-11/evidence/invalid-date-after.png": "778683254a1b92a3733e28b66edf2a754429275bb79a7bcacbeeed6506d47583",
+    "docs/audits/component-audit-2026-11-11/evidence/invalid-date-before.png": "b0b1f7bf4a5507c3224a9f33e6d88121bbc7851a30d480da2e869cc607c70a2a",
+    "docs/audits/component-audit-2026-11-11/evidence/metric-featured-360-rtl.png": "0ad614af441f44da22169ea40e6a15c5c52f3156d1e8d0dd6068628225b0d74a",
+    "docs/audits/component-audit-2026-11-11/evidence/settings-layer-360-rtl.png": "da0fa97ec578b36a274e6bce4928dfe634bf14f602f17eb1cc7ec732aa69f246",
+    "docs/audits/component-audit-2026-11-11/evidence/signed-data-360-rtl.png": "072373b294ceec04d5eefddb1c9e315fa4f6ab02d2bd6515ff0ebef57a3519aa",
+    "docs/audits/component-audit-2026-11-11/verification-summary.json": "4a52bd0b862a59579684aa9eea05b4e39fabba42e07b757ab5adf322bc5a9d9b",
+    "docs/audits/component-consumption-repair-2026-11-11/REPORT.md": "ed5c48a2922208811415d55e99f260695ab1144118f8184bd0a3f073ce39f102",
+    "docs/audits/component-consumption-repair-2026-11-11/baseline-contracts.json": "7de7cccf589503c7854ed3f0f6ed1f12468e720d329fa48ae2fbaff965974127",
+    "docs/audits/component-consumption-repair-2026-11-11/contracts.json": "f4d7a9511d1057ac407c7dcbeb6f0185bf82df9e3d4539ea8280c4ba027b1b37",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/loading-default-after.png": "3a53b309012247ed52e8391d47de69f90aee8255fe1a14c7bc7f93a59e43e601",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/loading-replace-after.png": "2b637069c2ac51c1bd4a28c9a50b2fc01ae45a79156bfc04fb44206f12833e40",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/navigation-after.png": "6fab263aa51fa390e3b96330702fcb54a8226c23629353056d847ef7b9c16495",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/recovery-after.png": "056bc3dd6042bc16dc60501416a2998a9891198a3823a0b175753d32b25e1d90",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/row-after.png": "6695fc53af17d9e8a0132f895478466df466b17f902a20c0d9890622a7d04fc6",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/signed-table-after.png": "5c4f17f3e652cfc16e5feaad8c4f894a09b7862a995298f33e5f987a57960333",
+    "docs/audits/component-consumption-repair-2026-11-11/evidence/signed-table-before.png": "c92dd6ee677363674df792b7e4cfc14ba340e8deaa489dd96bb36a6bc69c8b2c",
+    "docs/audits/component-consumption-repair-2026-11-11/verification-summary.json": "4b1ef8ba6634a61b4a764c82247731132940faa6e9e6a97f523ec5d57f6779f0",
+    "docs/audits/component-final-review-2026-11-11/REPORT.md": "a13c89c14c51bdce7e876cfb2d1f2db9e42583e8fe8607f5b0f96da55306c724",
+    "docs/audits/component-final-review-2026-11-11/checks/capture.py": "bb3b0ef4259df583f33e85ed596c1a30308d4e15f1a0c1a6edf790ab43dc0fa5",
+    "docs/audits/component-final-review-2026-11-11/checks/focused.py": "179c1071dae4eeb1935e086aab42f23fd8d089f1d6c1927e910c2e9ee6db9dbc",
+    "docs/audits/component-final-review-2026-11-11/checks/states.py": "4471832841ffbfc418c0f5ce21720487abe1e6f260e24c35e84d12157413f7a5",
+    "docs/audits/component-final-review-2026-11-11/checks/visual-focused.py": "8ca552069ab1c8fbd9284d6ae36528eb3c2e596d8631f7bf1bb98a7895dc1381",
+    "docs/audits/component-final-review-2026-11-11/evidence/buttons.png": "89415ae1862aab5eaba0a29fc52cd68dde1b6f254c9a901204750e063db375b0",
+    "docs/audits/component-final-review-2026-11-11/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/component-final-review-2026-11-11/evidence/calendar-light.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/component-final-review-2026-11-11/evidence/calendar.png": "15a0985b0b2f1ba6a86321483ce42134b9abbc765bb198d62257527523dbe78c",
+    "docs/audits/component-final-review-2026-11-11/evidence/carousel.png": "3e46c39397dae58ae3d6d7b26e7217c4600acc8520212129a12573a5f678de50",
+    "docs/audits/component-final-review-2026-11-11/evidence/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/component-final-review-2026-11-11/evidence/contracts.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/component-final-review-2026-11-11/evidence/data-scale.txt": "8fb29f58a757edac666db68879a1605fcc9c7fb5a0d784801561ed343993587c",
+    "docs/audits/component-final-review-2026-11-11/evidence/deterministic.txt": "e6b689095f2eff29669a2e19e6fa8b4bfe1eef389c4769de5fcfa290d8dd3641",
+    "docs/audits/component-final-review-2026-11-11/evidence/families.json": "dbc117525de7c7f3f37db8ee69bfa259d2c9a1bd9644ecc02a30395a341530a3",
+    "docs/audits/component-final-review-2026-11-11/evidence/fields.png": "d12fd7cccf0aff080f3d05e3baca909a96b7d75dff26932bb8547d30c6555f01",
+    "docs/audits/component-final-review-2026-11-11/evidence/focused.json": "790cabb46428f49602fee312174b1db365abbbafbdff8ab9a484a33b85760259",
+    "docs/audits/component-final-review-2026-11-11/evidence/lifecycle.json": "b29db9f790a56a7e806ba2a4de3afb9c274cd1fe6b243b39db85c6c7d0a45a98",
+    "docs/audits/component-final-review-2026-11-11/evidence/light-data.json": "d295d24c81f10bdf2bd718f8a259defb38a66af57946c89a2059fffffc96200d",
+    "docs/audits/component-final-review-2026-11-11/evidence/navigation.png": "6fab263aa51fa390e3b96330702fcb54a8226c23629353056d847ef7b9c16495",
+    "docs/audits/component-final-review-2026-11-11/evidence/observations.json": "7449d9b994517bc4ca7fdc82424fbfae8b86b0197f6b0a1fd7efc1a37cbd2587",
+    "docs/audits/component-final-review-2026-11-11/evidence/packed.png": "2c2317da11adb3886d6e391ff2f6f4f7b67287a5e5c33c5c39e890423ddeba05",
+    "docs/audits/component-final-review-2026-11-11/evidence/peek.png": "2da00c0f18331f99a689c78cc3807862220b05f39de43b89e97238f119045363",
+    "docs/audits/component-final-review-2026-11-11/evidence/picker.png": "e74095b5f73e40be717135eadc48b738f9eeec4929c54d3eef812c1becc44352",
+    "docs/audits/component-final-review-2026-11-11/evidence/release.json": "3f0cbb6c061070186ca37e8b6f84a56da2ba69cd75becd13453c59e17ea2afe9",
+    "docs/audits/component-final-review-2026-11-11/evidence/row.png": "6695fc53af17d9e8a0132f895478466df466b17f902a20c0d9890622a7d04fc6",
+    "docs/audits/component-final-review-2026-11-11/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/component-final-review-2026-11-11/evidence/settings.png": "aea45947f78e2da86c50de4285867cfa601b6a8d64788a8103edf82e40717e6b",
+    "docs/audits/component-final-review-2026-11-11/evidence/state-observations.json": "b6d16c8a87d9f413ce05e60c74567ab995b6353fc8c1cc6e82ee27d67dc82549",
+    "docs/audits/component-final-review-2026-11-11/evidence/static.json": "3bc600e35f4afb245dfdecdfb32e01e7c2643109e3ecac26f0aabde0fea476f7",
+    "docs/audits/component-final-review-2026-11-11/evidence/time-label-after.png": "00c86d90f68e492e476a1d23adcfb2236aa48b5996634652cc8158aa51308b69",
+    "docs/audits/component-final-review-2026-11-11/evidence/time-label-before.json": "6bab20441ec9724d3ad95a80ffd18724faec84ee0e83b8d6899def577ffde106",
+    "docs/audits/component-final-review-2026-11-11/evidence/time-label-before.png": "072373b294ceec04d5eefddb1c9e315fa4f6ab02d2bd6515ff0ebef57a3519aa",
+    "docs/audits/component-final-review-2026-11-11/evidence/visual-focused.json": "97f0fe248b1386cf4d936328f09601ebb83021c12496e7518348479a44c73a6f",
+    "docs/audits/component-final-review-2026-11-11/verification-summary.json": "999b2041e6116bdc70344929c2d585706704ef00c16377b72b1114ace923e428",
+    "docs/audits/final-source-review-2026-11-13/REPORT.md": "bc40764d6f3b6f8816ca2b12a8a5cd96cdfde1fc74bf534b4e1f5d21c465c082",
+    "docs/audits/final-source-review-2026-11-13/evidence/acceptance.json": "23d29c190517b72e696b8759b73bbed7122519b3503014957c617e9854be12f4",
+    "docs/audits/final-source-review-2026-11-13/evidence/audit.json": "99e151fa2da3f1fa0103f1fbe0e4e4caa6a65ebf9f7a8ced441d10cf4d7f45c0",
+    "docs/audits/final-source-review-2026-11-13/evidence/boundaries.json": "0c9ed68006eb6a35a534d902af1f43d990653538601a01ad987d6c8f6a4d0ce5",
+    "docs/audits/final-source-review-2026-11-13/evidence/build-gates.json": "45f32e6c183c3fa0698b83d93b649e9f3ea32f61121046a0b0b23f0fe64a2c00",
+    "docs/audits/final-source-review-2026-11-13/evidence/buttons.png": "96d6b0122f1b8785ddf57e930b9d5246e42099f50d44c58a30a494224dc49879",
+    "docs/audits/final-source-review-2026-11-13/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/final-source-review-2026-11-13/evidence/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/final-source-review-2026-11-13/evidence/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/final-source-review-2026-11-13/evidence/compositions.json": "36b74b5f5afc38f88d79eed579588bca50461f2922f2d8c7d9b94eddc1b60607",
+    "docs/audits/final-source-review-2026-11-13/evidence/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/final-source-review-2026-11-13/evidence/data.json": "39c76d3091a16062d403fbdea9b07646ebe5a463e03ff128a4bf0ec3622bc805",
+    "docs/audits/final-source-review-2026-11-13/evidence/families.json": "8b5a8bcaaca4900d79757c18cc8be4cd0ff3837042c1b0780537ce4a03635a7e",
+    "docs/audits/final-source-review-2026-11-13/evidence/gate-exits.json": "9d8a7ea999b85ca39edec229061f65ba19881dbcc7a3649d3ab56176994a931e",
+    "docs/audits/final-source-review-2026-11-13/evidence/order-schedule.png": "1f978be5d67a910f6ab10d8b3d47565efcccdb32aa2942f111f0b1618048aafd",
+    "docs/audits/final-source-review-2026-11-13/evidence/readable.json": "27044ca41e760da3cc98f3323cdf4c5f277af45c6a4587566583ff499cdaeb22",
+    "docs/audits/final-source-review-2026-11-13/evidence/release.json": "a4f26207b29718e3a5fb0db6928d64b78e1018ee7c61b020215f4ed5b48949a8",
+    "docs/audits/final-source-review-2026-11-13/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/final-source-review-2026-11-13/evidence/sales320-rtl.png": "0b82ca117e0ab4e78eaa909dc25bd5adf54a4bde33225c581abda9d988d97bab",
+    "docs/audits/final-source-review-2026-11-13/evidence/sales360-ltr.png": "9a566df0c4fee61cef089501de635ab66054674615fb9fa1a3b5a85765453e19",
+    "docs/audits/final-source-review-2026-11-13/evidence/sales360-rtl.png": "37cffca9ecd9bc30afcd4b1475bdfefaf8a88c45d14ed7ee4fc468247c3d4130",
+    "docs/audits/final-source-review-2026-11-13/evidence/shared.json": "7234a09df8f27ffa4a9f8a151026aaec6851f8a35941007ed6e9007acf717d3a",
+    "docs/audits/final-source-review-2026-11-13/evidence/source-rows360.png": "0b0bca292fe8b1ebaf35a67cdbb2effae447d7db941b27230e9f1170c326d125",
+    "docs/audits/final-source-review-2026-11-13/evidence/static.json": "7bdd4dea271c2683984cbd0a270f4deb06d5c6f10e9ef419096c27a879bc6fcc",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-after-0.png": "40a7ed2a50e132de9fb37b8174b5d0ff3af94a4b4d38a2412eb02faeaaf41c8f",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-after-10.png": "3bd0e397b30f03278cae18844629e007fd42107863b24eab7ab04a3c8f0f75bd",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-after-4.png": "f92b7a58fc03e7a216bc3572d89fed8ad2d80df049086de8c8105cb5fb1e321b",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-before-0.png": "29cd17813ea039235486276b796e88e01282ce0eb51111e97dcd4ab51ca73099",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-before-10.png": "3bd0e397b30f03278cae18844629e007fd42107863b24eab7ab04a3c8f0f75bd",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-before-4.png": "f9d01b54947894f26eae46161bc8846beacd52df70f9670c2e4ae8561cdb1d73",
+    "docs/audits/final-source-review-2026-11-13/evidence/unit-before.json": "a3f1ae0d69516301df4519730900029710bc65aaf14631cefc275152c6e48836",
+    "docs/audits/final-source-review-2026-11-13/evidence/units.json": "4774019e83b1f28c4de25b2a97a60c1bae8b03d80d2db46f85a221eb55e21247",
+    "docs/audits/readable-acceptance-2026-11-12/PHONE-CHECK.md": "bebe3ab6983e8a036bdad5c59002fc5e76ec8ea8d5c26d716f5ea7aa5e80b655",
+    "docs/audits/readable-acceptance-2026-11-12/PHONE-OBSERVATIONS.md": "bb15f1ae0bdcc58009f2f63e40ad9cd9aebcbfb454a42f4cb3743fa342df8626",
+    "docs/audits/readable-acceptance-2026-11-12/REPORT.md": "cb4b1bbbc31022f93f873c7f11c1215c962e9645ee243587549c8d0673e1126e",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/C01-unit-restored360.png": "39dd7e6cedb7b32d159cb8f112bfd513aba132e44683f6aafc7d3fe8588a8d60",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/C02-unit-restored360.png": "7c799e0c2f4a97ede940ecbaf2edd0746e5faf72e925042d983e4e20d9617c27",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/ancestor-clipped-context.png": "cb3f450aa104f8d48544ce3eb3c4016ff3648372a52a0a4f2677db7f065a58e7",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/diagnostic-clipped.png": "3870b801399a2cf11feb48105ca36faea799c2fbca3d83e74297dea835fefd76",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/diagnostic-hidden.png": "f4f92132f83909a8f00ffa37a127240f586781b4005aa01a6b677c49097cf2eb",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/diagnostic-invalid.png": "e1a414790a866cf52298a2c6c71c545cf83b4066994fc19d96037d15306b95c3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/diagnostic-periods.png": "78d35049275991ed4f02bc921879c0ce5e049c1b61749898ac161f63d4f584cc",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/hidden-currency-context.png": "58304f904e82a43bf831b3ad270f811b0f27e268b79f297e3805f5fbe62848fb",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/invalid-formatted-reading.png": "9b4398c757009dc124c7ae1ebd0e6c1019b054b8a869a0d8449d3350ab0b5f4a",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/mixed-period-table-ltr.png": "e8183492e1305c1fb2efcfc6442baa2932d002b9104a39248177b630a87b0c60",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/mixed-period-table.png": "f4c9e50e723527883dbd5e85a9ee768529a163bed8a6a14ecaa506dd071cf86c",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/mixed-period-table320.png": "df7510e5ab3571f57a1266467233580cad9095049f3d75ac3bbf42fa948faad6",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/normal-expenses360.png": "81224e16d39f63bda3b83480af3b4d5978ccb76a2a7147817e6ac7f1c92a991b",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/normal-progress360.png": "57ed90580e4c48a63c473c28ec67169f76ce9c0ed0c11094453a3d16903483f4",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/normal-rows360.png": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/normal-sales360.png": "ac98e78a08d766b67c205095ced5af8c2ce25f557071d4876a9d503341f80ca3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/after/results.json": "4fccb8d420aac5f799878cab237590834e3f92f56613f4391c754d7039142c42",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/baseline-and-visual-proof.json": "737c21c2f34f4ed8d3410371a936040635a94e93b6eb47f667eabef6d60ae1d3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/ancestor-clipped-context.png": "7d8353393f276429b4933fecb6a831a484908bd268cf98d9f405b7bc4c7caeee",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/hidden-currency-context.png": "3ad0b93dfa24dd3dc5434cebed817469cda261be9930fa9b21a66f57968c02eb",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/invalid-formatted-reading.png": "aa0ad883a88b0692acae4de7a3fd9db2eecb3939370855559f83e177cc37b1b8",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/mixed-period-table-ltr.png": "153d51a447e627515a35e674a4dd23b49b92fc63f8e03cebeec6997d0bcd8c22",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/mixed-period-table.png": "cdc3d804974e7f7cd8096460198e321b498a200005b8c2d246d71486fcbdbb0c",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/mixed-period-table320.png": "7fa7edd2e26b2687a5fe1af0232e634b0a0daaf24e3c8da287ab5ac3c5be7b46",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/normal-expenses360.png": "81224e16d39f63bda3b83480af3b4d5978ccb76a2a7147817e6ac7f1c92a991b",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/normal-progress360.png": "57ed90580e4c48a63c473c28ec67169f76ce9c0ed0c11094453a3d16903483f4",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/normal-rows360.png": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/normal-sales360.png": "ac98e78a08d766b67c205095ced5af8c2ce25f557071d4876a9d503341f80ca3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/before/results.json": "d835680b1c645dcde9b4db8465589e335314833f728d0ce981e496e3380ccfb7",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/boundaries.json": "13ba412c4b532d6079bc8994ec670b85a308ef24327fbf513be7174b80d36113",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/build-gates.json": "3d249b39f470e0123c4cc5317f8b92d34c2bd10e43bee246447e4433dc4139bf",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/compositions.json": "d857df4a3c673fd62d0afc8638d0d3d0a7f5b1eb9af057e9922f5f26515b0c74",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/data.json": "45b28ccab592e34862f467c2c98c00480930bf3846e71ffd8234378a6ff6040d",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/families.json": "d341c782c90e001055cef7c98aeb27acd5db5fa6556cb37206f4693e251d62c6",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/C01-unit-restored360.png": "39dd7e6cedb7b32d159cb8f112bfd513aba132e44683f6aafc7d3fe8588a8d60",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/C02-unit-restored360.png": "7c799e0c2f4a97ede940ecbaf2edd0746e5faf72e925042d983e4e20d9617c27",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/ancestor-clipped-context.png": "cb3f450aa104f8d48544ce3eb3c4016ff3648372a52a0a4f2677db7f065a58e7",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/hidden-currency-context.png": "58304f904e82a43bf831b3ad270f811b0f27e268b79f297e3805f5fbe62848fb",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/invalid-formatted-reading.png": "9b4398c757009dc124c7ae1ebd0e6c1019b054b8a869a0d8449d3350ab0b5f4a",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/mixed-period-table-ltr.png": "e8183492e1305c1fb2efcfc6442baa2932d002b9104a39248177b630a87b0c60",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/mixed-period-table.png": "f4c9e50e723527883dbd5e85a9ee768529a163bed8a6a14ecaa506dd071cf86c",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/mixed-period-table320.png": "df7510e5ab3571f57a1266467233580cad9095049f3d75ac3bbf42fa948faad6",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/normal-expenses360.png": "81224e16d39f63bda3b83480af3b4d5978ccb76a2a7147817e6ac7f1c92a991b",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/normal-progress360.png": "57ed90580e4c48a63c473c28ec67169f76ce9c0ed0c11094453a3d16903483f4",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/normal-rows360.png": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/normal-sales360.png": "ac98e78a08d766b67c205095ced5af8c2ce25f557071d4876a9d503341f80ca3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/focus-before/results.json": "5b677f7c4318a35d8724c5a5e1d10a08b40fb61489989cbb9419bb8530984a4e",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/phone/observations.json": "e87e4415f004928bd883b9d81cdb366bda8474be22e3ecb4088685fa97b5f740",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/phone/s25-chrome-expenses-rows.jpg": "46c78ceae170be4bfd471adb58e0dd25c95f8c7023edb21f989e9d70668f1e0e",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/phone/s25-chrome-sales.jpg": "93bf5f21954523e43c25aa58b7569ebc36917387260c485ee54c73a5b81bced3",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/readable-source.json": "3d0cbb72c15f06b3511e3c9b44a55dd080e20690b883c0fc827bfc5b3dee8a17",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/release.json": "da15d742d66884997ce6e69a51e6a1fc477fb606ac03e2e25f719684f7cfdbd5",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/readable-acceptance-2026-11-12/evidence/static.json": "ba8466bbb87993fe208bc177ddd7e364606f34331927a8242fb8ab614e2be4c1",
+    "docs/audits/readable-acceptance-2026-11-12/review-cases.html": "913880853e6a60d9dabb400b9771ae208c0e96ffbc7964652d66f2b6bfb26e40",
+    "docs/audits/readable-source-2026-11-12/REPORT.md": "c6ff8cbf2e07fc00c27689cbce54cfee1a5d95ec7e04aa7ca069b987e1c64f67",
+    "docs/audits/readable-source-2026-11-12/evidence/boundaries.json": "42cd639dc3cb6dda2a424de0fc62dda30e9d1133ba8c094ae397dfef4d414ad6",
+    "docs/audits/readable-source-2026-11-12/evidence/build-gates.json": "c5aabbb9be28142ab15041bae9ce4072390f5f160b08d4750b37b186afb2ac00",
+    "docs/audits/readable-source-2026-11-12/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/readable-source-2026-11-12/evidence/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/readable-source-2026-11-12/evidence/clone.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/readable-source-2026-11-12/evidence/compositions.json": "a729ec637dc9f7bbc88ee7bf1c64b330ac164fa08dcf6e93fe9073a752a1ccc3",
+    "docs/audits/readable-source-2026-11-12/evidence/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/readable-source-2026-11-12/evidence/data.json": "2886f6be392a4e65911b50d3512b9b84318921749d1e403ba4fc02a864740a27",
+    "docs/audits/readable-source-2026-11-12/evidence/development-before.png": "1fbdb7473bdd55166c91b0e2d10258198e0daac17c71d5565fd1cc8d0ae9c61d",
+    "docs/audits/readable-source-2026-11-12/evidence/families.json": "8efc0e689fd5136dbc11ccf522be5527d872ce8e24197a7e858874a6ec915a92",
+    "docs/audits/readable-source-2026-11-12/evidence/release.json": "dc839e4b70b71ea161b5275b4650a8ed1d5942ff7627a860ac58b64f78a77b02",
+    "docs/audits/readable-source-2026-11-12/evidence/results.json": "4579e6f47e2f644ddc3605c0964783106f686f3b1b72cc9029f1af8ac2ac24a5",
+    "docs/audits/readable-source-2026-11-12/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/readable-source-2026-11-12/evidence/source-expenses360.png": "9d094e6b06c42c24bb8d631b62dd2148abe44539c201b750666aefdd88f5198d",
+    "docs/audits/readable-source-2026-11-12/evidence/source-progress360.png": "239add5e0d9dacef963d3b720e2464bc25575c300cf698bceaec650752dc8b92",
+    "docs/audits/readable-source-2026-11-12/evidence/source-rows320-long.png": "c2a3f080dd81e34e9eeb8044a24eaf61d4d4e4365e1b31351dc42df29b74cccd",
+    "docs/audits/readable-source-2026-11-12/evidence/source-rows360-ltr.png": "78452e12db13c11fd76e1302617e8dab5981f2a0ff492b0ce5dc3e0d6a2513bd",
+    "docs/audits/readable-source-2026-11-12/evidence/source-rows360.png": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+    "docs/audits/readable-source-2026-11-12/evidence/source-sales360.png": "19408360080b7ea9561bcdfa82ff76f25fa9e7e296acd227edcfd87ee5fdd7b6",
+    "docs/audits/readable-source-2026-11-12/evidence/source360-rtl.png": "57a2c22ed7a57a0048dab0c2c7fefca68341d0bb96c2651f4631a150a825454e",
+    "docs/audits/readable-source-2026-11-12/evidence/static.json": "dbb45a630b56f5074d2d1b48f313a50362091d4f91182459ad8d4fb4bd2d61a3",
+    "docs/audits/readable-source-2026-11-12/review.html": "2ac350bb823b02df44edb00df61bb52374967cea44eb6fb631c766f6827ac51d",
+    "docs/audits/shared-actions-2026-11-12/ACTION-INVENTORY.md": "84a6abad469c59de96f4d922cf6320fbd4a937d4e4190db7241ce3cb90c35027",
+    "docs/audits/shared-actions-2026-11-12/CANDIDATE.md": "8249a4f9fbb897ebd1e43f97a0c81dd05f981a1226f462f99ab0adb81c6d99f3",
+    "docs/audits/shared-actions-2026-11-12/REPORT.md": "03b97b0a26868f105636a70a81fff641d519c65e4826ed9fc2039e0c7b643334",
+    "docs/audits/shared-actions-2026-11-12/evidence/acceptance.json": "7e8f0d24471b2f6a611fa6f5678e837c9ea3f8ed1eb048f16a5632631ff71891",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/results.json": "6505a1571ec93f74e80c3cf7d492d2d7a4ac89eefab2f8b410dcbb609f8860a7",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/rows360-rtl.png": "0b0bca292fe8b1ebaf35a67cdbb2effae447d7db941b27230e9f1170c326d125",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/sales-disabled360.png": "9e54be274480573496ea688b806fb26cb00e4c0eed733f5d4655fe400002b624",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/sales320-rtl.png": "0b82ca117e0ab4e78eaa909dc25bd5adf54a4bde33225c581abda9d988d97bab",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/sales360-ltr.png": "9a566df0c4fee61cef089501de635ab66054674615fb9fa1a3b5a85765453e19",
+    "docs/audits/shared-actions-2026-11-12/evidence/after/sales360-rtl.png": "37cffca9ecd9bc30afcd4b1475bdfefaf8a88c45d14ed7ee4fc468247c3d4130",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/results.json": "de4bbd0704bc672c34f041f6c11de9633d355dd428be1ec841439315f08a050b",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/rows360-rtl.png": "fbf708679ab3c2c2a88371c10598d17bcea93c481479007c2045dbc12bb33408",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/sales-disabled360.png": "55e305efffd78b8f50bc7c1713f053026f5f2c9b1bb723b538450991ce47812e",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/sales320-rtl.png": "bae1c7d3c4878b31dec22b7dcd682213e3773ec688e58a7b9e9d62541ce37eb0",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/sales360-ltr.png": "2dfce9383ab4805265aa1746a490cec167db19606620b52770a18dee3b503819",
+    "docs/audits/shared-actions-2026-11-12/evidence/before/sales360-rtl.png": "19408360080b7ea9561bcdfa82ff76f25fa9e7e296acd227edcfd87ee5fdd7b6",
+    "docs/audits/shared-actions-2026-11-12/evidence/boundaries.json": "9008be71f4ef5bf6f90b4191ee3edc41cf1e9e7994c3e4c903fff39cb7b4ed05",
+    "docs/audits/shared-actions-2026-11-12/evidence/build-gates.json": "b4d34d5f8bb08de97849a67b869b4e5f6554c814902fb4706c1dba34310350e8",
+    "docs/audits/shared-actions-2026-11-12/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/shared-actions-2026-11-12/evidence/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/shared-actions-2026-11-12/evidence/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/shared-actions-2026-11-12/evidence/compositions.json": "f45d0093316f013993276b8e5c4dd33bb0cd187c6442d1e9414f5874fd88a3a2",
+    "docs/audits/shared-actions-2026-11-12/evidence/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/shared-actions-2026-11-12/evidence/data.json": "39c76d3091a16062d403fbdea9b07646ebe5a463e03ff128a4bf0ec3622bc805",
+    "docs/audits/shared-actions-2026-11-12/evidence/disclosure-before.json": "66f7d2e2e06682d4426a5f72c5dc8f438822ad792f8ef7a7a58e802b45f7fa66",
+    "docs/audits/shared-actions-2026-11-12/evidence/disclosure-before.png": "17d881bd3b5664867804c30e92decf4e6ca2ae5ac33124de118644a5dc56e66e",
+    "docs/audits/shared-actions-2026-11-12/evidence/families.json": "a7987d7e7aaf332ccccacddeb6823f23dea6a9ba7d4d55dd9d370aeb6950d65b",
+    "docs/audits/shared-actions-2026-11-12/evidence/gate-exits.json": "0d974fa34a362d15188cfc7b7f0fb1b13b3383271fe85ab7dcb2f4ee0e6f23ea",
+    "docs/audits/shared-actions-2026-11-12/evidence/identity-proof.json": "0db37c0c7831cba28dc920c580cd80c3f1d4d1b0e930e3b463d38fa885d9c260",
+    "docs/audits/shared-actions-2026-11-12/evidence/readable.json": "5132bb85aa907bfc11ccc677d0c889bfa0a95cf92005c52e2cca46ecb44c6f96",
+    "docs/audits/shared-actions-2026-11-12/evidence/release.json": "3c2e9a30c2f6440a4d81e2470d3ba48fd1315c4a682245d0f284ac700ca3684c",
+    "docs/audits/shared-actions-2026-11-12/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/shared-actions-2026-11-12/evidence/static.json": "746442612dafb108021ee58dcd580216ca73167e59e1f0fe12d252497d50d571",
+    "docs/audits/shared-actions-2026-11-12/review.html": "2ac350bb823b02df44edb00df61bb52374967cea44eb6fb631c766f6827ac51d",
+    "docs/audits/ux-continuation-phase1-2026-11-12/REPORT.md": "3aca4fa908e555d7dd9bb09f43c8ebb75eba77445985a5098675fafcbb35efd8",
+    "docs/audits/ux-continuation-phase1-2026-11-12/inventory.json": "f9d2c45a57ea2263af8067d4e5540e709559bc3e049be8e48b9be09690639f5e",
+    "docs/audits/ux-continuation-phase1-2026-11-12/requirements.csv": "01ccd411f3ced65d9b9a3298ed877b810f5a36fe156fdf2a01722f979728c65b",
+    "docs/audits/ux-continuation-phase1-2026-11-12/static-records.json": "d5de26ec80d63151f9820f22cac4df387f64af112fe042765f3bbfa556b4ea8b",
+    "docs/audits/ux-continuation-phase1-2026-11-12/verification.json": "eae85335406e934c1f731d229988d4c15d11ecb728b44e0a6c25787f12270196",
+    "docs/audits/ux-continuation-phase2-2026-11-12/REPORT.md": "a66fe65c3b5b00db824247a10ed91df506e21126236326a87ad67cbaa3d07abd",
+    "docs/audits/ux-continuation-phase2-2026-11-12/contract-verification.json": "fe9ebb07be73f9fd406c9fb584265c069cfd5e86866b319ece4c1f3224130940",
+    "docs/audits/ux-continuation-phase2-2026-11-12/contracts.json": "3780ef38554b62a59a26bbef06a1bf80714b4a4324a1573aa6c8507a6f689b99",
+    "docs/audits/ux-continuation-phase2-2026-11-12/initial-static-records.json": "e04b2a8b6a78b8136aaccd4b24db221239368535fa5db3923092565557bdb305",
+    "docs/audits/ux-continuation-phase2-2026-11-12/static-records.json": "956ea63031aeb19a798377029fb0c944f01f5308efc3f4475f702b0def46854a",
+    "docs/audits/ux-continuation-phase2-2026-11-12/verification.json": "8f8d1b8839c4ccd698769f14f89bbe02490a7bf6cc4125d4866814dbbb32d35c",
+    "docs/audits/ux-continuation-phase2-2026-11-12/verify-contracts.py": "fddc3d57d7b56a3345884c96fc935a1f329e8ce59b02e60a804fe29520a94f50",
+    "docs/audits/ux-continuation-phase3-2026-11-12/REPORT.md": "9e13ae489c6c03df1f7779c0e066117d701385ecde09f01a4268db330a98e06e",
+    "docs/audits/ux-continuation-phase3-2026-11-12/coverage.json": "6144868e614322885b0239415fb30d9599ec84a2af6441cc7e6d2f69839ffa84",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/access-gateway.png": "de1bae37c8c45f08de788200a16b409ab50c946da6ffb0fdbde9ed192c19e5fc",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/account-application.png": "58af7dd7d6689bfed500e1cd00975def900bb95b53ead4652a555d763fcb4cf3",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/account-settings.png": "b27260d01f81099b87d963c19d209fb5fa1873446ec4589f4ce4e9b82c65b21a",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/buttons.png": "cfbd90d1cecd4af1b71e127a890e51f5eba1eee7dc278073aa68131768252522",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/carousel.png": "2f5a970947b532c4e2eeaf0cc7148042557acb92e896adaf01452133f7a5c740",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/data.png": "44ab13930cf8c0d1c4c34f3766f60d726f4cbfe7f8fc0b2d13e40aee24a70eb1",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/fields.png": "d12fd7cccf0aff080f3d05e3baca909a96b7d75dff26932bb8547d30c6555f01",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-name-ltr.png": "dcc366bf6ada21d868fa45934c40c216536a9bb3a6f29f3c8452fe67143f57f9",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-name-rtl.png": "f2c64e0279f085d2a33b1d48687b21f31a85ea01b50ae32c8cfed937b61dd4f0",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-sub-ltr.png": "f76057a2ee6eb306cec82de18253758ce21cf781b40e73a03c973bcbdce7a535",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-sub-rtl.png": "5c1f264db2cc2da7a86d98a445547a0e7c69aa6085fedad15bcf1a808d60a68b",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-sub-unbroken-ltr.png": "cd90521dc1a82d647d0420378914ab401c6600957edd390da26861c72e9cc694",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/identity-sub-unbroken-rtl.png": "47ea426669d7091a0ff42e12c05965570c920352424989c8bb0001be4f47a33d",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/info-strip.png": "60112d2c683ef934752d8c14a65ed6d1f8ec013163dff8398f428dfd54e972fd",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/messages.png": "113ce2c32ec64d0ac7c2e42bb873b3c248e30c02ba03710f69250acb452fdeb1",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/metric-comparison.png": "96e0519ede80e278288e2d2b516611cf704d30e235cf12501f9ab62295b9ddbd",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/navigation.png": "fe3292cbf70ad1177d56e74b12d18c17c029b0ba5a62211f7530521c71ba322d",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/note-body-control-ltr.png": "8ada7f3e3daef848c82e0bd2255522c8757eb3bdb467c34b89305d6a1738eb63",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/note-body-control-rtl.png": "0c224d231303e302e44d57335252ad3c5f3c65dbb94860f9226d18e38ee8fcac",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/note-title-ltr.png": "9b7d48c49c6922f30cf2113df8ff9adff490cf43d133d8fa2f5d47b12e47a170",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/note-title-rtl.png": "13963477edeff3987532bc303b46f631fc36ffc2a4030bf408b27080756a1b21",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/order-schedule.png": "15a0985b0b2f1ba6a86321483ce42134b9abbc765bb198d62257527523dbe78c",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/organization.png": "dd4323a8e97485591582e35a581adb8fa35ff51d78610654afa2a4528b59ecdc",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/retained-artifacts.json": "46704c918055e0079ebd244b0647320dd92c5a1a1373f993664d01a83fe1f2b4",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/section-desc-ltr.png": "21a61415749bf4867fa94d475d34092598e9f222f2642f8d566024494e0a6f37",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/section-desc-rtl.png": "964282081474f52520bd7a6474ea18c4f0733a61166b8dab6ded418d1dbb3abc",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/section-title-ltr.png": "aca9f1fc51be9e204f7b20e139a1a1b6a5c22774f25c5ad78837e5a4612fff9c",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/section-title-rtl.png": "105bad8a5605bc97a4dab67216a1462614f7d13fdf4f816bebe802e19d83007b",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/selection.png": "2bb39d0e88736935e7c4b2fdef19b2c6a10faed295244bbae9d3898750e14cb7",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/surfaces.png": "d82910646cb3ae857df53984c399c8c6bbeca50717f91987e3f9a7864eae8ccd",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-bubbles.png": "ce2547970c2d688110b1cd266f08627e20bc50456f8b5982711e22375f9136e5",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-donut.png": "eadc33064af0985826b4203e8cd39c52fa322fd911ef745d25dc948963e649b2",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-info-strip-peek.png": "96db807d238ceb8046187b9da126f6129961ecb1d1cdd13fbf83060a177a4f7c",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-main-metric-featured.png": "0ad614af441f44da22169ea40e6a15c5c52f3156d1e8d0dd6068628225b0d74a",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-metric-circles.png": "92958dcdc3d1d0b2ab03044e10a96738623c18b4b8a4ec242563dafbf4971fa7",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/variant-packed-circle.png": "e37361d5fd6015175639ede0d138c201dd12ed8dd5a34af0493b46e9982d558e",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/after/verification.json": "589de89b802dada7ccf92b729dc617f93d91c97841a09fef414f34ebe9112dc1",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/data.png": "360b4f335ff99dab8e24d353ea06ce379c8782db8a7ec89da5b97502828ed738",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/identity-name-rtl.png": "d98d63f38ddd7e6796cb739f5add2038a4e56f4b88e53475236b3a038171c18e",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/identity-sub-unbroken-rtl.png": "9a325fc08efeeb2762271730e8afc90c3494623a7c6344d3e6101096550be716",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/info-strip.png": "66c2ea789d7a540e62c2d04a6f1fd7f7b54f6e6619313a5a32f9d09e1a05a165",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/messages.png": "122db3aa5542e250b27878128a1b226bdc1c2f24b7d4eec54d10e4e2125387d9",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/note-title-rtl.png": "3b319d037bf8e464ccf7cc87c42ce9b99fa6509fdd3e02a67485fafd7ee866fa",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/retained-artifacts.json": "254802dad7f7273436d1f0bf664a6bd9fd8a57b03c6375ca8289740f8ca12cf0",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/section-title-rtl.png": "537fca6b3b45d4a3e5463ab809fcffa052d8ad45eab969e6989e3976613e9080",
+    "docs/audits/ux-continuation-phase3-2026-11-12/evidence/before/verification.json": "782e860a08026c0642e28cc39a67d5f68fcd028d2c2474ef457b6b0d14e07fb3",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/clone.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/data.json": "d295d24c81f10bdf2bd718f8a259defb38a66af57946c89a2059fffffc96200d",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/release.json": "4b226f88859ed3f26fa2f32bc494729878dfaecd9a30891311043462b0a67243",
+    "docs/audits/ux-continuation-phase3-2026-11-12/gates/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/ux-continuation-phase3-2026-11-12/static-records.json": "8293659947996dfea77a1b56a7e74fe9e35c1e3433f9e476ea001a49e8f8e8a6",
+    "docs/audits/ux-continuation-phase3-2026-11-12/verification.json": "d8a9990ae0d4028a11af2b12ef43709d8f5439103576b861c67d324867c0efb7",
+    "docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md": "3c8f8fb3af4843ec77ceb318450fcfdac65ac6904211ed84baaf2fddf218adb3",
+    "docs/audits/ux-continuation-phase4-2026-11-12/coverage.json": "2894bc2e1fe8157861d356da0b39d9352d7977d0bead206573d3560b2c00b4e9",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c01-amount-360-rtl.png": "099abd369e2910d6d02d5a5ee7dab349c791cb28f2b3db99a8eb0c16b2edba7f",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c01-count-360-rtl.png": "af1f71994ef506fcfc4829d96675c7b79b4da425a406d6e80a0b1331a5f20f08",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c02-collection-360-rtl.png": "55e4c575e616c855af661a43818920854f9672c9131f5143296dbc8ffc1c591d",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c02-stock-320-rtl.png": "87ea52501120f82b8cdaa04699764db5a322ec4cfc333081908a8d2bc4fff4a3",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c02-stock-360-rtl.png": "550a1c64393e9ee6aa020c41148842d105bea94dec04e684681cbb9f9c1a0bac",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c03-close-decision-360-rtl.png": "9894d50d983af814177ce61f1dae425432c0d4f69054dab31dd36b500c5a077e",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c03-dialog-360-rtl.png": "691b3b20877e33c70b156f8c4b0f3ec75561b424f25d1876e17e7cc7c2610f8a",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/c03-inline-360-rtl.png": "19bcb4dc397bec029debd857d5d8e785eaf092c88631b07475eff3c325ef4450",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/development-pattern-check.json": "22ccd7b65a47def69720fefdac3f32c6251a42247018f7306cb8fc3fe55d6d73",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/hub-360-rtl.png": "a315e112f1cc8d183ed28d0080356295ac90642178ff005f7fb05b9f7ff5fc0e",
+    "docs/audits/ux-continuation-phase4-2026-11-12/evidence/recipes-verification.json": "b38813624ab780561d1702ff6a2e6a6e838fa9d2d84cd87319f9ccb6d4c83a04",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/clone.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/data.json": "d295d24c81f10bdf2bd718f8a259defb38a66af57946c89a2059fffffc96200d",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/families.json": "3304f87055b5dea9b31e23a3c451719eb8a2db66cd4221d7bea2f85d90e09260",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/release.json": "9a220fb6b74378695f05e5173eaca8b59ce165835961d071b99317f3c97b24b1",
+    "docs/audits/ux-continuation-phase4-2026-11-12/gates/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/ux-continuation-phase4-2026-11-12/static-records.json": "2c6459e26cc46bde76fa9b6eb70882a83852b519ebe4d96c13ef4905ad8e2e9e",
+    "docs/audits/ux-continuation-phase4-2026-11-12/verification.json": "453afa973cd6f9cae8e53f5d69b835f8fc8be5624a9c8df799de912014dfe24c",
+    "docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md": "b4eb853ccc723edaf05348f474b8e50c0c3fcecb2ed51e452000e63d75223e6e",
+    "docs/audits/ux-continuation-phase5-2026-11-12/before-isolation-verification.json": "d8d90bb6dd0b28aad520a5e9fc5864f91d7b5e316a7a5f4d2472e915d0801a17",
+    "docs/audits/ux-continuation-phase5-2026-11-12/boundary-verification.json": "47e7858e18988e264e2fc21cb407f09e132fb01b2b94df6758373da6368b8138",
+    "docs/audits/ux-continuation-phase5-2026-11-12/coverage.json": "aad330f1cf3d1e761f3e5b6c4736d39ce50230130a1fec43db8f75269e60e0b1",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/before-dynamic-isolation-360-rtl.png": "1993c063e8e97c42be6ab9f5a4b49ae068628a6494c882498715addf736d766b",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/container-264-320-rtl.png": "87d47ba8e324c554b2f00ebbbaaa3c66f35a36d808264a2ef12feed6d130ae27",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/container-296-360-ltr.png": "a73177bc9ed2d9b29c1716fdc9f9367750389128613ab1d1ffa2da3e082dd68b",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/container-296-360-rtl.png": "874ca3f743b8f2b2071c83bc07eec397f3e69e33008f0fcc1967e45c5a45025b",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/dynamic-isolation-360-rtl.png": "1993c063e8e97c42be6ab9f5a4b49ae068628a6494c882498715addf736d766b",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/lifecycle-independent-form-360-rtl.png": "f5c29f4067310cb3e43d2bccce48ea8d55ce841cf7938bf4cd7b1a864adba2d8",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/native-dirty-decision-360-rtl.png": "939e5927852f37512f61533c5668801114ec0b99180f53cfbeef803081faf02b",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/negative-containing-block-360-rtl.png": "ac9df50e6e7f1b02214d8699bc83376edfbf865331cab5b586f050807cc44f11",
+    "docs/audits/ux-continuation-phase5-2026-11-12/evidence/portaled-layer-360-rtl.png": "7712ef512e42305f6d76a64f4f94d4bba1128fc7566930a5b497b80a8692b45d",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/compositions.json": "826bc3508a3d6fe05e45927061fdd9ef825927dd6786b3c9076b25273808e668",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/data.json": "d295d24c81f10bdf2bd718f8a259defb38a66af57946c89a2059fffffc96200d",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/families.json": "1aed0a89f7afe4cb1e0d53edbb11f032ad51c674f6f62757fc4bcbe8c74388e3",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/release.json": "463bc9fb77cefea075b9ff75c2f4e757c41bd1cc41a869e58e47c3357edc603e",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/ux-continuation-phase5-2026-11-12/gates/static.json": "3993275dd1dbff8fee6dff6316219ee1c2d6556a64e57e2d9ac1b5a0eafbfd6d",
+    "docs/audits/ux-continuation-phase5-2026-11-12/verification.json": "f41be491958f437822e7a59677674f1141ee53a7db1f1d3cd89641faa4155bbe",
+    "docs/audits/visual-closure-2026-11-13/REPORT.md": "fe452348dc845952cdd2c4d8ab8b16e74e3ee9734922c591ae67b51934ebda7d",
+    "docs/audits/visual-closure-2026-11-13/evidence/acceptance.json": "c09311146ed019671f7fe279bc309f119173a4e24491434310f94b7d916606cb",
+    "docs/audits/visual-closure-2026-11-13/evidence/audit.json": "00a287fa645cf486b71fc452273e5298f4305ac363a9a171b9ea584b15a4ae74",
+    "docs/audits/visual-closure-2026-11-13/evidence/before-sales-default360.png": "e07db5bf55b2c0851cd884576842a905c269424479e508407c353c9a489a7633",
+    "docs/audits/visual-closure-2026-11-13/evidence/before-stock360.png": "0b0bca292fe8b1ebaf35a67cdbb2effae447d7db941b27230e9f1170c326d125",
+    "docs/audits/visual-closure-2026-11-13/evidence/before.json": "dc798a52e0f36a3715cb545fe3699884f5017579bd2302c16c2c7c485ece15bb",
+    "docs/audits/visual-closure-2026-11-13/evidence/boundaries.json": "5398c274f666117777071bf936feaa41437e96e0f94c700487b2cbd400e61c9b",
+    "docs/audits/visual-closure-2026-11-13/evidence/brand-plate-targeted320.png": "d08ececcd55c6b39b41370792617b181a9d861dc0c466b99763ccc09f1a3ec91",
+    "docs/audits/visual-closure-2026-11-13/evidence/brand360.png": "4658fa4121fadb12dd79789e43ccf897b30525d31b636a767984cb1986aae88e",
+    "docs/audits/visual-closure-2026-11-13/evidence/build-gates.json": "2c80d7cc9d402d93a5172d2c7377d063d3895f66b7132ddac90f9cf8708e3ecd",
+    "docs/audits/visual-closure-2026-11-13/evidence/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/audits/visual-closure-2026-11-13/evidence/calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/audits/visual-closure-2026-11-13/evidence/clones.json": "492f9fd3a0af769a54f5b78e34cf8ee05e3665df553ecdd2841301bb598d49f3",
+    "docs/audits/visual-closure-2026-11-13/evidence/compositions.json": "5083735ca2b56e94360bc7b77c89c17f66141d11a34c92641e3d46086165fee1",
+    "docs/audits/visual-closure-2026-11-13/evidence/consumption.json": "abf757142f79beb724ef0a161309de81074337526c2c1f0527bc798188b9f8f6",
+    "docs/audits/visual-closure-2026-11-13/evidence/data.json": "038a34555408f02dbe1da13440cec771ad5807307a2a7deb587a53ee86baa320",
+    "docs/audits/visual-closure-2026-11-13/evidence/donut-optional360.png": "24db0fbd516588feed5f7d1f0aec09041a8089a2360f9bd55ce67f86e306aff0",
+    "docs/audits/visual-closure-2026-11-13/evidence/expense-rows360.png": "baec2eb0742d19968777b0c339ed2ef66cac019a56feb7d861aa5088fb8f8536",
+    "docs/audits/visual-closure-2026-11-13/evidence/families.json": "e9b99ad05201a3d420cf641eadd550c96a39c68fae7fbe61fc976f171e0f576f",
+    "docs/audits/visual-closure-2026-11-13/evidence/gate-exits.json": "d4e14f0a56a367d3f548cb2091b11b3957f77af746a147466b69beedcdbb1e09",
+    "docs/audits/visual-closure-2026-11-13/evidence/identity-proof.json": "dbdc78d3f611a28b77b294b738c00d0c153b7b3dace662c233c83db2c7e1b070",
+    "docs/audits/visual-closure-2026-11-13/evidence/progress360.png": "33db0575b88ba8c3cf98010260c50767eb78c740559c8b0da88d4833c0b759c3",
+    "docs/audits/visual-closure-2026-11-13/evidence/readable.json": "c60b1f1faf48c8f43be6ebf8e01b64c0571b042e93c4ab0b5a3b29d3b9efcad5",
+    "docs/audits/visual-closure-2026-11-13/evidence/release.json": "7c093411c4d466b51c24e0e3a51b6e35c201f9de58cfb2e3633f668463216e7e",
+    "docs/audits/visual-closure-2026-11-13/evidence/runtime.json": "216d92f8ebdb9e1659eec08c140927d52c4e4021e358d3c55b8cf53d72ce04eb",
+    "docs/audits/visual-closure-2026-11-13/evidence/sales-default360.png": "d05e6fad71b3871f1ee66be2e30ff1c344da7601e9d79abd034db2b9488400ea",
+    "docs/audits/visual-closure-2026-11-13/evidence/sales-opt-in360.png": "ade327c84dad44a5d4a2e1eec36b7b48a64c1f4af6823a337a696162e7049a82",
+    "docs/audits/visual-closure-2026-11-13/evidence/shared.json": "682a38e7756013ca2215d8358c5ad197d41cdffcdeb3ed185dd23582b72c8314",
+    "docs/audits/visual-closure-2026-11-13/evidence/static.json": "da9aea6cb4c8ad1e8d657e3a31d444684ce67dd2a90be509f0bb4924057c66a7",
+    "docs/audits/visual-closure-2026-11-13/evidence/stock-directional-ltr.png": "fbe5b26aecb5871d008644482ddfb3b9ae515e8f42a2d3339a3ac043017d8fab",
+    "docs/audits/visual-closure-2026-11-13/evidence/stock-targeted320.png": "038a390ab2daf7fed03e13b174539e3c5c87be7a9b647e778bf88afac55d07e3",
+    "docs/audits/visual-closure-2026-11-13/evidence/stock360.png": "c940d7e3e579d8daf7532ae8809bf0ed94e07bf6ea6aadd7a637ef3eba8ce371",
+    "docs/audits/visual-closure-2026-11-13/evidence/units.json": "ea87e9a76ba6854f3a2aed140dfffa92c26bb393ea6799aee64e220e4ac2fb35",
+    "docs/audits/visual-closure-2026-11-13/evidence/visual.json": "a0e53fde075b2bead0e73ce5f37fe68ce60d3261cb6c21acb460c2bdab4b2e04",
+    "docs/proposals/charts-2026-11-12/ORGANIZATION-PASS.md": "96821c0ac122b17d5fec3a4985e82f3498cf1d031b47e34c964521e62caf3557",
+    "docs/proposals/charts-2026-11-12/PROPOSAL.md": "9ab153541e0678a6c85b65457de888e3591c96a4d698c7bbfa3ff918864ab956",
+    "docs/proposals/charts-2026-11-12/STRUCTURED-REVIEW.md": "7e9cc77c3fe98b9f6ed19b62685efd518857f290874bc987d2d50aaae75eb125",
+    "docs/proposals/charts-2026-11-12/evidence/01-activity-360-rtl.png": "7059dd0146f963e8d647ef08e8c63aa5f8f8979183fa9cce10912488087fb656",
+    "docs/proposals/charts-2026-11-12/evidence/02-line-360-rtl.png": "7a6cf200e6918923ce0aadf82944073cc1e35e1c2f2eb5837ad86e332e21726c",
+    "docs/proposals/charts-2026-11-12/evidence/03-comparison-360-rtl.png": "f6846e673fff477d829653cf86e03297869e9bdcea0f951687e6abcdfa587068",
+    "docs/proposals/charts-2026-11-12/evidence/04-signed-360-rtl.png": "b10212086667af21f8f9b27b16e3b4fa76079eca95977dafcfde8f0230f7c39a",
+    "docs/proposals/charts-2026-11-12/evidence/05-share-components.png": "bfdbd6db64d13ac52874be08e44d51e0eee54346b3ef27c7b3500875b9751582",
+    "docs/proposals/charts-2026-11-12/evidence/05-share-progress-360-rtl.png": "d0aeb755348ae248595ebb1ce059a50182cdc3a408b96df6e7fa30e86b153101",
+    "docs/proposals/charts-2026-11-12/evidence/06-long-320-rtl.png": "9471807d2be816c76488704344b6a53fe891da599f2747e26cc8b3d0b5a03b90",
+    "docs/proposals/charts-2026-11-12/evidence/07-axis-360-ltr.png": "9d99f55d794885867efd1d9f6e7e99e945bd2965489ecd3eb1c9bfe046212339",
+    "docs/proposals/charts-2026-11-12/organization-review/before/activity-360-rtl.png": "b1aa3780ad3dd40bf3b4169e55c9b43f05e1360b2695207193ebc27fc849e2e0",
+    "docs/proposals/charts-2026-11-12/organization-review/before/activity-component.png": "00ad74223e3a75220a56982de04d7ebace11f74c3aacb3dfa4f02e7e0ccbaa49",
+    "docs/proposals/charts-2026-11-12/organization-review/before/compare-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "docs/proposals/charts-2026-11-12/organization-review/before/compare-component.png": "00f090741126054f32015960ca98fa96bf5885f1683196908e98c0aabe8b6b91",
+    "docs/proposals/charts-2026-11-12/organization-review/before/measurements.json": "3dd748433fd5f49709fc82126afb62058dd6822788a8134fad92dbbb9806cb86",
+    "docs/proposals/charts-2026-11-12/organization-review/before/share-360-rtl.png": "90b15c4b06822004d5cd333c213753e6f03c7e52885ea171f852aa0b7d71f223",
+    "docs/proposals/charts-2026-11-12/organization-review/before/share-component.png": "4403d0314740d7f4d9a6b29de114a855d66052239420363ff353a201f30e4536",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/01-activity-360-rtl.png": "c8b2109886dcfd4664a1be35e22b8f61064fe6890710eab4dbf4bff314599e93",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/02-line-360-rtl.png": "cd0492ece2dad4125f5ce07e505c6f01617b7e2cc6da1eb0109b0beeb558c102",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/03-comparison-360-rtl.png": "52d8c2df9e2e4ddb4c4205598ca85c22a4408ca228c46d514562d0062137ec54",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/04-signed-360-rtl.png": "52d8c2df9e2e4ddb4c4205598ca85c22a4408ca228c46d514562d0062137ec54",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/05-share-components.png": "1c732c006d8c5f4054f261e6786a4195959d6cab75b29eb258f525d4ff7bfb4b",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/05-share-progress-360-rtl.png": "7fb30253b89f63200afbeac9b93606a0190b2ca59b75ac75ed79d059a99ecfbd",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/06-long-320-rtl.png": "ca485df78375ce5a22a1fd093731034f652e3dbd063d7e70193289b0d4e13ba1",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/07-axis-360-ltr.png": "19329c225b1d973a94e85c2f5abe976c7b8f767fd5461f09fd763fb9c030ca74",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/08-share-320-rtl.png": "7e4998823a2cdd8fbfca8c43a3603ddc9e0d33cf034e063700c3d521c086093f",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/09-orders-month-360-rtl.png": "4eebc275d9958abfbce32c73393118f6cf9967000ba2a7d43fccce183f12c761",
+    "docs/proposals/charts-2026-11-12/organization-review/evidence/10-orders-day-360-rtl.png": "bfa694c6a782f840d116aa38575f2885eaadd4fa801d5b19bf0e5193a333c8e8",
+    "docs/proposals/charts-2026-11-12/organization-review/orders/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/proposals/charts-2026-11-12/organization-review/orders/light-calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/proposals/charts-2026-11-12/organization-review/proposal-verification.json": "805f3989ca79e8253a3d135187d5081829813a0cc71d6284b2a6062e91db68cf",
+    "docs/proposals/charts-2026-11-12/organization-review/references.json": "215173bf7c5b9df2399ef59d855840f88f86c30624efa4d889fd4967dccd7217",
+    "docs/proposals/charts-2026-11-12/organization-review/static-verification.json": "53cd2a934bb727746292e8147bb29db7d77cc8b4ed7a7d485715402bbf887c89",
+    "docs/proposals/charts-2026-11-12/organization-review/verification.json": "dbdc79015c9a0ffad1fb10f6e81912c5df8969d6d6aba895459b4715759d0eeb",
+    "docs/proposals/charts-2026-11-12/review-orders.html": "4fa201792c2c7acb6dca464913238ad72a34c409b18f435f8fc18dfe59753ec5",
+    "docs/proposals/charts-2026-11-12/review.html": "23792aa628da025b425e3344bd5fbf5c86b75296ceb76f1b9c806cbc39815ee0",
+    "docs/proposals/charts-2026-11-12/static-verification.json": "5e32ea95058baf169914b8d6d7570bc01816ea6ecb17d7bf12a63f84b0878618",
+    "docs/proposals/charts-2026-11-12/structured-review/before/activity-360-rtl.png": "7059dd0146f963e8d647ef08e8c63aa5f8f8979183fa9cce10912488087fb656",
+    "docs/proposals/charts-2026-11-12/structured-review/before/activity-component.png": "1f5c8a2ec20ee7a405f8f1c526c6b879e9ddd398b44fa905aebfc5660e2c24e2",
+    "docs/proposals/charts-2026-11-12/structured-review/before/compare-360-rtl.png": "7f6a9316d99b99a8254750684121a820d6678d5f3d1c3a99b45a59b1df8335eb",
+    "docs/proposals/charts-2026-11-12/structured-review/before/compare-component.png": "968b36067ba3424b69c413c024cbaf68ca7357116e71aff91a951c8a8d3fc883",
+    "docs/proposals/charts-2026-11-12/structured-review/before/measurements.json": "5bd7d79731bc4bb2c5ffe0814e75b3c7e37da51fc6bcf63ddb37aa2efe6bb911",
+    "docs/proposals/charts-2026-11-12/structured-review/before/share-360-rtl.png": "d0aeb755348ae248595ebb1ce059a50182cdc3a408b96df6e7fa30e86b153101",
+    "docs/proposals/charts-2026-11-12/structured-review/before/share-component.png": "bfdbd6db64d13ac52874be08e44d51e0eee54346b3ef27c7b3500875b9751582",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/01-activity-360-rtl.png": "b1aa3780ad3dd40bf3b4169e55c9b43f05e1360b2695207193ebc27fc849e2e0",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/02-line-360-rtl.png": "16b77e6eff7f8d7bc2ef911c600a40b6a6a84d949b97740680f385a231d5def8",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/03-comparison-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/04-signed-360-rtl.png": "6ea9b54a45b6fb41d42df9342885d30ad99aefda6f533eb2bcf29d7963194d0c",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/05-share-components.png": "4403d0314740d7f4d9a6b29de114a855d66052239420363ff353a201f30e4536",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/05-share-progress-360-rtl.png": "90b15c4b06822004d5cd333c213753e6f03c7e52885ea171f852aa0b7d71f223",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/06-long-320-rtl.png": "b9f9c4b50152ce96665c3aca29fb3181ecd514f8339a758d8391979e9346534b",
+    "docs/proposals/charts-2026-11-12/structured-review/evidence/07-axis-360-ltr.png": "31a5297b679d1cde01e60aa4f77bc28bf9122e47a74a563b1cc3394592faa16c",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/calendar-contract.json": "a19e572c2700f3510e322d720ba7594cdcb105f7e7beae6e7259b6a3cfb172a5",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/light-calendar.json": "313b56b59b46cdec93e6ed9b8c5b492390bc5badef5a8e8a7ef4d908827ff875",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/measurements.json": "4d414b9d19b6e7ee3ededad53a6949b36411532bc81573325b8a63126bfaa577",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/orders-current-day-expanded-360-rtl-component.png": "a1a04264e6b746880f0b619e9423f10087fdfbcc38dc240ddf758eeffa0a16d2",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/orders-current-month-360-rtl-component.png": "0182a7b59d37e701c21b2b7cdc264dd7d95a4c3765d98a569126ac0f05203164",
+    "docs/proposals/charts-2026-11-12/structured-review/orders/orders-current-week-360-rtl-component.png": "a4d379d8c15e6567bd865eca22fa73bf280429166735556746c1d3b85d3048d0",
+    "docs/proposals/charts-2026-11-12/structured-review/proposal-verification.json": "9ea3d86eff67b8c9eb4ade5e07a013c98ab2e8e8771684f690a2ec5c3ac436ce",
+    "docs/proposals/charts-2026-11-12/structured-review/static-verification.json": "37ca77858cc0d9bb99c1c2147443b1a0fe2dcefbd151df1b530ae625555aa861",
+    "docs/proposals/charts-2026-11-12/structured-review/verification.json": "b29e342749fcae030515b812f572501070670c8a224f898c051a9724bea49173",
+    "docs/proposals/charts-2026-11-12/verification.json": "545a42aa9bece1d2e4f9c6a887cc5598c83f438f8d8acac5dccdc7253cbf1c2e",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/CALENDAR-NOTES.md": "1353110b96ec3f740b79c4be2aedce67b7f698782bd1e903e82ab876634bac57",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/CHART-DECISIONS.md": "89b8a30e85c95858c66a54c60a52415b50468be6d079dfb206df42a3262d3d7d",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/INDEPENDENT-REVIEW.md": "00d56071fcbe9e3e12c84b1403057a6865a4775fd1b30e8705dc38860a30f598",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/PLAN.md": "8ff8449519d8de292fc616bc2228a564aee700a85879412b363ee69078bf365e",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/REPORT.md": "3185cc33b73b642085dfdc2bc7629bafd661c09e85533e9aef11ab3a19d00593",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/RUNTIME-FIX.md": "0442d1eeaaa7443d1645f9351c806283ed38a04901b8e8d994cc6e005958d7e1",
+    "docs/replit/light-only-complete-ui-repair-2026-10-24/SHOWCASE-NOTES.md": "43d08f8fe23fd5a694161c0a93396b2f447b5f4d9180631bc81bc51830a4424e",
+    "docs/review-evidence-repairs-2026-11-11/CHANGED-FILES.txt": "086880e5a4c64c01b25e346673eb2e4865706712264f40be59ecbd0053921b14",
+    "docs/review-evidence-repairs-2026-11-11/REPORT.md": "0d4f83339c0d8f949e80ea9d847665f1752b90ab7cc499ae7aab57a381f09531",
+    "docs/review-evidence-repairs-2026-11-11/baseline.json": "4b14039bc7116a756edc45bce89da72cbad81b8a921949156daba9be14e7dce7",
+    "docs/review-evidence-repairs-2026-11-11/carousel-default-360.json": "e4970933bd5cf039ca649d716e509d3ca2a2b7fa5c6b54a02ba50401b26e551b",
+    "docs/review-evidence-repairs-2026-11-11/checkout-after.json": "6d282a7284bf159291a8412b98341f73ab2c8923e925cd748b61a3d7a1113594",
+    "docs/review-evidence-repairs-2026-11-11/checkout-baseline.json": "398143c8b381135cdd1f63542703aa7259fee08b78159c4aca801fabf353ac02",
+    "docs/review-evidence-repairs-2026-11-11/evidence-index.json": "0046c92e751a8fd6a9a850d8772ca392a9f500f174548c41deb3cb4d45eeb126",
+    "docs/review-evidence-repairs-2026-11-11/evidence/calendar-five-rows-after.png": "f00ca54494afd3ad1b4aeedf8c1004e5de28087e057b0581d87343a0f7e7ae70",
+    "docs/review-evidence-repairs-2026-11-11/evidence/calendar-six-rows-after.png": "eb2dbe825fd5ebba072bf2bd3feec2c3d2f41f576d97cb15f1892fc013d26223",
+    "docs/review-evidence-repairs-2026-11-11/evidence/calendar-six-rows-before.png": "59a5f21b2a7f12006ba079bc6729a2ef1fb49e26a71f9ca0a8938b6d06d83d93",
+    "docs/review-evidence-repairs-2026-11-11/evidence/calendar-tools-after.png": "c18ec1adb855ebd5fdff2526ddc3b8de8be0fb7f4899d9be6e62b9184776d1b2",
+    "docs/review-evidence-repairs-2026-11-11/evidence/calendar-tools-before.png": "eab1b228f4b1351ababde854d8111e58f824cb7d103d44ab3f7d8b99ad593feb",
+    "docs/review-evidence-repairs-2026-11-11/evidence/component-review-after.png": "08c35513a6a5f79f5f057f9e00c0366b4b563dadf3dd06dbdfe2d88a9294a07a",
+    "docs/review-evidence-repairs-2026-11-11/focused-after.json": "a7af8ad8dc80ab48fe815b798960f1451f709b05c74fca976a121deab641913b",
+    "docs/review-evidence-repairs-2026-11-11/followup-complete-chart.json": "353b12fca5f51b6c9768b4172a4952e992c355b1be7b0f390a8b53256e9f6794",
+    "docs/review-evidence-repairs-2026-11-11/followup-light-data.json": "112bd5945660f7274d884129f5e552320e95208768b749b3d2da1b60aac87282",
+    "docs/review-evidence-repairs-2026-11-11/narrow-tables.json": "19fb7e8cf61df8616b42729140968b8285b3b747deb210a49632a198d36cc2eb",
+    "docs/review-evidence-repairs-2026-11-11/release-gate.json": "5c7a13074995b3b56fa3c50b3ab0b26747d45fc44e1d0b964f962fe55c923c0e",
+    "docs/zai/FINAL-CALENDAR-FIDELITY-AND-DONUT-REPAIR-2026-10-25.md": "90a5c0cb93d22e31e97568f471004bcb6ea4f9a90e3d6e56a86ea947ebe3e84f",
+    "docs/zai/FINAL-COMPONENT-REPAIR-AND-CONCEPT-AUDIT-2026-10-25.md": "e92a8f08268484a5a25732de0231bcddaabbb8d77f7ed1b7e34441c471a86c31",
+    "docs/zai/FINAL-COMPREHENSIVE-REPAIR-REPORT-2026-10-24.md": "24bc60e5b31553a45afb2cfbc7c0812f34514ac6085ba14597a6d524ffbf87a6",
+    "docs/zai/FINAL-FULL-UI-REVIEW-2026-10-24.json": "d09a6c3ab50ba0e9258235180662bb34cb37ea5a45ca14f90e28ca92269caab9",
+    "docs/zai/FINAL-FULL-UI-REVIEW-2026-10-24.md": "bd5979de03ecdbf418469ddb4cd145295470583e3da80e060a27333b756375c6",
+    "docs/zai/FINAL-REPAIR-REPORT-2026-10-24.md": "d7f63886e6323dabbce7b44a01e419dbf4e7515e1e6dce046bd2c76007d98ddb",
+    "docs/zai/ZAI-CALENDAR-FIDELITY-AND-DONUT-CORRECTIVE-PROMPT-2026-10-25.md": "75c79a9a56d22e59715b2554837c9c648b52a4a3d165080b576e19fcdbccb6a8",
+    "docs/zai/ZAI-COMPONENT-LEVEL-REPAIR-AND-CONCEPT-AUDIT-PROMPT-2026-10-25.md": "7bb1dd14cc57c51081529364d12c25302243063a98547e2ebab5b0eb0f78423d",
+    "docs/zai/ZAI-COMPREHENSIVE-REPAIR-EXECUTION-PROMPT-2026-10-24.md": "3f702a61be050a219d402d98b06059cfbd6f2b611bf456b095cff63b5179d29a",
+    "docs/zai/evidence/a1-info-card-320-rtl-en-type2-dpr1.png": "80ec91782638fb2f002a8a1a7313498e8f183141be4ff1059f8ae334807fa1bc",
+    "docs/zai/evidence/a1-info-card-360-rtl-en-type2-dpr2.png": "d3aff6b8869d3d9715fc3c8109f6764d3f711a640dfd8530d3977fce5a7e303d",
+    "docs/zai/evidence/a3-clip-probe/measurements.json": "1a6494c59a0063f482797244e1aec00a650cebadec622ca269746d2f5c906e75",
+    "docs/zai/evidence/a3-clip-probe/ocal-crop-320-daypanel.png": "feeb439e7be7dd323492ee293205f45cd1ca9be3440b551d957cb006b0851be4",
+    "docs/zai/evidence/a3-clip-probe/ocal-crop-320.png": "815e61e40a9ea03198b75063c514b4d7090b6aa55146f51140de3bc74871d18c",
+    "docs/zai/evidence/a3-clip-probe/ocal-crop-525.png": "1128972859362ed39c605f2ee181ae786339243dbe14e4d0f94f22a36c35c109",
+    "docs/zai/evidence/a3-clip-probe/rtl-320-canvas320.png": "7a6fcbda23bebb88a5b89fa4941239b10996c14149de2c9ec37ed7076f5dee83",
+    "docs/zai/evidence/a3-clip-probe/rtl-360-canvas360.png": "0b77a25b6f2af5c842b6d0f5c6dcd138e70690e796d9d5645d84126c99cf31e5",
+    "docs/zai/evidence/a3-clip-probe/rtl-390-canvas390.png": "64cdc62c1908e51b1adf54fa8b7fda7beb7ee09a11f68ead9b2358874748d916",
+    "docs/zai/evidence/a3-clip-probe/rtl-430-canvas430.png": "a6855c343925ec4f6732f474814c0bd291ffbfb80cf4f89f419f37f956ce4895",
+    "docs/zai/evidence/a3-clip-probe/rtl-525-canvas320-narrowest.png": "6f84cd7d0c121d4062b6fcb4613ba339450118d55e5ae7bd5e919a02c631172f",
+    "docs/zai/evidence/a3-clip-probe/rtl-525-canvas390-default.png": "d25498708b6746460d93394a30a519e2a8ea1f42e235ad6e97aa1ef1f1f28eda",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-320-ltr.png": "b54248dac002b8136e9bdcf7482dbd1046fdff45fdec6ea9ff1117217d9c8b55",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-320-rtl.png": "14ee9862c832f9a8adc8a59c13974fb3958d95cdf488b237b4afe12b1fe6cefd",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-360-ltr.png": "ea40c370bcccf615669365c1358f4f89d4571064464174ad2ec8cf3c817c03a1",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-360-rtl.png": "c8da00f450e1d07c4dd1e8520a60ec451b2fc5fef5fab952d85d9a00e7d25963",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-390-ltr.png": "0d46ec0888b2ce6d03fbf97ae1dc2a0bba8e5bdc7d927f5bbf81c6712169cb84",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-390-rtl.png": "45a2801f42ce6b3d8f61620a731839153ed7b9629bc677c7ff862a6095d59c36",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-430-ltr.png": "2423a6ebc3e812569c5135e113d081bba6456d04d42765c7f2b9aa8fbe4862ab",
+    "docs/zai/evidence/calendar-concept/agenda-collapsed-430-rtl.png": "d435a20eacf679cc74199c222de5a9ebe2b59c0f4968501c9c402bea1a93aaa0",
+    "docs/zai/evidence/calendar-concept/agenda-dayselected-390-ltr.png": "9e281386d07c131954d1715fd8c545bc24cab43905d77617ea17d8654f8cdc72",
+    "docs/zai/evidence/calendar-concept/agenda-dayselected-390-rtl.png": "6766a605fd25621b7d2005876267dcdad43e6381e9321ab9f14b146369d373a3",
+    "docs/zai/evidence/calendar-concept/agenda-dayselected-430-ltr.png": "5fbb1e66128fe261bc8c56234b3de18020db50d7d7970da43959e843d6d314c0",
+    "docs/zai/evidence/calendar-concept/agenda-dayselected-430-rtl.png": "3a1eb998f1424d6a60fa58b3eebe4a4790829b714a5aa931b4da6e8db63c1030",
+    "docs/zai/evidence/calendar-concept/agenda-open-320-ltr.png": "b86d0058f7e69071eb434856946f4baee3b277c27bfcf4e042e6aac32abec21b",
+    "docs/zai/evidence/calendar-concept/agenda-open-320-rtl.png": "9cd005f450518e3ccdaccd5e1b0cf77c3ad4976f441657d1a44d038e0e473fd3",
+    "docs/zai/evidence/calendar-concept/agenda-open-360-ltr.png": "7ef57b4d016b4814e047ab2e78172536af70a70b0efb708a6edd51b5c387c2b1",
+    "docs/zai/evidence/calendar-concept/agenda-open-360-rtl.png": "bd1c81d17c27043a7def10d793cca256af6659c0f119a3084f36137effb1c974",
+    "docs/zai/evidence/calendar-concept/agenda-open-390-ltr.png": "eae9d37c683b95d9afb6f7bd51ea0d7bc646d4cd7341ef588f8d24f8f5bdd328",
+    "docs/zai/evidence/calendar-concept/agenda-open-390-rtl.png": "f71e1e5341886a80358ef48e857525460a7f551eb50ef1feaa83ca2a07f27dd8",
+    "docs/zai/evidence/calendar-concept/agenda-open-430-ltr.png": "7840fc5479c0982c04c33f727795815ab416013a007bab10d6e9261b0d79efbe",
+    "docs/zai/evidence/calendar-concept/agenda-open-430-rtl.png": "673c963e10f70b3d0a94404d1ad5cebdac1b860998354f8038d4a57a0043bb13",
+    "docs/zai/evidence/calendar-concept/editor-add-390-ltr.png": "ced6069e5645bd330e21c53e2c4aca073d9db0a8f43135edfb1f5005f6aeebfa",
+    "docs/zai/evidence/calendar-concept/editor-add-390-rtl.png": "4f5c591292abab253604b6a011d6f1b5f2e74d1664444ae5e2d19f30f72cade6",
+    "docs/zai/evidence/calendar-concept/editor-add-430-ltr.png": "ed66a544c3bdd60fa0e976ca02b768e3b170b95bb029171ac65ddadd4bf5b917",
+    "docs/zai/evidence/calendar-concept/editor-add-430-rtl.png": "224fba2e5b40e91ec96a7135c533150c8d77889536661f6bb98f4f4490846538",
+    "docs/zai/evidence/calendar-concept/expanded-320-ltr.png": "def399666cfccd27b4097c7fc757dd3c0775f2384b42d02e537ffc7b0ac76bf0",
+    "docs/zai/evidence/calendar-concept/expanded-320-rtl.png": "58afab282cf4cba42450f8e71927319c7bad955516cb09f542806ac4b3821c36",
+    "docs/zai/evidence/calendar-concept/expanded-360-ltr.png": "b34b89809b6408a107f35c7f60cba904e8ae833bd6d60baf27cf65939d40ed9e",
+    "docs/zai/evidence/calendar-concept/expanded-360-rtl.png": "e0507f7faffc1023d8b0745e6d7102fe59e490b5bd5e273682cdf106fdc6dab8",
+    "docs/zai/evidence/calendar-concept/expanded-390-ltr.png": "c22f0c6dae5cc17bd8974542b29934c11ddc7b10bc5c0af580e9456f70cd6db9",
+    "docs/zai/evidence/calendar-concept/expanded-390-rtl.png": "ff021c7016a19f4d4a341226d22f8b7ee9ce2d41505af3f60fbafb2f1fdde9a2",
+    "docs/zai/evidence/calendar-concept/expanded-430-ltr.png": "0a2045ab006c8e6da8fadd862f1f81d81b635194f263cc191f7ad55dddb8e98f",
+    "docs/zai/evidence/calendar-concept/expanded-430-rtl.png": "b393b728cfdfdc9401dcc8c255bd9d7708a03db5465c244485f1f47c17b27220",
+    "docs/zai/evidence/calendar-contract/root-288-ltr.png": "8e07dd54e3a944a308fb1212532068270ca537564a016fdc51ad9d8a6448702d",
+    "docs/zai/evidence/calendar-contract/root-288-rtl.png": "155a16f7ac1b65edc57a4bab8c65362a56d7d378a74e7e6d007e16e03e73d825",
+    "docs/zai/evidence/calendar-contract/root-328-ltr.png": "92575d501d0f7e9d95c78c90ff245b17c1f785194a17f3fb1ff7d689f0b560bd",
+    "docs/zai/evidence/calendar-contract/root-328-rtl.png": "460064c21b7acad40126e6b94c10c03fb563168b7b2f9eb72ff1c8260c0752fe",
+    "docs/zai/evidence/calendar-contract/root-358-ltr.png": "c29c3c968ba160eb2f5dc3228fea02695fab35bd680bc37a4e220b58c2b515d0",
+    "docs/zai/evidence/calendar-contract/root-358-rtl.png": "a9c1a6f08562db837657ded9fab788601a5a6ab94d4705e026e5ca93772d8300",
+    "docs/zai/evidence/calendar-contract/root-398-ltr.png": "62a1d2530f0c62ae1c711b0e0bea68d029d3599d8d2bff664f0102954e61fdf1",
+    "docs/zai/evidence/calendar-contract/root-398-rtl.png": "238e2a630ec672e24448aef7cb053cbd11c09bfeb9800644347cbfd2b2547538",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-320-ltr.png": "f6be7fe08f589aff8549b72e0881d162ec5f499ab678d7c2733188441a33cabf",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-320-rtl.png": "4841f3b3bf81fc84872254879f7c7cf7b29773de4cdefc82545eab6871b815c6",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-360-ltr.png": "1083d951ca475bc1a9dc18d152a22dd648f5dce335f26292059e2e8b1dddd4d1",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-360-rtl.png": "a27ccd788b120a3f51d6e12857ac2edceb1db90a0191df11d49a248504e0dd12",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-390-ltr.png": "a1e71ddf452e3c7e030ccc97d4909de13472e2812d685fc6715e433a5b189ab1",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-390-rtl.png": "9fe3ee1ba109355e553567e6d340e635421f73b86c1016b4b8baafa14a573f6c",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-430-ltr.png": "1c10031c73e126018897900879a7e8a5cb7b0dcaf69d69351e95b7cc730b9225",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-browsing-430-rtl.png": "8ba56b09c78d68ec0036c2403fd508e0645e05e79538cfb7d66aa9c503b5421a",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-320-ltr.png": "f0dea643999bde3d59afdb13e15027ce86d5a943aa20185d65a4e2a984faa91a",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-320-rtl.png": "0251850568942cf647a8a2be2d03f76e9c9bfec3ecdf30f15d2ea92558836ceb",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-360-ltr.png": "889dc3cab8db899e289328aa488526ed74719593b9d8f7b93cf5e17fc0e09802",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-360-rtl.png": "91f0636f2b858c730e46f59bc8a1f3c34be1de6fa75256a5348592e210444177",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-390-ltr.png": "bdd53d5631b48d1fc1842fea56bea348748c19285883f0d4785d39138a2fac6b",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-390-rtl.png": "44f445ba3b33a853f61c43b40401c4bdbc4f331d72bc654825936e414e3ee9d3",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-430-ltr.png": "e87721248d0968c7ed7962def8e7dd6cfbfbf055e749921f94f154efcde003d1",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-day-430-rtl.png": "01c7e8ea152050dbd4b778003ae41aa8e27749cee4b6d3066df70803b8bdda64",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-320-ltr.png": "36bcb546819a4c97e62f0844d76801816d870ba7ac31ae73bbc0e49777973693",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-320-rtl.png": "c844b08c5c9cf030b20d621041d5b0b6ea1a453324d2bbd680581df85c97b2f1",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-360-ltr.png": "56f390982ce2af4e99e5d50dce33d34bf8bb6e7f9b10e15957c515ace1deef07",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-360-rtl.png": "95e4d4f1b65775d188efe1012aa69a1210cfae137aafd96f3c1a471e6bfdf459",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-390-ltr.png": "17401469872c02fcc398308bf2fec630d6b555f2078403c37c9ddd3482c3ba48",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-390-rtl.png": "21105f1414e6b40de7f41330370d6c74e1b2442ee301a3847348f008efe8b3ae",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-430-ltr.png": "52b06b666fa003e1ed6522ab05af811cf40f3006d0d34371a779baee81808549",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-empty-day-430-rtl.png": "33de9435360525a752fa9bb9994140ed417edb1ae38c1256052360215b3f72ac",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-320-ltr.png": "cc128aae991ca7716d160d30eebf08b1c2d0baeb6cde30b6213bd902170d431c",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-320-rtl.png": "0bd23dbc86ff77edf074fcc6fcd4e672742a719510f43f9c27d391f6b7885a61",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-360-ltr.png": "fbadbfcc8a36c333d6d560604d3f676eee9e3ed52599b574fcada42c4b1e710e",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-360-rtl.png": "cd51bb315ff6bb3dd3175e6dadef60e2e15e31a41953e7975cf3c972e6476d11",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-390-ltr.png": "58bd632623e8e0d411b8d78a29c220d965807be3f4b9444722517f46b3e7a85e",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-390-rtl.png": "df9535728d0cf15b59d0c0b2406b0ddb6873d8ac22898fe4c9d65c3ae98225d1",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-430-ltr.png": "36ac5d4c0b0dd096e5368329770b7f64665573901b06d723161e680bbaff3c1a",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-month-430-rtl.png": "8d6fb9f3c3224ee6033946797285f2c25e39e4e1953b34bba0878f50a350a3bc",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-320-ltr.png": "776f21628b68954a7114a8792c5d2eade09f69aa9b2fc7a2165338d13f90d42e",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-320-rtl.png": "2d1ea2ba960223de61010a2b254fc5cc8a8f6625b29d6d3f40d0b0050656e253",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-360-ltr.png": "8eb45d92b4b46c0573bed668f8e00643e7998ff9e637e91bdb7e481fcc62da12",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-360-rtl.png": "11f57a9ece50e225f927f1bbd7eee8f15ae4a5857ef5761f8212269486ecd17e",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-390-ltr.png": "cd62e44c8f6da4b2d2e24f9adfef49f9dcdff1e0d833e9899c4e594065421b34",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-390-rtl.png": "15165fce1ca8684d1ce6201a2eb659c0ace3fa55d41db20d6b08a1e7ab1e4c67",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-430-ltr.png": "c50943fba271438bc19cff3e581f8cc8215237d07cf2a6b93d9bcd0df910cc29",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/calendar-week-430-rtl.png": "734a3e9cd0f284e082898574de130f50dad9edb4b3c27dc6cae782550c09ff51",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/capture-report.json": "a39a9bd73ad8d90a3d1b92d1830b877b7aedcf180c23c43735adbe6f8d8d362c",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-320-ltr.png": "ad030cd521fbc1a9a36918da9199ddbc01a489e3f9cbb5acd527cf9299859459",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-320-rtl.png": "ad030cd521fbc1a9a36918da9199ddbc01a489e3f9cbb5acd527cf9299859459",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-360-ltr.png": "944588e697d2a25823384a625b13fbac3511148dc538687540b6937a0a8ae8f4",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-360-rtl.png": "944588e697d2a25823384a625b13fbac3511148dc538687540b6937a0a8ae8f4",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-390-ltr.png": "6365c9169b827ac931615a89dea10fec102d7be1539ac3714d377091adaf091a",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-390-rtl.png": "6365c9169b827ac931615a89dea10fec102d7be1539ac3714d377091adaf091a",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-430-ltr.png": "4c4ec7b9197af32079efa81ef6544feba411f9ee062dab205875471912e1c8ff",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-malformed-430-rtl.png": "4c4ec7b9197af32079efa81ef6544feba411f9ee062dab205875471912e1c8ff",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-320-ltr.png": "bcd2bb7fbb8d6bf0c93a9e0c6de2cc57ec8955049d04b1662c96e2b4f4bec3d4",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-320-rtl.png": "bcd2bb7fbb8d6bf0c93a9e0c6de2cc57ec8955049d04b1662c96e2b4f4bec3d4",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-360-ltr.png": "6b583424541169d39030726e832c507f32a0349c056afc0d88983bf068257617",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-360-rtl.png": "6b583424541169d39030726e832c507f32a0349c056afc0d88983bf068257617",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-390-ltr.png": "89684704b9eaaad0b5188b41638e0b973edd311d9ca81d3d8227d6242521d9ad",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-390-rtl.png": "89684704b9eaaad0b5188b41638e0b973edd311d9ca81d3d8227d6242521d9ad",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-430-ltr.png": "b1363e4e748de80483722c4ddf41d87b989e6a4b05111ab4a595b7cfc773bdfb",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-nodata-430-rtl.png": "b1363e4e748de80483722c4ddf41d87b989e6a4b05111ab4a595b7cfc773bdfb",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-320-ltr.png": "fe39a9c07970f615f6bdd45bfc12074c22226c1e4937d9ed69ed3901b4b219a3",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-320-rtl.png": "fe39a9c07970f615f6bdd45bfc12074c22226c1e4937d9ed69ed3901b4b219a3",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-360-ltr.png": "dd2ca15ef9095f822cff50801a6d67af240345adba643d602aafddb5681720d3",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-360-rtl.png": "dd2ca15ef9095f822cff50801a6d67af240345adba643d602aafddb5681720d3",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-390-ltr.png": "e205defa6de30f6570bff24ed8363c5e85d7a75ffb9437c0d01c4462dbb7fe0f",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-390-rtl.png": "e205defa6de30f6570bff24ed8363c5e85d7a75ffb9437c0d01c4462dbb7fe0f",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-430-ltr.png": "b4de3e8c2602768ae57793b90b7c9dcf353ad9ad2437c3c7bdb673a7bca59002",
+    "docs/zai/evidence/calendar-fidelity-donut-2026-10-25/donut-zero-430-rtl.png": "b4de3e8c2602768ae57793b90b7c9dcf353ad9ad2437c3c7bdb673a7bca59002",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/capture-report.json": "95840b1df2fd94b3d64eba7ccce9ab060afff9ebb3079a8138b122fb90d87b33",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-01-home-360x780.png": "57320b86b3b70efbe75e68eb0e09efb406d90d6054c6491663d83723057e2199",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-02-orders-month-360x780.png": "7b12d5d20c1368d4348b281efae7b18fa752efa9de1e6c322ad8d2c76c437414",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-03-orders-week-360x780.png": "f1829c672f93400d5091bb239a64027e5681e5d837df48cf57a637bc08327452",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-04-orders-day-360x780.png": "e56192c83a1860f3e076ea9dc482233564fb5561d9f62edce7d3ed68c98f5f6b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-05-orders-list-360x780.png": "cb0be7070d4a6dcf903d9be98ff7bdb56b7f61a6d94d82e2856dafbcceba3510",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-06-orders-list-expanded-360x780.png": "f4b6442cdc8abb7b81e197e5110fe5be9243ce164abe75f77cea5ba0d7f60a6b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-07-switching-expansion-360x780.png": "8cd6cb74bc8af2227ced668eb02219897be649c2a6b728697a5d03b963544be8",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-08-order-expanded-one-360x780.png": "2d36e7e004dee389ee7c5fdb0debd29f510686f1e2a1d58ee74a3cd665b37823",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-09-add-editor-360x780.png": "977adc8251665b4874ef3a209b28c1eb86793b4877b658250eb0f15b869da73b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-10-delete-dialog-360x780.png": "f1d2a19a4bd88f05c8a1fd315235c0ed089a313bb403fa46058986f75386ff06",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-11-month-picker-360x780.png": "1fc64eda59ae5d1a3d0da736179ef1e4ab855320be7618c9948406efbf9aa668",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-12-reports-360x780.png": "0a85d70f50f9b7a38d0e294924b7d9974a30e61e5d16a04f29ddc79fe6b6d677",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-13-account-360x780.png": "fe5fe2f47654b75a1672b445cc97981c175fc219728b5730cdc1db840c00590b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-14-full-showcase-360x780.png": "26b1a94ae9ab9f2ba2127bfa358e59ca58e17e9a84555e19d262685456013e0c",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-15-20orders-expanded-360x780.png": "d4dfcbb4bc7dd0cbd43e572aeeb77250e606f83f4c460fe7bf9772ccd087fa84",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-16-orders-200pct-360x780.png": "a8b4920f60a4918be3b56b37fe51df66b7b141b8823bf3a3687fa91e4db71682",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-orders-320x640.png": "e533b98dc8a80f01aa9e09c0bf82e619beaab0d1e88e796a0892f675f780b496",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-orders-320x780.png": "03a7572d4185e5a567fa4262aa1f821e005ef90b618506e5d5ed5df1de658ad1",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-orders-390x780.png": "49111ea8a7dc4bea757c47e26b822f96dc78b9a68c4cafa4926b05eff4a3d158",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/ltr-orders-430x780.png": "194c183f796db5209ef493ad0073a4a2fc60c39951a1e67aaab48ad04293897c",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-01-home-360x780.png": "d71b82756b1fa15450921aa1d2ab51f30cdfb093092ef6b4107da369695b147b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-02-orders-month-360x780.png": "7e82ae97572680ea21234841d41e94ce6979a3f88e495ebb85d8834b02242bc4",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-03-orders-week-360x780.png": "aa4b942e31c0dd1ec86713d2649ee73786adc864db96b64f99e48130fb8448d4",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-04-orders-day-360x780.png": "569a12710e6f009dd819cfed8423af2dbf03109b31466daef37a9771301c8a6c",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-05-orders-list-360x780.png": "76d44ef411f865c4b96f1d10d9104cec4ce88653d5d326ed1ef2fe6c3d0dc681",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-06-orders-list-expanded-360x780.png": "c5358eb6e0aeda21b4afc27200c9ebd0e914d68ed6b2db03c25f52593f5bc1d8",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-07-switching-expansion-360x780.png": "17fcd1cfdcad218464ad71f1c5a2b8ee195840d48d4f9b31f5e87ba563d7ba3d",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-08-order-expanded-one-360x780.png": "b9a955c4d516e75a45bc1d0ace6eaf851d98215000e0af7a32bb2351e7a7393e",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-09-add-editor-360x780.png": "b1e3e7a3cde77052949dfe1978071871aa56780920d8d8e4188eee74b8e8feb0",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-10-delete-dialog-360x780.png": "6755e25e76d32e03e98b75bc06e5f5fba9ee06264bb265a3d4709fac3e99e727",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-11-month-picker-360x780.png": "50a4c95f2dd1e83c1cbc7a14caed5befac03e4a69bb97db7d404ba06ba71c7f3",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-12-reports-360x780.png": "16d4d16233039b0a88d054066451b5e8688b275e3172b0d9b6ff3c6b508d4538",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-13-account-360x780.png": "a83226579cf1c31c0bea2cf320acade8303b34e4dcdf2f76191b611521b07267",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-14-full-showcase-360x780.png": "2a3e54a1f86e33a546563f5ac2d6a54b68bf27ecbd08715411fd06d68991e524",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-15-20orders-expanded-360x780.png": "3874e67a067fc8b3c53902298e61e5f318b79f129ff975893ccf335290338fa2",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-16-orders-200pct-360x780.png": "a8b4920f60a4918be3b56b37fe51df66b7b141b8823bf3a3687fa91e4db71682",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-orders-320x640.png": "e533b98dc8a80f01aa9e09c0bf82e619beaab0d1e88e796a0892f675f780b496",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-orders-320x780.png": "03a7572d4185e5a567fa4262aa1f821e005ef90b618506e5d5ed5df1de658ad1",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-orders-390x780.png": "49111ea8a7dc4bea757c47e26b822f96dc78b9a68c4cafa4926b05eff4a3d158",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/rtl-orders-430x780.png": "194c183f796db5209ef493ad0073a4a2fc60c39951a1e67aaab48ad04293897c",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/standalone-app-entry-360x780.png": "d71b82756b1fa15450921aa1d2ab51f30cdfb093092ef6b4107da369695b147b",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/standalone-orders-list-expanded-360x780.png": "c5358eb6e0aeda21b4afc27200c9ebd0e914d68ed6b2db03c25f52593f5bc1d8",
+    "docs/zai/evidence/calendar-list-accordion-2026-10-26/standalone-orders-month-360x780.png": "7e82ae97572680ea21234841d41e94ce6979a3f88e495ebb85d8834b02242bc4",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-01-home-360x780.png": "40f86408c9f22d0257b611731b3d89d05583c6f48eb476b8821b846cda3141df",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-02-orders-month-360x780.png": "0ab613fd9973e4f0bca141098af36780b725206c2e297bd936d5fab0aa643cf5",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-02-orders-month-fold-360x780.png": "97793f79a57dbd3531c7c18d18b45135be1390bd3995b6b187115804c1f55a50",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-03-orders-week.png": "1cdf5050806f3e60d6f0c551f3e8e5dc46c6422b37ecb66a00bf52edd3fd381b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-04-orders-day.png": "8c0169902e450dca97e05b236095bf79e4fb550d60644cc4dd5b451a0aacc7b0",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-05-next-month.png": "08f991a9384dfda5ef0d55da9ac2b8f9573a8b26e16156ece027db5cd59c08ac",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-06-order-details.png": "2be79ba427c46326c27c558b94c824b8335e44faf403dac3b7b48ccf663120f1",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-07-delete-dialog.png": "81ef1dbefe34a4ae09c928b6becfea8be31642822b814426e810318799aae4c4",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-08-add-editor.png": "a4f76113c5c84a783d4c6c65dfb946fb9a68aee59a38e525225887cbf83b4040",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-09-month-picker.png": "a26ac85affd66440cf4934412e7ad870442ef33456e8cc9a8c6ccaefc30565ae",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-10-reports.png": "91997886b8ed20768e6d32513852442d5fc9750e86fe0264ffc64295e522cf6e",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-11-reports-mix.png": "22dd3600e2f3a14740bb31a0144e024c5a5ed33f5a0d600b28ccb87292d6c98b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-12-account.png": "7ca05499db6e2c3dac29c13e1b281a1bf85fb332083514deeaf0e13ce17fe1e7",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-13-orders-200pct.png": "f81df083d25fd816c0a446e5ef390807c1476508908642add2d01fc5267bfd42",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-orders-320x640.png": "9beda3651c2042ee9dfc8f74951718b77298ccf69c3125bc6c895d323ec9da0d",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-orders-320x780.png": "754c4608b9d11020fe50b69b42e83ca7ee83a6d23a1c5ef002aa6d3f384021b4",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-orders-390x780.png": "f7960320d3823813644cd55056d8dcf40cd84a04dead5a1c2c2162b88bd34b98",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/ltr-orders-430x780.png": "97b901325b0a9733b9910a5f8202e140a87c7fb6e7a4d740715f324ae54ce025",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-01-home-360x780.png": "d71b82756b1fa15450921aa1d2ab51f30cdfb093092ef6b4107da369695b147b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-02-orders-month-360x780.png": "598710f8b62516a3d0b65893185204cb3c4c38266f7e41c889ffbf2b8fcc99d4",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-02-orders-month-fold-360x780.png": "8a196a4b92efd929797a8403bbe667005b24e903510c5f76a5b15aab22ece93e",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-03-orders-week.png": "6220758eb9d1b2f0da39a2d96620f8eeab2d468e0fdf03ddf1bf67aa24250183",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-04-orders-day.png": "084b62a8d3faaf9e37879d7bda4275b76511f16b37204b9c1400c8773c5e0c39",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-05-next-month.png": "2ecde08f368efca225ade50035540a5245bf52ed4aa337ffce890b6e700e6846",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-06-order-details.png": "0ea4fd0ff1395c2e2066ea7cc159575112ac484686a1d4b2ef6cd074e52ef845",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-07-delete-dialog.png": "828ad978e8972e3f90da7ec64d201d477953c64c5b90c2b3f57f79c3a82ea878",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-08-add-editor.png": "1a671605618fbf7062c95132b0560023ac9bc7cc15aa621def5db28019faafa7",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-09-month-picker.png": "8aaf88a81dc4e39a6c2714bb92e7cedb933032ad8b11acb5d32c73232ba2794e",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-10-reports.png": "ef4a8561a67f34ef5a2683ef16ac6b9e9a4008aaf306ff22feeac1d662e286f2",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-11-reports-mix.png": "06e9f1686f6ddd0b6e8b071a5f17b0327f76cffa91c09dfaa292091d397b005b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-12-account.png": "eb3805841b6e8ddfc124fe3a9b376d3780f164a57c5806bef25ce2b828259aaf",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-13-orders-200pct.png": "725ebd10e9bdb950ca2c1ebd4bbfc71c3f5ef54af85756132a61dc93f7f8b6fd",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-orders-320x640.png": "331c692e62b242a8c55b893a06606dd586cdfc670a9bae672691f2605700be97",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-orders-320x780.png": "845673ca27496bdd5205df8de8c4db6fb65944debecf5dd60005c176d44787c4",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-orders-390x780.png": "964eaee04e7452cc9656514159f5e754a769310467995c39955af8b5790b5d8c",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/rtl-orders-430x780.png": "555039774d634b1fe816b9e3de81d4c11f74f0e0fbb1ed80e74310063f14dd5a",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-360-ltr.png": "9d3b09cfdeeaf4221555da6c56636f8dcb4cba9c306a8b3c8aa86b39cfa4b41a",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-360-rtl.png": "da87e72c439d87c73cafe19871dd7826f72e31fbf08ee534e61f556942339a0c",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-account-360.png": "3837c13203ed876f39d0b53f9d44bcfe5391813a30ee9372aa31f2e6e432b49b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-calendar-month-360.png": "a5060b0d983aad1394b8e1d927e78e64347ef0e2635617f6d54e4a8f15f6c153",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-entry-360x780.png": "da87e72c439d87c73cafe19871dd7826f72e31fbf08ee534e61f556942339a0c",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/source-app-reports-360.png": "950e8214d2b6f718e562230302461068ab19568346497e3790a4d415c1a31650",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-360-ltr.png": "9d3b09cfdeeaf4221555da6c56636f8dcb4cba9c306a8b3c8aa86b39cfa4b41a",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-360-rtl.png": "da87e72c439d87c73cafe19871dd7826f72e31fbf08ee534e61f556942339a0c",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-account-360.png": "3837c13203ed876f39d0b53f9d44bcfe5391813a30ee9372aa31f2e6e432b49b",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-calendar-month-360.png": "a5060b0d983aad1394b8e1d927e78e64347ef0e2635617f6d54e4a8f15f6c153",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-entry-360x780.png": "da87e72c439d87c73cafe19871dd7826f72e31fbf08ee534e61f556942339a0c",
+    "docs/zai/evidence/calendar-refinement-2026-10-25/standalone-app-reports-360.png": "950e8214d2b6f718e562230302461068ab19568346497e3790a4d415c1a31650",
+    "docs/zai/evidence/chart-audit/bars-320-rtl.png": "4744c951804a71449ac9ec33b4f8b6b6a2c68826b29ab7faa98f28b5a0a216be",
+    "docs/zai/evidence/chart-audit/bars-390-rtl.png": "37a571996b04274105d27375570fc92921f7c8e088776c7cbdded5f17a2bcd6f",
+    "docs/zai/evidence/chart-audit/bubbles-320-rtl.png": "3ba4dcde0e16d2217a0bfa2e9704c84dc3cd883fbf04b42e9aec4435ee8eb89f",
+    "docs/zai/evidence/chart-audit/bubbles-390-rtl.png": "7d01f79363dc91cd0881b0a7c43a630c22f7bec1bcfab6488189bb591b657112",
+    "docs/zai/evidence/chart-audit/donut-320-rtl.png": "9b971d10132297481fece5d26a80981d25b88ce0b989ef9aa4059390581e8417",
+    "docs/zai/evidence/chart-audit/donut-390-rtl.png": "cf8a2b641527564a1980a7d4f5ddce78a0d46b26edc3ca2658c3a100292c5a3d",
+    "docs/zai/evidence/chart-audit/line-320-rtl.png": "a66b0f0e5b08180e888885215952b1ad04d41f8078ca2bca24e1e64c979c5133",
+    "docs/zai/evidence/chart-audit/line-390-rtl.png": "251fbba32d134022ec9627b713921e53dd8ee0306a33b50d8620ef8328089da8",
+    "docs/zai/evidence/chart-audit/main-metric-featured-320-rtl.png": "c1ed21b6c475211a89d56c81b7d4e2e5e1766dc8ee3b2d16363cd0f8e3987462",
+    "docs/zai/evidence/chart-audit/main-metric-featured-390-rtl.png": "422bcd9fc7d58420a9d6be3352cdd444a1752e494711c17e16c243180b691190",
+    "docs/zai/evidence/chart-audit/main-metric-rows-320-rtl.png": "797483d4e2c1f78c791b8b895fd2aaaeb39a29bfa6608137956ed5d14d65f02c",
+    "docs/zai/evidence/chart-audit/main-metric-rows-390-rtl.png": "af5f2e6e0c09bbda8b665ee47f89999a46f64872fd7da0999603d943098ec3a5",
+    "docs/zai/evidence/chart-audit/measurements.json": "7a9bffc800c0f862226cef633f97b3554f7936eb3dbb7b07c48c310b3b620337",
+    "docs/zai/evidence/chart-audit/metric-circles-320-rtl.png": "e22e7f65d06a7abc79087bc134dc7ee89c67375f4e16f81cee121b5c6e030272",
+    "docs/zai/evidence/chart-audit/metric-circles-390-rtl.png": "6eedd631293c1166c9fe330123453da82a2e31501f96878d5769446e45d51ce4",
+    "docs/zai/evidence/chart-audit/packed-circle-320-rtl.png": "8766340dc11a20ae27f675afe17dc2d77b0fa462178674b2218a323708835e37",
+    "docs/zai/evidence/chart-audit/packed-circle-390-rtl.png": "e5b45e42c698486f14a40c5877a105007a42cfc513baa37c2a9542a037feadcb",
+    "docs/zai/evidence/chart-audit/signed-bars-320-rtl.png": "a966a59ddb32d7d1241bb9dfc425e4d14b9d7be329e0f4422e365a2e3730c8f9",
+    "docs/zai/evidence/chart-audit/signed-bars-390-rtl.png": "dbc80bc599e41bba2ee6856496ed34188ff6e5c045eb71154918ede8e2d4aa45",
+    "docs/zai/evidence/chart-audit/signed-line-320-rtl.png": "2a7918ab30c4d0f476a39cd7441ee1846c9e9ddee6bf8e45ef0dbff296415880",
+    "docs/zai/evidence/chart-audit/signed-line-390-rtl.png": "e57ee51f12950c3b732d6683fc54b256b6b918e2518f4967af226397314b153b",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/account-360-rtl.png": "8e45d8b2012e276285a9d4c79affc44950435d7c92a5bc305e8fd33c2ab5bc89",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-day-360-ltr.png": "b7c1e353d2e13b8bb49aed61df24da4d0c2315af8bdeeb84378bff63c2fc7895",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-day-360-rtl.png": "d9821d0fe676f16f667f7790c32f820009b9d2302af5c9256bff4fc6372b87c3",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-month-360-ltr.png": "5a026b619d5c3c984e8628b7721b04e87a5c34faf5ce81a5680a9a32005226ee",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-month-360-rtl.png": "108787a8eecb95ab01fca057d468484922641c163cd7fea4387dc1c05ef63751",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-week-360-ltr.png": "b3805b18a30a6ee442962d33e1677f95e1933c18016c4fee55bb5a808c85b474",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/calendar-week-360-rtl.png": "5c0b4bab5b13651feac6686b68096fda3373fcfd07b3df4fbd635a821150c801",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/chart-states-review-surface-390-rtl.png": "8c7da1be14334b0d5ab2a43acd94ed3f202cc4472ddb1c64e50a84642e4c5297",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/editor-longtext-320-rtl.png": "28dd78d189776595748229cc9bb72d3e232ab11e99db2621aae4e001431ca2d2",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-320-ltr.png": "2944abb8c6de83a8a310069dbd34b1c8aa53b167133d8243537c2ab322bf5f68",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-320-rtl.png": "aec9bf5eff6a46dc71049fdfa919083bcd100ca5123c95204794e37c16ff5b92",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-360-ltr.png": "79211e5e15a28e6b473a348d801ef2502ace1442f3fcf7b80476e0e31451ffd0",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-360-rtl.png": "3dd6af873ff45f6bf3d340538dff86876f066e3fc2350cf6de909932fde1453f",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-390-ltr.png": "8f3633a36f47eca517f1b58a66ec7d34db939c9d90069c04abeebf9b3504079f",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-390-rtl.png": "be71554de4684ad8dbcf7f91cae73465cfdcc869763d7d10028e86650f7575d7",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-430-ltr.png": "1965681c22934c52eed5b3fdc9d231bb5f919245df57d336ba019f9118000cf8",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/entry-430-rtl.png": "34d47d5bde979edb7fc50fbda9d5f0284423f6930622029d15bbb79b8aa76a9b",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/orderbar-320-rtl.png": "35ffe6839120cde52eb954996ea3dcbf9ff53d012af7efa349591129b6a4f58e",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/orderbar-longtext-320-rtl.png": "70f6dd1556275459fe77252b7341fe5cdbe19990bea2c6d2abef62141924b5c9",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/reports-mix-360-rtl.png": "efe0f357ad69f83ffabf5beae9c3dc25150a314069f8d3d12f8fd6465b7b0bbf",
+    "docs/zai/evidence/clean-mobile-app-2026-10-25/reports-perf-360-rtl.png": "edc42fdfacb0b0be1e451a1efb91340e66c8ea57acb06610e553d8f4d1901706",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-320-ltr.png": "bd2118cc921205b1cf685116d66c758b7f1465efa55b190f3a2daef1fdc18704",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-320-rtl.png": "57d05fa7563c42c1e0010067520eecd5a5bd9c136d5b10b87ddcf07e1bd11a27",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-390-ltr.png": "1a52e57044c449652efa489481ef4bf1d21b19e01060d7b919fea3e73d1b138f",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-390-rtl.png": "5cc9416398c0c114c9c3a6174b1937e918fd369d8df42c75438bca2174671275",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-430-ltr.png": "3e0b8c56e1a14311902384c3514e0226736cdfdb064d87ddd58fa29dda92fa39",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-430-rtl.png": "11b0034cdd66072493febf1a7bd960ec542a7fc95057062a4d73a49500aa260f",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-320-ltr.png": "d3b1cb70f14434cc4fcda8df8530d2b24bb1c15593ee245c48023beb360f144d",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-320-rtl.png": "83d25069380fd38a655baceef797efa942ada1aac2d595e2348915de16e819a8",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-390-ltr.png": "e5ef7198fa281b63231fbb1f08e5b708af21ddc6bb73d8c5d27fd7e9e8ea37a0",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-390-rtl.png": "951f5b8b2f6a933ad09372f72ae6a41a3c7ae31dd9704181e4192018bddc3dc3",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-430-ltr.png": "f9027a6126100c82214383818648d4762d0693427a06826aff5fc20fbaccaff3",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-430-rtl.png": "73841bdac1b3466dc17148ead1f214078eca5e229fb04b1bf7bd63f165181af4",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-320-ltr.png": "c89d01ac1fb75a80a782ba86c7f636644f58ca0afe8dcaf93b7700a327c68472",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-320-rtl.png": "80f5906b5bbe6c0f37557f63da82aa4dca9ec4f830505b3e845d8af560e4c750",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-390-ltr.png": "5c174fc79579aeb866aeda2b0a10b4bf471384cfdd60c08a7948f05165c33685",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-390-rtl.png": "a697f1172273cd921dccd2acb23fa1d4e6c5220ef7e6945d9e8d9bb95ed8c9ec",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-430-ltr.png": "d187d22729f85fdad5bd79e4d668b06b39b3e7e7a5ed103815d2462192fb6c25",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-agenda-open-430-rtl.png": "96d862a0312102cdedfc32dbf09a3560de165b44c887daaedfb52eab8b9e391e",
+    "docs/zai/evidence/component-repair-2026-10-25/calendar-example-320-rtl.png": "65441cb1b67dc50a874ab57ade49edb7d6ad6a91ef22c795755d7ecbb880876f",
+    "docs/zai/evidence/component-repair-2026-10-25/capture-report.json": "17b38bc888edd1336f71d058ea7ba8b8d1b9bfe982e188f1078dd461cb24e4fd",
+    "docs/zai/evidence/component-repair-2026-10-25/data-section-320-ltr.png": "b7eb0894287ad6cfd3a8115d71e0d6d476216913e02e493844aa02848c88cebe",
+    "docs/zai/evidence/component-repair-2026-10-25/data-section-320-rtl.png": "5816713ba1a9bd1288d8ad6c0d8bfdf663d017ace7393e7253846615e4041999",
+    "docs/zai/evidence/component-repair-2026-10-25/data-section-390-ltr.png": "dd5241f924d96841c51b0f3822393a967178f566cddfd9fe51518e02ff029d32",
+    "docs/zai/evidence/component-repair-2026-10-25/data-section-390-rtl.png": "67c9987fdc20a0f8cdb9c4a2ff393dcc444b41004f13e886aa2c6ba722ff7e3d",
+    "docs/zai/evidence/component-repair-2026-10-25/donut-table-320-ltr.png": "583a06cf8732027031642dac063dd381985d9accaedc95e8a86d3a3a4b4d7151",
+    "docs/zai/evidence/component-repair-2026-10-25/donut-table-320-rtl.png": "60e0e6d37e77630fe0c1b206683db877464788bdfa7668bd1643a25283a14c5a",
+    "docs/zai/evidence/component-repair-2026-10-25/donut-table-390-ltr.png": "2926ab18c391432d09538f66dff2b9bf23ffccb7370be9159544824e14820e86",
+    "docs/zai/evidence/component-repair-2026-10-25/donut-table-390-rtl.png": "48138337c8b0a2437708ace36ebf84a31e5985f31042debbe3212bffa72b235e",
+    "docs/zai/evidence/component-repair-2026-10-25/metric-table-320-rtl.png": "722ca458ef703d1935f332514fd7387fdd2f38b5998bebfed397f4b18f9016c2",
+    "docs/zai/evidence/component-repair-2026-10-25/nodata-320-ltr.png": "5f280c5187aa9b1ef15c07a37ea0d91fa5e182321a9eed0e7b69b629722233b2",
+    "docs/zai/evidence/component-repair-2026-10-25/nodata-320-rtl.png": "ae36c918c295128108bba8369e4a41d618c5e8f2f545e92117fdd13ce9a95486",
+    "docs/zai/evidence/component-repair-2026-10-25/nodata-390-ltr.png": "8190688deed8288bb047288e80f5eb76668cd6bae7eb8a9ce95f87c7892dd8b4",
+    "docs/zai/evidence/component-repair-2026-10-25/nodata-390-rtl.png": "a08c1532837cb8eb3bffbb9e9fd901ab5ec5db9ce46605d5effdecb8b218a5af",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-320-ltr.png": "ffec188985401a4a3f13e1d6389ab72193ae7d97a61619756bef6c7fd7a0337d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-320-rtl.png": "b4a02fb6f0164ae75091cadcc937a033a93364324270369dc055f16d5aad5c4d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-360-ltr.png": "4a50d9a884dda2dcac830510385044b2e278474052ab8061d8a3c59cd3f72a44",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-360-rtl.png": "bce1d6054385491447c407ef3aa93fe9491c24814ec46e920c59ad7737137612",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-390-ltr.png": "d51a668803f79442359d82b26b194e3aedd0691e9d534341760bc67f02f1683b",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-390-rtl.png": "7789d725127a9d9994ca97b4a94ec700cfb7863eddb3ed24bc6c5eb3467aa6df",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-430-ltr.png": "07034b0fa35c5b1365d1ecabbde155ac4dc8dc15eeb612a4e3816d9ba0d18bd7",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/fixture-en-daypanel-430-rtl.png": "4c8d556bfb586e8c67519cff7b260e5751fd28703f39da24095679fadc34a8d5",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/metrics.json": "cac17b41cf34e818abb4e86b267795b82b98d2f5fe76df8139af2024accc9750",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-320-ltr.png": "ec3a954d0182d0e332c165213a6a9f9abc1bf7139074828af2939b100b64f08b",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-320-rtl.png": "6da6f8682f798f303171c557fda6a94a8513be33efe5198497e0a3e65089083a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-360-ltr.png": "78e13c07d35a4137c13afb5eccc4c138dac8b8d7f0755408cbb46d71b78b5191",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-360-rtl.png": "92032a0e00617677e515e743dea6ea66f28a7b773bc44763c2f4abea1028c255",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-390-ltr.png": "445d040eafb033b47abc346ccd338dee46570ac3938df48d0d026abc89b157db",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-390-rtl.png": "1ce0822ed594adc1c58d5dbf5c3293e1e74f8925fce9a538d40bd7a2a0aa8cf5",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-430-ltr.png": "e277f025ce43e5ea625e145237ef4f33b7c357fcc8d6d2bc033a8d63f78c049f",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/normal-daypanel-430-rtl.png": "7ae50722a27f02a9b7d92bb5346a6d571afa1a9680ddc9f85029b20e4dd04c92",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-320-ltr.png": "fe8e6d74b13a97c0771f1bdf579f317ebb795d9f40489e1a167d028bb9417dd4",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-320-rtl.png": "47d758fc919699062351a69fb6e9c7044787db43a5bf9e3d5cfb1d5a9e1fc58c",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-360-ltr.png": "af716c331f21971f89b05aa7403d16b7c186796d3fe21893f45f0f879ebe0c5d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-360-rtl.png": "33118a8d583364dcfc3f0f19a9bfa1c349788e83c5324d5a350151cef17e036a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-390-ltr.png": "53a09195ebfd9d5b06231a6d712a364bb756ce3666092bea8075ae804c1c29cd",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-390-rtl.png": "12c9e7b13ec27fdab00c349e68829649ecc068476b2543cca17b3a992f1d9fff",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-430-ltr.png": "ebac2db67215e1f18b06793ae429ed8cbd22da788cb7e4d4e3a51acb50bae8bb",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/showcase-month-430-rtl.png": "6980916bf698aab28103ca4162015595c013160dbb7314342ffe578e77e3b20e",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-320-ltr.png": "dd86215ccff5ee93a578272410192ac9855d2976e8449c5d933c963502133a2b",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-320-rtl.png": "666329742953915b8abf68e61f793e37293fe18b53c231b4a326eab38cdf6166",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-360-ltr.png": "3d670a0ad5d51c3d24d5ffd2e01e2a445a3f0417b799045b12a2f9a2e3a9a9cf",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-360-rtl.png": "97e6464b4697fbef588a101b6335a8940efe231b2e2339bcb918aec3c16f6f7a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-390-ltr.png": "08dac81b438b954063569f1435f0c0b09251587b382bf3ad741fa289bfc5096f",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-390-rtl.png": "bc23e01a8698ce0b49095cf29326fd271d150de46991bffb13af63f335a3e435",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-430-ltr.png": "066d5472576dc8741418380d9e654cddf5765892ac0ee4db1dd8399be7733a2a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/stress-daypanel-430-rtl.png": "826bd76295b4d7ce9a877a6ad77fe98d2880aede88e27e8960aac96b3841e1d2",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/type2-normal-daypanel-320-ltr.png": "bc2146cb969c42e711c08db5ec65a73320727cd83ace8881bfa77607f719ad24",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/type2-normal-daypanel-320-rtl.png": "3a6b71658464405a72f7dd8a0feeba90a319f9fa5094700f2de6f58659c08ef5",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/type2-stress-daypanel-320-ltr.png": "81f445f6a46e7ebbf8a1c061935a082d0b4aa8cf022d9a61d46f05884f99cc71",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/type2-stress-daypanel-320-rtl.png": "9ff443402ca03a1a50c93e7d9718e87aa8f03c2c2e0c8c1dd64671d62e42afc9",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/view-day-390-rtl.png": "4fdb76ace2451c38fa03165508af658309816e00ea4c8e7f7f27549d5eb38c5e",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/after/view-week-390-rtl.png": "a041129163a85ef39737a4e0b9488ae2a496c1c0decb8bbe50417724fc94b6f2",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-320-ltr.png": "1d419589b2d8eda0eb427e28068abbf63239a3c66c25b9af544bb781b373978e",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-320-rtl.png": "718a292922ab9cc81f1d7bd226f72af66dc616a0dfa2e9a2cf17b31edab402a2",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-360-ltr.png": "4bd2918666487f4f640cc05647c6f726d996a600c3e527768f552a1a00c3719d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-360-rtl.png": "baa6a41757644102b542d4b640cd31a6296c47b182ca3eaad2230f2319466024",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-390-ltr.png": "48ece48158bb93c9ef608ecf5281af71627b976d79fdd865523ebb1f5aaa63d1",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-390-rtl.png": "c953fd29bee60e11c405cabf2d1b3ad6ad41702e31bcb0d0a56afa9870585a87",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-430-ltr.png": "ccfae9971b9935c58d0629d5b3687f0f76510d9c93fe65a9dcaff8d0ac0c8b08",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/fixture-en-daypanel-430-rtl.png": "f3d0cacac8d086adaf98d67dbac6ade3c4298636e5daf495b88b45ba9e58d84c",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/metrics.json": "7619617322014ca23cdec9682334dc0e0006334306ab92a584a86e18d2db3d44",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-320-ltr.png": "b77f5a24b24cd720964e29221a57a3bccbff6000c5a0b0d64918ab9ba3f29e82",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-320-rtl.png": "d35afc746dd3777fb2d83ff96b8205e975e935e4d66230822d3b9f4fef095817",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-360-ltr.png": "f03dd99fd02769122ea59c2a62c02d0d6831801280d0cfa2fea90530fd2e2b20",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-360-rtl.png": "f22c52fea0ff965bb312180d6d498fa3bc401c2c976020c45fec0d6f7d5a699c",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-390-ltr.png": "44d6844f7f756d951e8c731e6d1ce20ed4b213715de15e5115628b651ba68fee",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-390-rtl.png": "3d14f436a57a034a4149baad1f621f5e148ed5efc066e70b41e25ef0efa76c6d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-430-ltr.png": "95ec35c59211110bbd95f555eb1de33fe04f89a5744f0705e6424dc58b619ed7",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/normal-daypanel-430-rtl.png": "f5e539d47a25fb670e2a244567278eb357a7a3ac33c69a6db030373caff69e3a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-320-ltr.png": "9ba4a36cc13ea349c5e9bb53b471ece54d42c336cac4f3bb18deadb9d08188eb",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-320-rtl.png": "ebf379910754df73da08aa59a036894f4a45a6d1d12ad4e65aba842b54f9bdb6",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-360-ltr.png": "77bacdeff2850fe0038b44ab8caab5acdbe1798d76a8916ad1a2be6337b068ac",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-360-rtl.png": "99b1ba8af182bee9a1bca93f18e1b2fae1a359cd999c945d4c34427f52f0070a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-390-ltr.png": "fe79abff5e8b6d09f55679bb5bb773654cced36b6c723e57e70f0eef622cc6fa",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-390-rtl.png": "f7b6410d3247635d1f55ceef69b742703aecd47de3bad6e76459855f49c37a65",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-430-ltr.png": "71fa72bf499c6448b5e6d5e0c8b31fbbe4e3e32caaaf00d8618b0462de553a27",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/showcase-month-430-rtl.png": "97af247c910aaa68418f9b69b7dc562ff49eaa706ab4e5f53820026c3f5c2776",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-320-ltr.png": "dad9be66559d220372b1663e78fa190947807d147f9fa907f36410b4c4aef2c5",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-320-rtl.png": "1911c08b0a75d66fbc6c37e7c2a8d483710af6219f32f98798521bfbe4e63621",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-360-ltr.png": "2c929698ba97cdc480644d1320aa2d1744ca0afdb29f51e4805d3be737f40305",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-360-rtl.png": "d1ebf30a6fe3896d2ec9c9a36564ab0d89c0ac9dc6687768ac8539e1fe9d0686",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-390-ltr.png": "1e30347e81cee0c6124fbef1d51b9bd92515cfa21d776954b1b15ec1b2cc7236",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-390-rtl.png": "0adc86759d66ac379e2c1198f032891c6dd415f4607d075af668aba40a22353f",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-430-ltr.png": "8bae03ce981aa7ac20fcd6f0e119de34cdd480df9b2f6bc0cadc13a1b1cd2747",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/stress-daypanel-430-rtl.png": "298b9040be2a95482260bb153dd40f23298fb4db61f0c54d329840e45778c55d",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/type2-normal-daypanel-320-ltr.png": "4daa8bbc31fc6c456538afc94142f53c8b604d542e0b3aa60f9d426a6a323e06",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/type2-normal-daypanel-320-rtl.png": "4ba3e784f5bf08c310705c1dbcdbee4ef6df9922fd6b66e50a0862c44091ec6f",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/type2-stress-daypanel-320-ltr.png": "44640c299a79b94e67d4c1dc3f282cdb6fdee0e5566884884f7d85b7c9b9591e",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/type2-stress-daypanel-320-rtl.png": "5e0b37e3e0c93f5ace2f731f1b58e82991407447ededda45fc70b29cb52ee2b7",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/view-day-390-rtl.png": "72db77e510c5e03bafa47ca2ac8e9ce654db09b06b4d888163312972a5d1438a",
+    "docs/zai/evidence/orderbar-containment-2026-10-25/before/view-week-390-rtl.png": "1e5ccd67e1ae3fce05b235584be3f862ae3480d01c0adb69dbbd3a75562bbd26",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS-2026-10-25.md": "5e44ab72b73c42a08ff04ef472cbc87c94a638c72e86f477c4a01bdfe2c51e75",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/README.md": "a60da9cc3985582c15123c035a0edc2c282df4edf8b00e695e5d3b47231bf32f",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/calendar-reference-implementation.html": "b24af2d4c15b91a6b3a68349d6183fb0a8aa0681ea5f681ed8b7c44fbf170c2f",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/calendar-target-latest-owner.png": "0e2635687d46475c802bd6be56cd2736733f79449bbf250b530ced1c33d72f6d",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/calendar-target.png": "bba6cc5b4ddd79415b4db4df0defd2a003831c08bdcddf18ff36a46b955c8391",
+    "docs/zai/references/owner-visual-concepts-2026-10-25/chart-target.png": "af0ee64e13732fd09813d100410a9e0545bc4f85126ca4f80e326272e47d7d7e",
+    "docs/zai/references/samsung-calendar-concept/01-full-month.png": "c7c240cdc1e7433daee8b6c9e5e1f6fa9a73e9a7c267aa9e636bde5d6634f302",
+    "docs/zai/references/samsung-calendar-concept/02-collapsed-agenda.png": "127008b88679b41d9e2635d8937ccd931f8d3d58fef39cb8264b77e71d7e3283",
+    "docs/zai/references/samsung-calendar-concept/03-expanded-month.png": "b4692322ffe919726ed5fb365aad57e38f408d369eeff9bf740955bd88ccf93c",
+    "docs/zai/references/samsung-calendar-concept/04-add-bottom-sheet.png": "4ddef6e65398a89b4112b05314f997f286aa11eabe63846131018ddec5de9611",
+    "docs/zai/references/samsung-calendar-concept/05-reminder-form.png": "e81d60c9974bcccd262c3836becf79e7ef1914d7cbd338af96f3668b34c85878",
+    "docs/zai/references/samsung-calendar-concept/README.md": "a6c654c07ad54d3205a6b9a977323448af67e23b26fc9b7043b9674b9b2787b6",
+    "previews/brand/index.html": "acbcddb92c837ab3dbe79742702b091df245762532a5e653a032717ac22c18fa",
+    "previews/buttons/index.html": "04d3ac723c230563c9b74b7d56ce241ecb0905e7564c80b4fb43710f4cf983c7",
+    "previews/carousel/example-usage.html": "dc6870c8661e914f6913c9180aa0ba7f30c9e2ff084c195f4591bf8ed2214e09",
+    "previews/carousel/index.html": "cfeffa111ca235c2e12298b4f4bbb986a80bc57b1a012b88812b0287dd64f62c",
+    "previews/chart-proposal/index.html": "1da7ae01bd66ee7e097d16bc909221f80867578888076d66379c78b133d43a00",
+    "previews/chart-proposal/orders.html": "795ff3582b8b17cef8179da5752bae7577959846e13c1f2502010189c0ff18af",
+    "previews/chart-proposal/orders.js": "69081b4f67bbec7aad8243b937a0bf00645e3fe93ba6211cf3f054ae36faae31",
+    "previews/chart-proposal/proposal.css": "8f457c2989fadda4f71c1ab44646ce69da176e36724d9ddd094e41036013a037",
+    "previews/chart-proposal/proposal.js": "da53d235e9d9fcc441850b1d20a3f1a1194a728ad397d7112efd4a66ea5fe95b",
+    "previews/compositions/compositions.css": "3fd3853ad46d65ba24388f4a16f24f0ad129f174bbe611918f8c4d012fea2841",
+    "previews/compositions/compositions.js": "c5eb90e701b2b30d19854569a7f915ea80b146c4af44409aa4d39c9445089fb3",
+    "previews/compositions/form-example.html": "e09f3606234d7b03df91eb6b64965457403e61d8366f6d51718192c58cb1e0b2",
+    "previews/compositions/index.html": "110ba12904dbbb6642fb9de0918c6db9b9643fc40181ad300e9f105c38a18b49",
+    "previews/compositions/row-composition.css": "2d31d52a53a170ab84501a6ded821f9e2b61a5c15567b0991fcfb10d499bd17c",
+    "previews/compositions/row-example.html": "50130c4a40caf6b3362217ef96702e17de6897a659be7eb93b57744801c64a6e",
+    "previews/compositions/summary-example.html": "ce568aa386f65dac38ad036339cec321e9d9dcd6b03a65dd700c4753d249cace",
+    "previews/data/example-usage.html": "1528aa97f1f74bf554faef97ccf0266b68fd31ea6e349e229c4e2279c3af1fdf",
+    "previews/index.css": "662733762f9419b68ae3367e40b8e557574a49e53f83dbced8f8cf04bf20adc1",
+    "previews/integration-boundaries/boundaries.css": "05cf5d1c14114a144ee33779d0dcd1b66b9cfcd115f88db9876a1854f4364dfd",
+    "previews/integration-boundaries/boundaries.js": "b438e93ff587e678f063fcc694c9cfb188654e07986729ca3b10e542ec6999db",
+    "previews/integration-boundaries/containers.html": "766e1e26bc5f0a79e9181c76f5f3839ed21a53157029de3b48a65587c6adddee",
+    "previews/integration-boundaries/index.html": "4cf7091f635eb0a7160980e3c366541c4932d5c25d5b8bf69c79b06076a89616",
+    "previews/integration-boundaries/layers.html": "25ded3d8933a71a962a34c859ffd860aa81a1684f66c99121c6db2f526aef594",
+    "previews/integration-boundaries/lifecycle.html": "2676373c76da662052166cc8aa0118595f811aefebe9e8bc9ac739ca0bf8a00b",
+    "previews/messages/index.html": "a5041b7f018fd18699aed641fa7b568aae727dffd392af7b96215f16766221ec",
+    "previews/readable-acceptance/acceptance.css": "ec14283de45397ecb2f09bc9d3336123da4a5faf5eaec84b59c9be0e68a4d14a",
+    "previews/readable-acceptance/acceptance.js": "8a168eab438bea8eac633c7ea1ed0cc9de7e77cad74fd5b4670b155a764a28cc",
+    "previews/readable-acceptance/index.html": "d90d16ffdab4e135645755a94bbc978e48206c98a383c2cd66de9ffba491ae5d",
+    "previews/readable-source/index.html": "e41a0a539fc9d576ec69a42f3b7b367c074a887f177dcaa024d62c726f82ecf8",
+    "previews/readable-source/preview.css": "850cd2533a13ff3b6b18c9a969034a370242b6cd0a12c2af87b0282a6cae17ae",
+    "previews/readable-source/preview.js": "30692157d88077ced081e577d84adf7cdb66c0ece576513560715e621aa2e158",
+    "previews/system/index.html": "2a3ca80de228970f969faadc8cf2b7f78df39d19917ae3354a0592dc578e3f1f",
+    "previews/system/system.css": "06399055917681fec941e83b54572643eec907037e0485267e58096159515e1e",
+    "previews/ui-system-showcase/README.md": "dd06c2797426038f1c43a02a07bd1531fc165e8de603c5640157897c7e6f86a0",
+    "previews/ui-system-showcase/index.html": "232ee70d9cd1b8e0a6bfd27f2ae76c1af0cc56f61568872036cec4187945d777",
+    "previews/ui-system-showcase/showcase.css": "d5de71e673fd06168bd209044b75cec5c8aea2bf5b8994d7f6f9167b76c8b030",
+    "previews/ui-system-showcase/showcase.js": "18394acdd76c10c4ed7ae9cab23ad9015874a4e5b686dcbebfe494a17f547d58",
+    "previews/ui-system-showcase/standalone.html": "c4505e655af52655b17967e261fc48879b7980f421ce3b9b9ed21611f2509550",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7",
+    "tools/build-chart-proposal-review.py": "df62b249b3f8c0a569263cbd701a55a014af400e1a7a96beb1236c595803b463",
+    "tools/build-ui-system-showcase-standalone.py": "5e7b7fc8c93192d074433a3a82c677c995de8048e03e5521a10f910ea6bc2a14",
+    "tools/calendar-contract-check.py": "448f0130feddd89f665864f096f2a60f86efc2381a059fa151d2b977ada2fd3b",
+    "tools/chart-mobile-check.py": "5df35bb5cbd39fe8eea9a102f2198d1ff3fd0886d9e32b4039b8574883acb361",
+    "tools/chart-proposal-check.py": "bf6854163ca8f4b3be46669938970780495649300c8453bf02fa98eb8e3c64ae",
+    "tools/clean-mobile-preview-check.py": "a14c9c6442e2e60b9bb106e8df0de2f35f82bb3bfad16ec79c14a35a9cd13313",
+    "tools/clone-lifecycle-check.py": "3814feb9d908ebce65d6037ae65283baa404e7c48bef4bdf5f03b5bec7d140dc",
+    "tools/complete-repair-chart-check.py": "2189f2b81b7ce0819326a6a8ad9d5987c16e457f99910ede9c68abbb1d816814",
+    "tools/complete-repair-lifecycle-check.py": "03bfa9852336a14c9e16c2d39f872e84070be569f0aab68a45d7d428c294ab83",
+    "tools/complete-repair-mobile-check.py": "efd0d62a2283abd971727f37f98e0c996e7b501b7925c4c3b5ba2321b817fd14",
+    "tools/component-audit-check.py": "d272ef74a6ae07be8c9265c246be52753465b6092d06beb980e7a11d3629c795",
+    "tools/component-catalog-build.py": "d3c61d906f0a722acd3368254d584aaf79ea4f3a5cace7ac4b06601633ef6619",
+    "tools/component-consumption-contract-check.py": "b5b25a943b09fa1987b5b951f43f6d93d8356003c34aa62b236ed22cd69cee3b",
+    "tools/composition-recipes-check.py": "bbae47237b910df54cdcb8fee6ba5eb82b59cb5113fe3fc108a8317dd403f632",
+    "tools/data-scale-state-check.py": "d83e3dba47b8d28ca6458370da9f8fa15335ed8583d3ea7785fee1a025981479",
+    "tools/evidence-repair-check.py": "3acef6e4c7e35bfe5ef9795631703e272ff0178be609885b702c6811c847df37",
+    "tools/integration-boundaries-check.py": "f054eb98d50790d50b674a27ee0f306529009e8eb9128e8b3513fbf9b624fc6d",
+    "tools/light-calendar-check.py": "93572e836490f869e71697d347ecf8cdf7f389f3167d0eae77e29e43dad97e13",
+    "tools/light-data-check.py": "00f4470931e13604e0092abc97f81678570e72a1dfc46dbc57c4abd75e6e6539",
+    "tools/light-evidence-capture.py": "3910fc8af3ec1a389f4a3d0221e2973ce303e4e3e95a29bf6f4670240ba02cbe",
+    "tools/light-release-check.py": "b07e4fc957f8c3f275ef34f513c44ddc07e8b8c68a3cb8b0f5fcffeb40750680",
+    "tools/light-static-check.py": "7b43332602a1a615de5a7045a1a1edda40535278a70cd9a6b55eefeda40ac5aa",
+    "tools/manifest-build.py": "23fe5fe5df52f59750ba3b57a0ced244ca420d52fe66048bb44178694ccbd01c",
+    "tools/numeric-chart-geometry-check.py": "185815def1fbb69d092999616e770ef5e19d11fbc699efbc450c6225650b6736",
+    "tools/preview-runtime-check.py": "9aced9c50cbc86b7e19f680c1c6b8fc68bc3bd6851423233683ccdd223a28a31",
+    "tools/professional-ui-repair-check.py": "cc9543a72cdfd92778961b73b6448c95e6b1c116cf1870b3cc3532174be9f661",
+    "tools/readable-acceptance-check.py": "004890176d427ee885f0ffc9be94b24bce312b771fc22a87dfa5ed9cf684e2f3",
+    "tools/readable-source-check.py": "3c4d14bcd85071b2ef026b43031a7ce7f797b77a14cd1b051e61e8c332ea97d7",
+    "tools/shared-actions-check.py": "0406a1cde2830309607a4edb93d14fae64475b067bd292b147e019760936f4ab",
+    "tools/standalone-checkout-check.py": "07d893d14598a1862108d8aecbe3837cc1c97223f1e2bda2f0e44cdeeaa07dd8",
+    "tools/ui-system-showcase-check.py": "02e3575b45f50e7b8d9700901aaa86fef4aa55fb11107dfc779d0cd24c31bfea",
+    "tools/ui-system-showcase-repair-check.py": "fc142b0aa4b47255c34fb6c556028bab712e74b05bb258e80ce149eb452d5379",
+    "tools/unit-context-check.py": "cdffb52e8cf5f098d7390b61f59094c5c3e45f02137c40b161fac5b81fc23dae",
+    "tools/ux-continuation-phase3-check.py": "b897b37cfb0c38b733bc893b6cd11ca0b8d19512585f620a20274bf752cdd116",
+    "tools/visual-closure-check.py": "8f9bbcdf8ababe5e6ba638f3dc33047d868b20ffe5e356a560b12bf3b00d327d"
+  },
+  "passed": 329,
+  "failed": 0,
+  "total": 329,
+  "records": [
+    {
+      "name": "javascript syntax: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/audit.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/slop_render.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/slop_scan.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/build-markdown-report.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/build-report.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/edge-sweep.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-browser-audit.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/slop-render-adapter.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/slop-static-adapter.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-inventory.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/visual-targeted-captures.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_audit.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_audit.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_palette.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/extract_copy.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/icon_normalize.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: assets/brand/micro-logo/v1/tools/export_brand.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: assets/fonts/fonts.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/access-gateway/access-gateway.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/access-gateway/access-gateway.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/account-settings/account-settings.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/account-settings/account-settings.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/buttons/buttons.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/buttons/buttons.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/carousel/carousel.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/carousel/carousel.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/compositions/form-surface.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/compositions/reading-context.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/compositions/reading-layout.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/data/data.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/data/data.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/data/packed-circle.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/data/packed-circle.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/fields/fields.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/fields/fields.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/info-strip/info-strip-peek.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/info-strip/info-strip-peek.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/info-strip/info-strip.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/info-strip/info-strip.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/info-strip/value-context.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/messages/messages.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/messages/messages.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/metric-comparison/metric-comparison.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/metric-comparison/metric-comparison.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/navigation/navigation.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/navigation/navigation.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/order-schedule/order-schedule.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/order-schedule/order-schedule.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/organization/operational-row.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/organization/organization.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/organization/organization.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/selection/picker.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/selection/picker.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/selection/selection.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: components/selection/selection.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/surfaces/curves.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: components/surfaces/surfaces.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: docs/audits/component-final-review-2026-11-11/checks/capture.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: docs/audits/component-final-review-2026-11-11/checks/focused.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: docs/audits/component-final-review-2026-11-11/checks/states.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: docs/audits/component-final-review-2026-11-11/checks/visual-focused.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: docs/audits/ux-continuation-phase2-2026-11-12/verify-contracts.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/board-base.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/buttons/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/buttons/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/carousel/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/carousel/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/chart-proposal/orders.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/chart-proposal/proposal.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/chart-proposal/proposal.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/compositions/compositions.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/compositions/compositions.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/compositions/row-composition.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/concepts/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/concepts/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/data/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/data/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/fields/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/fields/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/index.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/info-strip/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/integration-boundaries/boundaries.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/integration-boundaries/boundaries.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/messages/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/messages/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/navigation/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/navigation/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/organization/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/organization/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/readable-acceptance/acceptance.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/readable-acceptance/acceptance.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/readable-source/preview.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/readable-source/preview.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/selection/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/selection/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/surfaces/board.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/surfaces/board.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/system/system.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/system/system.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: previews/ui-system-showcase/showcase.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: previews/ui-system-showcase/showcase.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "javascript syntax: shared/icons.js",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: shared/motion.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CSS balanced delimiters: shared/tokens.css",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/assemble-components-package.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/browser_support.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/build-chart-proposal-review.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/build-components-package.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/build-ui-system-showcase-standalone.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/calendar-contract-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/chart-mobile-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/chart-proposal-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/clean-mobile-preview-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/clone-lifecycle-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/complete-repair-chart-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/complete-repair-lifecycle-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/complete-repair-mobile-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/component-audit-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/component-catalog-build.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/component-consumption-contract-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/component-mobile-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/composition-recipes-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/concepts-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/data-scale-state-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/evidence-repair-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/integration-boundaries-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/light-calendar-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/light-data-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/light-evidence-capture.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/light-release-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/light-static-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/manifest-build.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/numeric-chart-geometry-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/numeric-field-controls-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/numeric-geometry-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/numeric-micro-consistency-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/preview-runtime-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/preview-server.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/professional-remediation-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/professional-ui-repair-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/readable-acceptance-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/readable-source-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/shared-actions-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/split-components-package.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/standalone-checkout-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/ui-release-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/ui-system-showcase-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/ui-system-showcase-repair-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/unit-context-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/ux-continuation-phase3-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "python compile: tools/visual-closure-check.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed active links: AGENTS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: DESIGN.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: README.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: assets/SOURCES.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: assets/brand/micro-logo/README.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: assets/brand/micro-logo/USAGE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/access-gateway/access-gateway.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/access-gateway/access-gateway.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/access-gateway/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/account-settings/account-settings.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/account-settings/account-settings.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/account-settings/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/buttons/buttons.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/buttons/buttons.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/buttons/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/carousel/carousel.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/carousel/carousel.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/carousel/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/compositions/form-surface.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/compositions/form-surface.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/compositions/reading-layout.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/compositions/reading-layout.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/compositions/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/data/PACKED-PATTERN.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/data/data.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/data/data.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/data/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/data/packed-circle.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/data/packed-circle.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/data/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/fields/fields.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/fields/fields.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/fields/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/info-strip/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/info-strip/info-strip.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/info-strip/info-strip.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/info-strip/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/info-strip/value-context.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/info-strip/value-context.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/messages/messages.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/messages/messages.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/messages/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/metric-comparison/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/metric-comparison/metric-comparison.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/metric-comparison/metric-comparison.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/metric-comparison/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/navigation/navigation.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/navigation/navigation.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/navigation/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/order-schedule/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/order-schedule/order-schedule.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/order-schedule/order-schedule.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/order-schedule/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/organization/operational-row.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/organization/operational-row.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/organization/organization.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/organization/organization.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/organization/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/selection/picker.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/selection/picker.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/selection/selection.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/selection/selection.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/selection/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: components/surfaces/specification.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: components/surfaces/surfaces.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: components/surfaces/surfaces.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/BOUNDARY-FIXTURES.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/COMPONENT-API-CONTRACTS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/COMPONENT-CONSUMPTION.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/COMPONENT-INVENTORY.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/COMPOSITION-CONTRACTS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/COMPOSITIONS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/CURRENT-STATE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/FAMILY-CONSUMPTION.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/IMPLEMENTATION-VERIFICATION.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/READABLE-SOURCE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/SHARED-ACTIONS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/SYSTEM-CONTRACTS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/UI-DECISIONS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/UI-RELEASE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/UI-SYSTEM-SHOWCASE-COVERAGE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/UI-VISUAL-SYSTEM.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/VISUAL-ACCEPTANCE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/component-audit-2026-11-11/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/component-consumption-repair-2026-11-11/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/component-final-review-2026-11-11/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/final-source-review-2026-11-13/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-acceptance-2026-11-12/PHONE-CHECK.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-acceptance-2026-11-12/PHONE-OBSERVATIONS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-acceptance-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-acceptance-2026-11-12/review-cases.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-source-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/readable-source-2026-11-12/review.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/shared-actions-2026-11-12/ACTION-INVENTORY.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/shared-actions-2026-11-12/CANDIDATE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/shared-actions-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/shared-actions-2026-11-12/review.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/ux-continuation-phase1-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/ux-continuation-phase2-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/ux-continuation-phase3-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/audits/visual-closure-2026-11-13/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/proposals/charts-2026-11-12/ORGANIZATION-PASS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/proposals/charts-2026-11-12/PROPOSAL.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/proposals/charts-2026-11-12/STRUCTURED-REVIEW.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/proposals/charts-2026-11-12/review-orders.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/proposals/charts-2026-11-12/review.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/CALENDAR-NOTES.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/CHART-DECISIONS.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/INDEPENDENT-REVIEW.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/PLAN.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/RUNTIME-FIX.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/SHOWCASE-NOTES.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/review-evidence-repairs-2026-11-11/REPORT.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/FINAL-CALENDAR-FIDELITY-AND-DONUT-REPAIR-2026-10-25.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/FINAL-COMPONENT-REPAIR-AND-CONCEPT-AUDIT-2026-10-25.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/FINAL-COMPREHENSIVE-REPAIR-REPORT-2026-10-24.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/FINAL-FULL-UI-REVIEW-2026-10-24.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/FINAL-REPAIR-REPORT-2026-10-24.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/ZAI-CALENDAR-FIDELITY-AND-DONUT-CORRECTIVE-PROMPT-2026-10-25.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/ZAI-COMPONENT-LEVEL-REPAIR-AND-CONCEPT-AUDIT-PROMPT-2026-10-25.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/ZAI-COMPREHENSIVE-REPAIR-EXECUTION-PROMPT-2026-10-24.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS-2026-10-25.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/README.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/calendar-reference-implementation.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: docs/zai/references/samsung-calendar-concept/README.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/brand/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/buttons/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/carousel/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/carousel/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/chart-proposal/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/chart-proposal/orders.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/chart-proposal/proposal.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/chart-proposal/proposal.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/compositions/compositions.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/compositions/compositions.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/compositions/form-example.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/compositions/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/compositions/row-composition.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/compositions/row-composition.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/compositions/row-example.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/compositions/summary-example.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/data/example-usage.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/index.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/index.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/integration-boundaries/boundaries.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/integration-boundaries/boundaries.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/integration-boundaries/containers.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/integration-boundaries/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/integration-boundaries/layers.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/integration-boundaries/lifecycle.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/messages/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/readable-acceptance/acceptance.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/readable-acceptance/acceptance.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/readable-acceptance/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/readable-source/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/readable-source/preview.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/readable-source/preview.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/system/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/system/system.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/system/system.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/ui-system-showcase/README.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/ui-system-showcase/index.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: previews/ui-system-showcase/showcase.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: previews/ui-system-showcase/showcase.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "changed active links: previews/ui-system-showcase/standalone.html",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "defined required CSS tokens: shared/tokens.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no new hardcoded CSS palette: shared/tokens.css",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "legacy Dark values retained unchanged and gated inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "official accent and primary unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "logo v2 and official skills unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no removed source or dead removed-chart imports",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "branch descends from recorded main",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "git diff --check (repository-owned files)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no high-signal credential added in diff",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "limits": [
+    "CSS check is structural, not a full standards parser.",
+    "Secret scan covers selected high-signal diff signatures, not arbitrary secrets.",
+    "No Dark or System-dark execution."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "startCommit": "2946fad108e5fec2f00104e233decbb7e58c2855",
+  "workingTree": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/component-catalog-build.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "Catalog: 14 families, 8 explicit variants, 4 compositions, paths and inventory OK",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-ui-system-showcase-standalone.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "ICON CHECK OK: 24 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-chart-proposal-review.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "review.html: byte-identical PASS\nreview-orders.html: byte-identical PASS\nreview.html: byte-identical PASS\nreview-cases.html: byte-identical PASS\nreview.html: byte-identical PASS",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "browserGates": {
+    "count": 16,
+    "passed": 894,
+    "failed": 0
+  },
+  "protectedFilesUnchanged": 170,
+  "phone": "Deferred; not passed",
+  "deferred": [
+    "D01/UX-06",
+    "UX-07",
+    "UX-08"
+  ],
+  "static": {
+    "passed": 329,
+    "failed": 0
+  },
+  "manifest": "Generated and read-only checked after evidence archive; sealed record then regenerated and checked before commit.",
+  "evidenceNote": "Gates ran on the working source before commit. Browser hashes bind implementation at execution. Static hashes of evidence files describe their state during static execution, not a recursive final self-hash. Final MANIFEST binds all delivered evidence."
+}

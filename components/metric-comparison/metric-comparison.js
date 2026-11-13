@@ -452,12 +452,12 @@
         'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared) {
       max = declared.value;
-      userText = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = 'الأشرطة حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      userText = 'الأشرطة حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (hasKnown) {

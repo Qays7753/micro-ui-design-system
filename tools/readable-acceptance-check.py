@@ -23,7 +23,10 @@ def main():
         p=browser.new_page(viewport={'width':360,'height':780},is_mobile=True,has_touch=True,device_scale_factor=1,color_scheme='light',locale='ar',reduced_motion='reduce')
         p.on('pageerror',lambda e:errors.append(str(e)));p.on('console',lambda m:errors.append(m.text) if m.type=='error' else None);p.on('response',lambda r:errors.append(str(r.status)+' '+r.url) if r.status>=400 else None)
         def ev(js):return p.evaluate(js)
-        def go():p.goto(f'http://127.0.0.1:{server.server_port}/previews/readable-source/index.html',wait_until='networkidle');ev('document.fonts.ready')
+        def go():
+            p.goto(f'http://127.0.0.1:{server.server_port}/previews/readable-source/index.html',wait_until='networkidle');ev('document.fonts.ready')
+            # Exercise the documented opt-in using its actual preview control.
+            p.locator('#reading-options > summary').tap();p.locator('#preview-sales-selection').tap();p.locator('#reading-options > summary').tap();p.locator('#distribution-example > summary').tap()
         def shot(name,selector):p.locator(selector).screenshot(path=str(out/(name+'.png')))
         def geometry(name,selector):
             d=p.locator(selector).evaluate('''e=>{const b=e.getBoundingClientRect();return {left:b.left,right:b.right,width:b.width,scroll:document.documentElement.scrollWidth,viewport:innerWidth}}''');measurements.append(dict(name=name,**d));ck(name,d['left']>=-1 and d['right']<=d['viewport']+1 and d['scroll']<=d['viewport'],d)
@@ -55,9 +58,9 @@ def main():
         ev('''window.testGroup=document.createElement('section');testGroup.className='m-reading-group';testGroup.dataset.readingContext='acceptance-unit-label';testGroup.dataset.unit='د.أ';testGroup.innerHTML='<h2 class="m-reading-group__title">قيمة بسياق وحدة</h2><div id="caption-clip"><p id="acceptance-unit-label">هذا الأسبوع · د.أ</p></div><p><bdi dir="ltr">150</bdi> <span data-reading-unit="د.أ">د.أ</span></p>';document.querySelector('main').append(testGroup);window.caption=document.querySelector('#acceptance-unit-label');window.unit=testGroup.querySelector('[data-reading-unit]');window.clip=document.querySelector('#caption-clip');MicroReadings.sync(testGroup)''')
         ck('Visible complete caption permits context',ev("unit.classList.contains('m-reading-unit--contextual')"))
         ev("clip.style.cssText='height:0;overflow:hidden';MicroReadings.sync(testGroup)")
-        ck('Ancestor-clipped caption restores unit',ev("!unit.classList.contains('m-reading-unit--contextual')"),ev("({captionHeight:caption.getBoundingClientRect().height,clipHeight:clip.getBoundingClientRect().height,unitClass:unit.className})"));shot('ancestor-clipped-context', '.m-reading-group:last-of-type')
+        ck('Ancestor-clipped caption restores unit',ev("!unit.classList.contains('m-reading-unit--contextual')"),ev("({captionHeight:caption.getBoundingClientRect().height,clipHeight:clip.getBoundingClientRect().height,unitClass:unit.className})"));shot('ancestor-clipped-context', '[data-reading-context="acceptance-unit-label"]')
         ev("clip.removeAttribute('style');caption.innerHTML='هذا الأسبوع <span hidden>د.أ</span>';MicroReadings.sync(testGroup)")
-        ck('Hidden descendant cannot supply a currency caption',ev("!unit.classList.contains('m-reading-unit--contextual')"),ev("({visibleCaption:caption.innerText,textContent:caption.textContent,unitClass:unit.className})"));shot('hidden-currency-context','.m-reading-group:last-of-type')
+        ck('Hidden descendant cannot supply a currency caption',ev("!unit.classList.contains('m-reading-unit--contextual')"),ev("({visibleCaption:caption.innerText,textContent:caption.textContent,unitClass:unit.className})"));shot('hidden-currency-context','[data-reading-context="acceptance-unit-label"]')
         ev("caption.innerHTML='هذا الأسبوع <span style=\"opacity:0\">د.أ</span>';MicroReadings.sync(testGroup)")
         ck('Transparent descendant cannot supply a currency caption',ev("!unit.classList.contains('m-reading-unit--contextual')"))
         ev("caption.innerHTML='هذا الأسبوع <span style=\"position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)\">د.أ</span>';MicroReadings.sync(testGroup)")

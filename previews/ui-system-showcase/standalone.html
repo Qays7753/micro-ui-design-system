@@ -6147,7 +6147,7 @@ body {
   font-size: var(--micro-secondary-size);
   font-weight: var(--micro-weight-medium);
 }
-.showcase-brand__logo { display: block; width: 92px; height: 32px; object-fit: contain; object-position: start center; }
+.showcase-brand__logo { display: block; width: 96px; height: 32px; object-fit: contain; object-position: start center; }
 .showcase-brand__rule { width: 1px; height: 20px; background: var(--micro-border-divider); }
 
 .showcase-header__eyebrow {
@@ -6653,7 +6653,7 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
 .brand-proof__plate figure {
   display: grid;
   justify-items: center;
-  gap: 3px;
+  gap: 8px;
   min-width: 0;
   margin: 0;
 }
@@ -6670,8 +6670,8 @@ body[data-view="overview"] .showcase-footer p:not(:first-child) { display: none;
   .brand-proof { width: calc(100% - 32px); padding: 12px; }
   .brand-proof__head { display: grid; }
   .brand-proof__head > p { max-width: none; }
-  .brand-proof__plate { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px; padding-inline: 8px; }
-  .brand-proof__plate img { height: 26px; }
+  .brand-proof__plate { grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); padding-inline: 8px; }
+  .brand-proof__plate img { width: 96px; height: 30px; }
   .brand-proof__plate figure:last-child img { width: 24px; height: 24px; }
 }
 
@@ -7564,7 +7564,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         <p class="sc-section__kicker">BRAND ASSETS · V2</p>
         <h2 id="brand-proof-title">عينات الشعار المعتمدة</h2>
       </div>
-      <p>أصول عربية وإنجليزية ورمز مستقل، كما وردت. هذه معاينة استخدام وليست قاعدة رسمية للحجم الأدنى أو المسافة الآمنة.</p>
+      <p>أصول v2 الأصلية. <a href="../../assets/brand/micro-logo/USAGE.md">قاعدة الاستخدام الرقمي</a>: القفل <bdi dir="ltr">96×30</bdi> والرمز <bdi dir="ltr">24×24</bdi> كحد أدنى؛ المساحة الخالية8 أو ربع الارتفاع، أيهما أكبر. <a href="../brand/index.html">معاينة الحدود الدنيا</a>.</p>
     </div>
     <div class="brand-proof__plate" data-theme="light" role="group" aria-label="تطبيقات الشعار على سطح فاتح">
       <span class="brand-proof__mode">فاتح · full-color</span>
@@ -14745,12 +14745,12 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
         'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
     } else if (declared) {
       max = declared.value;
-      userText = 'مقياس مشترك: حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = 'الأشرطة حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = 'مقياس مشترك تلقائي: حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + ' (أكبر مقدار معلوم).';
+      userText = 'الأشرطة حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
         'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
     } else if (hasKnown) {
