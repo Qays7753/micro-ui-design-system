@@ -1,0 +1,408 @@
+{
+  "commitAtRun": "aed8bce26960b75723ac89d4cd9c672b6a5ee475",
+  "workingTree": true,
+  "physicalDevice": false,
+  "browser": "156.0.8078.79",
+  "scope": "Phone-only Light360x780 RTL/touch; targeted320 actions; directional360 LTR; normal/reduced motion; no Dark/desktop layout",
+  "passed": 54,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Programmatic request is synchronously vetoed without state/focus/scroll change",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Escape, close button and backdrop request the documented reasons once",
+      "passed": true,
+      "detail": [
+        {
+          "reason": "programmatic-request",
+          "trigger": null
+        },
+        {
+          "reason": "escape",
+          "trigger": "sample-note"
+        },
+        {
+          "reason": "close-button",
+          "trigger": ""
+        },
+        {
+          "reason": "backdrop",
+          "trigger": "form-backdrop"
+        }
+      ]
+    },
+    {
+      "name": "Backdrop keep sends no request",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reentrant request is ignored rather than dispatched twice",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Absent guard keeps normal closing, returns true and restores opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Closed, invalid and null requests are no-ops",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Dirty policy is supplied by the consumer, opening one named confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "A request cannot dismiss an underlying layer past its top confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Confirmation controls360",
+      "passed": true,
+      "detail": {
+        "left": 0,
+        "right": 360,
+        "width": 360,
+        "height": 218.53125,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Keep editing preserves input, restores focus and maintains the parent lock",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Discard closes confirmation then form once and restores page",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Explicit accepted-result command does not ask for confirmation again",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cleanup during a veto cannot be prevented or leave stale scroll/inert",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reopening during dispatch invalidates the old request generation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Direct Navigation cleanup during closing also hides its pending backdrop",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Action targets360",
+      "passed": true,
+      "detail": {
+        "left": 0,
+        "right": 360,
+        "width": 360,
+        "height": 324.53125,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Mobile action list uses a named dialog and native commands, without menu/listbox roles",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Phone Tab stays trapped and skips the disabled command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disabled command does not close or dispatch",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Row command emits exactly once after closed and restores its opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Same sheet receives a fresh card context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Denied close never emits a command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Retry after veto can emit exactly one command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Empty consumer state remains readable with an explicit Cancel",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Hidden commands cannot dispatch programmatically",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cancel sends no command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Phone keyboard activation retains native button behavior",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cloned list binds once with its own opaque context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disconnect aborts stale commands and releases the layer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reconnect initializes a clean lifetime once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Detached sheets cannot lock the page",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Narrow320 long action labels",
+      "passed": true,
+      "detail": {
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 344.53125,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "Long list scrolls inside the mobile sheet while Cancel stays reachable",
+      "passed": true,
+      "detail": {
+        "scroll": 1772,
+        "client": 578,
+        "top": 109.203125,
+        "bottom": 780,
+        "cancelTop": 127.46875,
+        "cancelBottom": 175.46875
+      }
+    },
+    {
+      "name": "Directional LTR actions360",
+      "passed": true,
+      "detail": {
+        "left": 0,
+        "right": 360,
+        "width": 360,
+        "height": 344.53125,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Animated close does not emit early or accept repeat taps",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Animated close emits one intent after completion",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Normal motion preserves observable closed before request ordering",
+      "passed": true,
+      "detail": [
+        "closed",
+        "request"
+      ]
+    },
+    {
+      "name": "Reopen cancels a stale pending action and leaves the new layer open",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cleanup during animation never dispatches or leaves a backdrop or page lock",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Reopen during closed cancels the queued intent instead of targeting new context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Initial external summary names selected day with count2 and unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Changing summary scope does not write Calendar DOM or state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Month navigation updates monthly count while keeping selected day independent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selected-day summary does not silently follow displayed month",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "User date selection updates summary from public state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "A selected day without matching records is a known zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Consumer explicitly syncs a silent setter without inventing events",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "External context360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 131.953125,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Loading never shows a stale number as a new period reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing reading after error is not a fake zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Known empty source is an honest zero with its unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Recovery replaces empty reading using current scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Consumer cleanup aborts all listeners before Calendar destruction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "Confirmation controls360",
+      "left": 0,
+      "right": 360,
+      "width": 360,
+      "height": 218.53125,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Action targets360",
+      "left": 0,
+      "right": 360,
+      "width": 360,
+      "height": 324.53125,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Narrow320 long action labels",
+      "left": 0,
+      "right": 320,
+      "width": 320,
+      "height": 344.53125,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "Directional LTR actions360",
+      "left": 0,
+      "right": 360,
+      "width": 360,
+      "height": 344.53125,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "External context360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 131.953125,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    }
+  ],
+  "sourceSha256": {
+    "components/navigation/navigation.js": "63c347d236e93deacd962a08423f182c0c21656427e03daa3acef0e0d432c2af",
+    "components/navigation/action-sheet.js": "24efde73a17922461bd048f6fa092221c3be22bf4296fbb665cae3d6845c3d70",
+    "components/navigation/action-sheet.css": "ff2376b6c515bef89e5c2c213b4dd3cdcd4eeb74ae1e348805c4794ef54bd7db",
+    "previews/mobile-capabilities/form.js": "acce1c147e962b36fe7d41a7ee66b1dee95a19347f97dee48ae7da744b248e2f",
+    "previews/mobile-capabilities/actions.js": "80b112c7ed5682299ca58d167b95d0efb1cb29e7a63c9cb8138faaf322cad0f5",
+    "previews/mobile-capabilities/calendar-summary.js": "173338d37d391735da479296ea32e76a9ca68af5feaaaf781445d9c5e28db475"
+  }
+}

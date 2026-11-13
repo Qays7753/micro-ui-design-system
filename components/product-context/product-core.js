@@ -14,6 +14,14 @@
       ? JSON.stringify([scope.contextId, scope.workspaceId || null, scope.roleId, scope.kind || 'business']) : null;
   }
   function copy(value) { return structuredClone(value); }
+  function draftOwner(value) {
+    return value ? JSON.stringify([value.mode || null, value.id == null ? null : value.id, value.draftKey || null]) : null;
+  }
+  function visibilityRevoked(before, after) {
+    return !!before && ['addresses','contact','evidence'].some(function (name) {
+      return before.visibility && before.visibility[name] === true && !(after.visibility && after.visibility[name] === true);
+    });
+  }
   function node(tag, cls, text) {
     var el = document.createElement(tag); if (cls) el.className = cls;
     if (text !== undefined && text !== null) el.textContent = String(text); return el;
@@ -152,7 +160,7 @@
     }
     function replace(next) {
       if(destroyed)return false;var previous=model&&key(model.scope);var nextModel=copy(next||{});nextModel.phase=nextModel.phase||'ready';if(nextModel.phase==='local-saved'&&nextModel.destination!=='manage')nextModel.phase='uncertain';if(!Object.prototype.hasOwnProperty.call(phases,nextModel.phase))nextModel.phase='uncertain';nextModel.connection=nextModel.connection||'online';if(['online','offline','weak','local'].indexOf(nextModel.connection)<0)nextModel.connection='offline';
-      var purge=previous!==key(nextModel.scope)||forbidden.indexOf(nextModel.phase)>=0||nextModel.clearDraft===true||!Array.isArray(nextModel.permissions)||nextModel.permissions.indexOf('view')<0;
+      var purge=previous!==key(nextModel.scope)||draftOwner(model)!==draftOwner(nextModel)||visibilityRevoked(model,nextModel)||forbidden.indexOf(nextModel.phase)>=0||nextModel.clearDraft===true||!Array.isArray(nextModel.permissions)||nextModel.permissions.indexOf('view')<0;
       disposeConfirmation();epoch++;pending=null;if(purge){releaseFiles();ui.draft=Object.create(null);suppressFocus=true;}model=nextModel;render();return true;
     }
     var api={

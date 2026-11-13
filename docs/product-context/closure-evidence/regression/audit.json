@@ -1,0 +1,624 @@
+{
+  "browser": "156.0.8078.79",
+  "passed": 67,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "review selector covers every catalog family exactly once",
+      "passed": true,
+      "detail": [
+        "buttons",
+        "fields",
+        "selection",
+        "organization",
+        "data",
+        "messages",
+        "navigation",
+        "surfaces",
+        "info-strip",
+        "metric-comparison",
+        "account-settings",
+        "access-gateway",
+        "order-schedule",
+        "carousel"
+      ]
+    },
+    {
+      "name": "buttons: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-buttons",
+            "w": 328,
+            "h": 551,
+            "family": [
+              "buttons"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fields: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-fields",
+            "w": 328,
+            "h": 1120.859375,
+            "family": [
+              "fields"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "selection: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-selection",
+            "w": 328,
+            "h": 1192.953125,
+            "family": [
+              "selection"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "organization: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-organization",
+            "w": 328,
+            "h": 756.015625,
+            "family": [
+              "organization"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "data: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-data",
+            "w": 328,
+            "h": 4077.328125,
+            "family": [
+              "data"
+            ]
+          },
+          {
+            "id": "sc-readable-data",
+            "w": 328,
+            "h": 542.171875,
+            "family": [
+              "data"
+            ]
+          },
+          {
+            "id": "sc-packed",
+            "w": 328,
+            "h": 971.171875,
+            "family": [
+              "data"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "messages: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-messages",
+            "w": 328,
+            "h": 1560.90625,
+            "family": [
+              "messages"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "navigation: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-navigation",
+            "w": 328,
+            "h": 1018,
+            "family": [
+              "navigation"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "surfaces: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-surfaces",
+            "w": 328,
+            "h": 662.9375,
+            "family": [
+              "surfaces"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "info-strip: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-info-strip",
+            "w": 328,
+            "h": 1180.734375,
+            "family": [
+              "info-strip"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "metric-comparison: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-readable-metric",
+            "w": 328,
+            "h": 259.96875,
+            "family": [
+              "metric-comparison"
+            ]
+          },
+          {
+            "id": "sc-metric",
+            "w": 328,
+            "h": 2598.375,
+            "family": [
+              "metric-comparison"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "account-settings: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-account",
+            "w": 328,
+            "h": 338.984375,
+            "family": [
+              "account-settings"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "access-gateway: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-gateway",
+            "w": 328,
+            "h": 532.984375,
+            "family": [
+              "access-gateway"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "order-schedule: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-ocal",
+            "w": 328,
+            "h": 1105.078125,
+            "family": [
+              "order-schedule"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "carousel: review is isolated, rendered and within 360px",
+      "passed": true,
+      "detail": {
+        "width": 360,
+        "scroll": 360,
+        "sections": [
+          {
+            "id": "sc-carousel",
+            "w": 328,
+            "h": 457.03125,
+            "family": [
+              "carousel"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "donut: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 296,
+        "h": 255.984375,
+        "visible": true,
+        "scroll": 296,
+        "client": 296,
+        "drawn": 1
+      }
+    },
+    {
+      "name": "main-metric-featured: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 296,
+        "h": 555.890625,
+        "visible": true,
+        "scroll": 296,
+        "client": 296,
+        "drawn": 2
+      }
+    },
+    {
+      "name": "bubbles: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 296,
+        "h": 329.09375,
+        "visible": true,
+        "scroll": 296,
+        "client": 296,
+        "drawn": 6
+      }
+    },
+    {
+      "name": "metric-circles: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 296,
+        "h": 441.953125,
+        "visible": true,
+        "scroll": 296,
+        "client": 296,
+        "drawn": 3
+      }
+    },
+    {
+      "name": "packed-circle: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 296,
+        "h": 303.953125,
+        "visible": true,
+        "scroll": 296,
+        "client": 296,
+        "drawn": 3
+      }
+    },
+    {
+      "name": "info-strip-peek: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 328,
+        "h": 155.96875,
+        "visible": true,
+        "scroll": 328,
+        "client": 328,
+        "drawn": 3
+      }
+    },
+    {
+      "name": "data-readable: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 328,
+        "h": 437.96875,
+        "visible": true,
+        "scroll": 326,
+        "client": 326,
+        "drawn": 1
+      }
+    },
+    {
+      "name": "metric-readable: actual opt-in example is visible and drawn",
+      "passed": true,
+      "detail": {
+        "w": 328,
+        "h": 189.984375,
+        "visible": true,
+        "scroll": 326,
+        "client": 326,
+        "drawn": 2
+      }
+    },
+    {
+      "name": "buttons: busy blocks keyboard and pointer without losing focus or size",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "buttons: completion restores exact accessible name and activation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "buttons: disabled never becomes a loading action",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields: clear empties search and returns focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields: quantity follows declared step",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields: error preserves text and associates an accessible message",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fields: native disabled and readonly remain distinct",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: no-results stays outside listbox and offers no active option",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: keyboard moves to a real option",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: Enter selects a value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker: Escape restores trigger focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "organization: disclosure opens its real body",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "organization: failed image is replaced with readable initials",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages: manual close hides note and restores declared target",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages: toast opens visibly with manual dismissal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages: manual dismissal actually hides toast",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "messages: empty and no-results are separate visible states",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "navigation: End activates last actual tab and panel",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "navigation: sheet is visible, modal and focus stays inside",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "navigation: Escape releases modal and returns focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "preview: wrapped actionbar option is reachable by internal scroll",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-bars exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-line exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-donut exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-bubbles exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-review-packed exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-signed-bars exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-signed-time exposes visible complete table",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-empty-bars is empty without zero geometry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data: #sc-chart-empty-donut is empty without zero geometry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric variant 0: visible table includes source values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric variant 1: visible table includes source values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric variant 2: visible table includes source values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "metric variant 3: visible table includes source values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "account: real application view and title are visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "account: Escape closes layer and restores opener",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: invalid submit focuses first invalid credential",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: reveal updates real input type",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "gateway: rejected callback produces safe visible error",
+      "passed": true,
+      "detail": "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."
+    },
+    {
+      "name": "#sc-strip: next changes visible position",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "#sc-strip-peek: next changes visible position",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel: inline expansion displays full details",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "carousel: next collapses previous details and changes accessible position",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime: no uncaught JavaScript or failed requests",
+      "passed": true,
+      "detail": {
+        "errors": [],
+        "requests": []
+      }
+    }
+  ],
+  "scope": "360x780 Light RTL, normal text; source components exercised in review; source-only regression gates run separately",
+  "catalogSha256": "d2ade92f80bb1b161eeb4e1f6fee522eeeadfa12d8ab7fa3a83953e5f981d769"
+}

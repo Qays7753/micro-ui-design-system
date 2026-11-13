@@ -12,7 +12,7 @@
 - لا تنشئ فرعًا أو PR أو تغييرًا خارج `main` إلا إذا طلب المالك ذلك صراحةً.
 - اقرأ الرأس البعيد قبل التعديل، ولا تستخدم رأسًا تاريخيًا أو نسخة محلية قديمة.
 - لا تعِد إدخال UX flows أو ملفات تاريخية غير موجودة في الشجرة الحالية.
-- التفويض الحالي: تنفيذ تدقيق تغطية سياق المنتج C07–C12 وإكمال الناقص داخل مكتبة المكونات فقط على فرع feature/ui-system-component-audit-repair-2026-11-11 الموجود، من main280b33b. لا فتح أو فحص Micro أو أي مستودع آخر؛ لا PR أو دمج أو نشر. تفويض دمج الدفعة السابقة نُفذ وانتهى. لا ترقية تلقائية للنضج أو ادعاء اختبار الهاتف الفعلي.
+- التفويض الحالي: وافق المالك صراحة على إكمال مكتبة المكونات ومراجعتها ثم دمج الدفعة في main. اعمل على فرع feature/ui-system-component-audit-repair-2026-11-11 الموجود، وأكمل الاختبارات والتوثيق ثم push ودمج FF بعد تحقق الرأس البعيد. لا PR أو نشر أو حذف فرع. لا فتح أو فحص أو تعديل مستودع Micro؛ مرحلة التطبيق تبدأ لاحقًا. لا ترقية تلقائية للنضج أو ادعاء اختبار الهاتف الفعلي.
 
 ## ترتيب القراءة
 
@@ -70,12 +70,14 @@
 ```bash
 python3 tools/preview-server.py
 python3 tools/build-ui-system-showcase-standalone.py --check
-python3 tools/ui-system-showcase-check.py
-python3 tools/ui-system-showcase-repair-check.py --tag after
-python3 tools/concepts-check.py
-python3 tools/data-scale-state-check.py
-python3 tools/professional-remediation-check.py
+python3 tools/product-context-check.py
+python3 tools/component-audit-check.py
+python3 tools/light-release-check.py --review-scope
+python3 tools/light-calendar-check.py --review-scope
+python3 tools/light-data-check.py --review-scope
+python3 tools/light-static-check.py
 python3 tools/component-catalog-build.py --check
+python3 tools/manifest-build.py --check
 ```
 
 لا تعتمد على الصور أو أرقام قديمة لا يمكن ربطها بالرأس الحالي. لا تضف تقارير أو لقطات تاريخية إلى المستودع إلا إذا كانت مطلوبة مباشرة لإثبات تغيير حالي.

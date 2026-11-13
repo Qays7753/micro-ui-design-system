@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "aed8bce26960b75723ac89d4cd9c672b6a5ee475",
+  "viewport": "360x780 RTL Light",
+  "beforeFix": true,
+  "recordChange": {
+    "draft": "مسودة السجل الأول",
+    "retainedFile": true
+  },
+  "visibilityRevoked": {
+    "original": "نقطة استلام مسموحة",
+    "after": "نقطة استلام مسموحة",
+    "staleVisible": true
+  }
+}
