@@ -1,13 +1,13 @@
 (function(){'use strict';MicroProduct.register('delivery',function(c){
-  var m=c.model,n=c.node,r=c.root;r.appendChild(n('h2','m-product__title',m.title||'طلب توصيل'));
-  if(m.statusLabel)r.appendChild(n('span','m-badge m-badge--info',m.statusLabel));
-  if(m.visibility&&m.visibility.addresses){var dl=n('dl','m-product__comparison');[['الاستلام',m.pickup],['التسليم',m.dropoff]].forEach(function(x){dl.append(n('dt','',x[0]),n('dd','',x[1]||'(غير متاح)'));});r.appendChild(dl);}else r.appendChild(n('p','m-product__secondary','تفاصيل المواقع غير متاحة لهذا السياق'));
+  var m=c.model,n=c.node,r=c.root,head=n('header','m-product__header');r.appendChild(head);head.appendChild(n('h2','m-product__title',m.title||'طلب توصيل'));
+  if(m.statusLabel)head.appendChild(n('span','m-badge m-badge--info',m.statusLabel));
+  if(m.mode!=='request'&&m.visibility&&m.visibility.addresses){var dl=n('dl','m-product__comparison');[['الاستلام',m.pickup],['التسليم',m.dropoff]].forEach(function(x){dl.append(n('dt','',x[0]),n('dd','',x[1]||'(غير متاح)'));});r.appendChild(dl);}else if(!(m.visibility&&m.visibility.addresses))r.appendChild(n('p','m-product__secondary','تفاصيل المواقع غير متاحة لهذا السياق'));
   if(m.visibility&&m.visibility.contact&&m.contact)r.appendChild(n('bdi','',m.contact));
   if(m.mode==='request'){
     c.field(r,'pickup','موقع الاستلام',{value:m.visibility&&m.visibility.addresses?m.pickup:''});c.field(r,'dropoff','موقع التسليم',{value:m.visibility&&m.visibility.addresses?m.dropoff:''});c.field(r,'note','تفاصيل الطلب',{multiline:true,value:m.note});
     c.button(r,'request-delivery','إرسال طلب توصيل',function(){return c.fieldsPayload(m.requiredFields||[]);},{confirm:true,description:'سيُرسل طلب التوصيل بالبيانات المدخلة.'});
   }else if(m.mode==='offer'){
-    var price=n('p','m-product__value');var number=n('bdi','',m.amount==null?'(غير متاح)':m.amount);number.dir='ltr';price.append(number,document.createTextNode(' '+(m.unit||'(الوحدة غير محددة)')));r.appendChild(price);r.appendChild(n('p','m-product__secondary',m.validityLabel||'مهلة العرض غير متاحة'));
+    var quote=n('section','m-product__section m-product__quote');r.appendChild(quote);var price=n('p','m-product__value');var number=n('bdi','',m.amount==null?'(غير متاح)':m.amount);number.dir='ltr';price.append(number,document.createTextNode(' '+(m.unit||'(الوحدة غير محددة)')));quote.appendChild(price);quote.appendChild(n('p','m-product__secondary',m.validityLabel||'مهلة العرض غير متاحة'));
     var actions=n('div','m-product__actions');r.appendChild(actions);['accept','decline','assign'].forEach(function(id){if((m.permissions||[]).indexOf(id)>=0)c.button(actions,id,{accept:'قبول العرض',decline:'رفض العرض',assign:'طلب إسناد للسائق'}[id],{requestId:m.id,offerId:m.offerId,revision:m.revision},{confirm:true,primary:id==='accept',description:'تأكيد العرض كما ورد: '+String(m.amount==null?'غير متاح':m.amount)+' '+(m.unit||'')+'.'});});
   }else if(m.mode==='change'){
     var diff=n('dl','m-product__comparison');diff.append(n('dt','','البيانات الحالية'),n('dd','',m.currentText||'(غير متاح)'),n('dt','','التعديل المقترح'),n('dd','',m.proposedText||'(غير متاح)'));r.appendChild(diff);

@@ -1,0 +1,20 @@
+{
+  "commitAtRun": "3463d338a251b7dad2faed57d109e5cfadc201e1",
+  "workingTree": true,
+  "physicalDevice": false,
+  "checks": [],
+  "passed": 0,
+  "failed": 0,
+  "errors": [],
+  "sourceSha256": {
+    "components/product-context/context.js": "fd1f88bc6ee48452253e9f9b2708a9dc275b861bcd93d02fdca244c4b284c32d",
+    "components/product-context/assistant.js": "c913c67e607a011b92f90cd419784d8a4d74d641f007bc8e26b073e4984770bc",
+    "components/product-context/delivery.js": "4a687f18df6ace04c5eb884c59dadee2f75b0535dde0fb1f1ecbea77be11fa64",
+    "components/product-context/product-core.js": "52dbf781c2e1d5ae165722ff99b083f66006a03e4ae1f47533ecf1e376789581",
+    "components/product-context/market.js": "541997a13ca042a9a83140622b5157f9109d3bc2e69f99978f454e2b62896579",
+    "components/product-context/operation.js": "a3a4cda649542de367d4ff7d53968c6b8eff5eb54b02b290a7d6483e6ff65f3f",
+    "components/product-context/specification.md": "897429100505d5179a9bf492b76033cf2fb775a60327e8467987a2fac60fa686",
+    "components/product-context/product-context.css": "4a2b6cc6fe12532cbe96b7eaf3c1c728d9806424c12427fc0436b99bcb9b1a4f",
+    "components/product-context/review.js": "8c03052523b3ab315cce8345eadd331eac1803c66d9ea589994f8c374122d08f"
+  }
+}
