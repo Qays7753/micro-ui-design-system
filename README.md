@@ -4,7 +4,7 @@
 
 ## نقطة الدخول
 
-الحالي: [تنقيحات الإقفال البصري](docs/audits/visual-closure-2026-11-13/REPORT.md)، و[قواعد التنظيم](docs/VISUAL-ACCEPTANCE.md)، و[قاعدة الشعار](assets/brand/micro-logo/USAGE.md). [معاينة القراءات الحالية](docs/audits/shared-actions-2026-11-12/review.html). البداية2946fad المدمجة؛ التنقيحات الجديدة على فرع Feature للمراجعة. الهاتف مؤجل والنضج محفوظ؛ [مراجعة الدمج السابقة](docs/audits/final-source-review-2026-11-13/REPORT.md).
+الحالي: [قدرات الهاتف المشتركة](docs/audits/mobile-capabilities-2026-11-13/REPORT.md)، [عقود D01/C05/C06](docs/MOBILE-CAPABILITIES.md)، و[المعاينات](previews/mobile-capabilities/index.html). البداية24b78ef؛ العمل على فرع Feature للمراجعة، والهاتف النهائي مؤجل.14 عائلة/8 متغيرات/6 تراكيب دون ترقية تلقائية للنضج. [التنقيحات البصرية السابقة](docs/audits/visual-closure-2026-11-13/REPORT.md).
 
 **التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
 

@@ -1,8 +1,8 @@
 # عقود المكونات الحالية — مرجع الاستهلاك
 
-المرحلة2، 2026-11-12. هذا المرجع يصف **المصدر الموجود** على فرع تدقيق UX؛ لا يعلن قبولًا بصريًا جديدًا أو جاهزية للتركيب داخل Micro. يغطي العائلات14 والمتغيرات6. المواصفة التفصيلية لكل عائلة والكتالوج يحتفظان بسلطتهما؛ [عقود النظام](SYSTEM-CONTRACTS.md) تحسم التعارضات التاريخية. تفاصيل مصدر كل API وأحداثه في [السجل القابل للتحقق](audits/ux-continuation-phase2-2026-11-12/contracts.json).
+المرحلة2، 2026-11-12. هذا المرجع يصف **المصدر الموجود** على فرع تدقيق UX؛ لا يعلن قبولًا بصريًا جديدًا أو جاهزية للتركيب داخل Micro. يغطي العائلات14 والمتغيرات8 والتراكيب6 بتحديثات الهاتف أدناه. المواصفة التفصيلية لكل عائلة والكتالوج يحتفظان بسلطتهما؛ [عقود النظام](SYSTEM-CONTRACTS.md) تحسم التعارضات التاريخية. [سجل المرحلة2](audits/ux-continuation-phase2-2026-11-12/contracts.json) تاريخي لرأسه؛ المرجع الحالي هو هذه العقود والمواصفات والمصدر، بما فيه إضافات الهاتف.
 
-اقرأ [SOP الاستهلاك](COMPONENT-CONSUMPTION.md) و[بطاقات التحميل والاعتماديات](FAMILY-CONSUMPTION.md) أيضًا. [التراكيب C01/C02/C03](COMPOSITIONS.md) وصفات HTML/CSS منفذة بحالة Draft، دون JavaScript API جديدة؛ [طلب الإغلاق D01](COMPOSITION-CONTRACTS.md) ما زال مقترحًا غير منفذ.
+اقرأ [SOP الاستهلاك](COMPONENT-CONSUMPTION.md) و[بطاقات التحميل والاعتماديات](FAMILY-CONSUMPTION.md) أيضًا. [التراكيب C01/C02/C03](COMPOSITIONS.md) وصفات HTML/CSS منفذة بحالة Draft، دون JavaScript API جديدة؛ [طلب الإغلاق D01](MOBILE-CAPABILITIES.md) منفذ الآن في Navigation؛ C05/C06 امتدادان للهاتف موثقان في الرابط نفسه.
 
 ## قواعد مشتركة وحدود مهمة
 
@@ -82,9 +82,9 @@
 
 - **المدخلات:** appbar/tabs/tabpanel/navbar/layer/backdrop/filter/actionbar وفق markup؛ IDs وروابط التحكم وtrigger/عنوان الطبقة وسياسة `data-backdrop=close|keep` من المستهلك. navbar ليس router.
 - **التحديث:** `MicroNavigation.init(root)`؛ `openLayer(layer,{trigger?,backdropEl?})` و`closeLayer(layer)` أمر إغلاق مباشر. `appliedFilters(panel)` يعيد نسخة؛ `setAppliedFilters(panel,values)` يعمل بعد تهيئة panel، يزامن المصدر حسب قواعد الجاري/المطبق القائمة. ليس نموذج dirty عامًا.
-- **الأحداث:** `micro-navigation:opened` وclosed بلا detail، closed بعد اكتمال الإغلاق؛ `micro-navigation:filters-applied` يحمل `{applied,count}`. لا close-request قابل للإلغاء حاليًا. tabs يغيّر panels وARIA، لا event مخصص موثق إضافي.
+- **الأحداث:** `micro-navigation:opened` وclosed بلا detail، closed بعد اكتمال الإغلاق؛ `micro-navigation:filters-applied` يحمل `{applied,count}`. micro-navigation:close-request طلب قابل للإلغاء قبل تغيير الحالة، detail={reason,trigger}، عبر requestClose للطبقة العليا. tabs يغيّر panels وARIA، لا event مخصص موثق إضافي.
 - **الملكية/التنظيف:** مالك وحيد للتركيز وinert وقفل التمرير. `disconnect(root)` يخفي طبقاته وينهي الربط والإغلاقات المتأخرة ويعيد الموارد؛ ليس إغلاقًا قابلًا للمنع. Escape على document مفرد. History/Back وقياس الأشرطة وsafe areas على مستوى الصفحة للمضيف.
-- **التغطية التالية:** كل الأجزاء، طبقات متداخلة وفلاتر وتبويبات مطولة ولوحة فارغة وأفعال معطلة/طويلة؛ الطلب المحروس مقترح منفصل C03/D01، لا يُستهلك كأنه موجود.
+- **التغطية التالية:** كل الأجزاء، طبقات متداخلة وفلاتر وتبويبات مطولة ولوحة فارغة وأفعال معطلة/طويلة؛ الطلب المحروس D01 منفذ، وسياسة dirty والحفظ للمستهلك؛ C03 native dialog يحتفظ بمالكه المستقل.
 
 ## 8. Surfaces
 
@@ -168,8 +168,12 @@
 
 ## امتدادات المصدر الاختيارية 2026-11-12
 
-Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init/sync/disconnect(root?) لاختصار تكرار وحدة بسياق صريح. [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](READABLE-SOURCE.md). D01/Menu/Calendar metadata مستمرة التأجيل.
+Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init/sync/disconnect(root?) لاختصار تكرار وحدة بسياق صريح. [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](READABLE-SOURCE.md). D01 وC05 قائمة إجراءات الهاتف وC06 ملخص خارجي منفذة وفق [عقود الهاتف](MOBILE-CAPABILITIES.md)؛ حقول metadata داخل الطلب لم تُضف.
 
 ## استهلاك B01 داخل الرسوم — 2026-11-12
 
 لا تغيير في API أو أسماء الأحداث أو IDs/hooks الجداول. أضيفت أصناف B01 secondary للأفعال المولدة، ويعاد تطبيقها على جدول منسوخ/قديم عند init/render. الاعتماد CSS على buttons.css شرط تحميل معلن؛ لا يلزم buttons.js بلا API تحميل. [عقد الأفعال والتغيير الاستهلاكي](SHARED-ACTIONS.md).
+
+## امتدادات الهاتف الحالية — 2026-11-13
+
+Navigation يضيف requestClose(layer,{reason?,trigger?}) بنتيجة boolean، مع بقاء closeLayer أمرًا مباشرًا. MicroActionSheet يضيف init/open/close/disconnect للتركيب C05، وmicro-actions:request يحمل {id,contextKey} بعد closed. C06 وصفة C01 خارج التقويم بمالك مزامنة من المستهلك؛ لا API جديدة داخل Order Schedule. [التفصيل والحدود والتحميل](MOBILE-CAPABILITIES.md).

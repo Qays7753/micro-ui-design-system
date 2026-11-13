@@ -1,0 +1,9 @@
+{
+  "layerHidden": true,
+  "backdropHidden": false,
+  "scroll": "",
+  "mainInert": false,
+  "navigationSha256": "39c7259d52fb926a9265d2e8fda233e384fe217386526d8be8c7a84698ec72d4",
+  "expectation": "Backdrop must also be hidden after forced cleanup during closing",
+  "passed": false
+}

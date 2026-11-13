@@ -1,0 +1,181 @@
+{
+  "browser": "156.0.8078.79",
+  "sourceRef": "working tree",
+  "passed": 31,
+  "failed": 0,
+  "checks": [
+    {
+      "family": "selection",
+      "name": "group clone and repeat init / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "selection",
+      "name": "group clone and repeat init / reconnect",
+      "passed": true
+    },
+    {
+      "family": "selection",
+      "name": "segmented clone dispatches exactly once / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "selection",
+      "name": "segmented clone dispatches exactly once / reconnect",
+      "passed": true
+    },
+    {
+      "family": "organization",
+      "name": "cloned section opens exactly once / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "organization",
+      "name": "cloned section opens exactly once / reconnect",
+      "passed": true
+    },
+    {
+      "family": "messages",
+      "name": "cloned message can close / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "messages",
+      "name": "cloned message can close / reconnect",
+      "passed": true
+    },
+    {
+      "family": "navigation",
+      "name": "cloned tabs switch real panels / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "navigation",
+      "name": "cloned tabs switch real panels / reconnect",
+      "passed": true
+    },
+    {
+      "family": "navigation",
+      "name": "cloned layer open/close bindings / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "navigation",
+      "name": "cloned layer open/close bindings / reconnect",
+      "passed": true
+    },
+    {
+      "family": "account-settings",
+      "name": "cloned account composition opens / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "account-settings",
+      "name": "cloned account composition opens / reconnect",
+      "passed": true
+    },
+    {
+      "family": "info-strip",
+      "name": "cloned strip advances to second reading / clone",
+      "passed": true,
+      "reattach": true
+    },
+    {
+      "family": "info-strip",
+      "name": "cloned strip advances to second reading / reconnect",
+      "passed": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned metric acquires its own responsive observer / clone",
+      "passed": true,
+      "ownedIdsFresh": true,
+      "reattach": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned metric acquires its own responsive observer / reconnect",
+      "passed": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned metric acquires its own responsive observer / independent generated IDs",
+      "passed": true
+    },
+    {
+      "family": "data",
+      "name": "cloned generated table disclosure / clone",
+      "passed": true,
+      "ownedIdsFresh": true,
+      "reattach": true
+    },
+    {
+      "family": "data",
+      "name": "cloned generated table disclosure / reconnect",
+      "passed": true
+    },
+    {
+      "family": "data",
+      "name": "cloned generated table disclosure / independent generated IDs",
+      "passed": true
+    },
+    {
+      "family": "packed-circle",
+      "name": "cloned generated table disclosure / clone",
+      "passed": true,
+      "ownedIdsFresh": true,
+      "reattach": true
+    },
+    {
+      "family": "packed-circle",
+      "name": "cloned generated table disclosure / reconnect",
+      "passed": true
+    },
+    {
+      "family": "packed-circle",
+      "name": "cloned generated table disclosure / independent generated IDs",
+      "passed": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned generated table disclosure / clone",
+      "passed": true,
+      "ownedIdsFresh": true,
+      "reattach": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned generated table disclosure / reconnect",
+      "passed": true
+    },
+    {
+      "family": "metric-comparison",
+      "name": "cloned generated table disclosure / independent generated IDs",
+      "passed": true
+    },
+    {
+      "family": "packed-circle",
+      "name": "init handles the matching root itself / clone",
+      "passed": true
+    },
+    {
+      "family": "packed-circle",
+      "name": "disconnect releases its width observers / clone",
+      "passed": true
+    },
+    {
+      "family": "runtime",
+      "name": "no runtime errors / clone",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "scope": "source only, 360x780 RTL, Light; no Showcase styles, no Dark/zoom"
+}

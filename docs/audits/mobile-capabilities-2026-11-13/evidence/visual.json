@@ -1,0 +1,421 @@
+{
+  "sourceCommitAtRun": "24b78ef571b524e4a0d84c6973cfcd50b0e95543",
+  "workingTree": true,
+  "captureOnly": false,
+  "browser": "156.0.8078.79",
+  "physicalDevice": false,
+  "theme": "Light",
+  "scope": "360x780 RTL; targeted320 stock note; directional360 LTR; no Dark/zoom",
+  "passed": 31,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Default sales is static readable, without duplicate selected value or controls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Seven exact sales values, total and previous amount remain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Primary expenses uses real monetary rows with unchanged source values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Donut is clearly optional and initially collapsed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "sales-default360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 402.984375,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "stock360 contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "height": 197.984375,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "progress360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 194.75,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "expense-rows360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 305.984375,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Normal scale note is concise and keeps value, unit and period",
+      "passed": true,
+      "detail": "الأشرطة حتى 149 قطعة · اليوم."
+    },
+    {
+      "name": "Auto scale diagnostics remain available to developers",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Declared retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "الأشرطة حتى 200 قطعة · اليوم.",
+        "state": "ok",
+        "rows": 3,
+        "detail": "metric-bars: scale=declared data-max=200؛ common-unit=قطعة؛ common-period=اليوم."
+      }
+    },
+    {
+      "name": "Signed retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "الأشرطة حتى 149 قطعة · اليوم. خط الوسط صفر؛ الموجب يمينه والسالب يساره.",
+        "state": "ok",
+        "rows": 3,
+        "detail": "metric-bars: scale=auto-largest-known=149؛ common-unit=قطعة؛ common-period=اليوم."
+      }
+    },
+    {
+      "name": "Invalid retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.",
+        "state": "invalid-scale",
+        "rows": 3,
+        "detail": "metric-bars: data-max='bad' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Below known retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.",
+        "state": "scale-below-known",
+        "rows": 3,
+        "detail": "metric-bars: data-max=50 أصغر من أكبر مقدار معلوم (149) — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Mixed retains honest scale, all rows and diagnostics",
+      "passed": true,
+      "detail": {
+        "text": "تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.",
+        "state": "inconsistent",
+        "rows": 3,
+        "detail": "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة."
+      }
+    },
+    {
+      "name": "Explicit opt-in silently selects the supplied Wednesday",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Opt-in remains operable once by touch",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "sales-opt-in360 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "height": 501.96875,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Turning selection off leaves data, table and focus available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Repeated opt-in preserves a single binding",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Optional donut still selects exact amount and valid share",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "stock-targeted320 contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 287,
+        "width": 254,
+        "height": 197.984375,
+        "document": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "stock-directional-ltr contained",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "height": 197.984375,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Showcase lockup meets96px minimum, retains ratio and original colors",
+      "passed": true,
+      "detail": {
+        "width": 96,
+        "height": 32,
+        "fit": "contain",
+        "filter": "none",
+        "loaded": true
+      }
+    },
+    {
+      "name": "Targeted320 brand plate wraps instead of shrinking its three assets",
+      "passed": true,
+      "detail": [
+        {
+          "width": 96,
+          "height": 30,
+          "loaded": true,
+          "fit": "contain",
+          "min": 96
+        },
+        {
+          "width": 96,
+          "height": 30,
+          "loaded": true,
+          "fit": "contain",
+          "min": 96
+        },
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true,
+          "fit": "contain",
+          "min": 24
+        }
+      ]
+    },
+    {
+      "name": "brand-plate-targeted320 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "width": 288,
+        "height": 304.46875,
+        "document": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "Digital brand usage guide exists",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Brand sample minima, clear space, ratios and no recoloring",
+      "passed": true,
+      "detail": [
+        {
+          "kind": "arabic",
+          "width": 96,
+          "height": 30,
+          "ratio": 3.2,
+          "loaded": true,
+          "gaps": [
+            9,
+            9,
+            9,
+            9
+          ],
+          "min": 8,
+          "filter": "none"
+        },
+        {
+          "kind": "english",
+          "width": 96,
+          "height": 30,
+          "ratio": 3.2,
+          "loaded": true,
+          "gaps": [
+            9,
+            9,
+            9,
+            9
+          ],
+          "min": 8,
+          "filter": "none"
+        },
+        {
+          "kind": "symbol",
+          "width": 24,
+          "height": 24,
+          "ratio": 1,
+          "loaded": true,
+          "gaps": [
+            9,
+            9,
+            9,
+            9
+          ],
+          "min": 8,
+          "filter": "none"
+        }
+      ]
+    },
+    {
+      "name": "Brand dimension captions isolate width by height in LTR",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "brand360 contained",
+      "passed": true,
+      "detail": {
+        "left": 0,
+        "right": 360,
+        "width": 360,
+        "height": 744.046875,
+        "document": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "No browser or missing resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "sales-default360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 402.984375,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "stock360",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "height": 197.984375,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "progress360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 194.75,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "expense-rows360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 305.984375,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "sales-opt-in360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "height": 501.96875,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "stock-targeted320",
+      "left": 33,
+      "right": 287,
+      "width": 254,
+      "height": 197.984375,
+      "document": 320,
+      "viewport": 320
+    },
+    {
+      "name": "stock-directional-ltr",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "height": 197.984375,
+      "document": 360,
+      "viewport": 360
+    },
+    {
+      "name": "brand-plate-targeted320",
+      "left": 16,
+      "right": 304,
+      "width": 288,
+      "height": 304.46875,
+      "document": 320,
+      "viewport": 320
+    },
+    {
+      "name": "brand360",
+      "left": 0,
+      "right": 360,
+      "width": 360,
+      "height": 744.046875,
+      "document": 360,
+      "viewport": 360
+    }
+  ],
+  "sourceSha256": {
+    "components/metric-comparison/metric-comparison.js": "d9cc0801356778e3186487653db08cae9844279942a228d1d022e23e18572d4d",
+    "previews/readable-source/index.html": "e41a0a539fc9d576ec69a42f3b7b367c074a887f177dcaa024d62c726f82ecf8",
+    "previews/readable-source/preview.js": "30692157d88077ced081e577d84adf7cdb66c0ece576513560715e621aa2e158",
+    "previews/ui-system-showcase/showcase.css": "d5de71e673fd06168bd209044b75cec5c8aea2bf5b8994d7f6f9167b76c8b030",
+    "assets/brand/micro-logo/USAGE.md": "2fb9c41e8c0570a408b6f8081973b4c9f04f5ca41b6145cd23ee60e32526b337",
+    "previews/brand/index.html": "acbcddb92c837ab3dbe79742702b091df245762532a5e653a032717ac22c18fa"
+  }
+}

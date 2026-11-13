@@ -1,0 +1,65 @@
+{
+  "startCommit": "24b78ef571b524e4a0d84c6973cfcd50b0e95543",
+  "workingTree": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/component-catalog-build.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "Catalog: 14 families, 8 explicit variants, 6 compositions, paths and inventory OK",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-ui-system-showcase-standalone.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "ICON CHECK OK: 24 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-chart-proposal-review.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "review.html: byte-identical PASS\nreview-orders.html: byte-identical PASS\nreview.html: byte-identical PASS\nreview-cases.html: byte-identical PASS\nreview.html: byte-identical PASS",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "phone": "Owner physical-device review deferred; not passed",
+  "scope": "Phone-only; Light",
+  "catalog": {
+    "families": 14,
+    "variants": 8,
+    "compositions": 6
+  },
+  "browserGates": {
+    "count": 17,
+    "passed": 948,
+    "failed": 0
+  },
+  "static": {
+    "passed": 346,
+    "failed": 0
+  },
+  "protectedFilesUnchanged": 172,
+  "evidenceNote": "All17 browser gates reran on the final implementation after the event-order and closing-backdrop fixes. Tests precede commit. Static hashes of evidence describe execution-time state, not recursive final self-hashes; final MANIFEST seals delivered artifacts.",
+  "manifest": "Regenerated after final reports and evidence; final read-only check before commit."
+}

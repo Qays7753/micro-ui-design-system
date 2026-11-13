@@ -1,0 +1,13 @@
+{
+  "commit": "24b78ef571b524e4a0d84c6973cfcd50b0e95543",
+  "mainAtStart": "2946fad108e5fec2f00104e233decbb7e58c2855",
+  "kind": "Approved additions, not a defect baseline",
+  "navigationSha256": "3a1840c33223258fba0512d56095585783591688652aab3a4884789a6290f97d",
+  "requestCloseExportPresent": false,
+  "newFilesPreviouslyPresent": {
+    "components/navigation/action-sheet.js": false,
+    "components/navigation/action-sheet.css": false,
+    "components/compositions/calendar-context.md": false
+  },
+  "existingNativeDialogAndC01": "Already available and preserved; D01 targets Navigation, C06 reuses C01."
+}

@@ -44,7 +44,7 @@
 
 ## التراكيب المشتركة
 
-تراكيب فوق العائلات الحالية؛ C01–C03 وصفات CSS، وC04 مساعد اختياري لسياق الوحدات. [التحميل والملكية](COMPOSITIONS.md).
+تراكيب فوق العائلات الحالية؛ C01–C04 للقراءات والنماذج، وC05 إجراءات هاتف، وC06 ملخص تقويم خارجي. [التحميل والملكية](COMPOSITIONS.md).
 
 | التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |
 |---|---|---|---|---|---|
@@ -52,6 +52,8 @@
 | C02 · Operational row and list | [`components/organization/operational-row.css`](../components/organization/operational-row.css) | [فتح](../previews/compositions/row-example.html) | DRAFT FOR REVIEW | organization | buttons, messages |
 | C03 · Controlled form surface | [`components/compositions/form-surface.css`](../components/compositions/form-surface.css) | [فتح](../previews/compositions/form-example.html) | DRAFT FOR REVIEW | fields, buttons | messages, selection, navigation |
 | C04 · Structured readings and explicit unit context | [`components/compositions/reading-layout.css`](../components/compositions/reading-layout.css)<br>[`components/compositions/reading-context.js`](../components/compositions/reading-context.js) | [فتح](../previews/readable-source/index.html) | DRAFT FOR REVIEW |  | data, metric-comparison, info-strip, organization |
+| C05 · Mobile action sheet | [`components/navigation/action-sheet.css`](../components/navigation/action-sheet.css)<br>[`components/navigation/action-sheet.js`](../components/navigation/action-sheet.js)<br>[`components/navigation/action-sheet.md`](../components/navigation/action-sheet.md) | [فتح](../previews/mobile-capabilities/actions.html) | DRAFT FOR REVIEW | navigation, buttons | messages |
+| C06 · External calendar context | [`components/info-strip/value-context.css`](../components/info-strip/value-context.css)<br>[`components/compositions/calendar-context.md`](../components/compositions/calendar-context.md) | [فتح](../previews/mobile-capabilities/calendar-summary.html) | DRAFT FOR REVIEW | info-strip, order-schedule | fields, messages |
 
 ## المتغيرات
 

@@ -1,0 +1,20 @@
+<!doctype html><html lang="ar" dir="rtl" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Micro — قدرات الهاتف المشتركة</title><link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/motion.css">
+<link rel="stylesheet" href="../../components/buttons/buttons.css">
+<link rel="stylesheet" href="../../components/fields/fields.css">
+<link rel="stylesheet" href="../../components/organization/organization.css">
+<link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+<link rel="stylesheet" href="../../components/info-strip/value-context.css">
+<link rel="stylesheet" href="../../components/navigation/navigation.css">
+<link rel="stylesheet" href="../../components/navigation/action-sheet.css">
+<link rel="stylesheet" href="../compositions/compositions.css"></head><body><main class="example-page"><header class="example-header"><a href="index.html">قدرات الهاتف المشتركة</a><h1>حماية طلب الإغلاق</h1><p>اكتب قيمة، ثم جرّب الإغلاق. قرار وجود تعديلات يملكه مستهلك المثال.</p><p class="example-caption">عينات مستقلة للهاتف، لا حفظ أو شبكة أو تنفيذ في تطبيق.</p></header><section class="demo-section"><button type="button" class="m-btn m-btn--secondary" data-layer-open="guarded-form" id="open-guarded-form">فتح النموذج</button><p id="form-feedback" class="example-feedback" role="status"></p></section></main>
+<div class="m-layer-backdrop" id="form-backdrop" data-for="guarded-form" hidden></div>
+<div class="m-layer" id="guarded-form" data-backdrop-id="form-backdrop" data-backdrop="close" role="dialog" aria-modal="true" aria-labelledby="form-title" hidden>
+<header class="m-layer__head"><h2 class="m-layer__title" id="form-title">ملاحظة العينة</h2><button type="button" class="m-btn m-btn--secondary" data-layer-close>إغلاق</button></header>
+<div class="m-layer__body"><div class="m-field" data-micro-field><label class="m-field__label" for="sample-note">الملاحظة</label><div class="m-field__control"><input class="m-field__input" id="sample-note" autocomplete="off" maxlength="120"></div></div><p>تبقى القيمة عند إلغاء طلب الإغلاق.</p></div>
+<footer class="m-layer__foot"><button type="button" class="m-btn m-btn--primary" id="accept-sample">اعتماد العينة محليًا</button></footer></div>
+<div class="m-layer-backdrop" id="confirm-backdrop" data-for="discard-confirm" hidden></div>
+<div class="m-layer" id="discard-confirm" data-backdrop-id="confirm-backdrop" data-backdrop="keep" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description" hidden>
+<header class="m-layer__head"><h2 class="m-layer__title" id="confirm-title">تجاهل التعديلات؟</h2></header><div class="m-layer__body"><p id="confirm-description">لديك قيمة معدلة لم تعتمدها في هذه المعاينة.</p></div>
+<footer class="m-layer__foot"><button type="button" class="m-btn m-btn--primary" data-layer-close id="keep-editing">متابعة التعديل</button><button type="button" class="m-btn m-btn--destructive-soft" id="discard-sample">تجاهل التعديلات</button></footer></div><script src="../../components/navigation/navigation.js"></script><script src="../../components/fields/fields.js"></script><script src="form.js"></script></body></html>

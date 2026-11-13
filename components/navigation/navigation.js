@@ -4,6 +4,7 @@
    عقد عام فقط:
    MicroNavigation.openLayer(layerEl, {trigger, backdropEl})
    MicroNavigation.closeLayer(layerEl)
+   MicroNavigation.requestClose(layerEl, {reason, trigger})
    - تركيز يُدار: التقاط المشغّل قبل نقل التركيز داخل الطبقة،
      أول عنصر تفاعلي عند الفتح، واستعادته عند الإغلاق إلى هدف
      صالح داخل المستند (وليس إلى ابن مخفي).
@@ -61,6 +62,7 @@
   var inertRestore = [];     /* [{el, inert}] — استرجاع دقيق */
   var isolationObserver = null;
   var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
+  var closeRequests = new WeakSet();
   var escapeBound = false;
   var doc = document;
   var layerTitleUid = 0;     /* W2.2: مولد id لعناوين الطبقات بلا id */
@@ -131,6 +133,7 @@
     if (s.timer) { window.clearTimeout(s.timer); s.timer = null; }
     if (s.onEnd) layer.removeEventListener('transitionend', s.onEnd);
     s.onEnd = null;
+    s.backdrop = null;
     layer.removeAttribute('data-closing');
     layer.removeAttribute('data-opening');
     layer.inert = false;
@@ -318,6 +321,29 @@
     layer.dispatchEvent(new CustomEvent('micro-navigation:opened', { bubbles: true }));
   }
 
+  /* A dismissal request changes no layer state before synchronous consent.
+     Commands/cleanup remain explicit; no dirty store, Promise or History owner. */
+  function requestClose(layer, options) {
+    var top = openLayers.length ? openLayers[openLayers.length - 1] : null;
+    if (!top || top.layer !== layer || closeRequests.has(layer)) return false;
+    options = options || {};
+    var reasons = ['escape', 'close-button', 'backdrop', 'programmatic-request'];
+    var reason = reasons.indexOf(options.reason) >= 0 ? options.reason : 'programmatic-request';
+    var trigger = options.trigger && options.trigger.nodeType === 1 ? options.trigger : null;
+    var generation = genOf(layer).gen;
+    var event = new CustomEvent('micro-navigation:close-request', {
+      bubbles: true, cancelable: true, detail: { reason: reason, trigger: trigger }
+    });
+    closeRequests.add(layer);
+    try { layer.dispatchEvent(event); }
+    finally { closeRequests.delete(layer); }
+    /* A consumer may open a confirmation, disconnect or reopen during dispatch. */
+    if (event.defaultPrevented || genOf(layer).gen !== generation ||
+        openLayers[openLayers.length - 1] !== top) return false;
+    closeLayer(layer);
+    return true;
+  }
+
   function closeLayer(layer) {
     if (!layer) return;
     /* إغلاق سلف لا يترك طبقة ابنة مفتوحة داخل hidden. أغلق الأبناء
@@ -363,6 +389,7 @@
     var s = genOf(layer);
     var myGen = s.gen;
     s.closing = true; /* قفل معلّق حتى يكتمل onEnd أو يُلغى */
+    s.backdrop = entry.backdrop;
     if (entry.trigger) s.lastTrigger = entry.trigger; /* R2-02: لإعادة الفتح أثناء الخفوت */
     var done = false;
     function onEnd(event) {
@@ -370,6 +397,7 @@
       if (done || s.gen !== myGen) return; /* R2-02: فتح جديد ألغى هذا الإغلاق */
       done = true;
       s.closing = false;
+      s.backdrop = null;
       layer.removeEventListener('transitionend', onEnd);
       if (s.timer) { window.clearTimeout(s.timer); s.timer = null; }
       finish();
@@ -623,8 +651,9 @@
     if (escapeBound) return;
     escapeBound = true;
     doc.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && openLayers.length) {
-        closeLayer(openLayers[openLayers.length - 1].layer);
+      if (e.key === 'Escape' && !e.defaultPrevented && openLayers.length) {
+        requestClose(openLayers[openLayers.length - 1].layer, { reason: 'escape', trigger: doc.activeElement });
+        e.preventDefault();
       }
     });
   }
@@ -651,7 +680,7 @@
     inScope('[data-layer-close]').forEach(function (btn) {
       if (!claimBinding(btn, 'microLayerCloseBound')) return;
       on(btn, btn, 'click', function () {
-        closeLayer(btn.closest('.m-layer'));
+        requestClose(btn.closest('.m-layer'), { reason: 'close-button', trigger: btn });
       });
     });
     inScope('.m-layer-backdrop[data-for]').forEach(function (bd) {
@@ -660,7 +689,7 @@
         var layer = document.getElementById(bd.getAttribute('data-for'));
         if (!layer) return;
         /* سياسة الضغط بالخلفية من السمة: close (افتراضي) أو keep للمتلف */
-        if ((layer.getAttribute('data-backdrop') || 'close') === 'close') closeLayer(layer);
+        if ((layer.getAttribute('data-backdrop') || 'close') === 'close') requestClose(layer, { reason: 'backdrop', trigger: bd });
       });
     });
     inScope('[data-tabs]').forEach(initTabs);
@@ -676,7 +705,10 @@
       var all = [scope].concat([].slice.call(scope.querySelectorAll('*')));
       all.forEach(function (element) {
         if (element.matches && element.matches('.m-layer')) {
+          var pendingClose = closeState.get(element);
+          var closingBackdrop = pendingClose && pendingClose.closing ? pendingClose.backdrop : null;
           cancelScheduledClose(element);
+          if (closingBackdrop) closingBackdrop.hidden = true;
           var index = openLayers.findIndex(function (entry) { return entry.layer === element; });
           if (index >= 0) {
             var entry = openLayers.splice(index, 1)[0];
@@ -700,6 +732,7 @@
       else releaseBackgroundInert();
     },
     openLayer: openLayer,
+    requestClose: requestClose,
     closeLayer: closeLayer,
     /* قراءة المطبّق الحالي — للفحص والمستهلك */
     appliedFilters: function (panel) {

@@ -1,0 +1,16 @@
+/* C05: existing mobile m-layer and B01 controls; no second modal engine. */
+.m-action-sheet__list {
+  display: grid;
+  gap: var(--micro-space-2);
+  list-style: none;
+  margin: 0;
+  padding: var(--micro-space-2) 0;
+}
+.m-action-sheet__item {
+  inline-size: 100%;
+  justify-content: flex-start;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.m-action-sheet__list[hidden] { display: none; }

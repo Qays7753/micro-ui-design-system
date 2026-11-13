@@ -1,0 +1,568 @@
+{
+  "workingTree": true,
+  "sourceCommitAtRun": "24b78ef571b524e4a0d84c6973cfcd50b0e95543",
+  "captureOnly": false,
+  "browser": "156.0.8078.79",
+  "emulatedPhone": true,
+  "physicalDevice": false,
+  "theme": "light",
+  "primary": "360x780 RTL touch",
+  "targeted": [
+    "320 mixed-period table",
+    "360 LTR table"
+  ],
+  "passed": 59,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Mobile emulation activates touch capability",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch next reads next real item",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch previous restores original item",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Native range accepts touch without loss of exact reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Touch donut selects full category row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disclosure opens with touch and preserves previous amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Disclosure closes with touch",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "normal-sales360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-expenses360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-rows360",
+      "passed": true,
+      "detail": {
+        "left": 33,
+        "right": 327,
+        "width": 294,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "normal-progress360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Reaching the last item keeps focus on an enabled chart control",
+      "passed": true,
+      "detail": {
+        "active": "INPUT",
+        "cls": "m-chart__select-range"
+      }
+    },
+    {
+      "name": "Mixed-context rerender returns removed control focus to data disclosure",
+      "passed": true,
+      "detail": {
+        "active": "BUTTON",
+        "cls": "m-btn m-btn--secondary m-chart__disclose"
+      }
+    },
+    {
+      "name": "Rerender never steals focus from an outside disclosure",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Selection opt-out returns focus to remaining disclosure",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Removed selected key keeps focus on an enabled choice without selecting a replacement",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Visible complete caption permits context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ancestor-clipped caption restores unit",
+      "passed": true,
+      "detail": {
+        "captionHeight": 26,
+        "clipHeight": 0,
+        "unitClass": ""
+      }
+    },
+    {
+      "name": "Hidden descendant cannot supply a currency caption",
+      "passed": true,
+      "detail": {
+        "visibleCaption": "هذا الأسبوع",
+        "textContent": "هذا الأسبوع د.أ",
+        "unitClass": ""
+      }
+    },
+    {
+      "name": "Transparent descendant cannot supply a currency caption",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Screen-reader-only currency cannot hide visible units",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Visible nested currency still supports context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unclipped overflow container remains valid context",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Invalid value announces raw value and invalid state instead of stale display",
+      "passed": true,
+      "detail": {
+        "aria": "سبت، bad (قيمة غير صالحة) د.أ",
+        "visible": "سبتbad (قيمة غير صالحة) د.أ",
+        "raw": "bad"
+      }
+    },
+    {
+      "name": "Unrendered negative is qualified in accessible reading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Missing value never announces stale formatted amount",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed-period chart refuses geometry without dropping real values",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mixed-period table has a semantic period column",
+      "passed": true,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة",
+          "الفترة"
+        ],
+        "rows": [
+          "مواد150 د.أهذا الشهر",
+          "مواد145 د.أالشهر السابق"
+        ],
+        "caption": "قراءات بفترتين — القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Each table row retains its own declared period",
+      "passed": true,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة",
+          "الفترة"
+        ],
+        "rows": [
+          "مواد150 د.أهذا الشهر",
+          "مواد145 د.أالشهر السابق"
+        ],
+        "caption": "قراءات بفترتين — القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Mixed table caption retains visible component title",
+      "passed": true,
+      "detail": {
+        "heads": [
+          "الفئة",
+          "القيمة",
+          "الفترة"
+        ],
+        "rows": [
+          "مواد150 د.أهذا الشهر",
+          "مواد145 د.أالشهر السابق"
+        ],
+        "caption": "قراءات بفترتين — القراءات بوحداتها وفتراتها"
+      }
+    },
+    {
+      "name": "Mixed-period table360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Missing per-row period is explicit rather than inferred",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Returning to homogeneous context removes extra period column",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Repeated render never duplicates period column",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Targeted320 mixed table",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "width": 288,
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "Directional LTR mixed table",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "C01 reuses explicit context without a custom component copy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 hidden caption restores its original visible unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C01 with C04 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "C01 cleanup preserves caller data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 reuses contextual unit without changing its value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 independent action still fires exactly once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 hidden caption restores quantity unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "C02 with C04 contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "C02 preserves standard48px action target",
+      "passed": true,
+      "detail": {
+        "x": 16,
+        "y": 381.953125,
+        "width": 107.03125,
+        "height": 48
+      }
+    },
+    {
+      "name": "C02 cleanup preserves value and action",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic clipped exposes exactly one case without stealing focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic clipped contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Diagnostic hidden exposes exactly one case without stealing focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic hidden contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Diagnostic invalid exposes exactly one case without stealing focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic invalid contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Diagnostic periods exposes exactly one case without stealing focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic periods contained",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "width": 328,
+        "scroll": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "Diagnostic mixed-period table is open and retains periods",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Diagnostic invalid selection exposes honest accessible state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Generated acceptance file consumes same source with subresource network blocked",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Generated acceptance file has no external asset requests",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "normal-sales360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-expenses360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-rows360",
+      "left": 33,
+      "right": 327,
+      "width": 294,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "normal-progress360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Mixed-period table360",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Targeted320 mixed table",
+      "left": 16,
+      "right": 304,
+      "width": 288,
+      "scroll": 320,
+      "viewport": 320
+    },
+    {
+      "name": "Directional LTR mixed table",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "C01 with C04 contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "C02 with C04 contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Diagnostic clipped contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Diagnostic hidden contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Diagnostic invalid contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    },
+    {
+      "name": "Diagnostic periods contained",
+      "left": 16,
+      "right": 344,
+      "width": 328,
+      "scroll": 360,
+      "viewport": 360
+    }
+  ],
+  "sourceSha256": {
+    "components/compositions/reading-context.js": "2b722711116fa94105a7161cd0195222729e0717adc2b7fb0423d23723100858",
+    "components/compositions/reading-layout.css": "9c02da5f030a5eafb0cecb5a8951c1051d0be3fa33e7189be73d4ae31c912460",
+    "components/data/data.js": "e75985be43c79caabfa0855100c062773240b1f3f16cf9278896cbc40101ce95",
+    "components/data/data.css": "a9b91bb348cd652c8aa27768a17eadbba04a5bd18a30ac240d7fbb532a753950",
+    "components/metric-comparison/metric-comparison.js": "d9cc0801356778e3186487653db08cae9844279942a228d1d022e23e18572d4d",
+    "components/metric-comparison/metric-comparison.css": "06392fb294b1595247571613aec00ba4cdda8b2b88410806659ad0791361b546",
+    "tools/readable-acceptance-check.py": "004890176d427ee885f0ffc9be94b24bce312b771fc22a87dfa5ed9cf684e2f3",
+    "previews/readable-acceptance/index.html": "d90d16ffdab4e135645755a94bbc978e48206c98a383c2cd66de9ffba491ae5d",
+    "previews/readable-acceptance/acceptance.css": "ec14283de45397ecb2f09bc9d3336123da4a5faf5eaec84b59c9be0e68a4d14a",
+    "previews/readable-acceptance/acceptance.js": "8a168eab438bea8eac633c7ea1ed0cc9de7e77cad74fd5b4670b155a764a28cc"
+  },
+  "limits": [
+    "Chromium mobile/touch emulation is not an actual Android/iOS device or screen-reader test."
+  ]
+}

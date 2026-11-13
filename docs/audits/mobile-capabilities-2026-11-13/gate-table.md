@@ -1,0 +1,19 @@
+| البوابة | نجاح | إخفاق |
+|---|---:|---:|
+|mobile|54|0|
+|visual|31|0|
+|units|22|0|
+|audit|67|0|
+|shared|40|0|
+|readable|85|0|
+|acceptance|59|0|
+|data|40|0|
+|families|84|0|
+|release|35|0|
+|calendar|126|0|
+|calendar-contract|41|0|
+|consumption|37|0|
+|clones|31|0|
+|compositions|91|0|
+|boundaries|77|0|
+|runtime|28|0|

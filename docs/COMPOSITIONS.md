@@ -1,6 +1,6 @@
-# استهلاك التراكيب المشتركة — C01/C02/C03/C04
+# استهلاك التراكيب المشتركة — C01–C06
 
-C01/C02/C03 وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`. الكتالوج يدرج4 تراكيب و8 متغيرات فوق14 عائلة؛ لا framework أو عائلة جديدة. [C04 والعرض المقروء](READABLE-SOURCE.md). [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
+C01/C02/C03 وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`. الكتالوج يدرج6 تراكيب و8 متغيرات فوق14 عائلة؛ لا framework أو عائلة جديدة. [C04 والعرض المقروء](READABLE-SOURCE.md). [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
 
 CSS وبنية DOM الدلالية جزء من المكوّن. صفحات المعاينة ومتحكمها لا تنتقل إلى المنتج. عند اختيار إطار المضيف لاحقًا يُعرّف markup مرة في غلاف مشترك ثم تمرر الصفحات البيانات والأفعال؛ لا نسخ CSS لكل شاشة أو نقل controller الأمثلة.
 
@@ -115,10 +115,14 @@ novalidate في هذا المثال يعني أن المستهلك يقدم وا
 
 `.m-form-dialog` على dialog يوفّر قياسًا وسطحًا بالتوكنز وغشاء Petrol40% مماثلًا لغشاء Navigation القائم. showModal/close/cancel واجهات **المتصفح**، لا Micro* API جديدة. لا تربط MicroNavigation إلى العنصر نفسه. Native dialog يملك التركيز وinert، ومستهلك المثال يملك قفل التمرير وإعادته. إذا اختيرت طبقة Navigation لاحقًا، توضع form-surface داخلها دون carrier native؛ حراسة إغلاقها تحتاج عقد المالك الموافق عليه.
 
-المثال يستعمل native cancel وباب الإغلاق والخلفية لسياسة dirty/pending محلية. dirty يحسب raw حتى إن كان غير صالح. التنظيف إجباري أثناء pending، ولا تكتب Promise قديمة في UI بعده. لا History أو URL أو storage. **لم يُنفذ D01 أو يُغير closeLayer**؛ مصدر Navigation وواجهاته بلا تغيير.
+المثال يستعمل native cancel وباب الإغلاق والخلفية لسياسة dirty/pending محلية. dirty يحسب raw حتى إن كان غير صالح. التنظيف إجباري أثناء pending، ولا تكتب Promise قديمة في UI بعده. لا History أو URL أو storage. مثال C03 الأصلي لا يستخدم D01؛ يبقى HTML dialog مستقلًا. أُضيف D01 الآن إلى Navigation بعقد طلب منفصل، دون تغيير معنى closeLayer الأمر المباشر.
 
 [المثال](../previews/compositions/form-example.html): نموذج inline وآخر داخل dialog بقواعد تحقق مختلفة معلنة. Promise محلية تُحل/تُرفض من أدوات صريحة، ومنها أدوات داخل الحوار لتبقى قابلة للاستعمال أثناء modality. لا timer نجاح أو خدمة. `CompositionPreview` في previews أدوات مستهلك/اختبار فقط، ليست حزمة منتج. يغطي prefill الصامت، callbacks دون مضاعفة، invalid raw، الرفض/الحياد، الرد المتأخر والإغلاق.
 
 ## حدود النضج والتحقق
 
 التراكيب Draft ولا تغير نضج العائلات أو المتغيرات القائمة. الأساس360×780 RTL Light، و320 لأفعال الصف الطويل فقط، وLTR حيث يؤثر الاتجاه. `tools/composition-recipes-check.py` يختبر المصدر دون CSS المعاينة أيضًا؛ إثبات استقلال محدود، وليس حاضنات المضيف الأوسع للمرحلة5. لا Dark أو zoom أو ادعاء اختبار جهاز/قارئ شاشة حقيقي.
+
+## قدرات الهاتف C05/C06 — 2026-11-13
+
+C05 قائمة إجراءات مشتركة من Navigation وB01، مع MicroActionSheet ودورة حياة وترتيب إرسال بعد الإغلاق. C06 وصفة ملخص خارجي من C01 بجوار Order Schedule، بمزامنة يملكها المستهلك لا API جديدة للتقويم. [العقود والتحميل](MOBILE-CAPABILITIES.md)، [المعاينات](../previews/mobile-capabilities/index.html). كلاهما Draft؛ لا تغيير نضج العائلات أو نقل شاشات أمثلة.

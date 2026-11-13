@@ -423,6 +423,46 @@
         "organization"
       ],
       "api": "MicroReadings"
+    },
+    {
+      "id": "mobile-actions",
+      "contract": "C05",
+      "name": "Mobile action sheet",
+      "maturity": "draft-for-review",
+      "preview": "previews/mobile-capabilities/actions.html",
+      "source": [
+        "components/navigation/action-sheet.css",
+        "components/navigation/action-sheet.js",
+        "components/navigation/action-sheet.md"
+      ],
+      "baseFamilies": [
+        "navigation",
+        "buttons"
+      ],
+      "optionalFamilies": [
+        "messages"
+      ],
+      "api": "MicroActionSheet"
+    },
+    {
+      "id": "calendar-context",
+      "contract": "C06",
+      "name": "External calendar context",
+      "maturity": "draft-for-review",
+      "preview": "previews/mobile-capabilities/calendar-summary.html",
+      "source": [
+        "components/info-strip/value-context.css",
+        "components/compositions/calendar-context.md"
+      ],
+      "baseFamilies": [
+        "info-strip",
+        "order-schedule"
+      ],
+      "optionalFamilies": [
+        "fields",
+        "messages"
+      ],
+      "api": null
     }
   ]
 }

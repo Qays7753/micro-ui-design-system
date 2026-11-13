@@ -17,7 +17,7 @@
 
 ## قواعد الإصدار
 
-- قبل إغلاق مرحلة المصدر أو تسليمها، راجع [سجل المؤجلات الحالي](UI-DECISIONS.md): D01/UX-06 وUX-07 وUX-08. يذكر التقرير حالة كل بند وسبب استمرار تأجيله؛ لا تنفيذ تلقائي أو إغلاق صامت للمؤجل.
+- قبل إغلاق مرحلة المصدر أو تسليمها، راجع [سجل حسم البنود الحالي](UI-DECISIONS.md): D01/UX-06 وUX-07 وUX-08. يذكر التقرير حالة كل بند ونطاقه أو سبب تأجيل توسعته؛ لا تنفيذ تلقائي أو إغلاق صامت.
 
 
 - حافظ على هوية Micro الحالية وألوان التوكنز وخطوط IBM Plex وأصول الأيقونات الموجودة.
@@ -39,7 +39,7 @@
 
 ## بوابة امتداد المصدر المقروء — 2026-11-12
 
-شغّل `python3 tools/readable-source-check.py --out /tmp/readable-source` مع بوابات Light الحالية وكتالوج/standalone/MANIFEST. المعاينة المستقلة للمصدر تُولد عبر `tools/build-chart-proposal-review.py --check`؛ ملفا prototype السابقان تاريخيان. لا تغير حالة Draft تلقائيًا، وأبلغ عن استمرار D01/UX-06 وUX-07 وUX-08 من سجل القرارات. [العقد](READABLE-SOURCE.md).
+شغّل `python3 tools/readable-source-check.py --out /tmp/readable-source` مع بوابات Light الحالية وكتالوج/standalone/MANIFEST. المعاينة المستقلة للمصدر تُولد عبر `tools/build-chart-proposal-review.py --check`؛ ملفا prototype السابقان تاريخيان. لا تغير حالة Draft تلقائيًا، وأبلغ عن الحالة الحالية لـD01/UX-06 وUX-07 وUX-08 من سجل القرارات. [العقد](READABLE-SOURCE.md).
 
 ## بوابة القبول الحالية — 2026-11-12
 
@@ -56,3 +56,7 @@
 ## تنقيحات الإقفال البصري — 2026-11-13
 
 شغّل `python3 tools/visual-closure-check.py --out /tmp/visual-closure` مع بوابات Light والبناء الحالية. يغطي العرض المختصر، التحديد الاختياري الفعلي، صفوف المصاريف وصدق شرح المقياس وحالاته، وحدود استخدام الشعار. فحوص readable/shared-actions تفعّل الخيار عبر أداة المعاينة قبل اختبار تفاعله؛ لا حذف Assertions. [القواعد](VISUAL-ACCEPTANCE.md) و[الدليل والنتائج](audits/visual-closure-2026-11-13/REPORT.md). لا تغيير تلقائي للنضج أو تنفيذ للمؤجلات أو إذن دمج جديد.
+
+## بوابة قدرات الهاتف — 2026-11-13
+
+شغّل `python3 tools/mobile-capabilities-check.py --out /tmp/mobile-capabilities` مع بوابات Light الحالية؛ يغطي D01/C05/C06 والحركة والتركيز والتكرار والتنظيف وسياقي الملخص. [العقود](MOBILE-CAPABILITIES.md) و[التقرير](audits/mobile-capabilities-2026-11-13/REPORT.md). التنفيذ للهاتف فقط؛ لا Dark أو desktop layout أو ترقية تلقائية لـDraft أو نجاح جهاز فعلي.
