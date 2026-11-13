@@ -111,14 +111,14 @@
         request:dispatch,
         button:function(parent,id,label,payload,options){
           options=options||{};var b=node('button','m-btn '+(options.danger?'m-btn--destructive-soft':options.primary?'m-btn--primary':'m-btn--secondary'),label);b.type='button';b.dataset.productAction=id;b.dataset.focusKey=options.focusKey||'action-'+id;
-          b.disabled=!allowed(id,options.local);parent.appendChild(b);
-          ctx.on(b,'click',function(){if(!root.contains(b)||!allowed(id,options.local))return;var data=typeof payload==='function'?payload():payload;if(data===false)return;if(options.confirm||options.danger)confirm(id,data,label,typeof options.description==='function'?options.description(data):options.description,options.local,options.danger);else dispatch(id,data,options.local);});return b;
+          b.disabled=!!options.disabled||!allowed(id,options.local);parent.appendChild(b);
+          ctx.on(b,'click',function(){if(!root.contains(b)||b.disabled||!allowed(id,options.local))return;var data=typeof payload==='function'?payload():payload;if(data===false)return;if(options.confirm||options.danger)confirm(id,data,label,typeof options.description==='function'?options.description(data):options.description,options.local,options.danger);else dispatch(id,data,options.local);});return b;
         },
         field:function(parent,name,label,options){
           options=options||{};var box=node('div','m-field'), lab=node('label','m-field__label',label), wrap=node('div','m-field__control');
           box.dataset.microField='';var input=node(options.multiline?'textarea':options.options?'select':'input',options.multiline?'m-field__area':'m-field__input');input.id=instanceId+'-'+name;input.dataset.focusKey='field-'+name;lab.htmlFor=input.id;
           if(options.options)options.options.forEach(function(x){var opt=node('option','',x.label);opt.value=x.id;input.appendChild(opt);});
-          else if(options.multiline)input.rows=3;else {input.type=options.type||'text';if(options.inputmode){input.inputMode=options.inputmode;if(['decimal','numeric'].indexOf(options.inputmode)>=0){input.classList.add('m-field__input--num');input.dir='ltr';}}}
+          else if(options.multiline)input.rows=options.rows||3;else {input.type=options.type||'text';if(options.inputmode){input.inputMode=options.inputmode;if(['decimal','numeric'].indexOf(options.inputmode)>=0){input.classList.add('m-field__input--num');input.dir='ltr';}}}
           if(ui.draft[name]===undefined)ui.draft[name]=options.value==null?'':String(options.value);input.value=ui.draft[name];input.disabled=!ctx.editable();if(options.maxLength)input.maxLength=options.maxLength;
           ctx.on(input,options.options?'change':'input',function(){ui.draft[name]=input.value;input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');box.classList.remove('has-error');if(!root.querySelector('[aria-invalid="true"]'))root.querySelectorAll('[data-product-validation]').forEach(function(e){e.remove();});});wrap.appendChild(input);if(options.unit)wrap.appendChild(node('span','m-field__unit',options.unit));box.append(lab,wrap);parent.appendChild(box);return input;
         },

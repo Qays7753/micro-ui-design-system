@@ -1,0 +1,111 @@
+{
+  "commitAtRun": "05f3f98a7210155cc89e0aac28b34602fb4d24ff",
+  "workingTree": true,
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Composer uses one readable row initially",
+      "passed": true
+    },
+    {
+      "name": "Long composer grows with bounded scrolling",
+      "passed": true
+    },
+    {
+      "name": "Three typed actions are attached to assistant message",
+      "passed": true
+    },
+    {
+      "name": "Follow-up emits identifiers and remains pending",
+      "passed": true
+    },
+    {
+      "name": "Pending blocks duplicate message action",
+      "passed": true
+    },
+    {
+      "name": "Open is an intent, not a URL navigation",
+      "passed": true
+    },
+    {
+      "name": "Execute requires confirmation before dispatch",
+      "passed": true
+    },
+    {
+      "name": "Cancel executes nothing",
+      "passed": true
+    },
+    {
+      "name": "Confirmed execution emits scoped ID and revision only",
+      "passed": true
+    },
+    {
+      "name": "Updated revision invalidates open confirmation",
+      "passed": true
+    },
+    {
+      "name": "Workspace switch clears actions and confirmation",
+      "passed": true
+    },
+    {
+      "name": "Expired suggestions cannot execute",
+      "passed": true
+    },
+    {
+      "name": "Displayed suggestions do not grant permission",
+      "passed": true
+    },
+    {
+      "name": "Unknown kinds and duplicate action IDs are ignored",
+      "passed": true
+    },
+    {
+      "name": "User message cannot supply assistant actions",
+      "passed": true
+    },
+    {
+      "name": "Duplicate message IDs cannot address actions",
+      "passed": true
+    },
+    {
+      "name": "Labels are plain text",
+      "passed": true
+    },
+    {
+      "name": "Search is explicit, send and suggestions blocked while waiting",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion keeps status without animation",
+      "passed": true
+    },
+    {
+      "name": "Normal motion affects activity only, not logo",
+      "passed": true
+    },
+    {
+      "name": "Unknown activity never pretends to search",
+      "passed": true
+    },
+    {
+      "name": "Legacy proposal stays available before composer",
+      "passed": true
+    },
+    {
+      "name": "Long action wraps at320 without losing touch height",
+      "passed": true
+    },
+    {
+      "name": "No script or resource errors",
+      "passed": true
+    }
+  ],
+  "passed": 24,
+  "failed": 0,
+  "sourceSha256": {
+    "components/product-context/assistant.js": "274d9d1fefc0ec860ac639e7e0444788ecaad9c4ebd10c07e22b3b9ef40b3179",
+    "components/product-context/product-core.js": "27e3e4a28923294158f0d037c38922ffe62de455320b3b4fc3619b24c75142a3",
+    "components/product-context/product-context.css": "a1cc8ce3a4f4a489fc4915d404d5bc6acfe2413257afb4e7e80ce9f4895c6ec2",
+    "previews/product-context/lab.js": "c15e40100cbc055f5423669f7abd8939e5bf1a914cdffd3765a0121b686ce514"
+  }
+}

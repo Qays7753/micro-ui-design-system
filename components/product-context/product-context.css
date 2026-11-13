@@ -47,3 +47,19 @@
 
 /* Editing previews use three touch rows; browsing cards keep their 4:3 media. */
 .m-product__gallery--preview .m-product__media { max-block-size:calc(var(--micro-touch-min) * 3);object-fit:contain; }
+
+/* Ask Micro: the brand asset stays still; only a truthful activity indicator moves. */
+.m-assistant__header { gap:var(--micro-space-1); }
+.m-assistant__identity { display:flex;align-items:center;gap:var(--micro-space-2); }
+.m-assistant__symbol { inline-size:24px;block-size:24px;margin:var(--micro-space-2);object-fit:contain;flex:none; }
+.m-assistant__actions { margin-block-start:var(--micro-space-3); }
+.m-assistant__actions .m-btn { max-inline-size:100%;white-space:normal;text-align:start; }
+.m-assistant__actions .m-product__secondary { flex-basis:100%; }
+.m-assistant__activity { display:flex;align-items:center;gap:var(--micro-space-2);min-block-size:var(--micro-touch-min);color:var(--micro-text-secondary);font-size:var(--micro-label-size); }
+.m-assistant__activity-dot { inline-size:8px;block-size:8px;background:var(--micro-brand-primary);border-radius:50%;animation:micro-assistant-pulse calc(var(--micro-motion-enter) * 5) ease-in-out infinite alternate; }
+@keyframes micro-assistant-pulse { from { opacity:.35; } to { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .m-assistant__activity-dot { animation:none; } }
+
+.m-assistant__composer { grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:var(--micro-space-2); }
+.m-assistant__composer .m-field { min-inline-size:0; }
+.m-assistant__composer .m-field__area { max-block-size:calc(var(--micro-field-min-height) * 3);resize:none;overflow-y:auto; }

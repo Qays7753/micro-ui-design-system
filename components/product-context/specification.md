@@ -51,7 +51,7 @@ phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/den
 
 ## إجراءات حساسة ونسخ متغيرة
 
-النشر/إرسال البلاغ النهائي/قبول أو رفض عرض/الإسناد/التعديل/الإثبات/قرارات المراجعة وexecute للمساعد تحتاج تأكيدًا عبر C05/Navigation الموجودين. لا مالك modal جديد. التأكيد يراجع label والسياق والبيانات الموصوفة، ثم يرسل النية بعد closed. replace أو تغيير السعر/النسخة أثناء التأكيد يبطله؛ لا ضغطة قديمة تعمل على عرض جديد. لا يُفسر كلام Ask كإجراء؛ execute يمرر proposalId/revision فقط مع grant وتأكيد.
+النشر/إرسال البلاغ النهائي/قبول أو رفض عرض/الإسناد/التعديل/الإثبات/قرارات المراجعة وexecute للمساعد تحتاج تأكيدًا عبر C05/Navigation الموجودين. لا مالك modal جديد. التأكيد يراجع label والسياق والبيانات الموصوفة، ثم يرسل النية بعد closed. replace أو تغيير السعر/النسخة أثناء التأكيد يبطله؛ لا ضغطة قديمة تعمل على عرض جديد. لا يُفسر كلام Ask كإجراء؛ execute يمرر proposalId/revision للاقتراح القديم، أو messageId/actionId/revision لإجراء داخل رسالة، مع grant وتأكيد.
 
 المواقع والتواصل في Delivery مقيدة بvisibility.addresses/contact؛ الافتراضي مخفي. لا نفترض وقت كشفها. تفاصيل المقارنة الحرة يجب أن تكون منقحة قبل تمريرها. مرفقات المراجعة تتطلب view-evidence وvisibility.evidence. لا انتقال حالة توصيل أو أثر مالي في Manage عند قبول عرض أو إعلان.
 
@@ -79,7 +79,7 @@ phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/den
 | delivery/tracking | steps[{label,time,detail,current}]، statusLabel | recheck{requestId}؛ لا انتقال تلقائي |
 | delivery/change | id/revision/currentText/proposedText، parties[{label,statusLabel}] | request-change{requestId,revision}؛ لا تطبيق للتعديل |
 | delivery/proof | id/revision/proofKind=delivery أوreturn، requirementsLabel/attachmentRequired/requiredFields | submit-proof{note,files,requestId,proofKind,revision} |
-| assistant | messages[{id,speaker:user/assistant/system,text,stateLabel,retryable}]، replyPending، proposal{id,revision,summary,label} | send{message,files:[]}؛ retry{messageId}؛ execute{proposalId,revision} |
+| assistant | messages[{id,speaker:user/assistant/system,text,stateLabel,retryable,actions}]، replyPending، activity، proposal{id,revision,summary,label} | send{message,files:[]}؛ retry{messageId}؛ execute{proposalId,revision} أو {messageId,actionId,revision}؛ follow-up/open-resource{messageId,actionId,revision} |
 | review/queue | id/revision/title/subjectLabel/summary/statusLabel/reason/history/images، visibility.evidence، reasonRequired | approve/reject/request-info{reason,files:[],subjectId,revision}؛ view-evidence لعرض الصور فقط |
 | review/report | id/subjectLabel/requiredFields/reasonOptions[{id,label}] | submit-report{reason,category عند وجوده,files:[],subjectId} |
 
@@ -110,3 +110,15 @@ Market report يطلب فتح محرر بلاغ C12 عند المستهلك دو
 العنوان والحالة في header واحد؛ معلومات التسعير الثانوية مجمّعة مع القيمة. dl تعرض label/value في عمودين مرنين1:2 دون قص؛ نموذج الطلب يعرض حقول العناوين فقط بدل تكرار نسخة للقراءة. مصدر CSS هو product-context.css ولا تتغير التوكنز أو أحجام اللمس. لا تُنشأ بطاقة لكل صف.
 
 بطاقة الاستعراض تبقي صورتها4:3؛ معاينة التحرير/الملفات المختارة تحتفظ بالصورة كاملةcontain بارتفاع أقصى144px (ثلاث وحدات لمس)، دون رفع أو ضغط أو تعديل الملف. غياب الصورة حالة مختصرة بحد لمس48 بدل حجز120. اختيار الصور زر B01 ثانوي48 يفتح input الأصلي المخفي؛ أسماء الملفات ظاهرة ويمكن إزالة الاختيار. حدود النظام ونوافذ اختيار الملفات ليست قابلة لتوحيد اللغة من المكتبة.
+
+## Ask: أزرار الرسائل والنشاط — مرحلة4
+
+`actions` مصفوفة داخل رسالة assistant فقط ذات id فريد في النموذج. كل إجراء `{id,kind,label,revision,state?,summary?}`. kind: follow-up يطلب متابعة، open يطلب عرض مورد، execute يطلب تغييرًا بعد تأكيد. grants منفصلة follow-up وopen-resource وexecute؛ كل intent يحمل messageId/actionId/revision فقط، بجانب scope/request العامين. يطابق المستهلك هذه المعرفات مع إجراءات يعرفها ويتحقق من الصلاحية والنسخة؛ المكتبة لا تفتح URL ولا تنفذ prompt أو كودًا مولّدًا.
+
+id وlabel وrevision نصوص غير فارغة، وsummary مطلوبة لإجراء execute لشرح العاقبة في التأكيد. أنواع غير معروفة أو ids مكررة في الرسالة أو رسالةid مكررة لا تنشئ أزرارًا. نصوص labels/summary تعرض كنص آمن. لا يوجد زعم حماية للخادم من هذه الواجهة.
+
+state اختياري وافتراضيه ready؛ expired/completed/unavailable تعرض زرًا معطلًا وسببًا واضحًا. القيمة الأخرى معطلة. صدق completed مسؤولية النموذج المؤكد. replace يبطل التأكيد والطلب القديم كما في العقد العام؛ تغيّرscope يمسح المسودة. replyPending يعطل إرسالًا جديدًا وأزرار الاقتراحات، مع إبقاء الكتابة متاحة، وسجل الرسائل aria-busy.
+
+activity=searching مع replyPending يعرض «جارٍ البحث» فقط؛ أي قيمة أخرى تعرض «جارٍ إعداد الرد». لا مراحل أو تقدم وهمي. الشعار v2 ثابت24 مع مساحة8 حوله، والحركة لمؤشر منفصل فقط؛ reduced motion يوقفها. اللون والخط والهوية الموجودة فقط، بلا شخصية كرتونية أو3D. هذا اتجاه معاينة Draft وليس اعتماد هوية جديدًا.
+
+حقل الرسالة يبدأ بصف واحد بحد52، وينمو حتى156px ثم يمرر المحتوى؛ زر إرسال بجواره بحجم التحكم الحالي. الاقتراح القديم m.proposal باقٍ للتوافق ويظهر بجوار الردود قبل الكاتب.
