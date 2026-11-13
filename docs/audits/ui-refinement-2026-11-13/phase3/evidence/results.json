@@ -1,0 +1,72 @@
+{
+  "commitAtRun": "65f44fbb2556f1ab710328c48a321f2dd8296b90",
+  "workingTree": true,
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Task example starts with week",
+      "passed": true
+    },
+    {
+      "name": "week retains date and order content",
+      "passed": true
+    },
+    {
+      "name": "week has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "month retains date and order content",
+      "passed": true
+    },
+    {
+      "name": "month has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "day retains date and order content",
+      "passed": true
+    },
+    {
+      "name": "day has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "Week leaves more room than month without shrinking controls",
+      "passed": true
+    },
+    {
+      "name": "#sales-group readable without overflow",
+      "passed": true
+    },
+    {
+      "name": "#units-default readable without overflow",
+      "passed": true
+    },
+    {
+      "name": "Money and inventory retain distinct visible units",
+      "passed": true
+    },
+    {
+      "name": "Share chart is optional, not initial clutter",
+      "passed": true
+    },
+    {
+      "name": "No script errors",
+      "passed": true
+    }
+  ],
+  "heights": {
+    "week": 495.953125,
+    "month": 687.953125,
+    "day": 351.96875
+  },
+  "passed": 13,
+  "failed": 0,
+  "sourceSha256": {
+    "components/order-schedule/order-schedule.js": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42",
+    "components/order-schedule/order-schedule.css": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990",
+    "previews/mobile-capabilities/calendar-tasks.js": "5674e2a6e2872a069a7574ba74b615e5e1c91a16fd9a537e7010f3942717151d",
+    "previews/mobile-capabilities/calendar-tasks.html": "5aa5e43185df43590b1bd90b1f4490eb5802f311a776ef1f9141f25b3143d7f9"
+  }
+}
