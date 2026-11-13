@@ -1,0 +1,382 @@
+PASS javascript syntax: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/audit.js
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/slop_render.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/anti-ai-slop/scripts/slop_scan.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/build-markdown-report.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/build-report.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/edge-sweep.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/interaction-browser-audit.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/slop-render-adapter.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/slop-static-adapter.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/system-inventory.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/audit-current/visual-targeted-captures.py
+PASS javascript syntax: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_audit.js
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_audit.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/brand_palette.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/extract_copy.py
+PASS python compile: _audit-resources/pixilated-ux-ui-skills-kit/brand-auditor/scripts/icon_normalize.py
+PASS python compile: assets/brand/micro-logo/v1/tools/export_brand.py
+PASS CSS balanced delimiters: assets/fonts/fonts.css
+PASS CSS balanced delimiters: components/access-gateway/access-gateway.css
+PASS javascript syntax: components/access-gateway/access-gateway.js
+PASS CSS balanced delimiters: components/account-settings/account-settings.css
+PASS javascript syntax: components/account-settings/account-settings.js
+PASS CSS balanced delimiters: components/buttons/buttons.css
+PASS javascript syntax: components/buttons/buttons.js
+PASS CSS balanced delimiters: components/carousel/carousel.css
+PASS javascript syntax: components/carousel/carousel.js
+PASS CSS balanced delimiters: components/compositions/form-surface.css
+PASS javascript syntax: components/compositions/reading-context.js
+PASS CSS balanced delimiters: components/compositions/reading-layout.css
+PASS CSS balanced delimiters: components/data/data.css
+PASS javascript syntax: components/data/data.js
+PASS CSS balanced delimiters: components/data/packed-circle.css
+PASS javascript syntax: components/data/packed-circle.js
+PASS CSS balanced delimiters: components/fields/fields.css
+PASS javascript syntax: components/fields/fields.js
+PASS CSS balanced delimiters: components/info-strip/info-strip-peek.css
+PASS javascript syntax: components/info-strip/info-strip-peek.js
+PASS CSS balanced delimiters: components/info-strip/info-strip.css
+PASS javascript syntax: components/info-strip/info-strip.js
+PASS CSS balanced delimiters: components/info-strip/value-context.css
+PASS CSS balanced delimiters: components/messages/messages.css
+PASS javascript syntax: components/messages/messages.js
+PASS CSS balanced delimiters: components/metric-comparison/metric-comparison.css
+PASS javascript syntax: components/metric-comparison/metric-comparison.js
+PASS CSS balanced delimiters: components/navigation/action-sheet.css
+PASS javascript syntax: components/navigation/action-sheet.js
+PASS CSS balanced delimiters: components/navigation/navigation.css
+PASS javascript syntax: components/navigation/navigation.js
+PASS CSS balanced delimiters: components/order-schedule/order-schedule.css
+PASS javascript syntax: components/order-schedule/order-schedule.js
+PASS CSS balanced delimiters: components/organization/operational-row.css
+PASS CSS balanced delimiters: components/organization/organization.css
+PASS javascript syntax: components/organization/organization.js
+PASS javascript syntax: components/product-context/assistant.js
+PASS javascript syntax: components/product-context/context.js
+PASS javascript syntax: components/product-context/delivery.js
+PASS javascript syntax: components/product-context/market.js
+PASS javascript syntax: components/product-context/operation.js
+PASS CSS balanced delimiters: components/product-context/product-context.css
+PASS javascript syntax: components/product-context/product-core.js
+PASS javascript syntax: components/product-context/review.js
+PASS CSS balanced delimiters: components/selection/picker.css
+PASS javascript syntax: components/selection/picker.js
+PASS CSS balanced delimiters: components/selection/selection.css
+PASS javascript syntax: components/selection/selection.js
+PASS CSS balanced delimiters: components/surfaces/curves.css
+PASS CSS balanced delimiters: components/surfaces/surfaces.css
+PASS python compile: docs/audits/component-final-review-2026-11-11/checks/capture.py
+PASS python compile: docs/audits/component-final-review-2026-11-11/checks/focused.py
+PASS python compile: docs/audits/component-final-review-2026-11-11/checks/states.py
+PASS python compile: docs/audits/component-final-review-2026-11-11/checks/visual-focused.py
+PASS python compile: docs/audits/ux-continuation-phase2-2026-11-12/verify-contracts.py
+PASS CSS balanced delimiters: previews/board-base.css
+PASS javascript syntax: previews/board.js
+PASS CSS balanced delimiters: previews/buttons/board.css
+PASS javascript syntax: previews/buttons/board.js
+PASS CSS balanced delimiters: previews/carousel/board.css
+PASS javascript syntax: previews/carousel/board.js
+PASS javascript syntax: previews/chart-proposal/orders.js
+PASS CSS balanced delimiters: previews/chart-proposal/proposal.css
+PASS javascript syntax: previews/chart-proposal/proposal.js
+PASS CSS balanced delimiters: previews/compositions/compositions.css
+PASS javascript syntax: previews/compositions/compositions.js
+PASS CSS balanced delimiters: previews/compositions/row-composition.css
+PASS CSS balanced delimiters: previews/concepts/board.css
+PASS javascript syntax: previews/concepts/board.js
+PASS CSS balanced delimiters: previews/data/board.css
+PASS javascript syntax: previews/data/board.js
+PASS CSS balanced delimiters: previews/fields/board.css
+PASS javascript syntax: previews/fields/board.js
+PASS CSS balanced delimiters: previews/index.css
+PASS CSS balanced delimiters: previews/info-strip/board.css
+PASS CSS balanced delimiters: previews/integration-boundaries/boundaries.css
+PASS javascript syntax: previews/integration-boundaries/boundaries.js
+PASS CSS balanced delimiters: previews/messages/board.css
+PASS javascript syntax: previews/messages/board.js
+PASS javascript syntax: previews/mobile-capabilities/actions.js
+PASS javascript syntax: previews/mobile-capabilities/calendar-summary.js
+PASS javascript syntax: previews/mobile-capabilities/calendar-tasks.js
+PASS javascript syntax: previews/mobile-capabilities/form.js
+PASS CSS balanced delimiters: previews/navigation/board.css
+PASS javascript syntax: previews/navigation/board.js
+PASS CSS balanced delimiters: previews/organization/board.css
+PASS javascript syntax: previews/organization/board.js
+PASS javascript syntax: previews/product-context/lab.js
+PASS CSS balanced delimiters: previews/readable-acceptance/acceptance.css
+PASS javascript syntax: previews/readable-acceptance/acceptance.js
+PASS CSS balanced delimiters: previews/readable-source/preview.css
+PASS javascript syntax: previews/readable-source/preview.js
+PASS CSS balanced delimiters: previews/selection/board.css
+PASS javascript syntax: previews/selection/board.js
+PASS CSS balanced delimiters: previews/surfaces/board.css
+PASS javascript syntax: previews/surfaces/board.js
+PASS CSS balanced delimiters: previews/system/system.css
+PASS javascript syntax: previews/system/system.js
+PASS CSS balanced delimiters: previews/ui-system-showcase/showcase.css
+PASS javascript syntax: previews/ui-system-showcase/showcase.js
+PASS javascript syntax: shared/icons.js
+PASS CSS balanced delimiters: shared/motion.css
+PASS CSS balanced delimiters: shared/tokens.css
+PASS python compile: tools/assemble-components-package.py
+PASS python compile: tools/assistant-actions-check.py
+PASS python compile: tools/browser_support.py
+PASS python compile: tools/build-chart-proposal-review.py
+PASS python compile: tools/build-components-package.py
+PASS python compile: tools/build-ui-system-showcase-standalone.py
+PASS python compile: tools/calendar-contract-check.py
+PASS python compile: tools/calendar-task-check.py
+PASS python compile: tools/chart-mobile-check.py
+PASS python compile: tools/chart-proposal-check.py
+PASS python compile: tools/clean-mobile-preview-check.py
+PASS python compile: tools/clone-lifecycle-check.py
+PASS python compile: tools/complete-repair-chart-check.py
+PASS python compile: tools/complete-repair-lifecycle-check.py
+PASS python compile: tools/complete-repair-mobile-check.py
+PASS python compile: tools/component-audit-check.py
+PASS python compile: tools/component-catalog-build.py
+PASS python compile: tools/component-consumption-contract-check.py
+PASS python compile: tools/component-mobile-check.py
+PASS python compile: tools/composition-recipes-check.py
+PASS python compile: tools/concepts-check.py
+PASS python compile: tools/data-scale-state-check.py
+PASS python compile: tools/evidence-repair-check.py
+PASS python compile: tools/integration-boundaries-check.py
+PASS python compile: tools/light-calendar-check.py
+PASS python compile: tools/light-data-check.py
+PASS python compile: tools/light-evidence-capture.py
+PASS python compile: tools/light-release-check.py
+PASS python compile: tools/light-static-check.py
+PASS python compile: tools/manifest-build.py
+PASS python compile: tools/mobile-capabilities-check.py
+PASS python compile: tools/numeric-chart-geometry-check.py
+PASS python compile: tools/numeric-field-controls-check.py
+PASS python compile: tools/numeric-geometry-check.py
+PASS python compile: tools/numeric-micro-consistency-check.py
+PASS python compile: tools/preview-runtime-check.py
+PASS python compile: tools/preview-server.py
+PASS python compile: tools/product-content-check.py
+PASS python compile: tools/product-context-check.py
+PASS python compile: tools/product-refinement-check.py
+PASS python compile: tools/professional-remediation-check.py
+PASS python compile: tools/professional-ui-repair-check.py
+PASS python compile: tools/readable-acceptance-check.py
+PASS python compile: tools/readable-source-check.py
+PASS python compile: tools/shared-actions-check.py
+PASS python compile: tools/split-components-package.py
+PASS python compile: tools/standalone-checkout-check.py
+PASS python compile: tools/ui-release-check.py
+PASS python compile: tools/ui-system-showcase-check.py
+PASS python compile: tools/ui-system-showcase-repair-check.py
+PASS python compile: tools/unit-context-check.py
+PASS python compile: tools/ux-continuation-phase3-check.py
+PASS python compile: tools/visual-closure-check.py
+PASS changed active links: AGENTS.md
+PASS changed active links: DESIGN.md
+PASS changed active links: README.md
+PASS changed active links: assets/SOURCES.md
+PASS changed active links: assets/brand/micro-logo/README.md
+PASS changed active links: assets/brand/micro-logo/USAGE.md
+PASS defined required CSS tokens: components/access-gateway/access-gateway.css
+PASS no new hardcoded CSS palette: components/access-gateway/access-gateway.css
+PASS changed active links: components/access-gateway/specification.md
+PASS defined required CSS tokens: components/account-settings/account-settings.css
+PASS no new hardcoded CSS palette: components/account-settings/account-settings.css
+PASS changed active links: components/account-settings/specification.md
+PASS defined required CSS tokens: components/buttons/buttons.css
+PASS no new hardcoded CSS palette: components/buttons/buttons.css
+PASS changed active links: components/buttons/specification.md
+PASS defined required CSS tokens: components/carousel/carousel.css
+PASS no new hardcoded CSS palette: components/carousel/carousel.css
+PASS changed active links: components/carousel/specification.md
+PASS changed active links: components/compositions/calendar-context.md
+PASS defined required CSS tokens: components/compositions/form-surface.css
+PASS no new hardcoded CSS palette: components/compositions/form-surface.css
+PASS defined required CSS tokens: components/compositions/reading-layout.css
+PASS no new hardcoded CSS palette: components/compositions/reading-layout.css
+PASS changed active links: components/compositions/specification.md
+PASS changed active links: components/data/PACKED-PATTERN.md
+PASS defined required CSS tokens: components/data/data.css
+PASS no new hardcoded CSS palette: components/data/data.css
+PASS changed active links: components/data/example-usage.html
+PASS defined required CSS tokens: components/data/packed-circle.css
+PASS no new hardcoded CSS palette: components/data/packed-circle.css
+PASS changed active links: components/data/specification.md
+PASS defined required CSS tokens: components/fields/fields.css
+PASS no new hardcoded CSS palette: components/fields/fields.css
+PASS changed active links: components/fields/specification.md
+PASS changed active links: components/info-strip/example-usage.html
+PASS defined required CSS tokens: components/info-strip/info-strip.css
+PASS no new hardcoded CSS palette: components/info-strip/info-strip.css
+PASS changed active links: components/info-strip/specification.md
+PASS defined required CSS tokens: components/info-strip/value-context.css
+PASS no new hardcoded CSS palette: components/info-strip/value-context.css
+PASS defined required CSS tokens: components/messages/messages.css
+PASS no new hardcoded CSS palette: components/messages/messages.css
+PASS changed active links: components/messages/specification.md
+PASS changed active links: components/metric-comparison/example-usage.html
+PASS defined required CSS tokens: components/metric-comparison/metric-comparison.css
+PASS no new hardcoded CSS palette: components/metric-comparison/metric-comparison.css
+PASS changed active links: components/metric-comparison/specification.md
+PASS defined required CSS tokens: components/navigation/action-sheet.css
+PASS no new hardcoded CSS palette: components/navigation/action-sheet.css
+PASS changed active links: components/navigation/action-sheet.md
+PASS defined required CSS tokens: components/navigation/navigation.css
+PASS no new hardcoded CSS palette: components/navigation/navigation.css
+PASS changed active links: components/navigation/specification.md
+PASS changed active links: components/order-schedule/example-usage.html
+PASS defined required CSS tokens: components/order-schedule/order-schedule.css
+PASS no new hardcoded CSS palette: components/order-schedule/order-schedule.css
+PASS changed active links: components/order-schedule/specification.md
+PASS defined required CSS tokens: components/organization/operational-row.css
+PASS no new hardcoded CSS palette: components/organization/operational-row.css
+PASS defined required CSS tokens: components/organization/organization.css
+PASS no new hardcoded CSS palette: components/organization/organization.css
+PASS changed active links: components/organization/specification.md
+PASS defined required CSS tokens: components/product-context/product-context.css
+PASS no new hardcoded CSS palette: components/product-context/product-context.css
+PASS changed active links: components/product-context/specification.md
+PASS defined required CSS tokens: components/selection/picker.css
+PASS no new hardcoded CSS palette: components/selection/picker.css
+PASS defined required CSS tokens: components/selection/selection.css
+PASS no new hardcoded CSS palette: components/selection/selection.css
+PASS changed active links: components/selection/specification.md
+PASS changed active links: components/surfaces/specification.md
+PASS defined required CSS tokens: components/surfaces/surfaces.css
+PASS no new hardcoded CSS palette: components/surfaces/surfaces.css
+PASS changed active links: docs/BOUNDARY-FIXTURES.md
+PASS changed active links: docs/COMPONENT-API-CONTRACTS.md
+PASS changed active links: docs/COMPONENT-CONSUMPTION.md
+PASS changed active links: docs/COMPONENT-INVENTORY.md
+PASS changed active links: docs/COMPOSITION-CONTRACTS.md
+PASS changed active links: docs/COMPOSITIONS.md
+PASS changed active links: docs/CURRENT-STATE.md
+PASS changed active links: docs/FAMILY-CONSUMPTION.md
+PASS changed active links: docs/IMPLEMENTATION-VERIFICATION.md
+PASS changed active links: docs/MOBILE-CAPABILITIES.md
+PASS changed active links: docs/READABLE-SOURCE.md
+PASS changed active links: docs/SHARED-ACTIONS.md
+PASS changed active links: docs/SYSTEM-CONTRACTS.md
+PASS changed active links: docs/UI-DECISIONS.md
+PASS changed active links: docs/UI-RELEASE.md
+PASS changed active links: docs/UI-SYSTEM-SHOWCASE-COVERAGE.md
+PASS changed active links: docs/UI-VISUAL-SYSTEM.md
+PASS changed active links: docs/VISUAL-ACCEPTANCE.md
+PASS changed active links: docs/audits/component-audit-2026-11-11/REPORT.md
+PASS changed active links: docs/audits/component-consumption-repair-2026-11-11/REPORT.md
+PASS changed active links: docs/audits/component-final-review-2026-11-11/REPORT.md
+PASS changed active links: docs/audits/final-source-review-2026-11-13/REPORT.md
+PASS changed active links: docs/audits/mobile-capabilities-2026-11-13/REPORT.md
+PASS changed active links: docs/audits/mobile-capabilities-2026-11-13/gate-table.md
+PASS changed active links: docs/audits/readable-acceptance-2026-11-12/PHONE-CHECK.md
+PASS changed active links: docs/audits/readable-acceptance-2026-11-12/PHONE-OBSERVATIONS.md
+PASS changed active links: docs/audits/readable-acceptance-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/readable-acceptance-2026-11-12/review-cases.html
+PASS changed active links: docs/audits/readable-source-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/readable-source-2026-11-12/review.html
+PASS changed active links: docs/audits/shared-actions-2026-11-12/ACTION-INVENTORY.md
+PASS changed active links: docs/audits/shared-actions-2026-11-12/CANDIDATE.md
+PASS changed active links: docs/audits/shared-actions-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/shared-actions-2026-11-12/review.html
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/PLAN.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase1/REPORT.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase2/REPORT.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase3/REPORT.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase4/REPORT.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase5/COVERAGE.md
+PASS changed active links: docs/audits/ui-refinement-2026-11-13/phase5/REPORT.md
+PASS changed active links: docs/audits/ux-continuation-phase1-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/ux-continuation-phase2-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/ux-continuation-phase3-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md
+PASS changed active links: docs/audits/visual-closure-2026-11-13/REPORT.md
+PASS changed active links: docs/product-context/CLOSURE.md
+PASS changed active links: docs/product-context/COVERAGE.md
+PASS changed active links: docs/product-context/REPORT.md
+PASS changed active links: docs/product-context/TRANSFER.md
+PASS changed active links: docs/product-context/closure-evidence/GATES.md
+PASS changed active links: docs/product-context/evidence/GATES.md
+PASS changed active links: docs/proposals/charts-2026-11-12/ORGANIZATION-PASS.md
+PASS changed active links: docs/proposals/charts-2026-11-12/PROPOSAL.md
+PASS changed active links: docs/proposals/charts-2026-11-12/STRUCTURED-REVIEW.md
+PASS changed active links: docs/proposals/charts-2026-11-12/review-orders.html
+PASS changed active links: docs/proposals/charts-2026-11-12/review.html
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/CALENDAR-NOTES.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/CHART-DECISIONS.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/INDEPENDENT-REVIEW.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/PLAN.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/REPORT.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/RUNTIME-FIX.md
+PASS changed active links: docs/replit/light-only-complete-ui-repair-2026-10-24/SHOWCASE-NOTES.md
+PASS changed active links: docs/review-evidence-repairs-2026-11-11/REPORT.md
+PASS changed active links: docs/zai/FINAL-CALENDAR-FIDELITY-AND-DONUT-REPAIR-2026-10-25.md
+PASS changed active links: docs/zai/FINAL-COMPONENT-REPAIR-AND-CONCEPT-AUDIT-2026-10-25.md
+PASS changed active links: docs/zai/FINAL-COMPREHENSIVE-REPAIR-REPORT-2026-10-24.md
+PASS changed active links: docs/zai/FINAL-FULL-UI-REVIEW-2026-10-24.md
+PASS changed active links: docs/zai/FINAL-REPAIR-REPORT-2026-10-24.md
+PASS changed active links: docs/zai/ZAI-CALENDAR-FIDELITY-AND-DONUT-CORRECTIVE-PROMPT-2026-10-25.md
+PASS changed active links: docs/zai/ZAI-COMPONENT-LEVEL-REPAIR-AND-CONCEPT-AUDIT-PROMPT-2026-10-25.md
+PASS changed active links: docs/zai/ZAI-COMPREHENSIVE-REPAIR-EXECUTION-PROMPT-2026-10-24.md
+PASS changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/CALENDAR-MONTH-VISUAL-REFINEMENT-INSTRUCTIONS-2026-10-25.md
+PASS changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/README.md
+PASS changed active links: docs/zai/references/owner-visual-concepts-2026-10-25/calendar-reference-implementation.html
+PASS changed active links: docs/zai/references/samsung-calendar-concept/README.md
+PASS changed active links: handoff/REFERENCE-2026-11-13.md
+PASS changed active links: previews/brand/index.html
+PASS changed active links: previews/buttons/index.html
+PASS changed active links: previews/carousel/example-usage.html
+PASS changed active links: previews/carousel/index.html
+PASS changed active links: previews/chart-proposal/index.html
+PASS changed active links: previews/chart-proposal/orders.html
+PASS defined required CSS tokens: previews/chart-proposal/proposal.css
+PASS no new hardcoded CSS palette: previews/chart-proposal/proposal.css
+PASS defined required CSS tokens: previews/compositions/compositions.css
+PASS no new hardcoded CSS palette: previews/compositions/compositions.css
+PASS changed active links: previews/compositions/form-example.html
+PASS changed active links: previews/compositions/index.html
+PASS defined required CSS tokens: previews/compositions/row-composition.css
+PASS no new hardcoded CSS palette: previews/compositions/row-composition.css
+PASS changed active links: previews/compositions/row-example.html
+PASS changed active links: previews/compositions/summary-example.html
+PASS changed active links: previews/data/example-usage.html
+PASS defined required CSS tokens: previews/index.css
+PASS no new hardcoded CSS palette: previews/index.css
+PASS defined required CSS tokens: previews/integration-boundaries/boundaries.css
+PASS no new hardcoded CSS palette: previews/integration-boundaries/boundaries.css
+PASS changed active links: previews/integration-boundaries/containers.html
+PASS changed active links: previews/integration-boundaries/index.html
+PASS changed active links: previews/integration-boundaries/layers.html
+PASS changed active links: previews/integration-boundaries/lifecycle.html
+PASS changed active links: previews/messages/index.html
+PASS changed active links: previews/mobile-capabilities/actions.html
+PASS changed active links: previews/mobile-capabilities/calendar-summary.html
+PASS changed active links: previews/mobile-capabilities/calendar-tasks.html
+PASS changed active links: previews/mobile-capabilities/index.html
+PASS changed active links: previews/mobile-capabilities/protected-form.html
+PASS changed active links: previews/product-context/index.html
+PASS changed active links: previews/product-context/lab.html
+PASS defined required CSS tokens: previews/readable-acceptance/acceptance.css
+PASS no new hardcoded CSS palette: previews/readable-acceptance/acceptance.css
+PASS changed active links: previews/readable-acceptance/index.html
+PASS changed active links: previews/readable-source/index.html
+PASS defined required CSS tokens: previews/readable-source/preview.css
+PASS no new hardcoded CSS palette: previews/readable-source/preview.css
+PASS changed active links: previews/system/index.html
+PASS defined required CSS tokens: previews/system/system.css
+PASS no new hardcoded CSS palette: previews/system/system.css
+PASS changed active links: previews/ui-system-showcase/README.md
+PASS changed active links: previews/ui-system-showcase/index.html
+PASS defined required CSS tokens: previews/ui-system-showcase/showcase.css
+PASS no new hardcoded CSS palette: previews/ui-system-showcase/showcase.css
+PASS changed active links: previews/ui-system-showcase/standalone.html
+PASS defined required CSS tokens: shared/tokens.css
+PASS no new hardcoded CSS palette: shared/tokens.css
+PASS legacy Dark values retained unchanged and gated inert
+PASS official accent and primary unchanged
+PASS logo v2 and official skills unchanged
+PASS no removed source or dead removed-chart imports
+PASS branch descends from recorded main
+PASS git diff --check (repository-owned files)
+PASS no high-signal credential added in diff
+381/381 PASS

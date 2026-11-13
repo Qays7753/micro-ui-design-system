@@ -864,3 +864,12 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 @media (min-width: 481px) {
   .app-shell { border-inline-width: 1px; }
 }
+
+/* Review is a component workbench: developer prose is available on demand. */
+.sc-docs > summary, .showcase-footer > details > summary { cursor:pointer;min-block-size:var(--micro-touch-min);display:list-item;padding-block:var(--micro-space-3);color:var(--micro-brand-primary); }
+.sc-docs > summary:focus-visible, .showcase-footer > details > summary:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }
+body[data-view="review"] .showcase-header { padding-block:var(--micro-space-3); }
+body[data-view="review"] .showcase-header__eyebrow,
+body[data-view="review"] .showcase-header__lede,
+body[data-view="review"] .showcase-header__meta,
+body[data-view="review"] .sc-review-nav > p { display:none; }

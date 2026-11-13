@@ -6966,6 +6966,15 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   .app-shell { border-inline-width: 1px; }
 }
 
+/* Review is a component workbench: developer prose is available on demand. */
+.sc-docs > summary, .showcase-footer > details > summary { cursor:pointer;min-block-size:var(--micro-touch-min);display:list-item;padding-block:var(--micro-space-3);color:var(--micro-brand-primary); }
+.sc-docs > summary:focus-visible, .showcase-footer > details > summary:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }
+body[data-view="review"] .showcase-header { padding-block:var(--micro-space-3); }
+body[data-view="review"] .showcase-header__eyebrow,
+body[data-view="review"] .showcase-header__lede,
+body[data-view="review"] .showcase-header__meta,
+body[data-view="review"] .sc-review-nav > p { display:none; }
+
 </style>
 </head>
 <body data-view="app">
@@ -7498,7 +7507,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     </div>
     <p class="showcase-header__eyebrow">MICRO · UI SYSTEM SHOWCASE</p>
     <h1 class="showcase-header__title">معرض نظام الواجهة</h1>
-    <p class="showcase-header__lede">مكوّنات عربية قابلة لإعادة الاستخدام. المصدر الحقيقي، وحالات واضحة، وتفاصيل مضبوطة من الهاتف إلى الشاشة الواسعة.</p>
+    <p class="showcase-header__lede">مكوّنات عربية قابلة لإعادة الاستخدام. المصدر الحقيقي، وحالات واضحة، للهاتف، مع توثيق الاستخدام والحالات.</p>
     <div class="showcase-header__meta">
       <span data-catalog-summary>حالة النضج تُقرأ من فهرس المكوّنات</span>
       <span>المتغيرات المقترحة تبقى اختيارية</span>
@@ -7580,7 +7589,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">01 · S01</p>
         <h2 class="sc-section__title" id="sc-surfaces-title">الأسطح <span class="sc-pill sc-pill--current" data-catalog-family="surfaces">STABLE UI</span></h2>
-        <p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة؛ الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">السطح البترولي قراءة ذات أولوية والمنحنيات الساكنة واسعة وخافتة؛ الاتجاه المعتمد من curves.css. عائلة CSS فقط بلا JavaScript.</p></details>
       </div>
       <div class="sc-block sc-block--plain sc-surface-stage">
         <article class="m-surface m-surface--curves">
@@ -7609,7 +7618,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">02 · B01</p>
         <h2 class="sc-section__title" id="sc-buttons-title">الأزرار <span class="sc-pill sc-pill--current" data-catalog-family="buttons">STABLE UI</span></h2>
-        <p class="sc-section__desc">الأنواع لا تتنافس في البروز؛ الأساسي هو التأكيد الوحيد. التحميل بالنمط B: التسمية باقية والمؤشر بفتة ثابتة بلا إزاحة محتوى.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">الأنواع لا تتنافس في البروز؛ الأساسي هو التأكيد الوحيد. التحميل بالنمط B: التسمية باقية والمؤشر بفتة ثابتة بلا إزاحة محتوى.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <p class="sc-block__title">الأنواع والمقاسات</p>
@@ -7643,7 +7652,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">03 · B02</p>
         <h2 class="sc-section__title" id="sc-fields-title">الحقول <span class="sc-pill sc-pill--current" data-catalog-family="fields">STABLE UI</span></h2>
-        <p class="sc-section__desc">التسمية ظاهرة وليست placeholder؛ فارغ ≠ صفر؛ الخطأ يبقي القيمة ويرتبط برسالة عبر aria-describedby تلقائيًا.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">التسمية ظاهرة وليست placeholder؛ فارغ ≠ صفر؛ الخطأ يبقي القيمة ويرتبط برسالة عبر aria-describedby تلقائيًا.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="m-field" data-micro-field id="sc-field-name">
@@ -7725,7 +7734,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">04 · B03</p>
         <h2 class="sc-section__title" id="sc-selection-title">الاختيار <span class="sc-pill sc-pill--current" data-catalog-family="selection">STABLE UI</span></h2>
-        <p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس؛ D-UI-05).</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">checkbox/radio للاختيار، switch للإعداد الدائم، toggle للوضع المؤقت، وsegmented لتبديل قيمة (40px مرئيًا / 48px هدف لمس؛ D-UI-05).</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-grid-2">
@@ -7824,7 +7833,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">05 · B04</p>
         <h2 class="sc-section__title" id="sc-organization-title">التنظيم <span class="sc-pill sc-pill--current" data-catalog-family="organization">STABLE UI</span></h2>
-        <p class="sc-section__desc">تجميع بالعناوين والمسافات والفواصل؛ الصفوف المفتوحة بلا ظل؛ الشارات معلوماتية لا أزرار؛ سهم التفاصيل يسارًا في RTL.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">تجميع بالعناوين والمسافات والفواصل؛ الصفوف المفتوحة بلا ظل؛ الشارات معلوماتية لا أزرار؛ سهم التفاصيل يسارًا في RTL.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-stack--tight">
@@ -7875,7 +7884,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">06 · SPEC-01</p>
         <h2 class="sc-section__title" id="sc-info-title">بطاقة القراءة وشريط المعلومات <span class="sc-pill sc-pill--current" data-catalog-family="info-strip">STABLE UI</span></h2>
-        <p class="sc-section__desc">القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">القراءة الواحدة الصغيرة تبدأ بالمتغير compact؛ الشريط اليدوي للبطاقات القليلة، وpeek opt-in للمُلخصات المتقاربة فقط. عند ضيق الحاوية يعود peek لبطاقة كاملة العرض.</p></details>
       </div>
       <div class="sc-block sc-block--plain sc-stack">
         <p class="sc-hint">الكثافة المدمجة هي الافتراضية؛ استخدم m-info-card--featured لقيمة محورية واحدة عند الحاجة لبروز حقيقي.</p>
@@ -8002,7 +8011,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">07 · B05</p>
         <h2 class="sc-section__title" id="sc-data-title">البيانات والرسوم <span class="sc-pill sc-pill--current" data-catalog-family="data">STABLE UI</span></h2>
-        <p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير ويحمل الوحدة والفترة في تسميته (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح، ولا بيانات تُعرض كحالة فراغ صادقة لا كصفر.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">كل رسم له اسم مرئي مرتبط وملخص متزامن مع المصدر، وإفصاح بيانات داخل الرسم يُعاد بناؤه كل تصيير ويحمل الوحدة والفترة في تسميته (D-UI-04). صفر/مفقود/سالب حالات مستقلة بنص صريح، ولا بيانات تُعرض كحالة فراغ صادقة لا كصفر.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-review-only">
@@ -8167,7 +8176,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-block sc-stack" id="sc-signed" aria-labelledby="sc-signed-title">
       <div class="sc-section__head">
         <h2 class="sc-section__title" id="sc-signed-title">نطاق القيم الموقّع (Data)</h2>
-        <p class="sc-section__desc">امتداد للعائلة نفسها، لا عائلة جديدة. محور صفر مشترك، وقراءات كاملة، ولا تحويل للسالب إلى موجب.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">امتداد للعائلة نفسها، لا عائلة جديدة. محور صفر مشترك، وقراءات كاملة، ولا تحويل للسالب إلى موجب.</p></details>
       </div>
       <div class="sc-stack">
         <section class="m-chart m-chart--bars" data-chart="bars" data-value-domain="signed" id="sc-signed-bars">
@@ -8200,7 +8209,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
 
     <!-- ============ 07b · packed-circle (ملحق PROPOSED — قرار عرض 2026-10-25) ============ -->
     <section class="sc-section" id="sc-readable-data" data-status="draft" aria-labelledby="sc-readable-data-title">
-      <div class="sc-section__head"><h2 class="sc-section__title" id="sc-readable-data-title">قراءة مباشرة واختيار اختياري <span class="sc-pill sc-pill--draft" data-catalog-family="data" data-catalog-variant="data-readable">DRAFT FOR REVIEW</span></h2><p class="sc-section__desc">القيم ووحداتها أولًا. <a href="../readable-source/index.html">معاينة المصدر وC04</a>؛ دون بيانات منتج.</p></div>
+      <div class="sc-section__head"><h2 class="sc-section__title" id="sc-readable-data-title">قراءة مباشرة واختيار اختياري <span class="sc-pill sc-pill--draft" data-catalog-family="data" data-catalog-variant="data-readable">DRAFT FOR REVIEW</span></h2><details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">القيم ووحداتها أولًا. <a href="../readable-source/index.html">معاينة المصدر وC04</a>؛ دون بيانات منتج.</p></details></div>
       <div class="m-reading-group" data-review-variant="data-readable">
         <div class="m-chart" data-chart="bars" data-presentation="readable" data-selection="single" data-selected-key="a" data-unit="د.أ">
           <h3 class="m-chart__title">قيم يومية</h3><ul class="m-chart__data" hidden><li data-key="a" data-series="a" data-label="سبت" data-value="150"></li><li data-key="b" data-series="a" data-label="أحد" data-value="120"></li><li data-key="c" data-series="a" data-label="اثنين" data-value="180"></li></ul><div class="m-chart__plot" data-plot></div>
@@ -8208,7 +8217,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       </div>
     </section>
     <section class="sc-section" id="sc-readable-metric" data-status="draft" aria-labelledby="sc-readable-metric-title">
-      <div class="sc-section__head"><h2 class="sc-section__title" id="sc-readable-metric-title">صفوف بأعمدة مشتركة <span class="sc-pill sc-pill--draft" data-catalog-family="metric-comparison" data-catalog-variant="metric-readable">DRAFT FOR REVIEW</span></h2><p class="sc-section__desc">أطوال قابلة للمقارنة وقراءات كاملة دون حذف.</p></div>
+      <div class="sc-section__head"><h2 class="sc-section__title" id="sc-readable-metric-title">صفوف بأعمدة مشتركة <span class="sc-pill sc-pill--draft" data-catalog-family="metric-comparison" data-catalog-variant="metric-readable">DRAFT FOR REVIEW</span></h2><details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">أطوال قابلة للمقارنة وقراءات كاملة دون حذف.</p></details></div>
       <div class="m-reading-group" data-review-variant="metric-readable">
         <div class="m-main-metric m-main-metric--compact m-main-metric--readable" data-main-comparison data-common-unit="قطعة" data-common-period="اليوم">
           <ul class="m-main-metric__source" data-bar-source hidden><li data-label="صابون" data-value="149" data-unit="قطعة" data-period="اليوم" data-series="a"></li><li data-label="شموع" data-value="82" data-unit="قطعة" data-period="اليوم" data-series="b"></li></ul><ul class="m-main-metric__rows" data-bar-items></ul><p class="m-main-metric__status" data-bar-status></p>
@@ -8219,7 +8228,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">07b · B05 ext</p>
         <h2 class="sc-section__title" id="sc-packed-title">الدوائر الملتصقة packed-circle <span class="sc-pill sc-pill--proposed" data-catalog-family="data" data-catalog-variant="packed-circle">PROPOSED</span></h2>
-        <p class="sc-section__desc">ملحق opt-in فوق B05. قرار عرض 2026-10-25 (دليل قياس وإخفاء بصري عند 320px): التداخل يخفي أجزاء الدوائر ويشوّه مقارنة المساحة على الهاتف، فالبيانات نفسها تُعرض هنا بالأعمدة (المفهوم الصحيح للمقارنة الدقيقة). يبقى الملحق PROPOSED في المكتبة لخيار المضيف الصريح بلا عرض افتراضي، وحدوده موثقة في مواصفته.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">ملحق opt-in فوق B05. قرار عرض 2026-10-25 (دليل قياس وإخفاء بصري عند 320px): التداخل يخفي أجزاء الدوائر ويشوّه مقارنة المساحة على الهاتف، فالبيانات نفسها تُعرض هنا بالأعمدة (المفهوم الصحيح للمقارنة الدقيقة). يبقى الملحق PROPOSED في المكتبة لخيار المضيف الصريح بلا عرض افتراضي، وحدوده موثقة في مواصفته.</p></details>
       </div>
       <div class="sc-block">
         <!-- البديل المعتمد للعرض: أعمدة بنفس مصدر البيانات (المفهوم الصحيح للمقارنة الدقيقة) -->
@@ -8256,7 +8265,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">08 · SPEC-02</p>
         <h2 class="sc-section__title" id="sc-metric-title">المقارنة العددية <span class="sc-pill sc-pill--current" data-catalog-family="metric-comparison">STABLE UI</span></h2>
-        <p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا (flat الموصى بها؛ compact للكثافة الأعلى بنفس العقد)، والبطاقات المدمجة للقراءات المحورية، وfeatured إبرازًا اختياريًا واحدًا. الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">الصفوف والأشرطة ذات المحور المشترك للقراءة الدقيقة افتراضيًا (flat الموصى بها؛ compact للكثافة الأعلى بنفس العقد)، والبطاقات المدمجة للقراءات المحورية، وfeatured إبرازًا اختياريًا واحدًا. الدوائر المنفصلة اختيارية للتقريب، والتداخل ليس ترميزًا كميًا افتراضيًا.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-review-only"><section class="m-metric-circles" data-metric-circles data-review-variant="metric-circles" data-layout="separated" data-unit="نقطة" data-period="العينة">
@@ -8361,7 +8370,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">09 · B06</p>
         <h2 class="sc-section__title" id="sc-messages-title">الرسائل والحالات <span class="sc-pill sc-pill--current" data-catalog-family="messages">STABLE UI</span></h2>
-        <p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert؛ D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">أدوار m-note من النوع تلقائيًا (help=note · info/success/warning=status · error=alert؛ D-UI-02)؛ إعلان الحيّ بقناتين منفصلتين بلا مؤقت ثابت (A2-F05)؛ toast للرسائل غير النقدية فقط.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-stack--tight">
@@ -8427,7 +8436,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">10 · B07</p>
         <h2 class="sc-section__title" id="sc-navigation-title">التنقل والطبقات <span class="sc-pill sc-pill--current" data-catalog-family="navigation">STABLE UI</span></h2>
-        <p class="sc-section__desc">الألسنة بصف واحد وتمرير أفقي مقصود مع Home/End (D-UI-01)؛ الطبقات بعزل خلفية وحصر تركيز واستعادة المشغّل؛ شريط الأفعال يلتف عند التكبير.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">الألسنة بصف واحد وتمرير أفقي مقصود مع Home/End (D-UI-01)؛ الطبقات بعزل خلفية وحصر تركيز واستعادة المشغّل؛ شريط الأفعال يلتف عند التكبير.</p></details>
       </div>
       <div class="sc-block sc-stack">
         <div class="sc-row sc-row--tight">
@@ -8492,7 +8501,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">11 · SPEC-04</p>
         <h2 class="sc-section__title" id="sc-gateway-title">بوابة الوصول <span class="sc-pill sc-pill--current" data-catalog-family="access-gateway">STABLE UI</span></h2>
-        <p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط؛ لا تُرسل بيانات إلى أي خدمة.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">تركيب مكوّنات بلا مصادقة ولا خدمة خلفية: تحقق وإرسال بمعالج المستهلك. المعالج هنا محاكاة عرض محلية حتمية فقط؛ لا تُرسل بيانات إلى أي خدمة.</p></details>
       </div>
       <div class="sc-block sc-block--plain">
         <section class="m-access-gateway sc-gateway" data-access-gateway id="sc-gateway-root" aria-labelledby="sc-gateway-heading">
@@ -8531,7 +8540,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">12 · SPEC-03</p>
         <h2 class="sc-section__title" id="sc-account-title">إعدادات الحساب والتطبيق <span class="sc-pill sc-pill--current" data-catalog-family="account-settings">STABLE UI</span></h2>
-        <p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير؛ دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">حوار بمستويين (الحساب ⇄ التطبيق) بأحداث تغيير؛ دون أي حفظ (عقد العائلة). المفاتيح مركّب B03 حقيقي داخل صفوف الإعدادات.</p></details>
       </div>
       <div class="sc-block">
         <main data-account-settings data-account-layer-id="sc-account-layer" id="sc-account-root">
@@ -8612,7 +8621,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">13 · m-ocal</p>
         <h2 class="sc-section__title" id="sc-ocal-title">جدول الطلبات المجدولة <span class="sc-pill sc-pill--draft" data-catalog-family="order-schedule">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">تقويم بمحدّد يوم/أسبوع/شهر حقيقي (عقد 2026-10-26): رأس شهر رقمي «10 / 2026» بلا أسماء أشهر مرئية، ومبدّل تقويم/قائمة مكوّني مستقل عن المحدد، وصفوف الطلب أكورديون داخلي أحادي الفتح — التفاصيل وأزرار تعديل/حذف داخل الصف نفسه لا في صندوق منفصل. اليوم داخل التقويم نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة).</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">تقويم بمحدّد يوم/أسبوع/شهر حقيقي (عقد 2026-10-26): رأس شهر رقمي «10 / 2026» بلا أسماء أشهر مرئية، ومبدّل تقويم/قائمة مكوّني مستقل عن المحدد، وصفوف الطلب أكورديون داخلي أحادي الفتح — التفاصيل وأزرار تعديل/حذف داخل الصف نفسه لا في صندوق منفصل. اليوم داخل التقويم نقطة الدخول؛ الإضافة والتعديل والحذف أحداث يملكها المضيف (تُحاكى هنا بحالة محلية موسومة).</p></details>
       </div>
       <!-- sc-block--ocal keeps the schedule root width equal to the actual available component width. -->
       <div class="sc-block sc-block--plain sc-stack sc-block--ocal">
@@ -8670,7 +8679,7 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
       <div class="sc-section__head">
         <p class="sc-section__kicker">14 · SYS-02</p>
         <h2 class="sc-section__title" id="sc-carousel-title">عارض البطاقات <span class="sc-pill sc-pill--draft" data-catalog-family="carousel">DRAFT FOR REVIEW</span></h2>
-        <p class="sc-section__desc">سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.</p>
+        <details class="sc-docs"><summary>ملاحظات المطوّر</summary><p class="sc-section__desc">سحب/أسهم/نقاط بلوحة مفاتيح منطقية RTL (ArrowLeft=التالي)، بلا autoplay، غير النشطة inert. التوسيع داخل البطاقة PROPOSED معروض كما هو.</p></details>
       </div>
       <div class="sc-block sc-block--plain">
         <div class="m-carousel" data-carousel data-controls="compact" data-carousel-label="ملخصات العرض" id="sc-carousel-root" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
@@ -8728,11 +8737,11 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
     </section>
   </main>
 
-  <footer class="showcase-footer">
+  <footer class="showcase-footer"><details><summary>حدود المعاينة والتسليم</summary>
     <p>هذا ملف عرض لمكوّنات نظام Micro UI؛ ليس تطبيقًا إنتاجيًا ولا صفحة منتج. جميع البيانات fixtures محلية حتمية لأغراض تنشيط حالات المكوّنات فقط.</p>
     <p>مستوى النضج يُقرأ من فهرس المكوّنات؛ ووسم العرض الحالي مستقل عن الحالة التشغيلية التي تتحكم بها أدوات المختبر. لا يُدّعى هنا جاهزية إنتاج ولا دعم أجهزة/قارئات غير مفحوصة.</p>
     <p>النسخة المكتفية ذاتيًا: standalone.html (مولدة آليًا؛ لا تُعدَّل يدويًا). إعادة البناء: python3 tools/build-ui-system-showcase-standalone.py</p>
-  </footer>
+  </details></footer>
 
   <!-- Toast على مستوى التطبيق (عقد B06: خارج العناصر المخفية) -->
   <div class="sc-toast-host" aria-label="منطقة الرسائل العابرة">

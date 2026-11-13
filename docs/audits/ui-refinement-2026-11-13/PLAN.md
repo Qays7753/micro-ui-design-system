@@ -10,7 +10,7 @@
 | 2 | توزيع ومساحات وأحجام: الذرات ثم تراكيب القراءة والنموذج وMarket/Delivery | دليل قبل/بعد للتجميع والتناسب ووضوح الإجراء؛ رفع صور متسق؛ لا تصغير شامل | منفذة؛ phase2/REPORT.md |
 | 3 | تقويم ورسوم وقراءات ومتغيراتها | مساحة مناسبة للمهمة، صدق المقاييس والوحدات؛ لا تغيير افتراضي عرض الطلبات دون حسم | منفذة؛ phase3/REPORT.md |
 | 4 | Ask: أزرار داخل الرسائل، صلاحية الاقتراحات، مقترح حضور وحركة | عقد واختبارات للسياق والتأكيد والإبطال؛ معاينة بصرية للهوية قبل اعتمادها | منفذة؛ phase4/REPORT.md، الاعتماد البصري مفتوح |
-| 5 | استكمال تغطية الحالات لجميع البنود ثم بوابات وتسليم | كل بند له دليل أو سبب عدم الانطباق، بلا إسقاط أو ترقية نضج آلية | بانتظار المراحل السابقة |
+| 5 | استكمال تغطية الحالات لجميع البنود ثم بوابات وتسليم | كل بند له دليل أو سبب عدم الانطباق، بلا إسقاط أو ترقية نضج آلية | منفذة؛ phase5/REPORT.md وCOVERAGE.md، الاعتماد البصري/المنصة مفتوحان |
 
 المراحل تتراكم: لا تلغي ملاحظات النصوص والأحجام والهوية عند الوصول إلى الرسوم أو Ask. لا تساوي «اختبار عقد ناجح» بـ«اعتماد بصري». لا تعالج كل شاشة بتنسيق منفصل إذا كان السبب مشتركًا.
 
@@ -57,40 +57,40 @@ Ask المطلوب: أزرار متابعة، عرض/تنقل، وتغيير ب�
 
 | النوع | المعرّف | النضج المحفوظ | نطاق المرحلة1 | المتابعة |
 |---|---|---|---|---|
-| families | buttons | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | fields | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | selection | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | organization | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | data | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | messages | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | navigation | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | surfaces | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | info-strip | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | metric-comparison | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | account-settings | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | access-gateway | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| families | order-schedule | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| families | carousel | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| variants | donut | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| variants | main-metric-featured | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| variants | bubbles | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| variants | metric-circles | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| variants | packed-circle | proposed | لا تعديل | مراجعة بصرية معلقة |
-| variants | info-strip-peek | stable-ui | لا تعديل | مراجعة بصرية معلقة |
-| variants | data-readable | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| variants | metric-readable | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | value-context | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | operational-row | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | form-surface | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | reading-context | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | mobile-actions | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | calendar-context | draft-for-review | لا تعديل | مراجعة بصرية معلقة |
-| compositions | product-context | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
-| compositions | operation-state | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
-| compositions | market-components | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
-| compositions | delivery-components | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
-| compositions | assistant-components | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
-| compositions | review-components | draft-for-review | نصوص مشتركة فقط | مراجعة بصرية معلقة |
+| families | buttons | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | fields | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | selection | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | organization | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | data | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | messages | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | navigation | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | surfaces | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | info-strip | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | metric-comparison | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | account-settings | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | access-gateway | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | order-schedule | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| families | carousel | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | donut | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | main-metric-featured | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | bubbles | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | metric-circles | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | packed-circle | proposed | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | info-strip-peek | stable-ui | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | data-readable | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| variants | metric-readable | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | value-context | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | operational-row | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | form-surface | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | reading-context | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | mobile-actions | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | calendar-context | draft-for-review | لا تعديل | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | product-context | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | operation-state | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | market-components | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | delivery-components | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | assistant-components | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
+| compositions | review-components | draft-for-review | نصوص مشتركة فقط | راجع phase5/COVERAGE.md؛ النضج محفوظ |
 
 ## القرارات المفتوحة
 
@@ -99,3 +99,7 @@ Ask المطلوب: أزرار متابعة، عرض/تنقل، وتغيير ب�
 - قواعد Delivery غير المحسومة مدخلات منتج، لا قرارات مكتبة.
 - الهاتف الفعلي مؤجل ولم يتحول إلى PASS. تكامل Micro مرحلة منفصلة لاحقًا.
 - نجاح أي فحص لا يرقّي Draft/Proposed ولا يعطي إذن دمج أو نشر.
+
+## تسلسل الرفع
+
+مرحلة1:3463d33؛ مرحلة2:65f44fb؛ مرحلة3:05f3f98؛ مرحلة4:a59d80b؛ مرحلة5 commit التقرير النهائي. كل مرحلة مرفوعة على الفرع نفسه، ولا main أو PR أو نشر.

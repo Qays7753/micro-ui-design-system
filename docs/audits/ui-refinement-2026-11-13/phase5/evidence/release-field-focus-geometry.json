@@ -1,0 +1,55 @@
+{
+  "viewport": 360,
+  "document": 360,
+  "fields": [
+    {
+      "id": "sc-field-name",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "sc-field-notes",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "sc-field-search",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "sc-field-qty",
+      "width": 186,
+      "scroll": 184,
+      "client": 184
+    },
+    {
+      "id": "sc-field-error-demo",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    },
+    {
+      "id": "",
+      "width": 296,
+      "scroll": 294,
+      "client": 294
+    }
+  ],
+  "focusBoundary": "rgba(255, 255, 255, 0.02) 0px 0px 0px 0.0378083px, rgba(22, 77, 89, 0.02) 0px 0px 0px 0.0756166px"
+}
