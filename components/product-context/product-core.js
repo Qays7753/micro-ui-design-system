@@ -3,7 +3,7 @@
   'use strict';
   var renderers = new Map(), instances = new WeakMap(), sequence = 0;
   var phases = {
-    ready: '', loading: 'جارٍ التحميل…', empty: 'لا توجد بيانات بعد', success: 'أكد المصدر نجاح العملية',
+    ready: '', loading: 'جارٍ التحميل…', empty: 'لا توجد بيانات بعد', success: 'تمت العملية',
     error: 'تعذّر إكمال الطلب', rejected: 'لم يُقبل الطلب', disabled: 'الإجراء غير متاح حاليًا',
     pending: 'بانتظار نتيجة مؤكدة', uncertain: 'النتيجة غير مؤكدة؛ تحقق قبل إعادة الإرسال',
     denied: 'لا تتوفر صلاحية لهذا السياق', expired: 'انتهت الجلسة', 'signed-out': 'يلزم تسجيل الدخول',
@@ -147,10 +147,10 @@
       if(forbidden.indexOf(phase)>=0){note(root,phases[phase],'بيانات السياق السابق غير معروضة.','warning');if(permission('reauth'))ctx.button(root,'reauth','متابعة الدخول',{});if(phase==='denied'&&permission('choose-context'))ctx.button(root,'choose-context','اختيار سياق آخر',{});}
       else if(!scopeKey){note(root,'اختر سياقًا معتمدًا','لا تُعرض بيانات خاصة قبل تحديد السياق.','warning');}
       else if(model.scope.kind==='driver'&&(type==='market'||(type==='review'&&model.mode!=='report')||(type!=='context'&&['manage','market'].indexOf(model.destination)>=0))){note(root,'هذه الوجهة غير متاحة في سياق السائق','المتاح للسائق Delivery وAsk Micro فقط.','warning');}
-      else if(!permission('view')||(type!=='context'&&type!=='state'&&key(model.dataContext)!==scopeKey)){note(root,'البيانات غير متاحة لهذا السياق','يلزم نطاق بيانات وصلاحية متطابقان.','warning');}
+      else if(!permission('view')||(type!=='context'&&type!=='state'&&key(model.dataContext)!==scopeKey)){note(root,'لا يمكنك عرض هذه البيانات في السياق الحالي','','warning');}
       else {
-        if(['offline','weak','local'].indexOf(model.connection)>=0)note(root,model.connection==='offline'?'الاتصال منقطع':model.connection==='local'?'وضع محلي':'الاتصال ضعيف',model.destination==='manage'?'العمل المحلي لا يعني أنه متزامن.':'العمليات التي تحتاج الاتصال غير متاحة الآن.','warning');
-        if(pending)note(root,phases.pending,'لم يؤكد المصدر اكتمال العملية.','info');else if(phase!=='ready')note(root,phase==='local-saved'&&model.destination!=='manage'?phases.uncertain:phases[phase],model.phaseDetail||'',phase==='error'?'error':phase==='success'?'success':'info');
+        if(['offline','weak','local'].indexOf(model.connection)>=0)note(root,model.connection==='offline'?'الاتصال منقطع':model.connection==='local'?'وضع محلي':'الاتصال ضعيف',model.destination==='manage'?'تحقق من مزامنة التغييرات المحلية.':'العمليات التي تحتاج الاتصال غير متاحة الآن.','warning');
+        if(pending)note(root,phases.pending,'','info');else if(phase!=='ready')note(root,phase==='local-saved'&&model.destination!=='manage'?phases.uncertain:phases[phase],model.phaseDetail||'',phase==='error'?'error':phase==='success'?'success':'info');
         if(phase!=='loading'&&(phase!=='empty'||type==='assistant'))renderers.get(type)(ctx);
         else if(phase==='empty'&&model.emptyActionLabel)ctx.button(root,'create',model.emptyActionLabel,{});
         if(['uncertain','conflict'].indexOf(phase)>=0&&permission('recheck')&&!root.querySelector('[data-product-action="recheck"]'))ctx.button(root,'recheck','إعادة التحقق',{});

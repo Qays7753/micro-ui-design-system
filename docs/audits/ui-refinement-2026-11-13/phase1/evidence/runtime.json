@@ -1,0 +1,96 @@
+{
+  "passed": 28,
+  "failed": 0,
+  "cases": [
+    {
+      "version": "source",
+      "width": 360,
+      "dir": "rtl",
+      "checks": {
+        "no_window_or_page_errors": true,
+        "no_unexpected_resource_errors": true,
+        "observer_deliveries_settle": true,
+        "source_values_unchanged": true,
+        "selected_date_unchanged": true,
+        "calendar_visible": true,
+        "charts_rendered": true
+      },
+      "errors": [],
+      "resource_errors": [
+        {
+          "tag": "IMG",
+          "src": "data:text/plain,not-an-image",
+          "fallback": true
+        }
+      ]
+    },
+    {
+      "version": "source",
+      "width": 360,
+      "dir": "ltr",
+      "checks": {
+        "no_window_or_page_errors": true,
+        "no_unexpected_resource_errors": true,
+        "observer_deliveries_settle": true,
+        "source_values_unchanged": true,
+        "selected_date_unchanged": true,
+        "calendar_visible": true,
+        "charts_rendered": true
+      },
+      "errors": [],
+      "resource_errors": [
+        {
+          "tag": "IMG",
+          "src": "data:text/plain,not-an-image",
+          "fallback": true
+        }
+      ]
+    },
+    {
+      "version": "standalone",
+      "width": 360,
+      "dir": "rtl",
+      "checks": {
+        "no_window_or_page_errors": true,
+        "no_unexpected_resource_errors": true,
+        "observer_deliveries_settle": true,
+        "source_values_unchanged": true,
+        "selected_date_unchanged": true,
+        "calendar_visible": true,
+        "charts_rendered": true
+      },
+      "errors": [],
+      "resource_errors": [
+        {
+          "tag": "IMG",
+          "src": "data:text/plain,not-an-image",
+          "fallback": true
+        }
+      ]
+    },
+    {
+      "version": "standalone",
+      "width": 360,
+      "dir": "ltr",
+      "checks": {
+        "no_window_or_page_errors": true,
+        "no_unexpected_resource_errors": true,
+        "observer_deliveries_settle": true,
+        "source_values_unchanged": true,
+        "selected_date_unchanged": true,
+        "calendar_visible": true,
+        "charts_rendered": true
+      },
+      "errors": [],
+      "resource_errors": [
+        {
+          "tag": "IMG",
+          "src": "data:text/plain,not-an-image",
+          "fallback": true
+        }
+      ]
+    }
+  ],
+  "scope": "Light-only Chromium source + standalone over HTTP; no Dark tests",
+  "reviewScope": true
+}
