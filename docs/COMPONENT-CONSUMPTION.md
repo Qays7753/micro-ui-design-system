@@ -72,3 +72,7 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 ## أفعال مشتركة ضمن مكونات أخرى
 
 عند استهلاك رسوم Data/Packed/Metric التي تولّد جدول إفصاح أو أدوات اختيار Data، حمّل `buttons.css` مرة قبل CSS العائلة. لا تنسخ مظهر B01 في hook خاص بالمخطط، ولا تفترض أن وجود `<button>` وحده يحقق مظهر الزر المعتمد. استهلاك المتغير وإظهار التعطيل والتركيز والضغط جزء من الفحص، مع مسؤولية العائلة عن حدث الفعل ودورة حياته. [العقد والاستثناءات المتخصصة](SHARED-ACTIONS.md).
+
+## امتداد سياق المنتج C07–C12
+
+[العقد العام الموثق](../components/product-context/specification.md) و[جدول التغطية والقرارات](product-context/COVERAGE.md) يضيفان تراكيب Draft فوق المصدر الحالي. `MicroProduct.mount/replace/resolve/destroy` مالك محتواها الداخلي فقط، ولا يحل محل Navigation/Fields/Carousel أو سياسة الخادم. لا تنسخ lab.js أو بيانات الأمثلة. [خطة النقل لاحقًا](product-context/TRANSFER.md).

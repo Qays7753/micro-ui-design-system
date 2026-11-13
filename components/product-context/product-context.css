@@ -1,0 +1,34 @@
+/* Geometry B and existing semantic tokens only. Phone component compositions. */
+.m-product { display:grid;gap:var(--micro-space-4);min-inline-size:0;font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family);color:var(--micro-text-primary);overflow-wrap:anywhere; }
+.m-product [hidden] { display:none; }
+.m-product__section { display:grid;gap:var(--micro-space-3);min-inline-size:0; }
+.m-product__surface { display:grid;gap:var(--micro-space-3);padding:var(--micro-space-4);border:1px solid var(--micro-border-divider);border-radius:var(--micro-radius-surface);background:var(--micro-surface-base);min-inline-size:0; }
+.m-product__title { margin:0;font-size:var(--micro-section-title-size);line-height:var(--micro-section-title-line);font-weight:var(--micro-weight-semibold); }
+.m-product__secondary { margin:0;color:var(--micro-text-secondary);font-size:var(--micro-secondary-size);line-height:var(--micro-secondary-line); }
+.m-product__actions { display:flex;flex-wrap:wrap;align-items:center;gap:var(--micro-space-2);min-inline-size:0; }
+.m-product__actions .m-btn { min-inline-size:var(--micro-touch-min); }
+.m-product__value { font-size:var(--micro-amount2-size);line-height:var(--micro-amount2-line);font-weight:var(--micro-weight-semibold); }
+.m-product__media { display:block;inline-size:100%;aspect-ratio:4/3;object-fit:cover;background:var(--micro-surface-page);border-radius:var(--micro-radius-field); }
+.m-product__media-empty { display:grid;place-items:center;min-block-size:120px;padding:var(--micro-space-4);background:var(--micro-surface-page);border:1px dashed var(--micro-border-divider);border-radius:var(--micro-radius-field);color:var(--micro-text-secondary); }
+.m-product__gallery .m-carousel__card { padding:0; }
+.m-product__file { inline-size:100%;min-block-size:var(--micro-touch-min);font:inherit; }
+.m-product__destinations { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--micro-space-2); }
+.m-product__destinations .m-btn { inline-size:100%;white-space:normal; }
+.m-product__timeline { list-style:none;margin:0;padding:0;display:grid;gap:var(--micro-space-3); }
+.m-product__timeline li { border-inline-start:2px solid var(--micro-border-divider);padding-inline-start:var(--micro-space-3);display:grid;gap:var(--micro-space-1); }
+.m-product__timeline [aria-current="step"] { border-color:var(--micro-brand-primary); }
+.m-product__log { display:grid;gap:var(--micro-space-3);max-block-size:360px;overflow:auto;overscroll-behavior:contain; }
+.m-product__message { max-inline-size:88%;padding:var(--micro-space-3);border:1px solid var(--micro-border-divider);border-radius:var(--micro-radius-surface);background:var(--micro-surface-base);white-space:pre-wrap; }
+.m-product__message[data-speaker="user"] { justify-self:start;background:var(--micro-surface-selected); }
+.m-product__message[data-speaker="assistant"] { justify-self:end; }
+.m-product__message p { margin:0; }
+.m-product__comparison { margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--micro-space-2); }
+.m-product__comparison dt { color:var(--micro-text-secondary);font-size:var(--micro-secondary-size); }
+.m-product__comparison dd { margin:0; }
+
+/* Reuse the field shell; the native input also occupies its touch height. */
+.m-product .m-field__input { min-block-size:calc(var(--micro-field-min-height) - 2px); }
+.m-product p { margin:0; }
+.m-product > .m-badge { justify-self:start; }
+.m-product strong { font-weight:var(--micro-weight-semibold); }
+.m-product:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }

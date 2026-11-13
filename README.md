@@ -1,10 +1,10 @@
 # Micro UI Design System
 
-مكتبة UI مستقلة قابلة لإعادة الاستخدام والتعديل. هذا المستودع لا يحتوي UX لمنتج Micro، ولا شاشات إنتاجية، ولا منطق أعمال، ولا مصادقة أو حفظًا حقيقيًا.
+مكتبة UI مستقلة قابلة لإعادة الاستخدام والتعديل. يحتوي مكونات وتراكيب UI محدودة لسياق Micro، دون شاشات إنتاجية أو منطق أعمال أو مصادقة أو حفظ حقيقي.
 
 ## نقطة الدخول
 
-الحالي: [مرجع التسليم المثبت](handoff/REFERENCE-2026-11-13.md). مصدر المكونات المعتمد `892cac56a83c72aa4d1a8e21e07c1eca26af9dd3` يتضمن24b78ef؛ أُقر دمجه مع سجل التسليم التوثيقي.14 عائلة/8 متغيرات/6 تراكيب للهاتف Light/RTL. معاينة الهاتف مؤجلة وتخطيط التكامل مرحلة منفصلة؛ النضج محفوظ. [العقود](docs/MOBILE-CAPABILITIES.md) و[تقرير القدرات](docs/audits/mobile-capabilities-2026-11-13/REPORT.md).
+الحالي: [تغطية سياق المنتج](docs/product-context/COVERAGE.md)، [تقرير الإكمال](docs/product-context/REPORT.md) و[المختبر](previews/product-context/index.html). البداية main `280b33b988428e3085c28cc150a0c71deb419889`؛14 عائلة/8 متغيرات/12 تركيبًا، C07–C12 الجديدة Draft للمراجعة، للهاتف Light/RTL. لم يُفتح Micro ولم يبدأ التكامل أو backend أو AI. [مرجع التسليم السابق المثبت](handoff/REFERENCE-2026-11-13.md) محفوظ لتلك النسخة ولا يعتمد هذه الإضافات تلقائيًا.
 
 **التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
 
@@ -59,6 +59,8 @@ previews/ui-system-showcase/standalone.html
 الملف الواحد مولد آليًا؛ عدّل `index.html` و`showcase.css` و`showcase.js` ثم أعد البناء، ولا تعدل `standalone.html` يدويًا.
 
 ## الفحوص الحالية
+
+`python3 tools/product-context-check.py --out /tmp/product-context` يفحص C07–C12 وحالاتها وعزل السياق والتأكيد والتنظيف، دون خدمات حقيقية.
 
 الفحص المركّز لعقود التركيب والإصلاحات: `python3 tools/component-consumption-contract-check.py` (Light، 360×780، دون zoom).
 

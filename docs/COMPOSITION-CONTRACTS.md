@@ -84,3 +84,7 @@ requestClose يرسل micro-navigation:close-request متزامنًا وقابل
 ## C04 — قراءة منظمة وسياق وحدة صريح
 
 امتداد مصدر اختياري Draft مع إطار CSS ومساعد MicroReadings؛ C01/C02/C03 باقية دون JS خاص بها. لا عائلة إضافية أو محرك أعمال. [عقد C04 ومقدار/وحدة/اختيار](READABLE-SOURCE.md). لا تُقرأ أعداد المتغيرات التاريخية أعلاه كحصر حالي؛ الكتالوج الحالي المرجع.
+
+## امتداد سياق المنتج C07–C12
+
+[العقد العام الموثق](../components/product-context/specification.md) و[جدول التغطية والقرارات](product-context/COVERAGE.md) يضيفان تراكيب Draft فوق المصدر الحالي. `MicroProduct.mount/replace/resolve/destroy` مالك محتواها الداخلي فقط، ولا يحل محل Navigation/Fields/Carousel أو سياسة الخادم. لا تنسخ lab.js أو بيانات الأمثلة. [خطة النقل لاحقًا](product-context/TRANSFER.md).

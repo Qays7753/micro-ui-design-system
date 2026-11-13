@@ -177,3 +177,7 @@ Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخ
 ## امتدادات الهاتف الحالية — 2026-11-13
 
 Navigation يضيف requestClose(layer,{reason?,trigger?}) بنتيجة boolean، مع بقاء closeLayer أمرًا مباشرًا. MicroActionSheet يضيف init/open/close/disconnect للتركيب C05، وmicro-actions:request يحمل {id,contextKey} بعد closed. C06 وصفة C01 خارج التقويم بمالك مزامنة من المستهلك؛ لا API جديدة داخل Order Schedule. [التفصيل والحدود والتحميل](MOBILE-CAPABILITIES.md).
+
+## امتداد سياق المنتج C07–C12
+
+[العقد العام الموثق](../components/product-context/specification.md) و[جدول التغطية والقرارات](product-context/COVERAGE.md) يضيفان تراكيب Draft فوق المصدر الحالي. `MicroProduct.mount/replace/resolve/destroy` مالك محتواها الداخلي فقط، ولا يحل محل Navigation/Fields/Carousel أو سياسة الخادم. لا تنسخ lab.js أو بيانات الأمثلة. [خطة النقل لاحقًا](product-context/TRANSFER.md).

@@ -101,7 +101,10 @@
     }, true);
     on(f, control, 'click', function (e) {
       if (e.defaultPrevented || input.disabled) return;
-      if (e.target.closest('input, textarea, select, button, a[href], [tabindex], [role="button"]')) return;
+      // A focusable host outside the control is not an embedded action.
+      // Only descendants of this shell keep their native interaction.
+      var interactive = e.target.closest('input, textarea, select, button, a[href], [tabindex], [role="button"]');
+      if (interactive && control.contains(interactive)) return;
       input.focus();
     });
   }

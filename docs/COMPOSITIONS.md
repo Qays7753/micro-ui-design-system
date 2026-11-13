@@ -1,6 +1,6 @@
-# استهلاك التراكيب المشتركة — C01–C06
+# استهلاك التراكيب المشتركة — C01–C12
 
-C01/C02/C03 وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`. الكتالوج يدرج6 تراكيب و8 متغيرات فوق14 عائلة؛ لا framework أو عائلة جديدة. [C04 والعرض المقروء](READABLE-SOURCE.md). [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
+C01/C02/C03 وصفات **HTML/CSS منفذة بحالة Draft للمراجعة**، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`. الكتالوج يدرج12 تركيبًا و8 متغيرات فوق14 عائلة؛ لا framework أو عائلة جديدة. [C04 والعرض المقروء](READABLE-SOURCE.md). [المعاينات](../previews/compositions/index.html) ليست شاشات منتج. [العقود](COMPOSITION-CONTRACTS.md) و[SOP](COMPONENT-CONSUMPTION.md) مكملان لهذا الدليل.
 
 CSS وبنية DOM الدلالية جزء من المكوّن. صفحات المعاينة ومتحكمها لا تنتقل إلى المنتج. عند اختيار إطار المضيف لاحقًا يُعرّف markup مرة في غلاف مشترك ثم تمرر الصفحات البيانات والأفعال؛ لا نسخ CSS لكل شاشة أو نقل controller الأمثلة.
 
@@ -126,3 +126,9 @@ novalidate في هذا المثال يعني أن المستهلك يقدم وا
 ## قدرات الهاتف C05/C06 — 2026-11-13
 
 C05 قائمة إجراءات مشتركة من Navigation وB01، مع MicroActionSheet ودورة حياة وترتيب إرسال بعد الإغلاق. C06 وصفة ملخص خارجي من C01 بجوار Order Schedule، بمزامنة يملكها المستهلك لا API جديدة للتقويم. [العقود والتحميل](MOBILE-CAPABILITIES.md)، [المعاينات](../previews/mobile-capabilities/index.html). كلاهما Draft؛ لا تغيير نضج العائلات أو نقل شاشات أمثلة.
+
+## C07–C12 — سياق المنتج
+
+ستة تراكيب Draft تستخدم `MicroProduct` المشترك وrenderers مستقلة، لا عائلات بديلة. [API والتحميل والأبعاد وحالات الاتصال](../components/product-context/specification.md)، [جدول التغطية](product-context/COVERAGE.md)، [المختبر ذو26 عينة](../previews/product-context/index.html). حمّل Fields JS وNavigation/C05 قبل core، وCarousel عند وجود الصور؛ لا تحمل متحكم المختبر في المنتج. تأكيد الحسّاس من C05، وعرض الصور من Carousel، واللمس من Fields/B01.
+
+الملكية: المستهلك يمرر نموذجًا كاملًا وصلاحيات وscope/dataContext، ويستقبل intent ويرد برمز resolve نفسه أو replace موثوق. لا network/store/auth/AI/قيد مالي. تغيير السياق أو انتهاء الجلسة يبطل الطلبات القديمة وينظف المسودات والمرفقات. دور السائق لا يمنح Manage/Market؛ واجهة المراجعة لا تجلب بيانات مالية. الخادم يظل مالك التفويض الحقيقي.

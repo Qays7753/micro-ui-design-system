@@ -48,7 +48,7 @@ def build():
             js = '<br>'.join(f'`{path}`' for path in dep['js']) or 'لا يلزم لهذا الخيار'
             lines.append(f"| {item['id']} | {dep['family']} | {dep['when']} | {css} | {js} |")
     lines += ["", "## التراكيب المشتركة", "",
-              "تراكيب فوق العائلات الحالية؛ C01–C04 للقراءات والنماذج، وC05 إجراءات هاتف، وC06 ملخص تقويم خارجي. [التحميل والملكية](COMPOSITIONS.md).", "",
+              "تراكيب فوق العائلات الحالية؛ C01–C04 للقراءات والنماذج، وC05 إجراءات هاتف، وC06 ملخص تقويم خارجي؛ C07–C12 تراكيب سياق المنتج في مختبر مستقل. [التحميل والملكية](COMPOSITIONS.md).", "",
               "| التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |",
               "|---|---|---|---|---|---|"]
     compositions = catalog.get('compositions', [])
@@ -57,6 +57,7 @@ def build():
         assert item['maturity'] in LABELS, item
         assert set(item['baseFamilies'] + item['optionalFamilies']) <= {family['id'] for family in families}, item
         expected_api = {('reading-context', 'C04'): 'MicroReadings', ('mobile-actions', 'C05'): 'MicroActionSheet'}
+        expected_api.update({('product-context','C07'):'MicroProduct',('operation-state','C08'):'MicroProduct',('market-components','C09'):'MicroProduct',('delivery-components','C10'):'MicroProduct',('assistant-components','C11'):'MicroProduct',('review-components','C12'):'MicroProduct'})
         assert item['api'] == expected_api.get((item['id'], item['contract'])), 'Composition API must match its explicit contract'
         for path in item['source'] + [item['preview']]:
             assert (ROOT / path).is_file(), path
@@ -78,7 +79,7 @@ def build():
         "- انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.",
         "- `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.",
         "- runtime success/error مختلف عن stable/draft/proposed.",
-        "- المعرض: [`Overview / State Lab`](../previews/ui-system-showcase/index.html) و[`Composition Lab`](../previews/compositions/index.html).",
+        "- المعرض: [`Overview / State Lab`](../previews/ui-system-showcase/index.html) و[`Composition Lab`](../previews/compositions/index.html) و[سياق المنتج](../previews/product-context/index.html).",
         "- المصدر والنسخة المولدة والمقارنات التاريخية وأدلة الاختبار فئات منفصلة.",
         "",
     ]

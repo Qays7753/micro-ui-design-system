@@ -44,7 +44,7 @@
 
 ## التراكيب المشتركة
 
-تراكيب فوق العائلات الحالية؛ C01–C04 للقراءات والنماذج، وC05 إجراءات هاتف، وC06 ملخص تقويم خارجي. [التحميل والملكية](COMPOSITIONS.md).
+تراكيب فوق العائلات الحالية؛ C01–C04 للقراءات والنماذج، وC05 إجراءات هاتف، وC06 ملخص تقويم خارجي؛ C07–C12 تراكيب سياق المنتج في مختبر مستقل. [التحميل والملكية](COMPOSITIONS.md).
 
 | التركيب | المصدر | المعاينة | النضج | عائلات الأساس | عائلات اختيارية بحسب الخانات |
 |---|---|---|---|---|---|
@@ -54,6 +54,12 @@
 | C04 · Structured readings and explicit unit context | [`components/compositions/reading-layout.css`](../components/compositions/reading-layout.css)<br>[`components/compositions/reading-context.js`](../components/compositions/reading-context.js) | [فتح](../previews/readable-source/index.html) | DRAFT FOR REVIEW |  | data, metric-comparison, info-strip, organization |
 | C05 · Mobile action sheet | [`components/navigation/action-sheet.css`](../components/navigation/action-sheet.css)<br>[`components/navigation/action-sheet.js`](../components/navigation/action-sheet.js)<br>[`components/navigation/action-sheet.md`](../components/navigation/action-sheet.md) | [فتح](../previews/mobile-capabilities/actions.html) | DRAFT FOR REVIEW | navigation, buttons | messages |
 | C06 · External calendar context | [`components/info-strip/value-context.css`](../components/info-strip/value-context.css)<br>[`components/compositions/calendar-context.md`](../components/compositions/calendar-context.md) | [فتح](../previews/mobile-capabilities/calendar-summary.html) | DRAFT FOR REVIEW | info-strip, order-schedule | fields, messages |
+| C07 · Identity, role, workspace and destinations | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/context.js`](../components/product-context/context.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, fields, messages | navigation |
+| C08 · Connection and acknowledged operation state | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/operation.js`](../components/product-context/operation.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, messages | — |
+| C09 · Market card, editor and search | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/market.js`](../components/product-context/market.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, fields, messages, carousel | organization, navigation |
+| C10 · Delivery request, offer, change and proof | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/delivery.js`](../components/product-context/delivery.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, fields, messages | carousel, navigation, organization |
+| C11 · Scoped Ask Micro conversation and confirmation | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/assistant.js`](../components/product-context/assistant.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, fields, messages | navigation |
+| C12 · Review item and report composition | [`components/product-context/product-core.js`](../components/product-context/product-core.js)<br>[`components/product-context/product-context.css`](../components/product-context/product-context.css)<br>[`components/product-context/review.js`](../components/product-context/review.js)<br>[`components/product-context/specification.md`](../components/product-context/specification.md) | [فتح](../previews/product-context/index.html) | DRAFT FOR REVIEW | buttons, fields, messages | carousel, navigation, organization |
 
 ## المتغيرات
 
@@ -76,5 +82,5 @@
 - انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.
 - `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.
 - runtime success/error مختلف عن stable/draft/proposed.
-- المعرض: [`Overview / State Lab`](../previews/ui-system-showcase/index.html) و[`Composition Lab`](../previews/compositions/index.html).
+- المعرض: [`Overview / State Lab`](../previews/ui-system-showcase/index.html) و[`Composition Lab`](../previews/compositions/index.html) و[سياق المنتج](../previews/product-context/index.html).
 - المصدر والنسخة المولدة والمقارنات التاريخية وأدلة الاختبار فئات منفصلة.
