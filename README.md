@@ -4,7 +4,7 @@
 
 ## نقطة الدخول
 
-الحالي: [قدرات الهاتف المشتركة](docs/audits/mobile-capabilities-2026-11-13/REPORT.md)، [عقود D01/C05/C06](docs/MOBILE-CAPABILITIES.md)، و[المعاينات](previews/mobile-capabilities/index.html). البداية24b78ef؛ العمل على فرع Feature للمراجعة، والهاتف النهائي مؤجل.14 عائلة/8 متغيرات/6 تراكيب دون ترقية تلقائية للنضج. [التنقيحات البصرية السابقة](docs/audits/visual-closure-2026-11-13/REPORT.md).
+الحالي: [مرجع التسليم المثبت](handoff/REFERENCE-2026-11-13.md). مصدر المكونات المعتمد `892cac56a83c72aa4d1a8e21e07c1eca26af9dd3` يتضمن24b78ef؛ أُقر دمجه مع سجل التسليم التوثيقي.14 عائلة/8 متغيرات/6 تراكيب للهاتف Light/RTL. معاينة الهاتف مؤجلة وتخطيط التكامل مرحلة منفصلة؛ النضج محفوظ. [العقود](docs/MOBILE-CAPABILITIES.md) و[تقرير القدرات](docs/audits/mobile-capabilities-2026-11-13/REPORT.md).
 
 **التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
 

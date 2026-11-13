@@ -1,0 +1,91 @@
+{
+  "approvedSourceCommit": "892cac56a83c72aa4d1a8e21e07c1eca26af9dd3",
+  "mainExpectedBeforeUpdate": "2946fad108e5fec2f00104e233decbb7e58c2855",
+  "runtimeAndPreviewUnchanged": true,
+  "sourceFilesVerified": 279,
+  "pinnedDocumentsVerified": 12,
+  "recordedBrowserGateAssertions": {
+    "passed": 948,
+    "failed": 0
+  },
+  "recordedStaticChecks": {
+    "passed": 346,
+    "failed": 0
+  },
+  "freshCriticalGate": {
+    "command": [
+      "python3",
+      "tools/mobile-capabilities-check.py",
+      "--out",
+      "/tmp/source-handoff-2026-11-13/mobile"
+    ],
+    "passed": 54,
+    "failed": 0,
+    "report": "handoff/mobile-check.json"
+  },
+  "checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "892cac56a83c72aa4d1a8e21e07c1eca26af9dd3",
+        "--",
+        "components",
+        "shared",
+        "assets",
+        "previews",
+        "tools"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/component-catalog-build.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "Catalog: 14 families, 8 explicit variants, 6 compositions, paths and inventory OK",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-ui-system-showcase-standalone.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "ICON CHECK OK: 24 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-chart-proposal-review.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "review.html: byte-identical PASS\nreview-orders.html: byte-identical PASS\nreview.html: byte-identical PASS\nreview-cases.html: byte-identical PASS\nreview.html: byte-identical PASS",
+      "stderr": ""
+    }
+  ],
+  "mergeStrategy": {
+    "type": "fast-forward",
+    "force": false,
+    "expectedMain": "2946fad108e5fec2f00104e233decbb7e58c2855",
+    "target": "The delivery commit containing this record; verified remote SHA is reported after update"
+  },
+  "phone": "Deferred; not passed",
+  "integration": "Separate phase; not performed",
+  "noDeployment": true,
+  "freshStaticChecks": {
+    "passed": 347,
+    "failed": 0,
+    "report": "handoff/static-check.json"
+  },
+  "evidenceNote": "Implementation and pinned consumption documents match892cac5. Evidence files and current-state documentation were sealed after static execution; final MANIFEST binds delivered files, avoiding a recursive self-hash claim.",
+  "manifest": "Regenerated and read-only checked before commit. Repeat checks on the identical tree after remote ref verification; the final delivery reports that actual result."
+}
