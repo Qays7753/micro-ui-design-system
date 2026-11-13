@@ -1,0 +1,1136 @@
+{
+  "browser": "156.0.8078.79",
+  "passed": 126,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "328px root/360px viewport/rtl: month-grid layout with compact=true",
+      "passed": true,
+      "detail": {
+        "layout": "month-grid",
+        "compact": "true"
+      }
+    },
+    {
+      "name": "328px/rtl: complete October grid with muted adjacent-month days",
+      "passed": true,
+      "detail": 35
+    },
+    {
+      "name": "328px/rtl: selected date initially October 31 in the grid",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "328px/rtl: day targets meet the documented compact (h>=48, w>=24) contract",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "328px/rtl: component and document have no horizontal overflow",
+      "passed": true,
+      "detail": {
+        "client": 328,
+        "scroll": 328,
+        "document": 360
+      }
+    },
+    {
+      "name": "328px/rtl: command controls keep 48px targets (segments 40px inside the 48px track)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "328px root/360px viewport/ltr: month-grid layout with compact=true",
+      "passed": true,
+      "detail": {
+        "layout": "month-grid",
+        "compact": "true"
+      }
+    },
+    {
+      "name": "328px/ltr: complete October grid with muted adjacent-month days",
+      "passed": true,
+      "detail": 35
+    },
+    {
+      "name": "328px/ltr: selected date initially October 31 in the grid",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "328px/ltr: day targets meet the documented compact (h>=48, w>=24) contract",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "328px/ltr: component and document have no horizontal overflow",
+      "passed": true,
+      "detail": {
+        "client": 328,
+        "scroll": 328,
+        "document": 360
+      }
+    },
+    {
+      "name": "328px/ltr: command controls keep 48px targets (segments 40px inside the 48px track)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "2026-10-25 anatomy: no counter chip inside month cells (dots-only system)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "day with three status types renders exactly three semantic dots",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "dots sit directly below their own day number (fixed tight gap)",
+      "passed": true,
+      "detail": {
+        "ok": true,
+        "ownGap": 4,
+        "nextGap": 10
+      }
+    },
+    {
+      "name": "indicator-to-next-row distance exceeds the own-number gap (fixed anatomy separation)",
+      "passed": true,
+      "detail": {
+        "ok": true,
+        "ownGap": 4,
+        "nextGap": 10
+      }
+    },
+    {
+      "name": "unified view segment renders day/week/month as tabs with month selected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "adjacent-month day is muted: disabled number color and 0.4 dot opacity",
+      "passed": true,
+      "detail": {
+        "num": "rgb(83, 103, 107)",
+        "dots": "0.4"
+      }
+    },
+    {
+      "name": "day segment composes view=calendar with cal-view=day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week segment composes view=calendar with cal-view=week (real week state)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week bar carries the selected week's numeric range (Oct 31 week is Sunday-first 25–31/10/2026)",
+      "passed": true,
+      "detail": "25–31/10/2026"
+    },
+    {
+      "name": "week grid holds the selected day and the events region below",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "next-week selects +7 days and emits day-select once (week follows selection)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prev-week returns to the Oct 31 week with another announced selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "clicking the week row's Sunday (logical first day) selects it with a numeric title",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "month segment returns to the full month grid of the selected month",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "muted leading September day is present and selectable in October view",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "clicking the muted out-month day selects it and follows it into its month",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "month header = numeric month / year (10 / 2026; month 18px/600 primary, year 18px/400 secondary, picker chevron)",
+      "passed": true,
+      "detail": {
+        "text": "10 / 2026",
+        "month": "18px",
+        "year": "18px",
+        "monthWeight": "600",
+        "yearWeight": "400",
+        "chevron": true
+      }
+    },
+    {
+      "name": "today = 1px divider-strong chip ring + semibold number (chip-level marks)",
+      "passed": true,
+      "detail": "rgb(113, 134, 139) 0px 0px 0px 1px"
+    },
+    {
+      "name": "selected day = brand-tint chip with brand-ink number; the cell itself never fills",
+      "passed": true,
+      "detail": {
+        "cell": "rgba(0, 0, 0, 0)",
+        "chip": "rgb(223, 238, 230)",
+        "num": "rgb(22, 77, 89)"
+      }
+    },
+    {
+      "name": "selected + today = selected style plus weight 600 with no ring",
+      "passed": true,
+      "detail": {
+        "bg": "rgb(223, 238, 230)",
+        "shadow": "none",
+        "weight": "600",
+        "color": "rgb(22, 77, 89)"
+      }
+    },
+    {
+      "name": "picker opens as a real local dialog and receives focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "year step changes picker year without changing selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "month choice updates displayed month only and returns focus to title",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "browsing January 2027 without a selected day shows the honest browsing panel",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Escape closes local picker and restores focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker Back action closes and restores focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "2027-02: Gregorian month contains 28 days",
+      "passed": true,
+      "detail": 28
+    },
+    {
+      "name": "2028-02: Gregorian month contains 29 days",
+      "passed": true,
+      "detail": 29
+    },
+    {
+      "name": "2027-04: Gregorian month contains 30 days",
+      "passed": true,
+      "detail": 30
+    },
+    {
+      "name": "2027-03: Gregorian month contains 31 days",
+      "passed": true,
+      "detail": 31
+    },
+    {
+      "name": "December-to-January month arrow changes displayed month without selecting",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact initial state: October grid complete, selected day events region shown",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prev-month from October: heading, grid and events region describe September coherently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "add request in a browsed month without selection emits date:null honestly",
+      "passed": true,
+      "detail": "[{\"name\":\"order-schedule:add-request\",\"detail\":{\"date\":null}}]"
+    },
+    {
+      "name": "next-month returns to October and restores the selected day events region",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "selecting a day in the displayed month updates selection and emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "date selection after browsing another month selects, emits, and leaves browsing state",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "add request with a selected day emits that day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact grid RTL ArrowLeft moves focus without selecting",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact grid focus crossing the month boundary updates month and focus only",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact grid Enter selects the focused day and emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact picker reaches December 2026 with 31 days and honest browsing panel",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "compact December-to-January arrow crosses the year boundary coherently",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "loading state remains outside calendar and is announced",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "error and consumer retry callback are available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "empty list keeps truthful empty state and add action",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "one and many order data are preserved in counts, rows, and summarized statuses",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "one-order day count and status remain visible",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "RTL grid ArrowLeft moves focus one day without selecting",
+      "passed": true,
+      "detail": {
+        "focus": "2026-10-08",
+        "selected": "2026-10-07",
+        "events": 0
+      }
+    },
+    {
+      "name": "grid Enter selects once and emits the existing day-select event",
+      "passed": true,
+      "detail": {
+        "selected": "2026-10-08",
+        "events": [
+          {
+            "name": "order-schedule:day-select",
+            "detail": {
+              "date": "2026-10-08"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "LTR grid ArrowLeft moves focus to previous day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "month view: events region below the grid with title, count, add and rows",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "order card is an accordion trigger: aria-expanded/aria-controls to a unique in-row region; actions hidden before opening",
+      "passed": true,
+      "detail": {
+        "present": true,
+        "expanded": "false",
+        "controls": "m-ocal-1-row-0-one-panel",
+        "panelFound": true,
+        "panelRole": "region",
+        "panelHidden": true,
+        "panelInsideRow": true,
+        "visiblePanels": 0,
+        "editInPanel": 1,
+        "deleteInPanel": 1,
+        "legacyTools": 0
+      }
+    },
+    {
+      "name": "order card keeps the refinement anatomy on the row surface (76px+, 1fr/20px, radius-lg, 1px border, no shadow, 20px chevron)",
+      "passed": true,
+      "detail": {
+        "present": true,
+        "h": 79.984375,
+        "cols": "262px 20px",
+        "radius": "16px",
+        "shadow": "none",
+        "border": "1px",
+        "titleOverflow": "ellipsis",
+        "chev": 20
+      }
+    },
+    {
+      "name": "tapping the whole order card expands it in place and emits order-open once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "expanded region shows the numeric details (title/date/time/status) with in-row edit/delete at 48px targets",
+      "passed": true,
+      "detail": {
+        "title": "طلب واحد",
+        "hasDate": true,
+        "hasTime": true,
+        "hasStatus": true,
+        "editBtn": true,
+        "deleteBtn": true,
+        "editRect": {
+          "w": 66,
+          "h": 48
+        }
+      }
+    },
+    {
+      "name": "clicking edit/delete inside the expanded row emits their events without collapsing the row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "tapping the expanded trigger collapses it honestly",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no floating add control and no bottom-sheet layer exist in this flow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "today's events region uses the اليوم wording (Events today equivalent)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "empty selected day keeps an honest empty state with the add action in region",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week view derives its row from the selected date (Oct 22 week, Sunday-first)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week RTL ArrowLeft steps the selection one day and emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week ArrowDown steps the selection one week (+7) and emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week ArrowUp steps the selection one week back (-7) and emits once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week Home selects the first (Sunday) day of the shown week",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week End selects the last (Saturday) day of the shown week",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "today button in week view jumps to today's week with an announced selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "day view keeps the day bar with prev/next and hides اليوم when selected is today",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "next-day in day view announces the new selected day and reveals اليوم",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "LTR week view renders the selected week with the events region",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "LTR week ArrowLeft steps the selection to the previous day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "events region add button emits add-request with the selected day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "week view has no horizontal overflow at wide root",
+      "passed": true,
+      "detail": {
+        "client": 328,
+        "scroll": 328,
+        "document": 360
+      }
+    },
+    {
+      "name": "loading keeps the view selector usable above the status box",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "error keeps the view selector usable and retry reachable",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "picker opens with aria-expanded and dialog role",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "focus leaving the component closes the picker honestly with updated aria-expanded",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "destroy removes all contract attributes and content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example title names the actual compact month presentation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example title follows explicit day mode",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example title follows explicit week mode",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example week demo initializes in the week presentation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example day demo initializes in the day presentation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example title follows explicit list mode",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "rtl: Sunday-first weekday header in both directions (أحد..سبت logical order)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت"
+      }
+    },
+    {
+      "name": "rtl: weekday header columns align exactly with grid date columns",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "rtl: calendar card surface with a single restrained border (radius-lg, no shadow)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "rtl: owner B: day grid has 1px/60% dividers; header and legend stay borderless",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "rtl: month header is numeric month / year (10 / 2026)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "rtl: day-cell accessible name is the full numeric date + count",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "rtl: no Arabic or English month names anywhere (visible or accessible)",
+      "passed": true,
+      "detail": {
+        "leaked": []
+      }
+    },
+    {
+      "name": "ltr: Sunday-first weekday header in both directions (أحد..سبت logical order)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت"
+      }
+    },
+    {
+      "name": "ltr: weekday header columns align exactly with grid date columns",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "ltr: calendar card surface with a single restrained border (radius-lg, no shadow)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "ltr: owner B: day grid has 1px/60% dividers; header and legend stay borderless",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "ltr: month header is numeric month / year (10 / 2026)",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "ltr: day-cell accessible name is the full numeric date + count",
+      "passed": true,
+      "detail": {
+        "first": "أحد",
+        "seventh": "سبت",
+        "firstIsSunday": true,
+        "seventhIsSaturday": true,
+        "aligned": true,
+        "cardPresent": true,
+        "cardBg": "rgb(255, 255, 255)",
+        "cardBorder": "1px",
+        "cardRadius": "16px",
+        "cardOverflow": "hidden",
+        "cardShadow": "none",
+        "headerRule": "0px",
+        "innerLines": 30,
+        "horizontalLine": "1px",
+        "dividerColor": "color(srgb 0.862745 0.898039 0.886274 / 0.6)",
+        "legendLine": "0px",
+        "monthLabel": "10",
+        "yearText": "2026",
+        "triggerText": "10 / 2026",
+        "eventsTitleNumeric": true,
+        "cellAriaNumeric": true,
+        "pickerAriaNumeric": null,
+        "visibleText": "يومأسبوعشهرعرض القائمة10 / 2026اليومأحدإثنثلاأربخميجمعسبت2728293012345678910111213141516171819202122232425262728293031قيد التنفيذمعلقمكتملطلبات 31/10/20261إضافة طلبطلب واحد09:15قيد التنفيذطلب واحدالتاريخ31/10/2026الوقت09:15المورد—الحالةقيد التنفيذ",
+        "ariaText": "طريقة العرض اختيار الشهر والسنة الشهر السابق الشهر التالي طلبات 10 / 2026 27/09/2026، لا طلبات 28/09/2026، طلب واحد 29/09/2026، لا طلبات 30/09/2026، لا طلبات 01/10/2026، لا طلبات 02/10/2026، لا طلبات 03/10/2026، لا طلبات 04/10/2026، لا طلبات 05/10/2026، لا طلبات 06/10/2026، لا طلبات 07/10/2026، لا طلبات 08/10/2026، لا طلبات 09/10/2026، لا طلبات 10/10/2026، لا طلبات 11/10/2026، لا طلبات 12/10/2026، لا طلبات 13/10/2026، لا طلبات 14/10/2026، لا طلبات 15/10/2026، لا طلبات 16/10/2026، لا طلبات 17/10/2026، لا طلبات 18/10/2026، لا طلبات 19/10/2026، لا طلبات 20/10/2026، لا طلبات 21/10/2026، لا طلبات 22/10/2026، 5 طلبات 23/10/2026، لا طلبات 24/10/2026، لا طلبات 25/10/2026، لا طلبات 26/10/2026، لا طلبات 27/10/2026، لا طلبات 28/10/2026، لا طلبات 29/10/2026، لا طلبات 30/10/2026، لا طلبات 31/10/2026، طلب واحد طلب واحد إضافة طلب ليوم السبت 31/10/2026"
+      }
+    },
+    {
+      "name": "ltr: no Arabic or English month names anywhere (visible or accessible)",
+      "passed": true,
+      "detail": {
+        "leaked": []
+      }
+    },
+    {
+      "name": "mode toggle renders beside the viewseg with truthful label and aria-pressed=false in calendar mode",
+      "passed": true,
+      "detail": {
+        "present": true,
+        "pressed": "false",
+        "label": "عرض القائمة",
+        "view": "calendar",
+        "viewseg": true,
+        "w": 131,
+        "h": 48
+      }
+    },
+    {
+      "name": "mode toggle switches to the real list surface (viewseg/calbar gone, grouped sections, same orders)",
+      "passed": true,
+      "detail": {
+        "view": "list",
+        "layout": "list",
+        "pressed": "true",
+        "label": "عرض التقويم",
+        "viewseg": false,
+        "calbar": false,
+        "sections": [
+          "الطلبات القادمة",
+          "الطلبات السابقة",
+          "الطلبات غير المجدولة"
+        ],
+        "rows": 9,
+        "triggerIds": [
+          "many-1",
+          "many-2",
+          "many-3",
+          "many-4",
+          "many-5",
+          "one",
+          "sep-adj",
+          "sep-1",
+          "unscheduled"
+        ],
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "list mode rows are the same accordion triggers (expansion works)",
+      "passed": true,
+      "detail": {
+        "expanded": "true",
+        "visible": 1
+      }
+    },
+    {
+      "name": "switching expansion to another order closes the first (single-open, order-open per open)",
+      "passed": true,
+      "detail": {
+        "oneExpanded": "false",
+        "otherExpanded": "true",
+        "visible": 1,
+        "orderOpenEvents": [
+          "one",
+          "many-1"
+        ],
+        "focus": "many-1"
+      }
+    },
+    {
+      "name": "keyboard Enter on the trigger collapses exactly like pointer activation",
+      "passed": true,
+      "detail": {
+        "expanded": "false",
+        "visible": 0,
+        "focus": "many-1"
+      }
+    },
+    {
+      "name": "mode toggle returns to calendar mode preserving the selection and the segmented control",
+      "passed": true,
+      "detail": {
+        "view": "calendar",
+        "calView": "month",
+        "selected": "2026-10-31",
+        "viewseg": true,
+        "toggleLabel": "عرض القائمة",
+        "togglePressed": "false"
+      }
+    },
+    {
+      "name": "empty list keeps the honest empty state with the mode toggle still reachable",
+      "passed": true,
+      "detail": {
+        "empty": true,
+        "text": "لا توجد طلبات بعد.إضافة طلب",
+        "toggle": true,
+        "rows": 0
+      }
+    },
+    {
+      "name": "2 orders: expansion stays inline inside the clicked row (no detached global box, single-open)",
+      "passed": true,
+      "detail": {
+        "rows": 2,
+        "middleId": "one",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "2 orders: no horizontal overflow with one row expanded",
+      "passed": true,
+      "detail": {
+        "rows": 2,
+        "middleId": "one",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "20 orders: expansion stays inline inside the clicked row (no detached global box, single-open)",
+      "passed": true,
+      "detail": {
+        "rows": 20,
+        "middleId": "x-7",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "20 orders: no horizontal overflow with one row expanded",
+      "passed": true,
+      "detail": {
+        "rows": 20,
+        "middleId": "x-7",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "100 orders: expansion stays inline inside the clicked row (no detached global box, single-open)",
+      "passed": true,
+      "detail": {
+        "rows": 100,
+        "middleId": "x-8",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "100 orders: no horizontal overflow with one row expanded",
+      "passed": true,
+      "detail": {
+        "rows": 100,
+        "middleId": "x-8",
+        "expanded": "true",
+        "panelInsideRow": true,
+        "visiblePanels": 1,
+        "panelsOutsideRows": 0,
+        "detachedGlobalBoxes": 0,
+        "rootScroll": 328,
+        "rootClient": 328,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "long Arabic title ellipsizes on the face (time/chevron intact) and shows in full inside the panel",
+      "passed": true,
+      "detail": {
+        "clipped": true,
+        "timeStillVisible": true,
+        "chevStillVisible": true,
+        "panelTitleFull": true,
+        "docWidth": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "no browser, console, or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "reviewScope": true,
+  "excluded": [
+    "390/430 viewport cases",
+    "compact-to-wide root resize"
+  ],
+  "scope": "Source-only fixture; light appearance; Chromium; no Dark tests or real-device/Safari/screen-reader claims"
+}

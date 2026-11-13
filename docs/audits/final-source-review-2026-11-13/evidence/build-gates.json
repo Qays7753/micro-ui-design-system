@@ -1,0 +1,80 @@
+{
+  "startCommit": "02411887f42b3efa6a6aa5b789e613dbfb7c3cd1",
+  "mainAtReview": "041c5a1096424047ebacccc9ca19c4b49e20aac1",
+  "workingTree": true,
+  "ownerMergeAuthorization": "2026-11-13; review then merge without reconfirmation",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/component-catalog-build.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "Catalog: 14 families, 8 explicit variants, 4 compositions, paths and inventory OK",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-ui-system-showcase-standalone.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "ICON CHECK OK: 24 رمزًا يطابق أصول assets/icons (المحتوى وfill)\nCHECK OK: standalone.html مطابق لإعادة التوليد بايت-ببايت",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build-chart-proposal-review.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "review.html: byte-identical PASS\nreview-orders.html: byte-identical PASS\nreview.html: byte-identical PASS\nreview-cases.html: byte-identical PASS\nreview.html: byte-identical PASS",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/manifest-build.py",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "CHECK OK: MANIFEST.json مطابق للمصدر (1290 مدخلًا، قراءة فقط)",
+      "stderr": ""
+    }
+  ],
+  "physicalDeviceReview": "Deferred; not passed",
+  "deferred": [
+    "D01/UX-06",
+    "UX-07",
+    "UX-08"
+  ],
+  "static": {
+    "passed": 322,
+    "failed": 0
+  },
+  "browserGates": {
+    "count": 15,
+    "passedAssertions": 863,
+    "failedAssertions": 0
+  },
+  "identityDiffVsMain": [],
+  "sourceAtFinalReview": {
+    "components/compositions/reading-context.js": "2b722711116fa94105a7161cd0195222729e0717adc2b7fb0423d23723100858",
+    "tools/unit-context-check.py": "cdffb52e8cf5f098d7390b61f59094c5c3e45f02137c40b161fac5b81fc23dae"
+  },
+  "manifestNote": "Regenerated and read-only check passed; regenerated again after sealing this evidence record, then checked before commit.",
+  "evidenceNote": "Browser gates ran on the working source before this documentation and evidence archive were sealed. The unit helper SHA matches units.json. Final MANIFEST binds all delivered evidence; static-report hashes of evidence files describe their state at static execution, not a recursive final hash."
+}

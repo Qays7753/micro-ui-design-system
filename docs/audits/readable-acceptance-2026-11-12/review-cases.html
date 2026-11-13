@@ -1425,13 +1425,26 @@ button.m-chart__legend-row { cursor:pointer; }
     }
     return text;
   }
+  function mentionsUnit(text, unit) {
+    // A unit inside another word/unit is not an explicit shared context.
+    var word = /[\p{L}\p{M}\p{N}_]/u;
+    var chars = Array.from(unit), startWord = word.test(chars[0]), endWord = word.test(chars[chars.length - 1]);
+    var offset = text.indexOf(unit);
+    while (offset >= 0) {
+      var before = Array.from(text.slice(0, offset)).pop() || '';
+      var after = Array.from(text.slice(offset + unit.length))[0] || '';
+      if ((!startWord || !word.test(before)) && (!endWord || !word.test(after))) return true;
+      offset = text.indexOf(unit, offset + unit.length);
+    }
+    return false;
+  }
   function contextFor(el) {
     var group = el.closest('[data-reading-context]');
     if (!group) return null;
     var unit = el.getAttribute('data-reading-unit');
     var common = group.getAttribute('data-unit') || group.getAttribute('data-common-unit') || '';
     var label = group.ownerDocument.getElementById(group.getAttribute('data-reading-context'));
-    if (!unit || unit !== common || label === el || (label && el.contains(label)) || !visible(label) || visibleText(label).indexOf(unit) < 0) return null;
+    if (!unit || unit !== common || label === el || (label && el.contains(label)) || !visible(label) || !mentionsUnit(visibleText(label), unit)) return null;
     /* A mixed group never hides units, even if its heading mentions money. */
     if (within(group).some(function (node) {
       return node.closest('[data-reading-context]') === group && node.getAttribute('data-reading-unit') !== common;

@@ -4,7 +4,7 @@
 
 ## نقطة الدخول
 
-الحالي: [نسخة مرشحة للإقفال](docs/audits/shared-actions-2026-11-12/CANDIDATE.md)، [التقرير والأدلة](docs/audits/shared-actions-2026-11-12/REPORT.md)، و[المعاينة المستقلة](docs/audits/shared-actions-2026-11-12/review.html). الأفعال داخل Data/Packed/Metric تستهلك B01 نفسه، مع دليل تحميل صريح واختبارات مقارنة فعلية. مراجعة المالك على الهاتف مؤجلة إلى النهاية بطلبه؛ النضج وقرار الدمج لا يتغيران تلقائيًا. [العقد](docs/SHARED-ACTIONS.md).
+الحالي: [مراجعة الإقفال وتفويض دمج المصدر](docs/audits/final-source-review-2026-11-13/REPORT.md)، و[المعاينة المستقلة](docs/audits/shared-actions-2026-11-12/review.html). أجاز المالك الدمج بعد المراجعة بتاريخ2026-11-13؛ فحص الهاتف النهائي يبقى مؤجلًا، ولا تغيير تلقائيًا لنضج الكتالوج. [دليل الاستهلاك](docs/audits/shared-actions-2026-11-12/CANDIDATE.md) و[عقد الأفعال](docs/SHARED-ACTIONS.md).
 
 **التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
 

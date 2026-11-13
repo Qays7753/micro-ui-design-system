@@ -1,0 +1,413 @@
+{
+  "browser": "156.0.8078.79",
+  "sourceRef": "working tree",
+  "passed": 41,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "invalid selected date is ignored: 2026-02-30",
+      "passed": true,
+      "detail": "2026-11-11"
+    },
+    {
+      "name": "invalid selected date is ignored: 2026-13-01",
+      "passed": true,
+      "detail": "2026-11-11"
+    },
+    {
+      "name": "invalid selected date is ignored: 2026-00-00",
+      "passed": true,
+      "detail": "2026-11-11"
+    },
+    {
+      "name": "invalid selected date is ignored: 2025-02-29",
+      "passed": true,
+      "detail": "2026-11-11"
+    },
+    {
+      "name": "invalid selected date is ignored: 0000-01-01",
+      "passed": true,
+      "detail": "2026-11-11"
+    },
+    {
+      "name": "invalid initialization uses a real local date",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "impossible order date is unscheduled, never a real dated order",
+      "passed": true,
+      "detail": "عرض التقويم\nإضافة طلب\nالطلبات غير المجدولة\n\nطلب واحد\n\nطلب بتاريخ غير موجود"
+    },
+    {
+      "name": "four-digit year, selected cell and order agree: 0001",
+      "passed": true,
+      "detail": {
+        "days": [
+          "0001-01-28",
+          "0001-01-29",
+          "0001-01-30",
+          "0001-01-31",
+          "0001-02-01",
+          "0001-02-02",
+          "0001-02-03",
+          "0001-02-04",
+          "0001-02-05",
+          "0001-02-06",
+          "0001-02-07",
+          "0001-02-08",
+          "0001-02-09",
+          "0001-02-10",
+          "0001-02-11",
+          "0001-02-12",
+          "0001-02-13",
+          "0001-02-14",
+          "0001-02-15",
+          "0001-02-16",
+          "0001-02-17",
+          "0001-02-18",
+          "0001-02-19",
+          "0001-02-20",
+          "0001-02-21",
+          "0001-02-22",
+          "0001-02-23",
+          "0001-02-24",
+          "0001-02-25",
+          "0001-02-26",
+          "0001-02-27",
+          "0001-02-28",
+          "0001-03-01",
+          "0001-03-02",
+          "0001-03-03"
+        ],
+        "selected": 1,
+        "row": true,
+        "text": "يومأسبوعشهرعرض القائمة02 / 0001أحدإثنثلاأربخميجمعسبت2829303112345678910111213141516171819202122232425262728123طلبات اليوم1إضافة طلبموعدموعدالتاريخ28/02/0001الوقت—المورد—"
+      }
+    },
+    {
+      "name": "four-digit year, selected cell and order agree: 0099",
+      "passed": true,
+      "detail": {
+        "days": [
+          "0099-02-01",
+          "0099-02-02",
+          "0099-02-03",
+          "0099-02-04",
+          "0099-02-05",
+          "0099-02-06",
+          "0099-02-07",
+          "0099-02-08",
+          "0099-02-09",
+          "0099-02-10",
+          "0099-02-11",
+          "0099-02-12",
+          "0099-02-13",
+          "0099-02-14",
+          "0099-02-15",
+          "0099-02-16",
+          "0099-02-17",
+          "0099-02-18",
+          "0099-02-19",
+          "0099-02-20",
+          "0099-02-21",
+          "0099-02-22",
+          "0099-02-23",
+          "0099-02-24",
+          "0099-02-25",
+          "0099-02-26",
+          "0099-02-27",
+          "0099-02-28"
+        ],
+        "selected": 1,
+        "row": true,
+        "text": "يومأسبوعشهرعرض القائمة02 / 0099أحدإثنثلاأربخميجمعسبت12345678910111213141516171819202122232425262728طلبات اليوم1إضافة طلبموعدموعدالتاريخ28/02/0099الوقت—المورد—"
+      }
+    },
+    {
+      "name": "four-digit year, selected cell and order agree: 0100",
+      "passed": true,
+      "detail": {
+        "days": [
+          "0100-01-31",
+          "0100-02-01",
+          "0100-02-02",
+          "0100-02-03",
+          "0100-02-04",
+          "0100-02-05",
+          "0100-02-06",
+          "0100-02-07",
+          "0100-02-08",
+          "0100-02-09",
+          "0100-02-10",
+          "0100-02-11",
+          "0100-02-12",
+          "0100-02-13",
+          "0100-02-14",
+          "0100-02-15",
+          "0100-02-16",
+          "0100-02-17",
+          "0100-02-18",
+          "0100-02-19",
+          "0100-02-20",
+          "0100-02-21",
+          "0100-02-22",
+          "0100-02-23",
+          "0100-02-24",
+          "0100-02-25",
+          "0100-02-26",
+          "0100-02-27",
+          "0100-02-28",
+          "0100-03-01",
+          "0100-03-02",
+          "0100-03-03",
+          "0100-03-04",
+          "0100-03-05",
+          "0100-03-06"
+        ],
+        "selected": 1,
+        "row": true,
+        "text": "يومأسبوعشهرعرض القائمة02 / 0100أحدإثنثلاأربخميجمعسبت3112345678910111213141516171819202122232425262728123456طلبات اليوم1إضافة طلبموعدموعدالتاريخ28/02/0100الوقت—المورد—"
+      }
+    },
+    {
+      "name": "four-digit year, selected cell and order agree: 0999",
+      "passed": true,
+      "detail": {
+        "days": [
+          "0999-01-27",
+          "0999-01-28",
+          "0999-01-29",
+          "0999-01-30",
+          "0999-01-31",
+          "0999-02-01",
+          "0999-02-02",
+          "0999-02-03",
+          "0999-02-04",
+          "0999-02-05",
+          "0999-02-06",
+          "0999-02-07",
+          "0999-02-08",
+          "0999-02-09",
+          "0999-02-10",
+          "0999-02-11",
+          "0999-02-12",
+          "0999-02-13",
+          "0999-02-14",
+          "0999-02-15",
+          "0999-02-16",
+          "0999-02-17",
+          "0999-02-18",
+          "0999-02-19",
+          "0999-02-20",
+          "0999-02-21",
+          "0999-02-22",
+          "0999-02-23",
+          "0999-02-24",
+          "0999-02-25",
+          "0999-02-26",
+          "0999-02-27",
+          "0999-02-28",
+          "0999-03-01",
+          "0999-03-02"
+        ],
+        "selected": 1,
+        "row": true,
+        "text": "يومأسبوعشهرعرض القائمة02 / 0999أحدإثنثلاأربخميجمعسبت27282930311234567891011121314151617181920212223242526272812طلبات اليوم1إضافة طلبموعدموعدالتاريخ28/02/0999الوقت—المورد—"
+      }
+    },
+    {
+      "name": "four-digit year, selected cell and order agree: 2000",
+      "passed": true,
+      "detail": {
+        "days": [
+          "2000-01-30",
+          "2000-01-31",
+          "2000-02-01",
+          "2000-02-02",
+          "2000-02-03",
+          "2000-02-04",
+          "2000-02-05",
+          "2000-02-06",
+          "2000-02-07",
+          "2000-02-08",
+          "2000-02-09",
+          "2000-02-10",
+          "2000-02-11",
+          "2000-02-12",
+          "2000-02-13",
+          "2000-02-14",
+          "2000-02-15",
+          "2000-02-16",
+          "2000-02-17",
+          "2000-02-18",
+          "2000-02-19",
+          "2000-02-20",
+          "2000-02-21",
+          "2000-02-22",
+          "2000-02-23",
+          "2000-02-24",
+          "2000-02-25",
+          "2000-02-26",
+          "2000-02-27",
+          "2000-02-28",
+          "2000-02-29",
+          "2000-03-01",
+          "2000-03-02",
+          "2000-03-03",
+          "2000-03-04"
+        ],
+        "selected": 1,
+        "row": true,
+        "text": "يومأسبوعشهرعرض القائمة02 / 2000أحدإثنثلاأربخميجمعسبت303112345678910111213141516171819202122232425262728291234طلبات اليوم1إضافة طلبموعدموعدالتاريخ28/02/2000الوقت—المورد—"
+      }
+    },
+    {
+      "name": "month browsing stays inside the supported Gregorian year range",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "real Gregorian leap day remains valid",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "rtl month arrow moves focus without selecting",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "rtl Enter selects the focused day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "ltr month arrow moves focus without selecting",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "ltr Enter selects the focused day",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID opens once and restores focus: quote\"id",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID edit event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID delete event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID opens once and restores focus: quote'id",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID edit event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID delete event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID opens once and restores focus: bracket]\\id",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID edit event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID delete event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID opens once and restores focus: طلب عربي/1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID edit event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "opaque ID delete event leaves a focused row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "general state snapshot and independent displayed-month API are available",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "initial displayed month is independent of selection",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "snapshots are copies; programmatic setters stay silent; invalid month ignored",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "user month browse emits one complete snapshot without selecting",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "user mode switch emits exactly one snapshot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "one day action emits its legacy event and one coherent state event",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "data/loading/error and repeat init do not fake navigation changes",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "teardown releases DOM, instance and all state-event paths",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no document horizontal overflow at 360px",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "targeted narrow calendar has no horizontal overflow",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "scope": "Light only; 360x780 RTL; directional LTR; targeted 320; no zoom/Dark/device claims"
+}

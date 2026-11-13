@@ -1,0 +1,174 @@
+[
+  {
+    "name": "units",
+    "command": [
+      "python3",
+      "tools/unit-context-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/units"
+    ],
+    "exitCode": 0,
+    "seconds": 3.59
+  },
+  {
+    "name": "audit",
+    "command": [
+      "python3",
+      "tools/component-audit-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/audit"
+    ],
+    "exitCode": 0,
+    "seconds": 12.03
+  },
+  {
+    "name": "shared",
+    "command": [
+      "python3",
+      "tools/shared-actions-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/shared"
+    ],
+    "exitCode": 0,
+    "seconds": 6.45
+  },
+  {
+    "name": "readable",
+    "command": [
+      "python3",
+      "tools/readable-source-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/readable"
+    ],
+    "exitCode": 0,
+    "seconds": 6.64
+  },
+  {
+    "name": "acceptance",
+    "command": [
+      "python3",
+      "tools/readable-acceptance-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/acceptance"
+    ],
+    "exitCode": 0,
+    "seconds": 8.67
+  },
+  {
+    "name": "data",
+    "command": [
+      "python3",
+      "tools/light-data-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/final-ui-review/gates/data"
+    ],
+    "exitCode": 0,
+    "seconds": 4.95
+  },
+  {
+    "name": "families",
+    "command": [
+      "python3",
+      "tools/ux-continuation-phase3-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/families"
+    ],
+    "exitCode": 0,
+    "seconds": 15.11
+  },
+  {
+    "name": "release",
+    "command": [
+      "python3",
+      "tools/light-release-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/final-ui-review/gates/release"
+    ],
+    "exitCode": 0,
+    "seconds": 6.97
+  },
+  {
+    "name": "calendar",
+    "command": [
+      "python3",
+      "tools/light-calendar-check.py",
+      "--review-scope",
+      "--out",
+      "/tmp/final-ui-review/gates/calendar.json"
+    ],
+    "exitCode": 0,
+    "seconds": 8.73
+  },
+  {
+    "name": "calendar-contract",
+    "command": [
+      "python3",
+      "tools/calendar-contract-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/calendar-contract"
+    ],
+    "exitCode": 0,
+    "seconds": 3.74
+  },
+  {
+    "name": "consumption",
+    "command": [
+      "python3",
+      "tools/component-consumption-contract-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/consumption"
+    ],
+    "exitCode": 0,
+    "seconds": 3.93
+  },
+  {
+    "name": "clones",
+    "command": [
+      "python3",
+      "tools/clone-lifecycle-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/clones"
+    ],
+    "exitCode": 0,
+    "seconds": 2.04
+  },
+  {
+    "name": "compositions",
+    "command": [
+      "python3",
+      "tools/composition-recipes-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/compositions"
+    ],
+    "exitCode": 0,
+    "seconds": 8.67
+  },
+  {
+    "name": "boundaries",
+    "command": [
+      "python3",
+      "tools/integration-boundaries-check.py",
+      "--out",
+      "/tmp/final-ui-review/gates/boundaries"
+    ],
+    "exitCode": 0,
+    "seconds": 9.16
+  },
+  {
+    "name": "runtime",
+    "command": [
+      "python3",
+      "tools/preview-runtime-check.py",
+      "--base",
+      "http://127.0.0.1:38007",
+      "--review-scope",
+      "--standalone-http",
+      "--out",
+      "/tmp/final-ui-review/gates/runtime"
+    ],
+    "exitCode": 0,
+    "seconds": 12.41
+  }
+]

@@ -1,0 +1,284 @@
+{
+  "sourceCommitAtRun": "02411887f42b3efa6a6aa5b789e613dbfb7c3cd1",
+  "captureOnly": true,
+  "physicalDevice": false,
+  "browser": "156.0.8078.79",
+  "viewport": "360x780 RTL",
+  "theme": "light",
+  "passed": 13,
+  "failed": 9,
+  "checks": [
+    {
+      "name": "م in المخزون هذا اليوم",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "المخزون هذا اليوم",
+        "unit": "م",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "g in Weight reading",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "Weight reading",
+        "unit": "g",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "غ in المبلغ الحالي",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "المبلغ الحالي",
+        "unit": "غ",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "م in الوحدة كم",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "الوحدة كم",
+        "unit": "م",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "g in Weight (kg)",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "Weight (kg)",
+        "unit": "g",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "م in المساحة م²",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "المساحة م²",
+        "unit": "م",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "USD in BUSDA",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "BUSDA",
+        "unit": "USD",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "د.أ in رمز دXأ",
+      "passed": true,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": false,
+        "label": "رمز دXأ",
+        "unit": "د.أ",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "م in الوحدة: م",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "الوحدة: م",
+        "unit": "م",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "g in الوزن · g",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "الوزن · g",
+        "unit": "g",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "د.أ in المبيعات (د.أ)",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "المبيعات (د.أ)",
+        "unit": "د.أ",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "د.أ in المبيعات · 150د.أ",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "المبيعات · 150د.أ",
+        "unit": "د.أ",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "% in نسبة التحصيل 65%",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "نسبة التحصيل 65%",
+        "unit": "%",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "$ in المبالغ $",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "المبالغ $",
+        "unit": "$",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "m² in المساحة m²",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "المساحة m²",
+        "unit": "m²",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "kg in Weight kg",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "Weight kg",
+        "unit": "kg",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "USD in USD · المبيعات",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "USD · المبيعات",
+        "unit": "USD",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "م in مخزون · م",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "مخزون · م",
+        "unit": "م",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "قطعة in الكمية (قطعة)",
+      "passed": true,
+      "expectedContextual": true,
+      "detail": {
+        "contextual": true,
+        "label": "الكمية (قطعة)",
+        "unit": "قطعة",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "طلب in الطلبات",
+      "passed": false,
+      "expectedContextual": false,
+      "detail": {
+        "contextual": true,
+        "label": "الطلبات",
+        "unit": "طلب",
+        "number": "150",
+        "scroll": 360,
+        "width": 360
+      }
+    },
+    {
+      "name": "Disconnect keeps inline unit available",
+      "passed": true
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "sourceSha256": {
+    "components/compositions/reading-context.js": "6924b6a6abd0c24c058ead22786793e19d54c8cdde532e03019139edb8870569"
+  }
+}
