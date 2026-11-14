@@ -35,6 +35,15 @@ def drawer(p,base,out,check):
  p.evaluate('MicroAccountSettings.disconnect(document);MicroNavigation.disconnect(document)');check('Destroy releases layer and scroll lock',layer.is_hidden() and p.evaluate('document.body.style.overflow!=="hidden"'));p.set_viewport_size({'width':360,'height':780})
  p.goto(base+'/components/account-settings/example-usage.html');p.locator('[data-account-open]').click();check('Legacy centered account default retained',p.locator('[data-account-view=account]').is_visible() and p.locator('.m-layer').evaluate('(e)=>e.classList.contains("m-layer--center")'))
 
+def tasks(p,base,out,check):
+ p.goto(base+'/previews/mobile-experience/tasks.html');p.evaluate('document.fonts.ready');p.locator('.preview-tools summary').click()
+ for task in ['finance','orders','market','delivery','assistant','review']:
+  p.locator('#task').select_option(task);check(task+' renders source content',p.locator('#task-root').inner_text().strip()!='');check(task+' fits phone',p.evaluate('document.documentElement.scrollWidth===innerWidth'));p.locator('.preview-tools').evaluate('(e)=>e.open=false');p.screenshot(path=str(out/(task+'360.png')));p.locator('.preview-tools').evaluate('(e)=>e.open=true')
+ p.locator('#task').select_option('assistant');check('Ask exposes interactive actions',p.locator('.m-assistant__actions button').count()==3)
+ p.locator('#task').select_option('delivery');p.locator('[data-product-action=accept]').click();check('Sensitive delivery action requires confirmation',p.locator('.m-layer:visible').count()==1);p.keyboard.press('Escape');p.wait_for_timeout(220)
+ p.locator('#task').select_option('finance');check('Amounts and counts retain units','د.أ' in p.locator('#task-root').inner_text() and 'قطعة' in p.locator('#task-root').inner_text())
+ p.locator('#task').select_option('market');p.evaluate('taskLab.instance.replace({...taskLab.model,phase:"empty"})');check('Empty uses source state',p.locator('#task-root').inner_text().strip()!='')
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--phase',choices=['login','drawer','tasks','motion','all'],default='all');ap.add_argument('--out',type=Path,default=Path('/tmp/mobile-experience-check'));a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
  def check(name,ok):checks.append({'name':name,'passed':bool(ok)});print(('PASS ' if ok else 'FAIL ')+name,flush=True)

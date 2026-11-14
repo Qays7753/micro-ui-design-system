@@ -1,0 +1,78 @@
+{
+  "phase": "tasks",
+  "viewport": "360x780",
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "finance renders source content",
+      "passed": true
+    },
+    {
+      "name": "finance fits phone",
+      "passed": true
+    },
+    {
+      "name": "orders renders source content",
+      "passed": true
+    },
+    {
+      "name": "orders fits phone",
+      "passed": true
+    },
+    {
+      "name": "market renders source content",
+      "passed": true
+    },
+    {
+      "name": "market fits phone",
+      "passed": true
+    },
+    {
+      "name": "delivery renders source content",
+      "passed": true
+    },
+    {
+      "name": "delivery fits phone",
+      "passed": true
+    },
+    {
+      "name": "assistant renders source content",
+      "passed": true
+    },
+    {
+      "name": "assistant fits phone",
+      "passed": true
+    },
+    {
+      "name": "review renders source content",
+      "passed": true
+    },
+    {
+      "name": "review fits phone",
+      "passed": true
+    },
+    {
+      "name": "Ask exposes interactive actions",
+      "passed": true
+    },
+    {
+      "name": "Sensitive delivery action requires confirmation",
+      "passed": true
+    },
+    {
+      "name": "Amounts and counts retain units",
+      "passed": true
+    },
+    {
+      "name": "Empty uses source state",
+      "passed": true
+    },
+    {
+      "name": "No script errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 17,
+  "failed": 0
+}
