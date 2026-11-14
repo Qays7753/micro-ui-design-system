@@ -43,7 +43,7 @@
       var old = instances.get(root);if (old.type !== type) throw new TypeError('One DOM owner per root');return old.api;
     }
     var model, epoch = 0, requestNumber = 0, pending = null, destroyed = false, rendererLife, cleanups = [], confirmation = null, suppressFocus = false;
-    var ui = { draft: Object.create(null), files: [], urls: [] }, instanceId = 'micro-product-' + (++sequence);
+    var ui = { draft: Object.create(null), files: [], urls: [], presentation:Object.create(null), presentationGeneration:0 }, instanceId = 'micro-product-' + (++sequence);
     var forbidden = ['denied', 'expired', 'signed-out'];
     function disposeConfirmation() {
       if (!confirmation) return;
@@ -176,13 +176,13 @@
     function replace(next) {
       if(destroyed)return false;var previous=model&&key(model.scope);var nextModel=copy(next||{});nextModel.phase=nextModel.phase||'ready';if(nextModel.phase==='local-saved'&&nextModel.destination!=='manage')nextModel.phase='uncertain';if(!Object.prototype.hasOwnProperty.call(phases,nextModel.phase))nextModel.phase='uncertain';nextModel.connection=nextModel.connection||'online';if(['online','offline','weak','local'].indexOf(nextModel.connection)<0)nextModel.connection='offline';
       var purge=previous!==key(nextModel.scope)||draftOwner(model)!==draftOwner(nextModel)||visibilityRevoked(model,nextModel)||forbidden.indexOf(nextModel.phase)>=0||nextModel.clearDraft===true||!Array.isArray(nextModel.permissions)||nextModel.permissions.indexOf('view')<0;
-      disposeConfirmation();epoch++;pending=null;if(purge){releaseFiles();ui.draft=Object.create(null);suppressFocus=true;}model=nextModel;render();return true;
+      disposeConfirmation();epoch++;pending=null;if(purge){ui.presentation=Object.create(null);ui.presentationGeneration++;releaseFiles();ui.draft=Object.create(null);suppressFocus=true;}model=nextModel;render();return true;
     }
     var api={
       replace:replace,
       resolve:function(token,next){if(destroyed||!pending||!token||['instanceId','generation','requestId','contextKey'].some(function(k){return pending.token[k]!==token[k];}))return false;var nextKey=key(next&&next.scope);if(nextKey!==key(model.scope)&&!(pending.action==='switch-context'&&nextKey&&nextKey===key(pending.payload.targetScope)))return false;return replace(next);},
       getState:function(){return destroyed?null:{scope:copy(model.scope||null),phase:model.phase,pending:pending?copy(pending.token):null};},
-      destroy:function(){if(destroyed)return;destroyed=true;epoch++;pending=null;disposeConfirmation();stopRender();releaseFiles();ui.draft=Object.create(null);root.replaceChildren();root.removeAttribute('aria-busy');root.removeAttribute('data-product-type');instances.delete(root);}
+      destroy:function(){if(destroyed)return;destroyed=true;epoch++;pending=null;ui.presentation=Object.create(null);ui.presentationGeneration++;disposeConfirmation();stopRender();releaseFiles();ui.draft=Object.create(null);root.replaceChildren();root.removeAttribute('aria-busy');root.removeAttribute('data-product-type');root.removeAttribute('data-conversation-layout');instances.delete(root);}
     };
     instances.set(root,{type:type,api:api});replace(value);return api;
   }

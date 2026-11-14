@@ -32,6 +32,38 @@ def phase5(p,base,out,check):
  go('editor-append');p.evaluate('let m=lab.model;m.phase="disabled";lab.replace(m)');check('Disabled editor cannot choose files',p.locator('[data-focus-key=choose-files]').is_disabled())
  check('File list fits phone',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
 
+def phasebaseline6(p,base,out,check):
+ p.goto(base+'/previews/product-context/lab.html?component=assistant')
+ p.evaluate('let m=lab.model;m.messages=Array.from({length:40},(_,i)=>({id:"r"+i,speaker:"assistant",text:"رسالة طويلة للقراءة ".repeat(8)}));lab.replace(m);document.querySelector(".m-product__log").scrollTop=600')
+ before=p.locator('.m-product__log').evaluate('(e)=>e.scrollTop')
+ p.evaluate('let m=lab.model;m.messages.push({id:"new",speaker:"assistant",text:"رسالة جديدة"});lab.replace(m)')
+ after=p.locator('.m-product__log').evaluate('(e)=>e.scrollTop');check('Reproduced old reading position reset',before>0 and after==0)
+ p.locator('#product-root').screenshot(path=str(out/'before360.png'))
+
+def phase6(p,base,out,check):
+ def go(case='reading'):
+  p.goto(base+'/previews/product-context/lab.html?component=assistant');p.locator('#scenario').select_option(case);p.evaluate('document.fonts.ready')
+ def model(code):p.evaluate('let m=lab.model;'+code+';lab.replace(m)')
+ go();model('m.messages=Array.from({length:40},(_,i)=>({id:"r"+i,speaker:"assistant",text:"رسالة طويلة للقراءة ".repeat(8)}))')
+ log=p.locator('.m-product__log');log.evaluate('(e)=>e.scrollTop=600');p.wait_for_timeout(30);before=log.evaluate('(e)=>e.scrollTop');model('m.messages.push({id:"new",speaker:"assistant",text:"رسالة جديدة"})')
+ check('Append preserves reading position',abs(log.evaluate('(e)=>e.scrollTop')-before)<2)
+ check('Unread affordance appears instead of pulling reader',p.locator('.m-assistant__new').is_visible())
+ p.locator('#product-root').screenshot(path=str(out/'reading360.png'))
+ p.locator('.m-assistant__new').click();check('Explicit new-message jump reaches end',log.evaluate('(e)=>e.scrollHeight-e.clientHeight-e.scrollTop<24') and p.locator('.m-assistant__new').is_hidden())
+ model('m.messages.push({id:"end",speaker:"assistant",text:"تحديث آخر"})');check('Reader at end follows new messages and keeps log focus',log.evaluate('(e)=>e.scrollHeight-e.clientHeight-e.scrollTop<24&&e===document.activeElement'))
+ log.evaluate('(e)=>e.scrollTop=500');p.wait_for_timeout(30);p.evaluate('window.anchor=[...document.querySelectorAll("[data-message-id]")].find(e=>e.getBoundingClientRect().bottom>document.querySelector(".m-product__log").getBoundingClientRect().top);window.anchorId=anchor.dataset.messageId;window.offset=anchor.getBoundingClientRect().top-document.querySelector(".m-product__log").getBoundingClientRect().top')
+ model('m.messages[0].text+="نص إضافي ".repeat(100)');check('Stable message anchor survives growth above it',p.evaluate('Math.abs([...document.querySelectorAll("[data-message-id]")].find(e=>e.dataset.messageId===anchorId).getBoundingClientRect().top-document.querySelector(".m-product__log").getBoundingClientRect().top-offset)<2'))
+ model('m.draftKey="another-thread";m.messages=[{id:"other",speaker:"assistant",text:"محادثة أخرى"}]');check('Conversation switch does not inherit unread state',p.locator('.m-assistant__new').is_hidden() and log.evaluate('(e)=>e.scrollTop')==0)
+ model('m.phase="empty"');check('Empty conversation has no false unread control',p.locator('.m-assistant__new').is_hidden())
+ go('expired-actions');check('One shared reason describes all expired actions',p.locator('.m-assistant__actions').inner_text().count('انتهت صلاحية الاقتراح')==1 and p.locator('.m-assistant__actions button').evaluate_all('(xs)=>new Set(xs.map(e=>e.getAttribute("aria-describedby"))).size===1'))
+ go('actions');check('Explicit emphasis selects one primary only',p.locator('.m-assistant__actions .m-btn--primary').count()==1)
+ model('m.messages[1].actions[1].emphasis="primary"');check('Conflicting emphasis does not guess a primary',p.locator('.m-assistant__actions .m-btn--primary').count()==0)
+ go('fill');check('Fill log fits bounded host',p.evaluate('(()=>{let r=document.querySelector("#product-root").getBoundingClientRect(),c=document.querySelector(".m-assistant__composer").getBoundingClientRect();return r.height===600&&c.bottom<=r.bottom+1&&document.querySelector(".m-product__log").clientHeight>0})()'))
+ p.locator('#product-root').screenshot(path=str(out/'fill360.png'))
+ p.locator('.m-assistant__composer textarea').fill('كتابة طويلة\n'*30);check('Growing composer stays inside fill host',p.evaluate('document.querySelector(".m-assistant__composer").getBoundingClientRect().bottom<=document.querySelector("#product-root").getBoundingClientRect().bottom+1'))
+ check('Phone has no horizontal overflow',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+ p.locator('.demo-tools > summary').click();p.locator('#destroy').click();check('Destroy clears conversation attributes and DOM',p.locator('#product-root').evaluate('(e)=>!e.children.length&&!e.hasAttribute("data-conversation-layout")'))
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--phase',required=True);ap.add_argument('--out',type=Path);args=ap.parse_args();out=args.out or Path(tempfile.mkdtemp(prefix='owner-check-'));out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
  def check(name,ok):checks.append(dict(name=name,passed=bool(ok)));print(('PASS ' if ok else 'FAIL ')+name,flush=True)

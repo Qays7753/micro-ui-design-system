@@ -1,0 +1,2 @@
+/* Bounded fixture only; the component takes its height from its host. */
+#product-root[data-conversation-layout="fill"] { block-size:600px; }
