@@ -16,3 +16,13 @@
 .m-session__title { margin:0;font-size:var(--micro-heading-size);line-height:var(--micro-heading-line); }
 .m-session__message { margin:0;font-size:var(--micro-body-size);line-height:var(--micro-body-line);color:var(--micro-text-secondary); }
 .m-session[hidden] { display:none; }
+
+/* Provider mark remains intact; shared busy semantics and adjacent status convey waiting. */
+.m-google-button > .m-btn__spinner { display:none; }
+.m-google-button[aria-busy="true"] { cursor:progress; }
+/* Opt-in entrance of the whole welcome surface. Never animate individual logo parts. */
+.m-welcome--enter { animation:micro-welcome-enter var(--micro-motion-enter) var(--micro-ease-enter); }
+@keyframes micro-welcome-enter { from { opacity:0; } to { opacity:1; } }
+.m-session[aria-busy="true"] .m-session__message::before { content:"";display:inline-block;inline-size:8px;block-size:8px;margin-inline-end:var(--micro-space-2);background:var(--micro-brand-primary);border-radius:50%;animation:micro-session-pulse calc(var(--micro-motion-enter) * 5) ease-in-out infinite alternate; }
+@keyframes micro-session-pulse { from { opacity:.35; } to { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .m-welcome--enter,.m-session[aria-busy="true"] .m-session__message::before { animation:none; } }

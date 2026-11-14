@@ -1,0 +1,50 @@
+{
+  "phase": "motion",
+  "viewport": "360x780",
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Welcome uses existing entrance duration",
+      "passed": true
+    },
+    {
+      "name": "Provider waiting preserves bounds",
+      "passed": true
+    },
+    {
+      "name": "Provider mark retained while waiting",
+      "passed": true
+    },
+    {
+      "name": "Restoring has truthful animated status",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion stops entrance and activity",
+      "passed": true
+    },
+    {
+      "name": "Drawer uses shared motion token",
+      "passed": true
+    },
+    {
+      "name": "Reopen during close remains visible",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion removes spatial drawer transition",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion still closes and restores focus",
+      "passed": true
+    },
+    {
+      "name": "No script errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 10,
+  "failed": 0
+}
