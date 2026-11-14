@@ -66,3 +66,7 @@
 
 /* The explicit B01 recipe wins over generic flex rows only where opted in. */
 .m-product .m-btn-group { display:grid;align-items:stretch;gap:var(--micro-space-3); }
+
+.m-product__filenames li { display:flex;align-items:center;gap:var(--micro-space-2); }
+.m-product__filenames bdi { flex:1;min-inline-size:0;overflow-wrap:anywhere; }
+.m-product__filenames .m-btn { flex:none; }
