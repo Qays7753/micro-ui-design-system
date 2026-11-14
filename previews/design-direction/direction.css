@@ -1,0 +1,24 @@
+/* Preview composition only. Component appearance comes from the source families. */
+* { box-sizing:border-box; }
+body { margin:0;background:var(--micro-surface-page);color:var(--micro-text-primary);font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+[hidden] { display:none!important; }
+.direction-page { max-inline-size:430px;margin-inline:auto;padding:var(--micro-space-4);display:grid;gap:var(--micro-space-6); }
+.direction-intro { display:grid;gap:var(--micro-space-1); }
+h1 { font-size:var(--micro-page-title-size,24px);margin:0;font-weight:var(--micro-weight-semibold); }
+h2 { font-size:var(--micro-section-title-size);margin:0;font-weight:var(--micro-weight-semibold); }
+p { margin:0; }
+a { color:var(--micro-brand-primary); }
+.direction-caption,.direction-intro p { color:var(--micro-text-secondary);font-size:var(--micro-secondary-size);line-height:var(--micro-secondary-line); }
+.direction-example { display:grid;gap:var(--micro-space-3);min-inline-size:0; }
+.direction-head { display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--micro-space-2); }
+.direction-actions { display:flex;flex-wrap:wrap;gap:var(--micro-space-2); }
+.direction-actions .m-btn { flex:1 1 auto; }
+.direction-filter { padding:var(--micro-space-3);border:1px solid var(--micro-border-divider);border-radius:var(--micro-radius-field);display:grid;gap:var(--micro-space-2); }
+.direction-filter fieldset { border:0;margin:0;padding:0;min-inline-size:0; }
+.direction-filter label { display:flex;align-items:center;gap:var(--micro-space-2);min-block-size:var(--micro-touch-min); }
+.direction-filter input { accent-color:var(--micro-brand-primary); }
+.direction-pair { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--micro-space-3); }
+.direction-pair .m-info-card__reading { gap:var(--micro-space-1); }
+.direction-docs summary { cursor:pointer;min-block-size:var(--micro-touch-min);padding-block:var(--micro-space-3);color:var(--micro-brand-primary); }
+.direction-docs p { margin-block-end:var(--micro-space-2); }
+:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }

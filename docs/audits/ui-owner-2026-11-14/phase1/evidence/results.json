@@ -1,0 +1,55 @@
+{
+  "baseCommit": "b94d78b885e609f4100a92ec5bceaaa57490f490",
+  "workingTree": true,
+  "physicalDevice": false,
+  "scope": "Light360x780 RTL only; no persistence or host",
+  "checks": [
+    {
+      "name": "Fits phone",
+      "passed": true
+    },
+    {
+      "name": "Existing primary and accent preserved",
+      "passed": true
+    },
+    {
+      "name": "Disclosure matches expanded state",
+      "passed": true
+    },
+    {
+      "name": "Zero hides counter and returns focus",
+      "passed": true
+    },
+    {
+      "name": "Counter matches active selection",
+      "passed": true
+    },
+    {
+      "name": "No false save claim",
+      "passed": true
+    },
+    {
+      "name": "One summary accent only",
+      "passed": true
+    },
+    {
+      "name": "Touch heights preserved",
+      "passed": true
+    },
+    {
+      "name": "No runtime errors",
+      "passed": true
+    }
+  ],
+  "passed": 9,
+  "failed": 0,
+  "errors": [],
+  "sourceSha256": {
+    "previews/design-direction/index.html": "cc831a67ffb43df38092f95bfaa1dd52d8d1808f584c1c4e6983c52152ca92d0",
+    "previews/design-direction/direction.js": "588846e398a58dd86fc7fa0d3a404fff0b5cbbf090825c69c55ed8f9699c6802",
+    "previews/design-direction/direction.css": "d58a8f2fcdfa12dc65dfb160101727916b0b2e9a0e2928ae06b7cb6314b6e2d4",
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/info-strip/info-strip.css": "c0b471dd3379e7d5d907759f1350a4c8a6d9459baa2406eea4909912c0fa20d0",
+    "shared/tokens.css": "b0d28b69d9ef5a6ca818ca9c954b69e85f584b934cdf8ee49e7d8e1e8de30ba7"
+  }
+}
