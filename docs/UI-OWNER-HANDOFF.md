@@ -1,3 +1,5 @@
+الجولة الأحدث مكتملة على Feature: [تجربة الهاتف](MOBILE-EXPERIENCE-HANDOFF.md). البداية7df38e8؛ دون دمجmain أوMicro. الأقسام التالية تخص الجولات السابقة.
+
 # تسليم الجولة الحالية
 
 الأساس b94d78b، والفرع feature/ui-system-component-audit-repair-2026-11-11. [الخطة](audits/ui-owner-2026-11-14/PLAN.md)، [التقرير](audits/ui-owner-2026-11-14/phase7/REPORT.md)، [تغطية14/8/12](audits/ui-owner-2026-11-14/phase7/COVERAGE.md).

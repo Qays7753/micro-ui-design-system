@@ -1,5 +1,5 @@
 /* Host owns viewport and routing. This optional shell owns its in-flow safe areas. */
-.m-mobile-shell { min-inline-size:0;background:var(--micro-surface-page);color:var(--micro-text-primary);font-family:var(--micro-font-family);padding-block-start:var(--micro-shell-inset-top,env(safe-area-inset-top,0px));padding-inline:env(safe-area-inset-left,0px) env(safe-area-inset-right,0px); }
+.m-mobile-shell { min-inline-size:0;background:var(--micro-surface-page);color:var(--micro-text-primary);font-family:var(--micro-font-family);padding-block-start:var(--micro-shell-inset-top,env(safe-area-inset-top,0px));padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px); }
 .m-mobile-shell__head { display:flex;align-items:center;gap:var(--micro-space-3);padding:var(--micro-space-2) var(--micro-space-4);background:inherit; }
 .m-mobile-shell__title { flex:1;min-inline-size:0;margin:0;font-size:var(--micro-heading-size);line-height:var(--micro-heading-line); }
 .m-mobile-shell__body { display:grid;gap:var(--micro-space-4);padding:var(--micro-space-4); }

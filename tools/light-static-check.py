@@ -114,6 +114,16 @@ def main():
             # والقيمتان القديمتان محفوظتان في تعليق التوثيق. لا يفتح هذا
             # الباب لأي لون آخر: الاستثناء قائمة صريحة لا نمط عام.
             audited = {"#A189CA", "#8E9A4D"} if name == "shared/tokens.css" else set()
+            # Provider branding has its own exact light palette; never a Micro token exception.
+            # The three literals must occur only inside the single provider-button rule.
+            if name == "components/access-gateway/welcome.css":
+                source = re.sub(r"/\*[\s\S]*?\*/", "", path.read_text())
+                provider = re.findall(r"(?m)^\.m-google-button\s*\{([^}]+)\}", source)
+                official = {"#747775", "#fff", "#1f1f1f"}
+                check("Google light palette confined to provider selector",
+                      len(provider) == 1 and set(re.findall(r"#[0-9a-fA-F]{3,8}\b", provider[0])) == official
+                      and not re.findall(r"#[0-9a-fA-F]{3,8}\b", re.sub(r"(?m)^\.m-google-button\s*\{[^}]+\}", "", source)))
+                audited |= official
             check("no new hardcoded CSS palette: " + name,
                   not (after_colors - before_colors - audited), sorted(after_colors - before_colors - audited))
 

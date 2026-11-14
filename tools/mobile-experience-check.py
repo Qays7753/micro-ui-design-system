@@ -11,7 +11,7 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 def login(p,base,out,check):
  p.goto(base+'/previews/mobile-experience/login.html');p.evaluate('document.fonts.ready');button=p.locator('[data-access-provider]');p.locator('.preview-tools summary').click()
- p.screenshot(path=str(out/'login360.png'))
+ p.locator('.preview-tools').evaluate('(e)=>e.open=false');p.screenshot(path=str(out/'login360.png'));p.locator('.preview-tools').evaluate('(e)=>e.open=true')
  check('Provider-only form exposes no password',p.locator('input[type=password]').count()==0 and button.is_visible())
  button.click();p.wait_for_function('window.providerCalls===1');p.evaluate('document.querySelector("[data-access-provider]").dispatchEvent(new MouseEvent("click",{bubbles:true}))')
  check('Pending provider gates duplicate calls',p.evaluate('providerCalls===1') and p.locator('form').get_attribute('aria-busy')=='true')
@@ -26,7 +26,7 @@ def drawer(p,base,out,check):
  p.goto(base+'/previews/mobile-experience/menu.html');p.evaluate('document.fonts.ready');trigger=p.locator('[data-account-open]');trigger.click();p.wait_for_timeout(270);layer=p.locator('.m-layer');box=layer.bounding_box();check('RTL drawer occupies right 80 percent',abs(box['width']-288)<1 and abs(box['x']-72)<1)
  check('Application opens first and background is isolated',p.locator('[data-account-view=application]').is_visible() and trigger.evaluate('(e)=>!!e.closest("[inert]")'))
  p.screenshot(path=str(out/'drawer360.png'));close=p.locator('[data-account-close]').bounding_box();p.locator('[data-account-to-account]').click();check('Account uses same layer and focuses its title',p.locator('[data-account-view=account]').is_visible() and p.locator('.m-layer:visible').count()==1 and p.locator('[data-account-title=account]').evaluate('(e)=>e===document.activeElement'))
- check('Close remains fixed between views',p.locator('[data-account-close]').bounding_box()==close);p.screenshot(path=str(out/'account360.png'));p.locator('[data-account-back]').click();check('Back returns to app settings',p.locator('[data-account-view=application]').is_visible())
+ check('Close remains fixed between views',p.locator('[data-account-close]').bounding_box()==close);p.wait_for_timeout(30);p.screenshot(path=str(out/'account360.png'));p.locator('[data-account-back]').click();check('Back returns to app settings',p.locator('[data-account-view=application]').is_visible())
  p.keyboard.press('Escape');p.wait_for_timeout(230);check('Escape restores trigger and background',layer.is_hidden() and trigger.evaluate('(e)=>e===document.activeElement&&!e.closest("[inert]")'))
  trigger.click();p.wait_for_timeout(270);p.locator('.m-layer-backdrop').click(position={'x':5,'y':400});p.wait_for_timeout(230);check('Backdrop closes drawer',layer.is_hidden())
  p.evaluate('document.documentElement.dir="ltr"');trigger.click();p.wait_for_timeout(270);check('LTR drawer follows inline start',abs(layer.bounding_box()['x'])<1);p.keyboard.press('Escape');p.wait_for_timeout(230)
@@ -42,6 +42,7 @@ def tasks(p,base,out,check):
  p.locator('#task').select_option('assistant');check('Ask exposes interactive actions',p.locator('.m-assistant__actions button').count()==3)
  p.locator('#task').select_option('delivery');p.locator('[data-product-action=accept]').click();check('Sensitive delivery action requires confirmation',p.locator('.m-layer:visible').count()==1);p.keyboard.press('Escape');p.wait_for_timeout(220)
  p.locator('#task').select_option('finance');check('Amounts and counts retain units','د.أ' in p.locator('#task-root').inner_text() and 'قطعة' in p.locator('#task-root').inner_text())
+ p.evaluate('document.querySelector(".m-mobile-shell").style.setProperty("--micro-shell-inset-top","24px")');check('Shell owns top inset exactly once',p.locator('.m-mobile-shell').evaluate('(e)=>getComputedStyle(e).paddingTop')=='24px')
  p.locator('#task').select_option('market');p.evaluate('taskLab.instance.replace({...taskLab.model,phase:"empty"})');check('Empty uses source state',p.locator('#task-root').inner_text().strip()!='')
 
 def motion(p,base,out,check):

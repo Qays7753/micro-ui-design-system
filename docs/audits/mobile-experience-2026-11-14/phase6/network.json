@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "index.html",
+    "login.html",
+    "menu.html",
+    "tasks.html?task=finance",
+    "tasks.html?task=orders",
+    "tasks.html?task=market",
+    "tasks.html?task=delivery",
+    "tasks.html?task=assistant",
+    "tasks.html?task=review"
+  ],
+  "errors": [],
+  "passed": true
+}
