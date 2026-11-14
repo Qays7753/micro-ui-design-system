@@ -305,3 +305,6 @@ a.m-row:active { background-color: var(--micro-surface-selected); }
 .m-section__head:hover { background-color: var(--micro-surface-page); }
 .m-badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 .m-row__value,.m-row__subtitle,.m-row__title { overflow-wrap: anywhere; }
+
+/* Explicit one-line row: preserve 48px touch floor; long content may grow. */
+.m-row--single { min-height:var(--micro-touch-min);padding-block:var(--micro-space-2); }
