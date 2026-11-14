@@ -1,0 +1,18 @@
+{
+  "commitAtRun": "2904f81b9d15238a4e98882cdb68ff32102352ae",
+  "sourceRef": "2904f81",
+  "workingTree": false,
+  "physicalDevice": false,
+  "checks": [],
+  "passed": 0,
+  "failed": 0,
+  "errors": [],
+  "sourceSha256": {
+    "components/buttons/buttons.css": "63da3f5cfb355fc42e1238497970e96af70af87814ae43e486c3f3eac6cbc1fb",
+    "components/product-context/product-core.js": "27e3e4a28923294158f0d037c38922ffe62de455320b3b4fc3619b24c75142a3",
+    "components/product-context/product-context.css": "a1cc8ce3a4f4a489fc4915d404d5bc6acfe2413257afb4e7e80ce9f4895c6ec2",
+    "components/product-context/market.js": "27a9272206ddbe2e678522447c6c0b087f82b9c5ba70025d8ca78d86df1187f3",
+    "components/product-context/delivery.js": "2c1f99154f6234913c49fedb16df2af20af959a1ce49c42fd138569765054a30",
+    "components/product-context/context.js": "fd1f88bc6ee48452253e9f9b2708a9dc275b861bcd93d02fdca244c4b284c32d"
+  }
+}

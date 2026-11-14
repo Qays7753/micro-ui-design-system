@@ -63,3 +63,6 @@
 .m-assistant__composer { grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:var(--micro-space-2); }
 .m-assistant__composer .m-field { min-inline-size:0; }
 .m-assistant__composer .m-field__area { max-block-size:calc(var(--micro-field-min-height) * 3);resize:none;overflow-y:auto; }
+
+/* The explicit B01 recipe wins over generic flex rows only where opted in. */
+.m-product .m-btn-group { display:grid;align-items:stretch;gap:var(--micro-space-3); }

@@ -1,0 +1,71 @@
+{
+  "commitAtRun": "2904f81b9d15238a4e98882cdb68ff32102352ae",
+  "sourceRef": null,
+  "workingTree": true,
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Each missing field has a nearby associated message",
+      "passed": true
+    },
+    {
+      "name": "One summary and first-field focus",
+      "passed": true
+    },
+    {
+      "name": "Correcting one preserves the other error only",
+      "passed": true
+    },
+    {
+      "name": "Zero value is retained and notices clear",
+      "passed": true
+    },
+    {
+      "name": "Single permitted action fills the row",
+      "passed": true
+    },
+    {
+      "name": "Paired actions have equal width and same row",
+      "passed": true
+    },
+    {
+      "name": "Supplementary action has an explicit full row",
+      "passed": true
+    },
+    {
+      "name": "One delivery action does not leave half a row",
+      "passed": true
+    },
+    {
+      "name": "Long paired action wraps without overflow or reduced touch height",
+      "passed": true
+    },
+    {
+      "name": "LTR uses same DOM order and containment",
+      "passed": true
+    },
+    {
+      "name": "Concise context preserves driver-only destinations",
+      "passed": true
+    },
+    {
+      "name": "Recipe examples fit phone",
+      "passed": true
+    },
+    {
+      "name": "No browser/resource errors",
+      "passed": true
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "errors": [],
+  "sourceSha256": {
+    "components/buttons/buttons.css": "23239e4dd68e8b72f77fd3e57038f490f71df43b3f98f689236d9e2fde5a9803",
+    "components/product-context/product-core.js": "de0ecde5462a20b520f2dc501d1dc1e595fb5e5b7b2070ea9295bf4fd7c2a9fa",
+    "components/product-context/product-context.css": "a43fb071302ed185a10e13e05ab9893ea9da0d90ba4296a10cc6b038407f39c5",
+    "components/product-context/market.js": "413e02d62df0081ab5bfecd0926caf17c2579331b449da9525fb075c8f631430",
+    "components/product-context/delivery.js": "af5561951e5d6174e937c19f04cdb9518bc216f9339e9936278e58f132b832f0",
+    "components/product-context/context.js": "c6f8b0fc63af69459f8ad221cd52ca770ddfe300cc5783f46164055a6a6df554"
+  }
+}

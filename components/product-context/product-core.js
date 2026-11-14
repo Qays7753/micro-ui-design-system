@@ -120,10 +120,25 @@
           if(options.options)options.options.forEach(function(x){var opt=node('option','',x.label);opt.value=x.id;input.appendChild(opt);});
           else if(options.multiline)input.rows=options.rows||3;else {input.type=options.type||'text';if(options.inputmode){input.inputMode=options.inputmode;if(['decimal','numeric'].indexOf(options.inputmode)>=0){input.classList.add('m-field__input--num');input.dir='ltr';}}}
           if(ui.draft[name]===undefined)ui.draft[name]=options.value==null?'':String(options.value);input.value=ui.draft[name];input.disabled=!ctx.editable();if(options.maxLength)input.maxLength=options.maxLength;
-          ctx.on(input,options.options?'change':'input',function(){ui.draft[name]=input.value;input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');box.classList.remove('has-error');if(!root.querySelector('[aria-invalid="true"]'))root.querySelectorAll('[data-product-validation]').forEach(function(e){e.remove();});});wrap.appendChild(input);if(options.unit)wrap.appendChild(node('span','m-field__unit',options.unit));box.append(lab,wrap);parent.appendChild(box);return input;
+          ctx.on(input,options.options?'change':'input',function(){ui.draft[name]=input.value;box.querySelectorAll('[data-product-field-error]').forEach(function(e){e.remove();});input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');box.classList.remove('has-error');if(!root.querySelector('[aria-invalid="true"]'))root.querySelectorAll('[data-product-validation]').forEach(function(e){e.remove();});});wrap.appendChild(input);if(options.unit)wrap.appendChild(node('span','m-field__unit',options.unit));box.append(lab,wrap);parent.appendChild(box);return input;
         },
         fieldsPayload:function(required){
-          var data=copy(ui.draft),missing=(required||[]).filter(function(name){return !String(data[name]||'').trim();});root.querySelectorAll('[data-product-validation]').forEach(function(e){e.remove();});if(missing.length){var error=note(root,'أكمل الحقول المطلوبة','القيم التي كتبتها باقية.','error');error.dataset.productValidation='';error.id=instanceId+'-validation';var first=null;root.querySelectorAll('[data-focus-key]').forEach(function(el){if(missing.indexOf(el.dataset.focusKey.slice(6))>=0){el.setAttribute('aria-invalid','true');el.setAttribute('aria-describedby',error.id);el.closest('.m-field').classList.add('has-error');if(!first)first=el;}});if(first)first.focus();return false;}data.files=ui.files.slice();return data;
+          var data=copy(ui.draft),missing=(required||[]).filter(function(name){return !String(data[name]||'').trim();});
+          root.querySelectorAll('[data-product-validation],[data-product-field-error]').forEach(function(e){e.remove();});
+          root.querySelectorAll('[data-focus-key^="field-"][aria-invalid="true"]').forEach(function(el){el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');el.closest('.m-field').classList.remove('has-error');});
+          if(missing.length){
+            var error=note(root,'أكمل الحقول المطلوبة','','error');error.dataset.productValidation='';error.id=instanceId+'-validation';
+            var heading=root.querySelector(':scope > header,:scope > h2');if(heading)heading.after(error);else root.prepend(error);
+            var first=null;
+            root.querySelectorAll('[data-focus-key^="field-"]').forEach(function(el){
+              if(missing.indexOf(el.dataset.focusKey.slice(6))<0)return;
+              var box=el.closest('.m-field'),label=box.querySelector('label'),message=node('p','m-field__msg is-visible','أدخل '+(label?label.textContent:'القيمة المطلوبة'));
+              message.id=el.id+'-required';message.dataset.productFieldError='';box.appendChild(message);
+              el.setAttribute('aria-invalid','true');el.setAttribute('aria-describedby',message.id);box.classList.add('has-error');if(!first)first=el;
+            });
+            if(first)first.focus();return false;
+          }
+          data.files=ui.files.slice();return data;
         },
         media:function(parent,images,fit,preview){
           if(!images||!images.length){parent.appendChild(node('div','m-product__media-empty','لا توجد صورة متاحة'));return;}

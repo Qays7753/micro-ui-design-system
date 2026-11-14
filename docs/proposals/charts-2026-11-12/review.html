@@ -851,6 +851,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .m-btn--secondary:hover:not(:disabled) { background-color: var(--micro-surface-page); }
 .m-btn--destructive-soft:hover:not(:disabled) { background-color: var(--micro-danger-surface); }
 
+/* B01 action composition: preserve DOM/keyboard order; layout is an explicit choice. */
+.m-btn-group { display:grid;align-items:stretch;grid-template-columns:minmax(0,1fr);gap:var(--micro-space-3);min-inline-size:0; }
+.m-btn-group--pair { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.m-btn-group > .m-btn, .m-btn-group__more > .m-btn { inline-size:100%;min-inline-size:var(--micro-touch-min);white-space:normal;overflow-wrap:anywhere; }
+.m-btn-group__more { grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--micro-space-3);min-inline-size:0; }
+.m-btn-group__more:empty { display:none; }
+
 </style><style>
 /* Review-only concept. No public m-chart rules or token changes. */
 *, *::before, *::after { box-sizing:border-box; }
