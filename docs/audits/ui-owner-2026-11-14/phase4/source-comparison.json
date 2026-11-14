@@ -1,0 +1,57 @@
+{
+  "reference": "b94d78b",
+  "sources": [
+    {
+      "path": "components/data/packed-circle.css",
+      "sameAsMergedBase": true,
+      "sha256": "0c8d7fb6cb072257ef29f9ee2da808f265a875f18eeb022954b44a1145621a8b"
+    },
+    {
+      "path": "components/data/data.css",
+      "sameAsMergedBase": true,
+      "sha256": "a9b91bb348cd652c8aa27768a17eadbba04a5bd18a30ac240d7fbb532a753950"
+    },
+    {
+      "path": "components/data/packed-circle.js",
+      "sameAsMergedBase": true,
+      "sha256": "c5090d30b33e85aa020827f730ddfef55ad475cbbdd3df55f822aec864feed20"
+    },
+    {
+      "path": "components/data/data.js",
+      "sameAsMergedBase": true,
+      "sha256": "e75985be43c79caabfa0855100c062773240b1f3f16cf9278896cbc40101ce95"
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.js",
+      "sameAsMergedBase": true,
+      "sha256": "d9cc0801356778e3186487653db08cae9844279942a228d1d022e23e18572d4d"
+    },
+    {
+      "path": "components/metric-comparison/metric-comparison.css",
+      "sameAsMergedBase": true,
+      "sha256": "06392fb294b1595247571613aec00ba4cdda8b2b88410806659ad0791361b546"
+    },
+    {
+      "path": "components/order-schedule/order-schedule.js",
+      "sameAsMergedBase": true,
+      "sha256": "5fe621cc257de3db3afcbc5910bf30e506adfe43a1b6557d633c65e6d875ec42"
+    },
+    {
+      "path": "components/order-schedule/order-schedule.css",
+      "sameAsMergedBase": true,
+      "sha256": "90c160a00805596ef547311ab9fc7f1b4e451d3b40c8fcfb77734f66e14e4990"
+    },
+    {
+      "path": "components/carousel/carousel.css",
+      "sameAsMergedBase": true,
+      "sha256": "5b7fcfcfa521066d7116cc4eee13894e42f4ef7810b0b375977f353317692b8e"
+    },
+    {
+      "path": "components/carousel/carousel.js",
+      "sameAsMergedBase": true,
+      "sha256": "9af5019569170f09cd020e12961113820deb4a8f2b84c9fa26cb37a31292fafa"
+    }
+  ],
+  "physicalDevice": false,
+  "newBrowserTests": false
+}
