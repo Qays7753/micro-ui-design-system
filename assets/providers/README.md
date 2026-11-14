@@ -1,0 +1,2 @@
+# Google provider asset
+Official G fetched from https://developers.google.com/identity/images/g-logo.png on 2026-11-14. Branding reference: https://developers.google.com/identity/branding-guidelines (HTTP200 verified). Used only to identify Google, not a Micro brand token. Production must use the provider-supported rendered button/flow and current branding rules; this local component is a UI specimen, not an OAuth implementation.

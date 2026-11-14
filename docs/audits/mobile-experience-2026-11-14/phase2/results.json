@@ -1,0 +1,54 @@
+{
+  "phase": "login",
+  "viewport": "360x780",
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Provider-only form exposes no password",
+      "passed": true
+    },
+    {
+      "name": "Pending provider gates duplicate calls",
+      "passed": true
+    },
+    {
+      "name": "Cancellation restores provider without claiming success",
+      "passed": true
+    },
+    {
+      "name": "Failure is visible and retry enabled",
+      "passed": true
+    },
+    {
+      "name": "Disconnect clears busy and ignores late result",
+      "passed": true
+    },
+    {
+      "name": "Session restoring",
+      "passed": true
+    },
+    {
+      "name": "Session expired",
+      "passed": true
+    },
+    {
+      "name": "Session denied",
+      "passed": true
+    },
+    {
+      "name": "Session offline",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "No script errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 11,
+  "failed": 0
+}

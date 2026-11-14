@@ -175,7 +175,12 @@
         var key = button.getAttribute('data-access-provider');
         var current = gateway.__microAccessCallbacks || {};
         var handler = current.providers && current.providers[key];
-        if (typeof handler !== 'function') return;
+        if (typeof handler !== 'function' || form.dataset.microAccessBusy === 'true'
+            || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
+        form.dataset.microAccessBusy = 'true';
+        form.setAttribute('aria-busy', 'true');
+        if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: 'جارٍ الاتصال' });
+        setMessage(form, 'جارٍ الاتصال بمزود الدخول…', 'info');
         Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
             if (!alive()) return;
@@ -184,7 +189,13 @@
             var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
             setMessage(form, outcome.text, outcome.tone);
           })
-          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); });
+          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); })
+          .then(function () {
+            if (!alive()) return;
+            form.dataset.microAccessBusy = 'false';
+            form.removeAttribute('aria-busy');
+            if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+          });
       });
     });
 
@@ -311,6 +322,9 @@
         form.removeAttribute('aria-busy');
         var submit = form.querySelector('[type="submit"]');
         if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
+        gateway.querySelectorAll('[data-access-provider]').forEach(function (button) {
+          if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+        });
         var password = credential(form, 'password');
         if (password) password.type = 'password';
       }
