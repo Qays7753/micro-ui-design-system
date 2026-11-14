@@ -16,7 +16,7 @@
 | 4 | قيمة/فترة/وحدة/مقارنة، صفر/مفقود/سالب، اختيار الرسم ومعاينة8 متغيرات؛ التقويم وأدواته وطلباته واليوم الحالي/المحدد؛ Carousel والفراغ والفشل. قبول: قراءة صحيحة دون تصغير قسري | منفذة؛ phase4/REPORT.md، إبقاء المصدر مبرر |
 | 5 | Market استعراض/تحرير/بحث/رفض، صور إضافة مقابل استبدال وإزالة فردية بعقد متوافق؛ Delivery مسار/عرض/حالة/إجراء/تعديل/إثبات؛ أدوار وسياق ومراجعة واتصال. قبول: وظيفة واضحة وعقود محفوظة بلا سياسة مخترعة | منفذة؛ phase5/REPORT.md |
 | 6 | Ask: إبراز صريح للأفعال دون جعله تلقائيًا للتنفيذ، تجميع أسباب التعطيل، محادثة مضمّنة/بحجم الحاضنة، حفظ موضع القراءة والتعامل مع الجديد، الكاتب والنشاط والسياق. قبول: تحديث لا يسحب القارئ ولا ينقل بيانات سياق آخر | منفذة؛ phase6/REPORT.md |
-| 7 | أمثلة مبلغ/نموذج/عرض توصيل/إعلان/محادثة، سجل كل14/8/12، فحوص متأثرة ثم بوابات عامة مرة، وثائق المصدر والتبعيات والصور والتسليم | لم تبدأ |
+| 7 | أمثلة مبلغ/نموذج/عرض توصيل/إعلان/محادثة، سجل كل14/8/12، فحوص متأثرة ثم بوابات عامة مرة، وثائق المصدر والتبعيات والصور والتسليم | منفذة؛ phase7/REPORT.md وCOVERAGE.md |
 
 ## سجل المشاكل والقرارات
 
@@ -39,43 +39,47 @@
 
 | النوع | المعرّف | المرحلة | الحالة |
 |---|---|---|---|
-| families | buttons | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | fields | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | selection | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | organization | 3 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| families | data | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| families | messages | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | navigation | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | surfaces | 3 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| families | info-strip | 3 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| families | metric-comparison | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| families | account-settings | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | access-gateway | 2 ثم7 | قرار المرحلة2 في التقرير، النضج السابق محفوظ؛ النضج stable-ui محفوظ |
-| families | order-schedule | 4 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| families | carousel | 4 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| variants | donut | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| variants | main-metric-featured | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| variants | bubbles | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| variants | metric-circles | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| variants | packed-circle | 4 ثم7 | بانتظار المراجعة؛ النضج proposed محفوظ |
-| variants | info-strip-peek | 4 ثم7 | بانتظار المراجعة؛ النضج stable-ui محفوظ |
-| variants | data-readable | 4 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| variants | metric-readable | 4 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | value-context | 3 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | operational-row | 3 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | form-surface | 3 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | reading-context | 3 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | mobile-actions | 2 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | calendar-context | 4 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | product-context | 5 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | operation-state | 5 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | market-components | 5 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | delivery-components | 5 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | assistant-components | 6 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
-| compositions | review-components | 5 ثم7 | بانتظار المراجعة؛ النضج draft-for-review محفوظ |
+| families | buttons | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | fields | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | selection | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | organization | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | data | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | messages | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | navigation | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | surfaces | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | info-strip | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | metric-comparison | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | account-settings | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | access-gateway | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| families | order-schedule | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| families | carousel | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| variants | donut | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| variants | main-metric-featured | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| variants | bubbles | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| variants | metric-circles | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| variants | packed-circle | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج proposed محفوظ |
+| variants | info-strip-peek | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج stable-ui محفوظ |
+| variants | data-readable | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| variants | metric-readable | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | value-context | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | operational-row | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | form-surface | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | reading-context | 3 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | mobile-actions | 2 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | calendar-context | 4 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | product-context | 5 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | operation-state | 5 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | market-components | 5 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | delivery-components | 5 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | assistant-components | 6 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
+| compositions | review-components | 5 ثم7 | راجع phase7/COVERAGE.md؛ النضج draft-for-review محفوظ |
 
 ## التحقق وإدارة المرحلة
 
 360×780 RTL Light مرجع؛320 لضيق مثبت وLTR لتأثير الاتجاه فقط. لا اختبارات zoom/مصفوفة جديدة. نستعمل نتائج الجزء غير المتغير؛ نختبر السلوك المعدل، ثم البوابات العامة آخر الجولة. لا صورة بلا مصدر معلوم ولا PASS مستعار لنسخة جديدة. تمييز: عيب مثبت/تحسين تصميمي/مشكلة معاينة/قرار منتج. كل مرحلة تقرير وصورة مفيدة وcommit وpush للفرع نفسه.
 
 الهاتف الحقيقي S25/Chrome واللمس ولوحة النظام وsafe areas وقارئ الشاشة غير معتمدة بالمحاكاة. حاضنة الهاتف لاحقًا تقرر مناطق الوصول؛ المكتبة تقدم وصفة ولا تبني التطبيق. متابعة التعديل: الأولوية ← التناسب ← استمرار الحالة ← التشطيب والحركة. لا swipe حساس أوprogress وهمي أو شخصية/3D بلا حاجة واعتماد. فتح ملف Figma لاحقًا اختياري، ومصدره نفس التشريح والخصائص والحالات في الكود.
+
+## سجل الرفع
+
+1:2904f81؛2:117d690؛3:c47e0cd؛4:c188f73؛5:1437d21؛6:e919648؛7:commit التقرير النهائي. كل مرحلة مرفوعةعلىالفرع نفسه؛ لاmain أوPR أو نشر.

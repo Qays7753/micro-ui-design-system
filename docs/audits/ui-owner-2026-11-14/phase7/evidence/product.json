@@ -1,0 +1,1887 @@
+{
+  "commitAtRun": "e9196482b554c0d18556ecf4ffc7b53a16d71cf3",
+  "workingTree": true,
+  "physicalDevice": false,
+  "browser": "156.0.8078.79",
+  "scope": "Phone Light360x780 RTL; targeted320; directional360 LTR; normal/reduced motion; no Dark/desktop/backend/AI",
+  "scenarios": {
+    "context": [
+      "business",
+      "supplier",
+      "driver",
+      "reviewer"
+    ],
+    "state": [
+      "remote",
+      "local"
+    ],
+    "market": [
+      "card",
+      "editor",
+      "editor-append",
+      "search",
+      "rejected",
+      "no-media"
+    ],
+    "delivery": [
+      "offer",
+      "request",
+      "tracking",
+      "change",
+      "proof",
+      "return",
+      "driver"
+    ],
+    "assistant": [
+      "chat",
+      "reading",
+      "fill",
+      "actions",
+      "searching",
+      "expired-actions",
+      "driver",
+      "proposal",
+      "retry"
+    ],
+    "review": [
+      "listing",
+      "report",
+      "flag",
+      "driver-application"
+    ]
+  },
+  "passed": 250,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Read-only replay: baseline Fields reproduces focusable-host gutter defect",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context / business 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "context / business renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context / supplier 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "context / supplier renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context / driver 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "context / driver renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context / reviewer 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "context / reviewer renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "context connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state / remote 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "state / remote renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state / local 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "state / local renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / card 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / card renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / editor 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / editor renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / editor-append 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / editor-append renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / search 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / search renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / rejected 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / rejected renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market / no-media 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "market / no-media renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / offer 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / offer renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / request 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / request renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / tracking 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / tracking renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / change 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / change renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / proof 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / proof renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / return 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / return renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery / driver 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery / driver renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / chat 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / chat renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / reading 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / reading renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / fill 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / fill renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / actions 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / actions renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / searching 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / searching renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / expired-actions 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / expired-actions renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / driver 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / driver renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / proposal 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / proposal renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant / retry 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant / retry renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review / listing 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "review / listing renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review / report 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "review / report renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review / flag 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "review / flag renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review / driver-application 360 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "review / driver-application renders text and no unintended pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state loading",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state success",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state error",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state uncertain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state denied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state expired",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state signed-out",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state conflict",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review state local-saved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review connection weak blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review connection offline blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review connection local blocks connected mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Driver gets Delivery/Ask only even when fixture offers all four",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Navigation intent is scoped and has no implicit role union",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Repeat mount reuses one owner",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Context change is pending, old scope remains until acknowledged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Context response with target id but wrong workspace/role is rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact approved target context can resolve",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Switched driver360",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Role name grants neither data nor commands",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Signed-out unified access intent works without former workspace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Manage local emits storage intent only, no success or network claim",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Local save cannot become a connected Delivery write",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unknown state/connection fail closed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Existing Carousel actually navigates source images",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Carousel previous restores index and availability",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Unsafe image URL is replaced by explicit unavailable UI",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Image failure gets a readable fallback",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Opening a report form is an intent; final submission owns confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Price input isolates numbers and shows its explicit unit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Known zero stays a number, not a missing price",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Required fields validated without opening confirmation or losing zero",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Same-scope refresh preserves draft, focus and caret",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Local selected image previews without upload",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Publish confirmation opens with current scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Cancel leaves draft/files and emits nothing",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Confirmed publish emits raw values/files once and remains pending",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Error acknowledgement preserves draft and allows explicit correction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Scope switch revokes local files and old draft, rejects late response",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Driver addresses and contact are not rendered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Hidden addresses do not leak through prefilled request inputs",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Proposed change remains a request; both parties/data unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Host-required proof is checked before sensitive intent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Offer revision update invalidates open confirmation and restores page",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "New price confirmation emits new revision only, no financial instruction",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Repeated pending tap cannot send twice",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ask messages are plain text and cannot inject markup",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "AI proposal cannot bypass missing grant",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ask action requires separate confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ask execute carries proposal id/revision, not inferred text command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Late Ask response and detached action do not reach new role/workspace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Expired session purges messages and draft",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "New session never recovers old sensitive draft",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Retry references the failed message and waits for acknowledgement",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market mismatched response context hides private data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "delivery mismatched response context hides private data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "assistant mismatched response context hides private data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "review mismatched response context hides private data",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Review evidence is gated independently from queue visibility",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Required review reason cannot be skipped",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Review rejection is confirmed intent, not automatic removal",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Driver cannot access market private/admin data even with injected grants",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Driver cannot access review private/admin data even with injected grants",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Driver can report in Delivery with an explicit report grant",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Correcting one field preserves remaining validation message references",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Last correction clears the shared validation notice",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Different record in same workspace starts its own draft",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Different record revokes previous attachments instead of transferring them",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "New-record publication contains only new-record input/files",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Different form mode does not inherit a same-record note",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Same draft owner retains edits across revision updates",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Explicit new conversation key clears old composer in same workspace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Revoking address visibility clears previously prefilled address inputs",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Hidden cleared addresses cannot be submitted as an old draft",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Existing Fields owns shell tap focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Invalid attachment is rejected without an upload or sensitive intent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Destroy revokes attachment URLs and disconnects Fields",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Keyboard focus remains inside confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Escape cancels without command and returns focus",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Keyboard Enter confirms once after close",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ask source without preview styles360",
+      "passed": true,
+      "detail": {
+        "left": 8,
+        "right": 352,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "Reduced motion is inherited by existing controls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Second instance pending does not lock first",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Destroyed instance rejects late resolution and releases content",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Normal motion waits for actual close before command",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Normal motion yields exactly one confirmed intent and unlocks page",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Destroy during animated confirmation cancels command, overlay and locks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "market targeted320 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "delivery targeted320 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "assistant targeted320 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "context targeted320 RTL",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 304,
+        "viewport": 320,
+        "scroll": 320,
+        "bad": []
+      }
+    },
+    {
+      "name": "Media directional360 LTR",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "LTR media navigation preserves logical index",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ask directional360 LTR",
+      "passed": true,
+      "detail": {
+        "left": 16,
+        "right": 344,
+        "viewport": 360,
+        "scroll": 360,
+        "bad": []
+      }
+    },
+    {
+      "name": "No browser exceptions or failed resources",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "name": "context / business 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "context / supplier 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "context / driver 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "context / reviewer 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "state / remote 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "state / local 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / card 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / editor 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / editor-append 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / search 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / rejected 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market / no-media 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / offer 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / request 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / tracking 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / change 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / proof 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / return 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "delivery / driver 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / chat 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / reading 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / fill 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / actions 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / searching 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / expired-actions 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / driver 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / proposal 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "assistant / retry 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "review / listing 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "review / report 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "review / flag 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "review / driver-application 360 RTL",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Switched driver360",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Ask source without preview styles360",
+      "left": 8,
+      "right": 352,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "market targeted320 RTL",
+      "left": 16,
+      "right": 304,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "delivery targeted320 RTL",
+      "left": 16,
+      "right": 304,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "assistant targeted320 RTL",
+      "left": 16,
+      "right": 304,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "context targeted320 RTL",
+      "left": 16,
+      "right": 304,
+      "viewport": 320,
+      "scroll": 320,
+      "bad": []
+    },
+    {
+      "name": "Media directional360 LTR",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    },
+    {
+      "name": "Ask directional360 LTR",
+      "left": 16,
+      "right": 344,
+      "viewport": 360,
+      "scroll": 360,
+      "bad": []
+    }
+  ],
+  "sourceSha256": {
+    "components/product-context/assistant.js": "fd59601cce46158adf333bc0b60a662ae5ce93c0b2de73b579b17dfe56ddb680",
+    "components/product-context/context.js": "c6f8b0fc63af69459f8ad221cd52ca770ddfe300cc5783f46164055a6a6df554",
+    "components/product-context/delivery.js": "af5561951e5d6174e937c19f04cdb9518bc216f9339e9936278e58f132b832f0",
+    "components/product-context/market.js": "413e02d62df0081ab5bfecd0926caf17c2579331b449da9525fb075c8f631430",
+    "components/product-context/operation.js": "a3a4cda649542de367d4ff7d53968c6b8eff5eb54b02b290a7d6483e6ff65f3f",
+    "components/product-context/product-context.css": "5646c006f6c353f0f7ffb02446a49e21c66d6e9eb79166716d25799fc4436f96",
+    "components/product-context/product-core.js": "0f61560d1979be9628b4114bbd238ea27a0080c41051129a28cbcf7e7ab4d3de",
+    "components/product-context/review.js": "8c03052523b3ab315cce8345eadd331eac1803c66d9ea589994f8c374122d08f",
+    "components/product-context/specification.md": "de08789dfcbf294ecfa5b959f1db4fe0484a6f5e59f3e9fb4fedd26e05646afa",
+    "components/fields/fields.js": "788263c11b3be5fb0e18be033209722f7e16260d4b0da016a5d6a49dec50a418",
+    "components/fields/specification.md": "4c0ae8de632aae3598923cc00636fd84a3110df5d20ec2168761f2485f46f9ed",
+    "previews/product-context/lab.html": "0d3cb08080ae6e96b514164b4bcfcab4b7c99028cfa4d616139d96fe6e1cd58a",
+    "previews/product-context/lab.js": "d94f297194bff46328104486ddeae821e48df105dc947b4f718aef34b698651f",
+    "previews/product-context/sample-one.svg": "ade4a09f9bfdce7b0334fff2a5d46772afb671eb13244741427c588b66046f4d",
+    "previews/product-context/sample-two.svg": "b4bc9f99938de2c7cc06865b65f365b94afdb2c2e41115e5a87895d43edd7418",
+    "tools/product-context-check.py": "cd1a31f4907a0a9e4da31bdfbb2c75d94cc75411874865766a9c189ae9128b57"
+  }
+}

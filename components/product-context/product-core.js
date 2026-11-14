@@ -100,7 +100,7 @@
       var active = root.contains(document.activeElement) ? document.activeElement : null;
       var focusKey = !suppressFocus && active && active.getAttribute('data-focus-key');
       var selection = active && typeof active.selectionStart === 'number' ? [active.selectionStart,active.selectionEnd] : null;
-      stopRender();rendererLife = new AbortController();root.replaceChildren();root.classList.add('m-product');root.setAttribute('data-product-type',type);root.setAttribute('aria-busy',String(!!pending || ['loading','pending'].indexOf(model.phase)>=0));
+      stopRender();rendererLife = new AbortController();root.replaceChildren();root.classList.add('m-product');root.setAttribute('data-product-type',type);if(type==='assistant')root.dataset.conversationLayout=model.conversationLayout==='fill'?'fill':'embedded';root.setAttribute('aria-busy',String(!!pending || ['loading','pending'].indexOf(model.phase)>=0));
       if (!root.hasAttribute('tabindex')) root.tabIndex=-1;
       var scopeKey = key(model.scope);
       var ctx = {

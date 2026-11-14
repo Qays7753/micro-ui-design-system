@@ -6,7 +6,6 @@
     var m=c.model,n=c.node,r=c.root,actionStatus=0,header=n('header','m-product__section m-assistant__header'),identity=n('div','m-assistant__identity'),logo=n('img','m-assistant__symbol');
     logo.src=symbol;logo.alt='';logo.width=24;logo.height=24;identity.append(logo,n('h2','m-product__title','Ask Micro'));header.append(identity,n('p','m-product__secondary',m.scope.label||m.scope.contextId));r.appendChild(header);
     var generation=c.ui.presentationGeneration,saved=c.ui.presentation.ask||null;
-    r.dataset.conversationLayout=m.conversationLayout==='fill'?'fill':'embedded';
     var messages=m.phase==='empty'?[]:m.messages||[],log=n('div','m-product__log');log.id=c.uid+'-log';log.dataset.focusKey='assistant-log';log.setAttribute('role','log');log.setAttribute('aria-label','رسائل المحادثة');log.setAttribute('aria-relevant','additions text');log.setAttribute('aria-busy',String(!!m.replyPending));
     messages.forEach(function(message){
       var bubble=n('article','m-product__message'),speaker=['user','assistant'].indexOf(message.speaker)>=0?message.speaker:'system';bubble.dataset.speaker=speaker;if(text(message.id)&&messages.filter(function(x){return x.id===message.id;}).length===1)bubble.dataset.messageId=message.id;
