@@ -157,3 +157,5 @@ button.m-setting-row:focus-visible { z-index: 1; }
   padding: var(--micro-space-3) var(--micro-space-5) 0;
 }
 .m-account-settings__back[hidden] { display: none !important; }
+.m-account-profile--entry { width:100%;border:0;text-align:start;cursor:pointer; }
+.m-account-profile--entry:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }

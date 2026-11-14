@@ -3296,6 +3296,22 @@ button.m-chart__legend-row { cursor:pointer; }
 .m-layer__title { overflow-wrap: anywhere; }
 .m-layer__foot { padding-block-end: var(--micro-space-1); }
 
+/* Optional side layer; same lifecycle/focus/isolation API as other B07 layers. */
+.m-layer--drawer {
+  inset-block:0;inset-inline-start:0;inset-inline-end:auto;
+  inline-size:80%;max-block-size:none;max-height:none;block-size:100%;
+  border-radius:0;padding-block:env(safe-area-inset-top,0px) calc(var(--micro-space-4) + env(safe-area-inset-bottom,0px));
+  padding-inline-start:env(safe-area-inset-right,0px);
+}
+.m-layer--drawer:dir(ltr) { padding-inline-start:env(safe-area-inset-left,0px); }
+.m-layer--drawer .m-layer__head { flex-shrink:0; }
+.m-layer--drawer .m-layer__body { min-block-size:0; }
+.m-layer--drawer[data-opening="true"],.m-layer--drawer[data-closing="true"] { transform:translateX(100%); }
+.m-layer--drawer:dir(ltr)[data-opening="true"],.m-layer--drawer:dir(ltr)[data-closing="true"] { transform:translateX(-100%); }
+@media (prefers-reduced-motion:reduce) {
+ .m-layer--drawer[data-opening="true"],.m-layer--drawer[data-closing="true"] { transform:none; }
+}
+
 </style>
   <style data-sc-from="components/surfaces/surfaces.css">
 /* =========================================================
@@ -4541,6 +4557,9 @@ button.m-setting-row:focus-visible { z-index: 1; }
   padding: var(--micro-space-3) var(--micro-space-5) 0;
 }
 .m-account-settings__back[hidden] { display: none !important; }
+.m-account-profile--entry { width:100%;border:0;text-align:start;cursor:pointer; }
+.m-account-profile--entry:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }
+
 </style>
   <style data-sc-from="components/access-gateway/access-gateway.css">
 /* Consumer-configured access form composed over Micro fields and buttons. */
@@ -15014,6 +15033,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var appTitle = panel.querySelector('[data-account-title="application"]');
     var back = panel.querySelector('[data-account-back]');
     var appEntry = panel.querySelector('[data-account-to-application]');
+    var initialView = panel.getAttribute('data-account-initial-view') === 'application' ? 'application' : 'account';
 
     function showView(view, shouldFocus) {
       var isApp = view === 'application';
@@ -15021,7 +15041,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (appView) appView.hidden = !isApp;
       if (accountTitle) accountTitle.hidden = isApp;
       if (appTitle) appTitle.hidden = !isApp;
-      if (back) back.hidden = !isApp;
+      if (back) back.hidden = view === initialView;
       layer.setAttribute('aria-labelledby', isApp && appTitle ? appTitle.id : accountTitle.id);
       if (shouldFocus) {
         var heading = isApp ? appTitle : accountTitle;
@@ -15032,12 +15052,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     panel.querySelectorAll('[data-account-open]').forEach(function (trigger) {
       on(trigger, 'click', function () {
         if (!window.MicroNavigation) return;
-        showView('account', false);
+        showView(initialView, false);
         window.MicroNavigation.openLayer(layer, { trigger: trigger, backdropEl: backdrop });
       });
     });
     if (appEntry) on(appEntry, 'click', function () { showView('application', true); });
-    if (back) on(back, 'click', function () { showView('account', true); });
+    panel.querySelectorAll('[data-account-to-account]').forEach(function (entry) {
+      on(entry, 'click', function () { showView('account', true); });
+    });
+    if (back) on(back, 'click', function () { showView(initialView, true); });
     panel.querySelectorAll('[data-account-close]').forEach(function (button) {
       on(button, 'click', function () {
         if (window.MicroNavigation) window.MicroNavigation.closeLayer(layer);
@@ -15058,7 +15081,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         : '';
     });
 
-    showView('account', false);
+    showView(initialView, false);
   }
 
   function init(root) {
@@ -15260,7 +15283,12 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var key = button.getAttribute('data-access-provider');
         var current = gateway.__microAccessCallbacks || {};
         var handler = current.providers && current.providers[key];
-        if (typeof handler !== 'function') return;
+        if (typeof handler !== 'function' || form.dataset.microAccessBusy === 'true'
+            || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
+        form.dataset.microAccessBusy = 'true';
+        form.setAttribute('aria-busy', 'true');
+        if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: 'جارٍ الاتصال' });
+        setMessage(form, 'جارٍ الاتصال بمزود الدخول…', 'info');
         Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
             if (!alive()) return;
@@ -15269,7 +15297,13 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
             var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
             setMessage(form, outcome.text, outcome.tone);
           })
-          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); });
+          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); })
+          .then(function () {
+            if (!alive()) return;
+            form.dataset.microAccessBusy = 'false';
+            form.removeAttribute('aria-busy');
+            if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+          });
       });
     });
 
@@ -15396,6 +15430,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         form.removeAttribute('aria-busy');
         var submit = form.querySelector('[type="submit"]');
         if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
+        gateway.querySelectorAll('[data-access-provider]').forEach(function (button) {
+          if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+        });
         var password = credential(form, 'password');
         if (password) password.type = 'password';
       }

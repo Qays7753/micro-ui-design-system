@@ -23,6 +23,7 @@
     var appTitle = panel.querySelector('[data-account-title="application"]');
     var back = panel.querySelector('[data-account-back]');
     var appEntry = panel.querySelector('[data-account-to-application]');
+    var initialView = panel.getAttribute('data-account-initial-view') === 'application' ? 'application' : 'account';
 
     function showView(view, shouldFocus) {
       var isApp = view === 'application';
@@ -30,7 +31,7 @@
       if (appView) appView.hidden = !isApp;
       if (accountTitle) accountTitle.hidden = isApp;
       if (appTitle) appTitle.hidden = !isApp;
-      if (back) back.hidden = !isApp;
+      if (back) back.hidden = view === initialView;
       layer.setAttribute('aria-labelledby', isApp && appTitle ? appTitle.id : accountTitle.id);
       if (shouldFocus) {
         var heading = isApp ? appTitle : accountTitle;
@@ -41,12 +42,15 @@
     panel.querySelectorAll('[data-account-open]').forEach(function (trigger) {
       on(trigger, 'click', function () {
         if (!window.MicroNavigation) return;
-        showView('account', false);
+        showView(initialView, false);
         window.MicroNavigation.openLayer(layer, { trigger: trigger, backdropEl: backdrop });
       });
     });
     if (appEntry) on(appEntry, 'click', function () { showView('application', true); });
-    if (back) on(back, 'click', function () { showView('account', true); });
+    panel.querySelectorAll('[data-account-to-account]').forEach(function (entry) {
+      on(entry, 'click', function () { showView('account', true); });
+    });
+    if (back) on(back, 'click', function () { showView(initialView, true); });
     panel.querySelectorAll('[data-account-close]').forEach(function (button) {
       on(button, 'click', function () {
         if (window.MicroNavigation) window.MicroNavigation.closeLayer(layer);
@@ -67,7 +71,7 @@
         : '';
     });
 
-    showView('account', false);
+    showView(initialView, false);
   }
 
   function init(root) {

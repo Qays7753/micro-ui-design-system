@@ -1,0 +1,62 @@
+{
+  "phase": "drawer",
+  "viewport": "360x780",
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "RTL drawer occupies right 80 percent",
+      "passed": true
+    },
+    {
+      "name": "Application opens first and background is isolated",
+      "passed": true
+    },
+    {
+      "name": "Account uses same layer and focuses its title",
+      "passed": true
+    },
+    {
+      "name": "Close remains fixed between views",
+      "passed": true
+    },
+    {
+      "name": "Back returns to app settings",
+      "passed": true
+    },
+    {
+      "name": "Escape restores trigger and background",
+      "passed": true
+    },
+    {
+      "name": "Backdrop closes drawer",
+      "passed": true
+    },
+    {
+      "name": "LTR drawer follows inline start",
+      "passed": true
+    },
+    {
+      "name": "Narrow drawer fits without page overflow",
+      "passed": true
+    },
+    {
+      "name": "Focus remains inside drawer",
+      "passed": true
+    },
+    {
+      "name": "Destroy releases layer and scroll lock",
+      "passed": true
+    },
+    {
+      "name": "Legacy centered account default retained",
+      "passed": true
+    },
+    {
+      "name": "No script errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 13,
+  "failed": 0
+}

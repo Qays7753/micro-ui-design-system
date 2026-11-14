@@ -22,6 +22,19 @@ def login(p,base,out,check):
   p.locator('#state').select_option(state);check('Session '+state,p.locator('.m-session').is_visible() and p.locator('[data-access-gateway]').is_hidden())
  check('No horizontal overflow',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
 
+def drawer(p,base,out,check):
+ p.goto(base+'/previews/mobile-experience/menu.html');p.evaluate('document.fonts.ready');trigger=p.locator('[data-account-open]');trigger.click();p.wait_for_timeout(270);layer=p.locator('.m-layer');box=layer.bounding_box();check('RTL drawer occupies right 80 percent',abs(box['width']-288)<1 and abs(box['x']-72)<1)
+ check('Application opens first and background is isolated',p.locator('[data-account-view=application]').is_visible() and trigger.evaluate('(e)=>!!e.closest("[inert]")'))
+ p.screenshot(path=str(out/'drawer360.png'));close=p.locator('[data-account-close]').bounding_box();p.locator('[data-account-to-account]').click();check('Account uses same layer and focuses its title',p.locator('[data-account-view=account]').is_visible() and p.locator('.m-layer:visible').count()==1 and p.locator('[data-account-title=account]').evaluate('(e)=>e===document.activeElement'))
+ check('Close remains fixed between views',p.locator('[data-account-close]').bounding_box()==close);p.screenshot(path=str(out/'account360.png'));p.locator('[data-account-back]').click();check('Back returns to app settings',p.locator('[data-account-view=application]').is_visible())
+ p.keyboard.press('Escape');p.wait_for_timeout(230);check('Escape restores trigger and background',layer.is_hidden() and trigger.evaluate('(e)=>e===document.activeElement&&!e.closest("[inert]")'))
+ trigger.click();p.wait_for_timeout(270);p.locator('.m-layer-backdrop').click(position={'x':5,'y':400});p.wait_for_timeout(230);check('Backdrop closes drawer',layer.is_hidden())
+ p.evaluate('document.documentElement.dir="ltr"');trigger.click();p.wait_for_timeout(270);check('LTR drawer follows inline start',abs(layer.bounding_box()['x'])<1);p.keyboard.press('Escape');p.wait_for_timeout(230)
+ p.evaluate('document.documentElement.dir="rtl"');p.set_viewport_size({'width':320,'height':780});trigger.click();p.wait_for_timeout(270);check('Narrow drawer fits without page overflow',p.evaluate('document.documentElement.scrollWidth===innerWidth') and layer.bounding_box()['width']<=320)
+ p.keyboard.press('Tab');check('Focus remains inside drawer',p.evaluate('document.querySelector(".m-layer").contains(document.activeElement)'))
+ p.evaluate('MicroAccountSettings.disconnect(document);MicroNavigation.disconnect(document)');check('Destroy releases layer and scroll lock',layer.is_hidden() and p.evaluate('document.body.style.overflow!=="hidden"'));p.set_viewport_size({'width':360,'height':780})
+ p.goto(base+'/components/account-settings/example-usage.html');p.locator('[data-account-open]').click();check('Legacy centered account default retained',p.locator('[data-account-view=account]').is_visible() and p.locator('.m-layer').evaluate('(e)=>e.classList.contains("m-layer--center")'))
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--phase',choices=['login','drawer','tasks','motion','all'],default='all');ap.add_argument('--out',type=Path,default=Path('/tmp/mobile-experience-check'));a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
  def check(name,ok):checks.append({'name':name,'passed':bool(ok)});print(('PASS ' if ok else 'FAIL ')+name,flush=True)
