@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "198fab7378bd055e5ae69d7d82393862c3d4baf4e2c264a686544c661c8ffeef",
+  "AGENTS.md": "480af07b289e0359dab93907f8b76597387724c29fda3db54fbb4b8c137dff96",
   "DESIGN.md": "b3d10d3ad0326ce3c1f7c829bfff45c00e1e26941424d2197b4adfc0fac90bfb",
   "README.md": "1f99e074d98b27d31b81fa2628a2ffd595d25a5d15edb36874403d14a6e2b77c",
   "assets/SOURCES.md": "e2af7650a4cbec0bc5c255c96aca40f41f1a024e982e487b3825624c6b9077c1",
@@ -439,6 +439,7 @@
   "docs/audits/mobile-capabilities-2026-11-13/evidence/units.json": "bc24e6775ee33a582ff655316e594607623e1fa4d3ffe201feb186f9662e683e",
   "docs/audits/mobile-capabilities-2026-11-13/evidence/visual.json": "3fe40e8a685e208bb1d438a1657e8c5b4fc00ae2857e10720648aece6fca8e1a",
   "docs/audits/mobile-capabilities-2026-11-13/gate-table.md": "9d140cd536cefe156690326c753fdacc76f18e8a8a8700376a94d9b5919928e9",
+  "docs/audits/mobile-experience-2026-11-14/PLAN.md": "c64a4f163b92cc750bcfd01d5f9c4dfe765d14e4870c6366de4235d8fbedebf5",
   "docs/audits/readable-acceptance-2026-11-12/PHONE-CHECK.md": "bebe3ab6983e8a036bdad5c59002fc5e76ec8ea8d5c26d716f5ea7aa5e80b655",
   "docs/audits/readable-acceptance-2026-11-12/PHONE-OBSERVATIONS.md": "bb15f1ae0bdcc58009f2f63e40ad9cd9aebcbfb454a42f4cb3743fa342df8626",
   "docs/audits/readable-acceptance-2026-11-12/REPORT.md": "cb4b1bbbc31022f93f873c7f11c1215c962e9645ee243587549c8d0673e1126e",
