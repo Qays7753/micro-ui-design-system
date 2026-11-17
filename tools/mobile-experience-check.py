@@ -21,6 +21,17 @@ def login(p,base,out,check):
  for state in ['restoring','expired','denied','offline']:
   p.locator('#state').select_option(state);check('Session '+state,p.locator('.m-session').is_visible() and p.locator('[data-access-gateway]').is_hidden())
  check('No horizontal overflow',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+ p.goto(base+'/components/access-gateway/google-welcome-usage.html');p.evaluate('document.fonts.ready')
+ slot=p.locator('[data-google-provider-slot]')
+ check('Google welcome exposes one visible provider-owned slot',slot.count()==1 and slot.evaluate('(e)=>getComputedStyle(e).display!=="none"&&e.offsetWidth>0'))
+ check('Production composition does not recreate the Google button',p.locator('[data-access-provider]').count()==0 and p.locator('.m-google-button').count()==0)
+ check('Google-only composition has no credential fields',p.locator('input[type="email"],input[type="password"]').count()==0)
+ check('Google welcome loads the official local Micro logo',p.locator('.m-welcome__brand').evaluate('(e)=>e.complete&&e.naturalWidth>0'))
+ check('Provider slot is accessibly named for Google',p.locator('.m-google-provider-region').get_attribute('role')=='group' and bool(p.locator('.m-google-provider-region').get_attribute('aria-label')))
+ check('Status and host-owned session state are present',p.locator('[data-access-status]').get_attribute('role')=='status' and p.locator('.m-session').get_attribute('data-session-state')=='restoring' and p.locator('.m-session').is_hidden())
+ check('Google welcome has no placeholder links or sign-up route',p.locator('a[href="#"]').count()==0 and p.get_by_text('إنشاء حساب',exact=False).count()==0)
+ check('Google SDK and OAuth configuration stay host-owned',p.locator('script[src]').count()==0 and p.locator('[data-client_id],[data-client-id]').count()==0)
+ check('Google welcome fits the phone viewport',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
 
 def drawer(p,base,out,check):
  p.goto(base+'/previews/mobile-experience/menu.html');p.evaluate('document.fonts.ready');trigger=p.locator('[data-account-open]');trigger.click();p.wait_for_timeout(270);layer=p.locator('.m-layer');box=layer.bounding_box();check('RTL drawer occupies right 80 percent',abs(box['width']-288)<1 and abs(box['x']-72)<1)

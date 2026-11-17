@@ -5,8 +5,8 @@
 ## المصدر وترتيب الاستهلاك
 
 1. fonts.css ثم tokens.css ثم motion.css.
-2. CSS العائلات المستخدمة ثم الوصفات الاختيارية: access-gateway/welcome.css وcompositions/mobile-shell.css. لا تحمل كل المكتبة دون حاجة.
-3. الدخول: buttons.js ثم access-gateway.js. استدعاء MicroAccessGateway.init(root,{providers:{google:handler}}). المعرف google يختار callback فقط؛ لا API أو OAuth في المصدر.
+2. CSS العائلات المستخدمة ثم الوصفات الاختيارية: access-gateway/welcome.css وcompositions/mobile-shell.css. تركيب Google-only القابل للاستهلاك موثق في [google-welcome-usage.html](../components/access-gateway/google-welcome-usage.html). لا تحمل كل المكتبة دون حاجة.
+3. Google-only: يحمّل المضيف Google Identity Services ويرسم الزر الرسمي داخل `data-google-provider-slot`، ثم يدير credential callback والنتيجة والجلسة. `MicroAccessGateway.init(root,handlers)` خاص بالنموذج العام أو أزرار المزود المخصصة؛ لا يعيد بناء زر GIS. لا SDK أو OAuth في المصدر.
 4. القائمة: Navigation ثم AccountSettings. استعمل طبقة B07 مع m-layer--drawer وdata-account-initial-view="application" وdata-account-to-account. احتفظ بعناوين فريدة وaria-labelledby والغشاء والأزرار. افصل العائلتين قبل إزالة الجذر.
 5. سياق المنتج: Fields وNavigation وActionSheet وCarousel حسب الاستخدام، ثم product-core ثم renderer. استعمل replace وdestroy وفق عقد المصدر، ولا تخترع update.
 
@@ -20,12 +20,12 @@
 
 ## الهوية والقياسات والحركة
 
-الشعار v2 والخطوط والتوكنز محفوظة. شعار الترحيب 128×40 مع مساحة خالية 12. أهداف اللمس 48، والحقول 52، والنص الأساسي 16/26. تباعد الوصفات من السلم الحالي. عرض اللوحة 80% مقترح للمعاينة، وليس قرارًا نهائيًا.
+الشعار v2 والخطوط والتوكنز محفوظة. شعار الترحيب 128×40 مع مساحة خالية 12. أهداف عناصر Micro 48، والحقول 52، والنص الأساسي 16/26. زر Google الرسمي يملؤه GIS؛ يختار المضيف الحجم الأكبر المناسب للهاتف ويفضل 48px عندما يدعمه المزود دون transform. تباعد الوصفات من السلم الحالي. عرض اللوحة 80% مقترح للمعاينة، وليس قرارًا نهائيًا.
 
 ألوان Google الثلاثة تخص زر المزود حصريًا وتخضع لبوابة دقيقة؛ ليست لوحة ألوان لـMicro. الإنتاج يستخدم زر مزود الهوية المدعوم ويتحقق من إرشاداته وترجماته السارية. أصل العلامة ومصدره في assets/providers/README.md. [دليل الحركة](MOBILE-MOTION.md).
 
 ## القرارات والحدود
 
-حصرية Google، وعرض اللوحة، وطريقة التشغيل Chrome/PWA، ولمس شبكة الشهر قرارات مفتوحة. لا backend أو AI أو OAuth أو حفظ إعدادات أو وجهات قانونية أو شخصية 3D. تسجيل Google مختلف عن استخدام Gemini.
+حصرية Google معتمدة للتركيب المستهدف: المستخدم الجديد والعائد يستخدمان إجراء Google نفسه، دون شاشة إنشاء حساب منفصلة. تظل طريقة تشغيل التطبيق Chrome/PWA وعرض اللوحة ولمس شبكة الشهر قرارات أخرى غير محسومة. لا backend أو AI أو OAuth أو حفظ إعدادات أو وجهات قانونية أو شخصية 3D داخل مستودع المكونات. مصادقة Google الفعلية والجلسة مسؤولية المضيف، وتسجيل Google مختلف عن استخدام Gemini.
 
 لم يُختبر الهاتف S25/Chrome فعليًا أو TalkBack أو لوحة النظام أو WebKit. لا ادعاء Native أو اعتماد بصري آلي. غياب الصورة في مثال Market حالة مقصودة؛ الصور الحقيقية تأتي من المضيف. الفراغ تحت مثال قصير لا يبرر حشو الشاشة بمعلومات أو زخارف.
