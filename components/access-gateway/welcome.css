@@ -1,5 +1,6 @@
 /* Optional welcome composition over AccessGateway; no viewport ownership. */
 .m-welcome { display:flex;flex-direction:column;gap:var(--micro-space-6);min-inline-size:0;color:var(--micro-text-primary);font-family:var(--micro-font-family); }
+.m-welcome[hidden] { display:none; }
 .m-welcome__brand { display:block;inline-size:128px;block-size:40px;object-fit:contain;margin:var(--micro-space-3); }
 .m-welcome__heading { margin:0;font-size:var(--micro-heading-large-size);line-height:var(--micro-heading-large-line);font-weight:var(--micro-weight-semibold); }
 .m-welcome__intro { margin:var(--micro-space-2) 0 0;color:var(--micro-text-secondary);font-size:var(--micro-body-size);line-height:var(--micro-body-line); }
@@ -24,6 +25,7 @@
 .m-session__message[data-tone="error"] { color:var(--micro-danger); }
 .m-session__message[data-tone="success"] { color:var(--micro-success); }
 .m-session__actions { display:flex;flex-wrap:wrap;gap:var(--micro-space-3);min-inline-size:0; }
+.m-session__actions [hidden] { display:none !important; }
 .m-session[hidden] { display:none; }
 
 /* Provider mark remains intact; shared busy semantics and adjacent status convey waiting. */
