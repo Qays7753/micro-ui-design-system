@@ -126,12 +126,14 @@
 
 المصدر: [المواصفة](../components/access-gateway/specification.md)، [JS](../components/access-gateway/access-gateway.js).
 
-- `MicroAccessGateway.init(root,handlers?)` بعد Fields؛ handlers: `onSubmit({email,password})` و`onRecovery()` و`providers[key]()`، يمكن أن تعيد قيمة/Promise. إعادة init لنفس الجذر تحدّث callbacks وتوافر الإجراءات الاختيارية دون ربط مضاعف؛ ليست إعادة بناء form.
+- `MicroAccessGateway.init(root,handlers?)`؛ هيّئ Fields قبلها عند استخدام حقول الاعتماد فقط. تركيب Google-only بلا حقول لا يحتاج Fields. handlers: `onSubmit({email,password})` و`onRecovery()` و`providers[key]()`، يمكن أن تعيد قيمة/Promise. إعادة init لنفس الجذر تحدّث callbacks وتوافر الإجراءات الاختيارية دون ربط مضاعف؛ ليست إعادة بناء form.
 - المستهلك يملك الخدمة والمصادقة والصلاحيات وإلغاء الشبكة؛ المكوّن يملك التحقق الأصلي للحقلين ورسائل UI وbusy وكشف كلمة المرور. غياب handler لا يرسل شيئًا، وغياب نتيجة صريحة لا يعني دخولًا.
 - النتيجة الاختيارية `{message?,tone?,authenticated?}` عقد عرض فقط؛ tone يقبل info/error. الرسالة الصريحة تُعرض؛ authenticated=true تأكيد المستهلك، false عدم دخول، وغير ذلك نتيجة محايدة. الرفض يعرض userMessage البشرية إن قُدمت، لا stack أو Error.message الخام.
 - `micro-access:submitted` من form يحمل `{result}` بعد الحل، بلا بيانات اعتماد مضافة من المكوّن؛ لا event مماثل للمزود والاستعادة حاليًا. لا تسجل credentials أو نتيجة حساسة في telemetry؛ النتيجة التي يردها handler مسؤوليته.
 - `disconnect/destroy(root)` ينهيان الربط وbusy ويعيدان إخفاء كلمة المرور ويمنعان استجابة Promise قديمة من تحديث UI؛ لا يلغيان طلب الشبكة الفعلي. Fields ينظف منفصلًا.
 - التغطية التالية: form/وسائل اختيارية/إظهار كلمة المرور، فراغ/invalid/disabled/pending/رفض/نتيجة محايدة وإعادة callbacks؛ لا مصادقة فعلية أو بيانات حقيقية.
+- تركيب `m-welcome` الاختياري موثق في [Google welcome usage](../components/access-gateway/google-welcome-usage.html): المسار المستهدف يعرض Google وحده للمستخدم الجديد والعائد بلا Sign-up منفصل، مع بقاء API العام متوافقًا مع form/providers. زر GIS الرسمي يرسمه المضيف داخل `data-google-provider-slot`; `.m-google-button` وصورة G المحلية عينتان وليستا زر الإنتاج. `welcome.css` يُحمّل بعد `access-gateway.css`.
+- `m-session` يقدم markup وحالات عرض يقودها المضيف (`restoring/expired/denied/offline`)؛ لا API جلسة ولا OAuth أو network أو storage داخل المكتبة. المضيف يملك الحالة والنص والإجراء، ولا يعرض النجاح إلا بعد تأكيده الصريح.
 
 ## 13. Order Schedule
 
