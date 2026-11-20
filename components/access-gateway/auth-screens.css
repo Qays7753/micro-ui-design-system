@@ -1,0 +1,115 @@
+/* Access Gateway screen compositions — UI only; the host owns routes and auth. */
+.m-auth-page { margin:0; background:var(--micro-surface-page); color:var(--micro-text-primary); font-family:var(--micro-font-family); }
+.m-auth-screen,
+.m-auth-screen * { box-sizing:border-box; }
+.m-auth-screen {
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+  inline-size:100%;
+  min-block-size:100vh;
+  min-block-size:100svh;
+  padding-block-start:var(--micro-shell-inset-top,env(safe-area-inset-top,0px));
+  padding-inline-start:env(safe-area-inset-left,0px);
+  padding-inline-end:env(safe-area-inset-right,0px);
+  background:var(--micro-surface-page);
+  color:var(--micro-text-primary);
+  font-family:var(--micro-font-family);
+}
+.m-auth-screen [hidden] { display:none !important; }
+.m-auth-screen__ornaments { position:absolute; z-index:-1; inset:0; overflow:hidden; pointer-events:none; }
+.m-auth-screen__ornaments::before,
+.m-auth-screen__ornaments::after { position:absolute; display:block; border-radius:var(--micro-radius-circle); content:""; }
+.m-auth-screen__logo { display:block; inline-size:128px; block-size:40px; object-fit:contain; }
+
+/* 1 — preserve the approved white Splash and its two fixed-position brand shapes. */
+.m-auth-screen--splash { background:var(--micro-color-white); }
+.m-auth-screen--splash .m-auth-screen__ornaments::before {
+  inset-block-start:-40vw;
+  left:-50vw;
+  inline-size:100vw;
+  aspect-ratio:5 / 4;
+  background:var(--micro-brand-support);
+}
+.m-auth-screen--splash .m-auth-screen__ornaments::after {
+  inset-block-end:-71vw;
+  right:-53vw;
+  inline-size:126vw;
+  aspect-ratio:1;
+  background:var(--micro-brand-primary);
+}
+.m-auth-screen__splash-action { position:absolute; z-index:1; inset:0; display:grid; place-items:center; min-block-size:100%; color:inherit; text-decoration:none; }
+.m-auth-screen__splash-action:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring); outline-offset:calc(0px - var(--micro-focus-gap)); }
+.m-auth-screen--splash .m-auth-screen__logo { inline-size:192px; block-size:60px; transform:translateY(-4svh); }
+
+/* 2 — Google-only entry screen; the actual GIS button is rendered by the host. */
+.m-auth-screen--signin { background:var(--micro-color-white); }
+.m-auth-screen--signin .m-auth-screen__ornaments::before {
+  inset-block-start:-42vw;
+  left:-42vw;
+  inline-size:84vw;
+  aspect-ratio:1;
+  background:var(--micro-brand-support);
+}
+.m-auth-screen__brand-zone { position:relative; z-index:1; display:grid; flex:1 1 auto; place-items:center; min-block-size:260px; padding-block:var(--micro-space-8); }
+.m-auth-screen--signin .m-auth-screen__logo { inline-size:180px; block-size:56px; transform:translateY(1svh); }
+.m-auth-screen__panel {
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:var(--micro-space-8);
+  min-block-size:44svh;
+  margin-block-start:auto;
+  padding-block:var(--micro-space-8) calc(var(--micro-space-8) + var(--micro-shell-inset-bottom,var(--micro-inset-bottom,env(safe-area-inset-bottom,0px))));
+  padding-inline:var(--micro-space-5);
+  border-start-start-radius:var(--micro-radius-hero);
+  border-start-end-radius:var(--micro-radius-hero);
+  background:var(--micro-brand-primary);
+  color:var(--micro-text-inverse);
+}
+.m-auth-screen__copy { display:grid; gap:var(--micro-space-2); min-inline-size:0; }
+.m-auth-screen__title { margin:0; font-size:var(--micro-heading-large-size); line-height:var(--micro-heading-large-line); font-weight:var(--micro-weight-semibold); text-wrap:pretty; }
+.m-auth-screen__description { margin:0; color:var(--micro-text-inverse); font-size:var(--micro-body-size); line-height:var(--micro-body-line); text-wrap:pretty; }
+.m-auth-screen__actions { display:grid; align-content:start; gap:var(--micro-space-4); min-inline-size:0; }
+.m-auth-screen__provider-region { min-inline-size:0; }
+.m-auth-screen__provider-slot { display:grid; place-items:center; inline-size:100%; min-inline-size:0; min-block-size:var(--micro-touch-min); }
+/* Visible only as an honest local preview marker, never applied to GIS internals. */
+.m-auth-screen__provider-placeholder { display:grid; place-items:center; inline-size:100%; min-block-size:var(--micro-touch-min); padding-inline:var(--micro-space-3); border:1px dashed var(--micro-brand-support); border-radius:var(--micro-radius-capsule); color:var(--micro-text-inverse); font-size:var(--micro-body-size); line-height:var(--micro-body-line); text-align:center; }
+.m-auth-screen__status { min-inline-size:0; margin:0; color:var(--micro-text-inverse); font-size:var(--micro-body-size); line-height:var(--micro-body-line); overflow-wrap:anywhere; }
+.m-auth-screen__status[data-tone="error"] { color:var(--micro-danger-surface); }
+
+/* 3/4 — same approved dark hero and light account sheet, with host-owned data. */
+.m-auth-screen--welcome { background:var(--micro-brand-primary); color:var(--micro-text-inverse); }
+.m-auth-screen__hero { display:flex; flex:1 1 72svh; flex-direction:column; align-items:start; justify-content:center; gap:var(--micro-space-4); min-block-size:260px; padding-block:var(--micro-space-6) calc(var(--micro-space-8) + var(--micro-space-2)); padding-inline-start:var(--micro-space-2); padding-inline-end:var(--micro-space-5); text-align:start; }
+.m-auth-screen__badge { display:grid; place-items:center; inline-size:var(--micro-icon-button-size); block-size:var(--micro-icon-button-size); flex:none; border-radius:var(--micro-radius-circle); background:var(--micro-brand-support); color:var(--micro-text-inverse); }
+.m-auth-screen__badge svg { display:block; inline-size:var(--micro-icon-in-button); block-size:var(--micro-icon-in-button); stroke:currentColor; }
+.m-auth-screen__hero .m-auth-screen__title { max-inline-size:100%; }
+.m-auth-screen__hero .m-auth-screen__description { max-inline-size:100%; }
+.m-auth-screen__sheet {
+  position:relative;
+  z-index:1;
+  display:grid;
+  flex:1 0 auto;
+  gap:0;
+  padding-block:var(--micro-space-8) var(--micro-shell-inset-bottom,var(--micro-inset-bottom,env(safe-area-inset-bottom,0px)));
+  padding-inline:var(--micro-space-5);
+  border-start-start-radius:var(--micro-radius-hero);
+  border-start-end-radius:var(--micro-radius-hero);
+  background:var(--micro-surface-base);
+  color:var(--micro-text-primary);
+}
+.m-auth-screen__account { display:flex; align-items:center; gap:var(--micro-space-4); min-inline-size:0; min-block-size:var(--micro-icon-button-size); padding:var(--micro-space-2) var(--micro-space-4); border:1px solid var(--micro-border-divider); border-radius:var(--micro-radius-overlay); background:var(--micro-surface-page); }
+.m-auth-screen__avatar { display:grid; place-items:center; inline-size:var(--micro-icon-button-size); block-size:var(--micro-icon-button-size); flex:none; border-radius:var(--micro-radius-circle); background:var(--micro-brand-support); color:var(--micro-text-inverse); font-size:var(--micro-heading-size); line-height:1; font-weight:var(--micro-weight-semibold); }
+.m-auth-screen__account-copy { display:grid; gap:var(--micro-space-1); min-inline-size:0; }
+.m-auth-screen__account-name { color:var(--micro-text-primary); font-size:var(--micro-body-size); line-height:var(--micro-heading-line); font-weight:var(--micro-weight-semibold); overflow-wrap:anywhere; }
+.m-auth-screen__account-email { display:block; color:var(--micro-text-secondary); font-size:var(--micro-label-size); line-height:var(--micro-label-line); direction:ltr; unicode-bidi:isolate; overflow-wrap:anywhere; }
+.m-auth-screen__sheet [data-auth-account]:not([hidden]) { margin-block-end:var(--micro-space-2); }
+.m-auth-screen__sheet [data-auth-action="use-another-account"] { margin-block-start:var(--micro-space-4); }
+.m-auth-screen__continue--returning { background-image:none; background-color:var(--micro-brand-primary); }
+.m-auth-screen__continue--new { background:var(--micro-brand-accent); color:var(--micro-text-primary); }
+.m-auth-screen__continue--new:active { background:var(--micro-brand-pressed); color:var(--micro-text-inverse); }
+.m-auth-screen__switch { inline-size:100%; min-inline-size:0; min-block-size:var(--micro-touch-min); padding-inline:var(--micro-space-2); color:var(--micro-text-secondary); white-space:normal; }
+.m-auth-screen__switch span { color:var(--micro-brand-ink); text-decoration:underline; text-underline-offset:var(--micro-space-1); }

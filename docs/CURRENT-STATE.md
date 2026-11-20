@@ -1,12 +1,12 @@
-الجولة الأحدث مكتملة على Feature: [تجربة الهاتف](MOBILE-EXPERIENCE-HANDOFF.md). البداية7df38e8؛ دون دمجmain أوMicro. الأقسام التالية تخص الجولات السابقة.
+الجولة الحالية على Feature: [تجهيز تراكيب بوابة الدخول الأربع](superpowers/plans/2026-11-21-auth-screen-compositions.md)، على `feature/google-only-access-gateway-2026-11-18` فوق `origin/main` عند `91744a5`. فحص `python3 tools/mobile-experience-check.py --phase login --out /tmp/auth-screen-check` نجح 65/65 في Chromium عند 360×780 RTL؛ وفُحص 320×780 للفيض فقط. اللقطات المؤقتة تحت `/tmp/auth-screen-check/`. لا ادعاء باختبار جهاز أو WebKit/Safari أو GIS/OAuth حقيقي أو قارئ شاشة، ولا دمج إلى main أو وصول إلى مستودع Micro.
 
 # الحالة الحالية — مكتبة Micro UI
 
-الجولة النشطة: [ملكية التصميم والتكوين والهوية المحدودة](audits/ui-owner-2026-11-14/PLAN.md). البداية b94d78b؛ المراحل1–7 منفذة على فرع Feature؛ الاعتماد البصري والهاتف الفعلي منفصلان. التسليم: docs/UI-OWNER-HANDOFF.md. الجولة السابقة أدناه مدموجة على main، وليست حالة الجولة الجديدة.
+الجولة النشطة: استكمال واجهات Access Gateway فقط وفق الخطة الحالية أعلاه. يبقى اعتماد المالك على الصور المرجعية والحزمة `Micro-Auth(1).zip`؛ صلاحية OAuth وGoogle والجلسة ليست ضمن هذا المستودع.
 
-## قرار واجهة الدخول — 2026-11-18
+## قرار واجهة الدخول — 2026-11-21
 
-تركيب الترحيب المستهدف يستخدم Google وحده للمستخدم الجديد والعائد؛ لا شاشة Sign-up منفصلة. المصدر القابل لإعادة الاستخدام ضمن `components/access-gateway/` هو UI فقط: لا OAuth أو backend أو إنشاء/حفظ جلسة. المضيف يحمّل زر Google الرسمي، ويدير credential callback والنتيجة والصلاحيات وحالات الجلسة. تبقى واجهة Access Gateway العامة متوافقة مع التركيبات الأخرى. انظر [مواصفة Access Gateway](../components/access-gateway/specification.md) و[تركيب Google welcome](../components/access-gateway/google-welcome-usage.html).
+التدفق المرئي أربع شاشات: Splash، Google-only sign-in، ترحيب للمستخدم الجديد، وترحيب مختلف للعائد. لا onboarding أو نموذج بريد/كلمة مرور أو تسجيل يدوي. المضيف يحمّل زر Google الرسمي، ويتحقق من النتيجة قبل اختيار `new` أو `returning`، ويملك الجلسة والبيانات والأفعال. لا OAuth أو backend أو تخزين في المكتبة. تبقى واجهة Access Gateway العامة متوافقة مع التركيبات الأخرى. انظر [مواصفة Access Gateway](../components/access-gateway/specification.md) و[أمثلة الشاشات الأربع](../components/access-gateway/README.md).
 
 الجولة السابقة المدموجة: [تنقيح النصوص والتكوين البصري على مراحل](audits/ui-refinement-2026-11-13/PLAN.md). مصدر البداية c70c257؛ المراحل1–5 منفذة ومرفوعة على فرع Feature؛ التقرير النهائي في phase5 ضمن الخطة، والاعتماد البصري/الهاتف الفعلي منفصلان. لا دمج جديد. المراجع التالية تخص دفعاتها السابقة.
 
@@ -156,7 +156,7 @@ Chromium 152.0.7977.64 / Playwright 1.63.0، مع IBM Plex الفعلي:
 - `order-schedule`: DRAFT FOR REVIEW.
 - `carousel`: DRAFT FOR REVIEW.
 - `packed-circle`: PROPOSED/opt-in ولا يغير السلوك الافتراضي للبيانات.
-- `account-settings` و`access-gateway`: UI محلي تجريبي دون حفظ أو مصادقة حقيقية.
+- `account-settings`: UI محلي دون حفظ فعلي. `access-gateway`: API عام وأربع تراكيب UI دون مصادقة أو جلسة حقيقية.
 
 هذه الحالات تصف حالة UI والمصدر، ولا تعني جاهزية تطبيق Micro أو اعتماد UX.
 
