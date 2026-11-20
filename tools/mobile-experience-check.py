@@ -36,6 +36,58 @@ def login(p,base,out,check):
  p.locator('.m-welcome').evaluate('(e)=>e.hidden=true');p.locator('.m-session').evaluate('(e)=>e.hidden=false')
  check('Host can reveal session after hiding welcome',p.locator('.m-welcome').is_hidden() and p.locator('.m-session').is_visible())
  check('Restoring session keeps its optional action hidden',p.locator('.m-session [data-session-action]').is_hidden())
+ auth_screens(p,base,out,check)
+
+def auth_screens(p,base,out,check):
+ pages=[
+  ('splash','splash-usage.html'),
+  ('signin','google-sign-in-usage.html'),
+  ('new-user','new-user-welcome-usage.html'),
+  ('returning-user','returning-user-welcome-usage.html')]
+ for screen,file in pages:
+  url=base+'/components/access-gateway/'+file
+  p.goto(url);p.evaluate('document.fonts.ready')
+  if screen in ('new-user','returning-user'):
+   p.wait_for_function('document.querySelector("[data-micro-icon]")?.childElementCount===1')
+  check(screen+' uses Arabic RTL and loads its screen',p.locator('html').get_attribute('lang')=='ar' and p.locator('html').get_attribute('dir')=='rtl' and p.locator('.m-auth-screen').count()==1)
+  check(screen+' has no external assets or credential inputs',p.locator('input').count()==0 and p.locator('script[src^="http"],link[href^="http"],img[src^="http"]').count()==0)
+  check(screen+' has no horizontal overflow at 360px',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+  check(screen+' remains inside the approved page composition',p.locator('.m-auth-screen').evaluate('(e)=>getComputedStyle(e).backgroundColor!="rgba(0, 0, 0, 0)"'))
+  if screen=='splash':
+   check('Splash loads the local v2 Micro logo',p.locator('.m-auth-screen__logo').evaluate('(e)=>e.complete&&e.naturalWidth>0'))
+   check('Splash example opens the canonical Google sign-in page',p.locator('.m-auth-screen__splash-action').get_attribute('href')=='google-sign-in-usage.html')
+   p.screenshot(path=str(out/'auth-splash360.png'))
+  elif screen=='signin':
+   slot=p.locator('[data-google-provider-slot]')
+   check('Google sign-in exposes one visible host-owned GIS slot',slot.count()==1 and slot.is_visible() and slot.locator('button').count()==0)
+   check('Google sign-in loads the local v2 Micro logo',p.locator('.m-auth-screen__logo').evaluate('(e)=>e.complete&&e.naturalWidth>0'))
+   check('Google SDK, client configuration, and recreated buttons stay host-owned',p.locator('script[src]').count()==0 and p.locator('[data-client_id],[data-client-id]').count()==0 and p.locator('.m-google-button').count()==0)
+   check('Google sign-in has no secondary method or unowned links',p.locator('a,input,[data-access-provider]').count()==0)
+   check('Google sign-in uses the approved copy',p.locator('#signin-title').inner_text()=='أهلًا بك' and 'إدارة أعمالك من مكان واحد' in p.locator('.m-auth-screen__description').inner_text())
+   p.screenshot(path=str(out/'auth-google-signin360.png'))
+  else:
+   expected='مرحبًا بك في Micro' if screen=='new-user' else 'أهلًا بعودتك'
+   check(screen+' preserves its distinct welcome heading',p.locator('h1').inner_text()==expected)
+   check(screen+' does not claim account setup or prefill account data','حسابك جاهز' not in p.content() and p.locator('[data-auth-user-name]').inner_text().strip()=='' and p.locator('[data-auth-user-email]').inner_text().strip()=='' and p.locator('[data-auth-user-initial]').inner_text().strip()=='')
+   check(screen+' keeps optional account data hidden until host supplies it',p.locator('[data-auth-account]').is_hidden())
+   check(screen+' exposes only host-owned continue and account-switch actions',p.locator('[data-auth-action="continue"]').count()==1 and p.locator('[data-auth-action="use-another-account"]').count()==1)
+   p.locator('[data-auth-user-name]').evaluate('(e)=>e.textContent="مستخدم اختبار"')
+   p.locator('[data-auth-user-email]').evaluate('(e)=>e.textContent="test@example.test"')
+   p.locator('[data-auth-user-initial]').evaluate('(e)=>e.textContent="م"')
+   p.locator('[data-auth-account]').evaluate('(e)=>e.hidden=false')
+   check(screen+' renders host-provided account data without clipping horizontally',p.locator('[data-auth-account]').is_visible() and p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+   check(screen+' keeps welcome actions fully visible at 360px',p.evaluate('document.documentElement.scrollHeight===innerHeight'))
+   p.screenshot(path=str(out/('auth-'+screen+'360.png')))
+  p.set_viewport_size({'width':320,'height':780})
+  if screen in ('new-user','returning-user'):
+   p.locator('[data-auth-user-name]').evaluate('(e)=>e.textContent="اسم مستخدم تجريبي طويل لاختبار الالتفاف"')
+   p.locator('[data-auth-user-email]').evaluate('(e)=>e.textContent="long.test.account.name@example.test"')
+   check(screen+' wraps long host data within the account card',p.locator('[data-auth-account]').evaluate('(e)=>{const n=e.querySelector("[data-auth-user-name]"),m=e.querySelector("[data-auth-user-email]");return n.scrollWidth<=n.clientWidth+1&&m.scrollWidth<=m.clientWidth+1}'))
+  check(screen+' has no horizontal overflow at 320px',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+  p.set_viewport_size({'width':360,'height':780})
+ p.goto(base+'/components/access-gateway/splash-usage.html')
+ p.locator('.m-auth-screen__splash-action').click()
+ check('Splash navigation reaches Google sign-in example',p.url.endswith('/components/access-gateway/google-sign-in-usage.html'))
 
 def drawer(p,base,out,check):
  p.goto(base+'/previews/mobile-experience/menu.html');p.evaluate('document.fonts.ready');trigger=p.locator('[data-account-open]');trigger.click();p.wait_for_timeout(270);layer=p.locator('.m-layer');box=layer.bounding_box();check('RTL drawer occupies right 80 percent',abs(box['width']-288)<1 and abs(box['x']-72)<1)

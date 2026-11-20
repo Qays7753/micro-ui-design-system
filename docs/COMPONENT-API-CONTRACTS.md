@@ -132,8 +132,10 @@
 - `micro-access:submitted` من form يحمل `{result}` بعد الحل، بلا بيانات اعتماد مضافة من المكوّن؛ لا event مماثل للمزود والاستعادة حاليًا. لا تسجل credentials أو نتيجة حساسة في telemetry؛ النتيجة التي يردها handler مسؤوليته.
 - `disconnect/destroy(root)` ينهيان الربط وbusy ويعيدان إخفاء كلمة المرور ويمنعان استجابة Promise قديمة من تحديث UI؛ لا يلغيان طلب الشبكة الفعلي. Fields ينظف منفصلًا.
 - التغطية التالية: form/وسائل اختيارية/إظهار كلمة المرور، فراغ/invalid/disabled/pending/رفض/نتيجة محايدة وإعادة callbacks؛ لا مصادقة فعلية أو بيانات حقيقية.
-- تركيب `m-welcome` الاختياري موثق في [Google welcome usage](../components/access-gateway/google-welcome-usage.html): المسار المستهدف يعرض Google وحده للمستخدم الجديد والعائد بلا Sign-up منفصل، مع بقاء API العام متوافقًا مع form/providers. زر GIS الرسمي يرسمه المضيف داخل `data-google-provider-slot`; `.m-google-button` وصورة G المحلية عينتان وليستا زر الإنتاج. `welcome.css` يُحمّل بعد `access-gateway.css`.
+- تركيب `m-welcome` و`m-session` العام موثق في [google-welcome-usage.html](../components/access-gateway/google-welcome-usage.html) ويبقى مثالًا أدنى محفوظًا. صفحة Google sign-in الكاملة هي [google-sign-in-usage.html](../components/access-gateway/google-sign-in-usage.html)، وتعرض موضع `data-google-provider-slot` للمضيف دون إعادة رسم زر GIS؛ `.m-google-button` وصورة G المحلية عينتان وليستا زر الإنتاج. يحافظ API العام على دعمه لـform/providers.
 - `m-session` يقدم markup وحالات عرض يقودها المضيف (`restoring/expired/denied/offline`)؛ لا API جلسة ولا OAuth أو network أو storage داخل المكتبة. المضيف يملك الحالة والنص والإجراء، ولا يعرض النجاح إلا بعد تأكيده الصريح.
+- تراكيب الشاشات الأربع تُستهلك من `auth-screens.css` وصفحات `splash-usage.html` و`google-sign-in-usage.html` و`new-user-welcome-usage.html` و`returning-user-welcome-usage.html`. يختار المضيف شاشة الجديد/العائد بعد تحقق موثوق؛ لا يقدّم المصدر حالة أو بيانات حساب تجريبية. يظل `google-welcome-usage.html` مثال `m-welcome`/`m-session` الأدنى.
+- عند استخدام تركيب GIS، يملأ المضيف `[data-google-provider-slot]` بزر المزود الرسمي دون أن تستهدفه قواعد تنسيق داخلية. `shared/icons.js` يحمّل رمز التحقق المحلي للشاشتين 3/4؛ `buttons.css` يوفّر CTA. أفعال المتابعة وتبديل الحساب وربط بيانات الحساب ملك المضيف، وليست OAuth أو جلسة من المكتبة.
 
 ## 13. Order Schedule
 
