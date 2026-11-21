@@ -38,9 +38,9 @@ python3 tools/ui-system-showcase-repair-check.py --tag after
 
 الدليل الأخير:
 
-- [`verification.txt`](../../reviews/UI-SYSTEM-SHOWCASE/verification.txt)
-- [`qa-verdict.txt`](../../reviews/UI-SYSTEM-SHOWCASE/qa-verdict.txt)
-- [`repair-check-after.txt`](../../reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt)
+- `verification.txt`
+- `qa-verdict.txt`
+- `repair-check-after.txt`
 - [`UI-SYSTEM-SHOWCASE-COVERAGE`](../../docs/TESTING.md)
 - [`UI-SYSTEM-SHOWCASE-REPAIR-TRACKER`](../../docs/TESTING.md)
 
