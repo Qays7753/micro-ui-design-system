@@ -13,7 +13,7 @@
 ## الفحوص الآلية
 
 1. **تدقيق كل عائلة** — [`tools/component-audit-check.py`](../tools/component-audit-check.py): تدقيق بصري/تفاعلي يقوده الكتالوج لكل العائلات الـ14 وكل المتغيرات الاختيارية (opt-in)، Light فقط، على 360×780 RTL مع حركة مخفّضة. يتحقق أن منتقي المراجعة يغطي كل عائلة في الكتالوج مرة واحدة بالضبط، وأن كل عائلة معزولة ومُصيَّرة داخل 360px، وأن مثال كل متغير اختياري ظاهر ومرسوم فعلاً من المصدر، وأن جداول المقاييس تعرض قيم المصدر.
-2. **فحوص سياق المنتج** — [`tools/product-context-check.py`](../tools/product-context-check.py): عقود واجهة C07–C12 على هاتف Light RTL، مع فحوص ضيقة/LTR محدودة، بلا خدمات.
+2. **فحوص سياق المنتج** — [`tools/product-context-check.py`](../tools/product-context-check.py): عقود واجهة C07–C12 وC14 على هاتف Light RTL، مع فحوص ضيقة/LTR محدودة، بلا خدمات.
 3. **مصفوفة الإصدار الخفيف** — [`tools/light-release-check.py`](../tools/light-release-check.py): مراجعة Light-only مستقلة للمعرض من المصدر الحي وعقود الحقول عبر Chromium حقيقي على العروض 320/360/390/430. مستوى الطباعة المفحوص هو تكبير نص CSS مرئي (ليس zoom المتصفح)، والفحص لا ينفّذ Dark ولا يحاكيه. وضع `--review-scope` يضيّق المصفوفة إلى 360×780 RTL بنص عادي وDPR1، وهو ما يشغّله المشغّل الموحّد أدناه.
 4. **فحوص تجربة الهاتف** — [`tools/mobile-experience-check.py`](../tools/mobile-experience-check.py): فحوص مركزة لتجربة الهاتف، Light فقط، بمنفذ عرض أساسي واحد.
 5. **البوابات الثابتة** — [`tools/light-static-check.py`](../tools/light-static-check.py): بوابات ثابتة قابلة للتكرار لإصدار Light-only دون تنفيذ Dark؛ قيم الهوية من `tools/baselines/identity.json`، والمقارنة مقابل `origin/main` افتراضيًا (تُغيَّر بـ`--base`)، ومنع حذف المصدر القابل للتعديل (`components/` و`shared/` و`assets/` و`previews/`).

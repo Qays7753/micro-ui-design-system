@@ -6,7 +6,7 @@
 
 ## النضج الحالي
 
-المصدر الوحيد للنضج هو [COMPONENT-CATALOG.json](COMPONENT-CATALOG.json): **14 عائلة / 8 متغيرات / 13 تركيبًا (C01–C13)**.
+المصدر الوحيد للنضج هو [COMPONENT-CATALOG.json](COMPONENT-CATALOG.json): **14 عائلة / 8 متغيرات / 14 تركيبًا (C01–C14)**.
 
 - العائلات: `stable-ui` ما عدا `order-schedule` و`carousel` (`draft-for-review`).
 - المتغيرات: donut/bubbles/main-metric-featured/metric-circles/info-strip-peek (`stable-ui`)، data-readable/metric-readable (`draft-for-review`)، packed-circle (`proposed`).

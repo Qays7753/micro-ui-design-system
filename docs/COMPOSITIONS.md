@@ -1,8 +1,8 @@
-# التراكيب المشتركة — العقود والوصفات والقواعد (C01–C13)
+# التراكيب المشتركة — العقود والوصفات والقواعد (C01–C14)
 
-## نظرة عامة على التراكيب C01–C13
+## نظرة عامة على التراكيب C01–C14
 
-التراكيب وصفات HTML/CSS عامة تستهلك المصدر المشترك فوق العائلات القائمة؛ لا framework ولا عائلة جديدة. C01/C02/C03 وصفات منفذة بحالة Draft للمراجعة، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`، وC05/C06 قدرات الهاتف، وC07–C12 سياق المنتج، وC13 شاشات بوابة الدخول. [الكتالوج الحالي](COMPONENT-CATALOG.json) هو المرجع لأعداد العائلات والمتغيرات والتراكيب؛ لا تُقرأ الأعداد التاريخية الواردة في هذا الملف كحصر حالي.
+التراكيب وصفات HTML/CSS عامة تستهلك المصدر المشترك فوق العائلات القائمة؛ لا framework ولا عائلة جديدة. C01/C02/C03 وصفات منفذة بحالة Draft للمراجعة، وC04 إطار قراءة مع مساعد اختياري للوحدات `MicroReadings`، وC05/C06 قدرات الهاتف، وC07–C12 وC14 سياق المنتج، وC13 شاشات بوابة الدخول. [الكتالوج الحالي](COMPONENT-CATALOG.json) هو المرجع لأعداد العائلات والمتغيرات والتراكيب؛ لا تُقرأ الأعداد التاريخية الواردة في هذا الملف كحصر حالي.
 
 CSS وبنية DOM الدلالية جزء من المكوّن. صفحات المعاينة ومتحكمها لا تنتقل إلى المنتج. عند اختيار إطار المضيف لاحقًا يُعرّف markup مرة في غلاف مشترك ثم تمرر الصفحات البيانات والأفعال؛ لا نسخ CSS لكل شاشة أو نقل controller الأمثلة. [واجهات المصدر](../docs/API.md) و[SOP الاستهلاك](../docs/API.md) مكملان لهذا الدليل.
 
@@ -14,20 +14,24 @@ CSS وبنية DOM الدلالية جزء من المكوّن. صفحات ال�
 | C04 | قراءة منظمة وسياق وحدة صريح | إطار قراءة و`MicroReadings` فوق Data/Metric؛ العقد الكامل في قسم «القراءات المنظمة» أدناه، و[المعاينة](../previews/readable-source/index.html). |
 | C05 | قائمة إجراءات للهاتف | تركيب Navigation/B01 مع `MicroActionSheet`؛ العقد أدناه، و[المعاينة](../previews/mobile-capabilities/actions.html). |
 | C06 | ملخص تقويم خارجي | وصفة C01 خارج جذر Order Schedule؛ العقد أدناه، و[المعاينة](../previews/mobile-capabilities/calendar-summary.html). |
-| C07–C12 | سياق المنتج | ستة تراكيب Draft فوق `MicroProduct` المشترك وrenderers مستقلة؛ [العقد العام](../components/product-context/specification.md) و[جدول التغطية](product-context/COVERAGE.md) و[المختبر](../previews/product-context/index.html). |
+| C07–C12 وC14 | سياق المنتج | سبعة تراكيب Draft فوق `MicroProduct` المشترك وrenderers مستقلة؛ [العقد العام](../components/product-context/specification.md) و[جدول التغطية](product-context/COVERAGE.md) و[المختبر](../previews/product-context/index.html). |
 | C13 | شاشات بوابة الدخول | وصفات UI-only لشاشات Splash وGoogle sign-in والترحيب بمستخدم جديد أو عائد فوق Access Gateway؛ [العقد](../components/access-gateway/specification.md). |
 
 [معاينات التراكيب](../previews/compositions/index.html) ليست شاشات منتج، و[مختبر الهاتف](../previews/mobile-capabilities/index.html) أدوات إثبات داخل UX.
 
-### C07–C12 — سياق المنتج
+### C07–C12 وC14 — سياق المنتج
 
-ستة تراكيب Draft تستخدم `MicroProduct` المشترك وrenderers مستقلة، لا عائلات بديلة. [API والتحميل والأبعاد وحالات الاتصال](../components/product-context/specification.md)، [جدول التغطية](product-context/COVERAGE.md)، [المختبر](../previews/product-context/index.html). حمّل Fields JS وNavigation/C05 قبل core، وCarousel عند وجود الصور؛ لا تحمل متحكم المختبر في المنتج. تأكيد الحسّاس من C05، وعرض الصور من Carousel، واللمس من Fields/B01.
+سبعة تراكيب Draft تستخدم `MicroProduct` المشترك وrenderers مستقلة، لا عائلات بديلة. [API والتحميل والأبعاد وحالات الاتصال](../components/product-context/specification.md)، [جدول التغطية](product-context/COVERAGE.md)، [المختبر](../previews/product-context/index.html). حمّل Fields JS وNavigation/C05 قبل core، وCarousel عند وجود الصور؛ لا تحمل متحكم المختبر في المنتج. تأكيد الحسّاس من C05، وعرض الصور من Carousel، واللمس من Fields/B01.
 
 الملكية: المستهلك يمرر نموذجًا كاملًا وصلاحيات وscope/dataContext، ويستقبل intent ويرد برمز resolve نفسه أو replace موثوق. لا network/store/auth/AI/قيد مالي. تغيير السياق أو انتهاء الجلسة يبطل الطلبات القديمة وينظف المسودات والمرفقات. دور السائق لا يمنح Manage/Market؛ واجهة المراجعة لا تجلب بيانات مالية. الخادم يظل مالك التفويض الحقيقي.
 
 ### C13 — شاشات بوابة الدخول
 
 وصفات UI-only منفصلة عن API العام للبوابة وعن `m-session`: Splash، وGoogle sign-in، وترحيب مستخدم جديد أو عائد، عبر `auth-screens.css` بأصناف `.m-auth-screen--*`. المضيف يملك اختيار الشاشة وتركيبها والحالة والانتقالات وcredential callback؛ لا onboarding ولا نموذج اعتماد يدوي ولا تغيير في مزودي API العامة. التحميل والحدود في [عقد بوابة الدخول](../components/access-gateway/specification.md).
+
+### C14 — سجل عمليات Manage
+
+تركيب سياق المنتج (المرحلة 8، D15/D16) فوق `MicroProduct` بrenderer مستقل `components/product-context/manage.js`: صفوف عمليات على مبنى C02، نموذج إدخال بB02/B01، وملخص فترة بقيم يمررها المضيف حصريًا. **قاعدة صارمة: المكتبة لا تحسب أي مجاميع مالية** — لا جمع ولا صافٍ؛ الوحدة من المضيف دائمًا. Online-only: offline يعطل الإرسال بنص واضح، لا save-local ولا طابور، ولا نجاح قبل resolve من المضيف. العقد الكامل وحالاته وأحداثه في [مواصفة سياق المنتج](../components/product-context/specification.md).
 
 ### مصدر واحد والتحميل
 

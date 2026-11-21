@@ -229,7 +229,7 @@ interface MicroCarouselApi {
   setLabels(partial: Record<string, unknown>): void;
 }
 
-/** Product — mount/replace/resolve/destroy لتراكيب C07–C13 (docs/API.md).
+/** Product — mount/replace/resolve/destroy لتراكيب C07–C14 (docs/API.md).
     طبقة تراكيب بعقد مثيل موحد أصلًا؛ replace هو تحديث المثيل. */
 interface MicroProductInstance {
   replace(value: unknown): boolean;
