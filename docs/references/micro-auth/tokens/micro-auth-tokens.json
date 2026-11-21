@@ -1,0 +1,59 @@
+{
+  "color": {
+    "brand": {
+      "petrol":      { "value": "#164D59", "pressed": "#0F3A43", "role": "Structure: splash base shape, sign-in panel, welcome headers, returning-user button" },
+      "blue-petrol": { "value": "#507F8B", "role": "Support: corner shape on splash and sign-in, account avatar" },
+      "terracotta":  { "value": "#D97757", "pressed": "#C9684A", "role": "New account only: the 'ابدأ الآن' button on the new-user screen; also the error icon" }
+    },
+    "surface": {
+      "bg":      { "value": "#FFFFFF" },
+      "bg-soft": { "value": "#F7F8F4", "use": "Account card" }
+    },
+    "text": {
+      "default":         { "value": "#172D32" },
+      "muted":           { "value": "#50656A" },
+      "on-petrol":       { "value": "#FFFFFF" },
+      "on-petrol-muted": { "value": "rgba(255,255,255,0.84)" },
+      "on-petrol-soft":  { "value": "rgba(255,255,255,0.72)", "use": "Consent line" },
+      "on-terracotta":   { "value": "#172D32", "note": "White text on terracotta is below 4.5:1; use this dark text." }
+    },
+    "border": { "value": "#DCE5E2" }
+  },
+  "font": {
+    "family": { "value": "'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif" },
+    "scale": {
+      "hello-title":  { "size": 34, "weight": 600, "lineHeight": 46 },
+      "signin-title": { "size": 32, "weight": 600, "lineHeight": 42 },
+      "lead":         { "size": 17, "weight": 400, "lineHeight": 28 },
+      "button":       { "size": 16, "weight": 600 },
+      "body":         { "size": 14, "weight": 400, "lineHeight": 22 },
+      "small":        { "size": 13, "weight": 400, "lineHeight": 20 }
+    }
+  },
+  "radius": {
+    "pill":   { "value": 26, "use": "Buttons (52px high)" },
+    "card":   { "value": 20, "use": "Account card" },
+    "alert":  { "value": 16, "use": "Error message" },
+    "sheet":  { "value": 32, "use": "White sheet on welcome screens" },
+    "panel":  { "value": 40, "use": "Petrol panel on sign-in" },
+    "circle": { "value": "50%", "use": "Decorative shapes, avatar, success badge" }
+  },
+  "size": {
+    "control-height": 52,
+    "google-button-slot": { "value": 44, "note": "Google renders its own 40px 'large' button inside; never style it" },
+    "min-touch-target": 44,
+    "screen-padding-x": 24,
+    "design-frame": { "width": 390, "height": 844 }
+  },
+  "motion": {
+    "ease": "cubic-bezier(.2,.8,.2,1)",
+    "panel-rise": "0.6s",
+    "badge-pop": "0.5s",
+    "button-press": "scale(.98), 0.12s",
+    "screen-change": "cross-fade (View Transitions), off with prefers-reduced-motion"
+  },
+  "shapes": {
+    "corner": { "color": "blue-petrol", "diameter": 300, "top": -150, "left": -120, "screens": ["splash", "google-sign-in"] },
+    "base":   { "color": "petrol", "diameter": 460, "bottom": -230, "right": -170, "screens": ["splash"] }
+  }
+}

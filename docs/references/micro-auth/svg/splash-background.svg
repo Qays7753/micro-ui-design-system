@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="Micro splash background">
+  <title>Micro — splash background (transparent, no logo)</title>
+  <defs><clipPath id="frame"><rect width="390" height="844"/></clipPath></defs>
+  <g clip-path="url(#frame)">
+    <circle id="shape-corner" cx="30" cy="0" r="150" fill="#507F8B"/>
+    <circle id="shape-base" cx="330" cy="844" r="230" fill="#164D59"/>
+  </g>
+</svg>
