@@ -5,6 +5,11 @@
       "page": "previews/concepts/index.html",
       "reason": "F7: إعادة روابط footer («تقرير الفحص» → docs/TESTING.md و«تعليمات حزمة المصدر القابل للتعديل» → docs/GETTING-STARTED.md) كروابط حقيقية بعد أن كانت نصًا",
       "decision": "R-D13 / F7"
+    },
+    {
+      "page": "previews/product-context/lab.html",
+      "reason": "R-D11 (الجولة الثانية R6): حذف فعل وزر التخزين على الجهاز وحالته من C08 — قائمة الأطوار في المختبر وصورة الحالة المحلية تتغير دون غيرها",
+      "decision": "docs/DECISIONS.md — R-D11"
     }
   ]
 }

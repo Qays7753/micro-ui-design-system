@@ -41,7 +41,7 @@
    المستهلك على الغلاف — المكوّن يعرضها فقط.
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -49,9 +49,24 @@ registerLabels('fields', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'fields';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'fields';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var msgUid = 0;
@@ -341,16 +356,16 @@ registerLabels('fields', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* fields: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { bindFields(scope); return existing; }
+    if (existing) { withLabels(scope, function () { bindFields(scope); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** = sync: مزامنة حالة الحقول من قيمها الحالية بلا أحداث. */
-      update: function () { sync(scope); },
+      update: function () { withLabels(scope, function () { sync(scope); }); },
       /** يفك مستمعات كل حقل ومراقبة رسائله — لا يمس قيم المستخدم. */
       destroy: function () {
         if (destroyed) return;
@@ -359,7 +374,7 @@ registerLabels('fields', familyDefaults);
         registry.remove(scope);
       },
     };
-    bindFields(scope);
+    withLabels(scope, function () { bindFields(scope); });
     registry.set(scope, instance);
     return instance;
   }

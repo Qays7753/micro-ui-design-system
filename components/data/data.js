@@ -83,7 +83,7 @@
    ========================================================= */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -91,9 +91,24 @@ registerLabels('data', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'data';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'data';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var NS = 'http://www.w3.org/2000/svg';
@@ -153,8 +168,8 @@ registerLabels('data', familyDefaults);
   function readingOf(item) {
     /* R-04/R-18 (2026-10-25): حالات القيمة بصيغة الأقواس الموحدة، لا شرطة
        em — الشرطة تبقى ترميزًا مرسومًا للقيمة المفقودة داخل الرسم فقط */
-    if (item.value === null) return item.invalid ? L('k1') : L('k2');
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L('k3');
+    if (item.value === null) return item.invalid ? L('value.invalid', item) : L('value.unavailable', item);
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L('value.negativeUnplottedSuffix', item);
     return item.display || item.rawValue || fmt(item.value);
   }
 
@@ -164,7 +179,7 @@ registerLabels('data', familyDefaults);
       && chart.getAttribute('data-axis-type') === 'time';
     if (isTimeAxis && item.axisX !== null && item.axisX !== ''
         && label.indexOf(String(item.axisX)) === -1) {
-      label += L('k4') + item.axisX;
+      label += L('common.listSeparator', chart) + item.axisX;
     }
     return label;
   }
@@ -201,8 +216,8 @@ registerLabels('data', familyDefaults);
     var title = chart.getAttribute('data-title');
     var contextTitle = !heading && title ? String(title).trim() : '';
     var entries = [
-      ['data-unit', L('k5')],
-      ['data-period', L('k6')]
+      ['data-unit', L('context.unit')],
+      ['data-period', L('context.period')]
     ].map(function (entry) {
       return { key: entry[0], label: entry[1], value: String(chart.getAttribute(entry[0]) || '').trim() };
     }).filter(function (entry) { return entry.value !== ''; });
@@ -287,7 +302,7 @@ registerLabels('data', familyDefaults);
     labels.forEach(function (node) { node.style.display = 'none'; });
     var rows = document.createElement('dl');
     rows.className = 'm-chart__readings';
-    rows.setAttribute('aria-label', L('k7'));
+    rows.setAttribute('aria-label', L('table.ariaLabel', rows));
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
@@ -297,7 +312,7 @@ registerLabels('data', familyDefaults);
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L('k8')));
+      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix', item)));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -611,15 +626,15 @@ registerLabels('data', familyDefaults);
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        L('k9'),
-        'bars: data-max="' + scale.declaredRaw + L('k10'));
+        L('bars.rangeError'),
+        'bars: data-max="' + scale.declaredRaw + L('bars.scaleInvalidDetail'));
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        L('k9'),
-        L('k11') + fmt(scale.largest) + L('k12') + fmt(scale.declared) + L('k13'));
+        L('bars.rangeError'),
+        L('bars.overscaleDetailPrefix') + fmt(scale.largest) + L('bars.overscaleDetailMax') + fmt(scale.declared) + L('bars.overscaleDetailSuffix'));
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -643,9 +658,9 @@ registerLabels('data', familyDefaults);
     var plotHeight = Math.min(128, Math.max(96, W * 0.32));
     var base = top + plotHeight, H = base + BAR_LABEL_STEP + 12 + extra;
     var colW = W / Math.max(items.length, 1);
-    var ariaLabel = chart.getAttribute('data-title') || L('k14');
+    var ariaLabel = chart.getAttribute('data-title') || L('bars.ariaLabel', chart);
     if (scale.kind === 'over') {
-      ariaLabel += L('k15') + fmt(max) + L('k16') + fmt(scale.declared);
+      ariaLabel += L('bars.rescaledAriaSuffix') + fmt(max) + L('bars.rescaledAriaInsteadOf') + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -661,10 +676,10 @@ registerLabels('data', familyDefaults);
         g.appendChild(svgEl('rect', { class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle' });
         applyTextPx(u, fontPx);
-        u.textContent = it.invalid ? L('k17') : '—'; g.appendChild(u);
+        u.textContent = it.invalid ? L('bars.invalidMark', u) : '—'; g.appendChild(u);
       } else if (it.value < 0) {
         /* E06: سالب في الأعمدة — رفض بوضوح، لا رسم كموجب */
-        invalidMarker(svg, g, cx, base, it.value, L('k18'), fontPx);
+        invalidMarker(svg, g, cx, base, it.value, L('bars.negativeUnplottedMark', svg), fontPx);
       } else {
         var h = Math.min(it.value, max) / max * (base - top); /* صفر = صفر حقيقي */
         g.appendChild(svgEl('rect', {
@@ -680,7 +695,7 @@ registerLabels('data', familyDefaults);
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
           applyTextPx(o, fontPx);
-          o.textContent = L('k19'); g.appendChild(o);
+          o.textContent = L('bars.outlierMark', o); g.appendChild(o);
         }
       }
       appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP, fontPx);
@@ -696,10 +711,10 @@ registerLabels('data', familyDefaults);
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = L('k20') + fmt(max) + L('k21') + fmt(scale.declared) + L('k22');
+      note.textContent = L('bars.rescaledNotePrefix', note) + fmt(max) + L('bars.rescaledNoteInsteadOf', note) + fmt(scale.declared) + L('bars.rescaledNoteSuffix', note);
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', L('k23') + fmt(scale.declared) + L('k24') + fmt(max) + L('k25'));
+      chart.setAttribute('data-scale-detail', L('bars.rescaleDetailPrefix', chart) + fmt(scale.declared) + L('bars.rescaleDetailTo', chart) + fmt(max) + L('bars.rescaleDetailSuffix', chart));
     }
   }
 
@@ -719,7 +734,7 @@ registerLabels('data', familyDefaults);
       var emptySigned = document.createElement('p');
       emptySigned.className = 'm-chart__empty';
       emptySigned.setAttribute('role', 'status');
-      emptySigned.textContent = L('k26');
+      emptySigned.textContent = L('chart.empty', emptySigned);
       plot.appendChild(emptySigned);
       appendFullReadingRows(chart, plot, items, '');
       chart.setAttribute('data-scale-state', 'empty');
@@ -737,7 +752,7 @@ registerLabels('data', familyDefaults);
     var exceeds = !invalid && (low < min || high > max);
     if (invalid || (exceeds && chart.getAttribute('data-overscale') !== 'rescale')) {
       renderScaleRefusal(chart, items, plot, { kind: invalid ? 'invalid' : 'over' },
-        L('k27'),
+        L('signed.rangeError'),
         'signed: bounds must include zero and every known value; no clipping or absolute-value conversion.');
       return;
     }
@@ -749,7 +764,7 @@ registerLabels('data', familyDefaults);
     var top = 24, height = Math.min(160, Math.max(112, width * 0.38)), bottom = top + height;
     var svg = svgEl('svg', {
       viewBox: '0 0 ' + width + ' ' + (bottom + 28), role: 'img',
-      'aria-label': (chart.getAttribute('data-title') || L('k28')) + L('k29')
+      'aria-label': (chart.getAttribute('data-title') || L('signed.ariaLabel', chart)) + L('signed.ariaSuffix', chart)
     });
     function y(value) { return top + (b - value / magnitude) / (b - a) * height; }
     var zero = y(0);
@@ -766,7 +781,7 @@ registerLabels('data', familyDefaults);
       chart.setAttribute('data-axis-state', time ? 'invalid-time' : 'invalid-type');
       var error = document.createElement('p');
       error.className = 'm-chart__error';
-      error.textContent = L('k30');
+      error.textContent = L('axis.missingSetupError', error);
       plot.appendChild(error);
       appendFullReadingRows(chart, plot, items, '');
       return;
@@ -841,7 +856,7 @@ registerLabels('data', familyDefaults);
     if (exceeds) {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = L('k31');
+      note.textContent = L('axis.autoExtendedNote', note);
       plot.appendChild(note);
     }
   }
@@ -858,9 +873,9 @@ registerLabels('data', familyDefaults);
         plot.innerHTML = '';
         var axisError = document.createElement('p');
         axisError.className = 'm-chart__error';
-        axisError.textContent = L('k32');
+        axisError.textContent = L('axis.timeMissingWithReadings', axisError);
         plot.appendChild(axisError);
-        appendFullReadingRows(chart, plot, items, L('k33'));
+        appendFullReadingRows(chart, plot, items, L('axis.timeMissing', chart));
         chart.setAttribute('data-axis-state', 'invalid-time');
         return;
       }
@@ -868,9 +883,9 @@ registerLabels('data', familyDefaults);
       plot.innerHTML = '';
       var typeError = document.createElement('p');
       typeError.className = 'm-chart__error';
-      typeError.textContent = L('k34');
+      typeError.textContent = L('axis.unsupportedWithReadings', typeError);
       plot.appendChild(typeError);
-      appendFullReadingRows(chart, plot, items, L('k35'));
+      appendFullReadingRows(chart, plot, items, L('axis.unsupported', chart));
       chart.setAttribute('data-axis-state', 'invalid-type');
       return;
     }
@@ -879,15 +894,15 @@ registerLabels('data', familyDefaults);
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        L('k9'),
-        'line: data-max="' + scale.declaredRaw + L('k10'));
+        L('bars.rangeError'),
+        'line: data-max="' + scale.declaredRaw + L('bars.scaleInvalidDetail'));
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        L('k9'),
-        L('k36') + fmt(scale.largest) + L('k12') + fmt(scale.declared) + L('k37'));
+        L('bars.rangeError'),
+        L('line.overscaleDetailPrefix') + fmt(scale.largest) + L('bars.overscaleDetailMax') + fmt(scale.declared) + L('line.overscaleDetailSuffix'));
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -917,9 +932,9 @@ registerLabels('data', familyDefaults);
       return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48);
     }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
-    var ariaLabel = chart.getAttribute('data-title') || L('k38');
+    var ariaLabel = chart.getAttribute('data-title') || L('line.ariaLabel', chart);
     if (scale.kind === 'over') {
-      ariaLabel += L('k15') + fmt(max) + L('k16') + fmt(scale.declared);
+      ariaLabel += L('bars.rescaledAriaSuffix') + fmt(max) + L('bars.rescaledAriaInsteadOf') + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -950,7 +965,7 @@ registerLabels('data', familyDefaults);
         applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, x, base, it.value, L('k18'), fontPx);
+        invalidMarker(svg, g, x, base, it.value, L('bars.negativeUnplottedMark', svg), fontPx);
       } else {
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
@@ -969,10 +984,10 @@ registerLabels('data', familyDefaults);
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = L('k20') + fmt(max) + L('k21') + fmt(scale.declared) + L('k22');
+      note.textContent = L('bars.rescaledNotePrefix', note) + fmt(max) + L('bars.rescaledNoteInsteadOf', note) + fmt(scale.declared) + L('bars.rescaledNoteSuffix', note);
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', L('k39') + fmt(scale.declared) + L('k24') + fmt(max) + L('k25'));
+      chart.setAttribute('data-scale-detail', L('line.rescaleDetailPrefix', chart) + fmt(scale.declared) + L('bars.rescaleDetailTo', chart) + fmt(max) + L('bars.rescaleDetailSuffix', chart));
     }
   }
 
@@ -1007,7 +1022,7 @@ registerLabels('data', familyDefaults);
   function appendFullReadingRows(chart, plot, items, ariaLabel) {
     var rows = document.createElement('dl');
     rows.className = 'm-chart__readings';
-    rows.setAttribute('aria-label', ariaLabel || L('k7'));
+    rows.setAttribute('aria-label', ariaLabel || L('table.ariaLabel', rows));
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
@@ -1017,7 +1032,7 @@ registerLabels('data', familyDefaults);
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L('k8')));
+      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix', item)));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -1111,7 +1126,7 @@ registerLabels('data', familyDefaults);
       });
       chart.setAttribute('data-value-layout', 'rows');
       appendFullReadingRows(chart, chart.querySelector('[data-plot]'), items,
-        L('k40'));
+        L('line.readingsAriaLabel'));
       return;
     }
     var selectedSet = new Set(selected);
@@ -1145,7 +1160,7 @@ registerLabels('data', familyDefaults);
   function donutRefusal(chart, plot, stateKind, devDetail) {
     var err = document.createElement('p');
     err.className = 'm-chart__error';
-    err.textContent = L('k41');
+    err.textContent = L('donut.rangeError', err);
     plot.appendChild(err);
     chart.setAttribute('data-scale-state', stateKind);
     chart.setAttribute('data-scale-detail', devDetail);
@@ -1196,7 +1211,7 @@ registerLabels('data', familyDefaults);
     var sum = known.reduce(function (a, i) { return a + i.value; }, 0);
     var R = 58, C = 2 * Math.PI * R, cx = 74, cy = 74;
 
-    var svg = svgEl('svg', { class: 'm-donut__svg', viewBox: '0 0 148 148', role: 'img', 'aria-label': chart.getAttribute('data-title') || L('k42') });
+    var svg = svgEl('svg', { class: 'm-donut__svg', viewBox: '0 0 148 148', role: 'img', 'aria-label': chart.getAttribute('data-title') || L('donut.ariaLabel', svg) });
     plot.innerHTML = '';
 
     /* حالات المدخلات غير القابلة للنسب — fallback صريح لا تمثيل مضلل */
@@ -1229,7 +1244,7 @@ registerLabels('data', familyDefaults);
       /* R2-05: مقام موجود غير صالح — خطأ معلن لا سقوط صامت إلى مجموع الفئات.
          R8-07a: رسالة المستخدم موحدة موجزة والتشخيص يحمل السبب والقيمة الخام */
       donutRefusal(chart, plot, 'invalid',
-        'donut: data-total="' + declaredRaw + L('k43'));
+        'donut: data-total="' + declaredRaw + L('donut.totalInvalidDetail'));
     } else if (!isFinite(sum)) {
       donutRefusal(chart, plot, 'invalid',
         'donut: sum exceeds the finite Number range; proportions refused and original readings retained.');
@@ -1240,18 +1255,18 @@ registerLabels('data', familyDefaults);
       /* نفس أسبقية الحالات السابقة: قيم سالبة تأخذ الأولوية عند اجتماع الاثنين */
       donutRefusal(chart, plot, hasInvalid ? 'invalid' : 'over',
         hasInvalid
-          ? L('k44')
-          : L('k45') + fmt(sum) + L('k46') + fmt(total) + L('k47'));
+          ? L('donut.negativeValuesDetail')
+          : L('donut.oversumDetailPrefix') + fmt(sum) + L('donut.oversumDetailMax') + fmt(total) + L('donut.oversumDetailSuffix'));
     } else if (declaredNegative) {
       /* C2: مقام سالب معلن — حالة غير صالحة صريحة، دون نسب
          (كان يسقط صامتًا إلى مجموع الفئات ويرسم توزيعًا طبيعيًا) */
       donutRefusal(chart, plot, 'invalid',
-        'donut: data-total="' + declaredRaw + L('k48'));
+        'donut: data-total="' + declaredRaw + L('donut.negativeTotalDetail'));
     } else if (declaredZero && sum > 0) {
       /* C2: مقام صفر مع قيم موجبة — تعارض صريح: لا استبدال المقام
          بالمجموع (ذلك بديل المقام الغائب فقط) ولا قسمة على صفر */
       donutRefusal(chart, plot, 'conflict',
-        L('k49') + fmt(sum) + L('k50'));
+        L('donut.zeroTotalDetailPrefix') + fmt(sum) + L('donut.zeroTotalDetailSuffix'));
     } else if (noData) {
       /* 2026-10-25 (تصحيح المالك أ): لا بيانات ليست حلقة فراغ ولا صفرًا —
          لا SVG ولا حلقة ولا علامات وهمية إطلاقًا؛ حالة فراغ صادقة
@@ -1260,18 +1275,18 @@ registerLabels('data', familyDefaults);
       var emptyDonut = document.createElement('p');
       emptyDonut.className = 'm-chart__empty';
       emptyDonut.setAttribute('role', 'status');
-      emptyDonut.textContent = L('k26');
+      emptyDonut.textContent = L('chart.empty', emptyDonut);
       plot.appendChild(emptyDonut);
       chart.setAttribute('data-scale-state', 'empty');
     } else if (unknownTotal) {
       /* R2-05: خلط مجهول/صفر والمجموع صفر بلا مقام معلن — لا دعوى بإجمالي صفر */
-      emptyRing('—', L('k51'));
+      emptyRing('—', L('donut.totalUnknown'));
     } else if (zeroCase) {
       /* كل القيم المعلومة صفرية بلا قيمة موجبة — الصفر هنا صادق؛
          مع مقام معلن صالح يظهر هو نفسه (شرائح كلها صفرية)، ومع مقام
          معلن صفر (C2) يظهر المقام المعلن 0 — الحالة الصفرية الموثقة
          دون قسمة، والمجهول إن وُجد يبقى «—» في المفتاح لا صفرًا */
-      emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || L('k52'));
+      emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || L('donut.totalLabel', chart));
     } else {
       var denom = hasDeclared ? total : sum; /* بلا مقام معلن: مجموع الفئات المعروفة — موثق */
       var offset = 0;
@@ -1323,7 +1338,7 @@ registerLabels('data', familyDefaults);
       var clab = svgEl('text', { class: 'm-donut__center-label', x: cx, y: cy + 20, 'text-anchor': 'middle' });
       /* مع فئات مجهولة وبلا مقام معلن: لا نسمّي المجموع إجماليًا كاملًا (R2-05) */
       clab.textContent = chart.getAttribute('data-total-label')
-        || (missing.length && !hasDeclared ? L('k53') : L('k52'));
+        || (missing.length && !hasDeclared ? L('donut.knownSumLabel') : L('donut.totalLabel'));
       svg.appendChild(clab);
       plot.appendChild(svg);
       fitDonutReading(plot, svg);
@@ -1369,8 +1384,8 @@ registerLabels('data', familyDefaults);
       val.className = 'm-legend__value';
       /* 2026-10-25: نفس تصنيف الجدول — المشوه بقراءته الخام، والمفقود مجهول */
       val.textContent = (it.value === null)
-        ? (it.invalid ? String(it.rawValue) + L('k54') : L('k2'))
-        : fmt(it.value) + L('k55');
+        ? (it.invalid ? String(it.rawValue) + L('donut.invalidValueSuffix') : L('value.unavailable'))
+        : fmt(it.value) + L('donut.invalidShareSuffix', it);
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -1417,13 +1432,13 @@ registerLabels('data', familyDefaults);
       if (it.invalid) {
         var raw = (it.rawValue !== null && String(it.rawValue).trim() !== '')
           ? String(it.rawValue) + ' ' : '';
-        return raw + L('k56');
+        return raw + L('donut.invalidReading');
       }
-      return L('k2');
+      return L('value.unavailable');
     }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0 && !it.signed) return base + L('k3');
-    return it.outlier ? base + L('k8') : base;
+    if (it.value < 0 && !it.signed) return base + L('value.negativeUnplottedSuffix', it);
+    return it.outlier ? base + L('value.outlierSuffix') : base;
   }
 
   function syncDatasetTable(chart, items) {
@@ -1436,7 +1451,7 @@ registerLabels('data', familyDefaults);
       btn.type = 'button';
       btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
-      btn.textContent = L('k57');
+      btn.textContent = L('table.showButton', btn);
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
       table.hidden = true;
@@ -1461,7 +1476,7 @@ registerLabels('data', familyDefaults);
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? L('k57') : L('k58');
+        btn.textContent = open ? L('table.showButton', btn) : L('table.hideButton', btn);
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -1477,21 +1492,21 @@ registerLabels('data', familyDefaults);
     var captionParts = [String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim()];
     var unitTxt = String(chart.getAttribute('data-unit') || '').trim();
     var periodTxt = String(chart.getAttribute('data-period') || '').trim();
-    if (unitTxt) captionParts.push(L('k59') + unitTxt);
-    if (periodTxt) captionParts.push(L('k60') + periodTxt);
+    if (unitTxt) captionParts.push(L('table.unitPrefix') + unitTxt);
+    if (periodTxt) captionParts.push(L('table.periodPrefix') + periodTxt);
     if (chart.getAttribute('data-chart') === 'donut') {
       var totalRaw = chart.getAttribute('data-total');
       if (totalRaw !== null && String(totalRaw).trim() !== '') {
-        captionParts.push((chart.getAttribute('data-total-label') || L('k52')) + ': ' + String(totalRaw).trim());
+        captionParts.push((chart.getAttribute('data-total-label') || L('donut.totalLabel', chart)) + ': ' + String(totalRaw).trim());
       }
     }
-    caption.textContent = captionParts.filter(function (p) { return p !== ''; }).join(L('k4'));
+    caption.textContent = captionParts.filter(function (p) { return p !== ''; }).join(L('common.listSeparator', caption));
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
     var hasTimeAxis = chart.getAttribute('data-chart') === 'line'
       && chart.getAttribute('data-axis-type') === 'time';
-    (hasTimeAxis ? [L('k61'), L('k62'), L('k63')] : [L('k61'), L('k63')]).forEach(function (h) {
+    (hasTimeAxis ? [L('table.head.category'), L('table.head.time'), L('table.head.value')] : [L('table.head.category'), L('table.head.value')]).forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -1508,7 +1523,7 @@ registerLabels('data', familyDefaults);
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');
-        if (it.axisX === null || it.axisX === '') time.textContent = L('k2');
+        if (it.axisX === null || it.axisX === '') time.textContent = L('value.unavailable', time);
         else {
           var coordinate = document.createElement('bdi');
           coordinate.dir = 'ltr';
@@ -1564,15 +1579,15 @@ registerLabels('data', familyDefaults);
     if (scaleKind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, { kind: 'invalid' },
-        L('k64'),
-        'bubbles: data-max="' + rawMax + L('k65'));
+        L('bubbles.rangeError'),
+        'bubbles: data-max="' + rawMax + L('bubbles.scaleInvalidDetail'));
       return;
     }
     if (scaleKind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, { kind: 'over' },
-        L('k64'),
-        L('k66') + fmt(largest) + L('k12') + fmt(declared) + L('k67'));
+        L('bubbles.rangeError'),
+        L('bubbles.overscaleDetailPrefix') + fmt(largest) + L('bars.overscaleDetailMax') + fmt(declared) + L('bubbles.overscaleDetailSuffix'));
       return;
     }
     var vmax = (scaleKind === 'ok') ? declared : Math.max(largest, 1);
@@ -1589,10 +1604,10 @@ registerLabels('data', familyDefaults);
       lab.textContent = it.label;
       if (it.value === null) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = L('k2');
+        valTxt.textContent = L('value.unavailable', valTxt);
       } else if (it.value < 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = fmt(it.value) + L('k68');
+        valTxt.textContent = fmt(it.value) + L('bubbles.negativeAreaSuffix', valTxt);
       } else if (it.value === 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
         valTxt.textContent = '0';
@@ -1621,10 +1636,10 @@ registerLabels('data', familyDefaults);
       /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = L('k69') + fmt(vmax) + L('k21') + fmt(declared) + L('k22');
+      note.textContent = L('bubbles.rescaledNotePrefix', note) + fmt(vmax) + L('bars.rescaledNoteInsteadOf', note) + fmt(declared) + L('bars.rescaledNoteSuffix', note);
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', L('k70') + fmt(declared) + L('k24') + fmt(vmax) + L('k71'));
+      chart.setAttribute('data-scale-detail', L('bubbles.rescaleDetailPrefix', chart) + fmt(declared) + L('bars.rescaleDetailTo', chart) + fmt(vmax) + L('bubbles.rescaleDetailSuffix', chart));
     }
   }
 
@@ -1693,7 +1708,7 @@ registerLabels('data', familyDefaults);
     var full = valueStateText(it);
     var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue)
       : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
-    if (donut && it.value !== null && it.value < 0) full = raw + L('k55');
+    if (donut && it.value !== null && it.value < 0) full = raw + L('donut.invalidShareSuffix', it);
     if (raw === null) parent.appendChild(readingNode('span', null, full));
     else {
       var bdi = readingNode('bdi', null, it.value !== null && it.display ? it.display : raw);
@@ -1765,8 +1780,8 @@ registerLabels('data', familyDefaults);
         life.status.appendChild(readingNode('span', 'm-chart__selected-label', selected.label));
         var value = readingNode('span', 'm-chart__selected-value');
         appendReadableValue(value, items[index], chart.getAttribute('data-chart') === 'donut'); appendReadingUnit(value, selected.unit); life.status.appendChild(value);
-      } else life.status.textContent = L('k72');
-      life.range.setAttribute('aria-valuetext', selected ? selected.label + L('k4') + value.textContent : L('k73'));
+      } else life.status.textContent = L('reading.selectPrompt', chart);
+      life.range.setAttribute('aria-valuetext', selected ? selected.label + L('common.listSeparator', chart) + value.textContent : L('reading.noneSelected', chart));
     }
     [].slice.call(chart.querySelectorAll('[data-reading-choice]')).forEach(function (button) {
       var active = !!selected && button.getAttribute('data-reading-choice') === selected.key;
@@ -1795,7 +1810,7 @@ registerLabels('data', familyDefaults);
       appendReadableValue(value, it, true); appendReadingUnit(value, it.unit);
       if (enabled && denominator > 0 && it.value !== null && it.value >= 0) {
         var share = readingNode('span', 'm-chart__share', Math.round(it.value / denominator * 100) + '%');
-        share.dir = 'ltr'; share.setAttribute('data-reading-share', ''); share.setAttribute('aria-label', share.textContent + L('k74')); share.hidden = true;
+        share.dir = 'ltr'; share.setAttribute('data-reading-share', ''); share.setAttribute('aria-label', share.textContent + L('reading.shareSuffix', share)); share.hidden = true;
         value.appendChild(share);
       }
       row.appendChild(value); li.appendChild(row); legend.appendChild(li);
@@ -1810,7 +1825,7 @@ registerLabels('data', familyDefaults);
     items.forEach(function (it) {
       var row = readingNode('div'); row.appendChild(readingNode('dt', null, fullLabelOf(chart, it)));
       var value = readingNode('dd'); appendReadableValue(value, it, chart.getAttribute('data-chart') === 'donut');
-      appendReadingUnit(value, it.unit || L('k75'));
+      appendReadingUnit(value, it.unit || L('reading.unitUnspecified', it));
       if (it.period) value.appendChild(readingNode('span', 'm-chart__reading-period', ' · ' + it.period));
       row.appendChild(value); list.appendChild(row);
     });
@@ -1825,17 +1840,17 @@ registerLabels('data', familyDefaults);
       [].slice.call(rows).forEach(function (row, i) {
         var cell = row.querySelector('td:last-of-type'); if (cell && items[i]) appendReadingUnit(cell, items[i].unit);
         if (mixed && items[i]) {
-          var periodCell = readingNode('td'), period = readingNode('bdi', null, items[i].period || L('k76'));
+          var periodCell = readingNode('td'), period = readingNode('bdi', null, items[i].period || L('reading.periodUnspecified', periodCell));
           period.dir = 'auto'; periodCell.appendChild(period); row.appendChild(periodCell);
         }
       });
       if (mixed) {
         var head = chart.querySelector('.m-chart__dataset thead tr');
-        if (head) { var periodHead = readingNode('th', null, L('k6')); periodHead.scope = 'col'; head.appendChild(periodHead); }
+        if (head) { var periodHead = readingNode('th', null, L('context.period', head)); periodHead.scope = 'col'; head.appendChild(periodHead); }
         var caption = chart.querySelector('.m-chart__dataset caption');
         var title = chart.querySelector('.m-chart__title');
         var titleText = title ? title.textContent.trim() : (chart.getAttribute('data-title') || '').trim();
-        if (caption) caption.textContent = (titleText ? titleText + ' — ' : '') + L('k77');
+        if (caption) caption.textContent = (titleText ? titleText + ' — ' : '') + L('reading.caption', caption);
       }
     }
     if (!valid) {
@@ -1860,9 +1875,9 @@ registerLabels('data', familyDefaults);
       var box = readingNode('div', 'm-chart__selection'); box.setAttribute('data-reading-owned', 'selection');
       var status = readingNode('p', 'm-chart__selection-value'); status.id = 'micro-data-selection-' + (++readingUid); status.setAttribute('role', 'status'); box.appendChild(status);
       var controls = readingNode('div', 'm-chart__selection-controls');
-      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('k78')); prev.type = 'button';
-      var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', L('k79')); range.setAttribute('aria-describedby', status.id);
-      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('k80')); next.type = 'button';
+      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('reading.prevButton', chart)); prev.type = 'button';
+      var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', L('reading.rangeAriaLabel', range)); range.setAttribute('aria-describedby', status.id);
+      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('reading.nextButton', chart)); next.type = 'button';
       controls.appendChild(prev); controls.appendChild(range); controls.appendChild(next); box.appendChild(controls);
       if (chart.getAttribute('data-chart') === 'donut') controls.hidden = true;
       chart.appendChild(box);
@@ -1923,7 +1938,7 @@ registerLabels('data', familyDefaults);
       var empty = document.createElement('p');
       empty.className = 'm-chart__empty';
       empty.setAttribute('role', 'status');
-      empty.textContent = L('k26');
+      empty.textContent = L('chart.empty', empty);
       emptyPlot.appendChild(empty);
       chart.setAttribute('data-scale-state', 'empty');
     }
@@ -1931,7 +1946,7 @@ registerLabels('data', familyDefaults);
     else if ((kind === 'bars' || kind === 'line') && domain !== 'non-negative') {
       chart.querySelector('[data-plot]').textContent = '';
       renderScaleRefusal(chart, items, chart.querySelector('[data-plot]'), { kind: 'invalid-domain' },
-        L('k81'), 'Expected non-negative or signed value domain.');
+        L('reading.unsupportedRangeError', chart), 'Expected non-negative or signed value domain.');
     }
     else if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
@@ -1977,20 +1992,18 @@ registerLabels('data', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* data: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { installFontRefit(); var cachedCharts = [].slice.call(scope.querySelectorAll('[data-chart]')); if (scope.nodeType === 1 && scope.matches('[data-chart]')) cachedCharts.unshift(scope); cachedCharts.forEach(function (c) { render(c); }); return existing; }
+    if (existing) { installFontRefit(); withLabels(scope, function () { var charts = [].slice.call(scope.querySelectorAll('[data-chart]')); if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope); charts.forEach(function (c) { render(c); }); }); return existing; }
     installFontRefit();
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد تصيير كل رسوم النطاق من DOM المصدر بعد تحديث المضيف. */
       update: function () {
-        var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
-        if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
-        charts.forEach(function (c) { render(c); });
+        withLabels(scope, function () { var charts = [].slice.call(scope.querySelectorAll('[data-chart]')); if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope); charts.forEach(function (c) { render(c); }); });
       },
       /** يفك مراقبات الرصد ومستمعات القراءة — لا يمس بيانات المصدر. */
       destroy: function () {
@@ -2000,9 +2013,7 @@ registerLabels('data', familyDefaults);
         instances.remove(scope);
       },
     };
-    var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
-    if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
-    charts.forEach(function (c) { render(c); });
+    withLabels(scope, function () { var charts = [].slice.call(scope.querySelectorAll('[data-chart]')); if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope); charts.forEach(function (c) { render(c); }); });
     instances.set(scope, instance);
     return instance;
   }

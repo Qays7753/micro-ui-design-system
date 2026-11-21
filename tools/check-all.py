@@ -54,11 +54,13 @@ def build_gates(quick, out, skip_visual):
         ("static", PY + ["tools/light-static-check.py"]),
         ("link-check", PY + ["tools/link-check.py"]),
         ("hardcoded-text", PY + ["tools/hardcoded-text-check.py"]),
+        ("labels-doc", PY + ["tools/labels-doc-build.py", "--check"]),
     ]
     if quick:
         return matrix
     matrix += [
         ("package-install", ["node", "tools/package-install-check.mjs"]),
+        ("labels-override", PY + ["tools/labels-override-check.py", "--out", str(out / "labels-override")]),
         ("audit", PY + ["tools/component-audit-check.py", "--out", str(out / "audit")]),
         ("product-context", PY + ["tools/product-context-check.py", "--out", str(out / "product")]),
         ("light-release", PY + ["tools/light-release-check.py", "--review-scope",

@@ -40,7 +40,8 @@
 
 ## البوابات
 
-بعد كل مرحلة: `uv sync && npm ci` ثم `uv run python tools/check-all.py` من جذر المستودع — يبني الحزمة أولًا (`node tools/build-package.mjs`)، ثم بوابات البناء بوضع `--check` وكل بوابات الجودة والبوابة البصرية (مرجعها من git ref)، ويطبع ملخصًا، ويفشل عند أي إخفاق. الفحوص تعمل على نسخة shallow (المقارنات مقابل `origin/main` افتراضيًا، وقيم الهوية من `tools/baselines/identity.json`).
+مسار التحقق الواحد: `npm ci` ثم `uv sync` ثم `uv run python tools/check-all.py` (26 بوابة — تشمل package-install وlabels-override والبصرية مقابل `v0.1.0`) ثم `npm run typecheck`. أي تعديل ملف متتبع يستلزم `uv run python tools/manifest-build.py` قبل الالتزام، و`standalone.html` يتجدد بأداته بعد أي تغيير سلوك.
+
 
 ## ما لا يُختبر آليًا
 

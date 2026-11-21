@@ -1,46 +1,38 @@
+# سير عمل CI لمستودع Micro UI (الجولة الثانية R7 — جاهز للتركيب).
+# التركيب (المالك فقط، مرة واحدة):
+#   git mv tools/ci/ci.yml .github/workflows/ci.yml && git commit && git push
+# يتطلب توكن رفع بنطاق workflow (انظر tools/ci/README.md).
 name: CI
-
 on:
   push:
-    branches: [feature/integration-readiness-2026-11-21]
   pull_request:
-    branches: [feature/integration-readiness-2026-11-21]
 
 jobs:
-  gates:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full history so origin/main exists for the static gates' diffs.
-          fetch-depth: 0
-
+          fetch-depth: 0     # البصمة البصرية والمقارنة مع origin/main
+          fetch-tags: true   # المرجع v0.1.0 للبوابة البصرية
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          cache: npm
+      - run: npm ci
       - uses: astral-sh/setup-uv@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Python dependencies
-        run: uv sync
-
-      # Phase 5: the package gate (node tools/build-package.mjs --check)
-      # rebuilds dist/ deterministically and needs esbuild from the lockfile.
-      - name: Install Node dev dependencies
-        run: npm ci
-
-      - name: Install Playwright Chromium
-        run: uv run python -m playwright install --with-deps chromium
-
-      - name: Set git identity (diff-based gates)
-        run: |
-          git config user.name "ci-bot"
-          git config user.email "ci-bot@users.noreply.github.com"
-
-      # R-D12 (round 2): the visual regression gate generates its reference
-      # from a git ref (default v0.1.0) inside a temporary worktree, so it
-      # runs in CI too — no baseline directory outside the repository.
-      - name: Run all quality gates
+      - run: uv sync
+      - run: uv run playwright install --with-deps chromium
+      - name: كل البوابات (بلا --skip-visual)
         run: uv run python tools/check-all.py
+      - name: فحص الأنواع
+        run: npm run typecheck
+      - name: رفع مخرجات الفحص عند الفشل
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: check-outputs
+          path: |
+            /tmp/micro-check-all-*
+            /tmp/micro-*
+          if-no-files-found: ignore

@@ -34,7 +34,7 @@
    لا شبكة ولا retry منطقي داخل المكوّن — إعادة المحاولة عند المستهلك.
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -42,9 +42,24 @@ registerLabels('messages', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'messages';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'messages';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var liveBindings = new WeakMap();
@@ -276,7 +291,7 @@ registerLabels('messages', familyDefaults);
       var v = noteVariantOf(note);
       if (v) note.setAttribute('role', NOTE_ROLE_BY_VARIANT[v]);
       else if (window.console && console.warn) {
-        console.warn(L('k1'), note);
+        console.warn(L('note.missingVariantWarning', note), note);
       }
     });
   }
@@ -352,18 +367,17 @@ function teardown(root) {
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* messages: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { ensureNoteRoles(scope); bindClose(scope); return existing; }
+    if (existing) { withLabels(scope, function () { ensureNoteRoles(scope); bindClose(scope); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد فحص الرسائل تحت الجذر (أدوار m-note وأزرار الإغلاق الجديدة). */
       update: function () {
-        ensureNoteRoles(scope);
-        bindClose(scope);
+        withLabels(scope, function () { ensureNoteRoles(scope); bindClose(scope); });
       },
       /** يفك المستمعات ويوقف مؤقتات toast — لا يمس نصوص الرسائل. */
       destroy: function () {
@@ -373,8 +387,7 @@ function teardown(root) {
         registry.remove(scope);
       },
     };
-    ensureNoteRoles(scope);
-    bindClose(scope);
+    withLabels(scope, function () { ensureNoteRoles(scope); bindClose(scope); });
     registry.set(scope, instance);
     return instance;
   }

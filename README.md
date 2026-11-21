@@ -4,13 +4,15 @@
 
 ## الحالة
 
-14 عائلة / 8 متغيرات / 14 تركيبًا (C01–C14)؛ الحالة والنضج والفجوات والمؤجلات في [docs/STATUS.md](docs/STATUS.md).
+إصدار `0.2.0` على فرع الربط: المصدر ES modules، مدخل لكل عائلة (21)، أنواع TypeScript، دورة حياة موحدة (`init`/`update`/`destroy` لكل مدخل)، ونصوص بمفاتيح دلالية قابلة للتخصيص لكل نسخة. التفاصيل في [docs/STATUS.md](docs/STATUS.md) و[CHANGELOG.md](CHANGELOG.md).
 
 ## تشغيل الفحوص
 
 ```bash
+npm ci
 uv sync
-uv run python tools/check-all.py
+uv run python tools/check-all.py   # 26 بوابة، تشمل البصرية مقابل v0.1.0
+npm run typecheck
 ```
 
 ## تشغيل المعرض

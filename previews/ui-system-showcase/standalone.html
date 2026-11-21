@@ -8936,6 +8936,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }
   }
   var registry = instanceRegistry();
+  function applyInstanceLabels() {
+  }
+  function withLabels(scope, fn) {
+    return fn();
+  }
   function scopedButtons(scope) {
     var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));
     if (scope.matches && scope.matches(".m-btn")) buttons.unshift(scope);
@@ -8943,10 +8948,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      scopedButtons(scope).forEach(ensureActivationGuard);
+      withLabels(scope, function() {
+        scopedButtons(scope).forEach(ensureActivationGuard);
+      });
       return existing;
     }
     scopedButtons(scope).forEach(ensureActivationGuard);
@@ -9059,6 +9066,20 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -9104,6 +9125,22 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/fields/fields.js
   registerLabels("fields", defaults);
+  var MICRO_LABELS_FAMILY = "fields";
+  var renderLabels = null;
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
+  }
   var msgUid = 0;
   function on(field, element, type, listener, capture) {
     element.addEventListener(type, listener, {
@@ -9342,10 +9379,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var registry = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      bindFields(scope);
+      withLabels(scope, function() {
+        bindFields(scope);
+      });
       return existing;
     }
     var destroyed = false;
@@ -9353,7 +9392,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = sync: مزامنة حالة الحقول من قيمها الحالية بلا أحداث. */
       update: function() {
-        sync(scope);
+        withLabels(scope, function() {
+          sync(scope);
+        });
       },
       /** يفك مستمعات كل حقل ومراقبة رسائله — لا يمس قيم المستخدم. */
       destroy: function() {
@@ -9363,7 +9404,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    bindFields(scope);
+    withLabels(scope, function() {
+      bindFields(scope);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -9472,15 +9515,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/selection/labels.js
   var defaults = {
-    "k1": "المحدد: ",
-    "k2": "المحدد: لا شيء",
-    "k3": "إعادة المحاولة",
-    "k4": "لم تُحمّل الخيارات بعد.",
-    "k5": "جارٍ تحميل الخيارات…",
-    "k6": "لا خيارات متاحة.",
-    "k7": "تعذّر تحميل الخيارات. أعد المحاولة.",
-    "k8": "الاختيار غير متاح حاليًا.",
-    "k9": "لا نتائج مطابقة. عدّل كلمة البحث."
+    "picker.selectedPrefix": "المحدد: ",
+    "picker.selectedNone": "المحدد: لا شيء",
+    "picker.retry": "إعادة المحاولة",
+    "picker.status.initial": "لم تُحمّل الخيارات بعد.",
+    "picker.status.loading": "جارٍ تحميل الخيارات…",
+    "picker.status.empty": "لا خيارات متاحة.",
+    "picker.status.error": "تعذّر تحميل الخيارات. أعد المحاولة.",
+    "picker.status.disabled": "الاختيار غير متاح حاليًا.",
+    "picker.noResults": "لا نتائج مطابقة. عدّل كلمة البحث."
   };
 
   // shared/lifecycle.js
@@ -9505,6 +9548,20 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/selection/selection.js
   registerLabels("selection", defaults);
+  var overlayLabels = /* @__PURE__ */ new WeakMap();
+  var renderLabels = null;
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = overlayLabels.get(scope) || null;
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") overlayLabels.set(scope, options.labels);
+  }
   var liveBindings = /* @__PURE__ */ new WeakMap();
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
@@ -9629,11 +9686,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var registry = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      bindGroups(scope);
-      bindSegmented(scope);
+      withLabels(scope, function() {
+        bindGroups(scope);
+        bindSegmented(scope);
+      });
       return existing;
     }
     acquireSwitchGuard();
@@ -9642,8 +9701,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد قراءة حالة المجموعات والمقاطع (يربط الجديد تحت الجذر). */
       update: function() {
-        bindGroups(scope);
-        bindSegmented(scope);
+        withLabels(scope, function() {
+          bindGroups(scope);
+          bindSegmented(scope);
+        });
       },
       /** يفك مستمعات النطاق ويطلق حصة حماية document — لا يمس القيم. */
       destroy: function() {
@@ -9654,8 +9715,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    bindGroups(scope);
-    bindSegmented(scope);
+    withLabels(scope, function() {
+      bindGroups(scope);
+      bindSegmented(scope);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -9810,15 +9873,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/selection/labels.js
   var defaults = {
-    "k1": "المحدد: ",
-    "k2": "المحدد: لا شيء",
-    "k3": "إعادة المحاولة",
-    "k4": "لم تُحمّل الخيارات بعد.",
-    "k5": "جارٍ تحميل الخيارات…",
-    "k6": "لا خيارات متاحة.",
-    "k7": "تعذّر تحميل الخيارات. أعد المحاولة.",
-    "k8": "الاختيار غير متاح حاليًا.",
-    "k9": "لا نتائج مطابقة. عدّل كلمة البحث."
+    "picker.selectedPrefix": "المحدد: ",
+    "picker.selectedNone": "المحدد: لا شيء",
+    "picker.retry": "إعادة المحاولة",
+    "picker.status.initial": "لم تُحمّل الخيارات بعد.",
+    "picker.status.loading": "جارٍ تحميل الخيارات…",
+    "picker.status.empty": "لا خيارات متاحة.",
+    "picker.status.error": "تعذّر تحميل الخيارات. أعد المحاولة.",
+    "picker.status.disabled": "الاختيار غير متاح حاليًا.",
+    "picker.noResults": "لا نتائج مطابقة. عدّل كلمة البحث."
   };
 
   // shared/lifecycle.js
@@ -9844,8 +9907,30 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/selection/picker.js
   registerLabels("selection", defaults);
   var MICRO_LABELS_FAMILY = "selection";
-  function L(key) {
+  var overlayLabels = /* @__PURE__ */ new WeakMap();
+  var renderLabels = null;
+  function overlayFor(el) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      if (overlayLabels.has(node)) return overlayLabels.get(node);
+    }
+    return null;
+  }
+  function L(key, el) {
+    var own = el && overlayFor(el) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = overlayLabels.get(scope) || null;
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") overlayLabels.set(scope, options.labels);
   }
   var states = /* @__PURE__ */ new WeakMap();
   function stateOf(picker) {
@@ -9901,7 +9986,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function summary(picker) {
     var foot = picker.querySelector("[data-picker-summary]");
     var selected = getSelected(picker);
-    if (foot) foot.textContent = selected ? L("k1") + selected.label : L("k2");
+    if (foot) foot.textContent = selected ? L("picker.selectedPrefix", foot) + selected.label : L("picker.selectedNone", foot);
   }
   function getSelected(picker) {
     var option = optionsOf(picker).filter(function(item) {
@@ -9937,7 +10022,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       retry.type = "button";
       retry.className = "m-btn m-btn--secondary";
       retry.setAttribute("data-picker-retry", "");
-      retry.textContent = L("k3");
+      retry.textContent = L("picker.retry", retry);
       list.parentNode.insertBefore(retry, list.nextSibling);
     } else if (list.contains(retry) || status.contains(retry)) {
       list.parentNode.insertBefore(retry, list.nextSibling);
@@ -9964,15 +10049,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       option.hidden = hide;
     });
     var defaults2 = {
-      initial: L("k4"),
-      loading: L("k5"),
-      empty: L("k6"),
-      error: L("k7"),
-      disabled: L("k8")
+      initial: L("picker.status.initial"),
+      loading: L("picker.status.loading"),
+      empty: L("picker.status.empty"),
+      error: L("picker.status.error"),
+      disabled: L("picker.status.disabled")
     };
     var noResult = ready && state.query !== "" && !available(picker).length;
     var noData = ready && !optionsOf(picker).length;
-    var message = ready ? noResult ? L("k9") : noData ? defaults2.empty : "" : state.message || defaults2[state.status] || "";
+    var message = ready ? noResult ? L("picker.noResults") : noData ? defaults2.empty : "" : state.message || defaults2[state.status] || "";
     var retryVisible = state.status === "error" && !locked(picker);
     if (active === nodes.retry && !retryVisible) safeFocus(picker);
     if (nodes.status.textContent !== message) nodes.status.textContent = message;
@@ -10050,17 +10135,24 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      withLabels(scope, function() {
+        each(scope, bind);
+      });
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
       /** = setOptions لكل picker تحت الجذر. */
       update: function(items) {
         if (!Array.isArray(items)) return;
-        each(scope, function(picker) {
-          setOptions(picker, items);
+        withLabels(scope, function() {
+          each(scope, function(pickerEl) {
+            setOptions(pickerEl, items);
+          });
         });
       },
       /** يفك مستمعات كل picker ويمحو حالته — بيانات المضيف لا تُمس. */
@@ -10071,7 +10163,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    each(scope, bind);
+    withLabels(scope, function() {
+      each(scope, bind);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -10190,6 +10284,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -10220,7 +10335,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/messages/labels.js
   var defaults = {
-    "k1": "[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا."
+    "note.missingVariantWarning": "[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا."
   };
 
   // shared/lifecycle.js
@@ -10246,8 +10361,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/messages/messages.js
   registerLabels("messages", defaults);
   var MICRO_LABELS_FAMILY = "messages";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var liveBindings = /* @__PURE__ */ new WeakMap();
   function claimBinding(element, key) {
@@ -10434,7 +10566,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var v = noteVariantOf(note);
       if (v) note.setAttribute("role", NOTE_ROLE_BY_VARIANT[v]);
       else if (window.console && console.warn) {
-        console.warn(L("k1"), note);
+        console.warn(L("note.missingVariantWarning", note), note);
       }
     });
   }
@@ -10494,11 +10626,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var registry = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      ensureNoteRoles(scope);
-      bindClose(scope);
+      withLabels(scope, function() {
+        ensureNoteRoles(scope);
+        bindClose(scope);
+      });
       return existing;
     }
     var destroyed = false;
@@ -10506,8 +10640,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص الرسائل تحت الجذر (أدوار m-note وأزرار الإغلاق الجديدة). */
       update: function() {
-        ensureNoteRoles(scope);
-        bindClose(scope);
+        withLabels(scope, function() {
+          ensureNoteRoles(scope);
+          bindClose(scope);
+        });
       },
       /** يفك المستمعات ويوقف مؤقتات toast — لا يمس نصوص الرسائل. */
       destroy: function() {
@@ -10517,8 +10653,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    ensureNoteRoles(scope);
-    bindClose(scope);
+    withLabels(scope, function() {
+      ensureNoteRoles(scope);
+      bindClose(scope);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -10553,9 +10691,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 if(typeof document!=='undefined'&&document.currentScript&&document.currentScript.src){(typeof globalThis!=='undefined'?globalThis:window).__microIifeBaseUrl=document.currentScript.src;}
 (() => {
   var __defProp = Object.defineProperty;
-  var __export = (target, all) => {
+  var __export = (target2, all) => {
     for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
+      __defProp(target2, name, { get: all[name], enumerable: true });
   };
 
   // components/navigation/navigation.js
@@ -10579,6 +10717,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root) return { locale: "ar-u-nu-latn", families: {} };
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
+  }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
   }
   function registerLabels(family, defaults2) {
     var families = store().families;
@@ -10610,20 +10769,20 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/navigation/labels.js
   var defaults = {
-    "k1": "[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.",
-    "k2": '[micro-navigation] دور غير معتاد للطبقة "',
-    "k3": '" — عقد الطبقات: dialog/alertdialog (D-UI-02).',
-    "k4": "فلتر واحد",
-    "k5": "فلتران",
-    "k6": " فلاتر",
-    "k7": " فلترًا",
-    "k8": " فلتر",
-    "k9": " فلتر واحد",
-    "k10": " فلتران",
-    "k11": ": لا فلاتر",
-    "k12": "، ",
-    "k13": "الجاري",
-    "k14": "المطبّق"
+    "layer.unnamedWarning": "[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.",
+    "layer.unusualRolePrefix": '[micro-navigation] دور غير معتاد للطبقة "',
+    "layer.unusualRoleSuffix": '" — عقد الطبقات: dialog/alertdialog (D-UI-02).',
+    "filters.count.one": "فلتر واحد",
+    "filters.count.two": "فلتران",
+    "filters.count.fewSuffix": " فلاتر",
+    "filters.count.manySuffix": " فلترًا",
+    "filters.count.hundredSuffix": " فلتر",
+    "filters.count.hundredOneSuffix": " فلتر واحد",
+    "filters.count.hundredTwoSuffix": " فلتران",
+    "filters.summary.emptySuffix": ": لا فلاتر",
+    "filters.summary.separator": "، ",
+    "filters.summary.current": "الجاري",
+    "filters.summary.applied": "المطبّق"
   };
 
   // shared/lifecycle.js
@@ -10649,8 +10808,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/navigation/navigation.js
   registerLabels("navigation", defaults);
   var MICRO_LABELS_FAMILY = "navigation";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var liveBindings = /* @__PURE__ */ new WeakMap();
   function claimBinding(element, key) {
@@ -10848,11 +11024,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
           if (!title.id) title.id = "micro-layer-title-" + ++layerTitleUid;
           layer.setAttribute("aria-labelledby", title.id);
         } else if (window.console && console.warn) {
-          console.warn(L("k1"), layer);
+          console.warn(L("layer.unnamedWarning", layer), layer);
         }
       }
     } else if (window.console && console.warn) {
-      console.warn(L("k2") + role + L("k3"), layer);
+      console.warn(L("layer.unusualRolePrefix", layer) + role + L("layer.unusualRoleSuffix", layer), layer);
     }
   }
   function openLayer(layer, options) {
@@ -10942,8 +11118,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var usable = t && inDocument(t) && !isDisabled(t) && !t.closest("[inert], [hidden]") && (!top || top.contains(t));
       if (usable && typeof t.focus === "function") t.focus();
       else if (top) {
-        var target = focusables(top)[0] || top;
-        target.focus();
+        var target2 = focusables(top)[0] || top;
+        target2.focus();
       }
       layer.dispatchEvent(new CustomEvent("micro-navigation:closed", { bubbles: true }));
     }
@@ -11007,16 +11183,16 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return "";
   }
   function filterCountAr(n) {
-    if (n === 1) return L("k4");
-    if (n === 2) return L("k5");
-    if (n >= 3 && n <= 10) return n + L("k6");
-    if (n >= 11 && n <= 99) return n + L("k7");
+    if (n === 1) return L("filters.count.one");
+    if (n === 2) return L("filters.count.two");
+    if (n >= 3 && n <= 10) return n + L("filters.count.fewSuffix");
+    if (n >= 11 && n <= 99) return n + L("filters.count.manySuffix");
     var r = n % 100;
-    if (r === 0) return n + L("k8");
-    if (r === 1) return n + L("k9");
-    if (r === 2) return n + L("k10");
-    if (r >= 3 && r <= 10) return n + L("k6");
-    return n + L("k7");
+    if (r === 0) return n + L("filters.count.hundredSuffix");
+    if (r === 1) return n + L("filters.count.hundredOneSuffix");
+    if (r === 2) return n + L("filters.count.hundredTwoSuffix");
+    if (r >= 3 && r <= 10) return n + L("filters.count.fewSuffix");
+    return n + L("filters.count.manySuffix");
   }
   function updateSummary(panel, phase) {
     var summary = panel.querySelector("[data-filter-summary]");
@@ -11026,7 +11202,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       return !!key && key !== "none" && inputActive(input);
     });
     if (!actives.length) {
-      summary.textContent = phase + L("k11");
+      summary.textContent = phase + L("filters.summary.emptySuffix", summary);
       return;
     }
     var labels = [];
@@ -11034,7 +11210,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var l = filterLabel(input);
       if (l && labels.indexOf(l) < 0) labels.push(l);
     });
-    summary.textContent = labels.length === actives.length ? phase + ": " + labels.join(L("k12")) : phase + ": " + filterCountAr(actives.length);
+    summary.textContent = labels.length === actives.length ? phase + ": " + labels.join(L("filters.summary.separator")) : phase + ": " + filterCountAr(actives.length);
   }
   function initFilterPanel(panel) {
     if (!claimBinding(panel, "microFilterBound")) return;
@@ -11051,14 +11227,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
           input.value = "";
         }
       });
-      updateSummary(panel, L("k13"));
+      updateSummary(panel, L("filters.summary.current", panel));
     });
     on(panel, panel, "change", function(e) {
-      if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, L("k13"));
+      if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, L("filters.summary.current", target));
     });
     on(panel, panel, "input", function(e) {
       if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
-        updateSummary(panel, L("k13"));
+        updateSummary(panel, L("filters.summary.current", panel));
       }
     });
     var apply = panel.querySelector("[data-filter-apply]");
@@ -11070,7 +11246,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         if (input.type === "checkbox") applied[key] = input.checked;
         else applied[key] = String(input.value == null ? "" : input.value).trim();
       });
-      updateSummary(panel, L("k14"));
+      updateSummary(panel, L("filters.summary.applied", panel));
       panel.__microApplied = Object.assign({}, applied);
       var count = Object.keys(applied).filter(function(k) {
         return applied[k] === true || typeof applied[k] === "string" && applied[k] !== "";
@@ -11088,7 +11264,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         if (input.type === "checkbox") input.checked = false;
         else input.value = "";
       });
-      updateSummary(panel, L("k13"));
+      updateSummary(panel, L("filters.summary.current", panel));
     });
     var cancel = panel.querySelector("[data-filter-cancel]");
     if (cancel) on(panel, cancel, "click", function() {
@@ -11109,7 +11285,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
           input.value = applied[key];
         }
       });
-      updateSummary(panel, L("k14"));
+      updateSummary(panel, L("filters.summary.applied", panel));
       panel.__microApplied = Object.assign({}, applied);
     };
   }
@@ -11246,10 +11422,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      bindScope(scope);
+      withLabels(scope, function() {
+        bindScope(scope);
+      });
       return existing;
     }
     bindDocumentOnce();
@@ -11258,7 +11436,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد ربط عناصر الطبقات الجديدة تحت الجذر (الربط محروس فلا ازدواج). */
       update: function() {
-        bindScope(scope);
+        withLabels(scope, function() {
+          bindScope(scope);
+        });
       },
       /** يغلق الطبقات المفتوحة ويفك المستمعات ويرجع inert الخلفية. */
       destroy: function() {
@@ -11269,7 +11449,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    bindScope(scope);
+    withLabels(scope, function() {
+      bindScope(scope);
+    });
     instances.set(scope, instance);
     return instance;
   }
@@ -11376,6 +11558,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -11406,7 +11609,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/organization/labels.js
   var defaults = {
-    "k1": "؟"
+    "avatar.initialsFallback": "؟"
   };
 
   // shared/lifecycle.js
@@ -11432,8 +11635,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/organization/organization.js
   registerLabels("organization", defaults);
   var MICRO_LABELS_FAMILY = "organization";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var liveBindings = /* @__PURE__ */ new WeakMap();
   function claimBinding(element, key) {
@@ -11487,7 +11707,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var span = document.createElement("span");
         span.className = "m-identity__initials";
         span.setAttribute("aria-hidden", "true");
-        span.textContent = initials || L("k1");
+        span.textContent = initials || L("avatar.initialsFallback", img);
         img.replaceWith(span);
       }
       on(img, "error", fallback);
@@ -11497,11 +11717,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var registry = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      initSections(scope);
-      initAvatars(scope);
+      withLabels(scope, function() {
+        initSections(scope);
+        initAvatars(scope);
+      });
       return existing;
     }
     var destroyed = false;
@@ -11509,8 +11731,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص الأقسام والصور الرمزية تحت الجذر (يربط الجديد فقط). */
       update: function() {
-        initSections(scope);
-        initAvatars(scope);
+        withLabels(scope, function() {
+          initSections(scope);
+          initAvatars(scope);
+        });
       },
       /** يفك كل مستمعات النطاق ويمكّن الربط من جديد — لا يمس حالة الطي. */
       destroy: function() {
@@ -11520,8 +11744,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    initSections(scope);
-    initAvatars(scope);
+    withLabels(scope, function() {
+      initSections(scope);
+      initAvatars(scope);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -11673,12 +11899,19 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
   }
   var registry = instanceRegistry();
+  function applyInstanceLabels() {
+  }
+  function withLabels(scope, fn) {
+    return fn();
+  }
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      sync(scope);
+      withLabels(scope, function() {
+        sync(scope);
+      });
       return existing;
     }
     var destroyed = false;
@@ -11686,7 +11919,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = sync: مزامنة أصناف سياق الوحدة من DOM الحالي. */
       update: function() {
-        sync(scope);
+        withLabels(scope, function() {
+          sync(scope);
+        });
       },
       /** ينزع أصناف السياق فقط — لا مستمعات أصلا في C04. */
       destroy: function() {
@@ -11696,7 +11931,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    sync(scope);
+    withLabels(scope, function() {
+      sync(scope);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -11760,6 +11997,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -11790,108 +12048,108 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/data/labels.js
   var defaults = {
-    "k1": "قيمة غير صالحة",
-    "k2": "(غير متاح)",
-    "k3": " (سالب غير مرسوم)",
-    "k4": "، ",
-    "k5": "الوحدة",
-    "k6": "الفترة",
-    "k7": "القراءات الكاملة للرسم",
-    "k8": " (قيمة شاذة)",
-    "k9": "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.",
-    "k10": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
-    "k11": "bars: أكبر قيمة (",
-    "k12": ') تتجاوز data-max="',
-    "k13": '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k14": "رسم أعمدة",
-    "k15": "؛ مقياس موسّع إلى ",
-    "k16": " بدل المعلن ",
-    "k17": "غير صالح",
-    "k18": "سالب غير مرسوم",
-    "k19": "قيمة شاذة",
-    "k20": "نطاق العرض: ",
-    "k21": " بدل ",
-    "k22": ". القيم الأصلية دون تغيير.",
-    "k23": 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k24": " إلى ",
-    "k25": "؛ القيم الأصلية دون تغيير.",
-    "k26": "لا توجد بيانات لعرضها.",
-    "k27": "تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.",
-    "k28": "رسم موقّع",
-    "k29": "؛ محور صفر مشترك، والقراءات الكاملة أدناه",
-    "k30": "تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.",
-    "k31": "وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.",
-    "k32": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.",
-    "k33": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.",
-    "k34": "نوع المحور غير مدعوم. القراءات متاحة أدناه.",
-    "k35": "نوع المحور غير مدعوم.",
-    "k36": "line: أكبر قيمة (",
-    "k37": '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k38": "رسم خط",
-    "k39": 'line: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k40": "التسميات والقراءات الكاملة للرسم",
-    "k41": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
-    "k42": "توزيع",
-    "k43": '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k44": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
-    "k45": "donut: مجموع الفئات (",
-    "k46": ') يتجاوز المقام المعلن data-total="',
-    "k47": '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k48": '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k49": 'donut: data-total="0" بينما مجموع الفئات ',
-    "k50": " — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
-    "k51": "الإجمالي غير معلوم",
-    "k52": "الإجمالي",
-    "k53": "مجموع المعلوم",
-    "k54": " (قيمة غير صالحة)",
-    "k55": " (غير صالح للنسب)",
-    "k56": "(قيمة غير صالحة)",
-    "k57": "عرض البيانات كجدول",
-    "k58": "إخفاء جدول البيانات",
-    "k59": "الوحدة: ",
-    "k60": "الفترة: ",
-    "k61": "الفئة",
-    "k62": "وقت النقطة",
-    "k63": "القيمة",
-    "k64": "تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.",
-    "k65": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
-    "k66": "bubbles: أكبر قيمة (",
-    "k67": '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k68": " (سالب غير صالح للمساحة)",
-    "k69": "نطاق الدوائر: ",
-    "k70": 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k71": "؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.",
-    "k72": "اختر عنصرًا لقراءة تفاصيله",
-    "k73": "لم يُحدد عنصر",
-    "k74": " من الإجمالي",
-    "k75": "(وحدة غير محددة)",
-    "k76": "(فترة غير محددة)",
-    "k77": "القراءات بوحداتها وفتراتها",
-    "k78": "السابق",
-    "k79": "تحديد عنصر لقراءة قيمته",
-    "k80": "التالي",
-    "k81": "نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.",
-    "k82": "حالات لا تدخل الرسم المساحي",
-    "k83": "0 (صفر)",
-    "k84": "(غير معروف)",
-    "k85": " (قيمة غير صالحة)",
-    "k86": "(غير متاح)",
-    "k87": " (سالب غير صالح للمساحة)",
-    "k88": "عرض البيانات كجدول",
-    "k89": "إخفاء جدول البيانات",
-    "k90": "الوحدة",
-    "k91": "الفترة",
-    "k92": "المقياس",
-    "k93": "، ",
-    "k94": "الفئة",
-    "k95": "القيمة",
-    "k96": "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.",
-    "k97": '" صفر',
-    "k98": " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.",
-    "k99": " ولا توجد قيم موجبة للمقارنة.",
-    "k100": '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.',
-    "k101": "لا توجد قيم موجبة قابلة للرسم المساحي.",
-    "k102": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
+    "value.invalid": "قيمة غير صالحة",
+    "value.unavailable": "(غير متاح)",
+    "value.negativeUnplottedSuffix": " (سالب غير مرسوم)",
+    "common.listSeparator": "، ",
+    "context.unit": "الوحدة",
+    "context.period": "الفترة",
+    "table.ariaLabel": "القراءات الكاملة للرسم",
+    "value.outlierSuffix": " (قيمة شاذة)",
+    "bars.rangeError": "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.",
+    "bars.scaleInvalidDetail": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
+    "bars.overscaleDetailPrefix": "bars: أكبر قيمة (",
+    "bars.overscaleDetailMax": ') تتجاوز data-max="',
+    "bars.overscaleDetailSuffix": '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "bars.ariaLabel": "رسم أعمدة",
+    "bars.rescaledAriaSuffix": "؛ مقياس موسّع إلى ",
+    "bars.rescaledAriaInsteadOf": " بدل المعلن ",
+    "bars.invalidMark": "غير صالح",
+    "bars.negativeUnplottedMark": "سالب غير مرسوم",
+    "bars.outlierMark": "قيمة شاذة",
+    "bars.rescaledNotePrefix": "نطاق العرض: ",
+    "bars.rescaledNoteInsteadOf": " بدل ",
+    "bars.rescaledNoteSuffix": ". القيم الأصلية دون تغيير.",
+    "bars.rescaleDetailPrefix": 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "bars.rescaleDetailTo": " إلى ",
+    "bars.rescaleDetailSuffix": "؛ القيم الأصلية دون تغيير.",
+    "chart.empty": "لا توجد بيانات لعرضها.",
+    "signed.rangeError": "تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.",
+    "signed.ariaLabel": "رسم موقّع",
+    "signed.ariaSuffix": "؛ محور صفر مشترك، والقراءات الكاملة أدناه",
+    "axis.missingSetupError": "تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.",
+    "axis.autoExtendedNote": "وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.",
+    "axis.timeMissingWithReadings": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.",
+    "axis.timeMissing": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.",
+    "axis.unsupportedWithReadings": "نوع المحور غير مدعوم. القراءات متاحة أدناه.",
+    "axis.unsupported": "نوع المحور غير مدعوم.",
+    "line.overscaleDetailPrefix": "line: أكبر قيمة (",
+    "line.overscaleDetailSuffix": '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "line.ariaLabel": "رسم خط",
+    "line.rescaleDetailPrefix": 'line: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "line.readingsAriaLabel": "التسميات والقراءات الكاملة للرسم",
+    "donut.rangeError": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+    "donut.ariaLabel": "توزيع",
+    "donut.totalInvalidDetail": '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.negativeValuesDetail": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "donut.oversumDetailPrefix": "donut: مجموع الفئات (",
+    "donut.oversumDetailMax": ') يتجاوز المقام المعلن data-total="',
+    "donut.oversumDetailSuffix": '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.negativeTotalDetail": '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.zeroTotalDetailPrefix": 'donut: data-total="0" بينما مجموع الفئات ',
+    "donut.zeroTotalDetailSuffix": " — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "donut.totalUnknown": "الإجمالي غير معلوم",
+    "donut.totalLabel": "الإجمالي",
+    "donut.knownSumLabel": "مجموع المعلوم",
+    "donut.invalidValueSuffix": " (قيمة غير صالحة)",
+    "donut.invalidShareSuffix": " (غير صالح للنسب)",
+    "donut.invalidReading": "(قيمة غير صالحة)",
+    "table.showButton": "عرض البيانات كجدول",
+    "table.hideButton": "إخفاء جدول البيانات",
+    "table.unitPrefix": "الوحدة: ",
+    "table.periodPrefix": "الفترة: ",
+    "table.head.category": "الفئة",
+    "table.head.time": "وقت النقطة",
+    "table.head.value": "القيمة",
+    "bubbles.rangeError": "تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.",
+    "bubbles.scaleInvalidDetail": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
+    "bubbles.overscaleDetailPrefix": "bubbles: أكبر قيمة (",
+    "bubbles.overscaleDetailSuffix": '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "bubbles.negativeAreaSuffix": " (سالب غير صالح للمساحة)",
+    "bubbles.rescaledNotePrefix": "نطاق الدوائر: ",
+    "bubbles.rescaleDetailPrefix": 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "bubbles.rescaleDetailSuffix": "؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.",
+    "reading.selectPrompt": "اختر عنصرًا لقراءة تفاصيله",
+    "reading.noneSelected": "لم يُحدد عنصر",
+    "reading.shareSuffix": " من الإجمالي",
+    "reading.unitUnspecified": "(وحدة غير محددة)",
+    "reading.periodUnspecified": "(فترة غير محددة)",
+    "reading.caption": "القراءات بوحداتها وفتراتها",
+    "reading.prevButton": "السابق",
+    "reading.rangeAriaLabel": "تحديد عنصر لقراءة قيمته",
+    "reading.nextButton": "التالي",
+    "reading.unsupportedRangeError": "نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.",
+    "packed.listAriaLabel": "حالات لا تدخل الرسم المساحي",
+    "packed.zeroText": "0 (صفر)",
+    "packed.unknown": "(غير معروف)",
+    "packed.invalidSuffix": " (قيمة غير صالحة)",
+    "packed.invalid": "(غير متاح)",
+    "packed.negativeSuffix": " (سالب غير صالح للمساحة)",
+    "packed.table.showButton": "عرض البيانات كجدول",
+    "packed.table.hideButton": "إخفاء جدول البيانات",
+    "packed.table.unitHead": "الوحدة",
+    "packed.table.periodHead": "الفترة",
+    "packed.table.scaleHead": "المقياس",
+    "packed.table.separator": "، ",
+    "packed.table.categoryHead": "الفئة",
+    "packed.table.valueHead": "القيمة",
+    "packed.scaleError": "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.",
+    "packed.zeroDetailMax": '" صفر',
+    "packed.zeroDetailWithPositive": " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.",
+    "packed.zeroDetailNoPositive": " ولا توجد قيم موجبة للمقارنة.",
+    "packed.invalidDetail": '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.',
+    "packed.empty": "لا توجد قيم موجبة قابلة للرسم المساحي.",
+    "packed.tooManyCategoriesError": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
   };
 
   // shared/lifecycle.js
@@ -11917,8 +12175,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/data.js
   registerLabels("data", defaults);
   var MICRO_LABELS_FAMILY = "data";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var NS = "http://www.w3.org/2000/svg";
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
@@ -11964,15 +12239,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return String(v);
   }
   function readingOf(item) {
-    if (item.value === null) return item.invalid ? L("k1") : L("k2");
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L("k3");
+    if (item.value === null) return item.invalid ? L("value.invalid", item) : L("value.unavailable", item);
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L("value.negativeUnplottedSuffix", item);
     return item.display || item.rawValue || fmt(item.value);
   }
   function fullLabelOf(chart, item) {
     var label = item.labelFull || item.label;
     var isTimeAxis = chart.getAttribute("data-chart") === "line" && chart.getAttribute("data-axis-type") === "time";
     if (isTimeAxis && item.axisX !== null && item.axisX !== "" && label.indexOf(String(item.axisX)) === -1) {
-      label += L("k4") + item.axisX;
+      label += L("common.listSeparator", chart) + item.axisX;
     }
     return label;
   }
@@ -12000,8 +12275,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var title = chart.getAttribute("data-title");
     var contextTitle = !heading && title ? String(title).trim() : "";
     var entries = [
-      ["data-unit", L("k5")],
-      ["data-period", L("k6")]
+      ["data-unit", L("context.unit")],
+      ["data-period", L("context.period")]
     ].map(function(entry) {
       return { key: entry[0], label: entry[1], value: String(chart.getAttribute(entry[0]) || "").trim() };
     }).filter(function(entry) {
@@ -12082,7 +12357,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     var rows = document.createElement("dl");
     rows.className = "m-chart__readings";
-    rows.setAttribute("aria-label", L("k7"));
+    rows.setAttribute("aria-label", L("table.ariaLabel", rows));
     items.forEach(function(item) {
       var row = document.createElement("div");
       var label = document.createElement("dt");
@@ -12092,7 +12367,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       number.dir = "ltr";
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L("k8")));
+      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix", item)));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -12349,8 +12624,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         scale,
-        L("k9"),
-        'bars: data-max="' + scale.declaredRaw + L("k10")
+        L("bars.rangeError"),
+        'bars: data-max="' + scale.declaredRaw + L("bars.scaleInvalidDetail")
       );
       return;
     }
@@ -12361,8 +12636,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         scale,
-        L("k9"),
-        L("k11") + fmt(scale.largest) + L("k12") + fmt(scale.declared) + L("k13")
+        L("bars.rangeError"),
+        L("bars.overscaleDetailPrefix") + fmt(scale.largest) + L("bars.overscaleDetailMax") + fmt(scale.declared) + L("bars.overscaleDetailSuffix")
       );
       return;
     }
@@ -12379,9 +12654,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var plotHeight = Math.min(128, Math.max(96, W * 0.32));
     var base = top + plotHeight, H = base + BAR_LABEL_STEP + 12 + extra;
     var colW = W / Math.max(items.length, 1);
-    var ariaLabel = chart.getAttribute("data-title") || L("k14");
+    var ariaLabel = chart.getAttribute("data-title") || L("bars.ariaLabel", chart);
     if (scale.kind === "over") {
-      ariaLabel += L("k15") + fmt(max) + L("k16") + fmt(scale.declared);
+      ariaLabel += L("bars.rescaledAriaSuffix") + fmt(max) + L("bars.rescaledAriaInsteadOf") + fmt(scale.declared);
     }
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -12396,10 +12671,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         g.appendChild(svgEl("rect", { class: "m-chart__bar-unknown", x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl("text", { class: "m-chart__bar-value", x: cx, y: base - 16, "text-anchor": "middle" });
         applyTextPx(u, fontPx);
-        u.textContent = it.invalid ? L("k17") : "—";
+        u.textContent = it.invalid ? L("bars.invalidMark", u) : "—";
         g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, cx, base, it.value, L("k18"), fontPx);
+        invalidMarker(svg, g, cx, base, it.value, L("bars.negativeUnplottedMark", svg), fontPx);
       } else {
         var h = Math.min(it.value, max) / max * (base - top);
         g.appendChild(svgEl("rect", {
@@ -12420,7 +12695,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         if (it.outlier) {
           var o = svgEl("text", { x: cx, y: base - h - 20, "text-anchor": "middle", class: "m-chart__bar-value", fill: "var(--micro-warning)" });
           applyTextPx(o, fontPx);
-          o.textContent = L("k19");
+          o.textContent = L("bars.outlierMark", o);
           g.appendChild(o);
         }
       }
@@ -12434,10 +12709,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (scale.kind === "over") {
       var note = document.createElement("p");
       note.className = "m-chart__scale-note";
-      note.textContent = L("k20") + fmt(max) + L("k21") + fmt(scale.declared) + L("k22");
+      note.textContent = L("bars.rescaledNotePrefix", note) + fmt(max) + L("bars.rescaledNoteInsteadOf", note) + fmt(scale.declared) + L("bars.rescaledNoteSuffix", note);
       plot.appendChild(note);
       chart.setAttribute("data-scale-state", "over-rescaled");
-      chart.setAttribute("data-scale-detail", L("k23") + fmt(scale.declared) + L("k24") + fmt(max) + L("k25"));
+      chart.setAttribute("data-scale-detail", L("bars.rescaleDetailPrefix", chart) + fmt(scale.declared) + L("bars.rescaleDetailTo", chart) + fmt(max) + L("bars.rescaleDetailSuffix", chart));
     }
   }
   function renderSigned(chart, items, kind) {
@@ -12450,7 +12725,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var emptySigned = document.createElement("p");
       emptySigned.className = "m-chart__empty";
       emptySigned.setAttribute("role", "status");
-      emptySigned.textContent = L("k26");
+      emptySigned.textContent = L("chart.empty", emptySigned);
       plot.appendChild(emptySigned);
       appendFullReadingRows(chart, plot, items, "");
       chart.setAttribute("data-scale-state", "empty");
@@ -12475,7 +12750,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         { kind: invalid ? "invalid" : "over" },
-        L("k27"),
+        L("signed.rangeError"),
         "signed: bounds must include zero and every known value; no clipping or absolute-value conversion."
       );
       return;
@@ -12495,7 +12770,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var svg = svgEl("svg", {
       viewBox: "0 0 " + width + " " + (bottom + 28),
       role: "img",
-      "aria-label": (chart.getAttribute("data-title") || L("k28")) + L("k29")
+      "aria-label": (chart.getAttribute("data-title") || L("signed.ariaLabel", chart)) + L("signed.ariaSuffix", chart)
     });
     function y(value) {
       return top + (b - value / magnitude) / (b - a) * height;
@@ -12524,7 +12799,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       chart.setAttribute("data-axis-state", time ? "invalid-time" : "invalid-type");
       var error = document.createElement("p");
       error.className = "m-chart__error";
-      error.textContent = L("k30");
+      error.textContent = L("axis.missingSetupError", error);
       plot.appendChild(error);
       appendFullReadingRows(chart, plot, items, "");
       return;
@@ -12617,7 +12892,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (exceeds) {
       var note = document.createElement("p");
       note.className = "m-chart__scale-note";
-      note.textContent = L("k31");
+      note.textContent = L("axis.autoExtendedNote", note);
       plot.appendChild(note);
     }
   }
@@ -12636,9 +12911,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         plot.innerHTML = "";
         var axisError = document.createElement("p");
         axisError.className = "m-chart__error";
-        axisError.textContent = L("k32");
+        axisError.textContent = L("axis.timeMissingWithReadings", axisError);
         plot.appendChild(axisError);
-        appendFullReadingRows(chart, plot, items, L("k33"));
+        appendFullReadingRows(chart, plot, items, L("axis.timeMissing", chart));
         chart.setAttribute("data-axis-state", "invalid-time");
         return;
       }
@@ -12646,9 +12921,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       plot.innerHTML = "";
       var typeError = document.createElement("p");
       typeError.className = "m-chart__error";
-      typeError.textContent = L("k34");
+      typeError.textContent = L("axis.unsupportedWithReadings", typeError);
       plot.appendChild(typeError);
-      appendFullReadingRows(chart, plot, items, L("k35"));
+      appendFullReadingRows(chart, plot, items, L("axis.unsupported", chart));
       chart.setAttribute("data-axis-state", "invalid-type");
       return;
     }
@@ -12660,8 +12935,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         scale,
-        L("k9"),
-        'line: data-max="' + scale.declaredRaw + L("k10")
+        L("bars.rangeError"),
+        'line: data-max="' + scale.declaredRaw + L("bars.scaleInvalidDetail")
       );
       return;
     }
@@ -12672,8 +12947,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         scale,
-        L("k9"),
-        L("k36") + fmt(scale.largest) + L("k12") + fmt(scale.declared) + L("k37")
+        L("bars.rangeError"),
+        L("line.overscaleDetailPrefix") + fmt(scale.largest) + L("bars.overscaleDetailMax") + fmt(scale.declared) + L("line.overscaleDetailSuffix")
       );
       return;
     }
@@ -12699,9 +12974,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     function yAt(v) {
       return v === null ? null : base - v / max * (base - top);
     }
-    var ariaLabel = chart.getAttribute("data-title") || L("k38");
+    var ariaLabel = chart.getAttribute("data-title") || L("line.ariaLabel", chart);
     if (scale.kind === "over") {
-      ariaLabel += L("k15") + fmt(max) + L("k16") + fmt(scale.declared);
+      ariaLabel += L("bars.rescaledAriaSuffix") + fmt(max) + L("bars.rescaledAriaInsteadOf") + fmt(scale.declared);
     }
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -12734,7 +13009,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         u.textContent = "—";
         g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, x, base, it.value, L("k18"), fontPx);
+        invalidMarker(svg, g, x, base, it.value, L("bars.negativeUnplottedMark", svg), fontPx);
       } else {
         g.appendChild(svgEl("circle", { class: "m-chart__dot", cx: x, cy: y, r: 4 }));
         var val = svgEl("text", { class: "m-chart__point-value", x, y: y - 10, "text-anchor": "middle" });
@@ -12752,10 +13027,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (scale.kind === "over") {
       var note = document.createElement("p");
       note.className = "m-chart__scale-note";
-      note.textContent = L("k20") + fmt(max) + L("k21") + fmt(scale.declared) + L("k22");
+      note.textContent = L("bars.rescaledNotePrefix", note) + fmt(max) + L("bars.rescaledNoteInsteadOf", note) + fmt(scale.declared) + L("bars.rescaledNoteSuffix", note);
       plot.appendChild(note);
       chart.setAttribute("data-scale-state", "over-rescaled");
-      chart.setAttribute("data-scale-detail", L("k39") + fmt(scale.declared) + L("k24") + fmt(max) + L("k25"));
+      chart.setAttribute("data-scale-detail", L("line.rescaleDetailPrefix", chart) + fmt(scale.declared) + L("bars.rescaleDetailTo", chart) + fmt(max) + L("bars.rescaleDetailSuffix", chart));
     }
   }
   function axisTimeOf(raw) {
@@ -12785,7 +13060,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function appendFullReadingRows(chart, plot, items, ariaLabel) {
     var rows = document.createElement("dl");
     rows.className = "m-chart__readings";
-    rows.setAttribute("aria-label", ariaLabel || L("k7"));
+    rows.setAttribute("aria-label", ariaLabel || L("table.ariaLabel", rows));
     items.forEach(function(item) {
       var row = document.createElement("div");
       var label = document.createElement("dt");
@@ -12795,7 +13070,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       number.dir = "ltr";
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L("k8")));
+      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix", item)));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -12895,7 +13170,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         chart,
         chart.querySelector("[data-plot]"),
         items,
-        L("k40")
+        L("line.readingsAriaLabel")
       );
       return;
     }
@@ -12910,7 +13185,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function donutRefusal(chart, plot, stateKind, devDetail) {
     var err = document.createElement("p");
     err.className = "m-chart__error";
-    err.textContent = L("k41");
+    err.textContent = L("donut.rangeError", err);
     plot.appendChild(err);
     chart.setAttribute("data-scale-state", stateKind);
     chart.setAttribute("data-scale-detail", devDetail);
@@ -12966,7 +13241,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       return a + i.value;
     }, 0);
     var R = 58, C = 2 * Math.PI * R, cx = 74, cy = 74;
-    var svg = svgEl("svg", { class: "m-donut__svg", viewBox: "0 0 148 148", role: "img", "aria-label": chart.getAttribute("data-title") || L("k42") });
+    var svg = svgEl("svg", { class: "m-donut__svg", viewBox: "0 0 148 148", role: "img", "aria-label": chart.getAttribute("data-title") || L("donut.ariaLabel", svg) });
     plot.innerHTML = "";
     var sumExceeds = hasDeclared && sum > total;
     var hasInvalid = invalid.length > 0;
@@ -12996,7 +13271,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         chart,
         plot,
         "invalid",
-        'donut: data-total="' + declaredRaw + L("k43")
+        'donut: data-total="' + declaredRaw + L("donut.totalInvalidDetail")
       );
     } else if (!isFinite(sum)) {
       donutRefusal(
@@ -13017,33 +13292,33 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         chart,
         plot,
         hasInvalid ? "invalid" : "over",
-        hasInvalid ? L("k44") : L("k45") + fmt(sum) + L("k46") + fmt(total) + L("k47")
+        hasInvalid ? L("donut.negativeValuesDetail") : L("donut.oversumDetailPrefix") + fmt(sum) + L("donut.oversumDetailMax") + fmt(total) + L("donut.oversumDetailSuffix")
       );
     } else if (declaredNegative) {
       donutRefusal(
         chart,
         plot,
         "invalid",
-        'donut: data-total="' + declaredRaw + L("k48")
+        'donut: data-total="' + declaredRaw + L("donut.negativeTotalDetail")
       );
     } else if (declaredZero && sum > 0) {
       donutRefusal(
         chart,
         plot,
         "conflict",
-        L("k49") + fmt(sum) + L("k50")
+        L("donut.zeroTotalDetailPrefix") + fmt(sum) + L("donut.zeroTotalDetailSuffix")
       );
     } else if (noData) {
       var emptyDonut = document.createElement("p");
       emptyDonut.className = "m-chart__empty";
       emptyDonut.setAttribute("role", "status");
-      emptyDonut.textContent = L("k26");
+      emptyDonut.textContent = L("chart.empty", emptyDonut);
       plot.appendChild(emptyDonut);
       chart.setAttribute("data-scale-state", "empty");
     } else if (unknownTotal) {
-      emptyRing("—", L("k51"));
+      emptyRing("—", L("donut.totalUnknown"));
     } else if (zeroCase) {
-      emptyRing(hasDeclared ? fmt(total) : "0", chart.getAttribute("data-total-label") || L("k52"));
+      emptyRing(hasDeclared ? fmt(total) : "0", chart.getAttribute("data-total-label") || L("donut.totalLabel", chart));
     } else {
       var denom = hasDeclared ? total : sum;
       var offset = 0;
@@ -13098,7 +13373,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       center.textContent = fmt(denom);
       svg.appendChild(center);
       var clab = svgEl("text", { class: "m-donut__center-label", x: cx, y: cy + 20, "text-anchor": "middle" });
-      clab.textContent = chart.getAttribute("data-total-label") || (missing.length && !hasDeclared ? L("k53") : L("k52"));
+      clab.textContent = chart.getAttribute("data-total-label") || (missing.length && !hasDeclared ? L("donut.knownSumLabel") : L("donut.totalLabel"));
       svg.appendChild(clab);
       plot.appendChild(svg);
       fitDonutReading(plot, svg);
@@ -13131,7 +13406,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       li.appendChild(label);
       var val = document.createElement("span");
       val.className = "m-legend__value";
-      val.textContent = it.value === null ? it.invalid ? String(it.rawValue) + L("k54") : L("k2") : fmt(it.value) + L("k55");
+      val.textContent = it.value === null ? it.invalid ? String(it.rawValue) + L("donut.invalidValueSuffix") : L("value.unavailable") : fmt(it.value) + L("donut.invalidShareSuffix", it);
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -13158,13 +13433,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (it.value === null) {
       if (it.invalid) {
         var raw = it.rawValue !== null && String(it.rawValue).trim() !== "" ? String(it.rawValue) + " " : "";
-        return raw + L("k56");
+        return raw + L("donut.invalidReading");
       }
-      return L("k2");
+      return L("value.unavailable");
     }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0 && !it.signed) return base + L("k3");
-    return it.outlier ? base + L("k8") : base;
+    if (it.value < 0 && !it.signed) return base + L("value.negativeUnplottedSuffix", it);
+    return it.outlier ? base + L("value.outlierSuffix") : base;
   }
   function syncDatasetTable(chart, items) {
     var wrap = chart.querySelector(".m-chart__dataset-wrap");
@@ -13176,7 +13451,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       btn.type = "button";
       btn.className = "m-btn m-btn--secondary m-chart__disclose";
       btn.setAttribute("aria-expanded", "false");
-      btn.textContent = L("k57");
+      btn.textContent = L("table.showButton", btn);
       table = document.createElement("table");
       table.className = "m-chart__dataset";
       table.hidden = true;
@@ -13199,7 +13474,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var open = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", open ? "false" : "true");
         table.hidden = open;
-        btn.textContent = open ? L("k57") : L("k58");
+        btn.textContent = open ? L("table.showButton", btn) : L("table.hideButton", btn);
       };
       btn.__microDatasetDisclosure = { table, handler };
       btn.addEventListener("click", handler);
@@ -13211,22 +13486,22 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var captionParts = [String(titleEl && titleEl.textContent || chart.getAttribute("data-title") || "").trim()];
     var unitTxt = String(chart.getAttribute("data-unit") || "").trim();
     var periodTxt = String(chart.getAttribute("data-period") || "").trim();
-    if (unitTxt) captionParts.push(L("k59") + unitTxt);
-    if (periodTxt) captionParts.push(L("k60") + periodTxt);
+    if (unitTxt) captionParts.push(L("table.unitPrefix") + unitTxt);
+    if (periodTxt) captionParts.push(L("table.periodPrefix") + periodTxt);
     if (chart.getAttribute("data-chart") === "donut") {
       var totalRaw = chart.getAttribute("data-total");
       if (totalRaw !== null && String(totalRaw).trim() !== "") {
-        captionParts.push((chart.getAttribute("data-total-label") || L("k52")) + ": " + String(totalRaw).trim());
+        captionParts.push((chart.getAttribute("data-total-label") || L("donut.totalLabel", chart)) + ": " + String(totalRaw).trim());
       }
     }
     caption.textContent = captionParts.filter(function(p) {
       return p !== "";
-    }).join(L("k4"));
+    }).join(L("common.listSeparator", caption));
     table.appendChild(caption);
     var thead = document.createElement("thead");
     var headRow = document.createElement("tr");
     var hasTimeAxis = chart.getAttribute("data-chart") === "line" && chart.getAttribute("data-axis-type") === "time";
-    (hasTimeAxis ? [L("k61"), L("k62"), L("k63")] : [L("k61"), L("k63")]).forEach(function(h) {
+    (hasTimeAxis ? [L("table.head.category"), L("table.head.time"), L("table.head.value")] : [L("table.head.category"), L("table.head.value")]).forEach(function(h) {
       var th = document.createElement("th");
       th.setAttribute("scope", "col");
       th.textContent = h;
@@ -13243,7 +13518,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement("td");
-        if (it.axisX === null || it.axisX === "") time.textContent = L("k2");
+        if (it.axisX === null || it.axisX === "") time.textContent = L("value.unavailable", time);
         else {
           var coordinate = document.createElement("bdi");
           coordinate.dir = "ltr";
@@ -13293,8 +13568,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         { kind: "invalid" },
-        L("k64"),
-        'bubbles: data-max="' + rawMax + L("k65")
+        L("bubbles.rangeError"),
+        'bubbles: data-max="' + rawMax + L("bubbles.scaleInvalidDetail")
       );
       return;
     }
@@ -13305,8 +13580,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         plot,
         { kind: "over" },
-        L("k64"),
-        L("k66") + fmt(largest) + L("k12") + fmt(declared) + L("k67")
+        L("bubbles.rangeError"),
+        L("bubbles.overscaleDetailPrefix") + fmt(largest) + L("bars.overscaleDetailMax") + fmt(declared) + L("bubbles.overscaleDetailSuffix")
       );
       return;
     }
@@ -13324,10 +13599,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       lab.textContent = it.label;
       if (it.value === null) {
         circ.setAttribute("class", "m-bubble__circle--none");
-        valTxt.textContent = L("k2");
+        valTxt.textContent = L("value.unavailable", valTxt);
       } else if (it.value < 0) {
         circ.setAttribute("class", "m-bubble__circle--none");
-        valTxt.textContent = fmt(it.value) + L("k68");
+        valTxt.textContent = fmt(it.value) + L("bubbles.negativeAreaSuffix", valTxt);
       } else if (it.value === 0) {
         circ.setAttribute("class", "m-bubble__circle--none");
         valTxt.textContent = "0";
@@ -13353,10 +13628,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (scaleKind === "over") {
       var note = document.createElement("p");
       note.className = "m-chart__scale-note";
-      note.textContent = L("k69") + fmt(vmax) + L("k21") + fmt(declared) + L("k22");
+      note.textContent = L("bubbles.rescaledNotePrefix", note) + fmt(vmax) + L("bars.rescaledNoteInsteadOf", note) + fmt(declared) + L("bars.rescaledNoteSuffix", note);
       plot.appendChild(note);
       chart.setAttribute("data-scale-state", "over-rescaled");
-      chart.setAttribute("data-scale-detail", L("k70") + fmt(declared) + L("k24") + fmt(vmax) + L("k71"));
+      chart.setAttribute("data-scale-detail", L("bubbles.rescaleDetailPrefix", chart) + fmt(declared) + L("bars.rescaleDetailTo", chart) + fmt(vmax) + L("bubbles.rescaleDetailSuffix", chart));
     }
   }
   var renderWidths = /* @__PURE__ */ new WeakMap();
@@ -13416,7 +13691,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function appendReadableValue(parent, it, donut) {
     var full = valueStateText(it);
     var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue) : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
-    if (donut && it.value !== null && it.value < 0) full = raw + L("k55");
+    if (donut && it.value !== null && it.value < 0) full = raw + L("donut.invalidShareSuffix", it);
     if (raw === null) parent.appendChild(readingNode("span", null, full));
     else {
       var bdi = readingNode("bdi", null, it.value !== null && it.display ? it.display : raw);
@@ -13512,8 +13787,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         appendReadableValue(value, items[index], chart.getAttribute("data-chart") === "donut");
         appendReadingUnit(value, selected.unit);
         life.status.appendChild(value);
-      } else life.status.textContent = L("k72");
-      life.range.setAttribute("aria-valuetext", selected ? selected.label + L("k4") + value.textContent : L("k73"));
+      } else life.status.textContent = L("reading.selectPrompt", chart);
+      life.range.setAttribute("aria-valuetext", selected ? selected.label + L("common.listSeparator", chart) + value.textContent : L("reading.noneSelected", chart));
     }
     [].slice.call(chart.querySelectorAll("[data-reading-choice]")).forEach(function(button) {
       var active = !!selected && button.getAttribute("data-reading-choice") === selected.key;
@@ -13551,7 +13826,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var share = readingNode("span", "m-chart__share", Math.round(it.value / denominator * 100) + "%");
         share.dir = "ltr";
         share.setAttribute("data-reading-share", "");
-        share.setAttribute("aria-label", share.textContent + L("k74"));
+        share.setAttribute("aria-label", share.textContent + L("reading.shareSuffix", share));
         share.hidden = true;
         value.appendChild(share);
       }
@@ -13574,7 +13849,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       row.appendChild(readingNode("dt", null, fullLabelOf(chart, it)));
       var value = readingNode("dd");
       appendReadableValue(value, it, chart.getAttribute("data-chart") === "donut");
-      appendReadingUnit(value, it.unit || L("k75"));
+      appendReadingUnit(value, it.unit || L("reading.unitUnspecified", it));
       if (it.period) value.appendChild(readingNode("span", "m-chart__reading-period", " · " + it.period));
       row.appendChild(value);
       list.appendChild(row);
@@ -13596,7 +13871,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var cell = row.querySelector("td:last-of-type");
         if (cell && items[i]) appendReadingUnit(cell, items[i].unit);
         if (mixed && items[i]) {
-          var periodCell = readingNode("td"), period = readingNode("bdi", null, items[i].period || L("k76"));
+          var periodCell = readingNode("td"), period = readingNode("bdi", null, items[i].period || L("reading.periodUnspecified", periodCell));
           period.dir = "auto";
           periodCell.appendChild(period);
           row.appendChild(periodCell);
@@ -13605,14 +13880,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (mixed) {
         var head = chart.querySelector(".m-chart__dataset thead tr");
         if (head) {
-          var periodHead = readingNode("th", null, L("k6"));
+          var periodHead = readingNode("th", null, L("context.period", head));
           periodHead.scope = "col";
           head.appendChild(periodHead);
         }
         var caption = chart.querySelector(".m-chart__dataset caption");
         var title = chart.querySelector(".m-chart__title");
         var titleText = title ? title.textContent.trim() : (chart.getAttribute("data-title") || "").trim();
-        if (caption) caption.textContent = (titleText ? titleText + " — " : "") + L("k77");
+        if (caption) caption.textContent = (titleText ? titleText + " — " : "") + L("reading.caption", caption);
       }
     }
     if (!valid) {
@@ -13656,15 +13931,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       status.setAttribute("role", "status");
       box.appendChild(status);
       var controls = readingNode("div", "m-chart__selection-controls");
-      var prev = readingNode("button", "m-btn m-btn--secondary m-chart__select-step", L("k78"));
+      var prev = readingNode("button", "m-btn m-btn--secondary m-chart__select-step", L("reading.prevButton", chart));
       prev.type = "button";
       var range = readingNode("input", "m-chart__select-range");
       range.type = "range";
       range.min = "0";
       range.step = "1";
-      range.setAttribute("aria-label", L("k79"));
+      range.setAttribute("aria-label", L("reading.rangeAriaLabel", range));
       range.setAttribute("aria-describedby", status.id);
-      var next = readingNode("button", "m-btn m-btn--secondary m-chart__select-step", L("k80"));
+      var next = readingNode("button", "m-btn m-btn--secondary m-chart__select-step", L("reading.nextButton", chart));
       next.type = "button";
       controls.appendChild(prev);
       controls.appendChild(range);
@@ -13720,7 +13995,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var empty = document.createElement("p");
       empty.className = "m-chart__empty";
       empty.setAttribute("role", "status");
-      empty.textContent = L("k26");
+      empty.textContent = L("chart.empty", empty);
       emptyPlot.appendChild(empty);
       chart.setAttribute("data-scale-state", "empty");
     } else if ((kind === "bars" || kind === "line") && domain === "signed") renderSigned(chart, items, kind);
@@ -13731,7 +14006,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         items,
         chart.querySelector("[data-plot]"),
         { kind: "invalid-domain" },
-        L("k81"),
+        L("reading.unsupportedRangeError", chart),
         "Expected non-negative or signed value domain."
       );
     } else if (kind === "bars") renderBars(chart, items);
@@ -13762,14 +14037,16 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
       installFontRefit();
-      var cachedCharts = [].slice.call(scope.querySelectorAll("[data-chart]"));
-      if (scope.nodeType === 1 && scope.matches("[data-chart]")) cachedCharts.unshift(scope);
-      cachedCharts.forEach(function(c) {
-        render(c);
+      withLabels(scope, function() {
+        var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
+        if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
+        charts.forEach(function(c) {
+          render(c);
+        });
       });
       return existing;
     }
@@ -13779,10 +14056,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد تصيير كل رسوم النطاق من DOM المصدر بعد تحديث المضيف. */
       update: function() {
-        var charts2 = [].slice.call(scope.querySelectorAll("[data-chart]"));
-        if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts2.unshift(scope);
-        charts2.forEach(function(c) {
-          render(c);
+        withLabels(scope, function() {
+          var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
+          if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
+          charts.forEach(function(c) {
+            render(c);
+          });
         });
       },
       /** يفك مراقبات الرصد ومستمعات القراءة — لا يمس بيانات المصدر. */
@@ -13793,10 +14072,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
-    if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
-    charts.forEach(function(c) {
-      render(c);
+    withLabels(scope, function() {
+      var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
+      if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
+      charts.forEach(function(c) {
+        render(c);
+      });
     });
     instances.set(scope, instance);
     return instance;
@@ -13913,6 +14194,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -13921,9 +14223,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function getLabel(family, key, vars) {
     var entry = store().families[family];
-    var value = entry ? entry[key] : void 0;
-    if (value == null || !vars) return value;
-    var text = String(value);
+    var value2 = entry ? entry[key] : void 0;
+    if (value2 == null || !vars) return value2;
+    var text = String(value2);
     for (var name in vars) text = text.split("{" + name + "}").join(String(vars[name]));
     return text;
   }
@@ -13943,108 +14245,108 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/data/labels.js
   var defaults = {
-    "k1": "قيمة غير صالحة",
-    "k2": "(غير متاح)",
-    "k3": " (سالب غير مرسوم)",
-    "k4": "، ",
-    "k5": "الوحدة",
-    "k6": "الفترة",
-    "k7": "القراءات الكاملة للرسم",
-    "k8": " (قيمة شاذة)",
-    "k9": "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.",
-    "k10": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
-    "k11": "bars: أكبر قيمة (",
-    "k12": ') تتجاوز data-max="',
-    "k13": '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k14": "رسم أعمدة",
-    "k15": "؛ مقياس موسّع إلى ",
-    "k16": " بدل المعلن ",
-    "k17": "غير صالح",
-    "k18": "سالب غير مرسوم",
-    "k19": "قيمة شاذة",
-    "k20": "نطاق العرض: ",
-    "k21": " بدل ",
-    "k22": ". القيم الأصلية دون تغيير.",
-    "k23": 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k24": " إلى ",
-    "k25": "؛ القيم الأصلية دون تغيير.",
-    "k26": "لا توجد بيانات لعرضها.",
-    "k27": "تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.",
-    "k28": "رسم موقّع",
-    "k29": "؛ محور صفر مشترك، والقراءات الكاملة أدناه",
-    "k30": "تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.",
-    "k31": "وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.",
-    "k32": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.",
-    "k33": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.",
-    "k34": "نوع المحور غير مدعوم. القراءات متاحة أدناه.",
-    "k35": "نوع المحور غير مدعوم.",
-    "k36": "line: أكبر قيمة (",
-    "k37": '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k38": "رسم خط",
-    "k39": 'line: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k40": "التسميات والقراءات الكاملة للرسم",
-    "k41": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
-    "k42": "توزيع",
-    "k43": '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k44": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
-    "k45": "donut: مجموع الفئات (",
-    "k46": ') يتجاوز المقام المعلن data-total="',
-    "k47": '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k48": '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
-    "k49": 'donut: data-total="0" بينما مجموع الفئات ',
-    "k50": " — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
-    "k51": "الإجمالي غير معلوم",
-    "k52": "الإجمالي",
-    "k53": "مجموع المعلوم",
-    "k54": " (قيمة غير صالحة)",
-    "k55": " (غير صالح للنسب)",
-    "k56": "(قيمة غير صالحة)",
-    "k57": "عرض البيانات كجدول",
-    "k58": "إخفاء جدول البيانات",
-    "k59": "الوحدة: ",
-    "k60": "الفترة: ",
-    "k61": "الفئة",
-    "k62": "وقت النقطة",
-    "k63": "القيمة",
-    "k64": "تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.",
-    "k65": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
-    "k66": "bubbles: أكبر قيمة (",
-    "k67": '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
-    "k68": " (سالب غير صالح للمساحة)",
-    "k69": "نطاق الدوائر: ",
-    "k70": 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ',
-    "k71": "؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.",
-    "k72": "اختر عنصرًا لقراءة تفاصيله",
-    "k73": "لم يُحدد عنصر",
-    "k74": " من الإجمالي",
-    "k75": "(وحدة غير محددة)",
-    "k76": "(فترة غير محددة)",
-    "k77": "القراءات بوحداتها وفتراتها",
-    "k78": "السابق",
-    "k79": "تحديد عنصر لقراءة قيمته",
-    "k80": "التالي",
-    "k81": "نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.",
-    "k82": "حالات لا تدخل الرسم المساحي",
-    "k83": "0 (صفر)",
-    "k84": "(غير معروف)",
-    "k85": " (قيمة غير صالحة)",
-    "k86": "(غير متاح)",
-    "k87": " (سالب غير صالح للمساحة)",
-    "k88": "عرض البيانات كجدول",
-    "k89": "إخفاء جدول البيانات",
-    "k90": "الوحدة",
-    "k91": "الفترة",
-    "k92": "المقياس",
-    "k93": "، ",
-    "k94": "الفئة",
-    "k95": "القيمة",
-    "k96": "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.",
-    "k97": '" صفر',
-    "k98": " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.",
-    "k99": " ولا توجد قيم موجبة للمقارنة.",
-    "k100": '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.',
-    "k101": "لا توجد قيم موجبة قابلة للرسم المساحي.",
-    "k102": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
+    "value.invalid": "قيمة غير صالحة",
+    "value.unavailable": "(غير متاح)",
+    "value.negativeUnplottedSuffix": " (سالب غير مرسوم)",
+    "common.listSeparator": "، ",
+    "context.unit": "الوحدة",
+    "context.period": "الفترة",
+    "table.ariaLabel": "القراءات الكاملة للرسم",
+    "value.outlierSuffix": " (قيمة شاذة)",
+    "bars.rangeError": "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.",
+    "bars.scaleInvalidDetail": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
+    "bars.overscaleDetailPrefix": "bars: أكبر قيمة (",
+    "bars.overscaleDetailMax": ') تتجاوز data-max="',
+    "bars.overscaleDetailSuffix": '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "bars.ariaLabel": "رسم أعمدة",
+    "bars.rescaledAriaSuffix": "؛ مقياس موسّع إلى ",
+    "bars.rescaledAriaInsteadOf": " بدل المعلن ",
+    "bars.invalidMark": "غير صالح",
+    "bars.negativeUnplottedMark": "سالب غير مرسوم",
+    "bars.outlierMark": "قيمة شاذة",
+    "bars.rescaledNotePrefix": "نطاق العرض: ",
+    "bars.rescaledNoteInsteadOf": " بدل ",
+    "bars.rescaledNoteSuffix": ". القيم الأصلية دون تغيير.",
+    "bars.rescaleDetailPrefix": 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "bars.rescaleDetailTo": " إلى ",
+    "bars.rescaleDetailSuffix": "؛ القيم الأصلية دون تغيير.",
+    "chart.empty": "لا توجد بيانات لعرضها.",
+    "signed.rangeError": "تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.",
+    "signed.ariaLabel": "رسم موقّع",
+    "signed.ariaSuffix": "؛ محور صفر مشترك، والقراءات الكاملة أدناه",
+    "axis.missingSetupError": "تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.",
+    "axis.autoExtendedNote": "وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.",
+    "axis.timeMissingWithReadings": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.",
+    "axis.timeMissing": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.",
+    "axis.unsupportedWithReadings": "نوع المحور غير مدعوم. القراءات متاحة أدناه.",
+    "axis.unsupported": "نوع المحور غير مدعوم.",
+    "line.overscaleDetailPrefix": "line: أكبر قيمة (",
+    "line.overscaleDetailSuffix": '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "line.ariaLabel": "رسم خط",
+    "line.rescaleDetailPrefix": 'line: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "line.readingsAriaLabel": "التسميات والقراءات الكاملة للرسم",
+    "donut.rangeError": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+    "donut.ariaLabel": "توزيع",
+    "donut.totalInvalidDetail": '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.negativeValuesDetail": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "donut.oversumDetailPrefix": "donut: مجموع الفئات (",
+    "donut.oversumDetailMax": ') يتجاوز المقام المعلن data-total="',
+    "donut.oversumDetailSuffix": '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.negativeTotalDetail": '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.',
+    "donut.zeroTotalDetailPrefix": 'donut: data-total="0" بينما مجموع الفئات ',
+    "donut.zeroTotalDetailSuffix": " — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "donut.totalUnknown": "الإجمالي غير معلوم",
+    "donut.totalLabel": "الإجمالي",
+    "donut.knownSumLabel": "مجموع المعلوم",
+    "donut.invalidValueSuffix": " (قيمة غير صالحة)",
+    "donut.invalidShareSuffix": " (غير صالح للنسب)",
+    "donut.invalidReading": "(قيمة غير صالحة)",
+    "table.showButton": "عرض البيانات كجدول",
+    "table.hideButton": "إخفاء جدول البيانات",
+    "table.unitPrefix": "الوحدة: ",
+    "table.periodPrefix": "الفترة: ",
+    "table.head.category": "الفئة",
+    "table.head.time": "وقت النقطة",
+    "table.head.value": "القيمة",
+    "bubbles.rangeError": "تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.",
+    "bubbles.scaleInvalidDetail": '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.',
+    "bubbles.overscaleDetailPrefix": "bubbles: أكبر قيمة (",
+    "bubbles.overscaleDetailSuffix": '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.',
+    "bubbles.negativeAreaSuffix": " (سالب غير صالح للمساحة)",
+    "bubbles.rescaledNotePrefix": "نطاق الدوائر: ",
+    "bubbles.rescaleDetailPrefix": 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ',
+    "bubbles.rescaleDetailSuffix": "؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.",
+    "reading.selectPrompt": "اختر عنصرًا لقراءة تفاصيله",
+    "reading.noneSelected": "لم يُحدد عنصر",
+    "reading.shareSuffix": " من الإجمالي",
+    "reading.unitUnspecified": "(وحدة غير محددة)",
+    "reading.periodUnspecified": "(فترة غير محددة)",
+    "reading.caption": "القراءات بوحداتها وفتراتها",
+    "reading.prevButton": "السابق",
+    "reading.rangeAriaLabel": "تحديد عنصر لقراءة قيمته",
+    "reading.nextButton": "التالي",
+    "reading.unsupportedRangeError": "نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.",
+    "packed.listAriaLabel": "حالات لا تدخل الرسم المساحي",
+    "packed.zeroText": "0 (صفر)",
+    "packed.unknown": "(غير معروف)",
+    "packed.invalidSuffix": " (قيمة غير صالحة)",
+    "packed.invalid": "(غير متاح)",
+    "packed.negativeSuffix": " (سالب غير صالح للمساحة)",
+    "packed.table.showButton": "عرض البيانات كجدول",
+    "packed.table.hideButton": "إخفاء جدول البيانات",
+    "packed.table.unitHead": "الوحدة",
+    "packed.table.periodHead": "الفترة",
+    "packed.table.scaleHead": "المقياس",
+    "packed.table.separator": "، ",
+    "packed.table.categoryHead": "الفئة",
+    "packed.table.valueHead": "القيمة",
+    "packed.scaleError": "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.",
+    "packed.zeroDetailMax": '" صفر',
+    "packed.zeroDetailWithPositive": " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.",
+    "packed.zeroDetailNoPositive": " ولا توجد قيم موجبة للمقارنة.",
+    "packed.invalidDetail": '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.',
+    "packed.empty": "لا توجد قيم موجبة قابلة للرسم المساحي.",
+    "packed.tooManyCategoriesError": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
   };
 
   // shared/lifecycle.js
@@ -14070,8 +14372,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/packed-circle.js
   registerLabels("data", defaults);
   var MICRO_LABELS_FAMILY = "data";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
   var observers = /* @__PURE__ */ new WeakMap();
@@ -14134,17 +14453,17 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function stateList(items) {
     var list = document.createElement("ul");
     list.className = "m-packed__states m-legend";
-    list.setAttribute("aria-label", L("k82"));
+    list.setAttribute("aria-label", L("packed.listAriaLabel", list));
     items.forEach(function(it) {
       var li = document.createElement("li");
       li.className = "m-legend__item m-cat--" + it.series;
       var label = document.createElement("span");
       label.textContent = it.label;
-      var value = document.createElement("bdi");
-      value.className = "m-legend__value";
-      value.textContent = it.value === 0 ? L("k83") : stateText(it).text;
+      var value2 = document.createElement("bdi");
+      value2.className = "m-legend__value";
+      value2.textContent = it.value === 0 ? L("packed.zeroText", value2) : stateText(it).text;
       li.appendChild(label);
-      li.appendChild(value);
+      li.appendChild(value2);
       list.appendChild(li);
     });
     return list;
@@ -14171,21 +14490,21 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
   }
   function stateText(it) {
-    if (!it.hasAttr) return { text: L("k84"), none: true };
-    if (it.value === null) return { text: it.raw && it.raw.trim() ? it.raw + L("k85") : L("k86"), none: true };
+    if (!it.hasAttr) return { text: L("packed.unknown"), none: true };
+    if (it.value === null) return { text: it.raw && it.raw.trim() ? it.raw + L("packed.invalidSuffix") : L("packed.invalid"), none: true };
     if (it.value < 0) {
       var num = it.display || it.raw || String(it.value);
-      return { text: num + L("k87"), none: true };
+      return { text: num + L("packed.negativeSuffix"), none: true };
     }
     if (it.value === 0) return { text: "0", none: true };
     return { text: it.display || it.raw || String(it.value), none: false };
   }
   var packedUid = 0;
   function packedValueState(it) {
-    if (!it.hasAttr) return L("k84");
-    if (it.value === null) return it.raw && it.raw.trim() ? it.raw + L("k85") : L("k86");
-    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L("k87");
-    if (it.value === 0) return L("k83");
+    if (!it.hasAttr) return L("packed.unknown");
+    if (it.value === null) return it.raw && it.raw.trim() ? it.raw + L("packed.invalidSuffix") : L("packed.invalid");
+    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L("packed.negativeSuffix", value);
+    if (it.value === 0) return L("packed.zeroText", it);
     return it.display || it.raw || String(it.value);
   }
   function syncPackedTable(chart) {
@@ -14199,7 +14518,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       btn.type = "button";
       btn.className = "m-btn m-btn--secondary m-chart__disclose";
       btn.setAttribute("aria-expanded", "false");
-      btn.textContent = L("k88");
+      btn.textContent = L("packed.table.showButton", btn);
       table = document.createElement("table");
       table.className = "m-chart__dataset";
       table.hidden = true;
@@ -14222,7 +14541,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var open = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", open ? "false" : "true");
         table.hidden = open;
-        btn.textContent = open ? L("k88") : L("k89");
+        btn.textContent = open ? L("packed.table.showButton", btn) : L("packed.table.hideButton", btn);
       };
       btn.__microDatasetDisclosure = { table, handler };
       btn.addEventListener("click", handler);
@@ -14232,15 +14551,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var caption = document.createElement("caption");
     var title = chart.querySelector(".m-chart__title");
     var context = [String(title && title.textContent || chart.getAttribute("data-title") || chart.getAttribute("aria-label") || "").trim()];
-    [["data-unit", L("k90")], ["data-period", L("k91")], ["data-max", L("k92")]].forEach(function(part) {
-      var value = chart.getAttribute(part[0]);
-      if (value && value.trim()) context.push(part[1] + ": " + value.trim());
+    [["data-unit", L("packed.table.unitHead")], ["data-period", L("packed.table.periodHead")], ["data-max", L("packed.table.scaleHead")]].forEach(function(part) {
+      var value2 = chart.getAttribute(part[0]);
+      if (value2 && value2.trim()) context.push(part[1] + ": " + value2.trim());
     });
-    caption.textContent = context.filter(Boolean).join(L("k93"));
+    caption.textContent = context.filter(Boolean).join(L("packed.table.separator", caption));
     table.appendChild(caption);
     var thead = document.createElement("thead");
     var headRow = document.createElement("tr");
-    [L("k94"), L("k95")].forEach(function(h) {
+    [L("packed.table.categoryHead"), L("packed.table.valueHead")].forEach(function(h) {
       var th = document.createElement("th");
       th.setAttribute("scope", "col");
       th.textContent = h;
@@ -14275,8 +14594,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var plot = chart.querySelector("[data-plot]");
     var err = document.createElement("p");
     err.className = "m-chart__scale-error";
-    err.textContent = L("k96");
-    var devDetail = parseNum(raw) === 0 ? 'packed-circle: data-max="' + raw + L("k97") + (positiveExists ? L("k98") : L("k99")) : 'packed-circle: data-max="' + raw + L("k100");
+    err.textContent = L("packed.scaleError", err);
+    var devDetail = parseNum(raw) === 0 ? 'packed-circle: data-max="' + raw + L("packed.zeroDetailMax") + (positiveExists ? L("packed.zeroDetailWithPositive") : L("packed.zeroDetailNoPositive")) : 'packed-circle: data-max="' + raw + L("packed.invalidDetail");
     chart.setAttribute("data-scale-detail", devDetail);
     plot.innerHTML = "";
     plot.appendChild(err);
@@ -14284,7 +14603,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var empty = document.createElement("p");
       empty.className = "m-packed__empty";
       empty.setAttribute("data-empty", "");
-      empty.textContent = L("k101");
+      empty.textContent = L("packed.empty", empty);
       plot.appendChild(empty);
       var states = stateList(itemsOf(chart));
       if (states.children.length) plot.appendChild(states);
@@ -14353,7 +14672,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       plot.innerHTML = "";
       var densityError = document.createElement("p");
       densityError.className = "m-chart__scale-error";
-      densityError.textContent = L("k102");
+      densityError.textContent = L("packed.tooManyCategoriesError", densityError);
       plot.appendChild(densityError);
       renderKeyOnly(chart);
       chart.setAttribute("data-packed-state", "too-many-positive-categories");
@@ -14429,7 +14748,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var empty = document.createElement("p");
       empty.className = "m-packed__empty";
       empty.setAttribute("data-empty", "");
-      empty.textContent = L("k101");
+      empty.textContent = L("packed.empty", empty);
       plot.appendChild(empty);
     }
     var special = items.filter(function(it) {
@@ -14471,11 +14790,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
-      scope.querySelectorAll("[data-chart-packed]").forEach(render);
+      withLabels(scope, function() {
+        if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
+        scope.querySelectorAll("[data-chart-packed]").forEach(render);
+      });
       return existing;
     }
     var destroyed = false;
@@ -14483,10 +14804,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد التصيير من DOM المصدر لكل رسوم packed تحت الجذر. */
       update: function() {
-        var charts = [].slice.call(scope.querySelectorAll("[data-chart-packed]"));
-        if (scope.matches && scope.matches("[data-chart-packed]")) charts.unshift(scope);
-        charts.forEach(function(chart) {
-          render(chart);
+        withLabels(scope, function() {
+          if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
+          scope.querySelectorAll("[data-chart-packed]").forEach(render);
         });
       },
       /** يفك مراقبات الرصد وrAF — لا يمس بيانات المصدر. */
@@ -14497,8 +14817,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
-    scope.querySelectorAll("[data-chart-packed]").forEach(render);
+    withLabels(scope, function() {
+      if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
+      scope.querySelectorAll("[data-chart-packed]").forEach(render);
+    });
     instances.set(scope, instance);
     return instance;
   }
@@ -14587,6 +14909,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -14617,17 +14960,17 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/info-strip/labels.js
   var defaults = {
-    "k1": "اختيار البطاقة",
-    "k2": "البطاقة ",
-    "k3": " من ",
-    "k4": "عرض البطاقة ",
-    "k5": "البطاقة 1 من ",
-    "k6": "لا توجد بطاقات.",
-    "k7": "البطاقة ",
-    "k8": " من ",
-    "k9": "لا توجد بطاقات.",
-    "k10": "اختيار البطاقة",
-    "k11": "عرض البطاقة "
+    "pages.ariaLabel": "اختيار البطاقة",
+    "status.positionPrefix": "البطاقة ",
+    "status.ofSeparator": " من ",
+    "page.showPrefix": "عرض البطاقة ",
+    "status.initialPrefix": "البطاقة 1 من ",
+    "status.empty": "لا توجد بطاقات.",
+    "peek.status.positionPrefix": "البطاقة ",
+    "peek.status.ofSeparator": " من ",
+    "peek.status.empty": "لا توجد بطاقات.",
+    "peek.pages.ariaLabel": "اختيار البطاقة",
+    "peek.page.showPrefix": "عرض البطاقة "
   };
 
   // shared/lifecycle.js
@@ -14653,8 +14996,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip.js
   registerLabels("info-strip", defaults);
   var MICRO_LABELS_FAMILY = "info-strip";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   function isEditingTarget(target) {
     return !!(target && (target.isContentEditable || target.closest && target.closest(
@@ -14700,7 +15060,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (slides().length >= 2 && empty) empty.hidden = true;
     if (pageList) {
       pageList.setAttribute("role", "group");
-      if (!pageList.hasAttribute("aria-label")) pageList.setAttribute("aria-label", L("k1"));
+      if (!pageList.hasAttribute("aria-label")) pageList.setAttribute("aria-label", L("pages.ariaLabel", pageList));
     }
     function setIndex(target, focusViewport) {
       var list = slides();
@@ -14720,7 +15080,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (previous) previous.disabled = index === 0;
       if (next) next.disabled = index === list.length - 1;
       if (position) position.textContent = index + 1 + " / " + list.length;
-      if (status) status.textContent = L("k2") + (index + 1) + L("k3") + list.length;
+      if (status) status.textContent = L("status.positionPrefix", status) + (index + 1) + L("status.ofSeparator", status) + list.length;
       if (pageList) {
         pageButtons.forEach(function(button, pageIndex) {
           button.setAttribute("aria-current", pageIndex === index ? "true" : "false");
@@ -14738,7 +15098,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         page.type = "button";
         page.className = "m-info-strip__page";
         page.setAttribute("data-info-strip-page", "");
-        page.setAttribute("aria-label", L("k4") + (pageIndex + 1));
+        page.setAttribute("aria-label", L("page.showPrefix", page) + (pageIndex + 1));
         page.setAttribute("aria-current", pageIndex === 0 ? "true" : "false");
         page.setAttribute("aria-pressed", pageIndex === 0 ? "true" : "false");
         page.addEventListener("click", function() {
@@ -14815,7 +15175,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (previous) previous.disabled = true;
     if (next) next.disabled = initial.length < 2;
     if (position) position.textContent = initial.length ? "1 / " + initial.length : "";
-    if (status) status.textContent = initial.length ? L("k5") + initial.length : L("k6");
+    if (status) status.textContent = initial.length ? L("status.initialPrefix", status) + initial.length : L("status.empty", status);
     registry.set(strip, {
       listeners,
       viewport,
@@ -14848,11 +15208,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
-      scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+      withLabels(scope, function() {
+        if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
+        scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+      });
       return existing;
     }
     var destroyed = false;
@@ -14860,7 +15222,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = rescan: إعادة التقاط البطاقات بعد تغيير شرائح DOM للمضيف. */
       update: function() {
-        rescan(scope);
+        withLabels(scope, function() {
+          rescan(scope);
+        });
       },
       /** يفك مستمعات كل شريط (لا يمس بطاقات المضيف ولا حالتها). */
       destroy: function() {
@@ -14870,8 +15234,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
-    scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+    withLabels(scope, function() {
+      if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
+      scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+    });
     instances.set(scope, instance);
     return instance;
   }
@@ -14952,6 +15318,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -14982,17 +15369,17 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/info-strip/labels.js
   var defaults = {
-    "k1": "اختيار البطاقة",
-    "k2": "البطاقة ",
-    "k3": " من ",
-    "k4": "عرض البطاقة ",
-    "k5": "البطاقة 1 من ",
-    "k6": "لا توجد بطاقات.",
-    "k7": "البطاقة ",
-    "k8": " من ",
-    "k9": "لا توجد بطاقات.",
-    "k10": "اختيار البطاقة",
-    "k11": "عرض البطاقة "
+    "pages.ariaLabel": "اختيار البطاقة",
+    "status.positionPrefix": "البطاقة ",
+    "status.ofSeparator": " من ",
+    "page.showPrefix": "عرض البطاقة ",
+    "status.initialPrefix": "البطاقة 1 من ",
+    "status.empty": "لا توجد بطاقات.",
+    "peek.status.positionPrefix": "البطاقة ",
+    "peek.status.ofSeparator": " من ",
+    "peek.status.empty": "لا توجد بطاقات.",
+    "peek.pages.ariaLabel": "اختيار البطاقة",
+    "peek.page.showPrefix": "عرض البطاقة "
   };
 
   // shared/lifecycle.js
@@ -15018,8 +15405,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip-peek.js
   registerLabels("info-strip", defaults);
   var MICRO_LABELS_FAMILY = "info-strip";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var AXIS_LOCK = 8;
   var COMMIT_RATIO = 0.2;
@@ -15118,7 +15522,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (st.prevBtn) st.prevBtn.disabled = st.index === 0 || st.count <= 1;
     if (st.nextBtn) st.nextBtn.disabled = st.index === st.count - 1 || st.count <= 1;
     if (st.position) st.position.textContent = st.index + 1 + " / " + st.count;
-    if (st.status) st.status.textContent = L("k7") + (st.index + 1) + L("k8") + st.count;
+    if (st.status) st.status.textContent = L("peek.status.positionPrefix", status) + (st.index + 1) + L("peek.status.ofSeparator", status) + st.count;
     if (st.pages) {
       Array.prototype.forEach.call(st.pages.querySelectorAll("[data-info-strip-page]"), function(b, i) {
         b.setAttribute("aria-current", i === st.index ? "true" : "false");
@@ -15312,7 +15716,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }) : [];
     var controls = strip.querySelector("[data-info-strip-controls]");
     var pages = strip.querySelector("[data-info-strip-pages]");
-    var status = strip.querySelector("[data-info-strip-status]");
+    var status2 = strip.querySelector("[data-info-strip-status]");
     var empty = strip.querySelector("[data-info-strip-empty]");
     var prevBtn = strip.querySelector("[data-info-strip-prev]");
     var nextBtn = strip.querySelector("[data-info-strip-next]");
@@ -15324,7 +15728,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (controls) controls.hidden = true;
       if (empty) empty.hidden = false;
       if (position) position.textContent = "";
-      if (status) status.textContent = L("k9");
+      if (status2) status2.textContent = L("peek.status.empty", status2);
       stateOf.set(strip, {
         viewport,
         track,
@@ -15332,7 +15736,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         prevBtn,
         nextBtn,
         position,
-        status,
+        status: status2,
         pages,
         index: -1,
         x: 0,
@@ -15352,7 +15756,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       prevBtn,
       nextBtn,
       position,
-      status,
+      status: status2,
       pages,
       index: 0,
       x: 0,
@@ -15363,14 +15767,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     stateOf.set(strip, st);
     if (pages) {
       pages.setAttribute("role", "group");
-      if (!pages.hasAttribute("aria-label")) pages.setAttribute("aria-label", L("k10"));
+      if (!pages.hasAttribute("aria-label")) pages.setAttribute("aria-label", L("peek.pages.ariaLabel", pages));
       pages.textContent = "";
       slides.forEach(function(_, i) {
         var page = document.createElement("button");
         page.type = "button";
         page.className = "m-info-strip__page";
         page.setAttribute("data-info-strip-page", "");
-        page.setAttribute("aria-label", L("k11") + (i + 1));
+        page.setAttribute("aria-label", L("peek.page.showPrefix", page) + (i + 1));
         page.setAttribute("aria-current", i === 0 ? "true" : "false");
         page.setAttribute("aria-pressed", i === 0 ? "true" : "false");
         listenDom(st, page, "click", function() {
@@ -15414,11 +15818,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
-      scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+      withLabels(scope, function() {
+        if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
+        scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+      });
       return existing;
     }
     var destroyed = false;
@@ -15434,7 +15840,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var stripEl = targetStrip();
         var st = stripEl ? stateOf.get(stripEl) : null;
         var index = typeof updateOptions.index === "number" ? updateOptions.index : st ? st.index : 0;
-        if (stripEl) goToIndex(stripEl, index, updateOptions);
+        withLabels(scope, function() {
+          if (stripEl) goToIndex(stripEl, index, updateOptions);
+        });
       },
       goTo: function(index, goToOptions) {
         var stripEl = targetStrip();
@@ -15460,8 +15868,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
-    scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+    withLabels(scope, function() {
+      if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
+      scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+    });
     instances.set(scope, instance);
     return instance;
   }
@@ -15572,6 +15982,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -15628,70 +16059,87 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/metric-comparison/labels.js
   var defaults = {
-    "k1": "القراءات الدقيقة لكل القيم",
-    "k2": "تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.",
-    "k3": "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.",
-    "k4": "تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.",
-    "k5": "' غير موجب أو أصغر من أكبر مقدار معلوم (",
-    "k6": ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
-    "k7": "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
-    "k8": "لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.",
-    "k9": "metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).",
-    "k10": "القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
-    "k11": "لا توجد قراءات متاحة للمقارنة بعد.",
-    "k12": "metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.",
-    "k13": "metric-circles: لا قيم معلومة — لا رسم.",
-    "k14": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
-    "k15": " العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
-    "k16": " النطاق يصل إلى ",
-    "k17": " التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.",
-    "k18": " — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale=",
-    "k19": "قيمة غير صالحة",
-    "k20": "غير متاح",
-    "k21": "تعذّر قراءة القيمة",
-    "k22": "لا توجد بيانات للمقارنة.",
-    "k23": "عرض البيانات كجدول",
-    "k24": "إخفاء جدول البيانات",
-    "k25": "الوحدة: ",
-    "k26": "الفترة: ",
-    "k27": "، ",
-    "k28": "الفئة",
-    "k29": "القيمة",
-    "k30": "الوحدة",
-    "k31": "الفترة",
-    "k32": "القيمة الرئيسية",
-    "k33": "— (غير متاح)",
-    "k34": "(قيمة غير صالحة)",
-    "k35": "(صفر)",
-    "k36": "(سالب)",
-    "k37": "الحالة",
-    "k38": "صفر",
-    "k39": "سالب — معروض بالقيمة والإشارة لا بالمساحة",
-    "k40": "metric-bars: مصدر فارغ — لا صفوف.",
-    "k41": "تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.",
-    "k42": "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.",
-    "k43": "تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.",
-    "k44": "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.",
-    "k45": "تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.",
-    "k46": " أصغر من أكبر مقدار معلوم (",
-    "k47": ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.",
-    "k48": "الأشرطة حتى ",
-    "k49": "؛ common-unit=",
-    "k50": "؛ common-period=",
-    "k51": "القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.",
-    "k52": "metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.",
-    "k53": "لا توجد قراءات متاحة لبناء مقياس بعد.",
-    "k54": "metric-bars: لا قيم معلومة — لا مقياس.",
-    "k55": " خط الوسط صفر؛ الموجب يمينه والسالب يساره.",
-    "k56": "(غير متاح)",
-    "k57": " (قيمة غير صالحة)"
+    "circles.discloseAriaLabel": "القراءات الدقيقة لكل القيم",
+    "circles.renderError": "تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.",
+    "circles.unknownLayoutDetail": "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.",
+    "circles.scaleError": "تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.",
+    "circles.scaleInvalidDetailPrefix": "' غير موجب أو أصغر من أكبر مقدار معلوم (",
+    "circles.scaleInvalidDetailSuffix": ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
+    "circles.radiusInvalidDetail": "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
+    "circles.deferredMessage": "لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.",
+    "circles.deferredDetail": "metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).",
+    "circles.zeroMessage": "القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
+    "circles.emptyMessage": "لا توجد قراءات متاحة للمقارنة بعد.",
+    "circles.zeroDetail": "metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.",
+    "circles.noValuesDetail": "metric-circles: لا قيم معلومة — لا رسم.",
+    "circles.scaledMessageBase": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
+    "circles.zeroMarkNote": " العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
+    "circles.scaleNotePrefix": " النطاق يصل إلى ",
+    "circles.overlapNote": " التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.",
+    "circles.fitNote": " — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale=",
+    "value.invalid": "قيمة غير صالحة",
+    "value.missing": "غير متاح",
+    "value.unreadable": "تعذّر قراءة القيمة",
+    "chart.empty": "لا توجد بيانات للمقارنة.",
+    "table.showButton": "عرض البيانات كجدول",
+    "table.hideButton": "إخفاء جدول البيانات",
+    "table.unitPrefix": "الوحدة: ",
+    "table.periodPrefix": "الفترة: ",
+    "table.separator": "، ",
+    "table.head.category": "الفئة",
+    "table.head.value": "القيمة",
+    "table.head.unit": "الوحدة",
+    "table.head.period": "الفترة",
+    "table.mainMetricFallback": "القيمة الرئيسية",
+    "table.missingValue": "— (غير متاح)",
+    "table.invalidValue": "(قيمة غير صالحة)",
+    "table.zeroValue": "(صفر)",
+    "table.negativeValue": "(سالب)",
+    "table.head.state": "الحالة",
+    "bars.stateZero": "صفر",
+    "bars.stateNegative": "سالب — معروض بالقيمة والإشارة لا بالمساحة",
+    "bars.emptyDetail": "metric-bars: مصدر فارغ — لا صفوف.",
+    "bars.unitMismatchError": "تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.",
+    "bars.unitMismatchDetail": "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "bars.scaleError": "تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.",
+    "bars.scaleInvalidDetail": "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "bars.unfairScaleError": "تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.",
+    "bars.underscaleDetailPrefix": " أصغر من أكبر مقدار معلوم (",
+    "bars.underscaleDetailSuffix": ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "bars.scaledMessagePrefix": "الأشرطة حتى ",
+    "bars.scaledDetailUnit": "؛ common-unit=",
+    "bars.scaledDetailPeriod": "؛ common-period=",
+    "bars.zeroMessage": "القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.",
+    "bars.zeroDetail": "metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.",
+    "bars.emptyMessage": "لا توجد قراءات متاحة لبناء مقياس بعد.",
+    "bars.noValuesDetail": "metric-bars: لا قيم معلومة — لا مقياس.",
+    "bars.zeroLineNote": " خط الوسط صفر؛ الموجب يمينه والسالب يساره.",
+    "main.missing": "(غير متاح)",
+    "main.invalidSuffix": " (قيمة غير صالحة)"
   };
 
   // components/metric-comparison/metric-comparison.js
   registerLabels("metric-comparison", defaults);
   var MICRO_LABELS_FAMILY = "metric-comparison";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var NUMBER_RE = /^[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
   var SERIES = { a: true, b: true, c: true, d: true, e: true };
@@ -15731,7 +16179,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!fallbackTarget) {
       fallbackTarget = make("ul", "m-metric-circles__fallback");
       fallbackTarget.setAttribute("data-metric-fallback", "");
-      fallbackTarget.setAttribute("aria-label", L("k1"));
+      fallbackTarget.setAttribute("aria-label", L("circles.discloseAriaLabel", fallbackTarget));
       target.insertAdjacentElement("afterend", fallbackTarget);
     }
     var items = Array.prototype.slice.call(source.querySelectorAll("[data-label]")).map(function(node) {
@@ -15797,52 +16245,52 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       scaleNote.setAttribute("data-valid", String(validLayout && validMax && validRadius && width > 0));
     }
     if (!validLayout) {
-      if (scaleNote) scaleNote.textContent = L("k2");
+      if (scaleNote) scaleNote.textContent = L("circles.renderError", scaleNote);
       writeDiagnostics(
         chart,
         "invalid-layout",
-        "metric-circles: data-layout='" + layout + L("k3")
+        "metric-circles: data-layout='" + layout + L("circles.unknownLayoutDetail")
       );
     } else if (!validMax) {
-      if (scaleNote) scaleNote.textContent = L("k4");
+      if (scaleNote) scaleNote.textContent = L("circles.scaleError", scaleNote);
       writeDiagnostics(
         chart,
         "invalid-scale",
-        "metric-circles: data-max='" + declaredRaw + L("k5") + measuredMax + L("k6")
+        "metric-circles: data-max='" + declaredRaw + L("circles.scaleInvalidDetailPrefix") + measuredMax + L("circles.scaleInvalidDetailSuffix")
       );
     } else if (!validRadius) {
-      if (scaleNote) scaleNote.textContent = L("k2");
+      if (scaleNote) scaleNote.textContent = L("circles.renderError", scaleNote);
       writeDiagnostics(
         chart,
         "invalid-radius",
-        "metric-circles: data-radius='" + radiusRaw + L("k7")
+        "metric-circles: data-radius='" + radiusRaw + L("circles.radiusInvalidDetail")
       );
     } else if (!width) {
-      if (scaleNote) scaleNote.textContent = L("k8");
+      if (scaleNote) scaleNote.textContent = L("circles.deferredMessage", scaleNote);
       writeDiagnostics(
         chart,
         "pending-width",
-        L("k9")
+        L("circles.deferredDetail")
       );
     } else if (!measuredMax) {
-      if (scaleNote) scaleNote.textContent = known.length ? L("k10") : L("k11");
+      if (scaleNote) scaleNote.textContent = known.length ? L("circles.zeroMessage") : L("circles.emptyMessage");
       writeDiagnostics(
         chart,
         known.length ? "zero" : "empty",
-        known.length ? L("k12") : L("k13")
+        known.length ? L("circles.zeroDetail") : L("circles.noValuesDetail")
       );
     } else {
       if (scaleNote) {
-        var scaledMessage = L("k14");
-        if (zeroCount) scaledMessage += L("k15");
-        if (declaredRaw !== null) scaledMessage += L("k16") + (chart.getAttribute("data-max-label") || declaredRaw) + ".";
-        if (layout === "overlap") scaledMessage += L("k17");
+        var scaledMessage = L("circles.scaledMessageBase");
+        if (zeroCount) scaledMessage += L("circles.zeroMarkNote");
+        if (declaredRaw !== null) scaledMessage += L("circles.scaleNotePrefix", chart) + (chart.getAttribute("data-max-label") || declaredRaw) + ".";
+        if (layout === "overlap") scaledMessage += L("circles.overlapNote");
         scaleNote.textContent = scaledMessage;
       }
       writeDiagnostics(
         chart,
         "ok",
-        "metric-circles: radius=" + (radiusRaw === null ? "auto" : radiusRaw) + L("k18") + (declaredRaw === null ? "auto-largest-known" : "declared")
+        "metric-circles: radius=" + (radiusRaw === null ? "auto" : radiusRaw) + L("circles.fitNote") + (declaredRaw === null ? "auto-largest-known" : "declared")
       );
     }
     var itemGeometry = items.map(function(item, index) {
@@ -15862,8 +16310,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     items.forEach(function(item, index) {
       var state = item.state === "unavailable" ? "missing" : item.state === "invalid" ? "invalid" : readNumber(item.raw).state;
-      var display = state === "missing" ? "—" + (item.unit ? " " + item.unit : "") : state === "invalid" ? item.display || (item.raw || L("k19")) + (item.unit ? " " + item.unit : "") : (item.display || item.raw) + (item.unit && !item.display ? " " + item.unit : "");
-      var stateText = state === "missing" ? L("k20") : state === "invalid" ? L("k21") : "";
+      var display = state === "missing" ? "—" + (item.unit ? " " + item.unit : "") : state === "invalid" ? item.display || (item.raw || L("value.invalid", unit)) + (item.unit ? " " + item.unit : "") : (item.display || item.raw) + (item.unit && !item.display ? " " + item.unit : "");
+      var stateText = state === "missing" ? L("value.missing") : state === "invalid" ? L("value.unreadable") : "";
       var zeroMarker = state === "zero" && validLayout && validMax && validRadius && width > 0;
       var canRender = zeroMarker || geometryAllowed && (state === "positive" || state === "negative");
       if (canRender) {
@@ -15891,7 +16339,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     if (empty) {
       empty.hidden = items.length > 0;
-      if (!items.length) empty.textContent = chart.getAttribute("data-empty-message") || L("k22");
+      if (!items.length) empty.textContent = chart.getAttribute("data-empty-message") || L("chart.empty", empty);
     }
     syncCirclesTable(chart, items);
   }
@@ -15911,7 +16359,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var btn, table;
     if (!wrap) {
       wrap = make("div", "m-main-metric__dataset-wrap");
-      btn = make("button", "m-btn m-btn--secondary m-main-metric__disclose", L("k23"));
+      btn = make("button", "m-btn m-btn--secondary m-main-metric__disclose", L("table.showButton", btn));
       btn.type = "button";
       btn.setAttribute("aria-expanded", "false");
       table = make("table", "m-main-metric__dataset");
@@ -15935,7 +16383,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var open = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", open ? "false" : "true");
         table.hidden = open;
-        btn.textContent = open ? L("k23") : L("k24");
+        btn.textContent = open ? L("table.showButton", btn) : L("table.hideButton", btn);
       };
       btn.__microDatasetDisclosure = { table, handler };
       btn.addEventListener("click", handler);
@@ -15977,11 +16425,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function tableCaptionBase(chart) {
     var title = chart.querySelector(".m-main-metric__title, .m-metric-circles__title");
     var parts = [String(title && title.textContent || chart.getAttribute("data-title") || chart.getAttribute("aria-label") || "").trim()];
-    var unit = chart.getAttribute("data-common-unit") || chart.getAttribute("data-unit");
+    var unit2 = chart.getAttribute("data-common-unit") || chart.getAttribute("data-unit");
     var period = chart.getAttribute("data-common-period") || chart.getAttribute("data-period");
-    if (unit) parts.push(L("k25") + unit);
-    if (period) parts.push(L("k26") + period);
-    return parts.filter(Boolean).join(L("k27"));
+    if (unit2) parts.push(L("table.unitPrefix", unit2) + unit2);
+    if (period) parts.push(L("table.periodPrefix") + period);
+    return parts.filter(Boolean).join(L("table.separator"));
   }
   function syncBarsTable(chart, entries, parsed) {
     var parts = ensureDatasetWrap(chart);
@@ -15990,7 +16438,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     table.textContent = "";
     var caption = make("caption", null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, [L("k28"), L("k29"), L("k30"), L("k31")]);
+    buildTableHead(table, [L("table.head.category", table), L("table.head.value", table), L("table.head.unit", table), L("table.head.period", table)]);
     var tbody = make("tbody");
     var hero = chart.querySelector(".m-main-metric__hero");
     var mainNumber = hero && hero.querySelector(".m-main-metric__number");
@@ -15998,7 +16446,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var mainLabel = hero.querySelector(".m-main-metric__label");
       var mainUnit = hero.querySelector(".m-main-metric__unit");
       appendRow(tbody, [
-        mainLabel && mainLabel.textContent || L("k32"),
+        mainLabel && mainLabel.textContent || L("table.mainMetricFallback", tbody),
         datasetReading(mainNumber.textContent),
         mainUnit && mainUnit.textContent || chart.getAttribute("data-common-unit") || "—",
         chart.getAttribute("data-common-period") || chart.getAttribute("data-period") || "—"
@@ -16007,10 +16455,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     entries.forEach(function(entry, index) {
       var value = parsed[index];
       var valueText;
-      if (value.state === "missing") valueText = L("k33");
-      else if (value.state === "invalid") valueText = datasetReading(entry.raw, L("k34"), false);
-      else if (value.state === "zero") valueText = datasetReading(entry.display || entry.raw || "0", L("k35"));
-      else valueText = datasetReading(entry.display || entry.raw, value.state === "negative" ? L("k36") : "");
+      if (value.state === "missing") valueText = L("table.missingValue");
+      else if (value.state === "invalid") valueText = datasetReading(entry.raw, L("table.invalidValue"), false);
+      else if (value.state === "zero") valueText = datasetReading(entry.display || entry.raw || "0", L("table.zeroValue"));
+      else valueText = datasetReading(entry.display || entry.raw, value.state === "negative" ? L("table.negativeValue") : "");
       appendRow(tbody, [entry.label, valueText, entry.unit || "—", entry.period || "—"]);
     });
     table.appendChild(tbody);
@@ -16022,20 +16470,20 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     table.textContent = "";
     var caption = make("caption", null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, [L("k28"), L("k29"), L("k37"), L("k30"), L("k31")]);
+    buildTableHead(table, [L("table.head.category", table), L("table.head.value", table), L("table.head.state", table), L("table.head.unit", table), L("table.head.period", table)]);
     var tbody = make("tbody");
     items.forEach(function(item) {
       var state = item.state === "unavailable" ? "missing" : item.state === "invalid" ? "invalid" : readNumber(item.raw).state;
       var valueText, stateText;
       if (state === "missing") {
         valueText = "—";
-        stateText = L("k20");
+        stateText = L("value.missing");
       } else if (state === "invalid") {
-        valueText = item.raw || L("k19");
-        stateText = L("k19");
+        valueText = item.raw || L("value.invalid");
+        stateText = L("value.invalid");
       } else {
         valueText = item.display || item.raw;
-        stateText = state === "zero" ? L("k38") : state === "negative" ? L("k39") : "";
+        stateText = state === "zero" ? L("bars.stateZero") : state === "negative" ? L("bars.stateNegative") : "";
       }
       appendRow(tbody, [
         item.label,
@@ -16098,54 +16546,54 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var max = null;
     var userText = "";
     if (!entries.length) {
-      userText = L("k22");
-      writeDiagnostics(chart, "empty", L("k40"));
+      userText = L("chart.empty");
+      writeDiagnostics(chart, "empty", L("bars.emptyDetail", chart));
     } else if (!consistent) {
-      userText = L("k41");
+      userText = L("bars.unitMismatchError");
       writeDiagnostics(
         chart,
         "inconsistent",
-        L("k42")
+        L("bars.unitMismatchDetail")
       );
     } else if (declaredRaw !== null && (!declared || declared.state !== "positive")) {
-      userText = L("k43");
+      userText = L("bars.scaleError");
       writeDiagnostics(
         chart,
         "invalid-scale",
-        "metric-bars: data-max='" + declaredRaw + L("k44")
+        "metric-bars: data-max='" + declaredRaw + L("bars.scaleInvalidDetail")
       );
     } else if (declared && declared.value < magnitudeMax) {
-      userText = L("k45");
+      userText = L("bars.unfairScaleError");
       writeDiagnostics(
         chart,
         "scale-below-known",
-        "metric-bars: data-max=" + declared.value + L("k46") + magnitudeMax + L("k47")
+        "metric-bars: data-max=" + declared.value + L("bars.underscaleDetailPrefix") + magnitudeMax + L("bars.underscaleDetailSuffix")
       );
     } else if (declared) {
       max = declared.value;
-      userText = L("k48") + (chart.getAttribute("data-max-label") || declaredRaw) + " " + commonUnit + " · " + commonPeriod + ".";
+      userText = L("bars.scaledMessagePrefix", chart) + (chart.getAttribute("data-max-label") || declaredRaw) + " " + commonUnit + " · " + commonPeriod + ".";
       writeDiagnostics(
         chart,
         "ok",
-        "metric-bars: scale=declared data-max=" + declared.value + L("k49") + commonUnit + L("k50") + commonPeriod + "."
+        "metric-bars: scale=declared data-max=" + declared.value + L("bars.scaledDetailUnit") + commonUnit + L("bars.scaledDetailPeriod") + commonPeriod + "."
       );
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = L("k48") + magnitudeMax + " " + commonUnit + " · " + commonPeriod + ".";
+      userText = L("bars.scaledMessagePrefix") + magnitudeMax + " " + commonUnit + " · " + commonPeriod + ".";
       writeDiagnostics(
         chart,
         "ok",
-        "metric-bars: scale=auto-largest-known=" + magnitudeMax + L("k49") + commonUnit + L("k50") + commonPeriod + "."
+        "metric-bars: scale=auto-largest-known=" + magnitudeMax + L("bars.scaledDetailUnit") + commonUnit + L("bars.scaledDetailPeriod") + commonPeriod + "."
       );
     } else if (hasKnown) {
       max = 0;
-      userText = L("k51");
-      writeDiagnostics(chart, "zero", L("k52"));
+      userText = L("bars.zeroMessage");
+      writeDiagnostics(chart, "zero", L("bars.zeroDetail", chart));
     } else {
-      userText = L("k53");
-      writeDiagnostics(chart, "empty", L("k54"));
+      userText = L("bars.emptyMessage");
+      writeDiagnostics(chart, "empty", L("bars.noValuesDetail", chart));
     }
-    if (signed && max !== null) userText += L("k55");
+    if (signed && max !== null) userText += L("bars.zeroLineNote");
     target.textContent = "";
     entries.forEach(function(entry, index) {
       var value = parsed[index];
@@ -16153,18 +16601,18 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       li.setAttribute("data-series", entry.series);
       var head = make("div", "m-main-metric__row-head");
       head.appendChild(make("span", "m-main-metric__row-label", entry.label));
-      var display = value.state === "missing" ? "—" : value.state === "invalid" ? L("k19") : (entry.display || entry.raw) + (entry.unit && !entry.display ? " " + entry.unit : "");
+      var display = value.state === "missing" ? "—" : value.state === "invalid" ? L("value.invalid") : (entry.display || entry.raw) + (entry.unit && !entry.display ? " " + entry.unit : "");
       var val = make("span", "m-main-metric__row-value");
       if (chart.classList.contains("m-main-metric--readable")) {
-        var number = make("bdi", "", value.state === "missing" ? L("k56") : value.state === "invalid" ? entry.raw : entry.display || entry.raw);
+        var number = make("bdi", "", value.state === "missing" ? L("main.missing") : value.state === "invalid" ? entry.raw : entry.display || entry.raw);
         number.dir = value.value === null ? "auto" : "ltr";
         val.appendChild(number);
-        if (value.state === "invalid") val.appendChild(make("span", "m-main-metric__reading-state", L("k57")));
+        if (value.state === "invalid") val.appendChild(make("span", "m-main-metric__reading-state", L("main.invalidSuffix", val)));
         if (entry.unit) {
           val.appendChild(document.createTextNode(" "));
-          var unit = make("span", "m-main-metric__reading-unit", entry.unit);
-          unit.setAttribute("data-reading-unit", entry.unit);
-          val.appendChild(unit);
+          var unit2 = make("span", "m-main-metric__reading-unit", entry.unit);
+          unit2.setAttribute("data-reading-unit", entry.unit);
+          val.appendChild(unit2);
         }
       } else {
         val.textContent = display;
@@ -16186,9 +16634,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       } else {
         track.hidden = true;
         if (value.state === "missing") {
-          li.appendChild(make("span", "m-main-metric__state", L("k20")));
+          li.appendChild(make("span", "m-main-metric__state", L("value.missing", li)));
         } else if (value.state === "invalid") {
-          li.appendChild(make("span", "m-main-metric__state", L("k21")));
+          li.appendChild(make("span", "m-main-metric__state", L("value.unreadable", li)));
         }
       }
       li.appendChild(track);
@@ -16279,12 +16727,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      installFontsHook();
-      if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
-      scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+      withLabels(scope, function() {
+        installFontsHook();
+        if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
+        scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+      });
       return existing;
     }
     installFontsHook();
@@ -16293,7 +16743,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = render: إعادة التصيير من DOM المصدر تحت الجذر. */
       update: function() {
-        render(scope);
+        withLabels(scope, function() {
+          render(scope);
+        });
       },
       /** يفك مستمعات الكشف والرصد — لا يمس قيم المصدر. */
       destroy: function() {
@@ -16303,8 +16755,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
-    scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+    withLabels(scope, function() {
+      installFontsHook();
+      if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
+      scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+    });
     instances.set(scope, instance);
     return instance;
   }
@@ -16409,6 +16864,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -16439,7 +16915,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/account-settings/labels.js
   var defaults = {
-    "k1": "تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد."
+    "demo.changeNotice": "تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد."
   };
 
   // shared/lifecycle.js
@@ -16465,8 +16941,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/account-settings/account-settings.js
   registerLabels("account-settings", defaults);
   var MICRO_LABELS_FAMILY = "account-settings";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   function initPanel(panel) {
     if (panel.hasAttribute("data-account-settings-ready") && panel.__microAccountLifetime && !panel.__microAccountLifetime.signal.aborted) return;
@@ -16533,18 +17026,20 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         detail: { setting: name, checked: input.checked }
       }));
       var status = panel.querySelector("[data-account-demo-status]");
-      if (status) status.textContent = input.getAttribute("data-demo-only") !== null ? L("k1") : "";
+      if (status) status.textContent = input.getAttribute("data-demo-only") !== null ? L("demo.changeNotice", panel) : "";
     });
     showView(initialView, false);
   }
   var registry = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
-      scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+      withLabels(scope, function() {
+        if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
+        scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+      });
       return existing;
     }
     var destroyed = false;
@@ -16552,8 +17047,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص اللوحات تحت الجذر (يربط الجديد فقط). */
       update: function() {
-        if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
-        scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+        withLabels(scope, function() {
+          if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
+          scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+        });
       },
       /** يفك مستمعات كل لوحة ويمكّن الربط من جديد — لا يغير حالة العرض. */
       destroy: function() {
@@ -16563,8 +17060,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
-    scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+    withLabels(scope, function() {
+      if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
+      scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+    });
     registry.set(scope, instance);
     return instance;
   }
@@ -16641,6 +17140,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -16671,26 +17191,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/access-gateway/labels.js
   var defaults = {
-    "k1": "إظهار كلمة المرور",
-    "k2": "انتهى طلب المساعدة دون تأكيد إرساله.",
-    "k3": "تعذّر إرسال طلب المساعدة. أعد المحاولة.",
-    "k4": "جارٍ الاتصال",
-    "k5": "جارٍ الاتصال بمزود الدخول…",
-    "k6": "تم الدخول بنجاح.",
-    "k7": "لم يتم الدخول.",
-    "k8": "انتهى الطلب دون نتيجة مؤكدة من التطبيق.",
-    "k9": "تعذّر تنفيذ الدخول. أعد المحاولة.",
-    "k10": "نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.",
-    "k11": "أدخل بريدًا إلكترونيًا صالحًا.",
-    "k12": "أدخل كلمة المرور.",
-    "k13": "أدخل كلمة مرور لا تقل عن ",
-    "k14": " أحرف.",
-    "k15": "تحقق من كلمة المرور المطلوبة.",
-    "k16": "تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.",
-    "k17": "هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.",
-    "k18": "جارٍ تسجيل الدخول",
-    "k19": "جارٍ التحقق من بيانات الدخول…",
-    "k20": "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."
+    "passwordReveal.label": "إظهار كلمة المرور",
+    "recovery.uncertain": "انتهى طلب المساعدة دون تأكيد إرساله.",
+    "recovery.error": "تعذّر إرسال طلب المساعدة. أعد المحاولة.",
+    "provider.connectingLabel": "جارٍ الاتصال",
+    "provider.connectingMessage": "جارٍ الاتصال بمزود الدخول…",
+    "provider.success": "تم الدخول بنجاح.",
+    "provider.failure": "لم يتم الدخول.",
+    "provider.uncertain": "انتهى الطلب دون نتيجة مؤكدة من التطبيق.",
+    "provider.error": "تعذّر تنفيذ الدخول. أعد المحاولة.",
+    "form.incomplete": "نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.",
+    "validation.email": "أدخل بريدًا إلكترونيًا صالحًا.",
+    "validation.password": "أدخل كلمة المرور.",
+    "validation.passwordMinLengthPrefix": "أدخل كلمة مرور لا تقل عن ",
+    "validation.passwordMinLengthSuffix": " أحرف.",
+    "validation.passwordRequired": "تحقق من كلمة المرور المطلوبة.",
+    "validation.emailAndPasswordRequired": "تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.",
+    "demo.notice": "هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.",
+    "submit.loadingLabel": "جارٍ تسجيل الدخول",
+    "submit.pendingMessage": "جارٍ التحقق من بيانات الدخول…",
+    "submit.error": "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."
   };
 
   // shared/lifecycle.js
@@ -16716,8 +17236,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/access-gateway/access-gateway.js
   registerLabels("access-gateway", defaults);
   var MICRO_LABELS_FAMILY = "access-gateway";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   function userError(error, fallback) {
     return error && typeof error.userMessage === "string" && error.userMessage.trim() ? error.userMessage : fallback;
@@ -16817,7 +17354,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
           var showing = password.type === "password";
           password.type = showing ? "text" : "password";
           reveal.setAttribute("aria-pressed", showing ? "true" : "false");
-          reveal.setAttribute("aria-label", L("k1"));
+          reveal.setAttribute("aria-label", L("passwordReveal.label", reveal));
           if (selection && typeof password.setSelectionRange === "function") {
             var start = Math.min(selection.start, password.value.length);
             var end = Math.min(selection.end, password.value.length);
@@ -16856,9 +17393,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var tone = "info";
         if (result && (result.tone === "info" || result.tone === "error")) tone = result.tone;
         else if (hasMessage && result && result.authenticated === false) tone = "error";
-        setMessage(form, hasMessage ? result.message : L("k2"), tone);
+        setMessage(form, hasMessage ? result.message : L("recovery.uncertain", form), tone);
       }).catch(function(error) {
-        if (alive()) setMessage(form, userError(error, L("k3")), "error");
+        if (alive()) setMessage(form, userError(error, L("recovery.error", form)), "error");
       });
     });
     providers.forEach(function(button) {
@@ -16869,16 +17406,16 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         if (typeof handler !== "function" || form.dataset.microAccessBusy === "true" || button.disabled || button.getAttribute("aria-disabled") === "true") return;
         form.dataset.microAccessBusy = "true";
         form.setAttribute("aria-busy", "true");
-        if (globalApi("Buttons")) globalApi("Buttons").setLoading(button, true, { loadingLabel: L("k4") });
-        setMessage(form, L("k5"), "info");
+        if (globalApi("Buttons")) globalApi("Buttons").setLoading(button, true, { loadingLabel: L("provider.connectingLabel", button) });
+        setMessage(form, L("provider.connectingMessage", form), "info");
         Promise.resolve().then(function() {
           if (alive()) return handler();
         }).then(function(result) {
           if (!alive()) return;
-          var outcome = resultOutcome(result, L("k6"), L("k7"), L("k8"));
+          var outcome = resultOutcome(result, L("provider.success"), L("provider.failure"), L("provider.uncertain"));
           setMessage(form, outcome.text, outcome.tone);
         }).catch(function(error) {
-          if (alive()) setMessage(form, userError(error, L("k9")), "error");
+          if (alive()) setMessage(form, userError(error, L("provider.error", form)), "error");
         }).then(function() {
           if (!alive()) return;
           form.dataset.microAccessBusy = "false";
@@ -16902,7 +17439,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var email = credential(form, "email");
       var passwordInput = credential(form, "password");
       if (!email || !passwordInput) {
-        setMessage(form, L("k10"), "error");
+        setMessage(form, L("form.incomplete", form), "error");
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -16912,22 +17449,22 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (invalid.length) {
         invalid.forEach(function(input) {
           var isEmail = input.getAttribute("data-access-credential") === "email" || input.name === "email" || input.type === "email";
-          setFieldError(input, isEmail ? L("k11") : input.validity.valueMissing ? L("k12") : input.validity.tooShort && input.minLength > 0 ? L("k13") + input.minLength + L("k14") : L("k15"));
+          setFieldError(input, isEmail ? L("validation.email", input) : input.validity.valueMissing ? L("validation.password", input) : input.validity.tooShort && input.minLength > 0 ? L("validation.passwordMinLengthPrefix", input) + input.minLength + L("validation.passwordMinLengthSuffix", input) : L("validation.passwordRequired", input));
         });
-        setMessage(form, L("k16"), "error");
+        setMessage(form, L("validation.emailAndPasswordRequired", form), "error");
         invalid[0].focus();
         return;
       }
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== "function") {
-        setMessage(form, L("k17"), "info");
+        setMessage(form, L("demo.notice", form), "info");
         return;
       }
       form.dataset.microAccessBusy = "true";
       form.setAttribute("aria-busy", "true");
       var submit = form.querySelector('[type="submit"]');
-      if (submit && globalApi("Buttons")) globalApi("Buttons").setLoading(submit, true, { loadingLabel: L("k18") });
-      setMessage(form, L("k19"), "info");
+      if (submit && globalApi("Buttons")) globalApi("Buttons").setLoading(submit, true, { loadingLabel: L("submit.loadingLabel") });
+      setMessage(form, L("submit.pendingMessage", form), "info");
       Promise.resolve().then(function() {
         if (!alive()) return;
         return current.onSubmit({
@@ -16936,11 +17473,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         });
       }).then(function(result) {
         if (!alive()) return;
-        var outcome = resultOutcome(result, L("k6"), L("k7"), L("k8"));
+        var outcome = resultOutcome(result, L("provider.success"), L("provider.failure"), L("provider.uncertain"));
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent("micro-access:submitted", { bubbles: true, detail: { result } }));
       }).catch(function(error) {
-        if (alive()) setMessage(form, userError(error, L("k20")), "error");
+        if (alive()) setMessage(form, userError(error, L("submit.error", form)), "error");
       }).then(function() {
         if (!alive()) return;
         form.dataset.microAccessBusy = "false";
@@ -16968,9 +17505,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }
   }
   function applyHandlers(scope, handlers) {
-    if (handlers && handlers.labels && typeof handlers.labels === "object") {
-      setLabels2(handlers.labels);
-    }
+    applyInstanceLabels(scope, handlers);
     var gateways = [];
     if (scope.matches && scope.matches("[data-access-gateway]")) gateways.push(scope);
     gateways = gateways.concat(Array.prototype.slice.call(scope.querySelectorAll("[data-access-gateway]")));
@@ -16982,6 +17517,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var registry = instanceRegistry();
   function init(root, handlers) {
     var scope = root || document;
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
     var existing = registry.get(scope);
     if (existing) {
       existing.update(handlers);
@@ -16992,7 +17531,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** تحديث callbacks وتوافر الإجراءات دون ربط مضاعف. */
       update: function(nextHandlers) {
-        applyHandlers(scope, nextHandlers);
+        withLabels(scope, function() {
+          applyHandlers(scope, nextHandlers);
+        });
       },
       /** يفك المستمعات والمراقبة ويرجع الحالة الظاهرة — لا يمس قيم المستخدم. */
       destroy: function() {
@@ -17091,6 +17632,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el2, family) {
+    for (var node = el2; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -17121,76 +17683,81 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/order-schedule/labels.js
   var defaults = {
-    "ordersCountPlural": { "zero": "لا طلبات", "one": "طلب واحد", "two": "طلبان", "few": "{n} طلبات", "many": "{n} طلبًا", "other": "{n} طلب", "hundredOne": "{n} طلب واحد", "hundredTwo": "{n} طلبان" },
-    "k1": "الأحد",
-    "k2": "الاثنين",
-    "k3": "الثلاثاء",
-    "k4": "الأربعاء",
-    "k5": "الخميس",
-    "k6": "الجمعة",
-    "k7": "السبت",
-    "k8": "أحد",
-    "k9": "إثن",
-    "k10": "ثلا",
-    "k11": "أرب",
-    "k12": "خمي",
-    "k13": "جمع",
-    "k14": "سبت",
-    "k15": "MicroOrderSchedule.init يتطلب عنصر جذر صالحًا (DOM Element)",
-    "k16": "طريقة العرض",
-    "k17": "يوم",
-    "k18": "أسبوع",
-    "k19": "شهر",
-    "k20": "عرض التقويم",
-    "k21": "عرض القائمة",
-    "k22": "اليوم",
-    "k23": "الشهر السابق",
-    "k24": "الأسبوع السابق",
-    "k25": "اليوم السابق",
-    "k26": "الشهر التالي",
-    "k27": "الأسبوع التالي",
-    "k28": "اليوم التالي",
-    "k29": "اختيار الشهر والسنة",
-    "k30": "السنة السابقة",
-    "k31": "السنة التالية",
-    "k32": "رجوع للتقويم",
-    "k33": "أشهر السنة",
-    "k34": "، ",
-    "k35": "طلبات ",
-    "k36": "طلبات الأسبوع ",
-    "k37": "إضافة طلب",
-    "k38": "إضافة طلب ليوم ",
-    "k39": "التاريخ",
-    "k40": "غير مجدول",
-    "k41": "الوقت",
-    "k42": "المورد",
-    "k43": "الحالة",
-    "k44": "الملاحظة",
-    "k45": "تعديل",
-    "k46": "حذف",
-    "k47": "طلبات اليوم",
-    "k48": "لا يوم محدد في ",
-    "k49": " في هذا الشهر",
-    "k50": "لا توجد طلبات",
-    "k51": "لا توجد طلبات بعد.",
-    "k52": "الطلبات القادمة",
-    "k53": "الطلبات السابقة",
-    "k54": "الطلبات غير المجدولة",
-    "k55": "جارٍ تحميل الطلبات…",
-    "k56": "تعذّر تحميل الطلبات.",
-    "k57": "إعادة المحاولة"
+    "schedule.orders.count": { "zero": "لا طلبات", "one": "طلب واحد", "two": "طلبان", "few": "{n} طلبات", "many": "{n} طلبًا", "other": "{n} طلب", "hundredOne": "{n} طلب واحد", "hundredTwo": "{n} طلبان" },
+    "schedule.weekdays.full": ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    "schedule.weekdays.short": ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"],
+    "schedule.errors.invalidRoot": "MicroOrderSchedule.init يتطلب عنصر جذر صالحًا (DOM Element)",
+    "schedule.view.ariaLabel": "طريقة العرض",
+    "schedule.view.day": "يوم",
+    "schedule.view.week": "أسبوع",
+    "schedule.view.month": "شهر",
+    "schedule.view.calendarToggle": "عرض التقويم",
+    "schedule.view.listToggle": "عرض القائمة",
+    "schedule.nav.today": "اليوم",
+    "schedule.nav.prevMonth": "الشهر السابق",
+    "schedule.nav.prevWeek": "الأسبوع السابق",
+    "schedule.nav.prevDay": "اليوم السابق",
+    "schedule.nav.nextMonth": "الشهر التالي",
+    "schedule.nav.nextWeek": "الأسبوع التالي",
+    "schedule.nav.nextDay": "اليوم التالي",
+    "schedule.picker.ariaLabel": "اختيار الشهر والسنة",
+    "schedule.picker.prevYear": "السنة السابقة",
+    "schedule.picker.nextYear": "السنة التالية",
+    "schedule.picker.back": "رجوع للتقويم",
+    "schedule.picker.monthsLabel": "أشهر السنة",
+    "schedule.dayCell.ordersSuffix": "، ",
+    "schedule.monthTitlePrefix": "طلبات ",
+    "schedule.weekTitlePrefix": "طلبات الأسبوع ",
+    "schedule.addOrder.label": "إضافة طلب",
+    "schedule.addOrder.dayAriaPrefix": "إضافة طلب ليوم ",
+    "schedule.orderRow.date": "التاريخ",
+    "schedule.orderRow.unscheduled": "غير مجدول",
+    "schedule.orderRow.time": "الوقت",
+    "schedule.orderRow.customer": "المورد",
+    "schedule.orderRow.status": "الحالة",
+    "schedule.orderRow.note": "الملاحظة",
+    "schedule.orderRow.edit": "تعديل",
+    "schedule.orderRow.delete": "حذف",
+    "schedule.dayList.title": "طلبات اليوم",
+    "schedule.dayList.noDayPrefix": "لا يوم محدد في ",
+    "schedule.dayList.noDaySuffix": " في هذا الشهر",
+    "schedule.dayList.empty": "لا توجد طلبات",
+    "schedule.list.empty": "لا توجد طلبات بعد.",
+    "schedule.list.upcoming": "الطلبات القادمة",
+    "schedule.list.past": "الطلبات السابقة",
+    "schedule.list.unscheduled": "الطلبات غير المجدولة",
+    "schedule.loading": "جارٍ تحميل الطلبات…",
+    "schedule.loadError": "تعذّر تحميل الطلبات.",
+    "schedule.retry": "إعادة المحاولة"
   };
 
   // components/order-schedule/order-schedule.js
   registerLabels("order-schedule", defaults);
   var MICRO_LABELS_FAMILY = "order-schedule";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el2) {
+    var own = el2 && instanceLabelFor(el2, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
-  var WEEKDAYS_FULL = [L("k1"), L("k2"), L("k3"), L("k4"), L("k5"), L("k6"), L("k7")];
-  var WEEKDAYS_SHORT = [L("k8"), L("k9"), L("k10"), L("k11"), L("k12"), L("k13"), L("k14")];
+  var WEEKDAYS_FULL = L("schedule.weekdays.full");
+  var WEEKDAYS_SHORT = L("schedule.weekdays.short");
   var SVG_NS = "http://www.w3.org/2000/svg";
   var instances = /* @__PURE__ */ new WeakMap();
   var instanceSeq = 0;
@@ -17271,7 +17838,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return countPluralRules.select(n);
   }
   function countPhraseAr(n) {
-    var forms = L("ordersCountPlural") || {};
+    var forms = L("schedule.orders.count") || {};
     var category = countPluralCategory(n);
     var template = forms[category] != null ? forms[category] : forms.other;
     if (template == null) return String(n);
@@ -17367,8 +17934,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function init(root, options) {
     if (!root || root.nodeType !== 1) {
-      throw new Error(L("k15"));
+      throw new Error(L("schedule.errors.invalidRoot"));
     }
+    applyInstanceLabels(root, options);
     var existing = instances.get(root);
     if (existing) return existing;
     var inst = createInstance(root, options);
@@ -17578,10 +18146,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     function buildViewSeg() {
       var bar = el("div", "m-ocal__viewseg");
       bar.setAttribute("role", "tablist");
-      bar.setAttribute("aria-label", L("k16"));
-      bar.appendChild(viewsegBtn("day", L("k17"), viewPressed("day")));
-      bar.appendChild(viewsegBtn("week", L("k18"), viewPressed("week")));
-      bar.appendChild(viewsegBtn("month", L("k19"), viewPressed("month")));
+      bar.setAttribute("aria-label", L("schedule.view.ariaLabel", bar));
+      bar.appendChild(viewsegBtn("day", L("schedule.view.day", bar), viewPressed("day")));
+      bar.appendChild(viewsegBtn("week", L("schedule.view.week", bar), viewPressed("week")));
+      bar.appendChild(viewsegBtn("month", L("schedule.view.month", bar), viewPressed("month")));
       return bar;
     }
     function buildModeToggle() {
@@ -17594,7 +18162,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       btn.appendChild(el(
         "span",
         "m-ocal__mode-toggle-text",
-        listActive ? L("k20") : L("k21")
+        listActive ? L("schedule.view.calendarToggle") : L("schedule.view.listToggle")
       ));
       return btn;
     }
@@ -17644,7 +18212,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var today = el("button", "m-ocal__todaybtn");
       today.type = "button";
       today.setAttribute("data-ocal-action", "today");
-      today.textContent = L("k22");
+      today.textContent = L("schedule.nav.today", today);
       return today;
     }
     function todayVisible() {
@@ -17660,8 +18228,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     function buildNavActions(prevAction, nextAction) {
       var group = el("div", "m-ocal__cal-actions");
       if (todayVisible()) group.appendChild(todayNavBtn());
-      group.appendChild(navBtn(prevAction, prevAction === "prev-month" ? L("k23") : prevAction === "prev-week" ? L("k24") : L("k25"), prevIcon()));
-      group.appendChild(navBtn(nextAction, nextAction === "next-month" ? L("k26") : nextAction === "next-week" ? L("k27") : L("k28"), nextIcon()));
+      group.appendChild(navBtn(prevAction, prevAction === "prev-month" ? L("schedule.nav.prevMonth", group) : prevAction === "prev-week" ? L("schedule.nav.prevWeek") : L("schedule.nav.prevDay"), prevIcon()));
+      group.appendChild(navBtn(nextAction, nextAction === "next-month" ? L("schedule.nav.nextMonth", group) : nextAction === "next-week" ? L("schedule.nav.nextWeek") : L("schedule.nav.nextDay"), nextIcon()));
       return group;
     }
     function prevIcon() {
@@ -17676,7 +18244,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var pickerButton = el("button", "m-ocal__month-trigger");
       pickerButton.type = "button";
       pickerButton.setAttribute("data-ocal-action", "month-picker");
-      pickerButton.setAttribute("aria-label", L("k29"));
+      pickerButton.setAttribute("aria-label", L("schedule.picker.ariaLabel", pickerButton));
       pickerButton.setAttribute("aria-haspopup", "dialog");
       pickerButton.setAttribute("aria-expanded", state.pickerOpen ? "true" : "false");
       var range = el("span", "m-ocal__month-range");
@@ -17695,31 +18263,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       picker.setAttribute("data-ocal-picker", "");
       picker.setAttribute("data-ocal-year", yearText(state.pickerYear));
       picker.setAttribute("role", "dialog");
-      picker.setAttribute("aria-label", L("k29"));
+      picker.setAttribute("aria-label", L("schedule.picker.ariaLabel", picker));
       var heading = el("div", "m-ocal__picker-head");
-      var prevYear = el("button", "m-ocal__picker-yearbtn", L("k30"));
+      var prevYear = el("button", "m-ocal__picker-yearbtn", L("schedule.picker.prevYear", prevYear));
       prevYear.type = "button";
       prevYear.setAttribute("data-ocal-action", "picker-prev-year");
-      prevYear.setAttribute("aria-label", L("k30"));
+      prevYear.setAttribute("aria-label", L("schedule.picker.prevYear", prevYear));
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
       var year = el(hTag(), "m-ocal__picker-year", yearText(state.pickerYear));
       year.setAttribute("aria-live", "polite");
       heading.appendChild(year);
-      var nextYear = el("button", "m-ocal__picker-yearbtn", L("k31"));
+      var nextYear = el("button", "m-ocal__picker-yearbtn", L("schedule.picker.nextYear", nextYear));
       nextYear.type = "button";
       nextYear.setAttribute("data-ocal-action", "picker-next-year");
-      nextYear.setAttribute("aria-label", L("k31"));
+      nextYear.setAttribute("aria-label", L("schedule.picker.nextYear", nextYear));
       nextYear.disabled = state.pickerYear >= 9999;
       heading.appendChild(nextYear);
-      var back = el("button", "m-ocal__picker-back", L("k32"));
+      var back = el("button", "m-ocal__picker-back", L("schedule.picker.back", back));
       back.type = "button";
       back.setAttribute("data-ocal-action", "picker-back");
       heading.appendChild(back);
       picker.appendChild(heading);
       var months = el("div", "m-ocal__picker-months");
       months.setAttribute("role", "group");
-      months.setAttribute("aria-label", L("k33"));
+      months.setAttribute("aria-label", L("schedule.picker.monthsLabel", months));
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
       for (var i = 0; i < 12; i++) {
         var month = el("button", "m-ocal__picker-month", pad2(i + 1));
@@ -17801,7 +18369,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         dots.appendChild(el("span", "m-ocal__dot m-ocal__dot--" + visibleStatuses[i].tone));
       }
       cell.appendChild(dots);
-      var label = dateNumeric(iso) + L("k34") + countPhraseAr(orders.length);
+      var label = dateNumeric(iso) + L("schedule.dayCell.ordersSuffix") + countPhraseAr(orders.length);
       cell.setAttribute("aria-label", label);
       return cell;
     }
@@ -17813,7 +18381,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var totalCells = Math.ceil((lead + dim) / 7) * 7;
       var grid = el("div", "m-ocal__grid");
       grid.setAttribute("role", "grid");
-      grid.setAttribute("aria-label", L("k35") + pad2(m) + " / " + yearText(y));
+      grid.setAttribute("aria-label", L("schedule.monthTitlePrefix", grid) + pad2(m) + " / " + yearText(y));
       grid.setAttribute("data-ocal-grid", "");
       var row = el("div", "m-ocal__gridrow");
       row.setAttribute("role", "row");
@@ -17869,7 +18437,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var monthOfTitle = parseIso(state.selectedDate);
       var grid = el("div", "m-ocal__grid");
       grid.setAttribute("role", "grid");
-      grid.setAttribute("aria-label", L("k36") + weekRangeTitle(dates));
+      grid.setAttribute("aria-label", L("schedule.weekTitlePrefix", grid) + weekRangeTitle(dates));
       grid.setAttribute("data-ocal-grid", "");
       var row = el("div", "m-ocal__gridrow");
       row.setAttribute("role", "row");
@@ -17902,10 +18470,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       b.type = "button";
       b.setAttribute("data-ocal-action", "add");
       b.appendChild(plusIcon());
-      b.appendChild(el("span", null, L("k37")));
+      b.appendChild(el("span", null, L("schedule.addOrder.label", b)));
       var d = dateIso === void 0 ? addRequestDate() : dateIso;
       b.setAttribute("data-ocal-add-date", d || "");
-      if (d) b.setAttribute("aria-label", L("k38") + fullDateAr(d));
+      if (d) b.setAttribute("aria-label", L("schedule.addOrder.dayAriaPrefix", b) + fullDateAr(d));
       return b;
     }
     function safeId(s) {
@@ -17972,12 +18540,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       panel.appendChild(el("p", "m-ocal__rowpanel-title", order.title));
       var dl = el("dl", "m-ocal__rowdetails");
       dl.appendChild(detailRow(
-        L("k39"),
-        order.date ? dateNumeric(order.date) : L("k40"),
+        L("schedule.orderRow.date", dl),
+        order.date ? dateNumeric(order.date) : L("schedule.orderRow.unscheduled"),
         true
       ));
-      dl.appendChild(detailRow(L("k41"), order.time || "—", true));
-      dl.appendChild(detailRow(L("k42"), order.customer || "—", false));
+      dl.appendChild(detailRow(L("schedule.orderRow.time", dl), order.time || "—", true));
+      dl.appendChild(detailRow(L("schedule.orderRow.customer", dl), order.customer || "—", false));
       if (order.statusKey !== "") {
         var st = resolveStatus(order.statusKey);
         var chip = el(
@@ -17985,10 +18553,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
           "m-ocal__row-status m-ocal__row-status--" + st.tone,
           st.label
         );
-        dl.appendChild(detailRow(L("k43"), chip, false));
+        dl.appendChild(detailRow(L("schedule.orderRow.status", dl), chip, false));
       }
       if (order.note) {
-        dl.appendChild(detailRow(L("k44"), order.note, false));
+        dl.appendChild(detailRow(L("schedule.orderRow.note", dl), order.note, false));
       }
       panel.appendChild(dl);
       if (state.orderActions.edit || state.orderActions.delete) {
@@ -18015,14 +18583,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     function buildOrderTools(order) {
       var row = el("div", "m-ocal__rowtools");
       if (state.orderActions.edit) {
-        var editBtn = el("button", "m-ocal__rowtool", L("k45"));
+        var editBtn = el("button", "m-ocal__rowtool", L("schedule.orderRow.edit", editBtn));
         editBtn.type = "button";
         editBtn.setAttribute("data-ocal-action", "order-edit");
         editBtn.setAttribute("data-ocal-id", order.id);
         row.appendChild(editBtn);
       }
       if (state.orderActions.delete) {
-        var delBtn = el("button", "m-ocal__rowtool m-ocal__rowtool--danger", L("k46"));
+        var delBtn = el("button", "m-ocal__rowtool m-ocal__rowtool--danger", L("schedule.orderRow.delete", delBtn));
         delBtn.type = "button";
         delBtn.setAttribute("data-ocal-action", "order-delete");
         delBtn.setAttribute("data-ocal-id", order.id);
@@ -18047,10 +18615,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     function eventsTitleNodes(iso) {
       var title = el(hTag(), "m-ocal__daypanel-title");
       if (iso === state.today) {
-        title.textContent = L("k47");
+        title.textContent = L("schedule.dayList.title", title);
         return title;
       }
-      title.appendChild(document.createTextNode(L("k35")));
+      title.appendChild(document.createTextNode(L("schedule.monthTitlePrefix", title)));
       var bdi = el("bdi", "m-ocal__daypanel-date", dateNumeric(iso));
       title.appendChild(bdi);
       return title;
@@ -18066,12 +18634,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         head.appendChild(el(
           hTag(),
           "m-ocal__daypanel-title",
-          L("k48") + pad2(m) + " / " + yearText(y)
+          L("schedule.dayList.noDayPrefix") + pad2(m) + " / " + yearText(y)
         ));
         head.appendChild(el(
           "p",
           "m-ocal__daypanel-count",
-          countPhraseAr(ordersInMonth(y, m).length) + L("k49")
+          countPhraseAr(ordersInMonth(y, m).length) + L("schedule.dayList.noDaySuffix")
         ));
         head.appendChild(buildAddButton(null));
         panel.appendChild(head);
@@ -18093,7 +18661,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var empty = el("div", "m-ocal__daypanel-empty");
         empty.setAttribute("data-ocal-status", "empty");
         empty.setAttribute("role", "status");
-        empty.appendChild(el("p", "m-ocal__status-text", L("k50")));
+        empty.appendChild(el("p", "m-ocal__status-text", L("schedule.dayList.empty", empty)));
         panel.appendChild(empty);
       }
       return panel;
@@ -18155,7 +18723,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var empty = el("div", "m-ocal__status m-ocal__status--empty");
         empty.setAttribute("data-ocal-status", "empty");
         empty.setAttribute("role", "status");
-        empty.appendChild(el("p", "m-ocal__status-text", L("k51")));
+        empty.appendChild(el("p", "m-ocal__status-text", L("schedule.list.empty", empty)));
         empty.appendChild(buildAddButton());
         screen.appendChild(empty);
         return screen;
@@ -18167,11 +18735,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       screen.appendChild(top);
       var buckets = listBuckets();
       var sec;
-      sec = buildListSection(L("k52"), buckets.upcoming);
+      sec = buildListSection(L("schedule.list.upcoming", sec), buckets.upcoming);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection(L("k53"), buckets.past);
+      sec = buildListSection(L("schedule.list.past", sec), buckets.past);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection(L("k54"), buckets.unsched);
+      sec = buildListSection(L("schedule.list.unscheduled", sec), buckets.unsched);
       if (sec) screen.appendChild(sec);
       return screen;
     }
@@ -18189,18 +18757,18 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var box = el("div", "m-ocal__status m-ocal__status--loading");
       box.setAttribute("data-ocal-status", "loading");
       box.setAttribute("role", "status");
-      box.appendChild(el("p", "m-ocal__status-text", L("k55")));
+      box.appendChild(el("p", "m-ocal__status-text", L("schedule.loading", box)));
       return box;
     }
     function buildError() {
       var box = el("div", "m-ocal__status m-ocal__status--error");
       box.setAttribute("data-ocal-status", "error");
       box.setAttribute("role", "alert");
-      box.appendChild(el("p", "m-ocal__status-text", L("k56")));
+      box.appendChild(el("p", "m-ocal__status-text", L("schedule.loadError", box)));
       var b = el("button", "m-ocal__retry");
       b.type = "button";
       b.setAttribute("data-ocal-action", "retry");
-      b.textContent = L("k57");
+      b.textContent = L("schedule.retry", b);
       box.appendChild(b);
       return box;
     }
@@ -18562,7 +19130,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       });
       dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
     }
-    render();
+    withLabels(root, function() {
+      render();
+    });
     observeResponsiveWidth();
     return {
       root,
@@ -18744,6 +19314,27 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -18774,14 +19365,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/carousel/labels.js
   var defaults = {
-    "k1": "لا توجد بطاقات.",
-    "k2": "بطاقة",
-    "k3": "بطاقة ",
-    "k4": "، البطاقة ",
-    "k5": " من ",
-    "k6": "البطاقة ",
-    "k7": "الانتقال إلى البطاقة ",
-    "k8": "عارض بطاقات"
+    "empty": "لا توجد بطاقات.",
+    "slide.cardRole": "بطاقة",
+    "slide.labelPrefix": "بطاقة ",
+    "slide.positionPrefix": "، البطاقة ",
+    "position.of": " من ",
+    "status.positionPrefix": "البطاقة ",
+    "dots.goToPrefix": "الانتقال إلى البطاقة ",
+    "region.role": "عارض بطاقات"
   };
 
   // shared/lifecycle.js
@@ -18807,8 +19398,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/carousel/carousel.js
   registerLabels("carousel", defaults);
   var MICRO_LABELS_FAMILY = "carousel";
-  function L(key) {
+  var renderLabels = null;
+  function L(key, el) {
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try {
+      return fn();
+    } finally {
+      renderLabels = previous;
+    }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var AXIS_LOCK = 8;
   var COMMIT_RATIO = 0.2;
@@ -18929,16 +19537,16 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       empty = document.createElement("p");
       empty.setAttribute("data-carousel-empty", "");
       empty.setAttribute("role", "status");
-      empty.textContent = L("k1");
+      empty.textContent = L("empty", empty);
       carousel.appendChild(empty);
     }
     if (empty) empty.hidden = st.count !== 0;
     st.slides.forEach(function(slide, i) {
       var isCurrent = i === st.index;
       slide.setAttribute("data-current", isCurrent ? "true" : "false");
-      slide.setAttribute("aria-roledescription", L("k2"));
-      var name = slide.getAttribute("data-card-label") || L("k3") + (i + 1);
-      slide.setAttribute("aria-label", name + L("k4") + (i + 1) + L("k5") + st.count);
+      slide.setAttribute("aria-roledescription", L("slide.cardRole", slide));
+      var name = slide.getAttribute("data-card-label") || L("slide.labelPrefix", slide) + (i + 1);
+      slide.setAttribute("aria-label", name + L("slide.positionPrefix", slide) + (i + 1) + L("position.of", slide) + st.count);
       slide.removeAttribute("aria-hidden");
       slide.inert = !isCurrent;
     });
@@ -18951,7 +19559,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (st.prev) st.prev.disabled = atStart || st.count <= 1;
     if (st.next) st.next.disabled = atEnd || st.count <= 1;
     if (st.status) {
-      st.status.textContent = st.count === 0 ? L("k1") : L("k6") + (st.index + 1) + L("k5") + st.count;
+      st.status.textContent = st.count === 0 ? L("empty") : L("status.positionPrefix") + (st.index + 1) + L("position.of") + st.count;
     }
     if (st.dots) {
       if (st.count > 1 && !st.dotsBuilt) buildDots(carousel, st);
@@ -18973,7 +19581,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var b = document.createElement("button");
       b.type = "button";
       b.className = "m-carousel__dot";
-      b.setAttribute("aria-label", L("k7") + (i + 1) + L("k5") + st.count);
+      b.setAttribute("aria-label", L("dots.goToPrefix", b) + (i + 1) + L("position.of", b) + st.count);
       (function(idx) {
         onLocal(carousel, b, "click", function() {
           goToIndex(carousel, idx);
@@ -19230,7 +19838,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     stateOf.set(carousel, st);
     carousel.setAttribute("role", "group");
     if (!carousel.hasAttribute("tabindex")) carousel.setAttribute("tabindex", "0");
-    carousel.setAttribute("aria-roledescription", L("k8"));
+    carousel.setAttribute("aria-roledescription", L("region.role", carousel));
     if (!carousel.hasAttribute("aria-label") && carousel.hasAttribute("data-carousel-label")) {
       carousel.setAttribute("aria-label", carousel.getAttribute("data-carousel-label"));
     }
@@ -19266,11 +19874,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var instances = instanceRegistry();
   function init(root, options) {
     var scope = root || document;
-    void options;
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
-      scope.querySelectorAll("[data-carousel]").forEach(setup);
+      withLabels(scope, function() {
+        if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
+        scope.querySelectorAll("[data-carousel]").forEach(setup);
+      });
       return existing;
     }
     var destroyed = false;
@@ -19312,8 +19922,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
-    scope.querySelectorAll("[data-carousel]").forEach(setup);
+    withLabels(scope, function() {
+      if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
+      scope.querySelectorAll("[data-carousel]").forEach(setup);
+    });
     instances.set(scope, instance);
     return instance;
   }

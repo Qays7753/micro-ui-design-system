@@ -25,7 +25,7 @@
    - prefers-reduced-motion: بلا انتقالات — الظهور فوري.
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -33,9 +33,24 @@ registerLabels('info-strip', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'info-strip';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'info-strip';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب (نفس ثوابت carousel) */
@@ -160,7 +175,7 @@ registerLabels('info-strip', familyDefaults);
     if (st.prevBtn) st.prevBtn.disabled = st.index === 0 || st.count <= 1;
     if (st.nextBtn) st.nextBtn.disabled = st.index === st.count - 1 || st.count <= 1;
     if (st.position) st.position.textContent = (st.index + 1) + ' / ' + st.count;
-    if (st.status) st.status.textContent = L('k7') + (st.index + 1) + L('k8') + st.count;
+    if (st.status) st.status.textContent = L('peek.status.positionPrefix', status) + (st.index + 1) + L('peek.status.ofSeparator', status) + st.count;
     if (st.pages) {
       Array.prototype.forEach.call(st.pages.querySelectorAll('[data-info-strip-page]'), function (b, i) {
         b.setAttribute('aria-current', i === st.index ? 'true' : 'false');
@@ -368,7 +383,7 @@ registerLabels('info-strip', familyDefaults);
       if (controls) controls.hidden = true;
       if (empty) empty.hidden = false;
       if (position) position.textContent = '';
-      if (status) status.textContent = L('k9');
+      if (status) status.textContent = L('peek.status.empty', status);
       stateOf.set(strip, {
         viewport: viewport, track: track, slides: [],
         prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
@@ -391,14 +406,14 @@ registerLabels('info-strip', familyDefaults);
 
     if (pages) {
       pages.setAttribute('role', 'group');
-      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', L('k10'));
+      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', L('peek.pages.ariaLabel', pages));
       pages.textContent = '';
       slides.forEach(function (_, i) {
         var page = document.createElement('button');
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', L('k11') + (i + 1));
+        page.setAttribute('aria-label', L('peek.page.showPrefix', page) + (i + 1));
         page.setAttribute('aria-current', i === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
         listenDom(st, page, 'click', function () { goToIndex(strip, i, false); });
@@ -439,11 +454,11 @@ registerLabels('info-strip', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* info-strip-peek: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope); scope.querySelectorAll('[data-info-peek]').forEach(initStrip); return existing; }
+    if (existing) { withLabels(scope, function () { if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope); scope.querySelectorAll('[data-info-peek]').forEach(initStrip); }); return existing; }
     var destroyed = false;
     /* الجذر قد يكون شريطًا أو حاوية — عمليات الفهرس تستهدف الشريط نفسه
        أو أول شريط تحته (توثيق القرار: لا معنى لفهرس واحد على عدة شرائط). */
@@ -459,7 +474,7 @@ registerLabels('info-strip', familyDefaults);
         var stripEl = targetStrip();
         var st = stripEl ? stateOf.get(stripEl) : null;
         var index = typeof updateOptions.index === 'number' ? updateOptions.index : (st ? st.index : 0);
-        if (stripEl) goToIndex(stripEl, index, updateOptions);
+        withLabels(scope, function () { if (stripEl) goToIndex(stripEl, index, updateOptions); });
       },
       goTo: function (index, goToOptions) {
         var stripEl = targetStrip();
@@ -476,8 +491,7 @@ registerLabels('info-strip', familyDefaults);
         instances.remove(scope);
       },
     };
-    if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope);
-    scope.querySelectorAll('[data-info-peek]').forEach(initStrip);
+    withLabels(scope, function () { if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope); scope.querySelectorAll('[data-info-peek]').forEach(initStrip); });
     instances.set(scope, instance);
     return instance;
   }

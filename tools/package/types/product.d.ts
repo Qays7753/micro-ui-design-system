@@ -17,7 +17,6 @@ export interface ProductLabels {
   'phase.expired': string;
   'phase.signedOut': string;
   'phase.conflict': string;
-  'phase.localSaved': string;
   'confirm.missingComponent': string;
   'confirm.title': string;
   'confirm.cancel': string;
@@ -117,7 +116,6 @@ export interface ProductLabels {
   'operation.referencePrefix': string;
   'operation.actions.recheck': string;
   'operation.actions.retry': string;
-  'operation.actions.saveLocal': string;
   'assistant.logLabel': string;
   'assistant.userSpeaker': string;
   'assistant.noteSpeaker': string;

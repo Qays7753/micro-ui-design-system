@@ -12,8 +12,29 @@ registerLabels('selection', familyDefaults);
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'selection';
-  function L(key) {
+  /* R5 — تخصيص لكل instance: init(root, {labels}) يخزن طبقة لجذر التهيئة،
+     وقراءة النص تحلها أولًا (من سياق عنصر عبر الأجداد أو من سياق التصيير
+     الجاري) ثم من سجل العائلة العام. setLabels(partial) يبقى للسجل العام. */
+  var overlayLabels = new WeakMap();
+  var renderLabels = null;
+  function overlayFor(el) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      if (overlayLabels.has(node)) return overlayLabels.get(node);
+    }
+    return null;
+  }
+  function L(key, el) {
+    var own = (el && overlayFor(el)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = overlayLabels.get(scope) || null;
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') overlayLabels.set(scope, options.labels);
   }
   var states = new WeakMap();
 
@@ -63,7 +84,7 @@ registerLabels('selection', familyDefaults);
   function summary(picker) {
     var foot = picker.querySelector('[data-picker-summary]');
     var selected = getSelected(picker);
-    if (foot) foot.textContent = selected ? L('k1') + selected.label : L('k2');
+    if (foot) foot.textContent = selected ? L('picker.selectedPrefix', foot) + selected.label : L('picker.selectedNone', foot);
   }
   export function getSelected(picker) {
     var option = optionsOf(picker).filter(function (item) { return item.getAttribute('aria-selected') === 'true'; })[0];
@@ -95,7 +116,7 @@ registerLabels('selection', familyDefaults);
       retry.type = 'button';
       retry.className = 'm-btn m-btn--secondary';
       retry.setAttribute('data-picker-retry', '');
-      retry.textContent = L('k3');
+      retry.textContent = L('picker.retry', retry);
       list.parentNode.insertBefore(retry, list.nextSibling);
     } else if (list.contains(retry) || status.contains(retry)) {
       list.parentNode.insertBefore(retry, list.nextSibling);
@@ -127,13 +148,13 @@ registerLabels('selection', familyDefaults);
       option.hidden = hide;
     });
     var defaults = {
-      initial: L('k4'), loading: L('k5'),
-      empty: L('k6'), error: L('k7'),
-      disabled: L('k8')
+      initial: L('picker.status.initial'), loading: L('picker.status.loading'),
+      empty: L('picker.status.empty'), error: L('picker.status.error'),
+      disabled: L('picker.status.disabled')
     };
     var noResult = ready && state.query !== '' && !available(picker).length;
     var noData = ready && !optionsOf(picker).length;
-    var message = ready ? (noResult ? L('k9') : noData ? defaults.empty : '')
+    var message = ready ? (noResult ? L('picker.noResults') : noData ? defaults.empty : '')
       : state.message || defaults[state.status] || '';
     var retryVisible = state.status === 'error' && !locked(picker);
     if (active === nodes.retry && !retryVisible) safeFocus(picker);
@@ -206,16 +227,17 @@ registerLabels('selection', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* picker: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
-    if (existing) return existing;
+    /* R4 (عقد SPA): المثيل الحي يُعاد كما هو مع ربط أي picker جديد تحت الجذر. */
+    if (existing) { withLabels(scope, function () { each(scope, bind); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** = setOptions لكل picker تحت الجذر. */
       update: function (items) {
         if (!Array.isArray(items)) return;
-        each(scope, function (picker) { setOptions(picker, items); });
+        withLabels(scope, function () { each(scope, function (pickerEl) { setOptions(pickerEl, items); }); });
       },
       /** يفك مستمعات كل picker ويمحو حالته — بيانات المضيف لا تُمس. */
       destroy: function () {
@@ -225,7 +247,7 @@ registerLabels('selection', familyDefaults);
         registry.remove(scope);
       },
     };
-    each(scope, bind);
+    withLabels(scope, function () { each(scope, bind); });
     registry.set(scope, instance);
     return instance;
   }

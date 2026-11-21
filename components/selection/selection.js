@@ -21,8 +21,29 @@ registerLabels('selection', familyDefaults);
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'selection';
-  function L(key) {
+  /* R5 — تخصيص لكل instance: init(root, {labels}) يخزن طبقة لجذر التهيئة،
+     وقراءة النص تحلها أولًا (من سياق عنصر عبر الأجداد أو من سياق التصيير
+     الجاري) ثم من سجل العائلة العام. setLabels(partial) يبقى للسجل العام. */
+  var overlayLabels = new WeakMap();
+  var renderLabels = null;
+  function overlayFor(el) {
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      if (overlayLabels.has(node)) return overlayLabels.get(node);
+    }
+    return null;
+  }
+  function L(key, el) {
+    var own = (el && overlayFor(el)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = overlayLabels.get(scope) || null;
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') overlayLabels.set(scope, options.labels);
   }
 
   var liveBindings = new WeakMap();
@@ -149,19 +170,18 @@ registerLabels('selection', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* selection: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { bindGroups(scope); bindSegmented(scope); return existing; }
+    if (existing) { withLabels(scope, function () { bindGroups(scope); bindSegmented(scope); }); return existing; }
     acquireSwitchGuard();
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد قراءة حالة المجموعات والمقاطع (يربط الجديد تحت الجذر). */
       update: function () {
-        bindGroups(scope);
-        bindSegmented(scope);
+        withLabels(scope, function () { bindGroups(scope); bindSegmented(scope); });
       },
       /** يفك مستمعات النطاق ويطلق حصة حماية document — لا يمس القيم. */
       destroy: function () {
@@ -172,8 +192,7 @@ registerLabels('selection', familyDefaults);
         registry.remove(scope);
       },
     };
-    bindGroups(scope);
-    bindSegmented(scope);
+    withLabels(scope, function () { bindGroups(scope); bindSegmented(scope); });
     registry.set(scope, instance);
     return instance;
   }

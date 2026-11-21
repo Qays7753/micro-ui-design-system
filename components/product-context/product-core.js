@@ -2,14 +2,29 @@
    الجولة الثانية R2 (F10): وحدة ES modules مقروءة — سطر لكل تعليمة، بلا
    غلاف IIFE ولا تهيئة تلقائية (R-D2/R-D3). العقود كما هي دون تغيير سلوك. */
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { instanceLabelFor, instanceLabelsOf, getLabel, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 
 registerLabels('product-context', familyDefaults);
 
 var MICRO_LABELS_FAMILY = 'product-context';
-function L(key) {
+/* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+   لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+var renderLabels = null;
+function L(key, el) {
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
+}
+function withLabels(scope, fn) {
+  var previous = renderLabels;
+  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+  try { return fn(); } finally { renderLabels = previous; }
+}
+function applyInstanceLabels(scope, options) {
+  if (options && options.labels && typeof options.labels === 'object') {
+    setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+  }
 }
 
 var renderers = new Map();
@@ -17,11 +32,11 @@ var instances = new WeakMap();
 var sequence = 0;
 
 var phases = {
-  ready: '', loading: L('k1'), empty: L('k2'), success: L('k3'),
-  error: L('k4'), rejected: L('k5'), disabled: L('k6'),
-  pending: L('k7'), uncertain: L('k8'),
-  denied: L('k9'), expired: L('k10'), 'signed-out': L('k11'),
-  conflict: L('k12'), 'local-saved': L('k13')
+  ready: '', loading: L('phase.loading'), empty: L('phase.empty'), success: L('phase.success'),
+  error: L('phase.error'), rejected: L('phase.rejected'), disabled: L('phase.disabled'),
+  pending: L('phase.pending'), uncertain: L('phase.uncertain'),
+  denied: L('phase.denied'), expired: L('phase.expired'), 'signed-out': L('phase.signedOut'),
+  conflict: L('phase.conflict')
 };
 
 function key(scope) {
@@ -141,7 +156,7 @@ function mount(root, type, value) {
 
   function confirm(id, payload, label, description, local, danger) {
     if (!allowed(id, local) || confirmation) return;
-    if (!globalApi('ActionSheet')) { note(root, L('k14'), '', 'error'); return; }
+    if (!globalApi('ActionSheet')) { note(root, L('confirm.missingComponent', root), '', 'error'); return; }
     var generation = epoch, context = key(model.scope), trigger = document.activeElement;
     var sheet = node('div', 'm-layer m-action-sheet'), backdrop = node('div', 'm-layer-backdrop'), life = new AbortController();
     sheet.id = instanceId + '-confirmation';
@@ -154,10 +169,10 @@ function mount(root, type, value) {
     sheet.setAttribute('aria-modal', 'true');
     sheet.setAttribute('aria-labelledby', sheet.id + '-title');
     sheet.setAttribute('aria-describedby', sheet.id + '-description');
-    var head = node('header', 'm-layer__head'), title = node('h2', 'm-layer__title', L('k15'));
+    var head = node('header', 'm-layer__head'), title = node('h2', 'm-layer__title', L('confirm.title', head));
     title.id = sheet.id + '-title';
     head.appendChild(title);
-    var cancel = node('button', 'm-btn m-btn--secondary', L('k16'));
+    var cancel = node('button', 'm-btn m-btn--secondary', L('confirm.cancel'));
     cancel.type = 'button';
     cancel.dataset.layerClose = '';
     head.appendChild(cancel);
@@ -167,7 +182,7 @@ function mount(root, type, value) {
     body.appendChild(desc);
     body.appendChild(node('p', 'm-product__secondary', model.scope.label || model.scope.contextId));
     var list = node('ul', 'm-action-sheet__list'), item = node('li');
-    var button = node('button', 'm-btn ' + (danger ? 'm-btn--destructive-soft' : 'm-btn--primary') + ' m-action-sheet__item', label || L('k17'));
+    var button = node('button', 'm-btn ' + (danger ? 'm-btn--destructive-soft' : 'm-btn--primary') + ' m-action-sheet__item', label || L('confirm.ok', label));
     button.type = 'button';
     button.dataset.actionId = 'confirm';
     item.appendChild(button);
@@ -279,7 +294,7 @@ function mount(root, type, value) {
           el.closest('.m-field').classList.remove('has-error');
         });
         if (missing.length) {
-          var error = note(root, L('k18'), '', 'error');
+          var error = note(root, L('form.requiredFields', root), '', 'error');
           error.dataset.productValidation = '';
           error.id = instanceId + '-validation';
           var heading = root.querySelector(':scope > header,:scope > h2');
@@ -288,7 +303,7 @@ function mount(root, type, value) {
           root.querySelectorAll('[data-focus-key^="field-"]').forEach(function (el) {
             if (missing.indexOf(el.dataset.focusKey.slice(6)) < 0) return;
             var box = el.closest('.m-field'), label = box.querySelector('label');
-            var message = node('p', 'm-field__msg is-visible', L('k19') + (label ? label.textContent : L('k20')));
+            var message = node('p', 'm-field__msg is-visible', L('form.missingFieldPrefix', label) + (label ? label.textContent : L('form.missingFieldFallback', label)));
             message.id = el.id + '-required';
             message.dataset.productFieldError = '';
             box.appendChild(message);
@@ -304,13 +319,13 @@ function mount(root, type, value) {
         return data;
       },
       media: function (parent, images, fit, preview) {
-        if (!images || !images.length) { parent.appendChild(node('div', 'm-product__media-empty', L('k21'))); return; }
+        if (!images || !images.length) { parent.appendChild(node('div', 'm-product__media-empty', L('media.unavailable', parent))); return; }
         var carousel = node('div', 'm-carousel m-product__gallery');
         carousel.classList.toggle('m-product__gallery--preview', !!preview);
         carousel.dataset.carousel = '';
-        carousel.dataset.carouselLabel = L('k22');
+        carousel.dataset.carouselLabel = L('media.carouselLabel', carousel);
         carousel.setAttribute('role', 'group');
-        carousel.setAttribute('aria-label', L('k22'));
+        carousel.setAttribute('aria-label', L('media.carouselLabel', carousel));
         var viewport = node('div', 'm-carousel__viewport');
         viewport.dataset.viewport = '';
         var track = node('ul', 'm-carousel__track');
@@ -318,18 +333,18 @@ function mount(root, type, value) {
         images.forEach(function (image, index) {
           var li = node('li', 'm-carousel__slide'), card = node('div', 'm-carousel__card'), src = safeImage(image.src);
           li.dataset.carouselSlide = '';
-          li.dataset.cardLabel = image.alt || L('k23') + (index + 1);
+          li.dataset.cardLabel = image.alt || L('media.cardLabelPrefix', li) + (index + 1);
           if (src) {
             var img = node('img', 'm-product__media');
             img.src = src;
-            img.alt = image.alt || L('k24');
+            img.alt = image.alt || L('media.imageAltFallback', img);
             img.loading = 'lazy';
             img.decoding = 'async';
             img.style.objectFit = fit === 'contain' ? 'contain' : 'cover';
-            ctx.on(img, 'error', function () { img.replaceWith(node('div', 'm-product__media-empty', L('k25'))); });
+            ctx.on(img, 'error', function () { img.replaceWith(node('div', 'm-product__media-empty', L('media.imageError', img))); });
             card.appendChild(img);
           } else {
-            card.appendChild(node('div', 'm-product__media-empty', L('k26')));
+            card.appendChild(node('div', 'm-product__media-empty', L('media.linkUnavailable', card)));
           }
           li.appendChild(card);
           track.appendChild(li);
@@ -339,7 +354,7 @@ function mount(root, type, value) {
         if (images.length > 1) {
           var controls = node('div', 'm-product__actions');
           ['prev', 'next'].forEach(function (dir) {
-            var b = node('button', 'm-btn m-btn--secondary', dir === 'prev' ? L('k27') : L('k28'));
+            var b = node('button', 'm-btn m-btn--secondary', dir === 'prev' ? L('media.prev') : L('media.next'));
             b.type = 'button';
             b.dataset[dir] = '';
             controls.appendChild(b);
@@ -356,9 +371,9 @@ function mount(root, type, value) {
         }
       },
       attachments: function (parent, required) {
-        var field = node('div', 'm-field'), lab = node('span', 'm-field__label', L('k29'));
+        var field = node('div', 'm-field'), lab = node('span', 'm-field__label', L('attachments.label', field));
         var input = node('input', 'm-product__file');
-        var choose = node('button', 'm-btn m-btn--secondary', model.attachmentSelection === 'append' ? L('k30') : ui.files.length ? L('k31') : L('k32'));
+        var choose = node('button', 'm-btn m-btn--secondary', model.attachmentSelection === 'append' ? L('attachments.addMore') : ui.files.length ? L('attachments.replaceSelection') : L('attachments.choose'));
         input.type = 'file';
         input.accept = 'image/*';
         input.multiple = true;
@@ -375,7 +390,7 @@ function mount(root, type, value) {
         ctx.on(input, 'change', function () {
           var files = Array.from(input.files || []);
           if (files.some(function (f) { return !f.type.startsWith('image/') || (model.maxImageBytes && f.size > model.maxImageBytes); })) {
-            note(parent, L('k33'), L('k34'), 'error');
+            note(parent, L('attachments.fileError', parent), L('attachments.fileErrorDetail', parent), 'error');
             return;
           }
           var selection = model.attachmentSelection === 'append' ? ui.files.concat(files) : files;
@@ -390,10 +405,10 @@ function mount(root, type, value) {
             var item = node('li');
             item.appendChild(node('bdi', '', f.name));
             if (ui.files.length > 1) {
-              var remove = node('button', 'm-btn m-btn--light', L('k35'));
+              var remove = node('button', 'm-btn m-btn--light', L('attachments.remove', remove));
               remove.type = 'button';
               remove.disabled = !ctx.editable();
-              remove.setAttribute('aria-label', L('k36') + f.name);
+              remove.setAttribute('aria-label', L('attachments.removeAriaPrefix', remove) + f.name);
               remove.dataset.focusKey = 'remove-file-' + index;
               ctx.on(remove, 'click', function () {
                 if (!ctx.editable()) return;
@@ -409,13 +424,13 @@ function mount(root, type, value) {
           });
           field.appendChild(names);
           ctx.media(parent, ui.files.map(function (f, i) { return { src: ui.urls[i], alt: f.name }; }), 'contain', true);
-          var clear = node('button', 'm-btn m-btn--light', L('k37'));
+          var clear = node('button', 'm-btn m-btn--light', L('attachments.removeAll'));
           clear.type = 'button';
           clear.disabled = !ctx.editable();
           ctx.on(clear, 'click', function () { releaseFiles(); render(); });
           parent.appendChild(clear);
         }
-        if (required) parent.appendChild(node('p', 'm-product__secondary', L('k38')));
+        if (required) parent.appendChild(node('p', 'm-product__secondary', L('attachments.requiredNotice', parent)));
       },
       timeline: function (parent, items) {
         var list = node('ol', 'm-product__timeline');
@@ -432,27 +447,27 @@ function mount(root, type, value) {
     };
     var phase = Object.prototype.hasOwnProperty.call(phases, model.phase) ? model.phase : 'uncertain';
     if (forbidden.indexOf(phase) >= 0) {
-      note(root, phases[phase], L('k39'), 'warning');
-      if (permission('reauth')) ctx.button(root, 'reauth', L('k40'), {});
-      if (phase === 'denied' && permission('choose-context')) ctx.button(root, 'choose-context', L('k41'), {});
+      note(root, phases[phase], L('shell.previousContextHidden', root), 'warning');
+      if (permission('reauth')) ctx.button(root, 'reauth', L('shell.reauth', root), {});
+      if (phase === 'denied' && permission('choose-context')) ctx.button(root, 'choose-context', L('shell.chooseContext', root), {});
     }
-    else if (!scopeKey) { note(root, L('k42'), L('k43'), 'warning'); }
-    else if (model.scope.kind === 'driver' && (type === 'market' || type === 'manage' || (type === 'review' && model.mode !== 'report') || (type !== 'context' && ['manage', 'market'].indexOf(model.destination) >= 0))) { note(root, L('k44'), L('k45'), 'warning'); }
-    else if (!permission('view') || (type !== 'context' && type !== 'state' && key(model.dataContext) !== scopeKey)) { note(root, L('k46'), '', 'warning'); }
+    else if (!scopeKey) { note(root, L('shell.noScopeTitle', root), L('shell.noScopeDetail', root), 'warning'); }
+    else if (model.scope.kind === 'driver' && (type === 'market' || type === 'manage' || (type === 'review' && model.mode !== 'report') || (type !== 'context' && ['manage', 'market'].indexOf(model.destination) >= 0))) { note(root, L('shell.driverScopeTitle', root), L('shell.driverScopeDetail', root), 'warning'); }
+    else if (!permission('view') || (type !== 'context' && type !== 'state' && key(model.dataContext) !== scopeKey)) { note(root, L('shell.noPermission', root), '', 'warning'); }
     else {
       if (['offline', 'weak', 'local'].indexOf(model.connection) >= 0) {
-        note(root, model.connection === 'offline' ? L('k47') : model.connection === 'local' ? L('k48') : L('k49'), model.destination === 'manage' ? L('k50') : L('k51'), 'warning');
+        note(root, model.connection === 'offline' ? L('connection.offline', root) : model.connection === 'local' ? L('connection.local', root) : L('connection.weak', root), model.destination === 'manage' ? L('connection.manageNotice', root) : L('connection.genericNotice', root), 'warning');
       }
       if (pending) {
         note(root, phases.pending, '', 'info');
       } else if (phase !== 'ready') {
-        note(root, phase === 'local-saved' && model.destination !== 'manage' ? phases.uncertain : phases[phase], model.phaseDetail || '', phase === 'error' ? 'error' : phase === 'success' ? 'success' : 'info');
+        note(root, phases[phase], model.phaseDetail || '', phase === 'error' ? 'error' : phase === 'success' ? 'success' : 'info');
       }
       /* المرحلة 8: manage يُعرض في empty مثل assistant — نموذج الإدخال
          هو غرض التركيب ولا معنى لإخفائه حين لا عمليات بعد. */
       if (phase !== 'loading' && (phase !== 'empty' || type === 'assistant' || type === 'manage')) renderers.get(type)(ctx);
       else if (phase === 'empty' && model.emptyActionLabel) ctx.button(root, 'create', model.emptyActionLabel, {});
-      if (['uncertain', 'conflict'].indexOf(phase) >= 0 && permission('recheck') && !root.querySelector('[data-product-action="recheck"]')) ctx.button(root, 'recheck', L('k52'), {});
+      if (['uncertain', 'conflict'].indexOf(phase) >= 0 && permission('recheck') && !root.querySelector('[data-product-action="recheck"]')) ctx.button(root, 'recheck', L('stateCard.recheck', root), {});
     }
     if (globalApi('Fields')) {
       globalApi('Fields').init(root);
@@ -475,7 +490,6 @@ function mount(root, type, value) {
     var previous = model && key(model.scope);
     var nextModel = copy(next || {});
     nextModel.phase = nextModel.phase || 'ready';
-    if (nextModel.phase === 'local-saved' && nextModel.destination !== 'manage') nextModel.phase = 'uncertain';
     if (!Object.prototype.hasOwnProperty.call(phases, nextModel.phase)) nextModel.phase = 'uncertain';
     nextModel.connection = nextModel.connection || 'online';
     if (['online', 'offline', 'weak', 'local'].indexOf(nextModel.connection) < 0) nextModel.connection = 'offline';
@@ -540,7 +554,9 @@ export { mount };
    instance.update(model) = replace. getInstance/destroy وحدويان مريحان. */
 export function init(root, model) {
   var type = model && model.type;
-  return mount(root, type, model);
+  /* R5 — model.labels طبقة نصوص لهذا التركيب فقط */
+  applyInstanceLabels(root, model);
+  return withLabels(root, function () { return mount(root, type, model); });
 }
 
 export function getInstance(root) {

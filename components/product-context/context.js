@@ -1,10 +1,25 @@
 /* C07 (context) — هوية واحدة، contexts من المستهلك، وجهات مصرح بها. */
 import { register } from './product-core.js';
-import { getLabel } from '../../shared/labels.js';
+import { instanceLabelFor, instanceLabelsOf, getLabel } from '../../shared/labels.js';
 
 var MICRO_LABELS_FAMILY = 'product-context';
-function L(key) {
+/* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+   لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+var renderLabels = null;
+function L(key, el) {
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
+}
+function withLabels(scope, fn) {
+  var previous = renderLabels;
+  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+  try { return fn(); } finally { renderLabels = previous; }
+}
+function applyInstanceLabels(scope, options) {
+  if (options && options.labels && typeof options.labels === 'object') {
+    setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+  }
 }
 
 export const type = 'context';
@@ -15,11 +30,11 @@ export function render(ctx) {
   var keys = contexts.map(function (item) { return ctx.key(item.scope); });
   var current = contexts.find(function (item) { return item.scope && ctx.key(item.scope) === ctx.key(model.scope); });
 
-  root.appendChild(node('h2', 'm-product__title', model.accountLabel || L('k53')));
-  if (!current) { ctx.note(root, L('k54'), L('k55'), 'warning'); return; }
-  if (keys.some(function (k, i) { return !k || keys.indexOf(k) !== i; })) { ctx.note(root, L('k56'), L('k55'), 'warning'); return; }
+  root.appendChild(node('h2', 'm-product__title', model.accountLabel || L('context.accountFallback', root)));
+  if (!current) { ctx.note(root, L('context.unavailableTitle', root), L('context.unavailableDetail', root), 'warning'); return; }
+  if (keys.some(function (k, i) { return !k || keys.indexOf(k) !== i; })) { ctx.note(root, L('context.invalidListTitle', root), L('context.unavailableDetail', root), 'warning'); return; }
 
-  var label = node('label', 'm-field__label', L('k57')), select = node('select', 'm-field__input');
+  var label = node('label', 'm-field__label', L('context.selectLabel', select)), select = node('select', 'm-field__input');
   select.id = ctx.uid + '-context';
   select.dataset.focusKey = 'context-select';
   label.htmlFor = select.id;
@@ -42,9 +57,9 @@ export function render(ctx) {
     if (item) ctx.request('switch-context', { contextId: item.scope.contextId, targetScope: structuredClone(item.scope) });
   });
 
-  var names = { manage: L('k58'), market: L('k59'), delivery: L('k60'), ask: 'Ask Micro' };
+  var names = { manage: L('context.destination.manage'), market: L('context.destination.market'), delivery: L('context.destination.delivery'), ask: 'Ask Micro' };
   var nav = node('nav', 'm-product__destinations');
-  nav.setAttribute('aria-label', L('k61'));
+  nav.setAttribute('aria-label', L('context.navLabel', nav));
   ['manage', 'market', 'delivery', 'ask']
     .filter(function (id) {
       return (current.destinations || []).indexOf(id) >= 0 && (model.scope.kind !== 'driver' || id === 'delivery' || id === 'ask');
@@ -56,7 +71,7 @@ export function render(ctx) {
       if (model.destination === id) button.setAttribute('aria-current', 'page');
     });
   root.appendChild(nav);
-  if (!nav.children.length) ctx.note(root, L('k62'), L('k63'), 'warning');
+  if (!nav.children.length) ctx.note(root, L('context.noDestinationsTitle', nav), L('context.noDestinationsDetail', nav), 'warning');
 }
 
 register(type, render);

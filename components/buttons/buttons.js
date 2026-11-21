@@ -126,6 +126,12 @@
      destroy. لا نصوص للعائلة (بلا labels.js) فلا options فعلية بعد R5. */
   var registry = instanceRegistry();
 
+  /* R5 — توحيد توقيع options.labels فقط (B01 لا نصوص — لا طبقات فعليًا). */
+  function applyInstanceLabels() {}
+
+  /* R5 — تمريرية: لا نصوص فلا طبقة (توحيد التوقيع فقط). */
+  function withLabels(scope, fn) { return fn(); }
+
   function scopedButtons(scope) {
     var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
     if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
@@ -134,11 +140,11 @@
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* B01: لا خيارات حاليًا — تدخل options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { scopedButtons(scope).forEach(ensureActivationGuard); return existing; } /* المثيل نفسه + ربط الجديد */
+    if (existing) { withLabels(scope, function () { scopedButtons(scope).forEach(ensureActivationGuard); }); return existing; } /* المثيل نفسه + ربط الجديد */
     scopedButtons(scope).forEach(ensureActivationGuard);
     var destroyed = false;
     var instance = {

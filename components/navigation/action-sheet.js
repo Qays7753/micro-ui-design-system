@@ -1,7 +1,7 @@
 /* C05: mobile command list. Navigation owns modal/focus/inert/scroll/motion. */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -9,9 +9,24 @@ registerLabels('navigation', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'navigation';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'navigation';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var states = new WeakMap();
 
@@ -79,16 +94,16 @@ registerLabels('navigation', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* action-sheet: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { sheets(scope).forEach(initOne); return existing; }
+    if (existing) { withLabels(scope, function () { sheets(scope).forEach(initOne); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد ربط أوراق الأفعال الجديدة تحت الجذر. */
-      update: function () { sheets(scope).forEach(initOne); },
+      update: function () { withLabels(scope, function () { sheets(scope).forEach(initOne); }); },
       /** يفك كل ورقة تحت الجذر (ومستمعات Navigation التابعة لها). */
       destroy: function () {
         if (destroyed) return;
@@ -97,7 +112,7 @@ registerLabels('navigation', familyDefaults);
         registry.remove(scope);
       },
     };
-    sheets(scope).forEach(initOne);
+    withLabels(scope, function () { sheets(scope).forEach(initOne); });
     registry.set(scope, instance);
     return instance;
   }

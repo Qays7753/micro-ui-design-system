@@ -33,6 +33,31 @@ function store() {
   return root.__microLabelsStore;
 }
 
+/* R5 — طبقات نصوص لكل instance (جذر تهيئة): init(root, {labels}) يخزنها
+   هنا لكل (جذر، عائلة)، وكل ملفات العائلة — النواة والrenderers — تقرأ
+   من الخريطة نفسها عبر سياق العنصر أو سياق التصيير الجاري. */
+var instanceOverlays = new WeakMap();
+
+export function setInstanceLabels(root, family, labels) {
+  if (!root || root.nodeType !== 1 || !labels || typeof labels !== 'object') return;
+  var byFamily = instanceOverlays.get(root);
+  if (!byFamily) { byFamily = {}; instanceOverlays.set(root, byFamily); }
+  byFamily[family] = labels;
+}
+
+export function instanceLabelsOf(root, family) {
+  var byFamily = root && instanceOverlays.get(root);
+  return (byFamily && byFamily[family]) || null;
+}
+
+export function instanceLabelFor(el, family) {
+  for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+    var own = instanceLabelsOf(node, family);
+    if (own) return own;
+  }
+  return null;
+}
+
 export function registerLabels(family, defaults) {
   var families = store().families;
   if (!families[family]) families[family] = {};

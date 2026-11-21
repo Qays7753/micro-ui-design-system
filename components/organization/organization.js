@@ -8,7 +8,7 @@
       بأحرف أولى من الاسم (بديل ظاهر لا مربع مكسور).
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -16,9 +16,24 @@ registerLabels('organization', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'organization';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'organization';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var liveBindings = new WeakMap();
@@ -71,7 +86,7 @@ registerLabels('organization', familyDefaults);
         var span = document.createElement('span');
         span.className = 'm-identity__initials';
         span.setAttribute('aria-hidden', 'true');
-        span.textContent = initials || L('k1');
+        span.textContent = initials || L('avatar.initialsFallback', img);
         img.replaceWith(span);
       }
       on(img, 'error', fallback);
@@ -88,18 +103,17 @@ registerLabels('organization', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* organization: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { initSections(scope); initAvatars(scope); return existing; }
+    if (existing) { withLabels(scope, function () { initSections(scope); initAvatars(scope); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد فحص الأقسام والصور الرمزية تحت الجذر (يربط الجديد فقط). */
       update: function () {
-        initSections(scope);
-        initAvatars(scope);
+        withLabels(scope, function () { initSections(scope); initAvatars(scope); });
       },
       /** يفك كل مستمعات النطاق ويمكّن الربط من جديد — لا يمس حالة الطي. */
       destroy: function () {
@@ -109,8 +123,7 @@ registerLabels('organization', familyDefaults);
         registry.remove(scope);
       },
     };
-    initSections(scope);
-    initAvatars(scope);
+    withLabels(scope, function () { initSections(scope); initAvatars(scope); });
     registry.set(scope, instance);
     return instance;
   }

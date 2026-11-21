@@ -1,12 +1,27 @@
 /* C11 (assistant) — محادثة Ask Micro محدودة النطاق: messages/draft/retry
    وproposal بتأكيد إلزامي. لا AI أو تفسير أوامر من النص. */
 import { register } from './product-core.js';
-import { getLabel } from '../../shared/labels.js';
+import { instanceLabelFor, instanceLabelsOf, getLabel } from '../../shared/labels.js';
 import { scriptBase } from '../../shared/script-base.js';
 
 var MICRO_LABELS_FAMILY = 'product-context';
-function L(key) {
+/* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+   لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+var renderLabels = null;
+function L(key, el) {
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
+}
+function withLabels(scope, fn) {
+  var previous = renderLabels;
+  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+  try { return fn(); } finally { renderLabels = previous; }
+}
+function applyInstanceLabels(scope, options) {
+  if (options && options.labels && typeof options.labels === 'object') {
+    setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+  }
 }
 
 /* شعار Ask Micro — مسار نسبي إلى موضع الحزمة (dist/esm|dist/iife حيث
@@ -47,7 +62,7 @@ export function render(ctx) {
   log.id = ctx.uid + '-log';
   log.dataset.focusKey = 'assistant-log';
   log.setAttribute('role', 'log');
-  log.setAttribute('aria-label', L('k115'));
+  log.setAttribute('aria-label', L('assistant.logLabel', log));
   log.setAttribute('aria-relevant', 'additions text');
   log.setAttribute('aria-busy', String(!!model.replyPending));
 
@@ -57,12 +72,12 @@ export function render(ctx) {
     bubble.dataset.speaker = speaker;
     if (text(message.id) && messages.filter(function (x) { return x.id === message.id; }).length === 1) bubble.dataset.messageId = message.id;
     bubble.append(
-      node('strong', 'm-product__secondary', speaker === 'user' ? L('k116') : speaker === 'assistant' ? 'Ask Micro' : L('k117')),
+      node('strong', 'm-product__secondary', speaker === 'user' ? L('assistant.userSpeaker') : speaker === 'assistant' ? 'Ask Micro' : L('assistant.noteSpeaker')),
       node('p', '', message.text)
     );
     if (message.stateLabel) bubble.appendChild(node('p', 'm-product__secondary', message.stateLabel));
     if (message.id && (model.permissions || []).indexOf('retry') >= 0 && message.retryable) {
-      ctx.button(bubble, 'retry', L('k118'), { messageId: message.id }, { focusKey: 'retry-' + message.id });
+      ctx.button(bubble, 'retry', L('assistant.retryAction', bubble), { messageId: message.id }, { focusKey: 'retry-' + message.id });
     }
     // IDs address a host-defined action. Text never becomes code, URL or a grant.
     if (speaker === 'assistant' && text(message.id) && messages.filter(function (x) { return x.id === message.id; }).length === 1) {
@@ -82,7 +97,7 @@ export function render(ctx) {
             primary: action.emphasis === 'primary' && actions.filter(function (x) { return x && x.emphasis === 'primary'; }).length === 1
           });
         if (state !== 'ready') {
-          var reason = { expired: L('k119'), completed: L('k120'), unavailable: L('k121') }[state] || L('k121');
+          var reason = { expired: L('assistant.proposalExpired'), completed: L('assistant.proposalCompleted'), unavailable: L('assistant.proposalUnavailable') }[state] || L('assistant.proposalUnavailable');
           var status = reasons[reason];
           if (!status) {
             status = node('span', 'm-product__secondary', reason);
@@ -98,7 +113,7 @@ export function render(ctx) {
     }
     log.appendChild(bubble);
   });
-  if (!log.children.length) log.appendChild(node('p', 'm-product__secondary', L('k122')));
+  if (!log.children.length) log.appendChild(node('p', 'm-product__secondary', L('assistant.emptyLog', log)));
   root.appendChild(log);
 
   if (model.replyPending) {
@@ -106,14 +121,14 @@ export function render(ctx) {
     activity.setAttribute('role', 'status');
     var dot = node('span', 'm-assistant__activity-dot');
     dot.setAttribute('aria-hidden', 'true');
-    activity.append(dot, node('span', '', model.activity === 'searching' ? L('k123') : L('k124')));
+    activity.append(dot, node('span', '', model.activity === 'searching' ? L('assistant.searchingStatus', activity) : L('assistant.preparingStatus', activity)));
     root.appendChild(activity);
   }
 
   var last = messages[messages.length - 1];
   var lastKey = last ? String(last.id || '') + '\n' + String(last.text || '') : '';
   var unread = !!(messages.length && saved && !saved.atEnd && (saved.unread || messages.length > saved.count || (messages.length === saved.count && saved.lastKey !== lastKey)));
-  var newer = node('button', 'm-btn m-btn--light m-assistant__new', L('k125'));
+  var newer = node('button', 'm-btn m-btn--light m-assistant__new', L('assistant.newMessagesAction', newer));
   newer.type = 'button';
   newer.hidden = !unread;
   newer.setAttribute('aria-controls', log.id);
@@ -135,14 +150,14 @@ export function render(ctx) {
   // Backwards compatible proposal; keep it adjacent to replies, before writing.
   if (model.proposal) {
     var box = node('section', 'm-product__surface');
-    box.append(node('h3', 'm-product__title', L('k126')), node('p', '', model.proposal.summary));
-    ctx.button(box, 'execute', model.proposal.label || L('k127'), { proposalId: model.proposal.id, revision: model.proposal.revision }, { confirm: true, description: model.proposal.summary });
+    box.append(node('h3', 'm-product__title', L('assistant.proposalTitle')), node('p', '', model.proposal.summary));
+    ctx.button(box, 'execute', model.proposal.label || L('assistant.proposalActionFallback', box), { proposalId: model.proposal.id, revision: model.proposal.revision }, { confirm: true, description: model.proposal.summary });
     root.appendChild(box);
   }
 
   var composer = node('div', 'm-product__section m-assistant__composer');
-  var input = ctx.field(composer, 'message', L('k128'), { multiline: true, rows: 1 });
-  ctx.button(composer, 'send', L('k129'), function () { return ctx.fieldsPayload(['message']); }, { primary: true, disabled: !!model.replyPending });
+  var input = ctx.field(composer, 'message', L('assistant.messageField'), { multiline: true, rows: 1 });
+  ctx.button(composer, 'send', L('assistant.sendAction', composer), function () { return ctx.fieldsPayload(['message']); }, { primary: true, disabled: !!model.replyPending });
   root.appendChild(composer);
 
   function grow() {

@@ -1,7 +1,7 @@
 /* Settings-layer composition over the existing MicroNavigation layer contract. */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -9,9 +9,24 @@ registerLabels('account-settings', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'account-settings';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'account-settings';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   function initPanel(panel) {
@@ -79,7 +94,7 @@ registerLabels('account-settings', familyDefaults);
       }));
       var status = panel.querySelector('[data-account-demo-status]');
       if (status) status.textContent = input.getAttribute('data-demo-only') !== null
-        ? L('k1')
+        ? L('demo.changeNotice', panel)
         : '';
     });
 
@@ -93,18 +108,17 @@ registerLabels('account-settings', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* account-settings: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope); scope.querySelectorAll('[data-account-settings]').forEach(initPanel); return existing; }
+    if (existing) { withLabels(scope, function () { if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope); scope.querySelectorAll('[data-account-settings]').forEach(initPanel); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد فحص اللوحات تحت الجذر (يربط الجديد فقط). */
       update: function () {
-        if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope);
-        scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
+        withLabels(scope, function () { if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope); scope.querySelectorAll('[data-account-settings]').forEach(initPanel); });
       },
       /** يفك مستمعات كل لوحة ويمكّن الربط من جديد — لا يغير حالة العرض. */
       destroy: function () {
@@ -114,8 +128,7 @@ registerLabels('account-settings', familyDefaults);
         registry.remove(scope);
       },
     };
-    if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope);
-    scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
+    withLabels(scope, function () { if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope); scope.querySelectorAll('[data-account-settings]').forEach(initPanel); });
     registry.set(scope, instance);
     return instance;
   }

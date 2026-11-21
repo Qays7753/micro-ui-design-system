@@ -1,23 +1,17 @@
-# سير عمل CI — نسخة جاهزة للتركيب
+# CI — التركيب من المالك
 
-ملف `ci.yml` هنا هو سير عمل GitHub Actions المعتمد للمرحلتين 4 و5 (تشغيل كل
-البوابات — ومنها بوابة الحزمة `package` — على
-`feature/integration-readiness-2026-11-21` عند كل push/pull_request).
-
-## لماذا ليس في `.github/workflows/`؟
-
-التوكن المستخدم للرفع في هذه الجولة لا يملك نطاق `workflow`، ويرفض GitHub أي
-دفع يعدّل ملفات workflows بدونه. القرار مسجل في `docs/DECISIONS.md`.
-
-## التركيب (لمالك المستودع، مرة واحدة)
+الملف `ci.yml` هنا محفوظ حرفيًا ولا يعمل من هذا الموضع (توكن الرفع الحالي بلا نطاق
+`workflow` — قرار المرحلة 4). التركيب مرة واحدة من المالك:
 
 ```bash
-mkdir -p .github/workflows
-cp tools/ci/ci.yml .github/workflows/ci.yml
-git add .github/workflows/ci.yml
-git commit -m "ci: add gates workflow"
+git mv tools/ci/ci.yml .github/workflows/ci.yml
+git commit -m "ci: enable workflow (round 2 R7)"
 git push
 ```
 
-بعد ذلك يعمل CI تلقائيًا على كل دفعة للفرع. البديل المؤقت المحلي:
-`uv sync && uv run python tools/check-all.py --skip-visual`.
+يتطلب توكن رفع بنطاق `workflow` (Settings → Developer settings → Personal access
+tokens). بعد التركيب يعمل السير تلقائيًا على كل push وpull_request: checkout كامل
+بالوسوم، Node 20 + npm ci، uv sync، تثبيت Chromium، `check-all` كاملة (بما فيها
+البوابة البصرية مقابل v0.1.0 من وسوم git)، ثم `typecheck`، ورفع مخرجات الفحص
+كـartifact عند الفشل. كل الأوامر تعمل محليًا بنفس الترتيب (وهذا ما تشغله
+`tools/check-all.py` على نسخة نظيفة في R9).

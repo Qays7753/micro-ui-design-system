@@ -145,16 +145,24 @@ for rel in ls_files('*.html'):
     if re.search(r'<script[^>]*src="[^"]*/labels\.js"', text):
         violations.append('labels-import: %s يحمّل labels.js منفصلًا — النصوص مضمنة في dist/iife' % rel)
 
-# ---- 3) تغطية المفاتيح ----
+# ---- 3) تغطية المفاتيح (R5: مفاتيح دلالية) ----
 keys_checked = 0
 for fam, files in family_js.items():
     labels_src = (ROOT / 'components' / fam / 'labels.js').read_text()
-    defined = set(re.findall(r'"([a-zA-Z][a-zA-Z0-9]*)":', labels_src))
+    defined = set(re.findall(r"'([a-zA-Z][a-zA-Z0-9.]*)':", labels_src))
+    legacy = {k for k in defined if re.fullmatch(r'k\d+', k)}
+    if legacy:
+        violations.append('labels-keys: عائلة %s ما زالت تملك مفاتيح kNNN: %s' % (fam, sorted(legacy)))
+    used = set()
     for rel in files:
-        for key in set(re.findall(r"L\('([a-zA-Z0-9]+)'\)", (ROOT / rel).read_text())):
+        for key in set(re.findall(r"L\('([a-zA-Z][a-zA-Z0-9.]*)'", (ROOT / rel).read_text())):
+            used.add(key)
             keys_checked += 1
             if key not in defined:
                 violations.append('labels-keys: %s يستخدم L(\'%s\') غير الموجود في labels.js' % (rel, key))
+    unused = {k for k in defined if k not in used}
+    if unused:
+        violations.append('labels-keys: عائلة %s مفاتيح معرفة غير مستخدمة: %s' % (fam, sorted(unused)))
 
 
 def strip_comments(src):

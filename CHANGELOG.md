@@ -1,19 +1,34 @@
 # سجل التغييرات
 
-## 0.2.0 (قيد الإعداد — الجولة الثانية R2)
+## 0.2.0 (2026-11-22 — الجولة الثانية R0–R9)
 
 ### Breaking
 - المصدر ES modules بصادرات مسماة؛ لا `window.Micro*` من المصدر — الغلوبالات في `dist/iife/<entry>.js` فقط (R-D2/R-D3).
 - `src/` حُذفت نهائيًا و`dist/` غير متتبع — يبنيه `npm run build`/`prepare` (R-D4).
 - مسارات IIFE الجديدة: `dist/iife/<entry>.js` بدل `dist/js/<file>.js`؛ ملفات labels لا تُحمّل منفصلة (مضمنة).
-- مفاتيح نصوص `kNNN` كما هي في هذه المرحلة (تُعاد تسميتها في R5).
+- **مفاتيح النصوص دلالية** (R5): كل `kNNN` في ملفات labels الثلاثة عشر صارت أسماء مواضع (`operation.title`، `schedule.weekdays.full`…) — التوثيق الكامل في `docs/LABELS.md` (مولد آليًا).
+- **حذف التخزين على الجهاز من C08** (R6/R-D11): لا فعل `save-local` ولا حالة `local-saved` — أي طور تخزين سابق من المضيف يُعرض `uncertain`.
+- **دورة حياة موحدة** (R4/F2): `init(root, options?)` لكل مدخل يعيد instance له `update`/`destroy` مع `destroy(root)`/`getInstance(root)`؛ `disconnect` المهمل يمر بنفس مسار destroy؛ النسخ المستنسخة تربط كعناصر جديدة؛ وبعد destroy صفر مستمعات/مراقبات/مؤقتات.
 
 ### Added
 - `dist/esm/<entry>.js` قابلة للاستيراد (`import { init } from '@micro/ui/buttons'`) مع صفر أثر جانبي عند الاستيراد.
 - مدخل واحد لكل عائلة (21 مدخلًا) + `dist/iife/micro-ui.js` شامل + `dist/css/styles.css`.
+- أنواع TypeScript لكل مدخل (`dist/types/<entry>.d.ts` + `iife.d.ts` للغلوبالات) — `npm run typecheck` (R3).
+- بوابة `package-install`: تثبيت فعلي (tarball وgit عبر prepare) + استيراد Node + tsc ضد الحزمة + فحص متصفح importmap + وسم `v0.2.0` (R3).
+- `examples/esm-app`: استهلاك ESM عبر importmap مع دورة تركيب/إزالة كاملة (R3).
+- تخصيص نصوص لكل instance: `init(root, { labels })` لكل مدخل نصوص (يشمل Carousel وPicker) مع عزل النسخ؛ `setLabels(partial)` يبقى للسجل العام (R5).
+- `docs/LABELS.md` مولّد آليًا (`tools/labels-doc-build.py --check` داخل check-all) وبوابة `labels-override` (37 فحصًا) تثبت التخصيص وعزله (R5).
+- البوابة البصرية تولّد مرجعها من git ref داخل worktree مؤقت — لا مسارات آلة ولا صور أساس في المستودع (R1).
+- فحوص R-D11: لا زر تخزين في أي destination، والطور المحذوف يُعرض uncertain، وoffline/local يعطلان الإرسال في C08/C14 (R6).
 
 ### Fixed
 - setLabels كانت موثقة ومفقودة من تنفيذ AccessGateway/AccountSettings في 0.1.0 (options.labels كانت ترمي خطأ) — أُوفّرت الآن.
+- روابط footer في `previews/concepts` أُعيدت روابط حية (R1/F7)، والبوابات لم تعد تكتب داخل المستودع ولا تعتمد مسارات آلة (R1/F9).
+- اجتثاث esbuild لتسجيل renderers في مدخل ESM للمنتج أُصلح بمرجع صريح (R4).
+- ثغرة عقد SPA: init على مثيل حي لم يكن يربط العناصر الجديدة تحته، وdisconnect لم يزل المثيل من السجل — أُصلحا وفق عقد المالك (R4).
+
+### Deprecated
+- في نسخة IIFE فقط حتى 1.0 (R-D10): `disconnect(root)` (كل العائلات)، `sync(root)` (Fields/Readings)، `rescan(root)` (Info Strip)، `render(chart|root)` (Data/Packed/Metric)، و`update` الجذرية (Fields/InfoStrip/Metric/Data/Packed/Carousel/Peek/AccessGateway). لا تُصدَّر من مداخل ESM.
 
 # Changelog — @micro/ui
 

@@ -694,7 +694,7 @@ SCRIPT = r"""async () => {
   }
   {
     /* حتمي: رسم أعمدة بنطاق معلن غير صالح (data-max="oops") يعرض نص
-       الرفض الافتراضي k9 داخل [data-plot] — بلا اعتماد على نصوص
+       الرفض الافتراضي bars.rangeError داخل [data-plot] — بلا اعتماد على نصوص
        القالب التي قد لا تحوي مفتاحًا ظاهرًا في innerHTML */
     const m = mount('data');
     const chart = document.createElement('div');
@@ -706,12 +706,12 @@ SCRIPT = r"""async () => {
       + '<div data-plot></div><p data-chart-summary></p>';
     m.root.appendChild(chart);
     MicroData.init(m.root);
-    const original = labelsOf('data').k9;
+    const original = labelsOf('data')['bars.rangeError'];
     const shown = m.root.innerHTML.includes(original);
-    MicroData.setLabels({ k9: 'نص بديل للفحص' });
+    MicroData.setLabels({ 'bars.rangeError': 'نص بديل للفحص' });
     MicroData.update(m.root);
     const changed = m.root.innerHTML.includes('نص بديل للفحص') && !m.root.innerHTML.includes(original);
-    MicroData.setLabels({ k9: original });
+    MicroData.setLabels({ 'bars.rangeError': original });
     MicroData.update(m.root);
     const restored = m.root.innerHTML.includes(original) && !m.root.innerHTML.includes('نص بديل للفحص');
     MicroData.disconnect(m.root);

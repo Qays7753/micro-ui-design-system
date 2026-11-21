@@ -14,7 +14,7 @@
    بعد إضافة/إزالة مضيفة غير متزامنة، وdisconnect(root) يفصل مستمعات
    الجذر ويعيده لحالة غير مهيأة (init جديدة تعمل بعدها). لا مؤقتات. */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -22,9 +22,24 @@ registerLabels('info-strip', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'info-strip';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'info-strip';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   function isEditingTarget(target) {
@@ -80,7 +95,7 @@ registerLabels('info-strip', familyDefaults);
 
     if (pageList) {
       pageList.setAttribute('role', 'group');
-      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', L('k1'));
+      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', L('pages.ariaLabel', pageList));
     }
     function setIndex(target, focusViewport) {
       var list = slides();
@@ -102,7 +117,7 @@ registerLabels('info-strip', familyDefaults);
       if (previous) previous.disabled = index === 0;
       if (next) next.disabled = index === list.length - 1;
       if (position) position.textContent = (index + 1) + ' / ' + list.length;
-      if (status) status.textContent = L('k2') + (index + 1) + L('k3') + list.length;
+      if (status) status.textContent = L('status.positionPrefix', status) + (index + 1) + L('status.ofSeparator', status) + list.length;
       if (pageList) {
         pageButtons.forEach(function (button, pageIndex) {
           button.setAttribute('aria-current', pageIndex === index ? 'true' : 'false');
@@ -121,7 +136,7 @@ registerLabels('info-strip', familyDefaults);
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', L('k4') + (pageIndex + 1));
+        page.setAttribute('aria-label', L('page.showPrefix', page) + (pageIndex + 1));
         page.setAttribute('aria-current', pageIndex === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', pageIndex === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { setIndex(pageIndex, false); });
@@ -201,7 +216,7 @@ registerLabels('info-strip', familyDefaults);
     if (previous) previous.disabled = true;
     if (next) next.disabled = initial.length < 2;
     if (position) position.textContent = initial.length ? '1 / ' + initial.length : '';
-    if (status) status.textContent = initial.length ? L('k5') + initial.length : L('k6');
+    if (status) status.textContent = initial.length ? L('status.initialPrefix', status) + initial.length : L('status.empty', status);
 
     registry.set(strip, {
       listeners: listeners,
@@ -242,16 +257,16 @@ registerLabels('info-strip', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* info-strip: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope); scope.querySelectorAll('[data-info-strip]').forEach(initStrip); return existing; }
+    if (existing) { withLabels(scope, function () { if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope); scope.querySelectorAll('[data-info-strip]').forEach(initStrip); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** = rescan: إعادة التقاط البطاقات بعد تغيير شرائح DOM للمضيف. */
-      update: function () { rescan(scope); },
+      update: function () { withLabels(scope, function () { rescan(scope); }); },
       /** يفك مستمعات كل شريط (لا يمس بطاقات المضيف ولا حالتها). */
       destroy: function () {
         if (destroyed) return;
@@ -260,8 +275,7 @@ registerLabels('info-strip', familyDefaults);
         instances.remove(scope);
       },
     };
-    if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope);
-    scope.querySelectorAll('[data-info-strip]').forEach(initStrip);
+    withLabels(scope, function () { if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope); scope.querySelectorAll('[data-info-strip]').forEach(initStrip); });
     instances.set(scope, instance);
     return instance;
   }

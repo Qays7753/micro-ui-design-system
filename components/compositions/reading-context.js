@@ -76,18 +76,24 @@ function teardown(root) { within(root || document).forEach(function (el) { el.cl
      مزامنة أصناف السياق، وdestroy ينزعها فقط. */
   var registry = instanceRegistry();
 
+  /* R5 — توحيد توقيع options.labels فقط (C04 لا نصوص — لا طبقات فعليًا). */
+  function applyInstanceLabels() {}
+
+  /* R5 — تمريرية: لا نصوص فلا طبقة (توحيد التوقيع فقط). */
+  function withLabels(scope, fn) { return fn(); }
+
   export function init(root, options) {
     var scope = root || document;
-    void options; /* readings: لا خيارات */
+    applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { sync(scope); return existing; }
+    if (existing) { withLabels(scope, function () { sync(scope); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** = sync: مزامنة أصناف سياق الوحدة من DOM الحالي. */
-      update: function () { sync(scope); },
+      update: function () { withLabels(scope, function () { sync(scope); }); },
       /** ينزع أصناف السياق فقط — لا مستمعات أصلا في C04. */
       destroy: function () {
         if (destroyed) return;
@@ -96,7 +102,7 @@ function teardown(root) { within(root || document).forEach(function (el) { el.cl
         registry.remove(scope);
       },
     };
-    sync(scope);
+    withLabels(scope, function () { sync(scope); });
     registry.set(scope, instance);
     return instance;
   }

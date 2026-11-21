@@ -1,10 +1,25 @@
 /* C12 (review) — modes queue/item/report. */
 import { register } from './product-core.js';
-import { getLabel } from '../../shared/labels.js';
+import { instanceLabelFor, instanceLabelsOf, getLabel } from '../../shared/labels.js';
 
 var MICRO_LABELS_FAMILY = 'product-context';
-function L(key) {
+/* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+   لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+var renderLabels = null;
+function L(key, el) {
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
+}
+function withLabels(scope, fn) {
+  var previous = renderLabels;
+  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+  try { return fn(); } finally { renderLabels = previous; }
+}
+function applyInstanceLabels(scope, options) {
+  if (options && options.labels && typeof options.labels === 'object') {
+    setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+  }
 }
 
 export const type = 'review';
@@ -12,18 +27,18 @@ export const type = 'review';
 export function render(ctx) {
   var model = ctx.model, node = ctx.node, root = ctx.root;
 
-  root.appendChild(node('h2', 'm-product__title', model.mode === 'report' ? L('k130') : model.mode === 'queue' ? (model.title || L('k164')) : (model.title || L('k131'))));
+  root.appendChild(node('h2', 'm-product__title', model.mode === 'report' ? L('review.reportTitle', root) : model.mode === 'queue' ? (model.title || L('review.queueTitle', root)) : (model.title || L('review.itemTitle', root))));
 
   if (model.mode === 'report') {
     if (model.subjectLabel) root.appendChild(node('p', '', model.subjectLabel));
     if (model.statusLabel) root.appendChild(node('span', 'm-badge m-badge--info', model.statusLabel));
-    ctx.field(root, 'reason', L('k132'), { multiline: true });
-    if (model.reasonOptions) ctx.field(root, 'category', L('k133'), { options: model.reasonOptions });
-    ctx.button(root, 'submit-report', L('k134'), function () {
+    ctx.field(root, 'reason', L('review.reasonField', root), { multiline: true });
+    if (model.reasonOptions) ctx.field(root, 'category', L('review.categoryField', root), { options: model.reasonOptions });
+    ctx.button(root, 'submit-report', L('review.submitAction', root), function () {
       var payload = ctx.fieldsPayload(model.requiredFields || []);
       if (payload) payload.subjectId = model.id;
       return payload;
-    }, { confirm: true, description: L('k135') });
+    }, { confirm: true, description: L('review.submitConfirm') });
     return;
   }
 
@@ -36,21 +51,21 @@ export function render(ctx) {
   if (model.mode === 'queue') {
     if (model.subjectLabel) root.appendChild(node('p', '', model.subjectLabel));
     if (model.phase === 'error') {
-      if ((model.permissions || []).indexOf('retry') >= 0) ctx.button(root, 'retry', L('k113'), {});
+      if ((model.permissions || []).indexOf('retry') >= 0) ctx.button(root, 'retry', L('operation.actions.retry', root), {});
       return;
     }
     var items = Array.isArray(model.items) ? model.items : [];
-    if (!items.length) { root.appendChild(node('p', 'm-product__secondary', L('k168'))); return; }
+    if (!items.length) { root.appendChild(node('p', 'm-product__secondary', L('review.emptyQueue', root))); return; }
     var list = node('ul', 'm-operational-list');
     items.forEach(function (item) {
       if (!item || item.id == null) return;
-      var kindText = item.kind === 'listing' ? L('k165') : item.kind === 'flag' ? L('k166') : item.kind === 'driver-application' ? L('k167') : null;
+      var kindText = item.kind === 'listing' ? L('review.kind.listing') : item.kind === 'flag' ? L('review.kind.flag') : item.kind === 'driver-application' ? L('review.kind.driverApplication') : null;
       var li = node('li'), row = node('button', 'm-row m-row--operational m-product__queue-item');
       row.type = 'button';
       row.dataset.focusKey = 'queue-item-' + item.id;
       row.disabled = !ctx.can('open-review');
       var text = node('span', 'm-row__text');
-      text.appendChild(node('strong', 'm-row__title', item.title || L('k67')));
+      text.appendChild(node('strong', 'm-row__title', item.title || L('common.unavailable', text)));
       var sub = [];
       if (kindText) sub.push(kindText);
       if (item.date) sub.push(item.date);
@@ -69,23 +84,23 @@ export function render(ctx) {
       list.appendChild(li);
     });
     if (list.children.length) root.appendChild(list);
-    else root.appendChild(node('p', 'm-product__secondary', L('k168')));
+    else root.appendChild(node('p', 'm-product__secondary', L('review.emptyQueue', root)));
     return;
   }
 
   if (model.subjectLabel) root.appendChild(node('p', '', model.subjectLabel));
   if (model.statusLabel) root.appendChild(node('span', 'm-badge m-badge--info', model.statusLabel));
   if (model.summary) root.appendChild(node('p', '', model.summary));
-  if (model.reason) ctx.note(root, L('k136'), model.reason, 'info');
+  if (model.reason) ctx.note(root, L('review.reasonTitle', root), model.reason, 'info');
   if ((model.permissions || []).indexOf('view-evidence') >= 0 && model.visibility && model.visibility.evidence) {
     ctx.media(root, model.images, 'contain');
   } else if (model.images && model.images.length) {
-    root.appendChild(node('p', 'm-product__secondary', L('k137')));
+    root.appendChild(node('p', 'm-product__secondary', L('review.attachmentsRestricted', root)));
   }
-  ctx.field(root, 'reason', L('k138'), { multiline: true });
+  ctx.field(root, 'reason', L('review.decisionNoteField', root), { multiline: true });
   var actions = node('div', 'm-product__actions');
   root.appendChild(actions);
-  [{ id: 'approve', label: L('k139') }, { id: 'reject', label: L('k140') }, { id: 'request-info', label: L('k141') }].forEach(function (action) {
+  [{ id: 'approve', label: L('review.approveAction') }, { id: 'reject', label: L('review.rejectAction') }, { id: 'request-info', label: L('review.requestInfoAction') }].forEach(function (action) {
     if ((model.permissions || []).indexOf(action.id) >= 0) {
       ctx.button(actions, action.id, action.label, function () {
         var payload = ctx.fieldsPayload(model.reasonRequired && action.id === 'reject' ? ['reason'] : []);
@@ -94,7 +109,7 @@ export function render(ctx) {
           payload.revision = model.revision;
         }
         return payload;
-      }, { confirm: true, primary: action.id === 'approve', danger: action.id === 'reject', description: L('k142') + action.label + L('k143') + (model.subjectLabel || L('k144')) + '.' });
+      }, { confirm: true, primary: action.id === 'approve', danger: action.id === 'reject', description: L('review.decisionConfirmPrefix') + action.label + L('review.decisionConfirmOn') + (model.subjectLabel || L('review.subjectFallback')) + '.' });
     }
   });
   if (model.history) ctx.timeline(root, model.history);

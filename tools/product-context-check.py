@@ -50,7 +50,7 @@ def main():
                 check(kind+' / '+case+' renders text and no unintended pending',ev('document.querySelector("#product-root").textContent.trim().length>0&&lab.instance.getState().pending===null&&[...document.querySelectorAll("#product-root strong")].every(x=>parseFloat(getComputedStyle(x).fontWeight)<=600)'))
             p.locator('#scenario').select_option(cases[kind][0]);shot(kind+'360')
             # Uniform shared states have behavior checks, not just DOM existence.
-            for phase in ['ready','empty','loading','success','error','rejected','disabled','pending','uncertain','denied','expired','signed-out','conflict','local-saved']:
+            for phase in ['ready','empty','loading','success','error','rejected','disabled','pending','uncertain','denied','expired','signed-out','conflict']:
                 model('m.phase='+json.dumps(phase))
                 if phase in ['denied','expired','signed-out']:
                     ok=ev('!document.querySelector("#product-root h2")&&[...document.querySelectorAll("#product-root [data-product-action]")].every(b=>["reauth","choose-context"].includes(b.dataset.productAction))')
@@ -60,7 +60,7 @@ def main():
                     ok=ev('[...document.querySelectorAll("#product-root [data-product-action]")].every(b=>b.disabled||["recheck","reauth"].includes(b.dataset.productAction))')
                 elif phase=='empty':
                     ok=ev('!document.querySelector("#product-root .m-product__message")&&'+('!!document.querySelector("#product-root textarea")' if kind in ('assistant','manage') else '!document.querySelector("#product-root h2")'))
-                else:ok=ev('lab.instance.getState().phase==='+json.dumps('uncertain' if phase=='local-saved' and ev('lab.model.destination')!='manage' else phase)+'&&document.documentElement.scrollWidth===innerWidth')
+                else:ok=ev('lab.instance.getState().phase==='+json.dumps(phase)+'&&document.documentElement.scrollWidth===innerWidth')
                 check(kind+' state '+phase,ok)
             model("m.phase='ready'")
             for connection in ['weak','offline','local']:
@@ -78,9 +78,11 @@ def main():
         model('m.permissions=[]');check('Role name grants neither data nor commands',ev('!document.querySelector("#product-root select")&&!document.querySelector("[data-destination]")'))
         model('m.phase="signed-out";m.scope=null;m.permissions=["reauth"]');action('reauth')
         check('Signed-out unified access intent works without former workspace',ev('lab.lastIntent.action==="reauth"&&lab.lastIntent.scope===null'))
-        go('state','local');action('save-local');check('Manage local emits storage intent only, no success or network claim',ev('lab.lastIntent.action==="save-local"&&lab.instance.getState().pending!==null&&document.querySelector("#product-root").textContent.includes("بانتظار نتيجة مؤكدة")'))
-        model('m.destination="delivery"');check('Local save cannot become a connected Delivery write',ev('document.querySelector("[data-product-action=save-local]").disabled'))
+        go('state','local');model('m.permissions.push("save-local")');check('R-D11: no storage action renders in any destination even with a legacy grant',ev('!document.querySelector("#product-root [data-product-action=save-local]")'))
+        model('m.phase="local-saved"');check('R-D11: legacy local-saved phase renders as uncertain with no success claim',ev('lab.instance.getState().phase==="uncertain"'))
+        go('state','remote');model('m.connection="offline"');check('R-D11: offline disables connected actions in C08',ev('[...document.querySelectorAll("#product-root [data-product-action]")].every(b=>b.disabled)'))
         model('m.connection="unknown";m.phase="new-unrecognized-phase"');check('Unknown state/connection fail closed',ev('lab.instance.getState().phase==="uncertain"&&[...document.querySelectorAll("#product-root button")].every(b=>b.disabled)'))
+        go('manage');model('m.connection="local"');check('R-D11: local connection disables submit in C14 (Online-only)',ev('[...document.querySelectorAll("#product-root form button")].every(b=>b.disabled)'))
         # Media: source Carousel, no duplicate widget, blocked URLs/failure states.
         go('market');p.locator('[data-next]').click()
         check('Existing Carousel actually navigates source images',ev('MicroCarousel.getIndex(document.querySelector("[data-carousel]"))===1&&document.querySelector("[data-status]").textContent.includes("2")'))
@@ -152,7 +154,7 @@ def main():
         check('Manage success appears only after host resolve and records the operation',ev('lab.instance.getState().phase==="success"&&document.querySelector("#product-root").textContent.includes("تمت العملية")&&document.querySelectorAll("#product-root .m-operational-list > li").length===4&&document.querySelector("#product-root").textContent.includes("دفعة عميل")'))
         check('Manage form is cleared after acknowledged success',ev('document.querySelector("[data-focus-key=field-amount]").value===""&&document.querySelector("[data-focus-key=field-note]").value===""'))
         go('manage','operations');model('m.connection="offline"')
-        check('Manage offline disables submit with an explicit online-only note',ev('document.querySelector("[data-product-action=add-operation]").disabled&&document.querySelector("#product-root").textContent.includes("الاتصال منقطع")&&document.querySelector("#product-root").textContent.includes("لا حفظ محلي ولا طابور مزامنة")&&!document.querySelector("[data-product-action=save-local]")&&!document.querySelector("#product-root").textContent.includes("تم الحفظ")'))
+        check('Manage offline disables submit with an explicit online-only note',ev('document.querySelector("[data-product-action=add-operation]").disabled&&document.querySelector("#product-root").textContent.includes("الاتصال منقطع")&&document.querySelector("#product-root").textContent.includes("لا طابور مزامنة")&&!document.querySelector("[data-product-action=save-local]")&&!document.querySelector("#product-root").textContent.includes("تم الحفظ")'))
         go('manage','form-only')
         check('Manage with no operations keeps the entry form and an honest empty line',ev('document.querySelector("#product-root").textContent.includes("لا عمليات في هذه الفترة")&&!!document.querySelector("[data-product-action=add-operation]")'))
         # ---- المرحلة 8 — C09/results (D17): نتائج من المضيف وحالات منفصلة. ----

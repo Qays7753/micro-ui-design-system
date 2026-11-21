@@ -60,7 +60,7 @@
      ثابتة من HTML المستهلك — هذا المكوّن لا يحسب شيئًا.
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -68,9 +68,24 @@ registerLabels('data', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'data';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'data';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
@@ -141,7 +156,7 @@ registerLabels('data', familyDefaults);
   function stateList(items) {
     var list = document.createElement('ul');
     list.className = 'm-packed__states m-legend';
-    list.setAttribute('aria-label', L('k82'));
+    list.setAttribute('aria-label', L('packed.listAriaLabel', list));
     items.forEach(function (it) {
       var li = document.createElement('li');
       li.className = 'm-legend__item m-cat--' + it.series;
@@ -149,7 +164,7 @@ registerLabels('data', familyDefaults);
       label.textContent = it.label;
       var value = document.createElement('bdi');
       value.className = 'm-legend__value';
-      value.textContent = it.value === 0 ? L('k83') : stateText(it).text;
+      value.textContent = it.value === 0 ? L('packed.zeroText', value) : stateText(it).text;
       li.appendChild(label);
       li.appendChild(value);
       list.appendChild(li);
@@ -187,12 +202,12 @@ registerLabels('data', familyDefaults);
      «-3,566 — سالب غير صالح للمساحة». وللقيم الموجبة بلا تغيير:
      data-display نص العرض كما هو. */
   function stateText(it) {
-    if (!it.hasAttr) return { text: L('k84'), none: true };
+    if (!it.hasAttr) return { text: L('packed.unknown'), none: true };
     if (it.value === null) return { text: it.raw && it.raw.trim()
-      ? it.raw + L('k85') : L('k86'), none: true };
+      ? it.raw + L('packed.invalidSuffix') : L('packed.invalid'), none: true };
     if (it.value < 0) {
       var num = it.display || it.raw || String(it.value);
-      return { text: num + L('k87'), none: true };
+      return { text: num + L('packed.negativeSuffix'), none: true };
     }
     if (it.value === 0) return { text: '0', none: true };
     return { text: it.display || it.raw || String(it.value), none: false };
@@ -207,11 +222,11 @@ registerLabels('data', familyDefaults);
   var packedUid = 0;
 
   function packedValueState(it) {
-    if (!it.hasAttr) return L('k84');
+    if (!it.hasAttr) return L('packed.unknown');
     if (it.value === null) return it.raw && it.raw.trim()
-      ? it.raw + L('k85') : L('k86');
-    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L('k87');
-    if (it.value === 0) return L('k83');
+      ? it.raw + L('packed.invalidSuffix') : L('packed.invalid');
+    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L('packed.negativeSuffix', value);
+    if (it.value === 0) return L('packed.zeroText', it);
     return it.display || it.raw || String(it.value);
   }
 
@@ -226,7 +241,7 @@ registerLabels('data', familyDefaults);
       btn.type = 'button';
       btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
-      btn.textContent = L('k88');
+      btn.textContent = L('packed.table.showButton', btn);
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
       table.hidden = true;
@@ -249,7 +264,7 @@ registerLabels('data', familyDefaults);
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? L('k88') : L('k89');
+        btn.textContent = open ? L('packed.table.showButton', btn) : L('packed.table.hideButton', btn);
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -259,15 +274,15 @@ registerLabels('data', familyDefaults);
     var caption = document.createElement('caption');
     var title = chart.querySelector('.m-chart__title');
     var context = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
-    [['data-unit', L('k90')], ['data-period', L('k91')], ['data-max', L('k92')]].forEach(function (part) {
+    [['data-unit', L('packed.table.unitHead')], ['data-period', L('packed.table.periodHead')], ['data-max', L('packed.table.scaleHead')]].forEach(function (part) {
       var value = chart.getAttribute(part[0]);
       if (value && value.trim()) context.push(part[1] + ': ' + value.trim());
     });
-    caption.textContent = context.filter(Boolean).join(L('k93'));
+    caption.textContent = context.filter(Boolean).join(L('packed.table.separator', caption));
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
-    [L('k94'), L('k95')].forEach(function (h) {
+    [L('packed.table.categoryHead'), L('packed.table.valueHead')].forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -308,12 +323,12 @@ registerLabels('data', familyDefaults);
     var plot = chart.querySelector('[data-plot]');
     var err = document.createElement('p');
     err.className = 'm-chart__scale-error';
-    err.textContent = L('k96');
+    err.textContent = L('packed.scaleError', err);
     var devDetail = parseNum(raw) === 0
-      ? 'packed-circle: data-max="' + raw + L('k97') + (positiveExists
-        ? L('k98')
-        : L('k99'))
-      : 'packed-circle: data-max="' + raw + L('k100');
+      ? 'packed-circle: data-max="' + raw + L('packed.zeroDetailMax') + (positiveExists
+        ? L('packed.zeroDetailWithPositive')
+        : L('packed.zeroDetailNoPositive'))
+      : 'packed-circle: data-max="' + raw + L('packed.invalidDetail');
     chart.setAttribute('data-scale-detail', devDetail);
     plot.innerHTML = '';
     plot.appendChild(err);
@@ -321,7 +336,7 @@ registerLabels('data', familyDefaults);
       var empty = document.createElement('p');
       empty.className = 'm-packed__empty';
       empty.setAttribute('data-empty', '');
-      empty.textContent = L('k101');
+      empty.textContent = L('packed.empty', empty);
       plot.appendChild(empty);
       var states = stateList(itemsOf(chart));
       if (states.children.length) plot.appendChild(states);
@@ -393,7 +408,7 @@ registerLabels('data', familyDefaults);
       plot.innerHTML = '';
       var densityError = document.createElement('p');
       densityError.className = 'm-chart__scale-error';
-      densityError.textContent = L('k102');
+      densityError.textContent = L('packed.tooManyCategoriesError', densityError);
       plot.appendChild(densityError);
       renderKeyOnly(chart);
       chart.setAttribute('data-packed-state', 'too-many-positive-categories');
@@ -468,7 +483,7 @@ registerLabels('data', familyDefaults);
       var empty = document.createElement('p');
       empty.className = 'm-packed__empty';
       empty.setAttribute('data-empty', '');
-      empty.textContent = L('k101');
+      empty.textContent = L('packed.empty', empty);
       plot.appendChild(empty);
     }
     var special = items.filter(function (it) { return stateText(it).none; });
@@ -523,19 +538,17 @@ registerLabels('data', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* packed-circle: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { if (scope.matches && scope.matches('[data-chart-packed]')) render(scope); scope.querySelectorAll('[data-chart-packed]').forEach(render); return existing; }
+    if (existing) { withLabels(scope, function () { if (scope.matches && scope.matches('[data-chart-packed]')) render(scope); scope.querySelectorAll('[data-chart-packed]').forEach(render); }); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد التصيير من DOM المصدر لكل رسوم packed تحت الجذر. */
       update: function () {
-        var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
-        if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
-        charts.forEach(function (chart) { render(chart); });
+        withLabels(scope, function () { if (scope.matches && scope.matches('[data-chart-packed]')) render(scope); scope.querySelectorAll('[data-chart-packed]').forEach(render); });
       },
       /** يفك مراقبات الرصد وrAF — لا يمس بيانات المصدر. */
       destroy: function () {
@@ -545,8 +558,7 @@ registerLabels('data', familyDefaults);
         instances.remove(scope);
       },
     };
-    if (scope.matches && scope.matches('[data-chart-packed]')) render(scope);
-    scope.querySelectorAll('[data-chart-packed]').forEach(render);
+    withLabels(scope, function () { if (scope.matches && scope.matches('[data-chart-packed]')) render(scope); scope.querySelectorAll('[data-chart-packed]').forEach(render); });
     instances.set(scope, instance);
     return instance;
   }

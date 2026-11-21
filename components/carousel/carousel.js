@@ -66,7 +66,7 @@
    حدث عام: micro-carousel:change {detail: {index, count}}
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -74,9 +74,24 @@ registerLabels('carousel', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'carousel';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'carousel';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب */
@@ -243,16 +258,16 @@ registerLabels('carousel', familyDefaults);
       empty = document.createElement('p');
       empty.setAttribute('data-carousel-empty', '');
       empty.setAttribute('role', 'status');
-      empty.textContent = L('k1'); /* R-22: عرف النقطة في سطور الفراغ */
+      empty.textContent = L('empty', empty); /* R-22: عرف النقطة في سطور الفراغ */
       carousel.appendChild(empty);
     }
     if (empty) empty.hidden = st.count !== 0;
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
       slide.setAttribute('data-current', isCurrent ? 'true' : 'false');
-      slide.setAttribute('aria-roledescription', L('k2'));
-      var name = slide.getAttribute('data-card-label') || (L('k3') + (i + 1));
-      slide.setAttribute('aria-label', name + L('k4') + (i + 1) + L('k5') + st.count);
+      slide.setAttribute('aria-roledescription', L('slide.cardRole', slide));
+      var name = slide.getAttribute('data-card-label') || (L('slide.labelPrefix', slide) + (i + 1));
+      slide.setAttribute('aria-label', name + L('slide.positionPrefix', slide) + (i + 1) + L('position.of', slide) + st.count);
       /* المعاينة البصرية للمجاورة لا تجعل تحكماتها أهداف Tab مقصوصة. */
       slide.removeAttribute('aria-hidden');
       slide.inert = !isCurrent;
@@ -274,8 +289,8 @@ registerLabels('carousel', familyDefaults);
     /* مؤشر الموضع — نص إتاحي صريح */
     if (st.status) {
       st.status.textContent = st.count === 0
-        ? L('k1')
-        : L('k6') + (st.index + 1) + L('k5') + st.count;
+        ? L('empty')
+        : L('status.positionPrefix') + (st.index + 1) + L('position.of') + st.count;
     }
 
     /* النقاط: تُبنى مرة، وتُحدَّث الحالية هنا */
@@ -301,7 +316,7 @@ registerLabels('carousel', familyDefaults);
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'm-carousel__dot';
-      b.setAttribute('aria-label', L('k7') + (i + 1) + L('k5') + st.count);
+      b.setAttribute('aria-label', L('dots.goToPrefix', b) + (i + 1) + L('position.of', b) + st.count);
       (function (idx) {
         onLocal(carousel, b, 'click', function () { goToIndex(carousel, idx); });
       })(i);
@@ -579,7 +594,7 @@ registerLabels('carousel', familyDefaults);
 
     carousel.setAttribute('role', 'group');
     if (!carousel.hasAttribute('tabindex')) carousel.setAttribute('tabindex', '0');
-    carousel.setAttribute('aria-roledescription', L('k8'));
+    carousel.setAttribute('aria-roledescription', L('region.role', carousel));
     if (!carousel.hasAttribute('aria-label') && carousel.hasAttribute('data-carousel-label')) {
       carousel.setAttribute('aria-label', carousel.getAttribute('data-carousel-label'));
     }
@@ -617,11 +632,11 @@ registerLabels('carousel', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* carousel: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { if (scope.matches && scope.matches('[data-carousel]')) setup(scope); scope.querySelectorAll('[data-carousel]').forEach(setup); return existing; }
+    if (existing) { withLabels(scope, function () { if (scope.matches && scope.matches('[data-carousel]')) setup(scope); scope.querySelectorAll('[data-carousel]').forEach(setup); }); return existing; }
     var destroyed = false;
     function target() {
       if (scope.matches && scope.matches('[data-carousel]')) return scope;
@@ -649,8 +664,7 @@ registerLabels('carousel', familyDefaults);
         instances.remove(scope);
       },
     };
-    if (scope.matches && scope.matches('[data-carousel]')) setup(scope);
-    scope.querySelectorAll('[data-carousel]').forEach(setup);
+    withLabels(scope, function () { if (scope.matches && scope.matches('[data-carousel]')) setup(scope); scope.querySelectorAll('[data-carousel]').forEach(setup); });
     instances.set(scope, instance);
     return instance;
   }

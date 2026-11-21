@@ -5,12 +5,12 @@
 | العقد | type | الدلالة والمدخلات |
 |---|---|---|
 | C07 | context | هوية واحدة، contexts من المستهلك، scope حالي وdestinations مصرح بها؛ طلب switch-context ينتظر إقرارًا. |
-| C08 | state | حالة عملية واتصال ومرجع، recheck/retry، وحفظ محلي صريح لـManage دون ادعاء مزامنة. |
+| C08 | state | حالة عملية واتصال ومرجع، recheck/retry — Online-only: لا إجراء تخزين على الجهاز (R-D11). |
 | C09 | market | modes card/editor/search/results؛ عنوان/سعر/وحدة/صور/حالة/سبب، ونتائج بحث يمررها المضيف بصفوف C02. |
 | C10 | delivery | modes request/offer/tracking/change/proof؛ سعر/وحدة/نسخة/خط أحداث/موافقات وإثبات يحددها المستهلك. |
 | C11 | assistant | messages نصية، draft، انتظار/retry، وproposal بمعرف ونسخة وتأكيد إلزامي. لا AI أو تفسير أمر من النص. |
 | C12 | review | modes queue/item/report؛ قائمة مراجعة متعددة ← تفاصيل (عنصر C12 نفسه) ← نموذج بلاغ. لا صلاحية مالية افتراضية. |
-| C14 | manage | سجل عمليات (مبيعات/مصاريف) بصفوف C02، نموذج إدخال، وملخص فترة من المضيف حصريًا؛ Online-only بلا حفظ محلي. |
+| C14 | manage | سجل عمليات (مبيعات/مصاريف) بصفوف C02، نموذج إدخال، وملخص فترة من المضيف حصريًا؛ Online-only بلا تخزين على الجهاز. |
 
 ## التحميل والاستعمال
 
@@ -44,9 +44,9 @@ root.addEventListener('micro-product:intent', event => {
 
 ## حالات العملية والاتصال
 
-phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/denied/expired/signed-out/conflict/local-saved. الحالة غير المعروفة uncertain، وlocal-saved خارجManage تعامل uncertain، لا نجاح مفترض. connection: online/offline/weak/local؛ غير المعروفة منقطعة. source لا يكتشف الشبكة بنفسه.
+phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/denied/expired/signed-out/conflict. الحالة غير المعروفة (ومنها أي حالة تخزين سابقة) تعامل uncertain، لا نجاح مفترض (R-D11). connection: online/offline/weak/local؛ غير المعروفة منقطعة. source لا يكتشف الشبكة بنفسه.
 
-الإجراء ينتقل إلى pending UI محليًا ويمنع التكرار، لكنه لا يعلن النجاح. success/local-saved يأتيان من نموذج يقدمه المستهلك صراحة. offline/weak/local تمنع طلبات الاتصال؛ save-local متاح فقط مع grant صريح وdestination=manage وسياق غير driver، ولا ينفذ تخزينًا. uncertain/conflict لا يسمحان إعادة mutation؛ recheck/reauth فقط حتى يقرر المصدر النتيجة. retry الصريح يحتاج idempotency وقرار إعادة التنفيذ عند المستهلك، ولا يُنفذ تلقائيًا.
+الإجراء ينتقل إلى pending UI محليًا ويمنع التكرار، لكنه لا يعلن النجاح. success يأتي من نموذج يقدمه المستهلك صراحة. offline/weak/local تمنع طلبات الاتصال. uncertain/conflict لا يسمحان إعادة mutation؛ recheck/reauth فقط حتى يقرر المصدر النتيجة. retry الصريح يحتاج idempotency وقرار إعادة التنفيذ عند المستهلك، ولا يُنفذ تلقائيًا.
 
 عند scope جديد أو سجل id مختلف أو mode مختلف أو draftKey جديد أو سحب visibility كانت ممنوحة أو انتهاء/رفض جلسة أو سحب view تُمسح drafts وFile URLs، وتُلغى التأكيدات والطلبات القديمة. لا تنتقل الرسائل أو مسودة أو focus لحقل من سياق سابق. التحديث في السياق نفسه يحفظ النص وتركيزه؛ تحديث prefill لا يستبدل مسودة محررة تلقائيًا. clearDraft=true من المستهلك يمسحه بعد إقرار مناسب، ويمرر false أو يحذفه في النموذج التالي لأنه علم لذلك التحديث. أخطاء الحقول لا تمسح القيم.
 
@@ -71,7 +71,7 @@ phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/den
 | type/mode | حقول الدلالة | الأوامر التي تتطلب grant بنفس الاسم |
 |---|---|---|
 | context | accountLabel، contexts[{scope,label,destinations}]، destination الحالية | switch-context{contextId,targetScope}؛ navigate{destination} |
-| state | title/reference/detail/steps | recheck/retry/save-local{reference} |
+| state | title/reference/detail/steps | recheck/retry |
 | market/card | id/revision/title/price/unit/images[{src,alt}]/sellerLabel/statusLabel/reason | edit/report{listingId,revision} |
 | market/editor | title/description/price/unit، requiredFields اختيارية، titleMaxLength اختياري، images القائمة | save-draft/publish{title,description,price,files} |
 | market/search | query، filters[{id,label,options:[{id,label}],value}]، resultLabel | search{query,…filterValues,files:[]}؛ معرّفات الحقول فريدة ولا تتصادم مع query/files |
@@ -157,7 +157,7 @@ conversationLayout اختياري embedded (السابق بحد360) أوfill (م
 
 - **قاعدة صارمة:** المكتبة لا تحسب أي مجاميع مالية إطلاقًا — لا جمع ولا صافٍ ولا رصيد. كل قيم ملخص الفترة يمررها المضيف حرفيًا (label/value/unit)، والمفقود يظهر «(غير متاح)» ولا يصبح صفرًا. الوحدة يمررها المضيف دائمًا ولا تفترضها المكتبة (D16)؛ غيابها يظهر «(الوحدة غير محددة)».
 - النوع نص ظاهر لكل صف (مبيعات/مصاريف من سجل النصوص الافتراضي) لا لونًا وحده؛ النوع غير المعروف لا يُترجم ولا يُخترع له اسم. المبلغ معزول الاتجاه (bdi/dir=ltr) ومعه وحدته.
-- **Online-only (D15):** عند offline/weak/local يُعطَّل زر الإرسال (وسائر الأفعال المتصلة) مع نص واضح: لا حفظ محلي ولا طابور مزامنة. لا يُعرض save-local ولا local-saved في هذا التركيب أبدًا، ولا «تم الحفظ» قبل resolve من المضيف.
+- **Online-only (D15):** عند offline/weak/local يُعطَّل زر الإرسال (وسائر الأفعال المتصلة) مع نص واضح: لا طابور مزامنة ولا تخزين على الجهاز، ولا «تم الحفظ» قبل resolve من المضيف (R-D11).
 - الحالات: loading وempty عبر phase المشتركة (التركيب يُعرض في empty مثل assistant لأن نموذج الإدخال غرضه)؛ عند ready بلا عمليات يظهر نص «لا عمليات في هذه الفترة». الإرسال intent مؤكد عبر C05 ثم pending: زر الإرسال يظهر حالة تحميل (is-loading/aria-busy) معطلًا ولا نجاح قبل إقرار المضيف. الفشل (phase=error) يحفظ القيم للتصحيح ويعرض retry صريحًا بgrant عند تمريره.
 - «تفريغ الحقول» فعل عرضي محلي يمسح مسودة النموذج فقط ولا يطلق نية ولا يتصل بشيء؛ يعطل أثناء pending/loading/disabled.
 - عقد المضيف: يمرر النموذج كاملًا (scope/permissions/phase/connection/destination=manage)، يستقبل `add-operation`/`retry` بمعرف الطلب، ويرد بـresolve بنموذج مؤكد (العملية المسجلة + clearDraft) أو رفض. المكتبة لا تتحقق ماليًا ولا تمتلك قيدًا ولا تعرف العملة.

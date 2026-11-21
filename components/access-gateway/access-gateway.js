@@ -1,7 +1,7 @@
 /* Access form primitives. No provider, network, or authentication is enabled by default. */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -9,9 +9,24 @@ registerLabels('access-gateway', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'access-gateway';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'access-gateway';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   // Rejected exceptions are diagnostics, never interface copy. The consumer may
@@ -134,7 +149,7 @@ registerLabels('access-gateway', familyDefaults);
           password.type = showing ? 'text' : 'password';
           reveal.setAttribute('aria-pressed', showing ? 'true' : 'false');
           /* A pressed toggle has one stable name; aria-pressed conveys state. */
-          reveal.setAttribute('aria-label', L('k1'));
+          reveal.setAttribute('aria-label', L('passwordReveal.label', reveal));
           if (selection && typeof password.setSelectionRange === 'function') {
             var start = Math.min(selection.start, password.value.length);
             var end = Math.min(selection.end, password.value.length);
@@ -178,9 +193,9 @@ registerLabels('access-gateway', familyDefaults);
           var tone = 'info';
           if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
           else if (hasMessage && result && result.authenticated === false) tone = 'error';
-          setMessage(form, hasMessage ? result.message : L('k2'), tone);
+          setMessage(form, hasMessage ? result.message : L('recovery.uncertain', form), tone);
         })
-        .catch(function (error) { if (alive()) setMessage(form, userError(error, L('k3')), 'error'); });
+        .catch(function (error) { if (alive()) setMessage(form, userError(error, L('recovery.error', form)), 'error'); });
     });
     providers.forEach(function (button) {
       on(button, 'click', function () {
@@ -191,17 +206,17 @@ registerLabels('access-gateway', familyDefaults);
             || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
         form.dataset.microAccessBusy = 'true';
         form.setAttribute('aria-busy', 'true');
-        if (globalApi('Buttons')) globalApi('Buttons').setLoading(button, true, { loadingLabel: L('k4') });
-        setMessage(form, L('k5'), 'info');
+        if (globalApi('Buttons')) globalApi('Buttons').setLoading(button, true, { loadingLabel: L('provider.connectingLabel', button) });
+        setMessage(form, L('provider.connectingMessage', form), 'info');
         Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
             if (!alive()) return;
             /* SUI-R1-01: عقد النتيجة — لا نجاح دخول من مجرد اكتمال
                المعالج؛ المستهلك يصرّح بالنتيجة أو تبقى محايدة. */
-            var outcome = resultOutcome(result, L('k6'), L('k7'), L('k8'));
+            var outcome = resultOutcome(result, L('provider.success'), L('provider.failure'), L('provider.uncertain'));
             setMessage(form, outcome.text, outcome.tone);
           })
-          .catch(function (error) { if (alive()) setMessage(form, userError(error, L('k9')), 'error'); })
+          .catch(function (error) { if (alive()) setMessage(form, userError(error, L('provider.error', form)), 'error'); })
           .then(function () {
             if (!alive()) return;
             form.dataset.microAccessBusy = 'false';
@@ -227,7 +242,7 @@ registerLabels('access-gateway', familyDefaults);
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, L('k10'), 'error');
+        setMessage(form, L('form.incomplete', form), 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -236,14 +251,14 @@ registerLabels('access-gateway', familyDefaults);
         invalid.forEach(function (input) {
           var isEmail = input.getAttribute('data-access-credential') === 'email' || input.name === 'email' || input.type === 'email';
           setFieldError(input, isEmail
-            ? L('k11')
+            ? L('validation.email', input)
             : input.validity.valueMissing
-              ? L('k12')
+              ? L('validation.password', input)
               : input.validity.tooShort && input.minLength > 0
-                ? L('k13') + input.minLength + L('k14')
-                : L('k15'));
+                ? L('validation.passwordMinLengthPrefix', input) + input.minLength + L('validation.passwordMinLengthSuffix', input)
+                : L('validation.passwordRequired', input));
         });
-        setMessage(form, L('k16'), 'error');
+        setMessage(form, L('validation.emailAndPasswordRequired', form), 'error');
         /* SUI-014: قناة خطأ واحدة — رسالة المكوّن المرتبطة بالحقل + aria-invalid
            + تركيز الحقل الأول. لا نستدعي reportValidity() فلا فقاعة أصلية
            ثانية بلغة النظام فوق الرسالة العربية (العرض البصري للفقاعة نفسها
@@ -254,14 +269,14 @@ registerLabels('access-gateway', familyDefaults);
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
         /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
-        setMessage(form, L('k17'), 'info');
+        setMessage(form, L('demo.notice', form), 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
       form.setAttribute('aria-busy', 'true');
       var submit = form.querySelector('[type="submit"]');
-      if (submit && globalApi('Buttons')) globalApi('Buttons').setLoading(submit, true, { loadingLabel: L('k18') });
-      setMessage(form, L('k19'), 'info');
+      if (submit && globalApi('Buttons')) globalApi('Buttons').setLoading(submit, true, { loadingLabel: L('submit.loadingLabel') });
+      setMessage(form, L('submit.pendingMessage', form), 'info');
       Promise.resolve().then(function () {
         if (!alive()) return;
         return current.onSubmit({
@@ -273,11 +288,11 @@ registerLabels('access-gateway', familyDefaults);
         /* SUI-R1-01: المكوّن يكتب رسالة النتيجة أولًا ثم يُطلق الحدث بعدها —
            فالكلمة الأخيرة فوق منطقة الحالة لمستمع المستهلك ولا تُمسح رسالته
            لاحقًا. النتيجة مسؤولية المستهلك بصياغة بشرية (SUI-013). */
-        var outcome = resultOutcome(result, L('k6'), L('k7'), L('k8'));
+        var outcome = resultOutcome(result, L('provider.success'), L('provider.failure'), L('provider.uncertain'));
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
       }).catch(function (error) {
-        if (alive()) setMessage(form, userError(error, L('k20')), 'error');
+        if (alive()) setMessage(form, userError(error, L('submit.error', form)), 'error');
       }).then(function () {
         if (!alive()) return;
         form.dataset.microAccessBusy = 'false';
@@ -305,10 +320,8 @@ registerLabels('access-gateway', familyDefaults);
   }
 
   function applyHandlers(scope, handlers) {
-    /* المرحلة 7 — options.labels لكل استدعاء: دمج جزئي فوق نصوص العائلة الافتراضية قبل الربط */
-    if (handlers && handlers.labels && typeof handlers.labels === 'object') {
-      setLabels(handlers.labels);
-    }
+    /* R5 — options.labels طبقة لهذا المثيل فقط (لا دمج عام) */
+    applyInstanceLabels(scope, handlers);
     var gateways = [];
     if (scope.matches && scope.matches('[data-access-gateway]')) gateways.push(scope);
     gateways = gateways.concat(Array.prototype.slice.call(scope.querySelectorAll('[data-access-gateway]')));
@@ -327,13 +340,17 @@ registerLabels('access-gateway', familyDefaults);
 
   export function init(root, handlers) {
     var scope = root || document;
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
+    applyInstanceLabels(scope, handlers);
     var existing = registry.get(scope);
     if (existing) { existing.update(handlers); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
       /** تحديث callbacks وتوافر الإجراءات دون ربط مضاعف. */
-      update: function (nextHandlers) { applyHandlers(scope, nextHandlers); },
+      update: function (nextHandlers) { withLabels(scope, function () { applyHandlers(scope, nextHandlers); }); },
       /** يفك المستمعات والمراقبة ويرجع الحالة الظاهرة — لا يمس قيم المستخدم. */
       destroy: function () {
         if (destroyed) return;

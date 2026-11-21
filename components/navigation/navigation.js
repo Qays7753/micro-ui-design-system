@@ -43,7 +43,7 @@
    لا هندسة تنقل جديدة ولا شاشات فعلية.
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -51,9 +51,24 @@ registerLabels('navigation', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'navigation';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'navigation';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   var liveBindings = new WeakMap();
@@ -285,11 +300,11 @@ registerLabels('navigation', familyDefaults);
           if (!title.id) title.id = 'micro-layer-title-' + (++layerTitleUid);
           layer.setAttribute('aria-labelledby', title.id);
         } else if (window.console && console.warn) {
-          console.warn(L('k1'), layer);
+          console.warn(L('layer.unnamedWarning', layer), layer);
         }
       }
     } else if (window.console && console.warn) {
-      console.warn(L('k2') + role + L('k3'), layer);
+      console.warn(L('layer.unusualRolePrefix', layer) + role + L('layer.unusualRoleSuffix', layer), layer);
     }
   }
 
@@ -457,16 +472,16 @@ registerLabels('navigation', familyDefaults);
   /* R-20 (2026-10-25): عبارة عدد الفلاتر العربية الكاملة — المثنى والجمع
      وقاعدة العدد المركب فوق 100 (كانت «N فلاتر» فقط بلا مثنى) */
   function filterCountAr(n) {
-    if (n === 1) return L('k4');
-    if (n === 2) return L('k5');
-    if (n >= 3 && n <= 10) return n + L('k6');
-    if (n >= 11 && n <= 99) return n + L('k7');
+    if (n === 1) return L('filters.count.one');
+    if (n === 2) return L('filters.count.two');
+    if (n >= 3 && n <= 10) return n + L('filters.count.fewSuffix');
+    if (n >= 11 && n <= 99) return n + L('filters.count.manySuffix');
     var r = n % 100;
-    if (r === 0) return n + L('k8');
-    if (r === 1) return n + L('k9');
-    if (r === 2) return n + L('k10');
-    if (r >= 3 && r <= 10) return n + L('k6');
-    return n + L('k7');
+    if (r === 0) return n + L('filters.count.hundredSuffix');
+    if (r === 1) return n + L('filters.count.hundredOneSuffix');
+    if (r === 2) return n + L('filters.count.hundredTwoSuffix');
+    if (r >= 3 && r <= 10) return n + L('filters.count.fewSuffix');
+    return n + L('filters.count.manySuffix');
   }
 
   function updateSummary(panel, phase) {
@@ -476,7 +491,7 @@ registerLabels('navigation', familyDefaults);
       var key = input.getAttribute('data-filter-key');
       return !!key && key !== 'none' && inputActive(input);
     });
-    if (!actives.length) { summary.textContent = phase + L('k11'); return; }
+    if (!actives.length) { summary.textContent = phase + L('filters.summary.emptySuffix', summary); return; }
     var labels = [];
     actives.forEach(function (input) {
       var l = filterLabel(input);
@@ -486,7 +501,7 @@ registerLabels('navigation', familyDefaults);
        محايد بلا أسماء مفاتيح. event.detail.count/applied وdraft/applied
        سليمة كما هي — هذا النص عرض فقط. */
     summary.textContent = labels.length === actives.length
-      ? phase + ': ' + labels.join(L('k12'))
+      ? phase + ': ' + labels.join(L('filters.summary.separator'))
       : phase + ': ' + filterCountAr(actives.length);
   }
 
@@ -506,15 +521,15 @@ registerLabels('navigation', familyDefaults);
           input.value = '';
         }
       });
-      updateSummary(panel, L('k13'));
+      updateSummary(panel, L('filters.summary.current', panel));
     });
     /* الملخص يتبع الجاري فعليًا عند أي تغيير (وليس عند الفتح/التطبيق فقط) */
     on(panel, panel, 'change', function (e) {
-      if (e.target.closest && e.target.closest('[data-filter-key]')) updateSummary(panel, L('k13'));
+      if (e.target.closest && e.target.closest('[data-filter-key]')) updateSummary(panel, L('filters.summary.current', target));
     });
     on(panel, panel, 'input', function (e) {
       if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
-        updateSummary(panel, L('k13'));
+        updateSummary(panel, L('filters.summary.current', panel));
       }
     });
     var apply = panel.querySelector('[data-filter-apply]');
@@ -526,7 +541,7 @@ registerLabels('navigation', familyDefaults);
         if (input.type === 'checkbox') applied[key] = input.checked;
         else applied[key] = String(input.value == null ? '' : input.value).trim();
       });
-      updateSummary(panel, L('k14'));
+      updateSummary(panel, L('filters.summary.applied', panel));
       panel.__microApplied = Object.assign({}, applied); /* قراءة لاحقة للفحص/المستهلك */
       var count = Object.keys(applied).filter(function (k) {
         return applied[k] === true || (typeof applied[k] === 'string' && applied[k] !== '');
@@ -543,7 +558,7 @@ registerLabels('navigation', familyDefaults);
         if (input.type === 'checkbox') input.checked = false;
         else input.value = '';
       });
-      updateSummary(panel, L('k13'));
+      updateSummary(panel, L('filters.summary.current', panel));
     });
     var cancel = panel.querySelector('[data-filter-cancel]');
     if (cancel) on(panel, cancel, 'click', function () { closeLayer(panel); }); /* يرمي الجاري */
@@ -568,7 +583,7 @@ registerLabels('navigation', familyDefaults);
           input.value = applied[key];
         }
       });
-      updateSummary(panel, L('k14'));
+      updateSummary(panel, L('filters.summary.applied', panel));
       panel.__microApplied = Object.assign({}, applied);
     };
   }
@@ -733,17 +748,17 @@ registerLabels('navigation', familyDefaults);
 
   export function init(root, options) {
     var scope = root || document;
-    void options; /* navigation: لا خيارات حاليًا — options.labels في R5 */
+    applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
         /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
        عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
-    if (existing) { bindScope(scope); return existing; }
+    if (existing) { withLabels(scope, function () { bindScope(scope); }); return existing; }
     bindDocumentOnce();
     var destroyed = false;
     var instance = {
       root: scope,
       /** يعيد ربط عناصر الطبقات الجديدة تحت الجذر (الربط محروس فلا ازدواج). */
-      update: function () { bindScope(scope); },
+      update: function () { withLabels(scope, function () { bindScope(scope); }); },
       /** يغلق الطبقات المفتوحة ويفك المستمعات ويرجع inert الخلفية. */
       destroy: function () {
         if (destroyed) return;
@@ -753,7 +768,7 @@ registerLabels('navigation', familyDefaults);
         instances.remove(scope);
       },
     };
-    bindScope(scope);
+    withLabels(scope, function () { bindScope(scope); });
     instances.set(scope, instance);
     return instance;
   }

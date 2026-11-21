@@ -107,16 +107,31 @@
      والتهيئة المزدوجة آمنة (data-ocal-init).
    ========================================================= */
 
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 
 registerLabels('order-schedule', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
      النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
      كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
-  var MICRO_LABELS_FAMILY = 'order-schedule';
-  function L(key) {
+var MICRO_LABELS_FAMILY = 'order-schedule';
+  /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+     لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+  var renderLabels = null;
+  function L(key, el) {
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
+  }
+  function withLabels(scope, fn) {
+    var previous = renderLabels;
+    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+    try { return fn(); } finally { renderLabels = previous; }
+  }
+  function applyInstanceLabels(scope, options) {
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
 
   /* ---- أنماط التحقق النصي (لا تحويل تاريخ عبر UTC) ---- */
@@ -130,7 +145,7 @@ registerLabels('order-schedule', familyDefaults);
      الإتاحية) — كل التواريخ رقمية DD/MM/YYYY ورأس الشهر «MM / YYYY».
      أسماء الأيام (ليست أشهرًا) تبقى لعناوين اليوم والأسماء الإتاحية. */
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
-  var WEEKDAYS_FULL = [L('k1'), L('k2'), L('k3'), L('k4'), L('k5'), L('k6'), L('k7')];
+  var WEEKDAYS_FULL = L('schedule.weekdays.full');
   /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
      (الأحد أولًا) يجعل العمود الأول أحدًا في الاتجاهين (RTL يعكس
      الصف المنطقي بصريًا بلا عكس تواريخ). */
@@ -139,7 +154,7 @@ registerLabels('order-schedule', familyDefaults);
      (رأس الأسبوع aria-hidden بصري فقط). كان: أسماء 5-6 أحرف مثل
      «ثلاثاء/أربعاء» لا تتسع عمود ~38px عند 1× فتنكسر الكلمة على سطرين
      (mid-word) بلا قراءة سليمة. */
-  var WEEKDAYS_SHORT = [L('k8'), L('k9'), L('k10'), L('k11'), L('k12'), L('k13'), L('k14')];
+  var WEEKDAYS_SHORT = L('schedule.weekdays.short');
 
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -247,7 +262,7 @@ registerLabels('order-schedule', familyDefaults);
     return countPluralRules.select(n);
   }
   function countPhraseAr(n) {
-    var forms = L('ordersCountPlural') || {};
+    var forms = L('schedule.orders.count') || {};
     var category = countPluralCategory(n);
     var template = forms[category] != null ? forms[category] : forms.other;
     if (template == null) return String(n);
@@ -380,8 +395,9 @@ registerLabels('order-schedule', familyDefaults);
 
   export function init(root, options) {
     if (!root || root.nodeType !== 1) {
-      throw new Error(L('k15'));
+      throw new Error(L('schedule.errors.invalidRoot'));
     }
+    applyInstanceLabels(root, options);
     /* تهيئة مزدوجة على نفس الجذر: نفس الحالة بلا مستمعات جديدة —
        الخيارات الأولى تُحتفظ (موثق في المواصفة) */
     var existing = instances.get(root);
@@ -683,10 +699,10 @@ registerLabels('order-schedule', familyDefaults);
     function buildViewSeg() {
       var bar = el('div', 'm-ocal__viewseg');
       bar.setAttribute('role', 'tablist');
-      bar.setAttribute('aria-label', L('k16'));
-      bar.appendChild(viewsegBtn('day', L('k17'), viewPressed('day')));
-      bar.appendChild(viewsegBtn('week', L('k18'), viewPressed('week')));
-      bar.appendChild(viewsegBtn('month', L('k19'), viewPressed('month')));
+      bar.setAttribute('aria-label', L('schedule.view.ariaLabel', bar));
+      bar.appendChild(viewsegBtn('day', L('schedule.view.day', bar), viewPressed('day')));
+      bar.appendChild(viewsegBtn('week', L('schedule.view.week', bar), viewPressed('week')));
+      bar.appendChild(viewsegBtn('month', L('schedule.view.month', bar), viewPressed('month')));
       return bar;
     }
 
@@ -705,7 +721,7 @@ registerLabels('order-schedule', familyDefaults);
       btn.setAttribute('aria-pressed', listActive ? 'true' : 'false');
       btn.appendChild(listActive ? calendarIcon() : listIcon());
       btn.appendChild(el('span', 'm-ocal__mode-toggle-text',
-        listActive ? L('k20') : L('k21')));
+        listActive ? L('schedule.view.calendarToggle') : L('schedule.view.listToggle')));
       return btn;
     }
 
@@ -774,7 +790,7 @@ registerLabels('order-schedule', familyDefaults);
       var today = el('button', 'm-ocal__todaybtn');
       today.type = 'button';
       today.setAttribute('data-ocal-action', 'today');
-      today.textContent = L('k22');
+      today.textContent = L('schedule.nav.today', today);
       return today;
     }
 
@@ -794,10 +810,10 @@ registerLabels('order-schedule', familyDefaults);
     function buildNavActions(prevAction, nextAction) {
       var group = el('div', 'm-ocal__cal-actions');
       if (todayVisible()) group.appendChild(todayNavBtn());
-      group.appendChild(navBtn(prevAction, prevAction === 'prev-month' ? L('k23') :
-        (prevAction === 'prev-week' ? L('k24') : L('k25')), prevIcon()));
-      group.appendChild(navBtn(nextAction, nextAction === 'next-month' ? L('k26') :
-        (nextAction === 'next-week' ? L('k27') : L('k28')), nextIcon()));
+      group.appendChild(navBtn(prevAction, prevAction === 'prev-month' ? L('schedule.nav.prevMonth', group) :
+        (prevAction === 'prev-week' ? L('schedule.nav.prevWeek') : L('schedule.nav.prevDay')), prevIcon()));
+      group.appendChild(navBtn(nextAction, nextAction === 'next-month' ? L('schedule.nav.nextMonth', group) :
+        (nextAction === 'next-week' ? L('schedule.nav.nextWeek') : L('schedule.nav.nextDay')), nextIcon()));
       return group;
     }
 
@@ -815,7 +831,7 @@ registerLabels('order-schedule', familyDefaults);
       var pickerButton = el('button', 'm-ocal__month-trigger');
       pickerButton.type = 'button';
       pickerButton.setAttribute('data-ocal-action', 'month-picker');
-      pickerButton.setAttribute('aria-label', L('k29'));
+      pickerButton.setAttribute('aria-label', L('schedule.picker.ariaLabel', pickerButton));
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
       /* عقد 2026-10-26 (تعليمات المالك — الأرقام فقط): رأس الشهر رقمي
@@ -840,24 +856,24 @@ registerLabels('order-schedule', familyDefaults);
       picker.setAttribute('data-ocal-picker', '');
       picker.setAttribute('data-ocal-year', yearText(state.pickerYear));
       picker.setAttribute('role', 'dialog');
-      picker.setAttribute('aria-label', L('k29'));
+      picker.setAttribute('aria-label', L('schedule.picker.ariaLabel', picker));
       var heading = el('div', 'm-ocal__picker-head');
-      var prevYear = el('button', 'm-ocal__picker-yearbtn', L('k30'));
+      var prevYear = el('button', 'm-ocal__picker-yearbtn', L('schedule.picker.prevYear', prevYear));
       prevYear.type = 'button';
       prevYear.setAttribute('data-ocal-action', 'picker-prev-year');
-      prevYear.setAttribute('aria-label', L('k30'));
+      prevYear.setAttribute('aria-label', L('schedule.picker.prevYear', prevYear));
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
       var year = el(hTag(), 'm-ocal__picker-year', yearText(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
-      var nextYear = el('button', 'm-ocal__picker-yearbtn', L('k31'));
+      var nextYear = el('button', 'm-ocal__picker-yearbtn', L('schedule.picker.nextYear', nextYear));
       nextYear.type = 'button';
       nextYear.setAttribute('data-ocal-action', 'picker-next-year');
-      nextYear.setAttribute('aria-label', L('k31'));
+      nextYear.setAttribute('aria-label', L('schedule.picker.nextYear', nextYear));
       nextYear.disabled = state.pickerYear >= 9999;
       heading.appendChild(nextYear);
-      var back = el('button', 'm-ocal__picker-back', L('k32'));
+      var back = el('button', 'm-ocal__picker-back', L('schedule.picker.back', back));
       back.type = 'button';
       back.setAttribute('data-ocal-action', 'picker-back');
       heading.appendChild(back);
@@ -865,7 +881,7 @@ registerLabels('order-schedule', familyDefaults);
 
       var months = el('div', 'm-ocal__picker-months');
       months.setAttribute('role', 'group');
-      months.setAttribute('aria-label', L('k33'));
+      months.setAttribute('aria-label', L('schedule.picker.monthsLabel', months));
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
       /* عقد 2026-10-26 (الأرقام فقط): خيارات المنتقي أرقام شهرية
          01..12 مرئية، والاسم الإتاحي رقمي أيضًا «10 / 2026» — لا اسم
@@ -976,7 +992,7 @@ registerLabels('order-schedule', familyDefaults);
       /* الاسم الإتاحي رقمي بالكامل (عقد 2026-10-26 — الأرقام فقط):
          التاريخ الكامل DD/MM/YYYY + عبارة العدد («07/10/2026، طلبان»)
          — لا اسم شهر ولا في الأسماء الإتاحية، بأرقام لاتينية معزولة. */
-      var label = dateNumeric(iso) + L('k34') + countPhraseAr(orders.length);
+      var label = dateNumeric(iso) + L('schedule.dayCell.ordersSuffix') + countPhraseAr(orders.length);
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -995,7 +1011,7 @@ registerLabels('order-schedule', familyDefaults);
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', L('k35') + pad2(m) + ' / ' + yearText(y));
+      grid.setAttribute('aria-label', L('schedule.monthTitlePrefix', grid) + pad2(m) + ' / ' + yearText(y));
       grid.setAttribute('data-ocal-grid', '');
 
       var row = el('div', 'm-ocal__gridrow');
@@ -1072,7 +1088,7 @@ registerLabels('order-schedule', familyDefaults);
       var monthOfTitle = parseIso(state.selectedDate);
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', L('k36') + weekRangeTitle(dates));
+      grid.setAttribute('aria-label', L('schedule.weekTitlePrefix', grid) + weekRangeTitle(dates));
       grid.setAttribute('data-ocal-grid', '');
       var row = el('div', 'm-ocal__gridrow');
       row.setAttribute('role', 'row');
@@ -1112,10 +1128,10 @@ registerLabels('order-schedule', familyDefaults);
       b.type = 'button';
       b.setAttribute('data-ocal-action', 'add');
       b.appendChild(plusIcon());
-      b.appendChild(el('span', null, L('k37')));
+      b.appendChild(el('span', null, L('schedule.addOrder.label', b)));
       var d = (dateIso === undefined) ? addRequestDate() : dateIso;
       b.setAttribute('data-ocal-add-date', d || '');
-      if (d) b.setAttribute('aria-label', L('k38') + fullDateAr(d));
+      if (d) b.setAttribute('aria-label', L('schedule.addOrder.dayAriaPrefix', b) + fullDateAr(d));
       return b;
     }
 
@@ -1211,18 +1227,18 @@ registerLabels('order-schedule', familyDefaults);
       if (!expanded) panel.hidden = true;
       panel.appendChild(el('p', 'm-ocal__rowpanel-title', order.title));
       var dl = el('dl', 'm-ocal__rowdetails');
-      dl.appendChild(detailRow(L('k39'),
-        order.date ? dateNumeric(order.date) : L('k40'), true));
-      dl.appendChild(detailRow(L('k41'), order.time || '—', true));
-      dl.appendChild(detailRow(L('k42'), order.customer || '—', false));
+      dl.appendChild(detailRow(L('schedule.orderRow.date', dl),
+        order.date ? dateNumeric(order.date) : L('schedule.orderRow.unscheduled'), true));
+      dl.appendChild(detailRow(L('schedule.orderRow.time', dl), order.time || '—', true));
+      dl.appendChild(detailRow(L('schedule.orderRow.customer', dl), order.customer || '—', false));
       if (order.statusKey !== '') {
         var st = resolveStatus(order.statusKey);
         var chip = el('span',
           'm-ocal__row-status m-ocal__row-status--' + st.tone, st.label);
-        dl.appendChild(detailRow(L('k43'), chip, false));
+        dl.appendChild(detailRow(L('schedule.orderRow.status', dl), chip, false));
       }
       if (order.note) {
-        dl.appendChild(detailRow(L('k44'), order.note, false));
+        dl.appendChild(detailRow(L('schedule.orderRow.note', dl), order.note, false));
       }
       panel.appendChild(dl);
       if (state.orderActions.edit || state.orderActions.delete) {
@@ -1255,14 +1271,14 @@ registerLabels('order-schedule', familyDefaults);
     function buildOrderTools(order) {
       var row = el('div', 'm-ocal__rowtools');
       if (state.orderActions.edit) {
-        var editBtn = el('button', 'm-ocal__rowtool', L('k45'));
+        var editBtn = el('button', 'm-ocal__rowtool', L('schedule.orderRow.edit', editBtn));
         editBtn.type = 'button';
         editBtn.setAttribute('data-ocal-action', 'order-edit');
         editBtn.setAttribute('data-ocal-id', order.id);
         row.appendChild(editBtn);
       }
       if (state.orderActions.delete) {
-        var delBtn = el('button', 'm-ocal__rowtool m-ocal__rowtool--danger', L('k46'));
+        var delBtn = el('button', 'm-ocal__rowtool m-ocal__rowtool--danger', L('schedule.orderRow.delete', delBtn));
         delBtn.type = 'button';
         delBtn.setAttribute('data-ocal-action', 'order-delete');
         delBtn.setAttribute('data-ocal-id', order.id);
@@ -1309,10 +1325,10 @@ registerLabels('order-schedule', familyDefaults);
     function eventsTitleNodes(iso) {
       var title = el(hTag(), 'm-ocal__daypanel-title');
       if (iso === state.today) {
-        title.textContent = L('k47');
+        title.textContent = L('schedule.dayList.title', title);
         return title;
       }
-      title.appendChild(document.createTextNode(L('k35')));
+      title.appendChild(document.createTextNode(L('schedule.monthTitlePrefix', title)));
       var bdi = el('bdi', 'm-ocal__daypanel-date', dateNumeric(iso));
       title.appendChild(bdi);
       return title;
@@ -1329,9 +1345,9 @@ registerLabels('order-schedule', familyDefaults);
         /* نفس تقديم رأس الشهر الرقمي (عقد الأرقام 2026-10-26):
            «لا يوم محدد في 01 / 2027» — لا اسم شهر */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          L('k48') + pad2(m) + ' / ' + yearText(y)));
+          L('schedule.dayList.noDayPrefix') + pad2(m) + ' / ' + yearText(y)));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
-          countPhraseAr(ordersInMonth(y, m).length) + L('k49')));
+          countPhraseAr(ordersInMonth(y, m).length) + L('schedule.dayList.noDaySuffix')));
         head.appendChild(buildAddButton(null));
         panel.appendChild(head);
         return panel;
@@ -1356,7 +1372,7 @@ registerLabels('order-schedule', familyDefaults);
         var empty = el('div', 'm-ocal__daypanel-empty');
         empty.setAttribute('data-ocal-status', 'empty');
         empty.setAttribute('role', 'status');
-        empty.appendChild(el('p', 'm-ocal__status-text', L('k50')));
+        empty.appendChild(el('p', 'm-ocal__status-text', L('schedule.dayList.empty', empty)));
         panel.appendChild(empty);
       }
       return panel;
@@ -1445,7 +1461,7 @@ registerLabels('order-schedule', familyDefaults);
         var empty = el('div', 'm-ocal__status m-ocal__status--empty');
         empty.setAttribute('data-ocal-status', 'empty');
         empty.setAttribute('role', 'status');
-        empty.appendChild(el('p', 'm-ocal__status-text', L('k51')));
+        empty.appendChild(el('p', 'm-ocal__status-text', L('schedule.list.empty', empty)));
         empty.appendChild(buildAddButton());
         screen.appendChild(empty);
         return screen;
@@ -1460,11 +1476,11 @@ registerLabels('order-schedule', familyDefaults);
 
       var buckets = listBuckets();
       var sec;
-      sec = buildListSection(L('k52'), buckets.upcoming);
+      sec = buildListSection(L('schedule.list.upcoming', sec), buckets.upcoming);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection(L('k53'), buckets.past);
+      sec = buildListSection(L('schedule.list.past', sec), buckets.past);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection(L('k54'), buckets.unsched);
+      sec = buildListSection(L('schedule.list.unscheduled', sec), buckets.unsched);
       if (sec) screen.appendChild(sec);
       return screen;
     }
@@ -1487,7 +1503,7 @@ registerLabels('order-schedule', familyDefaults);
       var box = el('div', 'm-ocal__status m-ocal__status--loading');
       box.setAttribute('data-ocal-status', 'loading');
       box.setAttribute('role', 'status');
-      box.appendChild(el('p', 'm-ocal__status-text', L('k55')));
+      box.appendChild(el('p', 'm-ocal__status-text', L('schedule.loading', box)));
       return box;
     }
 
@@ -1495,13 +1511,13 @@ registerLabels('order-schedule', familyDefaults);
       var box = el('div', 'm-ocal__status m-ocal__status--error');
       box.setAttribute('data-ocal-status', 'error');
       box.setAttribute('role', 'alert');
-      box.appendChild(el('p', 'm-ocal__status-text', L('k56')));
+      box.appendChild(el('p', 'm-ocal__status-text', L('schedule.loadError', box)));
       /* إعادة المحاولة تستدعي callback المستهلك — المكوّن لا يعيد
          التحميل بنفسه (موثق) */
       var b = el('button', 'm-ocal__retry');
       b.type = 'button';
       b.setAttribute('data-ocal-action', 'retry');
-      b.textContent = L('k57');
+      b.textContent = L('schedule.retry', b);
       box.appendChild(b);
       return box;
     }
@@ -1960,7 +1976,7 @@ registerLabels('order-schedule', familyDefaults);
       dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
     }
 
-    render();
+    withLabels(root, function () { render(); });
     observeResponsiveWidth();
 
     /* ---- الواجهة العمومية للمثيل ---- */

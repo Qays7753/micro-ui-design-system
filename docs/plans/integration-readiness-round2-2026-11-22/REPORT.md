@@ -8,12 +8,12 @@
 |---|---|---|---|---|
 | F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق (R2+R3)** | R2: `dist/esm/<entry>.js` للمداخل الـ21 مع صادرات متحققة وبلا أثر جانبي (`node tools/build-package.mjs --check` → OK). R3: `tools/package/types/<entry>.d.ts` لكل مدخل (+`iife.d.ts`) تُنسخ إلى `dist/types/`؛ `npm run typecheck` ناجح؛ بوابة `package-install` تثبت الحزمة فعلًا (tarball وgit عبر prepare) وتستوردها تحت Node وبالمتصفح — OK بكل خطواتها السبع |
 | F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | **مغلق (R4)** | كل المداخل الـ19: init يعيد instance له update/destroy مع getInstance/destroy(root)؛ api-lifecycle **193/193** (صفر متبقيات بتغليف المستمعات/المراقبات/المؤقتات)؛ clone-lifecycle **31/31** (disconnect=مسار destroy والنسخ تربط كجديدة)؛ check-all 23/23 على نسخة نظيفة |
-| F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | مفتوح | — |
+| F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | **مغلق (R5)** | صفر kNNN (hardcoded-text: 447 مفتاحًا دلاليًا مغطى)؛ docs/LABELS.md مولد ومطابق؛ labels-override **37/37** (تخصيص لكل instance يشمل Carousel/Picker مع عزل النسخ وsetLabels) |
 | F4 | C08 يعرض save-local وlocal-saved خلافًا لOnline-only | R6 | مفتوح | — |
 | F5 | ثلاث نسخ متتبعة (components/ وsrc/ وdist/) | R2 | **مغلق (R2)** | `git ls-files src dist | wc -l` = 0؛ `/dist/` في .gitignore؛ البناء حتمي (hash MANIFEST ثابت عبر 3 تشغيلات) |
 | F6 | البوابة البصرية مربوطة بمسار مطلق خارج المستودع | R1 | **مغلق (R1)** | `git grep -n "/home/z"` لا يُرجع سوى سطر وصف F6 في ملف الخطة نفسه (وثيقة المالك)؛ المرجع يُولَّد من `--baseline-ref v0.1.0` في worktree مؤقت: `uv run python tools/visual-regression-check.py --out /tmp/micro-vr-r1` → compared 62 / passed 61 / allowed 1 / failed 0 |
 | F7 | روابط footer في concepts أصبحت نصًا | R1 | **مغلق (R1)** | footer فيه 4 روابط `<a href>` حية (API.md وTESTING.md وGETTING-STARTED.md ومواصفة info-strip)؛ بوابة preview-runtime: 114/114 (حالتا concepts-footer جديدتان)؛ الارتفاع حُفظ 2335px والفرص 0.1455% مسموح (R-D13) |
-| F8 | CI غير مفعّل (الملف في tools/ci) | R7 | مفتوح | — |
+| F8 | CI غير مفعّل (الملف في tools/ci) | R7 | **مغلق (R7)** | tools/ci/ci.yml محدث وصالح YAML (safe_load ✓) بكل الأوامر بالترتيب المطلوب ورفع artifact عند الفشل؛ التركيب خطوة واحدة موثقة (توكن workflow عند المالك — R-D14 يحظر الدفع) |
 | F9 | فحوص تكتب داخل المستودع + قوائم مجلدات قديمة | R1 | **مغلق (R1)** | `grep -rn "generated-artifacts" tools/*.py` = صفر؛ `manifest-build --check` يرفض أي مجلد في PUBLIC_DIRS غير موجود (reviews/prompts/handoff حُذفت من القائمتين)؛ `git status` نظيف بعد check-all |
 | F10 | ملفات product-context JS مضغوطة غير مقروءة | R2 | **مغلق (R2)** | الملفات الثمانية أعيدت كتابتها: سطر لكل تعليمة، أسماء واضحة (model/node/root/ctx)، كل وحدة تصدّر type وrender |
 
@@ -148,7 +148,7 @@
 **ما نُفذ (2026-11-22):**
 
 1. **`shared/lifecycle.js` جديد:** `instanceRegistry()` (WeakMap جذر←مثيل) و`resourceTracker()` (مستمعات/مراقبات/مؤقتات تُزال معًا) — بلا وصول DOM في المستوى الأعلى (R-D2).
-2. **كل المداخل الـ19 تحت العقد الموحد:** init(root, options?) يعيد instance له root/update/destroy؛ وdestroy(root) وgetInstance(root) صادران مريحان؛ وdestroy مرتين آمن؛ وبعده init من جديد يعمل. التفصيل الكامل (جدول instance.update ودوال كل عائلة والأحداث) في [docs/API.md — العقد الموحد](../../../API.md).
+2. **كل المداخل الـ19 تحت العقد الموحد:** init(root, options?) يعيد instance له root/update/destroy؛ وdestroy(root) وgetInstance(root) صادران مريحان؛ وdestroy مرتين آمن؛ وبعده init من جديد يعمل. التفصيل الكامل (جدول instance.update ودوال كل عائلة والأحداث) في [docs/API.md — العقد الموحد](../../API.md).
 3. **R-D10 في البناء:** مداخل ESM مولّدة في `.build-entries` تعيد تصدير الأسماء العامة فقط (المهملات disconnect/sync/rescan/render/update الجذرية غير موجودة في dist/esm إطلاقًا)؛ نسخ IIFE تستورد المصدر كاملًا فتحصل عليها. `npm run typecheck` ناجح والأنواع مطهرة منها (تبقى في iife.d.ts).
 4. **عقد SPA (توجيه المالك بعد مراجعة 3abd076 — أُصلح الكود لا الفحوص):** (أ) `disconnect(root)` المهمل يمر بنفس مسار `destroy` للمثيل: تنظيف كامل لكل عنصر تحت الجذر (علامات الربط وحالات العناصر) وإزالة المثيل من السجل فيربط init التالي كل شيء من جديد؛ (ب) init على جذر له مثيل حي يعيد المثيل نفسه **ويعيد فحص الجذر فيربط أي عنصر جديد غير مربوط تحته** كما في v0.1.0؛ (ج) النسخ المستنسخة من DOM تربط كعناصر جديدة (علامات data-* المنسوخة ليست ربطًا حيًا — الحقيقة في WeakMap/خصائص JS غير المنقولة).
 5. **إصلاحان اكتشفهما الفحص ووثقهما DECISIONS R4:** إبقاء تسجيل renderers في مدخل ESM للمنتج بمرجع صريح (بنود 6)، وعدّ مستمعات الإشارة في فحص العقد (بند 7).
@@ -172,3 +172,33 @@
 **المؤجلات:** لا شيء من بنود R4.
 
 **Commit:** (يُسجل بعد الرفع)
+
+## R5 — نصوص بمفاتيح دلالية وتخصيص كامل (F3) — **مغلقة**
+
+**ما نُفذ (2026-11-22):**
+
+1. **كل المفاتيح دلالية:** ملفات labels الثلاثة عشر أُعيدت كتابتها — 423 مفتاحًا بصيغة مواضع (`operation.title`، `schedule.weekdays.full` مصفوفة، `schedule.orders.count` صيغ جمع، `picker.selectedNone`…) والقيم حرفية (R-D15). دمج k74+k105→`common.unitFallback` (نصان متطابقان لغرض واحد).
+2. **كل الاستدعاءات (472+) حُدّثت** في 18 ملف سلوك مع **سياق قراءة** (عنصر تحت جذر التهيئة) لكل استدعاء حيثما توفر — يتيح حل طبقة المثيل من سياق الحدث.
+3. **آلية الطبقات لكل instance في `shared/labels.js`:** خريطة واحدة لكل (جذر تهيئة، عائلة) — `init(root, {labels})` يخزن الطبقة، والقراءة تحلها أولًا (سياق عنصر عبر الأجداد أو سياق التصيير الجاري عبر `withLabels`) ثم السجل العام. النواة وrenderers العائلة يقرأون الخريطة نفسها (اكتشاف إصلاحي: خرائط محلية لكل ملف كانت تكسر المنتج). `setLabels(partial)` يبقى للسجل العام، و`setLocale` للأرقام.
+4. **`docs/LABELS.md`** (538 سطرًا) مولّد آليًا بـ`tools/labels-doc-build.py` (بوابة `labels-doc` داخل check-all): المفتاح والنص الافتراضي والمتغيرات لكل عائلة.
+5. **hardcoded-text-check hardened:** regex يقبل المفاتيح المنقوطة + فشل عند أي `k\d+` متبقٍ + مفتاح مستخدم غير معرف + مفتاح معرف غير مستخدم — **447 مفاتيح مغطاة، صفر مخالفات**.
+6. **بوابة `labels-override` الجديدة: 37 PASS / 0 FAIL** — لكل مدخل له نصوص (12): init بلصقين يغيّر النص الظاهر فعلًا (بما فيه قراءات الأحداث: اختيار Picker، تحقق AccessGateway، تبديل Account Settings، تحذيرات كونسول Messages/Navigation)، والنسخة الثانية بالافتراضي (عزل)، وsetLabels يغير الافتراضي العام.
+7. **إصلاحات اكتشفها الفحص:** سياقات مفقودة في ternaries متعددة الأسطر (validation في AccessGateway)، وسياق معلق قبل الإدراج في DOM (organization fallback — صار على `img`)، و`button` غير معرف في assistant (من `ctx.button(`)، وتصادم معرفات القوالب المستنسخة في البوابة (مفرِّد معرفات عام يشمل صفات الجذر).
+
+**القبول:** صفر `kNNN` (بوابة hardcoded-text) ✓؛ LABELS.md مولد ومطابق ✓؛ labels-override 37/37 ✓ (سيُرفق رقم visual من التشغيل الكامل أدناه).
+
+## R6 — Manage بلا تخزين على الجهاز (F4) — **مغلقة**
+
+1. operation.js: فعل `save-local` وزره و`{local:true}` حُذفت؛ labels: مفتاحا `operation.actions.saveLocal` و`phase.localSaved` حُذفا (مع تحديث الأنواع وLABELS.md)؛ product-core: الطور المحذوف يسقط من جدول phases المعروفة فيُعامل `uncertain` تلقائيًا (لا ادعاء نجاح).
+2. المواصفة (الأسطر 8/47/49/74/160) وCOMPOSITIONS والمختبر: C08 موثق Online-only؛ حالة المختبر «local» صارت اتصالًا محليًا بطور uncertain؛ إشعار الكتابة أعيدت صياغته (توثيق الاستثناء عن حرفية النصوص في DECISIONS R-D11).
+3. **فحصا الجولة القديمة حُذفا بالاسم** («Manage local emits storage intent only» و«Local save cannot become a connected Delivery write») وأضيف أربعة: لا زر تخزين في أي destination حتى مع grant قديم، الطور المحذوف → uncertain، offline يعطل أفعال C08، local يعطل إرسال C14. **product-context: 301 PASS / 0 FAIL.**
+4. allowlist: صفحة المختبر وحدها (`previews/product-context/lab.html`) بسبب R-D11.
+5. **القبول:** `grep -rn "save-local\|local-saved\|حفظ محلي" components previews docs tools/package` = **صفر** (عدا DECISIONS/CHANGELOG) ✓؛ product-context 301/301 ✓؛ visual — أدناه.
+
+## R7 — CI جاهز للتركيب (F8) — **مغلقة**
+
+`tools/ci/ci.yml` أعيدت كتابته: push/pull_request، checkout كامل بوسوم، Node 20 + cache npm، `npm ci`، `astral-sh/setup-uv` + `uv sync`، تثبيت Chromium، `check-all` **بلا --skip-visual**، ثم `typecheck`، ورفع مخرجات الفشل كـartifact. **YAML صالح محليًا** (`yaml.safe_load` ✓) وكل أوامره تعمل محليًا بنفس الترتيب (وهو ما يثبته R9). `tools/ci/README.md` يوثق خطوة النقل (أمر واحد) والصلاحية (workflow scope). لا دفع لـ`.github/` (R-D14).
+
+## R8 — توثيق وإصدار 0.2.0 — **مغلقة**
+
+CHANGELOG 0.2.0 كامل (Breaking: ESM/dist غير متتبع/مسارات IIFE/مفاتيح دلالية/حذف التخزين/lifecycle الموحد؛ Added: الأنواع/package-install/esm-app/labels لكل instance/LABELS.md/visual من git ref/فحوص R-D11؛ Fixed: concepts والفحوص الكاتبة داخل المستودع واجتثاث التسجيل وعقد SPA؛ Deprecated: مهملات IIFE). STATUS 0.2.0 (26 بوابة)، README (الحالة والفحوص)، AGENTS (البوابات: npm ci + check-all + typecheck + manifest — بلا مساس بالثوابت)، API.md قسم النصوص يربط LABELS.md، GETTING-STARTED يربط LABELS.md. package.json 0.2.0 منذ R2. link-check 139/0.

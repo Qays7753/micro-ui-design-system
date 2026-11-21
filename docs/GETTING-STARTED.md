@@ -98,7 +98,7 @@ const instance = init(document);   // init يدوي — ESM بلا تهيئة ت
 ## الأنواع والنصوص
 
 - أنواع كل مدخل: `dist/types/<entry>.d.ts` (تُنسخ من `tools/package/types/` عند البناء)؛ فحص الأنواع في المستودع: `npm run typecheck`. غلوبالات IIFE: `dist/types/iife.d.ts` — `/// <reference types="@micro/ui/iife" />` أو تضمين الملف في tsconfig.
-- النصوص الافتراضية لكل عائلة في `components/<family>/labels.js` وتخصيصها جزئيًا عبر `setLabels(partial)` في كل مدخل، و`setLocale(locale)` (من مدخل labels) لتغيير تنسيق الأرقام — الافتراضي `ar-u-nu-latn` (أرقام لاتينية بلا فواصل). العقود التفصيلية في [docs/API.md](API.md).
+- النصوص الافتراضية لكل عائلة في `components/<family>/labels.js` وتخصيصها جزئيًا عبر `setLabels(partial)` في كل مدخل، و`setLocale(locale)` (من مدخل labels) لتغيير تنسيق الأرقام — الافتراضي `ar-u-nu-latn` (أرقام لاتينية بلا فواصل). المفاتيح الكاملة لكل عائلة في [docs/LABELS.md](LABELS.md) والعقود التفصيلية في [docs/API.md](API.md).
 
 ## الفحص
 

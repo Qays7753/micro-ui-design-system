@@ -1,10 +1,25 @@
 /* C09 (market) — modes card/editor/search/results. */
 import { register } from './product-core.js';
-import { getLabel } from '../../shared/labels.js';
+import { instanceLabelFor, instanceLabelsOf, getLabel } from '../../shared/labels.js';
 
 var MICRO_LABELS_FAMILY = 'product-context';
-function L(key) {
+/* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
+   لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
+var renderLabels = null;
+function L(key, el) {
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
+}
+function withLabels(scope, fn) {
+  var previous = renderLabels;
+  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
+  try { return fn(); } finally { renderLabels = previous; }
+}
+function applyInstanceLabels(scope, options) {
+  if (options && options.labels && typeof options.labels === 'object') {
+    setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+  }
 }
 
 export const type = 'market';
@@ -13,16 +28,16 @@ export function render(ctx) {
   var model = ctx.model, node = ctx.node, root = ctx.root;
   var head = node('header', 'm-product__header');
   root.appendChild(head);
-  head.appendChild(node('h2', 'm-product__title', model.mode === 'editor' ? L('k92') : (model.mode === 'search' || model.mode === 'results') ? L('k93') : model.title || L('k94')));
+  head.appendChild(node('h2', 'm-product__title', model.mode === 'editor' ? L('market.editorTitle', head) : (model.mode === 'search' || model.mode === 'results') ? L('market.searchTitle', head) : model.title || L('market.listingTitle', head)));
 
   /* رأس البحث مشترك بين وضعي search وresults (المرحلة 8): الاستعلام
      والفلاتر وزر البحث وملخص النتائج — كلها من المستهلك. */
   function searchHeader() {
-    ctx.field(root, 'query', L('k95'), { value: model.query, type: 'search' });
+    ctx.field(root, 'query', L('market.searchField', root), { value: model.query, type: 'search' });
     (model.filters || []).forEach(function (filter) {
       ctx.field(root, filter.id, filter.label, { options: filter.options, value: filter.value });
     });
-    ctx.button(root, 'search', L('k96'), function () { return ctx.fieldsPayload([]); });
+    ctx.button(root, 'search', L('market.searchAction', root), function () { return ctx.fieldsPayload([]); });
     if (model.resultLabel) root.appendChild(node('p', 'm-product__secondary', model.resultLabel));
   }
 
@@ -42,16 +57,16 @@ export function render(ctx) {
   if (model.mode === 'results') {
     searchHeader();
     if (model.phase === 'error') {
-      if ((model.permissions || []).indexOf('retry') >= 0) ctx.button(root, 'retry', L('k113'), {});
+      if ((model.permissions || []).indexOf('retry') >= 0) ctx.button(root, 'retry', L('operation.actions.retry', root), {});
       return;
     }
-    if (model.resultsState === 'no-ads') ctx.note(root, L('k160'), L('k161'), 'info');
-    else if (model.resultsState === 'no-results') ctx.note(root, L('k162'), L('k163'), 'info');
+    if (model.resultsState === 'no-ads') ctx.note(root, L('market.noAdsTitle', root), L('market.noAdsDetail', root), 'info');
+    else if (model.resultsState === 'no-results') ctx.note(root, L('market.noResultsTitle', root), L('market.noResultsDetail', root), 'info');
     else {
       var results = Array.isArray(model.results) ? model.results : [];
       if (results.length) {
         var section = node('section', 'm-product__section');
-        section.appendChild(node('h3', 'm-product__title', L('k159')));
+        section.appendChild(node('h3', 'm-product__title', L('market.resultsTitle', section)));
         var list = node('ul', 'm-operational-list');
         results.forEach(function (item) {
           if (!item) return;
@@ -61,17 +76,17 @@ export function render(ctx) {
             if (src) {
               var img = node('img', 'm-product__thumb');
               img.src = src;
-              img.alt = item.image.alt || L('k21');
+              img.alt = item.image.alt || L('media.unavailable', img);
               img.loading = 'lazy';
               img.decoding = 'async';
-              ctx.on(img, 'error', function () { img.replaceWith(thumbEmpty(L('k25'))); });
+              ctx.on(img, 'error', function () { img.replaceWith(thumbEmpty(L('media.imageError', img))); });
               row.appendChild(img);
             } else {
-              row.appendChild(thumbEmpty(L('k21')));
+              row.appendChild(thumbEmpty(L('media.unavailable', row)));
             }
           }
           var text = node('span', 'm-row__text');
-          text.appendChild(node('strong', 'm-row__title', item.title || L('k67')));
+          text.appendChild(node('strong', 'm-row__title', item.title || L('common.unavailable', text)));
           if (item.sellerLabel) text.appendChild(node('span', 'm-row__subtitle', item.sellerLabel));
           row.appendChild(text);
           if (item.statusLabel) {
@@ -80,9 +95,9 @@ export function render(ctx) {
             row.appendChild(meta);
           }
           var reading = node('span', 'm-row__reading');
-          var price = node('bdi', '', item.price == null || String(item.price).trim() === '' ? L('k67') : item.price);
+          var price = node('bdi', '', item.price == null || String(item.price).trim() === '' ? L('common.unavailable') : item.price);
           price.dir = 'ltr';
-          reading.append(price, document.createTextNode(' ' + (item.unit || model.unit || L('k105'))));
+          reading.append(price, document.createTextNode(' ' + (item.unit || model.unit || L('common.unitFallback'))));
           row.appendChild(reading);
           list.appendChild(row);
         });
@@ -93,20 +108,20 @@ export function render(ctx) {
   }
 
   if (model.mode === 'editor') {
-    ctx.field(root, 'title', L('k97'), { value: model.title, maxLength: model.titleMaxLength });
-    ctx.field(root, 'description', L('k98'), { value: model.description, multiline: true });
-    ctx.field(root, 'price', L('k99'), { value: model.price, inputmode: 'decimal', unit: model.unit || L('k100') });
+    ctx.field(root, 'title', L('market.titleField', root), { value: model.title, maxLength: model.titleMaxLength });
+    ctx.field(root, 'description', L('market.descriptionField', root), { value: model.description, multiline: true });
+    ctx.field(root, 'price', L('market.priceField', root), { value: model.price, inputmode: 'decimal', unit: model.unit || L('market.priceUnitFallback', root) });
     if (model.images && model.images.length) ctx.media(root, model.images, 'contain', true);
     ctx.attachments(root, false);
     var actions = node('div', 'm-product__actions m-btn-group m-btn-group--pair');
     root.appendChild(actions);
     ['publish', 'save-draft'].forEach(function (id) {
       if ((model.permissions || []).indexOf(id) >= 0) {
-        ctx.button(actions, id, id === 'publish' ? L('k101') : L('k102'),
+        ctx.button(actions, id, id === 'publish' ? L('market.publishAction', actions) : L('market.saveDraftAction', actions),
           function () { return ctx.fieldsPayload(id === 'publish' ? (model.requiredFields || []) : []); },
           {
             confirm: id === 'publish', primary: id === 'publish',
-            description: function (data) { return L('k103') + data.title + L('k104') + data.price + ' ' + (model.unit || L('k105')) + '.'; }
+            description: function (data) { return L('market.publishConfirmPrefix') + data.title + L('market.publishConfirmPrice') + data.price + ' ' + (model.unit || L('common.unitFallback')) + '.'; }
           });
       }
     });
@@ -118,18 +133,18 @@ export function render(ctx) {
     var price = node('p', 'm-product__value');
     var number = node('bdi', '', model.price);
     number.dir = 'ltr';
-    price.append(number, document.createTextNode(' ' + (model.unit || L('k105'))));
+    price.append(number, document.createTextNode(' ' + (model.unit || L('common.unitFallback'))));
     head.appendChild(price);
   }
   if (model.sellerLabel) head.appendChild(node('p', 'm-product__secondary', model.sellerLabel));
   if (model.statusLabel) head.appendChild(node('span', 'm-badge m-badge--info', model.statusLabel));
   ctx.media(root, model.images, model.fit);
-  if (model.reason) ctx.note(root, L('k106'), model.reason, 'warning');
+  if (model.reason) ctx.note(root, L('market.reviewNoteTitle', root), model.reason, 'warning');
   var cardActions = node('div', 'm-product__actions');
   root.appendChild(cardActions);
-  [{ id: 'edit', label: L('k107') }, { id: 'report', label: L('k108') }].forEach(function (action) {
+  [{ id: 'edit', label: L('market.editAction') }, { id: 'report', label: L('market.reportAction') }].forEach(function (action) {
     if ((model.permissions || []).indexOf(action.id) >= 0) {
-      ctx.button(cardActions, action.id, action.label, { listingId: model.id, revision: model.revision }, { confirm: action.confirm, description: L('k109') });
+      ctx.button(cardActions, action.id, action.label, { listingId: model.id, revision: model.revision }, { confirm: action.confirm, description: L('market.reportConfirm') });
     }
   });
 }
