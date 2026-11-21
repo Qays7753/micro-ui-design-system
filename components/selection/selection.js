@@ -12,22 +12,16 @@
    HTML الأساس: <label class="m-choice m-choice--check"><input …><span class="m-choice__box"><svg><use href="#i-check"/></svg></span><span class="m-choice__text">…</span></label>
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('selection', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'selection';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var liveBindings = new WeakMap();
@@ -146,17 +140,29 @@
     });
   }
 
-  function init(root) {
+  export function init(root) {
+    installSwitchGuard();
     var scope = root || document;
     bindGroups(scope);
     bindSegmented(scope);
+  }
+
+  /* R2 (الجولة الثانية): مستمع document المفرد يُركَّب عند أول init — لا
+     وصول إلى document في المستوى الأعلى للوحدة (في مسار IIFE تسبقه
+     التهيئة التلقائية فالتوقيت الفعلي كما كان). */
+  var switchGuardInstalled = false;
+  function installSwitchGuard() {
+    if (switchGuardInstalled) return;
+    switchGuardInstalled = true;
+    installSwitchGuardListener();
   }
 
   /* حماية مباشرة حتى مع data-pending المضبوط بالترميز دون API:
    * تبديل مستخدم فعلي على مفتاح في انتظار يُرجع فورًا (تقاطع).
    * R2-06: إشعار change برمجي (isTrusted=false — مثلاً استهلاكٍ
    * ضبط checked وأطلق الححدث بنفسه) ليس تبديلًا فعليًا فلا يُعكس. */
-  document.addEventListener('change', function (e) {
+  function installSwitchGuardListener() {
+    document.addEventListener('change', function (e) {
     if (!e.isTrusted) return; /* R2-06: إشعار برمجي ليس تبديلًا فعليًا */
     var input = e.target;
     if (!input.matches || !input.matches('.m-switch input')) return;
@@ -165,11 +171,10 @@
       input.checked = !input.checked;
     }
   }, true);
+  }
 
   /* عقد المفتاح: انتظار تحديث إعداد — المستهلك يضبط ويرجع عند الفشل */
-  window.MicroSelection = {
-    init: init,
-    disconnect: function (root) {
+export function disconnect(root) {
       var scope = root || document;
       var nodes = [].slice.call(scope.querySelectorAll('[data-choice-group], [data-seg]'));
       if (scope.matches && scope.matches('[data-choice-group], [data-seg]')) nodes.unshift(scope);
@@ -182,9 +187,9 @@
       });
       var switches = [].slice.call(scope.querySelectorAll('.m-switch'));
       if (scope.matches && scope.matches('.m-switch')) switches.unshift(scope);
-      switches.forEach(function (element) { window.MicroSelection.setSwitchPending(element, false); });
-    },
-    setSwitchPending: function (switchEl, pending) {
+      switches.forEach(function (element) { setSwitchPending(element, false); });
+    }
+  export function setSwitchPending(switchEl, pending) {
       if (!switchEl || switchEl.nodeType !== 1) return;
       switchEl.setAttribute('data-pending', pending ? 'true' : 'false');
       var input = switchEl.querySelector('input');
@@ -205,26 +210,10 @@
       }
       /* بلا دورة انتظار سابقة: لا يُلمس disabled إطلاقًا */
     }
-  };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroSelection.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['selection'] = registry['selection'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('selection', partial);
+}

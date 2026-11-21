@@ -82,22 +82,17 @@
             المنتج الحالي لا هدف تكبير فيه (تكليف 2026-10-09).
    ========================================================= */
 
-(function () {
-  'use strict';
+import { globalApi } from '../../shared/integrations.js';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('data', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'data';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var NS = 'http://www.w3.org/2000/svg';
@@ -1781,7 +1776,7 @@
     [].slice.call(chart.querySelectorAll('[data-reading-key]')).forEach(function (el) {
       el.setAttribute('data-reading-selected', String(!!selected && el.getAttribute('data-reading-key') === selected.key));
     });
-    if (window.MicroReadings) window.MicroReadings.sync(chart);
+    if (globalApi('Readings')) globalApi('Readings').sync(chart);
     if (focusedControl && focusedControl.disabled && (document.activeElement === focusedControl || document.activeElement === document.body)) focusAvailableReading(chart, life.range);
   }
   function readableLegend(chart, items, legend, denominator) {
@@ -1846,7 +1841,7 @@
       disposeReading(chart);
       if (chart.getAttribute('data-selection') === 'single') { chart.setAttribute('data-selection-state', readable && mixedReadingContext(items) ? 'mixed-context' : items.length ? 'invalid-keys' : 'empty'); chart.removeAttribute('data-selected-key'); }
       else chart.removeAttribute('data-selection-state');
-      if (window.MicroReadings) window.MicroReadings.sync(chart);
+      if (globalApi('Readings')) globalApi('Readings').sync(chart);
       return;
     }
     chart.setAttribute('data-selection-state', 'ready');
@@ -1893,7 +1888,8 @@
     updateReadingSelection(chart, items);
   }
 
-  function render(chart) {
+  export function render(chart) {
+    installFontRefit();
     var focusControl = document.activeElement && chart.contains(document.activeElement)
       && document.activeElement.matches('.m-chart__select-range, .m-chart__select-step') ? document.activeElement : null;
     var focusChoice = document.activeElement && chart.contains(document.activeElement) && document.activeElement.closest('[data-reading-choice]');
@@ -1967,44 +1963,45 @@
     chart.dispatchEvent(new CustomEvent('micro-data:rendered', { bubbles: true, detail: { kind: kind } }));
   }
 
-  window.MicroData = {
-    /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-chart] ثم
-       الأبناء — نفس عقد init الموحد للعائلات؛ إعادة init آمنة (render
-       idempotent والمراقب واحد لكل رسم عبر WeakMap). */
-    init: function (root) {
+  /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-chart] ثم
+         الأبناء — نفس عقد init الموحد للعائلات؛ إعادة init آمنة (render
+         idempotent والمراقب واحد لكل رسم عبر WeakMap). */
+
+  export function init(root) {
+    installFontRefit();
       var scope = root || document;
       var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
       if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
       charts.forEach(function (c) {
         render(c);
       });
-    },
-    /* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
-    render: render,
+    }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
-       تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
-       DOM (.m-chart__data). لا وسيط بيانات: مصدر الرسم DOM. render
-       القديمة تبقى لرسم واحد (D10)، وإعادة الاستدعاء آمنة (render
-       idempotent والمراقب واحد لكل رسم). */
-    update: function (root) {
+         تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
+         DOM (.m-chart__data). لا وسيط بيانات: مصدر الرسم DOM. render
+         القديمة تبقى لرسم واحد (D10)، وإعادة الاستدعاء آمنة (render
+         idempotent والمراقب واحد لكل رسم). */
+
+  export function update(root) {
       var scope = root || document;
       var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
       if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
       charts.forEach(function (c) { render(c); });
-    },
-    getSelection: function (chart) { return chart && chart.matches && chart.matches('[data-chart]') ? selectionSnapshot(chart) : null; },
-    setSelection: function (chart, key) { return chart && chart.matches && chart.matches('[data-chart]') ? setReadingSelection(chart, key, false) : null; },
+    }
+  export function getSelection(chart) { return chart && chart.matches && chart.matches('[data-chart]') ? selectionSnapshot(chart) : null; }
+  export function setSelection(chart, key) { return chart && chart.matches && chart.matches('[data-chart]') ? setReadingSelection(chart, key, false) : null; }
     /* R3-UI01: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init/render
-       يظلان متاحين ويعيدان الإلحاق عند الحاجة، ومعالج DOMContentLoaded
-       المسجل مرة واحدة عند تحميل الوحدة لا يتكرر */
-    disconnect: function (root) {
+         يظلان متاحين ويعيدان الإلحاق عند الحاجة، وخطاف جاهزية الخطوط
+         يُركَّب مرة واحدة عند أول استخدام فلا يتكرر */
+
+  export function disconnect(root) {
       var scope = root || document;
       var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
       if (scope.matches && scope.matches('[data-chart]')) charts.unshift(scope);
       charts.forEach(function (c) {
         disconnectedCharts.add(c);
         disposeReading(c);
-        if (window.MicroReadings) window.MicroReadings.disconnect(c);
+        if (globalApi('Readings')) globalApi('Readings').disconnect(c);
         var ro = plotObservers.get(c);
         if (ro) { ro.disconnect(); plotObservers.delete(c); }
         if (plotFrames.has(c)) window.cancelAnimationFrame(plotFrames.get(c));
@@ -2012,27 +2009,15 @@
         renderWidths.delete(c);
       });
     }
-  };
+/* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroData.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['data'] = registry['data'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
+  export function setLabels(partial) {
+  setFamilyLabels('data', partial);
+}
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroData.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroData.init();
 
   /* F-01 (2026-10-10): جاهزية الخط — الرسم الأول قد يقيس بمقاييس خط
      بديل قبل تحميل IBM Plex العربي فيختلف أول تصيير عن إعادة التصيير
@@ -2050,9 +2035,13 @@
       });
     });
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', refitChartsOnFontsReady, { once: true });
-  } else {
+  /* R2 (الجولة الثانية): التركيب كسول — لا وصول إلى document في المستوى
+     الأعلى للوحدة؛ يُركَّب عند أول init/render (وفي مسار IIFE تسبقه
+     التهيئة التلقائية كما في الجولة الأولى، فالتوقيت الفعلي كما كان:
+     وعد جاهزية الخطوط لا يُحل إلا بعد اكتمال تحليل المستند). */
+  var fontRefitInstalled = false;
+  function installFontRefit() {
+    if (fontRefitInstalled) return;
+    fontRefitInstalled = true;
     refitChartsOnFontsReady();
   }
-})();

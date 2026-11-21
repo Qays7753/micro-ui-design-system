@@ -8,10 +8,10 @@
   <!-- مثال vanilla-app: يستهلك المصدر من مرآة src/ مباشرة (لا dist ولا previews).
        مرجع Micro-Auth المطابق: docs/references/micro-auth/previews/3-new-user.png
        (شاشة ترحيب المستخدم الجديد) — قواعد المطابقة وحسم التعارضات في docs/DECISIONS.md (المرحلة 1). -->
-  <link rel="stylesheet" href="../../../src/assets/fonts/fonts.css">
-  <link rel="stylesheet" href="../../../src/shared/tokens.css">
-  <link rel="stylesheet" href="../../../src/components/buttons/buttons.css">
-  <link rel="stylesheet" href="../../../src/components/access-gateway/auth-screens.css">
+  <link rel="stylesheet" href="../../../dist/fonts/fonts.css">
+  <link rel="stylesheet" href="../../../dist/css/shared/tokens.css">
+  <link rel="stylesheet" href="../../../dist/css/buttons/buttons.css">
+  <link rel="stylesheet" href="../../../dist/css/access-gateway/auth-screens.css">
 </head>
 <body class="m-auth-page">
   <main class="m-auth-screen m-auth-screen--welcome m-auth-screen--new-user" aria-labelledby="new-user-title">
@@ -35,6 +35,6 @@
       <button class="m-btn m-btn--light m-auth-screen__switch" type="button" data-auth-action="use-another-account">ليس حسابك؟ <span>استخدم حسابًا آخر</span></button>
     </section>
   </main>
-  <script src="../../../src/shared/icons.js"></script>
+  <script src="../../../dist/iife/icons.js"></script>
 </body>
 </html>

@@ -6,16 +6,16 @@
 
 | # | المشكلة | المرحلة | الحالة | الدليل |
 |---|---|---|---|---|
-| F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | مفتوح | — |
+| F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق جزئيًا (R2)** — ESM منفذ؛ الأنواع في R3 | `dist/esm/<entry>.js` لكل المداخل الـ21 مع صادرات متحققة وبلا أثر جانبي عند الاستيراد (`node tools/build-package.mjs --check` → OK)؛ `dist/types/*` (R3) لم يُنشأ بعد |
 | F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | مفتوح | — |
 | F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | مفتوح | — |
 | F4 | C08 يعرض save-local وlocal-saved خلافًا لOnline-only | R6 | مفتوح | — |
-| F5 | ثلاث نسخ متتبعة (components/ وsrc/ وdist/) | R2 | مفتوح | — |
+| F5 | ثلاث نسخ متتبعة (components/ وsrc/ وdist/) | R2 | **مغلق (R2)** | `git ls-files src dist | wc -l` = 0؛ `/dist/` في .gitignore؛ البناء حتمي (hash MANIFEST ثابت عبر 3 تشغيلات) |
 | F6 | البوابة البصرية مربوطة بمسار مطلق خارج المستودع | R1 | **مغلق (R1)** | `git grep -n "/home/z"` لا يُرجع سوى سطر وصف F6 في ملف الخطة نفسه (وثيقة المالك)؛ المرجع يُولَّد من `--baseline-ref v0.1.0` في worktree مؤقت: `uv run python tools/visual-regression-check.py --out /tmp/micro-vr-r1` → compared 62 / passed 61 / allowed 1 / failed 0 |
 | F7 | روابط footer في concepts أصبحت نصًا | R1 | **مغلق (R1)** | footer فيه 4 روابط `<a href>` حية (API.md وTESTING.md وGETTING-STARTED.md ومواصفة info-strip)؛ بوابة preview-runtime: 114/114 (حالتا concepts-footer جديدتان)؛ الارتفاع حُفظ 2335px والفرص 0.1455% مسموح (R-D13) |
 | F8 | CI غير مفعّل (الملف في tools/ci) | R7 | مفتوح | — |
 | F9 | فحوص تكتب داخل المستودع + قوائم مجلدات قديمة | R1 | **مغلق (R1)** | `grep -rn "generated-artifacts" tools/*.py` = صفر؛ `manifest-build --check` يرفض أي مجلد في PUBLIC_DIRS غير موجود (reviews/prompts/handoff حُذفت من القائمتين)؛ `git status` نظيف بعد check-all |
-| F10 | ملفات product-context JS مضغوطة غير مقروءة | R2 | مفتوح | — |
+| F10 | ملفات product-context JS مضغوطة غير مقروءة | R2 | **مغلق (R2)** | الملفات الثمانية أعيدت كتابتها: سطر لكل تعليمة، أسماء واضحة (model/node/root/ctx)، كل وحدة تصدّر type وrender |
 
 ## R0 — التجهيز
 
@@ -85,3 +85,18 @@
 
 **Commit:** (يُسجل بعد الرفع)
 
+## R2 — مصدر واحد بصيغة ES modules وبناء جديد (F1 جزئيًا، F5، F10)
+
+**ما نُفذ (2026-11-22):**
+
+- **R2.1:** حُوّل كل مصدر السلوك إلى ES modules في مكانه: 18 ملفًا قياسيًا بمحوّل آلي + 13 ملف labels (وحدات بيانات `export const defaults`) + `shared/labels.js` (نواة السجل: registerLabels/getLabel/setLabels/setLocale/getLocale/formatNumber/plural/pluralCategory) + `shared/script-base.js` و`shared/integrations.js` + `shared/icons.js` (ready كسولة في ESM) + product-context كاملًا بقراءة يدوية (F10): النواة والـrenderers السبعة تصدّر type/render. لا غلاف IIFE، لا تهيئة تلقائية، لا وصول DOM في المستوى الأعلى (استيراد تحت Node ينجح للـ44 وحدة).
+- **R2.2:** `tools/build-package.mjs` جديد: `dist/esm/<entry>.js` (esbuild esm+bundle+splitting، هدف es2020)، `dist/iife/<entry>.js` من مداخل مولدة (غلوبالات + تهيئة تلقائية تحترم MicroConfig وdata-micro-manual) + `dist/iife/micro-ui.js`، CSS بايت-ببايت (شجرة كاملة + ملف لكل مدخل + micro-ui.css + styles.css بترتيب موثق)، أصول وخطوط وشعار وأيقونات، MANIFEST. حتمي: نفس البايتات عبر التشغيلات. `--check`: بناء + كل مدخل موجود + صادرات ESM مطابقة + استيراد Node بلا DOM ينجح.
+- **R2.3:** `git rm -r src dist` و`/dist/` في .gitignore؛ package.json 0.2.0 (type module، exports لكل المداخل، prepare يبني عند التثبيت من git، devDeps esbuild+typescript)؛ كل مستهلكي المستودع (43 صفحة HTML + fixtures بوابات light-data/light-calendar/light-release/api-lifecycle/clone-lifecycle/component-consumption/product-context/integration-boundaries) على `dist/iife/`؛ preview-server يبني تلقائيًا عند قدماء dist؛ check-all يبني أولًا؛ standalone يضمّن من dist/iife ويبني قبله؛ hardcoded-text: فحص استيراد labels في المصدر بدل اقتران الصفحات + فحص صادرات ESM مقابل الأنواع (يعمل عند توفر R3)؛ AGENTS/README/CHANGELOG/TESTING حُدثت.
+
+**أرقام البوابات:** check-all **22/22 ناجحة** (انظر جدول DECISIONS رقم 10) — visual-regression: 62 مقارنة / 62 نجاح / صفر اختلافات مسموحة جديدة (التحويل صامت بصريًا حرفيًا: كل الصفحات ضمن 0.1% مقابل v0.1.0).
+
+**الافتراضات:** موثقة في DECISIONS R2 (بنود 1–9).
+
+**المؤجلات:** الأنواع لكل مدخل وبوابة package-install وexamples/esm-app (R3)؛ توثيق GETTING-STARTED الشامل بطرقه الثلاث يُستكمل في R3.6/R8.
+
+**Commit:** (يُسجل بعد الرفع)

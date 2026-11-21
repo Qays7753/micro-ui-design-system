@@ -1,20 +1,16 @@
 /* Settings-layer composition over the existing MicroNavigation layer contract. */
-(function () {
-  'use strict';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+import { globalApi } from '../../shared/integrations.js';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
+
+registerLabels('account-settings', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'account-settings';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   function initPanel(panel) {
@@ -56,9 +52,9 @@
 
     panel.querySelectorAll('[data-account-open]').forEach(function (trigger) {
       on(trigger, 'click', function () {
-        if (!window.MicroNavigation) return;
+        if (!globalApi('Navigation')) return;
         showView(initialView, false);
-        window.MicroNavigation.openLayer(layer, { trigger: trigger, backdropEl: backdrop });
+        globalApi('Navigation').openLayer(layer, { trigger: trigger, backdropEl: backdrop });
       });
     });
     if (appEntry) on(appEntry, 'click', function () { showView('application', true); });
@@ -68,7 +64,7 @@
     if (back) on(back, 'click', function () { showView(initialView, true); });
     panel.querySelectorAll('[data-account-close]').forEach(function (button) {
       on(button, 'click', function () {
-        if (window.MicroNavigation) window.MicroNavigation.closeLayer(layer);
+        if (globalApi('Navigation')) globalApi('Navigation').closeLayer(layer);
       });
     });
 
@@ -89,13 +85,13 @@
     showView(initialView, false);
   }
 
-  function init(root) {
+  export function init(root) {
     var scope = root || document;
     if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope);
     scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
   }
 
-  function disconnect(root) {
+  export function disconnect(root) {
     var scope = root || document;
     var panels = [].slice.call(scope.querySelectorAll('[data-account-settings]'));
     if (scope.matches && scope.matches('[data-account-settings]')) panels.unshift(scope);
@@ -105,8 +101,13 @@
       panel.removeAttribute('data-account-settings-ready');
     });
   }
-  window.MicroAccountSettings = { init: init, disconnect: disconnect, destroy: disconnect };
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export { disconnect as destroy };
+
+
+/* R2 (الجولة الثانية): setLabels كانت موثقة في API.md وd.ts وغير موجودة في
+   تنفيذ 0.1.0 (استدعاء options.labels في AccessGateway كان يرمي خطأ) —
+   تُوفَّر الآن فوق سجل النصوص المشترك كما في بقية العائلات. */
+export function setLabels(partial) {
+  setFamilyLabels('account-settings', partial);
+}

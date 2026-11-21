@@ -19,7 +19,7 @@ git clone https://github.com/Qays7753/micro-ui-design-system.git
 | الاستيراد | الملف |
 |---|---|
 | `@micro/ui/css/micro-ui.css` | `dist/css/micro-ui.css` — الحزمة الشاملة: fonts ثم tokens ثم motion بسلسلة بايت-ببايت |
-| `@micro/ui/css/<family>/<file>.css` | `dist/css/<family>/<file>.css` — CSS كل عائلة والملفات المشتركة (`css/shared/tokens.css`، `css/shared/motion.css`) |
+| `@micro/ui/css/<family>/<file>.css` | `dist/css/<family>/<file>.css` — CSS كل عائلة والملفات المشتركة، و`dist/css/<entry>.css` ملف أساسي مسطح لكل مدخل، و`dist/css/styles.css` الكل بترتيب موثق |
 | `@micro/ui/js/<file>.js` | `dist/js/<file>.js` — نسخة esbuild (IIFE، es2019، بلا تصغير) من كل ملف JS للعائلات |
 | `@micro/ui/fonts/<file>` | `dist/fonts/` — fonts.css وملفات woff2 |
 | `@micro/ui/micro-ui.d.ts` | `dist/micro-ui.d.ts` — تعريفات TypeScript محيطية لـ`window.Micro*` |
@@ -35,7 +35,7 @@ git clone https://github.com/Qays7753/micro-ui-design-system.git
 <script src="node_modules/@micro/ui/dist/js/fields.js"></script>
 ```
 
-لا تغيير على طبيعة الملفات: JS يبقى سكربتات عادية توفر `window.Micro*` (D10)، والـCSS منسوخ بايت-ببايت دون أي معالجة أو تصغير (D15). التعريفات: `/// <reference types="@micro/ui/micro-ui.d.ts" />`.
+لا تغيير على طبيعة الملفات: الجولة الثانية R2: المصدر ES modules؛ `dist/iife/<entry>.js` سكربتات عادية توفر `window.Micro*` (R-D3/D10)، و`dist/esm/<entry>.js` قابلة للاستيراد (تفصيل الطرق الثلاث يُستكمل في R3.6)، والـCSS منسوخ بايت-ببايت دون أي معالجة (D15). التعريفات: `/// <reference types="@micro/ui/micro-ui.d.ts" />`.
 
 ## الاستهلاك من src (المرآة)
 

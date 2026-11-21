@@ -37,10 +37,10 @@ def main():
         # The snapshot is checked in at tools/baselines/fields-baseline.js (Phase 0)
         # so no historical commit object is needed.
         previous_fields=(ROOT/'tools/baselines/fields-baseline.js').read_text()
-        p.route('**/components/fields/fields.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=previous_fields))
+        p.route('**/dist/iife/fields.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=previous_fields))
         go('market','editor');p.locator('#product-root .m-field__control').first.click(position={'x':3,'y':26})
         check('Read-only replay: baseline Fields reproduces focusable-host gutter defect',ev('document.activeElement.dataset.focusKey!=="field-title"'))
-        p.unroute('**/components/fields/fields.js')
+        p.unroute('**/dist/iife/fields.js')
         cases={}
         # Every documented semantic mode is actually reachable and measured.
         for kind in ['context','state','market','delivery','assistant','review','manage']:
@@ -237,7 +237,7 @@ def main():
         check('No browser exceptions or failed resources',not errors,errors)
         browser.close()
     server.shutdown()
-    paths=sorted(str(p.relative_to(ROOT)) for p in (ROOT/'components/product-context').glob('*') if p.is_file())+['components/fields/fields.js','components/fields/specification.md','previews/product-context/lab.html','previews/product-context/lab.js','previews/product-context/sample-one.svg','previews/product-context/sample-two.svg','tools/product-context-check.py']
+    paths=sorted(str(p.relative_to(ROOT)) for p in (ROOT/'components/product-context').glob('*') if p.is_file())+['dist/iife/fields.js','components/fields/specification.md','previews/product-context/lab.html','previews/product-context/lab.js','previews/product-context/sample-one.svg','previews/product-context/sample-two.svg','tools/product-context-check.py']
     report=dict(commitAtRun=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),workingTree=True,physicalDevice=False,browser=version,scope='Phone Light360x780 RTL; targeted320; directional360 LTR; normal/reduced motion; no Dark/desktop/backend/AI',scenarios=cases,passed=sum(c['passed'] for c in checks),failed=sum(not c['passed'] for c in checks),checks=checks,measurements=measurements,sourceSha256={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in paths})
     (out/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print(f"Product context: {report['passed']} PASS / {report['failed']} FAIL");return bool(report['failed'])
 if __name__=='__main__':raise SystemExit(main())

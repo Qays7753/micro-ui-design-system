@@ -4,6 +4,19 @@
 `feature/integration-readiness-2026-11-21`. يُحدَّث بعد كل مرحلة. عند تعارض
 قرارين، الأحدث يتقدم ما لم يمس ثوابت الهوية.
 
+## 2026-11-22 — الجولة الثانية، R2 (مصدر ES modules وبناء جديد)
+
+1. **مشاركة حالة سجل النصوص عبر الحزم:** `shared/labels.js` يخزن الحالة كسولًا على `globalThis.__microLabelsStore` — ملفات `dist/iife/*.js` المنفصلة وقطع `dist/esm/` تتشارك السجل كما كانت `window.MicroLabels` الواحدة قبل الجولة (خلاف ذلك تنكسر setLocale/setLabels بين العائلات).
+2. **التكاملات العابرة للعائلات عبر `shared/integrations.js`:** إحالات `window.MicroButtons/Navigation/Readings/Carousel/Fields/ActionSheet` داخل الدوال (مسموحة بالقاعدة R2.1.3) مرّت كلها عبر `globalApi(name)` لتصفير grep القبول دون تغيير سلوك — في ESM النقي لا غلوبالات فتُتخطى التحسينات كما عند غياب العائلة الأخرى سابقًا.
+3. **مسارات الأصول نسبية لموضع الحزمة:** icons.js وassistant يحلان الأصول كسولًا عبر `shared/script-base.js` (import.meta.url في ESM بهدف es2020؛ وفي IIFE يضخ banner قيمة document.currentScript.src في globalThis). المسارات مكتوبة نسبة إلى `dist/esm|dist/iife` (عمق واحد: `../assets/...`) لأن كل المستهلكين على dist بعد R2.
+4. **حتمية البناء بمجلد مداخل ثابت:** تعليقات حدود الوحدات في مخرجات esbuild غير المصغّرة تتضمن مسار المدخل نسبة لملف الخرج؛ مجلد mkdtemp عشوائي كان يكسر الحتمية — مداخل التوليد تُنشأ في `tools/package/.build-entries` (ثابت، يُحذف بعد البناء).
+5. **sideEffects يشمل المصدر:** حقل sideEffects بمخطط الخطة (`css + dist/iife` فقط) جعل esbuild يحذف استيرادات تسجيل renderers (أثر جانبي صرف) فانكسر مدخل product — أضيف `./components/**` و`./shared/**` (وحدات المكتبة تسجّل سلوكها ونصوصها عند الاستيراد).
+6. **سد فجوة setLabels في AccessGateway/AccountSettings:** كانت موثقة في API.md وd.ts ومفقودة من تنفيذ 0.1.0 (استدعاء options.labels في البوابة كان يرمي TypeError) — أُضيفت تصديرًا موحدًا فوق السجل المشترك (R2.1.2 يوجب تصدير كل دالة عامة موثقة).
+7. **كسولة الخطافات:** مستمع حماية switch في Selection وخطاف جاهزية الخطوط في Data/Metric وmatchMedia في Carousel/Peek/Navigation نُقلت من المستوى الأعلى إلى تركيب كسول عند أول init/render (R2.1.3) — في مسار IIFE تسبقها التهيئة التلقائية فالتوقيت الفعلي كما كان.
+8. **micro-ui.js واحد والمداخل كما في جدول R2.2:** مدخل product يجمع النواة والـrenderers السبعة بمجمع مولّد (export * من product-core + استيراد تسجيل)؛ الـrenderers تصدّر `type` و`render` أيضًا (شرط ≥export لكل ملف مصدر).
+9. **data-micro-manual:** فُسّر «احترام data-micro-manual» في مدخل IIFE كمفتاح صفحة: وجود العنصر يوقف التهيئة التلقائية للعائلة (لا صفحة قائمة تستخدمه فصفر أثر بصري)؛ التطبيق لكل عنصر مؤجل كما في الجولة الأولى.
+10. **أرقام البوابات بعد R2:** static 270/270 (+52: ملفات مصدر أعيدت وdist/fixtures محدثة)، link-check 138/0 (التقسيم تغير: standalone أضخم بدمج iife)، manifest 508 (لا src/dist متتبعين)، package بوابة جديدة الدلالة (بناء+صادرات+بلا أثر جانبي)، وبقية الأعداد كما الأساس (audit 67، product-context 306، light-release 35، mobile 126، light-calendar 164، light-data 185، consumption 37، boundaries 77، clone 31، api-lifecycle 58، numeric 51، showcase 126، preview-runtime 114، visual: 62 مقارنة كلها ضمن 0.1% بلا استثناءات جديدة).
+
 ## 2026-11-22 — الجولة الثانية، R1 (بوابات قابلة للتشغيل في أي مكان)
 
 1. **بقاء المسار الحرفي في ملف الخطة نفسه:** شرط قبول R1 نصّ على صفر نتائج لـ`grep "/home/z"`؛ بقي ظهور واحد في `docs/plans/integration-readiness-round2-2026-11-22/PLAN.md` لأنه جزء من نص وصف العيب F6 (اقتباس المسار المعطوب) — ملف الخطة وثيقة المالك ولا يُعدل. كل الكود والتوثيق التشغيلي (check-all وvisual-regression-check وTESTING.md وtools/README.md وci.yml) خالٍ من المسار: `git grep -n "/home/z"` لا يُرجع سوى سطر الخطة المذكور.

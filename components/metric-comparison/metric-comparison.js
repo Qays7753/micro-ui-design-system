@@ -1,20 +1,16 @@
 /* Numeric comparison primitives. The consumer owns meaning, units and formatting. */
-(function () {
-  'use strict';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { globalApi } from '../../shared/integrations.js';
+import { defaults as familyDefaults } from './labels.js';
+
+registerLabels('metric-comparison', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'metric-comparison';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var NUMBER_RE = /^[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
@@ -538,7 +534,7 @@
       status.setAttribute('data-valid', String(max !== null));
     }
     syncBarsTable(chart, entries, parsed);
-    if (window.MicroReadings) window.MicroReadings.sync(chart);
+    if (globalApi('Readings')) globalApi('Readings').sync(chart);
   }
 
   function initOne(root) {
@@ -597,7 +593,8 @@
     }
   }
 
-  function render(root) {
+  export function render(root) {
+    installFontsHook();
     var scope = root || document;
     if (scope.matches) disconnected.delete(scope);
     if (scope.matches && scope.matches('[data-metric-circles]')) {
@@ -620,13 +617,14 @@
     });
   }
 
-  function init(root) {
+  export function init(root) {
+    installFontsHook();
     var scope = root || document;
     if (scope.matches && (scope.matches('[data-metric-circles]') || scope.matches('[data-main-comparison]'))) initOne(scope);
     scope.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(initOne);
   }
 
-  function disconnect(root) {
+  export function disconnect(root) {
     var scope = root || document;
     var selector = '[data-metric-circles], [data-main-comparison]';
     var items = [].slice.call(scope.querySelectorAll(selector));
@@ -648,30 +646,25 @@
   /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
      render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
      الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
-  window.MicroMetricComparison = { init: init, render: render, update: render, disconnect: disconnect };
+
+  export { render as update };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroMetricComparison.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['metric-comparison'] = registry['metric-comparison'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
+  export function setLabels(partial) {
+  setFamilyLabels('metric-comparison', partial);
+}
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-  if (document.fonts) document.fonts.ready.then(function () {
-    document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
-      if (!disconnected.has(chart)) render(chart);
+  /* R2 (الجولة الثانية): التركيب كسول — لا وصول إلى document في المستوى
+     الأعلى للوحدة؛ يُركَّب عند أول init/render (نفس نمط data.js). */
+  var fontsHookInstalled = false;
+  function installFontsHook() {
+    if (fontsHookInstalled) return;
+    fontsHookInstalled = true;
+    if (document.fonts) document.fonts.ready.then(function () {
+      document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
+        if (!disconnected.has(chart)) render(chart);
+      });
     });
-  });
-})();
+  }

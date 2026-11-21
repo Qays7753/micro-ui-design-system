@@ -8,22 +8,16 @@
       بأحرف أولى من الاسم (بديل ظاهر لا مربع مكسور).
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('organization', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'organization';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var liveBindings = new WeakMap();
@@ -85,9 +79,8 @@
     });
   }
 
-  window.MicroOrganization = {
-    init: function (root) { initSections(root); initAvatars(root); },
-    disconnect: function (root) {
+export function init(root) { initSections(root); initAvatars(root); }
+  export function disconnect(root) {
       nodes(root, '.m-section__head, img[data-avatar-fallback]').forEach(function (element) {
         liveBindings.delete(element);
         if (element.__microOrganizationLifetime) element.__microOrganizationLifetime.abort();
@@ -96,26 +89,10 @@
         delete element.dataset.microAvatarBound;
       });
     }
-  };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroOrganization.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['organization'] = registry['organization'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroOrganization.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroOrganization.init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('organization', partial);
+}

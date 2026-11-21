@@ -47,8 +47,10 @@ def main():
             page.on('console', lambda m: errors.append(m.text) if m.type == 'error' else None)
             page.on('response', lambda r: errors.append(str(r.status)+' '+r.url) if r.status >= 400 else None)
             if args.source_ref:
+                # R2.3: صفحات الفيكسَر تستهلك dist/iife — نُقدّم سلوك المرجع
+                # القديم (IIFE من git) على مسار dist/iife نفسه.
                 js = subprocess.check_output(['git','show',args.source_ref+':components/navigation/navigation.js'],cwd=ROOT,text=True)
-                page.route('**/components/navigation/navigation.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=js))
+                page.route('**/dist/iife/navigation.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=js))
             def goto(name):
                 page.goto(base+name+'.html', wait_until='networkidle'); page.evaluate('document.fonts.ready')
                 # Detect unexpected product routing without implementing History.
@@ -185,8 +187,8 @@ def main():
         check('Test runner completed',False,str(e))
     finally:
         server.shutdown()
-    sources=[*ROOT.glob('previews/integration-boundaries/*'),ROOT/'components/navigation/navigation.js',ROOT/'tools/integration-boundaries-check.py',ROOT/'previews/ui-system-showcase/standalone.html']
-    result=dict(scope='independent synthetic UX fixtures only; Light; no product host',viewport='360x780 RTL; directional LTR; focused 320 container',sourceRef=args.source_ref,commitAtRun=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),browser=locals().get('version'),passed=sum(x['passed'] for x in checks),failed=sum(not x['passed'] for x in checks),checks=checks,measurements=measurements,errors=errors,servedNavigationSha256=hashlib.sha256(js.encode() if args.source_ref else (ROOT/'components/navigation/navigation.js').read_bytes()).hexdigest(),workspaceSha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
+    sources=[*ROOT.glob('previews/integration-boundaries/*'),ROOT/'components/navigation/navigation.js',ROOT/'dist/iife/navigation.js',ROOT/'tools/integration-boundaries-check.py',ROOT/'previews/ui-system-showcase/standalone.html']
+    result=dict(scope='independent synthetic UX fixtures only; Light; no product host',viewport='360x780 RTL; directional LTR; focused 320 container',sourceRef=args.source_ref,commitAtRun=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),browser=locals().get('version'),passed=sum(x['passed'] for x in checks),failed=sum(not x['passed'] for x in checks),checks=checks,measurements=measurements,errors=errors,servedNavigationSha256=hashlib.sha256(js.encode() if args.source_ref else (ROOT/'dist/iife/navigation.js').read_bytes()).hexdigest(),workspaceSha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
     (out/'verification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:result[k] for k in ['passed','failed','browser']},ensure_ascii=False))
     return 1 if result['failed'] else 0

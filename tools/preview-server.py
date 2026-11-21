@@ -1,16 +1,39 @@
 #!/usr/bin/env python3
-"""Serve the editable Micro library, without exposing private workspace folders."""
+"""Serve the editable Micro library, without exposing private workspace folders.
 
+R2 (الجولة الثانية): المستهلكون داخل المستودع يخدمون من dist/iife المبني
+(المصدر ESM — R-D2/R-D3). عند البدء تُبنى الحزمة تلقائيًا إن كان dist/
+غائبًا أو أقدم من أي ملف مصدر (مقارنة mtime)، ويطبع ذلك قبل الإصغاء.
+"""
+
+import subprocess
+import sys
+import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
-# Phase 5: examples/ (vanilla-app), src/ (committed package mirror), and
-# dist/ (deterministic build output) are public delivery trees now.
-# R1 (الجولة الثانية، F9): حُذفت المجلدات غير الموجودة (reviews، prompts، handoff).
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "examples", "src", "dist"}
+# R1 (الجولة الثانية، F9): حُذفت المجلدات غير الموجودة (reviews، prompts،
+# handoff). R2: حُذفت src (مرآة قديمة — R-D4) وبقيت dist (مخرج البناء).
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "examples", "dist"}
 PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "MANIFEST.json", "pyproject.toml", "uv.lock", "CHANGELOG.md", "package.json"}
+
+
+def ensure_dist():
+    """ابنِ الحزمة إن كانت غائبة أو قديمة (أي ملف مصدر أحدث من dist/)."""
+    dist = ROOT / "dist"
+    sources = [ROOT / "package.json"]
+    for pattern in ("components/**/*.js", "components/**/*.css", "shared/*.js", "shared/*.css", "tools/build-package.mjs"):
+        sources.extend(ROOT.glob(pattern))
+    newest_source = max((p.stat().st_mtime for p in sources if p.is_file()), default=0)
+    marker = dist / "MANIFEST.json"
+    if marker.is_file() and marker.stat().st_mtime >= newest_source:
+        return
+    print("preview-server: dist/ غائب أو أقدم من المصدر — إعادة البناء…", flush=True)
+    result = subprocess.run(["node", "tools/build-package.mjs"], cwd=ROOT)
+    if result.returncode != 0:
+        print("preview-server: فشل البناء — قدم الصفحات كما هي", flush=True)
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -50,4 +73,5 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    ensure_dist()
     ThreadingHTTPServer(("0.0.0.0", 5000), PreviewHandler).serve_forever()

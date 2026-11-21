@@ -34,22 +34,16 @@
    لا شبكة ولا retry منطقي داخل المكوّن — إعادة المحاولة عند المستهلك.
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('messages', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'messages';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var liveBindings = new WeakMap();
@@ -115,7 +109,7 @@
     while (announcedIds.length > ANNOUNCE_CAPACITY) announcedIds.shift();
   }
 
-  function announce(text, opts) {
+  export function announce(text, opts) {
     /* التوافق الخلفي: الوسيط الثاني كان منطقيًا (assertive) — يقبل
        الكائن {id, assertive} أو المنطقي القديم؛ بلا وسيط = حدث مستقل */
     var id, assertive;
@@ -165,7 +159,7 @@
     }
   }
 
-  function resetAnnouncements() {
+  export function resetAnnouncements() {
     /* SUI-R1-03: مسح سجل الهويات لاستخدام المستهلك عند تغيير السياق/الوجهة —
        كل الأحداث بعده جديدة؛ لا يمس المنطقة الحية نفسها */
     announcedIds = [];
@@ -189,7 +183,7 @@
     delete el.dataset.toastTimer;
   }
 
-  function toast(el, options) {
+  export function toast(el, options) {
     if (!el || el.nodeType !== 1) return;
     options = options || {};
     endToastSession(el);
@@ -234,7 +228,7 @@
   }
 
   /* الإغلاق اليدوي من المصدر (زر داخل العنصر أو استدعاء مباشر) */
-  function closeToast(el, trigger) {
+  export function closeToast(el, trigger) {
     if (!el || el.nodeType !== 1) return;
     var hadFocus = el.contains(document.activeElement);
     var state = toastStates.get(el);
@@ -318,8 +312,7 @@
     });
   }
 
-  window.MicroMessages = {
-    disconnect: function (root) {
+export function disconnect(root) {
       var scope = root || document;
       var nodes = [scope].concat([].slice.call(scope.querySelectorAll('*')));
       nodes.forEach(function (element) {
@@ -340,32 +333,14 @@
         if (liveAssertive) liveAssertive.remove();
         livePolite = liveAssertive = null;
       }
-    },
-    toast: toast,
-    closeToast: closeToast,
-    announce: announce,
-    resetAnnouncements: resetAnnouncements,
+    }
     /* W2.5: init(root) يشمل الجذر نفسه؛ W2.2: يضمن أدوار m-note قبل التفاعل */
-    init: function (root) { ensureNoteRoles(root); bindClose(root); }
-  };
+
+  export function init(root) { ensureNoteRoles(root); bindClose(root); }
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroMessages.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['messages'] = registry['messages'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroMessages.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroMessages.init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('messages', partial);
+}

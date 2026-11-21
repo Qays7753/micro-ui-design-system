@@ -1,20 +1,16 @@
 /* Access form primitives. No provider, network, or authentication is enabled by default. */
-(function () {
-  'use strict';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+import { globalApi } from '../../shared/integrations.js';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
+
+registerLabels('access-gateway', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'access-gateway';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   // Rejected exceptions are diagnostics, never interface copy. The consumer may
@@ -194,7 +190,7 @@
             || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
         form.dataset.microAccessBusy = 'true';
         form.setAttribute('aria-busy', 'true');
-        if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: L('k4') });
+        if (globalApi('Buttons')) globalApi('Buttons').setLoading(button, true, { loadingLabel: L('k4') });
         setMessage(form, L('k5'), 'info');
         Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
@@ -209,7 +205,7 @@
             if (!alive()) return;
             form.dataset.microAccessBusy = 'false';
             form.removeAttribute('aria-busy');
-            if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+            if (globalApi('Buttons')) globalApi('Buttons').setLoading(button, false);
           });
       });
     });
@@ -263,7 +259,7 @@
       form.dataset.microAccessBusy = 'true';
       form.setAttribute('aria-busy', 'true');
       var submit = form.querySelector('[type="submit"]');
-      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: L('k18') });
+      if (submit && globalApi('Buttons')) globalApi('Buttons').setLoading(submit, true, { loadingLabel: L('k18') });
       setMessage(form, L('k19'), 'info');
       Promise.resolve().then(function () {
         if (!alive()) return;
@@ -285,7 +281,7 @@
         if (!alive()) return;
         form.dataset.microAccessBusy = 'false';
         form.removeAttribute('aria-busy');
-        if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
+        if (submit && globalApi('Buttons')) globalApi('Buttons').setLoading(submit, false);
       });
     });
   }
@@ -307,10 +303,10 @@
     }
   }
 
-  function init(root, handlers) {
+  export function init(root, handlers) {
     /* المرحلة 7 — options.labels لكل استدعاء: دمج جزئي فوق نصوص العائلة الافتراضية قبل الربط */
     if (handlers && handlers.labels && typeof handlers.labels === 'object') {
-      window.MicroAccessGateway.setLabels(handlers.labels);
+      setLabels(handlers.labels);
     }
 
     var scope = root || document;
@@ -323,7 +319,7 @@
     });
   }
 
-  function disconnect(root) {
+  export function disconnect(root) {
     var scope = root || document;
     var gateways = [].slice.call(scope.querySelectorAll('[data-access-gateway]'));
     if (scope.matches && scope.matches('[data-access-gateway]')) gateways.unshift(scope);
@@ -341,9 +337,9 @@
         form.dataset.microAccessBusy = 'false';
         form.removeAttribute('aria-busy');
         var submit = form.querySelector('[type="submit"]');
-        if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, false);
+        if (submit && globalApi('Buttons')) globalApi('Buttons').setLoading(submit, false);
         gateway.querySelectorAll('[data-access-provider]').forEach(function (button) {
-          if (window.MicroButtons) window.MicroButtons.setLoading(button, false);
+          if (globalApi('Buttons')) globalApi('Buttons').setLoading(button, false);
         });
         var password = credential(form, 'password');
         if (password) password.type = 'password';
@@ -356,8 +352,13 @@
      يفوّض إلى init نفسها — تحديث callbacks وتوافر الإجراءات الاختيارية
      على جذر مربوط أصلًا دون ربط مضاعف (سلوك init الموثق). لا يبني
      النموذج من جديد ولا يعيد كلمة المرور المظهرة. */
-  window.MicroAccessGateway = { init: init, update: init, disconnect: disconnect, destroy: disconnect };
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export { init as update, disconnect as destroy };
+
+
+/* R2 (الجولة الثانية): setLabels كانت موثقة في API.md وd.ts وغير موجودة في
+   تنفيذ 0.1.0 (استدعاء options.labels في AccessGateway كان يرمي خطأ) —
+   تُوفَّر الآن فوق سجل النصوص المشترك كما في بقية العائلات. */
+export function setLabels(partial) {
+  setFamilyLabels('access-gateway', partial);
+}

@@ -1,29 +1,85 @@
 {
   "name": "@micro/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "type": "module",
   "description": "مكتبة Micro UI — مكونات Vanilla للهاتف العربي RTL، Light-only، بدون إطار وصفر اعتماديات تشغيل.",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "build": "node tools/build-package.mjs",
-    "check": "node tools/build-package.mjs --check"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.12"
+    "check": "node tools/build-package.mjs --check",
+    "prepare": "node tools/build-package.mjs",
+    "typecheck": "tsc -p tools/package/tsconfig.json --noEmit"
   },
   "files": [
     "dist/",
-    "src/",
+    "tools/build-package.mjs",
+    "tools/package/",
+    "components/",
+    "shared/",
+    "assets/",
     "README.md",
     "CHANGELOG.md"
   ],
+  "sideEffects": [
+    "**/*.css",
+    "./dist/iife/**",
+    "./components/**",
+    "./shared/**"
+  ],
   "exports": {
-    "./css/micro-ui.css": "./dist/css/micro-ui.css",
+    "./buttons": { "types": "./dist/types/buttons.d.ts", "import": "./dist/esm/buttons.js" },
+    "./fields": { "types": "./dist/types/fields.d.ts", "import": "./dist/esm/fields.js" },
+    "./selection": { "types": "./dist/types/selection.d.ts", "import": "./dist/esm/selection.js" },
+    "./picker": { "types": "./dist/types/picker.d.ts", "import": "./dist/esm/picker.js" },
+    "./organization": { "types": "./dist/types/organization.d.ts", "import": "./dist/esm/organization.js" },
+    "./data": { "types": "./dist/types/data.d.ts", "import": "./dist/esm/data.js" },
+    "./packed-circle": { "types": "./dist/types/packed-circle.d.ts", "import": "./dist/esm/packed-circle.js" },
+    "./messages": { "types": "./dist/types/messages.d.ts", "import": "./dist/esm/messages.js" },
+    "./navigation": { "types": "./dist/types/navigation.d.ts", "import": "./dist/esm/navigation.js" },
+    "./action-sheet": { "types": "./dist/types/action-sheet.d.ts", "import": "./dist/esm/action-sheet.js" },
+    "./info-strip": { "types": "./dist/types/info-strip.d.ts", "import": "./dist/esm/info-strip.js" },
+    "./info-strip-peek": { "types": "./dist/types/info-strip-peek.d.ts", "import": "./dist/esm/info-strip-peek.js" },
+    "./metric-comparison": { "types": "./dist/types/metric-comparison.d.ts", "import": "./dist/esm/metric-comparison.js" },
+    "./account-settings": { "types": "./dist/types/account-settings.d.ts", "import": "./dist/esm/account-settings.js" },
+    "./access-gateway": { "types": "./dist/types/access-gateway.d.ts", "import": "./dist/esm/access-gateway.js" },
+    "./carousel": { "types": "./dist/types/carousel.d.ts", "import": "./dist/esm/carousel.js" },
+    "./order-schedule": { "types": "./dist/types/order-schedule.d.ts", "import": "./dist/esm/order-schedule.js" },
+    "./readings": { "types": "./dist/types/readings.d.ts", "import": "./dist/esm/readings.js" },
+    "./product": { "types": "./dist/types/product.d.ts", "import": "./dist/esm/product.js" },
+    "./icons": { "types": "./dist/types/icons.d.ts", "import": "./dist/esm/icons.js" },
+    "./labels": { "types": "./dist/types/labels.d.ts", "import": "./dist/esm/labels.js" },
+    "./buttons.css": "./dist/css/buttons.css",
+    "./fields.css": "./dist/css/fields.css",
+    "./selection.css": "./dist/css/selection.css",
+    "./picker.css": "./dist/css/picker.css",
+    "./organization.css": "./dist/css/organization.css",
+    "./data.css": "./dist/css/data.css",
+    "./packed-circle.css": "./dist/css/packed-circle.css",
+    "./messages.css": "./dist/css/messages.css",
+    "./navigation.css": "./dist/css/navigation.css",
+    "./action-sheet.css": "./dist/css/action-sheet.css",
+    "./info-strip.css": "./dist/css/info-strip.css",
+    "./info-strip-peek.css": "./dist/css/info-strip-peek.css",
+    "./metric-comparison.css": "./dist/css/metric-comparison.css",
+    "./account-settings.css": "./dist/css/account-settings.css",
+    "./access-gateway.css": "./dist/css/access-gateway.css",
+    "./carousel.css": "./dist/css/carousel.css",
+    "./order-schedule.css": "./dist/css/order-schedule.css",
+    "./product.css": "./dist/css/product.css",
     "./css/*": "./dist/css/*",
-    "./js/*": "./dist/js/*",
+    "./styles.css": "./dist/css/styles.css",
+    "./micro-ui.css": "./dist/css/micro-ui.css",
+    "./iife/*": "./dist/iife/*",
+    "./assets/*": "./dist/assets/*",
     "./fonts/*": "./dist/fonts/*",
-    "./micro-ui.d.ts": "./dist/micro-ui.d.ts"
+    "./icons/*": "./dist/icons/*",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "typescript": "^5.9.3"
   }
 }

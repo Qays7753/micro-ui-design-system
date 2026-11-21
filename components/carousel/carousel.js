@@ -57,7 +57,7 @@
    وaria-controls — وتعمل باللمس ولوحة المفاتيح (Enter/Space).
 
    الواجهة العامة:
-   window.MicroCarousel = {
+   الغلوبال في نسخة IIFE: MicroCarousel = {
      init(root?)           — يربط كل [data-carousel] تحت الجذر
      goTo(carousel, i)     — بطاقة محددة (منطقيًا)
      next(carousel) / prev(carousel)
@@ -66,22 +66,16 @@
    حدث عام: micro-carousel:change {detail: {index, count}}
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('carousel', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'carousel';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب */
@@ -89,11 +83,13 @@
   var COMMIT_MIN = 32;    /* أدنى عتلام التزام بالبكسل */
   var DOTS_MAX = 6;       /* أقصى عدد نقاط قبل الالتفاف (مقترح) */
 
-  var reduceMotionQuery = window.matchMedia
-    ? window.matchMedia('(prefers-reduced-motion: reduce)')
-    : null;
+  /* R2 (الجولة الثانية): الاستعلام كسول — لا وصول إلى window في المستوى الأعلى. */
+  var reduceMotionQuery = null;
 
   function prefersReducedMotion() {
+    if (!reduceMotionQuery && typeof window !== 'undefined' && window.matchMedia) {
+      reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    }
     return !!(reduceMotionQuery && reduceMotionQuery.matches);
   }
 
@@ -111,7 +107,7 @@
      إعادة التوسيط تحفظ الفهرس والتركيز (goToIndex لنفس الفهرس: مزامنة
      صامتة بلا حدث micro-carousel:change ولا طي توسعة ولا نقل تركيز).
      بيئة بلا ResizeObserver تبقي سلوك window-resize فقط (حد موثق).
-     window.MicroCarousel.disconnect(root) يفصل المراقبين لدورة التنظيف. */
+     disconnect(root) يفصل المراقبين لدورة التنظيف. */
   var viewportObservers = new WeakMap(); /* carousel → ResizeObserver وحيد */
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
 
@@ -609,33 +605,30 @@
     });
   }
 
-  function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
-  function prev(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index - 1); }
+  export function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
+  export function prev(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index - 1); }
 
-  window.MicroCarousel = {
-    init: function (root) {
+export function init(root) {
       /* SUI-R2-A2 (إصلاح SUI-R1-02): الجذر-الذات إن كان عارضًا يُعالج هنا
          — تطابقًا مع disconnect الذي يعالجه (كان التعارض موثقًا في
          SUI-R1-02: disconnect يفصل الجذر-الذات وinit لا يصل إليه). */
       var scope = root || document;
       if (scope.matches && scope.matches('[data-carousel]')) setup(scope);
       scope.querySelectorAll('[data-carousel]').forEach(setup);
-    },
-    goTo: goToIndex,
-    next: next,
-    prev: prev,
+    }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(carousel, index, options)
-       اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق micro-carousel:change
-       حتى برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
-       الشرائح يبقى دورة destroy/init موثقة لا update. */
-    update: function (carousel, index, options) { goToIndex(carousel, index, options); },
-    getIndex: function (carousel) {
+         اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق micro-carousel:change
+         حتى برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+         الشرائح يبقى دورة destroy/init موثقة لا update. */
+
+  function updateApi(carousel, index, options) { goToIndex(carousel, index, options); }
+  export function getIndex(carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;
-    },
-    destroy: function (root) {
+    }
+  export function destroy(root) {
       var scope = root || document;
-      window.MicroCarousel.disconnect(scope);
+      disconnect(scope);
       var items = [].slice.call(scope.querySelectorAll('[data-carousel]'));
       if (scope.matches && scope.matches('[data-carousel]')) items.unshift(scope);
       items.forEach(function (carousel) {
@@ -644,11 +637,12 @@
         if (st && st.dots) st.dots.textContent = '';
         stateOf.delete(carousel);
       });
-    },
+    }
     /* SUI-025: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
-       ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
-       الجذر نفسه إن كان عارضًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
-    disconnect: function (root) {
+         ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
+         الجذر نفسه إن كان عارضًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+
+  export function disconnect(root) {
       var scope = root || document;
       var items = [];
       if (scope.matches && scope.matches('[data-carousel]')) items.push(scope);
@@ -681,25 +675,13 @@
         }
       });
     }
-  };
+  export { goToIndex as goTo, updateApi as update };
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroCarousel.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroCarousel.init();
-})();
+
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroCarousel.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['carousel'] = registry['carousel'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
+  export function setLabels(partial) {
+  setFamilyLabels('carousel', partial);
+}

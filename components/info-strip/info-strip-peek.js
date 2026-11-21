@@ -11,7 +11,7 @@
    الاستخدام: <div class="m-info-strip m-info-peek" data-info-strip
                  data-info-peek> … نفس بنية info-strip … </div>
    ثم MicroInfoPeek.init() (تلقائي عند التحميل).
-   الواجهة: window.MicroInfoPeek = { init, goTo, next, prev, getIndex }
+   الواجهة (وفي نسخة IIFE الغلوبال MicroInfoPeek): init, goTo, next, prev, getIndex
    حدث: micro-info-peek:change {detail: {index, count}}
 
    العقود المعلنة (مطابقة مرجع الفيديو سلوكيًا لا بصريًا):
@@ -25,31 +25,29 @@
    - prefers-reduced-motion: بلا انتقالات — الظهور فوري.
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('info-strip', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'info-strip';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب (نفس ثوابت carousel) */
   var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
   var COMMIT_MIN = 32;    /* أدنى عتبة التزام بالبكسل */
 
-  var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  /* R2 (الجولة الثانية): الاستعلام كسول — لا وصول إلى window في المستوى الأعلى. */
+  var reduceQuery = null;
 
   function prefersReducedMotion() {
+    if (!reduceQuery && typeof window !== 'undefined' && window.matchMedia) {
+      reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    }
     return !!(reduceQuery && reduceQuery.matches);
   }
 
@@ -65,7 +63,7 @@
      لنفس الفهرس مزامنة صامتة بلا حدث micro-info-peek:change ولا نقل
      تركيز. بيئة بلا ResizeObserver تبقي سلوك window-resize فقط
      (العقد القديم الموثق — المستهلك يعيد القياس عند الفتح).
-     window.MicroInfoPeek.disconnect(root) يفصل المراقبين تحت جذر
+     disconnect(root) يفصل المراقبين تحت جذر
      لدورة التنظيف (init يعيد الإلحاق عند الحاجة). */
   var viewportObservers = new WeakMap(); /* strip → ResizeObserver وحيد */
   var RESIZE_EPS = 0.5; /* فرق عرض يُعتبر تغيّرًا حقيقيًا (px) */
@@ -422,31 +420,29 @@
     recenterStrip(strip, st);
   }
 
-  function next(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index + 1); }
-  function prev(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index - 1); }
+  export function next(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index + 1); }
+  export function prev(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index - 1); }
 
-  window.MicroInfoPeek = {
-    init: function (root) {
+export function init(root) {
       var scope = root || document;
       if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope);
       scope.querySelectorAll('[data-info-peek]').forEach(initStrip);
-    },
-    goTo: goToIndex,
-    next: next,
-    prev: prev,
+    }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(strip, index, options)
-       اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق change حتى
-       برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
-       الشرائح يبقى دورة disconnect/init موثقة لا update. */
-    update: function (strip, index, options) { goToIndex(strip, index, options); },
-    getIndex: function (strip) {
+         اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق change حتى
+         برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+         الشرائح يبقى دورة disconnect/init موثقة لا update. */
+
+  function updateApi(strip, index, options) { goToIndex(strip, index, options); }
+  export function getIndex(strip) {
       var st = stateOf.get(strip);
       return st ? st.index : -1;
-    },
+    }
     /* SUI-007: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
-       ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
-       الجذر نفسه إن كان شريطًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
-    disconnect: function (root) {
+         ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
+         الجذر نفسه إن كان شريطًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+
+  export function disconnect(root) {
       var scope = root || document;
       var strips = [];
       if (scope.matches && scope.matches('[data-info-peek]')) strips.push(scope);
@@ -479,25 +475,13 @@
         }
       });
     }
-  };
+  export { goToIndex as goTo, updateApi as update };
 
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroInfoPeek.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroInfoPeek.init();
-})();
+
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroInfoPeek.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['info-strip'] = registry['info-strip'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
+  export function setLabels(partial) {
+  setFamilyLabels('info-strip', partial);
+}

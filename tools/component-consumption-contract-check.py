@@ -15,13 +15,10 @@ CSS = ['assets/fonts/fonts.css', 'shared/tokens.css', 'shared/motion.css'] + [
     f'components/{family}/{family}.css' for family in
     ['buttons', 'fields', 'selection', 'navigation', 'messages', 'data', 'metric-comparison', 'access-gateway']
 ] + ['components/selection/picker.css', 'components/data/packed-circle.css']
-# عقد المرحلة 7: labels.js (إن وجد) يسبق سلوك عائلته في الفيكسَر
-JS = [p for family in
+# R2.3: الفيكسَر يستهلك dist/iife المبني — ملف واحد لكل مدخل (labels مضمنة).
+JS = [f'dist/iife/{family}.js' for family in
       ['buttons', 'fields', 'selection', 'navigation', 'messages', 'data', 'metric-comparison', 'access-gateway']
-      for p in (([f'components/{family}/labels.js']
-                 if (ROOT / 'components' / family / 'labels.js').is_file() else [])
-                + [f'components/{family}/{family}.js'])
-      ] + ['components/selection/picker.js', 'components/data/packed-circle.js']
+      ] + ['dist/iife/picker.js', 'dist/iife/packed-circle.js']
 BODY = '''
 <button id="opener" class="m-btn" data-layer-open="layer">فتح اللوحة</button>
 <button id="outside" class="m-btn">متابعة</button>

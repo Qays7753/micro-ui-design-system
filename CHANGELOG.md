@@ -1,3 +1,20 @@
+# سجل التغييرات
+
+## 0.2.0 (قيد الإعداد — الجولة الثانية R2)
+
+### Breaking
+- المصدر ES modules بصادرات مسماة؛ لا `window.Micro*` من المصدر — الغلوبالات في `dist/iife/<entry>.js` فقط (R-D2/R-D3).
+- `src/` حُذفت نهائيًا و`dist/` غير متتبع — يبنيه `npm run build`/`prepare` (R-D4).
+- مسارات IIFE الجديدة: `dist/iife/<entry>.js` بدل `dist/js/<file>.js`؛ ملفات labels لا تُحمّل منفصلة (مضمنة).
+- مفاتيح نصوص `kNNN` كما هي في هذه المرحلة (تُعاد تسميتها في R5).
+
+### Added
+- `dist/esm/<entry>.js` قابلة للاستيراد (`import { init } from '@micro/ui/buttons'`) مع صفر أثر جانبي عند الاستيراد.
+- مدخل واحد لكل عائلة (21 مدخلًا) + `dist/iife/micro-ui.js` شامل + `dist/css/styles.css`.
+
+### Fixed
+- setLabels كانت موثقة ومفقودة من تنفيذ AccessGateway/AccountSettings في 0.1.0 (options.labels كانت ترمي خطأ) — أُوفّرت الآن.
+
 # Changelog — @micro/ui
 
 All notable changes to the Micro UI library are documented here. SemVer is followed from 0.1.0.

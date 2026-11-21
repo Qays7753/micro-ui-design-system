@@ -25,10 +25,6 @@
 
    مثال عملي كامل: previews/buttons/example-usage.html
    ========================================================= */
-
-(function () {
-  'use strict';
-
   /* حالة كل زر تُحفظ في WeakMap (لا تلوّث DOM): تسمية aria-label
      الأصلية ووجودها — تُحفظ مرة واحدة عند بدء التحميل وتُسترجع بدقة. */
   var state = new WeakMap();
@@ -145,7 +141,7 @@
     *   A عبر m-btn--loading-replace يخفي النص بصريًا فقط مع حفظ
     *   مكانه واسمه الإتاحي. يعود النص كما كان عند التوقف.
    */
-  function setLoading(btn, isLoading, options) {
+  export function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;
     options = options || {};
     var busy = btn.getAttribute('aria-busy') === 'true';
@@ -180,21 +176,20 @@
   }
 
   /* واجهة عامة للاستهلاك المباشر ولفحص العقد خارج لوحة المعاينة */
-  window.MicroButtons = {
-    setLoading: setLoading,
-    /* العقد الموحد (المرحلة 6 — 2026-11-21): B01 مكيّف بالترميز والربط
-       تلقائي عند التحميل (حراسات التحميل تُنشأ عند أول setLoading)، فهذا
-       init ليست تهيئة ربط بل اكتشاف موثق فقط: تعيد أزرار النطاق كي
-       تشتغل كود التهيئة الموحد عند المضيف على الجذر نفسه؛ استدعاؤها
-       مرتين بريء تمامًا ولا يضيف أي مستمع. لا update هنا: لا مفهوم
-       بيانات للزر — حالة التحميل العابرة عبر setLoading. */
-    init: function (root) {
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): B01 مكيّف بالترميز والربط
+         تلقائي عند التحميل (حراسات التحميل تُنشأ عند أول setLoading)، فهذا
+         init ليست تهيئة ربط بل اكتشاف موثق فقط: تعيد أزرار النطاق كي
+         تشتغل كود التهيئة الموحد عند المضيف على الجذر نفسه؛ استدعاؤها
+         مرتين بريء تمامًا ولا يضيف أي مستمع. لا update هنا: لا مفهوم
+         بيانات للزر — حالة التحميل العابرة عبر setLoading. */
+
+  export function init(root) {
       var scope = root || document;
       var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
       if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
       return buttons;
-    },
-    disconnect: function (root) {
+    }
+  export function disconnect(root) {
       var scope = root || document;
       var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
       if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
@@ -206,5 +201,3 @@
         guarded.delete(button);
       });
     }
-  };
-})();

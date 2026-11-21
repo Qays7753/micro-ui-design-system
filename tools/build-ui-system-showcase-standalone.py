@@ -24,6 +24,7 @@ import argparse
 import base64
 import mimetypes
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -63,35 +64,24 @@ EXPECTED_CSS = [
     "previews/ui-system-showcase/showcase.css",
 ]
 EXPECTED_JS = [
-    "components/buttons/buttons.js",
-    "components/fields/labels.js",
-    "components/fields/fields.js",
-    "components/selection/labels.js",
-    "components/selection/selection.js",
-    "components/selection/picker.js",
-    "components/messages/labels.js",
-    "components/messages/messages.js",
-    "components/navigation/labels.js",
-    "components/navigation/navigation.js",
-    "components/organization/labels.js",
-    "components/organization/organization.js",
-    "components/compositions/reading-context.js",
-    "components/data/labels.js",
-    "components/data/data.js",
-    "components/data/packed-circle.js",
-    "components/info-strip/labels.js",
-    "components/info-strip/info-strip.js",
-    "components/info-strip/info-strip-peek.js",
-    "components/metric-comparison/labels.js",
-    "components/metric-comparison/metric-comparison.js",
-    "components/account-settings/labels.js",
-    "components/account-settings/account-settings.js",
-    "components/access-gateway/labels.js",
-    "components/access-gateway/access-gateway.js",
-    "components/order-schedule/labels.js",
-    "components/order-schedule/order-schedule.js",
-    "components/carousel/labels.js",
-    "components/carousel/carousel.js",
+    # R2.3: المعرض يستهلك dist/iife المبني (ملف واحد لكل مدخل، labels مضمنة).
+    "dist/iife/buttons.js",
+    "dist/iife/fields.js",
+    "dist/iife/selection.js",
+    "dist/iife/picker.js",
+    "dist/iife/messages.js",
+    "dist/iife/navigation.js",
+    "dist/iife/organization.js",
+    "dist/iife/readings.js",
+    "dist/iife/data.js",
+    "dist/iife/packed-circle.js",
+    "dist/iife/info-strip.js",
+    "dist/iife/info-strip-peek.js",
+    "dist/iife/metric-comparison.js",
+    "dist/iife/account-settings.js",
+    "dist/iife/access-gateway.js",
+    "dist/iife/order-schedule.js",
+    "dist/iife/carousel.js",
     "previews/ui-system-showcase/showcase.js",
 ]
 
@@ -313,6 +303,15 @@ def main() -> int:
     ap.add_argument("--check", action="store_true",
                     help="تحقق فقط: قارن إعادة التوليد بالملف القائم بلا كتابة")
     args = ap.parse_args()
+
+    # R2.3: المعرض يستهلك dist/iife المبني — نبني الحزمة أولًا في كل
+    # تشغيل (توليد أو --check) كي يضمَّن آخر مخرجات فعلية.
+    build = subprocess.run(["node", "tools/build-package.mjs"], cwd=ROOT,
+                           capture_output=True, text=True)
+    if build.returncode != 0:
+        print(build.stdout[-2000:])
+        print(build.stderr[-1000:])
+        raise SystemExit("BUILD ERROR: فشل بناء الحزمة قبل توليد standalone")
 
     html = build_html()
     if args.check:

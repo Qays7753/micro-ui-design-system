@@ -13,6 +13,7 @@
 - `docs/DECISIONS.md` — سجل قرارات الحسم والافتراضات والمؤجلات.
 - `assets/` — الخطوط (IBM Plex المحلي) والأيقونات والشعار v2 المعتمد.
 - `previews/` — أمثلة مستقلة؛ `previews/ui-system-showcase/` المعرض الأخير، و`standalone.html` فيه مولّد آليًا.
+- **الجولة الثانية (R2):** المصدر ES modules — `components/<family>/*.js` و`shared/*.js` تصدّر API علنيًا ولا تنشئ `window` (R-D2). `dist/` مخرج بناء غير متتبع (`node tools/build-package.mjs`): `dist/esm/<entry>.js` (bundle+splitting)، `dist/iife/<entry>.js` (غلوبالات `window.Micro*` + تهيئة تلقائية — R-D3)، CSS وأصول. كل المستهلكين داخل المستودع (صفحات وfixtures) يحمّلون `dist/iife/`؛ لا مرآة `src/` بعد الآن (R-D4).
 - `tools/baselines/identity.json` — قيم الهوية المحمية التي تقارن بها الفحوص.
 
 ## ثوابت لا تُكسر
@@ -39,7 +40,7 @@
 
 ## البوابات
 
-بعد كل مرحلة: `uv sync` ثم `uv run python tools/check-all.py` من جذر المستودع — يشغّل بوابات البناء بوضع `--check` وكل بوابات الجودة، ويطبع ملخصًا، ويفشل عند أي إخفاق. الفحوص تعمل على نسخة shallow (المقارنات مقابل `origin/main` افتراضيًا، وقيم الهوية من `tools/baselines/identity.json`).
+بعد كل مرحلة: `uv sync && npm ci` ثم `uv run python tools/check-all.py` من جذر المستودع — يبني الحزمة أولًا (`node tools/build-package.mjs`)، ثم بوابات البناء بوضع `--check` وكل بوابات الجودة والبوابة البصرية (مرجعها من git ref)، ويطبع ملخصًا، ويفشل عند أي إخفاق. الفحوص تعمل على نسخة shallow (المقارنات مقابل `origin/main` افتراضيًا، وقيم الهوية من `tools/baselines/identity.json`).
 
 ## ما لا يُختبر آليًا
 

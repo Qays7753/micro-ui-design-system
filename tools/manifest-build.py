@@ -37,12 +37,11 @@ EXCLUDE_PATHS = {
     "reviews/UI-SYSTEM-SHOWCASE/generated-data-scale",
     "reviews/UI-SYSTEM-SHOWCASE/ui-release",
 }
-# Phase 5: src/ (mirrors of the editable source), dist/ (deterministic build
-# output), and examples/ are tracked delivery trees now, fingerprinted like
-# the rest; the package files at the root ship with them.
 # R1 (الجولة الثانية، F9): حُذفت المجلدات غير الموجودة (reviews، prompts،
 # handoff) — check_only يفشل إذا ذُكر مجلد غير موجود.
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "src", "dist", "examples"}
+# R2 (الجولة الثانية، R-D4): حُذفت src (مرآة قديمة) وdist (مخرج بناء غير
+# متتبع — يبثه package --check الحتمي)؛ MANIFEST يجرد المصدر المتتبع.
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "examples"}
 PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "pyproject.toml", "uv.lock", "CHANGELOG.md", "package.json", "package-lock.json"}
 
 

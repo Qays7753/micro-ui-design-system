@@ -1,22 +1,18 @@
 /* MicroPicker — Arabic-first listbox. Host owns data and the surrounding layer.
    Status and retry are siblings of the listbox, never options.
    init/disconnect are repeatable; destroy releases instance state, not host data. */
-(function () {
-  'use strict';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+import { globalApi } from '../../shared/integrations.js';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
+
+registerLabels('selection', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'selection';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
   var states = new WeakMap();
 
@@ -68,7 +64,7 @@
     var selected = getSelected(picker);
     if (foot) foot.textContent = selected ? L('k1') + selected.label : L('k2');
   }
-  function getSelected(picker) {
+  export function getSelected(picker) {
     var option = optionsOf(picker).filter(function (item) { return item.getAttribute('aria-selected') === 'true'; })[0];
     return option ? { value: option.getAttribute('data-value'), label: option.textContent.trim() } : null;
   }
@@ -182,7 +178,7 @@
     });
     listen(picker, picker.querySelector('[data-picker-close]'), 'click', function () {
       var layer = picker.closest('.m-layer');
-      if (layer && window.MicroNavigation) window.MicroNavigation.closeLayer(layer);
+      if (layer && globalApi('Navigation')) globalApi('Navigation').closeLayer(layer);
       picker.dispatchEvent(new CustomEvent('micro-picker:close', { bubbles: true }));
     });
     apply(picker);
@@ -198,26 +194,26 @@
     stateOf(picker).bound = false;
     picker.removeAttribute('data-micro-picker-bound');
   }
-  window.MicroPicker = {
-    init: function (root) { each(root, bind); },
+export function init(root) { each(root, bind); }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
-       setOptions لكل picker تحت الجذر (الجذر نفسه إن كان picker). الاسم
-       القديم setOptions(picker, items) يبقى كما هو (D10). بلا مصفوفة
-       خيارات لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions. */
-    update: function (root, items) {
+         setOptions لكل picker تحت الجذر (الجذر نفسه إن كان picker). الاسم
+         القديم setOptions(picker, items) يبقى كما هو (D10). بلا مصفوفة
+         خيارات لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions. */
+
+  export function update(root, items) {
       if (!Array.isArray(items)) return;
-      each(root, function (picker) { window.MicroPicker.setOptions(picker, items); });
-    },
-    disconnect: function (root) { each(root, disconnect); },
-    destroy: function (root) { each(root, function (picker) { disconnect(picker); states.delete(picker); }); },
-    setStatus: function (picker, kind, message) {
+      each(root, function (picker) { setOptions(picker, items); });
+    }
+  function disconnectApi(root) { each(root, disconnect); }
+  export function destroy(root) { each(root, function (picker) { disconnect(picker); states.delete(picker); }); }
+  export function setStatus(picker, kind, message) {
       if (['ready', 'loading', 'empty', 'error', 'initial', 'disabled'].indexOf(kind) < 0) return;
       var state = stateOf(picker);
       state.status = kind;
       state.message = typeof message === 'string' ? message : '';
       apply(picker);
-    },
-    setOptions: function (picker, items) {
+    }
+  export function setOptions(picker, items) {
       var list = listOf(picker);
       if (!list) return;
       var selected = getSelected(picker), active = document.activeElement;
@@ -241,31 +237,16 @@
       var replacement = available(picker).filter(function (option) { return option.getAttribute('data-value') === focusedKey; })[0];
       if (hadFocus && replacement && !locked(picker)) { replacement.focus(); roving(picker, replacement); }
       if (selected && !getSelected(picker)) changed(picker, null);
-    },
-    clearSelection: function (picker) {
+    }
+  export function clearSelection(picker) {
       optionsOf(picker).forEach(function (option) { option.setAttribute('aria-selected', 'false'); });
       summary(picker); roving(picker, document.activeElement); changed(picker, null);
-    },
-    getSelected: getSelected
-  };
+    }
+  export { disconnectApi as disconnect };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroPicker.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['selection'] = registry['selection'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroPicker.init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) window.MicroPicker.init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('selection', partial);
+}

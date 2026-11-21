@@ -1,7 +1,7 @@
 /* =========================================================
    Micro UI — سلوك مكوّن جدول الطلبات المجدولة (order-schedule)
    الملف: components/order-schedule/order-schedule.js
-   الاسم العالمي: window.MicroOrderSchedule — البادئة m-ocal.
+   الاسم العالمي في نسخة IIFE: MicroOrderSchedule — البادئة m-ocal.
 
    عقد عام (المفصّل في specification.md):
    MicroOrderSchedule.init(rootElement, options) → instance
@@ -107,22 +107,16 @@
      والتهيئة المزدوجة آمنة (data-ocal-init).
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('order-schedule', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'order-schedule';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   /* ---- أنماط التحقق النصي (لا تحويل تاريخ عبر UTC) ---- */
@@ -384,7 +378,7 @@
      التهيئة والواجهة العامة
      ======================================================= */
 
-  function init(root, options) {
+  export function init(root, options) {
     if (!root || root.nodeType !== 1) {
       throw new Error(L('k15'));
     }
@@ -2078,37 +2072,23 @@
     };
   }
 
-  window.MicroOrderSchedule = {
-    init: init,
-    getInstance: function (root) {
+export function getInstance(root) {
       return (root && instances.get(root)) || null;
-    },
+    }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, orders) اسم موحد
-       على مستوى الوحدة يفوّض إلى instance.setData(orders) نفسها — تحديث
-       كامل بلا إعادة تهيئة. الاسم القديم setData على المثيل يبقى (D10).
-       بلا مثيل للجذر لا فعل وتُعاد null (init تظل مدخل الإنشاء). */
-    update: function (root, orders) {
+         على مستوى الوحدة يفوّض إلى instance.setData(orders) نفسها — تحديث
+         كامل بلا إعادة تهيئة. الاسم القديم setData على المثيل يبقى (D10).
+         بلا مثيل للجذر لا فعل وتُعاد null (init تظل مدخل الإنشاء). */
+
+  export function update(root, orders) {
       var inst = (root && instances.get(root)) || null;
       if (inst) inst.setData(orders);
       return inst;
     }
-  };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroOrderSchedule.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['order-schedule'] = registry['order-schedule'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('order-schedule', partial);
+}

@@ -43,22 +43,16 @@
    لا هندسة تنقل جديدة ولا شاشات فعلية.
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('navigation', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'navigation';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var liveBindings = new WeakMap();
@@ -80,9 +74,15 @@
   var closeState = new WeakMap(); /* R2-02: layer → {gen, timer, onEnd} — إلغاء إغلاق قديم */
   var closeRequests = new WeakSet();
   var escapeBound = false;
-  var doc = document;
   var layerTitleUid = 0;     /* W2.2: مولد id لعناوين الطبقات بلا id */
-  var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  /* R2 (الجولة الثانية): الاستعلام كسول — لا وصول إلى window في المستوى الأعلى. */
+  var reduceQuery = null;
+  function motionQuery() {
+    if (!reduceQuery && typeof window !== 'undefined' && window.matchMedia) {
+      reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    }
+    return reduceQuery;
+  }
   function on(owner, element, type, handler) {
     if (!owner.__microNavigationLifetime) owner.__microNavigationLifetime = new AbortController();
     element.addEventListener(type, handler, { signal: owner.__microNavigationLifetime.signal });
@@ -98,7 +98,7 @@
   }
 
   function inDocument(el) {
-    return !!(el && el.nodeType === 1 && doc.contains(el));
+    return !!(el && el.nodeType === 1 && document.contains(el));
   }
 
   function isDisabled(el) {
@@ -182,7 +182,7 @@
     releaseBackgroundInert();
     if (!openLayers.length) return;
     var top = openLayers[openLayers.length - 1];
-    isolateSiblings(doc.body, top.layer, top.backdrop);
+    isolateSiblings(document.body, top.layer, top.backdrop);
     /* A consumer may mount siblings while a modal is open. Observe only for
        that modal lifetime; descendants of already-inert siblings inherit the
        isolation, while new siblings along the active layer's ancestor chain
@@ -197,7 +197,7 @@
       });
       if (changed) applyBackgroundInert();
     });
-    isolationObserver.observe(doc.body, { childList: true, subtree: true });
+    isolationObserver.observe(document.body, { childList: true, subtree: true });
   }
 
   function releaseBackgroundInert() {
@@ -209,8 +209,8 @@
   /* ---- قفل التمرير بعدّاد (R2-02): فتح/إغلاق متقاطع لا يفسد القيمة السابقة ---- */
   function lockScroll() {
     if (lockCount === 0) {
-      prevOverflow = doc.body.style.overflow;
-      doc.body.style.overflow = 'hidden';
+      prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
     }
     lockCount++;
   }
@@ -218,7 +218,7 @@
   function unlockScroll() {
     if (lockCount > 0) lockCount--;
     if (lockCount === 0 && prevOverflow !== null) {
-      doc.body.style.overflow = prevOverflow === '' ? '' : prevOverflow;
+      document.body.style.overflow = prevOverflow === '' ? '' : prevOverflow;
       prevOverflow = null;
     }
   }
@@ -232,7 +232,7 @@
       var f = focusables(layer);
       if (!f.length) { e.preventDefault(); return; }
       var first = f[0], last = f[f.length - 1];
-      var active = doc.activeElement;
+      var active = document.activeElement;
       if (!layer.contains(active)) { e.preventDefault(); first.focus(); return; }
       if (e.shiftKey && active === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
@@ -292,7 +292,7 @@
     }
   }
 
-  function openLayer(layer, options) {
+  export function openLayer(layer, options) {
     options = options || {};
     if (!layer || layer.tagName !== 'DIV') return;
     /* R2-02: إلغاء أي دورة إغلاق قديمة أولًا — إعادة الفتح أثناء الخفوت آمنة */
@@ -307,13 +307,13 @@
     }
     /* اسم موحد معلن = منفَّذ: options.backdropEl */
     var backdrop = options.backdropEl
-      || (layer.getAttribute('data-backdrop-id') ? doc.getElementById(layer.getAttribute('data-backdrop-id')) : null)
-      || doc.querySelector('.m-layer-backdrop[data-for="' + layer.id + '"]');
+      || (layer.getAttribute('data-backdrop-id') ? document.getElementById(layer.getAttribute('data-backdrop-id')) : null)
+      || document.querySelector('.m-layer-backdrop[data-for="' + layer.id + '"]');
     /* التقاط المشغّل قبل نقل التركيز — وإلا يكون الالتقاط ابنًا داخل الطبقة.
        R2-02: عند إعادة الفتح والتركيز داخل الطبقة أصلاً (حالة الإغلاق/الفتح
        المتقاطع)، يُستعمل مشغّل الدورة السابقة المحفوظ كي لا يضيع الاسترجاع. */
     var st = closeState.get(layer);
-    var trigger = options.trigger || doc.activeElement;
+    var trigger = options.trigger || document.activeElement;
     if (!inDocument(trigger) || layer.contains(trigger)) {
       trigger = (st && st.lastTrigger && inDocument(st.lastTrigger)) ? st.lastTrigger : null;
     }
@@ -339,7 +339,7 @@
 
   /* A dismissal request changes no layer state before synchronous consent.
      Commands/cleanup remain explicit; no dirty store, Promise or History owner. */
-  function requestClose(layer, options) {
+  export function requestClose(layer, options) {
     var top = openLayers.length ? openLayers[openLayers.length - 1] : null;
     if (!top || top.layer !== layer || closeRequests.has(layer)) return false;
     options = options || {};
@@ -360,7 +360,7 @@
     return true;
   }
 
-  function closeLayer(layer) {
+  export function closeLayer(layer) {
     if (!layer) return;
     /* إغلاق سلف لا يترك طبقة ابنة مفتوحة داخل hidden. أغلق الأبناء
        أولًا؛ تبقى قفلة التمرير لكل طبقة محفوظة حتى اكتمال انتقالها. */
@@ -443,7 +443,7 @@
     var lab = null;
     var id = input.id;
     if (id) {
-      try { lab = doc.querySelector('label[for="' + String(id).replace(/"/g, '') + '"]'); } catch (err) { lab = null; }
+      try { lab = document.querySelector('label[for="' + String(id).replace(/"/g, '') + '"]'); } catch (err) { lab = null; }
     }
     if (!lab && input.closest) lab = input.closest('label');
     if (lab) {
@@ -666,9 +666,9 @@
     /* Escape: مستمع واحد مهما تكرر init — يغلق أعلى طبقة مرة واحدة */
     if (escapeBound) return;
     escapeBound = true;
-    doc.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !e.defaultPrevented && openLayers.length) {
-        requestClose(openLayers[openLayers.length - 1].layer, { reason: 'escape', trigger: doc.activeElement });
+        requestClose(openLayers[openLayers.length - 1].layer, { reason: 'escape', trigger: document.activeElement });
         e.preventDefault();
       }
     });
@@ -678,7 +678,7 @@
      إن طابق المحدد ثم الأبناء (container-only سابقًا: تمرير عقدة التبويبات
      ذاتها أو عقدة الطبقة ذاتها كان يُهمل). إعادة init آمنة: كل ربط محروس
      بعلامة dataset فلا ازدواج listeners. */
-  function init(root) {
+  export function init(root) {
     var scope = root || document;
     bindDocumentOnce();
     var inScope = function (selector) {
@@ -712,9 +712,7 @@
     inScope('[data-filter-panel]').forEach(initFilterPanel);
   }
 
-  window.MicroNavigation = {
-    init: init,
-    disconnect: function (root) {
+export function disconnect(root) {
       var scope = root || document;
       // End owned layers synchronously, including closing layers whose entry
       // has already been removed from openLayers. Restore the original lock.
@@ -746,38 +744,22 @@
       });
       if (openLayers.length) applyBackgroundInert();
       else releaseBackgroundInert();
-    },
-    openLayer: openLayer,
-    requestClose: requestClose,
-    closeLayer: closeLayer,
+    }
     /* قراءة المطبّق الحالي — للفحص والمستهلك */
-    appliedFilters: function (panel) {
+
+  export function appliedFilters(panel) {
       return panel && panel.__microApplied ? Object.assign({}, panel.__microApplied) : {};
-    },
+    }
     /* (F03-R2-03) مزامنة المطبّق من الخارج بعقد موثق — انظر initFilterPanel.
-       تغيير محدود موثق في مواصفة navigation مع رجعية F02. */
-    setAppliedFilters: function (panel, values) {
+         تغيير محدود موثق في مواصفة navigation مع رجعية F02. */
+
+  export function setAppliedFilters(panel, values) {
       if (panel && typeof panel.__microSetApplied === 'function') panel.__microSetApplied(values);
     }
-  };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroNavigation.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['navigation'] = registry['navigation'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('navigation', partial);
+}

@@ -46,39 +46,39 @@ SOURCE_PATHS = (
     "shared/tokens.css",
     "shared/motion.css",
     "components/buttons/buttons.css",
-    "components/buttons/buttons.js",
+    "dist/iife/buttons.js",
     "components/fields/fields.css",
-    "components/fields/fields.js",
+    "dist/iife/fields.js",
     "components/selection/selection.css",
-    "components/selection/selection.js",
+    "dist/iife/selection.js",
     "components/selection/picker.css",
-    "components/selection/picker.js",
+    "dist/iife/picker.js",
     "components/organization/organization.css",
-    "components/organization/organization.js",
+    "dist/iife/organization.js",
     "components/data/data.css",
-    "components/data/data.js",
+    "dist/iife/data.js",
     "components/data/packed-circle.css",
-    "components/data/packed-circle.js",
+    "dist/iife/packed-circle.js",
     "components/messages/messages.css",
-    "components/messages/messages.js",
+    "dist/iife/messages.js",
     "components/navigation/navigation.css",
-    "components/navigation/navigation.js",
+    "dist/iife/navigation.js",
     "components/surfaces/surfaces.css",
     "components/surfaces/curves.css",
     "components/info-strip/info-strip.css",
-    "components/info-strip/info-strip.js",
+    "dist/iife/info-strip.js",
     "components/info-strip/info-strip-peek.css",
-    "components/info-strip/info-strip-peek.js",
+    "dist/iife/info-strip-peek.js",
     "components/metric-comparison/metric-comparison.css",
-    "components/metric-comparison/metric-comparison.js",
+    "dist/iife/metric-comparison.js",
     "components/account-settings/account-settings.css",
-    "components/account-settings/account-settings.js",
+    "dist/iife/account-settings.js",
     "components/access-gateway/access-gateway.css",
-    "components/access-gateway/access-gateway.js",
+    "dist/iife/access-gateway.js",
     "components/order-schedule/order-schedule.css",
-    "components/order-schedule/order-schedule.js",
+    "dist/iife/order-schedule.js",
     "components/carousel/carousel.css",
-    "components/carousel/carousel.js",
+    "dist/iife/carousel.js",
 )
 
 ENGLISH_HOST_FIXTURE = {
@@ -158,8 +158,7 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
 #fixture{width:100%;max-width:100%;padding:8px}
 #order-root{max-width:100%;margin:auto;font-family:var(--micro-font-family)}
 </style></head><body><main id="fixture"><div id="order-root"></div></main>
-<script src="/components/order-schedule/labels.js"></script>
-<script src="/components/order-schedule/order-schedule.js"></script>
+<script src="/dist/iife/order-schedule.js"></script>
 <script>
 (() => {
   const q=new URLSearchParams(location.search),root=document.querySelector('#order-root');

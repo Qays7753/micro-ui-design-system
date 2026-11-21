@@ -5,10 +5,13 @@ Runs each gate as a subprocess (so each keeps its own exit code and output),
 prints a per-gate summary line, and exits non-zero if any gate failed.
 
 Gate set (see tools/README.md for the full classification):
+  - package build first (R2.3): node tools/build-package.mjs — real build of
+    dist/ (esm/iife/css/assets) from the ESM source; consumers serve from it
   - build tools in --check mode: standalone, catalog, manifest, package
-    (node tools/build-package.mjs --check: src mirrors + deterministic dist)
+    (node tools/build-package.mjs --check: entries, ESM exports, no import
+    side effects — dist/ is untracked, R-D4)
   - static gates: static (light-static-check), links (link-check),
-    hardcoded-text (Arabic strings in JS, labels pairing, d.ts coverage)
+    hardcoded-text (Arabic strings in JS, labels imports, d.ts coverage)
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
     clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
@@ -106,6 +109,16 @@ def main():
     parser.add_argument("--skip-visual", action="store_true",
                         help="skip the visual regression gate (manual debugging only)")
     args = parser.parse_args()
+
+    # R2.3: أول خطوة بناء فعلي للحزمة — كل المستهلكين داخل المستودع
+    # يخدمون من dist/iife المبني (R-D5)، فتبنى الحزمة قبل أي بوابة.
+    build = subprocess.run(["node", "tools/build-package.mjs"], cwd=ROOT,
+                           capture_output=True, text=True)
+    print(f"=== build: {'OK' if build.returncode == 0 else 'FAIL'} | {build.stdout.strip().splitlines()[-1] if build.stdout.strip() else ''}", flush=True)
+    if build.returncode != 0:
+        print(build.stdout[-3000:])
+        print(build.stderr[-2000:])
+        return 1
 
     out = Path(tempfile.mkdtemp(prefix="micro-check-all-"))
     matrix = build_gates(args.quick, out, args.skip_visual)

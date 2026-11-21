@@ -59,36 +59,26 @@ CSS = (
     "components/order-schedule/order-schedule.css",
     "components/carousel/carousel.css",
 )
+# R2.3: الفحص يستهلك dist/iife المبني — ملف واحد لكل مدخل (labels مضمنة).
 JS = (
-    "components/buttons/buttons.js",
-    "components/fields/labels.js",
-    "components/fields/fields.js",
-    "components/selection/labels.js",
-    "components/selection/selection.js",
-    "components/selection/picker.js",
-    "components/organization/labels.js",
-    "components/organization/organization.js",
-    "components/data/labels.js",
-    "components/data/data.js",
-    "components/data/packed-circle.js",
-    "components/messages/labels.js",
-    "components/messages/messages.js",
-    "components/navigation/labels.js",
-    "components/navigation/navigation.js",
-    "components/navigation/action-sheet.js",
-    "components/info-strip/labels.js",
-    "components/info-strip/info-strip.js",
-    "components/info-strip/info-strip-peek.js",
-    "components/metric-comparison/labels.js",
-    "components/metric-comparison/metric-comparison.js",
-    "components/account-settings/labels.js",
-    "components/account-settings/account-settings.js",
-    "components/access-gateway/labels.js",
-    "components/access-gateway/access-gateway.js",
-    "components/order-schedule/labels.js",
-    "components/order-schedule/order-schedule.js",
-    "components/carousel/labels.js",
-    "components/carousel/carousel.js",
+    "dist/iife/labels.js",
+    "dist/iife/buttons.js",
+    "dist/iife/fields.js",
+    "dist/iife/selection.js",
+    "dist/iife/picker.js",
+    "dist/iife/organization.js",
+    "dist/iife/data.js",
+    "dist/iife/packed-circle.js",
+    "dist/iife/messages.js",
+    "dist/iife/navigation.js",
+    "dist/iife/action-sheet.js",
+    "dist/iife/info-strip.js",
+    "dist/iife/info-strip-peek.js",
+    "dist/iife/metric-comparison.js",
+    "dist/iife/account-settings.js",
+    "dist/iife/access-gateway.js",
+    "dist/iife/order-schedule.js",
+    "dist/iife/carousel.js",
 )
 
 # ترميز أدنى صالح لكل عائلة — منسوخ من example-usage/spec الحقيقية.
@@ -672,8 +662,9 @@ SCRIPT = r"""async () => {
   }
 
   /* المرحلة 7 — setLabels: نص بديل يظهر بعد إعادة التصيير، والاستعادة تعيد الأصل */
-  const labelKeyOf = (fam, html) => Object.keys(window.MicroLabels[fam] || {})
-    .find((k) => typeof window.MicroLabels[fam][k] === 'string' && html.includes(window.MicroLabels[fam][k]));
+  const labelsOf = (fam) => (window.MicroLabels && window.MicroLabels.familyLabels(fam)) || {};
+  const labelKeyOf = (fam, html) => Object.keys(labelsOf(fam))
+    .find((k) => typeof labelsOf(fam)[k] === 'string' && html.includes(labelsOf(fam)[k]));
   {
     const m = mount('order-schedule');
     /* نطاق الكتلة السابقة لا يمتد هنا — تعريفان محليان للسيناريو */
@@ -688,7 +679,7 @@ SCRIPT = r"""async () => {
     const inst = MicroOrderSchedule.init(m.root, { orders: ORDERS, statuses: STATUSES, today: '2026-11-21', selectedDate: '2026-11-21', view: 'list' });
     MicroOrderSchedule.update(m.root, []);
     const key = labelKeyOf('order-schedule', m.root.innerHTML);
-    const original = key && window.MicroLabels['order-schedule'][key];
+    const original = key && labelsOf('order-schedule')[key];
     MicroOrderSchedule.setLabels(key ? { [key]: 'نص بديل للفحص' } : {});
     MicroOrderSchedule.update(m.root, []);
     const changed = m.root.innerHTML.includes('نص بديل للفحص');
@@ -712,7 +703,7 @@ SCRIPT = r"""async () => {
       + '<div data-plot></div><p data-chart-summary></p>';
     m.root.appendChild(chart);
     MicroData.init(m.root);
-    const original = window.MicroLabels['data'].k9;
+    const original = labelsOf('data').k9;
     const shown = m.root.innerHTML.includes(original);
     MicroData.setLabels({ k9: 'نص بديل للفحص' });
     MicroData.update(m.root);
@@ -727,7 +718,7 @@ SCRIPT = r"""async () => {
     const m1 = mount('carousel');
     MicroCarousel.init(m1.root);
     const key = labelKeyOf('carousel', m1.root.innerHTML);
-    const original = key && window.MicroLabels['carousel'][key];
+    const original = key && labelsOf('carousel')[key];
     let changed = false;
     let restored = false;
     if (key) {

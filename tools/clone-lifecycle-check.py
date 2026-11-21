@@ -102,10 +102,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/clones.html':
             links=''.join(f'<link rel="stylesheet" href="/components/{f}/{f}.css">' for f in FAMILIES)
-            # عقد المرحلة 7: labels.js (إن وجد) يسبق سلوك عائلته
-            scripts=''.join((f'<script src="/components/{f}/labels.js"></script>'
-                             if (ROOT / 'components' / f / 'labels.js').is_file() else '')
-                            + f'<script src="/components/{f}/{f}.js"></script>' for f in FAMILIES)+'<script src="/components/data/packed-circle.js"></script>'
+            if self.source_ref:
+                # وضع المقارنة بمرجع قديم: يُقدَّم سلوك المرجع نفسه (IIFE
+                # قديم مع labels.js الخاصة به) — البنية كما كانت قبل R2.
+                scripts=''.join((f'<script src="/components/{f}/labels.js"></script>'
+                                 if (ROOT / 'components' / f / 'labels.js').is_file() else '')
+                                + f'<script src="/components/{f}/{f}.js"></script>' for f in FAMILIES)+'<script src="/components/data/packed-circle.js"></script>'
+            else:
+                # R2.3: الفحص الحالي يستهلك dist/iife المبني (labels مضمنة).
+                scripts=''.join(f'<script src="/dist/iife/{f}.js"></script>' for f in FAMILIES)+'<script src="/dist/iife/packed-circle.js"></script>'
             body=('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8">'
                   '<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">'
                   '<link rel="stylesheet" href="/shared/tokens.css">'+links+

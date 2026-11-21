@@ -1,13 +1,4 @@
 /* C04: explicit, fail-safe unit context. No data parsing or business state. */
-(function () {
-  'use strict';
-
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
-  }
   var CLASS = 'm-reading-unit--contextual';
   function within(root) {
     var out = [].slice.call(root.querySelectorAll('[data-reading-unit]'));
@@ -66,19 +57,12 @@
     })) return null;
     return label;
   }
-  function sync(root) {
+  export function sync(root) {
     within(root || document).forEach(function (el) {
       el.classList.toggle(CLASS, !!contextFor(el));
     });
   }
-  window.MicroReadings = {
-    init: sync,
-    sync: sync,
-    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+export function disconnect(root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
+/* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
        sync نفسها (امتداد C04). الاسم القديم sync يبقى (D10). */
-    update: sync,
-    disconnect: function (root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
-  };
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) sync(document); });
-  if (document.readyState !== 'loading' && microAutoInit()) sync(document);
-})();
+  export { sync as init, sync as update };

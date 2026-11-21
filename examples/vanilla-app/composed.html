@@ -9,13 +9,13 @@
        src/ مباشرة — لا dist ولا previews ولا أي منطق مضيف: كل سلوك من ملفات
        المكتبة نفسها (تهيئة تلقائية عند تحميل الوحدات). بيانات الرسم اصطناعية
        للعرض فقط؛ الوحدة والمجاميع الحقيقية من المضيف دائمًا. -->
-  <link rel="stylesheet" href="../../src/assets/fonts/fonts.css">
-  <link rel="stylesheet" href="../../src/shared/tokens.css">
+  <link rel="stylesheet" href="../../dist/fonts/fonts.css">
+  <link rel="stylesheet" href="../../dist/css/shared/tokens.css">
   <!-- ترتيب إلزامي: buttons.css قبل fields.css (زر المسح/الخطوة من B01)
        وقبل data.css (أفعال جدول الإفصاح من B01). -->
-  <link rel="stylesheet" href="../../src/components/buttons/buttons.css">
-  <link rel="stylesheet" href="../../src/components/fields/fields.css">
-  <link rel="stylesheet" href="../../src/components/data/data.css">
+  <link rel="stylesheet" href="../../dist/css/buttons/buttons.css">
+  <link rel="stylesheet" href="../../dist/css/fields/fields.css">
+  <link rel="stylesheet" href="../../dist/css/data/data.css">
   <style>
     /* تأطير صفحة المثال فقط؛ مكونات المكتبة بأنماط مصدرها دون تغيير. */
     body { margin: 0; background: var(--micro-surface-page); font-family: var(--micro-font-family); color: var(--micro-text-primary); }
@@ -72,10 +72,8 @@
     </div>
   </section>
 </main>
-<script src="../../src/components/buttons/buttons.js"></script>
-<script src="../../src/components/fields/labels.js"></script>
-<script src="../../src/components/fields/fields.js"></script>
-<script src="../../src/components/data/labels.js"></script>
-<script src="../../src/components/data/data.js"></script>
+<script src="../../dist/iife/buttons.js"></script>
+<script src="../../dist/iife/fields.js"></script>
+<script src="../../dist/iife/data.js"></script>
 </body>
 </html>

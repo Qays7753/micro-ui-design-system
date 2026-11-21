@@ -13,22 +13,17 @@
    البطاقات وقت التهيئة (المحتوى الثابت)، وrescan(root) يعيد الالتقاط
    بعد إضافة/إزالة مضيفة غير متزامنة، وdisconnect(root) يفصل مستمعات
    الجذر ويعيده لحالة غير مهيأة (init جديدة تعمل بعدها). لا مؤقتات. */
-(function () {
-  'use strict';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
+
+registerLabels('info-strip', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'info-strip';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   function isEditingTarget(target) {
@@ -238,7 +233,7 @@
     data.viewport.hidden = false;
   }
 
-  function init(root) {
+  export function init(root) {
     var scope = root || document;
     if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope);
     scope.querySelectorAll('[data-info-strip]').forEach(initStrip);
@@ -246,7 +241,7 @@
 
   /* R-15: إعادة الالتقاط بعد محتوى مضيف غير متزامن — تفصل الربط القديم
      ثم تهيئ من جديد (بطاقات جديدة/محذوفة، حالة أول صف، صفحات النقاط) */
-  function rescan(root) {
+  export function rescan(root) {
     var scope = root || document;
     var list = [];
     if (scope.matches && scope.matches('[data-info-strip]')) list.push(scope);
@@ -260,7 +255,7 @@
 
   /* R-15: فصل مستمعات جذر بعينه — يعيد الشريط لحالة غير مهيأة
      (init/rescan جديدان يعملان بعدها) */
-  function disconnect(root) {
+  export function disconnect(root) {
     var scope = root || document;
     if (scope.matches && scope.matches('[data-info-strip]')) teardown(scope);
     scope.querySelectorAll('[data-info-strip]').forEach(teardown);
@@ -269,25 +264,12 @@
   /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
      rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
      الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
-  window.MicroInfoStrip = { init: init, rescan: rescan, update: rescan, disconnect: disconnect };
+
+  export { rescan as update };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroInfoStrip.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['info-strip'] = registry['info-strip'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('info-strip', partial);
+}

@@ -14,7 +14,7 @@
         القيم الحالية دون إطلاق أي حدث تعديل (لا input ولا change
         ولا micro-field:*) ودون أي أثر جانبي (لا يجعل النموذج dirty).
 
-   الواجهة العلنية (window.MicroFields):
+   الواجهة العلنية (وفي نسخة IIFE الغلوبال MicroFields):
      init(root): تهيئة/ربط حقول النطاق (تلقائيًا عند التحميل).
      sync(root): مزامنة عدّاد الأحرف وظهور زر المسح بعد تعيين
                  القيم برمجيًا (input.value = ...) — بلا أحداث
@@ -41,22 +41,16 @@
    المستهلك على الغلاف — المكوّن يعرضها فقط.
    ========================================================= */
 
-(function () {
-  'use strict';
+import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { defaults as familyDefaults } from './labels.js';
 
-  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
-     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
-     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+registerLabels('fields', familyDefaults);
+  /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
+     النصوص المشترك (shared/labels.js) وقت الاستخدام (لا عند التحميل)
+     كي يعمل setLabels؛ العائلة تسجّل نصوصها الافتراضية عند الاستيراد. ---- */
   var MICRO_LABELS_FAMILY = 'fields';
   function L(key) {
-    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
-    return family ? family[key] : undefined;
-  }
-  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
-     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
-     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
-  function microAutoInit() {
-    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    return getLabel(MICRO_LABELS_FAMILY, key);
   }
 
   var msgUid = 0;
@@ -323,7 +317,7 @@
     return base + i;
   }
 
-  function init(root) {
+  export function init(root) {
     var scope = root || document;
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
@@ -344,7 +338,7 @@
      ولا change ولا micro-field:*) وبلا أثر جانبي، فلا يصبح النموذج
      dirty بسببها. تقبل عنصر حقل واحد أو أي نطاق (document/عنصر
      حاوي) فتُزامن كل حقوله؛ الحقول غير المربوطة تُتجاهل بصمت. */
-  function sync(root) {
+  export function sync(root) {
     var scope = (root && typeof root.querySelectorAll === 'function') ? root : document;
     if (scope.nodeType === 1 && scope.matches('[data-micro-field]')) {
       runSyncs(scope);
@@ -354,7 +348,7 @@
 
   /* واجهة عامة: init تهيئة يدوية للمحتوى المضاف لاحقًا؛
      sync مزامنة العدّاد/المسح بعد تعيين القيم برمجيًا. */
-  function disconnect(root) {
+  export function disconnect(root) {
     var scope = root || document;
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
@@ -377,25 +371,12 @@
      يفوّض إلى sync نفسها — مزامنة العدّاد والمسح والخطوة من قيم DOM
      الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
      ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
-  window.MicroFields = { init: init, sync: sync, update: sync, disconnect: disconnect, destroy: disconnect };
+
+  export { sync as update, disconnect as destroy };
+
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
      عند أول render/update بعد التغيير). */
-  window.MicroFields.setLabels = function (partial) {
-    var registry = window.MicroLabels = window.MicroLabels || {};
-    var current = registry['fields'] = registry['fields'] || {};
-    var key;
-    for (key in partial) {
-      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
-        current[key] = current[key] || {};
-        var sub;
-        for (sub in partial[key]) current[key][sub] = partial[key][sub];
-      } else {
-        current[key] = partial[key];
-      }
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
-  if (document.readyState !== 'loading' && microAutoInit()) init();
-})();
+  export function setLabels(partial) {
+  setFamilyLabels('fields', partial);
+}

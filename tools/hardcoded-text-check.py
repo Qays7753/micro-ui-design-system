@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""فحص النصوص المثبتة (المرحلة 7) — بويابة ثابتة بلا متصفح.
+"""فحص النصوص المثبتة (المرحلة 7 / الجولة الثانية R2) — بوابة ثابتة بلا متصفح.
 
 الأقسام:
 1) نصوص عربية داخل سلاسل JS: يفشل الفحص إذا وُجد حرف عربي
@@ -8,20 +8,21 @@
    .js متتبَّع تحت components/ أو shared/ خارج ملفات */labels.js.
    التعليقات مستثناة (لا تظهر للمستخدم). لا نجتاح للنصوص الإتاحية
    (aria-label) — كل نص يظهر للمستخدم أو لقارئ الشاشة يجب أن يمرّ
-   عبر السجل. dist/ وsrc/ مرايا مولّدة بايت-ببايت (يبثها فحص
-   package --check) فلا تُفحص هنا.
+   عبر السجل.
 
-2) اقتران التحميل في الصفحات: كل صفحة HTML متتبَّعة تحمّل سلوك
-   عائلة عبر <script> يجب أن تحمّل labels.js الخاص بها قبل أول
-   سكربت للعائلة (وإلا ضاع النص وقت التصيير).
+2) استيراد labels في المصدر (R2.3.8): كل عائلة لها labels.js يجب أن
+   يستوردها ملف سلوكها (import ... from './labels.js') — النصوص صارت
+   تُضمَّن في الحزم المبنية فلا تُحمَّل ملفات labels منفصلة في أي صفحة
+   (يفحص أيضًا صفر وسوم <script src=…labels.js> في الصفحات المتتبعة).
 
 3) تغطية المفاتيح: كل L('key') في JS العائلة يجب أن يكون له مفتاح
    في labels.js المقابل.
 
-4) تغطية .d.ts: كل دالة عامة منشورة على window.Micro* (مفاتيح كائن
-   الواجهة أو تعيينات window.MicroX.foo =) يجب أن تظهر داخل
-   interface MicroXApi في tools/package/micro-ui.d.ts. الداخلية
-   (تبدأ بشرطة سفلية) مستثناة.
+4) تغطية .d.ts (الجولة الثانية): المصدر لم يعد ينشر window.Micro*
+   (الغلوبالات تُنشئها مداخل IIFE المولدة — R-D3)، فالفحص هنا يتحقق
+   من صادرات كل مدخل ESM مبنى مقابل الأنواع في tools/package/types/
+   (R3)؛ قبل توفر الأنواع يبقى القسم فحص غلوبالات المصدر كما كان
+   (صفرًا بطبيعته بعد R2).
 """
 import re
 import subprocess
@@ -30,6 +31,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DTS = ROOT / 'tools/package/micro-ui.d.ts'
+TYPES_DIR = ROOT / 'tools/package/types'
+ESM_DIR = ROOT / 'dist/esm'
 AR = re.compile(r'[\u0600-\u06FF]')
 FAMILY_FILES_RE = re.compile(r'^(?:.*/)?components/([a-z-]+)/([a-z0-9-]+)\.js$')
 
@@ -119,58 +122,29 @@ for rel in ls_files('components', 'shared'):
     if m and (ROOT / 'components' / m.group(1) / 'labels.js').exists():
         family_js.setdefault(m.group(1), []).append(rel)
 
-# ---- 2) اقتران التحميل في الصفحات ----
-# العلامات: وسم <script src> حقيقي، أو وسم <script data-sc-from> داخل
-# standalone.html المولَّد (السكربتات مضمّنة بسمة أصلها). عيّنات التوثيق
-# النصية داخل الصفحات (src لا يحلّ إلى ملف موجود بالنسبة للصفحة) لا
-# تحمّل شيئًا فتُتجاهل عمدًا.
-pages_checked = 0
+# ---- 2) استيراد labels في المصدر (R2.3.8) ----
+# كل عائلة لها labels.js: ملف سلوكها يستوردها (product-context: النواة)؛
+# ولا تُحمَّل ملفات labels منفصلة في أي صفحة متتبعة (النصوص مضمنة في dist).
+imports_checked = 0
+for fam, files in sorted(family_js.items()):
+    importers = [rel for rel in files
+                 if re.search(r"from '\./labels\.js'", (ROOT / rel).read_text())]
+    imports_checked += 1
+    if fam == 'product-context':
+        # النواة تسجّل نصوص العائلة؛ الـrenderers تقرأ عبر getLabel المشترك.
+        core = ROOT / 'components/product-context/product-core.js'
+        if "from './labels.js'" not in core.read_text():
+            violations.append('labels-import: components/product-context/product-core.js لا يستورد ./labels.js')
+    elif not importers:
+        violations.append('labels-import: عائلة %s لا يستورد أي ملف سلوك لها ./labels.js' % fam)
+    # كل ملف سلوك في العائلة يقرأ نصوصه عبر getLabel المستورد من shared
+    for rel in files:
+        if 'getLabel(' in (ROOT / rel).read_text() and 'shared/labels.js' not in (ROOT / rel).read_text():
+            violations.append('labels-import: %s يستخدم getLabel بلا استيراد shared/labels.js' % rel)
 for rel in ls_files('*.html'):
     text = (ROOT / rel).read_text()
-    if '<script' not in text:
-        continue
-    pages_checked += 1
-    labels_pos = {}
-    first_js = {}
-    base_dir = (ROOT / rel).parent
-    for m in re.finditer(r'<script[^>]*\b(src|data-sc-from)="([^"]+)"[^>]*>', text):
-        attr, src = m.group(1), m.group(2)
-        if attr == 'data-sc-from':
-            resolved = ROOT / src
-        elif src.startswith(('http://', 'https://', 'data:')):
-            continue
-        else:
-            resolved = (ROOT / src.lstrip('/')) if src.startswith('/') else (base_dir / src)
-        try:
-            resolved = resolved.resolve()
-            resolved.relative_to(ROOT)
-        except (ValueError, OSError):
-            continue
-        if not resolved.is_file():
-            continue
-        # العائلة من المسار المحلول — يشمل المسارات النسبية القصيرة
-        # (src="data.js" داخل components/<family>/) التي كان النمط القديم
-        # (مطابقة نص components/... في قيمة src) يغفلها فتفقد labels.js.
-        cm = re.search(r'components/([a-z-]+)/([a-z0-9-]+)\.js$', str(resolved))
-        dm = re.search(r'dist/js/([a-z0-9-]+)\.js$', src)
-        if cm and cm.group(1) in family_js:
-            if cm.group(2) == 'labels':
-                labels_pos[cm.group(1)] = m.start()
-            else:
-                first_js.setdefault(cm.group(1), m.start())
-        elif dm and dm.group(1).endswith('-labels'):
-            fam = dm.group(1)[:-len('-labels')]
-            if fam in family_js:
-                labels_pos[fam] = m.start()
-        elif dm:
-            for fam2, files in family_js.items():
-                if dm.group(1) in [f.rsplit('/', 1)[-1] for f in files]:
-                    first_js.setdefault(fam2, m.start())
-    for fam, pos in first_js.items():
-        if fam not in labels_pos:
-            violations.append('page-pairing: %s يحمل %s.js بلا labels.js للعائلة' % (rel, fam))
-        elif labels_pos[fam] > pos:
-            violations.append('page-pairing: %s يحمل labels.js للعائلة %s بعد أول سكربت لها' % (rel, fam))
+    if re.search(r'<script[^>]*src="[^"]*/labels\.js"', text):
+        violations.append('labels-import: %s يحمّل labels.js منفصلًا — النصوص مضمنة في dist/iife' % rel)
 
 # ---- 3) تغطية المفاتيح ----
 keys_checked = 0
@@ -264,10 +238,38 @@ def top_level_keys(body):
     return keys
 
 
-# ---- 4) تغطية .d.ts ----
+# ---- 4) تغطية الأنواع (الجولة الثانية) ----
+# بعد R2 لا ينشر المصدر window.Micro* (الغلوبالات تُنشئها مداخل IIFE
+# المولدة)، ففحص الغلوبالات على المصدر صفر بطبيعته. عند توفر الأنواع
+# في tools/package/types (R3) يُفحص كل مدخل ESM مبني: كل اسم مصدَّر في
+# dist/esm/<entry>.js يجب أن يظهر في tools/package/types/<entry>.d.ts.
 dts_text = DTS.read_text() if DTS.exists() else ''
 interfaces = dict(re.findall(r'interface (Micro\w+Api) \{(.*?)\n\}', dts_text, re.S))
 public_fns = 0
+esm_exports_checked = 0
+if TYPES_DIR.is_dir() and ESM_DIR.is_dir():
+    for types_file in sorted(TYPES_DIR.glob('*.d.ts')):
+        entry = types_file.stem
+        esm_file = ESM_DIR / (entry + '.js')
+        if not esm_file.is_file():
+            continue
+        esm_src = strip_comments(esm_file.read_text())
+        exported = set()
+        for m in re.finditer(r'export\s*\{([^}]+)\}', esm_src):
+            for part in m.group(1).split(','):
+                part = part.strip()
+                if not part:
+                    continue
+                # "name" أو "name as alias" — المسمى العام هو alias إن وجد
+                names = part.split(' as ')
+                exported.add(names[-1].strip())
+        types_src = types_file.read_text()
+        for name in sorted(exported):
+            if name in ('default',):
+                continue
+            esm_exports_checked += 1
+            if not re.search(r'\b%s\b' % re.escape(name), strip_comments(types_src)):
+                violations.append('types-coverage: dist/esm/%s.js يصدّر %s بلا ذكر في types/%s.d.ts' % (entry, name, entry))
 for rel in sorted(set(sum(family_js.values(), []) + ls_files('components', 'shared'))):
     if not rel.endswith('.js') or rel.endswith('/labels.js'):
         continue
@@ -312,11 +314,11 @@ for rel in sorted(set(sum(family_js.values(), []) + ls_files('components', 'shar
         if block is None or not re.search(r'\b%s\b' % re.escape(name), block):
             violations.append('dts-coverage: %s ينشر %s.%s بلا ذكر في micro-ui.d.ts' % (rel, m.group(1), name))
 
-print('hardcoded-text: %d ملف JS مفحوص، %d سلسلة نصية، %d صفحة HTML، %d مفتاح L()، %d دالة عامة مقابل d.ts'
-      % (files_scanned, strings_checked, pages_checked, keys_checked, public_fns))
+print('hardcoded-text: %d ملف JS مفحوص، %d سلسلة نصية، %d عائلة (استيراد labels)، %d مفتاح L()، %d صادر ESM مقابل الأنواع، %d دالة غلوبال مقابل d.ts'
+      % (files_scanned, strings_checked, imports_checked, keys_checked, esm_exports_checked, public_fns))
 if violations:
     for v in violations:
         print(v)
     print('hardcoded-text: FAIL — %d مخالفة' % len(violations))
     sys.exit(1)
-print('hardcoded-text: PASS — صفر نصوص مثبتة، الاقتران والمفاتيح وd.ts مكتملة')
+print('hardcoded-text: PASS — صفر نصوص مثبتة، الاستيراد والمفاتيح والأنواع مكتملة')
