@@ -22,6 +22,7 @@ import type * as MetricComparison from './metric-comparison';
 import type * as AccountSettings from './account-settings';
 import type * as AccessGateway from './access-gateway';
 import type * as Carousel from './carousel';
+import type * as Screen from './screen';
 import type * as OrderSchedule from './order-schedule';
 import type * as Readings from './readings';
 import type * as Product from './product';
@@ -172,6 +173,7 @@ declare global {
     MicroAccountSettings: MicroAccountSettingsGlobal;
     MicroAccessGateway: MicroAccessGatewayGlobal;
     MicroCarousel: MicroCarouselGlobal;
+    MicroScreen: typeof Screen;
     MicroOrderSchedule: typeof OrderSchedule;
     MicroReadings: MicroReadingsGlobal;
     MicroProduct: typeof Product;
@@ -195,6 +197,7 @@ declare global {
   const MicroAccountSettings: MicroAccountSettingsGlobal;
   const MicroAccessGateway: MicroAccessGatewayGlobal;
   const MicroCarousel: MicroCarouselGlobal;
+  const MicroScreen: typeof Screen;
   const MicroOrderSchedule: typeof OrderSchedule;
   const MicroReadings: MicroReadingsGlobal;
   const MicroProduct: typeof Product;

@@ -254,6 +254,16 @@
       "preview": "previews/carousel/index.html",
       "api": "MicroCarousel",
       "dependencies": []
+    },
+    {
+      "id": "screen",
+      "name": "Screen",
+      "maturity": "draft-for-review",
+      "preview": "previews/screen/index.html",
+      "api": "MicroScreen",
+      "dependencies": [
+        "navigation"
+      ]
     }
   ],
   "variants": [

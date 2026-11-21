@@ -3,7 +3,7 @@
 <!-- GENERATED: tools/component-catalog-build.py — edit COMPONENT-CATALOG.json -->
 
 مصدر حالة النضج الوحيد: [`COMPONENT-CATALOG.json`](COMPONENT-CATALOG.json).
-هذه 14 عائلة؛ متغيرات الرسوم والشريط ليست عائلات إضافية.
+هذه 15 عائلة؛ متغيرات الرسوم والشريط ليست عائلات إضافية.
 الإصدار Light-only. المقارنة الدقيقة bars/rows/table؛ الأشكال الدائرية المتخصصة opt-in صريح.
 الحالة وصف للمصدر، لا شهادة منصة أو مصادقة أو حفظ أو جاهزية نقل.
 
@@ -23,6 +23,7 @@
 | Access gateway | [`access-gateway`](../components/access-gateway/specification.md) | [فتح](../previews/concepts/index.html) | STABLE UI | buttons, fields |
 | Order schedule | [`order-schedule`](../components/order-schedule/specification.md) | [فتح](../components/order-schedule/example-usage.html) | DRAFT FOR REVIEW | لا توجد |
 | Carousel | [`carousel`](../components/carousel/specification.md) | [فتح](../previews/carousel/index.html) | DRAFT FOR REVIEW | لا توجد |
+| Screen | [`screen`](../components/screen/specification.md) | [فتح](../previews/screen/index.html) | DRAFT FOR REVIEW | navigation |
 
 ## اعتماديات خيارات التركيب
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Micro — هيكل شاشة الهاتف</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../components/screen/screen.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { background: var(--micro-surface-page); font-family: var(--micro-font-family); color: var(--micro-text-primary); }
+    /* الشاشة تملأ نافذة العرض في هذه المعاينة — لا إطار صفحة حولها */
+    .m-screen { max-width: 480px; margin-inline: auto; }
+    .demo-section-title { margin: 0 0 10px; font-size: var(--micro-section-title-size); line-height: var(--micro-section-title-line); font-weight: var(--micro-weight-semibold); }
+    .demo-note { margin: 0; font-size: var(--micro-secondary-size); line-height: var(--micro-secondary-line); color: var(--micro-text-secondary); }
+    .demo-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--micro-border-divider); font-size: var(--micro-label-size); }
+    .demo-row:last-child { border-bottom: 0; }
+    .demo-row strong { font-size: var(--micro-amount2-size); line-height: var(--micro-amount2-line); font-weight: var(--micro-weight-semibold); }
+    .demo-field { display: block; width: 100%; min-height: 52px; margin-top: 10px; padding: 12px; font: inherit; border: 1px solid var(--micro-border-control); border-radius: var(--micro-radius-field); background: var(--micro-surface); color: var(--micro-text-primary); }
+  </style>
+</head>
+<body>
+
+<div class="m-screen" data-micro-screen>
+  <header class="m-screen__top">
+    <header class="m-appbar">
+      <button class="m-appbar__icon" type="button" aria-label="رجوع">‹</button>
+      <h1 class="m-appbar__title">حساب الورشة</h1>
+      <button class="m-appbar__icon" type="button" aria-label="بحث">⌕</button>
+    </header>
+  </header>
+
+  <main class="m-screen__content">
+    <section class="m-screen__section">
+      <h2 class="demo-section-title">ملخص الفترة</h2>
+      <p class="demo-note">المحتوى يتمرر وحده داخل الشاشة؛ الشريطان العلوي والسفلي ثابتان دائمًا.</p>
+      <div class="demo-row"><span>إجمالي المبيعات</span><strong>1,150 د.أ</strong></div>
+      <div class="demo-row"><span>إجمالي المصاريف</span><strong>280 د.أ</strong></div>
+      <div class="demo-row"><span>صافي الفترة</span><strong>870 د.أ</strong></div>
+    </section>
+
+    <section class="m-screen__section">
+      <h2 class="demo-section-title">نموذج إدخال</h2>
+      <p class="demo-note">ركّز حقلًا ثم افتح لوحة المفاتيح: الحقل يبقى ظاهرًا وشريط الإجراءات يرتفع فوقها.</p>
+      <label>اسم العملية<input class="demo-field" type="text" name="title"></label>
+      <label>المبلغ<input class="demo-field" type="text" inputmode="decimal" name="amount"></label>
+      <label>ملاحظات<input class="demo-field" type="text" name="note"></label>
+    </section>
+
+    <section class="m-screen__section" id="last-section">
+      <h2 class="demo-section-title">قسم أخير</h2>
+      <p class="demo-note">آخر عنصر في المحتوى يبقى قابلًا للوصول فوق شريط التنقل عند التمرير إلى النهاية.</p>
+    </section>
+  </main>
+
+  <footer class="m-screen__actions" data-actions="keyboard-follow">
+    <button class="m-btn m-btn--primary" type="button">حفظ العملية</button>
+    <button class="m-btn" type="button">إلغاء</button>
+  </footer>
+
+  <nav class="m-screen__nav">
+    <nav class="m-navbar" aria-label="التنقل الرئيسي">
+      <a class="m-navbar__item" href="#" aria-current="page"><span>الرئيسية</span></a>
+      <a class="m-navbar__item" href="#"><span>العمليات</span></a>
+      <a class="m-navbar__item" href="#"><span>الحساب</span></a>
+    </nav>
+  </nav>
+</div>
+
+  <script src="../../dist/iife/screen.js"></script>
+</body>
+</html>

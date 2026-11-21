@@ -15,6 +15,11 @@
       "page": "previews/product-context/index.html",
       "reason": "R-D11 (الجولة الثانية R6): وصف C14 في الصفحة الرئيسية أعيدت صياغته من «لا حفظ محلي» إلى «لا تخزين على الجهاز» — تغيير سطر نص واحد (0.39% من البكسلات)، لا مشهد آخر تغيّر",
       "decision": "docs/DECISIONS.md — R-D11"
+    },
+    {
+      "page": "previews/ui-system-showcase/index.html",
+      "reason": "T3 (N-D5): قسم عائلة screen الجديد في المعرض — بوابة الكتالوج (component-catalog-build) تفرض data-catalog-family لكل عائلة، وscreen عائلة جديدة خامسة عشرة",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T3"
     }
   ]
 }

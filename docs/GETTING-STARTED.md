@@ -35,6 +35,7 @@ node tools/build-package.mjs
 | `@micro/ui/account-settings` | components/account-settings/account-settings.js | `MicroAccountSettings` |
 | `@micro/ui/access-gateway` | components/access-gateway/access-gateway.js | `MicroAccessGateway` |
 | `@micro/ui/carousel` | components/carousel/carousel.js | `MicroCarousel` |
+| `@micro/ui/screen` | components/screen/screen.js | `MicroScreen` |
 | `@micro/ui/order-schedule` | components/order-schedule/order-schedule.js | `MicroOrderSchedule` |
 | `@micro/ui/readings` | components/compositions/reading-context.js | `MicroReadings` |
 | `@micro/ui/product` | components/product-context (النواة وكل renderers) | `MicroProduct` |

@@ -12,7 +12,8 @@ LABELS = {"stable-ui": "STABLE UI", "draft-for-review": "DRAFT FOR REVIEW", "pro
 def build():
     catalog = json.loads((ROOT / "docs/COMPONENT-CATALOG.json").read_text())
     families = catalog["families"]
-    assert len(families) == 14 and len({item["id"] for item in families}) == 14
+    # الجولة الثالثة T3 (N-D5): عائلة screen الخامسة عشرة.
+    assert len(families) == 15 and len({item["id"] for item in families}) == 15
     lines = [
         "# فهرس مكونات Micro UI",
         "",

@@ -95,6 +95,10 @@
       "types": "./dist/types/carousel.d.ts",
       "import": "./dist/esm/carousel.js"
     },
+    "./screen": {
+      "types": "./dist/types/screen.d.ts",
+      "import": "./dist/esm/screen.js"
+    },
     "./order-schedule": {
       "types": "./dist/types/order-schedule.d.ts",
       "import": "./dist/esm/order-schedule.js"
@@ -115,31 +119,7 @@
       "types": "./dist/types/labels.d.ts",
       "import": "./dist/esm/labels.js"
     },
-    "./buttons.css": "./dist/css/buttons.css",
-    "./fields.css": "./dist/css/fields.css",
-    "./selection.css": "./dist/css/selection.css",
-    "./picker.css": "./dist/css/picker.css",
-    "./organization.css": "./dist/css/organization.css",
-    "./data.css": "./dist/css/data.css",
-    "./packed-circle.css": "./dist/css/packed-circle.css",
-    "./messages.css": "./dist/css/messages.css",
-    "./navigation.css": "./dist/css/navigation.css",
-    "./action-sheet.css": "./dist/css/action-sheet.css",
-    "./info-strip.css": "./dist/css/info-strip.css",
-    "./info-strip-peek.css": "./dist/css/info-strip-peek.css",
-    "./metric-comparison.css": "./dist/css/metric-comparison.css",
-    "./account-settings.css": "./dist/css/account-settings.css",
-    "./access-gateway.css": "./dist/css/access-gateway.css",
-    "./carousel.css": "./dist/css/carousel.css",
-    "./order-schedule.css": "./dist/css/order-schedule.css",
-    "./product.css": "./dist/css/product.css",
-    "./css/*": "./dist/css/*",
     "./styles.css": "./dist/css/styles.css",
-    "./micro-ui.css": "./dist/css/micro-ui.css",
-    "./iife/*": "./dist/iife/*",
-    "./assets/*": "./dist/assets/*",
-    "./fonts/*": "./dist/fonts/*",
-    "./icons/*": "./dist/icons/*",
     "./package.json": "./package.json"
   },
   "devDependencies": {

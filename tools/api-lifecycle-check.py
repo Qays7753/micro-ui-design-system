@@ -79,6 +79,7 @@ JS = (
     "dist/iife/access-gateway.js",
     "dist/iife/order-schedule.js",
     "dist/iife/carousel.js",
+    "dist/iife/screen.js",
     "dist/iife/readings.js",
     "dist/iife/icons.js",
     "dist/iife/product.js",
@@ -233,6 +234,11 @@ TEMPLATES = """
     <span data-status aria-live="polite"></span>
     <button type="button" class="m-carousel__btn" data-next aria-label="التالي"></button>
   </div>
+</div></template>
+<template id="tpl-screen"><div class="m-screen" data-micro-screen style="height:420px; border:1px solid var(--micro-border-divider); overflow:hidden;">
+  <header class="m-screen__top"><div class="m-appbar"><span class="m-appbar__title">فحص عقد الشاشة</span></div></header>
+  <main class="m-screen__content"><section class="m-screen__section"><p>محتوى عقد دورة الحياة.</p><p>سطر ثانٍ لطول قابل للتمرير.</p><p>سطر ثالث.</p><p>سطر رابع.</p></section></main>
+  <footer class="m-screen__actions"><button class="m-btn m-btn--primary" type="button">إجراء</button></footer>
 </div></template>
 """
 
@@ -642,6 +648,27 @@ SCRIPT = r"""async () => {
     done(m);
   }
 
+  /* ---------- Screen (T3) ---------- */
+  {
+    const m = mount('screen');
+    const inst = MicroScreen.init(m.root);
+    const again = MicroScreen.init(m.root);
+    record('screen', 'init(root) يعيد instance (R4) بلا نصوص ولا بيانات', !!inst && typeof inst.update === 'function' && typeof inst.destroy === 'function');
+    record('screen', 'init مرتين يعيدان المثيل نفسه (لا ربط مضاعف)', again === inst);
+    const before = getComputedStyle(m.root).getPropertyValue('--m-screen-actions-h').trim();
+    const tall = document.createElement('button');
+    tall.type = 'button'; tall.className = 'm-btn'; tall.style.minHeight = '72px'; tall.textContent = 'أطول';
+    m.root.querySelector('.m-screen__actions').appendChild(tall);
+    MicroScreen.update(m.root);
+    const after = getComputedStyle(m.root).getPropertyValue('--m-screen-actions-h').trim();
+    record('screen', 'update(root) يعيد قياس الأشرطة بعد تغيير المحتوى', after !== before && after !== '' && after !== '0px', { before, after });
+    MicroScreen.destroy(m.root);
+    const cleared = !m.root.style.getPropertyValue('--m-screen-actions-h') && MicroScreen.getInstance(m.root) === null;
+    const rebound = !!MicroScreen.init(m.root);
+    record('screen', 'destroy يمحو الحالة ثم init يعيد الربط', cleared && rebound);
+    done(m);
+  }
+
   /* ---------- Carousel ---------- */
   {
     const m = mount('carousel', 320);
@@ -971,7 +998,7 @@ def main():
         "checks": results,
         "scope": "unified lifecycle contract (R4: init/instance.update/destroy + zero leftovers + IIFE aliases), 360x780 RTL Light reduced-motion; "
                  "update N/A verified as documented absence for Buttons/Selection/Organization/Messages/"
-                 "Navigation/Account Settings; Surfaces is CSS-only (no JS)",
+                 "Navigation/Account Settings; Screen T3 (no labels/updates beyond re-measure); Surfaces is CSS-only (no JS)",
     }
     (out / "verification.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{passed} PASS / {len(results) - passed} FAIL")

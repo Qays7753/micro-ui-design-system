@@ -133,7 +133,7 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 عند استهلاك رسوم Data/Packed/Metric التي تولّد جدول إفصاح أو أدوات اختيار Data، حمّل `buttons.css` مرة قبل CSS العائلة. لا تنسخ مظهر B01 في hook خاص بالمخطط، ولا تفترض أن وجود `<button>` وحده يحقق مظهر الزر المعتمد. استهلاك المتغير وإظهار التعطيل والتركيز والضغط جزء من الفحص، مع مسؤولية العائلة عن حدث الفعل ودورة حياته. العقد والاستثناءات المتخصصة في قسم «الأفعال المشتركة والقواعد المشتركة» أدناه.
 
-## بطاقات الاعتماد — استهلاك العائلات الـ14
+## بطاقات الاعتماد — استهلاك العائلات الـ15
 
 للتواقيع والمدخلات والأحداث والتحديث والملكية والاستثناءات: عقود العائلات أدناه في هذا الملف. [التراكيب C01/C02/C03](../docs/COMPOSITIONS.md) وصفات CSS/HTML منفذة بحالة Draft للمراجعة؛ [طلب الإغلاق D01 وC05/C06](../docs/COMPOSITIONS.md) منفذة الآن للهاتف، بعقود منفصلة دون مزج مالكي طبقات.
 
@@ -467,6 +467,22 @@ Surfaces عائلة CSS بلا JavaScript فلا تدخل العقد. `icons` (h
 - `MicroCarousel.init(root, options?)` يعيد instance له `update({index, animate?})`=goTo و`goTo/next/prev/getIndex`؛ دوال مستوى العنصر تبقى صادرة عامة، و`update(carousel, ...)` اسم مهمل في IIFE فقط (R-D10). getIndex=-1 دون حالة وgoTo يقيّد الفهرس. `micro-carousel:change` يحمل `{index,count}` عند تغيره، حتى من goTo البرمجي؛ ليس input خاصًا بالمنتج. تغيير الشريحة يطوي الموسعة، ولا يوسع الجديدة تلقائيًا.
 - `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يوقف الرصد والسحب وrAF ويحذف الحالة والنقاط المولدة؛ init بعده يبدأ من جديد. لا setSlides/rescan عامة؛ تبديل بنية الشرائح يحتاج دورة destroy ثم init وتنظيف الأطفال، لا تعديل track المملوك مع افتراض إعادة التقاط تلقائية.
 - التغطية التالية:0/1/عدة شرائح، controls/peek الاختياري وcompact/expand حسب المواصفة، حد أول/آخر، سحب/إلغاء/تركيز/RTL/LTR؛ البيانات الفارغة داخل البطاقة مسؤولية مكوّنها، لا خطأ شبكة في Carousel نفسه.
+
+### 15. Screen — هيكل شاشة الهاتف (الجولة الثالثة T3)
+
+**عقد المدخل:** `init(root?)` يعيد `ScreenInstance`؛ `update(root?)` و`destroy(root?)` و`getInstance(root?)` صادران.
+- **options:** لا شيء (لا نصوص ولا بيانات — عائلة تخطيط بلا labels.js، موثق في DECISIONS).
+- **instance:** `update()` يعيد قياس ارتفاعات الأشرطة بعد تغيير محتوى ديناميكي.
+- **events:** لا أحداث مخصصة.
+- **مثال:** `const s = MicroScreen.init(); /* أشرطة جديدة */ s.update(); s.destroy();`
+- **لا مهملات IIFE** — عائلة جديدة بعقد R4 النقي.
+
+المصدر: [المواصفة](../components/screen/specification.md)، [JS](../components/screen/screen.js). الحالة `draft-for-review` (N-D5).
+
+- markup `[data-micro-screen]`: شريط علوي `__top` ومحتوى يتمرر وحده `__content` وشريط إجراءات `__actions` وشريط تنقل `__nav` (كلها اختيارية عدا `__content`) داخل `100dvh` (بديل `100vh`). الأشرطة صفوف grid لا طبقات فلا تغطية ممكنة؛ قياس ResizeObserver يغذي `scroll-padding-bottom` فيبقى آخر عنصر قابلًا للوصول.
+- لوحة المفاتيح (N-D10 / [NATIVE-BEHAVIOR](NATIVE-BEHAVIOR.md) قسم 3): عبر `visualViewport` يبقى الحقل المركّز ظاهرًا، و`__actions[data-actions="keyboard-follow"]` يرتفع فوق اللوحة و`keyboard-hide` يختفي (الافتراضي عند وجود `__nav`). **المضيف يضبط `viewport-fit=cover`** لتفعيل الحواف الآمنة.
+- لا يملك route ولا history ولا بيانات؛ نصوص الأشرطة من عائلاتها (appbar/navbar من navigation، الأزرار من buttons).
+- التغطية التالية: 360×780 و320×780 RTL/LTR، آخر عنصر غير مغطى، محاكاة لوحة مفاتيح، safe areas بقيم اصطناعية (بوابة screen-check).
 
 ### امتدادات المصدر الاختيارية
 

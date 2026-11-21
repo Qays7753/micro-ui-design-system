@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>مثال مستقل — هيكل شاشة Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../buttons/buttons.css">
+  <link rel="stylesheet" href="../navigation/navigation.css">
+  <link rel="stylesheet" href="screen.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { background: var(--micro-surface-page); font-family: var(--micro-font-family); }
+    .demo-note { font-size: var(--micro-secondary-size); color: var(--micro-text-secondary); margin: 0 0 12px; }
+    .demo-field { display: block; width: 100%; min-height: 52px; margin-top: 12px;
+      padding: 12px; font: inherit; border: 1px solid var(--micro-border-control);
+      border-radius: var(--micro-radius-field); background: var(--micro-surface); color: var(--micro-text-primary); }
+    .demo-row { display: flex; justify-content: space-between; padding: 14px 0;
+      border-bottom: 1px solid var(--micro-border-divider); }
+  </style>
+</head>
+<body>
+
+<div class="m-screen" data-micro-screen>
+  <header class="m-screen__top">
+    <header class="m-appbar">
+      <button class="m-appbar__icon" type="button" aria-label="رجوع">‹</button>
+      <h1 class="m-appbar__title">مثال هيكل الشاشة</h1>
+    </header>
+  </header>
+
+  <main class="m-screen__content" id="content">
+    <p class="demo-note">هذا المحتوى يتمرر وحده داخل الشاشة؛ الشريطان العلوي والسفلي ثابتان.</p>
+    <section class="m-screen__section">
+      <h2>قسم أول</h2>
+      <div class="demo-row"><span>إجمالي الفترة</span><strong>1,150 د.أ</strong></div>
+      <div class="demo-row"><span>عدد العمليات</span><strong>3</strong></div>
+    </section>
+    <section class="m-screen__section">
+      <h2>نموذج إدخال</h2>
+      <p class="demo-note">ركّز أي حقل ثم افتح لوحة المفاتيح: الحقل يبقى ظاهرًا وشريط الإجراءات يرتفع فوقها (keyboard-follow).</p>
+      <label>الاسم<input class="demo-field" type="text" name="name"></label>
+      <label>المبلغ<input class="demo-field" type="text" inputmode="decimal" name="amount"></label>
+      <label>ملاحظات<input class="demo-field" type="text" name="note"></label>
+    </section>
+    <section class="m-screen__section" id="last">
+      <h2>قسم أخير</h2>
+      <p class="demo-note">آخر عنصر في المحتوى: يجب أن يبقى قابلًا للوصول غير مغطى بالأشرطة عند التمرير إلى النهاية.</p>
+    </section>
+  </main>
+
+  <footer class="m-screen__actions" data-actions="keyboard-follow">
+    <button class="m-btn m-btn--primary" type="button">حفظ العملية</button>
+    <button class="m-btn" type="button">إلغاء</button>
+  </footer>
+</div>
+
+<script src="../../dist/iife/screen.js"></script>
+</body>
+</html>

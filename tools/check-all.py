@@ -74,6 +74,7 @@ def build_gates(quick, out, skip_visual):
         ("integration-boundaries", PY + ["tools/integration-boundaries-check.py"]),
         ("clone-lifecycle", PY + ["tools/clone-lifecycle-check.py"]),
         ("api-lifecycle", PY + ["tools/api-lifecycle-check.py", "--out", str(out / "api-lifecycle")]),
+        ("screen", PY + ["tools/screen-check.py", "--out", str(out / "screen")]),
         ("numeric-geometry", PY + ["tools/numeric-geometry-check.py"]),
         ("ui-system-showcase", PY + ["tools/ui-system-showcase-check.py"]),
         ("preview-runtime", PY + ["tools/preview-runtime-check.py",

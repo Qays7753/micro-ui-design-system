@@ -60,6 +60,7 @@ EXPECTED_CSS = [
     "components/access-gateway/access-gateway.css",
     "components/order-schedule/order-schedule.css",
     "components/carousel/carousel.css",
+    "components/screen/screen.css",
     "components/compositions/reading-layout.css",
     "previews/ui-system-showcase/showcase.css",
 ]
@@ -82,6 +83,7 @@ EXPECTED_JS = [
     "dist/iife/access-gateway.js",
     "dist/iife/order-schedule.js",
     "dist/iife/carousel.js",
+    "dist/iife/screen.js",
     "previews/ui-system-showcase/showcase.js",
 ]
 

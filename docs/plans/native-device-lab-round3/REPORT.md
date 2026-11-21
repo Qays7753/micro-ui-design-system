@@ -40,8 +40,16 @@
 - أنشئ هذا التقرير بالجدول وأرقام الأساس.
 - «التفويض الحالي» وقسم «مختبر الهاتف — قاعدة دائمة» (N-D4) موجودان في `AGENTS.md` منذ `1cf2013` — تحقّق ✓ (لا تعديل مطلوب).
 
+## T3 — عائلة screen (N2) — منفذة
+
+- **الملفات:** `components/screen/` (screen.css، screen.js، specification.md، README.md، example-usage.html — بلا labels.js عمدًا) + `previews/screen/index.html` + `tools/screen-check.py`.
+- **التسجيل:** مدخل `@micro/ui/screen` (Global `MicroScreen`) في البناء وpackage.json exports وtypes (screen.d.ts + iife.d.ts)؛ الكتالوج **15/8/14** (draft-for-review) والجرد مولّد؛ API.md (بطاقة العائلة 15) وGETTING-STARTED محدثان؛ standalone المعرض مولّد بأداته.
+- **البنية:** grid بصفوف (top/content/actions/nav) داخل 100dvh (بديل 100vh)، تمرير `__content` فقط بـ`overscroll-behavior: contain`، أشرطة لا تغطي بنيويًا + قياس ResizeObserver لمتغيري `--m-screen-actions-h`/`--m-screen-nav-h` يغذي scroll-padding، حواف آمنة عبر متغيرات `--m-screen-safe-*` (من env()، قابلة للمحاكاة)، ملكية الحافة السفلية وفق W1.3، لوحة المفاتيح عبر visualViewport (keyboard-follow/keyboard-hide وحالة data-keyboard).
+- **أدلة:** `tools/screen-check.py` عند 360 و320: **19 PASS / 0 FAIL** (تمرير داخلي فقط، لا overflow، آخر عنصر مكشوف، لوحة مفاتيح بمحاكي visualViewport وهمي، حواف آمنة بمحاكاة، update/destroy/init)؛ api-lifecycle **197/0** (+4 فحوص screen)؛ package --check **22 مدخلًا**؛ static **287/287**.
+- **السماحية:** صفحة المعرض في allowlist (قسم screen الجديد — فرض بوابة الكتالوج، موثق في DECISIONS). صفحات screen الثلاث جديدة بلا مرجع فلا تقارن.
+
 ## نقطة الاستكمال
 
-- **الحالية:** T0 مكتملة (تقرير + تحقق فرع)؛ تشغيل الأساس التأكيدي يجري في الخلفية؛ التالي فورًا: T1 (G1: بوابة lint في check-all؛ G2: التقاط حتمي؛ مرجع v0.2.0).
-- الترتيب المتبقي: T1 → T2 (NATIVE-BEHAVIOR.md) → T3 (عائلة screen) → T4 (N3–N7) → T5 (أنماط الشاشات) → T6 (مختبر الهاتف — الأولوية الأعلى) → T7 (قائمة فحص المالك) → T8 (توثيق 0.3.0) → T9 (ثلاث نسخ نظيفة + وسم v0.3.0).
+- **الحالية:** T0–T3 منفذة وملتزمة؛ التالي: T4 (السلوك الأصلي في المكوّنات).
+- الترتيب المتبقي: T4 (N3–N7) → T5 → T6 (مختبر الهاتف) → T7 → T8 → T9 (ثلاث نسخ نظيفة + وسم v0.3.0).
 - لا أعطال معروفة حتى الآن.

@@ -1,0 +1,139 @@
+/* =========================================================
+   Micro UI — هيكل شاشة الهاتف (screen) — الجولة الثالثة T3 (N-D5).
+   الملف: components/screen/screen.css
+
+   الدور: هيكل شاشة تطبيق هاتف واحدة: شريط علوي ثابت، محتوى يتمرر
+   وحده، شريط إجراءات سفلي وشريط تنقل سفلي — داخل ارتفاع الشاشة
+   الحقيقي (100dvh مع بديل 100vh) بلا تمرير للصفحة نفسها.
+
+   القواعد الثابتة:
+   - Light-only، الهاتف وRTL أولًا؛ لا يملك route ولا history ولا بيانات.
+   - المحتوى لا يُغطى أبدًا: الأشرطة صفوف grid حقيقية أسفل المحتوى،
+     وليست طبقات فوقه (قرار البنية — موثق في specification.md).
+   - الحشوة السفلية للمحتوى (scroll-padding) تتبع ارتفاع الأشرطة
+     الفعلي المقيس (ResizeObserver في screen.js) فلا يختفي آخر عنصر
+     خلف شريط مرتفع بلوحة المفاتيح.
+   - توكنز التخطيط مشتقة حرفيًا من --micro-space-* (N-D5) وموثقة في
+     docs/DECISIONS.md.
+   ========================================================= */
+
+.m-screen {
+  --m-screen-inset-inline: var(--micro-space-4);       /* 16px — هامش الشاشة الأفقي */
+  --m-screen-section-gap: var(--micro-space-6);         /* 24px — المسافة بين الأقسام */
+  --m-screen-section-padding: var(--micro-space-4);     /* 16px — الحشوة داخل القسم */
+  --m-screen-actions-padding: var(--micro-space-4);     /* 16px — حشوة شريط الإجراءات */
+  --m-screen-actions-h: 0px;   /* يقيسها screen.js بـResizeObserver */
+  --m-screen-nav-h: 0px;       /* يقيسها screen.js بـResizeObserver */
+  --m-screen-keyboard: 0px;    /* ارتفاع لوحة المفاتيح من visualViewport */
+  /* حواف آمنة عبر متغيرات ملكية — قابلة للمحاكاة بقيم مخصصة في الفحص
+     (NATIVE-BEHAVIOR قسم 8) والافتراض من env() */
+  --m-screen-safe-top: env(safe-area-inset-top, 0px);
+  --m-screen-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --m-screen-safe-left: env(safe-area-inset-left, 0px);
+  --m-screen-safe-right: env(safe-area-inset-right, 0px);
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: 100vh;    /* بديل المتصفحات القديمة */
+  height: 100dvh;   /* الارتفاع الديناميكي الحقيقي */
+  min-height: 320px;
+  background: var(--ui-canvas);
+  color: var(--ui-text);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+  line-height: var(--micro-body-line);
+  /* حواف آمنة أفقية: القيمة الأكبر بين هامش الشاشة وحافة الجهاز */
+  padding-left: max(var(--m-screen-inset-inline), var(--m-screen-safe-left));
+  padding-right: max(var(--m-screen-inset-inline), var(--m-screen-safe-right));
+}
+
+/* الشريط العلوي: ثابت في مكانه (صف grid) ويحترم الحافة الآمنة العليا */
+.m-screen__top {
+  padding-top: var(--m-screen-safe-top);
+  padding-bottom: var(--micro-space-2);
+  background: var(--ui-surface);
+}
+
+/* المحتوى: التمرير الوحيد في الشاشة، محصور داخلها */
+.m-screen__content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* scroll-into-view للعنصر الأخير يهبط فوق الأشرطة لا خلفها */
+  scroll-padding-bottom: calc(var(--m-screen-actions-h) + var(--m-screen-nav-h)
+    + var(--micro-space-4) + var(--m-screen-safe-bottom));
+  padding-top: var(--micro-space-4);
+  padding-bottom: var(--micro-space-4);
+}
+
+.m-screen__section {
+  padding: var(--m-screen-section-padding);
+  background: var(--ui-surface);
+  border-radius: var(--micro-radius-surface);
+}
+
+.m-screen__section + .m-screen__section {
+  margin-top: var(--m-screen-section-gap);
+}
+
+/* شريط الإجراءات السفلي: زر أساسي واحد بعرض كامل هو النمط الافتراضي
+   (هاتف أولًا)؛ يفصل بينه وبين المحتوى فاصل خط، ويحترم الحافة الآمنة */
+.m-screen__actions {
+  --micro-inset-bottom: 0px;
+  display: flex;
+  gap: var(--micro-button-gap);
+  align-items: center;
+  padding: var(--m-screen-actions-padding);
+  padding-bottom: max(var(--m-screen-actions-padding), var(--m-screen-safe-bottom));
+  background: var(--ui-surface);
+  border-top: 1px solid var(--ui-border-divider);
+}
+
+.m-screen__actions > .m-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.m-screen__actions > .m-btn + .m-btn,
+.m-screen__actions > :not(.m-btn) {
+  flex: 0 1 auto;
+}
+
+/* شريط التنقل السفلي (navbar من عائلة navigation يوضع داخله) */
+/* W1.3 (ملكية الحافة السفلية): الشاشة هي المالك الخارجي للحافة —
+   تطبقها مرة هنا وتُصفّر متغير الملكية على الأشرطة الداخلية
+   (m-navbar/m-actionbar) فلا يتكرر inset داخل التركيب. */
+.m-screen__nav {
+  --micro-inset-bottom: 0px;
+  padding-bottom: var(--m-screen-safe-bottom);
+  background: var(--ui-surface);
+}
+
+/* ---- لوحة المفاتيح (N-D10 / NATIVE-BEHAVIOR قسم 3) ----
+   الحالة data-keyboard="true" يضبطها screen.js عند انكشاف لوحة مفاتيح
+   حقيقية (ارتفاع visualViewport أقل من النافذة بهامش معتبر). */
+
+/* keyboard-follow: الشريط يرتفع فوق اللوحة (شاشات النماذج) */
+.m-screen__actions[data-actions="keyboard-follow"] {
+  transform: translateY(calc(var(--m-screen-keyboard) * -1));
+  transition: translate var(--micro-motion-enter) var(--micro-ease-standard);
+}
+
+/* keyboard-hide: الشريط يختفي كليًا (الافتراضي حين يوجد __nav) */
+.m-screen[data-keyboard="true"] .m-screen__actions[data-actions="keyboard-hide"] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-screen__actions[data-actions="keyboard-follow"] {
+    transition: none;
+  }
+}
+
+/* 320px: لا هوامش سالبة ولا قص — الهامش الأصغر يكفي */
+@media (max-width: 359px) {
+  .m-screen {
+    --m-screen-inset-inline: var(--micro-space-3);
+    --m-screen-section-padding: var(--micro-space-3);
+  }
+}
