@@ -8,10 +8,15 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import tempfile
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "161bb71adbed86e0df4382174cb07bd2fcb8d62d"
+IDENTITY = json.loads((ROOT / "tools/baselines/identity.json").read_text(encoding="utf-8"))
+# Diff base: origin/main by default (available in shallow clones), override with --base.
+DEFAULT_BASE = "origin/main"
+# Deletions are only forbidden for editable UI source; docs cleanups are allowed.
+PROTECTED_PREFIXES = ("components/", "shared/", "assets/", "previews/")
 
 
 def git(*args):
@@ -69,10 +74,14 @@ def css_balanced(text):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", type=Path, default=ROOT / "generated-artifacts/light-only-repair/static.json")
+    parser.add_argument("--out", type=Path,
+                        default=Path(tempfile.mkdtemp(prefix="micro-light-static-")) / "static.json")
+    parser.add_argument("--base", default=DEFAULT_BASE,
+                        help="Diff base ref (default: origin/main)")
     args = parser.parse_args()
+    base = args.base
     files = sorted(set(git("ls-files", "--cached", "--others", "--exclude-standard").splitlines()))
-    changed = set(git("diff", "--name-only", BASE).splitlines()) | set(git("ls-files", "--others", "--exclude-standard").splitlines())
+    changed = set(git("diff", "--name-only", base).splitlines()) | set(git("ls-files", "--others", "--exclude-standard").splitlines())
     records = []
 
     def check(name, passed, detail=None):
@@ -106,7 +115,7 @@ def main():
         if path.is_file() and path.suffix == ".css":
             required = set(re.findall(r"var\((--micro-[\w-]+)\s*\)", path.read_text()))
             check("defined required CSS tokens: " + name, not (required - defined), sorted(required - defined))
-            old = subprocess.run(["git", "show", f"{BASE}:{name}"], cwd=ROOT, capture_output=True, text=True)
+            old = subprocess.run(["git", "show", f"{base}:{name}"], cwd=ROOT, capture_output=True, text=True)
             before_colors = set(re.findall(r"#[0-9a-fA-F]{3,8}\b", old.stdout))
             after_colors = set(re.findall(r"#[0-9a-fA-F]{3,8}\b", path.read_text()))
             # R-06 (2026-10-25): القيمتان المدققتان وحدهما مسموحتان في
@@ -128,15 +137,35 @@ def main():
                   not (after_colors - before_colors - audited), sorted(after_colors - before_colors - audited))
 
     tokens = (ROOT / "shared/tokens.css").read_text()
-    old_tokens = git("show", f"{BASE}:shared/tokens.css")
     marker = '[data-theme="dark"]'
-    legacy_same = tokens[tokens.index(marker):].rstrip()[:-1].rstrip() == old_tokens[old_tokens.index(marker):].rstrip()
-    check("legacy Dark values retained unchanged and gated inert", legacy_same and "@media not all {" in tokens)
-    check("official accent and primary unchanged", "--micro-color-brand-accent: #D97757;" in tokens and "--micro-color-brand-primary: #164D59;" in tokens)
-    check("logo v2 and official skills unchanged", not any(n.startswith(("assets/brand/micro-logo/v2/", "_audit-resources/")) for n in changed))
-    check("no removed source or dead removed-chart imports", not git("diff", "--name-only", "--diff-filter=D", BASE).strip())
-    check("branch descends from recorded main", git("merge-base", BASE, "HEAD").strip() == BASE)
-    whitespace = subprocess.run(["git", "diff", "--check", BASE], cwd=ROOT, capture_output=True, text=True)
+    legacy_block = tokens[tokens.index(marker):].rstrip()
+    # The closing "}" belongs to the inert @media wrapper, not to the legacy block.
+    legacy_block = legacy_block[:-1].rstrip()
+    check("legacy Dark values retained unchanged and gated inert",
+          hashlib.sha256(legacy_block.encode()).hexdigest() == IDENTITY["legacyDarkBlockSha256"]
+          and "@media not all {" in tokens)
+    check("official accent and primary unchanged",
+          f"--micro-color-brand-accent: {IDENTITY['brandAccent']};" in tokens
+          and f"--micro-color-brand-primary: {IDENTITY['brandPrimary']};" in tokens)
+    # Every baseline token value must still appear verbatim; additions are allowed.
+    # The only accepted deltas are the audited R-06 corrections and the one
+    # documented removal recorded next to the baseline in identity.json.
+    current_values = dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", tokens))
+    audited = IDENTITY.get("auditedTokenChanges", {})
+    removed_tokens = set(IDENTITY.get("removedTokens", []))
+    changed_values = sorted(
+        name for name, value in IDENTITY["tokensCssDeclarations"].items()
+        if current_values.get(name, "").strip() not in (value, audited.get(name))
+        and name not in removed_tokens
+    )
+    check("baseline token values unchanged against identity baseline", not changed_values, changed_values)
+    check("logo v2 and official skills unchanged",
+          not any(n.startswith(("assets/brand/micro-logo/v2/", "_audit-resources/")) for n in changed))
+    removed = [name for name in git("diff", "--name-only", "--diff-filter=D", base).splitlines()
+               if name.startswith(PROTECTED_PREFIXES)]
+    check("no removed source or dead removed-chart imports", not removed, removed)
+    check("branch descends from diff base", git("merge-base", base, "HEAD").strip() == git("rev-parse", base).strip())
+    whitespace = subprocess.run(["git", "diff", "--check", base], cwd=ROOT, capture_output=True, text=True)
     # 2026-10-25 (تصحيح نطاق): أصول المرجع التي يزوّد بها المالك
     # (docs/zai/references/**) تصل بأسطرها الأصلية (CRLF في
     # calendar-reference-implementation.html كما سلّمها المالك في
@@ -149,13 +178,14 @@ def main():
     check("git diff --check (repository-owned files)",
           whitespace.returncode == 0 or not ws_issues,
           ws_issues[:10] or (whitespace.stderr or None))
-    diff = git("diff", "--no-ext-diff", "--unified=0", BASE)
+    diff = git("diff", "--no-ext-diff", "--unified=0", base)
     additions = "\n".join(line[1:] for line in diff.splitlines() if line.startswith("+") and not line.startswith("+++"))
     # High-signal signatures only. This is not a full security certification.
     signatures = re.compile(r"(?:AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{30,}|sk_live_[A-Za-z0-9]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)")
     check("no high-signal credential added in diff", not signatures.search(additions))
     passed = sum(row["passed"] for row in records)
-    report = {"baseline": BASE, "sourceCommitAtRun": git("rev-parse", "HEAD").strip(),
+    report = {"baseline": base, "identityBaseline": IDENTITY["extractedFromCommit"],
+              "sourceCommitAtRun": git("rev-parse", "HEAD").strip(),
               "sourceSha256": {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in sorted(changed) if (ROOT / name).is_file()},
               "passed": passed, "failed": len(records) - passed, "total": len(records), "records": records,
               "limits": ["CSS check is structural, not a full standards parser.", "Secret scan covers selected high-signal diff signatures, not arbitrary secrets.", "No Dark or System-dark execution."]}

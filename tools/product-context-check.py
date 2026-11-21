@@ -34,7 +34,9 @@ def main():
             p.locator('[data-action-id=confirm]').click();p.wait_for_function('!document.querySelector(".m-action-sheet")')
         # Replay only the previous Fields source, read-only, to retain evidence of
         # the confirmed reusable defect. All later checks load current source.
-        previous_fields=subprocess.check_output(['git','show','280b33b988428e3085c28cc150a0c71deb419889:components/fields/fields.js'],cwd=ROOT,text=True)
+        # The snapshot is checked in at tools/baselines/fields-baseline.js (Phase 0)
+        # so no historical commit object is needed.
+        previous_fields=(ROOT/'tools/baselines/fields-baseline.js').read_text()
         p.route('**/components/fields/fields.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=previous_fields))
         go('market','editor');p.locator('#product-root .m-field__control').first.click(position={'x':3,'y':26})
         check('Read-only replay: baseline Fields reproduces focusable-host gutter defect',ev('document.activeElement.dataset.focusKey!=="field-title"'))

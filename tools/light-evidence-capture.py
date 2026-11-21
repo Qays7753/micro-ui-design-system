@@ -2,6 +2,7 @@
 """Same-fixture before/after chart evidence from Git baseline and live sources."""
 import argparse
 import hashlib
+import tempfile
 import http.server
 import importlib.util
 import json
@@ -15,7 +16,7 @@ from playwright.sync_api import sync_playwright
 from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "161bb71adbed86e0df4382174cb07bd2fcb8d62d"
+BASE = "origin/main"  # default diff/before base; override with --base
 module_spec = importlib.util.spec_from_file_location("light_data_fixture", ROOT / "tools/light-data-check.py")
 fixture_module = importlib.util.module_from_spec(module_spec)
 module_spec.loader.exec_module(fixture_module)
@@ -66,9 +67,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 
 def main():
+    global BASE
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", type=Path, default=ROOT / "generated-artifacts/light-only-repair/chart-pairs")
+    parser.add_argument("--out", type=Path, default=Path(tempfile.mkdtemp(prefix="micro-chart-pairs-")))
+    parser.add_argument("--base", default=BASE, help="ref serving the before-phase sources (default: origin/main)")
     args = parser.parse_args()
+    BASE = args.base
     args.out.mkdir(parents=True, exist_ok=True)
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     threading.Thread(target=server.serve_forever, daemon=True).start()

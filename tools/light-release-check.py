@@ -10,6 +10,7 @@ import hashlib
 import http.server
 import json
 import subprocess
+import tempfile
 import threading
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -20,7 +21,10 @@ from browser_support import chromium_launch_options
 
 
 ROOT = Path(__file__).resolve().parent.parent
-BASELINE = "161bb71adbed86e0df4382174cb07bd2fcb8d62d"
+IDENTITY = json.loads((ROOT / "tools/baselines/identity.json").read_text(encoding="utf-8"))
+# Identity comparisons use the checked-in baseline snapshot, not a historical
+# commit object; the report records where the snapshot was extracted from.
+BASELINE = IDENTITY["extractedFromCommit"]
 SHOWCASE = "/previews/ui-system-showcase/index.html"
 WIDTHS = (320, 360, 390, 430)
 DIRECTIONS = ("rtl", "ltr")
@@ -214,18 +218,9 @@ def source_hashes():
 
 
 def baseline_logo_hashes():
-    listing = subprocess.run(
-        ["git", "ls-tree", "-r", "--name-only", BASELINE, "--", "assets/brand/micro-logo/v2"],
-        cwd=ROOT, check=True, capture_output=True, text=True,
-    ).stdout.splitlines()
-    hashes = {}
-    for path in listing:
-        content = subprocess.run(
-            ["git", "show", f"{BASELINE}:{path}"], cwd=ROOT, check=True,
-            capture_output=True,
-        ).stdout
-        hashes[path] = digest(content)
-    return hashes
+    # Snapshot from tools/baselines/identity.json (extracted once from the
+    # historical identity commit); no git history access needed at run time.
+    return dict(IDENTITY["logoV2Sha256"])
 
 
 def current_logo_hashes():
@@ -273,8 +268,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--out", type=Path,
-        default=ROOT / "generated-artifacts/light-only-repair/acceptance",
-        help="matrix screenshot and independent report directory",
+        default=Path(tempfile.mkdtemp(prefix="micro-light-release-")),
+        help="matrix screenshot and independent report directory (default: temp dir)",
     )
     parser.add_argument(
         "--capture-only", action="store_true",
@@ -1093,32 +1088,26 @@ def main():
     logo_equal = logo_before == logo_after
     logo_changed = sorted(path for path in set(logo_before) | set(logo_after)
                           if logo_before.get(path) != logo_after.get(path))
-    check("logo v2 SHA-256 file set and contents match the 161bb71 baseline",
+    check("logo v2 SHA-256 file set and contents match the identity baseline",
           logo_equal, {"baselineFiles": len(logo_before), "currentFiles": len(logo_after),
                        "changedOrMissing": logo_changed[:30]})
 
     tokens = (ROOT / "shared/tokens.css").read_text(encoding="utf-8")
-    baseline_tokens = subprocess.run(
-        ["git", "show", f"{BASELINE}:shared/tokens.css"], cwd=ROOT,
-        check=True, capture_output=True, text=True,
-    ).stdout
     current_legacy = tokens[tokens.index("@media not all {") + len("@media not all {"):]
-    baseline_legacy_start = baseline_tokens.find('[data-theme="dark"]')
-    baseline_legacy = baseline_tokens[baseline_legacy_start:]
+    legacy_body = current_legacy.rstrip()[:-1].strip()
     check("Light-only stylesheet wraps existing legacy token definitions in a nonmatching gate unchanged",
           "@media not all {" in tokens and current_legacy.startswith("\n[data-theme=\"dark\"]")
           and current_legacy.rstrip().endswith("}")
-          and baseline_legacy.strip() == current_legacy.rstrip()[:-1].strip(),
+          and digest(legacy_body.encode()) == IDENTITY["legacyDarkBlockSha256"],
           {"gateFound": "@media not all {" in tokens,
-           "legacyBaselineSha256": digest(baseline_legacy.encode()),
-           "legacyCurrentSha256": digest(current_legacy.rstrip()[:-1].lstrip("\n").encode())})
+           "legacyBaselineSha256": IDENTITY["legacyDarkBlockSha256"],
+           "legacyCurrentSha256": digest(legacy_body.encode())})
     check("brand accent remains official and distinct semantically from the data channel",
-          "#D97757" in tokens and "--micro-color-brand-accent: #D97757;" in tokens
+          f"--micro-color-brand-accent: {IDENTITY['brandAccent']};" in tokens
           and "--micro-data-b: #D97757;" in tokens,
-          {"brandAccent": "#D97757", "dataRole": "separately named --micro-data-b"})
-    check("original Petrol token is unchanged from the 161bb71 baseline",
-          "--micro-color-brand-primary: #164D59;" in tokens
-          and "--micro-color-brand-primary: #164D59;" in baseline_tokens)
+          {"brandAccent": IDENTITY["brandAccent"], "dataRole": "separately named --micro-data-b"})
+    check("original Petrol token is unchanged from the identity baseline",
+          f"--micro-color-brand-primary: {IDENTITY['brandPrimary']};" in tokens)
 
     if browser_errors:
         check("no browser script, console, or network errors", False, browser_errors)

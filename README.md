@@ -2,9 +2,23 @@
 
 # Micro UI Design System
 
-الجولة النشطة: [ملكية التصميم والتكوين والهوية المحدودة](docs/audits/ui-owner-2026-11-14/PLAN.md). البداية b94d78b؛ المراحل1–7 منفذة على فرع Feature؛ الاعتماد البصري والهاتف الفعلي منفصلان. التسليم: docs/UI-OWNER-HANDOFF.md. الجولة السابقة أدناه مدموجة على main، وليست حالة الجولة الجديدة.
+## تشغيل الفحوص
 
-الجولة السابقة المدموجة: [تنقيح النصوص والتكوين البصري على مراحل](docs/audits/ui-refinement-2026-11-13/PLAN.md). مصدر البداية c70c257؛ المراحل1–5 منفذة ومرفوعة على فرع Feature؛ التقرير النهائي في phase5 ضمن الخطة، والاعتماد البصري/الهاتف الفعلي منفصلان. لا دمج جديد. المراجع التالية تخص دفعاتها السابقة.
+```bash
+uv sync
+uv run python tools/build-ui-system-showcase-standalone.py --check
+uv run python tools/component-catalog-build.py --check
+uv run python tools/manifest-build.py --check
+uv run python tools/light-static-check.py
+uv run python tools/component-audit-check.py
+uv run python tools/product-context-check.py --out <tmp>
+uv run python tools/light-release-check.py --review-scope
+uv run python tools/mobile-experience-check.py --out <tmp>
+```
+
+الفحوص تعمل على نسخة `git clone --depth 1` كاملة؛ مقارنات git تتم مقابل `origin/main` افتراضيًا (أو `--base <ref>` حيث ينطبق)، وقيم الهوية المحمية تأتي من `tools/baselines/identity.json` لا من commit تاريخي. المخرجات تكتب في مجلد مؤقت افتراضيًا ولا تترك أثرًا في `git status`.
+
+الجولة الأحدث مكتملة على Feature: [تجربة الهاتف](docs/MOBILE-EXPERIENCE-HANDOFF.md). البداية7df38e8؛ دون دمجmain أوMicro. الأقسام التالية تخص الجولات السابقة.
 
 مكتبة UI مستقلة قابلة لإعادة الاستخدام والتعديل. تحتوي على مكونات وتراكيب UI محدودة لسياق Micro، دون شاشات إنتاجية أو منطق أعمال أو مصادقة أو حفظ حقيقي.
 
