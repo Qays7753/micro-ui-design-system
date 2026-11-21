@@ -4,6 +4,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { currentInstanceLabels, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, getLabel, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { pulse } from '../../shared/haptics.js';
 
 registerLabels('product-context', familyDefaults);
 
@@ -192,6 +193,7 @@ function mount(root, type, value) {
     sheet.addEventListener('micro-actions:request', function () {
       if (destroyed || generation !== epoch || context !== key(model.scope)) return;
       disposeConfirmation();
+      pulse('confirm'); /* N-D7: نبضة تأكيد الفعل الحساس — معطلة افتراضيًا */
       dispatch(id, payload, local);
     }, { signal: life.signal });
     sheet.addEventListener('micro-navigation:closed', function (event) {
@@ -268,6 +270,7 @@ function mount(root, type, value) {
         input.value = ui.draft[name];
         input.disabled = !ctx.editable();
         if (options.maxLength) input.maxLength = options.maxLength;
+        if (options.enterKeyHint) input.setAttribute('enterkeyhint', options.enterKeyHint);
         ctx.on(input, options.options ? 'change' : 'input', function () {
           ui.draft[name] = input.value;
           box.querySelectorAll('[data-product-field-error]').forEach(function (e) { e.remove(); });

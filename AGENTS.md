@@ -44,7 +44,7 @@
 
 ## البوابات
 
-مسار التحقق الواحد: `npm ci` ثم `uv sync` ثم `uv run python tools/check-all.py` (27 بوابة بعد T3 من الجولة الثالثة — تشمل package-install وlabels-override والبصرية وlint وscreen؛ تضيف لاحقًا text-scale وdevice-lab) ثم `npm run typecheck` ثم `npm run lint`. أي تعديل ملف متتبع يستلزم `uv run python tools/manifest-build.py` قبل الالتزام، و`standalone.html` يتجدد بأداته بعد أي تغيير سلوك.
+مسار التحقق الواحد: `npm ci` ثم `uv sync` ثم `uv run python tools/check-all.py` (28 بوابة بعد T4 من الجولة الثالثة — تشمل package-install وlabels-override والبصرية وlint وscreen وtext-scale؛ تضيف لاحقًا device-lab) ثم `npm run typecheck` ثم `npm run lint`. أي تعديل ملف متتبع يستلزم `uv run python tools/manifest-build.py` قبل الالتزام، و`standalone.html` يتجدد بأداته بعد أي تغيير سلوك.
 
 
 ## ما لا يُختبر آليًا

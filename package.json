@@ -115,6 +115,14 @@
       "types": "./dist/types/icons.d.ts",
       "import": "./dist/esm/icons.js"
     },
+    "./back": {
+      "types": "./dist/types/back.d.ts",
+      "import": "./dist/esm/back.js"
+    },
+    "./haptics": {
+      "types": "./dist/types/haptics.d.ts",
+      "import": "./dist/esm/haptics.js"
+    },
     "./labels": {
       "types": "./dist/types/labels.d.ts",
       "import": "./dist/esm/labels.js"

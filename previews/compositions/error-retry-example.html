@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>تركيب C15 — حالة خطأ مع إعادة محاولة</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../components/screen/screen.css">
+  <link rel="stylesheet" href="../../components/compositions/error-retry.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { background: var(--micro-surface-page); font-family: var(--micro-font-family); }
+    .m-screen { max-width: 480px; margin-inline: auto; }
+  </style>
+</head>
+<body>
+
+<div class="m-screen" data-micro-screen>
+  <header class="m-screen__top">
+    <div class="m-appbar">
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="m-appbar__title">مزامنة الفترة</span>
+    </div>
+  </header>
+
+  <main class="m-screen__content">
+    <div class="m-error-retry" id="c15">
+      <span class="m-error-retry__mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 7v6M12 16.5v.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <h1 class="m-error-retry__title">تعذّر تحميل البيانات</h1>
+      <p class="m-error-retry__detail">انقطع الاتصال أثناء جلب ملخص الفترة. تحقق من الشبكة ثم أعد المحاولة؛ بياناتك المحفوظة سابقة لم تتأثر.</p>
+    </div>
+  </main>
+
+  <footer class="m-screen__actions" data-actions="keyboard-follow">
+    <button class="m-btn m-btn--primary" type="button" id="retry" data-loading-label="جارٍ إعادة المحاولة">إعادة المحاولة</button>
+    <button class="m-btn" type="button">متابعة دون تحديث</button>
+  </footer>
+</div>
+
+<script src="../../dist/iife/buttons.js"></script>
+<script src="../../dist/iife/screen.js"></script>
+<script>
+  /* النقر يطلق حدث التركيب؛ المستهلك يملك إعادة المحاولة (لا شبكة في المكتبة).
+     العرض: حالة التحميل تنتهي بعد ثانيتين. */
+  document.getElementById('retry').addEventListener('click', function () {
+    this.dispatchEvent(new CustomEvent('micro-error:retry', { bubbles: true }));
+    var btn = this;
+    MicroButtons.setLoading(btn, true);
+    setTimeout(function () { MicroButtons.setLoading(btn, false); }, 2000);
+  });
+</script>
+</body>
+</html>

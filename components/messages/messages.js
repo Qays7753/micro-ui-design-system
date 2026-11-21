@@ -35,6 +35,7 @@
    ========================================================= */
 
 import { currentInstanceLabels, getLabel, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { pulse } from '../../shared/haptics.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -125,15 +126,17 @@ var MICRO_LABELS_FAMILY = 'messages';
   export function announce(text, opts) {
     /* التوافق الخلفي: الوسيط الثاني كان منطقيًا (assertive) — يقبل
        الكائن {id, assertive} أو المنطقي القديم؛ بلا وسيط = حدث مستقل */
-    var id, assertive;
+    var id, assertive, tone;
     if (opts && typeof opts === 'object') {
       id = opts.id;
       assertive = !!opts.assertive;
+      tone = opts.tone;
     } else {
       assertive = !!opts;
       id = undefined;
     }
     var region = ensureLiveChannel(assertive ? 'assertive' : 'polite');
+    if (tone === 'error') pulse('error'); /* N-D7 — معطلة افتراضيًا */
     /* SUI-R1-03: الحدث ذاته (id نفسه والنص نفسه) يُعلن مرة داخل عمر
        الهوية حتى لو أعقبه أحداث مستقلة (A,B,A = إعلانان)؛ الحدث المستقل
        (id مختلف أو بلا id) بنفس النص يُعلن — إعلان نتيجة كل فعل (S28/S32).

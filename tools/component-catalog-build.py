@@ -14,6 +14,8 @@ def build():
     families = catalog["families"]
     # الجولة الثالثة T3 (N-D5): عائلة screen الخامسة عشرة.
     assert len(families) == 15 and len({item["id"] for item in families}) == 15
+    # T5: التركيب الخامس عشر (C15 error-retry)
+    assert len(catalog["compositions"]) == 15
     lines = [
         "# فهرس مكونات Micro UI",
         "",

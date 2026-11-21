@@ -46,6 +46,7 @@
 import { currentInstanceLabels, getLabel, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
+import { pulse } from '../../shared/haptics.js';
 
 registerLabels('navigation', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -305,6 +306,86 @@ var MICRO_LABELS_FAMILY = 'navigation';
     }
   }
 
+
+  /* ---- T4 (N-D9): سحب الورقة السفلية للأسفل يغلقها ----
+     مقبض ظاهر أعلى كل ورقة سفلية (.m-layer غير الموسّطة)؛ السحب من
+     المقبض فقط (المحتوى يبقى قابلاً للتمرير). عتبة الإغلاق: 30% من
+     ارتفاع الورقة أو سرعة كافية (≥ 0.6px/ms مع مسافة ≥ 60px)؛ دونها
+     ترتد الورقة. الإغلاق يمر بمسار requestClose نفسه (حق النقض محفوظ،
+     إعادة التركيز والأحداث كما هي) + نبضة اهتزاز selection عند قبول
+     الإغلاق (N-D7). لا سحب للحوار الموسّط (.m-layer--center). */
+  var dragBound = new WeakSet();
+
+  function ensureDragHandle(layer) {
+    if (layer.querySelector(':scope > .m-layer__drag-handle')) return;
+    var handle = document.createElement('div');
+    handle.className = 'm-layer__drag-handle';
+    handle.setAttribute('aria-hidden', 'true');
+    var bar = document.createElement('span');
+    bar.className = 'm-layer__drag-bar';
+    handle.appendChild(bar);
+    layer.insertBefore(handle, layer.firstChild);
+  }
+
+  function initSheetDrag(layer) {
+    if (dragBound.has(layer)) return;
+    dragBound.add(layer);
+    layer.addEventListener('pointerdown', function (event) {
+      var handle = event.target.closest ? event.target.closest('.m-layer__drag-handle') : null;
+      if (!handle || !layer.contains(handle) || layer.hidden) return;
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      var startY = event.clientY;
+      var lastY = startY;
+      var lastT = event.timeStamp;
+      var maxDy = 0;
+      var velocity = 0;
+      var dragging = false;
+      function onMove(moveEvent) {
+        var dy = moveEvent.clientY - startY;
+        if (!dragging) {
+          if (dy < 6) return;             /* السحب للأسفل فقط */
+          dragging = true;
+          try { handle.setPointerCapture(moveEvent.pointerId); } catch (error) { /* فُقد بين حركتين */ }
+        }
+        var dt = Math.max(1, moveEvent.timeStamp - lastT);
+        velocity = (moveEvent.clientY - lastY) / dt;
+        lastT = moveEvent.timeStamp;
+        lastY = moveEvent.clientY;
+        if (dy > maxDy) maxDy = dy;
+        layer.style.transform = 'translateY(' + Math.max(0, dy) + 'px)';
+      }
+      function release() {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', release);
+        window.removeEventListener('pointercancel', release);
+        if (!dragging) return;
+        var height = layer.offsetHeight || 1;
+        var threshold = maxDy >= 0.3 * height || (maxDy >= 60 && velocity >= 0.6);
+        if (threshold) {
+          layer.style.removeProperty('transform');
+          var accepted = requestClose(layer, { reason: 'drag-dismiss', trigger: handle });
+          if (accepted) pulse('selection');
+          else layer.style.transform = 'translateY(' + maxDy + 'px)';
+        }
+        /* ارتداد: عودة بمنحنى الخروج نفسه (أو بعد رفض النقض) */
+        if (!threshold || !accepted) {
+          layer.style.transition = 'transform 180ms cubic-bezier(0.2, 0, 0, 1)';
+          layer.style.removeProperty('transform');
+          window.setTimeout(function () { layer.style.removeProperty('transition'); }, 200);
+        }
+      }
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', release);
+      window.addEventListener('pointercancel', release);
+    });
+  }
+
+  function ensureSheetDrag(layer) {
+    if (layer.classList.contains('m-layer--center')) return;
+    ensureDragHandle(layer);
+    initSheetDrag(layer);
+  }
+
   export function openLayer(layer, options) {
     options = options || {};
     if (!layer || layer.tagName !== 'DIV') return;
@@ -346,8 +427,15 @@ var MICRO_LABELS_FAMILY = 'navigation';
     var first = layer.querySelector('[data-autofocus]');
     if (!(first && !isDisabled(first) && f.indexOf(first) >= 0)) first = f[0];
     if (first) first.focus(); else layer.focus();
+    ensureSheetDrag(layer);
     playOpenTransition(layer);
     layer.dispatchEvent(new CustomEvent('micro-navigation:opened', { bubbles: true }));
+    /* T4 (N-D8): حدث موحد للطبقات — تستهلكه shared/back.js وغيره.
+       close() = مسار الإغلاق المباشر بنفس عقد closeLayer. */
+    layer.dispatchEvent(new CustomEvent('micro-layer:open', {
+      bubbles: true,
+      detail: { layer: layer, opener: trigger, close: function () { closeLayer(layer); } }
+    }));
   }
 
   /* A dismissal request changes no layer state before synchronous consent.
@@ -356,7 +444,7 @@ var MICRO_LABELS_FAMILY = 'navigation';
     var top = openLayers.length ? openLayers[openLayers.length - 1] : null;
     if (!top || top.layer !== layer || closeRequests.has(layer)) return false;
     options = options || {};
-    var reasons = ['escape', 'close-button', 'backdrop', 'programmatic-request'];
+    var reasons = ['escape', 'close-button', 'backdrop', 'drag-dismiss', 'programmatic-request'];
     var reason = reasons.indexOf(options.reason) >= 0 ? options.reason : 'programmatic-request';
     var trigger = options.trigger && options.trigger.nodeType === 1 ? options.trigger : null;
     var generation = genOf(layer).gen;
@@ -389,6 +477,8 @@ var MICRO_LABELS_FAMILY = 'navigation';
     cancelScheduledClose(layer);
 
     function finish() {
+      layer.style.removeProperty('transform');
+      layer.style.removeProperty('transition');
       layer.hidden = true;
       layer.removeAttribute('data-closing');
       layer.inert = false;
@@ -408,6 +498,10 @@ var MICRO_LABELS_FAMILY = 'navigation';
         target.focus();
       }
       layer.dispatchEvent(new CustomEvent('micro-navigation:closed', { bubbles: true }));
+      layer.dispatchEvent(new CustomEvent('micro-layer:close', {
+        bubbles: true,
+        detail: { layer: layer, opener: entry.trigger }
+      }));
     }
 
     if (layer.hidden) { finish(); return; }

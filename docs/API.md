@@ -253,6 +253,7 @@ Surfaces عائلة CSS بلا JavaScript فلا تدخل العقد. `icons` (h
 
 **عقد المدخل (R4):** `init(root, options?)` يعيد `FieldsInstance`؛ `destroy(root)`/`getInstance(root)` صادران، و`sync(root)` يبقى صادرًا عامًا.
 - **options:** `labels` (R5 — لا مفاتيح حاليًا).
+- **enterkeyhint (T4/N-D10):** افتراضيًا `next`/`done` من ترتيب الحقول في نفس النموذج و`search` لحقل البحث — دون كتابة فوق قيمة المستهلك؛ Enter مع `next` في حقل مفرد ينقل التركيز للتالي، والنص الطويل يحتفظ بسطره.
 - **instance:** `update()` = sync (مزامنة العدّاد/المسح/الخطوة بلا أحداث).
 - **events:** `micro-field:cleared` و`micro-field:changed` بلا detail.
 - **مثال:** `const f = MicroFields.init(root); input.value = 'جديد'; f.update(); f.destroy();`
@@ -331,7 +332,7 @@ Surfaces عائلة CSS بلا JavaScript فلا تدخل العقد. `icons` (h
 
 - **المدخلات:** note/inline/empty/toast حسب المواصفة؛ النص والنبرة والإجراء والقرار بين رسالة ثابتة وإعلان مؤقت للمستهلك. الأدوار الافتراضية note للمساعدة وstatus للمعلومة/النجاح/التحذير وalert للخطأ؛ role الصريح محفوظ.
 - **التحديث:** `MicroMessages.init(root)` للأدوار والإغلاق؛ `toast(element,{duration?,returnFocus?})` افتراضي4000ms، يوقف العد أثناء التركيز داخله. `closeToast(element,trigger?)` يغلق ويدير هدف التركيز الصالح. `data-return-focus` selector أو returnFocus عنصر من المستهلك. لا تستخدم Toast مؤقتًا للخطأ الحرج الذي يحتاج بقاءً.
-- **الإعلان:** `announce(text,{id?,assertive?})` أو الوسيط boolean القديم. نفس id والنص ضمن نافذة الهوية لا يكرر الإعلان؛ دون id إعلان مستقل. `resetAnnouncements()` يعيد سجل الهوية ولا يمسح القناة الحية. ليست آلية dedup لطلبات الشبكة.
+- **الإعلان:** `announce(text,{id?,assertive?,tone?})` أو الوسيط boolean القديم؛ `tone:"error"` (T4/N-D7) يصاحبه نبضة اهتزاز خطأ عند تفعيل الاهتزاز (معطل افتراضيًا). نفس id والنص ضمن نافذة الهوية لا يكرر الإعلان؛ دون id إعلان مستقل. `resetAnnouncements()` يعيد سجل الهوية ولا يمسح القناة الحية. ليست آلية dedup لطلبات الشبكة.
 - **الأحداث:** `micro-messages:note-closed` يحمل `{returnFocus: boolean}`؛ toast-closed للإغلاق اليدوي وtoast-dismissed لانتهاء المؤقت، بلا detail. ليست تأكيدات حفظ/حذف.
 - **التنظيف:** `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يوقف الموارد المحلية؛ التنظيف على مستوى document ينظف القنوات المشتركة أيضًا. لا تعطّل إعلانات نسخ أخرى بتنظيف document عند إزالة Toast واحدة.
 - **التغطية التالية:** كل النبرات/الأجزاء، إعادة الإعلان، فقدان هدف التركيز، نص طويل وأزرار، خطأ ثابت وفراغ؛ لا نسبة/صفر خاص بالمكوّن.
@@ -467,6 +468,24 @@ Surfaces عائلة CSS بلا JavaScript فلا تدخل العقد. `icons` (h
 - `MicroCarousel.init(root, options?)` يعيد instance له `update({index, animate?})`=goTo و`goTo/next/prev/getIndex`؛ دوال مستوى العنصر تبقى صادرة عامة، و`update(carousel, ...)` اسم مهمل في IIFE فقط (R-D10). getIndex=-1 دون حالة وgoTo يقيّد الفهرس. `micro-carousel:change` يحمل `{index,count}` عند تغيره، حتى من goTo البرمجي؛ ليس input خاصًا بالمنتج. تغيير الشريحة يطوي الموسعة، ولا يوسع الجديدة تلقائيًا.
 - `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يوقف الرصد والسحب وrAF ويحذف الحالة والنقاط المولدة؛ init بعده يبدأ من جديد. لا setSlides/rescan عامة؛ تبديل بنية الشرائح يحتاج دورة destroy ثم init وتنظيف الأطفال، لا تعديل track المملوك مع افتراض إعادة التقاط تلقائية.
 - التغطية التالية:0/1/عدة شرائح، controls/peek الاختياري وcompact/expand حسب المواصفة، حد أول/آخر، سحب/إلغاء/تركيز/RTL/LTR؛ البيانات الفارغة داخل البطاقة مسؤولية مكوّنها، لا خطأ شبكة في Carousel نفسه.
+
+### 16. Back — ربط زر الرجوع بالطبقات (الجولة الثالثة T4/N-D8)
+
+**عقد المدخل:** `bindBackToLayers(options?)` → `{ openCount(), destroy() }` — وحدة اختيارية بلا تهيئة تلقائية.
+- **السلوك:** عند فتح طبقة (كل عائلة تطلق `micro-layer:open`) تضاف حالة سجل واحدة؛ زر الرجوع/إيماءته يغلقان الطبقة العليا عبر مسار إغلاقها (إعادة التركيز لفاتحها)، ثم يخرج بسلوك المتصفح. الإغلاق بالطرق الأخرى (زر/Esc/سحب) يستهلك الحالة فورًا فلا حالات زائدة. حالات سجل المضيف لا تُمس.
+- **الأحداث المستهلكة:** `micro-layer:open`/`micro-layer:close` (تفاصيل `{layer, opener, close?}`) — تطلقها navigation لكل طبقاتها (modal/لوحة تصفية/action-sheet/ورقة منتقٍ داخل طبقة).
+- **مثال:** `const back = MicroBack.bindBackToLayers(); /* ... */ back.destroy();`
+- **حدود:** iOS Safari غير المثبت — إيماءة الحافة قد يديرها النظام (NATIVE-BEHAVIOR قسم 11).
+
+المصدر: [JS](../shared/back.js)، [عقد السلوك](NATIVE-BEHAVIOR.md) قسم 4.
+
+### 17. Haptics — الاهتزاز الاختياري (الجولة الثالثة T4/N-D7)
+
+**عقد المدخل:** `setHaptics(on)` (يعيد الحالة الفعلية)، `isHapticsEnabled()`، `pulse(kind)` بـkind من `confirm` (12ms) / `error` (15ms) / `selection` (10ms).
+- **معطل افتراضيًا**؛ المضيف يفعّله. لا شيء على iOS (لا `navigator.vibrate`) ويُهمل مع `prefers-reduced-motion: reduce`. الحالة مشتركة عبر `globalThis` فسريان التفعيل على كل العائلات في صفحات IIFE متعددة المدخلات.
+- **المستدعى من:** إغلاق الورقة السفلية بالسحب (navigation)، رسائل الخطأ (messages)، تأكيد الأفعال الحساسة (product).
+
+المصدر: [JS](../shared/haptics.js)، [عقد السلوك](NATIVE-BEHAVIOR.md) قسم 7.
 
 ### 15. Screen — هيكل شاشة الهاتف (الجولة الثالثة T3)
 

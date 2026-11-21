@@ -130,6 +130,9 @@
 /* زر المسح: هدف لمس 48 دائمًا — لا يظهر إلا بوجود نص (زر B01 مستخدم كما هو).
    خصوصية أعلى من .m-btn كي لا يعيد زر B01 إظهاره (ترتيب التحميل لا يحسم) */
 .m-field .m-field__clear {
+  /* T4.6: استجابة ضغط أصيلة — بلا وميض ولا تأخير تكبير */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   display: none;
 }
 .m-field .m-field__clear.is-visible {

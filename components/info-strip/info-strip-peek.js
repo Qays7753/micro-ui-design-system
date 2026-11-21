@@ -50,9 +50,6 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     }
   }
 
-  var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب (نفس ثوابت carousel) */
-  var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
-  var COMMIT_MIN = 32;    /* أدنى عتبة التزام بالبكسل */
 
   /* R2 (الجولة الثانية): الاستعلام كسول — لا وصول إلى window في المستوى الأعلى. */
   var reduceQuery = null;
@@ -115,22 +112,31 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     return getComputedStyle(strip).direction === 'rtl';
   }
 
-  function setX(st, x, animate) {
-    st.x = x;
-    if (animate && !prefersReducedMotion()) {
-      st.track.style.transform = 'translateX(' + x + 'px)';
-    } else {
-      st.track.style.transition = 'none';
-      st.track.style.transform = 'translateX(' + x + 'px)';
-      void st.track.offsetWidth; /* إجبار إطار: لا انتقال مرئي */
-      st.track.style.transition = '';
-    }
+  /* T4 (N-D9): توسيط بطاقة i بتمرير أصلي — RTL/LTR بلا حساب scrollLeft */
+  function scrollToSlide(st, i, animate) {
+    var slide = st.slides[i];
+    if (!slide) return;
+    st.programmatic = true;
+    if (st.scrollTimer) window.clearTimeout(st.scrollTimer);
+    st.scrollTimer = window.setTimeout(function () { st.programmatic = false; },
+      animate && !prefersReducedMotion() ? 480 : 80);
+    slide.scrollIntoView({
+      inline: 'center',
+      block: 'nearest',
+      behavior: animate && !prefersReducedMotion() ? 'smooth' : 'auto'
+    });
   }
 
-  /* تمركز بطاقة i فيزيائيًا (offsetLeft مستقل عن الاتجاه والانتقال الجاري) */
-  function slideX(st, i) {
-    var s = st.slides[i];
-    return st.viewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+  function nearestSlide(st) {
+    var box = st.viewport.getBoundingClientRect();
+    var center = box.left + box.width / 2;
+    var best = 0, bestDist = Infinity;
+    st.slides.forEach(function (slide, i) {
+      var rect = slide.getBoundingClientRect();
+      var dist = Math.abs(rect.left + rect.width / 2 - center);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
   }
 
   function goToIndex(strip, i, opts) {
@@ -138,7 +144,7 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
-    setX(st, slideX(st, clamped), animate);
+    scrollToSlide(st, clamped, animate);
     if (clamped !== st.index) {
       st.index = clamped;
       update(strip, st);
@@ -181,98 +187,28 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     }
   }
 
-  /* ---------- السحب: تتبع المؤشر 1:1 (دورة حياة مغلقة على window) ---------- */
-  function onPointerDown(strip, st, e) {
-    if (st.disconnected || st.drag || st.count <= 1 || isEditingTarget(e.target) ||
-        (e.pointerType === 'mouse' && e.button !== 0)) return;
-    st.drag = {
-      id: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      baseX: st.x,
-      axis: null,
-      handlers: null
-    };
-    st.suppressClick = false;
-    st.track.classList.add('is-peek-dragging');
-    st.viewport.classList.add('is-peek-grabbing');
-    attachDragWindow(strip, st);
-  }
-
-  function attachDragWindow(strip, st) {
-    var d = st.drag;
-    if (!d || d.handlers) return;
-    d.handlers = {
-      move: function (e) { onPointerMove(strip, st, e); },
-      up: function (e) { endDrag(strip, st, false, e); },
-      cancel: function (e) { endDrag(strip, st, true, e); },
-      blur: function () { endDrag(strip, st, true, null); },
-      vis: function () { if (document.visibilityState === 'hidden') endDrag(strip, st, true, null); }
-    };
-    window.addEventListener('pointermove', d.handlers.move, true);
-    window.addEventListener('pointerup', d.handlers.up, true);
-    window.addEventListener('pointercancel', d.handlers.cancel, true);
-    window.addEventListener('blur', d.handlers.blur);
-    document.addEventListener('visibilitychange', d.handlers.vis);
-  }
-
-  function detachDragWindow(st, d) {
-    if (!d || !d.handlers) return;
-    window.removeEventListener('pointermove', d.handlers.move, true);
-    window.removeEventListener('pointerup', d.handlers.up, true);
-    window.removeEventListener('pointercancel', d.handlers.cancel, true);
-    window.removeEventListener('blur', d.handlers.blur);
-    document.removeEventListener('visibilitychange', d.handlers.vis);
-    d.handlers = null;
-  }
-
-  function onPointerMove(strip, st, e) {
-    var d = st.drag;
-    if (!d || e.pointerId !== d.id) return;
-    var dx = e.clientX - d.startX;
-    var dy = e.clientY - d.startY;
-    if (!d.axis) {
-      if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
-      d.axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'cancel';
-      if (d.axis === 'cancel') { endDrag(strip, st, true); return; }
-      try { st.viewport.setPointerCapture(d.id); } catch (err) { /* غير حرِج */ }
-    }
-    if (d.axis !== 'x') return;
-    /* تتبع حرفي: بلا انتقال؛ مقاومة عند الطرفين تصفّر الحركة */
-    var proposed = d.baseX + dx;
-    var rtl = rtlOf(strip);
-    var atStartEdge = st.index === 0 && (rtl ? dx < 0 : dx > 0);
-    var atEndEdge = st.index === st.count - 1 && (rtl ? dx > 0 : dx < 0);
-    st.drag.dx = dx;
-    setX(st, (atStartEdge || atEndEdge) ? d.baseX : proposed, false);
-    e.preventDefault();
-  }
-
-  function endDrag(strip, st, canceled, e) {
-    var d = st.drag;
-    if (!d) return;
-    if (e && e.pointerId !== undefined && e.pointerId !== d.id) return;
-    detachDragWindow(st, d);
-    st.drag = null;
-    st.track.classList.remove('is-peek-dragging');
-    st.viewport.classList.remove('is-peek-grabbing');
-    st.suppressClick = d.axis === 'x';
-    try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
-    if (st.disconnected) {
-      setX(st, d.baseX, false);
-      st.suppressClick = false;
-      return; /* cleanup only: no navigation, focus transfer or callback */
-    }
-    var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
-    var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
-    var dx = d.dx || 0;
-    if (canceled || Math.abs(dx) < threshold) {
-      goToIndex(strip, st.index, { animate: true }); /* snap-back */
-      return;
-    }
-    var rtl = rtlOf(strip);
-    var step = rtl ? (dx > 0 ? 1 : -1) : (dx < 0 ? 1 : -1);
-    goToIndex(strip, st.index + step, { animate: true });
+  /* ---------- تتبّع التمرير الأصلي (T4/N-D9) ----------
+     scroll → rAF: أقرب بطاقة للمركز تصبح النشطة (حدث change مرة عند
+     التغيير فقط)؛ التنقل البرمجي يحدّث الحالة بنفسه (حارس programmatic). */
+  function wireScroll(strip, st) {
+    listenDom(st, st.viewport, 'scroll', function () {
+      if (st.disconnected || st.programmatic || st.scrollRaf) return;
+      st.scrollRaf = requestAnimationFrame(function () {
+        st.scrollRaf = 0;
+        if (st.disconnected || st.programmatic || st.count === 0) return;
+        var i = nearestSlide(st);
+        if (i !== st.index) {
+          st.index = i;
+          update(strip, st);
+          strip.dispatchEvent(new CustomEvent('micro-info-peek:change', {
+            bubbles: true, detail: { index: st.index, count: st.count }
+          }));
+        }
+      });
+    }, { passive: true });
+    listenDom(st, st.viewport, 'dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
   }
 
   /* ---------- لوحة المفاتيح: ترتيب منطقي (RTL: التالي يسارًا) ---------- */
@@ -384,7 +320,7 @@ var MICRO_LABELS_FAMILY = 'info-strip';
       stateOf.set(strip, {
         viewport: viewport, track: track, slides: [],
         prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
-        index: -1, x: 0, count: 0, drag: null, suppressClick: false
+        index: -1, count: 0, programmatic: false
       });
       return;
     }
@@ -397,7 +333,7 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     var st = {
       viewport: viewport, track: track, slides: slides,
       prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
-      index: 0, x: 0, count: slides.length, drag: null, suppressClick: false
+      index: 0, count: slides.length, programmatic: false
     };
     stateOf.set(strip, st);
 
@@ -421,13 +357,7 @@ var MICRO_LABELS_FAMILY = 'info-strip';
     if (prevBtn) listenDom(st, prevBtn, 'click', function () { prev(strip); });
     if (nextBtn) listenDom(st, nextBtn, 'click', function () { next(strip); });
 
-    listenDom(st, viewport, 'pointerdown', function (e) { onPointerDown(strip, st, e); });
-    listenDom(st, viewport, 'dragstart', function (e) {
-      if (!st.disconnected) e.preventDefault();
-    });
-    listenDom(st, viewport, 'click', function (e) {
-      if (st.suppressClick) { e.preventDefault(); e.stopPropagation(); st.suppressClick = false; }
-    }, true);
+    wireScroll(strip, st);
     wireKeys(strip, st);
 
     /* SUI-007: window-resize يبقى (احتياط لبيئة بلا ResizeObserver
@@ -544,8 +474,8 @@ var MICRO_LABELS_FAMILY = 'info-strip';
             st.directionObserver = null;
           }
           st.generation = (st.generation || 0) + 1;
-          endDrag(strip, st, true, null);
-          st.suppressClick = false;
+          if (st.scrollTimer) { window.clearTimeout(st.scrollTimer); st.scrollTimer = null; }
+          if (st.scrollRaf) { cancelAnimationFrame(st.scrollRaf); st.scrollRaf = 0; }
           if (st.resizeHandler) {
             window.removeEventListener('resize', st.resizeHandler);
             st.resizeHandler = null;

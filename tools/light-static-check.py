@@ -160,9 +160,22 @@ def main():
     current_values = dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", tokens))
     audited = IDENTITY.get("auditedTokenChanges", {})
     removed_tokens = set(IDENTITY.get("removedTokens", []))
+
+    def rem_equivalent(current, baseline):
+        """الجولة الثالثة N-D6: توكنز أحجام الخط تُكتب بـrem بقيمة مكافئة
+        تمامًا عند جذر 16px — المقارنة بالقيمة المحسوبة لا بالنص الحرفي."""
+        try:
+            cur = current.strip(); base = baseline.strip()
+            if cur.endswith("rem") and base.endswith("px"):
+                return abs(float(cur[:-3]) * 16 - float(base[:-2])) < 1e-9
+        except (ValueError, AttributeError):
+            pass
+        return False
+
     changed_values = sorted(
         name for name, value in IDENTITY["tokensCssDeclarations"].items()
         if current_values.get(name, "").strip() not in (value, audited.get(name))
+        and not rem_equivalent(current_values.get(name, ""), value)
         and name not in removed_tokens
     )
     check("baseline token values unchanged against identity baseline", not changed_values, changed_values)

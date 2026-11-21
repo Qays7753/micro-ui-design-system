@@ -16,26 +16,16 @@
      LTR يظهر يمينًا — والمواضع الفيزيائية تُقاس من الهندسة نفسها
      (getBoundingClientRect) فتعمل الصيغة مع الاتجاهين بلا تفرّع.
 
-   ثوابت السحب الموثقة (عدّلها هنا فقط):
-   - AXIS_LOCK = 8px   : قفل المحور بعد أول إزاحة — تجاوزها
-     عموديًا يُلغي السحب ويُسلّم الحركة للتمرير الطبيعي.
-   - COMMIT نسبة 0.2 من عرض البطاقة بحد أدنى 32px: السحب أقل
-     من العتبة يلغي نفسه (snap-back) ولا يبدّل بطاقة.
-   - إلغاء السحب: pointercancel (المتصفح يأخذ الحركة عموديًا
-     مع touch-action: pan-y) أو خروج أقل من العتبة أو تجاوز
-     الطرفين — كله يرجع إلى أقرب بطاقة صالحة.
-
-   دورة حياة السحب (إصلاح PR#5): أثناء السحب تُسجَّل أدوات تتبع
-   المؤشر على window/document (pointermove/pointerup/pointercancel
-   في طور الالتقاط + blur للنافذة + visibilitychange للإخفاء)
-   وتُزال حتمًا عند نهاية السحب مهما كان مسار الخروج — فلا تبقى
-   حالة is-dragging عالقة إذا أُفلت الزر خارج الـviewport أو خرج
-   المؤشر من الصفحة أو فُقد التركيز. pointer capture (عند قفل
-   المحور فقط) تقوية إضافية لا بديل عن التنظيف على window، ولا
-   يُؤخذ capture عند pointerdown حتى لا يسرق نقر الأزرار داخل
-   البطاقات. السحب العمودي يُسلَّم للتمرير الطبيعي كما هو
-   (touch-action: pan-y لا يُكسر)، والسحب الأفقي يكبت النقرة
-   المتبقية (suppressClick) حتى لا تُفسَّر كبطاقة أو توسعة.
+   T4 (N-D9 — الجولة الثالثة): التنقل بين البطاقات عبر scroll-snap
+   أصلي — الـviewport حاوية تمرير أفقي (scroll-snap-type: x
+   mandatory) والشرائح scroll-snap-align: center. السحب تمرير
+   المتصفح نفسه (بلا منطق مؤشر مخصص): بلا تنفيذ أفعال بالسحب،
+   وبقاء الأزرار والنقاط ولوحة المفاتيح وحدث change كما هي.
+   الحالة تتبع أقرب شريحة لمركز الـviewport (scroll → rAF)؛
+   التنقل البرمجي (goTo/الأزرار/النقاط/إعادة التوسيط) يوسّط
+   الشريحة بscrollIntoView({inline:'center'}) — آمن مع RTL —
+   مع حارس programmatic كي لا يطلق التمرير السلس أحداثًا زائدة
+   للبطاقات العابرة: الحدث مرة واحدة عند الهدف فقط، كما كان.
 
    الأسهم داخل المحتوى التفاعلي (إصلاح PR#5): لا اعتراض
    ArrowLeft/ArrowRight/Home/End عندما يكون التركيز داخل عنصر
@@ -91,9 +81,6 @@ var MICRO_LABELS_FAMILY = 'carousel';
     }
   }
 
-  var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب */
-  var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
-  var COMMIT_MIN = 32;    /* أدنى عتلام التزام بالبكسل */
   var DOTS_MAX = 6;       /* أقصى عدد نقاط قبل الالتفاف (مقترح) */
 
   /* R2 (الجولة الثانية): الاستعلام كسول — لا وصول إلى window في المستوى الأعلى. */
@@ -195,30 +182,36 @@ var MICRO_LABELS_FAMILY = 'carousel';
     return getComputedStyle(carousel).direction === 'rtl' ? 'rtl' : 'ltr';
   }
 
-  /* الموضع الفيزيائي الحالي للـtrack (px) — يُتتبّع في الحالة */
-
-  function setX(st, x, animate) {
-    st.x = x;
-    if (animate && !prefersReducedMotion()) {
-      st.track.style.transform = 'translateX(' + x + 'px)';
-    } else {
-      /* فوري بلا انتقال: نوقف الانتقال لحظة التطبيق ثم نعيده */
-      st.track.style.transition = 'none';
-      st.track.style.transform = 'translateX(' + x + 'px)';
-      void st.track.offsetWidth; /* إجبار إطار حتى لا يُرى انتقال */
-      st.track.style.transition = '';
-    }
+  /* T4 (N-D9): توسيط شريحة i بتمرير أصلي — scrollIntoView بinline:center
+     صحيح في RTL/LTR معًا (لا حساب scrollLeft). block:nearest يمنع أي
+     تمرير عمودي للصفحة. */
+  function scrollToSlide(st, i, animate) {
+    var slide = st.slides[i];
+    if (!slide) return;
+    st.programmatic = true;
+    if (st.scrollTimer) window.clearTimeout(st.scrollTimer);
+    /* الحارس يسقط بعد مهلة أطول من أطول انتقال سلس — التمرير اللاحق
+       من المستخدم يعود يحدّث الحالة فورًا */
+    st.scrollTimer = window.setTimeout(function () { st.programmatic = false; },
+      animate && !prefersReducedMotion() ? 480 : 80);
+    slide.scrollIntoView({
+      inline: 'center',
+      block: 'nearest',
+      behavior: animate && !prefersReducedMotion() ? 'smooth' : 'auto'
+    });
   }
 
-  /* الموضع المطلق الذي يوسّط بطاقة i — من قيم layout المستقلة عن
-     transform (offsetLeft/offsetWidth): لا تتأثر بانتقال جارٍ
-     ولا بالاتجاه (offsetLeft فيزيائي). مرجع الإحداثيات: الـtrack
-     نفسه (offsetParent للشرائح لكونه position:relative)، وأصل
-     الـtrack الساكن = حافة محتوى الـviewport (طفل block بعرض
-     كامل بلا هوامش) — لذلك مركز الشاشة بإحداثيات الـtrack = W/2. */
-  function slideX(st, i) {
-    var s = st.slides[i];
-    return st.viewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+  /* أقرب شريحة لمركز الـviewport — هندسية فتعمل مع الاتجاهين */
+  function nearestSlide(st) {
+    var box = st.viewport.getBoundingClientRect();
+    var center = box.left + box.width / 2;
+    var best = 0, bestDist = Infinity;
+    st.slides.forEach(function (slide, i) {
+      var rect = slide.getBoundingClientRect();
+      var dist = Math.abs(rect.left + rect.width / 2 - center);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
   }
 
   function goToIndex(carousel, i, opts) {
@@ -226,7 +219,7 @@ var MICRO_LABELS_FAMILY = 'carousel';
     if (!st || st.disconnected || st.count === 0) return;
     var animate = !(opts && opts.animate === false);
     var clamped = Math.max(0, Math.min(st.count - 1, i));
-    setX(st, slideX(st, clamped), animate);
+    scrollToSlide(st, clamped, animate);
     if (clamped !== st.index) {
       /* الانتقال إلى بطاقة أخرى يطوي الموسّعة دائمًا — والجديدة تظهر مغلقة،
          ولا تُوسّع أبدًا (التوسعة من زر صريح فقط). */
@@ -322,105 +315,32 @@ var MICRO_LABELS_FAMILY = 'carousel';
     st.dotsBuilt = true;
   }
 
-  /* ---------- السحب (pointer events — لا مكتبات) ----------
-     دورة الحياة مغلقة في كل المسارات: يبدأ على الـviewport ويُتابع
-     على window (طور الالتقاط) حتى لو خرج المؤشر خارج الـviewport أو
-     من الصفحة، ويُنظَّف حتمًا عند pointerup/pointercancel/blur/إخفاء
-     الصفحة — فلا تبقى is-dragging عالقة أبدًا. */
-  function onPointerDown(carousel, st, e) {
-    if (st.disconnected || st.drag || st.count <= 1 || isLocalArrowTarget(e.target) ||
-        (e.pointerType === 'mouse' && e.button !== 0)) return;
-    st.drag = {
-      id: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      baseX: st.x,
-      axis: null,
-      handlers: null
-    };
-    st.suppressClick = false; /* بداية تفاعل جديد: النقر صالح حتى يثبت سحب أفقي */
-    st.root.classList.add('is-dragging');
-    attachDragWindow(carousel, st);
-  }
-
-  /* تتبع المؤشر على window أثناء السحب — يُزال في endDrag مهما كان المسار */
-  function attachDragWindow(carousel, st) {
-    var d = st.drag;
-    if (!d || d.handlers) return;
-    d.handlers = {
-      move: function (e) { onPointerMove(carousel, st, e); },
-      up: function (e) { endDrag(carousel, st, false, e); },
-      cancel: function (e) { endDrag(carousel, st, true, e); },
-      blur: function () { endDrag(carousel, st, true, null); },
-      vis: function () { if (document.visibilityState === 'hidden') endDrag(carousel, st, true, null); }
-    };
-    window.addEventListener('pointermove', d.handlers.move, true);
-    window.addEventListener('pointerup', d.handlers.up, true);
-    window.addEventListener('pointercancel', d.handlers.cancel, true);
-    window.addEventListener('blur', d.handlers.blur);
-    document.addEventListener('visibilitychange', d.handlers.vis);
-  }
-
-  function detachDragWindow(st, d) {
-    if (!d || !d.handlers) return;
-    window.removeEventListener('pointermove', d.handlers.move, true);
-    window.removeEventListener('pointerup', d.handlers.up, true);
-    window.removeEventListener('pointercancel', d.handlers.cancel, true);
-    window.removeEventListener('blur', d.handlers.blur);
-    document.removeEventListener('visibilitychange', d.handlers.vis);
-    d.handlers = null;
-  }
-
-  function onPointerMove(carousel, st, e) {
-    var d = st.drag;
-    if (!d || e.pointerId !== d.id) return;
-    var dx = e.clientX - d.startX;
-    var dy = e.clientY - d.startY;
-    if (!d.axis) {
-      if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
-      /* قفل المحور: العمودي يُسلَّم للتمرير الطبيعي — لا نحوّل كل لمس إلى سحب */
-      d.axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'cancel';
-      if (d.axis === 'cancel') { endDrag(carousel, st, true); return; }
-      try { st.viewport.setPointerCapture(d.id); } catch (err) { /* غير حرِج */ }
-    }
-    if (d.axis !== 'x') return;
-    /* تتبّع المؤشر مباشرة (بلا انتقال) — المقاومة عند الطرفين تصفّر الحركة */
-    var proposed = d.baseX + dx;
-    var atStartEdge = st.index === 0 && ((directionOf(carousel) === 'rtl') ? dx < 0 : dx > 0);
-    var atEndEdge = st.index === st.count - 1 && ((directionOf(carousel) === 'rtl') ? dx > 0 : dx < 0);
-    st.drag.dx = dx;
-    setX(st, (atStartEdge || atEndEdge) ? d.baseX : proposed, false);
-    e.preventDefault();
-  }
-
-  function endDrag(carousel, st, canceled, e) {
-    var d = st.drag;
-    if (!d) return;
-    /* مؤشر آخر لا ينهي سحبًا جاريًا لمؤشره */
-    if (e && e.pointerId !== undefined && e.pointerId !== d.id) return;
-    detachDragWindow(st, d);
-    st.drag = null;
-    st.root.classList.remove('is-dragging');
-    /* سحب أفقي مثبت (حتى دون الالتزام) يكبت النقرة المتبقية حتى لا
-       تُفسَّر كبطاقة/توسعة بعد الإفلات خارج البطاقة نفسها */
-    st.suppressClick = d.axis === 'x';
-    try { st.viewport.releasePointerCapture(d.id); } catch (err) { /* أُفرج عنه */ }
-    if (st.disconnected) {
-      setX(st, d.baseX, false);
-      st.suppressClick = false;
-      return; /* release interaction without dispatching a navigation action */
-    }
-    var slideW = st.slides[st.index] ? st.slides[st.index].offsetWidth : 0;
-    var threshold = Math.max(COMMIT_MIN, slideW * COMMIT_RATIO);
-    var dx = d.dx || 0;
-    if (canceled || Math.abs(dx) < threshold) {
-      goToIndex(carousel, st.index, { animate: true }); /* snap-back — إلغاء السحب */
-      return;
-    }
-    var rtl = directionOf(carousel) === 'rtl';
-    /* اتجاه الالتزام فيزيائي: في RTL السحب يمينًا (+) يجلب «التالي» (يسارًا) */
-    var step = rtl ? (dx > 0 ? 1 : -1) : (dx < 0 ? 1 : -1);
-    goToIndex(carousel, st.index + step, { animate: true });
+  /* ---------- تتبّع التمرير الأصلي (T4/N-D9) ----------
+     scroll → rAF: أقرب شريحة لمركز الـviewport تصبح النشطة (حدث
+     change مرة عند تغيّر الفهرس فقط). التنقل البرمجي يحدّث الحالة
+     بنفسه فتجاهل أحداثه هنا حتى اكتمال الاستقرار. */
+  function wireScroll(carousel, st) {
+    onLocal(carousel, st.viewport, 'scroll', function () {
+      if (st.disconnected || st.programmatic || st.scrollRaf) return;
+      st.scrollRaf = requestAnimationFrame(function () {
+        st.scrollRaf = 0;
+        if (st.disconnected || st.programmatic || st.count === 0) return;
+        var i = nearestSlide(st);
+        if (i !== st.index) {
+          collapseSlide(st, st.slides[st.index]);
+          st.index = i;
+          update(carousel, st);
+          carousel.dispatchEvent(new CustomEvent('micro-carousel:change', {
+            bubbles: true,
+            detail: { index: st.index, count: st.count }
+          }));
+        }
+      });
+    }, null, { passive: true });
+    /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء تمرير العارض */
+    onLocal(carousel, st.viewport, 'dragstart', function (e) {
+      if (!st.disconnected) e.preventDefault();
+    });
   }
 
   /* ---------- التوسعة داخل مكانها (آلية عامة — قرار PROPOSED) ----------
@@ -471,10 +391,6 @@ var MICRO_LABELS_FAMILY = 'carousel';
       if (st.disconnected) return;
       var btn = (e.target && e.target.closest) ? e.target.closest('[data-card-expand]') : null;
       if (!btn || !carousel.contains(btn)) return;
-      /* السحب الأفقي لا يوسّع: النقرة المتبقية بعد سحب مثبت تُكبت —
-         نقرات أصل مؤشر فقط (detail > 0)؛ نقرات لوحة المفاتيح
-         (Enter/Space → detail = 0) تمر دائمًا ولا تُكبت أبدًا */
-      if (st.suppressClick && e.detail > 0) { st.suppressClick = false; return; }
       var slide = btn.closest('[data-carousel-slide]');
       if (!slide) return;
       /* البطاقة النشطة فقط تُوسّع؛ زر بطاقة غير النشطة ينقل إليها دون توسعة */
@@ -483,16 +399,6 @@ var MICRO_LABELS_FAMILY = 'carousel';
         return;
       }
       toggleExpand(st, slide);
-    });
-  }
-
-  function wireDrag(carousel, st) {
-    /* البداية على الـviewport فقط؛ المتابعة والنهاية على window أثناء
-       السحب (attachDragWindow) حتى يعمل الإفلات خارج الـviewport. */
-    onLocal(carousel, st.viewport, 'pointerdown', function (e) { onPointerDown(carousel, st, e); });
-    /* منع سحب الصور/الروابط الأصلي داخل البطاقات أثناء سحب العارض */
-    onLocal(carousel, st.viewport, 'dragstart', function (e) {
-      if (!st.disconnected) e.preventDefault();
     });
   }
 
@@ -582,10 +488,8 @@ var MICRO_LABELS_FAMILY = 'carousel';
     }
     var st = parts(carousel);
     st.index = 0;
-    st.x = 0;
     st.count = st.slides.length;
-    st.drag = null;
-    st.suppressClick = false;
+    st.programmatic = false;
     st.dotsBuilt = false;
     stateOf.set(carousel, st);
 
@@ -601,7 +505,7 @@ var MICRO_LABELS_FAMILY = 'carousel';
     if (st.next) onLocal(carousel, st.next, 'click', function () { next(carousel); });
 
     wireKeys(carousel, st);
-    wireDrag(carousel, st);
+    wireScroll(carousel, st);
     wireExpand(carousel, st);
     wireResize(carousel, st);
 
@@ -724,8 +628,8 @@ var MICRO_LABELS_FAMILY = 'carousel';
             st.directionObserver.disconnect();
             st.directionObserver = null;
           }
-          endDrag(carousel, st, true, null);
-          st.suppressClick = false;
+          if (st.scrollTimer) { window.clearTimeout(st.scrollTimer); st.scrollTimer = null; }
+          if (st.scrollRaf) { cancelAnimationFrame(st.scrollRaf); st.scrollRaf = 0; }
           if (st.resizeHandler) {
             window.removeEventListener('resize', st.resizeHandler);
             st.resizeHandler = null;

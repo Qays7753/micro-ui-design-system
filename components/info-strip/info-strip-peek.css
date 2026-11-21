@@ -26,12 +26,15 @@
    عكس info-strip الحالي: الشرائح المخفية لا تطوى (بلا height:0)
    كي يبقى جزء المجاور مرئيًا كمطلوب في مقارنة الفيديو. */
 .m-info-peek .m-info-strip__slide {
-  flex: 0 0 calc(100% - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
+  /* T4 (N-D9): مقاس البطاقة نسبةً لحاوية .m-info-peek (cqw) — ثابت
+     مهما امتد صف التمرير، مع snap للمركز */
+  flex: 0 0 calc(100cqw - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
   min-width: 0;
   padding: 0;
+  scroll-snap-align: center;
 }
 .m-info-peek .m-info-strip__slide:only-child {
-  flex-basis: 100%; /* single reading is static: no space reserved for neighbours */
+  flex-basis: 100cqw; /* single reading is static: no space reserved for neighbours */
 }
 
 .m-info-peek .m-info-strip__slide[aria-hidden="true"] {
@@ -40,24 +43,25 @@
 
 .m-info-peek .m-info-strip__track {
   gap: var(--m-peek-gap, 12px);
-  /* التمركز الفيزيائي يُحسب من JS (offsetLeft) ليعمل مع RTL وLTR بلا تفرّع؛
-     القيمة الابتدائية هنا تمنع وميضًا قبل أول قياس. */
-  transform: translateX(0);
+  /* T4 (N-D9): صف تمرير أصلي — يمتد بمحتواه وحشوة الطرفين توسّطان
+     الأولى والأخيرة كالأوسط تمامًا (بلا transform) */
+  width: max-content;
+  min-width: 100cqw;
+  padding-inline: calc(var(--m-peek-width, 24px) + var(--m-peek-gap, 12px));
 }
 
-/* أثناء السحب: تتبع الإصبع مباشرة بلا انتقال — الاستجابة فورية */
-.m-info-peek .m-info-strip__track.is-peek-dragging {
-  transition: none;
-}
-
-/* سحب أفقي محتمل: touch-action pan-y يبقى (التمرير العمودي محفوظ) */
 .m-info-peek .m-info-strip__viewport {
-  touch-action: pan-y;
+  /* T4 (N-D9): حاوية تمرير أفقي بـscroll-snap أصلي — السحب تمرير
+     المتصفح نفسه؛ المحور العمودي يمرر الصفحة كالمعتاد */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: auto;
 }
-
-/* إخفاء المؤشر الأصلي عند سحب بالفأرة — لا تغيير تخطيط */
-.m-info-peek .m-info-strip__viewport.is-peek-grabbing {
-  cursor: grabbing;
+.m-info-peek .m-info-strip__viewport::-webkit-scrollbar {
+  display: none;
 }
 
 /* مؤشر مجاورة خافت: بدون إخفاء أو تعتيم قوي — مجرد حدّ بصري هادئ
@@ -70,11 +74,12 @@
    الأضيق من 280px نعيد البطاقة إلى العرض الكامل بدل ضغط محتواها. */
 @container (max-width: 280px) {
   .m-info-peek .m-info-strip__slide {
-    flex-basis: 100%;
+    flex-basis: 100cqw;
   }
 
   .m-info-peek .m-info-strip__track {
     gap: 0;
+    padding-inline: 0;
   }
 }
 

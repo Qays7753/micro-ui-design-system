@@ -431,3 +431,11 @@ Carousel للاستعراض مع بديل أزرار/مفاتيح؛ لاautoplay
 ### دليل العرض
 
 [القراءات المباشرة](../previews/readable-source/index.html)، [التقويم حسب المهمة](../previews/mobile-capabilities/calendar-tasks.html)، [المتغيرات](../previews/ui-system-showcase/index.html#component-review). هذه أدوات معاينة وليست تطبيقًا. لا نسخ صفحات المراجعة المولدة إلى المنتج.
+
+## C15 — حالة خطأ مع إعادة محاولة (error-retry)
+
+الحالة `draft-for-review` (الجولة الثالثة T5). وصفة عرض فوق عائلة `screen`: شريط علوي بعنوان السياق، ومحتوى خطأ مركزي (علامة دائرية بلون الخطأ + عنوان + وصف قصير بما يجب فعله — نص المستهلك)، وشريط إجراءات سفلي بزر **إعادة المحاولة** أساسي (B01 بحالة تحميل أثناء الانتظار) وزر ثانوي للبديل. المصدر: `components/compositions/error-retry.css`؛ المثال: `previews/compositions/error-retry-example.html`.
+
+- **الحدث:** النقر على إعادة المحاولة يطلق `micro-error:retry` (bubbles) — فعل المستهلك؛ لا منطق شبكة ولا تخزين في المكتبة.
+- **بلا skeleton** عمدًا: حركة تزيينية مستمرة تتعارض مع عقد الحركة؛ الانتظار يعرض بحالة التحميل على الزر.
+- الحواف الآمنة ولوحة المفاتيح من عائلة screen؛ تحليل التغطية الكامل في [SCREEN-PATTERNS.md](SCREEN-PATTERNS.md).

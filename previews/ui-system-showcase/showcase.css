@@ -629,8 +629,8 @@ body[data-view="app"] .sc-toast-host:not(.app-toast-host) { display: none; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;   /* T4.4: هدف لمس ≥ 48px */
+  height: 48px;
   padding: 0;
   border: 0;
   border-radius: var(--micro-radius-circle);

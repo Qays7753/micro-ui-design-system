@@ -84,6 +84,8 @@
    كيان يحتاج قراءة كاملة (عقد المواصفة)، والارتفاع حد أدنى يتمدد
    مع الأسطر الملتفة فلا قصّ. */
 .m-picker__option {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   display: flex;
   align-items: center;
   gap: var(--micro-space-2);

@@ -119,7 +119,7 @@
   --micro-icon-button-size: 48px;
   --micro-icon-button-icon: 24px;
   --micro-counter-height: 20px;
-  --micro-counter-label-size: 13px;
+  --micro-counter-label-size: 0.8125rem; /* N-D6: 13px */
   --micro-counter-label-weight: 500;
   /* R-10 (2026-10-25): توكنز أوزان الخط — الأوزان المشحونة فقط
      (400/500/600)؛ لا 700 ولا 800 (لا faux-bold). */
@@ -129,7 +129,7 @@
 
   /* R-11 (2026-10-25): مستوى عنوان القسم 18px بسطر نسبي (لا ارتفاع
      مقفول يقص عند تكبير النص وحده) — كان مستوى خامًا خارج المصدر */
-  --micro-section-title-size: 18px;
+  --micro-section-title-size: 1.125rem; /* N-D6: 18px */
   --micro-section-title-line: 1.5556;
 
   /* R-12 (2026-10-25): سلم الطبقات z الموثق — غشاء الطبقة < الطبقة
@@ -150,21 +150,21 @@
 
   /* IBM Plex: Latin/numerals and Arabic fallbacks remain authoritative. */
   --micro-font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-  --micro-body-size: 16px;
+  --micro-body-size: 1rem; /* N-D6: مكافئ 16px عند جذر 16px */
   --micro-body-line: 1.625;
-  --micro-label-size: 14px;
+  --micro-label-size: 0.875rem; /* N-D6: 14px */
   --micro-label-line: 1.571;
-  --micro-secondary-size: 13px;
+  --micro-secondary-size: 0.8125rem; /* N-D6: 13px */
   --micro-secondary-line: 1.538;
-  --micro-heading-size: 20px;
+  --micro-heading-size: 1.25rem; /* N-D6: 20px */
   --micro-heading-line: 1.4;
-  --micro-heading-large-size: 24px;
+  --micro-heading-large-size: 1.5rem; /* N-D6: 24px */
   --micro-heading-large-line: 1.333;
-  --micro-amount-size: 36px;
+  --micro-amount-size: 2.25rem; /* N-D6: 36px */
   --micro-amount-line: 1.2222;
-  --micro-amount2-size: 22px;
+  --micro-amount2-size: 1.375rem; /* N-D6: 22px */
   --micro-amount2-line: 1.4545;
-  --micro-button-label-size: 16px;
+  --micro-button-label-size: 1rem; /* N-D6: 16px */
   --micro-button-label-line: 1.5;
   --micro-button-label-weight: 500;
   --micro-field-min-height: 52px;
@@ -175,9 +175,9 @@
   --micro-switch-thumb: 24px;
   --micro-row-min-height: 72px;
   --micro-row-tile: 48px;
-  --micro-surface-title-size: 22px;
+  --micro-surface-title-size: 1.375rem; /* N-D6: 22px */
   --micro-surface-title-line: 1.6364;
-  --micro-surface-amount-size: 36px;
+  --micro-surface-amount-size: 2.25rem; /* N-D6: 36px */
   --micro-surface-amount-line: 1.2222;
   --micro-inset-bottom: env(safe-area-inset-bottom, 0px);
 

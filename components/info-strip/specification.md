@@ -132,3 +132,8 @@
 إثبات مستقل عند360×780 Light: `python3 tools/ux-continuation-phase3-check.py --options-only`. يشمل صفر/واحد/متعدد، والنسخ مع بقاء سمات التهيئة، ثم التنظيف. إعادة الإنتاج للقراءة فقط عبر `--source-ref 7e56f62b8d54f8691cfbe812bafa0868cb7e1665`؛ لا تبديل فرع أو وصول إلى مضيف.
 
 - **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS شريط المعلومات يُقرأ وقت الاستخدام من سجل `window.MicroLabels['info-strip']` الذي يسجّله `components/info-strip/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12).
+
+
+## الجولة الثالثة T4 — Peek بتمرير أصيل (N-D9)
+
+عرض Peek يحوّل إلى `scroll-snap` أصلي كالعارض الدوار: الـviewport حاوية تمرير أفقي، البطاقات `scroll-snap-align: center` بمقاس `100cqw`، والتنقل البرمجي `scrollIntoView({inline:'center'})`. الأزرار و`micro-info-peek:change` كما هي؛ لا تنفيذ أفعال بالسحب. عقد السلوك: NATIVE-BEHAVIOR قسم 5.

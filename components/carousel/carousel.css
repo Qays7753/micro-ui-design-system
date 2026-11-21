@@ -62,17 +62,19 @@
    touch-action: pan-y يبقي التمرير العمودي الطبيعي للمتصفح
    والسحب الأفقي يُدار بالأحداث (لا مكتبات خارجية). */
 .m-carousel__viewport {
-  overflow: hidden;
-  touch-action: pan-y;
+  /* T4 (N-D9): حاوية تمرير أفقي بـscroll-snap أصلي — السحب تمرير
+     المتصفح نفسه (المحور العمودي يمرر الصفحة كالمعتاد)، والتنقل
+     البرمجي بscrollIntoView. قناع القصّ كما هو (لا قصّ عمودي). */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;              /* لا شريط تمرير مرئي */
+  container-type: inline-size;        /* مقاس الشريحة نسبةً للقناع (cqw) */
   min-height: 0; /* empty state owns its natural height; no blank reservation */
 }
-/* أثناء السحب فقط: لا تحديد نص عَرَضي مع سحب المؤشر */
-.m-carousel.is-dragging .m-carousel__viewport {
-  user-select: none;
-  -webkit-user-select: none;
-}
-.m-carousel.is-dragging .m-carousel__track {
-  transition: none;
+.m-carousel__viewport::-webkit-scrollbar {
+  display: none;
 }
 
 /* ================= 2) track: صف البطاقات =================
@@ -89,11 +91,12 @@
   align-items: flex-start;
   gap: var(--_gap);
   position: relative;
+  width: max-content;    /* صف التمرير الأصلي — يمتد بمحتواه */
+  min-width: 100cqw;
   margin: 0;
   padding: 0;
   padding-block: var(--micro-space-2); /* مساحة ظل البطاقة — لا قصّ */
   list-style: none;
-  transition: transform var(--micro-motion-carousel) var(--micro-ease-standard);
 }
 
 /* البطاقة النشطة في المنتصف: عرضها = 100% − 2×(peek + gap)
@@ -102,20 +105,25 @@
    بصرف النظر عن عدد البطاقات (لا قفزة تخطيط عند إضافة بطاقة). */
 .m-carousel__slide {
   flex: 0 0 auto;
-  width: 100%;
+  width: 100cqw;   /* نسبةً للقناع لا للصف — ثابتة مهما امتد الصف */
   min-width: 0; /* يسمح بلفّ المحتوى الطويل داخل البطاقة */
+  scroll-snap-align: center;
 }
 /* Teaser is explicit; the default slide fills the available width. */
 .m-carousel[data-peek="true"] { --_peek: 24px; }
 .m-carousel[data-peek="true"] .m-carousel__slide {
-  width: calc(100% - 2 * (var(--_peek) + var(--_gap)));
+  width: calc(100cqw - 2 * (var(--_peek) + var(--_gap)));
+}
+/* حشوة الطرفين في وضع المعاينة: أول وآخر بطاقة تتمركزان كالأوسط تمامًا */
+.m-carousel[data-peek="true"] .m-carousel__track {
+  padding-inline: calc(var(--_peek) + var(--_gap));
 }
 /* Do not spend a narrow reading's width on decorative adjacent previews.
    This follows component width, not the device viewport. */
 @container (max-width: 335px) {
-  .m-carousel__slide { width: 100%; }
+  .m-carousel__slide { width: 100cqw; }
 }
-.m-carousel[data-carousel-count="1"] .m-carousel__slide { width: 100%; }
+.m-carousel[data-carousel-count="1"] .m-carousel__slide { width: 100cqw; }
 .m-carousel [hidden] { display: none !important; }
 /* البطاقة النشطة — وسام حالة يديره carousel.js (لا شكل خاص إلزامي) */
 .m-carousel__slide[data-current="true"] { }

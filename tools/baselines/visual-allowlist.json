@@ -18,8 +18,37 @@
     },
     {
       "page": "previews/ui-system-showcase/index.html",
-      "reason": "T3 (N-D5): قسم عائلة screen الجديد في المعرض — بوابة الكتالوج (component-catalog-build) تفرض data-catalog-family لكل عائلة، وscreen عائلة جديدة خامسة عشرة",
-      "decision": "docs/DECISIONS.md — الجولة الثالثة T3"
+      "reason": "T3 (N-D5): قسم عائلة screen الجديد في المعرض — بوابة الكتالوج تفرض data-catalog-family لكل عائلة فيفرض تغيّر ارتفاع الصفحة؛ allowSize يقارن المنطقة المشتركة بسقف 15% نفسه؛ allowSize وسقف 35% — إزاحة المحتوى تحت القسم الجديد تغطيها المنطقة المشتركة",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T3",
+      "allowSize": true,
+      "maxPercent": 35
+    },
+    {
+      "page": "previews/selection/example-usage.html",
+      "reason": "T4 (N-D9/N-D13): مقبض سحب الورقة السفلية — عنصر أصلي جديد ظاهر أعلى الورقة المفتوحة (24px)؛ المحتوى لم يتحرك (الورقة تنمو لأعلى) والظل تبعها",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T4/N-D9"
+    },
+    {
+      "page": "previews/carousel/index.html",
+      "reason": "T4 (N-D9): تحويل التنقل إلى scroll-snap أصلي — تنعيم حواف نصوص عند طور نقطي فرعي مختلف عند سكون التمرير (فروق ±1/255 في الموضع نفسه، لا إزاحة تخطيط: 3 بكسلات فقط من 28 المتغيرة إزاحة فعلية)",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T4/N-D9"
+    },
+    {
+      "page": "previews/carousel/example-usage.html",
+      "reason": "T4 (N-D9): تحويل التنقل إلى scroll-snap أصلي — تنعيم حواف فرعي عند السكون (±1/255، لا إزاحة تخطيط)",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T4/N-D9"
+    },
+    {
+      "page": "previews/info-strip/comparison.html",
+      "reason": "T4 (N-D9): تحويل Peek إلى scroll-snap أصلي — تنعيم حواف فرعي عند سكون التمرير (فروق لونية في الموضع نفسه 109/115، لا إزاحة تخطيط)",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T4/N-D9"
+    },
+    {
+      "page": "previews/ui-system-showcase/standalone.html",
+      "allowSize": true,
+      "maxPercent": 35,
+      "reason": "T3 (N-D5): standalone المعرض مشتق حتمي من صفحة المعرض — قسم عائلة screen الجديد (فرض بوابة الكتالوج) يغيّر الارتفاع ويزيح المحتوى تحته؛ allowSize وسقف موثق 35%",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T3/T5"
     }
   ]
 }

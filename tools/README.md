@@ -26,6 +26,7 @@
 | `api-lifecycle-check.py` | بوابة العقد الموحد (المرحلة 6): init مرتين لا يضاعف المستمعات، و`update` (أو غيابه الموثق) يعمل بلا ازدواج، و`disconnect`/`destroy` يزيلان المستمعات — بلا أخطاء صفحة/كونسول، على ترميز أدنى منسوخ من example-usage لكل عائلة. |
 | `numeric-geometry-check.py` | هندسة القراءات الرقمية وعلامات الحالة وأمان overflow عند 390px LTR. |
 | `ui-system-showcase-check.py` | أسطح المعرض الثلاثة (`#app`/`#component-review`/`#state-lab`) وحالاتها الـ15. |
+| `text-scale-check.py` | بوابة تكبير الخط (T4/N-D6): إعادة تدفق بلا قص ولا overflow عند 100/150/200% وأهداف لمس ≥ 48px على صفحات المختبر والعرض. |
 | `screen-check.py` | بوابة عائلة screen (T3/N-D5): التمرير الداخلي فقط، لا overflow أفقي، آخر عنصر غير مغطى، محاكاة لوحة مفاتيح عبر visualViewport وهمي، حواف آمنة بمتغيرات قابلة للمحاكاة، update/destroy/init — عند 360 و320. |
 | `lint` (عبر `npm run lint`) | بوابة ESLint (قاعدة `no-undef` على `components/` و`shared/`؛ الإعداد `eslint.config.mjs`): كل متغير مستخدم معرف أو عام للمتصفح — صفر أخطاء شرطًا (N-D16/الجولة الثالثة T1). |
 | `preview-runtime-check.py` | صفر أخطاء JavaScript وموارد مفقودة عبر كل صفحات `previews/` و`components/*` (يتطلب `--base http://127.0.0.1:5000`؛ `check-all` يبدأ الخادم تلقائيًا). |

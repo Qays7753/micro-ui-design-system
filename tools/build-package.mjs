@@ -96,6 +96,10 @@ const ENTRIES = [
     exports: ["register", "mount", "contextKey", "init", "destroy", "getInstance", "setLabels"] },
   { entry: "icons", source: "shared/icons.js", global: "MicroIcons", autoInit: false,
     exports: ["hydrate", "ready"] },
+  { entry: "back", source: "shared/back.js", global: "MicroBack", autoInit: false,
+    exports: ["bindBackToLayers"] },
+  { entry: "haptics", source: "shared/haptics.js", global: "MicroHaptics", autoInit: false,
+    exports: ["setHaptics", "pulse", "isHapticsEnabled"] },
   { entry: "labels", source: "shared/labels.js", global: "MicroLabels", autoInit: false,
     exports: ["registerLabels", "getLabel", "familyLabels", "setLabels", "setLocale", "getLocale", "formatNumber", "pluralCategory", "plural"] },
 ];

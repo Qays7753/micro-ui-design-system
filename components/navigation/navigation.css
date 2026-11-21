@@ -74,6 +74,8 @@
   scrollbar-width: thin;               /* مؤشر التمرير — قابلية الاكتشاف */
 }
 .m-tabs__tab {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   flex: 0 0 auto;                      /* D-UI-01: لا انكماش — التسمية كاملة بحجمها */
   min-height: var(--micro-touch-min);
   padding-inline: var(--micro-space-4);
@@ -130,6 +132,8 @@
   font-family: var(--micro-font-family);
 }
 .m-navbar__item {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   flex: 1 0 0;
   min-width: var(--micro-touch-min);
   min-height: var(--micro-touch-min);
@@ -170,6 +174,32 @@
    إغلاق ظاهر + Escape، سياسة الضغط بالخلفية موثقة بالسمة
    (data-backdrop="close" للغير المتلف، "keep" للحوار المتلف)،
    والسحب ليس وسيلة الإغلاق الوحيدة. */
+/* ---- T4 (N-D9): مقبض سحب الورقة السفلية للإغلاق ----
+   عنصر أصلي جديد ظاهر أعلى كل ورقة سفلية (لا للحوار الموسّط)؛
+   السحب من المقبض فقط، والمحتوى يبقى قابلاً للتمرير. */
+.m-layer__drag-handle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 24px;           /* منطقة لمس مريحة فوق الشريط البصري */
+  cursor: grab;
+  touch-action: none;         /* السحب العمودي للمقبض لا يمرّر الصفحة */
+  user-select: none;
+}
+.m-layer__drag-bar {
+  inline-size: 36px;
+  block-size: 4px;
+  border-radius: var(--micro-radius-capsule);
+  background: var(--micro-border-control);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.m-layer__drag-handle:active .m-layer__drag-bar { opacity: 0.9; }
+@media (prefers-reduced-motion: reduce) {
+  .m-layer__drag-handle { cursor: default; }
+}
+
 .m-layer-backdrop {
   position: fixed;
   inset: 0;

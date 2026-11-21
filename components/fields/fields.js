@@ -330,11 +330,63 @@ var MICRO_LABELS_FAMILY = 'fields';
     return base + i;
   }
 
+  /* T4 (N-D10 / NATIVE-BEHAVIOR قسم 3): enterkeyhint افتراضي — لا
+     يُكتب فوق قيمة وضعها المستهلك. الحساب من ترتيب الحقول في نفس
+     form (أو جذر التهيئة): search لحقل بحث، next لمن يليه حقل، done
+     للأخير. Enter مع next في حقل نص مفرد ينقل التركيز للحقل التالي
+     (سلوك التطبيقات الأصلية)؛ النص الطويل يحتفظ بسطره الأصلي. */
+  function applyEnterKeyHints(scope, fields) {
+    var groups = [];
+    fields.forEach(function (f) {
+      var key = f.closest('form') || scope;
+      var group = null;
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i].key === key) { group = groups[i]; break; }
+      }
+      if (!group) { group = { key: key, fields: [] }; groups.push(group); }
+      group.fields.push(f);
+    });
+    groups.forEach(function (group) {
+      group.fields.forEach(function (f, i) {
+        var input = f.querySelector('.m-field__input, .m-field__area');
+        if (!input) return;
+        var nextInput = null;
+        for (var j = i + 1; j < group.fields.length; j++) {
+          var candidate = group.fields[j].querySelector('.m-field__input, .m-field__area');
+          if (candidate) { nextInput = candidate; break; }
+        }
+        input.__microEnterNext = nextInput;
+        if (input.hasAttribute('enterkeyhint')) return; /* قيمة المستهلك محفوظة */
+        var type = (input.getAttribute('type') || '').toLowerCase();
+        input.setAttribute('enterkeyhint',
+          type === 'search' ? 'search' : nextInput ? 'next' : 'done');
+      });
+    });
+  }
+
+  function bindEnterNavigation(f) {
+    var input = f.querySelector('.m-field__input, .m-field__area');
+    if (!input) return;
+    on(f, input, 'keydown', function (e) {
+      if (e.key !== 'Enter' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (input.tagName === 'TEXTAREA') return;
+      if (input.getAttribute('enterkeyhint') !== 'next') return;
+      var next = input.__microEnterNext;
+      if (!next || !next.isConnected || next.disabled) return;
+      e.preventDefault();
+      next.focus();
+    });
+  }
+
   function bindFields(scope) {
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
+    applyEnterKeyHints(scope, fields);
     fields.forEach(function (f) {
-      if (f.dataset.microFieldBound && f.__microFieldLifetime && !f.__microFieldLifetime.signal.aborted) return;
+      if (f.dataset.microFieldBound && f.__microFieldLifetime && !f.__microFieldLifetime.signal.aborted) {
+        bindEnterNavigation(f); /* إعادة ربط آمنة — العمر نفسه */
+        return;
+      }
       f.dataset.microFieldBound = '1';
       f.__microFieldLifetime = new AbortController();
       bindControlFocus(f);
@@ -342,6 +394,7 @@ var MICRO_LABELS_FAMILY = 'fields';
       bindClear(f);
       bindStepper(f);
       bindMessage(f);
+      bindEnterNavigation(f);
     });
   }
 

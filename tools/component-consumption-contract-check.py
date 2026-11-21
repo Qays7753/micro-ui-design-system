@@ -18,7 +18,7 @@ CSS = ['assets/fonts/fonts.css', 'shared/tokens.css', 'shared/motion.css'] + [
 # R2.3: الفيكسَر يستهلك dist/iife المبني — ملف واحد لكل مدخل (labels مضمنة).
 JS = [f'dist/iife/{family}.js' for family in
       ['buttons', 'fields', 'selection', 'navigation', 'messages', 'data', 'metric-comparison', 'access-gateway']
-      ] + ['dist/iife/picker.js', 'dist/iife/packed-circle.js']
+      ] + ['dist/iife/picker.js', 'dist/iife/packed-circle.js', 'dist/iife/back.js', 'dist/iife/haptics.js']
 BODY = '''
 <button id="opener" class="m-btn" data-layer-open="layer">فتح اللوحة</button>
 <button id="outside" class="m-btn">متابعة</button>
@@ -27,7 +27,18 @@ BODY = '''
 <div class="m-layer" id="layer" role="dialog" aria-modal="true" aria-labelledby="layer-title" hidden>
  <div class="m-layer__head"><h2 class="m-layer__title" id="layer-title">لوحة مستقلة</h2>
  <button class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg aria-hidden="true"><use href="#close-icon"/></svg></button></div>
- <div class="m-layer__body">محتوى ثابت</div></div>
+ <div class="m-layer__body">محتوى ثابت<button id="opener2" class="m-btn" data-layer-open="layer2" type="button">فتح الثانية</button></div></div>
+<div class="m-layer-backdrop" data-for="layer2" hidden></div>
+<div class="m-layer" id="layer2" role="dialog" aria-modal="true" aria-labelledby="layer2-title" hidden>
+ <div class="m-layer__head"><h2 class="m-layer__title" id="layer2-title">لوحة متداخلة</h2>
+ <button class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"><svg aria-hidden="true"><use href="#close-icon"/></svg></button></div>
+ <div class="m-layer__body" style="min-height:120px">محتوى قصير لفحص السحب</div></div>
+<form id="mini-form" style="max-width:360px">
+  <label class="m-field" data-micro-field><span class="m-field__label">الاسم</span><input class="m-field__input" id="f1" type="text"></label>
+  <label class="m-field" data-micro-field><span class="m-field__label">المبلغ</span><input class="m-field__input" id="f2" type="text" inputmode="decimal"></label>
+  <label class="m-field" data-micro-field><span class="m-field__label">بحث</span><input class="m-field__input" id="f3" type="search"></label>
+  <label class="m-field" data-micro-field><span class="m-field__label">ملاحظة</span><input class="m-field__input" id="f4" type="text" enterkeyhint="done"></label>
+</form>
 <div class="m-picker" data-micro-picker id="picker"><input class="m-picker__input" data-picker-search aria-label="بحث"><div class="m-picker__list" data-picker-list role="listbox" aria-label="الخيارات"></div><p data-picker-summary></p></div>
 <button class="m-btn m-btn--primary m-btn--loading-replace" id="replace">حفظ العملية</button>
 <button class="m-btn m-btn--primary" id="default">حفظ العملية</button>
@@ -86,6 +97,8 @@ def main():
     def check(name, ok, detail=None):
         checks.append({'name': name, 'passed': bool(ok), 'detail': detail})
         print(('PASS ' if ok else 'FAIL ') + name, flush=True)
+        if not ok:
+            print('      detail:', detail, flush=True)
 
     try:
         with sync_playwright() as pw:
@@ -155,6 +168,73 @@ def main():
                     check(label + ': explicit ISO year-month-day order / ' + direction, order['valid'], order)
 
             check('data table retains invalid raw input and state', '12oops' in page.locator('#signed table').inner_text() and 'قيمة غير صالحة' in page.locator('#signed table').inner_text())
+            # T4 (N-D9/N-D7): سحب الورقة للأسفل — فوق العتبة يغلق بنبضة اهتزاز، وتحتها يرتد
+            ctx2 = browser.new_context(viewport={'width': 360, 'height': 780}, is_mobile=True,
+                                       has_touch=True, color_scheme='light')
+            page2 = ctx2.new_page()
+            page2.on('pageerror', lambda e: errors.append(str(e)))
+            page2.goto(f'http://127.0.0.1:{server.server_port}/consumption-contract.html')
+            page2.wait_for_timeout(150)
+            page2.evaluate("""() => {
+              /* stub على النموذج الأولي قبل أي استدعاء — تعيين خاصية خاصة على
+                 navigator بعد التحميل يستدعي فحص المتصفح الداخلي فيظهر استدعاء
+                 وهمي بلا وسيط في القياسات */
+              window.__vibes = [];
+              Object.defineProperty(Navigator.prototype, 'vibrate', {
+                value: (ms) => { window.__vibes.push(ms); return true; },
+                writable: true, configurable: true });
+              MicroBack.bindBackToLayers();
+            }""")
+            # معطل افتراضيًا في صفحة نظيفة: افتح واسحب قبل التفعيل — لا اهتزاز
+            page2.locator('#opener').click()
+            page2.wait_for_timeout(150)
+            handle = page2.locator('#layer .m-layer__drag-handle')
+            box = handle.bounding_box()
+            page2.mouse.move(box['x'] + box['width'] / 2, box['y'] + box['height'] / 2)
+            page2.mouse.down()
+            page2.mouse.move(box['x'] + box['width'] / 2, box['y'] + 300, steps=8)
+            page2.mouse.up()
+            page2.wait_for_timeout(400)
+            drag_closed = page2.evaluate("!document.getElementById('layer').hidden === false")
+            vibes_before_enable = page2.evaluate("window.__vibes.length")
+            check('sheet drag beyond threshold closes it via the same close path',
+                  drag_closed, {'closed': drag_closed})
+            check('haptics disabled by default — drag close does not vibrate', vibes_before_enable == 0)
+            # مفعلًا: اسحب الثانية (داخل الأولى) فوق العتبة → إغلاق + نبضة 10ms
+            page2.evaluate("MicroHaptics.setHaptics(true)")
+            page2.locator('#opener').click()
+            page2.wait_for_timeout(150)
+            page2.locator('#opener2').click()
+            page2.wait_for_timeout(200)
+            handle2 = page2.locator('#layer2 .m-layer__drag-handle')
+            box2 = handle2.bounding_box()
+            page2.mouse.move(box2['x'] + box2['width'] / 2, box2['y'] + box2['height'] / 2)
+            page2.mouse.down()
+            page2.mouse.move(box2['x'] + box2['width'] / 2, box2['y'] + 260, steps=8)
+            page2.mouse.up()
+            page2.wait_for_timeout(450)
+            drag2 = page2.evaluate("""() => ({
+              closed: document.getElementById('layer2').hidden,
+              vibes: window.__vibes.slice(),
+              focusBackInParent: document.getElementById('layer').contains(document.activeElement) })""")
+            check('enabled haptics: drag close vibrates 10ms and refocuses into parent',
+                  drag2['closed'] and drag2['vibes'] == [10] and drag2['focusBackInParent'], drag2)
+            # تحت العتبة: يرتد وتبقى مفتوحة
+            page2.locator('#opener2').click()
+            page2.wait_for_timeout(200)
+            handle2b = page2.locator('#layer2 .m-layer__drag-handle')
+            box2b = handle2b.bounding_box()
+            page2.mouse.move(box2b['x'] + box2b['width'] / 2, box2b['y'] + box2b['height'] / 2)
+            page2.mouse.down()
+            page2.mouse.move(box2b['x'] + box2b['width'] / 2, box2b['y'] + 36, steps=4)
+            page2.mouse.up()
+            page2.wait_for_timeout(350)
+            bounced = page2.evaluate("""() => ({
+              open: !document.getElementById('layer2').hidden,
+              transformCleared: !document.getElementById('layer2').style.transform })""")
+            check('sheet drag below threshold bounces back and stays open',
+                  bounced['open'] and bounced['transformCleared'], bounced)
+            ctx2.close()
             check('metric table retains zero and Arabic state', '0 (صفر)' in page.locator('#metric table').inner_text())
             # مسارات كانت مكسورة بكشوفها ESLint no-undef (قرار المالك بعد مراجعة c573118)
             circles_text = page.locator('#circles').inner_text()
@@ -164,6 +244,71 @@ def main():
             summary = page.locator('#filters [data-filter-summary]').inner_text()
             check('filter panel change updates summary (no-undef target path)',
                   'الجاري' in summary, summary)
+            # T4 (N-D10): enterkeyhint افتراضي في fields + Enter ينقل للحقل التالي
+            hints = page.evaluate("""() => ({
+              f1: document.getElementById('f1').getAttribute('enterkeyhint'),
+              f2: document.getElementById('f2').getAttribute('enterkeyhint'),
+              f3: document.getElementById('f3').getAttribute('enterkeyhint'),
+              f4: document.getElementById('f4').getAttribute('enterkeyhint') })""")
+            check('enterkeyhint defaults: next/search computed, consumer value preserved',
+                  hints['f1'] == 'next' and hints['f2'] == 'next' and hints['f3'] == 'search' and hints['f4'] == 'done', hints)
+            page.evaluate("document.getElementById('f1').focus()")
+            page.keyboard.press('Enter')
+            moved = page.evaluate("document.activeElement === document.getElementById('f2')")
+            check('Enter on a next field moves focus to the following field', moved)
+            # T4 (N-D8): زر الرجوع يغلق الطبقة العليا ويعيد التركيز
+            page.evaluate("window.__back = MicroBack.bindBackToLayers()")
+            page.evaluate("history.replaceState({mark: 'ref'}, '')")
+            page.locator('#opener').click()
+            page.wait_for_timeout(120)
+            page.locator('#opener2').click()
+            page.wait_for_timeout(120)
+            nested = page.evaluate("window.__back.openCount()")
+            page.evaluate("history.back()")
+            page.wait_for_timeout(300)
+            after_first_back = page.evaluate("""() => ({
+              count: window.__back.openCount(),
+              layer1: !document.getElementById('layer').hidden,
+              layer2: !document.getElementById('layer2').hidden,
+              focusInLayer1: document.getElementById('layer').contains(document.activeElement) })""")
+            check('back closes the top layer only (nested order) and refocus stays inside parent',
+                  nested == 2 and after_first_back['count'] == 1 and after_first_back['layer1'] and not after_first_back['layer2'] and after_first_back['focusInLayer1'],
+                  {'nested': nested, 'after': after_first_back})
+            page.evaluate("history.back()")
+            page.wait_for_timeout(300)
+            after_second = page.evaluate("""() => ({
+              count: window.__back.openCount(),
+              focus: document.activeElement === document.getElementById('opener') })""")
+            check('back again closes the parent and refocuses its opener',
+                  after_second['count'] == 0 and after_second['focus'], after_second)
+            # الإغلاق بالزر لا يترك حالة سجل زائدة
+            page.locator('#opener').click()
+            page.wait_for_timeout(120)
+            opened_state = page.evaluate("!!(history.state && history.state.__microBack)")
+            page.locator('#layer [data-layer-close]').click()
+            page.wait_for_timeout(300)
+            consumed = page.evaluate("history.state && history.state.mark === 'ref'")
+            check('closing by button consumes the pushed history state (no leftovers)',
+                  opened_state and consumed, {'opened': opened_state, 'consumed': consumed})
+            # destroy() يزيل كل شيء
+            page.evaluate("window.__back.destroy()")
+            page.locator('#opener').click()
+            page.wait_for_timeout(150)
+            no_write = page.evaluate("history.state && history.state.mark === 'ref' && window.__back.openCount() === 0")
+            page.locator('#layer [data-layer-close]').click()
+            page.wait_for_timeout(200)
+            check('destroy() removes the binding — opening writes no history', no_write)
+            # T4 (N-D7): haptics معطل افتراضيًا ولا يهتز مع تقليل الحركة (هذه الصفحة reduce)
+            reduced = page.evaluate("""() => {
+              window.__vibes = [];
+              Object.defineProperty(Navigator.prototype, 'vibrate', {
+                value: (ms) => { window.__vibes.push(ms); return true; },
+                writable: true, configurable: true });
+              const enabledResult = MicroHaptics.setHaptics(true);
+              const pulseResult = MicroHaptics.pulse('confirm');
+              return { enabledResult, pulseResult, vibes: window.__vibes.length };
+            }""")
+            check('haptics: pulse is suppressed under prefers-reduced-motion', reduced['pulseResult'] is False and reduced['vibes'] == 0, reduced)
             page.evaluate("document.documentElement.dir='rtl'")
             page.locator('#metric').screenshot(path=str(out / 'signed-table.png'))
             page.clock.install()

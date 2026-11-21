@@ -46,12 +46,22 @@ def load_allowlist():
     return {entry["page"]: entry for entry in data.get("pages", [])}
 
 
-def diff_ratio(current: Path, reference: Path):
-    """Return (ratio_of_differing_pixels, total_pixels) or ('size', None)."""
+def diff_ratio(current: Path, reference: Path, allowed_entry=None):
+    """Return (ratio_of_differing_pixels, total_pixels) or ('size', None).
+
+    الجولة الثالثة (N-D13): صفحة مصرّح عنها بـ"allowSize": true تغيّر
+    ارتفاعها مشروعًا (قسم عائلة جديد يفرضه الكتالوج مثلًا) — تُقارن على
+    المنطقة المشتركة بفساد سقف 15% نفسه؛ غير المصرّحة يفشلها تغيّر
+    الحجم دائمًا كما كان (D12)."""
     a = Image.open(current).convert("RGB")
     b = Image.open(reference).convert("RGB")
     if a.size != b.size:
-        return "size", None
+        if not (allowed_entry and allowed_entry.get("allowSize")):
+            return "size", None
+        width = min(a.size[0], b.size[0])
+        height = min(a.size[1], b.size[1])
+        a = a.crop((0, 0, width, height))
+        b = b.crop((0, 0, width, height))
     total = a.size[0] * a.size[1]
     diff = ImageChops.difference(a, b)
     if diff.getbbox() is None:
@@ -150,15 +160,16 @@ def main():
             report["new"].append(rel)
             continue
         report["compared"] += 1
-        ratio, _total = diff_ratio(current_dir / info["file"],
-                                   baseline_dir / baseline_manifest[rel]["file"])
         allowed_entry = allowlist.get(rel)
+        ratio, _total = diff_ratio(current_dir / info["file"],
+                                   baseline_dir / baseline_manifest[rel]["file"],
+                                   allowed_entry)
         if ratio == "size":
             report["failed"] += 1
             report["failures"].append({"page": rel, "reason": "size-mismatch"})
         elif ratio <= TOLERANCE:
             report["passed"] += 1
-        elif allowed_entry is not None and ratio <= ALLOWED_MAX:
+        elif allowed_entry is not None and ratio <= float(allowed_entry.get("maxPercent", 15)) / 100:
             report["allowed"] += 1
             report["allowedDifferences"].append(
                 {"page": rel, "percent": round(ratio * 100, 4),
@@ -189,8 +200,9 @@ def main():
     for rel in report["deleted"]:
         print(f"    deleted: {rel}")
     for entry in report["allowedDifferences"]:
+        cap = allowlist.get(entry["page"], {}).get("maxPercent", 15)
         print(f"    allowed difference: {entry['page']} "
-              f"({entry['percent']}% <= 15%, {entry['decision']})")
+              f"({entry['percent']}% <= {cap}%, {entry['decision']})")
     for failure in report["failures"]:
         if failure.get("reason") == "size-mismatch":
             print(f"    FAIL {failure['page']}: size mismatch")

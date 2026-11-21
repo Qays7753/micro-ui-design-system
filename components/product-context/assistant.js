@@ -153,7 +153,7 @@ export function render(ctx) {
   }
 
   var composer = node('div', 'm-product__section m-assistant__composer');
-  var input = ctx.field(composer, 'message', L('assistant.messageField'), { multiline: true, rows: 1 });
+  var input = ctx.field(composer, 'message', L('assistant.messageField'), { multiline: true, rows: 1, enterKeyHint: 'send' });
   ctx.button(composer, 'send', L('assistant.sendAction'), function () { return ctx.fieldsPayload(['message']); }, { primary: true, disabled: !!model.replyPending });
   root.appendChild(composer);
 

@@ -1,5 +1,7 @@
 # حالة المكتبة — Micro UI
 
+أنماط الشاشات المعيارية وتغطيتها: [SCREEN-PATTERNS.md](SCREEN-PATTERNS.md) — عقد السلوك الأصلي: [NATIVE-BEHAVIOR.md](NATIVE-BEHAVIOR.md).
+
 ## الإصدار
 
 الحزمة `@micro/ui` إصدار `0.2.0` (Vanilla بدون إطار؛ `private: true` — لا نشر دون قرار المالك): المصدر **ES modules** في `components/` و`shared/` و`assets/`، و`dist/` بناء حتمي غير متتبع (`npm run build` / `prepare` عند التثبيت من git)، مع أنواع TypeScript لكل مدخل و`examples/esm-app` و`examples/vanilla-app` — التفاصيل في [CHANGELOG.md](../CHANGELOG.md) و[GETTING-STARTED.md](GETTING-STARTED.md) و[API.md](API.md) و[LABELS.md](LABELS.md). مسار التحقق الواحد: `npm ci && uv sync && uv run python tools/check-all.py && npm run typecheck` (**26 بوابة**، منها package-install وlabels-override والبصرية مقابل `v0.1.0` من git).

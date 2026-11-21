@@ -651,6 +651,25 @@
         "navigation"
       ],
       "api": "MicroProduct"
+    },
+    {
+      "id": "error-retry",
+      "contract": "C15",
+      "name": "Error state with retry",
+      "maturity": "draft-for-review",
+      "preview": "previews/compositions/error-retry-example.html",
+      "source": [
+        "components/compositions/error-retry.css"
+      ],
+      "baseFamilies": [
+        "screen",
+        "buttons"
+      ],
+      "optionalFamilies": [
+        "navigation",
+        "messages"
+      ],
+      "api": null
     }
   ]
 }

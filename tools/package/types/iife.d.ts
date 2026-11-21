@@ -28,6 +28,8 @@ import type * as Readings from './readings';
 import type * as Product from './product';
 import type * as Icons from './icons';
 import type * as Labels from './labels';
+import type * as Back from './back';
+import type * as Haptics from './haptics';
 
 type MicroButtonsGlobal = typeof Buttons & {
   /** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
@@ -178,6 +180,8 @@ declare global {
     MicroReadings: MicroReadingsGlobal;
     MicroProduct: typeof Product;
     MicroIcons: MicroIconsGlobal;
+    MicroBack: typeof Back;
+    MicroHaptics: typeof Haptics;
     MicroLabels: MicroLabelsGlobal;
     MicroConfig: MicroConfig;
   }
@@ -202,6 +206,8 @@ declare global {
   const MicroReadings: MicroReadingsGlobal;
   const MicroProduct: typeof Product;
   const MicroIcons: MicroIconsGlobal;
+  const MicroBack: typeof Back;
+  const MicroHaptics: typeof Haptics;
   const MicroLabels: MicroLabelsGlobal;
   const MicroConfig: MicroConfig;
 }
