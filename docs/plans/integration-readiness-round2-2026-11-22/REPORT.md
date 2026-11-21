@@ -202,3 +202,13 @@
 ## R8 — توثيق وإصدار 0.2.0 — **مغلقة**
 
 CHANGELOG 0.2.0 كامل (Breaking: ESM/dist غير متتبع/مسارات IIFE/مفاتيح دلالية/حذف التخزين/lifecycle الموحد؛ Added: الأنواع/package-install/esm-app/labels لكل instance/LABELS.md/visual من git ref/فحوص R-D11؛ Fixed: concepts والفحوص الكاتبة داخل المستودع واجتثاث التسجيل وعقد SPA؛ Deprecated: مهملات IIFE). STATUS 0.2.0 (26 بوابة)، README (الحالة والفحوص)، AGENTS (البوابات: npm ci + check-all + typecheck + manifest — بلا مساس بالثوابت)، API.md قسم النصوص يربط LABELS.md، GETTING-STARTED يربط LABELS.md. package.json 0.2.0 منذ R2. link-check 139/0.
+
+## حالة التحقق الختامية عند 45f628c (2026-11-22 — إيقاف مؤقت بداعي الميزانية)
+
+R0–R4 مغلقة بالأدلة (أعلاه). **R5–R8 منفذة بالكامل ومرفوعة في `45f628c`** (التنفيذ + التوثيق + الأدلة الفردية: labels-override 37/0، product-context 301/0، audit 67/0، light-data 185/0، labels-doc مطابق، hardcoded-text 447 مفتاحًا، package/typecheck ناجحان) — لكن **لم تُعلن مغلقة بعد** لأن التشغيل الكامل الأخير أظهر **3 أعطال متبقية يجب إصلاحها قبل الإغلاق**:
+
+1. **visual-regression:** أداة الالتاط تخرج بخطأ `scroll_into_view: Timeout 5000ms` على صفحة واحدة من 63 (كل الصفحات التُقطت؛ الخطأ يجهض المقارنة). الصفحة غير محددة بعد — شغّل `uv run python tools/visual-regression-check.py --out /tmp/vr` وراقب أول صفحة لا تُطبع `captured <page>` قبل الـTraceback.
+2. **api-lifecycle 192/1:** فحص «f: setLabels ثم update...» كان يستخدم مفتاح `k9` القديم — **صُحح إلى `bars.rangeError`** (في 45f628c) ولم يُع تشغيله بعدها للتحقق.
+3. **component-consumption 36/1:** عطل واحد غير مشخص بعد (الاسم في مخرجات البوابة؛ شغّلها منفردة).
+
+**R9 لم تبدأ** (نسخة نظيفة + وسم v0.2.0 + القسم الختامي وجدول F1–F10 النهائي). ترتيب الاستكمال: إصلاح الثلاثة أعلاه ← check-all كاملة 25/25 ← إغلاق R5–R8 في هذا التقرير بالأدلة ← R9 (استنساخ نظيف + uv sync + npm ci + check-all + typecheck ← وسم v0.2.0 ودفع الوسم ← القسم الختامي: ما يبقى على المالك [نقل tools/ci/ci.yml، الاعتماد البصري، اختبار Samsung Galaxy S25، قرار النضج، إطار التطبيق، الدمج، حذف الفروع القديمة ccr-1bbe1186-fys05f وreview/component-readiness-20261117 وfeature/google-only-access-gateway-2026-11-18]، لا PR ولا دمج).
