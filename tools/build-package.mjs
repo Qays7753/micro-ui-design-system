@@ -384,8 +384,8 @@ function buildAssets(distDir) {
 }
 
 function buildTypes(distDir) {
-  // الأنواع من tools/package/types (R3)؛ مجلد المصدر قد لا يوجد بعد
-  // تشغيل R2 وحده — يتحقق --check من اكتمالها بعد R3.
+  // الأنواع من tools/package/types (R3): ملف لكل مدخل + iife.d.ts —
+  // يتحقق --check من اكتمالها لكل مدخل.
   const typesDir = path.join(ROOT, "tools", "package", "types");
   if (!statSync(typesDir, { throwIfNoEntry: false })) return 0;
   let count = 0;
@@ -410,6 +410,11 @@ async function buildDistInto(distDir) {
   const entryDir = path.join(ROOT, "tools", "package", ".build-entries");
   rmSync(entryDir, { recursive: true, force: true });
   mkdirSync(entryDir, { recursive: true });
+  /* حصانة البناء من اكتشاف tsconfig: esbuild يبحث عن أقرب tsconfig.json
+     فوق ملف المدخل ويطبّق خياراته (مثل alwaysStrict من strict) على مخرجات
+     IIFE، فتتغير البايتات بوجود tools/package/tsconfig.json (R3). ملف فارغ
+     داخل مجلد المداخل يثبت السلوك على الافتراضي مهما أضيف حوله. */
+  writeFileSync(path.join(entryDir, "tsconfig.json"), "{}\n", "utf8");
   try {
     const esmFiles = await buildEsm(distDir, entryDir);
     const iifeFiles = await buildIife(distDir, entryDir);
@@ -443,6 +448,11 @@ async function verify(distDir) {
     if (!statSync(iifePath, { throwIfNoEntry: false })) {
       problems.push(`iife/${spec.entry}.js: missing`);
     }
+    // R3: لكل مدخل ملف أنواع مطابق في dist/types.
+    const typesPath = path.join(distDir, "types", `${spec.entry}.d.ts`);
+    if (!statSync(typesPath, { throwIfNoEntry: false })) {
+      problems.push(`types/${spec.entry}.d.ts: missing`);
+    }
     try {
       const imported = await import(`file://${esmPath}`);
       const names = Object.keys(imported).sort();
@@ -465,7 +475,7 @@ async function verify(distDir) {
     }
   }
   // الملفات الأساسية.
-  for (const rel of ["css/micro-ui.css", "css/styles.css", "MANIFEST.json"]) {
+  for (const rel of ["css/micro-ui.css", "css/styles.css", "MANIFEST.json", "types/iife.d.ts"]) {
     if (!statSync(path.join(distDir, rel), { throwIfNoEntry: false })) {
       problems.push(`${rel}: missing`);
     }
@@ -494,7 +504,7 @@ async function main() {
       for (const line of problems.slice(0, 50)) console.error("  " + line);
       process.exit(1);
     }
-    console.log(`package check: OK (${ENTRIES.length} entries build, ESM exports verified, no side effects at import)`);
+    console.log(`package check: OK (${ENTRIES.length} entries build, ESM exports verified, no side effects at import, types for every entry)`);
     return 0;
   }
   const { files, esmFiles, iifeFiles, cssFiles } = await buildDistInto(DIST);

@@ -36,7 +36,8 @@
 | `build-ui-system-showcase-standalone.py` | توليد `previews/ui-system-showcase/standalone.html`؛ وضع `--check` يتحقق أن الملف المولّد مطابق حرفيًا (بوابة داخل `check-all`). |
 | `component-catalog-build.py` | اشتقاق جرد المكونات من الكتالوج؛ `--check` (بوابة داخل `check-all`). |
 | `manifest-build.py` | بصمات sha256 لملفات التسليم في `MANIFEST.json`؛ `--check` (بوابة داخل `check-all`). |
-| `build-package.mjs` | أداة بناء حزمة `@micro/ui` (Node): بلا وسائط يزامن مرايا `src/` ويولّد `dist/` حتميًا مع `dist/MANIFEST.json`؛ `--check` بوابة مقارنة بايت-ببايت. مصدر التعريفات `tools/package/micro-ui.d.ts`. |
+| `build-package.mjs` | أداة بناء حزمة `@micro/ui` (Node): بلا وسائط تبني `dist/` من المصدر ESM حتميًا (esm/iife/css/assets/types) مع `dist/MANIFEST.json`؛ `--check` بوابة: بناء نظيف + كل مدخل موجود + صادرات ESM متحققة + استيراد Node بلا أثر جانبي + أنواع لكل مدخل. الأنواع في `tools/package/types/` (ملف لكل مدخل + `iife.d.ts`). |
+| `package-install-check.mjs` | بوابة package-install (R3): `npm pack` + تثبيت في مشروع مؤقت + استيراد كل مدخل تحت Node بلا DOM + أهداف exports و`import.meta.resolve` + `tsc --noEmit` ضد الحزمة المثبتة + فحص متصفح Chromium (importmap وinit يدوي) + تثبيت من git يبني `dist/` عبر `prepare`. |
 | `preview-server.py` | خادم المعاينة على المنفذ 5000؛ `check-all` يشغّله تلقائيًا للبوابات التي تحتاجه. |
 | `visual-baseline-capture.py` | التقاط لقطات 360×780 RTL Light لكل صفحة؛ `--root` لتصوير شجرة أخرى (مثل worktree المرجع) و`--base-url` لخادم قائم — تُستخدمها بوابة D12 لتصوير المرجع والحالي بالأداة نفسها. |
 | `browser_support.py` | وحدة مساعدة لخيارات إطلاق Chromium (تستوردها البوابات). |

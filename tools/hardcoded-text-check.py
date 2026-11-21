@@ -18,11 +18,11 @@
 3) تغطية المفاتيح: كل L('key') في JS العائلة يجب أن يكون له مفتاح
    في labels.js المقابل.
 
-4) تغطية .d.ts (الجولة الثانية): المصدر لم يعد ينشر window.Micro*
-   (الغلوبالات تُنشئها مداخل IIFE المولدة — R-D3)، فالفحص هنا يتحقق
-   من صادرات كل مدخل ESM مبنى مقابل الأنواع في tools/package/types/
-   (R3)؛ قبل توفر الأنواع يبقى القسم فحص غلوبالات المصدر كما كان
-   (صفرًا بطبيعته بعد R2).
+4) تغطية الأنواع (الجولة الثانية R3): المصدر لم يعد ينشر window.Micro*
+   (الغلوبالات تُنشئها مداخل IIFE المولدة — R-D3، والفحص القديم عليها
+   صفر بطبيعته فحُذف)، فالفحص هنا يتحقق من صادرات كل مدخل ESM مبني
+   مقابل الأنواع في tools/package/types/ (بديل micro-ui.d.ts القديم:
+   ملف لكل مدخل + iife.d.ts للغلوبالات).
 """
 import re
 import subprocess
@@ -30,7 +30,6 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DTS = ROOT / 'tools/package/micro-ui.d.ts'
 TYPES_DIR = ROOT / 'tools/package/types'
 ESM_DIR = ROOT / 'dist/esm'
 AR = re.compile(r'[\u0600-\u06FF]')
@@ -190,66 +189,18 @@ def strip_comments(src):
             i += 1
     return ''.join(out)
 
-def top_level_keys(body):
-    """مفاتيح المستوى الأعلى فقط لكائن JS حرفي.
-
-    النمط الساذج ((?:^|,)\\s*key:) كان يلتقط المفاتيح المتداخلة —
-    خيارات مثل { trigger: …, backdropEl: … } داخل جسم تابع أو بين
-    أقواس استدعاء — فتُحسب واجهة عامة وهي ليست كذلك. هنا يُحسب عمق
-    الأقواس مع تخطي السلاسل النصية (تُوسم بعمق -1 فلا تُطابق)، ولا
-    يقبل المفتاح إلا عند العمق 0 مسبوقًا بفاصل المستوى الأعلى.
-    """
-    dep = []
-    d = 0
-    i = 0
-    n = len(body)
-    while i < n:
-        c = body[i]
-        if c in '\'"`':
-            j = i + 1
-            while j < n:
-                if body[j] == '\\':
-                    j += 2
-                    continue
-                if body[j] == c:
-                    break
-                j += 1
-            dep.extend([-1] * (min(j + 1, n) - i))
-            i = j + 1
-            continue
-        if c in '([{':
-            dep.append(d)
-            d += 1
-        elif c in ')]}':
-            d -= 1
-            dep.append(d)
-        else:
-            dep.append(d)
-        i += 1
-    keys = []
-    for km in re.finditer(r'([A-Za-z_$][A-Za-z0-9_$]*)\s*:', body):
-        s = km.start(1)
-        if dep[s] != 0:
-            continue
-        prev = body[:s].rstrip()
-        if prev and not prev.endswith(','):
-            continue
-        keys.append(km.group(1))
-    return keys
-
-
-# ---- 4) تغطية الأنواع (الجولة الثانية) ----
+# ---- 4) تغطية الأنواع (الجولة الثانية R3) ----
 # بعد R2 لا ينشر المصدر window.Micro* (الغلوبالات تُنشئها مداخل IIFE
-# المولدة)، ففحص الغلوبالات على المصدر صفر بطبيعته. عند توفر الأنواع
-# في tools/package/types (R3) يُفحص كل مدخل ESM مبني: كل اسم مصدَّر في
-# dist/esm/<entry>.js يجب أن يظهر في tools/package/types/<entry>.d.ts.
-dts_text = DTS.read_text() if DTS.exists() else ''
-interfaces = dict(re.findall(r'interface (Micro\w+Api) \{(.*?)\n\}', dts_text, re.S))
-public_fns = 0
+# المولدة — R-D3)، فالفحص القديم على غلوبالات المصدر كان صفرًا بطبيعته
+# وحُذف. هنا يُفحص كل مدخل ESM مبني: كل اسم مصدَّر في dist/esm/<entry>.js
+# يجب أن يظهر في tools/package/types/<entry>.d.ts.
 esm_exports_checked = 0
 if TYPES_DIR.is_dir() and ESM_DIR.is_dir():
     for types_file in sorted(TYPES_DIR.glob('*.d.ts')):
-        entry = types_file.stem
+        # stem على "buttons.d.ts" يعيد "buttons.d" (يزيل اللاحقة الأخيرة
+        # فقط) — القص الصريح هو الصحيح؛ هذا الخلل كان كامنًا لأن القسم
+        # لم يُفعَّل قبل توفر الأنواع في R3.
+        entry = types_file.name[:-len('.d.ts')]
         esm_file = ESM_DIR / (entry + '.js')
         if not esm_file.is_file():
             continue
@@ -270,52 +221,9 @@ if TYPES_DIR.is_dir() and ESM_DIR.is_dir():
             esm_exports_checked += 1
             if not re.search(r'\b%s\b' % re.escape(name), strip_comments(types_src)):
                 violations.append('types-coverage: dist/esm/%s.js يصدّر %s بلا ذكر في types/%s.d.ts' % (entry, name, entry))
-for rel in sorted(set(sum(family_js.values(), []) + ls_files('components', 'shared'))):
-    if not rel.endswith('.js') or rel.endswith('/labels.js'):
-        continue
-    src = strip_comments((ROOT / rel).read_text())
-    for m in re.finditer(r'window\.(Micro[A-Za-z]+)\s*=\s*\{', src):
-        i = m.end() - 1
-        depth = 0
-        while i < len(src):
-            c = src[i]
-            if c in '\'"`':
-                j = i + 1
-                while j < len(src):
-                    if src[j] == '\\':
-                        j += 2
-                        continue
-                    if src[j] == c:
-                        break
-                    j += 1
-                i = j + 1
-                continue
-            if c == '{':
-                depth += 1
-            elif c == '}':
-                depth -= 1
-                if depth == 0:
-                    break
-            i += 1
-        body = src[m.end():i]
-        for name in top_level_keys(body):
-            if name.startswith('_'):
-                continue
-            public_fns += 1
-            block = interfaces.get(m.group(1) + 'Api')
-            if block is None or not re.search(r'\b%s\b' % re.escape(name), block):
-                violations.append('dts-coverage: %s ينشر %s.%s بلا ذكر في micro-ui.d.ts' % (rel, m.group(1), name))
-    for m in re.finditer(r'window\.(Micro[A-Za-z]+)\.([A-Za-z_][A-Za-z0-9_]*)\s*=(?![=>])', src):
-        name = m.group(2)
-        if name.startswith('_'):
-            continue
-        public_fns += 1
-        block = interfaces.get(m.group(1) + 'Api')
-        if block is None or not re.search(r'\b%s\b' % re.escape(name), block):
-            violations.append('dts-coverage: %s ينشر %s.%s بلا ذكر في micro-ui.d.ts' % (rel, m.group(1), name))
 
-print('hardcoded-text: %d ملف JS مفحوص، %d سلسلة نصية، %d عائلة (استيراد labels)، %d مفتاح L()، %d صادر ESM مقابل الأنواع، %d دالة غلوبال مقابل d.ts'
-      % (files_scanned, strings_checked, imports_checked, keys_checked, esm_exports_checked, public_fns))
+print('hardcoded-text: %d ملف JS مفحوص، %d سلسلة نصية، %d عائلة (استيراد labels)، %d مفتاح L()، %d صادر ESM مقابل الأنواع'
+      % (files_scanned, strings_checked, imports_checked, keys_checked, esm_exports_checked))
 if violations:
     for v in violations:
         print(v)

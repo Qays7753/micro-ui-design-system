@@ -47,6 +47,13 @@ def collect_pages(tree_root: Path):
             rel = path.relative_to(tree_root).as_posix()
             if rel not in pages:
                 pages.append(rel)
+    # R3.4 (الجولة الثانية): مثال ESM تحت عقد البوابة البصرية — صفحة جديدة
+    # بلا مرجع عند v0.1.0 فتُبلَّغ «جديدة» ولا تُقارن (مسموح بالخطة).
+    # vanilla-app خارج العقد البصري؛ لا يُضاف هنا إلا ما أضافته الخطة صراحة.
+    for path in sorted((tree_root / "examples" / "esm-app").glob("*.html")):
+        rel = path.relative_to(tree_root).as_posix()
+        if rel not in pages:
+            pages.append(rel)
     return sorted(set(pages))
 
 

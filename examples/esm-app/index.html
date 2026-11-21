@@ -1,0 +1,142 @@
+<!doctype html>
+<!-- مثال ESM (الجولة الثانية R3.4): استهلاك الحزمة بوحدات ES عبر importmap
+     إلى dist/esm المبنية — بلا bundler وبلا غلوبالات window.Micro*.
+     شاشة: Buttons وFields وNavigation وتركيب C14 (سجل عمليات Manage) عبر
+     مدخل product، مع init يدوي وdestroy عند زر «إزالة التركيب» لإثبات دورة
+     SPA (تركيب/إزالة/إعادة تركيب). الإعداد الكامل في docs/GETTING-STARTED.md. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مثال ESM — Micro UI</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../dist/css/styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "@micro/ui/buttons": "../../dist/esm/buttons.js",
+      "@micro/ui/fields": "../../dist/esm/fields.js",
+      "@micro/ui/navigation": "../../dist/esm/navigation.js",
+      "@micro/ui/product": "../../dist/esm/product.js"
+    }
+  }
+  </script>
+  <style>
+    body { margin: 0; background: var(--micro-color-bg-canvas, #F6F5F2); }
+    .esm-page { max-width: 430px; margin: 0 auto; padding: 16px 16px 32px; display: grid; gap: 16px; }
+    .esm-page h1 { font-size: 18px; margin: 8px 0 0; }
+    .esm-section { display: grid; gap: 12px; }
+    .esm-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .esm-status { font-size: 13px; color: var(--micro-color-ink-soft, #5B5A57); min-height: 20px; }
+  </style>
+</head>
+<body>
+<main class="esm-page">
+  <h1>مثال ESM — استيراد الوحدات مباشرة</h1>
+
+  <section class="esm-section" aria-label="أزرار وحقول">
+    <div class="esm-actions">
+      <button class="m-btn m-btn--primary" id="esm-send" type="button" data-loading-label="جارٍ الإرسال…">إرسال الطلب</button>
+      <button class="m-btn m-btn--secondary" id="esm-open-layer" type="button">فتح الطبقة</button>
+      <button class="m-btn m-btn--secondary" id="esm-remove" type="button" hidden>إزالة التركيب</button>
+      <button class="m-btn m-btn--secondary" id="esm-remount" type="button" hidden>إعادة التركيب</button>
+    </div>
+    <div class="m-field" data-micro-field>
+      <label class="m-field__label" for="esm-note">ملاحظة الطلب</label>
+      <div class="m-field__control">
+        <input class="m-field__input" id="esm-note" type="text" value="توصيل قبل المغرب" maxlength="60">
+        <button type="button" class="m-btn m-btn--icon m-btn--secondary m-field__clear" aria-label="مسح"></button>
+      </div>
+      <p class="m-field__msg" data-field-msg hidden>رسالة الحقل</p>
+      <span class="m-field__count" aria-hidden="true"></span>
+    </div>
+    <p class="esm-status" id="esm-status">التركيب C14 مثبت عبر init يدوي — لا تهيئة تلقائية في ESM.</p>
+  </section>
+
+  <section class="esm-section" aria-label="سجل العمليات">
+    <div id="product-root"></div>
+  </section>
+
+  <div class="m-layer-backdrop" data-for="esm-layer" hidden></div>
+  <div class="m-layer" id="esm-layer" role="dialog" aria-modal="true" aria-labelledby="esm-layer-title" data-backdrop="close" hidden>
+    <div class="m-layer__head">
+      <span class="m-layer__title" id="esm-layer-title">تفاصيل المثال</span>
+      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-layer-close aria-label="إغلاق"></button>
+    </div>
+    <div class="m-layer__body"><p>طبقة Navigation مفتوحة من الوحدة المستوردة — عزل الخلفية وحصر التركيز.</p></div>
+    <div class="m-layer__foot"><button type="button" class="m-btn m-btn--secondary" data-layer-close>إغلاق</button></div>
+  </div>
+</main>
+
+<script type="module">
+  import { init as initButtons, setLoading } from '@micro/ui/buttons';
+  import { init as initFields } from '@micro/ui/fields';
+  import { init as initNavigation, openLayer } from '@micro/ui/navigation';
+  import { mount } from '@micro/ui/product';
+
+  /* init يدوي لكل عائلة (R-D2: لا تهيئة تلقائية في ESM). */
+  initButtons(document);
+  initFields(document);
+  initNavigation(document);
+
+  const scope = {
+    contextId: 'owner-a', workspaceId: 'workshop-a', roleId: 'owner', kind: 'business',
+    label: 'ورشة الشروق · صاحب مشروع',
+  };
+  const model = {
+    type: 'manage', scope: scope, dataContext: scope, phase: 'ready',
+    connection: 'online', destination: 'manage',
+    permissions: ['view', 'compose', 'reauth', 'recheck', 'add-operation', 'retry'],
+    revision: 'esm-app-r1', unit: 'د.أ',
+    requiredFields: ['amount', 'type', 'date'],
+    summary: [
+      { label: 'إجمالي المبيعات', value: '1150' },
+      { label: 'إجمالي المصاريف', value: '280' },
+      { label: 'صافي الفترة', value: '870' },
+    ],
+    operations: [
+      { id: 'op-1', type: 'sale', amount: '150', date: '2026-11-19', description: 'طقم صابون — عميل عمّان' },
+      { id: 'op-2', type: 'expense', amount: '40', date: '2026-11-18', description: 'مواد تغليف' },
+      { id: 'op-3', type: 'sale', amount: '95', date: '2026-11-17', description: 'شموع معطرة — طلب حفل' },
+    ],
+  };
+
+  const root = document.querySelector('#product-root');
+  const status = document.querySelector('#esm-status');
+  const removeBtn = document.querySelector('#esm-remove');
+  const remountBtn = document.querySelector('#esm-remount');
+  let instance = null;
+
+  function mountProduct() {
+    /* R3: التركيب عبر mount (init(root, model) الموحد يضاف في R4). */
+    instance = mount(root, 'manage', model);
+    removeBtn.hidden = false;
+    remountBtn.hidden = true;
+    status.textContent = 'التركيب C14 مثبت — «إزالة التركيب» تستدعي destroy ثم يُعاد التركيب من جديد.';
+  }
+
+  document.querySelector('#esm-send').addEventListener('click', function () {
+    /* مظاهرة Buttons: حراسة التحميل يربطها init، والحالة قرار المستهلك. */
+    setLoading(this, true);
+    setTimeout(() => setLoading(this, false), 600);
+  });
+  document.querySelector('#esm-open-layer').addEventListener('click', function () {
+    openLayer(document.querySelector('#esm-layer'), { trigger: this });
+  });
+  removeBtn.addEventListener('click', function () {
+    if (instance) instance.destroy();  /* دورة SPA: إزالة نظيفة بلا بقايا مستمعات */
+    instance = null;
+    removeBtn.hidden = true;
+    remountBtn.hidden = false;
+    status.textContent = 'أُزيل التركيب (destroy) — لا محتوى ولا مستمعات متبقية.';
+  });
+  remountBtn.addEventListener('click', mountProduct);
+  root.addEventListener('micro-product:intent', function (event) {
+    /* المستهلك يستلم النية ويردّ بresolve أو replace — لا فعل تلقائي هنا. */
+    status.textContent = 'استلم المستهلك نية «' + event.detail.action + '»؛ لا تغيير مالي تلقائي.';
+  });
+
+  mountProduct();
+</script>
+</body>
+</html>

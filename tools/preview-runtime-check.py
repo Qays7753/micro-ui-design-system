@@ -135,6 +135,45 @@ def main():
         print("concepts-footer", 360, "rtl",
               "PASS" if footer_links_ok and footer_targets_ok else "FAIL", footer_resolved)
         page.close()
+        # R3.4 (الجولة الثانية): مثال ESM — استيراد الوحدات عبر importmap مع
+        # init يدوي ودورة SPA (destroy ثم إعادة تركيب): صفر أخطاء، صفر موارد
+        # فاشلة، والمكونات مرسومة فعلًا من dist/esm.
+        page = browser.new_page(viewport={"width": 360, "height": 780})
+        page.add_init_script(INSTRUMENT)
+        page_errors = []
+        page.on("pageerror", lambda error, errors=page_errors: errors.append(str(error)))
+        page.goto(args.base.rstrip("/") + "/examples/esm-app/index.html", wait_until="load")
+        page.evaluate("document.fonts.ready")
+        page.wait_for_timeout(300)
+        mounted = page.evaluate("""() => ({
+          button: !!document.querySelector('.m-btn'),
+          field: !!document.querySelector('.m-field__control'),
+          product: document.querySelector('#product-root').classList.contains('m-product')
+            && document.querySelector('#product-root').children.length > 0,
+        })""")
+        page.click("#esm-remove")
+        page.wait_for_timeout(150)
+        destroyed = page.evaluate(
+            "() => document.querySelector('#product-root').children.length === 0")
+        page.click("#esm-remount")
+        page.wait_for_timeout(150)
+        remounted = page.evaluate(
+            "() => document.querySelector('#product-root').children.length > 0")
+        esm_errors = page.evaluate("__previewErrors") + page_errors
+        esm_resources = page.evaluate("__previewResourceErrors")
+        esm_checks = {
+            "esm_app_components_mounted": all(mounted.values()),
+            "esm_app_destroy_clears_dom": destroyed,
+            "esm_app_remount_restores": remounted,
+            "esm_app_no_errors": not esm_errors,
+            "esm_app_no_resource_errors": not esm_resources,
+        }
+        results.append({"version": "esm-app", "width": 360, "dir": "rtl",
+                        "checks": esm_checks, "errors": esm_errors,
+                        "resource_errors": esm_resources})
+        print("esm-app", 360, "rtl",
+              "PASS" if all(esm_checks.values()) else "FAIL", esm_errors)
+        page.close()
         browser.close()
     passed = sum(sum(case["checks"].values()) for case in results)
     total = sum(len(case["checks"]) for case in results)

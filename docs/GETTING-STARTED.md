@@ -1,89 +1,112 @@
 # البدء — Micro UI
 
-مكتبة Vanilla (بدون إطار) للهاتف العربي RTL، Light-only، صفر اعتماديات تشغيل. الحزمة `@micro/ui` 0.1.0 **خاصة** (`"private": true`) — لا نشر على npm دون قرار المالك (D9)؛ الاستهلاك عبر git. المصدر القابل للتعديل: `components/` و`shared/` و`assets/`، ومرآته المولّدة حتميًا `src/`، ومخرجات التوزيع `dist/`.
+مكتبة Vanilla (بدون إطار) للهاتف العربي RTL، Light-only، صفر اعتماديات تشغيل. الحزمة `@micro/ui` 0.2.0 **خاصة** (`"private": true`) — لا نشر على npm دون قرار المالك؛ الاستهلاك عبر git. مصدر السلوك الوحيد: **ES modules** في `components/<family>/*.js` و`shared/*.js` (R-D2)، والحزمة تُبنى حتميًا إلى `dist/` غير المتتبع (`node tools/build-package.mjs` — R-D4/D5).
 
 ## التثبيت
 
-الحزمة غير منشورة (D9)؛ الاستنساخ عبر git هو طريقة التثبيت الحالية:
+```bash
+npm install github:Qays7753/micro-ui-design-system#v0.2.0
+```
+
+سكربت `prepare` في الحزمة يبني `dist/` تلقائيًا عند التثبيت من git (يحتاج Node 20+؛ أدوات البناء devDependencies فقط: esbuild وtypescript — R-D9). أو استنسخ المستودع وابنِ يدويًا:
 
 ```bash
 git clone https://github.com/Qays7753/micro-ui-design-system.git
+node tools/build-package.mjs
 ```
 
-شجرة الحزمة المتتبعة: `src/` (مرآة بايت-ببايت للمصدر القابل للتعديل)، و`dist/` (بناء حتمي)، و`examples/` (مثال vanilla-app). لا تُعدَّل `src/` أو `dist/` يدويًا؛ عدّل `components/` و`shared/` و`assets/` ثم أعد البناء (انظر «البناء الحتمي» أدناه).
+## المداخل
 
-## الاستهلاك من dist (الحزمة)
+| المدخل | المصدر | الغلوبال في IIFE |
+|---|---|---|
+| `@micro/ui/buttons` | components/buttons/buttons.js | `MicroButtons` |
+| `@micro/ui/fields` | components/fields/fields.js | `MicroFields` |
+| `@micro/ui/selection` | components/selection/selection.js | `MicroSelection` |
+| `@micro/ui/picker` | components/selection/picker.js | `MicroPicker` |
+| `@micro/ui/organization` | components/organization/organization.js | `MicroOrganization` |
+| `@micro/ui/data` | components/data/data.js | `MicroData` |
+| `@micro/ui/packed-circle` | components/data/packed-circle.js | `MicroPacked` |
+| `@micro/ui/messages` | components/messages/messages.js | `MicroMessages` |
+| `@micro/ui/navigation` | components/navigation/navigation.js | `MicroNavigation` |
+| `@micro/ui/action-sheet` | components/navigation/action-sheet.js | `MicroActionSheet` |
+| `@micro/ui/info-strip` | components/info-strip/info-strip.js | `MicroInfoStrip` |
+| `@micro/ui/info-strip-peek` | components/info-strip/info-strip-peek.js | `MicroInfoPeek` |
+| `@micro/ui/metric-comparison` | components/metric-comparison/metric-comparison.js | `MicroMetricComparison` |
+| `@micro/ui/account-settings` | components/account-settings/account-settings.js | `MicroAccountSettings` |
+| `@micro/ui/access-gateway` | components/access-gateway/access-gateway.js | `MicroAccessGateway` |
+| `@micro/ui/carousel` | components/carousel/carousel.js | `MicroCarousel` |
+| `@micro/ui/order-schedule` | components/order-schedule/order-schedule.js | `MicroOrderSchedule` |
+| `@micro/ui/readings` | components/compositions/reading-context.js | `MicroReadings` |
+| `@micro/ui/product` | components/product-context (النواة وكل renderers) | `MicroProduct` |
+| `@micro/ui/icons` | shared/icons.js | `MicroIcons` |
+| `@micro/ui/labels` | shared/labels.js | `MicroLabels` |
 
-خرائط التصدير في `package.json` (المسارات نسبية إلى جذر الحزمة):
+CSS: `@micro/ui/styles.css` (الكل بالترتيب الموثق أدناه) أو `@micro/ui/micro-ui.css` (fonts + tokens + motion) أو `@micro/ui/<family>.css` و`@micro/ui/css/<family>/<file>.css` لملف محدد. ملفات IIFE: `@micro/ui/iife/<entry>.js`، والأصول: `@micro/ui/assets/*` و`@micro/ui/fonts/*` و`@micro/ui/icons/*`.
 
-| الاستيراد | الملف |
-|---|---|
-| `@micro/ui/css/micro-ui.css` | `dist/css/micro-ui.css` — الحزمة الشاملة: fonts ثم tokens ثم motion بسلسلة بايت-ببايت |
-| `@micro/ui/css/<family>/<file>.css` | `dist/css/<family>/<file>.css` — CSS كل عائلة والملفات المشتركة، و`dist/css/<entry>.css` ملف أساسي مسطح لكل مدخل، و`dist/css/styles.css` الكل بترتيب موثق |
-| `@micro/ui/js/<file>.js` | `dist/js/<file>.js` — نسخة esbuild (IIFE، es2019، بلا تصغير) من كل ملف JS للعائلات |
-| `@micro/ui/fonts/<file>` | `dist/fonts/` — fonts.css وملفات woff2 |
-| `@micro/ui/micro-ui.d.ts` | `dist/micro-ui.d.ts` — تعريفات TypeScript محيطية لـ`window.Micro*` |
+## الطريقة (أ) — bundler (Vite / esbuild / webpack …)
 
-ترتيب تحميل CSS إلزامي: **fonts ثم tokens ثم motion (عند الحاجة) ثم CSS العائلات المستهلكة** — الحزمة الشاملة `micro-ui.css` تغطي الثلاثة الأولى معًا، وملفات woff2 مجاورة لها فتُحلّ مسارات الخطوط كما هي:
+```js
+import { init } from '@micro/ui/buttons';
+import { init as initFields } from '@micro/ui/fields';
+import '@micro/ui/styles.css';
+
+const instance = init(document);   // init يدوي — ESM بلا تهيئة تلقائية (R-D2)
+```
+
+أنواع كل مدخل تُحل تلقائيًا من `dist/types/<entry>.d.ts` عبر `exports` — لا إعداد إضافي لـTypeScript.
+
+## الطريقة (ب) — importmap بلا bundler
+
+خريطة استيراد صريحة لكل مدخل مستهلك (لاحظ الامتداد `.js`)، والأصول تُحل نسبيًا من `dist/esm`:
 
 ```html
-<link rel="stylesheet" href="node_modules/@micro/ui/dist/css/micro-ui.css">
-<link rel="stylesheet" href="node_modules/@micro/ui/dist/css/buttons/buttons.css">
-<link rel="stylesheet" href="node_modules/@micro/ui/dist/css/fields/fields.css">
-<!-- ثم JS العائلات مرة واحدة كسكربتات عادية (plain scripts) -->
-<script src="node_modules/@micro/ui/dist/js/buttons.js"></script>
-<script src="node_modules/@micro/ui/dist/js/fields.js"></script>
+<link rel="stylesheet" href="node_modules/@micro/ui/dist/css/styles.css">
+<script type="importmap">
+{
+  "imports": {
+    "@micro/ui/buttons": "./node_modules/@micro/ui/dist/esm/buttons.js",
+    "@micro/ui/fields": "./node_modules/@micro/ui/dist/esm/fields.js",
+    "@micro/ui/product": "./node_modules/@micro/ui/dist/esm/product.js"
+  }
+}
+</script>
+<script type="module">
+  import { init } from '@micro/ui/buttons';
+  import { mount } from '@micro/ui/product';
+  init(document);
+</script>
 ```
 
-لا تغيير على طبيعة الملفات: الجولة الثانية R2: المصدر ES modules؛ `dist/iife/<entry>.js` سكربتات عادية توفر `window.Micro*` (R-D3/D10)، و`dist/esm/<entry>.js` قابلة للاستيراد (تفصيل الطرق الثلاث يُستكمل في R3.6)، والـCSS منسوخ بايت-ببايت دون أي معالجة (D15). التعريفات: `/// <reference types="@micro/ui/micro-ui.d.ts" />`.
+مثال كامل قابل للتشغيل (Buttons وFields وNavigation وتركيب C14 مع دورة destroy/remount): [examples/esm-app](../examples/esm-app/index.html) — يُقدَّم من خادم المستودع (`tools/preview-server.py` يبني الحزمة تلقائيًا عند قدمائها).
 
-## الاستهلاك من src (المرآة)
-
-`src/` مرآة مولّدة ببنية المصدر نفسها: `src/components/<family>/…` و`src/shared/…` و`src/assets/…` (باستثناء ملفات التوثيق `*.md` — روابطها نسبية لشجرة المستودع؛ توثيق الحزمة هو هذا الملف و[API.md](API.md)). استهلكها بنفس ترتيب التحميل أعلاه بمسارات المرآة — هذا ما يفعله `examples/vanilla-app/`:
+## الطريقة (ج) — سكربتات IIFE (بلا أدوات إطلاقًا)
 
 ```html
-<link rel="stylesheet" href="src/assets/fonts/fonts.css">
-<link rel="stylesheet" href="src/shared/tokens.css">
-<link rel="stylesheet" href="src/components/buttons/buttons.css">
-<script src="src/components/buttons/buttons.js"></script>
+<link rel="stylesheet" href="node_modules/@micro/ui/dist/css/styles.css">
+<script src="node_modules/@micro/ui/dist/iife/buttons.js"></script>
+<script src="node_modules/@micro/ui/dist/iife/fields.js"></script>
+<!-- أو كل العائلات ملفًا واحدًا: -->
+<script src="node_modules/@micro/ui/dist/iife/micro-ui.js"></script>
 ```
 
-الترتيب ذاته يسري على الشجرة القابلة للتعديل (`assets/fonts/fonts.css` ثم `shared/tokens.css` ثم `components/<family>/…`)؛ الاعتماديات المشروطة لكل عائلة في [API.md](../docs/API.md) (بطاقات الاعتماد). الخطوط IBM Plex محلية من `assets/fonts` — لا Google Fonts.
+ملفات IIFE توفر `window.Micro*` (R-D3) وتهيئ تلقائيًا عند `DOMContentLoaded` ما لم يُعطَّل ذلك بـ`window.MicroConfig = { autoInit: false }` أو وجود سمة `data-micro-manual` على الصفحة. الأسماء القديمة (`disconnect`/`sync`/`rescan`/`render`/`update` الجذرية) تبقى في IIFE فقط كأسماء مهملة حتى `1.0` (R-D10) — لا تُصدَّر من ESM. مثال: [examples/vanilla-app](../examples/vanilla-app/index.html).
 
-## تشغيل المثال vanilla-app
+## ترتيب تحميل CSS (إلزامي)
 
-```bash
-python3 tools/preview-server.py
-# ثم افتح: http://localhost:5000/examples/vanilla-app/
-```
+**fonts ثم tokens ثم motion (عند الحاجة) ثم CSS العائلات المستهلكة.** الحزمة الشاملة `micro-ui.css` تغطي الثلاثة الأولى معًا، وملفات `woff2` مجاورة لها فتُحل مسارات الخطوط نسبيًا من موضع الحزمة نفسها — وكذلك الأيقونات (`dist/assets/icons/`) وصور العلامة. `styles.css` = الحزمة الشاملة + كل CSS العائلات بالترتيب نفسه الذي يعرضه المعرض.
 
-المثال مستقل تمامًا: يستهلك من `src/` مباشرة (لا dist ولا previews)، ويتضمن شاشات الدخول الأربع (تركيب C13 المطابق لمرجع [Micro-Auth](references/micro-auth/README.md)) وشاشة مركّبة من Buttons وFields وData، دون أي منطق مضيف سوى محاكاة `?state=` في شاشة تسجيل الدخول.
+## الأنواع والنصوص
 
-## البناء الحتمي وفحص الحزمة
-
-```bash
-npm install          # مرة واحدة — أدوات البناء فقط (esbuild)، بلا اعتماديات تشغيل
-npm run build        # node tools/build-package.mjs — مزامنة src/ ثم توليد dist/
-npm run check        # node tools/build-package.mjs --check — إعادة بناء في مجلد مؤقت
-                     # ومقارنة بايت-ببايت مع src/ وdist/ المتتبعتين
-```
-
-البناء حتمي: نفس شجرة الدخل تعطي نفس بايتات الخرج (لا طوابع زمنية)، و`dist/MANIFEST.json` يبصم كل مخرجات dist بـsha256. بوابة `package` داخل `check-all` تشغّل `--check` تلقائيًا. يتطلب Node 20+ (`engines.node`).
-
-## مثال أدنى
-
-```html
-<button class="m-btn m-btn--primary" type="button">حفظ التغييرات</button>
-<script>MicroButtons.setLoading(document.querySelector('.m-btn'), true, {loadingLabel: 'جارٍ الحفظ'});</script>
-```
-
-التهيئة تلقائية عند تحميل الوحدات؛ DOM المضاف ديناميكيًا يحتاج استدعاء `init` على جذره المحلي. العقود الكاملة لكل عائلة في [API.md](../docs/API.md).
+- أنواع كل مدخل: `dist/types/<entry>.d.ts` (تُنسخ من `tools/package/types/` عند البناء)؛ فحص الأنواع في المستودع: `npm run typecheck`. غلوبالات IIFE: `dist/types/iife.d.ts` — `/// <reference types="@micro/ui/iife" />` أو تضمين الملف في tsconfig.
+- النصوص الافتراضية لكل عائلة في `components/<family>/labels.js` وتخصيصها جزئيًا عبر `setLabels(partial)` في كل مدخل، و`setLocale(locale)` (من مدخل labels) لتغيير تنسيق الأرقام — الافتراضي `ar-u-nu-latn` (أرقام لاتينية بلا فواصل). العقود التفصيلية في [docs/API.md](API.md).
 
 ## الفحص
 
 ```bash
 uv sync
+npm ci
 uv run python tools/check-all.py
+npm run typecheck
 ```
 
-تشمل البوابات بوابة الحزمة (`package`) وبقية بوابات الجودة والبناء؛ انظر [tools/README.md](../tools/README.md).
+تشمل البوابات بوابة الحزمة (`package`) وبوابة `package-install` (تثبيت فعلي في مشروع مؤقت + استيراد تحت Node + فحص متصفح + تثبيت من git) وبقية بوابات الجودة والبناء؛ انظر [tools/README.md](../tools/README.md).

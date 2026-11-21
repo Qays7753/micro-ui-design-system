@@ -9,7 +9,11 @@ Gate set (see tools/README.md for the full classification):
     dist/ (esm/iife/css/assets) from the ESM source; consumers serve from it
   - build tools in --check mode: standalone, catalog, manifest, package
     (node tools/build-package.mjs --check: entries, ESM exports, no import
-    side effects — dist/ is untracked, R-D4)
+      side effects, types for every entry — dist/ is untracked, R-D4)
+  - package-install (R3): npm pack + install in a temp project, Node import
+    of every entry without DOM, exports targets, tsc against the installed
+    package, a Chromium importmap page with manual init, and a git install
+    whose prepare builds dist/
   - static gates: static (light-static-check), links (link-check),
     hardcoded-text (Arabic strings in JS, labels imports, d.ts coverage)
   - browser gates: audit, product-context, light-release, mobile-experience,
@@ -54,6 +58,7 @@ def build_gates(quick, out, skip_visual):
     if quick:
         return matrix
     matrix += [
+        ("package-install", ["node", "tools/package-install-check.mjs"]),
         ("audit", PY + ["tools/component-audit-check.py", "--out", str(out / "audit")]),
         ("product-context", PY + ["tools/product-context-check.py", "--out", str(out / "product")]),
         ("light-release", PY + ["tools/light-release-check.py", "--review-scope",

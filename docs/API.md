@@ -479,4 +479,4 @@ C13 شاشات بوابة الدخول تركيب بحالة DRAFT FOR REVIEW ي
 - **صيغ الجمع:** `ordersCountPlural` في سجل order-schedule كائن فئات `{ zero, one, two, few, many, other, hundredOne, hundredTwo }` تُختار عبر `Intl.PluralRules('ar')` للعدادات دون 100 (تطابق تام مع المنطق السابق)، والأعداد 100 فأكثر تحتفظ بقاعدة العدد المركب الموثقة (آخر رقمين) — القيم نفس الصياغة الحرفية السابقة، و`{n}` موضع الرقم.
 - **`window.MicroConfig = { autoInit: false }`** قبل تحميل أي ملف سلوك يوقف الربط التلقائي عند `DOMContentLoaded`/`readyState` في مسار IIFE لكل العائلات (كائن الواجهة العام يبقى مصدرًا للتهيئة اليدوية). مستمع إعادة قياس الرسوم بعد جاهزية الخطوط في Data/Packed ليس تهيئة تلقائية فيبقى.
 
-بوابة `tools/hardcoded-text-check.py` (داخل `check-all`): صفر نصوص عربية داخل سلاسل JS خارج `*/labels.js`، اقتران تحميل labels.js قبل JS العائلة في كل صفحة، تغطية مفاتيح `L()`، وتغطية كل دالة عامة على `window.Micro*` في `micro-ui.d.ts`.
+بوابة `tools/hardcoded-text-check.py` (داخل `check-all`): صفر نصوص عربية داخل سلاسل JS خارج `*/labels.js`، استيراد `./labels.js` في ملف سلوك كل عائلة، تغطية مفاتيح `L()`، وتغطية كل صادر ESM مبنى في `dist/esm/<entry>.js` مقابل `tools/package/types/<entry>.d.ts`.

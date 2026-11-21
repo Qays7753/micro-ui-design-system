@@ -6,7 +6,7 @@
 
 | # | المشكلة | المرحلة | الحالة | الدليل |
 |---|---|---|---|---|
-| F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق جزئيًا (R2)** — ESM منفذ؛ الأنواع في R3 | `dist/esm/<entry>.js` لكل المداخل الـ21 مع صادرات متحققة وبلا أثر جانبي عند الاستيراد (`node tools/build-package.mjs --check` → OK)؛ `dist/types/*` (R3) لم يُنشأ بعد |
+| F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق (R2+R3)** | R2: `dist/esm/<entry>.js` للمداخل الـ21 مع صادرات متحققة وبلا أثر جانبي (`node tools/build-package.mjs --check` → OK). R3: `tools/package/types/<entry>.d.ts` لكل مدخل (+`iife.d.ts`) تُنسخ إلى `dist/types/`؛ `npm run typecheck` ناجح؛ بوابة `package-install` تثبت الحزمة فعلًا (tarball وgit عبر prepare) وتستوردها تحت Node وبالمتصفح — OK بكل خطواتها السبع |
 | F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | مفتوح | — |
 | F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | مفتوح | — |
 | F4 | C08 يعرض save-local وlocal-saved خلافًا لOnline-only | R6 | مفتوح | — |
@@ -113,3 +113,32 @@
 **المؤجلات:** الأنواع لكل مدخل وبوابة package-install وexamples/esm-app (R3)؛ توثيق GETTING-STARTED الشامل بطرقه الثلاث يُستكمل في R3.6/R8.
 
 **Commit:** `0aad2d8`
+
+## R3 — الحزمة قابلة للاستيراد فعلًا (F1)
+
+**ما نُفذ (2026-11-22):**
+
+1. **الأنواع (يدويًا — قرار DECISIONS R3.1):** `tools/package/types/<entry>.d.ts` لكل مدخل من الـ21 (init/options/instance/update/destroy/getInstance، دوال العائلة العامة، `<Family>Labels` بالمفاتيح الدلالية المستهدفة من R5، و`<Family>EventMap` بأسماء الأحداث وتفاصيلها الحرفية + `declare global { interface HTMLElementEventMap }` لكل عائلة لها أحداث) + `tools/package/types/iife.d.ts` بديل `micro-ui.d.ts` المحذوف (يصف `window.Micro*` = صادرات المدخل زائد مهملات R-D10). البناء ينسخها إلى `dist/types/` وبوابة `package --check` تفرض ملفًا لكل مدخل.
+2. **typecheck:** `tools/package/tsconfig.json` (strict، paths `@micro/ui/*` إلى `./types/*`) + `tools/package/types-test.ts` (يستورد كل مدخل ويستدعي الواجهة كاملة ويستمع لحدث لكل عائلة لها أحداث) + `tools/package/types-iife-test.ts` (الغلوبالات والمهملات و`MicroConfig`) — `npm run typecheck` ناجح.
+3. **بوابة `package-install` الجديدة** (`tools/package-install-check.mjs` في check-all): npm pack بعد بناء حتمي ← مشروع مؤقت type:module ← تثبيت الـtarball ← استيراد الـ21 مدخلًا تحت Node بلا DOM مع فحص كل صادر متوقع دالة ← كل أهداف exports موجودة و`import.meta.resolve` لكل مدخل ← `tsc --noEmit` على types-test.ts ضد الحزمة المثبتة ← فحص Chromium بصفحة importmap إلى `node_modules/@micro/ui/dist/esm/` تستورد Buttons وFields وNavigation وData وproduct وتهيئ يدويًا (زر 48×112px، حقل ورسم ومنتج مرسومون، صفر أخطاء console وصفر طلبات فاشلة) ← تثبيت `git+file://<repo>#<branch>` يبني `dist/` عبر prepare ويمر بنفس اختبار الاستيراد.
+4. **`examples/esm-app/`** جديد: importmap صريح إلى `../../dist/esm/`، شاشة Buttons+Fields+Navigation+تركيب C14 (Manage) عبر مدخل product، init يدوي وزر «إزالة التركيب» يستدعي `destroy()` وزر «إعادة التركيب» — دورة SPA كاملة. أُضيف إلى `preview-runtime-check` (5 حالات: مكونات مرسومة، الإزالة تفرّغ DOM، الإعادة تركّب، صفر أخطاء، صفر موارد فاشلة) وإلى `visual-baseline-capture` (صفحة جديدة بلا مرجع عند v0.1.0 — تُبلَّغ «جديدة» ولا تُقارن).
+5. **examples/vanilla-app:** تحقُّق أنه يستهلك `dist/iife/` فعلًا (حُوّل ضمن R2.3.3 مع كل المستهلكين) — `grep -rln "components/" examples/` = صفر.
+6. **docs/GETTING-STARTED.md أعيدت كتابته:** التثبيت (`npm install github:Qays7753/micro-ui-design-system#v0.2.0` مع prepare)، جدول المداخل الـ21، والطرق الثلاث بأمثلة كاملة قابلة للنسخ: (أ) bundler، (ب) importmap بلا bundler (مرتبط بمثال esm-app الحي)، (ج) سكربتات IIFE (مرتبط بvanilla-app)؛ ترتيب CSS الإلزامي، والأنواع والنصوص.
+7. **إصلاحات اكتشفها التنفيذ:** (أ) خلل كامن في `hardcoded-text-check.py` القسم 4 (`Path.stem` على `*.d.ts` يقص اللاحقة الأخيرة فقط فلم يكن الفحص يعمل إطلاقًا) — صُحح وصار يفحص 116 صادرًا؛ (ب) حصانة البناء من اكتشاف esbuild لـtsconfig (ملف فارغ في `.build-entries`) — بدونه تغيرت بايتات dist بمجرد وجود tools/package/tsconfig.json (DECISIONS R3.3).
+8. **توثيق:** TESTING.md (بوابة package-install في المشغّل الواحد + typecheck)، tools/README.md (وصفا build-package المحدث وpackage-install)، docs/API.md (تحديث وصف بوابة النصوص)، MANIFEST.json (534 مدخلًا).
+
+**أرقام البوابات (check-all كاملة):** 23 بوابة / **23 ناجحة / 0 فاشلة** — static 271/271 (+1 رابط صفحة esm-app)، link-check 138/0، hardcoded-text: 116 صادر ESM مقابل الأنواع (فحص جديد يعمل فعليًا)، package-install: **OK (7 خطوات)**، preview-runtime **119/119** (+5 حالات esm-app)، visual-regression: compared 62 / passed 61 / allowed 1 / failed 0 / **new: examples/esm-app/index.html** (بلا مرجع عند v0.1.0 — مسموح)، وكل الأعداد الأخرى كما بعد R2 (audit 67، product-context 306، light-release 35، mobile 126، light-calendar 164، light-data 185، consumption 37، boundaries 77، clone 31، api-lifecycle 58، numeric 51، showcase 126، manifest 534). `npm run typecheck` ناجح. `git status` نظيف بعد التشغيل.
+
+**بنود القبول:**
+
+| البند | محقق | الدليل |
+|---|---|---|
+| `npm run typecheck` ناجح | نعم | `tsc -p tools/package/tsconfig.json --noEmit` — خروج 0 بلا أخطاء (types-test + types-iife-test) |
+| بوابة package-install ناجحة بكل خطواتها السبع | نعم | `node tools/package-install-check.mjs` → OK (7 خطوات): زر 48×112px وfield/chart/product مرسومون وصفر أخطاء؛ وفي check-all: `package-install -> OK \| package-install: OK (7 خطوات)` |
+| examples/esm-app بلا أخطاء | نعم | preview-runtime 119/119 (حالات esm-app الخمس)؛ visual-regression: صفحة جديدة، 0 فشل؛ صفر أخطاء console وموارد في التشغيلين |
+
+**الافتراضات:** موثقة في DECISIONS R3 (بنود 1–9): الأنواع يدويًا؛ iife.d.ts بديلًا؛ حصانة tsconfig؛ mount مؤقتًا في فحص المتصفح حتى R4؛ تثبيت git بمرجع الفرع؛ مداخل importmap صريحة؛ typecheck عبر paths؛ vanilla-app تحقق لا تحويل؛ package-install خارج --quick.
+
+**المؤجلات:** لا شيء جديد من بنود R3 (مهملات R-D10 تُنفذ في R4؛ مفاتيح النصوص الدلالية في R5).
+
+**Commit:** (يُسجل بعد الرفع)
