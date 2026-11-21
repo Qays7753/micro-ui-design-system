@@ -356,9 +356,9 @@
 
 ### أدوات الفحص
 
-[`tools/component-mobile-check.py`](../tools/component-mobile-check.py) يفحص الإصابة الفعلية، المقاطع القصيرة، تمركز المفتاح واتجاهه، الحقول وأزرار الكمية عند 320/360/390/430 ومحاكاة النص 200%.
+[`tools/mobile-experience-check.py`](../tools/mobile-experience-check.py) و[`tools/component-audit-check.py`](../tools/component-audit-check.py) يفحصان الإصابة الفعلية، المقاطع القصيرة، تمركز المفتاح واتجاهه، الحقول وأزرار الكمية عند 320/360/390/430 ومحاكاة النص 200%.
 
-[`tools/chart-mobile-check.py`](../tools/chart-mobile-check.py) يفحص نسب SVG وعرضه، انقطاع الخط عند الغياب، نقل قراءة الدونات الطويلة، صف التنقل والمقطّع عند تكبير النص والأسهم في RTL/LTR. مثال الرسوم المستقل داخل [`components/data/example-usage.html`](../components/data/example-usage.html).
+[`tools/light-data-check.py`](../tools/light-data-check.py) يفحص نسب SVG وعرضه، انقطاع الخط عند الغياب، نقل قراءة الدونات الطويلة، صف التنقل والمقطّع عند تكبير النص والأسهم في RTL/LTR. مثال الرسوم المستقل داخل [`components/data/example-usage.html`](../components/data/example-usage.html).
 
 ## الحركة
 

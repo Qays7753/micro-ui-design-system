@@ -111,7 +111,7 @@ tag الأرشيف `archive/pre-integration-2026-11-21`.
 
 | القرار | المقارنة المتاحة | قواعد الاختيار | الحالة الحالية |
 |---|---|---|---|
-| A05 عرض الملخصات: peek + تتبع السحب مقابل الشريط الحالي — اعتماد النمطين | [المقارنة القابلة للتشغيل](../previews/info-strip/comparison.html) + [دليل الفحص](../tools/ui-system-showcase-repair-check.py) 24/24 | **peek + تتبع السحب**: ملخصات متعددة متقاربة في مساحة محدودة ويهم إظهار استمرار المحتوى. **الشريط الحالي**: الحالات التي تحتاج بطاقة بعرض كامل أو قراءات عريضة. لا وضع تلقائي للنمطين في شاشة واحدة؛ لا تغيير للافتراضي (peek `data-info-peek` opt-in والشريط يبقى العرض الأساسي)؛ لا شاشات جديدة | **ADOPTED — قرار المالك 2026-10-04** (كان PROPOSED FOR REVIEW) |
+| A05 عرض الملخصات: peek + تتبع السحب مقابل الشريط الحالي — اعتماد النمطين | [المقارنة القابلة للتشغيل](../previews/info-strip/comparison.html) + دليل الفحص (أداة تاريخية حُذفت في المرحلة 4) 24/24 | **peek + تتبع السحب**: ملخصات متعددة متقاربة في مساحة محدودة ويهم إظهار استمرار المحتوى. **الشريط الحالي**: الحالات التي تحتاج بطاقة بعرض كامل أو قراءات عريضة. لا وضع تلقائي للنمطين في شاشة واحدة؛ لا تغيير للافتراضي (peek `data-info-peek` opt-in والشريط يبقى العرض الأساسي)؛ لا شاشات جديدة | **ADOPTED — قرار المالك 2026-10-04** (كان PROPOSED FOR REVIEW) |
 
 المرجع التنفيذي: [مواصفة info-strip — قسم A05](../components/info-strip/specification.md) و[UI-USAGE-SOP](../docs/API.md). المراجعة الشكلية للإصدار تبقى ضمن PR#8 Draft، وهذا القرار لا يعني جاهزية نشر إنتاجية.
 
@@ -125,3 +125,22 @@ tag الأرشيف `archive/pre-integration-2026-11-21`.
 2. **حذف معاينة مقترح الرسوم:** `previews/chart-proposal/` مقترح تاريخي غير مستخدم في عقد حالي (البديل المنفذ في عائلات Data وOrder-Schedule بمعايناتها)؛ حُذفت مع استثناء موثق في بوابة static، وحُذفت روابطها من `previews/index.html`.
 3. **دمج المستندات:** أنشئ `STATUS.md` و`GETTING-STARTED.md` و`API.md` و`COMPOSITIONS.md` (استبدال الملف القديم بمدموج) و`DESIGN-FOUNDATIONS.md` و`TESTING.md` و`HANDOFF.md`؛ دُمج `UI-PLATFORM-NOTES.md` في `SYSTEM-CONTRACTS.md` و`UI-DECISIONS.md` في `DECISIONS.md`؛ `product-context/COVERAGE.md` أبقي محدثًا دون قسم الإقفال. عند التعارض تقدم `SYSTEM-CONTRACTS.md` ثم الأحدث (رصد الوكلاء: قيم انحناء الأسس القديمة 16/24 مقابل tokens الحالية 12 — اعتُمدت tokens؛ انحراف عدد التراكيب بين المستندات — اعتُمد الكتالوج 13).
 4. **أداة link-check:** `tools/link-check.py` يفحص كل الروابط النسبية في *.md و*.html المتتبعة ويفشل عند أي رابط مكسور.
+
+## 2026-11-21 — المرحلة 4 (أدوات الفحص وCI)
+
+1. **جرد tools/ وتصنيفه:** 15 بوابة حالية (أ)، و7 أدوات بناء/تشغيل (ب)، و38 أداة حُذفت (ج). الجرد الكامل وجدول التغطية البديلة لكل أداة محذوفة في [tools/README.md](../tools/README.md).
+2. **بوابات رُقّيت إلى (أ) بعد نجاحها على الشجرة الحالية:** `light-calendar-check` و`light-data-check` و`component-consumption-contract-check` و`integration-boundaries-check` و`clone-lifecycle-check` و`numeric-geometry-check` و`ui-system-showcase-check` و`preview-runtime-check`. كلها داخل `check-all` الآن مع البوابات الخمس الأساسية وlink-check والبوابة البصرية الجديدة.
+3. **D12 والمرجع البصري:** مقارنة الشجرة الحالية مع `pre-phase1` أعطت 57 صفحة مقارنة / 56 نجاح / فشلًا واحدًا (`previews/concepts/index.html` — اختلاف الحجم بعد تغييرات المراحل 1–3 المعتمدة)، مع 5 صفحات جديدة بلا مرجع (شاشات الدخول في المرحلة 1) وصفحتين محذوفتين (`previews/chart-proposal/`). لذلك التُقط مرجع جديد `pre-phase4` (62 صفحة، صفر أخطاء) خارج الشجرة، واعتُمد المرجع الافتراضي لمقارنات D12 في المراحل 4–7 (يشمل تغييرات المراحل 1–3 المعتمدة)، ويبقى `pre-phase1` دليلًا تاريخيًا.
+4. **أدوات متقادمة فشلت لسبب في الأداة لا في المصدر، وحُذفت مع تسجيل ملاحظاتها:**
+   - `clean-mobile-preview-check.py`: 70/72 حالة تنجح؛ الحالتان الفاشلتان («وصول المعرض الكامل من شاشة الحساب» في المصدر وفي standalone) تعتمدان بنية DOM قديمة للمعرض (`data-view=state` و`.sc-section` و`#sc-ocal-root`). **مؤجل — يحتاج قرار المالك:** إعادة تأسيس هاتين الحالتين على بنية المعرض الحالية إن أُريد استمرار فحص هذا المسار؛ التغطية القائمة: component-audit-check (كل العائلات في #component-review) وmobile-experience-check.
+   - `numeric-field-controls-check.py`: فشل بمحدد قديم (`.m-field__control` وترتيب Tab لأزرار الخطوة) لا يطابق DOM الحقول الحالي. **مؤجل:** إضافة حالات تركيز أزرار الخطوة (focus-visible) إلى light-release-check في مرحلة لاحقة؛ عقود الحقول مغطاة حاليًا بـlight-release-check وcomponent-audit-check.
+   - `readable-acceptance-check.py` و`readable-source-check.py` و`shared-actions-check.py`: محددات لم تعد موجودة في الصفحات (`#acceptance-case` و`#reading-options > summary`)؛ صفحات القراءة مغطاة بالبوابة البصرية وlight-data-check.
+   - `concepts-check.py`: نمط استدعاء قديم يتطلب `--chromium` بمسار صريح؛ صفحات concepts مغطاة بالبوابة البصرية.
+5. **CI:** `.github/workflows/ci.yml` على push/pull_request لفرع العمل فقط: checkout كامل (fetch-depth: 0 ليتوفر origin/main لفروق البوابة الثابتة)، Python 3.12 عبر setup-uv وNode 20 وتثبيت Chromium ثم `uv run python tools/check-all.py --skip-visual`. **قيود:** بوابة D12 البصرية محلية فقط لأن المرجع يعيش خارج المستودع؛ لا يمكن تشغيلها في CI.
+6. **اعتمادية جديدة:** أضيف `pillow` إلى pyproject لأجل المقارنة البكسلية في visual-regression-check.
+5. **قيد نطاق التوكن على ملف CI (قاعدة 3.3):** رفض GitHub دفع `.github/workflows/ci.yml`
+   لأن التوكن المستخدم بلا نطاق `workflow`. نُفّذ الجزء القابل للتنفيذ: سير العمل
+   محفوظ حرفيًا في `tools/ci/ci.yml` مع تعليمات تركيب من سطر واحد في
+   `tools/ci/README.md`، ويُركّبه المالك بأي توكن يملك النطاق. أُعيدت المحاولة مرة
+   أخرى بعد التسوية وأُكد الرفع لبقية الملفات.
+
