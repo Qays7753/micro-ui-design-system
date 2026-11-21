@@ -95,7 +95,12 @@ function jsEntries() {
   for (const family of readdirSync(path.join(ROOT, "components"), { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : 1))) {
     if (!family.isDirectory()) continue;
     for (const rel of walkRel(path.join(ROOT, "components", family.name))) {
-      if (rel.endsWith(".js")) entries.push({ source: `components/${family.name}/${rel}`, output: path.basename(rel) });
+      /* المرحلة 7: ملفات labels.js تخرج باسم <family>-labels.js كي تبقى
+         أسماء dist/js المسطحة فريدة (قيد التصادم أدناه). */
+      if (rel.endsWith(".js")) {
+        const output = rel === "labels.js" ? `${family.name}-labels.js` : path.basename(rel);
+        entries.push({ source: `components/${family.name}/${rel}`, output });
+      }
     }
   }
   for (const rel of walkRel(path.join(ROOT, "shared"))) {

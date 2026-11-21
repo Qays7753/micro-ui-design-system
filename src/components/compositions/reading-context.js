@@ -1,6 +1,13 @@
 /* C04: explicit, fail-safe unit context. No data parsing or business state. */
 (function () {
   'use strict';
+
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
   var CLASS = 'm-reading-unit--contextual';
   function within(root) {
     var out = [].slice.call(root.querySelectorAll('[data-reading-unit]'));
@@ -72,6 +79,6 @@
     update: sync,
     disconnect: function (root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
   };
-  document.addEventListener('DOMContentLoaded', function () { sync(document); });
-  if (document.readyState !== 'loading') sync(document);
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) sync(document); });
+  if (document.readyState !== 'loading' && microAutoInit()) sync(document);
 })();

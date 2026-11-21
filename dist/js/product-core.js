@@ -1,22 +1,30 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "product-context";
+    function L(key2) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key2] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var renderers = /* @__PURE__ */ new Map(), instances = /* @__PURE__ */ new WeakMap(), sequence = 0;
     var phases = {
       ready: "",
-      loading: "جارٍ التحميل…",
-      empty: "لا توجد بيانات بعد",
-      success: "تمت العملية",
-      error: "تعذّر إكمال الطلب",
-      rejected: "لم يُقبل الطلب",
-      disabled: "الإجراء غير متاح حاليًا",
-      pending: "بانتظار نتيجة مؤكدة",
-      uncertain: "النتيجة غير مؤكدة؛ تحقق قبل إعادة الإرسال",
-      denied: "لا تتوفر صلاحية لهذا السياق",
-      expired: "انتهت الجلسة",
-      "signed-out": "يلزم تسجيل الدخول",
-      conflict: "تغيّرت البيانات؛ راجع النسخة الأحدث",
-      "local-saved": "محفوظ على هذا الجهاز؛ غير متزامن"
+      loading: L("k1"),
+      empty: L("k2"),
+      success: L("k3"),
+      error: L("k4"),
+      rejected: L("k5"),
+      disabled: L("k6"),
+      pending: L("k7"),
+      uncertain: L("k8"),
+      denied: L("k9"),
+      expired: L("k10"),
+      "signed-out": L("k11"),
+      conflict: L("k12"),
+      "local-saved": L("k13")
     };
     function key(scope) {
       return scope && typeof scope.contextId === "string" && scope.contextId && typeof scope.roleId === "string" && scope.roleId && (scope.workspaceId == null || typeof scope.workspaceId === "string" && scope.workspaceId) ? JSON.stringify([scope.contextId, scope.workspaceId || null, scope.roleId, scope.kind || "business"]) : null;
@@ -114,7 +122,7 @@
       function confirm(id, payload, label, description, local, danger) {
         if (!allowed(id, local) || confirmation) return;
         if (!window.MicroActionSheet) {
-          note(root, "يلزم تحميل مكوّن التأكيد", "", "error");
+          note(root, L("k14"), "", "error");
           return;
         }
         var generation = epoch, context = key(model.scope), trigger = document.activeElement;
@@ -129,10 +137,10 @@
         sheet.setAttribute("aria-modal", "true");
         sheet.setAttribute("aria-labelledby", sheet.id + "-title");
         sheet.setAttribute("aria-describedby", sheet.id + "-description");
-        var head = node("header", "m-layer__head"), title = node("h2", "m-layer__title", "تأكيد الإجراء");
+        var head = node("header", "m-layer__head"), title = node("h2", "m-layer__title", L("k15"));
         title.id = sheet.id + "-title";
         head.appendChild(title);
-        var cancel = node("button", "m-btn m-btn--secondary", "تراجع");
+        var cancel = node("button", "m-btn m-btn--secondary", L("k16"));
         cancel.type = "button";
         cancel.dataset.layerClose = "";
         head.appendChild(cancel);
@@ -141,7 +149,7 @@
         desc.id = sheet.id + "-description";
         body.appendChild(desc);
         body.appendChild(node("p", "m-product__secondary", model.scope.label || model.scope.contextId));
-        var list = node("ul", "m-action-sheet__list"), item = node("li"), button = node("button", "m-btn " + (danger ? "m-btn--destructive-soft" : "m-btn--primary") + " m-action-sheet__item", label || "تأكيد");
+        var list = node("ul", "m-action-sheet__list"), item = node("li"), button = node("button", "m-btn " + (danger ? "m-btn--destructive-soft" : "m-btn--primary") + " m-action-sheet__item", label || L("k17"));
         button.type = "button";
         button.dataset.actionId = "confirm";
         item.appendChild(button);
@@ -271,7 +279,7 @@
               el.closest(".m-field").classList.remove("has-error");
             });
             if (missing.length) {
-              var error = note(root, "أكمل الحقول المطلوبة", "", "error");
+              var error = note(root, L("k18"), "", "error");
               error.dataset.productValidation = "";
               error.id = instanceId + "-validation";
               var heading = root.querySelector(":scope > header,:scope > h2");
@@ -280,7 +288,7 @@
               var first = null;
               root.querySelectorAll('[data-focus-key^="field-"]').forEach(function(el) {
                 if (missing.indexOf(el.dataset.focusKey.slice(6)) < 0) return;
-                var box = el.closest(".m-field"), label = box.querySelector("label"), message = node("p", "m-field__msg is-visible", "أدخل " + (label ? label.textContent : "القيمة المطلوبة"));
+                var box = el.closest(".m-field"), label = box.querySelector("label"), message = node("p", "m-field__msg is-visible", L("k19") + (label ? label.textContent : L("k20")));
                 message.id = el.id + "-required";
                 message.dataset.productFieldError = "";
                 box.appendChild(message);
@@ -297,15 +305,15 @@
           },
           media: function(parent, images, fit, preview) {
             if (!images || !images.length) {
-              parent.appendChild(node("div", "m-product__media-empty", "لا توجد صورة متاحة"));
+              parent.appendChild(node("div", "m-product__media-empty", L("k21")));
               return;
             }
             var carousel = node("div", "m-carousel m-product__gallery");
             carousel.classList.toggle("m-product__gallery--preview", !!preview);
             carousel.dataset.carousel = "";
-            carousel.dataset.carouselLabel = "صور المرفقات";
+            carousel.dataset.carouselLabel = L("k22");
             carousel.setAttribute("role", "group");
-            carousel.setAttribute("aria-label", "صور المرفقات");
+            carousel.setAttribute("aria-label", L("k22"));
             var viewport = node("div", "m-carousel__viewport");
             viewport.dataset.viewport = "";
             var track = node("ul", "m-carousel__track");
@@ -313,19 +321,19 @@
             images.forEach(function(image, index) {
               var li = node("li", "m-carousel__slide"), card = node("div", "m-carousel__card"), src = safeImage(image.src);
               li.dataset.carouselSlide = "";
-              li.dataset.cardLabel = image.alt || "صورة " + (index + 1);
+              li.dataset.cardLabel = image.alt || L("k23") + (index + 1);
               if (src) {
                 var img = node("img", "m-product__media");
                 img.src = src;
-                img.alt = image.alt || "صورة المرفق";
+                img.alt = image.alt || L("k24");
                 img.loading = "lazy";
                 img.decoding = "async";
                 img.style.objectFit = fit === "contain" ? "contain" : "cover";
                 ctx.on(img, "error", function() {
-                  img.replaceWith(node("div", "m-product__media-empty", "تعذّر عرض الصورة"));
+                  img.replaceWith(node("div", "m-product__media-empty", L("k25")));
                 });
                 card.appendChild(img);
-              } else card.appendChild(node("div", "m-product__media-empty", "رابط الصورة غير متاح"));
+              } else card.appendChild(node("div", "m-product__media-empty", L("k26")));
               li.appendChild(card);
               track.appendChild(li);
             });
@@ -334,7 +342,7 @@
             if (images.length > 1) {
               var controls = node("div", "m-product__actions");
               ["prev", "next"].forEach(function(dir) {
-                var b = node("button", "m-btn m-btn--secondary", dir === "prev" ? "السابق" : "التالي");
+                var b = node("button", "m-btn m-btn--secondary", dir === "prev" ? L("k27") : L("k28"));
                 b.type = "button";
                 b.dataset[dir] = "";
                 controls.appendChild(b);
@@ -353,7 +361,7 @@
             }
           },
           attachments: function(parent, required) {
-            var field = node("div", "m-field"), lab = node("span", "m-field__label", "الصور"), input = node("input", "m-product__file"), choose = node("button", "m-btn m-btn--secondary", model.attachmentSelection === "append" ? "إضافة صور" : ui.files.length ? "استبدال الاختيار" : "اختيار الصور");
+            var field = node("div", "m-field"), lab = node("span", "m-field__label", L("k29")), input = node("input", "m-product__file"), choose = node("button", "m-btn m-btn--secondary", model.attachmentSelection === "append" ? L("k30") : ui.files.length ? L("k31") : L("k32"));
             input.type = "file";
             input.accept = "image/*";
             input.multiple = true;
@@ -374,7 +382,7 @@
               if (files.some(function(f) {
                 return !f.type.startsWith("image/") || model.maxImageBytes && f.size > model.maxImageBytes;
               })) {
-                note(parent, "تعذّر استخدام الملف", "نوع الصورة أو حجمها لا يطابق القيد المقدم.", "error");
+                note(parent, L("k33"), L("k34"), "error");
                 return;
               }
               var selection2 = model.attachmentSelection === "append" ? ui.files.concat(files) : files;
@@ -391,10 +399,10 @@
                 var item = node("li");
                 item.appendChild(node("bdi", "", f.name));
                 if (ui.files.length > 1) {
-                  var remove = node("button", "m-btn m-btn--light", "إزالة");
+                  var remove = node("button", "m-btn m-btn--light", L("k35"));
                   remove.type = "button";
                   remove.disabled = !ctx.editable();
-                  remove.setAttribute("aria-label", "إزالة " + f.name);
+                  remove.setAttribute("aria-label", L("k36") + f.name);
                   remove.dataset.focusKey = "remove-file-" + index;
                   ctx.on(remove, "click", function() {
                     if (!ctx.editable()) return;
@@ -412,7 +420,7 @@
               ctx.media(parent, ui.files.map(function(f, i) {
                 return { src: ui.urls[i], alt: f.name };
               }), "contain", true);
-              var clear = node("button", "m-btn m-btn--light", "إزالة المرفقات");
+              var clear = node("button", "m-btn m-btn--light", L("k37"));
               clear.type = "button";
               clear.disabled = !ctx.editable();
               ctx.on(clear, "click", function() {
@@ -421,7 +429,7 @@
               });
               parent.appendChild(clear);
             }
-            if (required) parent.appendChild(node("p", "m-product__secondary", "أرفق صورة للمتابعة."));
+            if (required) parent.appendChild(node("p", "m-product__secondary", L("k38")));
           },
           timeline: function(parent, items) {
             var list = node("ol", "m-product__timeline");
@@ -438,22 +446,22 @@
         };
         var phase = Object.prototype.hasOwnProperty.call(phases, model.phase) ? model.phase : "uncertain";
         if (forbidden.indexOf(phase) >= 0) {
-          note(root, phases[phase], "بيانات السياق السابق غير معروضة.", "warning");
-          if (permission("reauth")) ctx.button(root, "reauth", "متابعة الدخول", {});
-          if (phase === "denied" && permission("choose-context")) ctx.button(root, "choose-context", "اختيار سياق آخر", {});
+          note(root, phases[phase], L("k39"), "warning");
+          if (permission("reauth")) ctx.button(root, "reauth", L("k40"), {});
+          if (phase === "denied" && permission("choose-context")) ctx.button(root, "choose-context", L("k41"), {});
         } else if (!scopeKey) {
-          note(root, "اختر سياقًا معتمدًا", "لا تُعرض بيانات خاصة قبل تحديد السياق.", "warning");
+          note(root, L("k42"), L("k43"), "warning");
         } else if (model.scope.kind === "driver" && (type === "market" || type === "review" && model.mode !== "report" || type !== "context" && ["manage", "market"].indexOf(model.destination) >= 0)) {
-          note(root, "هذه الوجهة غير متاحة في سياق السائق", "المتاح للسائق Delivery وAsk Micro فقط.", "warning");
+          note(root, L("k44"), L("k45"), "warning");
         } else if (!permission("view") || type !== "context" && type !== "state" && key(model.dataContext) !== scopeKey) {
-          note(root, "لا يمكنك عرض هذه البيانات في السياق الحالي", "", "warning");
+          note(root, L("k46"), "", "warning");
         } else {
-          if (["offline", "weak", "local"].indexOf(model.connection) >= 0) note(root, model.connection === "offline" ? "الاتصال منقطع" : model.connection === "local" ? "وضع محلي" : "الاتصال ضعيف", model.destination === "manage" ? "تحقق من مزامنة التغييرات المحلية." : "العمليات التي تحتاج الاتصال غير متاحة الآن.", "warning");
+          if (["offline", "weak", "local"].indexOf(model.connection) >= 0) note(root, model.connection === "offline" ? L("k47") : model.connection === "local" ? L("k48") : L("k49"), model.destination === "manage" ? L("k50") : L("k51"), "warning");
           if (pending) note(root, phases.pending, "", "info");
           else if (phase !== "ready") note(root, phase === "local-saved" && model.destination !== "manage" ? phases.uncertain : phases[phase], model.phaseDetail || "", phase === "error" ? "error" : phase === "success" ? "success" : "info");
           if (phase !== "loading" && (phase !== "empty" || type === "assistant")) renderers.get(type)(ctx);
           else if (phase === "empty" && model.emptyActionLabel) ctx.button(root, "create", model.emptyActionLabel, {});
-          if (["uncertain", "conflict"].indexOf(phase) >= 0 && permission("recheck") && !root.querySelector('[data-product-action="recheck"]')) ctx.button(root, "recheck", "إعادة التحقق", {});
+          if (["uncertain", "conflict"].indexOf(phase) >= 0 && permission("recheck") && !root.querySelector('[data-product-action="recheck"]')) ctx.button(root, "recheck", L("k52"), {});
         }
         if (window.MicroFields) {
           window.MicroFields.init(root);
@@ -539,5 +547,19 @@
       if (renderers.has(type)) throw new Error("Duplicate composition");
       renderers.set(type, renderer);
     }, mount, contextKey: key };
+    window.MicroProduct.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["product-context"] = registry["product-context"] || {};
+      var key2;
+      for (key2 in partial) {
+        if (partial[key2] && Object.prototype.toString.call(partial[key2]) === "[object Object]") {
+          current[key2] = current[key2] || {};
+          var sub;
+          for (sub in partial[key2]) current[key2][sub] = partial[key2][sub];
+        } else {
+          current[key2] = partial[key2];
+        }
+      }
+    };
   })();
 })();

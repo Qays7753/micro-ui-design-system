@@ -95,6 +95,19 @@
 **commits:** commit هذه المرحلة. **نتائج البوابات:** تُرى في مخرجات التشغيل أدناه وتُحدَّث في التقرير النهائي.
 
 
+## المرحلة 4 — تصنيف الأدوات وبوابات الجودة وCI ✅
+
+**ما نُفّذ:** صُنّفت الأدوات الستون في `tools/README.md`: 15 بوابة حالية، 7 أدوات بناء، وحُذف 38 سكربتًا تاريخيًا مع خريطة تغطية موثقة لكل محذوف (أي بوابة تغطي سلوكه الآن). رُقّيت البوابات الناجحة للسلوك الحالي إلى check-all (light-calendar، light-data، component-consumption، integration-boundaries، clone-lifecycle، numeric-geometry، ui-system-showcase، preview-runtime). أُعيد كتابة `tools/check-all.py` مشغّلًا وحيدًا للبوابات (ملخص لكل بوابة، `--quick`/`--skip-visual`، تشغيل خادم المعاينة تلقائيًا). أُضيفت `tools/visual-regression-check.py` (D12: فرق بكسلات ≤0.1%، الصفحات الجديدة/المحذوفة تُبلَّغ ولا تفشل، خط الأساس `pre-phase4` خارج المستودع). أُضيف `pillow` لفروق البكسلات. سير عمل CI جاهز في `tools/ci/ci.yml` مع تعليمات تركيب من سطر واحد: التوكن المستخدم للرفع بلا نطاق `workflow` فيرفض GitHub دفع ملفات `.github/workflows/` — قرار مسجل (3.3) ويُركّبه المالك.
+
+**القبول:** check-all كامل 19/19 ناجحة (بعد إصلاح روابط أدوات محذوفة في 3 مستندات وإعادة توليد MANIFEST): static 198/198، link-check 129/0، audit 67/67، product-context 250/250، light-release 35/35، mobile-experience 126/126، light-calendar 164/164، light-data 185/185، component-consumption 37/37، integration-boundaries 77/77، clone-lifecycle 31/31، numeric-geometry 51/51، ui-system-showcase 126/126، preview-runtime 112/112، visual-regression OK.
+
+**commits:** `b0df085`.
+
+**الافتراضات:** خط الأساس البصري خارج الشجرة (لا يُنشر)؛ CI في `tools/ci/` حتى يملك المالك توكنًا بنطاق workflow.
+
+**المؤجلات:** تركيب ملف CI في `.github/workflows/` بيد المالك.
+
+
 ## المرحلة 5 — الحزمة والتوزيع ✅
 
 **ما نُفّذ:** حزمة `@micro/ui` 0.1.0 خاصة (`private: true` — لا نشر، D9) بلا حقل `type` و`engines.node >= 20` وesbuild أداة بناء وحيدة (devDependencies) وخرائط تصدير `css/js/fonts/micro-ui.d.ts` وfiles: dist/src/README/CHANGELOG. `tools/build-package.mjs`: مزامنة مرايا `src/` (باستثناء `*.md` — روابط توثيق نسبية للمستودع) وتوليد `dist/` حتميًا (265 ملفًا): CSS منسوخ بايت-ببايت (D15) + `micro-ui.css` (fonts+tokens+motion)، JS عبر esbuild (IIFE/es2019/بلا تصغير)، خطوط وشعار v2 وأيقونات و`dist/assets/{icons,surfaces}` لحل المسارات النسبية، و`dist/MANIFEST.json` ببصمات sha256. `tools/package/micro-ui.d.ts` (15 global بأسماء التوابع الحقيقية). بوابة `package` داخل check-all (سريعة وقصيرة). `examples/vanilla-app/` (فهرس + شاشة مركّبة Buttons/Fields/Data + شاشات الدخول الأربع تستهلك `src/` مباشرة مع تعليق مرجع Micro-Auth لكل شاشة). اكتمل GETTING-STARTED (dist/src/examples/بناء/خاصية الحزمة) وCHANGELOG 0.1.0. أُزيل `/dist/` من .gitignore (dist مُتابَ)، ووسّع manifest-build وpreview-server لأشجار الحزمة. القرارات في DECISIONS.md (المرحلة 5، 11 بندًا).
@@ -108,3 +121,27 @@
 **الافتراضات:** مرآة src/ بلا *.md (موثق DECISIONS)؛ تخطيط dist بنسبي مع dist/assets لحل url() الحرفية (موثق)؛ LICENSE غائب فلا حقل license؛ examples خارج لقطات D12 (أداة الالتقاط تغطي previews/components فقط — فُحصت خارج الشجرة بدلها).
 
 **المؤجلات:** توسيع d.ts للغلوبالات الثانوية (MicroPacked/MicroInfoPeek/MicroReadings/MicroIcons/MicroActionSheet) مع عقود المرحلة 6؛ تركيب CI (tools/ci/ci.yml) بيد المالك.
+
+
+## المرحلة 6 — توحيد العقد البرمجي ✅
+
+**ما نُفّذ:** مسح كامل لعقود العائلات الأربع عشرة (جدول init/update-equivalent/disconnect/destroy في `docs/API.md`). توحيد سلوك محافظ: `MicroButtons.init(root)` اكتشاف موثق (markup-driven)، وأضيفت أسماء `update` رقيقة تفوّض للتنفيذ القائم بلا إزالة للأسماء التاريخية (Fields→sync، Picker→setOptions، Data→render، InfoStrip→rescan، Peek→goTo، MetricComparison→render، AccessGateway→init بالم-handlers، OrderSchedule→setData على مستوى الوحدة، Carousel→goTo، Readings/Packed→sync). العائلات بلا مفهوم بيانات (Buttons/Selection/Organization/Messages/Navigation/AccountSettings) موّث «لا ينطبق» صراحة في API.md وd.ts — لم يُخترع سلوك. `tools/api-lifecycle-check.py` جديد (فيكسَر حقيقي من example-usage لكل عائلة، 360×780 RTL Light reduced-motion): init مرتين → حدث واحد، update → بلا تكرار مستمعات، disconnect/destroy → صفر أحداث وصفر أخطاء صفحة/كونسول؛ داخل check-all. حُدّث API.md بعقد موحد وd.ts بكل الأسماء (ومنه الغلوبالات الثانوية المؤجلة من المرحلة 5) و10 مواصفات وعائلات وسطر لكل واحد.
+
+**القبول:** api-lifecycle 55/55؛ check-all كامل 21/21 (بعد إعادة توليد standalone وMANIFEST) — من ضمنها visual-regression OK (تغييرات JS لم تغيّر التصيير).
+
+**commits:** `edca290` (العقد) + `9a4cf60` (البوابة) + `5ae783d` (تجديد MANIFEST بعد standalone).
+
+**الافتراضات:** الأسماء التاريخية تبقى معتمدة خلال 0.x (لا إزالة)؛ الأسماء الداخلية `_` مستثناة من d.ts.
+
+**المؤجلات:** `MicroConfig.autoInit` و`options.labels` (نُفّذا في المرحلة 7)؛ فحص اكتمال d.ts (نُفّذ في المرحلة 7).
+
+
+## المرحلة 7 — النصوص ✅
+
+**ما نُفّذ:** سجل نصوص لكل عائلة: 13 ملف `components/<family>/labels.js` (بالمفاتيح camelCase والقيم العربية الحرفية السابقة) تُنشئ `window.MicroLabels['<family>']` وتُحمَّل قبل سلوك العائلة؛ ~518 نصًا إلى 426 مفتاحًا. `MicroX.setLabels(partial)` لكل عائلة (دمج جزئي يسري على التصييرات اللاحقة)، `options.labels` حيث يوجد كائن خيارات (AccessGateway عبر handlers)، و`MicroLabels.setLocale/locale` (الافتراضي `ar-u-nu-latn`) مع `formatNumber` يمرر `String(n)` كما هو في المسار الافتراضي — لا Intl في المسار الافتراضي حفاظًا على تطابق البايت (D12)، وصيغ الجمع «لا طلبات/طلب واحد/طلبان/…» عبر `Intl.PluralRules('ar')` بمطابقة الحرفية القائمة. `MicroConfig.autoInit=false` (متبقي المرحلة 6) حراسة مركزية قبل كل تهيئة تلقائية IIFE. بوابة `tools/hardcoded-text-check.py` (ساكنة، في check-all سريعًا وكاملًا): نصوص عربية في سلاسل JS خارج labels (تعليقات مستثناة)، اقتران التحميل في الصفحات (بما فيها المسارات النسبية القصيرة بعد التعميم)، تغطية مفاتيح L()، وتغطية d.ts لكل دالة عامة (استخراج واعٍ بعمق الأقواس للمستوى الأعلى فقط). امتد api-lifecycle بثلاث حالات setLabels حقيقية (order-schedule/data/carousel: نص بديل يظهر بعد update والاستعادة تعيد الأصل — حالة data حتمية عبر رسم أعمدة بنطاق معلن غير صالح يعرض نص الرفض k9). الحزمة تبث `dist/js/<family>-labels.js` وesbuild يضمّن السجل.
+
+**تسويات الجلسة:** فجوة المسارات النسبية — صفحات `*-usage.html` داخل `components/<family>/` تحمّل السلوك بمسار شقيق قصير فلم يلتقطها فحص الاقتران الأصلي (المطابقة النصية `components/...` في قيمة src): عُمّم الفحص على المسار المحلول، وقُرنت 14 صفحة (7 في components + مرايا src)، ورُقّعت فيكسَرات خمس بوابات مضمنة (light-calendar، light-release، light-data، component-consumption، clone-lifecycle) لتحمّل labels قبل السلوك — وهي سبب فشل 8 بوابات في أول تشغيل كامل (استُصل كليًا). استُبدل نمط مفاتيح d.ts الساذج بمسح واعٍ بالعمق (كان يعدّ خيارًا متداخلًا مثل backdropEl واجهة عامة زائفة). نُظّفت المسافات الزائدة في نهايات الأسطر بالملفات المعدلة.
+
+**القبول:** check-all كامل 22/22: static 410/410، link-check 147/0، hardcoded-text PASS (26 ملفًا، 4477 سلسلة، 65 صفحة، 426 مفتاحًا، 103 دوال عامة)، api-lifecycle 58/58، visual-regression OK (الصياغة الافتراضية مطابقة بايت-ببايت)، وكل البوابات الأخرى خضراء.
+
+**الافتراضات والمؤجلات (DECISIONS المرحلة 7):** Carousel/Picker بلا `options.labels` لكل نسخة (init بلا معامل خيارات — setLabels على مستوى الصفحة في 0.x)؛ `data-micro-manual` لكل عنصر أُلغي (MicroConfig.autoInit يغطي الحالة)؛ أرقام لاتينية افتراضيًا (مطلوب الخطة) والمسار الافتراضي بلا Intl.

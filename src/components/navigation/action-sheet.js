@@ -1,7 +1,23 @@
 /* C05: mobile command list. Navigation owns modal/focus/inert/scroll/motion. */
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'navigation';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
   var states = new WeakMap();
+
   function sheets(root) {
     var scope = root || document;
     var all = [].slice.call(scope.querySelectorAll('.m-action-sheet'));
@@ -85,6 +101,24 @@
       });
     }
   };
-  document.addEventListener('DOMContentLoaded', function () { window.MicroActionSheet.init(); });
-  if (document.readyState !== 'loading') window.MicroActionSheet.init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroActionSheet.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['navigation'] = registry['navigation'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroActionSheet.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroActionSheet.init();
 }());

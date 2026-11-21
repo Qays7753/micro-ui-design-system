@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "product-context";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var symbol = new URL("../../assets/brand/micro-logo/v2/variants/full-color/micro-symbol.svg", document.currentScript.src).href;
     var kinds = { "follow-up": "follow-up", open: "open-resource", execute: "execute" };
     function text(value) {
@@ -20,7 +28,7 @@
       log.id = c.uid + "-log";
       log.dataset.focusKey = "assistant-log";
       log.setAttribute("role", "log");
-      log.setAttribute("aria-label", "رسائل المحادثة");
+      log.setAttribute("aria-label", L("k115"));
       log.setAttribute("aria-relevant", "additions text");
       log.setAttribute("aria-busy", String(!!m.replyPending));
       messages.forEach(function(message) {
@@ -29,9 +37,9 @@
         if (text(message.id) && messages.filter(function(x) {
           return x.id === message.id;
         }).length === 1) bubble.dataset.messageId = message.id;
-        bubble.append(n("strong", "m-product__secondary", speaker === "user" ? "أنت" : speaker === "assistant" ? "Ask Micro" : "ملاحظة"), n("p", "", message.text));
+        bubble.append(n("strong", "m-product__secondary", speaker === "user" ? L("k116") : speaker === "assistant" ? "Ask Micro" : L("k117")), n("p", "", message.text));
         if (message.stateLabel) bubble.appendChild(n("p", "m-product__secondary", message.stateLabel));
-        if (message.id && (m.permissions || []).indexOf("retry") >= 0 && message.retryable) c.button(bubble, "retry", "إعادة المحاولة", { messageId: message.id }, { focusKey: "retry-" + message.id });
+        if (message.id && (m.permissions || []).indexOf("retry") >= 0 && message.retryable) c.button(bubble, "retry", L("k118"), { messageId: message.id }, { focusKey: "retry-" + message.id });
         if (speaker === "assistant" && text(message.id) && messages.filter(function(x) {
           return x.id === message.id;
         }).length === 1) {
@@ -46,7 +54,7 @@
               return x && x.emphasis === "primary";
             }).length === 1 });
             if (state !== "ready") {
-              var reason = { expired: "انتهت صلاحية الاقتراح", completed: "تم تنفيذ الإجراء", unavailable: "الإجراء غير متاح" }[state] || "الإجراء غير متاح";
+              var reason = { expired: L("k119"), completed: L("k120"), unavailable: L("k121") }[state] || L("k121");
               var status = reasons[reason];
               if (!status) {
                 status = n("span", "m-product__secondary", reason);
@@ -64,19 +72,19 @@
         }
         log.appendChild(bubble);
       });
-      if (!log.children.length) log.appendChild(n("p", "m-product__secondary", "ابدأ محادثة في السياق الحالي"));
+      if (!log.children.length) log.appendChild(n("p", "m-product__secondary", L("k122")));
       r.appendChild(log);
       if (m.replyPending) {
         var activity = n("div", "m-assistant__activity");
         activity.setAttribute("role", "status");
         var dot = n("span", "m-assistant__activity-dot");
         dot.setAttribute("aria-hidden", "true");
-        activity.append(dot, n("span", "", m.activity === "searching" ? "جارٍ البحث…" : "جارٍ إعداد الرد…"));
+        activity.append(dot, n("span", "", m.activity === "searching" ? L("k123") : L("k124")));
         r.appendChild(activity);
       }
       var last = messages[messages.length - 1], lastKey = last ? String(last.id || "") + "\n" + String(last.text || "") : "";
       var unread = !!(messages.length && saved && !saved.atEnd && (saved.unread || messages.length > saved.count || messages.length === saved.count && saved.lastKey !== lastKey));
-      var newer = n("button", "m-btn m-btn--light m-assistant__new", "رسائل جديدة");
+      var newer = n("button", "m-btn m-btn--light m-assistant__new", L("k125"));
       newer.type = "button";
       newer.hidden = !unread;
       newer.setAttribute("aria-controls", log.id);
@@ -99,12 +107,12 @@
       });
       if (m.proposal) {
         var box = n("section", "m-product__surface");
-        box.append(n("h3", "m-product__title", "إجراء مقترح"), n("p", "", m.proposal.summary));
-        c.button(box, "execute", m.proposal.label || "مراجعة وتأكيد الإجراء", { proposalId: m.proposal.id, revision: m.proposal.revision }, { confirm: true, description: m.proposal.summary });
+        box.append(n("h3", "m-product__title", L("k126")), n("p", "", m.proposal.summary));
+        c.button(box, "execute", m.proposal.label || L("k127"), { proposalId: m.proposal.id, revision: m.proposal.revision }, { confirm: true, description: m.proposal.summary });
         r.appendChild(box);
       }
-      var composer = n("div", "m-product__section m-assistant__composer"), input = c.field(composer, "message", "رسالتك", { multiline: true, rows: 1 });
-      c.button(composer, "send", "إرسال", function() {
+      var composer = n("div", "m-product__section m-assistant__composer"), input = c.field(composer, "message", L("k128"), { multiline: true, rows: 1 });
+      c.button(composer, "send", L("k129"), function() {
         return c.fieldsPayload(["message"]);
       }, { primary: true, disabled: !!m.replyPending });
       r.appendChild(composer);

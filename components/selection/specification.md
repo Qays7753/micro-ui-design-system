@@ -149,3 +149,5 @@ Picker يعتمد حالة ربط حية لكل عقدة، لا سمة منسو�
 ## W2.5 — عقد init(root) الموحد (A2-F08)
 
 - `MicroSelection.init(root)` يعالج **الجذر نفسه إن طابق** `[data-choice-group]` أو `[data-seg]` ثم الأبناء (كان container-only فتمرير عقدة segmented ذاتها كان يُهمل). إعادة init آمنة: كل ربط محروس بعلامة dataset فلا ازدواج listeners.
+
+- **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS الاختيار يُقرأ وقت الاستخدام من سجل `window.MicroLabels['selection']` الذي يسجّله `components/selection/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12).

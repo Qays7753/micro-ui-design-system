@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "organization";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var liveBindings = /* @__PURE__ */ new WeakMap();
     function claimBinding(element, key) {
       var keys = liveBindings.get(element);
@@ -53,7 +61,7 @@
           var span = document.createElement("span");
           span.className = "m-identity__initials";
           span.setAttribute("aria-hidden", "true");
-          span.textContent = initials || "؟";
+          span.textContent = initials || L("k1");
           img.replaceWith(span);
         }
         on(img, "error", fallback);
@@ -75,9 +83,23 @@
         });
       }
     };
+    window.MicroOrganization.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["organization"] = registry["organization"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroOrganization.init();
+      if (microAutoInit()) window.MicroOrganization.init();
     });
-    if (document.readyState !== "loading") window.MicroOrganization.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroOrganization.init();
   })();
 })();

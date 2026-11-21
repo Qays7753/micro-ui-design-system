@@ -7,7 +7,8 @@ prints a per-gate summary line, and exits non-zero if any gate failed.
 Gate set (see tools/README.md for the full classification):
   - build tools in --check mode: standalone, catalog, manifest, package
     (node tools/build-package.mjs --check: src mirrors + deterministic dist)
-  - static gates: static (light-static-check), links (link-check)
+  - static gates: static (light-static-check), links (link-check),
+    hardcoded-text (Arabic strings in JS, labels pairing, d.ts coverage)
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
     clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
@@ -44,6 +45,7 @@ def build_gates(quick, out, skip_visual):
         ("package", ["node", "tools/build-package.mjs", "--check"]),
         ("static", PY + ["tools/light-static-check.py"]),
         ("link-check", PY + ["tools/link-check.py"]),
+        ("hardcoded-text", PY + ["tools/hardcoded-text-check.py"]),
     ]
     if quick:
         return matrix

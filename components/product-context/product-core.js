@@ -1,13 +1,29 @@
 /* Shared UI-only context, request lifetime and confirmation. No transport/storage/AI. */
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'product-context';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
   var renderers = new Map(), instances = new WeakMap(), sequence = 0;
+
   var phases = {
-    ready: '', loading: 'جارٍ التحميل…', empty: 'لا توجد بيانات بعد', success: 'تمت العملية',
-    error: 'تعذّر إكمال الطلب', rejected: 'لم يُقبل الطلب', disabled: 'الإجراء غير متاح حاليًا',
-    pending: 'بانتظار نتيجة مؤكدة', uncertain: 'النتيجة غير مؤكدة؛ تحقق قبل إعادة الإرسال',
-    denied: 'لا تتوفر صلاحية لهذا السياق', expired: 'انتهت الجلسة', 'signed-out': 'يلزم تسجيل الدخول',
-    conflict: 'تغيّرت البيانات؛ راجع النسخة الأحدث', 'local-saved': 'محفوظ على هذا الجهاز؛ غير متزامن'
+    ready: '', loading: L('k1'), empty: L('k2'), success: L('k3'),
+    error: L('k4'), rejected: L('k5'), disabled: L('k6'),
+    pending: L('k7'), uncertain: L('k8'),
+    denied: L('k9'), expired: L('k10'), 'signed-out': L('k11'),
+    conflict: L('k12'), 'local-saved': L('k13')
   };
   function key(scope) {
     return scope && typeof scope.contextId === 'string' && scope.contextId && typeof scope.roleId === 'string' && scope.roleId && (scope.workspaceId == null || (typeof scope.workspaceId === 'string' && scope.workspaceId))
@@ -74,17 +90,17 @@
     }
     function confirm(id, payload, label, description, local, danger) {
       if (!allowed(id, local) || confirmation) return;
-      if (!window.MicroActionSheet) { note(root, 'يلزم تحميل مكوّن التأكيد', '', 'error');return; }
+      if (!window.MicroActionSheet) { note(root, L('k14'), '', 'error');return; }
       var generation = epoch, context = key(model.scope), trigger = document.activeElement;
       var sheet = node('div','m-layer m-action-sheet'), backdrop = node('div','m-layer-backdrop'), life = new AbortController();
       sheet.id = instanceId + '-confirmation';backdrop.id = sheet.id + '-backdrop';backdrop.dataset.for = sheet.id;
       sheet.dataset.backdropId = backdrop.id;sheet.dataset.backdrop = 'keep';sheet.hidden = backdrop.hidden = true;
       sheet.setAttribute('role','alertdialog');sheet.setAttribute('aria-modal','true');sheet.setAttribute('aria-labelledby',sheet.id+'-title');sheet.setAttribute('aria-describedby',sheet.id+'-description');
-      var head = node('header','m-layer__head'), title = node('h2','m-layer__title','تأكيد الإجراء');title.id = sheet.id+'-title';head.appendChild(title);
-      var cancel = node('button','m-btn m-btn--secondary','تراجع');cancel.type='button';cancel.dataset.layerClose='';head.appendChild(cancel);sheet.appendChild(head);
+      var head = node('header','m-layer__head'), title = node('h2','m-layer__title',L('k15'));title.id = sheet.id+'-title';head.appendChild(title);
+      var cancel = node('button','m-btn m-btn--secondary',L('k16'));cancel.type='button';cancel.dataset.layerClose='';head.appendChild(cancel);sheet.appendChild(head);
       var body = node('div','m-layer__body'), desc = node('p','',description || label);desc.id = sheet.id+'-description';body.appendChild(desc);
       body.appendChild(node('p','m-product__secondary',model.scope.label || model.scope.contextId));
-      var list = node('ul','m-action-sheet__list'), item = node('li'), button = node('button','m-btn '+(danger?'m-btn--destructive-soft':'m-btn--primary')+' m-action-sheet__item',label || 'تأكيد');button.type='button';button.dataset.actionId='confirm';item.appendChild(button);list.appendChild(item);body.appendChild(list);sheet.appendChild(body);
+      var list = node('ul','m-action-sheet__list'), item = node('li'), button = node('button','m-btn '+(danger?'m-btn--destructive-soft':'m-btn--primary')+' m-action-sheet__item',label || L('k17'));button.type='button';button.dataset.actionId='confirm';item.appendChild(button);list.appendChild(item);body.appendChild(list);sheet.appendChild(body);
       document.body.append(backdrop,sheet);confirmation = { sheet:sheet, backdrop:backdrop, life:life };
       window.MicroActionSheet.init(sheet);
       sheet.addEventListener('micro-actions:request',function () {
@@ -127,12 +143,12 @@
           root.querySelectorAll('[data-product-validation],[data-product-field-error]').forEach(function(e){e.remove();});
           root.querySelectorAll('[data-focus-key^="field-"][aria-invalid="true"]').forEach(function(el){el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');el.closest('.m-field').classList.remove('has-error');});
           if(missing.length){
-            var error=note(root,'أكمل الحقول المطلوبة','','error');error.dataset.productValidation='';error.id=instanceId+'-validation';
+            var error=note(root,L('k18'),'','error');error.dataset.productValidation='';error.id=instanceId+'-validation';
             var heading=root.querySelector(':scope > header,:scope > h2');if(heading)heading.after(error);else root.prepend(error);
             var first=null;
             root.querySelectorAll('[data-focus-key^="field-"]').forEach(function(el){
               if(missing.indexOf(el.dataset.focusKey.slice(6))<0)return;
-              var box=el.closest('.m-field'),label=box.querySelector('label'),message=node('p','m-field__msg is-visible','أدخل '+(label?label.textContent:'القيمة المطلوبة'));
+              var box=el.closest('.m-field'),label=box.querySelector('label'),message=node('p','m-field__msg is-visible',L('k19')+(label?label.textContent:L('k20')));
               message.id=el.id+'-required';message.dataset.productFieldError='';box.appendChild(message);
               el.setAttribute('aria-invalid','true');el.setAttribute('aria-describedby',message.id);box.classList.add('has-error');if(!first)first=el;
             });
@@ -141,34 +157,34 @@
           data.files=ui.files.slice();return data;
         },
         media:function(parent,images,fit,preview){
-          if(!images||!images.length){parent.appendChild(node('div','m-product__media-empty','لا توجد صورة متاحة'));return;}
-          var carousel=node('div','m-carousel m-product__gallery');carousel.classList.toggle('m-product__gallery--preview',!!preview);carousel.dataset.carousel='';carousel.dataset.carouselLabel='صور المرفقات';carousel.setAttribute('role','group');carousel.setAttribute('aria-label','صور المرفقات');
+          if(!images||!images.length){parent.appendChild(node('div','m-product__media-empty',L('k21')));return;}
+          var carousel=node('div','m-carousel m-product__gallery');carousel.classList.toggle('m-product__gallery--preview',!!preview);carousel.dataset.carousel='';carousel.dataset.carouselLabel=L('k22');carousel.setAttribute('role','group');carousel.setAttribute('aria-label',L('k22'));
           var viewport=node('div','m-carousel__viewport');viewport.dataset.viewport='';var track=node('ul','m-carousel__track');track.dataset.track='';
-          images.forEach(function(image,index){var li=node('li','m-carousel__slide'), card=node('div','m-carousel__card'), src=safeImage(image.src);li.dataset.carouselSlide='';li.dataset.cardLabel=image.alt||'صورة '+(index+1);
-            if(src){var img=node('img','m-product__media');img.src=src;img.alt=image.alt||'صورة المرفق';img.loading='lazy';img.decoding='async';img.style.objectFit=fit==='contain'?'contain':'cover';ctx.on(img,'error',function(){img.replaceWith(node('div','m-product__media-empty','تعذّر عرض الصورة'));});card.appendChild(img);}else card.appendChild(node('div','m-product__media-empty','رابط الصورة غير متاح'));
+          images.forEach(function(image,index){var li=node('li','m-carousel__slide'), card=node('div','m-carousel__card'), src=safeImage(image.src);li.dataset.carouselSlide='';li.dataset.cardLabel=image.alt||L('k23')+(index+1);
+            if(src){var img=node('img','m-product__media');img.src=src;img.alt=image.alt||L('k24');img.loading='lazy';img.decoding='async';img.style.objectFit=fit==='contain'?'contain':'cover';ctx.on(img,'error',function(){img.replaceWith(node('div','m-product__media-empty',L('k25')));});card.appendChild(img);}else card.appendChild(node('div','m-product__media-empty',L('k26')));
             li.appendChild(card);track.appendChild(li);});viewport.appendChild(track);carousel.appendChild(viewport);
-          if(images.length>1){var controls=node('div','m-product__actions');['prev','next'].forEach(function(dir){var b=node('button','m-btn m-btn--secondary',dir==='prev'?'السابق':'التالي');b.type='button';b.dataset[dir]='';controls.appendChild(b);});var count=node('span','m-product__secondary');count.dataset.status='';controls.appendChild(count);carousel.appendChild(controls);}
+          if(images.length>1){var controls=node('div','m-product__actions');['prev','next'].forEach(function(dir){var b=node('button','m-btn m-btn--secondary',dir==='prev'?L('k27'):L('k28'));b.type='button';b.dataset[dir]='';controls.appendChild(b);});var count=node('span','m-product__secondary');count.dataset.status='';controls.appendChild(count);carousel.appendChild(controls);}
           parent.appendChild(carousel);if(window.MicroCarousel){window.MicroCarousel.init(carousel);ctx.cleanup(function(){window.MicroCarousel.destroy(carousel);});}
         },
         attachments:function(parent,required){
-          var field=node('div','m-field'),lab=node('span','m-field__label','الصور'),input=node('input','m-product__file'),choose=node('button','m-btn m-btn--secondary',model.attachmentSelection==='append'?'إضافة صور':ui.files.length?'استبدال الاختيار':'اختيار الصور');input.type='file';input.accept='image/*';input.multiple=true;input.id=instanceId+'-files';input.hidden=true;input.tabIndex=-1;input.disabled=!ctx.editable();choose.type='button';choose.disabled=!ctx.editable();choose.dataset.focusKey='choose-files';ctx.on(choose,'click',function(){if(ctx.editable())input.click();});field.append(lab,input,choose);parent.appendChild(field);
-          ctx.on(input,'change',function(){var files=Array.from(input.files||[]);if(files.some(function(f){return !f.type.startsWith('image/')||(model.maxImageBytes&&f.size>model.maxImageBytes);})){note(parent,'تعذّر استخدام الملف','نوع الصورة أو حجمها لا يطابق القيد المقدم.','error');return;}var selection=model.attachmentSelection==='append'?ui.files.concat(files):files;releaseFiles();ui.files=selection;ui.urls=selection.map(function(f){return URL.createObjectURL(f);});render();});
-          if(ui.files.length){var names=node('ul','m-product__filenames');ui.files.forEach(function(f,index){var item=node('li');item.appendChild(node('bdi','',f.name));if(ui.files.length>1){var remove=node('button','m-btn m-btn--light','إزالة');remove.type='button';remove.disabled=!ctx.editable();remove.setAttribute('aria-label','إزالة '+f.name);remove.dataset.focusKey='remove-file-'+index;ctx.on(remove,'click',function(){if(!ctx.editable())return;URL.revokeObjectURL(ui.urls[index]);ui.urls.splice(index,1);ui.files.splice(index,1);remove.dataset.focusKey='choose-files';render();});item.appendChild(remove);}names.appendChild(item);});field.appendChild(names);ctx.media(parent,ui.files.map(function(f,i){return {src:ui.urls[i],alt:f.name};}),'contain',true);var clear=node('button','m-btn m-btn--light','إزالة المرفقات');clear.type='button';clear.disabled=!ctx.editable();ctx.on(clear,'click',function(){releaseFiles();render();});parent.appendChild(clear);}
-          if(required)parent.appendChild(node('p','m-product__secondary','أرفق صورة للمتابعة.'));
+          var field=node('div','m-field'),lab=node('span','m-field__label',L('k29')),input=node('input','m-product__file'),choose=node('button','m-btn m-btn--secondary',model.attachmentSelection==='append'?L('k30'):ui.files.length?L('k31'):L('k32'));input.type='file';input.accept='image/*';input.multiple=true;input.id=instanceId+'-files';input.hidden=true;input.tabIndex=-1;input.disabled=!ctx.editable();choose.type='button';choose.disabled=!ctx.editable();choose.dataset.focusKey='choose-files';ctx.on(choose,'click',function(){if(ctx.editable())input.click();});field.append(lab,input,choose);parent.appendChild(field);
+          ctx.on(input,'change',function(){var files=Array.from(input.files||[]);if(files.some(function(f){return !f.type.startsWith('image/')||(model.maxImageBytes&&f.size>model.maxImageBytes);})){note(parent,L('k33'),L('k34'),'error');return;}var selection=model.attachmentSelection==='append'?ui.files.concat(files):files;releaseFiles();ui.files=selection;ui.urls=selection.map(function(f){return URL.createObjectURL(f);});render();});
+          if(ui.files.length){var names=node('ul','m-product__filenames');ui.files.forEach(function(f,index){var item=node('li');item.appendChild(node('bdi','',f.name));if(ui.files.length>1){var remove=node('button','m-btn m-btn--light',L('k35'));remove.type='button';remove.disabled=!ctx.editable();remove.setAttribute('aria-label',L('k36')+f.name);remove.dataset.focusKey='remove-file-'+index;ctx.on(remove,'click',function(){if(!ctx.editable())return;URL.revokeObjectURL(ui.urls[index]);ui.urls.splice(index,1);ui.files.splice(index,1);remove.dataset.focusKey='choose-files';render();});item.appendChild(remove);}names.appendChild(item);});field.appendChild(names);ctx.media(parent,ui.files.map(function(f,i){return {src:ui.urls[i],alt:f.name};}),'contain',true);var clear=node('button','m-btn m-btn--light',L('k37'));clear.type='button';clear.disabled=!ctx.editable();ctx.on(clear,'click',function(){releaseFiles();render();});parent.appendChild(clear);}
+          if(required)parent.appendChild(node('p','m-product__secondary',L('k38')));
         },
         timeline:function(parent,items){var list=node('ol','m-product__timeline');(items||[]).forEach(function(item){var row=node('li');if(item.current)row.setAttribute('aria-current','step');row.appendChild(node('strong','',item.label));if(item.time)row.appendChild(node('bdi','m-product__secondary',item.time));if(item.detail)row.appendChild(node('p','m-product__secondary',item.detail));list.appendChild(row);});parent.appendChild(list);}
       };
       var phase=Object.prototype.hasOwnProperty.call(phases,model.phase)?model.phase:'uncertain';
-      if(forbidden.indexOf(phase)>=0){note(root,phases[phase],'بيانات السياق السابق غير معروضة.','warning');if(permission('reauth'))ctx.button(root,'reauth','متابعة الدخول',{});if(phase==='denied'&&permission('choose-context'))ctx.button(root,'choose-context','اختيار سياق آخر',{});}
-      else if(!scopeKey){note(root,'اختر سياقًا معتمدًا','لا تُعرض بيانات خاصة قبل تحديد السياق.','warning');}
-      else if(model.scope.kind==='driver'&&(type==='market'||(type==='review'&&model.mode!=='report')||(type!=='context'&&['manage','market'].indexOf(model.destination)>=0))){note(root,'هذه الوجهة غير متاحة في سياق السائق','المتاح للسائق Delivery وAsk Micro فقط.','warning');}
-      else if(!permission('view')||(type!=='context'&&type!=='state'&&key(model.dataContext)!==scopeKey)){note(root,'لا يمكنك عرض هذه البيانات في السياق الحالي','','warning');}
+      if(forbidden.indexOf(phase)>=0){note(root,phases[phase],L('k39'),'warning');if(permission('reauth'))ctx.button(root,'reauth',L('k40'),{});if(phase==='denied'&&permission('choose-context'))ctx.button(root,'choose-context',L('k41'),{});}
+      else if(!scopeKey){note(root,L('k42'),L('k43'),'warning');}
+      else if(model.scope.kind==='driver'&&(type==='market'||(type==='review'&&model.mode!=='report')||(type!=='context'&&['manage','market'].indexOf(model.destination)>=0))){note(root,L('k44'),L('k45'),'warning');}
+      else if(!permission('view')||(type!=='context'&&type!=='state'&&key(model.dataContext)!==scopeKey)){note(root,L('k46'),'','warning');}
       else {
-        if(['offline','weak','local'].indexOf(model.connection)>=0)note(root,model.connection==='offline'?'الاتصال منقطع':model.connection==='local'?'وضع محلي':'الاتصال ضعيف',model.destination==='manage'?'تحقق من مزامنة التغييرات المحلية.':'العمليات التي تحتاج الاتصال غير متاحة الآن.','warning');
+        if(['offline','weak','local'].indexOf(model.connection)>=0)note(root,model.connection==='offline'?L('k47'):model.connection==='local'?L('k48'):L('k49'),model.destination==='manage'?L('k50'):L('k51'),'warning');
         if(pending)note(root,phases.pending,'','info');else if(phase!=='ready')note(root,phase==='local-saved'&&model.destination!=='manage'?phases.uncertain:phases[phase],model.phaseDetail||'',phase==='error'?'error':phase==='success'?'success':'info');
         if(phase!=='loading'&&(phase!=='empty'||type==='assistant'))renderers.get(type)(ctx);
         else if(phase==='empty'&&model.emptyActionLabel)ctx.button(root,'create',model.emptyActionLabel,{});
-        if(['uncertain','conflict'].indexOf(phase)>=0&&permission('recheck')&&!root.querySelector('[data-product-action="recheck"]'))ctx.button(root,'recheck','إعادة التحقق',{});
+        if(['uncertain','conflict'].indexOf(phase)>=0&&permission('recheck')&&!root.querySelector('[data-product-action="recheck"]'))ctx.button(root,'recheck',L('k52'),{});
       }
       if(window.MicroFields){window.MicroFields.init(root);cleanups.push(function(){window.MicroFields.disconnect(root);});}
       if(suppressFocus&&active)root.focus({preventScroll:true});else if(focusKey){var found=Array.from(root.querySelectorAll('[data-focus-key]')).find(function(el){return el.dataset.focusKey===focusKey&&!el.disabled;});if(found){found.focus({preventScroll:true});if(selection&&found.setSelectionRange)try{found.setSelectionRange(selection[0],selection[1]);}catch(_){}}else root.focus({preventScroll:true});}suppressFocus=false;
@@ -187,4 +203,22 @@
     instances.set(root,{type:type,api:api});replace(value);return api;
   }
   window.MicroProduct={register:function(type,renderer){if(renderers.has(type))throw new Error('Duplicate composition');renderers.set(type,renderer);},mount:mount,contextKey:key};
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroProduct.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['product-context'] = registry['product-context'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
 }());

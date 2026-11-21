@@ -2,6 +2,21 @@
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'account-settings';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   function initPanel(panel) {
     if (panel.hasAttribute('data-account-settings-ready') && panel.__microAccountLifetime
         && !panel.__microAccountLifetime.signal.aborted) return;
@@ -67,7 +82,7 @@
       }));
       var status = panel.querySelector('[data-account-demo-status]');
       if (status) status.textContent = input.getAttribute('data-demo-only') !== null
-        ? 'تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد.'
+        ? L('k1')
         : '';
     });
 
@@ -91,6 +106,7 @@
     });
   }
   window.MicroAccountSettings = { init: init, disconnect: disconnect, destroy: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();

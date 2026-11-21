@@ -28,6 +28,21 @@
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'info-strip';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب (نفس ثوابت carousel) */
   var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
   var COMMIT_MIN = 32;    /* أدنى عتبة التزام بالبكسل */
@@ -146,7 +161,7 @@
     if (st.prevBtn) st.prevBtn.disabled = st.index === 0 || st.count <= 1;
     if (st.nextBtn) st.nextBtn.disabled = st.index === st.count - 1 || st.count <= 1;
     if (st.position) st.position.textContent = (st.index + 1) + ' / ' + st.count;
-    if (st.status) st.status.textContent = 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
+    if (st.status) st.status.textContent = L('k7') + (st.index + 1) + L('k8') + st.count;
     if (st.pages) {
       Array.prototype.forEach.call(st.pages.querySelectorAll('[data-info-strip-page]'), function (b, i) {
         b.setAttribute('aria-current', i === st.index ? 'true' : 'false');
@@ -346,7 +361,7 @@
       if (controls) controls.hidden = true;
       if (empty) empty.hidden = false;
       if (position) position.textContent = '';
-      if (status) status.textContent = 'لا توجد بطاقات.';
+      if (status) status.textContent = L('k9');
       stateOf.set(strip, {
         viewport: viewport, track: track, slides: [],
         prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
@@ -369,14 +384,14 @@
 
     if (pages) {
       pages.setAttribute('role', 'group');
-      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', 'اختيار البطاقة');
+      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', L('k10'));
       pages.textContent = '';
       slides.forEach(function (_, i) {
         var page = document.createElement('button');
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', 'عرض البطاقة ' + (i + 1));
+        page.setAttribute('aria-label', L('k11') + (i + 1));
         page.setAttribute('aria-current', i === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { goToIndex(strip, i, false); });
@@ -466,6 +481,23 @@
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () { window.MicroInfoPeek.init(); });
-  if (document.readyState !== 'loading') window.MicroInfoPeek.init();
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroInfoPeek.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroInfoPeek.init();
 })();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroInfoPeek.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['info-strip'] = registry['info-strip'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };

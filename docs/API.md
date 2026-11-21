@@ -466,3 +466,17 @@ CSS وJS من components/shared/assets هي ما يُستهلك. صفحات ال
 C07–C12 تراكيب سياق المنتج بحالة Draft فوق العائلات الحالية، ومصدرها `components/product-context/`: C07 الهوية والدور وWorkspace والوجهات، وC08 حالة الاتصال والعمليات المُقرّة، وC09 بطاقة السوق ومحرره وبحثه، وC10 طلب التوصيل وعرضه وتغييره وإثباته، وC11 محادثة Ask Micro المحدودة النطاق وتأكيدها، وC12 بند المراجعة وبلاغها.
 
 C13 شاشات بوابة الدخول تركيب بحالة DRAFT FOR REVIEW يُستهلك من `components/access-gateway/auth-screens.css` وصفحات الاستخدام الأربع (`splash-usage.html` و`google-sign-in-usage.html` و`new-user-welcome-usage.html` و`returning-user-welcome-usage.html`)؛ عائلة أساسه buttons، وهو تركيب CSS/HTML بلا JavaScript API خاصة به، فاستهلاكه وملكيته وتنظيفه وفق عقد Access Gateway أعلاه.
+
+## النصوص الافتراضية وتخصيصها — المرحلة 7 (2026-11-21)
+
+كل نص عربي ظاهر للمستخدم (بما فيه نصوص `aria-label` الإتاحية) كان مكتوبًا داخل JS العائلات أصبح يُقرأ من سجل نصوص افتراضي لكل عائلة: `components/<family>/labels.js` يسجّل `window.MicroLabels['<family>'] = { … }` بقيم هي الصياغة الحرفية السابقة للمرحلة (بلا تخصيص تبقى المخرجات متطابقة بايت-ببايت — D12). ملف `labels.js` يجب أن يُحمَّل قبل ملف سلوك العائلة في كل صفحة (تُفحص آليًا ببوابة `hardcoded-text`)، وملفات JS العائلات تقرأ النص وقت الاستخدام لا وقت التحميل، لذا يعمل التخصيص بعد التحميل.
+
+واجهات التخصيص:
+
+- **`MicroX.setLabels(partial)`** — متاح على كل عائلة لها نصوص JS ظاهرة (Fields، Selection، Picker، Organization، Data وPacked، Messages، Navigation وActionSheet، InfoStrip وPeek، MetricComparison، AccountSettings، AccessGateway، OrderSchedule، Carousel، Product): دمج جزئي (بمستوى واحد، وكائنات صيغ الجمع تُدمج بمفتاحها الداخلي) فوق الافتراضي في سجل العائلة. يسري على التصييرات اللاحقة؛ النص الثابت الموجود في DOM يتحدث عند أول `render`/`update` بعده (أو بتهيئة مثيل جديد). لا يوجد setLabels على Buttons وIcons وReadings وSurfaces عمدًا — لا نصوص JS ظاهرة فيها أصلًا.
+- **`options.labels`** — Access Gateway: `MicroAccessGateway.init(root, { labels: {…}, … })` يدمج نصوص هذا الاستدعاء قبل الربط ( Carousel وPicker بلا معامل options في `init` اليوم — استخدام `setLabels` مؤجل بقرار موثق في DECISIONS).
+- **`MicroLabels.setLocale(locale)`** — locale تنسيق الأرقام للتصييرات اللاحقة. الافتراضي `'ar-u-nu-latn'`: أرقام لاتينية بلا فواصل كما هو الحالي حرفيًا (`MicroLabels.formatNumber` يمرر `String(n)` في الافتراضي؛ `Intl.NumberFormat` يُستخدم فقط عند locale مخصص) — لا يوجد تغيير في أشكال الأرقام أو التواريخ المرئية افتراضيًا (التواريخ تبقى رقمية `DD/MM/YYYY` كما هي).
+- **صيغ الجمع:** `ordersCountPlural` في سجل order-schedule كائن فئات `{ zero, one, two, few, many, other, hundredOne, hundredTwo }` تُختار عبر `Intl.PluralRules('ar')` للعدادات دون 100 (تطابق تام مع المنطق السابق)، والأعداد 100 فأكثر تحتفظ بقاعدة العدد المركب الموثقة (آخر رقمين) — القيم نفس الصياغة الحرفية السابقة، و`{n}` موضع الرقم.
+- **`window.MicroConfig = { autoInit: false }`** قبل تحميل أي ملف سلوك يوقف الربط التلقائي عند `DOMContentLoaded`/`readyState` في مسار IIFE لكل العائلات (كائن الواجهة العام يبقى مصدرًا للتهيئة اليدوية). مستمع إعادة قياس الرسوم بعد جاهزية الخطوط في Data/Packed ليس تهيئة تلقائية فيبقى.
+
+بوابة `tools/hardcoded-text-check.py` (داخل `check-all`): صفر نصوص عربية داخل سلاسل JS خارج `*/labels.js`، اقتران تحميل labels.js قبل JS العائلة في كل صفحة، تغطية مفاتيح `L()`، وتغطية كل دالة عامة على `window.Micro*` في `micro-ui.d.ts`.

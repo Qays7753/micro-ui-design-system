@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "selection";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var liveBindings = /* @__PURE__ */ new WeakMap();
     function claimBinding(element, key) {
       var keys = liveBindings.get(element);
@@ -170,9 +178,23 @@
         }
       }
     };
+    window.MicroSelection.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["selection"] = registry["selection"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      init();
+      if (microAutoInit()) init();
     });
-    if (document.readyState !== "loading") init();
+    if (document.readyState !== "loading" && microAutoInit()) init();
   })();
 })();

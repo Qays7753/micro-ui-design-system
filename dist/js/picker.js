@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "selection";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var states = /* @__PURE__ */ new WeakMap();
     function stateOf(picker) {
       var state = states.get(picker);
@@ -55,7 +63,7 @@
     function summary(picker) {
       var foot = picker.querySelector("[data-picker-summary]");
       var selected = getSelected(picker);
-      if (foot) foot.textContent = selected ? "المحدد: " + selected.label : "المحدد: لا شيء";
+      if (foot) foot.textContent = selected ? L("k1") + selected.label : L("k2");
     }
     function getSelected(picker) {
       var option = optionsOf(picker).filter(function(item) {
@@ -91,7 +99,7 @@
         retry.type = "button";
         retry.className = "m-btn m-btn--secondary";
         retry.setAttribute("data-picker-retry", "");
-        retry.textContent = "إعادة المحاولة";
+        retry.textContent = L("k3");
         list.parentNode.insertBefore(retry, list.nextSibling);
       } else if (list.contains(retry) || status.contains(retry)) {
         list.parentNode.insertBefore(retry, list.nextSibling);
@@ -118,15 +126,15 @@
         option.hidden = hide;
       });
       var defaults = {
-        initial: "لم تُحمّل الخيارات بعد.",
-        loading: "جارٍ تحميل الخيارات…",
-        empty: "لا خيارات متاحة.",
-        error: "تعذّر تحميل الخيارات. أعد المحاولة.",
-        disabled: "الاختيار غير متاح حاليًا."
+        initial: L("k4"),
+        loading: L("k5"),
+        empty: L("k6"),
+        error: L("k7"),
+        disabled: L("k8")
       };
       var noResult = ready && state.query !== "" && !available(picker).length;
       var noData = ready && !optionsOf(picker).length;
-      var message = ready ? noResult ? "لا نتائج مطابقة. عدّل كلمة البحث." : noData ? defaults.empty : "" : state.message || defaults[state.status] || "";
+      var message = ready ? noResult ? L("k9") : noData ? defaults.empty : "" : state.message || defaults[state.status] || "";
       var retryVisible = state.status === "error" && !locked(picker);
       if (active === nodes.retry && !retryVisible) safeFocus(picker);
       if (nodes.status.textContent !== message) nodes.status.textContent = message;
@@ -269,9 +277,23 @@
       },
       getSelected
     };
+    window.MicroPicker.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["selection"] = registry["selection"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroPicker.init();
+      if (microAutoInit()) window.MicroPicker.init();
     });
-    if (document.readyState !== "loading") window.MicroPicker.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroPicker.init();
   })();
 })();

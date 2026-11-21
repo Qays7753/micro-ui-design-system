@@ -1,10 +1,18 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "order-schedule";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
     var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
-    var WEEKDAYS_FULL = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-    var WEEKDAYS_SHORT = ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"];
+    var WEEKDAYS_FULL = [L("k1"), L("k2"), L("k3"), L("k4"), L("k5"), L("k6"), L("k7")];
+    var WEEKDAYS_SHORT = [L("k8"), L("k9"), L("k10"), L("k11"), L("k12"), L("k13"), L("k14")];
     var SVG_NS = "http://www.w3.org/2000/svg";
     var instances = /* @__PURE__ */ new WeakMap();
     var instanceSeq = 0;
@@ -63,18 +71,33 @@
       var t = /* @__PURE__ */ new Date();
       return isoOf(t.getFullYear(), t.getMonth() + 1, t.getDate());
     }
+    var countPluralRules = null;
+    function countPluralCategory(n) {
+      if (n >= 100) {
+        var r = n % 100;
+        if (r === 0) return "other";
+        if (r === 1) return "hundredOne";
+        if (r === 2) return "hundredTwo";
+        if (r >= 3 && r <= 10) return "few";
+        return "many";
+      }
+      if (!countPluralRules) {
+        try {
+          countPluralRules = new Intl.PluralRules("ar");
+        } catch (err) {
+          countPluralRules = { select: function() {
+            return "other";
+          } };
+        }
+      }
+      return countPluralRules.select(n);
+    }
     function countPhraseAr(n) {
-      if (n === 0) return "لا طلبات";
-      if (n === 1) return "طلب واحد";
-      if (n === 2) return "طلبان";
-      if (n >= 3 && n <= 10) return n + " طلبات";
-      if (n >= 11 && n <= 99) return n + " طلبًا";
-      var r = n % 100;
-      if (r === 0) return n + " طلب";
-      if (r === 1) return n + " طلب واحد";
-      if (r === 2) return n + " طلبان";
-      if (r >= 3 && r <= 10) return n + " طلبات";
-      return n + " طلبًا";
+      var forms = L("ordersCountPlural") || {};
+      var category = countPluralCategory(n);
+      var template = forms[category] != null ? forms[category] : forms.other;
+      if (template == null) return String(n);
+      return String(template).replace("{n}", String(n));
     }
     function fullDateAr(iso) {
       var p = parseIso(iso);
@@ -166,7 +189,7 @@
     }
     function init(root, options) {
       if (!root || root.nodeType !== 1) {
-        throw new Error("MicroOrderSchedule.init يتطلب عنصر جذر صالحًا (DOM Element)");
+        throw new Error(L("k15"));
       }
       var existing = instances.get(root);
       if (existing) return existing;
@@ -377,10 +400,10 @@
       function buildViewSeg() {
         var bar = el("div", "m-ocal__viewseg");
         bar.setAttribute("role", "tablist");
-        bar.setAttribute("aria-label", "طريقة العرض");
-        bar.appendChild(viewsegBtn("day", "يوم", viewPressed("day")));
-        bar.appendChild(viewsegBtn("week", "أسبوع", viewPressed("week")));
-        bar.appendChild(viewsegBtn("month", "شهر", viewPressed("month")));
+        bar.setAttribute("aria-label", L("k16"));
+        bar.appendChild(viewsegBtn("day", L("k17"), viewPressed("day")));
+        bar.appendChild(viewsegBtn("week", L("k18"), viewPressed("week")));
+        bar.appendChild(viewsegBtn("month", L("k19"), viewPressed("month")));
         return bar;
       }
       function buildModeToggle() {
@@ -393,7 +416,7 @@
         btn.appendChild(el(
           "span",
           "m-ocal__mode-toggle-text",
-          listActive ? "عرض التقويم" : "عرض القائمة"
+          listActive ? L("k20") : L("k21")
         ));
         return btn;
       }
@@ -443,7 +466,7 @@
         var today = el("button", "m-ocal__todaybtn");
         today.type = "button";
         today.setAttribute("data-ocal-action", "today");
-        today.textContent = "اليوم";
+        today.textContent = L("k22");
         return today;
       }
       function todayVisible() {
@@ -459,8 +482,8 @@
       function buildNavActions(prevAction, nextAction) {
         var group = el("div", "m-ocal__cal-actions");
         if (todayVisible()) group.appendChild(todayNavBtn());
-        group.appendChild(navBtn(prevAction, prevAction === "prev-month" ? "الشهر السابق" : prevAction === "prev-week" ? "الأسبوع السابق" : "اليوم السابق", prevIcon()));
-        group.appendChild(navBtn(nextAction, nextAction === "next-month" ? "الشهر التالي" : nextAction === "next-week" ? "الأسبوع التالي" : "اليوم التالي", nextIcon()));
+        group.appendChild(navBtn(prevAction, prevAction === "prev-month" ? L("k23") : prevAction === "prev-week" ? L("k24") : L("k25"), prevIcon()));
+        group.appendChild(navBtn(nextAction, nextAction === "next-month" ? L("k26") : nextAction === "next-week" ? L("k27") : L("k28"), nextIcon()));
         return group;
       }
       function prevIcon() {
@@ -475,7 +498,7 @@
         var pickerButton = el("button", "m-ocal__month-trigger");
         pickerButton.type = "button";
         pickerButton.setAttribute("data-ocal-action", "month-picker");
-        pickerButton.setAttribute("aria-label", "اختيار الشهر والسنة");
+        pickerButton.setAttribute("aria-label", L("k29"));
         pickerButton.setAttribute("aria-haspopup", "dialog");
         pickerButton.setAttribute("aria-expanded", state.pickerOpen ? "true" : "false");
         var range = el("span", "m-ocal__month-range");
@@ -494,31 +517,31 @@
         picker.setAttribute("data-ocal-picker", "");
         picker.setAttribute("data-ocal-year", yearText(state.pickerYear));
         picker.setAttribute("role", "dialog");
-        picker.setAttribute("aria-label", "اختيار الشهر والسنة");
+        picker.setAttribute("aria-label", L("k29"));
         var heading = el("div", "m-ocal__picker-head");
-        var prevYear = el("button", "m-ocal__picker-yearbtn", "السنة السابقة");
+        var prevYear = el("button", "m-ocal__picker-yearbtn", L("k30"));
         prevYear.type = "button";
         prevYear.setAttribute("data-ocal-action", "picker-prev-year");
-        prevYear.setAttribute("aria-label", "السنة السابقة");
+        prevYear.setAttribute("aria-label", L("k30"));
         prevYear.disabled = state.pickerYear <= 1;
         heading.appendChild(prevYear);
         var year = el(hTag(), "m-ocal__picker-year", yearText(state.pickerYear));
         year.setAttribute("aria-live", "polite");
         heading.appendChild(year);
-        var nextYear = el("button", "m-ocal__picker-yearbtn", "السنة التالية");
+        var nextYear = el("button", "m-ocal__picker-yearbtn", L("k31"));
         nextYear.type = "button";
         nextYear.setAttribute("data-ocal-action", "picker-next-year");
-        nextYear.setAttribute("aria-label", "السنة التالية");
+        nextYear.setAttribute("aria-label", L("k31"));
         nextYear.disabled = state.pickerYear >= 9999;
         heading.appendChild(nextYear);
-        var back = el("button", "m-ocal__picker-back", "رجوع للتقويم");
+        var back = el("button", "m-ocal__picker-back", L("k32"));
         back.type = "button";
         back.setAttribute("data-ocal-action", "picker-back");
         heading.appendChild(back);
         picker.appendChild(heading);
         var months = el("div", "m-ocal__picker-months");
         months.setAttribute("role", "group");
-        months.setAttribute("aria-label", "أشهر السنة");
+        months.setAttribute("aria-label", L("k33"));
         var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
         for (var i = 0; i < 12; i++) {
           var month = el("button", "m-ocal__picker-month", pad2(i + 1));
@@ -600,7 +623,7 @@
           dots.appendChild(el("span", "m-ocal__dot m-ocal__dot--" + visibleStatuses[i].tone));
         }
         cell.appendChild(dots);
-        var label = dateNumeric(iso) + "، " + countPhraseAr(orders.length);
+        var label = dateNumeric(iso) + L("k34") + countPhraseAr(orders.length);
         cell.setAttribute("aria-label", label);
         return cell;
       }
@@ -612,7 +635,7 @@
         var totalCells = Math.ceil((lead + dim) / 7) * 7;
         var grid = el("div", "m-ocal__grid");
         grid.setAttribute("role", "grid");
-        grid.setAttribute("aria-label", "طلبات " + pad2(m) + " / " + yearText(y));
+        grid.setAttribute("aria-label", L("k35") + pad2(m) + " / " + yearText(y));
         grid.setAttribute("data-ocal-grid", "");
         var row = el("div", "m-ocal__gridrow");
         row.setAttribute("role", "row");
@@ -668,7 +691,7 @@
         var monthOfTitle = parseIso(state.selectedDate);
         var grid = el("div", "m-ocal__grid");
         grid.setAttribute("role", "grid");
-        grid.setAttribute("aria-label", "طلبات الأسبوع " + weekRangeTitle(dates));
+        grid.setAttribute("aria-label", L("k36") + weekRangeTitle(dates));
         grid.setAttribute("data-ocal-grid", "");
         var row = el("div", "m-ocal__gridrow");
         row.setAttribute("role", "row");
@@ -701,10 +724,10 @@
         b.type = "button";
         b.setAttribute("data-ocal-action", "add");
         b.appendChild(plusIcon());
-        b.appendChild(el("span", null, "إضافة طلب"));
+        b.appendChild(el("span", null, L("k37")));
         var d = dateIso === void 0 ? addRequestDate() : dateIso;
         b.setAttribute("data-ocal-add-date", d || "");
-        if (d) b.setAttribute("aria-label", "إضافة طلب ليوم " + fullDateAr(d));
+        if (d) b.setAttribute("aria-label", L("k38") + fullDateAr(d));
         return b;
       }
       function safeId(s) {
@@ -771,12 +794,12 @@
         panel.appendChild(el("p", "m-ocal__rowpanel-title", order.title));
         var dl = el("dl", "m-ocal__rowdetails");
         dl.appendChild(detailRow(
-          "التاريخ",
-          order.date ? dateNumeric(order.date) : "غير مجدول",
+          L("k39"),
+          order.date ? dateNumeric(order.date) : L("k40"),
           true
         ));
-        dl.appendChild(detailRow("الوقت", order.time || "—", true));
-        dl.appendChild(detailRow("المورد", order.customer || "—", false));
+        dl.appendChild(detailRow(L("k41"), order.time || "—", true));
+        dl.appendChild(detailRow(L("k42"), order.customer || "—", false));
         if (order.statusKey !== "") {
           var st = resolveStatus(order.statusKey);
           var chip = el(
@@ -784,10 +807,10 @@
             "m-ocal__row-status m-ocal__row-status--" + st.tone,
             st.label
           );
-          dl.appendChild(detailRow("الحالة", chip, false));
+          dl.appendChild(detailRow(L("k43"), chip, false));
         }
         if (order.note) {
-          dl.appendChild(detailRow("الملاحظة", order.note, false));
+          dl.appendChild(detailRow(L("k44"), order.note, false));
         }
         panel.appendChild(dl);
         if (state.orderActions.edit || state.orderActions.delete) {
@@ -814,14 +837,14 @@
       function buildOrderTools(order) {
         var row = el("div", "m-ocal__rowtools");
         if (state.orderActions.edit) {
-          var editBtn = el("button", "m-ocal__rowtool", "تعديل");
+          var editBtn = el("button", "m-ocal__rowtool", L("k45"));
           editBtn.type = "button";
           editBtn.setAttribute("data-ocal-action", "order-edit");
           editBtn.setAttribute("data-ocal-id", order.id);
           row.appendChild(editBtn);
         }
         if (state.orderActions.delete) {
-          var delBtn = el("button", "m-ocal__rowtool m-ocal__rowtool--danger", "حذف");
+          var delBtn = el("button", "m-ocal__rowtool m-ocal__rowtool--danger", L("k46"));
           delBtn.type = "button";
           delBtn.setAttribute("data-ocal-action", "order-delete");
           delBtn.setAttribute("data-ocal-id", order.id);
@@ -846,10 +869,10 @@
       function eventsTitleNodes(iso) {
         var title = el(hTag(), "m-ocal__daypanel-title");
         if (iso === state.today) {
-          title.textContent = "طلبات اليوم";
+          title.textContent = L("k47");
           return title;
         }
-        title.appendChild(document.createTextNode("طلبات "));
+        title.appendChild(document.createTextNode(L("k35")));
         var bdi = el("bdi", "m-ocal__daypanel-date", dateNumeric(iso));
         title.appendChild(bdi);
         return title;
@@ -865,12 +888,12 @@
           head.appendChild(el(
             hTag(),
             "m-ocal__daypanel-title",
-            "لا يوم محدد في " + pad2(m) + " / " + yearText(y)
+            L("k48") + pad2(m) + " / " + yearText(y)
           ));
           head.appendChild(el(
             "p",
             "m-ocal__daypanel-count",
-            countPhraseAr(ordersInMonth(y, m).length) + " في هذا الشهر"
+            countPhraseAr(ordersInMonth(y, m).length) + L("k49")
           ));
           head.appendChild(buildAddButton(null));
           panel.appendChild(head);
@@ -892,7 +915,7 @@
           var empty = el("div", "m-ocal__daypanel-empty");
           empty.setAttribute("data-ocal-status", "empty");
           empty.setAttribute("role", "status");
-          empty.appendChild(el("p", "m-ocal__status-text", "لا توجد طلبات"));
+          empty.appendChild(el("p", "m-ocal__status-text", L("k50")));
           panel.appendChild(empty);
         }
         return panel;
@@ -954,7 +977,7 @@
           var empty = el("div", "m-ocal__status m-ocal__status--empty");
           empty.setAttribute("data-ocal-status", "empty");
           empty.setAttribute("role", "status");
-          empty.appendChild(el("p", "m-ocal__status-text", "لا توجد طلبات بعد."));
+          empty.appendChild(el("p", "m-ocal__status-text", L("k51")));
           empty.appendChild(buildAddButton());
           screen.appendChild(empty);
           return screen;
@@ -966,11 +989,11 @@
         screen.appendChild(top);
         var buckets = listBuckets();
         var sec;
-        sec = buildListSection("الطلبات القادمة", buckets.upcoming);
+        sec = buildListSection(L("k52"), buckets.upcoming);
         if (sec) screen.appendChild(sec);
-        sec = buildListSection("الطلبات السابقة", buckets.past);
+        sec = buildListSection(L("k53"), buckets.past);
         if (sec) screen.appendChild(sec);
-        sec = buildListSection("الطلبات غير المجدولة", buckets.unsched);
+        sec = buildListSection(L("k54"), buckets.unsched);
         if (sec) screen.appendChild(sec);
         return screen;
       }
@@ -988,18 +1011,18 @@
         var box = el("div", "m-ocal__status m-ocal__status--loading");
         box.setAttribute("data-ocal-status", "loading");
         box.setAttribute("role", "status");
-        box.appendChild(el("p", "m-ocal__status-text", "جارٍ تحميل الطلبات…"));
+        box.appendChild(el("p", "m-ocal__status-text", L("k55")));
         return box;
       }
       function buildError() {
         var box = el("div", "m-ocal__status m-ocal__status--error");
         box.setAttribute("data-ocal-status", "error");
         box.setAttribute("role", "alert");
-        box.appendChild(el("p", "m-ocal__status-text", "تعذّر تحميل الطلبات."));
+        box.appendChild(el("p", "m-ocal__status-text", L("k56")));
         var b = el("button", "m-ocal__retry");
         b.type = "button";
         b.setAttribute("data-ocal-action", "retry");
-        b.textContent = "إعادة المحاولة";
+        b.textContent = L("k57");
         box.appendChild(b);
         return box;
       }
@@ -1454,8 +1477,8 @@
             resizeFallback = null;
           }
           for (var i = listeners.length - 1; i >= 0; i--) {
-            var L = listeners[i];
-            L.el.removeEventListener(L.type, L.fn, false);
+            var L2 = listeners[i];
+            L2.el.removeEventListener(L2.type, L2.fn, false);
           }
           listeners.length = 0;
           docEscapeRef = null;
@@ -1486,6 +1509,20 @@
         var inst = root && instances.get(root) || null;
         if (inst) inst.setData(orders);
         return inst;
+      }
+    };
+    window.MicroOrderSchedule.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["order-schedule"] = registry["order-schedule"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
       }
     };
   })();

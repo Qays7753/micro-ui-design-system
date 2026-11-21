@@ -1,6 +1,9 @@
 (() => {
   (function() {
     "use strict";
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var CLASS = "m-reading-unit--contextual";
     function within(root) {
       var out = [].slice.call(root.querySelectorAll("[data-reading-unit]"));
@@ -73,8 +76,8 @@
       }
     };
     document.addEventListener("DOMContentLoaded", function() {
-      sync(document);
+      if (microAutoInit()) sync(document);
     });
-    if (document.readyState !== "loading") sync(document);
+    if (document.readyState !== "loading" && microAutoInit()) sync(document);
   })();
 })();

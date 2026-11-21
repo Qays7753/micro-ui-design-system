@@ -20,9 +20,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCES = [
     "components/buttons/buttons.css",
     "components/data/data.css",
+    "components/data/labels.js",
     "components/data/data.js",
     "components/data/packed-circle.css",
     "components/data/packed-circle.js",
+    "components/metric-comparison/labels.js",
     "components/metric-comparison/metric-comparison.css",
     "components/metric-comparison/metric-comparison.js",
     "shared/tokens.css",
@@ -155,7 +157,8 @@ main{width:100%;max-width:430px;margin:auto;padding:12px;display:grid;gap:24px}
 <li data-series="b" data-label="سليمة" data-value="8"></li>
 <li data-series="c" data-label="مفقودة" data-value=""></li></ul>
 <div class="m-chart__plot m-donut" data-plot></div><p data-summary></p></section>
-</main><script src="/components/data/data.js"></script><script src="/components/data/packed-circle.js"></script>
+</main><script src="/components/data/labels.js"></script><script src="/components/data/data.js"></script><script src="/components/data/packed-circle.js"></script>
+<script src="/components/metric-comparison/labels.js"></script>
 <script src="/components/metric-comparison/metric-comparison.js"></script></body></html>"""
 
 

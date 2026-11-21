@@ -61,21 +61,33 @@ CSS = (
 )
 JS = (
     "components/buttons/buttons.js",
+    "components/fields/labels.js",
     "components/fields/fields.js",
+    "components/selection/labels.js",
     "components/selection/selection.js",
     "components/selection/picker.js",
+    "components/organization/labels.js",
     "components/organization/organization.js",
+    "components/data/labels.js",
     "components/data/data.js",
     "components/data/packed-circle.js",
+    "components/messages/labels.js",
     "components/messages/messages.js",
+    "components/navigation/labels.js",
     "components/navigation/navigation.js",
     "components/navigation/action-sheet.js",
+    "components/info-strip/labels.js",
     "components/info-strip/info-strip.js",
     "components/info-strip/info-strip-peek.js",
+    "components/metric-comparison/labels.js",
     "components/metric-comparison/metric-comparison.js",
+    "components/account-settings/labels.js",
     "components/account-settings/account-settings.js",
+    "components/access-gateway/labels.js",
     "components/access-gateway/access-gateway.js",
+    "components/order-schedule/labels.js",
     "components/order-schedule/order-schedule.js",
+    "components/carousel/labels.js",
     "components/carousel/carousel.js",
 )
 
@@ -659,6 +671,80 @@ SCRIPT = r"""async () => {
     done(m);
   }
 
+  /* المرحلة 7 — setLabels: نص بديل يظهر بعد إعادة التصيير، والاستعادة تعيد الأصل */
+  const labelKeyOf = (fam, html) => Object.keys(window.MicroLabels[fam] || {})
+    .find((k) => typeof window.MicroLabels[fam][k] === 'string' && html.includes(window.MicroLabels[fam][k]));
+  {
+    const m = mount('order-schedule');
+    /* نطاق الكتلة السابقة لا يمتد هنا — تعريفان محليان للسيناريو */
+    const ORDERS = [
+      { id: 'od-01', title: 'طلب القهوة العربية', date: '2026-11-21', time: '14:30', statusKey: 'progress', customer: 'مطعم الواحة' },
+      { id: 'od-02', title: 'طلب تجهيز مكتب الاستقبال', date: '2026-11-22', time: '09:00', statusKey: 'done', customer: 'شركة النور' }
+    ];
+    const STATUSES = {
+      progress: { label: 'قيد التنفيذ', tone: 'progress' },
+      done: { label: 'تم التسليم', tone: 'success' }
+    };
+    const inst = MicroOrderSchedule.init(m.root, { orders: ORDERS, statuses: STATUSES, today: '2026-11-21', selectedDate: '2026-11-21', view: 'list' });
+    MicroOrderSchedule.update(m.root, []);
+    const key = labelKeyOf('order-schedule', m.root.innerHTML);
+    const original = key && window.MicroLabels['order-schedule'][key];
+    MicroOrderSchedule.setLabels(key ? { [key]: 'نص بديل للفحص' } : {});
+    MicroOrderSchedule.update(m.root, []);
+    const changed = m.root.innerHTML.includes('نص بديل للفحص');
+    MicroOrderSchedule.setLabels(key ? { [key]: original } : {});
+    MicroOrderSchedule.update(m.root, []);
+    const restored = m.root.innerHTML.includes(original) && !m.root.innerHTML.includes('نص بديل للفحص');
+    inst.destroy();
+    record('order-schedule', 'd: setLabels ثم update يُظهر النص البديل والاستعادة تعيد الأصل', !!key && changed && restored, { key: key || null, changed, restored });
+  }
+  {
+    /* حتمي: رسم أعمدة بنطاق معلن غير صالح (data-max="oops") يعرض نص
+       الرفض الافتراضي k9 داخل [data-plot] — بلا اعتماد على نصوص
+       القالب التي قد لا تحوي مفتاحًا ظاهرًا في innerHTML */
+    const m = mount('data');
+    const chart = document.createElement('div');
+    chart.className = 'm-chart';
+    chart.setAttribute('data-chart', 'bars');
+    chart.setAttribute('data-max', 'oops');
+    chart.innerHTML = '<ul class="m-chart__data" hidden>'
+      + '<li data-series="a" data-label="قراءة" data-value="5"></li></ul>'
+      + '<div data-plot></div><p data-chart-summary></p>';
+    m.root.appendChild(chart);
+    MicroData.init(m.root);
+    const original = window.MicroLabels['data'].k9;
+    const shown = m.root.innerHTML.includes(original);
+    MicroData.setLabels({ k9: 'نص بديل للفحص' });
+    MicroData.update(m.root);
+    const changed = m.root.innerHTML.includes('نص بديل للفحص') && !m.root.innerHTML.includes(original);
+    MicroData.setLabels({ k9: original });
+    MicroData.update(m.root);
+    const restored = m.root.innerHTML.includes(original) && !m.root.innerHTML.includes('نص بديل للفحص');
+    MicroData.disconnect(m.root);
+    record('data', 'f: setLabels ثم update يعيد تصيير النص البديل والاستعادة تعيد الأصل', shown && changed && restored, { shown, changed, restored });
+  }
+  {
+    const m1 = mount('carousel');
+    MicroCarousel.init(m1.root);
+    const key = labelKeyOf('carousel', m1.root.innerHTML);
+    const original = key && window.MicroLabels['carousel'][key];
+    let changed = false;
+    let restored = false;
+    if (key) {
+      MicroCarousel.setLabels({ [key]: 'نص بديل للفحص' });
+      const m2 = mount('carousel');
+      MicroCarousel.init(m2.root);
+      changed = m2.root.innerHTML.includes('نص بديل للفحص');
+      MicroCarousel.destroy(m2.root);
+      MicroCarousel.setLabels({ [key]: original });
+      const m3 = mount('carousel');
+      MicroCarousel.init(m3.root);
+      restored = m3.root.innerHTML.includes(original) && !m3.root.innerHTML.includes('نص بديل للفحص');
+      MicroCarousel.destroy(m3.root);
+    }
+    MicroCarousel.destroy(m1.root);
+    record('carousel', 'e: setLabels يسري على التصييرات اللاحقة (مثيل جديد) والاستعادة تعيد الأصل', !!key && changed && restored, { key: key || null, changed, restored });
+  }
   return results;
 }"""
 

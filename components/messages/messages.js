@@ -37,7 +37,23 @@
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'messages';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var liveBindings = new WeakMap();
+
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
     if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
@@ -265,7 +281,7 @@
       var v = noteVariantOf(note);
       if (v) note.setAttribute('role', NOTE_ROLE_BY_VARIANT[v]);
       else if (window.console && console.warn) {
-        console.warn('[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا.', note);
+        console.warn(L('k1'), note);
       }
     });
   }
@@ -332,6 +348,24 @@
     /* W2.5: init(root) يشمل الجذر نفسه؛ W2.2: يضمن أدوار m-note قبل التفاعل */
     init: function (root) { ensureNoteRoles(root); bindClose(root); }
   };
-  document.addEventListener('DOMContentLoaded', function () { window.MicroMessages.init(); });
-  if (document.readyState !== 'loading') window.MicroMessages.init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroMessages.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['messages'] = registry['messages'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroMessages.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroMessages.init();
 })();

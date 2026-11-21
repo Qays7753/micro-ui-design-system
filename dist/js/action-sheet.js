@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "navigation";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var states = /* @__PURE__ */ new WeakMap();
     function sheets(root) {
       var scope = root || document;
@@ -87,9 +95,23 @@
         });
       }
     };
+    window.MicroActionSheet.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["navigation"] = registry["navigation"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroActionSheet.init();
+      if (microAutoInit()) window.MicroActionSheet.init();
     });
-    if (document.readyState !== "loading") window.MicroActionSheet.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroActionSheet.init();
   })();
 })();

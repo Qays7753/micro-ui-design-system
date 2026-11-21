@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "carousel";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var AXIS_LOCK = 8;
     var COMMIT_RATIO = 0.2;
     var COMMIT_MIN = 32;
@@ -118,16 +126,16 @@
         empty = document.createElement("p");
         empty.setAttribute("data-carousel-empty", "");
         empty.setAttribute("role", "status");
-        empty.textContent = "لا توجد بطاقات.";
+        empty.textContent = L("k1");
         carousel.appendChild(empty);
       }
       if (empty) empty.hidden = st.count !== 0;
       st.slides.forEach(function(slide, i) {
         var isCurrent = i === st.index;
         slide.setAttribute("data-current", isCurrent ? "true" : "false");
-        slide.setAttribute("aria-roledescription", "بطاقة");
-        var name = slide.getAttribute("data-card-label") || "بطاقة " + (i + 1);
-        slide.setAttribute("aria-label", name + "، البطاقة " + (i + 1) + " من " + st.count);
+        slide.setAttribute("aria-roledescription", L("k2"));
+        var name = slide.getAttribute("data-card-label") || L("k3") + (i + 1);
+        slide.setAttribute("aria-label", name + L("k4") + (i + 1) + L("k5") + st.count);
         slide.removeAttribute("aria-hidden");
         slide.inert = !isCurrent;
       });
@@ -140,7 +148,7 @@
       if (st.prev) st.prev.disabled = atStart || st.count <= 1;
       if (st.next) st.next.disabled = atEnd || st.count <= 1;
       if (st.status) {
-        st.status.textContent = st.count === 0 ? "لا توجد بطاقات." : "البطاقة " + (st.index + 1) + " من " + st.count;
+        st.status.textContent = st.count === 0 ? L("k1") : L("k6") + (st.index + 1) + L("k5") + st.count;
       }
       if (st.dots) {
         if (st.count > 1 && !st.dotsBuilt) buildDots(carousel, st);
@@ -162,7 +170,7 @@
         var b = document.createElement("button");
         b.type = "button";
         b.className = "m-carousel__dot";
-        b.setAttribute("aria-label", "الانتقال إلى البطاقة " + (i + 1) + " من " + st.count);
+        b.setAttribute("aria-label", L("k7") + (i + 1) + L("k5") + st.count);
         (function(idx) {
           onLocal(carousel, b, "click", function() {
             goToIndex(carousel, idx);
@@ -419,7 +427,7 @@
       stateOf.set(carousel, st);
       carousel.setAttribute("role", "group");
       if (!carousel.hasAttribute("tabindex")) carousel.setAttribute("tabindex", "0");
-      carousel.setAttribute("aria-roledescription", "عارض بطاقات");
+      carousel.setAttribute("aria-roledescription", L("k8"));
       if (!carousel.hasAttribute("aria-label") && carousel.hasAttribute("data-carousel-label")) {
         carousel.setAttribute("aria-label", carousel.getAttribute("data-carousel-label"));
       }
@@ -526,8 +534,22 @@
       }
     };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroCarousel.init();
+      if (microAutoInit()) window.MicroCarousel.init();
     });
-    if (document.readyState !== "loading") window.MicroCarousel.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroCarousel.init();
   })();
+  window.MicroCarousel.setLabels = function(partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry["carousel"] = registry["carousel"] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
 })();

@@ -53,6 +53,7 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
 </style></head><body><main id="fixture"><div id="order-root"></div>
 <button type="button" id="after-root-focus" style="margin-top:8px">هدف تركيز خارج المكوّن</button>
 </main>
+<script src="/components/order-schedule/labels.js"></script>
 <script src="/components/order-schedule/order-schedule.js"></script>
 <script>
 (() => {

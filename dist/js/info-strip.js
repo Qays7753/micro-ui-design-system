@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "info-strip";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     function isEditingTarget(target) {
       return !!(target && (target.isContentEditable || target.closest && target.closest(
         'input, textarea, select, option, [role="textbox"], [role="searchbox"], [role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'
@@ -45,7 +53,7 @@
       if (slides().length >= 2 && empty) empty.hidden = true;
       if (pageList) {
         pageList.setAttribute("role", "group");
-        if (!pageList.hasAttribute("aria-label")) pageList.setAttribute("aria-label", "اختيار البطاقة");
+        if (!pageList.hasAttribute("aria-label")) pageList.setAttribute("aria-label", L("k1"));
       }
       function setIndex(target, focusViewport) {
         var list = slides();
@@ -65,7 +73,7 @@
         if (previous) previous.disabled = index === 0;
         if (next) next.disabled = index === list.length - 1;
         if (position) position.textContent = index + 1 + " / " + list.length;
-        if (status) status.textContent = "البطاقة " + (index + 1) + " من " + list.length;
+        if (status) status.textContent = L("k2") + (index + 1) + L("k3") + list.length;
         if (pageList) {
           pageButtons.forEach(function(button, pageIndex) {
             button.setAttribute("aria-current", pageIndex === index ? "true" : "false");
@@ -83,7 +91,7 @@
           page.type = "button";
           page.className = "m-info-strip__page";
           page.setAttribute("data-info-strip-page", "");
-          page.setAttribute("aria-label", "عرض البطاقة " + (pageIndex + 1));
+          page.setAttribute("aria-label", L("k4") + (pageIndex + 1));
           page.setAttribute("aria-current", pageIndex === 0 ? "true" : "false");
           page.setAttribute("aria-pressed", pageIndex === 0 ? "true" : "false");
           page.addEventListener("click", function() {
@@ -160,7 +168,7 @@
       if (previous) previous.disabled = true;
       if (next) next.disabled = initial.length < 2;
       if (position) position.textContent = initial.length ? "1 / " + initial.length : "";
-      if (status) status.textContent = initial.length ? "البطاقة 1 من " + initial.length : "لا توجد بطاقات.";
+      if (status) status.textContent = initial.length ? L("k5") + initial.length : L("k6");
       registry.set(strip, {
         listeners,
         viewport,
@@ -176,8 +184,8 @@
     function teardown(strip) {
       var data = registry.get(strip);
       if (!data) return;
-      data.listeners.forEach(function(L) {
-        L.el.removeEventListener(L.type, L.fn, false);
+      data.listeners.forEach(function(L2) {
+        L2.el.removeEventListener(L2.type, L2.fn, false);
       });
       registry.delete(strip);
       strip.removeAttribute("data-info-strip-ready");
@@ -212,9 +220,23 @@
       scope.querySelectorAll("[data-info-strip]").forEach(teardown);
     }
     window.MicroInfoStrip = { init, rescan, update: rescan, disconnect };
+    window.MicroInfoStrip.setLabels = function(partial) {
+      var registry2 = window.MicroLabels = window.MicroLabels || {};
+      var current = registry2["info-strip"] = registry2["info-strip"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      init();
+      if (microAutoInit()) init();
     });
-    if (document.readyState !== "loading") init();
+    if (document.readyState !== "loading" && microAutoInit()) init();
   })();
 })();

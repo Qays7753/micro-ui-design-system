@@ -33,6 +33,9 @@ interface MicroFieldsApi {
   update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Selection — المجموعات والمقاطع والمفاتيح (docs/API.md §3).
@@ -41,6 +44,9 @@ interface MicroSelectionApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   setSwitchPending(switchWrapper: HTMLElement, pending: boolean): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Picker — listbox اختيار قيمة واحدة (docs/API.md §3).
@@ -55,6 +61,9 @@ interface MicroPickerApi {
   setStatus(picker: HTMLElement, kind: 'ready' | 'loading' | 'empty' | 'error' | 'initial' | 'disabled', message?: string): void;
   clearSelection(picker: HTMLElement): void;
   getSelected(picker: HTMLElement): MicroPickerSelection | null;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Organization — الطي وبديل الصورة (docs/API.md §4).
@@ -62,6 +71,9 @@ interface MicroPickerApi {
 interface MicroOrganizationApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Data — init/render/update/selection/disconnect (docs/API.md §5).
@@ -73,6 +85,9 @@ interface MicroDataApi {
   getSelection(chart: HTMLElement): unknown;
   setSelection(chart: HTMLElement, key: string | null): unknown;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Messages — init/toast/announce (docs/API.md §6).
@@ -84,6 +99,9 @@ interface MicroMessagesApi {
   closeToast(element: HTMLElement, trigger?: HTMLElement): void;
   announce(text: string, options?: { id?: string; assertive?: boolean } | boolean): void;
   resetAnnouncements(): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Navigation — init/layers/filters (docs/API.md §7).
@@ -96,6 +114,9 @@ interface MicroNavigationApi {
   requestClose(layer: HTMLElement, options?: { reason?: string; trigger?: HTMLElement }): boolean;
   appliedFilters(panel: HTMLElement): Record<string, unknown>;
   setAppliedFilters(panel: HTMLElement, values: Record<string, unknown>): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Info Strip — الشريط الأساسي (docs/API.md §9).
@@ -105,6 +126,9 @@ interface MicroInfoStripApi {
   rescan(root?: ParentNode): void;
   update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Metric Comparison — init/render/update/disconnect (docs/API.md §10).
@@ -114,6 +138,9 @@ interface MicroMetricComparisonApi {
   render(root?: ParentNode): void;
   update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Account Settings — init/disconnect/destroy (docs/API.md §11).
@@ -122,11 +149,15 @@ interface MicroAccountSettingsApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Access Gateway — init/update(root, handlers?)/disconnect/destroy (docs/API.md §12).
     update يفوّض إلى init نفسها: تحديث callbacks وتوافر الإجراءات بلا ربط مضاعف. */
 interface MicroAccessGatewayHandlers {
+  labels?: Record<string, unknown>;
   onSubmit?(credentials: { email: string; password: string }): unknown;
   onRecovery?(): unknown;
   providers?: Record<string, () => unknown>;
@@ -136,6 +167,9 @@ interface MicroAccessGatewayApi {
   update(root?: ParentNode, handlers?: MicroAccessGatewayHandlers): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Order Schedule — init(element, options?) يعيد instance (docs/API.md §13). */
@@ -174,6 +208,9 @@ interface MicroOrderScheduleApi {
   init(root: HTMLElement, options?: MicroOrderScheduleOptions): MicroOrderScheduleInstance;
   update(root: HTMLElement, orders: unknown[]): MicroOrderScheduleInstance | null;
   getInstance(root: HTMLElement): MicroOrderScheduleInstance | null;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Carousel — init/goTo/next/prev/getIndex/update/disconnect/destroy (docs/API.md §14).
@@ -187,6 +224,9 @@ interface MicroCarouselApi {
   getIndex(carousel: HTMLElement): number;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Product — mount/replace/resolve/destroy لتراكيب C07–C13 (docs/API.md).
@@ -201,6 +241,9 @@ interface MicroProductApi {
   register(type: string, renderer: unknown): void;
   mount(root: HTMLElement, type: string, value: unknown): MicroProductInstance;
   contextKey(scope: unknown): string | null;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 
 /** Globals المكتبة على window — الأسماء الحقيقية فقط (window.Micro*). */
@@ -228,6 +271,9 @@ interface MicroPackedApi {
   render(chart: HTMLElement): void;
   update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 /** MicroInfoPeek: متغير peek لعائلة Info Strip.
     update(strip, index, options?) يفوّض إلى goTo نفسها. */
@@ -239,6 +285,9 @@ interface MicroInfoPeekApi {
   prev(strip: HTMLElement): void;
   getIndex(strip: HTMLElement): number;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
 /** MicroReadings: امتداد C04 لاختصار تكرار الوحدة بسياق صريح.
     update(root) يفوّض إلى sync نفسها. */
@@ -261,7 +310,25 @@ interface MicroActionSheetApi {
   open(sheet: HTMLElement, options?: { trigger?: HTMLElement; contextKey?: string | null }): boolean;
   close(sheet: HTMLElement): void;
   disconnect(root?: ParentNode): void;
+  /** المرحلة 7 — دمج جزئي فوق نصوص العائلة الافتراضية في سجل MicroLabels؛
+      يسري على التصييرات اللاحقة (docs/API.md «النصوص الافتراضية»). */
+  setLabels(partial: Record<string, unknown>): void;
 }
+
+/** المرحلة 7 — سجل النصوص الافتراضية وإعدادات عامة (docs/API.md
+    «النصوص الافتراضية وتخصيصها»): labels.js لكل عائلة تُحمَّل قبل ملف
+    سلوكها؛ القيم العربية الافتراضية هي الصياغة الحرفية السابقة. */
+interface MicroLabelsRegistry {
+  locale: string;
+  setLocale(locale: string): void;
+  formatNumber(value: number): string;
+  [family: string]: unknown;
+}
+interface MicroConfig {
+  autoInit?: boolean;
+}
+declare const MicroLabels: MicroLabelsRegistry;
+declare const MicroConfig: MicroConfig;
 
 declare const MicroPacked: MicroPackedApi;
 declare const MicroInfoPeek: MicroInfoPeekApi;
@@ -290,4 +357,6 @@ interface Window {
   MicroReadings: MicroReadingsApi;
   MicroIcons: MicroIconsApi;
   MicroActionSheet: MicroActionSheetApi;
+  MicroLabels: MicroLabelsRegistry;
+  MicroConfig: MicroConfig;
 }

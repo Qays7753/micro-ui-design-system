@@ -9045,7 +9045,47 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 })();
 
 </script>
-  <script data-sc-from="components/fields/fields.js">
+  <script data-sc-from="components/fields/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (fields) — المرحلة 7.
+   الملف: components/fields/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['fields'] = {
+
+};
+})();
+
+</script>
+<script data-sc-from="components/fields/fields.js">
 /* =========================================================
    Micro UI — سلوك مكوّن الحقول (B02)
    الملف: components/fields/fields.js
@@ -9092,7 +9132,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
-  var msgUid = 0; /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'fields';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
+  var msgUid = 0;
+   /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
 
   function on(field, element, type, listener, capture) {
     element.addEventListener(type, listener, {
@@ -9410,12 +9466,78 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
      ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
   window.MicroFields = { init: init, sync: sync, update: sync, disconnect: disconnect, destroy: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroFields.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['fields'] = registry['fields'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 
 </script>
-  <script data-sc-from="components/selection/selection.js">
+  <script data-sc-from="components/selection/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (selection) — المرحلة 7.
+   الملف: components/selection/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['selection'] = {
+  "k1": "المحدد: ",
+    "k2": "المحدد: لا شيء",
+    "k3": "إعادة المحاولة",
+    "k4": "لم تُحمّل الخيارات بعد.",
+    "k5": "جارٍ تحميل الخيارات…",
+    "k6": "لا خيارات متاحة.",
+    "k7": "تعذّر تحميل الخيارات. أعد المحاولة.",
+    "k8": "الاختيار غير متاح حاليًا.",
+    "k9": "لا نتائج مطابقة. عدّل كلمة البحث."
+};
+})();
+
+</script>
+<script data-sc-from="components/selection/selection.js">
 /* =========================================================
    Micro UI — سلوك مكوّن الاختيار (B03)
    الملف: components/selection/selection.js
@@ -9433,7 +9555,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'selection';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var liveBindings = new WeakMap();
+
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
     if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
@@ -9608,9 +9746,27 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       /* بلا دورة انتظار سابقة: لا يُلمس disabled إطلاقًا */
     }
   };
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroSelection.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['selection'] = registry['selection'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
 
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 
 </script>
@@ -9620,7 +9776,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
    init/disconnect are repeatable; destroy releases instance state, not host data. */
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'selection';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
   var states = new WeakMap();
+
   function stateOf(picker) {
     var state = states.get(picker);
     if (!state) {
@@ -9667,7 +9839,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   function summary(picker) {
     var foot = picker.querySelector('[data-picker-summary]');
     var selected = getSelected(picker);
-    if (foot) foot.textContent = selected ? 'المحدد: ' + selected.label : 'المحدد: لا شيء';
+    if (foot) foot.textContent = selected ? L('k1') + selected.label : L('k2');
   }
   function getSelected(picker) {
     var option = optionsOf(picker).filter(function (item) { return item.getAttribute('aria-selected') === 'true'; })[0];
@@ -9699,7 +9871,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       retry.type = 'button';
       retry.className = 'm-btn m-btn--secondary';
       retry.setAttribute('data-picker-retry', '');
-      retry.textContent = 'إعادة المحاولة';
+      retry.textContent = L('k3');
       list.parentNode.insertBefore(retry, list.nextSibling);
     } else if (list.contains(retry) || status.contains(retry)) {
       list.parentNode.insertBefore(retry, list.nextSibling);
@@ -9731,13 +9903,13 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       option.hidden = hide;
     });
     var defaults = {
-      initial: 'لم تُحمّل الخيارات بعد.', loading: 'جارٍ تحميل الخيارات…',
-      empty: 'لا خيارات متاحة.', error: 'تعذّر تحميل الخيارات. أعد المحاولة.',
-      disabled: 'الاختيار غير متاح حاليًا.'
+      initial: L('k4'), loading: L('k5'),
+      empty: L('k6'), error: L('k7'),
+      disabled: L('k8')
     };
     var noResult = ready && state.query !== '' && !available(picker).length;
     var noData = ready && !optionsOf(picker).length;
-    var message = ready ? (noResult ? 'لا نتائج مطابقة. عدّل كلمة البحث.' : noData ? defaults.empty : '')
+    var message = ready ? (noResult ? L('k9') : noData ? defaults.empty : '')
       : state.message || defaults[state.status] || '';
     var retryVisible = state.status === 'error' && !locked(picker);
     if (active === nodes.retry && !retryVisible) safeFocus(picker);
@@ -9849,12 +10021,70 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     },
     getSelected: getSelected
   };
-  document.addEventListener('DOMContentLoaded', function () { window.MicroPicker.init(); });
-  if (document.readyState !== 'loading') window.MicroPicker.init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroPicker.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['selection'] = registry['selection'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroPicker.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroPicker.init();
 })();
 
 </script>
-  <script data-sc-from="components/messages/messages.js">
+  <script data-sc-from="components/messages/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (messages) — المرحلة 7.
+   الملف: components/messages/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['messages'] = {
+  "k1": "[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا."
+};
+})();
+
+</script>
+<script data-sc-from="components/messages/messages.js">
 /* =========================================================
    Micro UI — سلوك مكوّن الرسائل والحالات العامة (B06)
    الملف: components/messages/messages.js
@@ -9894,7 +10124,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'messages';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var liveBindings = new WeakMap();
+
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
     if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
@@ -10122,7 +10368,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var v = noteVariantOf(note);
       if (v) note.setAttribute('role', NOTE_ROLE_BY_VARIANT[v]);
       else if (window.console && console.warn) {
-        console.warn('[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا.', note);
+        console.warn(L('k1'), note);
       }
     });
   }
@@ -10189,12 +10435,83 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     /* W2.5: init(root) يشمل الجذر نفسه؛ W2.2: يضمن أدوار m-note قبل التفاعل */
     init: function (root) { ensureNoteRoles(root); bindClose(root); }
   };
-  document.addEventListener('DOMContentLoaded', function () { window.MicroMessages.init(); });
-  if (document.readyState !== 'loading') window.MicroMessages.init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroMessages.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['messages'] = registry['messages'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroMessages.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroMessages.init();
 })();
 
 </script>
-  <script data-sc-from="components/navigation/navigation.js">
+  <script data-sc-from="components/navigation/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (navigation) — المرحلة 7.
+   الملف: components/navigation/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['navigation'] = {
+  "k1": "[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.",
+    "k2": "[micro-navigation] دور غير معتاد للطبقة \"",
+    "k3": "\" — عقد الطبقات: dialog/alertdialog (D-UI-02).",
+    "k4": "فلتر واحد",
+    "k5": "فلتران",
+    "k6": " فلاتر",
+    "k7": " فلترًا",
+    "k8": " فلتر",
+    "k9": " فلتر واحد",
+    "k10": " فلتران",
+    "k11": ": لا فلاتر",
+    "k12": "، ",
+    "k13": "الجاري",
+    "k14": "المطبّق"
+};
+})();
+
+</script>
+<script data-sc-from="components/navigation/navigation.js">
 /* =========================================================
    Micro UI — سلوك مكوّن التنقّل والطبقات (B07)
    الملف: components/navigation/navigation.js
@@ -10243,7 +10560,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'navigation';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var liveBindings = new WeakMap();
+
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
     if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
@@ -10465,11 +10798,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
           if (!title.id) title.id = 'micro-layer-title-' + (++layerTitleUid);
           layer.setAttribute('aria-labelledby', title.id);
         } else if (window.console && console.warn) {
-          console.warn('[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.', layer);
+          console.warn(L('k1'), layer);
         }
       }
     } else if (window.console && console.warn) {
-      console.warn('[micro-navigation] دور غير معتاد للطبقة "' + role + '" — عقد الطبقات: dialog/alertdialog (D-UI-02).', layer);
+      console.warn(L('k2') + role + L('k3'), layer);
     }
   }
 
@@ -10637,16 +10970,16 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   /* R-20 (2026-10-25): عبارة عدد الفلاتر العربية الكاملة — المثنى والجمع
      وقاعدة العدد المركب فوق 100 (كانت «N فلاتر» فقط بلا مثنى) */
   function filterCountAr(n) {
-    if (n === 1) return 'فلتر واحد';
-    if (n === 2) return 'فلتران';
-    if (n >= 3 && n <= 10) return n + ' فلاتر';
-    if (n >= 11 && n <= 99) return n + ' فلترًا';
+    if (n === 1) return L('k4');
+    if (n === 2) return L('k5');
+    if (n >= 3 && n <= 10) return n + L('k6');
+    if (n >= 11 && n <= 99) return n + L('k7');
     var r = n % 100;
-    if (r === 0) return n + ' فلتر';
-    if (r === 1) return n + ' فلتر واحد';
-    if (r === 2) return n + ' فلتران';
-    if (r >= 3 && r <= 10) return n + ' فلاتر';
-    return n + ' فلترًا';
+    if (r === 0) return n + L('k8');
+    if (r === 1) return n + L('k9');
+    if (r === 2) return n + L('k10');
+    if (r >= 3 && r <= 10) return n + L('k6');
+    return n + L('k7');
   }
 
   function updateSummary(panel, phase) {
@@ -10656,7 +10989,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var key = input.getAttribute('data-filter-key');
       return !!key && key !== 'none' && inputActive(input);
     });
-    if (!actives.length) { summary.textContent = phase + ': لا فلاتر'; return; }
+    if (!actives.length) { summary.textContent = phase + L('k11'); return; }
     var labels = [];
     actives.forEach(function (input) {
       var l = filterLabel(input);
@@ -10666,7 +10999,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
        محايد بلا أسماء مفاتيح. event.detail.count/applied وdraft/applied
        سليمة كما هي — هذا النص عرض فقط. */
     summary.textContent = labels.length === actives.length
-      ? phase + ': ' + labels.join('، ')
+      ? phase + ': ' + labels.join(L('k12'))
       : phase + ': ' + filterCountAr(actives.length);
   }
 
@@ -10686,15 +11019,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
           input.value = '';
         }
       });
-      updateSummary(panel, 'الجاري');
+      updateSummary(panel, L('k13'));
     });
     /* الملخص يتبع الجاري فعليًا عند أي تغيير (وليس عند الفتح/التطبيق فقط) */
     on(panel, panel, 'change', function (e) {
-      if (e.target.closest && e.target.closest('[data-filter-key]')) updateSummary(panel, 'الجاري');
+      if (e.target.closest && e.target.closest('[data-filter-key]')) updateSummary(panel, L('k13'));
     });
     on(panel, panel, 'input', function (e) {
       if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
-        updateSummary(panel, 'الجاري');
+        updateSummary(panel, L('k13'));
       }
     });
     var apply = panel.querySelector('[data-filter-apply]');
@@ -10706,7 +11039,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         if (input.type === 'checkbox') applied[key] = input.checked;
         else applied[key] = String(input.value == null ? '' : input.value).trim();
       });
-      updateSummary(panel, 'المطبّق');
+      updateSummary(panel, L('k14'));
       panel.__microApplied = Object.assign({}, applied); /* قراءة لاحقة للفحص/المستهلك */
       var count = Object.keys(applied).filter(function (k) {
         return applied[k] === true || (typeof applied[k] === 'string' && applied[k] !== '');
@@ -10723,7 +11056,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         if (input.type === 'checkbox') input.checked = false;
         else input.value = '';
       });
-      updateSummary(panel, 'الجاري');
+      updateSummary(panel, L('k13'));
     });
     var cancel = panel.querySelector('[data-filter-cancel]');
     if (cancel) on(panel, cancel, 'click', function () { closeLayer(panel); }); /* يرمي الجاري */
@@ -10748,7 +11081,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
           input.value = applied[key];
         }
       });
-      updateSummary(panel, 'المطبّق');
+      updateSummary(panel, L('k14'));
       panel.__microApplied = Object.assign({}, applied);
     };
   }
@@ -10941,12 +11274,70 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (panel && typeof panel.__microSetApplied === 'function') panel.__microSetApplied(values);
     }
   };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroNavigation.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['navigation'] = registry['navigation'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 
 </script>
-  <script data-sc-from="components/organization/organization.js">
+  <script data-sc-from="components/organization/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (organization) — المرحلة 7.
+   الملف: components/organization/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['organization'] = {
+  "k1": "؟"
+};
+})();
+
+</script>
+<script data-sc-from="components/organization/organization.js">
 /* =========================================================
    Micro UI — سلوك مكوّن التنظيم والمعلومات (B04)
    الملف: components/organization/organization.js
@@ -10960,7 +11351,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'organization';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var liveBindings = new WeakMap();
+
   function claimBinding(element, key) {
     var keys = liveBindings.get(element);
     if (!keys) { keys = new Set(); liveBindings.set(element, keys); }
@@ -11009,7 +11416,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var span = document.createElement('span');
         span.className = 'm-identity__initials';
         span.setAttribute('aria-hidden', 'true');
-        span.textContent = initials || '؟';
+        span.textContent = initials || L('k1');
         img.replaceWith(span);
       }
       on(img, 'error', fallback);
@@ -11030,9 +11437,27 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       });
     }
   };
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroOrganization.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['organization'] = registry['organization'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
 
-  document.addEventListener('DOMContentLoaded', function () { window.MicroOrganization.init(); });
-  if (document.readyState !== 'loading') window.MicroOrganization.init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroOrganization.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroOrganization.init();
 })();
 
 </script>
@@ -11040,6 +11465,13 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 /* C04: explicit, fail-safe unit context. No data parsing or business state. */
 (function () {
   'use strict';
+
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
   var CLASS = 'm-reading-unit--contextual';
   function within(root) {
     var out = [].slice.call(root.querySelectorAll('[data-reading-unit]'));
@@ -11111,12 +11543,153 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     update: sync,
     disconnect: function (root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
   };
-  document.addEventListener('DOMContentLoaded', function () { sync(document); });
-  if (document.readyState !== 'loading') sync(document);
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) sync(document); });
+  if (document.readyState !== 'loading' && microAutoInit()) sync(document);
 })();
 
 </script>
-  <script data-sc-from="components/data/data.js">
+  <script data-sc-from="components/data/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (data) — المرحلة 7.
+   الملف: components/data/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['data'] = {
+  "k1": "قيمة غير صالحة",
+    "k2": "(غير متاح)",
+    "k3": " (سالب غير مرسوم)",
+    "k4": "، ",
+    "k5": "الوحدة",
+    "k6": "الفترة",
+    "k7": "القراءات الكاملة للرسم",
+    "k8": " (قيمة شاذة)",
+    "k9": "تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.",
+    "k10": "\" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.",
+    "k11": "bars: أكبر قيمة (",
+    "k12": ") تتجاوز data-max=\"",
+    "k13": "\" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+    "k14": "رسم أعمدة",
+    "k15": "؛ مقياس موسّع إلى ",
+    "k16": " بدل المعلن ",
+    "k17": "غير صالح",
+    "k18": "سالب غير مرسوم",
+    "k19": "قيمة شاذة",
+    "k20": "نطاق العرض: ",
+    "k21": " بدل ",
+    "k22": ". القيم الأصلية دون تغيير.",
+    "k23": "bars: data-overscale=\"rescale\" — رسم بمقياس موسّع من ",
+    "k24": " إلى ",
+    "k25": "؛ القيم الأصلية دون تغيير.",
+    "k26": "لا توجد بيانات لعرضها.",
+    "k27": "تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.",
+    "k28": "رسم موقّع",
+    "k29": "؛ محور صفر مشترك، والقراءات الكاملة أدناه",
+    "k30": "تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.",
+    "k31": "وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.",
+    "k32": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.",
+    "k33": "تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.",
+    "k34": "نوع المحور غير مدعوم. القراءات متاحة أدناه.",
+    "k35": "نوع المحور غير مدعوم.",
+    "k36": "line: أكبر قيمة (",
+    "k37": "\" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+    "k38": "رسم خط",
+    "k39": "line: data-overscale=\"rescale\" — رسم بمقياس موسّع من ",
+    "k40": "التسميات والقراءات الكاملة للرسم",
+    "k41": "تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.",
+    "k42": "توزيع",
+    "k43": "\" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "k44": "donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "k45": "donut: مجموع الفئات (",
+    "k46": ") يتجاوز المقام المعلن data-total=\"",
+    "k47": "\" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "k48": "\" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "k49": "donut: data-total=\"0\" بينما مجموع الفئات ",
+    "k50": " — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.",
+    "k51": "الإجمالي غير معلوم",
+    "k52": "الإجمالي",
+    "k53": "مجموع المعلوم",
+    "k54": " (قيمة غير صالحة)",
+    "k55": " (غير صالح للنسب)",
+    "k56": "(قيمة غير صالحة)",
+    "k57": "عرض البيانات كجدول",
+    "k58": "إخفاء جدول البيانات",
+    "k59": "الوحدة: ",
+    "k60": "الفترة: ",
+    "k61": "الفئة",
+    "k62": "وقت النقطة",
+    "k63": "القيمة",
+    "k64": "تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.",
+    "k65": "\" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.",
+    "k66": "bubbles: أكبر قيمة (",
+    "k67": "\" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale=\"rescale\" لتوسيع المقياس بشكل معلن.",
+    "k68": " (سالب غير صالح للمساحة)",
+    "k69": "نطاق الدوائر: ",
+    "k70": "bubbles: data-overscale=\"rescale\" — رسم بمقياس موسّع من ",
+    "k71": "؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.",
+    "k72": "اختر عنصرًا لقراءة تفاصيله",
+    "k73": "لم يُحدد عنصر",
+    "k74": " من الإجمالي",
+    "k75": "(وحدة غير محددة)",
+    "k76": "(فترة غير محددة)",
+    "k77": "القراءات بوحداتها وفتراتها",
+    "k78": "السابق",
+    "k79": "تحديد عنصر لقراءة قيمته",
+    "k80": "التالي",
+    "k81": "نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.",
+    "k82": "حالات لا تدخل الرسم المساحي",
+    "k83": "0 (صفر)",
+    "k84": "(غير معروف)",
+    "k85": " (قيمة غير صالحة)",
+    "k86": "(غير متاح)",
+    "k87": " (سالب غير صالح للمساحة)",
+    "k88": "عرض البيانات كجدول",
+    "k89": "إخفاء جدول البيانات",
+    "k90": "الوحدة",
+    "k91": "الفترة",
+    "k92": "المقياس",
+    "k93": "، ",
+    "k94": "الفئة",
+    "k95": "القيمة",
+    "k96": "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.",
+    "k97": "\" صفر",
+    "k98": " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.",
+    "k99": " ولا توجد قيم موجبة للمقارنة.",
+    "k100": "\" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.",
+    "k101": "لا توجد قيم موجبة قابلة للرسم المساحي.",
+    "k102": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
+};
+})();
+
+</script>
+<script data-sc-from="components/data/data.js">
 /* =========================================================
    Micro UI — سلوك مكوّن البيانات والتتبّع (B05)
    الملف: components/data/data.js
@@ -11204,7 +11777,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'data';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var NS = 'http://www.w3.org/2000/svg';
+
 
   /* R2-05: تحليل رقم كامل لا بادئة رقمية — `12oops` غير صالح وليس 12،
      والفارغ/غير الرقمي/NaN/∞ كلها null (مجهول). */
@@ -11260,8 +11849,8 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   function readingOf(item) {
     /* R-04/R-18 (2026-10-25): حالات القيمة بصيغة الأقواس الموحدة، لا شرطة
        em — الشرطة تبقى ترميزًا مرسومًا للقيمة المفقودة داخل الرسم فقط */
-    if (item.value === null) return item.invalid ? 'قيمة غير صالحة' : '(غير متاح)';
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + ' (سالب غير مرسوم)';
+    if (item.value === null) return item.invalid ? L('k1') : L('k2');
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L('k3');
     return item.display || item.rawValue || fmt(item.value);
   }
 
@@ -11271,7 +11860,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       && chart.getAttribute('data-axis-type') === 'time';
     if (isTimeAxis && item.axisX !== null && item.axisX !== ''
         && label.indexOf(String(item.axisX)) === -1) {
-      label += '، ' + item.axisX;
+      label += L('k4') + item.axisX;
     }
     return label;
   }
@@ -11308,8 +11897,8 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var title = chart.getAttribute('data-title');
     var contextTitle = !heading && title ? String(title).trim() : '';
     var entries = [
-      ['data-unit', 'الوحدة'],
-      ['data-period', 'الفترة']
+      ['data-unit', L('k5')],
+      ['data-period', L('k6')]
     ].map(function (entry) {
       return { key: entry[0], label: entry[1], value: String(chart.getAttribute(entry[0]) || '').trim() };
     }).filter(function (entry) { return entry.value !== ''; });
@@ -11394,7 +11983,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     labels.forEach(function (node) { node.style.display = 'none'; });
     var rows = document.createElement('dl');
     rows.className = 'm-chart__readings';
-    rows.setAttribute('aria-label', 'القراءات الكاملة للرسم');
+    rows.setAttribute('aria-label', L('k7'));
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
@@ -11404,7 +11993,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
+      if (item.outlier) value.appendChild(document.createTextNode(L('k8')));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -11718,15 +12307,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
-        'bars: data-max="' + scale.declaredRaw + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
+        L('k9'),
+        'bars: data-max="' + scale.declaredRaw + L('k10'));
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
-        'bars: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز data-max="' + fmt(scale.declared) + '" — الرسم النسبي كان سيخفي الفرق بين القيم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
+        L('k9'),
+        L('k11') + fmt(scale.largest) + L('k12') + fmt(scale.declared) + L('k13'));
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -11750,9 +12339,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var plotHeight = Math.min(128, Math.max(96, W * 0.32));
     var base = top + plotHeight, H = base + BAR_LABEL_STEP + 12 + extra;
     var colW = W / Math.max(items.length, 1);
-    var ariaLabel = chart.getAttribute('data-title') || 'رسم أعمدة';
+    var ariaLabel = chart.getAttribute('data-title') || L('k14');
     if (scale.kind === 'over') {
-      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += L('k15') + fmt(max) + L('k16') + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -11768,10 +12357,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         g.appendChild(svgEl('rect', { class: 'm-chart__bar-unknown', x: cx - 14, y: base - 10, width: 28, height: 10, rx: 4 }));
         var u = svgEl('text', { class: 'm-chart__bar-value', x: cx, y: base - 16, 'text-anchor': 'middle' });
         applyTextPx(u, fontPx);
-        u.textContent = it.invalid ? 'غير صالح' : '—'; g.appendChild(u);
+        u.textContent = it.invalid ? L('k17') : '—'; g.appendChild(u);
       } else if (it.value < 0) {
         /* E06: سالب في الأعمدة — رفض بوضوح، لا رسم كموجب */
-        invalidMarker(svg, g, cx, base, it.value, 'سالب غير مرسوم', fontPx);
+        invalidMarker(svg, g, cx, base, it.value, L('k18'), fontPx);
       } else {
         var h = Math.min(it.value, max) / max * (base - top); /* صفر = صفر حقيقي */
         g.appendChild(svgEl('rect', {
@@ -11787,7 +12376,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         if (it.outlier) {
           var o = svgEl('text', { x: cx, y: base - h - 20, 'text-anchor': 'middle', class: 'm-chart__bar-value', fill: 'var(--micro-warning)' });
           applyTextPx(o, fontPx);
-          o.textContent = 'قيمة شاذة'; g.appendChild(o);
+          o.textContent = L('k19'); g.appendChild(o);
         }
       }
       appendWrappedLabel(svg, g, it.label, cx, H - 12, labelChars, 'm-chart__bar-label', BAR_LABEL_STEP, fontPx);
@@ -11803,10 +12392,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
          R8-07: ملاحظة موجزة بلا أسماء سمات؛ تفاصيل العقد في data-scale-* */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
+      note.textContent = L('k20') + fmt(max) + L('k21') + fmt(scale.declared) + L('k22');
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', 'bars: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
+      chart.setAttribute('data-scale-detail', L('k23') + fmt(scale.declared) + L('k24') + fmt(max) + L('k25'));
     }
   }
 
@@ -11826,7 +12415,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var emptySigned = document.createElement('p');
       emptySigned.className = 'm-chart__empty';
       emptySigned.setAttribute('role', 'status');
-      emptySigned.textContent = 'لا توجد بيانات لعرضها.';
+      emptySigned.textContent = L('k26');
       plot.appendChild(emptySigned);
       appendFullReadingRows(chart, plot, items, '');
       chart.setAttribute('data-scale-state', 'empty');
@@ -11844,7 +12433,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var exceeds = !invalid && (low < min || high > max);
     if (invalid || (exceeds && chart.getAttribute('data-overscale') !== 'rescale')) {
       renderScaleRefusal(chart, items, plot, { kind: invalid ? 'invalid' : 'over' },
-        'تعذّر عرض الرسم بهذا النطاق. القراءات متاحة كاملة.',
+        L('k27'),
         'signed: bounds must include zero and every known value; no clipping or absolute-value conversion.');
       return;
     }
@@ -11856,7 +12445,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var top = 24, height = Math.min(160, Math.max(112, width * 0.38)), bottom = top + height;
     var svg = svgEl('svg', {
       viewBox: '0 0 ' + width + ' ' + (bottom + 28), role: 'img',
-      'aria-label': (chart.getAttribute('data-title') || 'رسم موقّع') + '؛ محور صفر مشترك، والقراءات الكاملة أدناه'
+      'aria-label': (chart.getAttribute('data-title') || L('k28')) + L('k29')
     });
     function y(value) { return top + (b - value / magnitude) / (b - a) * height; }
     var zero = y(0);
@@ -11873,7 +12462,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       chart.setAttribute('data-axis-state', time ? 'invalid-time' : 'invalid-type');
       var error = document.createElement('p');
       error.className = 'm-chart__error';
-      error.textContent = 'تعذّر عرض المحور دون إعداد وأوقات صريحة صالحة. القراءات متاحة كاملة.';
+      error.textContent = L('k30');
       plot.appendChild(error);
       appendFullReadingRows(chart, plot, items, '');
       return;
@@ -11948,7 +12537,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (exceeds) {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'وُسّع النطاق ليشمل جميع القيم؛ القراءات الأصلية دون تغيير.';
+      note.textContent = L('k31');
       plot.appendChild(note);
     }
   }
@@ -11965,9 +12554,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         plot.innerHTML = '';
         var axisError = document.createElement('p');
         axisError.className = 'm-chart__error';
-        axisError.textContent = 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة. القراءات متاحة أدناه.';
+        axisError.textContent = L('k32');
         plot.appendChild(axisError);
-        appendFullReadingRows(chart, plot, items, 'تعذر عرض المحور الزمني دون أوقات صريحة لكل نقطة.');
+        appendFullReadingRows(chart, plot, items, L('k33'));
         chart.setAttribute('data-axis-state', 'invalid-time');
         return;
       }
@@ -11975,9 +12564,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       plot.innerHTML = '';
       var typeError = document.createElement('p');
       typeError.className = 'm-chart__error';
-      typeError.textContent = 'نوع المحور غير مدعوم. القراءات متاحة أدناه.';
+      typeError.textContent = L('k34');
       plot.appendChild(typeError);
-      appendFullReadingRows(chart, plot, items, 'نوع المحور غير مدعوم.');
+      appendFullReadingRows(chart, plot, items, L('k35'));
       chart.setAttribute('data-axis-state', 'invalid-type');
       return;
     }
@@ -11986,15 +12575,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (scale.kind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
-        'line: data-max="' + scale.declaredRaw + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
+        L('k9'),
+        'line: data-max="' + scale.declaredRaw + L('k10'));
       return;
     }
     if (scale.kind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, scale,
-        'تعذر عرض الرسم بهذا النطاق. القيم متاحة أدناه.',
-        'line: أكبر قيمة (' + fmt(scale.largest) + ') تتجاوز data-max="' + fmt(scale.declared) + '" — الرسم كان سيخرج نقطة خارج مجال الرسم؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
+        L('k9'),
+        L('k36') + fmt(scale.largest) + L('k12') + fmt(scale.declared) + L('k37'));
       return;
     }
     /* A01: المقياس الفعلي للرسم — المعلن في ok، والتلقائي/الموسّع في auto/over-rescale */
@@ -12024,9 +12613,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       return rtl ? W - 24 - t * (W - 48) : 24 + t * (W - 48);
     }
     function yAt(v) { return v === null ? null : base - (v / max) * (base - top); }
-    var ariaLabel = chart.getAttribute('data-title') || 'رسم خط';
+    var ariaLabel = chart.getAttribute('data-title') || L('k38');
     if (scale.kind === 'over') {
-      ariaLabel += '؛ مقياس موسّع إلى ' + fmt(max) + ' بدل المعلن ' + fmt(scale.declared);
+      ariaLabel += L('k15') + fmt(max) + L('k16') + fmt(scale.declared);
     }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': ariaLabel });
     for (var grid = 1; grid < 3; grid++) {
@@ -12057,7 +12646,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         applyTextPx(u, fontPx);
         u.textContent = '—'; g.appendChild(u);
       } else if (it.value < 0) {
-        invalidMarker(svg, g, x, base, it.value, 'سالب غير مرسوم', fontPx);
+        invalidMarker(svg, g, x, base, it.value, L('k18'), fontPx);
       } else {
         g.appendChild(svgEl('circle', { class: 'm-chart__dot', cx: x, cy: y, r: 4 }));
         var val = svgEl('text', { class: 'm-chart__point-value', x: x, y: y - 10, 'text-anchor': 'middle' });
@@ -12076,10 +12665,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (scale.kind === 'over') {
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق العرض: ' + fmt(max) + ' بدل ' + fmt(scale.declared) + '. القيم الأصلية دون تغيير.';
+      note.textContent = L('k20') + fmt(max) + L('k21') + fmt(scale.declared) + L('k22');
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', 'line: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(scale.declared) + ' إلى ' + fmt(max) + '؛ القيم الأصلية دون تغيير.');
+      chart.setAttribute('data-scale-detail', L('k39') + fmt(scale.declared) + L('k24') + fmt(max) + L('k25'));
     }
   }
 
@@ -12114,7 +12703,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   function appendFullReadingRows(chart, plot, items, ariaLabel) {
     var rows = document.createElement('dl');
     rows.className = 'm-chart__readings';
-    rows.setAttribute('aria-label', ariaLabel || 'القراءات الكاملة للرسم');
+    rows.setAttribute('aria-label', ariaLabel || L('k7'));
     items.forEach(function (item) {
       var row = document.createElement('div');
       var label = document.createElement('dt');
@@ -12124,7 +12713,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(' (قيمة شاذة)'));
+      if (item.outlier) value.appendChild(document.createTextNode(L('k8')));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -12218,7 +12807,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       });
       chart.setAttribute('data-value-layout', 'rows');
       appendFullReadingRows(chart, chart.querySelector('[data-plot]'), items,
-        'التسميات والقراءات الكاملة للرسم');
+        L('k40'));
       return;
     }
     var selectedSet = new Set(selected);
@@ -12252,7 +12841,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   function donutRefusal(chart, plot, stateKind, devDetail) {
     var err = document.createElement('p');
     err.className = 'm-chart__error';
-    err.textContent = 'تعذر رسم التوزيع كنسب. القيم معروضة في المفتاح دون نسب.';
+    err.textContent = L('k41');
     plot.appendChild(err);
     chart.setAttribute('data-scale-state', stateKind);
     chart.setAttribute('data-scale-detail', devDetail);
@@ -12303,7 +12892,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var sum = known.reduce(function (a, i) { return a + i.value; }, 0);
     var R = 58, C = 2 * Math.PI * R, cx = 74, cy = 74;
 
-    var svg = svgEl('svg', { class: 'm-donut__svg', viewBox: '0 0 148 148', role: 'img', 'aria-label': chart.getAttribute('data-title') || 'توزيع' });
+    var svg = svgEl('svg', { class: 'm-donut__svg', viewBox: '0 0 148 148', role: 'img', 'aria-label': chart.getAttribute('data-title') || L('k42') });
     plot.innerHTML = '';
 
     /* حالات المدخلات غير القابلة للنسب — fallback صريح لا تمثيل مضلل */
@@ -12336,7 +12925,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       /* R2-05: مقام موجود غير صالح — خطأ معلن لا سقوط صامت إلى مجموع الفئات.
          R8-07a: رسالة المستخدم موحدة موجزة والتشخيص يحمل السبب والقيمة الخام */
       donutRefusal(chart, plot, 'invalid',
-        'donut: data-total="' + declaredRaw + '" غير رقمي/غير محدود — مقام غير قابل للاستخدام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
+        'donut: data-total="' + declaredRaw + L('k43'));
     } else if (!isFinite(sum)) {
       donutRefusal(chart, plot, 'invalid',
         'donut: sum exceeds the finite Number range; proportions refused and original readings retained.');
@@ -12347,18 +12936,18 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       /* نفس أسبقية الحالات السابقة: قيم سالبة تأخذ الأولوية عند اجتماع الاثنين */
       donutRefusal(chart, plot, hasInvalid ? 'invalid' : 'over',
         hasInvalid
-          ? 'donut: قيم سالبة — التوزيع نسب من قيم غير سالبة فقط؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.'
-          : 'donut: مجموع الفئات (' + fmt(sum) + ') يتجاوز المقام المعلن data-total="' + fmt(total) + '" — النسب كانت ستتجاوز المقام؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
+          ? L('k44')
+          : L('k45') + fmt(sum) + L('k46') + fmt(total) + L('k47'));
     } else if (declaredNegative) {
       /* C2: مقام سالب معلن — حالة غير صالحة صريحة، دون نسب
          (كان يسقط صامتًا إلى مجموع الفئات ويرسم توزيعًا طبيعيًا) */
       donutRefusal(chart, plot, 'invalid',
-        'donut: data-total="' + declaredRaw + '" سالب — المقام السالب غير صالح للنسب (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
+        'donut: data-total="' + declaredRaw + L('k48'));
     } else if (declaredZero && sum > 0) {
       /* C2: مقام صفر مع قيم موجبة — تعارض صريح: لا استبدال المقام
          بالمجموع (ذلك بديل المقام الغائب فقط) ولا قسمة على صفر */
       donutRefusal(chart, plot, 'conflict',
-        'donut: data-total="0" بينما مجموع الفئات ' + fmt(sum) + ' — تعارض بيانات: لا نسب من مقام صفر ولا استبدال تلقائي للمقام (C2)؛ رُفضت النسب والقيم معروضة في المفتاح دون نسب.');
+        L('k49') + fmt(sum) + L('k50'));
     } else if (noData) {
       /* 2026-10-25 (تصحيح المالك أ): لا بيانات ليست حلقة فراغ ولا صفرًا —
          لا SVG ولا حلقة ولا علامات وهمية إطلاقًا؛ حالة فراغ صادقة
@@ -12367,18 +12956,18 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var emptyDonut = document.createElement('p');
       emptyDonut.className = 'm-chart__empty';
       emptyDonut.setAttribute('role', 'status');
-      emptyDonut.textContent = 'لا توجد بيانات لعرضها.';
+      emptyDonut.textContent = L('k26');
       plot.appendChild(emptyDonut);
       chart.setAttribute('data-scale-state', 'empty');
     } else if (unknownTotal) {
       /* R2-05: خلط مجهول/صفر والمجموع صفر بلا مقام معلن — لا دعوى بإجمالي صفر */
-      emptyRing('—', 'الإجمالي غير معلوم');
+      emptyRing('—', L('k51'));
     } else if (zeroCase) {
       /* كل القيم المعلومة صفرية بلا قيمة موجبة — الصفر هنا صادق؛
          مع مقام معلن صالح يظهر هو نفسه (شرائح كلها صفرية)، ومع مقام
          معلن صفر (C2) يظهر المقام المعلن 0 — الحالة الصفرية الموثقة
          دون قسمة، والمجهول إن وُجد يبقى «—» في المفتاح لا صفرًا */
-      emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || 'الإجمالي');
+      emptyRing(hasDeclared ? fmt(total) : '0', chart.getAttribute('data-total-label') || L('k52'));
     } else {
       var denom = hasDeclared ? total : sum; /* بلا مقام معلن: مجموع الفئات المعروفة — موثق */
       var offset = 0;
@@ -12430,7 +13019,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var clab = svgEl('text', { class: 'm-donut__center-label', x: cx, y: cy + 20, 'text-anchor': 'middle' });
       /* مع فئات مجهولة وبلا مقام معلن: لا نسمّي المجموع إجماليًا كاملًا (R2-05) */
       clab.textContent = chart.getAttribute('data-total-label')
-        || (missing.length && !hasDeclared ? 'مجموع المعلوم' : 'الإجمالي');
+        || (missing.length && !hasDeclared ? L('k53') : L('k52'));
       svg.appendChild(clab);
       plot.appendChild(svg);
       fitDonutReading(plot, svg);
@@ -12476,8 +13065,8 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       val.className = 'm-legend__value';
       /* 2026-10-25: نفس تصنيف الجدول — المشوه بقراءته الخام، والمفقود مجهول */
       val.textContent = (it.value === null)
-        ? (it.invalid ? String(it.rawValue) + ' (قيمة غير صالحة)' : '(غير متاح)')
-        : fmt(it.value) + ' (غير صالح للنسب)';
+        ? (it.invalid ? String(it.rawValue) + L('k54') : L('k2'))
+        : fmt(it.value) + L('k55');
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -12524,13 +13113,13 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (it.invalid) {
         var raw = (it.rawValue !== null && String(it.rawValue).trim() !== '')
           ? String(it.rawValue) + ' ' : '';
-        return raw + '(قيمة غير صالحة)';
+        return raw + L('k56');
       }
-      return '(غير متاح)';
+      return L('k2');
     }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0 && !it.signed) return base + ' (سالب غير مرسوم)';
-    return it.outlier ? base + ' (قيمة شاذة)' : base;
+    if (it.value < 0 && !it.signed) return base + L('k3');
+    return it.outlier ? base + L('k8') : base;
   }
 
   function syncDatasetTable(chart, items) {
@@ -12543,7 +13132,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       btn.type = 'button';
       btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
-      btn.textContent = 'عرض البيانات كجدول';
+      btn.textContent = L('k57');
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
       table.hidden = true;
@@ -12568,7 +13157,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+        btn.textContent = open ? L('k57') : L('k58');
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -12584,21 +13173,21 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var captionParts = [String((titleEl && titleEl.textContent) || chart.getAttribute('data-title') || '').trim()];
     var unitTxt = String(chart.getAttribute('data-unit') || '').trim();
     var periodTxt = String(chart.getAttribute('data-period') || '').trim();
-    if (unitTxt) captionParts.push('الوحدة: ' + unitTxt);
-    if (periodTxt) captionParts.push('الفترة: ' + periodTxt);
+    if (unitTxt) captionParts.push(L('k59') + unitTxt);
+    if (periodTxt) captionParts.push(L('k60') + periodTxt);
     if (chart.getAttribute('data-chart') === 'donut') {
       var totalRaw = chart.getAttribute('data-total');
       if (totalRaw !== null && String(totalRaw).trim() !== '') {
-        captionParts.push((chart.getAttribute('data-total-label') || 'الإجمالي') + ': ' + String(totalRaw).trim());
+        captionParts.push((chart.getAttribute('data-total-label') || L('k52')) + ': ' + String(totalRaw).trim());
       }
     }
-    caption.textContent = captionParts.filter(function (p) { return p !== ''; }).join('، ');
+    caption.textContent = captionParts.filter(function (p) { return p !== ''; }).join(L('k4'));
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
     var hasTimeAxis = chart.getAttribute('data-chart') === 'line'
       && chart.getAttribute('data-axis-type') === 'time';
-    (hasTimeAxis ? ['الفئة', 'وقت النقطة', 'القيمة'] : ['الفئة', 'القيمة']).forEach(function (h) {
+    (hasTimeAxis ? [L('k61'), L('k62'), L('k63')] : [L('k61'), L('k63')]).forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -12615,7 +13204,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       tr.appendChild(th);
       if (hasTimeAxis) {
         var time = document.createElement('td');
-        if (it.axisX === null || it.axisX === '') time.textContent = '(غير متاح)';
+        if (it.axisX === null || it.axisX === '') time.textContent = L('k2');
         else {
           var coordinate = document.createElement('bdi');
           coordinate.dir = 'ltr';
@@ -12671,15 +13260,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (scaleKind === 'invalid') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, { kind: 'invalid' },
-        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
-        'bubbles: data-max="' + rawMax + '" غير رقمي/غير موجب — مقياس غير قابل للاستخدام (عقد A01 نفسه bars/line)؛ رُفض الرسم النسبي والقيم معروضة كاملة.');
+        L('k64'),
+        'bubbles: data-max="' + rawMax + L('k65'));
       return;
     }
     if (scaleKind === 'over' && (chart.getAttribute('data-overscale') || 'refuse') !== 'rescale') {
       plot.innerHTML = '';
       renderScaleRefusal(chart, items, plot, { kind: 'over' },
-        'تعذر عرض الدوائر بهذا النطاق. القيم متاحة أدناه.',
-        'bubbles: أكبر قيمة (' + fmt(largest) + ') تتجاوز data-max="' + fmt(declared) + '" — كان نصف القطر سيتجاوز rmax المعلن بصمت (r = Rmax×√(v/vmax) > Rmax)؛ صحّح data-max أو استخدم data-overscale="rescale" لتوسيع المقياس بشكل معلن.');
+        L('k64'),
+        L('k66') + fmt(largest) + L('k12') + fmt(declared) + L('k67'));
       return;
     }
     var vmax = (scaleKind === 'ok') ? declared : Math.max(largest, 1);
@@ -12696,10 +13285,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       lab.textContent = it.label;
       if (it.value === null) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = '(غير متاح)';
+        valTxt.textContent = L('k2');
       } else if (it.value < 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
-        valTxt.textContent = fmt(it.value) + ' (سالب غير صالح للمساحة)';
+        valTxt.textContent = fmt(it.value) + L('k68');
       } else if (it.value === 0) {
         circ.setAttribute('class', 'm-bubble__circle--none');
         valTxt.textContent = '0';
@@ -12728,10 +13317,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       /* W3.2: خيار rescale الصريح — التوسيع معلن ظاهرًا لا خفي */
       var note = document.createElement('p');
       note.className = 'm-chart__scale-note';
-      note.textContent = 'نطاق الدوائر: ' + fmt(vmax) + ' بدل ' + fmt(declared) + '. القيم الأصلية دون تغيير.';
+      note.textContent = L('k69') + fmt(vmax) + L('k21') + fmt(declared) + L('k22');
       plot.appendChild(note);
       chart.setAttribute('data-scale-state', 'over-rescaled');
-      chart.setAttribute('data-scale-detail', 'bubbles: data-overscale="rescale" — رسم بمقياس موسّع من ' + fmt(declared) + ' إلى ' + fmt(vmax) + '؛ القيم الأصلية دون تغيير، ولا نصف قطر يتجاوز rmax.');
+      chart.setAttribute('data-scale-detail', L('k70') + fmt(declared) + L('k24') + fmt(vmax) + L('k71'));
     }
   }
 
@@ -12800,7 +13389,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var full = valueStateText(it);
     var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue)
       : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
-    if (donut && it.value !== null && it.value < 0) full = raw + ' (غير صالح للنسب)';
+    if (donut && it.value !== null && it.value < 0) full = raw + L('k55');
     if (raw === null) parent.appendChild(readingNode('span', null, full));
     else {
       var bdi = readingNode('bdi', null, it.value !== null && it.display ? it.display : raw);
@@ -12872,8 +13461,8 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         life.status.appendChild(readingNode('span', 'm-chart__selected-label', selected.label));
         var value = readingNode('span', 'm-chart__selected-value');
         appendReadableValue(value, items[index], chart.getAttribute('data-chart') === 'donut'); appendReadingUnit(value, selected.unit); life.status.appendChild(value);
-      } else life.status.textContent = 'اختر عنصرًا لقراءة تفاصيله';
-      life.range.setAttribute('aria-valuetext', selected ? selected.label + '، ' + value.textContent : 'لم يُحدد عنصر');
+      } else life.status.textContent = L('k72');
+      life.range.setAttribute('aria-valuetext', selected ? selected.label + L('k4') + value.textContent : L('k73'));
     }
     [].slice.call(chart.querySelectorAll('[data-reading-choice]')).forEach(function (button) {
       var active = !!selected && button.getAttribute('data-reading-choice') === selected.key;
@@ -12902,7 +13491,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       appendReadableValue(value, it, true); appendReadingUnit(value, it.unit);
       if (enabled && denominator > 0 && it.value !== null && it.value >= 0) {
         var share = readingNode('span', 'm-chart__share', Math.round(it.value / denominator * 100) + '%');
-        share.dir = 'ltr'; share.setAttribute('data-reading-share', ''); share.setAttribute('aria-label', share.textContent + ' من الإجمالي'); share.hidden = true;
+        share.dir = 'ltr'; share.setAttribute('data-reading-share', ''); share.setAttribute('aria-label', share.textContent + L('k74')); share.hidden = true;
         value.appendChild(share);
       }
       row.appendChild(value); li.appendChild(row); legend.appendChild(li);
@@ -12917,7 +13506,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     items.forEach(function (it) {
       var row = readingNode('div'); row.appendChild(readingNode('dt', null, fullLabelOf(chart, it)));
       var value = readingNode('dd'); appendReadableValue(value, it, chart.getAttribute('data-chart') === 'donut');
-      appendReadingUnit(value, it.unit || '(وحدة غير محددة)');
+      appendReadingUnit(value, it.unit || L('k75'));
       if (it.period) value.appendChild(readingNode('span', 'm-chart__reading-period', ' · ' + it.period));
       row.appendChild(value); list.appendChild(row);
     });
@@ -12932,17 +13521,17 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       [].slice.call(rows).forEach(function (row, i) {
         var cell = row.querySelector('td:last-of-type'); if (cell && items[i]) appendReadingUnit(cell, items[i].unit);
         if (mixed && items[i]) {
-          var periodCell = readingNode('td'), period = readingNode('bdi', null, items[i].period || '(فترة غير محددة)');
+          var periodCell = readingNode('td'), period = readingNode('bdi', null, items[i].period || L('k76'));
           period.dir = 'auto'; periodCell.appendChild(period); row.appendChild(periodCell);
         }
       });
       if (mixed) {
         var head = chart.querySelector('.m-chart__dataset thead tr');
-        if (head) { var periodHead = readingNode('th', null, 'الفترة'); periodHead.scope = 'col'; head.appendChild(periodHead); }
+        if (head) { var periodHead = readingNode('th', null, L('k6')); periodHead.scope = 'col'; head.appendChild(periodHead); }
         var caption = chart.querySelector('.m-chart__dataset caption');
         var title = chart.querySelector('.m-chart__title');
         var titleText = title ? title.textContent.trim() : (chart.getAttribute('data-title') || '').trim();
-        if (caption) caption.textContent = (titleText ? titleText + ' — ' : '') + 'القراءات بوحداتها وفتراتها';
+        if (caption) caption.textContent = (titleText ? titleText + ' — ' : '') + L('k77');
       }
     }
     if (!valid) {
@@ -12967,9 +13556,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var box = readingNode('div', 'm-chart__selection'); box.setAttribute('data-reading-owned', 'selection');
       var status = readingNode('p', 'm-chart__selection-value'); status.id = 'micro-data-selection-' + (++readingUid); status.setAttribute('role', 'status'); box.appendChild(status);
       var controls = readingNode('div', 'm-chart__selection-controls');
-      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'السابق'); prev.type = 'button';
-      var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', 'تحديد عنصر لقراءة قيمته'); range.setAttribute('aria-describedby', status.id);
-      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', 'التالي'); next.type = 'button';
+      var prev = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('k78')); prev.type = 'button';
+      var range = readingNode('input', 'm-chart__select-range'); range.type = 'range'; range.min = '0'; range.step = '1'; range.setAttribute('aria-label', L('k79')); range.setAttribute('aria-describedby', status.id);
+      var next = readingNode('button', 'm-btn m-btn--secondary m-chart__select-step', L('k80')); next.type = 'button';
       controls.appendChild(prev); controls.appendChild(range); controls.appendChild(next); box.appendChild(controls);
       if (chart.getAttribute('data-chart') === 'donut') controls.hidden = true;
       chart.appendChild(box);
@@ -13027,7 +13616,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var empty = document.createElement('p');
       empty.className = 'm-chart__empty';
       empty.setAttribute('role', 'status');
-      empty.textContent = 'لا توجد بيانات لعرضها.';
+      empty.textContent = L('k26');
       emptyPlot.appendChild(empty);
       chart.setAttribute('data-scale-state', 'empty');
     }
@@ -13035,7 +13624,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     else if ((kind === 'bars' || kind === 'line') && domain !== 'non-negative') {
       chart.querySelector('[data-plot]').textContent = '';
       renderScaleRefusal(chart, items, chart.querySelector('[data-plot]'), { kind: 'invalid-domain' },
-        'نوع نطاق القيم غير مدعوم. القراءات متاحة كاملة.', 'Expected non-negative or signed value domain.');
+        L('k81'), 'Expected non-negative or signed value domain.');
     }
     else if (kind === 'bars') renderBars(chart, items);
     else if (kind === 'line') renderLine(chart, items);
@@ -13116,8 +13705,26 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       });
     }
   };
-  document.addEventListener('DOMContentLoaded', function () { window.MicroData.init(); });
-  if (document.readyState !== 'loading') window.MicroData.init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroData.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['data'] = registry['data'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroData.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroData.init();
 
   /* F-01 (2026-10-10): جاهزية الخط — الرسم الأول قد يقيس بمقاييس خط
      بديل قبل تحميل IBM Plex العربي فيختلف أول تصيير عن إعادة التصيير
@@ -13209,7 +13816,23 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'data';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
+
   var observers = new WeakMap();
   var resizeFrames = new WeakMap();
   var disconnected = new WeakSet();
@@ -13276,7 +13899,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   function stateList(items) {
     var list = document.createElement('ul');
     list.className = 'm-packed__states m-legend';
-    list.setAttribute('aria-label', 'حالات لا تدخل الرسم المساحي');
+    list.setAttribute('aria-label', L('k82'));
     items.forEach(function (it) {
       var li = document.createElement('li');
       li.className = 'm-legend__item m-cat--' + it.series;
@@ -13284,7 +13907,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       label.textContent = it.label;
       var value = document.createElement('bdi');
       value.className = 'm-legend__value';
-      value.textContent = it.value === 0 ? '0 (صفر)' : stateText(it).text;
+      value.textContent = it.value === 0 ? L('k83') : stateText(it).text;
       li.appendChild(label);
       li.appendChild(value);
       list.appendChild(li);
@@ -13322,12 +13945,12 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      «-3,566 — سالب غير صالح للمساحة». وللقيم الموجبة بلا تغيير:
      data-display نص العرض كما هو. */
   function stateText(it) {
-    if (!it.hasAttr) return { text: '(غير معروف)', none: true };
+    if (!it.hasAttr) return { text: L('k84'), none: true };
     if (it.value === null) return { text: it.raw && it.raw.trim()
-      ? it.raw + ' (قيمة غير صالحة)' : '(غير متاح)', none: true };
+      ? it.raw + L('k85') : L('k86'), none: true };
     if (it.value < 0) {
       var num = it.display || it.raw || String(it.value);
-      return { text: num + ' (سالب غير صالح للمساحة)', none: true };
+      return { text: num + L('k87'), none: true };
     }
     if (it.value === 0) return { text: '0', none: true };
     return { text: it.display || it.raw || String(it.value), none: false };
@@ -13342,11 +13965,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   var packedUid = 0;
 
   function packedValueState(it) {
-    if (!it.hasAttr) return '(غير معروف)';
+    if (!it.hasAttr) return L('k84');
     if (it.value === null) return it.raw && it.raw.trim()
-      ? it.raw + ' (قيمة غير صالحة)' : '(غير متاح)';
-    if (it.value < 0) return (it.display || it.raw || String(it.value)) + ' (سالب غير صالح للمساحة)';
-    if (it.value === 0) return '0 (صفر)';
+      ? it.raw + L('k85') : L('k86');
+    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L('k87');
+    if (it.value === 0) return L('k83');
     return it.display || it.raw || String(it.value);
   }
 
@@ -13361,7 +13984,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       btn.type = 'button';
       btn.className = 'm-btn m-btn--secondary m-chart__disclose';
       btn.setAttribute('aria-expanded', 'false');
-      btn.textContent = 'عرض البيانات كجدول';
+      btn.textContent = L('k88');
       table = document.createElement('table');
       table.className = 'm-chart__dataset';
       table.hidden = true;
@@ -13384,7 +14007,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+        btn.textContent = open ? L('k88') : L('k89');
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -13394,15 +14017,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var caption = document.createElement('caption');
     var title = chart.querySelector('.m-chart__title');
     var context = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
-    [['data-unit', 'الوحدة'], ['data-period', 'الفترة'], ['data-max', 'المقياس']].forEach(function (part) {
+    [['data-unit', L('k90')], ['data-period', L('k91')], ['data-max', L('k92')]].forEach(function (part) {
       var value = chart.getAttribute(part[0]);
       if (value && value.trim()) context.push(part[1] + ': ' + value.trim());
     });
-    caption.textContent = context.filter(Boolean).join('، ');
+    caption.textContent = context.filter(Boolean).join(L('k93'));
     table.appendChild(caption);
     var thead = document.createElement('thead');
     var headRow = document.createElement('tr');
-    ['الفئة', 'القيمة'].forEach(function (h) {
+    [L('k94'), L('k95')].forEach(function (h) {
       var th = document.createElement('th');
       th.setAttribute('scope', 'col');
       th.textContent = h;
@@ -13443,12 +14066,12 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var plot = chart.querySelector('[data-plot]');
     var err = document.createElement('p');
     err.className = 'm-chart__scale-error';
-    err.textContent = 'تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.';
+    err.textContent = L('k96');
     var devDetail = parseNum(raw) === 0
-      ? 'packed-circle: data-max="' + raw + '" صفر' + (positiveExists
-        ? ' بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس.'
-        : ' ولا توجد قيم موجبة للمقارنة.')
-      : 'packed-circle: data-max="' + raw + '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.';
+      ? 'packed-circle: data-max="' + raw + L('k97') + (positiveExists
+        ? L('k98')
+        : L('k99'))
+      : 'packed-circle: data-max="' + raw + L('k100');
     chart.setAttribute('data-scale-detail', devDetail);
     plot.innerHTML = '';
     plot.appendChild(err);
@@ -13456,7 +14079,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var empty = document.createElement('p');
       empty.className = 'm-packed__empty';
       empty.setAttribute('data-empty', '');
-      empty.textContent = 'لا توجد قيم موجبة قابلة للرسم المساحي.';
+      empty.textContent = L('k101');
       plot.appendChild(empty);
       var states = stateList(itemsOf(chart));
       if (states.children.length) plot.appendChild(states);
@@ -13528,7 +14151,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       plot.innerHTML = '';
       var densityError = document.createElement('p');
       densityError.className = 'm-chart__scale-error';
-      densityError.textContent = 'تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح.';
+      densityError.textContent = L('k102');
       plot.appendChild(densityError);
       renderKeyOnly(chart);
       chart.setAttribute('data-packed-state', 'too-many-positive-categories');
@@ -13603,7 +14226,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var empty = document.createElement('p');
       empty.className = 'm-packed__empty';
       empty.setAttribute('data-empty', '');
-      empty.textContent = 'لا توجد قيم موجبة قابلة للرسم المساحي.';
+      empty.textContent = L('k101');
       plot.appendChild(empty);
     }
     var special = items.filter(function (it) { return stateText(it).none; });
@@ -13677,13 +14300,81 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       });
     }
   };
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroPacked.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['data'] = registry['data'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
 
-  document.addEventListener('DOMContentLoaded', function () { window.MicroPacked.init(); });
-  if (document.readyState !== 'loading') window.MicroPacked.init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroPacked.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroPacked.init();
 })();
 
 </script>
-  <script data-sc-from="components/info-strip/info-strip.js">
+  <script data-sc-from="components/info-strip/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (info-strip) — المرحلة 7.
+   الملف: components/info-strip/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['info-strip'] = {
+  "k1": "اختيار البطاقة",
+    "k2": "البطاقة ",
+    "k3": " من ",
+    "k4": "عرض البطاقة ",
+    "k5": "البطاقة 1 من ",
+    "k6": "لا توجد بطاقات.",
+    "k7": "البطاقة ",
+    "k8": " من ",
+    "k9": "لا توجد بطاقات.",
+    "k10": "اختيار البطاقة",
+    "k11": "عرض البطاقة "
+};
+})();
+
+</script>
+<script data-sc-from="components/info-strip/info-strip.js">
 /* Micro — optional numeric-card carousel. Consumer supplies every card and value.
    R8-02: الجذر الذي يطلب variant الـpeek (data-info-peek) يملكه info-strip-peek
    وحده (مالك واحد للحالة والأحداث) — هذا المحرك يتخطاه مهما تقدّم ترتيب
@@ -13702,13 +14393,29 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'info-strip';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   function isEditingTarget(target) {
     return !!(target && (target.isContentEditable || (target.closest && target.closest(
       'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
       '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
   }
 
-  var registry = new WeakMap(); /* root → teardown data (listeners + nodes) */
+  var registry = new WeakMap();
+   /* root → teardown data (listeners + nodes) */
 
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
@@ -13754,7 +14461,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
     if (pageList) {
       pageList.setAttribute('role', 'group');
-      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', 'اختيار البطاقة');
+      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', L('k1'));
     }
     function setIndex(target, focusViewport) {
       var list = slides();
@@ -13776,7 +14483,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (previous) previous.disabled = index === 0;
       if (next) next.disabled = index === list.length - 1;
       if (position) position.textContent = (index + 1) + ' / ' + list.length;
-      if (status) status.textContent = 'البطاقة ' + (index + 1) + ' من ' + list.length;
+      if (status) status.textContent = L('k2') + (index + 1) + L('k3') + list.length;
       if (pageList) {
         pageButtons.forEach(function (button, pageIndex) {
           button.setAttribute('aria-current', pageIndex === index ? 'true' : 'false');
@@ -13795,7 +14502,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', 'عرض البطاقة ' + (pageIndex + 1));
+        page.setAttribute('aria-label', L('k4') + (pageIndex + 1));
         page.setAttribute('aria-current', pageIndex === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', pageIndex === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { setIndex(pageIndex, false); });
@@ -13875,7 +14582,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (previous) previous.disabled = true;
     if (next) next.disabled = initial.length < 2;
     if (position) position.textContent = initial.length ? '1 / ' + initial.length : '';
-    if (status) status.textContent = initial.length ? 'البطاقة 1 من ' + initial.length : 'لا توجد بطاقات.';
+    if (status) status.textContent = initial.length ? L('k5') + initial.length : L('k6');
 
     registry.set(strip, {
       listeners: listeners,
@@ -13940,8 +14647,26 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
      الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
   window.MicroInfoStrip = { init: init, rescan: rescan, update: rescan, disconnect: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroInfoStrip.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['info-strip'] = registry['info-strip'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 
 </script>
@@ -13975,6 +14700,21 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'info-strip';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب (نفس ثوابت carousel) */
   var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
@@ -14094,7 +14834,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (st.prevBtn) st.prevBtn.disabled = st.index === 0 || st.count <= 1;
     if (st.nextBtn) st.nextBtn.disabled = st.index === st.count - 1 || st.count <= 1;
     if (st.position) st.position.textContent = (st.index + 1) + ' / ' + st.count;
-    if (st.status) st.status.textContent = 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
+    if (st.status) st.status.textContent = L('k7') + (st.index + 1) + L('k8') + st.count;
     if (st.pages) {
       Array.prototype.forEach.call(st.pages.querySelectorAll('[data-info-strip-page]'), function (b, i) {
         b.setAttribute('aria-current', i === st.index ? 'true' : 'false');
@@ -14294,7 +15034,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (controls) controls.hidden = true;
       if (empty) empty.hidden = false;
       if (position) position.textContent = '';
-      if (status) status.textContent = 'لا توجد بطاقات.';
+      if (status) status.textContent = L('k9');
       stateOf.set(strip, {
         viewport: viewport, track: track, slides: [],
         prevBtn: prevBtn, nextBtn: nextBtn, position: position, status: status, pages: pages,
@@ -14317,14 +15057,14 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
     if (pages) {
       pages.setAttribute('role', 'group');
-      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', 'اختيار البطاقة');
+      if (!pages.hasAttribute('aria-label')) pages.setAttribute('aria-label', L('k10'));
       pages.textContent = '';
       slides.forEach(function (_, i) {
         var page = document.createElement('button');
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', 'عرض البطاقة ' + (i + 1));
+        page.setAttribute('aria-label', L('k11') + (i + 1));
         page.setAttribute('aria-current', i === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { goToIndex(strip, i, false); });
@@ -14414,17 +15154,146 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () { window.MicroInfoPeek.init(); });
-  if (document.readyState !== 'loading') window.MicroInfoPeek.init();
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroInfoPeek.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroInfoPeek.init();
+})();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroInfoPeek.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['info-strip'] = registry['info-strip'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+</script>
+  <script data-sc-from="components/metric-comparison/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (metric-comparison) — المرحلة 7.
+   الملف: components/metric-comparison/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['metric-comparison'] = {
+  "k1": "القراءات الدقيقة لكل القيم",
+    "k2": "تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.",
+    "k3": "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.",
+    "k4": "تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.",
+    "k5": "' غير موجب أو أصغر من أكبر مقدار معلوم (",
+    "k6": ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
+    "k7": "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.",
+    "k8": "لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.",
+    "k9": "metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).",
+    "k10": "القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
+    "k11": "لا توجد قراءات متاحة للمقارنة بعد.",
+    "k12": "metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.",
+    "k13": "metric-circles: لا قيم معلومة — لا رسم.",
+    "k14": "المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.",
+    "k15": " العلامة المجوفة تعني صفرًا، وليست مساحة عددية.",
+    "k16": " النطاق يصل إلى ",
+    "k17": " التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.",
+    "k18": " — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale=",
+    "k19": "قيمة غير صالحة",
+    "k20": "غير متاح",
+    "k21": "تعذّر قراءة القيمة",
+    "k22": "لا توجد بيانات للمقارنة.",
+    "k23": "عرض البيانات كجدول",
+    "k24": "إخفاء جدول البيانات",
+    "k25": "الوحدة: ",
+    "k26": "الفترة: ",
+    "k27": "، ",
+    "k28": "الفئة",
+    "k29": "القيمة",
+    "k30": "الوحدة",
+    "k31": "الفترة",
+    "k32": "القيمة الرئيسية",
+    "k33": "— (غير متاح)",
+    "k34": "(قيمة غير صالحة)",
+    "k35": "(صفر)",
+    "k36": "(سالب)",
+    "k37": "الحالة",
+    "k38": "صفر",
+    "k39": "سالب — معروض بالقيمة والإشارة لا بالمساحة",
+    "k40": "metric-bars: مصدر فارغ — لا صفوف.",
+    "k41": "تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.",
+    "k42": "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "k43": "تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.",
+    "k44": "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "k45": "تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.",
+    "k46": " أصغر من أكبر مقدار معلوم (",
+    "k47": ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.",
+    "k48": "الأشرطة حتى ",
+    "k49": "؛ common-unit=",
+    "k50": "؛ common-period=",
+    "k51": "القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.",
+    "k52": "metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.",
+    "k53": "لا توجد قراءات متاحة لبناء مقياس بعد.",
+    "k54": "metric-bars: لا قيم معلومة — لا مقياس.",
+    "k55": " خط الوسط صفر؛ الموجب يمينه والسالب يساره.",
+    "k56": "(غير متاح)",
+    "k57": " (قيمة غير صالحة)"
+};
 })();
 
 </script>
-  <script data-sc-from="components/metric-comparison/metric-comparison.js">
+<script data-sc-from="components/metric-comparison/metric-comparison.js">
 /* Numeric comparison primitives. The consumer owns meaning, units and formatting. */
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'metric-comparison';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var NUMBER_RE = /^[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
+
   var SERIES = { a: true, b: true, c: true, d: true, e: true };
 
   function readNumber(raw) {
@@ -14474,7 +15343,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     if (!fallbackTarget) {
       fallbackTarget = make('ul', 'm-metric-circles__fallback');
       fallbackTarget.setAttribute('data-metric-fallback', '');
-      fallbackTarget.setAttribute('aria-label', 'القراءات الدقيقة لكل القيم');
+      fallbackTarget.setAttribute('aria-label', L('k1'));
       target.insertAdjacentElement('afterend', fallbackTarget);
     }
     var items = Array.prototype.slice.call(source.querySelectorAll('[data-label]')).map(function (node) {
@@ -14542,35 +15411,35 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
        التقني الكامل على الجذر عبر writeDiagnostics. الشروحات الدلالية
        للصفر/النطاق/التداخل محفوظة كما هي في الحالة السليمة. */
     if (!validLayout) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k2');
       writeDiagnostics(chart, 'invalid-layout',
-        "metric-circles: data-layout='" + layout + "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-layout='" + layout + L('k3'));
     } else if (!validMax) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k4');
       writeDiagnostics(chart, 'invalid-scale',
-        "metric-circles: data-max='" + declaredRaw + "' غير موجب أو أصغر من أكبر مقدار معلوم (" + measuredMax + ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-max='" + declaredRaw + L('k5') + measuredMax + L('k6'));
     } else if (!validRadius) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k2');
       writeDiagnostics(chart, 'invalid-radius',
-        "metric-circles: data-radius='" + radiusRaw + "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-radius='" + radiusRaw + L('k7'));
     } else if (!width) {
-      if (scaleNote) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
+      if (scaleNote) scaleNote.textContent = L('k8');
       writeDiagnostics(chart, 'pending-width',
-        'metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).');
+        L('k9'));
     } else if (!measuredMax) {
       if (scaleNote) scaleNote.textContent = known.length
-        ? 'القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.'
-        : 'لا توجد قراءات متاحة للمقارنة بعد.';
+        ? L('k10')
+        : L('k11');
       writeDiagnostics(chart, known.length ? 'zero' : 'empty',
         known.length
-          ? 'metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.'
-          : 'metric-circles: لا قيم معلومة — لا رسم.');
+          ? L('k12')
+          : L('k13'));
     } else {
       if (scaleNote) {
-        var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
-        if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
-        if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
-        if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
+        var scaledMessage = L('k14');
+        if (zeroCount) scaledMessage += L('k15');
+        if (declaredRaw !== null) scaledMessage += L('k16') + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
+        if (layout === 'overlap') scaledMessage += L('k17');
         scaleNote.textContent = scaledMessage;
       }
       /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
@@ -14581,7 +15450,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
          circleItems — لا يبقى تشخيص دورة سابقة. */
       writeDiagnostics(chart, 'ok',
         'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
-        + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+        + L('k18')
         + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
     }
 
@@ -14606,10 +15475,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var display = state === 'missing'
         ? '—' + (item.unit ? ' ' + item.unit : '')
         : state === 'invalid'
-          ? (item.display || (item.raw || 'قيمة غير صالحة') + (item.unit ? ' ' + item.unit : ''))
+          ? (item.display || (item.raw || L('k19')) + (item.unit ? ' ' + item.unit : ''))
           : (item.display || item.raw) + (item.unit && !item.display ? ' ' + item.unit : '');
-      var stateText = state === 'missing' ? 'غير متاح'
-        : state === 'invalid' ? 'تعذّر قراءة القيمة' : '';
+      var stateText = state === 'missing' ? L('k20')
+        : state === 'invalid' ? L('k21') : '';
       var zeroMarker = state === 'zero' && validLayout && validMax && validRadius && width > 0;
       var canRender = zeroMarker || (geometryAllowed && (state === 'positive' || state === 'negative'));
       if (canRender) {
@@ -14637,7 +15506,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     });
     if (empty) {
       empty.hidden = items.length > 0;
-      if (!items.length) empty.textContent = chart.getAttribute('data-empty-message') || 'لا توجد بيانات للمقارنة.';
+      if (!items.length) empty.textContent = chart.getAttribute('data-empty-message') || L('k22');
     }
     syncCirclesTable(chart, items);
   }
@@ -14666,7 +15535,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var btn, table;
     if (!wrap) {
       wrap = make('div', 'm-main-metric__dataset-wrap');
-      btn = make('button', 'm-btn m-btn--secondary m-main-metric__disclose', 'عرض البيانات كجدول');
+      btn = make('button', 'm-btn m-btn--secondary m-main-metric__disclose', L('k23'));
       btn.type = 'button';
       btn.setAttribute('aria-expanded', 'false');
       table = make('table', 'm-main-metric__dataset');
@@ -14690,7 +15559,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+        btn.textContent = open ? L('k23') : L('k24');
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -14739,9 +15608,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     var parts = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
     var unit = chart.getAttribute('data-common-unit') || chart.getAttribute('data-unit');
     var period = chart.getAttribute('data-common-period') || chart.getAttribute('data-period');
-    if (unit) parts.push('الوحدة: ' + unit);
-    if (period) parts.push('الفترة: ' + period);
-    return parts.filter(Boolean).join('، ');
+    if (unit) parts.push(L('k25') + unit);
+    if (period) parts.push(L('k26') + period);
+    return parts.filter(Boolean).join(L('k27'));
   }
 
   /* جدول المقارنة الشريطية: فئة/قيمة/وحدة/فترة + الحالة داخل خلية
@@ -14753,24 +15622,24 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     table.textContent = '';
     var caption = make('caption', null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, ['الفئة', 'القيمة', 'الوحدة', 'الفترة']);
+    buildTableHead(table, [L('k28'), L('k29'), L('k30'), L('k31')]);
     var tbody = make('tbody');
     var hero = chart.querySelector('.m-main-metric__hero');
     var mainNumber = hero && hero.querySelector('.m-main-metric__number');
     if (mainNumber) {
       var mainLabel = hero.querySelector('.m-main-metric__label');
       var mainUnit = hero.querySelector('.m-main-metric__unit');
-      appendRow(tbody, [(mainLabel && mainLabel.textContent) || 'القيمة الرئيسية',
+      appendRow(tbody, [(mainLabel && mainLabel.textContent) || L('k32'),
         datasetReading(mainNumber.textContent), (mainUnit && mainUnit.textContent) || chart.getAttribute('data-common-unit') || '—',
         chart.getAttribute('data-common-period') || chart.getAttribute('data-period') || '—']);
     }
     entries.forEach(function (entry, index) {
       var value = parsed[index];
       var valueText;
-      if (value.state === 'missing') valueText = '— (غير متاح)';
-      else if (value.state === 'invalid') valueText = datasetReading(entry.raw, '(قيمة غير صالحة)', false);
-      else if (value.state === 'zero') valueText = datasetReading(entry.display || entry.raw || '0', '(صفر)');
-      else valueText = datasetReading(entry.display || entry.raw, value.state === 'negative' ? '(سالب)' : '');
+      if (value.state === 'missing') valueText = L('k33');
+      else if (value.state === 'invalid') valueText = datasetReading(entry.raw, L('k34'), false);
+      else if (value.state === 'zero') valueText = datasetReading(entry.display || entry.raw || '0', L('k35'));
+      else valueText = datasetReading(entry.display || entry.raw, value.state === 'negative' ? L('k36') : '');
       appendRow(tbody, [entry.label, valueText, entry.unit || '—', entry.period || '—']);
     });
     table.appendChild(tbody);
@@ -14785,18 +15654,18 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     table.textContent = '';
     var caption = make('caption', null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, ['الفئة', 'القيمة', 'الحالة', 'الوحدة', 'الفترة']);
+    buildTableHead(table, [L('k28'), L('k29'), L('k37'), L('k30'), L('k31')]);
     var tbody = make('tbody');
     items.forEach(function (item) {
       var state = item.state === 'unavailable' ? 'missing'
         : item.state === 'invalid' ? 'invalid' : readNumber(item.raw).state;
       var valueText, stateText;
-      if (state === 'missing') { valueText = '—'; stateText = 'غير متاح'; }
-      else if (state === 'invalid') { valueText = item.raw || 'قيمة غير صالحة'; stateText = 'قيمة غير صالحة'; }
+      if (state === 'missing') { valueText = '—'; stateText = L('k20'); }
+      else if (state === 'invalid') { valueText = item.raw || L('k19'); stateText = L('k19'); }
       else {
         valueText = item.display || item.raw;
-        stateText = state === 'zero' ? 'صفر'
-          : state === 'negative' ? 'سالب — معروض بالقيمة والإشارة لا بالمساحة'
+        stateText = state === 'zero' ? L('k38')
+          : state === 'negative' ? L('k39')
           : '';
       }
       appendRow(tbody, [item.label,
@@ -14858,39 +15727,39 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
        كاملة في الصفوف دائمًا، والسبب التقني في data-scale-state/detail.
        الشروحات الدلالية للوحدة والفترة والصفر والإشارة محفوظة. */
     if (!entries.length) {
-      userText = 'لا توجد بيانات للمقارنة.';
-      writeDiagnostics(chart, 'empty', 'metric-bars: مصدر فارغ — لا صفوف.');
+      userText = L('k22');
+      writeDiagnostics(chart, 'empty', L('k40'));
     } else if (!consistent) {
-      userText = 'تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.';
+      userText = L('k41');
       writeDiagnostics(chart, 'inconsistent',
-        "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        L('k42'));
     } else if (declaredRaw !== null && (!declared || declared.state !== 'positive')) {
-      userText = 'تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.';
+      userText = L('k43');
       writeDiagnostics(chart, 'invalid-scale',
-        "metric-bars: data-max='" + declaredRaw + "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        "metric-bars: data-max='" + declaredRaw + L('k44'));
     } else if (declared && declared.value < magnitudeMax) {
-      userText = 'تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.';
+      userText = L('k45');
       writeDiagnostics(chart, 'scale-below-known',
-        'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        'metric-bars: data-max=' + declared.value + L('k46') + magnitudeMax + L('k47'));
     } else if (declared) {
       max = declared.value;
-      userText = 'الأشرطة حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = L('k48') + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
-        'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
+        'metric-bars: scale=declared data-max=' + declared.value + L('k49') + commonUnit + L('k50') + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = 'الأشرطة حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = L('k48') + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
-        'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
+        'metric-bars: scale=auto-largest-known=' + magnitudeMax + L('k49') + commonUnit + L('k50') + commonPeriod + '.');
     } else if (hasKnown) {
       max = 0;
-      userText = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
-      writeDiagnostics(chart, 'zero', 'metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.');
+      userText = L('k51');
+      writeDiagnostics(chart, 'zero', L('k52'));
     } else {
-      userText = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
-      writeDiagnostics(chart, 'empty', 'metric-bars: لا قيم معلومة — لا مقياس.');
+      userText = L('k53');
+      writeDiagnostics(chart, 'empty', L('k54'));
     }
-    if (signed && max !== null) userText += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
+    if (signed && max !== null) userText += L('k55');
 
     target.textContent = '';
     entries.forEach(function (entry, index) {
@@ -14900,15 +15769,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var head = make('div', 'm-main-metric__row-head');
       head.appendChild(make('span', 'm-main-metric__row-label', entry.label));
       var display = value.state === 'missing' ? '—'
-        : value.state === 'invalid' ? 'قيمة غير صالحة'
+        : value.state === 'invalid' ? L('k19')
           : (entry.display || entry.raw) + (entry.unit && !entry.display ? ' ' + entry.unit : '');
       var val = make('span', 'm-main-metric__row-value');
       if (chart.classList.contains('m-main-metric--readable')) {
-        var number = make('bdi', '', value.state === 'missing' ? '(غير متاح)'
+        var number = make('bdi', '', value.state === 'missing' ? L('k56')
           : value.state === 'invalid' ? entry.raw : (entry.display || entry.raw));
         number.dir = value.value === null ? 'auto' : 'ltr';
         val.appendChild(number);
-        if (value.state === 'invalid') val.appendChild(make('span', 'm-main-metric__reading-state', ' (قيمة غير صالحة)'));
+        if (value.state === 'invalid') val.appendChild(make('span', 'm-main-metric__reading-state', L('k57')));
         if (entry.unit) {
           val.appendChild(document.createTextNode(' '));
           var unit = make('span', 'm-main-metric__reading-unit', entry.unit);
@@ -14931,9 +15800,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       } else {
         track.hidden = true;
         if (value.state === 'missing') {
-          li.appendChild(make('span', 'm-main-metric__state', 'غير متاح'));
+          li.appendChild(make('span', 'm-main-metric__state', L('k20')));
         } else if (value.state === 'invalid') {
-          li.appendChild(make('span', 'm-main-metric__state', 'تعذّر قراءة القيمة'));
+          li.appendChild(make('span', 'm-main-metric__state', L('k21')));
         }
       }
       li.appendChild(track);
@@ -15055,8 +15924,26 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
      الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
   window.MicroMetricComparison = { init: init, render: render, update: render, disconnect: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroMetricComparison.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['metric-comparison'] = registry['metric-comparison'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
   if (document.fonts) document.fonts.ready.then(function () {
     document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
       if (!disconnected.has(chart)) render(chart);
@@ -15065,10 +15952,65 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 })();
 
 </script>
-  <script data-sc-from="components/account-settings/account-settings.js">
+  <script data-sc-from="components/account-settings/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (account-settings) — المرحلة 7.
+   الملف: components/account-settings/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['account-settings'] = {
+  "k1": "تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد."
+};
+})();
+
+</script>
+<script data-sc-from="components/account-settings/account-settings.js">
 /* Settings-layer composition over the existing MicroNavigation layer contract. */
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'account-settings';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
 
   function initPanel(panel) {
     if (panel.hasAttribute('data-account-settings-ready') && panel.__microAccountLifetime
@@ -15135,7 +16077,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       }));
       var status = panel.querySelector('[data-account-demo-status]');
       if (status) status.textContent = input.getAttribute('data-demo-only') !== null
-        ? 'تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد.'
+        ? L('k1')
         : '';
     });
 
@@ -15159,14 +16101,89 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     });
   }
   window.MicroAccountSettings = { init: init, disconnect: disconnect, destroy: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 </script>
-  <script data-sc-from="components/access-gateway/access-gateway.js">
+  <script data-sc-from="components/access-gateway/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (access-gateway) — المرحلة 7.
+   الملف: components/access-gateway/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['access-gateway'] = {
+  "k1": "إظهار كلمة المرور",
+    "k2": "انتهى طلب المساعدة دون تأكيد إرساله.",
+    "k3": "تعذّر إرسال طلب المساعدة. أعد المحاولة.",
+    "k4": "جارٍ الاتصال",
+    "k5": "جارٍ الاتصال بمزود الدخول…",
+    "k6": "تم الدخول بنجاح.",
+    "k7": "لم يتم الدخول.",
+    "k8": "انتهى الطلب دون نتيجة مؤكدة من التطبيق.",
+    "k9": "تعذّر تنفيذ الدخول. أعد المحاولة.",
+    "k10": "نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.",
+    "k11": "أدخل بريدًا إلكترونيًا صالحًا.",
+    "k12": "أدخل كلمة المرور.",
+    "k13": "أدخل كلمة مرور لا تقل عن ",
+    "k14": " أحرف.",
+    "k15": "تحقق من كلمة المرور المطلوبة.",
+    "k16": "تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.",
+    "k17": "هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.",
+    "k18": "جارٍ تسجيل الدخول",
+    "k19": "جارٍ التحقق من بيانات الدخول…",
+    "k20": "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."
+};
+})();
+
+</script>
+<script data-sc-from="components/access-gateway/access-gateway.js">
 /* Access form primitives. No provider, network, or authentication is enabled by default. */
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'access-gateway';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
 
   // Rejected exceptions are diagnostics, never interface copy. The consumer may
   // explicitly supply userMessage; Error.message and stack are never displayed.
@@ -15288,7 +16305,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
           password.type = showing ? 'text' : 'password';
           reveal.setAttribute('aria-pressed', showing ? 'true' : 'false');
           /* A pressed toggle has one stable name; aria-pressed conveys state. */
-          reveal.setAttribute('aria-label', 'إظهار كلمة المرور');
+          reveal.setAttribute('aria-label', L('k1'));
           if (selection && typeof password.setSelectionRange === 'function') {
             var start = Math.min(selection.start, password.value.length);
             var end = Math.min(selection.end, password.value.length);
@@ -15332,9 +16349,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
           var tone = 'info';
           if (result && (result.tone === 'info' || result.tone === 'error')) tone = result.tone;
           else if (hasMessage && result && result.authenticated === false) tone = 'error';
-          setMessage(form, hasMessage ? result.message : 'انتهى طلب المساعدة دون تأكيد إرساله.', tone);
+          setMessage(form, hasMessage ? result.message : L('k2'), tone);
         })
-        .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر إرسال طلب المساعدة. أعد المحاولة.'), 'error'); });
+        .catch(function (error) { if (alive()) setMessage(form, userError(error, L('k3')), 'error'); });
     });
     providers.forEach(function (button) {
       on(button, 'click', function () {
@@ -15345,17 +16362,17 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
             || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
         form.dataset.microAccessBusy = 'true';
         form.setAttribute('aria-busy', 'true');
-        if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: 'جارٍ الاتصال' });
-        setMessage(form, 'جارٍ الاتصال بمزود الدخول…', 'info');
+        if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: L('k4') });
+        setMessage(form, L('k5'), 'info');
         Promise.resolve().then(function () { if (alive()) return handler(); })
           .then(function (result) {
             if (!alive()) return;
             /* SUI-R1-01: عقد النتيجة — لا نجاح دخول من مجرد اكتمال
                المعالج؛ المستهلك يصرّح بالنتيجة أو تبقى محايدة. */
-            var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+            var outcome = resultOutcome(result, L('k6'), L('k7'), L('k8'));
             setMessage(form, outcome.text, outcome.tone);
           })
-          .catch(function (error) { if (alive()) setMessage(form, userError(error, 'تعذّر تنفيذ الدخول. أعد المحاولة.'), 'error'); })
+          .catch(function (error) { if (alive()) setMessage(form, userError(error, L('k9')), 'error'); })
           .then(function () {
             if (!alive()) return;
             form.dataset.microAccessBusy = 'false';
@@ -15381,7 +16398,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var email = credential(form, 'email');
       var passwordInput = credential(form, 'password');
       if (!email || !passwordInput) {
-        setMessage(form, 'نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.', 'error');
+        setMessage(form, L('k10'), 'error');
         return;
       }
       var controls = [email, passwordInput].filter(Boolean);
@@ -15390,14 +16407,14 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         invalid.forEach(function (input) {
           var isEmail = input.getAttribute('data-access-credential') === 'email' || input.name === 'email' || input.type === 'email';
           setFieldError(input, isEmail
-            ? 'أدخل بريدًا إلكترونيًا صالحًا.'
+            ? L('k11')
             : input.validity.valueMissing
-              ? 'أدخل كلمة المرور.'
+              ? L('k12')
               : input.validity.tooShort && input.minLength > 0
-                ? 'أدخل كلمة مرور لا تقل عن ' + input.minLength + ' أحرف.'
-                : 'تحقق من كلمة المرور المطلوبة.');
+                ? L('k13') + input.minLength + L('k14')
+                : L('k15'));
         });
-        setMessage(form, 'تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.', 'error');
+        setMessage(form, L('k16'), 'error');
         /* SUI-014: قناة خطأ واحدة — رسالة المكوّن المرتبطة بالحقل + aria-invalid
            + تركيز الحقل الأول. لا نستدعي reportValidity() فلا فقاعة أصلية
            ثانية بلغة النظام فوق الرسالة العربية (العرض البصري للفقاعة نفسها
@@ -15408,14 +16425,14 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var current = gateway.__microAccessCallbacks || {};
       if (typeof current.onSubmit !== 'function') {
         /* SUI-013: لغة بشرية بلا مصطلحات داخلية (لا معالج/مستهلك/موصولة) */
-        setMessage(form, 'هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.', 'info');
+        setMessage(form, L('k17'), 'info');
         return;
       }
       form.dataset.microAccessBusy = 'true';
       form.setAttribute('aria-busy', 'true');
       var submit = form.querySelector('[type="submit"]');
-      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: 'جارٍ تسجيل الدخول' });
-      setMessage(form, 'جارٍ التحقق من بيانات الدخول…', 'info');
+      if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: L('k18') });
+      setMessage(form, L('k19'), 'info');
       Promise.resolve().then(function () {
         if (!alive()) return;
         return current.onSubmit({
@@ -15427,11 +16444,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         /* SUI-R1-01: المكوّن يكتب رسالة النتيجة أولًا ثم يُطلق الحدث بعدها —
            فالكلمة الأخيرة فوق منطقة الحالة لمستمع المستهلك ولا تُمسح رسالته
            لاحقًا. النتيجة مسؤولية المستهلك بصياغة بشرية (SUI-013). */
-        var outcome = resultOutcome(result, 'تم الدخول بنجاح.', 'لم يتم الدخول.', 'انتهى الطلب دون نتيجة مؤكدة من التطبيق.');
+        var outcome = resultOutcome(result, L('k6'), L('k7'), L('k8'));
         setMessage(form, outcome.text, outcome.tone);
         form.dispatchEvent(new CustomEvent('micro-access:submitted', { bubbles: true, detail: { result: result } }));
       }).catch(function (error) {
-        if (alive()) setMessage(form, userError(error, 'تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة.'), 'error');
+        if (alive()) setMessage(form, userError(error, L('k20')), 'error');
       }).then(function () {
         if (!alive()) return;
         form.dataset.microAccessBusy = 'false';
@@ -15459,6 +16476,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   }
 
   function init(root, handlers) {
+    /* المرحلة 7 — options.labels لكل استدعاء: دمج جزئي فوق نصوص العائلة الافتراضية قبل الربط */
+    if (handlers && handlers.labels && typeof handlers.labels === 'object') {
+      window.MicroAccessGateway.setLabels(handlers.labels);
+    }
+
     var scope = root || document;
     var gateways = [];
     if (scope.matches && scope.matches('[data-access-gateway]')) gateways.push(scope);
@@ -15503,11 +16525,109 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      على جذر مربوط أصلًا دون ربط مضاعف (سلوك init الموثق). لا يبني
      النموذج من جديد ولا يعيد كلمة المرور المظهرة. */
   window.MicroAccessGateway = { init: init, update: init, disconnect: disconnect, destroy: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();
 </script>
-  <script data-sc-from="components/order-schedule/order-schedule.js">
+  <script data-sc-from="components/order-schedule/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (order-schedule) — المرحلة 7.
+   الملف: components/order-schedule/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['order-schedule'] = {
+  "ordersCountPlural": {"zero": "لا طلبات", "one": "طلب واحد", "two": "طلبان", "few": "{n} طلبات", "many": "{n} طلبًا", "other": "{n} طلب", "hundredOne": "{n} طلب واحد", "hundredTwo": "{n} طلبان"},
+    "k1": "الأحد",
+    "k2": "الاثنين",
+    "k3": "الثلاثاء",
+    "k4": "الأربعاء",
+    "k5": "الخميس",
+    "k6": "الجمعة",
+    "k7": "السبت",
+    "k8": "أحد",
+    "k9": "إثن",
+    "k10": "ثلا",
+    "k11": "أرب",
+    "k12": "خمي",
+    "k13": "جمع",
+    "k14": "سبت",
+    "k15": "MicroOrderSchedule.init يتطلب عنصر جذر صالحًا (DOM Element)",
+    "k16": "طريقة العرض",
+    "k17": "يوم",
+    "k18": "أسبوع",
+    "k19": "شهر",
+    "k20": "عرض التقويم",
+    "k21": "عرض القائمة",
+    "k22": "اليوم",
+    "k23": "الشهر السابق",
+    "k24": "الأسبوع السابق",
+    "k25": "اليوم السابق",
+    "k26": "الشهر التالي",
+    "k27": "الأسبوع التالي",
+    "k28": "اليوم التالي",
+    "k29": "اختيار الشهر والسنة",
+    "k30": "السنة السابقة",
+    "k31": "السنة التالية",
+    "k32": "رجوع للتقويم",
+    "k33": "أشهر السنة",
+    "k34": "، ",
+    "k35": "طلبات ",
+    "k36": "طلبات الأسبوع ",
+    "k37": "إضافة طلب",
+    "k38": "إضافة طلب ليوم ",
+    "k39": "التاريخ",
+    "k40": "غير مجدول",
+    "k41": "الوقت",
+    "k42": "المورد",
+    "k43": "الحالة",
+    "k44": "الملاحظة",
+    "k45": "تعديل",
+    "k46": "حذف",
+    "k47": "طلبات اليوم",
+    "k48": "لا يوم محدد في ",
+    "k49": " في هذا الشهر",
+    "k50": "لا توجد طلبات",
+    "k51": "لا توجد طلبات بعد.",
+    "k52": "الطلبات القادمة",
+    "k53": "الطلبات السابقة",
+    "k54": "الطلبات غير المجدولة",
+    "k55": "جارٍ تحميل الطلبات…",
+    "k56": "تعذّر تحميل الطلبات.",
+    "k57": "إعادة المحاولة"
+};
+})();
+
+</script>
+<script data-sc-from="components/order-schedule/order-schedule.js">
 /* =========================================================
    Micro UI — سلوك مكوّن جدول الطلبات المجدولة (order-schedule)
    الملف: components/order-schedule/order-schedule.js
@@ -15620,8 +16740,24 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'order-schedule';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   /* ---- أنماط التحقق النصي (لا تحويل تاريخ عبر UTC) ---- */
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
   var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
   /* ---- أسماء عربية داخلية (لا مكتبة خارجية) ----
@@ -15630,7 +16766,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      الإتاحية) — كل التواريخ رقمية DD/MM/YYYY ورأس الشهر «MM / YYYY».
      أسماء الأيام (ليست أشهرًا) تبقى لعناوين اليوم والأسماء الإتاحية. */
   /* بفهرس getDay(): 0=الأحد .. 6=السبت */
-  var WEEKDAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  var WEEKDAYS_FULL = [L('k1'), L('k2'), L('k3'), L('k4'), L('k5'), L('k6'), L('k7')];
   /* اختصارات أعمدة رأس الأسبوع بفهرس getDay() — الافتراضي weekStart=0
      (الأحد أولًا) يجعل العمود الأول أحدًا في الاتجاهين (RTL يعكس
      الصف المنطقي بصريًا بلا عكس تواريخ). */
@@ -15639,7 +16775,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
      (رأس الأسبوع aria-hidden بصري فقط). كان: أسماء 5-6 أحرف مثل
      «ثلاثاء/أربعاء» لا تتسع عمود ~38px عند 1× فتنكسر الكلمة على سطرين
      (mid-word) بلا قراءة سليمة. */
-  var WEEKDAYS_SHORT = ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'];
+  var WEEKDAYS_SHORT = [L('k8'), L('k9'), L('k10'), L('k11'), L('k12'), L('k13'), L('k14')];
 
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -15726,18 +16862,32 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   /* عبارة العدد العربية الصحيحة: 0/1/2/3–10/11–99؛ ومن 100 فأعلى
      تُشتق الصيغة من آخر رقمين (قاعدة العدد المركب — 132 → «طلبًا»،
      102 → «طلبان»، 100 → «طلب») */
+  /* المرحلة 7 — صيغ الجمع عبر Intl.PluralRules('ar'): نفس الصياغة
+     الحرفية الحالية لكل حالة؛ الأعداد 100 فأكثر تحتفظ بقاعدة العدد
+     المركب الموثقة أعلاه (آخر رقمين) كي تبقى المخرجات متطابقة
+     بايت-ببايت مع ما قبل المرحلة. */
+  var countPluralRules = null;
+  function countPluralCategory(n) {
+    if (n >= 100) {
+      var r = n % 100;
+      if (r === 0) return 'other';
+      if (r === 1) return 'hundredOne';
+      if (r === 2) return 'hundredTwo';
+      if (r >= 3 && r <= 10) return 'few';
+      return 'many';
+    }
+    if (!countPluralRules) {
+      try { countPluralRules = new Intl.PluralRules('ar'); }
+      catch (err) { countPluralRules = { select: function () { return 'other'; } }; }
+    }
+    return countPluralRules.select(n);
+  }
   function countPhraseAr(n) {
-    if (n === 0) return 'لا طلبات';
-    if (n === 1) return 'طلب واحد';
-    if (n === 2) return 'طلبان';
-    if (n >= 3 && n <= 10) return n + ' طلبات';
-    if (n >= 11 && n <= 99) return n + ' طلبًا';
-    var r = n % 100;
-    if (r === 0) return n + ' طلب';
-    if (r === 1) return n + ' طلب واحد';
-    if (r === 2) return n + ' طلبان';
-    if (r >= 3 && r <= 10) return n + ' طلبات';
-    return n + ' طلبًا';
+    var forms = L('ordersCountPlural') || {};
+    var category = countPluralCategory(n);
+    var template = forms[category] != null ? forms[category] : forms.other;
+    if (template == null) return String(n);
+    return String(template).replace('{n}', String(n));
   }
 
   /* الاسم الإتاحي الكامل للتاريخ: اسم اليوم (معجمي — ليس اسم شهر)
@@ -15866,7 +17016,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
   function init(root, options) {
     if (!root || root.nodeType !== 1) {
-      throw new Error('MicroOrderSchedule.init يتطلب عنصر جذر صالحًا (DOM Element)');
+      throw new Error(L('k15'));
     }
     /* تهيئة مزدوجة على نفس الجذر: نفس الحالة بلا مستمعات جديدة —
        الخيارات الأولى تُحتفظ (موثق في المواصفة) */
@@ -16169,10 +17319,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     function buildViewSeg() {
       var bar = el('div', 'm-ocal__viewseg');
       bar.setAttribute('role', 'tablist');
-      bar.setAttribute('aria-label', 'طريقة العرض');
-      bar.appendChild(viewsegBtn('day', 'يوم', viewPressed('day')));
-      bar.appendChild(viewsegBtn('week', 'أسبوع', viewPressed('week')));
-      bar.appendChild(viewsegBtn('month', 'شهر', viewPressed('month')));
+      bar.setAttribute('aria-label', L('k16'));
+      bar.appendChild(viewsegBtn('day', L('k17'), viewPressed('day')));
+      bar.appendChild(viewsegBtn('week', L('k18'), viewPressed('week')));
+      bar.appendChild(viewsegBtn('month', L('k19'), viewPressed('month')));
       return bar;
     }
 
@@ -16191,7 +17341,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       btn.setAttribute('aria-pressed', listActive ? 'true' : 'false');
       btn.appendChild(listActive ? calendarIcon() : listIcon());
       btn.appendChild(el('span', 'm-ocal__mode-toggle-text',
-        listActive ? 'عرض التقويم' : 'عرض القائمة'));
+        listActive ? L('k20') : L('k21')));
       return btn;
     }
 
@@ -16260,7 +17410,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var today = el('button', 'm-ocal__todaybtn');
       today.type = 'button';
       today.setAttribute('data-ocal-action', 'today');
-      today.textContent = 'اليوم';
+      today.textContent = L('k22');
       return today;
     }
 
@@ -16280,10 +17430,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     function buildNavActions(prevAction, nextAction) {
       var group = el('div', 'm-ocal__cal-actions');
       if (todayVisible()) group.appendChild(todayNavBtn());
-      group.appendChild(navBtn(prevAction, prevAction === 'prev-month' ? 'الشهر السابق' :
-        (prevAction === 'prev-week' ? 'الأسبوع السابق' : 'اليوم السابق'), prevIcon()));
-      group.appendChild(navBtn(nextAction, nextAction === 'next-month' ? 'الشهر التالي' :
-        (nextAction === 'next-week' ? 'الأسبوع التالي' : 'اليوم التالي'), nextIcon()));
+      group.appendChild(navBtn(prevAction, prevAction === 'prev-month' ? L('k23') :
+        (prevAction === 'prev-week' ? L('k24') : L('k25')), prevIcon()));
+      group.appendChild(navBtn(nextAction, nextAction === 'next-month' ? L('k26') :
+        (nextAction === 'next-week' ? L('k27') : L('k28')), nextIcon()));
       return group;
     }
 
@@ -16301,7 +17451,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var pickerButton = el('button', 'm-ocal__month-trigger');
       pickerButton.type = 'button';
       pickerButton.setAttribute('data-ocal-action', 'month-picker');
-      pickerButton.setAttribute('aria-label', 'اختيار الشهر والسنة');
+      pickerButton.setAttribute('aria-label', L('k29'));
       pickerButton.setAttribute('aria-haspopup', 'dialog');
       pickerButton.setAttribute('aria-expanded', state.pickerOpen ? 'true' : 'false');
       /* عقد 2026-10-26 (تعليمات المالك — الأرقام فقط): رأس الشهر رقمي
@@ -16326,24 +17476,24 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       picker.setAttribute('data-ocal-picker', '');
       picker.setAttribute('data-ocal-year', yearText(state.pickerYear));
       picker.setAttribute('role', 'dialog');
-      picker.setAttribute('aria-label', 'اختيار الشهر والسنة');
+      picker.setAttribute('aria-label', L('k29'));
       var heading = el('div', 'm-ocal__picker-head');
-      var prevYear = el('button', 'm-ocal__picker-yearbtn', 'السنة السابقة');
+      var prevYear = el('button', 'm-ocal__picker-yearbtn', L('k30'));
       prevYear.type = 'button';
       prevYear.setAttribute('data-ocal-action', 'picker-prev-year');
-      prevYear.setAttribute('aria-label', 'السنة السابقة');
+      prevYear.setAttribute('aria-label', L('k30'));
       prevYear.disabled = state.pickerYear <= 1;
       heading.appendChild(prevYear);
       var year = el(hTag(), 'm-ocal__picker-year', yearText(state.pickerYear));
       year.setAttribute('aria-live', 'polite');
       heading.appendChild(year);
-      var nextYear = el('button', 'm-ocal__picker-yearbtn', 'السنة التالية');
+      var nextYear = el('button', 'm-ocal__picker-yearbtn', L('k31'));
       nextYear.type = 'button';
       nextYear.setAttribute('data-ocal-action', 'picker-next-year');
-      nextYear.setAttribute('aria-label', 'السنة التالية');
+      nextYear.setAttribute('aria-label', L('k31'));
       nextYear.disabled = state.pickerYear >= 9999;
       heading.appendChild(nextYear);
-      var back = el('button', 'm-ocal__picker-back', 'رجوع للتقويم');
+      var back = el('button', 'm-ocal__picker-back', L('k32'));
       back.type = 'button';
       back.setAttribute('data-ocal-action', 'picker-back');
       heading.appendChild(back);
@@ -16351,7 +17501,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
       var months = el('div', 'm-ocal__picker-months');
       months.setAttribute('role', 'group');
-      months.setAttribute('aria-label', 'أشهر السنة');
+      months.setAttribute('aria-label', L('k33'));
       var currentMonth = state.pickerYear === state.monthCursor.y ? state.monthCursor.m : -1;
       /* عقد 2026-10-26 (الأرقام فقط): خيارات المنتقي أرقام شهرية
          01..12 مرئية، والاسم الإتاحي رقمي أيضًا «10 / 2026» — لا اسم
@@ -16462,7 +17612,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       /* الاسم الإتاحي رقمي بالكامل (عقد 2026-10-26 — الأرقام فقط):
          التاريخ الكامل DD/MM/YYYY + عبارة العدد («07/10/2026، طلبان»)
          — لا اسم شهر ولا في الأسماء الإتاحية، بأرقام لاتينية معزولة. */
-      var label = dateNumeric(iso) + '، ' + countPhraseAr(orders.length);
+      var label = dateNumeric(iso) + L('k34') + countPhraseAr(orders.length);
       cell.setAttribute('aria-label', label);
       return cell;
     }
@@ -16481,7 +17631,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', 'طلبات ' + pad2(m) + ' / ' + yearText(y));
+      grid.setAttribute('aria-label', L('k35') + pad2(m) + ' / ' + yearText(y));
       grid.setAttribute('data-ocal-grid', '');
 
       var row = el('div', 'm-ocal__gridrow');
@@ -16558,7 +17708,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var monthOfTitle = parseIso(state.selectedDate);
       var grid = el('div', 'm-ocal__grid');
       grid.setAttribute('role', 'grid');
-      grid.setAttribute('aria-label', 'طلبات الأسبوع ' + weekRangeTitle(dates));
+      grid.setAttribute('aria-label', L('k36') + weekRangeTitle(dates));
       grid.setAttribute('data-ocal-grid', '');
       var row = el('div', 'm-ocal__gridrow');
       row.setAttribute('role', 'row');
@@ -16598,10 +17748,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       b.type = 'button';
       b.setAttribute('data-ocal-action', 'add');
       b.appendChild(plusIcon());
-      b.appendChild(el('span', null, 'إضافة طلب'));
+      b.appendChild(el('span', null, L('k37')));
       var d = (dateIso === undefined) ? addRequestDate() : dateIso;
       b.setAttribute('data-ocal-add-date', d || '');
-      if (d) b.setAttribute('aria-label', 'إضافة طلب ليوم ' + fullDateAr(d));
+      if (d) b.setAttribute('aria-label', L('k38') + fullDateAr(d));
       return b;
     }
 
@@ -16697,18 +17847,18 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (!expanded) panel.hidden = true;
       panel.appendChild(el('p', 'm-ocal__rowpanel-title', order.title));
       var dl = el('dl', 'm-ocal__rowdetails');
-      dl.appendChild(detailRow('التاريخ',
-        order.date ? dateNumeric(order.date) : 'غير مجدول', true));
-      dl.appendChild(detailRow('الوقت', order.time || '—', true));
-      dl.appendChild(detailRow('المورد', order.customer || '—', false));
+      dl.appendChild(detailRow(L('k39'),
+        order.date ? dateNumeric(order.date) : L('k40'), true));
+      dl.appendChild(detailRow(L('k41'), order.time || '—', true));
+      dl.appendChild(detailRow(L('k42'), order.customer || '—', false));
       if (order.statusKey !== '') {
         var st = resolveStatus(order.statusKey);
         var chip = el('span',
           'm-ocal__row-status m-ocal__row-status--' + st.tone, st.label);
-        dl.appendChild(detailRow('الحالة', chip, false));
+        dl.appendChild(detailRow(L('k43'), chip, false));
       }
       if (order.note) {
-        dl.appendChild(detailRow('الملاحظة', order.note, false));
+        dl.appendChild(detailRow(L('k44'), order.note, false));
       }
       panel.appendChild(dl);
       if (state.orderActions.edit || state.orderActions.delete) {
@@ -16741,14 +17891,14 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     function buildOrderTools(order) {
       var row = el('div', 'm-ocal__rowtools');
       if (state.orderActions.edit) {
-        var editBtn = el('button', 'm-ocal__rowtool', 'تعديل');
+        var editBtn = el('button', 'm-ocal__rowtool', L('k45'));
         editBtn.type = 'button';
         editBtn.setAttribute('data-ocal-action', 'order-edit');
         editBtn.setAttribute('data-ocal-id', order.id);
         row.appendChild(editBtn);
       }
       if (state.orderActions.delete) {
-        var delBtn = el('button', 'm-ocal__rowtool m-ocal__rowtool--danger', 'حذف');
+        var delBtn = el('button', 'm-ocal__rowtool m-ocal__rowtool--danger', L('k46'));
         delBtn.type = 'button';
         delBtn.setAttribute('data-ocal-action', 'order-delete');
         delBtn.setAttribute('data-ocal-id', order.id);
@@ -16795,10 +17945,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     function eventsTitleNodes(iso) {
       var title = el(hTag(), 'm-ocal__daypanel-title');
       if (iso === state.today) {
-        title.textContent = 'طلبات اليوم';
+        title.textContent = L('k47');
         return title;
       }
-      title.appendChild(document.createTextNode('طلبات '));
+      title.appendChild(document.createTextNode(L('k35')));
       var bdi = el('bdi', 'm-ocal__daypanel-date', dateNumeric(iso));
       title.appendChild(bdi);
       return title;
@@ -16815,9 +17965,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         /* نفس تقديم رأس الشهر الرقمي (عقد الأرقام 2026-10-26):
            «لا يوم محدد في 01 / 2027» — لا اسم شهر */
         head.appendChild(el(hTag(), 'm-ocal__daypanel-title',
-          'لا يوم محدد في ' + pad2(m) + ' / ' + yearText(y)));
+          L('k48') + pad2(m) + ' / ' + yearText(y)));
         head.appendChild(el('p', 'm-ocal__daypanel-count',
-          countPhraseAr(ordersInMonth(y, m).length) + ' في هذا الشهر'));
+          countPhraseAr(ordersInMonth(y, m).length) + L('k49')));
         head.appendChild(buildAddButton(null));
         panel.appendChild(head);
         return panel;
@@ -16842,7 +17992,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var empty = el('div', 'm-ocal__daypanel-empty');
         empty.setAttribute('data-ocal-status', 'empty');
         empty.setAttribute('role', 'status');
-        empty.appendChild(el('p', 'm-ocal__status-text', 'لا توجد طلبات'));
+        empty.appendChild(el('p', 'm-ocal__status-text', L('k50')));
         panel.appendChild(empty);
       }
       return panel;
@@ -16931,7 +18081,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
         var empty = el('div', 'm-ocal__status m-ocal__status--empty');
         empty.setAttribute('data-ocal-status', 'empty');
         empty.setAttribute('role', 'status');
-        empty.appendChild(el('p', 'm-ocal__status-text', 'لا توجد طلبات بعد.'));
+        empty.appendChild(el('p', 'm-ocal__status-text', L('k51')));
         empty.appendChild(buildAddButton());
         screen.appendChild(empty);
         return screen;
@@ -16946,11 +18096,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
       var buckets = listBuckets();
       var sec;
-      sec = buildListSection('الطلبات القادمة', buckets.upcoming);
+      sec = buildListSection(L('k52'), buckets.upcoming);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection('الطلبات السابقة', buckets.past);
+      sec = buildListSection(L('k53'), buckets.past);
       if (sec) screen.appendChild(sec);
-      sec = buildListSection('الطلبات غير المجدولة', buckets.unsched);
+      sec = buildListSection(L('k54'), buckets.unsched);
       if (sec) screen.appendChild(sec);
       return screen;
     }
@@ -16973,7 +18123,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var box = el('div', 'm-ocal__status m-ocal__status--loading');
       box.setAttribute('data-ocal-status', 'loading');
       box.setAttribute('role', 'status');
-      box.appendChild(el('p', 'm-ocal__status-text', 'جارٍ تحميل الطلبات…'));
+      box.appendChild(el('p', 'm-ocal__status-text', L('k55')));
       return box;
     }
 
@@ -16981,13 +18131,13 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var box = el('div', 'm-ocal__status m-ocal__status--error');
       box.setAttribute('data-ocal-status', 'error');
       box.setAttribute('role', 'alert');
-      box.appendChild(el('p', 'm-ocal__status-text', 'تعذّر تحميل الطلبات.'));
+      box.appendChild(el('p', 'm-ocal__status-text', L('k56')));
       /* إعادة المحاولة تستدعي callback المستهلك — المكوّن لا يعيد
          التحميل بنفسه (موثق) */
       var b = el('button', 'm-ocal__retry');
       b.type = 'button';
       b.setAttribute('data-ocal-action', 'retry');
-      b.textContent = 'إعادة المحاولة';
+      b.textContent = L('k57');
       box.appendChild(b);
       return box;
     }
@@ -17573,10 +18723,75 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       return inst;
     }
   };
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroOrderSchedule.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['order-schedule'] = registry['order-schedule'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
 })();
 
 </script>
-  <script data-sc-from="components/carousel/carousel.js">
+  <script data-sc-from="components/carousel/labels.js">
+/* =========================================================
+   Micro UI — نصوص العائلة الافتراضية (carousel) — المرحلة 7.
+   الملف: components/carousel/labels.js
+
+   هذا الملف هو المصدر الوحيد للنصوص العربية الظاهرة للمستخدم داخل
+   JS هذه العائلة (سجل window.MicroLabels). يجب تحميله قبل ملف
+   سلوك العائلة في كل صفحة (ترتيب <script>). القيم هي الصياغة
+   الحرفية السابقة للمرحلة 7 — بدون تخصيص تبقى المخرجات متطابقة
+   بايت-ببايت (D12).
+   التخصيص: MicroX.setLabels(partial) يدمج جزئيًا فوق هذه القيم،
+   وMicroLabels.setLocale(locale) يغيّر تنسيق الأرقام (الافتراضي
+   'ar-u-nu-latn' — أرقام لاتينية بلا فواصل كما هو اليوم).
+   ========================================================= */
+(function () {
+  'use strict';
+  window.MicroLabels = window.MicroLabels || {};
+  if (!window.MicroLabels.locale) window.MicroLabels.locale = 'ar-u-nu-latn';
+  if (!window.MicroLabels.setLocale) {
+    /* تغيير locale يسري على التصييرات اللاحقة فقط */
+    window.MicroLabels.setLocale = function (locale) {
+      window.MicroLabels.locale = locale;
+    };
+  }
+  if (!window.MicroLabels.formatNumber) {
+    /* العقد: الافتراضي يطابق السلوك الحالي حرفيًا (String(n) بأرقام
+       لاتينية بلا فواصل آلاف)؛ Intl يُستخدم فقط عند locale مخصص. */
+    window.MicroLabels.formatNumber = function (value) {
+      var locale = window.MicroLabels.locale || 'ar-u-nu-latn';
+      if (locale === 'ar-u-nu-latn') return String(value);
+      try { return new Intl.NumberFormat(locale).format(value); }
+      catch (err) { return String(value); }
+    };
+  }
+  window.MicroLabels['carousel'] = {
+  "k1": "لا توجد بطاقات.",
+    "k2": "بطاقة",
+    "k3": "بطاقة ",
+    "k4": "، البطاقة ",
+    "k5": " من ",
+    "k6": "البطاقة ",
+    "k7": "الانتقال إلى البطاقة ",
+    "k8": "عارض بطاقات"
+};
+})();
+
+</script>
+<script data-sc-from="components/carousel/carousel.js">
 /* =========================================================
    Micro UI — سلوك عارض البطاقات القابل للسحب (Carousel)
    الملف: components/carousel/carousel.js
@@ -17647,6 +18862,21 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
 (function () {
   'use strict';
+
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'carousel';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
 
   var AXIS_LOCK = 8;      /* بكسل — قفل محور السحب */
   var COMMIT_RATIO = 0.2; /* نسبة عرض البطاقة لالتزام السحب */
@@ -17810,16 +19040,16 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       empty = document.createElement('p');
       empty.setAttribute('data-carousel-empty', '');
       empty.setAttribute('role', 'status');
-      empty.textContent = 'لا توجد بطاقات.'; /* R-22: عرف النقطة في سطور الفراغ */
+      empty.textContent = L('k1'); /* R-22: عرف النقطة في سطور الفراغ */
       carousel.appendChild(empty);
     }
     if (empty) empty.hidden = st.count !== 0;
     st.slides.forEach(function (slide, i) {
       var isCurrent = i === st.index;
       slide.setAttribute('data-current', isCurrent ? 'true' : 'false');
-      slide.setAttribute('aria-roledescription', 'بطاقة');
-      var name = slide.getAttribute('data-card-label') || ('بطاقة ' + (i + 1));
-      slide.setAttribute('aria-label', name + '، البطاقة ' + (i + 1) + ' من ' + st.count);
+      slide.setAttribute('aria-roledescription', L('k2'));
+      var name = slide.getAttribute('data-card-label') || (L('k3') + (i + 1));
+      slide.setAttribute('aria-label', name + L('k4') + (i + 1) + L('k5') + st.count);
       /* المعاينة البصرية للمجاورة لا تجعل تحكماتها أهداف Tab مقصوصة. */
       slide.removeAttribute('aria-hidden');
       slide.inert = !isCurrent;
@@ -17841,8 +19071,8 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     /* مؤشر الموضع — نص إتاحي صريح */
     if (st.status) {
       st.status.textContent = st.count === 0
-        ? 'لا توجد بطاقات.'
-        : 'البطاقة ' + (st.index + 1) + ' من ' + st.count;
+        ? L('k1')
+        : L('k6') + (st.index + 1) + L('k5') + st.count;
     }
 
     /* النقاط: تُبنى مرة، وتُحدَّث الحالية هنا */
@@ -17868,7 +19098,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'm-carousel__dot';
-      b.setAttribute('aria-label', 'الانتقال إلى البطاقة ' + (i + 1) + ' من ' + st.count);
+      b.setAttribute('aria-label', L('k7') + (i + 1) + L('k5') + st.count);
       (function (idx) {
         onLocal(carousel, b, 'click', function () { goToIndex(carousel, idx); });
       })(i);
@@ -18146,7 +19376,7 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
 
     carousel.setAttribute('role', 'group');
     if (!carousel.hasAttribute('tabindex')) carousel.setAttribute('tabindex', '0');
-    carousel.setAttribute('aria-roledescription', 'عارض بطاقات');
+    carousel.setAttribute('aria-roledescription', L('k8'));
     if (!carousel.hasAttribute('aria-label') && carousel.hasAttribute('data-carousel-label')) {
       carousel.setAttribute('aria-label', carousel.getAttribute('data-carousel-label'));
     }
@@ -18247,9 +19477,26 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () { window.MicroCarousel.init(); });
-  if (document.readyState !== 'loading') window.MicroCarousel.init();
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) window.MicroCarousel.init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) window.MicroCarousel.init();
 })();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroCarousel.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['carousel'] = registry['carousel'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
 
 </script>
   <script data-sc-from="previews/ui-system-showcase/showcase.js">

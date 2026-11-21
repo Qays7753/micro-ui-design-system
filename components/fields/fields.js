@@ -44,7 +44,23 @@
 (function () {
   'use strict';
 
-  var msgUid = 0; /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'fields';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
+  var msgUid = 0;
+   /* E03: معرفات رسائل فريدة ثابتة لكل عنصر */
 
   function on(field, element, type, listener, capture) {
     element.addEventListener(type, listener, {
@@ -362,6 +378,24 @@
      الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
      ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
   window.MicroFields = { init: init, sync: sync, update: sync, disconnect: disconnect, destroy: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroFields.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['fields'] = registry['fields'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();

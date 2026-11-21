@@ -158,6 +158,7 @@ html,body{margin:0;min-width:0;background:var(--micro-surface-page);color:var(--
 #fixture{width:100%;max-width:100%;padding:8px}
 #order-root{max-width:100%;margin:auto;font-family:var(--micro-font-family)}
 </style></head><body><main id="fixture"><div id="order-root"></div></main>
+<script src="/components/order-schedule/labels.js"></script>
 <script src="/components/order-schedule/order-schedule.js"></script>
 <script>
 (() => {

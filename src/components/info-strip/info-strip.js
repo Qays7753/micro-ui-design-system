@@ -16,13 +16,29 @@
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'info-strip';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   function isEditingTarget(target) {
     return !!(target && (target.isContentEditable || (target.closest && target.closest(
       'input, textarea, select, option, [role="textbox"], [role="searchbox"], ' +
       '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
   }
 
-  var registry = new WeakMap(); /* root → teardown data (listeners + nodes) */
+  var registry = new WeakMap();
+   /* root → teardown data (listeners + nodes) */
 
   function initStrip(strip) {
     if (strip.hasAttribute('data-info-peek')) return; /* R8-02: تفويض صريح لمالك وحيد */
@@ -68,7 +84,7 @@
 
     if (pageList) {
       pageList.setAttribute('role', 'group');
-      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', 'اختيار البطاقة');
+      if (!pageList.hasAttribute('aria-label')) pageList.setAttribute('aria-label', L('k1'));
     }
     function setIndex(target, focusViewport) {
       var list = slides();
@@ -90,7 +106,7 @@
       if (previous) previous.disabled = index === 0;
       if (next) next.disabled = index === list.length - 1;
       if (position) position.textContent = (index + 1) + ' / ' + list.length;
-      if (status) status.textContent = 'البطاقة ' + (index + 1) + ' من ' + list.length;
+      if (status) status.textContent = L('k2') + (index + 1) + L('k3') + list.length;
       if (pageList) {
         pageButtons.forEach(function (button, pageIndex) {
           button.setAttribute('aria-current', pageIndex === index ? 'true' : 'false');
@@ -109,7 +125,7 @@
         page.type = 'button';
         page.className = 'm-info-strip__page';
         page.setAttribute('data-info-strip-page', '');
-        page.setAttribute('aria-label', 'عرض البطاقة ' + (pageIndex + 1));
+        page.setAttribute('aria-label', L('k4') + (pageIndex + 1));
         page.setAttribute('aria-current', pageIndex === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', pageIndex === 0 ? 'true' : 'false');
         page.addEventListener('click', function () { setIndex(pageIndex, false); });
@@ -189,7 +205,7 @@
     if (previous) previous.disabled = true;
     if (next) next.disabled = initial.length < 2;
     if (position) position.textContent = initial.length ? '1 / ' + initial.length : '';
-    if (status) status.textContent = initial.length ? 'البطاقة 1 من ' + initial.length : 'لا توجد بطاقات.';
+    if (status) status.textContent = initial.length ? L('k5') + initial.length : L('k6');
 
     registry.set(strip, {
       listeners: listeners,
@@ -254,6 +270,24 @@
      rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
      الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
   window.MicroInfoStrip = { init: init, rescan: rescan, update: rescan, disconnect: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroInfoStrip.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['info-strip'] = registry['info-strip'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
 })();

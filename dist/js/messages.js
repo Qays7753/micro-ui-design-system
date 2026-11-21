@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "messages";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var liveBindings = /* @__PURE__ */ new WeakMap();
     function claimBinding(element, key) {
       var keys = liveBindings.get(element);
@@ -189,7 +197,7 @@
         var v = noteVariantOf(note);
         if (v) note.setAttribute("role", NOTE_ROLE_BY_VARIANT[v]);
         else if (window.console && console.warn) {
-          console.warn("[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا.", note);
+          console.warn(L("k1"), note);
         }
       });
     }
@@ -254,9 +262,23 @@
         bindClose(root);
       }
     };
+    window.MicroMessages.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["messages"] = registry["messages"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroMessages.init();
+      if (microAutoInit()) window.MicroMessages.init();
     });
-    if (document.readyState !== "loading") window.MicroMessages.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroMessages.init();
   })();
 })();

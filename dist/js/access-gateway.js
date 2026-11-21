@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "access-gateway";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     function userError(error, fallback) {
       return error && typeof error.userMessage === "string" && error.userMessage.trim() ? error.userMessage : fallback;
     }
@@ -99,7 +107,7 @@
             var showing = password.type === "password";
             password.type = showing ? "text" : "password";
             reveal.setAttribute("aria-pressed", showing ? "true" : "false");
-            reveal.setAttribute("aria-label", "إظهار كلمة المرور");
+            reveal.setAttribute("aria-label", L("k1"));
             if (selection && typeof password.setSelectionRange === "function") {
               var start = Math.min(selection.start, password.value.length);
               var end = Math.min(selection.end, password.value.length);
@@ -138,9 +146,9 @@
           var tone = "info";
           if (result && (result.tone === "info" || result.tone === "error")) tone = result.tone;
           else if (hasMessage && result && result.authenticated === false) tone = "error";
-          setMessage(form, hasMessage ? result.message : "انتهى طلب المساعدة دون تأكيد إرساله.", tone);
+          setMessage(form, hasMessage ? result.message : L("k2"), tone);
         }).catch(function(error) {
-          if (alive()) setMessage(form, userError(error, "تعذّر إرسال طلب المساعدة. أعد المحاولة."), "error");
+          if (alive()) setMessage(form, userError(error, L("k3")), "error");
         });
       });
       providers.forEach(function(button) {
@@ -151,16 +159,16 @@
           if (typeof handler !== "function" || form.dataset.microAccessBusy === "true" || button.disabled || button.getAttribute("aria-disabled") === "true") return;
           form.dataset.microAccessBusy = "true";
           form.setAttribute("aria-busy", "true");
-          if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: "جارٍ الاتصال" });
-          setMessage(form, "جارٍ الاتصال بمزود الدخول…", "info");
+          if (window.MicroButtons) window.MicroButtons.setLoading(button, true, { loadingLabel: L("k4") });
+          setMessage(form, L("k5"), "info");
           Promise.resolve().then(function() {
             if (alive()) return handler();
           }).then(function(result) {
             if (!alive()) return;
-            var outcome = resultOutcome(result, "تم الدخول بنجاح.", "لم يتم الدخول.", "انتهى الطلب دون نتيجة مؤكدة من التطبيق.");
+            var outcome = resultOutcome(result, L("k6"), L("k7"), L("k8"));
             setMessage(form, outcome.text, outcome.tone);
           }).catch(function(error) {
-            if (alive()) setMessage(form, userError(error, "تعذّر تنفيذ الدخول. أعد المحاولة."), "error");
+            if (alive()) setMessage(form, userError(error, L("k9")), "error");
           }).then(function() {
             if (!alive()) return;
             form.dataset.microAccessBusy = "false";
@@ -184,7 +192,7 @@
         var email = credential(form, "email");
         var passwordInput = credential(form, "password");
         if (!email || !passwordInput) {
-          setMessage(form, "نموذج الدخول غير مكتمل. تواصل مع المسؤول إن تكرر ذلك.", "error");
+          setMessage(form, L("k10"), "error");
           return;
         }
         var controls = [email, passwordInput].filter(Boolean);
@@ -194,22 +202,22 @@
         if (invalid.length) {
           invalid.forEach(function(input) {
             var isEmail = input.getAttribute("data-access-credential") === "email" || input.name === "email" || input.type === "email";
-            setFieldError(input, isEmail ? "أدخل بريدًا إلكترونيًا صالحًا." : input.validity.valueMissing ? "أدخل كلمة المرور." : input.validity.tooShort && input.minLength > 0 ? "أدخل كلمة مرور لا تقل عن " + input.minLength + " أحرف." : "تحقق من كلمة المرور المطلوبة.");
+            setFieldError(input, isEmail ? L("k11") : input.validity.valueMissing ? L("k12") : input.validity.tooShort && input.minLength > 0 ? L("k13") + input.minLength + L("k14") : L("k15"));
           });
-          setMessage(form, "تحقق من البريد الإلكتروني وكلمة المرور المطلوبة.", "error");
+          setMessage(form, L("k16"), "error");
           invalid[0].focus();
           return;
         }
         var current = gateway.__microAccessCallbacks || {};
         if (typeof current.onSubmit !== "function") {
-          setMessage(form, "هذه نسخة عرض تجريبية: لن تُرسل بياناتك إلى أي خدمة.", "info");
+          setMessage(form, L("k17"), "info");
           return;
         }
         form.dataset.microAccessBusy = "true";
         form.setAttribute("aria-busy", "true");
         var submit = form.querySelector('[type="submit"]');
-        if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: "جارٍ تسجيل الدخول" });
-        setMessage(form, "جارٍ التحقق من بيانات الدخول…", "info");
+        if (submit && window.MicroButtons) window.MicroButtons.setLoading(submit, true, { loadingLabel: L("k18") });
+        setMessage(form, L("k19"), "info");
         Promise.resolve().then(function() {
           if (!alive()) return;
           return current.onSubmit({
@@ -218,11 +226,11 @@
           });
         }).then(function(result) {
           if (!alive()) return;
-          var outcome = resultOutcome(result, "تم الدخول بنجاح.", "لم يتم الدخول.", "انتهى الطلب دون نتيجة مؤكدة من التطبيق.");
+          var outcome = resultOutcome(result, L("k6"), L("k7"), L("k8"));
           setMessage(form, outcome.text, outcome.tone);
           form.dispatchEvent(new CustomEvent("micro-access:submitted", { bubbles: true, detail: { result } }));
         }).catch(function(error) {
-          if (alive()) setMessage(form, userError(error, "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."), "error");
+          if (alive()) setMessage(form, userError(error, L("k20")), "error");
         }).then(function() {
           if (!alive()) return;
           form.dataset.microAccessBusy = "false";
@@ -250,6 +258,9 @@
       }
     }
     function init(root, handlers) {
+      if (handlers && handlers.labels && typeof handlers.labels === "object") {
+        window.MicroAccessGateway.setLabels(handlers.labels);
+      }
       var scope = root || document;
       var gateways = [];
       if (scope.matches && scope.matches("[data-access-gateway]")) gateways.push(scope);
@@ -290,8 +301,8 @@
     }
     window.MicroAccessGateway = { init, update: init, disconnect, destroy: disconnect };
     document.addEventListener("DOMContentLoaded", function() {
-      init();
+      if (microAutoInit()) init();
     });
-    if (document.readyState !== "loading") init();
+    if (document.readyState !== "loading" && microAutoInit()) init();
   })();
 })();

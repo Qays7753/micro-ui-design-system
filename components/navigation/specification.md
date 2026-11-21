@@ -89,3 +89,5 @@ D01 منفذ: requestClose وmicro-navigation:close-request القابل للا�
 
 ## اللوحة الجانبية الاختيارية
 `m-layer--drawer`: 80% من عرض الحاضنة الثابتة للviewport، ارتفاع كامل، رأس ثابت ومحتوى داخلي قابل للتمرير. تدخل من inline-start (يمين RTL، يسار LTR)240ms وتخرج180ms؛ reduced motion فوري. نفس API وعزل وتركيز B07، دون history. تملك safe areas الخاصة بها مرة واحدة. عرض80% مقترح للمعاينة لا قرار منتج نهائي. لا يجمع drawer مع center.
+
+- **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS التنقل يُقرأ وقت الاستخدام من سجل `window.MicroLabels['navigation']` الذي يسجّله `components/navigation/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12).

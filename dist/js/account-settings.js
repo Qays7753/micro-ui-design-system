@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "account-settings";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     function initPanel(panel) {
       if (panel.hasAttribute("data-account-settings-ready") && panel.__microAccountLifetime && !panel.__microAccountLifetime.signal.aborted) return;
       var layerId = panel.getAttribute("data-account-layer-id");
@@ -66,7 +74,7 @@
           detail: { setting: name, checked: input.checked }
         }));
         var status = panel.querySelector("[data-account-demo-status]");
-        if (status) status.textContent = input.getAttribute("data-demo-only") !== null ? "تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد." : "";
+        if (status) status.textContent = input.getAttribute("data-demo-only") !== null ? L("k1") : "";
       });
       showView(initialView, false);
     }
@@ -87,8 +95,8 @@
     }
     window.MicroAccountSettings = { init, disconnect, destroy: disconnect };
     document.addEventListener("DOMContentLoaded", function() {
-      init();
+      if (microAutoInit()) init();
     });
-    if (document.readyState !== "loading") init();
+    if (document.readyState !== "loading" && microAutoInit()) init();
   })();
 })();

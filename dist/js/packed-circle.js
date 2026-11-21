@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "data";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var NUM_RE = /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/;
     var observers = /* @__PURE__ */ new WeakMap();
     var resizeFrames = /* @__PURE__ */ new WeakMap();
@@ -62,7 +70,7 @@
     function stateList(items) {
       var list = document.createElement("ul");
       list.className = "m-packed__states m-legend";
-      list.setAttribute("aria-label", "حالات لا تدخل الرسم المساحي");
+      list.setAttribute("aria-label", L("k82"));
       items.forEach(function(it) {
         var li = document.createElement("li");
         li.className = "m-legend__item m-cat--" + it.series;
@@ -70,7 +78,7 @@
         label.textContent = it.label;
         var value = document.createElement("bdi");
         value.className = "m-legend__value";
-        value.textContent = it.value === 0 ? "0 (صفر)" : stateText(it).text;
+        value.textContent = it.value === 0 ? L("k83") : stateText(it).text;
         li.appendChild(label);
         li.appendChild(value);
         list.appendChild(li);
@@ -99,21 +107,21 @@
       });
     }
     function stateText(it) {
-      if (!it.hasAttr) return { text: "(غير معروف)", none: true };
-      if (it.value === null) return { text: it.raw && it.raw.trim() ? it.raw + " (قيمة غير صالحة)" : "(غير متاح)", none: true };
+      if (!it.hasAttr) return { text: L("k84"), none: true };
+      if (it.value === null) return { text: it.raw && it.raw.trim() ? it.raw + L("k85") : L("k86"), none: true };
       if (it.value < 0) {
         var num = it.display || it.raw || String(it.value);
-        return { text: num + " (سالب غير صالح للمساحة)", none: true };
+        return { text: num + L("k87"), none: true };
       }
       if (it.value === 0) return { text: "0", none: true };
       return { text: it.display || it.raw || String(it.value), none: false };
     }
     var packedUid = 0;
     function packedValueState(it) {
-      if (!it.hasAttr) return "(غير معروف)";
-      if (it.value === null) return it.raw && it.raw.trim() ? it.raw + " (قيمة غير صالحة)" : "(غير متاح)";
-      if (it.value < 0) return (it.display || it.raw || String(it.value)) + " (سالب غير صالح للمساحة)";
-      if (it.value === 0) return "0 (صفر)";
+      if (!it.hasAttr) return L("k84");
+      if (it.value === null) return it.raw && it.raw.trim() ? it.raw + L("k85") : L("k86");
+      if (it.value < 0) return (it.display || it.raw || String(it.value)) + L("k87");
+      if (it.value === 0) return L("k83");
       return it.display || it.raw || String(it.value);
     }
     function syncPackedTable(chart) {
@@ -127,7 +135,7 @@
         btn.type = "button";
         btn.className = "m-btn m-btn--secondary m-chart__disclose";
         btn.setAttribute("aria-expanded", "false");
-        btn.textContent = "عرض البيانات كجدول";
+        btn.textContent = L("k88");
         table = document.createElement("table");
         table.className = "m-chart__dataset";
         table.hidden = true;
@@ -150,7 +158,7 @@
           var open = btn.getAttribute("aria-expanded") === "true";
           btn.setAttribute("aria-expanded", open ? "false" : "true");
           table.hidden = open;
-          btn.textContent = open ? "عرض البيانات كجدول" : "إخفاء جدول البيانات";
+          btn.textContent = open ? L("k88") : L("k89");
         };
         btn.__microDatasetDisclosure = { table, handler };
         btn.addEventListener("click", handler);
@@ -160,15 +168,15 @@
       var caption = document.createElement("caption");
       var title = chart.querySelector(".m-chart__title");
       var context = [String(title && title.textContent || chart.getAttribute("data-title") || chart.getAttribute("aria-label") || "").trim()];
-      [["data-unit", "الوحدة"], ["data-period", "الفترة"], ["data-max", "المقياس"]].forEach(function(part) {
+      [["data-unit", L("k90")], ["data-period", L("k91")], ["data-max", L("k92")]].forEach(function(part) {
         var value = chart.getAttribute(part[0]);
         if (value && value.trim()) context.push(part[1] + ": " + value.trim());
       });
-      caption.textContent = context.filter(Boolean).join("، ");
+      caption.textContent = context.filter(Boolean).join(L("k93"));
       table.appendChild(caption);
       var thead = document.createElement("thead");
       var headRow = document.createElement("tr");
-      ["الفئة", "القيمة"].forEach(function(h) {
+      [L("k94"), L("k95")].forEach(function(h) {
         var th = document.createElement("th");
         th.setAttribute("scope", "col");
         th.textContent = h;
@@ -203,8 +211,8 @@
       var plot = chart.querySelector("[data-plot]");
       var err = document.createElement("p");
       err.className = "m-chart__scale-error";
-      err.textContent = "تعذّر رسم المقارنة بهذا المقياس. القيم معروضة في المفتاح دون رسم.";
-      var devDetail = parseNum(raw) === 0 ? 'packed-circle: data-max="' + raw + '" صفر' + (positiveExists ? " بينما توجد قيم موجبة؛ تعارض بيانات: لا مقارنة مساحية من مقياس صفر ولا استبدال تلقائي للمقياس." : " ولا توجد قيم موجبة للمقارنة.") : 'packed-circle: data-max="' + raw + '" غير صالح (سالب أو غير رقمي) للمقارنة المساحية.';
+      err.textContent = L("k96");
+      var devDetail = parseNum(raw) === 0 ? 'packed-circle: data-max="' + raw + L("k97") + (positiveExists ? L("k98") : L("k99")) : 'packed-circle: data-max="' + raw + L("k100");
       chart.setAttribute("data-scale-detail", devDetail);
       plot.innerHTML = "";
       plot.appendChild(err);
@@ -212,7 +220,7 @@
         var empty = document.createElement("p");
         empty.className = "m-packed__empty";
         empty.setAttribute("data-empty", "");
-        empty.textContent = "لا توجد قيم موجبة قابلة للرسم المساحي.";
+        empty.textContent = L("k101");
         plot.appendChild(empty);
         var states = stateList(itemsOf(chart));
         if (states.children.length) plot.appendChild(states);
@@ -281,7 +289,7 @@
         plot.innerHTML = "";
         var densityError = document.createElement("p");
         densityError.className = "m-chart__scale-error";
-        densityError.textContent = "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح.";
+        densityError.textContent = L("k102");
         plot.appendChild(densityError);
         renderKeyOnly(chart);
         chart.setAttribute("data-packed-state", "too-many-positive-categories");
@@ -357,7 +365,7 @@
         var empty = document.createElement("p");
         empty.className = "m-packed__empty";
         empty.setAttribute("data-empty", "");
-        empty.textContent = "لا توجد قيم موجبة قابلة للرسم المساحي.";
+        empty.textContent = L("k101");
         plot.appendChild(empty);
       }
       var special = items.filter(function(it) {
@@ -427,9 +435,23 @@
         });
       }
     };
+    window.MicroPacked.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["data"] = registry["data"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      window.MicroPacked.init();
+      if (microAutoInit()) window.MicroPacked.init();
     });
-    if (document.readyState !== "loading") window.MicroPacked.init();
+    if (document.readyState !== "loading" && microAutoInit()) window.MicroPacked.init();
   })();
 })();

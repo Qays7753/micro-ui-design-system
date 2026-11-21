@@ -14,6 +14,9 @@ All notable changes to the Micro UI library are documented here. SemVer is follo
 - تركيب C13 شاشات بوابة الدخول الأربع (draft-for-review) مع حالات `data-auth-state` يقودها المضيف.
 - `tools/check-all.py` مدخل الفحوص الموحد، و`tools/link-check.py` لفحص الروابط، و`tools/baselines/identity.json` لقيم الهوية المحمية.
 - الكتالوج في هذا الإصدار: 14 عائلة / 8 متغيرات / 13 تركيبًا.
+- سجل النصوص الافتراضية (المرحلة 7 — 2026-11-21): كل نص عربي ظاهر داخل JS العائلات (بما فيه aria-label) انتقل إلى `components/<family>/labels.js` لكل عائلة (13 عائلة) يسجّل `window.MicroLabels['<family>']` بالصياغة الحرفية السابقة، وملفات السلوك تقرأ النص وقت الاستخدام، مع تحميل labels.js قبل ملف السلوك في كل صفحة (يفحص آليًا). التخصيص: `MicroX.setLabels(partial)` على كل عائلة ذات نصوص، و`handlers.labels` في Access Gateway init، و`MicroLabels.setLocale(locale)` للتنسيق (الافتراضي `ar-u-nu-latn` بأرقام لاتينية بلا فواصل كما هو اليوم حرفيًا — لا تغيير بصري افتراضيًا)، وصيغ جمع الطلبات عبر `Intl.PluralRules('ar')` بنفس الصياغة الحرفية. بوابة جديدة `tools/hardcoded-text-check.py` داخل `check-all`: صفر نصوص عربية داخل سلاسل JS خارج ملفات labels، واقتران التحميل في الصفحات، وتغطية مفاتيح النصوص، وتغطية كل دالة عامة على `window.Micro*` في `micro-ui.d.ts`.
+- `window.MicroConfig = { autoInit: false }` قبل التحميل يوقف الربط التلقائي عند DOMContentLoaded/readyState في مسار IIFE لكل العائلات (متبقي المرحلة 6)، مع بقاء كائنات الواجهة للتهيئة اليدوية؛ وأُضيف `setLabels` و`MicroLabels`/`MicroConfig` إلى `micro-ui.d.ts` و`docs/API.md` (قسم «النصوص الافتراضية وتخصيصها»).
+
 
 ### Changed
 - إعادة هيكلة التوثيق إلى مجموعة عقود حالية واحدة (STATUS/API/COMPOSITIONS/DESIGN-FOUNDATIONS/TESTING/HANDOFF/DECISIONS).

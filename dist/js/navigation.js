@@ -1,6 +1,14 @@
 (() => {
   (function() {
     "use strict";
+    var MICRO_LABELS_FAMILY = "navigation";
+    function L(key) {
+      var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+      return family ? family[key] : void 0;
+    }
+    function microAutoInit() {
+      return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+    }
     var liveBindings = /* @__PURE__ */ new WeakMap();
     function claimBinding(element, key) {
       var keys = liveBindings.get(element);
@@ -198,11 +206,11 @@
             if (!title.id) title.id = "micro-layer-title-" + ++layerTitleUid;
             layer.setAttribute("aria-labelledby", title.id);
           } else if (window.console && console.warn) {
-            console.warn("[micro-navigation] طبقة مفتوحة بلا اسم متاح (عقد D-UI-02): أضف aria-label أو aria-labelledby أو عنصر .m-layer__title — الطبقة modal بلا اسم غير صالحة.", layer);
+            console.warn(L("k1"), layer);
           }
         }
       } else if (window.console && console.warn) {
-        console.warn('[micro-navigation] دور غير معتاد للطبقة "' + role + '" — عقد الطبقات: dialog/alertdialog (D-UI-02).', layer);
+        console.warn(L("k2") + role + L("k3"), layer);
       }
     }
     function openLayer(layer, options) {
@@ -357,16 +365,16 @@
       return "";
     }
     function filterCountAr(n) {
-      if (n === 1) return "فلتر واحد";
-      if (n === 2) return "فلتران";
-      if (n >= 3 && n <= 10) return n + " فلاتر";
-      if (n >= 11 && n <= 99) return n + " فلترًا";
+      if (n === 1) return L("k4");
+      if (n === 2) return L("k5");
+      if (n >= 3 && n <= 10) return n + L("k6");
+      if (n >= 11 && n <= 99) return n + L("k7");
       var r = n % 100;
-      if (r === 0) return n + " فلتر";
-      if (r === 1) return n + " فلتر واحد";
-      if (r === 2) return n + " فلتران";
-      if (r >= 3 && r <= 10) return n + " فلاتر";
-      return n + " فلترًا";
+      if (r === 0) return n + L("k8");
+      if (r === 1) return n + L("k9");
+      if (r === 2) return n + L("k10");
+      if (r >= 3 && r <= 10) return n + L("k6");
+      return n + L("k7");
     }
     function updateSummary(panel, phase) {
       var summary = panel.querySelector("[data-filter-summary]");
@@ -376,7 +384,7 @@
         return !!key && key !== "none" && inputActive(input);
       });
       if (!actives.length) {
-        summary.textContent = phase + ": لا فلاتر";
+        summary.textContent = phase + L("k11");
         return;
       }
       var labels = [];
@@ -384,7 +392,7 @@
         var l = filterLabel(input);
         if (l && labels.indexOf(l) < 0) labels.push(l);
       });
-      summary.textContent = labels.length === actives.length ? phase + ": " + labels.join("، ") : phase + ": " + filterCountAr(actives.length);
+      summary.textContent = labels.length === actives.length ? phase + ": " + labels.join(L("k12")) : phase + ": " + filterCountAr(actives.length);
     }
     function initFilterPanel(panel) {
       if (!claimBinding(panel, "microFilterBound")) return;
@@ -401,14 +409,14 @@
             input.value = "";
           }
         });
-        updateSummary(panel, "الجاري");
+        updateSummary(panel, L("k13"));
       });
       on(panel, panel, "change", function(e) {
-        if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, "الجاري");
+        if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, L("k13"));
       });
       on(panel, panel, "input", function(e) {
         if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
-          updateSummary(panel, "الجاري");
+          updateSummary(panel, L("k13"));
         }
       });
       var apply = panel.querySelector("[data-filter-apply]");
@@ -420,7 +428,7 @@
           if (input.type === "checkbox") applied[key] = input.checked;
           else applied[key] = String(input.value == null ? "" : input.value).trim();
         });
-        updateSummary(panel, "المطبّق");
+        updateSummary(panel, L("k14"));
         panel.__microApplied = Object.assign({}, applied);
         var count = Object.keys(applied).filter(function(k) {
           return applied[k] === true || typeof applied[k] === "string" && applied[k] !== "";
@@ -438,7 +446,7 @@
           if (input.type === "checkbox") input.checked = false;
           else input.value = "";
         });
-        updateSummary(panel, "الجاري");
+        updateSummary(panel, L("k13"));
       });
       var cancel = panel.querySelector("[data-filter-cancel]");
       if (cancel) on(panel, cancel, "click", function() {
@@ -459,7 +467,7 @@
             input.value = applied[key];
           }
         });
-        updateSummary(panel, "المطبّق");
+        updateSummary(panel, L("k14"));
         panel.__microApplied = Object.assign({}, applied);
       };
     }
@@ -640,9 +648,23 @@
         if (panel && typeof panel.__microSetApplied === "function") panel.__microSetApplied(values);
       }
     };
+    window.MicroNavigation.setLabels = function(partial) {
+      var registry = window.MicroLabels = window.MicroLabels || {};
+      var current = registry["navigation"] = registry["navigation"] || {};
+      var key;
+      for (key in partial) {
+        if (partial[key] && Object.prototype.toString.call(partial[key]) === "[object Object]") {
+          current[key] = current[key] || {};
+          var sub;
+          for (sub in partial[key]) current[key][sub] = partial[key][sub];
+        } else {
+          current[key] = partial[key];
+        }
+      }
+    };
     document.addEventListener("DOMContentLoaded", function() {
-      init();
+      if (microAutoInit()) init();
     });
-    if (document.readyState !== "loading") init();
+    if (document.readyState !== "loading" && microAutoInit()) init();
   })();
 })();

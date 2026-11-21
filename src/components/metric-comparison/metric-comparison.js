@@ -2,7 +2,23 @@
 (function () {
   'use strict';
 
+  /* ---- المرحلة 7 — النصوص الافتراضية: تُقرأ من سجل window.MicroLabels
+     وقت الاستخدام (لا عند التحميل) كي يعمل setLabels؛ لذا يجب تحميل
+     labels.js الخاص بالعائلة قبل هذا الملف في كل صفحة. ---- */
+  var MICRO_LABELS_FAMILY = 'metric-comparison';
+  function L(key) {
+    var family = window.MicroLabels && window.MicroLabels[MICRO_LABELS_FAMILY];
+    return family ? family[key] : undefined;
+  }
+  /* إيقاف التهيئة التلقائية مركزيًا: window.MicroConfig = { autoInit: false }
+     قبل تحميل الملف يمنع الربط التلقائي عند DOMContentLoaded (المرحلة 6
+     المتبقية) مع بقاء كائن الواجهة العام مصدرًا. */
+  function microAutoInit() {
+    return !(window.MicroConfig && window.MicroConfig.autoInit === false);
+  }
+
   var NUMBER_RE = /^[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
+
   var SERIES = { a: true, b: true, c: true, d: true, e: true };
 
   function readNumber(raw) {
@@ -52,7 +68,7 @@
     if (!fallbackTarget) {
       fallbackTarget = make('ul', 'm-metric-circles__fallback');
       fallbackTarget.setAttribute('data-metric-fallback', '');
-      fallbackTarget.setAttribute('aria-label', 'القراءات الدقيقة لكل القيم');
+      fallbackTarget.setAttribute('aria-label', L('k1'));
       target.insertAdjacentElement('afterend', fallbackTarget);
     }
     var items = Array.prototype.slice.call(source.querySelectorAll('[data-label]')).map(function (node) {
@@ -120,35 +136,35 @@
        التقني الكامل على الجذر عبر writeDiagnostics. الشروحات الدلالية
        للصفر/النطاق/التداخل محفوظة كما هي في الحالة السليمة. */
     if (!validLayout) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k2');
       writeDiagnostics(chart, 'invalid-layout',
-        "metric-circles: data-layout='" + layout + "' غير معروف (المعروف: separated/overlap) — رُفض الرسم؛ القراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-layout='" + layout + L('k3'));
     } else if (!validMax) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا النطاق. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k4');
       writeDiagnostics(chart, 'invalid-scale',
-        "metric-circles: data-max='" + declaredRaw + "' غير موجب أو أصغر من أكبر مقدار معلوم (" + measuredMax + ") — مقياس غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-max='" + declaredRaw + L('k5') + measuredMax + L('k6'));
     } else if (!validRadius) {
-      if (scaleNote) scaleNote.textContent = 'تعذّر رسم الدوائر بهذا الإعداد. القيم معروضة في القائمة.';
+      if (scaleNote) scaleNote.textContent = L('k2');
       writeDiagnostics(chart, 'invalid-radius',
-        "metric-circles: data-radius='" + radiusRaw + "' غير موجب — حد حجم دائرة غير قابل للاستخدام؛ رُفض الرسم والقراءات كاملة في القائمة البديلة.");
+        "metric-circles: data-radius='" + radiusRaw + L('k7'));
     } else if (!width) {
-      if (scaleNote) scaleNote.textContent = 'لا تتوفر مساحة عرض بعد؛ ستظهر الدوائر عند إتاحة البطاقة.';
+      if (scaleNote) scaleNote.textContent = L('k8');
       writeDiagnostics(chart, 'pending-width',
-        'metric-circles: عرض اللوحة 0 — الرسم مؤجل حتى إتاحة المساحة (يعاد الرسم عند الإظهار).');
+        L('k9'));
     } else if (!measuredMax) {
       if (scaleNote) scaleNote.textContent = known.length
-        ? 'القيم المعروفة صفرية؛ العلامة المجوفة تعني صفرًا، وليست مساحة عددية.'
-        : 'لا توجد قراءات متاحة للمقارنة بعد.';
+        ? L('k10')
+        : L('k11');
       writeDiagnostics(chart, known.length ? 'zero' : 'empty',
         known.length
-          ? 'metric-circles: كل القيم المعلومة صفر — علامات صفر مجوفة بلا مساحات مقارنة.'
-          : 'metric-circles: لا قيم معلومة — لا رسم.');
+          ? L('k12')
+          : L('k13'));
     } else {
       if (scaleNote) {
-        var scaledMessage = 'المساحة تقارن مقدار القيمة؛ الإشارة مكتوبة في القراءة.';
-        if (zeroCount) scaledMessage += ' العلامة المجوفة تعني صفرًا، وليست مساحة عددية.';
-        if (declaredRaw !== null) scaledMessage += ' النطاق يصل إلى ' + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
-        if (layout === 'overlap') scaledMessage += ' التداخل بصري فقط ولا يدل على تقاطع أو علاقة بين القيم.';
+        var scaledMessage = L('k14');
+        if (zeroCount) scaledMessage += L('k15');
+        if (declaredRaw !== null) scaledMessage += L('k16') + (chart.getAttribute('data-max-label') || declaredRaw) + '.';
+        if (layout === 'overlap') scaledMessage += L('k17');
         scaleNote.textContent = scaledMessage;
       }
       /* R1-UI10: تشخيص المقياس التقني عقد للمطورين على الجذر (نفس نمط
@@ -159,7 +175,7 @@
          circleItems — لا يبقى تشخيص دورة سابقة. */
       writeDiagnostics(chart, 'ok',
         'metric-circles: radius=' + (radiusRaw === null ? 'auto' : radiusRaw)
-        + ' — الحجم يتكيف مع عرض البطاقة ضمن نصف القطر؛ scale='
+        + L('k18')
         + (declaredRaw === null ? 'auto-largest-known' : 'declared'));
     }
 
@@ -184,10 +200,10 @@
       var display = state === 'missing'
         ? '—' + (item.unit ? ' ' + item.unit : '')
         : state === 'invalid'
-          ? (item.display || (item.raw || 'قيمة غير صالحة') + (item.unit ? ' ' + item.unit : ''))
+          ? (item.display || (item.raw || L('k19')) + (item.unit ? ' ' + item.unit : ''))
           : (item.display || item.raw) + (item.unit && !item.display ? ' ' + item.unit : '');
-      var stateText = state === 'missing' ? 'غير متاح'
-        : state === 'invalid' ? 'تعذّر قراءة القيمة' : '';
+      var stateText = state === 'missing' ? L('k20')
+        : state === 'invalid' ? L('k21') : '';
       var zeroMarker = state === 'zero' && validLayout && validMax && validRadius && width > 0;
       var canRender = zeroMarker || (geometryAllowed && (state === 'positive' || state === 'negative'));
       if (canRender) {
@@ -215,7 +231,7 @@
     });
     if (empty) {
       empty.hidden = items.length > 0;
-      if (!items.length) empty.textContent = chart.getAttribute('data-empty-message') || 'لا توجد بيانات للمقارنة.';
+      if (!items.length) empty.textContent = chart.getAttribute('data-empty-message') || L('k22');
     }
     syncCirclesTable(chart, items);
   }
@@ -244,7 +260,7 @@
     var btn, table;
     if (!wrap) {
       wrap = make('div', 'm-main-metric__dataset-wrap');
-      btn = make('button', 'm-btn m-btn--secondary m-main-metric__disclose', 'عرض البيانات كجدول');
+      btn = make('button', 'm-btn m-btn--secondary m-main-metric__disclose', L('k23'));
       btn.type = 'button';
       btn.setAttribute('aria-expanded', 'false');
       table = make('table', 'm-main-metric__dataset');
@@ -268,7 +284,7 @@
         var open = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         table.hidden = open;
-        btn.textContent = open ? 'عرض البيانات كجدول' : 'إخفاء جدول البيانات';
+        btn.textContent = open ? L('k23') : L('k24');
       };
       btn.__microDatasetDisclosure = { table: table, handler: handler };
       btn.addEventListener('click', handler);
@@ -317,9 +333,9 @@
     var parts = [String((title && title.textContent) || chart.getAttribute('data-title') || chart.getAttribute('aria-label') || '').trim()];
     var unit = chart.getAttribute('data-common-unit') || chart.getAttribute('data-unit');
     var period = chart.getAttribute('data-common-period') || chart.getAttribute('data-period');
-    if (unit) parts.push('الوحدة: ' + unit);
-    if (period) parts.push('الفترة: ' + period);
-    return parts.filter(Boolean).join('، ');
+    if (unit) parts.push(L('k25') + unit);
+    if (period) parts.push(L('k26') + period);
+    return parts.filter(Boolean).join(L('k27'));
   }
 
   /* جدول المقارنة الشريطية: فئة/قيمة/وحدة/فترة + الحالة داخل خلية
@@ -331,24 +347,24 @@
     table.textContent = '';
     var caption = make('caption', null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, ['الفئة', 'القيمة', 'الوحدة', 'الفترة']);
+    buildTableHead(table, [L('k28'), L('k29'), L('k30'), L('k31')]);
     var tbody = make('tbody');
     var hero = chart.querySelector('.m-main-metric__hero');
     var mainNumber = hero && hero.querySelector('.m-main-metric__number');
     if (mainNumber) {
       var mainLabel = hero.querySelector('.m-main-metric__label');
       var mainUnit = hero.querySelector('.m-main-metric__unit');
-      appendRow(tbody, [(mainLabel && mainLabel.textContent) || 'القيمة الرئيسية',
+      appendRow(tbody, [(mainLabel && mainLabel.textContent) || L('k32'),
         datasetReading(mainNumber.textContent), (mainUnit && mainUnit.textContent) || chart.getAttribute('data-common-unit') || '—',
         chart.getAttribute('data-common-period') || chart.getAttribute('data-period') || '—']);
     }
     entries.forEach(function (entry, index) {
       var value = parsed[index];
       var valueText;
-      if (value.state === 'missing') valueText = '— (غير متاح)';
-      else if (value.state === 'invalid') valueText = datasetReading(entry.raw, '(قيمة غير صالحة)', false);
-      else if (value.state === 'zero') valueText = datasetReading(entry.display || entry.raw || '0', '(صفر)');
-      else valueText = datasetReading(entry.display || entry.raw, value.state === 'negative' ? '(سالب)' : '');
+      if (value.state === 'missing') valueText = L('k33');
+      else if (value.state === 'invalid') valueText = datasetReading(entry.raw, L('k34'), false);
+      else if (value.state === 'zero') valueText = datasetReading(entry.display || entry.raw || '0', L('k35'));
+      else valueText = datasetReading(entry.display || entry.raw, value.state === 'negative' ? L('k36') : '');
       appendRow(tbody, [entry.label, valueText, entry.unit || '—', entry.period || '—']);
     });
     table.appendChild(tbody);
@@ -363,18 +379,18 @@
     table.textContent = '';
     var caption = make('caption', null, tableCaptionBase(chart));
     table.appendChild(caption);
-    buildTableHead(table, ['الفئة', 'القيمة', 'الحالة', 'الوحدة', 'الفترة']);
+    buildTableHead(table, [L('k28'), L('k29'), L('k37'), L('k30'), L('k31')]);
     var tbody = make('tbody');
     items.forEach(function (item) {
       var state = item.state === 'unavailable' ? 'missing'
         : item.state === 'invalid' ? 'invalid' : readNumber(item.raw).state;
       var valueText, stateText;
-      if (state === 'missing') { valueText = '—'; stateText = 'غير متاح'; }
-      else if (state === 'invalid') { valueText = item.raw || 'قيمة غير صالحة'; stateText = 'قيمة غير صالحة'; }
+      if (state === 'missing') { valueText = '—'; stateText = L('k20'); }
+      else if (state === 'invalid') { valueText = item.raw || L('k19'); stateText = L('k19'); }
       else {
         valueText = item.display || item.raw;
-        stateText = state === 'zero' ? 'صفر'
-          : state === 'negative' ? 'سالب — معروض بالقيمة والإشارة لا بالمساحة'
+        stateText = state === 'zero' ? L('k38')
+          : state === 'negative' ? L('k39')
           : '';
       }
       appendRow(tbody, [item.label,
@@ -436,39 +452,39 @@
        كاملة في الصفوف دائمًا، والسبب التقني في data-scale-state/detail.
        الشروحات الدلالية للوحدة والفترة والصفر والإشارة محفوظة. */
     if (!entries.length) {
-      userText = 'لا توجد بيانات للمقارنة.';
-      writeDiagnostics(chart, 'empty', 'metric-bars: مصدر فارغ — لا صفوف.');
+      userText = L('k22');
+      writeDiagnostics(chart, 'empty', L('k40'));
     } else if (!consistent) {
-      userText = 'تعذّر عرض المقارنة: وحدة أو فترة غير متوافقة بين القيم. القراءات معروضة كاملة.';
+      userText = L('k41');
       writeDiagnostics(chart, 'inconsistent',
-        "metric-bars: تباين data-unit/data-period في بعض الصفوف مع data-common-unit/data-common-period — لا مقياس مشترك؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        L('k42'));
     } else if (declaredRaw !== null && (!declared || declared.state !== 'positive')) {
-      userText = 'تعذّر عرض المقارنة بهذا النطاق. القراءات معروضة كاملة.';
+      userText = L('k43');
       writeDiagnostics(chart, 'invalid-scale',
-        "metric-bars: data-max='" + declaredRaw + "' غير رقمي/غير موجب — مقياس غير قابل للاستخدام؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        "metric-bars: data-max='" + declaredRaw + L('k44'));
     } else if (declared && declared.value < magnitudeMax) {
-      userText = 'تعذّر عرض مقارنة عادلة بهذا النطاق. القراءات معروضة كاملة.';
+      userText = L('k45');
       writeDiagnostics(chart, 'scale-below-known',
-        'metric-bars: data-max=' + declared.value + ' أصغر من أكبر مقدار معلوم (' + magnitudeMax + ") — رسم نسبي كان سيخفي الفرق؛ رُفض رسم الأشرطة والقراءات كاملة.");
+        'metric-bars: data-max=' + declared.value + L('k46') + magnitudeMax + L('k47'));
     } else if (declared) {
       max = declared.value;
-      userText = 'الأشرطة حتى ' + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = L('k48') + (chart.getAttribute('data-max-label') || declaredRaw) + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
-        'metric-bars: scale=declared data-max=' + declared.value + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
+        'metric-bars: scale=declared data-max=' + declared.value + L('k49') + commonUnit + L('k50') + commonPeriod + '.');
     } else if (magnitudeMax > 0) {
       max = magnitudeMax;
-      userText = 'الأشرطة حتى ' + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
+      userText = L('k48') + magnitudeMax + ' ' + commonUnit + ' · ' + commonPeriod + '.';
       writeDiagnostics(chart, 'ok',
-        'metric-bars: scale=auto-largest-known=' + magnitudeMax + '؛ common-unit=' + commonUnit + '؛ common-period=' + commonPeriod + '.');
+        'metric-bars: scale=auto-largest-known=' + magnitudeMax + L('k49') + commonUnit + L('k50') + commonPeriod + '.');
     } else if (hasKnown) {
       max = 0;
-      userText = 'القيم المعروفة صفرية؛ علامة الصفر ظاهرة دون طول مصطنع.';
-      writeDiagnostics(chart, 'zero', 'metric-bars: كل القيم المعلومة صفر — علامات صفر بلا أطوال.');
+      userText = L('k51');
+      writeDiagnostics(chart, 'zero', L('k52'));
     } else {
-      userText = 'لا توجد قراءات متاحة لبناء مقياس بعد.';
-      writeDiagnostics(chart, 'empty', 'metric-bars: لا قيم معلومة — لا مقياس.');
+      userText = L('k53');
+      writeDiagnostics(chart, 'empty', L('k54'));
     }
-    if (signed && max !== null) userText += ' خط الوسط صفر؛ الموجب يمينه والسالب يساره.';
+    if (signed && max !== null) userText += L('k55');
 
     target.textContent = '';
     entries.forEach(function (entry, index) {
@@ -478,15 +494,15 @@
       var head = make('div', 'm-main-metric__row-head');
       head.appendChild(make('span', 'm-main-metric__row-label', entry.label));
       var display = value.state === 'missing' ? '—'
-        : value.state === 'invalid' ? 'قيمة غير صالحة'
+        : value.state === 'invalid' ? L('k19')
           : (entry.display || entry.raw) + (entry.unit && !entry.display ? ' ' + entry.unit : '');
       var val = make('span', 'm-main-metric__row-value');
       if (chart.classList.contains('m-main-metric--readable')) {
-        var number = make('bdi', '', value.state === 'missing' ? '(غير متاح)'
+        var number = make('bdi', '', value.state === 'missing' ? L('k56')
           : value.state === 'invalid' ? entry.raw : (entry.display || entry.raw));
         number.dir = value.value === null ? 'auto' : 'ltr';
         val.appendChild(number);
-        if (value.state === 'invalid') val.appendChild(make('span', 'm-main-metric__reading-state', ' (قيمة غير صالحة)'));
+        if (value.state === 'invalid') val.appendChild(make('span', 'm-main-metric__reading-state', L('k57')));
         if (entry.unit) {
           val.appendChild(document.createTextNode(' '));
           var unit = make('span', 'm-main-metric__reading-unit', entry.unit);
@@ -509,9 +525,9 @@
       } else {
         track.hidden = true;
         if (value.state === 'missing') {
-          li.appendChild(make('span', 'm-main-metric__state', 'غير متاح'));
+          li.appendChild(make('span', 'm-main-metric__state', L('k20')));
         } else if (value.state === 'invalid') {
-          li.appendChild(make('span', 'm-main-metric__state', 'تعذّر قراءة القيمة'));
+          li.appendChild(make('span', 'm-main-metric__state', L('k21')));
         }
       }
       li.appendChild(track);
@@ -633,8 +649,26 @@
      render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
      الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
   window.MicroMetricComparison = { init: init, render: render, update: render, disconnect: disconnect };
-  document.addEventListener('DOMContentLoaded', function () { init(); });
-  if (document.readyState !== 'loading') init();
+  /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
+     MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
+     عند أول render/update بعد التغيير). */
+  window.MicroMetricComparison.setLabels = function (partial) {
+    var registry = window.MicroLabels = window.MicroLabels || {};
+    var current = registry['metric-comparison'] = registry['metric-comparison'] || {};
+    var key;
+    for (key in partial) {
+      if (partial[key] && Object.prototype.toString.call(partial[key]) === '[object Object]') {
+        current[key] = current[key] || {};
+        var sub;
+        for (sub in partial[key]) current[key][sub] = partial[key][sub];
+      } else {
+        current[key] = partial[key];
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () { if (microAutoInit()) init(); });
+  if (document.readyState !== 'loading' && microAutoInit()) init();
   if (document.fonts) document.fonts.ready.then(function () {
     document.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(function (chart) {
       if (!disconnected.has(chart)) render(chart);

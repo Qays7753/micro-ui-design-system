@@ -48,3 +48,5 @@
 
 ## منظور افتتاح اختياري
 `data-account-initial-view="application"` يفتح القائمة أولًا. `data-account-to-account` يفتح الحساب داخل الطبقة نفسها وBack يعود للمنظور الأول. غياب السمة يبقي السلوك السابق. لا تبديل صلاحيات/حساب أو حفظ ضمن المكتبة. مثال `previews/mobile-experience/menu.html`.
+
+- **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS إعدادات الحساب يُقرأ وقت الاستخدام من سجل `window.MicroLabels['account-settings']` الذي يسجّله `components/account-settings/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12).
