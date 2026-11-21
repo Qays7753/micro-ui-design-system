@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""C07–C12 UI contracts: phone Light RTL, bounded narrow/LTR checks; no services."""
+"""C07–C12 وC14 UI contracts: phone Light RTL, bounded narrow/LTR checks; no services."""
 import argparse, hashlib, http.server, json, subprocess, tempfile, threading
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -43,7 +43,7 @@ def main():
         p.unroute('**/components/fields/fields.js')
         cases={}
         # Every documented semantic mode is actually reachable and measured.
-        for kind in ['context','state','market','delivery','assistant','review']:
+        for kind in ['context','state','market','delivery','assistant','review','manage']:
             go(kind);cases[kind]=p.locator('#scenario option').evaluate_all('(xs)=>xs.map(x=>x.value)')
             for case in cases[kind]:
                 p.locator('#scenario').select_option(case);geometry(kind+' / '+case+' 360 RTL')
@@ -59,7 +59,7 @@ def main():
                 elif phase in ['uncertain','conflict']:
                     ok=ev('[...document.querySelectorAll("#product-root [data-product-action]")].every(b=>b.disabled||["recheck","reauth"].includes(b.dataset.productAction))')
                 elif phase=='empty':
-                    ok=ev('!document.querySelector("#product-root .m-product__message")&&'+('!!document.querySelector("#product-root textarea")' if kind=='assistant' else '!document.querySelector("#product-root h2")'))
+                    ok=ev('!document.querySelector("#product-root .m-product__message")&&'+('!!document.querySelector("#product-root textarea")' if kind in ('assistant','manage') else '!document.querySelector("#product-root h2")'))
                 else:ok=ev('lab.instance.getState().phase==='+json.dumps('uncertain' if phase=='local-saved' and ev('lab.model.destination')!='manage' else phase)+'&&document.documentElement.scrollWidth===innerWidth')
                 check(kind+' state '+phase,ok)
             model("m.phase='ready'")
@@ -122,17 +122,66 @@ def main():
         p.locator('textarea').fill('expires');model('m.phase="expired"');check('Expired session purges messages and draft',ev('!document.querySelector("textarea")&&!document.querySelector(".m-product__message")'))
         model('m.phase="ready"');check('New session never recovers old sensitive draft',p.locator('textarea').input_value()=='')
         go('assistant','retry');action('retry');check('Retry references the failed message and waits for acknowledgement',ev('lab.lastIntent.payload.messageId==="failed-message"&&lab.instance.getState().pending!==null'))
-        for kind in ['market','delivery','assistant','review']:
+        for kind in ['market','delivery','assistant','review','manage']:
             go(kind);model('m.dataContext={...m.scope,workspaceId:"stale-workspace"}')
             check(kind+' mismatched response context hides private data',ev('!document.querySelector("#product-root h2")&&!document.querySelector("#product-root input,#product-root textarea,#product-root img")'))
         go('review');model('m.permissions=m.permissions.filter(p=>p!=="view-evidence")');check('Review evidence is gated independently from queue visibility',ev('!document.querySelector("#product-root img")&&document.querySelector("#product-root").textContent.includes("المرفقات مقيدة")'))
         ev('lab.replace(lab.fixture("listing"))');action('reject');check('Required review reason cannot be skipped',ev('!lab.lastIntent&&!document.querySelector(".m-action-sheet")&&document.querySelector("textarea").getAttribute("aria-invalid")==="true"'))
         p.locator('textarea').fill('سبب قرار من المراجع');action('reject');confirm();check('Review rejection is confirmed intent, not automatic removal',ev('lab.lastIntent.action==="reject"&&lab.lastIntent.payload.reason==="سبب قرار من المراجع"&&lab.model.phase==="ready"'))
-        for kind in ['market','review']:
+        for kind in ['market','review','manage']:
             go(kind);model('m.scope={contextId:"d",roleId:"driver",kind:"driver",workspaceId:null};m.dataContext=m.scope;m.destination="delivery"')
             check('Driver cannot access '+kind+' private/admin data even with injected grants',ev('!document.querySelector("#product-root h2")&&!document.querySelector("#product-root img")'))
         go('review','report');model('m.scope={contextId:"d",roleId:"driver",kind:"driver",workspaceId:null};m.dataContext=m.scope;m.destination="delivery"')
         check('Driver can report in Delivery with an explicit report grant',ev('!!document.querySelector("[data-product-action=submit-report]")&&!document.querySelector("[data-product-action=submit-report]").disabled'))
+        # ---- المرحلة 8 — C14 Manage (D15/D16): قراءة وإدخال فقط، Online-only. ----
+        go('manage','operations')
+        check('Manage renders host rows with type as text, unit and dates',ev('document.querySelectorAll("#product-root .m-operational-list > li").length===3&&document.querySelector("#product-root").textContent.includes("مبيعات")&&document.querySelector("#product-root").textContent.includes("مصاريف")&&document.querySelector("#product-root .m-row__reading").textContent.includes("د.أ")'))
+        check('Manage summary shows host-passed values verbatim, never computed',ev('(()=>{let dds=[...document.querySelectorAll("#product-root .m-product__comparison dd")];return dds.length===3&&dds[0].textContent.includes("1150")&&dds.every(dd=>dd.textContent.trim().endsWith("د.أ"));})()'))
+        model('m.unit=null;m.operations=[{id:"op-x",type:"sale",amount:"5",date:"2026-11-01",description:"بدون وحدة"}];m.summary=[]')
+        check('Manage missing unit stays explicitly undefined, never invented',ev('document.querySelector("#product-root .m-row__reading").textContent.includes("الوحدة غير محددة")'))
+        go('manage','operations');action('add-operation')
+        check('Manage required fields validated before any confirmation or intent',ev('!lab.lastIntent&&!document.querySelector(".m-action-sheet")&&document.querySelector("[data-focus-key=field-amount]").getAttribute("aria-invalid")==="true"'))
+        p.locator('[data-focus-key=field-amount]').fill('210');p.locator('[data-focus-key=field-type]').select_option('sale');p.locator('[data-focus-key=field-date]').fill('2026-11-21');p.locator('[data-focus-key=field-note]').fill('دفعة عميل')
+        action('add-operation');check('Manage add-operation needs explicit confirmation',ev('!lab.lastIntent&&!!document.querySelector(".m-action-sheet")'));confirm()
+        check('Manage submit waits for host: loading button, disabled, no success',ev('lab.lastIntent.action==="add-operation"&&lab.lastIntent.payload.amount==="210"&&lab.instance.getState().pending!==null&&document.querySelector("[data-product-action=add-operation]").disabled&&document.querySelector("[data-product-action=add-operation]").getAttribute("aria-busy")==="true"&&!document.querySelector("#product-root").textContent.includes("تمت العملية")'))
+        check('Manage pending blocks repeat submit and local clear',ev('document.querySelector("[data-focus-key=clear-operation-form]").disabled'))
+        ev("document.querySelector('#ack-error').click()")
+        check('Manage host failure keeps values and offers explicit retry',ev('lab.instance.getState().phase==="error"&&document.querySelector("[data-focus-key=field-amount]").value==="210"&&!!document.querySelector("[data-product-action=retry]")&&!document.querySelector("[data-product-action=retry]").disabled&&!document.querySelector("#product-root").textContent.includes("تمت العملية")'))
+        action('retry');check('Manage retry resends the same values as a new pending intent',ev('lab.lastIntent.action==="retry"&&lab.lastIntent.payload.amount==="210"&&lab.instance.getState().pending!==null'))
+        ev("document.querySelector('#ack-success').click()")
+        check('Manage success appears only after host resolve and records the operation',ev('lab.instance.getState().phase==="success"&&document.querySelector("#product-root").textContent.includes("تمت العملية")&&document.querySelectorAll("#product-root .m-operational-list > li").length===4&&document.querySelector("#product-root").textContent.includes("دفعة عميل")'))
+        check('Manage form is cleared after acknowledged success',ev('document.querySelector("[data-focus-key=field-amount]").value===""&&document.querySelector("[data-focus-key=field-note]").value===""'))
+        go('manage','operations');model('m.connection="offline"')
+        check('Manage offline disables submit with an explicit online-only note',ev('document.querySelector("[data-product-action=add-operation]").disabled&&document.querySelector("#product-root").textContent.includes("الاتصال منقطع")&&document.querySelector("#product-root").textContent.includes("لا حفظ محلي ولا طابور مزامنة")&&!document.querySelector("[data-product-action=save-local]")&&!document.querySelector("#product-root").textContent.includes("تم الحفظ")'))
+        go('manage','form-only')
+        check('Manage with no operations keeps the entry form and an honest empty line',ev('document.querySelector("#product-root").textContent.includes("لا عمليات في هذه الفترة")&&!!document.querySelector("[data-product-action=add-operation]")'))
+        # ---- المرحلة 8 — C09/results (D17): نتائج من المضيف وحالات منفصلة. ----
+        go('market','results');shot('market-results360')
+        check('Results rows render host fields as text with unit and status',ev('document.querySelectorAll("#product-root .m-operational-list > li").length===3&&document.querySelector("#product-root").textContent.includes("منشأة التوريد")&&document.querySelector("#product-root .m-row__reading").textContent.includes("د.أ")&&document.querySelector("#product-root .m-badge").textContent==="قيد المراجعة"'))
+        check('Results optional image is a bounded thumb; absent image renders none',ev('document.querySelectorAll("#product-root .m-product__thumb").length===2&&!document.querySelectorAll("#product-root .m-operational-list > li")[2].querySelector(".m-product__thumb")'))
+        model('m.results=[{id:"l1",title:"نتيجة بصورة مكسورة",price:"10",sellerLabel:"مورد",statusLabel:"معروض",image:{src:"sample-one.svg",alt:"صورة"}}]')
+        ev('document.querySelector("#product-root .m-product__thumb").dispatchEvent(new Event("error"))')
+        check('Results image load failure falls back to a stable placeholder',ev('!!document.querySelector("#product-root .m-product__thumb--empty")'))
+        model('m.results=[{id:"l1",title:"نتيجة برابط غير آمن",price:"10",sellerLabel:"مورد",statusLabel:"معروض",image:{src:"javascript:alert(1)",alt:"غير آمن"}}]')
+        check('Unsafe result image URL becomes a stable placeholder, not an img',ev('!document.querySelector("#product-root .m-product__thumb img")&&!!document.querySelector("#product-root .m-product__thumb--empty")'))
+        go('market','results');model('m.resultsState="no-ads";m.results=[]')
+        check('Results state no-ads is distinct and names the source',ev('document.querySelector("#product-root").textContent.includes("لا توجد إعلانات")&&!document.querySelector("#product-root .m-operational-list")'))
+        model('m.resultsState="no-results"')
+        check('Results state no-results names this search, not the source',ev('document.querySelector("#product-root").textContent.includes("لا نتائج لهذا البحث")&&!document.querySelector("#product-root").textContent.includes("لا توجد إعلانات")'))
+        model('m.phase="error"')
+        check('Results read failure shows retry only when the host grants it',ev('document.querySelector("#product-root").textContent.includes("تعذّر إكمال الطلب")&&!!document.querySelector("[data-product-action=retry]")&&!document.querySelector("#product-root .m-operational-list")'))
+        action('retry');check('Results retry is a host intent, never an automatic refetch',ev('lab.lastIntent.action==="retry"&&lab.instance.getState().pending!==null'))
+        # ---- المرحلة 8 — C12/queue (D18/D19): قائمة ← تفاصيل بلا قرارات محلية. ----
+        go('review','queue');shot('review-queue360')
+        check('Queue renders three typed items in exact host order as visible text',ev('(()=>{let rows=[...document.querySelectorAll("#product-root .m-product__queue-item")];return rows.length===3&&rows.map(b=>b.querySelector(".m-row__title").textContent).join("|")==="إعلان صابون يحتاج تدقيقًا|بلاغ عن صورة غير واضحة|طلب انضمام سائق — الزرقاء"&&rows.every(b=>/إعلان|بلاغ|طلب سائق/.test(b.textContent));})()'))
+        p.locator('.m-product__queue-item').nth(1).click()
+        check('Selecting a queue item emits an id intent and decides nothing',ev('lab.lastIntent.action==="open-review"&&lab.lastIntent.payload.itemId==="rv-2"&&lab.lastIntent.payload.revision==="rv-r2"&&lab.instance.getState().pending!==null&&document.querySelectorAll("#product-root .m-product__queue-item").length===3'))
+        ev("document.querySelector('#ack-success').click()")
+        check('Host resolve reuses the existing C12 item as the details view',ev('lab.instance.getState().phase==="success"&&!document.querySelector("#product-root .m-product__queue-item")&&document.querySelector("#product-root").textContent.includes("بلاغ يحتاج مراجعة")&&!!document.querySelector("[data-product-action=reject]")'))
+        go('review','queue');model('m.phase="empty";m.items=[]')
+        check('Queue empty state is the shared honest empty phase',ev('document.querySelector("#product-root").textContent.includes("لا توجد بيانات بعد")&&!document.querySelector("#product-root h2")'))
+        model('m.phase="error"')
+        check('Queue read failure offers host retry without rendering the list',ev('document.querySelector("#product-root").textContent.includes("تعذّر إكمال الطلب")&&!!document.querySelector("[data-product-action=retry]")&&!document.querySelector("#product-root .m-product__queue-item")'))
         go('market','editor');model('m.title="";m.price="";m.images=[];m.clearDraft=true');model('m.clearDraft=false');action('publish')
         p.locator('[data-focus-key=field-title]').fill('تم التصحيح')
         check('Correcting one field preserves remaining validation message references',ev('(()=>{let e=document.querySelector("[data-focus-key=field-price]");return e.getAttribute("aria-invalid")==="true"&&!!document.getElementById(e.getAttribute("aria-describedby"))})()'))
@@ -181,7 +230,7 @@ def main():
         p.emulate_media(reduced_motion='reduce')
         # Narrow checks only for the components which contain long labels/media/forms.
         p.set_viewport_size({'width':320,'height':780})
-        for kind,case in [('market','editor'),('delivery','change'),('assistant','proposal'),('context','business')]:
+        for kind,case in [('market','editor'),('delivery','change'),('assistant','proposal'),('context','business'),('market','results'),('review','queue'),('manage','operations')]:
             go(kind,case);geometry(kind+' targeted320 RTL');shot(kind+'320')
         p.set_viewport_size({'width':360,'height':780});go('market');ev('document.documentElement.dir="ltr"');p.locator('[data-next]').click();geometry('Media directional360 LTR');check('LTR media navigation preserves logical index',ev('MicroCarousel.getIndex(document.querySelector("[data-carousel]"))===1'))
         go('assistant','proposal');ev('document.documentElement.dir="ltr"');geometry('Ask directional360 LTR')

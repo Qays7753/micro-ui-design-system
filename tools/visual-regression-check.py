@@ -121,7 +121,7 @@ def main():
     for rel in report["deleted"]:
         print(f"    deleted: {rel}")
     for failure in report["failures"]:
-        if failure["reason"] == "size-mismatch":
+        if failure.get("reason") == "size-mismatch":
             print(f"    FAIL {failure['page']}: size mismatch")
         else:
             print(f"    FAIL {failure['page']}: "
