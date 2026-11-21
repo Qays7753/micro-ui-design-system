@@ -76,3 +76,12 @@
 .m-product[data-conversation-layout="fill"] > * { flex-shrink:0; }
 .m-product[data-conversation-layout="fill"] > .m-product__log { flex:1 1 0;min-block-size:0;max-block-size:none; }
 .m-assistant__new { justify-self:center;align-self:center; }
+
+/* المرحلة 8 — C09 نتائج البحث: صورة اختيارية مصغرة بحد لمس 48؛ غيابها
+   أو فشلها بديل ثابت لا يكسر الصف. C12 قائمة المراجعة: الصف نفسه هدف
+   لمس واحد (زر بملء الصف) فوق بنية C02 التشغيلية. */
+.m-product__thumb { flex:none;block-size:var(--micro-touch-min);inline-size:calc(var(--micro-touch-min) * 4 / 3);object-fit:cover;background:var(--micro-surface-page);border-radius:var(--micro-radius-field); }
+.m-product__thumb--empty { display:grid;place-items:center;border:1px dashed var(--micro-border-divider);color:var(--micro-text-secondary); }
+.m-product__queue-item { inline-size:100%;margin:0;padding-inline:0;border:0;background:transparent;color:inherit;font:var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family);text-align:start;cursor:pointer; }
+.m-product__queue-item:active { background:var(--micro-surface-selected); }
+.m-product__queue-item:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:calc(-1 * var(--micro-focus-gap)); }

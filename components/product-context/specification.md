@@ -1,19 +1,20 @@
-# C07–C12 — تراكيب سياق Micro للهاتف
+# C07–C12 وC14 — تراكيب سياق Micro للهاتف
 
-ستة تراكيب Draft فوق العائلات الحالية، لا تطبيقات جديدة ولا backend. [جرد التغطية](../../docs/product-context/COVERAGE.md) و[المختبر](../../previews/product-context/index.html).
+سبعة تراكيب Draft فوق العائلات الحالية، لا تطبيقات جديدة ولا backend (C13 شاشات الدخول في مواصفة بوابة الوصول الخاصة بها). [جرد التغطية](../../docs/product-context/COVERAGE.md) و[المختبر](../../previews/product-context/index.html).
 
 | العقد | type | الدلالة والمدخلات |
 |---|---|---|
 | C07 | context | هوية واحدة، contexts من المستهلك، scope حالي وdestinations مصرح بها؛ طلب switch-context ينتظر إقرارًا. |
 | C08 | state | حالة عملية واتصال ومرجع، recheck/retry، وحفظ محلي صريح لـManage دون ادعاء مزامنة. |
-| C09 | market | modes card/editor/search؛ عنوان/سعر/وحدة/صور/حالة/سبب، draft وحقول وفلاتر من المستهلك. |
+| C09 | market | modes card/editor/search/results؛ عنوان/سعر/وحدة/صور/حالة/سبب، ونتائج بحث يمررها المضيف بصفوف C02. |
 | C10 | delivery | modes request/offer/tracking/change/proof؛ سعر/وحدة/نسخة/خط أحداث/موافقات وإثبات يحددها المستهلك. |
 | C11 | assistant | messages نصية، draft، انتظار/retry، وproposal بمعرف ونسخة وتأكيد إلزامي. لا AI أو تفسير أمر من النص. |
-| C12 | review | modes queue/report؛ عنصر/سبب/مرفقات مصرح بها/قرارات وقائمة تصنيف من المستهلك. لا صلاحية مالية افتراضية. |
+| C12 | review | modes queue/item/report؛ قائمة مراجعة متعددة ← تفاصيل (عنصر C12 نفسه) ← نموذج بلاغ. لا صلاحية مالية افتراضية. |
+| C14 | manage | سجل عمليات (مبيعات/مصاريف) بصفوف C02، نموذج إدخال، وملخص فترة من المضيف حصريًا؛ Online-only بلا حفظ محلي. |
 
 ## التحميل والاستعمال
 
-fonts.css ثم tokens.css وmotion.css، ثم buttons/fields/messages/organization/navigation/action-sheet/carousel CSS المستخدمة، وproduct-context.css. حمّل fields.js ثم navigation.js ثم action-sheet.js وcarousel.js ثم product-core.js ثم ملف renderer المستخدم: context.js أوoperation.js أوmarket.js أوdelivery.js أوassistant.js أوreview.js. حملها مرة واحدة، وليس لكل صف.
+fonts.css ثم tokens.css وmotion.css، ثم buttons/fields/messages/organization/navigation/action-sheet/carousel CSS المستخدمة، وoperational-row.css عند عرض صفوف (نتائج C09 أو قائمة C12 أو عمليات C14)، وproduct-context.css. حمّل fields.js ثم navigation.js ثم action-sheet.js وcarousel.js ثم product-core.js ثم ملف renderer المستخدم: context.js أوoperation.js أوmarket.js أوdelivery.js أوassistant.js أوreview.js أوmanage.js. حملها مرة واحدة، وليس لكل صف.
 
 ```js
 const scope = {contextId:'approved-context',workspaceId:'workspace',roleId:'role',kind:'business'};
@@ -37,7 +38,7 @@ root.addEventListener('micro-product:intent', event => {
 - scope مفتاح contextId + workspaceId اختياري + roleId + kind، وليس اسم العرض. اختلاف الدور داخل Workspace نفسه سياق مختلف. `MicroProduct.contextKey(scope)` يوفر المفتاح المقارن؛ لا تعيد بناءه يدويًا.
 - contextId/roleId نصوص غير فارغة، workspaceId نص غير فارغ أوnull؛ kind المصرح للسائق هوdriver. بقية الأدوار labels من المستهلك ولا تمنح صلاحيات تلقائية. لكل option نطاق فريد؛ لا اتحاد grants لمجرد أن الشخص مورد ومالك أيضًا.
 - `permissions` قائمة أوامر صريحة لكل instance؛ غياب view يمنع عرض بياناتها. C09–C12 تتطلب أيضًا dataContext مطابقًا لنطاق طلب العرض الحالي. هذا ختم **سياق الاستجابة**، وليس ادعاء أن كل منتج عام مملوك للـWorkspace الحالي.
-- في driver لا يعرض C07 Manage/Market حتى لو مررهما المستهلك، ولا تُعرض C09 أو queue مراجعة. report فرعي داخلDelivery ممكن فقط بgrant صريح. القائمة لا تمنح الوصول؛ التطبيق والخادم يملكان التفويض الحقيقي وفلترة البيانات قبل إرسالها للعميل.
+- في driver لا يعرض C07 Manage/Market حتى لو مررهما المستهلك، ولا تُعرض C09 أو C14 أو queue مراجعة. report فرعي داخلDelivery ممكن فقط بgrant صريح. القائمة لا تمنح الوصول؛ التطبيق والخادم يملكان التفويض الحقيقي وفلترة البيانات قبل إرسالها للعميل.
 - `micro-product:intent` يحمل `{type,action,scope,request,payload}`. لا شبكة أو storage أو قيد مالي أو grant أو تنفيذ AI. الـrequest نسخ instanceId/generation/requestId/contextKey؛ payload يتضمن القيم الخام وFile عند اختيار مرفقات.
 - لا تفسّر إخفاء الواجهة كحماية backend. يجب أن يتحقق الخادم من scope والصلاحية ونسخة السجل وكل إجراء، ولا يرسل بيانات غير مسموحة أصلًا.
 
@@ -74,14 +75,17 @@ phase: ready/loading/empty/success/error/rejected/disabled/pending/uncertain/den
 | market/card | id/revision/title/price/unit/images[{src,alt}]/sellerLabel/statusLabel/reason | edit/report{listingId,revision} |
 | market/editor | title/description/price/unit، requiredFields اختيارية، titleMaxLength اختياري، images القائمة | save-draft/publish{title,description,price,files} |
 | market/search | query، filters[{id,label,options:[{id,label}],value}]، resultLabel | search{query,…filterValues,files:[]}؛ معرّفات الحقول فريدة ولا تتصادم مع query/files |
+| market/results | query، filters، resultLabel، resultsState اختياري (no-ads/no-results)، results[{id,title,price,unit,sellerLabel,statusLabel,image:{src,alt} اختيارية}] | search{query,…filterValues,files:[]}؛ retry{…} عند فشل القراءة بgrant |
 | delivery/request | pickup/dropoff/note، requiredFields، visibility.addresses/contact | request-delivery{pickup,dropoff,note,files:[]} |
 | delivery/offer | id/offerId/revision/amount/unit/validityLabel | accept/decline/assign{requestId,offerId,revision} |
 | delivery/tracking | steps[{label,time,detail,current}]، statusLabel | recheck{requestId}؛ لا انتقال تلقائي |
 | delivery/change | id/revision/currentText/proposedText، parties[{label,statusLabel}] | request-change{requestId,revision}؛ لا تطبيق للتعديل |
 | delivery/proof | id/revision/proofKind=delivery أوreturn، requirementsLabel/attachmentRequired/requiredFields | submit-proof{note,files,requestId,proofKind,revision} |
 | assistant | messages[{id,speaker:user/assistant/system,text,stateLabel,retryable,actions}]، replyPending، activity، proposal{id,revision,summary,label} | send{message,files:[]}؛ retry{messageId}؛ execute{proposalId,revision} أو {messageId,actionId,revision}؛ follow-up/open-resource{messageId,actionId,revision} |
-| review/queue | id/revision/title/subjectLabel/summary/statusLabel/reason/history/images، visibility.evidence، reasonRequired | approve/reject/request-info{reason,files:[],subjectId,revision}؛ view-evidence لعرض الصور فقط |
+| review/queue | title اختياري، items[{id,kind:listing/flag/driver-application,revision,title,date,statusLabel}]؛ الترتيب كما يمرره المضيف حرفيًا | open-review{itemId,revision}؛ retry{…} بgrant عند فشل القراءة |
+| review/item | id/revision/title/subjectLabel/summary/statusLabel/reason/history/images، visibility.evidence، reasonRequired | approve/reject/request-info{reason,files:[],subjectId,revision}؛ view-evidence لعرض الصور فقط |
 | review/report | id/subjectLabel/requiredFields/reasonOptions[{id,label}] | submit-report{reason,category عند وجوده,files:[],subjectId} |
+| manage | title/unit/summary[{label,value,unit?}]/operations[{id,type:sale/expense,amount,date,description}]/requiredFields | add-operation{amount,type,date,note,files:[]}؛ retry{amount,type,date,note} بgrant عند الفشل |
 
 compose إذن تحرير حقول النموذج وليس إذن إرسال. view إذن عرض؛ إعادة الدخول reauth واختيار سياق آخر choose-context grants منفصلة. loading/pending/disabled تعطل الإدخال والإجراءات، أما error/rejected فيحفظان النص للتصحيح. إعادة المحاولة لا تستنتج نجاحًا أو تزيل خطأ الخدمة. reasonRequired يفرض سبب الرفض فقط؛ requirements التجارية الأخرى يقررها المضيف.
 
@@ -145,4 +149,31 @@ conversationLayout اختياري embedded (السابق بحد360) أوfill (م
 
 أسباب التعطيل المتطابقة تظهر مرة واحدة في مجموعة الرسالة، وتشير الأزرار إلى الوصف نفسه. action.emphasis=primary اختيار صريح من المستهلك؛ إن طلبه أكثر من إجراء لا يُخمّن النظام واحدًا، وتبقى ثانوية. لا تمييز تنفيذ حساس تلقائيًا؛ التأكيد والصلاحية والنسخة قائمة. قيمةprimary هي البترولية الحالية.
 
-- **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS سياق المنتج يُقرأ وقت الاستخدام من سجل `window.MicroLabels['product-context']` الذي يسجّله `components/product-context/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12).
+## سد الفجوات الوظيفية — المرحلة 8 (D15–D19)
+
+### C14 — سجل عمليات Manage
+
+قراءة وإدخال فقط لسياق Owner المتصل. ثلاث كتل: ملخص فترة (dl قراءة)، صفوف عمليات على مبنى C02/Organization، ونموذج إدخال (مبلغ بوحدة، نوع sale/expense، تاريخ، ملاحظة) بأزرار B01: إرسال أساسي و«تفريغ الحقول» ثانوي.
+
+- **قاعدة صارمة:** المكتبة لا تحسب أي مجاميع مالية إطلاقًا — لا جمع ولا صافٍ ولا رصيد. كل قيم ملخص الفترة يمررها المضيف حرفيًا (label/value/unit)، والمفقود يظهر «(غير متاح)» ولا يصبح صفرًا. الوحدة يمررها المضيف دائمًا ولا تفترضها المكتبة (D16)؛ غيابها يظهر «(الوحدة غير محددة)».
+- النوع نص ظاهر لكل صف (مبيعات/مصاريف من سجل النصوص الافتراضي) لا لونًا وحده؛ النوع غير المعروف لا يُترجم ولا يُخترع له اسم. المبلغ معزول الاتجاه (bdi/dir=ltr) ومعه وحدته.
+- **Online-only (D15):** عند offline/weak/local يُعطَّل زر الإرسال (وسائر الأفعال المتصلة) مع نص واضح: لا حفظ محلي ولا طابور مزامنة. لا يُعرض save-local ولا local-saved في هذا التركيب أبدًا، ولا «تم الحفظ» قبل resolve من المضيف.
+- الحالات: loading وempty عبر phase المشتركة (التركيب يُعرض في empty مثل assistant لأن نموذج الإدخال غرضه)؛ عند ready بلا عمليات يظهر نص «لا عمليات في هذه الفترة». الإرسال intent مؤكد عبر C05 ثم pending: زر الإرسال يظهر حالة تحميل (is-loading/aria-busy) معطلًا ولا نجاح قبل إقرار المضيف. الفشل (phase=error) يحفظ القيم للتصحيح ويعرض retry صريحًا بgrant عند تمريره.
+- «تفريغ الحقول» فعل عرضي محلي يمسح مسودة النموذج فقط ولا يطلق نية ولا يتصل بشيء؛ يعطل أثناء pending/loading/disabled.
+- عقد المضيف: يمرر النموذج كاملًا (scope/permissions/phase/connection/destination=manage)، يستقبل `add-operation`/`retry` بمعرف الطلب، ويرد بـresolve بنموذج مؤكد (العملية المسجلة + clearDraft) أو رفض. المكتبة لا تتحقق ماليًا ولا تمتلك قيدًا ولا تعرف العملة.
+
+### C09/results — نتائج بحث Market (D17)
+
+وضع `results` يستقبل من المضيف مصفوفة نتائج ويرسمها صفوفًا على مبنى C02/Organization، فوق رأس البحث نفسه (query + filters + زر البحث + resultLabel) — الجلب والترتيب والتصفية ملك المضيف. لكل نتيجة: عنوان، سعر بوحدة معزولة الاتجاه، اسم المورد، حالة الإعلان (نص بشارة)، وصورة اختيارية مصغرة بحد لمس 48؛ الصورة المفقودة أو الفاشلة أو غير الآمنة تُستبدل ببديل ثابت (صندوق بحد لمس) ولا تكسر التخطيط، وغياب الحقل أصلًا لا يرسم شيئًا.
+
+حالات منفصلة لا تُدمج: **لا إعلانات أصلًا** (`resultsState:"no-ads"` — المصدر لا يضم إعلانات)، **لا نتائج لهذا البحث** (`resultsState:"no-results"` — الاستعلام هذا بلا مطابقات)، **فشل القراءة** (phase=error مع retry بgrant إن وفره المضيف — لا جلب آلي ولا إعادة محاولة داخلية)، و**التحميل** (phase=loading عبر الحالة المشتركة). لا صف وهمي عند الصفر ولا عدّاد مخترع ولا ترتيب محلي.
+
+### C12/queue — قائمة مراجعة متعددة (D18، D19)
+
+وضع `queue`: قائمة ← تفاصيل، والتفاصيل هي عنصر C12 نفسه (وضع `item`؛ كان اسمه السابق `queue` — أعيدت التسمية في المرحلة 8 ليسمي `queue` القائمة الفعلية). لكل عنصر النوع والعنوان والتاريخ والحالة، والأنواع الثلاثة بنص ظاهر من سجل النصوص: إعلان (listing) / بلاغ (flag) / طلب سائق (driver-application)؛ النوع غير المعروف لا يُترجم. **الترتيب كما يمرره المضيف حرفيًا** — لا فرز ولا أولوية ولا مدة مراجعة مخترعة.
+
+اختيار عنصر يطلق `open-review{itemId,revision}` فقط ولا يقرر شيئًا: القائمة تبقى حتى يرد المضيف بـresolve (نموذج تفاصيل mode=item) أو رفض. الحالات: فارغ (phase=empty المشتركة، أو نص «لا عناصر في القائمة» عند ready بمصفوفة فارغة)، فشل القراءة (phase=error مع retry بgrant)، وتحميل (phase=loading). قائمة مهام السائق (D19) غير منفذة عمدًا.
+
+**عمومية القائمة:** بنية الصف (نوع/عنوان/تاريخ/حالة + نية فتح بمعرّف) عامة بلا منطق مجال: أي قائمة لاحقة (مثل قائمة مهام السائق إن قُررت) تُبنى بتمرير عناصر مختلفة بنفس العقد، دون عائلة جديدة ولا حقول مخترعة. تسمية النوع تبقى لسجل النصوص الافتراضي للعائلة.
+
+- **النصوص الافتراضية (المرحلة 7 — 2026-11-21):** كل نص ظاهر داخل JS سياق المنتج يُقرأ وقت الاستخدام من سجل `window.MicroLabels['product-context']` الذي يسجّله `components/product-context/labels.js` (يُحمَّل قبل ملف السلوك في كل صفحة — يفحصه hardcoded-text-check)؛ التخصيص عبر `MicroX.setLabels(partial)` يسري على التصييرات اللاحقة، والقيم الافتراضية هي الصياغة الحرفية السابقة فلا تغيير بصري افتراضيًا (D12). نصوص المرحلة 8 الجديدة (k145–k168) في السجل نفسه، وتعديل نص C08 للمضاهاة Online-only موثق في DECISIONS.
