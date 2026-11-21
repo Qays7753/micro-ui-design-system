@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق (R2+R3)** | R2: `dist/esm/<entry>.js` للمداخل الـ21 مع صادرات متحققة وبلا أثر جانبي (`node tools/build-package.mjs --check` → OK). R3: `tools/package/types/<entry>.d.ts` لكل مدخل (+`iife.d.ts`) تُنسخ إلى `dist/types/`؛ `npm run typecheck` ناجح؛ بوابة `package-install` تثبت الحزمة فعلًا (tarball وgit عبر prepare) وتستوردها تحت Node وبالمتصفح — OK بكل خطواتها السبع |
 | F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | **مغلق (R4)** | كل المداخل الـ19: init يعيد instance له update/destroy مع getInstance/destroy(root)؛ api-lifecycle **193/193** (صفر متبقيات بتغليف المستمعات/المراقبات/المؤقتات)؛ clone-lifecycle **31/31** (disconnect=مسار destroy والنسخ تربط كجديدة)؛ check-all 23/23 على نسخة نظيفة |
-| F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | **مغلق (R5)** | صفر kNNN (hardcoded-text: 447 مفتاحًا دلاليًا مغطى)؛ docs/LABELS.md مولد ومطابق؛ labels-override **37/37** (تخصيص لكل instance يشمل Carousel/Picker مع عزل النسخ وsetLabels) |
+| F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | **مغلق (R5)** | صفر kNNN (hardcoded-text: 447 مفتاحًا دلاليًا مغطى)؛ docs/LABELS.md مولد ومطابق؛ labels-override **43/43** (تخصيص لكل instance يشمل Carousel/Picker وكل renderers المنتج، مع عزل النسخ وsetLabels) |
 | F4 | C08 يعرض save-local وlocal-saved خلافًا لOnline-only | R6 | مفتوح | — |
 | F5 | ثلاث نسخ متتبعة (components/ وsrc/ وdist/) | R2 | **مغلق (R2)** | `git ls-files src dist | wc -l` = 0؛ `/dist/` في .gitignore؛ البناء حتمي (hash MANIFEST ثابت عبر 3 تشغيلات) |
 | F6 | البوابة البصرية مربوطة بمسار مطلق خارج المستودع | R1 | **مغلق (R1)** | `git grep -n "/home/z"` لا يُرجع سوى سطر وصف F6 في ملف الخطة نفسه (وثيقة المالك)؛ المرجع يُولَّد من `--baseline-ref v0.1.0` في worktree مؤقت: `uv run python tools/visual-regression-check.py --out /tmp/micro-vr-r1` → compared 62 / passed 61 / allowed 1 / failed 0 |
@@ -203,12 +203,45 @@
 
 CHANGELOG 0.2.0 كامل (Breaking: ESM/dist غير متتبع/مسارات IIFE/مفاتيح دلالية/حذف التخزين/lifecycle الموحد؛ Added: الأنواع/package-install/esm-app/labels لكل instance/LABELS.md/visual من git ref/فحوص R-D11؛ Fixed: concepts والفحوص الكاتبة داخل المستودع واجتثاث التسجيل وعقد SPA؛ Deprecated: مهملات IIFE). STATUS 0.2.0 (26 بوابة)، README (الحالة والفحوص)، AGENTS (البوابات: npm ci + check-all + typecheck + manifest — بلا مساس بالثوابت)، API.md قسم النصوص يربط LABELS.md، GETTING-STARTED يربط LABELS.md. package.json 0.2.0 منذ R2. link-check 139/0.
 
-## حالة التحقق الختامية عند 45f628c (2026-11-22 — إيقاف مؤقت بداعي الميزانية)
+## مراجعة المالك c573118 والقرارات المعتمدة — منفذة ومغلقة (e984444)
 
-R0–R4 مغلقة بالأدلة (أعلاه). **R5–R8 منفذة بالكامل ومرفوعة في `45f628c`** (التنفيذ + التوثيق + الأدلة الفردية: labels-override 37/0، product-context 301/0، audit 67/0، light-data 185/0، labels-doc مطابق، hardcoded-text 447 مفتاحًا، package/typecheck ناجحان) — لكن **لم تُعلن مغلقة بعد** لأن التشغيل الكامل الأخير أظهر **3 أعطال متبقية يجب إصلاحها قبل الإغلاق**:
+نُفذت القرارات الثلاثة المعتمدة حرفيًا (DECISIONS — «مراجعة c573118»):
 
-1. **visual-regression:** أداة الالتاط تخرج بخطأ `scroll_into_view: Timeout 5000ms` على صفحة واحدة من 63 (كل الصفحات التُقطت؛ الخطأ يجهض المقارنة). الصفحة غير محددة بعد — شغّل `uv run python tools/visual-regression-check.py --out /tmp/vr` وراقب أول صفحة لا تُطبع `captured <page>` قبل الـTraceback.
-2. **api-lifecycle 192/1:** فحص «f: setLabels ثم update...» كان يستخدم مفتاح `k9` القديم — **صُحح إلى `bars.rangeError`** (في 45f628c) ولم يُع تشغيله بعدها للتحقق.
-3. **component-consumption 36/1:** عطل واحد غير مشخص بعد (الاسم في مخرجات البوابة؛ شغّلها منفردة).
+1. **بوابة lint (R-D16):** `eslint` + `globals` في devDependencies، و`eslint.config.mjs` (no-undef، ESM، globals المتصفح) على `components/` و`shared/` — بوابة `lint` في check-all وخطوة مستقلة في `tools/ci/ci.yml`. **صفر أخطاء** — عولج بها الخطأان المكتشفان بالمراجعة (target في navigation.js:528، unit في metric-comparison.js:215، value في packed-circle.js:228) واستيراد `setInstanceLabels` في renderers المنتج السبعة.
+2. **عقد سياق القراءة (R-D17):** `instanceLabelFor` تحرس العقد — أي سياق ليس عنصر DOM ولا undefined يُبلَّغ `console.error` ويُهمل. نُظفت كل الاستدعاءات المخالفة: 7 سياقات كائنات بيانات في الجولة الأولى (it/box/composer)، و3 اكتشفتها الحارسة وقت التشغيل بعد جرد غير حساس لحالة الأحرف فات مفاتيح camelCase (outlierSuffix×2 وnegativeUnplottedSuffix بسياق item في data.js)، وسياق نص واحد (unit في tableCaptionBase). بوابات مراقبة الكونسول كلها خضراء.
+3. **مكدس withLabels مشترك:** اكتُشف أن renderLabels كان محليًا لكل ملف — withLabels في نواة المنتج لم تكن تسري على renderers منفصلي الملفات. صار المكدس في `shared/labels.js` و`currentInstanceLabels(family)` تقرأه من أي ملف؛ ووحّدت selection/picker (آخر من بقي على الخريطة المحلية).
+4. **تغطية المسارات المكسورة:** circles بقيمة فاسدة بلا display/raw، وحدث change في لوحة التصفية (مسار target)، و`applyInstanceLabels` عبر كل renderers المنتج الستة الآخرين — ببوابة labels-override التي صارت **43 فحصًا** بعلامة اكتمال حتمية (`__gateDone`) بدل مهلة ثابتة. (قيمة packed السالبة كان يغطيها فحص ترتيب الإشارة القائم وفشلها زال بالإصلاح.)
+5. **مولّد LABELS.md أُصلح ذاته** (لا الملف): لا سطر فارغ زائد — بوابة static خضراء. وسمحية R-D11 البصرية شملت صفحة index للمنتج (سطر وصف C14 المعاد صياغته، 0.39%).
 
-**R9 لم تبدأ** (نسخة نظيفة + وسم v0.2.0 + القسم الختامي وجدول F1–F10 النهائي). ترتيب الاستكمال: إصلاح الثلاثة أعلاه ← check-all كاملة 25/25 ← إغلاق R5–R8 في هذا التقرير بالأدلة ← R9 (استنساخ نظيف + uv sync + npm ci + check-all + typecheck ← وسم v0.2.0 ودفع الوسم ← القسم الختامي: ما يبقى على المالك [نقل tools/ci/ci.yml، الاعتماد البصري، اختبار Samsung Galaxy S25، قرار النضج، إطار التطبيق، الدمج، حذف الفروع القديمة ccr-1bbe1186-fys05f وreview/component-readiness-20261117 وfeature/google-only-access-gateway-2026-11-18]، لا PR ولا دمج).
+**أرقام البوابات بعد الإصلاحات (محليًا عند e984444):** lint صفر أخطاء؛ api-lifecycle **193/0**؛ clone-lifecycle **31/0**؛ component-consumption **39/0**؛ audit **67/0**؛ labels-override **43/0**؛ product-context **301/0**؛ light-data **185/0**؛ light-release **792/0**؛ integration-boundaries **77/0**؛ ui-system-showcase **126/0**؛ visual-regression ناجحة (سماحيتا concepts بـR-D13 وindex المنتج بـR-D11)؛ package/typecheck ناجحان. (ملاحظة توثيقية: تشغيل محلي واحد سجل فشل numeric-geometry وpreview-runtime بسبب تنازع منفذ 5000 مع تشغيل متوازٍ — أُعيد التحقق النظيف أدناه بلا تنازع.)
+
+## R5 — مغلقة (F3)
+
+كل بنود الخطة منفذة: صفر `kNNN` (بوابة hardcoded-text: 447 مفتاحًا دلاليًا، مستخدم/معرف متطابقان)؛ `docs/LABELS.md` مولد ومطابق (بوابة labels-doc)؛ بوابة labels-override **43 PASS / 0 FAIL** لكل مدخل له نصوص: init بlabels يغيّر النص الظاهر فعلًا (تصييرًا وحدثًا وكونسولًا)، وعزل النسخ، وsetLabels العام، وكل renderers المنتج عبر السجل المشترك. النصوص الافتراضية حرفية (R-D15) والبوابة البصرية تثبت ذلك.
+
+## R6 — مغلقة (F4)
+
+`grep -rn "save-local|local-saved|حفظ محلي" components previews docs tools/package` = **صفر** (عدا DECISIONS/CHANGELOG)؛ product-context **301/0** بفحوص R-D11 الأربعة؛ السماحية البصرية محدودة بصفحتي المختبر وindex للمنتج (المشهد المتغير وحده).
+
+## R7 — مغلقة (F8)
+
+`tools/ci/ci.yml` محدث وصالح YAML بكل الأوامر بالترتيب (منها خطوة lint الجديدة) + وثيقة التركيب؛ لا دفع لـ`.github/` (R-D14).
+
+## R8 — مغلقة
+
+CHANGELOG 0.2.0 كامل (أُضيف إليه بند بوابة lint وقرارات المراجعة)، STATUS/README/AGENTS/API/GETTING-STARTED محدثة ومرتبطة بLABELS.md، وlink-check 139/0.
+
+## R9 — التحقق النهائي والتسليم — **مكتمل**
+
+**التحقق الحاسم على نسخة نظيفة عند `e984444`:** استنساخ نظيف من الرفعة ← `uv sync` + `npm ci` + `uv run python tools/check-all.py` + `npm run typecheck` + `npm run lint` → **25 بوابة / 25 ناجحة / 0 فاشلة، typecheck ✓، lint ✓، صفر تغييرات داخل المستودع بعد التشغيل** (git status نظيف). هذا هو الدليل النهائي لإغلاق R5–R8 أعلاه.
+
+**الوسم:** `v0.2.0` على الرفعة النهائية (لا يمس `v0.1.0`).
+
+**جدول العيوب F1–F10 النهائي:** F1–F10 كلها **مغلقة** (انظر الجدول أعلاه: F1 R3، F2 R4، F3 R5، F4 R6، F5 R2، F6 R1، F7 R1، F8 R7، F9 R1، F10 R2 — كل صف بدليله).
+
+**ما يبقى على المالك (خارج نطاق التفويض — لا دمج ولا PR من الوكيل):**
+1. نقل سير العمل: `git mv tools/ci/ci.yml .github/workflows/ci.yml` (توكن بنطاق workflow — انظر tools/ci/README.md).
+2. الاعتماد البصري الكامل للحزمة (R-D13) واختبار جهاز حقيقي Samsung Galaxy S25 (المتصفح headless بديل مؤقت).
+3. قرار النضج النهائي (اقتراح الرفع إلى stable-ui وفق الأدلة أو الإبقاء للمراجعة).
+4. اختيار إطار التطبيق المضيف وقرار النشر (الحزمة خاصة، D9).
+5. الدمج إلى main وحذف الفروع القديمة (ccr-1bbe1186-fys05f، review/component-readiness-20261117، feature/google-only-access-gateway-2026-11-18) بعد المراجعة.
