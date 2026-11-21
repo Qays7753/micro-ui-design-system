@@ -23,6 +23,7 @@
 | `component-consumption-contract-check.py` | عقود استهلاك كل عائلة (API الاستخدام من المضيف). |
 | `integration-boundaries-check.py` | صفحات `previews/integration-boundaries/` (الطبقات/الحاويات/دورة الحياة). |
 | `clone-lifecycle-check.py` | ضمانات استنساخ/إزالة العناصر دون تسريب مستمعات (تمهيد لعقود المرحلة 6). |
+| `api-lifecycle-check.py` | بوابة العقد الموحد (المرحلة 6): init مرتين لا يضاعف المستمعات، و`update` (أو غيابه الموثق) يعمل بلا ازدواج، و`disconnect`/`destroy` يزيلان المستمعات — بلا أخطاء صفحة/كونسول، على ترميز أدنى منسوخ من example-usage لكل عائلة. |
 | `numeric-geometry-check.py` | هندسة القراءات الرقمية وعلامات الحالة وأمان overflow عند 390px LTR. |
 | `ui-system-showcase-check.py` | أسطح المعرض الثلاثة (`#app`/`#component-review`/`#state-lab`) وحالاتها الـ15. |
 | `preview-runtime-check.py` | صفر أخطاء JavaScript وموارد مفقودة عبر كل صفحات `previews/` و`components/*` (يتطلب `--base http://127.0.0.1:5000`؛ `check-all` يبدأ الخادم تلقائيًا). |

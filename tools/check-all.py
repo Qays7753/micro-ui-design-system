@@ -10,7 +10,8 @@ Gate set (see tools/README.md for the full classification):
   - static gates: static (light-static-check), links (link-check)
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
-    clone-lifecycle, numeric-geometry, ui-system-showcase, preview-runtime
+    clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
+    preview-runtime
   - visual regression (D12) against the baseline under
     /home/z/my-project/visual-baseline (outside the repository)
   - git diff --check
@@ -57,6 +58,7 @@ def build_gates(quick, out, skip_visual):
         ("component-consumption", PY + ["tools/component-consumption-contract-check.py"]),
         ("integration-boundaries", PY + ["tools/integration-boundaries-check.py"]),
         ("clone-lifecycle", PY + ["tools/clone-lifecycle-check.py"]),
+        ("api-lifecycle", PY + ["tools/api-lifecycle-check.py", "--out", str(out / "api-lifecycle")]),
         ("numeric-geometry", PY + ["tools/numeric-geometry-check.py"]),
         ("ui-system-showcase", PY + ["tools/ui-system-showcase-check.py"]),
         ("preview-runtime", PY + ["tools/preview-runtime-check.py",
