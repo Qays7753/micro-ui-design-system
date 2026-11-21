@@ -223,7 +223,16 @@ function writeEsmEntry(entryDir, spec) {
     : path.join(ROOT, spec.source);
   const file = path.join(entryDir, "esm", `${spec.entry}.mjs`);
   mkdirSync(path.dirname(file), { recursive: true });
-  writeFileSync(file, `export { ${spec.exports.join(", ")} } from ${JSON.stringify(source)};\n`, "utf8");
+  let prologue = "";
+  if (spec.entry === "product") {
+    // تسجيل renderers أثر جانبي مقصود — المرجع الصريح يمنع اجتثاثه مهما
+    // تغيرت إعدادات sideEffects، فلا يعمل mount بنوع غير مسجل أبدًا.
+    const ids = PRODUCT_RENDERERS.map((name, i) => `r${i}`);
+    prologue = PRODUCT_RENDERERS.map((name, i) =>
+      `import * as ${ids[i]} from ${JSON.stringify(path.join(ROOT, "components/product-context", name + ".js"))};`).join("\n")
+      + `\nvoid [${ids.join(", ")}];\n`;
+  }
+  writeFileSync(file, prologue + `export { ${spec.exports.join(", ")} } from ${JSON.stringify(source)};\n`, "utf8");
   return file;
 }
 
