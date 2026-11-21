@@ -14,14 +14,15 @@ Gate set (see tools/README.md for the full classification):
     of every entry without DOM, exports targets, tsc against the installed
     package, a Chromium importmap page with manual init, and a git install
     whose prepare builds dist/
-  - static gates: static (light-static-check), links (link-check),
-    hardcoded-text (Arabic strings in JS, labels imports, d.ts coverage)
+  - static gates: static (light-static-check), lint (eslint no-undef on
+    components/ and shared/), links (link-check), hardcoded-text (Arabic
+    strings in JS, labels imports, d.ts coverage)
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
     clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
     preview-runtime
   - visual regression (D12/R-D12) against reference captures generated from
-    a git ref (default v0.1.0) inside a temporary worktree — no baseline
+    a git ref (default v0.2.0) inside a temporary worktree — no baseline
     images or machine-specific paths outside the repository
   - git diff --check
 
@@ -52,6 +53,7 @@ def build_gates(quick, out, skip_visual):
         ("manifest", PY + ["tools/manifest-build.py", "--check"]),
         ("package", ["node", "tools/build-package.mjs", "--check"]),
         ("static", PY + ["tools/light-static-check.py"]),
+        ("lint", ["npm", "run", "lint"]),
         ("link-check", PY + ["tools/link-check.py"]),
         ("hardcoded-text", PY + ["tools/hardcoded-text-check.py"]),
         ("labels-doc", PY + ["tools/labels-doc-build.py", "--check"]),

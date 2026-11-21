@@ -64,10 +64,15 @@ def main():
                     help="tree root whose pages are captured (default: repository root)")
     ap.add_argument("--base-url", default=None,
                     help="explicit base URL; skips the built-in server")
+    ap.add_argument("--only", default=None,
+                    help="capture only pages whose path contains this substring "
+                         "(T1/G2 determinism probes; the gate always captures all)")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     tree_root = args.root.resolve()
     pages = collect_pages(tree_root)
+    if args.only:
+        pages = [p for p in pages if args.only in p]
     server = None
     if args.base_url:
         base = args.base_url.rstrip("/")
@@ -92,7 +97,18 @@ def main():
             page.on("pageerror", lambda exc: errors.append(f"{exc}"))
             for rel in pages:
                 page.goto(f"{base}/{rel}", wait_until="networkidle")
+                # T1/G2: حتمية الالتقاط — لا حركات ولا انتقالات ولا مؤشر كتابة،
+                # لا تركيز نشط، وانتظار إطارين بعد الاستقرار قبل اللقطة.
+                page.add_style_tag(content="*{animation:none!important;"
+                                            "transition:none!important;"
+                                            "caret-color:transparent!important}")
                 page.evaluate("document.fonts.ready")
+                page.evaluate(
+                    "document.activeElement && document.activeElement !== document.body"
+                    " ? document.activeElement.blur() : null")
+                page.evaluate(
+                    "new Promise(r => requestAnimationFrame("
+                    "() => requestAnimationFrame(r)))")
                 page.wait_for_timeout(250)
                 name = rel.replace("/", "__")
                 target = args.out / (name + ".png")

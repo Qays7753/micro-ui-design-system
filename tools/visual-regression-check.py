@@ -4,7 +4,7 @@ screenshots of every page (reusing tools/visual-baseline-capture.py so the
 capture method is identical), then compare each page against reference
 captures.
 
-The reference is generated from a git ref (default v0.1.0) inside a temporary
+The reference is generated from a git ref (default v0.2.0) inside a temporary
 git worktree: no baseline images live in the repository and no machine-specific
 absolute paths are involved (R-D12). If the ref tree needs a package build
 (package.json present and dist/ absent), the tool runs `node
@@ -20,7 +20,7 @@ only in the reference (deleted) are reported and do NOT fail the gate.
 
 Usage:
     uv run python tools/visual-regression-check.py --out <dir>
-        [--baseline-ref <git-ref>]   (default v0.1.0)
+        [--baseline-ref <git-ref>]   (default v0.2.0)
         [--baseline <dir>]           ready captures dir with manifest.json
                                       (overrides --baseline-ref)
 """
@@ -90,6 +90,17 @@ def reference_from_ref(ref: str, out: Path) -> Path:
         # be served faithfully (v0.1.0 tracks dist/, so no build happens there).
         if (worktree / "package.json").is_file() and not (worktree / "dist").is_dir():
             print(f"visual-regression: building package inside worktree ({ref})", flush=True)
+            # T1: مرجع لا يتتبع dist/ (v0.2.0+) يحتاج esbuild من node_modules —
+            # تُربط نسخة القراءة فقط بالروابط الصلبة من الشجرة الحالية بدل
+            # تنزيل شبكي داخل كل تشغيل (لا يتغير شيء في المرجع نفسه).
+            if not (worktree / "node_modules").is_dir() and (ROOT / "node_modules").is_dir():
+                import shutil
+                copy = getattr(__import__("os"), "link", shutil.copy2)
+                try:
+                    shutil.copytree(ROOT / "node_modules", worktree / "node_modules",
+                                    copy_function=copy)
+                except OSError:
+                    shutil.copytree(ROOT / "node_modules", worktree / "node_modules")
             run(["node", "tools/build-package.mjs"], cwd=worktree)
         return capture(worktree, out, "baseline")
     finally:
@@ -101,7 +112,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, required=True,
                     help="temp dir for the fresh captures and the JSON report")
-    ap.add_argument("--baseline-ref", default="v0.1.0",
+    ap.add_argument("--baseline-ref", default="v0.2.0",
                     help="git ref the reference captures are generated from "
                          "(default: v0.1.0)")
     ap.add_argument("--baseline", type=Path, default=None,

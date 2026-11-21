@@ -26,8 +26,9 @@
 | `api-lifecycle-check.py` | بوابة العقد الموحد (المرحلة 6): init مرتين لا يضاعف المستمعات، و`update` (أو غيابه الموثق) يعمل بلا ازدواج، و`disconnect`/`destroy` يزيلان المستمعات — بلا أخطاء صفحة/كونسول، على ترميز أدنى منسوخ من example-usage لكل عائلة. |
 | `numeric-geometry-check.py` | هندسة القراءات الرقمية وعلامات الحالة وأمان overflow عند 390px LTR. |
 | `ui-system-showcase-check.py` | أسطح المعرض الثلاثة (`#app`/`#component-review`/`#state-lab`) وحالاتها الـ15. |
+| `lint` (عبر `npm run lint`) | بوابة ESLint (قاعدة `no-undef` على `components/` و`shared/`؛ الإعداد `eslint.config.mjs`): كل متغير مستخدم معرف أو عام للمتصفح — صفر أخطاء شرطًا (N-D16/الجولة الثالثة T1). |
 | `preview-runtime-check.py` | صفر أخطاء JavaScript وموارد مفقودة عبر كل صفحات `previews/` و`components/*` (يتطلب `--base http://127.0.0.1:5000`؛ `check-all` يبدأ الخادم تلقائيًا). |
-| `visual-regression-check.py` | بوابة D12/R-D12: التقاط 360×780 RTL Light لكل صفحة (بإعادة استخدام `visual-baseline-capture.py`) ومقارنة بكسل-بكسل مع مرجع يُولَّد من git ref (الافتراضي `v0.1.0`) داخل worktree مؤقت؛ نجاح الصفحة عند اختلاف ≤ 0.1% من البكسلات، والاستثناءات المسموحة في `baselines/visual-allowlist.json` (≤ 15% مع سبب وقرار). |
+| `visual-regression-check.py` | بوابة D12/R-D12: التقاط 360×780 RTL Light لكل صفحة (بإعادة استخدام `visual-baseline-capture.py`) ومقارنة بكسل-بكسل مع مرجع يُولَّد من git ref (الافتراضي `v0.2.0`) داخل worktree مؤقت؛ نجاح الصفحة عند اختلاف ≤ 0.1% من البكسلات، والاستثناءات المسموحة في `baselines/visual-allowlist.json` (≤ 15% مع سبب وقرار). |
 
 ## (ب) أدوات البناء والتشغيل
 
