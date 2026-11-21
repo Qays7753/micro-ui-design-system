@@ -21,7 +21,9 @@
 
 **الملفات الأساسية:** `tools/baselines/identity.json`، `tools/baselines/fields-baseline.js`، `tools/extract-identity-baselines.py`، `tools/light-static-check.py`، `tools/light-release-check.py`، `tools/light-evidence-capture.py`، `tools/product-context-check.py`، `.gitignore`، `README.md`.
 
-**commit:** `<يُستكمل بعد الرفع>`
+**commits:** `cf921d7` (فك الاعتماد) + `96c5129` (إعادة توليد MANIFEST بعد تغيّر بصمات الأدوات، ومعالجة فحص النسب على shallow).
+
+**قبول shallow:** اختُبرت نسخة `git clone --depth 1` + جلب فرع العمل: static 199/199، manifest/catalog/standalone --check، product-context 250/250، audit 67/67، و`git status` نظيف بعد التشغيل. فحص النسب (merge-base) غير قابل للتحقق في shallow (لا تاريخ مشترك بين grafts) — يبقى صارمًا في النسخ الكاملة وCI ويُوثَّق تخطيه في shallow بعبارة صريحة في نتيجة الفحص.
 
 **نتائج البوابات:** static 198/198 · audit 67/67 · product-context 250/250 · light-release 35/35 · mobile-experience 49/49 · catalog/manifest/standalone `--check` ناجحة. `git status` نظيف بعد التشغيل.
 
