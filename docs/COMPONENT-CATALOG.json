@@ -598,6 +598,26 @@
         "organization"
       ],
       "api": "MicroProduct"
+    },
+    {
+      "id": "access-gateway-screens",
+      "contract": "C13",
+      "name": "Access gateway screens",
+      "maturity": "draft-for-review",
+      "preview": "components/access-gateway/google-sign-in-usage.html",
+      "source": [
+        "components/access-gateway/auth-screens.css",
+        "components/access-gateway/splash-usage.html",
+        "components/access-gateway/google-sign-in-usage.html",
+        "components/access-gateway/new-user-welcome-usage.html",
+        "components/access-gateway/returning-user-welcome-usage.html",
+        "components/access-gateway/specification.md"
+      ],
+      "baseFamilies": [
+        "buttons"
+      ],
+      "optionalFamilies": [],
+      "api": null
     }
   ]
 }

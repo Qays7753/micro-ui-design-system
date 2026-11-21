@@ -1,4 +1,4 @@
-الجولة الحالية على Feature: [تجهيز تراكيب بوابة الدخول الأربع](superpowers/plans/2026-11-21-auth-screen-compositions.md)، على `feature/google-only-access-gateway-2026-11-18` فوق `origin/main` عند `91744a5`. فحص `python3 tools/mobile-experience-check.py --phase login --out /tmp/auth-screen-check` نجح 65/65 في Chromium عند 360×780 RTL؛ وفُحص 320×780 للفيض فقط. اللقطات المؤقتة تحت `/tmp/auth-screen-check/`. لا ادعاء باختبار جهاز أو WebKit/Safari أو GIS/OAuth حقيقي أو قارئ شاشة، ولا دمج إلى main أو وصول إلى مستودع Micro.
+الجولة الحالية على Feature: [تجهيز تراكيب بوابة الدخول الأربع](plans/access-gateway-2026-11-18/auth-screen-compositions.md)، على `feature/google-only-access-gateway-2026-11-18` فوق `origin/main` عند `91744a5`. فحص `python3 tools/mobile-experience-check.py --phase login --out /tmp/auth-screen-check` نجح 65/65 في Chromium عند 360×780 RTL؛ وفُحص 320×780 للفيض فقط. اللقطات المؤقتة تحت `/tmp/auth-screen-check/`. لا ادعاء باختبار جهاز أو WebKit/Safari أو GIS/OAuth حقيقي أو قارئ شاشة، ولا دمج إلى main أو وصول إلى مستودع Micro.
 
 # الحالة الحالية — مكتبة Micro UI
 

@@ -26,10 +26,27 @@
             <span class="m-auth-screen__provider-placeholder" data-preview-placeholder>مكان زر Google الرسمي</span>
           </div>
         </div>
-        <p class="m-auth-screen__status" data-access-status role="status" aria-live="polite" hidden></p>
+        <p class="m-auth-screen__status" data-access-status role="status" aria-live="polite"></p>
       </div>
     </section>
   </main>
-  <!-- المضيف وحده يحمّل Google Identity Services ويرسم الزر الرسمي في الموضع أعلاه. -->
+  <!-- المضيف وحده يحمّل Google Identity Services ويرسم الزر الرسمي في الموضع أعلاه.
+       حالات الشاشة يقودها المضيف: يضبط data-auth-state ويكتب نص الحالة. السكربت
+       أدناه محاكاة مضيف للعرض فقط؛ لا توجد أي حالة أو منطق داخل المكتبة. -->
+  <script>
+    (() => {
+      const messages = {
+        'loading': 'جارٍ التحقق من حسابك\u2026',
+        'error-network': 'تعذّر الاتصال بالخدمة. تحقّق من اتصالك ثم حاول مجددًا.',
+        'error-cancelled': 'أُلغيت عملية تسجيل الدخول.',
+        'error-auth': 'تعذّر التحقق من هويتك. حاول مجددًا.',
+      };
+      const state = new URLSearchParams(location.search).get('state');
+      if (state && messages[state]) {
+        document.querySelector('.m-auth-screen').dataset.authState = state;
+        document.querySelector('[data-access-status]').textContent = messages[state];
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -36,3 +36,32 @@
 **المؤجلات:** لا شيء في هذه المرحلة.
 
 **ما لم يُختبر:** لا تغيير على المتصفحات/الأجهزة عن السابق (Chromium فقط، D20).
+
+## المرحلة 1 — دمج الفروع وشاشات الدخول ✅
+
+**ما نُفّذ:**
+
+1. **D3:** نُقلت خطة جاهزية المكونات إلى `docs/plans/component-readiness-2026-11-17/PLAN.md` (من فرع المراجعة، آخر نسخة self-contained).
+2. **D2:** cherry-pick بالترتيب `6ec5fac` → `692b188` → `2462307`. تعارض MANIFEST حُل بإعادة التوليد؛ تعديلات الفرع على `AGENTS.md`/`DESIGN.md` أُسقطت كاملة (حتى ما دُمج تلقائيًا)، وأضيفت فقرة «حدود بوابة الدخول» إلى `DESIGN.md`.
+3. نُقلت `docs/superpowers/plans/*` إلى `docs/plans/access-gateway-2026-11-18/` وحُذف `docs/superpowers/` وحُدّث الرابط الوحيد في `CURRENT-STATE.md`. لا نص superpowers حيًّا في الشجرة.
+4. **مطابقة الشاشات الأربع مع المرجع** (`docs/references/micro-auth/` — tokens/svg/previews): الشاشات من D2 مطابقة بنيويًا (الأشكال، التسلسل، المحتوى). حُسمت التعارضات المعتمدة:
+   - زر «ابدأ الآن» صار بتروليًا أساسيًا `m-btn--primary` (المرجع تراكوتا — مسجل في DECISIONS).
+   - أهداف اللمس 48px، حالة الضغط وخطوط السلالم وأنصاف الأقطار من توكنز المستودع فقط؛ صفر قيم لونية/حجمية مكتوبة في `auth-screens.css`.
+   - موضع Google `data-google-provider-slot` بإطار منقّط دون مضيف؛ روابط الشروط/الخصوصية غائبة افتراضيًا.
+5. **حالات الشاشة 2:** `data-auth-state="loading|error-network|error-cancelled|error-auth"` على جذر الشاشة تعرض منطقة الحالة `[data-access-status]` (role=status، aria-live=polite) بنص يكتبه المضيف؛ حالات الخطأ بلون الخطر؛ نبض التحميل يُلغى مع `prefers-reduced-motion`؛ لا منطق محلي ولا انتقال لأي ترحيب. المثال `?state=…` محاكاة مضيف موثقة.
+6. **C13** في الكتالوج: تركيب `access-gateway-screens` بحالة `draft-for-review`؛ أعيد بناء الفهرس وpayload المعرض وstandalone وMANIFEST.
+7. **فحص login** وُسّع بـ28 حالة تغطي الحالات الأربع (نص ظاهر، aria-live، بقاء شاشة الدخول، لون الخطر، لا overflow عند 360 و320).
+
+**الملفات الأساسية:** `components/access-gateway/auth-screens.css`، `google-sign-in-usage.html`، `new-user-welcome-usage.html`، `returning-user-welcome-usage.html`، `specification.md`، `docs/COMPONENT-CATALOG.json`، `tools/mobile-experience-check.py`، `docs/DECISIONS.md`، `docs/plans/access-gateway-2026-11-18/`.
+
+**commits:** `210f2c1` (D3) + `ffabbb7`/`7e30892`/`5aa47d1` (D2 cherry-picks) + commit هذه التسوية.
+
+**نتائج البوابات:** static 225/225 · audit 67/67 · product-context 250/250 · light-release 35/35 · mobile-experience 126/126 (منها login 88) · catalog 14 عائلة/8 متغيرات/13 تركيبًا · standalone/manifest --check ناجحة.
+
+**القبول:** فحص login ناجح بكل حالاته ✓؛ الكتالوج 14/8/13 ✓؛ لا نص superpowers ولا رابط مكسور ✓.
+
+**الافتراضات:** مسجلة في `docs/DECISIONS.md` (البند 1 من المرحلة 1) — أبرزها فروق المقاسات الموثقة عن المرجع.
+
+**المؤجلات:** لا شيء.
+
+**ما لم يُختبر:** معاينة PNG المرجعية بصريًا داخل بيئة التنفيذ (لا تدعم قراءة الصور)؛ اعتمدت المطابقة على مصادر المرجع النصية (tokens JSON وSVG) وعلى فحوص D2 الأصلية. الاعتماد البصري النهائي على المالك.

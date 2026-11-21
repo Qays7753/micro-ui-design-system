@@ -95,4 +95,6 @@
 
 `[data-auth-account]` و`[data-auth-user-name]` و`[data-auth-user-email]` و`[data-auth-user-initial]` slots اختيارية، وتظل منطقة الحساب مخفية ما لم يمرر المضيف معلومات حقيقية. أفعال `[data-auth-action="continue"]` و`[data-auth-action="use-another-account"]` عناصر UI فقط؛ المضيف يربطها بالتطبيق. لا توجد بيانات اسم/بريد في أمثلة المصدر.
 
+حالات الشاشة الثانية يقودها المضيف عبر `data-auth-state="loading|error-network|error-cancelled|error-auth"` على جذر `.m-auth-screen`: تظهر منطقة الحالة `[data-access-status]` بوجود الخاصية غير الفارغة، وتأخذ حالات الخطأ لون الخطر، وحالة التحميل نبضًا نصيًا خفيفًا يُلغى مع `prefers-reduced-motion`. المضيف يملك النص والانتقالات؛ لا تؤقت المكتبة ولا تخفي موضع المزود ولا تنتقل إلى أي شاشة ترحيب عند الخطأ. أمثلة النصوص في `google-sign-in-usage.html?state=...` محاكاة مضيف للعرض فقط، وليست قاموس رسائل المكتبة.
+
 ترتيب التحميل لتراكيب الصفحات: `fonts.css` ثم `tokens.css` ثم `buttons.css` ثم `auth-screens.css`؛ شاشتا الترحيب تحملان `shared/icons.js` لعلامة التحقق المحلية. زر GIS لا يُعاد رسمه أو تنسيقه من داخل slot. يحتفظ التركيب العام وملفات `access-gateway.js`, `access-gateway.css`, `welcome.css` بعقودها الحالية.

@@ -65,6 +65,18 @@ def auth_screens(p,base,out,check):
    check('Google sign-in has no secondary method or unowned links',p.locator('a,input,[data-access-provider]').count()==0)
    check('Google sign-in uses the approved copy',p.locator('#signin-title').inner_text()=='أهلًا بك' and 'إدارة أعمالك من مكان واحد' in p.locator('.m-auth-screen__description').inner_text())
    p.screenshot(path=str(out/'auth-google-signin360.png'))
+   for state in ['loading','error-network','error-cancelled','error-auth']:
+    p.goto(url+'?state='+state);p.evaluate('document.fonts.ready')
+    status=p.locator('[data-access-status]')
+    check('Sign-in state '+state+' shows host status text',status.is_visible() and len(status.inner_text().strip())>0)
+    check('Sign-in state '+state+' announces through a live region',status.get_attribute('role')=='status' and status.get_attribute('aria-live')=='polite')
+    check('Sign-in state '+state+' stays on the entry screen',p.url.endswith('?state='+state) and p.locator('.m-auth-screen--welcome,.m-auth-screen--new-user,.m-auth-screen--returning-user').count()==0 and p.locator('h1').inner_text()=='أهلًا بك')
+    if state.startswith('error-'):
+     check('Sign-in state '+state+' uses the danger tone',status.evaluate('(e)=>getComputedStyle(e).color')=='rgb(251, 234, 236)')
+    check('Sign-in state '+state+' has no horizontal overflow at 360px',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+    p.set_viewport_size({'width':320,'height':780})
+    check('Sign-in state '+state+' has no horizontal overflow at 320px',p.evaluate('document.documentElement.scrollWidth===innerWidth'))
+    p.set_viewport_size({'width':360,'height':780})
   else:
    expected='مرحبًا بك في Micro' if screen=='new-user' else 'أهلًا بعودتك'
    check(screen+' preserves its distinct welcome heading',p.locator('h1').inner_text()==expected)
