@@ -2,7 +2,7 @@
 
 ## الإصدار
 
-الحزمة قيد التجهيز باسم `@micro/ui` إصدار `0.1.0` (Vanilla بدون إطار؛ راجع [CHANGELOG.md](../CHANGELOG.md) عند اكتمال التوزيع). المصدر القابل للتعديل في `components/` و`shared/` و`assets/` هو التسليم الأساسي.
+الحزمة `@micro/ui` إصدار `0.1.0` جاهزة (Vanilla بدون إطار؛ `private: true` — لا نشر دون قرار المالك، D9): `dist/` حتمي و`src/` مرآة و`examples/vanilla-app` — التفاصيل في [CHANGELOG.md](../CHANGELOG.md) و[GETTING-STARTED.md](GETTING-STARTED.md). المصدر القابل للتعديل في `components/` و`shared/` و`assets/` هو التسليم الأساسي، و`tools/check-all.py` (22 بوابة) هو مسار التحقق الواحد.
 
 ## النضج الحالي
 
@@ -10,18 +10,24 @@
 
 - العائلات: `stable-ui` ما عدا `order-schedule` و`carousel` (`draft-for-review`).
 - المتغيرات: donut/bubbles/main-metric-featured/metric-circles/info-strip-peek (`stable-ui`)، data-readable/metric-readable (`draft-for-review`)، packed-circle (`proposed`).
-- التراكيب C01–C13 كلها `draft-for-review`؛ لا ترقية نضج آلية، والاعتماد البصري قرار مالك منفصل.
+- التراكيب C01–C14 كلها `draft-for-review` (C14 Manage جديدة، وC09/C12 تغطيان أنماط results/queue)؛ لا ترقية نضج آلية، والاعتماد البصري قرار مالك منفصل.
 
 ## الفجوات المعروفة
 
-مسجلة في [خطة جاهزية المكونات](plans/component-readiness-2026-11-17/PLAN.md): تركيب Manage (C14)، عرض نتائج بحث Market في C09، وقائمة مراجعة متعددة العناصر في C12 — تُسد في المرحلة 8 من [خطة الربط](plans/integration-readiness-2026-11-21/PLAN.md).
+لا فجوات وظيفية معروفة مفتوحة: فجوات خطة الجاهزية الثلاث (C14 Manage، نتائج بحث C09، قائمة مراجعة C12) سُدّت في المرحلة 8 من [خطة الربط](plans/integration-readiness-2026-11-21/PLAN.md) بفحوص تغطيها (306 حالة product-context). ما دون ذلك مؤجلات قرار (أدناه) لا فجوات سلوك.
+
+## المرحلة 9 — ملغاة (D7)
+
+لا طبقات إطار في هذه الجولة: wrappers إطارات التطبيق (React/Vue) مؤجلة لحين تحديد التطبيق المستهدف؛ القرار D7 نهائي لهذه الخطة.
 
 ## المؤجلات
 
-- wrappers إطارات التطبيق (React/Vue) مؤجلة لحين تحديد التطبيق (قرار D7).
+- wrappers إطارات التطبيق (React/Vue) مؤجلة لحين تحديد التطبيق (D7 — المرحلة 9 ملغاة).
 - الاعتماد البصري النهائي ومعاينة Samsung Galaxy S25/Chrome الفعلية على المالك.
 - قائمة مهام السائق غير مطلوبة (D19)؛ قائمة المراجعة صُممت لقابلية إعادة الاستخدام.
+- تركيب سير عمل CI في `.github/workflows/` من `tools/ci/ci.yml` (التوكن الحالي بلا نطاق workflow).
+- خيارات `options.labels` لكل نسخة في Carousel/Picker (init بلا معامل خيارات — setLabels على مستوى الصفحة في 0.x).
 
 ## ما لم يُختبر
 
-Safari/WebKit، الأجهزة الفعلية (بينها Samsung Galaxy S25/Chrome)، اللمس الحقيقي، قارئات الشاشة، safe areas، native zoom، forced-colors — «غير مختبرة»؛ الفحص الآلي Chromium/Playwright فقط. التفصيل في [TESTING.md](../docs/TESTING.md) و[DECISIONS.md](../docs/DECISIONS.md).
+Safari/WebKit، الأجهزة الفعلية (بينها Samsung Galaxy S25/Chrome)، اللمس الحقيقي، قارئات الشاشة، safe areas، native zoom، forced-colors — «غير مختبرة»؛ الفحص الآلي Chromium/Playwright فقط. التفصيل في [TESTING.md](TESTING.md) و[DECISIONS.md](DECISIONS.md).
