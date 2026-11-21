@@ -34,7 +34,7 @@
    لا شبكة ولا retry منطقي داخل المكوّن — إعادة المحاولة عند المستهلك.
    ========================================================= */
 
-import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { currentInstanceLabels, getLabel, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -45,16 +45,13 @@ registerLabels('messages', familyDefaults);
 var MICRO_LABELS_FAMILY = 'messages';
   /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
      لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
-  var renderLabels = null;
   function L(key, el) {
-    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
   function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try { return fn(); } finally { renderLabels = previous; }
+    return withFamilyLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === 'object') {

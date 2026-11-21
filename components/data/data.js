@@ -83,7 +83,7 @@
    ========================================================= */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, instanceLabelFor, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { currentInstanceLabels, getLabel, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -94,16 +94,13 @@ registerLabels('data', familyDefaults);
 var MICRO_LABELS_FAMILY = 'data';
   /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
      لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
-  var renderLabels = null;
   function L(key, el) {
-    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
   function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try { return fn(); } finally { renderLabels = previous; }
+    return withFamilyLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === 'object') {
@@ -168,8 +165,8 @@ var MICRO_LABELS_FAMILY = 'data';
   function readingOf(item) {
     /* R-04/R-18 (2026-10-25): حالات القيمة بصيغة الأقواس الموحدة، لا شرطة
        em — الشرطة تبقى ترميزًا مرسومًا للقيمة المفقودة داخل الرسم فقط */
-    if (item.value === null) return item.invalid ? L('value.invalid', item) : L('value.unavailable', item);
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L('value.negativeUnplottedSuffix', item);
+    if (item.value === null) return item.invalid ? L('value.invalid') : L('value.unavailable');
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L('value.negativeUnplottedSuffix');
     return item.display || item.rawValue || fmt(item.value);
   }
 
@@ -312,7 +309,7 @@ var MICRO_LABELS_FAMILY = 'data';
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix', item)));
+      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix')));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -1032,7 +1029,7 @@ var MICRO_LABELS_FAMILY = 'data';
       number.dir = 'ltr';
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix', item)));
+      if (item.outlier) value.appendChild(document.createTextNode(L('value.outlierSuffix')));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -1385,7 +1382,7 @@ var MICRO_LABELS_FAMILY = 'data';
       /* 2026-10-25: نفس تصنيف الجدول — المشوه بقراءته الخام، والمفقود مجهول */
       val.textContent = (it.value === null)
         ? (it.invalid ? String(it.rawValue) + L('donut.invalidValueSuffix') : L('value.unavailable'))
-        : fmt(it.value) + L('donut.invalidShareSuffix', it);
+        : fmt(it.value) + L('donut.invalidShareSuffix');
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -1437,7 +1434,7 @@ var MICRO_LABELS_FAMILY = 'data';
       return L('value.unavailable');
     }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0 && !it.signed) return base + L('value.negativeUnplottedSuffix', it);
+    if (it.value < 0 && !it.signed) return base + L('value.negativeUnplottedSuffix');
     return it.outlier ? base + L('value.outlierSuffix') : base;
   }
 
@@ -1708,7 +1705,7 @@ var MICRO_LABELS_FAMILY = 'data';
     var full = valueStateText(it);
     var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue)
       : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
-    if (donut && it.value !== null && it.value < 0) full = raw + L('donut.invalidShareSuffix', it);
+    if (donut && it.value !== null && it.value < 0) full = raw + L('donut.invalidShareSuffix');
     if (raw === null) parent.appendChild(readingNode('span', null, full));
     else {
       var bdi = readingNode('bdi', null, it.value !== null && it.display ? it.display : raw);
@@ -1825,7 +1822,7 @@ var MICRO_LABELS_FAMILY = 'data';
     items.forEach(function (it) {
       var row = readingNode('div'); row.appendChild(readingNode('dt', null, fullLabelOf(chart, it)));
       var value = readingNode('dd'); appendReadableValue(value, it, chart.getAttribute('data-chart') === 'donut');
-      appendReadingUnit(value, it.unit || L('reading.unitUnspecified', it));
+      appendReadingUnit(value, it.unit || L('reading.unitUnspecified'));
       if (it.period) value.appendChild(readingNode('span', 'm-chart__reading-period', ' · ' + it.period));
       row.appendChild(value); list.appendChild(row);
     });

@@ -34,9 +34,10 @@ BODY = '''
 <div class="m-access-gateway"><button class="m-access-gateway__link" type="button" data-access-recovery>نسيت كلمة المرور؟</button></div>
 <div class="m-chart" data-chart="bars" data-value-domain="signed" id="signed"><h2 class="m-chart__title">قيم موقعة</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="سالب" data-value="-60"></li><li data-series="a" data-label="صفر" data-value="0"></li><li data-series="a" data-label="مفقود"></li><li data-series="a" data-label="مشوه" data-value="12oops"></li></ul><div data-plot></div><p data-chart-summary></p></div>
 <div class="m-main-metric m-main-metric--flat" data-main-comparison data-common-unit="طلب" data-common-period="اليوم" id="metric"><h2 class="m-main-metric__title">مقارنة</h2><div class="m-main-metric__hero"><span class="m-main-metric__label">قيمة رئيسية</span><span class="m-main-metric__number">18</span><span class="m-main-metric__unit">طلب</span></div><ul data-bar-source hidden><li data-series="a" data-label="سالب" data-value="-9" data-unit="طلب" data-period="اليوم"></li><li data-series="a" data-label="صفر" data-value="0" data-unit="طلب" data-period="اليوم"></li><li data-series="a" data-label="مشوه" data-value="12oops" data-unit="طلب" data-period="اليوم"></li></ul><ul class="m-main-metric__rows" data-bar-items></ul><p data-bar-status></p></div>
-<div class="m-metric-circles" data-metric-circles data-layout="separated" id="circles"><h2 class="m-metric-circles__title">دوائر</h2><ul data-metric-source hidden><li data-series="a" data-label="سالب" data-value="-5" data-unit="طلب"></li><li data-series="a" data-label="موجب" data-value="10" data-unit="طلب"></li></ul><ol data-metric-items></ol><ul data-metric-fallback></ul><p data-metric-empty hidden></p><p data-metric-scale></p></div>
+<div class="m-metric-circles" data-metric-circles data-layout="separated" id="circles"><h2 class="m-metric-circles__title">دوائر</h2><ul data-metric-source hidden><li data-series="a" data-label="سالب" data-value="-5" data-unit="طلب"></li><li data-series="a" data-label="موجب" data-value="10" data-unit="طلب"></li><li data-series="b" data-label="فاسد" data-value="oops" data-unit="طلب"></li></ul><ol data-metric-items></ol><ul data-metric-fallback></ul><p data-metric-empty hidden></p><p data-metric-scale></p></div>
 <div class="m-chart m-chart--packed" data-chart="bubbles" data-chart-packed id="packed"><h2 class="m-chart__title">مساحات اختيارية</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="سالب" data-value="-5"></li><li data-series="a" data-label="موجب" data-value="10"></li></ul><div data-plot></div><p data-chart-summary></p></div>
 <div class="m-chart" data-chart="line" data-value-domain="signed" data-axis-type="time" id="time"><h2 class="m-chart__title">زمن معلن</h2><ul class="m-chart__data" hidden><li data-series="a" data-label="قراءة صباحية" data-x="2026-01-02" data-value="-20"></li><li data-series="a" data-label="قراءة مسائية" data-x="2026-02-13" data-value="40"></li></ul><div data-plot></div><p data-chart-summary></p></div>
+<div data-filter-panel id="filters"><h2>تصفية النتائج</h2><label class="m-choice"><input type="checkbox" data-filter-key="status"><span>الحالة النشطة</span></label><p data-filter-summary></p><button type="button" class="m-btn" data-filter-apply>تطبيق</button></div>
 <div class="m-toast" id="toast" data-return-focus="#opener" hidden><span class="m-toast__text">تأكيد غير حرج</span><button class="m-btn" data-toast-close>إغلاق</button><button class="m-btn" id="toast-second">إجراء محلي</button></div>
 '''
 FIXTURE = ('<!doctype html><html lang="ar" dir="rtl" data-theme="light"><head><meta charset="utf-8">'
@@ -155,6 +156,14 @@ def main():
 
             check('data table retains invalid raw input and state', '12oops' in page.locator('#signed table').inner_text() and 'قيمة غير صالحة' in page.locator('#signed table').inner_text())
             check('metric table retains zero and Arabic state', '0 (صفر)' in page.locator('#metric table').inner_text())
+            # مسارات كانت مكسورة بكشوفها ESLint no-undef (قرار المالك بعد مراجعة c573118)
+            circles_text = page.locator('#circles').inner_text()
+            check('circles invalid value without display/raw renders invalid text, no throw',
+                  'قيمة غير صالحة' in circles_text, circles_text[:80])
+            page.evaluate("const cb=document.querySelector('#filters input[data-filter-key]');cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))")
+            summary = page.locator('#filters [data-filter-summary]').inner_text()
+            check('filter panel change updates summary (no-undef target path)',
+                  'الجاري' in summary, summary)
             page.evaluate("document.documentElement.dir='rtl'")
             page.locator('#metric').screenshot(path=str(out / 'signed-table.png'))
             page.clock.install()

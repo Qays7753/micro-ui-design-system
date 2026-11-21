@@ -23,6 +23,8 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
       - run: uv run playwright install --with-deps chromium
+      - name: فحص no-undef (lint)
+        run: npm run lint
       - name: كل البوابات (بلا --skip-visual)
         run: uv run python tools/check-all.py
       - name: فحص الأنواع

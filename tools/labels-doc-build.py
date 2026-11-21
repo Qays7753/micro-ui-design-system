@@ -48,7 +48,7 @@ def build():
         if not count:
             lines.append('| — | لا مفاتيح حاليًا | — |')
         lines.append('')
-    return '\n'.join(lines) + '\n'
+    return '\n'.join(lines).rstrip('\n') + '\n'
 
 
 def main():

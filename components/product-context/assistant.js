@@ -1,22 +1,19 @@
 /* C11 (assistant) — محادثة Ask Micro محدودة النطاق: messages/draft/retry
    وproposal بتأكيد إلزامي. لا AI أو تفسير أوامر من النص. */
 import { register } from './product-core.js';
-import { instanceLabelFor, instanceLabelsOf, getLabel } from '../../shared/labels.js';
+import { currentInstanceLabels, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, getLabel, setInstanceLabels } from '../../shared/labels.js';
 import { scriptBase } from '../../shared/script-base.js';
 
 var MICRO_LABELS_FAMILY = 'product-context';
 /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
    لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
-var renderLabels = null;
 function L(key, el) {
-  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || currentInstanceLabels(MICRO_LABELS_FAMILY);
   if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
 }
 function withLabels(scope, fn) {
-  var previous = renderLabels;
-  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-  try { return fn(); } finally { renderLabels = previous; }
+  return withFamilyLabels(scope, MICRO_LABELS_FAMILY, fn);
 }
 function applyInstanceLabels(scope, options) {
   if (options && options.labels && typeof options.labels === 'object') {
@@ -151,13 +148,13 @@ export function render(ctx) {
   if (model.proposal) {
     var box = node('section', 'm-product__surface');
     box.append(node('h3', 'm-product__title', L('assistant.proposalTitle')), node('p', '', model.proposal.summary));
-    ctx.button(box, 'execute', model.proposal.label || L('assistant.proposalActionFallback', box), { proposalId: model.proposal.id, revision: model.proposal.revision }, { confirm: true, description: model.proposal.summary });
+    ctx.button(box, 'execute', model.proposal.label || L('assistant.proposalActionFallback'), { proposalId: model.proposal.id, revision: model.proposal.revision }, { confirm: true, description: model.proposal.summary });
     root.appendChild(box);
   }
 
   var composer = node('div', 'm-product__section m-assistant__composer');
   var input = ctx.field(composer, 'message', L('assistant.messageField'), { multiline: true, rows: 1 });
-  ctx.button(composer, 'send', L('assistant.sendAction', composer), function () { return ctx.fieldsPayload(['message']); }, { primary: true, disabled: !!model.replyPending });
+  ctx.button(composer, 'send', L('assistant.sendAction'), function () { return ctx.fieldsPayload(['message']); }, { primary: true, disabled: !!model.replyPending });
   root.appendChild(composer);
 
   function grow() {

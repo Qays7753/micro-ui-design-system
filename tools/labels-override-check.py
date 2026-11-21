@@ -163,6 +163,32 @@ function appears(root, text) {{
     record(family + ': setLabels يغيّر الافتراضي العام', setC, null);
     [a, b, c].forEach(r => r.closest('div') ? r.closest('div').remove() : r.remove());
   }}
+  /* ج (قرار المالك): applyInstanceLabels يعمل عبر كل renderer للمنتج — السجل
+     المشترك في shared/labels.js يقرأه النواة وrenderers معًا */
+  const RENDERERS = {{
+    context: {{key: 'context.accountFallback', destination: 'delivery'}},
+    market: {{key: 'market.listingTitle', destination: 'market'}},
+    delivery: {{key: 'delivery.title', destination: 'delivery'}},
+    review: {{key: 'review.itemTitle', destination: 'market'}},
+    manage: {{key: 'manage.title', destination: 'manage'}},
+    assistant: {{key: 'assistant.sendAction', destination: 'ask'}},
+  }};
+  const productApi = await import('/dist/esm/product.js');
+  const OWNER = {{contextId: 'lo', workspaceId: 'lw', roleId: 'owner', kind: 'business', label: 'ورشة'}};
+  for (const [type, rcfg] of Object.entries(RENDERERS)) {{
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const model = {{
+      type, scope: OWNER, dataContext: OWNER, phase: 'ready', connection: 'online',
+      destination: rcfg.destination, permissions: ['view', 'compose', 'reauth', 'recheck'],
+      revision: 'r-override', messages: [], labels: {{ [rcfg.key]: 'طبقة-' + type }},
+    }};
+    productApi.init(root, model);
+    await new Promise(r => setTimeout(r, 80));
+    record('product/' + type + ': applyInstanceLabels عبر السجل المشترك', appears(root, 'طبقة-' + type), rcfg.key);
+    root.remove();
+  }}
+  window.__gateDone = true;
 }})();
 </script></body></html>"""
 
@@ -198,7 +224,8 @@ def main():
         page.on('console', lambda m: errors.append('console: ' + m.text) if m.type == 'error' else None)
         page.goto(f'http://127.0.0.1:{server.server_port}/labels-override.html')
         page.wait_for_load_state('networkidle')
-        page.wait_for_timeout(1800)
+        page.wait_for_function('window.__gateDone === true', timeout=20000)
+        page.wait_for_timeout(150)
         results = page.evaluate('window.__gateResults')
         page_console = page.evaluate('window.__gateConsole')
         browser.close()

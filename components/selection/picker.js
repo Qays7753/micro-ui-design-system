@@ -3,7 +3,7 @@
    init/disconnect are repeatable; destroy releases instance state, not host data. */
 
 import { globalApi } from '../../shared/integrations.js';
-import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { currentInstanceLabels, getLabel, instanceLabelFor, registerLabels, setInstanceLabels, setLabels as setFamilyLabels, withLabels as withFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 import { instanceRegistry } from '../../shared/lifecycle.js';
 
@@ -15,26 +15,18 @@ registerLabels('selection', familyDefaults);
   /* R5 — تخصيص لكل instance: init(root, {labels}) يخزن طبقة لجذر التهيئة،
      وقراءة النص تحلها أولًا (من سياق عنصر عبر الأجداد أو من سياق التصيير
      الجاري) ثم من سجل العائلة العام. setLabels(partial) يبقى للسجل العام. */
-  var overlayLabels = new WeakMap();
-  var renderLabels = null;
-  function overlayFor(el) {
-    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
-      if (overlayLabels.has(node)) return overlayLabels.get(node);
-    }
-    return null;
-  }
   function L(key, el) {
-    var own = (el && overlayFor(el)) || renderLabels;
+    var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
   function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = overlayLabels.get(scope) || null;
-    try { return fn(); } finally { renderLabels = previous; }
+    return withFamilyLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
-    if (options && options.labels && typeof options.labels === 'object') overlayLabels.set(scope, options.labels);
+    if (options && options.labels && typeof options.labels === 'object') {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var states = new WeakMap();
 

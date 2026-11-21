@@ -51,9 +51,40 @@ export function instanceLabelsOf(root, family) {
 }
 
 export function instanceLabelFor(el, family) {
+  /* عقد R5-ب (قرار المالك): السياق الثاني في L(key, ctx) عنصر DOM أو undefined
+     فقط. أي قيمة أخرى (نص/رقم/كائن بيانات) خطأ استدعاء يُبلَّغ في الكونسول
+     ويُهمل السياق (تسقط القراءة إلى سياق التصيير الجاري ثم السجل العام). */
+  if (el != null && !(el instanceof Node)) {
+    console.error('[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:', el);
+    return null;
+  }
+  if (!el) return null;
   for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
     var own = instanceLabelsOf(node, family);
     if (own) return own;
+  }
+  return null;
+}
+
+/* R5-ب: مكدس سياق التصيير الجاري — مشترك بين كل ملفات العائلة (النواة
+   وrenderers معًا): withLabels يضبط طبقة العائلة للجذر أثناء التصيير،
+   وcurrentInstanceLabels تجدها لأي ملف يقرأ نصوص العائلة نفسها. */
+var renderStack = [];
+
+export function withLabels(root, family, fn) {
+  var own = instanceLabelsOf(root, family);
+  renderStack.push(own ? { family: family, labels: own } : null);
+  try {
+    return fn();
+  } finally {
+    renderStack.pop();
+  }
+}
+
+export function currentInstanceLabels(family) {
+  for (var i = renderStack.length - 1; i >= 0; i--) {
+    var entry = renderStack[i];
+    if (entry && entry.family === family) return entry.labels;
   }
   return null;
 }

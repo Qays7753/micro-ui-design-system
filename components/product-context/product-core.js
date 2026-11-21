@@ -2,7 +2,7 @@
    الجولة الثانية R2 (F10): وحدة ES modules مقروءة — سطر لكل تعليمة، بلا
    غلاف IIFE ولا تهيئة تلقائية (R-D2/R-D3). العقود كما هي دون تغيير سلوك. */
 import { globalApi } from '../../shared/integrations.js';
-import { instanceLabelFor, instanceLabelsOf, getLabel, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
+import { currentInstanceLabels, instanceLabelFor, withLabels as withFamilyLabels, instanceLabelsOf, getLabel, registerLabels, setInstanceLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
 
 registerLabels('product-context', familyDefaults);
@@ -10,16 +10,13 @@ registerLabels('product-context', familyDefaults);
 var MICRO_LABELS_FAMILY = 'product-context';
 /* R5 — تخصيص لكل instance عبر السجل المشترك (shared/labels.js): الخريطة
    لكل (جذر، عائلة) فيقرأ النواة وrenderers العائلة الطبقة نفسها. */
-var renderLabels = null;
 function L(key, el) {
-  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || renderLabels;
+  var own = (el && instanceLabelFor(el, MICRO_LABELS_FAMILY)) || currentInstanceLabels(MICRO_LABELS_FAMILY);
   if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
   return getLabel(MICRO_LABELS_FAMILY, key);
 }
 function withLabels(scope, fn) {
-  var previous = renderLabels;
-  renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-  try { return fn(); } finally { renderLabels = previous; }
+  return withFamilyLabels(scope, MICRO_LABELS_FAMILY, fn);
 }
 function applyInstanceLabels(scope, options) {
   if (options && options.labels && typeof options.labels === 'object') {

@@ -9080,6 +9080,16 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var byFamily = root && instanceOverlays.get(root);
     return byFamily && byFamily[family] || null;
   }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -9126,15 +9136,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/fields/fields.js
   registerLabels("fields", defaults);
   var MICRO_LABELS_FAMILY = "fields";
-  var renderLabels = null;
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -9382,7 +9385,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         bindFields(scope);
       });
       return existing;
@@ -9392,7 +9395,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = sync: مزامنة حالة الحقول من قيمها الحالية بلا أحداث. */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           sync(scope);
         });
       },
@@ -9404,7 +9407,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       bindFields(scope);
     });
     registry.set(scope, instance);
@@ -9493,6 +9496,30 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -9548,19 +9575,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/selection/selection.js
   registerLabels("selection", defaults);
-  var overlayLabels = /* @__PURE__ */ new WeakMap();
-  var renderLabels = null;
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = overlayLabels.get(scope) || null;
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  var MICRO_LABELS_FAMILY = "selection";
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
-    if (options && options.labels && typeof options.labels === "object") overlayLabels.set(scope, options.labels);
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var liveBindings = /* @__PURE__ */ new WeakMap();
   function claimBinding(element, key) {
@@ -9689,7 +9711,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         bindGroups(scope);
         bindSegmented(scope);
       });
@@ -9701,7 +9723,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد قراءة حالة المجموعات والمقاطع (يربط الجديد تحت الجذر). */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           bindGroups(scope);
           bindSegmented(scope);
         });
@@ -9715,7 +9737,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       bindGroups(scope);
       bindSegmented(scope);
     });
@@ -9843,6 +9865,49 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (!root.__microLabelsStore) root.__microLabelsStore = { locale: "ar-u-nu-latn", families: {} };
     return root.__microLabelsStore;
   }
+  var instanceOverlays = /* @__PURE__ */ new WeakMap();
+  function setInstanceLabels(root, family, labels) {
+    if (!root || root.nodeType !== 1 || !labels || typeof labels !== "object") return;
+    var byFamily = instanceOverlays.get(root);
+    if (!byFamily) {
+      byFamily = {};
+      instanceOverlays.set(root, byFamily);
+    }
+    byFamily[family] = labels;
+  }
+  function instanceLabelsOf(root, family) {
+    var byFamily = root && instanceOverlays.get(root);
+    return byFamily && byFamily[family] || null;
+  }
+  function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      var own = instanceLabelsOf(node, family);
+      if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
+    }
+    return null;
+  }
   function registerLabels(family, defaults2) {
     var families = store().families;
     if (!families[family]) families[family] = {};
@@ -9907,30 +9972,18 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/selection/picker.js
   registerLabels("selection", defaults);
   var MICRO_LABELS_FAMILY = "selection";
-  var overlayLabels = /* @__PURE__ */ new WeakMap();
-  var renderLabels = null;
-  function overlayFor(el) {
-    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
-      if (overlayLabels.has(node)) return overlayLabels.get(node);
-    }
-    return null;
-  }
   function L(key, el) {
-    var own = el && overlayFor(el) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = overlayLabels.get(scope) || null;
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
-    if (options && options.labels && typeof options.labels === "object") overlayLabels.set(scope, options.labels);
+    if (options && options.labels && typeof options.labels === "object") {
+      setInstanceLabels(scope, MICRO_LABELS_FAMILY, options.labels);
+    }
   }
   var states = /* @__PURE__ */ new WeakMap();
   function stateOf(picker) {
@@ -10138,7 +10191,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         each(scope, bind);
       });
       return existing;
@@ -10149,7 +10202,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       /** = setOptions لكل picker تحت الجذر. */
       update: function(items) {
         if (!Array.isArray(items)) return;
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           each(scope, function(pickerEl) {
             setOptions(pickerEl, items);
           });
@@ -10163,7 +10216,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       each(scope, bind);
     });
     registry.set(scope, instance);
@@ -10299,9 +10352,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -10361,20 +10436,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/messages/messages.js
   registerLabels("messages", defaults);
   var MICRO_LABELS_FAMILY = "messages";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -10629,7 +10697,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         ensureNoteRoles(scope);
         bindClose(scope);
       });
@@ -10640,7 +10708,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص الرسائل تحت الجذر (أدوار m-note وأزرار الإغلاق الجديدة). */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           ensureNoteRoles(scope);
           bindClose(scope);
         });
@@ -10653,7 +10721,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       ensureNoteRoles(scope);
       bindClose(scope);
     });
@@ -10691,9 +10759,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 if(typeof document!=='undefined'&&document.currentScript&&document.currentScript.src){(typeof globalThis!=='undefined'?globalThis:window).__microIifeBaseUrl=document.currentScript.src;}
 (() => {
   var __defProp = Object.defineProperty;
-  var __export = (target2, all) => {
+  var __export = (target, all) => {
     for (var name in all)
-      __defProp(target2, name, { get: all[name], enumerable: true });
+      __defProp(target, name, { get: all[name], enumerable: true });
   };
 
   // components/navigation/navigation.js
@@ -10733,9 +10801,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -10808,20 +10898,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/navigation/navigation.js
   registerLabels("navigation", defaults);
   var MICRO_LABELS_FAMILY = "navigation";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -11118,8 +11201,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var usable = t && inDocument(t) && !isDisabled(t) && !t.closest("[inert], [hidden]") && (!top || top.contains(t));
       if (usable && typeof t.focus === "function") t.focus();
       else if (top) {
-        var target2 = focusables(top)[0] || top;
-        target2.focus();
+        var target = focusables(top)[0] || top;
+        target.focus();
       }
       layer.dispatchEvent(new CustomEvent("micro-navigation:closed", { bubbles: true }));
     }
@@ -11230,7 +11313,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       updateSummary(panel, L("filters.summary.current", panel));
     });
     on(panel, panel, "change", function(e) {
-      if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, L("filters.summary.current", target));
+      if (e.target.closest && e.target.closest("[data-filter-key]")) updateSummary(panel, L("filters.summary.current", e.target));
     });
     on(panel, panel, "input", function(e) {
       if (e.target.closest && e.target.closest('[data-filter-key][type="search"], [data-filter-key][type="text"]')) {
@@ -11425,7 +11508,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         bindScope(scope);
       });
       return existing;
@@ -11436,7 +11519,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد ربط عناصر الطبقات الجديدة تحت الجذر (الربط محروس فلا ازدواج). */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           bindScope(scope);
         });
       },
@@ -11449,7 +11532,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       bindScope(scope);
     });
     instances.set(scope, instance);
@@ -11573,9 +11656,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -11635,20 +11740,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/organization/organization.js
   registerLabels("organization", defaults);
   var MICRO_LABELS_FAMILY = "organization";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -11720,7 +11818,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         initSections(scope);
         initAvatars(scope);
       });
@@ -11731,7 +11829,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص الأقسام والصور الرمزية تحت الجذر (يربط الجديد فقط). */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           initSections(scope);
           initAvatars(scope);
         });
@@ -11744,7 +11842,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       initSections(scope);
       initAvatars(scope);
     });
@@ -12012,9 +12110,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -12175,20 +12295,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/data.js
   registerLabels("data", defaults);
   var MICRO_LABELS_FAMILY = "data";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -12239,8 +12352,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return String(v);
   }
   function readingOf(item) {
-    if (item.value === null) return item.invalid ? L("value.invalid", item) : L("value.unavailable", item);
-    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L("value.negativeUnplottedSuffix", item);
+    if (item.value === null) return item.invalid ? L("value.invalid") : L("value.unavailable");
+    if (item.value < 0 && !item.signed) return (item.display || item.rawValue || fmt(item.value)) + L("value.negativeUnplottedSuffix");
     return item.display || item.rawValue || fmt(item.value);
   }
   function fullLabelOf(chart, item) {
@@ -12367,7 +12480,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       number.dir = "ltr";
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix", item)));
+      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix")));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -13070,7 +13183,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       number.dir = "ltr";
       number.textContent = readingOf(item);
       value.appendChild(number);
-      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix", item)));
+      if (item.outlier) value.appendChild(document.createTextNode(L("value.outlierSuffix")));
       row.appendChild(label);
       row.appendChild(value);
       rows.appendChild(row);
@@ -13406,7 +13519,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       li.appendChild(label);
       var val = document.createElement("span");
       val.className = "m-legend__value";
-      val.textContent = it.value === null ? it.invalid ? String(it.rawValue) + L("donut.invalidValueSuffix") : L("value.unavailable") : fmt(it.value) + L("donut.invalidShareSuffix", it);
+      val.textContent = it.value === null ? it.invalid ? String(it.rawValue) + L("donut.invalidValueSuffix") : L("value.unavailable") : fmt(it.value) + L("donut.invalidShareSuffix");
       li.appendChild(val);
       legend.appendChild(li);
     });
@@ -13438,7 +13551,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       return L("value.unavailable");
     }
     var base = it.rawValue === null ? fmt(it.value) : String(it.rawValue);
-    if (it.value < 0 && !it.signed) return base + L("value.negativeUnplottedSuffix", it);
+    if (it.value < 0 && !it.signed) return base + L("value.negativeUnplottedSuffix");
     return it.outlier ? base + L("value.outlierSuffix") : base;
   }
   function syncDatasetTable(chart, items) {
@@ -13691,7 +13804,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function appendReadableValue(parent, it, donut) {
     var full = valueStateText(it);
     var raw = it.value !== null ? String(it.rawValue === null ? it.value : it.rawValue) : it.invalid && it.rawValue !== null ? String(it.rawValue) : null;
-    if (donut && it.value !== null && it.value < 0) full = raw + L("donut.invalidShareSuffix", it);
+    if (donut && it.value !== null && it.value < 0) full = raw + L("donut.invalidShareSuffix");
     if (raw === null) parent.appendChild(readingNode("span", null, full));
     else {
       var bdi = readingNode("bdi", null, it.value !== null && it.display ? it.display : raw);
@@ -13849,7 +13962,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       row.appendChild(readingNode("dt", null, fullLabelOf(chart, it)));
       var value = readingNode("dd");
       appendReadableValue(value, it, chart.getAttribute("data-chart") === "donut");
-      appendReadingUnit(value, it.unit || L("reading.unitUnspecified", it));
+      appendReadingUnit(value, it.unit || L("reading.unitUnspecified"));
       if (it.period) value.appendChild(readingNode("span", "m-chart__reading-period", " · " + it.period));
       row.appendChild(value);
       list.appendChild(row);
@@ -14041,7 +14154,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var existing = instances.get(scope);
     if (existing) {
       installFontRefit();
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
         if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
         charts.forEach(function(c) {
@@ -14056,7 +14169,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد تصيير كل رسوم النطاق من DOM المصدر بعد تحديث المضيف. */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
           if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
           charts.forEach(function(c) {
@@ -14072,7 +14185,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
       if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
       charts.forEach(function(c) {
@@ -14209,9 +14322,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -14223,9 +14358,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function getLabel(family, key, vars) {
     var entry = store().families[family];
-    var value2 = entry ? entry[key] : void 0;
-    if (value2 == null || !vars) return value2;
-    var text = String(value2);
+    var value = entry ? entry[key] : void 0;
+    if (value == null || !vars) return value;
+    var text = String(value);
     for (var name in vars) text = text.split("{" + name + "}").join(String(vars[name]));
     return text;
   }
@@ -14372,20 +14507,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/packed-circle.js
   registerLabels("data", defaults);
   var MICRO_LABELS_FAMILY = "data";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -14459,11 +14587,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       li.className = "m-legend__item m-cat--" + it.series;
       var label = document.createElement("span");
       label.textContent = it.label;
-      var value2 = document.createElement("bdi");
-      value2.className = "m-legend__value";
-      value2.textContent = it.value === 0 ? L("packed.zeroText", value2) : stateText(it).text;
+      var value = document.createElement("bdi");
+      value.className = "m-legend__value";
+      value.textContent = it.value === 0 ? L("packed.zeroText", value) : stateText(it).text;
       li.appendChild(label);
-      li.appendChild(value2);
+      li.appendChild(value);
       list.appendChild(li);
     });
     return list;
@@ -14503,8 +14631,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function packedValueState(it) {
     if (!it.hasAttr) return L("packed.unknown");
     if (it.value === null) return it.raw && it.raw.trim() ? it.raw + L("packed.invalidSuffix") : L("packed.invalid");
-    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L("packed.negativeSuffix", value);
-    if (it.value === 0) return L("packed.zeroText", it);
+    if (it.value < 0) return (it.display || it.raw || String(it.value)) + L("packed.negativeSuffix");
+    if (it.value === 0) return L("packed.zeroText");
     return it.display || it.raw || String(it.value);
   }
   function syncPackedTable(chart) {
@@ -14552,8 +14680,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var title = chart.querySelector(".m-chart__title");
     var context = [String(title && title.textContent || chart.getAttribute("data-title") || chart.getAttribute("aria-label") || "").trim()];
     [["data-unit", L("packed.table.unitHead")], ["data-period", L("packed.table.periodHead")], ["data-max", L("packed.table.scaleHead")]].forEach(function(part) {
-      var value2 = chart.getAttribute(part[0]);
-      if (value2 && value2.trim()) context.push(part[1] + ": " + value2.trim());
+      var value = chart.getAttribute(part[0]);
+      if (value && value.trim()) context.push(part[1] + ": " + value.trim());
     });
     caption.textContent = context.filter(Boolean).join(L("packed.table.separator", caption));
     table.appendChild(caption);
@@ -14793,7 +14921,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
         scope.querySelectorAll("[data-chart-packed]").forEach(render);
       });
@@ -14804,7 +14932,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد التصيير من DOM المصدر لكل رسوم packed تحت الجذر. */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
           scope.querySelectorAll("[data-chart-packed]").forEach(render);
         });
@@ -14817,7 +14945,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
       scope.querySelectorAll("[data-chart-packed]").forEach(render);
     });
@@ -14924,9 +15052,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -14996,20 +15146,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip.js
   registerLabels("info-strip", defaults);
   var MICRO_LABELS_FAMILY = "info-strip";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -15211,7 +15354,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
         scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
       });
@@ -15222,7 +15365,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = rescan: إعادة التقاط البطاقات بعد تغيير شرائح DOM للمضيف. */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           rescan(scope);
         });
       },
@@ -15234,7 +15377,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
       scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
     });
@@ -15333,9 +15476,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -15405,20 +15570,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip-peek.js
   registerLabels("info-strip", defaults);
   var MICRO_LABELS_FAMILY = "info-strip";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -15821,7 +15979,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
         scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
       });
@@ -15840,7 +15998,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         var stripEl = targetStrip();
         var st = stripEl ? stateOf.get(stripEl) : null;
         var index = typeof updateOptions.index === "number" ? updateOptions.index : st ? st.index : 0;
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           if (stripEl) goToIndex(stripEl, index, updateOptions);
         });
       },
@@ -15868,7 +16026,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
       scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
     });
@@ -15997,9 +16155,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -16121,20 +16301,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/metric-comparison/metric-comparison.js
   registerLabels("metric-comparison", defaults);
   var MICRO_LABELS_FAMILY = "metric-comparison";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -16310,7 +16483,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     items.forEach(function(item, index) {
       var state = item.state === "unavailable" ? "missing" : item.state === "invalid" ? "invalid" : readNumber(item.raw).state;
-      var display = state === "missing" ? "—" + (item.unit ? " " + item.unit : "") : state === "invalid" ? item.display || (item.raw || L("value.invalid", unit)) + (item.unit ? " " + item.unit : "") : (item.display || item.raw) + (item.unit && !item.display ? " " + item.unit : "");
+      var display = state === "missing" ? "—" + (item.unit ? " " + item.unit : "") : state === "invalid" ? item.display || (item.raw || L("value.invalid")) + (item.unit ? " " + item.unit : "") : (item.display || item.raw) + (item.unit && !item.display ? " " + item.unit : "");
       var stateText = state === "missing" ? L("value.missing") : state === "invalid" ? L("value.unreadable") : "";
       var zeroMarker = state === "zero" && validLayout && validMax && validRadius && width > 0;
       var canRender = zeroMarker || geometryAllowed && (state === "positive" || state === "negative");
@@ -16425,9 +16598,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function tableCaptionBase(chart) {
     var title = chart.querySelector(".m-main-metric__title, .m-metric-circles__title");
     var parts = [String(title && title.textContent || chart.getAttribute("data-title") || chart.getAttribute("aria-label") || "").trim()];
-    var unit2 = chart.getAttribute("data-common-unit") || chart.getAttribute("data-unit");
+    var unit = chart.getAttribute("data-common-unit") || chart.getAttribute("data-unit");
     var period = chart.getAttribute("data-common-period") || chart.getAttribute("data-period");
-    if (unit2) parts.push(L("table.unitPrefix", unit2) + unit2);
+    if (unit) parts.push(L("table.unitPrefix") + unit);
     if (period) parts.push(L("table.periodPrefix") + period);
     return parts.filter(Boolean).join(L("table.separator"));
   }
@@ -16610,9 +16783,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         if (value.state === "invalid") val.appendChild(make("span", "m-main-metric__reading-state", L("main.invalidSuffix", val)));
         if (entry.unit) {
           val.appendChild(document.createTextNode(" "));
-          var unit2 = make("span", "m-main-metric__reading-unit", entry.unit);
-          unit2.setAttribute("data-reading-unit", entry.unit);
-          val.appendChild(unit2);
+          var unit = make("span", "m-main-metric__reading-unit", entry.unit);
+          unit.setAttribute("data-reading-unit", entry.unit);
+          val.appendChild(unit);
         }
       } else {
         val.textContent = display;
@@ -16730,7 +16903,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         installFontsHook();
         if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
         scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
@@ -16743,7 +16916,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** = render: إعادة التصيير من DOM المصدر تحت الجذر. */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           render(scope);
         });
       },
@@ -16755,7 +16928,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       installFontsHook();
       if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
       scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
@@ -16879,9 +17052,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -16941,20 +17136,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/account-settings/account-settings.js
   registerLabels("account-settings", defaults);
   var MICRO_LABELS_FAMILY = "account-settings";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -17036,7 +17224,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = registry.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
         scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
       });
@@ -17047,7 +17235,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** يعيد فحص اللوحات تحت الجذر (يربط الجديد فقط). */
       update: function() {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
           scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
         });
@@ -17060,7 +17248,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         registry.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
       scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
     });
@@ -17155,9 +17343,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -17236,20 +17446,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/access-gateway/access-gateway.js
   registerLabels("access-gateway", defaults);
   var MICRO_LABELS_FAMILY = "access-gateway";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -17531,7 +17734,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       root: scope,
       /** تحديث callbacks وتوافر الإجراءات دون ربط مضاعف. */
       update: function(nextHandlers) {
-        withLabels(scope, function() {
+        withLabels2(scope, function() {
           applyHandlers(scope, nextHandlers);
         });
       },
@@ -17647,9 +17850,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el2, family) {
+    if (el2 != null && !(el2 instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el2);
+      return null;
+    }
+    if (!el2) return null;
     for (var node = el2; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -17734,20 +17959,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/order-schedule/order-schedule.js
   registerLabels("order-schedule", defaults);
   var MICRO_LABELS_FAMILY = "order-schedule";
-  var renderLabels = null;
   function L(key, el2) {
-    var own = el2 && instanceLabelFor(el2, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el2 && instanceLabelFor(el2, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -19130,7 +19348,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       });
       dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
     }
-    withLabels(root, function() {
+    withLabels2(root, function() {
       render();
     });
     observeResponsiveWidth();
@@ -19329,9 +19547,31 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return byFamily && byFamily[family] || null;
   }
   function instanceLabelFor(el, family) {
+    if (el != null && !(el instanceof Node)) {
+      console.error("[micro-ui/labels] سياق قراءة النص يجب أن يكون عنصر DOM أو undefined — أُهمل:", el);
+      return null;
+    }
+    if (!el) return null;
     for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
       var own = instanceLabelsOf(node, family);
       if (own) return own;
+    }
+    return null;
+  }
+  var renderStack = [];
+  function withLabels(root, family, fn) {
+    var own = instanceLabelsOf(root, family);
+    renderStack.push(own ? { family, labels: own } : null);
+    try {
+      return fn();
+    } finally {
+      renderStack.pop();
+    }
+  }
+  function currentInstanceLabels(family) {
+    for (var i = renderStack.length - 1; i >= 0; i--) {
+      var entry = renderStack[i];
+      if (entry && entry.family === family) return entry.labels;
     }
     return null;
   }
@@ -19398,20 +19638,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/carousel/carousel.js
   registerLabels("carousel", defaults);
   var MICRO_LABELS_FAMILY = "carousel";
-  var renderLabels = null;
   function L(key, el) {
-    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || renderLabels;
+    var own = el && instanceLabelFor(el, MICRO_LABELS_FAMILY) || currentInstanceLabels(MICRO_LABELS_FAMILY);
     if (own && Object.prototype.hasOwnProperty.call(own, key)) return own[key];
     return getLabel(MICRO_LABELS_FAMILY, key);
   }
-  function withLabels(scope, fn) {
-    var previous = renderLabels;
-    renderLabels = instanceLabelsOf(scope, MICRO_LABELS_FAMILY);
-    try {
-      return fn();
-    } finally {
-      renderLabels = previous;
-    }
+  function withLabels2(scope, fn) {
+    return withLabels(scope, MICRO_LABELS_FAMILY, fn);
   }
   function applyInstanceLabels(scope, options) {
     if (options && options.labels && typeof options.labels === "object") {
@@ -19877,7 +20110,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     applyInstanceLabels(scope, options);
     var existing = instances.get(scope);
     if (existing) {
-      withLabels(scope, function() {
+      withLabels2(scope, function() {
         if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
         scope.querySelectorAll("[data-carousel]").forEach(setup);
       });
@@ -19922,7 +20155,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         instances.remove(scope);
       }
     };
-    withLabels(scope, function() {
+    withLabels2(scope, function() {
       if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
       scope.querySelectorAll("[data-carousel]").forEach(setup);
     });

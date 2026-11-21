@@ -11,7 +11,8 @@
     "build": "node tools/build-package.mjs",
     "check": "node tools/build-package.mjs --check",
     "prepare": "node tools/build-package.mjs",
-    "typecheck": "tsc -p tools/package/tsconfig.json --noEmit"
+    "typecheck": "tsc -p tools/package/tsconfig.json --noEmit",
+    "lint": "eslint components shared"
   },
   "files": [
     "dist/",
@@ -30,27 +31,90 @@
     "./shared/**"
   ],
   "exports": {
-    "./buttons": { "types": "./dist/types/buttons.d.ts", "import": "./dist/esm/buttons.js" },
-    "./fields": { "types": "./dist/types/fields.d.ts", "import": "./dist/esm/fields.js" },
-    "./selection": { "types": "./dist/types/selection.d.ts", "import": "./dist/esm/selection.js" },
-    "./picker": { "types": "./dist/types/picker.d.ts", "import": "./dist/esm/picker.js" },
-    "./organization": { "types": "./dist/types/organization.d.ts", "import": "./dist/esm/organization.js" },
-    "./data": { "types": "./dist/types/data.d.ts", "import": "./dist/esm/data.js" },
-    "./packed-circle": { "types": "./dist/types/packed-circle.d.ts", "import": "./dist/esm/packed-circle.js" },
-    "./messages": { "types": "./dist/types/messages.d.ts", "import": "./dist/esm/messages.js" },
-    "./navigation": { "types": "./dist/types/navigation.d.ts", "import": "./dist/esm/navigation.js" },
-    "./action-sheet": { "types": "./dist/types/action-sheet.d.ts", "import": "./dist/esm/action-sheet.js" },
-    "./info-strip": { "types": "./dist/types/info-strip.d.ts", "import": "./dist/esm/info-strip.js" },
-    "./info-strip-peek": { "types": "./dist/types/info-strip-peek.d.ts", "import": "./dist/esm/info-strip-peek.js" },
-    "./metric-comparison": { "types": "./dist/types/metric-comparison.d.ts", "import": "./dist/esm/metric-comparison.js" },
-    "./account-settings": { "types": "./dist/types/account-settings.d.ts", "import": "./dist/esm/account-settings.js" },
-    "./access-gateway": { "types": "./dist/types/access-gateway.d.ts", "import": "./dist/esm/access-gateway.js" },
-    "./carousel": { "types": "./dist/types/carousel.d.ts", "import": "./dist/esm/carousel.js" },
-    "./order-schedule": { "types": "./dist/types/order-schedule.d.ts", "import": "./dist/esm/order-schedule.js" },
-    "./readings": { "types": "./dist/types/readings.d.ts", "import": "./dist/esm/readings.js" },
-    "./product": { "types": "./dist/types/product.d.ts", "import": "./dist/esm/product.js" },
-    "./icons": { "types": "./dist/types/icons.d.ts", "import": "./dist/esm/icons.js" },
-    "./labels": { "types": "./dist/types/labels.d.ts", "import": "./dist/esm/labels.js" },
+    "./buttons": {
+      "types": "./dist/types/buttons.d.ts",
+      "import": "./dist/esm/buttons.js"
+    },
+    "./fields": {
+      "types": "./dist/types/fields.d.ts",
+      "import": "./dist/esm/fields.js"
+    },
+    "./selection": {
+      "types": "./dist/types/selection.d.ts",
+      "import": "./dist/esm/selection.js"
+    },
+    "./picker": {
+      "types": "./dist/types/picker.d.ts",
+      "import": "./dist/esm/picker.js"
+    },
+    "./organization": {
+      "types": "./dist/types/organization.d.ts",
+      "import": "./dist/esm/organization.js"
+    },
+    "./data": {
+      "types": "./dist/types/data.d.ts",
+      "import": "./dist/esm/data.js"
+    },
+    "./packed-circle": {
+      "types": "./dist/types/packed-circle.d.ts",
+      "import": "./dist/esm/packed-circle.js"
+    },
+    "./messages": {
+      "types": "./dist/types/messages.d.ts",
+      "import": "./dist/esm/messages.js"
+    },
+    "./navigation": {
+      "types": "./dist/types/navigation.d.ts",
+      "import": "./dist/esm/navigation.js"
+    },
+    "./action-sheet": {
+      "types": "./dist/types/action-sheet.d.ts",
+      "import": "./dist/esm/action-sheet.js"
+    },
+    "./info-strip": {
+      "types": "./dist/types/info-strip.d.ts",
+      "import": "./dist/esm/info-strip.js"
+    },
+    "./info-strip-peek": {
+      "types": "./dist/types/info-strip-peek.d.ts",
+      "import": "./dist/esm/info-strip-peek.js"
+    },
+    "./metric-comparison": {
+      "types": "./dist/types/metric-comparison.d.ts",
+      "import": "./dist/esm/metric-comparison.js"
+    },
+    "./account-settings": {
+      "types": "./dist/types/account-settings.d.ts",
+      "import": "./dist/esm/account-settings.js"
+    },
+    "./access-gateway": {
+      "types": "./dist/types/access-gateway.d.ts",
+      "import": "./dist/esm/access-gateway.js"
+    },
+    "./carousel": {
+      "types": "./dist/types/carousel.d.ts",
+      "import": "./dist/esm/carousel.js"
+    },
+    "./order-schedule": {
+      "types": "./dist/types/order-schedule.d.ts",
+      "import": "./dist/esm/order-schedule.js"
+    },
+    "./readings": {
+      "types": "./dist/types/readings.d.ts",
+      "import": "./dist/esm/readings.js"
+    },
+    "./product": {
+      "types": "./dist/types/product.d.ts",
+      "import": "./dist/esm/product.js"
+    },
+    "./icons": {
+      "types": "./dist/types/icons.d.ts",
+      "import": "./dist/esm/icons.js"
+    },
+    "./labels": {
+      "types": "./dist/types/labels.d.ts",
+      "import": "./dist/esm/labels.js"
+    },
     "./buttons.css": "./dist/css/buttons.css",
     "./fields.css": "./dist/css/fields.css",
     "./selection.css": "./dist/css/selection.css",
@@ -80,6 +144,8 @@
   },
   "devDependencies": {
     "esbuild": "^0.25.12",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
     "typescript": "^5.9.3"
   }
 }
