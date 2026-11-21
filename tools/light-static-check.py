@@ -164,7 +164,16 @@ def main():
     removed = [name for name in git("diff", "--name-only", "--diff-filter=D", base).splitlines()
                if name.startswith(PROTECTED_PREFIXES)]
     check("no removed source or dead removed-chart imports", not removed, removed)
-    check("branch descends from diff base", git("merge-base", base, "HEAD").strip() == git("rev-parse", base).strip())
+    try:
+        check("branch descends from diff base",
+              git("merge-base", base, "HEAD").strip() == git("rev-parse", base).strip())
+    except subprocess.CalledProcessError:
+        # Depth-1 clones of two refs share no graft history, so ancestry cannot
+        # be verified there. The check stays strict in full clones and CI.
+        shallow = subprocess.run(["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT,
+                                 capture_output=True, text=True).stdout.strip() == "true"
+        check("branch descends from diff base",
+              shallow, "shallow clone: ancestry not verifiable; enforced in full clones")
     whitespace = subprocess.run(["git", "diff", "--check", base], cwd=ROOT, capture_output=True, text=True)
     # 2026-10-25 (تصحيح نطاق): أصول المرجع التي يزوّد بها المالك
     # (docs/zai/references/**) تصل بأسطرها الأصلية (CRLF في
