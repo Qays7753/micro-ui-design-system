@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F7F8F4">
+  <title>مختبر الهاتف — Micro UI</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../components/fields/fields.css">
+  <link rel="stylesheet" href="../../components/selection/selection.css">
+  <link rel="stylesheet" href="../../components/selection/picker.css">
+  <link rel="stylesheet" href="../../components/organization/organization.css">
+  <link rel="stylesheet" href="../../components/organization/operational-row.css">
+  <link rel="stylesheet" href="../../components/data/data.css">
+  <link rel="stylesheet" href="../../components/data/packed-circle.css">
+  <link rel="stylesheet" href="../../components/messages/messages.css">
+  <link rel="stylesheet" href="../../components/navigation/navigation.css">
+  <link rel="stylesheet" href="../../components/navigation/action-sheet.css">
+  <link rel="stylesheet" href="../../components/surfaces/surfaces.css">
+  <link rel="stylesheet" href="../../components/surfaces/curves.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip.css">
+  <link rel="stylesheet" href="../../components/info-strip/value-context.css">
+  <link rel="stylesheet" href="../../components/info-strip/info-strip-peek.css">
+  <link rel="stylesheet" href="../../components/metric-comparison/metric-comparison.css">
+  <link rel="stylesheet" href="../../components/account-settings/account-settings.css">
+  <link rel="stylesheet" href="../../components/access-gateway/access-gateway.css">
+  <link rel="stylesheet" href="../../components/access-gateway/auth-screens.css">
+  <link rel="stylesheet" href="../../components/access-gateway/welcome.css">
+  <link rel="stylesheet" href="../../components/order-schedule/order-schedule.css">
+  <link rel="stylesheet" href="../../components/carousel/carousel.css">
+  <link rel="stylesheet" href="../../components/screen/screen.css">
+  <link rel="stylesheet" href="../../components/compositions/reading-layout.css">
+  <link rel="stylesheet" href="../../components/compositions/form-surface.css">
+  <link rel="stylesheet" href="../../components/compositions/error-retry.css">
+  <link rel="stylesheet" href="device-lab.css">
+</head>
+<body>
+<div class="lab-app" data-screen="index">
+
+  <!-- ===== الفهرس: قائمة الشاشات مجمعة (تنقّل مختبر لا رحلة منتج) ===== -->
+  <nav class="lab-index" aria-label="فهرس شاشات المختبر">
+    <h1 class="lab-index__title">مختبر الهاتف</h1>
+    <p class="lab-index__note">كل مكوّن في مكانه وحجمه الطبيعيين على شاشة هاتف، تفاعليًا. المحتوى محايد للتجرِبة — ليس منتجًا. زر الرجوع يعود للفهرس، وأدوات المختبر في الزر العائم أسفل يسار.</p>
+
+    <fieldset class="lab-index__group">
+      <legend class="lab-index__group-title">الأساسيات</legend>
+      <ul class="lab-index__list">
+        <li><button class="lab-index__link" data-lab-open="screen" type="button">هيكل الشاشة <span class="lab-index__meta">عائلة screen</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="buttons" type="button">الأزرار وحالاتها <span class="lab-index__meta">buttons</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="fields" type="button">نموذج الحقول ولوحة المفاتيح <span class="lab-index__meta">fields · C03</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="selection" type="button">الاختيار والمنتقي <span class="lab-index__meta">selection · picker</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="surfaces" type="button">الأسطح والأرقام <span class="lab-index__meta">surfaces</span></button></li>
+      </ul>
+    </fieldset>
+
+    <fieldset class="lab-index__group">
+      <legend class="lab-index__group-title">المحتوى والبيانات</legend>
+      <ul class="lab-index__list">
+        <li><button class="lab-index__link" data-lab-open="data" type="button">لوحة البيانات والرسوم <span class="lab-index__meta">data · C04</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="metric" type="button">المقارنات الرقمية <span class="lab-index__meta">metric-comparison</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="info-strip" type="button">شريط المعلومات والقراءات <span class="lab-index__meta">info-strip · C01</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="carousel" type="button">عارض البطاقات (اسحب) <span class="lab-index__meta">carousel</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="organization" type="button">قائمة الصفوف والأقسام <span class="lab-index__meta">organization · C02</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="calendar" type="button">تقويم الطلبات <span class="lab-index__meta">order-schedule · C06</span></button></li>
+      </ul>
+    </fieldset>
+
+    <fieldset class="lab-index__group">
+      <legend class="lab-index__group-title">التنقل والرسائل</legend>
+      <ul class="lab-index__list">
+        <li><button class="lab-index__link" data-lab-open="navigation" type="button">التنقل والطبقات والتصفية <span class="lab-index__meta">navigation · C05</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="messages" type="button">الرسائل والتنبيه العابر <span class="lab-index__meta">messages</span></button></li>
+      </ul>
+    </fieldset>
+
+    <fieldset class="lab-index__group">
+      <legend class="lab-index__group-title">الحساب والدخول</legend>
+      <ul class="lab-index__list">
+        <li><button class="lab-index__link" data-lab-open="account" type="button">إعدادات الحساب والتطبيق <span class="lab-index__meta">account-settings</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="gateway" type="button">بوابة الدخول وشاشاتها <span class="lab-index__meta">access-gateway · C13</span></button></li>
+      </ul>
+    </fieldset>
+
+    <fieldset class="lab-index__group">
+      <legend class="lab-index__group-title">المنتج والأنماط</legend>
+      <ul class="lab-index__list">
+        <li><button class="lab-index__link" data-lab-open="product" type="button">شاشة المنتج بكل أنواعها <span class="lab-index__meta">C07–C12 · C14</span></button></li>
+        <li><button class="lab-index__link" data-lab-open="error" type="button">حالة خطأ مع إعادة محاولة <span class="lab-index__meta">C15</span></button></li>
+      </ul>
+    </fieldset>
+  </nav>
+
+  <!-- ===== المسرح: الشاشات ===== -->
+  <div class="lab-stage" data-open="false" aria-live="off">
+    <div class="lab-frame">
+
+      <!-- شاشة: هيكل الشاشة (عائلة screen) -->
+      <section data-lab-screen="screen" data-lab-title="هيكل الشاشة" data-lab-covers="screen" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">حساب الورشة</span>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="بحث"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">ملخص الفترة</h2>
+              <div class="lab-demo-row"><span>إجمالي المبيعات</span><strong>1,150 د.أ</strong></div>
+              <div class="lab-demo-row"><span>إجمالي المصاريف</span><strong>280 د.أ</strong></div>
+              <div class="lab-demo-row"><span>صافي الفترة</span><strong>870 د.أ</strong></div>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">نموذج سريع</h2>
+              <p class="lab-demo-note">ركّز حقلًا ثم افتح لوحة المفاتيح: الحقل يبقى ظاهرًا وشريط الإجراءات يرتفع فوقها.</p>
+              <label class="m-field" data-micro-field><span class="m-field__label">اسم العملية</span><div class="m-field__control"><input class="m-field__input" type="text" name="op-title"></div></label>
+              <label class="m-field" data-micro-field><span class="m-field__label">المبلغ</span><div class="m-field__control"><input class="m-field__input" type="text" inputmode="decimal" name="op-amount"></div></label>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">قسم أخير</h2>
+              <p class="lab-demo-note">مرّر إلى النهاية — هذا القسم يصل كاملًا فوق شريط الإجراءات وشريط التنقل.</p>
+            </section>
+          </main>
+          <footer class="m-screen__actions" data-actions="keyboard-follow">
+            <button class="m-btn m-btn--primary" type="button">حفظ العملية</button>
+            <button class="m-btn" type="button">إلغاء</button>
+          </footer>
+          <nav class="m-screen__nav">
+            <nav class="m-navbar" role="navigation" aria-label="تنقل التجربة">
+              <button type="button" class="m-navbar__item" aria-current="page" data-lab-nav-item="a"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>الرئيسية</button>
+              <button type="button" class="m-navbar__item" data-lab-nav-item="b"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>العمليات</button>
+              <button type="button" class="m-navbar__item" data-lab-nav-item="c"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>الحساب</button>
+            </nav>
+          </nav>
+        </div>
+      </section>
+
+      <!-- شاشة: الأزرار -->
+      <section data-lab-screen="buttons" data-lab-title="الأزرار" data-lab-covers="buttons" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">تأكيد طلب جديد</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">الحالات</h2>
+              <p class="lab-demo-note">اضغط زر التحميل: يدور ثانيتين ثم يعود. الزر المعطل لا يستجيب.</p>
+              <div style="display:grid;gap:12px">
+                <button class="m-btn m-btn--primary" type="button" data-lab-loading-demo data-loading-label="جارٍ إرسال الطلب">إرسال الطلب</button>
+                <button class="m-btn" type="button" data-lab-loading-demo data-loading-label="جارٍ الحفظ">حفظ كمسودة</button>
+                <button class="m-btn m-btn--destructive-soft" type="button">إلغاء الطلب</button>
+                <button class="m-btn m-btn--primary" type="button" disabled>زر معطل</button>
+              </div>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">زر داخل المحتوى</h2>
+              <div class="lab-demo-row"><span>طقم صابون مصنوع يدويًا</span><strong>150 د.أ</strong></div>
+              <button class="m-btn m-btn--secondary" type="button" style="margin-top:12px">إضافة إلى السلة</button>
+            </section>
+          </main>
+          <footer class="m-screen__actions" data-actions="keyboard-follow">
+            <button class="m-btn m-btn--primary" type="button" data-lab-loading-demo data-loading-label="جارٍ تأكيد الطلب">تأكيد الطلب</button>
+            <button class="m-btn" type="button">لاحقًا</button>
+          </footer>
+        </div>
+      </section>
+
+      <!-- شاشة: الحقول (fields + C03) -->
+      <section data-lab-screen="fields" data-lab-title="نموذج الحقول" data-lab-covers="fields form-surface" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">عملية جديدة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <form class="m-form-surface" id="lab-fields-form" novalidate>
+              <div class="m-form-surface__head"><h2 class="m-form-surface__title">تفاصيل العملية</h2></div>
+              <div class="m-form-surface__body">
+                <label class="m-field" data-micro-field><span class="m-field__label">اسم العملية</span>
+                  <div class="m-field__control"><input class="m-field__input" type="text" name="title" required></div></label>
+                <label class="m-field" data-micro-field><span class="m-field__label">المبلغ (دينار أردني)</span>
+                  <div class="m-field__control"><input class="m-field__input" type="text" inputmode="decimal" name="amount" required></div></label>
+                <label class="m-field" data-micro-field><span class="m-field__label">بحث عن عميل</span>
+                  <div class="m-field__control"><input class="m-field__input" type="search" name="customer"></div></label>
+                <label class="m-field" data-micro-field><span class="m-field__label">ملاحظات</span>
+                  <div class="m-field__control"><textarea class="m-field__area" rows="3" name="notes"></textarea></div></label>
+                <div class="m-field" data-micro-field><span class="m-field__label">الكمية</span>
+                  <div class="m-field__control">
+                    <div class="m-field__stepper">
+                      <button class="m-btn" type="button" data-step="-1" aria-label="إنقاص">−</button>
+                      <input class="m-field__input" inputmode="numeric" value="2" aria-label="الكمية">
+                      <button class="m-btn" type="button" data-step="1" aria-label="زيادة">+</button>
+                    </div>
+                  </div></div>
+                <div class="m-note m-note--error" id="lab-fields-error" hidden>
+                  <div class="m-note__body">أكمل الحقول المطلوبة ثم أعد الإرسال.</div>
+                </div>
+              </div>
+            </form>
+          </main>
+          <footer class="m-screen__actions" data-actions="keyboard-follow">
+            <button class="m-btn m-btn--primary" type="submit" form="lab-fields-form">إرسال العملية</button>
+          </footer>
+        </div>
+      </section>
+
+      <!-- شاشة: الاختيار والمنتقي (selection + picker) -->
+      <section data-lab-screen="selection" data-lab-title="الاختيار والمنتقي" data-lab-covers="selection" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">تفضيلات العرض</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">اختيار مجموعة</h2>
+              <div data-choice-group role="group" aria-label="الفروع">
+                <label class="m-choice m-choice--check"><input type="checkbox" value="amman"><span class="m-choice__box"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="m-choice__text">فرع عمّان</span></label>
+                <label class="m-choice m-choice--check"><input type="checkbox" value="zarqa"><span class="m-choice__box"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="m-choice__text">فرع الزرقاء</span></label>
+                <label class="m-choice"><input type="radio" name="primary-branch" value="irbid"><span class="m-choice__box"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg></span><span class="m-choice__text">الفرع الرئيسي: إربد</span></label>
+              </div>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">مقاطع</h2>
+              <div data-seg role="group" aria-label="ترتيب العرض" style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="m-seg__item" type="button" aria-pressed="true">الأحدث</button>
+                <button class="m-seg__item" type="button">الأعلى قيمة</button>
+                <button class="m-seg__item" type="button">الأقرب</button>
+              </div>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">مفتاح</h2>
+              <label class="m-switch" data-switch><span class="m-switch__text"><span class="m-switch__label">تنبيهات المخزون</span><span class="m-switch__hint">تنبيه عند نقص صنف</span></span><input type="checkbox" role="switch"><span class="m-switch__track"><span class="m-switch__thumb"></span></span></label>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">منتقٍ من قائمة طويلة</h2>
+              <p class="lab-demo-note">يفتح ورقة سفلية بقائمة قابلة للبحث — أغلقها بالسحب أو الرجوع.</p>
+              <button class="m-btn" type="button" id="lab-picker-open" data-layer-open="lab-picker-layer">اختيار الصنف</button>
+            </section>
+          </main>
+          <footer class="m-screen__actions">
+            <button class="m-btn m-btn--primary" type="button">حفظ التفضيلات</button>
+          </footer>
+        </div>
+        <div class="m-layer-backdrop" data-for="lab-picker-layer" hidden></div>
+        <div class="m-layer" id="lab-picker-layer" role="dialog" aria-modal="true" aria-labelledby="lab-picker-title" hidden>
+          <div class="m-layer__head"><h2 class="m-layer__title" id="lab-picker-title">اختيار الصنف</h2>
+            <button class="m-btn m-btn--icon m-btn--secondary" type="button" data-layer-close aria-label="إغلاق"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="m-layer__body">
+            <div class="m-picker" data-micro-picker id="lab-picker"><input class="m-picker__input" data-picker-search aria-label="بحث في الأصناف"><div class="m-picker__list" data-picker-list role="listbox" aria-label="الأصناف"></div><p data-picker-summary></p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- شاشة: الأسطح (surfaces) -->
+      <section data-lab-screen="surfaces" data-lab-title="الأسطح والأرقام" data-lab-covers="surfaces" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">ملخص الأداء</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-surface" aria-label="صافي الفترة">
+              <div class="m-surface__waves" aria-hidden="true"></div>
+              <div class="m-surface__content">
+                <span class="m-surface__label">صافي الفترة</span>
+                <span class="m-surface__amount"><bdi dir="ltr">870</bdi> <span class="m-surface__unit">د.أ</span></span>
+                <span class="m-surface__sub">مقارنة بـ 612 د.أ في الفترة السابقة</span>
+              </div>
+            </section>
+            <section class="m-screen__section" style="margin-top:16px">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">أرقام سريعة</h2>
+              <div class="lab-demo-row"><span>طلبات مكتملة</span><strong>132</strong></div>
+              <div class="lab-demo-row"><span>قيد التجهيز</span><strong>45</strong></div>
+              <div class="lab-demo-row"><span>مرتجعات</span><strong>3</strong></div>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: لوحة البيانات (data + المتغيرات + C04) -->
+      <section data-lab-screen="data" data-lab-title="لوحة البيانات" data-lab-covers="data donut bubbles packed-circle data-readable reading-context" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">قراءات الأسبوع</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-chart m-chart--bars" data-chart="bars" data-max="12">
+              <h2 class="m-chart__title">توزيع العمليات</h2>
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="مبيعات" data-value="8"></li>
+                <li data-series="b" data-label="مشتريات" data-value="4"></li>
+                <li data-series="c" data-label="مرتجعات" data-value="0"></li>
+                <li data-series="d" data-label="توريد" data-value="10"></li>
+              </ul>
+              <div class="m-chart__plot" data-plot></div>
+              <p class="m-chart__summary" data-summary>الصفر يظهر على خط الأساس.</p>
+            </section>
+            <section class="m-chart" data-chart="donut" style="margin-top:16px">
+              <h2 class="m-chart__title">حصص القنوات</h2>
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="المتجر" data-value="6"></li>
+                <li data-series="b" data-label="التطبيق" data-value="3"></li>
+                <li data-series="c" data-label="الهاتف" data-value="1"></li>
+              </ul>
+              <div data-plot></div>
+              <p data-chart-summary></p>
+            </section>
+            <section class="m-chart m-chart--packed" data-chart="bubbles" data-chart-packed style="margin-top:16px">
+              <h2 class="m-chart__title">حجم الطلبات</h2>
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="صابون" data-value="40"></li>
+                <li data-series="a" data-label="شموع" data-value="18"></li>
+                <li data-series="a" data-label="زيوت" data-value="9"></li>
+              </ul>
+              <div data-plot></div>
+              <p data-chart-summary></p>
+            </section>
+            <section class="m-chart" data-chart="bars" data-presentation="readable" style="margin-top:16px">
+              <h2 class="m-chart__title">القراءة المنظمة</h2>
+              <ul class="m-chart__data" hidden>
+                <li data-series="a" data-label="مبيعات" data-value="8" data-unit="عملية"></li>
+                <li data-series="b" data-label="مشتريات" data-value="4" data-unit="عملية"></li>
+              </ul>
+              <div data-plot></div>
+              <p data-chart-summary></p>
+            </section>
+            <section class="m-reading-group" aria-labelledby="lab-readings-title" style="margin-top:16px">
+              <header class="m-reading-group__head"><h2 class="m-reading-group__title" id="lab-readings-title">قراءات اليوم</h2></header>
+              <article class="m-info-card m-info-card--compact"><span class="m-info-card__label">طلبات مسلّمة</span><span class="m-info-card__reading"><bdi class="m-info-card__number" dir="ltr">18</bdi><span class="m-info-card__unit">طلب</span></span></article>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: المقارنات (metric-comparison + المتغيرات) -->
+      <section data-lab-screen="metric" data-lab-title="المقارنات الرقمية" data-lab-covers="metric-comparison main-metric-featured metric-circles metric-readable" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">مقارنة القنوات</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-main-metric m-main-metric--featured" data-main-comparison data-common-unit="طلب" data-common-period="هذا الأسبوع">
+              <div class="m-main-metric__hero"><span class="m-main-metric__label">إجمالي الطلبات</span><span class="m-main-metric__number">142</span><span class="m-main-metric__unit">طلب</span></div>
+              <ul data-bar-source hidden>
+                <li data-series="a" data-label="المتجر" data-value="62" data-unit="طلب"></li>
+                <li data-series="a" data-label="التطبيق" data-value="48" data-unit="طلب"></li>
+                <li data-series="a" data-label="الهاتف" data-value="32" data-unit="طلب"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items></ul>
+              <p data-bar-status></p>
+            </section>
+            <section class="m-metric-circles" data-metric-circles data-layout="separated" style="margin-top:16px">
+              <h2 class="m-metric-circles__title">دوائر المقارنة</h2>
+              <ul data-metric-source hidden>
+                <li data-series="a" data-label="المتجر" data-value="62" data-unit="طلب"></li>
+                <li data-series="a" data-label="التطبيق" data-value="48" data-unit="طلب"></li>
+              </ul>
+              <ol data-metric-items></ol>
+              <p data-metric-scale></p>
+            </section>
+            <section class="m-main-metric" data-main-comparison data-presentation="readable" style="margin-top:16px">
+              <ul data-bar-source hidden>
+                <li data-series="a" data-label="المتجر" data-value="62" data-unit="طلب" data-period="هذا الأسبوع"></li>
+                <li data-series="a" data-label="الهاتف" data-value="32" data-unit="طلب" data-period="هذا الأسبوع"></li>
+              </ul>
+              <ul class="m-main-metric__rows" data-bar-items></ul>
+              <p data-bar-status></p>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: شريط المعلومات (info-strip + peek + C01) -->
+      <section data-lab-screen="info-strip" data-lab-title="شريط المعلومات" data-lab-covers="info-strip info-strip-peek value-context" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">قراءات سريعة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section aria-label="قراءة قيمة بسياق">
+              <article class="m-info-card m-info-card--compact m-info-card--context">
+                <div class="m-info-card__heading"><span class="m-info-card__label">طلبات مسلّمة</span></div>
+                <p class="m-info-card__context">اليوم · مصدر عينة محلي</p>
+                <span class="m-info-card__reading"><bdi class="m-info-card__number" dir="ltr">18</bdi><span class="m-info-card__unit">طلب</span></span>
+              </article>
+            </section>
+            <section class="m-info-peek" data-info-peek style="margin-top:16px" aria-label="بطاقات قابلة للسحب">
+              <div class="m-info-strip__viewport"><ol class="m-info-strip__track">
+                <li class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">مبيعات اليوم</span><span class="m-info-card__reading"><bdi class="m-info-card__number" dir="ltr">1,150</bdi><span class="m-info-card__unit">د.أ</span></span></article></li>
+                <li class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">مصاريف اليوم</span><span class="m-info-card__reading"><bdi class="m-info-card__number" dir="ltr">280</bdi><span class="m-info-card__unit">د.أ</span></span></article></li>
+                <li class="m-info-strip__slide"><article class="m-info-card"><span class="m-info-card__label">طلبات قيد التجهيز</span><span class="m-info-card__reading"><bdi class="m-info-card__number" dir="ltr">45</bdi><span class="m-info-card__unit">طلب</span></span></article></li>
+              </ol></div>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <button class="m-btn" type="button" data-info-prev aria-label="السابق">‹</button>
+                <button class="m-btn" type="button" data-info-next aria-label="التالي">›</button>
+              </div>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: عارض البطاقات (carousel — اسحب) -->
+      <section data-lab-screen="carousel" data-lab-title="عارض البطاقات" data-lab-covers="carousel" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar">
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">ملخصات متعددة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <div class="m-carousel" data-carousel data-peek="true" data-carousel-label="ملخصات الأسبوع" role="group" aria-roledescription="عارض بطاقات" tabindex="0">
+              <div class="m-carousel__viewport" data-viewport>
+                <ol class="m-carousel__track" data-track>
+                  <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص الطلبات">
+                    <div class="m-carousel__card">
+                      <h3 class="m-appbar__title" style="font-size:var(--micro-label-size)">ملخص الطلبات</h3>
+                      <div class="lab-demo-row"><span>طلبات جديدة</span><strong>132</strong></div>
+                      <div class="lab-demo-row"><span>جاهزة للتسليم</span><strong>45</strong></div>
+                    </div>
+                  </li>
+                  <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص المبيعات">
+                    <div class="m-carousel__card">
+                      <h3 class="m-appbar__title" style="font-size:var(--micro-label-size)">ملخص المبيعات</h3>
+                      <div class="lab-demo-row"><span>اليوم</span><strong>1,150 د.أ</strong></div>
+                      <div class="lab-demo-row"><span>الأسبوع</span><strong>7,420 د.أ</strong></div>
+                    </div>
+                  </li>
+                  <li class="m-carousel__slide" data-carousel-slide data-card-label="ملخص التسليم">
+                    <div class="m-carousel__card">
+                      <h3 class="m-appbar__title" style="font-size:var(--micro-label-size)">ملخص التسليم</h3>
+                      <div class="lab-demo-row"><span>قيد التوصيل</span><strong>12</strong></div>
+                      <div class="lab-demo-row"><span>متأخر</span><strong>2</strong></div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <p class="lab-demo-note" style="margin-top:12px">اسحب البطاقة أفقيًا أو استخدم الأسهم من لوحة المفاتيح.</p>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: التنظيم (organization + C02) -->
+      <section data-lab-screen="organization" data-lab-title="قائمة الصفوف" data-lab-covers="organization operational-row" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">العمليات الأخيرة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-section" aria-labelledby="org-sec">
+              <h2 class="m-section__title" id="org-sec">اليوم</h2>
+              <ul class="m-rows">
+                <li class="m-row m-operational-row">
+                  <span class="m-identity m-row__tile"><img data-avatar-fallback alt="" src="data:image/png;base64,INVALID"></span>
+                  <span class="m-row__body"><span class="m-row__title">طقم صابون — عميل عمّان</span><span class="m-row__sub">بيع · 150 د.أ · 09:40</span></span>
+                  <span class="m-row__end"><span class="m-badge m-badge--success">مكتمل</span></span>
+                </li>
+                <li class="m-row m-operational-row">
+                  <span class="m-identity m-row__tile"><span class="m-identity__initials" aria-hidden="true">و</span></span>
+                  <span class="m-row__body"><span class="m-row__title">مواد تغليف</span><span class="m-row__sub">مصروف · 40 د.أ · 08:15</span></span>
+                  <span class="m-row__end"><span class="m-badge">مسجل</span></span>
+                </li>
+                <li class="m-row m-operational-row">
+                  <span class="m-identity m-row__tile"><span class="m-identity__initials" aria-hidden="true">ش</span></span>
+                  <span class="m-row__body"><span class="m-row__title">شموع معطرة — طلب حفل الزرقاء</span><span class="m-row__sub">بيع · 95 د.أ · بالأمس</span></span>
+                  <span class="m-row__end"><span class="m-badge m-badge--muted">بالانتظار</span></span>
+                </li>
+              </ul>
+            </section>
+          </main>
+          <footer class="m-screen__actions">
+            <button class="m-btn m-btn--primary" type="button">عملية جديدة</button>
+          </footer>
+        </div>
+      </section>
+
+      <!-- شاشة: التقويم (order-schedule + C06) -->
+      <section data-lab-screen="calendar" data-lab-title="تقويم الطلبات" data-lab-covers="order-schedule calendar-context" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">تقويم الطلبات</span>
+            </div>
+          </header>
+          <main class="m-screen__content" id="lab-calendar-root">
+            <p class="lab-demo-note">المحدّد يوم/أسبوع/شهر حقيقي، واليوم المحدد يفتح قائمة طلباته.</p>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: التنقل والطبقات (navigation + C05) -->
+      <section data-lab-screen="navigation" data-lab-title="التنقل والطبقات" data-lab-covers="navigation mobile-actions" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">الطلبات</span>
+              <button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="المزيد" data-layer-open="lab-actions"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></svg></button>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <div class="m-tabs" data-tabs role="tablist" aria-label="أقسام الطلبات">
+                <button class="m-tabs__tab" type="button" role="tab" aria-selected="true">الحالية</button>
+                <button class="m-tabs__tab" type="button" role="tab">المجدولة</button>
+                <button class="m-tabs__tab" type="button" role="tab">المنتهية</button>
+              </div>
+              <div style="margin-top:12px">
+                <div data-lab-nav-panel="a"><div class="lab-demo-row"><span>طقم صابون — عمّان</span><strong>150 د.أ</strong></div><div class="lab-demo-row"><span>شموع — الزرقاء</span><strong>95 د.أ</strong></div></div>
+                <div data-lab-nav-panel="b" hidden><div class="lab-demo-row"><span>زيوت معطرة</span><strong>غدًا 10:00</strong></div></div>
+                <div data-lab-nav-panel="c" hidden><div class="lab-demo-row"><span>طلب الأسبوع الماضي</span><strong>مكتمل</strong></div></div>
+              </div>
+            </section>
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">الطبقات</h2>
+              <p class="lab-demo-note">افتح لوحة التصفية أو الورقة أو الحوار — أغلقها بزر الرجوع في الهاتف أو بالسحب (الأوراق السفلية).</p>
+              <div style="display:grid;gap:12px">
+                <button class="m-btn" type="button" data-layer-open="lab-filter-panel">لوحة تصفية بعدّاد</button>
+                <button class="m-btn" type="button" data-layer-open="lab-actions">ورقة إجراءات (اسحب للإغلاق)</button>
+                <button class="m-btn" type="button" data-layer-open="lab-confirm">حوار تأكيد مركزي</button>
+              </div>
+            </section>
+          </main>
+          <nav class="m-screen__nav">
+            <nav class="m-navbar" role="navigation" aria-label="التنقل الرئيسي">
+              <button type="button" class="m-navbar__item" aria-current="page" data-lab-nav-item="a"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>الرئيسية</button>
+              <button type="button" class="m-navbar__item" data-lab-nav-item="b"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>الطلبات</button>
+              <button type="button" class="m-navbar__item" data-lab-nav-item="c"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>الحساب</button>
+            </nav>
+          </nav>
+        </div>
+        <div class="m-layer-backdrop" data-for="lab-filter-panel" hidden></div>
+        <div class="m-layer" id="lab-filter-panel" role="dialog" aria-modal="true" aria-labelledby="lab-filter-title" hidden>
+          <div class="m-layer__head"><h2 class="m-layer__title" id="lab-filter-title">تصفية الطلبات</h2>
+            <button class="m-btn m-btn--icon m-btn--secondary" type="button" data-layer-close aria-label="إغلاق"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="m-layer__body" data-filter-panel>
+            <label class="m-choice m-choice--check"><input type="checkbox" data-filter-key="status"><span class="m-choice__box"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="m-choice__text">المكتملة فقط</span></label>
+            <label class="m-choice m-choice--check"><input type="checkbox" data-filter-key="amount"><span class="m-choice__box"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="m-choice__text">قيمة عالية</span></label>
+            <p data-filter-summary></p>
+            <button type="button" class="m-btn m-btn--primary" data-filter-apply>تطبيق</button>
+          </div>
+        </div>
+        <div class="m-layer-backdrop" data-for="lab-actions" hidden></div>
+        <div class="m-layer m-action-sheet" id="lab-actions" role="dialog" aria-modal="true" aria-labelledby="lab-actions-title" hidden>
+          <div class="m-layer__head"><h2 class="m-layer__title" id="lab-actions-title">إجراءات الطلب</h2></div>
+          <div class="m-layer__body">
+            <ul class="m-action-sheet__list">
+              <li class="m-action-sheet__item"><button class="m-btn m-btn--secondary m-action-sheet__item" type="button" data-action-id="share">مشاركة الطلب</button></li>
+              <li class="m-action-sheet__item"><button class="m-btn m-btn--secondary m-action-sheet__item" type="button" data-action-id="print">طباعة الإيصال</button></li>
+              <li class="m-action-sheet__item"><button class="m-btn m-btn--destructive-soft m-action-sheet__item" type="button" data-action-id="cancel">إلغاء الطلب</button></li>
+            </ul>
+          </div>
+        </div>
+        <div class="m-layer-backdrop" data-for="lab-confirm" hidden></div>
+        <div class="m-layer m-layer--center" id="lab-confirm" role="alertdialog" aria-modal="true" aria-labelledby="lab-confirm-title" hidden>
+          <div class="m-layer__head"><h2 class="m-layer__title" id="lab-confirm-title">إلغاء الطلب؟</h2></div>
+          <div class="m-layer__body"><p>لا يمكن التراجع عن الإلغاء بعد التأكيد.</p></div>
+          <div class="m-layer__foot" style="display:flex;gap:8px;padding:0 var(--micro-space-4) var(--micro-space-4)">
+            <button class="m-btn" type="button" data-layer-close>تراجع</button>
+            <button class="m-btn m-btn--destructive-soft" type="button" data-layer-close>نعم، إلغاء</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- شاشة: الرسائل (messages) -->
+      <section data-lab-screen="messages" data-lab-title="الرسائل" data-lab-covers="messages" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">حالة المزامنة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section" style="display:grid;gap:12px">
+              <div class="m-note m-note--success"><div class="m-note__body">حُفظت العملية بنجاح ووصلت للخادم.</div></div>
+              <div class="m-note m-note--error"><div class="m-note__body">تعذّر إرسال الطلب — تحقق من الشبكة ثم أعد المحاولة.</div><button class="m-btn m-btn--secondary" type="button" id="lab-toast-error">إعادة المحاولة</button></div>
+              <div class="m-note m-note--warning"><div class="m-note__body">الاتصال ضعيف؛ قد تتأخر التحديثات.</div></div>
+              <div class="m-note m-note--info"><div class="m-note__body">بدأت فترة الجرد السنوي.</div></div>
+            </section>
+            <section class="m-screen__section" style="margin-top:16px">
+              <p class="lab-demo-note">التنبيه العابر يظهر أسفل الشاشة ثانيتين ثم يختفي، ويحترم التركيز.</p>
+              <button class="m-btn m-btn--primary" type="button" id="lab-toast-show">إظهار تنبيهًا عابرًا</button>
+            </section>
+          </main>
+        </div>
+        <div class="m-toast" id="lab-toast" data-return-focus="#lab-toast-show" hidden><span class="m-toast__text">تم تطبيق التغيير</span><button class="m-btn" data-toast-close type="button">إغلاق</button></div>
+      </section>
+
+      <!-- شاشة: إعدادات الحساب (account-settings) -->
+      <section data-lab-screen="account" data-lab-title="إعدادات الحساب" data-lab-covers="account-settings" hidden>
+        <div class="m-screen" data-micro-screen data-account-settings data-account-layer-id="lab-account-layer">
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">الحساب</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <p class="lab-demo-note">افتح لوحة الإعدادات: منظوران (الحساب / التطبيق) ومفاتيح حقيقية داخل طبقة.</p>
+              <button class="m-btn m-btn--primary" type="button" data-account-open>فتح الإعدادات</button>
+            </section>
+          </main>
+          <div class="m-layer-backdrop" id="lab-account-backdrop" data-for="lab-account-layer" hidden></div>
+          <div class="m-layer m-layer--center" id="lab-account-layer" role="dialog" aria-modal="true" aria-labelledby="lab-account-title" hidden>
+            <header class="m-layer__head">
+              <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب"><svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <h2 class="m-layer__title" id="lab-account-title" data-account-title="account" tabindex="-1">الحساب</h2>
+              <h2 class="m-layer__title" id="lab-app-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h2>
+              <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات"><svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            </header>
+            <div class="m-layer__body" data-account-panels>
+              <section data-account-panel="account">
+                <label class="m-switch" data-switch data-account-setting="email-alerts"><span class="m-switch__text"><span class="m-switch__label">تنبيهات البريد</span></span><input type="checkbox" role="switch" checked><span class="m-switch__track"><span class="m-switch__thumb"></span></span></label>
+                <label class="m-switch" data-switch data-account-setting="session-lock"><span class="m-switch__text"><span class="m-switch__label">قفل الجلسة الحساسة</span></span><input type="checkbox" role="switch"><span class="m-switch__track"><span class="m-switch__thumb"></span></span></label>
+              </section>
+              <section data-account-panel="application" hidden>
+                <label class="m-switch" data-switch data-account-setting="auto-updates"><span class="m-switch__text"><span class="m-switch__label">تحديث تلقائي</span></span><input type="checkbox" role="switch" checked><span class="m-switch__track"><span class="m-switch__thumb"></span></span></label>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- شاشة: بوابة الدخول (access-gateway + C13) -->
+      <section data-lab-screen="gateway" data-lab-title="بوابة الدخول" data-lab-covers="access-gateway access-gateway-screens" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">الدخول</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-access-gateway" data-access-gateway aria-labelledby="lab-gateway-title" data-lab-gateway>
+              <h1 class="m-access-gateway__heading" id="lab-gateway-title">الدخول إلى الحساب</h1>
+              <p class="m-access-gateway__intro">تجربة واجهة فقط — لا مصادقة حقيقية.</p>
+              <form data-access-form novalidate>
+                <div class="m-access-gateway__fields">
+                  <div class="m-field" data-micro-field>
+                    <label class="m-field__label" for="lab-gw-email">البريد الإلكتروني</label>
+                    <div class="m-field__control"><input class="m-field__input" id="lab-gw-email" name="identity" data-access-credential="email" type="email" inputmode="email" autocomplete="username"></div>
+                    <p class="m-field__msg" data-field-msg></p>
+                  </div>
+                  <div class="m-field" data-micro-field>
+                    <label class="m-field__label" for="lab-gw-pass">كلمة المرور</label>
+                    <div class="m-field__control"><input class="m-field__input" id="lab-gw-pass" name="secret" data-access-credential="password" type="password" autocomplete="current-password"></div>
+                    <p class="m-field__msg" data-field-msg></p>
+                  </div>
+                </div>
+                <button class="m-btn m-btn--primary m-access-gateway__submit" type="submit" data-access-submit data-loading-label="جارٍ التحقق">دخول</button>
+                <p class="m-access-gateway__alt"><button type="button" class="m-access-gateway__link" data-access-recovery>نسيت كلمة المرور؟</button></p>
+              </form>
+            </section>
+            <section class="m-screen__section" style="margin-top:16px">
+              <p class="lab-demo-note">حالات البوابة: بريد غير صالح عند الإرسال (تجربة محلية)، وزر التحمل ثانيتين.</p>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: المنتج بكل أنواعها (C07–C12 + C14) -->
+      <section data-lab-screen="product" data-lab-title="شاشة المنتج" data-lab-covers="product-context context operation-state market-components delivery-components assistant-components review-components manage-components" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">شاشة المنتج</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <section class="m-screen__section">
+              <h2 class="m-appbar__title" style="font-size:var(--micro-section-title-size)">نوع العرض</h2>
+              <div class="m-tabs" data-tabs role="tablist" aria-label="أنواع شاشة المنتج" style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="m-tabs__tab" type="button" data-lab-product-type="state" aria-pressed="true">حالة عملية</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="context">السياق</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="market">سوق</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="delivery">توصيل</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="assistant">محادثة</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="review">مراجعة</button>
+                <button class="m-tabs__tab" type="button" data-lab-product-type="manage">إدارة</button>
+              </div>
+            </section>
+            <section style="margin-top:16px" id="lab-product-root" aria-live="polite"></section>
+          </main>
+        </div>
+      </section>
+
+      <!-- شاشة: حالة خطأ مع إعادة محاولة (C15) -->
+      <section data-lab-screen="error" data-lab-title="حالة خطأ" data-lab-covers="error-retry" hidden>
+        <div class="m-screen" data-micro-screen>
+          <header class="m-screen__top">
+            <div class="m-appbar"><button type="button" class="m-btn m-btn--icon m-btn--secondary" aria-label="رجوع" data-lab-back><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="m-appbar__title">مزامنة الفترة</span>
+            </div>
+          </header>
+          <main class="m-screen__content">
+            <div class="m-error-retry" id="lab-error">
+              <span class="m-error-retry__mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 7v6M12 16.5v.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+              <h1 class="m-error-retry__title">تعذّر تحميل البيانات</h1>
+              <p class="m-error-retry__detail">انقطع الاتصال أثناء جلب ملخص الفترة. تحقق من الشبكة ثم أعد المحاولة؛ بياناتك المحفوظة سابقة لم تتأثر.</p>
+            </div>
+          </main>
+          <footer class="m-screen__actions" data-actions="keyboard-follow">
+            <button class="m-btn m-btn--primary" type="button" id="lab-error-retry" data-loading-label="جارٍ إعادة المحاولة">إعادة المحاولة</button>
+            <button class="m-btn" type="button">متابعة دون تحديث</button>
+          </footer>
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+
+  <!-- زر أدوات المختبر -->
+  <button class="lab-tools-button" type="button" aria-label="أدوات المختبر" aria-haspopup="dialog">
+    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4z" fill="currentColor"/></svg>
+  </button>
+
+  <!-- ورقة أدوات المختبر (من مكوّنات المكتبة) -->
+  <div class="m-layer-backdrop" id="lab-tools-backdrop" data-for="lab-tools" hidden></div>
+  <div class="m-layer" id="lab-tools" role="dialog" aria-modal="true" aria-labelledby="lab-tools-title" hidden>
+    <div class="m-layer__head">
+      <h2 class="m-layer__title" id="lab-tools-title">أدوات المختبر</h2>
+      <button class="m-btn m-btn--icon m-btn--secondary" type="button" data-layer-close aria-label="إغلاق"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4L20 20M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="m-layer__body">
+      <p class="lab-demo-note">تؤثر على المختبر كله ولا تغيّر المكوّنات نفسها.</p>
+      <div class="m-field" data-micro-field><span class="m-field__label">الاتجاه</span>
+        <div class="m-field__control">
+          <button class="m-btn" type="button" data-lab-dir-toggle="rtl" aria-pressed="true">عربي RTL</button>
+          <button class="m-btn" type="button" data-lab-dir-toggle="ltr" aria-pressed="false">LTR</button>
+        </div>
+      </div>
+      <div class="m-field" data-micro-field><span class="m-field__label">حجم الخط</span>
+        <div class="m-field__control">
+          <button class="m-btn" type="button" data-lab-font-scale="100" aria-pressed="true">100%</button>
+          <button class="m-btn" type="button" data-lab-font-scale="150">150%</button>
+          <button class="m-btn" type="button" data-lab-font-scale="200">200%</button>
+        </div>
+      </div>
+      <div class="m-field" data-micro-field><span class="m-field__label">الاهتزاز (أندرويد فقط)</span>
+        <div class="m-field__control">
+          <button class="m-btn" type="button" data-lab-haptics aria-pressed="false">تفعيل</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../dist/iife/buttons.js"></script>
+  <script src="../../dist/iife/fields.js"></script>
+  <script src="../../dist/iife/selection.js"></script>
+  <script src="../../dist/iife/picker.js"></script>
+  <script src="../../dist/iife/navigation.js"></script>
+  <script src="../../dist/iife/action-sheet.js"></script>
+  <script src="../../dist/iife/messages.js"></script>
+  <script src="../../dist/iife/organization.js"></script>
+  <script src="../../dist/iife/data.js"></script>
+  <script src="../../dist/iife/packed-circle.js"></script>
+  <script src="../../dist/iife/readings.js"></script>
+  <script src="../../dist/iife/info-strip.js"></script>
+  <script src="../../dist/iife/info-strip-peek.js"></script>
+  <script src="../../dist/iife/metric-comparison.js"></script>
+  <script src="../../dist/iife/account-settings.js"></script>
+  <script src="../../dist/iife/access-gateway.js"></script>
+  <script src="../../dist/iife/order-schedule.js"></script>
+  <script src="../../dist/iife/carousel.js"></script>
+  <script src="../../dist/iife/product.js"></script>
+  <script src="../../dist/iife/screen.js"></script>
+  <script src="../../dist/iife/back.js"></script>
+  <script src="../../dist/iife/haptics.js"></script>
+  <script src="device-lab.js"></script>
+</body>
+</html>

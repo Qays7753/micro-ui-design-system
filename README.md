@@ -1,4 +1,6 @@
-# Micro UI Design System
+# Micro UI
+
+**[مختبر الهاتف](previews/device-lab/standalone.html) هو أداة التجربة الأساسية** — افتحه على هاتفك لاستخدام كل مكوّن في حجمه الطبيعي. Design System
 
 مكتبة UI مستقلة لمشروع Micro: مكونات وتراكيب HTML/CSS/JS للهاتف العربي RTL، Light-only، Vanilla بدون إطار. لا مصادقة ولا شبكة ولا منطق أعمال — كل ذلك للتطبيق المضيف.
 

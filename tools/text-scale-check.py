@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # صفحات الفحص — تُضاف شاشات مختبر الهاتف في T6
 PAGES = [
     "previews/screen/index.html",
+    "previews/device-lab/index.html",
     "previews/compositions/error-retry-example.html",
     "previews/ui-system-showcase/index.html",
 ]

@@ -25,7 +25,7 @@ jobs:
       - run: uv run playwright install --with-deps chromium
       - name: فحص no-undef (lint)
         run: npm run lint
-      - name: كل البوابات (بلا --skip-visual)
+      - name: كل البوابات (بلا --skip-visual — تشمل screen وtext-scale وdevice-lab)
         run: uv run python tools/check-all.py
       - name: فحص الأنواع
         run: npm run typecheck

@@ -1,0 +1,159 @@
+/* =========================================================
+   Micro UI — مختبر الهاتف (device-lab) — الجولة الثالثة T6 (N-D3).
+   الملف: previews/device-lab/device-lab.css
+
+   الدور: كروم المختبر فقط (فهرس الشاشات، أدوات المختبر، إطار الهاتف
+   على الكمبيوتر). الشاشات نفسها مبنية كلها من مكوّنات المكتبة
+   (عائلة screen أساسًا) — لا هوية منفصلة للمختبر.
+
+   العرض:
+   - على الهاتف (≤ 480px): الشاشة تملأ العرض والارتفاع بلا أي إطار.
+   - على الكمبيوتر (> 480px): الشاشة داخل إطار هاتف 360×780 (زوايا
+     ونوتش بسيطين محايدين) والفهرس بجانبه.
+   ========================================================= */
+
+.lab-app,
+.lab-app * { box-sizing: border-box; }
+.lab-app {
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  background: var(--micro-surface-page);
+  color: var(--micro-text-primary);
+  font-family: var(--micro-font-family);
+  font-size: var(--micro-body-size);
+}
+
+/* ===== الفهرس ===== */
+.lab-index {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: max(var(--micro-space-4), env(safe-area-inset-top, 0px)) var(--micro-space-4) var(--micro-space-6);
+}
+.lab-index__title {
+  margin: var(--micro-space-2) 0 var(--micro-space-1);
+  font-size: var(--micro-heading-size);
+  line-height: var(--micro-heading-line);
+  font-weight: var(--micro-weight-semibold);
+}
+.lab-index__note {
+  margin: 0 0 var(--micro-space-4);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.lab-index__group { margin: 0 0 var(--micro-space-4); border: 0; padding: 0; }
+.lab-index__group-title {
+  margin: 0 0 var(--micro-space-2);
+  padding: 0;
+  font-size: var(--micro-section-title-size);
+  line-height: var(--micro-section-title-line);
+  font-weight: var(--micro-weight-semibold);
+}
+.lab-index__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--micro-space-2); }
+.lab-index__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--micro-space-3);
+  inline-size: 100%;
+  min-height: 48px;
+  padding: var(--micro-space-3) var(--micro-space-4);
+  background: var(--micro-surface-base);
+  color: var(--micro-text-primary);
+  border: 1px solid var(--micro-border-divider);
+  border-radius: var(--micro-radius-chip);
+  text-decoration: none;
+  font: inherit;
+  font-size: var(--micro-label-size);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.lab-index__link:active { background: var(--micro-surface-selected); }
+.lab-index__meta { color: var(--micro-text-secondary); font-size: var(--micro-secondary-size); }
+
+/* ===== حاوية الشاشة ===== */
+.lab-stage { position: relative; display: none; }
+.lab-stage[data-open="true"] { display: block; }
+.lab-stage .m-screen { height: 100%; }
+
+/* على الكمبيوتر: فهرس + إطار هاتف جنبًا إلى جنب */
+@media (min-width: 481px) {
+  .lab-app { grid-template-columns: minmax(300px, 380px) 1fr; }
+  .lab-stage { display: block; padding: var(--micro-space-6) var(--micro-space-4); }
+  .lab-stage[data-open="false"] .lab-frame { visibility: hidden; }
+  .lab-frame {
+    inline-size: 360px;
+    block-size: 780px;
+    max-block-size: calc(100dvh - var(--micro-space-8));
+    margin-inline: auto;
+    border-radius: 36px;
+    border: 10px solid #172D32;   /* محايد: حبر الهوية دون رسوم */
+    overflow: hidden;
+    position: relative;
+    background: var(--micro-surface-page);
+    box-shadow: var(--micro-shadow-overlay);
+  }
+  .lab-frame::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    inset-inline-start: 50%;
+    transform: translateX(50%);
+    inline-size: 120px;
+    block-size: 22px;
+    border-radius: var(--micro-radius-capsule);
+    background: #172D32;
+    z-index: 99;
+  }
+}
+/* على الهاتف: الشاشة بملء النافذة بلا إطار */
+@media (max-width: 480px) {
+  .lab-app[data-screen="index"] .lab-stage { display: none; }
+  .lab-app:not([data-screen="index"]) .lab-index { display: none; }
+  .lab-stage { display: block; }
+}
+
+/* ===== زر أدوات المختبر ===== */
+.lab-tools-button {
+  position: fixed;
+  z-index: 95;
+  inset-block-end: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  inset-inline-start: 12px;
+  min-inline-size: 48px;
+  min-block-size: 48px;
+  padding: 0;
+  border-radius: var(--micro-radius-circle);
+  background: var(--micro-surface-base);
+  border: 1px solid var(--micro-border-divider);
+  color: var(--micro-text-secondary);
+  box-shadow: var(--micro-shadow-emphasis);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.lab-tools-button:active { background: var(--micro-surface-selected); }
+@media (min-width: 481px) {
+  .lab-tools-button { position: absolute; }
+}
+
+/* محتوى ديمو عام داخل الشاشات (من توكنات المكتبة فقط) */
+.lab-demo-note {
+  margin: 0 0 var(--micro-space-3);
+  font-size: var(--micro-secondary-size);
+  line-height: var(--micro-secondary-line);
+  color: var(--micro-text-secondary);
+}
+.lab-demo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--micro-space-3);
+  padding: var(--micro-space-3) 0;
+  border-bottom: 1px solid var(--micro-border-divider);
+  font-size: var(--micro-label-size);
+}
+.lab-demo-row:last-child { border-bottom: 0; }

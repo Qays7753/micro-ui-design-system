@@ -76,6 +76,8 @@ def build_gates(quick, out, skip_visual):
         ("api-lifecycle", PY + ["tools/api-lifecycle-check.py", "--out", str(out / "api-lifecycle")]),
         ("screen", PY + ["tools/screen-check.py", "--out", str(out / "screen")]),
         ("text-scale", PY + ["tools/text-scale-check.py", "--out", str(out / "text-scale")]),
+        ("device-lab-standalone", PY + ["tools/build-device-lab-standalone.py", "--check"]),
+        ("device-lab", PY + ["tools/device-lab-check.py", "--out", str(out / "device-lab")]),
         ("numeric-geometry", PY + ["tools/numeric-geometry-check.py"]),
         ("ui-system-showcase", PY + ["tools/ui-system-showcase-check.py"]),
         ("preview-runtime", PY + ["tools/preview-runtime-check.py",
