@@ -75,7 +75,7 @@
       if (destroyed || pending || !permission(id)) return false;
       if (forbidden.indexOf(model.phase) >= 0) return model.connection==='online'&&(id==='reauth'||(model.phase==='denied'&&id==='choose-context'));
       if (!key(model.scope)) return false;
-      if (model.scope.kind === 'driver' && (type === 'market' || (type === 'review' && model.mode !== 'report') || (type!=='context'&&['manage','market'].indexOf(model.destination)>=0))) return false;
+      if (model.scope.kind === 'driver' && (type === 'market' || type === 'manage' || (type === 'review' && model.mode !== 'report') || (type!=='context'&&['manage','market'].indexOf(model.destination)>=0))) return false;
       if (['loading','pending','disabled'].indexOf(model.phase) >= 0) return false;
       if (['uncertain','conflict'].indexOf(model.phase) >= 0 && ['recheck','reauth'].indexOf(id)<0) return false;
       if (['offline','weak','local'].indexOf(model.connection) >= 0) return !!local && model.destination === 'manage' && model.scope.kind !== 'driver';
@@ -121,6 +121,10 @@
       var scopeKey = key(model.scope);
       var ctx = {
         root:root, model:model, ui:ui, node:node, note:note, key:key, uid:instanceId,
+        /* المرحلة 8 — معلومات عرض إضافية للتراكيب الجديدة: رابط صورة
+           مفحوص (نفس قاعدة media) وفعل الطلب المعلق إن وُجد (لعرض حالة
+           تحميل على زره)؛ إضافات فقط لا تغير سلوك أي renderer قائم. */
+        safeImage:safeImage, pending:pending?pending.action:null,
         on:function (el,event,fn) { el.addEventListener(event,fn,{signal:rendererLife.signal}); },
         cleanup:function(fn){cleanups.push(fn);}, can:allowed,
         editable:function(){return !pending && permission('compose') && forbidden.indexOf(model.phase)<0 && ['disabled','loading','pending'].indexOf(model.phase)<0;},
@@ -177,12 +181,14 @@
       var phase=Object.prototype.hasOwnProperty.call(phases,model.phase)?model.phase:'uncertain';
       if(forbidden.indexOf(phase)>=0){note(root,phases[phase],L('k39'),'warning');if(permission('reauth'))ctx.button(root,'reauth',L('k40'),{});if(phase==='denied'&&permission('choose-context'))ctx.button(root,'choose-context',L('k41'),{});}
       else if(!scopeKey){note(root,L('k42'),L('k43'),'warning');}
-      else if(model.scope.kind==='driver'&&(type==='market'||(type==='review'&&model.mode!=='report')||(type!=='context'&&['manage','market'].indexOf(model.destination)>=0))){note(root,L('k44'),L('k45'),'warning');}
+      else if(model.scope.kind==='driver'&&(type==='market'||type==='manage'||(type==='review'&&model.mode!=='report')||(type!=='context'&&['manage','market'].indexOf(model.destination)>=0))){note(root,L('k44'),L('k45'),'warning');}
       else if(!permission('view')||(type!=='context'&&type!=='state'&&key(model.dataContext)!==scopeKey)){note(root,L('k46'),'','warning');}
       else {
         if(['offline','weak','local'].indexOf(model.connection)>=0)note(root,model.connection==='offline'?L('k47'):model.connection==='local'?L('k48'):L('k49'),model.destination==='manage'?L('k50'):L('k51'),'warning');
         if(pending)note(root,phases.pending,'','info');else if(phase!=='ready')note(root,phase==='local-saved'&&model.destination!=='manage'?phases.uncertain:phases[phase],model.phaseDetail||'',phase==='error'?'error':phase==='success'?'success':'info');
-        if(phase!=='loading'&&(phase!=='empty'||type==='assistant'))renderers.get(type)(ctx);
+        /* المرحلة 8: manage يُعرض في empty مثل assistant — نموذج الإدخال
+           هو غرض التركيب ولا معنى لإخفائه حين لا عمليات بعد. */
+        if(phase!=='loading'&&(phase!=='empty'||type==='assistant'||type==='manage'))renderers.get(type)(ctx);
         else if(phase==='empty'&&model.emptyActionLabel)ctx.button(root,'create',model.emptyActionLabel,{});
         if(['uncertain','conflict'].indexOf(phase)>=0&&permission('recheck')&&!root.querySelector('[data-product-action="recheck"]'))ctx.button(root,'recheck',L('k52'),{});
       }

@@ -104,7 +104,7 @@
         if (destroyed || pending || !permission(id)) return false;
         if (forbidden.indexOf(model.phase) >= 0) return model.connection === "online" && (id === "reauth" || model.phase === "denied" && id === "choose-context");
         if (!key(model.scope)) return false;
-        if (model.scope.kind === "driver" && (type === "market" || type === "review" && model.mode !== "report" || type !== "context" && ["manage", "market"].indexOf(model.destination) >= 0)) return false;
+        if (model.scope.kind === "driver" && (type === "market" || type === "manage" || type === "review" && model.mode !== "report" || type !== "context" && ["manage", "market"].indexOf(model.destination) >= 0)) return false;
         if (["loading", "pending", "disabled"].indexOf(model.phase) >= 0) return false;
         if (["uncertain", "conflict"].indexOf(model.phase) >= 0 && ["recheck", "reauth"].indexOf(id) < 0) return false;
         if (["offline", "weak", "local"].indexOf(model.connection) >= 0) return !!local && model.destination === "manage" && model.scope.kind !== "driver";
@@ -192,6 +192,11 @@
           note,
           key,
           uid: instanceId,
+          /* المرحلة 8 — معلومات عرض إضافية للتراكيب الجديدة: رابط صورة
+             مفحوص (نفس قاعدة media) وفعل الطلب المعلق إن وُجد (لعرض حالة
+             تحميل على زره)؛ إضافات فقط لا تغير سلوك أي renderer قائم. */
+          safeImage,
+          pending: pending ? pending.action : null,
           on: function(el, event, fn) {
             el.addEventListener(event, fn, { signal: rendererLife.signal });
           },
@@ -451,7 +456,7 @@
           if (phase === "denied" && permission("choose-context")) ctx.button(root, "choose-context", L("k41"), {});
         } else if (!scopeKey) {
           note(root, L("k42"), L("k43"), "warning");
-        } else if (model.scope.kind === "driver" && (type === "market" || type === "review" && model.mode !== "report" || type !== "context" && ["manage", "market"].indexOf(model.destination) >= 0)) {
+        } else if (model.scope.kind === "driver" && (type === "market" || type === "manage" || type === "review" && model.mode !== "report" || type !== "context" && ["manage", "market"].indexOf(model.destination) >= 0)) {
           note(root, L("k44"), L("k45"), "warning");
         } else if (!permission("view") || type !== "context" && type !== "state" && key(model.dataContext) !== scopeKey) {
           note(root, L("k46"), "", "warning");
@@ -459,7 +464,7 @@
           if (["offline", "weak", "local"].indexOf(model.connection) >= 0) note(root, model.connection === "offline" ? L("k47") : model.connection === "local" ? L("k48") : L("k49"), model.destination === "manage" ? L("k50") : L("k51"), "warning");
           if (pending) note(root, phases.pending, "", "info");
           else if (phase !== "ready") note(root, phase === "local-saved" && model.destination !== "manage" ? phases.uncertain : phases[phase], model.phaseDetail || "", phase === "error" ? "error" : phase === "success" ? "success" : "info");
-          if (phase !== "loading" && (phase !== "empty" || type === "assistant")) renderers.get(type)(ctx);
+          if (phase !== "loading" && (phase !== "empty" || type === "assistant" || type === "manage")) renderers.get(type)(ctx);
           else if (phase === "empty" && model.emptyActionLabel) ctx.button(root, "create", model.emptyActionLabel, {});
           if (["uncertain", "conflict"].indexOf(phase) >= 0 && permission("recheck") && !root.querySelector('[data-product-action="recheck"]')) ctx.button(root, "recheck", L("k52"), {});
         }

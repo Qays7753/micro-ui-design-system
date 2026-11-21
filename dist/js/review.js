@@ -11,10 +11,10 @@
         return !(window.MicroConfig && window.MicroConfig.autoInit === false);
       }
       var m = c.model, n = c.node, r = c.root;
-      r.appendChild(n("h2", "m-product__title", m.mode === "report" ? L("k130") : m.title || L("k131")));
-      if (m.subjectLabel) r.appendChild(n("p", "", m.subjectLabel));
-      if (m.statusLabel) r.appendChild(n("span", "m-badge m-badge--info", m.statusLabel));
+      r.appendChild(n("h2", "m-product__title", m.mode === "report" ? L("k130") : m.mode === "queue" ? m.title || L("k164") : m.title || L("k131")));
       if (m.mode === "report") {
+        if (m.subjectLabel) r.appendChild(n("p", "", m.subjectLabel));
+        if (m.statusLabel) r.appendChild(n("span", "m-badge m-badge--info", m.statusLabel));
         c.field(r, "reason", L("k132"), { multiline: true });
         if (m.reasonOptions) c.field(r, "category", L("k133"), { options: m.reasonOptions });
         c.button(r, "submit-report", L("k134"), function() {
@@ -24,6 +24,50 @@
         }, { confirm: true, description: L("k135") });
         return;
       }
+      if (m.mode === "queue") {
+        if (m.subjectLabel) r.appendChild(n("p", "", m.subjectLabel));
+        if (m.phase === "error") {
+          if ((m.permissions || []).indexOf("retry") >= 0) c.button(r, "retry", L("k113"), {});
+          return;
+        }
+        var items = Array.isArray(m.items) ? m.items : [];
+        if (!items.length) {
+          r.appendChild(n("p", "m-product__secondary", L("k168")));
+          return;
+        }
+        var list = n("ul", "m-operational-list");
+        items.forEach(function(item) {
+          if (!item || item.id == null) return;
+          var kindText = item.kind === "listing" ? L("k165") : item.kind === "flag" ? L("k166") : item.kind === "driver-application" ? L("k167") : null;
+          var li = n("li"), row = n("button", "m-row m-row--operational m-product__queue-item");
+          row.type = "button";
+          row.dataset.focusKey = "queue-item-" + item.id;
+          row.disabled = !c.can("open-review");
+          var text = n("span", "m-row__text");
+          text.appendChild(n("strong", "m-row__title", item.title || L("k67")));
+          var sub = [];
+          if (kindText) sub.push(kindText);
+          if (item.date) sub.push(item.date);
+          if (sub.length) text.appendChild(n("span", "m-row__subtitle", sub.join(" · ")));
+          row.appendChild(text);
+          if (item.statusLabel) {
+            var meta = n("div", "m-row__meta");
+            meta.appendChild(n("span", "m-badge m-badge--info", item.statusLabel));
+            row.appendChild(meta);
+          }
+          c.on(row, "click", function() {
+            if (!r.contains(row) || row.disabled) return;
+            c.request("open-review", { itemId: item.id, revision: item.revision == null ? null : item.revision });
+          });
+          li.appendChild(row);
+          list.appendChild(li);
+        });
+        if (list.children.length) r.appendChild(list);
+        else r.appendChild(n("p", "m-product__secondary", L("k168")));
+        return;
+      }
+      if (m.subjectLabel) r.appendChild(n("p", "", m.subjectLabel));
+      if (m.statusLabel) r.appendChild(n("span", "m-badge m-badge--info", m.statusLabel));
       if (m.summary) r.appendChild(n("p", "", m.summary));
       if (m.reason) c.note(r, L("k136"), m.reason, "info");
       if ((m.permissions || []).indexOf("view-evidence") >= 0 && m.visibility && m.visibility.evidence) c.media(r, m.images, "contain");
