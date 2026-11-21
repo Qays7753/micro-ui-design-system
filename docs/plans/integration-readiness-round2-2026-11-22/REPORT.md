@@ -142,3 +142,20 @@
 **المؤجلات:** لا شيء جديد من بنود R3 (مهملات R-D10 تُنفذ في R4؛ مفاتيح النصوص الدلالية في R5).
 
 **Commit:** `b76471c`
+
+## R4 — عقد دورة حياة موحد (F2) — **غير مكتمل**
+
+**ما نُفذ (2026-11-22، دفعات محلية غير مرفوعة بعد):**
+
+1. **`shared/lifecycle.js` جديد:** `instanceRegistry()` (WeakMap جذر←مثيل، init المكرر يعيد المثيل نفسه) و`resourceTracker()` (مستمعات/مراقبات/مؤقتات تُزال معًا) — بلا وصول DOM في المستوى الأعلى (R-D2).
+2. **كل المداخل الـ19 حُوّلت للعقد:** init(root, options?) يعيد instance له update/destroy، وdestroy(root) وgetInstance(root) صادران مريحان، وdestroy مرتين آمن، وinit من جديد بعد destroy يعمل: buttons (ربط الحراسات عند init — R4.7)، fields، selection (حماية document للمفاتيح بعدّاد مرجعي)، picker، organization، messages، info-strip، info-strip-peek (متعقّب مستمعات DOM جديد)، metric-comparison، account-settings، access-gateway (init المكرر يطبق handlers الجديدة)، carousel (إصلاح قصر تسجيلي في مسار destroy)، navigation (مستمع Escape بعدّاد مرجعي)، readings، data وpacked-circle (إزالة مستمعات كشف الجداول في التنظيف)، order-schedule (instance.update وdestroy(root) فوق العقد القائم)، product (init(root, model) من model.type وinstance.update=replace وroot على المثيل).
+3. **R-D10 في البناء:** مداخل ESM مولّدة في `.build-entries` تعيد تصدير الأسماء العامة فقط (الأسماء المهملة disconnect/sync/rescan/render/update الجذرية غير موجودة في dist/esm إطلاقًا)؛ نسخ IIFE تستورد المصدر كاملًا فتحصل عليها تلقائيًا. `node tools/build-package.mjs --check` ناجح والأنواع طُهرت من المهملات (تبقى في iife.d.ts) و`npm run typecheck` ناجح.
+4. **توسعة api-lifecycle-check:** سكربت تغليف يعدّ المستمعات/المراقبات/المؤقتات صافيًا + سيناريو ESM لكل مدخل (init → init مكرر → update → destroy ×2 → صفر متبقيات → init من جديد → إزالة الجذر بلا destroy → إطاران → صفر أخطاء) + فحص غلوبالات IIFE ومهملاتها، وتحديث 3 فحوص قديمة للعقد الجديد. **النتيجة الحالية: 172 PASS / 20 FAIL** — البقايا موصوفة أدناه.
+
+**ما لم يكتمل (ولم يُرفع لأجله):**
+
+- **بوابة api-lifecycle: 20 فشلًا متبقيًا** من نوعين: (أ) فحص «صفر متبقيات» لعشر عائلات تزيل مستمعاتها عبر AbortController.abort() — عدّاد التغليف يعد الإضافة عبر addEventListener لكن إزالة abort داخلية لا تمر بremoveEventListener؛ حُقنت معالجة إشارات في عدّاد الفحص (خريطة signal→عدد) لكنها لم تدخل حيز التنفيذ بعد التشغيل الأخير وتحتاج تحققًا. (ب) مدخل product في السيناريو يرمي `Unknown product composition or invalid root` رغم إضافة init/root — يُشتبه بآلية تسجيل renderers داخل مجمع ESM (استيراد التسجيل الجانبي) ويحتاج تتبعًا.
+- **إعادة كتابة docs/API.md** بالبنية الموحدة (init/options/instance/update/events/destroy/مثال لكل مدخل) — لم تبدأ.
+- **بنود قبول R4 كلها معلقة** على البوابة أعلاه؛ لا يُعلق أي إغلاق حتى تختضر.
+
+**Commit:** (محلي — يُرفع كدفعة عمل جارية موثقة الحالة)

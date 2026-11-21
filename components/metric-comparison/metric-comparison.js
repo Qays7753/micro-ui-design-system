@@ -2,6 +2,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { globalApi } from '../../shared/integrations.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 import { defaults as familyDefaults } from './labels.js';
 
 registerLabels('metric-comparison', familyDefaults);
@@ -593,6 +594,8 @@ registerLabels('metric-comparison', familyDefaults);
     }
   }
 
+  /* @deprecated منذ 0.2.0 (R-D10): الاسم القديم لإعادة التصيير — يبقى في
+     نسخة IIFE فقط حتى 1.0؛ استخدم instance.update() (مصدر البيانات DOM). */
   export function render(root) {
     installFontsHook();
     var scope = root || document;
@@ -617,18 +620,67 @@ registerLabels('metric-comparison', familyDefaults);
     });
   }
 
-  export function init(root) {
-    installFontsHook();
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update() = render (إعادة التصيير من DOM
+     المصدر لكل المقارنات تحت الجذر)؛ destroy يفك مستمعات كشف الجداول
+     ومراقبات الرصد ومؤقتات rAF. */
+  var instances = instanceRegistry();
+
+  export function init(root, options) {
     var scope = root || document;
+    void options; /* metric-comparison: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    installFontsHook();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = render: إعادة التصيير من DOM المصدر تحت الجذر. */
+      update: function () { render(scope); },
+      /** يفك مستمعات الكشف والرصد — لا يمس قيم المصدر. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      },
+    };
     if (scope.matches && (scope.matches('[data-metric-circles]') || scope.matches('[data-main-comparison]'))) initOne(scope);
     scope.querySelectorAll('[data-metric-circles], [data-main-comparison]').forEach(initOne);
+    instances.set(scope, instance);
+    return instance;
   }
 
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
     var scope = root || document;
     var selector = '[data-metric-circles], [data-main-comparison]';
     var items = [].slice.call(scope.querySelectorAll(selector));
     if (scope.matches && scope.matches(selector)) items.unshift(scope);
+    /* R4.4: مستمعات كشف جداول البيانات كانت تُزال عند إعادة الربط فقط —
+       تُزال الآن مع التنظيف (صفر مستمعات بعد destroy). */
+    [].slice.call(scope.querySelectorAll('.m-main-metric__disclose')).forEach(function (btn) {
+      var binding = btn.__microDatasetDisclosure;
+      if (binding) {
+        btn.removeEventListener('click', binding.handler);
+        delete btn.__microDatasetDisclosure;
+      }
+    });
+    if (scope.matches && scope.matches('.m-main-metric__disclose') && scope.__microDatasetDisclosure) {
+      scope.removeEventListener('click', scope.__microDatasetDisclosure.handler);
+      delete scope.__microDatasetDisclosure;
+    }
     items.forEach(function (chart) {
       disconnected.add(chart);
       if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
@@ -643,10 +695,8 @@ registerLabels('metric-comparison', familyDefaults);
     });
   }
 
-  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
-     render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
-     الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
-
+  /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لrender —
+     يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update() (المصدر DOM). */
   export { render as update };
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل

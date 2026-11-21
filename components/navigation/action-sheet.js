@@ -3,6 +3,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('navigation', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -71,7 +72,42 @@ registerLabels('navigation', familyDefaults);
     if (bd) globalApi('Navigation').init(bd);
     return state;
   }
-export function init(root) { sheets(root).forEach(initOne); }
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد ربط أوراق الأفعال الجديدة تحت الجذر
+     (Navigation يبقى مالك الطبقة)؛ destroy يفك كل ورقة وطبقتها. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* action-sheet: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد ربط أوراق الأفعال الجديدة تحت الجذر. */
+      update: function () { sheets(scope).forEach(initOne); },
+      /** يفك كل ورقة تحت الجذر (ومستمعات Navigation التابعة لها). */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    sheets(scope).forEach(initOne);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
   export function open(sheet, options) {
       if (!sheet || sheet.nodeType !== 1 || !document.contains(sheet) || !sheet.matches('.m-layer.m-action-sheet')) return false;
       var state = initOne(sheet);
@@ -83,6 +119,8 @@ export function init(root) { sheets(root).forEach(initOne); }
       return true;
     }
   export function close(sheet) { if (states.has(sheet)) globalApi('Navigation').closeLayer(sheet); }
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
       sheets(root).forEach(function (sheet) {
         var state = states.get(sheet);
@@ -90,9 +128,10 @@ export function init(root) { sheets(root).forEach(initOne); }
         state.pending = null;
         state.lifetime.abort();
         states.delete(sheet);
-        globalApi('Navigation').disconnect(sheet);
+        var nav = globalApi('Navigation');
+        if (nav) nav.disconnect(sheet);
         var bd = backdrop(sheet);
-        if (bd) globalApi('Navigation').disconnect(bd);
+        if (bd && nav) nav.disconnect(bd);
       });
     }
 

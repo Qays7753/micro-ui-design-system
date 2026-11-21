@@ -16,6 +16,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('info-strip', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -233,10 +234,44 @@ registerLabels('info-strip', familyDefaults);
     data.viewport.hidden = false;
   }
 
-  export function init(root) {
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update() = rescan (إعادة التقاط البطاقات
+     بعد تغيير المضيف لشرائح DOM)؛ destroy يفك مستمعات كل شريط تحت الجذر
+     ويعيده لحالة غير مهيأة. */
+  var instances = instanceRegistry();
+
+  export function init(root, options) {
     var scope = root || document;
+    void options; /* info-strip: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = rescan: إعادة التقاط البطاقات بعد تغيير شرائح DOM للمضيف. */
+      update: function () { rescan(scope); },
+      /** يفك مستمعات كل شريط (لا يمس بطاقات المضيف ولا حالتها). */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      },
+    };
     if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope);
     scope.querySelectorAll('[data-info-strip]').forEach(initStrip);
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
 
   /* R-15: إعادة الالتقاط بعد محتوى مضيف غير متزامن — تفصل الربط القديم
@@ -255,16 +290,16 @@ registerLabels('info-strip', familyDefaults);
 
   /* R-15: فصل مستمعات جذر بعينه — يعيد الشريط لحالة غير مهيأة
      (init/rescan جديدان يعملان بعدها) */
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
     var scope = root || document;
     if (scope.matches && scope.matches('[data-info-strip]')) teardown(scope);
     scope.querySelectorAll('[data-info-strip]').forEach(teardown);
   }
 
-  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
-     rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
-     الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
-
+  /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لrescan —
+     يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update() أو rescan(root). */
   export { rescan as update };
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل

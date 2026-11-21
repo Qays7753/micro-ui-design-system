@@ -85,6 +85,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('data', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -1888,6 +1889,8 @@ registerLabels('data', familyDefaults);
     updateReadingSelection(chart, items);
   }
 
+  /* @deprecated منذ 0.2.0 (R-D10): رسم واحد — يبقى في نسخة IIFE فقط حتى
+     1.0؛ لتصيير كل الرسوم تحت جذر استخدم instance.update(). */
   export function render(chart) {
     installFontRefit();
     var focusControl = document.activeElement && chart.contains(document.activeElement)
@@ -1965,23 +1968,61 @@ registerLabels('data', familyDefaults);
 
   /* W2.5 (A2-F08): init(root) يعالج الجذر نفسه إن طابق [data-chart] ثم
          الأبناء — نفس عقد init الموحد للعائلات؛ إعادة init آمنة (render
-         idempotent والمراقب واحد لكل رسم عبر WeakMap). */
+         idempotent والمراقب واحد لكل رسم عبر WeakMap).
+     العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update() يعيد تصيير كل رسوم النطاق من
+     DOM المصدر؛ destroy يفك مراقبات الرصد وrAF ومستمعات القراءة وكشف
+     الجداول تحت الجذر. */
+  var instances = instanceRegistry();
 
-  export function init(root) {
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* data: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
     installFontRefit();
-      var scope = root || document;
-      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
-      if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
-      charts.forEach(function (c) {
-        render(c);
-      });
-    }
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد تصيير كل رسوم النطاق من DOM المصدر بعد تحديث المضيف. */
+      update: function () {
+        var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+        if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
+        charts.forEach(function (c) { render(c); });
+      },
+      /** يفك مراقبات الرصد ومستمعات القراءة — لا يمس بيانات المصدر. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      },
+    };
+    var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+    if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
+    charts.forEach(function (c) { render(c); });
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
          تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
          DOM (.m-chart__data). لا وسيط بيانات: مصدر الرسم DOM. render
          القديمة تبقى لرسم واحد (D10)، وإعادة الاستدعاء آمنة (render
          idempotent والمراقب واحد لكل رسم). */
 
+  /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لإعادة تصيير
+     كل رسوم النطاق — يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance
+     .update() (مصدر الرسم DOM). */
   export function update(root) {
       var scope = root || document;
       var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
@@ -1992,10 +2033,21 @@ registerLabels('data', familyDefaults);
   export function setSelection(chart, key) { return chart && chart.matches && chart.matches('[data-chart]') ? setReadingSelection(chart, key, false) : null; }
     /* R3-UI01: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init/render
          يظلان متاحين ويعيدان الإلحاق عند الحاجة، وخطاف جاهزية الخطوط
-         يُركَّب مرة واحدة عند أول استخدام فلا يتكرر */
+         يُركَّب مرة واحدة عند أول استخدام فلا يتكرر.
+         @deprecated منذ 0.2.0 (R-D10): يبقى في نسخة IIFE فقط حتى 1.0 —
+         استخدم destroy(root) أو instance.destroy(). */
 
   export function disconnect(root) {
       var scope = root || document;
+      /* R4.4: مستمعات كشف جداول البيانات تُزال مع التنظيف (كانت تُزال عند
+         إعادة الربط فقط) — صفر مستمعات بعد destroy. */
+      [].slice.call(scope.querySelectorAll('.m-chart__disclose')).forEach(function (btn) {
+        var binding = btn.__microDatasetDisclosure;
+        if (binding) {
+          btn.removeEventListener('click', binding.handler);
+          delete btn.__microDatasetDisclosure;
+        }
+      });
       var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
       if (scope.matches && scope.matches('[data-chart]')) charts.unshift(scope);
       charts.forEach(function (c) {

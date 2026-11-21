@@ -22,12 +22,6 @@ export function init(root?: Element | Document, options?: FieldsOptions): Fields
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): FieldsInstance | null;
 export function setLabels(partial: Partial<FieldsLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم instance.update(). */
-export function sync(root?: Element | Document): void;
-/** @deprecated منذ 0.2.0 (R-D10) — alias لsync؛ استخدم instance.update(). */
-export function update(root?: Element | Document): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

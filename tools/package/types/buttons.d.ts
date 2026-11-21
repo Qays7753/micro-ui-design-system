@@ -18,5 +18,3 @@ export function init(root?: Element | Document, options?: ButtonsOptions): Butto
 export function setLoading(button: Element, flag: boolean, options?: { loadingLabel?: string }): void;
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): ButtonsInstance | null;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;

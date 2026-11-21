@@ -1967,6 +1967,21 @@ registerLabels('order-schedule', familyDefaults);
     return {
       root: root,
       getState: guard(getState),
+      /* العقد الموحد (الجولة الثانية R4): update(orders) = setData نفسها —
+         تحديث كامل بلا إعادة تهيئة. */
+      update: guard(function (orders) {
+        state.orders = normalizeOrders(orders);
+        if (state.expandedId !== null) {
+          var stillThere = false;
+          for (var i = 0; i < state.orders.length; i++) {
+            if (state.orders[i].id === state.expandedId) { stillThere = true; break; }
+          }
+          if (!stillThere) state.expandedId = null;
+        }
+        state.loading = false;
+        state.errorRetry = null;
+        render();
+      }),
       setDisplayedMonth: guard(function (month) {
         var p = parseIso(typeof month === 'string' ? month + '-01' : null);
         if (!p) return;
@@ -2075,6 +2090,12 @@ registerLabels('order-schedule', familyDefaults);
 export function getInstance(root) {
       return (root && instances.get(root)) || null;
     }
+  /* العقد الموحد (الجولة الثانية R4): destroy(root) مريح — يدمر مثيل
+     الجذر إن وجد (بلا فعل إن لم يوجد — init يظل مدخل الإنشاء). */
+  export function destroy(root) {
+    var inst = (root && instances.get(root)) || null;
+    if (inst) inst.destroy();
+  }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, orders) اسم موحد
          على مستوى الوحدة يفوّض إلى instance.setData(orders) نفسها — تحديث
          كامل بلا إعادة تهيئة. الاسم القديم setData على المثيل يبقى (D10).

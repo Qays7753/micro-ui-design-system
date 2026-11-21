@@ -10,6 +10,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('organization', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -79,7 +80,50 @@ registerLabels('organization', familyDefaults);
     });
   }
 
-export function init(root) { initSections(root); initAvatars(root); }
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد فحص الأقسام والصور الرمزية (يربط
+     الجديد تحت الجذر)؛ destroy يفك مستمعات النطاق كلها ويعيد الرؤوس
+     والصور قابلة للربط من جديد. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* organization: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص الأقسام والصور الرمزية تحت الجذر (يربط الجديد فقط). */
+      update: function () {
+        initSections(scope);
+        initAvatars(scope);
+      },
+      /** يفك كل مستمعات النطاق ويمكّن الربط من جديد — لا يمس حالة الطي. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    initSections(scope);
+    initAvatars(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
       nodes(root, '.m-section__head, img[data-avatar-fallback]').forEach(function (element) {
         liveBindings.delete(element);

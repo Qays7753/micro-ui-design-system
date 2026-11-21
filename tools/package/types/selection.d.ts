@@ -33,8 +33,6 @@ export function setSwitchPending(switchWrapper: Element, pending: boolean): void
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): SelectionInstance | null;
 export function setLabels(partial: Partial<SelectionLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

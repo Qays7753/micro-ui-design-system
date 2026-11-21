@@ -29,10 +29,6 @@ export function getSelected(picker: Element): PickerItem | null;
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): PickerInstance | null;
 export function setLabels(partial: Partial<SelectionLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — alias لsetOptions لكل picker تحت الجذر؛ استخدم instance.update(items). */
-export function update(root: Element | Document, items: PickerItem[]): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

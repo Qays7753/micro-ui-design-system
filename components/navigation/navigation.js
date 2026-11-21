@@ -45,6 +45,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('navigation', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -662,25 +663,43 @@ registerLabels('navigation', familyDefaults);
     if (initial) syncPanelTabindex(initial);
   }
 
+  /* R4: مستمع Escape على document مشترك بعدّاد مرجعي بين مثيلات العائلة —
+     يُركَّب مع أول مثيل حي ويُزال مع آخر destroy (كان يُركَّب مرة واحدة ولا
+     يُزال أبدًا). سلوك الصفحة كما كان ما دام مثيل واحد على الأقل حيًا. */
+  var escapeUsers = 0;
+  var escapeHandler = null;
   function bindDocumentOnce() {
     /* Escape: مستمع واحد مهما تكرر init — يغلق أعلى طبقة مرة واحدة */
-    if (escapeBound) return;
-    escapeBound = true;
-    document.addEventListener('keydown', function (e) {
+    escapeUsers++;
+    if (escapeHandler) return;
+    escapeHandler = function (e) {
       if (e.key === 'Escape' && !e.defaultPrevented && openLayers.length) {
         requestClose(openLayers[openLayers.length - 1].layer, { reason: 'escape', trigger: document.activeElement });
         e.preventDefault();
       }
-    });
+    };
+    document.addEventListener('keydown', escapeHandler);
+  }
+  function unbindDocument() {
+    if (escapeUsers > 0) escapeUsers--;
+    if (escapeUsers === 0 && escapeHandler) {
+      document.removeEventListener('keydown', escapeHandler);
+      escapeHandler = null;
+      escapeBound = false;
+    }
   }
 
   /* W2.5 (A2-F08): عقد موحد لكل العائلات — init(root) يعالج الجذر نفسه
      إن طابق المحدد ثم الأبناء (container-only سابقًا: تمرير عقدة التبويبات
      ذاتها أو عقدة الطبقة ذاتها كان يُهمل). إعادة init آمنة: كل ربط محروس
-     بعلامة dataset فلا ازدواج listeners. */
-  export function init(root) {
-    var scope = root || document;
-    bindDocumentOnce();
+     بعلامة dataset فلا ازدواج listeners.
+     العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد ربط عناصر الطبقات الجديدة تحت الجذر؛
+     destroy يغلق الطبقات المفتوحة ويفك المستمعات ويرجع inert الخلفية
+     ويطلق حصة مستمع Escape المشترك. */
+  var instances = instanceRegistry();
+
+  function bindScope(scope) {
     var inScope = function (selector) {
       var list = [].slice.call(scope.querySelectorAll(selector));
       if (scope.nodeType === 1 && scope.matches(selector)) list.unshift(scope);
@@ -712,6 +731,43 @@ registerLabels('navigation', familyDefaults);
     inScope('[data-filter-panel]').forEach(initFilterPanel);
   }
 
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* navigation: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    bindDocumentOnce();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد ربط عناصر الطبقات الجديدة تحت الجذر (الربط محروس فلا ازدواج). */
+      update: function () { bindScope(scope); },
+      /** يغلق الطبقات المفتوحة ويفك المستمعات ويرجع inert الخلفية. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        unbindDocument();
+        instances.remove(scope);
+      },
+    };
+    bindScope(scope);
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) { instance.destroy(); return; }
+    disconnect(root);
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
 export function disconnect(root) {
       var scope = root || document;
       // End owned layers synchronously, including closing layers whose entry

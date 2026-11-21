@@ -14,6 +14,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('selection', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -140,40 +141,83 @@ registerLabels('selection', familyDefaults);
     });
   }
 
-  export function init(root) {
-    installSwitchGuard();
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد قراءة حالة المجموعات والمقاطع تحت
+     الجذر؛ destroy يفك المستمعات كلها — بما فيها حماية document للمفاتيح
+     (مشتركة بعدّاد مرجعي بين مثيلات العائلة: تُزال مع آخر مثيل حي). */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
     var scope = root || document;
+    void options; /* selection: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    acquireSwitchGuard();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد قراءة حالة المجموعات والمقاطع (يربط الجديد تحت الجذر). */
+      update: function () {
+        bindGroups(scope);
+        bindSegmented(scope);
+      },
+      /** يفك مستمعات النطاق ويطلق حصة حماية document — لا يمس القيم. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        releaseSwitchGuard();
+        registry.remove(scope);
+      },
+    };
     bindGroups(scope);
     bindSegmented(scope);
+    registry.set(scope, instance);
+    return instance;
   }
 
-  /* R2 (الجولة الثانية): مستمع document المفرد يُركَّب عند أول init — لا
-     وصول إلى document في المستوى الأعلى للوحدة (في مسار IIFE تسبقه
-     التهيئة التلقائية فالتوقيت الفعلي كما كان). */
-  var switchGuardInstalled = false;
-  function installSwitchGuard() {
-    if (switchGuardInstalled) return;
-    switchGuardInstalled = true;
-    installSwitchGuardListener();
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
   }
 
   /* حماية مباشرة حتى مع data-pending المضبوط بالترميز دون API:
    * تبديل مستخدم فعلي على مفتاح في انتظار يُرجع فورًا (تقاطع).
    * R2-06: إشعار change برمجي (isTrusted=false — مثلاً استهلاكٍ
-   * ضبط checked وأطلق الححدث بنفسه) ليس تبديلًا فعليًا فلا يُعكس. */
-  function installSwitchGuardListener() {
-    document.addEventListener('change', function (e) {
-    if (!e.isTrusted) return; /* R2-06: إشعار برمجي ليس تبديلًا فعليًا */
-    var input = e.target;
-    if (!input.matches || !input.matches('.m-switch input')) return;
-    var sw = input.closest('.m-switch');
-    if (sw && sw.getAttribute('data-pending') === 'true') {
-      input.checked = !input.checked;
+   * ضبط checked وأطلق الححدث بنفسه) ليس تبديلًا فعليًا فلا يُعكس.
+   * R4: مستمع document واحد مشترك بعدّاد مرجعي — يُركَّب مع أول مثيل حي
+   * ويُزال مع آخر destroy (بلا وصول إلى document في المستوى الأعلى). */
+  var switchGuardUsers = 0;
+  var switchGuardHandler = null;
+  function acquireSwitchGuard() {
+    switchGuardUsers++;
+    if (switchGuardHandler) return;
+    switchGuardHandler = function (e) {
+      if (!e.isTrusted) return;
+      var input = e.target;
+      if (!input.matches || !input.matches('.m-switch input')) return;
+      var sw = input.closest('.m-switch');
+      if (sw && sw.getAttribute('data-pending') === 'true') {
+        input.checked = !input.checked;
+      }
+    };
+    document.addEventListener('change', switchGuardHandler, true);
+  }
+  function releaseSwitchGuard() {
+    if (switchGuardUsers > 0) switchGuardUsers--;
+    if (switchGuardUsers === 0 && switchGuardHandler) {
+      document.removeEventListener('change', switchGuardHandler, true);
+      switchGuardHandler = null;
     }
-  }, true);
   }
 
   /* عقد المفتاح: انتظار تحديث إعداد — المستهلك يضبط ويرجع عند الفشل */
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
 export function disconnect(root) {
       var scope = root || document;
       var nodes = [].slice.call(scope.querySelectorAll('[data-choice-group], [data-seg]'));

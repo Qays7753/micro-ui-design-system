@@ -5,6 +5,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('selection', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -194,8 +195,48 @@ registerLabels('selection', familyDefaults);
     stateOf(picker).bound = false;
     picker.removeAttribute('data-micro-picker-bound');
   }
-export function init(root) { each(root, bind); }
-    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update(items) = setOptions لكل picker تحت
+     الجذر (بلا مصفوفة لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions). */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* picker: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = setOptions لكل picker تحت الجذر. */
+      update: function (items) {
+        if (!Array.isArray(items)) return;
+        each(scope, function (picker) { setOptions(picker, items); });
+      },
+      /** يفك مستمعات كل picker ويمحو حالته — بيانات المضيف لا تُمس. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        each(scope, function (picker) { disconnect(picker); states.delete(picker); });
+        registry.remove(scope);
+      },
+    };
+    each(scope, bind);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else each(root, function (picker) { disconnect(picker); states.delete(picker); });
+  }
+
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
          setOptions لكل picker تحت الجذر (الجذر نفسه إن كان picker). الاسم
          القديم setOptions(picker, items) يبقى كما هو (D10). بلا مصفوفة
          خيارات لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions. */
@@ -204,8 +245,6 @@ export function init(root) { each(root, bind); }
       if (!Array.isArray(items)) return;
       each(root, function (picker) { setOptions(picker, items); });
     }
-  function disconnectApi(root) { each(root, disconnect); }
-  export function destroy(root) { each(root, function (picker) { disconnect(picker); states.delete(picker); }); }
   export function setStatus(picker, kind, message) {
       if (['ready', 'loading', 'empty', 'error', 'initial', 'disabled'].indexOf(kind) < 0) return;
       var state = stateOf(picker);
@@ -242,6 +281,9 @@ export function init(root) { each(root, bind); }
       optionsOf(picker).forEach(function (option) { option.setAttribute('aria-selected', 'false'); });
       summary(picker); roving(picker, document.activeElement); changed(picker, null);
     }
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
+  function disconnectApi(root) { each(root, disconnect); }
   export { disconnectApi as disconnect };
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل

@@ -3,6 +3,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('access-gateway', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -303,13 +304,11 @@ registerLabels('access-gateway', familyDefaults);
     }
   }
 
-  export function init(root, handlers) {
+  function applyHandlers(scope, handlers) {
     /* المرحلة 7 — options.labels لكل استدعاء: دمج جزئي فوق نصوص العائلة الافتراضية قبل الربط */
     if (handlers && handlers.labels && typeof handlers.labels === 'object') {
       setLabels(handlers.labels);
     }
-
-    var scope = root || document;
     var gateways = [];
     if (scope.matches && scope.matches('[data-access-gateway]')) gateways.push(scope);
     gateways = gateways.concat(Array.prototype.slice.call(scope.querySelectorAll('[data-access-gateway]')));
@@ -319,6 +318,47 @@ registerLabels('access-gateway', familyDefaults);
     });
   }
 
+  /* العقد الموحد (الجولة الثانية R4): init(root, handlers) يعيد instance
+     له update/destroy. init على جذر حي يعيد المثيل نفسه ويطبق الـhandlers
+     الجديدة دون ربط مضاعف (سلوك init الموثق في 0.1.0)؛ instance.update
+     (handlers) هو ذلك المسار نفسه؛ destroy يفك المستمعات والمراقبة
+     ويعيد كلمة المرور المخطوطة ويرجع حالة الأزرار. */
+  var registry = instanceRegistry();
+
+  export function init(root, handlers) {
+    var scope = root || document;
+    var existing = registry.get(scope);
+    if (existing) { existing.update(handlers); return existing; }
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** تحديث callbacks وتوافر الإجراءات دون ربط مضاعف. */
+      update: function (nextHandlers) { applyHandlers(scope, nextHandlers); },
+      /** يفك المستمعات والمراقبة ويرجع الحالة الظاهرة — لا يمس قيم المستخدم. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    applyHandlers(scope, handlers);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
     var scope = root || document;
     var gateways = [].slice.call(scope.querySelectorAll('[data-access-gateway]'));
@@ -348,12 +388,10 @@ registerLabels('access-gateway', familyDefaults);
       if (reveal) reveal.setAttribute('aria-pressed', 'false');
     });
   }
-  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, handlers) اسم موحد
-     يفوّض إلى init نفسها — تحديث callbacks وتوافر الإجراءات الاختيارية
-     على جذر مربوط أصلًا دون ربط مضاعف (سلوك init الموثق). لا يبني
-     النموذج من جديد ولا يعيد كلمة المرور المظهرة. */
-
-  export { init as update, disconnect as destroy };
+  /* @deprecated منذ 0.2.0 (R-D10): update(root, handlers) الاسم القديم
+     لمسار init — يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update
+     (handlers) أو init(root, handlers). */
+  export { init as update };
 
 
 /* R2 (الجولة الثانية): setLabels كانت موثقة في API.md وd.ts وغير موجودة في

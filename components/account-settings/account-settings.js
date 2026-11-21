@@ -3,6 +3,7 @@
 import { globalApi } from '../../shared/integrations.js';
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('account-settings', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -85,12 +86,49 @@ registerLabels('account-settings', familyDefaults);
     showView(initialView, false);
   }
 
-  export function init(root) {
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد فحص اللوحات (يربط الجديد تحت الجذر)؛
+     destroy يفك مستمعات كل لوحة ويمكّن الربط من جديد. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
     var scope = root || document;
+    void options; /* account-settings: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص اللوحات تحت الجذر (يربط الجديد فقط). */
+      update: function () {
+        if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope);
+        scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
+      },
+      /** يفك مستمعات كل لوحة ويمكّن الربط من جديد — لا يغير حالة العرض. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
     if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope);
     scope.querySelectorAll('[data-account-settings]').forEach(initPanel);
+    registry.set(scope, instance);
+    return instance;
   }
 
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
     var scope = root || document;
     var panels = [].slice.call(scope.querySelectorAll('[data-account-settings]'));
@@ -101,8 +139,6 @@ registerLabels('account-settings', familyDefaults);
       panel.removeAttribute('data-account-settings-ready');
     });
   }
-
-  export { disconnect as destroy };
 
 
 /* R2 (الجولة الثانية): setLabels كانت موثقة في API.md وd.ts وغير موجودة في

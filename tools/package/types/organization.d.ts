@@ -23,8 +23,6 @@ export function init(root?: Element | Document, options?: OrganizationOptions): 
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): OrganizationInstance | null;
 export function setLabels(partial: Partial<OrganizationLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

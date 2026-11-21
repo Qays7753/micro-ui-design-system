@@ -20,12 +20,6 @@ export function init(root?: Element | Document, options?: PackedCircleOptions): 
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): PackedCircleInstance | null;
 export function setLabels(partial: Partial<DataLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — لتصيير كل الرسوم تحت جذر استخدم instance.update(). */
-export function render(chart?: Element): void;
-/** @deprecated منذ 0.2.0 (R-D10) — alias لrender؛ استخدم instance.update(). */
-export function update(root?: Element | Document): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

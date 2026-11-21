@@ -8844,10 +8844,34 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/buttons/buttons.js
   var buttons_exports = {};
   __export(buttons_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLoading: () => setLoading
   });
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
+
+  // components/buttons/buttons.js
   var state = /* @__PURE__ */ new WeakMap();
   var guarded = /* @__PURE__ */ new WeakSet();
   var guardControllers = /* @__PURE__ */ new WeakMap();
@@ -8911,6 +8935,49 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       wrapTextLabel(btn);
     }
   }
+  var registry = instanceRegistry();
+  function scopedButtons(scope) {
+    var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));
+    if (scope.matches && scope.matches(".m-btn")) buttons.unshift(scope);
+    return buttons;
+  }
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    scopedButtons(scope).forEach(ensureActivationGuard);
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** update({loading?, loadingLabel?}) يغلف setLoading لكل أزرار النطاق. */
+      update: function(state2) {
+        scopedButtons(scope).forEach(function(button) {
+          if (state2 && typeof state2.loading === "boolean") {
+            setLoading(button, state2.loading, state2);
+          } else if (!state2) {
+            setLoading(button, false);
+          }
+        });
+      },
+      /** يوقف التحميل ويفك حراسات التفعيل ويزيل المثيل — لا يمس قيم المستخدم. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
   function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;
     options = options || {};
@@ -8941,17 +9008,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       unwrapTextLabel(btn);
     }
   }
-  function init(root) {
-    var scope = root || document;
-    var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));
-    if (scope.matches && scope.matches(".m-btn")) buttons.unshift(scope);
-    return buttons;
-  }
   function disconnect(root) {
     var scope = root || document;
-    var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));
-    if (scope.matches && scope.matches(".m-btn")) buttons.unshift(scope);
-    buttons.forEach(function(button) {
+    scopedButtons(scope).forEach(function(button) {
       setLoading(button, false);
       var controller = guardControllers.get(button);
       if (controller) controller.abort();
@@ -8977,8 +9036,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/fields/fields.js
   var fields_exports = {};
   __export(fields_exports, {
-    destroy: () => disconnect,
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2,
     sync: () => sync,
@@ -9014,6 +9074,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
 
   // components/fields/labels.js
   var defaults = {};
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/fields/fields.js
   registerLabels("fields", defaults);
@@ -9238,8 +9318,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     while (document.getElementById(base + i)) i++;
     return base + i;
   }
-  function init(root) {
-    var scope = root || document;
+  function bindFields(scope) {
     var fields = [].slice.call(scope.querySelectorAll("[data-micro-field]"));
     if (scope.matches && scope.matches("[data-micro-field]")) fields.unshift(scope);
     fields.forEach(function(f) {
@@ -9252,6 +9331,39 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       bindStepper(f);
       bindMessage(f);
     });
+  }
+  var registry = instanceRegistry();
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = sync: مزامنة حالة الحقول من قيمها الحالية بلا أحداث. */
+      update: function() {
+        sync(scope);
+      },
+      /** يفك مستمعات كل حقل ومراقبة رسائله — لا يمس قيم المستخدم. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    bindFields(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function sync(root) {
     var scope = root && typeof root.querySelectorAll === "function" ? root : document;
@@ -9310,7 +9422,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/selection/selection.js
   var selection_exports = {};
   __export(selection_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2,
     setSwitchPending: () => setSwitchPending
@@ -9355,6 +9469,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k8": "الاختيار غير متاح حاليًا.",
     "k9": "لا نتائج مطابقة. عدّل كلمة البحث."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/selection/selection.js
   registerLabels("selection", defaults);
@@ -9479,20 +9613,48 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       });
     });
   }
-  function init(root) {
-    installSwitchGuard();
+  var registry = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    acquireSwitchGuard();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد قراءة حالة المجموعات والمقاطع (يربط الجديد تحت الجذر). */
+      update: function() {
+        bindGroups(scope);
+        bindSegmented(scope);
+      },
+      /** يفك مستمعات النطاق ويطلق حصة حماية document — لا يمس القيم. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        releaseSwitchGuard();
+        registry.remove(scope);
+      }
+    };
     bindGroups(scope);
     bindSegmented(scope);
+    registry.set(scope, instance);
+    return instance;
   }
-  var switchGuardInstalled = false;
-  function installSwitchGuard() {
-    if (switchGuardInstalled) return;
-    switchGuardInstalled = true;
-    installSwitchGuardListener();
+  function getInstance(root) {
+    return registry.get(root);
   }
-  function installSwitchGuardListener() {
-    document.addEventListener("change", function(e) {
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
+  var switchGuardUsers = 0;
+  var switchGuardHandler = null;
+  function acquireSwitchGuard() {
+    switchGuardUsers++;
+    if (switchGuardHandler) return;
+    switchGuardHandler = function(e) {
       if (!e.isTrusted) return;
       var input = e.target;
       if (!input.matches || !input.matches(".m-switch input")) return;
@@ -9500,7 +9662,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (sw && sw.getAttribute("data-pending") === "true") {
         input.checked = !input.checked;
       }
-    }, true);
+    };
+    document.addEventListener("change", switchGuardHandler, true);
+  }
+  function releaseSwitchGuard() {
+    if (switchGuardUsers > 0) switchGuardUsers--;
+    if (switchGuardUsers === 0 && switchGuardHandler) {
+      document.removeEventListener("change", switchGuardHandler, true);
+      switchGuardHandler = null;
+    }
   }
   function disconnect(root) {
     var scope = root || document;
@@ -9567,6 +9737,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     clearSelection: () => clearSelection,
     destroy: () => destroy,
     disconnect: () => disconnectApi,
+    getInstance: () => getInstance,
     getSelected: () => getSelected,
     init: () => init,
     setLabels: () => setLabels2,
@@ -9628,6 +9799,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k8": "الاختيار غير متاح حاليًا.",
     "k9": "لا نتائج مطابقة. عدّل كلمة البحث."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/selection/picker.js
   registerLabels("selection", defaults);
@@ -9829,22 +10020,52 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     stateOf(picker).bound = false;
     picker.removeAttribute("data-micro-picker-bound");
   }
-  function init(root) {
-    each(root, bind);
+  var registry = instanceRegistry();
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = setOptions لكل picker تحت الجذر. */
+      update: function(items) {
+        if (!Array.isArray(items)) return;
+        each(scope, function(picker) {
+          setOptions(picker, items);
+        });
+      },
+      /** يفك مستمعات كل picker ويمحو حالته — بيانات المضيف لا تُمس. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        each(scope, function(picker) {
+          disconnect(picker);
+          states.delete(picker);
+        });
+        registry.remove(scope);
+      }
+    };
+    each(scope, bind);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else each(root, function(picker) {
+      disconnect(picker);
+      states.delete(picker);
+    });
   }
   function update(root, items) {
     if (!Array.isArray(items)) return;
     each(root, function(picker) {
       setOptions(picker, items);
-    });
-  }
-  function disconnectApi(root) {
-    each(root, disconnect);
-  }
-  function destroy(root) {
-    each(root, function(picker) {
-      disconnect(picker);
-      states.delete(picker);
     });
   }
   function setStatus(picker, kind, message) {
@@ -9896,6 +10117,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     roving(picker, document.activeElement);
     changed(picker, null);
   }
+  function disconnectApi(root) {
+    each(root, disconnect);
+  }
   function setLabels2(partial) {
     setLabels("selection", partial);
   }
@@ -9929,7 +10153,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   __export(messages_exports, {
     announce: () => announce,
     closeToast: () => closeToast,
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     resetAnnouncements: () => resetAnnouncements,
     setLabels: () => setLabels2,
@@ -9975,6 +10201,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var defaults = {
     "k1": "[micro-messages] m-note بلا variant ولا role — لا يمكن اختيار دور إعلاني آمن (D-UI-02/SUI-010): أضف نوعًا (m-note--info/success/warning/error/help) أو role صريحًا."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/messages/messages.js
   registerLabels("messages", defaults);
@@ -10221,9 +10467,40 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       livePolite = liveAssertive = null;
     }
   }
-  function init(root) {
-    ensureNoteRoles(root);
-    bindClose(root);
+  var registry = instanceRegistry();
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص الرسائل تحت الجذر (أدوار m-note وأزرار الإغلاق الجديدة). */
+      update: function() {
+        ensureNoteRoles(scope);
+        bindClose(scope);
+      },
+      /** يفك المستمعات ويوقف مؤقتات toast — لا يمس نصوص الرسائل. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    ensureNoteRoles(scope);
+    bindClose(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function setLabels2(partial) {
     setLabels("messages", partial);
@@ -10258,7 +10535,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   __export(navigation_exports, {
     appliedFilters: () => appliedFilters,
     closeLayer: () => closeLayer,
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     openLayer: () => openLayer,
     requestClose: () => requestClose,
@@ -10318,6 +10597,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k13": "الجاري",
     "k14": "المطبّق"
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/navigation/navigation.js
   registerLabels("navigation", defaults);
@@ -10865,19 +11164,29 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     })[0] || items[0];
     if (initial) syncPanelTabindex(initial);
   }
+  var escapeUsers = 0;
+  var escapeHandler = null;
   function bindDocumentOnce() {
-    if (escapeBound) return;
-    escapeBound = true;
-    document.addEventListener("keydown", function(e) {
+    escapeUsers++;
+    if (escapeHandler) return;
+    escapeHandler = function(e) {
       if (e.key === "Escape" && !e.defaultPrevented && openLayers.length) {
         requestClose(openLayers[openLayers.length - 1].layer, { reason: "escape", trigger: document.activeElement });
         e.preventDefault();
       }
-    });
+    };
+    document.addEventListener("keydown", escapeHandler);
   }
-  function init(root) {
-    var scope = root || document;
-    bindDocumentOnce();
+  function unbindDocument() {
+    if (escapeUsers > 0) escapeUsers--;
+    if (escapeUsers === 0 && escapeHandler) {
+      document.removeEventListener("keydown", escapeHandler);
+      escapeHandler = null;
+      escapeBound = false;
+    }
+  }
+  var instances = instanceRegistry();
+  function bindScope(scope) {
     var inScope = function(selector) {
       var list = [].slice.call(scope.querySelectorAll(selector));
       if (scope.nodeType === 1 && scope.matches(selector)) list.unshift(scope);
@@ -10906,6 +11215,43 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     inScope("[data-tabs]").forEach(initTabs);
     inScope("[data-filter-panel]").forEach(initFilterPanel);
+  }
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    bindDocumentOnce();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد ربط عناصر الطبقات الجديدة تحت الجذر (الربط محروس فلا ازدواج). */
+      update: function() {
+        bindScope(scope);
+      },
+      /** يغلق الطبقات المفتوحة ويفك المستمعات ويرجع inert الخلفية. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        unbindDocument();
+        instances.remove(scope);
+      }
+    };
+    bindScope(scope);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) {
+      instance.destroy();
+      return;
+    }
+    disconnect(root);
   }
   function disconnect(root) {
     var scope = root || document;
@@ -10985,7 +11331,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/organization/organization.js
   var organization_exports = {};
   __export(organization_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2
   });
@@ -11029,6 +11377,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var defaults = {
     "k1": "؟"
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/organization/organization.js
   registerLabels("organization", defaults);
@@ -11095,9 +11463,39 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (img.complete && img.naturalWidth === 0) fallback();
     });
   }
-  function init(root) {
-    initSections(root);
-    initAvatars(root);
+  var registry = instanceRegistry();
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص الأقسام والصور الرمزية تحت الجذر (يربط الجديد فقط). */
+      update: function() {
+        initSections(scope);
+        initAvatars(scope);
+      },
+      /** يفك كل مستمعات النطاق ويمكّن الربط من جديد — لا يمس حالة الطي. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    initSections(scope);
+    initAvatars(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
   }
   function disconnect(root) {
     nodes(root, ".m-section__head, img[data-avatar-fallback]").forEach(function(element) {
@@ -11139,11 +11537,35 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/compositions/reading-context.js
   var reading_context_exports = {};
   __export(reading_context_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
-    init: () => sync,
+    getInstance: () => getInstance,
+    init: () => init,
     sync: () => sync,
     update: () => sync
   });
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
+
+  // components/compositions/reading-context.js
   var CLASS = "m-reading-unit--contextual";
   function within(root) {
     var out = [].slice.call(root.querySelectorAll("[data-reading-unit]"));
@@ -11208,6 +11630,39 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       el.classList.remove(CLASS);
     });
   }
+  var registry = instanceRegistry();
+  function init(root, options) {
+    var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = sync: مزامنة أصناف سياق الوحدة من DOM الحالي. */
+      update: function() {
+        sync(scope);
+      },
+      /** ينزع أصناف السياق فقط — لا مستمعات أصلا في C04. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    sync(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
 
   // tools/package/.build-entries/iife/readings.mjs
   window.MicroReadings = Object.assign({}, reading_context_exports);
@@ -11236,7 +11691,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/data.js
   var data_exports = {};
   __export(data_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     getSelection: () => getSelection,
     init: () => init,
     render: () => render,
@@ -11391,6 +11848,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k101": "لا توجد قيم موجبة قابلة للرسم المساحي.",
     "k102": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/data/data.js
   registerLabels("data", defaults);
@@ -13237,14 +13714,47 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }
     chart.dispatchEvent(new CustomEvent("micro-data:rendered", { bubbles: true, detail: { kind } }));
   }
-  function init(root) {
-    installFontRefit();
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    installFontRefit();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد تصيير كل رسوم النطاق من DOM المصدر بعد تحديث المضيف. */
+      update: function() {
+        var charts2 = [].slice.call(scope.querySelectorAll("[data-chart]"));
+        if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts2.unshift(scope);
+        charts2.forEach(function(c) {
+          render(c);
+        });
+      },
+      /** يفك مراقبات الرصد ومستمعات القراءة — لا يمس بيانات المصدر. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      }
+    };
     var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
     if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
     charts.forEach(function(c) {
       render(c);
     });
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function update(root) {
     var scope = root || document;
@@ -13262,6 +13772,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function disconnect(root) {
     var scope = root || document;
+    [].slice.call(scope.querySelectorAll(".m-chart__disclose")).forEach(function(btn) {
+      var binding = btn.__microDatasetDisclosure;
+      if (binding) {
+        btn.removeEventListener("click", binding.handler);
+        delete btn.__microDatasetDisclosure;
+      }
+    });
     var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
     if (scope.matches && scope.matches("[data-chart]")) charts.unshift(scope);
     charts.forEach(function(c) {
@@ -13324,7 +13841,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/data/packed-circle.js
   var packed_circle_exports = {};
   __export(packed_circle_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     render: () => render,
     setLabels: () => setLabels2,
@@ -13471,6 +13990,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k101": "لا توجد قيم موجبة قابلة للرسم المساحي.",
     "k102": "تعذر عرض الدوائر لمقارنة أكثر من خمس فئات موجبة. القيم الكاملة معروضة في المفتاح."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/data/packed-circle.js
   registerLabels("data", defaults);
@@ -13873,10 +14412,43 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     renderPacked(chart);
     syncPackedTable(chart);
   }
-  function init(root) {
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد التصيير من DOM المصدر لكل رسوم packed تحت الجذر. */
+      update: function() {
+        var charts = [].slice.call(scope.querySelectorAll("[data-chart-packed]"));
+        if (scope.matches && scope.matches("[data-chart-packed]")) charts.unshift(scope);
+        charts.forEach(function(chart) {
+          render(chart);
+        });
+      },
+      /** يفك مراقبات الرصد وrAF — لا يمس بيانات المصدر. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      }
+    };
     if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
     scope.querySelectorAll("[data-chart-packed]").forEach(render);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function update(root) {
     var scope = root || document;
@@ -13888,6 +14460,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function disconnect(root) {
     var scope = root || document;
+    [].slice.call(scope.querySelectorAll(".m-chart__disclose")).forEach(function(btn) {
+      var binding = btn.__microDatasetDisclosure;
+      if (binding) {
+        btn.removeEventListener("click", binding.handler);
+        delete btn.__microDatasetDisclosure;
+      }
+    });
     var charts = [].slice.call(scope.querySelectorAll("[data-chart-packed]"));
     if (scope.matches && scope.matches("[data-chart-packed]")) charts.unshift(scope);
     charts.forEach(function(chart) {
@@ -13929,7 +14508,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip.js
   var info_strip_exports = {};
   __export(info_strip_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     rescan: () => rescan,
     setLabels: () => setLabels2,
@@ -13985,6 +14566,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k10": "اختيار البطاقة",
     "k11": "عرض البطاقة "
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/info-strip/info-strip.js
   registerLabels("info-strip", defaults);
@@ -14181,10 +14782,39 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     if (data.empty) data.empty.hidden = true;
     data.viewport.hidden = false;
   }
-  function init(root) {
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = rescan: إعادة التقاط البطاقات بعد تغيير شرائح DOM للمضيف. */
+      update: function() {
+        rescan(scope);
+      },
+      /** يفك مستمعات كل شريط (لا يمس بطاقات المضيف ولا حالتها). */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      }
+    };
     if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
     scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function rescan(root) {
     var scope = root || document;
@@ -14233,8 +14863,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/info-strip/info-strip-peek.js
   var info_strip_peek_exports = {};
   __export(info_strip_peek_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
     getIndex: () => getIndex,
+    getInstance: () => getInstance,
     goTo: () => goToIndex,
     init: () => init,
     next: () => next,
@@ -14292,6 +14924,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k10": "اختيار البطاقة",
     "k11": "عرض البطاقة "
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/info-strip/info-strip-peek.js
   registerLabels("info-strip", defaults);
@@ -14514,8 +15166,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       'input, textarea, select, option, [role="textbox"], [role="searchbox"], [role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'
     )));
   }
+  function listenDom(st, element, type, handler, options) {
+    element.addEventListener(type, handler, options);
+    if (!st.domListeners) st.domListeners = [];
+    st.domListeners.push({ element, type, handler, options });
+  }
   function wireKeys(strip, st) {
-    strip.addEventListener("keydown", function(e) {
+    listenDom(st, strip, "keydown", function(e) {
       if (st.disconnected || e.defaultPrevented || e.isComposing || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || st.count === 0) return;
       var target = e.target;
       if (isEditingTarget(target)) return;
@@ -14646,25 +15303,25 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         page.setAttribute("aria-label", L("k11") + (i + 1));
         page.setAttribute("aria-current", i === 0 ? "true" : "false");
         page.setAttribute("aria-pressed", i === 0 ? "true" : "false");
-        page.addEventListener("click", function() {
+        listenDom(st, page, "click", function() {
           goToIndex(strip, i, false);
         });
         pages.appendChild(page);
       });
     }
-    if (prevBtn) prevBtn.addEventListener("click", function() {
+    if (prevBtn) listenDom(st, prevBtn, "click", function() {
       prev(strip);
     });
-    if (nextBtn) nextBtn.addEventListener("click", function() {
+    if (nextBtn) listenDom(st, nextBtn, "click", function() {
       next(strip);
     });
-    viewport.addEventListener("pointerdown", function(e) {
+    listenDom(st, viewport, "pointerdown", function(e) {
       onPointerDown(strip, st, e);
     });
-    viewport.addEventListener("dragstart", function(e) {
+    listenDom(st, viewport, "dragstart", function(e) {
       if (!st.disconnected) e.preventDefault();
     });
-    viewport.addEventListener("click", function(e) {
+    listenDom(st, viewport, "click", function(e) {
       if (st.suppressClick) {
         e.preventDefault();
         e.stopPropagation();
@@ -14684,10 +15341,63 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var st = stateOf.get(strip);
     if (st) goToIndex(strip, st.index - 1);
   }
-  function init(root) {
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    function targetStrip() {
+      if (scope.matches && scope.matches("[data-info-peek]")) return scope;
+      return scope.querySelector ? scope.querySelector("[data-info-peek]") : null;
+    }
+    var instance = {
+      root: scope,
+      /** = goTo: تنقل الفهرس (يطلق micro-info-peek:change حتى برمجيًا). */
+      update: function(updateOptions) {
+        updateOptions = updateOptions || {};
+        var stripEl = targetStrip();
+        var st = stripEl ? stateOf.get(stripEl) : null;
+        var index = typeof updateOptions.index === "number" ? updateOptions.index : st ? st.index : 0;
+        if (stripEl) goToIndex(stripEl, index, updateOptions);
+      },
+      goTo: function(index, goToOptions) {
+        var stripEl = targetStrip();
+        if (stripEl) goToIndex(stripEl, index, goToOptions);
+      },
+      next: function() {
+        var stripEl = targetStrip();
+        if (stripEl) next(stripEl);
+      },
+      prev: function() {
+        var stripEl = targetStrip();
+        if (stripEl) prev(stripEl);
+      },
+      getIndex: function() {
+        var stripEl = targetStrip();
+        return stripEl ? getIndex(stripEl) : -1;
+      },
+      /** يفك مستمعات كل شريط ومراقباته ومؤقتاته تحت الجذر. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      }
+    };
     if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
     scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function updateApi(strip, index, options) {
     goToIndex(strip, index, options);
@@ -14710,6 +15420,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var st = stateOf.get(strip);
       if (st) {
         st.disconnected = true;
+        if (st.domListeners) {
+          st.domListeners.splice(0).forEach(function(entry) {
+            entry.element.removeEventListener(entry.type, entry.handler, entry.options);
+          });
+        }
         if (st.directionObserver) {
           st.directionObserver.disconnect();
           st.directionObserver = null;
@@ -14764,7 +15479,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/metric-comparison/metric-comparison.js
   var metric_comparison_exports = {};
   __export(metric_comparison_exports, {
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     render: () => render,
     setLabels: () => setLabels2,
@@ -14810,6 +15527,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function globalApi(name) {
     if (typeof globalThis === "undefined") return void 0;
     return globalThis["Micro" + name];
+  }
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
   }
 
   // components/metric-comparison/labels.js
@@ -15462,17 +16199,57 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       observeResponsive(chart);
     });
   }
-  function init(root) {
-    installFontsHook();
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    installFontsHook();
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = render: إعادة التصيير من DOM المصدر تحت الجذر. */
+      update: function() {
+        render(scope);
+      },
+      /** يفك مستمعات الكشف والرصد — لا يمس قيم المصدر. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      }
+    };
     if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
     scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function disconnect(root) {
     var scope = root || document;
     var selector = "[data-metric-circles], [data-main-comparison]";
     var items = [].slice.call(scope.querySelectorAll(selector));
     if (scope.matches && scope.matches(selector)) items.unshift(scope);
+    [].slice.call(scope.querySelectorAll(".m-main-metric__disclose")).forEach(function(btn) {
+      var binding = btn.__microDatasetDisclosure;
+      if (binding) {
+        btn.removeEventListener("click", binding.handler);
+        delete btn.__microDatasetDisclosure;
+      }
+    });
+    if (scope.matches && scope.matches(".m-main-metric__disclose") && scope.__microDatasetDisclosure) {
+      scope.removeEventListener("click", scope.__microDatasetDisclosure.handler);
+      delete scope.__microDatasetDisclosure;
+    }
     items.forEach(function(chart) {
       disconnected.add(chart);
       if (chart.__microMetricResizeObserver) chart.__microMetricResizeObserver.disconnect();
@@ -15527,8 +16304,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/account-settings/account-settings.js
   var account_settings_exports = {};
   __export(account_settings_exports, {
-    destroy: () => disconnect,
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2
   });
@@ -15578,6 +16356,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   var defaults = {
     "k1": "تغيّر هذا المثال داخل الصفحة فقط؛ لم يُحفظ الإعداد."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/account-settings/account-settings.js
   registerLabels("account-settings", defaults);
@@ -15654,10 +16452,39 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
     showView(initialView, false);
   }
-  function init(root) {
+  var registry = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص اللوحات تحت الجذر (يربط الجديد فقط). */
+      update: function() {
+        if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
+        scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+      },
+      /** يفك مستمعات كل لوحة ويمكّن الربط من جديد — لا يغير حالة العرض. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
     if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
     scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
   }
   function disconnect(root) {
     var scope = root || document;
@@ -15700,8 +16527,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/access-gateway/access-gateway.js
   var access_gateway_exports = {};
   __export(access_gateway_exports, {
-    destroy: () => disconnect,
+    destroy: () => destroy,
     disconnect: () => disconnect,
+    getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2,
     update: () => init
@@ -15771,6 +16599,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k19": "جارٍ التحقق من بيانات الدخول…",
     "k20": "تعذّر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة."
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances.delete(key(root));
+      }
+    };
+  }
 
   // components/access-gateway/access-gateway.js
   registerLabels("access-gateway", defaults);
@@ -16026,11 +16874,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       );
     }
   }
-  function init(root, handlers) {
+  function applyHandlers(scope, handlers) {
     if (handlers && handlers.labels && typeof handlers.labels === "object") {
       setLabels2(handlers.labels);
     }
-    var scope = root || document;
     var gateways = [];
     if (scope.matches && scope.matches("[data-access-gateway]")) gateways.push(scope);
     gateways = gateways.concat(Array.prototype.slice.call(scope.querySelectorAll("[data-access-gateway]")));
@@ -16038,6 +16885,41 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       initGateway(gateway, handlers || gateway.__microAccessCallbacks || {});
       syncOptional(gateway);
     });
+  }
+  var registry = instanceRegistry();
+  function init(root, handlers) {
+    var scope = root || document;
+    var existing = registry.get(scope);
+    if (existing) {
+      existing.update(handlers);
+      return existing;
+    }
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** تحديث callbacks وتوافر الإجراءات دون ربط مضاعف. */
+      update: function(nextHandlers) {
+        applyHandlers(scope, nextHandlers);
+      },
+      /** يفك المستمعات والمراقبة ويرجع الحالة الظاهرة — لا يمس قيم المستخدم. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      }
+    };
+    applyHandlers(scope, handlers);
+    registry.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return registry.get(root);
+  }
+  function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
   function disconnect(root) {
     var scope = root || document;
@@ -16099,6 +16981,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   // components/order-schedule/order-schedule.js
   var order_schedule_exports = {};
   __export(order_schedule_exports, {
+    destroy: () => destroy,
     getInstance: () => getInstance,
     init: () => init,
     setLabels: () => setLabels2,
@@ -17588,6 +18471,24 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return {
       root,
       getState: guard(getState),
+      /* العقد الموحد (الجولة الثانية R4): update(orders) = setData نفسها —
+         تحديث كامل بلا إعادة تهيئة. */
+      update: guard(function(orders) {
+        state.orders = normalizeOrders(orders);
+        if (state.expandedId !== null) {
+          var stillThere = false;
+          for (var i = 0; i < state.orders.length; i++) {
+            if (state.orders[i].id === state.expandedId) {
+              stillThere = true;
+              break;
+            }
+          }
+          if (!stillThere) state.expandedId = null;
+        }
+        state.loading = false;
+        state.errorRetry = null;
+        render();
+      }),
       setDisplayedMonth: guard(function(month) {
         var p = parseIso(typeof month === "string" ? month + "-01" : null);
         if (!p) return;
@@ -17698,6 +18599,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function getInstance(root) {
     return root && instances.get(root) || null;
   }
+  function destroy(root) {
+    var inst = root && instances.get(root) || null;
+    if (inst) inst.destroy();
+  }
   function update(root, orders) {
     var inst = root && instances.get(root) || null;
     if (inst) inst.setData(orders);
@@ -17727,6 +18632,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     destroy: () => destroy,
     disconnect: () => disconnect,
     getIndex: () => getIndex,
+    getInstance: () => getInstance,
     goTo: () => goToIndex,
     init: () => init,
     next: () => next,
@@ -17781,6 +18687,26 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     "k7": "الانتقال إلى البطاقة ",
     "k8": "عارض بطاقات"
   };
+
+  // shared/lifecycle.js
+  function instanceRegistry() {
+    var instances2 = /* @__PURE__ */ new WeakMap();
+    function key(root) {
+      return root || document;
+    }
+    return {
+      get: function(root) {
+        var instance = instances2.get(key(root));
+        return instance && !instance.__destroyed ? instance : null;
+      },
+      set: function(root, instance) {
+        instances2.set(key(root), instance);
+      },
+      remove: function(root) {
+        instances2.delete(key(root));
+      }
+    };
+  }
 
   // components/carousel/carousel.js
   registerLabels("carousel", defaults);
@@ -18241,10 +19167,58 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var st = stateOf.get(carousel);
     if (st) goToIndex(carousel, st.index - 1);
   }
-  function init(root) {
+  var instances = instanceRegistry();
+  function init(root, options) {
     var scope = root || document;
+    void options;
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    function target() {
+      if (scope.matches && scope.matches("[data-carousel]")) return scope;
+      return scope.querySelector ? scope.querySelector("[data-carousel]") : null;
+    }
+    var instance = {
+      root: scope,
+      /** = goTo: تنقل الفهرس (يطلق micro-carousel:change حتى برمجيًا). */
+      update: function(updateOptions) {
+        updateOptions = updateOptions || {};
+        var el = target();
+        var st = el ? stateOf.get(el) : null;
+        var index = typeof updateOptions.index === "number" ? updateOptions.index : st ? st.index : 0;
+        if (el) goToIndex(el, index, updateOptions);
+      },
+      goTo: function(index, goToOptions) {
+        var el = target();
+        if (el) goToIndex(el, index, goToOptions);
+      },
+      next: function() {
+        var el = target();
+        if (el) next(el);
+      },
+      prev: function() {
+        var el = target();
+        if (el) prev(el);
+      },
+      getIndex: function() {
+        var el = target();
+        return el ? getIndex(el) : -1;
+      },
+      /** يفك مستمعات كل عارض ومراقباته ومؤقتاته تحت الجذر. */
+      destroy: function() {
+        if (destroyed) return;
+        destroyed = true;
+        destroyAll(scope);
+        instances.remove(scope);
+      }
+    };
     if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
     scope.querySelectorAll("[data-carousel]").forEach(setup);
+    instances.set(scope, instance);
+    return instance;
+  }
+  function getInstance(root) {
+    return instances.get(root);
   }
   function updateApi(carousel, index, options) {
     goToIndex(carousel, index, options);
@@ -18253,8 +19227,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var st = stateOf.get(carousel);
     return st ? st.index : -1;
   }
-  function destroy(root) {
-    var scope = root || document;
+  function destroyAll(scope) {
     disconnect(scope);
     var items = [].slice.call(scope.querySelectorAll("[data-carousel]"));
     if (scope.matches && scope.matches("[data-carousel]")) items.unshift(scope);
@@ -18264,6 +19237,14 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       if (st && st.dots) st.dots.textContent = "";
       stateOf.delete(carousel);
     });
+  }
+  function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) {
+      instance.destroy();
+      return;
+    }
+    destroyAll(root || document);
   }
   function disconnect(root) {
     var scope = root || document;

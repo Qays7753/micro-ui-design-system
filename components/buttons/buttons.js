@@ -25,6 +25,8 @@
 
    مثال عملي كامل: previews/buttons/example-usage.html
    ========================================================= */
+
+  import { instanceRegistry } from '../../shared/lifecycle.js';
   /* حالة كل زر تُحفظ في WeakMap (لا تلوّث DOM): تسمية aria-label
      الأصلية ووجودها — تُحفظ مرة واحدة عند بدء التحميل وتُسترجع بدقة. */
   var state = new WeakMap();
@@ -115,32 +117,61 @@
     }
   }
 
-  /**
-   * حالة التحميل — العقد العام للمكوّن:
-   *
-   * MicroButtons.setLoading(btn, true|false [, options])
-   * options.loadingLabel — تسمية تحميل صريحة سليمة (مثل «جارٍ البحث»).
-   * بديل تصريحي بلا JS إضافي: سمة data-loading-label على الزر.
-   *
-   * الضمانات:
-   * - التكرار آمن: true على زر محمّل أصلًا لا فعل، وfalse على زر غير
-   *   محمّل (أو لم يبدأ تحميله عبر هذه الدالة) لا فعل ولا يمحو شيئًا.
-   * - الاسترجاع دقيق: aria-label الأصلي يعود كما كان، وإن لم يكن
-   *   للزر تسمية أصلًا فلا تُضاف له تسمية بعد التوقف.
-   * - بلا تسمية صريحة يبقى الاسم الإتاحي مطابقًا للنص الظاهر كما هو —
-   *   لا تركيب آلي لجمل غير سليمة ولا اختصار يخفي المعنى؛ وaria-busy
-   *   يبلغ التقنيات المساعدة بالانشغال.
-   * - زر معطل أصلًا (disabled) لا يدخل حالة التحميل إطلاقًا، ولا تُنزع
-   *   سمة disabled أبدًا — التعطيل الحقيقي يتقدم على المحاكاة.
-   * - الزر أثناء التحميل يبقى قابلًا للتركيز (ليس disabled) فلا يضيع
-   *   التركيز من مستخدم لوحة المفاتيح، وحلقة التركيز تبقى ظاهرة.
-   * - منع التفعيل: pointer-events:none + حراسة click/keydown أعلاه.
-    * - زر نصي بلا أيقونة: B الافتراضي يحفظ التسمية ظاهرة ويُظهر المؤشر
-    *   أثناء التحميل داخل حشو بداية الزر نفسه — بلا حجز مساحة قبل
-    *   التحميل، فالعرض والارتفاع ثابتان في الأطوار الثلاثة (R1-UI02).
-    *   A عبر m-btn--loading-replace يخفي النص بصريًا فقط مع حفظ
-    *   مكانه واسمه الإتاحي. يعود النص كما كان عند التوقف.
-   */
+  /* واجهة عامة للاستهلاك المباشر ولفحص العقد خارج لوحة المعاينة */
+
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. B01 لا مفهوم بيانات له — update يغلف setLoading
+     لكل .m-btn تحت الجذر (الحالة العابرة قرار المستهلك عبر setLoading
+     أيضًا). الحراسات تُربط عند init مباشرة (R4.7) ويعاد ربطها بعد كل
+     destroy. لا نصوص للعائلة (بلا labels.js) فلا options فعلية بعد R5. */
+  var registry = instanceRegistry();
+
+  function scopedButtons(scope) {
+    var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
+    if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
+    return buttons;
+  }
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* B01: لا خيارات حاليًا — تدخل options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing; /* المثيل نفسه — لا ربط مضاعف */
+    scopedButtons(scope).forEach(ensureActivationGuard);
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** update({loading?, loadingLabel?}) يغلف setLoading لكل أزرار النطاق. */
+      update: function (state) {
+        scopedButtons(scope).forEach(function (button) {
+          if (state && typeof state.loading === 'boolean') {
+            setLoading(button, state.loading, state);
+          } else if (!state) {
+            setLoading(button, false);
+          }
+        });
+      },
+      /** يوقف التحميل ويفك حراسات التفعيل ويزيل المثيل — لا يمس قيم المستخدم. */
+      destroy: function () {
+        if (destroyed) return; /* destroy مرتين آمن */
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+  }
+
   export function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;
     options = options || {};
@@ -175,29 +206,15 @@
     }
   }
 
-  /* واجهة عامة للاستهلاك المباشر ولفحص العقد خارج لوحة المعاينة */
-  /* العقد الموحد (المرحلة 6 — 2026-11-21): B01 مكيّف بالترميز والربط
-         تلقائي عند التحميل (حراسات التحميل تُنشأ عند أول setLoading)، فهذا
-         init ليست تهيئة ربط بل اكتشاف موثق فقط: تعيد أزرار النطاق كي
-         تشتغل كود التهيئة الموحد عند المضيف على الجذر نفسه؛ استدعاؤها
-         مرتين بريء تمامًا ولا يضيف أي مستمع. لا update هنا: لا مفهوم
-         بيانات للزر — حالة التحميل العابرة عبر setLoading. */
-
-  export function init(root) {
-      var scope = root || document;
-      var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
-      if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
-      return buttons;
-    }
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى 1.0
+     (لا يُصدَّر من مدخل ESM) — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
-      var scope = root || document;
-      var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
-      if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
-      buttons.forEach(function (button) {
-        setLoading(button, false);
-        var controller = guardControllers.get(button);
-        if (controller) controller.abort();
-        guardControllers.delete(button);
-        guarded.delete(button);
-      });
-    }
+    var scope = root || document;
+    scopedButtons(scope).forEach(function (button) {
+      setLoading(button, false);
+      var controller = guardControllers.get(button);
+      if (controller) controller.abort();
+      guardControllers.delete(button);
+      guarded.delete(button);
+    });
+  }

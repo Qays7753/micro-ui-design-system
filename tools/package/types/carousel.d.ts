@@ -38,10 +38,6 @@ export function getIndex(carousel: Element): number;
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): CarouselInstance | null;
 export function setLabels(partial: Partial<CarouselLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — alias لgoTo؛ استخدم instance.update({index}). */
-export function update(carousel: Element, index: number, options?: { animate?: boolean }): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

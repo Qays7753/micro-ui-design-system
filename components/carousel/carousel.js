@@ -68,6 +68,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('carousel', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -608,26 +609,67 @@ registerLabels('carousel', familyDefaults);
   export function next(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index + 1); }
   export function prev(carousel) { var st = stateOf.get(carousel); if (st) goToIndex(carousel, st.index - 1); }
 
-export function init(root) {
-      /* SUI-R2-A2 (إصلاح SUI-R1-02): الجذر-الذات إن كان عارضًا يُعالج هنا
-         — تطابقًا مع disconnect الذي يعالجه (كان التعارض موثقًا في
-         SUI-R1-02: disconnect يفصل الجذر-الذات وinit لا يصل إليه). */
-      var scope = root || document;
-      if (scope.matches && scope.matches('[data-carousel]')) setup(scope);
-      scope.querySelectorAll('[data-carousel]').forEach(setup);
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/goTo/next/prev/getIndex/destroy. الجذر-الذات إن كان عارضًا
+     يُعالج هنا — تطابقًا مع disconnect (SUI-R1-02)؛ عمليات الفهرس تستهدف
+     العارض نفسه أو أوله تحت الجذر (لا معنى لفهرس واحد على عدة عارضين). */
+  var instances = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* carousel: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    function target() {
+      if (scope.matches && scope.matches('[data-carousel]')) return scope;
+      return scope.querySelector ? scope.querySelector('[data-carousel]') : null;
     }
+    var instance = {
+      root: scope,
+      /** = goTo: تنقل الفهرس (يطلق micro-carousel:change حتى برمجيًا). */
+      update: function (updateOptions) {
+        updateOptions = updateOptions || {};
+        var el = target();
+        var st = el ? stateOf.get(el) : null;
+        var index = typeof updateOptions.index === 'number' ? updateOptions.index : (st ? st.index : 0);
+        if (el) goToIndex(el, index, updateOptions);
+      },
+      goTo: function (index, goToOptions) { var el = target(); if (el) goToIndex(el, index, goToOptions); },
+      next: function () { var el = target(); if (el) next(el); },
+      prev: function () { var el = target(); if (el) prev(el); },
+      getIndex: function () { var el = target(); return el ? getIndex(el) : -1; },
+      /** يفك مستمعات كل عارض ومراقباته ومؤقتاته تحت الجذر. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        destroyAll(scope);
+        instances.remove(scope);
+      },
+    };
+    if (scope.matches && scope.matches('[data-carousel]')) setup(scope);
+    scope.querySelectorAll('[data-carousel]').forEach(setup);
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(carousel, index, options)
          اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق micro-carousel:change
          حتى برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
          الشرائح يبقى دورة destroy/init موثقة لا update. */
+    /* @deprecated منذ 0.2.0 (R-D10): update(carousel, index, options) الاسم
+       القديم لgoTo — يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update
+       ({index}) أو goTo(carousel, index). */
 
   function updateApi(carousel, index, options) { goToIndex(carousel, index, options); }
   export function getIndex(carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;
     }
-  export function destroy(root) {
-      var scope = root || document;
+  function destroyAll(scope) {
       disconnect(scope);
       var items = [].slice.call(scope.querySelectorAll('[data-carousel]'));
       if (scope.matches && scope.matches('[data-carousel]')) items.unshift(scope);
@@ -637,10 +679,18 @@ export function init(root) {
         if (st && st.dots) st.dots.textContent = '';
         stateOf.delete(carousel);
       });
-    }
+  }
+
+  export function destroy(root) {
+      var instance = instances.get(root);
+      if (instance) { instance.destroy(); return; }
+      destroyAll(root || document);
+  }
     /* SUI-025: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init يظل متاحًا
          ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
          الجذر نفسه إن كان عارضًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
+    /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+       1.0 — استخدم destroy(root) أو instance.destroy(). */
 
   export function disconnect(root) {
       var scope = root || document;

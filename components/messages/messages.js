@@ -36,6 +36,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('messages', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -312,6 +313,8 @@ registerLabels('messages', familyDefaults);
     });
   }
 
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
 export function disconnect(root) {
       var scope = root || document;
       var nodes = [scope].concat([].slice.call(scope.querySelectorAll('*')));
@@ -336,7 +339,49 @@ export function disconnect(root) {
     }
     /* W2.5: init(root) يشمل الجذر نفسه؛ W2.2: يضمن أدوار m-note قبل التفاعل */
 
-  export function init(root) { ensureNoteRoles(root); bindClose(root); }
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. update يعيد فحص الرسائل (أدوار m-note وأزرار
+     الإغلاق الجديدة)؛ destroy يفك المستمعات ويوقف مؤقتات toast النشطة
+     تحت الجذر. القنوات الحية (polite/assertive) ملك الوحدة مشتركة بين
+     المثيلات — تُزال فقط عند destroy(document) كما في 0.1.0. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* messages: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد فحص الرسائل تحت الجذر (أدوار m-note وأزرار الإغلاق الجديدة). */
+      update: function () {
+        ensureNoteRoles(scope);
+        bindClose(scope);
+      },
+      /** يفك المستمعات ويوقف مؤقتات toast — لا يمس نصوص الرسائل. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    ensureNoteRoles(scope);
+    bindClose(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث

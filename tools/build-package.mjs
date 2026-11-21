@@ -49,46 +49,49 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = path.join(ROOT, "dist");
 
 /* جدول نقاط الدخول (R2.2): المدخل | المصدر | الغلوبال في IIFE |
-   تهيئة تلقائية؟ | الأسماء المتوقعة في ESM (يفحصها --check). */
+   تهيئة تلقائية؟ | الأسماء العامة في مدخل ESM (يفحصها --check).
+   R-D10 (الجولة الثانية R4): الأسماء المهملة (disconnect/sync/rescan/
+   render/update الجذرية) تبقى في المصدر وتظهر في نسخة IIFE فقط — مدخل
+   ESM مولّد يعيد تصدير الأسماء العامة الحصرية أدناه. */
 const ENTRIES = [
   { entry: "buttons", source: "components/buttons/buttons.js", global: "MicroButtons", autoInit: false,
-    exports: ["init", "setLoading", "disconnect"] },
+    exports: ["init", "setLoading", "destroy", "getInstance"] },
   { entry: "fields", source: "components/fields/fields.js", global: "MicroFields", autoInit: true,
-    exports: ["init", "sync", "update", "disconnect", "destroy", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "selection", source: "components/selection/selection.js", global: "MicroSelection", autoInit: true,
-    exports: ["init", "disconnect", "setSwitchPending", "setLabels"] },
+    exports: ["init", "setSwitchPending", "destroy", "getInstance", "setLabels"] },
   { entry: "picker", source: "components/selection/picker.js", global: "MicroPicker", autoInit: true,
-    exports: ["init", "update", "disconnect", "destroy", "setOptions", "setStatus", "clearSelection", "getSelected", "setLabels"] },
+    exports: ["init", "update", "destroy", "getInstance", "setOptions", "setStatus", "clearSelection", "getSelected", "setLabels"] },
   { entry: "organization", source: "components/organization/organization.js", global: "MicroOrganization", autoInit: true,
-    exports: ["init", "disconnect", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "data", source: "components/data/data.js", global: "MicroData", autoInit: true,
-    exports: ["init", "render", "update", "getSelection", "setSelection", "disconnect", "setLabels"] },
+    exports: ["init", "getSelection", "setSelection", "destroy", "getInstance", "setLabels"] },
   { entry: "packed-circle", source: "components/data/packed-circle.js", global: "MicroPacked", autoInit: true,
-    exports: ["init", "render", "update", "disconnect", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "messages", source: "components/messages/messages.js", global: "MicroMessages", autoInit: true,
-    exports: ["init", "toast", "closeToast", "announce", "resetAnnouncements", "disconnect", "setLabels"] },
+    exports: ["init", "toast", "closeToast", "announce", "resetAnnouncements", "destroy", "getInstance", "setLabels"] },
   { entry: "navigation", source: "components/navigation/navigation.js", global: "MicroNavigation", autoInit: true,
-    exports: ["init", "openLayer", "requestClose", "closeLayer", "appliedFilters", "setAppliedFilters", "disconnect", "setLabels"] },
+    exports: ["init", "openLayer", "requestClose", "closeLayer", "appliedFilters", "setAppliedFilters", "destroy", "getInstance", "setLabels"] },
   { entry: "action-sheet", source: "components/navigation/action-sheet.js", global: "MicroActionSheet", autoInit: true,
-    exports: ["init", "open", "close", "disconnect", "setLabels"] },
+    exports: ["init", "open", "close", "destroy", "getInstance", "setLabels"] },
   { entry: "info-strip", source: "components/info-strip/info-strip.js", global: "MicroInfoStrip", autoInit: true,
-    exports: ["init", "rescan", "update", "disconnect", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "info-strip-peek", source: "components/info-strip/info-strip-peek.js", global: "MicroInfoPeek", autoInit: true,
-    exports: ["init", "goTo", "update", "next", "prev", "getIndex", "disconnect", "setLabels"] },
+    exports: ["init", "goTo", "next", "prev", "getIndex", "destroy", "getInstance", "setLabels"] },
   { entry: "metric-comparison", source: "components/metric-comparison/metric-comparison.js", global: "MicroMetricComparison", autoInit: true,
-    exports: ["init", "render", "update", "disconnect", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "account-settings", source: "components/account-settings/account-settings.js", global: "MicroAccountSettings", autoInit: true,
-    exports: ["init", "disconnect", "destroy", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "access-gateway", source: "components/access-gateway/access-gateway.js", global: "MicroAccessGateway", autoInit: true,
-    exports: ["init", "update", "disconnect", "destroy", "setLabels"] },
+    exports: ["init", "destroy", "getInstance", "setLabels"] },
   { entry: "carousel", source: "components/carousel/carousel.js", global: "MicroCarousel", autoInit: true,
-    exports: ["init", "goTo", "update", "next", "prev", "getIndex", "destroy", "disconnect", "setLabels"] },
+    exports: ["init", "goTo", "next", "prev", "getIndex", "destroy", "getInstance", "setLabels"] },
   { entry: "order-schedule", source: "components/order-schedule/order-schedule.js", global: "MicroOrderSchedule", autoInit: false,
-    exports: ["init", "update", "getInstance", "setLabels"] },
+    exports: ["init", "update", "getInstance", "destroy", "setLabels"] },
   { entry: "readings", source: "components/compositions/reading-context.js", global: "MicroReadings", autoInit: true,
-    exports: ["init", "sync", "update", "disconnect"] },
+    exports: ["init", "destroy", "getInstance"] },
   { entry: "product", source: "components/product-context", global: "MicroProduct", autoInit: false,
-    exports: ["register", "mount", "contextKey", "setLabels"] },
+    exports: ["register", "mount", "contextKey", "init", "destroy", "getInstance", "setLabels"] },
   { entry: "icons", source: "shared/icons.js", global: "MicroIcons", autoInit: false,
     exports: ["hydrate", "ready"] },
   { entry: "labels", source: "shared/labels.js", global: "MicroLabels", autoInit: false,
@@ -211,13 +214,23 @@ function autoInitCode(global) {
 `;
 }
 
+/** مدخل ESM مولّد لكل عائلة (R-D10): يعيد تصدير الأسماء العامة وحدها —
+    الأسماء المهملة (disconnect/sync/rescan/render/update الجذرية) تبقى في
+    المصدر وتظهر في نسخة IIFE فقط، فلا تصل إلى مدخل ESM أبدًا. */
+function writeEsmEntry(entryDir, spec) {
+  const source = spec.entry === "product"
+    ? writeProductAggregator(entryDir)
+    : path.join(ROOT, spec.source);
+  const file = path.join(entryDir, "esm", `${spec.entry}.mjs`);
+  mkdirSync(path.dirname(file), { recursive: true });
+  writeFileSync(file, `export { ${spec.exports.join(", ")} } from ${JSON.stringify(source)};\n`, "utf8");
+  return file;
+}
+
 async function buildEsm(distDir, entryDir) {
-  const productAggregate = writeProductAggregator(entryDir);
   const entryPoints = {};
   for (const spec of ENTRIES) {
-    entryPoints[spec.entry] = spec.entry === "product"
-      ? productAggregate
-      : path.join(ROOT, spec.source);
+    entryPoints[spec.entry] = writeEsmEntry(entryDir, spec);
   }
   const result = await esbuild.build({
     ...ESBUILD_COMMON,

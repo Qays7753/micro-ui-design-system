@@ -1,4 +1,5 @@
 /* C04: explicit, fail-safe unit context. No data parsing or business state. */
+import { instanceRegistry } from '../../shared/lifecycle.js';
   var CLASS = 'm-reading-unit--contextual';
   function within(root) {
     var out = [].slice.call(root.querySelectorAll('[data-reading-unit]'));
@@ -62,7 +63,48 @@
       el.classList.toggle(CLASS, !!contextFor(el));
     });
   }
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
 export function disconnect(root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
-/* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
-       sync نفسها (امتداد C04). الاسم القديم sync يبقى (D10). */
-  export { sync as init, sync as update };
+
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy — C04 عديم الحالة (لا مستمعات أصلًا): update يعيد
+     مزامنة أصناف السياق، وdestroy ينزعها فقط. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* readings: لا خيارات */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = sync: مزامنة أصناف سياق الوحدة من DOM الحالي. */
+      update: function () { sync(scope); },
+      /** ينزع أصناف السياق فقط — لا مستمعات أصلا في C04. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    sync(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
+
+  /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لsync —
+     يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update() أو sync(root). */
+  export { sync as update };

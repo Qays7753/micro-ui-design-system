@@ -62,6 +62,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('data', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -505,21 +506,64 @@ registerLabels('data', familyDefaults);
   }
 
   /* render العام: جسم الرسم ثم مزامنة جدول الإفصاح في كل مسار
-     (نجاح/رفض مقياس/كثافة) — العرض البديل الكامل دائمًا (عقد المالك) */
+     (نجاح/رفض مقياس/كثافة) — العرض البديل الكامل دائمًا (عقد المالك).
+     @deprecated منذ 0.2.0 (R-D10): يبقى في نسخة IIFE فقط حتى 1.0 —
+     لتصيير كل الرسوم تحت جذر استخدم instance.update(). */
   export function render(chart) {
     disconnected.delete(chart);
     renderPacked(chart);
     syncPackedTable(chart);
   }
 
-export function init(root) {
-      var scope = root || document;
-      if (scope.matches && scope.matches('[data-chart-packed]')) render(scope);
-      scope.querySelectorAll('[data-chart-packed]').forEach(render);
-    }
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update() يعيد تصيير كل رسوم packed تحت
+     الجذر من DOM المصدر؛ destroy يفك مراقبات الرصد وrAF المعلقة
+     ومستمعات كشف الجداول. */
+  var instances = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* packed-circle: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** يعيد التصيير من DOM المصدر لكل رسوم packed تحت الجذر. */
+      update: function () {
+        var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
+        if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
+        charts.forEach(function (chart) { render(chart); });
+      },
+      /** يفك مراقبات الرصد وrAF — لا يمس بيانات المصدر. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      },
+    };
+    if (scope.matches && scope.matches('[data-chart-packed]')) render(scope);
+    scope.querySelectorAll('[data-chart-packed]').forEach(render);
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
+
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
          تصيير كل رسوم packed تحت الجذر عبر render نفسها (لا وسيط بيانات —
-         المصدر DOM). الاسم القديم render(chart) يبقى (D10). */
+         المصدر DOM). الاسم القديم render(chart) يبقى (D10).
+         @deprecated منذ 0.2.0 (R-D10): يبقى في نسخة IIFE فقط حتى 1.0 —
+         استخدم instance.update(). */
 
   export function update(root) {
       var scope = root || document;
@@ -527,8 +571,19 @@ export function init(root) {
       if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
       charts.forEach(function (chart) { render(chart); });
     }
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
       var scope = root || document;
+      /* R4.4: مستمعات كشف الجداول تُزال مع التنظيف (كانت تُزال عند إعادة
+         الربط فقط). */
+      [].slice.call(scope.querySelectorAll('.m-chart__disclose')).forEach(function (btn) {
+        var binding = btn.__microDatasetDisclosure;
+        if (binding) {
+          btn.removeEventListener('click', binding.handler);
+          delete btn.__microDatasetDisclosure;
+        }
+      });
       var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
       if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
       charts.forEach(function (chart) {

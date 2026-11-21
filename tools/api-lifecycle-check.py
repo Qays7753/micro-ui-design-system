@@ -79,6 +79,9 @@ JS = (
     "dist/iife/access-gateway.js",
     "dist/iife/order-schedule.js",
     "dist/iife/carousel.js",
+    "dist/iife/readings.js",
+    "dist/iife/icons.js",
+    "dist/iife/product.js",
 )
 
 # ترميز أدنى صالح لكل عائلة — منسوخ من example-usage/spec الحقيقية.
@@ -298,8 +301,8 @@ SCRIPT = r"""async () => {
     const btn = m.root.matches('.m-btn') ? m.root : m.root.querySelector('.m-btn');
     const found = MicroButtons.init(m.root);
     const again = MicroButtons.init(m.root);
-    record('buttons', 'init(root) اكتشاف موثق: يعيد أزرار النطاق نفسها', Array.isArray(found) && found.length === 1 && found[0] === btn, found && found.length);
-    record('buttons', 'init مرتين بريء (markup-driven — لا حالة تُضاعف)', Array.isArray(again) && again.length === 1 && again[0] === btn);
+    record('buttons', 'init(root) يعيد instance جذره النطاق (R4)', !!found && found.root === m.root && typeof found.update === 'function' && typeof found.destroy === 'function', found && found.root === m.root);
+    record('buttons', 'init مرتين يعيدان المثيل نفسه (لا ربط مضاعف)', again === found);
     const clicks = countOn(document, 'click');
     btn.click();
     const oneActivation = clicks.get();
@@ -411,7 +414,7 @@ SCRIPT = r"""async () => {
     const renderedOnInitTwice = ev.get();
     const disclose = chart.querySelector('.m-chart__disclose');
     disclose.click();
-    record('data', 'a: init مرتين يعيدان التصيير (موثق) والإفصاح ينقلب مرة واحدة فقط', renderedOnInitTwice === 2 && disclose.getAttribute('aria-expanded') === 'true', { renderedOnInitTwice, expanded: disclose.getAttribute('aria-expanded') });
+    record('data', 'a: init مرتين: المثيل نفسه يُعاد بلا إعادة تصيير مكررة (R4) والإفصاح ينقلب مرة واحدة فقط', renderedOnInitTwice === 1 && disclose.getAttribute('aria-expanded') === 'true', { renderedOnInitTwice, expanded: disclose.getAttribute('aria-expanded') });
     const before = ev.get();
     chart.querySelector('.m-chart__data li[data-series="b"]').setAttribute('data-value', '10');
     MicroData.update(m.root);
@@ -740,6 +743,146 @@ SCRIPT = r"""async () => {
 }"""
 
 
+
+ESM_SCRIPT = r"""async () => {
+  const results = [];
+  const record = (name, passed, detail) => results.push({
+    family: 'esm-unified', name, passed: !!passed, detail: detail === undefined ? null : detail
+  });
+  const counts = () => ({
+    listeners: window.__lcNet.listeners,
+    observers: window.__lcNet.observers,
+    timers: window.__lcNet.timers.size,
+  });
+  const frames = () => new Promise((r) => requestAnimationFrame(
+    () => requestAnimationFrame(() => setTimeout(r, 40))));
+  const clone = (id) => document.getElementById('tpl-' + id).content.firstElementChild.cloneNode(true);
+  await document.fonts.ready;
+  await frames(); await frames(); /* استقرار نشاط ما قبل السيناريو */
+
+  const scope = { contextId: 'lc-owner', workspaceId: 'lc-ws', roleId: 'owner', kind: 'business', label: 'ورشة الفحص' };
+  const manageModel = {
+    type: 'manage', scope, dataContext: scope, phase: 'ready', connection: 'online',
+    destination: 'manage', permissions: ['view', 'compose', 'add-operation', 'retry'], revision: 'lc-r1',
+    unit: 'د.أ', requiredFields: ['amount', 'type', 'date'],
+    summary: [{ label: 'المبيعات', value: '150' }], operations: [],
+  };
+  const asId = 'lc-as-' + Math.random().toString(36).slice(2, 7);
+  const configs = {
+    'buttons': { tpl: 'buttons', updateArg: { loading: true } },
+    'fields': { tpl: 'fields' },
+    'selection': { tpl: 'selection' },
+    'picker': { tpl: 'picker', updateArg: [{ value: 'a', label: 'الخيار أ' }] },
+    'organization': { tpl: 'organization' },
+    'data': { tpl: 'data', width: 320 },
+    'packed-circle': { tpl: 'packed-circle', width: 320 },
+    'messages': { tpl: 'messages' },
+    'navigation': { tpl: 'navigation' },
+    'action-sheet': { root: () => {
+      const d = document.createElement('div');
+      d.className = 'm-layer m-action-sheet'; d.id = asId; d.hidden = true;
+      d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true');
+      d.innerHTML = '<div class="m-layer__head"><span class="m-layer__title">أفعال الفحص</span></div>' +
+        '<div class="m-layer__body"><button type="button" data-action-id="a1">إجراء الفحص</button></div>';
+      return d;
+    } },
+    'info-strip': { tpl: 'info-strip', width: 320 },
+    'info-strip-peek': { tpl: 'info-peek', width: 320, updateArg: { index: 0, animate: false } },
+    'metric-comparison': { tpl: 'metric-comparison', width: 320 },
+    'account-settings': { tpl: 'account-settings' },
+    'access-gateway': { tpl: 'access-gateway' },
+    'carousel': { tpl: 'carousel', width: 320, updateArg: { index: 0, animate: false } },
+    'order-schedule': { tpl: 'order-schedule', updateArg: [] },
+    'readings': { root: () => {
+      const d = document.createElement('div');
+      const uid = 'lc-ru-' + Math.random().toString(36).slice(2, 7);
+      d.innerHTML = '<p id="' + uid + '">إجمالي بالدينار الأردني</p><span data-reading-unit="د.أ">150 د.أ</span>';
+      d.setAttribute('data-reading-context', uid); d.setAttribute('data-unit', 'د.أ');
+      return d;
+    } },
+    'product': { root: () => document.createElement('section'), initArg: manageModel, updateArg: manageModel },
+  };
+
+  const apis = {};
+  for (const entry of Object.keys(configs)) {
+    try { apis[entry] = await import('/dist/esm/' + entry + '.js'); }
+    catch (error) { record(entry + ': استيراد ESM ينجح', false, String(error)); }
+  }
+
+  for (const [entry, cfg] of Object.entries(configs)) {
+    const api = apis[entry];
+    if (!api) continue;
+    const before = counts();
+    const errorsBefore = window.__lcErrors.length;
+    const holder = document.createElement('div');
+    holder.style.width = cfg.width ? cfg.width + 'px' : '';
+    const root = cfg.root ? cfg.root() : clone(cfg.tpl);
+    holder.appendChild(root);
+    document.body.appendChild(holder);
+    let inst = null, sameInstance = false, updateOk = true, destroyTwiceOk = true;
+    try {
+      inst = api.init(root, cfg.initArg);
+      sameInstance = api.init(root, cfg.initArg) === inst;
+      if (!inst || inst.root !== root || typeof inst.update !== 'function' || typeof inst.destroy !== 'function') inst = null;
+    } catch (error) { record(entry + ': init يعيد instance له update/destroy', false, String(error)); }
+    record(entry + ': init يعيد instance له update/destroy', !!inst);
+    record(entry + ': init مكرر يعيد المثيل نفسه بلا ربط مضاعف', sameInstance && !!inst);
+    try { if (inst) inst.update(cfg.updateArg); } catch (error) { updateOk = false; record(entry + ': update بلا أخطاء', false, String(error)); }
+    if (inst) record(entry + ': update بلا أخطاء', updateOk);
+    try { if (inst) { inst.destroy(); inst.destroy(); } } catch (error) { destroyTwiceOk = false; record(entry + ': destroy مرتين لا يرمي', false, String(error)); }
+    if (inst) record(entry + ': destroy مرتين لا يرمي', destroyTwiceOk);
+    if (inst) {
+      const after = counts();
+      record(entry + ': صفر متبقيات بعد destroy (مستمعات/مراقبات/مؤقتات)',
+        before.listeners === after.listeners && before.observers === after.observers && before.timers === after.timers,
+        JSON.stringify({ before, after }));
+    }
+    let inst3 = null;
+    try { inst3 = api.init(root, cfg.initArg); } catch (error) { record(entry + ': init من جديد بعد destroy', false, String(error)); }
+    record(entry + ': init من جديد بعد destroy يعمل', !!inst3 && inst3 !== inst);
+    holder.remove(); /* إزالة الجذر بلا destroy (قاعدة 3) */
+    await frames();
+    try { if (inst3) inst3.destroy(); } catch (error) { record(entry + ': destroy بعد إزالة الجذر لا يرمي', false, String(error)); }
+    record(entry + ': إزالة الجذر بلا destroy — لا أخطاء لاحقة', window.__lcErrors.length === errorsBefore,
+      window.__lcErrors.slice(errorsBefore));
+  }
+
+  /* R-D10: window.Micro* تعرض صادرات المدخل نفسها + الأسماء المهملة (IIFE فقط). */
+  const iifeExpect = {
+    MicroButtons: { fns: ['init', 'setLoading', 'destroy', 'getInstance'], aliases: ['disconnect'] },
+    MicroFields: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['sync', 'update', 'disconnect'] },
+    MicroSelection: { fns: ['init', 'setSwitchPending', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroPicker: { fns: ['init', 'update', 'destroy', 'getInstance', 'setOptions', 'setStatus', 'clearSelection', 'getSelected', 'setLabels'], aliases: ['update', 'disconnect'] },
+    MicroOrganization: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroData: { fns: ['init', 'getSelection', 'setSelection', 'destroy', 'getInstance', 'setLabels'], aliases: ['render', 'update', 'disconnect'] },
+    MicroPacked: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['render', 'update', 'disconnect'] },
+    MicroMessages: { fns: ['init', 'toast', 'closeToast', 'announce', 'resetAnnouncements', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroNavigation: { fns: ['init', 'openLayer', 'requestClose', 'closeLayer', 'appliedFilters', 'setAppliedFilters', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroActionSheet: { fns: ['init', 'open', 'close', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroInfoStrip: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['rescan', 'update', 'disconnect'] },
+    MicroInfoPeek: { fns: ['init', 'goTo', 'next', 'prev', 'getIndex', 'destroy', 'getInstance', 'setLabels'], aliases: ['update', 'disconnect'] },
+    MicroMetricComparison: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['render', 'update', 'disconnect'] },
+    MicroAccountSettings: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['disconnect'] },
+    MicroAccessGateway: { fns: ['init', 'destroy', 'getInstance', 'setLabels'], aliases: ['update', 'disconnect'] },
+    MicroCarousel: { fns: ['init', 'goTo', 'next', 'prev', 'getIndex', 'destroy', 'getInstance', 'setLabels'], aliases: ['update', 'disconnect'] },
+    MicroOrderSchedule: { fns: ['init', 'update', 'getInstance', 'destroy', 'setLabels'], aliases: [] },
+    MicroReadings: { fns: ['init', 'destroy', 'getInstance'], aliases: ['sync', 'update', 'disconnect'] },
+    MicroProduct: { fns: ['register', 'mount', 'contextKey', 'init', 'destroy', 'getInstance', 'setLabels'], aliases: [] },
+    MicroIcons: { fns: ['hydrate'], aliases: [] },
+    MicroLabels: { fns: ['registerLabels', 'getLabel', 'familyLabels', 'setLabels', 'setLocale', 'getLocale', 'formatNumber', 'pluralCategory', 'plural'], aliases: [] },
+  };
+  const iifeProblems = [];
+  for (const [global, expect] of Object.entries(iifeExpect)) {
+    const api = window[global];
+    if (!api) { iifeProblems.push(global + ' غير موجود'); continue; }
+    for (const fn of expect.fns) if (typeof api[fn] !== 'function') iifeProblems.push(global + '.' + fn);
+    for (const alias of expect.aliases) if (typeof api[alias] !== 'function') iifeProblems.push(global + '.' + alias + ' (alias)');
+  }
+  record('IIFE: window.Micro* تعرض دوال المدخل نفسها + مهملات R-D10', !iifeProblems.length, iifeProblems);
+  record('IIFE: خاصيتا توافق locale وready', typeof window.MicroLabels.locale === 'string' && !!window.MicroIcons.ready);
+  return results;
+}"""
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, help="مجلد تقرير JSON (افتراضيًا مجلد مؤقت)")
@@ -768,6 +911,27 @@ def main():
                 "observe(t,o){auditROs.add(this);return super.observe(t,o)}"
                 "disconnect(){auditROs.delete(this);return super.disconnect()}};"
                 "document.addEventListener('submit',function(e){e.preventDefault()},true);")
+
+            page.add_init_script(
+                # R4 (الجولة الثانية): عدّاد صافٍ للمستمعات والمراقبات والمؤقتات
+                # لسيناريو العقد الموحد — يُلتقط قبل/بعد كل دورة.
+                "window.__lcErrors=[];"
+                "addEventListener('error',e=>window.__lcErrors.push(e.message||'error'));"
+                "addEventListener('unhandledrejection',e=>window.__lcErrors.push('rejection: '+String(e.reason)));"
+                "window.__lcNet={listeners:0,observers:0,timers:new Set()};"
+                "(function(){"
+                "const oa=EventTarget.prototype.addEventListener,or=EventTarget.prototype.removeEventListener;"
+                "EventTarget.prototype.addEventListener=function(t,f,o){window.__lcNet.listeners++;return oa.call(this,t,f,o)};"
+                "EventTarget.prototype.removeEventListener=function(t,f,o){window.__lcNet.listeners--;return or.call(this,t,f,o)};"
+                "for(const n of['ResizeObserver','MutationObserver','IntersectionObserver']){const O=window[n];if(!O)continue;"
+                "window[n]=class extends O{constructor(c){super(c);window.__lcNet.observers++}"
+                "disconnect(){window.__lcNet.observers--;return super.disconnect()}}}"
+                "const wt=(k,sch,can)=>{const w=function(f,...a){let key;const id=sch.call(window,function(...x){window.__lcNet.timers.delete(key);return f.apply(this,x)},...a);"
+                "key=k+':'+id;window.__lcNet.timers.add(key);return id};"
+                "const wc=function(id,...a){window.__lcNet.timers.delete(k+':'+id);return can.call(window,id,...a)};return[w,wc]};"
+                "const[t1,c1]=wt('t',setTimeout,clearTimeout),[t2,c2]=wt('i',setInterval,clearInterval),[t3,c3]=wt('r',requestAnimationFrame,cancelAnimationFrame);"
+                "window.setTimeout=t1;window.clearTimeout=c1;window.setInterval=t2;window.clearInterval=c2;"
+                "window.requestAnimationFrame=t3;window.cancelAnimationFrame=c3;})();")
             page.on("pageerror", lambda e: errors.append(str(e)))
             page.on("console", lambda m: console_errors.append(m.text) if m.type == "error" else None)
             page.goto(f"http://127.0.0.1:{server.server_port}/api-lifecycle.html")
@@ -775,6 +939,10 @@ def main():
             page.evaluate("document.fonts ? document.fonts.ready : Promise.resolve()")
             results = page.evaluate(SCRIPT)
             page.wait_for_timeout(120)
+            # R4 (الجولة الثانية): سيناريو العقد الموحد عبر ESM — نفس الصفحة
+            # (القوالب والغلوبالات جاهزة فيها) مع عدّادات التغليف أعلاه.
+            esm_results = page.evaluate(ESM_SCRIPT)
+            results.extend(esm_results)
             version = browser.version
             browser.close()
     finally:
@@ -797,7 +965,7 @@ def main():
         "passed": passed,
         "failed": len(results) - passed,
         "checks": results,
-        "scope": "unified init/update/disconnect|destroy contract, 360x780 RTL Light reduced-motion; "
+        "scope": "unified lifecycle contract (R4: init/instance.update/destroy + zero leftovers + IIFE aliases), 360x780 RTL Light reduced-motion; "
                  "update N/A verified as documented absence for Buttons/Selection/Organization/Messages/"
                  "Navigation/Account Settings; Surfaces is CSS-only (no JS)",
     }

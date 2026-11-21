@@ -22,8 +22,6 @@ export function close(sheet: Element): void;
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): ActionSheetInstance | null;
 export function setLabels(partial: Partial<NavigationLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

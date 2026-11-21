@@ -32,25 +32,25 @@ const TSC = path.join(ROOT, "node_modules", "typescript", "bin", "tsc");
 /* الصادرات المتوقعة لكل مدخل (يجب أن تطابق جدول ENTRIES في
    tools/build-package.mjs — بوابة package تفرضها على البناء). */
 const EXPECTED = {
-  "buttons": ["init", "setLoading", "disconnect"],
-  "fields": ["init", "sync", "update", "disconnect", "destroy", "setLabels"],
-  "selection": ["init", "disconnect", "setSwitchPending", "setLabels"],
-  "picker": ["init", "update", "disconnect", "destroy", "setOptions", "setStatus", "clearSelection", "getSelected", "setLabels"],
-  "organization": ["init", "disconnect", "setLabels"],
-  "data": ["init", "render", "update", "getSelection", "setSelection", "disconnect", "setLabels"],
-  "packed-circle": ["init", "render", "update", "disconnect", "setLabels"],
-  "messages": ["init", "toast", "closeToast", "announce", "resetAnnouncements", "disconnect", "setLabels"],
-  "navigation": ["init", "openLayer", "requestClose", "closeLayer", "appliedFilters", "setAppliedFilters", "disconnect", "setLabels"],
-  "action-sheet": ["init", "open", "close", "disconnect", "setLabels"],
-  "info-strip": ["init", "rescan", "update", "disconnect", "setLabels"],
-  "info-strip-peek": ["init", "goTo", "update", "next", "prev", "getIndex", "disconnect", "setLabels"],
-  "metric-comparison": ["init", "render", "update", "disconnect", "setLabels"],
-  "account-settings": ["init", "disconnect", "destroy", "setLabels"],
-  "access-gateway": ["init", "update", "disconnect", "destroy", "setLabels"],
-  "carousel": ["init", "goTo", "update", "next", "prev", "getIndex", "destroy", "disconnect", "setLabels"],
-  "order-schedule": ["init", "update", "getInstance", "setLabels"],
-  "readings": ["init", "sync", "update", "disconnect"],
-  "product": ["register", "mount", "contextKey", "setLabels"],
+  "buttons": ["init", "setLoading", "destroy", "getInstance"],
+  "fields": ["init", "destroy", "getInstance", "setLabels"],
+  "selection": ["init", "setSwitchPending", "destroy", "getInstance", "setLabels"],
+  "picker": ["init", "update", "destroy", "getInstance", "setOptions", "setStatus", "clearSelection", "getSelected", "setLabels"],
+  "organization": ["init", "destroy", "getInstance", "setLabels"],
+  "data": ["init", "getSelection", "setSelection", "destroy", "getInstance", "setLabels"],
+  "packed-circle": ["init", "destroy", "getInstance", "setLabels"],
+  "messages": ["init", "toast", "closeToast", "announce", "resetAnnouncements", "destroy", "getInstance", "setLabels"],
+  "navigation": ["init", "openLayer", "requestClose", "closeLayer", "appliedFilters", "setAppliedFilters", "destroy", "getInstance", "setLabels"],
+  "action-sheet": ["init", "open", "close", "destroy", "getInstance", "setLabels"],
+  "info-strip": ["init", "destroy", "getInstance", "setLabels"],
+  "info-strip-peek": ["init", "goTo", "next", "prev", "getIndex", "destroy", "getInstance", "setLabels"],
+  "metric-comparison": ["init", "destroy", "getInstance", "setLabels"],
+  "account-settings": ["init", "destroy", "getInstance", "setLabels"],
+  "access-gateway": ["init", "destroy", "getInstance", "setLabels"],
+  "carousel": ["init", "goTo", "next", "prev", "getIndex", "destroy", "getInstance", "setLabels"],
+  "order-schedule": ["init", "update", "getInstance", "destroy", "setLabels"],
+  "readings": ["init", "destroy", "getInstance"],
+  "product": ["register", "mount", "contextKey", "init", "destroy", "getInstance", "setLabels"],
   "icons": ["hydrate", "ready"],
   "labels": ["registerLabels", "getLabel", "familyLabels", "setLabels", "setLocale", "getLocale", "formatNumber", "pluralCategory", "plural"],
 };
@@ -101,7 +101,7 @@ const BROWSER_PAGE = `<!doctype html>
   import { init as initFields } from '@micro/ui/fields';
   import { init as initNavigation } from '@micro/ui/navigation';
   import { init as initData } from '@micro/ui/data';
-  import * as productApi from '@micro/ui/product';
+  import { init as initProduct } from '@micro/ui/product';
   initButtons(document);
   initFields(document);
   initNavigation(document);
@@ -114,9 +114,7 @@ const BROWSER_PAGE = `<!doctype html>
     accountLabel: 'Micro · حساب تجريبي واحد',
     contexts: [{ scope: scope, label: scope.label, destinations: ['manage', 'market', 'delivery', 'ask'] }],
   };
-  /* R3: init(root, model) الموحد يضاف في R4 — حتى ذلك الحين التهيئة
-     اليدوية لسياق المنتج عبر mount (نفس عقد 0.1.0). */
-  productApi.mount(document.querySelector('#product-root'), 'context', model);
+  initProduct(document.querySelector('#product-root'), model);
 </script>
 </body>
 </html>

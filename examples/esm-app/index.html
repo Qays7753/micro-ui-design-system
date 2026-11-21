@@ -72,7 +72,7 @@
   import { init as initButtons, setLoading } from '@micro/ui/buttons';
   import { init as initFields } from '@micro/ui/fields';
   import { init as initNavigation, openLayer } from '@micro/ui/navigation';
-  import { mount } from '@micro/ui/product';
+  import { init as initProduct } from '@micro/ui/product';
 
   /* init يدوي لكل عائلة (R-D2: لا تهيئة تلقائية في ESM). */
   initButtons(document);
@@ -108,8 +108,8 @@
   let instance = null;
 
   function mountProduct() {
-    /* R3: التركيب عبر mount (init(root, model) الموحد يضاف في R4). */
-    instance = mount(root, 'manage', model);
+    /* العقد الموحد (R4): init(root, model) يختار الـrenderer من model.type. */
+    instance = initProduct(root, model);
     removeBtn.hidden = false;
     remountBtn.hidden = true;
     status.textContent = 'التركيب C14 مثبت — «إزالة التركيب» تستدعي destroy ثم يُعاد التركيب من جديد.';

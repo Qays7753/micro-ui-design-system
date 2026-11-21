@@ -79,9 +79,3 @@ export function init(root?: Element | Document, options?: MetricComparisonOption
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): MetricComparisonInstance | null;
 export function setLabels(partial: Partial<MetricComparisonLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم instance.update(). */
-export function render(root?: Element | Document): void;
-/** @deprecated منذ 0.2.0 (R-D10) — alias لrender؛ استخدم instance.update(). */
-export function update(root?: Element | Document): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;

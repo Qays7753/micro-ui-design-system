@@ -27,6 +27,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('info-strip', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -269,8 +270,16 @@ registerLabels('info-strip', familyDefaults);
       '[role="combobox"], [role="spinbutton"], [role="slider"], [data-info-strip-editable]'))));
   }
 
+  /* R4: مستمعات DOM لكل شريط تُسجل هنا وتُزال كلها في disconnect —
+     كانت تبقى خاملة بالحراسة، والعقد الموحد يوجب صفر مستمعات بعد destroy. */
+  function listenDom(st, element, type, handler, options) {
+    element.addEventListener(type, handler, options);
+    if (!st.domListeners) st.domListeners = [];
+    st.domListeners.push({ element: element, type: type, handler: handler, options: options });
+  }
+
   function wireKeys(strip, st) {
-    strip.addEventListener('keydown', function (e) {
+    listenDom(st, strip, 'keydown', function (e) {
       if (st.disconnected || e.defaultPrevented || e.isComposing ||
           e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || st.count === 0) return;
       var target = e.target;
@@ -392,19 +401,19 @@ registerLabels('info-strip', familyDefaults);
         page.setAttribute('aria-label', L('k11') + (i + 1));
         page.setAttribute('aria-current', i === 0 ? 'true' : 'false');
         page.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-        page.addEventListener('click', function () { goToIndex(strip, i, false); });
+        listenDom(st, page, 'click', function () { goToIndex(strip, i, false); });
         pages.appendChild(page);
       });
     }
 
-    if (prevBtn) prevBtn.addEventListener('click', function () { prev(strip); });
-    if (nextBtn) nextBtn.addEventListener('click', function () { next(strip); });
+    if (prevBtn) listenDom(st, prevBtn, 'click', function () { prev(strip); });
+    if (nextBtn) listenDom(st, nextBtn, 'click', function () { next(strip); });
 
-    viewport.addEventListener('pointerdown', function (e) { onPointerDown(strip, st, e); });
-    viewport.addEventListener('dragstart', function (e) {
+    listenDom(st, viewport, 'pointerdown', function (e) { onPointerDown(strip, st, e); });
+    listenDom(st, viewport, 'dragstart', function (e) {
       if (!st.disconnected) e.preventDefault();
     });
-    viewport.addEventListener('click', function (e) {
+    listenDom(st, viewport, 'click', function (e) {
       if (st.suppressClick) { e.preventDefault(); e.stopPropagation(); st.suppressClick = false; }
     }, true);
     wireKeys(strip, st);
@@ -423,11 +432,64 @@ registerLabels('info-strip', familyDefaults);
   export function next(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index + 1); }
   export function prev(strip) { var st = stateOf.get(strip); if (st) goToIndex(strip, st.index - 1); }
 
-export function init(root) {
-      var scope = root || document;
-      if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope);
-      scope.querySelectorAll('[data-info-peek]').forEach(initStrip);
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/goTo/next/prev/getIndex/destroy. instance.update({index,
+     animate}) = goTo؛ تغيير بنية الشرائح يبقى دورة destroy/init موثقة. */
+  var instances = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* info-strip-peek: لا خيارات حاليًا — options.labels في R5 */
+    var existing = instances.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    /* الجذر قد يكون شريطًا أو حاوية — عمليات الفهرس تستهدف الشريط نفسه
+       أو أول شريط تحته (توثيق القرار: لا معنى لفهرس واحد على عدة شرائط). */
+    function targetStrip() {
+      if (scope.matches && scope.matches('[data-info-peek]')) return scope;
+      return scope.querySelector ? scope.querySelector('[data-info-peek]') : null;
     }
+    var instance = {
+      root: scope,
+      /** = goTo: تنقل الفهرس (يطلق micro-info-peek:change حتى برمجيًا). */
+      update: function (updateOptions) {
+        updateOptions = updateOptions || {};
+        var stripEl = targetStrip();
+        var st = stripEl ? stateOf.get(stripEl) : null;
+        var index = typeof updateOptions.index === 'number' ? updateOptions.index : (st ? st.index : 0);
+        if (stripEl) goToIndex(stripEl, index, updateOptions);
+      },
+      goTo: function (index, goToOptions) {
+        var stripEl = targetStrip();
+        if (stripEl) goToIndex(stripEl, index, goToOptions);
+      },
+      next: function () { var stripEl = targetStrip(); if (stripEl) next(stripEl); },
+      prev: function () { var stripEl = targetStrip(); if (stripEl) prev(stripEl); },
+      getIndex: function () { var stripEl = targetStrip(); return stripEl ? getIndex(stripEl) : -1; },
+      /** يفك مستمعات كل شريط ومراقباته ومؤقتاته تحت الجذر. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        instances.remove(scope);
+      },
+    };
+    if (scope.matches && scope.matches('[data-info-peek]')) initStrip(scope);
+    scope.querySelectorAll('[data-info-peek]').forEach(initStrip);
+    instances.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return instances.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = instances.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
+  }
+
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(strip, index, options)
          اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق change حتى
          برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
@@ -442,6 +504,8 @@ export function init(root) {
          ويعيد الإلحاق عند الحاجة (نفس عقد MicroData.disconnect في data.js).
          الجذر نفسه إن كان شريطًا يُفصل أيضًا (init يعالج الجذر-الذات كذلك) */
 
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
       var scope = root || document;
       var strips = [];
@@ -453,6 +517,11 @@ export function init(root) {
         var st = stateOf.get(strip);
         if (st) {
           st.disconnected = true;
+          if (st.domListeners) {
+            st.domListeners.splice(0).forEach(function (entry) {
+              entry.element.removeEventListener(entry.type, entry.handler, entry.options);
+            });
+          }
           if (st.directionObserver) {
             st.directionObserver.disconnect();
             st.directionObserver = null;

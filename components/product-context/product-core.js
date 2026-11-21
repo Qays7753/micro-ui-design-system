@@ -496,7 +496,11 @@ function mount(root, type, value) {
   }
 
   var api = {
+    root: root,
     replace: replace,
+    /* العقد الموحد (الجولة الثانية R4): update(model) = replace نفسها —
+       استبدال النموذج وإعادة التصيير بلا إعادة تركيب. */
+    update: replace,
     resolve: function (token, next) {
       if (destroyed || !pending || !token || ['instanceId', 'generation', 'requestId', 'contextKey'].some(function (k) { return pending.token[k] !== token[k]; })) return false;
       var nextKey = key(next && next.scope);
@@ -530,6 +534,24 @@ function mount(root, type, value) {
 }
 
 export { mount };
+
+/* العقد الموحد (الجولة الثانية R4): init(root, model) يختار الـrenderer
+   من model.type ويفوّض إلى mount نفسها (العقد القائم بلا تغيير)؛
+   instance.update(model) = replace. getInstance/destroy وحدويان مريحان. */
+export function init(root, model) {
+  var type = model && model.type;
+  return mount(root, type, model);
+}
+
+export function getInstance(root) {
+  var entry = root && instances.get(root);
+  return entry ? entry.api : null;
+}
+
+export function destroy(root) {
+  var entry = root && instances.get(root);
+  if (entry) entry.api.destroy();
+}
 
 /* المرحلة 7 / الجولة الثانية R2 — تخصيص نصوص العائلة: دمج جزئي فوق
    الافتراضي في سجل النصوص المشترك (shared/labels.js)؛ يسري على

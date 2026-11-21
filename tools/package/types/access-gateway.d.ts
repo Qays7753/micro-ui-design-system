@@ -46,10 +46,6 @@ export function init(root?: Element | Document, handlers?: AccessGatewayHandlers
 export function destroy(root: Element | Document): void;
 export function getInstance(root: Element | Document): AccessGatewayInstance | null;
 export function setLabels(partial: Partial<AccessGatewayLabels>): void;
-/** @deprecated منذ 0.2.0 (R-D10) — تحديث callbacks؛ استخدم init أو instance.update(handlers). */
-export function update(root?: Element | Document, handlers?: AccessGatewayHandlers): void;
-/** @deprecated منذ 0.2.0 (R-D10) — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root?: Element | Document): void;
 
 declare global {
   interface HTMLElementEventMap {

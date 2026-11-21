@@ -43,6 +43,7 @@
 
 import { getLabel, registerLabels, setLabels as setFamilyLabels } from '../../shared/labels.js';
 import { defaults as familyDefaults } from './labels.js';
+import { instanceRegistry } from '../../shared/lifecycle.js';
 
 registerLabels('fields', familyDefaults);
   /* ---- المرحلة 7 / الجولة الثانية R2 — النصوص الافتراضية: تُقرأ من سجل
@@ -317,8 +318,7 @@ registerLabels('fields', familyDefaults);
     return base + i;
   }
 
-  export function init(root) {
-    var scope = root || document;
+  function bindFields(scope) {
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);
     fields.forEach(function (f) {
@@ -331,6 +331,45 @@ registerLabels('fields', familyDefaults);
       bindStepper(f);
       bindMessage(f);
     });
+  }
+
+  /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
+     له update/destroy. instance.update() = sync القديمة (مزامنة العدّاد
+     والمسح والخطوة من قيم DOM الحالية — بلا أحداث ولا آثار جانبية)؛
+     destroy يفك مستمعات كل حقل ومراقبة رسائله. */
+  var registry = instanceRegistry();
+
+  export function init(root, options) {
+    var scope = root || document;
+    void options; /* fields: لا خيارات حاليًا — options.labels في R5 */
+    var existing = registry.get(scope);
+    if (existing) return existing;
+    var destroyed = false;
+    var instance = {
+      root: scope,
+      /** = sync: مزامنة حالة الحقول من قيمها الحالية بلا أحداث. */
+      update: function () { sync(scope); },
+      /** يفك مستمعات كل حقل ومراقبة رسائله — لا يمس قيم المستخدم. */
+      destroy: function () {
+        if (destroyed) return;
+        destroyed = true;
+        disconnect(scope);
+        registry.remove(scope);
+      },
+    };
+    bindFields(scope);
+    registry.set(scope, instance);
+    return instance;
+  }
+
+  export function getInstance(root) {
+    return registry.get(root);
+  }
+
+  export function destroy(root) {
+    var instance = registry.get(root);
+    if (instance) instance.destroy();
+    else disconnect(root);
   }
 
   /* UI-05/UI-06: مزامنة حالة الحقول من قيمها الحالية بعد تعيينها
@@ -346,8 +385,10 @@ registerLabels('fields', familyDefaults);
     scope.querySelectorAll('[data-micro-field]').forEach(runSyncs);
   }
 
-  /* واجهة عامة: init تهيئة يدوية للمحتوى المضاف لاحقًا؛
+  /* واجهة عامة: init تهيئة يدوي للمحتوى المضاف لاحقًا؛
      sync مزامنة العدّاد/المسح بعد تعيين القيم برمجيًا. */
+  /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
+     1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
     var scope = root || document;
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
@@ -367,12 +408,9 @@ registerLabels('fields', familyDefaults);
       });
     });
   }
-  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد للعائلات
-     يفوّض إلى sync نفسها — مزامنة العدّاد والمسح والخطوة من قيم DOM
-     الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
-     ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
-
-  export { sync as update, disconnect as destroy };
+  /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لsync —
+     يبقى في نسخة IIFE فقط حتى 1.0؛ استخدم instance.update() أو sync(root). */
+  export { sync as update };
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
