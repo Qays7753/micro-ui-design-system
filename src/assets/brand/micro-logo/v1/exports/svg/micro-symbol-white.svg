@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="224" height="224" viewBox="0 0 224 224" role="img" aria-labelledby="title">
+  <title id="title">Micro symbol</title>
+  <g transform="translate(16 16) scale(1)">
+    <g id="micro-symbol" inkscape:label="Micro symbol / four equal modules" data-native-width="192" data-native-height="192">
+      <g id="module-top" inkscape:label="Module top" transform="rotate(0 96 96)">
+        <path id="shape-top" d="M40 0 H100 Q112 0 112 12 V52 Q112 64 100 64 H12 Q0 64 0 52 V40 A40 40 0 0 1 40 0 Z" fill="#FFFFFF" data-color-role="petrol" />
+      </g>
+      <g id="module-right" inkscape:label="Module right" transform="rotate(90 96 96)">
+        <path id="shape-right" d="M40 0 H100 Q112 0 112 12 V52 Q112 64 100 64 H12 Q0 64 0 52 V40 A40 40 0 0 1 40 0 Z" fill="#FFFFFF" data-color-role="terracotta" />
+      </g>
+      <g id="module-bottom" inkscape:label="Module bottom" transform="rotate(180 96 96)">
+        <path id="shape-bottom" d="M40 0 H100 Q112 0 112 12 V52 Q112 64 100 64 H12 Q0 64 0 52 V40 A40 40 0 0 1 40 0 Z" fill="#FFFFFF" data-color-role="petrol" />
+      </g>
+      <g id="module-left" inkscape:label="Module left" transform="rotate(270 96 96)">
+        <path id="shape-left" d="M40 0 H100 Q112 0 112 12 V52 Q112 64 100 64 H12 Q0 64 0 52 V40 A40 40 0 0 1 40 0 Z" fill="#FFFFFF" data-color-role="blue-petrol" />
+      </g>
+    </g>
+  </g>
+</svg>

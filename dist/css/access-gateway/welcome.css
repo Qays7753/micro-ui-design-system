@@ -1,0 +1,39 @@
+/* Optional welcome composition over AccessGateway; no viewport ownership. */
+.m-welcome { display:flex;flex-direction:column;gap:var(--micro-space-6);min-inline-size:0;color:var(--micro-text-primary);font-family:var(--micro-font-family); }
+.m-welcome[hidden] { display:none; }
+.m-welcome__brand { display:block;inline-size:128px;block-size:40px;object-fit:contain;margin:var(--micro-space-3); }
+.m-welcome__heading { margin:0;font-size:var(--micro-heading-large-size);line-height:var(--micro-heading-large-line);font-weight:var(--micro-weight-semibold); }
+.m-welcome__intro { margin:var(--micro-space-2) 0 0;color:var(--micro-text-secondary);font-size:var(--micro-body-size);line-height:var(--micro-body-line); }
+.m-welcome__legal { display:flex;flex-wrap:wrap;gap:var(--micro-space-4);font-size:var(--micro-secondary-size); }
+.m-welcome__legal a { display:inline-flex;align-items:center;min-block-size:var(--micro-touch-min);color:var(--micro-brand-ink); }
+.m-welcome [data-access-providers] { border:0;padding:0; }
+.m-welcome .m-access-gateway__provider-list { display:grid; }
+.m-welcome__copy { display:grid;gap:var(--micro-space-2);min-inline-size:0; }
+.m-welcome__copy .m-welcome__intro { margin:0; }
+.m-welcome__providers { inline-size:100%;min-inline-size:0; }
+/* Host renders the provider-supported button here; do not style its internals. */
+.m-google-provider-region { inline-size:100%;min-inline-size:0; }
+.m-google-provider-slot { inline-size:100%;min-inline-size:0;max-inline-size:100%; }
+/* Legacy visual specimen only; production uses Google's rendered button in the slot. */
+.m-google-button { display:flex;align-items:center;justify-content:center;gap:12px;min-block-size:48px;padding:10px 12px;border:1px solid #747775;border-radius:4px;background:#fff;color:#1f1f1f;font:500 14px/20px var(--micro-font-family);cursor:pointer; }
+.m-google-button img { inline-size:20px;block-size:20px;object-fit:contain;flex:none; }
+.m-google-button:focus-visible { outline:var(--micro-focus-ring-width) solid var(--micro-focus-ring);outline-offset:var(--micro-focus-gap); }
+.m-google-button:disabled { cursor:wait; }
+.m-session { display:grid;gap:var(--micro-space-4);justify-items:start; }
+.m-session__title { margin:0;font-size:var(--micro-heading-size);line-height:var(--micro-heading-line); }
+.m-session__message { min-inline-size:0;margin:0;font-size:var(--micro-body-size);line-height:var(--micro-body-line);color:var(--micro-text-secondary);overflow-wrap:anywhere; }
+.m-session__message[data-tone="error"] { color:var(--micro-danger); }
+.m-session__message[data-tone="success"] { color:var(--micro-success); }
+.m-session__actions { display:flex;flex-wrap:wrap;gap:var(--micro-space-3);min-inline-size:0; }
+.m-session__actions [hidden] { display:none !important; }
+.m-session[hidden] { display:none; }
+
+/* Provider mark remains intact; shared busy semantics and adjacent status convey waiting. */
+.m-google-button > .m-btn__spinner { display:none; }
+.m-google-button[aria-busy="true"] { cursor:progress; }
+/* Opt-in entrance of the whole welcome surface. Never animate individual logo parts. */
+.m-welcome--enter { animation:micro-welcome-enter var(--micro-motion-enter) var(--micro-ease-enter); }
+@keyframes micro-welcome-enter { from { opacity:0; } to { opacity:1; } }
+.m-session[aria-busy="true"] .m-session__message::before { content:"";display:inline-block;inline-size:8px;block-size:8px;margin-inline-end:var(--micro-space-2);background:var(--micro-brand-primary);border-radius:50%;animation:micro-session-pulse calc(var(--micro-motion-enter) * 5) ease-in-out infinite alternate; }
+@keyframes micro-session-pulse { from { opacity:.35; } to { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .m-welcome--enter,.m-session[aria-busy="true"] .m-session__message::before { animation:none; } }

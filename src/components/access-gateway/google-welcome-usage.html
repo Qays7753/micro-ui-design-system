@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>تركيب الترحيب عبر Google — Micro UI</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../shared/motion.css">
+  <link rel="stylesheet" href="../buttons/buttons.css">
+  <link rel="stylesheet" href="access-gateway.css">
+  <link rel="stylesheet" href="welcome.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-block-size: 100svh;
+      background: var(--micro-surface-page);
+      color: var(--micro-text-primary);
+      font-family: var(--micro-font-family);
+    }
+    .auth-entry-host {
+      display: grid;
+      align-items: center;
+      inline-size: min(100%, 430px);
+      min-block-size: 100svh;
+      margin-inline: auto;
+      padding: var(--micro-space-6);
+      background: var(--micro-surface-base);
+    }
+    .auth-entry-host__content { inline-size: 100%; min-inline-size: 0; }
+  </style>
+</head>
+<body>
+  <main class="auth-entry-host">
+    <div class="auth-entry-host__content">
+      <section class="m-welcome" aria-labelledby="micro-welcome-title">
+        <img
+          class="m-welcome__brand"
+          src="../../assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg"
+          width="128"
+          height="40"
+          alt="Micro"
+        >
+
+        <div class="m-welcome__copy">
+          <h1 class="m-welcome__heading" id="micro-welcome-title">أهلًا بك في Micro</h1>
+          <p class="m-welcome__intro">سجّل الدخول إلى حسابك باستخدام <bdi dir="ltr">Google</bdi></p>
+        </div>
+
+        <section class="m-access-gateway" aria-label="الدخول إلى Micro">
+          <div class="m-google-provider-region" role="group" aria-label="تسجيل الدخول باستخدام Google">
+            <div class="m-google-provider-slot" data-google-provider-slot></div>
+          </div>
+          <p class="m-access-gateway__status" data-access-status role="status" aria-live="polite"></p>
+        </section>
+      </section>
+
+        <!--
+          حالة واجهة اختيارية يقودها المضيف. أظهر هذا القسم بدل الترحيب عند
+          استعادة الجلسة أو انتهائها أو منع الوصول أو تعذر الاتصال. غيّر
+          data-session-state وaria-busy والنص والإجراء وفق الحالة الحقيقية.
+          لا ينشئ هذا التركيب جلسة أو يقرر صلاحية المستخدم.
+        -->
+        <section class="m-session" data-session-state="restoring" hidden aria-labelledby="session-title" aria-busy="false">
+          <h2 class="m-session__title" id="session-title">جارٍ التحقق من الجلسة</h2>
+          <p class="m-session__message" role="status" aria-live="polite">لحظة من فضلك، نتحقق من حالة الدخول.</p>
+          <div class="m-session__actions">
+            <button class="m-btn m-btn--secondary" type="button" data-session-action hidden>إعادة المحاولة</button>
+          </div>
+        </section>
+    </div>
+  </main>
+
+  <!--
+    هذا تركيب UI فقط. يحمّل التطبيق المضيف Google Identity Services وفق
+    الإرشادات السارية، ثم يطلب من Google رسم زرّه الرسمي داخل
+    [data-google-provider-slot]. العلامة المحلية مخصصة للمرجع البصري فقط؛
+    لا تستبدل بها الزر الرسمي ولا تعيد بناءه باستخدام .m-google-button.
+    المضيف يملك credential callback والجلسة، ويكتب رسائل الحالة الصادقة في
+    [data-access-status] ويبدّل واجهتي welcome وm-session حسب نتيجة الخدمة.
+  -->
+</body>
+</html>

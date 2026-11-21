@@ -116,6 +116,10 @@ def main():
         if path.is_file() and path.suffix in (".html", ".md"):
             check("changed active links: " + name, not (bad := missing_links(path, path.read_text())), bad)
         if path.is_file() and path.suffix == ".css":
+            # Generated package mirrors of already-checked sources; byte-identity
+            # is enforced by the package --check gate.
+            if name.startswith(("src/", "dist/")):
+                continue
             required = set(re.findall(r"var\((--micro-[\w-]+)\s*\)", path.read_text()))
             check("defined required CSS tokens: " + name, not (required - defined), sorted(required - defined))
             old = subprocess.run(["git", "show", f"{base}:{name}"], cwd=ROOT, capture_output=True, text=True)

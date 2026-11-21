@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مثال إعدادات الحساب — Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../buttons/buttons.css">
+  <link rel="stylesheet" href="../selection/selection.css">
+  <link rel="stylesheet" href="../navigation/navigation.css">
+  <link rel="stylesheet" href="account-settings.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100dvh; padding: 24px 20px; background: var(--micro-surface-page); color: var(--micro-text-primary); font: var(--micro-body-size)/var(--micro-body-line) var(--micro-font-family); }
+    main { max-width: 390px; margin-inline: auto; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main data-account-settings data-account-layer-id="sample-account-layer">
+    <h1>إعدادات الحساب</h1>
+    <button class="m-btn m-btn--secondary" type="button" data-account-open data-autofocus>فتح الإعدادات</button>
+    <p class="m-account-settings__demo-note">تجربة واجهة فقط؛ لا توجد بيانات حساب فعلية أو حفظ.</p>
+
+    <div class="m-layer-backdrop" id="sample-account-backdrop" data-for="sample-account-layer" hidden></div>
+    <div class="m-layer m-layer--center" id="sample-account-layer" role="dialog" aria-modal="true" aria-labelledby="sample-account-title" data-account-settings-layer hidden>
+      <header class="m-layer__head">
+        <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-back aria-label="العودة إلى إعدادات الحساب" hidden>
+          <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true" data-micro-icon="chevron-right.svg"></svg>
+        </button>
+        <h2 class="m-layer__title" id="sample-account-title" data-account-title="account" tabindex="-1">الحساب</h2>
+        <h2 class="m-layer__title" id="sample-app-title" data-account-title="application" tabindex="-1" hidden>إعدادات التطبيق</h2>
+        <button class="m-btn m-btn--secondary m-btn--icon" type="button" data-account-close aria-label="إغلاق الإعدادات">
+          <svg class="m-btn__icon" viewBox="0 0 24 24" aria-hidden="true" data-micro-icon="cancel01.svg"></svg>
+        </button>
+      </header>
+      <div class="m-layer__body m-account-settings">
+        <div class="m-account-settings__view" data-account-view="account">
+          <div class="m-account-profile">
+            <span class="m-account-profile__avatar" aria-hidden="true">لم</span>
+            <span class="m-account-profile__text">
+              <span class="m-account-profile__name">ليان منصور</span>
+              <span class="m-account-profile__detail" dir="ltr">lian@example.test</span>
+            </span>
+          </div>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">الحساب</h3>
+            <ul class="m-setting-group__items">
+              <li class="m-setting-row">
+                <span class="m-setting-row__icon" data-icon="user" aria-hidden="true"></span>
+                <span class="m-setting-row__content"><span class="m-setting-row__label">الملف الشخصي</span><span class="m-setting-row__detail">معلومات الحساب</span></span>
+              </li>
+            </ul>
+          </section>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">التطبيق</h3>
+            <ul class="m-setting-group__items">
+              <li>
+                <button class="m-setting-row" type="button" data-account-to-application>
+                  <span class="m-setting-row__icon" data-icon="info" aria-hidden="true"></span>
+                  <span class="m-setting-row__content"><span class="m-setting-row__label">إعدادات التطبيق</span><span class="m-setting-row__detail">اللغة والتفضيلات</span></span>
+                  <span class="m-setting-row__end" aria-hidden="true"></span>
+                </button>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <div class="m-account-settings__view" data-account-view="application" hidden>
+          <p class="m-account-settings__demo-note">هذه التفضيلات عينة محلية مؤقتة.</p>
+          <section class="m-setting-group">
+            <h3 class="m-setting-group__title">تفضيلات التطبيق</h3>
+            <div class="m-setting-row m-setting-row--toggle">
+              <label class="m-switch">
+                <input type="checkbox" role="switch" data-account-setting="notifications" data-demo-only>
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">تنبيهات الطلبات</span><span class="m-switch__state">تغيير تجريبي فقط</span></span>
+              </label>
+            </div>
+            <div class="m-setting-row m-setting-row--toggle">
+              <label class="m-switch">
+                <input type="checkbox" role="switch" data-account-setting="weekly-summary" data-demo-only>
+                <span class="m-switch__track"><span class="m-switch__thumb"></span></span>
+                <span class="m-switch__text"><span class="m-switch__label">ملخص أسبوعي</span><span class="m-switch__state">تغيير تجريبي فقط</span></span>
+              </label>
+            </div>
+          </section>
+          <p class="m-account-settings__demo-status" data-account-demo-status aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="../../shared/icons.js"></script>
+  <script src="../navigation/navigation.js"></script>
+  <script src="account-settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>أهلًا بعودتك — Micro</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../shared/tokens.css">
+  <link rel="stylesheet" href="../../components/buttons/buttons.css">
+  <link rel="stylesheet" href="auth-screens.css">
+</head>
+<body class="m-auth-page">
+  <main class="m-auth-screen m-auth-screen--welcome m-auth-screen--returning-user" aria-labelledby="returning-user-title">
+    <header class="m-auth-screen__hero">
+      <span class="m-auth-screen__badge" aria-hidden="true">
+        <svg data-micro-icon="check.svg" aria-hidden="true"></svg>
+      </span>
+      <h1 class="m-auth-screen__title" id="returning-user-title">أهلًا بعودتك</h1>
+      <p class="m-auth-screen__description">يسعدنا رؤيتك مجددًا.</p>
+    </header>
+    <section class="m-auth-screen__sheet" aria-label="الحساب والإجراء التالي">
+      <!-- يعرض المضيف هذه البطاقة بعد تمرير بيانات حساب حقيقية فقط. -->
+      <div class="m-auth-screen__account" data-auth-account hidden>
+        <span class="m-auth-screen__avatar" data-auth-user-initial aria-hidden="true"></span>
+        <span class="m-auth-screen__account-copy">
+          <span class="m-auth-screen__account-name" data-auth-user-name></span>
+          <bdi class="m-auth-screen__account-email" data-auth-user-email dir="ltr"></bdi>
+        </span>
+      </div>
+      <button class="m-btn m-btn--primary m-btn--block m-btn--capsule" type="button" data-auth-action="continue">المتابعة إلى Micro</button>
+      <button class="m-btn m-btn--light m-auth-screen__switch" type="button" data-auth-action="use-another-account">ليس حسابك؟ <span>استخدم حسابًا آخر</span></button>
+    </section>
+  </main>
+  <script src="../../shared/icons.js"></script>
+</body>
+</html>

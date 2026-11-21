@@ -6,8 +6,10 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "reviews", "references", "prompts", "tools"}
-PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "MANIFEST.json", "pyproject.toml", "uv.lock"}
+# Phase 5: examples/ (vanilla-app), src/ (committed package mirror), and
+# dist/ (deterministic build output) are public delivery trees now.
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "reviews", "references", "prompts", "tools", "examples", "src", "dist"}
+PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "MANIFEST.json", "pyproject.toml", "uv.lock", "CHANGELOG.md", "package.json"}
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):

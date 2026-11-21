@@ -5,7 +5,8 @@ Runs each gate as a subprocess (so each keeps its own exit code and output),
 prints a per-gate summary line, and exits non-zero if any gate failed.
 
 Gate set (see tools/README.md for the full classification):
-  - build tools in --check mode: standalone, catalog, manifest
+  - build tools in --check mode: standalone, catalog, manifest, package
+    (node tools/build-package.mjs --check: src mirrors + deterministic dist)
   - static gates: static (light-static-check), links (link-check)
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
@@ -39,6 +40,7 @@ def build_gates(quick, out, skip_visual):
         ("standalone", PY + ["tools/build-ui-system-showcase-standalone.py", "--check"]),
         ("catalog", PY + ["tools/component-catalog-build.py", "--check"]),
         ("manifest", PY + ["tools/manifest-build.py", "--check"]),
+        ("package", ["node", "tools/build-package.mjs", "--check"]),
         ("static", PY + ["tools/light-static-check.py"]),
         ("link-check", PY + ["tools/link-check.py"]),
     ]

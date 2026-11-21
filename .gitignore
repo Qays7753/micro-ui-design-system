@@ -21,6 +21,7 @@ replit.md
 /generated-artifacts/
 
 # Phase 0 (integration readiness): local environments and build outputs.
+# dist/ is now a committed deterministic build artifact (phase 5); the
+# package --check gate rebuilds it and byte-compares against the tree.
 .venv/
 node_modules/
-/dist/

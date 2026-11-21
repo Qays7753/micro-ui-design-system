@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 160" preserveAspectRatio="none">
+  <!-- عمق أغنى محدود ومقترح للسطح البارز فقط؛ تراكب واسع بلا لمعان أو شرائط. -->
+  <defs>
+    <linearGradient id="depth-petroleum" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#507F8B" stop-opacity="0"/>
+      <stop offset=".38" stop-color="#507F8B" stop-opacity=".035"/>
+      <stop offset="1" stop-color="#507F8B" stop-opacity=".15"/>
+    </linearGradient>
+    <linearGradient id="depth-mint" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DFEEE6" stop-opacity="0"/>
+      <stop offset=".58" stop-color="#DFEEE6" stop-opacity=".035"/>
+      <stop offset="1" stop-color="#DFEEE6" stop-opacity=".12"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#depth-petroleum)" d="M0 58c80-23 131 17 202 7 63-9 107-36 173-31v126H0Z"/>
+  <path fill="url(#depth-mint)" d="M0 91c68-13 122 14 190 15 73 1 131-30 185-17v71H0Z"/>
+</svg>
