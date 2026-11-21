@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Micro — Splash</title>
+  <link rel="icon" href="data:,">
+  <!-- مثال vanilla-app: يستهلك المصدر من مرآة src/ مباشرة (لا dist ولا previews).
+       مرجع Micro-Auth المطابق: docs/references/micro-auth/previews/1-splash.png
+       (شاشة البداية) — قواعد المطابقة وحسم التعارضات في docs/DECISIONS.md (المرحلة 1). -->
+  <link rel="stylesheet" href="../../../src/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../../src/shared/tokens.css">
+  <link rel="stylesheet" href="../../../src/components/access-gateway/auth-screens.css">
+</head>
+<body class="m-auth-page">
+  <main class="m-auth-screen m-auth-screen--splash" aria-label="Micro">
+    <div class="m-auth-screen__ornaments" aria-hidden="true"></div>
+    <!-- رابط محلي لعرض التدفق فقط؛ يحدد المضيف وجهة Splash في التطبيق. -->
+    <a class="m-auth-screen__splash-action" href="sign-in.html" aria-label="متابعة إلى تسجيل الدخول">
+      <img class="m-auth-screen__logo" src="../../../src/assets/brand/micro-logo/v2/variants/full-color/micro-lockup-arabic.svg" width="128" height="40" alt="">
+    </a>
+  </main>
+</body>
+</html>

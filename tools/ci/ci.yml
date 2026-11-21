@@ -26,6 +26,11 @@ jobs:
       - name: Install Python dependencies
         run: uv sync
 
+      # Phase 5: the package gate (node tools/build-package.mjs --check)
+      # rebuilds dist/ deterministically and needs esbuild from the lockfile.
+      - name: Install Node dev dependencies
+        run: npm ci
+
       - name: Install Playwright Chromium
         run: uv run python -m playwright install --with-deps chromium
 

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>شاشة مركّبة — Micro UI</title>
+  <link rel="icon" href="data:,">
+  <!-- شاشة مركّبة صغيرة تستهلك ثلاث عائلات (Buttons وFields وData) من مرآة
+       src/ مباشرة — لا dist ولا previews ولا أي منطق مضيف: كل سلوك من ملفات
+       المكتبة نفسها (تهيئة تلقائية عند تحميل الوحدات). بيانات الرسم اصطناعية
+       للعرض فقط؛ الوحدة والمجاميع الحقيقية من المضيف دائمًا. -->
+  <link rel="stylesheet" href="../../src/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="../../src/shared/tokens.css">
+  <!-- ترتيب إلزامي: buttons.css قبل fields.css (زر المسح/الخطوة من B01)
+       وقبل data.css (أفعال جدول الإفصاح من B01). -->
+  <link rel="stylesheet" href="../../src/components/buttons/buttons.css">
+  <link rel="stylesheet" href="../../src/components/fields/fields.css">
+  <link rel="stylesheet" href="../../src/components/data/data.css">
+  <style>
+    /* تأطير صفحة المثال فقط؛ مكونات المكتبة بأنماط مصدرها دون تغيير. */
+    body { margin: 0; background: var(--micro-surface-page); font-family: var(--micro-font-family); color: var(--micro-text-primary); }
+    main { max-width: 430px; margin-inline: auto; padding: var(--micro-space-4); display: grid; gap: var(--micro-space-6); }
+    h1 { margin: 0; font-size: var(--micro-surface-title-size); line-height: var(--micro-surface-title-line); }
+    section { display: grid; gap: var(--micro-space-4); margin: 0; }
+    h2 { margin: 0; font-size: var(--micro-surface-title-size); line-height: var(--micro-surface-title-line); }
+    .back { color: var(--micro-text-secondary); text-decoration: none; }
+    .actions { display: flex; flex-wrap: wrap; gap: var(--micro-space-3); }
+    .note { margin: 0; color: var(--micro-text-secondary); font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <a class="back" href="index.html">عودة إلى الفهرس</a>
+    <h1>ملخص عمليات اليوم</h1>
+  </header>
+
+  <section aria-labelledby="entry-title">
+    <h2 id="entry-title">إدخال عملية</h2>
+    <div class="m-field" data-micro-field>
+      <label class="m-field__label" for="op-amount">المبلغ</label>
+      <div class="m-field__control">
+        <input class="m-field__input m-field__input--num" id="op-amount" type="text" inputmode="decimal" dir="ltr" value="1,240.50">
+        <span class="m-field__unit">د.أ</span>
+      </div>
+    </div>
+    <div class="m-field" data-micro-field>
+      <label class="m-field__label" for="op-desc">الوصف</label>
+      <div class="m-field__control">
+        <input class="m-field__input" id="op-desc" type="text" maxlength="40" autocomplete="off">
+      </div>
+      <span class="m-field__count" data-count-for="op-desc"></span>
+    </div>
+    <div class="actions">
+      <button class="m-btn m-btn--primary" type="button">حفظ التغييرات</button>
+      <button class="m-btn m-btn--secondary" type="button">إلغاء</button>
+    </div>
+    <p class="note">الحفظ والتحقق من المضيف؛ المكتبة UI فقط.</p>
+  </section>
+
+  <section aria-labelledby="chart-title">
+    <h2 id="chart-title">توزيع العمليات</h2>
+    <div class="m-chart m-chart--bars" data-chart="bars" data-max="12">
+      <ul class="m-chart__data" hidden>
+        <li data-series="a" data-label="مبيعات" data-value="8"></li>
+        <li data-series="b" data-label="مشتريات" data-value="4"></li>
+        <li data-series="c" data-label="مرتجعات" data-value="0"></li>
+        <li data-series="d" data-label="توريد" data-value="10"></li>
+      </ul>
+      <div class="m-chart__plot" data-plot></div>
+      <p class="m-chart__summary" data-summary>مثال اصطناعي للعرض؛ الصفر يظهر على خط الأساس، والوحدة من المضيف.</p>
+    </div>
+  </section>
+</main>
+<script src="../../src/components/buttons/buttons.js"></script>
+<script src="../../src/components/fields/fields.js"></script>
+<script src="../../src/components/data/data.js"></script>
+</body>
+</html>

@@ -93,3 +93,18 @@
 **القبول:** صفر روابط مكسورة (link-check) — تُثبت أرقام البوابات أدناه؛ لا ملف في docs/ سجل جولة؛ manifest --check ناجح بعد إعادة البناء.
 
 **commits:** commit هذه المرحلة. **نتائج البوابات:** تُرى في مخرجات التشغيل أدناه وتُحدَّث في التقرير النهائي.
+
+
+## المرحلة 5 — الحزمة والتوزيع ✅
+
+**ما نُفّذ:** حزمة `@micro/ui` 0.1.0 خاصة (`private: true` — لا نشر، D9) بلا حقل `type` و`engines.node >= 20` وesbuild أداة بناء وحيدة (devDependencies) وخرائط تصدير `css/js/fonts/micro-ui.d.ts` وfiles: dist/src/README/CHANGELOG. `tools/build-package.mjs`: مزامنة مرايا `src/` (باستثناء `*.md` — روابط توثيق نسبية للمستودع) وتوليد `dist/` حتميًا (265 ملفًا): CSS منسوخ بايت-ببايت (D15) + `micro-ui.css` (fonts+tokens+motion)، JS عبر esbuild (IIFE/es2019/بلا تصغير)، خطوط وشعار v2 وأيقونات و`dist/assets/{icons,surfaces}` لحل المسارات النسبية، و`dist/MANIFEST.json` ببصمات sha256. `tools/package/micro-ui.d.ts` (15 global بأسماء التوابع الحقيقية). بوابة `package` داخل check-all (سريعة وقصيرة). `examples/vanilla-app/` (فهرس + شاشة مركّبة Buttons/Fields/Data + شاشات الدخول الأربع تستهلك `src/` مباشرة مع تعليق مرجع Micro-Auth لكل شاشة). اكتمل GETTING-STARTED (dist/src/examples/بناء/خاصية الحزمة) وCHANGELOG 0.1.0. أُزيل `/dist/` من .gitignore (dist مُتابَ)، ووسّع manifest-build وpreview-server لأشجار الحزمة. القرارات في DECISIONS.md (المرحلة 5، 11 بندًا).
+
+**القبول:** package --check ناجح (المرايا وdist بايت-ببايت مطابقة لإعادة بناء حتمية)؛ كل مخرجات dist/js تمر node --check وتعمل في Chromium (فحص وظيفي خارج الشجرة: globals ورسم Data وsetLoading وترطيب الأيقونات والخطوط)؛ صفحات examples السبع صفر أخطاء console وموارد؛ catalog 14/8/13.
+
+**commits:** commit هذه المرحلة (بناء الحزمة ثم أمثلة وتوثيق).
+
+**نتائج البوابات (check-all كامل 20/20):** standalone OK، catalog 14/8/13 OK، manifest 1017 مدخلًا OK، package OK، static 330/330، link-check 147 ملفًا/0 مكسور، audit 67/67، product-context 250/250، light-release 35/35، mobile-experience 126/126، light-calendar 164/164، light-data 185/185، component-consumption 37/37، integration-boundaries 77/77، clone-lifecycle 31/31، numeric-geometry 51/51، ui-system-showcase 126/126، preview-runtime 112/112، visual-regression OK، git diff --check OK.
+
+**الافتراضات:** مرآة src/ بلا *.md (موثق DECISIONS)؛ تخطيط dist بنسبي مع dist/assets لحل url() الحرفية (موثق)؛ LICENSE غائب فلا حقل license؛ examples خارج لقطات D12 (أداة الالتقاط تغطي previews/components فقط — فُحصت خارج الشجرة بدلها).
+
+**المؤجلات:** توسيع d.ts للغلوبالات الثانوية (MicroPacked/MicroInfoPeek/MicroReadings/MicroIcons/MicroActionSheet) مع عقود المرحلة 6؛ تركيب CI (tools/ci/ci.yml) بيد المالك.
