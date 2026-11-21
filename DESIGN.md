@@ -6,7 +6,7 @@
 
 ## الهوية
 
-- الاتجاه المعتمد **Purposeful Expressive Native UI**، والهندسة **Geometry B**؛ القيم التنفيذية في [`shared/tokens.css`](shared/tokens.css) والعقود التفصيلية في [`docs/SYSTEM-CONTRACTS.md`](docs/SYSTEM-CONTRACTS.md) و[`docs/UI-VISUAL-SYSTEM.md`](docs/UI-VISUAL-SYSTEM.md) و[`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
+- الاتجاه المعتمد **Purposeful Expressive Native UI**، والهندسة **Geometry B**؛ القيم التنفيذية في [`shared/tokens.css`](shared/tokens.css) والعقود التفصيلية في [`docs/SYSTEM-CONTRACTS.md`](docs/SYSTEM-CONTRACTS.md) و[`docs/DESIGN-FOUNDATIONS.md`](docs/DESIGN-FOUNDATIONS.md) و[`docs/DESIGN-FOUNDATIONS.md`](docs/DESIGN-FOUNDATIONS.md).
 - العربية RTL افتراضية والأرقام Western 0–9 والتقويم ميلادي. المضيف يختار المنطقة الزمنية والعملة والوحدة؛ المكتبة لا تستنتجها.
 - الخط: IBM Plex Sans Arabic وIBM Plex من الأصول المحلية في `assets/fonts`. لا Google Fonts.
 - الألوان: بترولي `#164D59` للإجراء الأساسي، والتراكوتا `#D97757` محصورة بعدّاد التصفية وحافة الملخص المختار. لا لوحة بديلة ولا filter لإعادة تلوين الشعار.
@@ -34,7 +34,7 @@ Access Gateway يوفّر واجهات UI فقط؛ المضيف يملك Google 
 
 - القيم التنفيذية: [`shared/tokens.css`](shared/tokens.css) · الحركة: [`shared/motion.css`](shared/motion.css) · الأيقونات: [`shared/icons.js`](shared/icons.js).
 - المكونات: [`components/`](components/) · الأمثلة: [`previews/`](previews/) · المعرض: [`previews/ui-system-showcase/`](previews/ui-system-showcase/).
-- المواصفات والعقود والقرارات: [`docs/`](docs/) — ابدأ من [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md) و[`docs/COMPONENT-API-CONTRACTS.md`](docs/COMPONENT-API-CONTRACTS.md).
+- المواصفات والعقود والقرارات: [`docs/`](docs/) — ابدأ من [`docs/STATUS.md`](docs/STATUS.md) و[`docs/API.md`](docs/API.md).
 
 ## التحقق
 

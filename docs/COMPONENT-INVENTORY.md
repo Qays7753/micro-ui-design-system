@@ -78,7 +78,7 @@
 ## العقود العامة
 
 - القواعد المعتمدة: [`SYSTEM-CONTRACTS.md`](SYSTEM-CONTRACTS.md).
-- التركيب والتنظيف والاستثناءات: [`COMPONENT-CONSUMPTION.md`](COMPONENT-CONSUMPTION.md) و[`FAMILY-CONSUMPTION.md`](FAMILY-CONSUMPTION.md).
+- التركيب والتنظيف والاستثناءات: [`API.md`](API.md) و[`API.md`](API.md).
 - توكنز CSS مصدر التنفيذ؛ لا مسار DTCG موازٍ.
 - انطباق حالات initial/loading/empty/error/disabled/success يتبع مسؤولية كل مكوّن، لا قالبًا وهميًا موحدًا.
 - `MANIFEST.json` جرد بصمات، وليس مصدر النضج أو رسم التبعيات.

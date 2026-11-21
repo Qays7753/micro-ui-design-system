@@ -346,7 +346,7 @@
       ]
     }
   ],
-  "dependencyPolicy": "dependencies للعائلات الأساسية؛ conditionalDependencies لخيارات التركيب المحددة. CSS وJS والأصول وتوقيعات API موثقة في FAMILY-CONSUMPTION.md.",
+  "dependencyPolicy": "dependencies للعائلات الأساسية؛ conditionalDependencies لخيارات التركيب المحددة. CSS وJS والأصول وتوقيعات API موثقة في docs/API.md.",
   "compositions": [
     {
       "id": "value-context",

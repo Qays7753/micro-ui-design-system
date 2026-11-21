@@ -43,10 +43,10 @@
 ### Task 2: إظهار التركيب المستهدف في مراجع الاستهلاك
 
 **Files:**
-- Modify: `docs/COMPONENT-API-CONTRACTS.md`
-- Modify: `docs/FAMILY-CONSUMPTION.md`
-- Modify: `docs/MOBILE-EXPERIENCE-HANDOFF.md`
-- Modify: `docs/CURRENT-STATE.md`
+- Modify: `docs/API.md`
+- Modify: `docs/API.md`
+- Modify: `docs/HANDOFF.md`
+- Modify: `docs/STATUS.md`
 
 - [x] اربط تركيب Google-only بمصدره وموضع زر GIS الرسمي وترتيب CSS.
 - [x] سجّل قرار Google-only مع بقاء `MicroAccessGateway` API العامة.

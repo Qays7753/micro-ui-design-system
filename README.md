@@ -1,161 +1,30 @@
-الجولة الأحدث مكتملة على Feature: [تجربة الهاتف](docs/MOBILE-EXPERIENCE-HANDOFF.md). البداية7df38e8؛ دون دمجmain أوMicro. الأقسام التالية تخص الجولات السابقة.
-
 # Micro UI Design System
+
+مكتبة UI مستقلة لمشروع Micro: مكونات وتراكيب HTML/CSS/JS للهاتف العربي RTL، Light-only، Vanilla بدون إطار. لا مصادقة ولا شبكة ولا منطق أعمال — كل ذلك للتطبيق المضيف.
+
+## الحالة
+
+14 عائلة / 8 متغيرات / 13 تركيبًا (C01–C13)؛ الحالة والنضج والفجوات والمؤجلات في [docs/STATUS.md](docs/STATUS.md).
 
 ## تشغيل الفحوص
 
 ```bash
 uv sync
-uv run python tools/build-ui-system-showcase-standalone.py --check
-uv run python tools/component-catalog-build.py --check
-uv run python tools/manifest-build.py --check
-uv run python tools/light-static-check.py
-uv run python tools/component-audit-check.py
-uv run python tools/product-context-check.py --out <tmp>
-uv run python tools/light-release-check.py --review-scope
-uv run python tools/mobile-experience-check.py --out <tmp>
+uv run python tools/check-all.py
 ```
 
-الفحوص تعمل على نسخة `git clone --depth 1` كاملة؛ مقارنات git تتم مقابل `origin/main` افتراضيًا (أو `--base <ref>` حيث ينطبق)، وقيم الهوية المحمية تأتي من `tools/baselines/identity.json` لا من commit تاريخي. المخرجات تكتب في مجلد مؤقت افتراضيًا ولا تترك أثرًا في `git status`.
-
-الجولة الأحدث مكتملة على Feature: [تجربة الهاتف](docs/MOBILE-EXPERIENCE-HANDOFF.md). البداية7df38e8؛ دون دمجmain أوMicro. الأقسام التالية تخص الجولات السابقة.
-
-مكتبة UI مستقلة قابلة لإعادة الاستخدام والتعديل. تحتوي على مكونات وتراكيب UI محدودة لسياق Micro، دون شاشات إنتاجية أو منطق أعمال أو مصادقة أو حفظ حقيقي.
-
-## نقطة الدخول
-
-الحالي: [تغطية سياق المنتج](docs/product-context/COVERAGE.md)، [تقرير الإقفال والاعتماد](docs/product-context/CLOSURE.md) و[المختبر](previews/product-context/index.html). البداية main `280b33b988428e3085c28cc150a0c71deb419889`؛14 عائلة/8 متغيرات/12 تركيبًا، C07–C12 الجديدة Draft في الكتالوج؛ اعتمد المالك إقفال المصدر ودمجه وفق تقرير الإقفال، للهاتف Light/RTL. لم يُفتح Micro ولم يبدأ التكامل أو backend أو AI. [مرجع التسليم السابق المثبت](handoff/REFERENCE-2026-11-13.md) محفوظ لتلك النسخة ولا يعتمد هذه الإضافات تلقائيًا.
-
-**التسليمات أدناه سجل المراحل السابقة؛ مرجع المصدر الحالي الروابط أعلاه وCURRENT-STATE.**
-
-استكمال سابق: [تقرير المرحلة5 — حدود التركيب](docs/audits/ux-continuation-phase5-2026-11-12/REPORT.md)، و[دليل الحاضنات](docs/BOUNDARY-FIXTURES.md)، و[المعاينات المستقلة](previews/integration-boundaries/index.html). أصلح عزل الخلفية المتغيرة في Navigation؛ التراكيب C01/C02/C03 باقية Draft، وD01 غير منفذ. لا وصول أو تعديل أو اختبار في Micro.
-
-مقترح المرحلة6: [تنفيذ التنظيم والقراءة المباشرة في المعاينة](docs/proposals/charts-2026-11-12/ORGANIZATION-PASS.md)، و[معاينة المؤشرات](docs/proposals/charts-2026-11-12/review.html) و[معاينة الطلبات المستقلة](docs/proposals/charts-2026-11-12/review-orders.html). للمراجعة فقط؛ لم تتغير مصادر المكونات أو عقودها.
-
-تسليم المرحلة4:  [تقرير المرحلة4 — التراكيب الثلاثة](docs/audits/ux-continuation-phase4-2026-11-12/REPORT.md)، و[دليل الاستهلاك](docs/COMPOSITIONS.md)، و[المعاينات المستقلة](previews/compositions/index.html). C01/C02/C03 وصفات Draft منفذة، مع بقاء العائلات14 والمتغيرات6 بنضجها السابق. [API الحالية](docs/COMPONENT-API-CONTRACTS.md) مستقلة عن سياسات الأمثلة، وD01 المقترح غير منفذ. لا اختبار أو إصلاح داخل Micro.
-
-اقرأ بالترتيب:
-
-1. [`AGENTS.md`](AGENTS.md) — عقد العمل الحالي.
-2. [`DESIGN.md`](DESIGN.md) — الهوية والحدود.
-3. [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md) — الحالة الحالية وحدود الدليل، دون افتراض الدمج في `main`.
-4. [`docs/UI-RELEASE.md`](docs/UI-RELEASE.md) — القواعد النهائية للنطاق الحالي.
-5. [`docs/COMPONENT-INVENTORY.md`](docs/COMPONENT-INVENTORY.md) — العائلات ومسارات المصدر.
-6. مواصفة العائلة داخل `components/` قبل تعديلها.
-7. [`docs/SYSTEM-CONTRACTS.md`](docs/SYSTEM-CONTRACTS.md) — Geometry B والثيم ودورة الحياة والبيانات وملكية المضيف.
-8. [`docs/COMPONENT-CATALOG.json`](docs/COMPONENT-CATALOG.json) — مصدر النضج الوحيد؛ 14 عائلة ومتغيرات صريحة.
-
-## مصدر الحقيقة
-
-**الإصدار الحالي Light-only.** لا دعم أو إصلاح أو اختبارات Dark/System-dark في هذه الدفعة. توثيق التنفيذ والأدلة الحالية في [`تقرير الإصلاح`](docs/replit/light-only-complete-ui-repair-2026-10-24/REPORT.md)، لا في نتائج الجولات التاريخية.
-
-- `components/`: CSS وJavaScript وHTML والمواصفات القابلة للتعديل.
-- `shared/tokens.css`: التوكنز التنفيذية الوحيدة.
-- `shared/motion.css` و`shared/icons.js`: القواعد المشتركة.
-- `assets/`: الخطوط والأيقونات والشعار والأصول المعتمدة.
-- `previews/`: أمثلة مستقلة للمكونات.
-- `previews/ui-system-showcase/`: معرض المكونات الأخير، بمصدر قابل للتعديل وملف standalone مولد.
-
-## المعرض الأخير
-
-للتشغيل من جذر المستودع:
+## تشغيل المعرض
 
 ```bash
 python3 tools/preview-server.py
+# ثم http://localhost:5000/previews/ui-system-showcase/index.html
 ```
 
-ثم افتح:
+أو افتح `previews/ui-system-showcase/standalone.html` مباشرة (ملف مولد لا يُعدَّل يدويًا).
 
-```text
-http://localhost:5000/previews/ui-system-showcase/index.html
-```
+## الوثائق
 
-أو افتح مباشرة:
-
-```text
-previews/ui-system-showcase/standalone.html
-```
-
-الملف الواحد مولد آليًا؛ عدّل `index.html` و`showcase.css` و`showcase.js` ثم أعد البناء، ولا تعدل `standalone.html` يدويًا.
-
-## الفحوص الحالية
-
-`python3 tools/product-context-check.py --out /tmp/product-context` يفحص C07–C12 وحالاتها وعزل السياق والتأكيد والتنظيف، دون خدمات حقيقية.
-
-الفحص المركّز لعقود التركيب والإصلاحات: `python3 tools/component-consumption-contract-check.py` (Light، 360×780، دون zoom).
-
-```bash
-python3 tools/build-ui-system-showcase-standalone.py --check
-python3 tools/component-mobile-check.py
-python3 tools/chart-mobile-check.py
-python3 tools/ui-system-showcase-check.py
-python3 tools/ui-system-showcase-repair-check.py --tag after
-python3 tools/concepts-check.py
-python3 tools/data-scale-state-check.py
-```
-
-`component-mobile-check.py` يفحص الحقول والاختيار مباشرة من مصدر المكوّنات،
-بمحاكاة لمس Chromium عند 320/360/390/430 وتكبير النص؛ يحفظ الأدلة في مجلد
-مؤقت افتراضيًا، أو في المسار المحدد بـ`--out`. لا يستخدم CSS المعرض ولا
-يثبت أجهزة أو قارئات شاشة فعلية.
-
-مرجع الأبعاد والهندسة والاستثناءات الحالية:
-[`docs/COMPONENT-GEOMETRY.md`](docs/COMPONENT-GEOMETRY.md).
-
-تقارير الإصلاح السابق **التاريخية** في
-[`docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/`](docs/replit/professional-numeric-geometry-ui-polish-2026-10-21/).
-أدلة `reviews/UI-SYSTEM-SHOWCASE/` و`docs/UI-SYSTEM-SHOWCASE-*.md` تاريخية،
-وليست بديلًا عن تشغيل الفحوص على المصدر الحالي.
-
-## العائلات
-
-| العائلة | المصدر | الحالة الحالية |
-|---|---|---|
-| buttons | `components/buttons/` | STABLE UI |
-| fields | `components/fields/` | STABLE UI |
-| selection | `components/selection/` | STABLE UI |
-| organization | `components/organization/` | STABLE UI |
-| data | `components/data/` | STABLE UI |
-| messages | `components/messages/` | STABLE UI |
-| navigation | `components/navigation/` | STABLE UI |
-| surfaces | `components/surfaces/` | STABLE UI |
-| info-strip | `components/info-strip/` | STABLE UI مع peek اختياري |
-| metric-comparison | `components/metric-comparison/` | STABLE UI |
-| account-settings | `components/account-settings/` | STABLE UI دون حفظ فعلي |
-| access-gateway | `components/access-gateway/` | STABLE UI دون مصادقة فعلية |
-| order-schedule | `components/order-schedule/` | DRAFT FOR REVIEW |
-| carousel | `components/carousel/` | DRAFT FOR REVIEW |
-
-`packed-circle` متغير مقترح opt-in تحت Data، وليس عائلة خامسة عشرة. Donut وBubbles وMetric Circles وMain Metric featured متغيرات متخصصة opt-in أيضًا؛ مصدر القائمة والنضج هو الكتالوج.
-
-## حدود مهمة
-
-التحقق الحالي قائم على Chromium/Playwright. لم يُثبت بعد توافق جهاز Android أو iOS فعلي، WebKit/Safari، اللمس الحقيقي، TalkBack/VoiceOver، safe areas أو native zoom. لا تحول نجاح الفحوص المكتبية إلى ادعاء جاهزية إنتاجية.
-
-لا تغيّر الهوية أو التوكنز أو الخطوط أو الأيقونات من دون قرار صريح. حافظ على العربية RTL، الأرقام المقروءة، الحالات الصادقة، وعدم قص البيانات المهمة.
-
-## استهلاك المكونات
-
-ابدأ من [دليل الاستهلاك وSOP التركيب](docs/COMPONENT-CONSUMPTION.md) ثم [بطاقات العائلات الـ14](docs/FAMILY-CONSUMPTION.md). ملفات المعرض أدوات فحص؛ بنية DOM للمكوّن تُعرّف مرة في غلاف مشترك مناسب للمضيف لاحقًا. لا تُنسخ شاشة المعرض إلى المنتج.
-
-استكمال المكتبة الجاري: [تقرير المرحلة الأولى — النطاق والنواقص](docs/audits/ux-continuation-phase1-2026-11-12/REPORT.md). العمل داخل UX فقط؛ لا إصلاح أو فحص جديد أو تكامل في Micro، ولا اشتراط إصلاحه لاستكمال المكتبة. الرسوم مؤجلة إلى مرحلتها، والوثيقة جرد وليست تنفيذًا أو قبولًا جديدًا للمكونات.
-
-## الحزمة
-
-المصدر القابل للتعديل هو التسليم الأساسي. تعليمات إعادة بناء حزمة النقل موجودة في [`deliverables/README.md`](deliverables/README.md)، ولا تُعامل أي صورة أو build كبديل عن المصدر.
-
-مصدر الرسوم القابل للنقل: [`components/data/`](components/data/)، ومثاله المستقل [`example-usage.html`](components/data/example-usage.html). فحص `chart-mobile-check.py` يستخدم CSS/JS المصدر دون المعرض، ويثبت عرض SVG ونسبه والقراءات الكاملة وهندسة التنقل والاختيار؛ لا اختبار أجهزة فعلية.
-
-## العرض النظيف ومختبر الحالات
-
-المعرض يبدأ بمعاينة App المحلية؛ افتح `#overview` لنظرة المكونات، و`#component-review` لمراجعة عائلة معزولة؛ افتح رابط **مختبر الحالات** أو `previews/ui-system-showcase/index.html#state-lab` للاختبارات والـfixtures والأحداث. المقارنة الدقيقة تبدأ بـbars/rows/table؛ Bubbles وPacked وMetric Circles خيارات متخصصة صريحة وليست العرض الافتراضي.
-
-فحوص الإصدار للهاتف: `python3 tools/light-calendar-check.py --review-scope`، `tools/light-data-check.py`، و`tools/light-release-check.py`، إضافة إلى فحوص المصدر الحتمية والمكونات الحالية المناسبة. لا تشغّل `professional-remediation-check.py` التاريخي ضمن قبول هذا الإصدار لأنه يشمل Dark.
-
-## مراجعة المكونات الحالية
-
-Full Component Review مستقل عن مختبر الحالات: افتح `previews/ui-system-showcase/index.html#component-review` واختر العائلة. الأمثلة الفعلية للمتغيرات الستة محفوظة مع نضجها في الكتالوج. `#state-lab` للتشخيص، و`#app` للمعاينة النظيفة. Line خيار للتسلسل المرتب أو الزمني، وBars/Rows/Tables هي افتراض المقارنة الدقيقة.
-
-## أحدث امتداد مصدر اختياري — قراءات منظمة
-
-[المعاينة الفعلية](previews/readable-source/index.html) و[العقد](docs/READABLE-SOURCE.md): Data/Metric readable + C04 بحالة Draft، وحدات ظاهرة افتراضيًا واختيار عام اختياري بمفاتيح ثابتة. لا تغيير هوية أو محور افتراضي أو تركيب في تطبيق. [ملف مراجعة مستقل](docs/audits/readable-source-2026-11-12/review.html).
+- [البدء](docs/GETTING-STARTED.md) · [الحالة](docs/STATUS.md) · [عقود النظام](docs/SYSTEM-CONTRACTS.md)
+- [API والاستهلاك](docs/API.md) · [التراكيب](docs/COMPOSITIONS.md) · [أسس التصميم](docs/DESIGN-FOUNDATIONS.md)
+- [الاختبار](docs/TESTING.md) · [التسليم](docs/HANDOFF.md) · [القرارات](docs/DECISIONS.md)
+- [الكتالوج](docs/COMPONENT-CATALOG.json) (مصدر النضج) · [عقد العمل](AGENTS.md) · [الهوية والحدود](DESIGN.md)

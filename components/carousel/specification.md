@@ -45,7 +45,7 @@
 - الحالة تبقى **DRAFT FOR REVIEW**؛ هذا ليس اعتمادًا تلقائيًا.
 
 الحالة: **DRAFT FOR REVIEW** — ما لم يُحسم موسوم «مقترح/PROPOSED».
-المرجع: `components/carousel/specification.md` + `docs/SHARED-SPEC.md` + `docs/EDITABLE-DELIVERY.md`.
+المرجع: `components/carousel/specification.md` + `docs/API.md` + `docs/HANDOFF.md`.
 الحالة: DRAFT FOR REVIEW ضمن مصدر `main` الحالي.
 
 ## 1) الغرض والحدود

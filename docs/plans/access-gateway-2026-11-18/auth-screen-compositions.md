@@ -8,7 +8,7 @@
 
 **Tech Stack:** HTML وCSS وتوكنز Micro المحلية وأصول الشعار والأيقونات الحالية؛ Python وPlaywright الموجودان لفحص الهاتف. لا اعتمادات أو مصادر شبكة جديدة.
 
-**Spec:** `components/access-gateway/specification.md`، `docs/MOBILE-EXPERIENCE-HANDOFF.md`، والمرجع المرئي الوحيد `/home/ubuntu/upload/Micro-Auth%281%29.zip` مع موجز القرارات `MICRO-AUTH-CONTINUATION-BRIEF-2026-11-21.md`.
+**Spec:** `components/access-gateway/specification.md`، `docs/HANDOFF.md`، والمرجع المرئي الوحيد `/home/ubuntu/upload/Micro-Auth%281%29.zip` مع موجز القرارات `MICRO-AUTH-CONTINUATION-BRIEF-2026-11-21.md`.
 
 ## Global Constraints
 
@@ -31,10 +31,10 @@
 - Modify: `DESIGN.md`
 - Modify: `components/access-gateway/specification.md`
 - Modify: `components/access-gateway/README.md`
-- Modify: `docs/CURRENT-STATE.md`
-- Modify: `docs/COMPONENT-API-CONTRACTS.md`
-- Modify: `docs/FAMILY-CONSUMPTION.md`
-- Modify: `docs/MOBILE-EXPERIENCE-HANDOFF.md`
+- Modify: `docs/STATUS.md`
+- Modify: `docs/API.md`
+- Modify: `docs/API.md`
+- Modify: `docs/HANDOFF.md`
 
 **Interfaces:**
 - الواجهة المرئية: `.m-auth-screen--splash`, `.m-auth-screen--signin`, `.m-auth-screen--new-user`, `.m-auth-screen--returning-user`.

@@ -17,6 +17,9 @@ IDENTITY = json.loads((ROOT / "tools/baselines/identity.json").read_text(encodin
 DEFAULT_BASE = "origin/main"
 # Deletions are only forbidden for editable UI source; docs cleanups are allowed.
 PROTECTED_PREFIXES = ("components/", "shared/", "assets/", "previews/")
+# Phase 3 approved removal: the historical chart-proposal preview (decision logged
+# in docs/DECISIONS.md); its implemented successor lives in components/ previews.
+APPROVED_REMOVALS = ("previews/chart-proposal/",)
 
 
 def git(*args):
@@ -159,10 +162,12 @@ def main():
         and name not in removed_tokens
     )
     check("baseline token values unchanged against identity baseline", not changed_values, changed_values)
-    check("logo v2 and official skills unchanged",
-          not any(n.startswith(("assets/brand/micro-logo/v2/", "_audit-resources/")) for n in changed))
+    # Phase 3 (D6): _audit-resources/ removed from the tree after the archive tag;
+    # protection now covers the logo v2 assets only.
+    check("logo v2 assets unchanged",
+          not any(n.startswith(("assets/brand/micro-logo/v2/",)) for n in changed))
     removed = [name for name in git("diff", "--name-only", "--diff-filter=D", base).splitlines()
-               if name.startswith(PROTECTED_PREFIXES)]
+               if name.startswith(PROTECTED_PREFIXES) and not name.startswith(APPROVED_REMOVALS)]
     check("no removed source or dead removed-chart imports", not removed, removed)
     try:
         check("branch descends from diff base",

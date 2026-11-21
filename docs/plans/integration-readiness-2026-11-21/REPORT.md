@@ -82,3 +82,14 @@
 **نتائج البوابات:** check-all: 9/9 (static 227/227، audit 67/67، product-context 250/250، light-release 35/35، mobile-experience 126/126، standalone/catalog/manifest --check، git diff --check).
 
 **الافتراضات:** لا شيء جديد. **المؤجلات:** لا شيء.
+
+
+## المرحلة 3 — تنظيف التوثيق والمستودع ✅
+
+**ما نُفّذ:** tag أرشيف `archive/pre-integration-2026-11-21` قبل أي حذف. حُذف الأرشيف التاريخي (D6) وقوائمه في DECISIONS؛ دُمجت مستندات docs العليا في: STATUS، GETTING-STARTED (جديد)، API، COMPOSITIONS، DESIGN-FOUNDATIONS، TESTING، HANDOFF، مع دمج UI-PLATFORM-NOTES في SYSTEM-CONTRACTS وUI-DECISIONS في DECISIONS وإبقاء COVERAGE محدثًا. أُعيد كتابة README قصيرًا. حُذفت معاينة chart-proposal التاريخية بقرار موثق. أضيف `tools/link-check.py`. حُدّثت الأدوات التي تقرأ مسارات محذوفة (light-static: حماية الشعار فقط + استثناء الحذف المعتمد؛ الكتالوج ومولد الفهرس). القرارات التفصيلية في DECISIONS.md (المرحلة 3).
+
+**الحجم:** 202MB/1761 ملفًا قبل → ~151MB/~1250 ملفًا بعد (تقريب du بدون .git).
+
+**القبول:** صفر روابط مكسورة (link-check) — تُثبت أرقام البوابات أدناه؛ لا ملف في docs/ سجل جولة؛ manifest --check ناجح بعد إعادة البناء.
+
+**commits:** commit هذه المرحلة. **نتائج البوابات:** تُرى في مخرجات التشغيل أدناه وتُحدَّث في التقرير النهائي.

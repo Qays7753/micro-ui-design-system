@@ -4,7 +4,7 @@
 
 جداول الأشرطة والدوائر تعزل الإشارة والقراءة الرقمية عن نص الحالة. القراءة الرئيسية والصفوف والوحدة والفترة محفوظة، والغياب لا يصبح صفرًا.
 
-التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/COMPONENT-CONSUMPTION.md) و[بطاقات العائلات](../../docs/FAMILY-CONSUMPTION.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
+التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/API.md) و[بطاقات العائلات](../../docs/API.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
 
 ## تهيئة النسخ ودورة الحياة — تدقيق 2026-11-11
 
@@ -26,7 +26,7 @@
 - `MicroMetricComparison.disconnect(root)` يشمل الجذر المطابق وأبناءه لكل من `[data-metric-circles]` و`[data-main-comparison]`. يفصل ResizeObserver أو مستمع window resize الاحتياطي، ويمسح المراجع وعلامات التهيئة. الفصل المتكرر آمن. `init(root)` يعيد التهيئة بمراقب/مستمع واحد؛ `render(root)` الصريح يبقى صالحًا ويعيد الإلحاق. callback جاهزية الخط لا يعيد إحياء مكوّن فُصل.
 - الفحص يستخدم Chromium ومسارًا مضبوطًا يعطّل ResizeObserver قبل تحميل المكوّن، ويؤخر fonts.ready عمدًا؛ ليس اختبارًا لجهاز قديم فعلي.
 
-**الحالة: STABLE UI — [UI-RELEASE](../../docs/UI-RELEASE.md).** مكوّنات عددية قابلة لإعادة الاستخدام؛ لا حساب مالي أو تجميع أو تفسير لعلاقات الأعمال.
+**الحالة: STABLE UI — [UI-RELEASE](../../docs/STATUS.md).** مكوّنات عددية قابلة لإعادة الاستخدام؛ لا حساب مالي أو تجميع أو تفسير لعلاقات الأعمال.
 
 ## عائلات العرض
 
@@ -121,8 +121,8 @@
 
 ## صفوف قراءة اختيارية — Draft 2026-11-12
 
-`.m-main-metric--readable` أعمدة مشتركة للاسم والمسار والقيمة، مع وحدات منفصلة. تبقى قواعد المقارنة والتحقق والمقاسات الافتراضية. [العقد والتحميل](../../docs/READABLE-SOURCE.md) و[المعاينة](../../previews/readable-source/index.html).
+`.m-main-metric--readable` أعمدة مشتركة للاسم والمسار والقيمة، مع وحدات منفصلة. تبقى قواعد المقارنة والتحقق والمقاسات الافتراضية. [العقد والتحميل](../../docs/COMPOSITIONS.md) و[المعاينة](../../previews/readable-source/index.html).
 
 ## استهلاك الأزرار المشتركة — مرشح الإقفال 2026-11-12
 
-أفعال «عرض البيانات كجدول» المولدة تستخدم `m-btn m-btn--secondary` من B01، مع بقاء hook العائلة وaria-controls/expanded ودورة حياة الجدول. حمّل `components/buttons/buttons.css` مرة قبل CSS العائلة عند تشغيل JavaScript المولّد للجداول؛ لا يلزم buttons.js لهذه الأفعال العادية. Data يطبّق ذلك أيضًا على السابق/التالي في data-selection=single وعلى إفصاح Packed Circle. لا يعاد تعريف ألوان/حدود/خطوط الزر في CSS العائلة؛ الجدول والصفوف ومقياس الرسم تبقى ملكها. [عقد الاستهلاك والأفعال](../../docs/SHARED-ACTIONS.md).
+أفعال «عرض البيانات كجدول» المولدة تستخدم `m-btn m-btn--secondary` من B01، مع بقاء hook العائلة وaria-controls/expanded ودورة حياة الجدول. حمّل `components/buttons/buttons.css` مرة قبل CSS العائلة عند تشغيل JavaScript المولّد للجداول؛ لا يلزم buttons.js لهذه الأفعال العادية. Data يطبّق ذلك أيضًا على السابق/التالي في data-selection=single وعلى إفصاح Packed Circle. لا يعاد تعريف ألوان/حدود/خطوط الزر في CSS العائلة؛ الجدول والصفوف ومقياس الرسم تبقى ملكها. [عقد الاستهلاك والأفعال](../../docs/API.md).

@@ -4,7 +4,7 @@
 
 أنت تعمل على المستودع `Qays7753/micro-ui-design-system`. المهمة تنفيذ الخطة أدناه **كاملة ومن البداية حتى المرحلة 10 دون توقف ودون أن تسأل المالك أي سؤال**. كل القرارات معتمدة مسبقًا في القسم 2. إذا ظهر شيء غير مغطى، طبّق قواعد القسم 3 وتابع.
 
-- اقرأ قبل البدء: `README.md`، `DESIGN.md`، `docs/CURRENT-STATE.md`، `docs/SYSTEM-CONTRACTS.md`، `docs/COMPONENT-API-CONTRACTS.md`، `docs/COMPONENT-CATALOG.json`، ومواصفة كل عائلة قبل تعديلها.
+- اقرأ قبل البدء: `README.md`، `DESIGN.md`، `docs/STATUS.md`، `docs/SYSTEM-CONTRACTS.md`، `docs/API.md`، `docs/COMPONENT-CATALOG.json`، ومواصفة كل عائلة قبل تعديلها.
 - **هذا البرومت يتقدم على أي تفويض أو قيد تاريخي في `AGENTS.md` أو `README.md` أو `CURRENT-STATE.md`** يتعارض معه؛ تلك الملفات ستُعاد كتابتها في المرحلة 2. أما ثوابت الهوية في القسم 1 فلا يتجاوزها شيء.
 - بعد كل مرحلة: شغّل البوابات، اعمل commit واضحًا بالإنجليزية بصيغة `type(scope): summary`، ثم `git push`، وحدّث تقرير التقدم (القسم 5). لا تنتظر ردًا.
 

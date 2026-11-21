@@ -32,7 +32,7 @@
 - **فجوة UI مثبتة:** غياب تركيبة/عرض ظاهر من كتالوج المصدر، مع مطلب المنتج الذي يبرر الحاجة. أما الغياب بلا مطلب مسند فيسجل كسؤال لا كفجوة.
 - **مسؤولية مضيف:** هوية أو بيانات أو صلاحية أو خدمة أو انتقال منتج؛ لا تُحل بإضافة عنصر واجهة.
 
-مصدر النضج هو `docs/COMPONENT-CATALOG.json` لا `MANIFEST.json`؛ ويصرح `docs/COMPONENT-INVENTORY.md` §§1 و83 أن النضج ليس جاهزية منصة وأن MANIFEST جرد بصمات. بوابات المصدر/التفاعل/المنصة مستقلة وفق `docs/UI-RELEASE.md` §§30–35.
+مصدر النضج هو `docs/COMPONENT-CATALOG.json` لا `MANIFEST.json`؛ ويصرح `docs/COMPONENT-INVENTORY.md` §§1 و83 أن النضج ليس جاهزية منصة وأن MANIFEST جرد بصمات. بوابات المصدر/التفاعل/المنصة مستقلة وفق `docs/STATUS.md` §§30–35.
 
 ## مصفوفة مشتركة موجزة
 
@@ -85,7 +85,7 @@
 
 ### الموجود القابل لإعادة الاستخدام
 
-- C10 في `docs/COMPONENT-CATALOG.json` §§533–555 و`components/product-context/delivery.js` §§1–21: المكونات المذكورة، خط زمني، عرض مبلغ كوحدة/نص قادم من المصدر، attachments، وتأكيد للأفعال الحساسة. جميع C07–C12 Draft وفق `docs/CURRENT-STATE.md` §§13–16؛ لا يعني اكتمال المصدر اعتمادًا بصريًا.
+- C10 في `docs/COMPONENT-CATALOG.json` §§533–555 و`components/product-context/delivery.js` §§1–21: المكونات المذكورة، خط زمني، عرض مبلغ كوحدة/نص قادم من المصدر، attachments، وتأكيد للأفعال الحساسة. جميع C07–C12 Draft وفق `docs/STATUS.md` §§13–16؛ لا يعني اكتمال المصدر اعتمادًا بصريًا.
 - Buttons وFields وMessages عائلات `STABLE UI` وفق الكتالوج §§28–134. C05 Action Sheet قائمة إجراءات هاتف اختيارية مبنية على B07/B01 (`components/navigation/action-sheet.md` §§1–7، 28–40). C02 صف/قائمة تشغيلية موجودة Draft (`docs/COMPOSITIONS.md` §§50–82)، وOrganization يحدد صفًا دلاليًا لا سجل طلبات (`components/organization/specification.md` §§3–5).
 - Carousel للصور مكوّن Draft؛ اختياري عند صور فعلية فقط، بطاقة كاملة العرض افتراضيًا، لا autoplay أو تنفيذ بالسحب (`components/carousel/specification.md` §§1–5، 51–68). لا حاجة لإضافته إلى كل مسار Delivery.
 - لمسار الإشراف على عناصر Delivery: C12 يعرض عنصر مراجعة واحدًا مع ملاحظة وقرار وتاريخ/مرفقات مشروطة بالصلاحية؛ لا يثبت ذلك وجود صندوق وارد متعدد الطلبات. العقد موثق في `components/product-context/specification.md` §§11–12 و82–85، والرسم الفعلي في `components/product-context/review.js` §§2–12.
@@ -94,7 +94,7 @@
 
 **حقيقة المصدر:** `delivery.js` §§9–21 يرسم timeline لطلب/تتبع واحد، والكتالوج/specification لا يعرّف mode لقائمة تسليمات أو طابور سائق. **الاستنتاج:** لا يوجد في هذه المكتبة حاليًا تركيب قائمة عمل متعددة الطلبات. **الحكم:** الحاجة إلى قائمة عمل للسائق غير مقررة في موجز المنتج المضمن بهذا التقرير؛ فلا تُسجّل كفجوة منتج معتمدة ولا تنفذ قائمة جديدة الآن. إن أكد المالك لاحقًا حاجة السائق إلى قائمة مهام، فالتركيب المرشح C02 بصفوف؛ لا عائلة جديدة ولا حقول حالة/ترتيب مخترعة.
 
-لا تُسجّل فجوة في تدفق request/offer/tracking/change/proof نفسه؛ هذه الوضعيات موجودة. لا تعتبر Order Schedule تقويمًا أو FSM للتوصيل؛ `docs/COMPONENT-API-CONTRACTS.md` §§136–145 يحده كتقويم ومصدر بيانات للمستهلك.
+لا تُسجّل فجوة في تدفق request/offer/tracking/change/proof نفسه؛ هذه الوضعيات موجودة. لا تعتبر Order Schedule تقويمًا أو FSM للتوصيل؛ `docs/API.md` §§136–145 يحده كتقويم ومصدر بيانات للمستهلك.
 
 ### الحالات التي يجب أن تعرضها الواجهة
 
@@ -224,7 +224,7 @@ C11 يعرض سجل رسائل، composer، انتظار/نشاط/retry، اقت
 
 ### ما تملكه المكتبة وما يملكه Micro
 
-`docs/COMPONENT-CONSUMPTION.md` §§22–32 و`docs/SYSTEM-CONTRACTS.md` §§118–123 يحددان فصل الملكية: المكوّن يملك هندسة DOM وحالاته/تركيزه وموارده؛ المضيف يملك هوية وخدمة وصلاحية وحفظًا/شبكة/بيانات صحيحة، route/History/Back، safe areas والـviewport والثيم واللغة/المنطقة الزمنية. `MicroProduct.mount/replace/resolve/destroy` مالك المحتوى الداخلي في C07–C12، لا يحل محل الصلاحيات أو Navigation (`docs/COMPONENT-API-CONTRACTS.md` §§181–184).
+`docs/API.md` §§22–32 و`docs/SYSTEM-CONTRACTS.md` §§118–123 يحددان فصل الملكية: المكوّن يملك هندسة DOM وحالاته/تركيزه وموارده؛ المضيف يملك هوية وخدمة وصلاحية وحفظًا/شبكة/بيانات صحيحة، route/History/Back، safe areas والـviewport والثيم واللغة/المنطقة الزمنية. `MicroProduct.mount/replace/resolve/destroy` مالك المحتوى الداخلي في C07–C12، لا يحل محل الصلاحيات أو Navigation (`docs/API.md` §§181–184).
 
 ### مراجعة مسؤول المنصة للمحتوى
 
@@ -240,7 +240,7 @@ C11 يعرض سجل رسائل، composer، انتظار/نشاط/retry، اقت
 
 - كل حساب قد يحمل أدوارًا متعددة، لكن نموذج context فريد بحسب `contextId/workspaceId/roleId/kind`; لا اتحاد grants في العميل. الدليل `components/product-context/specification.md` §§35–42.
 - وفق سياق المنتج المضمن أعلاه، سياق السائق يظهر Delivery وAsk فقط؛ لا Market أو Manage، ومسؤول المنصة لا يحصل تلقائيًا على بيانات Manage المالية. لا تُرسل API بيانات غير مصرح بها اعتمادًا على إخفاء عناصر UI؛ المضيف وحده يفرض grants.
-- استجابة success أو حفظ مالي تأتي من مصدر موثوق ومؤكد؛ pending/uncertain/conflict لا يساوي نجاحًا. لا يحول C08 أي event intent إلى أعمال مكتملة (`docs/COMPONENT-API-CONTRACTS.md` §§15، 68–77؛ `SYSTEM-CONTRACTS.md` §§48–50).
+- استجابة success أو حفظ مالي تأتي من مصدر موثوق ومؤكد؛ pending/uncertain/conflict لا يساوي نجاحًا. لا يحول C08 أي event intent إلى أعمال مكتملة (`docs/API.md` §§15، 68–77؛ `SYSTEM-CONTRACTS.md` §§48–50).
 - يوجد أساس Navigation مستقر لا shell نهائي: navbar/tab/page/History وsafe areas العامة وإدارة سجل المتصفح ليست مسؤولية المكوّن (`components/navigation/specification.md` §§28–36، 38–49؛ `SYSTEM-CONTRACTS.md` §§118–123). التوصية Composition/host wiring لا إعادة كتابة Navigation.
 
 ## أصغر موجات التوثيق/العمل اللاحق وعلاقاتها

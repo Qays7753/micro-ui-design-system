@@ -4,13 +4,13 @@
 
 خيار التوافق الصريح `m-btn--loading-replace` يخفي النص المرئي فقط أثناء التحميل ويحتفظ به في شجرة الإتاحة والأبعاد. الافتراضي B يبقي النص ظاهرًا والمؤشر منفصلًا. مثال حالات المعاينة يعرض B ولا يركب ترميز التوافق ضمنيًا.
 
-التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/COMPONENT-CONSUMPTION.md) و[بطاقات العائلات](../../docs/FAMILY-CONSUMPTION.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
+التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/API.md) و[بطاقات العائلات](../../docs/API.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
 
 ## تحديث Geometry B والثيم ودورة الحياة
 
 [العقود الحالية](../../docs/SYSTEM-CONTRACTS.md) تتقدم على قياسات سابقة هنا: control radius 12، capsule opt-in، وهدف 48 حيث ينطبق. الإصدار الحالي Light-only؛ حدود وforeground الحالات دلالية. `MicroButtons.disconnect(root)` ينهي loading المملوك ويستعيد الاسم ويفصل activation guards؛ `setLoading` يعيد الربط عند الحاجة، ولا مؤقت إكمال افتراضي داخل المكوّن.
 
-الحالة: **STABLE UI** — تفاصيل الإصدار في [UI-RELEASE](../../docs/UI-RELEASE.md). حُسمت البدائل بتفويض المالك الحالي؛ عقود السلوك محفوظة، وأدلة R1/R2 تاريخية وليست فحصًا جديدًا.
+الحالة: **STABLE UI** — تفاصيل الإصدار في [UI-RELEASE](../../docs/STATUS.md). حُسمت البدائل بتفويض المالك الحالي؛ عقود السلوك محفوظة، وأدلة R1/R2 تاريخية وليست فحصًا جديدًا.
 
 ## 1) الغرض
 

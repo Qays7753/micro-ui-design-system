@@ -11,7 +11,7 @@
 
 تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight-only. `disconnect(root)` و`destroy(root)` يفصلان أحداث التركيب؛ التنظيف الطبقي عبر `MicroNavigation.disconnect` أيضًا، وتنظيف أي Selection مضمّن عبر API العائلة. لا حفظ إعدادات فعليًا ولا history/Back أو ثيم دائم يملكه المكوّن.
 
-**الحالة: STABLE UI — [UI-RELEASE](../../docs/UI-RELEASE.md).** أجزاء قابلة للتركيب، لا شاشة منتج أو صلاحيات إدارية.
+**الحالة: STABLE UI — [UI-RELEASE](../../docs/STATUS.md).** أجزاء قابلة للتركيب، لا شاشة منتج أو صلاحيات إدارية.
 
 ## أجزاء مستقلة
 
@@ -44,7 +44,7 @@
 ## اعتماد
 
 `account-settings.css` و`account-settings.js` يتطلبان `navigation.css/js` للمشهد الحواري، و`buttons.css` للأزرار، و`selection.css` للمفاتيح الأصلية؛ حمّل `selection.js` عند استعمال سلوك المجموعات أو pending المشترك، إضافة للتوكنات والخطوط. مثال مستقل كامل في `example-usage.html`.
-تفاصيل التهيئة وتنظيف الطبقة والأطفال: [بطاقة الاستهلاك](../../docs/FAMILY-CONSUMPTION.md).
+تفاصيل التهيئة وتنظيف الطبقة والأطفال: [بطاقة الاستهلاك](../../docs/API.md).
 
 ## منظور افتتاح اختياري
 `data-account-initial-view="application"` يفتح القائمة أولًا. `data-account-to-account` يفتح الحساب داخل الطبقة نفسها وBack يعود للمنظور الأول. غياب السمة يبقي السلوك السابق. لا تبديل صلاحيات/حساب أو حفظ ضمن المكتبة. مثال `previews/mobile-experience/menu.html`.

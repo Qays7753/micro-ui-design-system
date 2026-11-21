@@ -1,5 +1,5 @@
 /* Micro UI — opt-in broad, faint curved surfaces for S01.
-   Stable UI release translation of the approved direction; see docs/UI-RELEASE.md.
+   Stable UI release translation of the approved direction; see docs/STATUS.md.
    Load after surfaces.css. No animation, waves, or new palette.
    Ellipse placement/opacity are surface-specific geometry, not shared tokens. */
 

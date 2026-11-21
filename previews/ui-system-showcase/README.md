@@ -41,8 +41,8 @@ python3 tools/ui-system-showcase-repair-check.py --tag after
 - [`verification.txt`](../../reviews/UI-SYSTEM-SHOWCASE/verification.txt)
 - [`qa-verdict.txt`](../../reviews/UI-SYSTEM-SHOWCASE/qa-verdict.txt)
 - [`repair-check-after.txt`](../../reviews/UI-SYSTEM-SHOWCASE/repair-check-after.txt)
-- [`UI-SYSTEM-SHOWCASE-COVERAGE`](../../docs/UI-SYSTEM-SHOWCASE-COVERAGE.md)
-- [`UI-SYSTEM-SHOWCASE-REPAIR-TRACKER`](../../docs/UI-SYSTEM-SHOWCASE-REPAIR-TRACKER.md)
+- [`UI-SYSTEM-SHOWCASE-COVERAGE`](../../docs/TESTING.md)
+- [`UI-SYSTEM-SHOWCASE-REPAIR-TRACKER`](../../docs/TESTING.md)
 
 ## ما يغطيه
 
@@ -68,4 +68,4 @@ Focused verification: `python3 tools/evidence-repair-check.py --out /tmp/micro-r
 
 ### امتدادات القراءة Draft
 
-مراجعة عائلة Data وMetricComparison تعرض data-readable وmetric-readable فعليًا من المصدر؛ [معاينة C04 المستقلة](../readable-source/index.html) تُظهر السياق المتجانس والمختلط والتقدم. [عقد الاستهلاك](../../docs/READABLE-SOURCE.md).
+مراجعة عائلة Data وMetricComparison تعرض data-readable وmetric-readable فعليًا من المصدر؛ [معاينة C04 المستقلة](../readable-source/index.html) تُظهر السياق المتجانس والمختلط والتقدم. [عقد الاستهلاك](../../docs/COMPOSITIONS.md).

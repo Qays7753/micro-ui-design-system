@@ -4,13 +4,13 @@
 
 زر استعادة الوصول الاختياري يرث خط المكوّن وله خلفية شفافة بلا إطار متصفح افتراضي. لا يضيف هذا handler أو تدفق استعادة؛ لا يظهر دون callback مطابق.
 
-التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/COMPONENT-CONSUMPTION.md) و[بطاقات العائلات](../../docs/FAMILY-CONSUMPTION.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
+التحميل والملكية والاستثناءات: [دليل الاستهلاك](../../docs/API.md) و[بطاقات العائلات](../../docs/API.md). فحص المصدر: `python3 tools/component-consumption-contract-check.py` (Light فقط).
 
 ## العقد الحالي الإضافي
 
 تسري [عقود النظام](../../docs/SYSTEM-CONTRACTS.md): Geometry B وLight-only وملكية المضيف. الاستثناء يعرض `userMessage` الصريح فقط أو fallback عربيًا آمنًا؛ لا `.message` أو `.stack`. `init(root, callbacks)` قابل للتكرار، و`disconnect(root)`/`destroy(root)` يفصلان listeners ومراقب reveal ويخفيان كلمة المرور ويُنهيان busy؛ تُهمل النتائج المتأخرة بعد الفصل أو إعادة التهيئة. لا يلغي ذلك الشبكة التي يملكها callback. قيم الحقول وcallbacks ملك المضيف؛ لا مصادقة حقيقية داخل المكتبة.
 
-**الحالة: STABLE UI — [UI-RELEASE](../../docs/UI-RELEASE.md).** مجموعة إدخال وتركيب فقط؛ لا مصادقة افتراضية.
+**الحالة: STABLE UI — [UI-RELEASE](../../docs/STATUS.md).** مجموعة إدخال وتركيب فقط؛ لا مصادقة افتراضية.
 
 ## الأجزاء
 
