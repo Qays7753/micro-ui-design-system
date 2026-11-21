@@ -606,7 +606,7 @@
         chart.removeAttribute("data-bars-ready");
       });
     }
-    window.MicroMetricComparison = { init, render, disconnect };
+    window.MicroMetricComparison = { init, render, update: render, disconnect };
     document.addEventListener("DOMContentLoaded", function() {
       init();
     });

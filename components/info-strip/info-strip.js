@@ -250,7 +250,10 @@
     scope.querySelectorAll('[data-info-strip]').forEach(teardown);
   }
 
-  window.MicroInfoStrip = { init: init, rescan: rescan, disconnect: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+     rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
+     الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
+  window.MicroInfoStrip = { init: init, rescan: rescan, update: rescan, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

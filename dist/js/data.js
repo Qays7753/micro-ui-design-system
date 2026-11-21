@@ -1853,6 +1853,19 @@
       },
       /* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
       render,
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
+         تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
+         DOM (.m-chart__data). لا وسيط بيانات: مصدر الرسم DOM. render
+         القديمة تبقى لرسم واحد (D10)، وإعادة الاستدعاء آمنة (render
+         idempotent والمراقب واحد لكل رسم). */
+      update: function(root) {
+        var scope = root || document;
+        var charts = [].slice.call(scope.querySelectorAll("[data-chart]"));
+        if (scope.nodeType === 1 && scope.matches("[data-chart]")) charts.unshift(scope);
+        charts.forEach(function(c) {
+          render(c);
+        });
+      },
       getSelection: function(chart) {
         return chart && chart.matches && chart.matches("[data-chart]") ? selectionSnapshot(chart) : null;
       },

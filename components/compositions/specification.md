@@ -10,3 +10,5 @@ carrier dialog.m-form-dialog اختياري لواجهة HTML الأصلية ب�
 
 ## حاضنة هاتف اختيارية
 `mobile-shell.css` وصفة Draft مشتركة للرأس/المحتوى/التذييل. لا viewport أو routing أو history. shell يملك safe top والجانبين في التدفق؛ foot يملك bottom مرة واحدة ويضبط inset الأطفال إلى0. اللوحة الثابتة تملك حوافها بنفسها. يمكن للمضيف تمرير `--micro-shell-inset-top/bottom:0px` عندما يملك الحافة خارجيًا. لا شريط ساعة/بطارية وهمي. الأمثلة: `previews/mobile-experience/`. هذه وصفة للتراكيب القائمة، لا عائلة جديدة.
+
+العقد الموحد (2026-11-21): `MicroReadings.update(root)` اسم موحد يفوّض إلى `sync` نفسها (امتداد C04 — [API](../../docs/API.md)).

@@ -392,6 +392,13 @@
       goTo: goToIndex,
       next,
       prev,
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(strip, index, options)
+         اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق change حتى
+         برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+         الشرائح يبقى دورة disconnect/init موثقة لا update. */
+      update: function(strip, index, options) {
+        goToIndex(strip, index, options);
+      },
       getIndex: function(strip) {
         var st = stateOf.get(strip);
         return st ? st.index : -1;

@@ -629,7 +629,10 @@
     });
   }
 
-  window.MicroMetricComparison = { init: init, render: render, disconnect: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+     render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
+     الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
+  window.MicroMetricComparison = { init: init, render: render, update: render, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
   if (document.fonts) document.fonts.ready.then(function () {

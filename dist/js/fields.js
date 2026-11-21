@@ -266,7 +266,7 @@
         });
       });
     }
-    window.MicroFields = { init, sync, disconnect, destroy: disconnect };
+    window.MicroFields = { init, sync, update: sync, disconnect, destroy: disconnect };
     document.addEventListener("DOMContentLoaded", function() {
       init();
     });

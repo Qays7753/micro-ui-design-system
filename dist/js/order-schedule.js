@@ -1477,6 +1477,15 @@
       init,
       getInstance: function(root) {
         return root && instances.get(root) || null;
+      },
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, orders) اسم موحد
+         على مستوى الوحدة يفوّض إلى instance.setData(orders) نفسها — تحديث
+         كامل بلا إعادة تهيئة. الاسم القديم setData على المثيل يبقى (D10).
+         بلا مثيل للجذر لا فعل وتُعاد null (init تظل مدخل الإنشاء). */
+      update: function(root, orders) {
+        var inst = root && instances.get(root) || null;
+        if (inst) inst.setData(orders);
+        return inst;
       }
     };
   })();

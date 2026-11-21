@@ -403,6 +403,17 @@
         scope.querySelectorAll("[data-chart-packed]").forEach(render);
       },
       render,
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
+         تصيير كل رسوم packed تحت الجذر عبر render نفسها (لا وسيط بيانات —
+         المصدر DOM). الاسم القديم render(chart) يبقى (D10). */
+      update: function(root) {
+        var scope = root || document;
+        var charts = [].slice.call(scope.querySelectorAll("[data-chart-packed]"));
+        if (scope.matches && scope.matches("[data-chart-packed]")) charts.unshift(scope);
+        charts.forEach(function(chart) {
+          render(chart);
+        });
+      },
       disconnect: function(root) {
         var scope = root || document;
         var charts = [].slice.call(scope.querySelectorAll("[data-chart-packed]"));

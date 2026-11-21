@@ -71,6 +71,8 @@ var inst = MicroOrderSchedule.init(rootElement, options);
 //          orderActions {edit,delete}, headingLevel (2–6, افتراضي 3),
 //          loading, retry
 inst.setData(orders);                 // تحديث كامل بلا إعادة تهيئة
+// العقد الموحد (2026-11-21): MicroOrderSchedule.update(root, orders) على
+// مستوى الوحدة يفوّض إلى instance.setData(orders) ويعيد المثيل أو null
 inst.setSelectedDate('2026-10-09');   // صامت: بلا أحداث
 inst.setView('list');
 inst.setCalendarView('week');         // 'month' | 'week' | 'day'

@@ -199,6 +199,16 @@
       init: function(root) {
         each(root, bind);
       },
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
+         setOptions لكل picker تحت الجذر (الجذر نفسه إن كان picker). الاسم
+         القديم setOptions(picker, items) يبقى كما هو (D10). بلا مصفوفة
+         خيارات لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions. */
+      update: function(root, items) {
+        if (!Array.isArray(items)) return;
+        each(root, function(picker) {
+          window.MicroPicker.setOptions(picker, items);
+        });
+      },
       disconnect: function(root) {
         each(root, disconnect);
       },

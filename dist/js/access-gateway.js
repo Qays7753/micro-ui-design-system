@@ -288,7 +288,7 @@
         if (reveal) reveal.setAttribute("aria-pressed", "false");
       });
     }
-    window.MicroAccessGateway = { init, disconnect, destroy: disconnect };
+    window.MicroAccessGateway = { init, update: init, disconnect, destroy: disconnect };
     document.addEventListener("DOMContentLoaded", function() {
       init();
     });

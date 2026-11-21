@@ -63,6 +63,9 @@
     window.MicroReadings = {
       init: sync,
       sync,
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+         sync نفسها (امتداد C04). الاسم القديم sync يبقى (D10). */
+      update: sync,
       disconnect: function(root) {
         within(root || document).forEach(function(el) {
           el.classList.remove(CLASS);

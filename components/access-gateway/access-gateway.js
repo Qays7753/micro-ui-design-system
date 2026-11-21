@@ -332,7 +332,11 @@
       if (reveal) reveal.setAttribute('aria-pressed', 'false');
     });
   }
-  window.MicroAccessGateway = { init: init, disconnect: disconnect, destroy: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, handlers) اسم موحد
+     يفوّض إلى init نفسها — تحديث callbacks وتوافر الإجراءات الاختيارية
+     على جذر مربوط أصلًا دون ربط مضاعف (سلوك init الموثق). لا يبني
+     النموذج من جديد ولا يعيد كلمة المرور المظهرة. */
+  window.MicroAccessGateway = { init: init, update: init, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

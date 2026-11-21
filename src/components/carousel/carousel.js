@@ -609,6 +609,11 @@
     goTo: goToIndex,
     next: next,
     prev: prev,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(carousel, index, options)
+       اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق micro-carousel:change
+       حتى برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+       الشرائح يبقى دورة destroy/init موثقة لا update. */
+    update: function (carousel, index, options) { goToIndex(carousel, index, options); },
     getIndex: function (carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;

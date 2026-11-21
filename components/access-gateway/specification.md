@@ -19,6 +19,7 @@
 ## callbacks
 
 `MicroAccessGateway.init(root, handlers)` حيث `handlers.onSubmit({email,password})` و`handlers.onRecovery()` و`handlers.providers[key]()` وظائف يقدمها المستهلك. يمكن أن تعيد Promise؛ حالة الانتظار تستعمل `MicroButtons.setLoading`، والرفض يظهر نص الخطأ بـ`textContent`. لا تحفظ المكتبة كلمة المرور ولا تطلب API.
+العقد الموحد (2026-11-21): `update(root, handlers?)` يفوّض إلى init نفسها — تحديث callbacks وتوافر الإجراءات الاختيارية دون ربط مضاعف ([API](../../docs/API.md)).
 
 ### عقد النتيجة (SUI-R1-01) — المستهلك يملك النتيجة والرسالة
 

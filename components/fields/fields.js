@@ -357,7 +357,11 @@
       });
     });
   }
-  window.MicroFields = { init: init, sync: sync, disconnect: disconnect, destroy: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد للعائلات
+     يفوّض إلى sync نفسها — مزامنة العدّاد والمسح والخطوة من قيم DOM
+     الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
+     ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
+  window.MicroFields = { init: init, sync: sync, update: sync, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();

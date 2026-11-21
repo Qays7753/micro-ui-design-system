@@ -211,7 +211,7 @@
       if (scope.matches && scope.matches("[data-info-strip]")) teardown(scope);
       scope.querySelectorAll("[data-info-strip]").forEach(teardown);
     }
-    window.MicroInfoStrip = { init, rescan, disconnect };
+    window.MicroInfoStrip = { init, rescan, update: rescan, disconnect };
     document.addEventListener("DOMContentLoaded", function() {
       init();
     });

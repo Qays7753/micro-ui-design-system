@@ -96,6 +96,18 @@
     }
     window.MicroButtons = {
       setLoading,
+      /* العقد الموحد (المرحلة 6 — 2026-11-21): B01 مكيّف بالترميز والربط
+         تلقائي عند التحميل (حراسات التحميل تُنشأ عند أول setLoading)، فهذا
+         init ليست تهيئة ربط بل اكتشاف موثق فقط: تعيد أزرار النطاق كي
+         تشتغل كود التهيئة الموحد عند المضيف على الجذر نفسه؛ استدعاؤها
+         مرتين بريء تمامًا ولا يضيف أي مستمع. لا update هنا: لا مفهوم
+         بيانات للزر — حالة التحميل العابرة عبر setLoading. */
+      init: function(root) {
+        var scope = root || document;
+        var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));
+        if (scope.matches && scope.matches(".m-btn")) buttons.unshift(scope);
+        return buttons;
+      },
       disconnect: function(root) {
         var scope = root || document;
         var buttons = [].slice.call(scope.querySelectorAll(".m-btn"));

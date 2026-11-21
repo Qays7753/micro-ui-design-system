@@ -7,36 +7,48 @@
      /// <reference types="@micro/ui/micro-ui.d.ts" />
    أو بمسار نسبي إلى dist/micro-ui.d.ts.
 
-   ملاحظة نطاق: globals ثانوية موثقة في docs/API.md لكنها خارج نطاق هذا
-   الملف الأدنى (المرحلة 5): MicroPacked وMicroInfoPeek وMicroReadings
-   وMicroIcons وMicroActionSheet. عائلة Surfaces CSS-only بلا JavaScript.
-   معاملات البيانات typed كـ unknown عمدًا؛ عقود التفصيل في docs/API.md. */
+   العقد الموحد (المرحلة 6 — 2026-11-21، docs/API.md «العقد الموحد
+   للبرمجة»): update اسم موحد يفوّض إلى التنفيذ القائم (sync/render/
+   setData/rescan/setOptions/goTo)؛ العائلات التي لا مفهوم بيانات لها
+   (Selection وOrganization وMessages وNavigation وAccount Settings)
+   موثق غياب update عندها عمدًا ولم يُخترع لها سلوك. الغلوبالات
+   الثانوية (MicroPacked وMicroInfoPeek وMicroReadings وMicroIcons
+   وMicroActionSheet) معلنة هنا من مصادرها الحقيقية. عائلة Surfaces
+   CSS-only بلا JavaScript. معاملات البيانات typed كـ unknown عمدًا؛
+   عقود التفصيل في docs/API.md. */
 
-/** Buttons — تحميل الزر فقط؛ لا يوجد init عام (docs/API.md §1). */
+/** Buttons — اكتشاف موثق + تحميل الزر؛ الربط تلقائي (docs/API.md §1).
+    update غير منطبق: لا مفهوم بيانات للزر. */
 interface MicroButtonsApi {
+  init(root?: ParentNode): Array<HTMLElement>;
   setLoading(button: HTMLElement, flag: boolean, options?: { loadingLabel?: string }): void;
   disconnect(root?: ParentNode): void;
 }
 
-/** Fields — init/sync/disconnect/destroy (docs/API.md §2). */
+/** Fields — init/sync/update/disconnect/destroy (docs/API.md §2).
+    update يفوّض إلى sync نفسها؛ لا وسيط بيانات (القيم في DOM). */
 interface MicroFieldsApi {
   init(root?: ParentNode): void;
   sync(root?: ParentNode): void;
+  update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
 }
 
-/** Selection — المجموعات والمقاطع والمفاتيح (docs/API.md §3). */
+/** Selection — المجموعات والمقاطع والمفاتيح (docs/API.md §3).
+    update غير منطبق: الحالة الأصلية checked/pressed يملكها المستهلك. */
 interface MicroSelectionApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   setSwitchPending(switchWrapper: HTMLElement, pending: boolean): void;
 }
 
-/** Picker — listbox اختيار قيمة واحدة (docs/API.md §3). */
+/** Picker — listbox اختيار قيمة واحدة (docs/API.md §3).
+    update(root, items) يفوّض إلى setOptions لكل picker تحت الجذر. */
 interface MicroPickerSelection { value: string; label: string; }
 interface MicroPickerApi {
   init(root?: ParentNode): void;
+  update(root: ParentNode, items: Array<{ value: string; label: string }>): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
   setOptions(picker: HTMLElement, items: Array<{ value: string; label: string }>): void;
@@ -45,22 +57,26 @@ interface MicroPickerApi {
   getSelected(picker: HTMLElement): MicroPickerSelection | null;
 }
 
-/** Organization — الطي وبديل الصورة (docs/API.md §4). */
+/** Organization — الطي وبديل الصورة (docs/API.md §4).
+    update غير منطبق: تحديث source DOM عند المستهلك ثم init. */
 interface MicroOrganizationApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
 }
 
-/** Data — init/render/selection/disconnect (docs/API.md §5). */
+/** Data — init/render/update/selection/disconnect (docs/API.md §5).
+    update(root) يعيد تصيير كل رسوم النطاق عبر render؛ لا وسيط بيانات. */
 interface MicroDataApi {
   init(root?: ParentNode): void;
   render(chart: HTMLElement): void;
+  update(root?: ParentNode): void;
   getSelection(chart: HTMLElement): unknown;
   setSelection(chart: HTMLElement, key: string | null): unknown;
   disconnect(root?: ParentNode): void;
 }
 
-/** Messages — init/toast/announce (docs/API.md §6). */
+/** Messages — init/toast/announce (docs/API.md §6).
+    update غير منطبق: toast/announce/closeToast واجهات الحالة. */
 interface MicroMessagesApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
@@ -70,7 +86,8 @@ interface MicroMessagesApi {
   resetAnnouncements(): void;
 }
 
-/** Navigation — init/layers/filters (docs/API.md §7). */
+/** Navigation — init/layers/filters (docs/API.md §7).
+    update غير منطبق: openLayer/closeLayer/setAppliedFilters واجهات الحالة. */
 interface MicroNavigationApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
@@ -81,28 +98,34 @@ interface MicroNavigationApi {
   setAppliedFilters(panel: HTMLElement, values: Record<string, unknown>): void;
 }
 
-/** Info Strip — الشريط الأساسي (docs/API.md §9). */
+/** Info Strip — الشريط الأساسي (docs/API.md §9).
+    update(root) يفوّض إلى rescan نفسها؛ لا وسيط بيانات. */
 interface MicroInfoStripApi {
   init(root?: ParentNode): void;
   rescan(root?: ParentNode): void;
+  update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
 }
 
-/** Metric Comparison — init/render/disconnect (docs/API.md §10). */
+/** Metric Comparison — init/render/update/disconnect (docs/API.md §10).
+    update يفوّض إلى render نفسها؛ لا وسيط بيانات (المصدر DOM). */
 interface MicroMetricComparisonApi {
   init(root?: ParentNode): void;
   render(root?: ParentNode): void;
+  update(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
 }
 
-/** Account Settings — init/disconnect/destroy (docs/API.md §11). */
+/** Account Settings — init/disconnect/destroy (docs/API.md §11).
+    update غير منطبق: لا setData/save — الحالة الأصلية عند المستهلك. */
 interface MicroAccountSettingsApi {
   init(root?: ParentNode): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
 }
 
-/** Access Gateway — init(root, handlers?) (docs/API.md §12). */
+/** Access Gateway — init/update(root, handlers?)/disconnect/destroy (docs/API.md §12).
+    update يفوّض إلى init نفسها: تحديث callbacks وتوافر الإجراءات بلا ربط مضاعف. */
 interface MicroAccessGatewayHandlers {
   onSubmit?(credentials: { email: string; password: string }): unknown;
   onRecovery?(): unknown;
@@ -110,6 +133,7 @@ interface MicroAccessGatewayHandlers {
 }
 interface MicroAccessGatewayApi {
   init(root?: ParentNode, handlers?: MicroAccessGatewayHandlers): void;
+  update(root?: ParentNode, handlers?: MicroAccessGatewayHandlers): void;
   disconnect(root?: ParentNode): void;
   destroy(root?: ParentNode): void;
 }
@@ -148,13 +172,16 @@ interface MicroOrderScheduleInstance {
 }
 interface MicroOrderScheduleApi {
   init(root: HTMLElement, options?: MicroOrderScheduleOptions): MicroOrderScheduleInstance;
+  update(root: HTMLElement, orders: unknown[]): MicroOrderScheduleInstance | null;
   getInstance(root: HTMLElement): MicroOrderScheduleInstance | null;
 }
 
-/** Carousel — init/goTo/next/prev/getIndex (docs/API.md §14). */
+/** Carousel — init/goTo/next/prev/getIndex/update/disconnect/destroy (docs/API.md §14).
+    update(carousel, index, options?) يفوّض إلى goTo نفسها (يطلق change حتى برمجيًا). */
 interface MicroCarouselApi {
   init(root?: ParentNode): void;
   goTo(carousel: HTMLElement, index: number, options?: { animate?: boolean }): void;
+  update(carousel: HTMLElement, index: number, options?: { animate?: boolean }): void;
   next(carousel: HTMLElement): void;
   prev(carousel: HTMLElement): void;
   getIndex(carousel: HTMLElement): number;
@@ -162,7 +189,8 @@ interface MicroCarouselApi {
   destroy(root?: ParentNode): void;
 }
 
-/** Product — mount/replace/resolve/destroy لتراكيب C07–C13 (docs/API.md). */
+/** Product — mount/replace/resolve/destroy لتراكيب C07–C13 (docs/API.md).
+    طبقة تراكيب بعقد مثيل موحد أصلًا؛ replace هو تحديث المثيل. */
 interface MicroProductInstance {
   replace(value: unknown): boolean;
   resolve(token: { instanceId: string; generation: number; requestId: string; contextKey: string | null }, next: unknown): boolean;
@@ -192,6 +220,55 @@ declare const MicroOrderSchedule: MicroOrderScheduleApi;
 declare const MicroCarousel: MicroCarouselApi;
 declare const MicroProduct: MicroProductApi;
 
+/** Globals ثانوية — من مصادرها الحقيقية (متغيرات وامتدادات الهاتف).
+    MicroPacked: متغير packed-circle لعائلة Data (Proposed).
+    update(root) يعيد التصيير عبر render لكل رسم تحت الجذر. */
+interface MicroPackedApi {
+  init(root?: ParentNode): void;
+  render(chart: HTMLElement): void;
+  update(root?: ParentNode): void;
+  disconnect(root?: ParentNode): void;
+}
+/** MicroInfoPeek: متغير peek لعائلة Info Strip.
+    update(strip, index, options?) يفوّض إلى goTo نفسها. */
+interface MicroInfoPeekApi {
+  init(root?: ParentNode): void;
+  goTo(strip: HTMLElement, index: number, options?: { animate?: boolean }): void;
+  update(strip: HTMLElement, index: number, options?: { animate?: boolean }): void;
+  next(strip: HTMLElement): void;
+  prev(strip: HTMLElement): void;
+  getIndex(strip: HTMLElement): number;
+  disconnect(root?: ParentNode): void;
+}
+/** MicroReadings: امتداد C04 لاختصار تكرار الوحدة بسياق صريح.
+    update(root) يفوّض إلى sync نفسها. */
+interface MicroReadingsApi {
+  init(root?: ParentNode): void;
+  sync(root?: ParentNode): void;
+  update(root?: ParentNode): void;
+  disconnect(root?: ParentNode): void;
+}
+/** MicroIcons: ترطيب SVG المحلي من HugeIcons (shared/icons.js).
+    بلا lifecycle: hydrate تعيد Promise، وready ترطيب التحميل الأول. */
+interface MicroIconsApi {
+  hydrate(root?: ParentNode): Promise<unknown[]>;
+  ready: Promise<unknown[]>;
+}
+/** MicroActionSheet: تركيب C05 قائمة الأفعال فوق عقد Navigation.
+    بلا update: contextKey يمرر إلى open وليس حالة بيانات. */
+interface MicroActionSheetApi {
+  init(root?: ParentNode): void;
+  open(sheet: HTMLElement, options?: { trigger?: HTMLElement; contextKey?: string | null }): boolean;
+  close(sheet: HTMLElement): void;
+  disconnect(root?: ParentNode): void;
+}
+
+declare const MicroPacked: MicroPackedApi;
+declare const MicroInfoPeek: MicroInfoPeekApi;
+declare const MicroReadings: MicroReadingsApi;
+declare const MicroIcons: MicroIconsApi;
+declare const MicroActionSheet: MicroActionSheetApi;
+
 interface Window {
   MicroButtons: MicroButtonsApi;
   MicroFields: MicroFieldsApi;
@@ -208,4 +285,9 @@ interface Window {
   MicroOrderSchedule: MicroOrderScheduleApi;
   MicroCarousel: MicroCarouselApi;
   MicroProduct: MicroProductApi;
+  MicroPacked: MicroPackedApi;
+  MicroInfoPeek: MicroInfoPeekApi;
+  MicroReadings: MicroReadingsApi;
+  MicroIcons: MicroIconsApi;
+  MicroActionSheet: MicroActionSheetApi;
 }

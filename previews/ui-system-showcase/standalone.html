@@ -9017,6 +9017,18 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   /* واجهة عامة للاستهلاك المباشر ولفحص العقد خارج لوحة المعاينة */
   window.MicroButtons = {
     setLoading: setLoading,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): B01 مكيّف بالترميز والربط
+       تلقائي عند التحميل (حراسات التحميل تُنشأ عند أول setLoading)، فهذا
+       init ليست تهيئة ربط بل اكتشاف موثق فقط: تعيد أزرار النطاق كي
+       تشتغل كود التهيئة الموحد عند المضيف على الجذر نفسه؛ استدعاؤها
+       مرتين بريء تمامًا ولا يضيف أي مستمع. لا update هنا: لا مفهوم
+       بيانات للزر — حالة التحميل العابرة عبر setLoading. */
+    init: function (root) {
+      var scope = root || document;
+      var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
+      if (scope.matches && scope.matches('.m-btn')) buttons.unshift(scope);
+      return buttons;
+    },
     disconnect: function (root) {
       var scope = root || document;
       var buttons = [].slice.call(scope.querySelectorAll('.m-btn'));
@@ -9393,7 +9405,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       });
     });
   }
-  window.MicroFields = { init: init, sync: sync, disconnect: disconnect, destroy: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد للعائلات
+     يفوّض إلى sync نفسها — مزامنة العدّاد والمسح والخطوة من قيم DOM
+     الحالية بعد تعيينها برمجيًا. الاسم القديم sync يبقى كما هو (D10)،
+     ولا وسيط بيانات: قيم الحقول في DOM عند المستهلك. */
+  window.MicroFields = { init: init, sync: sync, update: sync, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();
@@ -9785,6 +9801,14 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   }
   window.MicroPicker = {
     init: function (root) { each(root, bind); },
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
+       setOptions لكل picker تحت الجذر (الجذر نفسه إن كان picker). الاسم
+       القديم setOptions(picker, items) يبقى كما هو (D10). بلا مصفوفة
+       خيارات لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions. */
+    update: function (root, items) {
+      if (!Array.isArray(items)) return;
+      each(root, function (picker) { window.MicroPicker.setOptions(picker, items); });
+    },
     disconnect: function (root) { each(root, disconnect); },
     destroy: function (root) { each(root, function (picker) { disconnect(picker); states.delete(picker); }); },
     setStatus: function (picker, kind, message) {
@@ -11082,6 +11106,9 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
   window.MicroReadings = {
     init: sync,
     sync: sync,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+       sync نفسها (امتداد C04). الاسم القديم sync يبقى (D10). */
+    update: sync,
     disconnect: function (root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
   };
   document.addEventListener('DOMContentLoaded', function () { sync(document); });
@@ -13057,6 +13084,17 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     },
     /* إعادة تصيير رسم واحد بعد تعديل بيانات المصدر (يستخدمه الفحص) */
     render: render,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
+       تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
+       DOM (.m-chart__data). لا وسيط بيانات: مصدر الرسم DOM. render
+       القديمة تبقى لرسم واحد (D10)، وإعادة الاستدعاء آمنة (render
+       idempotent والمراقب واحد لكل رسم). */
+    update: function (root) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart]'));
+      if (scope.nodeType === 1 && scope.matches('[data-chart]')) charts.unshift(scope);
+      charts.forEach(function (c) { render(c); });
+    },
     getSelection: function (chart) { return chart && chart.matches && chart.matches('[data-chart]') ? selectionSnapshot(chart) : null; },
     setSelection: function (chart, key) { return chart && chart.matches && chart.matches('[data-chart]') ? setReadingSelection(chart, key, false) : null; },
     /* R3-UI01: فصل مراقبي الرصد تحت جذر لدورة التنظيف؛ init/render
@@ -13617,6 +13655,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       scope.querySelectorAll('[data-chart-packed]').forEach(render);
     },
     render: render,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
+       تصيير كل رسوم packed تحت الجذر عبر render نفسها (لا وسيط بيانات —
+       المصدر DOM). الاسم القديم render(chart) يبقى (D10). */
+    update: function (root) {
+      var scope = root || document;
+      var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
+      if (scope.matches && scope.matches('[data-chart-packed]')) charts.unshift(scope);
+      charts.forEach(function (chart) { render(chart); });
+    },
     disconnect: function (root) {
       var scope = root || document;
       var charts = [].slice.call(scope.querySelectorAll('[data-chart-packed]'));
@@ -13889,7 +13936,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     scope.querySelectorAll('[data-info-strip]').forEach(teardown);
   }
 
-  window.MicroInfoStrip = { init: init, rescan: rescan, disconnect: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+     rescan نفسها — إعادة التقاط البطاقات بعد تغيير المضيف لشرائح DOM.
+     الاسم القديم rescan(root) يبقى (D10)، ولا وسيط بيانات: البطاقات DOM. */
+  window.MicroInfoStrip = { init: init, rescan: rescan, update: rescan, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();
@@ -14317,6 +14367,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     goTo: goToIndex,
     next: next,
     prev: prev,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(strip, index, options)
+       اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق change حتى
+       برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+       الشرائح يبقى دورة disconnect/init موثقة لا update. */
+    update: function (strip, index, options) { goToIndex(strip, index, options); },
     getIndex: function (strip) {
       var st = stateOf.get(strip);
       return st ? st.index : -1;
@@ -14996,7 +15051,10 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     });
   }
 
-  window.MicroMetricComparison = { init: init, render: render, disconnect: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يفوّض إلى
+     render نفسها — إعادة تصيير قراءات النطاق بعد تحديث مصدر DOM.
+     الاسم القديم render(root) يبقى (D10)، ولا وسيط بيانات: المصدر DOM. */
+  window.MicroMetricComparison = { init: init, render: render, update: render, disconnect: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
   if (document.fonts) document.fonts.ready.then(function () {
@@ -15440,7 +15498,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
       if (reveal) reveal.setAttribute('aria-pressed', 'false');
     });
   }
-  window.MicroAccessGateway = { init: init, disconnect: disconnect, destroy: disconnect };
+  /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, handlers) اسم موحد
+     يفوّض إلى init نفسها — تحديث callbacks وتوافر الإجراءات الاختيارية
+     على جذر مربوط أصلًا دون ربط مضاعف (سلوك init الموثق). لا يبني
+     النموذج من جديد ولا يعيد كلمة المرور المظهرة. */
+  window.MicroAccessGateway = { init: init, update: init, disconnect: disconnect, destroy: disconnect };
   document.addEventListener('DOMContentLoaded', function () { init(); });
   if (document.readyState !== 'loading') init();
 })();
@@ -17500,6 +17562,15 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     init: init,
     getInstance: function (root) {
       return (root && instances.get(root)) || null;
+    },
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, orders) اسم موحد
+       على مستوى الوحدة يفوّض إلى instance.setData(orders) نفسها — تحديث
+       كامل بلا إعادة تهيئة. الاسم القديم setData على المثيل يبقى (D10).
+       بلا مثيل للجذر لا فعل وتُعاد null (init تظل مدخل الإنشاء). */
+    update: function (root, orders) {
+      var inst = (root && instances.get(root)) || null;
+      if (inst) inst.setData(orders);
+      return inst;
     }
   };
 })();
@@ -18117,6 +18188,11 @@ body[data-view="review"] .sc-review-nav > p { display:none; }
     goTo: goToIndex,
     next: next,
     prev: prev,
+    /* العقد الموحد (المرحلة 6 — 2026-11-21): update(carousel, index, options)
+       اسم موحد يفوّض إلى goTo نفسها — تنقل الفهرس (يطلق micro-carousel:change
+       حتى برمجيًا وفق العقد). الاسم القديم goTo يبقى (D10)؛ تغيير بنية
+       الشرائح يبقى دورة destroy/init موثقة لا update. */
+    update: function (carousel, index, options) { goToIndex(carousel, index, options); },
     getIndex: function (carousel) {
       var st = stateOf.get(carousel);
       return st ? st.index : -1;
