@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "6aa4284c667064149ccd4d91073216eab46197be462b2b94d04939dc571f38b5",
+  "AGENTS.md": "a6c5b900a2ff31d13720edcd6f72fc86b05f9e7a8cf4e28dea87fa487189e4c7",
   "CHANGELOG.md": "84d815275890c3bce5d382bdd24c2b6cef0624318f9edb137bab1b0effbb143b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "26a7e24307ad09ceb4d0b6f7587f544e47b381760bf25fc60bde3ae8ff3efc58",
@@ -331,6 +331,7 @@
   "docs/plans/integration-readiness-2026-11-21/REPORT.md": "5e1330369f191851d8f00662afef645f3a2311c995f5d08471f4042fd3bcd391",
   "docs/plans/integration-readiness-round2-2026-11-22/PLAN.md": "ea4786f7e0dfc759e56f1e89a6a77f804e8092fdadd30be9f2c6c52038aa3aaa",
   "docs/plans/integration-readiness-round2-2026-11-22/REPORT.md": "e0aff96778a9d766f268fe9bcd6cfb625728fc2a2c4bebb6efaa10c8d6ce0d83",
+  "docs/plans/native-device-lab-round3/PLAN.md": "70785d7123aef3a676acf3104d769961a67837ff6ede75dcb40ea1b6e7425be1",
   "docs/product-context/COVERAGE.md": "794e998f646946a8c28856e5868ec9a9dbac53902e1b1142526d645401fbb9ac",
   "docs/references/micro-auth/README.md": "1739b53cb67f35758da34a50a7a80ae671fd5cbf1a1c9af00e964f2eef6e19d5",
   "docs/references/micro-auth/SOURCE.md": "c4ebd24cd690940f8858910821ff515fa1defe7f6b82226039467a9c6053847b",
