@@ -508,7 +508,7 @@
     {
       "id": "market-components",
       "contract": "C09",
-      "name": "Market card, editor and search",
+      "name": "Market card, editor, search and results",
       "maturity": "draft-for-review",
       "preview": "previews/product-context/index.html",
       "source": [
@@ -578,7 +578,7 @@
     {
       "id": "review-components",
       "contract": "C12",
-      "name": "Review item and report composition",
+      "name": "Review queue, item and report composition",
       "maturity": "draft-for-review",
       "preview": "previews/product-context/index.html",
       "source": [
@@ -618,6 +618,29 @@
       ],
       "optionalFamilies": [],
       "api": null
+    },
+    {
+      "id": "manage-components",
+      "contract": "C14",
+      "name": "Manage operations, entry form and period summary",
+      "maturity": "draft-for-review",
+      "preview": "previews/product-context/index.html",
+      "source": [
+        "components/product-context/product-core.js",
+        "components/product-context/product-context.css",
+        "components/product-context/manage.js",
+        "components/product-context/specification.md"
+      ],
+      "baseFamilies": [
+        "buttons",
+        "fields",
+        "messages",
+        "organization"
+      ],
+      "optionalFamilies": [
+        "navigation"
+      ],
+      "api": "MicroProduct"
     }
   ]
 }

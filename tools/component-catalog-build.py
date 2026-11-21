@@ -57,7 +57,7 @@ def build():
         assert item['maturity'] in LABELS, item
         assert set(item['baseFamilies'] + item['optionalFamilies']) <= {family['id'] for family in families}, item
         expected_api = {('reading-context', 'C04'): 'MicroReadings', ('mobile-actions', 'C05'): 'MicroActionSheet'}
-        expected_api.update({('product-context','C07'):'MicroProduct',('operation-state','C08'):'MicroProduct',('market-components','C09'):'MicroProduct',('delivery-components','C10'):'MicroProduct',('assistant-components','C11'):'MicroProduct',('review-components','C12'):'MicroProduct'})
+        expected_api.update({('product-context','C07'):'MicroProduct',('operation-state','C08'):'MicroProduct',('market-components','C09'):'MicroProduct',('delivery-components','C10'):'MicroProduct',('assistant-components','C11'):'MicroProduct',('review-components','C12'):'MicroProduct',('manage-components','C14'):'MicroProduct'})
         assert item['api'] == expected_api.get((item['id'], item['contract'])), 'Composition API must match its explicit contract'
         for path in item['source'] + [item['preview']]:
             assert (ROOT / path).is_file(), path
