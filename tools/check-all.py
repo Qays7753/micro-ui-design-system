@@ -13,15 +13,16 @@ Gate set (see tools/README.md for the full classification):
     light-calendar, light-data, component-consumption, integration-boundaries,
     clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
     preview-runtime
-  - visual regression (D12) against the baseline under
-    /home/z/my-project/visual-baseline (outside the repository)
+  - visual regression (D12/R-D12) against reference captures generated from
+    a git ref (default v0.1.0) inside a temporary worktree — no baseline
+    images or machine-specific paths outside the repository
   - git diff --check
 
 Usage:
     uv run python tools/check-all.py [--quick] [--skip-visual]
       --quick        static + build gates + link-check + git diff --check only.
-      --skip-visual  skip the D12 visual regression gate (used in CI, where the
-                     baseline directory outside the repository is unavailable).
+      --skip-visual  skip the visual regression gate (manual debugging only;
+                     CI runs it too).
 """
 import argparse
 import socket
@@ -103,7 +104,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--quick", action="store_true", help="skip browser and visual gates")
     parser.add_argument("--skip-visual", action="store_true",
-                        help="skip the D12 visual regression gate (CI mode)")
+                        help="skip the visual regression gate (manual debugging only)")
     args = parser.parse_args()
 
     out = Path(tempfile.mkdtemp(prefix="micro-check-all-"))

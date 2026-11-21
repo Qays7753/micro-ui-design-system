@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import tempfile
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -46,7 +47,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     domain = os.environ.get("REPLIT_DEV_DOMAIN")
     parser.add_argument("--base", default="https://" + domain if domain else None)
-    parser.add_argument("--out", type=Path, default=ROOT / "generated-artifacts/runtime-fix")
+    parser.add_argument("--out", type=Path,
+                        default=Path(tempfile.mkdtemp(prefix="micro-preview-runtime-")))
     parser.add_argument('--review-scope', action='store_true', help='360x780 RTL/LTR; targeted 320 resize only; no zoom')
     parser.add_argument('--standalone-http', action='store_true', help='serve the same generated file over HTTP when browser policy blocks file://; does not establish file:// support')
     args = parser.parse_args()
@@ -111,6 +113,28 @@ def main():
                                     "checks": checks, "errors": errors, "resource_errors": resources})
                     print(version, width, direction, "PASS" if all(checks.values()) else "FAIL", errors)
                     page.close()
+        # F7 (R1 الجولة الثانية): روابط footer صفحة concepts روابط حقيقية
+        # لملفات موجودة — 4 روابط <a href> تحل إلى استجابات ناجحة.
+        page = browser.new_page(viewport={"width": 360, "height": 780})
+        page.goto(args.base.rstrip("/") + "/previews/concepts/index.html", wait_until="load")
+        footer_hrefs = page.eval_on_selector_all(
+            "footer.concept-footer a[href]",
+            "els => els.map(el => el.getAttribute('href'))")
+        footer_links_ok = len(footer_hrefs) == 4 and all(h and not h.startswith("#") for h in footer_hrefs)
+        footer_resolved = []
+        for href in footer_hrefs:
+            url = page.evaluate("h => new URL(h, location.href).toString()", href)
+            footer_resolved.append((href, page.request.get(url).ok))
+        footer_targets_ok = all(ok for _href, ok in footer_resolved)
+        results.append({
+            "version": "concepts-footer", "width": 360, "dir": "rtl",
+            "checks": {"concepts_footer_four_links": footer_links_ok,
+                       "concepts_footer_links_resolve": footer_targets_ok},
+            "errors": [], "resource_errors": [], "link_targets": footer_resolved,
+        })
+        print("concepts-footer", 360, "rtl",
+              "PASS" if footer_links_ok and footer_targets_ok else "FAIL", footer_resolved)
+        page.close()
         browser.close()
     passed = sum(sum(case["checks"].values()) for case in results)
     total = sum(len(case["checks"]) for case in results)

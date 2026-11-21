@@ -27,7 +27,7 @@
 | `numeric-geometry-check.py` | هندسة القراءات الرقمية وعلامات الحالة وأمان overflow عند 390px LTR. |
 | `ui-system-showcase-check.py` | أسطح المعرض الثلاثة (`#app`/`#component-review`/`#state-lab`) وحالاتها الـ15. |
 | `preview-runtime-check.py` | صفر أخطاء JavaScript وموارد مفقودة عبر كل صفحات `previews/` و`components/*` (يتطلب `--base http://127.0.0.1:5000`؛ `check-all` يبدأ الخادم تلقائيًا). |
-| `visual-regression-check.py` | بوابة D12: التقاط 360×780 RTL Light لكل صفحة (بإعادة استخدام `visual-baseline-capture.py`) ومقارنة بكسل-بكسل مع المرجع؛ نجاح الصفحة عند اختلاف ≤ 0.1% من البكسلات. |
+| `visual-regression-check.py` | بوابة D12/R-D12: التقاط 360×780 RTL Light لكل صفحة (بإعادة استخدام `visual-baseline-capture.py`) ومقارنة بكسل-بكسل مع مرجع يُولَّد من git ref (الافتراضي `v0.1.0`) داخل worktree مؤقت؛ نجاح الصفحة عند اختلاف ≤ 0.1% من البكسلات، والاستثناءات المسموحة في `baselines/visual-allowlist.json` (≤ 15% مع سبب وقرار). |
 
 ## (ب) أدوات البناء والتشغيل
 
@@ -38,7 +38,7 @@
 | `manifest-build.py` | بصمات sha256 لملفات التسليم في `MANIFEST.json`؛ `--check` (بوابة داخل `check-all`). |
 | `build-package.mjs` | أداة بناء حزمة `@micro/ui` (Node): بلا وسائط يزامن مرايا `src/` ويولّد `dist/` حتميًا مع `dist/MANIFEST.json`؛ `--check` بوابة مقارنة بايت-ببايت. مصدر التعريفات `tools/package/micro-ui.d.ts`. |
 | `preview-server.py` | خادم المعاينة على المنفذ 5000؛ `check-all` يشغّله تلقائيًا للبوابات التي تحتاجه. |
-| `visual-baseline-capture.py` | التقاط لقطات مرجعية لـD12 إلى مجلد خارج الشجرة (أنشأ `pre-phase1` و`pre-phase4`). |
+| `visual-baseline-capture.py` | التقاط لقطات 360×780 RTL Light لكل صفحة؛ `--root` لتصوير شجرة أخرى (مثل worktree المرجع) و`--base-url` لخادم قائم — تُستخدمها بوابة D12 لتصوير المرجع والحالي بالأداة نفسها. |
 | `browser_support.py` | وحدة مساعدة لخيارات إطلاق Chromium (تستوردها البوابات). |
 | `extract-identity-baselines.py` | أداة لمرة واحدة موثقة: استخراج قيم الهوية المرجعية إلى `tools/baselines/identity.json`. |
 
@@ -47,12 +47,12 @@
 ```bash
 uv run python tools/check-all.py               # كل البوابات بما فيها البصري D12
 uv run python tools/check-all.py --quick       # البوابات الثابتة وأدوات البناء فقط
-uv run python tools/check-all.py --skip-visual # كل البوابات عدا البصري (وضع CI)
+uv run python tools/check-all.py --skip-visual # كل البوابات عدا البصري (تشخيص يدوي فقط)
 ```
 
 - يبدأ خادم المعاينة تلقائيًا على المنفذ 5000 للبوابات التي تحتاجه ثم يوقفه.
 - بوابة `package` تحتاج Node 20+ مع `npm install` مرة واحدة (esbuild أداة بناء وحيدة؛ بلا اعتماديات تشغيل).
-- **البصري (D12) محلي فقط:** المرجع يعيش خارج المستودع في `/home/z/my-project/visual-baseline`، لذا يتخطاه CI بـ`--skip-visual` (انظر `docs/TESTING.md`). المرجع الافتراضي هو أحدث مجلد `pre-phase*` (حاليًا `pre-phase4`).
+- **البصري (D12/R-D12) يعمل في أي مكان:** المرجع يُولَّد آليًا من git ref (الافتراضي `v0.1.0`) داخل worktree مؤقت يُحذف دائمًا — لا صور مرجعية في المستودع ولا مسارات آلة (إصلاح F6). الاستثناءات المسموحة (concepts وصفحات C08 المتأثرة فقط) في `tools/baselines/visual-allowlist.json` مع السبب والقرار (R-D13).
 - `tools/baselines/identity.json` بيانات مرجعية للبوابات الثابتة، وليس أداة.
 
 ## (ج) الأدوات المحذوفة في المرحلة 4 — السبب والتغطية البديلة

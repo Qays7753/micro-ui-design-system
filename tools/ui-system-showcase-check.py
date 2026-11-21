@@ -22,6 +22,7 @@ Exit 0 عند نجاح الكل وإلا exit 1. لا أسرار ولا مسار
 import http.server
 import socketserver
 import sys
+import tempfile
 import threading
 from datetime import date
 from pathlib import Path
@@ -31,7 +32,9 @@ from browser_support import chromium_launch_options
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLE = ROOT / "previews" / "ui-system-showcase"
-OUT_DIR = ROOT / "generated-artifacts" / "professional-ui-repair" / "existing-showcase"
+# F9 (الجولة الثانية): الفحص لا يكتب داخل المستودع — المخرجات في مجلد مؤقت
+# افتراضيًا (أو --out صريح).
+OUT_DIR = Path(tempfile.mkdtemp(prefix="micro-showcase-check-"))
 SHOTS = OUT_DIR / "screenshots"
 PORT = 0  # منفذ حر يُختار آليًا (يكتب في chosen_port)
 

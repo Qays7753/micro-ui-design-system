@@ -8,7 +8,8 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 # Phase 5: examples/ (vanilla-app), src/ (committed package mirror), and
 # dist/ (deterministic build output) are public delivery trees now.
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "reviews", "references", "prompts", "tools", "examples", "src", "dist"}
+# R1 (الجولة الثانية، F9): حُذفت المجلدات غير الموجودة (reviews، prompts، handoff).
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "examples", "src", "dist"}
 PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "MANIFEST.json", "pyproject.toml", "uv.lock", "CHANGELOG.md", "package.json"}
 
 

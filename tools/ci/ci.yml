@@ -39,8 +39,8 @@ jobs:
           git config user.name "ci-bot"
           git config user.email "ci-bot@users.noreply.github.com"
 
-      # The D12 visual baseline lives outside the repository
-      # (/home/z/my-project/visual-baseline), so the visual regression gate
-      # is local-only and skipped here (see docs/TESTING.md).
+      # R-D12 (round 2): the visual regression gate generates its reference
+      # from a git ref (default v0.1.0) inside a temporary worktree, so it
+      # runs in CI too — no baseline directory outside the repository.
       - name: Run all quality gates
-        run: uv run python tools/check-all.py --skip-visual
+        run: uv run python tools/check-all.py

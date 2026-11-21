@@ -6,7 +6,13 @@ and components/access-gateway/*-usage.html. Deterministic settings: mobile
 viewport 360x780, touch, Light, locale ar, reduced motion, DPR 1, full page.
 
 Usage:
-    uv run python tools/visual-baseline-capture.py --out <dir> [--base-url auto]
+    uv run python tools/visual-baseline-capture.py --out <dir>
+        [--root <tree-root>] [--base-url <url>]
+    --root       tree whose pages are captured (default: the repository root).
+                 When --base-url is absent the script serves this tree itself
+                 on a free port, so a git worktree can be captured as-is.
+    --base-url   explicit base URL (skips the built-in server); pages are
+                 still enumerated from --root.
 Output: one PNG per page (path-derived name) + manifest.json with page list and hashes.
 """
 import argparse
@@ -26,19 +32,19 @@ ROOT = Path(__file__).resolve().parent.parent
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
-        super().__init__(*a, directory=str(ROOT), **kw)
+        super().__init__(*a, directory=str(kw.pop("serve_root")), **kw)
 
     def log_message(self, *_):
         pass
 
 
-def collect_pages():
+def collect_pages(tree_root: Path):
     pages = []
-    for path in sorted((ROOT / "previews").rglob("*.html")):
-        pages.append(path.relative_to(ROOT).as_posix())
+    for path in sorted((tree_root / "previews").rglob("*.html")):
+        pages.append(path.relative_to(tree_root).as_posix())
     for pattern in ("example-usage.html", "*-usage.html"):
-        for path in sorted((ROOT / "components").glob("*/" + pattern)):
-            rel = path.relative_to(ROOT).as_posix()
+        for path in sorted((tree_root / "components").glob("*/" + pattern)):
+            rel = path.relative_to(tree_root).as_posix()
             if rel not in pages:
                 pages.append(rel)
     return sorted(set(pages))
@@ -47,15 +53,25 @@ def collect_pages():
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--root", type=Path, default=ROOT,
+                    help="tree root whose pages are captured (default: repository root)")
+    ap.add_argument("--base-url", default=None,
+                    help="explicit base URL; skips the built-in server")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
-    pages = collect_pages()
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-    base = f"http://127.0.0.1:{server.server_port}"
+    tree_root = args.root.resolve()
+    pages = collect_pages(tree_root)
+    server = None
+    if args.base_url:
+        base = args.base_url.rstrip("/")
+    else:
+        handler = lambda *a, **kw: Handler(*a, serve_root=tree_root, **kw)
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        base = f"http://127.0.0.1:{server.server_port}"
     manifest = {"viewport": "360x780", "direction": "rtl", "scheme": "light",
                 "locale": "ar", "reducedMotion": "reduce", "dpr": 1, "fullPage": True,
-                "pages": {}}
+                "root": str(tree_root), "pages": {}}
     errors = []
     try:
         with sync_playwright() as pw:
@@ -81,8 +97,9 @@ def main():
                 print("captured", rel, flush=True)
             browser.close()
     finally:
-        server.shutdown()
-        server.server_close()
+        if server:
+            server.shutdown()
+            server.server_close()
     manifest["errors"] = errors
     (args.out / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")

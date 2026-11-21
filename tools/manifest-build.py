@@ -40,7 +40,9 @@ EXCLUDE_PATHS = {
 # Phase 5: src/ (mirrors of the editable source), dist/ (deterministic build
 # output), and examples/ are tracked delivery trees now, fingerprinted like
 # the rest; the package files at the root ship with them.
-PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "reviews", "prompts", "tools", "handoff", "src", "dist", "examples"}
+# R1 (الجولة الثانية، F9): حُذفت المجلدات غير الموجودة (reviews، prompts،
+# handoff) — check_only يفشل إذا ذُكر مجلد غير موجود.
+PUBLIC_DIRS = {"assets", "components", "shared", "previews", "docs", "references", "tools", "src", "dist", "examples"}
 PUBLIC_FILES = {"README.md", "AGENTS.md", "DESIGN.md", "pyproject.toml", "uv.lock", "CHANGELOG.md", "package.json", "package-lock.json"}
 
 
@@ -74,6 +76,11 @@ def check_only() -> int:
     """قارن MANIFEST.json الموجود بإعادة التوليد في الذاكرة — بلا كتابة."""
     if not OUT.exists():
         print("CHECK FAIL: MANIFEST.json غير موجود — ولّده أولًا بلا --check")
+        return 1
+    # F9 (R1 الجولة الثانية): PUBLIC_DIRS يذكر مجلدات موجودة فقط.
+    stale_dirs = sorted(d for d in PUBLIC_DIRS if not (ROOT / d).is_dir())
+    if stale_dirs:
+        print("CHECK FAIL: PUBLIC_DIRS يذكر مجلدات غير موجودة:", ", ".join(stale_dirs))
         return 1
     expected = build_manifest()
     try:
