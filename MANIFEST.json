@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "20b3cc6751aa3099b1e82ff3e38ca6e46706459db2071c95a88699dcee559906",
+  "AGENTS.md": "a91ae5b799cb0ba19cdda7e592e7957a62d61c7c21fb91e38b1e861fe4cdfcfc",
   "CHANGELOG.md": "a57ecb4c03cad5fa3a68062bd2efac987aabe315e842c98c14ffb4d341f00072",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "3b699ab3b65ed999dcceab4bc463de75d80a6d27872c34e2b150bf508cf99a02",
@@ -606,6 +606,7 @@
   "docs/plans/component-readiness-2026-11-17/PLAN.md": "45b60646addd0a8fe0cdec38d09c27c8810fe759521071ab9bc07a96bb26d880",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",
   "docs/plans/integration-readiness-2026-11-21/REPORT.md": "5e1330369f191851d8f00662afef645f3a2311c995f5d08471f4042fd3bcd391",
+  "docs/plans/integration-readiness-round2-2026-11-22/PLAN.md": "ea4786f7e0dfc759e56f1e89a6a77f804e8092fdadd30be9f2c6c52038aa3aaa",
   "docs/product-context/COVERAGE.md": "794e998f646946a8c28856e5868ec9a9dbac53902e1b1142526d645401fbb9ac",
   "docs/references/micro-auth/README.md": "1739b53cb67f35758da34a50a7a80ae671fd5cbf1a1c9af00e964f2eef6e19d5",
   "docs/references/micro-auth/SOURCE.md": "c4ebd24cd690940f8858910821ff515fa1defe7f6b82226039467a9c6053847b",
