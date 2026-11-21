@@ -343,7 +343,9 @@ registerLabels('fields', familyDefaults);
     var scope = root || document;
     void options; /* fields: لا خيارات حاليًا — options.labels في R5 */
     var existing = registry.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { bindFields(scope); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -353,7 +355,7 @@ registerLabels('fields', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -369,7 +371,7 @@ registerLabels('fields', familyDefaults);
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
   /* UI-05/UI-06: مزامنة حالة الحقول من قيمها الحالية بعد تعيينها
@@ -390,6 +392,10 @@ registerLabels('fields', familyDefaults);
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
     var scope = root || document;
     var fields = [].slice.call(scope.querySelectorAll('[data-micro-field]'));
     if (scope.matches && scope.matches('[data-micro-field]')) fields.unshift(scope);

@@ -15,7 +15,7 @@
 ### حدود العقد والملكية
 
 - HTML الدلالي جزء من المكوّن؛ الذي لا ينتقل هو شاشة Showcase وبياناتها وأدواتها. يعيد المستهلك استخدام المصدر وmarkup الموثق أو موصلًا رقيقًا، ولا ينسخ CSS/JS لكل موضع.
-- معظم `init(root)` يقبل الجذر المطابق وأبناءه، ويُستدعى تلقائيًا عند تحميل الوحدة؛ المحتوى الجديد يحتاج تهيئة محددة. ربط Buttons تلقائي عند التحميل و`init` فيه اكتشاف موثق يعيد أزرار النطاق ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21))، وSurfaces لا يملك JS، وOrder Schedule يحتاج Element صريحًا. لا نفترض تطابق توقيع العائلات.
+- معظم `init(root, options?)` يقبل الجذر المطابق وأبناءه (الافتراضي document)، ويعيد instance بعقد R4 الموحد ([أعلاه](#العقد-الموحد-لدورة-الحياة-الجولة-الثانية-r4--2026-11-22))؛ نسخة IIFE وحدها تهيئ تلقائيًا عند تحميل الوحدة (تحترم MicroConfig.autoInit)، وESM بلا تهيئة تلقائية (R-D2). init المكرر يعيد المثيل نفسه ويربط أي عنصر جديد تحت الجذر. Surfaces لا يملك JS، وOrder Schedule يحتاج Element صريحًا. لا نفترض تطابق توقيع العائلات.
 - تكرار الربط لا يضاعف المستمعات. هذا لا يعني انعدام الآثار: Data يعيد التصيير ويطلق rendered؛ Carousel وPeek قد يطلقان change عند التنقل البرمجي. لا تُحوّل كل حدث إلى dirty تلقائيًا.
 - المستهلك يملك source DOM والبيانات؛ renderer يملك مناطق العرض المولدة فقط. لا يكتب إطار العمل والـrenderer في العقد نفسها. معرّفات المصدر فريدة لكل نسخة. `data-*-ready` المنسوخة ليست بديلًا عن init.
 - نظّف الأطفال المضمّنين ثم مالك التركيب قبل إزالة الجذر؛ API الأب لا ينظف كل عائلة بداخله. disconnect لا يعني دائمًا استعادة HTML الأصلي أو حذف الحالة. الاستثناءات أدناه مقصودة.
@@ -164,44 +164,86 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 ## العقود
 
-### العقد الموحد للبرمجة (2026-11-21)
+### العقد الموحد لدورة الحياة (الجولة الثانية R4 — 2026-11-22)
 
-توحيد مبني على السلوك الحالي، لا إعادة كتابة: كل عائلة لها JavaScript تعرض `init(root)` (يقبل عنصرًا أو محددًا أو نطاقًا، ويعالج الجذر-الذات إن طابق محدد العائلة، وتكراره لا يضاعف المستمعات)، واسمًا موحدًا `update(root, data)` يفوّض إلى التنفيذ القائم نفسه حيث يوجد مفهوم تحديث بيانات، ودالة تنظيف موثقة `disconnect(root)` و/أو `destroy(root)` بدلالاتها الحالية. الأسماء القديمة كلها تبقى تعمل طوال `0.x` (D10)؛ كل اسم موحد هو تفويض رقيق للتنفيذ نفسه، فلا تغيير سلوك ولا تغيير بصري (D12).
+لكل مدخل JavaScript (عدا `icons` و`labels`) عقد موحد واحد:
 
-- **init:** استدعاؤه مرتين على الجذر نفسه آمن بتعريف كل عائلة (حراسات الربط القائمة محفوظة كما هي؛ Order Schedule يعيد المثيل نفسه). بعد `destroy` يعمل init من جديد بدءًا من حالة نظيفة.
-- **update:** الاسم الموحد لتحديث العرض بعد تغيير المصدر. وسيط البيانات يختلف بحسب ملكية العائلة: في Data وMetric وPacked وInfo Strip وFields المصدر هو DOM عند المستهلك فلا وسيط؛ في Picker هو مصفوفة الخيارات؛ في Access Gateway هو كائن handlers؛ في Order Schedule هو مصفوفة الطلبات؛ في Carousel وPeek رقم الفهرس (تفويض إلى goTo). العائلات التي لا مفهوم بيانات لها موثق «غير منطبق» أدناه — لم يُخترع لها سلوك.
-- **disconnect/destroy:** الدلالات الحالية كما هي: disconnect يفصل الربط ويحفظ الحالة حيث وُثق ذلك (Carousel/Peek/Picker)، وdestroy يزيل الحالة الداخلية أيضًا (Picker/Carousel/Order Schedule/Access Gateway/Account Settings/Fields). العائلة التي لا تملك إلا واحدًا منهما موثقة بذلك ولم يُشتق لها الآخر.
-- **الفحص:** `tools/api-lifecycle-check.py` (بوابة داخل `check-all`) ينفذ لكل عائلة السيناريو: init مرتين ← الفعل الأساسي مرة واحدة بالضبط ← update (أو غيابه الموثق) ← الفعل مرة أخرى بالعدّ نفسه ← disconnect/destroy ← صفر أحداث ولا أخطاء صفحة/كونسول.
+```js
+const instance = init(root, options?);   // root: عنصر أو نطاق (الافتراضي document)
+instance.root;                            // الجذر الذي رُبط عليه
+instance.update(arg?);                    // دلالة كل عائلة في جدول المسح أدناه
+instance.destroy();                       // تنظيف كامل — مرتين آمن
+destroy(root);                            // صادر مريح: يدمر مثيل الجذر إن وجد
+getInstance(root);                        // المثيل الحي أو null
+```
 
-الغيوبالات الثانوية: `MicroPacked.update(root)` و`MicroInfoPeek.update(strip, index, options?)` و`MicroReadings.update(root)` تتبع العقد نفسه؛ `MicroActionSheet` (لا تحديث بيانات — contextKey يمرر إلى open) و`MicroIcons` (ترطيب فقط) بلا update؛ `MicroProduct` طبقة تراكيب بعقد مثيل موحد أصلًا (`mount`/`replace`/`resolve`/`destroy`).
+القواعد الست النافذة (تُفحص آليًا في `tools/api-lifecycle-check.py`):
 
-جدول المسح الذي بنى عليه التوحيد (العائلة | init | المكافئ القائم لupdate | disconnect | destroy | ملاحظات):
+1. **init على جذر له مثيل حي يعيد المثيل نفسه** ولا يضاعف الربط، ويعيد فحص الجذر فيربط أي عنصر جديد غير مربوط تحته — init متكرر آمن كما في 0.1.0.
+2. **destroy مرتين لا يرمي**، وبعده يعمل init من جديد بدءًا من حالة نظيفة.
+3. **إزالة الجذر من DOM بلا destroy لا تسبب أخطاء لاحقة** (المراقبات تحرس `isConnected`).
+4. **بعد destroy:** لا مستمع على `window`/`document`/الجذر أضافه المكوّن، ولا `ResizeObserver`/`MutationObserver`/`IntersectionObserver` حي، ولا مؤقت معلق (`setTimeout`/`setInterval`/`requestAnimationFrame`).
+5. **destroy لا يمس قيم المستخدم ولا يستعيد HTML الأصلي** إلا حيث توثق ذلك صراحة (Order Schedule يفرغ جذره، Carousel يحذف النقاط المولدة).
+6. **الأحداث المخصصة أسماؤها وتفاصيلها كما هي** — موثقة لكل مدخل أدناه وفي `tools/package/types/<entry>.d.ts`.
 
-| العائلة | init | update-equivalent (الاسم الحالي) | disconnect | destroy | ملاحظات |
-|---|---|---|---|---|---|
-| Buttons | `init(root)` — اكتشاف موثق يعيد أزرار النطاق | غير منطبق — لا مفهوم بيانات (`setLoading` حالة عابرة) | `disconnect(root)` | — | الربط تلقائي عند التحميل؛ init لتمكين كود تهيئة موحد عند المضيف، بلا أي مستمع أو أثر |
-| Fields | `init(root)` | `sync(root)` ← `update(root)` | `disconnect(root)` | `destroy(root)` | update يفوّض إلى sync نفسها (بلا أحداث تعديل) |
-| Selection | `init(root)` | غير منطبق — الحالة الأصلية checked/pressed يملكها المستهلك | `disconnect(root)` | — | `setSwitchPending` حالة انتظار عابرة لا تحديث بيانات |
-| Picker | `init(root)` | `setOptions(picker, items)` ← `update(root, items)` | `disconnect(root)` | `destroy(root)` | update يستبدل خيارات كل picker تحت الجذر (الجذر-الذات مشمول) |
-| Organization | `init(root)` | غير منطبق — تحديث source DOM عند المستهلك ثم init | `disconnect(root)` | — | |
-| Data | `init(root)` | `render(chart)` ← `update(root)` | `disconnect(root)` | — | update يعيد تصيير كل رسوم النطاق عبر render؛ لا يمسح المصدر |
-| Messages | `init(root)` | غير منطبق — `toast`/`announce`/`closeToast` واجهات الحالة | `disconnect(root)`؛ النطاق document ينظف القنوات المشتركة | — | |
-| Navigation | `init(root)` | غير منطبق — `openLayer`/`closeLayer`/`setAppliedFilters` واجهات الحالة | `disconnect(root)` | — | |
-| Surfaces | — CSS فقط | — | — | — | عائلة بلا JavaScript إطلاقًا |
-| Info Strip | `init(root)` | `rescan(root)` ← `update(root)` | `disconnect(root)` | — | Peek (متغير): `goTo(strip, index)` ← `update(strip, index, options?)` مع `disconnect(root)` |
-| Metric Comparison | `init(root)` | `render(root)` ← `update(root)` | `disconnect(root)` | — | |
-| Account Settings | `init(root)` | غير منطبق — لا setData/save؛ الحالة أصلية عند المستهلك | `disconnect(root)` | `destroy(root)` | |
-| Access Gateway | `init(root, handlers?)` — إعادة init تحدّث callbacks بلا ربط مضاعف | إعادة init بالمعالجات ← `update(root, handlers?)` | `disconnect(root)` | `destroy(root)` | update يحدّث callbacks وتوافر الإجراءات الاختيارية فقط |
-| Order Schedule | `init(element, options?)` يعيد instance؛ التكرار يعيد المثيل نفسه | `instance.setData(orders)` ← `update(root, orders)` على مستوى الوحدة | — | `instance.destroy()` | update يعيد المثيل أو null بلا مثيل؛ instance.destroy() هو التنظيف الموثق |
-| Carousel | `init(root)` | `goTo(carousel, index)` ← `update(carousel, index, options?)` | `disconnect(root)` يحفظ الحالة | `destroy(root)` | تغيير بنية الشرائح يبقى دورة destroy/init موثقة لا update |
+**النسخ المستنسخة من DOM تربط كعناصر جديدة:** علامات الربط المنسوخة (`data-*-ready`/`data-*-bound`) لا تعتبر ربطًا حيًا — الحقيقة في حالة المكوّن الداخلية لا في السمات المنقولة.
+
+**الأسماء المهملة (R-D10) — IIFE فقط حتى 1.0، لا تُصدَّر من مداخل ESM:**
+
+| الاسم المهمل | بديل ESM | ملاحظة |
+|---|---|---|
+| `disconnect(root)` (كل العائلات) | `destroy(root)` / `instance.destroy()` | يمر بنفس مسار destroy للمثيل: تنظيف كامل وإزالة المثيل من السجل |
+| `sync(root)` — Fields/Readings | `instance.update()` | نفس التنفيذ |
+| `rescan(root)` — Info Strip | `instance.update()` | إعادة الالتقاط لأول بطاقة (R-15) |
+| `render(chart|root)` — Data/Packed/Metric | `instance.update()` | لإعادة تصيير كل الرسوم تحت جذر |
+| `update(root)` الجذرية — Fields/InfoStrip/Metric/Data/Packed | `instance.update()` | |
+| `update(carousel|strip, index, options?)` — Carousel/Peek | `instance.update({index, animate?})` أو `goTo` | |
+| `update(root, handlers?)` — Access Gateway | `init(root, handlers)` أو `instance.update(handlers)` | |
+
+استثناءات تبقى عامة في ESM (أسماء حقيقية لا مهملات): `update(root, items)` لـPicker، و`update(root, orders)` لـOrder Schedule، و`sync(root)` لـFields يبقى صادرًا عامًا مع مهمل `update(root)`.
+
+جدول المسح (instance.update لكل عائلة | دوال المثيل الإضافية | الأحداث المخصصة):
+
+| العائلة | `instance.update` | دوال المثيل الإضافية | أحداث مخصصة |
+|---|---|---|---|
+| Buttons | `update({loading?, loadingLabel?})` يغلف setLoading لكل أزرار النطاق | — | — |
+| Fields | `update()` = sync (بلا أحداث تعديل) | — | `micro-field:cleared`/`changed` |
+| Selection | `update()` يعيد قراءة المجموعات والمقاطع | — | `micro-selection:changed`/`segment` |
+| Picker | `update(items?)` = setOptions لكل picker | — | `micro-picker:change`/`retry`/`close` |
+| Organization | `update()` يعيد فحص الأقسام والصور | — | `micro-organization:toggle` |
+| Data | `update()` يعيد تصيير كل الرسوم من DOM المصدر | — | `micro-data:selection-change`/`rendered` |
+| Packed | `update()` يعيد تصيير رسوم packed | — | `micro-packed:rendered` |
+| Messages | `update()` يعيد فحص الرسائل | — | toast-dismissed/toast-closed/`note-closed` |
+| Navigation | `update()` يربط عناصر الطبقات الجديدة | — | opened/close-request/closed/filters-applied |
+| Action Sheet | `update()` يربط الأوراق الجديدة | — | `micro-actions:request` |
+| Info Strip | `update()` = rescan | — | — |
+| Peek | `update({index, animate?})` = goTo | `goTo`/`next`/`prev`/`getIndex` | `micro-info-peek:change` |
+| Metric Comparison | `update()` يعيد التصيير | — | — |
+| Account Settings | `update()` يعيد فحص اللوحات | — | `micro-account-settings:change` |
+| Access Gateway | `update(handlers?)` يحدث callbacks بلا ربط مضاعف | — | `micro-access:submitted` |
+| Carousel | `update({index, animate?})` = goTo | `goTo`/`next`/`prev`/`getIndex` | `micro-carousel:change` |
+| Order Schedule | `update(orders)` = setData | `setData`/`getState`/`setSelectedDate`/`setDisplayedMonth`/`setView`/`setCalendarView`/`setLoading`/`setError` | `order-schedule:*` الستة |
+| Readings (C04) | `update()` = sync | — | — |
+| Product (C07–C14) | `update(model)` = replace | `replace`/`resolve`/`getState` | `micro-product:intent` |
+
+Surfaces عائلة CSS بلا JavaScript فلا تدخل العقد. `icons` (hydrate/ready) و`labels` (سجل النصوص) مدخلان مساندان بلا دورة حياة.
+
+الفحص: `tools/api-lifecycle-check.py` ينفذ لكل مدخل السيناريو الكامل (init ← init مكرر ← update ← destroy ×2 ← صفر متبقيات بتغليف المستمعات/المراقبات/المؤقتات ← init من جديد ← إزالة الجذر بلا destroy ← إطاران ← صفر أخطاء)، ويتحقق أن غلوبالات IIFE تعرض دوال المدخل نفسها مع المهملات أعلاه.
 
 ## عقود العائلات
 
 ### 1. Buttons
 
+**عقد المدخل (R4):** `init(root, options?)` يعيد `ButtonsInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** لا شيء حاليًا (يدخل `labels` في R5 إن ظهرت نصوص).
+- **instance:** `update({loading?, loadingLabel?})`.
+- **events:** لا أحداث مخصصة.
+- **مثال:** `const b = MicroButtons.init(root); b.update({ loading: true, loadingLabel: 'جارٍ الحفظ' }); b.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)`.
+
 المصدر: [المواصفة](../components/buttons/specification.md)، [JS](../components/buttons/buttons.js).
 
-- **المدخلات:** markup `.m-btn`، نوع button/link، الاسم والنص والأيقونة والمتغير والمقاس والعرض من المستهلك. `button.type` صريح داخل النموذج؛ disabled الأصلي وaria-disabled للرابط لا يُستبدلان بمجرد مظهر معطل. `MicroButtons.init(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اكتشاف موثق فقط: يعيد أزرار `.m-btn` تحت الجذر (الجذر-الذات مشمول) لتمكين كود تهيئة موحد عند المضيف؛ الربط نفسه تلقائي عند التحميل ولا يضيف init أي مستمع أو أثرًا، وupdate غير منطبق لأن الزر لا يملك مفهوم بيانات.
+- **المدخلات:** markup `.m-btn`، نوع button/link، الاسم والنص والأيقونة والمتغير والمقاس والعرض من المستهلك. `button.type` صريح داخل النموذج؛ disabled الأصلي وaria-disabled للرابط لا يُستبدلان بمجرد مظهر معطل. `MicroButtons.init(root, options?)` يعيد instance (عقد R4 أعلاه) ويربط حراسات التحميل لكل `.m-btn` تحت الجذر (الجذر-الذات مشمول)؛ تكراره آمن ولا يضاعف الربط.
 - **التحديث:** `MicroButtons.setLoading(button, flag, {loadingLabel?})`؛ البديل `data-loading-label`. لا يبدأ تحميل زر disabled أصلًا. التحميل المتكرر لا يكرر المؤشر، وإيقافه يستعيد الاسم السابق. حفظ النص الافتراضي وخيار loading-replace يبقيان وفق المواصفة.
 - **الأحداث:** لا أحداث مخصصة؛ click تفعيل أصلي، لا «حفظ» تلقائي. loading يمنع التفعيل المتكرر ويحفظ التركيز.
 - **الملكية/التنظيف:** مصدر الاسم والمحتوى للمستهلك؛ المؤشر وحراسة التحميل للمكوّن. `disconnect(root)` ينهي التحميل المملوك والحراس؛ ليس إلغاء طلب الشبكة.
@@ -209,46 +251,81 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 ### 2. Fields
 
+**عقد المدخل (R4):** `init(root, options?)` يعيد `FieldsInstance`؛ `destroy(root)`/`getInstance(root)` صادران، و`sync(root)` يبقى صادرًا عامًا.
+- **options:** `labels` (R5 — لا مفاتيح حاليًا).
+- **instance:** `update()` = sync (مزامنة العدّاد/المسح/الخطوة بلا أحداث).
+- **events:** `micro-field:cleared` و`micro-field:changed` بلا detail.
+- **مثال:** `const f = MicroFields.init(root); input.value = 'جديد'; f.update(); f.destroy();`
+- **مهملات IIFE (R-D10):** `update(root)` و`disconnect(root)`.
+
 المصدر: [المواصفة](../components/fields/specification.md)، [JS](../components/fields/fields.js).
 
 - **المدخلات:** `[data-micro-field]` وlabel/control/message؛ قيمة input/textarea وtype/inputmode وrequired/min/max/step/maxlength والوحدة والرسائل من المستهلك. خطأ وصحة وreadonly/disabled تحتاج الحالة الدلالية الفعلية مع CSS، لا صنفًا بصريًا فقط.
-- **التحديث:** `MicroFields.init(root)` ثم تعديل `.value` واستدعاء `sync(root)` للعداد والمسح وحالة الخطوة. sync صامت: لا input/change/micro-field، ولا يتعامل مع حقل غير مربوط. `update(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى sync نفسها؛ لا وسيط بيانات لأن قيم الحقول في DOM عند المستهلك.
+- **التحديث:** `MicroFields.init(root)` ثم تعديل `.value` واستدعاء `sync(root)` للعداد والمسح وحالة الخطوة. sync صامت: لا input/change/micro-field، ولا يتعامل مع حقل غير مربوط. `instance.update()` (عقد R4) = sync نفسها — لا وسيط بيانات لأن قيم الحقول في DOM عند المستهلك؛ `update(root)` القديم اسم مهمل في IIFE فقط (R-D10).
 - **الأحداث:** المسح تفاعل يطلق input ثم `micro-field:cleared` بلا detail؛ الخطوة تطلق input ثم `micro-field:changed` بلا detail. استمع لقناة واحدة مناسبة كي لا تحسب الفعل مرتين. لا تنتظر change من تعديل `.value` البرمجي.
-- **الملكية/التنظيف:** النص الخام في حقل النص للمستهلك؛ ليست كل أنواع الحقول محلل مال. تطبيع الكمية المقصود في stepper وفق المواصفة لا يُعمّم على النص أو المال ولا يُصنف عيبًا تلقائيًا. `disconnect(root)` و`destroy(root)` اسمان للتنظيف نفسه؛ يوقفان الربط والمراقب، لا يمسحان قيم المستخدم أو ينفذان reset.
+- **الملكية/التنظيف:** النص الخام في حقل النص للمستهلك؛ ليست كل أنواع الحقول محلل مال. تطبيع الكمية المقصود في stepper وفق المواصفة لا يُعمّم على النص أو المال ولا يُصنف عيبًا تلقائيًا. `destroy(root)` (و`disconnect(root)` المهمل الذي يمر بنفس المسار) يوقف الربط والمراقب ويحذف المثيل؛ لا يمسح قيم المستخدم أو ينفذ reset.
 - **التغطية التالية:** text/search/textarea/quantity وبقية أنواع المواصفة، وحدة/بادئة/لاحقة/عداد/مسح/خطوة، عادي وفارغ وصفر وخطأ ومعطل وreadonly؛ لصق نص غير صالح، تعيين قيمة مسبقة، RTL/LTR للجزء الرقمي.
 
 ### 3. Selection / Picker
 
+**عقد المدخل (R4):** `MicroSelection.init(root, options?)` و`MicroPicker.init(root, options?)` يعيدان مثيلات؛ `destroy(root)`/`getInstance(root)` صادران لكل منهما.
+- **options:** `labels` (R5 — مفاتيح عائلة selection تخص Picker).
+- **instance (Selection):** `update()` يعيد قراءة المجموعات والمقاطع. **instance (Picker):** `update(items?)` = setOptions لكل picker تحت الجذر.
+- **events:** Selection: `micro-selection:changed` بلا detail و`micro-selection:segment` بـ`{value}`؛ Picker: `micro-picker:change` بـ`{value,label}` وretry/close بلا detail.
+- **مثال:** `const p = MicroPicker.init(root); p.update([{value:'a', label:'الأول'}]); p.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)` للعائلتين. (تنبيه: `update(root, items)` لPicker يبقى اسمًا عامًا في ESM لا مهملًا.)
+
 المصدر: [المواصفة](../components/selection/specification.md)، [Selection](../components/selection/selection.js)، [Picker](../components/selection/picker.js).
 
-- **Selection:** `MicroSelection.init(root)` للمجموعات والمقاطع؛ native checked/radio/indeterminate والاسم وقيمة العنصر من markup. `setSwitchPending(switchWrapper, flag)` يأخذ `.m-switch`، يقفل input أثناء الانتظار ثم يعيد disabled السابق؛ لا يحفظ الإعداد أو يرجع checked عند رفض الخدمة. `disconnect(root)` يفصل المجموعات والمقاطع وينهي pending للمفاتيح.
+- **Selection:** `MicroSelection.init(root)` للمجموعات والمقاطع؛ native checked/radio/indeterminate والاسم وقيمة العنصر من markup. `setSwitchPending(switchWrapper, flag)` يأخذ `.m-switch`، يقفل input أثناء الانتظار ثم يعيد disabled السابق؛ لا يحفظ الإعداد أو يرجع checked عند رفض الخدمة. `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يفصل المجموعات والمقاطع وينهي pending للمفاتيح.
 - **أحداث Selection:** native input/change؛ `micro-selection:changed` بلا detail عند فعل checkbox المجموعة؛ `micro-selection:segment` بالتفصيل `{value}` عند الاختيار بالنقر أو الأسهم. لا setters عامة لقيمة كل نوع؛ المستهلك يحدّث source وفق مواصفته. لا يدّعي الحساب dirty بناء على كل تغيير في DOM.
-- **Picker:** listbox اختيار قيمة، لا menu أوامر. `MicroPicker.init(root)`؛ `setOptions(picker, [{value,label}])` يستبدل الخيارات بمفاتيح string ويحفظ اختيارًا صالحًا؛ لا يدعم item.disabled في هذا التوقيع الحالي. `update(root, items)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى setOptions لكل picker تحت الجذر (بلا مصفوفة خيارات لا فعل). `getSelected(picker)` يعيد `{value,label}` أو null. لا `setSelected` عامة حاليًا؛ الاختيار الابتدائي عبر markup/aria-selected قبل التهيئة.
+- **Picker:** listbox اختيار قيمة، لا menu أوامر. `MicroPicker.init(root)`؛ `setOptions(picker, [{value,label}])` يستبدل الخيارات بمفاتيح string ويحفظ اختيارًا صالحًا؛ لا يدعم item.disabled في هذا التوقيع الحالي. `instance.update(items?)` (عقد R4) = setOptions لكل picker تحت الجذر (بلا مصفوفة خيارات لا فعل)؛ `update(root, items)` يبقى صادرًا عامًا على مستوى الوحدة. `getSelected(picker)` يعيد `{value,label}` أو null. لا `setSelected` عامة حاليًا؛ الاختيار الابتدائي عبر markup/aria-selected قبل التهيئة.
 - **حالات Picker:** `setStatus(picker, kind, message?)` يقبل ready/loading/empty/error/initial/disabled؛ القيمة غير المعروفة تُتجاهل. غير ready يخفي الخيارات القديمة؛ البحث لا يلغي loading/error. لا نتائج البحث مختلفة عن مصدر بيانات فارغ. `setOptions` يعيد ready ويحترم الاستعلام الحالي.
 - **أحداث Picker:** `micro-picker:change` يحمل `{value,label}` أو `{value:null,label:null}`؛ عند الاختيار، وعند زواله بعد setOptions، وعند `clearSelection(picker)` حتى لو لم يكن هناك اختيار. `micro-picker:retry` و`micro-picker:close` بلا detail. retry نية، لا جلب آلي؛ close قد يستدعي closeLayer عند وجود Navigation.
-- **التنظيف:** `disconnect(root)` يحفظ DOM والحالة؛ `destroy(root)` يحذف الحالة الداخلية أيضًا، دون حذف خيارات المضيف. القائمة والبحث والملخص والـroving للمكوّن؛ البيانات والطبقة والشبكة للمستهلك.
+- **التنظيف:** `destroy(root)` يفك المستمعات ويحذف الحالة الداخلية دون حذف خيارات المضيف؛ `disconnect(root)` اسم مهمل يمر بنفس المسار (R-D10). القائمة والبحث والملخص والـroving للمكوّن؛ البيانات والطبقة والشبكة للمستهلك.
 - **التغطية التالية:** checkbox/radio/group/partial/switch/pending/segmented، وPicker مضمّن وداخل طبقة والبحث وحالاته؛ الاختيارات المعطلة والأسهم وHome/End والاتجاه. لا تحويل تاريخ أصلي إلى تقويم جديد.
 
 ### 4. Organization
+
+**عقد المدخل (R4):** `init(root, options?)` يعيد `OrganizationInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5 — `avatar.initialsFallback`).
+- **instance:** `update()` يعيد فحص الأقسام والصور الرمزية.
+- **events:** `micro-organization:toggle` بـ`{open}`.
+- **مثال:** `const o = MicroOrganization.init(root); o.update(); o.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)`.
 
 المصدر: [المواصفة](../components/organization/specification.md)، [JS](../components/organization/organization.js).
 
 - **المدخلات:** row/list/section/badge/identity وما تحدده المواصفة؛ النص والقيمة والوحدة والحالة والرابط والإجراء والصورة من المستهلك. الصف متعدد الأفعال حاوية مع رابط وأزرار أشقاء؛ الرابط الشامل لا يحتوي زرًا.
 - **التحديث والأحداث:** تحديث source DOM؛ `MicroOrganization.init(root)` للطي وavatar fallback. `micro-organization:toggle` يحمل `{open}` على section بعد التغيير. لا event أو حفظ تجاري للصف الساكن؛ الحقول المالية ليست مسؤولية Organization.
-- **التنظيف:** `disconnect(root)` يوقف الربط؛ الصورة الفاشلة قد تكون استُبدلت بالأحرف بالفعل، ولا يعد التنظيف باسترجاعها. المصدر يملك تبديل الصورة/المحتوى لاحقًا.
+- **التنظيف:** `destroy(root)` (وdisconnect المهمل IIFE) يوقف الربط؛ الصورة الفاشلة قد تكون استُبدلت بالأحرف بالفعل، ولا يعد التنظيف باسترجاعها. المصدر يملك تبديل الصورة/المحتوى لاحقًا.
 - **التغطية التالية:** كل أجزاء المواصفة، صف طويل/قيمة طويلة وموقعة/حالة/أفعال متعددة/طي/صورة فاشلة، وفراغ القائمة عند وجوده. وصفة الصف الضيق الحالية في previews ليست CSS منتج معتمدًا بعد؛ انظر [تركيب C02](../docs/COMPOSITIONS.md).
 
 ### 5. Data
 
+**عقد المدخل (R4):** `MicroData.init(root, options?)` و`MicroPacked.init(root, options?)` يعيدان مثيلات؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5 — مفاتيح عائلة data).
+- **instance (Data):** `update()` يعيد تصيير كل الرسوم من DOM المصدر. **instance (Packed):** `update()` يعيد تصيير رسوم packed.
+- **events:** `micro-data:rendered` بـ`{kind}` و`micro-data:selection-change` (عند تفعيل التحديد)؛ `micro-packed:rendered` بـ`{ok, reason?, vmaxDerived?}`.
+- **مثال:** `const d = MicroData.init(root); /* عدّل .m-chart__data */ d.update(); d.destroy();`
+- **مهملات IIFE (R-D10):** `render(chart)` و`update(root)` و`disconnect(root)` للعائلتين.
+
 المصدر: [المواصفة](../components/data/specification.md)، [JS](../components/data/data.js)، [Packed](../components/data/packed-circle.js).
 
 - **المدخلات:** source `.m-chart__data [data-series]` وdata-value/display وتسميات الفئات والمفاتيح، والوحدة والفترة والمقام والنطاق/المقياس والإحداثي الزمني كما في المواصفة. الرقم الخام للرسم منفصل عن نص العرض؛ لا اشتقاق نسبة من مبلغ أو غياب قيمة من صفر.
-- **التحديث:** `MicroData.init(root)` أو `render(chartElement)` بعد تحديث source؛ render ليس API بيانات array. `update(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يعيد تصيير كل رسوم النطاق عبر render نفسها (الجذر-الذات مشمول)؛ لا وسيط بيانات لأن المصدر DOM. المكوّن يملك plot وجدول الإفصاح المولّد؛ لا تستبدلهما بإطار العمل. وجود `data-summary-text` يزامن الملخص كل render، وغيابه يترك نص المستهلك.
-- **الأحداث والتنظيف:** `micro-data:rendered` يحمل `{kind}`؛ ليس حدث اختيار نقطة ولا نجاح عملية أعمال، وقد يأتي بعد تحديث برمجي أو إعادة قياس. `disconnect(root)` يوقف الرصد وrAF؛ init/render يعيدان الربط. لا يمسح source.
-- **Packed الاختياري:** `MicroPacked.init(root)/render(chart)/disconnect(root)` على `[data-chart-packed]`، لا init مزدوج للإفصاح. `update(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) يعيد تصيير رسوم packed تحت الجذر عبر render نفسها. `micro-packed:rendered` يحمل ok وvmaxDerived في المسارات الحالية، ومع الرفض reason؛ التفاصيل ليست API اختيار عنصر. قيم reason الحالية مدرجة في السجل. لا نعدّل سلوكه أو نضجه Proposed هنا.
+- **التحديث:** `MicroData.init(root, options?)` يعيد instance؛ `instance.update()` يعيد تصيير كل رسوم النطاق من DOM المصدر (الجذر-الذات مشمول) — لا وسيط بيانات. `render(chartElement)` و`update(root)` أسماء مهملة في IIFE فقط (R-D10). المكوّن يملك plot وجدول الإفصاح المولّد؛ لا تستبدلهما بإطار العمل. وجود `data-summary-text` يزامن الملخص كل render، وغيابه يترك نص المستهلك.
+- **الأحداث والتنظيف:** `micro-data:rendered` يحمل `{kind}`؛ ليس حدث اختيار نقطة ولا نجاح عملية أعمال، وقد يأتي بعد تحديث برمجي أو إعادة قياس. `destroy(root)` (وdisconnect المهمل IIFE) يوقف الرصد وrAF؛ init يعيد الربط. لا يمسح source.
+- **Packed الاختياري:** `MicroPacked.init(root, options?)` يعيد instance على `[data-chart-packed]` (لا init مزدوج للإفصاح)؛ `instance.update()` يعيد تصيير رسوم packed؛ `render`/`update`/`disconnect` مهملة في IIFE فقط (R-D10). `micro-packed:rendered` يحمل ok وvmaxDerived في المسارات الحالية، ومع الرفض reason؛ التفاصيل ليست API اختيار عنصر. قيم reason الحالية مدرجة في السجل. لا نعدّل سلوكه أو نضجه Proposed هنا.
 - **التغطية التالية:** bars/line وجدول/إفصاح، non-negative/signed ومقياس غير صالح/متجاوز ومحور زمني، فارغ/صفر/مفقود/غير صالح/قيمة كبيرة؛ Donut/Bubbles/Packed مسجلة أدناه. تصميم الرسوم واختيار نقاطها في المسار الأساسي مؤجلان؛ انظر «امتدادات المصدر الاختيارية» أدناه لخيار التحديد المفعل.
 
 ### 6. Messages
+
+**عقد المدخل (R4):** `init(root, options?)` يعيد `MessagesInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5).
+- **instance:** `update()` يعيد فحص الرسائل (أدوار m-note وأزرار الإغلاق الجديدة).
+- **events:** `micro-messages:note-closed` بـ`{returnFocus}` وtoast-dismissed/toast-closed بلا detail.
+- **مثال:** `const m = MicroMessages.init(root); m.update(); m.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)`.
 
 المصدر: [المواصفة](../components/messages/specification.md)، [JS](../components/messages/messages.js).
 
@@ -256,20 +333,29 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 - **التحديث:** `MicroMessages.init(root)` للأدوار والإغلاق؛ `toast(element,{duration?,returnFocus?})` افتراضي4000ms، يوقف العد أثناء التركيز داخله. `closeToast(element,trigger?)` يغلق ويدير هدف التركيز الصالح. `data-return-focus` selector أو returnFocus عنصر من المستهلك. لا تستخدم Toast مؤقتًا للخطأ الحرج الذي يحتاج بقاءً.
 - **الإعلان:** `announce(text,{id?,assertive?})` أو الوسيط boolean القديم. نفس id والنص ضمن نافذة الهوية لا يكرر الإعلان؛ دون id إعلان مستقل. `resetAnnouncements()` يعيد سجل الهوية ولا يمسح القناة الحية. ليست آلية dedup لطلبات الشبكة.
 - **الأحداث:** `micro-messages:note-closed` يحمل `{returnFocus: boolean}`؛ toast-closed للإغلاق اليدوي وtoast-dismissed لانتهاء المؤقت، بلا detail. ليست تأكيدات حفظ/حذف.
-- **التنظيف:** `disconnect(root)` يوقف الموارد المحلية؛ `disconnect(document)` ينظف القنوات المشتركة أيضًا. لا تعطّل إعلانات نسخ أخرى بتنظيف document عند إزالة Toast واحدة.
+- **التنظيف:** `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يوقف الموارد المحلية؛ التنظيف على مستوى document ينظف القنوات المشتركة أيضًا. لا تعطّل إعلانات نسخ أخرى بتنظيف document عند إزالة Toast واحدة.
 - **التغطية التالية:** كل النبرات/الأجزاء، إعادة الإعلان، فقدان هدف التركيز، نص طويل وأزرار، خطأ ثابت وفراغ؛ لا نسبة/صفر خاص بالمكوّن.
 
 ### 7. Navigation
+
+**عقد المدخل (R4):** `init(root, options?)` يعيد `NavigationInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5).
+- **instance:** `update()` يربط عناصر الطبقات/التبويبات/الفلاتر الجديدة تحت الجذر.
+- **events:** `micro-navigation:opened`/`closed` بلا detail؛ `close-request` بـ`{reason?, trigger}` قابل للإلغاء؛ `filters-applied` بـ`{applied, count}`.
+- **مثال:** `const n = MicroNavigation.init(root); n.update(); n.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)`.
 
 المصدر: [المواصفة](../components/navigation/specification.md)، [JS](../components/navigation/navigation.js).
 
 - **المدخلات:** appbar/tabs/tabpanel/navbar/layer/backdrop/filter/actionbar وفق markup؛ IDs وروابط التحكم وtrigger/عنوان الطبقة وسياسة `data-backdrop=close|keep` من المستهلك. navbar ليس router.
 - **التحديث:** `MicroNavigation.init(root)`؛ `openLayer(layer,{trigger?,backdropEl?})` و`closeLayer(layer)` أمر إغلاق مباشر. `appliedFilters(panel)` يعيد نسخة؛ `setAppliedFilters(panel,values)` يعمل بعد تهيئة panel، يزامن المصدر حسب قواعد الجاري/المطبق القائمة. ليس نموذج dirty عامًا.
 - **الأحداث:** `micro-navigation:opened` وclosed بلا detail، closed بعد اكتمال الإغلاق؛ `micro-navigation:filters-applied` يحمل `{applied,count}`. micro-navigation:close-request طلب قابل للإلغاء قبل تغيير الحالة، detail={reason,trigger}، عبر requestClose للطبقة العليا. tabs يغيّر panels وARIA، لا event مخصص موثق إضافي.
-- **الملكية/التنظيف:** مالك وحيد للتركيز وinert وقفل التمرير. `disconnect(root)` يخفي طبقاته وينهي الربط والإغلاقات المتأخرة ويعيد الموارد؛ ليس إغلاقًا قابلًا للمنع. Escape على document مفرد. History/Back وقياس الأشرطة وsafe areas على مستوى الصفحة للمضيف.
+- **الملكية/التنظيف:** مالك وحيد للتركيز وinert وقفل التمرير. `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يخفي طبقاته وينهي الربط والإغلاقات المتأخرة ويعيد الموارد؛ ليس إغلاقًا قابلًا للمنع. Escape على document مفرد. History/Back وقياس الأشرطة وsafe areas على مستوى الصفحة للمضيف.
 - **التغطية التالية:** كل الأجزاء، طبقات متداخلة وفلاتر وتبويبات مطولة ولوحة فارغة وأفعال معطلة/طويلة؛ الطلب المحروس D01 منفذ، وسياسة dirty والحفظ للمستهلك؛ C03 native dialog يحتفظ بمالكه المستقل.
 
 ### 8. Surfaces
+
+**عقد المدخل:** عائلة CSS بلا JavaScript — لا init/instance/events/destroy.
 
 المصدر: [المواصفة](../components/surfaces/specification.md).
 
@@ -279,41 +365,69 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 ### 9. Info Strip
 
+**عقد المدخل (R4):** `MicroInfoStrip.init(root, options?)` و`MicroInfoPeek.init(root, options?)` يعيدان مثيلات؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5 — مفاتيح عائلة info-strip).
+- **instance (Strip):** `update()` = rescan. **instance (Peek):** `update({index, animate?})` = goTo، مع `goTo`/`next`/`prev`/`getIndex` على المثيل.
+- **events:** Peek فقط: `micro-info-peek:change` بـ`{index, count}`؛ الشريط العادي بلا أحداث.
+- **مثال:** `const s = MicroInfoStrip.init(root); /* بطاقات جديدة */ s.update(); s.destroy();`
+- **مهملات IIFE (R-D10):** `rescan(root)` و`update(root)` و`disconnect(root)` للشريط؛ `update(strip, ...)` و`disconnect(root)` لPeek.
+
 المصدر: [المواصفة](../components/info-strip/specification.md)، [Strip](../components/info-strip/info-strip.js)، [Peek](../components/info-strip/info-strip-peek.js).
 
 - بطاقة info منفردة CSS، لا JS لعرض الرقم. label/value/unit/context وbasic/compact/featured والقراءات من المصدر؛ لا حساب نسبة أو حالة مالية تلقائية.
-- `MicroInfoStrip.init(root)` للشريط، `rescan(root)` بعد إضافة/حذف بطاقات يعيد التقاط المصدر؛ `update(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى rescan نفسها (إعادة الالتقاط تعيد الشريط لأول بطاقة وفق عقد R-15). `disconnect(root)` يفصل الربط. `data-controls` يحدد أدوات التحكم وفق المواصفة. لا event مخصص للشريط العادي حاليًا؛ تحريك scroll ليس اختيار سجل أعمال.
-- Peek مالك مستقل على `[data-info-peek]`: `MicroInfoPeek.init(root)/goTo(strip,index,{animate?})/next(strip)/prev(strip)/getIndex(strip)/disconnect(root)`. `update(strip,index,options?)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى goTo نفسها. getIndex يعيد -1 دون حالة؛ goTo يقيّد الفهرس للمتاح. `micro-info-peek:change` يحمل `{index,count}` عند تغير الفهرس، بما فيه التنقل البرمجي. disconnect يحفظ الحالة ويوقف الرصد والسحب والمهام المتأخرة؛ init يعيد الاتصال. لا destroy عامة أو وعد rescan ديناميكي لـPeek.
+- `MicroInfoStrip.init(root)` للشريط، `instance.update()` بعد إضافة/حذف بطاقات يعيد التقاط المصدر (يعيد الشريط لأول بطاقة وفق عقد R-15)؛ `rescan`/`update`/`disconnect` أسماء مهملة في IIFE فقط (R-D10). `data-controls` يحدد أدوات التحكم وفق المواصفة. لا event مخصص للشريط العادي حاليًا؛ تحريك scroll ليس اختيار سجل أعمال.
+- Peek مالك مستقل على `[data-info-peek]`: `MicroInfoPeek.init(root, options?)` يعيد instance له `update({index, animate?})`=goTo و`goTo/next/prev/getIndex`؛ دوال مستوى العنصر تبقى صادرة عامة. `update(strip, ...)` و`disconnect` مهملة في IIFE فقط (R-D10). getIndex يعيد -1 دون حالة؛ goTo يقيّد الفهرس للمتاح. `micro-info-peek:change` يحمل `{index,count}` عند تغير الفهرس، بما فيه التنقل البرمجي. destroy يوقف الرصد والسحب والمهام المتأخرة ويمحو حالة المثيل؛ init بعده يعيد الاتصال من جديد (تحديث R4: صار destroy موحدًا للPeek).
 - لا يشغّل Strip العادي على Peek، ولا ينظف أيهما أطفال Data/Fields. تغيير بنية شرائح Peek ليس مكافئًا لـrescan الشريط العادي؛ لا نفترض دعمًا غير موثق.
 - التغطية التالية: بطاقة منفردة/متعددة القراءات/basic/compact/featured، شريط بأدواته، Peek اختياري،0/1/عدة بطاقات وقيم طويلة/مفقودة، RTL/LTR وتركيز بطاقة غير نشطة.
 
 ### 10. Metric Comparison
 
+**عقد المدخل (R4):** `init(root, options?)` يعيد `MetricComparisonInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5).
+- **instance:** `update()` يعيد التصيير من DOM المصدر.
+- **events:** لا أحداث مخصصة.
+- **مثال:** `const mc = MicroMetricComparison.init(root); mc.update(); mc.destroy();`
+- **مهملات IIFE (R-D10):** `render(root)` و`update(root)` و`disconnect(root)`.
+
 المصدر: [المواصفة](../components/metric-comparison/specification.md)، [JS](../components/metric-comparison/metric-comparison.js).
 
-- source DOM للقراءات والتسميات والوحدات والفترات والمقياس؛ `MicroMetricComparison.init(root)/render(root)` على `[data-main-comparison]` أو `[data-metric-circles]` أو حاويتهما. `render` يقبل نطاقًا، بخلاف MicroData.render الذي يأخذ رسمًا واحدًا. `update(root)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى render نفسها؛ لا وسيط بيانات لأن المصدر DOM.
-- source data للمستهلك؛ العناصر/الأشرطة/الدوائر والجداول المولدة للمكوّن. `disconnect(root)` يوقف المراقبة وrAF؛ لا يمسح المصدر. لا أحداث مخصصة أو حفظ أو point-selection عامة حاليًا.
+- source DOM للقراءات والتسميات والوحدات والفترات والمقياس؛ `MicroMetricComparison.init(root, options?)` يعيد instance على `[data-main-comparison]` أو `[data-metric-circles]` أو حاويتهما؛ `instance.update()` يعيد التصيير لكل النطاق — لا وسيط بيانات لأن المصدر DOM. `render`/`update` مهملة في IIFE فقط (R-D10).
+- source data للمستهلك؛ العناصر/الأشرطة/الدوائر والجداول المولدة للمكوّن. `destroy(root)` (وdisconnect المهمل IIFE) يوقف المراقبة وrAF؛ لا يمسح المصدر. لا أحداث مخصصة أو حفظ أو point-selection عامة حاليًا.
 - الافتراضي flat/rows/bars للمقارنة الدقيقة؛ compact/featured/circles اختيارات وفق المواصفة. لا مقياس مشترك لوحدات/فترات غير متجانسة، ولا نسبة بلا مقام ومعنى معلنين.
 - التغطية التالية: كل العروض وأرقام صغيرة/طويلة وصفر/مفقود/غير صالح/مقياس غير صالح؛ الأرقام الحقيقية تبقى الأساس، وتصميم البدائل الرسومية مؤجل.
 
 ### 11. Account Settings
 
+**عقد المدخل (R4):** `init(root, options?)` يعيد `AccountSettingsInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options:** `labels` (R5).
+- **instance:** `update()` يعيد فحص اللوحات.
+- **events:** `micro-account-settings:change` بـ`{setting, checked}`.
+- **مثال:** `const a = MicroAccountSettings.init(root); a.update(); a.destroy();`
+- **مهملات IIFE (R-D10):** `disconnect(root)`.
+
 المصدر: [المواصفة](../components/account-settings/specification.md)، [JS](../components/account-settings/account-settings.js).
 
 - markup `[data-account-settings]` مع طبقة وعنواني account/application ومعرفاتهما وروابط العرض وإعدادات `[data-account-setting]`؛ المحتوى من المستهلك، ليس إعدادات منتج جاهزة. Navigation وSelection وButtons حسب دليل الاعتماد.
-- `MicroAccountSettings.init(root)`، `disconnect(root)` و`destroy(root)` الاسم الآخر نفسه. لا setData أو save أو update-handlers عامة، وupdate غير منطبق ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) — لا مفهوم بيانات: الحالة الأصلية checked عند المستهلك. ضبط checked خارجيًا لا يطلق حدثًا من تلقاء نفسه؛ إعادة init ليست API لتغيير هوية الطبقة.
+- `MicroAccountSettings.init(root, options?)` يعيد instance له `update()` (إعادة فحص اللوحات — لا مفهوم بيانات: الحالة الأصلية checked عند المستهلك) و`destroy()`. لا setData أو save؛ `disconnect` اسم مهمل في IIFE فقط (R-D10). ضبط checked خارجيًا لا يطلق حدثًا من تلقاء نفسه؛ إعادة init ليست API لتغيير هوية الطبقة.
 - `micro-account-settings:change` يحمل `{setting,checked}` بعد native change. النية لا تعني أن الخدمة حفظت. pending/الفشل/إرجاع القيمة يديرها المستهلك مع Selection عند الحاجة.
 - المكوّن يملك ربط تبديل المنظورين، وNavigation يملك الطبقة؛ تنظيف Account وحده لا يفصل بقية العائلات. التغطية التالية: المنظوران، رجوع داخلي، محتوى طويل، تغيير معطل/منتظر وفشل ممثل خارجيًا، دون خدمات إعدادات.
 
 ### 12. Access Gateway
 
+**عقد المدخل (R4):** `init(root, handlers?)` يعيد `AccessGatewayInstance`؛ `destroy(root)`/`getInstance(root)` صادران.
+- **options (handlers):** `labels` (R5) و`onSubmit({email, password})` و`onRecovery()` و`providers[key]()`.
+- **instance:** `update(handlers?)` يحدث callbacks وتوافر الإجراءات بلا ربط مضاعف.
+- **events:** `micro-access:submitted` بـ`{result}`.
+- **مثال:** `const g = MicroAccessGateway.init(root, { onSubmit }); g.update({ onRecovery }); g.destroy();`
+- **مهملات IIFE (R-D10):** `update(root, handlers?)` و`disconnect(root)`.
+
 المصدر: [المواصفة](../components/access-gateway/specification.md)، [JS](../components/access-gateway/access-gateway.js).
 
-- `MicroAccessGateway.init(root,handlers?)`؛ هيّئ Fields قبلها عند استخدام حقول الاعتماد فقط. تركيب Google-only بلا حقول لا يحتاج Fields. handlers: `onSubmit({email,password})` و`onRecovery()` و`providers[key]()`، يمكن أن تعيد قيمة/Promise. إعادة init لنفس الجذر تحدّث callbacks وتوافر الإجراءات الاختيارية دون ربط مضاعف؛ ليست إعادة بناء form. `update(root, handlers?)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد لهذا التحديث نفسه — يفوّض إلى init فلا يبني النموذج من جديد ولا يعيد كلمة المرور المظهرة.
+- `MicroAccessGateway.init(root,handlers?)`؛ هيّئ Fields قبلها عند استخدام حقول الاعتماد فقط. تركيب Google-only بلا حقول لا يحتاج Fields. handlers: `onSubmit({email,password})` و`onRecovery()` و`providers[key]()`، يمكن أن تعيد قيمة/Promise. إعادة init لنفس الجذر تحدّث callbacks وتوافر الإجراءات الاختيارية دون ربط مضاعف؛ ليست إعادة بناء form. `instance.update(handlers?)` (عقد R4) هذا التحديث نفسه — لا يبني النموذج من جديد ولا يعيد كلمة المرور المظهرة؛ `update(root, handlers?)` القديم اسم مهمل في IIFE فقط (R-D10).
 - المستهلك يملك الخدمة والمصادقة والصلاحيات وإلغاء الشبكة؛ المكوّن يملك التحقق الأصلي للحقلين ورسائل UI وbusy وكشف كلمة المرور. غياب handler لا يرسل شيئًا، وغياب نتيجة صريحة لا يعني دخولًا.
 - النتيجة الاختيارية `{message?,tone?,authenticated?}` عقد عرض فقط؛ tone يقبل info/error. الرسالة الصريحة تُعرض؛ authenticated=true تأكيد المستهلك، false عدم دخول، وغير ذلك نتيجة محايدة. الرفض يعرض userMessage البشرية إن قُدمت، لا stack أو Error.message الخام.
 - `micro-access:submitted` من form يحمل `{result}` بعد الحل، بلا بيانات اعتماد مضافة من المكوّن؛ لا event مماثل للمزود والاستعادة حاليًا. لا تسجل credentials أو نتيجة حساسة في telemetry؛ النتيجة التي يردها handler مسؤوليته.
-- `disconnect/destroy(root)` ينهيان الربط وbusy ويعيدان إخفاء كلمة المرور ويمنعان استجابة Promise قديمة من تحديث UI؛ لا يلغيان طلب الشبكة الفعلي. Fields ينظف منفصلًا.
+- `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) ينهي الربط وbusy ويعيد إخفاء كلمة المرور ويمنع استجابة Promise قديمة من تحديث UI؛ لا يلغي طلب الشبكة الفعلي. Fields ينظف منفصلًا.
 - التغطية التالية: form/وسائل اختيارية/إظهار كلمة المرور، فراغ/invalid/disabled/pending/رفض/نتيجة محايدة وإعادة callbacks؛ لا مصادقة فعلية أو بيانات حقيقية.
 - تركيب `m-welcome` و`m-session` العام موثق في [google-welcome-usage.html](../components/access-gateway/google-welcome-usage.html) ويبقى مثالًا أدنى محفوظًا. صفحة Google sign-in الكاملة هي [google-sign-in-usage.html](../components/access-gateway/google-sign-in-usage.html)، وتعرض موضع `data-google-provider-slot` للمضيف دون إعادة رسم زر GIS؛ `.m-google-button` وصورة G المحلية عينتان وليستا زر الإنتاج. يحافظ API العام على دعمه لـform/providers.
 - `m-session` يقدم markup وحالات عرض يقودها المضيف (`restoring/expired/denied/offline`)؛ لا API جلسة ولا OAuth أو network أو storage داخل المكتبة. المضيف يملك الحالة والنص والإجراء، ولا يعرض النجاح إلا بعد تأكيده الصريح.
@@ -322,9 +436,16 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 ### 13. Order Schedule
 
+**عقد المدخل (R4):** `init(element, options?)` يعيد `OrderScheduleInstance`؛ `getInstance(root)` و`destroy(root)` و`update(root, orders)` صادرة عامة.
+- **options:** orders/statuses/today/weekStart/selectedDate/displayedMonth/view/calendarView/orderActions/headingLevel/loading/retry (+`labels` في R5).
+- **instance:** `update(orders)` = setData، مع setData/getState/setSelectedDate/setDisplayedMonth/setView/setCalendarView/setLoading/setError/destroy.
+- **events:** `order-schedule:state-change`/`day-select`/`order-open`/`order-edit-request`/`order-delete-request`/`add-request`.
+- **مثال:** `const cal = MicroOrderSchedule.init(el, { orders }); cal.update(newOrders); cal.destroy();`
+- **لا مهملات** — كل الأسماء عامة.
+
 المصدر: [المواصفة](../components/order-schedule/specification.md)، [JS](../components/order-schedule/order-schedule.js). يبقى Draft.
 
-- `MicroOrderSchedule.init(element,options)` يعيد instance؛ root غير صالح يرمي Error. تهيئة نفس الجذر تعيد المثيل نفسه وتتجاهل options الجديدة؛ `getInstance(root)` يعيد المثيل أو null. `update(root, orders)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) على مستوى الوحدة يفوّض إلى `instance.setData(orders)` ويعيد المثيل أو null بلا مثيل. لا auto-init عام للتقويم.
+- `MicroOrderSchedule.init(element,options)` يعيد instance؛ root غير صالح يرمي Error. تهيئة نفس الجذر تعيد المثيل نفسه وتتجاهل options الجديدة؛ `getInstance(root)` يعيد المثيل أو null. `instance.update(orders)` = `instance.setData(orders)` نفسها (عقد R4)؛ `update(root, orders)` على مستوى الوحدة يفوّض إلى setData ويعيد المثيل أو null، و`destroy(root)` يدمر مثيل الجذر إن وجد. لا auto-init عام للتقويم.
 - options الحالية: orders/statuses/today/weekStart/selectedDate/displayedMonth/view/calendarView/orderActions/headingLevel/loading/retry. تواريخ مدنية YYYY-MM-DD وشهر YYYY-MM، وقت HH:mm؛ لا تحويل timezone أو recurrence. يطبّع الطلب إلى id/title/date/time/statusKey/customer/note؛ metadata الأخرى لا تُحفظ تلقائيًا. IDs المستهلك مستقرة وفريدة، وstatusKey لا يشتق من التاريخ.
 - instance: `setData(orders)` استبدال كامل يحفظ حالة العرض/التحديد، يزيل loading/error ويطوي طلبًا مفتوحًا حُذف. `setSelectedDate(date)` يغير التحديد وشهره. `setDisplayedMonth(month)` يصفح الشهر مستقلًا عن التحديد. `setView('calendar'|'list')` و`setCalendarView('month'|'week'|'day')`. القيم غير الصالحة تُتجاهل.
 - `getState()` نسخة `{view,calendarView,selectedDate,displayedMonth}`، لا store للبيانات أو حالة حفظ. setters صامتة. عند تغير الحالة بفعل مستخدم يطلق `order-schedule:state-change` مرة بالتفصيل نفسه؛ day-select يحمل `{date}`؛ order-open/edit-request/delete-request تحمل `{id}`؛ add-request يحمل `{date:ISO|null}`. order-open اسم الحدث الحالي عند فتح صف، لا تفويضًا تلقائيًا لفتح route.
@@ -333,16 +454,23 @@ CSS وJavaScript وبنية DOM الدلالية أجزاء من المكوّن.
 
 ### 14. Carousel
 
+**عقد المدخل (R4):** `init(root, options?)` يعيد `CarouselInstance`؛ `destroy(root)`/`getInstance(root)` صادران، و`goTo/next/prev/getIndex` على مستوى العنصر تبقى عامة.
+- **options:** `labels` (R5).
+- **instance:** `update({index, animate?})` = goTo، مع `goTo`/`next`/`prev`/`getIndex` على المثيل.
+- **events:** `micro-carousel:change` بـ`{index, count}` (حتى البرمجي).
+- **مثال:** `const c = MicroCarousel.init(root); c.update({ index: 2 }); c.destroy();`
+- **مهملات IIFE (R-D10):** `update(carousel, index, options?)` و`disconnect(root)`.
+
 المصدر: [المواصفة](../components/carousel/specification.md)، [JS](../components/carousel/carousel.js). يبقى Draft.
 
 - source markup `[data-carousel]` مع viewport/track/slides وcontrols/compact/expand والخيارات الموثقة؛ محتوى البطاقة من عائلات مستقلة. لا autoplay؛ المقارنة المتزامنة صفوف وليست Carousel إلزاميًا.
-- `MicroCarousel.init(root)/goTo(carousel,index,{animate?})/next(carousel)/prev(carousel)/getIndex(carousel)`؛ `update(carousel,index,options?)` ([العقد الموحد](#العقد-الموحد-للبرمجة-2026-11-21)) اسم موحد يفوّض إلى goTo نفسها. getIndex=-1 دون حالة وgoTo يقيّد الفهرس. `micro-carousel:change` يحمل `{index,count}` عند تغيره، حتى من goTo البرمجي؛ ليس input خاصًا بالمنتج. تغيير الشريحة يطوي الموسعة، ولا يوسع الجديدة تلقائيًا.
-- `disconnect(root)` يوقف الرصد والسحب وrAF ويحفظ الحالة لعودة init؛ `destroy(root)` يفصل أيضًا الربط النهائي ويحذف الحالة والنقاط المولدة. لا setSlides/rescan عامة؛ تبديل بنية الشرائح يحتاج دورة destroy ثم init وتنظيف الأطفال، لا تعديل track المملوك مع افتراض إعادة التقاط تلقائية.
+- `MicroCarousel.init(root, options?)` يعيد instance له `update({index, animate?})`=goTo و`goTo/next/prev/getIndex`؛ دوال مستوى العنصر تبقى صادرة عامة، و`update(carousel, ...)` اسم مهمل في IIFE فقط (R-D10). getIndex=-1 دون حالة وgoTo يقيّد الفهرس. `micro-carousel:change` يحمل `{index,count}` عند تغيره، حتى من goTo البرمجي؛ ليس input خاصًا بالمنتج. تغيير الشريحة يطوي الموسعة، ولا يوسع الجديدة تلقائيًا.
+- `destroy(root)` (وdisconnect المهمل IIFE بنفس المسار) يوقف الرصد والسحب وrAF ويحذف الحالة والنقاط المولدة؛ init بعده يبدأ من جديد. لا setSlides/rescan عامة؛ تبديل بنية الشرائح يحتاج دورة destroy ثم init وتنظيف الأطفال، لا تعديل track المملوك مع افتراض إعادة التقاط تلقائية.
 - التغطية التالية:0/1/عدة شرائح، controls/peek الاختياري وcompact/expand حسب المواصفة، حد أول/آخر، سحب/إلغاء/تركيز/RTL/LTR؛ البيانات الفارغة داخل البطاقة مسؤولية مكوّنها، لا خطأ شبكة في Carousel نفسه.
 
 ### امتدادات المصدر الاختيارية
 
-Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init/sync/disconnect(root?) لاختصار تكرار وحدة بسياق صريح. [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](../docs/COMPOSITIONS.md). D01 وC05 قائمة إجراءات الهاتف وC06 ملخص خارجي منفذة وفق [عقود الهاتف](../docs/COMPOSITIONS.md)؛ حقول metadata داخل الطلب لم تُضف.
+Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخدم micro-data:selection-change فقط عند data-selection=single ومفاتيح فريدة؛ لا تغيير rendered أو API قديم. C04 يضيف MicroReadings.init(root, options?) بعقد R4 الموحد (`instance.update()`=sync و`destroy`)؛ `sync`/`update`/`disconnect` أسماء مهملة في IIFE فقط (R-D10). [المدخلات والتحديث والإتاحة والتنظيف بالتفصيل](../docs/COMPOSITIONS.md). D01 وC05 قائمة إجراءات الهاتف وC06 ملخص خارجي منفذة وفق [عقود الهاتف](../docs/COMPOSITIONS.md)؛ حقول metadata داخل الطلب لم تُضف.
 
 ### استهلاك B01 داخل الرسوم
 
@@ -350,7 +478,7 @@ Data يضيف getSelection(chart)/setSelection(chart,key|null) وحدث مستخ
 
 ### امتدادات الهاتف الحالية
 
-Navigation يضيف requestClose(layer,{reason?,trigger?}) بنتيجة boolean، مع بقاء closeLayer أمرًا مباشرًا. MicroActionSheet يضيف init/open/close/disconnect للتركيب C05، وmicro-actions:request يحمل {id,contextKey} بعد closed. C06 وصفة C01 خارج التقويم بمالك مزامنة من المستهلك؛ لا API جديدة داخل Order Schedule. [التفصيل والحدود والتحميل](../docs/COMPOSITIONS.md).
+Navigation يضيف requestClose(layer,{reason?,trigger?}) بنتيجة boolean، مع بقاء closeLayer أمرًا مباشرًا. MicroActionSheet يضيف init (بعقد R4 الموحد: instance له update/destroy) وopen/close للتركيب C05؛ disconnect اسم مهمل في IIFE فقط، وmicro-actions:request يحمل {id,contextKey} بعد closed. C06 وصفة C01 خارج التقويم بمالك مزامنة من المستهلك؛ لا API جديدة داخل Order Schedule. [التفصيل والحدود والتحميل](../docs/COMPOSITIONS.md).
 
 ## المتغيرات
 
@@ -460,6 +588,8 @@ CSS وJS من components/shared/assets هي ما يُستهلك. صفحات ال
 تفاصيل الحالات غير المعتمدة تبقى مسودات في مواصفات العائلة. 24px للزر متعدد الأسطر والتحميل B افتراضيان مستقران صريحان في [سجل الاختيارات](../docs/DECISIONS.md). يوجد منتقي تاريخ native ضمن الاختيار؛ لا تقويم مخصص أو PIN أو قنوات مشاركة تلقائيًا. الاختبارات العملية ولكل تشغيل منها مصدر وحدود تغطية؛ ليست شهادة شاملة للمكتبة.
 
 ## امتداد سياق المنتج C07–C14
+
+**عقد المدخل (R4):** `MicroProduct.init(root, model)` يختار الـrenderer من `model.type` ويفوّض إلى mount؛ `instance.update(model)` = replace، مع `replace`/`resolve`/`getState`/`destroy` على المثيل. `mount(root, type, value)` و`register` و`contextKey` و`destroy(root)` و`getInstance(root)` صادرة عامة. الحدث `micro-product:intent` بـ`{type, action, scope, request, payload}`. لا مهملات. مثال: `const p = MicroProduct.init(root, { type: 'manage', scope, ... }); p.update(nextModel); p.destroy();`
 
 [العقد العام الموثق](../components/product-context/specification.md) و[جدول التغطية والقرارات](product-context/COVERAGE.md) يضيفان تراكيب Draft فوق المصدر الحالي. `MicroProduct.mount/replace/resolve/destroy` مالك محتواها الداخلي فقط، ولا يحل محل Navigation/Fields/Carousel أو سياسة الخادم. لا تنسخ lab.js أو بيانات الأمثلة.
 

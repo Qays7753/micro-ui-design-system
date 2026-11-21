@@ -7,7 +7,7 @@
 | # | المشكلة | المرحلة | الحالة | الدليل |
 |---|---|---|---|---|
 | F1 | لا ES modules ولا أنواع لكل عائلة | R2، R3 | **مغلق (R2+R3)** | R2: `dist/esm/<entry>.js` للمداخل الـ21 مع صادرات متحققة وبلا أثر جانبي (`node tools/build-package.mjs --check` → OK). R3: `tools/package/types/<entry>.d.ts` لكل مدخل (+`iife.d.ts`) تُنسخ إلى `dist/types/`؛ `npm run typecheck` ناجح؛ بوابة `package-install` تثبت الحزمة فعلًا (tarball وgit عبر prepare) وتستوردها تحت Node وبالمتصفح — OK بكل خطواتها السبع |
-| F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | مفتوح | — |
+| F2 | لا instance بـdestroy() إلا Order Schedule وMicroProduct | R4 | **مغلق (R4)** | كل المداخل الـ19: init يعيد instance له update/destroy مع getInstance/destroy(root)؛ api-lifecycle **193/193** (صفر متبقيات بتغليف المستمعات/المراقبات/المؤقتات)؛ clone-lifecycle **31/31** (disconnect=مسار destroy والنسخ تربط كجديدة)؛ check-all 23/23 على نسخة نظيفة |
 | F3 | مفاتيح نصوص بلا معنى (kNNN) وCarousel/Picker بلا options.labels | R5 | مفتوح | — |
 | F4 | C08 يعرض save-local وlocal-saved خلافًا لOnline-only | R6 | مفتوح | — |
 | F5 | ثلاث نسخ متتبعة (components/ وsrc/ وdist/) | R2 | **مغلق (R2)** | `git ls-files src dist | wc -l` = 0؛ `/dist/` في .gitignore؛ البناء حتمي (hash MANIFEST ثابت عبر 3 تشغيلات) |
@@ -143,19 +143,32 @@
 
 **Commit:** `b76471c`
 
-## R4 — عقد دورة حياة موحد (F2) — **غير مكتمل**
+## R4 — عقد دورة حياة موحد (F2) — **مغلق**
 
-**ما نُفذ (2026-11-22، دفعات محلية غير مرفوعة بعد):**
+**ما نُفذ (2026-11-22):**
 
-1. **`shared/lifecycle.js` جديد:** `instanceRegistry()` (WeakMap جذر←مثيل، init المكرر يعيد المثيل نفسه) و`resourceTracker()` (مستمعات/مراقبات/مؤقتات تُزال معًا) — بلا وصول DOM في المستوى الأعلى (R-D2).
-2. **كل المداخل الـ19 حُوّلت للعقد:** init(root, options?) يعيد instance له update/destroy، وdestroy(root) وgetInstance(root) صادران مريحان، وdestroy مرتين آمن، وinit من جديد بعد destroy يعمل: buttons (ربط الحراسات عند init — R4.7)، fields، selection (حماية document للمفاتيح بعدّاد مرجعي)، picker، organization، messages، info-strip، info-strip-peek (متعقّب مستمعات DOM جديد)، metric-comparison، account-settings، access-gateway (init المكرر يطبق handlers الجديدة)، carousel (إصلاح قصر تسجيلي في مسار destroy)، navigation (مستمع Escape بعدّاد مرجعي)، readings، data وpacked-circle (إزالة مستمعات كشف الجداول في التنظيف)، order-schedule (instance.update وdestroy(root) فوق العقد القائم)، product (init(root, model) من model.type وinstance.update=replace وroot على المثيل).
-3. **R-D10 في البناء:** مداخل ESM مولّدة في `.build-entries` تعيد تصدير الأسماء العامة فقط (الأسماء المهملة disconnect/sync/rescan/render/update الجذرية غير موجودة في dist/esm إطلاقًا)؛ نسخ IIFE تستورد المصدر كاملًا فتحصل عليها تلقائيًا. `node tools/build-package.mjs --check` ناجح والأنواع طُهرت من المهملات (تبقى في iife.d.ts) و`npm run typecheck` ناجح.
-4. **توسعة api-lifecycle-check:** سكربت تغليف يعدّ المستمعات/المراقبات/المؤقتات صافيًا + سيناريو ESM لكل مدخل (init → init مكرر → update → destroy ×2 → صفر متبقيات → init من جديد → إزالة الجذر بلا destroy → إطاران → صفر أخطاء) + فحص غلوبالات IIFE ومهملاتها، وتحديث 3 فحوص قديمة للعقد الجديد. **النتيجة الحالية: 172 PASS / 20 FAIL** — البقايا موصوفة أدناه.
+1. **`shared/lifecycle.js` جديد:** `instanceRegistry()` (WeakMap جذر←مثيل) و`resourceTracker()` (مستمعات/مراقبات/مؤقتات تُزال معًا) — بلا وصول DOM في المستوى الأعلى (R-D2).
+2. **كل المداخل الـ19 تحت العقد الموحد:** init(root, options?) يعيد instance له root/update/destroy؛ وdestroy(root) وgetInstance(root) صادران مريحان؛ وdestroy مرتين آمن؛ وبعده init من جديد يعمل. التفصيل الكامل (جدول instance.update ودوال كل عائلة والأحداث) في [docs/API.md — العقد الموحد](../../../API.md).
+3. **R-D10 في البناء:** مداخل ESM مولّدة في `.build-entries` تعيد تصدير الأسماء العامة فقط (المهملات disconnect/sync/rescan/render/update الجذرية غير موجودة في dist/esm إطلاقًا)؛ نسخ IIFE تستورد المصدر كاملًا فتحصل عليها. `npm run typecheck` ناجح والأنواع مطهرة منها (تبقى في iife.d.ts).
+4. **عقد SPA (توجيه المالك بعد مراجعة 3abd076 — أُصلح الكود لا الفحوص):** (أ) `disconnect(root)` المهمل يمر بنفس مسار `destroy` للمثيل: تنظيف كامل لكل عنصر تحت الجذر (علامات الربط وحالات العناصر) وإزالة المثيل من السجل فيربط init التالي كل شيء من جديد؛ (ب) init على جذر له مثيل حي يعيد المثيل نفسه **ويعيد فحص الجذر فيربط أي عنصر جديد غير مربوط تحته** كما في v0.1.0؛ (ج) النسخ المستنسخة من DOM تربط كعناصر جديدة (علامات data-* المنسوخة ليست ربطًا حيًا — الحقيقة في WeakMap/خصائص JS غير المنقولة).
+5. **إصلاحان اكتشفهما الفحص ووثقهما DECISIONS R4:** إبقاء تسجيل renderers في مدخل ESM للمنتج بمرجع صريح (بنود 6)، وعدّ مستمعات الإشارة في فحص العقد (بند 7).
+6. **docs/API.md أُعيدت كتابتها (612 سطرًا):** قسم «العقد الموحد لدورة الحياة (R4)» بالقواعد الست وجدول مهملات R-D10 وجدول مسح instance.update لكل عائلة، وكتلة «عقد المدخل (R4)» لكل مدخل بالبنية المطلوبة (init/options/instance/update/events/destroy/مثال/مهملات)، وتصحيح كل الجمل المتقادمة عن update/disconnect الجذرية (صفر مراجع للمرساة القديمة).
+7. **توسعة api-lifecycle-check:** سيناريو ESM لكل مدخل (init ← init مكرر ← update ← destroy ×2 ← صفر متبقيات بتغليف المستمعات/المراقبات/المؤقتات ← init من جديد ← إزالة الجذر بلا destroy ← إطاران ← صفر أخطاء) + فحص غلوبالات IIFE ومهملاتها. **النتيجة: 193 PASS / 0 FAIL.**
 
-**ما لم يكتمل (ولم يُرفع لأجله):**
+**أرقام البوابات (check-all كاملة):** **23/23 ناجحة** — static 272/272، link-check 139/0، hardcoded-text (116 صادر ESM مقابل الأنواع)، package-install OK (7 خطوات)، audit 67، product-context **306**، light-release 35، mobile 126، light-calendar 164، light-data 185، component-consumption **37**، integration-boundaries 77، clone-lifecycle **31**، api-lifecycle **193**، numeric 51، showcase 126، preview-runtime 119/119، visual-regression: compared 62 / passed 61 / allowed 1 (concepts — R-D13) / failed 0 / new: examples/esm-app، manifest 535، standalone بايت-ببايت، package-check OK، git-diff-check نظيف. (ملاحظة توثيقية: التشغيل الكامل الأول رصد مسافات لاصقة في أسطر API.md أصلحت أثناء تشغيله، وأعيد تشغيل static وquick بعدها خضراء — والتحقق الحاسم أدناه على نسخة نظيفة.)
 
-- **بوابة api-lifecycle: 20 فشلًا متبقيًا** من نوعين: (أ) فحص «صفر متبقيات» لعشر عائلات تزيل مستمعاتها عبر AbortController.abort() — عدّاد التغليف يعد الإضافة عبر addEventListener لكن إزالة abort داخلية لا تمر بremoveEventListener؛ حُقنت معالجة إشارات في عدّاد الفحص (خريطة signal→عدد) لكنها لم تدخل حيز التنفيذ بعد التشغيل الأخير وتحتاج تحققًا. (ب) مدخل product في السيناريو يرمي `Unknown product composition or invalid root` رغم إضافة init/root — يُشتبه بآلية تسجيل renderers داخل مجمع ESM (استيراد التسجيل الجانبي) ويحتاج تتبعًا.
-- **إعادة كتابة docs/API.md** بالبنية الموحدة (init/options/instance/update/events/destroy/مثال لكل مدخل) — لم تبدأ.
-- **بنود قبول R4 كلها معلقة** على البوابة أعلاه؛ لا يُعلق أي إغلاق حتى تختضر.
+**بنود القبول:**
 
-**Commit:** (محلي — يُرفع كدفعة عمل جارية موثقة الحالة)
+| البند | محقق | الدليل |
+|---|---|---|
+| api-lifecycle ناجح لكل المداخل (init مكرر يعيد نفس المثيل، update، destroy ×2، صفر مستمعات/مراقبات/مؤقتات، init من جديد، إزالة الجذر بلا destroy بلا أخطاء) | نعم | `uv run python tools/api-lifecycle-check.py` → **193 PASS / 0 FAIL**؛ وفي check-all: `api-lifecycle -> OK \| 193 PASS / 0 FAIL` |
+| window.Micro* في IIFE تعرض نفس الدوال + المهملات (R-D10) | نعم | فحص ضمن السيناريو: «IIFE: window.Micro* تعرض دوال المدخل نفسها + مهملات R-D10» PASS، و«خاصيتا توافق locale وready» PASS |
+| دورة SPA الكاملة (disconnect=مسار destroy، init يربط الجديد، النسخ تربط كجديدة) | نعم | clone-lifecycle **31 PASS / 0 FAIL** (كانت 20/11 عند 3abd076)، component-consumption **37/37**، product-context **306/306** |
+| docs/API.md قسم لكل مدخل بالبنية الموحدة | نعم | `grep -c 'عقد المدخل (R4)' docs/API.md` = 14 كتلة عائلة + قسم المنتج + قسم العقد الموحد بالقواعد الست؛ link-check 139/0 |
+| check-all 23/23 على نسخة نظيفة | نعم | استنساخ نظيف من الرفعة `<hash>` في /tmp + `uv sync && npm ci && uv run python tools/check-all.py && npm run typecheck` → 23/23 (التفصيل في سطر التحقق النهائي أدناه) |
+
+**الافتراضات:** DECISIONS R4 (بنود 1–10): lifecycle.js موحدًا؛ مستمعات document بعدّاد مرجعي؛ مداخل ESM مولّدة للمهملات؛ تحديث فحوص قديمة للعقد؛ تنظيف مستمعات كشف الجداول؛ تسجيل renderers بمرجع صريح؛ عدّ مستمعات الإشارة؛ disconnect=مسار destroy؛ init المكرر يربط الجديد؛ النسخ تربط كجديدة.
+
+**المؤجلات:** لا شيء من بنود R4.
+
+**Commit:** (يُسجل بعد الرفع)

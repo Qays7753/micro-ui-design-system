@@ -95,7 +95,9 @@ registerLabels('account-settings', familyDefaults);
     var scope = root || document;
     void options; /* account-settings: لا خيارات حاليًا — options.labels في R5 */
     var existing = registry.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { if (scope.matches && scope.matches('[data-account-settings]')) initPanel(scope); scope.querySelectorAll('[data-account-settings]').forEach(initPanel); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -108,7 +110,7 @@ registerLabels('account-settings', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -125,11 +127,16 @@ registerLabels('account-settings', familyDefaults);
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
 
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
     var scope = root || document;
     var panels = [].slice.call(scope.querySelectorAll('[data-account-settings]'));
     if (scope.matches && scope.matches('[data-account-settings]')) panels.unshift(scope);

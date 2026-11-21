@@ -619,7 +619,9 @@ registerLabels('carousel', familyDefaults);
     var scope = root || document;
     void options; /* carousel: لا خيارات حاليًا — options.labels في R5 */
     var existing = instances.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { if (scope.matches && scope.matches('[data-carousel]')) setup(scope); scope.querySelectorAll('[data-carousel]').forEach(setup); return existing; }
     var destroyed = false;
     function target() {
       if (scope.matches && scope.matches('[data-carousel]')) return scope;
@@ -670,7 +672,7 @@ registerLabels('carousel', familyDefaults);
       return st ? st.index : -1;
     }
   function destroyAll(scope) {
-      disconnect(scope);
+      teardown(scope);
       var items = [].slice.call(scope.querySelectorAll('[data-carousel]'));
       if (scope.matches && scope.matches('[data-carousel]')) items.unshift(scope);
       items.forEach(function (carousel) {
@@ -693,6 +695,10 @@ registerLabels('carousel', familyDefaults);
        1.0 — استخدم destroy(root) أو instance.destroy(). */
 
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
       var scope = root || document;
       var items = [];
       if (scope.matches && scope.matches('[data-carousel]')) items.push(scope);

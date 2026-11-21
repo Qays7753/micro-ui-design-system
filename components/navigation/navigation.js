@@ -735,7 +735,9 @@ registerLabels('navigation', familyDefaults);
     var scope = root || document;
     void options; /* navigation: لا خيارات حاليًا — options.labels في R5 */
     var existing = instances.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { bindScope(scope); return existing; }
     bindDocumentOnce();
     var destroyed = false;
     var instance = {
@@ -746,7 +748,7 @@ registerLabels('navigation', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         unbindDocument();
         instances.remove(scope);
       },
@@ -762,13 +764,17 @@ registerLabels('navigation', familyDefaults);
 
   export function destroy(root) {
     var instance = instances.get(root);
-    if (instance) { instance.destroy(); return; }
-    disconnect(root);
+    if (instance) instance.destroy();
+    else teardown(root || document);
   }
 
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
 export function disconnect(root) {
+  destroy(root);
+}
+
+function teardown(root) {
       var scope = root || document;
       // End owned layers synchronously, including closing layers whose entry
       // has already been removed from openLayers. Restore the original lock.

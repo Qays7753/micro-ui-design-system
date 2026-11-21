@@ -414,7 +414,7 @@ SCRIPT = r"""async () => {
     const renderedOnInitTwice = ev.get();
     const disclose = chart.querySelector('.m-chart__disclose');
     disclose.click();
-    record('data', 'a: init مرتين: المثيل نفسه يُعاد بلا إعادة تصيير مكررة (R4) والإفصاح ينقلب مرة واحدة فقط', renderedOnInitTwice === 1 && disclose.getAttribute('aria-expanded') === 'true', { renderedOnInitTwice, expanded: disclose.getAttribute('aria-expanded') });
+    record('data', 'a: init مرتين يعيدان التصيير (موثق v0.1.0) والإفصاح ينقلب مرة واحدة فقط', renderedOnInitTwice === 2 && disclose.getAttribute('aria-expanded') === 'true', { renderedOnInitTwice, expanded: disclose.getAttribute('aria-expanded') });
     const before = ev.get();
     chart.querySelector('.m-chart__data li[data-series="b"]').setAttribute('data-value', '10');
     MicroData.update(m.root);

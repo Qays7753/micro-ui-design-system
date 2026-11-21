@@ -216,7 +216,7 @@ registerLabels('info-strip', familyDefaults);
     });
   }
 
-  function teardown(strip) {
+  function teardownStrip(strip) {
     var data = registry.get(strip);
     if (!data) return;
     data.listeners.forEach(function (L) {
@@ -244,7 +244,9 @@ registerLabels('info-strip', familyDefaults);
     var scope = root || document;
     void options; /* info-strip: لا خيارات حاليًا — options.labels في R5 */
     var existing = instances.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { if (scope.matches && scope.matches('[data-info-strip]')) initStrip(scope); scope.querySelectorAll('[data-info-strip]').forEach(initStrip); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -254,7 +256,7 @@ registerLabels('info-strip', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       },
     };
@@ -271,7 +273,7 @@ registerLabels('info-strip', familyDefaults);
   export function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
   /* R-15: إعادة الالتقاط بعد محتوى مضيف غير متزامن — تفصل الربط القديم
@@ -283,7 +285,7 @@ registerLabels('info-strip', familyDefaults);
     Array.prototype.push.apply(list, scope.querySelectorAll('[data-info-strip]'));
     list.forEach(function (strip) {
       if (strip.hasAttribute('data-info-peek')) return; /* مالك آخر (R8-02) */
-      if (strip.hasAttribute('data-info-strip-ready')) teardown(strip);
+      if (strip.hasAttribute('data-info-strip-ready')) teardownStrip(strip);
       initStrip(strip);
     });
   }
@@ -293,9 +295,13 @@ registerLabels('info-strip', familyDefaults);
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
     var scope = root || document;
-    if (scope.matches && scope.matches('[data-info-strip]')) teardown(scope);
-    scope.querySelectorAll('[data-info-strip]').forEach(teardown);
+    if (scope.matches && scope.matches('[data-info-strip]')) teardownStrip(scope);
+    scope.querySelectorAll('[data-info-strip]').forEach(teardownStrip);
   }
 
   /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لrescan —

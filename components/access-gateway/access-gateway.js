@@ -338,7 +338,7 @@ registerLabels('access-gateway', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -354,12 +354,16 @@ registerLabels('access-gateway', familyDefaults);
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
     var scope = root || document;
     var gateways = [].slice.call(scope.querySelectorAll('[data-access-gateway]'));
     if (scope.matches && scope.matches('[data-access-gateway]')) gateways.unshift(scope);

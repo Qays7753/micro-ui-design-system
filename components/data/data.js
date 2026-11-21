@@ -1979,7 +1979,9 @@ registerLabels('data', familyDefaults);
     var scope = root || document;
     void options; /* data: لا خيارات حاليًا — options.labels في R5 */
     var existing = instances.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { installFontRefit(); var cachedCharts = [].slice.call(scope.querySelectorAll('[data-chart]')); if (scope.nodeType === 1 && scope.matches('[data-chart]')) cachedCharts.unshift(scope); cachedCharts.forEach(function (c) { render(c); }); return existing; }
     installFontRefit();
     var destroyed = false;
     var instance = {
@@ -1994,7 +1996,7 @@ registerLabels('data', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       },
     };
@@ -2012,7 +2014,7 @@ registerLabels('data', familyDefaults);
   export function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
          تصيير كل رسوم النطاق عبر render نفسها بعد تحديث المضيف لمصدر
@@ -2038,6 +2040,10 @@ registerLabels('data', familyDefaults);
          استخدم destroy(root) أو instance.destroy(). */
 
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
       var scope = root || document;
       /* R4.4: مستمعات كشف جداول البيانات تُزال مع التنظيف (كانت تُزال عند
          إعادة الربط فقط) — صفر مستمعات بعد destroy. */

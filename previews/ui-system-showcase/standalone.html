@@ -8945,7 +8945,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      scopedButtons(scope).forEach(ensureActivationGuard);
+      return existing;
+    }
     scopedButtons(scope).forEach(ensureActivationGuard);
     var destroyed = false;
     var instance = {
@@ -8964,7 +8967,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -8977,6 +8980,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
   function setLoading(btn, isLoading, options) {
     if (!btn || btn.nodeType !== 1) return;
@@ -9009,6 +9013,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     scopedButtons(scope).forEach(function(button) {
       setLoading(button, false);
@@ -9337,7 +9344,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      bindFields(scope);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -9349,7 +9359,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -9363,7 +9373,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function sync(root) {
     var scope = root && typeof root.querySelectorAll === "function" ? root : document;
@@ -9373,6 +9383,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     scope.querySelectorAll("[data-micro-field]").forEach(runSyncs);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var fields = [].slice.call(scope.querySelectorAll("[data-micro-field]"));
     if (scope.matches && scope.matches("[data-micro-field]")) fields.unshift(scope);
@@ -9618,7 +9631,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      bindGroups(scope);
+      bindSegmented(scope);
+      return existing;
+    }
     acquireSwitchGuard();
     var destroyed = false;
     var instance = {
@@ -9632,7 +9649,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         releaseSwitchGuard();
         registry.remove(scope);
       }
@@ -9648,6 +9665,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
   var switchGuardUsers = 0;
   var switchGuardHandler = null;
@@ -9673,6 +9691,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     }
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var nodes = [].slice.call(scope.querySelectorAll("[data-choice-group], [data-seg]"));
     if (scope.matches && scope.matches("[data-choice-group], [data-seg]")) nodes.unshift(scope);
@@ -9736,7 +9757,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   __export(picker_exports, {
     clearSelection: () => clearSelection,
     destroy: () => destroy,
-    disconnect: () => disconnectApi,
+    disconnect: () => disconnectRoot,
     getInstance: () => getInstance,
     getSelected: () => getSelected,
     init: () => init,
@@ -10021,6 +10042,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     picker.removeAttribute("data-micro-picker-bound");
   }
   var registry = instanceRegistry();
+  function teardown(scope) {
+    each(scope, function(pickerEl) {
+      disconnect(pickerEl);
+      states.delete(pickerEl);
+    });
+  }
   function init(root, options) {
     var scope = root || document;
     void options;
@@ -10040,10 +10067,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        each(scope, function(picker) {
-          disconnect(picker);
-          states.delete(picker);
-        });
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -10057,10 +10081,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else each(root, function(picker) {
-      disconnect(picker);
-      states.delete(picker);
-    });
+    else teardown(root);
   }
   function update(root, items) {
     if (!Array.isArray(items)) return;
@@ -10117,8 +10138,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     roving(picker, document.activeElement);
     changed(picker, null);
   }
-  function disconnectApi(root) {
-    each(root, disconnect);
+  function disconnectRoot(root) {
+    destroy(root);
   }
   function setLabels2(partial) {
     setLabels("selection", partial);
@@ -10448,6 +10469,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var nodes = [scope].concat([].slice.call(scope.querySelectorAll("*")));
     nodes.forEach(function(element) {
@@ -10472,7 +10496,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      ensureNoteRoles(scope);
+      bindClose(scope);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -10485,7 +10513,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -10500,7 +10528,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function setLabels2(partial) {
     setLabels("messages", partial);
@@ -11220,7 +11248,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      bindScope(scope);
+      return existing;
+    }
     bindDocumentOnce();
     var destroyed = false;
     var instance = {
@@ -11233,7 +11264,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         unbindDocument();
         instances.remove(scope);
       }
@@ -11247,13 +11278,13 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   }
   function destroy(root) {
     var instance = instances.get(root);
-    if (instance) {
-      instance.destroy();
-      return;
-    }
-    disconnect(root);
+    if (instance) instance.destroy();
+    else teardown(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var all = [scope].concat([].slice.call(scope.querySelectorAll("*")));
     all.forEach(function(element) {
@@ -11468,7 +11499,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      initSections(scope);
+      initAvatars(scope);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -11481,7 +11516,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -11496,8 +11531,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     nodes(root, ".m-section__head, img[data-avatar-fallback]").forEach(function(element) {
       liveBindings.delete(element);
       if (element.__microOrganizationLifetime) element.__microOrganizationLifetime.abort();
@@ -11626,6 +11665,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     within(root || document).forEach(function(el) {
       el.classList.remove(CLASS);
     });
@@ -11635,7 +11677,10 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      sync(scope);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -11647,7 +11692,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -11661,7 +11706,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
   // tools/package/.build-entries/iife/readings.mjs
@@ -13719,7 +13764,15 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      installFontRefit();
+      var cachedCharts = [].slice.call(scope.querySelectorAll("[data-chart]"));
+      if (scope.nodeType === 1 && scope.matches("[data-chart]")) cachedCharts.unshift(scope);
+      cachedCharts.forEach(function(c) {
+        render(c);
+      });
+      return existing;
+    }
     installFontRefit();
     var destroyed = false;
     var instance = {
@@ -13736,7 +13789,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       }
     };
@@ -13754,7 +13807,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function update(root) {
     var scope = root || document;
@@ -13771,6 +13824,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return chart && chart.matches && chart.matches("[data-chart]") ? setReadingSelection(chart, key, false) : null;
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     [].slice.call(scope.querySelectorAll(".m-chart__disclose")).forEach(function(btn) {
       var binding = btn.__microDatasetDisclosure;
@@ -14417,7 +14473,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      if (scope.matches && scope.matches("[data-chart-packed]")) render(scope);
+      scope.querySelectorAll("[data-chart-packed]").forEach(render);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -14433,7 +14493,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       }
     };
@@ -14448,7 +14508,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function update(root) {
     var scope = root || document;
@@ -14459,6 +14519,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     });
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     [].slice.call(scope.querySelectorAll(".m-chart__disclose")).forEach(function(btn) {
       var binding = btn.__microDatasetDisclosure;
@@ -14765,7 +14828,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       syncEmptyState
     });
   }
-  function teardown(strip) {
+  function teardownStrip(strip) {
     var data = registry.get(strip);
     if (!data) return;
     data.listeners.forEach(function(L2) {
@@ -14787,7 +14850,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      if (scope.matches && scope.matches("[data-info-strip]")) initStrip(scope);
+      scope.querySelectorAll("[data-info-strip]").forEach(initStrip);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -14799,7 +14866,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       }
     };
@@ -14814,7 +14881,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function rescan(root) {
     var scope = root || document;
@@ -14823,14 +14890,17 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     Array.prototype.push.apply(list, scope.querySelectorAll("[data-info-strip]"));
     list.forEach(function(strip) {
       if (strip.hasAttribute("data-info-peek")) return;
-      if (strip.hasAttribute("data-info-strip-ready")) teardown(strip);
+      if (strip.hasAttribute("data-info-strip-ready")) teardownStrip(strip);
       initStrip(strip);
     });
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
-    if (scope.matches && scope.matches("[data-info-strip]")) teardown(scope);
-    scope.querySelectorAll("[data-info-strip]").forEach(teardown);
+    if (scope.matches && scope.matches("[data-info-strip]")) teardownStrip(scope);
+    scope.querySelectorAll("[data-info-strip]").forEach(teardownStrip);
   }
   function setLabels2(partial) {
     setLabels("info-strip", partial);
@@ -15346,7 +15416,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      if (scope.matches && scope.matches("[data-info-peek]")) initStrip(scope);
+      scope.querySelectorAll("[data-info-peek]").forEach(initStrip);
+      return existing;
+    }
     var destroyed = false;
     function targetStrip() {
       if (scope.matches && scope.matches("[data-info-peek]")) return scope;
@@ -15382,7 +15456,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       }
     };
@@ -15397,7 +15471,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function updateApi(strip, index, options) {
     goToIndex(strip, index, options);
@@ -15407,6 +15481,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return st ? st.index : -1;
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var strips = [];
     if (scope.matches && scope.matches("[data-info-peek]")) strips.push(scope);
@@ -16204,7 +16281,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      installFontsHook();
+      if (scope.matches && (scope.matches("[data-metric-circles]") || scope.matches("[data-main-comparison]"))) initOne(scope);
+      scope.querySelectorAll("[data-metric-circles], [data-main-comparison]").forEach(initOne);
+      return existing;
+    }
     installFontsHook();
     var destroyed = false;
     var instance = {
@@ -16217,7 +16299,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       }
     };
@@ -16232,9 +16314,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var selector = "[data-metric-circles], [data-main-comparison]";
     var items = [].slice.call(scope.querySelectorAll(selector));
@@ -16457,7 +16542,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = registry.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      if (scope.matches && scope.matches("[data-account-settings]")) initPanel(scope);
+      scope.querySelectorAll("[data-account-settings]").forEach(initPanel);
+      return existing;
+    }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -16470,7 +16559,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -16485,8 +16574,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var panels = [].slice.call(scope.querySelectorAll("[data-account-settings]"));
     if (scope.matches && scope.matches("[data-account-settings]")) panels.unshift(scope);
@@ -16905,7 +16998,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       destroy: function() {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       }
     };
@@ -16919,9 +17012,12 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
   function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var gateways = [].slice.call(scope.querySelectorAll("[data-access-gateway]"));
     if (scope.matches && scope.matches("[data-access-gateway]")) gateways.unshift(scope);
@@ -19172,7 +19268,11 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     var scope = root || document;
     void options;
     var existing = instances.get(scope);
-    if (existing) return existing;
+    if (existing) {
+      if (scope.matches && scope.matches("[data-carousel]")) setup(scope);
+      scope.querySelectorAll("[data-carousel]").forEach(setup);
+      return existing;
+    }
     var destroyed = false;
     function target() {
       if (scope.matches && scope.matches("[data-carousel]")) return scope;
@@ -19228,7 +19328,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return st ? st.index : -1;
   }
   function destroyAll(scope) {
-    disconnect(scope);
+    teardown(scope);
     var items = [].slice.call(scope.querySelectorAll("[data-carousel]"));
     if (scope.matches && scope.matches("[data-carousel]")) items.unshift(scope);
     items.forEach(function(carousel) {
@@ -19247,6 +19347,9 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     destroyAll(root || document);
   }
   function disconnect(root) {
+    destroy(root);
+  }
+  function teardown(root) {
     var scope = root || document;
     var items = [];
     if (scope.matches && scope.matches("[data-carousel]")) items.push(scope);

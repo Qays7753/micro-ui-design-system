@@ -65,7 +65,11 @@ import { instanceRegistry } from '../../shared/lifecycle.js';
   }
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
-export function disconnect(root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
+export function disconnect(root) {
+  destroy(root);
+}
+
+function teardown(root) { within(root || document).forEach(function (el) { el.classList.remove(CLASS); }); }
 
   /* العقد الموحد (الجولة الثانية R4): init(root, options?) يعيد instance
      له update/destroy — C04 عديم الحالة (لا مستمعات أصلًا): update يعيد
@@ -76,7 +80,9 @@ export function disconnect(root) { within(root || document).forEach(function (el
     var scope = root || document;
     void options; /* readings: لا خيارات */
     var existing = registry.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { sync(scope); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -86,7 +92,7 @@ export function disconnect(root) { within(root || document).forEach(function (el
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -102,7 +108,7 @@ export function disconnect(root) { within(root || document).forEach(function (el
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
   /* @deprecated منذ 0.2.0 (R-D10): update(root) الاسم القديم لsync —

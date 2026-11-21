@@ -81,7 +81,9 @@ registerLabels('navigation', familyDefaults);
     var scope = root || document;
     void options; /* action-sheet: لا خيارات حاليًا — options.labels في R5 */
     var existing = registry.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { sheets(scope).forEach(initOne); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -91,7 +93,7 @@ registerLabels('navigation', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -107,6 +109,7 @@ registerLabels('navigation', familyDefaults);
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
   export function open(sheet, options) {
       if (!sheet || sheet.nodeType !== 1 || !document.contains(sheet) || !sheet.matches('.m-layer.m-action-sheet')) return false;
@@ -122,6 +125,10 @@ registerLabels('navigation', familyDefaults);
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
       sheets(root).forEach(function (sheet) {
         var state = states.get(sheet);
         if (!state) return;

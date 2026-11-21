@@ -136,7 +136,9 @@
     var scope = root || document;
     void options; /* B01: لا خيارات حاليًا — تدخل options.labels في R5 */
     var existing = registry.get(scope);
-    if (existing) return existing; /* المثيل نفسه — لا ربط مضاعف */
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { scopedButtons(scope).forEach(ensureActivationGuard); return existing; } /* المثيل نفسه + ربط الجديد */
     scopedButtons(scope).forEach(ensureActivationGuard);
     var destroyed = false;
     var instance = {
@@ -155,7 +157,7 @@
       destroy: function () {
         if (destroyed) return; /* destroy مرتين آمن */
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -170,6 +172,7 @@
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
+    else teardown(root || document);
   }
 
   export function setLoading(btn, isLoading, options) {
@@ -209,6 +212,10 @@
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى 1.0
      (لا يُصدَّر من مدخل ESM) — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
     var scope = root || document;
     scopedButtons(scope).forEach(function (button) {
       setLoading(button, false);

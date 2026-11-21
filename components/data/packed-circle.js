@@ -525,7 +525,9 @@ registerLabels('data', familyDefaults);
     var scope = root || document;
     void options; /* packed-circle: لا خيارات حاليًا — options.labels في R5 */
     var existing = instances.get(scope);
-    if (existing) return existing;
+        /* R4 (عقد SPA): المثيل الحي يُعاد كما هو، مع فحص الجذر وربط أي
+       عنصر جديد غير مربوط تحته — init متكرر آمن كما في v0.1.0. */
+    if (existing) { if (scope.matches && scope.matches('[data-chart-packed]')) render(scope); scope.querySelectorAll('[data-chart-packed]').forEach(render); return existing; }
     var destroyed = false;
     var instance = {
       root: scope,
@@ -539,7 +541,7 @@ registerLabels('data', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        disconnect(scope);
+        teardown(scope);
         instances.remove(scope);
       },
     };
@@ -556,7 +558,7 @@ registerLabels('data', familyDefaults);
   export function destroy(root) {
     var instance = instances.get(root);
     if (instance) instance.destroy();
-    else disconnect(root);
+    else teardown(root || document);
   }
 
     /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root) اسم موحد يعيد
@@ -574,6 +576,10 @@ registerLabels('data', familyDefaults);
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
   export function disconnect(root) {
+    destroy(root);
+  }
+
+  function teardown(root) {
       var scope = root || document;
       /* R4.4: مستمعات كشف الجداول تُزال مع التنظيف (كانت تُزال عند إعادة
          الربط فقط). */

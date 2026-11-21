@@ -200,6 +200,10 @@ registerLabels('selection', familyDefaults);
      الجذر (بلا مصفوفة لا فعل — الاستبدال الفارغ فعل صريح عبر setOptions). */
   var registry = instanceRegistry();
 
+  function teardown(scope) {
+    each(scope, function (pickerEl) { disconnect(pickerEl); states.delete(pickerEl); });
+  }
+
   export function init(root, options) {
     var scope = root || document;
     void options; /* picker: لا خيارات حاليًا — options.labels في R5 */
@@ -217,7 +221,7 @@ registerLabels('selection', familyDefaults);
       destroy: function () {
         if (destroyed) return;
         destroyed = true;
-        each(scope, function (picker) { disconnect(picker); states.delete(picker); });
+        teardown(scope);
         registry.remove(scope);
       },
     };
@@ -233,7 +237,7 @@ registerLabels('selection', familyDefaults);
   export function destroy(root) {
     var instance = registry.get(root);
     if (instance) instance.destroy();
-    else each(root, function (picker) { disconnect(picker); states.delete(picker); });
+    else teardown(root);
   }
 
   /* العقد الموحد (المرحلة 6 — 2026-11-21): update(root, items) يفوّض إلى
@@ -283,8 +287,8 @@ registerLabels('selection', familyDefaults);
     }
   /* @deprecated منذ 0.2.0 (R-D10): اسم مهمل يبقى في نسخة IIFE فقط حتى
      1.0 — استخدم destroy(root) أو instance.destroy(). */
-  function disconnectApi(root) { each(root, disconnect); }
-  export { disconnectApi as disconnect };
+  function disconnectRoot(root) { destroy(root); }
+  export { disconnectRoot as disconnect };
 
   /* المرحلة 7 — تخصيص نصوص العائلة: دمج جزئي فوق الافتراضي في سجل
      MicroLabels؛ يسري على التصييرات اللاحقة (النص الثابت في DOM يتحدث
