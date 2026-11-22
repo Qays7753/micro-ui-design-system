@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "a4693e8a725fac76069e244bdcb943639fa30867c61a62f0fea334ec0c336b9f",
+  "AGENTS.md": "93013eab3b5a3371d3b6f65ba8b9727dce3dab7f90a497a5ee95b3e36ca4ad7b",
   "CHANGELOG.md": "8e08601bc953f85ec50fb8fe2788c8dade72acfa63cf46dad4dc5c8351910c1b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "91a78a501f983ac3ef4fcaa1b0e07fd4a54608debe5b6a52a7a3220bcb730584",
@@ -339,7 +339,7 @@
   "docs/plans/access-gateway-2026-11-18/auth-screen-compositions.md": "5678be40b887245628b9fb69924f43d081eead959ab5b19582858179f646eb66",
   "docs/plans/access-gateway-2026-11-18/google-only-access-gateway.md": "90aa5e13c50138c4cc0a9244c156f4923bff8c0ca85613cfec0b6234782f2de6",
   "docs/plans/component-readiness-2026-11-17/PLAN.md": "45b60646addd0a8fe0cdec38d09c27c8810fe759521071ab9bc07a96bb26d880",
-  "docs/plans/design-system-batch1/PLAN.md": "e8c23d953ab0144a057fd429ce654731e781ec4b3ec0fcadad52d7e75b24d31a",
+  "docs/plans/design-system-batch1/PLAN.md": "0440aedc8724a1477bb92b67bc91f3c9eff69e7bea2f2df35666b475095203a2",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",
   "docs/plans/integration-readiness-2026-11-21/REPORT.md": "5e1330369f191851d8f00662afef645f3a2311c995f5d08471f4042fd3bcd391",
   "docs/plans/integration-readiness-round2-2026-11-22/PLAN.md": "ea4786f7e0dfc759e56f1e89a6a77f804e8092fdadd30be9f2c6c52038aa3aaa",
