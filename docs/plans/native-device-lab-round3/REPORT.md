@@ -87,9 +87,62 @@ CHANGELOG قسم 0.3.0 كامل (Added/Changed/Fixed كما في الخطة)، p
 
 الوسم v0.3.0 وجدول G/N الختامي والتشغيل الثلاثي على نسخ نظيفة **لم يكتمل بعد** — هو أول بند في الجلسة التالية.
 
-## نقطة الاستكمال (الجلسة الحالية تنتهي هنا)
+## T9 — التحقق النهائي
 
-- **المنجز والمرفوع:** T0–T5 مكتملة بأدلتها (79455d1، 619d926، 65eb040)؛ T6 (المختبر) منفذ بالكامل تقريبًا: 17 شاشة + standalone 1.1MB حتمي يعمل من file:// + المولد ب--check + README + روابط + تسجيل البوابات؛ T7 (القائمة) وT8 (التوثيق والإصدار) منفذان أعلاه. كل ذلك يُرفع بهذا الالتزام.
-- **حالة بوابة device-lab-check (أُصلحت في T9):** **44 PASS / 0 FAIL**. الإصلاحات: أهداف لمس 48px فعلية لأزرار المقاطع ومحدّد عرض التقويم (كانت 40px — خلل حقيقي كشفته البوابة)، ربط أزرار أدوات المختبر (كانت بلا نقر — فحص 200% يعمل)، عقد الغلاف في المسبار (هدف المدخل = .m-field__control وأفراده منطقة واحدة)، destroy للمنتج قبل إعادة التركيب، تصحيح ترميز الخطوات للتركيب الرسمي، والبوابة تكتب تقريرها دائمًا.
-- **المتبقي (T9):** (2) check-all كاملة (30 بوابة) حتى الصفر — جارية الآن؛ (3) بصري مقابل v0.2.0 + تحديث جدول السماحيات (تأثير أهداف 48px على صفحات المقاطع/التقويم)؛ (4) فتح standalone من file:// في محاكاة هاتف وتسجيل النتيجة؛ (5) ثلاث نسخ نظيفة متتالية؛ (6) جدول G1–G2/N1–N10 الختامي؛ (7) وسم v0.3.0 ودفعه؛ (8) القسم الختامي. لا PR ولا دمج.
-- **أعطال معروفة:** لا شيء — بوابة المختبر 44/0.
+### 9.1 إصلاح بقايا بوابة المختبر — منفذ
+
+**device-lab-check: 44 PASS / 0 FAIL.** الإصلاحات (موثقة في DECISIONS):
+- **أهداف لمس 48px فعلية** كشفتها البوابة: أزرار المقاطع `.m-seg__item` وأزرار محدّد عرض التقويم `.m-ocal__viewseg-btn` كانت 40px — صارت `min-block-size: var(--micro-touch-min)`.
+- ربط أزرار أدوات المختبر (الاتجاه/حجم الخط/الاهتزاز كانت بلا نقر — فحص 200% يعمل الآن).
+- عقد الغلاف في المسبار: هدف لمس المدخل النصي هو `.m-field__control` وأفراد الغلاف الواحد منطقة لمس واحدة لا تُعدّ تداخلًا؛ الإدخال المخفي بصريًا (نمط m-choice) يُقاس بليبله.
+- تبديل أنواع المنتج: destroy + replaceChildren قبل mount؛ تصحيح ترميز الخطوات للتركيب الرسمي.
+- بوابة package-install: اسم الحزمة يُشتق من package.json (كان مثبتًا 0.2.0 — كسر عند 0.3.0).
+- البوابة تكتب تقريرها دائمًا (أي خلل داخلي فحص فاشل لا انهيار).
+
+### 9.2 check-all كاملة محليًا — ناجحة
+
+**30 بوابة: 30 ok / 0 failed** بعد إعادة توليد standalone المعرض (أثر CSS الـ48px). البوابة البصرية ضمنها: **63 مقارنة — 53 ناجحة + 10 مسموحة موثقة + 0 فاشلة**، و5 صفحات جديدة بلا مرجع (شاشات screen والمختبر وC15).
+
+### 9.3 التطابق البصري مقابل v0.2.0 — موثق بالكامل
+
+10 سماحيات، كل واحدة بسبب ورقم قرار في `tools/baselines/visual-allowlist.json`:
+
+| الصفحة | النسبة | السبب |
+|---|---|---|
+| previews/selection/example-usage.html | 5.40% | مقبض سحب الورقة (N-D9/N-D13) |
+| previews/carousel/index.html + example-usage.html | 0.13%/0.12% | تنعيم فرعي لscroll-snap (N-D9) |
+| previews/info-strip/comparison.html | 0.55% | تنعيم فرعي لPeek (N-D9) |
+| previews/ui-system-showcase/index.html + standalone.html | 26.70% (سقف 35) | قسم عائلة screen (فرض الكتالوج — allowSize) |
+| previews/mobile-capabilities/calendar-summary.html (9.63%) + calendar-tasks.html (13.73%) | ≤15% | أزرار محدّد التقويم 48px (T9.1) |
+| previews/selection/index.html + components/order-schedule/example-usage.html | ≤25% | أزرار المقاطع/المحدّد 48px (T9.1) |
+
+صفحات جديدة بلا مرجع (لا تقارن): components/screen/example-usage.html، previews/screen/index.html، previews/compositions/error-retry-example.html، previews/device-lab/index.html، previews/device-lab/standalone.html.
+
+### 9.4 المختبر من file:// — ناجح
+
+ضمن device-lab-check: standalone.html من `file://` — جاهز (`__labReady`)، صفر أخطاء صفحة/كونسول، **صفر طلبات شبكة** (كل الطلبات file:// أو data:)، وكل الشاشات السبع عشرة مضمّنة.
+
+### 9.5 ثلاث نسخ نظيفة متتالية
+
+(تُوثَّق نتائجها هنا فور اكتمالها — الجارية الآن من الفرع المدفوع d2ec23b.)
+
+### جدول الجولة الختامي — G1–G2 وN1–N10
+
+| # | البند | الحالة | الدليل |
+|---|---|---|---|
+| G1 | بوابة lint داخل check-all | ✅ مكتمل | `("lint", ["npm","run","lint"])` في tools/check-all.py — العدد 30 بوابة (AGENTS/TESTING/README محدثة) |
+| G2 | حتمية البوابة البصرية | ✅ مكتمل | 10/10 لقطات متطابقة لreadable-acceptance (sha256 bab95a1e…) + 3× متتالية × 63/63 مقابل v0.2.0 من worktree نظيف عند 79455d1؛ لا رفع سماحية لأجلها |
+| N1 | عقد السلوك الأصلي | ✅ مكتمل | docs/NATIVE-BEHAVIOR.md بأقسامه الـ11 + رابط من SYSTEM-CONTRACTS |
+| N2 | هيكل شاشة الهاتف | ✅ مكتمل | عائلة screen (draft-for-review): grid/100dvh/تمرير داخلي/visualViewport/حواف آمنة قابلة للمحاكاة + screen-check 19/0 + توكنز N-D5 في DECISIONS |
+| N3 | لوحة المفاتيح | ✅ مكتمل | enterkeyhint افتراضي في fields (+send للمحادثة) وEnter ينقل للتالي + visualViewport في screen — فحوص screen-check وcomponent-consumption |
+| N4 | زر الرجوع | ✅ مكتمل | shared/back.js (bindBackToLayers) + أحداث micro-layer:open/close من كل طبقات navigation + 5 فحوص في consumption (متداخلة/استهلاك صامت/destroy) |
+| N5 | السحب | ✅ مكتمل | scroll-snap أصيل في Carousel وPeek + مقبض سحب الأوراق بعتبة مسافة/سرعة عبر requestClose — فحوص consumption والبوابات البصرية الموثقة |
+| N6 | تكبير الخط | ✅ مكتمل | توكنز rem مكافئة (12 توكنًا + 12px data) + فحص هوية rem-aware + بوابة text-scale 16/0 عند 100/150/200% |
+| N7 | الاهتزاز | ✅ مكتمل | shared/haptics.js معطل افتراضيًا (حالة مشتركة globalThis) في product/messages/navigation + فحوص التفعيل والتقليل |
+| N8 | أنماط الشاشات | ✅ مكتمل | SCREEN-PATTERNS.md (الأنماط الـ15) + C15 error-retry + الكتالوج 15/8/15 |
+| N9 | مختبر الهاتف | ✅ مكتمل | 17 شاشة تغطي الكتالوج كاملًا + standalone.html حتمي يعمل من file:// بصفر طلبات + أدوات + device-lab-check 44/0 + README وقاعدة N-D4 الدائمة |
+| N10 | قائمة فحص المالك | ✅ مكتمل | docs/DEVICE-CHECKLIST.md (جدول الشاشات + أقسام عامة + إرسال الملاحظات) |
+
+### نقطة الاستكمال
+
+- (تُستكمل بنتائج النسخ الثلاث والوسم)
