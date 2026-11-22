@@ -197,10 +197,13 @@
                 <div class="m-field" data-micro-field><span class="m-field__label">الكمية</span>
                   <div class="m-field__control">
                     <div class="m-field__stepper">
-                      <button class="m-btn" type="button" data-step="-1" aria-label="إنقاص">−</button>
-                      <input class="m-field__input" inputmode="numeric" value="2" aria-label="الكمية">
-                      <button class="m-btn" type="button" data-step="1" aria-label="زيادة">+</button>
+                      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
                     </div>
+                    <input class="m-field__input m-field__input--num" type="text" inputmode="numeric" dir="ltr" value="2" min="0" max="99" step="1" aria-label="الكمية">
+                    <div class="m-field__stepper">
+                      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    </div>
+                    <span class="m-field__unit">قطعة</span>
                   </div></div>
                 <div class="m-note m-note--error" id="lab-fields-error" hidden>
                   <div class="m-note__body">أكمل الحقول المطلوبة ثم أعد الإرسال.</div>

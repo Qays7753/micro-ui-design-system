@@ -33,25 +33,38 @@ SCREEN_PROBE = """() => {
   const doc = document.documentElement;
   const out = { overflowX: doc.scrollWidth > doc.clientWidth + 1, small: [], overlap: [], clipped: [], reachable: true };
   const interactive = [];
-  screen.querySelectorAll('button, a[href], input:not([type=hidden]), select, [role="button"], [role="switch"]')
+  screen.querySelectorAll('button, a[href], input:not([type=hidden]), select, [role="button"], [role="switch"], label.m-choice')
     .forEach((el) => {
       if (!el.getClientRects().length) return;
+      /* الإدخال الأصلي المخفي بصريًا (نمط m-choice: 1×1) هدفه الليبل — يُقاس بدلًا منه */
+      if (el.tagName === 'INPUT' && el.getBoundingClientRect().width < 8) {
+        const choiceLabel = el.closest('label.m-choice');
+        if (choiceLabel && choiceLabel.getClientRects().length) el = choiceLabel;
+        else return;
+      }
       const inTools = el.closest('#lab-tools, #lab-tools-backdrop, .lab-index');
       const r = el.getBoundingClientRect();
       if (r.width === 0 || r.height === 0) return;
-      /* هدف لمس الحقل النصي هو غلافه (min-height 52px) — الإ_input الداخلي يجري بمحتواه */
-      const control = el.closest('.m-field__control');
-      const rect = (control && control.getBoundingClientRect().height > 0)
-        ? control.getBoundingClientRect() : r;
+      /* هدف لمس الحقل النصي هو غلافه (min-height 52px) — يخص inputs فقط
+         لا الأزرار داخل الغلاف (زر الخطوة له هدفه الخاص) */
+      /* عقد المكتبة: الغلاف .m-field__control هو الإطار المرئي وهدف اللمس
+         لكل ما فيه (مدخلات وأزرار خطوة) — يُقاس للمُدخل، وأفراد الغلاف
+         الواحد لا يُعدّون متداخلين (منطقة لمس واحدة) */
+      const isTextInput = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT';
+      const hostControl = isTextInput ? el.closest('.m-field__control') : null;
+      const rect = (hostControl && hostControl.getBoundingClientRect().height > 0)
+        ? hostControl.getBoundingClientRect() : r;
       interactive.push({ el, r: rect, inTools });
       if (!inTools && (rect.width < 47 || rect.height < 47)) {
         out.small.push({ tag: el.tagName, cls: String(el.className).slice(0, 36), w: Math.round(rect.width), h: Math.round(rect.height) });
       }
     });
+  const hostOf = (el) => el && el.closest ? el.closest('.m-field__control') : null;
   for (let i = 0; i < interactive.length; i++) {
     for (let j = i + 1; j < interactive.length; j++) {
       const a = interactive[i], b = interactive[j];
       if (a.el.contains(b.el) || b.el.contains(a.el)) continue;
+      if (hostOf(a.el) && hostOf(a.el) === hostOf(b.el)) continue;
       const x = Math.max(0, Math.min(a.r.right, b.r.right) - Math.max(a.r.left, b.r.left));
       const y = Math.max(0, Math.min(a.r.bottom, b.r.bottom) - Math.max(a.r.top, b.r.top));
       if (x > 2 && y > 2) { out.overlap.push([String(a.el.className).slice(0, 24), String(b.el.className).slice(0, 24)]); }
@@ -136,6 +149,8 @@ def main():
     def check(name, ok, detail=None):
         checks.append({"name": name, "passed": bool(ok), "detail": detail})
         print(("PASS " if ok else "FAIL ") + name, flush=True)
+        if not ok:
+            print("      detail:", str(detail)[:300], flush=True)
 
     catalog = json.loads((ROOT / "docs/COMPONENT-CATALOG.json").read_text(encoding="utf-8"))
     required = ([f["id"] for f in catalog["families"]]
@@ -156,6 +171,7 @@ def main():
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_port}"
 
+    run_error = None
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**chromium_launch_options())
@@ -215,12 +231,18 @@ def main():
             page.set_viewport_size({"width": 360, "height": 780})
 
             # 4) الرجوع: شاشة ← الفهرس، وطبقة ← تُغلق أولًا
+            def goto_index():
+                page.evaluate("location.hash='';history.replaceState(null,'','');window.dispatchEvent(new HashChangeEvent('hashchange'))")
+                page.wait_for_timeout(250)
+
+            goto_index()
             page.locator('[data-lab-open="buttons"]').click()
             page.wait_for_timeout(300)
             page.evaluate("history.back()")
             page.wait_for_timeout(350)
             back_index = page.evaluate("document.querySelector('.lab-app').getAttribute('data-screen') === 'index'")
             check("back from a screen returns to the index", back_index)
+            goto_index()
             page.locator('[data-lab-open="navigation"]').click()
             page.wait_for_timeout(300)
             page.locator("[data-layer-open='lab-filter-panel']").click()
@@ -234,6 +256,7 @@ def main():
             page.wait_for_timeout(300)
 
             # 6) حجم الخط 200% من أدوات المختبر
+            goto_index()
             page.locator('[data-lab-open="buttons"]').click()
             page.wait_for_timeout(250)
             page.locator(".lab-tools-button").click()
@@ -268,7 +291,16 @@ def main():
 
             check("no page, console, or resource errors across the lab", not errors, errors[:6])
             browser.close()
+    except Exception as exc:  # أي انهيار يُسجل فشلًا ولا يمنع التقرير
+        run_error = str(exc)
+        checks.append({"name": "gate completes without internal errors",
+                       "passed": False, "detail": run_error})
+        print("FAIL gate completes without internal errors:", run_error[:200], flush=True)
     finally:
+        try:
+            browser.close()
+        except Exception:
+            pass
         server.shutdown()
         server.server_close()
 

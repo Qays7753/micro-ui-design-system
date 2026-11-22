@@ -89,7 +89,7 @@
 
 .m-ocal__viewseg-btn {
   min-width: 48px; /* ≥ هدف اللمس العرضي — WCAG 2.5.8 */
-  min-height: 40px;
+  min-block-size: var(--micro-touch-min); /* T4.6: هدف لمس ≥ 48px فعلي */
   display: inline-flex;
   align-items: center;
   justify-content: center;

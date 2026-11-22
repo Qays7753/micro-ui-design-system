@@ -1564,8 +1564,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 }
 .m-seg__item {
   flex: 0 0 auto;
-  position: relative; /* لامتداد هدف اللمس دون تغيير الشكل */
-  min-height: 40px;
+  position: relative;
+  min-block-size: var(--micro-touch-min); /* T4.6: هدف لمس ≥ 48px فعلي */
   min-width: var(--micro-touch-min); /* الامتداد الزائف رأسي فقط؛ العرض يحميه الحد الحقيقي */
   padding-inline: var(--micro-space-4);
   display: inline-flex;
@@ -5117,7 +5117,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
 
 .m-ocal__viewseg-btn {
   min-width: 48px; /* ≥ هدف اللمس العرضي — WCAG 2.5.8 */
-  min-height: 40px;
+  min-block-size: var(--micro-touch-min); /* T4.6: هدف لمس ≥ 48px فعلي */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -6770,7 +6770,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
     max-block-size: calc(100dvh - var(--micro-space-8));
     margin-inline: auto;
     border-radius: 36px;
-    border: 10px solid #172D32;   /* محايد: حبر الهوية دون رسوم */
+    border: 10px solid var(--micro-color-ink);   /* محايد: حبر الهوية دون رسوم */
     overflow: hidden;
     position: relative;
     background: var(--micro-surface-page);
@@ -6785,7 +6785,7 @@ button.m-setting-row:focus-visible { z-index: 1; }
     inline-size: 120px;
     block-size: 22px;
     border-radius: var(--micro-radius-capsule);
-    background: #172D32;
+    background: var(--micro-color-ink);
     z-index: 99;
   }
 }
@@ -6998,10 +6998,13 @@ button.m-setting-row:focus-visible { z-index: 1; }
                 <div class="m-field" data-micro-field><span class="m-field__label">الكمية</span>
                   <div class="m-field__control">
                     <div class="m-field__stepper">
-                      <button class="m-btn" type="button" data-step="-1" aria-label="إنقاص">−</button>
-                      <input class="m-field__input" inputmode="numeric" value="2" aria-label="الكمية">
-                      <button class="m-btn" type="button" data-step="1" aria-label="زيادة">+</button>
+                      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="down" aria-label="إنقاص الكمية"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
                     </div>
+                    <input class="m-field__input m-field__input--num" type="text" inputmode="numeric" dir="ltr" value="2" min="0" max="99" step="1" aria-label="الكمية">
+                    <div class="m-field__stepper">
+                      <button type="button" class="m-btn m-btn--icon m-btn--secondary" data-step="up" aria-label="زيادة الكمية"><svg class="m-btn__icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    </div>
+                    <span class="m-field__unit">قطعة</span>
                   </div></div>
                 <div class="m-note m-note--error" id="lab-fields-error" hidden>
                   <div class="m-note__body">أكمل الحقول المطلوبة ثم أعد الإرسال.</div>
@@ -21447,6 +21450,22 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
     return enabled;
   };
 
+  /* ربط أزرار الأدوات (الاتجاه/حجم الخط/الاهتزاز) */
+  [].forEach.call(document.querySelectorAll('[data-lab-dir-toggle]'), function (b) {
+    b.addEventListener('click', function () { window.__labSetDir(b.getAttribute('data-lab-dir-toggle')); });
+  });
+  [].forEach.call(document.querySelectorAll('[data-lab-font-scale]'), function (b) {
+    b.addEventListener('click', function () {
+      window.__labSetFontScale(parseInt(b.getAttribute('data-lab-font-scale'), 10));
+    });
+  });
+  var labHapticsButton = document.querySelector('[data-lab-haptics]');
+  if (labHapticsButton) {
+    labHapticsButton.addEventListener('click', function () {
+      window.__labSetHaptics(labHapticsButton.getAttribute('aria-pressed') !== 'true');
+    });
+  }
+
   /* ===== ربط زر الرجوع بالطبقات (N-D8) — المختبر يفعّله ===== */
   if (window.MicroBack) window.__labBack = window.MicroBack.bindBackToLayers();
 
@@ -21503,7 +21522,8 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
       var type = btn.getAttribute('data-lab-product-type');
       var root = document.getElementById('lab-product-root');
       if (!root || !window.MicroProduct) return;
-      root.innerHTML = '';
+      if (window.__labProduct) { window.__labProduct.destroy(); window.__labProduct = null; }
+      root.replaceChildren();
       var owner = { contextId: 'lo', workspaceId: 'lw', roleId: 'owner', kind: 'business', label: 'ورشة الشروق' };
       var base = {
         scope: owner, dataContext: owner, phase: 'ready', connection: 'online',
@@ -21523,7 +21543,7 @@ if(typeof document!=='undefined'&&document.currentScript&&document.currentScript
         { id: 'op-1', type: 'sale', amount: '150', date: '2026-11-19', description: 'طقم صابون — عميل عمّان' },
         { id: 'op-2', type: 'expense', amount: '40', date: '2026-11-18', description: 'مواد تغليف' },
       ] });
-      window.MicroProduct.mount(root, type, base);
+      window.__labProduct = window.MicroProduct.mount(root, type, base);
     });
   });
 

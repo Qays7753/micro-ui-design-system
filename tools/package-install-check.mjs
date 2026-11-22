@@ -205,9 +205,14 @@ async function main() {
     const packDir = path.join(work, "pack");
     mkdirSync(packDir, { recursive: true });
     run("npm", ["pack", "--silent", "--pack-destination", packDir], { cwd: ROOT });
-    const tarball = path.join(packDir, "micro-ui-0.2.0.tgz");
+    /* T8/T9: اسم الحزمة يُشتق من package.json (النسخة تتغير مع الإصدارات) */
+    const pkgMeta = JSON.parse(readFileSync(path.join(ROOT, "package.json"), "utf8"));
+    /* scoped: @micro/ui → micro-ui (npm يحذف النطاق والشرطة المائلة) */
+    const flatName = pkgMeta.name.replace(/^@/, "").replace("/", "-");
+    const tarballName = `${flatName}-${pkgMeta.version}.tgz`;
+    const tarball = path.join(packDir, tarballName);
     if (!existsSync(tarball)) {
-      console.error("  npm pack لم ينتج micro-ui-0.2.0.tgz");
+      console.error(`  npm pack لم ينتج ${tarballName}`);
       finish(1);
     }
 

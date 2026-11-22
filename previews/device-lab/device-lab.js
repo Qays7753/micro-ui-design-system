@@ -91,6 +91,22 @@
     return enabled;
   };
 
+  /* ربط أزرار الأدوات (الاتجاه/حجم الخط/الاهتزاز) */
+  [].forEach.call(document.querySelectorAll('[data-lab-dir-toggle]'), function (b) {
+    b.addEventListener('click', function () { window.__labSetDir(b.getAttribute('data-lab-dir-toggle')); });
+  });
+  [].forEach.call(document.querySelectorAll('[data-lab-font-scale]'), function (b) {
+    b.addEventListener('click', function () {
+      window.__labSetFontScale(parseInt(b.getAttribute('data-lab-font-scale'), 10));
+    });
+  });
+  var labHapticsButton = document.querySelector('[data-lab-haptics]');
+  if (labHapticsButton) {
+    labHapticsButton.addEventListener('click', function () {
+      window.__labSetHaptics(labHapticsButton.getAttribute('aria-pressed') !== 'true');
+    });
+  }
+
   /* ===== ربط زر الرجوع بالطبقات (N-D8) — المختبر يفعّله ===== */
   if (window.MicroBack) window.__labBack = window.MicroBack.bindBackToLayers();
 
@@ -147,7 +163,8 @@
       var type = btn.getAttribute('data-lab-product-type');
       var root = document.getElementById('lab-product-root');
       if (!root || !window.MicroProduct) return;
-      root.innerHTML = '';
+      if (window.__labProduct) { window.__labProduct.destroy(); window.__labProduct = null; }
+      root.replaceChildren();
       var owner = { contextId: 'lo', workspaceId: 'lw', roleId: 'owner', kind: 'business', label: 'ورشة الشروق' };
       var base = {
         scope: owner, dataContext: owner, phase: 'ready', connection: 'online',
@@ -167,7 +184,7 @@
         { id: 'op-1', type: 'sale', amount: '150', date: '2026-11-19', description: 'طقم صابون — عميل عمّان' },
         { id: 'op-2', type: 'expense', amount: '40', date: '2026-11-18', description: 'مواد تغليف' },
       ] });
-      window.MicroProduct.mount(root, type, base);
+      window.__labProduct = window.MicroProduct.mount(root, type, base);
     });
   });
 

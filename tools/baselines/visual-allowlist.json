@@ -49,6 +49,32 @@
       "maxPercent": 35,
       "reason": "T3 (N-D5): standalone المعرض مشتق حتمي من صفحة المعرض — قسم عائلة screen الجديد (فرض بوابة الكتالوج) يغيّر الارتفاع ويزيح المحتوى تحته؛ allowSize وسقف موثق 35%",
       "decision": "docs/DECISIONS.md — الجولة الثالثة T3/T5"
+    },
+    {
+      "page": "components/order-schedule/example-usage.html",
+      "allowSize": true,
+      "reason": "T9.1 (تتمة T4.6): أزرار محدّد عرض التقويم 48px (كانت 40px) — إزاحة محتوى واسعة تحت المحدّد؛ سقف موثق 25%",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T9",
+      "maxPercent": 25
+    },
+    {
+      "page": "previews/mobile-capabilities/calendar-summary.html",
+      "allowSize": true,
+      "reason": "T9.1 (تتمة T4.6): أزرار محدّد عرض التقويم صارت 48px فعليًا (كانت 40px) — ارتفاع الصفحة تغيّر تبعًا لذلك؛ المنطقة المشتركة تُقارن كسقف 15%",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T9"
+    },
+    {
+      "page": "previews/mobile-capabilities/calendar-tasks.html",
+      "allowSize": true,
+      "reason": "T9.1 (تتمة T4.6): أزرار محدّد عرض التقويم صارت 48px فعليًا (كانت 40px) — ارتفاع الصفحة تغيّر تبعًا لذلك؛ المنطقة المشتركة تُقارن كسقف 15%",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T9"
+    },
+    {
+      "page": "previews/selection/index.html",
+      "allowSize": true,
+      "maxPercent": 25,
+      "reason": "T9.1 (تتمة T4.6): أزرار المقاطع .m-seg__item صارت 48px فعليًا (كانت 40px) — ارتفاع الصفحة وموضع المحتوى تحتها تغيّرا؛ المنطقة المشتركة تُقارن بسقف موثق 25%",
+      "decision": "docs/DECISIONS.md — الجولة الثالثة T9"
     }
   ]
 }

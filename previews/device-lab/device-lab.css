@@ -91,7 +91,7 @@
     max-block-size: calc(100dvh - var(--micro-space-8));
     margin-inline: auto;
     border-radius: 36px;
-    border: 10px solid #172D32;   /* محايد: حبر الهوية دون رسوم */
+    border: 10px solid var(--micro-color-ink);   /* محايد: حبر الهوية دون رسوم */
     overflow: hidden;
     position: relative;
     background: var(--micro-surface-page);
@@ -106,7 +106,7 @@
     inline-size: 120px;
     block-size: 22px;
     border-radius: var(--micro-radius-capsule);
-    background: #172D32;
+    background: var(--micro-color-ink);
     z-index: 99;
   }
 }
