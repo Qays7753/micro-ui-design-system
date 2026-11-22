@@ -1,0 +1,39 @@
+/**
+ * base.css — global element defaults (BRIEF 23.24 + 27). Hand-written; every
+ * design value comes from tokens.css as var(--mds-*); no raw hex/px/ms.
+ */
+
+:root {
+  /* BRIEF 23.24(12): never let browsers flip to a dark scheme. */
+  color-scheme: light;
+}
+
+html {
+  /* BRIEF 23.24(13): no automatic text inflation on rotate. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--mds-font-text);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  background-color: var(--mds-color-canvas);
+}
+
+button,
+[role='button'] {
+  /* BRIEF 27.1: the touch highlight is replaced by the pressed state (23.2). */
+  -webkit-tap-highlight-color: transparent;
+  /* BRIEF 27.2: remove double-tap delay. */
+  touch-action: manipulation;
+  /* BRIEF 27.2: labels are not selectable text. */
+  user-select: none;
+}
+
+/* BRIEF 27.11 / 23.2: the focus ring is keyboard-only. */
+:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}

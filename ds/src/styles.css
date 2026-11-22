@@ -1,0 +1,10 @@
+/**
+ * styles.css — the single CSS entry of @micro/ds (plan D4).
+ * Import order: base defaults, token variables, fonts (which override the
+ * two font stacks with metric-matched fallbacks), icon rules. Component CSS
+ * files join here from S3 onward.
+ */
+@import './base.css';
+@import './tokens/tokens.css';
+@import './fonts/fonts.css';
+@import './icons/icons.css';

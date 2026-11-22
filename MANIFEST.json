@@ -340,6 +340,7 @@
   "docs/plans/access-gateway-2026-11-18/google-only-access-gateway.md": "90aa5e13c50138c4cc0a9244c156f4923bff8c0ca85613cfec0b6234782f2de6",
   "docs/plans/component-readiness-2026-11-17/PLAN.md": "45b60646addd0a8fe0cdec38d09c27c8810fe759521071ab9bc07a96bb26d880",
   "docs/plans/design-system-batch1/PLAN.md": "c7c38504c20662a4d9dd4c9822d5ce17eb422a7b9068ee14ec7936ed8b8cadaa",
+  "docs/plans/design-system-batch1/REPORT.md": "921a5a5d1d8ab8a369af009a74791db70467918e5142902b69797013b87a580d",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",
   "docs/plans/integration-readiness-2026-11-21/REPORT.md": "5e1330369f191851d8f00662afef645f3a2311c995f5d08471f4042fd3bcd391",
   "docs/plans/integration-readiness-round2-2026-11-22/PLAN.md": "ea4786f7e0dfc759e56f1e89a6a77f804e8092fdadd30be9f2c6c52038aa3aaa",
@@ -489,7 +490,7 @@
   "previews/ui-system-showcase/showcase.css": "6b6f57bc5067cecd599fc1fcf595acb16a66582effb28c8bf341bdea3c4ad011",
   "previews/ui-system-showcase/showcase.js": "18394acdd76c10c4ed7ae9cab23ad9015874a4e5b686dcbebfe494a17f547d58",
   "previews/ui-system-showcase/standalone.html": "e7495ec98bbc1e33939577aa436eefcbafbd9bf61f3cd241416aabbc122ac321",
-  "pyproject.toml": "9800296a2ba889efa8bf1ed18d6c6d7da88f7e42718813b22eb00ffb1230cbc6",
+  "pyproject.toml": "2f5e6bff0260608e51b3c5858277f3074174960400e1faad3953729c28d0297c",
   "references/micro-data-colors-v1.html": "acfa7cec660ba2ec1062eb3632fdec1a66abb5c408ccbbe02168ad56bafecc2c",
   "shared/back.js": "413c81571b815be0cabc29cb47ad04121cb2e8d08ae830ac17972fb6229c94e5",
   "shared/haptics.js": "c278f31753d15a01584884d5dbda4cde30feb246b56999921f98a20ccc554cfa",
@@ -567,5 +568,5 @@
   "tools/ui-system-showcase-check.py": "363e64b5ad9e0006d51bc75c121a6d259390fa4b29300af532bcf5964a4bc1b9",
   "tools/visual-baseline-capture.py": "8a4d149a70480a42b4413ac145193c4ca54c02f26eab6fa1d57c39bce0edebce",
   "tools/visual-regression-check.py": "5fe386aec36988f4528a17e6becc24ec818a33abab4cd5a5d8f17aa556cfc788",
-  "uv.lock": "9154a0a335b87f667cc4685ffab0d902be70270708fe900f61dab695743425ac"
+  "uv.lock": "83a4747b9c6ffde5fbf169f4557e460bf4d7a99b6f752ac4240071d7b3d54fc7"
 }

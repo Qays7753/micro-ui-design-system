@@ -1,0 +1,272 @@
+{
+  "gates": {
+    "tabularNumbersMaxDiffPx": 0.1,
+    "tabularNumbersRelativeTolerance": 0.006,
+    "layoutShiftMaxPx": 2,
+    "layoutShiftAxes": [
+      "height",
+      "top"
+    ]
+  },
+  "viewport": {
+    "width": 360,
+    "height": 780
+  },
+  "fontMetrics": {
+    "rubik-var": {
+      "digitAdvanceWidthsPerMil": {
+        "0": 616.0,
+        "1": 398.0,
+        "2": 560.0,
+        "3": 576.0,
+        "4": 595.0,
+        "5": 572.0,
+        "6": 582.0,
+        "7": 487.0,
+        "8": 618.0,
+        "9": 572.0
+      },
+      "digitsTabularByDesign": false,
+      "hasTnumFeature": true
+    },
+    "plex-arabic-400": {
+      "digitAdvanceWidthsPerMil": {
+        "0": 600.0,
+        "1": 600.0,
+        "2": 600.0,
+        "3": 600.0,
+        "4": 600.0,
+        "5": 600.0,
+        "6": 600.0,
+        "7": 600.0,
+        "8": 600.0,
+        "9": 600.0
+      },
+      "digitsTabularByDesign": true,
+      "hasTnumFeature": false
+    },
+    "plex-arabic-500": {
+      "digitAdvanceWidthsPerMil": {
+        "0": 600.0,
+        "1": 600.0,
+        "2": 600.0,
+        "3": 600.0,
+        "4": 600.0,
+        "5": 600.0,
+        "6": 600.0,
+        "7": 600.0,
+        "8": 600.0,
+        "9": 600.0
+      },
+      "digitsTabularByDesign": true,
+      "hasTnumFeature": false
+    },
+    "plex-arabic-600": {
+      "digitAdvanceWidthsPerMil": {
+        "0": 600.0,
+        "1": 600.0,
+        "2": 600.0,
+        "3": 600.0,
+        "4": 600.0,
+        "5": 600.0,
+        "6": 600.0,
+        "7": 600.0,
+        "8": 600.0,
+        "9": 600.0
+      },
+      "digitsTabularByDesign": true,
+      "hasTnumFeature": false
+    }
+  },
+  "engines": {
+    "chromium": {
+      "engine": "chromium",
+      "fontsLoaded": {
+        "rubik": false,
+        "plex400": false,
+        "plex600": false
+      },
+      "tabular": {
+        "rubik-500": {
+          "width111": 124.062,
+          "width888": 167,
+          "width888Repeat": 167,
+          "diffPx": 42.938,
+          "tolerancePx": 0.744,
+          "unstable": false,
+          "pass": false
+        },
+        "plex-400": {
+          "width111": 49.625,
+          "width888": 64,
+          "width888Repeat": 64,
+          "diffPx": 14.375,
+          "tolerancePx": 0.298,
+          "unstable": false,
+          "pass": false
+        },
+        "plex-600": {
+          "width111": 48.469,
+          "width888": 52,
+          "width888Repeat": 65,
+          "diffPx": 3.531,
+          "tolerancePx": 0.291,
+          "unstable": true,
+          "pass": true
+        }
+      },
+      "shift": {
+        "display": {
+          "before": {
+            "width": 127,
+            "height": 47,
+            "top": 0
+          },
+          "after": {
+            "width": 132,
+            "height": 47,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 5,
+            "heightPx": 0,
+            "topPx": 0
+          },
+          "pass": true
+        },
+        "display-arabic": {
+          "before": {
+            "width": 259,
+            "height": 33,
+            "top": 0
+          },
+          "after": {
+            "width": 260,
+            "height": 33,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 1,
+            "heightPx": 0,
+            "topPx": 0
+          },
+          "pass": true
+        },
+        "text": {
+          "before": {
+            "width": 154,
+            "height": 24,
+            "top": 0
+          },
+          "after": {
+            "width": 128,
+            "height": 24,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 26,
+            "heightPx": 0,
+            "topPx": 0
+          },
+          "pass": true
+        }
+      },
+      "pass": false
+    },
+    "webkit": {
+      "engine": "webkit",
+      "fontsLoaded": {
+        "rubik": false,
+        "plex400": false,
+        "plex600": false
+      },
+      "tabular": {
+        "rubik-500": {
+          "width111": 165.422,
+          "width888": 165.422,
+          "width888Repeat": 164.562,
+          "diffPx": 0.0,
+          "tolerancePx": 0.993,
+          "unstable": true,
+          "pass": true
+        },
+        "plex-400": {
+          "width111": 66.172,
+          "width888": 66.172,
+          "width888Repeat": 61.953,
+          "diffPx": 0.0,
+          "tolerancePx": 0.397,
+          "unstable": true,
+          "pass": true
+        },
+        "plex-600": {
+          "width111": 72.375,
+          "width888": 62.375,
+          "width888Repeat": 62.375,
+          "diffPx": 10.0,
+          "tolerancePx": 0.434,
+          "unstable": false,
+          "pass": false
+        }
+      },
+      "shift": {
+        "display": {
+          "before": {
+            "width": 129.766,
+            "height": 47,
+            "top": 0
+          },
+          "after": {
+            "width": 131.375,
+            "height": 47,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 1.609,
+            "heightPx": 0,
+            "topPx": 0
+          },
+          "pass": true
+        },
+        "display-arabic": {
+          "before": {
+            "width": 310.203,
+            "height": 33.078,
+            "top": 0
+          },
+          "after": {
+            "width": 257.406,
+            "height": 33,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 52.797,
+            "heightPx": 0.078,
+            "topPx": 0
+          },
+          "pass": true
+        },
+        "text": {
+          "before": {
+            "width": 154.375,
+            "height": 24,
+            "top": 0
+          },
+          "after": {
+            "width": 129.875,
+            "height": 24,
+            "top": 0
+          },
+          "deltas": {
+            "widthPx": 24.5,
+            "heightPx": 0,
+            "topPx": 0
+          },
+          "pass": true
+        }
+      },
+      "pass": false
+    }
+  },
+  "pass": false
+}
