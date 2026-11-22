@@ -120,6 +120,14 @@ def main():
             # is enforced by the package --check gate.
             if name.startswith(("src/", "dist/")):
                 continue
+            # ds batch one (2026-11-22): ds/src/tokens/tokens.css is GENERATED
+            # from docs/design-system/tokens.json by ds/tools/generate-tokens.mjs
+            # and byte-verified by its --check mode plus the manifest gate, so
+            # its hex values are the token definitions themselves — the single
+            # allowed location of raw colors in the new system. Explicit file
+            # list, not a pattern; every other ds file must use var(--mds-*).
+            if name == "ds/src/tokens/tokens.css":
+                continue
             required = set(re.findall(r"var\((--micro-[\w-]+)\s*\)", path.read_text()))
             check("defined required CSS tokens: " + name, not (required - defined), sorted(required - defined))
             old = subprocess.run(["git", "show", f"{base}:{name}"], cwd=ROOT, capture_output=True, text=True)

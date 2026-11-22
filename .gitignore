@@ -27,5 +27,17 @@ replit.md
 .venv/
 node_modules/
 /dist/
+
+# ds (batch one, @micro/ds): build outputs and local envs — built by
+# ds/package.json scripts; byte-verified by gates, never source.
+/ds/dist/
+/ds/lab/dist/
+/ds/consumer-test/dist/
+/ds/node_modules/
+/ds/lab/node_modules/
+/ds/consumer-test/node_modules/
+*.tsbuildinfo
+coverage/
+
 # مدخلات بناء مولَّدة (R2.2): تُنشأ وتُحذف مع كل تشغيل للبناء.
 /tools/package/.build-entries/
