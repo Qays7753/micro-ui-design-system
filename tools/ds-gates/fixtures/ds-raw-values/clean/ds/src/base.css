@@ -1,0 +1,6 @@
+/* fixture (clean): every value is a token reference */
+.card {
+  color: var(--mds-color-brand-signal-text);
+  padding: var(--mds-space-3);
+  transition: background-color var(--mds-motion-quick-ms);
+}

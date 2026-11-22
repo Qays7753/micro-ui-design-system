@@ -1,0 +1,16 @@
+{
+  "name": "@micro/ds",
+  "version": "0.1.0",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^18"
+  },
+  "sideEffects": true,
+  "files": [
+    "src"
+  ]
+}

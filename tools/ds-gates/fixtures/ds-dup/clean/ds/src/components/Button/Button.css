@@ -1,0 +1,5 @@
+.mds-button {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-2);
+}

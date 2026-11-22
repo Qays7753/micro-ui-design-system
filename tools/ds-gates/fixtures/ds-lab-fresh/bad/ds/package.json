@@ -1,0 +1,8 @@
+{
+  "name": "@micro/ds",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:standalone": "python3 tools/build.py"
+  }
+}

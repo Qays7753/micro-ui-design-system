@@ -1,0 +1,58 @@
+#!/bin/sh
+# pre-commit — K25 (plan section 8-هـ): every commit that changes ds/ or
+# previews/ds-lab/ must carry a freshly built previews/ds-lab/standalone.html.
+#
+# How it works (readable, plain /bin/sh):
+#   1. collect the staged files that touch ^(ds|previews/ds-lab)/
+#      (none -> nothing to do, exit 0);
+#   2. if previews/ds-lab/standalone.html does not exist yet (the lab build
+#      lands in S3) the hook only reports the staged file list and exits 0;
+#   3. otherwise rebuild it in place (cd ds && npm run build:standalone),
+#      compare the rebuilt file with the STAGED version (git show :path),
+#      and fail with the owner-facing message when they differ, so the
+#      standalone can never go stale on the branch.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# The hook never commits, pushes or modifies anything except rebuilding the
+# standalone build output.
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^(ds|previews/ds-lab)/')
+if [ -z "$STAGED" ]; then
+    echo "ds pre-commit: no ds/ or previews/ds-lab/ files staged, nothing to verify"
+    exit 0
+fi
+
+echo "ds pre-commit: staged files touch the design system:"
+echo "$STAGED" | sed 's/^/  /'
+
+SA="previews/ds-lab/standalone.html"
+if [ ! -f "$SA" ]; then
+    echo "ds pre-commit: $SA does not exist yet (lab build lands in S3) — file-list check only, K25 arm waits"
+    exit 0
+fi
+
+# Rebuild only when the build command exists (it arrives with the lab, S3).
+if ! grep -q '"build:standalone"' ds/package.json 2>/dev/null; then
+    echo "ds pre-commit: ds/package.json has no build:standalone script while $SA exists — cannot verify freshness"
+    exit 1
+fi
+if ! (cd ds && npm run build:standalone); then
+    echo "ds pre-commit: npm run build:standalone failed — fix the lab build before committing"
+    exit 1
+fi
+
+# The rebuilt file must match what is staged (the index version).
+STAGED_COPY=$(mktemp)
+if ! git show ":$SA" > "$STAGED_COPY" 2>/dev/null; then
+    rm -f "$STAGED_COPY"
+    echo "ds pre-commit: standalone.html قديم — أعد بناءه وأدرجه ($SA exists but is not staged)"
+    exit 1
+fi
+if cmp -s "$STAGED_COPY" "$SA"; then
+    rm -f "$STAGED_COPY"
+    echo "ds pre-commit: $SA matches a fresh build — K25 ok"
+    exit 0
+fi
+rm -f "$STAGED_COPY"
+echo "ds pre-commit: standalone.html قديم — أعد بناءه وأدرجه (rebuilt output differs from the staged file)"
+exit 1

@@ -1,0 +1,10 @@
+{
+  "name": "@micro/ds",
+  "version": "0.1.0",
+  "dependencies": {
+    "lucide-react": "^0.548.0"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.0"
+  }
+}

@@ -1,0 +1,6 @@
+/* fixture (violation): raw values outside the tokens */
+.card {
+  color: rgb(169 80 47);
+  padding: 12px;
+  transition: background-color 250ms;
+}

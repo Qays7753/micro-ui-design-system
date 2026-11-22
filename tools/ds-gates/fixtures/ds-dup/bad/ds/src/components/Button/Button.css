@@ -1,0 +1,7 @@
+.mds-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mds-radius-md);
+  background-color: var(--mds-color-surface-pressed);
+}

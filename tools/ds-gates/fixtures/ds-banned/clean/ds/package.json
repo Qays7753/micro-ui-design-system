@@ -1,0 +1,12 @@
+{
+  "name": "@micro/ds",
+  "version": "0.1.0",
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "vaul": "^1"
+  },
+  "devDependencies": {
+    "@phosphor-icons/core": "^2.1.1"
+  }
+}

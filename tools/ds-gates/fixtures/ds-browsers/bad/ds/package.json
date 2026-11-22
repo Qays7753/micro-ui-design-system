@@ -1,0 +1,7 @@
+{
+  "name": "@micro/ds",
+  "browserslist": [
+    "iOS >= 12",
+    "Chrome >= 60"
+  ]
+}

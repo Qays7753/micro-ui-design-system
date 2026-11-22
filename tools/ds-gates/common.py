@@ -1,0 +1,456 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Shared framework for the @micro/ds quality gates (batch 1, stage S2).
+
+Contract every ds gate follows (task S2 / plan section 6):
+  - one line per check:  "PASS <check-id>[ | <detail>]"  /  "FAIL <check-id> | <violation>"
+  - a final summary:     "total: N ok, M failed"
+  - a gate whose target does not exist yet (no components, no lab page) prints
+    "not applicable yet: <reason>" after the total and exits 0 — documented,
+    never silent.
+  - exit code 0 iff no FAIL.
+  - --target <path-or-url> redirects the gate at another tree (fixture).
+  - --prove re-runs the gate as a subprocess on its own fixtures:
+      fixtures/<gate>/bad   must exit 1 (the gate detects its violation)
+      fixtures/<gate>/clean must exit 0
+    and exits 0 only when both behave as expected. A gate that can never
+    fail is rejected (plan S2: "بوابة لا تفشل أبداً لا قيمة لها").
+
+Browser gates run on TWO engines (Chromium + WebKit, plan section 6) and
+document each engine separately: <check-id>/chromium and <check-id>/webkit.
+WebKit needs the software-EGL environment (see browser_env below); the gate
+applies it itself so check-all needs no sourcing.
+
+No gate writes a file it later controls (manifest --check pattern): reports
+are written only to explicit --out paths chosen by the caller.
+"""
+import argparse
+import contextlib
+import glob
+import http.server
+import json
+import os
+import re
+import socket
+import subprocess
+import sys
+import threading
+from pathlib import Path
+
+GATES_DIR = Path(__file__).resolve().parent
+ROOT = GATES_DIR.parent.parent          # repo root (micro-ui-design-system)
+FIXTURES = GATES_DIR / "fixtures"
+TOOLS_DIR = ROOT / "tools"
+
+sys.path.insert(0, str(TOOLS_DIR))      # browser_support (Chromium selection)
+
+with open(GATES_DIR / "config.json", encoding="utf-8") as fh:
+    CONFIG = json.load(fh)
+
+AR = re.compile(r"[\u0600-\u06FF]")
+
+
+# --------------------------------------------------------------------------
+# Gate result model
+# --------------------------------------------------------------------------
+class Gate:
+    def __init__(self, name):
+        self.name = name
+        self.checks = []  # (id, ok, detail)
+
+    def ok(self, check_id, detail=""):
+        self.checks.append((check_id, True, detail))
+
+    def fail(self, check_id, detail):
+        self.checks.append((check_id, False, detail))
+
+    def na(self, check_id, reason):
+        """A check that has nothing to check yet — documented, counts as ok."""
+        self.checks.append((check_id, True, "not applicable yet: " + reason))
+
+    @property
+    def failed(self):
+        return [c for c in self.checks if not c[1]]
+
+    def all_na(self):
+        return bool(self.checks) and all(d.startswith("not applicable yet:") for _, _, d in self.checks)
+
+    def report(self):
+        for check_id, ok, detail in self.checks:
+            line = ("PASS " if ok else "FAIL ") + check_id
+            if detail:
+                line += " | " + detail
+            print(line, flush=True)
+        n_ok = len(self.checks) - len(self.failed)
+        n_fail = len(self.failed)
+        print(f"total: {n_ok} ok, {n_fail} failed", flush=True)
+        if self.all_na():
+            print("not applicable yet: " + self.checks[0][2][len("not applicable yet:"):], flush=True)
+        return 1 if n_fail else 0
+
+
+# --------------------------------------------------------------------------
+# Source parsing helpers (comment-aware, string-aware)
+# --------------------------------------------------------------------------
+def strip_comments(src):
+    """Remove // and /* */ comments while preserving strings and line count."""
+    out = []
+    i, n = 0, len(src)
+    while i < n:
+        c = src[i]
+        if c == "/" and i + 1 < n and src[i + 1] == "/":
+            j = src.find("\n", i)
+            i = n if j == -1 else j
+        elif c == "/" and i + 1 < n and src[i + 1] == "*":
+            j = src.find("*/", i + 2)
+            j = n if j == -1 else j + 2
+            out.append(" ")
+            out.append("\n" * src.count("\n", i, j))
+            i = j
+        elif c in "\"'`":
+            j = i + 1
+            while j < n:
+                if src[j] == "\\":
+                    j += 2
+                    continue
+                if src[j] == c:
+                    break
+                j += 1
+            out.append(src[i:min(j + 1, n)])
+            i = j + 1
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def iter_strings(src):
+    """Yield (start_line, value) for every string literal in code (comments already gone)."""
+    i, n, line = 0, len(src), 1
+    while i < n:
+        c = src[i]
+        if c == "\n":
+            line += 1
+            i += 1
+            continue
+        if c in "\"'`":
+            start_line = line
+            j = i + 1
+            while j < n:
+                if src[j] == "\\":
+                    j += 2
+                    continue
+                if c != "`" and src[j] == "\n":
+                    break
+                if src[j] == c:
+                    break
+                j += 1
+            value = src[i + 1:min(j, n)]
+            line += src.count("\n", i, min(j + 1, n))
+            i = j + 1
+            yield start_line, value
+            continue
+        i += 1
+
+
+def source_files(target_root, subpath, patterns, exclude=()):
+    """All files under <target_root>/<subpath> matching patterns, minus exclude globs."""
+    base = Path(target_root) / subpath
+    if not base.is_dir():
+        return []
+    excluded_res = []
+    for pat in exclude:
+        excluded_res.append(re.compile(pat.replace("**", ".*").replace("*", "[^/]*") + "$"))
+    found = []
+    for pattern in patterns:
+        for path in sorted(base.rglob(pattern)):
+            rel = path.relative_to(Path(target_root)).as_posix()
+            if any(rx.match(rel) for rx in excluded_res):
+                continue
+            found.append(path)
+    return found
+
+
+def rel_of(path, target_root):
+    try:
+        return path.relative_to(Path(target_root)).as_posix()
+    except ValueError:
+        return str(path)
+
+
+def gzip_size(path):
+    import gzip as _gzip
+    with open(path, "rb") as fh:
+        return len(_gzip.compress(fh.read(), compresslevel=9, mtime=0))
+
+
+def read_tokens(target_root):
+    tokens_path = Path(target_root) / "docs" / "design-system" / "tokens.json"
+    if not tokens_path.is_file():
+        return None
+    with open(tokens_path, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def token_by_path(tokens, dotted):
+    node = tokens
+    for key in dotted.split("."):
+        if not isinstance(node, dict) or key not in node:
+            raise KeyError(dotted)
+        node = node[key]
+    return node
+
+
+def component_closed_list(target_root):
+    """The batch-1 closed component list, read from the S0 table in REPORT.md (32 names)."""
+    report = Path(target_root) / "docs" / "plans" / "design-system-batch1" / "REPORT.md"
+    if not report.is_file():
+        return None, "missing docs/plans/design-system-batch1/REPORT.md"
+    text = report.read_text(encoding="utf-8")
+    names = []
+    row = re.compile(r"^\|\s*\d+\s*\|\s*`([A-Za-z][A-Za-z0-9]*)`\s*\|")
+    in_table = False
+    for line in text.splitlines():
+        if "قائمة مكوّنات الدفعة الأولى" in line:
+            in_table = True
+        if in_table and row.match(line):
+            names.append(row.match(line).group(1))
+    if not names:
+        return None, "S0 component table not found in REPORT.md"
+    return names, None
+
+
+# --------------------------------------------------------------------------
+# Browser support: engines, environment, local HTTP fixture server
+# --------------------------------------------------------------------------
+def apply_webkit_env():
+    """Mirror /home/z/webkit-libs/env.sh (software EGL for WebKit) into os.environ.
+
+    Idempotent and non-destructive: an environment that was already sourced
+    externally wins. This lets check-all run the browser gates without any
+    prior `source` (task: "مع تمرير البيئة").
+    """
+    if not glob.glob(os.path.expanduser("~/.cache/ms-playwright/webkit-*")):
+        return
+    cands = sorted(glob.glob(os.path.expanduser("~/.cache/ms-playwright/webkit-*")),
+                   key=lambda p: [int(x) for x in re.findall(r"\d+", p) if x.isdigit()])
+    wk = cands[-1] + "/minibrowser-wpe"
+    env = {
+        "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS": "1",
+        "EGL_PLATFORM": "surfaceless",
+        "LIBGL_ALWAYS_SOFTWARE": "1",
+        "__EGL_VENDOR_LIBRARY_DIRS": wk + "/egl_vendor",
+        "LIBGL_DRIVERS_PATH": wk + "/dri",
+        "LIBGL_ALWAYS_INDIRECT": "0",
+    }
+    for key, value in env.items():
+        os.environ.setdefault(key, value)
+
+
+class LocalServer:
+    """Ephemeral 127.0.0.1 HTTP server for fixture pages (enables route interception).
+
+    delay_suffixes: file extensions served with a deliberate delay (used by
+    ds-font-shift to hold the webfont back until the first measurement).
+    aliases: {url-filename: absolute path} — lets a text-only fixture swap in
+    a real tracked font file without copying binaries into fixtures/.
+    """
+
+    def __init__(self, root, delay_suffixes=(), delay_seconds=0.6, aliases=None):
+        self.root = Path(root).resolve()
+        self.aliases = {name: Path(path) for name, path in (aliases or {}).items()}
+        self.delay_suffixes = tuple(delay_suffixes)
+        self.delay_seconds = delay_seconds
+        server = self
+
+        class Handler(http.server.SimpleHTTPRequestHandler):
+            def __init__(self, *a, **kw):
+                kw.setdefault("directory", str(server.root))
+                super().__init__(*a, **kw)
+
+            def log_message(self, fmt, *a):
+                pass  # keep gate output clean
+
+            def translate_path(self, path):
+                name = path.lstrip("/").split("?")[0]
+                if name in server.aliases:
+                    return str(server.aliases[name])
+                return super().translate_path(path)
+
+            def end_headers(self):
+                server.httpd_common_headers(self)
+                super().end_headers()
+
+            def do_GET(self):
+                path = self.translate_path(self.path)
+                if path.endswith(server.delay_suffixes):
+                    import time as _time
+                    _time.sleep(server.delay_seconds)
+                super().do_GET()
+
+        self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        self.port = self.httpd.server_address[1]
+        self.thread = threading.Thread(target=self.httpd.serve_forever, daemon=True)
+
+    def httpd_common_headers(self, handler):
+        handler.send_header("Cache-Control", "no-store")
+
+    def start(self):
+        self.thread.start()
+        return f"http://127.0.0.1:{self.port}"
+
+    def url(self, path=""):
+        return f"http://127.0.0.1:{self.port}/{path.lstrip('/')}"
+
+    def stop(self):
+        self.httpd.shutdown()
+        self.httpd.server_close()
+
+
+@contextlib.contextmanager
+def browser_session(engine):
+    """Context manager yielding a launched browser for the given engine."""
+    apply_webkit_env()
+    from playwright.sync_api import sync_playwright
+    from browser_support import chromium_launch_options
+
+    with sync_playwright() as pw:
+        if engine == "chromium":
+            browser = pw.chromium.launch(**chromium_launch_options())
+        elif engine == "webkit":
+            browser = pw.webkit.launch()
+        else:
+            raise ValueError("unknown engine: " + engine)
+        contexts = []
+
+        class _Session:
+            def page(self, **context_options):
+                ctx = browser.new_context(**context_options)
+                contexts.append(ctx)
+                return ctx.new_page()
+
+        try:
+            yield _Session()
+        finally:
+            with contextlib.suppress(Exception):
+                for ctx in contexts:
+                    ctx.close()
+            with contextlib.suppress(Exception):
+                browser.close()
+
+
+DEFAULT_CONTEXT = {
+    "viewport": {"width": 360, "height": 780},
+    "device_scale_factor": 3,
+}
+
+
+def resolve_page_target(target_arg, default_file="standalone.html", default_dir="previews/ds-lab"):
+    """Resolve --target to a served page URL.
+
+    Returns (kind, value): kind in {"url", "server", "na"}.
+      url     -> an http(s)/file URL to open directly (server=None)
+      server  -> (LocalServer, path) already started; caller must stop it
+      na      -> nothing to open yet (value = reason)
+    """
+    if target_arg and re.match(r"^(https?|file)://", target_arg):
+        return "url", target_arg
+    if target_arg:
+        path = Path(target_arg)
+        try:
+            is_root = path.resolve() == ROOT.resolve()
+        except OSError:
+            is_root = False
+        if path.is_dir() and not is_root:
+            for name in ("previews/ds-lab/standalone.html", "standalone.html",
+                         "page.html", "index.html"):
+                if (path / name).is_file():
+                    server = LocalServer(path if "/" not in name else path / Path(name).parent)
+                    base = server.start()
+                    return "server", (server, base + "/" + Path(name).name)
+            return "na", f"no page (previews/ds-lab/standalone.html, page.html) under {target_arg}"
+        if path.is_file():
+            server = LocalServer(path.parent)
+            base = server.start()
+            return "server", (server, base + "/" + path.name)
+        if not is_root:
+            return "na", "--target does not exist: " + target_arg
+        # the repo root itself: fall through to the default lab page below
+    default_path = ROOT / default_dir / default_file
+    if default_path.is_file():
+        server = LocalServer(ROOT / default_dir)
+        base = server.start()
+        return "server", (server, base + "/" + default_file)
+    return "na", f"{default_dir}/{default_file} does not exist yet (lab build lands in S3)"
+
+
+# --------------------------------------------------------------------------
+# Gate main driver (normal + prove modes)
+# --------------------------------------------------------------------------
+def gate_main(name, run_fn, extra_args=None):
+    parser = argparse.ArgumentParser(description=f"{name} gate (@micro/ds S2)")
+    parser.add_argument("--target", help="path or URL to check (default: current source/lab state)")
+    parser.add_argument("--prove", action="store_true",
+                        help="run on the gate fixtures: the bad one must FAIL, the clean one must PASS")
+    parser.add_argument("--out", help="write a JSON report to this path")
+    parser.add_argument("--engine", default="both", choices=["both", "chromium", "webkit"])
+    if extra_args:
+        extra_args(parser)
+    args = parser.parse_args()
+
+    if args.prove:
+        return prove_main(name, run_fn, args)
+
+    gate = Gate(name)
+    try:
+        run_fn(gate, args.target or str(ROOT), args)
+    except Exception as exc:  # a crashed gate is a failed gate, never a green one
+        gate.fail(name + "/internal", f"gate crashed: {exc!r}")
+    rc = gate.report()
+    if args.out:
+        payload = {
+            "gate": name,
+            "target": args.target or str(ROOT),
+            "exit": rc,
+            "checks": [{"id": cid, "ok": ok, "detail": detail} for cid, ok, detail in gate.checks],
+            "failed": len(gate.failed),
+        }
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return rc
+
+
+def prove_main(name, run_fn, args):
+    entry = Path(sys.argv[0]).resolve()
+    base = FIXTURES / name
+    checks = []
+    for kind, expected in (("bad", 1), ("clean", 0)):
+        fixture = base / kind
+        check_id = f"prove/{kind}"
+        if not fixture.is_dir():
+            checks.append((check_id, False, f"fixture missing: {rel_of(fixture, ROOT)}"))
+            continue
+        cmd = [sys.executable, str(entry), "--target", str(fixture)]
+        if args.engine != "both":
+            cmd += ["--engine", args.engine]
+        proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=300)
+        ok = proc.returncode == expected
+        last = (proc.stdout or "").strip().splitlines()
+        first_fail = next((ln for ln in last if ln.startswith("FAIL ")), "")
+        detail = f"{rel_of(fixture, ROOT)} -> exit {proc.returncode} (expected {expected})"
+        if first_fail:
+            detail += f"; {first_fail.strip()[:160]}"
+        if proc.returncode not in (0, 1):
+            detail += f"; stderr: {(proc.stderr or '').strip()[:200]}"
+        checks.append((check_id, ok, detail))
+
+    n_ok = sum(1 for _, ok, _ in checks if ok)
+    n_fail = len(checks) - n_ok
+    for check_id, ok, detail in checks:
+        print(("PASS " if ok else "FAIL ") + f"{name}/{check_id} | {detail}", flush=True)
+    print(f"total: {n_ok} ok, {n_fail} failed", flush=True)
+    if n_fail == 0:
+        print(f"PROVEN {name} — fails on its violation fixture and passes the clean one", flush=True)
+    else:
+        print(f"UNPROVEN {name} — the gate did not behave as required on its fixtures", flush=True)
+    return 1 if n_fail else 0

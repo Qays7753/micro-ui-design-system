@@ -17,6 +17,12 @@ Gate set (see tools/README.md for the full classification):
   - static gates: static (light-static-check), lint (eslint no-undef on
     components/ and shared/), links (link-check), hardcoded-text (Arabic
     strings in JS, labels imports, d.ts coverage)
+  - ds gates (S2, batch one @micro/ds): tools/ds-gates/*.py — 10 static
+    gates in the quick matrix, 10 browser/lab gates in the full matrix
+    (each browser gate runs Chromium AND WebKit and applies the WebKit
+    software-EGL environment itself, so no sourcing is required); every
+    gate is independently provable with --prove on its fixtures under
+    tools/ds-gates/fixtures/
   - browser gates: audit, product-context, light-release, mobile-experience,
     light-calendar, light-data, component-consumption, integration-boundaries,
     clone-lifecycle, api-lifecycle, numeric-geometry, ui-system-showcase,
@@ -58,6 +64,21 @@ def build_gates(quick, out, skip_visual):
         ("hardcoded-text", PY + ["tools/hardcoded-text-check.py"]),
         ("labels-doc", PY + ["tools/labels-doc-build.py", "--check"]),
     ]
+    # ds (batch one, @micro/ds) static gates — S2, run in every mode.
+    # Each gate exits 0/1 and prints a per-check PASS/FAIL summary; prove
+    # them any time with `--prove` (they must fail on their fixtures).
+    matrix += [
+        ("ds-raw-values", PY + ["tools/ds-gates/ds-raw-values.py"]),
+        ("ds-banned", PY + ["tools/ds-gates/ds-banned.py"]),
+        ("ds-structure", PY + ["tools/ds-gates/ds-structure.py"]),
+        ("ds-props", PY + ["tools/ds-gates/ds-props.py"]),
+        ("ds-imports", PY + ["tools/ds-gates/ds-imports.py"]),
+        ("ds-dup", PY + ["tools/ds-gates/ds-dup.py"]),
+        ("ds-copy", PY + ["tools/ds-gates/ds-copy.py"]),
+        ("ds-browsers", PY + ["tools/ds-gates/ds-browsers.py"]),
+        ("ds-consumer", PY + ["tools/ds-gates/ds-consumer.py"]),
+        ("ds-lowend", PY + ["tools/ds-gates/ds-lowend.py"]),
+    ]
     if quick:
         return matrix
     matrix += [
@@ -82,6 +103,22 @@ def build_gates(quick, out, skip_visual):
         ("ui-system-showcase", PY + ["tools/ui-system-showcase-check.py"]),
         ("preview-runtime", PY + ["tools/preview-runtime-check.py",
                                   "--base", BASE_URL, "--out", str(out / "preview-runtime")]),
+    ]
+    # ds browser/lab gates — S2. Each runs on Chromium AND WebKit (the gate
+    # itself applies the WebKit software-EGL env, so check-all needs no
+    # sourcing) and is "not applicable yet" (documented, green) until the
+    # lab pages exist (S3+).
+    matrix += [
+        ("ds-standalone-mode", PY + ["tools/ds-gates/ds-standalone-mode.py"]),
+        ("ds-lab-fresh", PY + ["tools/ds-gates/ds-lab-fresh.py"]),
+        ("ds-measure", PY + ["tools/ds-gates/ds-measure.py"]),
+        ("ds-a11y", PY + ["tools/ds-gates/ds-a11y.py"]),
+        ("ds-states", PY + ["tools/ds-gates/ds-states.py"]),
+        ("ds-motion", PY + ["tools/ds-gates/ds-motion.py"]),
+        ("ds-hidden-amounts", PY + ["tools/ds-gates/ds-hidden-amounts.py"]),
+        ("ds-font-shift", PY + ["tools/ds-gates/ds-font-shift.py"]),
+        ("ds-tabular", PY + ["tools/ds-gates/ds-tabular.py"]),
+        ("ds-small-screen", PY + ["tools/ds-gates/ds-small-screen.py"]),
     ]
     if not skip_visual:
         matrix += [

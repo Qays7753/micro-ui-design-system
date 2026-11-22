@@ -1,0 +1,6 @@
+.mds-tile {
+  position: relative;
+  height: 152px;
+  border-radius: 28px;
+  border: 1px solid var(--mds-color-surface-edge);
+}

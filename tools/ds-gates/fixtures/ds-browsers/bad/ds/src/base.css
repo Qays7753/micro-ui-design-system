@@ -1,0 +1,5 @@
+/* fixture (violation): old floor + unsupported CSS syntax */
+@scope (.mds-card) {
+  p { color: var(--mds-color-text-primary); }
+}
+.light-mode { color: light-dark(rgb(16 23 25), rgb(255 255 255)); }

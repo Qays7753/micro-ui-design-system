@@ -1,0 +1,8 @@
+{
+  "_comment": "ds-measure spec (@micro/ds S2). The builder (S3+) marks lab elements with data-ds-check=\"<id>\" and extends this file; expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number. Seeded from BRIEF 29.2 exact specs.",
+  "checks": [
+    {"id": "icon-button", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
+    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
+    {"id": "status-badge-height", "height": {"px": 24}}
+  ]
+}
