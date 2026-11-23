@@ -18,9 +18,15 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, Money, StatusBadge, ar, t } from '@micro/ds';
-import { amounts, edgeCases } from './data';
+import { AmountVisibilityProvider, AmountVisibilityToggle, EntityMark, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
+
+const FUND_ICONS = {
+  cash: FundCashIcon,
+  bank: FundBankIcon,
+  wallet: FundWalletIcon,
+} as const;
 
 export function App() {
   const [hidden, setHidden] = useState(false);
@@ -152,6 +158,42 @@ export function App() {
           <div className="lab-row">
             <span className="lab-label">{t('state.longest')}</span>
             <StatusBadge tone="waiting" label={edgeCases.longestName} />
+          </div>
+        </section>
+
+        {/* ---- EntityMark (BRIEF 23.5 + 23.24(4)) ---- */}
+        <section className="lab-section" id="entity">
+          <h2 className="lab-title">{t('title.entityMark')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.initial')}</span>
+            <EntityMark size="sm" value={parties[0]} data-ds-check="entity-mark-sm" />
+            <EntityMark size="md" value={parties[0]} data-ds-check="entity-mark-md" />
+            <EntityMark size="lg" value={parties[0]} data-ds-check="entity-mark-lg" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.fundTypes')}</span>
+            {funds.map((fund) => {
+              const Icon = FUND_ICONS[fund.icon];
+              return (
+                <span className="lab-entity" key={fund.icon}>
+                  <EntityMark size="md">
+                    <Icon />
+                  </EntityMark>
+                  <span className="lab-name">{fund.name}</span>
+                </span>
+              );
+            })}
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.badged')}</span>
+            <span className="lab-entity">
+              <EntityMark size="md" value={drivers[0]} tone="done" />
+              <span className="lab-name">{drivers[0]}</span>
+            </span>
+            <span className="lab-entity">
+              <EntityMark size="md" value={drivers[1]} tone="waiting" />
+              <span className="lab-name">{drivers[1]}</span>
+            </span>
           </div>
         </section>
         </main>

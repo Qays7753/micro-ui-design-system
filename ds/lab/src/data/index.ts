@@ -65,3 +65,10 @@ export const edgeCases = {
   /** قيمة قيد تحميل — renders as a skeleton, never as zero */
   loadingAmount: undefined as string | undefined,
 } as const;
+
+/** Fund types with their mark icons (BRIEF 66: درج الكاش، الحساب البنكي، المحفظة). */
+export const funds: readonly { name: string; icon: 'cash' | 'bank' | 'wallet' }[] = [
+  { name: 'درج الكاش', icon: 'cash' },
+  { name: 'الحساب البنكي', icon: 'bank' },
+  { name: 'المحفظة', icon: 'wallet' },
+];

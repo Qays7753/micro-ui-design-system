@@ -4,6 +4,9 @@
     {"id": "money-md", "height": {"token": "type.amount-row.line"}},
     {"id": "money-lg", "height": {"token": "type.number-lg.line"}},
     {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
-    {"id": "status-badge-height", "height": {"px": 24}}
+    {"id": "status-badge-height", "height": {"px": 24}},
+    {"id": "entity-mark-sm", "width": {"px": 32}, "height": {"px": 32}},
+    {"id": "entity-mark-md", "width": {"px": 44}, "height": {"px": 44}},
+    {"id": "entity-mark-lg", "width": {"px": 64}, "height": {"px": 64}}
   ]
 }

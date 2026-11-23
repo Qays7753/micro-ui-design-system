@@ -1,0 +1,75 @@
+/*
+ * EntityMark.css — BRIEF 23.5 + 23.24(4). Every value is a token reference;
+ * no raw hex/px/ms in this file.
+ */
+
+.mds-entity-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--mds-color-entity-bg);
+  color: var(--mds-color-entity-fg);
+}
+
+/* The three sizes with their exact radii (23.18: sm 32, md 44, lg 64). */
+.mds-entity-mark--sm {
+  width: var(--mds-size-entity-32);
+  height: var(--mds-size-entity-32);
+  border-radius: var(--mds-radius-entity-32);
+}
+
+.mds-entity-mark--md {
+  width: var(--mds-size-entity-44);
+  height: var(--mds-size-entity-44);
+  border-radius: var(--mds-radius-entity-44);
+}
+
+.mds-entity-mark--lg {
+  width: var(--mds-size-entity-64);
+  height: var(--mds-size-entity-64);
+  border-radius: var(--mds-radius-entity-64);
+}
+
+/* The isolated initial: entity-initial Plex 600, 14/18/26 by size (23.5). */
+.mds-entity-mark-initial {
+  font-family: var(--mds-type-entity-initial-font);
+  font-weight: var(--mds-type-entity-initial-weight);
+  line-height: 1;
+}
+
+.mds-entity-mark--sm .mds-entity-mark-initial {
+  font-size: var(--mds-type-entity-initial-size-by-mark-32);
+}
+
+.mds-entity-mark--md .mds-entity-mark-initial {
+  font-size: var(--mds-type-entity-initial-size-by-mark-44);
+}
+
+.mds-entity-mark--lg .mds-entity-mark-initial {
+  font-size: var(--mds-type-entity-initial-size-by-mark-64);
+}
+
+/* An object mark (icon as children): type icon in text-primary (23.5). The
+   badge icon is not a direct child, so it keeps the mark's own color. */
+.mds-entity-mark > svg {
+  color: var(--mds-color-text-primary);
+}
+
+/* The verification badge of 23.24(4): a white 18 circle forming a 2-token
+   ring around the Fill 14 icon, at the bottom-start corner, overlapping the
+   mark by the badge-overlap token. */
+.mds-entity-mark-badge {
+  position: absolute;
+  bottom: calc(-1 * var(--mds-size-entity-badge-overlap));
+  inset-inline-start: calc(-1 * var(--mds-size-entity-badge-overlap));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-entity-badge);
+  height: var(--mds-size-entity-badge);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface);
+  color: var(--mds-color-entity-fg);
+}
