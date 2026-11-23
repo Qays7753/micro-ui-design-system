@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, NavTodayIcon, SegmentedControl, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -31,6 +31,7 @@ const FUND_ICONS = {
 export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
+  const [segment, setSegment] = useState('today');
 
   const applyScale = (next: 100 | 200) => {
     setScale(next);
@@ -274,6 +275,63 @@ export function App() {
           </div>
           <div className="lab-row">
             <TextField id="field-disabled" label={t('field.supplier')} disabled />
+          </div>
+        </section>
+
+        {/* ---- SegmentedControl (BRIEF 9.1): track, white selected, 2–4 parts ---- */}
+        <section className="lab-section" id="segmented-control">
+          <h2 className="lab-title">{t('title.segmentedControl')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.twoSegments')}</span>
+            <SegmentedControl
+              label={t('title.today')}
+              leading={[
+                { value: 'today', label: t('nav.today') },
+                { value: 'agenda', label: t('nav.agenda') },
+              ]}
+              value={segment}
+              onChange={setSegment}
+              data-ds-check="segmented-control"
+            />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.threeSegments')}</span>
+            <SegmentedControl
+              label={t('title.today')}
+              leading={[
+                { value: 'in', label: t('movement.in') },
+                { value: 'out', label: t('movement.out') },
+                { value: 'transfer', label: t('movement.transfer') },
+              ]}
+              value="in"
+              onChange={() => {}}
+            />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.fourSegments')}</span>
+            <SegmentedControl
+              label={t('title.today')}
+              leading={[
+                { value: 'in', label: t('movement.in') },
+                { value: 'out', label: t('movement.out') },
+                { value: 'transfer', label: t('movement.transfer') },
+                { value: 'all', label: t('button.all') },
+              ]}
+              value="all"
+              onChange={() => {}}
+            />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.withIcon')}</span>
+            <SegmentedControl
+              label={t('title.today')}
+              leading={[
+                { value: 'today', label: t('nav.today'), leading: <NavTodayIcon /> },
+                { value: 'agenda', label: t('nav.agenda') },
+              ]}
+              value="today"
+              onChange={() => {}}
+            />
           </div>
         </section>
         </main>

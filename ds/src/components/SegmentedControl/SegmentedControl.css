@@ -1,0 +1,105 @@
+/*
+ * SegmentedControl.css — BRIEF 9.1 + 23.2 + 23.20. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-segmented {
+  display: inline-flex;
+  box-sizing: border-box;
+  gap: var(--mds-layout-segmented-padding);
+  width: 100%;
+  padding: var(--mds-layout-segmented-padding);
+  background-color: var(--mds-color-track);
+  border-radius: var(--mds-radius-full);
+}
+
+/* The segment: 48 zone (size-segmented), full radius, label typography. */
+.mds-segmented-segment {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-layout-button-icon-gap);
+  min-width: var(--mds-size-segment-min-width);
+  min-height: calc(var(--mds-size-segmented) - var(--mds-layout-segmented-padding) * 2);
+  padding: 0;
+  border: var(--mds-border-hairline) solid transparent;
+  border-radius: var(--mds-radius-full);
+  background-color: transparent;
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+              border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* The selected segment: white with a 1px surface-edge border, NO shadow (9.1),
+   and label-strong (selection is not color alone — 23.2). */
+.mds-segmented-segment--selected {
+  border-color: var(--mds-color-surface-edge);
+  background-color: var(--mds-color-surface);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+}
+
+/* Leading icon (20, at the start) inherits the segment color (23.3). */
+.mds-segmented-segment-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mds-segmented-segment-icon svg {
+  width: var(--mds-size-icon-20);
+  height: var(--mds-size-icon-20);
+}
+
+/* Pressed: surface-pressed background on the segment — no scale, no ripple
+   (23.2). Both the hook state (data-pressed, with the 8px move cancel) and
+   the native :active drive the same styles. The SELECTED segment responds
+   too: its white capsule dims to surface-pressed for the held moment (23.2:
+   الضغط يغيّر الخلفية — لا عنصر تفاعلي صامت اللمس), so pressing the active
+   segment is never silent. */
+.mds-segmented-segment:active,
+.mds-segmented-segment[data-pressed],
+.mds-segmented-segment--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Hover only on fine pointers, same color as the press (23.2). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-segmented-segment:not(:disabled):hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+}
+
+/* Focus ring: 2px brand-text, offset 2, keyboard only (23.2); the ring
+   follows the segment's full radius. */
+.mds-segmented-segment:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled: text dims (23.2); the selected one keeps its white capsule so
+   the disabled state stays readable on the track (23.24(15)). */
+.mds-segmented-segment:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-segmented-segment--selected:disabled {
+  border-color: var(--mds-color-surface-edge);
+  background-color: var(--mds-color-disabled-bg);
+}
+
+/* Reduced motion: the quick background/border fade stays (it is a fade
+   already), nothing moves (23.14). */
+@media (prefers-reduced-motion: reduce) {
+  .mds-segmented-segment {
+    transition: none;
+  }
+}

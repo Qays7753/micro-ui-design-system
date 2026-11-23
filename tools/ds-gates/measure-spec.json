@@ -82,6 +82,12 @@
         "px": 84
       },
       "_note": "field root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + input 56 (size.field)"
+    },
+    {
+      "id": "segmented-control",
+      "height": {
+        "token": "size.segmented"
+      }
     }
   ]
 }
