@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 
 from common import CONFIG, ROOT, Gate, gate_main, browser_session, DEFAULT_CONTEXT, \
-    read_tokens, token_by_path, resolve_page_target
+    read_tokens, token_by_path, resolve_page_target, wait_lab_ready
 
 TOLERANCE = CONFIG["measure_tolerance_px"]
 
@@ -74,6 +74,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(150)
                     for entry in checks:
                         cid = entry["id"]

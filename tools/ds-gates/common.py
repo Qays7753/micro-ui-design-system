@@ -396,6 +396,21 @@ def browser_session(engine):
         session.close()
 
 
+def wait_lab_ready(page, marker="[data-ds-check]", timeout_ms=5000):
+    """Wait until the lab app actually mounted (markers in the DOM).
+
+    `load` fires before React mounts, and a fixed 150ms sleep raced under
+    load (WebKit software rendering): a gate then measured an empty page and
+    failed flakily. Marker-based waiting removes the race; a timeout here is
+    NOT an error — pages without markers (fixture proofs) fall through and
+    the gate's own checks decide.
+    """
+    try:
+        page.wait_for_selector(marker, state="attached", timeout=timeout_ms)
+    except Exception:
+        pass
+
+
 DEFAULT_CONTEXT = {
     "viewport": {"width": 360, "height": 780},
     "device_scale_factor": 3,

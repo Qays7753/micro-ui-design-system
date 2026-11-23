@@ -15,7 +15,7 @@ disabled semantics — 23.18 handles that per component).
 """
 import json
 
-from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, wait_lab_ready
 
 STYLE_PROPS = ("backgroundColor", "color", "borderTopColor", "opacity", "transform")
 
@@ -39,6 +39,18 @@ SNAPSHOT_JS = """
 }
 """ % json.dumps(list(STYLE_PROPS))
 
+# Center after scrolling: the lab pages grow stage by stage, so the gate
+# scrolls every element into the viewport before pressing it (a mouse event
+# outside the viewport never hits the element and would fake a violation).
+CENTER_JS = """
+(i) => {
+  const el = document.querySelector(`[data-ds-state-probe="${i}"]`);
+  el.scrollIntoView({ block: 'center' });
+  const r = el.getBoundingClientRect();
+  return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+}
+"""
+
 
 def run(gate: Gate, target, args):
     kind, resolved = resolve_page_target(target)
@@ -59,13 +71,15 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(150)
                     elements = page.evaluate(BASE_JS)
                     n_elements = len(elements)
                     for el in elements:
                         base = page.evaluate(SNAPSHOT_JS, el["i"])
                         # --- :active via a real press (mouse down, hold) ---
-                        page.mouse.move(el["x"], el["y"])
+                        center = page.evaluate(CENTER_JS, el["i"])
+                        page.mouse.move(center["x"], center["y"])
                         page.mouse.down()
                         page.wait_for_timeout(120)
                         active = page.evaluate(SNAPSHOT_JS, el["i"])

@@ -14,7 +14,7 @@ applicable. The proof fixture is an html that pulls a CDN script.
 import re
 from pathlib import Path
 
-from common import CONFIG, ROOT, Gate, gate_main, browser_session, DEFAULT_CONTEXT
+from common import CONFIG, ROOT, Gate, gate_main, browser_session, DEFAULT_CONTEXT, wait_lab_ready
 
 EXTERNAL_RX = re.compile(r"(?:src|href|url)\s*[=(]\s*[\"']?\s*(?:(?:https?:)?//|/[^/\"' ])")
 
@@ -68,6 +68,7 @@ def run(gate: Gate, target, args):
                 page.on("request", lambda req: requests.append(req.url)
                         if req.resource_type != "document" else None)
                 page.goto(url, wait_until="load", timeout=15000)
+                wait_lab_ready(page)
                 page.wait_for_timeout(300)
                 problems = []
                 for req in requests:

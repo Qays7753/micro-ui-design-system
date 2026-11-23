@@ -10,7 +10,7 @@ when amounts are hidden) must, on Chromium AND WebKit:
   - keep digits out of aria-label / data-aria too (the real value must not be
     in the page at all — القيمة الحقيقية لا تكون في الصفحة أصلاً)
 """
-from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, wait_lab_ready
 
 CHECK = CONFIG["hidden_amounts"]["check_attr"]
 BULLETS = CONFIG["hidden_amounts"]["bullets"]
@@ -50,6 +50,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     for el in page.evaluate(PROBE_JS, CHECK):
                         found += 1
                         if el["digits"]:

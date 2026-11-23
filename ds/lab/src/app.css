@@ -152,3 +152,11 @@
   outline: var(--mds-border-field-focus) solid var(--mds-role-focus-ring);
   outline-offset: var(--mds-space-4);
 }
+
+/* The 48 touch zone that hosts sm buttons (23.3: 44 داخل منطقة لمس 48). */
+.lab-touch-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-height: var(--mds-size-touch-min);
+}

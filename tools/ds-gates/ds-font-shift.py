@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 
 from common import CONFIG, ROOT, Gate, gate_main, browser_session, DEFAULT_CONTEXT, \
-    LocalServer, read_tokens, token_by_path
+    LocalServer, read_tokens, token_by_path, wait_lab_ready
 
 MARKERS_JS = """
 () => {

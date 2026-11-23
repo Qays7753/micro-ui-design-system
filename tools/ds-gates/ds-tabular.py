@@ -10,7 +10,7 @@ values rendered with the money font) must, on Chromium AND WebKit:
     tolerance (S1 report decision 4: WebKit software rounding at 40px sizes)
 The gate needs at least two such elements (the 111/888 pair).
 """
-from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, wait_lab_ready
 
 TOL = CONFIG["tabular_tolerance"]
 
@@ -42,6 +42,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(120)
                     probes = page.evaluate(PROBE_JS)
                     found = len(probes)

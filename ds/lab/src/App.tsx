@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, EntityMark, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -194,6 +194,49 @@ export function App() {
               <EntityMark size="md" value={drivers[1]} tone="waiting" />
               <span className="lab-name">{drivers[1]}</span>
             </span>
+          </div>
+        </section>
+
+        {/* ---- Button (BRIEF 9.3, 23.2, 23.3) ---- */}
+        <section className="lab-section" id="button">
+          <h2 className="lab-title">{t('title.button')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('variant.primary')}</span>
+            <Button data-ds-check="button-md">{t('button.recordMovement')}</Button>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('variant.secondary')}</span>
+            <Button variant="secondary">{t('button.acceptQuote')}</Button>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('variant.text')}</span>
+            <Button variant="text">{t('button.back')}</Button>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('variant.danger')}</span>
+            <Button variant="danger">{t('button.deleteMovement')}</Button>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.loading')}</span>
+            <Button loading>{t('saveState.sending')}</Button>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.sizes')}</span>
+            {/* sm visual is 44 inside a 48 container zone (23.3): the row
+                below is the 48 zone, so the instances are ds-exempt with this
+                documented reason. */}
+            <div className="lab-touch-row">
+              <Button size="sm" data-ds-check="button-sm" data-ds-exempt="">
+                {t('button.back')}
+              </Button>
+              <Button size="sm" variant="secondary" data-ds-exempt="">
+                {t('button.all')}
+              </Button>
+            </div>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.withIcon')}</span>
+            <Button leading={<BackIcon />}>{t('button.back')}</Button>
           </div>
         </section>
         </main>

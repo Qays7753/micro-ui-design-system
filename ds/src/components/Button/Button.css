@@ -1,0 +1,172 @@
+/*
+ * Button.css — BRIEF 9.3 + 23.2 + 23.3 + 23.24(1). Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-layout-button-icon-gap);
+  border: none;
+  padding: 0;
+  font-family: var(--mds-type-button-font);
+  font-size: var(--mds-type-button-size);
+  line-height: var(--mds-type-button-line);
+  font-weight: var(--mds-type-button-weight);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* md: 52 high, radius 16, padding 20, min-width 96 (23.3). */
+.mds-button--md {
+  min-height: var(--mds-size-button);
+  min-width: var(--mds-size-button-min-width);
+  padding-inline: var(--mds-layout-button-padding);
+  border-radius: var(--mds-radius-md);
+}
+
+/* sm: 44 visual (23.3) — the 48 touch zone comes from the container row the
+   button sits in, so lab instances carry data-ds-exempt with this comment as
+   the documented reason (the ds-small-screen floor stays 48 everywhere else). */
+.mds-button--sm {
+  min-height: var(--mds-size-button-compact);
+  padding-inline: var(--mds-layout-button-compact-padding);
+  border-radius: var(--mds-radius-inset);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+}
+
+/* ---- Variants (9.3): filled primary/secondary, text and danger on transparent ---- */
+.mds-button--primary {
+  background-color: var(--mds-color-brand-anchor);
+  color: var(--mds-color-on-anchor);
+}
+
+.mds-button--secondary {
+  background-color: var(--mds-color-brand-selected-bg);
+  color: var(--mds-color-brand-anchor);
+}
+
+.mds-button--text {
+  background-color: transparent;
+  color: var(--mds-color-brand-text);
+}
+
+.mds-button--danger {
+  background-color: transparent;
+  color: var(--mds-color-status-problem-fg);
+}
+
+/* ---- Pressed (23.2): background swap; scale(.96) on the filled pair only.
+   Both the hook state (data-pressed, with the 8px move cancel) and the
+   native :active drive the same styles, so keyboards, mice and touches
+   behave identically. ---- */
+.mds-button--primary:active,
+.mds-button--primary[data-pressed],
+.mds-button--secondary:active,
+.mds-button--secondary[data-pressed] {
+  transform: scale(var(--mds-motion-press-in-scale-button));
+}
+
+.mds-button--primary:active,
+.mds-button--primary[data-pressed] {
+  background-color: var(--mds-color-brand-anchor-pressed);
+}
+
+.mds-button--secondary:active,
+.mds-button--secondary[data-pressed] {
+  background-color: var(--mds-color-brand-selected-pressed);
+}
+
+.mds-button--text:active,
+.mds-button--text[data-pressed],
+.mds-button--danger:active,
+.mds-button--danger[data-pressed] {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Hover only on fine pointers, same colors as the press, no scale (23.2). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-button--primary:hover {
+    background-color: var(--mds-color-brand-anchor-pressed);
+  }
+
+  .mds-button--secondary:hover {
+    background-color: var(--mds-color-brand-selected-pressed);
+  }
+
+  .mds-button--text:hover,
+  .mds-button--danger:hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+}
+
+/* Focus ring: 2px brand-text, offset 2, keyboard only (23.2, 23.3). */
+.mds-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled (23.2): the filled pair dims to disabled-bg + disabled-fg; the
+   text pair keeps its transparent background with disabled-fg text. */
+.mds-button--primary:disabled,
+.mds-button--secondary:disabled {
+  background-color: var(--mds-color-disabled-bg);
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-button--text:disabled,
+.mds-button--danger:disabled {
+  background-color: transparent;
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-button:disabled {
+  cursor: default;
+}
+
+/* ---- Icon slot: one icon max, 20, start or end (23.3). ---- */
+.mds-button-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* ---- Loading: the 20/2 spinner with the 75% arc, spinning on the motion
+   token; reduced motion leaves the arc static (23.24(1)). The button keeps
+   its width (23.3) because the spinner replaces the icon slot in the same
+   flex line. ---- */
+.mds-button-spinner {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--mds-size-spinner);
+  height: var(--mds-size-spinner);
+  box-sizing: border-box;
+  border: var(--mds-size-spinner-stroke) solid transparent;
+  border-radius: var(--mds-radius-full);
+  /* 75% of the ring colored, one quarter transparent (motion.spinner-arc). */
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-bottom-color: currentColor;
+  animation: mds-button-spin var(--mds-motion-spinner-ms) var(--mds-motion-spinner-ease) infinite;
+}
+
+@keyframes mds-button-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-button-spinner {
+    animation: none;
+  }
+}

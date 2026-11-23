@@ -11,7 +11,7 @@ At the 360×780 phone viewport, on Chromium AND WebKit:
     marked data-ds-exempt are excluded.
 """
 from common import CONFIG, Gate, gate_main, browser_session, read_tokens, ROOT, \
-    resolve_page_target, token_by_path
+    resolve_page_target, token_by_path, wait_lab_ready
 
 SS = CONFIG["small_screen"]
 
@@ -55,6 +55,7 @@ def run(gate: Gate, target, args):
                     page = session.page(viewport={"width": SS["width"], "height": SS["height"]},
                                         device_scale_factor=3)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(150)
                     info = page.evaluate(PROBE_JS, touch_min)
                     n_interactive = len(info["interactives"])

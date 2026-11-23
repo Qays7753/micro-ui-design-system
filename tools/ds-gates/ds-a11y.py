@@ -14,7 +14,7 @@ WebKit and checks:
 """
 import re
 
-from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, wait_lab_ready
 
 ICON_BUTTONS_JS = """
 () => Array.from(document.querySelectorAll('button, [role="button"]')).map(el => {
@@ -87,6 +87,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
 
                     # 1) icon-only buttons need a name
                     named = page.evaluate(ICON_BUTTONS_JS)

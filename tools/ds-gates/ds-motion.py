@@ -16,7 +16,7 @@ documented resolution of that conflict; recorded in the S2 report).
 Both passes run on Chromium AND WebKit.
 """
 from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, \
-    read_tokens, token_by_path, ROOT
+    read_tokens, token_by_path, ROOT, wait_lab_ready
 
 ANIMATED_JS = """
 () => {
@@ -94,6 +94,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(200)
                     animated = page.evaluate(ANIMATED_JS)
                     for el in animated:
@@ -110,6 +111,7 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT, reduced_motion="reduce")
                     page.goto(url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
                     page.wait_for_timeout(200)
                     reduced = page.evaluate(ANIMATED_JS)
                     for el in reduced:
