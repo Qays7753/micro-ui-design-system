@@ -2,6 +2,7 @@
   "_comment": "ds-measure spec (@micro/ds S3). Staged per unit (builder decision, REPORT 2026-11-23): each unit adds its own checks here — the S2 seed ids return with their components (amount-visibility-toggle: unit 2, status-badge-height: unit 3, icon-button: S4 IconButton). Expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number.",
   "checks": [
     {"id": "money-md", "height": {"token": "type.amount-row.line"}},
-    {"id": "money-lg", "height": {"token": "type.number-lg.line"}}
+    {"id": "money-lg", "height": {"token": "type.number-lg.line"}},
+    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}}
   ]
 }

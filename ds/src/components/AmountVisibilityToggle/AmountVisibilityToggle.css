@@ -1,0 +1,73 @@
+/*
+ * AmountVisibilityToggle.css — IconButton rules of BRIEF 23.2/23.3 with the
+ * sizes of 23.22. Every value is a token reference; no raw hex/px/ms here.
+ */
+
+.mds-amount-visibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-icon-button);
+  height: var(--mds-size-icon-button);
+  padding: 0;
+  border: none;
+  border-radius: var(--mds-radius-full);
+  background-color: transparent;
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+}
+
+/* Driver density: 56 touch targets (BRIEF 23.18 density large, tokens 7). */
+.mds-amount-visibility-toggle--large {
+  width: var(--mds-size-touch-driver);
+  height: var(--mds-size-touch-driver);
+}
+
+/* Pressed: the filled circle of 23.2 — the native :active, no ripple, no
+   scaling for icon buttons. */
+.mds-amount-visibility-toggle:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Keyboard focus ring (BRIEF 23.3, 29.1-م7): role tokens, keyboard only. */
+.mds-amount-visibility-toggle:focus-visible {
+  outline: var(--mds-border-field-focus) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-space-4);
+}
+
+/* Hover exists only on fine pointers, with the pressed color and no motion
+   (BRIEF 23.2: no hover on touch). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-amount-visibility-toggle:hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+}
+
+/* Disabled: the icon dims to disabled-fg and stays legible (23.2, WCAG
+   exemption noted in the brief). */
+.mds-amount-visibility-toggle:disabled {
+  color: var(--mds-color-disabled-fg);
+  background-color: transparent;
+  cursor: default;
+}
+
+/* The eye swap plays the quick fade; reduced motion turns it off (23.14). */
+.mds-amount-visibility-toggle .mds-icon {
+  animation: mds-amounts-toggle-in var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+@keyframes mds-amounts-toggle-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-amount-visibility-toggle .mds-icon {
+    animation: none;
+  }
+}

@@ -1,8 +1,7 @@
 /**
- * Lab App — one component page per S3 unit (plan S3, K27). This commit:
- * unit 1/4, the Money page; AmountVisibilityToggle, StatusBadge and
- * EntityMark join with their units, each with its lab rows and measure-spec
- * checks.
+ * Lab App — one component page per S3 unit (plan S3, K27). So far: unit 1/4,
+ * the Money page; unit 2/4, the AmountVisibilityToggle page (the lab's master
+ * switch); StatusBadge and EntityMark join with their units.
  *
  * Structure rules the browser gates rely on (do not reorder lightly):
  * - The controls panel comes first, so every <button> sits inside the first
@@ -11,15 +10,20 @@
  * - Sections after the controls carry no interactive elements at all.
  * - The hidden-amounts demo nests its own AmountVisibilityProvider so
  *   `amount-hidden` probes exist at load whatever the master switch does.
+ * - A permanently disabled control is never rendered in the lab: ds-states
+ *   presses every visible button, and a disabled one shows no :active
+ *   feedback by definition (23.24(15)) — the gate exercises the disabled
+ *   look by toggling the native property instead.
  * - Only component/state names are shown (K32); all words come from the
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, Money, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, Money, t } from '@micro/ds';
 import { amounts, edgeCases } from './data';
 import './app.css';
 
 export function App() {
+  const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
 
   const applyScale = (next: 100 | 200) => {
@@ -28,32 +32,45 @@ export function App() {
   };
 
   return (
-    <div className="lab-page">
-      <header className="lab-header">
-        <p className="lab-stamp">{t('lab.stamp')}</p>
-      </header>
+    <AmountVisibilityProvider hidden={hidden}>
+      <div className="lab-page">
+        <header className="lab-header">
+          <p className="lab-stamp">{t('lab.stamp')}</p>
+        </header>
 
-      <main className="lab-main">
-        {/* ---- Controls: the lab's keys (first in DOM, first viewport) ---- */}
-        <section className="lab-section" id="controls">
-          <div className="lab-row">
-            <span className="lab-label">{t('lab.fontScale')}</span>
-            <button
-              type="button"
-              className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'}
-              onClick={() => applyScale(100)}
-            >
-              {t('lab.scale100')}
-            </button>
-            <button
-              type="button"
-              className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'}
-              onClick={() => applyScale(200)}
-            >
-              {t('lab.scale200')}
-            </button>
-          </div>
-        </section>
+        <main className="lab-main">
+          {/* ---- Controls: the lab's keys (first in DOM, first viewport) ---- */}
+          <section className="lab-section" id="controls">
+            <h2 className="lab-title">{t('title.amountToggle')}</h2>
+            <div className="lab-row">
+              <span className="lab-label">{t('state.default')}</span>
+              <AmountVisibilityToggle
+                onChange={(visible) => setHidden(!visible)}
+                data-ds-check="amount-visibility-toggle"
+              />
+            </div>
+            <div className="lab-row">
+              <span className="lab-label">{t('state.driver')}</span>
+              <AmountVisibilityToggle density="large" />
+            </div>
+            <div className="lab-row">
+              <span className="lab-label">{t('lab.fontScale')}</span>
+              <button
+                type="button"
+                className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'}
+                onClick={() => applyScale(100)}
+              >
+                {t('lab.scale100')}
+              </button>
+              <button
+                type="button"
+                className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'}
+                onClick={() => applyScale(200)}
+              >
+                {t('lab.scale200')}
+              </button>
+            </div>
+          </section>
 
         {/* ---- Money (BRIEF 8 + 23.22): the states of Money.states ---- */}
         <section className="lab-section" id="money">
@@ -116,7 +133,8 @@ export function App() {
             <Money value="888.888" size="lg" />
           </div>
         </section>
-      </main>
-    </div>
+        </main>
+      </div>
+    </AmountVisibilityProvider>
   );
 }

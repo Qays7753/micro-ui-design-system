@@ -14,3 +14,4 @@ export * from './i18n/time';
 export * from './lib';
 export * from './icons';
 export * from './components/Money';
+export * from './components/AmountVisibilityToggle';
