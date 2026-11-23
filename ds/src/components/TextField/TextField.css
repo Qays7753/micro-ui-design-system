@@ -1,0 +1,96 @@
+/*
+ * TextField.css — BRIEF 9.3 + 23.24(10). Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-text-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--mds-layout-label-to-field);
+  min-width: var(--mds-size-textfield-min-width);
+}
+
+.mds-text-field-label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-text-field-input {
+  box-sizing: border-box;
+  height: var(--mds-size-field);
+  padding-inline: var(--mds-space-16);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  border-radius: var(--mds-radius-md);
+  background-color: var(--mds-color-surface);
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  caret-color: var(--mds-color-brand-text);
+  outline: none;
+}
+
+.mds-text-field-input::placeholder {
+  color: var(--mds-color-text-secondary);
+}
+
+/* iOS Safari ignores ::selection (stylelint plugin flags it): the rule
+   stays for every engine that honors it and degrades gracefully there —
+   documented deviation, REPORT S4-3. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+.mds-text-field-input::selection {
+  background-color: var(--mds-color-brand-selected-bg);
+}
+/* stylelint-enable plugin/no-unsupported-browser-features */
+
+/* Focus: 2px brand-text border + the 4px halo (9.3). A text caret is
+   keyboard interaction by definition, so :focus-visible applies. */
+.mds-text-field-input:focus-visible {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
+}
+
+/* Error: the red border of 9.3 (width unchanged — the color carries it). */
+.mds-text-field--error .mds-text-field-input {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+.mds-text-field--disabled .mds-text-field-input {
+  background-color: var(--mds-color-disabled-bg);
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-bg);
+  cursor: default;
+}
+
+.mds-text-field--disabled .mds-text-field-input::placeholder {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The browser autofill fill is cancelled: the surface background is painted
+   back over it (23.24(10)). The inset spread comes from a token multiple —
+   no raw px (ds-raw-values). */
+.mds-text-field-input:-webkit-autofill {
+  -webkit-text-fill-color: var(--mds-color-text-primary);
+  -webkit-box-shadow: inset 0 0 0 calc(var(--mds-size-button-min-width) * 10) var(--mds-color-surface);
+  caret-color: var(--mds-color-brand-text);
+}
+
+/* The help line below: caption type, 4 gap to the field (9.3). */
+.mds-text-field-caption {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  margin-top: var(--mds-layout-field-to-help);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-text-field-caption--error {
+  color: var(--mds-color-status-problem-fg);
+}

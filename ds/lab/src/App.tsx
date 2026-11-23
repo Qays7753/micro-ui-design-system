@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -254,6 +254,26 @@ export function App() {
             <IconButton label={t('button.back')} onPress={() => {}} density="large">
               <BackIcon />
             </IconButton>
+          </div>
+        </section>
+
+        {/* ---- TextField (BRIEF 9.3, 23.24(10)) ---- */}
+        <section className="lab-section" id="text-field">
+          <h2 className="lab-title">{t('title.textField')}</h2>
+          <div className="lab-row">
+            <TextField id="field-supplier" label={t('field.supplier')} data-ds-check="text-field" />
+          </div>
+          <div className="lab-row">
+            <TextField id="field-phone" label={t('field.supplier')} placeholder={t('placeholder.phone')} />
+          </div>
+          <div className="lab-row">
+            <TextField id="field-hint" label={t('field.supplier')} caption={t('help.supplierName')} />
+          </div>
+          <div className="lab-row">
+            <TextField id="field-error" label={t('field.supplier')} state="error" caption={t('error.phoneFormat')} />
+          </div>
+          <div className="lab-row">
+            <TextField id="field-disabled" label={t('field.supplier')} disabled />
           </div>
         </section>
         </main>

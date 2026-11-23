@@ -1,15 +1,87 @@
 {
   "_comment": "ds-measure spec (@micro/ds S3). Staged per unit (builder decision, REPORT 2026-11-23): each unit adds its own checks here — the S2 seed ids return with their components (amount-visibility-toggle: unit 2, status-badge-height: unit 3, icon-button: S4 IconButton). Expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number.",
   "checks": [
-    {"id": "money-md", "height": {"token": "type.amount-row.line"}},
-    {"id": "money-lg", "height": {"token": "type.number-lg.line"}},
-    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
-    {"id": "status-badge-height", "height": {"px": 24}},
-    {"id": "entity-mark-sm", "width": {"px": 32}, "height": {"px": 32}},
-    {"id": "entity-mark-md", "width": {"px": 44}, "height": {"px": 44}},
-    {"id": "entity-mark-lg", "width": {"px": 64}, "height": {"px": 64}},
-    {"id": "button-md", "height": {"token": "size.button"}},
-    {"id": "button-sm", "height": {"token": "size.button-compact"}},
-    {"id": "icon-button", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}}
+    {
+      "id": "money-md",
+      "height": {
+        "token": "type.amount-row.line"
+      }
+    },
+    {
+      "id": "money-lg",
+      "height": {
+        "token": "type.number-lg.line"
+      }
+    },
+    {
+      "id": "amount-visibility-toggle",
+      "width": {
+        "token": "size.touch-min"
+      },
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
+      "id": "status-badge-height",
+      "height": {
+        "px": 24
+      }
+    },
+    {
+      "id": "entity-mark-sm",
+      "width": {
+        "px": 32
+      },
+      "height": {
+        "px": 32
+      }
+    },
+    {
+      "id": "entity-mark-md",
+      "width": {
+        "px": 44
+      },
+      "height": {
+        "px": 44
+      }
+    },
+    {
+      "id": "entity-mark-lg",
+      "width": {
+        "px": 64
+      },
+      "height": {
+        "px": 64
+      }
+    },
+    {
+      "id": "button-md",
+      "height": {
+        "token": "size.button"
+      }
+    },
+    {
+      "id": "button-sm",
+      "height": {
+        "token": "size.button-compact"
+      }
+    },
+    {
+      "id": "icon-button",
+      "width": {
+        "token": "size.touch-min"
+      },
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
+      "id": "text-field",
+      "height": {
+        "px": 84
+      },
+      "_note": "field root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + input 56 (size.field)"
+    }
   ]
 }

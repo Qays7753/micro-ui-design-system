@@ -19,3 +19,4 @@ export * from './components/StatusBadge';
 export * from './components/EntityMark';
 export * from './components/Button';
 export * from './components/IconButton';
+export * from './components/TextField';
