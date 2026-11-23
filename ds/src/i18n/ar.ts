@@ -132,6 +132,8 @@ export const ar = {
   'lab.scale200': { kind: 'button', text: '200%' },
   'title.money': { kind: 'title', text: 'المبلغ' },
   'title.amountToggle': { kind: 'title', text: 'إخفاء المبالغ وإظهارها' },
+  'title.statusBadge': { kind: 'title', text: 'شارة الحالة' },
+  'state.tones': { kind: 'badge', text: 'النغمات' },
   'state.driver': { kind: 'badge', text: 'وضع السائق' },
   'state.default': { kind: 'badge', text: 'افتراضي' },
   'state.debt': { kind: 'badge', text: 'دين' },

@@ -3,6 +3,7 @@
   "checks": [
     {"id": "money-md", "height": {"token": "type.amount-row.line"}},
     {"id": "money-lg", "height": {"token": "type.number-lg.line"}},
-    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}}
+    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
+    {"id": "status-badge-height", "height": {"px": 24}}
   ]
 }

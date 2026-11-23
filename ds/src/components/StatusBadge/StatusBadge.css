@@ -1,0 +1,81 @@
+/*
+ * StatusBadge.css — BRIEF 23.6 + 23.20 + the status color pairs of 5.2.
+ * Every value is a token reference; no raw hex/px/ms in this file.
+ */
+
+.mds-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--mds-size-badge);
+  max-width: var(--mds-size-badge-max-width);
+  padding-inline: var(--mds-layout-badge-padding);
+  border-radius: var(--mds-radius-xs);
+  /* The 160 cap clips (23.20) — a long word must not push the page wider. */
+  overflow: hidden;
+}
+
+/* The content remounts on a tone change to replay the quick cross-fade of
+   23.14 (تغيّر حالة الشارة). min-width: 0 lets it shrink inside the cap. */
+.mds-status-badge-content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-layout-badge-icon-gap);
+  min-width: 0;
+  animation: mds-status-badge-in var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+@keyframes mds-status-badge-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-status-badge-content {
+    animation: none;
+  }
+}
+
+/* The word truncates with «…» past the 160 cap (23.20); type is the micro
+   row of the appendix (12/16/600) — BRIEF 23.6. min-width: 0 lets the
+   nowrap word shrink to the available space instead of overflowing. */
+.mds-status-badge-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  font-weight: var(--mds-type-micro-weight);
+}
+
+/* The five tones: light bg + dark fg, no border, no dot (23.6). */
+.mds-status-badge--done {
+  background-color: var(--mds-color-status-done-bg);
+  color: var(--mds-color-status-done-fg);
+}
+
+.mds-status-badge--waiting {
+  background-color: var(--mds-color-status-waiting-bg);
+  color: var(--mds-color-status-waiting-fg);
+}
+
+.mds-status-badge--problem {
+  background-color: var(--mds-color-status-problem-bg);
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-status-badge--info {
+  background-color: var(--mds-color-status-info-bg);
+  color: var(--mds-color-status-info-fg);
+}
+
+.mds-status-badge--neutral {
+  background-color: var(--mds-color-status-neutral-bg);
+  color: var(--mds-color-status-neutral-fg);
+}

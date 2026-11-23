@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, Money, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, edgeCases } from './data';
 import './app.css';
 
@@ -131,6 +131,27 @@ export function App() {
             <Money value={amounts[3]} size="lg" data-ds-check="money-lg" />
             <Money value="111.111" size="lg" />
             <Money value="888.888" size="lg" />
+          </div>
+        </section>
+
+        {/* ---- StatusBadge (BRIEF 23.6): the five tones + tight space ---- */}
+        <section className="lab-section" id="badge">
+          <h2 className="lab-title">{t('title.statusBadge')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.tones')}</span>
+            <StatusBadge tone="done" />
+            <StatusBadge tone="waiting" />
+            <StatusBadge tone="problem" />
+            <StatusBadge tone="info" data-ds-check="status-badge-height" />
+            <StatusBadge tone="neutral" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('badge.cancelled')}</span>
+            <StatusBadge tone="neutral" label={ar['badge.cancelled'].text} />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.longest')}</span>
+            <StatusBadge tone="waiting" label={edgeCases.longestName} />
           </div>
         </section>
         </main>
