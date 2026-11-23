@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -237,6 +237,23 @@ export function App() {
           <div className="lab-row">
             <span className="lab-label">{t('state.withIcon')}</span>
             <Button leading={<BackIcon />}>{t('button.back')}</Button>
+          </div>
+        </section>
+
+        {/* ---- IconButton (BRIEF 23.2, 23.3): circular 48, named ---- */}
+        <section className="lab-section" id="icon-button">
+          <h2 className="lab-title">{t('title.iconButton')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.default')}</span>
+            <IconButton label={t('button.back')} onPress={() => {}} data-ds-check="icon-button">
+              <BackIcon />
+            </IconButton>
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.driver')}</span>
+            <IconButton label={t('button.back')} onPress={() => {}} density="large">
+              <BackIcon />
+            </IconButton>
           </div>
         </section>
         </main>

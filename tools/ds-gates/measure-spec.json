@@ -9,6 +9,7 @@
     {"id": "entity-mark-md", "width": {"px": 44}, "height": {"px": 44}},
     {"id": "entity-mark-lg", "width": {"px": 64}, "height": {"px": 64}},
     {"id": "button-md", "height": {"token": "size.button"}},
-    {"id": "button-sm", "height": {"token": "size.button-compact"}}
+    {"id": "button-sm", "height": {"token": "size.button-compact"}},
+    {"id": "icon-button", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}}
   ]
 }

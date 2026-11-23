@@ -25,11 +25,12 @@ def run(gate: Gate, target, args):
         if re.match(r"^(https?|file)://", target):
             gate.fail("ds-standalone-mode/file-protocol", f"--target must be a file path for this gate, got {target}")
             return
-        try:
-            is_root = path.resolve() == ROOT.resolve()
-        except OSError:
-            is_root = False
-        if path.is_dir() and not is_root:
+        if path.is_dir():
+            # Every directory goes through the same candidate search — the
+            # repo root included (S4 fix: the old is_root shortcut skipped
+            # the search and then reported the ROOT itself as "not a file",
+            # so the normal no---target run said "not applicable" forever
+            # even after previews/ds-lab/standalone.html landed).
             for candidate in (path / "previews" / "ds-lab" / "standalone.html", path / "standalone.html"):
                 if candidate.is_file():
                     path = candidate
@@ -39,11 +40,7 @@ def run(gate: Gate, target, args):
                         f"no standalone html (previews/ds-lab/standalone.html) under {target}")
                 return
         if not path.is_file():
-            if is_root:
-                gate.na("ds-standalone-mode/standalone",
-                        "previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)")
-            else:
-                gate.na("ds-standalone-mode/standalone", f"--target file does not exist: {target}")
+            gate.na("ds-standalone-mode/standalone", f"--target file does not exist: {target}")
             return
     else:
         path = ROOT / "previews" / "ds-lab" / "standalone.html"

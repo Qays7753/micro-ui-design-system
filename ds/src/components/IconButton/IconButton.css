@@ -1,0 +1,55 @@
+/*
+ * IconButton.css — BRIEF 23.2 + 23.3. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-icon-button);
+  height: var(--mds-size-icon-button);
+  padding: 0;
+  border: none;
+  border-radius: var(--mds-radius-full);
+  background-color: transparent;
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Driver density: the 56 touch circle (23.18, BRIEF 7). */
+.mds-icon-button--large {
+  width: var(--mds-size-touch-driver);
+  height: var(--mds-size-touch-driver);
+}
+
+/* Pressed: the filled circle of 23.2 — background swap only, no scale, no
+   ripple. Both the hook state (data-pressed, with the 8px move cancel) and
+   the native :active drive the same styles. */
+.mds-icon-button:active,
+.mds-icon-button[data-pressed],
+.mds-icon-button--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Hover only on fine pointers, same color as the press (23.2). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-icon-button:hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+}
+
+/* Circular focus ring: 2px brand-text, offset 2, keyboard only (23.2); the
+   full radius keeps the outline round. */
+.mds-icon-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled: the icon dims to disabled-fg, background stays empty (23.2). */
+.mds-icon-button:disabled {
+  color: var(--mds-color-disabled-fg);
+  background-color: transparent;
+  cursor: default;
+}

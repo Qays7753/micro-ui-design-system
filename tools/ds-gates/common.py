@@ -496,7 +496,16 @@ def prove_main(name, run_fn, args):
     entry = Path(sys.argv[0]).resolve()
     base = FIXTURES / name
     checks = []
-    for kind, expected in (("bad", 1), ("clean", 0)):
+    # bad -> 1 and clean -> 0 always; a gate may add more kinds through
+    # fixtures/<gate>/expectations.json, e.g. {"rootlike": 0} for a fixture
+    # shaped like the repo root (previews/ds-lab/standalone.html inside).
+    kinds = [("bad", 1), ("clean", 0)]
+    expectations_file = base / "expectations.json"
+    if expectations_file.is_file():
+        import json
+        for kind, expected in json.loads(expectations_file.read_text(encoding="utf-8")).items():
+            kinds.append((kind, int(expected)))
+    for kind, expected in kinds:
         fixture = base / kind
         check_id = f"prove/{kind}"
         if not fixture.is_dir():

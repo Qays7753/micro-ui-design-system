@@ -135,6 +135,7 @@ export const ar = {
   'title.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'state.tones': { kind: 'badge', text: 'النغمات' },
   'title.entityMark': { kind: 'title', text: 'علامة الكيان' },
+  'title.iconButton': { kind: 'title', text: 'زر الأيقونة' },
   'state.initial': { kind: 'badge', text: 'الحرف الأول' },
   'state.fundTypes': { kind: 'badge', text: 'أنواع الصناديق' },
   'state.badged': { kind: 'badge', text: 'بشارة تحقق' },
