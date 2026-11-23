@@ -35,7 +35,8 @@
     "icons": "node tools/generate-icons.mjs",
     "icons:check": "node tools/generate-icons.mjs --check",
     "fonts": "node tools/generate-fonts.mjs",
-    "fonts:measure": "cd .. && uv run python ds/tools/measure-fonts.py"
+    "fonts:measure": "cd .. && uv run python ds/tools/measure-fonts.py",
+    "build:standalone": "vite build --config lab/vite.config.ts && node tools/build-standalone.mjs"
   },
   "peerDependencies": {
     "react": "^19",

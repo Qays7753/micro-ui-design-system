@@ -24,11 +24,12 @@
     "size", "variant", "tone", "state", "saveState", "density", "disabled", "selected",
     "draft", "locked", "loading", "label", "caption", "value", "leading", "trailing",
     "onPress", "onLongPress", "onChange", "onDismiss", "onRetry",
-    "className", "children", "id", "style", "ref", "key", "testID"
+    "className", "children", "id", "style", "ref", "key", "testID",
+    "direction", "debt"
   ],
   "banned_props_jsx": ["onLongTap", "onTouchTap", "onTap", "kind", "color", "pressDelay"],
   "banned_props_types": ["kind", "color", "type", "onLongTap", "onTouchTap", "onTap", "onClick", "pressDelay", "padding", "width", "height", "backgroundColor", "textColor"],
-  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop.",
+  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. direction/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك), added with the S3 Money unit.",
   "copy": {
     "kinds": ["button", "title", "badge", "success", "error", "empty", "help", "placeholder", "screen-reader"],
     "kind_word_limits": {

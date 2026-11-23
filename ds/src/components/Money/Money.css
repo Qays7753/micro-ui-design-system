@@ -1,0 +1,108 @@
+/*
+ * Money.css — BRIEF 8 + 23.22. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values). md = amount-row, lg = number-lg.
+ */
+
+.mds-money {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  font-family: var(--mds-type-amount-row-font);
+  font-size: var(--mds-type-amount-row-size);
+  line-height: var(--mds-type-amount-row-line);
+  font-weight: var(--mds-type-amount-row-weight);
+  color: var(--mds-color-text-primary);
+  /* The digits switch to a size-tuned fallback together with the webfont, so
+     the swap must not move anything (BRIEF 27.8); tabular-nums on the root
+     also covers wrapper-level probing of the digits (BRIEF 29.3-د9). */
+  font-variant-numeric: var(--mds-font-numeric);
+}
+
+.mds-money--lg {
+  font-family: var(--mds-type-number-lg-font);
+  font-size: var(--mds-type-number-lg-size);
+  line-height: var(--mds-type-number-lg-line);
+  font-weight: var(--mds-type-number-lg-weight);
+}
+
+.mds-money--disabled {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The visual part swaps shown/hidden with the quick cross-fade (BRIEF 23.22);
+   the remount replays this entry fade. */
+.mds-money-visual {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--mds-layout-amount-unit-gap);
+  animation: mds-money-swap var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+@keyframes mds-money-swap {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* BRIEF 23.14: reduced motion turns every movement into fade — here, off. */
+@media (prefers-reduced-motion: reduce) {
+  .mds-money-visual {
+    animation: none;
+  }
+}
+
+/* Debt word «لك» / «عليك» before the number (BRIEF 8); same gap token as the
+   unit gap — the brief gives no separate word gap. */
+.mds-money-debt {
+  margin-inline-end: var(--mds-layout-amount-unit-gap);
+}
+
+/* The digits and the sign: LTR isolation, equal-width digits (BRIEF 8). The
+   real minus U+2212 comes from formatMoney, never a hyphen. */
+.mds-money-value {
+  font-variant-numeric: var(--mds-font-numeric);
+}
+
+/* Digit tracking only from 28 up (BRIEF 5.3): lg renders number-lg 28. */
+.mds-money--lg .mds-money-value {
+  letter-spacing: var(--mds-font-digit-tracking);
+}
+
+.mds-money-unit {
+  font-family: var(--mds-type-amount-row-font);
+}
+
+.mds-money-missing {
+  color: inherit;
+}
+
+/* Loading state: the gray skeleton in the shape of the amount line (BRIEF 8,
+   nearest 23.10 values: line height, hairline radius, skeleton color). */
+.mds-money-skeleton {
+  display: inline-block;
+  width: var(--mds-size-row-text-min-width);
+  height: var(--mds-type-amount-row-line);
+  background-color: var(--mds-color-skeleton);
+  border-radius: var(--mds-radius-2xs);
+}
+
+.mds-money--lg .mds-money-skeleton {
+  height: var(--mds-type-number-lg-line);
+}
+
+/* Screen-reader-only text (the full-words amount of 23.17): a hairline-sized
+   box with hidden overflow paints nothing but stays in the accessibility
+   tree. Sizes come from token references — the hairline token is the 1px
+   scale — so this file stays free of raw values (ds-raw-values). */
+.mds-visually-hidden {
+  position: absolute;
+  width: var(--mds-border-hairline);
+  height: var(--mds-border-hairline);
+  margin: calc(-1 * var(--mds-border-hairline));
+  overflow: hidden;
+  white-space: nowrap;
+}

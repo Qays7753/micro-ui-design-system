@@ -1,0 +1,154 @@
+/*
+ * Lab stylesheet — the consumer-side layout of the S3 pages. Values come from
+ * the token variables shipped inside @micro/ds styles (no palette copies);
+ * class names are lab-* so nothing collides with the mds- namespace (K4).
+ */
+
+.lab-page {
+  min-height: 100vh;
+  background-color: var(--mds-color-canvas);
+}
+
+.lab-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-layer-sticky);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  padding: var(--mds-space-16);
+  background-color: var(--mds-color-canvas);
+  border-bottom: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
+.lab-stamp {
+  margin: 0;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.lab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-space-8);
+}
+
+.lab-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--mds-size-touch-min);
+  min-height: var(--mds-size-touch-min);
+  padding-inline: var(--mds-space-16);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-brand-text);
+  text-decoration: none;
+  border-radius: var(--mds-radius-md);
+}
+
+.lab-nav-link:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.lab-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+  padding-block: var(--mds-space-16);
+  padding-inline: var(--mds-layout-screen-margin-phone);
+}
+
+.lab-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+}
+
+.lab-title {
+  margin: 0;
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  line-height: var(--mds-type-title-section-line);
+  font-weight: var(--mds-type-title-section-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.lab-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mds-space-12);
+}
+
+.lab-label {
+  flex-basis: 100%;
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+.lab-name {
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.lab-entity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+}
+
+/* The lab keys (font scale). Real buttons with the interaction states the
+   platform applies to every control (BRIEF 23.2). */
+.lab-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--mds-size-touch-min);
+  min-height: var(--mds-size-touch-min);
+  padding-inline: var(--mds-space-16);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-primary);
+  background-color: var(--mds-color-surface);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-md);
+  cursor: pointer;
+}
+
+.lab-key--on {
+  color: var(--mds-color-brand-anchor);
+  background-color: var(--mds-color-brand-selected-bg);
+  border-color: var(--mds-color-surface-edge);
+}
+
+.lab-key:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.lab-key:disabled {
+  color: var(--mds-color-disabled-fg);
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-surface-edge);
+  cursor: default;
+}
+
+/* Keyboard focus ring (BRIEF 23.3, 29.1-م7): visible on keyboard focus, not
+   on mouse press; width/color from the role tokens. */
+.lab-key:focus-visible,
+.lab-nav-link:focus-visible {
+  outline: var(--mds-border-field-focus) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-space-4);
+}

@@ -15,7 +15,11 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@micro/ds": ["./src/index.ts"]
+    }
   },
-  "include": ["src", "lab/src/data", "tools/**/*.ts", "vite.config.ts", "eslint.config.mjs", "stylelint.config.mjs"]
+  "include": ["src", "lab/src", "tools/**/*.ts", "vite.config.ts", "lab/vite.config.ts", "eslint.config.mjs", "stylelint.config.mjs"]
 }

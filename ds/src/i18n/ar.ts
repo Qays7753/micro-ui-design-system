@@ -124,6 +124,23 @@ export const ar = {
   'money.missing': { kind: 'badge', text: '—' },
   'money.hiddenGlyph': { kind: 'badge', text: '••••' },
 
+  // --- Lab chrome and state names (plan K27/K32: the lab shows component and
+  //     state names only; every word lives here, not in lab source) ---
+  'lab.stamp': { kind: 'title', text: 'مختبر الدفعة الأولى' },
+  'lab.fontScale': { kind: 'badge', text: 'حجم الخط' },
+  'lab.scale100': { kind: 'button', text: '100%' },
+  'lab.scale200': { kind: 'button', text: '200%' },
+  'title.money': { kind: 'title', text: 'المبلغ' },
+  'state.default': { kind: 'badge', text: 'افتراضي' },
+  'state.debt': { kind: 'badge', text: 'دين' },
+  'state.hidden': { kind: 'badge', text: 'مخفي' },
+  'state.missing': { kind: 'badge', text: 'مفقود' },
+  'state.loading': { kind: 'badge', text: 'تحميل' },
+  'state.disabled': { kind: 'badge', text: 'معطّل' },
+  'state.longest': { kind: 'badge', text: 'أطول قيمة' },
+  'state.sizes': { kind: 'badge', text: 'المقاسات' },
+  'state.tabular': { kind: 'badge', text: 'أرقام جدولية' },
+
   // --- Money aria words (BRIEF 23.17; assembled in lib/format-money.ts) ---
   'money.ariaMinus': { kind: 'screen-reader', text: 'سالب' },
   'money.ariaDinar': { kind: 'screen-reader', text: 'دينار' },

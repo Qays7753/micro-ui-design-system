@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>مختبر نظام التصميم</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      /* Load the inline webfonts before the app bundle executes (BRIEF 27.8,
+         single-file lab: the faces are data URIs, so the decode is queued at
+         parse time and finishes while the deferred bundle is still parsing —
+         the first layout therefore already uses the real fonts and nothing
+         moves when they apply). Classic script on purpose: it must run during
+         parsing, before the deferred module. */
+      try {
+        if (document.fonts && document.fonts.load) {
+          document.fonts.load('500 40px Rubik');
+          document.fonts.load('600 16px Rubik');
+          document.fonts.load('400 16px "IBM Plex Sans Arabic"');
+          document.fonts.load('500 16px "IBM Plex Sans Arabic"');
+          document.fonts.load('600 16px "IBM Plex Sans Arabic"');
+        }
+      } catch (error) {
+        /* font bootstrap is an optimization, never a blocker */
+      }
+    </script>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

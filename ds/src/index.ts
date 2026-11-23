@@ -13,3 +13,4 @@ export * from './i18n/plural';
 export * from './i18n/time';
 export * from './lib';
 export * from './icons';
+export * from './components/Money';

@@ -1,8 +1,7 @@
 {
-  "_comment": "ds-measure spec (@micro/ds S2). The builder (S3+) marks lab elements with data-ds-check=\"<id>\" and extends this file; expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number. Seeded from BRIEF 29.2 exact specs.",
+  "_comment": "ds-measure spec (@micro/ds S3). Staged per unit (builder decision, REPORT 2026-11-23): each unit adds its own checks here — the S2 seed ids return with their components (amount-visibility-toggle: unit 2, status-badge-height: unit 3, icon-button: S4 IconButton). Expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number.",
   "checks": [
-    {"id": "icon-button", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
-    {"id": "amount-visibility-toggle", "width": {"token": "size.touch-min"}, "height": {"token": "size.touch-min"}},
-    {"id": "status-badge-height", "height": {"px": 24}}
+    {"id": "money-md", "height": {"token": "type.amount-row.line"}},
+    {"id": "money-lg", "height": {"token": "type.number-lg.line"}}
   ]
 }
