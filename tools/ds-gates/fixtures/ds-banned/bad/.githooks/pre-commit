@@ -1,0 +1,3 @@
+#!/bin/sh
+# Deliberately non-portable fixture hook: machine-absolute path.
+exec /Users/dev/tools/run-checks.sh "$@"

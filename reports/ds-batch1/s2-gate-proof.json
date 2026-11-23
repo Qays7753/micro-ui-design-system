@@ -25,8 +25,14 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "total: 3 ok, 0 failed",
-      "prove_exit": 0
+      "current_state_tail": "total: 4 ok, 0 failed",
+      "prove_exit": 0,
+      "updated": {
+        "date": "2026-11-23",
+        "reason": "owner task item 4: added check 4 — machine-absolute paths (home/Users/tmp roots) in tracked files under ds/, tools/ds-gates/ and .githooks/; fixtures extended (bad: /home/ + /tmp/ + /Users/ literals; clean: relative paths)",
+        "current_state_tail": "total: 4 ok, 0 failed",
+        "violation_first_fail": "PASS ds-banned/prove/bad | tools/ds-gates/fixtures/ds-banned/bad -> exit 1 (expected 1); FAIL ds-banned/deps | 2 banned packages"
+      }
     },
     {
       "gate": "ds-structure",

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """measure-fonts.py — S1 font acceptance (plan S1 / BRIEF 5.3 + 27.8).
 
-Run via `npm run fonts:measure` inside ds/ (it sources
-/home/z/webkit-libs/env.sh for WebKit/EGL, then runs this with the repo venv
-Python, whose Playwright 1.63 has both Chromium and WebKit installed).
+Run via `npm run fonts:measure` inside ds/ (repo venv Python, whose
+Playwright has both Chromium and WebKit installed — see tools/README.md
+for browser setup). WebKit in environments without a GPU is handled by
+the shared launch fallback in tools/ds-gates/common.py: plain launch
+first, one software-EGL retry only if that fails.
 
 Serves ds/src/fonts over localhost, loads them through real @font-face,
 waits for document.fonts.ready, then measures on BOTH engines:
@@ -21,13 +23,14 @@ waits for document.fonts.ready, then measures on BOTH engines:
 Results go to reports/ds-batch1/s1-font-measure.json; exit 1 on failure.
 """
 import json
+import sys
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
-
 DS_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(DS_ROOT.parent / "tools" / "ds-gates"))
+from common import browser_session  # noqa: E402 - path shim for the shared gate framework
 FONTS_DIR = DS_ROOT / "src" / "fonts"
 REPORT_PATH = DS_ROOT.parent / "reports" / "ds-batch1" / "s1-font-measure.json"
 
@@ -124,14 +127,30 @@ SHIFT_PROBES = [
 ]
 
 
-def measure_engine(engine_name, browser_type, url):
-    browser = browser_type.launch()
-    page = browser.new_page(viewport={"width": 360, "height": 780})
+def measure_engine(engine_name, session, url):
+    page = session.page(viewport={"width": 360, "height": 780})
     page.goto(url)
-    page.evaluate("document.fonts.ready")
+    # Force every @font-face to actually load before measuring anything.
+    # An empty page never triggers font loads (browsers load lazily on first
+    # use), so fonts.ready alone resolves with every face still "unloaded"
+    # and fonts.check reports false — the S1 report slipped through as a
+    # FAIL precisely because of this (defect found 2026-11-23).
+    page.evaluate(
+        """async () => {
+          await Promise.all([
+            document.fonts.load('500 40px Rubik', '888.888'),
+            document.fonts.load('600 28px Rubik', '0123456789'),
+            document.fonts.load('400 16px "IBM Plex Sans Arabic"', '0123456789'),
+            document.fonts.load('500 16px "IBM Plex Sans Arabic"', '0123456789'),
+            document.fonts.load('600 16px "IBM Plex Sans Arabic"', '0123456789'),
+          ]);
+          await document.fonts.ready;
+        }"""
+    )
     loaded = page.evaluate(
         "({ rubik: document.fonts.check('500 40px Rubik'),"
         " plex400: document.fonts.check('400 16px IBM Plex Sans Arabic'),"
+        " plex500: document.fonts.check('500 16px IBM Plex Sans Arabic'),"
         " plex600: document.fonts.check('600 16px IBM Plex Sans Arabic') })"
     )
 
@@ -174,7 +193,6 @@ def measure_engine(engine_name, browser_type, url):
             # across fonts; the 2px gate is about the line box and baseline.
             "pass": deltas["heightPx"] <= SHIFT_TOLERANCE_PX and deltas["topPx"] <= SHIFT_TOLERANCE_PX,
         }
-    browser.close()
     engine_pass = (
         loaded["rubik"] and loaded["plex400"] and loaded["plex600"]
         and all(r["pass"] for r in tabular.values())
@@ -229,15 +247,15 @@ def main():
         "engines": {},
     }
     failed = False
-    with sync_playwright() as pw:
-        for name in ("chromium", "webkit"):
-            try:
-                results["engines"][name] = measure_engine(name, getattr(pw, name), url)
-                if not results["engines"][name]["pass"]:
-                    failed = True
-            except Exception as error:  # noqa: BLE001 - report and keep going
-                results["engines"][name] = {"engine": name, "error": str(error), "pass": False}
+    for name in ("chromium", "webkit"):
+        try:
+            with browser_session(name) as session:
+                results["engines"][name] = measure_engine(name, session, url)
+            if not results["engines"][name]["pass"]:
                 failed = True
+        except Exception as error:  # noqa: BLE001 - report and keep going
+            results["engines"][name] = {"engine": name, "error": str(error), "pass": False}
+            failed = True
     server.shutdown()
     results["pass"] = not failed
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)

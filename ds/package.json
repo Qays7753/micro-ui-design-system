@@ -35,7 +35,7 @@
     "icons": "node tools/generate-icons.mjs",
     "icons:check": "node tools/generate-icons.mjs --check",
     "fonts": "node tools/generate-fonts.mjs",
-    "fonts:measure": "bash -c 'source /home/z/webkit-libs/env.sh && cd .. && uv run python ds/tools/measure-fonts.py'"
+    "fonts:measure": "cd .. && uv run python ds/tools/measure-fonts.py"
   },
   "peerDependencies": {
     "react": "^19",

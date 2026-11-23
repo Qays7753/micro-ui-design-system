@@ -1,0 +1,3 @@
+#!/bin/sh
+# Portable fixture hook: repo-relative invocation.
+exec ./tools/run-checks.sh "$@"

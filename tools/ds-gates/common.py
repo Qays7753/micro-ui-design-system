@@ -18,8 +18,10 @@ Contract every ds gate follows (task S2 / plan section 6):
 
 Browser gates run on TWO engines (Chromium + WebKit, plan section 6) and
 document each engine separately: <check-id>/chromium and <check-id>/webkit.
-WebKit needs the software-EGL environment (see browser_env below); the gate
-applies it itself so check-all needs no sourcing.
+Both engines launch with the environment untouched first; only when a
+plain WebKit launch fails does the session retry once with the software-EGL
+fallback environment (apply_webkit_env below + tools/README.md) — machines
+where the browsers run as officially installed are never touched.
 
 No gate writes a file it later controls (manifest --check pattern): reports
 are written only to explicit --out paths chosen by the caller.
@@ -223,28 +225,49 @@ def component_closed_list(target_root):
 # --------------------------------------------------------------------------
 # Browser support: engines, environment, local HTTP fixture server
 # --------------------------------------------------------------------------
-def apply_webkit_env():
-    """Mirror /home/z/webkit-libs/env.sh (software EGL for WebKit) into os.environ.
+def webkit_install_dir():
+    """Newest Playwright WebKit install directory, or None."""
+    installs = glob.glob(os.path.join(os.path.expanduser("~"), ".cache", "ms-playwright", "webkit-*"))
+    if not installs:
+        return None
+    return sorted(installs, key=lambda p: [int(x) for x in re.findall(r"\d+", p) if x.isdigit()])[-1]
 
-    Idempotent and non-destructive: an environment that was already sourced
-    externally wins. This lets check-all run the browser gates without any
-    prior `source` (task: "مع تمرير البيئة").
+
+def apply_webkit_env():
+    """Software-EGL fallback environment for WebKit (see tools/README.md).
+
+    Returns True only when the installed WebKit actually carries the fallback
+    directories (sys/egl_vendor + sys/lib/dri inside its minibrowser-wpe
+    bundle). A plain official install does not have them unless the sandbox
+    setup documented in tools/README.md added them, so on a normal machine
+    this returns False and the environment is left untouched.
+
+    Called exclusively from the retry path of browser_session, after a plain
+    launch already failed: an environment sourced externally always wins
+    (setdefault, never overwrite).
     """
-    if not glob.glob(os.path.expanduser("~/.cache/ms-playwright/webkit-*")):
-        return
-    cands = sorted(glob.glob(os.path.expanduser("~/.cache/ms-playwright/webkit-*")),
-                   key=lambda p: [int(x) for x in re.findall(r"\d+", p) if x.isdigit()])
-    wk = cands[-1] + "/minibrowser-wpe"
+    install = webkit_install_dir()
+    if not install:
+        return False
+    sysdir = os.path.join(install, "minibrowser-wpe", "sys")
+    egl_vendor = os.path.join(sysdir, "egl_vendor")
+    dri = os.path.join(sysdir, "lib", "dri")
+    if not (os.path.isdir(egl_vendor) and os.path.isdir(dri)):
+        return False
     env = {
+        # The ldd-based host validation cannot see libraries inside the
+        # browser bundle's own LD_LIBRARY_PATH; skip it and let the real
+        # launch decide (the actual launch inherits those paths natively).
         "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS": "1",
         "EGL_PLATFORM": "surfaceless",
         "LIBGL_ALWAYS_SOFTWARE": "1",
-        "__EGL_VENDOR_LIBRARY_DIRS": wk + "/egl_vendor",
-        "LIBGL_DRIVERS_PATH": wk + "/dri",
         "LIBGL_ALWAYS_INDIRECT": "0",
+        "__EGL_VENDOR_LIBRARY_DIRS": egl_vendor,
+        "LIBGL_DRIVERS_PATH": dri,
     }
     for key, value in env.items():
         os.environ.setdefault(key, value)
+    return True
 
 
 class LocalServer:
@@ -307,36 +330,70 @@ class LocalServer:
         self.httpd.server_close()
 
 
-@contextlib.contextmanager
-def browser_session(engine):
-    """Context manager yielding a launched browser for the given engine."""
-    apply_webkit_env()
+class _Session:
+    """Pages created through one browser; close() tears the whole stack down."""
+
+    def __init__(self, pw_cm, browser):
+        self._pw_cm = pw_cm
+        self._browser = browser
+        self._contexts = []
+
+    def page(self, **context_options):
+        ctx = self._browser.new_context(**context_options)
+        self._contexts.append(ctx)
+        return ctx.new_page()
+
+    def close(self):
+        with contextlib.suppress(Exception):
+            for ctx in self._contexts:
+                ctx.close()
+        with contextlib.suppress(Exception):
+            self._browser.close()
+        with contextlib.suppress(Exception):
+            self._pw_cm.__exit__(None, None, None)
+
+
+def _open_browser_session(engine):
+    """Open a browser session with the CURRENT environment (no fallback)."""
     from playwright.sync_api import sync_playwright
     from browser_support import chromium_launch_options
 
-    with sync_playwright() as pw:
+    pw_cm = sync_playwright()
+    pw = pw_cm.__enter__()
+    try:
         if engine == "chromium":
             browser = pw.chromium.launch(**chromium_launch_options())
         elif engine == "webkit":
             browser = pw.webkit.launch()
         else:
             raise ValueError("unknown engine: " + engine)
-        contexts = []
+    except Exception:
+        with contextlib.suppress(Exception):
+            pw_cm.__exit__(None, None, None)
+        raise
+    return _Session(pw_cm, browser)
 
-        class _Session:
-            def page(self, **context_options):
-                ctx = browser.new_context(**context_options)
-                contexts.append(ctx)
-                return ctx.new_page()
 
-        try:
-            yield _Session()
-        finally:
-            with contextlib.suppress(Exception):
-                for ctx in contexts:
-                    ctx.close()
-            with contextlib.suppress(Exception):
-                browser.close()
+@contextlib.contextmanager
+def browser_session(engine):
+    """Context manager yielding a browser session for the given engine.
+
+    Plain launch first: zero environment interference on machines where the
+    browsers run as officially installed. Only if that launch fails AND the
+    WebKit install carries the fallback dirs (apply_webkit_env) does the
+    session retry once with the fallback environment — through a fresh
+    driver so the variables reach the browser process chain.
+    """
+    try:
+        session = _open_browser_session(engine)
+    except Exception:
+        if engine != "webkit" or not apply_webkit_env():
+            raise
+        session = _open_browser_session(engine)
+    try:
+        yield session
+    finally:
+        session.close()
 
 
 DEFAULT_CONTEXT = {

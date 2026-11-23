@@ -82,36 +82,37 @@
     "chromium": {
       "engine": "chromium",
       "fontsLoaded": {
-        "rubik": false,
-        "plex400": false,
-        "plex600": false
+        "rubik": true,
+        "plex400": true,
+        "plex500": true,
+        "plex600": true
       },
       "tabular": {
         "rubik-500": {
-          "width111": 124.062,
+          "width111": 167,
           "width888": 167,
           "width888Repeat": 167,
-          "diffPx": 42.938,
-          "tolerancePx": 0.744,
+          "diffPx": 0,
+          "tolerancePx": 1.002,
           "unstable": false,
-          "pass": false
+          "pass": true
         },
         "plex-400": {
-          "width111": 49.625,
+          "width111": 64,
           "width888": 64,
           "width888Repeat": 64,
-          "diffPx": 14.375,
-          "tolerancePx": 0.298,
+          "diffPx": 0,
+          "tolerancePx": 0.384,
           "unstable": false,
-          "pass": false
+          "pass": true
         },
         "plex-600": {
-          "width111": 48.469,
-          "width888": 52,
+          "width111": 65,
+          "width888": 65,
           "width888Repeat": 65,
-          "diffPx": 3.531,
-          "tolerancePx": 0.291,
-          "unstable": true,
+          "diffPx": 0,
+          "tolerancePx": 0.39,
+          "unstable": false,
           "pass": true
         }
       },
@@ -171,42 +172,43 @@
           "pass": true
         }
       },
-      "pass": false
+      "pass": true
     },
     "webkit": {
       "engine": "webkit",
       "fontsLoaded": {
-        "rubik": false,
-        "plex400": false,
-        "plex600": false
+        "rubik": true,
+        "plex400": true,
+        "plex500": true,
+        "plex600": true
       },
       "tabular": {
         "rubik-500": {
-          "width111": 165.422,
-          "width888": 165.422,
+          "width111": 164.562,
+          "width888": 164.562,
           "width888Repeat": 164.562,
           "diffPx": 0.0,
-          "tolerancePx": 0.993,
-          "unstable": true,
+          "tolerancePx": 0.987,
+          "unstable": false,
           "pass": true
         },
         "plex-400": {
-          "width111": 66.172,
-          "width888": 66.172,
+          "width111": 61.953,
+          "width888": 61.953,
           "width888Repeat": 61.953,
           "diffPx": 0.0,
-          "tolerancePx": 0.397,
-          "unstable": true,
+          "tolerancePx": 0.372,
+          "unstable": false,
           "pass": true
         },
         "plex-600": {
-          "width111": 72.375,
+          "width111": 62.375,
           "width888": 62.375,
           "width888Repeat": 62.375,
-          "diffPx": 10.0,
-          "tolerancePx": 0.434,
+          "diffPx": 0.0,
+          "tolerancePx": 0.374,
           "unstable": false,
-          "pass": false
+          "pass": true
         }
       },
       "shift": {
@@ -265,8 +267,8 @@
           "pass": true
         }
       },
-      "pass": false
+      "pass": true
     }
   },
-  "pass": false
+  "pass": true
 }

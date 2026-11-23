@@ -32,6 +32,33 @@
 | `preview-runtime-check.py` | صفر أخطاء JavaScript وموارد مفقودة عبر كل صفحات `previews/` و`components/*` (يتطلب `--base http://127.0.0.1:5000`؛ `check-all` يبدأ الخادم تلقائيًا). |
 | `visual-regression-check.py` | بوابة D12/R-D12: التقاط 360×780 RTL Light لكل صفحة (بإعادة استخدام `visual-baseline-capture.py`) ومقارنة بكسل-بكسل مع مرجع يُولَّد من git ref (الافتراضي `v0.2.0`) داخل worktree مؤقت؛ نجاح الصفحة عند اختلاف ≤ 0.1% من البكسلات، والاستثناءات المسموحة في `baselines/visual-allowlist.json` (≤ 15% مع سبب وقرار). |
 
+## تثبيت المتصفحات على جهاز جديد
+
+الطريقة الرسمية المعتمدة (أي جهاز جديد):
+
+```bash
+uv sync
+sh tools/setup-browsers.sh        # uv run playwright install --with-deps chromium webkit
+```
+
+- بوابة `static` وكل بوابات المتصفح (القديمة وds) تعمل بعدها مباشرة بلا أي إعداد يدوي: لا `source` لأي ملف، ولا متغيرات بيئة.
+- إصدار Playwright مثبّت في `pyproject.tom` للمستودع، والتنزيلات في `~/.cache/ms-playwright/` (الافتراضي لكل نظام تشغيل).
+
+### بيئة مقيدة (ساندبوكس بلا GPU أو بلا sudo) — حل بديل فقط
+
+هذا القسم **حل بديل لبيئات خاصة** وليس متطلبًا؛ على جهاز عادي مثبّت بالطريقة الرسمية أعلاه لا يُستخدم إطلاقًا.
+
+- مشكلة الساندبوكس: لا صلاحيات sudo، فلا تستطيع `--with-deps` تثبيت مكتبات النظام التي يحتاجها WebKit (libgtk-4 وlibgraphene و… إلخ)، ولا وحدة GPU.
+- الحل (سكربت إعداد خارج المستودع على جهاز الساندبوكس): تنزيل الحزم عبر `apt-get download` بلا صلاحيات، استخراجها بـ`dpkg -x`، ونسخها إلى `sys/lib` داخل تثبيت WebKit نفسه (`~/.cache/ms-playwright/webkit-*/minibrowser-wpe/sys/lib/`) — الـwrapper الخاص بالتثبيت يضيف هذا المجلد إلى `LD_LIBRARY_PATH` من تلقاء نفسه. وملفات mesa (EGL vendor JSON ومشغّلات DRI) تُنسخ إلى `sys/egl_vendor` و`sys/lib/dri`.
+- تشغيل WebKit بعدها **تلقائي في الأدوات**: جلسة المتصفح المشتركة (`tools/ds-gates/common.py` → `browser_session`) تجرّب الإطلاق العادي أولًا؛ إن فشل وفقط إن وُجدت مجلدات التراجع داخل تثبيت WebKit، تعيد المحاولة مرة واحدة بمتغيرات EGL البرمجية (`EGL_PLATFORM=surfaceless`، `LIBGL_ALWAYS_SOFTWARE=1`، …). لا تدخل يدوي في البيئة إطلاقًا، والأجهزة العادية لا تُلمس لأن الإطلاق العادي ينجح عندها من المحاولة الأولى.
+- بوابة `ds-banned` تحظر أي مسار مطلق لجهاز (جذر `home`/`Users`/`tmp`) في الملفات المتتبعة تحت `ds/` و`tools/ds-gates/` و`.githooks/`، فتبقى الأدوات قابلة للتشغيل على أي جهاز.
+
+### مصادر الخطوط (أداة `ds/tools/generate-fonts.mjs`)
+
+- تعمل بالشبكة عند أول تشغيل: تنزّل ملفات TTF/OFL من مستودع google/fonts الرسمي على commit مثبّت، وتتحقق من sha256 لكل ملف قبل استخدامه، في مجلد مؤقت (`npm run fonts` داخل `ds/`).
+- بلا شبكة: وجّه `MDS_FONT_SOURCE_DIR` إلى مجلد يحوي الملفات نفسها (تُفحص بنفس البصمات).
+- الخط المرجعي لاحتياطي المقاييس يُحل عبر `fc-match` (Arial → Liberation Sans على لينكس); على نظام بلا fontconfig وجّه `MDS_REFERENCE_FONT` إلى خط متوافق مقاييس مع Arial.
+
 ## (ب) أدوات البناء والتشغيل
 
 | الأداة | الدور |

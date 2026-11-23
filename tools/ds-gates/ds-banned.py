@@ -11,15 +11,60 @@
 3. No default Tailwind color/shadow/radius classes (rounded-*, shadow-*,
    bg-red-500 …) in tsx/ts/css — explicit prefix x scale x palette list in
    config.json (BRIEF 26-21).
+4. No machine-absolute paths (a filesystem-root "home", "Users" or "tmp"
+   directory segment) in tracked files under ds/, tools/ds-gates/ and
+   .githooks/ — the tools must run on any machine, so every path is
+   repo-relative, env-provided or resolved at run time (task 2026-11-23:
+   portability). Gate fixtures are excluded by design: they carry the
+   violations on purpose and are enforced by --prove.
 """
 import json
 import re
+import subprocess
 from pathlib import Path
 
 from common import CONFIG, Gate, gate_main, source_files, strip_comments, rel_of
 
 BANNED_DEPS = set(CONFIG["banned_deps"])
 TW = CONFIG["tailwind_banned"]
+
+# Built by concatenation so this file itself carries no literal that the
+# pattern would flag (the gate scans its own tree).
+ABS_PATH_RX = re.compile("/" + "(?:home|Users|tmp)" + "/[A-Za-z0-9._~$-]")
+
+
+def abs_path_scan_files(root):
+    """Files subject to the machine-absolute-path scan.
+
+    Tracked files (git ls-files) when the target is a repository checkout; a
+    filesystem walk otherwise (fixture trees are not checkouts). node_modules/
+    dist/.git and the fixtures/ trees are always excluded: fixtures carry
+    deliberate violations for --prove, not shippable code.
+    """
+    root = Path(root)
+    prefixes = ["ds", "tools/ds-gates", ".githooks"]
+    excluded = re.compile(r"(^|/)(node_modules|dist|fixtures|\.git)(/|$)")
+    try:
+        top = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True)
+        if top.returncode == 0 and Path(top.stdout.strip()).resolve() == root.resolve():
+            listed = subprocess.run(["git", "-C", str(root), "ls-files", "--", *prefixes],
+                                    capture_output=True, text=True)
+            if listed.returncode == 0:
+                files = [root / name for name in listed.stdout.splitlines() if name]
+                return [p for p in files
+                        if p.is_file() and not excluded.search(p.relative_to(root).as_posix())]
+    except (OSError, ValueError):
+        pass
+    files = []
+    for prefix in prefixes:
+        base = root / prefix
+        if not base.is_dir():
+            continue
+        for path in base.rglob("*"):
+            if path.is_file() and not excluded.search(path.relative_to(root).as_posix()):
+                files.append(path)
+    return files
 
 
 def tailwind_banned_classes():
@@ -110,6 +155,28 @@ def run(gate: Gate, target, args):
                 gate.fail("ds-banned/tailwind-class", f)
         else:
             gate.ok("ds-banned/tailwind-classes", f"{len(TW_CLASSES)} default classes watched, none used")
+
+    # ---- 4) machine-absolute paths ----
+    scan = abs_path_scan_files(root)
+    if not scan:
+        gate.na("ds-banned/machine-paths", "no ds/, tools/ds-gates/ or .githooks/ files under target")
+    else:
+        found = []
+        for path in scan:
+            rel = rel_of(path, target)
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue  # binary artifacts (woff2 etc.) carry no source paths
+            for lineno, line in enumerate(text.splitlines(), 1):
+                if ABS_PATH_RX.search(line):
+                    found.append(f"{rel}:{lineno} machine-absolute path: {line.strip()[:70]!r}")
+        if found:
+            gate.fail("ds-banned/machine-paths", f"{len(scan)} files scanned, {len(found)} machine-absolute paths")
+            for f in found:
+                gate.fail("ds-banned/machine-path", f)
+        else:
+            gate.ok("ds-banned/machine-paths", f"{len(scan)} files scanned, no machine-absolute paths")
 
 
 if __name__ == "__main__":

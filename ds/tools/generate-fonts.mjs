@@ -3,7 +3,7 @@
  * generate-fonts.mjs — self-hosted, subset woff2 fonts for @micro/ds (plan D8,
  * BRIEF 27.8 + 5.3).
  *
- * Steps (deterministic, no network access needed at run time):
+ * Steps (deterministic; upstream sources are fetched on demand):
  *   1. Subset the source TTFs with pyftsubset (repo venv) to woff2:
  *        rubik-var.woff2      — variable Rubik, full wght axis kept (300–900)
  *        plex-arabic-400/500/600.woff2 — IBM Plex Sans Arabic weights
@@ -21,14 +21,20 @@
  *      src/i18n/ar.ts and lab/src/data must exist in the cmap of all four
  *      subset fonts (format/bidi controls are exempt — shapers handle them).
  *
- * Sources (inputs, not committed):
- *   - /home/z/webkit-libs/fonts/{Rubik,PlexAr-Regular,PlexAr-SemiBold}.ttf
- *   - MDS_FONT_SOURCE_DIR (default /home/z/my-project/ds-font-sources):
- *     IBMPlexSansArabic-Medium.ttf, OFL-rubik.txt, OFL-ibmplex.txt
- *     (downloaded once from google/fonts OFL directories).
+ * Sources (pinned, never committed, never a machine-absolute path):
+ *   Downloaded from the official google/fonts repository at the pinned
+ *   commit below into a fresh temp dir; every file is verified by sha256
+ *   before use:
+ *     ofl/rubik/Rubik[wght].ttf                      (variable, wght 300-900)
+ *     ofl/ibmplexsansarabic/IBMPlexSansArabic-{Regular,Medium,SemiBold}.ttf
+ *     ofl/rubik/OFL.txt, ofl/ibmplexsansarabic/OFL.txt
+ *   MDS_FONT_SOURCE_DIR may point at a directory already holding the same
+ *   files (still sha256-verified) for offline regeneration.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { chmodSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -39,10 +45,48 @@ const outDir = join(dsRoot, 'src', 'fonts');
 const venvPython = join(repoRoot, '.venv', 'bin', 'python');
 const pyftsubset = join(repoRoot, '.venv', 'bin', 'pyftsubset');
 
-const sourceDirs = [
-  process.env.MDS_FONT_SOURCE_DIR || '/home/z/my-project/ds-font-sources',
-  '/home/z/webkit-libs/fonts',
-];
+// Pinned upstream: the official google/fonts repository at one commit, each
+// file pinned by sha256. A mismatch anywhere refuses to build — regeneration
+// is byte-deterministic from known sources only.
+const GOOGLE_FONTS_COMMIT = '06bfe0d62a98375cb09c942fa18e68bd32cff057';
+const GOOGLE_FONTS_BASE = `https://raw.githubusercontent.com/google/fonts/${GOOGLE_FONTS_COMMIT}/`;
+const PINNED_SOURCES = {
+  'rubik-var.ttf': { path: 'ofl/rubik/Rubik[wght].ttf', sha256: '1b3a7437ba2af80e465e773ed60c5036d1ba6ace492d89046dbcf18fb31e4e88' },
+  'plex-400.ttf': { path: 'ofl/ibmplexsansarabic/IBMPlexSansArabic-Regular.ttf', sha256: '6f611412270a132bbac838da9259d4c68569b4175f3b3b8fa3fa36a30b56dab9' },
+  'plex-500.ttf': { path: 'ofl/ibmplexsansarabic/IBMPlexSansArabic-Medium.ttf', sha256: 'b8363ab9f733dfa4f8e96b8b2102c24b5cf4110fb96d1d3d9a9412f6fb49cf74' },
+  'plex-600.ttf': { path: 'ofl/ibmplexsansarabic/IBMPlexSansArabic-SemiBold.ttf', sha256: '597bd5502e5997be4414e4c9c88834b30ff3784250c84f20bce2b20e53ebd467' },
+  'OFL-rubik.txt': { path: 'ofl/rubik/OFL.txt', sha256: '472cbe7c25441df63e9c7864b43eb3c0f4b3df950c66a76224e6cfe1eae843fb' },
+  'OFL-ibmplex.txt': { path: 'ofl/ibmplexsansarabic/OFL.txt', sha256: '7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da' },
+};
+
+function sha256(file) {
+  return createHash('sha256').update(readFileSync(file)).digest('hex');
+}
+
+// Fetch the pinned sources into a temp dir (or MDS_FONT_SOURCE_DIR). Every
+// file is sha256-verified no matter where it came from.
+let sourceDirIsTemp = false;
+async function fetchPinnedSources() {
+  const dir = process.env.MDS_FONT_SOURCE_DIR
+    || ((sourceDirIsTemp = true), mkdtempSync(join(tmpdir(), 'micro-ds-fonts-')));
+  for (const [name, meta] of Object.entries(PINNED_SOURCES)) {
+    const dest = join(dir, name);
+    if (!existsSync(dest) || sha256(dest) !== meta.sha256) {
+      const url = GOOGLE_FONTS_BASE + meta.path.split('/').map(encodeURIComponent).join('/');
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`pinned source download failed (HTTP ${res.status}): ${meta.path} @ ${GOOGLE_FONTS_COMMIT}`);
+      }
+      writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+    }
+    const got = sha256(dest);
+    if (got !== meta.sha256) {
+      throw new Error(`sha256 mismatch for ${name}: got ${got}, pinned ${meta.sha256} — refusing to build from an unknown source`);
+    }
+  }
+  return dir;
+}
+const sourceDir = await fetchPinnedSources();
 
 // Arabic + Latin + digits + the punctuation the dictionary actually uses.
 const UNICODES = [
@@ -63,10 +107,10 @@ const UNICODES = [
 ].join(',');
 
 const FONTS = [
-  { source: 'Rubik.ttf', output: 'rubik-var.woff2', family: 'Rubik', weight: '300 900', license: 'OFL-rubik.txt' },
-  { source: 'PlexAr-Regular.ttf', output: 'plex-arabic-400.woff2', family: 'IBM Plex Sans Arabic', weight: '400', license: 'OFL-ibmplex.txt' },
-  { source: 'IBMPlexSansArabic-Medium.ttf', output: 'plex-arabic-500.woff2', family: 'IBM Plex Sans Arabic', weight: '500', license: 'OFL-ibmplex.txt' },
-  { source: 'PlexAr-SemiBold.ttf', output: 'plex-arabic-600.woff2', family: 'IBM Plex Sans Arabic', weight: '600', license: 'OFL-ibmplex.txt' },
+  { source: 'rubik-var.ttf', output: 'rubik-var.woff2', family: 'Rubik', weight: '300 900', license: 'OFL-rubik.txt' },
+  { source: 'plex-400.ttf', output: 'plex-arabic-400.woff2', family: 'IBM Plex Sans Arabic', weight: '400', license: 'OFL-ibmplex.txt' },
+  { source: 'plex-500.ttf', output: 'plex-arabic-500.woff2', family: 'IBM Plex Sans Arabic', weight: '500', license: 'OFL-ibmplex.txt' },
+  { source: 'plex-600.ttf', output: 'plex-arabic-600.woff2', family: 'IBM Plex Sans Arabic', weight: '600', license: 'OFL-ibmplex.txt' },
 ];
 
 const LICENSES = [
@@ -74,18 +118,27 @@ const LICENSES = [
   { source: 'OFL-ibmplex.txt', output: 'OFL-ibmplex.txt' },
 ];
 
-// Reference for the metric-matched fallback. No Noto Sans Arabic file exists
-// locally, so per the task instruction we use Arial metrics; Liberation Sans
-// (metric-compatible with Arial) is available as a real file and is also what
+// Reference for the metric-matched fallback: an Arial-metric font, resolved
+// at run time through fontconfig (what local('Arial') actually resolves to —
+// Liberation Sans on Linux). No Noto Sans Arabic file exists locally, so
+// Arial metrics are the practical reference; Liberation Sans is also what
 // fontconfig resolves for local('Arial') in the sandbox browsers.
-const REFERENCE_FONT = '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf';
+// Override for machines without fontconfig: MDS_REFERENCE_FONT (tools/README.md).
+function findReferenceFont() {
+  const override = process.env.MDS_REFERENCE_FONT;
+  if (override) return override;
+  const resolved = run('fc-match', ['-f', '%{file}', 'Arial:style=Regular']).trim();
+  if (resolved && existsSync(resolved)) return resolved;
+  throw new Error('no Arial-metric reference font found via fc-match — set MDS_REFERENCE_FONT (see tools/README.md)');
+}
+const REFERENCE_FONT = findReferenceFont();
 
 function findSource(name) {
-  for (const dir of sourceDirs) {
-    const candidate = join(dir, name);
-    if (existsSync(candidate)) return candidate;
+  const candidate = join(sourceDir, name);
+  if (!existsSync(candidate)) {
+    throw new Error(`pinned source not found: ${name} in ${sourceDir}`);
   }
-  throw new Error(`font source not found: ${name} (looked in ${sourceDirs.join(', ')})`);
+  return candidate;
 }
 
 function run(cmd, args) {
@@ -105,6 +158,7 @@ function subset(font) {
   ]);
   const size = statSync(outputPath).size;
   if (size === 0) throw new Error(`empty subset output: ${outputPath}`);
+  chmodSync(outputPath, 0o644); // deterministic file modes across machines
   return { ...font, source, outputPath, size };
 }
 
@@ -290,9 +344,17 @@ function checkCoverage(cmaps) {
 // ---------------------------------------------------------------------------
 
 const subsets = FONTS.map((f) => subset(f));
+function normalizeLicenseText(text) {
+  // Upstream OFL files ship with CRLF endings and stray trailing spaces; the
+  // repository keeps them LF-clean so whitespace gates stay green. The
+  // license wording itself is byte-preserved.
+  return text.replace(/\r\n/g, '\n').split('\n').map((l) => l.replace(/[ \t]+$/, '')).join('\n');
+}
 for (const license of LICENSES) {
   const from = findSource(license.source);
-  writeFileSync(join(outDir, license.output), readFileSync(from));
+  const dest = join(outDir, license.output);
+  writeFileSync(dest, normalizeLicenseText(readFileSync(from, 'utf8')), 'utf8');
+  chmodSync(dest, 0o644);
 }
 
 const metricsJson = JSON.parse(run(venvPython, [join(scriptDir, 'font-metrics.py'), 'metrics',
@@ -308,6 +370,7 @@ const plexFace = fallbackFace(plex, reference);
 
 const css = generateFontsCss(subsets, rubikFace, plexFace, rubikAxis);
 writeFileSync(join(outDir, 'fonts.css'), css, 'utf8');
+chmodSync(join(outDir, 'fonts.css'), 0o644);
 
 // Coverage check on the subset outputs (woff2).
 const cmapJson = JSON.parse(run(venvPython, [join(scriptDir, 'font-metrics.py'), 'cmap',
@@ -328,3 +391,5 @@ if (coverage.missing.length > 0) {
   process.exit(1);
 }
 console.log('[fonts] coverage OK');
+
+if (sourceDirIsTemp) rmSync(sourceDir, { recursive: true, force: true });
