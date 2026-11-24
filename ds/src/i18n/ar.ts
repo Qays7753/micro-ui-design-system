@@ -158,6 +158,7 @@ export const ar = {
   'title.surface': { kind: 'title', text: 'السطح' },
   'state.withHeader': { kind: 'badge', text: 'برأس' },
   'state.list': { kind: 'badge', text: 'قائمة' },
+  'title.well': { kind: 'title', text: 'الحاوي الغائر' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },
   'state.scrollRow': { kind: 'badge', text: 'قابل للتمرير' },
   'state.driver': { kind: 'badge', text: 'وضع السائق' },

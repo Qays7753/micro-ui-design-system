@@ -1,0 +1,12 @@
+/*
+ * Well.css — BRIEF 9.2 + 23.1(1). Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-well {
+  box-sizing: border-box;
+  padding: var(--mds-layout-well-padding);
+  background-color: var(--mds-color-surface-well);
+  /* 23.1(1) nested radius: container 24 − padding 16 = 8. */
+  border-radius: var(--mds-radius-sm);
+}

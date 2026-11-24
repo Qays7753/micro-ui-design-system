@@ -23,3 +23,4 @@ export * from './components/TextField';
 export * from './components/SegmentedControl';
 export * from './components/FilterChips';
 export * from './components/Surface';
+export * from './components/Well';
