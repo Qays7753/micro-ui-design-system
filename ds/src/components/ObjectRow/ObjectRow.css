@@ -1,0 +1,120 @@
+/*
+ * ObjectRow.css — BRIEF 23.4 + 23.2. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-object-row {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--mds-layout-row-gap);
+  width: 100%;
+  padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
+  /* Heights (23.4): 72 two lines, 56 one line — min-heights so the 44
+     mark never stretches a one-line row past its spec height. */
+  min-height: var(--mds-size-row-2line);
+  background-color: transparent;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+}
+
+.mds-object-row--one-line {
+  min-height: var(--mds-size-row-1line);
+}
+
+/* The text column takes the remaining space and gives its overflow to
+   the title's ellipsis (23.4 item 3). */
+.mds-object-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-row-line-gap);
+  flex: 1;
+  min-width: 0;
+}
+
+.mds-object-row-title {
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mds-object-row-caption {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The end column: width by content, NEVER truncated (23.4 item 5). */
+.mds-object-row-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--mds-layout-row-line-gap);
+  flex-shrink: 0;
+}
+
+.mds-object-row-value {
+  font-family: var(--mds-type-amount-row-font);
+  font-size: var(--mds-type-amount-row-size);
+  line-height: var(--mds-type-amount-row-line);
+  font-weight: var(--mds-type-amount-row-weight);
+  color: var(--mds-color-text-primary);
+  font-variant-numeric: var(--mds-font-numeric);
+  white-space: nowrap;
+}
+
+.mds-object-row-time {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+  white-space: nowrap;
+}
+
+/* Press (23.2): the row inset — surface-pressed with the pressed-row
+   inset on the block axis. */
+.mds-object-row:active,
+.mds-object-row[data-pressed],
+.mds-object-row--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-object-row:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: calc(-1 * var(--mds-border-focus-ring-offset));
+}
+
+/* Disabled (23.24(15)): the row's own color dims — children inherit. */
+.mds-object-row:disabled {
+  cursor: default;
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-object-row:disabled .mds-object-row-title,
+.mds-object-row:disabled .mds-object-row-caption,
+.mds-object-row:disabled .mds-object-row-value,
+.mds-object-row:disabled .mds-object-row-time {
+  color: inherit;
+}
+
+.mds-object-row:disabled:active,
+.mds-object-row:disabled[data-pressed] {
+  background-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-object-row {
+    transition: none;
+  }
+}

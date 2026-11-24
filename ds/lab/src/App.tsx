@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -480,6 +480,43 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.emptySection')}</span>
             <HeroSurface label={t('nav.finance')} />
+          </div>
+        </section>
+
+        {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}
+        <section className="lab-section" id="object-row">
+          <h2 className="lab-title">{t('title.objectRow')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <Surface>
+              <div data-ds-check="object-row">
+                <ObjectRow
+                  label={t('row.sampleTitle')}
+                  caption={t('row.sampleCaption')}
+                  value="1,245.750"
+                  trailing={t('row.sampleTime')}
+                  onPress={() => {}}
+                />
+              </div>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withBadge')}</span>
+            <Surface>
+              <ObjectRow
+                label={t('row.sampleTitle')}
+                caption={t('row.sampleCaption')}
+                value="1,250"
+                trailing={<StatusBadge tone="waiting" />}
+                onPress={() => {}}
+              />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.oneLine')}</span>
+            <Surface>
+              <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => {}} />
+            </Surface>
           </div>
         </section>
 

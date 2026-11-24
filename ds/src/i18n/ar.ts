@@ -86,6 +86,12 @@ export const ar = {
   'role.admin': { kind: 'badge', text: 'مسؤول' },
   'movement.in': { kind: 'badge', text: 'داخل' },
   'movement.counted': { kind: 'badge', text: '32 حركة' },
+  'row.sampleTitle': { kind: 'title', text: 'سلمى الحوراني' },
+  'row.sampleCaption': { kind: 'help', text: 'فستان سهرة · درج الكاش' },
+  'row.sampleTime': { kind: 'help', text: '10:24 ص' },
+  'title.objectRow': { kind: 'title', text: 'الصف' },
+  'state.oneLine': { kind: 'badge', text: 'سطر واحد' },
+  'state.withBadge': { kind: 'badge', text: 'مع شارة' },
   'movement.out': { kind: 'badge', text: 'خارج' },
   'movement.transfer': { kind: 'badge', text: 'تحويل' },
 
