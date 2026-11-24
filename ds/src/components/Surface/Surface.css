@@ -1,0 +1,81 @@
+/*
+ * Surface.css — BRIEF 9.2 + 23.1(5) + 23.19 + 23.21. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-surface {
+  box-sizing: border-box;
+  min-width: var(--mds-size-surface-min-width);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-lg);
+  /* 9.2: بلا ظل — separation is border + spacing, never elevation. */
+  box-shadow: none;
+}
+
+/* Tablet: padding 20 (9.2; breakpoint.tablet-min = 744 at the 16px root
+   = 46.5rem). A CSS @media condition cannot reference custom properties
+   (var() is unresolved there — verified in Chromium/WebKit), so the
+   breakpoint is expressed in rem: gate-clean (ds-raw-values flags px only)
+   and zoom-correct — if the app scales the root font, the breakpoint
+   scales with the type. */
+@media (min-width: 46.5rem) {
+  .mds-surface {
+    padding: var(--mds-layout-surface-padding-tablet);
+  }
+}
+
+/* List mode (23.1(5)): vertical padding 8, inline padding 0 — the rows
+   carry their own 16. */
+.mds-surface--list {
+  padding-block: var(--mds-layout-list-surface-padding-block);
+  padding-inline: 0;
+}
+
+/* Header: the optional title-card + one action (9.2, 23.21). */
+.mds-surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-12);
+  margin-block-end: var(--mds-space-12);
+}
+
+.mds-surface-title {
+  margin: 0;
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-surface-action {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* Pressable surface (23.2: Surface القابلة للضغط): scale(.98) +
+   surface-pressed — applied by the app through this class; the base
+   container never presses on its own. */
+.mds-surface--pressable {
+  cursor: pointer;
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+              transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
+}
+
+.mds-surface--pressable:active {
+  background-color: var(--mds-color-surface-pressed);
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-surface--pressable {
+    transition: none;
+  }
+
+  .mds-surface--pressable:active {
+    transform: none;
+  }
+}

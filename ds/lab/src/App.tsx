@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, SegmentedControl, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, SegmentedControl, Surface, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -381,6 +381,37 @@ export function App() {
               value={['today']}
               onChange={() => {}}
             />
+          </div>
+        </section>
+
+        {/* ---- Surface (BRIEF 9.2, 23.1(5), 23.21): the primary container ---- */}
+        <section className="lab-section" id="surface">
+          <h2 className="lab-title">{t('title.surface')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <Surface data-ds-check="surface">
+              <p className="lab-name">{t('title.needsYou')}</p>
+              <p className="lab-label">{t('empty.movements')}</p>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withHeader')}</span>
+            <Surface label={t('title.needsYou')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
+              <p className="lab-label">{t('empty.movements')}</p>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.list')}</span>
+            <Surface density="list">
+              <div className="lab-row-entity">
+                <span className="lab-name">{parties[0]}</span>
+                <Money value={amounts[0]} />
+              </div>
+              <div className="lab-row-entity">
+                <span className="lab-name">{parties[1]}</span>
+                <Money value={amounts[1]} />
+              </div>
+            </Surface>
           </div>
         </section>
         </main>

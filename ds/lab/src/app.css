@@ -172,3 +172,13 @@
 .lab-row--full .mds-filter-chips {
   width: 100%;
 }
+
+/* Entity rows inside the list-mode Surface (the rows carry their own 16). */
+.lab-row-entity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-12);
+  padding-inline: var(--mds-layout-surface-padding-phone);
+  min-height: var(--mds-size-touch-min);
+}
