@@ -88,6 +88,12 @@
       "height": {
         "token": "size.segmented"
       }
+    },
+    {
+      "id": "filter-chips",
+      "height": {
+        "token": "size.touch-min"
+      }
     }
   ]
 }

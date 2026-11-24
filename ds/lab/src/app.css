@@ -160,3 +160,15 @@
   gap: var(--mds-space-8);
   min-height: var(--mds-size-touch-min);
 }
+
+/* Full-width lab rows (the horizontal-scroll chip row needs the width). */
+.lab-row--full {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--mds-space-12);
+}
+
+.lab-row--full .mds-filter-chips {
+  width: 100%;
+}

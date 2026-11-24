@@ -1,0 +1,141 @@
+/*
+ * FilterChips.css — BRIEF 9.1 + 23.2 + 23.16 + owner amendment to 23.1(4).
+ * Every value is a token reference; no raw hex/px/ms in this file
+ * (ds-raw-values).
+ */
+
+/* The scroll row: 48-high touch zone, horizontal scroll, no arrows, no edge
+   fades (gradients banned), hidden scrollbar; end padding 16 (23.16). */
+.mds-filter-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-layout-chip-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--mds-size-touch-min);
+  padding-block: var(--mds-layout-segmented-padding);
+  padding-inline: 0;
+  overflow-x: auto;
+  /* iOS Safari (16.4+, a target) ignores scrollbar-width — the WebKit rule
+     below hides the bar there; documented deviation like TextField's
+     ::selection (REPORT S4-3). */
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  scrollbar-width: none;
+}
+
+.mds-filter-chips::-webkit-scrollbar {
+  display: none;
+}
+
+/* The last chip keeps the 16 end padding (23.16: الحشوة في نهاية القائمة
+   16) via the row's inline end padding below; the start side is flush with
+   the content it belongs to. */
+.mds-filter-chips > .mds-filter-chip:last-child {
+  margin-inline-end: var(--mds-layout-chip-padding);
+}
+
+/* The chip: 40 visual inside the 48 touch row (9.1), full radius, 16
+   inline padding, label typography; capped at 200 wide (23.20). */
+.mds-filter-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-layout-chip-gap);
+  max-width: var(--mds-size-chip-max-width);
+  min-height: var(--mds-size-chip);
+  padding-inline: var(--mds-layout-chip-padding);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+              border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* The selected chip: brand-selected-bg fill, brand-anchor label-strong and
+   the ✓ 16 (SelectedIcon) — selection is never color alone (9.1, 23.2). */
+.mds-filter-chip--selected {
+  border-color: var(--mds-color-brand-selected-bg);
+  background-color: var(--mds-color-brand-selected-bg);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-brand-anchor);
+}
+
+.mds-filter-chip-check {
+  color: var(--mds-color-brand-anchor);
+}
+
+/* The label truncates inside the 200 cap (23.20). */
+.mds-filter-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Pressed: surface-pressed background — no scale, no ripple (23.2). Both
+   the hook state (data-pressed, with the 8px move cancel) and the native
+   :active drive the same styles. */
+.mds-filter-chip:active,
+.mds-filter-chip[data-pressed],
+.mds-filter-chip--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-filter-chip--selected:active,
+.mds-filter-chip--selected[data-pressed],
+.mds-filter-chip--pressed.mds-filter-chip--selected {
+  border-color: var(--mds-color-brand-selected-pressed);
+  background-color: var(--mds-color-brand-selected-pressed);
+}
+
+/* Hover only on fine pointers, same color as the press (23.2). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-filter-chip:not(:disabled):hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+
+  .mds-filter-chip--selected:not(:disabled):hover {
+    border-color: var(--mds-color-brand-selected-pressed);
+    background-color: var(--mds-color-brand-selected-pressed);
+  }
+}
+
+/* Focus ring: 2px brand-text, offset 2, keyboard only (23.2); the ring
+   follows the chip's full radius. */
+.mds-filter-chip:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled: text dims, the fill keeps the selected tint at rest (23.2,
+   23.24(15)). */
+.mds-filter-chip:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-filter-chip--selected:disabled {
+  border-color: var(--mds-color-disabled-bg);
+  background-color: var(--mds-color-disabled-bg);
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-filter-chip--selected:disabled .mds-filter-chip-check {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* Reduced motion: the quick background/border fade stops (23.14). */
+@media (prefers-reduced-motion: reduce) {
+  .mds-filter-chip {
+    transition: none;
+  }
+}

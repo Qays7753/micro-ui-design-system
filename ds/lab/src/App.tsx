@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, IconButton, NavTodayIcon, SegmentedControl, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, SegmentedControl, TextField, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -32,6 +32,7 @@ export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
   const [segment, setSegment] = useState('today');
+  const [chips, setChips] = useState<string[]>(['in']);
 
   const applyScale = (next: 100 | 200) => {
     setScale(next);
@@ -330,6 +331,54 @@ export function App() {
                 { value: 'agenda', label: t('nav.agenda') },
               ]}
               value="today"
+              onChange={() => {}}
+            />
+          </div>
+        </section>
+
+        {/* ---- FilterChips (BRIEF 9.1, 23.16): 40-in-48 chips, horizontal scroll ---- */}
+        <section className="lab-section" id="filter-chips">
+          <h2 className="lab-title">{t('title.filterChips')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <FilterChips
+              label={t('title.filterChips')}
+              leading={[
+                { value: 'in', label: t('movement.in') },
+                { value: 'out', label: t('movement.out') },
+                { value: 'transfer', label: t('movement.transfer') },
+              ]}
+              value={chips}
+              onChange={setChips}
+              data-ds-check="filter-chips"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.multiSelect')}</span>
+            <FilterChips
+              label={t('title.filterChips')}
+              leading={[
+                { value: 'in', label: t('movement.in') },
+                { value: 'out', label: t('movement.out') },
+                { value: 'transfer', label: t('movement.transfer') },
+                { value: 'all', label: t('button.all') },
+              ]}
+              value={['in', 'transfer']}
+              onChange={() => {}}
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.scrollRow')}</span>
+            <FilterChips
+              label={t('title.filterChips')}
+              leading={[
+                { value: 'in', label: t('movement.in') },
+                { value: 'out', label: t('movement.out') },
+                { value: 'transfer', label: t('movement.transfer') },
+                { value: 'all', label: t('button.all') },
+                { value: 'today', label: t('nav.todayLong') },
+              ]}
+              value={['today']}
               onChange={() => {}}
             />
           </div>
