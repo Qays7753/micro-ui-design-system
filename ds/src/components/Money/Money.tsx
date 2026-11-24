@@ -36,7 +36,7 @@ export function Money({
   const { hidden: contextHidden } = useAmountVisibility();
   const hidden = contextHidden && value !== null && value !== undefined;
   const result = formatMoney(value, { direction, debt, hidden, texts: moneyTexts });
-  const classes = ['mds-money', `mds-money--${size}`, disabled ? 'mds-money--disabled' : '', className]
+  const classes = ['mds-money', `mds-money--${size}`, size === 'lg' ? 'mds-number-lg' : '', disabled ? 'mds-money--disabled' : '', className]
     .filter(Boolean)
     .join(' ');
 

@@ -389,4 +389,15 @@
   --mds-quality-max-badges-per-screen: 6;
   --mds-quality-max-overview-items: 5;
   --mds-quality-max-tile-facts: 2;
+
+  /* Hero padding (BRIEF 23.8): 20 on phone, 24 on tablet. The switch
+     lives here, with the breakpoint tokens, because @media cannot read
+     custom properties; components consume the abstracted var. */
+  --mds-layout-hero-padding: var(--mds-layout-hero-padding-phone);
+}
+
+@media (min-width: 744px) {
+  :root {
+    --mds-layout-hero-padding: var(--mds-layout-hero-padding-tablet);
+  }
 }

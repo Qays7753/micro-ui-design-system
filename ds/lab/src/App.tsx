@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -445,6 +445,41 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.emptySection')}</span>
             <Section label={t('title.needsYou')} onPress={() => {}} />
+          </div>
+        </section>
+
+        {/* ---- HeroSurface (BRIEF 1.5 + 23.8): the screen's single hero ---- */}
+        <section className="lab-section" id="hero">
+          <h2 className="lab-title">{t('title.hero')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withCents')}</span>
+            <HeroSurface
+              label={t('nav.finance')}
+              value="1,245.750"
+              trailing={t('money.unit')}
+              direction={
+                <>
+                  <DeltaUpIcon />
+                  <span>{t('metric.deltaHigher', { percent: '12%' })}</span>
+                </>
+              }
+              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              onDismiss={() => {}}
+              data-ds-check="hero"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.longNumber')}</span>
+            <HeroSurface
+              label={t('nav.finance')}
+              value="1,250,000.125"
+              trailing={t('money.unit')}
+              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.emptySection')}</span>
+            <HeroSurface label={t('nav.finance')} />
           </div>
         </section>
 

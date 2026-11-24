@@ -85,6 +85,7 @@ export const ar = {
   'role.reviewer': { kind: 'badge', text: 'مراجع' },
   'role.admin': { kind: 'badge', text: 'مسؤول' },
   'movement.in': { kind: 'badge', text: 'داخل' },
+  'movement.counted': { kind: 'badge', text: '32 حركة' },
   'movement.out': { kind: 'badge', text: 'خارج' },
   'movement.transfer': { kind: 'badge', text: 'تحويل' },
 
@@ -164,6 +165,9 @@ export const ar = {
   'state.emptySection': { kind: 'badge', text: 'فارغ' },
   'title.tile': { kind: 'title', text: 'البلاطات' },
   'state.grid4': { kind: 'badge', text: 'شبكة 2×2' },
+  'title.hero': { kind: 'title', text: 'السطح البطل' },
+  'state.withCents': { kind: 'badge', text: 'مع فلوس' },
+  'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },
   'state.scrollRow': { kind: 'badge', text: 'قابل للتمرير' },
   'state.driver': { kind: 'badge', text: 'وضع السائق' },

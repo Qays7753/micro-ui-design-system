@@ -37,3 +37,13 @@ button,
   outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
   outline-offset: var(--mds-border-focus-ring-offset);
 }
+
+/* The number-lg type quartet (BRIEF 23.8/23.6): shared by Money--lg and
+   HeroSurface's long-number drop so component CSS keeps no duplicated
+   type blocks (ds-dup). */
+.mds-number-lg {
+  font-family: var(--mds-type-number-lg-font);
+  font-size: var(--mds-type-number-lg-size);
+  line-height: var(--mds-type-number-lg-line);
+  font-weight: var(--mds-type-number-lg-weight);
+}
