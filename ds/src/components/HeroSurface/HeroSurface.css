@@ -43,13 +43,18 @@
 .mds-hero-value {
   display: inline-flex;
   align-items: baseline;
+  color: var(--mds-color-on-anchor);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--mds-font-digit-tracking);
+}
+
+/* The 40/48 hero size lives on its own modifier so it never competes with
+   the shared .mds-number-lg (base.css) the long-number drop composes. */
+.mds-hero-value--hero {
   font-family: var(--mds-type-display-hero-font);
   font-size: var(--mds-type-display-hero-size);
   line-height: var(--mds-type-display-hero-line);
   font-weight: var(--mds-type-display-hero-weight);
-  color: var(--mds-color-on-anchor);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--mds-font-digit-tracking);
 }
 
 /* «1,250,000.125 د.أ» does not fit at 40: drop to number-lg 28/36 in ONE

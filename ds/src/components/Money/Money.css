@@ -3,7 +3,10 @@
  * hex/px/ms in this file (ds-raw-values). md = amount-row, lg = number-lg.
  */
 
-.mds-money {
+/* :not(.mds-number-lg) — the lg size composes the shared number-lg class
+   (base.css); without the guard the component sheet (loaded after base)
+   would out-cascade it at equal specificity. */
+.mds-money:not(.mds-number-lg) {
   display: inline-flex;
   align-items: baseline;
   white-space: nowrap;
