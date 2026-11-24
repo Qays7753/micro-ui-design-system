@@ -37,3 +37,16 @@ button,
   outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
   outline-offset: var(--mds-border-focus-ring-offset);
 }
+
+/* Label-centering counter (owner amendment to BRIEF 23.1(4), REPORT
+   2026-11-24): mirrors a leading icon block so the label stays centered
+   inside Button, SegmentedControl and FilterChips. Shared here because
+   three components use the same device (ds-dup keeps component CSS free
+   of cross-component duplication). */
+.mds-label-counter {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--mds-size-icon-20);
+  height: var(--mds-size-icon-20);
+  visibility: hidden;
+}

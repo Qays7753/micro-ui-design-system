@@ -91,6 +91,9 @@ function Segment({
     >
       {segment.leading ? <span className="mds-segmented-segment-icon" aria-hidden="true">{segment.leading}</span> : null}
       <span className="mds-segmented-segment-label">{segment.label}</span>
+      {/* Owner amendment to 23.1(4): mirror the leading icon block so the
+          label stays in the segment's center. */}
+      {segment.leading ? <span className="mds-label-counter" aria-hidden="true" /> : null}
     </button>
   );
 }

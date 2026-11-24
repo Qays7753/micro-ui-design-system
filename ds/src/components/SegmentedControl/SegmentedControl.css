@@ -58,6 +58,13 @@
   height: var(--mds-size-icon-20);
 }
 
+/* Counter-space (owner amendment to 23.1(4), REPORT 2026-11-24): mirrors the
+   leading icon block (icon + gap) so the label stays in the segment's
+   center: |label-center − segment-center| <= 0.5px. */
+/* The counter block is the shared .mds-label-counter (base.css): exactly
+   the leading icon's width, so [icon][gap][label][gap][counter] is
+   symmetric and the label sits on the segment's center line. */
+
 /* Pressed: surface-pressed background on the segment — no scale, no ripple
    (23.2). Both the hook state (data-pressed, with the 8px move cancel) and
    the native :active drive the same styles. The SELECTED segment responds
