@@ -1,0 +1,150 @@
+/*
+ * Tile.css — BRIEF 23.9 + 23.2. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The 2×2 grid: tile width = (content − 12) / 2 comes from the grid itself;
+   gap 12 (23.9). On tablet the block stays 2×2 inside the 720 content. */
+.mds-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--mds-layout-tile-gap);
+}
+
+.mds-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: var(--mds-size-tile-height);
+  padding: var(--mds-layout-tile-padding);
+  background-color: var(--mds-color-surface);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  cursor: pointer;
+  transition: transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
+  /* base corners 8; the outer 28 corner per position below */
+  border-radius: var(--mds-radius-sm);
+  text-align: start;
+}
+
+/* The outer corner of the 2×2 block is 28 (23.9: كما في وحدات الرمز
+   تماماً). tone=start: the top-start corner (first tile in RTL = top
+   right); tone=end: the bottom-end corner (fourth tile). */
+.mds-tile--start {
+  border-start-start-radius: var(--mds-radius-signature-outer);
+}
+
+.mds-tile--end {
+  border-end-end-radius: var(--mds-radius-signature-outer);
+}
+
+/* Header (top): icon 20 text-secondary bare, 8, label 14/20/500. */
+.mds-tile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-height: var(--mds-size-icon-20);
+}
+
+.mds-tile-header-icon {
+  display: inline-flex;
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-tile-header-icon svg {
+  width: var(--mds-size-icon-20);
+  height: var(--mds-size-icon-20);
+}
+
+.mds-tile-header-label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: 500;
+  color: var(--mds-color-text-secondary);
+}
+
+/* Attention dot: 8 status-waiting-fg at the header line's end (23.9). */
+.mds-tile-dot {
+  margin-inline-start: auto;
+  width: var(--mds-size-dot-attention);
+  height: var(--mds-size-dot-attention);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-role-dot-attention);
+  flex-shrink: 0;
+}
+
+/* Content pinned to the BOTTOM (23.9: المحتوى في أسفل البلاطة). */
+.mds-tile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mds-space-4);
+  margin-block-start: auto;
+}
+
+/* The number: Rubik 28/36/500 (number-lg). «—» keeps the SAME typography
+   (owner decision 2026-11-25). */
+.mds-tile-value {
+  font-family: var(--mds-type-number-lg-font);
+  font-size: var(--mds-type-number-lg-size);
+  line-height: var(--mds-type-number-lg-line);
+  font-weight: var(--mds-type-number-lg-weight);
+  color: var(--mds-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* One 13/20 text-secondary line under the number. */
+.mds-tile-line {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* The sparkline: 24 high, above the number, one tile max (23.9). */
+.mds-tile-sparkline {
+  display: block;
+  height: var(--mds-size-sparkline-height);
+}
+
+/* Press: scale(.98) — no background change, no ripple (23.9, 23.2). */
+.mds-tile:active,
+.mds-tile[data-pressed],
+.mds-tile--pressed {
+  transform: scale(0.98);
+}
+
+.mds-tile:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled (23.24(15)): dims, no press motion. */
+.mds-tile:disabled {
+  cursor: default;
+}
+
+.mds-tile:disabled .mds-tile-value,
+.mds-tile:disabled .mds-tile-header-label,
+.mds-tile:disabled .mds-tile-line,
+.mds-tile:disabled .mds-tile-header-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-tile:disabled:active,
+.mds-tile:disabled[data-pressed] {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-tile {
+    transition: none;
+  }
+
+  .mds-tile:active,
+  .mds-tile[data-pressed],
+  .mds-tile--pressed {
+    transform: none;
+  }
+}

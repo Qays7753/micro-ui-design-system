@@ -25,3 +25,4 @@ export * from './components/FilterChips';
 export * from './components/Surface';
 export * from './components/Well';
 export * from './components/Section';
+export * from './components/Tile';

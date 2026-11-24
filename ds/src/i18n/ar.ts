@@ -162,6 +162,8 @@ export const ar = {
   'title.section': { kind: 'title', text: 'القسم' },
   'state.withCount': { kind: 'badge', text: 'مع عدد' },
   'state.emptySection': { kind: 'badge', text: 'فارغ' },
+  'title.tile': { kind: 'title', text: 'البلاطات' },
+  'state.grid4': { kind: 'badge', text: 'شبكة 2×2' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },
   'state.scrollRow': { kind: 'badge', text: 'قابل للتمرير' },
   'state.driver': { kind: 'badge', text: 'وضع السائق' },

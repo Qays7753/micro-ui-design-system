@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -445,6 +445,47 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.emptySection')}</span>
             <Section label={t('title.needsYou')} onPress={() => {}} />
+          </div>
+        </section>
+
+        {/* ---- Tile (BRIEF 23.9): the 2x2 Bento grid ---- */}
+        <section className="lab-section" id="tile">
+          <h2 className="lab-title">{t('title.tile')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.grid4')}</span>
+            <div className="mds-tile-grid" data-ds-check="tile-grid">
+              <Tile
+                tone="start"
+                label={t('nav.today')}
+                leading={<NavTodayIcon />}
+                value="1,250"
+                trailing={t('movement.in')}
+                onPress={() => {}}
+              />
+              <Tile
+                label={t('title.needsYou')}
+                leading={<NavTodayIcon />}
+                state
+                caption={t('title.needsYou')}
+                value="4"
+                onPress={() => {}}
+              />
+              <Tile
+                label={t('nav.todayLong')}
+                leading={<NavTodayIcon />}
+                value="—"
+                trailing={t('empty.movements')}
+                onPress={() => {}}
+              />
+              <Tile
+                tone="end"
+                label={t('nav.agenda')}
+                leading={<NavTodayIcon />}
+                draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>}
+                value="72%"
+                onPress={() => {}}
+              />
+            </div>
           </div>
         </section>
         </main>
