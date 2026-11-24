@@ -47,3 +47,19 @@ button,
   line-height: var(--mds-type-number-lg-line);
   font-weight: var(--mds-type-number-lg-weight);
 }
+
+/* The caption type trio (BRIEF 23.x): shared by Tile, ObjectRow and
+   ObjectCard second lines (ds-dup). */
+.mds-type-caption {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+}
+
+/* The amount-row quartet: shared by ObjectRow and ObjectCard values. */
+.mds-type-amount-row {
+  font-family: var(--mds-type-amount-row-font);
+  font-size: var(--mds-type-amount-row-size);
+  line-height: var(--mds-type-amount-row-line);
+  font-weight: var(--mds-type-amount-row-weight);
+}

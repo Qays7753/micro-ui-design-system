@@ -69,7 +69,7 @@ export function Tile({
       <span className="mds-tile-content">
         {draft ? <span className="mds-tile-sparkline" aria-hidden="true">{draft}</span> : null}
         <span className="mds-tile-value">{value ?? '—'}</span>
-        {trailing ? <span className="mds-tile-line">{trailing}</span> : null}
+        {trailing ? <span className="mds-tile-line mds-type-caption">{trailing}</span> : null}
       </span>
     </button>
   );

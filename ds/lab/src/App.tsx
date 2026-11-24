@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -517,6 +517,32 @@ export function App() {
             <Surface>
               <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => {}} />
             </Surface>
+          </div>
+        </section>
+
+        {/* ---- ObjectCard (BRIEF 4.1 + 23.24): the card anatomy ---- */}
+        <section className="lab-section" id="object-card">
+          <h2 className="lab-title">{t('title.objectCard')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withButton')}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '280px', gap: 12 }}>
+              <ObjectCard
+                label="طلب 1175 — سلمى الحوراني"
+                caption={t('row.sampleCaption')}
+                value="1,245.750"
+                state={<StatusBadge tone="waiting" />}
+                onPress={() => {}}
+                data-ds-check="object-card"
+              >
+                <Button variant="secondary" size="sm" data-ds-exempt="">{t('button.recordPayment')}</Button>
+              </ObjectCard>
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '280px', gap: 12 }}>
+              <ObjectCard label="صندوق الكاش" value="4,820" caption={t('row.sampleTime')} />
+            </div>
           </div>
         </section>
 

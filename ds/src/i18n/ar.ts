@@ -92,6 +92,8 @@ export const ar = {
   'title.objectRow': { kind: 'title', text: 'الصف' },
   'state.oneLine': { kind: 'badge', text: 'سطر واحد' },
   'state.withBadge': { kind: 'badge', text: 'مع شارة' },
+  'title.objectCard': { kind: 'title', text: 'بطاقة الكائن' },
+  'state.withButton': { kind: 'badge', text: 'مع زر' },
   'movement.out': { kind: 'badge', text: 'خارج' },
   'movement.transfer': { kind: 'badge', text: 'تحويل' },
 

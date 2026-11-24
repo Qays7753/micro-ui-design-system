@@ -1,0 +1,128 @@
+/*
+ * ObjectCard.css — BRIEF 4.1 + 23.24. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-object-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  /* 23.24: بطاقة — استدارة 24 (radius.lg, like Surface/HeroSurface). */
+  border-radius: var(--mds-radius-lg);
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  transition: transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
+}
+
+/* Width (1339): 280 in horizontal lists is the consumer track's job; the
+   card itself flexes with its container. */
+
+/* Tablet padding (23.1; breakpoint.tablet-min = 744 at the 16px root
+   = 46.5rem — the Surface rem-media pattern: gate-clean and
+   zoom-correct). */
+@media (min-width: 46.5rem) {
+  .mds-object-card {
+    padding: var(--mds-layout-surface-padding-tablet);
+  }
+}
+
+
+/* The mark row: EntityMark 64 with the badge beside it. */
+.mds-object-card-mark {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--mds-space-12);
+}
+
+.mds-object-card-state {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.mds-object-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  min-width: 0;
+}
+
+/* The title: title-card 18/26, TWO lines max, ellipsized beyond (1435). */
+.mds-object-card-title {
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.mds-object-card-caption {
+  /* type trio shared via .mds-type-caption (base.css, ds-dup) */
+  color: var(--mds-color-text-secondary);
+}
+
+/* The value: amount-row 16/24/600 tabular, never truncated. */
+.mds-object-card-value {
+  /* type quartet shared via .mds-type-amount-row (base.css, ds-dup) */
+  color: var(--mds-color-text-primary);
+  font-variant-numeric: var(--mds-font-numeric);
+  white-space: nowrap;
+}
+
+/* The one next-step compact secondary button, aligned to the start. */
+.mds-object-card-action {
+  display: inline-flex;
+  margin-block-start: var(--mds-space-4);
+}
+
+/* Press (23.24 press table): scale(.98) + surface-pressed. */
+.mds-object-card:active,
+.mds-object-card[data-pressed],
+.mds-object-card--pressed {
+  transform: scale(0.98);
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-object-card:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled (23.24(15)). */
+.mds-object-card:disabled {
+  cursor: default;
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-object-card:disabled .mds-object-card-title,
+.mds-object-card:disabled .mds-object-card-caption,
+.mds-object-card:disabled .mds-object-card-value {
+  color: inherit;
+}
+
+.mds-object-card:disabled:active,
+.mds-object-card:disabled[data-pressed] {
+  transform: none;
+  background-color: var(--mds-color-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-object-card {
+    transition: none;
+  }
+
+  .mds-object-card:active,
+  .mds-object-card[data-pressed],
+  .mds-object-card--pressed {
+    transform: none;
+  }
+}

@@ -46,9 +46,7 @@
 }
 
 .mds-object-row-caption {
-  font-family: var(--mds-type-caption-font);
-  font-size: var(--mds-type-caption-size);
-  line-height: var(--mds-type-caption-line);
+  /* type trio shared via .mds-type-caption (base.css, ds-dup) */
   color: var(--mds-color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -65,10 +63,7 @@
 }
 
 .mds-object-row-value {
-  font-family: var(--mds-type-amount-row-font);
-  font-size: var(--mds-type-amount-row-size);
-  line-height: var(--mds-type-amount-row-line);
-  font-weight: var(--mds-type-amount-row-weight);
+  /* type quartet shared via .mds-type-amount-row (base.css, ds-dup) */
   color: var(--mds-color-text-primary);
   font-variant-numeric: var(--mds-font-numeric);
   white-space: nowrap;

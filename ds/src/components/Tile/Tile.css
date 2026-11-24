@@ -96,9 +96,7 @@
 
 /* One 13/20 text-secondary line under the number. */
 .mds-tile-line {
-  font-family: var(--mds-type-caption-font);
-  font-size: var(--mds-type-caption-size);
-  line-height: var(--mds-type-caption-line);
+  /* type trio shared via .mds-type-caption (base.css, ds-dup) */
   color: var(--mds-color-text-secondary);
 }
 

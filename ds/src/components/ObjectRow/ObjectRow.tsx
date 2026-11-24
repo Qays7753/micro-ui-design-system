@@ -61,12 +61,12 @@ export function ObjectRow({
       </EntityMark>
       <span className="mds-object-row-text">
         <span className="mds-object-row-title">{label}</span>
-        {caption ? <span className="mds-object-row-caption">{caption}</span> : null}
+        {caption ? <span className="mds-object-row-caption mds-type-caption">{caption}</span> : null}
       </span>
       {value !== undefined || trailing ? (
         <span className="mds-object-row-end">
-          <span className="mds-object-row-value">{value ?? '—'}</span>
-          {trailing ? <span className="mds-object-row-time">{trailing}</span> : null}
+          <span className="mds-object-row-value mds-type-amount-row">{value ?? '—'}</span>
+          {trailing ? <span className="mds-object-row-time mds-type-caption">{trailing}</span> : null}
         </span>
       ) : null}
     </Root>

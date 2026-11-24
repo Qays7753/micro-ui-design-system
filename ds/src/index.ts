@@ -28,3 +28,4 @@ export * from './components/Section';
 export * from './components/Tile';
 export * from './components/HeroSurface';
 export * from './components/ObjectRow';
+export * from './components/ObjectCard';
