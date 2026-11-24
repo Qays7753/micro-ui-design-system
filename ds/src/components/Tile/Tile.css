@@ -57,9 +57,7 @@
 }
 
 .mds-tile-header-label {
-  font-family: var(--mds-type-label-font);
-  font-size: var(--mds-type-label-size);
-  line-height: var(--mds-type-label-line);
+  /* type trio shared via .mds-type-label (base.css, ds-dup) */
   font-weight: 500;
   color: var(--mds-color-text-secondary);
 }

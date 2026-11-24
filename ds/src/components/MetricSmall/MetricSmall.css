@@ -1,0 +1,12 @@
+/*
+ * MetricSmall.css — BRIEF 9.3 («نفس التشريح بقيمة number-lg»). Every
+ * value is a token reference; no raw hex/px/ms (ds-raw-values).
+ */
+
+/* The loading skeleton at the small size (23.10: بمقاس المحتوى الحقيقي —
+   no invented numbers, owner-documented in REPORT): the body-line
+   height at the hero width. */
+.mds-metric-small .mds-metric-skeleton {
+  width: var(--mds-size-skeleton-hero-160);
+  height: var(--mds-size-skeleton-line-body);
+}

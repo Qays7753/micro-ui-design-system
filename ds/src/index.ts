@@ -29,3 +29,5 @@ export * from './components/Tile';
 export * from './components/HeroSurface';
 export * from './components/ObjectRow';
 export * from './components/ObjectCard';
+export * from './components/Metric';
+export * from './components/MetricSmall';

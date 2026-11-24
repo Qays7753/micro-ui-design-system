@@ -43,7 +43,7 @@ function HeroValue({ value }: { value: string }) {
   // 28/36 in ONE step, no gradual shrinking. 9 chars covers the quoted
   // example without catching «12,345,678» (8) which does fit.
   const long = value.length > 9;
-  const sizeClass = long ? 'mds-hero-value--lg mds-number-lg' : 'mds-hero-value--hero';
+  const sizeClass = long ? 'mds-hero-value--lg mds-number-lg' : 'mds-hero-value--hero mds-type-display-hero';
   return (
     <span className={`mds-hero-value ${sizeClass}`}>
       <span className="mds-hero-value-whole">{whole}</span>

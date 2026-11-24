@@ -61,7 +61,7 @@ export function Tile({
     >
       <span className="mds-tile-header">
         {leading ? <span className="mds-tile-header-icon" aria-hidden="true">{leading}</span> : null}
-        <span className="mds-tile-header-label">{label}</span>
+        <span className="mds-tile-header-label mds-type-label">{label}</span>
         {state ? (
           <span className="mds-tile-dot" role="img" aria-label={caption ?? ''} />
         ) : null}

@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -543,6 +543,57 @@ export function App() {
             <div style={{ display: 'grid', gridTemplateColumns: '280px', gap: 12 }}>
               <ObjectCard label="صندوق الكاش" value="4,820" caption={t('row.sampleTime')} />
             </div>
+          </div>
+        </section>
+
+        {/* ---- Metric + MetricSmall (BRIEF 9.3 + 23.8 on white) ---- */}
+        <section className="lab-section" id="metric">
+          <h2 className="lab-title">{t('title.metric')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withCents')}</span>
+            <Surface>
+              <Metric
+                label={t('nav.finance')}
+                value="1,245.750"
+                trailing={t('money.unit')}
+                direction={
+                  <span style={{ color: 'var(--mds-color-status-done-fg)' }}>
+                    <DeltaUpIcon />
+                    <span>{t('metric.deltaHigher', { percent: '12%' })}</span>
+                  </span>
+                }
+                debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
+                onDismiss={() => {}}
+                data-ds-check="metric"
+              />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.loading')}</span>
+            <Surface>
+              <Metric label={t('nav.finance')} loading />
+            </Surface>
+          </div>
+        </section>
+        <section className="lab-section" id="metric-small">
+          <h2 className="lab-title">{t('title.metricSmall')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <Surface>
+              <MetricSmall
+                label={t('nav.finance')}
+                value="4,820"
+                trailing={t('money.unit')}
+                debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
+                data-ds-check="metric-small"
+              />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.emptySection')}</span>
+            <Surface>
+              <MetricSmall label={t('nav.finance')} />
+            </Surface>
           </div>
         </section>
 

@@ -63,3 +63,20 @@ button,
   line-height: var(--mds-type-amount-row-line);
   font-weight: var(--mds-type-amount-row-weight);
 }
+
+/* The display-hero quartet (BRIEF 23.8): shared by HeroSurface and
+   Metric (ds-dup). */
+.mds-type-display-hero {
+  font-family: var(--mds-type-display-hero-font);
+  font-size: var(--mds-type-display-hero-size);
+  line-height: var(--mds-type-display-hero-line);
+  font-weight: var(--mds-type-display-hero-weight);
+}
+
+/* The label trio (BRIEF 23.x): shared by Metric labels and Tile headers
+   (ds-dup). Weight varies by consumer (500 both, per 23.8/23.9). */
+.mds-type-label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+}

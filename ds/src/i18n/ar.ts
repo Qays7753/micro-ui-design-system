@@ -94,6 +94,8 @@ export const ar = {
   'state.withBadge': { kind: 'badge', text: 'مع شارة' },
   'title.objectCard': { kind: 'title', text: 'بطاقة الكائن' },
   'state.withButton': { kind: 'badge', text: 'مع زر' },
+  'title.metric': { kind: 'title', text: 'المقياس' },
+  'title.metricSmall': { kind: 'title', text: 'المقياس الصغير' },
   'movement.out': { kind: 'badge', text: 'خارج' },
   'movement.transfer': { kind: 'badge', text: 'تحويل' },
 

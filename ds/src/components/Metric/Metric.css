@@ -1,0 +1,135 @@
+/*
+ * Metric.css — BRIEF 9.3 + 23.8 (خارج السطح البطل). Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-metric {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* The label: 14/20/500 text-secondary (23.8 item 1, on white). */
+.mds-metric-label {
+  /* type trio shared via .mds-type-label (base.css, ds-dup) */
+  font-weight: 500;
+  color: var(--mds-color-text-secondary);
+}
+
+/* 4 after the label (23.8 item 2). */
+.mds-metric-amount {
+  margin: var(--mds-space-4) 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--mds-layout-amount-unit-gap);
+}
+
+/* The value: display-hero 40/48/500 text-primary, tabular, −0.01em.
+   The hero quartet composes .mds-number-lg? No — display-hero is its own
+   size; declared on the modifier so the shared number-lg (used by the
+   long drop and Money) never competes (S5 critic lesson). */
+.mds-metric-value {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--mds-color-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--mds-font-digit-tracking);
+}
+
+.mds-metric-value--hero {
+  /* quartet shared via .mds-type-display-hero (base.css, ds-dup) */
+}
+
+/* Cents: same size, text-secondary on white (23.8). */
+.mds-metric-value-cents {
+  color: var(--mds-color-text-secondary);
+}
+
+/* The unit: body-strong 16/24 on the number's baseline (23.8). */
+.mds-metric-unit {
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+/* 8 after the amount → the diff line (23.8 items 4-5). On white the diff
+   takes the STATE color WITH the arrow and the word — the color comes
+   from the passed node (MetricDelta / app markup). */
+.mds-metric-diff {
+  margin: var(--mds-space-8) 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  font-family: var(--mds-type-caption-strong-font);
+  font-size: var(--mds-type-caption-strong-size);
+  line-height: var(--mds-type-caption-strong-line);
+  font-weight: var(--mds-type-caption-strong-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-metric-diff svg {
+  width: var(--mds-size-icon-14);
+  height: var(--mds-size-icon-14);
+}
+
+/* 12 after the diff → the source link: caption-strong text-primary
+   (23.8 item 7, on white). ONE caption line under the number total
+   (owner decision 2026-11-25): this is that single line. */
+.mds-metric-source {
+  margin: var(--mds-space-12) 0 0;
+  padding: 0;
+  padding-bottom: calc(var(--mds-border-underline-offset) - var(--mds-border-hairline));
+  border: none;
+  border-bottom: var(--mds-border-underline) solid var(--mds-color-text-primary);
+  background-color: transparent;
+  font-family: var(--mds-type-caption-strong-font);
+  font-size: var(--mds-type-caption-strong-size);
+  line-height: var(--mds-type-caption-strong-line);
+  font-weight: var(--mds-type-caption-strong-weight);
+  color: var(--mds-color-text-primary);
+  cursor: pointer;
+}
+
+.mds-metric-source:active,
+.mds-metric-source[data-pressed],
+.mds-metric-source--pressed {
+  color: var(--mds-color-text-secondary);
+  border-bottom-color: var(--mds-color-text-secondary);
+}
+
+.mds-metric-source:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Loading (9.3): the gray skeleton replaces the value — never a zero.
+   Hero skeleton 160×32 (size.skeleton-hero), pulse on the token. */
+.mds-metric-skeleton {
+  display: inline-block;
+  width: var(--mds-size-skeleton-hero-160);
+  height: var(--mds-size-skeleton-hero-32);
+  border-radius: var(--mds-radius-2xs);
+  background-color: var(--mds-color-skeleton);
+  animation: mds-metric-skeleton-pulse var(--mds-motion-skeleton-pulse-ms) ease-in-out infinite;
+}
+
+@keyframes mds-metric-skeleton-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-metric-skeleton {
+    animation: none;
+  }
+}
+
+/* Disabled (23.24(15)): the link dims. */
+.mds-metric-source:disabled {
+  color: var(--mds-color-disabled-fg);
+  border-bottom-color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
