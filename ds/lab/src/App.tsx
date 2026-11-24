@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, SegmentedControl, Surface, TextField, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, EntityMark, FilterChips, IconButton, NavTodayIcon, Section, SegmentedControl, Surface, TextField, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -426,6 +426,25 @@ export function App() {
                 <Money value={amounts[2]} />
               </Well>
             </Surface>
+          </div>
+        </section>
+
+        {/* ---- Section (BRIEF 9.2, 23.24(16)): the titled group ---- */}
+        <section className="lab-section" id="section">
+          <h2 className="lab-title">{t('title.section')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withCount')}</span>
+            <Section label={t('title.needsYou')} caption={3} onPress={() => {}} data-ds-check="section">
+              <Surface>
+                <Well>
+                  <p className="lab-label">{t('empty.movements')}</p>
+                </Well>
+              </Surface>
+            </Section>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.emptySection')}</span>
+            <Section label={t('title.needsYou')} onPress={() => {}} />
           </div>
         </section>
         </main>

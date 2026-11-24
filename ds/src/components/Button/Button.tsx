@@ -68,11 +68,6 @@ export function Button({
       ) : null}
       <span className="mds-button-label">{children}</span>
       {trailing ? <span className="mds-button-icon">{trailing}</span> : null}
-      {/* Owner amendment to 23.1(4): mirror the leading block (icon+gap, or the
-          spinner that replaces it) so the label stays in the button's center. */}
-      {(loading || leading) && !trailing ? (
-        <span className="mds-label-counter" aria-hidden="true" />
-      ) : null}
     </button>
   );
 }

@@ -37,6 +37,21 @@ MARKERS_JS = """
 }
 """
 
+# The marker body (without the arrow wrapper) for the frame-boundary sampler.
+MARKERS_BODY = """
+  let els = Array.from(document.querySelectorAll('[data-ds-font-ref]'));
+  if (!els.length) {
+    els = Array.from(document.querySelectorAll('body *')).filter(el => {
+      if (el.offsetParent === null) return false;
+      return Array.from(el.childNodes).some(n => n.nodeType === 3 && n.textContent.trim());
+    }).slice(0, 30);
+  }
+  return els.map(el => {
+    const r = el.getBoundingClientRect();
+    return {x: r.x, y: r.y, w: r.width, h: r.height};
+  });
+"""
+
 DEFAULT_FONT = "plex-arabic-400.woff2"
 
 
@@ -100,10 +115,35 @@ def run(gate: Gate, target, args):
                 with browser_session(engine) as session:
                     page = session.page(**DEFAULT_CONTEXT)
                     page.goto(url, wait_until="domcontentloaded", timeout=20000)
-                    before = page.evaluate(MARKERS_JS)
+                    # Both samples at frame boundaries (two rAF each): a
+                    # half-laid-out capture is what made this gate flaky
+                    # under load — the before-measure could land after the
+                    # swap for early elements while fonts.ready raced the
+                    # relayout. Owner decision 2026-11-25: no retry loops,
+                    # no raised thresholds — deterministic capture points.
+                    before = page.evaluate(
+                        "() => new Promise(res => requestAnimationFrame("
+                        "() => requestAnimationFrame(() => res("
+                        "(() => {" + MARKERS_BODY + "})()"
+                        "))))"
+                    )
                     page.wait_for_function("document.fonts.status === 'loaded'", timeout=15000)
-                    page.wait_for_timeout(120)
-                    after = page.evaluate(MARKERS_JS)
+                    after = page.evaluate(
+                        "() => new Promise(res => requestAnimationFrame("
+                        "() => requestAnimationFrame(() => res("
+                        "(() => {" + MARKERS_BODY + "})()"
+                        "))))"
+                    )
+                    # Fonts.ready can precede the final relayout by a frame;
+                    # verify stability with one more frame-pair sample.
+                    settle = page.evaluate(
+                        "() => new Promise(res => requestAnimationFrame("
+                        "() => requestAnimationFrame(() => res("
+                        "(() => {" + MARKERS_BODY + "})()"
+                        "))))"
+                    )
+                    if settle:
+                        after = settle
 
                 if not before:
                     gate.fail(f"ds-font-shift/shift/{engine}", "no text markers found on the page")

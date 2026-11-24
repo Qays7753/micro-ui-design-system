@@ -1,0 +1,106 @@
+/*
+ * Section.css — BRIEF 9.2 + 23.24(16) + 23.2. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* Header → first surface (9.2: 12), applied as the gap; section-to-
+     section 32 comes from the consuming screen's rhythm. */
+  gap: var(--mds-layout-section-title-to-surface);
+}
+
+.mds-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mds-space-8);
+  /* «الكل» pinned to the line's end (23.24(16)). */
+  justify-content: flex-start;
+}
+
+.mds-section-title {
+  margin: 0;
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  line-height: var(--mds-type-title-section-line);
+  font-weight: var(--mds-type-title-section-weight);
+  color: var(--mds-color-text-primary);
+}
+
+/* The count: caption-strong in text-secondary, 8 after the title
+   (23.24(16)) — the 8 comes from the header's own gap. */
+.mds-section-count {
+  font-family: var(--mds-type-caption-strong-font);
+  font-size: var(--mds-type-caption-strong-size);
+  line-height: var(--mds-type-caption-strong-line);
+  font-weight: var(--mds-type-caption-strong-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+/* «الكل»: label-strong in brand-text with the forward icon, at the line's
+   end, in a 48 touch zone (23.24(16)). */
+.mds-section-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  margin-inline-start: auto;
+  padding-inline: var(--mds-layout-chip-padding);
+  min-height: var(--mds-size-touch-min);
+  margin-block: calc((var(--mds-type-title-section-line) - var(--mds-type-label-strong-line)) / -2);
+  border: none;
+  background-color: transparent;
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-brand-text);
+  cursor: pointer;
+}
+
+.mds-section-see-all-icon {
+  color: var(--mds-color-brand-text);
+}
+
+/* Press: surface-pressed behind the 48 zone — no scale, no ripple (23.2);
+   the tappable area is round-ish so the press reads as a soft block. */
+.mds-section-see-all:active,
+.mds-section-see-all[data-pressed],
+.mds-section-see-all--pressed {
+  background-color: var(--mds-color-surface-pressed);
+  border-radius: var(--mds-radius-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mds-section-see-all:not(:disabled):hover {
+    background-color: var(--mds-color-surface-pressed);
+    border-radius: var(--mds-radius-sm);
+  }
+}
+
+.mds-section-see-all:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-section-see-all {
+    transition: none;
+  }
+}
+
+/* Disabled (23.24(15)): the link dims and stops responding. */
+.mds-section-see-all:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-section-see-all:disabled .mds-section-see-all-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-section-see-all:disabled:active,
+.mds-section-see-all:disabled[data-pressed] {
+  background-color: transparent;
+}
