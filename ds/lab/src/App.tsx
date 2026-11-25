@@ -74,6 +74,7 @@ export function App() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toastText, setToastText] = useState<string | null>(null);
   const [pageState, setPageState] = useState<'normal' | 'loading' | 'empty'>('normal');
+  const [composeHidden, setComposeHidden] = useState(false);
   const [view, setView] = useState<'compose' | 'catalog'>(() =>
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
       ? 'catalog'
@@ -91,7 +92,7 @@ export function App() {
         <div className="lab-compose">
           <div className="lab-compose-top">
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
-            <AmountVisibilityToggle />
+            <AmountVisibilityToggle onChange={(visible) => setComposeHidden(!visible)} />
             <button type="button" className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(100)}>{t('lab.scale100')}</button>
             <button type="button" className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(200)}>{t('lab.scale200')}</button>
             <button type="button" className={pageState === 'loading' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('loading')}>{t('state.loading')}</button>
@@ -134,7 +135,7 @@ export function App() {
               <>
               <HeroSurface
                 label={t('nav.finance')}
-                value="1,245.750"
+                value={composeHidden ? '—' : '1,245.750'}
                 trailing={t('money.unit')}
                 direction={
                   <>
@@ -150,14 +151,14 @@ export function App() {
                   <ObjectRow
                     label={parties[0]}
                     caption={t('row.sampleCaption')}
-                    value="1,245.750"
+                    value={composeHidden ? '••••' : '1,245.750'}
                     trailing={t('row.sampleTime')}
                     onPress={() => {}}
                   />
                   <ObjectRow
                     label={parties[1]}
                     caption={t('row.sampleCaption')}
-                    value="1,250"
+                    value={composeHidden ? '••••' : '1,250'}
                     trailing={<StatusBadge tone="waiting" />}
                     onPress={() => setConfirmOpen(true)}
                   />
