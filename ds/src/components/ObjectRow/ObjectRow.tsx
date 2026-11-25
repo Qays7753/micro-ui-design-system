@@ -60,7 +60,7 @@ export function ObjectRow({
         {typeof leading === 'string' ? undefined : leading}
       </EntityMark>
       <span className="mds-object-row-text">
-        <span className="mds-object-row-title">{label}</span>
+        <span className="mds-object-row-title mds-type-body-strong">{label}</span>
         {caption ? <span className="mds-object-row-caption mds-type-caption">{caption}</span> : null}
       </span>
       {value !== undefined || trailing ? (

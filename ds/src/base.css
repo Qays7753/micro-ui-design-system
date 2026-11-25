@@ -89,3 +89,12 @@ button,
   line-height: var(--mds-type-title-section-line);
   font-weight: var(--mds-type-title-section-weight);
 }
+
+/* The body-strong quartet (BRIEF 23.x): shared by ObjectRow titles and
+   ProjectSwitcher names (ds-dup). */
+.mds-type-body-strong {
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+}

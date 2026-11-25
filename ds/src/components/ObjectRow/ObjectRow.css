@@ -40,10 +40,7 @@
 }
 
 .mds-object-row-title {
-  font-family: var(--mds-type-body-strong-font);
-  font-size: var(--mds-type-body-strong-size);
-  line-height: var(--mds-type-body-strong-line);
-  font-weight: var(--mds-type-body-strong-weight);
+  /* type quartet shared via .mds-type-body-strong (base.css, ds-dup) */
   color: var(--mds-color-text-primary);
   white-space: nowrap;
   overflow: hidden;

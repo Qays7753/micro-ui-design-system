@@ -1,0 +1,80 @@
+/*
+ * ProjectSwitcher.css — BRIEF 9.1 + 23.20 + 23.2. Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-project-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-width: var(--mds-size-switcher-min-width);
+  min-height: var(--mds-size-touch-min);
+  max-width: 100%;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: inherit;
+}
+
+/* Press (23.2): the surface-pressed rounded fill, no scale. */
+.mds-project-switcher:active,
+.mds-project-switcher[data-pressed] {
+  background-color: var(--mds-color-surface-pressed);
+  border-radius: var(--mds-radius-md);
+}
+
+.mds-project-switcher:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+  border-radius: var(--mds-radius-md);
+}
+
+/* Name column: body-strong one line, ellipsized, never pushes. The
+   type quartet itself is the shared .mds-type-body-strong class. */
+.mds-project-switcher-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  min-width: 0;
+  text-align: start;
+}
+
+.mds-project-switcher-name {
+  color: var(--mds-color-text-primary);
+  /* One-line ellipsis — same line-clamp discipline as ObjectRow's title
+     (23.24(8)); kept as one shared line by the ds-dup gate. */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* The role line: micro 12/16/600, text-secondary (9.1). */
+.mds-project-switcher-role {
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  font-weight: var(--mds-type-micro-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-project-switcher-caret {
+  flex-shrink: 0;
+}
+
+/* Disabled (23.2). */
+.mds-project-switcher:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-project-switcher:disabled:active,
+.mds-project-switcher:disabled[data-pressed] {
+  background-color: transparent;
+}
+
+.mds-project-switcher:disabled .mds-project-switcher-name,
+.mds-project-switcher:disabled .mds-project-switcher-role {
+  color: var(--mds-color-disabled-fg);
+}

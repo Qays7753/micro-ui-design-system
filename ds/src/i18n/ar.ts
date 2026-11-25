@@ -190,6 +190,8 @@ export const ar = {
   'state.unread': { kind: 'badge', text: 'غير مقروء' },
   'title.notificationsButton': { kind: 'title', text: 'زر الإشعارات' },
   'state.noUnread': { kind: 'badge', text: 'بلا نقطة' },
+  'title.projectSwitcher': { kind: 'title', text: 'مبدّل المشروع' },
+  'state.singleRole': { kind: 'badge', text: 'دور واحد' },
   'state.withCents': { kind: 'badge', text: 'مع فلوس' },
   'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },

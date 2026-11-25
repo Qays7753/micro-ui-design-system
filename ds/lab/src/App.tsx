@@ -18,8 +18,8 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, NotificationsButton, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
-import { amounts, drivers, edgeCases, funds, parties } from './data';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, NotificationsButton, ProjectSwitcher, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
 const FUND_ICONS = {
@@ -548,6 +548,30 @@ export function App() {
         </section>
 
 
+
+
+        {/* ---- ProjectSwitcher (BRIEF 9.1 + 23.20): the project trigger ---- */}
+        <section className="lab-section" id="project-switcher">
+          <h2 className="lab-title">{t('title.projectSwitcher')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.default')}</span>
+            <ProjectSwitcher
+              label={projects[0]}
+              caption={ar['role.owner'].text}
+              onPress={() => {}}
+              data-ds-check="project-switcher"
+            />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.singleRole')}</span>
+            <ProjectSwitcher
+              label={projects[1]}
+              caption={ar['role.owner'].text}
+              locked
+              onPress={() => {}}
+            />
+          </div>
+        </section>
 
         {/* ---- NotificationsButton (BRIEF 9.1 + 23.24(2)): the bell ---- */}
         <section className="lab-section" id="notifications-button">
