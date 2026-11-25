@@ -213,3 +213,22 @@
 .lab-sheet-stage .mds-sheet-panel {
   max-width: none;
 }
+
+/* ---- ActionBar specimen stage (S7 unit 3): same mini-frame pattern as
+   the sheet stage above — the FIXED bar (position: fixed, safe-area,
+   layer.bars) would swallow every gate press below it on the long lab
+   page, so the specimen renders INLINE; the real fixed/keyboard
+   behavior rides in apps (the stage makes it static like the sheets). */
+.lab-bar-stage {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+  border-radius: 24px;
+  border: 1px solid var(--mds-color-surface-edge);
+  background-color: var(--mds-color-canvas);
+}
+
+.lab-bar-stage .mds-action-bar {
+  position: static;
+}

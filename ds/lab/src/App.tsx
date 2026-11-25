@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, BackIcon, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -508,6 +508,41 @@ export function App() {
                   />
                 </Surface>
               </Sheet>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- ActionBar (BRIEF 9.2 + 23.16 + 27.3/27.4): fixed bottom bar ---- */}
+        <section className="lab-section" id="action-bar">
+          <h2 className="lab-title">{t('title.actionBar')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withSecondary')}</span>
+            {/* Lab-only presentation (same documented pattern as
+                .lab-sheet-stage for the S7 sheets): the FIXED bar would
+                swallow every gate press below it on the long lab page, so
+                each specimen renders INLINE inside its own mini-frame —
+                the component's real fixed+safe-area behavior rides in
+                apps. The inline form is position: static via the stage. */}
+            <div className="lab-bar-stage" data-ds-check="action-bar">
+              <ActionBar
+                label={t('button.saveMovement')}
+                caption={t('button.recordPayment')}
+                onPress={() => {}}
+                onRetry={() => {}}
+                leading
+              />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.primaryOnly')}</span>
+            <div className="lab-bar-stage">
+              <ActionBar label={t('button.saveMovement')} onPress={() => {}} leading />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.scrolledToEnd')}</span>
+            <div className="lab-bar-stage">
+              <ActionBar label={t('button.saveMovement')} onPress={() => {}} leading={false} />
             </div>
           </div>
         </section>

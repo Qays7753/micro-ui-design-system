@@ -1,0 +1,46 @@
+/*
+ * ActionBar.css — BRIEF 9.2 + 23.15 + 23.16 + 23.20 + 27.3. Every value is
+ * a token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-action-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  /* 23.15: the screen's own bar sits in layer.bars. A sheet-owned bar
+     lives inside the sheet's own stacking context (23.15) which
+     out-stacks this by being rendered inside it. */
+  z-index: var(--mds-layer-bars);
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  padding-block: var(--mds-space-12);
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  /* 27.3: the safe area below the bar (home indicator). env() with no
+     fallback: every target browser evaluates the function (0 where no
+     inset applies), and the fallback literal would be a raw px value. */
+  padding-bottom: calc(var(--mds-space-12) + env(safe-area-inset-bottom));
+  background-color: var(--mds-color-surface);
+}
+
+/* 23.16: the top hairline appears ONLY while the content above has not
+   scrolled to its end — the host app passes that signal (`leading`).
+   The transition rides the quick motion token, as 23.16 prescribes
+   «بحركة quick» for the ContextBar rule which the ActionBar rule
+   mirrors (same section, same border). */
+.mds-action-bar--more {
+  border-top: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
+/* The secondary action: Button variant=text keeps its own press/
+   focus/disabled styles (23.2); here it only refuses to shrink. */
+.mds-action-bar-secondary {
+  flex: 0 0 auto;
+}
+
+/* The ONE primary button fills everything the secondary left (23.20:
+   «الزر الأساسي يملأ ما يتبقى بعد الثانوي» — full width inside the
+   bar, 23.3). */
+.mds-action-bar-primary {
+  flex: 1 1 auto;
+}
