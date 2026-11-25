@@ -202,6 +202,8 @@ export const ar = {
   'button.new': { kind: 'button', text: 'جديد' },
   'state.scrolled': { kind: 'badge', text: 'عند التمرير' },
   'title.saveState': { kind: 'title', text: 'حالة الحفظ' },
+  'title.toast': { kind: 'title', text: 'الإشعار العابر' },
+  'state.defaultToast': { kind: 'badge', text: 'ثلاث ثوانٍ' },
   'state.draft': { kind: 'badge', text: 'مسودة' },
   'state.sending': { kind: 'badge', text: 'يُرسل' },
   'state.fiveTabs': { kind: 'badge', text: 'خمسة تبويبات' },

@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, SaveState, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -570,6 +570,24 @@ export function App() {
 
 
 
+
+
+        {/* ---- Toast (BRIEF 23.12 + 23.17): fixed above the bars ---- */}
+        <section className="lab-section" id="toast">
+          <h2 className="lab-title">{t('title.toast')}</h2>
+          <div className="lab-row lab-row--full" data-ds-check="toast">
+            <span className="lab-label">{t('state.default')}</span>
+            <div className="lab-toast-stage">
+              <Toast label={t('toast.movementSaved')} onDismiss={() => {}} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('button.undo')}</span>
+            <div className="lab-toast-stage">
+              <Toast label={t('toast.quoteAccepted')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.undo')}</Button>} onDismiss={() => {}} />
+            </div>
+          </div>
+        </section>
 
         {/* ---- SaveState (BRIEF 9.4 + 656 + 23.17): the four save states ---- */}
         <section className="lab-section" id="save-state">

@@ -232,3 +232,16 @@
 .lab-bar-stage .mds-action-bar {
   position: static;
 }
+
+/* Toast stage: same frame; the fixed toast renders static inside it. */
+.lab-toast-stage {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+}
+
+.lab-toast-stage .mds-toast {
+  position: static;
+  inset-inline: auto;
+}
