@@ -10,6 +10,9 @@
   /* White surface with the PERMANENT top hairline (23.16: TabBar's
      border is always present, unlike ContextBar/ActionBar). */
   background-color: var(--mds-color-surface);
+  /* 64 on the bar root itself — the tabs' 64 + safe area sit inside it
+     (23.20 width table). */
+  min-height: var(--mds-size-tab-bar);
   border-top: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
   /* 23.15: the bottom bar sits in layer.bars. */
   z-index: var(--mds-layer-bars);
