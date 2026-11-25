@@ -56,8 +56,12 @@ export function Metric({
                 size === 'sm' ? 'mds-number-lg' : 'mds-type-display-hero',
               ].join(' ')}
             >
-              <span className="mds-metric-value-whole">{whole}</span>
-              {cents ? <span className="mds-metric-value-cents">{cents}</span> : null}
+              {/* LTR isolation like Money: the full number keeps its
+                  logical digit order in the RTL line (A1). */}
+              <bdi dir="ltr">
+                <span className="mds-metric-value-whole">{whole}</span>
+                {cents ? <span className="mds-metric-value-cents">{cents}</span> : null}
+              </bdi>
             </span>
             {trailing ? <span className="mds-metric-unit">{trailing}</span> : null}
           </>

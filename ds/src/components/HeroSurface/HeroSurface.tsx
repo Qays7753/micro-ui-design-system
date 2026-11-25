@@ -46,8 +46,13 @@ function HeroValue({ value }: { value: string }) {
   const sizeClass = long ? 'mds-hero-value--lg mds-number-lg' : 'mds-hero-value--hero mds-type-display-hero';
   return (
     <span className={`mds-hero-value ${sizeClass}`}>
-      <span className="mds-hero-value-whole">{whole}</span>
-      {cents ? <span className="mds-hero-value-cents">{cents}</span> : null}
+      {/* LTR isolation like Money: the full number keeps its logical
+          digit order in the RTL line (A1 — «1,245.750» never reads
+          «750.1,245»). */}
+      <bdi dir="ltr">
+        <span className="mds-hero-value-whole">{whole}</span>
+        {cents ? <span className="mds-hero-value-cents">{cents}</span> : null}
+      </bdi>
     </span>
   );
 }

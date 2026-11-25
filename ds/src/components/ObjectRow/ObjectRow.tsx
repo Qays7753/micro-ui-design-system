@@ -65,7 +65,7 @@ export function ObjectRow({
       </span>
       {value !== undefined || trailing ? (
         <span className="mds-object-row-end">
-          <span className="mds-object-row-value mds-type-amount-row">{value ?? '—'}</span>
+          <span className="mds-object-row-value mds-type-amount-row"><bdi dir="ltr">{value ?? '—'}</bdi></span>
           {trailing ? <span className="mds-object-row-time mds-type-caption">{trailing}</span> : null}
         </span>
       ) : null}
