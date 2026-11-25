@@ -245,3 +245,22 @@
   position: static;
   inset-inline: auto;
 }
+
+/* InlineBanner stage: the sticky strip renders static inside the frame. */
+.lab-banner-stage {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+}
+
+.lab-banner-stage .mds-inline-banner {
+  position: static;
+}
+
+/* EmptyState stage: the surface frames inside the lab column. */
+.lab-empty-stage {
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+}

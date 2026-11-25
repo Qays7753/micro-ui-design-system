@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, InlineBanner, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, EmptyState, InlineBanner, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -572,6 +572,24 @@ export function App() {
 
 
 
+
+
+        {/* ---- EmptyState (BRIEF 23.7): the ghost-preview empty surface ---- */}
+        <section className="lab-section" id="empty-state">
+          <h2 className="lab-title">{t('title.emptyState')}</h2>
+          <div className="lab-row lab-row--full" data-ds-check="empty-state">
+            <span className="lab-label">{t('state.default')}</span>
+            <div className="lab-empty-stage">
+              <EmptyState label={t('empty.movements')} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('button.recordMovement')}</span>
+            <div className="lab-empty-stage">
+              <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" data-ds-exempt="">{t('button.recordMovement')}</Button>} />
+            </div>
+          </div>
+        </section>
 
         {/* ---- InlineBanner (BRIEF 517 + 658 + 23.23): the three semantics ---- */}
         <section className="lab-section" id="inline-banner">
