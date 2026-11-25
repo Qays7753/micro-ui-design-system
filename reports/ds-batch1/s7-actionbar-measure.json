@@ -1,0 +1,121 @@
+{
+ "target": "previews/ds-lab/standalone.html",
+ "engines": {
+  "chromium": [
+   [
+    "bar background surface (white)",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "bar top hairline present with content-more (23.16)",
+    "1px"
+   ],
+   [
+    "hairline color surface-edge",
+    "rgb(213, 220, 224)"
+   ],
+   [
+    "no hairline when scrolled to end",
+    "0px"
+   ],
+   [
+    "ONE primary button per bar",
+    "1"
+   ],
+   [
+    "primary fills the remaining width (flex 1 1 auto)",
+    "1/1"
+   ],
+   [
+    "secondary does not shrink (flex 0 0 auto)",
+    "0/0"
+   ],
+   [
+    "bar layer is layer.bars (20)",
+    "20"
+   ],
+   [
+    "safe-area in bottom padding",
+    "12px"
+   ],
+   [
+    "bar block padding 12",
+    "12px/12px"
+   ],
+   [
+    "bar inline padding = screen margin 16",
+    "16px/16px"
+   ],
+   [
+    "role=group with label",
+    "group:احفظ الحركة"
+   ],
+   [
+    "primary button height 52 (size.button)",
+    "52"
+   ],
+   [
+    "primary is full width (label single line)",
+    "169"
+   ]
+  ],
+  "webkit": [
+   [
+    "bar background surface (white)",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "bar top hairline present with content-more (23.16)",
+    "1px"
+   ],
+   [
+    "hairline color surface-edge",
+    "rgb(213, 220, 224)"
+   ],
+   [
+    "no hairline when scrolled to end",
+    "0px"
+   ],
+   [
+    "ONE primary button per bar",
+    "1"
+   ],
+   [
+    "primary fills the remaining width (flex 1 1 auto)",
+    "1/1"
+   ],
+   [
+    "secondary does not shrink (flex 0 0 auto)",
+    "0/0"
+   ],
+   [
+    "bar layer is layer.bars (20)",
+    "20"
+   ],
+   [
+    "safe-area in bottom padding",
+    "12px"
+   ],
+   [
+    "bar block padding 12",
+    "12px/12px"
+   ],
+   [
+    "bar inline padding = screen margin 16",
+    "16px/16px"
+   ],
+   [
+    "role=group with label",
+    "group:احفظ الحركة"
+   ],
+   [
+    "primary button height 52 (size.button)",
+    "52"
+   ],
+   [
+    "primary is full width (label single line)",
+    "170.25"
+   ]
+  ]
+ }
+}
