@@ -205,6 +205,7 @@ export const ar = {
   'title.toast': { kind: 'title', text: 'الإشعار العابر' },
   'title.inlineBanner': { kind: 'title', text: 'الشريط المثبت' },
   'title.emptyState': { kind: 'title', text: 'حالة الفراغ' },
+  'title.skeleton': { kind: 'title', text: 'هيكل التحميل' },
   'state.defaultToast': { kind: 'badge', text: 'ثلاث ثوانٍ' },
   'state.draft': { kind: 'badge', text: 'مسودة' },
   'state.sending': { kind: 'badge', text: 'يُرسل' },

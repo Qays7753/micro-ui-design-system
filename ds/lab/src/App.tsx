@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, EmptyState, InlineBanner, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, EmptyState, InlineBanner, PageHeader, SaveState, Skeleton, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -573,6 +573,23 @@ export function App() {
 
 
 
+
+
+        {/* ---- Skeleton (BRIEF 23.10): the real-content shapes on a surface ---- */}
+        <section className="lab-section" id="skeleton">
+          <h2 className="lab-title">{t('title.skeleton')}</h2>
+          <div className="lab-row lab-row--full" data-ds-check="skeleton">
+            <span className="lab-label">{t('state.loading')}</span>
+            <Surface aria-busy="true">
+              <div className="lab-skeleton-pair">
+                <Skeleton variant="body" />
+                <Skeleton variant="caption" />
+              </div>
+              <Skeleton variant="hero" />
+              <Skeleton variant="mark" />
+            </Surface>
+          </div>
+        </section>
 
         {/* ---- EmptyState (BRIEF 23.7): the ghost-preview empty surface ---- */}
         <section className="lab-section" id="empty-state">

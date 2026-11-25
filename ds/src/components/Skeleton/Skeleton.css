@@ -1,0 +1,58 @@
+/*
+ * Skeleton.css — BRIEF 23.10 + 1650. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-skeleton {
+  display: block;
+  background-color: var(--mds-color-skeleton);
+  /* The never-stopping opacity pulse (23.10) — no shimmer, no
+     gradient. */
+  animation: mds-skeleton-pulse var(--mds-motion-skeleton-pulse-ms)
+    var(--mds-motion-skeleton-pulse-ease) infinite;
+}
+
+@keyframes mds-skeleton-pulse {
+  0% {
+    opacity: var(--mds-motion-skeleton-pulse-from);
+  }
+
+  50% {
+    opacity: var(--mds-motion-skeleton-pulse-to);
+  }
+
+  100% {
+    opacity: var(--mds-motion-skeleton-pulse-from);
+  }
+}
+
+/* Shapes size to the REAL content (23.10). */
+.mds-skeleton--body {
+  height: var(--mds-size-skeleton-line-body);
+  width: 72%;
+  border-radius: var(--mds-radius-2xs);
+}
+
+.mds-skeleton--caption {
+  height: var(--mds-size-skeleton-line-caption);
+  width: 48%;
+  border-radius: var(--mds-radius-2xs);
+}
+
+.mds-skeleton--hero {
+  height: var(--mds-size-skeleton-hero-32);
+  width: var(--mds-size-skeleton-hero-160);
+  border-radius: var(--mds-radius-sm);
+}
+
+.mds-skeleton--mark {
+  height: var(--mds-size-entity-44);
+  width: var(--mds-size-entity-44);
+  border-radius: var(--mds-radius-entity-44);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-skeleton {
+    animation: none;
+  }
+}
