@@ -264,3 +264,17 @@
   max-width: 320px;
   margin-inline: auto;
 }
+
+/* Skeleton section: breathing room between the specimen shapes — the
+   component itself stays per-spec (contiguous blocks); the lab presents
+   them like a composed loading state. */
+#skeleton .mds-surface > * + * {
+  margin-block-start: var(--mds-space-12);
+}
+
+.lab-skeleton-pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  width: 100%;
+}
