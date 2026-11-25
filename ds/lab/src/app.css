@@ -377,12 +377,10 @@
   position: relative;
 }
 
-.lab-compose-screen .mds-sheet,
-.lab-compose-screen .mds-confirm-sheet {
-  position: absolute;
-  inset: 0;
-}
-
+/* The sheets keep their REAL fixed behavior (full-screen overlay, as
+   verified in the S7 catalog sections — in the standalone the viewport
+   IS the device screen). Only the toast is framed: it hovers above the
+   frame's own TabBar at toast-offset 12 (23.12). */
 .lab-compose-screen .mds-toast {
   position: absolute;
   inset-inline: var(--mds-space-16);
