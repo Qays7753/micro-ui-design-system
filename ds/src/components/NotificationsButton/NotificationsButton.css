@@ -1,0 +1,62 @@
+/*
+ * NotificationsButton.css — BRIEF 9.1 + 23.2 + 23.24(2). Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-notifications-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-touch-min);
+  height: var(--mds-size-touch-min);
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  border-radius: var(--mds-radius-full);
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mds-notifications-button svg {
+  width: var(--mds-size-icon-24);
+  height: var(--mds-size-icon-24);
+}
+
+/* Press (23.2, the circular filled treatment like IconButton). */
+.mds-notifications-button:active,
+.mds-notifications-button[data-pressed] {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Focus ring: circular, keyboard only (23.2). */
+.mds-notifications-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled (23.2). */
+.mds-notifications-button:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-notifications-button:disabled:active,
+.mds-notifications-button:disabled[data-pressed] {
+  background-color: transparent;
+}
+
+/* The unread dot (23.24(2)): 8px brand-anchor with a 2px ring of the
+   bar's own background, in the corner FARTHEST from the icon's center
+   — the start-side corner of the 48 zone (top-left in RTL). */
+.mds-notifications-dot {
+  position: absolute;
+  width: var(--mds-size-dot-unread);
+  height: var(--mds-size-dot-unread);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-brand-anchor);
+  box-shadow: 0 0 0 var(--mds-size-dot-unread-ring) var(--mds-color-canvas);
+  top: calc(var(--mds-space-8) - var(--mds-size-dot-unread-ring));
+  inset-inline-start: calc(var(--mds-space-8) - var(--mds-size-dot-unread-ring));
+}

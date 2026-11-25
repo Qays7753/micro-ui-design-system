@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, NotificationsButton, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -547,6 +547,20 @@ export function App() {
           </div>
         </section>
 
+
+
+        {/* ---- NotificationsButton (BRIEF 9.1 + 23.24(2)): the bell ---- */}
+        <section className="lab-section" id="notifications-button">
+          <h2 className="lab-title">{t('title.notificationsButton')}</h2>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.noUnread')}</span>
+            <NotificationsButton onPress={() => {}} data-ds-check="notifications-button" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.unread')}</span>
+            <NotificationsButton value={3} onPress={() => {}} />
+          </div>
+        </section>
 
         {/* ---- AskButton (BRIEF 9.1 + 4.2(1) + 23.24(2)): the Ask Micro trigger ---- */}
         <section className="lab-section" id="ask-button">

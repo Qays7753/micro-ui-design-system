@@ -35,3 +35,4 @@ export * from './components/Sheet';
 export * from './components/ConfirmSheet';
 export * from './components/ActionBar';
 export * from './components/AskButton';
+export * from './components/NotificationsButton';
