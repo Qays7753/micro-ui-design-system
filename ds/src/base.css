@@ -98,3 +98,12 @@ button,
   line-height: var(--mds-type-body-strong-line);
   font-weight: var(--mds-type-body-strong-weight);
 }
+
+/* The label-strong quartet (BRIEF 23.x): shared by PageHeader collapsed
+   titles, SegmentedControl selected labels and FilterChips (ds-dup). */
+.mds-type-label-strong {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+}

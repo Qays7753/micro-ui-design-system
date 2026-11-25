@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -568,6 +568,30 @@ export function App() {
 
 
 
+
+
+        {/* ---- PageHeader (BRIEF 9.1): the page title, main + sub + collapsed ---- */}
+        <section className="lab-section" id="page-header">
+          <h2 className="lab-title">{t('title.pageHeader')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.mainScreens')}</span>
+            <div className="lab-bar-stage" data-ds-check="page-header">
+              <PageHeader label={t('title.movements')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.new')}</Button>} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.subScreens')}</span>
+            <div className="lab-bar-stage">
+              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => {}}><BackIcon /></IconButton>} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.scrolled')}</span>
+            <div className="lab-bar-stage">
+              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => {}}><BackIcon /></IconButton>} caption />
+            </div>
+          </div>
+        </section>
 
         {/* ---- TabBar (BRIEF 9.1 + 23.16): the bottom tabs ---- */}
         <section className="lab-section" id="tab-bar">

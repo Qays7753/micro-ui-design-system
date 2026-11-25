@@ -1,0 +1,47 @@
+/*
+ * PageHeader.css — BRIEF 9.1 + 23.16 + 23.20. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-page-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  /* On canvas, under the context bar; content follows the screen
+     margins (23.20: 16 phone). */
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  min-height: var(--mds-size-touch-min);
+  background-color: var(--mds-color-canvas);
+}
+
+/* The full title: title-screen 28/36, TWO lines max, grows (min-height
+   discipline — brief 389). */
+.mds-page-header-title {
+  font-family: var(--mds-type-title-screen-font);
+  font-size: var(--mds-type-title-screen-size);
+  line-height: var(--mds-type-title-screen-line);
+  font-weight: var(--mds-type-title-screen-weight);
+  color: var(--mds-color-text-primary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* The end slot: hero metric / period switcher / creation action. */
+.mds-page-header-end {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Collapsed sub-screen form (9.1): the label-strong compact title beside
+   the back IconButton; the row keeps the 48 touch floor. */
+.mds-page-header--collapsed .mds-page-header-title {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+}
