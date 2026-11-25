@@ -31,3 +31,4 @@ export * from './components/ObjectRow';
 export * from './components/ObjectCard';
 export * from './components/Metric';
 export * from './components/MetricSmall';
+export * from './components/Sheet';

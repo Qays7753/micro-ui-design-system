@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -32,6 +32,7 @@ export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
   const [segment, setSegment] = useState('today');
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [chips, setChips] = useState<string[]>(['in']);
 
   const applyScale = (next: 100 | 200) => {
@@ -637,6 +638,32 @@ export function App() {
             </div>
           </div>
         </section>
+
+        {/* Sheet rendered at layer level (23.15) */}
+        {sheetOpen ? (
+        <Sheet
+          label={t('sheet.sampleTitle')}
+          onDismiss={() => setSheetOpen(false)}
+          data-ds-check="sheet"
+        >
+          <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
+            <ObjectRow
+              label={t('row.sampleTitle')}
+              caption={t('row.sampleCaption')}
+              value="1,245.750"
+              trailing={t('row.sampleTime')}
+              onPress={() => {}}
+            />
+            <ObjectRow
+              label={t('row.sampleTitle')}
+              caption={t('row.sampleCaption')}
+              value="980"
+              trailing={<StatusBadge tone="waiting" />}
+              onPress={() => {}}
+            />
+          </Surface>
+        </Sheet>
+        ) : null}
         </main>
       </div>
     </AmountVisibilityProvider>

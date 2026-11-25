@@ -80,3 +80,12 @@ button,
   font-size: var(--mds-type-label-size);
   line-height: var(--mds-type-label-line);
 }
+
+/* The title-section quartet (BRIEF 23.x): shared by Section titles and
+   Sheet headers (ds-dup). */
+.mds-type-title-section {
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  line-height: var(--mds-type-title-section-line);
+  font-weight: var(--mds-type-title-section-weight);
+}

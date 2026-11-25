@@ -87,6 +87,8 @@ export const ar = {
   'movement.in': { kind: 'badge', text: 'داخل' },
   'movement.counted': { kind: 'badge', text: '32 حركة' },
   'row.sampleTitle': { kind: 'title', text: 'سلمى الحوراني' },
+  'sheet.sampleTitle': { kind: 'title', text: 'تفاصيل الحركة' },
+  'title.sheet': { kind: 'title', text: 'الورقة' },
   'row.sampleCaption': { kind: 'help', text: 'فستان سهرة · درج الكاش' },
   'row.sampleTime': { kind: 'help', text: '10:24 ص' },
   'title.objectRow': { kind: 'title', text: 'الصف' },

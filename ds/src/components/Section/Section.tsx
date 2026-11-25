@@ -37,7 +37,7 @@ export function Section({
   return (
     <section ref={ref} id={id} style={style} className={classes} {...rest}>
       <header className="mds-section-header">
-        <h2 className="mds-section-title">{label}</h2>
+        <h2 className="mds-section-title mds-type-title-section">{label}</h2>
         {caption !== undefined ? (
           <span className="mds-section-count">{caption}</span>
         ) : null}

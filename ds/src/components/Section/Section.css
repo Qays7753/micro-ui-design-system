@@ -21,11 +21,8 @@
 }
 
 .mds-section-title {
+  /* type quartet shared via .mds-type-title-section (base.css, ds-dup) */
   margin: 0;
-  font-family: var(--mds-type-title-section-font);
-  font-size: var(--mds-type-title-section-size);
-  line-height: var(--mds-type-title-section-line);
-  font-weight: var(--mds-type-title-section-weight);
   color: var(--mds-color-text-primary);
 }
 
