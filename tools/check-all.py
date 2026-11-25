@@ -118,6 +118,7 @@ def build_gates(quick, out, skip_visual):
         ("ds-hidden-amounts", PY + ["tools/ds-gates/ds-hidden-amounts.py"]),
         ("ds-font-shift", PY + ["tools/ds-gates/ds-font-shift.py"]),
         ("ds-tabular", PY + ["tools/ds-gates/ds-tabular.py"]),
+        ("ds-bidi", PY + ["tools/ds-gates/ds-bidi.py"]),
         ("ds-small-screen", PY + ["tools/ds-gates/ds-small-screen.py"]),
     ]
     if not skip_visual:

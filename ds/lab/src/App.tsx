@@ -87,15 +87,15 @@ export function App() {
           <h2 className="lab-title">{t('title.money')}</h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
-            <Money value={amounts[1]} data-ds-check="amount" />
+            <span data-ds-check="bidi"><Money value={amounts[1]} data-ds-check="amount" /></span>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.in')}</span>
-            <Money value={amounts[0]} direction="in" />
+            <span data-ds-check="bidi"><Money value={amounts[0]} direction="in" /></span>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.out')}</span>
-            <Money value={amounts[7]} direction="out" />
+            <span data-ds-check="bidi"><Money value={amounts[7]} direction="out" /></span>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.transfer')}</span>
@@ -453,7 +453,7 @@ export function App() {
         {/* ---- HeroSurface (BRIEF 1.5 + 23.8): the screen's single hero ---- */}
         <section className="lab-section" id="hero">
           <h2 className="lab-title">{t('title.hero')}</h2>
-          <div className="lab-row lab-row--full">
+          <div className="lab-row lab-row--full" data-ds-check="bidi">
             <span className="lab-label">{t('state.withCents')}</span>
             <HeroSurface
               label={t('nav.finance')}
@@ -757,7 +757,7 @@ export function App() {
         {/* ---- Metric + MetricSmall (BRIEF 9.3 + 23.8 on white) ---- */}
         <section className="lab-section" id="metric">
           <h2 className="lab-title">{t('title.metric')}</h2>
-          <div className="lab-row lab-row--full">
+          <div className="lab-row lab-row--full" data-ds-check="bidi">
             <span className="lab-label">{t('state.withCents')}</span>
             <Surface>
               <Metric
