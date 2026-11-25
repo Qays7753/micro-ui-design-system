@@ -196,6 +196,8 @@ export const ar = {
   'state.mainScreens': { kind: 'badge', text: 'الشاشات الرئيسية' },
   'state.subScreens': { kind: 'badge', text: 'الشاشات الفرعية' },
   'sr.switchProject': { kind: 'screen-reader', text: 'تبديل المشروع' },
+  'title.tabBar': { kind: 'title', text: 'شريط التبويبات' },
+  'state.fiveTabs': { kind: 'badge', text: 'خمسة تبويبات' },
   'state.withCents': { kind: 'badge', text: 'مع فلوس' },
   'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },

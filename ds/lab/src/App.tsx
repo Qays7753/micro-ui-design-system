@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, ContextBar, NotificationsButton, ProjectSwitcher, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -34,6 +34,7 @@ export function App() {
   const [segment, setSegment] = useState('today');
 
   const [chips, setChips] = useState<string[]>(['in']);
+  const [tab, setTab] = useState(0);
 
   const applyScale = (next: 100 | 200) => {
     setScale(next);
@@ -550,6 +551,33 @@ export function App() {
 
 
 
+
+
+        {/* ---- TabBar (BRIEF 9.1 + 23.16): the bottom tabs ---- */}
+        <section className="lab-section" id="tab-bar">
+          <h2 className="lab-title">{t('title.tabBar')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.fiveTabs')}</span>
+            <div className="lab-bar-stage" data-ds-check="tab-bar">
+              <TabBar value={tab} onChange={setTab}>
+                <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+                <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+                <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+                <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+              </TabBar>
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <div className="lab-bar-stage">
+              <TabBar>
+                <TabBarTab label={ar['nav.today'].text} leading={<NavTodayIcon weight="fill" />} onPress={() => {}} />
+                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon />} onPress={() => {}} />
+              </TabBar>
+            </div>
+          </div>
+        </section>
 
         {/* ---- ContextBar (BRIEF 9.1 + 23.16): the top bar composing the three ---- */}
         <section className="lab-section" id="context-bar">
