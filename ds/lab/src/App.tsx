@@ -28,6 +28,41 @@ const FUND_ICONS = {
   wallet: FundWalletIcon,
 } as const;
 
+const SECTIONS: { id: string; name: string }[] = [
+  { id: 'controls', name: t('title.amountToggle') },
+  { id: 'money', name: t('title.money') },
+  { id: 'badge', name: t('title.statusBadge') },
+  { id: 'entity', name: t('title.entityMark') },
+  { id: 'button', name: t('title.button') },
+  { id: 'icon-button', name: t('title.iconButton') },
+  { id: 'text-field', name: t('title.textField') },
+  { id: 'segmented-control', name: t('title.segmentedControl') },
+  { id: 'filter-chips', name: t('title.filterChips') },
+  { id: 'surface', name: t('title.surface') },
+  { id: 'well', name: t('title.well') },
+  { id: 'section', name: t('title.section') },
+  { id: 'hero', name: t('title.hero') },
+  { id: 'sheet', name: t('title.sheet') },
+  { id: 'action-bar', name: t('title.actionBar') },
+  { id: 'skeleton', name: t('title.skeleton') },
+  { id: 'empty-state', name: t('title.emptyState') },
+  { id: 'inline-banner', name: t('title.inlineBanner') },
+  { id: 'toast', name: t('title.toast') },
+  { id: 'save-state', name: t('title.saveState') },
+  { id: 'page-header', name: t('title.pageHeader') },
+  { id: 'tab-bar', name: t('title.tabBar') },
+  { id: 'context-bar', name: t('title.contextBar') },
+  { id: 'project-switcher', name: t('title.projectSwitcher') },
+  { id: 'notifications-button', name: t('title.notificationsButton') },
+  { id: 'ask-button', name: t('title.askButton') },
+  { id: 'confirm-sheet', name: t('title.confirmSheet') },
+  { id: 'object-row', name: t('title.objectRow') },
+  { id: 'object-card', name: t('title.objectCard') },
+  { id: 'metric', name: t('title.metric') },
+  { id: 'metric-small', name: t('title.metricSmall') },
+  { id: 'tile', name: t('title.tile') },
+];
+
 export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
@@ -44,6 +79,12 @@ export function App() {
   return (
     <AmountVisibilityProvider hidden={hidden}>
       <div className="lab-page">
+        <nav className="lab-index" aria-label={t('lab.index')}>
+          {SECTIONS.map((sec: { id: string; name: string }) => (
+            <a key={sec.id} href={`#${sec.id}`}>{sec.name}</a>
+          ))}
+        </nav>
+
         <header className="lab-header">
           <p className="lab-stamp">{t('lab.stamp')}</p>
         </header>

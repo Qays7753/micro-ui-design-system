@@ -278,3 +278,52 @@
   gap: var(--mds-space-8);
   width: 100%;
 }
+
+/* Fixed catalog index: component names only, each jumps to its section.
+   Sticky at the top; no prose. */
+.lab-index {
+  /* One 48px row that scrolls sideways inside its own strip — the sticky
+     bar stays ~one touch-target tall and never shadows page presses. */
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-layer-bars);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--mds-space-4);
+  padding: var(--mds-space-8) var(--mds-space-16);
+  background-color: var(--mds-color-canvas);
+  border-bottom: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  overflow-x: auto;
+}
+
+.lab-index a {
+  /* Interactive: 48 touch floor (م3) + press + keyboard focus (23.2). */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--mds-size-touch-min);
+  min-width: var(--mds-size-touch-min);
+  justify-content: center;
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  color: var(--mds-color-text-secondary);
+  text-decoration: none;
+  padding: var(--mds-space-4) var(--mds-space-8);
+  border-radius: var(--mds-radius-sm);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lab-index a:active {
+  background-color: var(--mds-color-surface-pressed);
+  color: var(--mds-color-text-primary);
+}
+
+.lab-index a:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.lab-index a:hover {
+  background-color: var(--mds-color-surface-pressed);
+  color: var(--mds-color-text-primary);
+}
