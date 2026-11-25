@@ -22,6 +22,9 @@ STYLE_PROPS = ("backgroundColor", "color", "borderTopColor", "opacity", "transfo
 BASE_JS = """
 () => Array.from(document.querySelectorAll('button, [role="button"]'))
   .filter(el => el.offsetParent !== null)
+  // Lab chrome that swaps catalog/compose views unmounts the probed
+  // DOM mid-scan; such view toggles are outside the 23.2 scope.
+  .filter(el => !el.closest('[data-ds-exempt]'))
   .map((el, i) => {
     el.setAttribute('data-ds-state-probe', i);
     const r = el.getBoundingClientRect();

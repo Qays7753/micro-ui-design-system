@@ -452,7 +452,10 @@ def resolve_page_target(target_arg, default_file="standalone.html", default_dir=
     if default_path.is_file():
         server = LocalServer(ROOT / default_dir)
         base = server.start()
-        return "server", (server, base + "/" + default_file)
+        # The probe gates inspect the COMPONENT CATALOG; the standalone's
+        # default view is the demo-compose page (owner request), so every
+        # gate URL pins the catalog view explicitly.
+        return "server", (server, base + "/" + default_file + "?view=catalog")
     return "na", f"{default_dir}/{default_file} does not exist yet (lab build lands in S3)"
 
 

@@ -70,6 +70,11 @@ export function App() {
 
   const [chips, setChips] = useState<string[]>(['in']);
   const [tab, setTab] = useState(0);
+  const [view, setView] = useState<'compose' | 'catalog'>(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
+      ? 'catalog'
+      : 'compose',
+  );
 
   const applyScale = (next: 100 | 200) => {
     setScale(next);
@@ -78,8 +83,61 @@ export function App() {
 
   return (
     <AmountVisibilityProvider hidden={hidden}>
+      {view === 'compose' ? (
+        <div className="lab-compose">
+          <div className="lab-compose-top">
+            <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
+          </div>
+          <div className="lab-compose-screen" data-ds-check="compose">
+            <ContextBar
+              label={t('sr.switchProject')}
+              leading={
+                <ProjectSwitcher label={projects[0]} caption={ar['role.owner'].text} onPress={() => {}} />
+              }
+              trailing={
+                <>
+                  <NotificationsButton value={3} onPress={() => {}} />
+                  <AskButton onPress={() => {}} />
+                </>
+              }
+            />
+            <PageHeader
+              label={t('nav.today')}
+              trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.recordMovement')}</Button>}
+            />
+            <div className="lab-compose-content">
+              <Surface>
+                <ObjectRow
+                  label={t('row.sampleTitle')}
+                  caption={t('row.sampleCaption')}
+                  value="1,245.750"
+                  trailing={t('row.sampleTime')}
+                  onPress={() => {}}
+                />
+                <ObjectRow
+                  label={t('row.sampleTitle')}
+                  caption={t('row.sampleCaption')}
+                  value="1,250"
+                  trailing={<StatusBadge tone="waiting" />}
+                  onPress={() => {}
+                  }
+                />
+              </Surface>
+            </div>
+            <TabBar value={tab} onChange={setTab}>
+              <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+              <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+              <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+              <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+              <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+            </TabBar>
+          </div>
+        </div>
+      ) : (
+      <>
       <div className="lab-page">
         <nav className="lab-index" aria-label={t('lab.index')}>
+          <button type="button" className="lab-key" data-ds-exempt="view-toggle" onClick={() => setView('compose')}>{t('button.back')}</button>
           {SECTIONS.map((sec: { id: string; name: string }) => (
             <a key={sec.id} href={`#${sec.id}`}>{sec.name}</a>
           ))}
@@ -1019,6 +1077,8 @@ export function App() {
 
         </main>
       </div>
+      </>
+      )}
     </AmountVisibilityProvider>
   );
 }
