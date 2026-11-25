@@ -392,14 +392,23 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface data-ds-check="surface">
-              <p className="lab-name">{t('title.needsYou')}</p>
-              <p className="lab-label">{t('empty.movements')}</p>
+              <div className="lab-row-entity">
+                <span className="lab-name">{parties[0]}</span>
+                <Money value={amounts[0]} />
+              </div>
+              <div className="lab-row-entity">
+                <span className="lab-name">{parties[1]}</span>
+                <Money value={amounts[1]} />
+              </div>
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withHeader')}</span>
             <Surface label={t('title.needsYou')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
-              <p className="lab-label">{t('empty.movements')}</p>
+              <div className="lab-row-entity">
+                <span className="lab-name">{parties[2]}</span>
+                <Money value={amounts[2]} />
+              </div>
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
@@ -424,7 +433,7 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
               <Well data-ds-check="well">
-                <p className="lab-label">{t('empty.movements')}</p>
+                <span className="lab-name">{funds[0].name}</span>
                 <Money value={amounts[2]} />
               </Well>
             </Surface>
@@ -439,7 +448,14 @@ export function App() {
             <Section label={t('title.needsYou')} caption={3} onPress={() => {}} data-ds-check="section">
               <Surface>
                 <Well>
-                  <p className="lab-label">{t('empty.movements')}</p>
+                  <div className="lab-row-entity">
+                    <span className="lab-name">{parties[0]}</span>
+                    <Money value={amounts[0]} />
+                  </div>
+                  <div className="lab-row-entity">
+                    <span className="lab-name">{parties[1]}</span>
+                    <Money value={amounts[1]} />
+                  </div>
                 </Well>
               </Surface>
             </Section>
@@ -705,25 +721,15 @@ export function App() {
                   trailing={t('row.sampleTime')}
                   onPress={() => {}}
                 />
+                <ObjectRow
+                  label={t('row.sampleTitle')}
+                  caption={t('row.sampleCaption')}
+                  value="1,250"
+                  trailing={<StatusBadge tone="waiting" />}
+                  onPress={() => {}}
+                />
+                <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => {}} />
               </div>
-            </Surface>
-          </div>
-          <div className="lab-row lab-row--full">
-            <span className="lab-label">{t('state.withBadge')}</span>
-            <Surface>
-              <ObjectRow
-                label={t('row.sampleTitle')}
-                caption={t('row.sampleCaption')}
-                value="1,250"
-                trailing={<StatusBadge tone="waiting" />}
-                onPress={() => {}}
-              />
-            </Surface>
-          </div>
-          <div className="lab-row lab-row--full">
-            <span className="lab-label">{t('state.oneLine')}</span>
-            <Surface>
-              <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => {}} />
             </Surface>
           </div>
         </section>
@@ -813,33 +819,34 @@ export function App() {
             <div className="mds-tile-grid" data-ds-check="tile-grid">
               <Tile
                 tone="start"
-                label={t('nav.today')}
-                leading={<NavTodayIcon />}
+                label={t('nav.finance')}
+                leading={<NavFinanceIcon size={20} />}
+                draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>}
                 value="1,250"
                 trailing={t('movement.in')}
                 onPress={() => {}}
               />
               <Tile
-                label={t('title.needsYou')}
-                leading={<NavTodayIcon />}
+                label={t('nav.orders')}
+                leading={<NavOrdersIcon size={20} />}
                 state
-                caption={t('title.needsYou')}
                 value="4"
+                trailing={t('badge.waiting')}
                 onPress={() => {}}
               />
               <Tile
-                label={t('nav.todayLong')}
-                leading={<NavTodayIcon />}
-                value="—"
-                trailing={t('empty.movements')}
+                label={t('nav.delivery')}
+                leading={<NavDeliveryIcon size={20} />}
+                value="2"
+                trailing={t('movement.out')}
                 onPress={() => {}}
               />
               <Tile
                 tone="end"
-                label={t('nav.agenda')}
-                leading={<NavTodayIcon />}
-                draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>}
+                label={t('nav.market')}
+                leading={<NavMarketIcon size={20} />}
                 value="72%"
+                trailing={t('badge.done')}
                 onPress={() => {}}
               />
             </div>
