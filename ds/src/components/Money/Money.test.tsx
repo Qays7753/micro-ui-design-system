@@ -38,6 +38,21 @@ describe('Money (BRIEF 8)', () => {
     expect(digitsOf(moved.container)).toBe('1,280');
   });
 
+  it('A2: the sign is the FIRST character inside the LTR isolation, adjacent to the integer', () => {
+    const out = render(<Money value="-35" />);
+    const value = out.container.querySelector('.mds-money-value')!;
+    expect(value.getAttribute('dir')).toBe('ltr');
+    const integer = value.querySelector('.mds-money-integer')!;
+    // Sign + digits form ONE adjacent run inside the isolation, so the
+    // sign can never drift to the number's far side («35−» is banned).
+    expect(integer.textContent).toBe('−35');
+    expect(integer.textContent?.indexOf('−')).toBe(0);
+    const incoming = render(<Money value="2250" direction="in" />);
+    const int2 = incoming.container.querySelector('.mds-money-integer')!;
+    expect(int2.textContent).toBe('+2,250');
+    expect(int2.textContent?.indexOf('+')).toBe(0);
+  });
+
   it('renders the debt forms without a sign (BRIEF 8)', () => {
     const forYou = render(<Money value={45} debt="forYou" />);
     expect(forYou.container.querySelector('.mds-money-debt')?.textContent).toBe(moneyTexts.forYou);
