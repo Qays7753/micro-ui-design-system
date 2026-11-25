@@ -226,6 +226,7 @@ export const ar = {
   'money.ariaMissing': { kind: 'screen-reader', text: 'القيمة غير متوفرة' },
 
   // --- Screen-reader announcements (BRIEF 23.17, verbatim where quoted) ---
+  'sr.notifications': { kind: 'screen-reader', text: 'الإشعارات' },
   'sr.notificationsCount': { kind: 'screen-reader', text: 'الإشعارات، {counted}' },
   'sr.askUnread': { kind: 'screen-reader', text: 'Ask Micro، جواب غير مقروء' },
   'sr.financeNeedsYou': { kind: 'screen-reader', text: 'المالية، يحتاجك' },

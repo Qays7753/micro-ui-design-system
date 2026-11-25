@@ -29,9 +29,10 @@ export function NotificationsButton({
 }: NotificationsButtonProps) {
   const { isPressed, pressProps } = usePress({ onPress });
 
-  // 23.17: «الإشعارات، 3 غير مقروءة» — the count in the name.
+  // 23.17: the count rides the name only when there ARE unread items;
+  // at 0 the dot hides and the name stays plain «الإشعارات».
   const counted = pluralAr(value, pluralNouns.unread);
-  const name = label ?? t('sr.notificationsCount', { counted });
+  const name = label ?? (value > 0 ? t('sr.notificationsCount', { counted }) : t('sr.notifications'));
 
   const classes = [
     'mds-notifications-button',

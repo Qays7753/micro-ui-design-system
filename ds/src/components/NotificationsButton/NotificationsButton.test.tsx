@@ -36,6 +36,12 @@ describe('NotificationsButton (BRIEF 9.1, 23.24(2))', () => {
     );
   });
 
+  it('A-critic: at zero the name stays plain — no count rides it (23.17)', () => {
+    const { container } = render(<NotificationsButton onPress={() => {}} />);
+    const btn = container.querySelector('.mds-notifications-button') as HTMLElement;
+    expect(btn.getAttribute('aria-label')).toBe(t('sr.notifications'));
+  });
+
   it('fires onPress on tap', () => {
     const onPress = vi.fn();
     const { container } = render(<NotificationsButton onPress={onPress} />);
@@ -48,7 +54,7 @@ describe('NotificationsButton (BRIEF 9.1, 23.24(2))', () => {
   it('the dot is dot-unread brand-anchor with a canvas ring', () => {
     const css = readFileSync(join(__dirname, 'NotificationsButton.css'), 'utf8');
     expect(css).toContain('var(--mds-size-dot-unread)');
-    expect(css).toContain('var(--mds-size-dot-unread-ring)');
+    expect(css).toContain('inset-inline-end');
     expect(css).toContain('var(--mds-color-brand-anchor)');
     expect(css).toContain('var(--mds-color-canvas)');
   });

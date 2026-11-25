@@ -49,7 +49,7 @@
 
 /* The unread dot (23.24(2)): 8px brand-anchor with a 2px ring of the
    bar's own background, in the corner FARTHEST from the icon's center
-   — the start-side corner of the 48 zone (top-left in RTL). */
+   — the outer corner of the bar's end (inline-END, top-left in RTL). */
 .mds-notifications-dot {
   position: absolute;
   width: var(--mds-size-dot-unread);
@@ -58,5 +58,5 @@
   background-color: var(--mds-color-brand-anchor);
   box-shadow: 0 0 0 var(--mds-size-dot-unread-ring) var(--mds-color-canvas);
   top: calc(var(--mds-space-8) - var(--mds-size-dot-unread-ring));
-  inset-inline-start: calc(var(--mds-space-8) - var(--mds-size-dot-unread-ring));
+  inset-inline-end: calc(var(--mds-space-8) - var(--mds-size-dot-unread-ring));
 }
