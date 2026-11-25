@@ -1,0 +1,43 @@
+/*
+ * Toast.css — BRIEF 23.12 + 1348. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-toast {
+  position: fixed;
+  /* Above the bars with toast-offset 12 (23.12); the host moves it up
+     when a sheet ActionBar exists. */
+  bottom: var(--mds-layout-toast-offset);
+  inset-inline: var(--mds-layout-screen-margin-phone);
+  /* Screen − 32 comes from the two screen margins; tablet caps 480. */
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-12);
+  justify-content: space-between;
+  background-color: var(--mds-color-toast-bg);
+  color: var(--mds-color-on-dark);
+  border-radius: var(--mds-radius-md);
+  padding-block: var(--mds-layout-toast-padding-block);
+  padding-inline: var(--mds-layout-toast-padding-inline);
+  z-index: var(--mds-layer-toast);
+  max-width: var(--mds-size-toast-tablet-max-width);
+  margin-inline: auto;
+}
+
+.mds-toast-text {
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-on-dark-fg);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* The action slot: «تراجع» rides on-dark-action (23.12). */
+.mds-toast-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
