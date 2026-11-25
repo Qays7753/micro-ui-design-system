@@ -186,6 +186,8 @@ export const ar = {
   'state.primaryOnly': { kind: 'badge', text: 'أساسي وحده' },
   'state.contentMore': { kind: 'badge', text: 'بقي محتوى' },
   'state.scrolledToEnd': { kind: 'badge', text: 'انتهى التمرير' },
+  'title.askButton': { kind: 'title', text: 'زر Ask' },
+  'state.unread': { kind: 'badge', text: 'غير مقروء' },
   'state.withCents': { kind: 'badge', text: 'مع فلوس' },
   'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },

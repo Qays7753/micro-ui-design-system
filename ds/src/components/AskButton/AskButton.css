@@ -1,0 +1,68 @@
+/*
+ * AskButton.css — BRIEF 4.2(1) + 9.1 + 23.2 + 23.24(2). Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-ask-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-touch-min);
+  height: var(--mds-size-touch-min);
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  border-radius: var(--mds-radius-full);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The symbol at its 28 size (size.ask-symbol), centered in the 48. */
+.mds-ask-button svg {
+  width: var(--mds-size-ask-symbol);
+  height: var(--mds-size-ask-symbol);
+}
+
+/* Press (23.2, IconButton's circular fill — no scale, no ripple):
+   hook state and native :active drive the same style. */
+.mds-ask-button:active,
+.mds-ask-button[data-pressed] {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Focus ring: circular, keyboard only (23.2). */
+.mds-ask-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled (23.2): the symbol dims; no motion, no color change. */
+.mds-ask-button:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-ask-button:disabled:active,
+.mds-ask-button:disabled[data-pressed] {
+  background-color: transparent;
+}
+
+/* The unread dot: 6px (size.dot-ask) in the symbol's empty CENTER
+   (4.2) — the only mark-element use of the dot. */
+.mds-ask-dot {
+  position: absolute;
+  width: var(--mds-size-dot-ask);
+  height: var(--mds-size-dot-ask);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-brand-anchor);
+  /* Center of the 48 zone, which is the symbol's empty middle. */
+  top: calc((var(--mds-size-touch-min) - var(--mds-size-dot-ask)) / 2);
+  left: calc((var(--mds-size-touch-min) - var(--mds-size-dot-ask)) / 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-ask-button {
+    transition: none;
+  }
+}
