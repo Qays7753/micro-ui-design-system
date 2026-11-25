@@ -1,0 +1,189 @@
+{
+ "target": "previews/ds-lab/standalone.html (default compose view)",
+ "engines": {
+  "chromium": [
+   [
+    "compose is the default view",
+    "true"
+   ],
+   [
+    "catalog sections absent without the query",
+    "NO-ELEMENT"
+   ],
+   [
+    "one button opens the catalog",
+    "7"
+   ],
+   [
+    "bar: switcher mark shows the initial (23.5)",
+    "و"
+   ],
+   [
+    "bar: unread dot on the bell",
+    "true"
+   ],
+   [
+    "bar: Ask is the LAST element in the corner",
+    "ask-last"
+   ],
+   [
+    "bar height 56",
+    "56px"
+   ],
+   [
+    "header title اليوم",
+    "اليوم"
+   ],
+   [
+    "header trailing = the creation button",
+    "true"
+   ],
+   [
+    "hero value logical order",
+    "1,245.750"
+   ],
+   [
+    "hero unit د.أ present",
+    "د.أ"
+   ],
+   [
+    "section needs-you with count 3",
+    "present"
+   ],
+   [
+    "rows carry the 23.5 initials",
+    "س,أ"
+   ],
+   [
+    "four tiles with distinct 23.23 icons",
+    "5 icons / 5 distinct"
+   ],
+   [
+    "tile sparkline on finance only (23.9)",
+    "one-sparkline"
+   ],
+   [
+    "tabbar five tabs, active Fill brand-logo",
+    "5/active-color:rgb(22, 77, 89)"
+   ],
+   [
+    "active tab carries aria-current (23.17)",
+    "page"
+   ]
+  ],
+  "webkit": [
+   [
+    "compose is the default view",
+    "true"
+   ],
+   [
+    "catalog sections absent without the query",
+    "NO-ELEMENT"
+   ],
+   [
+    "one button opens the catalog",
+    "7"
+   ],
+   [
+    "bar: switcher mark shows the initial (23.5)",
+    "و"
+   ],
+   [
+    "bar: unread dot on the bell",
+    "true"
+   ],
+   [
+    "bar: Ask is the LAST element in the corner",
+    "ask-last"
+   ],
+   [
+    "bar height 56",
+    "56px"
+   ],
+   [
+    "header title اليوم",
+    "اليوم"
+   ],
+   [
+    "header trailing = the creation button",
+    "true"
+   ],
+   [
+    "hero value logical order",
+    "1,245.750"
+   ],
+   [
+    "hero unit د.أ present",
+    "د.أ"
+   ],
+   [
+    "section needs-you with count 3",
+    "present"
+   ],
+   [
+    "rows carry the 23.5 initials",
+    "س,أ"
+   ],
+   [
+    "four tiles with distinct 23.23 icons",
+    "5 icons / 5 distinct"
+   ],
+   [
+    "tile sparkline on finance only (23.9)",
+    "one-sparkline"
+   ],
+   [
+    "tabbar five tabs, active Fill brand-logo",
+    "5/active-color:rgb(22, 77, 89)"
+   ],
+   [
+    "active tab carries aria-current (23.17)",
+    "page"
+   ]
+  ]
+ },
+ "extras": {
+  "chromium": {
+   "flow": {
+    "sheetOpened": true,
+    "sheetHasField": true,
+    "sheetHasBar": true,
+    "toastRaised": true,
+    "toastText": "حُفظت الحركة",
+    "confirmOpened": true,
+    "toastAfterConfirm": "حُذفت الحركة"
+   },
+   "states": {
+    "loadingSkeletons": 4,
+    "emptyGhosts": 2,
+    "emptySentence": "حركات اليوم تظهر هنا.",
+    "normalRows": 2,
+    "heroWhileHidden": "—",
+    "rowsBullets": true,
+    "catalogOpens": true,
+    "backToCompose": true
+   }
+  },
+  "webkit": {
+   "flow": {
+    "sheetOpened": true,
+    "sheetHasField": true,
+    "sheetHasBar": true,
+    "toastRaised": true,
+    "toastText": "حُفظت الحركة",
+    "confirmOpened": true,
+    "toastAfterConfirm": "حُذفت الحركة"
+   },
+   "states": {
+    "loadingSkeletons": 4,
+    "emptyGhosts": 2,
+    "emptySentence": "حركات اليوم تظهر هنا.",
+    "normalRows": 2,
+    "heroWhileHidden": "—",
+    "rowsBullets": true,
+    "catalogOpens": true,
+    "backToCompose": true
+   }
+  }
+ }
+}
