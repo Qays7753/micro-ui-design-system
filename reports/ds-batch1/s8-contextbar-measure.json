@@ -1,0 +1,361 @@
+{
+ "target": "previews/ds-lab/standalone.html",
+ "special": {
+  "chromium": {
+   "askExists": true,
+   "bellInstances": 2,
+   "dotHiddenAtZero": true,
+   "dotShownAtThree": true,
+   "tabPaddingEnd": "0px"
+  },
+  "webkit": {
+   "askExists": true,
+   "bellInstances": 2,
+   "dotHiddenAtZero": true,
+   "dotShownAtThree": true,
+   "tabPaddingEnd": "0px"
+  }
+ },
+ "engines": {
+  "chromium": [
+   [
+    "ContextBar min-height 56",
+    "56px"
+   ],
+   [
+    "ContextBar canvas background",
+    "rgb(232, 236, 239)"
+   ],
+   [
+    "no bottom hairline at rest (23.16)",
+    "0px"
+   ],
+   [
+    "1px hairline while scrolled (caption)",
+    "1px"
+   ],
+   [
+    "bars layer 20 (23.15)",
+    "20"
+   ],
+   [
+    "safe-area env in top padding (27.3)",
+    "0px"
+   ],
+   [
+    "end pair: bell precedes Ask (Ask last, 9.1)",
+    "ask-last"
+   ],
+   [
+    "end pair never shrinks (23.20)",
+    "0/0"
+   ],
+   [
+    "AskButton touch zone 48",
+    "48x48"
+   ],
+   [
+    "AskButton no rest background (symbol IS the button)",
+    "rgba(0, 0, 0, 0)"
+   ],
+   [
+    "Ask symbol 28",
+    "28"
+   ],
+   [
+    "unread dot 6",
+    "6"
+   ],
+   [
+    "unread dot centered in the 48 zone",
+    "0.0/0.0"
+   ],
+   [
+    "Ask unread instance carries the unread note (23.17)",
+    "Ask Micro | Ask Micro، جواب غير مقروء"
+   ],
+   [
+    "bell icon 24",
+    "24"
+   ],
+   [
+    "unread dot 8",
+    "8"
+   ],
+   [
+    "dot ringed 2px canvas",
+    "rgb(232, 236, 239) 0px 0px 0px 2px"
+   ],
+   [
+    "dot on the outer inline-end corner in RTL (farthest, 23.24(2))",
+    "outer-left=inlne-end-rtl"
+   ],
+   [
+    "bell names: plain at zero, count at three (23.17)",
+    "الإشعارات | الإشعارات، 3 غير مقروءة"
+   ],
+   [
+    "switcher mark 32",
+    "32"
+   ],
+   [
+    "switcher name body-strong",
+    "500/16px"
+   ],
+   [
+    "switcher min-width 120 (23.20)",
+    "120px"
+   ],
+   [
+    "switcher touch floor 48",
+    "48px"
+   ],
+   [
+    "caret hidden for one project and role (9.1 locked)",
+    "locked-no-caret"
+   ],
+   [
+    "name ellipsizes, never pushes (23.20)",
+    "ellipsis/hidden"
+   ],
+   [
+    "TabBar root min-height 64",
+    "64px"
+   ],
+   [
+    "TabBar top hairline PERMANENT (23.16)",
+    "1px rgb(213, 220, 224)"
+   ],
+   [
+    "TabBar white surface",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "safe-area inset bottom (27.3)",
+    "0px"
+   ],
+   [
+    "active tab NO background (9.1)",
+    "rgba(0, 0, 0, 0)"
+   ],
+   [
+    "active label text-primary",
+    "rgb(16, 23, 25)"
+   ],
+   [
+    "active icon brand-logo",
+    "rgb(22, 77, 89)"
+   ],
+   [
+    "label micro 12",
+    "12px"
+   ],
+   [
+    "مشروع اليوم uncut with 5 tabs on 360 (23.20)",
+    "fits:59/59"
+   ],
+   [
+    "active carries aria-current=page (23.17)",
+    "page"
+   ],
+   [
+    "tabs equal width (23.20)",
+    "equal"
+   ],
+   [
+    "PageHeader title title-screen 28",
+    "28px/36px"
+   ],
+   [
+    "title two lines max (23.20)",
+    "2"
+   ],
+   [
+    "PageHeader on canvas",
+    "rgb(232, 236, 239)"
+   ],
+   [
+    "sub screen uses the real IconButton (owner rule د)",
+    "icon-button"
+   ],
+   [
+    "collapsed title label-strong beside the back button",
+    "14px/600"
+   ],
+   [
+    "main screen never collapses (9.1)",
+    "28px"
+   ]
+  ],
+  "webkit": [
+   [
+    "ContextBar min-height 56",
+    "56px"
+   ],
+   [
+    "ContextBar canvas background",
+    "rgb(232, 236, 239)"
+   ],
+   [
+    "no bottom hairline at rest (23.16)",
+    "0px"
+   ],
+   [
+    "1px hairline while scrolled (caption)",
+    "1px"
+   ],
+   [
+    "bars layer 20 (23.15)",
+    "20"
+   ],
+   [
+    "safe-area env in top padding (27.3)",
+    "0px"
+   ],
+   [
+    "end pair: bell precedes Ask (Ask last, 9.1)",
+    "ask-last"
+   ],
+   [
+    "end pair never shrinks (23.20)",
+    "0/0"
+   ],
+   [
+    "AskButton touch zone 48",
+    "48x48"
+   ],
+   [
+    "AskButton no rest background (symbol IS the button)",
+    "rgba(0, 0, 0, 0)"
+   ],
+   [
+    "Ask symbol 28",
+    "28"
+   ],
+   [
+    "unread dot 6",
+    "6"
+   ],
+   [
+    "unread dot centered in the 48 zone",
+    "0.0/0.0"
+   ],
+   [
+    "Ask unread instance carries the unread note (23.17)",
+    "Ask Micro | Ask Micro، جواب غير مقروء"
+   ],
+   [
+    "bell icon 24",
+    "24"
+   ],
+   [
+    "unread dot 8",
+    "8"
+   ],
+   [
+    "dot ringed 2px canvas",
+    "rgb(232, 236, 239) 0px 0px 0px 2px"
+   ],
+   [
+    "dot on the outer inline-end corner in RTL (farthest, 23.24(2))",
+    "outer-left=inlne-end-rtl"
+   ],
+   [
+    "bell names: plain at zero, count at three (23.17)",
+    "الإشعارات | الإشعارات، 3 غير مقروءة"
+   ],
+   [
+    "switcher mark 32",
+    "32"
+   ],
+   [
+    "switcher name body-strong",
+    "500/16px"
+   ],
+   [
+    "switcher min-width 120 (23.20)",
+    "120px"
+   ],
+   [
+    "switcher touch floor 48",
+    "48px"
+   ],
+   [
+    "caret hidden for one project and role (9.1 locked)",
+    "locked-no-caret"
+   ],
+   [
+    "name ellipsizes, never pushes (23.20)",
+    "ellipsis/hidden"
+   ],
+   [
+    "TabBar root min-height 64",
+    "64px"
+   ],
+   [
+    "TabBar top hairline PERMANENT (23.16)",
+    "1px rgb(213, 220, 224)"
+   ],
+   [
+    "TabBar white surface",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "safe-area inset bottom (27.3)",
+    "0px"
+   ],
+   [
+    "active tab NO background (9.1)",
+    "rgba(0, 0, 0, 0)"
+   ],
+   [
+    "active label text-primary",
+    "rgb(16, 23, 25)"
+   ],
+   [
+    "active icon brand-logo",
+    "rgb(22, 77, 89)"
+   ],
+   [
+    "label micro 12",
+    "12px"
+   ],
+   [
+    "مشروع اليوم uncut with 5 tabs on 360 (23.20)",
+    "fits:59/59"
+   ],
+   [
+    "active carries aria-current=page (23.17)",
+    "page"
+   ],
+   [
+    "tabs equal width (23.20)",
+    "equal"
+   ],
+   [
+    "PageHeader title title-screen 28",
+    "28px/36px"
+   ],
+   [
+    "title two lines max (23.20)",
+    "2"
+   ],
+   [
+    "PageHeader on canvas",
+    "rgb(232, 236, 239)"
+   ],
+   [
+    "sub screen uses the real IconButton (owner rule د)",
+    "icon-button"
+   ],
+   [
+    "collapsed title label-strong beside the back button",
+    "14px/600"
+   ],
+   [
+    "main screen never collapses (9.1)",
+    "28px"
+   ]
+  ]
+ }
+}

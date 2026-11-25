@@ -32,12 +32,13 @@
 
 | البند | القيمة |
 |---|---|
-| آخر مرحلة منفذة | **S7 كاملة** (Sheet + ConfirmSheet + ActionBar + مراجعة الناقد: صفر رفض قائم، الجدول أعلاه) — check-all أعيدت كاملة 50/50 على 24ca048 قبل ActionBar ✓ |
-| آخر commit | 9ffd73c (S7 وحدة 3/4: ActionBar) |
-| الوحدة التالية | **S8/وحدة 1: ContextBar + AskButton + NotificationsButton + ProjectSwitcher**، ثم TabBar، ثم PageHeader، ثم مراجعة ناقد S8 |
+| آخر مرحلة منفذة | **S8 كاملة** بالتقسيم الإلزامي وحدةً لوحدة (1 AskButton 57f37e6 · 2 NotificationsButton 86a7a1a · 3 ProjectSwitcher 2f65be9 · 4 ContextBar 4e5aced · 5 TabBar da33b9c · 6 PageHeader 9204855 · مراجعة الناقد وإصلاحاها: ffb59ff، 6646845) — مع جولة إصلاحات بصرية A1–A6 (عزل LTR للأرقام 505d010، قفل إشارة Money f131906، بوابة ds-bidi الجديدة 847f006، حرف EntityMark الواحد b1f9fc5، المختبر بلا قوالب de95bcb، أداة المسح الشامل f9d7f13) |
+| آخر commit | 6646845 (S8 مراجعة الناقد: إصلاح 2/2 TabBar) |
+| مراجعة الناقد S8 | `scripts/s8-critic.py` قاس كل ادعاءات المكوّنات الست على المحركين → `reports/ds-batch1/s8-contextbar-measure.json`. **رفضان قائمان أُصلحا:** نقطة الجرس على الجهة الداخلية بدل الزاوية البعيدة (23.24(2) → inline-end)، واسم الجرس عند صفر يحمل صيغة العدد (23.17 → «الإشعارات» المجردة)، وضبط ارتفاع شريط التبويبات على الجذر (64). بعد الإصلاح: كل الادعاءات مطابقة (56/48/28/32/64، حد الشريط 1px عند caption فقط، layer.bars 20، النشط Fill brand-logo بلا خلفية، «مشروع اليوم» 59/59px بلا قص، aria-current=page، الانكماش label-strong بجانب IconButton) |
+| الوحدة التالية | **S9/وحدة 1: SaveState** ثم Toast ثم InlineBanner ثم EmptyState ثم Skeleton ثم مراجعة ناقد S9 |
 | فحص معلق | لا شيء |
 
-_جدول سابق (قديم — تجاوزه): «S4/وحدة 4 التالية: SegmentedControl» — انتهى منذ جولات سابقة._
+_جدول سابق (قديم — تجاوزه): «S7 كاملة… check-all 50/50 على 24ca048» — انتهى منذ جولات سابقة._
 
 ---
 
