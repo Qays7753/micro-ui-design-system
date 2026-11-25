@@ -1,0 +1,329 @@
+{
+ "target": "previews/ds-lab/standalone.html",
+ "special": {
+  "chromium": {
+   "savedPolite": true,
+   "toastUndo": true,
+   "emptyInstances": 2,
+   "emptyAction": true,
+   "emptyFirstNoAction": true
+  },
+  "webkit": {
+   "savedPolite": true,
+   "toastUndo": true,
+   "emptyInstances": 2,
+   "emptyAction": true,
+   "emptyFirstNoAction": true
+  }
+ },
+ "engines": {
+  "chromium": [
+   [
+    "SaveState four instances in the lab",
+    "4"
+   ],
+   [
+    "draft rides the waiting color",
+    "rgb(138, 82, 0)"
+   ],
+   [
+    "saved rides the done color",
+    "rgb(22, 107, 58)"
+   ],
+   [
+    "failed rides the problem color + role=alert",
+    "rgb(179, 38, 30)/alert"
+   ],
+   [
+    "sending is aria-busy, silent",
+    "true/silent"
+   ],
+   [
+    "saved check draws (motion tokens present)",
+    "draw-ready"
+   ],
+   [
+    "state line fits content, never breaks (1347)",
+    "nowrap"
+   ],
+   [
+    "Toast bg is toast-bg",
+    "rgb(16, 23, 25)"
+   ],
+   [
+    "Toast text is white (on-dark)",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "Toast radius 16",
+    "16px"
+   ],
+   [
+    "Toast padding 12/16",
+    "12px/16px"
+   ],
+   [
+    "Toast layer.toast 70",
+    "70"
+   ],
+   [
+    "Toast role=status polite (23.17)",
+    "status"
+   ],
+   [
+    "Toast text two lines max (1348)",
+    "2"
+   ],
+   [
+    "undo rides on-dark-action",
+    "rgb(140, 207, 214)"
+   ],
+   [
+    "Toast static in the lab stage",
+    "static"
+   ],
+   [
+    "banner icon 20",
+    "20"
+   ],
+   [
+    "offline pair problem-bg/problem-fg",
+    "rgb(253, 236, 234)/rgb(179, 38, 30)"
+   ],
+   [
+    "locked pair neutral",
+    "rgb(238, 241, 243)/rgb(91, 102, 108)"
+   ],
+   [
+    "info pair info",
+    "rgb(236, 251, 251)/rgb(11, 106, 117)"
+   ],
+   [
+    "banner role=status polite (23.17)",
+    "status"
+   ],
+   [
+    "banner static in the lab stage",
+    "static"
+   ],
+   [
+    "banner action slot present (658)",
+    "action"
+   ],
+   [
+    "EmptyState radius r-lg 24",
+    "24px"
+   ],
+   [
+    "two ghost rows shaped like ObjectRow",
+    "2"
+   ],
+   [
+    "ghost mark is the 44 shape",
+    "44x44"
+   ],
+   [
+    "ghost lines 72% / 48%",
+    "72%/48%"
+   ],
+   [
+    "ghost lines use the skeleton color, no motion",
+    "rgb(233, 237, 239)/none"
+   ],
+   [
+    "ONE body sentence, centered",
+    "center"
+   ],
+   [
+    "content ≤ 280 (1649)",
+    "280"
+   ],
+   [
+    "skeleton on a surface, never on the ground",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "body line 12 / 72% / r4",
+    "12/72%/4px"
+   ],
+   [
+    "caption line 10 / 48%",
+    "10/48%"
+   ],
+   [
+    "hero rect 160x32 r8",
+    "160x32/8px"
+   ],
+   [
+    "mark shape 44 with its radius",
+    "44x44/14px"
+   ],
+   [
+    "pulse 1400ms infinite, no gradient (1650)",
+    "1.4s/infinite/no-gradient"
+   ],
+   [
+    "static under reduced-motion (emulated)",
+    "static-ok"
+   ],
+   [
+    "skeleton aria-hidden (23.17)",
+    "true"
+   ]
+  ],
+  "webkit": [
+   [
+    "SaveState four instances in the lab",
+    "4"
+   ],
+   [
+    "draft rides the waiting color",
+    "rgb(138, 82, 0)"
+   ],
+   [
+    "saved rides the done color",
+    "rgb(22, 107, 58)"
+   ],
+   [
+    "failed rides the problem color + role=alert",
+    "rgb(179, 38, 30)/alert"
+   ],
+   [
+    "sending is aria-busy, silent",
+    "true/silent"
+   ],
+   [
+    "saved check draws (motion tokens present)",
+    "draw-ready"
+   ],
+   [
+    "state line fits content, never breaks (1347)",
+    "nowrap"
+   ],
+   [
+    "Toast bg is toast-bg",
+    "rgb(16, 23, 25)"
+   ],
+   [
+    "Toast text is white (on-dark)",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "Toast radius 16",
+    "16px"
+   ],
+   [
+    "Toast padding 12/16",
+    "12px/16px"
+   ],
+   [
+    "Toast layer.toast 70",
+    "70"
+   ],
+   [
+    "Toast role=status polite (23.17)",
+    "status"
+   ],
+   [
+    "Toast text two lines max (1348)",
+    "2"
+   ],
+   [
+    "undo rides on-dark-action",
+    "rgb(140, 207, 214)"
+   ],
+   [
+    "Toast static in the lab stage",
+    "static"
+   ],
+   [
+    "banner icon 20",
+    "20"
+   ],
+   [
+    "offline pair problem-bg/problem-fg",
+    "rgb(253, 236, 234)/rgb(179, 38, 30)"
+   ],
+   [
+    "locked pair neutral",
+    "rgb(238, 241, 243)/rgb(91, 102, 108)"
+   ],
+   [
+    "info pair info",
+    "rgb(236, 251, 251)/rgb(11, 106, 117)"
+   ],
+   [
+    "banner role=status polite (23.17)",
+    "status"
+   ],
+   [
+    "banner static in the lab stage",
+    "static"
+   ],
+   [
+    "banner action slot present (658)",
+    "action"
+   ],
+   [
+    "EmptyState radius r-lg 24",
+    "24px"
+   ],
+   [
+    "two ghost rows shaped like ObjectRow",
+    "2"
+   ],
+   [
+    "ghost mark is the 44 shape",
+    "44x44"
+   ],
+   [
+    "ghost lines 72% / 48%",
+    "72%/48%"
+   ],
+   [
+    "ghost lines use the skeleton color, no motion",
+    "rgb(233, 237, 239)/none"
+   ],
+   [
+    "ONE body sentence, centered",
+    "center"
+   ],
+   [
+    "content ≤ 280 (1649)",
+    "280"
+   ],
+   [
+    "skeleton on a surface, never on the ground",
+    "rgb(255, 255, 255)"
+   ],
+   [
+    "body line 12 / 72% / r4",
+    "12/72%/4px"
+   ],
+   [
+    "caption line 10 / 48%",
+    "10/48%"
+   ],
+   [
+    "hero rect 160x32 r8",
+    "160x32/8px"
+   ],
+   [
+    "mark shape 44 with its radius",
+    "44x44/14px"
+   ],
+   [
+    "pulse 1400ms infinite, no gradient (1650)",
+    "1.4s/infinite/no-gradient"
+   ],
+   [
+    "static under reduced-motion (emulated)",
+    "static-ok"
+   ],
+   [
+    "skeleton aria-hidden (23.17)",
+    "true"
+   ]
+  ]
+ }
+}

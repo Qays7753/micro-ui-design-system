@@ -36,8 +36,18 @@
   overflow: hidden;
 }
 
-/* The action slot: «تراجع» rides on-dark-action (23.12). */
+/* The action slot: «تراجع» rides on-dark-action (23.12) — text 14/20
+   weight 600. The toast owns the on-dark treatment of whatever button
+   the app drops in the slot. */
 .mds-toast-action {
   display: inline-flex;
   flex: 0 0 auto;
+}
+
+.mds-toast-action button {
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-on-dark-action);
 }
