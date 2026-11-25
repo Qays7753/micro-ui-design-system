@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, SaveState, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -569,6 +569,28 @@ export function App() {
 
 
 
+
+
+        {/* ---- SaveState (BRIEF 9.4 + 656 + 23.17): the four save states ---- */}
+        <section className="lab-section" id="save-state">
+          <h2 className="lab-title">{t('title.saveState')}</h2>
+          <div className="lab-row" data-ds-check="save-state">
+            <span className="lab-label">{t('state.draft')}</span>
+            <SaveState saveState="draft" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('state.sending')}</span>
+            <SaveState saveState="sending" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('badge.done')}</span>
+            <SaveState saveState="saved" />
+          </div>
+          <div className="lab-row">
+            <span className="lab-label">{t('badge.problem')}</span>
+            <SaveState saveState="failed" />
+          </div>
+        </section>
 
         {/* ---- PageHeader (BRIEF 9.1): the page title, main + sub + collapsed ---- */}
         <section className="lab-section" id="page-header">

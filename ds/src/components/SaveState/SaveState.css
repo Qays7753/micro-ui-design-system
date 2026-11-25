@@ -1,0 +1,82 @@
+/*
+ * SaveState.css — BRIEF 9.4 + 23.17 + 677 (check-draw). Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values). SVG
+ * unitless user-units (dash lengths) are geometry, not CSS values.
+ */
+
+.mds-save-state {
+  /* Fits its content, never breaks (1347). */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  min-height: var(--mds-size-touch-min);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-save-state svg {
+  width: var(--mds-size-icon-14);
+  height: var(--mds-size-icon-14);
+  flex: 0 0 auto;
+}
+
+.mds-save-state-text {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  white-space: nowrap;
+}
+
+/* State colors (5.2 tones): draft + failed ride waiting/problem, saved
+   rides done, sending stays secondary. */
+.mds-save-state--draft {
+  color: var(--mds-color-status-waiting-fg);
+}
+
+.mds-save-state--sending {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-save-state--saved {
+  color: var(--mds-color-status-done-fg);
+}
+
+.mds-save-state--failed {
+  color: var(--mds-color-status-problem-fg);
+}
+
+/* The saved check draws itself (677: ✓ مرسومة check-draw — 300ms
+   ease-out): stroke draws while the fill fades in behind it. SVG
+   user-units below are path geometry, not design values. */
+.mds-save-state--saved .mds-save-state-icon path {
+  stroke: currentColor;
+  stroke-width: 20;
+  stroke-dasharray: 500;
+  fill: currentColor;
+  fill-opacity: 0;
+  animation: mds-check-draw var(--mds-motion-check-draw-ms)
+    var(--mds-motion-check-draw-ease) forwards;
+}
+
+@keyframes mds-check-draw {
+  0% {
+    stroke-dashoffset: 500;
+    fill-opacity: 0;
+  }
+
+  60% {
+    fill-opacity: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-save-state--saved .mds-save-state-icon path {
+    animation: none;
+    fill-opacity: 1;
+    stroke: none;
+  }
+}

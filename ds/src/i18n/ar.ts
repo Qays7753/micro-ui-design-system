@@ -201,6 +201,9 @@ export const ar = {
   'title.movements': { kind: 'title', text: 'الحركات' },
   'button.new': { kind: 'button', text: 'جديد' },
   'state.scrolled': { kind: 'badge', text: 'عند التمرير' },
+  'title.saveState': { kind: 'title', text: 'حالة الحفظ' },
+  'state.draft': { kind: 'badge', text: 'مسودة' },
+  'state.sending': { kind: 'badge', text: 'يُرسل' },
   'state.fiveTabs': { kind: 'badge', text: 'خمسة تبويبات' },
   'state.withCents': { kind: 'badge', text: 'مع فلوس' },
   'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
@@ -240,6 +243,7 @@ export const ar = {
   'sr.more': { kind: 'screen-reader', text: 'المزيد' },
   'sr.search': { kind: 'screen-reader', text: 'بحث' },
   'sr.clear': { kind: 'screen-reader', text: 'مسح' },
+  'sr.saveSaved': { kind: 'screen-reader', text: 'حُفظت الحركة' },
   'sr.saveFailed': { kind: 'error', text: 'لم تُحفظ الحركة. الاتصال انقطع.' },
 
   // --- Field placeholder, format only (BRIEF 23.24(10)) ---
