@@ -58,7 +58,7 @@ export function ObjectCard({
       {...rest}
     >
       <span className="mds-object-card-mark">
-        <EntityMark size="lg" tone={tone} value={typeof leading === 'string' ? leading : undefined}>
+        <EntityMark size="lg" tone={tone} value={typeof leading === 'string' ? leading : label}>
           {typeof leading === 'string' ? undefined : leading}
         </EntityMark>
         {state ? <span className="mds-object-card-state">{state}</span> : null}

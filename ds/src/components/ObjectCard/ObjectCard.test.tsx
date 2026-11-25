@@ -58,4 +58,14 @@ describe('ObjectCard (BRIEF 4.1, 23.24)', () => {
     fireEvent.pointerUp(card);
     expect(onPress).not.toHaveBeenCalled();
   });
+
+  it('A4: the mark shows the ONE 23.5 initial from the label, never an empty square', () => {
+    const { container } = render(
+      <ObjectCard label={TITLE} caption={CAPTION} />,
+    );
+    const initial = container.querySelector('.mds-entity-mark-initial');
+    expect(initial).not.toBeNull();
+    const letters = Array.from((initial as HTMLElement).textContent ?? '');
+    expect(letters).toHaveLength(1);
+  });
 });

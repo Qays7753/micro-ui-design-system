@@ -56,7 +56,7 @@ export function ObjectRow({
       {...(interactive ? pressProps : {})}
       {...rest}
     >
-      <EntityMark size="md" tone={tone} value={typeof leading === 'string' ? leading : undefined}>
+      <EntityMark size="md" tone={tone} value={typeof leading === 'string' ? leading : label}>
         {typeof leading === 'string' ? undefined : leading}
       </EntityMark>
       <span className="mds-object-row-text">

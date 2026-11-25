@@ -80,4 +80,14 @@ describe('ObjectRow (BRIEF 23.4)', () => {
     const { container } = render(<ObjectRow label={TITLE} value="1,250" onPress={() => {}} />);
     expect(container.textContent).not.toContain('›');
   });
+
+  it('A4: the mark shows the ONE 23.5 initial from the label, never an empty square', () => {
+    const { container } = render(
+      <ObjectRow label={TITLE} value="1,245.750" onPress={() => {}} />,
+    );
+    const initial = container.querySelector('.mds-entity-mark-initial');
+    expect(initial).not.toBeNull();
+    const letters = Array.from((initial as HTMLElement).textContent ?? '');
+    expect(letters).toHaveLength(1);
+  });
 });
