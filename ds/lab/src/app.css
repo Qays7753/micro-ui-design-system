@@ -369,3 +369,22 @@
   flex-direction: column;
   gap: var(--mds-space-16);
 }
+
+/* The compose frame hosts its overlays INSIDE the phone frame (the
+   components' real fixed positioning rides in apps; the frame is the
+   demo's viewport). */
+.lab-compose-screen {
+  position: relative;
+}
+
+.lab-compose-screen .mds-sheet,
+.lab-compose-screen .mds-confirm-sheet {
+  position: absolute;
+  inset: 0;
+}
+
+.lab-compose-screen .mds-toast {
+  position: absolute;
+  inset-inline: var(--mds-space-16);
+  bottom: calc(var(--mds-size-tab-bar) + var(--mds-layout-toast-offset));
+}

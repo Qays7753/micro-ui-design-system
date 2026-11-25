@@ -70,6 +70,9 @@ export function App() {
 
   const [chips, setChips] = useState<string[]>(['in']);
   const [tab, setTab] = useState(0);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [toastText, setToastText] = useState<string | null>(null);
   const [view, setView] = useState<'compose' | 'catalog'>(() =>
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
       ? 'catalog'
@@ -103,7 +106,7 @@ export function App() {
             />
             <PageHeader
               label={t('nav.today')}
-              trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.recordMovement')}</Button>}
+              trailing={<Button variant="secondary" size="sm" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
             />
             <div className="lab-compose-content">
               <HeroSurface
@@ -133,7 +136,7 @@ export function App() {
                     caption={t('row.sampleCaption')}
                     value="1,250"
                     trailing={<StatusBadge tone="waiting" />}
-                    onPress={() => {}}
+                    onPress={() => setConfirmOpen(true)}
                   />
                 </Surface>
               </Section>
@@ -144,6 +147,37 @@ export function App() {
                 <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => {}} />
               </div>
             </div>
+            {sheetOpen ? (
+              <Sheet label={t('sheet.sampleTitle')} onDismiss={() => setSheetOpen(false)}>
+                <Surface>
+                  <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
+                  <SaveState saveState="draft" />
+                  <ActionBar
+                    label={t('button.saveMovement')}
+                    onPress={() => {
+                      setSheetOpen(false);
+                      setToastText(t('toast.movementSaved'));
+                    }}
+                    leading
+                  />
+                </Surface>
+              </Sheet>
+            ) : null}
+            {confirmOpen ? (
+              <ConfirmSheet
+                label={t('confirm.sampleTitle')}
+                caption={t('confirm.sampleSentence')}
+                value={t('button.deleteMovement')}
+                onPress={() => {
+                  setConfirmOpen(false);
+                  setToastText(t('toast.movementDeleted'));
+                }}
+                onDismiss={() => setConfirmOpen(false)}
+              />
+            ) : null}
+            {toastText ? (
+              <Toast label={toastText} onDismiss={() => setToastText(null)} />
+            ) : null}
             <TabBar value={tab} onChange={setTab}>
               <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
               <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
