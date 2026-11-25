@@ -73,6 +73,7 @@ export function App() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toastText, setToastText] = useState<string | null>(null);
+  const [pageState, setPageState] = useState<'normal' | 'loading' | 'empty'>('normal');
   const [view, setView] = useState<'compose' | 'catalog'>(() =>
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
       ? 'catalog'
@@ -90,6 +91,12 @@ export function App() {
         <div className="lab-compose">
           <div className="lab-compose-top">
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
+            <AmountVisibilityToggle />
+            <button type="button" className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(100)}>{t('lab.scale100')}</button>
+            <button type="button" className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(200)}>{t('lab.scale200')}</button>
+            <button type="button" className={pageState === 'loading' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('loading')}>{t('state.loading')}</button>
+            <button type="button" className={pageState === 'empty' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('empty')}>{t('state.empty')}</button>
+            <button type="button" className={pageState === 'normal' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('normal')}>{t('state.normal')}</button>
           </div>
           <div className="lab-compose-screen" data-ds-check="compose">
             <ContextBar
@@ -108,7 +115,23 @@ export function App() {
               label={t('nav.today')}
               trailing={<Button variant="secondary" size="sm" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
             />
-            <div className="lab-compose-content">
+            <div className="lab-compose-content" data-ds-check="compose-content">
+              {pageState === 'loading' ? (
+                <Surface aria-busy="true">
+                  <Skeleton variant="hero" />
+                  <div className="lab-skeleton-pair">
+                    <Skeleton variant="body" />
+                    <Skeleton variant="caption" />
+                  </div>
+                  <Skeleton variant="mark" />
+                </Surface>
+              ) : pageState === 'empty' ? (
+                <EmptyState
+                  label={t('empty.movements')}
+                  trailing={<Button variant="secondary" data-ds-exempt="">{t('button.recordMovement')}</Button>}
+                />
+              ) : (
+              <>
               <HeroSurface
                 label={t('nav.finance')}
                 value="1,245.750"
@@ -146,6 +169,8 @@ export function App() {
                 <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => {}} />
                 <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => {}} />
               </div>
+              </>
+              )}
             </div>
             {sheetOpen ? (
               <Sheet label={t('sheet.sampleTitle')} onDismiss={() => setSheetOpen(false)}>

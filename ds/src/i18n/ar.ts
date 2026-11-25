@@ -223,6 +223,8 @@ export const ar = {
   'state.hidden': { kind: 'badge', text: 'مخفي' },
   'state.missing': { kind: 'badge', text: 'مفقود' },
   'state.loading': { kind: 'badge', text: 'تحميل' },
+  'state.empty': { kind: 'badge', text: 'فراغ' },
+  'state.normal': { kind: 'badge', text: 'عادي' },
   'state.disabled': { kind: 'badge', text: 'معطّل' },
   'state.longest': { kind: 'badge', text: 'أطول قيمة' },
   'state.sizes': { kind: 'badge', text: 'المقاسات' },
