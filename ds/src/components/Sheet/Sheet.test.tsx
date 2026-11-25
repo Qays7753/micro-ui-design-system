@@ -19,7 +19,7 @@ describe('Sheet (BRIEF 23.11, 23.15)', () => {
     );
     expect(container.querySelector('.mds-sheet-handle')).not.toBeNull();
     expect(container.querySelector('.mds-sheet-title')?.textContent).toBe(TITLE);
-    expect(container.querySelector('.mds-sheet-header .mds-icon-button')).not.toBeNull();
+    expect(container.querySelector('.mds-sheet-close .mds-icon-button')).not.toBeNull();
     expect(container.querySelector('.mds-sheet-body')?.textContent).toBe('body');
     expect(SheetStates).toContain('open');
   });

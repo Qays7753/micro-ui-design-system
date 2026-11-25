@@ -11,9 +11,9 @@
  * a sheet is sheet-2(60) over scrim-2(50). Max two stacked. Free
  * design-value props banned (23.18).
  */
-import type { ReactNode, Ref } from 'react';
+import type { HTMLAttributes, ReactNode, Ref } from 'react';
 
-export interface SheetProps {
+export interface SheetProps extends HTMLAttributes<HTMLDivElement> {
   /** The sheet title (Rubik 22/30/600). */
   label: string;
   /** The sheet body: surfaces, Metric, StatusTrack, LinkedObjects,

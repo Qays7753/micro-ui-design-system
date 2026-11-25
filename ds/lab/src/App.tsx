@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, BackIcon, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties } from './data';
 import './app.css';
 
@@ -32,7 +32,7 @@ export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
   const [segment, setSegment] = useState('today');
-  const [sheetOpen, setSheetOpen] = useState(false);
+
   const [chips, setChips] = useState<string[]>(['in']);
 
   const applyScale = (next: 100 | 200) => {
@@ -484,6 +484,51 @@ export function App() {
           </div>
         </section>
 
+        {/* ---- Sheet (BRIEF 23.11 + 23.15): the bottom sheet ---- */}
+        <section className="lab-section" id="sheet">
+          <h2 className="lab-title">{t('title.sheet')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <div className="lab-sheet-stage" data-ds-check="sheet">
+              <Sheet label={t('sheet.sampleTitle')} onDismiss={() => {}}>
+                <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
+                  <ObjectRow
+                    label={t('row.sampleTitle')}
+                    caption={t('row.sampleCaption')}
+                    value="1,245.750"
+                    trailing={t('row.sampleTime')}
+                    onPress={() => {}}
+                  />
+                  <ObjectRow
+                    label={t('row.sampleTitle')}
+                    caption={t('row.sampleCaption')}
+                    value="980"
+                    trailing={<StatusBadge tone="waiting" />}
+                    onPress={() => {}}
+                  />
+                </Surface>
+              </Sheet>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- ConfirmSheet (BRIEF 9.3 + 23.24): destructive confirm ---- */}
+        <section className="lab-section" id="confirm-sheet">
+          <h2 className="lab-title">{t('title.confirmSheet')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <div className="lab-sheet-stage" data-ds-check="confirm-sheet">
+              <ConfirmSheet
+                label={t('confirm.sampleTitle')}
+                caption={t('confirm.sampleSentence')}
+                value={t('button.deleteMovement')}
+                onPress={() => {}}
+                onDismiss={() => {}}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}
         <section className="lab-section" id="object-row">
           <h2 className="lab-title">{t('title.objectRow')}</h2>
@@ -639,31 +684,6 @@ export function App() {
           </div>
         </section>
 
-        {/* Sheet rendered at layer level (23.15) */}
-        {sheetOpen ? (
-        <Sheet
-          label={t('sheet.sampleTitle')}
-          onDismiss={() => setSheetOpen(false)}
-          data-ds-check="sheet"
-        >
-          <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
-            <ObjectRow
-              label={t('row.sampleTitle')}
-              caption={t('row.sampleCaption')}
-              value="1,245.750"
-              trailing={t('row.sampleTime')}
-              onPress={() => {}}
-            />
-            <ObjectRow
-              label={t('row.sampleTitle')}
-              caption={t('row.sampleCaption')}
-              value="980"
-              trailing={<StatusBadge tone="waiting" />}
-              onPress={() => {}}
-            />
-          </Surface>
-        </Sheet>
-        ) : null}
         </main>
       </div>
     </AmountVisibilityProvider>

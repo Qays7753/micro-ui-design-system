@@ -1,0 +1,71 @@
+/*
+ * ConfirmSheet.css — BRIEF 9.3 + 23.24 + 1096. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The header (icon + title + sentence) is one of the ONLY centered
+   places (1096). */
+.mds-confirm-sheet-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--mds-space-8);
+  padding-block: var(--mds-space-12);
+}
+
+/* The danger icon: WarningCircle 24 (1424) in the problem color. */
+.mds-confirm-sheet-icon {
+  display: inline-flex;
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-confirm-sheet-icon svg {
+  width: var(--mds-size-icon-24);
+  height: var(--mds-size-icon-24);
+}
+
+.mds-confirm-sheet-title {
+  margin: 0;
+  color: var(--mds-color-text-primary);
+}
+
+/* The result sentence: body 16/24 text-secondary. */
+.mds-confirm-sheet-sentence {
+  margin: 0;
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* The two buttons: full width inside the sheet (23.3), the destructive
+   one FILLED red — allowed only here. */
+.mds-confirm-sheet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  padding-block: var(--mds-space-4) var(--mds-space-12);
+}
+
+.mds-confirm-sheet-actions .mds-button {
+  width: 100%;
+}
+
+/* The FILLED danger variant (9.3: خطر ممتلئ داخل ConfirmSheet فقط). */
+.mds-confirm-sheet-confirm.mds-button--danger {
+  background-color: var(--mds-color-status-problem-fg);
+  color: var(--mds-color-on-anchor);
+}
+
+.mds-confirm-sheet-confirm.mds-button--danger:active,
+.mds-confirm-sheet-confirm.mds-button--danger[data-pressed] {
+  background-color: var(--mds-color-status-problem-bg);
+  color: var(--mds-color-status-problem-fg);
+}
+
+/* Disabled (23.24(15)): the filled danger dims to its bg tone. */
+.mds-confirm-sheet-confirm.mds-button--danger:disabled {
+  background-color: var(--mds-color-status-problem-bg);
+  color: var(--mds-color-status-problem-fg);
+}

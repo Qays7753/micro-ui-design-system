@@ -165,10 +165,12 @@ export function Sheet({
           <span className="mds-sheet-handle" aria-hidden="true" />
           <header className="mds-sheet-header">
             <h2 className="mds-sheet-title mds-type-title-section">{label}</h2>
-            <IconButton label={label} onPress={onDismiss}>
-              <CloseIcon />
-            </IconButton>
           </header>
+        </div>
+        <div className="mds-sheet-close">
+          <IconButton label={label} onPress={onDismiss}>
+            <CloseIcon />
+          </IconButton>
         </div>
         <div className="mds-sheet-body">{children}</div>
       </div>

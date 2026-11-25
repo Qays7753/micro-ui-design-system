@@ -90,6 +90,15 @@
 }
 
 /* The body: scrollable with the scroll contained inside (23.11). */
+/* The close button sits at the header's end corner OUTSIDE the drag
+   zone (the grab area's pointer capture would swallow its :active). */
+.mds-sheet-close {
+  position: absolute;
+  top: calc(var(--mds-size-handle-offset) + var(--mds-size-handle-height) + var(--mds-space-4));
+  inset-inline-end: var(--mds-layout-sheet-padding);
+  z-index: 1;
+}
+
 .mds-sheet-body {
   overflow-y: auto;
   overscroll-behavior: contain;

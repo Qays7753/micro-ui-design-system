@@ -182,3 +182,34 @@
   padding-inline: var(--mds-layout-surface-padding-phone);
   min-height: var(--mds-size-touch-min);
 }
+
+/* ---- Sheet specimen stages (S7): a mini phone frame that contains the
+   sheet's fixed overlay inside itself (transform creates a containing
+   block for fixed descendants), so the specimen never covers the lab
+   page while ds-states measures every element. */
+.lab-sheet-stage {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+  border-radius: 24px;
+  border: 1px solid var(--mds-color-surface-edge);
+  background-color: var(--mds-color-canvas);
+}
+
+/* Lab-only presentation (like data-ds-exempt for 44-in-48 buttons): the
+   specimen sheet renders INLINE — the component's real fixed overlay
+   behaves exactly per 23.11 in apps; in the specimen page the inline
+   form keeps every other element measurable by the gates (a fixed
+   specimen would swallow presses). */
+.lab-sheet-stage .mds-sheet {
+  position: static;
+}
+
+.lab-sheet-stage .mds-sheet-scrim {
+  display: none;
+}
+
+.lab-sheet-stage .mds-sheet-panel {
+  max-width: none;
+}
