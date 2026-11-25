@@ -53,6 +53,19 @@ sh tools/setup-browsers.sh        # uv run playwright install --with-deps chromi
 - تشغيل WebKit بعدها **تلقائي في الأدوات**: جلسة المتصفح المشتركة (`tools/ds-gates/common.py` → `browser_session`) تجرّب الإطلاق العادي أولًا؛ إن فشل وفقط إن وُجدت مجلدات التراجع داخل تثبيت WebKit، تعيد المحاولة مرة واحدة بمتغيرات EGL البرمجية (`EGL_PLATFORM=surfaceless`، `LIBGL_ALWAYS_SOFTWARE=1`، …). لا تدخل يدوي في البيئة إطلاقًا، والأجهزة العادية لا تُلمس لأن الإطلاق العادي ينجح عندها من المحاولة الأولى.
 - بوابة `ds-banned` تحظر أي مسار مطلق لجهاز (جذر `home`/`Users`/`tmp`) في الملفات المتتبعة تحت `ds/` و`tools/ds-gates/` و`.githooks/`، فتبقى الأدوات قابلة للتشغيل على أي جهاز.
 
+**قائمة الحزم الحرفية التي احتاجها تثبيت WebKit في ساندبوكس Debian trixie (اكتملت بيئة 2026-11-25 — تنزّل بهذه الأسماء بأمر `apt-get download` واحد ثم `dpkg -x` إلى مجلد واحد ثم النسخ كما أعلاه):**
+
+```
+libgtk-4-1 libgraphene-1.0-0 libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0
+libgstreamer-plugins-bad1.0-0 libsoup-3.0-0 libmanette-0.2-0 libenchant-2-2
+libsecret-1-0 libegl1 libegl-mesa0 libgles2 libgl1 libgl1-mesa-dri libglx-mesa0
+libgudev-1.0-0 libhidapi-hidraw0 libevdev2 libnice10 libxkbcommon-x11-0 libxcb-xkb1
+libgupnp-1.6-0 libgssdp-1.6-0 libgupnp-igd-1.6-0 libx264-164
+```
+
+- `libgstcodecparsers-1.0.so.0` يأتي من `libgstreamer-plugins-bad1.0-0` (لا حزمة باسمه)، وملفات mesa (EGL vendor JSON `50_mesa.json` ومشغّلات DRI بينها `swrast_dri.so` و`kms_swrast_dri.so`) من `libegl-mesa0` و`libgl1-mesa-dri`.
+- إن أظهر Playwright فحص المكيفات «Missing libGLESv2.so.2» رغم نسخها إلى `sys/lib`: هذا فحص `ldconfig -p` النظامي لا يرى مكتبات داخل حزمة المتصفح — يتخطاه إعداد `apply_webkit_env` (يضبط `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1`) والإطلاق الفعلي هو الحكم.
+
 ### مصادر الخطوط (أداة `ds/tools/generate-fonts.mjs`)
 
 - تعمل بالشبكة عند أول تشغيل: تنزّل ملفات TTF/OFL من مستودع google/fonts الرسمي على commit مثبّت، وتتحقق من sha256 لكل ملف قبل استخدامه، في مجلد مؤقت (`npm run fonts` داخل `ds/`).
