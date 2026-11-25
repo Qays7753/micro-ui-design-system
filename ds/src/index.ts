@@ -42,3 +42,4 @@ export * from './components/TabBar';
 export * from './components/PageHeader';
 export * from './components/SaveState';
 export * from './components/Toast';
+export * from './components/InlineBanner';

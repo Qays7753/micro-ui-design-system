@@ -1,0 +1,52 @@
+/*
+ * InlineBanner.css — BRIEF 517 + 658 + 23.23 + 1649. Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-inline-banner {
+  /* Fixed at the top of the content (517), in layer.content (1242). */
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-layer-content);
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  padding-block: var(--mds-layout-toast-padding-block);
+  padding-inline: var(--mds-layout-toast-padding-inline);
+}
+
+.mds-inline-banner svg {
+  width: var(--mds-size-icon-20);
+  height: var(--mds-size-icon-20);
+  flex: 0 0 auto;
+}
+
+.mds-inline-banner-text {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  min-width: 0;
+}
+
+.mds-inline-banner-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+/* Tone pairs from 5.2: icon + text on the light pair, NEVER a fully
+   colored surface (1649). */
+.mds-inline-banner--offline {
+  background-color: var(--mds-color-status-problem-bg);
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-inline-banner--locked {
+  background-color: var(--mds-color-status-neutral-bg);
+  color: var(--mds-color-status-neutral-fg);
+}
+
+.mds-inline-banner--info {
+  background-color: var(--mds-color-status-info-bg);
+  color: var(--mds-color-status-info-fg);
+}

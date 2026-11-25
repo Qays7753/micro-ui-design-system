@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, InlineBanner, PageHeader, SaveState, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -571,6 +571,30 @@ export function App() {
 
 
 
+
+
+        {/* ---- InlineBanner (BRIEF 517 + 658 + 23.23): the three semantics ---- */}
+        <section className="lab-section" id="inline-banner">
+          <h2 className="lab-title">{t('title.inlineBanner')}</h2>
+          <div className="lab-row lab-row--full" data-ds-check="inline-banner">
+            <span className="lab-label">{t('badge.problem')}</span>
+            <div className="lab-banner-stage">
+              <InlineBanner tone="offline" label={t('banner.offline')} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('badge.neutral')}</span>
+            <div className="lab-banner-stage">
+              <InlineBanner tone="locked" label={t('banner.permission')} />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('button.reviewAndSave')}</span>
+            <div className="lab-banner-stage">
+              <InlineBanner tone="info" label={t('banner.backOnline')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.reviewAndSave')}</Button>} />
+            </div>
+          </div>
+        </section>
 
         {/* ---- Toast (BRIEF 23.12 + 23.17): fixed above the bars ---- */}
         <section className="lab-section" id="toast">

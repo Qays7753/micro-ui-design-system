@@ -203,6 +203,7 @@ export const ar = {
   'state.scrolled': { kind: 'badge', text: 'عند التمرير' },
   'title.saveState': { kind: 'title', text: 'حالة الحفظ' },
   'title.toast': { kind: 'title', text: 'الإشعار العابر' },
+  'title.inlineBanner': { kind: 'title', text: 'الشريط المثبت' },
   'state.defaultToast': { kind: 'badge', text: 'ثلاث ثوانٍ' },
   'state.draft': { kind: 'badge', text: 'مسودة' },
   'state.sending': { kind: 'badge', text: 'يُرسل' },
