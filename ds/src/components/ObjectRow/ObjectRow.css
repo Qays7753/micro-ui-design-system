@@ -20,8 +20,13 @@
   text-align: start;
 }
 
+/* One-line rows (23.4): the fixed 56 height with the fixed 44 mark means
+   the vertical padding flexes to 6 (56 = 44 + 2×6); the 12-block padding
+   of the two-line row would force 68. Owner-decision reading documented
+   in REPORT (يحتاج قرار المالك). */
 .mds-object-row--one-line {
   min-height: var(--mds-size-row-1line);
+  padding-block: calc((var(--mds-size-row-1line) - var(--mds-size-entity-44)) / 2);
 }
 
 /* The text column takes the remaining space and gives its overflow to
