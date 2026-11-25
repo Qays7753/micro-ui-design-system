@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, EmptyState, InlineBanner, PageHeader, SaveState, Skeleton, Toast, ContextBar, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NotificationsButton, ProjectSwitcher, TabBar, TabBarTab, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, BackIcon, Button, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, SaveState, Section, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -106,23 +106,43 @@ export function App() {
               trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.recordMovement')}</Button>}
             />
             <div className="lab-compose-content">
-              <Surface>
-                <ObjectRow
-                  label={t('row.sampleTitle')}
-                  caption={t('row.sampleCaption')}
-                  value="1,245.750"
-                  trailing={t('row.sampleTime')}
-                  onPress={() => {}}
-                />
-                <ObjectRow
-                  label={t('row.sampleTitle')}
-                  caption={t('row.sampleCaption')}
-                  value="1,250"
-                  trailing={<StatusBadge tone="waiting" />}
-                  onPress={() => {}
-                  }
-                />
-              </Surface>
+              <HeroSurface
+                label={t('nav.finance')}
+                value="1,245.750"
+                trailing={t('money.unit')}
+                direction={
+                  <>
+                    <DeltaUpIcon />
+                    <span>{t('metric.deltaHigher', { percent: '12%' })}</span>
+                  </>
+                }
+                debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+                onDismiss={() => {}}
+              />
+              <Section label={t('title.needsYou')} caption={3} onPress={() => {}}>
+                <Surface>
+                  <ObjectRow
+                    label={parties[0]}
+                    caption={t('row.sampleCaption')}
+                    value="1,245.750"
+                    trailing={t('row.sampleTime')}
+                    onPress={() => {}}
+                  />
+                  <ObjectRow
+                    label={parties[1]}
+                    caption={t('row.sampleCaption')}
+                    value="1,250"
+                    trailing={<StatusBadge tone="waiting" />}
+                    onPress={() => {}}
+                  />
+                </Surface>
+              </Section>
+              <div className="mds-tile-grid">
+                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>} value="1,250" trailing={t('movement.in')} onPress={() => {}} />
+                <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} state value="4" trailing={t('badge.waiting')} onPress={() => {}} />
+                <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => {}} />
+                <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => {}} />
+              </div>
             </div>
             <TabBar value={tab} onChange={setTab}>
               <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />

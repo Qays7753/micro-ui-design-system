@@ -355,10 +355,15 @@
   border-radius: var(--mds-radius-lg);
   overflow: hidden;
   background-color: var(--mds-color-canvas);
+  /* A real app frame: bars pinned, the content column scrolls. */
+  display: flex;
+  flex-direction: column;
+  height: min(680px, calc(100vh - 140px));
 }
 
 .lab-compose-content {
-  min-height: 320px;
+  flex: 1 1 auto;
+  overflow-y: auto;
   padding: var(--mds-space-16);
   display: flex;
   flex-direction: column;
