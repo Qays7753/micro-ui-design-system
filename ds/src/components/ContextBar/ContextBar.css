@@ -1,0 +1,42 @@
+/*
+ * ContextBar.css — BRIEF 9.1 + 23.16 + 23.20 + 27.3. Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-8);
+  min-height: var(--mds-size-context-bar);
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  /* 27.3: the safe area rides the top padding (notches). */
+  padding-block-start: env(safe-area-inset-top);
+  background-color: var(--mds-color-canvas);
+  z-index: var(--mds-layer-bars);
+}
+
+/* 23.16: the bottom hairline appears ONLY while content scrolled
+   under the bar — host signal (`caption`). */
+.mds-context-bar--scrolled {
+  border-bottom: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
+/* Start: the switcher (main) or back button (sub); it may shrink but
+   its buttons never get pushed out (23.20). */
+.mds-context-bar-start {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+/* End: NotificationsButton then AskButton — Ask is the LAST element
+   in the corner (9.1 confirmed order); the pair never shrinks. */
+.mds-context-bar-end {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  flex: 0 0 auto;
+}

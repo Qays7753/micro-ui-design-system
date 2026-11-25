@@ -37,3 +37,4 @@ export * from './components/ActionBar';
 export * from './components/AskButton';
 export * from './components/NotificationsButton';
 export * from './components/ProjectSwitcher';
+export * from './components/ContextBar';

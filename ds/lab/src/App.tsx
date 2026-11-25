@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, NotificationsButton, ProjectSwitcher, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
+import { AmountVisibilityProvider, AmountVisibilityToggle, ActionBar, AskButton, BackIcon, ContextBar, NotificationsButton, ProjectSwitcher, Button, ConfirmSheet, DeltaUpIcon, EntityMark, FilterChips, HeroSurface, IconButton, Metric, MetricSmall, NavTodayIcon, ObjectCard, ObjectRow, Section, SegmentedControl, Sheet, Surface, TextField, Tile, Well, FundBankIcon, FundCashIcon, FundWalletIcon, Money, StatusBadge, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -549,6 +549,53 @@ export function App() {
 
 
 
+
+
+        {/* ---- ContextBar (BRIEF 9.1 + 23.16): the top bar composing the three ---- */}
+        <section className="lab-section" id="context-bar">
+          <h2 className="lab-title">{t('title.contextBar')}</h2>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.mainScreens')}</span>
+            <div className="lab-bar-stage" data-ds-check="context-bar">
+              <ContextBar
+                label={t('sr.switchProject')}
+                leading={
+                  <ProjectSwitcher
+                    label={projects[0]}
+                    caption={ar['role.owner'].text}
+                    onPress={() => {}}
+                  />
+                }
+                trailing={
+                  <>
+                    <NotificationsButton value={3} onPress={() => {}} />
+                    <AskButton onPress={() => {}} />
+                  </>
+                }
+              />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.subScreens')}</span>
+            <div className="lab-bar-stage">
+              <ContextBar
+                label={t('title.contextBar')}
+                leading={
+                  <IconButton label={t('sr.back')} onPress={() => {}}>
+                    <BackIcon />
+                  </IconButton>
+                }
+                trailing={
+                  <>
+                    <NotificationsButton onPress={() => {}} />
+                    <AskButton selected onPress={() => {}} />
+                  </>
+                }
+                caption
+              />
+            </div>
+          </div>
+        </section>
 
         {/* ---- ProjectSwitcher (BRIEF 9.1 + 23.20): the project trigger ---- */}
         <section className="lab-section" id="project-switcher">
