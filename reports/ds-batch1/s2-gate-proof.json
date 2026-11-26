@@ -1,6 +1,6 @@
 {
   "stage": "S2 — أدوات الفحص (وكيل الفحوص)",
-  "date": "2026-11-22",
+  "date": "2026-11-26",
   "mode": "prove + current-state",
   "definition": "لكل بوابة: الشاهد المخالف يجب أن يفشل (بوابة --prove تتوقع exit 1 من الشاهد المخالف وexit 0 من النظيف؛ تخرج 0 فقط إذا حدث ذلك)، والحالة الحالية تنجح (exit 0). بوابة لم تثبت فشلها على مخالفتها مرفوضة.",
   "gates": [
@@ -26,13 +26,7 @@
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
       "current_state_tail": "total: 4 ok, 0 failed",
-      "prove_exit": 0,
-      "updated": {
-        "date": "2026-11-23",
-        "reason": "owner task item 4: added check 4 — machine-absolute paths (home/Users/tmp roots) in tracked files under ds/, tools/ds-gates/ and .githooks/; fixtures extended (bad: /home/ + /tmp/ + /Users/ literals; clean: relative paths)",
-        "current_state_tail": "total: 4 ok, 0 failed",
-        "violation_first_fail": "PASS ds-banned/prove/bad | tools/ds-gates/fixtures/ds-banned/bad -> exit 1 (expected 1); FAIL ds-banned/deps | 2 banned packages"
-      }
+      "prove_exit": 0
     },
     {
       "gate": "ds-structure",
@@ -55,7 +49,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  no component source under ds/src/components yet (builder starts at S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -79,7 +73,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  no component CSS under ds/src/components yet (builder starts at S3)",
+      "current_state_tail": "total: 1 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -115,7 +109,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "total: 1 ok, 0 failed",
+      "current_state_tail": "total: 6 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -139,7 +133,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -151,7 +145,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  no 'build:standalone' lab build command and no standalone.html yet (both land in S3)",
+      "current_state_tail": "total: 1 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -163,7 +157,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -175,7 +169,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -187,7 +181,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 3 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -199,7 +193,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -211,7 +205,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -223,7 +217,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -235,7 +229,19 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
+      "prove_exit": 0
+    },
+    {
+      "gate": "ds-bidi",
+      "engine": "browser (chromium+webkit)",
+      "violation_fixture": "tools/ds-gates/fixtures/ds-bidi/bad",
+      "clean_fixture": "tools/ds-gates/fixtures/ds-bidi/clean",
+      "expected_failure_exit": 1,
+      "expected_success_exit": 0,
+      "failure_detected_on_violation": true,
+      "current_state_exit": 0,
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     },
     {
@@ -247,7 +253,31 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "not applicable yet:  previews/ds-lab/standalone.html does not exist yet (lab build lands in S3)",
+      "current_state_tail": "total: 2 ok, 0 failed",
+      "prove_exit": 0
+    },
+    {
+      "gate": "ds-signal",
+      "engine": "browser (chromium+webkit)",
+      "violation_fixture": "tools/ds-gates/fixtures/ds-signal/bad",
+      "clean_fixture": "tools/ds-gates/fixtures/ds-signal/clean",
+      "expected_failure_exit": 1,
+      "expected_success_exit": 0,
+      "failure_detected_on_violation": true,
+      "current_state_exit": 0,
+      "current_state_tail": "total: 2 ok, 0 failed",
+      "prove_exit": 0
+    },
+    {
+      "gate": "ds-layout",
+      "engine": "browser (chromium+webkit)",
+      "violation_fixture": "tools/ds-gates/fixtures/ds-layout/bad",
+      "clean_fixture": "tools/ds-gates/fixtures/ds-layout/clean",
+      "expected_failure_exit": 1,
+      "expected_success_exit": 0,
+      "failure_detected_on_violation": true,
+      "current_state_exit": 0,
+      "current_state_tail": "total: 2 ok, 0 failed",
       "prove_exit": 0
     }
   ]

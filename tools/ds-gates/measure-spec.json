@@ -110,6 +110,35 @@
     "px": 76
    },
    "_note": "ActionBar min height = primary button 52 (size.button) + 2x12 block padding. The 24 padding is space.12 (no layout token; documented S7 value with the brief's 9.2 'safe area' text on top)."
-  }
- ]
+   }
+ ],
+ "views": {
+  "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
+  "compose": [
+   {
+    "id": "button-sm",
+    "height": {
+     "token": "size.button-compact"
+    },
+    "_note": "The compose PageHeader's «سجّل حركة» secondary Button (size sm) — the page marks its own real instance."
+   },
+   {
+    "id": "status-badge-height",
+    "height": {
+     "px": 24
+    },
+    "_note": "The waiting StatusBadge trailing the second ObjectRow of «تحتاج منك»."
+   },
+   {
+    "id": "amount-visibility-toggle",
+    "width": {
+     "token": "size.touch-min"
+    },
+    "height": {
+     "token": "size.touch-min"
+    },
+    "_note": "The compose view's master visibility toggle in the lab strip (a real AmountVisibilityToggle instance on the page)."
+   }
+  ]
+ }
 }

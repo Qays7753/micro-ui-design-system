@@ -97,7 +97,7 @@ export function App() {
         <div className="lab-compose">
           <div className="lab-compose-top">
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
-            <AmountVisibilityToggle onChange={(visible) => setComposeHidden(!visible)} />
+            <AmountVisibilityToggle data-ds-check="amount-visibility-toggle" onChange={(visible) => setComposeHidden(!visible)} />
             <span className="lab-tabular-pair">
               {/* G2 probes riding the lab strip: the money font's tabular
                   figures (ds-tabular), LTR digit runs inside RTL (ds-bidi),
@@ -107,6 +107,11 @@ export function App() {
               <Money value="1,245.750" data-ds-check="bidi" />
               <Money value="888.888" data-ds-check="bidi" />
               <Money value="1,250" data-ds-check="bidi" />
+              {/* G2 compose-view measure probes: the page's own REAL elements
+                  carry the ds-measure ids (see measure-spec.json views.compose):
+                  a default-size Money (money-md), the master visibility toggle,
+                  the header's compact Button, and the row's StatusBadge. */}
+              <Money value="312.500" data-ds-check="money-md" />
               <AmountVisibilityProvider hidden>
                 <Money value="1,245.750" data-ds-check="amount-hidden" />
               </AmountVisibilityProvider>
@@ -132,7 +137,7 @@ export function App() {
             />
             <PageHeader
               label={t('nav.today')}
-              trailing={<Button variant="secondary" size="sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
+              trailing={<Button variant="secondary" size="sm" data-ds-check="button-sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
             />
             <div className="lab-compose-content" data-ds-check="compose-content">
               {pageState === 'loading' ? (
@@ -174,7 +179,7 @@ export function App() {
                     label={parties[1]}
                     caption={t('row.sampleCaption')}
                     value={composeHidden ? '••••' : '1,250'}
-                    trailing={<StatusBadge tone="waiting" />}
+                    trailing={<StatusBadge tone="waiting" data-ds-check="status-badge-height" />}
                     data-ds-exempt="view-toggle"
                     onPress={() => setConfirmOpen(true)}
                   />

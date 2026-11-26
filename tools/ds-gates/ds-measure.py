@@ -51,14 +51,26 @@ CENTER_JS = """
 """
 
 
-def load_spec(target, args_spec):
+def load_spec(target, args_spec, view="catalog"):
     if args_spec:
-        return json.loads(Path(args_spec).read_text(encoding="utf-8")), Path(args_spec)
-    candidate = Path(target) / "measure-spec.json"
-    if candidate.is_file():
-        return json.loads(candidate.read_text(encoding="utf-8")), candidate
-    default = ROOT / "tools" / "ds-gates" / "measure-spec.json"
-    return json.loads(default.read_text(encoding="utf-8")), default
+        raw = json.loads(Path(args_spec).read_text(encoding="utf-8"))
+        spec_path = Path(args_spec)
+    else:
+        candidate = Path(target) / "measure-spec.json"
+        if candidate.is_file():
+            raw = json.loads(candidate.read_text(encoding="utf-8"))
+            spec_path = candidate
+        else:
+            raw = json.loads((ROOT / "tools" / "ds-gates" / "measure-spec.json").read_text(encoding="utf-8"))
+            spec_path = ROOT / "tools" / "ds-gates" / "measure-spec.json"
+    # G2: per-view specs. A view that declares entries in spec["views"] runs
+    # THEM (its own real elements); a view without a declaration runs the
+    # default specimen spec. Missing elements fail on every view — a check
+    # that finds nothing proves nothing.
+    views = raw.get("views") or {}
+    if isinstance(views, dict) and view in views:
+        return {"checks": views[view]}, spec_path
+    return raw, spec_path
 
 
 def expected_value(spec_value, tokens):
@@ -77,7 +89,8 @@ def run(gate: Gate, target, args):
     else:
         server, url = resolved
 
-    spec, spec_path = load_spec(target, getattr(args, "spec", None))
+    spec, spec_path = load_spec(target, getattr(args, "spec", None),
+                                "compose" if "view=compose" in url else "catalog")
     tokens = read_tokens(ROOT if kind != "url" and target == str(ROOT) else target)
     if tokens is None:
         tokens = read_tokens(ROOT)
