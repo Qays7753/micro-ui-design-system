@@ -140,10 +140,7 @@ export function App() {
                   <Skeleton variant="mark" />
                 </Surface>
               ) : pageState === 'empty' ? (
-                <EmptyState
-                  label={t('empty.movements')}
-                  trailing={<Button variant="secondary" data-ds-exempt="">{t('button.recordMovement')}</Button>}
-                />
+                <EmptyState label={t('empty.movements')} />
               ) : (
               <>
               <HeroSurface
@@ -794,7 +791,7 @@ export function App() {
             </div>
           </div>
           <div className="lab-row lab-row--full">
-            <span className="lab-label">{t('button.recordMovement')}</span>
+            <span className="lab-label">{t('empty.oneButtonMax')}</span>
             <div className="lab-empty-stage">
               <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" data-ds-exempt="">{t('button.recordMovement')}</Button>} />
             </div>

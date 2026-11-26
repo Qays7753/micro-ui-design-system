@@ -575,8 +575,10 @@ const w = {
   "banner.permission": { kind: "help", text: "هذا خارج صلاحياتك في هذا المشروع" },
   "errorState.loadFailed": { kind: "error", text: "تعذّر تحميل البيانات. أعد المحاولة." },
   "errorState.updatedAt": { kind: "help", text: "آخر تحديث {time}" },
-  // --- EmptyState (BRIEF 23.7, 24.6) ---
+  // --- EmptyState (BRIEF 23.7, 24.6; و-1 item 14: one button max, and
+  // none when the header carries the creation button) ---
   "empty.movements": { kind: "empty", text: "حركات اليوم تظهر هنا." },
+  "empty.oneButtonMax": { kind: "help", text: "زر واحد كحد أقصى، حين يغيب زر الإنشاء" },
   // --- ConfirmSheet result sentence (BRIEF 24.3) ---
   "confirm.deleteResult": { kind: "help", text: "لن تظهر في رصيد {fund}." },
   // --- Metric delta lines (BRIEF 23.8 + 23.22 hidden form) ---

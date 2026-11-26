@@ -300,6 +300,10 @@ export declare const ar: {
         readonly kind: "empty";
         readonly text: "حركات اليوم تظهر هنا.";
     };
+    readonly 'empty.oneButtonMax': {
+        readonly kind: "help";
+        readonly text: "زر واحد كحد أقصى، حين يغيب زر الإنشاء";
+    };
     readonly 'confirm.deleteResult': {
         readonly kind: "help";
         readonly text: "لن تظهر في رصيد {fund}.";
