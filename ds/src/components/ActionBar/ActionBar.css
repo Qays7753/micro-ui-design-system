@@ -13,13 +13,13 @@
   z-index: var(--mds-layer-bars);
   display: flex;
   align-items: center;
-  gap: var(--mds-space-8);
-  padding-block: var(--mds-space-12);
+  gap: var(--mds-layout-action-bar-gap);
+  padding-block: var(--mds-layout-action-bar-padding-block);
   padding-inline: var(--mds-layout-screen-margin-phone);
   /* 27.3: the safe area below the bar (home indicator). env() with no
      fallback: every target browser evaluates the function (0 where no
      inset applies), and the fallback literal would be a raw px value. */
-  padding-bottom: calc(var(--mds-space-12) + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--mds-layout-action-bar-padding-block) + env(safe-area-inset-bottom));
   background-color: var(--mds-color-surface);
 }
 
