@@ -52,6 +52,18 @@ describe('PageHeader (BRIEF 9.1, 23.16, 23.20)', () => {
     expect(PageHeaderStates).toContain('subScreenBack');
   });
 
+  it('never renders the back control as a text link (rule 46: back is an IconButton, not a link)', () => {
+    const { container } = render(
+      <PageHeader
+        label={TITLE}
+        leading={<IconButton label={ar['button.back'].text} onPress={() => {}}><BackIcon /></IconButton>}
+      />,
+    );
+    expect(container.querySelector('a')).toBeNull();
+    // the only back control is the 48 IconButton
+    expect(container.querySelector('.mds-icon-button')).not.toBeNull();
+  });
+
   it('collapses to label-strong beside the back button when scrolled (9.1)', () => {
     const { container } = render(
       <PageHeader
