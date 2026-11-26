@@ -117,8 +117,10 @@ def main():
             check("changed active links: " + name, not (bad := missing_links(path, path.read_text())), bad)
         if path.is_file() and path.suffix == ".css":
             # Generated package mirrors of already-checked sources; byte-identity
-            # is enforced by the package --check gate.
-            if name.startswith(("src/", "dist/")):
+            # is enforced by the package --check gate. ds/dist/ is the same
+            # thing for the S9+ design-system package (S11: the consumer
+            # installs it from the pack tarball).
+            if name.startswith(("src/", "dist/", "ds/dist/")):
                 continue
             # ds batch one (2026-11-22): ds/src/tokens/tokens.css is GENERATED
             # from docs/design-system/tokens.json by ds/tools/generate-tokens.mjs

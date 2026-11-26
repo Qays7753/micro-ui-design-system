@@ -1,0 +1,90 @@
+/* =========================================================
+   Micro UI — variant عرض بطاقات مع peek وتتبع السحب (A05)
+   الملف: components/info-strip/info-strip-peek.css
+   الحالة: ADOPTED — اعتمد المالك النمط الاختياري بتاريخ 2026-10-04؛
+   ليست الافتراضي ولا بديلًا عن info-strip الحالي.
+   المصدر: نفس بنية info-strip (العرض/التحكم/الحالات)، وأنماط
+   التوسيط والمعاينة مستوحاة من مصدر carousel القابل للتعديل
+   (components/carousel/carousel.js) — لا مكتبة ثالثة ولا ألوان
+   أو 3D أو محتوى من الفيديو المرجعي.
+   يعمل بعد info-strip.css. التحميل اختياري صريح.
+   مفاتيح التعديل (على العارض):
+     --m-peek-width   عرض جزء المجاور الظاهر (افتراضي 24px)
+     --m-peek-gap     الفاصل بين البطاقات (افتراضي 12px)
+   ========================================================= */
+
+.m-info-peek,
+.m-info-peek * {
+  box-sizing: border-box;
+}
+
+.m-info-peek {
+  container-type: inline-size;
+}
+
+/* الجار الظاهر جزئيًا: البطاقة النشطة موسّطة، والمجاورات على الجانبين.
+   عكس info-strip الحالي: الشرائح المخفية لا تطوى (بلا height:0)
+   كي يبقى جزء المجاور مرئيًا كمطلوب في مقارنة الفيديو. */
+.m-info-peek .m-info-strip__slide {
+  /* T4 (N-D9): مقاس البطاقة نسبةً لحاوية .m-info-peek (cqw) — ثابت
+     مهما امتد صف التمرير، مع snap للمركز */
+  flex: 0 0 calc(100cqw - 2 * var(--m-peek-width, 24px) - var(--m-peek-gap, 12px));
+  min-width: 0;
+  padding: 0;
+  scroll-snap-align: center;
+}
+.m-info-peek .m-info-strip__slide:only-child {
+  flex-basis: 100cqw; /* single reading is static: no space reserved for neighbours */
+}
+
+.m-info-peek .m-info-strip__slide[aria-hidden="true"] {
+  height: auto;
+}
+
+.m-info-peek .m-info-strip__track {
+  gap: var(--m-peek-gap, 12px);
+  /* T4 (N-D9): صف تمرير أصلي — يمتد بمحتواه وحشوة الطرفين توسّطان
+     الأولى والأخيرة كالأوسط تمامًا (بلا transform) */
+  width: max-content;
+  min-width: 100cqw;
+  padding-inline: calc(var(--m-peek-width, 24px) + var(--m-peek-gap, 12px));
+}
+
+.m-info-peek .m-info-strip__viewport {
+  /* T4 (N-D9): حاوية تمرير أفقي بـscroll-snap أصلي — السحب تمرير
+     المتصفح نفسه؛ المحور العمودي يمرر الصفحة كالمعتاد */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: auto;
+}
+.m-info-peek .m-info-strip__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* مؤشر مجاورة خافت: بدون إخفاء أو تعتيم قوي — مجرد حدّ بصري هادئ
+   يفصل البطاقة النشطة (قيمة مشتقة من حدود info-card الحالية) */
+.m-info-peek .m-info-strip__slide[aria-hidden="true"] .m-info-card {
+  border-color: var(--micro-border-divider);
+}
+
+/* Peek يحتاج حيزًا فعليًا بعد خصم الجيران والفجوات. في الأعمدة
+   الأضيق من 280px نعيد البطاقة إلى العرض الكامل بدل ضغط محتواها. */
+@container (max-width: 280px) {
+  .m-info-peek .m-info-strip__slide {
+    flex-basis: 100cqw;
+  }
+
+  .m-info-peek .m-info-strip__track {
+    gap: 0;
+    padding-inline: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-info-peek .m-info-strip__track {
+    transition: none;
+  }
+}
