@@ -257,6 +257,18 @@
       "prove_exit": 0
     },
     {
+      "gate": "ds-registry",
+      "engine": "browser (chromium+webkit)",
+      "violation_fixture": "tools/ds-gates/fixtures/ds-registry/bad",
+      "clean_fixture": "tools/ds-gates/fixtures/ds-registry/clean",
+      "expected_failure_exit": 1,
+      "expected_success_exit": 0,
+      "failure_detected_on_violation": true,
+      "current_state_exit": 0,
+      "current_state_tail": "total: 3 ok, 0 failed",
+      "prove_exit": 0
+    },
+    {
       "gate": "ds-bidi",
       "engine": "browser (chromium+webkit)",
       "violation_fixture": "tools/ds-gates/fixtures/ds-bidi/bad",

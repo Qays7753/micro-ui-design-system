@@ -275,5 +275,13 @@
         "why": "lesson rule 55: currency-symbol icons are banned"
       }
     ]
+  },
+  "registry_exceptions": {
+    "_note": "unit 15 (lesson rule 76): catalog section ids whose kebab-case does not match the component folder name",
+    "entity": "EntityMark",
+    "hero": "HeroSurface",
+    "badge": "StatusBadge",
+    "money": "Money",
+    "controls": "AmountVisibilityToggle"
   }
 }
