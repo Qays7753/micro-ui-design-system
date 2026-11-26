@@ -23,7 +23,10 @@
   font-family: var(--mds-type-label-font);
   font-size: var(--mds-type-label-size);
   line-height: var(--mds-type-label-line);
-  white-space: nowrap;
+  /* No white-space lock: plain label text reflows ("كل مكوّن يعمل حتى 200%
+     بلا قص" — the batch text-scale rule); a nowrap lock turned the failed
+     state's sentence into the widest unbreakable box on its line and pushed
+     its bar past the viewport at font-scale 200%. */
 }
 
 /* State colors (5.2 tones): draft + failed ride waiting/problem, saved

@@ -15,7 +15,11 @@
   font-size: var(--mds-type-button-size);
   line-height: var(--mds-type-button-line);
   font-weight: var(--mds-type-button-weight);
-  white-space: nowrap;
+  /* No white-space lock: the label is one line at 100% because it fits, and
+     at font-scale 200% it breaks to two lines while min-height grows the
+     button — exactly the 23.20 Button row ("بخط 200% تنكسر لسطرين ويزيد
+     الارتفاع"). A nowrap lock here made the unbreakable label the widest
+     min-content on its line and pushed whole bars past the viewport. */
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
