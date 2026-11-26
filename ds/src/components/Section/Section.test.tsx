@@ -31,6 +31,23 @@ describe('Section (BRIEF 9.2, 23.24(16), owner decision 2026-11-25)', () => {
     expect(SectionStates).toContain('withCount');
   });
 
+  it('keeps the count a SEPARATE sibling the component decorates with nothing (rule 14: no brackets, no separator dot)', () => {
+    const { container } = render(
+      <Section label={TITLE} caption={3}>
+        <p>{BODY}</p>
+      </Section>,
+    );
+    const title = screen.getByRole('heading', { level: 2 });
+    const count = container.querySelector('.mds-section-count') as HTMLElement;
+    const text = count.textContent ?? '';
+    // separate element, outside the heading, verbatim value
+    expect(title.contains(count)).toBe(false);
+    expect(text).toBe('3');
+    // the component adds no punctuation of its own
+    expect(text.startsWith('(')).toBe(false);
+    expect(text.includes('·')).toBe(false);
+  });
+
   it('renders the see-all link with the forward icon in a 48 zone (23.24(16))', () => {
     const onSeeAll = vi.fn();
     const { container } = render(
