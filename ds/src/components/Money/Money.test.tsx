@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { AmountVisibilityProvider } from '../../lib/amount-visibility';
@@ -82,6 +84,23 @@ describe('Money (BRIEF 8)', () => {
     expect(container.querySelector('.mds-money-missing')?.textContent).toBe(moneyTexts.missingGlyph);
     expect(container.querySelector('.mds-money-value')).toBeNull();
     expect(container.textContent).not.toContain('0');
+  });
+
+  it('renders the missing glyph in the NUMBER typography, never a caption (rule 9 / owner decision)', () => {
+    const { container } = render(<Money value={null} />);
+    const missing = container.querySelector('.mds-money-missing') as HTMLElement;
+    // the glyph rides the amount line itself: no caption class anywhere on it
+    expect(missing.className).not.toContain('caption');
+    expect(missing.closest('.mds-type-caption')).toBeNull();
+    // and it sits in the same visual flow the value would occupy (the
+    // mds-money-visual line, sibling of where the bdi value renders)
+    expect(missing.parentElement?.classList.contains('mds-money-visual')).toBe(true);
+    expect(missing.parentElement?.querySelector('.mds-money-value')).toBeNull();
+  });
+
+  it('spaces the unit from the number with the amount-unit-gap token (rule 4)', () => {
+    const css = readFileSync(join(__dirname, 'Money.css'), 'utf8');
+    expect(css).toContain('var(--mds-layout-amount-unit-gap)');
   });
 
   it('renders the loading skeleton with aria-busy, never a zero (BRIEF 8, 23.17)', () => {
