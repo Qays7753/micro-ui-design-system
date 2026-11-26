@@ -1,0 +1,282 @@
+[
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 890,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "chromium-compose-360x780-100.png",
+  "engine": "chromium",
+  "view": "compose",
+  "width": 360,
+  "height": 780,
+  "scale": "100"
+ },
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 1042,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "chromium-compose-360x780-200.png",
+  "engine": "chromium",
+  "view": "compose",
+  "width": 360,
+  "height": 780,
+  "scale": "200"
+ },
+ {
+  "overflowX": false,
+  "docW": 320,
+  "viewW": 320,
+  "docH": 750,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "chromium-compose-320x640-100.png",
+  "engine": "chromium",
+  "view": "compose",
+  "width": 320,
+  "height": 640,
+  "scale": "100"
+ },
+ {
+  "overflowX": false,
+  "docW": 320,
+  "viewW": 320,
+  "docH": 954,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "chromium-compose-320x640-200.png",
+  "engine": "chromium",
+  "view": "compose",
+  "width": 320,
+  "height": 640,
+  "scale": "200"
+ },
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 890,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "webkit-compose-360x780-100.png",
+  "engine": "webkit",
+  "view": "compose",
+  "width": 360,
+  "height": 780,
+  "scale": "100"
+ },
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 1094,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "webkit-compose-360x780-200.png",
+  "engine": "webkit",
+  "view": "compose",
+  "width": 360,
+  "height": 780,
+  "scale": "200"
+ },
+ {
+  "overflowX": false,
+  "docW": 320,
+  "viewW": 320,
+  "docH": 750,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "webkit-compose-320x640-100.png",
+  "engine": "webkit",
+  "view": "compose",
+  "width": 320,
+  "height": 640,
+  "scale": "100"
+ },
+ {
+  "overflowX": false,
+  "docW": 320,
+  "viewW": 320,
+  "docH": 954,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic"
+  ],
+  "shot": "webkit-compose-320x640-200.png",
+  "engine": "webkit",
+  "view": "compose",
+  "width": 320,
+  "height": 640,
+  "scale": "200"
+ },
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 13277,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "chromium-catalog-360x780-100.png",
+  "engine": "chromium",
+  "view": "catalog",
+  "width": 360,
+  "height": 780,
+  "scale": "100"
+ },
+ {
+  "overflowX": true,
+  "docW": 462,
+  "viewW": 360,
+  "docH": 19061,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "chromium-catalog-360x780-200.png",
+  "engine": "chromium",
+  "view": "catalog",
+  "width": 360,
+  "height": 780,
+  "scale": "200"
+ },
+ {
+  "overflowX": true,
+  "docW": 336,
+  "viewW": 320,
+  "docH": 13415,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "chromium-catalog-320x640-100.png",
+  "engine": "chromium",
+  "view": "catalog",
+  "width": 320,
+  "height": 640,
+  "scale": "100"
+ },
+ {
+  "overflowX": true,
+  "docW": 462,
+  "viewW": 320,
+  "docH": 19733,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "chromium-catalog-320x640-200.png",
+  "engine": "chromium",
+  "view": "catalog",
+  "width": 320,
+  "height": 640,
+  "scale": "200"
+ },
+ {
+  "overflowX": false,
+  "docW": 360,
+  "viewW": 360,
+  "docH": 13313,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "webkit-catalog-360x780-100.png",
+  "engine": "webkit",
+  "view": "catalog",
+  "width": 360,
+  "height": 780,
+  "scale": "100"
+ },
+ {
+  "overflowX": true,
+  "docW": 464,
+  "viewW": 360,
+  "docH": 19070,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "webkit-catalog-360x780-200.png",
+  "engine": "webkit",
+  "view": "catalog",
+  "width": 360,
+  "height": 780,
+  "scale": "200"
+ },
+ {
+  "overflowX": true,
+  "docW": 336,
+  "viewW": 320,
+  "docH": 13416,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "webkit-catalog-320x640-100.png",
+  "engine": "webkit",
+  "view": "catalog",
+  "width": 320,
+  "height": 640,
+  "scale": "100"
+ },
+ {
+  "overflowX": true,
+  "docW": 464,
+  "viewW": 320,
+  "docH": 19742,
+  "clipped": [],
+  "fontsLoaded": [
+   "Rubik",
+   "IBM Plex Sans Arabic",
+   "MDS Fallback Text"
+  ],
+  "shot": "webkit-catalog-320x640-200.png",
+  "engine": "webkit",
+  "view": "catalog",
+  "width": 320,
+  "height": 640,
+  "scale": "200"
+ }
+]
