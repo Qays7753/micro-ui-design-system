@@ -1,0 +1,13 @@
+{
+  "indicator": "K3 (التعديل في مكان واحد يصل كل الاستخدامات)",
+  "method": "تعديل قيمة واحدة في tokens.json (color.canvas: ‎#E8ECEF → ‎#7A1F2B) → generate-tokens.mjs → بناء الحزمة → بناء المختبر → قراءة الخلفية المحسوبة للعرضين ثم تراجع كامل واستعادة البناء",
+  "measured": {
+    "catalog_view_background": "rgb(122, 31, 43)",
+    "compose_default_view_background": "rgb(122, 31, 43)",
+    "expected": "rgb(122, 31, 43)",
+    "untouched_control_hero_anchor_compose": "rgb(14, 62, 70)"
+  },
+  "verdict": "ناجح — قيمة رمز واحدة غيّرت النمط المحسوب في كلا عرضي المختبر ببناء واحد، والعنصر الضابط (لون مرساة البطل) لم يتأثر",
+  "reverted": true,
+  "date": "2026-11-26"
+}
