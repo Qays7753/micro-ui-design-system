@@ -30,6 +30,10 @@ export interface TextFieldProps
   state?: TextFieldState;
   /** Disabled look: disabled-bg fill and disabled-fg text (23.2). */
   disabled?: boolean;
+  /** Optional field: the word «اختياري» (caption type, text-secondary) after
+   *  the label — ONLY optional fields are marked, required ones never are
+   *  (lesson rule 67, one uniform shape). */
+  optional?: boolean;
   /** React 19 ref-as-prop on the input element. */
   ref?: Ref<HTMLInputElement>;
 }

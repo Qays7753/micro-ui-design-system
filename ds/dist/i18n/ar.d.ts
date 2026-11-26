@@ -396,6 +396,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "المبلغ";
     };
+    readonly 'field.optional': {
+        readonly kind: "badge";
+        readonly text: "اختياري";
+    };
     readonly 'placeholder.amount': {
         readonly kind: "placeholder";
         readonly text: "0.000";

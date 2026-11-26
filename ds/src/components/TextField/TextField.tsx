@@ -15,6 +15,7 @@
  * - The label names the input: htmlFor by `id`, aria-label otherwise.
  */
 import { ToneProblemIcon } from '../../icons';
+import { t } from '../../i18n/ar';
 import type { TextFieldProps } from './TextField.types';
 import './TextField.css';
 
@@ -26,6 +27,7 @@ export function TextField({
   placeholder,
   state = 'idle',
   disabled = false,
+  optional = false,
   className,
   id,
   style,
@@ -46,6 +48,10 @@ export function TextField({
     <span ref={ref} id={id} style={style} className={classes} {...rest}>
       <label className="mds-text-field-label" htmlFor={inputId}>
         {label}
+        {/* Rule 67: optional fields ALONE carry the mark, one uniform shape:
+            the dictionary word after the label in caption type. Required
+            fields are never marked. */}
+        {optional ? <span className="mds-text-field-optional">{t('field.optional')}</span> : null}
       </label>
       <input
         id={inputId}

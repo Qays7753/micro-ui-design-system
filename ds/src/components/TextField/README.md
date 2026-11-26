@@ -12,6 +12,7 @@
 | `placeholder` | نص | **للصيغة فقط** («07X XXX XXXX») بلون `text-secondary` — لا يقوم مقام التسمية |
 | `state` | `idle` · `error` | الخطأ: حد أحمر + نص الحل + أيقونة النغمة |
 | `disabled` | `true` / `false` | خلفية `disabled-bg` ونص `disabled-fg` |
+| `optional` | `true` / `false` | قاعدة الدروس 67: الحقل الاختياري **وحده** يُعلَّم بكلمة «اختياري» من القاموس بعد التسمية بنمط `caption` بلون `text-secondary`؛ الإلزامي لا يُعلَّم أبدًا |
 
 ## الشكل (9.3)
 

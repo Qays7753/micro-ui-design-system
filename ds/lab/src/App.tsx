@@ -473,6 +473,11 @@ export function App() {
           <div className="lab-row">
             <TextField id="field-hint" label={t('field.supplier')} caption={t('help.supplierName')} />
           </div>
+          {/* Rule 67 (lesson sweep): optional fields ALONE carry the «اختياري»
+              mark after the label, one uniform shape — required never marked. */}
+          <div className="lab-row">
+            <TextField id="field-optional" label={t('field.supplier')} optional />
+          </div>
           <div className="lab-row">
             <TextField id="field-error" label={t('field.supplier')} state="error" caption={t('error.phoneFormat')} />
           </div>

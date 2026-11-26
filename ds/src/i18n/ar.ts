@@ -158,6 +158,7 @@ export const ar = {
   'title.textField': { kind: 'title', text: 'حقل النص' },
   'field.supplier': { kind: 'badge', text: 'اسم المورد' },
   'field.amount': { kind: 'badge', text: 'المبلغ' },
+  'field.optional': { kind: 'badge', text: 'اختياري' },
   'placeholder.amount': { kind: 'placeholder', text: '0.000' },
   'help.supplierName': { kind: 'help', text: 'اكتب الاسم كما في السجل الرسمي' },
   'error.phoneFormat': { kind: 'error', text: 'اكتب الرقم كاملاً بالأرقام الغربية' },

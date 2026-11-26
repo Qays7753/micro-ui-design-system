@@ -18,6 +18,16 @@
   color: var(--mds-color-text-primary);
 }
 
+/* Rule 67: the optional mark rides the label row, one uniform shape —
+   caption type in text-secondary, one 4 gap after the label word. */
+.mds-text-field-optional {
+  margin-inline-start: var(--mds-space-4);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
 .mds-text-field-input {
   box-sizing: border-box;
   height: var(--mds-size-field);

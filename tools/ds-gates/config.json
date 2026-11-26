@@ -123,7 +123,8 @@
     "direction",
     "flow",
     "debt",
-    "placeholder"
+    "placeholder",
+    "optional"
   ],
   "banned_props_jsx": [
     "onLongTap",
@@ -148,7 +149,7 @@
     "backgroundColor",
     "textColor"
   ],
-  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. flow/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك) — flow renamed from direction per BRIEF-ADDENDUM-1.6 و-1 item 31; direction REMAINS the Metric/HeroSurface diff-line node (BRIEF 23.8). placeholder: TextField format hint (23.24(10)).",
+  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. flow/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك) — flow renamed from direction per BRIEF-ADDENDUM-1.6 و-1 item 31; direction REMAINS the Metric/HeroSurface diff-line node (BRIEF 23.8). placeholder: TextField format hint (23.24(10)). optional: TextField's optional-field mark (lesson rule 67: only optional fields carry «اختياري» after the label).",
   "copy": {
     "kinds": [
       "button",

@@ -51,4 +51,22 @@ describe('TextField (BRIEF 9.3, 23.24(10))', () => {
     const { container } = render(<TextField label={LABEL} data-ds-check="text-field" />);
     expect(container.querySelector('[data-ds-check="text-field"]')).not.toBeNull();
   });
+
+  it('marks ONLY the optional field with the dictionary word after the label in caption type (rule 67)', () => {
+    const { container } = render(<TextField label={LABEL} optional />);
+    const marks = container.querySelectorAll('.mds-text-field-optional');
+    expect(marks.length).toBe(1);
+    expect(marks[0].textContent).toBe(ar['field.optional'].text);
+  });
+
+  it('never marks the required field (rule 67: no mark without the optional prop)', () => {
+    const { container } = render(<TextField label={LABEL} />);
+    expect(container.querySelector('.mds-text-field-optional')).toBeNull();
+    expect(container.textContent).not.toContain(ar['field.optional'].text);
+  });
+
+  it('starts EMPTY when the app passes no value (rule 15: amount fields open blank)', () => {
+    render(<TextField label={LABEL} />);
+    expect((screen.getByLabelText(LABEL) as HTMLInputElement).value).toBe('');
+  });
 });

@@ -607,6 +607,7 @@ const v = {
   "title.textField": { kind: "title", text: "حقل النص" },
   "field.supplier": { kind: "badge", text: "اسم المورد" },
   "field.amount": { kind: "badge", text: "المبلغ" },
+  "field.optional": { kind: "badge", text: "اختياري" },
   "placeholder.amount": { kind: "placeholder", text: "0.000" },
   "help.supplierName": { kind: "help", text: "اكتب الاسم كما في السجل الرسمي" },
   "error.phoneFormat": { kind: "error", text: "اكتب الرقم كاملاً بالأرقام الغربية" },
@@ -2216,32 +2217,36 @@ function Xn({
   placeholder: i,
   state: r = "idle",
   disabled: o = !1,
-  className: d,
-  id: l,
-  style: c,
-  ref: u,
-  ...m
+  optional: d = !1,
+  className: l,
+  id: c,
+  style: u,
+  ref: m,
+  ...g
 }) {
-  const g = [
+  const f = [
     "mds-text-field",
     r === "error" ? "mds-text-field--error" : "",
     o ? "mds-text-field--disabled" : "",
-    d
-  ].filter(Boolean).join(" "), f = l ? `${l}-input` : void 0;
-  return /* @__PURE__ */ h("span", { ref: u, id: l, style: c, className: g, ...m, children: [
-    /* @__PURE__ */ a("label", { className: "mds-text-field-label", htmlFor: f, children: e }),
+    l
+  ].filter(Boolean).join(" "), p = c ? `${c}-input` : void 0;
+  return /* @__PURE__ */ h("span", { ref: m, id: c, style: u, className: f, ...g, children: [
+    /* @__PURE__ */ h("label", { className: "mds-text-field-label", htmlFor: p, children: [
+      e,
+      d ? /* @__PURE__ */ a("span", { className: "mds-text-field-optional", children: S("field.optional") }) : null
+    ] }),
     /* @__PURE__ */ a(
       "input",
       {
-        id: f,
+        id: p,
         className: "mds-text-field-input",
         type: "text",
         value: n,
         disabled: o,
         placeholder: i,
-        "aria-label": l ? void 0 : e,
+        "aria-label": c ? void 0 : e,
         "aria-invalid": r === "error" || void 0,
-        onChange: (p) => s?.(p.target.value)
+        onChange: (b) => s?.(b.target.value)
       }
     ),
     t ? /* @__PURE__ */ h("span", { className: r === "error" ? "mds-text-field-caption mds-text-field-caption--error" : "mds-text-field-caption", children: [
