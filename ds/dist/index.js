@@ -808,7 +808,7 @@ function pe(e, t) {
       aria: n.hidden
     };
   }
-  const { negative: i, fils: r } = he(e), o = ge(r), d = t.debt === "forYou" ? n.forYou : t.debt === "againstYou" ? n.againstYou : "", l = d ? "" : t.direction === "in" ? me : t.direction === "out" ? T : t.direction === "transfer" ? "" : i ? T : "", c = `${l}${o.int}${o.frac}`, m = d ? `${d} ${c} ${n.unit}` : `${c} ${n.unit}`;
+  const { negative: i, fils: r } = he(e), o = ge(r), d = t.debt === "forYou" ? n.forYou : t.debt === "againstYou" ? n.againstYou : "", l = d ? "" : t.flow === "in" ? me : t.flow === "out" ? T : t.flow === "transfer" ? "" : i ? T : "", c = `${l}${o.int}${o.frac}`, m = d ? `${d} ${c} ${n.unit}` : `${c} ${n.unit}`;
   let u;
   return d ? u = `${d} ${$(r, n)}` : l === T ? u = `${n.minus} ${$(r, n)}` : u = $(r, n), {
     missing: !1,
@@ -1955,7 +1955,7 @@ function An({
 const Nn = ["nav-delivery", "back", "forward", "transfer"];
 function Bn({
   value: e,
-  direction: t,
+  flow: t,
   debt: n,
   size: s = "md",
   state: i = "idle",
@@ -1966,7 +1966,7 @@ function Bn({
   ref: c,
   ...m
 }) {
-  const { hidden: u } = j(), g = u && e !== null && e !== void 0, f = pe(e, { direction: t, debt: n, hidden: g, texts: V }), p = ["mds-money", `mds-money--${s}`, s === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
+  const { hidden: u } = j(), g = u && e !== null && e !== void 0, f = pe(e, { flow: t, debt: n, hidden: g, texts: V }), p = ["mds-money", `mds-money--${s}`, s === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
   return i === "loading" ? /* @__PURE__ */ a("span", { ref: c, id: d, style: l, className: p, "aria-busy": "true", ...m, children: /* @__PURE__ */ a("span", { className: "mds-money-skeleton", "aria-hidden": "true" }) }) : /* @__PURE__ */ h("span", { ref: c, id: d, style: l, className: p, ...m, children: [
     /* @__PURE__ */ h("span", { className: "mds-money-visual", "aria-hidden": "true", children: [
       f.debtWord ? /* @__PURE__ */ a("span", { className: "mds-money-debt", children: f.debtWord }) : null,

@@ -5,7 +5,7 @@
 ## متى يُستخدم
 
 - أي مبلغ: رصيد، حركة، دين، سعر، مجموع.
-- بصيغه الأربع من الموجز 9.3: **عادي**، **بإشارة** (`direction`)، **لك/عليك** (`debt`)، **مخفي** (من السياق العام، لا كخاصية).
+- بصيغه الأربع من الموجز 9.3: **عادي**، **بإشارة** (`flow`)، **لك/عليك** (`debt`)، **مخفي** (من السياق العام، لا كخاصية).
 
 ## متى لا يُستخدم
 
@@ -18,7 +18,7 @@
 | الخاصية | القيم | ملاحظة |
 |---|---|---|
 | `value` | نص برقم عشري أو رقم | `-35` يعطي «−35 د.أ»؛ `null` يعطي «—» |
-| `direction` | `in` · `out` · `transfer` | داخل «+»، خارج «−» (U+2212)، تحويل بلا إشارة |
+| `flow` | `in` · `out` · `transfer` | داخل «+»، خارج «−» (U+2212)، تحويل بلا إشارة |
 | `debt` | `forYou` · `againstYou` | «لك 45 د.أ» / «عليك 20 د.أ» بلا إشارة |
 | `size` | `md` (افتراضي) · `lg` | md = amount-row 16/24/600، lg = number-lg 28/36/500 مع تتبع الأرقام |
 | `state` | `idle` · `loading` | loading = هيكل رمادي + `aria-busy` |
@@ -40,7 +40,7 @@ import { AmountVisibilityProvider, Money } from '@micro/ds';
   <Money value="12450.125" />
   <Money value="-35" />
   <Money value={45} debt="forYou" />
-  <Money value="1280" direction="transfer" />
+  <Money value="1280" flow="transfer" />
 </AmountVisibilityProvider>
 ```
 

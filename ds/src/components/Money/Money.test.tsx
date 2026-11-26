@@ -32,9 +32,9 @@ describe('Money (BRIEF 8)', () => {
   });
 
   it('signs in with + and transfers without a sign', () => {
-    const incoming = render(<Money value="35" direction="in" />);
+    const incoming = render(<Money value="35" flow="in" />);
     expect(digitsOf(incoming.container)).toBe('+35');
-    const moved = render(<Money value="1280" direction="transfer" />);
+    const moved = render(<Money value="1280" flow="transfer" />);
     expect(digitsOf(moved.container)).toBe('1,280');
   });
 
@@ -47,7 +47,7 @@ describe('Money (BRIEF 8)', () => {
     // sign can never drift to the number's far side («35−» is banned).
     expect(integer.textContent).toBe('−35');
     expect(integer.textContent?.indexOf('−')).toBe(0);
-    const incoming = render(<Money value="2250" direction="in" />);
+    const incoming = render(<Money value="2250" flow="in" />);
     const int2 = incoming.container.querySelector('.mds-money-integer')!;
     expect(int2.textContent).toBe('+2,250');
     expect(int2.textContent?.indexOf('+')).toBe(0);

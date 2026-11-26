@@ -6,7 +6,7 @@ export {
   formatMoney,
   type DebtSide,
   type MoneyAriaTexts,
-  type MoneyDirection,
+  type MoneyFlow,
   type MoneyFormatOptions,
   type MoneyInput,
   type MoneyResult,

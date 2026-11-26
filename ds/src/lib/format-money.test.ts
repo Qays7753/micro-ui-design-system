@@ -20,22 +20,22 @@ describe('formatMoney', () => {
     expect(formatMoney('12450.100', { texts: moneyTexts }).frac).toBe('.100');
   });
 
-  it('applies direction signs: in +, out − (U+2212), transfer none', () => {
-    const inResult = formatMoney(45, { direction: 'in', texts: moneyTexts });
-    const outResult = formatMoney(45, { direction: 'out', texts: moneyTexts });
-    const transfer = formatMoney(45, { direction: 'transfer', texts: moneyTexts });
+  it('applies flow signs: in +, out − (U+2212), transfer none', () => {
+    const inResult = formatMoney(45, { flow: 'in', texts: moneyTexts });
+    const outResult = formatMoney(45, { flow: 'out', texts: moneyTexts });
+    const transfer = formatMoney(45, { flow: 'transfer', texts: moneyTexts });
     expect(inResult.display).toBe('+45 د.أ');
     expect(outResult.display).toBe('−45 د.أ');
     expect(transfer.display).toBe('45 د.أ');
     expect(outResult.sign.charCodeAt(0)).toBe(0x2212); // the real minus
   });
 
-  it('renders negative values negative without a direction', () => {
+  it('renders negative values negative without a flow', () => {
     const result = formatMoney('-35', { texts: moneyTexts });
     expect(result.display).toBe('−35 د.أ');
     expect(result.aria).toBe('سالب 35 دينار');
     // Direction wins over the raw sign: out + (-35) is still −35, not +.
-    expect(formatMoney('-35', { direction: 'out', texts: moneyTexts }).display).toBe('−35 د.أ');
+    expect(formatMoney('-35', { flow: 'out', texts: moneyTexts }).display).toBe('−35 د.أ');
   });
 
   it('formats debts as لك / عليك with no sign', () => {
@@ -48,7 +48,7 @@ describe('formatMoney', () => {
   });
 
   it('hides amounts as four bullets with unit, no sign, no fils', () => {
-    const result = formatMoney('12450.125', { hidden: true, direction: 'in', texts: moneyTexts });
+    const result = formatMoney('12450.125', { hidden: true, flow: 'in', texts: moneyTexts });
     expect(result.display).toBe('•••• د.أ');
     expect(result.int).toBe('');
     expect(result.frac).toBe('');
@@ -85,8 +85,8 @@ describe('formatMoney', () => {
 
   it('is pure: identical inputs give identical results', () => {
     const texts: MoneyAriaTexts = moneyTexts;
-    const a = formatMoney('12.500', { direction: 'out', texts });
-    const b = formatMoney('12.500', { direction: 'out', texts });
+    const a = formatMoney('12.500', { flow: 'out', texts });
+    const b = formatMoney('12.500', { flow: 'out', texts });
     expect(a).toEqual(b);
   });
 });

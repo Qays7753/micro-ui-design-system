@@ -120,6 +120,7 @@
     "key",
     "testID",
     "direction",
+    "flow",
     "debt",
     "placeholder"
   ],
@@ -146,7 +147,7 @@
     "backgroundColor",
     "textColor"
   ],
-  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. direction/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك), added with the S3 Money unit. placeholder: TextField format hint (23.24(10)), added with the S4 TextField unit.",
+  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. flow/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك) — flow renamed from direction per BRIEF-ADDENDUM-1.6 و-1 item 31; direction REMAINS the Metric/HeroSurface diff-line node (BRIEF 23.8). placeholder: TextField format hint (23.24(10)).",
   "copy": {
     "kinds": [
       "button",

@@ -6,7 +6,7 @@
  * Rules implemented (BRIEF 8):
  * - Western digits only; thousands separator ',' and decimal '.'.
  * - Signs: in -> '+', out -> '−' (U+2212, the real minus), transfer -> none.
- *   Without a direction, a negative value renders '−'.
+ *   Without a flow, a negative value renders '−'.
  * - Fils: exactly 3 decimals when non-zero, none when zero
  *   («12.500 د.أ» and «2.250 د.أ», but «150 د.أ», never «150.000 د.أ»).
  * - Unit 'د.أ' after the number; the component draws the 4px gap from
@@ -18,8 +18,8 @@
  * - Screen-reader text in full words: «سالب 35 دينار», «12 دينار و500 فلس»,
  *   «لك 45 دينار», «المبلغ مخفي».
  */
-/** Movement direction — decides the sign (BRIEF 8). */
-export type MoneyDirection = 'in' | 'out' | 'transfer';
+/** Money flow — decides the sign (BRIEF 8; prop renamed from direction per و-1 item 31). */
+export type MoneyFlow = 'in' | 'out' | 'transfer';
 /** Debt side (BRIEF 8: لك / عليك). */
 export type DebtSide = 'forYou' | 'againstYou';
 /** Every word formatMoney needs; bound to ar.ts `moneyTexts` by callers. */
@@ -50,10 +50,10 @@ export interface MoneyAriaTexts {
 export type MoneyInput = string | number | null | undefined;
 export interface MoneyFormatOptions {
     /**
-     * Movement direction. When given, the sign follows it and the magnitude is
+     * Money flow (و-1 item 31, renamed from direction). When given, the sign follows it and the magnitude is
      * used ('out' + 35 -> '−35'). When omitted, the value's own sign is used.
      */
-    readonly direction?: MoneyDirection;
+    readonly flow?: MoneyFlow;
     /** Renders «لك …» / «عليك …» (no +/− sign). */
     readonly debt?: DebtSide;
     /** Hidden amounts: bullets + unit, no sign, no fils (BRIEF 23.22). */

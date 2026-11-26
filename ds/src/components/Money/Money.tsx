@@ -22,7 +22,7 @@ import './Money.css';
 
 export function Money({
   value,
-  direction,
+  flow,
   debt,
   size = 'md',
   state = 'idle',
@@ -35,7 +35,7 @@ export function Money({
 }: MoneyProps) {
   const { hidden: contextHidden } = useAmountVisibility();
   const hidden = contextHidden && value !== null && value !== undefined;
-  const result = formatMoney(value, { direction, debt, hidden, texts: moneyTexts });
+  const result = formatMoney(value, { flow, debt, hidden, texts: moneyTexts });
   const classes = ['mds-money', `mds-money--${size}`, size === 'lg' ? 'mds-number-lg' : '', disabled ? 'mds-money--disabled' : '', className]
     .filter(Boolean)
     .join(' ');

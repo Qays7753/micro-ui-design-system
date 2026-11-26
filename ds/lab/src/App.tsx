@@ -284,15 +284,15 @@ export function App() {
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.in')}</span>
-            <span data-ds-check="bidi"><Money value={amounts[0]} direction="in" /></span>
+            <span data-ds-check="bidi"><Money value={amounts[0]} flow="in" /></span>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.out')}</span>
-            <span data-ds-check="bidi"><Money value={amounts[7]} direction="out" /></span>
+            <span data-ds-check="bidi"><Money value={amounts[7]} flow="out" /></span>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('movement.transfer')}</span>
-            <Money value={amounts[4]} direction="transfer" />
+            <Money value={amounts[4]} flow="transfer" />
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.debt')}</span>
