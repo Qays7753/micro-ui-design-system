@@ -27,7 +27,6 @@
   --mds-color-brand-selected-bg: #E6EFF1;
   --mds-color-brand-selected-pressed: #D5E4E7;
   --mds-color-brand-signal: #D97757;
-  --mds-color-brand-signal-text: #A9502F;
   --mds-color-on-anchor: #FFFFFF;
   --mds-color-on-anchor-secondary: #A8C4C9;
   --mds-color-status-done-fg: #166B3A;
@@ -60,8 +59,15 @@
   --mds-role-dot-attention: var(--mds-color-status-waiting-fg);
   --mds-role-chart-zero-line: var(--mds-color-border-field);
   --mds-role-chart-series: var(--mds-color-brand-data);
-  --mds-role-chart-highlight: var(--mds-color-brand-anchor);
-  --mds-role-draft-edge: var(--mds-color-brand-data);
+  --mds-role-chart-highlight: var(--mds-color-brand-signal);
+  --mds-role-chart-highlight-negative: var(--mds-color-brand-anchor);
+  --mds-role-chart-scrub: var(--mds-color-brand-anchor);
+  --mds-role-draft-edge: var(--mds-color-brand-signal);
+  --mds-role-today-ring: var(--mds-color-brand-signal);
+  --mds-role-now-line: var(--mds-color-brand-signal);
+  --mds-role-sparkline-endpoint: var(--mds-color-brand-signal);
+  --mds-role-hero-sparkline: var(--mds-color-brand-signal);
+  --mds-role-voice-wave: var(--mds-color-brand-signal);
   --mds-role-placeholder: var(--mds-color-text-secondary);
   --mds-role-theme-color: var(--mds-color-canvas);
 
@@ -196,6 +202,10 @@
   --mds-layout-amount-unit-gap: 4px;
   --mds-layout-chip-padding: 16px;
   --mds-layout-chip-gap: 8px;
+  --mds-layout-touch-gap-min: 8px;
+  --mds-layout-month-grid-margin: 0px;
+  --mds-layout-action-bar-padding-block: 12px;
+  --mds-layout-action-bar-gap: 8px;
   --mds-layout-segmented-padding: 4px;
   --mds-layout-empty-state-gap: 16px;
   --mds-layout-empty-state-content-max: 280px;
@@ -228,6 +238,7 @@
   --mds-border-field-focus-halo: 4px;
   --mds-border-underline: 1px;
   --mds-border-underline-offset: 3px;
+  --mds-border-signal-line: 2px;
 
   /* Elevations (BRIEF 6) — only floating layers get a shadow. */
   --mds-elevation-surface: none;
@@ -260,8 +271,9 @@
   --mds-size-segment-min-width: 72px;
   --mds-size-context-bar: 56px;
   --mds-size-tab-bar: 64px;
-  --mds-size-row-2line: 72px;
-  --mds-size-row-1line: 56px;
+  --mds-size-row-with-mark: 72px;
+  --mds-size-row-plain: 56px;
+  --mds-size-dot-signal: 6px;
   --mds-size-row-text-min-width: 96px;
   --mds-size-badge: 24px;
   --mds-size-badge-max-width: 160px;
@@ -389,16 +401,8 @@
   --mds-quality-max-badges-per-screen: 6;
   --mds-quality-max-overview-items: 5;
   --mds-quality-max-tile-facts: 2;
-
-  /* Surface paddings (BRIEF 23.1/23.8): 16/20 on phone, 20/24 on
-     tablet. The switch lives here, with the breakpoint tokens, because
-     @media cannot read custom properties; components consume the
-     abstracted vars. */
-  --mds-layout-hero-padding: var(--mds-layout-hero-padding-phone);
-}
-
-@media (min-width: 744px) {
-  :root {
-    --mds-layout-hero-padding: var(--mds-layout-hero-padding-tablet);
-  }
+  --mds-quality-max-signal-per-screen: 3;
+  --mds-quality-max-signal-per-component: 1;
+  --mds-quality-max-hub-sections: 6;
+  --mds-quality-max-text-lines: 2;
 }

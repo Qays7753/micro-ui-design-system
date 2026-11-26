@@ -21,7 +21,6 @@ const se = {
     "brand-selected-bg": "#E6EFF1",
     "brand-selected-pressed": "#D5E4E7",
     "brand-signal": "#D97757",
-    "brand-signal-text": "#A9502F",
     "on-anchor": "#FFFFFF",
     "on-anchor-secondary": "#A8C4C9",
     "status-done-fg": "#166B3A",
@@ -54,8 +53,15 @@ const se = {
     "dot-attention": "status-waiting-fg",
     "chart-zero-line": "border-field",
     "chart-series": "brand-data",
-    "chart-highlight": "brand-anchor",
-    "draft-edge": "brand-data",
+    "chart-highlight": "brand-signal",
+    "chart-highlight-negative": "brand-anchor",
+    "chart-scrub": "brand-anchor",
+    "draft-edge": "brand-signal",
+    "today-ring": "brand-signal",
+    "now-line": "brand-signal",
+    "sparkline-endpoint": "brand-signal",
+    "hero-sparkline": "brand-signal",
+    "voice-wave": "brand-signal",
     placeholder: "text-secondary",
     "theme-color": "canvas"
   },
@@ -230,6 +236,10 @@ const se = {
     "amount-unit-gap": 4,
     "chip-padding": 16,
     "chip-gap": 8,
+    "touch-gap-min": 8,
+    "month-grid-margin": 0,
+    "action-bar-padding-block": 12,
+    "action-bar-gap": 8,
     "segmented-padding": 4,
     "empty-state-gap": 16,
     "empty-state-content-max": 280,
@@ -261,7 +271,8 @@ const se = {
     "focus-ring-offset": 2,
     "field-focus-halo": 4,
     underline: 1,
-    "underline-offset": 3
+    "underline-offset": 3,
+    "signal-line": 2
   },
   elevation: {
     surface: "none",
@@ -294,8 +305,9 @@ const se = {
     "segment-min-width": 72,
     "context-bar": 56,
     "tab-bar": 64,
-    "row-2line": 72,
-    "row-1line": 56,
+    "row-with-mark": 72,
+    "row-plain": 56,
+    "dot-signal": 6,
     "row-text-min-width": 96,
     badge: 24,
     "badge-max-width": 160,
@@ -476,7 +488,11 @@ const se = {
     "text-scale-max": 2,
     "max-badges-per-screen": 6,
     "max-overview-items": 5,
-    "max-tile-facts": 2
+    "max-tile-facts": 2,
+    "max-signal-per-screen": 3,
+    "max-signal-per-component": 1,
+    "max-hub-sections": 6,
+    "max-text-lines": 2
   }
 };
 function ie(e) {

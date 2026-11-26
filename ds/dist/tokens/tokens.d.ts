@@ -23,7 +23,6 @@ export declare const tokens: {
         readonly "brand-selected-bg": "#E6EFF1";
         readonly "brand-selected-pressed": "#D5E4E7";
         readonly "brand-signal": "#D97757";
-        readonly "brand-signal-text": "#A9502F";
         readonly "on-anchor": "#FFFFFF";
         readonly "on-anchor-secondary": "#A8C4C9";
         readonly "status-done-fg": "#166B3A";
@@ -56,8 +55,15 @@ export declare const tokens: {
         readonly "dot-attention": "status-waiting-fg";
         readonly "chart-zero-line": "border-field";
         readonly "chart-series": "brand-data";
-        readonly "chart-highlight": "brand-anchor";
-        readonly "draft-edge": "brand-data";
+        readonly "chart-highlight": "brand-signal";
+        readonly "chart-highlight-negative": "brand-anchor";
+        readonly "chart-scrub": "brand-anchor";
+        readonly "draft-edge": "brand-signal";
+        readonly "today-ring": "brand-signal";
+        readonly "now-line": "brand-signal";
+        readonly "sparkline-endpoint": "brand-signal";
+        readonly "hero-sparkline": "brand-signal";
+        readonly "voice-wave": "brand-signal";
         readonly placeholder: "text-secondary";
         readonly "theme-color": "canvas";
     };
@@ -212,6 +218,10 @@ export declare const tokens: {
         readonly "amount-unit-gap": 4;
         readonly "chip-padding": 16;
         readonly "chip-gap": 8;
+        readonly "touch-gap-min": 8;
+        readonly "month-grid-margin": 0;
+        readonly "action-bar-padding-block": 12;
+        readonly "action-bar-gap": 8;
         readonly "segmented-padding": 4;
         readonly "empty-state-gap": 16;
         readonly "empty-state-content-max": 280;
@@ -244,6 +254,7 @@ export declare const tokens: {
         readonly "field-focus-halo": 4;
         readonly underline: 1;
         readonly "underline-offset": 3;
+        readonly "signal-line": 2;
     };
     readonly elevation: {
         readonly surface: "none";
@@ -276,8 +287,9 @@ export declare const tokens: {
         readonly "segment-min-width": 72;
         readonly "context-bar": 56;
         readonly "tab-bar": 64;
-        readonly "row-2line": 72;
-        readonly "row-1line": 56;
+        readonly "row-with-mark": 72;
+        readonly "row-plain": 56;
+        readonly "dot-signal": 6;
         readonly "row-text-min-width": 96;
         readonly badge: 24;
         readonly "badge-max-width": 160;
@@ -429,6 +441,10 @@ export declare const tokens: {
         readonly "max-badges-per-screen": 6;
         readonly "max-overview-items": 5;
         readonly "max-tile-facts": 2;
+        readonly "max-signal-per-screen": 3;
+        readonly "max-signal-per-component": 1;
+        readonly "max-hub-sections": 6;
+        readonly "max-text-lines": 2;
     };
 };
 export type Tokens = typeof tokens;

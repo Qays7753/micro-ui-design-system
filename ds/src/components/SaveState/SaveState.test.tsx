@@ -63,6 +63,10 @@ describe('SaveState (BRIEF 9.4, 656, 23.17)', () => {
   it('fits its content and never breaks (1347)', () => {
     const css = readFileSync(join(__dirname, 'SaveState.css'), 'utf8');
     expect(css).toContain('display: inline-flex');
-    expect(css).toContain('white-space: nowrap');
+    // 140b441 (S12/2, font-200% rejection 2) removed the nowrap lock: the
+    // plain sentence reflows under the text-scale rule («كل مكوّن يعمل حتى
+    // 200% بلا قص»). The stale toContain assertion here was left behind by
+    // that commit — flipped to the protected absence.
+    expect(css).not.toContain('white-space: nowrap');
   });
 });
