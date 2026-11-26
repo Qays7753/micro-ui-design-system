@@ -1,6 +1,6 @@
 /*
- * HeroSurface.css — BRIEF 1.5 + 23.8, exactly as written (owner decision
- * 2026-11-25: no chart line, no addition). Every value is a token
+ * HeroSurface.css — BRIEF 1.5 + 23.8, with the ONE addition addendum 1.6
+ * allows (the optional small line, 23.25). Every value is a token
  * reference; no raw hex/px/ms in this file (ds-raw-values).
  */
 
@@ -9,11 +9,22 @@
   display: flex;
   flex-direction: column;
   min-height: var(--mds-size-hero-min-height);
-  padding: var(--mds-layout-hero-padding);
+  /* 23.8: حشوة 20 (24 على التابلت). S5 wrote an undefined --mds-layout-hero-padding
+     (the tokens are -phone/-tablet) so the padding silently computed to 0 —
+     caught in the unit-8 visual look; the real tokens ride now. */
+  padding: var(--mds-layout-hero-padding-phone);
   background-color: var(--mds-color-brand-anchor);
   /* 23.8: استدارة 24 متماثلة (radius.lg on all four corners). */
   border-radius: var(--mds-radius-lg);
   color: var(--mds-color-on-anchor);
+}
+
+/* Tablet: padding 24 (23.8; breakpoint.tablet-min = 744 at the 16px root
+   = 46.5rem — the same pattern as Surface). */
+@media (min-width: 46.5rem) {
+  .mds-hero-surface {
+    padding: var(--mds-layout-hero-padding-tablet);
+  }
 }
 
 /* 1. Label line: 14/20/500 on-anchor-secondary with the toggle at the
@@ -36,6 +47,24 @@
 /* 2. 4 after the label line (23.8 item 2). */
 .mds-hero-amount {
   margin: var(--mds-space-4) 0 0;
+}
+
+/* The visual amount swaps shown/hidden with the quick cross-fade
+   (BRIEF 23.22); the key remount on every swap replays the entry fade. */
+.mds-hero-visual {
+  display: inline-flex;
+  align-items: baseline;
+  animation: mds-hero-swap var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+@keyframes mds-hero-swap {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* 3. The value: Rubik 40/48/500 white, tabular digits, −0.01em on the
@@ -78,6 +107,12 @@
   color: var(--mds-color-on-anchor-secondary);
 }
 
+/* The hidden «••••» / missing «—» glyph: inherits the value's quartet and
+   color (23.22: the bullets sit in the value's own typography). */
+.mds-hero-value-glyph {
+  color: inherit;
+}
+
 /* 5. The diff line: arrow 14 + text 13/20/600 on-anchor-secondary — 8
    after the amount (23.8 items 4-5). No green, no red inside the hero:
    direction is the arrow and the word only. */
@@ -97,6 +132,40 @@
   width: var(--mds-size-icon-14);
   height: var(--mds-size-icon-14);
   color: var(--mds-color-on-anchor-secondary);
+}
+
+/* 5½. The optional small line (23.25, addendum 1.6 أ-ج): 12 under the diff
+   line, height sparkline-height 24; stroke signal-line in hero-sparkline
+   with a dot-signal endpoint — the line and its dot are ONE terracotta use
+   (و-2 item 2). With hidden amounts the slot stays, empty (يبقى بلا قيم). */
+.mds-hero-sparkline {
+  display: block;
+  margin-block-start: var(--mds-space-12);
+  height: var(--mds-size-sparkline-height);
+}
+
+.mds-hero-sparkline svg {
+  display: block;
+  overflow: visible;
+}
+
+.mds-hero-sparkline-line {
+  fill: none;
+  stroke: var(--mds-role-hero-sparkline);
+  stroke-width: var(--mds-border-signal-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mds-hero-sparkline-dot {
+  fill: var(--mds-role-hero-sparkline);
+}
+
+/* RTL (the system's first direction): the series mirrors so the LATEST
+   value — the endpoint dot — sits at the reading end; time flows with the
+   reading direction. Geometric mirror only, the dot stays a circle. */
+:root[dir='rtl'] .mds-hero-sparkline svg {
+  transform: scaleX(-1);
 }
 
 /* 7. The source link: 13/20/600 white, underline 1px offset 3 — 12 after
@@ -147,6 +216,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mds-hero-visual {
+    animation: none;
+  }
+
   .mds-hero-source {
     transition: none;
   }

@@ -661,7 +661,7 @@ export function App() {
           </div>
         </section>
 
-        {/* ---- HeroSurface (BRIEF 1.5 + 23.8): the screen's single hero ---- */}
+        {/* ---- HeroSurface (BRIEF 1.5 + 23.8 + 23.25): the screen's single hero ---- */}
         <section className="lab-section" id="hero">
           <h2 className="lab-title">{t('title.hero')}</h2>
           <div className="lab-row lab-row--full" data-ds-check="bidi">
@@ -673,12 +673,31 @@ export function App() {
               direction={
                 <>
                   <DeltaUpIcon />
-                  <span>{t('metric.deltaHigher', { percent: '12%' })}</span>
+                  {/* 23.22: hidden amounts keep the arrow and the word, no ratio */}
+                  <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
                 </>
               }
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
               onDismiss={() => {}}
               data-ds-check="hero"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.withSparkline')}</span>
+            <HeroSurface
+              label={t('nav.finance')}
+              value="1,245.750"
+              trailing={t('money.unit')}
+              draft={[9.1, 8.4, 9.6, 8.8, 10.1, 9.4, 11.2]}
+              direction={
+                <>
+                  <DeltaUpIcon />
+                  {/* 23.22: hidden amounts keep the arrow and the word, no ratio */}
+                  <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
+                </>
+              }
+              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              onDismiss={() => {}}
             />
           </div>
           <div className="lab-row lab-row--full">

@@ -11,8 +11,9 @@
  * green/red inside the hero); 12; the source link 13/20/600 white with a
  * 1px underline offset 3. Height by content, min 152; a number that does
  * not fit drops to number-lg 28/36 in ONE step. Banned: ornaments,
- * watermarks, gradients, background shapes, a chart line, any addition
- * (owner decision 2026-11-25). Free design-value props banned (23.18).
+ * watermarks, gradients, background shapes, any addition — the ONE
+ * exception since addendum 1.6 (أ-ج / 23.21): the optional small line
+ * (23.25). Free design-value props banned (23.18).
  */
 import type { ReactNode, Ref } from 'react';
 export interface HeroSurfaceProps {
@@ -20,13 +21,24 @@ export interface HeroSurfaceProps {
     label: string;
     /** The main value; rendered as «1,245» white + «.750» secondary when it
      *  carries cents. `undefined` renders «—» in the SAME display-hero
-     *  typography (owner decision 2026-11-25). */
+     *  typography (owner decision 2026-11-25). Hidden amounts render
+     *  «••••» + the unit (BRIEF 23.22 [مؤكد]). */
     value?: string;
-    /** The unit («د.أ») shown beside the number; omit for unitless values. */
+    /** The unit («د.أ») shown beside the number; omitted for unitless values.
+     *  Stays with the hidden bullets (23.22), drops for the missing «—»
+     *  (و-2 item 9: «—» وحدها بلا وحدة). */
     trailing?: string;
     /** The diff line WITHOUT an invented ratio: arrow 14 + text 13/20/600.
-     *  Omitted entirely for numbers without a comparison (23.8). */
+     *  Omitted entirely for numbers without a comparison (23.8). With hidden
+     *  amounts the app passes the no-ratio wording (23.22: arrow + word only). */
     direction?: ReactNode;
+    /** The optional hero sparkline (23.25 «خط السطح البطل», addendum 1.6 أ-ج):
+     *  the recent series, drawn as ONE line of height sparkline-height 24,
+     *  stroke signal-line in hero-sparkline with a dot-signal endpoint —
+     *  the line and its dot are ONE terracotta use (و-2 item 2) — 12 under
+     *  the diff line, one line max. With hidden amounts the line STAYS but
+     *  carries no values (23.22). */
+    draft?: readonly number[];
     /** The source link line («من 32 حركة») 13/20/600 white, underline 1px
      *  offset 3. */
     debt?: string;

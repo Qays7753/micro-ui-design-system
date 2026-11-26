@@ -216,6 +216,7 @@ export const ar = {
   'state.sending': { kind: 'badge', text: 'يُرسل' },
   'state.fiveTabs': { kind: 'badge', text: 'خمسة تبويبات' },
   'state.withCents': { kind: 'badge', text: 'مع فلوس' },
+  'state.withSparkline': { kind: 'badge', text: 'بخط صغير' },
   'state.longNumber': { kind: 'badge', text: 'رقم طويل' },
   'state.multiSelect': { kind: 'badge', text: 'تحديد متعدد' },
   'state.scrollRow': { kind: 'badge', text: 'قابل للتمرير' },

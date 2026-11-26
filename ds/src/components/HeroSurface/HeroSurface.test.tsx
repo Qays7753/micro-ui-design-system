@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { render, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ar } from '../../i18n/ar';
+import { ar, moneyTexts } from '../../i18n/ar';
+import { AmountVisibilityProvider } from '../../lib/amount-visibility';
 import { HeroSurface } from './HeroSurface';
 import { HeroSurfaceStates } from './HeroSurface.states';
 
@@ -69,5 +70,83 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
   it('uses no brand-signal-text anywhere (owner terracotta decision)', () => {
     const css = readFileSync(join(__dirname, 'HeroSurface.css'), 'utf8');
     expect(css).not.toContain('brand-signal-text');
+  });
+
+  it('renders the optional small line between the diff line and the source link (23.25)', () => {
+    const { container } = render(
+      <HeroSurface
+        label={LABEL}
+        value="1,245.750"
+        trailing={UNIT}
+        draft={[9.1, 8.4, 9.6, 8.8, 10.1, 9.4, 11.2]}
+        direction={<span>↑ أعلى</span>}
+        debt={SOURCE}
+      />,
+    );
+    const sparkline = container.querySelector('.mds-hero-sparkline');
+    expect(sparkline).not.toBeNull();
+    expect(sparkline?.querySelector('polyline')).not.toBeNull();
+    expect(sparkline?.querySelector('circle')).not.toBeNull();
+    expect(HeroSurfaceStates).toContain('withSparkline');
+    // order (23.25): diff → sparkline → source
+    const order = ['.mds-hero-diff', '.mds-hero-sparkline', '.mds-hero-source'].map(
+      (sel) => container.querySelector(sel),
+    );
+    expect(order[0]).not.toBeNull();
+    expect(order[1]).not.toBeNull();
+    expect(order[2]).not.toBeNull();
+    expect(order[0]!.compareDocumentPosition(order[1]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(order[1]!.compareDocumentPosition(order[2]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('draws the endpoint dot ALONE for a single value (no line)', () => {
+    const { container } = render(
+      <HeroSurface label={LABEL} value="1,245" draft={[11.2]} />,
+    );
+    expect(container.querySelector('.mds-hero-sparkline circle')).not.toBeNull();
+    expect(container.querySelector('.mds-hero-sparkline polyline')).toBeNull();
+  });
+
+  it('omits the small line entirely when draft is not given', () => {
+    const { container } = render(<HeroSurface label={LABEL} value="1,245" />);
+    expect(container.querySelector('.mds-hero-sparkline')).toBeNull();
+  });
+
+  it('keeps the small line slot WITHOUT values when amounts are hidden (23.22: stays, value-less)', () => {
+    const { container } = render(
+      <AmountVisibilityProvider hidden>
+        <HeroSurface label={LABEL} value="1,245" trailing={UNIT} draft={[9.1, 8.4, 9.6, 8.8]} />
+      </AmountVisibilityProvider>,
+    );
+    const sparkline = container.querySelector('.mds-hero-sparkline');
+    expect(sparkline).not.toBeNull();
+    expect(sparkline?.querySelector('polyline')).toBeNull();
+    expect(sparkline?.querySelector('circle')).toBeNull();
+  });
+
+  it('renders «••••» + the unit and NO real value when amounts are hidden (23.22)', () => {
+    const { container } = render(
+      <AmountVisibilityProvider hidden>
+        <HeroSurface label={LABEL} value="1,245.750" trailing={UNIT} />
+      </AmountVisibilityProvider>,
+    );
+    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.hiddenGlyph);
+    expect(container.querySelector('.mds-hero-unit')?.textContent).toBe(UNIT);
+    expect(container.textContent).not.toContain('1,245.750');
+    expect(container.querySelector('.mds-visually-hidden')?.textContent).toBe(moneyTexts.hidden);
+  });
+
+  it('renders the missing em dash ALONE, without the unit (addendum 1.6 w-2 item 9)', () => {
+    const { container } = render(<HeroSurface label={LABEL} trailing={UNIT} />);
+    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(container.querySelector('.mds-hero-unit')).toBeNull();
+    // and «—» survives hidden (missing wins over hidden, like Money)
+    const hiddenRender = render(
+      <AmountVisibilityProvider hidden>
+        <HeroSurface label={LABEL} trailing={UNIT} />
+      </AmountVisibilityProvider>,
+    );
+    expect(hiddenRender.container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(hiddenRender.container.querySelector('.mds-visually-hidden')).toBeNull();
   });
 });

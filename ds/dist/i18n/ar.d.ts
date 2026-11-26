@@ -628,6 +628,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "مع فلوس";
     };
+    readonly 'state.withSparkline': {
+        readonly kind: "badge";
+        readonly text: "بخط صغير";
+    };
     readonly 'state.longNumber': {
         readonly kind: "badge";
         readonly text: "رقم طويل";

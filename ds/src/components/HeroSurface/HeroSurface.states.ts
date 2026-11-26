@@ -1,9 +1,10 @@
 /**
- * HeroSurface.states.ts — applicable states from BRIEF 9.0 + 23.8.
+ * HeroSurface.states.ts — applicable states from BRIEF 9.0 + 23.8 + 23.25.
  *
  * The hero is passive chrome (the toggle inside it is interactive on its
- * own); the axis that matters visually is value shape: plain, with cents,
- * missing (—), and the long-number drop to number-lg in one step.
+ * own); the axes that matter visually are value shape (plain, with cents,
+ * missing (—), the long-number drop to number-lg in one step), no diff,
+ * and the optional small line (23.25, addendum 1.6 أ-ج).
  */
 export const HeroSurfaceStates = [
   'default',
@@ -11,6 +12,7 @@ export const HeroSurfaceStates = [
   'missing',
   'longNumber',
   'noDiff',
+  'withSparkline',
 ] as const;
 
 export type HeroSurfaceStateId = (typeof HeroSurfaceStates)[number];
