@@ -1,0 +1,23 @@
+/*
+ * tailwind-bridge.css — the K14 bridge (plan S11): Tailwind 4 utilities
+ * must consume OUR tokens, not a copied palette. Tailwind 4 reads design
+ * tokens straight from CSS custom properties via @theme: the values are
+ * references to the @micro/ds token variables, so a Tailwind class like
+ * bg-ground computes EXACTLY tokens.json's color.ground (verified by the
+ * ds-consumer gate).
+ */
+@import 'tailwindcss';
+
+@theme {
+  /* The ground color, straight from the shipped tokens (5.1). */
+  --color-ground: var(--mds-color-canvas);
+  /* The primary text color (5.2). */
+  --color-ink: var(--mds-color-text-primary);
+  /* The brand action color (5.2). */
+  --color-brand: var(--mds-color-role-action);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ground);
+}
