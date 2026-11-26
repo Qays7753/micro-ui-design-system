@@ -29,7 +29,7 @@
   font-size: var(--mds-type-body-size);
   line-height: var(--mds-type-body-line);
   font-weight: var(--mds-type-body-strong-weight);
-  color: var(--mds-color-on-dark-fg);
+  color: var(--mds-color-on-dark);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
