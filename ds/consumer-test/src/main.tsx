@@ -4,6 +4,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@micro/ds/styles.css';
 import './tailwind-bridge.css';
+import './consumer.css';
 import { ConsumerApp } from './App';
 
 createRoot(document.getElementById('root') as HTMLElement).render(

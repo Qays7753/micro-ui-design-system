@@ -1,0 +1,39 @@
+/* The consumer's own layout (lab-style chrome, consumer-* namespace). */
+.consumer-root {
+  max-width: 420px;
+  margin-inline: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.consumer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.consumer-header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.consumer-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.consumer-funds {
+  display: flex;
+  gap: 12px;
+  color: var(--mds-color-text-secondary);
+}
+
+.consumer-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
