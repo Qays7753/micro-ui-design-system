@@ -16,6 +16,7 @@ describe('ObjectCard (BRIEF 4.1, 23.24)', () => {
         label={TITLE}
         caption={CAPTION}
         value="1,245.750"
+        onPress={() => {}}
       >
         <Button variant="secondary" size="sm">{ar['button.recordPayment'].text}</Button>
       </ObjectCard>,
@@ -27,9 +28,31 @@ describe('ObjectCard (BRIEF 4.1, 23.24)', () => {
     expect(ObjectCardStates).toContain('withButton');
   });
 
+  it('keeps the next-step button a SIBLING above the card press surface — never nested (addendum item 19)', () => {
+    const { container } = render(
+      <ObjectCard label={TITLE} value="1,250" onPress={() => {}}>
+        <Button variant="secondary" size="sm">{ar['button.recordPayment'].text}</Button>
+      </ObjectCard>,
+    );
+    const card = container.querySelector('button.mds-object-card') as HTMLElement;
+    const action = container.querySelector('.mds-object-card-action .mds-button') as HTMLElement;
+    expect(card).not.toBeNull();
+    expect(action).not.toBeNull();
+    expect(card.contains(action)).toBe(false);
+  });
+
+  it('renders the whole card as one stretched anchor when href is given (addendum item 19)', () => {
+    const { container } = render(<ObjectCard label={TITLE} value="1,250" href="#orders" />);
+    const card = container.querySelector('a.mds-object-card') as HTMLAnchorElement;
+    expect(card).not.toBeNull();
+    expect(card.getAttribute('href')).toBe('#orders');
+    expect(container.querySelector('button')).toBeNull();
+  });
+
   it('renders a passive div when not interactive', () => {
     const { container } = render(<ObjectCard label={TITLE} value="1,250" />);
     expect(container.querySelector('button')).toBeNull();
+    expect(container.querySelector('a.mds-object-card')).toBeNull();
   });
 
   it('fires onPress when the card is pressed (AskNavResult pattern)', () => {

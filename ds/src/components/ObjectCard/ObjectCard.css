@@ -3,6 +3,12 @@
  * no raw hex/px/ms in this file (ds-raw-values).
  */
 
+/* The wrapper: the card press surface and the next-step Button are
+   SIBLINGS here (و-2 item 19) — never an interactive inside another. */
+.mds-object-card-wrap {
+  position: relative;
+}
+
 .mds-object-card {
   box-sizing: border-box;
   display: flex;
@@ -16,7 +22,14 @@
   font: inherit;
   color: inherit;
   text-align: start;
+  width: 100%;
   transition: transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
+}
+
+/* With a next-step action the card reserves its space at the end; the
+   action anchors absolutely to the card's padding corner (و-2 item 19). */
+.mds-object-card--with-action {
+  padding-block-end: calc(var(--mds-layout-surface-padding-phone) + var(--mds-size-button-compact) + var(--mds-space-4));
 }
 
 /* Width (1339): 280 in horizontal lists is the consumer track's job; the
@@ -28,6 +41,9 @@
 @media (min-width: 46.5rem) {
   .mds-object-card {
     padding: var(--mds-layout-surface-padding-tablet);
+  }
+  .mds-object-card--with-action {
+    padding-block-end: calc(var(--mds-layout-surface-padding-tablet) + var(--mds-size-button-compact) + var(--mds-space-4));
   }
 }
 
@@ -78,10 +94,21 @@
   white-space: nowrap;
 }
 
-/* The one next-step compact secondary button, aligned to the start. */
+/* The one next-step compact secondary button — a SIBLING above the card
+   press surface, anchored to the card's padding corner (و-2 item 19). */
 .mds-object-card-action {
+  position: absolute;
+  inset-inline-start: var(--mds-layout-surface-padding-phone);
+  inset-block-end: var(--mds-layout-surface-padding-phone);
+  z-index: 2;
   display: inline-flex;
-  margin-block-start: var(--mds-space-4);
+}
+
+@media (min-width: 46.5rem) {
+  .mds-object-card-action {
+    inset-inline-start: var(--mds-layout-surface-padding-tablet);
+    inset-block-end: var(--mds-layout-surface-padding-tablet);
+  }
 }
 
 /* Press (23.24 press table): scale(.98) + surface-pressed. */
@@ -97,15 +124,20 @@
   outline-offset: var(--mds-border-focus-ring-offset);
 }
 
-/* Disabled (23.24(15)). */
-.mds-object-card:disabled {
+/* Disabled (23.24(15)): the card dims through its own disabled state;
+   the action sibling dims through the wrapper's disabled class. */
+.mds-object-card:disabled,
+.mds-object-card-wrap--disabled .mds-object-card {
   cursor: default;
   color: var(--mds-color-disabled-fg);
 }
 
 .mds-object-card:disabled .mds-object-card-title,
 .mds-object-card:disabled .mds-object-card-caption,
-.mds-object-card:disabled .mds-object-card-value {
+.mds-object-card:disabled .mds-object-card-value,
+.mds-object-card-wrap--disabled .mds-object-card-title,
+.mds-object-card-wrap--disabled .mds-object-card-caption,
+.mds-object-card-wrap--disabled .mds-object-card-value {
   color: inherit;
 }
 

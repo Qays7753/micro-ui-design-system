@@ -107,6 +107,7 @@
     "value",
     "leading",
     "trailing",
+    "href",
     "onPress",
     "onLongPress",
     "onChange",

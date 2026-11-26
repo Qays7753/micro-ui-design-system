@@ -1,5 +1,5 @@
-import { jsx as a, jsxs as h, Fragment as R } from "react/jsx-runtime";
-import { useMemo as K, useContext as O, createContext as ee, useState as Z, useRef as y, useCallback as H, useEffect as M, useReducer as de, useId as ce, useLayoutEffect as ue, Children as me } from "react";
+import { jsx as a, jsxs as h, Fragment as O } from "react/jsx-runtime";
+import { useMemo as K, useContext as z, createContext as ee, useState as Z, useRef as y, useCallback as H, useEffect as P, useReducer as de, useId as ce, useLayoutEffect as ue, Children as me } from "react";
 const he = {
   color: {
     canvas: "#E8ECEF",
@@ -501,7 +501,7 @@ function fe(e) {
     t = t[n];
   return t;
 }
-const w = {
+const v = {
   // --- Buttons and links (BRIEF 24.1: verb + object, ≤ 3 words) ---
   "button.saveMovement": { kind: "button", text: "احفظ الحركة" },
   "button.acceptQuote": { kind: "button", text: "اقبل العرض" },
@@ -707,8 +707,8 @@ const w = {
   // --- Field placeholder, format only (BRIEF 23.24(10)) ---
   "placeholder.phone": { kind: "placeholder", text: "07X XXX XXXX" }
 };
-function N(e, t) {
-  let n = w[e].text;
+function B(e, t) {
+  let n = v[e].text;
   if (t)
     for (const [s, i] of Object.entries(t))
       n = n.replaceAll(`{${s}}`, String(i));
@@ -720,18 +720,18 @@ const ge = {
   quotes: { zero: "لا عروض", one: "عرض واحد", two: "عرضان", few: "عروض", many: "عرض" },
   results: { zero: "لا نتائج", one: "نتيجة واحدة", two: "نتيجتان", few: "نتائج", many: "نتيجة" },
   unread: { zero: "لا شيء غير مقروء", one: "غير مقروء واحد", two: "غير مقروءان", few: "غير مقروءة", many: "غير مقروءة" }
-}, F = {
-  unit: w["money.unit"].text,
-  minus: w["money.ariaMinus"].text,
-  dinar: w["money.ariaDinar"].text,
-  fils: w["money.ariaFils"].text,
-  and: w["money.ariaAnd"].text,
-  forYou: w["money.forYou"].text,
-  againstYou: w["money.againstYou"].text,
-  hidden: w["money.ariaHidden"].text,
-  missing: w["money.ariaMissing"].text,
-  hiddenGlyph: w["money.hiddenGlyph"].text,
-  missingGlyph: w["money.missing"].text
+}, E = {
+  unit: v["money.unit"].text,
+  minus: v["money.ariaMinus"].text,
+  dinar: v["money.ariaDinar"].text,
+  fils: v["money.ariaFils"].text,
+  and: v["money.ariaAnd"].text,
+  forYou: v["money.forYou"].text,
+  againstYou: v["money.againstYou"].text,
+  hidden: v["money.ariaHidden"].text,
+  missing: v["money.ariaMissing"].text,
+  hiddenGlyph: v["money.hiddenGlyph"].text,
+  missingGlyph: v["money.missing"].text
 }, pe = new Intl.PluralRules("ar");
 function be(e, t) {
   switch (pe.select(e)) {
@@ -760,23 +760,23 @@ function nn(e) {
   const { h: t, m: n } = we(e), s = t < 12 ? xe : ve, i = t % 12 === 0 ? 12 : t % 12;
   return `${J(i)}:${J(n)} ${s}`;
 }
-const E = "−", ke = "+", j = 3;
+const D = "−", ke = "+", $ = 3;
 function ye(e) {
-  const t = String(e).trim(), n = t.startsWith("-"), s = n ? t.slice(1) : t, [i = "0", r = ""] = s.split("."), o = i.replace(/[^0-9]/g, "") || "0", d = (r + "000").slice(0, j), l = BigInt(o) * 10n ** BigInt(j) + BigInt(d || "0");
+  const t = String(e).trim(), n = t.startsWith("-"), s = n ? t.slice(1) : t, [i = "0", r = ""] = s.split("."), o = i.replace(/[^0-9]/g, "") || "0", d = (r + "000").slice(0, $), l = BigInt(o) * 10n ** BigInt($) + BigInt(d || "0");
   return { negative: n, fils: l };
 }
 function Ae(e) {
   return e.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 function Ne(e) {
-  const t = 10n ** BigInt(j), n = e / t, s = e % t;
+  const t = 10n ** BigInt($), n = e / t, s = e % t;
   return {
     int: Ae(n.toString()),
-    frac: s === 0n ? "" : `.${s.toString().padStart(j, "0")}`
+    frac: s === 0n ? "" : `.${s.toString().padStart($, "0")}`
   };
 }
-function D(e, t) {
-  const n = 10n ** BigInt(j), s = e / n, i = e % n;
+function Y(e, t) {
+  const n = 10n ** BigInt($), s = e / n, i = e % n;
   let r = `${s.toString()} ${t.dinar}`;
   return i !== 0n && (r += ` ${t.and}${i.toString()} ${t.fils}`), r;
 }
@@ -810,9 +810,9 @@ function Be(e, t) {
       aria: n.hidden
     };
   }
-  const { negative: i, fils: r } = ye(e), o = Ne(r), d = t.debt === "forYou" ? n.forYou : t.debt === "againstYou" ? n.againstYou : "", l = d ? "" : t.flow === "in" ? ke : t.flow === "out" ? E : t.flow === "transfer" ? "" : i ? E : "", c = `${l}${o.int}${o.frac}`, m = d ? `${d} ${c} ${n.unit}` : `${c} ${n.unit}`;
+  const { negative: i, fils: r } = ye(e), o = Ne(r), d = t.debt === "forYou" ? n.forYou : t.debt === "againstYou" ? n.againstYou : "", l = d ? "" : t.flow === "in" ? ke : t.flow === "out" ? D : t.flow === "transfer" ? "" : i ? D : "", c = `${l}${o.int}${o.frac}`, m = d ? `${d} ${c} ${n.unit}` : `${c} ${n.unit}`;
   let u;
-  return d ? u = `${d} ${D(r, n)}` : l === E ? u = `${n.minus} ${D(r, n)}` : u = D(r, n), {
+  return d ? u = `${d} ${Y(r, n)}` : l === D ? u = `${n.minus} ${Y(r, n)}` : u = Y(r, n), {
     missing: !1,
     hidden: !1,
     debt: t.debt ?? null,
@@ -830,8 +830,8 @@ function Se({ children: e, hidden: t = !1 }) {
   const n = K(() => ({ hidden: t }), [t]);
   return /* @__PURE__ */ a(te.Provider, { value: n, children: e });
 }
-function $() {
-  const { hidden: e } = O(te);
+function L() {
+  const { hidden: e } = z(te);
   return { hidden: e, visible: !e };
 }
 const He = 500, Ze = fe("motion.press-cancel-px");
@@ -857,8 +857,8 @@ function A(e = {}) {
   ), g = H(
     (p) => {
       if (!i || o.current === null) return;
-      const b = p.clientX - o.current.x, v = p.clientY - o.current.y;
-      Math.hypot(b, v) > Ze && m();
+      const b = p.clientX - o.current.x, w = p.clientY - o.current.y;
+      Math.hypot(b, w) > Ze && m();
     },
     [i, m]
   ), f = H(
@@ -891,7 +891,7 @@ function ne(e) {
 }
 function Ce() {
   const [e, t] = Z(Me);
-  return M(() => {
+  return P(() => {
     const n = window.visualViewport;
     if (!n) return;
     const s = () => t(ne(n));
@@ -900,7 +900,7 @@ function Ce() {
     };
   }, []), e;
 }
-const z = ee({
+const Q = ee({
   sheetIds: [],
   registerSheet: () => {
   },
@@ -922,10 +922,10 @@ function an({ children: e }) {
     () => ({ sheetIds: t, registerSheet: s, unregisterSheet: i }),
     [t, s, i]
   );
-  return /* @__PURE__ */ a(z.Provider, { value: r, children: e });
+  return /* @__PURE__ */ a(Q.Provider, { value: r, children: e });
 }
 function sn() {
-  const { sheetIds: e, registerSheet: t, unregisterSheet: n } = O(z), s = ce();
+  const { sheetIds: e, registerSheet: t, unregisterSheet: n } = z(Q), s = ce();
   ue(() => (t(s), () => n(s)), [s, t, n]);
   const i = e.indexOf(s) + 1 || e.length + 1, r = Math.min(i, 2), o = i === e.length;
   return {
@@ -937,7 +937,7 @@ function sn() {
   };
 }
 function rn() {
-  const { sheetIds: e } = O(z);
+  const { sheetIds: e } = z(Q);
   return e.length;
 }
 const je = /* @__PURE__ */ h("g", { transform: "translate(16 16)", id: "micro-symbol-master-2", children: [
@@ -1428,7 +1428,7 @@ function ot({
 const lt = {
   bold: /* @__PURE__ */ a("path", { d: "M128,20A108,108,0,1,0,236,128,108.12,108.12,0,0,0,128,20Zm0,192a84,84,0,1,1,84-84A84.09,84.09,0,0,1,128,212Zm-12-80V80a12,12,0,0,1,24,0v52a12,12,0,0,1-24,0Zm28,40a16,16,0,1,1-16-16A16,16,0,0,1,144,172Z" })
 };
-function Q({
+function _({
   size: e = 14,
   weight: t = "bold",
   className: n,
@@ -1968,12 +1968,12 @@ function Vn({
   ref: c,
   ...m
 }) {
-  const { hidden: u } = $(), g = u && e !== null && e !== void 0, f = Be(e, { flow: t, debt: n, hidden: g, texts: F }), p = ["mds-money", `mds-money--${s}`, s === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
+  const { hidden: u } = L(), g = u && e !== null && e !== void 0, f = Be(e, { flow: t, debt: n, hidden: g, texts: E }), p = ["mds-money", `mds-money--${s}`, s === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
   return i === "loading" ? /* @__PURE__ */ a("span", { ref: c, id: d, style: l, className: p, "aria-busy": "true", ...m, children: /* @__PURE__ */ a("span", { className: "mds-money-skeleton", "aria-hidden": "true" }) }) : /* @__PURE__ */ h("span", { ref: c, id: d, style: l, className: p, ...m, children: [
     /* @__PURE__ */ h("span", { className: "mds-money-visual", "aria-hidden": "true", children: [
       f.debtWord ? /* @__PURE__ */ a("span", { className: "mds-money-debt", children: f.debtWord }) : null,
-      f.missing ? /* @__PURE__ */ a("span", { className: "mds-money-missing", children: F.missingGlyph }) : /* @__PURE__ */ h(R, { children: [
-        /* @__PURE__ */ a("bdi", { className: "mds-money-value", dir: "ltr", children: f.hidden ? F.hiddenGlyph : /* @__PURE__ */ h(R, { children: [
+      f.missing ? /* @__PURE__ */ a("span", { className: "mds-money-missing", children: E.missingGlyph }) : /* @__PURE__ */ h(O, { children: [
+        /* @__PURE__ */ a("bdi", { className: "mds-money-value", dir: "ltr", children: f.hidden ? E.hiddenGlyph : /* @__PURE__ */ h(O, { children: [
           /* @__PURE__ */ h("span", { className: "mds-money-integer", children: [
             f.sign,
             f.int
@@ -2010,7 +2010,7 @@ function Et({
   ref: o,
   ...d
 }) {
-  const { hidden: l, visible: c } = $(), m = l ? ze : Re, u = N(l ? "button.showAmounts" : "button.hideAmounts"), g = [
+  const { hidden: l, visible: c } = L(), m = l ? ze : Re, u = B(l ? "button.showAmounts" : "button.hideAmounts"), g = [
     "mds-amount-visibility-toggle",
     n === "large" ? "mds-amount-visibility-toggle--large" : "",
     s
@@ -2041,14 +2041,14 @@ const $n = [
 ], Dt = {
   done: ae,
   waiting: ot,
-  problem: Q,
+  problem: _,
   info: ct
 }, Yt = {
-  done: w["badge.done"].text,
-  waiting: w["badge.waiting"].text,
-  problem: w["badge.problem"].text,
-  info: w["badge.info"].text,
-  neutral: w["badge.neutral"].text
+  done: v["badge.done"].text,
+  waiting: v["badge.waiting"].text,
+  problem: v["badge.problem"].text,
+  info: v["badge.info"].text,
+  neutral: v["badge.neutral"].text
 };
 function In({
   tone: e,
@@ -2080,7 +2080,7 @@ function Ot(e) {
   const t = e.trim().split(/\s+/)[0];
   return t ? Array.from(t)[0] : void 0;
 }
-function _({
+function q({
   size: e = "md",
   value: t,
   tone: n,
@@ -2105,7 +2105,7 @@ const Fn = [
   "pending",
   "withImageRule"
 ];
-function T({
+function I({
   variant: e = "primary",
   size: t = "md",
   loading: n = !1,
@@ -2125,7 +2125,7 @@ function T({
     onPress: r,
     onLongPress: o,
     disabled: d || n
-  }), v = [
+  }), w = [
     "mds-button",
     `mds-button--${e}`,
     `mds-button--${t}`,
@@ -2141,7 +2141,7 @@ function T({
       ...f,
       ...b,
       type: "button",
-      className: v,
+      className: w,
       disabled: d,
       "aria-busy": n || void 0,
       children: [
@@ -2244,7 +2244,7 @@ function Yn({
       }
     ),
     t ? /* @__PURE__ */ h("span", { className: r === "error" ? "mds-text-field-caption mds-text-field-caption--error" : "mds-text-field-caption", children: [
-      r === "error" ? /* @__PURE__ */ a(Q, { size: 14 }) : null,
+      r === "error" ? /* @__PURE__ */ a(_, { size: 14 }) : null,
       t
     ] }) : null
   ] });
@@ -2475,7 +2475,7 @@ function Un({
           "data-ds-exempt": "",
           ...u,
           children: [
-            /* @__PURE__ */ a("span", { className: "mds-section-see-all-label", children: N("button.all") }),
+            /* @__PURE__ */ a("span", { className: "mds-section-see-all-label", children: B("button.all") }),
             /* @__PURE__ */ a(qe, { size: 16, className: "mds-section-see-all-icon" })
           ]
         }
@@ -2507,7 +2507,7 @@ function Kn({
   ref: f,
   ...p
 }) {
-  const { isPressed: b, pressProps: v } = A({ onPress: () => l?.(), disabled: c }), B = [
+  const { isPressed: b, pressProps: w } = A({ onPress: () => l?.(), disabled: c }), N = [
     "mds-tile",
     `mds-tile--${d}`,
     b ? "mds-tile--pressed" : "",
@@ -2521,10 +2521,10 @@ function Kn({
       id: u,
       style: g,
       type: "button",
-      className: B,
+      className: N,
       disabled: c,
       "data-ds-exempt": c ? void 0 : "",
-      ...v,
+      ...w,
       ...p,
       children: [
         /* @__PURE__ */ h("span", { className: "mds-tile-header", children: [
@@ -2554,7 +2554,7 @@ function qt(e) {
   return t === -1 ? { whole: e, cents: "" } : { whole: e.slice(0, t), cents: e.slice(t) };
 }
 function Gt({ value: e }) {
-  const { hidden: t } = $(), { whole: n, cents: s } = qt(t ? "—" : e), r = e.length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
+  const { hidden: t } = L(), { whole: n, cents: s } = qt(t ? "—" : e), r = e.length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
   return /* @__PURE__ */ a("span", { className: `mds-hero-value ${r}`, children: /* @__PURE__ */ h("bdi", { dir: "ltr", children: [
     /* @__PURE__ */ a("span", { className: "mds-hero-value-whole", children: n }),
     s ? /* @__PURE__ */ a("span", { className: "mds-hero-value-cents", children: s }) : null
@@ -2573,7 +2573,7 @@ function ta({
   ref: c,
   ...m
 }) {
-  const { isPressed: u, pressProps: g } = A({ onPress: () => r?.() }), { hidden: f } = $(), p = ["mds-hero-surface", o].filter(Boolean).join(" ");
+  const { isPressed: u, pressProps: g } = A({ onPress: () => r?.() }), { hidden: f } = L(), p = ["mds-hero-surface", o].filter(Boolean).join(" ");
   return /* @__PURE__ */ a(Se, { children: /* @__PURE__ */ h("section", { ref: c, id: d, style: l, className: p, ...m, children: [
     /* @__PURE__ */ h("header", { className: "mds-hero-header", children: [
       /* @__PURE__ */ a("span", { className: "mds-hero-label", children: e }),
@@ -2618,7 +2618,7 @@ function aa({
   ref: u,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = A({ onPress: () => o?.(), disabled: d }), b = o !== void 0, v = [
+  const { isPressed: f, pressProps: p } = A({ onPress: () => o?.(), disabled: d }), b = o !== void 0, w = [
     "mds-object-row",
     f ? "mds-object-row--pressed" : "",
     d ? "mds-object-row--disabled" : "",
@@ -2632,12 +2632,12 @@ function aa({
       id: c,
       style: m,
       type: b ? "button" : void 0,
-      className: v,
+      className: w,
       disabled: b ? d : void 0,
       ...b ? p : {},
       ...g,
       children: [
-        /* @__PURE__ */ a(_, { size: "md", tone: t, value: typeof e == "string" ? e : n, children: typeof e == "string" ? void 0 : e }),
+        /* @__PURE__ */ a(q, { size: "md", tone: t, value: typeof e == "string" ? e : n, children: typeof e == "string" ? void 0 : e }),
         /* @__PURE__ */ h("span", { className: "mds-object-row-text", children: [
           /* @__PURE__ */ a("span", { className: "mds-object-row-title mds-type-body-strong", children: n }),
           s ? /* @__PURE__ */ a("span", { className: "mds-object-row-caption mds-type-caption", children: s }) : null
@@ -2665,47 +2665,48 @@ function ia({
   caption: s,
   value: i,
   state: r,
-  children: o,
-  onPress: d,
-  disabled: l = !1,
-  className: c,
-  id: m,
-  style: u,
-  ref: g,
-  ...f
+  href: o,
+  children: d,
+  onPress: l,
+  disabled: c = !1,
+  className: m,
+  id: u,
+  style: g,
+  ref: f,
+  ...p
 }) {
-  const { isPressed: p, pressProps: b } = A({ onPress: () => d?.(), disabled: l }), v = d !== void 0, B = [
+  const { isPressed: b, pressProps: w } = A({ onPress: () => l?.(), disabled: c }), N = l !== void 0 || o !== void 0, j = d != null, M = o ? "a" : N ? "button" : "div", C = [
     "mds-object-card",
-    p ? "mds-object-card--pressed" : "",
-    l ? "mds-object-card--disabled" : "",
-    v ? "" : "mds-object-card--passive",
-    c
+    b ? "mds-object-card--pressed" : "",
+    c ? "mds-object-card--disabled" : "",
+    j ? "mds-object-card--with-action" : "",
+    N ? "" : "mds-object-card--passive",
+    m
   ].filter(Boolean).join(" ");
-  return /* @__PURE__ */ h(
-    v ? "button" : "div",
-    {
-      ref: g,
-      id: m,
-      style: u,
-      type: v ? "button" : void 0,
-      className: B,
-      disabled: v ? l : void 0,
-      ...v ? b : {},
-      ...f,
-      children: [
-        /* @__PURE__ */ h("span", { className: "mds-object-card-mark", children: [
-          /* @__PURE__ */ a(_, { size: "lg", tone: t, value: typeof e == "string" ? e : n, children: typeof e == "string" ? void 0 : e }),
-          r ? /* @__PURE__ */ a("span", { className: "mds-object-card-state", children: r }) : null
-        ] }),
-        /* @__PURE__ */ h("span", { className: "mds-object-card-body", children: [
-          /* @__PURE__ */ a("span", { className: "mds-object-card-title", children: n }),
-          s ? /* @__PURE__ */ a("span", { className: "mds-object-card-caption mds-type-caption", children: s }) : null,
-          i !== void 0 ? /* @__PURE__ */ a("span", { className: "mds-object-card-value mds-type-amount-row", children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i }) }) : null,
-          o ? /* @__PURE__ */ a("span", { className: "mds-object-card-action", children: o }) : null
-        ] })
-      ]
-    }
-  );
+  return /* @__PURE__ */ h("div", { ref: f, id: u, style: g, className: ["mds-object-card-wrap", c ? "mds-object-card-wrap--disabled" : "", m].filter(Boolean).join(" "), ...p, children: [
+    /* @__PURE__ */ h(
+      M,
+      {
+        className: C,
+        href: o,
+        type: M === "button" ? "button" : void 0,
+        disabled: M === "button" ? c : void 0,
+        ...N ? w : {},
+        children: [
+          /* @__PURE__ */ h("span", { className: "mds-object-card-mark", children: [
+            /* @__PURE__ */ a(q, { size: "lg", tone: t, value: typeof e == "string" ? e : n, children: typeof e == "string" ? void 0 : e }),
+            r ? /* @__PURE__ */ a("span", { className: "mds-object-card-state", children: r }) : null
+          ] }),
+          /* @__PURE__ */ h("span", { className: "mds-object-card-body", children: [
+            /* @__PURE__ */ a("span", { className: "mds-object-card-title", children: n }),
+            s ? /* @__PURE__ */ a("span", { className: "mds-object-card-caption mds-type-caption", children: s }) : null,
+            i !== void 0 ? /* @__PURE__ */ a("span", { className: "mds-object-card-value mds-type-amount-row", children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i }) }) : null
+          ] })
+        ]
+      }
+    ),
+    j ? /* @__PURE__ */ a("span", { className: "mds-object-card-action", children: d }) : null
+  ] });
 }
 const ra = [
   "default",
@@ -2734,10 +2735,10 @@ function Xt({
   ref: u,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = A({ onPress: () => o?.() }), { whole: b, cents: v } = Wt(n ?? "—"), B = ["mds-metric", l].filter(Boolean).join(" ");
-  return /* @__PURE__ */ h("div", { ref: u, id: c, style: m, className: B, ...g, children: [
+  const { isPressed: f, pressProps: p } = A({ onPress: () => o?.() }), { whole: b, cents: w } = Wt(n ?? "—"), N = ["mds-metric", l].filter(Boolean).join(" ");
+  return /* @__PURE__ */ h("div", { ref: u, id: c, style: m, className: N, ...g, children: [
     /* @__PURE__ */ a("span", { className: "mds-metric-label mds-type-label", children: e }),
-    /* @__PURE__ */ a("p", { className: "mds-metric-amount", children: d ? /* @__PURE__ */ a("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : /* @__PURE__ */ h(R, { children: [
+    /* @__PURE__ */ a("p", { className: "mds-metric-amount", children: d ? /* @__PURE__ */ a("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : /* @__PURE__ */ h(O, { children: [
       /* @__PURE__ */ a(
         "span",
         {
@@ -2747,7 +2748,7 @@ function Xt({
           ].join(" "),
           children: /* @__PURE__ */ h("bdi", { dir: "ltr", children: [
             /* @__PURE__ */ a("span", { className: "mds-metric-value-whole", children: b }),
-            v ? /* @__PURE__ */ a("span", { className: "mds-metric-value-cents", children: v }) : null
+            w ? /* @__PURE__ */ a("span", { className: "mds-metric-value-cents", children: w }) : null
           ] })
         }
       ),
@@ -2782,7 +2783,7 @@ const da = [
   "missing",
   "loading",
   "noDiff"
-], Y = /* @__PURE__ */ new Set();
+], R = /* @__PURE__ */ new Set();
 function Ut({
   label: e,
   children: t,
@@ -2793,65 +2794,65 @@ function Ut({
   ref: o,
   ...d
 }) {
-  const l = y(null), [c, m] = Z(0), [u, g] = Z(!1), [f, p] = Z(!1), b = y(0), v = y(0), B = y(0), I = y(null), q = y(n);
-  M(() => {
-    q.current = n;
+  const l = y(null), [c, m] = Z(0), [u, g] = Z(!1), [f, p] = Z(!1), b = y(0), w = y(0), N = y(0), j = y(null), M = y(n);
+  P(() => {
+    M.current = n;
   }, [n]);
-  const V = H(() => {
-    I.current?.focus?.(), q.current();
-  }, []), [L] = Z(() => /* @__PURE__ */ Symbol("sheet")), [G] = Z(() => (Y.add(L), Y.size >= 2 ? 2 : 1));
-  M(
+  const C = H(() => {
+    j.current?.focus?.(), M.current();
+  }, []), [F] = Z(() => /* @__PURE__ */ Symbol("sheet")), [G] = Z(() => (R.add(F), R.size >= 2 ? 2 : 1));
+  P(
     () => () => {
-      Y.delete(L);
+      R.delete(F);
     },
-    [L]
+    [F]
   );
   const se = () => {
     const x = l.current?.querySelector(".mds-sheet-panel");
     return x ? x.getBoundingClientRect().height * 0.3 : 0;
-  }, C = H(() => {
+  }, V = H(() => {
     if (f) return;
-    I.current = document.activeElement ?? null, p(!0), (typeof requestAnimationFrame == "function" ? requestAnimationFrame : (k) => setTimeout(() => k(performance.now()), 0))(() => {
+    j.current = document.activeElement ?? null, p(!0), (typeof requestAnimationFrame == "function" ? requestAnimationFrame : (k) => setTimeout(() => k(performance.now()), 0))(() => {
       const k = l.current?.querySelector(".mds-sheet-panel");
       if (!k) {
-        V();
+        C();
         return;
       }
       const S = getComputedStyle(k).transitionDuration, U = S && S !== "0s" && S !== "";
       if (k.style.transform = "translateY(100%)", !U) {
-        V();
+        C();
         return;
       }
-      const P = (le) => {
-        le.propertyName === "transform" && (k.removeEventListener("transitionend", P), V());
+      const T = (le) => {
+        le.propertyName === "transform" && (k.removeEventListener("transitionend", T), C());
       };
-      k.addEventListener("transitionend", P);
+      k.addEventListener("transitionend", T);
     });
-  }, [f, V]), ie = (x) => {
+  }, [f, C]), ie = (x) => {
     if (!u) return;
-    const k = performance.now(), S = k - B.current;
-    S > 0 && (b.current = (x.clientY - v.current) / S), v.current = x.clientY, B.current = k, m(Math.max(0, x.clientY - W.current));
+    const k = performance.now(), S = k - N.current;
+    S > 0 && (b.current = (x.clientY - w.current) / S), w.current = x.clientY, N.current = k, m(Math.max(0, x.clientY - W.current));
   }, W = y(0), re = (x) => {
     const k = x.target, S = l.current?.querySelector(".mds-sheet-body");
     if (!(S?.contains(k) && S && S.scrollTop > 0)) {
       if (f) {
-        const P = l.current?.querySelector(".mds-sheet-panel");
-        P && (P.style.transform = c ? `translateY(${c}px)` : ""), p(!1);
+        const T = l.current?.querySelector(".mds-sheet-panel");
+        T && (T.style.transform = c ? `translateY(${c}px)` : ""), p(!1);
       }
-      b.current = 0, v.current = x.clientY, B.current = performance.now(), g(!0), x.currentTarget.setPointerCapture?.(x.pointerId);
+      b.current = 0, w.current = x.clientY, N.current = performance.now(), g(!0), x.currentTarget.setPointerCapture?.(x.pointerId);
     }
   }, X = () => {
     if (!u) return;
     g(!1);
     const x = c > se(), k = b.current > 0.6;
-    x || k ? C() : m(0);
+    x || k ? V() : m(0);
   };
-  M(() => {
+  P(() => {
     const x = (k) => {
-      k.key === "Escape" && C();
+      k.key === "Escape" && V();
     };
     return window.addEventListener("keydown", x), () => window.removeEventListener("keydown", x);
-  }, [C]);
+  }, [V]);
   const oe = [
     "mds-sheet",
     G === 2 ? "mds-sheet--stacked" : "",
@@ -2878,7 +2879,7 @@ function Ut({
           "div",
           {
             className: "mds-sheet-scrim",
-            onClick: () => C(),
+            onClick: () => V(),
             "aria-hidden": "true"
           }
         ),
@@ -2904,7 +2905,7 @@ function Ut({
                   ]
                 }
               ),
-              /* @__PURE__ */ a("div", { className: "mds-sheet-close", children: /* @__PURE__ */ a(zt, { label: e, onPress: C, children: /* @__PURE__ */ a(Ue, {}) }) }),
+              /* @__PURE__ */ a("div", { className: "mds-sheet-close", children: /* @__PURE__ */ a(zt, { label: e, onPress: V, children: /* @__PURE__ */ a(Ue, {}) }) }),
               /* @__PURE__ */ a("div", { className: "mds-sheet-body", children: t })
             ]
           }
@@ -2933,7 +2934,7 @@ function ua({
   ...c
 }) {
   const m = y(null);
-  return M(() => {
+  return P(() => {
     m.current?.focus();
   }, []), /* @__PURE__ */ a(
     "div",
@@ -2959,16 +2960,16 @@ function ua({
             ] }),
             /* @__PURE__ */ h("div", { className: "mds-confirm-sheet-actions", children: [
               /* @__PURE__ */ a(
-                T,
+                I,
                 {
                   ref: m,
                   variant: "secondary",
                   className: "mds-confirm-sheet-back",
                   onPress: i,
-                  children: w["button.back"].text
+                  children: v["button.back"].text
                 }
               ),
-              /* @__PURE__ */ a(T, { variant: "danger", className: "mds-confirm-sheet-confirm", onPress: s, children: n })
+              /* @__PURE__ */ a(I, { variant: "danger", className: "mds-confirm-sheet-confirm", onPress: s, children: n })
             ] })
           ]
         }
@@ -3010,9 +3011,9 @@ function ha({
       "aria-label": e,
       ...g,
       children: [
-        i ? /* @__PURE__ */ a(T, { variant: "text", onPress: r, className: "mds-action-bar-secondary", children: i }) : null,
+        i ? /* @__PURE__ */ a(I, { variant: "text", onPress: r, className: "mds-action-bar-secondary", children: i }) : null,
         /* @__PURE__ */ a(
-          T,
+          I,
           {
             variant: "primary",
             onPress: t,
@@ -3047,7 +3048,7 @@ function ga({
   ref: o,
   ...d
 }) {
-  const { isPressed: l, pressProps: c } = A({ onPress: t, onLongPress: n }), m = e ? w["sr.askUnread"].text : w["sr.ask"].text, u = ["mds-ask-button", l ? "mds-ask-button--pressed" : "", s].filter(Boolean).join(" ");
+  const { isPressed: l, pressProps: c } = A({ onPress: t, onLongPress: n }), m = e ? v["sr.askUnread"].text : v["sr.ask"].text, u = ["mds-ask-button", l ? "mds-ask-button--pressed" : "", s].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
     {
@@ -3083,7 +3084,7 @@ function ba({
   ref: o,
   ...d
 }) {
-  const { isPressed: l, pressProps: c } = A({ onPress: n }), m = be(e, ge.unread), u = t ?? (e > 0 ? N("sr.notificationsCount", { counted: m }) : N("sr.notifications")), g = [
+  const { isPressed: l, pressProps: c } = A({ onPress: n }), m = be(e, ge.unread), u = t ?? (e > 0 ? B("sr.notificationsCount", { counted: m }) : B("sr.notifications")), g = [
     "mds-notifications-button",
     l ? "mds-notifications-button--pressed" : "",
     e > 0 ? "mds-notifications-button--unread" : "",
@@ -3140,7 +3141,7 @@ function va({
       ...l,
       ...m,
       children: [
-        /* @__PURE__ */ a(_, { size: "sm", value: e }),
+        /* @__PURE__ */ a(q, { size: "sm", value: e }),
         /* @__PURE__ */ h("span", { className: "mds-project-switcher-text", children: [
           /* @__PURE__ */ a("span", { className: "mds-project-switcher-name mds-type-body-strong", children: e }),
           t ? /* @__PURE__ */ a("span", { className: "mds-project-switcher-role", children: t }) : null
@@ -3306,10 +3307,10 @@ const Ha = [
   "collapsedOnScroll",
   "withTrailing"
 ], Jt = {
-  draft: N("saveState.draft"),
-  sending: N("saveState.sending"),
-  saved: N("saveState.saved"),
-  failed: N("saveState.failed")
+  draft: B("saveState.draft"),
+  sending: B("saveState.sending"),
+  saved: B("saveState.saved"),
+  failed: B("saveState.failed")
 };
 function Za({
   saveState: e,
@@ -3335,10 +3336,10 @@ function Za({
       "aria-busy": e === "sending" || void 0,
       ...r,
       children: [
-        e === "draft" ? /* @__PURE__ */ a(mt, { size: 14 }) : e === "saved" ? /* @__PURE__ */ a("span", { className: "mds-save-state-icon", children: /* @__PURE__ */ a(ae, { size: 14 }) }) : e === "failed" ? /* @__PURE__ */ a(Q, { size: 14 }) : null,
+        e === "draft" ? /* @__PURE__ */ a(mt, { size: 14 }) : e === "saved" ? /* @__PURE__ */ a("span", { className: "mds-save-state-icon", children: /* @__PURE__ */ a(ae, { size: 14 }) }) : e === "failed" ? /* @__PURE__ */ a(_, { size: 14 }) : null,
         /* @__PURE__ */ a("span", { className: "mds-save-state-text", children: Jt[e] }),
-        e === "saved" ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: N("sr.saveSaved") }) : null,
-        e === "failed" ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: N("sr.saveFailed") }) : null
+        e === "saved" ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: B("sr.saveSaved") }) : null,
+        e === "failed" ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: B("sr.saveFailed") }) : null
       ]
     }
   );
@@ -3360,7 +3361,7 @@ function Ca({
   ...d
 }) {
   const l = y(null), c = y(0), m = y(0), u = t ? 5e3 : 3e3;
-  M(() => (c.current = u, m.current = Date.now(), l.current = window.setTimeout(() => n?.(), u), () => {
+  P(() => (c.current = u, m.current = Date.now(), l.current = window.setTimeout(() => n?.(), u), () => {
     l.current && window.clearTimeout(l.current), l.current = null;
   }), [e, u]);
   const g = () => {
@@ -3495,7 +3496,7 @@ export {
   pa as AskButtonStates,
   Ve as AskSymbolIcon,
   mn as BackIcon,
-  T as Button,
+  I as Button,
   En as ButtonStates,
   fn as ClearIcon,
   Ue as CloseIcon,
@@ -3511,7 +3512,7 @@ export {
   Ta as EmptyState,
   $a as EmptyStateStates,
   yt as EntityApprovedIcon,
-  _ as EntityMark,
+  q as EntityMark,
   Fn as EntityMarkStates,
   Nt as EntityPendingIcon,
   We as ExpandIcon,
@@ -3591,21 +3592,21 @@ export {
   Pa as ToastStates,
   ae as ToneDoneIcon,
   ct as ToneInfoIcon,
-  Q as ToneProblemIcon,
+  _ as ToneProblemIcon,
   ot as ToneWaitingIcon,
   An as TransferIcon,
   Wn as Well,
   Xn as WellStates,
-  w as ar,
+  v as ar,
   Be as formatMoney,
   nn as formatTime12,
   fe as getToken,
-  F as moneyTexts,
+  E as moneyTexts,
   be as pluralAr,
   ge as pluralNouns,
-  N as t,
+  B as t,
   he as tokens,
-  $ as useAmountVisibility,
+  L as useAmountVisibility,
   rn as useOpenSheetCount,
   A as usePress,
   sn as useSheetLayer,

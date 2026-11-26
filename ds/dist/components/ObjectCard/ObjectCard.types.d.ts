@@ -8,7 +8,10 @@
  * compact secondary Button for the next step. Allowed: exactly this
  * list. Banned: a Surface inside, a primary button, more than one button
  * (23.24). Radius 24, width 280 in horizontal lists (720 max). Press:
- * scale(.98) + surface-pressed. Free design-value props banned (23.18).
+ * scale(.98) + surface-pressed. Press surface (و-2 item 19): the whole
+ * card is ONE press element and the next-step Button is a SIBLING above
+ * it — never an interactive inside another. Free design-value props
+ * banned (23.18).
  */
 import type { ReactNode, Ref } from 'react';
 export interface ObjectCardProps {
@@ -25,6 +28,10 @@ export interface ObjectCardProps {
     /** The state: a StatusBadge node — only when it differs from the
      *  expected (23.6). */
     state?: ReactNode;
+    /** The card's destination (و-2 item 19): when given, the whole card
+     *  is one stretched `<a>` — a navigational card. Pair it with the
+     *  next-step Button; never with `disabled`. */
+    href?: string;
     /** The next-step compact secondary button (exactly one; 23.24). */
     children?: ReactNode;
     /** Fires when the card itself is pressed (AskNavResult pattern). */
