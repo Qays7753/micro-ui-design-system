@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ds-consumer — the package contract a consumer installs (plan D1/D7/D10, section 4).
+"""ds-consumer — the package contract a consumer installs (plan D1/D7/D10,
+section 4) plus the S11 automated checks K13/K14/K15 (plan rows 221-223,
+executed against ds/consumer-test).
 
 Checks ds/package.json as the consumer's package manager sees it:
   - exports exposes exactly '.' and './styles.css', '.' with types + import
@@ -12,9 +14,10 @@ Checks ds/package.json as the consumer's package manager sees it:
   - main/module/types point into dist
 """
 import json
+import subprocess
 from pathlib import Path
 
-from common import Gate, gate_main
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT
 
 REQUIRED_PEERS = {"react": "^19", "react-dom": "^19", "vaul": "^1"}
 EXPECTED_EXPORTS = {".", "./styles.css"}
@@ -80,6 +83,98 @@ def run(gate: Gate, target, args):
     else:
         gate.ok("ds-consumer/package",
                 "exports ./ ./styles.css with types, peers react/react-dom/vaul only, sideEffects CSS only, files include dist")
+
+    run_consumer_checks(gate, Path(target))
+
+
+def run_consumer_checks(gate: Gate, root: Path) -> None:
+    """K15 (pack+install), K13 (build + 0 console), K14 (bridge = tokens)."""
+    ds_dir = root / "ds"
+    consumer = ds_dir / "consumer-test"
+    if not (consumer / "package.json").is_file():
+        gate.na("ds-consumer/k15-pack-install", "no ds/consumer-test scaffold")
+        gate.na("ds-consumer/k13-build-console", "no ds/consumer-test scaffold")
+        gate.na("ds-consumer/k14-bridge-value", "no ds/consumer-test scaffold")
+        return
+
+    pnpm = ["corepack", "pnpm"]
+
+    # ---- K15: pnpm pack then install from the tarball ----
+    pack = subprocess.run(pnpm + ["pack"], cwd=ds_dir, capture_output=True, text=True, timeout=300)
+    tarballs = list(ds_dir.glob("micro-ds-*.tgz"))
+    if pack.returncode != 0 or not tarballs:
+        gate.fail("ds-consumer/k15-pack-install", f"pnpm pack failed: {pack.stderr[-200:]}")
+        gate.na("ds-consumer/k13-build-console", "pack failed")
+        gate.na("ds-consumer/k14-bridge-value", "pack failed")
+        return
+    install = subprocess.run(pnpm + ["install"], cwd=consumer, capture_output=True, text=True, timeout=600)
+    pkg_src = consumer / "node_modules" / "@micro" / "ds" / "dist" / "index.js"
+    if install.returncode != 0 or not pkg_src.is_file():
+        gate.fail("ds-consumer/k15-pack-install",
+                  f"install from tarball failed: {install.stderr[-200:]}")
+        gate.na("ds-consumer/k13-build-console", "install failed")
+        gate.na("ds-consumer/k14-bridge-value", "install failed")
+        return
+    gate.ok("ds-consumer/k15-pack-install",
+            f"installed @micro/ds from {tarballs[0].name}; components come from node_modules")
+
+    # ---- K13 first half: the consumer build (tsc + vite) ----
+    build = subprocess.run(pnpm + ["run", "build"], cwd=consumer, capture_output=True, text=True, timeout=600)
+    if build.returncode != 0:
+        gate.fail("ds-consumer/k13-build-console", f"consumer build failed: {build.stderr[-300:]}")
+        gate.na("ds-consumer/k14-bridge-value", "build failed")
+        return
+    dist = consumer / "dist"
+    index_html = dist / "index.html"
+    if not index_html.is_file():
+        gate.fail("ds-consumer/k13-build-console", "consumer dist/index.html missing")
+        gate.na("ds-consumer/k14-bridge-value", "dist missing")
+        return
+
+    # ---- serve dist: K13 console sweep + K14 bridge value ----
+    import functools
+    import http.server
+    import threading
+
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(dist))
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    port = server.server_address[1]
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        tokens = json.loads((root / "docs" / "design-system" / "tokens.json").read_text(encoding="utf-8"))
+        ground = tokens["color"]["canvas"]
+
+        def rgb(hex_value: str) -> str:
+            hex_value = hex_value.lstrip("#")
+            return f"rgb({int(hex_value[0:2], 16)}, {int(hex_value[2:4], 16)}, {int(hex_value[4:6], 16)})"
+
+        for engine in CONFIG["engines"]:
+            messages: list[str] = []
+            with browser_session(engine) as session:
+                page = session.page(**DEFAULT_CONTEXT)
+                page.on("console", lambda m, _msgs=messages: _msgs.append(m.text) if m.type in ("error", "warning") else None)
+                page.on("pageerror", lambda e, _msgs=messages: _msgs.append(str(e)))
+                page.goto(f"http://127.0.0.1:{port}/", wait_until="load", timeout=20000)
+                page.wait_for_timeout(600)
+                # ---- K14: the Tailwind class computes the token value ----
+                bridge = page.evaluate(
+                    "() => { const el = document.querySelector('[data-ds-check=consumer-bridge]');"
+                    " return el ? getComputedStyle(el).backgroundColor : 'NO-ELEMENT'; }")
+                if bridge != rgb(ground):
+                    gate.fail(f"ds-consumer/k14-bridge-value/{engine}",
+                              f"bg-ground computed {bridge} != tokens.json color.canvas {rgb(ground)} (K14)")
+                else:
+                    gate.ok(f"ds-consumer/k14-bridge-value/{engine}",
+                            f"Tailwind bg-ground == tokens.json color.canvas ({ground})")
+            if messages:
+                gate.fail(f"ds-consumer/k13-build-console/{engine}",
+                          f"{len(messages)} console errors/warnings: {messages[:3]}")
+            else:
+                gate.ok(f"ds-consumer/k13-build-console/{engine}",
+                        "consumer build clean, 0 console errors, 0 React warnings")
+    finally:
+        server.shutdown()
 
 
 if __name__ == "__main__":
