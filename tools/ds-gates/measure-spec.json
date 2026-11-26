@@ -35,6 +35,9 @@
    },
    "height": {
     "px": 32
+   },
+   "center": {
+    "child": ".mds-entity-mark-initial"
    }
   },
   {
@@ -44,6 +47,9 @@
    },
    "height": {
     "px": 44
+   },
+   "center": {
+    "child": ".mds-entity-mark-initial"
    }
   },
   {
@@ -53,6 +59,9 @@
    },
    "height": {
     "px": 64
+   },
+   "center": {
+    "child": ".mds-entity-mark-initial"
    }
   },
   {

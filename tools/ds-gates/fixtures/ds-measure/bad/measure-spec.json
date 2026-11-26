@@ -8,6 +8,12 @@
       "height": {
         "token": "size.touch-min"
       }
+    },
+    {
+      "id": "mark-center",
+      "center": {
+        "child": ".child"
+      }
     }
   ]
 }

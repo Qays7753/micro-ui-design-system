@@ -1,6 +1,13 @@
 <!doctype html>
 <html dir="rtl"><head><meta charset="utf-8">
-<style>button { width: 48px; height: 48px; }</style>
+<style>
+button { width: 48px; height: 48px; }
+.mark { width: 48px; height: 48px; position: relative; }
+.mark .child { position: absolute; width: 12px; height: 12px; left: 18px; top: 18px; }
+</style>
 </head><body>
 <button data-ds-check="icon-button" aria-label="إغلاق">&#10005;</button>
+<div class="mark" data-ds-check="mark-center">
+  <span class="child"></span>
+</div>
 </body></html>

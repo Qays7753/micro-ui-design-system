@@ -12,6 +12,13 @@ Expected values come from a spec file the future builder (S3+) extends:
 Spec entry:  {"id": "icon-button", "width": {"token": "size.touch-min"},
                "height": {"token": "size.touch-min"}}            — token ref
               {"id": "row-two-lines", "height": {"px": 72}}     — fixed number
+              {"id": "entity-mark-md", "center": {"child":
+               ".mds-entity-mark-initial"}}                      — centering:
+              the child's rect center must sit within the measure tolerance
+              (±0.5px) of the element's rect center on BOTH axes (ج1 as
+              widened by addendum 1.6 و-2 item 7: the EntityMark initial is
+              among the centered things). A missing child is a FAIL — a check
+              that finds nothing proves nothing.
 Token paths resolve against docs/design-system/tokens.json at the target root.
 Runs on Chromium AND WebKit; every engine must pass.
 """
@@ -27,6 +34,19 @@ MEASURE_JS = """
 (elements) => elements.map(el => {
   const r = el.getBoundingClientRect();
   return {tag: el.tagName.toLowerCase(), w: r.width, h: r.height};
+})
+"""
+
+CENTER_JS = """
+(args) => args.elements.map(el => {
+  const child = el.querySelector(args.selector);
+  if (!child) return null;
+  const c = child.getBoundingClientRect();
+  const p = el.getBoundingClientRect();
+  return {
+    dx: (c.x + c.width / 2) - (p.x + p.width / 2),
+    dy: (c.y + c.height / 2) - (p.y + p.height / 2),
+  };
 })
 """
 
@@ -94,6 +114,21 @@ def run(gate: Gate, target, args):
                                     problems.append(
                                         f"[{cid} #{i}] {axis} {got:.2f}px != token {want:g}px "
                                         f"(tolerance ±{TOLERANCE}px, {entry[axis]})")
+                            if "center" in entry:
+                                child_sel = entry["center"]["child"]
+                                deltas = page.evaluate(
+                                    CENTER_JS, {"elements": handle, "selector": child_sel})
+                                for j, delta in enumerate(deltas):
+                                    if delta is None:
+                                        problems.append(
+                                            f"[{cid} #{i}#{j}] center child '{child_sel}' not found — "
+                                            "a check that finds nothing proves nothing")
+                                        continue
+                                    if abs(delta["dx"]) > TOLERANCE or abs(delta["dy"]) > TOLERANCE:
+                                        problems.append(
+                                            f"[{cid} #{i}#{j}] center off by "
+                                            f"dx {delta['dx']:+.2f}px dy {delta['dy']:+.2f}px "
+                                            f"(tolerance ±{TOLERANCE}px, child '{child_sel}')")
             except Exception as exc:
                 problems.append(f"browser error: {exc!r}")
             if problems:
