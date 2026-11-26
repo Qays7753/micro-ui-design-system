@@ -1,0 +1,41 @@
+<!doctype html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<title>ds-layout bad fixture</title>
+<style>
+  body { margin: 0; padding: 16px; background: #E8ECEF; font: 16px/1.5 sans-serif; }
+  .row { display: flex; gap: 10px; }
+  .mds-button { display: inline-flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: 0 16px; background: #0E3E46; color: #fff; border: none; }
+  .tight { display: flex; gap: 4px; margin: 16px 0; }
+  .chip-row { display: flex; gap: 8px; margin: 16px 0; }
+  .mds-chip { display: inline-flex; align-items: center; padding: 0 12px;
+    background: #fff; border: 1px solid #D5DCE0; }
+  .cover-zone { position: relative; margin: 16px 0; }
+  .cover { position: absolute; inset: 0; background: rgba(16 23 25 / 40%); z-index: 5; }
+</style>
+</head><body>
+  <!-- m21: two texts occupying the same spot (absolute overlap) -->
+  <div style="position: relative; height: 24px;">
+    <span style="position: absolute; inset-inline-start: 0;">النص الأول</span>
+    <span style="position: absolute; inset-inline-start: 0;">نص ثانٍ فوقه</span>
+  </div>
+
+  <!-- m22: two independent buttons only 4px apart (< touch-gap-min 8) -->
+  <div class="tight">
+    <button type="button" class="mds-button">حفظ</button>
+    <button type="button" class="mds-button">إلغاء</button>
+  </div>
+
+  <!-- m24: same-type chips in one horizontal row with DIFFERENT heights -->
+  <div class="chip-row">
+    <span class="mds-chip" style="height: 40px;">داخل</span>
+    <span class="mds-chip" style="height: 64px;">خارج</span>
+    <span class="mds-chip" style="height: 40px;">تحويل</span>
+  </div>
+
+  <!-- m23: a scrim covering a button's center -->
+  <div class="cover-zone">
+    <button type="button" class="mds-button">مغطّى</button>
+    <div class="cover"></div>
+  </div>
+</body></html>

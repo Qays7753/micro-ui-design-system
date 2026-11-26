@@ -1,0 +1,29 @@
+<!doctype html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<title>ds-layout clean fixture</title>
+<style>
+  body { margin: 0; padding: 16px; background: #E8ECEF; font: 16px/1.5 sans-serif; }
+  .mds-button { display: inline-flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: 0 16px; background: #0E3E46; color: #fff; border: none; }
+  .spaced { display: flex; gap: 12px; margin: 16px 0; }
+  .chip-row { display: flex; gap: 8px; margin: 16px 0; }
+  .mds-chip { display: inline-flex; align-items: center; height: 48px; padding: 0 12px;
+    background: #fff; border: 1px solid #D5DCE0; }
+</style>
+</head><body>
+  <!-- m21: two texts side by side, no overlap -->
+  <p><span>النص الأول</span> — <span>نص ثانٍ بجانبه</span></p>
+
+  <!-- m22: independent buttons 12px apart (>= touch-gap-min 8) -->
+  <div class="spaced">
+    <button type="button" class="mds-button">حفظ</button>
+    <button type="button" class="mds-button">إلغاء</button>
+  </div>
+
+  <!-- m24: same-type chips in one row, ONE height -->
+  <div class="chip-row">
+    <span class="mds-chip">داخل</span>
+    <span class="mds-chip">خارج</span>
+    <span class="mds-chip">تحويل</span>
+  </div>
+</body></html>

@@ -385,9 +385,12 @@
   max-width: 360px;
   display: flex;
   /* The lab strip wraps instead of overflowing the phone width (K21):
-     it is not sticky, so wrapping cannot shadow presses. */
+     it is not sticky, so wrapping cannot shadow presses. Gap 8 (was 4):
+     the strip's keys are independent touch targets with visible
+     boundaries — د8/م22 (layout.touch-gap-min) applies to the lab's own
+     UI too; ds-layout caught the 4px pairs. */
   flex-wrap: wrap;
-  gap: var(--mds-space-4);
+  gap: var(--mds-space-8);
   justify-content: flex-start;
   margin-block-end: var(--mds-space-8);
 }
