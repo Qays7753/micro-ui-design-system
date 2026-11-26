@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ar } from '../../i18n/ar';
+import { ar, moneyTexts } from '../../i18n/ar';
+import { AmountVisibilityProvider } from '../../lib/amount-visibility';
 
 const LINE = ar['empty.movements'].text;
 import { NavTodayIcon } from '../../icons';
@@ -38,12 +39,57 @@ describe('Tile (BRIEF 23.9)', () => {
     expect(TileStates).toContain('withDot');
   });
 
-  it('renders the sparkline above the number when provided', () => {
-    const { container } = render(
-      <Tile {...base()} draft={<svg data-testid="spark" viewBox="0 0 80 24" />} />,
-    );
-    expect(container.querySelector('.mds-tile-sparkline')).not.toBeNull();
+  it('renders the sparkline above the number when provided (23.25: line + endpoint dot)', () => {
+    const { container } = render(<Tile {...base()} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} trailing={LINE} />);
+    const sparkline = container.querySelector('.mds-tile-sparkline');
+    expect(sparkline).not.toBeNull();
+    expect(sparkline?.querySelector('polyline')).not.toBeNull();
+    expect(sparkline?.querySelector('circle')).not.toBeNull();
+    // the sparkline sits ABOVE the number (23.9)
+    const value = container.querySelector('.mds-tile-value') as HTMLElement;
+    expect(
+      sparkline!.compareDocumentPosition(value) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(TileStates).toContain('withSparkline');
+  });
+
+  it('draws the endpoint dot ALONE for a single value (no line)', () => {
+    const { container } = render(<Tile {...base()} draft={[9.4]} />);
+    expect(container.querySelector('.mds-tile-sparkline circle')).not.toBeNull();
+    expect(container.querySelector('.mds-tile-sparkline polyline')).toBeNull();
+  });
+
+  it('hides the number but keeps the sparkline slot WITHOUT values when amounts are hidden (23.22)', () => {
+    const { container } = render(
+      <AmountVisibilityProvider hidden>
+        <Tile {...base()} draft={[8.2, 7.6, 8.9, 8.1]} trailing={LINE} />
+      </AmountVisibilityProvider>,
+    );
+    const sparkline = container.querySelector('.mds-tile-sparkline');
+    expect(sparkline).not.toBeNull();
+    expect(sparkline?.querySelector('polyline')).toBeNull();
+    expect(sparkline?.querySelector('circle')).toBeNull();
+    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(moneyTexts.hiddenGlyph);
+    expect(container.textContent).not.toContain('1,250');
+    expect(container.querySelector('.mds-tile-line')?.textContent).toBe(LINE);
+  });
+
+  it('keeps the missing em dash over hidden (like Money and the hero)', () => {
+    const { container } = render(
+      <AmountVisibilityProvider hidden>
+        <Tile label={LABEL} trailing={LINE} />
+      </AmountVisibilityProvider>,
+    );
+    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(moneyTexts.missingGlyph);
+  });
+
+  it('keeps a NON-financial counter visible while amounts are hidden (23.22)', () => {
+    const { container } = render(
+      <AmountVisibilityProvider hidden>
+        <Tile label={LABEL} value="4" trailing={LINE} />
+      </AmountVisibilityProvider>,
+    );
+    expect(container.querySelector('.mds-tile-value')?.textContent).toBe('4');
   });
 
   it('applies the outer-corner tone classes (28 outer / 8 rest)', () => {

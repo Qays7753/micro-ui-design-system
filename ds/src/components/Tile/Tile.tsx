@@ -16,6 +16,9 @@
  * - Press: scale(.98) (23.9). Tapping opens the filtered domain (onPress).
  */
 import { usePress } from '../../lib/use-press';
+import { useAmountVisibility } from '../../lib/amount-visibility';
+import { moneyTexts } from '../../i18n/ar';
+import { SparklineSvg } from '../../lib/sparkline';
 import type { TileProps } from './Tile.types';
 import './Tile.css';
 
@@ -37,6 +40,21 @@ export function Tile({
   ...rest
 }: TileProps) {
   const { isPressed, pressProps } = usePress({ onPress: () => onPress?.(), disabled });
+  // 23.22 («سلوك كل مكوّن» — Tile المالية): الرقم مخفي «•••» والخط الصغير
+  // يبقى ظاهرًا بلا قيم؛ القيمة الحقيقية تغادر الصفحة. المفقودة «—» تغلب الإخفاء.
+  // The FINANCE tile is the sparkline tile (23.9: «بلاطة واحدة كحد أقصى —
+  // المالية») — its number is the money amount, so ONLY it hides; the other
+  // tiles' numbers are non-financial counters and stay visible (23.22:
+  // «الأعداد غير المالية ظاهرة»). Recorded for the owner under «يحتاج قرار
+  // المالك»: a money tile without a sparkline would need its own marker.
+  const { hidden } = useAmountVisibility();
+  const isMoneyTile = draft !== undefined;
+  const number =
+    value === undefined
+      ? moneyTexts.missingGlyph
+      : hidden && isMoneyTile
+        ? moneyTexts.hiddenGlyph
+        : value;
   const classes = [
     'mds-tile',
     `mds-tile--${tone}`,
@@ -67,8 +85,19 @@ export function Tile({
         ) : null}
       </span>
       <span className="mds-tile-content">
-        {draft ? <span className="mds-tile-sparkline" aria-hidden="true">{draft}</span> : null}
-        <span className="mds-tile-value"><bdi dir="ltr">{value ?? '—'}</bdi></span>
+        {draft ? (
+          <span className="mds-tile-sparkline" aria-hidden="true">
+            <SparklineSvg
+              values={draft}
+              hidden={hidden}
+              lineClassName="mds-tile-sparkline-line"
+              dotClassName="mds-tile-sparkline-dot"
+            />
+          </span>
+        ) : null}
+        <span className="mds-tile-value">
+          <bdi dir="ltr">{number}</bdi>
+        </span>
         {trailing ? <span className="mds-tile-line mds-type-caption">{trailing}</span> : null}
       </span>
     </button>

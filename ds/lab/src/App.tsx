@@ -181,7 +181,7 @@ export function App() {
                 </Surface>
               </Section>
               <div className="mds-tile-grid">
-                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>} value="1,250" trailing={t('movement.in')} onPress={() => {}} />
+                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} value="1,250" trailing={t('movement.in')} onPress={() => {}} />
                 <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} state value="4" trailing={t('badge.waiting')} onPress={() => {}} />
                 <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => {}} />
                 <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => {}} />
@@ -1159,7 +1159,7 @@ export function App() {
                 tone="start"
                 label={t('nav.finance')}
                 leading={<NavFinanceIcon size={20} />}
-                draft={<svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true"><polyline points="0,18 20,10 40,14 60,6 80,10" fill="none" stroke="currentColor" strokeWidth="2"/></svg>}
+                draft={[8.2, 7.6, 8.9, 8.1, 9.4]}
                 value="1,250"
                 trailing={t('movement.in')}
                 onPress={() => {}}

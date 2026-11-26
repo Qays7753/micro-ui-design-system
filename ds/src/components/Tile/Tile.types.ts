@@ -27,8 +27,12 @@ export interface TileProps {
   value?: string;
   /** The single 13/20 text-secondary line under the number. */
   trailing?: string;
-  /** The 24-high sparkline above the number — one tile max (finance). */
-  draft?: ReactNode;
+  /** The 24-high sparkline above the number — one tile max (finance), the
+   *  recent series (23.25 «آخر قيمة», addendum 1.6 أ-ج): a brand-data line
+   *  of weight 2 with a dot-signal endpoint in sparkline-endpoint. With
+   *  hidden amounts the slot stays but draws no values (23.22: «الخط
+   *  الصغير ظاهر بلا قيم»). */
+  draft?: readonly number[];
   /** Grid position decides the outer 28 corner (BRIEF 23.9). */
   tone?: 'start' | 'end';
   /** Tapping opens the filtered domain (BRIEF 23.9). */

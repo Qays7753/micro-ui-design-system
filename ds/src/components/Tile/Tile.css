@@ -98,10 +98,37 @@
   color: var(--mds-color-text-secondary);
 }
 
-/* The sparkline: 24 high, above the number, one tile max (23.9). */
+/* The sparkline: 24 high, above the number, one tile max (23.9). The line
+   (23.25 «آخر قيمة», addendum 1.6 أ-ج): brand-data at weight 2 — the 2px
+   stroke token (border.signal-line, the value the addendum quotes) — with
+   a dot-signal endpoint in sparkline-endpoint: the ONLY terracotta in the
+   tile. Hidden amounts keep the slot, draw no values (23.22). */
 .mds-tile-sparkline {
   display: block;
   height: var(--mds-size-sparkline-height);
+}
+
+.mds-tile-sparkline svg {
+  display: block;
+  overflow: visible;
+}
+
+.mds-tile-sparkline-line {
+  fill: none;
+  stroke: var(--mds-color-brand-data);
+  stroke-width: var(--mds-border-signal-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mds-tile-sparkline-dot {
+  fill: var(--mds-role-sparkline-endpoint);
+}
+
+/* RTL (the system's first direction): the series mirrors so the LATEST
+   value — the endpoint dot — sits at the reading end, same as the hero. */
+:root[dir='rtl'] .mds-tile-sparkline svg {
+  transform: scaleX(-1);
 }
 
 /* Press: scale(.98) — no background change, no ripple (23.9, 23.2). */

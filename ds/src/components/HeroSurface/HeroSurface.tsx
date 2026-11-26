@@ -34,7 +34,7 @@
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { moneyTexts } from '../../i18n/ar';
-import { tokens } from '../../tokens/tokens';
+import { SparklineSvg } from '../../lib/sparkline';
 import { AmountVisibilityToggle } from '../AmountVisibilityToggle/index';
 import type { HeroSurfaceProps } from './HeroSurface.types';
 import './HeroSurface.css';
@@ -44,31 +44,6 @@ function splitValue(value: string): { whole: string; cents: string } {
   const dot = value.indexOf('.');
   if (dot === -1) return { whole: value, cents: '' };
   return { whole: value.slice(0, dot), cents: value.slice(dot) };
-}
-
-/* The sparkline's chart geometry. The HEIGHT is the token
- * (size.sparkline-height = sparkline-height 24); the 80 viewBox width is the
- * chart's own coordinate space — a data-geometry constant like the polyline
- * points, not a design token. The dot radius and stroke come from their
- * tokens by name; the pad keeps dot + stroke inside the 24-high box. */
-const SPARK_W = 80;
-const SPARK_H = tokens.size['sparkline-height'];
-const SPARK_DOT_R = tokens.size['dot-signal'] / 2;
-const SPARK_STROKE = tokens.border['signal-line'];
-const SPARK_PAD = SPARK_DOT_R + SPARK_STROKE / 2;
-
-/** Map the series into the 80×24 viewBox: x 4→76, y inverted 4→20 (a rising
- *  value climbs), a flat series centered, a single value at the line's end. */
-function sparkGeometry(values: readonly number[]): { points: string; endX: number; endY: number } {
-  const n = values.length;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min;
-  const x = (i: number) => (n === 1 ? SPARK_W - SPARK_PAD : SPARK_PAD + (i / (n - 1)) * (SPARK_W - 2 * SPARK_PAD));
-  const y = (v: number) =>
-    span === 0 ? SPARK_H / 2 : SPARK_PAD + (1 - (v - min) / span) * (SPARK_H - 2 * SPARK_PAD);
-  const points = values.map((v, i) => `${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ');
-  return { points, endX: x(n - 1), endY: y(values[n - 1]) };
 }
 
 function HeroValue({ value }: { value?: string }) {
@@ -107,13 +82,14 @@ function HeroSparkline({ values }: { values: readonly number[] }) {
   const { hidden } = useAmountVisibility();
   // «يبقى بلا قيم» (23.22): hidden amounts keep the 24-high slot but draw
   // neither the line nor the endpoint dot — no digit, no trend leak.
-  const geo = !hidden && values.length >= 1 ? sparkGeometry(values) : null;
   return (
     <span className="mds-hero-sparkline" aria-hidden="true">
-      <svg viewBox={`0 0 ${SPARK_W} ${SPARK_H}`} width={SPARK_W} height={SPARK_H} focusable="false">
-        {geo && values.length >= 2 ? <polyline className="mds-hero-sparkline-line" points={geo.points} /> : null}
-        {geo ? <circle className="mds-hero-sparkline-dot" cx={geo.endX} cy={geo.endY} r={SPARK_DOT_R} /> : null}
-      </svg>
+      <SparklineSvg
+        values={values}
+        hidden={hidden}
+        lineClassName="mds-hero-sparkline-line"
+        dotClassName="mds-hero-sparkline-dot"
+      />
     </span>
   );
 }
