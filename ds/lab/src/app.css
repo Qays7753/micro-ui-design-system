@@ -136,6 +136,10 @@
   justify-content: center;
   min-width: var(--mds-size-touch-min);
   min-height: var(--mds-size-touch-min);
+  /* flex-shrink:0 — a lab key keeps its label's width (the row wraps); at
+     font-scale 200% the shrink squeezed the 100%/200% keys under their own
+     text and clipped it (S12/2). */
+  flex-shrink: 0;
   padding-inline: var(--mds-space-16);
   font-family: var(--mds-type-label-strong-font);
   font-size: var(--mds-type-label-strong-size);
@@ -333,6 +337,11 @@
   align-items: center;
   min-height: var(--mds-size-touch-min);
   min-width: var(--mds-size-touch-min);
+  /* flex-shrink:0 — the strip scrolls sideways by design (see .lab-index);
+     a shrinkable item collapsed to its 48 floor instead, wrapping its label
+     over three lines inside a 64px box and breaking the one-row bar at BOTH
+     font scales (caught by the S12/2 200% pass). */
+  flex-shrink: 0;
   justify-content: center;
   font-family: var(--mds-type-label-font);
   font-size: var(--mds-type-label-size);
