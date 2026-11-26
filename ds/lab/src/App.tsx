@@ -157,6 +157,7 @@ export function App() {
                 label={t('nav.finance')}
                 value={composeHidden ? '—' : '1,245.750'}
                 trailing={t('money.unit')}
+                draft={[10.2, 9.8, 11.0, 10.4, 11.6, 11.1, 12.3]}
                 direction={
                   <>
                     <DeltaUpIcon />
