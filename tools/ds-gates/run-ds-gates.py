@@ -42,6 +42,7 @@ GATES = [
     "ds-hidden-amounts",
     "ds-font-shift",
     "ds-tabular",
+    "ds-money",
     "ds-bidi",
     "ds-small-screen",
     "ds-signal",
@@ -52,6 +53,7 @@ BROWSER_GATES = {
     "ds-standalone-mode", "ds-measure", "ds-a11y", "ds-states", "ds-motion",
     "ds-hidden-amounts", "ds-font-shift", "ds-tabular", "ds-bidi",
     "ds-small-screen", "ds-signal", "ds-layout",
+    "ds-money",
 }
 
 

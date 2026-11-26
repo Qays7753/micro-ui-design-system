@@ -233,6 +233,18 @@
       "prove_exit": 0
     },
     {
+      "gate": "ds-money",
+      "engine": "browser (chromium+webkit)",
+      "violation_fixture": "tools/ds-gates/fixtures/ds-money/bad",
+      "clean_fixture": "tools/ds-gates/fixtures/ds-money/clean",
+      "expected_failure_exit": 1,
+      "expected_success_exit": 0,
+      "failure_detected_on_violation": true,
+      "current_state_exit": 0,
+      "current_state_tail": "total: 2 ok, 0 failed",
+      "prove_exit": 0
+    },
+    {
       "gate": "ds-bidi",
       "engine": "browser (chromium+webkit)",
       "violation_fixture": "tools/ds-gates/fixtures/ds-bidi/bad",
