@@ -1,0 +1,44 @@
+<!doctype html>
+<html dir="rtl"><head><meta charset="utf-8">
+<style>
+  .stack > * { margin: 0; }
+</style></head><body>
+<div data-ds-check="compose">
+  <div class="mds-context-bar">اليوم</div>
+  <div class="mds-page-header">
+    <h1 class="mds-page-header-title">اليوم</h1>
+    <div class="mds-page-header-end">
+      <button class="mds-button mds-button--secondary mds-button--sm">سجّل حركة</button>
+    </div>
+  </div>
+  <div data-ds-check="compose-content">
+    <!-- c17: TWO hero components -->
+    <div class="mds-hero-surface"><span class="mds-hero-label">المالية</span><span class="mds-hero-value mds-type-display-hero" style="font-size:40px; line-height:48px;"><span>1,245</span></span></div>
+    <div class="mds-metric"><span class="mds-metric-label">ثانية</span><span class="mds-metric-value" style="font-size:40px;">500</span></div>
+    <!-- c19: a stray big text outside header/hero before the first section -->
+    <p style="font-size:22px; line-height:30px;">إشعار مهم للجميع</p>
+    <!-- c31: a 48px vertical gap between children (limit 32) -->
+    <div style="height:8px;"></div>
+    <!-- c69: a zero count beside an empty state -->
+    <section class="mds-section">
+      <span class="mds-section-count">0</span>
+      <div class="mds-empty-state"><span>لا شيء هنا</span></div>
+    </section>
+    <!-- c36: 3 items in 2 columns -->
+    <div class="mds-tile-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <div class="mds-tile"><span class="mds-tile-value" style="font-size:16px; line-height:24px;">4</span></div>
+      <div class="mds-tile"><span class="mds-tile-value" style="font-size:28px; line-height:36px;">2</span></div>
+      <div class="mds-tile"><span class="mds-tile-value" style="font-size:16px; line-height:24px;">7</span></div>
+    </div>
+    <!-- c73: two display switches directly in a row -->
+    <div class="mds-segmented"></div>
+    <div class="mds-segmented"></div>
+    <!-- c20: a second Button before the first amount is already satisfied? no — the header button is before; add one more -->
+    <button class="mds-button mds-button--secondary mds-button--sm">سجّل حركة</button>
+    <!-- c21+c22: a second primary with a repeated label -->
+    <button class="mds-button mds-button--primary mds-button--sm">سجّل حركة</button>
+    <!-- d7: a 3-line text block -->
+    <p style="font-size:16px; line-height:24px; max-width:200px;">نص طويل جداً يمتد إلى ثلاثة أسطر كاملة في هذا الصندوق الضيق لتكسر الحد المسموح من السطور في الشاشة</p>
+  </div>
+</div>
+</body></html>
