@@ -67,6 +67,26 @@
   display: flex;
   flex-direction: column;
   gap: var(--mds-space-12);
+  /* Font-scale 200% (BRIEF line "الخط المكبّر" + criterion م5): unbreakable
+     champion content (nowrap row titles, tabular Money) must not propagate
+     its min-content width up through these column wrappers and blow the
+     page horizontally — the 23.20 tight-space behaviors (the text column
+     ellipsizes; what surrounds Money is clipped, never Money itself) only
+     engage when the wrappers actually constrain their children. min-width:0
+     changes nothing at 100%, where every champion already fits its row. */
+  min-width: 0;
+}
+
+/* Same propagation cut at the champion level: a row item (a Surface, a
+   HeroSurface, a Tile grid...) may shrink to its line width so its OWN
+   23.20 tight-space rule applies, instead of stretching the line past the
+   viewport through the flex cross-axis automatic minimum. Wrap containers
+   still wrap first (two Money champions side by side wrap to two lines —
+   Money itself is never shrunk below its content, BRIEF 23.20 Money row). */
+.lab-section > *,
+.lab-row > *,
+.lab-row--full > * {
+  min-width: 0;
 }
 
 .lab-title {
@@ -161,10 +181,21 @@
   min-height: var(--mds-size-touch-min);
 }
 
-/* Full-width lab rows (the horizontal-scroll chip row needs the width). */
-.lab-row--full {
+/* Full-width lab rows (the horizontal-scroll chip row needs the width).
+   Two-class specificity (.lab-row.lab-row--full): these elements carry BOTH
+   classes, and .lab-row's align-items:center would otherwise win the equal-
+   specificity cascade — center cross-sizes each champion by its content
+   (fit-content), so at font-scale 200% an unbreakable inside (nowrap row
+   title, tabular Money) decided the card's width and pushed it past the
+   viewport. Stretch hands the champion the row's real width and its own
+   23.20 tight-space rule ellipsizes the inside instead. flex-wrap:nowrap
+   completes it: .lab-row's wrap on a COLUMN container would give every
+   oversized champion its own COLUMN line sized by its content, and the
+   stretch clamp would then match that line's width, not the row's. */
+.lab-row.lab-row--full {
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
   align-items: stretch;
   gap: var(--mds-space-12);
 }
