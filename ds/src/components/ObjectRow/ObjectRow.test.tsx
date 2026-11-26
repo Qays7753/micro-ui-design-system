@@ -35,9 +35,9 @@ describe('ObjectRow (BRIEF 23.4)', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('marks a one-line row (height 56 class) when caption and trailing are absent', () => {
+  it('keeps one-line rows at the mark height: no 56 variant class (addendum hw-1)', () => {
     const { container } = render(<ObjectRow label={TITLE} value="1,250" />);
-    expect(container.querySelector('.mds-object-row--one-line')).not.toBeNull();
+    expect(container.querySelector('.mds-object-row--one-line')).toBeNull();
     expect(ObjectRowStates).toContain('oneLine');
   });
 

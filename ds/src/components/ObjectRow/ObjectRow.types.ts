@@ -7,8 +7,10 @@
  * the time or a StatusBadge; never truncated). Baselines: title with the
  * value, second line with the time. The amount NEVER truncates — the
  * title does when space runs out. No trailing «›». The badge appears
- * only when the state differs from the expected (23.6). Heights: 72 for
- * two lines, 56 for one. Free design-value props banned (23.18).
+ * only when the state differs from the expected (23.6). Heights (و-1
+ * هـ1): 72 for every row — the mark starts it — one line or two, the
+ * one-line row centers vertically. Free design-value props banned
+ * (23.18).
  */
 import type { ReactNode, Ref } from 'react';
 
@@ -21,7 +23,8 @@ export interface ObjectRowProps {
   /** The title: body-strong 16/24 text-primary, one line, ellipsized. */
   label: string;
   /** The second line: caption 13/20 text-secondary, one line; must NOT
-   *  repeat the title (23.4). Omit for a one-line row (height 56). */
+   *  repeat the title (23.4). Omit for a one-line row (still 72 — the
+   *  mark starts it — text centered vertically, و-1 هـ1). */
   caption?: string;
   /** The end value: amount-row 16/24/600 tabular; never truncated. */
   value?: string;

@@ -10,23 +10,15 @@
   gap: var(--mds-layout-row-gap);
   width: 100%;
   padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
-  /* Heights: 72 with mark, 56 plain — token names follow و-1 هـ1
-     (row-with-mark / row-plain). */
+  /* Heights (و-1 هـ1): the height follows what starts the row — ObjectRow
+     always renders the EntityMark 44, so every row is 72, one line or two;
+     the one-line row centers its text vertically (align-items: center). */
   min-height: var(--mds-size-row-with-mark);
   background-color: transparent;
   border: none;
   font: inherit;
   color: inherit;
   text-align: start;
-}
-
-/* One-line rows (23.4): the fixed 56 height with the fixed 44 mark means
-   the vertical padding flexes to 6 (56 = 44 + 2×6); the 12-block padding
-   of the two-line row would force 68. Owner-decision reading documented
-   in REPORT (يحتاج قرار المالك) — و-1 هـ1 supersedes this in unit 3. */
-.mds-object-row--one-line {
-  min-height: var(--mds-size-row-plain);
-  padding-block: calc((var(--mds-size-row-plain) - var(--mds-size-entity-44)) / 2);
 }
 
 /* The text column takes the remaining space and gives its overflow to

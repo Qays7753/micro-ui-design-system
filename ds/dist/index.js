@@ -2618,7 +2618,6 @@ function Xn({
 }) {
   const { isPressed: f, pressProps: p } = k({ onPress: () => o?.(), disabled: d }), b = o !== void 0, v = [
     "mds-object-row",
-    s || r ? "" : "mds-object-row--one-line",
     f ? "mds-object-row--pressed" : "",
     d ? "mds-object-row--disabled" : "",
     b ? "" : "mds-object-row--passive",

@@ -7,7 +7,11 @@
  * - Baselines: the title sits on the value's baseline; the caption sits
  *   on the time's baseline (align-items: baseline on both columns'
  *   first/second lines via matched line-heights).
- * - Heights: 72 two lines, 56 one line (from padding 12×2 + line pairs).
+ * - Heights (و-1 هـ1): the height follows what STARTS the row — this row
+ *   always renders EntityMark 44, so every row is 72, one line or two;
+ *   the one-line row centers its text vertically. The 56 plain rows (no
+ *   mark, or a 24 icon: the actions/settings lists) are app-side patterns
+ *   of 23.24(7), not this component.
  * - Press: the row-inset treatment (23.2). No trailing «›» (23.24).
  */
 import { usePress } from '../../lib/use-press';
@@ -34,7 +38,6 @@ export function ObjectRow({
   const interactive = onPress !== undefined;
   const classes = [
     'mds-object-row',
-    caption || trailing ? '' : 'mds-object-row--one-line',
     isPressed ? 'mds-object-row--pressed' : '',
     disabled ? 'mds-object-row--disabled' : '',
     interactive ? '' : 'mds-object-row--passive',
