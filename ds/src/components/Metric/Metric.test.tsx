@@ -70,6 +70,13 @@ describe('Metric (BRIEF 9.3, 23.8 on white)', () => {
     expect(lines.length).toBe(1);
   });
 
+  it('renders the source link in the SOURCE form only: caption-strong underlined text, never a forward icon (rule 52 per the review item 20)', () => {
+    const { container } = render(<Metric label={LABEL} value="1,245" debt={SOURCE} />);
+    const source = container.querySelector('.mds-metric-source') as HTMLElement;
+    expect(source.textContent).toBe(SOURCE);
+    expect(source.querySelector('svg')).toBeNull();
+  });
+
   it('uses no brand-signal-text (owner terracotta decision)', () => {
     const css = readFileSync(join(__dirname, 'Metric.css'), 'utf8');
     expect(css).not.toContain('brand-signal-text');
