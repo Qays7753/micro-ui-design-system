@@ -21,6 +21,7 @@
 .mds-metric-amount {
   margin: var(--mds-space-4) 0 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: var(--mds-layout-amount-unit-gap);
 }

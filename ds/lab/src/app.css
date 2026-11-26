@@ -7,6 +7,12 @@
 .lab-page {
   min-height: 100vh;
   background-color: var(--mds-color-canvas);
+  /* NO overflow-x clip here — unit 17's review tried it and the LOOK caught
+     the 200% hero number losing its leading digits (BRIEF 27/29: حتى 200%
+     بلا قص, and 23.20/23.24: the amount is NEVER clipped). The zoo page at
+     font-scale 200% scrolls horizontally instead, keeping every unbreakable
+     amount whole; the product screen (demo-compose) reflows fully clean at
+     every size and scale, so the page scroll exists only in the sample zoo. */
 }
 
 .lab-header {
@@ -211,6 +217,7 @@
 /* Entity rows inside the list-mode Surface (the rows carry their own 16). */
 .lab-row-entity {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--mds-space-12);

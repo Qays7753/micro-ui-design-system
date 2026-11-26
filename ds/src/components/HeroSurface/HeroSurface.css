@@ -50,9 +50,12 @@
 }
 
 /* The visual amount swaps shown/hidden with the quick cross-fade
-   (BRIEF 23.22); the key remount on every swap replays the entry fade. */
+   (BRIEF 23.22); the key remount on every swap replays the entry fade.
+   flex-wrap: at extreme zoom (27.8: the line reflows, never clips) the UNIT
+   wraps under the number — the digits themselves stay one unbroken run. */
 .mds-hero-visual {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: baseline;
   animation: mds-hero-swap var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
 }
