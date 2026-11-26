@@ -95,6 +95,21 @@ describe('FilterChips (BRIEF 9.1, 23.16, 23.2)', () => {
     expect(FilterChipsStates).toContain('manyChips');
   });
 
+  it('starts the row with the FIRST chip flush at the container edge, nothing before it (rule 33: first chip fully visible at scroll 0)', () => {
+    const chips = [
+      { value: 'in', label: IN },
+      { value: 'out', label: OUT },
+    ];
+    const { container } = render(<FilterChips leading={chips} value={[]} onChange={() => {}} label={GROUP} />);
+    const row = container.querySelector('.mds-filter-chips') as HTMLElement;
+    const first = row.firstElementChild as HTMLElement;
+    // no leading spacer: the first chip IS the row's first element child
+    expect(first.classList.contains('mds-filter-chip')).toBe(true);
+    expect(first.textContent).toBe(IN);
+    // the flush start is the CSS contract: padding-inline 0 on the row
+    // (FilterChips.css) — the consumer's screen margin is the only offset.
+  });
+
   it('passes data attributes through to the scroll container (lab hooks)', () => {
     const { container } = render(
       <FilterChips
