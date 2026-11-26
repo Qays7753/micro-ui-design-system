@@ -72,6 +72,11 @@ export function App() {
   const [tab, setTab] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  // Catalog samples: the exit motion plays on dismiss, THEN the app
+  // (here, the lab) removes the sheet — remounted fresh at once so the
+  // sample stays for review and the press scan (23.2) keeps hitting it.
+  const [sheetSampleKey, setSheetSampleKey] = useState(0);
+  const [confirmSampleKey, setConfirmSampleKey] = useState(0);
   const [toastText, setToastText] = useState<string | null>(null);
   const [pageState, setPageState] = useState<'normal' | 'loading' | 'empty'>('normal');
   const [composeHidden, setComposeHidden] = useState(false);
@@ -697,7 +702,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-sheet-stage" data-ds-check="sheet">
-              <Sheet label={t('sheet.sampleTitle')} onDismiss={() => {}}>
+              <Sheet key={sheetSampleKey} label={t('sheet.sampleTitle')} onDismiss={() => setSheetSampleKey(k => k + 1)}>
                 <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
                   <ObjectRow
                     label={t('row.sampleTitle')}
@@ -1010,11 +1015,12 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-sheet-stage" data-ds-check="confirm-sheet">
               <ConfirmSheet
+                key={confirmSampleKey}
                 label={t('confirm.sampleTitle')}
                 caption={t('confirm.sampleSentence')}
                 value={t('button.deleteMovement')}
                 onPress={() => {}}
-                onDismiss={() => {}}
+                onDismiss={() => setConfirmSampleKey(k => k + 1)}
               />
             </div>
           </div>

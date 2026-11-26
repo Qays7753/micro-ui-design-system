@@ -12,11 +12,18 @@
  *   interruptible (a new touch stops it where it is and follows again).
  * - Scrolling inside: overscroll-behavior contain (the drag starts only
  *   from the header/handle area or a scrolled-to-top body).
+ * - Close (و-2 item 30): the sheet plays its OWN exit motion first —
+ *   the panel slides to translateY(100%) with the exit token and the
+ *   scrim fades — THEN calls onDismiss, and the app removes it. A new
+ *   touch on the grab zone cancels the close where it is (23.11
+ *   interruptible). Focus returns to the opener when the dismiss fires
+ *   (23.17). prefers-reduced-motion (and any engine that reports no
+ *   transition) closes immediately: no orphaned motion.
  * - Layers: layer.sheet(40) over layer.scrim(30); `stacked` renders at
  *   layer.sheet-2(60) over layer.scrim-2(50). Max two stacked (23.15) —
  *   enforced by the app's own flow; the component provides the levels.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { CloseIcon } from '../../icons';
 
 /** Live-mounted sheet registry: render order decides the layer level. */
@@ -38,9 +45,26 @@ export function Sheet({
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const [dragY, setDragY] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [closing, setClosing] = useState(false);
   const velocity = useRef(0);
   const lastY = useRef(0);
   const lastT = useRef(0);
+  const openerRef = useRef<HTMLElement | null>(null);
+
+  // The latest onDismiss, so the transitionend callback (registered once
+  // per close) always fires the current prop — written in an effect,
+  // never during render.
+  const onDismissRef = useRef(onDismiss);
+  useEffect(() => {
+    onDismissRef.current = onDismiss;
+  }, [onDismiss]);
+
+  /** Finishes the close: return focus to the opener (23.17), then hand
+   *  the removal to the app. */
+  const finishDismiss = useCallback(() => {
+    openerRef.current?.focus?.();
+    onDismissRef.current();
+  }, []);
 
   // 23.15: the stacking level from live render order — the second live
   // sheet takes sheet-2(60) over scrim-2(50); a third never mounts (the
@@ -67,21 +91,41 @@ export function Sheet({
     return el.getBoundingClientRect().height * 0.3;
   };
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    // The drag starts from the header/handle area, or from the body only
-    // when it is scrolled to the top (23.11 scrolling-inside rule).
-    const target = e.target as HTMLElement;
-    const body = sheetRef.current?.querySelector('.mds-sheet-body') as HTMLElement | null;
-    const fromBody = body?.contains(target);
-    if (fromBody && body && body.scrollTop > 0) return;
-    velocity.current = 0;
-    lastY.current = e.clientY;
-    lastT.current = performance.now();
-    setDragging(true);
-    // Pointer capture keeps the drag tied to the grab zone across
-    // leave events; guard for engines without it (jsdom).
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-  };
+  /** The dismiss entry point for every close path (و-2 item 30): start
+   *  the exit motion, then onDismiss — the app unmounts afterwards. A
+   *  second request while closing is a no-op; the grab-zone pointerdown
+   *  cancels instead (23.11 interruptible). */
+  const requestDismiss = useCallback(() => {
+    if (closing) return;
+    openerRef.current = (document.activeElement as HTMLElement | null) ?? null;
+    setClosing(true);
+    // Next frame so the closing transition class is committed before the
+    // target transform is written (a plain rAF; jsdom falls back to a
+    // microtask-ish timeout — scheduling only, never a design value).
+    const schedule = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (cb: FrameRequestCallback) => setTimeout(() => cb(performance.now()), 0);
+    schedule(() => {
+      const panel = sheetRef.current?.querySelector('.mds-sheet-panel') as HTMLElement | null;
+      if (!panel) {
+        finishDismiss();
+        return;
+      }
+      const duration = getComputedStyle(panel).transitionDuration;
+      const animated = duration && duration !== '0s' && duration !== '';
+      panel.style.transform = 'translateY(100%)';
+      if (!animated) {
+        // prefers-reduced-motion (transition: none) or a non-CSS engine:
+        // close immediately, never orphan the exit.
+        finishDismiss();
+        return;
+      }
+      const done = (e: TransitionEvent) => {
+        if (e.propertyName !== 'transform') return;
+        panel.removeEventListener('transitionend', done);
+        finishDismiss();
+      };
+      panel.addEventListener('transitionend', done);
+    });
+  }, [closing, finishDismiss]);
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging) return;
@@ -98,30 +142,57 @@ export function Sheet({
   // whatever offset a previous partial drag left.
   const dragOrigin = useRef(0);
 
+  const onPointerDown = (e: React.PointerEvent) => {
+    // The drag starts from the header/handle area, or from the body only
+    // when it is scrolled to the top (23.11 scrolling-inside rule).
+    const target = e.target as HTMLElement;
+    const body = sheetRef.current?.querySelector('.mds-sheet-body') as HTMLElement | null;
+    const fromBody = body?.contains(target);
+    if (fromBody && body && body.scrollTop > 0) return;
+    if (closing) {
+      // 23.11 interruptible: a new touch cancels the exit where the
+      // panel is and the drag follows the finger again.
+      const panel = sheetRef.current?.querySelector('.mds-sheet-panel') as HTMLElement | null;
+      if (panel) panel.style.transform = dragY ? `translateY(${dragY}px)` : '';
+      setClosing(false);
+    }
+    velocity.current = 0;
+    lastY.current = e.clientY;
+    lastT.current = performance.now();
+    setDragging(true);
+    // Pointer capture keeps the drag tied to the grab zone across
+    // leave events; guard for engines without it (jsdom).
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
+
   const endDrag = () => {
     if (!dragging) return;
     setDragging(false);
     const pastDistance = dragY > threshold();
     const fast = velocity.current > 0.6;
-    // The sheet always lands at rest: past the threshold or too fast it
-    // dismisses (the caller unmounts it), otherwise it springs back —
-    // either way the drag offset resets.
-    setDragY(0);
-    if (pastDistance || fast) onDismiss();
+    if (pastDistance || fast) {
+      // Dismiss: KEEP the drag offset — the exit motion starts from
+      // where the finger left it (و-2 item 30), not from a snapped-back 0.
+      requestDismiss();
+    } else {
+      // Return: the offset resets so the panel springs back (standard).
+      setDragY(0);
+    }
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onDismiss();
+      if (e.key === 'Escape') requestDismiss();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onDismiss]);
+  }, [requestDismiss]);
 
   const classes = [
     'mds-sheet',
     level === 2 ? 'mds-sheet--stacked' : '',
     dragging ? 'mds-sheet--dragging' : '',
+    closing ? 'mds-sheet--closing' : '',
     className,
   ]
     .filter(Boolean)
@@ -145,7 +216,7 @@ export function Sheet({
     >
       <div
         className="mds-sheet-scrim"
-        onClick={() => onDismiss()}
+        onClick={() => requestDismiss()}
         aria-hidden="true"
       />
       <div
@@ -168,7 +239,7 @@ export function Sheet({
           </header>
         </div>
         <div className="mds-sheet-close">
-          <IconButton label={label} onPress={onDismiss}>
+          <IconButton label={label} onPress={requestDismiss}>
             <CloseIcon />
           </IconButton>
         </div>

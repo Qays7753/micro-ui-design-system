@@ -41,15 +41,32 @@ describe('Sheet (BRIEF 23.11, 23.15)', () => {
     expect(SheetStates).toContain('stacked');
   });
 
-  it('closes from the scrim, the close button and Escape', () => {
+  it('closes from the scrim, the close button and Escape (each path plays the exit, addendum item 30)', async () => {
+    for (const path of ['scrim', 'button', 'escape'] as const) {
+      const onDismiss = vi.fn();
+      const { container, unmount } = render(<Sheet label={TITLE} onDismiss={onDismiss} />);
+      if (path === 'scrim') {
+        fireEvent.click(container.querySelector('.mds-sheet-scrim') as HTMLElement);
+      } else if (path === 'button') {
+        const closeBtn = container.querySelector('.mds-icon-button') as HTMLElement;
+        fireEvent.pointerDown(closeBtn);
+        fireEvent.pointerUp(closeBtn);
+      } else {
+        fireEvent.keyDown(window, { key: 'Escape' });
+      }
+      await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1));
+      unmount();
+    }
+  });
+
+  it('a second dismiss request while closing is a no-op (the exit runs once)', async () => {
     const onDismiss = vi.fn();
     const { container } = render(<Sheet label={TITLE} onDismiss={onDismiss} />);
     fireEvent.click(container.querySelector('.mds-sheet-scrim') as HTMLElement);
-    const closeBtn = container.querySelector('.mds-icon-button') as HTMLElement;
-    fireEvent.pointerDown(closeBtn);
-    fireEvent.pointerUp(closeBtn);
+    fireEvent.click(container.querySelector('.mds-sheet-scrim') as HTMLElement);
     fireEvent.keyDown(window, { key: 'Escape' });
-    expect(onDismiss).toHaveBeenCalledTimes(3);
+    await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1));
+    expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
   it('follows the finger 1:1 downward only during the drag', () => {
@@ -80,7 +97,7 @@ describe('Sheet (BRIEF 23.11, 23.15)', () => {
     fireEvent.pointerDown(grab, { clientY: 100, pointerId: 1 });
     fireEvent.pointerMove(grab, { clientY: 300, pointerId: 1 });
     fireEvent.pointerUp(grab, { pointerId: 1 });
-    expect(onDismiss).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1));
     expect(SheetStates).toContain('pastThreshold');
 
     // A short drag (below threshold, slow) returns instead. Space the
@@ -112,6 +129,37 @@ describe('Sheet (BRIEF 23.11, 23.15)', () => {
   it('contains the scroll inside the body (23.11)', () => {
     const css = readFileSync(join(__dirname, 'Sheet.css'), 'utf8');
     expect(css).toContain('overscroll-behavior: contain');
+  });
+
+  it('plays the exit motion then dismisses, and a touch cancels the close (addendum item 30, 23.11)', async () => {
+    const onDismiss = vi.fn();
+    const { container } = render(<Sheet label={TITLE} onDismiss={onDismiss} />);
+    const panel = container.querySelector('.mds-sheet-panel') as HTMLElement;
+    const real = getComputedStyle(panel);
+    vi.spyOn(window, 'getComputedStyle').mockReturnValue({ ...real, transitionDuration: '0.2s' } as CSSStyleDeclaration);
+    fireEvent.click(container.querySelector('.mds-sheet-scrim') as HTMLElement);
+    // the closing class is on, the target transform is written, the
+    // dismiss has NOT fired yet — the exit is playing
+    expect(container.querySelector('.mds-sheet--closing')).not.toBeNull();
+    await waitFor(() => expect(panel.style.transform).toBe('translateY(100%)'));
+    expect(onDismiss).not.toHaveBeenCalled();
+    // the transition ends -> THEN onDismiss
+    panel.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform' }));
+    await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1));
+    vi.mocked(window.getComputedStyle).mockRestore();
+
+    // a new touch on the grab zone cancels the close where the panel is
+    const onDismiss2 = vi.fn();
+    const second = render(<Sheet label={TITLE} onDismiss={onDismiss2} />);
+    const panel2 = second.container.querySelector('.mds-sheet-panel') as HTMLElement;
+    const real2 = getComputedStyle(panel2);
+    vi.spyOn(window, 'getComputedStyle').mockReturnValue({ ...real2, transitionDuration: '0.2s' } as CSSStyleDeclaration);
+    fireEvent.click(second.container.querySelector('.mds-sheet-scrim') as HTMLElement);
+    const grab2 = second.container.querySelector('.mds-sheet-grab') as HTMLElement;
+    fireEvent.pointerDown(grab2, { clientY: 400, pointerId: 9 });
+    expect(second.container.querySelector('.mds-sheet--closing')).toBeNull();
+    expect(onDismiss2).not.toHaveBeenCalled();
+    vi.mocked(window.getComputedStyle).mockRestore();
   });
 
   it('uses no brand-signal-text (owner terracotta decision)', () => {

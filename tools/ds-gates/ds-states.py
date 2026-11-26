@@ -21,7 +21,30 @@ from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, Lo
 STYLE_PROPS = ("backgroundColor", "color", "borderTopColor", "opacity", "transform")
 
 BASE_JS = """
-() => Array.from(document.querySelectorAll('button, [role="button"]'))
+() => {
+  // Stable CSS path for re-resolution: the honest close flow (و-2 item
+  // 30: exit motion, THEN onDismiss, THEN the app removes it) makes the
+  // lab's sheet samples remount MID-SCAN (the app removes + reopens the
+  // specimen). The press assertion itself never changes — the scan only
+  // follows the DOM when the tagged node is replaced by a fresh,
+  // structurally identical one (same path, new node).
+  const pathOf = (el) => {
+    const parts = [];
+    let node = el;
+    while (node && node.nodeType === 1 && node !== document.body) {
+      if (node.id) { parts.unshift('#' + (window.CSS && CSS.escape ? CSS.escape(node.id) : node.id)); break; }
+      let sel = node.tagName.toLowerCase();
+      const parent = node.parentElement;
+      if (parent) {
+        const sibs = Array.from(parent.children).filter(c => c.tagName === node.tagName);
+        if (sibs.length > 1) sel += ':nth-of-type(' + (sibs.indexOf(node) + 1) + ')';
+      }
+      parts.unshift(sel);
+      node = parent;
+    }
+    return parts.join(' > ');
+  };
+  return Array.from(document.querySelectorAll('button, [role="button"]'))
   .filter(el => el.offsetParent !== null)
   // Lab chrome that swaps catalog/compose views unmounts the probed
   // DOM mid-scan; such view toggles are outside the 23.2 scope. The
@@ -32,19 +55,64 @@ BASE_JS = """
   .map((el, i) => {
     el.setAttribute('data-ds-state-probe', i);
     const r = el.getBoundingClientRect();
-    return {i, tag: el.tagName.toLowerCase(), x: r.x + r.width / 2, y: r.y + r.height / 2,
+    return {i, path: pathOf(el), tag: el.tagName.toLowerCase(), x: r.x + r.width / 2, y: r.y + r.height / 2,
             w: r.width, h: r.height, text: (el.textContent || '').trim().slice(0, 20)};
   })
+}
+"""
+
+# Re-resolve a probe: by tag first, by stable path when the tagged node
+# was replaced (honest remount mid-scan — same assertion, fresh node).
+RESOLVE_JS = """
+(args) => {
+  let el = document.querySelector(`[data-ds-state-probe="${args.i}"]`);
+  if (!el && args.path) {
+    el = document.querySelector(args.path);
+    if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+  }
+  return !!el;
+}
 """
 
 SNAPSHOT_JS = """
-(i) => {
-  const el = document.querySelector(`[data-ds-state-probe="${i}"]`);
+(args) => {
+  let el = document.querySelector(`[data-ds-state-probe="${args.i}"]`);
+  if (!el && args.path) {
+    el = document.querySelector(args.path);
+    if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+  }
+  if (!el) return null;
   const st = getComputedStyle(el);
   const props = %s;
   return props.map(p => st[p]).join('|');
 }
 """ % json.dumps(list(STYLE_PROPS))
+
+# Measure AT REST (23.2 is a resting-state contract): wait out any running
+# animation/transition in the element's subtree (e.g. the honest sheet
+# exit motion the previous probe's press started) before snapshotting.
+STABLE_JS = """
+async (args) => {
+  let el = document.querySelector(`[data-ds-state-probe="${args.i}"]`);
+  if (!el && args.path) {
+    el = document.querySelector(args.path);
+    if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+  }
+  if (!el) return false;
+  const t0 = performance.now();
+  while (performance.now() - t0 < 800) {
+    // The element's own subtree AND its ancestor chain: the honest sheet
+    // exit (و-2 item 30) runs on the PANEL — an ancestor of the probed
+    // button — so subtree-only misses it and the press lands mid-flight.
+    const nodes = [];
+    for (let n = el; n && n !== document.documentElement; n = n.parentElement) nodes.push(n);
+    const anims = nodes.flatMap(n => (n.getAnimations ? n.getAnimations({ subtree: true }) : []));
+    if (!anims.some(a => a.playState === 'running')) return true;
+    await new Promise(r => setTimeout(r, 40));
+  }
+  return true;
+}
+"""
 
 # Fixture helper: resolve a probed element's id (exempt-scope proof).
 ID_PROBE_JS = """
@@ -55,8 +123,13 @@ ID_PROBE_JS = """
 # scrolls every element into the viewport before pressing it (a mouse event
 # outside the viewport never hits the element and would fake a violation).
 CENTER_JS = """
-(i) => {
-  const el = document.querySelector(`[data-ds-state-probe="${i}"]`);
+(args) => {
+  let el = document.querySelector(`[data-ds-state-probe="${args.i}"]`);
+  if (!el && args.path) {
+    el = document.querySelector(args.path);
+    if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+  }
+  if (!el) return null;
   el.scrollIntoView({ block: 'center' });
   const r = el.getBoundingClientRect();
   return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
@@ -88,27 +161,38 @@ def run(gate: Gate, target, args):
                     elements = page.evaluate(BASE_JS)
                     n_elements = len(elements)
                     for el in elements:
-                        base = page.evaluate(SNAPSHOT_JS, el["i"])
+                        arg = {"i": el["i"], "path": el["path"]}
+                        await_stable = page.evaluate(STABLE_JS, arg)
+                        base = page.evaluate(SNAPSHOT_JS, arg)
                         # --- :active via a real press (mouse down, hold) ---
-                        center = page.evaluate(CENTER_JS, el["i"])
+                        center = page.evaluate(CENTER_JS, arg)
+                        if center is None or base is None or not await_stable:
+                            problems.append(f"<{el['tag']}> «{el['text']}» vanished from the page mid-scan")
+                            continue
                         page.mouse.move(center["x"], center["y"])
                         page.mouse.down()
                         page.wait_for_timeout(120)
-                        active = page.evaluate(SNAPSHOT_JS, el["i"])
+                        active = page.evaluate(SNAPSHOT_JS, arg)
                         page.mouse.up()
-                        if active == base:
+                        if active is None or active == base:
                             problems.append(
                                 f"<{el['tag']}> «{el['text']}» shows no :active style change "
                                 "(23.2: الضغط يغيّر الخلفية/الشكل)")
                         # --- :disabled (native buttons only) ---
                         if el["tag"] == "button":
                             page.evaluate(
-                                "(i) => document.querySelector(`[data-ds-state-probe=\"${i}\"]`).disabled = true", el["i"])
+                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
+                                "if (!el && args.path) { el = document.querySelector(args.path);"
+                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
+                                "if (el) el.disabled = true; }", arg)
                             page.wait_for_timeout(60)
-                            disabled = page.evaluate(SNAPSHOT_JS, el["i"])
+                            disabled = page.evaluate(SNAPSHOT_JS, arg)
                             page.evaluate(
-                                "(i) => document.querySelector(`[data-ds-state-probe=\"${i}\"]`).disabled = false", el["i"])
-                            if disabled == base:
+                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
+                                "if (!el && args.path) { el = document.querySelector(args.path);"
+                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
+                                "if (el) el.disabled = false; }", arg)
+                            if disabled is None or disabled == base:
                                 problems.append(
                                     f"<button> «{el['text']}» shows no :disabled style change (23.2)")
             except Exception as exc:
