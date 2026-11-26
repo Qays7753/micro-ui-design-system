@@ -344,6 +344,10 @@
   width: 100%;
   max-width: 360px;
   display: flex;
+  /* The lab strip wraps instead of overflowing the phone width (K21):
+     it is not sticky, so wrapping cannot shadow presses. */
+  flex-wrap: wrap;
+  gap: var(--mds-space-4);
   justify-content: flex-start;
   margin-block-end: var(--mds-space-8);
 }
@@ -385,4 +389,26 @@
   position: absolute;
   inset-inline: var(--mds-space-16);
   bottom: calc(var(--mds-size-tab-bar) + var(--mds-layout-toast-offset));
+}
+
+/* The tabular specimen pair rides the compose lab strip (G2): the money
+   font's tabular figures probed by ds-tabular on the default view too. */
+.lab-tabular-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+}
+
+/* The compose content column is a fixed-height flex column with its own
+   scroller: flex children must keep their NATURAL height (flex-shrink:0)
+   — the default shrink squeezed the hero under its own content and its
+   source button spilled over the next section's title (hit-test theft). */
+.lab-compose-content > * {
+  flex-shrink: 0;
+}
+
+/* The G2 probe strip wraps too: five Money specimens exceed 360 as one
+   inline-flex row. */
+.lab-tabular-pair {
+  flex-wrap: wrap;
 }

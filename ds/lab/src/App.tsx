@@ -93,11 +93,24 @@ export function App() {
           <div className="lab-compose-top">
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
             <AmountVisibilityToggle onChange={(visible) => setComposeHidden(!visible)} />
-            <button type="button" className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(100)}>{t('lab.scale100')}</button>
-            <button type="button" className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => applyScale(200)}>{t('lab.scale200')}</button>
-            <button type="button" className={pageState === 'loading' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('loading')}>{t('state.loading')}</button>
-            <button type="button" className={pageState === 'empty' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('empty')}>{t('state.empty')}</button>
-            <button type="button" className={pageState === 'normal' ? 'lab-key lab-key--on' : 'lab-key'} onClick={() => setPageState('normal')}>{t('state.normal')}</button>
+            <span className="lab-tabular-pair">
+              {/* G2 probes riding the lab strip: the money font's tabular
+                  figures (ds-tabular), LTR digit runs inside RTL (ds-bidi),
+                  and the hidden shape «•••• د.أ» (ds-hidden-amounts). */}
+              <Money value="111.111" data-ds-check="tabular" />
+              <Money value="888.888" data-ds-check="tabular" />
+              <Money value="1,245.750" data-ds-check="bidi" />
+              <Money value="888.888" data-ds-check="bidi" />
+              <Money value="1,250" data-ds-check="bidi" />
+              <AmountVisibilityProvider hidden>
+                <Money value="1,245.750" data-ds-check="amount-hidden" />
+              </AmountVisibilityProvider>
+            </span>
+            <button type="button" className={scale === 100 ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => applyScale(100)}>{t('lab.scale100')}</button>
+            <button type="button" className={scale === 200 ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => applyScale(200)}>{t('lab.scale200')}</button>
+            <button type="button" className={pageState === 'loading' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('loading')}>{t('state.loading')}</button>
+            <button type="button" className={pageState === 'empty' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('empty')}>{t('state.empty')}</button>
+            <button type="button" className={pageState === 'normal' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('normal')}>{t('state.normal')}</button>
           </div>
           <div className="lab-compose-screen" data-ds-check="compose">
             <ContextBar
@@ -114,7 +127,7 @@ export function App() {
             />
             <PageHeader
               label={t('nav.today')}
-              trailing={<Button variant="secondary" size="sm" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
+              trailing={<Button variant="secondary" size="sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
             />
             <div className="lab-compose-content" data-ds-check="compose-content">
               {pageState === 'loading' ? (
@@ -160,6 +173,7 @@ export function App() {
                     caption={t('row.sampleCaption')}
                     value={composeHidden ? '••••' : '1,250'}
                     trailing={<StatusBadge tone="waiting" />}
+                    data-ds-exempt="view-toggle"
                     onPress={() => setConfirmOpen(true)}
                   />
                 </Surface>

@@ -453,9 +453,16 @@ def resolve_page_target(target_arg, default_file="standalone.html", default_dir=
         server = LocalServer(ROOT / default_dir)
         base = server.start()
         # The probe gates inspect the COMPONENT CATALOG; the standalone's
-        # default view is the demo-compose page (owner request), so every
-        # gate URL pins the catalog view explicitly.
-        return "server", (server, base + "/" + default_file + "?view=catalog")
+        # default view is the demo-compose page (owner request), so the
+        # default gate URL pins the catalog view. DS_VIEW=compose runs the
+        # SAME gates against the default (compose) view — owner request G2
+        # (the page must pass the gates too; fixes go to components/page).
+        view = os.environ.get("DS_VIEW", "catalog")
+        if view == "default":
+            url = base + "/" + default_file
+        else:
+            url = base + "/" + default_file + "?view=" + view
+        return "server", (server, url)
     return "na", f"{default_dir}/{default_file} does not exist yet (lab build lands in S3)"
 
 

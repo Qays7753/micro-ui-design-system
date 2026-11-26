@@ -4,6 +4,9 @@
  */
 
 .mds-amount-visibility-toggle {
+  /* 48 touch floor in both axes (م3): the icon is 24 but the button
+     itself is a touch target like every other. */
+  min-width: var(--mds-size-touch-min);
   display: inline-flex;
   align-items: center;
   justify-content: center;
