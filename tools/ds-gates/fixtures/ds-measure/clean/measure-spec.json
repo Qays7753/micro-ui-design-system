@@ -14,6 +14,13 @@
       "center": {
         "child": ".child"
       }
+    },
+    {
+      "id": "seg-center",
+      "center": {
+        "child": ".seg-label",
+        "of": "parent"
+      }
     }
   ]
 }

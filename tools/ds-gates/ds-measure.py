@@ -50,6 +50,18 @@ CENTER_JS = """
 })
 """
 
+CENTER_PARENT_JS = """
+(args) => args.elements.flatMap(el =>
+  Array.from(el.querySelectorAll(args.selector)).map(child => {
+    const c = child.getBoundingClientRect();
+    const p = child.parentElement.getBoundingClientRect();
+    return {
+      dx: (c.x + c.width / 2) - (p.x + p.width / 2),
+      dy: (c.y + c.height / 2) - (p.y + p.height / 2),
+    };
+  }))
+"""
+
 
 def load_spec(target, args_spec, view="catalog"):
     if args_spec:
@@ -129,8 +141,17 @@ def run(gate: Gate, target, args):
                                         f"(tolerance ±{TOLERANCE}px, {entry[axis]})")
                             if "center" in entry:
                                 child_sel = entry["center"]["child"]
-                                deltas = page.evaluate(
-                                    CENTER_JS, {"elements": handle, "selector": child_sel})
+                                if entry["center"].get("of") == "parent":
+                                    deltas = page.evaluate(
+                                        CENTER_PARENT_JS, {"elements": handle, "selector": child_sel})
+                                    if not deltas:
+                                        problems.append(
+                                            f"[{cid} #{i}] center child '{child_sel}' not found under any "
+                                            "marked element — a check that finds nothing proves nothing")
+                                        continue
+                                else:
+                                    deltas = page.evaluate(
+                                        CENTER_JS, {"elements": handle, "selector": child_sel})
                                 for j, delta in enumerate(deltas):
                                     if delta is None:
                                         problems.append(

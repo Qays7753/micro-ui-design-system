@@ -96,7 +96,12 @@
    "id": "segmented-control",
    "height": {
     "token": "size.segmented"
-   }
+   },
+   "center": {
+    "child": ".mds-segmented-segment-label",
+    "of": "parent"
+   },
+   "_note": "Rule 72/ج1: every segment centers its label horizontally AND vertically (of:parent — each label against its own segment box); icon-prefixed segments center the GROUP, which the label+icon flex row already does."
   },
   {
    "id": "filter-chips",
@@ -110,7 +115,7 @@
     "px": 76
    },
    "_note": "ActionBar min height = primary button 52 (size.button) + 2x12 block padding. The 24 padding is space.12 (no layout token; documented S7 value with the brief's 9.2 'safe area' text on top)."
-   }
+  }
  ],
  "views": {
   "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
