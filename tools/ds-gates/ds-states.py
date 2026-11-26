@@ -14,8 +14,9 @@ on Chromium AND WebKit:
 disabled semantics — 23.18 handles that per component).
 """
 import json
+from pathlib import Path
 
-from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, resolve_page_target, wait_lab_ready
+from common import CONFIG, Gate, gate_main, browser_session, DEFAULT_CONTEXT, LocalServer, resolve_page_target, wait_lab_ready
 
 STYLE_PROPS = ("backgroundColor", "color", "borderTopColor", "opacity", "transform")
 
@@ -23,8 +24,11 @@ BASE_JS = """
 () => Array.from(document.querySelectorAll('button, [role="button"]'))
   .filter(el => el.offsetParent !== null)
   // Lab chrome that swaps catalog/compose views unmounts the probed
-  // DOM mid-scan; such view toggles are outside the 23.2 scope.
-  .filter(el => !el.closest('[data-ds-exempt]'))
+  // DOM mid-scan; such view toggles are outside the 23.2 scope. The
+  // exemption is SCOPED to the view-toggle token: a bare
+  // data-ds-exempt="" (a size exemption for ds-small-screen) must NOT
+  // exclude a button from the press scan (23.2 applies to everything).
+  .filter(el => !el.closest('[data-ds-exempt~="view-toggle"]'))
   .map((el, i) => {
     el.setAttribute('data-ds-state-probe', i);
     const r = el.getBoundingClientRect();
@@ -41,6 +45,11 @@ SNAPSHOT_JS = """
   return props.map(p => st[p]).join('|');
 }
 """ % json.dumps(list(STYLE_PROPS))
+
+# Fixture helper: resolve a probed element's id (exempt-scope proof).
+ID_PROBE_JS = """
+(i) => document.querySelector(`[data-ds-state-probe="${i}"]`).id
+"""
 
 # Center after scrolling: the lab pages grow stage by stage, so the gate
 # scrolls every element into the viewport before pressing it (a mouse event
@@ -111,6 +120,31 @@ def run(gate: Gate, target, args):
             else:
                 gate.ok(f"ds-states/interaction/{engine}",
                         f"{n_elements} interactive elements, every :active and :disabled differs from rest")
+
+        # --- exempt-scope fixture: proves the press scan's exclusion is
+        # scoped to the view-toggle token ONLY. A bare data-ds-exempt=""
+        # (a SIZE exemption for ds-small-screen) must stay scanned. ---
+        if args.engine in ("both", "chromium"):
+            fixture_dir = Path(__file__).resolve().parent / "fixtures" / "ds-states-exempt-scope"
+            fserver = LocalServer(fixture_dir)
+            try:
+                base_url = fserver.start()
+                with browser_session("chromium") as fsess:
+                    fpg = fsess.page(**DEFAULT_CONTEXT)
+                    fpg.goto(base_url + "/page.html")
+                    fpg.wait_for_timeout(100)
+                    scanned = fpg.evaluate(BASE_JS)
+                    ids = []
+                    for el in scanned:
+                        ids.append(fpg.evaluate(ID_PROBE_JS, el["i"]))
+                if "size-exempt" in ids and "plain" in ids and "view-toggle" not in ids:
+                    gate.ok("ds-states/exempt-scope-fixture",
+                            "bare data-ds-exempt stays scanned; view-toggle excluded")
+                else:
+                    gate.fail("ds-states/exempt-scope-fixture",
+                              f"press scan set wrong: {sorted(ids)}")
+            finally:
+                fserver.stop()
     finally:
         if server:
             server.stop()

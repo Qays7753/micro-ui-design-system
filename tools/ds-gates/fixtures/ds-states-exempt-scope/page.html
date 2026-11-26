@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>ds-states exempt-scope fixture</title>
+<style>
+  button { min-height: 48px; min-width: 48px; }
+  button:active { background-color: rgb(230, 239, 241); }
+</style>
+</head>
+<body>
+  <button type="button" id="plain">زر عادي</button>
+  <!-- The PROOF: a size exemption for ds-small-screen must NOT remove
+       this button from the ds-states press scan (23.2). -->
+  <button type="button" id="size-exempt" data-ds-exempt="">زر بحشو مستثنى الحجم</button>
+  <!-- The only exclusion ds-states honors: the view-toggle token. -->
+  <button type="button" id="view-toggle" data-ds-exempt="view-toggle">زر تبديل العرض</button>
+</body>
+</html>
