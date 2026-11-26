@@ -156,6 +156,27 @@ def run(gate: Gate, target, args):
         else:
             gate.ok("ds-banned/tailwind-classes", f"{len(TW_CLASSES)} default classes watched, none used")
 
+    # ---- 3ب) banned code patterns (unit 15: lesson rules 11 and 55) ----
+    patterns = (CONFIG.get("banned_code_patterns") or {}).get("patterns") or []
+    if not files or not patterns:
+        gate.na("ds-banned/code-patterns", "no ds/src source or no patterns configured")
+    else:
+        found = []
+        for path in files:
+            rel = rel_of(path, target)
+            code = strip_comments(path.read_text(encoding="utf-8"))
+            for spec in patterns:
+                rx = re.compile(spec["regex"])
+                for m in rx.finditer(code):
+                    line = code.count("\n", 0, m.start()) + 1
+                    found.append(f"{rel}:{line} {spec['why']} (pattern {spec['regex']!r})")
+        if found:
+            gate.fail("ds-banned/code-patterns", f"{len(files)} files scanned, {len(found)} banned code patterns")
+            for f in found:
+                gate.fail("ds-banned/code-pattern", f)
+        else:
+            gate.ok("ds-banned/code-patterns", f"{len(files)} files scanned, {len(patterns)} patterns watched, none used")
+
     # ---- 4) machine-absolute paths ----
     scan = abs_path_scan_files(root)
     if not scan:

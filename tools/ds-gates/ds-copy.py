@@ -23,6 +23,7 @@ COPY = CONFIG["copy"]
 KINDS = set(COPY["kinds"])
 LIMITS = COPY["kind_word_limits"]
 BANNED_PHRASES = COPY["banned_phrases"]
+BANNED_PREFIXES = COPY.get("banned_prefixes", [])
 BANNED_BUTTONS = COPY["banned_button_words"]
 LEXICON_BANNED = COPY["lexicon_banned_tokens"]
 EXCLAMATION = COPY["exclamation"]
@@ -60,6 +61,10 @@ def check_text(key, kind, text):
         problems.append("exclamation mark (BRIEF 24.2: none anywhere in the UI)")
     if "..." in text:
         problems.append("three dots instead of the single «…» (BRIEF 24.1-7)")
+    for prefix in BANNED_PREFIXES:
+        if text.startswith(prefix):
+            problems.append(f"banned start «{prefix}…» (lesson rule 64: no about/meaning/read links; "
+                            "rule 42: «+» opens a creation only)")
     hits = token_set(text) & set(LEXICON_BANNED)
     if hits:
         problems.append(f"word(s) outside the fixed lexicon (24.3): {', '.join(sorted(hits))}")

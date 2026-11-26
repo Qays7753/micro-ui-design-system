@@ -25,7 +25,7 @@
       "expected_success_exit": 0,
       "failure_detected_on_violation": true,
       "current_state_exit": 0,
-      "current_state_tail": "total: 4 ok, 0 failed",
+      "current_state_tail": "total: 5 ok, 0 failed",
       "prove_exit": 0
     },
     {

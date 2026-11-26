@@ -214,7 +214,14 @@
       "مؤقت"
     ],
     "_lexicon_note": "BRIEF 24.3 'لا تُستخدم' column, matched as whole words (tokens) so Arabic prefixes/suffixes don't false-positive. The positive 'full closed vocabulary' check (every word must appear in the lexicon) is not implementable from the brief — the 24.3 table maps only 10 concepts — and stays a reviewer/ناقد duty; documented in the S2 report.",
-    "exclamation": "!"
+    "exclamation": "!",
+    "banned_prefixes": [
+      "عن ",
+      "معنى ",
+      "اقرأ ",
+      "+"
+    ],
+    "_banned_prefixes_note": "lesson rules 64 and 42 (unit 15): no «عن…/معنى…/اقرأ…» links anywhere, and «+» opens a creation only — the dictionary carries creation verbs as words, never a leading «+» (the batch-2 QuantityStepper's plus is an icon glyph, not dictionary text)."
   },
   "browserslist_required": [
     "iOS >= 16.4",
@@ -255,5 +262,18 @@
     "unit": "د.أ",
     "check_attr": "amount-hidden"
   },
-  "motion_fade_token": "motion.fade.ms"
+  "motion_fade_token": "motion.fade.ms",
+  "banned_code_patterns": {
+    "_note": "unit 15 static bans: rule 11 (the browser's native date field) and rule 55 (currency-symbol icons; the money icons are the named 23.23 set). Matched in the ds source with comments stripped, like ds-raw-values.",
+    "patterns": [
+      {
+        "regex": "type\\s*=\\s*[\"']date[\"']",
+        "why": "lesson rule 11: the native date field is banned"
+      },
+      {
+        "regex": "\\bCurrency[A-Z]",
+        "why": "lesson rule 55: currency-symbol icons are banned"
+      }
+    ]
+  }
 }
