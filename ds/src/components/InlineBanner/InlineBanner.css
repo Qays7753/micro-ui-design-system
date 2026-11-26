@@ -9,10 +9,16 @@
   top: 0;
   z-index: var(--mds-layer-content);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--mds-space-8);
   padding-block: var(--mds-layout-toast-padding-block);
   padding-inline: var(--mds-layout-toast-padding-inline);
+  /* flex-wrap:wrap — the tight-space reflow the 23.20 table leaves to the
+     batch text-scale rule ("كل مكوّن يعمل حتى 200% بلا قص"): at font-scale
+     200% on a 320 screen the un-shrinkable action (flex 0 0 auto) left the
+     text 58px for an 86px word and clipped it; wrapping moves the action to
+     its own line instead. Nothing changes at 100%, where all three fit. */
 }
 
 .mds-inline-banner svg {
