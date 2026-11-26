@@ -191,6 +191,14 @@ COMPOSE_JS = """
     }
   }
 
+  // c39 — no input-with-save outside a Sheet (DecisionCard exempt per و-3,
+  // and nothing hand-drawn is allowed anyway: rule 76's gate holds the rest)
+  for (const field of screen.querySelectorAll('input, textarea')) {
+    if (!field.closest('.mds-sheet')) {
+      problems.push('[c39] an input field sits OUTSIDE a Sheet (rule 39: forms with save open in a Sheet)');
+    }
+  }
+
   // د3 — hub sections
   const sections = screen.querySelectorAll('.mds-section');
   if (sections.length > args.maxSections) problems.push('[d3] sections = ' + sections.length + ' > quality.max-hub-sections ' + args.maxSections);
