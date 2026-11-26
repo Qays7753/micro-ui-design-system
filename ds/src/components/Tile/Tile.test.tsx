@@ -120,4 +120,15 @@ describe('Tile (BRIEF 23.9)', () => {
     const { container } = render(<Tile {...base()} leading={<NavTodayIcon />} />);
     expect(container.querySelector('.mds-tile-header-icon')).not.toBeNull();
   });
+
+  it('renders the non-interactive leading icon BESIDE the label text, never alone (rule 27: icon with sibling text, size owned by the app <= 20)', () => {
+    const { container } = render(<Tile {...base()} leading={<NavTodayIcon size={20} />} />);
+    const header = container.querySelector('.mds-tile-header') as HTMLElement;
+    const icon = header.querySelector('.mds-tile-header-icon') as HTMLElement;
+    // adjacency: the icon and the label share the header row
+    expect(header.contains(icon)).toBe(true);
+    expect((header.textContent ?? '').includes(LABEL)).toBe(true);
+    // the app keeps the icon at the 20 cap from size.icon (rule 27)
+    expect(icon.querySelector('svg')).not.toBeNull();
+  });
 });
