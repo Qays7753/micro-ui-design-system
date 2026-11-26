@@ -1,25 +1,11 @@
-# Changelog
+# CHANGELOG — @micro/ds
 
-All notable changes to `@micro/ds` live here (SemVer).
+## 0.1.0 — 2026-11-26 (دفعة الدفعة الأولى، القسم 2 من الموجز)
 
-## 0.1.0 (2026-11-22) — batch 1 foundations (stage S1)
+أول إصدار لنظام التصميم المصغّر (`@micro/ds`): 22 مكوّنًا + الأيقونات الدلالية + القاموس العربي + الرموز، مرفوعة وحدةً وحدة مع بواباتها وبوابة check-all الكاملة 51/51 على Chromium وWebKit.
 
-- Package scaffold: `@micro/ds`, library mode Vite build (ESM, react/react-dom/vaul
-  external), strict TypeScript, ESLint 9 flat config, Stylelint 16 with
-  browserslist feature checking, Vitest + React Testing Library.
-- Tokens: `docs/design-system/tokens.json` → `src/tokens/tokens.css`
-  (`--mds-*`), `tokens.ts` (typed tree + `getToken`), `tailwind-theme.css`
-  (Tailwind 4 `@theme` bindings). Byte-exact `--check` mode.
-- Fonts: self-hosted subset woff2 (variable Rubik 300–900, IBM Plex Sans Arabic
-  400/500/600), OFL licenses, `fonts.css` with `font-display: swap` and two
-  metric-matched local fallback faces computed from the real font metrics.
-- Icons: 44 React components generated from Phosphor (BRIEF 23.23 + 5.5
-  semantic names) with per-icon weight sets, RTL flip list, and the Micro ask
-  symbol rendered from the approved favicon geometry.
-- i18n: Arabic dictionary (`ar.ts`, BRIEF 24), `pluralAr` (Intl.PluralRules),
-  12-hour `formatTime12`.
-- lib: `formatMoney` (BRIEF 8 complete), amount-visibility context, `usePress`
-  (8px cancel from tokens, 500ms long-press), `useVisualViewport`, layer
-  registry (max 2 sheets, token z-index vars).
-- Lab data from BRIEF section 25 (verbatim, Jordanian).
-- 63 tests; generators deterministic (`tokens:check`, `icons:check`).
+- **الأساس:** الرموز (docs/design-system/tokens.json → tokens.css)، الاتجاه RTL، القاموس (t/ar)، الأيقونات 20/24 بالمعادن الدلالية.
+- **المكوّنات:** Button · IconButton · Money · StatusBadge · EntityMark · ContextBar (+ProjectSwitcher/NotificationsButton/AskButton) · PageHeader · TabBar · Surface · Section · Well · Metric · MetricSmall · ObjectRow · ObjectCard · Tile · HeroSurface · TextField · SegmentedControl · FilterChips · Sheet · ConfirmSheet · ActionBar · SaveState · Toast · InlineBanner · EmptyState · Skeleton · FundIcons.
+- **المختبر:** previews/ds-lab/standalone.html — الكتالوج بفهرس ثابت + صفحة «تركيب تجريبي» هي العرض الافتراضي (زرّا فتح/عودة)، ملف واحد يعمل من file://.
+- **التجربة:** ds/consumer-test بالإعدادات المثبتة (D12) يعرض كل المكوّنات من حزمة pnpm pack، وفحوص K13/K14/K15 آلية.
+- **البوابات:** 51 بوابة في check-all، منها بوابات المتصفح على العرضين (G2) وفحص الضغط المستثنى بقيمة view-toggle فقط (G1).
