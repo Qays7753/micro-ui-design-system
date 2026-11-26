@@ -1,0 +1,38 @@
+<!doctype html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<title>ds-signal bad fixture</title>
+<style>
+  body { margin: 0; background: #E8ECEF; }
+  .mds-hero-surface { background: #0E3E46; padding: 16px; width: 200px; }
+  .mds-tile { background: #FFFFFF; padding: 12px; width: 150px; margin: 8px 0; }
+  .terra-line { stroke: #D97757; stroke-width: 2; fill: none; }
+  .terra-dot { fill: #D97757; }
+  .gray-box { background: #D5DCE0; padding: 8px; width: 100px; }
+  .text-terra { color: #D97757; }
+  .badge-problem { background: #FDECEA; color: #B3261E; padding: 4px 8px; display: inline-block; }
+</style>
+</head><body>
+  <!-- m17: text in terracotta -->
+  <p class="text-terra">مبلغ اليوم 1,245</p>
+
+  <!-- m18: terracotta drawing on a gray (non-surface, non-anchor) box -->
+  <div class="gray-box">
+    <svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true">
+      <polyline class="terra-line" points="4,18 40,10 76,8"></polyline>
+    </svg>
+  </div>
+
+  <!-- m19 per-component: TWO separate signal units inside one mds-tile -->
+  <div class="mds-tile">
+    <svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true">
+      <polyline class="terra-line" points="4,18 76,8"></polyline>
+    </svg>
+    <span style="display:block;width:6px;height:6px;border-radius:50%;background:#D97757"></span>
+  </div>
+
+  <!-- m20: terracotta dot + status-problem badge on the SAME surface -->
+  <div class="mds-tile">
+    <span style="display:block;width:6px;height:6px;border-radius:50%;background:#D97757"></span>
+    <span class="badge-problem">فشل الحفظ</span>
+  </div>
+</body></html>

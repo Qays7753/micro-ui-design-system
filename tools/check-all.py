@@ -120,6 +120,7 @@ def build_gates(quick, out, skip_visual):
         ("ds-tabular", PY + ["tools/ds-gates/ds-tabular.py"]),
         ("ds-bidi", PY + ["tools/ds-gates/ds-bidi.py"]),
         ("ds-small-screen", PY + ["tools/ds-gates/ds-small-screen.py"]),
+        ("ds-signal", PY + ["tools/ds-gates/ds-signal.py"]),
     ]
     if not skip_visual:
         matrix += [

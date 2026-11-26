@@ -1,0 +1,41 @@
+<!doctype html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<title>ds-signal clean fixture</title>
+<style>
+  body { margin: 0; background: #E8ECEF; }
+  .mds-hero-surface { background: #0E3E46; padding: 16px; width: 200px; }
+  .mds-tile { background: #FFFFFF; padding: 12px; width: 150px; margin: 8px 0; }
+  .terra-line { stroke: #D97757; stroke-width: 2; fill: none; }
+  .terra-dot { fill: #D97757; }
+  .badge-problem { background: #FDECEA; color: #B3261E; padding: 4px 8px; display: inline-block; }
+  .mds-ask-button { background: transparent; border: none; width: 48px; height: 48px; }
+</style>
+</head><body>
+  <!-- ONE unit on brand-anchor: the line + its endpoint dot (و-2 item 2) -->
+  <div class="mds-hero-surface">
+    <svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true">
+      <polyline class="terra-line" points="4,18 76,8"></polyline>
+      <circle class="terra-dot" cx="76" cy="8" r="3"></circle>
+    </svg>
+  </div>
+
+  <!-- ONE unit on surface -->
+  <div class="mds-tile">
+    <svg viewBox="0 0 80 24" width="80" height="24" aria-hidden="true">
+      <circle class="terra-dot" cx="40" cy="12" r="3"></circle>
+    </svg>
+  </div>
+
+  <!-- a problem badge on its OWN surface, no terracotta beside it -->
+  <div class="mds-tile">
+    <span class="badge-problem">فشل الحفظ</span>
+  </div>
+
+  <!-- the frozen brand symbol: exempt from m17/m18/m20, still ONE counted unit -->
+  <button class="mds-ask-button" type="button" aria-label="اسأل">
+    <svg viewBox="0 0 224 224" width="28" height="28" aria-hidden="true">
+      <path d="M36 0 H108 L0 52 Z" fill="#164D59"></path>
+      <path d="M36 0 H108 L0 52 Z" fill="#D97757" transform="rotate(90 96 96)"></path>
+    </svg>
+  </button>
+</body></html>
