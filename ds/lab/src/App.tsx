@@ -1096,7 +1096,10 @@ export function App() {
                 onPress={() => {}}
                 data-ds-check="object-card"
               >
-                <Button variant="secondary" size="sm" data-ds-exempt="">{t('button.recordPayment')}</Button>
+                {/* Rule 61 (و-2 item 21): visible text may repeat across
+                    instances, the SR name carries the OBJECT — the exact
+                    addendum example «سجّل دفعة، سلمى الحوراني». */}
+                <Button variant="secondary" size="sm" data-ds-exempt="" aria-label={`${t('button.recordPayment')}، طلب 1175`}>{t('button.recordPayment')}</Button>
               </ObjectCard>
             </div>
           </div>

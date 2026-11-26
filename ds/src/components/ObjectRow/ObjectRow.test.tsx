@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ar } from '../../i18n/ar';
 import { StatusBadge } from '../StatusBadge/index';
@@ -89,5 +89,11 @@ describe('ObjectRow (BRIEF 23.4)', () => {
     expect(initial).not.toBeNull();
     const letters = Array.from((initial as HTMLElement).textContent ?? '');
     expect(letters).toHaveLength(1);
+  });
+
+  it('carries the OBJECT in the row accessible name (rule 61: name per instance)', () => {
+    render(<ObjectRow label={TITLE} caption={CAPTION} value="1,245.750" trailing={TIME} onPress={() => {}} />);
+    const row = screen.getByRole('button', { name: new RegExp(TITLE) });
+    expect(row).not.toBeNull();
   });
 });

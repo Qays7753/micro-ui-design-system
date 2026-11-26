@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ar } from '../../i18n/ar';
 import { Button } from '../Button/index';
@@ -90,5 +90,19 @@ describe('ObjectCard (BRIEF 4.1, 23.24)', () => {
     expect(initial).not.toBeNull();
     const letters = Array.from((initial as HTMLElement).textContent ?? '');
     expect(letters).toHaveLength(1);
+  });
+
+  it('carries the OBJECT in the card press surface accessible name (rule 61: name per instance)', () => {
+    render(
+      <ObjectCard label={TITLE} caption={CAPTION} value="1,245.750" onPress={() => {}}>
+        <Button variant="secondary" size="sm">{ar['button.recordPayment'].text}</Button>
+      </ObjectCard>,
+    );
+    // the card's own name is content-derived and contains the object title
+    const card = screen.getByRole('button', { name: new RegExp(TITLE) });
+    expect(card).not.toBeNull();
+    // the sibling action keeps its visible label (repetition allowed by و-2 21);
+    // the OBJECT-carrying name is demonstrated on the lab sample's aria-label.
+    expect(screen.getByRole('button', { name: ar['button.recordPayment'].text })).not.toBeNull();
   });
 });
