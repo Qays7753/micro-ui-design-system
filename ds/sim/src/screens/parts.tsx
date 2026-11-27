@@ -51,12 +51,29 @@ export function ScreenDate() {
   return <p className="sim-screen__date"> {TODAY_LINE} </p>;
 }
 
+/** One project and one role: the caret hides and the sheet stays closed (9.1). */
+const noopLocked = () => {};
+
+/** The role's line in the switcher (the driver serves one project — locked). */
+const ROLE_CAPTIONS: Record<string, string> = {
+  owner: 'مالك',
+  driver: 'سائق',
+  supplier: 'مورد',
+  reviewer: 'مراجعة المنصة',
+  guest: 'زائر',
+};
+
 /** The shared ContextBar (§5.1: المشترك لكل الأدوار). */
 export function ContextBarShell() {
   const dispatch = useSimDispatch();
-  const { notifications, project } = useSim();
+  const { notifications, project, role } = useSim();
   const current = PROJECTS.find((p) => p.id === project) ?? PROJECTS[0]!;
-  const unread = notifications.filter((n) => !n.read && n.role === 'owner').length;
+  // The owner owns the switcher's projects; the other roles serve ONE
+  // project with ONE role — the caret hides and the sheet stays closed (9.1).
+  const isOwner = role === 'owner';
+  // §5.2.9: the notifications carry their own role — the bell shows the
+  // CURRENT role's unread count (the reviewer has none).
+  const unread = notifications.filter((n) => !n.read && n.role === role).length;
 
   // 23.16: the bottom hairline shows ONLY while content scrolled under.
   const [scrolled, setScrolled] = useState(false);
@@ -73,8 +90,13 @@ export function ContextBarShell() {
       leading={
         <ProjectSwitcher
           label={current.name}
-          caption={current.role}
-          onPress={() => dispatch({ type: 'ui/openSheet', id: 'project-switcher' })}
+          caption={ROLE_CAPTIONS[role ?? 'owner'] ?? current.role}
+          locked={!isOwner}
+          onPress={
+            isOwner
+              ? () => dispatch({ type: 'ui/openSheet', id: 'project-switcher' })
+              : noopLocked
+          }
         />
       }
       trailing={

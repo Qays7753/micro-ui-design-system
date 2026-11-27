@@ -6,6 +6,7 @@
  * carry the unit's own marker until then.
  */
 import { useSim } from '../state/store';
+import { DriverScreen } from './driver/DriverScreen';
 import { DeliveryScreen } from './owner/DeliveryScreen';
 import { FinanceScreen } from './owner/FinanceScreen';
 import { MovementsScreen } from './owner/MovementsScreen';
@@ -16,8 +17,6 @@ import { LaterMark } from './parts';
 
 /** The unit markers for the screens not yet built. */
 const PART_UNITS: Record<string, string> = {
-  driverOrders: 'SA7ب (السائق)',
-  myJobs: 'SA7ب (السائق)',
   myListings: 'SA7ج (المورد)',
   review: 'SA7د (المراجع)',
   reports: 'SA7د (المراجع)',
@@ -46,6 +45,9 @@ export function ScreenRouter() {
   }
 
   switch (ui.screen) {
+    case 'driverOrders':
+    case 'myJobs':
+      return <DriverScreen />;
     case 'today':
       return <TodayScreen />;
     case 'finance':

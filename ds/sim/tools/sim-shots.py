@@ -26,6 +26,10 @@ FLOWS = {
         'market': ['tab:السوق'],
         'movements': ['tile:المالية', 'all:'],
     },
+    'driver': {
+        'driverOrders': [],
+        'myJobs': ['seg:مهامي'],
+    },
 }
 
 
@@ -80,6 +84,22 @@ def main() -> None:
             page.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)')
             page.wait_for_timeout(150)
             page.screenshot(path=str(outdir / f'owner-{screen}-bottom-{engine}.png'))
+
+        # Back to the role screen for the driver (SA7ب).
+        page.reload()
+        page.wait_for_selector('[data-sim-role-screen]', timeout=15000)
+        page.wait_for_selector('[data-sim-splash]', state='detached', timeout=15000)
+        page.get_by_text('عمر الزعبي').click()
+        page.wait_for_selector('[data-sim-screen-body="driverOrders"]', timeout=8000)
+        page.wait_for_timeout(400)
+        for screen, steps in FLOWS['driver'].items():
+            for step in steps:
+                kind, _, label = step.partition(':')
+                press(page, kind, label)
+                page.wait_for_timeout(350)
+            page.evaluate('window.scrollTo(0, 0)')
+            page.wait_for_timeout(150)
+            page.screenshot(path=str(outdir / f'driver-{screen}-{engine}.png'))
 
         # The shared sheets.
         page.get_by_role('button', name='ورشة الياسمين للخياطة').first.click()
