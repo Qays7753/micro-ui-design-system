@@ -24,6 +24,19 @@
   gap: var(--mds-space-4);
   min-width: 0;
   flex: 1;
+  /* m24: siblings share one height. Every label is exactly ONE line
+     (nowrap + ellipsis), so no step grows by word count. */
+  block-size: fit-content;
+}
+
+.mds-status-track-dot-row {
+  /* m24: every step's dot row is the SAME fixed height; the current's
+     bigger dot is CENTERED inside it, never growing the step box. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--mds-size-dot-attention);
+  flex-shrink: 0;
 }
 
 .mds-status-track-dot {
@@ -59,7 +72,23 @@
   border-top-color: var(--mds-color-brand-data);
 }
 
-/* The current label sits UNDER its dot (label-strong); past ones micro. */
+/* The current label sits UNDER its dot (label-strong); past ones micro.
+   m24: every label BOX is the same fixed line height (micro-line) with
+   the text centered inside, so all sibling steps measure identical. */
+.mds-status-track-label {
+  display: flex;
+  align-items: center;
+  block-size: var(--mds-type-micro-line);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-primary);
+}
 
 .mds-status-track-step--done .mds-status-track-label {
   font-family: var(--mds-type-micro-font);

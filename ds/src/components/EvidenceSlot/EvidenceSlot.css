@@ -75,6 +75,17 @@
   cursor: pointer;
 }
 
+/* Press/disabled in the captured properties (23.2). */
+.mds-evidence-slot-redo:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-evidence-slot-redo:disabled {
+  background-color: var(--mds-color-surface-well);
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
 /* Driver density: bigger touch. */
 .mds-evidence-slot--large .mds-evidence-slot-redo {
   inline-size: var(--mds-size-touch-driver);
@@ -83,7 +94,7 @@
 
 
 .mds-evidence-slot-action {
-  align-self: flex-start;
+  align-self: stretch;
   min-height: var(--mds-size-touch-min);
   display: inline-flex;
 }

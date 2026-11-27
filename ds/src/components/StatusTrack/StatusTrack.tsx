@@ -58,7 +58,9 @@ export function StatusTrack({
                 .filter(Boolean)
                 .join(' ')}
             >
-              <span className="mds-status-track-dot" />
+              <span className="mds-status-track-dot-row">
+                <span className="mds-status-track-dot" />
+              </span>
               <span className="mds-status-track-label mds-type-micro">{step.label}</span>
             </div>
           );

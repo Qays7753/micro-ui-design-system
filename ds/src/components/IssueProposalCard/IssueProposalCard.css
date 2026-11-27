@@ -36,6 +36,17 @@
   flex-wrap: wrap;
   gap: var(--mds-layout-chip-gap);
   margin-block-start: var(--mds-space-4);
+  /* The 48 touch floor (م3) reaches the real button inside any slot. */
+  align-items: stretch;
+}
+
+.mds-issue-proposal-card-actions > * {
+  display: flex;
+  align-items: stretch;
+}
+
+.mds-issue-proposal-card-actions > * > * {
+  min-block-size: var(--mds-size-touch-min);
 }
 
 .mds-issue-proposal-card-result {

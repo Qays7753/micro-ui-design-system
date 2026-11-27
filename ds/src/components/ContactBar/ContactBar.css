@@ -22,7 +22,13 @@
   min-width: 0;
 }
 
-/* Driver mode: the buttons' touch targets grow to touch-driver. */
+/* The 48 touch floor (م3) for the compact row; driver mode grows to
+   touch-driver (56). */
+.mds-contact-bar-row > * {
+  min-height: var(--mds-size-touch-min);
+  align-items: center;
+}
+
 .mds-contact-bar--large .mds-contact-bar-row > * {
   min-height: var(--mds-size-touch-driver);
 }

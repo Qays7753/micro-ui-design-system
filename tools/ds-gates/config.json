@@ -333,6 +333,8 @@
   "badge": "StatusBadge",
   "money": "Money",
   "controls": "AmountVisibilityToggle",
-  "delivery-compose": "DeliveryRequestCard"
+  "delivery-compose": "Section",
+  "finance-compose": "Section",
+  "orders-compose": "Section"
  }
 }

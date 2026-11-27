@@ -41,6 +41,19 @@
   flex-wrap: wrap;
   gap: var(--mds-layout-chip-gap);
   margin-block-start: var(--mds-space-12);
+  /* The 48 touch floor (م3) reaches the REAL button inside the slot span
+     (44 visual, 23.3): the span passes height, the button's min-block-size
+     carries the target. */
+  align-items: stretch;
+}
+
+.mds-quote-card-actions > * {
+  display: flex;
+  align-items: stretch;
+}
+
+.mds-quote-card-actions > * > * {
+  min-block-size: var(--mds-size-touch-min);
 }
 
 /* Rejected (§4.2 item 4): everything secondary, no buttons. */

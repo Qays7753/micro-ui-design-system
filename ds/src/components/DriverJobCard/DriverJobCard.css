@@ -10,7 +10,6 @@
   padding: var(--mds-layout-surface-padding-phone);
   background-color: var(--mds-color-surface);
   border-radius: var(--mds-radius-xl);
-  width: 100%;
 }
 
 .mds-driver-job-title {

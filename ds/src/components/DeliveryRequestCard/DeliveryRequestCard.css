@@ -55,7 +55,10 @@
 .mds-delivery-request-card-action {
   margin-block-start: var(--mds-space-12);
   align-self: flex-start;
-  /* touch-min target via min-block-size (varies from OrderCard's block-size) */
-  min-block-size: var(--mds-size-touch-min);
   display: inline-flex;
+  align-items: stretch;
+}
+
+.mds-delivery-request-card-action > * {
+  min-block-size: var(--mds-size-touch-min);
 }

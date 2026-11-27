@@ -6,10 +6,9 @@
 .mds-driver-approval {
   display: flex;
   flex-direction: column;
-  gap: var(--mds-space-8);
+  gap: var(--mds-space-12);
   padding: var(--mds-layout-surface-padding-phone);
   background-color: var(--mds-color-surface);
   border-radius: var(--mds-radius-xl);
-  width: 100%;
 }
 

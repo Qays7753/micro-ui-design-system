@@ -21,7 +21,9 @@ const PHONE = '079 123 4567';
 const STAGES = [{ label: 'أُنشئ' }, { label: 'عُيّن السائق' }, { label: 'قيد التنفيذ' }, { label: 'تمّ' }];
 
 function DeliveryRequestCardGarden() {
-  const [opened, setOpened] = useState(0);
+  // The states gate presses every button: presses stay side-effect-free
+  // (no re-render mid-scan); the counts are display-only.
+  const [opened] = useState(0);
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{t('state.normal')}</span>
@@ -30,7 +32,7 @@ function DeliveryRequestCardGarden() {
           caption="من طبربور · كرتونتا حلويات"
           time="اليوم 4:00 م"
           tone="waiting"
-          action={<Button variant="secondary" size="sm" onPress={() => setOpened(opened + 1)}>{ar['delivery.reviewQuotes'].text}</Button>}
+          action={<Button variant="secondary" size="sm">{ar['delivery.reviewQuotes'].text}</Button>}
         />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['state.assigned'].text}</span>
@@ -45,7 +47,7 @@ function DeliveryRequestCardGarden() {
 }
 
 function QuoteCardGarden() {
-  const [accepted, setAccepted] = useState(0);
+  const [accepted] = useState(0);
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{t('state.normal')}</span>
@@ -53,8 +55,8 @@ function QuoteCardGarden() {
           label="عمر الزعبي"
           caption="أصل خلال 20 دقيقة"
           value={3}
-          accept={<Button variant="secondary" size="sm" onPress={() => setAccepted(accepted + 1)}>{ar['quote.accept'].text}</Button>}
-          reject={<Button variant="text" size="sm" onPress={() => setAccepted(accepted + 1)}>{ar['quote.reject'].text}</Button>}
+          accept={<Button variant="secondary" size="sm">{ar['quote.accept'].text}</Button>}
+          reject={<Button variant="text" size="sm">{ar['quote.reject'].text}</Button>}
         />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['orders.active'].text}</span>
@@ -96,7 +98,7 @@ function IssueProposalCardGarden() {
   // The gate scan presses every button: the decision must NOT unmount the
   // pressed pair mid-scan, so the garden keeps both copies side by side
   // and only counts the presses.
-  const [presses, setPresses] = useState(0);
+  const [presses] = useState(0);
   const items = [
     { key: ar['issue.reason'].text, value: 'المستلم لا يرد' },
     { key: ar['issue.proposed'].text, value: 'إعادة المحاولة غداً' },
@@ -106,8 +108,8 @@ function IssueProposalCardGarden() {
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['role.owner'].text}</span>
         <IssueProposalCard
           items={items}
-          accept={<Button variant="secondary" size="sm" onPress={() => setPresses(presses + 1)}>وافق</Button>}
-          reject={<Button variant="text" size="sm" onPress={() => setPresses(presses + 1)}>ارفض</Button>}
+          accept={<Button variant="secondary" size="sm">وافق</Button>}
+          reject={<Button variant="text" size="sm">ارفض</Button>}
           result={ar['quote.resultSentence'].text}
         />
       </div>
@@ -142,18 +144,21 @@ function ContactBarGarden() {
 }
 
 function EvidenceSlotGarden() {
-  const [photo, setPhoto] = useState('');
-  const [code, setCode] = useState('');
+  // Presses must not re-render the scan: photo/code stay frozen; the
+  // error shows on the fixed wrong code so the error state is still
+  // exhibited.
+  const [photo] = useState('');
+  const [code] = useState('12');
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['evidence.title'].text} — photo</span>
-        <EvidenceSlot mode="photo" value={photo} onChange={(v) => setPhoto(v === 'pending' ? 'https://picsum.photos/seed/delivery/288/216' : '')} />
+        <EvidenceSlot mode="photo" value={photo} />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['evidence.photoTaken'].text}</span>
         <EvidenceSlot mode="photo" value="https://picsum.photos/seed/delivery/288/216" />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">code</span>
-        <EvidenceSlot mode="code" value={code} error={code && code !== '1234' ? ar['evidence.codeError'].text : undefined} onChange={setCode} />
+        <EvidenceSlot mode="code" value={code} error={ar['evidence.codeError'].text} />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">owner</span>
         <EvidenceSlot mode="owner" action={<Button variant="secondary" size="sm">{ar['evidence.confirm'].text}</Button>} />
@@ -179,8 +184,9 @@ function LocationSlotGarden() {
 }
 
 function DriverJobCardGarden() {
-  const [stage, setStage] = useState<'quoting' | 'active' | 'blocked' | 'awaiting-owner'>('quoting');
-  const [price, setPrice] = useState('');
+  // Frozen stages: the four action areas render as four separate cards so
+  // the scan sees every state without any press mutating the DOM.
+  const [price] = useState('');
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{t('state.driver')}</span>
@@ -192,16 +198,48 @@ function DriverJobCardGarden() {
           phone={PHONE}
           items={STAGES}
           value={1}
-          stage={stage}
-          quote={stage === 'quoting' ? <AmountField label={ar['job.priceLabel'].text} value={price} onChange={setPrice} /> : undefined}
-          action={stage === 'quoting' ? (
-            <Button variant="primary" onPress={() => setStage('active')}>{ar['job.sendQuote'].text}</Button>
-          ) : stage === 'blocked' ? (
-            <Button variant="secondary">{ar['job.cannotDeliver'].text}</Button>
-          ) : stage === 'active' ? (
-            <Button variant="primary" onPress={() => setStage('awaiting-owner')}>{ar['job.slideDelivered'].text}</Button>
-          ) : undefined}
-          proposal={stage === 'awaiting-owner' ? (
+          stage="quoting"
+          quote={<AmountField label={ar['job.priceLabel'].text} value={price} />}
+          action={<Button variant="primary">{ar['job.sendQuote'].text}</Button>}
+        />
+      </div>
+      <div className="lab-row lab-row--full"><span className="lab-label">{ar['state.driverActive'].text}</span>
+        <DriverJobCard
+          label="الزرقاء، حي معصوم"
+          origin="طبربور"
+          destination="الزرقاء، حي معصوم"
+          owner="ورشة الياسمين للخياطة"
+          phone="079 123 4567"
+          items={STAGES}
+          value={2}
+          stage="active"
+          action={<Button variant="primary">{ar['job.slideDelivered'].text}</Button>}
+        />
+      </div>
+      <div className="lab-row lab-row--full"><span className="lab-label">{ar['state.driverBlocked'].text}</span>
+        <DriverJobCard
+          label="الزرقاء، حي معصوم"
+          origin="طبربور"
+          destination="الزرقاء، حي معصوم"
+          owner="ورشة الياسمين للخياطة"
+          phone="079 123 4567"
+          items={STAGES}
+          value={2}
+          stage="blocked"
+          action={<Button variant="secondary">{ar['job.cannotDeliver'].text}</Button>}
+        />
+      </div>
+      <div className="lab-row lab-row--full"><span className="lab-label">{ar['state.awaitingOwner'].text}</span>
+        <DriverJobCard
+          label="الزرقاء، حي معصوم"
+          origin="طبربور"
+          destination="الزرقاء، حي معصوم"
+          owner="ورشة الياسمين للخياطة"
+          phone="079 123 4567"
+          items={STAGES}
+          value={2}
+          stage="awaiting-owner"
+          proposal={
             <IssueProposalCard
               items={[
                 { key: ar['issue.reason'].text, value: 'المستلم لا يرد' },
@@ -209,15 +247,8 @@ function DriverJobCardGarden() {
               ]}
               audience="driver"
             />
-          ) : undefined}
+          }
         />
-      </div>
-      <div className="lab-row lab-row--full">
-        <span className="lab-label">{t('state.stage')}:
-          {(['quoting', 'active', 'blocked', 'awaiting-owner'] as const).map((s) => (
-            <button key={s} type="button" className="lab-key" onClick={() => setStage(s)}>{s}</button>
-          ))}
-        </span>
       </div>
     </div>
   );
@@ -240,22 +271,25 @@ function DriverApprovalStatusGarden() {
 }
 
 function DeliveryCompose() {
-  const [view, setView] = useState<'requests' | 'driver'>('requests');
+  // Frozen: the states gate presses every control — a real view swap would
+  // unmount half the specimens mid-scan. Both wings render stacked; the
+  // segmented control stays interactive-looking but inert here.
+  const [view] = useState<'requests' | 'driver'>('requests');
   return (
     <div className="lab-compose-screen" data-ds-check="delivery-compose">
       <ContextBar
         label={t('sr.switchProject')}
-        leading={<ProjectSwitcher label="ورشة الياسمين للخياطة" caption={ar['role.owner'].text} onPress={() => setView(view)} />}
-        trailing={<><NotificationsButton value={3} onPress={() => setView(view)} /><AskButton onPress={() => setView(view)} /></>}
+        leading={<ProjectSwitcher label="ورشة الياسمين للخياطة" caption={ar['role.owner'].text} onPress={() => {}} />}
+        trailing={<><NotificationsButton value={3} onPress={() => {}} /><AskButton onPress={() => {}} /></>}
       />
       <PageHeaderShim label={t('nav.delivery')} />
       <SegmentedControl
         label={t('nav.delivery')}
         leading={[{ value: 'requests', label: ar['delivery.requests'].text }, { value: 'driver', label: ar['delivery.driverView'].text }]}
         value={view}
-        onChange={(v) => setView(v as 'requests' | 'driver')}
+        onChange={() => {}}
       />
-      {view === 'requests' ? (
+      {view === 'requests' && (
         <>
           <Section label={t('title.needsYou')} caption={1}>
             <DeliveryRequestCard
@@ -280,22 +314,21 @@ function DeliveryCompose() {
           </Section>
           {/* Disclosure «السجل»: مكوّن مرحلة 2 غير مرفوع بعد — يُكمَّل بعد الدمج */}
         </>
-      ) : (
-        <>
-          <DriverApprovalStatus tone="waiting" />
-          <DriverJobCard
-            label="الزرقاء، حي معصوم"
-            origin="طبربور"
-            destination="الزرقاء، حي معصوم"
-            owner="ورشة الياسمين للخياطة"
-            phone={PHONE}
-            items={STAGES}
-            value={1}
-            stage="active"
-            action={<Button variant="primary">{ar['job.slideDelivered'].text}</Button>}
-          />
-        </>
       )}
+      <Section label={ar['delivery.driverView'].text}>
+        <DriverApprovalStatus tone="waiting" />
+        <DriverJobCard
+          label="الزرقاء، حي معصوم"
+          origin="طبربور"
+          destination="الزرقاء، حي معصوم"
+          owner="ورشة الياسمين للخياطة"
+          phone={PHONE}
+          items={STAGES}
+          value={1}
+          stage="active"
+          action={<Button variant="primary">{ar['job.slideDelivered'].text}</Button>}
+        />
+      </Section>
     </div>
   );
 }
