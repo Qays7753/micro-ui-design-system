@@ -6,7 +6,7 @@ import { ContextBarShell, OwnerTabBar, moneyText } from '../parts';
 import { MARKET_SEARCH } from '../../texts';
 
 /** The market's search + chips + grid (the shared body of every variant). */
-export function MarketBody() {
+export function MarketBody({ locked = false }: { locked?: boolean }) {
   const state = useSim();
   const dispatch = useSimDispatch();
   const [query, setQuery] = useState('');
@@ -51,12 +51,14 @@ export function MarketBody() {
                   <span className="sim-later__name">يُركَّب لاحقًا: ListingCard</span>
                   <span className="sim-later__note">{l.title}</span>
                   <span className="sim-later__note">
-                    {l.tiers
-                      ? `من ${moneyText(l.tiers[0]?.price ?? 0)} د / ${l.minOrder}`
-                      : l.price !== null
-                        ? `${moneyText(l.price)} د / ${l.minOrder}`
-                        : '—'}
-                    {l.availability === 'temporarilyUnavailable' ? ' · غير متوفر' : ''}
+                    {locked
+                      ? 'السعر مقفل — يُركَّب لاحقًا: LockedDetails'
+                      : l.tiers
+                        ? `من ${moneyText(l.tiers[0]?.price ?? 0)} د / ${l.minOrder}`
+                        : l.price !== null
+                          ? `${moneyText(l.price)} د / ${l.minOrder}`
+                          : '—'}
+                    {!locked && l.availability === 'temporarilyUnavailable' ? ' · غير متوفر' : ''}
                   </span>
                   <span className="sim-later__note">{l.supplier}</span>
                 </span>

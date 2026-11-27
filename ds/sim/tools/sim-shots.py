@@ -21,6 +21,7 @@ ROLE_FIRST_SCREEN = {
     'driver': ('عمر الزعبي', 'driverOrders'),
     'supplier': ('مخبز الأصيل للجملة', 'myListings'),
     'reviewer': ('مراجعة المنصة', 'review'),
+    'guest': ('بلا حساب', 'market'),
 }
 
 FLOWS = {
@@ -45,6 +46,9 @@ FLOWS = {
         'review': [],
         'reports': ['tab:البلاغات'],
         'drivers': ['tab:السائقون'],
+    },
+    'guest': {
+        'guest-market': [],
     },
 }
 
@@ -102,7 +106,7 @@ def main() -> None:
             page.screenshot(path=str(outdir / f'owner-{screen}-bottom-{engine}.png'))
 
         # The other roles (SA7ب/ج/د): back to the role screen each time.
-        for role in ('driver', 'supplier', 'reviewer'):
+        for role in ('driver', 'supplier', 'reviewer', 'guest'):
             page.reload()
             page.wait_for_selector('[data-sim-role-screen]', timeout=15000)
             page.wait_for_selector('[data-sim-splash]', state='detached', timeout=15000)

@@ -13,18 +13,13 @@ import { MovementsScreen } from './owner/MovementsScreen';
 import { OrdersScreen } from './owner/OrdersScreen';
 import { TodayScreen } from './owner/TodayScreen';
 import { MarketScreen } from './market/MarketScreen';
-import { LaterMark } from './parts';
+import { GuestMarket } from './market/GuestMarket';
 
 export function ScreenRouter() {
   const { role, ui } = useSim();
 
   if (role === 'guest') {
-    // The guest's market wrap (GuestShell) arrives with SA7هـ.
-    return (
-      <div className="sim-screen" data-sim-screen-body="market">
-        <LaterMark name="SA7هـ (الزائر)" note="سوق الزائر داخل GuestShell يُبنى في وحدته" />
-      </div>
-    );
+    return <GuestMarket />;
   }
 
   switch (ui.screen) {

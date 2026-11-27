@@ -552,6 +552,11 @@
   gap: var(--mds-space-8);
 }
 
+.sim-screen--guest {
+  padding: var(--mds-space-8) var(--mds-layout-screen-margin-phone) var(--mds-layout-scroll-end-padding);
+  gap: var(--mds-layout-section-to-section);
+}
+
 /* The PeriodSwitcher's place rides its own row. */
 .sim-period {
   width: 100%;
