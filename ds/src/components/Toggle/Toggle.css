@@ -1,0 +1,132 @@
+/*
+ * Toggle.css — ADDENDUM §1.7. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-toggle {
+  display: flex;
+  align-items: center;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  padding-block: var(--mds-layout-row-line-gap);
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mds-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.mds-toggle-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* 320: the label takes the row minus the paddings, the track and 12 (§1.7-6). */
+  flex: 1;
+}
+
+.mds-toggle-label {
+  color: var(--mds-color-text-primary);
+}
+
+.mds-toggle-caption {
+  color: var(--mds-color-text-secondary);
+  margin-block-start: var(--mds-space-4);
+}
+
+/* The switch: the track 52×32 r-full; OFF = border-field, ON = brand-anchor. */
+.mds-toggle-switch {
+  flex: none;
+  margin-inline-start: var(--mds-space-3);
+  display: inline-flex;
+}
+
+.mds-toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  inline-size: 52px;
+  block-size: 32px;
+  border-radius: var(--mds-radius-full);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  background: var(--mds-color-surface);
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* The thumb 24, offset 4 inside the track; slides motion.quick. */
+.mds-toggle-thumb {
+  position: absolute;
+  inset-inline-start: var(--mds-space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: var(--mds-radius-full);
+  background: var(--mds-color-surface);
+  box-shadow: none;
+  color: var(--mds-color-brand-anchor);
+  transition: inset-inline-start var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* §1.7-2: the check rides the thumb ONLY on the ON state (the OFF thumb is
+   bare — the audit caught the visible OFF check before this rule). */
+.mds-toggle-thumb svg {
+  opacity: 0;
+}
+
+.mds-toggle--selected .mds-toggle-thumb svg {
+  opacity: 1;
+}
+
+/* ON: the track fills brand-anchor and the thumb rides to the END. */
+.mds-toggle--selected .mds-toggle-track {
+  background: var(--mds-color-brand-anchor);
+  border-color: var(--mds-color-brand-anchor);
+}
+
+.mds-toggle--selected .mds-toggle-thumb {
+  inset-inline-start: calc(100% - 24px - var(--mds-space-4));
+}
+
+.mds-toggle:active .mds-toggle-track {
+  background: var(--mds-color-surface-pressed);
+}
+
+.mds-toggle--selected:active .mds-toggle-track {
+  background: var(--mds-color-brand-anchor-pressed);
+}
+
+.mds-toggle--disabled {
+  cursor: default;
+}
+
+.mds-toggle--disabled .mds-toggle-track {
+  background: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-fg);
+}
+
+.mds-toggle--disabled .mds-toggle-label,
+.mds-toggle--disabled .mds-toggle-caption {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-toggle-input:focus-visible + .mds-toggle-text + .mds-toggle-switch .mds-toggle-track {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-toggle-thumb,
+  .mds-toggle-track {
+    transition: none;
+  }
+}

@@ -17,6 +17,7 @@ export * from './components/Money';
 export * from './components/AmountVisibilityToggle';
 export * from './components/Checkbox';
 export * from './components/Radio';
+export * from './components/Toggle';
 export * from './components/StatusBadge';
 export * from './components/EntityMark';
 export * from './components/Button';

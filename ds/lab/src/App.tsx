@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, Radio, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, Radio, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -58,6 +58,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'confirm-sheet', name: t('title.confirmSheet') },
   { id: 'checkbox', name: t('lab.h.checkbox') },
   { id: 'radio', name: t('lab.h.radio') },
+  { id: 'toggle', name: t('lab.h.toggle') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -96,6 +97,8 @@ export function App() {
   const [cbB, setCbB] = useState(false);
   const [cbC, setCbC] = useState(false);
   const [avail, setAvail] = useState('available');
+  const [toggleDemo, setToggleDemo] = useState(true);
+  const [toggleDemo2, setToggleDemo2] = useState(false);
   // Catalog samples: the exit motion plays on dismiss, THEN the app
   // (here, the lab) removes the sheet — remounted fresh at once so the
   // sample stays for review and the press scan (23.2) keeps hitting it.
@@ -1262,6 +1265,24 @@ export function App() {
               ]}
               state="error"
             />
+          </div>
+        </section>
+
+        {/* ---- Toggle (ADDENDUM §1.7): the instant setting ---- */}
+        <section className="lab-section" id="toggle">
+          <h2 className="lab-title">{t('lab.h.toggle')}<span className="lab-tech">{t('title.toggle')}</span></h2>
+          <div className="lab-row lab-row--full" data-ds-check="toggle">
+            <span className="lab-label">{t('state.default')}</span>
+            <Surface>
+              <Toggle label={t('button.hideAmounts')} caption={t('banner.permission')} selected={toggleDemo} onChange={setToggleDemo} />
+              <Toggle label={t('avail.available')} selected={toggleDemo2} onChange={setToggleDemo2} />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.disabled')}</span>
+            <Surface>
+              <Toggle label={t('button.hideAmounts')} selected disabled />
+            </Surface>
           </div>
         </section>
 
