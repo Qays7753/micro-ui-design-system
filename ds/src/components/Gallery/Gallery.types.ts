@@ -10,9 +10,9 @@ import type { HTMLAttributes, Ref } from 'react';
 
 export interface GalleryItem {
   /** The image URL. */
-  src: string;
+  value: string;
   /** The alt word (the listing's title) for the screen reader. */
-  alt?: string;
+  caption?: string;
 }
 
 export interface GalleryProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'items'> {

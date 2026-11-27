@@ -5,7 +5,7 @@
 
 ## نقطة الاستكمال
 
-- **الحالة:** B4 السوق — المكوّنات السبعة كلها مبنية باختباراتها (ListingCard 7، Gallery 5، PriceTierTable 4، SupplierHeader 4، ListingStatusBadge 4، ReportSheet 4، ListingEditor 5 = 33 جديدًا؛ المجموع 522/522) وصفحة التركيب §5.8 وصفحات المختبر الثمانية، وtsc/eslint(ملفاتي)/stylelint نظيفة، وbuild وstandalone وmanifest تمّت. **متبقٍ لإغلاق B4:** جولة البوابات على المحركين (states/small-screen/layout/copy/dup/registry أولًا — نمط الأخطاء المتوقع كنمط B3: لمس 48 داخل الفتحات، صح أنواع القاموس، استثناءات registry لmarket-compose) ثم الصور بعين مصمم ثم check-all ثم commit الإغلاق. بعدها: B5 المراجعة مباشرة.
+- **الحالة:** B4 السوق — المكوّنات السبعة كلها مبنية باختباراتها (ListingCard 7، Gallery 5، PriceTierTable 4، SupplierHeader 4، ListingStatusBadge 4، ReportSheet 4، ListingEditor 5 = 33 جديدًا؛ المجموع 522/522) وصفحة التركيب §5.8 وصفحات المختبر الثمانية، وtsc/eslint(ملفاتي)/stylelint نظيفة، وbuild وstandalone وmanifest تمّت. **متبقٍ لإغلاق B4 (تحديث الجلسة الأخيرة):** أُصلح في الجولة: registry (استثناء market-compose) وcopy (رسالة الرمي إنجليزية) وprops (Gallery أعيدت تسمية src/alt إلى value/caption الموحدة، وقائمة الموحد امتدت بخصائص المواصفة: image/unavailable/supplier/unit/price/available/save/photos/tiers/editing/draft وغيرها) — الخضراء الآن: registry وcopy وprops وstructure على Chromium، وtsc نظيف و522/522. **المتبقي:** جولة states/small-screen/layout/dup (بدأت خلفية ولم تكتمل — أعدها من الصفر؛ النمط المتوقع كنمط B3) ثم WebKit ثم الصور ثم check-all ثم commit الإغلاق. بعدها: B5 المراجعة مباشرة.
 - آخر push إلى `design-system-b`: هذا الـcommit (B4 حفظ عمل).
 
 ## B3 (مغلق)

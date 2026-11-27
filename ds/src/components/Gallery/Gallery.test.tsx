@@ -4,10 +4,10 @@ import { ar } from '../../i18n/ar';
 import { Gallery } from './Gallery';
 
 const FOUR = [
-  { src: 'a.jpg', alt: 'طحين' },
-  { src: 'b.jpg', alt: 'طحين' },
-  { src: 'c.jpg', alt: 'طحين' },
-  { src: 'd.jpg', alt: 'طحين' },
+  { value: 'a.jpg', caption: 'طحين' },
+  { value: 'b.jpg', caption: 'طحين' },
+  { value: 'c.jpg', caption: 'طحين' },
+  { value: 'd.jpg', caption: 'طحين' },
 ];
 
 describe('Gallery (BATCH2-SPECS §5.2)', () => {
@@ -17,7 +17,7 @@ describe('Gallery (BATCH2-SPECS §5.2)', () => {
   });
 
   it('single photo: no dots, no nav', () => {
-    const { container } = render(<Gallery items={[{ src: 'a.jpg' }]} value={0} />);
+    const { container } = render(<Gallery items={[{ value: 'a.jpg' }]} value={0} />);
     expect(container.querySelector('.mds-gallery-dots')).toBeNull();
     expect(container.querySelector('.mds-gallery-nav')).toBeNull();
   });

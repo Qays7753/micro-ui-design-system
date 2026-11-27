@@ -170,7 +170,25 @@
   "stage",
   "evidence",
   "readOnly",
-  "error"
+  "error",
+  "image",
+  "unavailable",
+  "photos",
+  "tiers",
+  "editing",
+  "approved",
+  "alt",
+  "chosen",
+  "supplier",
+  "unit",
+  "price",
+  "name",
+  "details",
+  "reason",
+  "single",
+  "tiersMode",
+  "available",
+  "save"
  ],
  "banned_props_jsx": [
   "onLongTap",
@@ -335,6 +353,7 @@
   "controls": "AmountVisibilityToggle",
   "delivery-compose": "Section",
   "finance-compose": "Section",
-  "orders-compose": "Section"
+  "orders-compose": "Section",
+  "market-compose": "ListingCard"
  }
 }

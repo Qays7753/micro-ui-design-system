@@ -71,14 +71,14 @@ export function Gallery({
         {items.map((item, i) => (
           <div
             className="mds-gallery-item"
-            key={`${item.src}-${i}`}
+            key={`${item.value}-${i}`}
             role="img"
             aria-label={ar['gallery.imageOf'].text
               .replace('{current}', String(i + 1))
               .replace('{total}', String(items.length))
-              + (item.alt ? `${ar['sr.listSeparator'].text}${item.alt}` : '')}
+              + (item.caption ? `${ar['sr.listSeparator'].text}${item.caption}` : '')}
           >
-            <img className="mds-gallery-photo" src={item.src} alt="" aria-hidden="true" loading="lazy" />
+            <img className="mds-gallery-photo" src={item.value} alt="" aria-hidden="true" loading="lazy" />
           </div>
         ))}
       </div>
@@ -87,7 +87,7 @@ export function Gallery({
           <div className="mds-gallery-dots" aria-hidden="true">
             {items.map((item, i) => (
               <span
-                key={`${item.src}-dot-${i}`}
+                key={`${item.value}-dot-${i}`}
                 className={['mds-gallery-dot', i === current ? 'mds-gallery-dot--active' : '']
                   .filter(Boolean)
                   .join(' ')}

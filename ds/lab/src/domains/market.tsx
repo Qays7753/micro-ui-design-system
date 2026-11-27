@@ -46,10 +46,10 @@ function ListingCardGarden() {
 function GalleryGarden() {
   const [idx, setIdx] = useState(0);
   const four = [
-    { src: FLOUR, alt: 'طحين أبيض 50 كغ' },
-    { src: SATIN, alt: 'طحين أبيض 50 كغ' },
-    { src: FLOUR, alt: 'طحين أبيض 50 كغ' },
-    { src: SATIN, alt: 'طحين أبيض 50 كغ' },
+    { value: FLOUR, caption: 'طحين أبيض 50 كغ' },
+    { value: SATIN, caption: 'طحين أبيض 50 كغ' },
+    { value: FLOUR, caption: 'طحين أبيض 50 كغ' },
+    { value: SATIN, caption: 'طحين أبيض 50 كغ' },
   ];
   return (
     <div>
@@ -57,7 +57,7 @@ function GalleryGarden() {
         <Gallery items={four} value={idx} onChange={setIdx} />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{t('state.normal')}</span>
-        <Gallery items={[{ src: FLOUR, alt: 'طحين' }]} value={0} />
+        <Gallery items={[{ value: FLOUR, caption: 'طحين' }]} value={0} />
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export function ListingStatusBadge({
   // ق1: a rejection without its reason is a caller bug — the test
   // asserts the guard; keep it env-free so no node types leak in.
   if (tone === 'rejected' && !caption) {
-    throw new Error('ListingStatusBadge: rejected requires its reason caption (ق1)');
+    throw new Error('ListingStatusBadge: rejected requires its reason caption (rule Q1)');
   }
   const word = ar[WORD[tone]].text;
   return (
