@@ -137,7 +137,7 @@ export const ar = {
   'metric.deltaLowerHidden': { kind: 'help', text: 'أقل من أمس' },
 
   // --- Money fragments (BRIEF 8; display fragments -> badge) ---
-  'money.unit': { kind: 'badge', text: 'د.أ' },
+  'money.unit': { kind: 'badge', text: 'د' },
   'money.forYou': { kind: 'badge', text: 'لك' },
   'money.againstYou': { kind: 'badge', text: 'عليك' },
   'money.missing': { kind: 'badge', text: '—' },

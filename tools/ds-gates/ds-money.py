@@ -5,18 +5,18 @@ corrected by و-2 items 8 and 9, unit 15).
 
 Rule 1  every amount is shown through Money (a sentence amount is allowed —
         و-2 item 8). Automatic form: any TEXT NODE that carries digit(s) AND
-        the currency marker («د.أ» or the hidden shape «••••») must sit inside
+        the currency marker («د» or the hidden shape «••••») must sit inside
         a Money element (class mds-money*) — the count outside Money = 0.
         Money's own DOM splits value and unit into sibling nodes, so a correct
         Money (bare, in a sentence, hidden, or debt form) never trips this;
-        a raw sentence «دفعت 120 د.أ» does. The future AmountField's static
-        «د.أ» inside its caption is exempt by و-2 item 8 (not built yet — the
+        a raw sentence «دفعت 120 د» does. The future AmountField's static
+        «د» inside its caption is exempt by و-2 item 8 (not built yet — the
         exemption is documented here for the day it lands).
 Rule 4  the unit sits ONE layout.amount-unit-gap from the number inside Money
         (و-2 item 9 corrections): the computed column-gap of every rendered
         .mds-money-visual equals the tokens.json value ±0.5px, and the three
-        accepted forms render — «—» ALONE without the unit, «•••• د.أ» (hidden
-        keeps the unit), «لك 45 د.أ» (debt word + number + unit). The trio
+        accepted forms render — «—» ALONE without the unit, «•••• د» (hidden
+        keeps the unit), «لك 45 د» (debt word + number + unit). The trio
         presence is checked on the catalog view only (it is the sample zoo
         that demonstrates the forms; the compose screen is a screen, not a
         zoo). The gap check runs on BOTH views and BOTH engines.
@@ -46,10 +46,10 @@ MONEY_JS = """
     const node = walker.currentNode;
     const text = node.textContent || '';
     if (!hasDigit.test(text)) continue;
-    if (!text.includes('د.أ') && !text.includes('••••')) continue;
+    if (!text.includes('د') && !text.includes('••••')) continue;
     const host = node.parentElement;
     if (host && host.closest('[class*="mds-money"]')) continue;
-    // the documented future exemption: the static «د.أ» inside AmountField's
+    // the documented future exemption: the static «د» inside AmountField's
     // caption (و-2 item 8) — not built yet; nothing to match today.
     outside.push(desc(host) + ' «' + text.trim().slice(0, 30) + '»');
   }
@@ -73,10 +73,10 @@ MONEY_JS = """
       const bdi = visual.querySelector('.mds-money-value');
       const unit = visual.querySelector('.mds-money-unit');
       if (bdi && unit && (bdi.textContent || '').includes('••••')
-          && (unit.textContent || '').includes('د.أ')) hidden = true;
+          && (unit.textContent || '').includes('د')) hidden = true;
       const debtWord = visual.querySelector('.mds-money-debt');
       if (debtWord && unit && (debtWord.textContent || '').startsWith('لك')
-          && (unit.textContent || '').includes('د.أ')) debt = true;
+          && (unit.textContent || '').includes('د')) debt = true;
     }
     trio.hidden = hidden;
     trio.debt = debt;
@@ -118,7 +118,7 @@ def run(gate: Gate, target, args):
                         if not ok:
                             problems.append(
                                 f"[rule4] accepted form «{form}» not demonstrated on the catalog "
-                                "(missing «—» alone / «•••• د.أ» / «لك 45 د.أ»)")
+                                "(missing «—» alone / «•••• د» / «لك 45 د»)")
         except Exception as exc:
             problems.append(f"browser error: {exc!r}")
         if problems:

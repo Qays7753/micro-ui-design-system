@@ -46,7 +46,7 @@ describe('ar dictionary (BRIEF 24)', () => {
   });
 
   it('interpolates {param} placeholders', () => {
-    expect(t('confirm.deleteTitle', { amount: '12.500 د.أ' })).toBe('تحذف حركة 12.500 د.أ؟');
+    expect(t('confirm.deleteTitle', { amount: '12.500 د' })).toBe('تحذف حركة 12.500 د؟');
     expect(t('confirm.deleteResult', { fund: 'درج الكاش' })).toBe('لن تظهر في رصيد درج الكاش.');
     expect(t('metric.deltaHigher', { percent: '12%' })).toBe('12% أعلى من أمس');
     expect(t('errorState.updatedAt', { time: '10:42 ص' })).toBe('آخر تحديث 10:42 ص');
@@ -65,7 +65,7 @@ describe('ar dictionary (BRIEF 24)', () => {
   });
 
   it('binds money aria texts from the dictionary', () => {
-    expect(moneyTexts.unit).toBe('د.أ');
+    expect(moneyTexts.unit).toBe('د');
     expect(moneyTexts.minus).toBe('سالب');
     expect(moneyTexts.hidden).toBe('المبلغ مخفي');
     expect(moneyTexts.hiddenGlyph).toBe('••••');

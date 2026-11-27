@@ -5,17 +5,17 @@ import { formatMoney, type MoneyAriaTexts } from './format-money';
 /** BRIEF section 8, case by case. */
 describe('formatMoney', () => {
   it('formats plain amounts with unit and grouping', () => {
-    expect(formatMoney(45, { texts: moneyTexts }).display).toBe('45 د.أ');
-    expect(formatMoney('1280', { texts: moneyTexts }).display).toBe('1,280 د.أ');
-    expect(formatMoney('1250000.125', { texts: moneyTexts }).display).toBe('1,250,000.125 د.أ');
-    expect(formatMoney(0, { texts: moneyTexts }).display).toBe('0 د.أ');
+    expect(formatMoney(45, { texts: moneyTexts }).display).toBe('45 د');
+    expect(formatMoney('1280', { texts: moneyTexts }).display).toBe('1,280 د');
+    expect(formatMoney('1250000.125', { texts: moneyTexts }).display).toBe('1,250,000.125 د');
+    expect(formatMoney(0, { texts: moneyTexts }).display).toBe('0 د');
   });
 
   it('keeps fils at exactly three digits when non-zero, drops them when zero', () => {
-    expect(formatMoney('2.250', { texts: moneyTexts }).display).toBe('2.250 د.أ');
-    expect(formatMoney('12.500', { texts: moneyTexts }).display).toBe('12.500 د.أ');
-    expect(formatMoney('145.750', { texts: moneyTexts }).display).toBe('145.750 د.أ');
-    expect(formatMoney('150.000', { texts: moneyTexts }).display).toBe('150 د.أ');
+    expect(formatMoney('2.250', { texts: moneyTexts }).display).toBe('2.250 د');
+    expect(formatMoney('12.500', { texts: moneyTexts }).display).toBe('12.500 د');
+    expect(formatMoney('145.750', { texts: moneyTexts }).display).toBe('145.750 د');
+    expect(formatMoney('150.000', { texts: moneyTexts }).display).toBe('150 د');
     expect(formatMoney('12450.125', { texts: moneyTexts }).frac).toBe('.125');
     expect(formatMoney('12450.100', { texts: moneyTexts }).frac).toBe('.100');
   });
@@ -24,38 +24,38 @@ describe('formatMoney', () => {
     const inResult = formatMoney(45, { flow: 'in', texts: moneyTexts });
     const outResult = formatMoney(45, { flow: 'out', texts: moneyTexts });
     const transfer = formatMoney(45, { flow: 'transfer', texts: moneyTexts });
-    expect(inResult.display).toBe('+45 د.أ');
-    expect(outResult.display).toBe('−45 د.أ');
-    expect(transfer.display).toBe('45 د.أ');
+    expect(inResult.display).toBe('+45 د');
+    expect(outResult.display).toBe('−45 د');
+    expect(transfer.display).toBe('45 د');
     expect(outResult.sign.charCodeAt(0)).toBe(0x2212); // the real minus
   });
 
   it('renders negative values negative without a flow', () => {
     const result = formatMoney('-35', { texts: moneyTexts });
-    expect(result.display).toBe('−35 د.أ');
+    expect(result.display).toBe('−35 د');
     expect(result.aria).toBe('سالب 35 دينار');
     // Direction wins over the raw sign: out + (-35) is still −35, not +.
-    expect(formatMoney('-35', { flow: 'out', texts: moneyTexts }).display).toBe('−35 د.أ');
+    expect(formatMoney('-35', { flow: 'out', texts: moneyTexts }).display).toBe('−35 د');
   });
 
   it('formats debts as لك / عليك with no sign', () => {
     const forYou = formatMoney(45, { debt: 'forYou', texts: moneyTexts });
     const againstYou = formatMoney(20, { debt: 'againstYou', texts: moneyTexts });
-    expect(forYou.display).toBe('لك 45 د.أ');
+    expect(forYou.display).toBe('لك 45 د');
     expect(forYou.aria).toBe('لك 45 دينار');
-    expect(againstYou.display).toBe('عليك 20 د.أ');
+    expect(againstYou.display).toBe('عليك 20 د');
     expect(againstYou.sign).toBe('');
   });
 
   it('hides amounts as four bullets with unit, no sign, no fils', () => {
     const result = formatMoney('12450.125', { hidden: true, flow: 'in', texts: moneyTexts });
-    expect(result.display).toBe('•••• د.أ');
+    expect(result.display).toBe('•••• د');
     expect(result.int).toBe('');
     expect(result.frac).toBe('');
     expect(result.sign).toBe('');
     expect(result.aria).toBe('المبلغ مخفي');
-    // Debt word stays visible (BRIEF 23.22: «لك •••• د.أ»).
-    expect(formatMoney(45, { debt: 'forYou', hidden: true, texts: moneyTexts }).display).toBe('لك •••• د.أ');
+    // Debt word stays visible (BRIEF 23.22: «لك •••• د»).
+    expect(formatMoney(45, { debt: 'forYou', hidden: true, texts: moneyTexts }).display).toBe('لك •••• د');
   });
 
   it('renders missing values as an em dash, never zero', () => {
@@ -80,7 +80,7 @@ describe('formatMoney', () => {
     expect(result.sign).toBe('−');
     expect(result.int).toBe('12,450');
     expect(result.frac).toBe('.125');
-    expect(result.unit).toBe('د.أ');
+    expect(result.unit).toBe('د');
   });
 
   it('is pure: identical inputs give identical results', () => {

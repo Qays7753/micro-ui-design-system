@@ -259,7 +259,7 @@
   "font_shift_max_token": "quality.font-layout-shift-max-px",
   "hidden_amounts": {
     "bullets": "••••",
-    "unit": "د.أ",
+    "unit": "د",
     "check_attr": "amount-hidden"
   },
   "motion_fade_token": "motion.fade.ms",

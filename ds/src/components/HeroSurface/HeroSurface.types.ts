@@ -6,7 +6,7 @@
  * on-anchor-secondary with the AmountVisibilityToggle at the line's end;
  * 4; the value Rubik 40/48/500 white with tabular digits and −0.01em
  * tracking — cents in the same size but on-anchor-secondary — the unit
- * «د.أ» Plex 16/24/500 on-anchor-secondary on the number's baseline, 4
+ * «د» Plex 16/24/500 on-anchor-secondary on the number's baseline, 4
  * away; 8; the diff line (arrow 14 + 13/20/600 on-anchor-secondary, no
  * green/red inside the hero); 12; the source link 13/20/600 white with a
  * 1px underline offset 3. Height by content, min 152; a number that does
@@ -25,7 +25,7 @@ export interface HeroSurfaceProps {
    *  typography (owner decision 2026-11-25). Hidden amounts render
    *  «••••» + the unit (BRIEF 23.22 [مؤكد]). */
   value?: string;
-  /** The unit («د.أ») shown beside the number; omitted for unitless values.
+  /** The unit («د») shown beside the number; omitted for unitless values.
    *  Stays with the hidden bullets (23.22), drops for the missing «—»
    *  (و-2 item 9: «—» وحدها بلا وحدة). */
   trailing?: string;

@@ -101,7 +101,7 @@ export function App() {
             <span className="lab-tabular-pair">
               {/* G2 probes riding the lab strip: the money font's tabular
                   figures (ds-tabular), LTR digit runs inside RTL (ds-bidi),
-                  and the hidden shape «•••• د.أ» (ds-hidden-amounts). */}
+                  and the hidden shape «•••• د» (ds-hidden-amounts). */}
               <Money value="111.111" data-ds-check="tabular" />
               <Money value="888.888" data-ds-check="tabular" />
               <Money value="1,245.750" data-ds-check="bidi" />

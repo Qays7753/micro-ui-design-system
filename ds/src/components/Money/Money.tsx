@@ -2,12 +2,12 @@
  * Money — the amount display (BRIEF section 8, 9.3, 23.22).
  *
  * - The digits and the sign sit inside a LTR isolation (<bdi dir="ltr">); the
- *   unit «د.أ» follows the number with the token unit gap, and the amount
+ *   unit «د» follows the number with the token unit gap, and the amount
  *   never wraps (white-space: nowrap).
  * - Signs: in «+», out «−» (U+2212), transfer none; the sign carries the
  *   number's own color — an outgoing amount is NOT red (BRIEF 8).
  * - Hidden amounts come from the app-owned context, never a prop (23.22):
- *   the component renders exactly «•••• د.أ» (no sign, no fils, debt word
+ *   the component renders exactly «•••• د» (no sign, no fils, debt word
  *   kept) and keeps every digit out of the DOM — not even the screen-reader
  *   text carries the real value.
  * - The screen reader gets the amount in full words («سالب 35 دينار») from

@@ -86,7 +86,7 @@
   /* quartet shared via .mds-type-display-hero (base.css, ds-dup) */
 }
 
-/* «1,250,000.125 د.أ» does not fit at 40: drop to number-lg 28/36 in ONE
+/* «1,250,000.125 د» does not fit at 40: drop to number-lg 28/36 in ONE
    step (23.8). */
 /* The long-number drop's type quartet lives in the shared .mds-number-lg
    (base.css) — composed on the element, not duplicated here (ds-dup). */
@@ -99,7 +99,7 @@
   color: var(--mds-color-on-anchor-secondary);
 }
 
-/* The unit «د.أ»: Plex 16/24/500 on-anchor-secondary on the number's
+/* The unit «د»: Plex 16/24/500 on-anchor-secondary on the number's
    baseline, 4 away (23.8). */
 .mds-hero-unit {
   margin-inline-start: var(--mds-layout-amount-unit-gap);

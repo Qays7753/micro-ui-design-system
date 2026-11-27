@@ -8,7 +8,7 @@
  * - Stack (23.8): label 14/20/500 on-anchor-secondary with the
  *   AmountVisibilityToggle at the line's end → 4 → value display-hero
  *   (Rubik 40/48/500, white, tabular, −0.01em on digits; cents the same
- *   size in on-anchor-secondary; unit «د.أ» Plex 16/24/500
+ *   size in on-anchor-secondary; unit «د» Plex 16/24/500
  *   on-anchor-secondary on the number's baseline, 4 away) → 8 → diff line
  *   (arrow 14 + 13/20/600 on-anchor-secondary — direction by arrow and
  *   word ONLY, no green/red) → 12 → source link 13/20/600 white with a
@@ -29,7 +29,7 @@
  *   (23.8) — the app passes a long value; the drop is the app's choice made
  *   explicit here through the same token ladder, so the component does
  *   not guess: value strings longer than 9 digit-group characters render
- *   at number-lg (the «1,250,000.125 د.أ» case of 23.8).
+ *   at number-lg (the «1,250,000.125 د» case of 23.8).
  */
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
@@ -53,7 +53,7 @@ function HeroValue({ value }: { value?: string }) {
   // = «—» alone (و-2 item 9). Both keep the value's own typography.
   const glyph = missing ? moneyTexts.missingGlyph : hidden ? moneyTexts.hiddenGlyph : null;
   const { whole, cents } = splitValue(value ?? moneyTexts.missingGlyph);
-  // 23.8: «1,250,000.125 د.أ» does not fit at 40 — drop to number-lg
+  // 23.8: «1,250,000.125 د» does not fit at 40 — drop to number-lg
   // 28/36 in ONE step, no gradual shrinking. 9 chars covers the quoted
   // example without catching «12,345,678» (8) which does fit. The hidden
   // bullets keep the value's size class (the slot never reflows).

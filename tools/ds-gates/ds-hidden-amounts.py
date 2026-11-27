@@ -6,7 +6,7 @@ Every element with data-ds-check="amount-hidden" (the id the components use
 when amounts are hidden) must, on Chromium AND WebKit:
   - contain no digits at all (Western or Arabic-Indic) in textContent
   - render exactly four bullets •••• (U+2022, fixed shape, never the number)
-  - show the unit «د.أ»
+  - show the unit «د»
   - keep digits out of aria-label / data-aria too (the real value must not be
     in the page at all — القيمة الحقيقية لا تكون في الصفحة أصلاً)
 """

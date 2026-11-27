@@ -58,7 +58,7 @@ export const orders: readonly number[] = [1175, 1203];
 export const edgeCases = {
   /** أطول اسم */
   longestName: 'مؤسسة عبد الرحمن الخطيب للتجارة العامة والتوريدات',
-  /** أطول مبلغ — renders as «1,250,000.125 د.أ» */
+  /** أطول مبلغ — renders as «1,250,000.125 د» */
   longestAmount: '1250000.125',
   /** قيمة مفقودة — renders as «—», never as zero */
   missingAmount: null as string | null,
