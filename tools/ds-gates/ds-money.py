@@ -39,14 +39,18 @@ MONEY_JS = """
     return el.tagName.toLowerCase() + (cls ? '.' + cls.split(/\\s+/).slice(0, 2).join('.') : '');
   };
   // Rule 1: per TEXT NODE — digits together with the currency marker must be
-  // inside a Money element (class mds-money*).
+  // inside a Money element (class mds-money*). The marker is the UNIT as a
+  // standalone word (batch-2 1.4): «45 د» and «دفعت 120 د» fail, while the
+  // same letter inside a word («3 دقائق») is not an amount. The hidden
+  // bullets «••••» always count.
+  const unitToken = /(^|[\s(«>])د(?=$|[\s»)،.…؟!<])/;
   const outside = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const node = walker.currentNode;
     const text = node.textContent || '';
     if (!hasDigit.test(text)) continue;
-    if (!text.includes('د') && !text.includes('••••')) continue;
+    if (!unitToken.test(text) && !text.includes('••••')) continue;
     const host = node.parentElement;
     if (host && host.closest('[class*="mds-money"]')) continue;
     // the documented future exemption: the static «د» inside AmountField's

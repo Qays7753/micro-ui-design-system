@@ -1,5 +1,8 @@
 <!doctype html>
 <html dir="rtl"><head><meta charset="utf-8"></head><body>
+<!-- rule 1 violation (batch-2 1.4, case 1.2): a bare financial VALUE outside
+     Money — digits + the unit, not a sentence, exactly the ObjectRow shape -->
+<div class="row-end"><span class="value">45 د</span></div>
 <!-- rule 1 violation: a raw sentence amount outside Money -->
 <div class="note">دفعت 120 د اليوم للمورد</div>
 <!-- rule 4 violation: the unit gap is 8, not the token 4 -->
