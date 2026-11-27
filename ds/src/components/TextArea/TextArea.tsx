@@ -35,6 +35,7 @@ export function TextArea({
   const reactId = useId();
   const errorId = useMemo(() => `${reactId}-error`, [reactId]);
   const classes = [
+    'mds-field',
     'mds-text-area',
     state === 'error' ? 'mds-text-area--error' : '',
     disabled ? 'mds-text-area--disabled mds-field--disabled' : '',

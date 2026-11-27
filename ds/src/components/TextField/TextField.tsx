@@ -35,6 +35,7 @@ export function TextField({
   ...rest
 }: TextFieldProps) {
   const classes = [
+    'mds-field',
     'mds-text-field',
     state === 'error' ? 'mds-text-field--error' : '',
     disabled ? 'mds-text-field--disabled mds-field--disabled' : '',

@@ -3,16 +3,10 @@
  * no raw hex/px/ms in this file (ds-raw-values).
  */
 
-.mds-text-field {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--mds-layout-label-to-field);
-  min-width: var(--mds-size-textfield-min-width);
-  /* خ9 (1.7): the field is AS WIDE AS ITS CONTAINER — an unconstrained
-     input would take its intrinsic ~351px and spill out of the sheet's
-     surface (and the screen) in RTL. */
-  inline-size: 100%;
-}
+/* The root rides the shared .mds-field anatomy (base.css): the label
+   column, the label-to-field gap, the min width and the
+   fills-its-container width (kh9 — the intrinsic ~351px input used to
+   spill outside the surface and the screen in RTL). */
 
 /* The label weight and color on top of the shared .mds-type-label trio
    (base.css) — kept ≤3 declarations so the anatomy stays shared (ds-dup). */

@@ -154,3 +154,15 @@ button,
   border-color: var(--mds-color-disabled-bg);
   cursor: default;
 }
+
+/* The field root anatomy (BRIEF 9.3/ADDENDUM §1.2): the label column with
+   the label-to-field gap, the field's min width, and the
+   fills-its-container width (1.7 kh9) — shared by TextField and TextArea
+   (ds-dup, plan rule 4-7). */
+.mds-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--mds-layout-label-to-field);
+  min-width: var(--mds-size-textfield-min-width);
+  inline-size: 100%;
+}

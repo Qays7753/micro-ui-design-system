@@ -3,13 +3,7 @@
  * hex/px/ms in this file (ds-raw-values).
  */
 
-.mds-text-area {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--mds-layout-label-to-field);
-  min-width: var(--mds-size-textfield-min-width);
-  inline-size: 100%;
-}
+/* The root rides the shared .mds-field anatomy (base.css). */
 
 /* The label weight and color on top of the shared .mds-type-label trio
    (base.css) — kept ≤3 declarations so the anatomy stays shared (ds-dup). */
