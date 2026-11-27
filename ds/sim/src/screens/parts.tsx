@@ -46,6 +46,16 @@ export function LaterMark({ name, note }: { name: string; note?: ReactNode }) {
   );
 }
 
+/** The compact slot-sized marker (a badge's place at a row's end). */
+export function LaterChip({ name, note }: { name: string; note?: string }) {
+  return (
+    <span className="sim-later-chip" data-sim-later={name}>
+      <span className="sim-later-chip__name">يُركَّب لاحقًا: {name}</span>
+      {note ? <span className="sim-later-chip__note">{note}</span> : null}
+    </span>
+  );
+}
+
 /** The date caption line under the اليوم header (10.2 (1)). */
 export function ScreenDate() {
   return <p className="sim-screen__date"> {TODAY_LINE} </p>;

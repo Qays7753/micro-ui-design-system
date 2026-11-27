@@ -25,6 +25,8 @@ import {
   Sheet,
   Surface,
   TextArea,
+  TextField,
+  Toggle,
 } from '@micro/ds';
 import type { SegmentOption } from '@micro/ds';
 import { useState } from 'react';
@@ -221,6 +223,91 @@ export function ReportSheetShell({ listing, onDismiss }: { listing: Listing; onD
           onPress={() => {
             if (!reason) return; // the reason picker is a batch-2 marker in part A.
             dispatch({ type: 'listing/report', listingId: listing.id, reason });
+            dispatch({ type: 'ui/openSheet', id: null });
+          }}
+        />
+      </SheetBody>
+    </Sheet>
+  );
+}
+
+/** The listing form (م1 §5.6's ListingEditor) — built fields real. */
+export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
+  const dispatch = useSimDispatch();
+  const [form, setForm] = useState<{
+    title: string;
+    unit: string;
+    price: string;
+    tiers: ReadonlyArray<{ min: number; max: number | null; price: number }> | null;
+    available: boolean;
+    description: string;
+    imageCount: number;
+  }>({ title: '', unit: '', price: '', tiers: null, available: true, description: '', imageCount: 0 });
+  const complete = form.title.trim() !== '' && form.unit.trim() !== '' && form.imageCount > 0;
+  return (
+    <Sheet label="عرض جديد" variant="form" onDismiss={onDismiss}>
+      <SheetBody>
+        <div className="sim-later-inline" data-sim-later="PhotoUploader">
+          <span className="sim-later__name">يُركَّب لاحقًا: PhotoUploader</span>
+          <span className="sim-later__note">الصور — بلا صورة: خطأ الإرسال</span>
+        </div>
+        <TextField
+          label="اسم العرض"
+          value={form.title}
+          onChange={(title) => setForm((f) => ({ ...f, title }))}
+        />
+        <TextField
+          label="العبوة"
+          placeholder="كرتونة 12 قطعة"
+          value={form.unit}
+          onChange={(unit) => setForm((f) => ({ ...f, unit }))}
+        />
+        <SegmentedControl
+          leading={[
+            { value: 'single', label: 'سعر واحد' },
+            { value: 'tiers', label: 'شرائح' },
+          ]}
+          value={form.tiers ? 'tiers' : 'single'}
+          onChange={(v) => setForm((f) => ({ ...f, tiers: v === 'tiers' ? [{ min: 1, max: null, price: 0 }] : null }))}
+          label="طريقة السعر"
+        />
+        {form.tiers ? (
+          <div className="sim-later-inline" data-sim-later="PriceTierBuilder">
+            <span className="sim-later__name">يُركَّب لاحقًا: PriceTierBuilder</span>
+            <span className="sim-later__note">بناء الشرائح (ر5.2: ثلاث شرائح)</span>
+          </div>
+        ) : (
+          <AmountField
+            label="السعر للعبوة"
+            value={form.price}
+            onChange={(price) => setForm((f) => ({ ...f, price }))}
+          />
+        )}
+        <Toggle
+          label="متوفر"
+          selected={form.available}
+          onChange={(available) => setForm((f) => ({ ...f, available }))}
+        />
+        <TextArea
+          label="الوصف"
+          value={form.description}
+          onChange={(description) => setForm((f) => ({ ...f, description }))}
+          caption="اختياري"
+        />
+        <SaveState saveState="draft" />
+        <ActionBar
+          label="أرسل للمراجعة"
+          onPress={() => {
+            if (!complete) return; // the photos ride the real PhotoUploader in part B.
+            dispatch({
+              type: 'listing/create',
+              input: {
+                title: form.title,
+                unit: form.unit,
+                imageCount: form.imageCount,
+                tiers: form.tiers ?? [{ min: 1, max: null, price: Math.round(Number.parseFloat(form.price) * 1000) }],
+              },
+            });
             dispatch({ type: 'ui/openSheet', id: null });
           }}
         />
@@ -453,6 +540,7 @@ export function SharedSheets() {
   if (sheet === 'needsYouAll') return <NeedsYouAllSheet onDismiss={close} />;
   if (sheet === 'movement') return <MovementSheet onDismiss={close} />;
   if (sheet === 'newOrder') return <NewOrderSheet onDismiss={close} />;
+  if (sheet === 'newListing') return <NewListingSheet onDismiss={close} />;
   if (sheet === 'newDelivery') return <NewDeliverySheet onDismiss={close} />;
   if (sheet.startsWith('report:')) {
     const target = state.listings.find((l) => l.id === sheet.slice('report:'.length)) ?? state.listings[0]!;

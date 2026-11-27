@@ -1,12 +1,3 @@
-/**
- * MarketScreen — «السوق» (م1 §5.8 / 10.2 (8)): the header, the search, the
- * category chips (real, from the listings' own categories), and the two-
- * column grid of ListingCard places — the batch-2 card is still unbuilt, so
- * each visible listing's place carries the internal marker with its live
- * data (title · price · supplier). The owner reaches it as a tab (with the
- * TabBar); the supplier's «السوق» segment and the guest render it without
- * the TabBar (the guest's GuestShell arrives with SA7هـ).
- */
 import { FilterChips, PageHeader, SearchField } from '@micro/ds';
 import type { ChipOption } from '@micro/ds';
 import { useMemo, useState } from 'react';
@@ -14,7 +5,8 @@ import { useSim, useSimDispatch } from '../../state/store';
 import { ContextBarShell, OwnerTabBar, moneyText } from '../parts';
 import { MARKET_SEARCH } from '../../texts';
 
-export function MarketScreen({ tab = false }: { tab?: boolean }) {
+/** The market's search + chips + grid (the shared body of every variant). */
+export function MarketBody() {
   const state = useSim();
   const dispatch = useSimDispatch();
   const [query, setQuery] = useState('');
@@ -41,11 +33,8 @@ export function MarketScreen({ tab = false }: { tab?: boolean }) {
   }, [state.listings]);
 
   return (
-    <div className="sim-screen" data-sim-screen-body="market">
-      <ContextBarShell />
-      <PageHeader label="السوق" />
-      <div className="sim-screen__body">
-        <SearchField label={MARKET_SEARCH} placeholder={MARKET_SEARCH} value={query} onChange={setQuery} />
+    <>
+      <SearchField label={MARKET_SEARCH} placeholder={MARKET_SEARCH} value={query} onChange={setQuery} />
         {categoryOptions.length > 1 ? (
           <FilterChips leading={categoryOptions} value={categories} onChange={setCategories} label="تصنيفات السوق" />
         ) : null}
@@ -75,6 +64,26 @@ export function MarketScreen({ tab = false }: { tab?: boolean }) {
             ))}
           </div>
         ) : null}
+    </>
+  );
+}
+
+/**
+ * MarketScreen — «السوق» (م1 §5.8 / 10.2 (8)): the header, the search, the
+ * category chips (real, from the listings' own categories), and the two-
+ * column grid of ListingCard places — the batch-2 card is still unbuilt, so
+ * each visible listing's place carries the internal marker with its live
+ * data (title · price · supplier). The owner reaches it as a tab (with the
+ * TabBar); the supplier's «السوق» segment and the guest render it without
+ * the TabBar (the guest's GuestShell arrives with SA7هـ).
+ */
+export function MarketScreen({ tab = false }: { tab?: boolean }) {
+  return (
+    <div className="sim-screen" data-sim-screen-body="market">
+      <ContextBarShell />
+      <PageHeader label="السوق" />
+      <div className="sim-screen__body">
+        <MarketBody />
       </div>
       {tab ? <OwnerTabBar /> : null}
     </div>

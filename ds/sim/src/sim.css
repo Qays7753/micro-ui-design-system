@@ -342,6 +342,43 @@
   font-size: var(--mds-type-caption-size);
 }
 
+/* The compact slot-sized marker (a badge's place at a row's end). */
+.sim-later-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  max-width: 9em;
+}
+
+.sim-later-chip__name,
+.sim-later-chip__note {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sim-later-chip__name {
+  text-decoration: 1px dashed underline;
+  text-decoration-color: var(--mds-color-surface-edge);
+  text-underline-offset: 3px;
+}
+
+/* The supplier's rows: the row + the badge's reason caption under it. */
+.sim-supplier-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+}
+
+.sim-supplier-row__why {
+  padding-inline: calc(var(--mds-layout-row-padding-inline) + 44 + var(--mds-space-12));
+}
+
 /* The marker stack (a section of markers). */
 .sim-cards,
 .sim-rows {

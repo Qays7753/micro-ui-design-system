@@ -16,6 +16,13 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / 'tools' / '
 from common import browser_session  # noqa: E402
 
 # (name, role-row-text, then the presses after entering the role)
+ROLE_FIRST_SCREEN = {
+    'owner': ('ورشة الياسمين للخياطة', 'today'),
+    'driver': ('عمر الزعبي', 'driverOrders'),
+    'supplier': ('مخبز الأصيل للجملة', 'myListings'),
+    'reviewer': ('مراجعة المنصة', 'review'),
+}
+
 FLOWS = {
     'owner': {
         'today': [],
@@ -29,6 +36,15 @@ FLOWS = {
     'driver': {
         'driverOrders': [],
         'myJobs': ['seg:مهامي'],
+    },
+    'supplier': {
+        'myListings': [],
+        'market': ['seg:السوق'],
+    },
+    'reviewer': {
+        'review': [],
+        'reports': ['tab:البلاغات'],
+        'drivers': ['tab:السائقون'],
     },
 }
 
@@ -85,21 +101,23 @@ def main() -> None:
             page.wait_for_timeout(150)
             page.screenshot(path=str(outdir / f'owner-{screen}-bottom-{engine}.png'))
 
-        # Back to the role screen for the driver (SA7ب).
-        page.reload()
-        page.wait_for_selector('[data-sim-role-screen]', timeout=15000)
-        page.wait_for_selector('[data-sim-splash]', state='detached', timeout=15000)
-        page.get_by_text('عمر الزعبي').click()
-        page.wait_for_selector('[data-sim-screen-body="driverOrders"]', timeout=8000)
-        page.wait_for_timeout(400)
-        for screen, steps in FLOWS['driver'].items():
-            for step in steps:
-                kind, _, label = step.partition(':')
-                press(page, kind, label)
-                page.wait_for_timeout(350)
-            page.evaluate('window.scrollTo(0, 0)')
-            page.wait_for_timeout(150)
-            page.screenshot(path=str(outdir / f'driver-{screen}-{engine}.png'))
+        # The other roles (SA7ب/ج/د): back to the role screen each time.
+        for role in ('driver', 'supplier', 'reviewer'):
+            page.reload()
+            page.wait_for_selector('[data-sim-role-screen]', timeout=15000)
+            page.wait_for_selector('[data-sim-splash]', state='detached', timeout=15000)
+            row, first = ROLE_FIRST_SCREEN[role]
+            page.get_by_text(row).click()
+            page.wait_for_selector(f'[data-sim-screen-body="{first}"]', timeout=8000)
+            page.wait_for_timeout(400)
+            for screen, steps in FLOWS[role].items():
+                for step in steps:
+                    kind, _, label = step.partition(':')
+                    press(page, kind, label)
+                    page.wait_for_timeout(350)
+                page.evaluate('window.scrollTo(0, 0)')
+                page.wait_for_timeout(150)
+                page.screenshot(path=str(outdir / f'{role}-{screen}-{engine}.png'))
 
         # The shared sheets.
         page.get_by_role('button', name='ورشة الياسمين للخياطة').first.click()

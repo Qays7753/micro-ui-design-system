@@ -7,6 +7,7 @@
  */
 import { useSim } from '../state/store';
 import { DriverScreen } from './driver/DriverScreen';
+import { SupplierScreen } from './supplier/SupplierScreen';
 import { DeliveryScreen } from './owner/DeliveryScreen';
 import { FinanceScreen } from './owner/FinanceScreen';
 import { MovementsScreen } from './owner/MovementsScreen';
@@ -17,7 +18,6 @@ import { LaterMark } from './parts';
 
 /** The unit markers for the screens not yet built. */
 const PART_UNITS: Record<string, string> = {
-  myListings: 'SA7ج (المورد)',
   review: 'SA7د (المراجع)',
   reports: 'SA7د (المراجع)',
   drivers: 'SA7د (المراجع)',
@@ -48,6 +48,10 @@ export function ScreenRouter() {
     case 'driverOrders':
     case 'myJobs':
       return <DriverScreen />;
+    case 'myListings':
+      return <SupplierScreen />;
+    case 'market':
+      return role === 'supplier' ? <SupplierScreen /> : <MarketScreen tab={role === 'owner'} />;
     case 'today':
       return <TodayScreen />;
     case 'finance':
@@ -59,8 +63,6 @@ export function ScreenRouter() {
       return <OrdersScreen />;
     case 'delivery':
       return <DeliveryScreen />;
-    case 'market':
-      return <MarketScreen tab={role === 'owner'} />;
     default:
       return null;
   }

@@ -11,7 +11,7 @@ worktree="/home/z/my-project/gh-pages-deploy"
 [ -n "${GH_TOKEN:-}" ] || { echo "deploy-pages: GH_TOKEN not set"; exit 1; }
 
 # A clean worktree of origin/gh-pages (create or sync).
-if [ ! -d "$worktree/.git" ]; then
+if [ ! -e "$worktree/.git" ]; then
   git -C "$repo" worktree add "$worktree" origin/gh-pages
 else
   git -C "$worktree" fetch origin gh-pages
