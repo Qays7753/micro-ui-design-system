@@ -1,0 +1,30 @@
+/*
+ * The simulation's own layout (sim-* namespace; the components' shape stays
+ * untouched — only page structure, and every value is a token by name).
+ */
+
+.sim-app {
+  min-height: 100dvh;
+  background-color: var(--mds-color-canvas);
+  color: var(--mds-color-text-primary);
+  /* Zooming by pinch stays allowed; double-tap-zoom is off (§9.ب 7 / 27). */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sim-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+  padding: var(--mds-layout-screen-margin-phone);
+  padding-top: calc(var(--mds-space-8) + env(safe-area-inset-top));
+  max-width: var(--mds-breakpoint-content-max, 480px);
+  margin-inline: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sim-screen__date {
+  margin: 0;
+  color: var(--mds-color-text-secondary);
+}

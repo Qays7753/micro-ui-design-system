@@ -1,0 +1,4 @@
+# pnpm 12 build-script approvals (single package, the ds/consumer-test pattern):
+# esbuild is the ONLY dependency allowed to run its build script.
+allowBuilds:
+  esbuild: true

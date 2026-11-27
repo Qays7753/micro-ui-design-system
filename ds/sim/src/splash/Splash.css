@@ -1,0 +1,54 @@
+/*
+ * Splash styles — canvas fullscreen; the four modules slide in along their own
+ * radius (motion.splash 600ms) then the whole mark fades out
+ * (motion.fade 150ms). Reduced motion: the modules sit still. All values are
+ * the tokens by name (--mds-*), no raw design values.
+ */
+.sim-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mds-color-canvas);
+}
+
+.sim-splash__mark {
+  display: block;
+}
+
+.sim-splash__module {
+  animation: sim-splash-gather var(--mds-motion-splash-ms) var(--mds-motion-emphasized-ease) both;
+}
+
+.sim-splash--fade {
+  animation: sim-splash-fade var(--mds-motion-fade-ms) ease both;
+}
+
+@keyframes sim-splash-gather {
+  from {
+    transform: translate(0, -28px);
+  }
+
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes sim-splash-fade {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sim-splash__module {
+    animation: none;
+    transform: none;
+  }
+}

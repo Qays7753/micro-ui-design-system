@@ -1,0 +1,25 @@
+<!doctype html>
+<!--
+  The standalone build entry (vite.singlefile.config.ts → previews/micro-sim/
+  micro-sim.html): one file that runs alone from file:// (owner decision 1).
+  The head stays minimal — no service worker, no apple splash set, and the
+  favicon rides an inline data URI so nothing outside this file is needed.
+-->
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#E8ECEF" />
+    <title>Micro — المحاكاة</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20224%20224'%3E%3Cg%20transform='translate(16%2016)'%3E%3Cg%20transform='rotate(0%2096%2096)'%3E%3Cpath%20d='M36%200%20H108%20Q116%200%20116%208%20V56%20Q116%2064%20108%2064%20H12%20Q0%2064%200%2052%20V36%20C0%2016.1%2016.1%200%2036%200%20Z'%20fill='%23164D59'/%3E%3C/g%3E%3Cg%20transform='rotate(90%2096%2096)'%3E%3Cpath%20d='M36%200%20H108%20Q116%200%20116%208%20V56%20Q116%2064%20108%2064%20H12%20Q0%2064%200%2052%20V36%20C0%2016.1%2016.1%200%2036%200%20Z'%20fill='%23D97757'/%3E%3C/g%3E%3Cg%20transform='rotate(180%2096%2096)'%3E%3Cpath%20d='M36%200%20H108%20Q116%200%20116%208%20V56%20Q116%2064%20108%2064%20H12%20Q0%2064%200%2052%20V36%20C0%2016.1%2016.1%200%2036%200%20Z'%20fill='%23164D59'/%3E%3C/g%3E%3Cg%20transform='rotate(270%2096%2096)'%3E%3Cpath%20d='M36%200%20H108%20Q116%200%20116%208%20V56%20Q116%2064%20108%2064%20H12%20Q0%2064%200%2052%20V36%20C0%2016.1%2016.1%200%2036%200%20Z'%20fill='%23507F8B'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"
+      type="image/svg+xml"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

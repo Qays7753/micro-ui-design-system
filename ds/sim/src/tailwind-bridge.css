@@ -1,0 +1,17 @@
+/*
+ * The Tailwind 4 bridge (the ds README / BRIEF 0.7 pattern): Tailwind
+ * namespaces consume OUR token variables through @theme, so any Tailwind
+ * utility the app uses computes exactly tokens.json's values.
+ */
+@import 'tailwindcss';
+
+@theme {
+  --color-ground: var(--mds-color-canvas);
+  --color-ink: var(--mds-color-text-primary);
+  --color-brand: var(--mds-color-brand-anchor);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ground);
+}
