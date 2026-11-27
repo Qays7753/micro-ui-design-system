@@ -12,19 +12,244 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.sim-screen {
+/* ── The sim bar (§5.4.1, decisions 3+4) ──────────────────────────────── */
+
+.sim-bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-layer-bars, 20);
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-12);
+  min-height: var(--mds-size-touch-min);
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  padding-top: env(safe-area-inset-top);
+  box-sizing: border-box;
+  background-color: var(--mds-color-surface-well);
+  border-bottom: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
+.sim-version {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+  cursor: default;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.sim-bar__task {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: start;
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+/* ── The shell screen area (SA7 fills it) ─────────────────────────────── */
+
+.sim-shell-screen {
   display: flex;
   flex-direction: column;
   gap: var(--mds-layout-section-to-section);
   padding: var(--mds-layout-screen-margin-phone);
-  padding-top: calc(var(--mds-space-8) + env(safe-area-inset-top));
-  max-width: var(--mds-breakpoint-content-max, 480px);
+  padding-top: var(--mds-space-8);
+  max-width: var(--mds-breakpoint-content-max);
+  margin-inline: auto;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 40dvh;
+}
+
+.sim-shell-placeholder {
+  margin: 0;
+  color: var(--mds-color-text-secondary);
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+}
+
+/* ── The tasks sheet (§5.4.2) ─────────────────────────────────────────── */
+
+.sim-tasks-sheet__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+  padding-bottom: var(--mds-layout-scroll-end-padding);
+}
+
+.sim-task-current {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+}
+
+.sim-task-current__sentence {
+  margin: 0;
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.sim-task-current__role {
+  margin: 0;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-task-current__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  align-items: stretch;
+}
+
+.sim-task-current__none {
+  margin: 0;
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-task-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-12);
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+}
+
+.sim-task-row__id {
+  flex: none;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-task-row__sentence {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  color: var(--mds-color-text-primary);
+}
+
+/* ── The sim panel (§5.7) ─────────────────────────────────────────────── */
+
+.sim-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+  padding-bottom: var(--mds-layout-scroll-end-padding);
+}
+
+.sim-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-12);
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+}
+
+.sim-panel__row-end {
+  flex: none;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-panel__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-field-to-field);
+}
+
+.sim-identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-field-to-field);
+}
+
+.sim-identity__placeholder {
+  margin: 0;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-panel__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--mds-space-8);
+}
+
+/* ── The role screen (§5.8) ───────────────────────────────────────────── */
+
+.sim-role {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mds-color-canvas);
+}
+
+.sim-role__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--mds-layout-section-to-section);
+  padding: var(--mds-layout-screen-margin-phone);
+  padding-top: calc(env(safe-area-inset-top) + var(--mds-space-40));
+  max-width: var(--mds-breakpoint-content-max);
   margin-inline: auto;
   width: 100%;
   box-sizing: border-box;
 }
 
-.sim-screen__date {
-  margin: 0;
-  color: var(--mds-color-text-secondary);
+.sim-role__mark {
+  display: flex;
+  justify-content: center;
+}
+
+.sim-role__footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--mds-space-16);
+  padding-bottom: calc(env(safe-area-inset-bottom) + var(--mds-space-16));
 }

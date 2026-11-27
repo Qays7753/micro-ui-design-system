@@ -26,7 +26,8 @@ export type Screen =
   | 'orders' // الطلبات — القائمة
   | 'ordersCalendar' // الطلبات — التقويم
   | 'delivery' // التوصيل
-  | 'myJobs' // مهامي (السائق)
+  | 'driverOrders' // التوصيل — جزء «الطلبات» (السائق)
+  | 'myJobs' // التوصيل — جزء «مهامي» (السائق)
   | 'market' // السوق
   | 'myListings' // عروضي (المورد)
   | 'review' // المراجعة (المراجع)
@@ -164,6 +165,7 @@ export type SimAction =
   | { type: 'role/enter'; role: SimRole }
   | { type: 'role/guestLogin' }
   | { type: 'role/change'; role: SimRole }
+  | { type: 'role/exit' }
   | { type: 'project/switch'; project: ProjectId }
   | { type: 'amountsHidden/set'; hidden: boolean }
   | { type: 'movement/save'; input: MovementInput }

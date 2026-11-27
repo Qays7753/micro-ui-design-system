@@ -61,6 +61,9 @@ export function reducer(state: SimState, action: SimAction): SimState {
     case 'role/change':
       // From the sim panel: switch the role WITHOUT touching the data (§5.7 item 5).
       return { ...state, role: action.role };
+    case 'role/exit':
+      // «غيّر الدور» (§5.7 item 5): the role screen opens, the data STAYS.
+      return { ...state, role: null, ui: initialUi() };
     case 'project/switch':
       return { ...state, project: action.project };
 

@@ -141,6 +141,8 @@ export interface Delivery {
   evidence: 'photo' | null;
   /** Present evidence for done jobs: 'photo'. */
   evidenceProvided?: 'photo' | null;
+  /** ر4.4: an issue proposal the OWNER approved (the mission stays تعذّر, closed). */
+  issueClosed?: boolean;
   linkedOrderId?: string;
   linkedMovementId?: string;
   description?: string;
