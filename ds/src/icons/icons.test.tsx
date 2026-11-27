@@ -66,7 +66,12 @@ describe('generated icons (BRIEF 23.23)', () => {
   });
 
   it('flips exactly the 23.23 directional names', () => {
-    expect(RTL_FLIP_ICONS).toEqual(['nav-delivery', 'back', 'forward', 'transfer']);
+    // 23.23 + BATCH2 م-أ7 (movement-in/out) + م-أ10 (send): the directional
+    // names flip in RTL — nothing else does.
+    expect(RTL_FLIP_ICONS).toEqual([
+      'nav-delivery', 'back', 'forward', 'transfer',
+      'movement-in', 'movement-out', 'send',
+    ]);
   });
 
   it('renders at the requested size (BRIEF 5.5: 14/16/20/24)', () => {

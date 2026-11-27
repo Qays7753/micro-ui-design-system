@@ -51,7 +51,9 @@
 |---|---|---|
 | الوحدة 3.1 | **منفذة** — رموز م-ر1–م-ر19 في `tokens.json` والمولّدات الثلاث (tokens.ts وtokens.css وtailwind-theme.css): `size.toggle-track/thumb`، و`layout.photo-columns` **بدل** `size.photo-tile`، و`motion.drag-lift`، و`size.voice-bar`، و`motion.hold-confirm`، و`size.track-dot` و`border.track-line`، و`size.logo-lockup`، و`size.google-button`، و`size.progress`، و`layout.timeline-hours` و`size.timeline-block-min`، و`size.day-mark`، و`size.dot-event`، و`size.textarea-max-lines` و`size.ask-input-max-lines`، و`quality.max-inline-table-rows`، و`quality.slide-confirm-ratio`، و`quality.viewer-zoom-min/max/step`، و`quality.timeline-default-range`، و`quality.voice-max-seconds/warning-seconds`، و`size.checkbox`. **رموز sim.* خارجها** (م-ر20/م-ر21 للمحاكاة فقط). typecheck و302 اختبار وbuild وstandalone وds-raw-values وds-browsers أخضر | commit هذه الوحدة |
 
-(تُملأ مع الوحدتين 3.2–3.4)
+| الوحدة 3.2 | **منفذة** — أيقونات م-أ1–م-أ16 من Phosphor في `ds/src/icons` بأسمائها الدلالية (24 أيقونة جديدة: backspace وplus/minus وcalendar/clock وcamera وmic/stop وtrash وmovement-in/out المعكوسة وphone/whatsapp وmap-pin وsend المعكوسة وtable/chart وzoom-in/out وfile وlink وnote/sliders وpause Bold 14) — المجموع 67 أيقونة + رمز Ask، والمولّد يتحقق (--check)، واختبار الانعكاس تحدّث إلى القائمة السبع حرفيًا. typecheck و302 اختبار وlint وbuild أخضر | commit هذه الوحدة |
+
+(تُملأ مع الوحدتين 3.3–3.4)
 
 ## المرحلة 4 — المكوّنات العامة
 
