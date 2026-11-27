@@ -12,7 +12,15 @@
  *   the one-line row centers its text vertically. An ICON row (ت4 1.7: a
  *   ReactNode `leading` — an action or a setting) starts with the icon 20
  *   in text-secondary and rides the row-plain 56 height.
- * - Press: the row-inset treatment (23.2). No trailing «›» (23.24).
+ * - Press: the row-inset treatment (23.2 + 1.7 ت13): surface-pressed
+ *   background, inset 8 from the surface's edges (the row's own padding
+ *   absorbs the inset so the CONTENT never moves), corner radius r-sm 8 —
+ *   to sit inside a surface whose own corner is 16 (radius.lg). No
+ *   trailing «›» (23.24).
+ * - Landed (1.7 ت12): after a save closes its sheet the affected row
+ *   plays motion.landed ONCE — brand-selected-bg fading to transparent
+ *   over 1200ms ease-out (reduced motion: no fade; the Toast alone
+ *   signals) — with the same floating-inset geometry as the press.
  * - End column (ت5 1.7): a row WITHOUT a value shows NOTHING at its end —
  *   «—» belongs to a LABELED value cell (KeyValueList, Metric), never to
  *   an object row.
@@ -42,6 +50,7 @@ export function ObjectRow({
   value,
   trailing,
   onPress,
+  landed = false,
   disabled = false,
   className,
   id,
@@ -55,6 +64,7 @@ export function ObjectRow({
     'mds-object-row',
     isIconLead(leading) ? 'mds-object-row--icon' : '',
     isPressed ? 'mds-object-row--pressed' : '',
+    landed ? 'mds-object-row--landed' : '',
     disabled ? 'mds-object-row--disabled' : '',
     interactive ? '' : 'mds-object-row--passive',
     className,

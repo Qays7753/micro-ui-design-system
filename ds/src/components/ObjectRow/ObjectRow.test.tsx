@@ -83,6 +83,34 @@ describe('ObjectRow (BRIEF 23.4)', () => {
     expect(container.querySelector('.mds-object-row-end')).toBeNull();
   });
 
+  it('pressed rides the r-sm corner and the floating 8 inset with the content unmoved (1.7 ت13)', () => {
+    const css = readFileSync(join(__dirname, 'ObjectRow.css'), 'utf8');
+    expect(css).toContain('border-radius: var(--mds-radius-sm)');
+    expect(css).toContain('margin-inline: var(--mds-layout-pressed-row-inset)');
+    expect(css).toContain('padding-inline: calc(var(--mds-layout-row-padding-inline) - var(--mds-layout-pressed-row-inset))');
+    // the inset is absorbed, never added: the padding cut matches the margin
+    expect(css).not.toContain('padding-inline: var(--mds-layout-row-padding-inline)');
+  });
+
+  it('landed plays motion.landed once and goes quiet under reduced motion (1.7 ت12)', () => {
+    const { container } = render(
+      <ObjectRow label={ar['row.sampleTitle'].text} landed />,
+    );
+    const row = container.firstElementChild as HTMLElement;
+    expect(row.className).toContain('mds-object-row--landed');
+    const css = readFileSync(join(__dirname, 'ObjectRow.css'), 'utf8');
+    expect(css).toContain('animation: mds-row-landed var(--mds-motion-landed-ms) var(--mds-motion-landed-ease) 1 both');
+    expect(css).toContain('@keyframes mds-row-landed');
+    expect(css).toContain('var(--mds-color-brand-selected-bg)');
+    expect(css.match(/animation: none/g)?.length).toBeGreaterThanOrEqual(1);
+    expect(ObjectRowStates).toContain('landed');
+  });
+
+  it('landed defaults to off and stays off without the prop', () => {
+    const { container } = render(<ObjectRow label={ar['row.sampleTitle'].text} />);
+    expect((container.firstElementChild as HTMLElement).className).not.toContain('mds-object-row--landed');
+  });
+
   it('ignores presses when disabled (23.24(15))', () => {
     const onPress = vi.fn();
     const { container } = render(

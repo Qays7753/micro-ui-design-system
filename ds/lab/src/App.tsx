@@ -85,6 +85,9 @@ export function App() {
   const [tab, setTab] = useState(0);
   const [tabDemo, setTabDemo] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // ت12 demo: the row-garden landing sample replays motion.landed on press
+  // (class off -> on restarts the one-shot animation).
+  const [rowLanded, setRowLanded] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   // 2.1 demo sheets: every pressable in the lab opens its real sample.
   const [projectOpen, setProjectOpen] = useState(false);
@@ -1432,6 +1435,24 @@ export function App() {
                 />
                 <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => setObjectOpen(true)} />
               </div>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.landed')}</span>
+            <Surface>
+              {/* 1.7 ت12: press replays the landing — the save closed its
+                  sheet and the affected row settles here. */}
+              <ObjectRow
+                label={t('row.sampleTitle')}
+                caption={t('row.sampleCaption')}
+                value={<Money value="1,290.750" />}
+                landed={rowLanded}
+                onPress={() => {
+                  setRowLanded(false);
+                  window.setTimeout(() => setRowLanded(true), 60);
+                  setToastText(t('toast.movementSaved'));
+                }}
+              />
             </Surface>
           </div>
         </section>
