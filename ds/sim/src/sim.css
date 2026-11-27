@@ -59,25 +59,10 @@
 
 /* ── The shell screen area (SA7 fills it) ─────────────────────────────── */
 
+/* The screens carry their own chrome and margins — the shell only frames. */
 .sim-shell-screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-layout-section-to-section);
-  padding: var(--mds-layout-screen-margin-phone);
-  padding-top: var(--mds-space-8);
-  max-width: var(--mds-breakpoint-content-max);
-  margin-inline: auto;
+  display: block;
   width: 100%;
-  box-sizing: border-box;
-  min-height: 40dvh;
-}
-
-.sim-shell-placeholder {
-  margin: 0;
-  color: var(--mds-color-text-secondary);
-  font-family: var(--mds-type-body-font);
-  font-size: var(--mds-type-body-size);
-  line-height: var(--mds-type-body-line);
 }
 
 /* ── The tasks sheet (§5.4.2) ─────────────────────────────────────────── */
@@ -252,4 +237,279 @@
   justify-content: center;
   padding: var(--mds-space-16);
   padding-bottom: calc(env(safe-area-inset-bottom) + var(--mds-space-16));
+}
+
+/* ── The screens (SA7 · §5.1) ────────────────────────────────────────── */
+
+/* §5.4.1: the SIM bar takes the top safe area itself, so the ContextBar
+   below it must NOT take it again inside the simulation shell. */
+.sim-app--shell .mds-context-bar {
+  padding-block-start: 0;
+}
+
+/* One screen: a full-width column — the ContextBar, PageHeader and TabBar
+   carry their own chrome; the body carries the screen margins. */
+.sim-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+/* The screen's scrollable body (between the headers and the TabBar). */
+.sim-screen__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+  width: 100%;
+  box-sizing: border-box;
+  max-width: var(--mds-breakpoint-content-max);
+  margin-inline: auto;
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  padding-block: var(--mds-space-8) var(--mds-layout-scroll-end-padding);
+}
+
+/* The TabBar pins to the bottom while the body scrolls — the body must
+   reserve its height (64 + the safe area) so nothing hides under it. */
+.sim-screen .mds-tab-bar {
+  position: sticky;
+  bottom: 0;
+}
+
+.sim-screen__body:has(+ .mds-tab-bar) {
+  padding-block-end: calc(
+    var(--mds-size-tab-bar) + env(safe-area-inset-bottom) + var(--mds-space-16)
+  );
+}
+
+/* The date caption under the اليوم header (10.2 (1)). */
+.sim-screen__date {
+  margin: 0;
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* ── The «يُركَّب لاحقًا» marker (SA7's rule — never a substitute) ──────── */
+
+.sim-later {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--mds-space-12);
+  border: var(--mds-border-hairline) dashed var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-sm);
+  background-color: var(--mds-color-surface-well);
+}
+
+.sim-later__name {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-later__note {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* The inline variant (a marker inside a Surface row / a form / a chart head). */
+.sim-later-inline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--mds-space-8) var(--mds-layout-row-padding-inline);
+  border-block-start: var(--mds-border-hairline) dashed var(--mds-color-surface-edge);
+}
+
+.sim-later-inline:first-child {
+  border-block-start: none;
+}
+
+.sim-later-inline .sim-later__name,
+.sim-later-inline .sim-later__note {
+  font-size: var(--mds-type-caption-size);
+}
+
+/* The marker stack (a section of markers). */
+.sim-cards,
+.sim-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+}
+
+/* A form's markers sit between its real fields. */
+.sim-sheet__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-field-to-field);
+}
+
+.sim-form-help {
+  margin: 0;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* ── The Bento tiles block (10.2 (1)) ─────────────────────────────────── */
+
+.sim-tiles {
+  width: 100%;
+}
+
+/* ── The hero's diff line (23.8) ──────────────────────────────────────── */
+
+.sim-hero-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  color: var(--mds-color-on-anchor-secondary);
+}
+
+.sim-money {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── The 8.1 weekly bars (the app-owned chart inside a Surface) ──────── */
+
+.sim-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-16);
+}
+
+.sim-chart__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-8);
+  min-width: 0;
+  /* The internal marker is wider than the real AskAboutThis slot will be —
+     wrapping beats overlapping (nothing may cover the summary line). */
+  flex-wrap: wrap;
+}
+
+.sim-chart__title {
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sim-chart__tools {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+}
+
+.sim-chart__tools .sim-later-inline {
+  border: none;
+  padding: 0;
+}
+
+.sim-chart__table {
+  display: flex;
+}
+
+.sim-bars {
+  display: flex;
+  align-items: stretch;
+  gap: var(--mds-space-8);
+  height: var(--mds-size-chart-height);
+  direction: rtl; /* الأحد at the start (right) */
+  touch-action: none;
+}
+
+.sim-bars__cell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+}
+
+.sim-bars__stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.sim-bars__bar {
+  width: 100%;
+  border-radius: var(--mds-radius-xs) var(--mds-radius-xs) 0 0;
+  background-color: var(--mds-role-chart-series);
+}
+
+.sim-bars__bar--latest {
+  background-color: var(--mds-role-chart-highlight);
+}
+
+.sim-bars__bar--active {
+  background-color: var(--mds-role-chart-scrub);
+}
+
+.sim-bars__day {
+  text-align: center;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-bars__badge {
+  position: absolute;
+  inset-block-end: calc(100% + var(--mds-space-4));
+  inset-inline-start: 50%;
+  transform: translateX(50%); /* RTL: half the badge width toward the visual right */
+  white-space: nowrap;
+}
+
+/* ── The market grid (10.2 (8)): two columns on the phone ────────────── */
+
+.sim-market-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--mds-layout-tile-gap);
+}
+
+.sim-market-cell {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: start;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ListingCard ق2: the cards of one row share one height. */
+.sim-later--card {
+  flex: 1;
+}
+
+/* The PeriodSwitcher's place rides its own row. */
+.sim-period {
+  width: 100%;
 }

@@ -3,8 +3,8 @@
  * first screen; the role picker (§5.8) while no role is chosen, then the
  * app shell — the sim bar (§5.4) above the screen area, with the identity
  * overrides applied live through CSS variables (§5.6) and the amount
- * visibility bound to the store (ر2.4). The screens themselves arrive with
- * SA7; until then the screen area carries the §5.1 map placeholders.
+ * visibility bound to the store (ر2.4). SA7: the screen area carries the
+ * §5.1 screens and the shared sheets.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AmountVisibilityProvider, Toast } from '@micro/ds';
@@ -15,6 +15,8 @@ import { RoleScreen } from './shell/RoleScreen';
 import { TasksSheet } from './shell/TasksSheet';
 import { applyRootFontScale, identityStyle } from './shell/identityStyle';
 import { SimProvider, useSim, useSimDispatch } from './state/store';
+import { ScreenRouter } from './screens/ScreenRouter';
+import { SharedSheets } from './screens/Sheets';
 import { TASKS } from './tasks/tasks';
 
 /** The fixed simulation date (§5): الجمعة 27/11/2026. */
@@ -83,11 +85,10 @@ function Shell() {
       <div className="sim-app sim-app--shell" style={identityStyle(state.identity)} data-sim-app="ready">
         <SimBar onOpenTasks={openTasks} onOpenPanel={openPanel} />
         <main className="sim-shell-screen" data-sim-screen={state.ui.screen}>
-          <p className="sim-shell-placeholder">
-            شاشة «{state.ui.screen}» تُبنى في SA7 من مكوّنات المكتبة (§5.1).
-          </p>
+          <ScreenRouter />
         </main>
       </div>
+      <SharedSheets />
       {tasksOpen ? <TasksSheet onDismiss={closeTasks} /> : null}
       {panelOpen ? <SimPanel onDismiss={closePanel} onOpenTasks={openTasks} /> : null}
       {toast !== null ? <Toast label={toast} onDismiss={() => setToast(null)} /> : null}
