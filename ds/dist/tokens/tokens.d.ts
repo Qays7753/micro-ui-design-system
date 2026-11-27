@@ -228,6 +228,8 @@ export declare const tokens: {
         readonly "pressed-row-inset": 8;
         readonly "scroll-peek-min": 24;
         readonly "scroll-end-padding": 16;
+        readonly "photo-columns": 3;
+        readonly "timeline-hours": 48;
     };
     readonly radius: {
         readonly "2xs": 4;
@@ -255,6 +257,7 @@ export declare const tokens: {
         readonly underline: 1;
         readonly "underline-offset": 3;
         readonly "signal-line": 2;
+        readonly "track-line": 2;
     };
     readonly elevation: {
         readonly surface: "none";
@@ -318,7 +321,6 @@ export declare const tokens: {
         readonly "sparkline-height": 24;
         readonly "chart-area-opacity": 0.08;
         readonly "keypad-key": readonly [64, 56];
-        readonly "photo-tile": 96;
         readonly "weekstrip-cell": readonly [44, 56];
         readonly "timeline-hour": 64;
         readonly spinner: 20;
@@ -346,6 +348,23 @@ export declare const tokens: {
         readonly "toast-max-lines": 2;
         readonly "max-segments": 4;
         readonly "max-wells-per-surface": 2;
+        readonly "toggle-track": readonly [52, 32];
+        readonly "toggle-thumb": 24;
+        readonly "voice-bar": {
+            readonly width: 4;
+            readonly min: 8;
+            readonly max: 24;
+        };
+        readonly "track-dot": 12;
+        readonly "logo-lockup": 28;
+        readonly "google-button": 40;
+        readonly progress: 8;
+        readonly "timeline-block-min": 32;
+        readonly "day-mark": 36;
+        readonly "dot-event": 6;
+        readonly "textarea-max-lines": 6;
+        readonly "ask-input-max-lines": 4;
+        readonly checkbox: 20;
     };
     readonly motion: {
         readonly "press-in": {
@@ -427,6 +446,13 @@ export declare const tokens: {
         };
         readonly "press-cancel-px": 8;
         readonly "response-max-ms": 100;
+        readonly "drag-lift": {
+            readonly scale: 1.04;
+            readonly elevation: "float";
+        };
+        readonly "hold-confirm": {
+            readonly ms: 600;
+        };
     };
     readonly breakpoint: {
         readonly "phone-min": 360;
@@ -445,6 +471,14 @@ export declare const tokens: {
         readonly "max-signal-per-component": 1;
         readonly "max-hub-sections": 6;
         readonly "max-text-lines": 2;
+        readonly "max-inline-table-rows": 5;
+        readonly "slide-confirm-ratio": 0.8;
+        readonly "viewer-zoom-min": 1;
+        readonly "viewer-zoom-max": 4;
+        readonly "viewer-zoom-step": 1.5;
+        readonly "timeline-default-range": readonly [8, 20];
+        readonly "voice-max-seconds": 60;
+        readonly "voice-warning-seconds": 50;
     };
 };
 export type Tokens = typeof tokens;

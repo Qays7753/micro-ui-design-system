@@ -212,6 +212,8 @@
   --mds-layout-pressed-row-inset: 8px;
   --mds-layout-scroll-peek-min: 24px;
   --mds-layout-scroll-end-padding: 16px;
+  --mds-layout-photo-columns: 3px;
+  --mds-layout-timeline-hours: 48px;
 
   /* Corner radii (BRIEF 5.4). */
   --mds-radius-2xs: 4px;
@@ -239,6 +241,7 @@
   --mds-border-underline: 1px;
   --mds-border-underline-offset: 3px;
   --mds-border-signal-line: 2px;
+  --mds-border-track-line: 2px;
 
   /* Elevations (BRIEF 6) — only floating layers get a shadow. */
   --mds-elevation-surface: none;
@@ -308,7 +311,6 @@
   --mds-size-chart-area-opacity: 0.08px;
   --mds-size-keypad-key-64: 64px;
   --mds-size-keypad-key-56: 56px;
-  --mds-size-photo-tile: 96px;
   --mds-size-weekstrip-cell-44: 44px;
   --mds-size-weekstrip-cell-56: 56px;
   --mds-size-timeline-hour: 64px;
@@ -340,6 +342,22 @@
   --mds-size-toast-max-lines: 2px;
   --mds-size-max-segments: 4px;
   --mds-size-max-wells-per-surface: 2px;
+  --mds-size-toggle-track-52: 52px;
+  --mds-size-toggle-track-32: 32px;
+  --mds-size-toggle-thumb: 24px;
+  --mds-size-voice-bar-width: 4px;
+  --mds-size-voice-bar-min: 8px;
+  --mds-size-voice-bar-max: 24px;
+  --mds-size-track-dot: 12px;
+  --mds-size-logo-lockup: 28px;
+  --mds-size-google-button: 40px;
+  --mds-size-progress: 8px;
+  --mds-size-timeline-block-min: 32px;
+  --mds-size-day-mark: 36px;
+  --mds-size-dot-event: 6px;
+  --mds-size-textarea-max-lines: 6px;
+  --mds-size-ask-input-max-lines: 4px;
+  --mds-size-checkbox: 20px;
 
   /* Motion durations and parameters (BRIEF 7 / 23.14). */
   --mds-motion-press-in-ms: 80ms;
@@ -387,6 +405,9 @@
   --mds-motion-sheet-dismiss-velocity-px-per-ms: 0.6;
   --mds-motion-press-cancel-px: 8px;
   --mds-motion-response-max-ms: 100ms;
+  --mds-motion-drag-lift-scale: 1.04;
+  --mds-motion-drag-lift-elevation: float;
+  --mds-motion-hold-confirm-ms: 600ms;
 
   /* Breakpoints (BRIEF 7) — unitless px values, used from tokens.ts. */
   --mds-breakpoint-phone-min: 360;
@@ -405,4 +426,13 @@
   --mds-quality-max-signal-per-component: 1;
   --mds-quality-max-hub-sections: 6;
   --mds-quality-max-text-lines: 2;
+  --mds-quality-max-inline-table-rows: 5;
+  --mds-quality-slide-confirm-ratio: 0.8;
+  --mds-quality-viewer-zoom-min: 1;
+  --mds-quality-viewer-zoom-max: 4;
+  --mds-quality-viewer-zoom-step: 1.5;
+  --mds-quality-timeline-default-range-8: 8;
+  --mds-quality-timeline-default-range-20: 20;
+  --mds-quality-voice-max-seconds: 60;
+  --mds-quality-voice-warning-seconds: 50;
 }

@@ -47,7 +47,11 @@
 
 ## المرحلة 3 — أساسات الدفعة الثانية
 
-(تُملأ مع الوحدات 3.1–3.4)
+| البند | الحالة | أين |
+|---|---|---|
+| الوحدة 3.1 | **منفذة** — رموز م-ر1–م-ر19 في `tokens.json` والمولّدات الثلاث (tokens.ts وtokens.css وtailwind-theme.css): `size.toggle-track/thumb`، و`layout.photo-columns` **بدل** `size.photo-tile`، و`motion.drag-lift`، و`size.voice-bar`، و`motion.hold-confirm`، و`size.track-dot` و`border.track-line`، و`size.logo-lockup`، و`size.google-button`، و`size.progress`، و`layout.timeline-hours` و`size.timeline-block-min`، و`size.day-mark`، و`size.dot-event`، و`size.textarea-max-lines` و`size.ask-input-max-lines`، و`quality.max-inline-table-rows`، و`quality.slide-confirm-ratio`، و`quality.viewer-zoom-min/max/step`، و`quality.timeline-default-range`، و`quality.voice-max-seconds/warning-seconds`، و`size.checkbox`. **رموز sim.* خارجها** (م-ر20/م-ر21 للمحاكاة فقط). typecheck و302 اختبار وbuild وstandalone وds-raw-values وds-browsers أخضر | commit هذه الوحدة |
+
+(تُملأ مع الوحدتين 3.2–3.4)
 
 ## المرحلة 4 — المكوّنات العامة
 

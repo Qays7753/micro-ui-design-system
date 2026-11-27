@@ -1,5 +1,5 @@
 import { jsx as n, jsxs as h, Fragment as F } from "react/jsx-runtime";
-import { useMemo as ae, useContext as Q, createContext as se, useState as j, useRef as A, useCallback as P, useEffect as V, useReducer as ge, useId as pe, useLayoutEffect as be, Children as xe } from "react";
+import { useMemo as ae, useContext as Q, createContext as ie, useState as j, useRef as A, useCallback as C, useEffect as V, useReducer as ge, useId as pe, useLayoutEffect as be, Children as xe } from "react";
 const O = {
   color: {
     canvas: "#E8ECEF",
@@ -245,7 +245,9 @@ const O = {
     "empty-state-content-max": 280,
     "pressed-row-inset": 8,
     "scroll-peek-min": 24,
-    "scroll-end-padding": 16
+    "scroll-end-padding": 16,
+    "photo-columns": 3,
+    "timeline-hours": 48
   },
   radius: {
     "2xs": 4,
@@ -272,7 +274,8 @@ const O = {
     "field-focus-halo": 4,
     underline: 1,
     "underline-offset": 3,
-    "signal-line": 2
+    "signal-line": 2,
+    "track-line": 2
   },
   elevation: {
     surface: "none",
@@ -351,7 +354,6 @@ const O = {
       64,
       56
     ],
-    "photo-tile": 96,
     "weekstrip-cell": [
       44,
       56
@@ -393,7 +395,27 @@ const O = {
     "title-max-lines": 2,
     "toast-max-lines": 2,
     "max-segments": 4,
-    "max-wells-per-surface": 2
+    "max-wells-per-surface": 2,
+    "toggle-track": [
+      52,
+      32
+    ],
+    "toggle-thumb": 24,
+    "voice-bar": {
+      width: 4,
+      min: 8,
+      max: 24
+    },
+    "track-dot": 12,
+    "logo-lockup": 28,
+    "google-button": 40,
+    progress: 8,
+    "timeline-block-min": 32,
+    "day-mark": 36,
+    "dot-event": 6,
+    "textarea-max-lines": 6,
+    "ask-input-max-lines": 4,
+    checkbox: 20
   },
   motion: {
     "press-in": {
@@ -474,7 +496,14 @@ const O = {
       "velocity-px-per-ms": 0.6
     },
     "press-cancel-px": 8,
-    "response-max-ms": 100
+    "response-max-ms": 100,
+    "drag-lift": {
+      scale: 1.04,
+      elevation: "float"
+    },
+    "hold-confirm": {
+      ms: 600
+    }
   },
   breakpoint: {
     "phone-min": 360,
@@ -492,16 +521,27 @@ const O = {
     "max-signal-per-screen": 3,
     "max-signal-per-component": 1,
     "max-hub-sections": 6,
-    "max-text-lines": 2
+    "max-text-lines": 2,
+    "max-inline-table-rows": 5,
+    "slide-confirm-ratio": 0.8,
+    "viewer-zoom-min": 1,
+    "viewer-zoom-max": 4,
+    "viewer-zoom-step": 1.5,
+    "timeline-default-range": [
+      8,
+      20
+    ],
+    "voice-max-seconds": 60,
+    "voice-warning-seconds": 50
   }
 };
-function ve(e) {
+function ke(e) {
   let t = O;
   for (const a of e.split("."))
     t = t[a];
   return t;
 }
-const k = {
+const v = {
   // --- Buttons and links (BRIEF 24.1: verb + object, ≤ 3 words) ---
   "button.saveMovement": { kind: "button", text: "احفظ الحركة" },
   "button.acceptQuote": { kind: "button", text: "اقبل العرض" },
@@ -555,9 +595,9 @@ const k = {
   "notif.quoteArrived": { kind: "help", text: "وصل عرض سعر من عمر الزعبي" },
   "notif.orderToday": { kind: "help", text: "طلب 1203 موعده اليوم 4:00 م" },
   "notif.paymentIn": { kind: "help", text: "دفعة 30 د من رنا العبادي" },
-  "notif.timeAgo": { kind: "badge", text: "قبل 5 دقائق" },
+  "notif.timeAgo": { kind: "help", text: "قبل 5 دقائق" },
   "notif.timeToday": { kind: "badge", text: "9:15 ص" },
-  "notif.timeYesterday": { kind: "badge", text: "أمس 5:10 م" },
+  "notif.timeYesterday": { kind: "help", text: "أمس 5:10 م" },
   "ask.placeholder": { kind: "placeholder", text: "اسأل Micro" },
   "ask.amountLabel": { kind: "badge", text: "السؤال" },
   "button.askSend": { kind: "button", text: "أرسل" },
@@ -620,6 +660,41 @@ const k = {
   // --- Lab chrome and state names (plan K27/K32: the lab shows component and
   //     state names only; every word lives here, not in lab source) ---
   "lab.stamp": { kind: "title", text: "مختبر الدفعة الأولى" },
+  // 2.2 (owner note §3): section headings in the product owner's language —
+  // what it is and when it is used, two or three words; the technical name
+  // renders small beside it (lab-title's .lab-tech).
+  "lab.h.amountToggle": { kind: "title", text: "زر إخفاء الأرقام" },
+  "lab.h.money": { kind: "title", text: "شكل المبلغ ووحدته" },
+  "lab.h.statusBadge": { kind: "title", text: "شارة الحالة" },
+  "lab.h.entityMark": { kind: "title", text: "حرف الطرف" },
+  "lab.h.button": { kind: "title", text: "الأزرار" },
+  "lab.h.iconButton": { kind: "title", text: "زر أيقونة دائري" },
+  "lab.h.textField": { kind: "title", text: "حقل سطر واحد" },
+  "lab.h.segmentedControl": { kind: "title", text: "مبدّل خيارات قليلة" },
+  "lab.h.filterChips": { kind: "title", text: "رقائق تصفية القائمة" },
+  "lab.h.surface": { kind: "title", text: "بطاقة محتوى بيضاء" },
+  "lab.h.well": { kind: "title", text: "معلومات داخل بطاقة" },
+  "lab.h.section": { kind: "title", text: "عنوان قسم وقائمته" },
+  "lab.h.hero": { kind: "title", text: "البطاقة الرئيسية" },
+  "lab.h.sheet": { kind: "title", text: "الورقة المنبثقة" },
+  "lab.h.actionBar": { kind: "title", text: "شريط الحفظ السفلي" },
+  "lab.h.skeleton": { kind: "title", text: "هيكل التحميل" },
+  "lab.h.emptyState": { kind: "title", text: "شكل القائمة الفارغة" },
+  "lab.h.inlineBanner": { kind: "title", text: "شريط معلومة علوي" },
+  "lab.h.toast": { kind: "title", text: "رسالة نجاح سريعة" },
+  "lab.h.saveState": { kind: "title", text: "حالة الحفظ" },
+  "lab.h.pageHeader": { kind: "title", text: "العنوان وزر الإنشاء" },
+  "lab.h.tabBar": { kind: "title", text: "تبويبات أسفل الشاشة" },
+  "lab.h.contextBar": { kind: "title", text: "الشريط العلوي الثابت" },
+  "lab.h.projectSwitcher": { kind: "title", text: "مبدّل المشروع والدور" },
+  "lab.h.notificationsButton": { kind: "title", text: "جرس الإشعارات" },
+  "lab.h.askButton": { kind: "title", text: "زر المساعد Micro" },
+  "lab.h.confirmSheet": { kind: "title", text: "ورقة تأكيد الحذف" },
+  "lab.h.objectRow": { kind: "title", text: "صف في قائمة" },
+  "lab.h.objectCard": { kind: "title", text: "بطاقة كائن موسّعة" },
+  "lab.h.metric": { kind: "title", text: "الرقم البطل" },
+  "lab.h.metricSmall": { kind: "title", text: "رقم مصغّر بعنوانه" },
+  "lab.h.tile": { kind: "title", text: "بلاطات اليوم الأربع" },
   "lab.fontScale": { kind: "badge", text: "حجم الخط" },
   "lab.scale100": { kind: "button", text: "100%" },
   "lab.scale200": { kind: "button", text: "200%" },
@@ -735,30 +810,30 @@ const k = {
   "placeholder.phone": { kind: "placeholder", text: "07X XXX XXXX" }
 };
 function S(e, t) {
-  let a = k[e].text;
+  let a = v[e].text;
   if (t)
-    for (const [s, i] of Object.entries(t))
-      a = a.replaceAll(`{${s}}`, String(i));
+    for (const [i, s] of Object.entries(t))
+      a = a.replaceAll(`{${i}}`, String(s));
   return a;
 }
-const ke = {
+const ve = {
   movements: { zero: "لا حركات", one: "حركة واحدة", two: "حركتين", few: "حركات", many: "حركة" },
   orders: { zero: "لا طلبات", one: "طلب واحد", two: "طلتان", few: "طلبات", many: "طلب" },
   quotes: { zero: "لا عروض", one: "عرض واحد", two: "عرضان", few: "عروض", many: "عرض" },
   results: { zero: "لا نتائج", one: "نتيجة واحدة", two: "نتيجتان", few: "نتائج", many: "نتيجة" },
   unread: { zero: "لا شيء غير مقروء", one: "غير مقروء واحد", two: "غير مقروءان", few: "غير مقروءة", many: "غير مقروءة" }
 }, B = {
-  unit: k["money.unit"].text,
-  minus: k["money.ariaMinus"].text,
-  dinar: k["money.ariaDinar"].text,
-  fils: k["money.ariaFils"].text,
-  and: k["money.ariaAnd"].text,
-  forYou: k["money.forYou"].text,
-  againstYou: k["money.againstYou"].text,
-  hidden: k["money.ariaHidden"].text,
-  missing: k["money.ariaMissing"].text,
-  hiddenGlyph: k["money.hiddenGlyph"].text,
-  missingGlyph: k["money.missing"].text
+  unit: v["money.unit"].text,
+  minus: v["money.ariaMinus"].text,
+  dinar: v["money.ariaDinar"].text,
+  fils: v["money.ariaFils"].text,
+  and: v["money.ariaAnd"].text,
+  forYou: v["money.forYou"].text,
+  againstYou: v["money.againstYou"].text,
+  hidden: v["money.ariaHidden"].text,
+  missing: v["money.ariaMissing"].text,
+  hiddenGlyph: v["money.hiddenGlyph"].text,
+  missingGlyph: v["money.missing"].text
 }, we = new Intl.PluralRules("ar");
 function ye(e, t) {
   switch (we.select(e)) {
@@ -784,30 +859,30 @@ function Se(e) {
   return e instanceof Date ? { h: e.getHours(), m: e.getMinutes() } : e;
 }
 function cn(e) {
-  const { h: t, m: a } = Se(e), s = t < 12 ? Ae : Ne, i = t % 12 === 0 ? 12 : t % 12;
-  return `${ne(i)}:${ne(a)} ${s}`;
+  const { h: t, m: a } = Se(e), i = t < 12 ? Ae : Ne, s = t % 12 === 0 ? 12 : t % 12;
+  return `${ne(s)}:${ne(a)} ${i}`;
 }
 const _ = "−", Be = "+", E = 3;
 function He(e) {
-  const t = String(e).trim(), a = t.startsWith("-"), s = a ? t.slice(1) : t, [i = "0", r = ""] = s.split("."), o = i.replace(/[^0-9]/g, "") || "0", d = (r + "000").slice(0, E), l = BigInt(o) * 10n ** BigInt(E) + BigInt(d || "0");
+  const t = String(e).trim(), a = t.startsWith("-"), i = a ? t.slice(1) : t, [s = "0", r = ""] = i.split("."), o = s.replace(/[^0-9]/g, "") || "0", d = (r + "000").slice(0, E), l = BigInt(o) * 10n ** BigInt(E) + BigInt(d || "0");
   return { negative: a, fils: l };
 }
 function Ze(e) {
   return e.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 function Me(e) {
-  const t = 10n ** BigInt(E), a = e / t, s = e % t;
+  const t = 10n ** BigInt(E), a = e / t, i = e % t;
   return {
     int: Ze(a.toString()),
-    frac: s === 0n ? "" : `.${s.toString().padStart(E, "0")}`
+    frac: i === 0n ? "" : `.${i.toString().padStart(E, "0")}`
   };
 }
 function z(e, t) {
-  const a = 10n ** BigInt(E), s = e / a, i = e % a;
-  let r = `${s.toString()} ${t.dinar}`;
-  return i !== 0n && (r += ` ${t.and}${i.toString()} ${t.fils}`), r;
+  const a = 10n ** BigInt(E), i = e / a, s = e % a;
+  let r = `${i.toString()} ${t.dinar}`;
+  return s !== 0n && (r += ` ${t.and}${s.toString()} ${t.fils}`), r;
 }
-function Pe(e, t) {
+function Ce(e, t) {
   const a = t.texts;
   if (e == null)
     return {
@@ -837,7 +912,7 @@ function Pe(e, t) {
       aria: a.hidden
     };
   }
-  const { negative: i, fils: r } = He(e), o = Me(r), d = t.debt === "forYou" ? a.forYou : t.debt === "againstYou" ? a.againstYou : "", l = d ? "" : t.flow === "in" ? Be : t.flow === "out" ? _ : t.flow === "transfer" ? "" : i ? _ : "", c = `${l}${o.int}${o.frac}`, u = d ? `${d} ${c} ${a.unit}` : `${c} ${a.unit}`;
+  const { negative: s, fils: r } = He(e), o = Me(r), d = t.debt === "forYou" ? a.forYou : t.debt === "againstYou" ? a.againstYou : "", l = d ? "" : t.flow === "in" ? Be : t.flow === "out" ? _ : t.flow === "transfer" ? "" : s ? _ : "", c = `${l}${o.int}${o.frac}`, u = d ? `${d} ${c} ${a.unit}` : `${c} ${a.unit}`;
   let m;
   return d ? m = `${d} ${z(r, a)}` : l === _ ? m = `${a.minus} ${z(r, a)}` : m = z(r, a), {
     missing: !1,
@@ -852,24 +927,24 @@ function Pe(e, t) {
     aria: m
   };
 }
-const ie = se({ hidden: !1 });
+const se = ie({ hidden: !1 });
 function mn({ children: e, hidden: t = !1 }) {
   const a = ae(() => ({ hidden: t }), [t]);
-  return /* @__PURE__ */ n(ie.Provider, { value: a, children: e });
+  return /* @__PURE__ */ n(se.Provider, { value: a, children: e });
 }
 function T() {
-  const { hidden: e } = Q(ie);
+  const { hidden: e } = Q(se);
   return { hidden: e, visible: !e };
 }
-const Ce = 500, je = ve("motion.press-cancel-px");
+const Pe = 500, je = ke("motion.press-cancel-px");
 function N(e = {}) {
-  const { onPress: t, onLongPress: a, disabled: s } = e, [i, r] = j(!1), o = A(null), d = A(null), l = A(!1), c = P(() => {
+  const { onPress: t, onLongPress: a, disabled: i } = e, [s, r] = j(!1), o = A(null), d = A(null), l = A(!1), c = C(() => {
     d.current !== null && (clearTimeout(d.current), d.current = null);
-  }, []), u = P(() => {
+  }, []), u = C(() => {
     c(), o.current = null, l.current = !1, r(!1);
-  }, [c]), m = P(
+  }, [c]), m = C(
     (p) => {
-      if (!s && !(p.pointerType === "mouse" && p.button !== 0)) {
+      if (!i && !(p.pointerType === "mouse" && p.button !== 0)) {
         if (typeof p.currentTarget.setPointerCapture == "function")
           try {
             p.currentTarget.setPointerCapture(p.pointerId);
@@ -877,27 +952,27 @@ function N(e = {}) {
           }
         o.current = { x: p.clientX, y: p.clientY }, l.current = !1, r(!0), a && (d.current = setTimeout(() => {
           l.current = !0, a();
-        }, Ce));
+        }, Pe));
       }
     },
-    [s, a]
-  ), g = P(
+    [i, a]
+  ), g = C(
     (p) => {
-      if (!i || o.current === null) return;
-      const b = p.clientX - o.current.x, v = p.clientY - o.current.y;
-      Math.hypot(b, v) > je && u();
+      if (!s || o.current === null) return;
+      const b = p.clientX - o.current.x, k = p.clientY - o.current.y;
+      Math.hypot(b, k) > je && u();
     },
-    [i, u]
-  ), f = P(
+    [s, u]
+  ), f = C(
     (p) => {
-      if (!i) return;
+      if (!s) return;
       const b = l.current;
-      u(), !b && !s && t?.();
+      u(), !b && !i && t?.();
     },
-    [i, s, t, u]
+    [s, i, t, u]
   );
   return {
-    isPressed: i,
+    isPressed: s,
     pressProps: {
       onPointerDown: m,
       onPointerMove: g,
@@ -913,21 +988,21 @@ const Te = () => typeof window > "u" || !window.visualViewport ? {
   keyboardHeight: 0
 } : re(window.visualViewport);
 function re(e) {
-  const t = e.height, a = e.offsetTop, s = Math.max(0, window.innerHeight - t - a);
-  return { height: t, offsetTop: a, scale: e.scale, keyboardHeight: s };
+  const t = e.height, a = e.offsetTop, i = Math.max(0, window.innerHeight - t - a);
+  return { height: t, offsetTop: a, scale: e.scale, keyboardHeight: i };
 }
 function Ve() {
   const [e, t] = j(Te);
   return V(() => {
     const a = window.visualViewport;
     if (!a) return;
-    const s = () => t(re(a));
-    return s(), a.addEventListener("resize", s), a.addEventListener("scroll", s), window.addEventListener("resize", s), window.addEventListener("orientationchange", s), () => {
-      a.removeEventListener("resize", s), a.removeEventListener("scroll", s), window.removeEventListener("resize", s), window.removeEventListener("orientationchange", s);
+    const i = () => t(re(a));
+    return i(), a.addEventListener("resize", i), a.addEventListener("scroll", i), window.addEventListener("resize", i), window.addEventListener("orientationchange", i), () => {
+      a.removeEventListener("resize", i), a.removeEventListener("scroll", i), window.removeEventListener("resize", i), window.removeEventListener("orientationchange", i);
     };
   }, []), e;
 }
-const W = se({
+const W = ie({
   sheetIds: [],
   registerSheet: () => {
   },
@@ -945,19 +1020,19 @@ function $e(e, t) {
   }
 }
 function un({ children: e }) {
-  const [t, a] = ge($e, []), s = P((o) => a({ type: "register", id: o }), []), i = P((o) => a({ type: "unregister", id: o }), []), r = ae(
-    () => ({ sheetIds: t, registerSheet: s, unregisterSheet: i }),
-    [t, s, i]
+  const [t, a] = ge($e, []), i = C((o) => a({ type: "register", id: o }), []), s = C((o) => a({ type: "unregister", id: o }), []), r = ae(
+    () => ({ sheetIds: t, registerSheet: i, unregisterSheet: s }),
+    [t, i, s]
   );
   return /* @__PURE__ */ n(W.Provider, { value: r, children: e });
 }
 function hn() {
-  const { sheetIds: e, registerSheet: t, unregisterSheet: a } = Q(W), s = pe();
-  be(() => (t(s), () => a(s)), [s, t, a]);
-  const i = e.indexOf(s) + 1 || e.length + 1, r = Math.min(i, 2), o = i === e.length;
+  const { sheetIds: e, registerSheet: t, unregisterSheet: a } = Q(W), i = pe();
+  be(() => (t(i), () => a(i)), [i, t, a]);
+  const s = e.indexOf(i) + 1 || e.length + 1, r = Math.min(s, 2), o = s === e.length;
   return {
     level: r,
-    overLimit: i > 2,
+    overLimit: s > 2,
     sheetZ: r === 1 ? "var(--mds-layer-sheet)" : "var(--mds-layer-sheet-2)",
     scrimZ: r === 1 ? "var(--mds-layer-scrim)" : "var(--mds-layer-scrim-2)",
     isTop: o
@@ -995,7 +1070,7 @@ function gn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1006,7 +1081,7 @@ function gn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Fe[t]
     }
   );
@@ -1019,7 +1094,7 @@ function pn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1030,7 +1105,7 @@ function pn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Ee[t]
     }
   );
@@ -1043,7 +1118,7 @@ function bn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1054,7 +1129,7 @@ function bn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: De[t]
     }
   );
@@ -1067,7 +1142,7 @@ function xn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1078,7 +1153,7 @@ function xn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", "mds-icon-flip", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Ye[t]
     }
   );
@@ -1087,11 +1162,11 @@ const Re = {
   regular: /* @__PURE__ */ n("path", { d: "M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z" }),
   fill: /* @__PURE__ */ n("path", { d: "M231.69,93.81,217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.81A7.94,7.94,0,0,0,24,96v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96A7.94,7.94,0,0,0,231.69,93.81ZM88,112a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8H88Zm64,0a24,24,0,0,1-48,0v-8h48Zm64,0a24,24,0,0,1-11.07,20.2,8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48Z" })
 };
-function vn({
+function kn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1102,7 +1177,7 @@ function vn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Re[t]
     }
   );
@@ -1114,7 +1189,7 @@ function Ge({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1125,7 +1200,7 @@ function Ge({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Oe[t]
     }
   );
@@ -1137,7 +1212,7 @@ function ze({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1148,7 +1223,7 @@ function ze({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: _e[t]
     }
   );
@@ -1160,7 +1235,7 @@ function Qe({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1171,7 +1246,7 @@ function Qe({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: qe[t]
     }
   );
@@ -1179,11 +1254,11 @@ function Qe({
 const We = {
   regular: /* @__PURE__ */ n("path", { d: "M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z" })
 };
-function kn({
+function vn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1194,7 +1269,7 @@ function kn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", "mds-icon-flip", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: We[t]
     }
   );
@@ -1206,7 +1281,7 @@ function Ue({
   size: e = 16,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1217,7 +1292,7 @@ function Ue({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", "mds-icon-flip", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Xe[t]
     }
   );
@@ -1229,7 +1304,7 @@ function Je({
   size: e = 16,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1240,7 +1315,7 @@ function Je({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Ke[t]
     }
   );
@@ -1252,7 +1327,7 @@ function tt({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1263,7 +1338,7 @@ function tt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: et[t]
     }
   );
@@ -1275,7 +1350,7 @@ function at({
   size: e = 16,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1286,19 +1361,19 @@ function at({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: nt[t]
     }
   );
 }
-const st = {
+const it = {
   regular: /* @__PURE__ */ n("path", { d: "M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z" })
 };
 function wn({
   size: e = 20,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1309,19 +1384,19 @@ function wn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
-      children: st[t]
+      ...i,
+      children: it[t]
     }
   );
 }
-const it = {
+const st = {
   fill: /* @__PURE__ */ n("path", { d: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm37.66,130.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32L139.31,128Z" })
 };
 function yn({
   size: e = 20,
   weight: t = "fill",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1332,8 +1407,8 @@ function yn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
-      children: it[t]
+      ...i,
+      children: st[t]
     }
   );
 }
@@ -1344,7 +1419,7 @@ function An({
   size: e = 16,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1355,7 +1430,7 @@ function An({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: rt[t]
     }
   );
@@ -1367,7 +1442,7 @@ function Nn({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1378,7 +1453,7 @@ function Nn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: ot[t]
     }
   );
@@ -1390,7 +1465,7 @@ function Sn({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1401,7 +1476,7 @@ function Sn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: lt[t]
     }
   );
@@ -1413,7 +1488,7 @@ function oe({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1424,7 +1499,7 @@ function oe({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: dt[t]
     }
   );
@@ -1436,7 +1511,7 @@ function mt({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1447,7 +1522,7 @@ function mt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: ct[t]
     }
   );
@@ -1459,7 +1534,7 @@ function X({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1470,7 +1545,7 @@ function X({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: ut[t]
     }
   );
@@ -1482,7 +1557,7 @@ function ft({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1493,7 +1568,7 @@ function ft({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: ht[t]
     }
   );
@@ -1505,7 +1580,7 @@ function pt({
   size: e = 14,
   weight: t = "bold",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1516,7 +1591,7 @@ function pt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: gt[t]
     }
   );
@@ -1528,7 +1603,7 @@ function Bn({
   size: e = 20,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1539,7 +1614,7 @@ function Bn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: bt[t]
     }
   );
@@ -1547,11 +1622,11 @@ function Bn({
 const xt = {
   regular: /* @__PURE__ */ n("path", { d: "M213.92,210.62a8,8,0,1,1-11.84,10.76l-52-57.15a60,60,0,0,0-57.41,7.24,8,8,0,1,1-9.42-12.93A75.43,75.43,0,0,1,128,144c1.28,0,2.55,0,3.82.1L104.9,114.49A108,108,0,0,0,61,135.31,8,8,0,0,1,49.73,134,8,8,0,0,1,51,122.77a124.27,124.27,0,0,1,41.71-21.66L69.37,75.4a155.43,155.43,0,0,0-40.29,24A8,8,0,0,1,18.92,87,171.87,171.87,0,0,1,58,62.86L42.08,45.38A8,8,0,1,1,53.92,34.62ZM128,192a12,12,0,1,0,12,12A12,12,0,0,0,128,192ZM237.08,87A172.3,172.3,0,0,0,106,49.4a8,8,0,1,0,2,15.87A158.33,158.33,0,0,1,128,64a156.25,156.25,0,0,1,98.92,35.37A8,8,0,0,0,237.08,87ZM195,135.31a8,8,0,0,0,11.24-1.3,8,8,0,0,0-1.3-11.24,124.25,124.25,0,0,0-51.73-24.2A8,8,0,1,0,150,114.24,108.12,108.12,0,0,1,195,135.31Z" })
 };
-function vt({
+function kt({
   size: e = 20,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1562,19 +1637,19 @@ function vt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: xt[t]
     }
   );
 }
-const kt = {
+const vt = {
   regular: /* @__PURE__ */ n("path", { d: "M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z" })
 };
 function wt({
   size: e = 20,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1585,8 +1660,8 @@ function wt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
-      children: kt[t]
+      ...i,
+      children: vt[t]
     }
   );
 }
@@ -1597,7 +1672,7 @@ function At({
   size: e = 20,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1608,7 +1683,7 @@ function At({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: yt[t]
     }
   );
@@ -1620,7 +1695,7 @@ function Hn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1631,7 +1706,7 @@ function Hn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Nt[t]
     }
   );
@@ -1643,7 +1718,7 @@ function Bt({
   size: e = 14,
   weight: t = "fill",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1654,7 +1729,7 @@ function Bt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: St[t]
     }
   );
@@ -1666,7 +1741,7 @@ function Zt({
   size: e = 14,
   weight: t = "fill",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1677,7 +1752,7 @@ function Zt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Ht[t]
     }
   );
@@ -1685,11 +1760,11 @@ function Zt({
 const Mt = {
   regular: /* @__PURE__ */ n("path", { d: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z" })
 };
-function Pt({
+function Ct({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1700,19 +1775,19 @@ function Pt({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Mt[t]
     }
   );
 }
-const Ct = {
+const Pt = {
   regular: /* @__PURE__ */ n("path", { d: "M239.76,158.06,217.28,68.12A16,16,0,0,0,201.75,56H136V40a16,16,0,0,0-16-16H80A16,16,0,0,0,64,40V56H54.25A16,16,0,0,0,38.72,68.12L16.24,158.06A7.93,7.93,0,0,0,16,160v32a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V160A7.93,7.93,0,0,0,239.76,158.06ZM80,40h40V56H80ZM54.25,72h147.5l20,80H34.25ZM32,192V168H224v24ZM64,96a8,8,0,0,1,8-8H88a8,8,0,0,1,0,16H72A8,8,0,0,1,64,96Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H120A8,8,0,0,1,112,96Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H168A8,8,0,0,1,160,96ZM64,128a8,8,0,0,1,8-8H88a8,8,0,0,1,0,16H72A8,8,0,0,1,64,128Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H120A8,8,0,0,1,112,128Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H168A8,8,0,0,1,160,128Z" })
 };
 function Zn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1723,8 +1798,8 @@ function Zn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
-      children: Ct[t]
+      ...i,
+      children: Pt[t]
     }
   );
 }
@@ -1735,7 +1810,7 @@ function Mn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1746,7 +1821,7 @@ function Mn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: jt[t]
     }
   );
@@ -1754,11 +1829,11 @@ function Mn({
 const Tt = {
   regular: /* @__PURE__ */ n("path", { d: "M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z" })
 };
-function Pn({
+function Cn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1769,7 +1844,7 @@ function Pn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Tt[t]
     }
   );
@@ -1777,11 +1852,11 @@ function Pn({
 const Vt = {
   regular: /* @__PURE__ */ n("path", { d: "M213.66,181.66l-32,32a8,8,0,0,1-11.32-11.32L188.69,184H48a8,8,0,0,1,0-16H188.69l-18.35-18.34a8,8,0,0,1,11.32-11.32l32,32A8,8,0,0,1,213.66,181.66Zm-139.32-64a8,8,0,0,0,11.32-11.32L67.31,88H208a8,8,0,0,0,0-16H67.31L85.66,53.66A8,8,0,0,0,74.34,42.34l-32,32a8,8,0,0,0,0,11.32Z" })
 };
-function Cn({
+function Pn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1792,7 +1867,7 @@ function Cn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", "mds-icon-flip", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Vt[t]
     }
   );
@@ -1804,7 +1879,7 @@ function jn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1815,7 +1890,7 @@ function jn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: $t[t]
     }
   );
@@ -1827,7 +1902,7 @@ function Tn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1838,7 +1913,7 @@ function Tn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: It[t]
     }
   );
@@ -1850,7 +1925,7 @@ function Vn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1861,7 +1936,7 @@ function Vn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Lt[t]
     }
   );
@@ -1873,7 +1948,7 @@ function $n({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1884,7 +1959,7 @@ function $n({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Ft[t]
     }
   );
@@ -1896,7 +1971,7 @@ function In({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1907,7 +1982,7 @@ function In({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Et[t]
     }
   );
@@ -1919,7 +1994,7 @@ function Ln({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1930,7 +2005,7 @@ function Ln({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Dt[t]
     }
   );
@@ -1942,7 +2017,7 @@ function Fn({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1953,7 +2028,7 @@ function Fn({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Yt[t]
     }
   );
@@ -1965,7 +2040,7 @@ function En({
   size: e = 24,
   weight: t = "regular",
   className: a,
-  ...s
+  ...i
 }) {
   return /* @__PURE__ */ n(
     "svg",
@@ -1976,7 +2051,7 @@ function En({
       height: e,
       "aria-hidden": "true",
       className: ["mds-icon", a].filter(Boolean).join(" "),
-      ...s,
+      ...i,
       children: Rt[t]
     }
   );
@@ -1986,8 +2061,8 @@ function Yn({
   value: e,
   flow: t,
   debt: a,
-  size: s = "md",
-  state: i = "idle",
+  size: i = "md",
+  state: s = "idle",
   disabled: r = !1,
   className: o,
   id: d,
@@ -1995,8 +2070,8 @@ function Yn({
   ref: c,
   ...u
 }) {
-  const { hidden: m } = T(), g = m && e !== null && e !== void 0, f = Pe(e, { flow: t, debt: a, hidden: g, texts: B }), p = ["mds-money", `mds-money--${s}`, s === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
-  return i === "loading" ? /* @__PURE__ */ n("span", { ref: c, id: d, style: l, className: p, "aria-busy": "true", ...u, children: /* @__PURE__ */ n("span", { className: "mds-money-skeleton", "aria-hidden": "true" }) }) : /* @__PURE__ */ h("span", { ref: c, id: d, style: l, className: p, ...u, children: [
+  const { hidden: m } = T(), g = m && e !== null && e !== void 0, f = Ce(e, { flow: t, debt: a, hidden: g, texts: B }), p = ["mds-money", `mds-money--${i}`, i === "lg" ? "mds-number-lg" : "", r ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
+  return s === "loading" ? /* @__PURE__ */ n("span", { ref: c, id: d, style: l, className: p, "aria-busy": "true", ...u, children: /* @__PURE__ */ n("span", { className: "mds-money-skeleton", "aria-hidden": "true" }) }) : /* @__PURE__ */ h("span", { ref: c, id: d, style: l, className: p, ...u, children: [
     /* @__PURE__ */ h("span", { className: "mds-money-visual", "aria-hidden": "true", children: [
       f.debtWord ? /* @__PURE__ */ n("span", { className: "mds-money-debt", children: f.debtWord }) : null,
       f.missing ? /* @__PURE__ */ n("span", { className: "mds-money-missing", children: B.missingGlyph }) : /* @__PURE__ */ h(F, { children: [
@@ -2031,8 +2106,8 @@ function Ot({
   onChange: e,
   disabled: t = !1,
   density: a = "regular",
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
@@ -2040,13 +2115,13 @@ function Ot({
   const { hidden: l, visible: c } = T(), u = l ? Qe : ze, m = S(l ? "button.showAmounts" : "button.hideAmounts"), g = [
     "mds-amount-visibility-toggle",
     a === "large" ? "mds-amount-visibility-toggle--large" : "",
-    s
+    i
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ n(
     "button",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
       ...d,
       type: "button",
@@ -2071,23 +2146,23 @@ const On = [
   problem: X,
   info: ft
 }, _t = {
-  done: k["badge.done"].text,
-  waiting: k["badge.waiting"].text,
-  problem: k["badge.problem"].text,
-  info: k["badge.info"].text,
-  neutral: k["badge.neutral"].text
+  done: v["badge.done"].text,
+  waiting: v["badge.waiting"].text,
+  problem: v["badge.problem"].text,
+  info: v["badge.info"].text,
+  neutral: v["badge.neutral"].text
 };
 function Gn({
   tone: e,
   label: t,
   className: a,
-  id: s,
-  style: i,
+  id: i,
+  style: s,
   ref: r,
   ...o
 }) {
   const d = e === "neutral" ? null : Gt[e], l = ["mds-status-badge", `mds-status-badge--${e}`, a].filter(Boolean).join(" ");
-  return /* @__PURE__ */ n("span", { ref: r, id: s, style: i, className: l, ...o, children: /* @__PURE__ */ h("span", { className: "mds-status-badge-content", children: [
+  return /* @__PURE__ */ n("span", { ref: r, id: i, style: s, className: l, ...o, children: /* @__PURE__ */ h("span", { className: "mds-status-badge-content", children: [
     d ? /* @__PURE__ */ n(d, { size: 14 }) : null,
     /* @__PURE__ */ n("span", { className: "mds-status-badge-label", children: t ?? _t[e] })
   ] }, e) });
@@ -2111,16 +2186,16 @@ function U({
   size: e = "md",
   value: t,
   tone: a,
-  children: s,
-  className: i,
+  children: i,
+  className: s,
   id: r,
   style: o,
   ref: d,
   ...l
 }) {
-  const c = a === "done" || a === "waiting" ? zt[a] : null, u = s ? void 0 : t ? qt(t) : void 0, m = ["mds-entity-mark", `mds-entity-mark--${e}`, i].filter(Boolean).join(" ");
+  const c = a === "done" || a === "waiting" ? zt[a] : null, u = i ? void 0 : t ? qt(t) : void 0, m = ["mds-entity-mark", `mds-entity-mark--${e}`, s].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("span", { ref: d, id: r, style: o, className: m, "aria-hidden": "true", ...l, children: [
-    s ?? (u ? /* @__PURE__ */ n("span", { className: "mds-entity-mark-initial", children: u }) : null),
+    i ?? (u ? /* @__PURE__ */ n("span", { className: "mds-entity-mark-initial", children: u }) : null),
     c ? /* @__PURE__ */ n("span", { className: "mds-entity-mark-badge", children: /* @__PURE__ */ n(c, { size: 14 }) }) : null
   ] });
 }
@@ -2136,8 +2211,8 @@ function D({
   variant: e = "primary",
   size: t = "md",
   loading: a = !1,
-  leading: s,
-  trailing: i,
+  leading: i,
+  trailing: s,
   onPress: r,
   onLongPress: o,
   disabled: d = !1,
@@ -2152,7 +2227,7 @@ function D({
     onPress: r,
     onLongPress: o,
     disabled: d || a
-  }), v = [
+  }), k = [
     "mds-button",
     `mds-button--${e}`,
     `mds-button--${t}`,
@@ -2168,13 +2243,13 @@ function D({
       ...f,
       ...b,
       type: "button",
-      className: v,
+      className: k,
       disabled: d,
       "aria-busy": a || void 0,
       children: [
-        a ? /* @__PURE__ */ n("span", { className: "mds-button-spinner", "aria-hidden": "true" }) : s ? /* @__PURE__ */ n("span", { className: "mds-button-icon", children: s }) : null,
+        a ? /* @__PURE__ */ n("span", { className: "mds-button-spinner", "aria-hidden": "true" }) : i ? /* @__PURE__ */ n("span", { className: "mds-button-icon", children: i }) : null,
         /* @__PURE__ */ n("span", { className: "mds-button-label", children: g }),
-        i ? /* @__PURE__ */ n("span", { className: "mds-button-icon", children: i }) : null
+        s ? /* @__PURE__ */ n("span", { className: "mds-button-icon", children: s }) : null
       ]
     }
   );
@@ -2196,8 +2271,8 @@ function Qt({
   label: e,
   onPress: t,
   onLongPress: a,
-  disabled: s = !1,
-  density: i = "regular",
+  disabled: i = !1,
+  density: s = "regular",
   className: r,
   id: o,
   style: d,
@@ -2205,9 +2280,9 @@ function Qt({
   children: c,
   ...u
 }) {
-  const { isPressed: m, pressProps: g } = N({ onPress: t, onLongPress: a, disabled: s }), f = [
+  const { isPressed: m, pressProps: g } = N({ onPress: t, onLongPress: a, disabled: i }), f = [
     "mds-icon-button",
-    i === "large" ? "mds-icon-button--large" : "",
+    s === "large" ? "mds-icon-button--large" : "",
     m ? "mds-icon-button--pressed" : "",
     r
   ].filter(Boolean).join(" ");
@@ -2222,7 +2297,7 @@ function Qt({
       type: "button",
       className: f,
       "aria-label": e,
-      disabled: s,
+      disabled: i,
       children: c
     }
   );
@@ -2238,8 +2313,8 @@ function Wn({
   label: e,
   caption: t,
   value: a,
-  onChange: s,
-  placeholder: i,
+  onChange: i,
+  placeholder: s,
   state: r = "idle",
   disabled: o = !1,
   optional: d = !1,
@@ -2268,10 +2343,10 @@ function Wn({
         type: "text",
         value: a,
         disabled: o,
-        placeholder: i,
+        placeholder: s,
         "aria-label": c ? void 0 : e,
         "aria-invalid": r === "error" || void 0,
-        onChange: (b) => s?.(b.target.value)
+        onChange: (b) => i?.(b.target.value)
       }
     ),
     t ? /* @__PURE__ */ h("span", { className: r === "error" ? "mds-text-field-caption mds-text-field-caption--error" : "mds-text-field-caption", children: [
@@ -2292,8 +2367,8 @@ function Un({
   leading: e,
   value: t,
   onChange: a,
-  disabled: s = !1,
-  label: i,
+  disabled: i = !1,
+  label: s,
   className: r,
   id: o,
   style: d,
@@ -2308,14 +2383,14 @@ function Un({
       style: d,
       className: ["mds-segmented", r].filter(Boolean).join(" "),
       role: "group",
-      "aria-label": i,
+      "aria-label": s,
       ...c,
       children: e.map((u) => /* @__PURE__ */ n(
         Wt,
         {
           segment: u,
           selected: u.value === t,
-          disabled: s || u.disabled === !0,
+          disabled: i || u.disabled === !0,
           onChange: a
         },
         u.value
@@ -2327,12 +2402,12 @@ function Wt({
   segment: e,
   selected: t,
   disabled: a,
-  onChange: s
+  onChange: i
 }) {
-  const { isPressed: i, pressProps: r } = N({ onPress: () => s(e.value), disabled: a }), o = [
+  const { isPressed: s, pressProps: r } = N({ onPress: () => i(e.value), disabled: a }), o = [
     "mds-segmented-segment",
     t ? "mds-segmented-segment--selected" : "",
-    i ? "mds-segmented-segment--pressed" : ""
+    s ? "mds-segmented-segment--pressed" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
@@ -2364,8 +2439,8 @@ function Jn({
   leading: e,
   value: t,
   onChange: a,
-  disabled: s = !1,
-  label: i,
+  disabled: i = !1,
+  label: s,
   className: r,
   id: o,
   style: d,
@@ -2384,14 +2459,14 @@ function Jn({
       style: d,
       className: ["mds-filter-chips", r].filter(Boolean).join(" "),
       role: "group",
-      "aria-label": i,
+      "aria-label": s,
       ...c,
       children: e.map((m) => /* @__PURE__ */ n(
         Xt,
         {
           chip: m,
           selected: t.includes(m.value),
-          disabled: s || m.disabled === !0,
+          disabled: i || m.disabled === !0,
           onToggle: u
         },
         m.value
@@ -2403,12 +2478,12 @@ function Xt({
   chip: e,
   selected: t,
   disabled: a,
-  onToggle: s
+  onToggle: i
 }) {
-  const { isPressed: i, pressProps: r } = N({ onPress: () => s(e.value), disabled: a }), o = [
+  const { isPressed: s, pressProps: r } = N({ onPress: () => i(e.value), disabled: a }), o = [
     "mds-filter-chip",
     t ? "mds-filter-chip--selected" : "",
-    i ? "mds-filter-chip--pressed" : ""
+    s ? "mds-filter-chip--pressed" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
@@ -2438,8 +2513,8 @@ function ta({
   children: e,
   label: t,
   trailing: a,
-  density: s = "regular",
-  className: i,
+  density: i = "regular",
+  className: s,
   id: r,
   style: o,
   ref: d,
@@ -2447,8 +2522,8 @@ function ta({
 }) {
   const c = [
     "mds-surface",
-    s === "list" ? "mds-surface--list" : "",
-    i
+    i === "list" ? "mds-surface--list" : "",
+    s
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("div", { ref: d, id: r, style: o, className: c, ...l, children: [
     t || a ? /* @__PURE__ */ h("div", { className: "mds-surface-header", children: [
@@ -2465,35 +2540,35 @@ const na = [
   "pressed",
   "list"
 ];
-function aa({ children: e, className: t, id: a, style: s, ref: i, ...r }) {
+function aa({ children: e, className: t, id: a, style: i, ref: s, ...r }) {
   return /* @__PURE__ */ n(
     "div",
     {
-      ref: i,
+      ref: s,
       id: a,
-      style: s,
+      style: i,
       className: ["mds-well", t].filter(Boolean).join(" "),
       ...r,
       children: e
     }
   );
 }
-const sa = [
+const ia = [
   "default",
   "inSurface"
 ];
-function ia({
+function sa({
   label: e,
   caption: t,
   onPress: a,
-  children: s,
-  className: i,
+  children: i,
+  className: s,
   id: r,
   style: o,
   ref: d,
   ...l
 }) {
-  const c = s == null, { isPressed: u, pressProps: m } = N({ onPress: () => a?.(), disabled: c }), g = !c && a !== void 0, f = ["mds-section", i].filter(Boolean).join(" ");
+  const c = i == null, { isPressed: u, pressProps: m } = N({ onPress: () => a?.(), disabled: c }), g = !c && a !== void 0, f = ["mds-section", s].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("section", { ref: d, id: r, style: o, className: f, ...l, children: [
     /* @__PURE__ */ h("header", { className: "mds-section-header", children: [
       /* @__PURE__ */ n("h2", { className: "mds-section-title mds-type-title-section", children: e }),
@@ -2512,7 +2587,7 @@ function ia({
         }
       ) : null
     ] }),
-    s
+    i
   ] });
 }
 const ra = [
@@ -2522,22 +2597,22 @@ const ra = [
   "empty"
 ], Y = 80, R = O.size["sparkline-height"], le = O.size["dot-signal"] / 2, Ut = O.border["signal-line"], L = le + Ut / 2;
 function Kt(e) {
-  const t = e.length, a = Math.min(...e), i = Math.max(...e) - a, r = (l) => t === 1 ? Y - L : L + l / (t - 1) * (Y - 2 * L), o = (l) => i === 0 ? R / 2 : L + (1 - (l - a) / i) * (R - 2 * L);
+  const t = e.length, a = Math.min(...e), s = Math.max(...e) - a, r = (l) => t === 1 ? Y - L : L + l / (t - 1) * (Y - 2 * L), o = (l) => s === 0 ? R / 2 : L + (1 - (l - a) / s) * (R - 2 * L);
   return { points: e.map((l, c) => `${r(c).toFixed(2)},${o(l).toFixed(2)}`).join(" "), endX: r(t - 1), endY: o(e[t - 1]) };
 }
-function de({ values: e, lineClassName: t, dotClassName: a, hidden: s = !1 }) {
-  const i = !s && e.length >= 1 ? Kt(e) : null;
+function de({ values: e, lineClassName: t, dotClassName: a, hidden: i = !1 }) {
+  const s = !i && e.length >= 1 ? Kt(e) : null;
   return /* @__PURE__ */ h("svg", { viewBox: `0 0 ${Y} ${R}`, width: Y, height: R, focusable: "false", children: [
-    i && e.length >= 2 ? /* @__PURE__ */ n("polyline", { className: t, points: i.points }) : null,
-    i ? /* @__PURE__ */ n("circle", { className: a, cx: i.endX, cy: i.endY, r: le }) : null
+    s && e.length >= 2 ? /* @__PURE__ */ n("polyline", { className: t, points: s.points }) : null,
+    s ? /* @__PURE__ */ n("circle", { className: a, cx: s.endX, cy: s.endY, r: le }) : null
   ] });
 }
 function oa({
   leading: e,
   label: t,
   state: a = !1,
-  caption: s,
-  value: i,
+  caption: i,
+  value: s,
   trailing: r,
   draft: o,
   tone: d = "start",
@@ -2549,7 +2624,7 @@ function oa({
   ref: f,
   ...p
 }) {
-  const { isPressed: b, pressProps: v } = N({ onPress: () => l?.(), disabled: c }), { hidden: y } = T(), H = i === void 0 ? B.missingGlyph : y && o !== void 0 ? B.hiddenGlyph : i, C = [
+  const { isPressed: b, pressProps: k } = N({ onPress: () => l?.(), disabled: c }), { hidden: y } = T(), H = s === void 0 ? B.missingGlyph : y && o !== void 0 ? B.hiddenGlyph : s, P = [
     "mds-tile",
     `mds-tile--${d}`,
     b ? "mds-tile--pressed" : "",
@@ -2563,16 +2638,16 @@ function oa({
       id: m,
       style: g,
       type: "button",
-      className: C,
+      className: P,
       disabled: c,
       "data-ds-exempt": c ? void 0 : "",
-      ...v,
+      ...k,
       ...p,
       children: [
         /* @__PURE__ */ h("span", { className: "mds-tile-header", children: [
           e ? /* @__PURE__ */ n("span", { className: "mds-tile-header-icon", "aria-hidden": "true", children: e }) : null,
           /* @__PURE__ */ n("span", { className: "mds-tile-header-label mds-type-label", children: t }),
-          a ? /* @__PURE__ */ n("span", { className: "mds-tile-dot", role: "img", "aria-label": s ?? "" }) : null
+          a ? /* @__PURE__ */ n("span", { className: "mds-tile-dot", role: "img", "aria-label": i ?? "" }) : null
         ] }),
         /* @__PURE__ */ h("span", { className: "mds-tile-content", children: [
           o ? /* @__PURE__ */ n("span", { className: "mds-tile-sparkline", "aria-hidden": "true", children: /* @__PURE__ */ n(
@@ -2604,9 +2679,9 @@ function Jt(e) {
   return t === -1 ? { whole: e, cents: "" } : { whole: e.slice(0, t), cents: e.slice(t) };
 }
 function en({ value: e }) {
-  const { hidden: t } = T(), s = e === void 0 ? B.missingGlyph : t ? B.hiddenGlyph : null, { whole: i, cents: r } = Jt(e ?? B.missingGlyph), d = (e ?? "").length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
-  return /* @__PURE__ */ n("span", { className: `mds-hero-value ${d}`, children: /* @__PURE__ */ n("bdi", { dir: "ltr", children: s !== null ? /* @__PURE__ */ n("span", { className: "mds-hero-value-glyph", children: s }) : /* @__PURE__ */ h(F, { children: [
-    /* @__PURE__ */ n("span", { className: "mds-hero-value-whole", children: i }),
+  const { hidden: t } = T(), i = e === void 0 ? B.missingGlyph : t ? B.hiddenGlyph : null, { whole: s, cents: r } = Jt(e ?? B.missingGlyph), d = (e ?? "").length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
+  return /* @__PURE__ */ n("span", { className: `mds-hero-value ${d}`, children: /* @__PURE__ */ n("bdi", { dir: "ltr", children: i !== null ? /* @__PURE__ */ n("span", { className: "mds-hero-value-glyph", children: i }) : /* @__PURE__ */ h(F, { children: [
+    /* @__PURE__ */ n("span", { className: "mds-hero-value-whole", children: s }),
     r ? /* @__PURE__ */ n("span", { className: "mds-hero-value-cents", children: r }) : null
   ] }) }) });
 }
@@ -2626,8 +2701,8 @@ function da({
   label: e,
   value: t,
   trailing: a,
-  direction: s,
-  debt: i,
+  direction: i,
+  debt: s,
   draft: r,
   onDismiss: o,
   onChange: d,
@@ -2637,29 +2712,29 @@ function da({
   ref: m,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.() }), { hidden: b } = T(), v = b && t !== void 0, y = ["mds-hero-surface", l].filter(Boolean).join(" ");
+  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.() }), { hidden: b } = T(), k = b && t !== void 0, y = ["mds-hero-surface", l].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("section", { ref: m, id: c, style: u, className: y, ...g, children: [
     /* @__PURE__ */ h("header", { className: "mds-hero-header", children: [
       /* @__PURE__ */ n("span", { className: "mds-hero-label", children: e }),
       /* @__PURE__ */ n(Ot, { className: "mds-hero-toggle", onChange: d })
     ] }),
     /* @__PURE__ */ h("p", { className: "mds-hero-amount", children: [
-      /* @__PURE__ */ h("span", { className: "mds-hero-visual", "aria-hidden": v || void 0, children: [
+      /* @__PURE__ */ h("span", { className: "mds-hero-visual", "aria-hidden": k || void 0, children: [
         /* @__PURE__ */ n(en, { value: t }),
         a && t !== void 0 ? /* @__PURE__ */ n("span", { className: "mds-hero-unit", children: a }) : null
-      ] }, v ? "hidden" : "shown"),
-      v ? /* @__PURE__ */ n("span", { className: "mds-visually-hidden", children: B.hidden }) : null
+      ] }, k ? "hidden" : "shown"),
+      k ? /* @__PURE__ */ n("span", { className: "mds-visually-hidden", children: B.hidden }) : null
     ] }),
-    s ? /* @__PURE__ */ n("p", { className: "mds-hero-diff", children: s }) : null,
+    i ? /* @__PURE__ */ n("p", { className: "mds-hero-diff", children: i }) : null,
     r ? /* @__PURE__ */ n(tn, { values: r }) : null,
-    i ? /* @__PURE__ */ n(
+    s ? /* @__PURE__ */ n(
       "button",
       {
         type: "button",
         className: ["mds-hero-source", f ? "mds-hero-source--pressed" : ""].filter(Boolean).join(" "),
         "data-ds-exempt": "",
         ...p,
-        children: i
+        children: s
       }
     ) : null
   ] });
@@ -2676,8 +2751,8 @@ function ma({
   leading: e,
   tone: t,
   label: a,
-  caption: s,
-  value: i,
+  caption: i,
+  value: s,
   trailing: r,
   onPress: o,
   disabled: d = !1,
@@ -2687,7 +2762,7 @@ function ma({
   ref: m,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.(), disabled: d }), b = o !== void 0, v = [
+  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.(), disabled: d }), b = o !== void 0, k = [
     "mds-object-row",
     f ? "mds-object-row--pressed" : "",
     d ? "mds-object-row--disabled" : "",
@@ -2701,7 +2776,7 @@ function ma({
       id: c,
       style: u,
       type: b ? "button" : void 0,
-      className: v,
+      className: k,
       disabled: b ? d : void 0,
       ...b ? p : {},
       ...g,
@@ -2709,13 +2784,13 @@ function ma({
         /* @__PURE__ */ n(U, { size: "md", tone: t, value: typeof e == "string" ? e : a, children: typeof e == "string" ? void 0 : e }),
         /* @__PURE__ */ h("span", { className: "mds-object-row-text", children: [
           /* @__PURE__ */ n("span", { className: "mds-object-row-title mds-type-body-strong", children: a }),
-          s ? /* @__PURE__ */ n("span", { className: "mds-object-row-caption mds-type-caption", children: s }) : null
+          i ? /* @__PURE__ */ n("span", { className: "mds-object-row-caption mds-type-caption", children: i }) : null
         ] }),
-        i !== void 0 || r ? /* @__PURE__ */ h("span", { className: "mds-object-row-end", children: [
-          /* @__PURE__ */ n("span", { className: "mds-object-row-value mds-type-amount-row", children: i === void 0 ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: "—" }) : typeof i == "string" ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: i }) : (
+        s !== void 0 || r ? /* @__PURE__ */ h("span", { className: "mds-object-row-end", children: [
+          /* @__PURE__ */ n("span", { className: "mds-object-row-value mds-type-amount-row", children: s === void 0 ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: "—" }) : typeof s == "string" ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: s }) : (
             /* A Money node renders itself (its own LTR isolation, sign,
                unit and hidden-amounts behaviour) — never re-wrapped. */
-            i
+            s
           ) }),
           r ? /* @__PURE__ */ n("span", { className: "mds-object-row-time mds-type-caption", children: r }) : null
         ] }) : null
@@ -2735,8 +2810,8 @@ function ha({
   leading: e,
   tone: t,
   label: a,
-  caption: s,
-  value: i,
+  caption: i,
+  value: s,
   state: r,
   href: o,
   children: d,
@@ -2748,7 +2823,7 @@ function ha({
   ref: f,
   ...p
 }) {
-  const { isPressed: b, pressProps: v } = N({ onPress: () => l?.(), disabled: c }), y = l !== void 0 || o !== void 0, M = d != null, H = o ? "a" : y ? "button" : "div", C = [
+  const { isPressed: b, pressProps: k } = N({ onPress: () => l?.(), disabled: c }), y = l !== void 0 || o !== void 0, M = d != null, H = o ? "a" : y ? "button" : "div", P = [
     "mds-object-card",
     b ? "mds-object-card--pressed" : "",
     c ? "mds-object-card--disabled" : "",
@@ -2760,11 +2835,11 @@ function ha({
     /* @__PURE__ */ h(
       H,
       {
-        className: C,
+        className: P,
         href: o,
         type: H === "button" ? "button" : void 0,
         disabled: H === "button" ? c : void 0,
-        ...y ? v : {},
+        ...y ? k : {},
         children: [
           /* @__PURE__ */ h("span", { className: "mds-object-card-mark", children: [
             /* @__PURE__ */ n(U, { size: "lg", tone: t, value: typeof e == "string" ? e : a, children: typeof e == "string" ? void 0 : e }),
@@ -2772,11 +2847,11 @@ function ha({
           ] }),
           /* @__PURE__ */ h("span", { className: "mds-object-card-body", children: [
             /* @__PURE__ */ n("span", { className: "mds-object-card-title", children: a }),
-            s ? /* @__PURE__ */ n("span", { className: "mds-object-card-caption mds-type-caption", children: s }) : null,
-            i !== void 0 ? /* @__PURE__ */ n("span", { className: "mds-object-card-value mds-type-amount-row", children: typeof i == "string" ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: i }) : (
+            i ? /* @__PURE__ */ n("span", { className: "mds-object-card-caption mds-type-caption", children: i }) : null,
+            s !== void 0 ? /* @__PURE__ */ n("span", { className: "mds-object-card-value mds-type-amount-row", children: typeof s == "string" ? /* @__PURE__ */ n("bdi", { dir: "ltr", children: s }) : (
               /* A Money node renders itself (its own isolation, sign,
                  unit and hidden-amounts behaviour) — never re-wrapped. */
-              i
+              s
             ) }) : null
           ] })
         ]
@@ -2801,8 +2876,8 @@ function an({
   label: e,
   size: t = "lg",
   value: a,
-  trailing: s,
-  direction: i,
+  trailing: i,
+  direction: s,
   debt: r,
   onDismiss: o,
   loading: d = !1,
@@ -2812,10 +2887,10 @@ function an({
   ref: m,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.() }), { hidden: b } = T(), v = b && a !== void 0 && a !== null && !d, { whole: y, cents: M } = nn(v ? "—" : a ?? "—"), H = ["mds-metric", l].filter(Boolean).join(" ");
+  const { isPressed: f, pressProps: p } = N({ onPress: () => o?.() }), { hidden: b } = T(), k = b && a !== void 0 && a !== null && !d, { whole: y, cents: M } = nn(k ? "—" : a ?? "—"), H = ["mds-metric", l].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("div", { ref: m, id: c, style: u, className: H, ...g, children: [
     /* @__PURE__ */ n("span", { className: "mds-metric-label mds-type-label", children: e }),
-    /* @__PURE__ */ n("p", { className: "mds-metric-amount", children: d ? /* @__PURE__ */ n("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : v ? /* @__PURE__ */ h(F, { children: [
+    /* @__PURE__ */ n("p", { className: "mds-metric-amount", children: d ? /* @__PURE__ */ n("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : k ? /* @__PURE__ */ h(F, { children: [
       /* @__PURE__ */ h(
         "span",
         {
@@ -2827,7 +2902,7 @@ function an({
           "aria-hidden": "true",
           children: [
             /* @__PURE__ */ n("bdi", { dir: "ltr", children: /* @__PURE__ */ n("span", { className: "mds-metric-value-whole", children: B.hiddenGlyph }) }),
-            s ? /* @__PURE__ */ n("span", { className: "mds-metric-unit", children: s }) : null
+            i ? /* @__PURE__ */ n("span", { className: "mds-metric-unit", children: i }) : null
           ]
         }
       ),
@@ -2846,9 +2921,9 @@ function an({
           ] })
         }
       ),
-      s ? /* @__PURE__ */ n("span", { className: "mds-metric-unit", children: s }) : null
+      i ? /* @__PURE__ */ n("span", { className: "mds-metric-unit", children: i }) : null
     ] }) }),
-    i && !d ? /* @__PURE__ */ n("p", { className: "mds-metric-diff", children: i }) : null,
+    s && !d ? /* @__PURE__ */ n("p", { className: "mds-metric-diff", children: s }) : null,
     r && !d ? /* @__PURE__ */ n(
       "button",
       {
@@ -2882,17 +2957,17 @@ function sn({
   label: e,
   children: t,
   onDismiss: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
 }) {
-  const l = A(null), [c, u] = j(0), [m, g] = j(!1), [f, p] = j(!1), b = A(0), v = A(0), y = A(0), M = A(null), H = A(a);
+  const l = A(null), [c, u] = j(0), [m, g] = j(!1), [f, p] = j(!1), b = A(0), k = A(0), y = A(0), M = A(null), H = A(a);
   V(() => {
     H.current = a;
   }, [a]);
-  const C = P(() => {
+  const P = C(() => {
     M.current?.focus?.(), H.current();
   }, []), [G] = j(() => /* @__PURE__ */ Symbol("sheet")), [K] = j(() => (q.add(G), q.size >= 2 ? 2 : 1));
   V(
@@ -2904,28 +2979,28 @@ function sn({
   const ce = () => {
     const x = l.current?.querySelector(".mds-sheet-panel");
     return x ? x.getBoundingClientRect().height * 0.3 : 0;
-  }, $ = P(() => {
+  }, $ = C(() => {
     if (f) return;
     M.current = document.activeElement ?? null, p(!0), (typeof requestAnimationFrame == "function" ? requestAnimationFrame : (w) => setTimeout(() => w(performance.now()), 0))(() => {
       const w = l.current?.querySelector(".mds-sheet-panel");
       if (!w) {
-        C();
+        P();
         return;
       }
       const Z = getComputedStyle(w).transitionDuration, te = Z && Z !== "0s" && Z !== "";
       if (w.style.transform = "translateY(100%)", !te) {
-        C();
+        P();
         return;
       }
       const I = (fe) => {
-        fe.propertyName === "transform" && (w.removeEventListener("transitionend", I), C());
+        fe.propertyName === "transform" && (w.removeEventListener("transitionend", I), P());
       };
       w.addEventListener("transitionend", I);
     });
-  }, [f, C]), me = (x) => {
+  }, [f, P]), me = (x) => {
     if (!m) return;
     const w = performance.now(), Z = w - y.current;
-    Z > 0 && (b.current = (x.clientY - v.current) / Z), v.current = x.clientY, y.current = w, u(Math.max(0, x.clientY - J.current));
+    Z > 0 && (b.current = (x.clientY - k.current) / Z), k.current = x.clientY, y.current = w, u(Math.max(0, x.clientY - J.current));
   }, J = A(0), ue = (x) => {
     const w = x.target, Z = l.current?.querySelector(".mds-sheet-body");
     if (!(Z?.contains(w) && Z && Z.scrollTop > 0)) {
@@ -2933,7 +3008,7 @@ function sn({
         const I = l.current?.querySelector(".mds-sheet-panel");
         I && (I.style.transform = c ? `translateY(${c}px)` : ""), p(!1);
       }
-      b.current = 0, v.current = x.clientY, y.current = performance.now(), g(!0), x.currentTarget.setPointerCapture?.(x.pointerId);
+      b.current = 0, k.current = x.clientY, y.current = performance.now(), g(!0), x.currentTarget.setPointerCapture?.(x.pointerId);
     }
   }, ee = () => {
     if (!m) return;
@@ -2952,7 +3027,7 @@ function sn({
     K === 2 ? "mds-sheet--stacked" : "",
     m ? "mds-sheet--dragging" : "",
     f ? "mds-sheet--closing" : "",
-    s
+    i
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "div",
@@ -2960,7 +3035,7 @@ function sn({
       ref: (x) => {
         l.current = x, typeof o == "function" ? o(x) : o && (o.current = x);
       },
-      id: i,
+      id: s,
       style: r,
       className: he,
       "data-ds-sheet-level": String(K),
@@ -3015,12 +3090,12 @@ const xa = [
   "pastThreshold",
   "stacked"
 ];
-function va({
+function ka({
   label: e,
   caption: t,
   value: a,
-  onPress: s,
-  onDismiss: i,
+  onPress: i,
+  onDismiss: s,
   className: r,
   id: o,
   style: d,
@@ -3042,13 +3117,13 @@ function va({
         sn,
         {
           label: e,
-          onDismiss: i,
+          onDismiss: s,
           className: "mds-confirm-sheet__sheet",
           role: "alertdialog",
           "data-ds-check": "confirm-sheet",
           children: [
             /* @__PURE__ */ h("div", { className: "mds-confirm-sheet-head", children: [
-              /* @__PURE__ */ n("span", { className: "mds-confirm-sheet-icon", children: /* @__PURE__ */ n(Pt, {}) }),
+              /* @__PURE__ */ n("span", { className: "mds-confirm-sheet-icon", children: /* @__PURE__ */ n(Ct, {}) }),
               /* @__PURE__ */ n("h2", { className: "mds-confirm-sheet-title mds-type-title-section", children: e }),
               /* @__PURE__ */ n("p", { className: "mds-confirm-sheet-sentence", children: t })
             ] }),
@@ -3059,11 +3134,11 @@ function va({
                   ref: u,
                   variant: "secondary",
                   className: "mds-confirm-sheet-back",
-                  onPress: i,
-                  children: k["button.back"].text
+                  onPress: s,
+                  children: v["button.back"].text
                 }
               ),
-              /* @__PURE__ */ n(D, { variant: "danger", className: "mds-confirm-sheet-confirm", onPress: s, children: a })
+              /* @__PURE__ */ n(D, { variant: "danger", className: "mds-confirm-sheet-confirm", onPress: i, children: a })
             ] })
           ]
         }
@@ -3071,7 +3146,7 @@ function va({
     }
   );
 }
-const ka = [
+const va = [
   "default",
   "focused",
   "pressed"
@@ -3080,8 +3155,8 @@ function wa({
   label: e,
   onPress: t,
   loading: a = !1,
-  disabled: s = !1,
-  caption: i,
+  disabled: i = !1,
+  caption: s,
   onRetry: r,
   leading: o = !0,
   trailing: d,
@@ -3105,14 +3180,14 @@ function wa({
       "aria-label": e,
       ...g,
       children: [
-        i ? /* @__PURE__ */ n(D, { variant: "text", onPress: r, className: "mds-action-bar-secondary", children: i }) : null,
+        s ? /* @__PURE__ */ n(D, { variant: "text", onPress: r, className: "mds-action-bar-secondary", children: s }) : null,
         /* @__PURE__ */ n(
           D,
           {
             variant: "primary",
             onPress: t,
             loading: a,
-            disabled: s,
+            disabled: i,
             leading: d,
             className: "mds-action-bar-primary",
             children: e
@@ -3136,18 +3211,18 @@ function Aa({
   selected: e = !1,
   onPress: t,
   onLongPress: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
 }) {
-  const { isPressed: l, pressProps: c } = N({ onPress: t, onLongPress: a }), u = e ? k["sr.askUnread"].text : k["sr.ask"].text, m = ["mds-ask-button", l ? "mds-ask-button--pressed" : "", s].filter(Boolean).join(" ");
+  const { isPressed: l, pressProps: c } = N({ onPress: t, onLongPress: a }), u = e ? v["sr.askUnread"].text : v["sr.ask"].text, m = ["mds-ask-button", l ? "mds-ask-button--pressed" : "", i].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
       type: "button",
       className: m,
@@ -3172,23 +3247,23 @@ function Sa({
   value: e = 0,
   label: t,
   onPress: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
 }) {
-  const { isPressed: l, pressProps: c } = N({ onPress: a }), u = ye(e, ke.unread), m = t ?? (e > 0 ? S("sr.notificationsCount", { counted: u }) : S("sr.notifications")), g = [
+  const { isPressed: l, pressProps: c } = N({ onPress: a }), u = ye(e, ve.unread), m = t ?? (e > 0 ? S("sr.notificationsCount", { counted: u }) : S("sr.notifications")), g = [
     "mds-notifications-button",
     l ? "mds-notifications-button--pressed" : "",
     e > 0 ? "mds-notifications-button--unread" : "",
-    s
+    i
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
       type: "button",
       className: g,
@@ -3212,17 +3287,17 @@ function Ha({
   label: e,
   caption: t,
   locked: a = !1,
-  onPress: s,
-  className: i,
+  onPress: i,
+  className: s,
   id: r,
   style: o,
   ref: d,
   ...l
 }) {
-  const { isPressed: c, pressProps: u } = N({ onPress: s }), m = [
+  const { isPressed: c, pressProps: u } = N({ onPress: i }), m = [
     "mds-project-switcher",
     c ? "mds-project-switcher--pressed" : "",
-    i
+    s
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
@@ -3256,8 +3331,8 @@ function Ma({
   leading: e,
   trailing: t,
   caption: a = !1,
-  label: s,
-  className: i,
+  label: i,
+  className: s,
   id: r,
   style: o,
   ref: d,
@@ -3267,7 +3342,7 @@ function Ma({
   const u = [
     "mds-context-bar",
     a ? "mds-context-bar--scrolled" : "",
-    i
+    s
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "div",
@@ -3277,7 +3352,7 @@ function Ma({
       style: o,
       className: u,
       role: "banner",
-      "aria-label": s,
+      "aria-label": i,
       ...c,
       children: [
         /* @__PURE__ */ n("div", { className: "mds-context-bar-start", children: e ?? l }),
@@ -3286,27 +3361,27 @@ function Ma({
     }
   );
 }
-const Pa = [
+const Ca = [
   "default",
   "mainScreenSwitcher",
   "subScreenBack",
   "scrolledHairline",
   "notScrolled"
 ];
-function Ca({
+function Pa({
   label: e,
   selected: t = !1,
   leading: a,
-  onPress: s,
-  className: i,
+  onPress: i,
+  className: s,
   ref: r,
   ...o
 }) {
-  const { isPressed: d, pressProps: l } = N({ onPress: s }), c = [
+  const { isPressed: d, pressProps: l } = N({ onPress: i }), c = [
     "mds-tab",
     t ? "mds-tab--active" : "",
     d ? "mds-tab--pressed" : "",
-    i
+    s
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h(
     "button",
@@ -3331,8 +3406,8 @@ function ja({
   children: e,
   value: t,
   onChange: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
@@ -3344,9 +3419,9 @@ function ja({
     "div",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
-      className: ["mds-tab-bar", s].filter(Boolean).join(" "),
+      className: ["mds-tab-bar", i].filter(Boolean).join(" "),
       role: "tablist",
       ...d,
       children: l.map((m, g) => {
@@ -3376,8 +3451,8 @@ function Va({
   label: e,
   leading: t,
   caption: a = !1,
-  trailing: s,
-  className: i,
+  trailing: i,
+  className: s,
   id: r,
   style: o,
   ref: d,
@@ -3386,12 +3461,12 @@ function Va({
   const c = [
     "mds-page-header",
     a && t ? "mds-page-header--collapsed" : "",
-    i
+    s
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("header", { ref: d, id: r, style: o, className: c, ...l, children: [
     t,
     /* @__PURE__ */ n("h1", { className: "mds-page-header-title", children: e }),
-    s ? /* @__PURE__ */ n("div", { className: "mds-page-header-end", children: s }) : null
+    i ? /* @__PURE__ */ n("div", { className: "mds-page-header-end", children: i }) : null
   ] });
 }
 const $a = [
@@ -3410,8 +3485,8 @@ function Ia({
   saveState: e,
   className: t,
   id: a,
-  style: s,
-  ref: i,
+  style: i,
+  ref: s,
   ...r
 }) {
   const o = [
@@ -3422,9 +3497,9 @@ function Ia({
   return /* @__PURE__ */ h(
     "span",
     {
-      ref: i,
+      ref: s,
       id: a,
-      style: s,
+      style: i,
       className: o,
       role: e === "failed" ? "alert" : void 0,
       "aria-busy": e === "sending" || void 0,
@@ -3448,8 +3523,8 @@ function Fa({
   label: e,
   trailing: t,
   onDismiss: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
@@ -3467,9 +3542,9 @@ function Fa({
     "div",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
-      className: ["mds-toast", s].filter(Boolean).join(" "),
+      className: ["mds-toast", i].filter(Boolean).join(" "),
       role: "status",
       onFocus: g,
       onBlur: f,
@@ -3482,7 +3557,7 @@ function Fa({
   );
 }
 const Ea = ["default", "withAction", "focusedPaused"], on = {
-  offline: vt,
+  offline: kt,
   locked: wt,
   info: At
 };
@@ -3490,8 +3565,8 @@ function Da({
   tone: e,
   label: t,
   trailing: a,
-  className: s,
-  id: i,
+  className: i,
+  id: s,
   style: r,
   ref: o,
   ...d
@@ -3501,9 +3576,9 @@ function Da({
     "div",
     {
       ref: o,
-      id: i,
+      id: s,
       style: r,
-      className: ["mds-inline-banner", `mds-inline-banner--${e}`, s].filter(Boolean).join(" "),
+      className: ["mds-inline-banner", `mds-inline-banner--${e}`, i].filter(Boolean).join(" "),
       role: "status",
       ...d,
       children: [
@@ -3519,8 +3594,8 @@ function Ra({
   label: e,
   trailing: t,
   className: a,
-  id: s,
-  style: i,
+  id: i,
+  style: s,
   ref: r,
   ...o
 }) {
@@ -3528,8 +3603,8 @@ function Ra({
     "div",
     {
       ref: r,
-      id: s,
-      style: i,
+      id: i,
+      style: s,
       className: ["mds-empty-state", a].filter(Boolean).join(" "),
       ...o,
       children: [
@@ -3560,16 +3635,16 @@ function Ga({
   variant: e,
   className: t,
   id: a,
-  style: s,
-  ref: i,
+  style: i,
+  ref: s,
   ...r
 }) {
   return /* @__PURE__ */ n(
     "span",
     {
-      ref: i,
+      ref: s,
       id: a,
-      style: s,
+      style: i,
       "aria-hidden": "true",
       className: ["mds-skeleton", `mds-skeleton--${e}`, t].filter(Boolean).join(" "),
       ...r
@@ -3589,16 +3664,16 @@ export {
   Aa as AskButton,
   Na as AskButtonStates,
   Le as AskSymbolIcon,
-  kn as BackIcon,
+  vn as BackIcon,
   D as Button,
   qn as ButtonStates,
   yn as ClearIcon,
   tt as CloseIcon,
-  va as ConfirmSheet,
-  ka as ConfirmSheetStates,
+  ka as ConfirmSheet,
+  va as ConfirmSheetStates,
   Ma as ContextBar,
-  Pa as ContextBarStates,
-  Pt as DangerIcon,
+  Ca as ContextBarStates,
+  Ct as DangerIcon,
   jn as DebtIcon,
   Sn as DeltaDownIcon,
   Nn as DeltaUpIcon,
@@ -3616,7 +3691,7 @@ export {
   Ue as ForwardIcon,
   Mn as FundBankIcon,
   Zn as FundCashIcon,
-  Pn as FundWalletIcon,
+  Cn as FundWalletIcon,
   da as HeroSurface,
   ca as HeroSurfaceStates,
   Qt as IconButton,
@@ -3625,7 +3700,7 @@ export {
   Da as InlineBanner,
   Ya as InlineBannerStates,
   Vn as JobFailedIcon,
-  Ce as LONG_PRESS_MS,
+  Pe as LONG_PRESS_MS,
   un as LayersProvider,
   wt as LockedIcon,
   an as Metric,
@@ -3637,7 +3712,7 @@ export {
   Hn as MoreIcon,
   xn as NavDeliveryIcon,
   pn as NavFinanceIcon,
-  vn as NavMarketIcon,
+  kn as NavMarketIcon,
   bn as NavOrdersIcon,
   gn as NavTodayIcon,
   Sa as NotificationsButton,
@@ -3647,7 +3722,7 @@ export {
   fa as ObjectCardStates,
   ma as ObjectRow,
   ua as ObjectRowStates,
-  vt as OfflineIcon,
+  kt as OfflineIcon,
   $n as OrderIcon,
   Va as PageHeader,
   $a as PageHeaderStates,
@@ -3662,7 +3737,7 @@ export {
   Ia as SaveState,
   La as SaveStateStates,
   wn as SearchIcon,
-  ia as Section,
+  sa as Section,
   ra as SectionStates,
   Un as SegmentedControl,
   Kn as SegmentedControlStates,
@@ -3677,7 +3752,7 @@ export {
   na as SurfaceStates,
   ja as TabBar,
   Ta as TabBarStates,
-  Ca as TabBarTab,
+  Pa as TabBarTab,
   Wn as TextField,
   Xn as TextFieldStates,
   oa as Tile,
@@ -3688,16 +3763,16 @@ export {
   ft as ToneInfoIcon,
   X as ToneProblemIcon,
   mt as ToneWaitingIcon,
-  Cn as TransferIcon,
+  Pn as TransferIcon,
   aa as Well,
-  sa as WellStates,
-  k as ar,
-  Pe as formatMoney,
+  ia as WellStates,
+  v as ar,
+  Ce as formatMoney,
   cn as formatTime12,
-  ve as getToken,
+  ke as getToken,
   B as moneyTexts,
   ye as pluralAr,
-  ke as pluralNouns,
+  ve as pluralNouns,
   S as t,
   O as tokens,
   T as useAmountVisibility,

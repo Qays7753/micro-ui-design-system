@@ -225,7 +225,7 @@ export declare const ar: {
         readonly text: "دفعة 30 د من رنا العبادي";
     };
     readonly 'notif.timeAgo': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "قبل 5 دقائق";
     };
     readonly 'notif.timeToday': {
@@ -233,7 +233,7 @@ export declare const ar: {
         readonly text: "9:15 ص";
     };
     readonly 'notif.timeYesterday': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "أمس 5:10 م";
     };
     readonly 'ask.placeholder': {
@@ -431,6 +431,134 @@ export declare const ar: {
     readonly 'lab.stamp': {
         readonly kind: "title";
         readonly text: "مختبر الدفعة الأولى";
+    };
+    readonly 'lab.h.amountToggle': {
+        readonly kind: "title";
+        readonly text: "زر إخفاء الأرقام";
+    };
+    readonly 'lab.h.money': {
+        readonly kind: "title";
+        readonly text: "شكل المبلغ ووحدته";
+    };
+    readonly 'lab.h.statusBadge': {
+        readonly kind: "title";
+        readonly text: "شارة الحالة";
+    };
+    readonly 'lab.h.entityMark': {
+        readonly kind: "title";
+        readonly text: "حرف الطرف";
+    };
+    readonly 'lab.h.button': {
+        readonly kind: "title";
+        readonly text: "الأزرار";
+    };
+    readonly 'lab.h.iconButton': {
+        readonly kind: "title";
+        readonly text: "زر أيقونة دائري";
+    };
+    readonly 'lab.h.textField': {
+        readonly kind: "title";
+        readonly text: "حقل سطر واحد";
+    };
+    readonly 'lab.h.segmentedControl': {
+        readonly kind: "title";
+        readonly text: "مبدّل خيارات قليلة";
+    };
+    readonly 'lab.h.filterChips': {
+        readonly kind: "title";
+        readonly text: "رقائق تصفية القائمة";
+    };
+    readonly 'lab.h.surface': {
+        readonly kind: "title";
+        readonly text: "بطاقة محتوى بيضاء";
+    };
+    readonly 'lab.h.well': {
+        readonly kind: "title";
+        readonly text: "معلومات داخل بطاقة";
+    };
+    readonly 'lab.h.section': {
+        readonly kind: "title";
+        readonly text: "عنوان قسم وقائمته";
+    };
+    readonly 'lab.h.hero': {
+        readonly kind: "title";
+        readonly text: "البطاقة الرئيسية";
+    };
+    readonly 'lab.h.sheet': {
+        readonly kind: "title";
+        readonly text: "الورقة المنبثقة";
+    };
+    readonly 'lab.h.actionBar': {
+        readonly kind: "title";
+        readonly text: "شريط الحفظ السفلي";
+    };
+    readonly 'lab.h.skeleton': {
+        readonly kind: "title";
+        readonly text: "هيكل التحميل";
+    };
+    readonly 'lab.h.emptyState': {
+        readonly kind: "title";
+        readonly text: "شكل القائمة الفارغة";
+    };
+    readonly 'lab.h.inlineBanner': {
+        readonly kind: "title";
+        readonly text: "شريط معلومة علوي";
+    };
+    readonly 'lab.h.toast': {
+        readonly kind: "title";
+        readonly text: "رسالة نجاح سريعة";
+    };
+    readonly 'lab.h.saveState': {
+        readonly kind: "title";
+        readonly text: "حالة الحفظ";
+    };
+    readonly 'lab.h.pageHeader': {
+        readonly kind: "title";
+        readonly text: "العنوان وزر الإنشاء";
+    };
+    readonly 'lab.h.tabBar': {
+        readonly kind: "title";
+        readonly text: "تبويبات أسفل الشاشة";
+    };
+    readonly 'lab.h.contextBar': {
+        readonly kind: "title";
+        readonly text: "الشريط العلوي الثابت";
+    };
+    readonly 'lab.h.projectSwitcher': {
+        readonly kind: "title";
+        readonly text: "مبدّل المشروع والدور";
+    };
+    readonly 'lab.h.notificationsButton': {
+        readonly kind: "title";
+        readonly text: "جرس الإشعارات";
+    };
+    readonly 'lab.h.askButton': {
+        readonly kind: "title";
+        readonly text: "زر المساعد Micro";
+    };
+    readonly 'lab.h.confirmSheet': {
+        readonly kind: "title";
+        readonly text: "ورقة تأكيد الحذف";
+    };
+    readonly 'lab.h.objectRow': {
+        readonly kind: "title";
+        readonly text: "صف في قائمة";
+    };
+    readonly 'lab.h.objectCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة كائن موسّعة";
+    };
+    readonly 'lab.h.metric': {
+        readonly kind: "title";
+        readonly text: "الرقم البطل";
+    };
+    readonly 'lab.h.metricSmall': {
+        readonly kind: "title";
+        readonly text: "رقم مصغّر بعنوانه";
+    };
+    readonly 'lab.h.tile': {
+        readonly kind: "title";
+        readonly text: "بلاطات اليوم الأربع";
     };
     readonly 'lab.fontScale': {
         readonly kind: "badge";

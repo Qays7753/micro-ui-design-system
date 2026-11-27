@@ -254,7 +254,9 @@ export const tokens = {
     "empty-state-content-max": 280,
     "pressed-row-inset": 8,
     "scroll-peek-min": 24,
-    "scroll-end-padding": 16
+    "scroll-end-padding": 16,
+    "photo-columns": 3,
+    "timeline-hours": 48
   },
   "radius": {
     "2xs": 4,
@@ -281,7 +283,8 @@ export const tokens = {
     "field-focus-halo": 4,
     "underline": 1,
     "underline-offset": 3,
-    "signal-line": 2
+    "signal-line": 2,
+    "track-line": 2
   },
   "elevation": {
     "surface": "none",
@@ -360,7 +363,6 @@ export const tokens = {
       64,
       56
     ],
-    "photo-tile": 96,
     "weekstrip-cell": [
       44,
       56
@@ -402,7 +404,27 @@ export const tokens = {
     "title-max-lines": 2,
     "toast-max-lines": 2,
     "max-segments": 4,
-    "max-wells-per-surface": 2
+    "max-wells-per-surface": 2,
+    "toggle-track": [
+      52,
+      32
+    ],
+    "toggle-thumb": 24,
+    "voice-bar": {
+      "width": 4,
+      "min": 8,
+      "max": 24
+    },
+    "track-dot": 12,
+    "logo-lockup": 28,
+    "google-button": 40,
+    "progress": 8,
+    "timeline-block-min": 32,
+    "day-mark": 36,
+    "dot-event": 6,
+    "textarea-max-lines": 6,
+    "ask-input-max-lines": 4,
+    "checkbox": 20
   },
   "motion": {
     "press-in": {
@@ -483,7 +505,14 @@ export const tokens = {
       "velocity-px-per-ms": 0.6
     },
     "press-cancel-px": 8,
-    "response-max-ms": 100
+    "response-max-ms": 100,
+    "drag-lift": {
+      "scale": 1.04,
+      "elevation": "float"
+    },
+    "hold-confirm": {
+      "ms": 600
+    }
   },
   "breakpoint": {
     "phone-min": 360,
@@ -501,7 +530,18 @@ export const tokens = {
     "max-signal-per-screen": 3,
     "max-signal-per-component": 1,
     "max-hub-sections": 6,
-    "max-text-lines": 2
+    "max-text-lines": 2,
+    "max-inline-table-rows": 5,
+    "slide-confirm-ratio": 0.8,
+    "viewer-zoom-min": 1,
+    "viewer-zoom-max": 4,
+    "viewer-zoom-step": 1.5,
+    "timeline-default-range": [
+      8,
+      20
+    ],
+    "voice-max-seconds": 60,
+    "voice-warning-seconds": 50
   }
 } as const;
 
