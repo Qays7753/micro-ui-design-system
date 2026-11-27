@@ -46,7 +46,7 @@ export function ProjectSwitcher({
       {...rest}
       {...pressProps}
     >
-      <EntityMark size="sm" value={label} />
+      <EntityMark size="sm" variant="canvas" value={label} />
       <span className="mds-project-switcher-text">
         <span className="mds-project-switcher-name mds-type-body-strong">{label}</span>
         {caption ? (

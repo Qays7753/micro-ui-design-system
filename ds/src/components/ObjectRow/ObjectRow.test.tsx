@@ -2,7 +2,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ar } from '../../i18n/ar';
 import { StatusBadge } from '../StatusBadge/index';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { ObjectRow } from './ObjectRow';
+import { SelectedIcon } from '../../icons';
 import { ObjectRowStates } from './ObjectRow.states';
 
 const TITLE = ar['row.sampleTitle'].text;
@@ -54,9 +57,25 @@ describe('ObjectRow (BRIEF 23.4)', () => {
     expect(ObjectRowStates).toContain('withBadge');
   });
 
-  it('renders «—» for a missing value beside a present time', () => {
+  it('renders NOTHING at the row end when the value is missing (ت5, 1.7)', () => {
     const { container } = render(<ObjectRow label={TITLE} caption={CAPTION} trailing={TIME} />);
-    expect(container.querySelector('.mds-object-row-value')?.textContent).toBe('—');
+    // «—» belongs to a LABELED value cell (KeyValueList, Metric) — never an
+    // object row; the time still rides the end column alone.
+    expect(container.querySelector('.mds-object-row-value')).toBeNull();
+    expect(container.querySelector('.mds-object-row-time')?.textContent).toBe(TIME);
+  });
+
+  it('icon rows (ت4, 1.7): a ReactNode leading rides 20 text-secondary, no mark box, row-plain height', () => {
+    const css = readFileSync(join(__dirname, 'ObjectRow.css'), 'utf8');
+    expect(css).toContain('.mds-object-row--icon');
+    expect(css).toContain('var(--mds-size-row-plain)');
+    expect(css).toContain('var(--mds-size-icon-20)');
+    expect(css).toContain('var(--mds-color-text-secondary)');
+    const { container } = render(
+      <ObjectRow label={TITLE} leading={<SelectedIcon size={20} />} onPress={() => {}} />,
+    );
+    expect(container.querySelector('.mds-object-row-icon')).not.toBeNull();
+    expect(container.querySelector('.mds-entity-mark')).toBeNull();
   });
 
   it('hides the end column entirely when both value and trailing are absent', () => {

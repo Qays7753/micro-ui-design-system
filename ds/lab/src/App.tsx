@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -156,8 +156,12 @@ export function App() {
             ))}
           </Surface>
           <Surface>
+            {/* خ14/ت4 (1.7): the settings row — the icon 20 at the start
+                (NO entity mark), the FIXED name «إخفاء المبالغ» (23.22), and
+                ✓ at the end only while the setting is ON. */}
             <ObjectRow
-              label={hidden ? t('button.showAmounts') : t('button.hideAmounts')}
+              label={t('button.hideAmounts')}
+              leading={hidden ? <AmountsHiddenIcon size={20} /> : <AmountsShownIcon size={20} />}
               trailing={hidden ? <SelectedIcon size={20} /> : undefined}
               onPress={() => { setHidden(!hidden); setProjectOpen(false); }}
             />
@@ -354,7 +358,7 @@ export function App() {
             />
             <PageHeader
               label={t('nav.today')}
-              trailing={<Button variant="secondary" size="sm" data-ds-check="button-sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
+              trailing={<Button variant="primary" size="sm" data-ds-check="button-sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
             />
             <div className="lab-compose-content" data-ds-check="compose-content">
               {pageState === 'loading' ? (
@@ -1039,7 +1043,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('empty.oneButtonMax')}</span>
             <div className="lab-empty-stage">
-              <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>} />
+              <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" mode="canvas" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>} />
             </div>
           </div>
         </section>

@@ -20,6 +20,7 @@ import './Button.css';
 
 export function Button({
   variant = 'primary',
+  mode = 'surface',
   size = 'md',
   loading = false,
   leading,
@@ -43,6 +44,7 @@ export function Button({
     'mds-button',
     `mds-button--${variant}`,
     `mds-button--${size}`,
+    mode === 'canvas' ? 'mds-button--on-canvas' : '',
     isPressed ? 'mds-button--pressed' : '',
     className,
   ]

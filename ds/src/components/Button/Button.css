@@ -56,6 +56,15 @@
   color: var(--mds-color-brand-anchor);
 }
 
+/* ت3 (1.7): a SECONDARY riding the canvas floor swaps to the surface
+   background + a hairline surface-edge border — brand-selected-bg is
+   1.02:1 against canvas and reads as no button at all. On a surface it
+   stays brand-selected-bg. */
+.mds-button--secondary.mds-button--on-canvas {
+  background-color: var(--mds-color-surface);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
 .mds-button--text {
   background-color: transparent;
   color: var(--mds-color-brand-text);
@@ -75,6 +84,13 @@
 .mds-button--secondary:active,
 .mds-button--secondary[data-pressed] {
   transform: scale(var(--mds-motion-press-in-scale-button));
+}
+
+/* ت3: the canvas-riding secondary presses to surface-pressed (its resting
+   background is the surface, not brand-selected-bg). */
+.mds-button--secondary.mds-button--on-canvas:active,
+.mds-button--secondary.mds-button--on-canvas[data-pressed] {
+  background-color: var(--mds-color-surface-pressed);
 }
 
 .mds-button--primary:active,

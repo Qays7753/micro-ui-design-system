@@ -11,6 +11,9 @@
  * - tone="done"/"waiting" add the small verification badge of 23.24(4): an
  *   18 white circle with the Fill 14 icon, at the bottom-start corner,
  *   overlapping the mark by the badge-overlap token.
+ * - variant="canvas" (1.7 §3.1): the mark riding the canvas (ContextBar's
+ *   switcher) takes entity-bg-canvas — the sheet-gray entity-bg would read
+ *   1.02:1 against the canvas floor.
  * - The mark is presentational (aria-hidden): the app renders the name
  *   beside it, which is what the screen reader reads.
  */
@@ -24,14 +27,26 @@ const BADGE_ICONS = {
   waiting: EntityPendingIcon,
 } as const;
 
-/** First letter of the first word, codepoint-safe, isolated by its own element. */
+/**
+ * First letter of the first word, codepoint-safe, isolated by its own
+ * element — AFTER dropping a leading «ال» (1.7 ت4: «أول حرف بعد حذف ال من
+ * بداية الاسم»): «العمر الزعبي» carries ع, not ا. A name that is nothing
+ * BUT the article falls back to its first letter.
+ */
 function initialOf(value: string): string | undefined {
-  const firstWord = value.trim().split(/\s+/)[0];
+  let firstWord = value.trim().split(/\s+/)[0];
+  // the definite article «ال» as code points (U+0627 U+0644) — parsing data
+  // for the letter rule, not UI copy (ds-copy: copy lives in ar.ts).
+  const article = String.fromCodePoint(0x0627, 0x0644);
+  if (firstWord.length > article.length && firstWord.startsWith(article)) {
+    firstWord = firstWord.slice(article.length);
+  }
   return firstWord ? Array.from(firstWord)[0] : undefined;
 }
 
 export function EntityMark({
   size = 'md',
+  variant = 'surface',
   value,
   tone,
   children,
@@ -43,7 +58,8 @@ export function EntityMark({
 }: EntityMarkProps) {
   const BadgeIcon = tone === 'done' || tone === 'waiting' ? BADGE_ICONS[tone] : null;
   const initial = children ? undefined : value ? initialOf(value) : undefined;
-  const classes = ['mds-entity-mark', `mds-entity-mark--${size}`, className]
+  const classes = ['mds-entity-mark', `mds-entity-mark--${size}`,
+    variant === 'canvas' ? 'mds-entity-mark--canvas' : '', className]
     .filter(Boolean)
     .join(' ');
 

@@ -73,3 +73,9 @@
   background-color: var(--mds-color-surface);
   color: var(--mds-color-entity-fg);
 }
+
+/* 1.7 §3.1: the mark on the canvas floor (ContextBar) — entity-bg-canvas;
+   entity-bg is 1.02:1 against canvas, invisible. */
+.mds-entity-mark--canvas {
+  background-color: var(--mds-color-entity-bg-canvas);
+}

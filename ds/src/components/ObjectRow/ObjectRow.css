@@ -10,9 +10,10 @@
   gap: var(--mds-layout-row-gap);
   width: 100%;
   padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
-  /* Heights (و-1 هـ1): the height follows what starts the row — ObjectRow
-     always renders the EntityMark 44, so every row is 72, one line or two;
-     the one-line row centers its text vertically (align-items: center). */
+  /* Heights (و-1 هـ1): the height follows what starts the row — an entity
+     row renders the EntityMark 44, so it is 72, one line or two; the
+     one-line row centers its text vertically (align-items: center). The
+     icon row (ت4) rides the row-plain 56. */
   min-height: var(--mds-size-row-with-mark);
   background-color: transparent;
   border: none;
@@ -106,4 +107,20 @@
   .mds-object-row {
     transition: none;
   }
+}
+
+/* ت4 (1.7): the icon row — height row-plain 56, the leading icon 20 in
+   text-secondary (no mark box). */
+.mds-object-row--icon {
+  min-height: var(--mds-size-row-plain);
+}
+
+.mds-object-row-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-icon-20);
+  block-size: var(--mds-size-icon-20);
+  color: var(--mds-color-text-secondary);
 }

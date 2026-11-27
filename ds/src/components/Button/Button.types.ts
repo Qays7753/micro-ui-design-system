@@ -16,6 +16,11 @@ export type ButtonSize = Extract<Size, 'md' | 'sm'>;
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onPress' | 'onLongPress'> {
   /** Visual weight: primary · secondary · text · danger (23.18). */
+  /** WHERE the button rides (1.7 ت3): `surface` (default — on a white
+   *  surface/card) or `canvas` — a SECONDARY on the canvas floor takes the
+   *  surface background + a hairline surface-edge border, because
+   *  brand-selected-bg is 1.02:1 against canvas and reads as nothing. */
+  mode?: 'surface' | 'canvas';
   variant?: ButtonVariant;
   /** md (default, 52) · sm (44 inside the 48 touch zone) (23.3). */
   size?: ButtonSize;

@@ -18,6 +18,9 @@ export interface EntityMarkProps extends HTMLAttributes<HTMLSpanElement> {
   /** The name; the mark renders its first letter in its isolated form (23.5). */
   value?: string;
   /** Optional verification badge: done → approved ✓, waiting → pending clock (23.24(4)). */
+  /** Where the mark rides: `surface` (default, entity-bg) or `canvas`
+   *  (entity-bg-canvas — the ContextBar switcher, 1.7 §3.1). */
+  variant?: 'surface' | 'canvas';
   tone?: Tone;
   /** Object marks pass their type icon (FundCashIcon / FundBankIcon / FundWalletIcon) as children. */
   children?: ReactNode;

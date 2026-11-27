@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ar } from '../../i18n/ar';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { EntityMark } from './EntityMark';
 import { EntityMarkStates } from './EntityMark.states';
 
@@ -16,6 +18,23 @@ describe('EntityMark (BRIEF 23.5, 23.24(4))', () => {
     const { container } = render(<EntityMark value={SINGLE} />);
     const initial = container.querySelector('.mds-entity-mark-initial')!;
     expect(initial.textContent).toBe(SINGLE.slice(0, 1));
+  });
+
+  it('drops the leading «ال» before taking the letter (ت4, 1.7)', () => {
+    // «لك •••• د»-style dictionary words: build a name that STARTS with the
+    // article «ال» and assert the letter AFTER it.
+    const withArticle = `ال${TWO_WORDS}`;
+    const { container } = render(<EntityMark value={withArticle} />);
+    expect(container.querySelector('.mds-entity-mark-initial')?.textContent).toBe(
+      Array.from(TWO_WORDS)[0],
+    );
+  });
+
+  it('variant=canvas rides entity-bg-canvas (1.7 §3.1)', () => {
+    const css = readFileSync(join(__dirname, 'EntityMark.css'), 'utf8');
+    expect(css).toContain('var(--mds-color-entity-bg-canvas)');
+    const { container } = render(<EntityMark variant="canvas" value={SINGLE} />);
+    expect(container.querySelector('.mds-entity-mark--canvas')).not.toBeNull();
   });
 
   it('keeps the first word letter for a multi-word name', () => {

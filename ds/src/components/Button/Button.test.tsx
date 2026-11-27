@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ar } from '../../i18n/ar';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Button } from './Button';
 
 // Labels come from the dictionary (no Arabic literals here — ds-copy).
@@ -90,5 +92,13 @@ describe('Button (BRIEF 9.3, 23.2, 23.3)', () => {
     expect(ButtonStates).toContain('loading');
     expect(ButtonStates).toContain('pressed');
     expect(ButtonStates).toContain('sm');
+  });
+  it('a secondary on canvas swaps to surface + hairline (ت3, 1.7)', () => {
+    const css = readFileSync(join(__dirname, 'Button.css'), 'utf8');
+    expect(css).toContain('.mds-button--secondary.mds-button--on-canvas');
+    expect(css).toContain('background-color: var(--mds-color-surface)');
+    expect(css).toContain('var(--mds-color-surface-edge)');
+    const { container } = render(<Button variant="secondary" mode="canvas">{LABEL}</Button>);
+    expect(container.querySelector('.mds-button--on-canvas')).not.toBeNull();
   });
 });
