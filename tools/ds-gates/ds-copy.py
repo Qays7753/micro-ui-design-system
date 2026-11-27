@@ -99,18 +99,31 @@ def run(gate: Gate, target, args):
                 else "no component/lib/icon sources yet (builder starts at S3)")
 
     # ---- (ب)+(ج) the ar.ts dictionary itself ----
+    # Plan B (B0): the domain dictionary ds/src/i18n/ar-domains.ts joins the
+    # same checks — an agent-2 private file outside the gate would prove
+    # nothing. Both files are parsed with the same entry regex; a missing
+    # ar-domains.ts is only a skip on fixtures that predate plan B (the
+    # fixtures carry ar.ts alone), but when the file EXISTS its entries are
+    # checked with no exceptions.
+    dictionaries = []
     ar_path = Path(target) / "ds" / "src" / "i18n" / "ar.ts"
     if not ar_path.is_file():
         gate.fail("ds-copy/dictionary", "ds/src/i18n/ar.ts not found")
         return
+    ar_domains_path = Path(target) / "ds" / "src" / "i18n" / "ar-domains.ts"
+    if ar_domains_path.is_file():
+        dictionaries.append(ar_domains_path)
+    dictionaries.append(ar_path)
     problems = []
     entries = 0
-    for m in ENTRY_RX.finditer(ar_path.read_text(encoding="utf-8")):
-        key, kind, text = m.group(1), m.group(2), m.group(3)
-        line = ar_path.read_text(encoding="utf-8").count("\n", 0, m.start()) + 1
-        entries += 1
-        for problem in check_text(key, kind, text):
-            problems.append(f"ar.ts:{line} '{key}': {problem}")
+    for dict_path in dictionaries:
+        dict_code = dict_path.read_text(encoding="utf-8")
+        for m in ENTRY_RX.finditer(dict_code):
+            key, kind, text = m.group(1), m.group(2), m.group(3)
+            line = dict_code.count("\n", 0, m.start()) + 1
+            entries += 1
+            for problem in check_text(key, kind, text):
+                problems.append(f"{dict_path.name}:{line} '{key}': {problem}")
     if entries == 0:
         gate.fail("ds-copy/dictionary", "no {kind, text} entries parsed from ar.ts — parse drifted, fix the gate")
         return
@@ -119,7 +132,8 @@ def run(gate: Gate, target, args):
         for p in problems[:40]:
             gate.fail("ds-copy/entry", p)
     else:
-        gate.ok("ds-copy/dictionary", f"{entries} entries: nine kinds, word ceilings, 24.2/24.3 bans — clean")
+        extra = f" (+{len(dictionaries) - 1} domain file)" if len(dictionaries) > 1 else ""
+        gate.ok("ds-copy/dictionary", f"{entries} entries{extra}: nine kinds, word ceilings, 24.2/24.3 bans — clean")
 
 
 if __name__ == "__main__":

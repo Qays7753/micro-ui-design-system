@@ -1,0 +1,9 @@
+{
+  "checks": [
+    {
+      "id": "domain-mark",
+      "width": { "px": 44 },
+      "height": { "px": 44 }
+    }
+  ]
+}

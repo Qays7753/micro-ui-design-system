@@ -82,6 +82,15 @@ def registry_check(gate: Gate, target):
     exceptions = CONFIG.get("registry_exceptions") or {}
     text = app_tsx.read_text(encoding="utf-8")
     ids = re.findall(r"\{\s*id:\s*'([a-z0-9-]+)'", text)
+    # Plan B (B0): the domains wing's sections live in agent-2's own
+    # ds/lab/src/domains/*.tsx files (one linking import in App.tsx); the
+    # catalog scan reads every file of that directory too, so a domain
+    # component page is registered exactly like a batch-1 section and a
+    # private file outside the registry would be impossible.
+    domains_dir = base / "ds" / "lab" / "src" / "domains"
+    if domains_dir.is_dir():
+        for df in sorted(domains_dir.glob("*.tsx")):
+            ids += re.findall(r"\{\s*id:\s*'([a-z0-9-]+)'", df.read_text(encoding="utf-8"))
     if not ids:
         gate.fail("ds-registry/catalog", "no catalog section ids found in ds/lab/src/App.tsx")
         return

@@ -20,6 +20,9 @@
 import { useState } from 'react';
 import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
+/* Domains wing (plan B): one import, rendered as one block after the
+   batch-1 sections (the sections join SECTIONS through domainSections). */
+import { domainSections } from './domains';
 import './app.css';
 
 const FUND_ICONS = {
@@ -67,6 +70,8 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'metric', name: t('title.metric') },
   { id: 'metric-small', name: t('title.metricSmall') },
   { id: 'tile', name: t('title.tile') },
+  // Domains (plan B, stage 5) — agent-2's own sections, one linking import.
+  ...domainSections.map((sec) => ({ id: sec.id, name: sec.name })),
 ];
 
 export function App() {
@@ -1597,6 +1602,14 @@ export function App() {
             </div>
           </div>
         </section>
+
+        {/* ---- Domains (plan B, stage 5): one rendering block, the
+             sections themselves live in ds/lab/src/domains/ ---- */}
+        {domainSections.map((sec) => (
+          <section className="lab-section" id={sec.id} key={sec.id}>
+            {sec.content}
+          </section>
+        ))}
 
         </main>
         {demoSheets}

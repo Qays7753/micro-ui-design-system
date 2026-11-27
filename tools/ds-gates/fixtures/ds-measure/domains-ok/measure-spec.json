@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "id": "icon-button",
+      "width": {
+        "token": "size.touch-min"
+      },
+      "height": {
+        "token": "size.touch-min"
+      }
+    }
+  ],
+  "views": {
+    "_domains_extends": "domains-extra.json"
+  }
+}

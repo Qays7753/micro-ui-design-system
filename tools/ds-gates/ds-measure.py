@@ -79,10 +79,28 @@ def load_spec(target, args_spec, view="catalog"):
     # THEM (its own real elements); a view without a declaration runs the
     # default specimen spec. Missing elements fail on every view — a check
     # that finds nothing proves nothing.
+    #
+    # Domains extension (plan B, B0): the main spec's views carry a
+    # "_domains_extends" pointer (one linking line) to
+    # tools/ds-gates/measure-spec-domains.json — agent-2's own measurement
+    # checks. The default catalog list merges them (after the batch-1
+    # checks); a per-view declaration stays untouched. A missing pointer
+    # file is a FAIL, not a silent skip: a private file outside every
+    # check proves nothing.
     views = raw.get("views") or {}
-    if isinstance(views, dict) and view in views:
-        return {"checks": views[view]}, spec_path
-    return raw, spec_path
+    domains_rel = views.get("_domains_extends") if isinstance(views, dict) else None
+    if not (isinstance(views, dict) and view in views):
+        if domains_rel:
+            domains_path = Path(target) / domains_rel
+            if not domains_path.is_file():
+                domains_path = ROOT / domains_rel
+            if not domains_path.is_file():
+                return None, f"views._domains_extends points to a missing file: {domains_rel}"
+            domains_raw = json.loads(domains_path.read_text(encoding="utf-8"))
+            merged = list(raw.get("checks") or []) + list(domains_raw.get("checks") or [])
+            return {"checks": merged}, domains_path
+        return raw, spec_path
+    return {"checks": views[view]}, spec_path
 
 
 def expected_value(spec_value, tokens):
@@ -101,8 +119,12 @@ def run(gate: Gate, target, args):
     else:
         server, url = resolved
 
-    spec, spec_path = load_spec(target, getattr(args, "spec", None),
-                                "compose" if "view=compose" in url else "catalog")
+    spec_result = load_spec(target, getattr(args, "spec", None),
+                            "compose" if "view=compose" in url else "catalog")
+    if spec_result is None or isinstance(spec_result, str):
+        gate.fail("ds-measure/dimensions", spec_result)
+        return
+    spec, spec_path = spec_result
     tokens = read_tokens(ROOT if kind != "url" and target == str(ROOT) else target)
     if tokens is None:
         tokens = read_tokens(ROOT)

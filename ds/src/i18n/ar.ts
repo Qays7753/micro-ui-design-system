@@ -25,6 +25,7 @@
 /** Copy kinds understood by the ds-copy gate (plan section 8-و). */
 import type { PluralForms } from './plural';
 import type { MoneyAriaTexts } from '../lib/format-money';
+import { arDomains } from './ar-domains';
 
 export type TextKind =
   | 'button'
@@ -42,7 +43,7 @@ export interface TextEntry {
   readonly text: string;
 }
 
-export const ar = {
+export const arBase = {
   // --- Buttons and links (BRIEF 24.1: verb + object, ≤ 3 words) ---
   'button.saveMovement': { kind: 'button', text: 'احفظ الحركة' },
   'button.acceptQuote': { kind: 'button', text: 'اقبل العرض' },
@@ -397,9 +398,17 @@ export const ar = {
   'state.errorRow': { kind: 'badge', text: 'حالة الخطأ' },
   'title.checkbox': { kind: 'title', text: 'مربع الاختيار' },
 
+// --- Domains (plan B, stage 5): ar-domains.ts, one linking line (PLAN-B) ---
+
 // ---------------------------------------------------------------------------
 
 } as const;
+
+/* The domain dictionary (seven domains, agent-2 private file) joins `ar`
+   here — one linking line; its keys become ArKey members and the copy
+   override mechanism (3ج) sees them like any batch-1 key. */
+
+export const ar = { ...arBase, ...arDomains };
 
 export type ArKey = keyof typeof ar;
 

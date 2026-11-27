@@ -52,3 +52,5 @@ export * from './components/Toast';
 export * from './components/InlineBanner';
 export * from './components/EmptyState';
 export * from './components/Skeleton';
+/* Domains (plan B, stage 5) — agent-2 components, one linking line (PLAN-B). */
+export * from './domains';

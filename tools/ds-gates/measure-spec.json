@@ -154,6 +154,7 @@
   ],
   "views": {
     "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
+    "_domains_extends": "tools/ds-gates/measure-spec-domains.json",
     "compose": [
       {
         "id": "button-sm",

@@ -27,7 +27,7 @@ export interface TextEntry {
     readonly kind: TextKind;
     readonly text: string;
 }
-export declare const ar: {
+export declare const arBase: {
     readonly 'button.saveMovement': {
         readonly kind: "button";
         readonly text: "احفظ الحركة";
@@ -1265,6 +1265,2108 @@ export declare const ar: {
         readonly text: "حالة الخطأ";
     };
     readonly 'title.checkbox': {
+        readonly kind: "title";
+        readonly text: "مربع الاختيار";
+    };
+};
+export declare const ar: {
+    'fund.lastMovement': {
+        readonly kind: "badge";
+        readonly text: "آخر حركة:";
+    };
+    'fund.negativeBalance': {
+        readonly kind: "badge";
+        readonly text: "رصيد سالب";
+    };
+    'debt.forYou': {
+        readonly kind: "badge";
+        readonly text: "لك";
+    };
+    'debt.againstYou': {
+        readonly kind: "badge";
+        readonly text: "عليك";
+    };
+    'debt.dueOn': {
+        readonly kind: "help";
+        readonly text: "يستحق {date}";
+    };
+    'debt.overdue': {
+        readonly kind: "badge";
+        readonly text: "متأخر";
+    };
+    'debt.settled': {
+        readonly kind: "badge";
+        readonly text: "سُدّد";
+    };
+    'payment.paid': {
+        readonly kind: "badge";
+        readonly text: "دُفع";
+    };
+    'payment.remaining': {
+        readonly kind: "badge";
+        readonly text: "بقي";
+    };
+    'sr.movementRowOut': {
+        readonly kind: "screen-reader";
+        readonly text: "خارج";
+    };
+    'sr.movementRowIn': {
+        readonly kind: "screen-reader";
+        readonly text: "داخل";
+    };
+    'sr.transferFrom': {
+        readonly kind: "screen-reader";
+        readonly text: "تحويل من {from} إلى {to}";
+    };
+    'sr.fundHasDraft': {
+        readonly kind: "screen-reader";
+        readonly text: "فيه مسودة";
+    };
+    'sr.debtProgress': {
+        readonly kind: "screen-reader";
+        readonly text: "دُفع {paid} من {total} دينار";
+    };
+    'lab.h.movementRow': {
+        readonly kind: "title";
+        readonly text: "صف حركة مالية";
+    };
+    'lab.h.transferRow': {
+        readonly kind: "title";
+        readonly text: "صف تحويل صندوقين";
+    };
+    'lab.h.fundCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة صندوق ورصيده";
+    };
+    'lab.h.debtCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة دين ودفعاته";
+    };
+    'lab.h.debtSummary': {
+        readonly kind: "title";
+        readonly text: "ملخص الديون";
+    };
+    'lab.h.paymentProgress': {
+        readonly kind: "title";
+        readonly text: "شريط تقدم السداد";
+    };
+    'lab.h.financeCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب شاشة المالية";
+    };
+    'order.delivery': {
+        readonly kind: "badge";
+        readonly text: "التسليم";
+    };
+    'order.today': {
+        readonly kind: "badge";
+        readonly text: "اليوم";
+    };
+    'order.tomorrow': {
+        readonly kind: "badge";
+        readonly text: "غداً";
+    };
+    'order.yesterday': {
+        readonly kind: "badge";
+        readonly text: "أمس";
+    };
+    'agenda.noTime': {
+        readonly kind: "title";
+        readonly text: "بلا وقت";
+    };
+    'agenda.emptyDay': {
+        readonly kind: "empty";
+        readonly text: "مواعيد هذا اليوم تظهر هنا.";
+    };
+    'agenda.emptyAll': {
+        readonly kind: "empty";
+        readonly text: "لا عناصر في هذه الفترة.";
+    };
+    'slot.morning': {
+        readonly kind: "title";
+        readonly text: "صباحاً";
+    };
+    'slot.evening': {
+        readonly kind: "title";
+        readonly text: "مساءً";
+    };
+    'slot.empty': {
+        readonly kind: "empty";
+        readonly text: "لا أوقات متاحة في هذا اليوم.";
+    };
+    'minute.one': {
+        readonly kind: "badge";
+        readonly text: "دقيقة";
+    };
+    'minute.few': {
+        readonly kind: "badge";
+        readonly text: "دقائق";
+    };
+    'hour.one': {
+        readonly kind: "badge";
+        readonly text: "ساعة";
+    };
+    'hour.two': {
+        readonly kind: "badge";
+        readonly text: "ساعتان";
+    };
+    'hour.few': {
+        readonly kind: "badge";
+        readonly text: "ساعات";
+    };
+    'sr.weekStripToday': {
+        readonly kind: "screen-reader";
+        readonly text: "اليوم";
+    };
+    'sr.weekStripItems': {
+        readonly kind: "screen-reader";
+        readonly text: "{counted}";
+    };
+    'sr.slotUnavailable': {
+        readonly kind: "screen-reader";
+        readonly text: "غير متاح";
+    };
+    'sr.timelineNow': {
+        readonly kind: "screen-reader";
+        readonly text: "الآن";
+    };
+    'lab.h.orderCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة طلب";
+    };
+    'lab.h.weekStrip': {
+        readonly kind: "title";
+        readonly text: "شريط أيام الأسبوع";
+    };
+    'lab.h.dayTimeline': {
+        readonly kind: "title";
+        readonly text: "جدول اليوم بالساعات";
+    };
+    'lab.h.agendaList': {
+        readonly kind: "title";
+        readonly text: "قائمة عناصر بالأيام";
+    };
+    'lab.h.slotPicker': {
+        readonly kind: "title";
+        readonly text: "أوقات متاحة للاختيار";
+    };
+    'lab.h.ordersCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب شاشة الطلبات";
+    };
+    'delivery.to': {
+        readonly kind: "badge";
+        readonly text: "إلى {area}";
+    };
+    'delivery.from': {
+        readonly kind: "help";
+        readonly text: "من {area} · {desc}";
+    };
+    'delivery.reviewQuotes': {
+        readonly kind: "button";
+        readonly text: "راجع العروض";
+    };
+    'quote.expiry': {
+        readonly kind: "help";
+        readonly text: "ينتهي {time}";
+    };
+    'quote.expiringSoon': {
+        readonly kind: "badge";
+        readonly text: "ينتهي قريباً";
+    };
+    'quote.acceptOutcome': {
+        readonly kind: "help";
+        readonly text: "بالقبول يبدأ السائق المهمة.";
+    };
+    'quote.rejected': {
+        readonly kind: "badge";
+        readonly text: "مرفوض";
+    };
+    'quote.superseded': {
+        readonly kind: "badge";
+        readonly text: "مستبدل";
+    };
+    'quote.expired': {
+        readonly kind: "badge";
+        readonly text: "انتهى";
+    };
+    'issue.title': {
+        readonly kind: "title";
+        readonly text: "تعذّر التسليم";
+    };
+    'issue.reason': {
+        readonly kind: "badge";
+        readonly text: "السبب";
+    };
+    'issue.proposed': {
+        readonly kind: "badge";
+        readonly text: "الإجراء المقترح";
+    };
+    'issue.awaitingOwner': {
+        readonly kind: "badge";
+        readonly text: "بانتظار موافقة المالك";
+    };
+    'issue.agreedAt': {
+        readonly kind: "help";
+        readonly text: "وافقت · {time}";
+    };
+    'issue.rejectedAt': {
+        readonly kind: "help";
+        readonly text: "رفضت · {time}";
+    };
+    'contact.call': {
+        readonly kind: "button";
+        readonly text: "اتصل";
+    };
+    'contact.whatsapp': {
+        readonly kind: "button";
+        readonly text: "واتساب";
+    };
+    'contact.marketNote': {
+        readonly kind: "help";
+        readonly text: "الشراء والتواصل خارج Micro.";
+    };
+    'evidence.title': {
+        readonly kind: "title";
+        readonly text: "إثبات التسليم";
+    };
+    'evidence.takePhoto': {
+        readonly kind: "button";
+        readonly text: "التقط صورة";
+    };
+    'evidence.codeLabel': {
+        readonly kind: "help";
+        readonly text: "الرمز من المستلم";
+    };
+    'evidence.ownerSentence': {
+        readonly kind: "help";
+        readonly text: "المالك يؤكد التسليم.";
+    };
+    'evidence.confirm': {
+        readonly kind: "button";
+        readonly text: "أكّد التسليم";
+    };
+    'evidence.codeError': {
+        readonly kind: "error";
+        readonly text: "الرمز غير صحيح. اسأل المستلم مرة أخرى.";
+    };
+    'evidence.entered': {
+        readonly kind: "help";
+        readonly text: "أُدخل الرمز ✓";
+    };
+    'location.openMaps': {
+        readonly kind: "button";
+        readonly text: "افتح في الخرائط";
+    };
+    'job.priceLabel': {
+        readonly kind: "badge";
+        readonly text: "سعرك";
+    };
+    'job.sendQuote': {
+        readonly kind: "button";
+        readonly text: "أرسل العرض";
+    };
+    'job.cannotDeliver': {
+        readonly kind: "button";
+        readonly text: "لم أستطع التسليم";
+    };
+    'job.sendToOwner': {
+        readonly kind: "button";
+        readonly text: "أرسل للمالك";
+    };
+    'job.slideDelivered': {
+        readonly kind: "button";
+        readonly text: "اسحب: تمّ التسليم";
+    };
+    'driver.pending': {
+        readonly kind: "badge";
+        readonly text: "بانتظار الاعتماد";
+    };
+    'driver.approved': {
+        readonly kind: "badge";
+        readonly text: "معتمد";
+    };
+    'driver.rejected': {
+        readonly kind: "badge";
+        readonly text: "مرفوض";
+    };
+    'driver.pendingSentence': {
+        readonly kind: "help";
+        readonly text: "طلبك قيد المراجعة. ستصلك الطلبات بعد الاعتماد.";
+    };
+    'sr.contactCall': {
+        readonly kind: "screen-reader";
+        readonly text: "اتصل بـ{name}";
+    };
+    'sr.contactWhatsapp': {
+        readonly kind: "screen-reader";
+        readonly text: "واتساب {name}، يفتح تطبيقاً آخر";
+    };
+    'sr.openMaps': {
+        readonly kind: "screen-reader";
+        readonly text: "افتح العنوان في الخرائط، يفتح تطبيقاً آخر";
+    };
+    'sr.jobTrack': {
+        readonly kind: "screen-reader";
+        readonly text: "مراحل التوصيل: المرحلة {current} من {total}";
+    };
+    'sr.evidenceNotTaken': {
+        readonly kind: "screen-reader";
+        readonly text: "لم تُلتقط بعد";
+    };
+    'sr.evidencePhoto': {
+        readonly kind: "screen-reader";
+        readonly text: "صورة";
+    };
+    'lab.h.deliveryRequestCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة طلب توصيل";
+    };
+    'lab.h.quoteCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة عرض سعر";
+    };
+    'lab.h.jobTrack': {
+        readonly kind: "title";
+        readonly text: "مسار مراحل التوصيل";
+    };
+    'lab.h.issueProposalCard': {
+        readonly kind: "title";
+        readonly text: "مقترح تعذّر التسليم";
+    };
+    'lab.h.contactBar': {
+        readonly kind: "title";
+        readonly text: "اتصال وواتساب";
+    };
+    'lab.h.evidenceSlot': {
+        readonly kind: "title";
+        readonly text: "إثبات التسليم";
+    };
+    'lab.h.locationSlot': {
+        readonly kind: "title";
+        readonly text: "عنوانا من وإلى";
+    };
+    'lab.h.driverJobCard': {
+        readonly kind: "title";
+        readonly text: "مهمة السائق الحالية";
+    };
+    'lab.h.driverApprovalStatus': {
+        readonly kind: "title";
+        readonly text: "حالة اعتماد السائق";
+    };
+    'lab.h.deliveryCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب شاشة التوصيل";
+    };
+    'listing.perUnit': {
+        readonly kind: "badge";
+        readonly text: "/ {unit}";
+    };
+    'listing.from': {
+        readonly kind: "badge";
+        readonly text: "من";
+    };
+    'listing.unavailable': {
+        readonly kind: "badge";
+        readonly text: "غير متوفر مؤقتاً";
+    };
+    'listing.byRequest': {
+        readonly kind: "badge";
+        readonly text: "بالطلب";
+    };
+    'tier.from': {
+        readonly kind: "badge";
+        readonly text: "من";
+    };
+    'tier.to': {
+        readonly kind: "badge";
+        readonly text: "إلى";
+    };
+    'tier.pricePerUnit': {
+        readonly kind: "badge";
+        readonly text: "السعر للعبوة";
+    };
+    'tier.andAbove': {
+        readonly kind: "badge";
+        readonly text: "فما فوق";
+    };
+    'gallery.imageOf': {
+        readonly kind: "screen-reader";
+        readonly text: "صورة {current} من {total}";
+    };
+    'gallery.close': {
+        readonly kind: "screen-reader";
+        readonly text: "أغلق الصور";
+    };
+    'gallery.zoomIn': {
+        readonly kind: "screen-reader";
+        readonly text: "كبّر";
+    };
+    'gallery.zoomOut': {
+        readonly kind: "screen-reader";
+        readonly text: "صغّر";
+    };
+    'gallery.loadFailed': {
+        readonly kind: "error";
+        readonly text: "لم تُحمَّل الصورة.";
+    };
+    'report.title': {
+        readonly kind: "title";
+        readonly text: "أبلغ عن العرض";
+    };
+    'report.details': {
+        readonly kind: "badge";
+        readonly text: "تفاصيل";
+    };
+    'report.detailsOptional': {
+        readonly kind: "help";
+        readonly text: "اختياري";
+    };
+    'report.send': {
+        readonly kind: "button";
+        readonly text: "أرسل البلاغ";
+    };
+    'report.chooseReason': {
+        readonly kind: "error";
+        readonly text: "اختر سبب البلاغ";
+    };
+    'report.sent': {
+        readonly kind: "success";
+        readonly text: "أُرسل البلاغ";
+    };
+    'editor.photos': {
+        readonly kind: "badge";
+        readonly text: "الصور";
+    };
+    'editor.listingName': {
+        readonly kind: "badge";
+        readonly text: "اسم العرض";
+    };
+    'editor.unit': {
+        readonly kind: "badge";
+        readonly text: "العبوة";
+    };
+    'editor.singlePrice': {
+        readonly kind: "badge";
+        readonly text: "سعر واحد";
+    };
+    'editor.tiers': {
+        readonly kind: "badge";
+        readonly text: "شرائح";
+    };
+    'editor.pricePerUnit': {
+        readonly kind: "badge";
+        readonly text: "السعر للعبوة";
+    };
+    'editor.sendReview': {
+        readonly kind: "button";
+        readonly text: "أرسل للمراجعة";
+    };
+    'editor.sendEdit': {
+        readonly kind: "button";
+        readonly text: "أرسل التعديل";
+    };
+    'listing.reviewPending': {
+        readonly kind: "badge";
+        readonly text: "قيد المراجعة";
+    };
+    'listing.approved': {
+        readonly kind: "badge";
+        readonly text: "معتمد";
+    };
+    'listing.rejected': {
+        readonly kind: "badge";
+        readonly text: "مرفوض";
+    };
+    'listing.editPending': {
+        readonly kind: "badge";
+        readonly text: "تعديل قيد المراجعة";
+    };
+    'listing.editRejected': {
+        readonly kind: "badge";
+        readonly text: "رُفض التعديل";
+    };
+    'sr.galleryRegion': {
+        readonly kind: "screen-reader";
+        readonly text: "معرض";
+    };
+    'sr.tierTable': {
+        readonly kind: "screen-reader";
+        readonly text: "شرائح السعر";
+    };
+    'lab.h.listingCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة عرض";
+    };
+    'lab.h.gallery': {
+        readonly kind: "title";
+        readonly text: "صور العرض والعارض";
+    };
+    'lab.h.priceTierTable': {
+        readonly kind: "title";
+        readonly text: "جدول شرائح السعر";
+    };
+    'lab.h.supplierHeader': {
+        readonly kind: "title";
+        readonly text: "رأس صفحة المورد";
+    };
+    'lab.h.reportSheet': {
+        readonly kind: "title";
+        readonly text: "ورقة الإبلاغ";
+    };
+    'lab.h.listingEditor': {
+        readonly kind: "title";
+        readonly text: "نموذج إنشاء عرض";
+    };
+    'lab.h.listingStatusBadge': {
+        readonly kind: "title";
+        readonly text: "شارة حالة العرض";
+    };
+    'lab.h.marketCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب شاشة السوق";
+    };
+    'review.newListing': {
+        readonly kind: "badge";
+        readonly text: "عرض جديد";
+    };
+    'review.editListing': {
+        readonly kind: "badge";
+        readonly text: "تعديل عرض";
+    };
+    'review.newDriver': {
+        readonly kind: "badge";
+        readonly text: "سائق جديد";
+    };
+    'review.report': {
+        readonly kind: "badge";
+        readonly text: "بلاغ";
+    };
+    'review.sinceAgo': {
+        readonly kind: "help";
+        readonly text: "منذ {duration}";
+    };
+    'review.emptyQueue': {
+        readonly kind: "empty";
+        readonly text: "لا شيء ينتظر المراجعة.";
+    };
+    'review.emptyReports': {
+        readonly kind: "empty";
+        readonly text: "لا بلاغات.";
+    };
+    'review.beforeApprove': {
+        readonly kind: "title";
+        readonly text: "بنود التحقق";
+    };
+    'review.firstListing': {
+        readonly kind: "badge";
+        readonly text: "أول عرض";
+    };
+    'review.verificationCall': {
+        readonly kind: "help";
+        readonly text: "أجريت اتصال التحقق مع المورد";
+    };
+    'review.tickAllFirst': {
+        readonly kind: "help";
+        readonly text: "أشّر على كل البنود أولاً.";
+    };
+    'review.decisionReason': {
+        readonly kind: "badge";
+        readonly text: "سبب القرار";
+    };
+    'review.approve': {
+        readonly kind: "button";
+        readonly text: "اعتمد العرض";
+    };
+    'review.reject': {
+        readonly kind: "button";
+        readonly text: "ارفض العرض";
+    };
+    'review.sendRejection': {
+        readonly kind: "button";
+        readonly text: "أرسل الرفض";
+    };
+    'review.approvedToast': {
+        readonly kind: "success";
+        readonly text: "اعتُمد العرض";
+    };
+    'review.rejectedToast': {
+        readonly kind: "success";
+        readonly text: "رُفض العرض";
+    };
+    'review.writeReason': {
+        readonly kind: "error";
+        readonly text: "اكتب سبب القرار.";
+    };
+    'reportItem.one': {
+        readonly kind: "badge";
+        readonly text: "بلاغ";
+    };
+    'reportItem.two': {
+        readonly kind: "badge";
+        readonly text: "بلاغان";
+    };
+    'reportItem.few': {
+        readonly kind: "badge";
+        readonly text: "{count} بلاغات";
+    };
+    'driverReview.approve': {
+        readonly kind: "button";
+        readonly text: "اعتمد السائق";
+    };
+    'driverReview.reject': {
+        readonly kind: "button";
+        readonly text: "ارفض";
+    };
+    'driverReview.approvedToast': {
+        readonly kind: "success";
+        readonly text: "اعتُمد السائق";
+    };
+    'driverReview.attachments': {
+        readonly kind: "title";
+        readonly text: "المرفقات";
+    };
+    'sr.unread': {
+        readonly kind: "screen-reader";
+        readonly text: "غير مقروء";
+    };
+    'sr.reviewItems': {
+        readonly kind: "screen-reader";
+        readonly text: "{count} بنود، أُشّر على {ticked}";
+    };
+    'lab.h.reviewQueueItem': {
+        readonly kind: "title";
+        readonly text: "صف طابور المراجعة";
+    };
+    'lab.h.decisionCard': {
+        readonly kind: "title";
+        readonly text: "ورقة قرار الاعتماد";
+    };
+    'lab.h.driverApprovalCard': {
+        readonly kind: "title";
+        readonly text: "ورقة اعتماد سائق";
+    };
+    'lab.h.reportItem': {
+        readonly kind: "title";
+        readonly text: "صف عرض مبلَّغاً";
+    };
+    'lab.h.reviewCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب شاشة المراجعة";
+    };
+    'ask.title': {
+        readonly kind: "title";
+        readonly text: "Ask Micro";
+    };
+    'ask.askMicro': {
+        readonly kind: "badge";
+        readonly text: "اسأل Micro";
+    };
+    'ask.contextPrefix': {
+        readonly kind: "badge";
+        readonly text: "تسأل عن: {context}";
+    };
+    'ask.you': {
+        readonly kind: "screen-reader";
+        readonly text: "أنت:";
+    };
+    'ask.notSent': {
+        readonly kind: "error";
+        readonly text: "لم يُرسل";
+    };
+    'ask.resend': {
+        readonly kind: "button";
+        readonly text: "أعد الإرسال";
+    };
+    'ask.microPrefix': {
+        readonly kind: "screen-reader";
+        readonly text: "Micro:";
+    };
+    'ask.incomplete': {
+        readonly kind: "error";
+        readonly text: "لم يكتمل الجواب.";
+    };
+    'ask.retry': {
+        readonly kind: "button";
+        readonly text: "أعد المحاولة";
+    };
+    'ask.howCalculated': {
+        readonly kind: "button";
+        readonly text: "كيف حُسبت؟";
+    };
+    'ask.numberSource': {
+        readonly kind: "title";
+        readonly text: "مصدر الرقم";
+    };
+    'ask.fullTable': {
+        readonly kind: "button";
+        readonly text: "الجدول كاملاً";
+    };
+    'ask.gone': {
+        readonly kind: "help";
+        readonly text: "لم يعد موجوداً";
+    };
+    'ask.limitPermission': {
+        readonly kind: "help";
+        readonly text: "هذا خارج صلاحياتك في هذا المشروع.";
+    };
+    'ask.limitData': {
+        readonly kind: "help";
+        readonly text: "لا أملك بيانات كافية لهذا السؤال.";
+    };
+    'ask.recordVoice': {
+        readonly kind: "screen-reader";
+        readonly text: "سجّل صوتاً";
+    };
+    'ask.send': {
+        readonly kind: "screen-reader";
+        readonly text: "أرسل";
+    };
+    'sr.howCalculated': {
+        readonly kind: "screen-reader";
+        readonly text: "كيف حُسبت {label}";
+    };
+    'sr.askAbout': {
+        readonly kind: "screen-reader";
+        readonly text: "اسأل Micro عن {label}";
+    };
+    'lab.h.askPanel': {
+        readonly kind: "title";
+        readonly text: "لوحة المساعد Ask";
+    };
+    'lab.h.askContextChip': {
+        readonly kind: "title";
+        readonly text: "رقاقة سياق السؤال";
+    };
+    'lab.h.askUserMessage': {
+        readonly kind: "title";
+        readonly text: "رسالة المستخدم";
+    };
+    'lab.h.askAnswer': {
+        readonly kind: "title";
+        readonly text: "جواب Micro النصي";
+    };
+    'lab.h.askComputedResult': {
+        readonly kind: "title";
+        readonly text: "رقم محسوب ومصدره";
+    };
+    'lab.h.askInlineTable': {
+        readonly kind: "title";
+        readonly text: "جدول داخل الجواب";
+    };
+    'lab.h.askNavResult': {
+        readonly kind: "title";
+        readonly text: "كائن من الجواب";
+    };
+    'lab.h.askDraftCard': {
+        readonly kind: "title";
+        readonly text: "مسودة من الجواب";
+    };
+    'lab.h.askLimit': {
+        readonly kind: "title";
+        readonly text: "جواب خارج الصلاحيات";
+    };
+    'lab.h.askThinking': {
+        readonly kind: "title";
+        readonly text: "انتظار الجواب";
+    };
+    'lab.h.askAboutThis': {
+        readonly kind: "title";
+        readonly text: "زر اسأل عنه";
+    };
+    'lab.h.askCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب محادثة Ask";
+    };
+    'chart.table': {
+        readonly kind: "screen-reader";
+        readonly text: "جدول";
+    };
+    'chart.chart': {
+        readonly kind: "screen-reader";
+        readonly text: "رسم";
+    };
+    'chart.empty': {
+        readonly kind: "empty";
+        readonly text: "لا بيانات لهذه الفترة.";
+    };
+    'chart.thisWeek': {
+        readonly kind: "badge";
+        readonly text: "هذا الأسبوع";
+    };
+    'chart.lastWeek': {
+        readonly kind: "badge";
+        readonly text: "الأسبوع الماضي";
+    };
+    'chart.other': {
+        readonly kind: "badge";
+        readonly text: "غير ذلك";
+    };
+    'lab.h.chartBars': {
+        readonly kind: "title";
+        readonly text: "أعمدة مبيعات الأيام";
+    };
+    'lab.h.chartNegative': {
+        readonly kind: "title";
+        readonly text: "أعمدة فيها خسارة";
+    };
+    'lab.h.chartRanked': {
+        readonly kind: "title";
+        readonly text: "أعلى العملاء بالقيمة";
+    };
+    'lab.h.chartLine': {
+        readonly kind: "title";
+        readonly text: "خط تغير سنة";
+    };
+    'lab.h.chartStacked': {
+        readonly kind: "title";
+        readonly text: "توزيع الخارج بالنسب";
+    };
+    'lab.h.chartCompare': {
+        readonly kind: "title";
+        readonly text: "مقارنة أسبوعين";
+    };
+    'lab.h.chartsCompose': {
+        readonly kind: "title";
+        readonly text: "تركيب الرسوم";
+    };
+    'button.saveMovement': {
+        readonly kind: "button";
+        readonly text: "احفظ الحركة";
+    };
+    'button.acceptQuote': {
+        readonly kind: "button";
+        readonly text: "اقبل العرض";
+    };
+    'button.recordPayment': {
+        readonly kind: "button";
+        readonly text: "سجّل دفعة";
+    };
+    'button.deleteMovement': {
+        readonly kind: "button";
+        readonly text: "احذف الحركة";
+    };
+    'button.back': {
+        readonly kind: "button";
+        readonly text: "رجوع";
+    };
+    'button.retry': {
+        readonly kind: "button";
+        readonly text: "أعد المحاولة";
+    };
+    'button.recordMovement': {
+        readonly kind: "button";
+        readonly text: "سجّل حركة";
+    };
+    'button.reviewAndSave': {
+        readonly kind: "button";
+        readonly text: "راجع واحفظ";
+    };
+    'button.all': {
+        readonly kind: "button";
+        readonly text: "الكل";
+    };
+    'button.undo': {
+        readonly kind: "button";
+        readonly text: "تراجع";
+    };
+    'button.howCalculated': {
+        readonly kind: "button";
+        readonly text: "كيف حُسبت؟";
+    };
+    'button.hideAmounts': {
+        readonly kind: "button";
+        readonly text: "إخفاء المبالغ";
+    };
+    'button.showAmounts': {
+        readonly kind: "button";
+        readonly text: "إظهار المبالغ";
+    };
+    'metric.sourceFrom': {
+        readonly kind: "button";
+        readonly text: "من {counted}";
+    };
+    'title.today': {
+        readonly kind: "title";
+        readonly text: "اليوم";
+    };
+    'title.needsYou': {
+        readonly kind: "title";
+        readonly text: "يحتاجك";
+    };
+    'title.now': {
+        readonly kind: "title";
+        readonly text: "الآن";
+    };
+    'confirm.deleteTitle': {
+        readonly kind: "title";
+        readonly text: "تحذف حركة {amount}؟";
+    };
+    'badge.done': {
+        readonly kind: "badge";
+        readonly text: "تمّ";
+    };
+    'badge.waiting': {
+        readonly kind: "badge";
+        readonly text: "ينتظر";
+    };
+    'badge.problem': {
+        readonly kind: "badge";
+        readonly text: "مشكلة";
+    };
+    'badge.info': {
+        readonly kind: "badge";
+        readonly text: "معلومة";
+    };
+    'badge.neutral': {
+        readonly kind: "badge";
+        readonly text: "محايد";
+    };
+    'badge.cancelled': {
+        readonly kind: "badge";
+        readonly text: "ملغى";
+    };
+    'nav.today': {
+        readonly kind: "badge";
+        readonly text: "اليوم";
+    };
+    'nav.todayLong': {
+        readonly kind: "badge";
+        readonly text: "مشروع اليوم";
+    };
+    'nav.agenda': {
+        readonly kind: "badge";
+        readonly text: "الأجندة";
+    };
+    'nav.finance': {
+        readonly kind: "badge";
+        readonly text: "المالية";
+    };
+    'nav.orders': {
+        readonly kind: "badge";
+        readonly text: "الطلبات";
+    };
+    'nav.delivery': {
+        readonly kind: "badge";
+        readonly text: "التوصيل";
+    };
+    'nav.market': {
+        readonly kind: "badge";
+        readonly text: "السوق";
+    };
+    'role.owner': {
+        readonly kind: "badge";
+        readonly text: "مالك";
+    };
+    'role.supplier': {
+        readonly kind: "badge";
+        readonly text: "مورد";
+    };
+    'role.driver': {
+        readonly kind: "badge";
+        readonly text: "سائق";
+    };
+    'role.reviewer': {
+        readonly kind: "badge";
+        readonly text: "مراجع";
+    };
+    'role.admin': {
+        readonly kind: "badge";
+        readonly text: "مسؤول";
+    };
+    'movement.in': {
+        readonly kind: "badge";
+        readonly text: "داخل";
+    };
+    'movement.counted': {
+        readonly kind: "badge";
+        readonly text: "32 حركة";
+    };
+    'row.sampleTitle': {
+        readonly kind: "title";
+        readonly text: "سلمى الحوراني";
+    };
+    'sheet.sampleTitle': {
+        readonly kind: "title";
+        readonly text: "تفاصيل الحركة";
+    };
+    'sheet.projectTitle': {
+        readonly kind: "title";
+        readonly text: "تبديل المشروع";
+    };
+    'sheet.notificationsTitle': {
+        readonly kind: "title";
+        readonly text: "الإشعارات";
+    };
+    'sheet.askTitle': {
+        readonly kind: "title";
+        readonly text: "Ask Micro";
+    };
+    'sheet.sourceTitle': {
+        readonly kind: "title";
+        readonly text: "مصدر الرقم";
+    };
+    'sheet.allTitle': {
+        readonly kind: "title";
+        readonly text: "كل ما يحتاجك";
+    };
+    'sheet.objectTitle': {
+        readonly kind: "title";
+        readonly text: "طلب 1175";
+    };
+    'notif.quoteArrived': {
+        readonly kind: "help";
+        readonly text: "وصل عرض سعر من عمر الزعبي";
+    };
+    'notif.orderToday': {
+        readonly kind: "help";
+        readonly text: "طلب 1203 موعده اليوم 4:00 م";
+    };
+    'notif.paymentIn': {
+        readonly kind: "help";
+        readonly text: "دفعة 30 د من رنا العبادي";
+    };
+    'notif.timeAgo': {
+        readonly kind: "help";
+        readonly text: "قبل 5 دقائق";
+    };
+    'notif.timeToday': {
+        readonly kind: "badge";
+        readonly text: "9:15 ص";
+    };
+    'notif.timeYesterday': {
+        readonly kind: "help";
+        readonly text: "أمس 5:10 م";
+    };
+    'ask.placeholder': {
+        readonly kind: "placeholder";
+        readonly text: "اسأل Micro";
+    };
+    'ask.amountLabel': {
+        readonly kind: "badge";
+        readonly text: "السؤال";
+    };
+    'button.askSend': {
+        readonly kind: "button";
+        readonly text: "أرسل";
+    };
+    'kv.orderTitle': {
+        readonly kind: "badge";
+        readonly text: "الطلب";
+    };
+    'kv.customer': {
+        readonly kind: "badge";
+        readonly text: "العميل";
+    };
+    'kv.delivery': {
+        readonly kind: "badge";
+        readonly text: "التسليم";
+    };
+    'kv.phone': {
+        readonly kind: "badge";
+        readonly text: "الهاتف";
+    };
+    'title.sheet': {
+        readonly kind: "title";
+        readonly text: "الورقة";
+    };
+    'confirm.sampleTitle': {
+        readonly kind: "title";
+        readonly text: "حذف الحركة؟";
+    };
+    'confirm.sampleSentence': {
+        readonly kind: "help";
+        readonly text: "ستُحذف الحركة نهائياً ولا يمكن التراجع عنها.";
+    };
+    'title.confirmSheet': {
+        readonly kind: "title";
+        readonly text: "ورقة التأكيد";
+    };
+    'row.sampleCaption': {
+        readonly kind: "help";
+        readonly text: "فستان سهرة · درج الكاش";
+    };
+    'row.sampleTime': {
+        readonly kind: "help";
+        readonly text: "10:24 ص";
+    };
+    'title.objectRow': {
+        readonly kind: "title";
+        readonly text: "الصف";
+    };
+    'state.oneLine': {
+        readonly kind: "badge";
+        readonly text: "سطر واحد";
+    };
+    'state.withBadge': {
+        readonly kind: "badge";
+        readonly text: "مع شارة";
+    };
+    'title.objectCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة الكائن";
+    };
+    'state.withButton': {
+        readonly kind: "badge";
+        readonly text: "مع زر";
+    };
+    'title.metric': {
+        readonly kind: "title";
+        readonly text: "المقياس";
+    };
+    'title.metricSmall': {
+        readonly kind: "title";
+        readonly text: "المقياس الصغير";
+    };
+    'movement.out': {
+        readonly kind: "badge";
+        readonly text: "خارج";
+    };
+    'movement.transfer': {
+        readonly kind: "badge";
+        readonly text: "تحويل";
+    };
+    'saveState.draft': {
+        readonly kind: "badge";
+        readonly text: "مسودة · لم تُحفظ";
+    };
+    'saveState.sending': {
+        readonly kind: "badge";
+        readonly text: "يُرسل…";
+    };
+    'saveState.saved': {
+        readonly kind: "badge";
+        readonly text: "حُفظ";
+    };
+    'saveState.failed': {
+        readonly kind: "error";
+        readonly text: "لم يُحفظ — أعد المحاولة";
+    };
+    'toast.movementSaved': {
+        readonly kind: "success";
+        readonly text: "حُفظت الحركة";
+    };
+    'toast.movementDeleted': {
+        readonly kind: "success";
+        readonly text: "حُذفت الحركة";
+    };
+    'toast.quoteAccepted': {
+        readonly kind: "success";
+        readonly text: "قُبل العرض";
+    };
+    'toast.questionSent': {
+        readonly kind: "success";
+        readonly text: "أُرسل السؤال";
+    };
+    'toast.opens': {
+        readonly kind: "help";
+        readonly text: "تفتح {area}";
+    };
+    'banner.offline': {
+        readonly kind: "error";
+        readonly text: "الاتصال انقطع";
+    };
+    'banner.backOnline': {
+        readonly kind: "help";
+        readonly text: "عاد الاتصال، لديك مسودة";
+    };
+    'banner.permission': {
+        readonly kind: "help";
+        readonly text: "هذا خارج صلاحياتك في هذا المشروع";
+    };
+    'errorState.loadFailed': {
+        readonly kind: "error";
+        readonly text: "تعذّر تحميل البيانات. أعد المحاولة.";
+    };
+    'errorState.updatedAt': {
+        readonly kind: "help";
+        readonly text: "آخر تحديث {time}";
+    };
+    'empty.movements': {
+        readonly kind: "empty";
+        readonly text: "حركات اليوم تظهر هنا.";
+    };
+    'empty.oneButtonMax': {
+        readonly kind: "help";
+        readonly text: "زر واحد كحد أقصى، حين يغيب زر الإنشاء";
+    };
+    'confirm.deleteResult': {
+        readonly kind: "help";
+        readonly text: "لن تظهر في رصيد {fund}.";
+    };
+    'metric.deltaHigher': {
+        readonly kind: "help";
+        readonly text: "{percent} أعلى من أمس";
+    };
+    'metric.deltaLower': {
+        readonly kind: "help";
+        readonly text: "{percent} أقل من أمس";
+    };
+    'metric.deltaHigherHidden': {
+        readonly kind: "help";
+        readonly text: "أعلى من أمس";
+    };
+    'metric.deltaLowerHidden': {
+        readonly kind: "help";
+        readonly text: "أقل من أمس";
+    };
+    'money.unit': {
+        readonly kind: "badge";
+        readonly text: "د";
+    };
+    'money.forYou': {
+        readonly kind: "badge";
+        readonly text: "لك";
+    };
+    'money.againstYou': {
+        readonly kind: "badge";
+        readonly text: "عليك";
+    };
+    'money.missing': {
+        readonly kind: "badge";
+        readonly text: "—";
+    };
+    'money.hiddenGlyph': {
+        readonly kind: "badge";
+        readonly text: "••••";
+    };
+    'lab.stamp': {
+        readonly kind: "title";
+        readonly text: "مختبر الدفعة الأولى";
+    };
+    'lab.h.amountToggle': {
+        readonly kind: "title";
+        readonly text: "زر إخفاء الأرقام";
+    };
+    'lab.h.money': {
+        readonly kind: "title";
+        readonly text: "شكل المبلغ ووحدته";
+    };
+    'lab.h.statusBadge': {
+        readonly kind: "title";
+        readonly text: "شارة الحالة";
+    };
+    'lab.h.entityMark': {
+        readonly kind: "title";
+        readonly text: "حرف الطرف";
+    };
+    'lab.h.button': {
+        readonly kind: "title";
+        readonly text: "الأزرار";
+    };
+    'lab.h.iconButton': {
+        readonly kind: "title";
+        readonly text: "زر أيقونة دائري";
+    };
+    'lab.h.textField': {
+        readonly kind: "title";
+        readonly text: "حقل سطر واحد";
+    };
+    'lab.h.segmentedControl': {
+        readonly kind: "title";
+        readonly text: "مبدّل خيارات قليلة";
+    };
+    'lab.h.filterChips': {
+        readonly kind: "title";
+        readonly text: "رقائق تصفية القائمة";
+    };
+    'lab.h.surface': {
+        readonly kind: "title";
+        readonly text: "بطاقة محتوى بيضاء";
+    };
+    'lab.h.well': {
+        readonly kind: "title";
+        readonly text: "معلومات داخل بطاقة";
+    };
+    'lab.h.section': {
+        readonly kind: "title";
+        readonly text: "عنوان قسم وقائمته";
+    };
+    'lab.h.hero': {
+        readonly kind: "title";
+        readonly text: "البطاقة الرئيسية";
+    };
+    'lab.h.sheet': {
+        readonly kind: "title";
+        readonly text: "الورقة المنبثقة";
+    };
+    'lab.h.actionBar': {
+        readonly kind: "title";
+        readonly text: "شريط الحفظ السفلي";
+    };
+    'lab.h.skeleton': {
+        readonly kind: "title";
+        readonly text: "هيكل التحميل";
+    };
+    'lab.h.emptyState': {
+        readonly kind: "title";
+        readonly text: "شكل القائمة الفارغة";
+    };
+    'lab.h.inlineBanner': {
+        readonly kind: "title";
+        readonly text: "شريط معلومة علوي";
+    };
+    'lab.h.toast': {
+        readonly kind: "title";
+        readonly text: "رسالة نجاح سريعة";
+    };
+    'lab.h.saveState': {
+        readonly kind: "title";
+        readonly text: "حالة الحفظ";
+    };
+    'lab.h.pageHeader': {
+        readonly kind: "title";
+        readonly text: "العنوان وزر الإنشاء";
+    };
+    'lab.h.tabBar': {
+        readonly kind: "title";
+        readonly text: "تبويبات أسفل الشاشة";
+    };
+    'lab.h.contextBar': {
+        readonly kind: "title";
+        readonly text: "الشريط العلوي الثابت";
+    };
+    'lab.h.projectSwitcher': {
+        readonly kind: "title";
+        readonly text: "مبدّل المشروع والدور";
+    };
+    'lab.h.notificationsButton': {
+        readonly kind: "title";
+        readonly text: "جرس الإشعارات";
+    };
+    'lab.h.askButton': {
+        readonly kind: "title";
+        readonly text: "زر المساعد Micro";
+    };
+    'lab.h.confirmSheet': {
+        readonly kind: "title";
+        readonly text: "ورقة تأكيد الحذف";
+    };
+    'lab.h.objectRow': {
+        readonly kind: "title";
+        readonly text: "صف في قائمة";
+    };
+    'lab.h.objectCard': {
+        readonly kind: "title";
+        readonly text: "بطاقة كائن موسّعة";
+    };
+    'lab.h.metric': {
+        readonly kind: "title";
+        readonly text: "الرقم البطل";
+    };
+    'lab.h.metricSmall': {
+        readonly kind: "title";
+        readonly text: "رقم مصغّر بعنوانه";
+    };
+    'lab.h.tile': {
+        readonly kind: "title";
+        readonly text: "بلاطات اليوم الأربع";
+    };
+    'lab.fontScale': {
+        readonly kind: "badge";
+        readonly text: "حجم الخط";
+    };
+    'lab.scale100': {
+        readonly kind: "button";
+        readonly text: "100%";
+    };
+    'lab.scale200': {
+        readonly kind: "button";
+        readonly text: "200%";
+    };
+    'title.money': {
+        readonly kind: "title";
+        readonly text: "المبلغ";
+    };
+    'title.amountToggle': {
+        readonly kind: "title";
+        readonly text: "إخفاء المبالغ وإظهارها";
+    };
+    'title.statusBadge': {
+        readonly kind: "title";
+        readonly text: "شارة الحالة";
+    };
+    'state.tones': {
+        readonly kind: "badge";
+        readonly text: "النغمات";
+    };
+    'title.entityMark': {
+        readonly kind: "title";
+        readonly text: "علامة الكيان";
+    };
+    'title.iconButton': {
+        readonly kind: "title";
+        readonly text: "زر الأيقونة";
+    };
+    'title.textField': {
+        readonly kind: "title";
+        readonly text: "حقل النص";
+    };
+    'field.supplier': {
+        readonly kind: "badge";
+        readonly text: "اسم المورد";
+    };
+    'field.amount': {
+        readonly kind: "badge";
+        readonly text: "المبلغ";
+    };
+    'field.optional': {
+        readonly kind: "badge";
+        readonly text: "اختياري";
+    };
+    'placeholder.amount': {
+        readonly kind: "placeholder";
+        readonly text: "0.000";
+    };
+    'help.supplierName': {
+        readonly kind: "help";
+        readonly text: "اكتب الاسم كما في السجل الرسمي";
+    };
+    'error.phoneFormat': {
+        readonly kind: "error";
+        readonly text: "اكتب الرقم كاملاً بالأرقام الغربية";
+    };
+    'state.initial': {
+        readonly kind: "badge";
+        readonly text: "الحرف الأول";
+    };
+    'state.fundTypes': {
+        readonly kind: "badge";
+        readonly text: "أنواع الصناديق";
+    };
+    'state.badged': {
+        readonly kind: "badge";
+        readonly text: "بشارة تحقق";
+    };
+    'title.button': {
+        readonly kind: "title";
+        readonly text: "الزر";
+    };
+    'variant.primary': {
+        readonly kind: "badge";
+        readonly text: "أساسي";
+    };
+    'variant.secondary': {
+        readonly kind: "badge";
+        readonly text: "ثانوي";
+    };
+    'variant.text': {
+        readonly kind: "badge";
+        readonly text: "نصي";
+    };
+    'variant.danger': {
+        readonly kind: "badge";
+        readonly text: "خطر";
+    };
+    'state.withIcon': {
+        readonly kind: "badge";
+        readonly text: "بأيقونة";
+    };
+    'title.segmentedControl': {
+        readonly kind: "title";
+        readonly text: "المبدّل المقسّم";
+    };
+    'state.twoSegments': {
+        readonly kind: "badge";
+        readonly text: "جزآن";
+    };
+    'state.threeSegments': {
+        readonly kind: "badge";
+        readonly text: "ثلاثة أجزاء";
+    };
+    'state.fourSegments': {
+        readonly kind: "badge";
+        readonly text: "أربعة أجزاء";
+    };
+    'title.filterChips': {
+        readonly kind: "title";
+        readonly text: "رقائق التصفية";
+    };
+    'title.surface': {
+        readonly kind: "title";
+        readonly text: "السطح";
+    };
+    'state.withHeader': {
+        readonly kind: "badge";
+        readonly text: "برأس";
+    };
+    'state.list': {
+        readonly kind: "badge";
+        readonly text: "قائمة";
+    };
+    'title.well': {
+        readonly kind: "title";
+        readonly text: "الحاوي الغائر";
+    };
+    'title.section': {
+        readonly kind: "title";
+        readonly text: "القسم";
+    };
+    'state.withCount': {
+        readonly kind: "badge";
+        readonly text: "مع عدد";
+    };
+    'state.emptySection': {
+        readonly kind: "badge";
+        readonly text: "فارغ";
+    };
+    'title.tile': {
+        readonly kind: "title";
+        readonly text: "البلاطات";
+    };
+    'state.grid4': {
+        readonly kind: "badge";
+        readonly text: "شبكة 2×2";
+    };
+    'title.hero': {
+        readonly kind: "title";
+        readonly text: "السطح البطل";
+    };
+    'title.actionBar': {
+        readonly kind: "title";
+        readonly text: "شريط الإجراءات";
+    };
+    'state.withSecondary': {
+        readonly kind: "badge";
+        readonly text: "مع ثانوي";
+    };
+    'state.primaryOnly': {
+        readonly kind: "badge";
+        readonly text: "أساسي وحده";
+    };
+    'state.contentMore': {
+        readonly kind: "badge";
+        readonly text: "بقي محتوى";
+    };
+    'state.scrolledToEnd': {
+        readonly kind: "badge";
+        readonly text: "انتهى التمرير";
+    };
+    'title.askButton': {
+        readonly kind: "title";
+        readonly text: "زر Ask";
+    };
+    'state.unread': {
+        readonly kind: "badge";
+        readonly text: "غير مقروء";
+    };
+    'title.notificationsButton': {
+        readonly kind: "title";
+        readonly text: "زر الإشعارات";
+    };
+    'state.noUnread': {
+        readonly kind: "badge";
+        readonly text: "بلا نقطة";
+    };
+    'title.projectSwitcher': {
+        readonly kind: "title";
+        readonly text: "مبدّل المشروع";
+    };
+    'state.singleRole': {
+        readonly kind: "badge";
+        readonly text: "دور واحد";
+    };
+    'title.contextBar': {
+        readonly kind: "title";
+        readonly text: "شريط السياق";
+    };
+    'state.mainScreens': {
+        readonly kind: "badge";
+        readonly text: "الشاشات الرئيسية";
+    };
+    'state.subScreens': {
+        readonly kind: "badge";
+        readonly text: "الشاشات الفرعية";
+    };
+    'sr.switchProject': {
+        readonly kind: "screen-reader";
+        readonly text: "تبديل المشروع";
+    };
+    'title.tabBar': {
+        readonly kind: "title";
+        readonly text: "شريط التبويبات";
+    };
+    'title.pageHeader': {
+        readonly kind: "title";
+        readonly text: "رأس الصفحة";
+    };
+    'title.movements': {
+        readonly kind: "title";
+        readonly text: "الحركات";
+    };
+    'button.new': {
+        readonly kind: "button";
+        readonly text: "جديد";
+    };
+    'state.scrolled': {
+        readonly kind: "badge";
+        readonly text: "عند التمرير";
+    };
+    'title.saveState': {
+        readonly kind: "title";
+        readonly text: "حالة الحفظ";
+    };
+    'title.toast': {
+        readonly kind: "title";
+        readonly text: "الإشعار العابر";
+    };
+    'title.inlineBanner': {
+        readonly kind: "title";
+        readonly text: "الشريط المثبت";
+    };
+    'title.emptyState': {
+        readonly kind: "title";
+        readonly text: "حالة الفراغ";
+    };
+    'title.skeleton': {
+        readonly kind: "title";
+        readonly text: "هيكل التحميل";
+    };
+    'lab.index': {
+        readonly kind: "help";
+        readonly text: "فهرس المكوّنات";
+    };
+    'state.defaultToast': {
+        readonly kind: "badge";
+        readonly text: "ثلاث ثوانٍ";
+    };
+    'state.draft': {
+        readonly kind: "badge";
+        readonly text: "مسودة";
+    };
+    'state.sending': {
+        readonly kind: "badge";
+        readonly text: "يُرسل";
+    };
+    'state.fiveTabs': {
+        readonly kind: "badge";
+        readonly text: "خمسة تبويبات";
+    };
+    'state.withCents': {
+        readonly kind: "badge";
+        readonly text: "مع فلوس";
+    };
+    'state.withSparkline': {
+        readonly kind: "badge";
+        readonly text: "بخط صغير";
+    };
+    'state.longNumber': {
+        readonly kind: "badge";
+        readonly text: "رقم طويل";
+    };
+    'state.multiSelect': {
+        readonly kind: "badge";
+        readonly text: "تحديد متعدد";
+    };
+    'state.scrollRow': {
+        readonly kind: "badge";
+        readonly text: "قابل للتمرير";
+    };
+    'state.driver': {
+        readonly kind: "badge";
+        readonly text: "وضع السائق";
+    };
+    'state.default': {
+        readonly kind: "badge";
+        readonly text: "افتراضي";
+    };
+    'state.debt': {
+        readonly kind: "badge";
+        readonly text: "دين";
+    };
+    'state.hidden': {
+        readonly kind: "badge";
+        readonly text: "مخفي";
+    };
+    'state.missing': {
+        readonly kind: "badge";
+        readonly text: "مفقود";
+    };
+    'state.loading': {
+        readonly kind: "badge";
+        readonly text: "تحميل";
+    };
+    'state.empty': {
+        readonly kind: "badge";
+        readonly text: "فراغ";
+    };
+    'state.normal': {
+        readonly kind: "badge";
+        readonly text: "عادي";
+    };
+    'state.disabled': {
+        readonly kind: "badge";
+        readonly text: "معطّل";
+    };
+    'state.longest': {
+        readonly kind: "badge";
+        readonly text: "أطول قيمة";
+    };
+    'state.sizes': {
+        readonly kind: "badge";
+        readonly text: "المقاسات";
+    };
+    'state.tabular': {
+        readonly kind: "badge";
+        readonly text: "أرقام جدولية";
+    };
+    'money.ariaMinus': {
+        readonly kind: "screen-reader";
+        readonly text: "سالب";
+    };
+    'money.ariaDinar': {
+        readonly kind: "screen-reader";
+        readonly text: "دينار";
+    };
+    'money.ariaFils': {
+        readonly kind: "screen-reader";
+        readonly text: "فلس";
+    };
+    'money.ariaAnd': {
+        readonly kind: "screen-reader";
+        readonly text: "و";
+    };
+    'money.ariaHidden': {
+        readonly kind: "screen-reader";
+        readonly text: "المبلغ مخفي";
+    };
+    'money.ariaMissing': {
+        readonly kind: "screen-reader";
+        readonly text: "القيمة غير متوفرة";
+    };
+    'sr.notifications': {
+        readonly kind: "screen-reader";
+        readonly text: "الإشعارات";
+    };
+    'sr.notificationsCount': {
+        readonly kind: "screen-reader";
+        readonly text: "الإشعارات، {counted}";
+    };
+    'sr.askUnread': {
+        readonly kind: "screen-reader";
+        readonly text: "Ask Micro، جواب غير مقروء";
+    };
+    'sr.financeNeedsYou': {
+        readonly kind: "screen-reader";
+        readonly text: "المالية، يحتاجك";
+    };
+    'sr.askThinking': {
+        readonly kind: "screen-reader";
+        readonly text: "يعمل Micro على الجواب";
+    };
+    'sr.askAnswered': {
+        readonly kind: "screen-reader";
+        readonly text: "وصل الجواب";
+    };
+    'sr.quoteArrived': {
+        readonly kind: "screen-reader";
+        readonly text: "وصل عرض سعر من {name}";
+    };
+    'sr.searchResults': {
+        readonly kind: "screen-reader";
+        readonly text: "{counted}";
+    };
+    'sr.ask': {
+        readonly kind: "screen-reader";
+        readonly text: "Ask Micro";
+    };
+    'sr.close': {
+        readonly kind: "screen-reader";
+        readonly text: "إغلاق";
+    };
+    'sr.back': {
+        readonly kind: "screen-reader";
+        readonly text: "رجوع";
+    };
+    'sr.more': {
+        readonly kind: "screen-reader";
+        readonly text: "المزيد";
+    };
+    'sr.search': {
+        readonly kind: "screen-reader";
+        readonly text: "بحث";
+    };
+    'sr.clear': {
+        readonly kind: "screen-reader";
+        readonly text: "مسح";
+    };
+    'sr.saveSaved': {
+        readonly kind: "screen-reader";
+        readonly text: "حُفظت الحركة";
+    };
+    'sr.saveFailed': {
+        readonly kind: "error";
+        readonly text: "لم تُحفظ الحركة. الاتصال انقطع.";
+    };
+    'placeholder.phone': {
+        readonly kind: "placeholder";
+        readonly text: "07X XXX XXXX";
+    };
+    'day.0': {
+        readonly kind: "badge";
+        readonly text: "أحد";
+    };
+    'day.1': {
+        readonly kind: "badge";
+        readonly text: "اثنين";
+    };
+    'day.2': {
+        readonly kind: "badge";
+        readonly text: "ثلاثاء";
+    };
+    'day.3': {
+        readonly kind: "badge";
+        readonly text: "أربعاء";
+    };
+    'day.4': {
+        readonly kind: "badge";
+        readonly text: "خميس";
+    };
+    'day.5': {
+        readonly kind: "badge";
+        readonly text: "جمعة";
+    };
+    'day.6': {
+        readonly kind: "badge";
+        readonly text: "سبت";
+    };
+    'month.1': {
+        readonly kind: "screen-reader";
+        readonly text: "كانون الثاني";
+    };
+    'month.2': {
+        readonly kind: "screen-reader";
+        readonly text: "شباط";
+    };
+    'month.3': {
+        readonly kind: "screen-reader";
+        readonly text: "آذار";
+    };
+    'month.4': {
+        readonly kind: "screen-reader";
+        readonly text: "نيسان";
+    };
+    'month.5': {
+        readonly kind: "screen-reader";
+        readonly text: "أيار";
+    };
+    'month.6': {
+        readonly kind: "screen-reader";
+        readonly text: "حزيران";
+    };
+    'month.7': {
+        readonly kind: "screen-reader";
+        readonly text: "تموز";
+    };
+    'month.8': {
+        readonly kind: "screen-reader";
+        readonly text: "آب";
+    };
+    'month.9': {
+        readonly kind: "screen-reader";
+        readonly text: "أيلول";
+    };
+    'month.10': {
+        readonly kind: "screen-reader";
+        readonly text: "تشرين الأول";
+    };
+    'month.11': {
+        readonly kind: "screen-reader";
+        readonly text: "تشرين الثاني";
+    };
+    'month.12': {
+        readonly kind: "screen-reader";
+        readonly text: "كانون الأول";
+    };
+    'order.draft': {
+        readonly kind: "badge";
+        readonly text: "مسودة";
+    };
+    'order.tentative': {
+        readonly kind: "badge";
+        readonly text: "اتفاق مبدئي";
+    };
+    'order.confirmed': {
+        readonly kind: "badge";
+        readonly text: "مؤكد";
+    };
+    'order.inProgress': {
+        readonly kind: "badge";
+        readonly text: "قيد التنفيذ";
+    };
+    'order.ready': {
+        readonly kind: "badge";
+        readonly text: "جاهز";
+    };
+    'order.delivered': {
+        readonly kind: "badge";
+        readonly text: "تم التسليم";
+    };
+    'order.settled': {
+        readonly kind: "badge";
+        readonly text: "تمت التسوية";
+    };
+    'order.deferred': {
+        readonly kind: "badge";
+        readonly text: "مؤجل";
+    };
+    'order.cancelled': {
+        readonly kind: "badge";
+        readonly text: "ملغى";
+    };
+    'order.needsReview': {
+        readonly kind: "badge";
+        readonly text: "يحتاج مراجعة";
+    };
+    'next.draft': {
+        readonly kind: "button";
+        readonly text: "أضف السعر والموعد";
+    };
+    'next.tentative': {
+        readonly kind: "button";
+        readonly text: "ابدأ التنفيذ";
+    };
+    'next.confirmed': {
+        readonly kind: "button";
+        readonly text: "ابدأ التنفيذ";
+    };
+    'next.inProgress': {
+        readonly kind: "button";
+        readonly text: "أكمل التنفيذ";
+    };
+    'next.ready': {
+        readonly kind: "button";
+        readonly text: "سجّل التسليم";
+    };
+    'next.delivered': {
+        readonly kind: "button";
+        readonly text: "راجع التحصيل والنتيجة";
+    };
+    'next.settled': {
+        readonly kind: "button";
+        readonly text: "راجع نتيجة الطلب";
+    };
+    'next.deferred': {
+        readonly kind: "button";
+        readonly text: "راجع سبب التأجيل";
+    };
+    'next.cancelled': {
+        readonly kind: "button";
+        readonly text: "راجع تسوية الطلب";
+    };
+    'next.needsReview': {
+        readonly kind: "button";
+        readonly text: "راجع الطلب";
+    };
+    'avail.available': {
+        readonly kind: "badge";
+        readonly text: "متوفر";
+    };
+    'avail.onRequest': {
+        readonly kind: "badge";
+        readonly text: "بالطلب";
+    };
+    'avail.unavailable': {
+        readonly kind: "badge";
+        readonly text: "غير متوفر مؤقتاً";
+    };
+    'report.misleading': {
+        readonly kind: "badge";
+        readonly text: "معلومات مضللة";
+    };
+    'report.offTopic': {
+        readonly kind: "badge";
+        readonly text: "خارج النطاق المسموح";
+    };
+    'report.spam': {
+        readonly kind: "badge";
+        readonly text: "إعلان مزعج";
+    };
+    'report.contact': {
+        readonly kind: "badge";
+        readonly text: "مشكلة في التواصل";
+    };
+    'report.other': {
+        readonly kind: "badge";
+        readonly text: "سبب آخر";
+    };
+    'report.writeReason': {
+        readonly kind: "badge";
+        readonly text: "اكتب السبب";
+    };
+    'checkbox.tickThis': {
+        readonly kind: "help";
+        readonly text: "أشّر على هذا البند.";
+    };
+    'radio.choose': {
+        readonly kind: "help";
+        readonly text: "اختر {label}.";
+    };
+    'lab.h.radio': {
+        readonly kind: "title";
+        readonly text: "اختيار من قائمة";
+    };
+    'lab.tools': {
+        readonly kind: "screen-reader";
+        readonly text: "أدوات المختبر";
+    };
+    'lab.toolsTitle': {
+        readonly kind: "title";
+        readonly text: "أدوات المختبر";
+    };
+    'lab.h.toggle': {
+        readonly kind: "title";
+        readonly text: "إعداد يعمل فوراً";
+    };
+    'title.toggle': {
+        readonly kind: "title";
+        readonly text: "المفتاح";
+    };
+    'title.radio': {
+        readonly kind: "title";
+        readonly text: "مجموعة الراديو";
+    };
+    'sr.clearSearch': {
+        readonly kind: "screen-reader";
+        readonly text: "امسح البحث";
+    };
+    'search.in': {
+        readonly kind: "placeholder";
+        readonly text: "ابحث في {area}";
+    };
+    'lab.h.searchField': {
+        readonly kind: "title";
+        readonly text: "بحث داخل قسم";
+    };
+    'lab.h.textArea': {
+        readonly kind: "title";
+        readonly text: "نص متعدد الأسطر";
+    };
+    'lab.h.amountField': {
+        readonly kind: "title";
+        readonly text: "حقل المبالغ";
+    };
+    'title.amountField': {
+        readonly kind: "title";
+        readonly text: "حقل المبلغ";
+    };
+    'title.textArea': {
+        readonly kind: "title";
+        readonly text: "حقل الملاحظة";
+    };
+    'title.searchField': {
+        readonly kind: "title";
+        readonly text: "حقل البحث";
+    };
+    'lab.h.checkbox': {
+        readonly kind: "title";
+        readonly text: "بنود تُشَرّ مستقلة";
+    };
+    'state.errorRow': {
+        readonly kind: "badge";
+        readonly text: "حالة الخطأ";
+    };
+    'title.checkbox': {
         readonly kind: "title";
         readonly text: "مربع الاختيار";
     };

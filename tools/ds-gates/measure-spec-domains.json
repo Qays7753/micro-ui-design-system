@@ -1,0 +1,5 @@
+{
+  "_comment": "ds-measure spec for the seven domains (plan B, stage 5 — agent-2's own file, PLAN-B 'your own files'). tools/ds-gates/measure-spec.json links it through its existing views mechanism: the catalog view gains a 'domains-extends' pointer entry so the gate merges these checks into the default specimen list (see ds-measure.py load_spec; the link line lives in measure-spec.json views._domains_extends). Each unit appends its own checks here — same shape as the main spec: token refs against docs/design-system/tokens.json or fixed px.",
+  "checks": [
+  ]
+}
