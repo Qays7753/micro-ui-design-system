@@ -3,7 +3,15 @@
  * neutral shell defaults (role screen, tab order ب, everything off).
  */
 import { DEBTS, DELIVERIES, DRIVERS, LISTINGS, MOVEMENTS, NOTIFICATIONS, ORDERS, DRIVERS_QUEUE, REPORTS_QUEUE, REVIEW_QUEUE } from '../data';
-import type { SimState } from './types';
+import type { SimState, TasksState, UiState } from './types';
+
+export function initialUi(): UiState {
+  return { screen: 'today', selectedDate: null, openListing: null, sheet: null };
+}
+
+export function initialTasks(): TasksState {
+  return { current: null, statuses: Array(17).fill(null), startedAt: null, taps: 0, errors: 0 };
+}
 
 export function initialState(): SimState {
   return {
@@ -38,5 +46,7 @@ export function initialState(): SimState {
       densityScale: 1,
       fontScale: 100,
     },
+    ui: initialUi(),
+    tasks: initialTasks(),
   };
 }

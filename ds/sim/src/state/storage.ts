@@ -30,9 +30,9 @@ interface Snapshot {
   state?: unknown;
 }
 
-/** The stored envelope: { version, state } with state sans the version. */
+/** The stored envelope: { version, state } with the ephemeral slices stripped. */
 export function saveState(state: SimState): void {
-  const { version: _version, ...rest } = state;
+  const { version: _version, role: _role, buyer: _buyer, ui: _ui, tasks: _tasks, ...rest } = state;
   const snap: Snapshot = { version: DATA_VERSION, state: rest };
   window.localStorage.setItem(keyFor(DATA_VERSION), JSON.stringify(snap));
 }
@@ -49,13 +49,19 @@ export function storedVersions(): number[] {
   return found.sort((a, b) => a - b);
 }
 
-/** Hydrate a parsed snapshot into a full state (filling any missing shell field). */
+/** Hydrate a parsed snapshot into a full state: the recorded data returns,
+ *  the ephemeral slices (role, buyer, ui, tasks) start fresh — the role
+ *  screen opens at EVERY app open (§5.8) — and any missing field is filled. */
 function hydrate(state: unknown): SimState {
   const base = initialState();
-  const s = state as Partial<SimState>;
+  const s = (state ?? {}) as Partial<SimState>;
   return {
     ...base,
     ...s,
+    role: null,
+    buyer: false,
+    ui: base.ui,
+    tasks: base.tasks,
     toggles: { ...base.toggles, ...(s.toggles ?? {}) },
     identity: { ...base.identity, ...(s.identity ?? {}) },
   };

@@ -19,6 +19,45 @@ import type {
   SimRole,
 } from '../data/types';
 
+/** A screen key (§5.1's map; navigation is plain internal state). */
+export type Screen =
+  | 'today' // مشروع اليوم
+  | 'finance' // المالية
+  | 'orders' // الطلبات — القائمة
+  | 'ordersCalendar' // الطلبات — التقويم
+  | 'delivery' // التوصيل
+  | 'myJobs' // مهامي (السائق)
+  | 'market' // السوق
+  | 'myListings' // عروضي (المورد)
+  | 'review' // المراجعة (المراجع)
+  | 'reports' // البلاغات (المراجع)
+  | 'drivers'; // السائقون (المراجع)
+
+/** The transient UI slice — never persisted (the app opens at the role screen every time). */
+export interface UiState {
+  screen: Screen;
+  /** The calendar's selected day (ر3.2). */
+  selectedDate: string | null;
+  /** The market listing whose details are open (ر5.1). */
+  openListing: string | null;
+  /** The open object/form sheet id, or null. */
+  sheet: string | null;
+}
+
+/** One task's session record (§5.4.2: يُسجّل في الذاكرة: الزمن والضغطات والأخطاء). */
+export interface TasksState {
+  /** The index of the task marked «الحالية», or null. */
+  current: number | null;
+  /** Per task: أُنجزت / تُخطيت / لا شارة (null). */
+  statuses: ('done' | 'skipped' | null)[];
+  /** The current task's timer (ms since start). */
+  startedAt: number | null;
+  /** Presses since the current task started. */
+  taps: number;
+  /** Error messages that appeared since it started. */
+  errors: number;
+}
+
 /** The simulation toggles (addendum §5.7 item 2 — amounts hidden rides its own field). */
 export interface SimToggles {
   /** بلا اتصال — every save fails and stays a draft. */
@@ -52,11 +91,11 @@ export interface IdentityOverrides {
 export interface SimState {
   /** The data version this snapshot was written by (storage migration gate). */
   version: number;
-  /** The chosen role; 'guest' = the visitor shell, null = the role screen. */
+  /** Ephemeral — the role screen shows at EVERY app open (§5.8); 'guest' = the visitor shell, null = the role screen. */
   role: SimRole | null;
   /** The owner's active project (switching projects §04). */
   project: ProjectId;
-  /** The guest pressed «دخول تجريبي» → a registered buyer with no project (§5.1/§5.8). */
+  /** Ephemeral — the guest pressed «دخول تجريبي» → a registered buyer with no project (§5.1/§5.8). */
   buyer: boolean;
   /** Amounts hidden (ر2.4) — persists across sections and reopens. */
   amountsHidden: boolean;
@@ -74,6 +113,10 @@ export interface SimState {
   tabOrder: 'a' | 'b';
   toggles: SimToggles;
   identity: IdentityOverrides;
+  /** Ephemeral — navigation and open overlays. */
+  ui: UiState;
+  /** Ephemeral — the 17 tasks' session (§5.4.2). */
+  tasks: TasksState;
 }
 
 /** What a new movement's save carries (ر2.1/ر2.2 and the Ask drafts س6/س7). */
@@ -146,4 +189,12 @@ export type SimAction =
   | { type: 'tabOrder/set'; order: 'a' | 'b' }
   | { type: 'toggles/set'; patch: Partial<SimToggles> }
   | { type: 'identity/set'; patch: Partial<IdentityOverrides> }
+  | { type: 'ui/navigate'; screen: Screen }
+  | { type: 'ui/selectDate'; date: string | null }
+  | { type: 'ui/openListing'; id: string | null }
+  | { type: 'ui/openSheet'; id: string | null }
+  | { type: 'task/start'; index: number }
+  | { type: 'task/skip'; index: number }
+  | { type: 'task/succeed'; index?: number }
+  | { type: 'task/record'; taps?: number; errors?: number }
   | { type: 'data/reset' };

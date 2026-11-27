@@ -38,12 +38,13 @@ describe('SA3 · storage: what the experimenter records is saved on the device',
     saveState(recorded);
     const loaded = loadState();
     expect(loaded).not.toBeNull();
-    expect(loaded).toEqual(recorded);
-    expect(loaded!.role).toBe('owner');
-    expect(loaded!.movements).toHaveLength(23);
+    // The recorded data returns; the ROLE resets — the role screen opens at
+    // every app open (§5.8). ui and tasks are ephemeral too.
+    expect(loaded).toEqual({ ...recorded, role: null, buyer: false });
     expect(loaded!.amountsHidden).toBe(true);
     expect(loaded!.toggles.offline).toBe(true);
     expect(loaded!.tabOrder).toBe('a');
+    expect(loaded!.movements).toHaveLength(23);
   });
 
   it('the version rides the snapshot, not the state body', () => {

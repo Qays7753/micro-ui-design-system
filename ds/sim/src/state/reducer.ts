@@ -7,7 +7,8 @@
  */
 import { SIM_TODAY } from '../data';
 import type { Delivery, Listing, Movement, Order } from '../data/types';
-import { initialState } from './initial';
+import { initialState, initialTasks, initialUi } from './initial';
+import { TASKS } from '../tasks/tasks';
 import type { SimAction, SimState } from './types';
 
 const nowTime = (): string => '12:30';
@@ -274,12 +275,12 @@ export function reducer(state: SimState, action: SimAction): SimState {
     case 'issue/resolve': {
       const d = state.deliveries.find((x) => x.id === action.deliveryId);
       if (!d || d.status !== 'failed') return state;
-      // Approval closes the mission (it leaves مهامي as تعذّر resolved);
+      // Approval closes the mission (تعذّر مُقفل — ر4.4);
       // refusal returns it to the driver to retry (قيد التنفيذ).
       return {
         ...state,
         deliveries: state.deliveries.map((x) =>
-          x.id === d.id ? { ...x, status: action.approve ? 'failed' : 'inProgress' } : x,
+          x.id === d.id ? { ...x, status: action.approve ? 'failed' : 'inProgress', issueClosed: action.approve ? true : x.issueClosed } : x,
         ),
       };
     }
@@ -375,7 +376,92 @@ export function reducer(state: SimState, action: SimAction): SimState {
       // «ابدأ من جديد» — everything back to the original (owner decision 2).
       return { ...initialState(), role: null };
 
+    // ── Navigation (transient; the file:// single build needs no router) ───
+    case 'ui/navigate':
+      return { ...state, ui: { ...state.ui, screen: action.screen } };
+    case 'ui/selectDate':
+      return { ...state, ui: { ...state.ui, selectedDate: action.date } };
+    case 'ui/openListing':
+      return { ...state, ui: { ...state.ui, openListing: action.id, sheet: null } };
+    case 'ui/openSheet':
+      return { ...state, ui: { ...state.ui, sheet: action.id } };
+
+    // ── The 17 tasks (§5.4.2) ───────────────────────────────────────
+    case 'task/start': {
+      const task = TASKS[action.index];
+      if (!task) return state;
+      // «ابدأ المهمة» (§5.4.2): (1) the DATA back to the original —
+      // tab order, toggles and identity are the experimenter's tools and
+      // stay; (2) the task's role; (3) the start screen; (5) the timer.
+      const fresh = initialState();
+      return {
+        ...state,
+        movements: fresh.movements,
+        debts: fresh.debts,
+        orders: fresh.orders,
+        deliveries: fresh.deliveries,
+        drivers: fresh.drivers,
+        listings: fresh.listings,
+        reviewQueue: fresh.reviewQueue,
+        reportsQueue: fresh.reportsQueue,
+        driversQueue: fresh.driversQueue,
+        notifications: fresh.notifications,
+        amountsHidden: false,
+        project: 'yasmine',
+        role: task.role,
+        buyer: false,
+        ui: { ...initialUi(), screen: task.startScreen },
+        tasks: {
+          ...initialTasks(),
+          statuses: state.tasks.statuses,
+          current: action.index,
+          startedAt: Date.now(),
+        },
+      };
+    }
+    case 'task/skip': {
+      if (!TASKS[action.index]) return state;
+      const statuses = [...state.tasks.statuses];
+      statuses[action.index] = 'skipped';
+      const next = nextTaskIndex(state.tasks.statuses, action.index);
+      return {
+        ...state,
+        tasks: { ...state.tasks, statuses, current: next, startedAt: next === null ? null : Date.now(), taps: 0, errors: 0 },
+      };
+    }
+    case 'task/succeed': {
+      const index = action.index ?? state.tasks.current;
+      if (index === null || !TASKS[index]) return state;
+      const statuses = [...state.tasks.statuses];
+      statuses[index] = 'done';
+      const next = nextTaskIndex(statuses, index);
+      return {
+        ...state,
+        tasks: { ...state.tasks, statuses, current: next, startedAt: next === null ? null : Date.now(), taps: 0, errors: 0 },
+      };
+    }
+    case 'task/record':
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          taps: state.tasks.taps + (action.taps ?? 0),
+          errors: state.tasks.errors + (action.errors ?? 0),
+        },
+      };
+
     default:
       return state;
   }
+}
+
+/** The first task after `from` with no status yet (the next «الحالية»). */
+function nextTaskIndex(statuses: readonly ('done' | 'skipped' | null)[], from: number): number | null {
+  for (let i = from + 1; i < statuses.length; i++) {
+    if (statuses[i] === null) return i;
+  }
+  for (let i = 0; i < statuses.length; i++) {
+    if (i !== from && statuses[i] === null) return i;
+  }
+  return null;
 }
