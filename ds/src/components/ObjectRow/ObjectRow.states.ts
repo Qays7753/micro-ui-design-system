@@ -10,6 +10,7 @@ export const ObjectRowStates = [
   'oneLine',
   'withBadge',
   'pressed',
+  'landed',
   'focused',
   'disabled',
 ] as const;

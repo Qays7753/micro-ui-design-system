@@ -90,6 +90,9 @@ export function App() {
   const [tab, setTab] = useState(0);
   const [tabDemo, setTabDemo] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // ت12 demo: the row-garden landing sample replays motion.landed on press
+  // (class off -> on restarts the one-shot animation).
+  const [rowLanded, setRowLanded] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   // 2.1 demo sheets: every pressable in the lab opens its real sample.
   const [projectOpen, setProjectOpen] = useState(false);
@@ -1125,6 +1128,20 @@ export function App() {
             </div>
           </div>
           <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.todayProject')}</span>
+            {/* 1.7 ت1: «مشروع اليوم» carries the hide-amounts IconButton in
+                the header's END slot (48, text-secondary) — the conflict
+                23.22-vs-10.2(1) resolved: no HeroSurface on that screen, so
+                the hide button moves to the header line. Live: it flips the
+                global visibility context. */}
+            <div className="lab-bar-stage">
+              <PageHeader
+                label={t('nav.todayLong')}
+                trailing={<AmountVisibilityToggle data-ds-exempt="" onChange={(visible) => setHidden(!visible)} />}
+              />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.subScreens')}</span>
             <div className="lab-bar-stage">
               <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))}><BackIcon /></IconButton>} />
@@ -1437,6 +1454,24 @@ export function App() {
                 />
                 <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => setObjectOpen(true)} />
               </div>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.landed')}</span>
+            <Surface>
+              {/* 1.7 ت12: press replays the landing — the save closed its
+                  sheet and the affected row settles here. */}
+              <ObjectRow
+                label={t('row.sampleTitle')}
+                caption={t('row.sampleCaption')}
+                value={<Money value="1,290.750" />}
+                landed={rowLanded}
+                onPress={() => {
+                  setRowLanded(false);
+                  window.setTimeout(() => setRowLanded(true), 60);
+                  setToastText(t('toast.movementSaved'));
+                }}
+              />
             </Surface>
           </div>
         </section>

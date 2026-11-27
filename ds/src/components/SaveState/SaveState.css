@@ -39,6 +39,16 @@
   color: var(--mds-color-text-secondary);
 }
 
+/* ت11 (addendum 1.7): the sending line WAITS OUT motion.pending-delay
+   before it shows — invisible, not gone: the box (min-height, the line)
+   stays so nothing shifts when the line appears, and the screen reader's
+   aria-busy never waits (only the visual does). A save that resolves
+   inside the delay never shows the line at all — it jumps straight to
+   «حُفظ». */
+.mds-save-state--pending-delay {
+  visibility: hidden;
+}
+
 .mds-save-state--saved {
   color: var(--mds-color-status-done-fg);
 }

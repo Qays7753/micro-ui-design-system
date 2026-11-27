@@ -78,6 +78,24 @@ describe('PageHeader (BRIEF 9.1, 23.16, 23.20)', () => {
     expect(PageHeaderStates).toContain('collapsedOnScroll');
   });
 
+  it('accepts the hide-amounts IconButton in its end slot (1.7 ت1: «مشروع اليوم»)', () => {
+    const { container } = render(
+      <PageHeader
+        label={ar['nav.todayLong'].text}
+        trailing={<IconButton label={ar['button.hideAmounts'].text}><BackIcon /></IconButton>}
+      />,
+    );
+    const end = container.querySelector('.mds-page-header-end') as HTMLElement;
+    expect(end).not.toBeNull();
+    expect(end.querySelector('.mds-icon-button')).not.toBeNull();
+    // the end slot centers its content on the title's line (the 48 touch
+    // floor is the header's own min-height, the row never grows for it)
+    const css = readFileSync(join(__dirname, 'PageHeader.css'), 'utf8');
+    expect(css).toContain('min-height: var(--mds-size-touch-min)');
+    expect(css).toContain('align-items: center');
+    expect(PageHeaderStates).toContain('mainScreen');
+  });
+
   it('renders the trailing slot (metric / period / creation action)', () => {
     const { container } = render(
       <PageHeader label={TITLE} trailing={<span data-testid="m">M</span>} />,

@@ -1,12 +1,15 @@
-import { render, cleanup } from '@testing-library/react';
-import { describe, expect, it, afterEach } from 'vitest';
+import { act, render, cleanup } from '@testing-library/react';
+import { describe, expect, it, afterEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ar } from '../../i18n/ar';
 import { SaveState } from './SaveState';
 import { SaveStateStates } from './SaveState.states';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 
 describe('SaveState (BRIEF 9.4, 656, 23.17)', () => {
   it('renders the four app-owned states with text + icon (519)', () => {
@@ -50,6 +53,35 @@ describe('SaveState (BRIEF 9.4, 656, 23.17)', () => {
     const { container } = render(<SaveState saveState="sending" />);
     expect((container.firstElementChild as HTMLElement).getAttribute('aria-busy')).toBe('true');
     expect(container.querySelector('.mds-visually-hidden')).toBeNull();
+  });
+
+  it('«يُرسل…» waits out motion.pending-delay before it shows (1.7 ت11)', () => {
+    vi.useFakeTimers();
+    const { container } = render(<SaveState saveState="sending" />);
+    // the slot is there, busy is immediate, the LINE is invisible
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.getAttribute('aria-busy')).toBe('true');
+    expect(root.className).toContain('mds-save-state--pending-delay');
+    const css = readFileSync(join(__dirname, 'SaveState.css'), 'utf8');
+    expect(css).toContain('visibility: hidden');
+    act(() => vi.advanceTimersByTime(300));
+    expect((container.firstElementChild as HTMLElement).className).not.toContain(
+      'mds-save-state--pending-delay',
+    );
+    vi.useRealTimers();
+  });
+
+  it('a save that resolves inside the delay never shows «يُرسل…» (ت11: straight to «حُفظ»)', () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(<SaveState saveState="sending" />);
+    act(() => vi.advanceTimersByTime(200));
+    rerender(<SaveState saveState="saved" />);
+    act(() => vi.advanceTimersByTime(3000));
+    expect(container.textContent).toContain(ar['saveState.saved'].text);
+    expect((container.firstElementChild as HTMLElement).className).not.toContain(
+      'mds-save-state--pending-delay',
+    );
+    vi.useRealTimers();
   });
 
   it('the saved check draws with the check-draw motion (677)', () => {

@@ -72,12 +72,45 @@
   white-space: nowrap;
 }
 
-/* Press (23.2): the row inset — surface-pressed with the pressed-row
-   inset on the block axis. */
+/* Press (23.2 + 1.7 ت13): the row inset — surface-pressed with the
+   pressed-row inset from the surface's edges and the r-sm 8 corner (ت13:
+   16 before, to sit inside a surface whose own corner is now 16 — the
+   signature reads and the highlight floats). The box SHRINKS by the two
+   insets (width calc + margins, so a width:100% row never overflows its
+   parent) while the row's own inline padding absorbs the same 8px: the
+   CONTENT box stays byte-identical — every child sits exactly where it
+   was, only the painted highlight narrows. */
 .mds-object-row:active,
 .mds-object-row[data-pressed],
 .mds-object-row--pressed {
   background-color: var(--mds-color-surface-pressed);
+  border-radius: var(--mds-radius-sm);
+  width: calc(100% - 2 * var(--mds-layout-pressed-row-inset));
+  margin-inline: var(--mds-layout-pressed-row-inset);
+  padding-inline: calc(var(--mds-layout-row-padding-inline) - var(--mds-layout-pressed-row-inset));
+}
+
+/* Landed (1.7 ت12): after a save closes its sheet the affected row takes
+   motion.landed ONCE — brand-selected-bg (motion.landed.from) fading to
+   transparent (motion.landed.to) over 1200ms ease-out — riding the same
+   floating-inset geometry as the press. Reduced motion: no fade at all
+   (1.7 §3.1: the Toast alone signals). */
+.mds-object-row--landed {
+  border-radius: var(--mds-radius-sm);
+  width: calc(100% - 2 * var(--mds-layout-pressed-row-inset));
+  margin-inline: var(--mds-layout-pressed-row-inset);
+  padding-inline: calc(var(--mds-layout-row-padding-inline) - var(--mds-layout-pressed-row-inset));
+  animation: mds-row-landed var(--mds-motion-landed-ms) var(--mds-motion-landed-ease) 1 both;
+}
+
+@keyframes mds-row-landed {
+  from {
+    background-color: var(--mds-color-brand-selected-bg);
+  }
+
+  to {
+    background-color: transparent;
+  }
 }
 
 .mds-object-row:focus-visible {
@@ -106,6 +139,12 @@
 @media (prefers-reduced-motion: reduce) {
   .mds-object-row {
     transition: none;
+  }
+
+  /* 1.7 §3.1 (motion.landed): with reduced motion there is no fade — the
+     Toast alone carries the signal. */
+  .mds-object-row--landed {
+    animation: none;
   }
 }
 
