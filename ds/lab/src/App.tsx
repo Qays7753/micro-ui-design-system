@@ -355,21 +355,11 @@ export function App() {
           {toolsPinned ? (
             <div className="lab-compose-top">{toolsStrip}</div>
           ) : (
-            <>
-              <button
-                type="button"
-                className="lab-tools-fab"
-                aria-label={t('lab.tools')}
-                onClick={() => setToolsOpen(true)}
-              >
-                <SlidersIcon size={20} />
-              </button>
-              {toolsOpen ? (
-                <Sheet label={t('lab.toolsTitle')} onDismiss={() => setToolsOpen(false)}>
-                  <div className="lab-compose-top lab-tools-sheet">{toolsStrip}</div>
-                </Sheet>
-              ) : null}
-            </>
+            toolsOpen ? (
+              <Sheet label={t('lab.toolsTitle')} onDismiss={() => setToolsOpen(false)}>
+                <div className="lab-compose-top lab-tools-sheet">{toolsStrip}</div>
+              </Sheet>
+            ) : null
           )}
           <div className="lab-compose-screen" data-ds-check="compose">
             <ContextBar
@@ -471,6 +461,24 @@ export function App() {
               </>
               )}
             </div>
+            {/* Owner fix 2026-11-28: the tools button must cover NO content.
+                It rides a reserved dock band between the scrolling content
+                and the TabBar — furniture outside the scroll flow, where
+                nothing can ever pass beneath it (the old fixed overlay
+                covered the finance tile's text at rest and the delivery
+                tile scrolled). */}
+            {toolsPinned ? null : (
+              <div className="lab-tools-dock">
+                <button
+                  type="button"
+                  className="lab-tools-fab"
+                  aria-label={t('lab.tools')}
+                  onClick={() => setToolsOpen(true)}
+                >
+                  <SlidersIcon size={20} />
+                </button>
+              </div>
+            )}
             {confirmOpen ? (
               <ConfirmSheet
                 label={t('confirm.sampleTitle')}
