@@ -390,6 +390,7 @@ export function App() {
                 debt={t('metric.sourceFrom', { counted: t('movement.in') })}
                 onDismiss={() => setSourceOpen(true)}
                 onChange={(visible) => setHidden(!visible)}
+                data-ds-check="hero"
               />
               <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)}>
                 <Surface>
@@ -897,7 +898,6 @@ export function App() {
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
               onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
-              data-ds-check="hero"
             />
           </div>
           <div className="lab-row lab-row--full">
@@ -917,6 +917,7 @@ export function App() {
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
               onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
+              data-ds-check="hero"
             />
           </div>
           <div className="lab-row lab-row--full">

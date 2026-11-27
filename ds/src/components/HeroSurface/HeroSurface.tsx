@@ -1,39 +1,42 @@
 /**
  * HeroSurface — the screen's single hero (BRIEF 1.5, 23.8 — with the ONE
- * addition addendum 1.6 allows: the optional small line, 23.25).
+ * addition addendum 1.6 allows: the optional small line, 23.25; structure
+ * per addendum 1.7 ت2).
  *
- * - Fill brand-anchor, symmetric radius 24, padding 20 (24 on tablet);
- *   min-height 152; height by content. No ornaments, no watermark, no
- *   gradient, no background shape (23.8 ممنوع).
- * - Stack (23.8): label 14/20/500 on-anchor-secondary with the
- *   AmountVisibilityToggle at the line's end → 4 → value display-hero
- *   (Rubik 40/48/500, white, tabular, −0.01em on digits; cents the same
- *   size in on-anchor-secondary; unit «د» Plex 16/24/500
- *   on-anchor-secondary on the number's baseline, 4 away) → 8 → diff line
- *   (arrow 14 + 13/20/600 on-anchor-secondary — direction by arrow and
- *   word ONLY, no green/red) → 12 → source link 13/20/600 white with a
- *   1px underline offset 3.
- * - Hidden amounts (23.22 [مؤكد], read from the app's visibility context —
- *   the internal default provider that used to shadow it is gone): the
- *   value renders «••••» with the unit kept, the real value leaves the page
- *   entirely, the screen reader gets «المبلغ مخفي», and the swap replays
- *   the quick cross-fade (like Money).
- * - «—» for a missing value keeps the SAME display-hero typography, alone,
- *   without the unit (owner decision 2026-11-25; و-2 item 9).
- * - The optional sparkline (23.25, addendum 1.6 أ-ج): 12 under the diff
- *   line, height sparkline-height 24, stroke signal-line in hero-sparkline,
- *   a dot-signal endpoint — the line and its dot are ONE terracotta use
- *   (و-2 item 2). «يبقى بلا قيم»: with hidden amounts the slot stays but
- *   draws no values — the trend must not leak.
+ * - Fill brand-anchor, symmetric radius 16 (radius.lg), padding 20 (24 on
+ *   tablet); min-height 152; height by content. No ornaments, no
+ *   watermark, no gradient, no background shape (23.8 ممنوع).
+ * - Stack (1.7 ت2, top to bottom):
+ *   1. Label line 20 high — 14/20/500 on-anchor-secondary with the
+ *      AmountVisibilityToggle at the line's end; the toggle's 48 touch
+ *      area rides INSIDE the padding and does not raise the line.
+ *   2. 8 → value display-hero (Rubik 40/48/500, white, tabular, −0.01em
+ *      on digits; cents the same size in on-anchor-secondary; unit «د»
+ *      Plex 16/24/500 on-anchor-secondary on the number's baseline, 4
+ *      away).
+ *   3. 8 → ONE line: the diff (arrow 14 + 13/20/600 on-anchor-secondary —
+ *      direction by arrow and word ONLY, no green/red), then « · », then
+ *      the source link 13/20/600 white with a 1px underline offset 3 at
+ *      the line's end.
+ *   4. 16 → the small line (23.25): the CONTENT's full width, height
+ *      hero-sparkline-height 32, stroke signal-line in hero-sparkline, a
+ *      dot-signal endpoint — one terracotta use (و-2 item 2).
+ * - Hidden amounts (23.22 + 1.7 ت10, read from the app's visibility
+ *   context): the value renders «••••» with the unit kept, the real value
+ *   leaves the page entirely, the screen reader gets «المبلغ مخفي», the
+ *   swap replays the quick cross-fade (like Money), the diff line keeps
+ *   the arrow and the word only, and the small line's slot STAYS without
+ *   values — the shape must not leak the trend.
+ * - «—» for a missing value keeps the SAME display-hero typography,
+ *   alone, without the unit (owner decision 2026-11-25; و-2 item 9).
  * - A number that does not fit drops to number-lg 28/36 in ONE step
- *   (23.8) — the app passes a long value; the drop is the app's choice made
- *   explicit here through the same token ladder, so the component does
- *   not guess: value strings longer than 9 digit-group characters render
+ *   (23.8) — value strings longer than 9 digit-group characters render
  *   at number-lg (the «1,250,000.125 د» case of 23.8).
  */
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { moneyTexts } from '../../i18n/ar';
+import { tokens } from '../../tokens/tokens';
 import { SparklineSvg } from '../../lib/sparkline';
 import { AmountVisibilityToggle } from '../AmountVisibilityToggle/index';
 import type { HeroSurfaceProps } from './HeroSurface.types';
@@ -80,13 +83,16 @@ function HeroValue({ value }: { value?: string }) {
 
 function HeroSparkline({ values }: { values: readonly number[] }) {
   const { hidden } = useAmountVisibility();
-  // «يبقى بلا قيم» (23.22): hidden amounts keep the 24-high slot but draw
-  // neither the line nor the endpoint dot — no digit, no trend leak.
+  // «يبقى بلا قيم» (23.22 + 1.7 ت10): hidden amounts keep the 32-high
+  // full-width slot but draw neither the line nor the endpoint dot — no
+  // digit, no trend leak. The slot itself stays so the card never jumps.
   return (
     <span className="mds-hero-sparkline" aria-hidden="true">
       <SparklineSvg
         values={values}
         hidden={hidden}
+        height={tokens.size['hero-sparkline-height']}
+        fullWidth
         lineClassName="mds-hero-sparkline-line"
         dotClassName="mds-hero-sparkline-dot"
       />
@@ -133,20 +139,28 @@ export function HeroSurface({
         </span>
         {swapped ? <span className="mds-visually-hidden">{moneyTexts.hidden}</span> : null}
       </p>
-      {direction ? <p className="mds-hero-diff">{direction}</p> : null}
-      {draft ? <HeroSparkline values={draft} /> : null}
-      {debt ? (
-        <button
-          type="button"
-          className={['mds-hero-source', isPressed ? 'mds-hero-source--pressed' : '']
-            .filter(Boolean)
-            .join(' ')}
-          data-ds-exempt=""
-          {...pressProps}
-        >
-          {debt}
-        </button>
+      {direction || debt ? (
+        /* 1.7 ت2.3: ONE line — the diff, then « · », then the source link
+            at the line's end (they used to be two stacked lines with the
+            source under the sparkline). */
+        <p className="mds-hero-line">
+          {direction ? <span className="mds-hero-diff">{direction}</span> : null}
+          {direction && debt ? <span className="mds-hero-line-sep" aria-hidden="true">·</span> : null}
+          {debt ? (
+            <button
+              type="button"
+              className={['mds-hero-source', isPressed ? 'mds-hero-source--pressed' : '']
+                .filter(Boolean)
+                .join(' ')}
+              data-ds-exempt=""
+              {...pressProps}
+            >
+              {debt}
+            </button>
+          ) : null}
+        </p>
       ) : null}
+      {draft ? <HeroSparkline values={draft} /> : null}
     </section>
   );
 }

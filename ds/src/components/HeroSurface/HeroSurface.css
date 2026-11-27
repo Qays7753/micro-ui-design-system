@@ -1,7 +1,6 @@
 /*
- * HeroSurface.css — BRIEF 1.5 + 23.8, with the ONE addition addendum 1.6
- * allows (the optional small line, 23.25). Every value is a token
- * reference; no raw hex/px/ms in this file (ds-raw-values).
+ * HeroSurface.css — BRIEF 1.5 + 23.8 + addendum 1.7 ت2 (structure). Every
+ * value is a token reference; no raw hex/px/ms in this file (ds-raw-values).
  */
 
 .mds-hero-surface {
@@ -14,7 +13,8 @@
      caught in the unit-8 visual look; the real tokens ride now. */
   padding: var(--mds-layout-hero-padding-phone);
   background-color: var(--mds-color-brand-anchor);
-  /* 23.8: استدارة 24 متماثلة (radius.lg on all four corners). */
+  /* 23.8: استدارة متماثلة (radius.lg on all four corners; 1.7 §3.1 moved
+     the token 24→16 so the signature corner reads). */
   border-radius: var(--mds-radius-lg);
   color: var(--mds-color-on-anchor);
 }
@@ -27,13 +27,17 @@
   }
 }
 
-/* 1. Label line: 14/20/500 on-anchor-secondary with the toggle at the
-   line's end (23.8 item 1). */
+/* 1. The label line (1.7 ت2.1): 20 high — 14/20/500 on-anchor-secondary
+   with the toggle at the line's end. The toggle's 48 touch area is
+   CENTERED on the line and bleeds into the 20 padding above and below
+   (the container's fixed height keeps the line at 20; overflow is
+   visible), so the touch target never raises the line. */
 .mds-hero-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--mds-space-8);
+  height: var(--mds-type-label-line);
 }
 
 .mds-hero-label {
@@ -44,9 +48,9 @@
   color: var(--mds-color-on-anchor-secondary);
 }
 
-/* 2. 4 after the label line (23.8 item 2). */
+/* 2. 8 after the label line (1.7 ت2.2 — was 4 before). */
 .mds-hero-amount {
-  margin: var(--mds-space-4) 0 0;
+  margin: var(--mds-space-8) 0 0;
 }
 
 /* The visual amount swaps shown/hidden with the quick cross-fade
@@ -125,12 +129,29 @@
   color: inherit;
 }
 
-/* 5. The diff line: arrow 14 + text 13/20/600 on-anchor-secondary — 8
-   after the amount (23.8 items 4-5). No green, no red inside the hero:
-   direction is the arrow and the word only. */
-.mds-hero-diff {
+/* 4. The ONE line (1.7 ت2.3 — 8 under the amount): the diff, then « · »,
+   then the source link at the line's end. The diff and the source used to
+   be two stacked lines with the sparkline between them; one quiet line
+   now carries both, so the hero reads top-to-bottom with a single rhythm.
+   align-items: CENTER (not baseline): a baseline-aligned row would
+   synthesize the inline-flex diff's baseline from its icon (an svg has no
+   text baseline) and grow the line by the icon's descent — 3px taller or
+   not depending on how the app wraps its icon node. All three items share
+   the caption-strong 13/20 line box, so centering aligns their text
+   exactly AND keeps the line at a deterministic 20 on every engine. */
+.mds-hero-line {
   margin: var(--mds-space-8) 0 0;
   display: flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  min-width: 0;
+}
+
+/* The diff (23.8 item 5): arrow 14 + text 13/20/600 on-anchor-secondary —
+   direction is the arrow and the word only. No green, no red inside the
+   hero. */
+.mds-hero-diff {
+  display: inline-flex;
   align-items: center;
   gap: var(--mds-space-4);
   font-family: var(--mds-type-caption-strong-font);
@@ -146,14 +167,91 @@
   color: var(--mds-color-on-anchor-secondary);
 }
 
-/* 5½. The optional small line (23.25, addendum 1.6 أ-ج): 12 under the diff
-   line, height sparkline-height 24; stroke signal-line in hero-sparkline
-   with a dot-signal endpoint — the line and its dot are ONE terracotta use
-   (و-2 item 2). With hidden amounts the slot stays, empty (يبقى بلا قيم). */
+/* The « · » between the diff and the source (ت2.3) — the same quiet
+   caption-strong typography as the diff, a separator not a word (ds-copy
+   separator tokens, no dictionary entry). */
+.mds-hero-line-sep {
+  font-family: var(--mds-type-caption-strong-font);
+  font-size: var(--mds-type-caption-strong-size);
+  line-height: var(--mds-type-caption-strong-line);
+  font-weight: var(--mds-type-caption-strong-weight);
+  color: var(--mds-color-on-anchor-secondary);
+}
+
+/* 5. The source link (23.8 item 7): 13/20/600 white, underline 1px offset
+   3 — now the END of the one line, not a stacked row of its own. The
+   underline rides an ::after bar OUT of the flow (position: absolute), so
+   the 23.8 geometry (1px line, 3 under the text) survives while the
+   button's box stays its 20px line box — the one line's height stays 20
+   and the hero lands at the ت2 estimate exactly. Same reason as the
+   border-bottom note before it: the partially-supported
+   text-decoration-* properties stay out (lint: no-unsupported-browser-
+   features). */
+.mds-hero-source {
+  position: relative;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-family: var(--mds-type-caption-strong-font);
+  font-size: var(--mds-type-caption-strong-size);
+  line-height: var(--mds-type-caption-strong-line);
+  font-weight: var(--mds-type-caption-strong-weight);
+  color: var(--mds-color-on-anchor);
+  cursor: pointer;
+}
+
+.mds-hero-source::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(-1 * var(--mds-border-underline-offset));
+  height: var(--mds-border-underline);
+  background-color: var(--mds-color-on-anchor);
+}
+
+/* Press (23.2): the link text dims to on-anchor-secondary — visible in
+   color, not just the underline. */
+.mds-hero-source:active,
+.mds-hero-source[data-pressed],
+.mds-hero-source--pressed {
+  color: var(--mds-color-on-anchor-secondary);
+}
+
+.mds-hero-source:active::after,
+.mds-hero-source[data-pressed]::after,
+.mds-hero-source--pressed::after {
+  background-color: var(--mds-color-on-anchor-secondary);
+}
+
+/* Disabled (23.24(15)): dimmed, no underline action. */
+.mds-hero-source:disabled {
+  color: var(--mds-color-on-anchor-secondary);
+  cursor: default;
+}
+
+.mds-hero-source:disabled::after {
+  background-color: transparent;
+}
+
+.mds-hero-source:disabled:active,
+.mds-hero-source:disabled[data-pressed] {
+  color: var(--mds-color-on-anchor);
+}
+
+.mds-hero-source:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* 6. The optional small line (23.25, 1.7 ت2.4): 16 under the one line, the
+   CONTENT's full width, height hero-sparkline-height 32; stroke
+   signal-line in hero-sparkline with a dot-signal endpoint — the line and
+   its dot are ONE terracotta use (و-2 item 2). With hidden amounts the
+   slot stays, empty (يبقى بلا قيم — 23.22 + 1.7 ت10). */
 .mds-hero-sparkline {
   display: block;
-  margin-block-start: var(--mds-space-12);
-  height: var(--mds-size-sparkline-height);
+  margin-block-start: var(--mds-space-16);
+  height: var(--mds-size-hero-sparkline-height);
 }
 
 .mds-hero-sparkline svg {
@@ -169,8 +267,13 @@
   stroke-linejoin: round;
 }
 
+/* The endpoint dot (1.7 ت2.4 full-width mode): a zero-length round-capped
+   path — its STROKE is the dot (the diameter rides the stroke-width
+   attribute from the token), so it stays a perfect circle under the
+   stretch where a circle would distort into an ellipse. */
 .mds-hero-sparkline-dot {
-  fill: var(--mds-role-hero-sparkline);
+  fill: none;
+  stroke: var(--mds-role-hero-sparkline);
 }
 
 /* RTL (the system's first direction): the series mirrors so the LATEST
@@ -178,53 +281,6 @@
    reading direction. Geometric mirror only, the dot stays a circle. */
 :root[dir='rtl'] .mds-hero-sparkline svg {
   transform: scaleX(-1);
-}
-
-/* 7. The source link: 13/20/600 white, underline 1px offset 3 — 12 after
-   the diff line (23.8 items 6-7). */
-.mds-hero-source {
-  margin: var(--mds-space-12) 0 0;
-  padding: 0;
-  align-self: flex-start;
-  border: none;
-  background-color: transparent;
-  font-family: var(--mds-type-caption-strong-font);
-  font-size: var(--mds-type-caption-strong-size);
-  line-height: var(--mds-type-caption-strong-line);
-  font-weight: var(--mds-type-caption-strong-weight);
-  color: var(--mds-color-on-anchor);
-  /* 23.8 item 7: خط سفلي 1px وإزاحة 3 — border-bottom + padding keeps the
-     same geometry without the partially-supported text-decoration
-     properties (lint: no-unsupported-browser-features). */
-  padding-bottom: calc(var(--mds-border-underline-offset) - var(--mds-border-hairline));
-  border-bottom: var(--mds-border-underline) solid var(--mds-color-on-anchor);
-  cursor: pointer;
-}
-
-/* Press (23.2): the link text dims to on-anchor-secondary — visible in
-   color, not just the underline. */
-.mds-hero-source:active,
-.mds-hero-source[data-pressed],
-.mds-hero-source--pressed {
-  color: var(--mds-color-on-anchor-secondary);
-  border-bottom-color: var(--mds-color-on-anchor-secondary);
-}
-
-/* Disabled (23.24(15)): dimmed, no underline action. */
-.mds-hero-source:disabled {
-  color: var(--mds-color-on-anchor-secondary);
-  cursor: default;
-}
-
-.mds-hero-source:disabled:active,
-.mds-hero-source:disabled[data-pressed] {
-  color: var(--mds-color-on-anchor);
-  border-bottom-color: var(--mds-color-on-anchor);
-}
-
-.mds-hero-source:focus-visible {
-  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
-  outline-offset: var(--mds-border-focus-ring-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {
