@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "714b48b9bcbab63eb1763506921157ceb848af338b97d63b633aa9ebd2bfc07e",
+  "AGENTS.md": "d4f23ddce9b0f927c9ad6f9f9652e35ed4aca56f9d5ca13b5a4ccf4d295bd7d4",
   "CHANGELOG.md": "8e08601bc953f85ec50fb8fe2788c8dade72acfa63cf46dad4dc5c8351910c1b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "91a78a501f983ac3ef4fcaa1b0e07fd4a54608debe5b6a52a7a3220bcb730584",
@@ -334,6 +334,7 @@
   "docs/SYSTEM-CONTRACTS.md": "0dcec06d53a5ed501b2c012cff9c066c345c25c4d4626c6ee5122b9004031ec5",
   "docs/TESTING.md": "e6b3e43834aa4808ae082efc4d99b7dd58358f241f925c60952f1dbde5211ed9",
   "docs/design-system/BRIEF-ADDENDUM-1.6.md": "4cb8b88bc6cea0508b5ab2ade121ac8cb7bcc12da908ee5b32a2fa2124dcee84",
+  "docs/design-system/BRIEF-ADDENDUM-1.7.md": "2a92a41aaa495ba2c870dc8ca7e013cb4019f2d1d81a18217afe06b1e21f483e",
   "docs/design-system/BRIEF-CHANGELOG.md": "0b16102eba25f1cc485e79d0a50eaf2d6779c0e6cecd05b32f549576bb307262",
   "docs/design-system/BRIEF.md": "4abcf9103e2ccddbba392567d3e3688b9ddb5ba697c6fad6a833f6c9bc958eb1",
   "docs/design-system/batch2/BATCH2-SPECS-ADDENDUM.md": "678f1d48e9f4765c356ef9057b5eeb57b0ca0790083b71fc4f9039d059a90a2c",
@@ -347,7 +348,7 @@
   "docs/plans/design-system-batch1/OWNER-CHECKLIST.md": "196846d659d7d23f098b170ba40beddd10b6616b68a66da2531d1c57523dd1f5",
   "docs/plans/design-system-batch1/PLAN.md": "c7c38504c20662a4d9dd4c9822d5ce17eb422a7b9068ee14ec7936ed8b8cadaa",
   "docs/plans/design-system-batch1/REPORT.md": "0e292868b0ad2a953c3189feb377353d48a9bd310c32f2ec261d02870f8d71e6",
-  "docs/plans/design-system-batch2/PLAN.md": "5f62865afec4e138449d556e4c6d3cc2e515097d6566c97e5aad94c352f1e00b",
+  "docs/plans/design-system-batch2/PLAN.md": "82bc122d1eeb75162892b1ef2efa06ade5f69529c126de3b744bcd1f3f842e1c",
   "docs/plans/design-system-batch2/REPORT.md": "ea073f5763ebafe3744f995496297cb23d093dbbe10469bb82bde2a2f4513268",
   "docs/plans/design-system-batch2/VISUAL-AUDIT.md": "6f39bb52895114025e550ae293e494b6966b59e0655651934cceb8bf49958bb7",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",
