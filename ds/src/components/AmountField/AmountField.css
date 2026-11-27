@@ -1,0 +1,106 @@
+/*
+ * AmountField.css — ADDENDUM §1.3. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-amount-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--mds-layout-label-to-field);
+  inline-size: 100%;
+}
+
+.mds-amount-field-label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-amount-field-box {
+  display: flex;
+  align-items: center;
+  min-height: var(--mds-size-amount-field);
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-inline: var(--mds-layout-chip-padding);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  border-radius: var(--mds-radius-md);
+  background: var(--mds-color-surface);
+}
+
+/* The digits: amount-input 32/40/500 tabular, LTR isolation, START aligned. */
+.mds-amount-field-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  direction: ltr;
+  text-align: start;
+  font-family: var(--mds-type-amount-input-font);
+  font-size: var(--mds-type-amount-input-size);
+  line-height: var(--mds-type-amount-input-line);
+  font-weight: var(--mds-type-amount-input-weight);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--mds-font-digit-tracking);
+  color: var(--mds-color-text-primary);
+  caret-color: var(--mds-color-brand-text);
+}
+
+/* Outgrows amount-input: one step down to number-lg (23.20, ADDENDUM 2.1),
+   then the field scrolls horizontally — never clipping. The drop drives off
+   the RENDERED length: past 13 characters the 32px run risks the 256px
+   usable box, so the type drops in ONE step (the component sets
+   data-long). */
+.mds-amount-field-input[data-long='true'] {
+  font-family: var(--mds-type-number-lg-font);
+  font-size: var(--mds-type-number-lg-size);
+  line-height: var(--mds-type-number-lg-line);
+  font-weight: var(--mds-type-number-lg-weight);
+}
+
+/* The unit «د»: fixed at the END, body-strong text-secondary (§1.3-2). */
+.mds-amount-field-unit {
+  flex: none;
+  margin-inline-start: var(--mds-layout-amount-unit-gap);
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-amount-field-box:focus-within {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
+}
+
+.mds-amount-field-help {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-amount-field--error .mds-amount-field-box {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+.mds-amount-field--error .mds-amount-field-help {
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-amount-field--disabled .mds-amount-field-box {
+  background: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+}
+
+.mds-amount-field--disabled .mds-amount-field-input,
+.mds-amount-field--disabled .mds-amount-field-unit,
+.mds-amount-field--disabled .mds-amount-field-label,
+.mds-amount-field--disabled .mds-amount-field-help {
+  color: var(--mds-color-disabled-fg);
+}

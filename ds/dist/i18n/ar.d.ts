@@ -1204,9 +1204,49 @@ export declare const ar: {
         readonly kind: "title";
         readonly text: "اختيار واحد من قائمة";
     };
+    readonly 'lab.h.toggle': {
+        readonly kind: "title";
+        readonly text: "إعداد يعمل فوراً";
+    };
+    readonly 'title.toggle': {
+        readonly kind: "title";
+        readonly text: "المفتاح";
+    };
     readonly 'title.radio': {
         readonly kind: "title";
         readonly text: "مجموعة الراديو";
+    };
+    readonly 'sr.clearSearch': {
+        readonly kind: "screen-reader";
+        readonly text: "امسح البحث";
+    };
+    readonly 'search.in': {
+        readonly kind: "placeholder";
+        readonly text: "ابحث في {area}";
+    };
+    readonly 'lab.h.searchField': {
+        readonly kind: "title";
+        readonly text: "بحث داخل قسم";
+    };
+    readonly 'lab.h.textArea': {
+        readonly kind: "title";
+        readonly text: "نص متعدد الأسطر";
+    };
+    readonly 'lab.h.amountField': {
+        readonly kind: "title";
+        readonly text: "حقل المبالغ";
+    };
+    readonly 'title.amountField': {
+        readonly kind: "title";
+        readonly text: "حقل المبلغ";
+    };
+    readonly 'title.textArea': {
+        readonly kind: "title";
+        readonly text: "حقل الملاحظة";
+    };
+    readonly 'title.searchField': {
+        readonly kind: "title";
+        readonly text: "حقل البحث";
     };
     readonly 'lab.h.checkbox': {
         readonly kind: "title";

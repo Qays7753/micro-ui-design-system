@@ -387,6 +387,8 @@ export const ar = {
   'search.in': { kind: 'placeholder', text: 'ابحث في {area}' },
   'lab.h.searchField': { kind: 'title', text: 'بحث داخل قسم' },
   'lab.h.textArea': { kind: 'title', text: 'نص متعدد الأسطر' },
+  'lab.h.amountField': { kind: 'title', text: 'حقل المبالغ' },
+  'title.amountField': { kind: 'title', text: 'حقل المبلغ' },
   'title.textArea': { kind: 'title', text: 'حقل الملاحظة' },
   'title.searchField': { kind: 'title', text: 'حقل البحث' },
   'lab.h.checkbox': { kind: 'title', text: 'بنود تُشَرّ مستقلة' },
