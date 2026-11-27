@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "19a90df39f62c6280d871e7916ea88e5e4a12632b4ce3f5cc9e206ddfb475833",
+  "AGENTS.md": "714b48b9bcbab63eb1763506921157ceb848af338b97d63b633aa9ebd2bfc07e",
   "CHANGELOG.md": "8e08601bc953f85ec50fb8fe2788c8dade72acfa63cf46dad4dc5c8351910c1b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "91a78a501f983ac3ef4fcaa1b0e07fd4a54608debe5b6a52a7a3220bcb730584",
@@ -336,6 +336,8 @@
   "docs/design-system/BRIEF-ADDENDUM-1.6.md": "4cb8b88bc6cea0508b5ab2ade121ac8cb7bcc12da908ee5b32a2fa2124dcee84",
   "docs/design-system/BRIEF-CHANGELOG.md": "0b16102eba25f1cc485e79d0a50eaf2d6779c0e6cecd05b32f549576bb307262",
   "docs/design-system/BRIEF.md": "4abcf9103e2ccddbba392567d3e3688b9ddb5ba697c6fad6a833f6c9bc958eb1",
+  "docs/design-system/batch2/BATCH2-SPECS-ADDENDUM.md": "678f1d48e9f4765c356ef9057b5eeb57b0ca0790083b71fc4f9039d059a90a2c",
+  "docs/design-system/batch2/BATCH2-SPECS.md": "3013c135433ac8a46262f92e63bac92e74bd4ad6f5dcdd2d01bab502e8fe8db4",
   "docs/design-system/tokens.json": "e0409a35826b7bd6ef85893ac88ca63222362e03f22245f62e66f19680e2e197",
   "docs/plans/access-gateway-2026-11-18/auth-screen-compositions.md": "5678be40b887245628b9fb69924f43d081eead959ab5b19582858179f646eb66",
   "docs/plans/access-gateway-2026-11-18/google-only-access-gateway.md": "90aa5e13c50138c4cc0a9244c156f4923bff8c0ca85613cfec0b6234782f2de6",
@@ -345,6 +347,7 @@
   "docs/plans/design-system-batch1/OWNER-CHECKLIST.md": "196846d659d7d23f098b170ba40beddd10b6616b68a66da2531d1c57523dd1f5",
   "docs/plans/design-system-batch1/PLAN.md": "c7c38504c20662a4d9dd4c9822d5ce17eb422a7b9068ee14ec7936ed8b8cadaa",
   "docs/plans/design-system-batch1/REPORT.md": "0e292868b0ad2a953c3189feb377353d48a9bd310c32f2ec261d02870f8d71e6",
+  "docs/plans/design-system-batch2/PLAN.md": "5f62865afec4e138449d556e4c6d3cc2e515097d6566c97e5aad94c352f1e00b",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",
   "docs/plans/integration-readiness-2026-11-21/REPORT.md": "5e1330369f191851d8f00662afef645f3a2311c995f5d08471f4042fd3bcd391",
   "docs/plans/integration-readiness-round2-2026-11-22/PLAN.md": "ea4786f7e0dfc759e56f1e89a6a77f804e8092fdadd30be9f2c6c52038aa3aaa",
