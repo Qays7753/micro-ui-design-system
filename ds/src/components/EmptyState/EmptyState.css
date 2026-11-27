@@ -1,14 +1,17 @@
 /*
- * EmptyState.css — BRIEF 23.7 + 1649. Every value is a token reference;
- * no raw hex/px/ms in this file (ds-raw-values).
+ * EmptyState.css — BRIEF 23.7 as amended by addendum 1.7 ت9. Every value is
+ * a token reference; no raw hex/px/ms in this file (ds-raw-values).
  */
 
+/* The surface: symmetric r-lg, start-aligned content (ت9: EmptyState is
+   REMOVED from the 23.1(4) centering list — centering is a template tell;
+   the sentence reads from the screen's start edge like every other
+   content line). */
 .mds-empty-state {
-  /* Symmetric r-lg 24 surface, centered content (23.7). */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--mds-space-16);
   background-color: var(--mds-color-surface);
   border-radius: var(--mds-radius-lg);
@@ -16,64 +19,21 @@
   width: 100%;
 }
 
-.mds-empty-state-ghosts {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-space-12);
-  width: 100%;
-  max-width: var(--mds-layout-empty-state-content-max);
-}
-
-/* The ghost row: shaped like the real ObjectRow — 44 mark + two lines
-   (23.7), skeleton color, NO motion. */
-.mds-empty-state-ghost {
-  display: flex;
-  align-items: center;
-  gap: var(--mds-space-12);
-}
-
-.mds-empty-state-ghost-mark {
-  width: var(--mds-size-entity-44);
-  height: var(--mds-size-entity-44);
-  border-radius: var(--mds-radius-entity-44);
-  background-color: var(--mds-color-skeleton);
-  flex: 0 0 auto;
-}
-
-.mds-empty-state-ghost-lines {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-space-8);
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.mds-empty-state-ghost-line {
-  height: var(--mds-size-skeleton-line-body);
-  border-radius: var(--mds-radius-2xs);
-  background-color: var(--mds-color-skeleton);
-}
-
-.mds-empty-state-ghost-line--body {
-  width: 72%;
-}
-
-.mds-empty-state-ghost-line--caption {
-  height: var(--mds-size-skeleton-line-caption);
-  width: 48%;
-}
-
-/* The ONE sentence (24) and the ONE secondary action (9.1). */
+/* The ONE sentence (24) in text-primary (ت9: on this surface the sentence
+   IS the content — secondary said «caption», and ghost rows in skeleton
+   color used to flank it reading as a frozen loading). */
 .mds-empty-state-sentence {
   font-family: var(--mds-type-body-font);
   font-size: var(--mds-type-body-size);
   line-height: var(--mds-type-body-line);
-  color: var(--mds-color-text-secondary);
-  text-align: center;
+  color: var(--mds-color-text-primary);
+  text-align: start;
   margin: 0;
   max-width: var(--mds-layout-empty-state-content-max);
 }
 
+/* The ONE secondary action (9.1, و-1 item 14) — 16 under the sentence,
+   start-aligned like the sentence. */
 .mds-empty-state-action {
   display: inline-flex;
   max-width: var(--mds-layout-empty-state-content-max);
