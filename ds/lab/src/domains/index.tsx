@@ -24,11 +24,13 @@ export interface DomainSection {
 import { financeSections } from './finance';
 import { ordersSections } from './orders';
 import { deliverySections } from './delivery';
+import { marketSections } from './market';
 
 export const domainSections: DomainSection[] = [
   ...financeSections,
   ...ordersSections,
   ...deliverySections,
+  ...marketSections,
   // B1 finance — filled by finance.tsx
   // B2 orders & appointments — filled by orders.tsx
   // B3 delivery — filled by delivery.tsx

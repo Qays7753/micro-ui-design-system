@@ -11,10 +11,6 @@
   width: var(--mds-size-horizontal-card-width);
 }
 
-.mds-fund-card--pressed {
-  transform: scale(0.98);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .mds-fund-card {
     transition: none;

@@ -33,8 +33,9 @@ export interface DriverJobCardProps extends HTMLAttributes<HTMLDivElement> {
   value: number;
   /** Which action area shows (§4.8 item 2). */
   stage?: DriverJobStage;
-  /** Whether the delivery requires an evidence slot (active stage). */
-  evidence?: boolean;
+  /** The evidence slot node (§4.8: shows in the active stage before the
+   *  slide-to-confirm when the delivery requires a proof). */
+  evidence?: ReactNode;
   /** The stage's action node: quote form / slide / report button — the
    *  app passes it; ق2: ONE primary-or-slide element at most. */
   action?: ReactNode;

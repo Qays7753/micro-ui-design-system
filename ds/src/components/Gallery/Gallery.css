@@ -1,0 +1,97 @@
+/*
+ * Gallery.css — BATCH2-SPECS §5.2. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The region: strip + dots (23.16). */
+.mds-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  width: 100%;
+}
+
+/* The snap strip: each photo the container's width at 4:3, r-md. */
+.mds-gallery-strip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.mds-gallery-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* A single photo: no scroll at all. */
+.mds-gallery--single .mds-gallery-strip {
+  overflow-x: hidden;
+}
+
+.mds-gallery-item {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: calc(var(--mds-radius-lg) - var(--mds-space-8));
+  background-color: var(--mds-color-surface-well);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mds-gallery-photo {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* The 23.16 dots. */
+.mds-gallery-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-space-8);
+}
+
+.mds-gallery-dot {
+  inline-size: var(--mds-size-dot-event);
+  block-size: var(--mds-size-dot-event);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface-track);
+  border: none;
+  padding: 0;
+  /* 23.16: the dot's touch target is the 48 row it sits in. */
+  min-inline-size: var(--mds-size-touch-min);
+  min-block-size: var(--mds-size-touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mds-gallery-dot::after {
+  content: '';
+  inline-size: var(--mds-size-dot-event);
+  block-size: var(--mds-size-dot-event);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface-track);
+}
+
+.mds-gallery-dot:active::after {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-gallery-dot--active::after {
+  background-color: var(--mds-color-brand-data);
+}
+
+/* The visually hidden prev/next buttons (§5.2 item 7). */
+.mds-gallery-nav {
+  position: absolute;
+  inline-size: var(--mds-border-hairline);
+  block-size: var(--mds-border-hairline);
+  margin: calc(-1 * var(--mds-border-hairline));
+  overflow: hidden;
+  white-space: nowrap;
+}

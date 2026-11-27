@@ -20,11 +20,8 @@
 .mds-contact-bar-row > * {
   flex: 1 1 calc(50% - var(--mds-layout-chip-gap) / 2);
   min-width: 0;
-}
-
-/* The 48 touch floor (م3) for the compact row; driver mode grows to
-   touch-driver (56). */
-.mds-contact-bar-row > * {
+  /* The 48 touch floor (م3) for the compact row; driver mode grows to
+     touch-driver (56). */
   min-height: var(--mds-size-touch-min);
   align-items: center;
 }

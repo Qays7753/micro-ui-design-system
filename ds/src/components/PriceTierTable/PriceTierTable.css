@@ -1,0 +1,68 @@
+/*
+ * PriceTierTable.css — BATCH2-SPECS §5.3 (a semantic table; DataTable is
+ * the agent-1 phase-4 component — this is the market's own reading view).
+ * Every value is a token reference; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-price-tier-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mds-price-tier-table caption {
+  /* 23.17: the table's name reaches screen readers without a visible
+     heading duplicate. */
+  position: absolute;
+  inline-size: var(--mds-border-hairline);
+  block-size: var(--mds-border-hairline);
+  margin: calc(-1 * var(--mds-border-hairline));
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.mds-price-tier-table th,
+.mds-price-tier-table td {
+  padding-block: var(--mds-space-8);
+  padding-inline: var(--mds-space-4);
+  text-align: start;
+}
+
+.mds-price-tier-table th {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-secondary);
+  border-block-end: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+}
+
+.mds-price-tier-table td {
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.mds-price-tier-table th:first-child,
+.mds-price-tier-table td:first-child {
+  padding-inline-start: 0;
+}
+
+.mds-price-tier-table th:last-child,
+.mds-price-tier-table td:last-child {
+  padding-inline-end: 0;
+}
+
+/* The locked shape (§5.3 item 4): three well rows, no digits. */
+.mds-price-tier-table-locked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+}
+
+.mds-price-tier-table-locked-row {
+  block-size: var(--mds-size-row-plain);
+  border-radius: var(--mds-radius-sm);
+  background-color: var(--mds-color-surface-well);
+}

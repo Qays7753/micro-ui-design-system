@@ -365,7 +365,7 @@ export declare const arDomains: {
         readonly text: "الإجراء المقترح";
     };
     readonly 'issue.awaitingOwner': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "بانتظار موافقة المالك";
     };
     readonly 'issue.agreedAt': {
@@ -496,6 +496,22 @@ export declare const arDomains: {
         readonly kind: "badge";
         readonly text: "سائق معيّن";
     };
+    readonly 'state.decided': {
+        readonly kind: "badge";
+        readonly text: "بعد القرار";
+    };
+    readonly 'state.awaitingOwner': {
+        readonly kind: "badge";
+        readonly text: "بانتظار المالك";
+    };
+    readonly 'state.driverBlocked': {
+        readonly kind: "badge";
+        readonly text: "تعذّر";
+    };
+    readonly 'state.driverActive': {
+        readonly kind: "badge";
+        readonly text: "قيد التنفيذ";
+    };
     readonly 'state.driver': {
         readonly kind: "badge";
         readonly text: "السائق";
@@ -570,7 +586,7 @@ export declare const arDomains: {
     };
     readonly 'listing.unavailable': {
         readonly kind: "badge";
-        readonly text: "غير متوفر مؤقتاً";
+        readonly text: "غير متوفر";
     };
     readonly 'listing.byRequest': {
         readonly kind: "badge";
@@ -592,9 +608,37 @@ export declare const arDomains: {
         readonly kind: "badge";
         readonly text: "فما فوق";
     };
+    readonly 'tier.tableName': {
+        readonly kind: "title";
+        readonly text: "شرائح السعر";
+    };
+    readonly 'supplier.oneOffer': {
+        readonly kind: "badge";
+        readonly text: "عرض واحد";
+    };
+    readonly 'supplier.twoOffers': {
+        readonly kind: "badge";
+        readonly text: "عرضان";
+    };
+    readonly 'supplier.offers': {
+        readonly kind: "badge";
+        readonly text: "{n} عروض";
+    };
+    readonly 'supplier.offersMany': {
+        readonly kind: "badge";
+        readonly text: "{n} عرضاً";
+    };
     readonly 'gallery.imageOf': {
         readonly kind: "screen-reader";
         readonly text: "صورة {current} من {total}";
+    };
+    readonly 'gallery.prev': {
+        readonly kind: "screen-reader";
+        readonly text: "السابق";
+    };
+    readonly 'gallery.next': {
+        readonly kind: "screen-reader";
+        readonly text: "التالي";
     };
     readonly 'gallery.close': {
         readonly kind: "screen-reader";
@@ -668,6 +712,46 @@ export declare const arDomains: {
         readonly kind: "button";
         readonly text: "أرسل التعديل";
     };
+    readonly 'editor.editTitle': {
+        readonly kind: "title";
+        readonly text: "عدّل العرض";
+    };
+    readonly 'editor.newTitle': {
+        readonly kind: "title";
+        readonly text: "عرض جديد";
+    };
+    readonly 'editor.unitHint': {
+        readonly kind: "placeholder";
+        readonly text: "كرتونة 12 قطعة";
+    };
+    readonly 'editor.priceMode': {
+        readonly kind: "badge";
+        readonly text: "السعر";
+    };
+    readonly 'editor.available': {
+        readonly kind: "badge";
+        readonly text: "متوفر";
+    };
+    readonly 'editor.description': {
+        readonly kind: "badge";
+        readonly text: "الوصف";
+    };
+    readonly 'editor.nameRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب اسم العرض.";
+    };
+    readonly 'editor.unitRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب العبوة.";
+    };
+    readonly 'editor.priceRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب السعر.";
+    };
+    readonly 'editor.photoRequired': {
+        readonly kind: "error";
+        readonly text: "أضف صورة واحدة على الأقل.";
+    };
     readonly 'listing.reviewPending': {
         readonly kind: "badge";
         readonly text: "قيد المراجعة";
@@ -681,7 +765,7 @@ export declare const arDomains: {
         readonly text: "مرفوض";
     };
     readonly 'listing.editPending': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "تعديل قيد المراجعة";
     };
     readonly 'listing.editRejected': {
@@ -865,7 +949,7 @@ export declare const arDomains: {
         readonly text: "اسأل Micro";
     };
     readonly 'ask.contextPrefix': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "تسأل عن: {context}";
     };
     readonly 'ask.you': {

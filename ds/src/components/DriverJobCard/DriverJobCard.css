@@ -20,11 +20,8 @@
   color: var(--mds-color-text-primary);
 }
 
-/* Driver density: every interactive inside grows to touch-driver. */
-.mds-driver-job {
-  /* the slots' own paddings stretch; targets enforce min via --large. */
-  --mds-driver-target: var(--mds-size-touch-driver);
-}
+/* Driver density: every interactive inside grows to touch-driver (the
+   custom property rides the root block above). */
 
 .mds-driver-job .mds-location-slot-link {
   min-height: var(--mds-driver-target);

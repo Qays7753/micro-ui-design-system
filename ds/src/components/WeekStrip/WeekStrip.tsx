@@ -36,7 +36,7 @@ export function WeekStrip({
   items,
   value,
   today,
-  weekStart = 0,
+  weekStart: _weekStart = 0,
   onChange,
   state = 'idle',
   className,

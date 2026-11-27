@@ -1,0 +1,15 @@
+/*
+ * ListingStatusBadge.css — BATCH2-SPECS §5.7. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-listing-status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  align-items: flex-start;
+}
+
+.mds-listing-status-reason {
+  color: var(--mds-color-text-secondary);
+}

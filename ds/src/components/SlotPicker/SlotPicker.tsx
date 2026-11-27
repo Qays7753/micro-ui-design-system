@@ -22,7 +22,7 @@ import './SlotPicker.css';
 export function SlotPicker({
   items,
   value,
-  step,
+  step: _step,
   onChange,
   state = 'idle',
   className,

@@ -1,0 +1,118 @@
+/*
+ * ListingCard.css — BATCH2-SPECS §5.1. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The whole card is one press target (scale press per §5.1 item 5). */
+.mds-listing-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--mds-space-8);
+  border-radius: var(--mds-radius-lg);
+  background-color: var(--mds-color-surface);
+  text-align: start;
+  font: inherit;
+  border: none;
+  cursor: pointer;
+  min-width: 0;
+  /* ق2: cards in one row share ONE height (the row stretches). */
+  align-self: stretch;
+}
+
+.mds-listing-card:active {
+  transform: scale(0.98);
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-listing-card:disabled {
+  background-color: var(--mds-color-surface-well);
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+/* The 4:3 image box — reserved BEFORE load (ق1); r-md (= r-lg − 8). */
+.mds-listing-card-figure {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: calc(var(--mds-radius-lg) - var(--mds-space-8));
+  background-color: var(--mds-color-surface-well);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* the entity-image-edge inset lives on the photo itself */
+  padding: var(--mds-size-entity-image-edge);
+}
+
+.mds-listing-card-photo {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* A small image centers on the well (not cropped to fill). */
+.mds-listing-card-photo--small {
+  position: static;
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  object-fit: contain;
+}
+
+/* The content column: 4 horizontal padding inside the card's 8. */
+.mds-listing-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  padding-inline: var(--mds-space-4);
+  margin-block-start: var(--mds-space-8);
+  flex: 1;
+}
+
+.mds-listing-card-title {
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-block-size: calc(2 * var(--mds-type-body-strong-line));
+}
+
+/* The amount-row price: number + unit on one baseline (23.5). */
+.mds-listing-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mds-space-4);
+  color: var(--mds-color-text-primary);
+  font-family: var(--mds-type-number-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.mds-listing-card-unit {
+  color: var(--mds-color-text-secondary);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+}
+
+/* The supplier line: mark 32 → 8 → name caption one line. */
+.mds-listing-card-supplier {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-width: 0;
+}
+
+.mds-listing-card-supplier-name {
+  color: var(--mds-color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

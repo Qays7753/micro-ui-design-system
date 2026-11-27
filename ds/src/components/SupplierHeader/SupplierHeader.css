@@ -1,0 +1,36 @@
+/*
+ * SupplierHeader.css — BATCH2-SPECS §5.4. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* A plain row: mark 64 → 12 → the name column; no surface. */
+.mds-supplier-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-12);
+  width: 100%;
+}
+
+.mds-supplier-header-id {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-row-line-gap);
+  flex: 1;
+  min-width: 0;
+}
+
+.mds-supplier-header-name {
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  line-height: var(--mds-type-title-section-line);
+  font-weight: var(--mds-type-title-section-weight);
+  color: var(--mds-color-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.mds-supplier-header-caption {
+  color: var(--mds-color-text-secondary);
+}

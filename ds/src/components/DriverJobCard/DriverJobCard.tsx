@@ -72,7 +72,10 @@ export function DriverJobCard({
       ) : (
         <div className="mds-driver-job-action">
           {stage === 'quoting' ? quote : null}
-          {action /* active: evidence slot + slide; blocked: report button — the app's nodes */}
+          {/* §4.8 item 2: active with a required proof shows the evidence
+              slot BEFORE the slide — the app passes it through `evidence`. */}
+          {stage === 'active' && evidence ? evidence : null}
+          {action /* active: the slide; blocked: the report button — the app's nodes */}
         </div>
       )}
     </div>

@@ -1659,7 +1659,7 @@ export declare const ar: {
         readonly text: "الإجراء المقترح";
     };
     'issue.awaitingOwner': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "بانتظار موافقة المالك";
     };
     'issue.agreedAt': {
@@ -1790,6 +1790,22 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "سائق معيّن";
     };
+    'state.decided': {
+        readonly kind: "badge";
+        readonly text: "بعد القرار";
+    };
+    'state.awaitingOwner': {
+        readonly kind: "badge";
+        readonly text: "بانتظار المالك";
+    };
+    'state.driverBlocked': {
+        readonly kind: "badge";
+        readonly text: "تعذّر";
+    };
+    'state.driverActive': {
+        readonly kind: "badge";
+        readonly text: "قيد التنفيذ";
+    };
     'state.driver': {
         readonly kind: "badge";
         readonly text: "السائق";
@@ -1864,7 +1880,7 @@ export declare const ar: {
     };
     'listing.unavailable': {
         readonly kind: "badge";
-        readonly text: "غير متوفر مؤقتاً";
+        readonly text: "غير متوفر";
     };
     'listing.byRequest': {
         readonly kind: "badge";
@@ -1886,9 +1902,37 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "فما فوق";
     };
+    'tier.tableName': {
+        readonly kind: "title";
+        readonly text: "شرائح السعر";
+    };
+    'supplier.oneOffer': {
+        readonly kind: "badge";
+        readonly text: "عرض واحد";
+    };
+    'supplier.twoOffers': {
+        readonly kind: "badge";
+        readonly text: "عرضان";
+    };
+    'supplier.offers': {
+        readonly kind: "badge";
+        readonly text: "{n} عروض";
+    };
+    'supplier.offersMany': {
+        readonly kind: "badge";
+        readonly text: "{n} عرضاً";
+    };
     'gallery.imageOf': {
         readonly kind: "screen-reader";
         readonly text: "صورة {current} من {total}";
+    };
+    'gallery.prev': {
+        readonly kind: "screen-reader";
+        readonly text: "السابق";
+    };
+    'gallery.next': {
+        readonly kind: "screen-reader";
+        readonly text: "التالي";
     };
     'gallery.close': {
         readonly kind: "screen-reader";
@@ -1962,6 +2006,46 @@ export declare const ar: {
         readonly kind: "button";
         readonly text: "أرسل التعديل";
     };
+    'editor.editTitle': {
+        readonly kind: "title";
+        readonly text: "عدّل العرض";
+    };
+    'editor.newTitle': {
+        readonly kind: "title";
+        readonly text: "عرض جديد";
+    };
+    'editor.unitHint': {
+        readonly kind: "placeholder";
+        readonly text: "كرتونة 12 قطعة";
+    };
+    'editor.priceMode': {
+        readonly kind: "badge";
+        readonly text: "السعر";
+    };
+    'editor.available': {
+        readonly kind: "badge";
+        readonly text: "متوفر";
+    };
+    'editor.description': {
+        readonly kind: "badge";
+        readonly text: "الوصف";
+    };
+    'editor.nameRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب اسم العرض.";
+    };
+    'editor.unitRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب العبوة.";
+    };
+    'editor.priceRequired': {
+        readonly kind: "error";
+        readonly text: "اكتب السعر.";
+    };
+    'editor.photoRequired': {
+        readonly kind: "error";
+        readonly text: "أضف صورة واحدة على الأقل.";
+    };
     'listing.reviewPending': {
         readonly kind: "badge";
         readonly text: "قيد المراجعة";
@@ -1975,7 +2059,7 @@ export declare const ar: {
         readonly text: "مرفوض";
     };
     'listing.editPending': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "تعديل قيد المراجعة";
     };
     'listing.editRejected': {
@@ -2159,7 +2243,7 @@ export declare const ar: {
         readonly text: "اسأل Micro";
     };
     'ask.contextPrefix': {
-        readonly kind: "badge";
+        readonly kind: "help";
         readonly text: "تسأل عن: {context}";
     };
     'ask.you': {
@@ -3161,6 +3245,42 @@ export declare const ar: {
     'state.default': {
         readonly kind: "badge";
         readonly text: "افتراضي";
+    };
+    'state.landed': {
+        readonly kind: "badge";
+        readonly text: "وصل محفوظ";
+    };
+    'state.todayProject': {
+        readonly kind: "badge";
+        readonly text: "مشروع اليوم";
+    };
+    'today.date': {
+        readonly kind: "badge";
+        readonly text: "الجمعة 27/11/2026";
+    };
+    'section.now': {
+        readonly kind: "title";
+        readonly text: "الآن";
+    };
+    'now.in40': {
+        readonly kind: "help";
+        readonly text: "بعد 40 دقيقة";
+    };
+    'tile.fundsNow': {
+        readonly kind: "help";
+        readonly text: "في الصناديق الآن";
+    };
+    'tile.todayNext': {
+        readonly kind: "help";
+        readonly text: "اليوم · التالي 4:00 م";
+    };
+    'tile.running': {
+        readonly kind: "badge";
+        readonly text: "جارية";
+    };
+    'tile.offers': {
+        readonly kind: "badge";
+        readonly text: "عروض";
     };
     'state.debt': {
         readonly kind: "badge";

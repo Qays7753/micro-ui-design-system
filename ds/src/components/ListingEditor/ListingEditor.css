@@ -1,0 +1,15 @@
+/*
+ * ListingEditor.css — BATCH2-SPECS §5.6. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-listing-editor-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-field-to-field);
+  padding: var(--mds-layout-surface-padding-phone);
+}
+
+.mds-listing-editor-error {
+  color: var(--mds-color-status-problem-fg);
+}

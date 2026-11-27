@@ -13,8 +13,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--mds-space-12);
-  row-gap: var(--mds-space-8);
+  gap: var(--mds-space-8) var(--mds-space-12);
 }
 
 .mds-quote-card-head .mds-entity-mark {
