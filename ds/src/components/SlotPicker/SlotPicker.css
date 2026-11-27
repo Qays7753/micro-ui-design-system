@@ -73,7 +73,7 @@
 /* 200% text (§3.6 item 6): two columns. rem-based media tracks the root
    font the lab's 200% key doubles, so the doubled chips at a phone
    viewport fall into this range and the grid drops to 2 columns. */
-@media (max-width: 22.5rem) {
+@media (max-width: 11.25rem) {
   .mds-slot-picker-grid {
     grid-template-columns: repeat(2, 1fr);
   }

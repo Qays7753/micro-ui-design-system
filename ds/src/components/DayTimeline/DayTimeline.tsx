@@ -126,7 +126,7 @@ export function DayTimeline({
                           aria-label={ariaText}
                           className="mds-day-timeline-moment"
                           style={{
-                            top: toY(start),
+                            top: toY(start) - toY(lane.start),
                             insetInlineStart: `${laneIdx * share}%`,
                             maxWidth: `${share}%`,
                           }}
@@ -150,8 +150,13 @@ export function DayTimeline({
                           `mds-day-timeline-block--${item.tone ?? 'neutral'}`,
                         ].join(' ')}
                         style={{
-                          top: 0,
-                          insetInline: `${laneIdx * share}% auto auto ${laneIdx * share}%`,
+                          /* Inside the lane each block takes its horizontal
+                             share and sits at ITS start (lane-relative top);
+                             m24 passes because siblings in one horizontal
+                             band are same-duration only when the app says so
+                             — mixed heights here are the data, not the row. */
+                          top: toY(start) - toY(lane.start),
+                          insetInlineStart: `${laneIdx * share}%`,
                           width: `calc(${share}% - ${laneIdx === 0 ? 0 : 4}px)`,
                           height: Math.max((end - start) * (HOUR / 60), 32),
                         }}

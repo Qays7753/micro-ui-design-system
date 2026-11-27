@@ -84,12 +84,34 @@
   color: var(--mds-color-text-primary);
 }
 
+/* Press/disabled feedback in the captured properties (23.2): the tone
+   surfaces darken a step via background-color, never a filter. */
 .mds-day-timeline-block:active {
-  filter: brightness(0.97);
+  background-color: var(--mds-color-surface-pressed);
+  border-color: var(--mds-color-text-secondary);
 }
 
-.mds-day-timeline-moment:active .mds-day-timeline-moment-chip {
+.mds-day-timeline-block:disabled {
+  background-color: var(--mds-color-surface-well);
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-day-timeline-moment:active {
   background-color: var(--mds-color-surface-pressed);
+  border-radius: var(--mds-radius-full);
+}
+
+.mds-day-timeline-moment:disabled {
+  cursor: default;
+}
+
+.mds-day-timeline-moment:disabled .mds-day-timeline-moment-dot {
+  background-color: var(--mds-color-disabled-fg);
+}
+
+.mds-day-timeline-moment:disabled .mds-day-timeline-moment-chip {
+  color: var(--mds-color-disabled-fg);
 }
 
 .mds-day-timeline-block-title {
