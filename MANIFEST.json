@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "d4f23ddce9b0f927c9ad6f9f9652e35ed4aca56f9d5ca13b5a4ccf4d295bd7d4",
+  "AGENTS.md": "8d9143e8e81aa295645b35062d6c2d750202b899dc69c76d22e5a6aa4cca9721",
   "CHANGELOG.md": "8e08601bc953f85ec50fb8fe2788c8dade72acfa63cf46dad4dc5c8351910c1b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "91a78a501f983ac3ef4fcaa1b0e07fd4a54608debe5b6a52a7a3220bcb730584",
@@ -348,7 +348,8 @@
   "docs/plans/design-system-batch1/OWNER-CHECKLIST.md": "196846d659d7d23f098b170ba40beddd10b6616b68a66da2531d1c57523dd1f5",
   "docs/plans/design-system-batch1/PLAN.md": "c7c38504c20662a4d9dd4c9822d5ce17eb422a7b9068ee14ec7936ed8b8cadaa",
   "docs/plans/design-system-batch1/REPORT.md": "0e292868b0ad2a953c3189feb377353d48a9bd310c32f2ec261d02870f8d71e6",
-  "docs/plans/design-system-batch2/PLAN.md": "c59a83a7f18d8a575059fe90c901ffff405016ccce1dbd40f408dd50c98de979",
+  "docs/plans/design-system-batch2/PLAN-B.md": "b87b1422b86ab859f70e3831b5a1d36a38b89ddff61775f3c41808d9bbe77d32",
+  "docs/plans/design-system-batch2/PLAN.md": "9cffbaaa1a03ea16b07a5de61be2b7ffae1e88495f0d8e4e00f3bea384a72df1",
   "docs/plans/design-system-batch2/REPORT.md": "5ad7521ce26f0a4a559b9871fbd36ded77c7287088f20aaad16605e8f24b1720",
   "docs/plans/design-system-batch2/VISUAL-AUDIT.md": "6f39bb52895114025e550ae293e494b6966b59e0655651934cceb8bf49958bb7",
   "docs/plans/integration-readiness-2026-11-21/PLAN.md": "ec5945ea70f1e022a7fea06c0cd2b94d4b03e6ba284f7f3888e2489122adac73",

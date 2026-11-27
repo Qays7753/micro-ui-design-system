@@ -93,6 +93,14 @@
 | 3ج.2 | **دليل الاستخدام للتطبيق المضيف** `ds/USAGE.md` بالعربي: كيف يثبّت Micro الحزمة بالوسم، وكيف يغيّر نصًا، وكيف يختار مكوّنًا بدل آخر (مثلًا رقائق التصفية أو ورقة اختيار من `Sheet` مع `Radio` أو `Checkbox`)، وكيف يُطلب مكوّن جديد (ملحق للموجز ثم وحدة في المكتبة ثم وسم جديد)، وأن المكوّنات **لا تُنسخ** إلى التطبيق بل تُستورد من الحزمة، وأن صفحات التركيب في المختبر أمثلة لا تُنقل |
 | 3ج.3 | **بوابة:** لا نص ثابت داخل أي مكوّن إلا عبر آلية 3ج.1، وfixture يثبت أن مكوّنًا يستدعي النص مباشرة يفشل |
 
+## دمج عمل الوكيل الثاني (الخطة ب)
+
+وكيل ثانٍ ينفّذ `docs/plans/design-system-batch2/PLAN-B.md` على الفرع `design-system-b`: منطق بلا شكل في `ds/src/lib/b2/`، وبيانات المحاكاة ومنطقها غير المرئي في `ds/sim/`. ملفات جديدة فقط.
+
+- **متى تدمج:** عند بداية المرحلة 4 (بعد 3ج)، وعند بداية كل مجال في المرحلة 5، وعند بداية المرحلة 7. في كل مرة: `git fetch origin design-system-b`، ثم `git merge --no-ff origin/design-system-b` إلى `design-system`، ثم حل أي تعارض، ثم تسجيل ما يلزم في الملفات المشتركة (`ds/src/index.ts`، والقاموس من `PROPOSED-KEYS.md`، و`package.json`)، ثم كل البوابات، ثم `manifest`، ثم commit + push بعنوان «merge(design-system-b): …».
+- **راجع قبل الاستخدام:** اقرأ REPORT-B، وصحّح ما يخالف المراجع. منطق الوكيل الثاني يُستعمل في المكوّن الذي يحتاجه بدل كتابته من جديد. وإن وجدته خاطئًا، أصلحه في `design-system` وسجّل ذلك.
+- **لا تنتظر الوكيل الثاني:** إن لم يكن ما تحتاجه موجودًا على `design-system-b` حين تصل إليه، فابنه بنفسك كالمعتاد، وسجّل ذلك في التقرير.
+
 ## المرحلة 4 — المكوّنات العامة
 
 وحدة لكل مكوّن، بالترتيب: Checkbox، Radio، Toggle، SearchField، TextArea، AmountField، AmountKeypad، MovementTypeControl، QuantityStepper، DateQuickChips، TimePicker، DurationPicker، PeriodSwitcher، MonthGrid، DatePicker (تركيب)، PartyPicker، FundPicker، PhotoUploader، VoiceInput، SlideToConfirm، PriceTierBuilder، KeyValueList، DataTable، StatusTrack، ActivityLog، LinkedObjects، Disclosure، ObjectSheet، LockedDetails، ErrorState، PermissionNotice، NotificationCenter، GuestShell، GoogleSignInSlot. ثم مراجعة المرحلة.
