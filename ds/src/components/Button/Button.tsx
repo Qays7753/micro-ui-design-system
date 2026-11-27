@@ -12,9 +12,14 @@
  *   press cancels when the pointer moves more than 8px (lib/use-press).
  * - Focus ring 2px brand-text offset 2, :focus-visible only (23.2, 23.3).
  * - Loading: the 20 spinner replaces the icon, width unchanged, aria-busy;
- *   the caller owns the ongoing-form label (23.3, 23.24(1)).
+ *   the caller owns the ongoing-form label (23.3, 23.24(1)). The spinner
+ *   appears ONLY after motion.pending-delay (addendum 1.7 ت11: a pending
+ *   that resolves inside 300ms never flashes an indicator — the state
+ *   jumps straight to its result; aria-busy and the disabled-while-loading
+ *   are immediate, only the VISUAL indicator waits).
  */
 import { usePress } from '../../lib/use-press';
+import { usePendingDelay } from '../../lib/use-pending-delay';
 import type { ButtonProps } from './Button.types';
 import './Button.css';
 
@@ -40,6 +45,9 @@ export function Button({
     onLongPress,
     disabled: disabled || loading,
   });
+  // ت11: the spinner waits for motion.pending-delay; the press-disabled and
+  // aria-busy ride the raw loading flag (semantics are immediate).
+  const showSpinner = usePendingDelay(loading);
   const classes = [
     'mds-button',
     `mds-button--${variant}`,
@@ -63,7 +71,7 @@ export function Button({
       disabled={disabled}
       aria-busy={loading || undefined}
     >
-      {loading ? (
+      {showSpinner ? (
         <span className="mds-button-spinner" aria-hidden="true" />
       ) : leading ? (
         <span className="mds-button-icon">{leading}</span>

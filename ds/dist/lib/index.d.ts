@@ -6,5 +6,6 @@ export { formatMoney, type DebtSide, type MoneyAriaTexts, type MoneyFlow, type M
 export { AmountVisibilityProvider, useAmountVisibility, type AmountVisibility, type AmountVisibilityContextValue, type AmountVisibilityProviderProps, } from './amount-visibility';
 export { usePress, LONG_PRESS_MS, type PressProps, type UsePressOptions, type UsePressResult, } from './use-press';
 export { useVisualViewport, type VisualViewportState, } from './use-visual-viewport';
+export { usePendingDelay } from './use-pending-delay';
 export { LayersProvider, useOpenSheetCount, useSheetLayer, type LayersProviderProps, type SheetLayerInfo, } from './layers';
 export type { ButtonVariant, DataState, Density, Size } from './types';
