@@ -23,7 +23,7 @@
 
 ## الخصائص (23.18)
 
-`leading` (محتوى العلامة: اسم أو أيقونة)، `tone` (توثيق العلامة)، `label` (العنوان)، `caption` (السطر الثاني)، `value` (المبلغ)، `trailing` (الوقت أو StatusBadge)، `onPress`، `disabled`.
+`leading` (محتوى العلامة: اسم أو أيقونة)، `tone` (توثيق العلامة)، `label` (العنوان)، `caption` (السطر الثاني)، `value` (القيمة: **المبلغ المالي عقدة `Money` بمقاس md** بإشارته ووحدته — الدفعة الثانية 1.2 — والأعداد غير المالية نص)، `trailing` (الوقت أو StatusBadge)، `onPress`، `disabled`.
 
 ## حالات القائمة (9.0)
 
@@ -32,12 +32,12 @@
 ## مثال
 
 ```tsx
-import { ObjectRow, StatusBadge, t } from '@micro/ds';
+import { Money, ObjectRow, StatusBadge, t } from '@micro/ds';
 
 <ObjectRow
   label={t('row.sampleTitle')}
   caption={t('row.sampleCaption')}
-  value="1,245.750"
+  value={<Money value="1,245.750" />}
   trailing={t('row.sampleTime')}
   onPress={openObject}
 />

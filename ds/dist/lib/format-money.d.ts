@@ -8,12 +8,12 @@
  * - Signs: in -> '+', out -> '−' (U+2212, the real minus), transfer -> none.
  *   Without a flow, a negative value renders '−'.
  * - Fils: exactly 3 decimals when non-zero, none when zero
- *   («12.500 د.أ» and «2.250 د.أ», but «150 د.أ», never «150.000 د.أ»).
- * - Unit 'د.أ' after the number; the component draws the 4px gap from
+ *   («12.500 د» and «2.250 د», but «150 د», never «150.000 د»).
+ * - Unit 'د' after the number; the component draws the 4px gap from
  *   --mds-layout-amount-unit-gap, this function returns parts (and a
  *   plain-space `display` assembly for tests and non-React callers).
- * - Debts: «لك 45 د.أ» / «عليك 20 د.أ» (word + amount, no sign).
- * - Hidden: '•••• د.أ' (4 × U+2022), no sign, no fils, debt word kept.
+ * - Debts: «لك 45 د» / «عليك 20 د» (word + amount, no sign).
+ * - Hidden: '•••• د' (4 × U+2022), no sign, no fils, debt word kept.
  * - Missing (null/undefined): '—', never a zero.
  * - Screen-reader text in full words: «سالب 35 دينار», «12 دينار و500 فلس»,
  *   «لك 45 دينار», «المبلغ مخفي».
@@ -24,7 +24,7 @@ export type MoneyFlow = 'in' | 'out' | 'transfer';
 export type DebtSide = 'forYou' | 'againstYou';
 /** Every word formatMoney needs; bound to ar.ts `moneyTexts` by callers. */
 export interface MoneyAriaTexts {
-    /** Display unit after the number, e.g. د.أ */
+    /** Display unit after the number, e.g. د */
     readonly unit: string;
     /** Aria minus word, e.g. سالب */
     readonly minus: string;
@@ -87,9 +87,9 @@ export interface MoneyResult {
  * Format one money value. Pure: same input, same output.
  *
  * ```ts
- * formatMoney('-35', { texts: moneyTexts }).display   // '−35 د.أ'
+ * formatMoney('-35', { texts: moneyTexts }).display   // '−35 د'
  * formatMoney('12.500', { texts: moneyTexts }).aria    // '12 دينار و500 فلس'
- * formatMoney(45, { debt: 'forYou', texts }).display   // 'لك 45 د.أ'
+ * formatMoney(45, { debt: 'forYou', texts }).display   // 'لك 45 د'
  * ```
  */
 export declare function formatMoney(input: MoneyInput, opts: MoneyFormatOptions): MoneyResult;

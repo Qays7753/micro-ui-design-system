@@ -20,7 +20,7 @@ export interface MetricProps {
     size?: 'lg' | 'sm';
     /** The value; cents split like the hero (23.8). */
     value?: string;
-    /** The unit («د.أ») body-strong 16/24 on the number's baseline. */
+    /** The unit («د») body-strong 16/24 on the number's baseline. */
     trailing?: string;
     /** The diff line: arrow + word; its color is the STATE color (done /
      *  problem) — render a MetricDelta node or pass your own. Omitted for

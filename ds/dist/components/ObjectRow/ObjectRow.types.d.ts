@@ -9,8 +9,12 @@
  * title does when space runs out. No trailing «›». The badge appears
  * only when the state differs from the expected (23.6). Heights (و-1
  * هـ1): 72 for every row — the mark starts it — one line or two, the
- * one-line row centers vertically. Free design-value props banned
- * (23.18).
+ * one-line row centers vertically. Free design-value props banned.
+ * Values (batch-2 1.2): a FINANCIAL value arrives as a <Money> node (md
+ * size — 23.4 fixes the size, not the shape) so the sign and the unit «د»
+ * ride on Money and the hidden-amounts context applies (23.22); a plain
+ * string stays text (non-financial numbers). A raw «45 د» text value
+ * FAILS the ds-money gate (rule 1: every amount through Money).
  */
 import type { ReactNode, Ref } from 'react';
 export interface ObjectRowProps {
@@ -25,8 +29,10 @@ export interface ObjectRowProps {
      *  repeat the title (23.4). Omit for a one-line row (still 72 — the
      *  mark starts it — text centered vertically, و-1 هـ1). */
     caption?: string;
-    /** The end value: amount-row 16/24/600 tabular; never truncated. */
-    value?: string;
+    /** The end value: amount-row 16/24/600 tabular; never truncated. A
+     *  FINANCIAL value arrives as a <Money> node (md size, batch-2 1.2);
+     *  a plain string stays text (non-financial numbers). */
+    value?: ReactNode;
     /** The second line of the end column: the time text or a StatusBadge
      *  node — only when the state differs from the expected (23.6). */
     trailing?: ReactNode;

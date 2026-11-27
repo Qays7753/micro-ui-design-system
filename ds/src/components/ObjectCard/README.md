@@ -25,7 +25,7 @@
 
 ## الخصائص (23.18)
 
-`leading` (محتوى العلامة)، `tone` (توثيقها)، `label` (العنوان)، `caption` (السطر الثاني)، `value` (القيمة)، `state` (عقدة StatusBadge)، `children` (زر الخطوة التالية)، `onPress`، `disabled`.
+`leading` (محتوى العلامة)، `tone` (توثيقها)، `label` (العنوان)، `caption` (السطر الثاني)، `value` (القيمة: **المبلغ المالي عقدة `Money` بمقاس md** بإشارته ووحدته — الدفعة الثانية 1.2 — والأعداد غير المالية نص)، `state` (عقدة StatusBadge)، `children` (زر الخطوة التالية)، `onPress`، `disabled`.
 
 ## حالات القائمة (9.0)
 
@@ -34,12 +34,12 @@
 ## مثال
 
 ```tsx
-import { ObjectCard, Button, StatusBadge, t } from '@micro/ds';
+import { Money, ObjectCard, Button, StatusBadge, t } from '@micro/ds';
 
 <ObjectCard
   label="طلب 1175 — سلمى الحوراني"
   caption={t('row.sampleCaption')}
-  value="1,245.750"
+  value={<Money value="1,245.750" />}
   state={<StatusBadge tone="waiting" />}
   onPress={openOrder}
 >

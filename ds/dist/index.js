@@ -587,7 +587,7 @@ const v = {
   "metric.deltaHigherHidden": { kind: "help", text: "أعلى من أمس" },
   "metric.deltaLowerHidden": { kind: "help", text: "أقل من أمس" },
   // --- Money fragments (BRIEF 8; display fragments -> badge) ---
-  "money.unit": { kind: "badge", text: "د.أ" },
+  "money.unit": { kind: "badge", text: "د" },
   "money.forYou": { kind: "badge", text: "لك" },
   "money.againstYou": { kind: "badge", text: "عليك" },
   "money.missing": { kind: "badge", text: "—" },
@@ -2686,7 +2686,11 @@ function ma({
           s ? /* @__PURE__ */ a("span", { className: "mds-object-row-caption mds-type-caption", children: s }) : null
         ] }),
         i !== void 0 || r ? /* @__PURE__ */ h("span", { className: "mds-object-row-end", children: [
-          /* @__PURE__ */ a("span", { className: "mds-object-row-value mds-type-amount-row", children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i ?? "—" }) }),
+          /* @__PURE__ */ a("span", { className: "mds-object-row-value mds-type-amount-row", children: i === void 0 ? /* @__PURE__ */ a("bdi", { dir: "ltr", children: "—" }) : typeof i == "string" ? /* @__PURE__ */ a("bdi", { dir: "ltr", children: i }) : (
+            /* A Money node renders itself (its own LTR isolation, sign,
+               unit and hidden-amounts behaviour) — never re-wrapped. */
+            i
+          ) }),
           r ? /* @__PURE__ */ a("span", { className: "mds-object-row-time mds-type-caption", children: r }) : null
         ] }) : null
       ]
@@ -2743,7 +2747,11 @@ function ha({
           /* @__PURE__ */ h("span", { className: "mds-object-card-body", children: [
             /* @__PURE__ */ a("span", { className: "mds-object-card-title", children: n }),
             s ? /* @__PURE__ */ a("span", { className: "mds-object-card-caption mds-type-caption", children: s }) : null,
-            i !== void 0 ? /* @__PURE__ */ a("span", { className: "mds-object-card-value mds-type-amount-row", children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i }) }) : null
+            i !== void 0 ? /* @__PURE__ */ a("span", { className: "mds-object-card-value mds-type-amount-row", children: typeof i == "string" ? /* @__PURE__ */ a("bdi", { dir: "ltr", children: i }) : (
+              /* A Money node renders itself (its own isolation, sign,
+                 unit and hidden-amounts behaviour) — never re-wrapped. */
+              i
+            ) }) : null
           ] })
         ]
       }

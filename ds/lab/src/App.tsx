@@ -172,14 +172,14 @@ export function App() {
                   <ObjectRow
                     label={parties[0]}
                     caption={t('row.sampleCaption')}
-                    value={composeHidden ? '••••' : '1,245.750'}
+                    value={<Money value="1,245.750" />}
                     trailing={t('row.sampleTime')}
                     onPress={() => {}}
                   />
                   <ObjectRow
                     label={parties[1]}
                     caption={t('row.sampleCaption')}
-                    value={composeHidden ? '••••' : '1,250'}
+                    value={<Money value="1,250" />}
                     trailing={<StatusBadge tone="waiting" data-ds-check="status-badge-height" />}
                     data-ds-exempt="view-toggle"
                     onPress={() => setConfirmOpen(true)}
@@ -1066,14 +1066,14 @@ export function App() {
                 <ObjectRow
                   label={t('row.sampleTitle')}
                   caption={t('row.sampleCaption')}
-                  value="1,245.750"
+                  value={<Money value="1,245.750" />}
                   trailing={t('row.sampleTime')}
                   onPress={() => {}}
                 />
                 <ObjectRow
                   label={t('row.sampleTitle')}
                   caption={t('row.sampleCaption')}
-                  value="1,250"
+                  value={<Money value="1,250" />}
                   trailing={<StatusBadge tone="waiting" />}
                   onPress={() => {}}
                 />
@@ -1092,7 +1092,7 @@ export function App() {
               <ObjectCard
                 label="طلب 1175 — سلمى الحوراني"
                 caption={t('row.sampleCaption')}
-                value="1,245.750"
+                value={<Money value="1,245.750" />}
                 state={<StatusBadge tone="waiting" />}
                 onPress={() => {}}
                 data-ds-check="object-card"
@@ -1107,7 +1107,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <div style={{ display: 'grid', gridTemplateColumns: '280px', gap: 12 }}>
-              <ObjectCard label="صندوق الكاش" value="4,820" caption={t('row.sampleTime')} />
+              <ObjectCard label="صندوق الكاش" value={<Money value="4,820" />} caption={t('row.sampleTime')} />
             </div>
           </div>
         </section>

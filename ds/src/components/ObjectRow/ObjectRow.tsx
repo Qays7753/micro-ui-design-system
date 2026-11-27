@@ -13,6 +13,11 @@
  *   mark, or a 24 icon: the actions/settings lists) are app-side patterns
  *   of 23.24(7), not this component.
  * - Press: the row-inset treatment (23.2). No trailing «›» (23.24).
+ * - Values (batch-2 1.2): a FINANCIAL value must be passed as a <Money>
+ *   node (md size — 23.4 fixes the size, not the shape) so the sign and
+ *   the unit «د» ride on Money and the hidden-amounts context applies
+ *   (23.22). Non-financial numbers stay plain text. A raw «45 د» text
+ *   value FAILS the ds-money gate (rule 1: every amount through Money).
  */
 import { usePress } from '../../lib/use-press';
 import { EntityMark } from '../EntityMark/index';
@@ -68,7 +73,17 @@ export function ObjectRow({
       </span>
       {value !== undefined || trailing ? (
         <span className="mds-object-row-end">
-          <span className="mds-object-row-value mds-type-amount-row"><bdi dir="ltr">{value ?? '—'}</bdi></span>
+          <span className="mds-object-row-value mds-type-amount-row">
+            {value === undefined ? (
+              <bdi dir="ltr">—</bdi>
+            ) : typeof value === 'string' ? (
+              <bdi dir="ltr">{value}</bdi>
+            ) : (
+              /* A Money node renders itself (its own LTR isolation, sign,
+                 unit and hidden-amounts behaviour) — never re-wrapped. */
+              value
+            )}
+          </span>
           {trailing ? <span className="mds-object-row-time mds-type-caption">{trailing}</span> : null}
         </span>
       ) : null}

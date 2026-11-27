@@ -73,7 +73,15 @@ export function ObjectCard({
         <span className="mds-object-card-body">
           <span className="mds-object-card-title">{label}</span>
           {caption ? <span className="mds-object-card-caption mds-type-caption">{caption}</span> : null}
-          {value !== undefined ? <span className="mds-object-card-value mds-type-amount-row"><bdi dir="ltr">{value}</bdi></span> : null}
+          {value !== undefined ? (
+            <span className="mds-object-card-value mds-type-amount-row">
+              {typeof value === 'string'
+                ? <bdi dir="ltr">{value}</bdi>
+                : /* A Money node renders itself (its own isolation, sign,
+                     unit and hidden-amounts behaviour) — never re-wrapped. */
+                  value}
+            </span>
+          ) : null}
         </span>
       </Card>
       {hasAction ? <span className="mds-object-card-action">{children}</span> : null}

@@ -326,7 +326,7 @@ export declare const ar: {
     };
     readonly 'money.unit': {
         readonly kind: "badge";
-        readonly text: "د.أ";
+        readonly text: "د";
     };
     readonly 'money.forYou': {
         readonly kind: "badge";
