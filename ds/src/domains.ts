@@ -7,4 +7,5 @@
  * their unit (B1 finance first). Until B1 lands the module is empty by
  * design — `export {}` keeps it a module for the index re-export.
  */
-export {};
+export * from './components/MovementRow';
+export * from './components/PaymentProgress';

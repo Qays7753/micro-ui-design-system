@@ -1274,6 +1274,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "آخر حركة:";
     };
+    'fund.cashDrawer': {
+        readonly kind: "badge";
+        readonly text: "درج الكاش";
+    };
     'fund.negativeBalance': {
         readonly kind: "badge";
         readonly text: "رصيد سالب";
@@ -1305,6 +1309,10 @@ export declare const ar: {
     'payment.remaining': {
         readonly kind: "badge";
         readonly text: "بقي";
+    };
+    'sr.listSeparator': {
+        readonly kind: "screen-reader";
+        readonly text: "، ";
     };
     'sr.movementRowOut': {
         readonly kind: "screen-reader";

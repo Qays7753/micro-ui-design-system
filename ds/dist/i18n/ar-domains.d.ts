@@ -16,6 +16,10 @@ export declare const arDomains: {
         readonly kind: "badge";
         readonly text: "آخر حركة:";
     };
+    readonly 'fund.cashDrawer': {
+        readonly kind: "badge";
+        readonly text: "درج الكاش";
+    };
     readonly 'fund.negativeBalance': {
         readonly kind: "badge";
         readonly text: "رصيد سالب";
@@ -47,6 +51,10 @@ export declare const arDomains: {
     readonly 'payment.remaining': {
         readonly kind: "badge";
         readonly text: "بقي";
+    };
+    readonly 'sr.listSeparator': {
+        readonly kind: "screen-reader";
+        readonly text: "، ";
     };
     readonly 'sr.movementRowOut': {
         readonly kind: "screen-reader";

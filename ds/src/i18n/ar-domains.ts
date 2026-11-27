@@ -15,6 +15,7 @@
 export const arDomains = {
   // ---------------------------------------------------------------- B1 finance
   'fund.lastMovement': { kind: 'badge', text: 'آخر حركة:' },
+  'fund.cashDrawer': { kind: 'badge', text: 'درج الكاش' },
   'fund.negativeBalance': { kind: 'badge', text: 'رصيد سالب' },
   'debt.forYou': { kind: 'badge', text: 'لك' },
   'debt.againstYou': { kind: 'badge', text: 'عليك' },
@@ -23,6 +24,7 @@ export const arDomains = {
   'debt.settled': { kind: 'badge', text: 'سُدّد' },
   'payment.paid': { kind: 'badge', text: 'دُفع' },
   'payment.remaining': { kind: 'badge', text: 'بقي' },
+  'sr.listSeparator': { kind: 'screen-reader', text: '، ' },
   'sr.movementRowOut': { kind: 'screen-reader', text: 'خارج' },
   'sr.movementRowIn': { kind: 'screen-reader', text: 'داخل' },
   'sr.transferFrom': { kind: 'screen-reader', text: 'تحويل من {from} إلى {to}' },

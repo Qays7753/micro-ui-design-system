@@ -1,0 +1,101 @@
+/**
+ * PaymentProgress.css — BATCH2-SPECS §2.6. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-payment-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  width: 100%;
+}
+
+/* The track: size.progress (8) tall, r-full, the track colour; the paid
+   part grows from the START (RTL: the right) and stretches with
+   motion.standard as a save lands (§2.6 item 5 — scaleX from the start,
+   so transform-origin follows the writing direction). */
+.mds-payment-progress-track {
+  position: relative;
+  height: var(--mds-size-progress);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-track);
+  overflow: hidden;
+}
+
+.mds-payment-progress-fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--mds-payment-progress-share, 0%);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-brand-data);
+  transition: width var(--mds-motion-standard-ms) var(--mds-motion-standard-ease);
+}
+
+/* The caption line: «دُفع 35 د · بقي 45 د» in caption 13/20 — the Money
+   nodes render their own LTR isolations; the sentence breaks to a second
+   line at 200% (§2.6 item 6). */
+.mds-payment-progress-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--mds-space-4);
+  color: var(--mds-color-text-secondary);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+}
+
+.mds-payment-progress-line bdi {
+  font-variant-numeric: var(--mds-font-numeric);
+}
+
+/* Hidden amounts (§2.6 item 6): the bar and the ratio line are GONE — a
+   plain caption says the amount is hidden; nothing of the ratio remains
+   in geometry or text. */
+.mds-payment-progress--hidden .mds-payment-progress-track,
+.mds-payment-progress--hidden .mds-payment-progress-line {
+  display: none;
+}
+
+/* Loading (BRIEF 8): the bar is a skeleton; aria-busy rides the root. */
+.mds-payment-progress--loading .mds-payment-progress-fill {
+  display: none;
+}
+
+.mds-payment-progress--loading .mds-payment-progress-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-skeleton);
+  animation: mds-payment-progress-pulse var(--mds-motion-skeleton-pulse-ms)
+    var(--mds-motion-skeleton-pulse-ease) infinite;
+}
+
+@keyframes mds-payment-progress-pulse {
+  0% {
+    opacity: var(--mds-motion-skeleton-pulse-from);
+  }
+
+  50% {
+    opacity: var(--mds-motion-skeleton-pulse-to);
+  }
+
+  100% {
+    opacity: var(--mds-motion-skeleton-pulse-from);
+  }
+}
+
+/* reduced-motion (BATCH2 §0.2 item 10): the stretch and the pulse both
+   fall back to the fade. */
+@media (prefers-reduced-motion: reduce) {
+  .mds-payment-progress-fill {
+    transition: opacity var(--mds-motion-fade-ms) linear;
+  }
+
+  .mds-payment-progress--loading .mds-payment-progress-track::after {
+    animation: none;
+    opacity: var(--mds-motion-skeleton-pulse-to);
+  }
+}
