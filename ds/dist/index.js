@@ -784,6 +784,7 @@ const w = {
   "state.driver": { kind: "badge", text: "وضع السائق" },
   "state.default": { kind: "badge", text: "افتراضي" },
   "state.landed": { kind: "badge", text: "وصل محفوظ" },
+  "state.todayProject": { kind: "badge", text: "مشروع اليوم" },
   "state.debt": { kind: "badge", text: "دين" },
   "state.hidden": { kind: "badge", text: "مخفي" },
   "state.missing": { kind: "badge", text: "مفقود" },

@@ -872,6 +872,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "وصل محفوظ";
     };
+    readonly 'state.todayProject': {
+        readonly kind: "badge";
+        readonly text: "مشروع اليوم";
+    };
     readonly 'state.debt': {
         readonly kind: "badge";
         readonly text: "دين";

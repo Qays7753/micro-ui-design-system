@@ -1123,6 +1123,20 @@ export function App() {
             </div>
           </div>
           <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.todayProject')}</span>
+            {/* 1.7 ت1: «مشروع اليوم» carries the hide-amounts IconButton in
+                the header's END slot (48, text-secondary) — the conflict
+                23.22-vs-10.2(1) resolved: no HeroSurface on that screen, so
+                the hide button moves to the header line. Live: it flips the
+                global visibility context. */}
+            <div className="lab-bar-stage">
+              <PageHeader
+                label={t('nav.todayLong')}
+                trailing={<AmountVisibilityToggle data-ds-exempt="" onChange={(visible) => setHidden(!visible)} />}
+              />
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.subScreens')}</span>
             <div className="lab-bar-stage">
               <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))}><BackIcon /></IconButton>} />
