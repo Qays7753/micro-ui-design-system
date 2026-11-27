@@ -50,6 +50,8 @@ export const arDomains = {
 
   // -------------------------------------------------- B2 orders & appointments
   'order.delivery': { kind: 'badge', text: 'التسليم' },
+  'order.deliver': { kind: 'button', text: 'سلّم الطلب' },
+  'order.duration': { kind: 'badge', text: 'موعد بمدة' },
   'order.today': { kind: 'badge', text: 'اليوم' },
   'order.tomorrow': { kind: 'badge', text: 'غداً' },
   'order.yesterday': { kind: 'badge', text: 'أمس' },
@@ -67,7 +69,14 @@ export const arDomains = {
   'sr.weekStripToday': { kind: 'screen-reader', text: 'اليوم' },
   'sr.weekStripItems': { kind: 'screen-reader', text: '{counted}' },
   'sr.slotUnavailable': { kind: 'screen-reader', text: 'غير متاح' },
+  'sr.timelineItems': { kind: 'screen-reader', text: 'عناصر اليوم بالترتيب' },
   'sr.timelineNow': { kind: 'screen-reader', text: 'الآن' },
+  'orders.listView': { kind: 'badge', text: 'القائمة' },
+  'orders.calendarView': { kind: 'badge', text: 'التقويم' },
+  'orders.all': { kind: 'badge', text: 'الكل' },
+  'orders.active': { kind: 'badge', text: 'الجارية' },
+  'orders.log': { kind: 'badge', text: 'السجل' },
+  'state.selected': { kind: 'badge', text: 'المحدد:' },
   'lab.h.orderCard': { kind: 'title', text: 'بطاقة طلب' },
   'lab.h.weekStrip': { kind: 'title', text: 'شريط أيام الأسبوع' },
   'lab.h.dayTimeline': { kind: 'title', text: 'جدول اليوم بالساعات' },

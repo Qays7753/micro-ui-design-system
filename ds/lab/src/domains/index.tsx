@@ -22,9 +22,11 @@ export interface DomainSection {
 /** The domains wing: one section per domain component + compose pages.
  *  Each domain file fills its rows as its units land (B1 first). */
 import { financeSections } from './finance';
+import { ordersSections } from './orders';
 
 export const domainSections: DomainSection[] = [
   ...financeSections,
+  ...ordersSections,
   // B1 finance — filled by finance.tsx
   // B2 orders & appointments — filled by orders.tsx
   // B3 delivery — filled by delivery.tsx

@@ -1,0 +1,191 @@
+/*
+ * DayTimeline.css — BATCH2-SPECS §3.3. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-day-timeline {
+  display: flex;
+  width: 100%;
+  background-color: var(--mds-color-surface);
+  border-radius: var(--mds-radius-lg);
+  position: relative;
+}
+
+/* The hours column: layout.timeline-hours 48 wide; each hour slot is
+   size.timeline-hour (64) tall; the label aligns to the slot's top. */
+.mds-day-timeline-hours {
+  display: flex;
+  flex-direction: column;
+  width: var(--mds-layout-timeline-hours);
+  flex-shrink: 0;
+}
+
+.mds-day-timeline-hour {
+  height: var(--mds-size-timeline-hour);
+  padding-top: var(--mds-space-4);
+  text-align: center;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+  box-sizing: border-box;
+}
+
+/* The items area: relative, one hour = size.timeline-hour px. */
+.mds-day-timeline-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+/* A duration block: absolute, from start to end; r-inset; the tone's
+   light background with its dark text (§3.3 item 2). */
+.mds-day-timeline-block {
+  position: absolute;
+  box-sizing: border-box;
+  min-height: var(--mds-size-timeline-block-min);
+  padding: var(--mds-space-8);
+  border-radius: var(--mds-radius-inset);
+  border: none;
+  font: inherit;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--mds-space-4);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Tone surfaces (23.6): waiting/done/problem/info light backgrounds with
+   their dark foregrounds; neutral uses the well surface. */
+.mds-day-timeline-block--waiting {
+  background-color: var(--mds-color-status-waiting-bg);
+  color: var(--mds-color-status-waiting-fg);
+}
+
+.mds-day-timeline-block--done {
+  background-color: var(--mds-color-status-done-bg);
+  color: var(--mds-color-status-done-fg);
+}
+
+.mds-day-timeline-block--problem {
+  background-color: var(--mds-color-status-problem-bg);
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-day-timeline-block--info {
+  background-color: var(--mds-color-status-info-bg);
+  color: var(--mds-color-status-info-fg);
+}
+
+.mds-day-timeline-block--neutral {
+  background-color: var(--mds-color-surface-well);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-day-timeline-block:active {
+  filter: brightness(0.97);
+}
+
+.mds-day-timeline-moment:active .mds-day-timeline-moment-chip {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-day-timeline-block-title {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mds-day-timeline-block-time {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A moment delivery: pinned at its hour — a dot-event-sized brand-anchor
+   dot then 8 then a chip-height pill on surface-well. */
+.mds-day-timeline-moment {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  border: none;
+  background: transparent;
+  /* The chip is 40 high; the press target stretches to touch-min (م3). */
+  padding-block: calc((var(--mds-size-touch-min) - var(--mds-size-chip)) / 2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mds-day-timeline-moment-dot {
+  width: var(--mds-size-dot-attention);
+  height: var(--mds-size-dot-attention);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-brand-anchor);
+  flex-shrink: 0;
+}
+
+.mds-day-timeline-moment-chip {
+  display: inline-flex;
+  align-items: center;
+  height: var(--mds-size-chip);
+  padding-inline: var(--mds-space-8);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface-well);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* The now line: across the area, signal-line width in now-line color,
+   with a dot-signal at its start (§3.3 item 2). */
+.mds-day-timeline-now {
+  position: absolute;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.mds-day-timeline-now::before {
+  content: '';
+  flex: 1;
+  height: 0;
+  border-top: var(--mds-border-signal-line) solid var(--mds-role-now-line);
+}
+
+.mds-day-timeline-now-dot {
+  width: var(--mds-size-dot-signal);
+  height: var(--mds-size-dot-signal);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-role-now-line);
+}
+
+/* The overlap lanes (§3.3 item 2): items overlapping in time split the
+   width equally with 4 between; the inline style sets each lane's share. */
+.mds-day-timeline-lane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  gap: var(--mds-space-4);
+}
+
+.mds-day-timeline-lane > * {
+  flex: 1;
+  min-width: 0;
+}

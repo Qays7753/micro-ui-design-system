@@ -1,0 +1,86 @@
+/*
+ * SlotPicker.css — BATCH2-SPECS §3.6. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-slot-picker {
+  display: flex;
+  flex-direction: column;
+  /* group-to-group gap per §3.6 item 2; inline-size for the fill */
+  gap: var(--mds-layout-group-to-group);
+  inline-size: 100%;
+}
+
+/* The group heading: label-strong (§3.6 item 2). */
+.mds-slot-picker-group-label {
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-primary);
+}
+
+/* The 3-column equal grid (§3.6 item 2): (288 − 16) ÷ 3 = 90 on 320;
+   two columns at 200% (the media query below). */
+.mds-slot-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--mds-layout-chip-gap);
+}
+
+.mds-slot-picker-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--mds-size-touch-min);
+  padding-inline: var(--mds-space-8);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  font-variant-numeric: var(--mds-font-numeric);
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+.mds-slot-picker-slot:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.mds-slot-picker-slot[aria-checked='true'] {
+  background-color: var(--mds-color-brand-anchor);
+  border-color: var(--mds-color-brand-anchor);
+  color: var(--mds-color-on-anchor);
+}
+
+.mds-slot-picker-slot:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-slot-picker-slot:disabled {
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+/* 200% text (§3.6 item 6): two columns. rem-based media tracks the root
+   font the lab's 200% key doubles, so the doubled chips at a phone
+   viewport fall into this range and the grid drops to 2 columns. */
+@media (max-width: 22.5rem) {
+  .mds-slot-picker-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-slot-picker-slot {
+    transition: none;
+  }
+}

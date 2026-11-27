@@ -61,8 +61,9 @@ export function FundCard({
     .join(ar['sr.listSeparator'].text);
 
   const classes = [
+    'mds-card-shell',
     'mds-fund-card',
-    isPressed ? 'mds-fund-card--pressed' : '',
+    isPressed ? 'mds-card-shell--pressed' : '',
     loading ? 'mds-fund-card--loading' : '',
     className,
   ]

@@ -1,0 +1,83 @@
+/*
+ * OrderCard.css — BATCH2-SPECS §3.1 on the card anatomy. Every value is a
+ * token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* Card chrome: the shared mds-card-shell (ObjectCard.css). */
+
+/* First row: mark 44 → 12 → name+content; the value anchors the end. The
+   value wraps UNDER the name when it cannot fit (§3.1 item 6). */
+.mds-order-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mds-space-12);
+  max-width: 100%;
+}
+
+.mds-order-card-head .mds-entity-mark {
+  flex-shrink: 0;
+}
+
+.mds-order-card-id {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--mds-layout-row-line-gap);
+  flex: 1;
+  min-width: 0;
+  align-items: flex-start;
+}
+
+.mds-order-card-head .mds-money {
+  /* The card's own value keeps the amount-row typography Money brings. */
+  color: var(--mds-color-text-primary);
+}
+
+/* The appointment line: clock 16 text-secondary → 8 → label text-primary;
+   the status badge anchors the line's end (§3.1 item 2). */
+.mds-order-card-time {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  margin-top: var(--mds-space-12);
+  color: var(--mds-color-text-primary);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+}
+
+.mds-order-card-time-icon {
+  color: var(--mds-color-text-secondary);
+  display: inline-flex;
+}
+
+.mds-order-card-time-badge {
+  margin-inline-start: auto;
+}
+
+/* The next-step button rides at the end (و-2 item 19: the button is a
+   SIBLING above the stretched card link — never nested interactives). */
+.mds-order-card-action {
+  margin-block-start: var(--mds-space-12);
+  align-self: flex-start;
+  block-size: var(--mds-size-touch-min);
+  display: inline-flex;
+}
+
+/* Cancelled (§3.1 item 2): everything secondary, the value struck, no button. */
+.mds-order-card--cancelled .mds-order-card-title,
+.mds-order-card--cancelled .mds-object-row-caption,
+.mds-order-card--cancelled .mds-order-card-time {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-order-card--cancelled .mds-money .mds-money-visual {
+  text-decoration: line-through;
+  color: var(--mds-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-order-card {
+    transition: none;
+  }
+}

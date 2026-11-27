@@ -17,7 +17,7 @@ export interface FundCardProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
     /** The fund name, one line (body-strong). */
     label: string;
     /** The fund type; picks the mark's icon. */
-    type?: FundType;
+    variant?: FundType;
     /** The balance; Money lg (number-lg 28/36). A negative keeps its «−»
      *  with no extra colour (§2.3 item 4). */
     value: MoneyInput;

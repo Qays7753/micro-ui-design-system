@@ -1,0 +1,44 @@
+/*
+ * AgendaList.css — BATCH2-SPECS §3.4. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-agenda-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-group-to-group);
+  width: 100%;
+}
+
+/* The pinned day heading (23.24 (5)): sticky under the strip, the label
+   with the count at its end, one baseline, surface background. */
+.mds-agenda-list-heading {
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-layer-bars);
+  display: flex;
+  align-items: baseline;
+  gap: var(--mds-space-8);
+  padding: var(--mds-space-8) 0;
+  background-color: var(--mds-color-canvas);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-agenda-list-count {
+  margin-inline-start: auto;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* The day group: heading then the Surface of rows. */
+.mds-agenda-list-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+}

@@ -81,8 +81,9 @@ export function DebtCard({
     .join(ar['sr.listSeparator'].text);
 
   const classes = [
+    'mds-card-shell',
     'mds-debt-card',
-    isPressed ? 'mds-debt-card--pressed' : '',
+    isPressed ? 'mds-card-shell--pressed' : '',
     className,
   ]
     .filter(Boolean)

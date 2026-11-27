@@ -3,28 +3,7 @@
  * raw hex/px/ms in this file (ds-raw-values).
  */
 
-/* The card: container width, radius 24, surface padding; the press
-   treatment of the unified card (§2.4 on 23.24). */
-.mds-debt-card {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--mds-layout-surface-padding-phone);
-  background-color: var(--mds-color-surface);
-  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
-  border-radius: var(--mds-radius-xl);
-  font: inherit;
-  color: inherit;
-  text-align: start;
-  transition: transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
-}
-
-.mds-debt-card--pressed {
-  transform: scale(0.98);
-  background-color: var(--mds-color-surface-pressed);
-}
-
+/* Card chrome: the shared mds-card-shell (ObjectCard.css). */
 .mds-debt-card:disabled {
   cursor: default;
 }

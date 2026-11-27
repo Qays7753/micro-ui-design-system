@@ -1315,7 +1315,7 @@ export declare const ar: {
         readonly text: "سُدّد";
     };
     'metric.weekIn': {
-        readonly kind: "badge";
+        readonly kind: "title";
         readonly text: "الداخل هذا الأسبوع";
     };
     'payment.paid': {
@@ -1406,6 +1406,14 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "التسليم";
     };
+    'order.deliver': {
+        readonly kind: "button";
+        readonly text: "سلّم الطلب";
+    };
+    'order.duration': {
+        readonly kind: "badge";
+        readonly text: "موعد بمدة";
+    };
     'order.today': {
         readonly kind: "badge";
         readonly text: "اليوم";
@@ -1474,9 +1482,37 @@ export declare const ar: {
         readonly kind: "screen-reader";
         readonly text: "غير متاح";
     };
+    'sr.timelineItems': {
+        readonly kind: "screen-reader";
+        readonly text: "عناصر اليوم بالترتيب";
+    };
     'sr.timelineNow': {
         readonly kind: "screen-reader";
         readonly text: "الآن";
+    };
+    'orders.listView': {
+        readonly kind: "badge";
+        readonly text: "القائمة";
+    };
+    'orders.calendarView': {
+        readonly kind: "badge";
+        readonly text: "التقويم";
+    };
+    'orders.all': {
+        readonly kind: "badge";
+        readonly text: "الكل";
+    };
+    'orders.active': {
+        readonly kind: "badge";
+        readonly text: "الجارية";
+    };
+    'orders.log': {
+        readonly kind: "badge";
+        readonly text: "السجل";
+    };
+    'state.selected': {
+        readonly kind: "badge";
+        readonly text: "المحدد:";
     };
     'lab.h.orderCard': {
         readonly kind: "title";

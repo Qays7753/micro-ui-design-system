@@ -1,0 +1,113 @@
+/*
+ * WeekStrip.css — BATCH2-SPECS §3.2. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* Full-width surface strip with top/bottom hairlines only (و-2 item 26):
+   7 equal cells of screen ÷ 7, height size.weekstrip-cell-56. */
+.mds-week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--mds-color-surface);
+  border-block: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  padding: 0;
+  margin: 0;
+  /* Full-bleed (و-2 البند 26): the strip spans the SCREEN width, not the
+     16-margin content, so each cell = 360 ÷ 7 ≥ size.touch-min (ق1). */
+  inline-size: 100vw;
+  margin-inline: calc(50% - 50vw);
+  max-inline-size: 100vw;
+  box-sizing: border-box;
+}
+
+.mds-week-strip-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-space-4);
+  min-height: var(--mds-size-weekstrip-cell-56);
+  padding: var(--mds-space-8) 0;
+  background: transparent;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.mds-week-strip-day:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: calc(-1 * var(--mds-border-focus-ring-width));
+  border-radius: var(--mds-radius-2xs);
+}
+
+.mds-week-strip-day[aria-disabled='true'] {
+  cursor: default;
+}
+
+.mds-week-strip-day:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-week-strip-name {
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  color: var(--mds-color-text-secondary);
+  white-space: nowrap;
+}
+
+/* The date circle: day-mark 36; the ring rides OUTSIDE it (today). */
+.mds-week-strip-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-day-mark);
+  height: var(--mds-size-day-mark);
+  border-radius: var(--mds-radius-full);
+  font-family: var(--mds-type-body-strong-font);
+  font-size: var(--mds-type-body-strong-size);
+  line-height: var(--mds-type-body-strong-line);
+  font-weight: var(--mds-type-body-strong-weight);
+  color: var(--mds-color-text-primary);
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+.mds-week-strip-day--today .mds-week-strip-mark {
+  box-shadow: 0 0 0 var(--mds-border-track-line) var(--mds-role-today-ring);
+}
+
+/* Selected: the circle fills brand-anchor, the number goes on-anchor;
+   today's ring stays when the selected day IS today (§3.2 item 2). */
+.mds-week-strip-day--selected .mds-week-strip-mark {
+  background-color: var(--mds-color-brand-anchor);
+  color: var(--mds-color-on-anchor);
+}
+
+/* The item dots: up to 3 of dot-event 6, 2 apart; 4+ renders the count. */
+.mds-week-strip-dots {
+  display: inline-flex;
+  gap: var(--mds-space-4);
+  align-items: center;
+  min-height: var(--mds-size-dot-event);
+}
+
+.mds-week-strip-dot {
+  width: var(--mds-size-dot-event);
+  height: var(--mds-size-dot-event);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-text-secondary);
+}
+
+.mds-week-strip-count {
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  color: var(--mds-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-week-strip-mark {
+    transition: none;
+  }
+}

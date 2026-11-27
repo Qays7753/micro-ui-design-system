@@ -141,7 +141,18 @@
   "action",
   "forYou",
   "againstYou",
-  "counted"
+  "counted",
+  "badge",
+  "rows",
+  "hour",
+  "startMinutes",
+  "minutes",
+  "now",
+  "date",
+  "draft",
+  "cancelled",
+  "slots",
+  "today"
  ],
  "banned_props_jsx": [
   "onLongTap",
@@ -308,6 +319,7 @@
   "badge": "StatusBadge",
   "money": "Money",
   "controls": "AmountVisibilityToggle",
-  "finance-compose": "FundCard"
+  "finance-compose": "FundCard",
+  "orders-compose": "OrderCard"
  }
 }
