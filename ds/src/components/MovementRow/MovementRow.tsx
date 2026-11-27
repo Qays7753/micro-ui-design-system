@@ -82,7 +82,7 @@ export function MovementRow({
     direction === 'out' ? ar['sr.movementRowOut'].text : ar['sr.movementRowIn'].text,
     label,
     caption,
-    value === null || value === undefined ? '' : ar['money.ariaMissing'].text,
+    value === null || value === undefined ? ar['money.ariaMissing'].text : '',
     draft ? ar['state.draft'].text : time ?? '',
   ]
     .filter(Boolean)

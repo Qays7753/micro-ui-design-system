@@ -46,8 +46,10 @@
   line-height: var(--mds-type-caption-line);
 }
 
-.mds-payment-progress-line bdi {
-  font-variant-numeric: var(--mds-font-numeric);
+.mds-payment-progress-amount .mds-money {
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  font-weight: var(--mds-type-amount-row-weight);
 }
 
 /* Hidden amounts (§2.6 item 6): the bar and the ratio line are GONE — a

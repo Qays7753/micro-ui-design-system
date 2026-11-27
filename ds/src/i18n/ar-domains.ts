@@ -29,7 +29,7 @@ export const arDomains = {
   'sr.movementRowIn': { kind: 'screen-reader', text: 'داخل' },
   'sr.transferFrom': { kind: 'screen-reader', text: 'تحويل من {from} إلى {to}' },
   'sr.fundHasDraft': { kind: 'screen-reader', text: 'فيه مسودة' },
-  'sr.debtProgress': { kind: 'screen-reader', text: 'دُفع {paid} من {total} دينار' },
+  'sr.debtProgress': { kind: 'screen-reader', text: 'دُفع {paid} من {total}' },
   'lab.h.movementRow': { kind: 'title', text: 'صف حركة مالية' },
   'lab.h.transferRow': { kind: 'title', text: 'صف تحويل صندوقين' },
   'lab.h.fundCard': { kind: 'title', text: 'بطاقة صندوق ورصيده' },

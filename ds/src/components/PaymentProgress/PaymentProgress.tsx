@@ -19,6 +19,7 @@ import { moneyTexts, t } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { formatMoney } from '../../lib/format-money';
 import type { MoneyInput } from '../../lib/format-money';
+import { Money } from '../Money/index';
 import type { PaymentProgressProps } from './PaymentProgress.types';
 import './PaymentProgress.css';
 
@@ -91,10 +92,14 @@ export function PaymentProgress({
           </span>
           <span className="mds-payment-progress-line">
             {t('payment.paid')}{' '}
-            <bdi dir="ltr">{formatMoney(paidCapped / 1000, { texts: moneyTexts }).display}</bdi>
+            <span className="mds-payment-progress-amount">
+              <Money value={paidCapped / 1000} />
+            </span>
             {' · '}
             {t('payment.remaining')}{' '}
-            <bdi dir="ltr">{formatMoney(remaining / 1000, { texts: moneyTexts }).display}</bdi>
+            <span className="mds-payment-progress-amount">
+              <Money value={remaining / 1000} />
+            </span>
           </span>
         </>
       )}
