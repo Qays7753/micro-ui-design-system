@@ -40,6 +40,12 @@ export interface ObjectRowProps {
     onPress?: () => void;
     /** Disables the row (23.24(15)). */
     disabled?: boolean;
+    /** ت12 (addendum 1.7): the row JUST LANDED — a save closed its sheet and
+     *  the affected row plays motion.landed ONCE (brand-selected-bg fading to
+     *  transparent over 1200ms ease-out; reduced motion: no fade, the Toast
+     *  alone signals). Toggle it false after the landing so a re-land
+     *  replays. */
+    landed?: boolean;
     /** React 19 ref-as-prop on the root element. */
     ref?: Ref<HTMLElement>;
     /** Standard pass-throughs. */

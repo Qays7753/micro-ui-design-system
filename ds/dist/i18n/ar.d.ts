@@ -868,6 +868,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "افتراضي";
     };
+    readonly 'state.landed': {
+        readonly kind: "badge";
+        readonly text: "وصل محفوظ";
+    };
     readonly 'state.debt': {
         readonly kind: "badge";
         readonly text: "دين";
