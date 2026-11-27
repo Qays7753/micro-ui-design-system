@@ -188,6 +188,82 @@ export declare const ar: {
         readonly kind: "title";
         readonly text: "تفاصيل الحركة";
     };
+    readonly 'sheet.projectTitle': {
+        readonly kind: "title";
+        readonly text: "تبديل المشروع";
+    };
+    readonly 'sheet.notificationsTitle': {
+        readonly kind: "title";
+        readonly text: "الإشعارات";
+    };
+    readonly 'sheet.askTitle': {
+        readonly kind: "title";
+        readonly text: "Ask Micro";
+    };
+    readonly 'sheet.sourceTitle': {
+        readonly kind: "title";
+        readonly text: "مصدر الرقم";
+    };
+    readonly 'sheet.allTitle': {
+        readonly kind: "title";
+        readonly text: "كل ما يحتاجك";
+    };
+    readonly 'sheet.objectTitle': {
+        readonly kind: "title";
+        readonly text: "طلب 1175";
+    };
+    readonly 'notif.quoteArrived': {
+        readonly kind: "help";
+        readonly text: "وصل عرض سعر من عمر الزعبي";
+    };
+    readonly 'notif.orderToday': {
+        readonly kind: "help";
+        readonly text: "طلب 1203 موعده اليوم 4:00 م";
+    };
+    readonly 'notif.paymentIn': {
+        readonly kind: "help";
+        readonly text: "دفعة 30 د من رنا العبادي";
+    };
+    readonly 'notif.timeAgo': {
+        readonly kind: "badge";
+        readonly text: "قبل 5 دقائق";
+    };
+    readonly 'notif.timeToday': {
+        readonly kind: "badge";
+        readonly text: "9:15 ص";
+    };
+    readonly 'notif.timeYesterday': {
+        readonly kind: "badge";
+        readonly text: "أمس 5:10 م";
+    };
+    readonly 'ask.placeholder': {
+        readonly kind: "placeholder";
+        readonly text: "اسأل Micro";
+    };
+    readonly 'ask.amountLabel': {
+        readonly kind: "badge";
+        readonly text: "السؤال";
+    };
+    readonly 'button.askSend': {
+        readonly kind: "button";
+        readonly text: "أرسل";
+    };
+    readonly 'kv.orderTitle': {
+        readonly kind: "badge";
+        readonly text: "الطلب";
+    };
+    readonly 'kv.customer': {
+        readonly kind: "badge";
+        readonly text: "العميل";
+    };
+    readonly 'kv.delivery': {
+        readonly kind: "badge";
+        readonly text: "التسليم";
+    };
+    readonly 'kv.phone': {
+        readonly kind: "badge";
+        readonly text: "الهاتف";
+    };
     readonly 'title.sheet': {
         readonly kind: "title";
         readonly text: "الورقة";
@@ -275,6 +351,14 @@ export declare const ar: {
     readonly 'toast.quoteAccepted': {
         readonly kind: "success";
         readonly text: "قُبل العرض";
+    };
+    readonly 'toast.questionSent': {
+        readonly kind: "success";
+        readonly text: "أُرسل السؤال";
+    };
+    readonly 'toast.opens': {
+        readonly kind: "help";
+        readonly text: "تفتح {area}";
     };
     readonly 'banner.offline': {
         readonly kind: "error";

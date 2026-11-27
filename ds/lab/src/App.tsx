@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, BackIcon, Button, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -67,15 +67,34 @@ export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
   const [segment, setSegment] = useState('today');
+  // 2.1 (owner note §1): EVERY interactive lab example actually works when
+  // pressed — no onChange={() => {}} anywhere in the lab or the compose page.
+  const [segment3, setSegment3] = useState('in');
+  const [segment4, setSegment4] = useState('all');
+  const [segmentIcon, setSegmentIcon] = useState('today');
 
   const [chips, setChips] = useState<string[]>(['in']);
+  const [chipsMulti, setChipsMulti] = useState<string[]>(['in', 'transfer']);
+  const [chipsScroll, setChipsScroll] = useState<string[]>(['today']);
   const [tab, setTab] = useState(0);
+  const [tabDemo, setTabDemo] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  // 2.1 demo sheets: every pressable in the lab opens its real sample.
+  const [projectOpen, setProjectOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [askOpen, setAskOpen] = useState(false);
+  const [askText, setAskText] = useState('');
+  const [sourceOpen, setSourceOpen] = useState(false);
+  const [objectOpen, setObjectOpen] = useState(false);
+  const [allOpen, setAllOpen] = useState(false);
   // Catalog samples: the exit motion plays on dismiss, THEN the app
   // (here, the lab) removes the sheet — remounted fresh at once so the
   // sample stays for review and the press scan (23.2) keeps hitting it.
   const [sheetSampleKey, setSheetSampleKey] = useState(0);
+  // The Toast garden's «تراجع» replays the sample so the press always has a
+  // visible effect (the enter motion) — the exit+remount loop of 23.12.
+  const [toastUndoKey, setToastUndoKey] = useState(0);
   const [confirmSampleKey, setConfirmSampleKey] = useState(0);
   const [toastText, setToastText] = useState<string | null>(null);
   const [pageState, setPageState] = useState<'normal' | 'loading' | 'empty'>('normal');
@@ -84,6 +103,129 @@ export function App() {
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
       ? 'catalog'
       : 'compose',
+  );
+
+  /* 2.1 demo sheets — the real destinations of every pressable in both
+     views: the project switcher sheet (with the 23.22 «إخفاء المبالغ»
+     row), the notifications sheet, the Ask panel sample, the amount
+     source sheet («كل رقم مجمّع يُظهر مصدره»), the object-sheet pattern
+     (10.2 (5)) and the full needs-you list. */
+  const demoSheets = (
+    <>
+      {projectOpen ? (
+        <Sheet label={t('sheet.projectTitle')} onDismiss={() => setProjectOpen(false)}>
+          <Surface>
+            {projects.slice(0, 2).map((name, i) => (
+              <ObjectRow
+                key={name}
+                label={name}
+                caption={ar['role.owner'].text}
+                trailing={i === 0 ? <SelectedIcon size={20} /> : undefined}
+                onPress={() => setProjectOpen(false)}
+              />
+            ))}
+          </Surface>
+          <Surface>
+            <ObjectRow
+              label={hidden ? t('button.showAmounts') : t('button.hideAmounts')}
+              trailing={hidden ? <SelectedIcon size={20} /> : undefined}
+              onPress={() => { setHidden(!hidden); setProjectOpen(false); }}
+            />
+          </Surface>
+        </Sheet>
+      ) : null}
+      {notifOpen ? (
+        <Sheet label={t('sheet.notificationsTitle')} onDismiss={() => setNotifOpen(false)}>
+          <Surface>
+            <ObjectRow
+              leading={drivers[0]}
+              label={t('notif.quoteArrived')}
+              caption={t('notif.timeAgo')}
+              trailing={<StatusBadge tone="waiting" />}
+              onPress={() => setNotifOpen(false)}
+            />
+            <ObjectRow
+              leading={parties[0]}
+              label={t('notif.orderToday')}
+              caption={t('notif.timeToday')}
+              onPress={() => setNotifOpen(false)}
+            />
+            <ObjectRow
+              leading={parties[2]}
+              label={t('notif.paymentIn')}
+              caption={t('notif.timeYesterday')}
+              onPress={() => setNotifOpen(false)}
+            />
+          </Surface>
+        </Sheet>
+      ) : null}
+      {askOpen ? (
+        <Sheet label={t('sheet.askTitle')} onDismiss={() => setAskOpen(false)}>
+          <Surface>
+            <div className="lab-row-entity" style={{ alignItems: 'center' }}>
+              <AskSymbolIcon size={28} />
+              <TextField
+                label={t('ask.amountLabel')}
+                placeholder={t('ask.placeholder')}
+                value={askText}
+                onChange={setAskText}
+              />
+            </div>
+            <ActionBar
+              label={t('button.askSend')}
+              onPress={() => { setAskOpen(false); setAskText(''); setToastText(t('toast.questionSent')); }}
+              leading={false}
+            />
+          </Surface>
+        </Sheet>
+      ) : null}
+      {sourceOpen ? (
+        <Sheet label={t('sheet.sourceTitle')} onDismiss={() => setSourceOpen(false)}>
+          <Surface>
+            <ObjectRow label={parties[0]} caption={t('row.sampleCaption')} value={<Money value="145.750" />} trailing={t('row.sampleTime')} onPress={() => setSourceOpen(false)} />
+            <ObjectRow label={parties[2]} caption={t('row.sampleCaption')} value={<Money value="90" />} trailing={t('row.sampleTime')} onPress={() => setSourceOpen(false)} />
+            <ObjectRow label={parties[3]} caption={t('row.sampleCaption')} value={<Money value="12.500" />} trailing={t('row.sampleTime')} onPress={() => setSourceOpen(false)} />
+          </Surface>
+        </Sheet>
+      ) : null}
+      {objectOpen ? (
+        <Sheet label={t('sheet.objectTitle')} onDismiss={() => setObjectOpen(false)}>
+          <Surface>
+            <div className="lab-row-entity">
+              <span className="lab-name">{t('kv.orderTitle')}</span>
+              <Money value="45" debt="forYou" />
+            </div>
+            <ObjectRow label={t('kv.customer')} caption={parties[0]} />
+            <ObjectRow label={t('kv.delivery')} caption={t('notif.timeToday')} />
+            <ObjectRow label={t('kv.phone')} caption={t('placeholder.phone')} />
+          </Surface>
+          <Surface>
+            <ObjectRow
+              label={t('button.recordPayment')}
+              caption={t('row.sampleCaption')}
+              onPress={() => setToastText(t('toast.movementSaved'))}
+            />
+          </Surface>
+        </Sheet>
+      ) : null}
+      {allOpen ? (
+        <Sheet label={t('sheet.allTitle')} onDismiss={() => setAllOpen(false)}>
+          <Surface>
+            {parties.map((name) => (
+              <ObjectRow
+                key={name}
+                label={name}
+                caption={t('row.sampleCaption')}
+                value={<Money value="45" />}
+                trailing={t('row.sampleTime')}
+                onPress={() => setAllOpen(false)}
+              />
+            ))}
+          </Surface>
+        </Sheet>
+      ) : null}
+      {toastText ? <Toast label={toastText} onDismiss={() => setToastText(null)} /> : null}
+    </>
   );
 
   const applyScale = (next: 100 | 200) => {
@@ -130,7 +272,7 @@ export function App() {
               }
               trailing={
                 <>
-                  <NotificationsButton value={3} onPress={() => {}} />
+                  <NotificationsButton value={3} onPress={() => setNotifOpen(true)} />
                   <AskButton onPress={() => {}} />
                 </>
               }
@@ -264,7 +406,7 @@ export function App() {
             </div>
             <div className="lab-row">
               <span className="lab-label">{t('state.driver')}</span>
-              <AmountVisibilityToggle density="large" />
+              <AmountVisibilityToggle density="large" onChange={(visible) => setHidden(!visible)} />
             </div>
             <div className="lab-row">
               <span className="lab-label">{t('lab.fontScale')}</span>
@@ -409,19 +551,19 @@ export function App() {
           <h2 className="lab-title">{t('title.button')}</h2>
           <div className="lab-row">
             <span className="lab-label">{t('variant.primary')}</span>
-            <Button data-ds-check="button-md">{t('button.recordMovement')}</Button>
+            <Button data-ds-check="button-md" onClick={() => setToastText(t('toast.movementSaved'))}>{t('button.recordMovement')}</Button>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('variant.secondary')}</span>
-            <Button variant="secondary">{t('button.acceptQuote')}</Button>
+            <Button variant="secondary" onClick={() => setToastText(t('toast.quoteAccepted'))}>{t('button.acceptQuote')}</Button>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('variant.text')}</span>
-            <Button variant="text">{t('button.back')}</Button>
+            <Button variant="text" onClick={() => setToastText(t('button.back'))}>{t('button.back')}</Button>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('variant.danger')}</span>
-            <Button variant="danger">{t('button.deleteMovement')}</Button>
+            <Button variant="danger" onClick={() => setToastText(t('toast.movementDeleted'))}>{t('button.deleteMovement')}</Button>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.loading')}</span>
@@ -433,10 +575,10 @@ export function App() {
                 below is the 48 zone, so the instances are ds-exempt with this
                 documented reason. */}
             <div className="lab-touch-row">
-              <Button size="sm" data-ds-check="button-sm" data-ds-exempt="">
+              <Button size="sm" data-ds-check="button-sm" data-ds-exempt="" onClick={() => setToastText(t('button.back'))}>
                 {t('button.back')}
               </Button>
-              <Button size="sm" variant="secondary" data-ds-exempt="">
+              <Button size="sm" variant="secondary" data-ds-exempt="" onClick={() => setToastText(t('button.all'))}>
                 {t('button.all')}
               </Button>
             </div>
@@ -452,13 +594,13 @@ export function App() {
           <h2 className="lab-title">{t('title.iconButton')}</h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
-            <IconButton label={t('button.back')} onPress={() => {}} data-ds-check="icon-button">
+            <IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))} data-ds-check="icon-button">
               <BackIcon />
             </IconButton>
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.driver')}</span>
-            <IconButton label={t('button.back')} onPress={() => {}} density="large">
+            <IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))} density="large">
               <BackIcon />
             </IconButton>
           </div>
@@ -514,8 +656,8 @@ export function App() {
                 { value: 'out', label: t('movement.out') },
                 { value: 'transfer', label: t('movement.transfer') },
               ]}
-              value="in"
-              onChange={() => {}}
+              value={segment3}
+              onChange={setSegment3}
             />
           </div>
           <div className="lab-row">
@@ -528,8 +670,8 @@ export function App() {
                 { value: 'transfer', label: t('movement.transfer') },
                 { value: 'all', label: t('button.all') },
               ]}
-              value="all"
-              onChange={() => {}}
+              value={segment4}
+              onChange={setSegment4}
             />
           </div>
           <div className="lab-row">
@@ -540,8 +682,8 @@ export function App() {
                 { value: 'today', label: t('nav.today'), leading: <NavTodayIcon /> },
                 { value: 'agenda', label: t('nav.agenda') },
               ]}
-              value="today"
-              onChange={() => {}}
+              value={segmentIcon}
+              onChange={setSegmentIcon}
             />
           </div>
         </section>
@@ -573,8 +715,8 @@ export function App() {
                 { value: 'transfer', label: t('movement.transfer') },
                 { value: 'all', label: t('button.all') },
               ]}
-              value={['in', 'transfer']}
-              onChange={() => {}}
+              value={chipsMulti}
+              onChange={setChipsMulti}
             />
           </div>
           <div className="lab-row lab-row--full">
@@ -588,8 +730,8 @@ export function App() {
                 { value: 'all', label: t('button.all') },
                 { value: 'today', label: t('nav.todayLong') },
               ]}
-              value={['today']}
-              onChange={() => {}}
+              value={chipsScroll}
+              onChange={setChipsScroll}
             />
           </div>
         </section>
@@ -612,7 +754,7 @@ export function App() {
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withHeader')}</span>
-            <Surface label={t('title.needsYou')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
+            <Surface label={t('title.needsYou')} trailing={<Button variant="text" size="sm" data-ds-exempt="" onClick={() => setToastText(t('button.all'))}>{t('button.all')}</Button>}>
               <div className="lab-row-entity">
                 <span className="lab-name">{parties[2]}</span>
                 <Money value={amounts[2]} />
@@ -653,7 +795,7 @@ export function App() {
           <h2 className="lab-title">{t('title.section')}</h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withCount')}</span>
-            <Section label={t('title.needsYou')} caption={3} onPress={() => {}} data-ds-check="section">
+            <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)} data-ds-check="section">
               <Surface>
                 <Well>
                   <div className="lab-row-entity">
@@ -670,7 +812,7 @@ export function App() {
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.emptySection')}</span>
-            <Section label={t('title.needsYou')} onPress={() => {}} />
+            <Section label={t('title.needsYou')} onPress={() => setAllOpen(true)} />
           </div>
         </section>
 
@@ -691,7 +833,8 @@ export function App() {
                 </>
               }
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
-              onDismiss={() => {}}
+              onDismiss={() => setSourceOpen(true)}
+              onChange={(visible) => setHidden(!visible)}
               data-ds-check="hero"
             />
           </div>
@@ -710,7 +853,8 @@ export function App() {
                 </>
               }
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
-              onDismiss={() => {}}
+              onDismiss={() => setSourceOpen(true)}
+              onChange={(visible) => setHidden(!visible)}
             />
           </div>
           <div className="lab-row lab-row--full">
@@ -720,6 +864,7 @@ export function App() {
               value="1,250,000.125"
               trailing={t('money.unit')}
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              onChange={(visible) => setHidden(!visible)}
             />
           </div>
           <div className="lab-row lab-row--full">
@@ -735,20 +880,20 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-sheet-stage" data-ds-check="sheet">
               <Sheet key={sheetSampleKey} label={t('sheet.sampleTitle')} onDismiss={() => setSheetSampleKey(k => k + 1)}>
-                <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.all')}</Button>}>
+                <Surface label={t('nav.today')} trailing={<Button variant="text" size="sm" data-ds-exempt="" onClick={() => setToastText(t('button.all'))}>{t('button.all')}</Button>}>
                   <ObjectRow
                     label={t('row.sampleTitle')}
                     caption={t('row.sampleCaption')}
                     value="1,245.750"
                     trailing={t('row.sampleTime')}
-                    onPress={() => {}}
+                    onPress={() => setObjectOpen(true)}
                   />
                   <ObjectRow
                     label={t('row.sampleTitle')}
                     caption={t('row.sampleCaption')}
                     value="980"
                     trailing={<StatusBadge tone="waiting" />}
-                    onPress={() => {}}
+                    onPress={() => setObjectOpen(true)}
                   />
                 </Surface>
               </Sheet>
@@ -771,8 +916,8 @@ export function App() {
               <ActionBar
                 label={t('button.saveMovement')}
                 caption={t('button.recordPayment')}
-                onPress={() => {}}
-                onRetry={() => {}}
+                onPress={() => setToastText(t('toast.movementSaved'))}
+                onRetry={() => setToastText(t('toast.movementSaved'))}
                 leading
               />
             </div>
@@ -780,13 +925,13 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.primaryOnly')}</span>
             <div className="lab-bar-stage">
-              <ActionBar label={t('button.saveMovement')} onPress={() => {}} leading />
+              <ActionBar label={t('button.saveMovement')} onPress={() => setToastText(t('toast.movementSaved'))} leading />
             </div>
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.scrolledToEnd')}</span>
             <div className="lab-bar-stage">
-              <ActionBar label={t('button.saveMovement')} onPress={() => {}} leading={false} />
+              <ActionBar label={t('button.saveMovement')} onPress={() => setToastText(t('toast.movementSaved'))} leading={false} />
             </div>
           </div>
         </section>
@@ -830,7 +975,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('empty.oneButtonMax')}</span>
             <div className="lab-empty-stage">
-              <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" data-ds-exempt="">{t('button.recordMovement')}</Button>} />
+              <EmptyState label={t('empty.movements')} trailing={<Button variant="secondary" data-ds-exempt="" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>} />
             </div>
           </div>
         </section>
@@ -853,7 +998,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('button.reviewAndSave')}</span>
             <div className="lab-banner-stage">
-              <InlineBanner tone="info" label={t('banner.backOnline')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.reviewAndSave')}</Button>} />
+              <InlineBanner tone="info" label={t('banner.backOnline')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="" onClick={() => setToastText(t('toast.movementSaved'))}>{t('button.reviewAndSave')}</Button>} />
             </div>
           </div>
         </section>
@@ -870,7 +1015,7 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('button.undo')}</span>
             <div className="lab-toast-stage">
-              <Toast label={t('toast.quoteAccepted')} trailing={<Button variant="text" size="sm" data-ds-exempt="">{t('button.undo')}</Button>} onDismiss={() => {}} />
+              <Toast key={toastUndoKey} label={t('toast.quoteAccepted')} trailing={<Button variant="text" size="sm" data-ds-exempt="" onClick={() => setToastUndoKey(k => k + 1)}>{t('button.undo')}</Button>} onDismiss={() => {}} />
             </div>
           </div>
         </section>
@@ -902,19 +1047,19 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.mainScreens')}</span>
             <div className="lab-bar-stage" data-ds-check="page-header">
-              <PageHeader label={t('title.movements')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="">{t('button.new')}</Button>} />
+              <PageHeader label={t('title.movements')} trailing={<Button variant="secondary" size="sm" data-ds-exempt="" onClick={() => setToastText(t('button.new'))}>{t('button.new')}</Button>} />
             </div>
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.subScreens')}</span>
             <div className="lab-bar-stage">
-              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => {}}><BackIcon /></IconButton>} />
+              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))}><BackIcon /></IconButton>} />
             </div>
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.scrolled')}</span>
             <div className="lab-bar-stage">
-              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => {}}><BackIcon /></IconButton>} caption />
+              <PageHeader label={t('title.movements')} leading={<IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))}><BackIcon /></IconButton>} caption />
             </div>
           </div>
         </section>
@@ -937,9 +1082,9 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-bar-stage">
-              <TabBar>
-                <TabBarTab label={ar['nav.today'].text} leading={<NavTodayIcon weight="fill" />} onPress={() => {}} />
-                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon />} onPress={() => {}} />
+              <TabBar value={tabDemo} onChange={setTabDemo}>
+                <TabBarTab label={ar['nav.today'].text} leading={<NavTodayIcon weight={tabDemo === 0 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(0)} />
+                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tabDemo === 1 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(1)} />
               </TabBar>
             </div>
           </div>
@@ -957,13 +1102,13 @@ export function App() {
                   <ProjectSwitcher
                     label={projects[0]}
                     caption={ar['role.owner'].text}
-                    onPress={() => {}}
+                    onPress={() => setProjectOpen(true)}
                   />
                 }
                 trailing={
                   <>
-                    <NotificationsButton value={3} onPress={() => {}} />
-                    <AskButton onPress={() => {}} />
+                    <NotificationsButton value={3} onPress={() => setNotifOpen(true)} />
+                    <AskButton onPress={() => setAskOpen(true)} />
                   </>
                 }
               />
@@ -975,14 +1120,14 @@ export function App() {
               <ContextBar
                 label={t('title.contextBar')}
                 leading={
-                  <IconButton label={t('sr.back')} onPress={() => {}}>
+                  <IconButton label={t('sr.back')} onPress={() => setToastText(t('button.back'))}>
                     <BackIcon />
                   </IconButton>
                 }
                 trailing={
                   <>
-                    <NotificationsButton onPress={() => {}} />
-                    <AskButton selected onPress={() => {}} />
+                    <NotificationsButton onPress={() => setNotifOpen(true)} />
+                    <AskButton selected onPress={() => setAskOpen(true)} />
                   </>
                 }
                 caption
@@ -999,7 +1144,7 @@ export function App() {
             <ProjectSwitcher
               label={projects[0]}
               caption={ar['role.owner'].text}
-              onPress={() => {}}
+              onPress={() => setProjectOpen(true)}
               data-ds-check="project-switcher"
             />
           </div>
@@ -1009,7 +1154,7 @@ export function App() {
               label={projects[1]}
               caption={ar['role.owner'].text}
               locked
-              onPress={() => {}}
+              onPress={() => setProjectOpen(true)}
             />
           </div>
         </section>
@@ -1019,11 +1164,11 @@ export function App() {
           <h2 className="lab-title">{t('title.notificationsButton')}</h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.noUnread')}</span>
-            <NotificationsButton onPress={() => {}} data-ds-check="notifications-button" />
+            <NotificationsButton onPress={() => setNotifOpen(true)} data-ds-check="notifications-button" />
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.unread')}</span>
-            <NotificationsButton value={3} onPress={() => {}} />
+            <NotificationsButton value={3} onPress={() => setNotifOpen(true)} />
           </div>
         </section>
 
@@ -1032,11 +1177,11 @@ export function App() {
           <h2 className="lab-title">{t('title.askButton')}</h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
-            <AskButton onPress={() => {}} data-ds-check="ask-button" />
+            <AskButton onPress={() => setAskOpen(true)} data-ds-check="ask-button" />
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.unread')}</span>
-            <AskButton selected onPress={() => {}} />
+            <AskButton selected onPress={() => setAskOpen(true)} />
           </div>
         </section>
 
@@ -1051,7 +1196,10 @@ export function App() {
                 label={t('confirm.sampleTitle')}
                 caption={t('confirm.sampleSentence')}
                 value={t('button.deleteMovement')}
-                onPress={() => {}}
+                onPress={() => {
+                  setToastText(t('toast.movementDeleted'));
+                  setConfirmSampleKey(k => k + 1);
+                }}
                 onDismiss={() => setConfirmSampleKey(k => k + 1)}
               />
             </div>
@@ -1070,16 +1218,16 @@ export function App() {
                   caption={t('row.sampleCaption')}
                   value={<Money value="1,245.750" />}
                   trailing={t('row.sampleTime')}
-                  onPress={() => {}}
+                  onPress={() => setObjectOpen(true)}
                 />
                 <ObjectRow
                   label={t('row.sampleTitle')}
                   caption={t('row.sampleCaption')}
                   value={<Money value="1,250" />}
                   trailing={<StatusBadge tone="waiting" />}
-                  onPress={() => {}}
+                  onPress={() => setObjectOpen(true)}
                 />
-                <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => {}} />
+                <ObjectRow label={t('row.sampleTitle')} value="980" onPress={() => setObjectOpen(true)} />
               </div>
             </Surface>
           </div>
@@ -1096,7 +1244,7 @@ export function App() {
                 caption={t('row.sampleCaption')}
                 value={<Money value="1,245.750" />}
                 state={<StatusBadge tone="waiting" />}
-                onPress={() => {}}
+                onPress={() => setObjectOpen(true)}
                 data-ds-check="object-card"
               >
                 {/* Rule 61 (و-2 item 21): visible text may repeat across
@@ -1131,7 +1279,7 @@ export function App() {
                   </span>
                 }
                 debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
-                onDismiss={() => {}}
+                onDismiss={() => setSourceOpen(true)}
                 data-ds-check="metric"
               />
             </Surface>
@@ -1153,6 +1301,7 @@ export function App() {
                 value="4,820"
                 trailing={t('money.unit')}
                 debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
+                onDismiss={() => setSourceOpen(true)}
                 data-ds-check="metric-small"
               />
             </Surface>
@@ -1169,6 +1318,22 @@ export function App() {
                   value="4,820"
                   trailing={t('money.unit')}
                   debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
+                  onDismiss={() => setSourceOpen(true)}
+                />
+              </AmountVisibilityProvider>
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.hidden')}</span>
+            <Surface>
+              {/* Batch-2 1.3: the metric reads the hidden context itself —
+                  its value element carries data-ds-check="amount-hidden"
+                  so ds-hidden-amounts verifies «•••• د» on both views. */}
+              <AmountVisibilityProvider hidden>
+                <MetricSmall
+                  label={t('nav.finance')}
+                  value="4,820"
+                  trailing={t('money.unit')}
                 />
               </AmountVisibilityProvider>
             </Surface>
@@ -1194,7 +1359,7 @@ export function App() {
                 draft={[8.2, 7.6, 8.9, 8.1, 9.4]}
                 value="1,250"
                 trailing={t('movement.in')}
-                onPress={() => {}}
+                onPress={() => setToastText(t('nav.finance'))}
               />
               <Tile
                 label={t('nav.orders')}
@@ -1202,14 +1367,14 @@ export function App() {
                 state
                 value="4"
                 trailing={t('badge.waiting')}
-                onPress={() => {}}
+                onPress={() => setToastText(t('nav.orders'))}
               />
               <Tile
                 label={t('nav.delivery')}
                 leading={<NavDeliveryIcon size={20} />}
                 value="2"
                 trailing={t('movement.out')}
-                onPress={() => {}}
+                onPress={() => setToastText(t('nav.delivery'))}
               />
               <Tile
                 tone="end"
@@ -1217,13 +1382,14 @@ export function App() {
                 leading={<NavMarketIcon size={20} />}
                 value="72%"
                 trailing={t('badge.done')}
-                onPress={() => {}}
+                onPress={() => setToastText(t('nav.market'))}
               />
             </div>
           </div>
         </section>
 
         </main>
+        {demoSheets}
       </div>
       </>
       )}

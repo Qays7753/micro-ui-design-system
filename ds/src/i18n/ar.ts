@@ -88,6 +88,26 @@ export const ar = {
   'movement.counted': { kind: 'badge', text: '32 حركة' },
   'row.sampleTitle': { kind: 'title', text: 'سلمى الحوراني' },
   'sheet.sampleTitle': { kind: 'title', text: 'تفاصيل الحركة' },
+  // Lab demo sheets (2.1): every pressable opens its real sample sheet
+  'sheet.projectTitle': { kind: 'title', text: 'تبديل المشروع' },
+  'sheet.notificationsTitle': { kind: 'title', text: 'الإشعارات' },
+  'sheet.askTitle': { kind: 'title', text: 'Ask Micro' },
+  'sheet.sourceTitle': { kind: 'title', text: 'مصدر الرقم' },
+  'sheet.allTitle': { kind: 'title', text: 'كل ما يحتاجك' },
+  'sheet.objectTitle': { kind: 'title', text: 'طلب 1175' },
+  'notif.quoteArrived': { kind: 'help', text: 'وصل عرض سعر من عمر الزعبي' },
+  'notif.orderToday': { kind: 'help', text: 'طلب 1203 موعده اليوم 4:00 م' },
+  'notif.paymentIn': { kind: 'help', text: 'دفعة 30 د من رنا العبادي' },
+  'notif.timeAgo': { kind: 'badge', text: 'قبل 5 دقائق' },
+  'notif.timeToday': { kind: 'badge', text: '9:15 ص' },
+  'notif.timeYesterday': { kind: 'badge', text: 'أمس 5:10 م' },
+  'ask.placeholder': { kind: 'placeholder', text: 'اسأل Micro' },
+  'ask.amountLabel': { kind: 'badge', text: 'السؤال' },
+  'button.askSend': { kind: 'button', text: 'أرسل' },
+  'kv.orderTitle': { kind: 'badge', text: 'الطلب' },
+  'kv.customer': { kind: 'badge', text: 'العميل' },
+  'kv.delivery': { kind: 'badge', text: 'التسليم' },
+  'kv.phone': { kind: 'badge', text: 'الهاتف' },
   'title.sheet': { kind: 'title', text: 'الورقة' },
   'confirm.sampleTitle': { kind: 'title', text: 'حذف الحركة؟' },
   'confirm.sampleSentence': { kind: 'help', text: 'ستُحذف الحركة نهائياً ولا يمكن التراجع عنها.' },
@@ -114,6 +134,11 @@ export const ar = {
   'toast.movementSaved': { kind: 'success', text: 'حُفظت الحركة' },
   'toast.movementDeleted': { kind: 'success', text: 'حُذفت الحركة' },
   'toast.quoteAccepted': { kind: 'success', text: 'قُبل العرض' },
+  'toast.questionSent': { kind: 'success', text: 'أُرسل السؤال' },
+  // Lab-only press responses for samples whose real destination is a full
+  // screen the lab page cannot host (tiles → domain tabs, back → previous
+  // screen): the Toast IS the documented press response (23.12).
+  'toast.opens': { kind: 'help', text: 'تفتح {area}' },
 
   // --- InlineBanner / ErrorState (BRIEF 9.5, 11.3, 24.5) ---
   'banner.offline': { kind: 'error', text: 'الاتصال انقطع' },

@@ -45,6 +45,10 @@ export interface HeroSurfaceProps {
   debt?: string;
   /** Fires when the source link is pressed. */
   onDismiss?: () => void;
+  /** Reports the embedded visibility toggle's press (23.22: the toggle sits
+   *  at the label line's end inside the hero). The app applies it to the
+   *  AmountVisibilityProvider — the library owns no state. */
+  onChange?: (visible: boolean) => void;
   /** React 19 ref-as-prop on the root element. */
   ref?: Ref<HTMLElement>;
   /** Standard pass-throughs. */

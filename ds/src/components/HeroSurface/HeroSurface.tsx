@@ -102,6 +102,7 @@ export function HeroSurface({
   debt,
   draft,
   onDismiss,
+  onChange,
   className,
   id,
   style,
@@ -120,7 +121,7 @@ export function HeroSurface({
     <section ref={ref} id={id} style={style} className={classes} {...rest}>
       <header className="mds-hero-header">
         <span className="mds-hero-label">{label}</span>
-        <AmountVisibilityToggle className="mds-hero-toggle" />
+        <AmountVisibilityToggle className="mds-hero-toggle" onChange={onChange} />
       </header>
       <p className="mds-hero-amount">
         {/* The key remounts the visual on every shown/hidden swap so the
