@@ -18,6 +18,7 @@ import { SimProvider, useSim, useSimDispatch } from './state/store';
 import { ScreenRouter } from './screens/ScreenRouter';
 import { SharedSheets } from './screens/Sheets';
 import { TASKS } from './tasks/tasks';
+import { installGhostClickGuard } from './shell/ghostClickGuard';
 
 /** The fixed simulation date (§5): الجمعة 27/11/2026. */
 export const SIM_DATE = 'الجمعة 27/11/2026';
@@ -99,6 +100,12 @@ function Shell() {
 export function App() {
   const [splashDone, setSplashDone] = useState(false);
   const onSplashDone = useCallback(() => setSplashDone(true), []);
+
+  // TEMPORARY sim-only guard for the touch ghost click that closed every
+  // sheet the instant it opened (library Sheet closes its scrim on click
+  // while openers fire on pointerup) — see ghostClickGuard.ts and the
+  // REPORT-SIM note; removed when the library fixes the scrim.
+  useEffect(() => installGhostClickGuard(), []);
 
   return (
     <SimProvider>

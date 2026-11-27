@@ -1,0 +1,121 @@
+/**
+ * The touch ghost-click guard test (جولة الناقد): the sheet opened by a
+ * press MUST STAY OPEN through the tap's compatibility click — the browser
+ * dispatches the tap's `click` at the opening coordinates after the sheet
+ * has mounted, so without the guard that click lands on the fresh scrim and
+ * the sheet dismisses the instant it opens (reproduced with real tap() on
+ * Chromium and WebKit, 390×844, hasTouch+isMobile).
+ *
+ * The guard is identity-based, so the test proves all four paths:
+ *  1. ghost click (tap started on the trigger, click lands on the scrim) →
+ *     the sheet stays open — the regression the guard exists for;
+ *  2. a real close-tap (pointerdown ON the scrim, then its click) → closes;
+ *  3. a click with no pointerdown of its own (keyboard Enter) → passes →
+ *     closes — the guard never blocks non-pointer paths;
+ *  4. a tap started INSIDE the sheet that clicks inside the SAME sheet
+ *     (e.g. a row press) still reaches the row.
+ */
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { App } from '../App';
+
+/** The project switcher button of the owner's context bar. */
+function switcher(): HTMLElement {
+  return document.querySelector('.mds-context-bar .mds-project-switcher') as HTMLElement;
+}
+
+/** Opens a sheet the way a finger does: pointerdown then pointerup. */
+async function pressToOpen(el: HTMLElement) {
+  // The two events run OUTSIDE act — React flushes each discrete event
+  // synchronously, so the press hook sees isPressed=true at pointerup.
+  fireEvent.pointerDown(el);
+  fireEvent.pointerUp(el);
+  await act(async () => {
+    await new Promise((r) => setTimeout(r, 30));
+  });
+}
+
+/** A bubbling click like the browser's compatibility click after a tap. */
+function compatClick(target: Element) {
+  target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+}
+
+async function enterOwner() {
+  render(<App />);
+  await waitFor(() => expect(document.querySelector('[data-sim-role-screen]')).toBeTruthy(), {
+    timeout: 2500,
+  });
+  const row = screen.getByText('ورشة الياسمين للخياطة').closest('button')!;
+  await pressToOpen(row);
+  await waitFor(() => expect(switcher()).toBeTruthy());
+}
+
+describe('ghostClickGuard (جولة الناقد — the sheet survives the opening tap)', () => {
+  afterEach(() => {
+    window.localStorage.clear();
+    cleanup();
+  });
+
+  it('1. the compatibility click of the OPENING tap does not close the sheet', async () => {
+    await enterOwner();
+    await pressToOpen(switcher());
+    const sheet = () => document.querySelector('.mds-sheet');
+    expect(sheet()).toBeTruthy();
+    // The ghost: the tap started on the switcher (outside the sheet); the
+    // browser retargets its compatibility click to the mounted scrim.
+    compatClick(document.querySelector('.mds-sheet-scrim')!);
+    // The sheet is still open and NOT exiting.
+    expect(sheet()).toBeTruthy();
+    expect(sheet()!.className).not.toContain('mds-sheet--closing');
+    expect(sheet()!.getAttribute('aria-label')).toBe('تبديل المشروع');
+    // And it is still open a beat later — no delayed dismissal either.
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 60));
+    });
+    expect(sheet()).toBeTruthy();
+  });
+
+  it('2. a real close-tap on the scrim still closes the sheet', async () => {
+    await enterOwner();
+    await pressToOpen(switcher());
+    compatClick(document.querySelector('.mds-sheet-scrim')!); // the opening tap's ghost
+    const scrim = document.querySelector('.mds-sheet-scrim')!;
+    // The user's own tap: pointerdown ON the scrim, then its click.
+    await act(async () => {
+      fireEvent.pointerDown(scrim);
+      compatClick(scrim);
+      await new Promise((r) => setTimeout(r, 60));
+    });
+    await waitFor(() => expect(document.querySelector('.mds-sheet')).toBeNull());
+  });
+
+  it('3. a click with no pointerdown (keyboard path) is never blocked', async () => {
+    await enterOwner();
+    await pressToOpen(switcher());
+    compatClick(document.querySelector('.mds-sheet-scrim')!); // the opening tap's ghost
+    // This click has NO pointerdown of its own (keyboard activation) — the
+    // guard passes it and the scrim's own handler closes the sheet.
+    compatClick(document.querySelector('.mds-sheet-scrim')!);
+    await waitFor(() => expect(document.querySelector('.mds-sheet')).toBeNull());
+  });
+
+  it('4. a tap started inside the sheet still activates rows inside it', async () => {
+    await enterOwner();
+    await pressToOpen(switcher());
+    compatClick(document.querySelector('.mds-sheet-scrim')!); // the ghost
+    // «إخفاء المبالغ» lives inside the sheet; a tap on it (down + up, then
+    // the tap's own click — all inside the SAME sheet) must reach it: the
+    // SelectedIcon appears at the row's end when the amounts hide.
+    const row = (await screen.findByText('إخفاء المبالغ')).closest('button')!;
+    expect(row.querySelector('.mds-object-row-end .mds-icon')).toBeNull();
+    fireEvent.pointerDown(row);
+    fireEvent.pointerUp(row);
+    compatClick(row);
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 30));
+    });
+    expect(row.querySelector('.mds-object-row-end .mds-icon')).not.toBeNull();
+    // The sheet stays open (the row toggles the amounts; it never closes).
+    expect(document.querySelector('.mds-sheet')).toBeTruthy();
+  });
+});
