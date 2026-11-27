@@ -1,7 +1,9 @@
 /**
  * Sheet — the bottom sheet (BRIEF 23.11 + 23.15 layers).
  *
- * - Canvas background; white surfaces carry the content;
+ * - detail variant (default): canvas background, white surfaces carry
+ *   the content; form variant (1.7 ت7): surface background, fields
+ *   directly on it, always 92% tall (ت6).
  *   elevation-float shadow; radius 24 top corners (Surface family).
  * - Handle 36×5 full-radius `handle` color, 8 from the top edge.
  * - Header: title Rubik 22/30/600, padding 20, closing IconButton at
@@ -34,6 +36,7 @@ import './Sheet.css';
 
 export function Sheet({
   label,
+  variant = 'detail',
   children,
   onDismiss,
   className,
@@ -190,6 +193,7 @@ export function Sheet({
 
   const classes = [
     'mds-sheet',
+    variant === 'form' ? 'mds-sheet--form' : '',
     level === 2 ? 'mds-sheet--stacked' : '',
     dragging ? 'mds-sheet--dragging' : '',
     closing ? 'mds-sheet--closing' : '',

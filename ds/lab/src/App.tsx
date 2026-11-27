@@ -255,19 +255,21 @@ export function App() {
         </Sheet>
       ) : null}
       {sheetOpen ? (
-        <Sheet label={t('sheet.sampleTitle')} onDismiss={() => setSheetOpen(false)}>
-          <Surface>
-            <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
-            <SaveState saveState="draft" />
-            <ActionBar
-              label={t('button.saveMovement')}
-              onPress={() => {
-                setSheetOpen(false);
-                setToastText(t('toast.movementSaved'));
-              }}
-              leading
-            />
-          </Surface>
+        /* ت6/ت7 (1.7): the creation sheet — form variant (surface background,
+           fields directly on it, always 92%), titled by the OPENING BUTTON'S
+           action, the ActionBar a direct child of the body riding the
+           panel's bottom edge. */
+        <Sheet variant="form" label={t('button.recordMovement')} onDismiss={() => setSheetOpen(false)}>
+          <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
+          <SaveState saveState="draft" />
+          <ActionBar
+            label={t('button.saveMovement')}
+            onPress={() => {
+              setSheetOpen(false);
+              setToastText(t('toast.movementSaved'));
+            }}
+            leading
+          />
         </Sheet>
       ) : null}
       {toastText ? <Toast label={toastText} onDismiss={() => setToastText(null)} /> : null}

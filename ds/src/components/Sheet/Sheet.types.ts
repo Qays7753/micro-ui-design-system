@@ -14,8 +14,14 @@
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 
 export interface SheetProps extends HTMLAttributes<HTMLDivElement> {
-  /** The sheet title (Rubik 22/30/600). */
+  /** The sheet title (Rubik 22/30/600). For creation/edit sheets this is
+   *  the OPENING BUTTON'S ACTION («سجّل حركة»), not a noun (1.7 ت7). */
   label: string;
+  /** `form` (ADDENDUM 1.7 ت7): the creation/edit sheet — surface
+   *  background, fields sit DIRECTLY on it (no inner Surface), always 92%
+   *  tall (ت6). `detail` (default): canvas background with white surfaces,
+   *  content height between 50% and 92%. */
+  variant?: 'form' | 'detail';
   /** The sheet body: surfaces, Metric, StatusTrack, LinkedObjects,
    *  ActivityLog, and ONE ActionBar at the bottom (23.24 Sheet row). */
   children?: ReactNode;

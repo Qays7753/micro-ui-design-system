@@ -15,7 +15,8 @@
   align-items: center;
   gap: var(--mds-layout-action-bar-gap);
   padding-block: var(--mds-layout-action-bar-padding-block);
-  padding-inline: var(--mds-layout-screen-margin-phone);
+  /* 1.7 §3.1: the bar's own inline padding token (16). */
+  padding-inline: var(--mds-layout-action-bar-padding-inline);
   /* 27.3: the safe area below the bar (home indicator). env() with no
      fallback: every target browser evaluates the function (0 where no
      inset applies), and the fallback literal would be a raw px value. */

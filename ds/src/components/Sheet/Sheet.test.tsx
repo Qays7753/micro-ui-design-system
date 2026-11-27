@@ -32,6 +32,27 @@ describe('Sheet (BRIEF 23.11, 23.15)', () => {
     expect(css).toContain('z-index: var(--mds-layer-sheet-2)');
   });
 
+  it('form variant: surface background, always 92%, fields directly (ت6/ت7)', () => {
+    const css = readFileSync(join(__dirname, 'Sheet.css'), 'utf8');
+    expect(css).toContain('.mds-sheet--form .mds-sheet-panel');
+    expect(css).toContain('height: 92%');
+    expect(css).toContain('background-color: var(--mds-color-surface)');
+    // ت6: the content height floors/ceilings
+    expect(css).toContain('min-height: 50%');
+    expect(css).toContain('max-height: 92%');
+    // ت6: the sheet's ActionBar never covers a field — the body clears it
+    expect(css).toContain(':has(> .mds-action-bar)');
+    expect(css).toContain('var(--mds-layout-scroll-end-padding)');
+    // ت6: between two surfaces the surface-to-surface rhythm
+    expect(css).toContain('var(--mds-layout-surface-to-surface)');
+    const { container } = render(
+      <Sheet variant="form" label="سجّل حركة" onDismiss={() => {}}>
+        <div />
+      </Sheet>,
+    );
+    expect(container.querySelector('.mds-sheet--form')).not.toBeNull();
+  });
+
   it('takes the second level when another sheet is live (23.15)', async () => {
     render(<Sheet label={TITLE} onDismiss={() => {}} />);
     const { container } = render(<Sheet label={TITLE} onDismiss={() => {}} />);

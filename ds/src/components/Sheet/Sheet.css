@@ -40,6 +40,18 @@
   box-shadow: var(--mds-elevation-float);
   overflow: hidden;
   transition: transform var(--mds-motion-standard-ms) var(--mds-motion-standard-ease);
+  /* ت6 (1.7): content height between the sheet-height pair — 50% floor,
+     92% ceiling (size.sheet-height = ["50%","92%"], not emitted as CSS
+     vars; the panel's containing block is the full-viewport sheet root). */
+  min-height: 50%;
+  max-height: 92%;
+}
+
+/* The creation/edit sheet (ت7): surface background, fields directly on it
+   — and ALWAYS 92% tall (ت6: creation, AskPanel, NotificationCenter). */
+.mds-sheet--form .mds-sheet-panel {
+  height: 92%;
+  background-color: var(--mds-color-surface);
 }
 
 .mds-sheet--dragging .mds-sheet-panel {
@@ -114,10 +126,31 @@
 }
 
 .mds-sheet-body {
+  /* flex: 1 + min-height 0 — the body scrolls INSIDE the clamped panel
+     (the panel never grows past its 92% ceiling; ت6). */
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--mds-layout-sheet-padding);
   padding-top: 0;
+  /* ت6: between two surfaces (and between the body's blocks) the
+     surface-to-surface rhythm. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-surface-to-surface);
+}
+
+/* ت6: the sheet's ActionBar rides at the panel's bottom edge (its own
+   fixed layer inside the sheet's stacking context) — the LAST content
+   stays clear of it by scroll-end-padding, so the bar never covers a
+   field. Direct child only: the form sheet puts the bar directly in the
+   body (ت7 drops the inner Surface). */
+.mds-sheet-body:has(> .mds-action-bar) {
+  padding-block-end: calc(
+    var(--mds-size-button) + 2 * var(--mds-layout-action-bar-padding-block) +
+    env(safe-area-inset-bottom) + var(--mds-layout-scroll-end-padding)
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
