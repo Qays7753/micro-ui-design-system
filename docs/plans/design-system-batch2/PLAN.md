@@ -101,6 +101,8 @@
 
 وحدة لكل مكوّن، بالترتيب: Checkbox، Radio، Toggle، SearchField، TextArea، AmountField، AmountKeypad، MovementTypeControl، QuantityStepper، DateQuickChips، TimePicker، DurationPicker، PeriodSwitcher، MonthGrid، DatePicker (تركيب)، PartyPicker، FundPicker، PhotoUploader، VoiceInput، SlideToConfirm، PriceTierBuilder، KeyValueList، DataTable، StatusTrack، ActivityLog، LinkedObjects، Disclosure، ObjectSheet، LockedDetails، ErrorState، PermissionNotice، NotificationCenter، GuestShell، GoogleSignInSlot. ثم مراجعة المرحلة.
 
+> **الشعار في `GuestShell` و`GoogleSignInSlot` وأي موضع آخر:** يتبع `docs/brand/reference/README.md`: الشعار الكامل بعرض 144px على الأقل (180 موصى به)، وإلا فالرمز وحده، وبالتنويع المناسب للخلفية. **انتبه:** `size.logo-lockup` (م-ر7) ارتفاع 28 يعطي الشعار العربي عرضًا ≈90px، أقل من الحد المطلق. طبّق قاعدة الهوية (الرمز وحده عند 28، أو شعار كامل بارتفاع يعطي 144 عرضًا على الأقل)، وسجّل اختيارك تحت «يحتاج قرار المالك». تدفق شاشات الدخول وحالاتها (لا شكلها) في `docs/references/micro-auth/` مع `USE-IN-NEW-SYSTEM.md`.
+
 > MonthGrid هنا لأن DatePicker يعتمد عليه. يبقى في صفحة المالية والطلبات حيث يُستخدم.
 
 ### إغلاق نطاق الوكيل الأول (بعد آخر مكوّن في المرحلة 4)

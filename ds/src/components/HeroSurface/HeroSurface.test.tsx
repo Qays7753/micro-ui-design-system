@@ -11,7 +11,7 @@ const LABEL = ar['nav.finance'].text;
 const UNIT = ar['money.unit'].text;
 const SOURCE = ar['metric.sourceFrom'].text.replace('{counted}', ar['movement.counted'].text);
 
-describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
+describe('HeroSurface (BRIEF 1.5, 23.8 + 1.7 ت2)', () => {
   it('renders label, value, unit, diff and source link in order', () => {
     const { container } = render(
       <HeroSurface
@@ -45,10 +45,30 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
     expect(HeroSurfaceStates).toContain('longNumber');
   });
 
-  it('omits the diff line when there is no comparison (23.8)', () => {
+  it('omits the one line entirely when there is neither diff nor source', () => {
     const { container } = render(<HeroSurface label={LABEL} value="1,245" />);
-    expect(container.querySelector('.mds-hero-diff')).toBeNull();
+    expect(container.querySelector('.mds-hero-line')).toBeNull();
     expect(HeroSurfaceStates).toContain('noDiff');
+  });
+
+  it('merges the diff and the source into ONE line with « · » between them (1.7 ت2.3)', () => {
+    const { container } = render(
+      <HeroSurface label={LABEL} value="1,245" direction={<span>↑ أعلى</span>} debt={SOURCE} />,
+    );
+    const line = container.querySelector('.mds-hero-line') as HTMLElement;
+    expect(line).not.toBeNull();
+    expect(line.querySelector('.mds-hero-diff')).not.toBeNull();
+    expect(line.querySelector('.mds-hero-line-sep')?.textContent).toBe('·');
+    expect(line.querySelector('.mds-hero-source')).not.toBeNull();
+  });
+
+  it('renders the line with the source ALONE when there is no diff', () => {
+    const { container } = render(<HeroSurface label={LABEL} value="1,245" debt={SOURCE} />);
+    const line = container.querySelector('.mds-hero-line') as HTMLElement;
+    expect(line).not.toBeNull();
+    expect(line.querySelector('.mds-hero-diff')).toBeNull();
+    expect(line.querySelector('.mds-hero-line-sep')).toBeNull();
+    expect(line.querySelector('.mds-hero-source')).not.toBeNull();
   });
 
   it('fires onDismiss when the source link is pressed', () => {
@@ -72,7 +92,7 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
     expect(css).not.toContain('brand-signal-text');
   });
 
-  it('renders the optional small line between the diff line and the source link (23.25)', () => {
+  it('renders the small line LAST, full width, at hero-sparkline-height (1.7 ت2.4)', () => {
     const { container } = render(
       <HeroSurface
         label={LABEL}
@@ -86,24 +106,32 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
     const sparkline = container.querySelector('.mds-hero-sparkline');
     expect(sparkline).not.toBeNull();
     expect(sparkline?.querySelector('polyline')).not.toBeNull();
-    expect(sparkline?.querySelector('circle')).not.toBeNull();
     expect(HeroSurfaceStates).toContain('withSparkline');
-    // order (23.25): diff → sparkline → source
-    const order = ['.mds-hero-diff', '.mds-hero-sparkline', '.mds-hero-source'].map(
+    // order (1.7 ت2): label line → value → ONE line (diff + source) → sparkline
+    const order = ['.mds-hero-header', '.mds-hero-amount', '.mds-hero-line', '.mds-hero-sparkline'].map(
       (sel) => container.querySelector(sel),
     );
-    expect(order[0]).not.toBeNull();
-    expect(order[1]).not.toBeNull();
-    expect(order[2]).not.toBeNull();
-    expect(order[0]!.compareDocumentPosition(order[1]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(order[1]!.compareDocumentPosition(order[2]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    for (const el of order) expect(el).not.toBeNull();
+    for (let i = 0; i + 1 < order.length; i += 1) {
+      expect(order[i]!.compareDocumentPosition(order[i + 1]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    }
+    // the line carries BOTH the diff and the source, in that order
+    const line = container.querySelector('.mds-hero-line') as HTMLElement;
+    const diff = line.querySelector('.mds-hero-diff') as HTMLElement;
+    const source = line.querySelector('.mds-hero-source') as HTMLElement;
+    expect(diff.compareDocumentPosition(source) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // the stretched svg rides the content's full width (preserveAspectRatio none)
+    const svg = sparkline?.querySelector('svg');
+    expect(svg?.getAttribute('width')).toBe('100%');
+    expect(svg?.getAttribute('preserveAspectRatio')).toBe('none');
   });
 
   it('draws the endpoint dot ALONE for a single value (no line)', () => {
     const { container } = render(
       <HeroSurface label={LABEL} value="1,245" draft={[11.2]} />,
     );
-    expect(container.querySelector('.mds-hero-sparkline circle')).not.toBeNull();
+    // full-width mode: the dot is a zero-length round-capped path, not a circle
+    expect(container.querySelector('.mds-hero-sparkline path.mds-hero-sparkline-dot')).not.toBeNull();
     expect(container.querySelector('.mds-hero-sparkline polyline')).toBeNull();
   });
 
@@ -112,7 +140,7 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
     expect(container.querySelector('.mds-hero-sparkline')).toBeNull();
   });
 
-  it('keeps the small line slot WITHOUT values when amounts are hidden (23.22: stays, value-less)', () => {
+  it('keeps the small line slot WITHOUT values when amounts are hidden (23.22 + 1.7 ت10: stays, value-less)', () => {
     const { container } = render(
       <AmountVisibilityProvider hidden>
         <HeroSurface label={LABEL} value="1,245" trailing={UNIT} draft={[9.1, 8.4, 9.6, 8.8]} />
@@ -121,7 +149,7 @@ describe('HeroSurface (BRIEF 1.5, 23.8)', () => {
     const sparkline = container.querySelector('.mds-hero-sparkline');
     expect(sparkline).not.toBeNull();
     expect(sparkline?.querySelector('polyline')).toBeNull();
-    expect(sparkline?.querySelector('circle')).toBeNull();
+    expect(sparkline?.querySelector('path')).toBeNull();
   });
 
   it('renders «••••» + the unit and NO real value when amounts are hidden (23.22)', () => {

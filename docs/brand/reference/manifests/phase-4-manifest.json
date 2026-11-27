@@ -1,0 +1,100 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 4,
+  "phaseName": "platform-icons",
+  "status": "approved",
+  "sourceOfTruth": {
+    "symbolMaster": "brand/master/micro-symbol-master.svg",
+    "colorVariants": "brand/variants/",
+    "derivedFromApprovedSymbolOnly": true,
+    "multipleCompetingFinalsAllowed": false
+  },
+  "approvedConcept": {
+    "name": "Option 02",
+    "geometry": "Outside R36 C8 G12",
+    "fullColor": {
+      "petrol": "#164D59",
+      "terracotta": "#D97757",
+      "bluePetrol": "#507F8B"
+    },
+    "platformBackground": "#164D59",
+    "platformForeground": "#FFFFFF"
+  },
+  "deliverables": {
+    "favicon": [
+      "brand/platform-icons/favicon/favicon.svg",
+      "brand/platform-icons/favicon/favicon.ico",
+      "brand/platform-icons/favicon/favicon-16.png",
+      "brand/platform-icons/favicon/favicon-32.png",
+      "brand/platform-icons/favicon/favicon-48.png"
+    ],
+    "pwa": {
+      "any": [
+        {
+          "src": "brand/platform-icons/pwa/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "brand/platform-icons/pwa/icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ],
+      "maskable": [
+        {
+          "src": "brand/platform-icons/pwa/maskable-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "maskable"
+        },
+        {
+          "src": "brand/platform-icons/pwa/maskable-icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "maskable"
+        }
+      ],
+      "maskableSource": "brand/platform-icons/pwa/maskable-icon.svg"
+    },
+    "apple": [
+      "brand/platform-icons/apple/apple-touch-icon-source.svg",
+      "brand/platform-icons/apple/apple-touch-icon-180.png"
+    ],
+    "android": [
+      "brand/platform-icons/android/source/adaptive-foreground.svg",
+      "brand/platform-icons/android/source/adaptive-background.svg",
+      "brand/platform-icons/android/res/drawable-nodpi/micro_adaptive_foreground.png",
+      "brand/platform-icons/android/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "brand/platform-icons/android/res/values/colors.xml"
+    ]
+  },
+  "verification": {
+    "svgSourcesParse": true,
+    "pngDimensionsValidated": true,
+    "transparentExportsValidated": true,
+    "faviconIcoValidated": true,
+    "faviconIcoSizes": [
+      16,
+      32,
+      48
+    ],
+    "safeZoneReviewed": true,
+    "platformPreviewsReviewed": true,
+    "symbolGeometryChanged": false
+  },
+  "nextPhaseAfterApproval": {
+    "phase": 5,
+    "name": "usage-and-clear-space-spec",
+    "deliverables": [
+      "clear-space rules",
+      "minimum-size rules",
+      "background rules",
+      "do-and-dont examples",
+      "implementation reference"
+    ]
+  },
+  "approvedInFinalRelease": true
+}

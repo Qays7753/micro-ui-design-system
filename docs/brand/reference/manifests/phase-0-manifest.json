@@ -1,0 +1,90 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 0,
+  "phaseName": "scope-naming-manifest",
+  "status": "approved",
+  "approvalRequiredBefore": "phase-1-master-source",
+  "approvedConcept": {
+    "name": "Option 02",
+    "geometry": "Outside R36 C8 G12",
+    "moduleOrder": [
+      "top",
+      "right",
+      "bottom",
+      "left"
+    ],
+    "colors": {
+      "petrol": "#164D59",
+      "terracotta": "#D97757",
+      "bluePetrol": "#507F8B"
+    },
+    "lockups": [
+      "ar",
+      "en"
+    ],
+    "symbolOnly": true
+  },
+  "currentReferencePackage": "micro-brand-system-option-02-final",
+  "sourceOfTruthPolicy": {
+    "current": "approved core SVG package until phase 1 is approved",
+    "future": "brand/master/",
+    "derivedAssetsMustReferenceMaster": true,
+    "multipleCompetingFinalsAllowed": false
+  },
+  "plannedPhases": [
+    {
+      "id": 0,
+      "name": "scope-naming-manifest",
+      "approvalGate": true
+    },
+    {
+      "id": 1,
+      "name": "master-source-svgs",
+      "approvalGate": true
+    },
+    {
+      "id": 2,
+      "name": "color-and-background-variants",
+      "approvalGate": true
+    },
+    {
+      "id": 3,
+      "name": "platform-icons",
+      "approvalGate": true
+    },
+    {
+      "id": 4,
+      "name": "clear-space-minimum-size-and-qa",
+      "approvalGate": true
+    },
+    {
+      "id": 5,
+      "name": "brand-and-system-motion",
+      "approvalGate": true
+    },
+    {
+      "id": 6,
+      "name": "web-and-print-exports",
+      "approvalGate": true
+    },
+    {
+      "id": 7,
+      "name": "final-qa-and-release",
+      "approvalGate": true
+    }
+  ],
+  "phaseZeroDeliverables": [
+    "docs/00-REPOSITORY-SCOPE.md",
+    "docs/01-FILE-NAMING-RULES.md",
+    "meta/final-manifest.json"
+  ],
+  "phaseZeroExclusions": [
+    "no_new_logo_geometry",
+    "no_new_exports",
+    "no_platform_icons",
+    "no_master_source_rebuild",
+    "no_external_repository_upload",
+    "no_product_code_changes"
+  ],
+  "approvedInFinalRelease": true
+}

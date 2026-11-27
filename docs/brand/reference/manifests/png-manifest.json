@@ -1,0 +1,552 @@
+{
+  "full-color": {
+    "symbol": [
+      {
+        "file": "brand/png/full-color/symbol/symbol-16.png",
+        "width": 16,
+        "height": 16,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-24.png",
+        "width": 24,
+        "height": 24,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-32.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-48.png",
+        "width": 48,
+        "height": 48,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-64.png",
+        "width": 64,
+        "height": 64,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-128.png",
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-256.png",
+        "width": 256,
+        "height": 256,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-512.png",
+        "width": 512,
+        "height": 512,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/symbol/symbol-1024.png",
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      }
+    ],
+    "arabic": [
+      {
+        "file": "brand/png/full-color/arabic/arabic-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/arabic/arabic-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/arabic/arabic-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/arabic/arabic-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ],
+    "english": [
+      {
+        "file": "brand/png/full-color/english/english-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/english/english-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/english/english-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/full-color/english/english-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ]
+  },
+  "monochrome-black": {
+    "symbol": [
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-16.png",
+        "width": 16,
+        "height": 16,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-24.png",
+        "width": 24,
+        "height": 24,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-32.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-48.png",
+        "width": 48,
+        "height": 48,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-64.png",
+        "width": 64,
+        "height": 64,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-128.png",
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-256.png",
+        "width": 256,
+        "height": 256,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-512.png",
+        "width": 512,
+        "height": 512,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/symbol/symbol-1024.png",
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      }
+    ],
+    "arabic": [
+      {
+        "file": "brand/png/monochrome-black/arabic/arabic-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/arabic/arabic-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/arabic/arabic-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/arabic/arabic-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ],
+    "english": [
+      {
+        "file": "brand/png/monochrome-black/english/english-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/english/english-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/english/english-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-black/english/english-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ]
+  },
+  "monochrome-white": {
+    "symbol": [
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-16.png",
+        "width": 16,
+        "height": 16,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-24.png",
+        "width": 24,
+        "height": 24,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-32.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-48.png",
+        "width": 48,
+        "height": 48,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-64.png",
+        "width": 64,
+        "height": 64,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-128.png",
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-256.png",
+        "width": 256,
+        "height": 256,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-512.png",
+        "width": 512,
+        "height": 512,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/symbol/symbol-1024.png",
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      }
+    ],
+    "arabic": [
+      {
+        "file": "brand/png/monochrome-white/arabic/arabic-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/arabic/arabic-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/arabic/arabic-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/arabic/arabic-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ],
+    "english": [
+      {
+        "file": "brand/png/monochrome-white/english/english-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/english/english-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/english/english-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-white/english/english-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ]
+  },
+  "monochrome-petrol": {
+    "symbol": [
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-16.png",
+        "width": 16,
+        "height": 16,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-24.png",
+        "width": 24,
+        "height": 24,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-32.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-48.png",
+        "width": 48,
+        "height": 48,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-64.png",
+        "width": 64,
+        "height": 64,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-128.png",
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-256.png",
+        "width": 256,
+        "height": 256,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-512.png",
+        "width": 512,
+        "height": 512,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/symbol/symbol-1024.png",
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      }
+    ],
+    "arabic": [
+      {
+        "file": "brand/png/monochrome-petrol/arabic/arabic-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/arabic/arabic-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/arabic/arabic-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/arabic/arabic-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ],
+    "english": [
+      {
+        "file": "brand/png/monochrome-petrol/english/english-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/english/english-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/english/english-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/monochrome-petrol/english/english-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ]
+  },
+  "reversed-dark": {
+    "symbol": [
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-16.png",
+        "width": 16,
+        "height": 16,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-24.png",
+        "width": 24,
+        "height": 24,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-32.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-48.png",
+        "width": 48,
+        "height": 48,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-64.png",
+        "width": 64,
+        "height": 64,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-128.png",
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-256.png",
+        "width": 256,
+        "height": 256,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-512.png",
+        "width": 512,
+        "height": 512,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/symbol/symbol-1024.png",
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      }
+    ],
+    "arabic": [
+      {
+        "file": "brand/png/reversed-dark/arabic/arabic-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/arabic/arabic-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/arabic/arabic-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/arabic/arabic-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ],
+    "english": [
+      {
+        "file": "brand/png/reversed-dark/english/english-256.png",
+        "width": 256,
+        "height": 80,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/english/english-512.png",
+        "width": 512,
+        "height": 160,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/english/english-1024.png",
+        "width": 1024,
+        "height": 320,
+        "mode": "RGBA"
+      },
+      {
+        "file": "brand/png/reversed-dark/english/english-2048.png",
+        "width": 2048,
+        "height": 640,
+        "mode": "RGBA"
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 1,
+  "phaseName": "master-source-svgs",
+  "status": "approved",
+  "approvedConcept": {
+    "name": "Option 02",
+    "geometry": "Outside R36 C8 G12",
+    "moduleOrder": [
+      "top",
+      "right",
+      "bottom",
+      "left"
+    ],
+    "colors": {
+      "petrol": "#164D59",
+      "terracotta": "#D97757",
+      "bluePetrol": "#507F8B"
+    },
+    "lockups": [
+      "ar",
+      "en"
+    ],
+    "symbolOnly": true
+  },
+  "sourceOfTruth": {
+    "masterDirectory": "brand/master/",
+    "masterFiles": [
+      "brand/master/micro-symbol-master.svg",
+      "brand/master/micro-lockup-english-master.svg",
+      "brand/master/micro-lockup-arabic-master.svg",
+      "brand/master/micro-brand-master.svg"
+    ],
+    "derivedAssetsMustReferenceMaster": true,
+    "multipleCompetingFinalsAllowed": false
+  },
+  "phaseOneDeliverables": [
+    "brand/master/micro-symbol-master.svg",
+    "brand/master/micro-lockup-english-master.svg",
+    "brand/master/micro-lockup-arabic-master.svg",
+    "brand/master/micro-brand-master.svg",
+    "docs/02-MASTER-SOURCE.md",
+    "meta/final-manifest.json"
+  ],
+  "verification": {
+    "pathGeometryComparedToApprovedCore": true,
+    "renderComparisonComparedToApprovedCore": true,
+    "pixelDifferenceForSeparateMasters": false,
+    "allMasterSvgsParse": true
+  },
+  "nextPhaseAfterApproval": {
+    "phase": 2,
+    "name": "color-and-background-variants",
+    "deliverables": [
+      "full-color",
+      "monochrome",
+      "white",
+      "black",
+      "petrol",
+      "reversed-background-variants"
+    ]
+  },
+  "approvedInFinalRelease": true
+}
