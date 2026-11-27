@@ -1,13 +1,12 @@
 /**
  * ScreenRouter — the §5.1 map's runtime: one component per screen key, by
- * the current role. This unit (SA7أ) carries the OWNER's screens and the
- * shared market; the other roles' screens arrive with their own units
- * (SA7ب السائق، SA7ج المورد، SA7د المراجع، SA7هـ الزائر) and their places
- * carry the unit's own marker until then.
+ * the current role. SA7أ–SA7د carry the owner, driver, supplier and
+ * reviewer screens; the guest's GuestShell wrap arrives with SA7هـ.
  */
 import { useSim } from '../state/store';
 import { DriverScreen } from './driver/DriverScreen';
 import { SupplierScreen } from './supplier/SupplierScreen';
+import { ReviewScreen, ReportsScreen, DriversScreen } from './reviewer/ReviewerScreens';
 import { DeliveryScreen } from './owner/DeliveryScreen';
 import { FinanceScreen } from './owner/FinanceScreen';
 import { MovementsScreen } from './owner/MovementsScreen';
@@ -16,24 +15,8 @@ import { TodayScreen } from './owner/TodayScreen';
 import { MarketScreen } from './market/MarketScreen';
 import { LaterMark } from './parts';
 
-/** The unit markers for the screens not yet built. */
-const PART_UNITS: Record<string, string> = {
-  review: 'SA7د (المراجع)',
-  reports: 'SA7د (المراجع)',
-  drivers: 'SA7د (المراجع)',
-};
-
 export function ScreenRouter() {
   const { role, ui } = useSim();
-  const later = PART_UNITS[ui.screen];
-
-  if (later) {
-    return (
-      <div className="sim-screen" data-sim-screen-body={ui.screen}>
-        <LaterMark name={later} note="هذه الشاشة تُبنى في وحدتها القادمة" />
-      </div>
-    );
-  }
 
   if (role === 'guest') {
     // The guest's market wrap (GuestShell) arrives with SA7هـ.
@@ -50,6 +33,12 @@ export function ScreenRouter() {
       return <DriverScreen />;
     case 'myListings':
       return <SupplierScreen />;
+    case 'review':
+      return <ReviewScreen />;
+    case 'reports':
+      return <ReportsScreen />;
+    case 'drivers':
+      return <DriversScreen />;
     case 'market':
       return role === 'supplier' ? <SupplierScreen /> : <MarketScreen tab={role === 'owner'} />;
     case 'today':
