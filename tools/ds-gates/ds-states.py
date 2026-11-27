@@ -137,6 +137,50 @@ CENTER_JS = """
 """
 
 
+CLEANUP_JS = """
+async () => {
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  const vis = (el) => el.getClientRects().length > 0;
+  // The lab is LIVE (batch-2 2.1): a press opens real sheets/toasts. Close
+  // the page-level sheets (never the static garden stages) and wait out the
+  // page Toast (layer 70 intercepts the next press) so every element is
+  // measured on the same clean page — the precondition the scan assumes.
+  let rounds = 0;
+  while (rounds < 5) {
+    const sheets = Array.from(document.querySelectorAll('.mds-sheet, [class*="mds-confirm"]'))
+      .filter(el => el.closest('.lab-sheet-stage') === null && vis(el));
+    if (!sheets.length) break;
+    for (const sheet of sheets) {
+      // The Sheet's close button carries the SHEET's title as its
+      // accessible name (not «إغلاق») — find it structurally: the header's
+      // icon button. ConfirmSheet has none; its closer is «رجوع».
+      const closer = sheet.querySelector('[class*="sheet-head"] .mds-icon-button, [class*="sheet"] > [class*="icon-button"]')
+        || sheet.querySelector('.mds-icon-button')
+        || Array.from(sheet.querySelectorAll('button'))
+          .find(b => (b.textContent || '').trim() === 'رجوع');
+      if (closer) {
+        const o = { bubbles: true, cancelable: true, composed: true, pointerId: 1, isPrimary: true, pointerType: 'touch' };
+        closer.dispatchEvent(new PointerEvent('pointerdown', o));
+        closer.dispatchEvent(new PointerEvent('pointerup', o));
+        closer.dispatchEvent(new MouseEvent('click', o));
+      }
+    }
+    await sleep(240);
+    rounds++;
+  }
+  let waited = 0;
+  while (waited < 4200) {
+    const toast = Array.from(document.querySelectorAll('.mds-toast'))
+      .find(el => el.closest('.lab-toast-stage') === null && vis(el));
+    if (!toast) break;
+    await sleep(150);
+    waited += 150;
+  }
+  return true;
+}
+"""
+
+
 def run(gate: Gate, target, args):
     kind, resolved = resolve_page_target(target)
     if kind == "na":
@@ -195,6 +239,9 @@ def run(gate: Gate, target, args):
                             if disabled is None or disabled == base:
                                 problems.append(
                                     f"<button> «{el['text']}» shows no :disabled style change (23.2)")
+                        # live-lab hygiene: a press opens real sheets/toasts —
+                        # restore the clean page before the next element
+                        page.evaluate(CLEANUP_JS)
             except Exception as exc:
                 problems.append(f"browser error: {exc!r}")
             if problems:

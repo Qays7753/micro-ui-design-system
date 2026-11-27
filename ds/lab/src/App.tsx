@@ -223,6 +223,22 @@ export function App() {
           </Surface>
         </Sheet>
       ) : null}
+      {sheetOpen ? (
+        <Sheet label={t('sheet.sampleTitle')} onDismiss={() => setSheetOpen(false)}>
+          <Surface>
+            <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
+            <SaveState saveState="draft" />
+            <ActionBar
+              label={t('button.saveMovement')}
+              onPress={() => {
+                setSheetOpen(false);
+                setToastText(t('toast.movementSaved'));
+              }}
+              leading
+            />
+          </Surface>
+        </Sheet>
+      ) : null}
       {toastText ? <Toast label={toastText} onDismiss={() => setToastText(null)} /> : null}
     </>
   );
@@ -339,22 +355,6 @@ export function App() {
               </>
               )}
             </div>
-            {sheetOpen ? (
-              <Sheet label={t('sheet.sampleTitle')} onDismiss={() => setSheetOpen(false)}>
-                <Surface>
-                  <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
-                  <SaveState saveState="draft" />
-                  <ActionBar
-                    label={t('button.saveMovement')}
-                    onPress={() => {
-                      setSheetOpen(false);
-                      setToastText(t('toast.movementSaved'));
-                    }}
-                    leading
-                  />
-                </Surface>
-              </Sheet>
-            ) : null}
             {confirmOpen ? (
               <ConfirmSheet
                 label={t('confirm.sampleTitle')}
@@ -583,7 +583,7 @@ export function App() {
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.withIcon')}</span>
-            <Button leading={<RetryIcon />}>{t('button.retry')}</Button>
+            <Button leading={<RetryIcon />} onClick={() => setToastText(t('button.retry'))}>{t('button.retry')}</Button>
           </div>
         </section>
 
@@ -862,12 +862,18 @@ export function App() {
               value="1,250,000.125"
               trailing={t('money.unit')}
               debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
             />
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.emptySection')}</span>
-            <HeroSurface label={t('nav.finance')} />
+            {/* 2.1: even the empty hero's eye is live — the toggle is the
+                GLOBAL 23.22 control, wired through HeroSurface's onChange. */}
+            <HeroSurface
+              label={t('nav.finance')}
+              onChange={(visible) => setHidden(!visible)}
+            />
           </div>
         </section>
 
@@ -1248,7 +1254,15 @@ export function App() {
                 {/* Rule 61 (و-2 item 21): visible text may repeat across
                     instances, the SR name carries the OBJECT — the exact
                     addendum example «سجّل دفعة، سلمى الحوراني». */}
-                <Button variant="secondary" size="sm" data-ds-exempt="" aria-label={`${t('button.recordPayment')}، طلب 1175`}>{t('button.recordPayment')}</Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  data-ds-exempt=""
+                  aria-label={`${t('button.recordPayment')}، طلب 1175`}
+                  onClick={() => setToastText(t('toast.movementSaved'))}
+                >
+                  {t('button.recordPayment')}
+                </Button>
               </ObjectCard>
             </div>
           </div>

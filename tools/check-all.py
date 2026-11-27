@@ -116,6 +116,7 @@ def build_gates(quick, out, skip_visual):
         ("ds-states", PY + ["tools/ds-gates/ds-states.py"]),
         ("ds-motion", PY + ["tools/ds-gates/ds-motion.py"]),
         ("ds-hidden-amounts", PY + ["tools/ds-gates/ds-hidden-amounts.py"]),
+        ("ds-lab-live", PY + ["tools/ds-gates/ds-lab-live.py"]),
         ("ds-font-shift", PY + ["tools/ds-gates/ds-font-shift.py"]),
         ("ds-tabular", PY + ["tools/ds-gates/ds-tabular.py"]),
         ("ds-bidi", PY + ["tools/ds-gates/ds-bidi.py"]),
