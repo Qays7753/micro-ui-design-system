@@ -1,0 +1,99 @@
+/*
+ * SearchField.css — ADDENDUM §1.1. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-search-field {
+  display: flex;
+  align-items: center;
+  min-height: var(--mds-size-search);
+  box-sizing: border-box;
+  inline-size: 100%;
+  border-radius: var(--mds-radius-full);
+  background: var(--mds-color-surface);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  padding-inline-start: var(--mds-layout-chip-padding);
+  color: var(--mds-color-text-secondary);
+  transition: border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+.mds-search-field:focus-within {
+  border-color: var(--mds-role-focus-ring);
+  outline: var(--mds-border-field-focus-halo) solid var(--mds-role-field-focus-halo);
+}
+
+/* The icon sits chip-padding from the START; then button-icon-gap to the input. */
+.mds-search-field > svg {
+  flex: none;
+}
+
+.mds-search-field-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  margin-inline-start: var(--mds-layout-button-icon-gap);
+  padding-block: var(--mds-space-3);
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  caret-color: var(--mds-role-caret);
+}
+
+.mds-search-field-input::placeholder {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-search-field-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* The clear button: 4 from the END edge (§1.1-2), a 48 touch zone. */
+.mds-search-field-clear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-icon-button);
+  block-size: var(--mds-size-icon-button);
+  margin-inline-end: calc(-1 * var(--mds-space-4));
+  border: none;
+  border-radius: var(--mds-radius-full);
+  background: transparent;
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  animation: mds-search-clear-in var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+.mds-search-field-clear--pressed {
+  background: var(--mds-color-surface-pressed);
+}
+
+@keyframes mds-search-clear-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.mds-search-field--disabled {
+  border-color: var(--mds-color-disabled-fg);
+}
+
+.mds-search-field--disabled .mds-search-field-input,
+.mds-search-field--disabled > svg {
+  color: var(--mds-color-disabled-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-search-field-clear {
+    animation: none;
+  }
+}
