@@ -386,6 +386,8 @@ export const ar = {
   'sr.clearSearch': { kind: 'screen-reader', text: 'امسح البحث' },
   'search.in': { kind: 'placeholder', text: 'ابحث في {area}' },
   'lab.h.searchField': { kind: 'title', text: 'بحث داخل قسم' },
+  'lab.h.textArea': { kind: 'title', text: 'نص متعدد الأسطر' },
+  'title.textArea': { kind: 'title', text: 'حقل الملاحظة' },
   'title.searchField': { kind: 'title', text: 'حقل البحث' },
   'lab.h.checkbox': { kind: 'title', text: 'بنود تُشَرّ مستقلة' },
   'state.errorRow': { kind: 'badge', text: 'حالة الخطأ' },

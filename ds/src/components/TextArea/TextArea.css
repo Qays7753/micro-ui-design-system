@@ -1,0 +1,90 @@
+/*
+ * TextArea.css — ADDENDUM §1.2. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-text-area {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--mds-layout-label-to-field);
+  min-width: var(--mds-size-textfield-min-width);
+  inline-size: 100%;
+}
+
+.mds-text-area-label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-primary);
+}
+
+/* Rule 67: «اختياري» rides the label row, one uniform shape. */
+.mds-text-area-optional {
+  margin-inline-start: var(--mds-space-4);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}
+
+/* The field: min size.field; the vertical padding 16 keeps the first line
+   aligned with TextField (§1.2-2); grows to size.textarea-max-lines of body
+   then scrolls internally (ق2). The growth is instant (§1.2-5). */
+.mds-text-area-input {
+  box-sizing: border-box;
+  min-height: var(--mds-size-field);
+  max-height: calc(
+    var(--mds-size-textarea-max-lines) * var(--mds-type-body-line) + 2 * var(--mds-space-16)
+  );
+  overflow-y: auto;
+  padding-block: var(--mds-space-16);
+  padding-inline: var(--mds-space-16);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  border-radius: var(--mds-radius-md);
+  background-color: var(--mds-color-surface);
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  caret-color: var(--mds-color-brand-text);
+  outline: none;
+  resize: none;
+}
+
+.mds-text-area-input::placeholder {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-text-area-input::selection {
+  background-color: var(--mds-color-brand-selected-bg);
+}
+
+.mds-text-area-input:focus-visible {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
+}
+
+/* The help line 4 below; the error row carries the icon + the solution. */
+.mds-text-area-help {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--mds-layout-badge-icon-gap);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-text-area--error .mds-text-area-help {
+  color: var(--mds-color-status-problem-fg);
+}
+
+.mds-text-area--error .mds-text-area-input {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+.mds-text-area--disabled .mds-text-area-input {
+  background-color: var(--mds-color-disabled-bg);
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-bg);
+  cursor: default;
+}

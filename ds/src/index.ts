@@ -19,6 +19,7 @@ export * from './components/Checkbox';
 export * from './components/Radio';
 export * from './components/Toggle';
 export * from './components/SearchField';
+export * from './components/TextArea';
 export * from './components/StatusBadge';
 export * from './components/EntityMark';
 export * from './components/Button';
