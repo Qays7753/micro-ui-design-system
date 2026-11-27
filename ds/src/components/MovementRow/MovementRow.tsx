@@ -52,7 +52,7 @@ export function MovementRow({
     // §0.2 item 1: the skeleton takes the row's own shape — mark 44, a
     // title line, an amount block; nothing of the real numbers in the DOM.
     return (
-      <div className="mds-movement-row mds-movement-row--loading" aria-busy="true" id={id} style={style} ref={ref as React.Ref<HTMLDivElement>}>
+      <div className="mds-movement-row mds-movement-row--loading mds-object-row" aria-busy="true" id={id} style={style} ref={ref as React.Ref<HTMLDivElement>}>
         <EntityMark>
           <Skeleton variant="mark" />
         </EntityMark>

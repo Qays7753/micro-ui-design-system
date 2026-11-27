@@ -131,7 +131,17 @@
   "step",
   "weekStart",
   "mode",
-  "useSystemKeyboard"
+  "useSystemKeyboard",
+  "paid",
+  "total",
+  "markTone",
+  "from",
+  "to",
+  "time",
+  "action",
+  "forYou",
+  "againstYou",
+  "counted"
  ],
  "banned_props_jsx": [
   "onLongTap",
@@ -297,6 +307,7 @@
   "hero": "HeroSurface",
   "badge": "StatusBadge",
   "money": "Money",
-  "controls": "AmountVisibilityToggle"
+  "controls": "AmountVisibilityToggle",
+  "finance-compose": "FundCard"
  }
 }

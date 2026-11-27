@@ -5,31 +5,10 @@
 
 /* The row rides ObjectRow's own classes (mds-object-row) for the anatomy,
    the baselines and the press treatment; only the movement specifics live
-   here. The mark: the movement icon 24 on the entity surface (§2.1). */
+   here. The mark: the movement icon 24 on the entity surface (§2.1).
+   The loading state (§0.2 item 1) reuses the same anatomy classes —
+   ObjectRow.css carries the whole layout once. */
 .mds-movement-row .mds-entity-mark {
   flex-shrink: 0;
 }
 
-/* Loading shape (§0.2 item 1): the mark and two text lines; the amount
-   side gets one caption-width block. */
-.mds-movement-row--loading {
-  display: flex;
-  align-items: center;
-  gap: var(--mds-layout-row-gap);
-  padding: var(--mds-layout-row-padding-block) var(--mds-layout-row-padding-inline);
-  min-height: var(--mds-size-row-with-mark);
-}
-
-.mds-movement-row--loading .mds-movement-row-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-layout-row-line-gap);
-  flex: 1;
-  min-width: 0;
-}
-
-.mds-movement-row--loading .mds-movement-row-end {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}

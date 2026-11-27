@@ -1,0 +1,48 @@
+/*
+ * DebtSummary.css — BATCH2-SPECS §2.5. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-debt-summary {
+  display: flex;
+  /* Two equal columns 16 apart, NO divider line (§2.5 ق2). */
+  flex-direction: row;
+  gap: var(--mds-space-16);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border-radius: var(--mds-radius-lg);
+  /* The uncut-number guarantee (§2.5 ق1): when a column's number cannot
+     fit, the whole grid wraps to rows — the number itself NEVER clips. */
+  flex-wrap: wrap;
+}
+
+.mds-debt-summary-col {
+  flex: 1 1 0;
+  /* A number that cannot fit its 50% share forces the columns to wrap to
+     rows (§2.5 ق1: no number ever clips) — fit-content floors the column
+     so the wrap, never the clip, resolves the overflow. */
+  min-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+}
+
+.mds-debt-summary-col .mds-money {
+  max-width: 100%;
+  width: fit-content;
+}
+
+.mds-debt-summary-label {
+  /* type trio shared via .mds-type-label (base.css) */
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-debt-summary-count {
+  /* type trio shared via .mds-type-caption (base.css) */
+  color: var(--mds-color-text-secondary);
+}
+
+/* Loading: the two columns keep their shape with skeleton blocks. */
+.mds-debt-summary--loading .mds-debt-summary-col {
+  gap: var(--mds-space-8);
+}

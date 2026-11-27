@@ -8,4 +8,8 @@
  * design — `export {}` keeps it a module for the index re-export.
  */
 export * from './components/MovementRow';
+export * from './components/TransferRow';
+export * from './components/FundCard';
+export * from './components/DebtCard';
+export * from './components/DebtSummary';
 export * from './components/PaymentProgress';

@@ -1,0 +1,28 @@
+/*
+ * TransferRow.css — BATCH2-SPECS §2.2 on the ObjectRow anatomy. Every
+ * value is a token reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The route title: one line; overflow ellipsizes from the END so the
+   first fund name stays whole (§2.2 item 6). The arrow takes the token
+   gap on both sides and stays visually with the names. */
+.mds-transfer-row-route {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--mds-space-8);
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mds-transfer-row-arrow {
+  color: var(--mds-color-text-secondary);
+  flex-shrink: 0;
+}
+
+/* The loading state (§0.2 item 1) reuses the ObjectRow anatomy classes
+   (mds-object-row + -text/-end on the loading root) — ObjectRow.css
+   carries the whole layout once. */
+

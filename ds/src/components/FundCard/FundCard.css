@@ -1,0 +1,100 @@
+/*
+ * FundCard.css — BATCH2-SPECS §2.3. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* The card: 280 wide in horizontal lists (size.horizontal-card-width),
+   radius 24, surface padding; the ObjectCard press treatment (§2.3). */
+.mds-fund-card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: var(--mds-size-horizontal-card-width);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-xl);
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  transition: transform var(--mds-motion-press-in-ms) var(--mds-motion-press-in-ease);
+}
+
+.mds-fund-card--pressed {
+  transform: scale(0.98);
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-fund-card:disabled {
+  cursor: default;
+}
+
+/* ObjectCard anatomy with the fund header: mark sm 32 → 8 → name; the
+   draft's attention dot anchors to the header's end. */
+.mds-fund-card .mds-fund-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  min-width: 0;
+}
+
+.mds-fund-card .mds-fund-card-name {
+  /* type quartet shared via .mds-type-body-strong (base.css) */
+  color: var(--mds-color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.mds-fund-card .mds-fund-card-dot {
+  width: var(--mds-size-dot-attention);
+  height: var(--mds-size-dot-attention);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-role-dot-attention);
+  flex-shrink: 0;
+}
+
+/* The balance block: Money lg then the last-movement caption. */
+.mds-fund-card .mds-fund-card-balance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  margin-top: var(--mds-space-12);
+}
+
+.mds-fund-card .mds-fund-card-last {
+  color: var(--mds-color-text-secondary);
+}
+
+/* Loading: the card keeps its shape with skeleton blocks (§0.2 item 1). */
+.mds-fund-card--loading .mds-fund-card-balance {
+  gap: var(--mds-space-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-fund-card {
+    transition: none;
+  }
+}
+
+/* The horizontal list the card rides in (§2.3 item 2, 23.16): the strip
+   scrolls sideways INSIDE itself — the page never gets a horizontal
+   scrollbar from it. */
+.mds-fund-card-list {
+  display: flex;
+  gap: var(--mds-space-12);
+  overflow-x: auto;
+  max-width: 100%;
+  /* RTL left-overflow guard (K21): layout containment keeps the strip's
+     leftward scrolled content out of the document's scroll area — the
+     page never gains a horizontal scrollbar from the list (verified
+     contain: layout collapses documentElement.scrollWidth to the
+     viewport on Chromium AND WebKit). */
+  contain: layout;
+}
+
+.mds-fund-card-list .mds-fund-card {
+  flex-shrink: 0;
+}

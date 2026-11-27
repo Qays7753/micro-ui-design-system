@@ -20,6 +20,18 @@ export declare const arDomains: {
         readonly kind: "badge";
         readonly text: "درج الكاش";
     };
+    readonly 'fund.bankAccount': {
+        readonly kind: "badge";
+        readonly text: "الحساب البنكي";
+    };
+    readonly 'fund.walletName': {
+        readonly kind: "badge";
+        readonly text: "المحفظة";
+    };
+    readonly 'fund.balanceWord': {
+        readonly kind: "screen-reader";
+        readonly text: "الرصيد";
+    };
     readonly 'fund.negativeBalance': {
         readonly kind: "badge";
         readonly text: "رصيد سالب";
@@ -44,6 +56,10 @@ export declare const arDomains: {
         readonly kind: "badge";
         readonly text: "سُدّد";
     };
+    readonly 'metric.weekIn': {
+        readonly kind: "badge";
+        readonly text: "الداخل هذا الأسبوع";
+    };
     readonly 'payment.paid': {
         readonly kind: "badge";
         readonly text: "دُفع";
@@ -64,6 +80,10 @@ export declare const arDomains: {
         readonly kind: "screen-reader";
         readonly text: "داخل";
     };
+    readonly 'transfer.arrow': {
+        readonly kind: "badge";
+        readonly text: "←";
+    };
     readonly 'sr.transferFrom': {
         readonly kind: "screen-reader";
         readonly text: "تحويل من {from} إلى {to}";
@@ -74,7 +94,27 @@ export declare const arDomains: {
     };
     readonly 'sr.debtProgress': {
         readonly kind: "screen-reader";
-        readonly text: "دُفع {paid} من {total} دينار";
+        readonly text: "دُفع {paid} من {total}";
+    };
+    readonly 'title.funds': {
+        readonly kind: "title";
+        readonly text: "الصناديق";
+    };
+    readonly 'title.debts': {
+        readonly kind: "title";
+        readonly text: "الديون";
+    };
+    readonly 'state.negativeBalance': {
+        readonly kind: "badge";
+        readonly text: "رصيد سالب";
+    };
+    readonly 'state.opened': {
+        readonly kind: "badge";
+        readonly text: "فُتح:";
+    };
+    readonly 'state.pressed': {
+        readonly kind: "badge";
+        readonly text: "مرات الضغط:";
     };
     readonly 'lab.h.movementRow': {
         readonly kind: "title";

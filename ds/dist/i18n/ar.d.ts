@@ -1278,6 +1278,18 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "درج الكاش";
     };
+    'fund.bankAccount': {
+        readonly kind: "badge";
+        readonly text: "الحساب البنكي";
+    };
+    'fund.walletName': {
+        readonly kind: "badge";
+        readonly text: "المحفظة";
+    };
+    'fund.balanceWord': {
+        readonly kind: "screen-reader";
+        readonly text: "الرصيد";
+    };
     'fund.negativeBalance': {
         readonly kind: "badge";
         readonly text: "رصيد سالب";
@@ -1302,6 +1314,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "سُدّد";
     };
+    'metric.weekIn': {
+        readonly kind: "badge";
+        readonly text: "الداخل هذا الأسبوع";
+    };
     'payment.paid': {
         readonly kind: "badge";
         readonly text: "دُفع";
@@ -1322,6 +1338,10 @@ export declare const ar: {
         readonly kind: "screen-reader";
         readonly text: "داخل";
     };
+    'transfer.arrow': {
+        readonly kind: "badge";
+        readonly text: "←";
+    };
     'sr.transferFrom': {
         readonly kind: "screen-reader";
         readonly text: "تحويل من {from} إلى {to}";
@@ -1332,7 +1352,27 @@ export declare const ar: {
     };
     'sr.debtProgress': {
         readonly kind: "screen-reader";
-        readonly text: "دُفع {paid} من {total} دينار";
+        readonly text: "دُفع {paid} من {total}";
+    };
+    'title.funds': {
+        readonly kind: "title";
+        readonly text: "الصناديق";
+    };
+    'title.debts': {
+        readonly kind: "title";
+        readonly text: "الديون";
+    };
+    'state.negativeBalance': {
+        readonly kind: "badge";
+        readonly text: "رصيد سالب";
+    };
+    'state.opened': {
+        readonly kind: "badge";
+        readonly text: "فُتح:";
+    };
+    'state.pressed': {
+        readonly kind: "badge";
+        readonly text: "مرات الضغط:";
     };
     'lab.h.movementRow': {
         readonly kind: "title";

@@ -39,7 +39,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: var(--mds-space-4);
+  gap: var(--mds-space-4);
   color: var(--mds-color-text-secondary);
   font-family: var(--mds-type-caption-font);
   font-size: var(--mds-type-caption-size);
