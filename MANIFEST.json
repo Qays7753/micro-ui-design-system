@@ -1,5 +1,5 @@
 {
-  "AGENTS.md": "1a7af9fb526d886eeeb2cc3d7d876e8c4f87eae71fa4a74ce1f43ce1fdd6665e",
+  "AGENTS.md": "1b19fa471dbd08f97f78bafa3411b94fcab9c6cb1db01f1ab6612174268439ba",
   "CHANGELOG.md": "8e08601bc953f85ec50fb8fe2788c8dade72acfa63cf46dad4dc5c8351910c1b",
   "DESIGN.md": "9bf64de78547131343145daa45a806e90da5d45499e17f9b77ab4a479dce9988",
   "README.md": "91a78a501f983ac3ef4fcaa1b0e07fd4a54608debe5b6a52a7a3220bcb730584",
@@ -373,6 +373,7 @@
   "docs/plans/design-system-batch1/PLAN.md": "c7c38504c20662a4d9dd4c9822d5ce17eb422a7b9068ee14ec7936ed8b8cadaa",
   "docs/plans/design-system-batch1/REPORT.md": "0e292868b0ad2a953c3189feb377353d48a9bd310c32f2ec261d02870f8d71e6",
   "docs/plans/design-system-batch2/PLAN-B.md": "1ffa21fd743dddd2877b1863bd6973561700ce7419f7fe2d48bd329127e0e170",
+  "docs/plans/design-system-batch2/PLAN-SIM.md": "f42f9ea8b9e4294c96d5054c26457e622b458d826165bef882fa9f764b526e7e",
   "docs/plans/design-system-batch2/PLAN.md": "cfd65809edd36cd685b1911d2af147bb181a9c51a4b9c1a3638269fb6450f8be",
   "docs/plans/design-system-batch2/REPORT.md": "e7371fa77b8bd7c440a1c4e17e47504bda12d1e9ca471df29313f288e37a7c0d",
   "docs/plans/design-system-batch2/VISUAL-AUDIT.md": "6f39bb52895114025e550ae293e494b6966b59e0655651934cceb8bf49958bb7",
