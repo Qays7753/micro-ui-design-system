@@ -60,6 +60,15 @@
   animation: mds-hero-swap var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
 }
 
+/* 2.3 visual audit (أ): the DIGIT RUN never breaks — at 200% the whole+cents
+   spans inside the bdi used to wrap mid-number («1,250,000.12 | 5»). The
+   run stays one line and the garden's documented horizontal scroll (b2bed89)
+   carries the overflow; only the UNIT keeps its wrap-under. */
+.mds-hero-visual bdi {
+  white-space: nowrap;
+}
+
+
 @keyframes mds-hero-swap {
   from {
     opacity: 0;
