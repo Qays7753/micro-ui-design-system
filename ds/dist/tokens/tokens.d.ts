@@ -7,7 +7,7 @@ export declare const tokens: {
         readonly canvas: "#E8ECEF";
         readonly surface: "#FFFFFF";
         readonly "surface-edge": "#D5DCE0";
-        readonly "surface-well": "#F6F8F9";
+        readonly "surface-well": "#E8ECEF";
         readonly "surface-pressed": "#EEF1F3";
         readonly track: "#DDE2E6";
         readonly "text-primary": "#101719";
@@ -38,7 +38,8 @@ export declare const tokens: {
         readonly "disabled-bg": "#DDE2E6";
         readonly "disabled-fg": "#8A959B";
         readonly skeleton: "#E9EDEF";
-        readonly "entity-bg": "#DDE2E6";
+        readonly "entity-bg": "#EAEEF1";
+        readonly "entity-bg-canvas": "#FFFFFF";
         readonly "entity-fg": "#3A464C";
         readonly "entity-image-edge": "rgb(16 23 25 / 6%)";
         readonly handle: "#C9D0D4";
@@ -220,6 +221,7 @@ export declare const tokens: {
         readonly "chip-gap": 8;
         readonly "touch-gap-min": 8;
         readonly "month-grid-margin": 0;
+        readonly "action-bar-padding-inline": 16;
         readonly "action-bar-padding-block": 12;
         readonly "action-bar-gap": 8;
         readonly "segmented-padding": 4;
@@ -236,14 +238,14 @@ export declare const tokens: {
         readonly xs: 6;
         readonly sm: 8;
         readonly inset: 12;
-        readonly md: 16;
-        readonly lg: 24;
+        readonly md: 12;
+        readonly lg: 16;
         readonly "signature-outer": 28;
-        readonly xl: 32;
+        readonly xl: 24;
         readonly full: 9999;
-        readonly "entity-32": 10;
-        readonly "entity-44": 14;
-        readonly "entity-64": 20;
+        readonly "entity-32": 8;
+        readonly "entity-44": 10;
+        readonly "entity-64": 14;
         readonly "nested-min": 4;
     };
     readonly border: {
@@ -319,6 +321,7 @@ export declare const tokens: {
         readonly "bar-max-width": 24;
         readonly "bar-width-ratio": 0.6;
         readonly "sparkline-height": 24;
+        readonly "hero-sparkline-height": 32;
         readonly "chart-area-opacity": 0.08;
         readonly "keypad-key": readonly [64, 56];
         readonly "weekstrip-cell": readonly [44, 56];
@@ -446,6 +449,14 @@ export declare const tokens: {
         };
         readonly "press-cancel-px": 8;
         readonly "response-max-ms": 100;
+        readonly "pending-delay": 300;
+        readonly landed: {
+            readonly ms: 1200;
+            readonly ease: "ease-out";
+            readonly from: "brand-selected-bg";
+            readonly to: "transparent";
+            readonly once: true;
+        };
         readonly "drag-lift": {
             readonly scale: 1.04;
             readonly elevation: "float";

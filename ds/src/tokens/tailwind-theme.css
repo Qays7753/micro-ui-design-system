@@ -46,6 +46,7 @@
   --color-disabled-fg: var(--mds-color-disabled-fg);
   --color-skeleton: var(--mds-color-skeleton);
   --color-entity-bg: var(--mds-color-entity-bg);
+  --color-entity-bg-canvas: var(--mds-color-entity-bg-canvas);
   --color-entity-fg: var(--mds-color-entity-fg);
   --color-entity-image-edge: var(--mds-color-entity-image-edge);
   --color-handle: var(--mds-color-handle);

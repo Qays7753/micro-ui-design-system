@@ -11,7 +11,7 @@
   --mds-color-canvas: #E8ECEF;
   --mds-color-surface: #FFFFFF;
   --mds-color-surface-edge: #D5DCE0;
-  --mds-color-surface-well: #F6F8F9;
+  --mds-color-surface-well: #E8ECEF;
   --mds-color-surface-pressed: #EEF1F3;
   --mds-color-track: #DDE2E6;
   --mds-color-text-primary: #101719;
@@ -42,7 +42,8 @@
   --mds-color-disabled-bg: #DDE2E6;
   --mds-color-disabled-fg: #8A959B;
   --mds-color-skeleton: #E9EDEF;
-  --mds-color-entity-bg: #DDE2E6;
+  --mds-color-entity-bg: #EAEEF1;
+  --mds-color-entity-bg-canvas: #FFFFFF;
   --mds-color-entity-fg: #3A464C;
   --mds-color-entity-image-edge: rgb(16 23 25 / 6%);
   --mds-color-handle: #C9D0D4;
@@ -204,6 +205,7 @@
   --mds-layout-chip-gap: 8px;
   --mds-layout-touch-gap-min: 8px;
   --mds-layout-month-grid-margin: 0px;
+  --mds-layout-action-bar-padding-inline: 16px;
   --mds-layout-action-bar-padding-block: 12px;
   --mds-layout-action-bar-gap: 8px;
   --mds-layout-segmented-padding: 4px;
@@ -220,14 +222,14 @@
   --mds-radius-xs: 6px;
   --mds-radius-sm: 8px;
   --mds-radius-inset: 12px;
-  --mds-radius-md: 16px;
-  --mds-radius-lg: 24px;
+  --mds-radius-md: 12px;
+  --mds-radius-lg: 16px;
   --mds-radius-signature-outer: 28px;
-  --mds-radius-xl: 32px;
+  --mds-radius-xl: 24px;
   --mds-radius-full: 9999px;
-  --mds-radius-entity-32: 10px;
-  --mds-radius-entity-44: 14px;
-  --mds-radius-entity-64: 20px;
+  --mds-radius-entity-32: 8px;
+  --mds-radius-entity-44: 10px;
+  --mds-radius-entity-64: 14px;
   --mds-radius-nested-min: 4px;
 
   /* Border widths (BRIEF 23.19 — every border is 1px except focus states). */
@@ -308,6 +310,7 @@
   --mds-size-bar-max-width: 24px;
   --mds-size-bar-width-ratio: 0.6px;
   --mds-size-sparkline-height: 24px;
+  --mds-size-hero-sparkline-height: 32px;
   --mds-size-chart-area-opacity: 0.08px;
   --mds-size-keypad-key-64: 64px;
   --mds-size-keypad-key-56: 56px;
@@ -405,6 +408,12 @@
   --mds-motion-sheet-dismiss-velocity-px-per-ms: 0.6;
   --mds-motion-press-cancel-px: 8px;
   --mds-motion-response-max-ms: 100ms;
+  --mds-motion-pending-delay: 300;
+  --mds-motion-landed-ms: 1200ms;
+  --mds-motion-landed-ease: ease-out;
+  --mds-motion-landed-from: brand-selected-bg;
+  --mds-motion-landed-to: transparent;
+  /* motion.landed.once = true — not emitted as CSS vars (boolean; see tokens.ts). */
   --mds-motion-drag-lift-scale: 1.04;
   --mds-motion-drag-lift-elevation: float;
   --mds-motion-hold-confirm-ms: 600ms;
