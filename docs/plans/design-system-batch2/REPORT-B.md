@@ -53,6 +53,10 @@
 - `ds-copy`: تقرأ `ar-domains.ts` إلى جانب `ar.ts` (فحص القاموس نفسه).
 - أي بوابة أخرى تقرأ ملفًا مشتركًا بالاسم وتتأثر بملفات المجالات: تُوسَّع معها، مع fixture سيئ ونظيف.
 
+## مكوّنات المرحلة 4 المبنية هنا (الاستثناء الوحيد)
+
+- **بُني هنا: StatusTrack** (§1.17، في B3) بقرار المالك 2026-11-28 — أُبلغ الوكيل الأول أن يتخطاه (commit ccf3cfb على design-system). أي مكوّن مرحلة-4 آخر لا يُبنى هنا.
+
 ## يُكمَّل بعد الدمج (يحتاج مكوّنات المرحلة 4 من الوكيل الأول)
 
 - لا شيء بعد. (تُضاف البنود مع بناء صفحات التركيب.)
@@ -77,6 +81,6 @@
 - SlotPicker: عمودا 200% عبر media بوحدة rem (11.25rem) — لا تنقلب إلا بخط مضاعف فعلًا، ولا توجد آلية 200% في المختبر لتُختبر مباشرة.
 - قشرة البطاقات الثلاث (FundCard/DebtCard/OrderCard) فئة مشتركة واحدة `mds-card-shell` في ObjectCard.css بدل تكرارها (بوابة ds-dup).
 - unified_props امتدت بخصائص المواصفات B2 (badge/rows/hour/startMinutes/minutes/now/date/draft/cancelled/slots/today)، وregistry_exceptions بسطر (orders-compose → OrderCard).
-- B3: EvidenceSlot أُعيدت تسميته من kind إلى variant (23.18 يحظر kind) رغم «kind†» في المواصفة — الاسم الموحد هو variant. ContactBar يستخدم مفاتيح الوكيل sr.contactCall/sr.contactWhatsapp (الباء قبل الاسم فيها تطويل ـ). ContactBar أزراره <a> حقيقية بفئات Button (روابط خارجية tel:/wa.me). JobTrack غلاف رقيق فوق StatusTrack (بلا CSS خاص بعد إصلاح تعليق الأبستروف الذي كسر بناء المستهلك — tailwind يفسّر ' داخل تعليق CSS كسلسلة غير مغلقة). أدوات النص المشتركة (mds-type-micro) انتقلت إلى base.css بدل تكرارها. ds-consumer: إعادة pack+install ضرورية بعد كل تعديل CSS (الحزمة تُنسخ إلى consumer-test).
+- B3: EvidenceSlot — المواصفة تقول «kind†» و23.18 يحظر kind؛ الصحيح بقرار المالك في رأس PLAN.md: kind تصير mode (variant للأزرار فقط) — سُمّيت mode. ContactBar يستخدم مفاتيح الوكيل sr.contactCall/sr.contactWhatsapp (الباء قبل الاسم فيها تطويل ـ). ContactBar أزراره <a> حقيقية بفئات Button (روابط خارجية tel:/wa.me). JobTrack غلاف رقيق فوق StatusTrack (بلا CSS خاص بعد إصلاح تعليق الأبستروف الذي كسر بناء المستهلك — tailwind يفسّر ' داخل تعليق CSS كسلسلة غير مغلقة). أدوات النص المشتركة (mds-type-micro) انتقلت إلى base.css بدل تكرارها. ds-consumer: إعادة pack+install ضرورية بعد كل تعديل CSS (الحزمة تُنسخ إلى consumer-test).
 - قياسات B3 الموثقة (Chromium/DOM): العلامة 44 معكوسة matrix(-1,0,0,1,0,0)، بلاطة الإثبات 1.33 (4:3)، رابط الاتصال tel:+962791234567، رابط الخرائط مشفر encodeURIComponent، عنوان DriverJobCard h3، ContactBar السائق بوضع large.
 - نصوص lab بُسّطت لاحترام حدود 24.1 (ملاحظات المالك §3).

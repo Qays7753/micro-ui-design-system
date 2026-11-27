@@ -15,8 +15,8 @@ import type { DataState, Density } from '../../lib/types';
 export type EvidenceKind = 'photo' | 'code' | 'owner';
 
 export interface EvidenceSlotProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /** The proof kind — EXACTLY ONE shows (ق1). */
-  variant: EvidenceKind;
+  /** The proof mode — EXACTLY ONE shows (ق1). */
+  mode: EvidenceKind;
   /** photo: the captured image URL; code: the entered digits; owner:
    *  unused (the owner's confirm is a button). */
   value?: string;

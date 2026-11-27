@@ -147,16 +147,16 @@ function EvidenceSlotGarden() {
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['evidence.title'].text} — photo</span>
-        <EvidenceSlot variant="photo" value={photo} onChange={(v) => setPhoto(v === 'pending' ? 'https://picsum.photos/seed/delivery/288/216' : '')} />
+        <EvidenceSlot mode="photo" value={photo} onChange={(v) => setPhoto(v === 'pending' ? 'https://picsum.photos/seed/delivery/288/216' : '')} />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['evidence.photoTaken'].text}</span>
-        <EvidenceSlot variant="photo" value="https://picsum.photos/seed/delivery/288/216" />
+        <EvidenceSlot mode="photo" value="https://picsum.photos/seed/delivery/288/216" />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">code</span>
-        <EvidenceSlot variant="code" value={code} error={code && code !== '1234' ? ar['evidence.codeError'].text : undefined} onChange={setCode} />
+        <EvidenceSlot mode="code" value={code} error={code && code !== '1234' ? ar['evidence.codeError'].text : undefined} onChange={setCode} />
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">owner</span>
-        <EvidenceSlot variant="owner" action={<Button variant="secondary" size="sm">{ar['evidence.confirm'].text}</Button>} />
+        <EvidenceSlot mode="owner" action={<Button variant="secondary" size="sm">{ar['evidence.confirm'].text}</Button>} />
       </div>
     </div>
   );

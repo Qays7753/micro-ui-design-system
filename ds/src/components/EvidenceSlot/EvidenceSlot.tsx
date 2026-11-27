@@ -1,7 +1,7 @@
 /**
  * EvidenceSlot — the delivery proof (BATCH2-SPECS §4.6).
  *
- * - ONE kind shows (ق1): photo = a 4:3 tile (r-md, well) with the camera
+ * - ONE mode shows (ق1): photo = a 4:3 tile (r-md, well) with the camera
  *   prompt «التقط صورة» before capture, the photo with a redo control
  *   after; code = a numeric TextField «الرمز من المستلم» with tabular
  *   digits and the app-passed error under it; owner = the «المالك يؤكد
@@ -18,7 +18,7 @@ import type { EvidenceSlotProps } from './EvidenceSlot.types';
 import './EvidenceSlot.css';
 
 export function EvidenceSlot({
-  variant,
+  mode,
   value,
   onChange,
   error,
@@ -37,9 +37,9 @@ export function EvidenceSlot({
 
   const ariaText = [
     ar['evidence.title'].text,
-    variant === 'photo' ? (hasPhoto ? ar['evidence.photoTaken'].text : ar['evidence.photoMissing'].text) : '',
-    variant === 'code' ? (value ? ar['evidence.entered'].text : ar['evidence.codeLabel'].text) : '',
-    variant === 'owner' ? ar['evidence.ownerSentence'].text : '',
+    mode === 'photo' ? (hasPhoto ? ar['evidence.photoTaken'].text : ar['evidence.photoMissing'].text) : '',
+    mode === 'code' ? (value ? ar['evidence.entered'].text : ar['evidence.codeLabel'].text) : '',
+    mode === 'owner' ? ar['evidence.ownerSentence'].text : '',
   ].filter(Boolean).join(ar['sr.listSeparator'].text);
 
   return (
@@ -65,7 +65,7 @@ export function EvidenceSlot({
         <span className="mds-evidence-slot-tile" aria-hidden="true">
           <Skeleton variant="body" />
         </span>
-      ) : variant === 'photo' ? (
+      ) : mode === 'photo' ? (
         hasPhoto ? (
           <span className="mds-evidence-slot-tile" style={{ cursor: 'default' }}>
             {/* The app's uploaded photo URL fills the reserved 4:3. */}
@@ -96,7 +96,7 @@ export function EvidenceSlot({
             <span>{ar['evidence.takePhoto'].text}</span>
           </button>
         )
-      ) : variant === 'code' ? (
+      ) : mode === 'code' ? (
         readOnly ? (
           <span className="mds-evidence-slot-done mds-type-label-strong">{value ? ar['evidence.entered'].text : '—'}</span>
         ) : (
