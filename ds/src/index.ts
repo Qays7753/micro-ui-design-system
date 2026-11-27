@@ -15,6 +15,7 @@ export * from './lib';
 export * from './icons';
 export * from './components/Money';
 export * from './components/AmountVisibilityToggle';
+export * from './components/Checkbox';
 export * from './components/StatusBadge';
 export * from './components/EntityMark';
 export * from './components/Button';

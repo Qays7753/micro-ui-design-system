@@ -1,0 +1,123 @@
+/*
+ * Checkbox.css — ADDENDUM §3.1. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-checkbox {
+  display: flex;
+  align-items: flex-start;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  padding-block: var(--mds-layout-row-line-gap);
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* The REAL checkbox: visually hidden, fully functional (ق2). */
+.mds-checkbox-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+/* The styled box: 20, r-xs, hairline border-field on surface (resting). */
+.mds-checkbox-box {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-checkbox);
+  block-size: var(--mds-size-checkbox);
+  margin-block-start: var(--mds-space-4);
+  border-radius: var(--mds-radius-xs);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  background: var(--mds-color-surface);
+  color: var(--mds-color-on-anchor);
+  transition: background-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* Ticked: brand-anchor fill; the check draws with motion.check-draw. */
+.mds-checkbox--selected .mds-checkbox-box {
+  background: var(--mds-color-brand-anchor);
+  border-color: var(--mds-color-brand-anchor);
+}
+
+.mds-checkbox-box svg {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.mds-checkbox--selected .mds-checkbox-box svg {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity var(--mds-motion-check-draw-ms) var(--mds-motion-check-draw-ease),
+    transform var(--mds-motion-check-draw-ms) var(--mds-motion-check-draw-ease);
+}
+
+/* The label column: body + the optional caption. */
+.mds-checkbox-text {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: var(--mds-space-3);
+  min-width: 0;
+}
+
+.mds-checkbox-label {
+  color: var(--mds-color-text-primary);
+}
+
+.mds-checkbox-caption {
+  color: var(--mds-color-text-secondary);
+  margin-block-start: var(--mds-space-4);
+}
+
+/* The fix-it line under the row (error state). */
+.mds-checkbox-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-inline-start: var(--mds-space-3);
+  align-self: center;
+}
+
+/* Pressed: the row's pressed treatment (23.2) — surface-pressed inset. */
+.mds-checkbox:active {
+  background: var(--mds-color-surface-pressed);
+  border-radius: var(--mds-radius-md);
+}
+
+/* Disabled: box border and label in disabled-fg, still readable (23.2). */
+.mds-checkbox--disabled {
+  cursor: default;
+}
+
+.mds-checkbox--disabled .mds-checkbox-box {
+  border-color: var(--mds-color-disabled-fg);
+  background: var(--mds-color-surface);
+}
+
+.mds-checkbox--disabled .mds-checkbox-label,
+.mds-checkbox--disabled .mds-checkbox-caption {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* Error: the box border turns problem (the row stays a row, no fill). */
+.mds-checkbox--error .mds-checkbox-box {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+/* Keyboard: the 2px ring on the box via :focus-visible on the input. */
+.mds-checkbox-input:focus-visible + .mds-checkbox-box {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-checkbox-box,
+  .mds-checkbox-box svg {
+    transition: none;
+  }
+}

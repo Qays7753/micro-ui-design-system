@@ -1000,6 +1000,202 @@ export declare const ar: {
         readonly kind: "placeholder";
         readonly text: "07X XXX XXXX";
     };
+    readonly 'day.0': {
+        readonly kind: "badge";
+        readonly text: "أحد";
+    };
+    readonly 'day.1': {
+        readonly kind: "badge";
+        readonly text: "اثنين";
+    };
+    readonly 'day.2': {
+        readonly kind: "badge";
+        readonly text: "ثلاثاء";
+    };
+    readonly 'day.3': {
+        readonly kind: "badge";
+        readonly text: "أربعاء";
+    };
+    readonly 'day.4': {
+        readonly kind: "badge";
+        readonly text: "خميس";
+    };
+    readonly 'day.5': {
+        readonly kind: "badge";
+        readonly text: "جمعة";
+    };
+    readonly 'day.6': {
+        readonly kind: "badge";
+        readonly text: "سبت";
+    };
+    readonly 'month.1': {
+        readonly kind: "screen-reader";
+        readonly text: "كانون الثاني";
+    };
+    readonly 'month.2': {
+        readonly kind: "screen-reader";
+        readonly text: "شباط";
+    };
+    readonly 'month.3': {
+        readonly kind: "screen-reader";
+        readonly text: "آذار";
+    };
+    readonly 'month.4': {
+        readonly kind: "screen-reader";
+        readonly text: "نيسان";
+    };
+    readonly 'month.5': {
+        readonly kind: "screen-reader";
+        readonly text: "أيار";
+    };
+    readonly 'month.6': {
+        readonly kind: "screen-reader";
+        readonly text: "حزيران";
+    };
+    readonly 'month.7': {
+        readonly kind: "screen-reader";
+        readonly text: "تموز";
+    };
+    readonly 'month.8': {
+        readonly kind: "screen-reader";
+        readonly text: "آب";
+    };
+    readonly 'month.9': {
+        readonly kind: "screen-reader";
+        readonly text: "أيلول";
+    };
+    readonly 'month.10': {
+        readonly kind: "screen-reader";
+        readonly text: "تشرين الأول";
+    };
+    readonly 'month.11': {
+        readonly kind: "screen-reader";
+        readonly text: "تشرين الثاني";
+    };
+    readonly 'month.12': {
+        readonly kind: "screen-reader";
+        readonly text: "كانون الأول";
+    };
+    readonly 'order.draft': {
+        readonly kind: "badge";
+        readonly text: "مسودة";
+    };
+    readonly 'order.tentative': {
+        readonly kind: "badge";
+        readonly text: "اتفاق مبدئي";
+    };
+    readonly 'order.confirmed': {
+        readonly kind: "badge";
+        readonly text: "مؤكد";
+    };
+    readonly 'order.inProgress': {
+        readonly kind: "badge";
+        readonly text: "قيد التنفيذ";
+    };
+    readonly 'order.ready': {
+        readonly kind: "badge";
+        readonly text: "جاهز";
+    };
+    readonly 'order.delivered': {
+        readonly kind: "badge";
+        readonly text: "تم التسليم";
+    };
+    readonly 'order.settled': {
+        readonly kind: "badge";
+        readonly text: "تمت التسوية";
+    };
+    readonly 'order.deferred': {
+        readonly kind: "badge";
+        readonly text: "مؤجل";
+    };
+    readonly 'order.cancelled': {
+        readonly kind: "badge";
+        readonly text: "ملغى";
+    };
+    readonly 'order.needsReview': {
+        readonly kind: "badge";
+        readonly text: "يحتاج مراجعة";
+    };
+    readonly 'next.draft': {
+        readonly kind: "button";
+        readonly text: "أضف السعر والموعد";
+    };
+    readonly 'next.tentative': {
+        readonly kind: "button";
+        readonly text: "ابدأ التنفيذ";
+    };
+    readonly 'next.confirmed': {
+        readonly kind: "button";
+        readonly text: "ابدأ التنفيذ";
+    };
+    readonly 'next.inProgress': {
+        readonly kind: "button";
+        readonly text: "أكمل التنفيذ";
+    };
+    readonly 'next.ready': {
+        readonly kind: "button";
+        readonly text: "سجّل التسليم";
+    };
+    readonly 'next.delivered': {
+        readonly kind: "button";
+        readonly text: "راجع التحصيل والنتيجة";
+    };
+    readonly 'next.settled': {
+        readonly kind: "button";
+        readonly text: "راجع نتيجة الطلب";
+    };
+    readonly 'next.deferred': {
+        readonly kind: "button";
+        readonly text: "راجع سبب التأجيل";
+    };
+    readonly 'next.cancelled': {
+        readonly kind: "button";
+        readonly text: "راجع تسوية الطلب";
+    };
+    readonly 'next.needsReview': {
+        readonly kind: "button";
+        readonly text: "راجع الطلب";
+    };
+    readonly 'avail.available': {
+        readonly kind: "badge";
+        readonly text: "متوفر";
+    };
+    readonly 'avail.onRequest': {
+        readonly kind: "badge";
+        readonly text: "بالطلب";
+    };
+    readonly 'avail.unavailable': {
+        readonly kind: "badge";
+        readonly text: "غير متوفر مؤقتاً";
+    };
+    readonly 'report.misleading': {
+        readonly kind: "badge";
+        readonly text: "معلومات مضللة";
+    };
+    readonly 'report.offTopic': {
+        readonly kind: "badge";
+        readonly text: "خارج النطاق المسموح";
+    };
+    readonly 'report.spam': {
+        readonly kind: "badge";
+        readonly text: "إعلان مزعج";
+    };
+    readonly 'report.contact': {
+        readonly kind: "badge";
+        readonly text: "مشكلة في التواصل";
+    };
+    readonly 'report.other': {
+        readonly kind: "badge";
+        readonly text: "سبب آخر";
+    };
+    readonly 'report.writeReason': {
+        readonly kind: "badge";
+        readonly text: "اكتب السبب";
+    };
+    readonly 'checkbox.tickThis': {
+        readonly kind: "help";
+        readonly text: "أشّر على هذا البند.";
+    };
 };
 export type ArKey = keyof typeof ar;
 /**

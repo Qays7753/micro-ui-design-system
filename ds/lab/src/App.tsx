@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -56,6 +56,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'notifications-button', name: t('title.notificationsButton') },
   { id: 'ask-button', name: t('title.askButton') },
   { id: 'confirm-sheet', name: t('title.confirmSheet') },
+  { id: 'checkbox', name: t('lab.h.checkbox') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -88,6 +89,11 @@ export function App() {
   const [sourceOpen, setSourceOpen] = useState(false);
   const [objectOpen, setObjectOpen] = useState(false);
   const [allOpen, setAllOpen] = useState(false);
+  // Stage-4 batch-2 component samples — each one LIVE (2.1's rule holds for
+  // every new garden too).
+  const [cbA, setCbA] = useState(true);
+  const [cbB, setCbB] = useState(false);
+  const [cbC, setCbC] = useState(false);
   // Catalog samples: the exit motion plays on dismiss, THEN the app
   // (here, the lab) removes the sheet — remounted fresh at once so the
   // sample stays for review and the press scan (23.2) keeps hitting it.
@@ -1207,6 +1213,24 @@ export function App() {
                 onDismiss={() => setConfirmSampleKey(k => k + 1)}
               />
             </div>
+          </div>
+        </section>
+
+        {/* ---- Checkbox (ADDENDUM §3.1): independent tickable items ---- */}
+        <section className="lab-section" id="checkbox">
+          <h2 className="lab-title">{t('lab.h.checkbox')}<span className="lab-tech">{t('title.checkbox')}</span></h2>
+          <div className="lab-row lab-row--full" data-ds-check="checkbox">
+            <span className="lab-label">{t('state.default')}</span>
+            <Surface>
+              <Checkbox label={ar['kv.customer'].text} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
+              <Checkbox label={ar['kv.delivery'].text} selected={cbB} onChange={setCbB} />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.errorRow')}</span>
+            <Surface>
+              <Checkbox label={t('kv.phone')} selected={cbC} onChange={setCbC} state="error" />
+            </Surface>
           </div>
         </section>
 

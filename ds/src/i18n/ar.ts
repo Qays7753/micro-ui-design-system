@@ -377,6 +377,10 @@ export const ar = {
   'report.contact': { kind: 'badge', text: 'مشكلة في التواصل' },
   'report.other': { kind: 'badge', text: 'سبب آخر' },
   'report.writeReason': { kind: 'badge', text: 'اكتب السبب' },
+  'checkbox.tickThis': { kind: 'help', text: 'أشّر على هذا البند.' },
+  'lab.h.checkbox': { kind: 'title', text: 'بنود تُشَرّ مستقلة' },
+  'state.errorRow': { kind: 'badge', text: 'حالة الخطأ' },
+  'title.checkbox': { kind: 'title', text: 'مربع الاختيار' },
 
 // ---------------------------------------------------------------------------
 
