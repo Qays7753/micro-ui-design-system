@@ -46,10 +46,10 @@ export function Radio({
         {items.map((item) => {
           const selected = item.value === value;
           return (
-            <label key={item.value} className="mds-radio-row">
+            <label key={item.value} className="mds-control-row mds-radio-row">
               <input
                 type="radio"
-                className="mds-radio-input"
+                className="mds-radio-input mds-sr-input"
                 name={groupName}
                 checked={selected}
                 disabled={disabled || item.disabled}
@@ -58,7 +58,7 @@ export function Radio({
               <span className="mds-radio-circle" aria-hidden="true">
                 <span className="mds-radio-dot" />
               </span>
-              <span className="mds-radio-text">
+              <span className="mds-radio-text mds-control-text">
                 <span className="mds-radio-row-label mds-type-body">{item.label}</span>
                 {item.caption ? (
                   <span className="mds-radio-caption mds-type-caption">{item.caption}</span>

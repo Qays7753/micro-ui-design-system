@@ -38,6 +38,9 @@ export function Checkbox({
   // pointer and keyboard behave identically, and ds-states' native
   // disabled flip keeps working (the input is the interactive element).
   const classes = [
+    // .mds-control-row (base.css): the shared row-plain anatomy; the box
+    // aligns to the FIRST text line, so the alignment overrides to start.
+    'mds-control-row',
     'mds-checkbox',
     selected ? 'mds-checkbox--selected' : '',
     disabled ? 'mds-checkbox--disabled' : '',
@@ -51,7 +54,7 @@ export function Checkbox({
     <label ref={ref} id={id} style={style} className={classes} {...rest}>
       <input
         type="checkbox"
-        className="mds-checkbox-input"
+        className="mds-checkbox-input mds-sr-input"
         checked={selected}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
@@ -61,7 +64,7 @@ export function Checkbox({
       <span className="mds-checkbox-box" aria-hidden="true">
         <SelectedIcon size={14} />
       </span>
-      <span className="mds-checkbox-text">
+      <span className="mds-checkbox-text mds-control-text">
         <span className="mds-checkbox-label mds-type-body">{label}</span>
         {caption ? <span className="mds-checkbox-caption mds-type-caption">{caption}</span> : null}
       </span>

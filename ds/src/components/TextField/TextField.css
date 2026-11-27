@@ -10,21 +10,17 @@
   min-width: var(--mds-size-textfield-min-width);
 }
 
+/* The label weight and color on top of the shared .mds-type-label trio
+   (base.css) — kept ≤3 declarations so the anatomy stays shared (ds-dup). */
 .mds-text-field-label {
-  font-family: var(--mds-type-label-font);
-  font-size: var(--mds-type-label-size);
-  line-height: var(--mds-type-label-line);
   font-weight: var(--mds-type-label-weight);
   color: var(--mds-color-text-primary);
 }
 
-/* Rule 67: the optional mark rides the label row, one uniform shape —
-   caption type in text-secondary, one 4 gap after the label word. */
+/* Rule 67: the optional mark rides the label row — the caption trio comes
+   from .mds-type-caption (base.css). */
 .mds-text-field-optional {
   margin-inline-start: var(--mds-space-4);
-  font-family: var(--mds-type-caption-font);
-  font-size: var(--mds-type-caption-size);
-  line-height: var(--mds-type-caption-line);
   color: var(--mds-color-text-secondary);
 }
 
@@ -69,13 +65,8 @@
   border-color: var(--mds-color-status-problem-fg);
 }
 
-.mds-text-field--disabled .mds-text-field-input {
-  background-color: var(--mds-color-disabled-bg);
-  color: var(--mds-color-disabled-fg);
-  border-color: var(--mds-color-disabled-bg);
-  cursor: default;
-}
-
+/* The disabled input treatment is the shared .mds-field--disabled
+   .mds-field-input block (base.css); only the placeholder stays here. */
 .mds-text-field--disabled .mds-text-field-input::placeholder {
   color: var(--mds-color-disabled-fg);
 }

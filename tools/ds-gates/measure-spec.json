@@ -1,149 +1,184 @@
 {
- "_comment": "ds-measure spec (@micro/ds S3). Staged per unit (builder decision, REPORT 2026-11-23): each unit adds its own checks here — the S2 seed ids return with their components (amount-visibility-toggle: unit 2, status-badge-height: unit 3, icon-button: S4 IconButton). Expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number.",
- "checks": [
-  {
-   "id": "money-md",
-   "height": {
-    "token": "type.amount-row.line"
-   }
-  },
-  {
-   "id": "money-lg",
-   "height": {
-    "token": "type.number-lg.line"
-   }
-  },
-  {
-   "id": "amount-visibility-toggle",
-   "width": {
-    "token": "size.touch-min"
-   },
-   "height": {
-    "token": "size.touch-min"
-   }
-  },
-  {
-   "id": "status-badge-height",
-   "height": {
-    "px": 24
-   }
-  },
-  {
-   "id": "entity-mark-sm",
-   "width": {
-    "px": 32
-   },
-   "height": {
-    "px": 32
-   },
-   "center": {
-    "child": ".mds-entity-mark-initial"
-   }
-  },
-  {
-   "id": "entity-mark-md",
-   "width": {
-    "px": 44
-   },
-   "height": {
-    "px": 44
-   },
-   "center": {
-    "child": ".mds-entity-mark-initial"
-   }
-  },
-  {
-   "id": "entity-mark-lg",
-   "width": {
-    "px": 64
-   },
-   "height": {
-    "px": 64
-   },
-   "center": {
-    "child": ".mds-entity-mark-initial"
-   }
-  },
-  {
-   "id": "button-md",
-   "height": {
-    "token": "size.button"
-   }
-  },
-  {
-   "id": "button-sm",
-   "height": {
-    "token": "size.button-compact"
-   }
-  },
-  {
-   "id": "icon-button",
-   "width": {
-    "token": "size.touch-min"
-   },
-   "height": {
-    "token": "size.touch-min"
-   }
-  },
-  {
-   "id": "text-field",
-   "height": {
-    "px": 84
-   },
-   "_note": "field root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + input 56 (size.field)"
-  },
-  {
-   "id": "segmented-control",
-   "height": {
-    "token": "size.segmented"
-   },
-   "center": {
-    "child": ".mds-segmented-segment-label",
-    "of": "parent"
-   },
-   "_note": "Rule 72/ج1: every segment centers its label horizontally AND vertically (of:parent — each label against its own segment box); icon-prefixed segments center the GROUP, which the label+icon flex row already does."
-  },
-  {
-   "id": "filter-chips",
-   "height": {
-    "token": "size.touch-min"
-   }
-  },
-  {
-   "id": "action-bar",
-   "min_height": {
-    "px": 76
-   },
-   "_note": "ActionBar min height = primary button 52 (size.button) + 2x12 block padding. The 24 padding is space.12 (no layout token; documented S7 value with the brief's 9.2 'safe area' text on top)."
+  "_comment": "ds-measure spec (@micro/ds S3). Staged per unit (builder decision, REPORT 2026-11-23): each unit adds its own checks here — the S2 seed ids return with their components (amount-visibility-toggle: unit 2, status-badge-height: unit 3, icon-button: S4 IconButton). Expectations reference docs/design-system/tokens.json by dotted path, or a fixed px number.",
+  "checks": [
+    {
+      "id": "money-md",
+      "height": {
+        "token": "type.amount-row.line"
+      }
+    },
+    {
+      "id": "money-lg",
+      "height": {
+        "token": "type.number-lg.line"
+      }
+    },
+    {
+      "id": "amount-visibility-toggle",
+      "width": {
+        "token": "size.touch-min"
+      },
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
+      "id": "status-badge-height",
+      "height": {
+        "px": 24
+      }
+    },
+    {
+      "id": "entity-mark-sm",
+      "width": {
+        "px": 32
+      },
+      "height": {
+        "px": 32
+      },
+      "center": {
+        "child": ".mds-entity-mark-initial"
+      }
+    },
+    {
+      "id": "entity-mark-md",
+      "width": {
+        "px": 44
+      },
+      "height": {
+        "px": 44
+      },
+      "center": {
+        "child": ".mds-entity-mark-initial"
+      }
+    },
+    {
+      "id": "entity-mark-lg",
+      "width": {
+        "px": 64
+      },
+      "height": {
+        "px": 64
+      },
+      "center": {
+        "child": ".mds-entity-mark-initial"
+      }
+    },
+    {
+      "id": "button-md",
+      "height": {
+        "token": "size.button"
+      }
+    },
+    {
+      "id": "button-sm",
+      "height": {
+        "token": "size.button-compact"
+      }
+    },
+    {
+      "id": "icon-button",
+      "width": {
+        "token": "size.touch-min"
+      },
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
+      "id": "text-field",
+      "height": {
+        "px": 84
+      },
+      "_note": "field root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + input 56 (size.field)"
+    },
+    {
+      "id": "segmented-control",
+      "height": {
+        "token": "size.segmented"
+      },
+      "center": {
+        "child": ".mds-segmented-segment-label",
+        "of": "parent"
+      },
+      "_note": "Rule 72/ج1: every segment centers its label horizontally AND vertically (of:parent — each label against its own segment box); icon-prefixed segments center the GROUP, which the label+icon flex row already does."
+    },
+    {
+      "id": "filter-chips",
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
+      "id": "action-bar",
+      "min_height": {
+        "px": 76
+      },
+      "_note": "ActionBar min height = primary button 52 (size.button) + 2x12 block padding. The 24 padding is space.12 (no layout token; documented S7 value with the brief's 9.2 'safe area' text on top)."
+    },
+    {
+      "id": "checkbox",
+      "height": {
+        "token": "size.row-plain"
+      },
+      "_note": "rule 4-7 shared row anatomy; the label-only sample sits at row-plain"
+    },
+    {
+      "id": "toggle",
+      "height": {
+        "token": "size.row-plain"
+      },
+      "_note": "the switch row rides the shared control-row anatomy"
+    },
+    {
+      "id": "search-field",
+      "height": {
+        "token": "size.search"
+      },
+      "_note": "the search pill is size.search high (q1, ADDENDUM §1.1)"
+    },
+    {
+      "id": "text-area",
+      "height": {
+        "px": 88
+      },
+      "_note": "root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + input 60: min size.field 56 (q1, §1.2-2) with the 1-row content taller — padding-block 2x16 + body line 26 + hairline borders 2 = 60 (the 16 padding keeps the first line aligned with TextField, §1.2-2)"
+    },
+    {
+      "id": "amount-field",
+      "height": {
+        "px": 100
+      },
+      "_note": "root = label 20 + gap 8 + size.amount-field 72 (q1, §1.3)"
+    }
+  ],
+  "views": {
+    "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
+    "compose": [
+      {
+        "id": "button-sm",
+        "height": {
+          "token": "size.button-compact"
+        },
+        "_note": "The compose PageHeader's «سجّل حركة» secondary Button (size sm) — the page marks its own real instance."
+      },
+      {
+        "id": "status-badge-height",
+        "height": {
+          "px": 24
+        },
+        "_note": "The waiting StatusBadge trailing the second ObjectRow of «تحتاج منك»."
+      },
+      {
+        "id": "amount-visibility-toggle",
+        "width": {
+          "token": "size.touch-min"
+        },
+        "height": {
+          "token": "size.touch-min"
+        },
+        "_note": "The compose view's master visibility toggle in the lab strip (a real AmountVisibilityToggle instance on the page)."
+      }
+    ]
   }
- ],
- "views": {
-  "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
-  "compose": [
-   {
-    "id": "button-sm",
-    "height": {
-     "token": "size.button-compact"
-    },
-    "_note": "The compose PageHeader's «سجّل حركة» secondary Button (size sm) — the page marks its own real instance."
-   },
-   {
-    "id": "status-badge-height",
-    "height": {
-     "px": 24
-    },
-    "_note": "The waiting StatusBadge trailing the second ObjectRow of «تحتاج منك»."
-   },
-   {
-    "id": "amount-visibility-toggle",
-    "width": {
-     "token": "size.touch-min"
-    },
-    "height": {
-     "token": "size.touch-min"
-    },
-    "_note": "The compose view's master visibility toggle in the lab strip (a real AmountVisibilityToggle instance on the page)."
-   }
-  ]
- }
 }

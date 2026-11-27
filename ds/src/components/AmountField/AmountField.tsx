@@ -61,11 +61,19 @@ export function AmountField({
 
   return (
     <div id={id} style={style} className={classes} {...rest}>
-      <span className="mds-amount-field-label">{label}</span>
+      <span className="mds-amount-field-label mds-type-label">{label}</span>
       <div className="mds-amount-field-box">
         <input
           ref={ref}
-          className="mds-amount-field-input"
+          className={[
+            'mds-amount-field-input',
+            // ADDENDUM 2.1: past 13 characters the type drops in ONE step to
+            // number-lg — the shared .mds-number-lg class (base.css), exactly
+            // the Money/HeroSurface drop (23.20).
+            display.length > 13 ? 'mds-number-lg' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           inputMode="decimal"
           enterKeyHint="next"
           value={display}

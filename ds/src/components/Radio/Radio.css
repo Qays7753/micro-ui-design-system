@@ -19,36 +19,20 @@
   flex-direction: column;
   margin-block-start: var(--mds-layout-label-to-field);
   border-radius: var(--mds-radius-lg);
-  border: 1px solid var(--mds-color-surface-edge);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
   background: var(--mds-color-surface);
   overflow: hidden;
   box-sizing: border-box;
   inline-size: 100%;
 }
 
-.mds-radio-row {
-  display: flex;
-  align-items: center;
-  min-height: var(--mds-size-row-plain);
-  padding-inline: var(--mds-layout-row-padding-inline);
-  padding-block: var(--mds-layout-row-line-gap);
-  box-sizing: border-box;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
+/* The row rides the shared .mds-control-row anatomy (base.css). */
 
 .mds-radio-row:active {
   background: var(--mds-color-surface-pressed);
 }
 
-.mds-radio-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-}
+/* The real radio is visually hidden via the shared .mds-sr-input (base.css). */
 
 /* The circle: 20, r-full, border-field resting. */
 .mds-radio-circle {
@@ -86,12 +70,7 @@
   transform: scale(1);
 }
 
-.mds-radio-text {
-  display: flex;
-  flex-direction: column;
-  margin-inline-start: var(--mds-space-3);
-  min-width: 0;
-}
+/* The label column rides the shared .mds-control-text (base.css). */
 
 .mds-radio-row-label {
   color: var(--mds-color-text-primary);

@@ -64,7 +64,91 @@
 | الوحدة 4.4 | **منفذة** — `SearchField` (الملحق §1.1): ارتفاع size.search واستدارة كاملة وحد border-field، أيقونة البحث 20 بالبداية والحقل body ≥16، وزر المسح لا يظهر إلا وفيه نص (ق2) بلمس 48 واسم «امسح البحث»، ولا حالة خطأ (§1.1-4)، وrole=searchbox باسم التسمية والنص الإرشادي يقوم مقامها. المختبر: عيّنة حية + معطّل. **ملاحظة انضباط:** أسلاك القسم سقطت في مشغّلة وأُعيد تطبيقها بتأكيدات فردية وتحقّق القسم في الملف المولّد. typecheck و323 اختبار وlint وbuild وstandalone، ولقطة قبل الرفع | commit `681ac17` |
 | الوحدة 4.5 | **منفذة** — `TextArea` (الملحق §1.2): كـTextField بالتسمية والمساعدة، الأدنى size.field والحشوة الرأسية 16 (السطر الأول متسق مع TextField)، يتمدد حتى `size.textarea-max-lines` (6) ثم يتمرر داخلياً (ق2)، التمدد فوري (§1.2-5)، الخطأ بحد problem وأيقونة field-error ونص الحل مربوط aria-describedby (§1.2-7)، و«اختياري» على التسمية (67). المختبر: عيّنة حية بخطأ. **ملاحظة انضباط:** ثغرتا نوع في rest وسقط أسلاك المختبر مرة — أصلحتا بتأكيدات حرفية قبل الرفع. typecheck و329 اختبار (6 جديدة) وlint وbuild وstandalone، ولقطة قبل الرفع | commit هذه الوحدة |
 | الوحدة 4.6 | **منفذة** — `AmountField` (الملحق §1.3): الحاوية 72 بـr-md والرقم `amount-input` 32/40/500 داخل عزل LTR والوحدة «د» ثابتة بالنهاية لا في التسمية (ق5)، يبدأ فارغاً بلا إرشادي (ق2/القاعدة 15)، `normalize-amount` تطبيع حرفي: هندية→غربية و«٫»/«,»→«.» ولا رابع عشرية (ق3/ق4)، عند الفقد يعرض بتجميع Money بلا وحدة (الملحق §1.4)، والطويل ينزل إلى number-lg دفعة واحدة ثم يتمرر بلا قص (ADDENDUM 2.1/ق6 — «1,250,000.125» سليم)، ولا يقرأ سياق الإخفاء أصلًا (23.22: رقم الكاتب ظاهر). المختبر: ثلاث عينات (فارغ/خطأ/طويل). typecheck و338 اختبار (9 جديدة) وlint وbuild وstandalone، ولقطة قبل الرفع | commit هذه الوحدة |
+| إصلاح استئناف (قبل 3ب) | **منفذ** — البيئة أُعيد تجهيزها (uv sync وnode_modules الجذر وds/ وChromium 1243 وWebKit 2359 بمسار التراجع + libaspell) ثم كُشفت انجرافة بوابات من وحدات 4.1–4.6 وفُصلت: **(1) خطأ ترجمة glob في `source_files`** كان يُبطل استثناء ملفات الاختبار الموثق فأصلحته بترجمة صحيحة (`_glob_to_regex`)؛ **(2) قائمة الدفعة الثانية المغلقة** أُضيفت كجدول في هذا التقرير و`component_closed_list` تقرأها (108 مكوّنًا معتمدًا)؛ **(3) ازدواج CSS** (7 كتل) حُلّ بأصناف مشتركة في `base.css` على سابقة `.mds-number-lg`: `.mds-sr-input` و`.mds-control-row` و`.mds-control-text` و`.mds-field--disabled .mds-field-input` وتسميات الحقول فوق الثلاثي المشترك — بلا أي تغيير بصري (البصرية 63 صفحة: 53 مطابقة و10 استثناءات وصفر فشل)؛ **(4) قيم خام**: 1px→`border-hairline` و52/32/24 في Toggle→رموز `size.toggle-track-*`/`thumb` والاختبارات تشهد الرموز، وخريطة الأرقام الهندية في `normalize-amount` صارت نقاط ترميز صريحة؛ **(5) `enterKeyHint`** أُزال من خصائص TextArea (المواصفة §1.2-8 تثبّته «enter»)؛ **(6) عينات المختبر** غير المسلوكة (خطأ TextArea وخطأ/طويل AmountField) صارت حية، والعلامات `data-ds-check` نُقلت إلى المكوّنات نفسها مع 5 قياسات ds-measure جديدة؛ **(7) لمس م3**: مدخلات البحث والمبلغ تمتد بملء حقلها (52/72) وبوابة الشاشة الصغيرة تفهم هدف `label` الملتف؛ **(8) تقليل الحركة**: كتلة Checkbox قوت نوعيتها على قاعدة المؤشَّر المحدد وبحث حبوب البحث أُضيف للكتلة. كذلك `ds-a11y` تفهم الآن حلقة `:focus-within` على الحاوية (تُقبل فقط إذا اختفت عند فقد التركيز) وعنوان راديو المختبر قُرّب إلى 3 كلمات. كل البوابات الـ27 على المحركين والعرضين خضراء، والسريعة 20/20، والبصرية صفر فشل، وtypecheck و338 اختبار وlint وbuild وstandalone، ولقطات الحدائق الست في `reports/ds-addendum-1.7/repair/` نُظرت (مع حكم المطابقة البكسلية) | commit هذه الوحدة |
 
+
+## قائمة مكوّنات الدفعة الثانية (المعتمدة من الخطة — القائمة المغلقة الثانية، القسم 9)
+
+> المصدر: ترتيب المرحلتين 4 و5 في `PLAN.md` حرفيًا. مكوّنات الرسوم (5.7) تُضاف إلى هذا الجدول في وحداتها حين تُسمّى. البوابة `ds-structure` تقرأ هذا الجدول.
+
+| # | المكوّن | المرحلة |
+|---|---|---|
+| 1 | `Checkbox` | 4 |
+| 2 | `Radio` | 4 |
+| 3 | `Toggle` | 4 |
+| 4 | `SearchField` | 4 |
+| 5 | `TextArea` | 4 |
+| 6 | `AmountField` | 4 |
+| 7 | `AmountKeypad` | 4 |
+| 8 | `MovementTypeControl` | 4 |
+| 9 | `QuantityStepper` | 4 |
+| 10 | `DateQuickChips` | 4 |
+| 11 | `TimePicker` | 4 |
+| 12 | `DurationPicker` | 4 |
+| 13 | `PeriodSwitcher` | 4 |
+| 14 | `MonthGrid` | 4 |
+| 15 | `DatePicker` | 4 |
+| 16 | `PartyPicker` | 4 |
+| 17 | `FundPicker` | 4 |
+| 18 | `PhotoUploader` | 4 |
+| 19 | `VoiceInput` | 4 |
+| 20 | `SlideToConfirm` | 4 |
+| 21 | `PriceTierBuilder` | 4 |
+| 22 | `KeyValueList` | 4 |
+| 23 | `DataTable` | 4 |
+| 24 | `StatusTrack` | 4 |
+| 25 | `ActivityLog` | 4 |
+| 26 | `LinkedObjects` | 4 |
+| 27 | `Disclosure` | 4 |
+| 28 | `ObjectSheet` | 4 |
+| 29 | `LockedDetails` | 4 |
+| 30 | `ErrorState` | 4 |
+| 31 | `PermissionNotice` | 4 |
+| 32 | `NotificationCenter` | 4 |
+| 33 | `GuestShell` | 4 |
+| 34 | `GoogleSignInSlot` | 4 |
+| 35 | `MovementRow` | 5.1 |
+| 36 | `TransferRow` | 5.1 |
+| 37 | `FundCard` | 5.1 |
+| 38 | `DebtCard` | 5.1 |
+| 39 | `DebtSummary` | 5.1 |
+| 40 | `PaymentProgress` | 5.1 |
+| 41 | `OrderCard` | 5.2 |
+| 42 | `WeekStrip` | 5.2 |
+| 43 | `DayTimeline` | 5.2 |
+| 44 | `AgendaList` | 5.2 |
+| 45 | `SlotPicker` | 5.2 |
+| 46 | `DeliveryRequestCard` | 5.3 |
+| 47 | `QuoteCard` | 5.3 |
+| 48 | `JobTrack` | 5.3 |
+| 49 | `IssueProposalCard` | 5.3 |
+| 50 | `ContactBar` | 5.3 |
+| 51 | `EvidenceSlot` | 5.3 |
+| 52 | `LocationSlot` | 5.3 |
+| 53 | `DriverJobCard` | 5.3 |
+| 54 | `DriverApprovalStatus` | 5.3 |
+| 55 | `ListingCard` | 5.4 |
+| 56 | `Gallery` | 5.4 |
+| 57 | `PriceTierTable` | 5.4 |
+| 58 | `SupplierHeader` | 5.4 |
+| 59 | `ReportSheet` | 5.4 |
+| 60 | `ListingEditor` | 5.4 |
+| 61 | `ListingStatusBadge` | 5.4 |
+| 62 | `ReviewQueueItem` | 5.5 |
+| 63 | `DecisionCard` | 5.5 |
+| 64 | `DriverApprovalCard` | 5.5 |
+| 65 | `ReportItem` | 5.5 |
+| 66 | `AskPanel` | 5.6 |
+| 67 | `AskContextChip` | 5.6 |
+| 68 | `AskUserMessage` | 5.6 |
+| 69 | `AskAnswer` | 5.6 |
+| 70 | `AskComputedResult` | 5.6 |
+| 71 | `AskInlineTable` | 5.6 |
+| 72 | `AskNavResult` | 5.6 |
+| 73 | `AskDraftCard` | 5.6 |
+| 74 | `AskLimit` | 5.6 |
+| 75 | `AskThinking` | 5.6 |
+| 76 | `AskAboutThis` | 5.6 |
 
 ## المرحلة 4 — المكوّنات العامة
 

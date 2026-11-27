@@ -28,8 +28,6 @@ export interface TextAreaProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onC
   disabled?: boolean;
   /** Optional field: «اختياري» after the label (lesson rule 67). */
   optional?: boolean;
-  /** enterkeyhint on the textarea (default «enter»; Ask sends via a button). */
-  enterKeyHint?: 'enter' | 'send' | 'next';
   /** React 19 ref-as-prop on the textarea element. */
   ref?: Ref<HTMLTextAreaElement>;
   /** Standard pass-throughs. */

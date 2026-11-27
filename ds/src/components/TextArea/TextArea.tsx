@@ -26,7 +26,6 @@ export function TextArea({
   state = 'idle',
   disabled = false,
   optional = false,
-  enterKeyHint = 'enter',
   className,
   id,
   style,
@@ -38,7 +37,7 @@ export function TextArea({
   const classes = [
     'mds-text-area',
     state === 'error' ? 'mds-text-area--error' : '',
-    disabled ? 'mds-text-area--disabled' : '',
+    disabled ? 'mds-text-area--disabled mds-field--disabled' : '',
     className,
   ]
     .filter(Boolean)
@@ -46,14 +45,16 @@ export function TextArea({
 
   return (
     <div id={id} style={style} className={classes} {...rest}>
-      <label className="mds-text-area-label" htmlFor={id ?? reactId}>
+      <label className="mds-text-area-label mds-type-label" htmlFor={id ?? reactId}>
         {label}
-        {optional ? <span className="mds-text-area-optional">{t('field.optional')}</span> : null}
+        {optional ? <span className="mds-text-area-optional mds-type-caption">{t('field.optional')}</span> : null}
       </label>
+      {/* §1.2-8: enterkeyhint is FIXED «enter» — the spec does not expose it
+          as a prop (Ask sends via its own button, not the keyboard hint). */}
       <textarea
         ref={ref}
         id={id ?? reactId}
-        className="mds-text-area-input"
+        className="mds-text-area-input mds-field-input"
         rows={1}
         value={value}
         disabled={disabled}
@@ -61,7 +62,7 @@ export function TextArea({
         aria-multiline="true"
         aria-invalid={state === 'error' || undefined}
         aria-describedby={state === 'error' ? errorId : undefined}
-        enterKeyHint={enterKeyHint}
+        enterKeyHint="enter"
         onChange={(e) => onChange?.(e.target.value)}
         onInput={(e) => {
           // §1.2-2: grow to 6 lines, then scroll internally. The growth is

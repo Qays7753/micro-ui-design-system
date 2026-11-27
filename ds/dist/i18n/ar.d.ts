@@ -1202,7 +1202,7 @@ export declare const ar: {
     };
     readonly 'lab.h.radio': {
         readonly kind: "title";
-        readonly text: "اختيار واحد من قائمة";
+        readonly text: "اختيار من قائمة";
     };
     readonly 'lab.h.toggle': {
         readonly kind: "title";

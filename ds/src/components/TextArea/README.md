@@ -12,7 +12,9 @@
 
 ## الخصائص (23.18)
 
-`label`، `caption`، `placeholder`، `value`، `onChange`، `disabled`، `state`، `optional`، `enterKeyHint`.
+`label`، `caption`، `placeholder`، `value`، `onChange`، `disabled`، `state`، `optional`.
+
+> `enterkeyhint` قيمة مثبتة «enter» وفق §1.2-8 (الإرسال في Ask بزر مستقل)، وليست خاصية (23.18).
 
 ## حالات القائمة (9.0 + §1.2)
 

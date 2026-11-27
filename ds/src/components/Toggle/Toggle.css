@@ -3,30 +3,11 @@
  * hex/px/ms in this file (ds-raw-values).
  */
 
-.mds-toggle {
-  display: flex;
-  align-items: center;
-  min-height: var(--mds-size-row-plain);
-  padding-inline: var(--mds-layout-row-padding-inline);
-  padding-block: var(--mds-layout-row-line-gap);
-  box-sizing: border-box;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.mds-toggle-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-}
+/* The row rides the shared .mds-control-row anatomy (base.css); the real
+   switch input is visually hidden via the shared .mds-sr-input (base.css). */
 
 .mds-toggle-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+  /* The label column rides the shared .mds-control-text (base.css). */
   /* 320: the label takes the row minus the paddings, the track and 12 (§1.7-6). */
   flex: 1;
 }
@@ -51,8 +32,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  inline-size: 52px;
-  block-size: 32px;
+  inline-size: var(--mds-size-toggle-track-52);
+  block-size: var(--mds-size-toggle-track-32);
   border-radius: var(--mds-radius-full);
   border: var(--mds-border-field) solid var(--mds-color-border-field);
   background: var(--mds-color-surface);
@@ -67,8 +48,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 24px;
-  block-size: 24px;
+  inline-size: var(--mds-size-toggle-thumb);
+  block-size: var(--mds-size-toggle-thumb);
   border-radius: var(--mds-radius-full);
   background: var(--mds-color-surface);
   box-shadow: none;
@@ -94,7 +75,7 @@
 }
 
 .mds-toggle--selected .mds-toggle-thumb {
-  inset-inline-start: calc(100% - 24px - var(--mds-space-4));
+  inset-inline-start: calc(100% - var(--mds-size-toggle-thumb) - var(--mds-space-4));
 }
 
 .mds-toggle:active .mds-toggle-track {

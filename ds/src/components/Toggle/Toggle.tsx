@@ -30,6 +30,8 @@ export function Toggle({
   ...rest
 }: ToggleProps) {
   const classes = [
+    // .mds-control-row (base.css): the whole row is the switch's press zone.
+    'mds-control-row',
     'mds-toggle',
     selected ? 'mds-toggle--selected' : '',
     disabled ? 'mds-toggle--disabled' : '',
@@ -42,14 +44,14 @@ export function Toggle({
     <label ref={ref} id={id} style={style} className={classes} {...rest}>
       <input
         type="checkbox"
-        className="mds-toggle-input"
+        className="mds-toggle-input mds-sr-input"
         role="switch"
         checked={selected}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
         aria-checked={selected}
       />
-      <span className="mds-toggle-text">
+      <span className="mds-toggle-text mds-control-text">
         <span className="mds-toggle-label mds-type-body">{label}</span>
         {caption ? <span className="mds-toggle-caption mds-type-caption">{caption}</span> : null}
       </span>

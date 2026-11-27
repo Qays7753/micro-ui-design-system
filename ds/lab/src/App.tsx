@@ -105,6 +105,12 @@ export function App() {
   const [searchDemo, setSearchDemo] = useState('');
   const [noteDemo, setNoteDemo] = useState('');
   const [amountDemo, setAmountDemo] = useState('');
+  // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
+  // the error and long samples keep their point (the error contract, the
+  // long-number drop) while remaining editable.
+  const [rejectionDemo, setRejectionDemo] = useState('');
+  const [amountErrorDemo, setAmountErrorDemo] = useState('');
+  const [amountLongDemo, setAmountLongDemo] = useState('1,250,000.125');
   // Catalog samples: the exit motion plays on dismiss, THEN the app
   // (here, the lab) removes the sheet — remounted fresh at once so the
   // sample stays for review and the press scan (23.2) keeps hitting it.
@@ -1230,11 +1236,11 @@ export function App() {
         {/* ---- Checkbox (ADDENDUM §3.1): independent tickable items ---- */}
         <section className="lab-section" id="checkbox">
           <h2 className="lab-title">{t('lab.h.checkbox')}<span className="lab-tech">{t('title.checkbox')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="checkbox">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
               <Checkbox label={ar['kv.customer'].text} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
-              <Checkbox label={ar['kv.delivery'].text} selected={cbB} onChange={setCbB} />
+              <Checkbox label={ar['kv.delivery'].text} selected={cbB} onChange={setCbB} data-ds-check="checkbox" />
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
@@ -1248,9 +1254,10 @@ export function App() {
         {/* ---- Radio (ADDENDUM §3.2): single choice, long labels ---- */}
         <section className="lab-section" id="radio">
           <h2 className="lab-title">{t('lab.h.radio')}<span className="lab-tech">{t('title.radio')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="radio">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Radio
+              data-ds-check="radio"
               label={t('lab.h.radio')}
               items={[
                 { value: 'available', label: t('avail.available') },
@@ -1277,11 +1284,11 @@ export function App() {
         {/* ---- Toggle (ADDENDUM §1.7): the instant setting ---- */}
         <section className="lab-section" id="toggle">
           <h2 className="lab-title">{t('lab.h.toggle')}<span className="lab-tech">{t('title.toggle')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="toggle">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
               <Toggle label={t('button.hideAmounts')} caption={t('banner.permission')} selected={toggleDemo} onChange={setToggleDemo} />
-              <Toggle label={t('avail.available')} selected={toggleDemo2} onChange={setToggleDemo2} />
+              <Toggle label={t('avail.available')} selected={toggleDemo2} onChange={setToggleDemo2} data-ds-check="toggle" />
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
@@ -1295,9 +1302,10 @@ export function App() {
         {/* ---- SearchField (ADDENDUM §1.1): the section search ---- */}
         <section className="lab-section" id="search-field">
           <h2 className="lab-title">{t('lab.h.searchField')}<span className="lab-tech">{t('title.searchField')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="search-field">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <SearchField
+              data-ds-check="search-field"
               label={t('search.in', { area: t('title.movements') })}
               placeholder={t('search.in', { area: t('title.movements') })}
               value={searchDemo}
@@ -1313,9 +1321,10 @@ export function App() {
         {/* ---- TextArea (ADDENDUM §1.2): free multi-line text ---- */}
         <section className="lab-section" id="text-area">
           <h2 className="lab-title">{t('lab.h.textArea')}<span className="lab-tech">{t('title.textArea')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="text-area">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <TextArea
+              data-ds-check="text-area"
               label="ملاحظة"
               optional
               value={noteDemo}
@@ -1325,24 +1334,36 @@ export function App() {
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.errorRow')}</span>
-            <TextArea label="سبب الرفض" state="error" caption="اكتب سبب الرفض." />
+            <TextArea
+              label="سبب الرفض"
+              state="error"
+              caption="اكتب سبب الرفض."
+              value={rejectionDemo}
+              onChange={setRejectionDemo}
+            />
           </div>
         </section>
 
         {/* ---- AmountField (ADDENDUM §1.3): the amount entry ---- */}
         <section className="lab-section" id="amount-field">
           <h2 className="lab-title">{t('lab.h.amountField')}<span className="lab-tech">{t('title.amountField')}</span></h2>
-          <div className="lab-row lab-row--full" data-ds-check="amount-field">
+          <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
-            <AmountField label="المبلغ" value={amountDemo} onChange={setAmountDemo} />
+            <AmountField label="المبلغ" value={amountDemo} onChange={setAmountDemo} data-ds-check="amount-field" />
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.errorRow')}</span>
-            <AmountField label="المبلغ" state="error" caption="اكتب المبلغ بالأرقام." />
+            <AmountField
+              label="المبلغ"
+              state="error"
+              caption="اكتب المبلغ بالأرقام."
+              value={amountErrorDemo}
+              onChange={setAmountErrorDemo}
+            />
           </div>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.longNumber')}</span>
-            <AmountField label="المبلغ" value="1,250,000.125" />
+            <AmountField label="المبلغ" value={amountLongDemo} onChange={setAmountLongDemo} />
           </div>
         </section>
 

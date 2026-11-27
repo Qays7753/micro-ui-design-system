@@ -3,26 +3,14 @@
  * hex/px/ms in this file (ds-raw-values).
  */
 
+/* The row rides the shared .mds-control-row anatomy (base.css); the box
+   aligns with the FIRST text line, so alignment overrides to start. */
 .mds-checkbox {
-  display: flex;
   align-items: flex-start;
-  min-height: var(--mds-size-row-plain);
-  padding-inline: var(--mds-layout-row-padding-inline);
-  padding-block: var(--mds-layout-row-line-gap);
-  box-sizing: border-box;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
-/* The REAL checkbox: visually hidden, fully functional (ق2). */
-.mds-checkbox-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-}
+/* The REAL checkbox is visually hidden via the shared .mds-sr-input
+   (base.css), fully functional (ق2). */
 
 /* The styled box: 20, r-xs, hairline border-field on surface (resting). */
 .mds-checkbox-box {
@@ -59,13 +47,7 @@
     transform var(--mds-motion-check-draw-ms) var(--mds-motion-check-draw-ease);
 }
 
-/* The label column: body + the optional caption. */
-.mds-checkbox-text {
-  display: flex;
-  flex-direction: column;
-  margin-inline-start: var(--mds-space-3);
-  min-width: 0;
-}
+/* The label column rides the shared .mds-control-text (base.css). */
 
 .mds-checkbox-label {
   color: var(--mds-color-text-primary);
@@ -117,7 +99,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mds-checkbox-box,
-  .mds-checkbox-box svg {
+  /* the SELECTED draw rule (0,2,1) out-ranks a bare `.mds-checkbox-box svg`
+     (0,1,1) — the reduce selector must match it, and being later it wins. */
+  .mds-checkbox-box svg,
+  .mds-checkbox--selected .mds-checkbox-box svg {
     transition: none;
   }
 }

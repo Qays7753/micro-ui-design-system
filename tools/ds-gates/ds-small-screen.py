@@ -22,7 +22,19 @@ PROBE_JS = """
     'button, [role="button"], a[href], input, select, textarea'))
     .filter(el => !el.hasAttribute('data-ds-exempt') && el.offsetParent !== null)
     .map(el => {
-      const r = el.getBoundingClientRect();
+      let r = el.getBoundingClientRect();
+      if ((el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA')
+          && (r.width < touchMin || r.height < touchMin)) {
+        // A control whose own box is small (the visually hidden real input of
+        // Checkbox/Radio/Toggle at hairline size): its touch target is the
+        // WRAPPING <label> — HTML label semantics make the whole label the
+        // activation zone (م3's target is where the finger lands).
+        const host = el.closest('label');
+        if (host) {
+          const lr = host.getBoundingClientRect();
+          if (lr.width >= touchMin && lr.height >= touchMin) r = lr;
+        }
+      }
       return {tag: el.tagName.toLowerCase(), w: r.width, h: r.height,
               label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 20)};
     });

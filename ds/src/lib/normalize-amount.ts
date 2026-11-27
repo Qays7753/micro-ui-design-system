@@ -7,13 +7,22 @@
  * - No negative sign (the flow rides MovementTypeControl).
  * - At most 3 fraction digits: the FOURTH digit is refused (not stored).
  * - No thousand separators while typing (they render on blur via Money).
+ *
+ * The Arabic-Indic code points below are ENTRY DATA for parsing (U+0660..U+0669
+ * digits, U+066B decimal separator), written as explicit escapes so the
+ * source carries code points, not UI copy (ds-copy: copy lives in ar.ts).
  */
+const ARABIC_INDIC_ZERO = 0x0660;
+const ARABIC_INDIC_NINE = 0x0669;
+const ARABIC_DECIMAL_SEPARATOR = 0x066b;
+
 export function normalizeAmount(raw: string): string {
   let out = '';
   let seenDot = false;
   for (const ch of raw) {
-    if (ch >= '٠' && ch <= '٩') {
-      const western = String(ch.charCodeAt(0) - '٠'.charCodeAt(0));
+    const code = ch.codePointAt(0)!;
+    if (code >= ARABIC_INDIC_ZERO && code <= ARABIC_INDIC_NINE) {
+      const western = String(code - ARABIC_INDIC_ZERO);
       out = pushDigit(out, western);
       continue;
     }
@@ -21,7 +30,7 @@ export function normalizeAmount(raw: string): string {
       out = pushDigit(out, ch);
       continue;
     }
-    if ((ch === '٫' || ch === '.' || ch === ',') && !seenDot) {
+    if ((code === ARABIC_DECIMAL_SEPARATOR || ch === '.' || ch === ',') && !seenDot) {
       // a single decimal point; a second one is refused
       if (out === '') out = '0';
       out += '.';

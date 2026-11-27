@@ -11,20 +11,17 @@
   inline-size: 100%;
 }
 
+/* The label weight and color on top of the shared .mds-type-label trio
+   (base.css) — kept ≤3 declarations so the anatomy stays shared (ds-dup). */
 .mds-text-area-label {
-  font-family: var(--mds-type-label-font);
-  font-size: var(--mds-type-label-size);
-  line-height: var(--mds-type-label-line);
   font-weight: var(--mds-type-label-weight);
   color: var(--mds-color-text-primary);
 }
 
-/* Rule 67: «اختياري» rides the label row, one uniform shape. */
+/* Rule 67: «اختياري» rides the label row — the caption trio comes from
+   .mds-type-caption (base.css). */
 .mds-text-area-optional {
   margin-inline-start: var(--mds-space-4);
-  font-family: var(--mds-type-caption-font);
-  font-size: var(--mds-type-caption-size);
-  line-height: var(--mds-type-caption-line);
   color: var(--mds-color-text-secondary);
 }
 
@@ -49,6 +46,10 @@
   color: var(--mds-color-text-primary);
   caret-color: var(--mds-color-brand-text);
   outline: none;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features --
+     iOS Safari ignores `resize` (feature flagged): the resize grip is
+     unwanted anyway (§1.2-2 growth is internal), so the value is a no-op
+     there and prevents the grip where honored. */
   resize: none;
 }
 
@@ -56,9 +57,14 @@
   color: var(--mds-color-text-secondary);
 }
 
+/* iOS Safari ignores ::selection (stylelint plugin flags it): the rule
+   stays for every engine that honors it and degrades gracefully there —
+   the TextField documented deviation, REPORT S4-3. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
 .mds-text-area-input::selection {
   background-color: var(--mds-color-brand-selected-bg);
 }
+/* stylelint-enable plugin/no-unsupported-browser-features */
 
 .mds-text-area-input:focus-visible {
   border-color: var(--mds-color-brand-text);
@@ -82,9 +88,5 @@
   border-color: var(--mds-color-status-problem-fg);
 }
 
-.mds-text-area--disabled .mds-text-area-input {
-  background-color: var(--mds-color-disabled-bg);
-  color: var(--mds-color-disabled-fg);
-  border-color: var(--mds-color-disabled-bg);
-  cursor: default;
-}
+/* The disabled input treatment is the shared .mds-field--disabled
+   .mds-field-input block (base.css). */

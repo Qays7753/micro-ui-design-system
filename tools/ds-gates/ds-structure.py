@@ -3,8 +3,9 @@
 """ds-structure — one component = one folder, closed list (plan K5, section 4, BRIEF 9).
 
 For every folder under ds/src/components/<Name>:
-  - <Name> is in the batch-1 closed list (32 names, read from the S0 table in
-    docs/plans/design-system-batch1/REPORT.md — the source of truth, not a copy)
+  - <Name> is in the sanctioned closed list: batch-1 (32 names, S0 table in
+    docs/plans/design-system-batch1/REPORT.md) plus batch-2 (the
+    «قائمة مكوّنات الدفعة الثانية» table in docs/plans/design-system-batch2/REPORT.md)
   - <Name>.tsx, <Name>.css and index.ts exist (plan section 4: the seven files;
     these three are the S2 gate floor, the rest lands with the builder)
   - <Name>.tsx actually exports a component named <Name>
@@ -26,7 +27,7 @@ def run(gate: Gate, target, args):
     if names is None:
         gate.fail("ds-structure/closed-list", f"cannot read the closed list: {err}")
         return
-    gate.ok("ds-structure/closed-list", f"{len(names)} batch-1 components from REPORT.md S0 table")
+    gate.ok("ds-structure/closed-list", f"{len(names)} sanctioned components (batch-1 S0 + batch-2 tables in their REPORTs)")
 
     if not components.is_dir() or not any(components.iterdir()):
         gate.na("ds-structure/components", "no components under ds/src/components yet (builder starts at S3)")
@@ -39,7 +40,7 @@ def run(gate: Gate, target, args):
         name = folder.name
         rel = rel_of(folder, target)
         if name not in closed:
-            problems.append(f"{rel}/ not in the batch-1 closed list (BRIEF section 9)")
+            problems.append(f"{rel}/ not in the sanctioned batch-1/batch-2 closed list (BRIEF section 9 — a new batch-2 component joins the list table in its own unit)")
             continue
         for tpl in REQUIRED:
             if not (folder / tpl.format(name=name)).is_file():

@@ -37,7 +37,7 @@ export function TextField({
   const classes = [
     'mds-text-field',
     state === 'error' ? 'mds-text-field--error' : '',
-    disabled ? 'mds-text-field--disabled' : '',
+    disabled ? 'mds-text-field--disabled mds-field--disabled' : '',
     className,
   ]
     .filter(Boolean)
@@ -46,16 +46,16 @@ export function TextField({
 
   return (
     <span ref={ref} id={id} style={style} className={classes} {...rest}>
-      <label className="mds-text-field-label" htmlFor={inputId}>
+      <label className="mds-text-field-label mds-type-label" htmlFor={inputId}>
         {label}
         {/* Rule 67: optional fields ALONE carry the mark, one uniform shape:
             the dictionary word after the label in caption type. Required
             fields are never marked. */}
-        {optional ? <span className="mds-text-field-optional">{t('field.optional')}</span> : null}
+        {optional ? <span className="mds-text-field-optional mds-type-caption">{t('field.optional')}</span> : null}
       </label>
       <input
         id={inputId}
-        className="mds-text-field-input"
+        className="mds-text-field-input mds-field-input"
         type="text"
         value={value}
         disabled={disabled}

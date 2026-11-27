@@ -379,7 +379,7 @@ export const ar = {
   'report.writeReason': { kind: 'badge', text: 'اكتب السبب' },
   'checkbox.tickThis': { kind: 'help', text: 'أشّر على هذا البند.' },
   'radio.choose': { kind: 'help', text: 'اختر {label}.' },
-  'lab.h.radio': { kind: 'title', text: 'اختيار واحد من قائمة' },
+  'lab.h.radio': { kind: 'title', text: 'اختيار من قائمة' },
   'lab.h.toggle': { kind: 'title', text: 'إعداد يعمل فوراً' },
   'title.toggle': { kind: 'title', text: 'المفتاح' },
   'title.radio': { kind: 'title', text: 'مجموعة الراديو' },

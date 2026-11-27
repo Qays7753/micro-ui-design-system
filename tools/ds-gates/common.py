@@ -155,6 +155,36 @@ def iter_strings(src):
         i += 1
 
 
+def _glob_to_regex(pat):
+    """Path glob -> anchored regex with real glob semantics.
+
+    The old inline translation (replace ** with .* THEN * with [^/]*)
+    corrupted the stars introduced by the first step, so
+    "ds/src/**/*.test.tsx" never matched files one level deeper than
+    ds/src/<seg>/<file> — component tests under ds/src/components/<Name>/
+    slipped through every documented test exclusion. Proper translation:
+    "**/" matches zero or more whole segments, "**" any path text, "*"
+    one segment part.
+    """
+    out = ["^"]
+    i = 0
+    while i < len(pat):
+        if pat[i:i + 3] == "**/":
+            out.append("(?:.*/)?")
+            i += 3
+        elif pat[i:i + 2] == "**":
+            out.append(".*")
+            i += 2
+        elif pat[i] == "*":
+            out.append("[^/]*")
+            i += 1
+        else:
+            out.append(re.escape(pat[i]))
+            i += 1
+    out.append("$")
+    return re.compile("".join(out))
+
+
 def source_files(target_root, subpath, patterns, exclude=()):
     """All files under <target_root>/<subpath> matching patterns, minus exclude globs."""
     base = Path(target_root) / subpath
@@ -162,7 +192,7 @@ def source_files(target_root, subpath, patterns, exclude=()):
         return []
     excluded_res = []
     for pat in exclude:
-        excluded_res.append(re.compile(pat.replace("**", ".*").replace("*", "[^/]*") + "$"))
+        excluded_res.append(_glob_to_regex(pat))
     found = []
     for pattern in patterns:
         for path in sorted(base.rglob(pattern)):
@@ -204,19 +234,29 @@ def token_by_path(tokens, dotted):
 
 
 def component_closed_list(target_root):
-    """The batch-1 closed component list, read from the S0 table in REPORT.md (32 names)."""
+    """The sanctioned component list: batch-1 (S0 table in its REPORT.md, 32
+    names) plus batch-2 (the «قائمة مكوّنات الدفعة الثانية» table in the batch-2
+    REPORT.md — the plan's sanctioned second closed list; each unit adds its
+    component there). Chart components of stage 5.7 join that table when named."""
     report = Path(target_root) / "docs" / "plans" / "design-system-batch1" / "REPORT.md"
     if not report.is_file():
         return None, "missing docs/plans/design-system-batch1/REPORT.md"
     text = report.read_text(encoding="utf-8")
     names = []
     row = re.compile(r"^\|\s*\d+\s*\|\s*`([A-Za-z][A-Za-z0-9]*)`\s*\|")
-    in_table = False
-    for line in text.splitlines():
-        if "قائمة مكوّنات الدفعة الأولى" in line:
-            in_table = True
-        if in_table and row.match(line):
-            names.append(row.match(line).group(1))
+    report2 = Path(target_root) / "docs" / "plans" / "design-system-batch2" / "REPORT.md"
+    texts = [text]
+    if report2.is_file():
+        texts.append(report2.read_text(encoding="utf-8"))
+    for text in texts:
+        in_table = False
+        for line in text.splitlines():
+            if "قائمة مكوّنات الدفعة الأولى" in line or "قائمة مكوّنات الدفعة الثانية" in line:
+                in_table = True
+            if in_table and row.match(line):
+                name = row.match(line).group(1)
+                if name not in names:
+                    names.append(name)
     if not names:
         return None, "S0 component table not found in REPORT.md"
     return names, None

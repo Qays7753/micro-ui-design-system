@@ -30,6 +30,9 @@
 .mds-search-field-input {
   flex: 1;
   min-width: 0;
+  /* stretch: the input FILLS the size.search pill (م3 touch floor — the
+     whole pill is the tap zone, not just the text line). */
+  align-self: stretch;
   border: none;
   outline: none;
   background: transparent;
@@ -93,7 +96,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mds-search-field,
   .mds-search-field-clear {
     animation: none;
+    transition: none;
   }
 }

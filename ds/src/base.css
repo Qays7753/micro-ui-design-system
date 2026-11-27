@@ -107,3 +107,50 @@ button,
   line-height: var(--mds-type-label-strong-line);
   font-weight: var(--mds-type-label-strong-weight);
 }
+
+/* The visually hidden REAL input of custom controls (Checkbox, Radio,
+   Toggle — plan rule 4-7: a repeated pattern lives once, here): hairline
+   sized and transparent, still focusable and fully functional for the
+   keyboard and the a11y tree. Focus rings ride the custom visual via
+   .mds-<control>-input:focus-visible + … rules in the component sheets. */
+.mds-sr-input {
+  position: absolute;
+  width: var(--mds-border-hairline);
+  height: var(--mds-border-hairline);
+  margin: 0;
+  opacity: 0;
+}
+
+/* The control row anatomy (BRIEF 23.x row-plain): shared by Radio rows and
+   the Toggle row (Checkbox keeps its own start-aligned variant — it rides
+   .mds-control-row and overrides alignment). */
+.mds-control-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  padding-block: var(--mds-layout-row-line-gap);
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* The label column inside a control row: shared by Checkbox, Radio and
+   Toggle text blocks. */
+.mds-control-text {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: var(--mds-space-3);
+  min-width: 0;
+}
+
+/* The disabled treatment of a field input (BRIEF 23.2), shared by TextField
+   and TextArea (later fields join it): components put .mds-field-input on
+   the input element and .mds-field--disabled on the field root. */
+.mds-field--disabled .mds-field-input {
+  background-color: var(--mds-color-disabled-bg);
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-bg);
+  cursor: default;
+}

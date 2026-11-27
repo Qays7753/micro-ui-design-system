@@ -26,9 +26,9 @@ describe('Toggle (ADDENDUM §1.7)', () => {
 
   it('rides the batch-2 tokens: track 52x32, thumb 24, quick slide (م-ر1)', () => {
     const css = readFileSync(join(__dirname, 'Toggle.css'), 'utf8');
-    expect(css).toContain('52px');
-    expect(css).toContain('32px');
-    expect(css).toContain('24px');
+    expect(css).toContain('--mds-size-toggle-track-52');
+    expect(css).toContain('--mds-size-toggle-track-32');
+    expect(css).toContain('--mds-size-toggle-thumb');
     expect(css).toContain('--mds-motion-quick-ms');
     expect(css).toContain('--mds-color-brand-anchor');
   });

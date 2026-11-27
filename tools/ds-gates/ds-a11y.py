@@ -106,9 +106,28 @@ def run(gate: Gate, target, args):
                         info = page.evaluate("""() => {
                             const el = document.activeElement;
                             if (!el || el === document.body) return null;
-                            const st = getComputedStyle(el);
-                            const ring = (st.outlineStyle !== 'none' && parseFloat(st.outlineWidth) > 0)
-                                       || (st.boxShadow && st.boxShadow !== 'none');
+                            const paints = (node) => {
+                                const st = getComputedStyle(node);
+                                return (st.outlineStyle !== 'none' && parseFloat(st.outlineWidth) > 0)
+                                    || (st.boxShadow && st.boxShadow !== 'none');
+                            };
+                            let ring = paints(el);
+                            if (!ring) {
+                                // The focus-within field pattern (SearchField, AmountField):
+                                // the ring paints on the WRAPPING field container. Accept it
+                                // ONLY when it is focus-driven — it must VANISH once focus
+                                // leaves (a decorative shadow never does). Focus is restored
+                                // right after, so the Tab walk continues from the same stop.
+                                for (let node = el.parentElement, depth = 0;
+                                     node && node !== document.body && depth < 3;
+                                     node = node.parentElement, depth++) {
+                                    if (!paints(node) || !node.matches(':focus-within')) continue;
+                                    el.blur();
+                                    const focusDriven = !paints(node);
+                                    el.focus();
+                                    if (focusDriven) { ring = true; break; }
+                                }
+                            }
                             return {tag: el.tagName.toLowerCase(), label: (el.getAttribute('aria-label')
                                     || el.textContent || '').trim().slice(0, 20), ring};
                         }""")
