@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ar } from '../../i18n/ar';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,6 +9,10 @@ import { Button } from './Button';
 const LABEL = ar['button.all'].text;
 const SAVING = ar['saveState.sending'].text;
 import { ButtonStates } from './Button.states';
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe('Button (BRIEF 9.3, 23.2, 23.3)', () => {
   it('renders the primary 52 button with radius and min-width classes', () => {
@@ -44,11 +48,28 @@ describe('Button (BRIEF 9.3, 23.2, 23.3)', () => {
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('shows the spinner and aria-busy while loading, no icon slot (23.3)', () => {
+  it('shows the spinner and aria-busy while loading, no icon slot (23.3 + 1.7 ت11)', () => {
+    vi.useFakeTimers();
     const { container } = render(<Button loading>{SAVING}</Button>);
+    // ت11: aria-busy and the press-disabled are immediate; the SPINNER waits
+    // for motion.pending-delay — a pending that resolves inside it never
+    // flashes an indicator at all.
+    expect(screen.getByRole('button').getAttribute('aria-busy')).toBe('true');
+    expect(container.querySelector('.mds-button-spinner')).toBeNull();
+    act(() => vi.advanceTimersByTime(300));
     expect(container.querySelector('.mds-button-spinner')).not.toBeNull();
     expect(container.querySelector('.mds-button-icon')).toBeNull();
-    expect(screen.getByRole('button').getAttribute('aria-busy')).toBe('true');
+    vi.useRealTimers();
+  });
+
+  it('never flashes a spinner when loading resolves inside the delay (ت11)', () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(<Button loading>{SAVING}</Button>);
+    act(() => vi.advanceTimersByTime(200));
+    rerender(<Button loading={false}>{SAVING}</Button>);
+    act(() => vi.advanceTimersByTime(3000));
+    expect(container.querySelector('.mds-button-spinner')).toBeNull();
+    vi.useRealTimers();
   });
 
   it('renders one leading icon and one trailing icon max (23.3)', () => {

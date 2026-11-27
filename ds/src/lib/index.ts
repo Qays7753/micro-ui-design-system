@@ -29,6 +29,7 @@ export {
   useVisualViewport,
   type VisualViewportState,
 } from './use-visual-viewport';
+export { usePendingDelay } from './use-pending-delay';
 export {
   LayersProvider,
   useOpenSheetCount,

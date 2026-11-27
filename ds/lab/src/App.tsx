@@ -1037,7 +1037,7 @@ export function App() {
           </div>
         </section>
 
-        {/* ---- EmptyState (BRIEF 23.7): the ghost-preview empty surface ---- */}
+        {/* ---- EmptyState (BRIEF 23.7 + 1.7 t9): no ghost rows, start-aligned ---- */}
         <section className="lab-section" id="empty-state">
           <h2 className="lab-title">{t('lab.h.emptyState')}<span className="lab-tech">{t('title.emptyState')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="empty-state">
