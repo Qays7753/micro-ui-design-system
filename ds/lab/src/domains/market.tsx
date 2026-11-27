@@ -149,7 +149,7 @@ function MarketCompose() {
         { value: 'أقمشة', label: 'أقمشة' },
         { value: 'مواد غذائية', label: 'مواد غذائية' },
       ]} value={[]} onChange={() => {}} />
-      <div className="lab-grid-2">
+      <div className="lab-grid-2" style={{ marginBlockStart: 'var(--mds-space-12)' }}>
         <ListingCard label="طحين أبيض 50 كغ" value={2.5} caption="عبوة" supplier="مخبز الأصيل للجملة" image={FLOUR} />
         <ListingCard label="قماش ساتان، لفّة 25 م" value={4} caption="لفّة" supplier="مؤسسة الخطيب للأقمشة" image={SATIN} />
         <ListingCard label="خميرة فورية 500 غ" value={1.75} caption="كيس" supplier="مخبز الأصيل للجملة" />

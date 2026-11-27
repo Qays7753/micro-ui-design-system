@@ -69,7 +69,7 @@ export function EvidenceSlot({
         hasPhoto ? (
           <span className="mds-evidence-slot-tile" style={{ cursor: 'default' }}>
             {/* The app's uploaded photo URL fills the reserved 4:3. */}
-            <img className="mds-evidence-slot-photo" src={value} alt={ar['evidence.photoTaken'].text} />
+            <img className="mds-media-fill" src={value} alt={ar['evidence.photoTaken'].text} />
             {!readOnly ? (
               <button
                 type="button"

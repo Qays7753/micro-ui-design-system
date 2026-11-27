@@ -50,13 +50,6 @@
   cursor: default;
 }
 
-.mds-evidence-slot-photo {
-  position: absolute;
-  inset: 0;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
 
 /* The redo control over the captured photo (bottom-end). */
 .mds-evidence-slot-redo {

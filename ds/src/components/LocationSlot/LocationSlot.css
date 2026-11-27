@@ -50,6 +50,6 @@
   text-decoration: none;
   flex-shrink: 0;
   /* 48 touch target (م3): padding grows, the visual line stays. */
-  padding-block: var(--mds-space-12);
+  padding-block: var(--mds-space-14);
   min-block-size: var(--mds-size-touch-min);
 }

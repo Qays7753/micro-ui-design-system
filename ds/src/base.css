@@ -41,6 +41,16 @@ button,
 /* The number-lg type quartet (BRIEF 23.8/23.6): shared by Money--lg and
    HeroSurface's long-number drop so component CSS keeps no duplicated
    type blocks (ds-dup). */
+.mds-media-fill {
+  /* The shared 4:3 photo fill: absolute, all edges, cover crop — used by
+     the listing figure and the evidence photo (ds-dup: one owner). */
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
 .mds-number-lg {
   font-family: var(--mds-type-number-lg-font);
   font-size: var(--mds-type-number-lg-size);

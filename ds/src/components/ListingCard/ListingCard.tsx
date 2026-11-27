@@ -79,7 +79,7 @@ export function ListingCard({
       <span className="mds-listing-card-figure">
         {image ? (
           <img
-            className={['mds-listing-card-photo', /* small-image heuristic is the app's */ '']
+            className={['mds-media-fill', /* small-image heuristic is the app's */ '']
               .filter(Boolean).join(' ')}
             src={image}
             alt=""

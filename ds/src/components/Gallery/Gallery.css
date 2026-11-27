@@ -86,12 +86,15 @@
   background-color: var(--mds-color-brand-data);
 }
 
-/* The visually hidden prev/next buttons (§5.2 item 7). */
+/* The visually hidden prev/next buttons (§5.2 item 7): hairline boxes in
+   the FLOW after the dots — invisible, keyboard-reachable, and never
+   under any overlay (m23) nor overlapping each other (m21). */
 .mds-gallery-nav {
-  position: absolute;
+  position: relative;
   inline-size: var(--mds-border-hairline);
   block-size: var(--mds-border-hairline);
-  margin: calc(-1 * var(--mds-border-hairline));
+  margin: calc(-1 * var(--mds-border-hairline)) 0 0 calc(-1 * var(--mds-border-hairline));
   overflow: hidden;
   white-space: nowrap;
+  display: inline-block;
 }
