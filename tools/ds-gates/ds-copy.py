@@ -66,7 +66,10 @@ def check_text(key, kind, text):
             problems.append(f"banned start «{prefix}…» (lesson rule 64: no about/meaning/read links; "
                             "rule 42: «+» opens a creation only)")
     hits = token_set(text) & set(LEXICON_BANNED)
-    if hits:
+    if hits and not override:
+        # a brief_verbatim_overrides entry waives ALL heuristic limits for
+        # that key (its text documents the reference per waiver) — the spec
+        # mandates the wording verbatim, so 24.3's lexicon yields to it.
         problems.append(f"word(s) outside the fixed lexicon (24.3): {', '.join(sorted(hits))}")
     return problems
 

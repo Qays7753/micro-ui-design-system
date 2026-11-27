@@ -322,6 +322,64 @@ export const ar = {
 
   // --- Field placeholder, format only (BRIEF 23.24(10)) ---
   'placeholder.phone': { kind: 'placeholder', text: '07X XXX XXXX' },
+  // --- BATCH2 3.4: calendar, order states and marketplace vocabularies ---
+  // Days WITHOUT «ال» (owner decision د5/1.1), in weekStart=0 order.
+  'day.0': { kind: 'badge', text: 'أحد' },
+  'day.1': { kind: 'badge', text: 'اثنين' },
+  'day.2': { kind: 'badge', text: 'ثلاثاء' },
+  'day.3': { kind: 'badge', text: 'أربعاء' },
+  'day.4': { kind: 'badge', text: 'خميس' },
+  'day.5': { kind: 'badge', text: 'جمعة' },
+  'day.6': { kind: 'badge', text: 'سبت' },
+  // The Levantine month names for the SCREEN-READER only (و-1: the screen
+  // shows «07/2026»; the reader says «تموز 2026»).
+  'month.1': { kind: 'screen-reader', text: 'كانون الثاني' },
+  'month.2': { kind: 'screen-reader', text: 'شباط' },
+  'month.3': { kind: 'screen-reader', text: 'آذار' },
+  'month.4': { kind: 'screen-reader', text: 'نيسان' },
+  'month.5': { kind: 'screen-reader', text: 'أيار' },
+  'month.6': { kind: 'screen-reader', text: 'حزيران' },
+  'month.7': { kind: 'screen-reader', text: 'تموز' },
+  'month.8': { kind: 'screen-reader', text: 'آب' },
+  'month.9': { kind: 'screen-reader', text: 'أيلول' },
+  'month.10': { kind: 'screen-reader', text: 'تشرين الأول' },
+  'month.11': { kind: 'screen-reader', text: 'تشرين الثاني' },
+  'month.12': { kind: 'screen-reader', text: 'كانون الأول' },
+  // The TEN order states + their «next step» texts (ADDENDUM 2.2.1 — the
+  // badge text and the next-step label ride the SAME table).
+  'order.draft': { kind: 'badge', text: 'مسودة' },
+  'order.tentative': { kind: 'badge', text: 'اتفاق مبدئي' },
+  'order.confirmed': { kind: 'badge', text: 'مؤكد' },
+  'order.inProgress': { kind: 'badge', text: 'قيد التنفيذ' },
+  'order.ready': { kind: 'badge', text: 'جاهز' },
+  'order.delivered': { kind: 'badge', text: 'تم التسليم' },
+  'order.settled': { kind: 'badge', text: 'تمت التسوية' },
+  'order.deferred': { kind: 'badge', text: 'مؤجل' },
+  'order.cancelled': { kind: 'badge', text: 'ملغى' },
+  'order.needsReview': { kind: 'badge', text: 'يحتاج مراجعة' },
+  'next.draft': { kind: 'button', text: 'أضف السعر والموعد' },
+  'next.tentative': { kind: 'button', text: 'ابدأ التنفيذ' },
+  'next.confirmed': { kind: 'button', text: 'ابدأ التنفيذ' },
+  'next.inProgress': { kind: 'button', text: 'أكمل التنفيذ' },
+  'next.ready': { kind: 'button', text: 'سجّل التسليم' },
+  'next.delivered': { kind: 'button', text: 'راجع التحصيل والنتيجة' },
+  'next.settled': { kind: 'button', text: 'راجع نتيجة الطلب' },
+  'next.deferred': { kind: 'button', text: 'راجع سبب التأجيل' },
+  'next.cancelled': { kind: 'button', text: 'راجع تسوية الطلب' },
+  'next.needsReview': { kind: 'button', text: 'راجع الطلب' },
+  // Availability (ADDENDUM 2.5) and report reasons (ADDENDUM 2.8).
+  'avail.available': { kind: 'badge', text: 'متوفر' },
+  'avail.onRequest': { kind: 'badge', text: 'بالطلب' },
+  'avail.unavailable': { kind: 'badge', text: 'غير متوفر مؤقتاً' },
+  'report.misleading': { kind: 'badge', text: 'معلومات مضللة' },
+  'report.offTopic': { kind: 'badge', text: 'خارج النطاق المسموح' },
+  'report.spam': { kind: 'badge', text: 'إعلان مزعج' },
+  'report.contact': { kind: 'badge', text: 'مشكلة في التواصل' },
+  'report.other': { kind: 'badge', text: 'سبب آخر' },
+  'report.writeReason': { kind: 'badge', text: 'اكتب السبب' },
+
+// ---------------------------------------------------------------------------
+
 } as const;
 
 export type ArKey = keyof typeof ar;
@@ -346,8 +404,6 @@ export function t(key: ArKey, params?: Record<string, string | number>): string 
 // strings: pluralAr() itself prepends the number for few/many/other.
 // 'movements' uses the genitive dual (حركتين) because it follows «من» in
 // the source link; standalone announcements use the 24.8 nominative forms.
-// ---------------------------------------------------------------------------
-
 export const pluralNouns = {
   movements: { zero: 'لا حركات', one: 'حركة واحدة', two: 'حركتين', few: 'حركات', many: 'حركة' },
   orders: { zero: 'لا طلبات', one: 'طلب واحد', two: 'طلتان', few: 'طلبات', many: 'طلب' },

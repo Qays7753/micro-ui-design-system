@@ -199,7 +199,11 @@
    "إلغاء"
   ],
   "brief_verbatim_overrides": {
-   "saveState.draft": "BRIEF 11 [مؤكد] mandates the badge text «مسودة · لم تُحفظ» verbatim (3 words); plan 8-و preamble: «إن تعارض أي حد مع الموجز، الموجز يغلب». Word-count ceiling waived for this key only; banned-phrase/lexicon checks still apply."
+   "saveState.draft": "BRIEF 11 [مؤكد] mandates the badge text «مسودة · لم تُحفظ» verbatim (3 words); plan 8-و preamble: «إن تعارض أي حد مع الموجز، الموجز يغلب». Word-count ceiling waived for this key only; banned-phrase/lexicon checks still apply.",
+   "avail.unavailable": "BATCH2-SPECS-ADDENDUM §2.5 table verbatim «غير متوفر مؤقتاً» (owner-closed question 6); the badge word ceiling yields to the addendum as it does for saveState.draft",
+   "report.offTopic": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «خارج النطاق المسموح» (owner-closed question 9)",
+   "report.spam": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «إعلان مزعج» (owner-closed question 9); the 24.3 lexicon bans «إعلان» as the name of a MARKET LISTING — the report taxonomy is a different concept and the addendum outranks BRIEF 24",
+   "report.contact": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «مشكلة في التواصل» (owner-closed question 9)"
   },
   "lexicon_banned_tokens": [
    "إيراد",
