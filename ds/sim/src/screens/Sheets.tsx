@@ -200,7 +200,13 @@ export function ListingSheet({ listing, onDismiss }: { listing: Listing; onDismi
         <ObjectRow
           label="أبلغ عن العرض"
           caption="more"
-          onPress={() => dispatch({ type: 'ui/openSheet', id: `report:${listing.id}` })}
+          onPress={() => {
+            // The listing slot shadows the sheet slot, so the report sheet
+            // only appears after the listing sheet leaves (جولة الناقد: the
+            // row was dead — the report sheet never showed).
+            dispatch({ type: 'ui/openListing', id: null });
+            dispatch({ type: 'ui/openSheet', id: `report:${listing.id}` });
+          }}
         />
       </SheetBody>
     </Sheet>

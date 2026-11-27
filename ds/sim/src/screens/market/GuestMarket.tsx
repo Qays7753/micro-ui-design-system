@@ -7,11 +7,13 @@
  * button that rides the slot in part B) the registered buyer's market shows
  * the prices and the bar's end becomes the bell (+ ask).
  */
-import { useSim } from '../../state/store';
+import { Button } from '@micro/ds';
+import { useSim, useSimDispatch } from '../../state/store';
 import { MarketBody } from './MarketScreen';
 
 export function GuestMarket() {
   const state = useSim();
+  const dispatch = useSimDispatch();
   const buyer = state.buyer;
   return (
     <div className="sim-screen sim-screen--guest" data-sim-screen-body="market">
@@ -28,6 +30,14 @@ export function GuestMarket() {
         <span className="sim-later__note">
           {buyer ? 'دخل الزائر (دخول تجريبي)' : 'داخله زر ثانوي «دخول تجريبي» — ليس زر Google ولا يحاكي شكله (ر5.1)'}
         </span>
+        {!buyer ? (
+          /* ر5.1's step 3: the demo sign-in rides the slot until the real
+             GoogleSignInSlot lands in part B — without it the visitor's
+             journey is a dead end (جولة الناقد: the button was missing). */
+          <Button variant="secondary" onPress={() => dispatch({ type: 'role/guestLogin' })}>
+            دخول تجريبي
+          </Button>
+        ) : null}
       </div>
       <MarketBody locked={!buyer} />
     </div>

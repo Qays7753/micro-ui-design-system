@@ -7,7 +7,6 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, test } from 'vitest';
 import { App } from '../../App';
-import { SimProvider, useSimDispatch } from '../../state/store';
 
 afterEach(cleanup);
 
@@ -21,11 +20,8 @@ async function press(el: Element) {
 }
 
 function renderApp() {
-  return render(
-    <SimProvider>
-      <App />
-    </SimProvider>,
-  );
+  // App carries its own SimProvider (the store the guestLogin flip uses).
+  return render(<App />);
 }
 
 /** Renders and enters the guest role → السوق. */
@@ -51,32 +47,16 @@ describe('SA7هـ — the visitor market (§5.1)', () => {
     expect(screen.getByText(/بلا TabBar ولا AskButton قبل الدخول/)).toBeTruthy();
     expect(screen.getByText('يُركَّب لاحقًا: GuestShell')).toBeTruthy();
     expect(screen.getByText('يُركَّب لاحقًا: GoogleSignInSlot')).toBeTruthy();
-    expect(screen.getByText(/دخول تجريبي/)).toBeTruthy();
+    // ر5.1's demo sign-in: a REAL secondary button rides the slot (جولة
+    // الناقد — the journey was a dead end without it).
+    expect(screen.getByRole('button', { name: 'دخول تجريبي' })).toBeTruthy();
   });
 
   test('«دخول تجريبي» flips the market to the registered buyer state (ر5.1)', async () => {
     await enterGuest();
-    // The button rides the slot in part B; the flip it triggers (SA3's
-    // role/guestLogin) is dispatched through the store here — the buyer's
-    // market then shows the prices and drops the LockedDetails notes.
-    const { GuestMarket } = await import('./GuestMarket');
-    function Probe() {
-      const dispatch = useSimDispatch();
-      return (
-        <button type="button" onClick={() => dispatch({ type: 'role/guestLogin' })}>
-          do-login
-        </button>
-      );
-    }
-    cleanup();
-    render(
-      <SimProvider>
-        <GuestMarket />
-        <Probe />
-      </SimProvider>,
-    );
-    expect(screen.getAllByText('السعر مقفل — يُركَّب لاحقًا: LockedDetails').length).toBe(5);
-    fireEvent.click(screen.getByText('do-login'));
+    // The REAL button in the slot: pressing it flips the market — prices
+    // show, the LockedDetails notes drop, and the slot notes the login.
+    await press(screen.getByRole('button', { name: 'دخول تجريبي' }));
     expect(screen.queryByText('السعر مقفل — يُركَّب لاحقًا: LockedDetails')).toBeNull();
     expect(screen.getAllByText(/22 د \/ كيسان/).length).toBe(1);
     expect(screen.getByText(/الأسعار والتواصل ظاهرة/)).toBeTruthy();
