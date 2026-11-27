@@ -159,10 +159,12 @@ export function App() {
                 trailing={t('money.unit')}
                 draft={[10.2, 9.8, 11.0, 10.4, 11.6, 11.1, 12.3]}
                 direction={
-                  <>
+                  /* 23.22 row 2: hidden diff line is arrow + word only —
+                      the percent disappears (batch-2 1.3). */
+                  <span style={{ color: 'var(--mds-color-on-anchor-secondary)' }}>
                     <DeltaUpIcon />
-                    <span>{t('metric.deltaHigher', { percent: '12%' })}</span>
-                  </>
+                    <span>{composeHidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
+                  </span>
                 }
                 debt={t('metric.sourceFrom', { counted: t('movement.in') })}
                 onDismiss={() => {}}
@@ -1153,6 +1155,22 @@ export function App() {
                 debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
                 data-ds-check="metric-small"
               />
+            </Surface>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.hidden')}</span>
+            <Surface>
+              {/* Batch-2 1.3: the metric reads the hidden context itself —
+                  its value element carries data-ds-check="amount-hidden"
+                  so ds-hidden-amounts verifies «•••• د» on both views. */}
+              <AmountVisibilityProvider hidden>
+                <MetricSmall
+                  label={t('nav.finance')}
+                  value="4,820"
+                  trailing={t('money.unit')}
+                  debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
+                />
+              </AmountVisibilityProvider>
             </Surface>
           </div>
           <div className="lab-row lab-row--full">

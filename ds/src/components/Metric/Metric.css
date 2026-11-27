@@ -47,6 +47,13 @@
   color: var(--mds-color-text-secondary);
 }
 
+/* Hidden (23.22, batch-2 1.3): «•••• د» rides in ONE element (the gate
+   reads this node's text), so the amount-unit gap is declared here —
+   the shown path takes it from the flex parent. */
+.mds-metric-value--hidden {
+  gap: var(--mds-layout-amount-unit-gap);
+}
+
 /* The unit: body-strong 16/24 on the number's baseline (23.8). */
 .mds-metric-unit {
   font-family: var(--mds-type-body-strong-font);
