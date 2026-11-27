@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -85,6 +85,28 @@ export function App() {
   const [tab, setTab] = useState(0);
   const [tabDemo, setTabDemo] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // ت11 + ت12 demo (compose): the movement sheet's save runs a REAL pending
+  // phase — the button's spinner and «يُرسل…» wait out motion.pending-delay
+  // (nothing flashes for the first 300ms), the response lands at 600ms, the
+  // sheet closes, the AFFECTED row takes motion.landed and its number
+  // counts to the new value with motion.count, and the Toast says it.
+  const [saving, setSaving] = useState(false);
+  const [rowValue, setRowValue] = useState(1245.75);
+  const [rowFrom, setRowFrom] = useState(1245.75);
+  const [composeLanded, setComposeLanded] = useState(false);
+  const composeRowValue = useCountUp(rowFrom, rowValue, composeLanded);
+  const saveMovement = () => {
+    setSaving(true);
+    window.setTimeout(() => {
+      setSaving(false);
+      setSheetOpen(false);
+      setRowFrom(rowValue);
+      setRowValue((v) => v + 45);
+      setComposeLanded(true);
+      setToastText(t('toast.movementSaved'));
+      window.setTimeout(() => setComposeLanded(false), 1800);
+    }, 600);
+  };
   // ت12 demo: the row-garden landing sample replays motion.landed on press
   // (class off -> on restarts the one-shot animation).
   const [rowLanded, setRowLanded] = useState(false);
@@ -265,16 +287,16 @@ export function App() {
         /* ت6/ت7 (1.7): the creation sheet — form variant (surface background,
            fields directly on it, always 92%), titled by the OPENING BUTTON'S
            action, the ActionBar a direct child of the body riding the
-           panel's bottom edge. */
+           panel's bottom edge. ت11/ت12: the save runs a real pending phase
+           (spinner + «يُرسل…» wait out motion.pending-delay; response at
+           600ms), then the sheet closes and the affected row LANDS. */
         <Sheet variant="form" label={t('button.recordMovement')} onDismiss={() => setSheetOpen(false)}>
           <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
-          <SaveState saveState="draft" />
+          <SaveState saveState={saving ? 'sending' : 'draft'} />
           <ActionBar
             label={t('button.saveMovement')}
-            onPress={() => {
-              setSheetOpen(false);
-              setToastText(t('toast.movementSaved'));
-            }}
+            onPress={saveMovement}
+            loading={saving}
             leading
           />
         </Sheet>
@@ -397,11 +419,15 @@ export function App() {
               />
               <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)}>
                 <Surface>
+                  {/* ت12 (1.7): the row the movement sheet's save lands on —
+                      motion.landed once + motion.count on the affected
+                      number. */}
                   <ObjectRow
                     label={parties[0]}
                     caption={t('row.sampleCaption')}
-                    value={<Money value="1,245.750" />}
+                    value={<Money value={composeRowValue} />}
                     trailing={t('row.sampleTime')}
+                    landed={composeLanded}
                     onPress={() => setObjectOpen(true)}
                   />
                   <ObjectRow
