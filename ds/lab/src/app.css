@@ -104,6 +104,17 @@
   color: var(--mds-color-text-primary);
 }
 
+/* 2.2: the component's technical name rides small beside the plain
+   heading (owner note §3) — label 14/20/500 in text-secondary, after 8. */
+.lab-tech {
+  margin-inline-start: var(--mds-layout-badge-icon-gap);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-color-text-secondary);
+}
+
 .lab-row {
   display: flex;
   flex-wrap: wrap;

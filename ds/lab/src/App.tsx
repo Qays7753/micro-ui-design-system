@@ -394,7 +394,7 @@ export function App() {
         <main className="lab-main">
           {/* ---- Controls: the lab's keys (first in DOM, first viewport) ---- */}
           <section className="lab-section" id="controls">
-            <h2 className="lab-title">{t('title.amountToggle')}</h2>
+            <h2 className="lab-title">{t('lab.h.amountToggle')}<span className="lab-tech">{t('title.amountToggle')}</span></h2>
             <div className="lab-row">
               <span className="lab-label">{t('state.default')}</span>
               <AmountVisibilityToggle
@@ -427,7 +427,7 @@ export function App() {
 
         {/* ---- Money (BRIEF 8 + 23.22): the states of Money.states ---- */}
         <section className="lab-section" id="money">
-          <h2 className="lab-title">{t('title.money')}</h2>
+          <h2 className="lab-title">{t('lab.h.money')}<span className="lab-tech">{t('title.money')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
             <span data-ds-check="bidi"><Money value={amounts[1]} data-ds-check="amount" /></span>
@@ -489,7 +489,7 @@ export function App() {
 
         {/* ---- StatusBadge (BRIEF 23.6): the five tones + tight space ---- */}
         <section className="lab-section" id="badge">
-          <h2 className="lab-title">{t('title.statusBadge')}</h2>
+          <h2 className="lab-title">{t('lab.h.statusBadge')}<span className="lab-tech">{t('title.statusBadge')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.tones')}</span>
             <StatusBadge tone="done" />
@@ -510,7 +510,7 @@ export function App() {
 
         {/* ---- EntityMark (BRIEF 23.5 + 23.24(4)) ---- */}
         <section className="lab-section" id="entity">
-          <h2 className="lab-title">{t('title.entityMark')}</h2>
+          <h2 className="lab-title">{t('lab.h.entityMark')}<span className="lab-tech">{t('title.entityMark')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.initial')}</span>
             <EntityMark size="sm" value={parties[0]} data-ds-check="entity-mark-sm" />
@@ -546,7 +546,7 @@ export function App() {
 
         {/* ---- Button (BRIEF 9.3, 23.2, 23.3) ---- */}
         <section className="lab-section" id="button">
-          <h2 className="lab-title">{t('title.button')}</h2>
+          <h2 className="lab-title">{t('lab.h.button')}<span className="lab-tech">{t('title.button')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('variant.primary')}</span>
             <Button data-ds-check="button-md" onClick={() => setToastText(t('toast.movementSaved'))}>{t('button.recordMovement')}</Button>
@@ -589,7 +589,7 @@ export function App() {
 
         {/* ---- IconButton (BRIEF 23.2, 23.3): circular 48, named ---- */}
         <section className="lab-section" id="icon-button">
-          <h2 className="lab-title">{t('title.iconButton')}</h2>
+          <h2 className="lab-title">{t('lab.h.iconButton')}<span className="lab-tech">{t('title.iconButton')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
             <IconButton label={t('button.back')} onPress={() => setToastText(t('button.back'))} data-ds-check="icon-button">
@@ -606,7 +606,7 @@ export function App() {
 
         {/* ---- TextField (BRIEF 9.3, 23.24(10)) ---- */}
         <section className="lab-section" id="text-field">
-          <h2 className="lab-title">{t('title.textField')}</h2>
+          <h2 className="lab-title">{t('lab.h.textField')}<span className="lab-tech">{t('title.textField')}</span></h2>
           <div className="lab-row">
             <TextField id="field-supplier" label={t('field.supplier')} data-ds-check="text-field" />
           </div>
@@ -631,7 +631,7 @@ export function App() {
 
         {/* ---- SegmentedControl (BRIEF 9.1): track, white selected, 2–4 parts ---- */}
         <section className="lab-section" id="segmented-control">
-          <h2 className="lab-title">{t('title.segmentedControl')}</h2>
+          <h2 className="lab-title">{t('lab.h.segmentedControl')}<span className="lab-tech">{t('title.segmentedControl')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.twoSegments')}</span>
             <SegmentedControl
@@ -688,7 +688,7 @@ export function App() {
 
         {/* ---- FilterChips (BRIEF 9.1, 23.16): 40-in-48 chips, horizontal scroll ---- */}
         <section className="lab-section" id="filter-chips">
-          <h2 className="lab-title">{t('title.filterChips')}</h2>
+          <h2 className="lab-title">{t('lab.h.filterChips')}<span className="lab-tech">{t('title.filterChips')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <FilterChips
@@ -736,7 +736,7 @@ export function App() {
 
         {/* ---- Surface (BRIEF 9.2, 23.1(5), 23.21): the primary container ---- */}
         <section className="lab-section" id="surface">
-          <h2 className="lab-title">{t('title.surface')}</h2>
+          <h2 className="lab-title">{t('lab.h.surface')}<span className="lab-tech">{t('title.surface')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface data-ds-check="surface">
@@ -776,7 +776,7 @@ export function App() {
 
         {/* ---- Well (BRIEF 9.2, 23.1(1)): the inset inside a Surface ---- */}
         <section className="lab-section" id="well">
-          <h2 className="lab-title">{t('title.well')}</h2>
+          <h2 className="lab-title">{t('lab.h.well')}<span className="lab-tech">{t('title.well')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
@@ -790,7 +790,7 @@ export function App() {
 
         {/* ---- Section (BRIEF 9.2, 23.24(16)): the titled group ---- */}
         <section className="lab-section" id="section">
-          <h2 className="lab-title">{t('title.section')}</h2>
+          <h2 className="lab-title">{t('lab.h.section')}<span className="lab-tech">{t('title.section')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withCount')}</span>
             <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)} data-ds-check="section">
@@ -816,7 +816,7 @@ export function App() {
 
         {/* ---- HeroSurface (BRIEF 1.5 + 23.8 + 23.25): the screen's single hero ---- */}
         <section className="lab-section" id="hero">
-          <h2 className="lab-title">{t('title.hero')}</h2>
+          <h2 className="lab-title">{t('lab.h.hero')}<span className="lab-tech">{t('title.hero')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="bidi">
             <span className="lab-label">{t('state.withCents')}</span>
             <HeroSurface
@@ -879,7 +879,7 @@ export function App() {
 
         {/* ---- Sheet (BRIEF 23.11 + 23.15): the bottom sheet ---- */}
         <section className="lab-section" id="sheet">
-          <h2 className="lab-title">{t('title.sheet')}</h2>
+          <h2 className="lab-title">{t('lab.h.sheet')}<span className="lab-tech">{t('title.sheet')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-sheet-stage" data-ds-check="sheet">
@@ -907,7 +907,7 @@ export function App() {
 
         {/* ---- ActionBar (BRIEF 9.2 + 23.16 + 27.3/27.4): fixed bottom bar ---- */}
         <section className="lab-section" id="action-bar">
-          <h2 className="lab-title">{t('title.actionBar')}</h2>
+          <h2 className="lab-title">{t('lab.h.actionBar')}<span className="lab-tech">{t('title.actionBar')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withSecondary')}</span>
             {/* Lab-only presentation (same documented pattern as
@@ -953,7 +953,7 @@ export function App() {
 
         {/* ---- Skeleton (BRIEF 23.10): the real-content shapes on a surface ---- */}
         <section className="lab-section" id="skeleton">
-          <h2 className="lab-title">{t('title.skeleton')}</h2>
+          <h2 className="lab-title">{t('lab.h.skeleton')}<span className="lab-tech">{t('title.skeleton')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="skeleton">
             <span className="lab-label">{t('state.loading')}</span>
             <Surface aria-busy="true">
@@ -969,7 +969,7 @@ export function App() {
 
         {/* ---- EmptyState (BRIEF 23.7): the ghost-preview empty surface ---- */}
         <section className="lab-section" id="empty-state">
-          <h2 className="lab-title">{t('title.emptyState')}</h2>
+          <h2 className="lab-title">{t('lab.h.emptyState')}<span className="lab-tech">{t('title.emptyState')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="empty-state">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-empty-stage">
@@ -986,7 +986,7 @@ export function App() {
 
         {/* ---- InlineBanner (BRIEF 517 + 658 + 23.23): the three semantics ---- */}
         <section className="lab-section" id="inline-banner">
-          <h2 className="lab-title">{t('title.inlineBanner')}</h2>
+          <h2 className="lab-title">{t('lab.h.inlineBanner')}<span className="lab-tech">{t('title.inlineBanner')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="inline-banner">
             <span className="lab-label">{t('badge.problem')}</span>
             <div className="lab-banner-stage">
@@ -1009,7 +1009,7 @@ export function App() {
 
         {/* ---- Toast (BRIEF 23.12 + 23.17): fixed above the bars ---- */}
         <section className="lab-section" id="toast">
-          <h2 className="lab-title">{t('title.toast')}</h2>
+          <h2 className="lab-title">{t('lab.h.toast')}<span className="lab-tech">{t('title.toast')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="toast">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-toast-stage">
@@ -1026,7 +1026,7 @@ export function App() {
 
         {/* ---- SaveState (BRIEF 9.4 + 656 + 23.17): the four save states ---- */}
         <section className="lab-section" id="save-state">
-          <h2 className="lab-title">{t('title.saveState')}</h2>
+          <h2 className="lab-title">{t('lab.h.saveState')}<span className="lab-tech">{t('title.saveState')}</span></h2>
           <div className="lab-row" data-ds-check="save-state">
             <span className="lab-label">{t('state.draft')}</span>
             <SaveState saveState="draft" />
@@ -1047,7 +1047,7 @@ export function App() {
 
         {/* ---- PageHeader (BRIEF 9.1): the page title, main + sub + collapsed ---- */}
         <section className="lab-section" id="page-header">
-          <h2 className="lab-title">{t('title.pageHeader')}</h2>
+          <h2 className="lab-title">{t('lab.h.pageHeader')}<span className="lab-tech">{t('title.pageHeader')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.mainScreens')}</span>
             <div className="lab-bar-stage" data-ds-check="page-header">
@@ -1070,7 +1070,7 @@ export function App() {
 
         {/* ---- TabBar (BRIEF 9.1 + 23.16): the bottom tabs ---- */}
         <section className="lab-section" id="tab-bar">
-          <h2 className="lab-title">{t('title.tabBar')}</h2>
+          <h2 className="lab-title">{t('lab.h.tabBar')}<span className="lab-tech">{t('title.tabBar')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.fiveTabs')}</span>
             <div className="lab-bar-stage" data-ds-check="tab-bar">
@@ -1096,7 +1096,7 @@ export function App() {
 
         {/* ---- ContextBar (BRIEF 9.1 + 23.16): the top bar composing the three ---- */}
         <section className="lab-section" id="context-bar">
-          <h2 className="lab-title">{t('title.contextBar')}</h2>
+          <h2 className="lab-title">{t('lab.h.contextBar')}<span className="lab-tech">{t('title.contextBar')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.mainScreens')}</span>
             <div className="lab-bar-stage" data-ds-check="context-bar">
@@ -1142,7 +1142,7 @@ export function App() {
 
         {/* ---- ProjectSwitcher (BRIEF 9.1 + 23.20): the project trigger ---- */}
         <section className="lab-section" id="project-switcher">
-          <h2 className="lab-title">{t('title.projectSwitcher')}</h2>
+          <h2 className="lab-title">{t('lab.h.projectSwitcher')}<span className="lab-tech">{t('title.projectSwitcher')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
             <ProjectSwitcher
@@ -1165,7 +1165,7 @@ export function App() {
 
         {/* ---- NotificationsButton (BRIEF 9.1 + 23.24(2)): the bell ---- */}
         <section className="lab-section" id="notifications-button">
-          <h2 className="lab-title">{t('title.notificationsButton')}</h2>
+          <h2 className="lab-title">{t('lab.h.notificationsButton')}<span className="lab-tech">{t('title.notificationsButton')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.noUnread')}</span>
             <NotificationsButton onPress={() => setNotifOpen(true)} data-ds-check="notifications-button" />
@@ -1178,7 +1178,7 @@ export function App() {
 
         {/* ---- AskButton (BRIEF 9.1 + 4.2(1) + 23.24(2)): the Ask Micro trigger ---- */}
         <section className="lab-section" id="ask-button">
-          <h2 className="lab-title">{t('title.askButton')}</h2>
+          <h2 className="lab-title">{t('lab.h.askButton')}<span className="lab-tech">{t('title.askButton')}</span></h2>
           <div className="lab-row">
             <span className="lab-label">{t('state.default')}</span>
             <AskButton onPress={() => setAskOpen(true)} data-ds-check="ask-button" />
@@ -1191,7 +1191,7 @@ export function App() {
 
         {/* ---- ConfirmSheet (BRIEF 9.3 + 23.24): destructive confirm ---- */}
         <section className="lab-section" id="confirm-sheet">
-          <h2 className="lab-title">{t('title.confirmSheet')}</h2>
+          <h2 className="lab-title">{t('lab.h.confirmSheet')}<span className="lab-tech">{t('title.confirmSheet')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-sheet-stage" data-ds-check="confirm-sheet">
@@ -1212,7 +1212,7 @@ export function App() {
 
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}
         <section className="lab-section" id="object-row">
-          <h2 className="lab-title">{t('title.objectRow')}</h2>
+          <h2 className="lab-title">{t('lab.h.objectRow')}<span className="lab-tech">{t('title.objectRow')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
@@ -1239,7 +1239,7 @@ export function App() {
 
         {/* ---- ObjectCard (BRIEF 4.1 + 23.24): the card anatomy ---- */}
         <section className="lab-section" id="object-card">
-          <h2 className="lab-title">{t('title.objectCard')}</h2>
+          <h2 className="lab-title">{t('lab.h.objectCard')}<span className="lab-tech">{t('title.objectCard')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.withButton')}</span>
             <div style={{ display: 'grid', gridTemplateColumns: '280px', gap: 12 }}>
@@ -1276,7 +1276,7 @@ export function App() {
 
         {/* ---- Metric + MetricSmall (BRIEF 9.3 + 23.8 on white) ---- */}
         <section className="lab-section" id="metric">
-          <h2 className="lab-title">{t('title.metric')}</h2>
+          <h2 className="lab-title">{t('lab.h.metric')}<span className="lab-tech">{t('title.metric')}</span></h2>
           <div className="lab-row lab-row--full" data-ds-check="bidi">
             <span className="lab-label">{t('state.withCents')}</span>
             <Surface>
@@ -1304,7 +1304,7 @@ export function App() {
           </div>
         </section>
         <section className="lab-section" id="metric-small">
-          <h2 className="lab-title">{t('title.metricSmall')}</h2>
+          <h2 className="lab-title">{t('lab.h.metricSmall')}<span className="lab-tech">{t('title.metricSmall')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
@@ -1360,7 +1360,7 @@ export function App() {
 
         {/* ---- Tile (BRIEF 23.9): the 2x2 Bento grid ---- */}
         <section className="lab-section" id="tile">
-          <h2 className="lab-title">{t('title.tile')}</h2>
+          <h2 className="lab-title">{t('lab.h.tile')}<span className="lab-tech">{t('title.tile')}</span></h2>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.grid4')}</span>
             <div className="mds-tile-grid" data-ds-check="tile-grid">
