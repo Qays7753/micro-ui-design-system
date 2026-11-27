@@ -224,6 +224,18 @@ export declare const arDomains: {
         readonly kind: "screen-reader";
         readonly text: "غير متاح";
     };
+    readonly 'sr.statusTrackStages': {
+        readonly kind: "screen-reader";
+        readonly text: "المراحل";
+    };
+    readonly 'sr.statusTrackStep': {
+        readonly kind: "screen-reader";
+        readonly text: "المرحلة {n} من {m}";
+    };
+    readonly 'sr.statusTrackOf': {
+        readonly kind: "screen-reader";
+        readonly text: "من {m}";
+    };
     readonly 'sr.timelineItems': {
         readonly kind: "screen-reader";
         readonly text: "عناصر اليوم بالترتيب";
@@ -282,7 +294,11 @@ export declare const arDomains: {
     };
     readonly 'delivery.to': {
         readonly kind: "badge";
-        readonly text: "إلى {area}";
+        readonly text: "إلى";
+    };
+    readonly 'delivery.fromWord': {
+        readonly kind: "badge";
+        readonly text: "من";
     };
     readonly 'delivery.from': {
         readonly kind: "help";
@@ -291,6 +307,26 @@ export declare const arDomains: {
     readonly 'delivery.reviewQuotes': {
         readonly kind: "button";
         readonly text: "راجع العروض";
+    };
+    readonly 'quote.offerFrom': {
+        readonly kind: "screen-reader";
+        readonly text: "عرض من {label}";
+    };
+    readonly 'quote.approved': {
+        readonly kind: "screen-reader";
+        readonly text: "معتمد";
+    };
+    readonly 'quote.resultSentence': {
+        readonly kind: "help";
+        readonly text: "بالقبول يبدأ السائق المهمة.";
+    };
+    readonly 'quote.accept': {
+        readonly kind: "button";
+        readonly text: "اقبل العرض";
+    };
+    readonly 'quote.reject': {
+        readonly kind: "button";
+        readonly text: "ارفض";
     };
     readonly 'quote.expiry': {
         readonly kind: "help";
@@ -380,6 +416,18 @@ export declare const arDomains: {
         readonly kind: "help";
         readonly text: "أُدخل الرمز ✓";
     };
+    readonly 'evidence.retake': {
+        readonly kind: "help";
+        readonly text: "أعد الالتقاط";
+    };
+    readonly 'evidence.photoMissing': {
+        readonly kind: "help";
+        readonly text: "لم تُلتقط بعد";
+    };
+    readonly 'evidence.photoTaken': {
+        readonly kind: "help";
+        readonly text: "صورة مُلتقطة";
+    };
     readonly 'location.openMaps': {
         readonly kind: "button";
         readonly text: "افتح في الخرائط";
@@ -444,6 +492,30 @@ export declare const arDomains: {
         readonly kind: "screen-reader";
         readonly text: "صورة";
     };
+    readonly 'state.assigned': {
+        readonly kind: "badge";
+        readonly text: "سائق معيّن";
+    };
+    readonly 'state.driver': {
+        readonly kind: "badge";
+        readonly text: "السائق";
+    };
+    readonly 'state.stage': {
+        readonly kind: "badge";
+        readonly text: "المرحلة";
+    };
+    readonly 'visitor.locked': {
+        readonly kind: "badge";
+        readonly text: "زائر";
+    };
+    readonly 'delivery.requests': {
+        readonly kind: "badge";
+        readonly text: "الطلبات";
+    };
+    readonly 'delivery.driverView': {
+        readonly kind: "badge";
+        readonly text: "وضع السائق";
+    };
     readonly 'lab.h.deliveryRequestCard': {
         readonly kind: "title";
         readonly text: "بطاقة طلب توصيل";
@@ -451,6 +523,10 @@ export declare const arDomains: {
     readonly 'lab.h.quoteCard': {
         readonly kind: "title";
         readonly text: "بطاقة عرض سعر";
+    };
+    readonly 'lab.h.statusTrack': {
+        readonly kind: "title";
+        readonly text: "مسار الحالة";
     };
     readonly 'lab.h.jobTrack': {
         readonly kind: "title";

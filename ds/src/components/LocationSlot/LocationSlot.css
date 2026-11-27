@@ -1,0 +1,53 @@
+/*
+ * LocationSlot.css — BATCH2-SPECS §4.7. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* A plain row (size.row-plain): pin 20 secondary → 12 → the address
+   (2 lines max), the maps link at the end; the link wraps under the
+   address at 200%/320 (§4.7 item 6). */
+.mds-location-slot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mds-space-12);
+  min-height: var(--mds-size-row-plain);
+  width: 100%;
+}
+
+.mds-location-slot-icon {
+  color: var(--mds-color-text-secondary);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+
+.mds-location-slot-key {
+  /* type trio shared via .mds-type-label (base.css) */
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-location-slot-address {
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.mds-location-slot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  font-family: var(--mds-type-label-strong-font);
+  font-size: var(--mds-type-label-strong-size);
+  line-height: var(--mds-type-label-strong-line);
+  font-weight: var(--mds-type-label-strong-weight);
+  color: var(--mds-color-brand-anchor);
+  text-decoration: none;
+  flex-shrink: 0;
+  padding-block: var(--mds-space-8);
+}

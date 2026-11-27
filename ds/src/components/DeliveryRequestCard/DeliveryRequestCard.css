@@ -1,0 +1,61 @@
+/*
+ * DeliveryRequestCard.css — BATCH2-SPECS §4.1 on the card anatomy. Every
+ * value is a token reference; no raw hex/px/ms (ds-raw-values).
+ */
+
+/* Card chrome: the shared mds-card-shell (ObjectCard.css). */
+.mds-delivery-request-card:disabled {
+  cursor: default;
+}
+
+/* First row: mark 44 → 12 → title+caption; the badge wraps UNDER the
+   title at 200%/320 (§4.1 item 6) — flex-wrap. */
+.mds-delivery-request-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--mds-space-12);
+  row-gap: var(--mds-space-8);
+  padding-inline: 0;
+}
+
+.mds-delivery-request-card-head .mds-entity-mark {
+  flex-shrink: 0;
+}
+
+
+.mds-delivery-request-card-head .mds-status-badge {
+  flex-shrink: 0;
+}
+
+/* ق2 (§4.1): the delivery nav icon rides mirrored for RTL. */
+.mds-delivery-request-card-nav {
+  display: inline-flex;
+  transform: scaleX(-1);
+}
+
+/* The time line: clock 16 secondary → 8 → label (the OrderCard pattern). */
+.mds-delivery-request-card-time {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  margin-block-start: var(--mds-space-12);
+  color: var(--mds-color-text-primary);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  line-height: var(--mds-type-label-line);
+}
+
+.mds-delivery-request-card-time-icon {
+  color: var(--mds-color-text-secondary);
+  display: inline-flex;
+}
+
+/* The optional next-step slot (و-2 item 19: sibling, never nested). */
+.mds-delivery-request-card-action {
+  margin-block-start: var(--mds-space-12);
+  align-self: flex-start;
+  /* touch-min target via min-block-size (varies from OrderCard's block-size) */
+  min-block-size: var(--mds-size-touch-min);
+  display: inline-flex;
+}

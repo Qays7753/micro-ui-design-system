@@ -152,7 +152,26 @@
   "draft",
   "cancelled",
   "slots",
-  "today"
+  "today",
+  "market",
+  "driver",
+  "origin",
+  "destination",
+  "owner",
+  "phone",
+  "audience",
+  "accept",
+  "reject",
+  "decided",
+  "result",
+  "inList",
+  "quote",
+  "proposal",
+  "stage",
+  "evidence",
+  "readOnly",
+  "error",
+  "locked"
  ],
  "banned_props_jsx": [
   "onLongTap",
@@ -320,6 +339,7 @@
   "money": "Money",
   "controls": "AmountVisibilityToggle",
   "finance-compose": "FundCard",
-  "orders-compose": "OrderCard"
+  "orders-compose": "OrderCard",
+  "delivery-compose": "DeliveryRequestCard"
  }
 }

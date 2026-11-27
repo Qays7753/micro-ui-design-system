@@ -92,7 +92,7 @@ export function WeekStrip({
               .join(' ')}
             onClick={() => onChange?.(day.date)}
           >
-            <span className="mds-week-strip-name">{dayName}</span>
+            <span className="mds-week-strip-name mds-type-micro">{dayName}</span>
             <span className="mds-week-strip-mark">{parts.d}</span>
             {!loading && count > 0 ? (
               <span className="mds-week-strip-dots" aria-hidden="true">
@@ -101,7 +101,7 @@ export function WeekStrip({
                     <span key={i} className="mds-week-strip-dot" />
                   ))
                 ) : (
-                  <span className="mds-week-strip-count">{count}</span>
+                  <span className="mds-week-strip-count mds-type-micro">{count}</span>
                 )}
               </span>
             ) : (

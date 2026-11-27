@@ -1,0 +1,55 @@
+/*
+ * QuoteCard.css — BATCH2-SPECS §4.2. Every value is a token reference; no
+ * raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* Card chrome: the shared mds-card-shell (ObjectCard.css) — non-button
+   root: the accept/reject buttons own the interactions. */
+.mds-quote-card {
+  text-align: start;
+}
+
+.mds-quote-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--mds-space-12);
+  row-gap: var(--mds-space-8);
+}
+
+.mds-quote-card-head .mds-entity-mark {
+  flex-shrink: 0;
+}
+
+
+/* The price + outcome sentence block. */
+.mds-quote-card-price {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-4);
+  margin-block-start: var(--mds-space-12);
+}
+
+.mds-quote-card-result {
+  color: var(--mds-color-text-secondary);
+}
+
+/* The two buttons: chip-gap between; 2-up on one row, two rows at 200%
+   (§4.2 item 6). */
+.mds-quote-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-layout-chip-gap);
+  margin-block-start: var(--mds-space-12);
+}
+
+/* Rejected (§4.2 item 4): everything secondary, no buttons. */
+.mds-quote-card--rejected .mds-quote-card-title,
+.mds-quote-card--rejected .mds-quote-card-caption,
+.mds-quote-card--rejected .mds-quote-card-result {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-quote-card--rejected .mds-money .mds-money-visual {
+  color: var(--mds-color-text-secondary);
+}

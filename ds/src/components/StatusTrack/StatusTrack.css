@@ -1,0 +1,73 @@
+/*
+ * StatusTrack.css — BATCH2-SPECS §1.17. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-status-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  width: 100%;
+}
+
+/* The dots-and-line row: dots 10 (done/current 16), lines flex between. */
+.mds-status-track-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+}
+
+.mds-status-track-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mds-space-4);
+  min-width: 0;
+  flex: 1;
+}
+
+.mds-status-track-dot {
+  width: var(--mds-size-dot-event);
+  height: var(--mds-size-dot-event);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface-track);
+  flex-shrink: 0;
+}
+
+.mds-status-track-step--done .mds-status-track-dot {
+  background-color: var(--mds-color-brand-data);
+}
+
+.mds-status-track-step--current .mds-status-track-dot {
+  width: var(--mds-size-dot-attention);
+  height: var(--mds-size-dot-attention);
+}
+
+.mds-status-track-step--problem .mds-status-track-dot {
+  background-color: var(--mds-color-status-problem-fg);
+}
+
+.mds-status-track-line {
+  flex: 1;
+  min-width: var(--mds-space-8);
+  height: 0;
+  border-top: var(--mds-border-track-line) solid var(--mds-color-surface-track);
+  margin-block-start: calc((var(--mds-size-dot-attention) - var(--mds-size-dot-event)) / 2 + var(--mds-border-hairline));
+}
+
+.mds-status-track-line--done {
+  border-top-color: var(--mds-color-brand-data);
+}
+
+/* The current label sits UNDER its dot (label-strong); past ones micro. */
+
+.mds-status-track-step--done .mds-status-track-label {
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-status-track-step--problem .mds-status-track-label {
+  color: var(--mds-color-status-problem-fg);
+}

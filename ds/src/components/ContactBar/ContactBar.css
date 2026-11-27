@@ -1,0 +1,32 @@
+/*
+ * ContactBar.css — BATCH2-SPECS §4.5. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-contact-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-field-to-help);
+  width: 100%;
+}
+
+/* Two equal buttons, chip-gap apart; two rows at 200% (§4.5 item 6). */
+.mds-contact-bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-layout-chip-gap);
+}
+
+.mds-contact-bar-row > * {
+  flex: 1 1 calc(50% - var(--mds-layout-chip-gap) / 2);
+  min-width: 0;
+}
+
+/* Driver mode: the buttons' touch targets grow to touch-driver. */
+.mds-contact-bar--large .mds-contact-bar-row > * {
+  min-height: var(--mds-size-touch-driver);
+}
+
+.mds-contact-bar-note {
+  color: var(--mds-color-text-secondary);
+}

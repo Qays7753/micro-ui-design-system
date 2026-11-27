@@ -1,0 +1,39 @@
+/*
+ * DriverJobCard.css — BATCH2-SPECS §4.8. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-driver-job {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-16);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border-radius: var(--mds-radius-xl);
+  width: 100%;
+}
+
+.mds-driver-job-title {
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  line-height: var(--mds-type-title-section-line);
+  font-weight: var(--mds-type-title-section-weight);
+  color: var(--mds-color-text-primary);
+}
+
+/* Driver density: every interactive inside grows to touch-driver. */
+.mds-driver-job {
+  /* the slots' own paddings stretch; targets enforce min via --large. */
+  --mds-driver-target: var(--mds-size-touch-driver);
+}
+
+.mds-driver-job .mds-location-slot-link {
+  min-height: var(--mds-driver-target);
+  align-items: center;
+}
+
+.mds-driver-job-action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+}

@@ -1,0 +1,44 @@
+/*
+ * IssueProposalCard.css — BATCH2-SPECS §4.4. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+/* ق2: a plain Surface — no danger background; the icon is the one
+   coloured stroke on the card. */
+.mds-issue-proposal-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border-radius: var(--mds-radius-xl);
+}
+
+.mds-issue-proposal-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+}
+
+.mds-issue-proposal-card-icon {
+  color: var(--mds-color-status-problem-fg);
+  display: inline-flex;
+}
+
+/* The decision row (owner): chip-gap between; two rows at 200% (§4.4). */
+.mds-issue-proposal-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-layout-chip-gap);
+  margin-block-start: var(--mds-space-4);
+}
+
+.mds-issue-proposal-card-result {
+  color: var(--mds-color-text-secondary);
+}
+

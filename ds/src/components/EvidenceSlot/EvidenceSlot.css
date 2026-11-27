@@ -1,0 +1,90 @@
+/*
+ * EvidenceSlot.css — BATCH2-SPECS §4.6. Every value is a token reference;
+ * no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-evidence-slot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  /* full width via the flow, not a re-declared inline-size */
+  align-self: stretch;
+}
+
+.mds-evidence-slot-title {
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  font-weight: var(--mds-type-title-card-weight);
+  color: var(--mds-color-text-primary);
+}
+
+/* The 4:3 tile (ق2): reserved BEFORE any image loads, r-md radius,
+   well background, centered prompt; the photo fills the same box. */
+.mds-evidence-slot-tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--mds-radius-md);
+  background-color: var(--mds-color-surface-well);
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-space-8);
+  font: inherit;
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+}
+
+.mds-evidence-slot-tile:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-evidence-slot-tile:disabled {
+  background-color: var(--mds-color-surface);
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-evidence-slot-photo {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* The redo control over the captured photo (bottom-end). */
+.mds-evidence-slot-redo {
+  position: absolute;
+  inset-block-end: var(--mds-space-8);
+  inset-inline-end: var(--mds-space-8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-touch-min);
+  block-size: var(--mds-size-touch-min);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-surface);
+  border: none;
+  color: var(--mds-color-text-primary);
+  cursor: pointer;
+}
+
+/* Driver density: bigger touch. */
+.mds-evidence-slot--large .mds-evidence-slot-redo {
+  inline-size: var(--mds-size-touch-driver);
+  block-size: var(--mds-size-touch-driver);
+}
+
+
+.mds-evidence-slot-action {
+  align-self: flex-start;
+  min-height: var(--mds-size-touch-min);
+  display: inline-flex;
+}
+

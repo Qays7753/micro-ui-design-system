@@ -1,0 +1,15 @@
+/*
+ * DriverApprovalStatus.css — BATCH2-SPECS §4.9. Every value is a token
+ * reference; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-driver-approval {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-8);
+  padding: var(--mds-layout-surface-padding-phone);
+  background-color: var(--mds-color-surface);
+  border-radius: var(--mds-radius-xl);
+  width: 100%;
+}
+

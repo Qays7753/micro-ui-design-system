@@ -48,13 +48,6 @@
   background-color: var(--mds-color-surface-pressed);
 }
 
-.mds-week-strip-name {
-  font-family: var(--mds-type-micro-font);
-  font-size: var(--mds-type-micro-size);
-  line-height: var(--mds-type-micro-line);
-  color: var(--mds-color-text-secondary);
-  white-space: nowrap;
-}
 
 /* The date circle: day-mark 36; the ring rides OUTSIDE it (today). */
 .mds-week-strip-mark {
@@ -99,12 +92,6 @@
   background-color: var(--mds-color-text-secondary);
 }
 
-.mds-week-strip-count {
-  font-family: var(--mds-type-micro-font);
-  font-size: var(--mds-type-micro-size);
-  line-height: var(--mds-type-micro-line);
-  color: var(--mds-color-text-secondary);
-}
 
 @media (prefers-reduced-motion: reduce) {
   .mds-week-strip-mark {

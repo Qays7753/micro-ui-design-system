@@ -50,6 +50,12 @@ button,
 
 /* The caption type trio (BRIEF 23.x): shared by Tile, ObjectRow and
    ObjectCard second lines (ds-dup). */
+.mds-type-micro {
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+}
+
 .mds-type-caption {
   font-family: var(--mds-type-caption-font);
   font-size: var(--mds-type-caption-size);
