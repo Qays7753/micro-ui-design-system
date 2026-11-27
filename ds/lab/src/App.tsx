@@ -98,7 +98,6 @@ export function App() {
   const [confirmSampleKey, setConfirmSampleKey] = useState(0);
   const [toastText, setToastText] = useState<string | null>(null);
   const [pageState, setPageState] = useState<'normal' | 'loading' | 'empty'>('normal');
-  const [composeHidden, setComposeHidden] = useState(false);
   const [view, setView] = useState<'compose' | 'catalog'>(() =>
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('view') === 'catalog'
       ? 'catalog'
@@ -239,7 +238,7 @@ export function App() {
         <div className="lab-compose">
           <div className="lab-compose-top">
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
-            <AmountVisibilityToggle data-ds-check="amount-visibility-toggle" onChange={(visible) => setComposeHidden(!visible)} />
+            <AmountVisibilityToggle data-ds-check="amount-visibility-toggle" onChange={(visible) => setHidden(!visible)} />
             <span className="lab-tabular-pair">
               {/* G2 probes riding the lab strip: the money font's tabular
                   figures (ds-tabular), LTR digit runs inside RTL (ds-bidi),
@@ -268,12 +267,12 @@ export function App() {
             <ContextBar
               label={t('sr.switchProject')}
               leading={
-                <ProjectSwitcher label={projects[0]} caption={ar['role.owner'].text} onPress={() => {}} />
+                <ProjectSwitcher label={projects[0]} caption={ar['role.owner'].text} onPress={() => setProjectOpen(true)} />
               }
               trailing={
                 <>
                   <NotificationsButton value={3} onPress={() => setNotifOpen(true)} />
-                  <AskButton onPress={() => {}} />
+                  <AskButton onPress={() => setAskOpen(true)} />
                 </>
               }
             />
@@ -297,7 +296,7 @@ export function App() {
               <>
               <HeroSurface
                 label={t('nav.finance')}
-                value={composeHidden ? '—' : '1,245.750'}
+                value="1,245.750"
                 trailing={t('money.unit')}
                 draft={[10.2, 9.8, 11.0, 10.4, 11.6, 11.1, 12.3]}
                 direction={
@@ -305,20 +304,21 @@ export function App() {
                       the percent disappears (batch-2 1.3). */
                   <span style={{ color: 'var(--mds-color-on-anchor-secondary)' }}>
                     <DeltaUpIcon />
-                    <span>{composeHidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
+                    <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
                   </span>
                 }
                 debt={t('metric.sourceFrom', { counted: t('movement.in') })}
-                onDismiss={() => {}}
+                onDismiss={() => setSourceOpen(true)}
+                onChange={(visible) => setHidden(!visible)}
               />
-              <Section label={t('title.needsYou')} caption={3} onPress={() => {}}>
+              <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)}>
                 <Surface>
                   <ObjectRow
                     label={parties[0]}
                     caption={t('row.sampleCaption')}
                     value={<Money value="1,245.750" />}
                     trailing={t('row.sampleTime')}
-                    onPress={() => {}}
+                    onPress={() => setObjectOpen(true)}
                   />
                   <ObjectRow
                     label={parties[1]}
@@ -331,10 +331,10 @@ export function App() {
                 </Surface>
               </Section>
               <div className="mds-tile-grid">
-                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} value="1,250" trailing={t('movement.in')} onPress={() => {}} />
-                <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} state value="4" trailing={t('badge.waiting')} onPress={() => {}} />
-                <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => {}} />
-                <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => {}} />
+                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} value="1,250" trailing={t('movement.in')} onPress={() => setToastText(t('nav.finance'))} />
+                <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} state value="4" trailing={t('badge.waiting')} onPress={() => setToastText(t('nav.orders'))} />
+                <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => setToastText(t('nav.delivery'))} />
+                <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => setToastText(t('nav.market'))} />
               </div>
               </>
               )}
@@ -367,9 +367,7 @@ export function App() {
                 onDismiss={() => setConfirmOpen(false)}
               />
             ) : null}
-            {toastText ? (
-              <Toast label={toastText} onDismiss={() => setToastText(null)} />
-            ) : null}
+            {demoSheets}
             <TabBar value={tab} onChange={setTab}>
               <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
               <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
