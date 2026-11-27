@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { AmountVisibilityProvider } from '../../lib/amount-visibility';
 import { ar } from '../../i18n/ar';
 import { Metric } from './Metric';
-import { MetricSmall } from '../MetricSmall/MetricSmall';
+import { MetricSmall } from '../MetricSmall/index';
 import { MetricStates } from './Metric.states';
 
 const LABEL = ar['nav.finance'].text;
