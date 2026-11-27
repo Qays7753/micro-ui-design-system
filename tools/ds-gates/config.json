@@ -1,287 +1,294 @@
 {
-  "_comment": "S2 gate configuration (@micro/ds batch 1). Every list here is the explicit, extensible form of a rule that the brief states in prose. Sources: BRIEF 0.7/0.8/23.18/24.2/24.3, plan section 2/8. Extend here, never inside a gate script.",
-  "banned_deps": [
-    "shadcn",
-    "shadcn-ui",
-    "@mui/material",
-    "@mui/icons-material",
-    "material-ui",
-    "@material-ui/core",
-    "@material-ui/icons",
-    "@chakra-ui/react",
-    "@chakra-ui/icons",
-    "chakra-ui",
-    "bootstrap",
-    "react-bootstrap",
-    "daisyui",
-    "lucide-react",
-    "lucide-static",
-    "lucide-vue-next",
-    "@heroicons/react",
-    "heroicons",
-    "@fortawesome/fontawesome-free",
-    "@fortawesome/fontawesome-svg-core",
-    "@fortawesome/react-fontawesome",
-    "feather-icons",
-    "react-feather",
-    "@tabler/icons",
-    "@tabler/icons-react",
-    "@phosphor-icons/core",
-    "@phosphor-icons/react"
+ "_comment": "S2 gate configuration (@micro/ds batch 1). Every list here is the explicit, extensible form of a rule that the brief states in prose. Sources: BRIEF 0.7/0.8/23.18/24.2/24.3, plan section 2/8. Extend here, never inside a gate script.",
+ "banned_deps": [
+  "shadcn",
+  "shadcn-ui",
+  "@mui/material",
+  "@mui/icons-material",
+  "material-ui",
+  "@material-ui/core",
+  "@material-ui/icons",
+  "@chakra-ui/react",
+  "@chakra-ui/icons",
+  "chakra-ui",
+  "bootstrap",
+  "react-bootstrap",
+  "daisyui",
+  "lucide-react",
+  "lucide-static",
+  "lucide-vue-next",
+  "@heroicons/react",
+  "heroicons",
+  "@fortawesome/fontawesome-free",
+  "@fortawesome/fontawesome-svg-core",
+  "@fortawesome/react-fontawesome",
+  "feather-icons",
+  "react-feather",
+  "@tabler/icons",
+  "@tabler/icons-react",
+  "@phosphor-icons/core",
+  "@phosphor-icons/react"
+ ],
+ "_banned_deps_note": "deps+devDeps entries are matched exactly; @phosphor-icons/core is allowed only as the S1 generation devDependency, never as a source import (D5) — ds-banned flags it in ds/src as an import, ds-consumer checks where it lives.",
+ "phosphor_generation_dep": "@phosphor-icons/core",
+ "tailwind_banned": {
+  "prefixes": [
+   "rounded",
+   "shadow",
+   "bg",
+   "text",
+   "border",
+   "ring",
+   "fill",
+   "stroke",
+   "outline"
   ],
-  "_banned_deps_note": "deps+devDeps entries are matched exactly; @phosphor-icons/core is allowed only as the S1 generation devDependency, never as a source import (D5) — ds-banned flags it in ds/src as an import, ds-consumer checks where it lives.",
-  "phosphor_generation_dep": "@phosphor-icons/core",
-  "tailwind_banned": {
-    "prefixes": [
-      "rounded",
-      "shadow",
-      "bg",
-      "text",
-      "border",
-      "ring",
-      "fill",
-      "stroke",
-      "outline"
-    ],
-    "scales": [
-      "xs",
-      "sm",
-      "md",
-      "lg",
-      "xl",
-      "2xl",
-      "3xl",
-      "full",
-      "none",
-      "50",
-      "100",
-      "200",
-      "300",
-      "400",
-      "500",
-      "600",
-      "700",
-      "800",
-      "900",
-      "950"
-    ],
-    "palette": [
-      "red",
-      "orange",
-      "amber",
-      "yellow",
-      "lime",
-      "green",
-      "emerald",
-      "teal",
-      "cyan",
-      "sky",
-      "blue",
-      "indigo",
-      "violet",
-      "purple",
-      "fuchsia",
-      "pink",
-      "rose",
-      "slate",
-      "gray",
-      "zinc",
-      "neutral",
-      "stone"
-    ]
-  },
-  "unified_props": [
-    "size",
-    "variant",
-    "tone",
-    "state",
-    "saveState",
-    "density",
-    "disabled",
-    "selected",
-    "draft",
-    "locked",
-    "loading",
-    "label",
-    "caption",
-    "value",
-    "leading",
-    "trailing",
-    "href",
-    "onPress",
-    "onLongPress",
-    "onChange",
-    "onDismiss",
-    "onRetry",
-    "className",
-    "children",
-    "id",
-    "style",
-    "ref",
-    "key",
-    "testID",
-    "direction",
-    "flow",
-    "debt",
-    "placeholder",
-    "optional"
+  "scales": [
+   "xs",
+   "sm",
+   "md",
+   "lg",
+   "xl",
+   "2xl",
+   "3xl",
+   "full",
+   "none",
+   "50",
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "950"
   ],
-  "banned_props_jsx": [
-    "onLongTap",
-    "onTouchTap",
-    "onTap",
-    "kind",
-    "color",
-    "pressDelay"
+  "palette": [
+   "red",
+   "orange",
+   "amber",
+   "yellow",
+   "lime",
+   "green",
+   "emerald",
+   "teal",
+   "cyan",
+   "sky",
+   "blue",
+   "indigo",
+   "violet",
+   "purple",
+   "fuchsia",
+   "pink",
+   "rose",
+   "slate",
+   "gray",
+   "zinc",
+   "neutral",
+   "stone"
+  ]
+ },
+ "unified_props": [
+  "size",
+  "variant",
+  "tone",
+  "state",
+  "saveState",
+  "density",
+  "disabled",
+  "selected",
+  "draft",
+  "locked",
+  "loading",
+  "label",
+  "caption",
+  "value",
+  "leading",
+  "trailing",
+  "href",
+  "onPress",
+  "onLongPress",
+  "onChange",
+  "onDismiss",
+  "onRetry",
+  "className",
+  "children",
+  "id",
+  "style",
+  "ref",
+  "key",
+  "testID",
+  "direction",
+  "flow",
+  "debt",
+  "placeholder",
+  "optional",
+  "items",
+  "min",
+  "max",
+  "step",
+  "weekStart",
+  "mode",
+  "useSystemKeyboard"
+ ],
+ "banned_props_jsx": [
+  "onLongTap",
+  "onTouchTap",
+  "onTap",
+  "kind",
+  "color",
+  "pressDelay"
+ ],
+ "banned_props_types": [
+  "kind",
+  "color",
+  "type",
+  "onLongTap",
+  "onTouchTap",
+  "onTap",
+  "onClick",
+  "pressDelay",
+  "padding",
+  "width",
+  "height",
+  "backgroundColor",
+  "textColor"
+ ],
+ "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. flow/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك) — flow renamed from direction per BRIEF-ADDENDUM-1.6 و-1 item 31; direction REMAINS the Metric/HeroSurface diff-line node (BRIEF 23.8). placeholder: TextField format hint (23.24(10)). optional: TextField's optional-field mark (lesson rule 67: only optional fields carry «اختياري» after the label). || batch-2 3.3 (م-خ1..م-خ3): items/min/max/step/weekStart/mode/useSystemKeyboard — mode NOT kind (owner decision 1.3; kind stays banned in JSX).",
+ "copy": {
+  "kinds": [
+   "button",
+   "title",
+   "badge",
+   "success",
+   "error",
+   "empty",
+   "help",
+   "placeholder",
+   "screen-reader"
   ],
-  "banned_props_types": [
-    "kind",
-    "color",
-    "type",
-    "onLongTap",
-    "onTouchTap",
-    "onTap",
-    "onClick",
-    "pressDelay",
-    "padding",
-    "width",
-    "height",
-    "backgroundColor",
-    "textColor"
+  "kind_word_limits": {
+   "button": 3,
+   "title": 3,
+   "badge": 2,
+   "success": 5,
+   "error": 12,
+   "empty": 10,
+   "help": 8,
+   "placeholder": null,
+   "screen-reader": null
+  },
+  "_limits_note": "placeholder/screen-reader have no word-count ceiling in plan 8-و (the plan sets none for them); they are still checked for banned phrases and exclamation marks.",
+  "banned_phrases": [
+   "يرجى",
+   "الرجاء",
+   "عذراً، حدث خطأ ما",
+   "تمت العملية بنجاح",
+   "لا توجد بيانات",
+   "مرحباً بعودتك",
+   "هل أنت متأكد؟",
+   "اضغط هنا"
   ],
-  "_props_note": "banned_props_types applies to component prop interfaces (*.types.ts and interface/type blocks in component .tsx) — BRIEF 23.18: no aliases (color for tone, type for variant) and no free design-value props. HTML attribute pass-through on real elements (e.g. type=\"button\") is not a component prop. flow/debt: Money's signed forms (BRIEF 8: داخل/خارج/تحويل، لك/عليك) — flow renamed from direction per BRIEF-ADDENDUM-1.6 و-1 item 31; direction REMAINS the Metric/HeroSurface diff-line node (BRIEF 23.8). placeholder: TextField format hint (23.24(10)). optional: TextField's optional-field mark (lesson rule 67: only optional fields carry «اختياري» after the label).",
-  "copy": {
-    "kinds": [
-      "button",
-      "title",
-      "badge",
-      "success",
-      "error",
-      "empty",
-      "help",
-      "placeholder",
-      "screen-reader"
-    ],
-    "kind_word_limits": {
-      "button": 3,
-      "title": 3,
-      "badge": 2,
-      "success": 5,
-      "error": 12,
-      "empty": 10,
-      "help": 8,
-      "placeholder": null,
-      "screen-reader": null
-    },
-    "_limits_note": "placeholder/screen-reader have no word-count ceiling in plan 8-و (the plan sets none for them); they are still checked for banned phrases and exclamation marks.",
-    "banned_phrases": [
-      "يرجى",
-      "الرجاء",
-      "عذراً، حدث خطأ ما",
-      "تمت العملية بنجاح",
-      "لا توجد بيانات",
-      "مرحباً بعودتك",
-      "هل أنت متأكد؟",
-      "اضغط هنا"
-    ],
-    "banned_button_words": [
-      "إرسال",
-      "موافق",
-      "تأكيد",
-      "حفظ",
-      "إلغاء"
-    ],
-    "brief_verbatim_overrides": {
-      "saveState.draft": "BRIEF 11 [مؤكد] mandates the badge text «مسودة · لم تُحفظ» verbatim (3 words); plan 8-و preamble: «إن تعارض أي حد مع الموجز، الموجز يغلب». Word-count ceiling waived for this key only; banned-phrase/lexicon checks still apply."
-    },
-    "lexicon_banned_tokens": [
-      "إيراد",
-      "دخل",
-      "مصروف",
-      "سحب",
-      "نقل",
-      "ترحيل",
-      "مدين",
-      "مستحق",
-      "دائن",
-      "حساب",
-      "محفظة",
-      "إعلان",
-      "منتج",
-      "تسعيرة",
-      "كوتيشن",
-      "معلّق",
-      "مؤقت"
-    ],
-    "_lexicon_note": "BRIEF 24.3 'لا تُستخدم' column, matched as whole words (tokens) so Arabic prefixes/suffixes don't false-positive. The positive 'full closed vocabulary' check (every word must appear in the lexicon) is not implementable from the brief — the 24.3 table maps only 10 concepts — and stays a reviewer/ناقد duty; documented in the S2 report.",
-    "exclamation": "!",
-    "banned_prefixes": [
-      "عن ",
-      "معنى ",
-      "اقرأ ",
-      "+"
-    ],
-    "_banned_prefixes_note": "lesson rules 64 and 42 (unit 15): no «عن…/معنى…/اقرأ…» links anywhere, and «+» opens a creation only — the dictionary carries creation verbs as words, never a leading «+» (the batch-2 QuantityStepper's plus is an icon glyph, not dictionary text)."
-  },
-  "browserslist_required": [
-    "iOS >= 16.4",
-    "Chrome >= 116",
-    "ChromeAndroid >= 116",
-    "Samsung >= 23"
+  "banned_button_words": [
+   "إرسال",
+   "موافق",
+   "تأكيد",
+   "حفظ",
+   "إلغاء"
   ],
-  "css_unsupported_features": [
-    "@scope",
-    "light-dark("
+  "brief_verbatim_overrides": {
+   "saveState.draft": "BRIEF 11 [مؤكد] mandates the badge text «مسودة · لم تُحفظ» verbatim (3 words); plan 8-و preamble: «إن تعارض أي حد مع الموجز، الموجز يغلب». Word-count ceiling waived for this key only; banned-phrase/lexicon checks still apply."
+  },
+  "lexicon_banned_tokens": [
+   "إيراد",
+   "دخل",
+   "مصروف",
+   "سحب",
+   "نقل",
+   "ترحيل",
+   "مدين",
+   "مستحق",
+   "دائن",
+   "حساب",
+   "محفظة",
+   "إعلان",
+   "منتج",
+   "تسعيرة",
+   "كوتيشن",
+   "معلّق",
+   "مؤقت"
   ],
-  "_css_note": "Manually listed CSS syntax that the target floor (iOS 16.4 / Chrome 116 / Samsung 23) cannot parse. :has() is NOT here — it is supported since Chrome 105 / Safari 15.4. The authoritative per-decision check stays stylelint-no-unsupported-browser-features (runs in ds lint), this list is the belt for at-rules/functions stylelint cannot see.",
-  "lowend": {
-    "woff2_kb": 65,
-    "index_gzip_kb_base": 16,
-    "index_gzip_kb_per_component": 8,
-    "styles_gzip_kb_base": 8,
-    "styles_gzip_kb_per_component": 2
-  },
-  "_lowend_note": "The plan's only hard size numbers are K12 (each component ≤ 8KB gzip) and the woff2 budget (65KB, task). index.js/styles.css have no plan number, so the budget = measured S1 baseline with margin (16KB / 8KB gzip) + the K12 per-component allowance for every built component. Adjust here only with a leader decision.",
-  "lab_build_script": "build:standalone",
-  "engines": [
-    "chromium",
-    "webkit"
+  "_lexicon_note": "BRIEF 24.3 'لا تُستخدم' column, matched as whole words (tokens) so Arabic prefixes/suffixes don't false-positive. The positive 'full closed vocabulary' check (every word must appear in the lexicon) is not implementable from the brief — the 24.3 table maps only 10 concepts — and stays a reviewer/ناقد duty; documented in the S2 report.",
+  "exclamation": "!",
+  "banned_prefixes": [
+   "عن ",
+   "معنى ",
+   "اقرأ ",
+   "+"
   ],
-  "small_screen": {
-    "width": 360,
-    "height": 780
-  },
-  "measure_tolerance_px": 0.5,
-  "tabular_tolerance": {
-    "abs_px": 0.1,
-    "relative": 0.006
-  },
-  "font_shift_max_token": "quality.font-layout-shift-max-px",
-  "hidden_amounts": {
-    "bullets": "••••",
-    "unit": "د",
-    "check_attr": "amount-hidden"
-  },
-  "motion_fade_token": "motion.fade.ms",
-  "banned_code_patterns": {
-    "_note": "unit 15 static bans: rule 11 (the browser's native date field) and rule 55 (currency-symbol icons; the money icons are the named 23.23 set). Matched in the ds source with comments stripped, like ds-raw-values.",
-    "patterns": [
-      {
-        "regex": "type\\s*=\\s*[\"']date[\"']",
-        "why": "lesson rule 11: the native date field is banned"
-      },
-      {
-        "regex": "\\bCurrency[A-Z]",
-        "why": "lesson rule 55: currency-symbol icons are banned"
-      }
-    ]
-  },
-  "registry_exceptions": {
-    "_note": "unit 15 (lesson rule 76): catalog section ids whose kebab-case does not match the component folder name",
-    "entity": "EntityMark",
-    "hero": "HeroSurface",
-    "badge": "StatusBadge",
-    "money": "Money",
-    "controls": "AmountVisibilityToggle"
-  }
+  "_banned_prefixes_note": "lesson rules 64 and 42 (unit 15): no «عن…/معنى…/اقرأ…» links anywhere, and «+» opens a creation only — the dictionary carries creation verbs as words, never a leading «+» (the batch-2 QuantityStepper's plus is an icon glyph, not dictionary text)."
+ },
+ "browserslist_required": [
+  "iOS >= 16.4",
+  "Chrome >= 116",
+  "ChromeAndroid >= 116",
+  "Samsung >= 23"
+ ],
+ "css_unsupported_features": [
+  "@scope",
+  "light-dark("
+ ],
+ "_css_note": "Manually listed CSS syntax that the target floor (iOS 16.4 / Chrome 116 / Samsung 23) cannot parse. :has() is NOT here — it is supported since Chrome 105 / Safari 15.4. The authoritative per-decision check stays stylelint-no-unsupported-browser-features (runs in ds lint), this list is the belt for at-rules/functions stylelint cannot see.",
+ "lowend": {
+  "woff2_kb": 65,
+  "index_gzip_kb_base": 16,
+  "index_gzip_kb_per_component": 8,
+  "styles_gzip_kb_base": 8,
+  "styles_gzip_kb_per_component": 2
+ },
+ "_lowend_note": "The plan's only hard size numbers are K12 (each component ≤ 8KB gzip) and the woff2 budget (65KB, task). index.js/styles.css have no plan number, so the budget = measured S1 baseline with margin (16KB / 8KB gzip) + the K12 per-component allowance for every built component. Adjust here only with a leader decision.",
+ "lab_build_script": "build:standalone",
+ "engines": [
+  "chromium",
+  "webkit"
+ ],
+ "small_screen": {
+  "width": 360,
+  "height": 780
+ },
+ "measure_tolerance_px": 0.5,
+ "tabular_tolerance": {
+  "abs_px": 0.1,
+  "relative": 0.006
+ },
+ "font_shift_max_token": "quality.font-layout-shift-max-px",
+ "hidden_amounts": {
+  "bullets": "••••",
+  "unit": "د",
+  "check_attr": "amount-hidden"
+ },
+ "motion_fade_token": "motion.fade.ms",
+ "banned_code_patterns": {
+  "_note": "unit 15 static bans: rule 11 (the browser's native date field) and rule 55 (currency-symbol icons; the money icons are the named 23.23 set). Matched in the ds source with comments stripped, like ds-raw-values.",
+  "patterns": [
+   {
+    "regex": "type\\s*=\\s*[\"']date[\"']",
+    "why": "lesson rule 11: the native date field is banned"
+   },
+   {
+    "regex": "\\bCurrency[A-Z]",
+    "why": "lesson rule 55: currency-symbol icons are banned"
+   }
+  ]
+ },
+ "registry_exceptions": {
+  "_note": "unit 15 (lesson rule 76): catalog section ids whose kebab-case does not match the component folder name",
+  "entity": "EntityMark",
+  "hero": "HeroSurface",
+  "badge": "StatusBadge",
+  "money": "Money",
+  "controls": "AmountVisibilityToggle"
+ }
 }

@@ -53,7 +53,9 @@
 
 | الوحدة 3.2 | **منفذة** — أيقونات م-أ1–م-أ16 من Phosphor في `ds/src/icons` بأسمائها الدلالية (24 أيقونة جديدة: backspace وplus/minus وcalendar/clock وcamera وmic/stop وtrash وmovement-in/out المعكوسة وphone/whatsapp وmap-pin وsend المعكوسة وtable/chart وzoom-in/out وfile وlink وnote/sliders وpause Bold 14) — المجموع 67 أيقونة + رمز Ask، والمولّد يتحقق (--check)، واختبار الانعكاس تحدّث إلى القائمة السبع حرفيًا. typecheck و302 اختبار وlint وbuild أخضر | commit هذه الوحدة |
 
-(تُملأ مع الوحدتين 3.3–3.4)
+| الوحدة 3.3 | **منفذة** — مفردات 23.18 تكتسب م-خ1–م-خ3: `items` و`min`/`max` و`step` و`weekStart` و`mode` (قائمة لكل مكوّن) و`useSystemKeyboard` في `tools/ds-gates/config.json` — **`mode` لا `kind`** (قرار المالك 1.3) و`kind` بقاء في القائمة المحظورة بالJSX. بوابتا ds-props وds-structure أخضرتان | commit هذه الوحدة |
+
+(تُملأ مع الوحدة 3.4)
 
 ## المرحلة 4 — المكوّنات العامة
 
