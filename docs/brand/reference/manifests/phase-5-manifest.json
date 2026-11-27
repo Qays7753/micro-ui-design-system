@@ -1,0 +1,58 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 5,
+  "phaseName": "usage-and-clear-space-spec",
+  "status": "approved",
+  "approvedAt": "2026-10-24T00:29:17+03:00",
+  "sourceOfTruth": {
+    "masterDirectory": "brand/master/",
+    "colorVariants": "brand/variants/",
+    "platformIcons": "brand/platform-icons/",
+    "derivedAssetsMustReferenceMaster": true
+  },
+  "approvedConcept": {
+    "name": "Option 02",
+    "geometry": "Outside R36 C8 G12",
+    "unitU": "64 native units",
+    "clearSpaceMinimum": "0.5U",
+    "clearSpacePreferred": "1U",
+    "coBrandSeparation": "2C",
+    "minimumDigital": {
+      "symbolRecommended": "20px",
+      "symbolAbsolute": "16px",
+      "lockupRecommendedWidth": "180px",
+      "lockupAbsoluteWidth": "144px"
+    },
+    "minimumPrint": {
+      "symbolRecommended": "6mm",
+      "symbolAbsolute": "4mm",
+      "lockupRecommendedWidth": "28mm",
+      "lockupAbsoluteWidth": "22mm"
+    },
+    "minimumPrintStatus": "deferred"
+  },
+  "deliverables": [
+    "docs/06-USAGE-SPEC.md",
+    "docs/07-IMPLEMENTATION-REFERENCE.md",
+    "previews/04-usage-spec.png",
+    "meta/final-manifest.json"
+  ],
+  "verification": {
+    "rulesDerivedFromApprovedGeometry": true,
+    "externalGuidelinesReviewed": true,
+    "referencesIncluded": true,
+    "noMasterFilesChanged": true
+  },
+  "nextPhaseAfterApproval": {
+    "phase": 6,
+    "name": "repository-integration-and-final-audit",
+    "deliverables": [
+      "final repository structure",
+      "asset manifest consolidation",
+      "cross-phase audit",
+      "release checklist"
+    ]
+  },
+  "approvedInFinalRelease": true,
+  "printExports": "deferred"
+}

@@ -1,0 +1,69 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 3,
+  "phaseName": "production-png-exports",
+  "status": "approved",
+  "sourceOfTruth": {
+    "svgVariants": "brand/variants/",
+    "derivedFromMasterChain": true,
+    "multipleCompetingFinalsAllowed": false
+  },
+  "variants": [
+    "full-color",
+    "monochrome-black",
+    "monochrome-white",
+    "monochrome-petrol",
+    "reversed-dark"
+  ],
+  "assets": {
+    "symbolSizes": [
+      16,
+      24,
+      32,
+      48,
+      64,
+      128,
+      256,
+      512,
+      1024
+    ],
+    "lockupWidths": [
+      256,
+      512,
+      1024,
+      2048
+    ],
+    "lockups": [
+      "arabic",
+      "english"
+    ],
+    "transparent": true,
+    "colorMode": "RGBA",
+    "fileCount": 85
+  },
+  "verification": {
+    "dimensionsValidated": true,
+    "rgbaValidated": true,
+    "transparentBackgroundValidated": true,
+    "geometrySourcePreserved": true,
+    "previewReviewed": true
+  },
+  "phaseThreeDeliverables": [
+    "brand/png/",
+    "previews/02-png-exports.png",
+    "docs/04-PNG-EXPORTS.md",
+    "meta/final-manifest.json"
+  ],
+  "nextPhaseAfterApproval": {
+    "phase": 4,
+    "name": "platform-icons",
+    "deliverables": [
+      "favicon",
+      "PWA icons",
+      "maskable icon",
+      "Apple Touch Icon",
+      "Android adaptive icon source"
+    ]
+  },
+  "approvedInFinalRelease": true
+}

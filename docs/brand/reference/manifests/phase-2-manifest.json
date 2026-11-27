@@ -1,0 +1,77 @@
+{
+  "repository": "micro-brand-repository",
+  "phase": 2,
+  "phaseName": "color-and-background-variants",
+  "status": "approved",
+  "sourceOfTruth": {
+    "masterDirectory": "brand/master/",
+    "derivedFromMasterOnly": true,
+    "multipleCompetingFinalsAllowed": false
+  },
+  "approvedConcept": {
+    "name": "Option 02",
+    "geometry": "Outside R36 C8 G12",
+    "moduleOrder": [
+      "top",
+      "right",
+      "bottom",
+      "left"
+    ],
+    "colors": {
+      "petrol": "#164D59",
+      "terracotta": "#D97757",
+      "bluePetrol": "#507F8B"
+    }
+  },
+  "variants": {
+    "full-color": {
+      "fillMode": "approved-palette",
+      "background": "light-or-neutral"
+    },
+    "monochrome-black": {
+      "fill": "#000000",
+      "background": "light"
+    },
+    "monochrome-white": {
+      "fill": "#FFFFFF",
+      "background": "dark-or-brand-color"
+    },
+    "monochrome-petrol": {
+      "fill": "#164D59",
+      "background": "light-or-neutral"
+    },
+    "reversed-dark": {
+      "fill": "#FFFFFF",
+      "background": "dark-or-brand-color",
+      "semanticDuplicateOf": "monochrome-white"
+    }
+  },
+  "assetsPerVariant": [
+    "micro-symbol.svg",
+    "micro-lockup-arabic.svg",
+    "micro-lockup-english.svg"
+  ],
+  "verification": {
+    "allSvgsParse": true,
+    "pathsPreserved": true,
+    "transformsPreserved": true,
+    "viewBoxesPreserved": true,
+    "onlyFillAndMetadataChanged": true
+  },
+  "phaseTwoDeliverables": [
+    "brand/variants/",
+    "previews/01-variant-comparison.png",
+    "docs/03-COLOR-VARIANTS.md",
+    "meta/final-manifest.json"
+  ],
+  "nextPhaseAfterApproval": {
+    "phase": 3,
+    "name": "production-png-exports",
+    "deliverables": [
+      "standard-png-exports",
+      "transparent-png-exports",
+      "dark-background-preview-exports"
+    ]
+  },
+  "approvedInFinalRelease": true
+}
