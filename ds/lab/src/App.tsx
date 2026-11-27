@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -126,6 +126,14 @@ export function App() {
       ? 'catalog'
       : 'compose',
   );
+  /* 3ب.0 (owner note 2026-11-27): the compose view fills the phone screen as
+     a real app and the lab tools fold behind one small button that opens a
+     Sheet. ?tools=1 pins the classic strip above the framed screen — the
+     documented target of every gate (resolve_page_target appends it). */
+  const [toolsPinned] = useState(
+    () => typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('tools') === '1',
+  );
+  const [toolsOpen, setToolsOpen] = useState(false);
 
   /* 2.1 demo sheets — the real destinations of every pressable in both
      views: the project switcher sheet (with the 23.22 «إخفاء المبالغ»
@@ -271,11 +279,12 @@ export function App() {
     document.documentElement.style.fontSize = next === 200 ? '200%' : '100%';
   };
 
-  return (
-    <AmountVisibilityProvider hidden={hidden}>
-      {view === 'compose' ? (
-        <div className="lab-compose">
-          <div className="lab-compose-top">
+  // The lab tools strip (3ب.0): pinned classic (?tools=1) or folded behind
+  // the fab's Sheet. Same JSX, same classes, same data attributes — the
+  // gates' documented targets do not move.
+  const toolsStrip = (
+    <>
+
             <Button variant="text" size="sm" data-ds-exempt="view-toggle" onClick={() => setView('catalog')}>{t('button.all')}</Button>
             <AmountVisibilityToggle data-ds-check="amount-visibility-toggle" onChange={(visible) => setHidden(!visible)} />
             <span className="lab-tabular-pair">
@@ -301,7 +310,33 @@ export function App() {
             <button type="button" className={pageState === 'loading' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('loading')}>{t('state.loading')}</button>
             <button type="button" className={pageState === 'empty' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('empty')}>{t('state.empty')}</button>
             <button type="button" className={pageState === 'normal' ? 'lab-key lab-key--on' : 'lab-key'} data-ds-exempt="view-toggle" onClick={() => setPageState('normal')}>{t('state.normal')}</button>
-          </div>
+
+    </>
+  );
+
+  return (
+    <AmountVisibilityProvider hidden={hidden}>
+      {view === 'compose' ? (
+        <div className={toolsPinned ? 'lab-compose lab-compose--tools' : 'lab-compose'}>
+          {toolsPinned ? (
+            <div className="lab-compose-top">{toolsStrip}</div>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="lab-tools-fab"
+                aria-label={t('lab.tools')}
+                onClick={() => setToolsOpen(true)}
+              >
+                <SlidersIcon size={20} />
+              </button>
+              {toolsOpen ? (
+                <Sheet label={t('lab.toolsTitle')} onDismiss={() => setToolsOpen(false)}>
+                  <div className="lab-compose-top lab-tools-sheet">{toolsStrip}</div>
+                </Sheet>
+              ) : null}
+            </>
+          )}
           <div className="lab-compose-screen" data-ds-check="compose">
             <ContextBar
               label={t('sr.switchProject')}

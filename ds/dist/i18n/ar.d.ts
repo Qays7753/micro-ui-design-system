@@ -1204,6 +1204,14 @@ export declare const ar: {
         readonly kind: "title";
         readonly text: "اختيار من قائمة";
     };
+    readonly 'lab.tools': {
+        readonly kind: "screen-reader";
+        readonly text: "أدوات المختبر";
+    };
+    readonly 'lab.toolsTitle': {
+        readonly kind: "title";
+        readonly text: "أدوات المختبر";
+    };
     readonly 'lab.h.toggle': {
         readonly kind: "title";
         readonly text: "إعداد يعمل فوراً";

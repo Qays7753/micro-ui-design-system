@@ -380,6 +380,8 @@ export const ar = {
   'checkbox.tickThis': { kind: 'help', text: 'أشّر على هذا البند.' },
   'radio.choose': { kind: 'help', text: 'اختر {label}.' },
   'lab.h.radio': { kind: 'title', text: 'اختيار من قائمة' },
+  'lab.tools': { kind: 'screen-reader', text: 'أدوات المختبر' },
+  'lab.toolsTitle': { kind: 'title', text: 'أدوات المختبر' },
   'lab.h.toggle': { kind: 'title', text: 'إعداد يعمل فوراً' },
   'title.toggle': { kind: 'title', text: 'المفتاح' },
   'title.radio': { kind: 'title', text: 'مجموعة الراديو' },

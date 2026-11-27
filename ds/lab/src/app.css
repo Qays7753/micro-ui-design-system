@@ -386,16 +386,37 @@
   color: var(--mds-color-text-primary);
 }
 
-/* Demo-compose page (S10): the default standalone view. The screen is a
-   360-wide phone frame centered in the browser; catalog toggle sits on
-   top; the content column scrolls between the bars. */
+/* Demo-compose page (S10) — 3ب.0 (owner note 2026-11-27): the DEFAULT view
+   is a REAL app screen: full-bleed, full width, 100dvh tall, safe areas
+   handled by the bars themselves (env() in ContextBar/TabBar). The lab
+   tools fold behind one small button that opens a Sheet (the fab below).
+   ?tools=1 (appended by resolve_page_target for every gate) pins the
+   classic layout: the strip above the framed 680 screen, unchanged. */
 .lab-compose {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--mds-color-canvas);
+}
+
+@supports (height: 100dvh) {
+  .lab-compose {
+    height: 100dvh;
+  }
+}
+
+/* ?tools=1 — the gates' pinned classic layout. */
+.lab-compose--tools {
+  height: auto;
+  min-height: 100vh;
   align-items: center;
   padding: var(--mds-space-16);
-  background-color: var(--mds-color-canvas);
+}
+
+@supports (height: 100dvh) {
+  .lab-compose--tools {
+    min-height: 100dvh;
+  }
 }
 
 .lab-compose-top {
@@ -415,15 +436,53 @@
 
 .lab-compose-screen {
   width: 100%;
+  overflow: hidden;
+  background-color: var(--mds-color-canvas);
+  /* A real app frame: bars pinned, the content column scrolls. In the
+     default view the screen IS the viewport (flex: 1 fills 100dvh). */
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* The framed screen only exists in the pinned tools layout. */
+.lab-compose--tools .lab-compose-screen {
+  flex: none;
   max-width: 360px;
   border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
   border-radius: var(--mds-radius-lg);
-  overflow: hidden;
-  background-color: var(--mds-color-canvas);
-  /* A real app frame: bars pinned, the content column scrolls. */
-  display: flex;
-  flex-direction: column;
   height: min(680px, calc(100vh - 140px));
+}
+
+/* 3ب.0: the folded lab tools — one small round button fixed above the
+   TabBar at the START corner (never over ContextBar or TabBar); opens the
+   tools Sheet. The tools themselves keep their classic strip classes. */
+.lab-tools-fab {
+  position: fixed;
+  inset-inline-start: var(--mds-space-8);
+  bottom: calc(env(safe-area-inset-bottom) + var(--mds-size-tab-bar) + var(--mds-space-8));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(4 * var(--mds-space-8));
+  block-size: calc(4 * var(--mds-space-8));
+  border-radius: var(--mds-radius-full);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  background-color: var(--mds-color-surface);
+  color: var(--mds-color-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* paints above the app screen (DOM order puts it first) but below the
+     bars/scrim/sheet/toast elevations — it never covers a sheet or toast. */
+  z-index: var(--mds-layer-sticky);
+}
+
+/* The tools sheet body: the classic strip, full width inside the sheet. */
+.lab-tools-sheet {
+  width: 100%;
+  margin-block-end: 0;
 }
 
 .lab-compose-content {

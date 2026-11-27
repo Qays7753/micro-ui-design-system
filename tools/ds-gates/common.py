@@ -502,6 +502,11 @@ def resolve_page_target(target_arg, default_file="standalone.html", default_dir=
             url = base + "/" + default_file
         else:
             url = base + "/" + default_file + "?view=" + view
+        # 3ب.0: the default compose view fills the phone screen with the lab
+        # tools folded behind a fab (the owner's phone experience); the gates
+        # pin the classic strip layout with ?tools=1 so every documented
+        # target (strip keys, view toggles, probes) stays reachable.
+        url += "&tools=1" if "?" in url else "?tools=1"
         return "server", (server, url)
     return "na", f"{default_dir}/{default_file} does not exist yet (lab build lands in S3)"
 
