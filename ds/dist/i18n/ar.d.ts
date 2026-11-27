@@ -1196,6 +1196,30 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "أشّر على هذا البند.";
     };
+    readonly 'radio.choose': {
+        readonly kind: "help";
+        readonly text: "اختر {label}.";
+    };
+    readonly 'lab.h.radio': {
+        readonly kind: "title";
+        readonly text: "اختيار واحد من قائمة";
+    };
+    readonly 'title.radio': {
+        readonly kind: "title";
+        readonly text: "مجموعة الراديو";
+    };
+    readonly 'lab.h.checkbox': {
+        readonly kind: "title";
+        readonly text: "بنود تُشَرّ مستقلة";
+    };
+    readonly 'state.errorRow': {
+        readonly kind: "badge";
+        readonly text: "حالة الخطأ";
+    };
+    readonly 'title.checkbox': {
+        readonly kind: "title";
+        readonly text: "مربع الاختيار";
+    };
 };
 export type ArKey = keyof typeof ar;
 /**

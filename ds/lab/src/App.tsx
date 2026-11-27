@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, Radio, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -57,6 +57,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'ask-button', name: t('title.askButton') },
   { id: 'confirm-sheet', name: t('title.confirmSheet') },
   { id: 'checkbox', name: t('lab.h.checkbox') },
+  { id: 'radio', name: t('lab.h.radio') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -94,6 +95,7 @@ export function App() {
   const [cbA, setCbA] = useState(true);
   const [cbB, setCbB] = useState(false);
   const [cbC, setCbC] = useState(false);
+  const [avail, setAvail] = useState('available');
   // Catalog samples: the exit motion plays on dismiss, THEN the app
   // (here, the lab) removes the sheet — remounted fresh at once so the
   // sample stays for review and the press scan (23.2) keeps hitting it.
@@ -1231,6 +1233,35 @@ export function App() {
             <Surface>
               <Checkbox label={t('kv.phone')} selected={cbC} onChange={setCbC} state="error" />
             </Surface>
+          </div>
+        </section>
+
+        {/* ---- Radio (ADDENDUM §3.2): single choice, long labels ---- */}
+        <section className="lab-section" id="radio">
+          <h2 className="lab-title">{t('lab.h.radio')}<span className="lab-tech">{t('title.radio')}</span></h2>
+          <div className="lab-row lab-row--full" data-ds-check="radio">
+            <span className="lab-label">{t('state.default')}</span>
+            <Radio
+              label={t('lab.h.radio')}
+              items={[
+                { value: 'available', label: t('avail.available') },
+                { value: 'onRequest', label: t('avail.onRequest') },
+                { value: 'unavailable', label: t('avail.unavailable') },
+              ]}
+              value={avail}
+              onChange={setAvail}
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.errorRow')}</span>
+            <Radio
+              label={t('kv.customer')}
+              items={[
+                { value: 'a', label: parties[0] },
+                { value: 'b', label: parties[1], disabled: true },
+              ]}
+              state="error"
+            />
           </div>
         </section>
 

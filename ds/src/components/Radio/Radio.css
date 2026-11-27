@@ -1,0 +1,134 @@
+/*
+ * Radio.css — ADDENDUM §3.2. Every value is a token reference; no raw
+ * hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-radio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mds-radio-label {
+  color: var(--mds-color-text-primary);
+}
+
+/* The group's label → its surface: 8 (23.1-2). */
+.mds-radio-surface {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--mds-layout-label-to-field);
+  border-radius: var(--mds-radius-lg);
+  border: 1px solid var(--mds-color-surface-edge);
+  background: var(--mds-color-surface);
+  overflow: hidden;
+  box-sizing: border-box;
+  inline-size: 100%;
+}
+
+.mds-radio-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  padding-block: var(--mds-layout-row-line-gap);
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mds-radio-row:active {
+  background: var(--mds-color-surface-pressed);
+}
+
+.mds-radio-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+/* The circle: 20, r-full, border-field resting. */
+.mds-radio-circle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-checkbox);
+  block-size: var(--mds-size-checkbox);
+  border-radius: var(--mds-radius-full);
+  border: var(--mds-border-field) solid var(--mds-color-border-field);
+  background: var(--mds-color-surface);
+  transition: border-color var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+.mds-radio-dot {
+  inline-size: var(--mds-size-dot-unread);
+  block-size: var(--mds-size-dot-unread);
+  border-radius: var(--mds-radius-full);
+  background: var(--mds-color-brand-anchor);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--mds-motion-quick-ms) var(--mds-motion-quick-ease),
+    transform var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+/* Selected: focus border in brand-anchor + the inner dot (§3.2-2). */
+.mds-radio-row input:checked + .mds-radio-circle {
+  border-color: var(--mds-color-brand-anchor);
+  border-width: var(--mds-border-field-focus);
+}
+
+.mds-radio-row input:checked + .mds-radio-circle .mds-radio-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.mds-radio-text {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: var(--mds-space-3);
+  min-width: 0;
+}
+
+.mds-radio-row-label {
+  color: var(--mds-color-text-primary);
+}
+
+.mds-radio-caption {
+  color: var(--mds-color-text-secondary);
+  margin-block-start: var(--mds-space-4);
+}
+
+.mds-radio-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}
+
+.mds-radio--disabled {
+  cursor: default;
+}
+
+.mds-radio--disabled .mds-radio-row-label,
+.mds-radio--disabled .mds-radio-caption {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-radio--disabled .mds-radio-circle {
+  border-color: var(--mds-color-disabled-fg);
+}
+
+/* Keyboard: the ring rides the circle via the real input. */
+.mds-radio-input:focus-visible + .mds-radio-circle {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mds-radio-dot,
+  .mds-radio-circle {
+    transition: none;
+  }
+}
