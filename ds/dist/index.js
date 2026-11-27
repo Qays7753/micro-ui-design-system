@@ -1,4 +1,4 @@
-import { jsx as a, jsxs as h, Fragment as E } from "react/jsx-runtime";
+import { jsx as a, jsxs as h, Fragment as D } from "react/jsx-runtime";
 import { useMemo as Q, useContext as U, createContext as de, useState as C, useRef as A, useCallback as P, useEffect as V, useReducer as we, useId as K, useLayoutEffect as Ae, Children as ye } from "react";
 const j = {
   color: {
@@ -785,6 +785,13 @@ const w = {
   "state.default": { kind: "badge", text: "افتراضي" },
   "state.landed": { kind: "badge", text: "وصل محفوظ" },
   "state.todayProject": { kind: "badge", text: "مشروع اليوم" },
+  "today.date": { kind: "badge", text: "الجمعة 27/11/2026" },
+  "section.now": { kind: "title", text: "الآن" },
+  "now.in40": { kind: "help", text: "بعد 40 دقيقة" },
+  "tile.fundsNow": { kind: "help", text: "في الصناديق الآن" },
+  "tile.todayNext": { kind: "help", text: "اليوم · التالي 4:00 م" },
+  "tile.running": { kind: "badge", text: "جارية" },
+  "tile.offers": { kind: "badge", text: "عروض" },
   "state.debt": { kind: "badge", text: "دين" },
   "state.hidden": { kind: "badge", text: "مخفي" },
   "state.missing": { kind: "badge", text: "مفقود" },
@@ -910,7 +917,7 @@ const He = {
   quotes: { zero: "لا عروض", one: "عرض واحد", two: "عرضان", few: "عروض", many: "عرض" },
   results: { zero: "لا نتائج", one: "نتيجة واحدة", two: "نتيجتان", few: "نتائج", many: "نتيجة" },
   unread: { zero: "لا شيء غير مقروء", one: "غير مقروء واحد", two: "غير مقروءان", few: "غير مقروءة", many: "غير مقروءة" }
-}, B = {
+}, S = {
   unit: w["money.unit"].text,
   minus: w["money.ariaMinus"].text,
   dinar: w["money.ariaDinar"].text,
@@ -950,23 +957,23 @@ function qn(e) {
   const { h: t, m: n } = Ce(e), i = t < 12 ? Ze : Me, r = t % 12 === 0 ? 12 : t % 12;
   return `${se(r)}:${se(n)} ${i}`;
 }
-const G = "−", Pe = "+", D = 3;
+const G = "−", Pe = "+", R = 3;
 function Ve(e) {
-  const t = String(e).trim(), n = t.startsWith("-"), i = n ? t.slice(1) : t, [r = "0", s = ""] = i.split("."), o = r.replace(/[^0-9]/g, "") || "0", l = (s + "000").slice(0, D), d = BigInt(o) * 10n ** BigInt(D) + BigInt(l || "0");
+  const t = String(e).trim(), n = t.startsWith("-"), i = n ? t.slice(1) : t, [r = "0", s = ""] = i.split("."), o = r.replace(/[^0-9]/g, "") || "0", l = (s + "000").slice(0, R), d = BigInt(o) * 10n ** BigInt(R) + BigInt(l || "0");
   return { negative: n, fils: d };
 }
 function je(e) {
   return e.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 function Te(e) {
-  const t = 10n ** BigInt(D), n = e / t, i = e % t;
+  const t = 10n ** BigInt(R), n = e / t, i = e % t;
   return {
     int: je(n.toString()),
-    frac: i === 0n ? "" : `.${i.toString().padStart(D, "0")}`
+    frac: i === 0n ? "" : `.${i.toString().padStart(R, "0")}`
   };
 }
 function q(e, t) {
-  const n = 10n ** BigInt(D), i = e / n, r = e % n;
+  const n = 10n ** BigInt(R), i = e / n, r = e % n;
   let s = `${i.toString()} ${t.dinar}`;
   return r !== 0n && (s += ` ${t.and}${r.toString()} ${t.fils}`), s;
 }
@@ -1020,7 +1027,7 @@ function Xn({ children: e, hidden: t = !1 }) {
   const n = Q(() => ({ hidden: t }), [t]);
   return /* @__PURE__ */ a(ce.Provider, { value: n, children: e });
 }
-function T() {
+function I() {
   const { hidden: e } = U(ce);
   return { hidden: e, visible: !e };
 }
@@ -2740,12 +2747,12 @@ function Ga({
   ref: c,
   ...u
 }) {
-  const { hidden: m } = T(), g = m && e !== null && e !== void 0, f = W(e, { flow: t, debt: n, hidden: g, texts: B }), p = ["mds-money", `mds-money--${i}`, i === "lg" ? "mds-number-lg" : "", s ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
+  const { hidden: m } = I(), g = m && e !== null && e !== void 0, f = W(e, { flow: t, debt: n, hidden: g, texts: S }), p = ["mds-money", `mds-money--${i}`, i === "lg" ? "mds-number-lg" : "", s ? "mds-money--disabled" : "", o].filter(Boolean).join(" ");
   return r === "loading" ? /* @__PURE__ */ a("span", { ref: c, id: l, style: d, className: p, "aria-busy": "true", ...u, children: /* @__PURE__ */ a("span", { className: "mds-money-skeleton", "aria-hidden": "true" }) }) : /* @__PURE__ */ h("span", { ref: c, id: l, style: d, className: p, ...u, children: [
     /* @__PURE__ */ h("span", { className: "mds-money-visual", "aria-hidden": "true", children: [
       f.debtWord ? /* @__PURE__ */ a("span", { className: "mds-money-debt", children: f.debtWord }) : null,
-      f.missing ? /* @__PURE__ */ a("span", { className: "mds-money-missing", children: B.missingGlyph }) : /* @__PURE__ */ h(E, { children: [
-        /* @__PURE__ */ a("bdi", { className: "mds-money-value", dir: "ltr", children: f.hidden ? B.hiddenGlyph : /* @__PURE__ */ h(E, { children: [
+      f.missing ? /* @__PURE__ */ a("span", { className: "mds-money-missing", children: S.missingGlyph }) : /* @__PURE__ */ h(D, { children: [
+        /* @__PURE__ */ a("bdi", { className: "mds-money-value", dir: "ltr", children: f.hidden ? S.hiddenGlyph : /* @__PURE__ */ h(D, { children: [
           /* @__PURE__ */ h("span", { className: "mds-money-integer", children: [
             f.sign,
             f.int
@@ -2782,7 +2789,7 @@ function An({
   ref: o,
   ...l
 }) {
-  const { hidden: d, visible: c } = T(), u = d ? et : ze, m = N(d ? "button.showAmounts" : "button.hideAmounts"), g = [
+  const { hidden: d, visible: c } = I(), u = d ? et : ze, m = N(d ? "button.showAmounts" : "button.hideAmounts"), g = [
     "mds-amount-visibility-toggle",
     n === "large" ? "mds-amount-visibility-toggle--large" : "",
     i
@@ -3131,7 +3138,7 @@ function ii({
     s === "error" ? "mds-amount-field--error" : "",
     o ? "mds-amount-field--draft" : "",
     l
-  ].filter(Boolean).join(" "), x = g || n === "" ? n : W(n, { texts: B }).int + (n.includes(".") ? W(n, { texts: B }).frac : "");
+  ].filter(Boolean).join(" "), x = g || n === "" ? n : W(n, { texts: S }).int + (n.includes(".") ? W(n, { texts: S }).frac : "");
   return /* @__PURE__ */ h("div", { id: d, style: c, className: p, ...m, children: [
     /* @__PURE__ */ a("span", { className: "mds-amount-field-label mds-type-label", children: e }),
     /* @__PURE__ */ h("div", { className: "mds-amount-field-box", children: [
@@ -3158,7 +3165,7 @@ function ii({
           onChange: (b) => i?.(Bn(b.target.value))
         }
       ),
-      /* @__PURE__ */ a("span", { className: "mds-amount-field-unit", children: B.unit })
+      /* @__PURE__ */ a("span", { className: "mds-amount-field-unit", children: S.unit })
     ] }),
     s === "error" && t ? /* @__PURE__ */ a("span", { className: "mds-amount-field-help", children: t }) : t ? /* @__PURE__ */ a("span", { className: "mds-amount-field-help", children: t }) : null
   ] });
@@ -3264,7 +3271,7 @@ function Y({
     onPress: o,
     onLongPress: l,
     disabled: d || i
-  }), v = me(i), S = [
+  }), v = me(i), B = [
     "mds-button",
     `mds-button--${e}`,
     `mds-button--${n}`,
@@ -3281,7 +3288,7 @@ function Y({
       ...p,
       ...b,
       type: "button",
-      className: S,
+      className: B,
       disabled: d,
       "aria-busy": i || void 0,
       children: [
@@ -3634,9 +3641,9 @@ const Ai = [
   "withCount",
   "withSeeAll",
   "empty"
-], O = 80, fe = j.size["dot-signal"] / 2, Tn = j.border["signal-line"], F = fe + Tn / 2;
+], O = 80, fe = j.size["dot-signal"] / 2, Tn = j.border["signal-line"], E = fe + Tn / 2;
 function In(e, t) {
-  const n = e.length, i = Math.min(...e), s = Math.max(...e) - i, o = (c) => n === 1 ? O - F : F + c / (n - 1) * (O - 2 * F), l = (c) => s === 0 ? t / 2 : F + (1 - (c - i) / s) * (t - 2 * F);
+  const n = e.length, i = Math.min(...e), s = Math.max(...e) - i, o = (c) => n === 1 ? O - E : E + c / (n - 1) * (O - 2 * E), l = (c) => s === 0 ? t / 2 : E + (1 - (c - i) / s) * (t - 2 * E);
   return { points: e.map((c, u) => `${o(u).toFixed(2)},${l(c).toFixed(2)}`).join(" "), endX: o(n - 1), endY: l(e[n - 1]) };
 }
 function ge({
@@ -3702,7 +3709,7 @@ function yi({
   ref: f,
   ...p
 }) {
-  const { isPressed: x, pressProps: b } = H({ onPress: () => d?.(), disabled: c }), { hidden: v } = T(), Z = r === void 0 ? B.missingGlyph : v && o !== void 0 ? B.hiddenGlyph : r, I = [
+  const { isPressed: x, pressProps: b } = H({ onPress: () => d?.(), disabled: c }), { hidden: v } = I(), B = o !== void 0, Z = r != null && typeof r != "string", T = r === void 0 ? S.missingGlyph : Z ? r : v && B ? S.hiddenGlyph : r, $ = [
     "mds-tile",
     `mds-tile--${l}`,
     x ? "mds-tile--pressed" : "",
@@ -3716,7 +3723,7 @@ function yi({
       id: m,
       style: g,
       type: "button",
-      className: I,
+      className: $,
       disabled: c,
       "data-ds-exempt": c ? void 0 : "",
       ...b,
@@ -3737,7 +3744,7 @@ function yi({
               dotClassName: "mds-tile-sparkline-dot"
             }
           ) }) : null,
-          /* @__PURE__ */ a("span", { className: "mds-tile-value", children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: Z }) }),
+          /* @__PURE__ */ a("span", { className: "mds-tile-value", children: Z ? T : /* @__PURE__ */ a("bdi", { dir: "ltr", children: T }) }),
           s ? /* @__PURE__ */ a("span", { className: "mds-tile-line mds-type-caption", children: s }) : null
         ] })
       ]
@@ -3757,14 +3764,14 @@ function $n(e) {
   return t === -1 ? { whole: e, cents: "" } : { whole: e.slice(0, t), cents: e.slice(t) };
 }
 function Ln({ value: e }) {
-  const { hidden: t } = T(), i = e === void 0 ? B.missingGlyph : t ? B.hiddenGlyph : null, { whole: r, cents: s } = $n(e ?? B.missingGlyph), l = (e ?? "").length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
-  return /* @__PURE__ */ a("span", { className: `mds-hero-value ${l}`, children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i !== null ? /* @__PURE__ */ a("span", { className: "mds-hero-value-glyph", children: i }) : /* @__PURE__ */ h(E, { children: [
+  const { hidden: t } = I(), i = e === void 0 ? S.missingGlyph : t ? S.hiddenGlyph : null, { whole: r, cents: s } = $n(e ?? S.missingGlyph), l = (e ?? "").length > 9 ? "mds-hero-value--lg mds-number-lg" : "mds-hero-value--hero mds-type-display-hero";
+  return /* @__PURE__ */ a("span", { className: `mds-hero-value ${l}`, children: /* @__PURE__ */ a("bdi", { dir: "ltr", children: i !== null ? /* @__PURE__ */ a("span", { className: "mds-hero-value-glyph", children: i }) : /* @__PURE__ */ h(D, { children: [
     /* @__PURE__ */ a("span", { className: "mds-hero-value-whole", children: r }),
     s ? /* @__PURE__ */ a("span", { className: "mds-hero-value-cents", children: s }) : null
   ] }) }) });
 }
 function Fn({ values: e }) {
-  const { hidden: t } = T();
+  const { hidden: t } = I();
   return /* @__PURE__ */ a("span", { className: "mds-hero-sparkline", "aria-hidden": "true", children: /* @__PURE__ */ a(
     ge,
     {
@@ -3792,7 +3799,7 @@ function Hi({
   ref: m,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = H({ onPress: () => o?.() }), { hidden: x } = T(), b = x && t !== void 0, v = ["mds-hero-surface", d].filter(Boolean).join(" ");
+  const { isPressed: f, pressProps: p } = H({ onPress: () => o?.() }), { hidden: x } = I(), b = x && t !== void 0, v = ["mds-hero-surface", d].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("section", { ref: m, id: c, style: u, className: v, ...g, children: [
     /* @__PURE__ */ h("header", { className: "mds-hero-header", children: [
       /* @__PURE__ */ a("span", { className: "mds-hero-label", children: e }),
@@ -3803,7 +3810,7 @@ function Hi({
         /* @__PURE__ */ a(Ln, { value: t }),
         n && t !== void 0 ? /* @__PURE__ */ a("span", { className: "mds-hero-unit", children: n }) : null
       ] }, b ? "hidden" : "shown"),
-      b ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: B.hidden }) : null
+      b ? /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: S.hidden }) : null
     ] }),
     i || r ? (
       /* 1.7 ت2.3: ONE line — the diff, then « · », then the source link
@@ -3922,11 +3929,11 @@ function Mi({
   ref: f,
   ...p
 }) {
-  const { isPressed: x, pressProps: b } = H({ onPress: () => d?.(), disabled: c }), v = d !== void 0 || o !== void 0, S = l != null, Z = o ? "a" : v ? "button" : "div", I = [
+  const { isPressed: x, pressProps: b } = H({ onPress: () => d?.(), disabled: c }), v = d !== void 0 || o !== void 0, B = l != null, Z = o ? "a" : v ? "button" : "div", T = [
     "mds-object-card",
     x ? "mds-object-card--pressed" : "",
     c ? "mds-object-card--disabled" : "",
-    S ? "mds-object-card--with-action" : "",
+    B ? "mds-object-card--with-action" : "",
     v ? "" : "mds-object-card--passive",
     u
   ].filter(Boolean).join(" ");
@@ -3934,7 +3941,7 @@ function Mi({
     /* @__PURE__ */ h(
       Z,
       {
-        className: I,
+        className: T,
         href: o,
         type: Z === "button" ? "button" : void 0,
         disabled: Z === "button" ? c : void 0,
@@ -3956,7 +3963,7 @@ function Mi({
         ]
       }
     ),
-    S ? /* @__PURE__ */ a("span", { className: "mds-object-card-action", children: l }) : null
+    B ? /* @__PURE__ */ a("span", { className: "mds-object-card-action", children: l }) : null
   ] });
 }
 const Ci = [
@@ -3986,10 +3993,10 @@ function Dn({
   ref: m,
   ...g
 }) {
-  const { isPressed: f, pressProps: p } = H({ onPress: () => o?.() }), { hidden: x } = T(), b = x && n !== void 0 && n !== null && !l, { whole: v, cents: S } = En(b ? "—" : n ?? "—"), Z = ["mds-metric", d].filter(Boolean).join(" ");
+  const { isPressed: f, pressProps: p } = H({ onPress: () => o?.() }), { hidden: x } = I(), b = x && n !== void 0 && n !== null && !l, { whole: v, cents: B } = En(b ? "—" : n ?? "—"), Z = ["mds-metric", d].filter(Boolean).join(" ");
   return /* @__PURE__ */ h("div", { ref: m, id: c, style: u, className: Z, ...g, children: [
     /* @__PURE__ */ a("span", { className: "mds-metric-label mds-type-label", children: e }),
-    /* @__PURE__ */ a("p", { className: "mds-metric-amount", children: l ? /* @__PURE__ */ a("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : b ? /* @__PURE__ */ h(E, { children: [
+    /* @__PURE__ */ a("p", { className: "mds-metric-amount", children: l ? /* @__PURE__ */ a("span", { className: "mds-metric-skeleton", "aria-busy": "true" }) : b ? /* @__PURE__ */ h(D, { children: [
       /* @__PURE__ */ h(
         "span",
         {
@@ -4000,13 +4007,13 @@ function Dn({
           "data-ds-check": "amount-hidden",
           "aria-hidden": "true",
           children: [
-            /* @__PURE__ */ a("bdi", { dir: "ltr", children: /* @__PURE__ */ a("span", { className: "mds-metric-value-whole", children: B.hiddenGlyph }) }),
+            /* @__PURE__ */ a("bdi", { dir: "ltr", children: /* @__PURE__ */ a("span", { className: "mds-metric-value-whole", children: S.hiddenGlyph }) }),
             i ? /* @__PURE__ */ a("span", { className: "mds-metric-unit", children: i }) : null
           ]
         }
       ),
-      /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: B.hidden })
-    ] }) : /* @__PURE__ */ h(E, { children: [
+      /* @__PURE__ */ a("span", { className: "mds-visually-hidden", children: S.hidden })
+    ] }) : /* @__PURE__ */ h(D, { children: [
       /* @__PURE__ */ a(
         "span",
         {
@@ -4016,7 +4023,7 @@ function Dn({
           ].join(" "),
           children: /* @__PURE__ */ h("bdi", { dir: "ltr", children: [
             /* @__PURE__ */ a("span", { className: "mds-metric-value-whole", children: v }),
-            S ? /* @__PURE__ */ a("span", { className: "mds-metric-value-cents", children: S }) : null
+            B ? /* @__PURE__ */ a("span", { className: "mds-metric-value-cents", children: B }) : null
           ] })
         }
       ),
@@ -4063,12 +4070,12 @@ function Rn({
   ref: l,
   ...d
 }) {
-  const c = A(null), [u, m] = C(0), [g, f] = C(!1), [p, x] = C(!1), b = A(0), v = A(0), S = A(0), Z = A(null), I = A(i);
+  const c = A(null), [u, m] = C(0), [g, f] = C(!1), [p, x] = C(!1), b = A(0), v = A(0), B = A(0), Z = A(null), T = A(i);
   V(() => {
-    I.current = i;
+    T.current = i;
   }, [i]);
-  const R = P(() => {
-    Z.current?.focus?.(), I.current();
+  const $ = P(() => {
+    Z.current?.focus?.(), T.current();
   }, []), [_] = C(() => /* @__PURE__ */ Symbol("sheet")), [ne] = C(() => (X.add(_), X.size >= 2 ? 2 : 1));
   V(
     () => () => {
@@ -4079,49 +4086,49 @@ function Rn({
   const pe = () => {
     const k = c.current?.querySelector(".mds-sheet-panel");
     return k ? k.getBoundingClientRect().height * 0.3 : 0;
-  }, $ = P(() => {
+  }, L = P(() => {
     if (p) return;
     Z.current = document.activeElement ?? null, x(!0), (typeof requestAnimationFrame == "function" ? requestAnimationFrame : (y) => setTimeout(() => y(performance.now()), 0))(() => {
       const y = c.current?.querySelector(".mds-sheet-panel");
       if (!y) {
-        R();
+        $();
         return;
       }
       const M = getComputedStyle(y).transitionDuration, re = M && M !== "0s" && M !== "";
       if (y.style.transform = "translateY(100%)", !re) {
-        R();
+        $();
         return;
       }
-      const L = (ve) => {
-        ve.propertyName === "transform" && (y.removeEventListener("transitionend", L), R());
+      const F = (ve) => {
+        ve.propertyName === "transform" && (y.removeEventListener("transitionend", F), $());
       };
-      y.addEventListener("transitionend", L);
+      y.addEventListener("transitionend", F);
     });
-  }, [p, R]), be = (k) => {
+  }, [p, $]), be = (k) => {
     if (!g) return;
-    const y = performance.now(), M = y - S.current;
-    M > 0 && (b.current = (k.clientY - v.current) / M), v.current = k.clientY, S.current = y, m(Math.max(0, k.clientY - ae.current));
+    const y = performance.now(), M = y - B.current;
+    M > 0 && (b.current = (k.clientY - v.current) / M), v.current = k.clientY, B.current = y, m(Math.max(0, k.clientY - ae.current));
   }, ae = A(0), xe = (k) => {
     const y = k.target, M = c.current?.querySelector(".mds-sheet-body");
     if (!(M?.contains(y) && M && M.scrollTop > 0)) {
       if (p) {
-        const L = c.current?.querySelector(".mds-sheet-panel");
-        L && (L.style.transform = u ? `translateY(${u}px)` : ""), x(!1);
+        const F = c.current?.querySelector(".mds-sheet-panel");
+        F && (F.style.transform = u ? `translateY(${u}px)` : ""), x(!1);
       }
-      b.current = 0, v.current = k.clientY, S.current = performance.now(), f(!0), k.currentTarget.setPointerCapture?.(k.pointerId);
+      b.current = 0, v.current = k.clientY, B.current = performance.now(), f(!0), k.currentTarget.setPointerCapture?.(k.pointerId);
     }
   }, ie = () => {
     if (!g) return;
     f(!1);
     const k = u > pe(), y = b.current > 0.6;
-    k || y ? $() : m(0);
+    k || y ? L() : m(0);
   };
   V(() => {
     const k = (y) => {
-      y.key === "Escape" && $();
+      y.key === "Escape" && L();
     };
     return window.addEventListener("keydown", k), () => window.removeEventListener("keydown", k);
-  }, [$]);
+  }, [L]);
   const ke = [
     "mds-sheet",
     t === "form" ? "mds-sheet--form" : "",
@@ -4149,7 +4156,7 @@ function Rn({
           "div",
           {
             className: "mds-sheet-scrim",
-            onClick: () => $(),
+            onClick: () => L(),
             "aria-hidden": "true"
           }
         ),
@@ -4175,7 +4182,7 @@ function Rn({
                   ]
                 }
               ),
-              /* @__PURE__ */ a("div", { className: "mds-sheet-close", children: /* @__PURE__ */ a(Pn, { label: e, onPress: $, children: /* @__PURE__ */ a(ot, {}) }) }),
+              /* @__PURE__ */ a("div", { className: "mds-sheet-close", children: /* @__PURE__ */ a(Pn, { label: e, onPress: L, children: /* @__PURE__ */ a(ot, {}) }) }),
               /* @__PURE__ */ a("div", { className: "mds-sheet-body", children: n })
             ]
           }
@@ -4892,13 +4899,13 @@ export {
   W as formatMoney,
   qn as formatTime12,
   Ne as getToken,
-  B as moneyTexts,
+  S as moneyTexts,
   Bn as normalizeAmount,
   Se as pluralAr,
   He as pluralNouns,
   N as t,
   j as tokens,
-  T as useAmountVisibility,
+  I as useAmountVisibility,
   Wn as useCountUp,
   Kn as useOpenSheetCount,
   me as usePendingDelay,

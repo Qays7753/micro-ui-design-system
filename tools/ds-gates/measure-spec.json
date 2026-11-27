@@ -163,13 +163,6 @@
     "_comment": "Per-view specs (G2, owner request: every gate on BOTH views). The demo-compose view carries no catalog specimens, so it declares its own entries: only REAL elements of the compose page (marked on the page itself), same missing-element-is-a-fail discipline — a check that finds nothing proves nothing, on every view.",
     "compose": [
       {
-        "id": "button-sm",
-        "height": {
-          "token": "size.button-compact"
-        },
-        "_note": "The compose PageHeader's «سجّل حركة» secondary Button (size sm) — the page marks its own real instance."
-      },
-      {
         "id": "status-badge-height",
         "height": {
           "px": 24
@@ -185,13 +178,6 @@
           "token": "size.touch-min"
         },
         "_note": "The compose view's master visibility toggle in the lab strip (a real AmountVisibilityToggle instance on the page)."
-      },
-      {
-        "id": "hero",
-        "height": {
-          "px": 192
-        },
-        "_note": "1.7 t2 stack exact (the withSparkline sample carries the marker): padding 2x20 + label line 20 + 8 + value 48 + 8 + one line 20 + 16 + sparkline hero-sparkline-height 32 = 192 - the addendum's own estimate. The one line is CENTER-aligned (a baseline row would synthesize the diff's baseline from its icon svg and grow 3px) and the source's underline rides an out-of-flow ::after, so the line is a deterministic 20 on both engines, both views, and however the app wraps its icon node. The sparkline rides the content's full width (svg width 100%)."
       }
     ]
   }

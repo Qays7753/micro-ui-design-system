@@ -26,14 +26,23 @@
   color: var(--mds-color-text-primary);
 }
 
-/* The count: caption-strong in text-secondary, 8 after the title
-   (23.24(16)) — the 8 comes from the header's own gap. */
+/* The count: a NUMBER BADGE in the «ينتظر» tone (10.2(1): «وعنوانه معه
+   شارة عدد بلون «ينتظر»», 1.7 خ2 — it was a gray caption-strong number
+   before), 8 after the title (23.24(16)) — the 8 comes from the header's
+   own gap. The badge anatomy rides the badge tokens (size/padding/radius)
+   with the micro row; the waiting pair is the tone. */
 .mds-section-count {
-  font-family: var(--mds-type-caption-strong-font);
-  font-size: var(--mds-type-caption-strong-size);
-  line-height: var(--mds-type-caption-strong-line);
-  font-weight: var(--mds-type-caption-strong-weight);
-  color: var(--mds-color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--mds-size-badge);
+  padding-inline: var(--mds-layout-badge-padding);
+  border-radius: var(--mds-radius-xs);
+  font-family: var(--mds-type-micro-font);
+  font-size: var(--mds-type-micro-size);
+  line-height: var(--mds-type-micro-line);
+  font-weight: var(--mds-type-micro-weight);
+  background-color: var(--mds-color-status-waiting-bg);
+  color: var(--mds-color-status-waiting-fg);
 }
 
 /* «الكل»: label-strong in brand-text with the forward icon, at the line's

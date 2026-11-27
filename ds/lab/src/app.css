@@ -532,3 +532,14 @@
 .lab-tabular-pair {
   flex-wrap: wrap;
 }
+
+/* 3ب.5: the «مشروع اليوم» head — the date caption line under the
+   PageHeader (10.2(1) + the 5.1 table), at the screen margins. */
+.lab-compose-date {
+  margin: 0;
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
+}

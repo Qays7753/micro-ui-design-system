@@ -82,7 +82,7 @@ export function App() {
   const [chips, setChips] = useState<string[]>(['in']);
   const [chipsMulti, setChipsMulti] = useState<string[]>(['in', 'transfer']);
   const [chipsScroll, setChipsScroll] = useState<string[]>(['today']);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(2);
   const [tabDemo, setTabDemo] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
   // ت11 + ت12 demo (compose): the movement sheet's save runs a REAL pending
@@ -100,6 +100,9 @@ export function App() {
     window.setTimeout(() => {
       setSaving(false);
       setSheetOpen(false);
+      // a save from the EMPTY state records the first item — the content
+      // returns with the landed row.
+      setPageState('normal');
       setRowFrom(rowValue);
       setRowValue((v) => v + 45);
       setComposeLanded(true);
@@ -381,10 +384,17 @@ export function App() {
                 </>
               }
             />
-            <PageHeader
-              label={t('nav.today')}
-              trailing={<Button variant="primary" size="sm" data-ds-check="button-sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
-            />
+            {/* 1.7 ت1/خ1: «مشروع اليوم» carries NO creation button (that
+                verb lives in «المالية»'s header) and NO HeroSurface; the
+                hide-amounts IconButton rides the header's end. The date
+                sits under the title (10.2(1) + the 5.1 table). */}
+            <div className="lab-compose-head">
+              <PageHeader
+                label={t('nav.todayLong')}
+                trailing={<AmountVisibilityToggle data-ds-exempt="view-toggle" onChange={(visible) => setHidden(!visible)} />}
+              />
+              <p className="lab-compose-date">{t('today.date')}</p>
+            </div>
             <div className="lab-compose-content" data-ds-check="compose-content">
               {pageState === 'loading' ? (
                 <Surface aria-busy="true">
@@ -396,27 +406,30 @@ export function App() {
                   <Skeleton variant="mark" />
                 </Surface>
               ) : pageState === 'empty' ? (
-                <EmptyState label={t('empty.movements')} />
+                /* و-1 item 14: this screen's header carries NO creation
+                   action, so the EmptyState carries the one secondary
+                   button — the movement-sheet entry of the ت11/ت12 demo. */
+                <EmptyState
+                  label={t('empty.movements')}
+                  trailing={<Button variant="secondary" size="sm" data-ds-exempt="view-toggle" onClick={() => setSheetOpen(true)}>{t('button.recordMovement')}</Button>}
+                />
               ) : (
               <>
-              <HeroSurface
-                label={t('nav.finance')}
-                value="1,245.750"
-                trailing={t('money.unit')}
-                draft={[10.2, 9.8, 11.0, 10.4, 11.6, 11.1, 12.3]}
-                direction={
-                  /* 23.22 row 2: hidden diff line is arrow + word only —
-                      the percent disappears (batch-2 1.3). */
-                  <span style={{ color: 'var(--mds-color-on-anchor-secondary)' }}>
-                    <DeltaUpIcon />
-                    <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
-                  </span>
-                }
-                debt={t('metric.sourceFrom', { counted: t('movement.in') })}
-                onDismiss={() => setSourceOpen(true)}
-                onChange={(visible) => setHidden(!visible)}
-                data-ds-check="hero"
-              />
+              {/* 10.2(1) + the 5.1 table: «الآن» — the nearest temporal
+                  thing (OrderCard is a phase-5 component, so the card
+                  rides an ObjectRow until it is built — marked «عند بناء
+                  المكوّن» like the 3ب.1 deferrals). */}
+              <Section label={t('section.now')}>
+                <Surface>
+                  <ObjectRow
+                    label={parties[0]}
+                    caption={t('kv.delivery')}
+                    trailing={t('now.in40')}
+                    onPress={() => setObjectOpen(true)}
+                  />
+                </Surface>
+              </Section>
+              {/* خ2: THREE rows with the count as a waiting number badge. */}
               <Section label={t('title.needsYou')} caption={3} onPress={() => setAllOpen(true)}>
                 <Surface>
                   {/* ت12 (1.7): the row the movement sheet's save lands on —
@@ -438,13 +451,22 @@ export function App() {
                     data-ds-exempt="view-toggle"
                     onPress={() => setConfirmOpen(true)}
                   />
+                  <ObjectRow
+                    label={parties[2]}
+                    caption={t('row.sampleCaption')}
+                    value={<Money value="45" />}
+                    onPress={() => setObjectOpen(true)}
+                  />
                 </Surface>
               </Section>
+              {/* The 5.1 Bento: المالية (Money + the small line), الطلبات
+                  (today/next), التوصيل (attention dot), السوق (offers) —
+                  each tile goes to its tab (خ7: tab order ب). */}
               <div className="mds-tile-grid">
-                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} value="1,250" trailing={t('movement.in')} onPress={() => setToastText(t('nav.finance'))} />
-                <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} state value="4" trailing={t('badge.waiting')} onPress={() => setToastText(t('nav.orders'))} />
-                <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} value="2" trailing={t('movement.out')} onPress={() => setToastText(t('nav.delivery'))} />
-                <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="72%" trailing={t('badge.done')} onPress={() => setToastText(t('nav.market'))} />
+                <Tile tone="start" label={t('nav.finance')} leading={<NavFinanceIcon size={20} />} draft={[8.2, 7.6, 8.9, 8.1, 9.4]} value={<Money value="595.500" size="lg" />} trailing={t('tile.fundsNow')} onPress={() => setTab(0)} />
+                <Tile label={t('nav.orders')} leading={<NavOrdersIcon size={20} />} value="2" trailing={t('tile.todayNext')} onPress={() => setTab(1)} />
+                <Tile label={t('nav.delivery')} leading={<NavDeliveryIcon size={20} />} state value="1" trailing={t('tile.running')} onPress={() => setTab(3)} />
+                <Tile tone="end" label={t('nav.market')} leading={<NavMarketIcon size={20} />} value="5" trailing={t('tile.offers')} onPress={() => setTab(4)} />
               </div>
               </>
               )}
@@ -462,10 +484,12 @@ export function App() {
               />
             ) : null}
             {demoSheets}
+            {/* خ7 (1.7): tab order ب — المالية، الطلبات، «مشروع اليوم»
+                in the MIDDLE (the default), التوصيل، السوق. */}
             <TabBar value={tab} onChange={setTab}>
-              <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
-              <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
-              <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+              <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+              <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+              <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
               <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
               <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
             </TabBar>
@@ -924,7 +948,7 @@ export function App() {
                   <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
                 </>
               }
-              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
               onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
             />
@@ -943,7 +967,7 @@ export function App() {
                   <span>{hidden ? t('metric.deltaHigherHidden') : t('metric.deltaHigher', { percent: '12%' })}</span>
                 </>
               }
-              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
               onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
               data-ds-check="hero"
@@ -955,7 +979,7 @@ export function App() {
               label={t('nav.finance')}
               value="1,250,000.125"
               trailing={t('money.unit')}
-              debt={t('metric.sourceFrom', { counted: t('movement.in') })}
+              debt={t('metric.sourceFrom', { counted: t('movement.counted') })}
               onDismiss={() => setSourceOpen(true)}
               onChange={(visible) => setHidden(!visible)}
             />
