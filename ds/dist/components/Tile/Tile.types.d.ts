@@ -22,8 +22,12 @@ export interface TileProps {
     /** Screen-reader text for the attention dot (23.17). */
     caption?: string;
     /** The main number (number-lg Rubik 28/36/500) or «—» when missing
-     *  (owner decision 2026-11-25: same number typography, not caption). */
-    value?: string;
+     *  (owner decision 2026-11-25: same number typography, not caption).
+     *  A FINANCIAL value arrives as a <Money> node (lg size — the tile's own
+     *  number quartet) so the sign and the unit «د» ride on Money and the
+     *  hidden-amounts context applies (the 5.1 finance tile: «Money الإجمالي»);
+     *  a plain string stays a non-financial counter. */
+    value?: ReactNode;
     /** The single 13/20 text-secondary line under the number. */
     trailing?: string;
     /** The 24-high sparkline above the number — one tile max (finance), the

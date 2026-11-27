@@ -7,8 +7,11 @@ The criteria scope to the demo-compose screen ([data-ds-check="compose"]) —
 the catalog is a sample zoo, not a screen (the ds-signal precedent); on the
 catalog view the gate reports the scope note instead of the screen checks.
 
-  c17  (rule 17, و-2 item 10) exactly ONE hero-number component
-       (HeroSurface or Metric) in the screen                          (limit 1)
+  c17  (rule 17, و-2 item 10) AT MOST ONE hero-number component
+       (HeroSurface or Metric) in the screen — the brief's «سطح بطل واحد
+       في الصفحة» is a maximum, and 1.7 ت1 removes the hero from «مشروع
+       اليوم» entirely (HeroSurface lives in «المالية» only), so zero is a
+       valid screen                                                  (limit 1)
   c18  (rule 18, و-2 item 11) ≤ 3 distinct AMOUNT font sizes — amounts only
        (money value/missing, hero value, metric value, row/card/tile
        values); the diff line's caption is not an amount               (≤ 3)
@@ -62,9 +65,10 @@ COMPOSE_JS = """
   const problems = [];
   const px = (v) => parseFloat(v) || 0;
 
-  // c17 — one hero-number component
+  // c17 — at most one hero-number component (1.7 ت1: a screen may carry
+  // none — the hero belongs to «المالية»)
   const heroes = screen.querySelectorAll('.mds-hero-surface, .mds-metric');
-  if (heroes.length !== 1) problems.push('[c17] hero-number components = ' + heroes.length + ' (limit 1): '
+  if (heroes.length > 1) problems.push('[c17] hero-number components = ' + heroes.length + ' (limit 1): '
     + Array.from(heroes).map(desc).join(', '));
 
   // c18 — ≤ 3 distinct amount font sizes (amounts only)

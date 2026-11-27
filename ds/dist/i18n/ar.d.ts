@@ -876,6 +876,34 @@ export declare const arBase: {
         readonly kind: "badge";
         readonly text: "مشروع اليوم";
     };
+    readonly 'today.date': {
+        readonly kind: "badge";
+        readonly text: "الجمعة 27/11/2026";
+    };
+    readonly 'section.now': {
+        readonly kind: "title";
+        readonly text: "الآن";
+    };
+    readonly 'now.in40': {
+        readonly kind: "help";
+        readonly text: "بعد 40 دقيقة";
+    };
+    readonly 'tile.fundsNow': {
+        readonly kind: "help";
+        readonly text: "في الصناديق الآن";
+    };
+    readonly 'tile.todayNext': {
+        readonly kind: "help";
+        readonly text: "اليوم · التالي 4:00 م";
+    };
+    readonly 'tile.running': {
+        readonly kind: "badge";
+        readonly text: "جارية";
+    };
+    readonly 'tile.offers': {
+        readonly kind: "badge";
+        readonly text: "عروض";
+    };
     readonly 'state.debt': {
         readonly kind: "badge";
         readonly text: "دين";
