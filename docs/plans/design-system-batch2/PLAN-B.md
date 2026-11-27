@@ -11,6 +11,21 @@
 - **صفحة تركيب كل مجال** تُبنى من المكوّنات الموجودة فعلًا على فرعك فقط. أي جزء يحتاج مكوّنًا عامًا من المرحلة 4 غير موجود بعد (مثل `AmountKeypad`، و`MovementTypeControl`، و`FundPicker`، و`PartyPicker`، و`DatePicker`، و`MonthGrid`، و`TimePicker`، و`DurationPicker`، و`StatusTrack`، و`PhotoUploader`، و`PriceTierBuilder`، و`VoiceInput`، و`KeyValueList`، و`ObjectSheet`): **لا تبنِه أنت ولا تخترع بديلًا.** اترك مكانه، واكتبه في REPORT-B تحت «يُكمَّل بعد الدمج» بالمكوّن والموضع.
 - **مزامنة الأساس:** قبل بداية كل مجال: `git fetch origin design-system` ثم `git merge origin/design-system` إلى فرعك، لتأخذ آخر الرموز والقواعد وآلية النصوص من الوكيل الأول. حل أي تعارض في الملفات المشتركة (القاموس، و`index.ts`، والمختبر، و`config.json`، و`measure-spec.json`، و`MANIFEST.json`) بإبقاء الإضافتين معًا. **إن ظهرت آلية تجاوز النصوص (المرحلة 3ج) على `design-system`، فاستعملها في كل مكوّن.**
 
+## ملفاتك الخاصة (لتجنب التعارض مع الوكيل الأول)
+
+الوكيل الأول يكتب في الملفات المشتركة الكبيرة. لا تكتب فيها إلا **سطر ربط واحد** لكل ملف، وضع عملك في ملفات خاصة:
+
+| الملف المشترك | ملفك الخاص | سطر الربط الوحيد في الملف المشترك |
+|---|---|---|
+| `ds/src/i18n/ar.ts` (القاموس) | `ds/src/i18n/ar-domains.ts`: كل نصوص المجالات بالشكل نفسه (`text` و`kind`) | نشر `arDomains` داخل كائن `ar`، فتبقى المفاتيح في نوع `ArKey` وتعمل عليها آلية تجاوز النصوص (3ج) |
+| `ds/src/index.ts` (التصدير) | `ds/src/domains.ts`: تصدير كل مكوّنات المجالات | `export * from './domains';` |
+| `ds/lab/src/App.tsx` (المختبر) | `ds/lab/src/domains/<المجال>.tsx`: صفحات المكوّنات وصفحة تركيب كل مجال، و`ds/lab/src/domains/index.tsx` يجمعها | استيراد واحد، وعرض واحد لقسم المجالات |
+| `tools/ds-gates/measure-spec.json` | `tools/ds-gates/measure-spec-domains.json` | ربطه بآلية `extends` الموجودة. وإن لم تكفِ، فوسّع البوابة لتقرأ الملفين، مع fixture يثبت ذلك |
+| `tools/ds-gates/config.json` | — | إضافات في آخر القوائم فقط، كل إضافة بسطر |
+
+- **شرط الفحوص:** إن كانت أي بوابة (مثل `ds-copy` و`ds-i18n` و`ds-structure` و`ds-registry`) تقرأ `ar.ts` أو `index.ts` أو `App.tsx` وحدها بالاسم، **فوسّعها لتقرأ ملفاتك الخاصة أيضًا**، مع fixture سيئ ونظيف يثبت أن ملفك مفحوص. **ممنوع أن يكون ملفك خارج أي فحص.**
+- اكتب سطور الربط أول مرة في B0، ولا تعدّلها بعد ذلك إلا للضرورة.
+
 ## المراجع (بالأسبقية)
 `AGENTS.md`، ثم `PLAN.md` (رأسه: قرارات المالك وقواعد الجولة، والمرحلة 5)، ثم `BRIEF-ADDENDUM-1.7.md`، ثم `batch2/BATCH2-SPECS-ADDENDUM.md`، ثم `batch2/BATCH2-SPECS.md` (اقرأ §0.2 أولًا)، ثم `BRIEF-ADDENDUM-1.6.md`، ثم `BRIEF.md`، و`owner-feedback/2026-11-27.md`.
 
@@ -23,7 +38,7 @@
 
 | # | المجال | المكوّنات |
 |---|---|---|
-| B0 | البدء | استنساخ، وإنشاء `design-system-b` من `origin/design-system`، وتجهيز البيئة (المحركان وnode_modules)، وcheck-all خط أساس، وإنشاء REPORT-B |
+| B0 | البدء | استنساخ، وإنشاء `design-system-b` من `origin/design-system`، وتجهيز البيئة (المحركان وnode_modules)، وcheck-all خط أساس، وإنشاء REPORT-B، وملفاتك الخاصة وسطور الربط وتوسيع البوابات لها (القسم «ملفاتك الخاصة») |
 | B1 | المالية | MovementRow، TransferRow، FundCard، DebtCard، DebtSummary، PaymentProgress، ثم صفحة تركيب المالية |
 | B2 | الطلبات والمواعيد | OrderCard، WeekStrip، DayTimeline، AgendaList، SlotPicker، ثم صفحة التركيب |
 | B3 | التوصيل | DeliveryRequestCard، QuoteCard، JobTrack، IssueProposalCard، ContactBar، EvidenceSlot، LocationSlot، DriverJobCard، DriverApprovalStatus، ثم صفحة التركيب |
