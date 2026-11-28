@@ -34,39 +34,50 @@ async function enterReviewer() {
 }
 
 describe('SA7د — the reviewer screens (§5.1)', () => {
-  test('المراجعة: the queue oldest-first with its DecisionCard places', async () => {
+  test('المراجعة: the queue oldest-first — real rows that open the decision sheets', async () => {
     await enterReviewer();
     expect(screen.getAllByText('المراجعة').length).toBeGreaterThanOrEqual(2); // header + tab
-    // §5.2.8: ع3 (5 hours) then ع8 (3 hours, first listing) then ع4-تعديل.
+    // §5.2.8: ع3 (5 hours) then ع8 (3 hours, first listing) then ع4-تعديل —
+    // جولة المستخدم: الصفوف حقيقية تفتح ورقة القرار، وعلامة ReviewQueueItem
+    // في نهاية كل صف.
     const queue = document.querySelectorAll('[data-sim-later="ReviewQueueItem"]');
     expect(queue.length).toBe(3);
-    expect(queue[0]!.textContent).toContain('خبز صاج، ربطة 10');
-    expect(queue[0]!.textContent).toContain('منذ 5 ساعات');
-    expect(queue[1]!.textContent).toContain('مقلوبة مجمدة');
-    expect(queue[2]!.textContent).toContain('كعك بالسمسم');
-    expect(queue[2]!.textContent).toContain('تعديل عرض');
-    // The DecisionCard places carry their §6.2 content notes.
-    expect(screen.getByText(/بنود التحقق السبعة/)).toBeTruthy();
-    expect(screen.getByText(/«اعتمد العرض» \/ «ارفض العرض» بسبب/)).toBeTruthy();
-    expect(document.querySelectorAll('[data-sim-later="DecisionCard"]').length).toBe(3);
+    expect(screen.getByText('خبز صاج، ربطة 10')).toBeTruthy();
+    expect(screen.getByText('عرض جديد · 1.5 د · مخبز الأصيل للجملة · منذ 5 ساعات')).toBeTruthy();
+    expect(screen.getByText('مقلوبة مجمدة، صينية 4 أشخاص')).toBeTruthy();
+    expect(screen.getByText('كعك بالسمسم، كيس 1 كغ')).toBeTruthy();
+    await press(screen.getByText('خبز صاج، ربطة 10'));
+    // ورقة القرار: بنود التحقق السبعة + اتصال + اعتمد/ارفض
+    expect(screen.getByText('أجريت اتصال التحقق')).toBeTruthy();
+    expect(screen.getByText('اعتمد العرض')).toBeTruthy();
+    expect(screen.getByText('ارفض العرض')).toBeTruthy();
+    expect(screen.getByText('مكان المكوّن الحقيقي')).toBeTruthy();
   });
 
-  test('البلاغات: ع6 with its most-common reason and أبقِ/أوقف', async () => {
+  test('البلاغات: ع6 with its most-common reason — the row opens أبقِ/أوقف', async () => {
     await enterReviewer();
     const tab = screen.getAllByRole('tab').find((b) => b.textContent === 'البلاغات')!;
     await press(tab);
     expect(screen.getByText(/قماش ساتان، لفّة 25 م/)).toBeTruthy();
     expect(screen.getByText(/السبب الأكثر تكرارًا: معلومات مضللة/)).toBeTruthy();
-    expect(screen.getByText(/«أبقِ العرض» \/ «أوقف العرض»/)).toBeTruthy();
+    expect(screen.getByText('3 بلاغات')).toBeTruthy();
+    await press(screen.getByText(/قماش ساتان، لفّة 25 م/));
+    expect(screen.getByText('أبقِ العرض')).toBeTruthy();
+    expect(screen.getByText('أوقف العرض')).toBeTruthy();
+    expect(screen.getAllByText('معلومات مضللة').length).toBeGreaterThanOrEqual(1); // السبب في القائمة خلف الورقة وفي صفوفها
   });
 
-  test('السائقون: يزن القضاة with his DriverApprovalCard place', async () => {
+  test('السائقون: يزن القضاة — the row opens his approval sheet with data + attachments', async () => {
     await enterReviewer();
     const tab = screen.getAllByRole('tab').find((b) => b.textContent === 'السائقون')!;
     await press(tab);
-    expect(screen.getByText(/يزن القضاة · بانتظار الاعتماد · منذ يومين/)).toBeTruthy();
+    expect(screen.getByText('يزن القضاة')).toBeTruthy();
+    expect(screen.getByText(/بانتظار الاعتماد · منذ يومين/)).toBeTruthy();
+    await press(screen.getByText('يزن القضاة'));
+    expect(screen.getByText('الهاتف')).toBeTruthy();
+    expect(screen.getByText('المركبة واللوحة')).toBeTruthy();
     expect(screen.getByText('يُركَّب لاحقًا: DriverApprovalCard')).toBeTruthy();
-    expect(screen.getByText(/المرفقات الثلاثة/)).toBeTruthy();
+    expect(screen.getByText('اعتمد السائق')).toBeTruthy();
   });
 
   test('the reviewer has no notifications — the real EmptyState', async () => {

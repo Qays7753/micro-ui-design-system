@@ -601,3 +601,38 @@ button.sim-later--tap {
 .sim-sheet__gap {
   height: var(--mds-layout-field-to-field);
 }
+
+/* جولة المستخدم: the reviewer's decision sheets — a section heading inside
+   the sheet body, and the driver's head block (EntityMark + name + area). */
+.sim-sheet__section {
+  margin: 0;
+  font-family: var(--mds-type-title-card-font);
+  font-size: var(--mds-type-title-card-size);
+  line-height: var(--mds-type-title-card-line);
+  color: var(--mds-color-text-primary);
+}
+
+.sim-sheet__section-caption {
+  margin-inline-start: var(--mds-layout-field-to-field);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+}
+
+.sim-driver-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mds-layout-element-to-element);
+  padding-block: var(--mds-layout-field-to-field);
+}
+.sim-driver-head__name {
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  color: var(--mds-color-text-primary);
+}
+.sim-driver-head__area {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+}

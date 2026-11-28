@@ -318,6 +318,19 @@ export function reducer(state: SimState, action: SimAction): SimState {
       };
       return { ...state, listings: [...state.listings, l] };
     }
+    case 'listing/edit': {
+      // جولة المستخدم: the supplier edits a published price — the edit goes
+      // to the review queue exactly like ع4's baked-in edit.
+      const l = state.listings.find((x) => x.id === action.listingId);
+      if (!l || !Number.isFinite(action.price) || action.price <= 0 || l.status !== 'approved') return state;
+      return {
+        ...state,
+        listings: state.listings.map((x) =>
+          x.id === l.id ? { ...x, editedPrice: action.price, status: 'approvedWithEdit' as const, since: 'الآن' } : x,
+        ),
+        reviewQueue: [...state.reviewQueue, { kind: 'listingEdit' as const, ref: l.id, since: 'الآن' }],
+      };
+    }
     case 'listing/report': {
       const l = state.listings.find((x) => x.id === action.listingId);
       if (!l || !action.reason.trim()) return state;
@@ -346,6 +359,36 @@ export function reducer(state: SimState, action: SimAction): SimState {
           x.id === l.id ? { ...x, status: 'rejected', rejectReason: action.reason, since: undefined } : x,
         ),
         reviewQueue: state.reviewQueue.filter((r) => !(r.kind === 'listing' && r.ref === l.id)),
+      };
+    }
+    case 'listing/stop': {
+      // جولة المستخدم (§6.4): «أبقِ العرض» clears the reports and keeps the
+      // listing; «أوقف العرض» hides it from every buyer's market and tells
+      // the supplier through a moderation notification.
+      const l = state.listings.find((x) => x.id === action.listingId);
+      if (!l) return state;
+      return {
+        ...state,
+        listings: state.listings.map((x) =>
+          x.id === l.id
+            ? action.stop
+              ? { ...x, stopped: true, reports: [] }
+              : { ...x, stopped: false, reports: [] }
+            : x,
+        ),
+        reportsQueue: state.reportsQueue.filter((r) => r.ref !== l.id),
+        notifications: action.stop
+          ? [...state.notifications, { key: 'moderation_decision' as const, role: 'supplier' as const, object: l.id, time: 'الآن', read: false }]
+          : state.notifications,
+      };
+    }
+    case 'driver/reject': {
+      const driver = state.drivers.find((d) => d.id === action.driverId);
+      if (!driver || driver.status !== 'pendingReview' || !action.reason.trim()) return state;
+      return {
+        ...state,
+        drivers: state.drivers.map((d) => (d.id === driver.id ? { ...d, status: 'rejected' as const } : d)),
+        driversQueue: state.driversQueue.filter((r) => r.ref !== driver.id),
       };
     }
     case 'edit/approve': {

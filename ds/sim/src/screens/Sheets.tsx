@@ -38,6 +38,7 @@ import type { FundId, Listing } from '../data/types';
 import type { MovementInput, OrderInput, DeliveryInput, SimState } from '../state/types';
 import { LaterMark, moneyText, needsCard, todayNeedsYouList, whenLine } from './parts';
 import { minutesSinceOpen } from '../clock';
+import { DecisionSheet, DriverDecisionSheet } from './reviewer/ReviewerSheets';
 import { dateDisplay, parseTimeInput, time12 } from '../format';
 
 /** The sheet's own body rhythm. */
@@ -409,6 +410,39 @@ export function ObjectSheetShell({ title, refId, onDismiss }: { title: string; r
   );
 }
 
+/** جولة المستخدم: the supplier's price edit (the ListingEditor's temporary
+ *  core until the real editor mounts): the new price goes to the review
+ *  queue exactly like ع4's baked-in edit. */
+export function EditListingSheet({ listingId, onDismiss }: { listingId: string; onDismiss: () => void }) {
+  const state = useSim();
+  const dispatch = useSimDispatch();
+  const listing = state.listings.find((l) => l.id === listingId);
+  const [price, setPrice] = useState('');
+  const fils = Math.round(Number.parseFloat(price) * 1000);
+  const ok = listing !== undefined && Number.isFinite(fils) && fils > 0 && fils !== listing.price;
+  if (!listing) return null;
+  return (
+    <Sheet label={`عدّل العرض · ${listing.title}`} variant="form" onDismiss={onDismiss}>
+      <SheetBody>
+        <LaterMark name="ListingEditor" note="بديل مؤقت: تعديل السعر فقط — المحرر الكامل يُركَّب في الجزء ب" />
+        <Surface>
+          <ObjectRow label="المنشور الآن" value={<span className="sim-money">{`${moneyText(listing.price ?? 0)} د`}</span>} />
+        </Surface>
+        <AmountField label="السعر الجديد" value={price} onChange={setPrice} caption="بالدينار" />
+        <ActionBar
+          label="أرسل التعديل"
+          disabled={!ok}
+          onPress={() => {
+            if (!ok) return;
+            dispatch({ type: 'listing/edit', listingId: listing.id, price: fils });
+            dispatch({ type: 'ui/openSheet', id: null });
+          }}
+        />
+      </SheetBody>
+    </Sheet>
+  );
+}
+
 /** ورقة الدفعة (ر2.3): amount + fund + the «اكتب مبلغاً حتى … د» error. */
 export function PaymentSheet({ debtId, onDismiss }: { debtId: string; onDismiss: () => void }) {
   const state = useSim();
@@ -457,6 +491,8 @@ export function PaymentSheet({ debtId, onDismiss }: { debtId: string; onDismiss:
 /** A listing's details sheet (§5.8): the Gallery/price/supplier/contact places. */
 export function ListingSheet({ listing, onDismiss }: { listing: Listing; onDismiss: () => void }) {
   const dispatch = useSimDispatch();
+  const state = useSim();
+  const ownApproved = state.role === 'supplier' && listing.supplier === 'مخبز الأصيل للجملة' && listing.status === 'approved';
   return (
     <Sheet label={listing.title} onDismiss={onDismiss}>
       <SheetBody>
@@ -480,6 +516,16 @@ export function ListingSheet({ listing, onDismiss }: { listing: Listing; onDismi
           <span className="sim-later__name">يُركَّب لاحقًا: ContactBar</span>
           <span className="sim-later__note">التواصل مع المورد</span>
         </div>
+        {ownApproved ? (
+          <ObjectRow
+            label="عدّل العرض"
+            caption="السعر الجديد يذهب للمراجعة كما في ع4"
+            onPress={() => {
+              dispatch({ type: 'ui/openListing', id: null });
+              dispatch({ type: 'ui/openSheet', id: `editListing:${listing.id}` });
+            }}
+          />
+        ) : null}
         <ObjectRow
           label="أبلغ عن العرض"
           caption="more"
@@ -496,21 +542,33 @@ export function ListingSheet({ listing, onDismiss }: { listing: Listing; onDismi
   );
 }
 
-/** The report sheet's place (ر5.3's action mounts with ReportSheet in part B). */
+/** The report sheet (ر5.3) — جولة المستخدم: the reason rows are TEMPORARY
+ *  built rows under the ReportSheet marker (its §5.2.7 reasons), and the
+ *  report really lands on the listing for the reviewer's queue. */
 export function ReportSheetShell({ listing, onDismiss }: { listing: Listing; onDismiss: () => void }) {
   const dispatch = useSimDispatch();
-  // The reason picker is a batch-2 marker in part A, so no reason is ever
-  // picked here and the report honestly stays unsaved.
-  const reason: string | null = null;
+  const [reason, setReason] = useState<string | null>(null);
   return (
     <Sheet label="أبلغ عن العرض" onDismiss={onDismiss}>
       <SheetBody>
-        <LaterMark name="ReportSheet" note={`${listing.title} · الأسباب: معلومات مضللة، إعلان مزعج…`} />
-        <SaveState saveState="draft" />
+        <LaterMark name="ReportSheet" note="بديل مؤقت: أسباب §5.2.7 كصفوف اختيار" />
+        <Surface>
+          {['معلومات مضللة', 'إعلان مزعج', 'مخالف لقواعد السوق'].map((r) => (
+            <ObjectRow
+              key={r}
+              label={r}
+              trailing={reason === r ? <SelectedIcon size={20} /> : undefined}
+              onPress={() => setReason(r)}
+            />
+          ))}
+        </Surface>
+        <SaveState saveState={reason ? 'draft' : 'failed'} />
+        {!reason ? <p className="sim-form-help">اختر سبب البلاغ.</p> : null}
         <ActionBar
           label="أرسل البلاغ"
+          disabled={!reason}
           onPress={() => {
-            if (!reason) return; // the reason picker is a batch-2 marker in part A.
+            if (!reason) return;
             dispatch({ type: 'listing/report', listingId: listing.id, reason });
             dispatch({ type: 'ui/openSheet', id: null });
           }}
@@ -528,11 +586,14 @@ export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
     unit: string;
     price: string;
     tiers: ReadonlyArray<{ min: number; max: number | null; price: number }> | null;
+    tierPrices: [string, string, string];
     available: boolean;
     description: string;
     imageCount: number;
-  }>({ title: '', unit: '', price: '', tiers: null, available: true, description: '', imageCount: 0 });
-  const complete = form.title.trim() !== '' && form.unit.trim() !== '' && form.imageCount > 0;
+  }>({ title: '', unit: '', price: '', tiers: null, tierPrices: ['', '', ''], available: true, description: '', imageCount: 0 });
+  // جولة المستخدم: «إرسال بلا صورة» خطأ المواصفة — الزر معطّل بسببه حتى
+  // يؤكد الصور (بديل مؤقت موسوم إلى PhotoUploader).
+  const complete = form.title.trim() !== '' && form.unit.trim() !== '' && form.imageCount > 0 && (form.tiers === null || form.tierPrices.every((t) => Number.parseFloat(t) > 0));
   return (
     <Sheet label="عرض جديد" variant="form" onDismiss={onDismiss}>
       <SheetBody>
@@ -561,10 +622,15 @@ export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
           label="طريقة السعر"
         />
         {form.tiers ? (
-          <div className="sim-later-inline" data-sim-later="PriceTierBuilder">
-            <span className="sim-later__name">يُركَّب لاحقًا: PriceTierBuilder</span>
-            <span className="sim-later__note">بناء الشرائح (ر5.2: ثلاث شرائح)</span>
-          </div>
+          <>
+            <div className="sim-later-inline" data-sim-later="PriceTierBuilder">
+              <span className="sim-later__name">يُركَّب لاحقًا: PriceTierBuilder</span>
+              <span className="sim-later__note">بديل مؤقت: ثلاث شرائح ثابتة الحدود وأسعارها حقيقية (ر5.2)</span>
+            </div>
+            <AmountField label="الشريحة 1 (1–9)" value={form.tierPrices[0]!} onChange={(v) => setForm((f) => ({ ...f, tierPrices: [v, f.tierPrices[1]!, f.tierPrices[2]!] }))} />
+            <AmountField label="الشريحة 2 (10–49)" value={form.tierPrices[1]!} onChange={(v) => setForm((f) => ({ ...f, tierPrices: [f.tierPrices[0]!, v, f.tierPrices[2]!] }))} />
+            <AmountField label="الشريحة 3 (50 فما فوق)" value={form.tierPrices[2]!} onChange={(v) => setForm((f) => ({ ...f, tierPrices: [f.tierPrices[0]!, f.tierPrices[1]!, v] }))} />
+          </>
         ) : (
           <AmountField
             label="السعر للعبوة"
@@ -577,6 +643,15 @@ export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
           selected={form.available}
           onChange={(available) => setForm((f) => ({ ...f, available }))}
         />
+        <div className="sim-later-inline" data-sim-later="PhotoUploader">
+          <span className="sim-later__name">يُركَّب لاحقًا: PhotoUploader</span>
+          <span className="sim-later__note">بديل مؤقت: تأكيد إرفاق الصور (صورتان تجريبيتان)</span>
+        </div>
+        <Toggle
+          label="الصور أُرفقت (مؤقت حتى يُركَّب رافع الصور)"
+          selected={form.imageCount > 0}
+          onChange={(v) => setForm((f) => ({ ...f, imageCount: v ? 2 : 0 }))}
+        />
         <TextArea
           label="الوصف"
           value={form.description}
@@ -584,17 +659,26 @@ export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
           caption="اختياري"
         />
         <SaveState saveState="draft" />
+        {!complete ? <p className="sim-form-help">{form.imageCount === 0 ? 'أضف صورة أولاً.' : !form.title.trim() ? 'اكتب اسم العرض.' : !form.unit.trim() ? 'اكتب العبوة.' : 'أكمل أسعار الشرائح الثلاث.'}</p> : null}
         <ActionBar
           label="أرسل للمراجعة"
+          disabled={!complete}
           onPress={() => {
-            if (!complete) return; // the photos ride the real PhotoUploader in part B.
+            if (!complete) return;
             dispatch({
               type: 'listing/create',
               input: {
                 title: form.title,
                 unit: form.unit,
                 imageCount: form.imageCount,
-                tiers: form.tiers ?? [{ min: 1, max: null, price: Math.round(Number.parseFloat(form.price) * 1000) }],
+                tiers:
+                  form.tiers === null
+                    ? [{ min: 1, max: null, price: Math.round(Number.parseFloat(form.price) * 1000) }]
+                    : [
+                        { min: 1, max: 9, price: Math.round(Number.parseFloat(form.tierPrices[0]!) * 1000) },
+                        { min: 10, max: 49, price: Math.round(Number.parseFloat(form.tierPrices[1]!) * 1000) },
+                        { min: 50, max: null, price: Math.round(Number.parseFloat(form.tierPrices[2]!) * 1000) },
+                      ],
               },
             });
             dispatch({ type: 'ui/openSheet', id: null });
@@ -1103,8 +1187,24 @@ export function SharedSheets() {
   if (sheet.startsWith('pay:')) {
     return <PaymentSheet debtId={sheet.slice('pay:'.length)} onDismiss={close} />;
   }
+  if (sheet.startsWith('editListing:')) {
+    return <EditListingSheet listingId={sheet.slice('editListing:'.length)} onDismiss={close} />;
+  }
   if (sheet.startsWith('issue:')) {
     return <IssueSheet deliveryId={sheet.slice('issue:'.length)} onDismiss={close} />;
+  }
+  if (sheet.startsWith('decision:')) {
+    const id = sheet.slice('decision:'.length);
+    const listing = state.listings.find((l) => l.id === id);
+    if (listing) return <DecisionSheet listing={listing} mode="queue" onDismiss={close} />;
+  }
+  if (sheet.startsWith('reports:')) {
+    const id = sheet.slice('reports:'.length);
+    const listing = state.listings.find((l) => l.id === id);
+    if (listing) return <DecisionSheet listing={listing} mode="reports" onDismiss={close} />;
+  }
+  if (sheet.startsWith('driverDecision:')) {
+    return <DriverDecisionSheet driverId={sheet.slice('driverDecision:'.length)} onDismiss={close} />;
   }
   if (sheet.startsWith('object:')) {
     const refId = sheet.slice('object:'.length);

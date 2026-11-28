@@ -6,9 +6,9 @@
  * internal marker with its live queue data; the TabBar carries the three
  * tabs.
  */
-import { EmptyState, PageHeader, Section } from '@micro/ds';
-import { useSim } from '../../state/store';
-import { ContextBarShell, LaterMark, ReviewerTabBar } from '../parts';
+import { EmptyState, EntityMark, ObjectRow, PageHeader, Section, StatusBadge } from '@micro/ds';
+import { useSim, useSimDispatch } from '../../state/store';
+import { ContextBarShell, LaterChip, ReviewerTabBar } from '../parts';
 
 /** A queue item's line (§6.1: the title + the type · sender + the age). */
 function queueLine(title: string, type: string, sender: string, since: string): string {
@@ -17,6 +17,7 @@ function queueLine(title: string, type: string, sender: string, since: string): 
 
 export function ReviewScreen() {
   const state = useSim();
+  const dispatch = useSimDispatch();
   const items = state.reviewQueue.map((r) => {
     if (r.kind === 'driver') {
       const driver = state.drivers.find((d) => d.id === r.ref);
@@ -45,19 +46,14 @@ export function ReviewScreen() {
           <Section label="طابور المراجعة" caption={items.length}>
             <div className="sim-rows">
               {items.map((item) => (
-                <div key={item.ref + item.since} className="sim-review-item">
-                  <LaterMark name="ReviewQueueItem" note={item.line} />
-                  <div className="sim-later-inline" data-sim-later="DecisionCard">
-                    <span className="sim-later__name">يُركَّب لاحقًا: DecisionCard</span>
-                    <span className="sim-later__note">
-                      {item.ref === 'ع8'
-                        ? 'تأشير بنود التحقق السبعة + «أجريت اتصال التحقق» ← «اعتمد العرض»'
-                        : item.ref === 'ع3'
-                          ? '«اعتمد العرض» / «ارفض العرض» بسبب'
-                          : 'اعتماد التعديل على ع4'}
-                    </span>
-                  </div>
-                </div>
+                <ObjectRow
+                  key={item.ref + item.since}
+                  label={item.line.split(' · ')[0]!}
+                  caption={item.line.split(' · ').slice(1).join(' · ')}
+                  leading={<EntityMark value={item.ref} />}
+                  trailing={<LaterChip name="ReviewQueueItem" />}
+                  onPress={() => dispatch({ type: 'ui/openSheet', id: `decision:${item.ref}` })}
+                />
               ))}
             </div>
           </Section>
@@ -72,6 +68,7 @@ export function ReviewScreen() {
 
 export function ReportsScreen() {
   const state = useSim();
+  const dispatch = useSimDispatch();
   const items = state.reportsQueue.map((r) => {
     const listing = state.listings.find((l) => l.id === r.ref);
     const mostCommon = listing?.reports?.[0] ?? '';
@@ -87,13 +84,14 @@ export function ReportsScreen() {
           <Section label="العروض المبلَّغ عنها" caption={items.length}>
             <div className="sim-rows">
               {items.map((item) => (
-                <div key={item.ref} className="sim-review-item">
-                  <LaterMark name="ReportItem" note={item.line} />
-                  <div className="sim-later-inline" data-sim-later="DecisionCard">
-                    <span className="sim-later__name">يُركَّب لاحقًا: DecisionCard</span>
-                    <span className="sim-later__note">«أبقِ العرض» / «أوقف العرض»</span>
-                  </div>
-                </div>
+                <ObjectRow
+                  key={item.ref}
+                  label={item.line.split(' · ')[0]!}
+                  caption={item.line.split(' · ').slice(1).join(' · ')}
+                  leading={<EntityMark value={item.ref} />}
+                  trailing={<StatusBadge tone="waiting" label="3 بلاغات" />}
+                  onPress={() => dispatch({ type: 'ui/openSheet', id: `reports:${item.ref}` })}
+                />
               ))}
             </div>
           </Section>
@@ -108,6 +106,7 @@ export function ReportsScreen() {
 
 export function DriversScreen() {
   const state = useSim();
+  const dispatch = useSimDispatch();
   const items = state.driversQueue.map((r) => {
     const driver = state.drivers.find((d) => d.id === r.ref);
     return { ref: r.ref, line: `${driver?.name ?? r.ref} · بانتظار الاعتماد · ${r.since}` };
@@ -122,15 +121,14 @@ export function DriversScreen() {
           <Section label="طلبات الاعتماد" caption={items.length}>
             <div className="sim-rows">
               {items.map((item) => (
-                <div key={item.ref} className="sim-review-item">
-                  <LaterMark name="ReviewQueueItem" note={item.line} />
-                  <div className="sim-later-inline" data-sim-later="DriverApprovalCard">
-                    <span className="sim-later__name">يُركَّب لاحقًا: DriverApprovalCard</span>
-                    <span className="sim-later__note">
-                      الحقول (الهاتف، المركبة، اللوحة، مناطق الخدمة) والمرفقات الثلاثة ← «اعتمد السائق»
-                    </span>
-                  </div>
-                </div>
+                <ObjectRow
+                  key={item.ref}
+                  label={item.line.split(' · ')[0]!}
+                  caption={item.line.split(' · ').slice(1).join(' · ')}
+                  leading={<EntityMark value={item.ref} />}
+                  trailing={<LaterChip name="ReviewQueueItem" />}
+                  onPress={() => dispatch({ type: 'ui/openSheet', id: `driverDecision:${item.ref}` })}
+                />
               ))}
             </div>
           </Section>

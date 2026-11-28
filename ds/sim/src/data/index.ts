@@ -144,7 +144,10 @@ export function ordersOf(orders: readonly Order[], project: 'yasmine' | 'reef'):
 
 /** The market's VISIBLE listings for buyers (§5.2.7): ع1 ع2 ع4(المنشورة) ع6 ع7 = 5. */
 export function visibleListings(listings: readonly Listing[]): Listing[] {
-  return listings.filter((l) => l.status === 'approved' || l.status === 'approvedWithEdit');
+  // جولة المستخدم: «أوقف العرض» يخفيه عن كل المشترين دون حذفه.
+  return listings.filter(
+    (l) => !l.stopped && (l.status === 'approved' || l.status === 'approvedWithEdit'),
+  );
 }
 
 /** «يحتاجك» of the project-today screen, in the addendum's fixed order. */

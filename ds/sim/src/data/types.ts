@@ -151,7 +151,7 @@ export interface Delivery {
 export interface Driver {
   id: 'omar' | 'yazan';
   name: string;
-  status: 'approved' | 'pendingReview';
+  status: 'approved' | 'pendingReview' | 'rejected'; // جولة المستخدم: الرفض بسبب
   phone: string;
   vehicle: string;
   plate: string;
@@ -200,6 +200,9 @@ export interface Listing {
   minOrder: string;
   /** ع6: the reports with their reasons. */
   reports?: readonly string[];
+  /** جولة المستخدم: «أوقف العرض» — the reviewer's stop decision hides the
+   *  listing from every buyer's market without deleting it. */
+  stopped?: boolean;
   /** ع8: the supplier's first listing ever. */
   firstListing?: boolean;
 }

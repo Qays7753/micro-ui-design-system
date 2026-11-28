@@ -188,9 +188,12 @@ export type SimAction =
   | { type: 'listing/create'; input: ListingInput }
   | { type: 'listing/report'; listingId: string; reason: string }
   | { type: 'listing/approve'; listingId: string }
+  | { type: 'listing/stop'; listingId: string; stop: boolean } // جولة المستخدم: «أبقِ العرض» / «أوقف العرض»
+  | { type: 'listing/edit'; listingId: string; price: number } // جولة المستخدم: تعديل سعر عرض منشور ← تعديل قيد المراجعة
   | { type: 'listing/reject'; listingId: string; reason: string }
   | { type: 'edit/approve'; listingId: string }
   | { type: 'driver/approve'; driverId: string }
+  | { type: 'driver/reject'; driverId: string; reason: string } // جولة المستخدم: رفض السائق بسبب
   | { type: 'notification/read'; key: SimNotification['key']; object: string }
   | { type: 'tabOrder/set'; order: 'a' | 'b' }
   | { type: 'toggles/set'; patch: Partial<SimToggles> }

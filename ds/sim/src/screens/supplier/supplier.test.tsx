@@ -61,7 +61,7 @@ describe('SA7ج — the supplier screens (§5.1)', () => {
     expect(screen.getByText('متوفر')).toBeTruthy();
     expect(screen.getByText('أرسل للمراجعة')).toBeTruthy();
     // The batch-2 parts carry the marker.
-    expect(screen.getByText('يُركَّب لاحقًا: PhotoUploader')).toBeTruthy();
+    expect(screen.getAllByText('يُركَّب لاحقًا: PhotoUploader').length).toBe(2); // المعرض + النموذج (صور ع1 وع…) — جولة المستخدم
   });
 
   test('«السوق» segment: the shared market body with the supplier segments', async () => {
