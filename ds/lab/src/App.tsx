@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -262,7 +262,10 @@ export function App() {
             <ObjectRow label={t('kv.phone')} caption={t('placeholder.phone')} />
           </Surface>
           <Surface>
+            {/* خ20 (1.7): an ACTION row carries NO entity letter mark —
+                the movement-in icon rides the icon row (3ب.3ب). */}
             <ObjectRow
+              leading={<MovementInIcon size={20} />}
               label={t('button.recordPayment')}
               caption={t('row.sampleCaption')}
               onPress={() => setToastText(t('toast.movementSaved'))}
