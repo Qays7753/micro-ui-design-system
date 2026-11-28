@@ -20,6 +20,7 @@ import {
   TabBar,
   TabBarTab,
   TableIcon,
+  Toast,
 } from '@micro/ds';
 import {
   NavDeliveryIcon,
@@ -76,9 +77,6 @@ export function ScreenDate() {
   return <p className="sim-screen__date"> {TODAY_LINE} </p>;
 }
 
-/** One project and one role: the caret hides and the sheet stays closed (9.1). */
-const noopLocked = () => {};
-
 /** The role's line in the switcher (the driver serves one project — locked). */
 const ROLE_CAPTIONS: Record<string, string> = {
   owner: 'مالك',
@@ -88,6 +86,14 @@ const ROLE_CAPTIONS: Record<string, string> = {
   guest: 'زائر',
 };
 
+/** The locked-identity hint (جولة المستخدم ا-11): the owner's rule — «لا
+ * يبقى في المحاكاة زر يفعل لا شيء». The locked switcher's press now answers
+ * with an honest Toast instead of a dead silence; the LOCK itself (no
+ * caret, one project) is our recorded decision (ملاحظات على قراراتنا) and
+ * a built-in locked affordance is a library suggestion (ملاحظات للجولة
+ * النهائية). */
+const LOCKED_HINT = 'هذا الدور يخدم مشروعًا واحدًا — التبديل من شاشة الأدوار';
+
 /** The shared ContextBar (§5.1: المشترك لكل الأدوار). */
 export function ContextBarShell() {
   const dispatch = useSimDispatch();
@@ -96,6 +102,13 @@ export function ContextBarShell() {
   // The owner owns the switcher's projects; the other roles serve ONE
   // project with ONE role — the caret hides and the sheet stays closed (9.1).
   const isOwner = role === 'owner';
+  // The locked switcher answers its press with the honest hint (ا-11).
+  const [lockedHint, setLockedHint] = useState(false);
+  useEffect(() => {
+    if (!lockedHint) return;
+    const t = window.setTimeout(() => setLockedHint(false), 2600);
+    return () => window.clearTimeout(t);
+  }, [lockedHint]);
   // §5.2.9: the notifications carry their own role — the bell shows the
   // CURRENT role's unread count (the reviewer has none).
   const unread = notifications.filter((n) => !n.read && n.role === role).length;
@@ -110,32 +123,35 @@ export function ContextBarShell() {
   }, []);
 
   return (
-    <ContextBar
-      label="شريط السياق"
-      leading={
-        <ProjectSwitcher
-          label={current.name}
-          caption={ROLE_CAPTIONS[role ?? 'owner'] ?? current.role}
-          locked={!isOwner}
-          onPress={
-            isOwner
-              ? () => dispatch({ type: 'ui/openSheet', id: 'project-switcher' })
-              : noopLocked
-          }
-        />
-      }
-      trailing={
-        <>
-          <NotificationsButton
-            value={unread}
-            label={unread ? `الإشعارات، ${unread} غير مقروءة` : 'الإشعارات'}
-            onPress={() => dispatch({ type: 'ui/openSheet', id: 'notifications' })}
+    <>
+      <ContextBar
+        label="شريط السياق"
+        leading={
+          <ProjectSwitcher
+            label={current.name}
+            caption={ROLE_CAPTIONS[role ?? 'owner'] ?? current.role}
+            locked={!isOwner}
+            onPress={
+              isOwner
+                ? () => dispatch({ type: 'ui/openSheet', id: 'project-switcher' })
+                : () => setLockedHint(true)
+            }
           />
-          <AskButton onPress={() => dispatch({ type: 'ui/openSheet', id: 'ask' })} />
-        </>
-      }
-      caption={scrolled}
-    />
+        }
+        trailing={
+          <>
+            <NotificationsButton
+              value={unread}
+              label={unread ? `الإشعارات، ${unread} غير مقروءة` : 'الإشعارات'}
+              onPress={() => dispatch({ type: 'ui/openSheet', id: 'notifications' })}
+            />
+            <AskButton onPress={() => dispatch({ type: 'ui/openSheet', id: 'ask' })} />
+          </>
+        }
+        caption={scrolled}
+      />
+      {lockedHint ? <Toast label={LOCKED_HINT} onDismiss={() => setLockedHint(false)} /> : null}
+    </>
   );
 }
 

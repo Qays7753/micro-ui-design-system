@@ -516,6 +516,9 @@ def main():
                 if role == "guest":
                     # The visitor taps «دخول تجريبي» and continues as the
                     # buyer (المشتري بعد الدخول) — same run, same device.
+                    # The census may have already pressed it mid-walk (it is
+                    # a button on the guest's screen) — either way the buyer
+                    # census runs on whatever state the page is in now.
                     btn = page.evaluate(
                         """(() => { const b = [...document.querySelectorAll('button')]
                              .find(x => x.textContent.includes('دخول تجريبي'));
@@ -523,18 +526,20 @@ def main():
                              return { x: Math.round(r.left + r.width / 2),
                                       y: Math.round(r.top + r.height / 2) }; })()""")
                     if btn and not v.sheet()["open"]:
-                        vb = Vanish(page, engine, "buyer")
                         v.timed_tap(btn["x"], btn["y"], "دخول تجريبي (الزائر ← المشتري)",
                                     "navigates", "market")
-                        scr = vb.screen()
-                        print(f"\n═══ المشتري · الشاشة {scr} ═══")
-                        walk_screen(vb, scr)
-                        badb = [r for r in vb.rows if r["verdict"].startswith("معطوب")]
-                        print(f"\n=== buyer/{engine}: {len(vb.rows) - len(badb)}/{len(vb.rows)} سليم ===")
-                        for r in badb:
-                            print(f"  معطوب: {r['screen']} · {r['button']} — {r['happened']}")
-                        with open(f"/tmp/vanish/{engine}-buyer.json", "w") as f:
-                            json.dump(vb.rows, f, ensure_ascii=False, indent=1)
+                    vb = Vanish(page, engine, "buyer")
+                    if page.evaluate("() => !!document.querySelector('.mds-sheet')"):
+                        vb.close_layer("market")
+                    scr = vb.screen()
+                    print(f"\n═══ المشتري · الشاشة {scr} ═══")
+                    walk_screen(vb, scr)
+                    badb = [r for r in vb.rows if r["verdict"].startswith("معطوب")]
+                    print(f"\n=== buyer/{engine}: {len(vb.rows) - len(badb)}/{len(vb.rows)} سليم ===")
+                    for r in badb:
+                        print(f"  معطوب: {r['screen']} · {r['button']} — {r['happened']}")
+                    with open(f"/tmp/vanish/{engine}-buyer.json", "w") as f:
+                        json.dump(vb.rows, f, ensure_ascii=False, indent=1)
                 bad = [r for r in v.rows if r["verdict"].startswith("معطوب")]
                 print(f"\n=== {role}/{engine}: {len(v.rows) - len(bad)}/{len(v.rows)} سليم ===")
                 for r in bad:
