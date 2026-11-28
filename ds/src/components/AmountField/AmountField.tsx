@@ -39,6 +39,7 @@ export function AmountField({
   id,
   style,
   ref,
+  useSystemKeyboard = true,
   ...rest
 }: AmountFieldProps) {
   const [focused, setFocused] = useState(false);
@@ -74,7 +75,7 @@ export function AmountField({
           ]
             .filter(Boolean)
             .join(' ')}
-          inputMode="decimal"
+          inputMode={useSystemKeyboard ? 'decimal' : 'none'}
           enterKeyHint="next"
           value={display}
           disabled={disabled}

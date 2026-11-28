@@ -183,6 +183,25 @@ export const ar = {
   'lab.overrideOff': { kind: 'button', text: 'أعد نص المكتبة' },
   'lab.overrideTarget': { kind: 'help', text: 'الهدف الحي' },
   'lab.overrideReplacement': { kind: 'button', text: 'دبّر الحركة' },
+  // AmountKeypad (§1.4-7): the SPOKEN names — the visible glyph stays a digit.
+  'keypad.srGroup': { kind: 'screen-reader', text: 'لوحة المبالغ' },
+  'keypad.sr0': { kind: 'screen-reader', text: 'صفر' },
+  'keypad.sr1': { kind: 'screen-reader', text: 'واحد' },
+  'keypad.sr2': { kind: 'screen-reader', text: 'اثنان' },
+  'keypad.sr3': { kind: 'screen-reader', text: 'ثلاثة' },
+  'keypad.sr4': { kind: 'screen-reader', text: 'أربعة' },
+  'keypad.sr5': { kind: 'screen-reader', text: 'خمسة' },
+  'keypad.sr6': { kind: 'screen-reader', text: 'ستة' },
+  'keypad.sr7': { kind: 'screen-reader', text: 'سبعة' },
+  'keypad.sr8': { kind: 'screen-reader', text: 'ثمانية' },
+  'keypad.sr9': { kind: 'screen-reader', text: 'تسعة' },
+  'keypad.sr000': { kind: 'screen-reader', text: 'ثلاثة أصفار' },
+  'keypad.srDecimal': { kind: 'screen-reader', text: 'فاصلة' },
+  'keypad.srBackspace': { kind: 'screen-reader', text: 'احذف' },
+  // the keypad lab page (§1.4-10: typing 145.750 through the keys).
+  'title.keypad': { kind: 'title', text: 'لوحة المبالغ' },
+  'lab.h.keypad': { kind: 'title', text: 'لوحة أرقام المبالغ' },
+  'lab.keypadHint': { kind: 'help', text: 'اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
   'lab.h.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'lab.h.entityMark': { kind: 'title', text: 'حرف الطرف' },
@@ -412,6 +431,7 @@ export const ar = {
   'title.searchField': { kind: 'title', text: 'حقل البحث' },
   'lab.h.checkbox': { kind: 'title', text: 'بنود تُشَرّ مستقلة' },
   'state.errorRow': { kind: 'badge', text: 'حالة الخطأ' },
+  'state.fractionFull': { kind: 'badge', text: 'خانات كاملة' },
   'title.checkbox': { kind: 'title', text: 'مربع الاختيار' },
 
 // ---------------------------------------------------------------------------

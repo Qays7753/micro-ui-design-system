@@ -23,6 +23,11 @@ export interface AmountFieldProps {
     disabled?: boolean;
     /** idle | error — «اكتب المبلغ بالأرقام» / «اكتب مبلغاً أكبر من صفر». */
     state?: AmountFieldState;
+    /** True (default): the device keyboard shows (inputmode="decimal").
+     * False: inputmode="none" — the app shows its AmountKeypad under the
+     * field, so the DEVICE board never appears (ADDENDUM §1.4-5, م-خ2); the
+     * external keyboard keeps working either way. */
+    useSystemKeyboard?: boolean;
     /** A draft flag: the field unchanged, the badge rides the form's SaveState (§1.3-4). */
     draft?: boolean;
     /** React 19 ref-as-prop on the input element. */

@@ -20,6 +20,7 @@ export * from './components/Toggle';
 export * from './components/SearchField';
 export * from './components/TextArea';
 export * from './components/AmountField';
+export * from './components/AmountKeypad';
 export * from './lib/normalize-amount';
 export * from './components/StatusBadge';
 export * from './components/EntityMark';

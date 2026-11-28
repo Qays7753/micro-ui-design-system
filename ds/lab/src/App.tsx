@@ -18,7 +18,8 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import type { KeypadKey } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -27,6 +28,18 @@ const FUND_ICONS = {
   bank: FundBankIcon,
   wallet: FundWalletIcon,
 } as const;
+
+/** Apply a keypad key to a raw amount value (the host app's job — the pad
+ * only emits). Mirrors the pad's own disabling rules: one dot, three
+ * fraction digits (BRIEF 8). */
+function applyKeypadKey(value: string, key: KeypadKey): string {
+  if (key === 'backspace') return value.slice(0, -1);
+  const next = value + key;
+  const parts = next.split('.');
+  if (parts.length > 2) return value;
+  if (parts[1] !== undefined && parts[1].length > 3) return value;
+  return next;
+}
 
 const SECTIONS: { id: string; name: string }[] = [
   { id: 'controls', name: t('title.amountToggle') },
@@ -63,6 +76,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'search-field', name: t('lab.h.searchField') },
   { id: 'text-area', name: t('lab.h.textArea') },
   { id: 'amount-field', name: t('lab.h.amountField') },
+  { id: 'amount-keypad', name: t('title.keypad') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -136,6 +150,9 @@ export function App() {
   const [searchDemo, setSearchDemo] = useState('');
   const [noteDemo, setNoteDemo] = useState('');
   const [amountDemo, setAmountDemo] = useState('');
+  // 4.7 — the AmountKeypad demo: the field above, the pad below (its keys
+  // APPLY to the value; the long backspace press clears it — §1.4).
+  const [keypadValue, setKeypadValue] = useState('');
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -1520,6 +1537,39 @@ export function App() {
             <span className="lab-label">{t('state.longNumber')}</span>
             <AmountField label="المبلغ" value={amountLongDemo} onChange={setAmountLongDemo} />
           </div>
+        </section>
+
+        {/* ---- AmountKeypad (ADDENDUM §1.4): the pad under the field ---- */}
+        <section className="lab-section" id="amount-keypad">
+          <h2 className="lab-title">{t('lab.h.keypad')}<span className="lab-tech">{t('title.keypad')}</span></h2>
+          <p className="lab-note">{t('lab.keypadHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <AmountField
+              label={t('field.amount')}
+              value={keypadValue}
+              onChange={setKeypadValue}
+              useSystemKeyboard={false}
+              data-ds-check="keypad-field"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <AmountKeypad
+              value={keypadValue}
+              onChange={(key) => setKeypadValue((v) => applyKeypadKey(v, key))}
+              onLongPress={() => setKeypadValue('')}
+              data-ds-check="amount-keypad"
+            />
+            {/* §1.4-7: after each press the field's new value is announced
+                politely (the host integration owns the live region). */}
+            <span className="mds-visually-hidden" aria-live="polite">
+              {keypadValue}
+            </span>
+          </div>
+          {/* The impossible-key state (a dot + three fraction digits — the
+              «.» and the digits go visibly off, §1.4-4) is REACHED by typing
+              9.999 through the keys, never pre-rendered: the states gate
+              toggles the native disabled attribute and must see a change. */}
         </section>
 
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}

@@ -464,6 +464,74 @@ export declare const ar: {
         readonly kind: "button";
         readonly text: "دبّر الحركة";
     };
+    readonly 'keypad.srGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "لوحة المبالغ";
+    };
+    readonly 'keypad.sr0': {
+        readonly kind: "screen-reader";
+        readonly text: "صفر";
+    };
+    readonly 'keypad.sr1': {
+        readonly kind: "screen-reader";
+        readonly text: "واحد";
+    };
+    readonly 'keypad.sr2': {
+        readonly kind: "screen-reader";
+        readonly text: "اثنان";
+    };
+    readonly 'keypad.sr3': {
+        readonly kind: "screen-reader";
+        readonly text: "ثلاثة";
+    };
+    readonly 'keypad.sr4': {
+        readonly kind: "screen-reader";
+        readonly text: "أربعة";
+    };
+    readonly 'keypad.sr5': {
+        readonly kind: "screen-reader";
+        readonly text: "خمسة";
+    };
+    readonly 'keypad.sr6': {
+        readonly kind: "screen-reader";
+        readonly text: "ستة";
+    };
+    readonly 'keypad.sr7': {
+        readonly kind: "screen-reader";
+        readonly text: "سبعة";
+    };
+    readonly 'keypad.sr8': {
+        readonly kind: "screen-reader";
+        readonly text: "ثمانية";
+    };
+    readonly 'keypad.sr9': {
+        readonly kind: "screen-reader";
+        readonly text: "تسعة";
+    };
+    readonly 'keypad.sr000': {
+        readonly kind: "screen-reader";
+        readonly text: "ثلاثة أصفار";
+    };
+    readonly 'keypad.srDecimal': {
+        readonly kind: "screen-reader";
+        readonly text: "فاصلة";
+    };
+    readonly 'keypad.srBackspace': {
+        readonly kind: "screen-reader";
+        readonly text: "احذف";
+    };
+    readonly 'title.keypad': {
+        readonly kind: "title";
+        readonly text: "لوحة المبالغ";
+    };
+    readonly 'lab.h.keypad': {
+        readonly kind: "title";
+        readonly text: "لوحة أرقام المبالغ";
+    };
+    readonly 'lab.keypadHint': {
+        readonly kind: "help";
+        readonly text: "اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";
@@ -1327,6 +1395,10 @@ export declare const ar: {
     readonly 'state.errorRow': {
         readonly kind: "badge";
         readonly text: "حالة الخطأ";
+    };
+    readonly 'state.fractionFull': {
+        readonly kind: "badge";
+        readonly text: "ثلاث خانات عشرية";
     };
     readonly 'title.checkbox': {
         readonly kind: "title";
