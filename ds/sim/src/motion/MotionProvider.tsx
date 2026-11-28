@@ -15,7 +15,7 @@
  * عند النقل إلى ds/src/motion/MotionProvider.tsx ينتقل كما هو.
  */
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motionCssVars } from './tokens';
 import { decideTier, measureWindowMs } from './tierMeasure';
 
@@ -60,6 +60,32 @@ export function MotionProvider({
 
   const clampedScale = Math.min(1, Math.max(0.1, scale));
   const effectiveTier: 'full' | 'light' = tier === 'auto' ? autoTier : tier;
+
+  // صفات البيانات ومتغيرات CSS على **العنصر الجذر** (§2.1: html) — لا على
+  // الغلاف نفسه، لأن أوراق المكتبة تُركَّب عبر portal إلى body فلا ترث
+  // ما يوضع على غلاف داخل التطبيق.
+  useEffect(() => {
+    const rootEl = document.documentElement;
+    rootEl.setAttribute('data-ds-motion-tier', effectiveTier);
+    rootEl.setAttribute('data-ds-motion-reduced', reduced ? 'true' : 'false');
+    rootEl.setAttribute('data-ds-motion-paused', paused ? 'true' : 'false');
+    rootEl.setAttribute('data-ds-motion-profile', profile);
+    rootEl.setAttribute('data-ds-motion-scale', String(clampedScale));
+    const styleEl = rootEl.style;
+    for (const [k, v] of Object.entries(motionCssVars(clampedScale))) {
+      styleEl.setProperty(k, v);
+    }
+    return () => {
+      rootEl.removeAttribute('data-ds-motion-tier');
+      rootEl.removeAttribute('data-ds-motion-reduced');
+      rootEl.removeAttribute('data-ds-motion-paused');
+      rootEl.removeAttribute('data-ds-motion-profile');
+      rootEl.removeAttribute('data-ds-motion-scale');
+      for (const k of Object.keys(motionCssVars(clampedScale))) {
+        styleEl.removeProperty(k);
+      }
+    };
+  }, [effectiveTier, reduced, paused, profile, clampedScale]);
 
   // قياس المستوى: فقط tier="auto"، وبلا تقليل حركة، ولم يُتخذ قرار بعد (§4.1-1).
   // أين: أثناء حركة فتح أول ورقة في الجلسة — يُرصد تركيب .mds-sheet-panel.
@@ -127,19 +153,8 @@ export function MotionProvider({
     };
   }, [tier, clampedScale]);
 
-  const style = motionCssVars(clampedScale) as CSSProperties;
-
   return (
-    <div
-      ref={rootRef}
-      className="ds-motion-root"
-      data-ds-motion-tier={effectiveTier}
-      data-ds-motion-reduced={reduced ? 'true' : 'false'}
-      data-ds-motion-paused={paused ? 'true' : 'false'}
-      data-ds-motion-profile={profile}
-      data-ds-motion-scale={clampedScale}
-      style={style}
-    >
+    <div ref={rootRef} className="ds-motion-root">
       {children}
     </div>
   );

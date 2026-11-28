@@ -8,4 +8,4 @@
  * 27/11/2026 (BATCH2-SPECS-ADDENDUM §5) — the version date is the build
  * date, not the sim calendar.
  */
-export const SIM_VERSION = '0.3.1 · 29/11/2026';
+export const SIM_VERSION = '0.3.2 · 29/11/2026';

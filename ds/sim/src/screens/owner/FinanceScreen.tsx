@@ -32,12 +32,16 @@ import {
 import { FINANCE_HERO } from '../../texts';
 import { FUNDS, fundBalance, incomeByDay, totalBalance, endOfDayBalances } from '../../data';
 import { projectView } from '../parts';
+import { useOpenedMark } from '../../motion/useOpenedMark';
 
 export function FinanceScreen() {
   const state = useSim();
   const dispatch = useSimDispatch();
   const view = projectView(state);
   const { amountsHidden } = state;
+
+  // ح04 — الصف المفتوح يبقى معلّمًا حتى onClosed ثم يتلاشى 600 ميكرو.
+  const openedMark = useOpenedMark(state.ui.sheet);
 
   // The hero's live numbers (§5.1 HeroSurface المالية) — the project's own.
   const total = totalBalance(view.movements);
@@ -116,6 +120,7 @@ export function FinanceScreen() {
                 caption={`${m.type === 'in' ? 'داخل' : 'خارج'} · ${FUNDS.find((f) => f.id === m.fund)?.name} · ${whenLine(m.date, m.time)}`}
                 value={<Money value={moneyText(m.amount)} flow={m.type} />}
                 leading={<DraftIcon size={24} />}
+                {...openedMark(`object:${m.id}`)}
                 onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${m.id}` })}
               />
             ))}
@@ -143,6 +148,7 @@ export function FinanceScreen() {
               value={<span className="sim-money"><Money value={moneyText(fundBalance(view.movements, fund.id))} /> د</span>}
               leading={<EntityMark value={fund.name} />}
               trailing={<LaterChip name="FundCard" />}
+              {...openedMark(`object:${fund.id}`)}
               onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${fund.id}` })}
             />
           ))}
@@ -161,6 +167,7 @@ export function FinanceScreen() {
               caption={`${m.id} · ${whenLine(m.date, m.time)}`}
               value={<Money value={moneyText(m.amount)} flow={m.type} />}
               trailing={<LaterChip name={m.type === 'transfer' ? 'TransferRow' : 'MovementRow'} />}
+              {...openedMark(`object:${m.id}`)}
               onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${m.id}` })}
             />
           ))}

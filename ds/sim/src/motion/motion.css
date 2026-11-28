@@ -22,3 +22,39 @@ html[data-sim-motion='off'] .ds-motion-root :not(.mds-button-spinner):not(.mds-b
 
 /* === «تقليل الحركة» المحاكى يمر عبر data-ds-motion-reduced — قواعد كل
    حركة تحت هذا النطاق تصل مع وحداتها. */
+
+/* === M3 — الضغط (ح01–ح03) والعلامة (ح04) === */
+
+/* تعارض 2 — منحنى press-out: المكتبة تخفف الخروج بـquick (.2,0,0,1)؛
+   الملحق يريده 160 بـmicro. متغير المنحنى يوضع على الجذر من motionCssVars
+   (فيرثه كل ما في نطاق الحركة بما فيه الأوراق عبر الجذر html). */
+
+/* ح03/ح04 — الصف المفتوح يبقى معلَّمًا: الخلفية المضغوطة ثابتة بلا انتقال
+   ما دامت الورقة مفتوحة (الدخول فوري)، وبعد onClosed تخرج بتلاشٍ 600
+   ميكرو — الصف إلى شفاف، والبطاقة إلى سطحها. عند النقل تدخل خاصية
+   `opened` عناصر المكتبة (تعارض 5) وتُحذف هذه القواعد. */
+[data-sim-opened='true'] {
+  background-color: var(--mds-color-surface-pressed) !important;
+  transition: none;
+}
+[data-sim-opened='fade'] {
+  background-color: transparent;
+  transition: background-color calc(var(--ds-motion-opened-fade) * var(--ds-motion-scale))
+    var(--ds-motion-ease-micro);
+}
+/* البطاقة المفتوحة تعود إلى سطحها لا إلى الشفاف. */
+[data-sim-opened-card='true'] {
+  background-color: var(--mds-color-surface-pressed) !important;
+  transition: none;
+}
+[data-sim-opened-card='fade'] {
+  background-color: var(--mds-color-surface);
+  transition: background-color calc(var(--ds-motion-opened-fade) * var(--ds-motion-scale))
+    var(--ds-motion-ease-micro);
+}
+/* تقليل الحركة: الخروج بتلاشٍ xs 120 (ح04 المستويات). */
+[data-ds-motion-reduced='true'] [data-sim-opened='fade'],
+[data-ds-motion-reduced='true'] [data-sim-opened-card='fade'] {
+  transition: background-color calc(var(--ds-motion-duration-xs) * var(--ds-motion-scale))
+    var(--ds-motion-ease-micro);
+}

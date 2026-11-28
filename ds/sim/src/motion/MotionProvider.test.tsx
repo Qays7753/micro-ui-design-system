@@ -8,8 +8,7 @@ import { MotionProvider } from './MotionProvider';
 import { decideTier } from './tierMeasure';
 
 function attr(name: string): string | null {
-  const root = document.querySelector('.ds-motion-root');
-  return root?.getAttribute(name) ?? null;
+  return document.documentElement.getAttribute(name);
 }
 
 describe('decideTier (§4.1-3)', () => {
@@ -47,9 +46,9 @@ describe('MotionProvider — صفات البيانات والمتغيرات (§2
     expect(attr('data-ds-motion-paused')).toBe('true');
     expect(attr('data-ds-motion-profile')).toBe('driver');
     expect(attr('data-ds-motion-scale')).toBe('0.5');
-    const root = document.querySelector('.ds-motion-root') as HTMLElement;
-    expect(root.style.getPropertyValue('--ds-motion-scale')).toBe('0.5');
-    expect(root.style.getPropertyValue('--ds-motion-duration-lg')).toBe('360ms');
+    const rootEl = document.documentElement;
+    expect(rootEl.style.getPropertyValue('--ds-motion-scale')).toBe('0.5');
+    expect(rootEl.style.getPropertyValue('--ds-motion-duration-lg')).toBe('360ms');
   });
 
   it('الافتراضي: auto يبدأ full وscale يُحصر في 0.1–1', () => {

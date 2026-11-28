@@ -78,14 +78,13 @@ def main():
 
         def root_attrs():
             return page.evaluate("""(() => {
-              const r = document.querySelector('.ds-motion-root');
-              if (!r) return null;
+              const r = document.documentElement;
               const cs = getComputedStyle(r);
               return { tier: r.getAttribute('data-ds-motion-tier'),
                        reduced: r.getAttribute('data-ds-motion-reduced'),
                        paused: r.getAttribute('data-ds-motion-paused'),
                        profile: r.getAttribute('data-ds-motion-profile'),
-                       scale: r.style.getPropertyValue('--ds-motion-scale') };
+                       scale: r.getAttribute('data-ds-motion-scale') || cs.getPropertyValue('--ds-motion-scale').trim() };
             })()""")
 
         # 1) الجذر وصفاته
@@ -97,6 +96,36 @@ def main():
         # الدخول: دور المالك
         press('[data-sim-role-screen] .mds-object-row:has-text("ورشة الياسمين")', "دور المالك")
         page.wait_for_selector(".mds-context-bar", timeout=5000)
+
+        # M3 — منحنى press-out داخل النطاق = micro (تعارض 2، الشيم من الرموز):
+        # المتغير الموروث على أي عنصر داخل النطاق يحمل cubic-bezier(.22,1,.36,1).
+        curve = page.evaluate("""(() => {
+          const el = document.querySelector('.sim-app') || document.body;
+          return getComputedStyle(el).getPropertyValue('--mds-motion-quick-ease');
+        })()""")
+        results.append(check(page, curve is not None and ".22" in curve and ".36, 1".replace(' ', '') in curve.replace(' ', ''),
+                             "منحنى الخروج داخل النطاق micro (الشيم)", curve or ""))
+
+        # M3 — ح04: صف الحركات يبقى معلّمًا مع الورقة ثم يتلاشى بعد onClosed.
+        press('.mds-tab-bar button:has-text("المالية")', "تبويب المالية")
+        page.wait_for_selector('[data-sim-screen-body="finance"]', timeout=5000)
+        row = page.locator('.mds-section:has-text("الحركات") .mds-object-row').first
+        row.scroll_into_view_if_needed()
+        row.tap(timeout=5000)
+        time.sleep(0.7)
+        opened_attr = page.evaluate("""(() => {
+          const r = document.querySelector('[data-sim-screen-body="finance"] [data-sim-opened="true"]');
+          return r ? r.getAttribute('data-sim-opened') : null;
+        })()""")
+        results.append(check(page, opened_attr == "true", "الصف المفتوح معلَّم data-sim-opened=true"))
+        # إغلاق الورقة بلمسة الخلفية
+        page.touchscreen.tap(195, 150)
+        time.sleep(0.9)
+        fade_attr = page.evaluate("""(() => {
+          const r = document.querySelector('[data-sim-screen-body="finance"] [data-sim-opened]');
+          return r ? r.getAttribute('data-sim-opened') : null;
+        })()""")
+        results.append(check(page, fade_attr == "fade", "بعد onClosed تبدأ حالة التلاشي fade", str(fade_attr)))
 
         # 2) لمس مطوّل على النسخة → لوحة المحاكاة (pointerdown ممسوك ≥500ms)
         version = page.locator("[data-sim-version]").first
