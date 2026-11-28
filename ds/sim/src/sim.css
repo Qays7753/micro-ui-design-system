@@ -313,6 +313,10 @@
   line-height: var(--mds-type-label-strong-line);
   font-weight: var(--mds-type-label-strong-weight);
   color: var(--mds-color-text-secondary);
+  /* جولة الناقد: the marker names carry unbreakable Latin component names
+     (LockedDetails…) — at خط 200% inside the market's 2-col grid they
+     forced the track (and the page) 36px wider. The text may break now. */
+  overflow-wrap: anywhere;
 }
 
 .sim-later__note {
@@ -320,6 +324,7 @@
   font-size: var(--mds-type-caption-size);
   line-height: var(--mds-type-caption-line);
   color: var(--mds-color-text-secondary);
+  overflow-wrap: anywhere;
 }
 
 /* The inline variant (a marker inside a Surface row / a form / a chart head). */
@@ -406,6 +411,17 @@
 
 .sim-tiles {
   width: 100%;
+  /* جولة الناقد: a 1fr track's min-width is auto — the tile's big money
+     value (library Tile internals, unstylable from the sim) pushed the
+     grid 65px past the viewport at خط 200%. The track clamps at half the
+     container; and at 200% the tiles STACK (temporary sim accommodation —
+     the library decides the real 200% tile behavior; REPORT-SIM
+     «ملاحظات للجولة النهائية»). */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-sim-font="200"] .sim-tiles {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 /* ── The hero's diff line (23.8) ──────────────────────────────────────── */
@@ -526,7 +542,7 @@
 
 .sim-market-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--mds-layout-tile-gap);
 }
 

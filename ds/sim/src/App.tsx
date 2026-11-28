@@ -83,7 +83,12 @@ function Shell() {
 
   return (
     <AmountVisibilityProvider hidden={state.amountsHidden}>
-      <div className="sim-app sim-app--shell" style={identityStyle(state.identity)} data-sim-app="ready">
+      <div
+        className="sim-app sim-app--shell"
+        style={identityStyle(state.identity)}
+        data-sim-app="ready"
+        data-sim-font={state.identity.fontScale === 200 ? '200' : undefined}
+      >
         <SimBar onOpenTasks={openTasks} onOpenPanel={openPanel} />
         <main className="sim-shell-screen" data-sim-screen={state.ui.screen}>
           <ScreenRouter />

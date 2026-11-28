@@ -78,4 +78,31 @@ describe('App (the SA6 shell)', () => {
     expect(screen.getByText('غيّر الدور')).toBeTruthy();
     expect(screen.getByText('أعد البيانات')).toBeTruthy();
   });
+
+  it('خط 200% marks the shell (data-sim-font) — the tiles stack hook (جولة الناقد)', async () => {
+    // jsdom lacks the label→checkbox activation (the real toggle is proven
+    // in the touch audit: computed 200%), so this drives the REAL hydration
+    // path: a stored identity with fontScale 200 comes back from the device.
+    window.localStorage.setItem(
+      'micro-sim:v1',
+      JSON.stringify({
+        version: 1,
+        state: { identity: { fontScale: 200 }, movements: [], orders: [], deliveries: [], listings: [], debts: [], drivers: [], notifications: [], reviewQueue: [], reportsQueue: [], driversQueue: [] },
+      }),
+    );
+    render(<App />);
+    await waitFor(
+      () => expect(document.querySelector('[data-sim-role-screen]')).toBeTruthy(),
+      { timeout: 2500 },
+    );
+    const row = screen.getByText('ورشة الياسمين للخياطة').closest('button')!;
+    fireEvent.pointerDown(row);
+    fireEvent.pointerUp(row);
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 60));
+    });
+    expect(document.documentElement.style.fontSize).toBe('200%');
+    expect(document.querySelector('[data-sim-app="ready"]')?.getAttribute('data-sim-font')).toBe('200');
+    window.localStorage.clear();
+  });
 });
