@@ -310,6 +310,12 @@ class Vanish:
             return "navigates"
         if e["tog"]:
             return "state"
+        # The sheet's own X (close) IconButton: the LIBRARY gives it the
+        # sheet's label as its accessible name (Sheet.tsx line ~246: <IconButton
+        # label={label}>), so its text is «تبديل المشروع» etc. — it CLOSES
+        # the sheet (recorded as a library note in REPORT-SIM).
+        if e["inSheet"] and e["cls"] == "mds-icon-button":
+            return "closes-sheet"
         if e["seeall"] or e["row"]:
             return "opens-layer"
         if e["tile"]:
