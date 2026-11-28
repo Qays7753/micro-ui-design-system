@@ -121,15 +121,15 @@ function FieldButton({
     : label;
   const classes = [
     'mds-text-field-input',
-    'mds-time-field-box',
-    isPressed ? 'mds-time-field-box--pressed' : '',
+    'mds-picker-field-box',
+    isPressed ? 'mds-picker-field-box--pressed' : '',
     error ? 'mds-time-field-box--error' : '',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <span className="mds-time-field-row">
+    <span className="mds-picker-field-row">
       <button
         type="button"
         className={classes}
@@ -194,7 +194,7 @@ function TimeSheet({
 
   return (
     <Sheet variant="form" label={label} onDismiss={onDismiss}>
-      <div className="mds-time-sheet-head">
+      <div className="mds-picker-sheet-head">
         <span className="mds-time-sheet-value mds-type-number-lg">
           {current ? current.text : t('money.missing')}
         </span>

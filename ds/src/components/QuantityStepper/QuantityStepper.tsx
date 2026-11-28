@@ -42,6 +42,7 @@ export function QuantityStepper({
   onChange,
   min = 0,
   max,
+  step = 1,
   disabled = false,
   className,
   id,
@@ -73,17 +74,17 @@ export function QuantityStepper({
     }
   }, []);
 
-  const step = useCallback(
+  const doStep = useCallback(
     (direction: 1 | -1) => {
       setDraft(null);
-      const next = (valueRef.current ?? min) + direction;
+      const next = (valueRef.current ?? min) + direction * step;
       if (next < min || (max !== undefined && next > max)) return;
       onChange?.(next);
     },
-    [min, max, onChange],
+    [min, max, step, onChange],
   );
   useEffect(() => {
-    stepRef.current = step;
+    stepRef.current = doStep;
     valueRef.current = value;
   });
 
@@ -116,7 +117,7 @@ export function QuantityStepper({
         icon={<MinusIcon size={20} />}
         name={t('quantity.decrease')}
         disabled={minusDisabled}
-        step={() => step(-1)}
+        step={() => doStep(-1)}
         startRepeat={() => startRepeat(-1)}
         stopRepeat={stopRepeat}
       />
@@ -141,7 +142,11 @@ export function QuantityStepper({
           const bounded = Number.isFinite(parsed)
             ? Math.min(Math.max(parsed, min), max ?? Number.MAX_SAFE_INTEGER)
             : current;
-          if (bounded !== current) onChange?.(bounded);
+          // a typed value returns to the bound AND snaps to the step grid
+          // (§1.6-5 + the step contract)
+          const snapped = Math.round(bounded / step) * step;
+          const settled = Math.min(Math.max(snapped, min), max ?? Number.MAX_SAFE_INTEGER);
+          if (settled !== current) onChange?.(settled);
           setDraft(null);
         }}
       />
@@ -149,7 +154,7 @@ export function QuantityStepper({
         icon={<PlusIcon size={20} />}
         name={t('quantity.increase')}
         disabled={plusDisabled}
-        step={() => step(1)}
+        step={() => doStep(1)}
         startRepeat={() => startRepeat(1)}
         stopRepeat={stopRepeat}
       />

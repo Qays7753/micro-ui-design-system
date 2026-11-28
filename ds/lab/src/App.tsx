@@ -20,7 +20,7 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, TimePicker, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -82,6 +82,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'quantity-stepper', name: t('title.quantityStepper') },
   { id: 'date-quick-chips', name: t('title.dateQuickChips') },
   { id: 'time-picker', name: t('title.timePicker') },
+  { id: 'duration-picker', name: t('title.durationPicker') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -192,6 +193,10 @@ export function App() {
   // button that unmounts on its own press would fake a violation).
   const [deliveryTime, setDeliveryTime] = useState<number | undefined>(undefined);
   const [deliveryTimeError, setDeliveryTimeError] = useState(false);
+  // 4.12 — DurationPicker: §3.3-10's data (45 minutes) — the duration
+  // field does not exist before a time (criterion 2): the garden is a real
+  // mini form where the duration field appears only after the time.
+  const [orderDuration, setOrderDuration] = useState<number | undefined>(undefined);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   // the interim picker serves two targets: the catalog garden and the
   // movement sheet's own date field (§746's composition order).
@@ -1800,6 +1805,36 @@ export function App() {
               >
                 {t('button.saveMovement')}
               </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- DurationPicker (addendum §3.3): the appointment duration ---- */}
+        <section className="lab-section" id="duration-picker">
+          <h2 className="lab-title">{t('lab.h.durationPicker')}<span className="lab-tech">{t('title.durationPicker')}</span></h2>
+          <p className="lab-note">{t('lab.durationPickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            {/* A REAL mini form: pick the time first, the duration field
+                appears only then (criterion 2); its sheet carries the
+                common chips and the 15-minute stepper; the value rides
+                §3.3-10's data through a common pick. */}
+            <div className="lab-garden">
+              <TimePicker
+                label={t('field.deliveryTime')}
+                value={deliveryTime}
+                onChange={(next) => {
+                  setDeliveryTime(next);
+                  setDeliveryTimeError(false);
+                }}
+              />
+              {deliveryTime !== undefined ? (
+                <DurationPicker
+                  label={t('field.duration')}
+                  value={orderDuration}
+                  onChange={setOrderDuration}
+                  data-ds-check="duration-picker"
+                />
+              ) : null}
             </div>
           </div>
         </section>

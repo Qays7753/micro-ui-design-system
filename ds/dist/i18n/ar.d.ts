@@ -676,6 +676,78 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "اضغط الحقل تفتح الورقة، واعتمد منها.";
     };
+    readonly 'duration.hourOne': {
+        readonly kind: "badge";
+        readonly text: "ساعة";
+    };
+    readonly 'duration.hourTwo': {
+        readonly kind: "badge";
+        readonly text: "ساعتان";
+    };
+    readonly 'duration.hourFew': {
+        readonly kind: "badge";
+        readonly text: "ساعات";
+    };
+    readonly 'duration.hourMany': {
+        readonly kind: "badge";
+        readonly text: "ساعة";
+    };
+    readonly 'duration.minuteOne': {
+        readonly kind: "badge";
+        readonly text: "دقيقة";
+    };
+    readonly 'duration.minuteTwo': {
+        readonly kind: "badge";
+        readonly text: "دقيقتان";
+    };
+    readonly 'duration.minuteFew': {
+        readonly kind: "badge";
+        readonly text: "دقائق";
+    };
+    readonly 'duration.minuteMany': {
+        readonly kind: "badge";
+        readonly text: "دقيقة";
+    };
+    readonly 'duration.half': {
+        readonly kind: "badge";
+        readonly text: "ونصف";
+    };
+    readonly 'duration.and': {
+        readonly kind: "badge";
+        readonly text: "و";
+    };
+    readonly 'duration.common': {
+        readonly kind: "title";
+        readonly text: "مدد شائعة";
+    };
+    readonly 'duration.other': {
+        readonly kind: "badge";
+        readonly text: "مدة أخرى";
+    };
+    readonly 'durationPicker.apply': {
+        readonly kind: "button";
+        readonly text: "اعتمد المدة";
+    };
+    readonly 'durationPicker.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {duration}";
+    };
+    readonly 'field.duration': {
+        readonly kind: "badge";
+        readonly text: "المدة";
+    };
+    readonly 'title.durationPicker': {
+        readonly kind: "title";
+        readonly text: "منتقي المدة";
+    };
+    readonly 'lab.h.durationPicker': {
+        readonly kind: "title";
+        readonly text: "حقل مدة الموعد";
+    };
+    readonly 'lab.durationPickerHint': {
+        readonly kind: "help";
+        readonly text: "المدة تظهر بعد اختيار الوقت، وتُعتمد من الورقة.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";

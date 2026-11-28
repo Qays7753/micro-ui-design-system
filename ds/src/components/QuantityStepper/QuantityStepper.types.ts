@@ -22,6 +22,10 @@ export interface QuantityStepperProps {
   min?: number;
   /** The upper bound; «+» disables here (م-خ1). Undefined = no ceiling. */
   max?: number;
+  /** The step size (م-خ1) — default 1 (integer quantities, §1.6); the
+   * DurationPicker sheet rides 15 (ADDENDUM §3.3: «بخطوة 15 دقيقة»). A
+   * typed value snaps to the step grid on blur. */
+  step?: number;
   /** Disables the whole group (23.2). */
   disabled?: boolean;
   /** React 19 ref-as-prop on the group root. */

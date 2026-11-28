@@ -1,9 +1,10 @@
 /*
  * TimePicker.css — BATCH2-SPECS §1.9 + ADDENDUM §2.4. The field box rides
- * TextField's own input class (the composed look); the chips ride
- * FilterChips' own chip class. This file owns the field's row (text +
- * clock + clear), the sheet's head/grids, and the error line. Every value
- * rides a token by name; no raw hex/px/ms (ds-raw-values).
+ * TextField's own input class + the shared .mds-picker-field-* anatomy
+ * (base.css — the row, box, press/focus/disabled, sheet head); the chips
+ * ride FilterChips' own chip class. This file owns only the time-specific
+ * pieces. Every value rides a token by name; no raw hex/px/ms
+ * (ds-raw-values).
  */
 
 .mds-time-field {
@@ -12,62 +13,15 @@
   width: 100%;
 }
 
-/* The label rides the shared field anatomy (label above, 8 gap — base.css
- * carries .mds-field for it; TimePicker keeps its own trio small so the
- * anatomy stays shared). */
 .mds-time-field-label {
   font-weight: var(--mds-type-label-weight);
   color: var(--mds-type-label-color, var(--mds-color-text-primary));
   margin-block-end: var(--mds-layout-label-to-field);
 }
 
-/* The field row: the TextField-look trigger + the clear IconButton. */
-.mds-time-field-row {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--mds-space-8);
-  width: 100%;
-}
-
-/* The trigger box — the .mds-text-field-input class carries the TextField
- * look (height, border, radius, padding); this class only lays out its
- * content (text start, icon end). */
-.mds-time-field-box {
-  display: inline-flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--mds-space-8);
-  cursor: pointer;
-  text-align: start;
-  font-family: inherit;
-}
-
-/* The pressed field reads as a surface press (23.2). */
-.mds-time-field-box:active,
-.mds-time-field-box[data-pressed],
-.mds-time-field-box--pressed {
-  background-color: var(--mds-color-surface-pressed);
-}
-
-/* The focus ring of the fields (9.3): keyboard focus on the trigger. */
-.mds-time-field-box:focus-visible {
-  border-color: var(--mds-color-brand-text);
-  border-width: var(--mds-border-field-focus);
-  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
-  outline: none;
-}
-
 /* The error border (§1.9-4, like TextField). */
 .mds-time-field-box--error {
   border-color: var(--mds-color-status-problem-fg);
-}
-
-/* The native disabled state (23.2): the gate toggles the attribute and
-   must SEE the change — the icon dims with the text. */
-.mds-time-field-box:disabled {
-  color: var(--mds-color-disabled-fg);
-  cursor: default;
 }
 
 /* The time text: tabular figures inside an LTR run (ج7). */
@@ -80,11 +34,13 @@
   color: var(--mds-color-text-secondary);
 }
 
-.mds-time-field--disabled .mds-time-field-box {
+.mds-time-field--disabled .mds-time-field-label {
   color: var(--mds-color-disabled-fg);
+}
+
+.mds-time-field--disabled .mds-picker-field-box {
   background-color: var(--mds-color-disabled-bg);
   border-color: var(--mds-color-disabled-bg);
-  cursor: default;
 }
 
 .mds-time-field--disabled .mds-time-field-icon {
@@ -97,15 +53,7 @@
   margin-block-start: var(--mds-layout-field-to-help);
 }
 
-/* --- The sheet (92%, ADDENDUM §2.4) --- */
-
-.mds-time-sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-block: var(--mds-space-8);
-}
-
+/* The drafted time in the sheet head. */
 .mds-time-sheet-value {
   font-variant-numeric: tabular-nums;
 }

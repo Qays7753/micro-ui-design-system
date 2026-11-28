@@ -1,0 +1,68 @@
+/*
+ * DurationPicker.css — BATCH2-SPECS-ADDENDUM §3.3. The field box rides
+ * TextField's own input class + the shared .mds-picker-field-* anatomy
+ * (base.css); the chips ride FilterChips' own chip class. This file owns
+ * only the duration-specific pieces. Every value rides a token by name;
+ * no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-duration-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mds-duration-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+.mds-duration-field--disabled .mds-duration-field-label {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-duration-field--disabled .mds-picker-field-box {
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+}
+
+/* The drafted duration in the sheet head. */
+.mds-duration-sheet-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The common durations: single-choice chips in TWO columns (§3.3-6 — two
+   columns at 200% AND on 320). */
+.mds-duration-common {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--mds-layout-chip-gap);
+  min-height: var(--mds-size-touch-min);
+  margin-block-start: var(--mds-space-16);
+}
+
+.mds-duration-common-chip {
+  width: 100%;
+}
+
+.mds-duration-common-chip-label {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The «مدة أخرى» block: its visible title, the stepper, and the
+   formatted text under it. */
+.mds-duration-other {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--mds-space-16);
+}
+
+.mds-duration-other-title {
+  margin-block-end: var(--mds-space-8);
+}
+
+.mds-duration-other-text {
+  color: var(--mds-color-text-secondary);
+  margin-block-start: var(--mds-space-8);
+}
