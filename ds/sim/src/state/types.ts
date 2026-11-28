@@ -176,6 +176,7 @@ export type SimAction =
   | { type: 'draft/discard' }
   | { type: 'order/save'; input: OrderInput }
   | { type: 'order/deliver'; id: string }
+  | { type: 'order/status'; id: string; status: 'confirmed' } // جولة المستخدم: اعتماد «يحتاج مراجعة»
   | { type: 'debt/pay'; debtId: string; amount: number; fund: FundId }
   | { type: 'delivery/create'; input: DeliveryInput }
   | { type: 'quote/submit'; deliveryId: string; amount: number }

@@ -135,6 +135,17 @@ export function reducer(state: SimState, action: SimAction): SimState {
         orders: state.orders.map((o) => (o.id === action.id ? { ...o, status: 'delivered' } : o)),
       };
     }
+    case 'order/status': {
+      // جولة المستخدم: the owner's review of a «يحتاج مراجعة» order — the
+      // only status transition the journeys need; everything else rides the
+      // real cards in part B.
+      const order = state.orders.find((o) => o.id === action.id);
+      if (!order || order.status !== 'needsReview') return state;
+      return {
+        ...state,
+        orders: state.orders.map((o) => (o.id === action.id ? { ...o, status: action.status } : o)),
+      };
+    }
 
     // ── Debts (ر2.3) ──────────────────────────────────────────────────────
     case 'debt/pay': {

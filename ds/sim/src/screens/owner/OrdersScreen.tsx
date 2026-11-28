@@ -163,7 +163,7 @@ export function OrdersScreen() {
             <Section label="يحتاجك" caption={needsList.length}>
               <div className="sim-cards">
                 {needsList.map((o) => (
-                  <LaterMark key={o.id} name="OrderCard" note={`طلب ${o.id} · ${o.customer} · ${o.content} · ${statusOf(o).label}`} />
+                  <LaterMark key={o.id} name="OrderCard" note={`طلب ${o.id} · ${o.customer} · ${o.content} · ${statusOf(o).label}`} onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${o.id}` })} />
                 ))}
               </div>
             </Section>
@@ -174,8 +174,8 @@ export function OrdersScreen() {
                 {running.map((o) => (
                   <ObjectRow
                     key={o.id}
-                    label={`${o.content} · ${o.customer}`}
-                    caption={`طلب ${o.id} · ${o.dueDate ? dateDisplay(o.dueDate) : 'بلا موعد'}${o.time ? ` · ${time12(o.time)}` : ''}`}
+                    label={`${o.customer} · ${o.content}`}
+                    caption={`طلب ${o.id}${o.time ? ` · ${time12(o.time)}` : ''}${o.dueDate ? ` · ${dateDisplay(o.dueDate)}` : ''}`}
                     leading={<EntityMark value={o.customer} />}
                     trailing={<StatusBadge tone={statusOf(o).tone} label={statusOf(o).label} />}
                     onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${o.id}` })}

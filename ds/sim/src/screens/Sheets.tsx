@@ -37,7 +37,7 @@ import { FUNDS, PROJECTS, fundBalance } from '../data';
 import type { FundId, Listing } from '../data/types';
 import type { MovementInput, OrderInput, DeliveryInput, SimState } from '../state/types';
 import { LaterMark, moneyText, needsCard, todayNeedsYouList, whenLine } from './parts';
-import { dateDisplay } from '../format';
+import { dateDisplay, parseTimeInput, time12 } from '../format';
 
 /** The sheet's own body rhythm. */
 function SheetBody({ children }: { children: React.ReactNode }) {
@@ -242,6 +242,61 @@ export function ObjectSheetShell({ title, refId, onDismiss }: { title: string; r
           ) : (
             <p className="sim-form-help">دين عليك مورد — سجّل تسديدك من «سجّل حركة» ← خارج.</p>
           )}
+        </SheetBody>
+      </Sheet>
+    );
+  }
+
+  const order = state.orders.find((o) => o.id === refId);
+  if (order) {
+    const STATUS_WORDS: Record<string, string> = {
+      delivered: 'تم التسليم', ready: 'جاهز', settled: 'تمت التسوية', draft: 'مسودة',
+      tentative: 'اتفاق مبدئي', confirmed: 'مؤكد', inProgress: 'قيد التنفيذ',
+      needsReview: 'يحتاج مراجعة', postponed: 'مؤجل', cancelled: 'ملغى',
+    };
+    const deliverable = ['ready', 'confirmed', 'tentative', 'inProgress'].includes(order.status);
+    return (
+      <Sheet label={title} onDismiss={onDismiss}>
+        <SheetBody>
+          <LaterMark name="ObjectSheet" note="مكان ورقة الكائن الحقيقية" />
+          <Surface>
+            <ObjectRow label={order.customer} caption="العميل" leading={<EntityMark value={order.customer} />} />
+            <ObjectRow label={order.content || '—'} caption={order.content ? 'المحتوى' : 'المحتوى: —'} />
+            <ObjectRow label="السعر" value={<span className="sim-money">{order.price !== null ? `${moneyText(order.price)} د` : '—'}</span>} />
+            <ObjectRow
+              label="الموعد"
+              value={<span>{order.dueDate ? `${dateDisplay(order.dueDate)}${order.time ? ` · ${time12(order.time)}` : ''}` : '—'}</span>}
+            />
+            {order.durationMinutes ? <ObjectRow label="المدة" value={<span>{`${order.durationMinutes} دقيقة`}</span>} /> : null}
+            <ObjectRow label="الحالة" value={<span>{STATUS_WORDS[order.status] ?? order.status}</span>} />
+            {order.reason ? <ObjectRow label={order.reason} caption="سبب التأجيل" /> : null}
+            {order.linkedDebtId ? <ObjectRow label={order.linkedDebtId} caption="مرتبط بدين" /> : null}
+            {order.linkedMovementId ? <ObjectRow label={`حركة ${order.linkedMovementId}`} caption="مرتبط بحركة" /> : null}
+            {order.linkedDeliveryId ? <ObjectRow label={order.linkedDeliveryId} caption="مرتبط بتوصيل" /> : null}
+          </Surface>
+          {order.status === 'needsReview' ? (
+            <>
+              <ActionBar
+                label="اعتمد الطلب"
+                onPress={() => {
+                  dispatch({ type: 'order/status', id: order.id, status: 'confirmed' });
+                  dispatch({ type: 'ui/openSheet', id: null });
+                }}
+              />
+            </>
+          ) : deliverable ? (
+            <>
+              <ActionBar
+                label="سجّل التسليم"
+                onPress={() => {
+                  dispatch({ type: 'order/deliver', id: order.id });
+                  dispatch({ type: 'ui/openSheet', id: null });
+                }}
+              />
+            </>
+          ) : order.status === 'draft' && order.missing?.length ? (
+            <p className="sim-form-help">{`مسودة — الناقص: ${order.missing.join(' و')}.`}</p>
+          ) : null}
         </SheetBody>
       </Sheet>
     );
@@ -629,29 +684,60 @@ export function MovementSheet({ onDismiss }: { onDismiss: () => void }) {
   );
 }
 
-/** The order form (§2.2.5's ورقة «طلب جديد») — built fields real. */
+/** The order form (§2.2.5's ورقة «طلب جديد») — جولة المستخدم: the form WORKS.
+ *  The customer/date/time pickers are still markers; until they mount the
+ *  sim offers TEMPORARY real inputs (a TextField for the customer, اليوم /
+ *  غدًا / بعد غد chips for the date, a TextField parsing «4:00 م» for the
+ *  time) — documented in REPORT-SIM as a temporary accommodation. Without a
+ *  price the order saves as مسودة (§2.2.5 + ر3.1's expected error). */
 export function NewOrderSheet({ onDismiss }: { onDismiss: () => void }) {
   const dispatch = useSimDispatch();
   const [form, setForm] = useState<{
-    customer: string | null;
+    customer: string;
     content: string;
     price: string;
-    dueDate: string | null;
+    dueDay: 'today' | 'tomorrow' | 'afterTomorrow' | null;
+    time: string;
     status: 'confirmed' | 'tentative';
     note: string;
-  }>({ customer: null, content: '', price: '', dueDate: null, status: 'confirmed', note: '' });
-  const missing = !form.customer || !form.dueDate || !form.price;
+  }>({ customer: '', content: '', price: '', dueDay: null, time: '', status: 'confirmed', note: '' });
+  const DUE_DAYS: readonly { value: 'today' | 'tomorrow' | 'afterTomorrow'; label: string; iso: string }[] = [
+    { value: 'today', label: 'اليوم', iso: '2026-11-27' },
+    { value: 'tomorrow', label: 'غدًا', iso: '2026-11-28' },
+    { value: 'afterTomorrow', label: 'بعد غد', iso: '2026-11-29' },
+  ];
+  const timeIso = form.time.trim() ? parseTimeInput(form.time) : null;
+  const timeInvalid = form.time.trim() !== '' && timeIso === null;
+  const missingCustomer = !form.customer.trim();
+  const missingDate = form.dueDay === null;
+  const priceValue = form.price.trim() === '' ? null : Math.round(Number.parseFloat(form.price) * 1000);
+  const priceInvalid = priceValue !== null && (!Number.isFinite(priceValue) || priceValue <= 0);
+  // ر3.1's expected error: بلا سعر يُحفظ «مسودة» — النقص لا يمنع الحفظ، بل يغيّر حالته.
+  const blocked = missingCustomer || missingDate || timeInvalid || priceInvalid;
   const STATUS_SEGMENTS: readonly SegmentOption[] = [
     { value: 'confirmed', label: 'مؤكد' },
     { value: 'tentative', label: 'اتفاق مبدئي' },
   ];
+  const blockedReason = missingCustomer
+    ? 'اكتب اسم العميل.'
+    : missingDate
+      ? 'اختر موعد التسليم.'
+      : priceInvalid
+        ? 'اكتب سعرًا صحيحًا — أو اتركه فارغًا ليُحفظ مسودة.'
+        : null; // خطأ الوقت يظهر تحت حقل الوقت نفسه — لا تكرار
   return (
     <Sheet label="طلب جديد" variant="form" onDismiss={onDismiss}>
       <SheetBody>
         <div className="sim-later-inline" data-sim-later="PartyPicker">
           <span className="sim-later__name">يُركَّب لاحقًا: PartyPicker</span>
-          <span className="sim-later__note">العميل</span>
+          <span className="sim-later__note">بديل مؤقت: كتابة الاسم مباشرة</span>
         </div>
+        <TextField
+          label="العميل"
+          placeholder="مثال: سلمى الحوراني"
+          value={form.customer}
+          onChange={(customer) => setForm((f) => ({ ...f, customer }))}
+        />
         <TextArea
           label="المحتوى"
           value={form.content}
@@ -664,12 +750,26 @@ export function NewOrderSheet({ onDismiss }: { onDismiss: () => void }) {
         />
         <div className="sim-later-inline" data-sim-later="DatePicker">
           <span className="sim-later__name">يُركَّب لاحقًا: DatePicker</span>
-          <span className="sim-later__note">موعد التسليم</span>
+          <span className="sim-later__note">بديل مؤقت: اليوم / غدًا / بعد غد</span>
         </div>
+        <SegmentedControl
+          leading={DUE_DAYS.map((d) => ({ value: d.value, label: d.label }))}
+          value={form.dueDay ?? ''}
+          onChange={(v) => setForm((f) => ({ ...f, dueDay: v as 'today' | 'tomorrow' | 'afterTomorrow' }))}
+          label="موعد التسليم"
+        />
         <div className="sim-later-inline" data-sim-later="TimePicker">
           <span className="sim-later__name">يُركَّب لاحقًا: TimePicker</span>
-          <span className="sim-later__note">اختياري</span>
+          <span className="sim-later__note">بديل مؤقت: كتابة الوقت</span>
         </div>
+        <TextField
+          label="الوقت"
+          placeholder="مثال: 4:00 م أو 16:00"
+          value={form.time}
+          onChange={(time) => setForm((f) => ({ ...f, time }))}
+          caption="اختياري"
+        />
+        {timeInvalid ? <p className="sim-form-help sim-form-help--error">اكتب الوقت مثل 4:00 م أو 16:00.</p> : null}
         <TextArea
           label="ملاحظة"
           value={form.note}
@@ -680,21 +780,27 @@ export function NewOrderSheet({ onDismiss }: { onDismiss: () => void }) {
           leading={STATUS_SEGMENTS}
           value={form.status}
           onChange={(v) => setForm((f) => ({ ...f, status: v as 'confirmed' | 'tentative' }))}
-          disabled={missing}
+          disabled={blocked}
           label="الحالة"
         />
-        {missing ? <p className="sim-form-help">يُحفظ مسودة حتى تكمل السعر والموعد.</p> : null}
+        {blocked && blockedReason ? <p className="sim-form-help">{blockedReason}</p> : null}
+        {!blocked && priceValue === null ? (
+          <p className="sim-form-help">بلا سعر يُحفظ «مسودة» ويظهر في «يحتاجك» بخطوة أكمل السعر.</p>
+        ) : null}
         <SaveState saveState="draft" />
         <ActionBar
           label="احفظ الطلب"
+          disabled={blocked || timeInvalid}
           onPress={() => {
-            if (missing || !form.customer || !form.dueDate || !form.content.trim()) return;
+            if (blocked || timeInvalid) return;
+            const iso = DUE_DAYS.find((d) => d.value === form.dueDay)?.iso;
+            if (!iso) return;
             const input: OrderInput = {
-              customer: form.customer,
+              customer: form.customer.trim(),
               content: form.content,
-              price: Math.round(Number.parseFloat(form.price) * 1000),
-              dueDate: form.dueDate,
-              time: null,
+              price: priceValue,
+              dueDate: iso,
+              time: timeIso,
               durationMinutes: null,
               status: form.status,
             };
