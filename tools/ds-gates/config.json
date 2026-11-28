@@ -289,11 +289,12 @@
     ]
   },
   "registry_exceptions": {
-    "_note": "unit 15 (lesson rule 76): catalog section ids whose kebab-case does not match the component folder name",
+    "_note": "unit 15 (lesson rule 76): catalog section ids whose kebab-case does not match the component folder name; text-override (3ج.1) demos the i18n override mechanism through Button specimens",
     "entity": "EntityMark",
     "hero": "HeroSurface",
     "badge": "StatusBadge",
     "money": "Money",
-    "controls": "AmountVisibilityToggle"
+    "controls": "AmountVisibilityToggle",
+    "text-override": "Button"
   }
 }

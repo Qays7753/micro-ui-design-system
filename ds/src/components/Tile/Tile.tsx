@@ -17,7 +17,7 @@
  */
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import { SparklineSvg } from '../../lib/sparkline';
 import type { TileProps } from './Tile.types';
 import './Tile.css';
@@ -56,11 +56,11 @@ export function Tile({
   const isNodeValue = value !== undefined && value !== null && typeof value !== 'string';
   const number =
     value === undefined
-      ? moneyTexts.missingGlyph
+      ? getMoneyTexts().missingGlyph
       : isNodeValue
         ? value
         : hidden && isMoneyTile
-          ? moneyTexts.hiddenGlyph
+          ? getMoneyTexts().hiddenGlyph
           : value;
   const classes = [
     'mds-tile',

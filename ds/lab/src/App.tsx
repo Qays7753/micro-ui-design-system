@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -30,6 +30,7 @@ const FUND_ICONS = {
 
 const SECTIONS: { id: string; name: string }[] = [
   { id: 'controls', name: t('title.amountToggle') },
+  { id: 'text-override', name: t('title.textOverride') },
   { id: 'money', name: t('title.money') },
   { id: 'badge', name: t('title.statusBadge') },
   { id: 'entity', name: t('title.entityMark') },
@@ -72,6 +73,8 @@ const SECTIONS: { id: string; name: string }[] = [
 export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
+  // 3ج.1 demo state: is the app-word override active right now?
+  const [textOverridden, setTextOverridden] = useState(false);
   const [segment, setSegment] = useState('today');
   // 2.1 (owner note §1): EVERY interactive lab example actually works when
   // pressed — no onChange={() => {}} anywhere in the lab or the compose page.
@@ -551,6 +554,38 @@ export function App() {
               >
                 {t('lab.scale200')}
               </button>
+            </div>
+          </section>
+
+          {/* ---- 3ج.1: the host-app text override, LIVE — the plan's own
+              example: «سجّل حركة» becomes an app word and back. ---- */}
+          <section className="lab-section" id="text-override">
+            <h2 className="lab-title">{t('lab.h.textOverride')}<span className="lab-tech">overrideTexts</span></h2>
+            <div className="lab-row">
+              <span className="lab-label">{t('lab.overrideHint')}</span>
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt="view-toggle"
+                onPress={() => {
+                  if (textOverridden) {
+                    resetTextOverrides();
+                    setTextOverridden(false);
+                  } else {
+                    overrideTexts({ 'button.recordMovement': t('lab.overrideReplacement') });
+                    setTextOverridden(true);
+                  }
+                }}
+              >
+                {textOverridden ? t('lab.overrideOff') : t('lab.overrideOn')}
+              </Button>
+            </div>
+            <div className="lab-row">
+              <span className="lab-label">{t('lab.overrideTarget')}</span>
+              {/* the live target: the same dictionary key the compose
+                  screen's movement entry reads — its word flips on the
+                  override, with no other text moving */}
+              <Button>{t('button.recordMovement')}</Button>
             </div>
           </section>
 

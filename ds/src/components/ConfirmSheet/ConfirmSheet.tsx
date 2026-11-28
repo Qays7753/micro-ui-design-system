@@ -13,7 +13,7 @@ import { useEffect, useRef } from 'react';
 import { DangerIcon } from '../../icons';
 import { Button } from '../Button/index';
 import { Sheet } from '../Sheet/index';
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import type { ConfirmSheetProps } from './ConfirmSheet.types';
 import './ConfirmSheet.css';
 
@@ -66,7 +66,7 @@ export function ConfirmSheet({
             className="mds-confirm-sheet-back"
             onPress={onDismiss}
           >
-            {ar['button.back'].text}
+            {t('button.back')}
           </Button>
           <Button variant="danger" className="mds-confirm-sheet-confirm" onPress={onPress}>
             {value}
