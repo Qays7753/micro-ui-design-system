@@ -21,8 +21,8 @@ import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
 import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
-import { formatDateParts, weekStartOf } from '@micro/ds';
-import type { PeriodValue } from '@micro/ds';
+import { formatDateParts, weekStartOf, MonthGrid } from '@micro/ds';
+import type { PeriodValue, MonthGridRange } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 /* Domains wing (plan B): one import, rendered as one block after the
    batch-1 sections (the sections join SECTIONS through domainSections). */
@@ -89,6 +89,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'time-picker', name: t('title.timePicker') },
   { id: 'duration-picker', name: t('title.durationPicker') },
   { id: 'period-switcher', name: t('title.periodSwitcher') },
+  { id: 'month-grid', name: t('title.monthGrid') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -220,6 +221,19 @@ export function App() {
   const [weekPeriod, setWeekPeriod] = useState<PeriodValue>({ size: 'week', start: formatDateParts(weekStartOf(todayParts, 0)) });
   const [dayPeriod, setDayPeriod] = useState<PeriodValue>({ size: 'day', start: formatDateParts(todayParts) });
   const [monthOnlyPeriod, setMonthOnlyPeriod] = useState<PeriodValue>({ size: 'month', start: thisMonth });
+  // 4.14 — MonthGrid: §3.5-10's data (11/2026, today 27, selected 30) with
+  // items dots; the range garden starts from a
+  // COMPLETE draft (pressing a day restarts it — the live gate's own
+  // proof); the view garden shows the no-buttons anatomy.
+  const [monthDay, setMonthDay] = useState<string | undefined>('30/11/2026');
+  const [monthRange, setMonthRange] = useState<MonthGridRange | undefined>({ start: '02/11/2026', end: '05/11/2026' });
+  const monthItems: Record<string, number> = {
+    '23/11/2026': 1,
+    '24/11/2026': 2,
+    '25/11/2026': 3,
+    '27/11/2026': 3,
+    '30/11/2026': 1,
+  };
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   // the interim picker serves two targets: the catalog garden and the
   // movement sheet's own date field (§746's composition order).
@@ -1897,6 +1911,55 @@ export function App() {
                 composition rides (ADDENDUM §3.4-2) — the label is NOT a
                 button and no size sheet; the arrows switch months. */}
             <PeriodSwitcher value={monthOnlyPeriod} onChange={setMonthOnlyPeriod} items={['month']} />
+          </div>
+        </section>
+
+        {/* ---- MonthGrid (§3.5): the month calendar strip ---- */}
+        <section className="lab-section" id="month-grid">
+          <h2 className="lab-title">{t('lab.h.monthGrid')}<span className="lab-tech">{t('title.monthGrid')}</span></h2>
+          <p className="lab-note">{t('lab.monthGridHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('monthGrid.modeSingle')}</span>
+            {/* §3.5-10's data: the month 11/2026, today 27 (the ring),
+                selected 30, dots on the items days. NO min at rest — the
+                lab never renders a permanently disabled button (the
+                documented ds-states convention; the gate itself toggles
+                the native property to exercise the disabled look, and the
+                min/max disabling is covered by the unit tests). The strip
+                runs FULL-BLEED (edge to edge, layout.month-grid-margin =
+                0) — the lab's own negative margin undoes the section's
+                screen padding, exactly as the phone screen places it. */}
+            <MonthGrid
+              className="lab-month-full"
+              month="11/2026"
+              mode="single"
+              value={monthDay}
+              items={monthItems}
+              onChange={(next) => setMonthDay(typeof next === 'string' ? next : undefined)}
+              data-ds-check="month-grid"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('monthGrid.modeRange')}</span>
+            {/* the range draft: a COMPLETE range at rest — pressing a day
+                restarts it, a second press completes it again. */}
+            <MonthGrid
+              className="lab-month-full"
+              month="11/2026"
+              mode="range"
+              value={monthRange}
+              onChange={(next) => setMonthRange(typeof next === 'object' ? next : undefined)}
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('monthGrid.modeView')}</span>
+            {/* the plain month view — no buttons at all. */}
+            <MonthGrid
+              className="lab-month-full"
+              month="12/2026"
+              mode="view"
+              items={{ '05/12/2026': 2, '20/12/2026': 3 }}
+            />
           </div>
         </section>
 

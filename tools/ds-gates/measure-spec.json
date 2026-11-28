@@ -184,6 +184,13 @@
       "_note": "rule 4-7: the ONE control row at size.touch-min (criterion 1)"
     },
     {
+      "id": "month-grid",
+      "height": {
+        "px": 266
+      },
+      "_note": "§3.5-10's month 11/2026: names row 24 (space) + 5 week rows × size.touch-min 48 + the strip's own 2 hairline borders = 266 (November 2026 starts Sunday, 30 days → 5 rows)"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192

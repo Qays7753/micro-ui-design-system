@@ -69,6 +69,14 @@
   padding-inline: var(--mds-layout-screen-margin-phone);
 }
 
+/* 4.14 — the month grid strip runs FULL-BLEED (edge to edge, its own
+   layout.month-grid-margin = 0): undo the lab's screen padding so the
+   strip sits exactly as a phone screen places it. */
+.lab-month-full {
+  margin-inline: calc(-1 * var(--mds-layout-screen-margin-phone));
+  inline-size: calc(100% + 2 * var(--mds-layout-screen-margin-phone));
+}
+
 .lab-section {
   display: flex;
   flex-direction: column;

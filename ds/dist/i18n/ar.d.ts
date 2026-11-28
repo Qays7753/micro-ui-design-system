@@ -840,6 +840,46 @@ export declare const arBase: {
         readonly kind: "help";
         readonly text: "السابق والتالي يتنقّلان، والتسمية تفتح ورقة الحجم.";
     };
+    readonly 'month.srGrid': {
+        readonly kind: "screen-reader";
+        readonly text: "{month} {year}";
+    };
+    readonly 'month.srCell': {
+        readonly kind: "screen-reader";
+        readonly text: "{day} {month}، {weekday}";
+    };
+    readonly 'month.srCellToday': {
+        readonly kind: "screen-reader";
+        readonly text: "{name}، {today}";
+    };
+    readonly 'month.srCellCount': {
+        readonly kind: "screen-reader";
+        readonly text: "{name}، {counted}";
+    };
+    readonly 'title.monthGrid': {
+        readonly kind: "title";
+        readonly text: "شبكة الشهر";
+    };
+    readonly 'lab.h.monthGrid': {
+        readonly kind: "title";
+        readonly text: "تقويم الشهر";
+    };
+    readonly 'lab.monthGridHint': {
+        readonly kind: "help";
+        readonly text: "اختر يومًا، أو مدى في وضع المدى.";
+    };
+    readonly 'monthGrid.modeSingle': {
+        readonly kind: "badge";
+        readonly text: "اختيار يوم";
+    };
+    readonly 'monthGrid.modeRange': {
+        readonly kind: "badge";
+        readonly text: "اختيار مدى";
+    };
+    readonly 'monthGrid.modeView': {
+        readonly kind: "badge";
+        readonly text: "عرض فقط";
+    };
     readonly 'lab.periodDayRow': {
         readonly kind: "badge";
         readonly text: "تنقّل يومي";
@@ -4155,6 +4195,13 @@ export declare const pluralNouns: {
         readonly two: "غير مقروءان";
         readonly few: "غير مقروءة";
         readonly many: "غير مقروءة";
+    };
+    readonly dayItems: {
+        readonly zero: "لا عناصر";
+        readonly one: "عنصر واحد";
+        readonly two: "عنصران";
+        readonly few: "عناصر";
+        readonly many: "عنصر";
     };
 };
 export type PluralNoun = keyof typeof pluralNouns;

@@ -298,6 +298,17 @@ export const arBase = {
   'title.periodSwitcher': { kind: 'title', text: 'مبدّل الفترة' },
   'lab.h.periodSwitcher': { kind: 'title', text: 'تنقّل الفترات' },
   'lab.periodSwitcherHint': { kind: 'help', text: 'السابق والتالي يتنقّلان، والتسمية تفتح ورقة الحجم.' },
+  // MonthGrid (§3.5): the grid's spoken month, the cell names, the lab.
+  'month.srGrid': { kind: 'screen-reader', text: '{month} {year}' },
+  'month.srCell': { kind: 'screen-reader', text: '{day} {month}، {weekday}' },
+  'month.srCellToday': { kind: 'screen-reader', text: '{name}، {today}' },
+  'month.srCellCount': { kind: 'screen-reader', text: '{name}، {counted}' },
+  'title.monthGrid': { kind: 'title', text: 'شبكة الشهر' },
+  'lab.h.monthGrid': { kind: 'title', text: 'تقويم الشهر' },
+  'lab.monthGridHint': { kind: 'help', text: 'اختر يومًا، أو مدى في وضع المدى.' },
+  'monthGrid.modeSingle': { kind: 'badge', text: 'اختيار يوم' },
+  'monthGrid.modeRange': { kind: 'badge', text: 'اختيار مدى' },
+  'monthGrid.modeView': { kind: 'badge', text: 'عرض فقط' },
   'lab.periodDayRow': { kind: 'badge', text: 'تنقّل يومي' },
   'lab.periodMonthOnlyRow': { kind: 'badge', text: 'شهر فقط' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
@@ -610,6 +621,8 @@ export const pluralNouns = {
   quotes: { zero: 'لا عروض', one: 'عرض واحد', two: 'عرضان', few: 'عروض', many: 'عرض' },
   results: { zero: 'لا نتائج', one: 'نتيجة واحدة', two: 'نتيجتان', few: 'نتائج', many: 'نتيجة' },
   unread: { zero: 'لا شيء غير مقروء', one: 'غير مقروء واحد', two: 'غير مقروءان', few: 'غير مقروءة', many: 'غير مقروءة' },
+  // MonthGrid (§3.5-7): the counted items of a day in a cell's name.
+  dayItems: { zero: 'لا عناصر', one: 'عنصر واحد', two: 'عنصران', few: 'عناصر', many: 'عنصر' },
 } as const satisfies Record<string, PluralForms>;
 
 export type PluralNoun = keyof typeof pluralNouns;
