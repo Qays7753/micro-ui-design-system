@@ -552,6 +552,30 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.";
     };
+    readonly 'quantity.increase': {
+        readonly kind: "screen-reader";
+        readonly text: "زيادة";
+    };
+    readonly 'quantity.decrease': {
+        readonly kind: "screen-reader";
+        readonly text: "إنقاص";
+    };
+    readonly 'field.quantity': {
+        readonly kind: "badge";
+        readonly text: "الكمية";
+    };
+    readonly 'title.quantityStepper': {
+        readonly kind: "title";
+        readonly text: "عداد الكمية";
+    };
+    readonly 'lab.h.quantityStepper': {
+        readonly kind: "title";
+        readonly text: "عداد كمية صحيحة";
+    };
+    readonly 'lab.quantityHint': {
+        readonly kind: "help";
+        readonly text: "اضغط مطولًا يتسارع العد، واكتب ما تشاء.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";

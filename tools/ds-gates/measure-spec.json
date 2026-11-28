@@ -158,6 +158,12 @@
       }
     },
     {
+      "id": "quantity-stepper",
+      "height": {
+        "token": "size.icon-button"
+      }
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192

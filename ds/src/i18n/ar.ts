@@ -210,6 +210,14 @@ export const ar = {
   'title.movementTypeControl': { kind: 'title', text: 'نوع الحركة' },
   'lab.h.movementTypeControl': { kind: 'title', text: 'مبدّل نوع الحركة' },
   'lab.movementTypeHint': { kind: 'help', text: 'حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.' },
+  // QuantityStepper (§1.6): the stepper's screen-reader words (its only
+  // own texts — everything else is the app's label).
+  'quantity.increase': { kind: 'screen-reader', text: 'زيادة' },
+  'quantity.decrease': { kind: 'screen-reader', text: 'إنقاص' },
+  'field.quantity': { kind: 'badge', text: 'الكمية' },
+  'title.quantityStepper': { kind: 'title', text: 'عداد الكمية' },
+  'lab.h.quantityStepper': { kind: 'title', text: 'عداد كمية صحيحة' },
+  'lab.quantityHint': { kind: 'help', text: 'اضغط مطولًا يتسارع العد، واكتب ما تشاء.' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
   'lab.h.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'lab.h.entityMark': { kind: 'title', text: 'حرف الطرف' },

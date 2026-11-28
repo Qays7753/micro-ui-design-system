@@ -20,7 +20,7 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, QuantityStepper, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -79,6 +79,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'amount-field', name: t('lab.h.amountField') },
   { id: 'amount-keypad', name: t('title.keypad') },
   { id: 'movement-type-control', name: t('title.movementTypeControl') },
+  { id: 'quantity-stepper', name: t('title.quantityStepper') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -170,6 +171,10 @@ export function App() {
   const [movementFormError, setMovementFormError] = useState(false);
   const [movementSheetType, setMovementSheetType] = useState<MovementTypeValue | undefined>(undefined);
   const [movementSheetError, setMovementSheetError] = useState(false);
+  // 4.9 — QuantityStepper: the lab garden (§1.6-10: «الكمية» at 2) with the
+  // host-owned polite live region announcing each change (§1.6-7, the
+  // §1.4-7 pattern).
+  const [quantityDemo, setQuantityDemo] = useState(2);
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -1639,6 +1644,29 @@ export function App() {
                 {t('button.saveMovement')}
               </Button>
             </div>
+          </div>
+        </section>
+
+        {/* ---- QuantityStepper (§1.6): the integer quantity stepper ---- */}
+        <section className="lab-section" id="quantity-stepper">
+          <h2 className="lab-title">{t('lab.h.quantityStepper')}<span className="lab-tech">{t('title.quantityStepper')}</span></h2>
+          <p className="lab-note">{t('lab.quantityHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('field.quantity')}</span>
+            {/* §1.6-10: the lab data — «الكمية» at 2. The group is LTR (the
+                number line); the host-owned polite region announces each
+                new value (§1.6-7, the §1.4-7 pattern). */}
+            <QuantityStepper
+              label={t('field.quantity')}
+              value={quantityDemo}
+              onChange={setQuantityDemo}
+              min={0}
+              max={10}
+              data-ds-check="quantity-stepper"
+            />
+            <span className="mds-visually-hidden" aria-live="polite">
+              {quantityDemo}
+            </span>
           </div>
         </section>
 

@@ -10,8 +10,11 @@ afterEach(() => {
 describe('MovementTypeControl (BATCH2-SPECS §1.5)', () => {
   it('renders the three segments in the spec order (criterion 1)', () => {
     const { container } = render(<MovementTypeControl value="out" />);
+    // the segments render the COMPOSED segmented classes (§1.5-2) inside
+    // the control's own root
+    const root = container.querySelector('.mds-movement-type') as HTMLElement;
     const labels = Array.from(
-      container.querySelectorAll('.mds-movement-type-segment-label'),
+      root.querySelectorAll('.mds-segmented-segment-label'),
     ).map((el) => el.textContent);
     expect(labels).toEqual([
       ar['movement.in'].text,
@@ -19,7 +22,7 @@ describe('MovementTypeControl (BATCH2-SPECS §1.5)', () => {
       ar['movement.transfer'].text,
     ]);
     // no icons anywhere in the control (§1.5-2)
-    expect(container.querySelector('svg')).toBeNull();
+    expect(root.querySelector('svg')).toBeNull();
   });
 
   it('is a radiogroup named «نوع الحركة» with aria-checked segments (§1.5-7)', () => {
