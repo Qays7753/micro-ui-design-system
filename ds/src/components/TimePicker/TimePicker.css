@@ -1,0 +1,139 @@
+/*
+ * TimePicker.css — BATCH2-SPECS §1.9 + ADDENDUM §2.4. The field box rides
+ * TextField's own input class (the composed look); the chips ride
+ * FilterChips' own chip class. This file owns the field's row (text +
+ * clock + clear), the sheet's head/grids, and the error line. Every value
+ * rides a token by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-time-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* The label rides the shared field anatomy (label above, 8 gap — base.css
+ * carries .mds-field for it; TimePicker keeps its own trio small so the
+ * anatomy stays shared). */
+.mds-time-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+/* The field row: the TextField-look trigger + the clear IconButton. */
+.mds-time-field-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  width: 100%;
+}
+
+/* The trigger box — the .mds-text-field-input class carries the TextField
+ * look (height, border, radius, padding); this class only lays out its
+ * content (text start, icon end). */
+.mds-time-field-box {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-8);
+  cursor: pointer;
+  text-align: start;
+  font-family: inherit;
+}
+
+/* The pressed field reads as a surface press (23.2). */
+.mds-time-field-box:active,
+.mds-time-field-box[data-pressed],
+.mds-time-field-box--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* The focus ring of the fields (9.3): keyboard focus on the trigger. */
+.mds-time-field-box:focus-visible {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
+  outline: none;
+}
+
+/* The error border (§1.9-4, like TextField). */
+.mds-time-field-box--error {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+/* The native disabled state (23.2): the gate toggles the attribute and
+   must SEE the change — the icon dims with the text. */
+.mds-time-field-box:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+/* The time text: tabular figures inside an LTR run (ج7). */
+.mds-time-field-text {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+
+.mds-time-field-icon {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-time-field--disabled .mds-time-field-box {
+  color: var(--mds-color-disabled-fg);
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+  cursor: default;
+}
+
+.mds-time-field--disabled .mds-time-field-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The save-time error line under the field (§1.9-4). */
+.mds-time-field-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}
+
+/* --- The sheet (92%, ADDENDUM §2.4) --- */
+
+.mds-time-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--mds-space-8);
+}
+
+.mds-time-sheet-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The slot grids: a titled radiogroup of chips, 4 columns (§2.4 — 12 hour
+ * chips and 4 minute chips both ride 4). */
+.mds-time-slot {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--mds-space-16);
+}
+
+.mds-time-slot-title {
+  margin-block-end: var(--mds-space-8);
+}
+
+.mds-time-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--mds-layout-chip-gap);
+  min-height: var(--mds-size-touch-min);
+}
+
+.mds-time-slot-chip {
+  width: 100%;
+}
+
+.mds-time-slot-chip-label {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}

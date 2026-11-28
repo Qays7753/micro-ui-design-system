@@ -170,6 +170,13 @@
       }
     },
     {
+      "id": "time-picker",
+      "height": {
+        "px": 84
+      },
+      "_note": "root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + box 56 (size.field) — the TextField anatomy"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192

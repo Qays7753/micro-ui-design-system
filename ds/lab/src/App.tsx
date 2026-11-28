@@ -20,7 +20,7 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, TimePicker, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -81,6 +81,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'movement-type-control', name: t('title.movementTypeControl') },
   { id: 'quantity-stepper', name: t('title.quantityStepper') },
   { id: 'date-quick-chips', name: t('title.dateQuickChips') },
+  { id: 'time-picker', name: t('title.timePicker') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -184,6 +185,13 @@ export function App() {
   const [saleDate, setSaleDate] = useState<string | undefined>('27/11/2026');
   const [saleDateError, setSaleDateError] = useState(false);
   const [customDateDemo, setCustomDateDemo] = useState<string | undefined>('14/07/2026');
+  // 4.11 — TimePicker: the garden starts from the field's EMPTY state
+  // (§1.9-4) — the spec data («وقت التسليم», 4:00 م = 960) arrives through
+  // a real sheet pick. The clear button therefore never exists at the
+  // states gate's collect time (the SearchField pattern: a value-conditioned
+  // button that unmounts on its own press would fake a violation).
+  const [deliveryTime, setDeliveryTime] = useState<number | undefined>(undefined);
+  const [deliveryTimeError, setDeliveryTimeError] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   // the interim picker serves two targets: the catalog garden and the
   // movement sheet's own date field (§746's composition order).
@@ -1761,6 +1769,38 @@ export function App() {
               value={customDateDemo}
               onChange={setCustomDateDemo}
             />
+          </div>
+        </section>
+
+        {/* ---- TimePicker (§1.9 + addendum §2.4): the delivery-moment picker ---- */}
+        <section className="lab-section" id="time-picker">
+          <h2 className="lab-title">{t('lab.h.timePicker')}<span className="lab-tech">{t('title.timePicker')}</span></h2>
+          <p className="lab-note">{t('lab.timePickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            {/* The field's own label names it (the TextField section's
+                pattern — no duplicate lab label); it opens the 92% sheet
+                and picks «4:00 م» through its chips, and the save without
+                a value shows the error line (§1.9-4). */}
+            <div className="lab-garden">
+              <TimePicker
+                label={t('field.deliveryTime')}
+                value={deliveryTime}
+                onChange={(next) => {
+                  setDeliveryTime(next);
+                  setDeliveryTimeError(false);
+                }}
+                state={deliveryTimeError ? 'error' : 'idle'}
+                data-ds-check="time-picker"
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => setDeliveryTimeError(deliveryTime === undefined)}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
           </div>
         </section>
 

@@ -620,6 +620,62 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "تاريخ مخصص";
     };
+    readonly 'time.am': {
+        readonly kind: "badge";
+        readonly text: "ص";
+    };
+    readonly 'time.pm': {
+        readonly kind: "badge";
+        readonly text: "م";
+    };
+    readonly 'time.amSpoken': {
+        readonly kind: "screen-reader";
+        readonly text: "صباحاً";
+    };
+    readonly 'time.pmSpoken': {
+        readonly kind: "screen-reader";
+        readonly text: "مساءً";
+    };
+    readonly 'time.periodGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة";
+    };
+    readonly 'time.hour': {
+        readonly kind: "title";
+        readonly text: "الساعة";
+    };
+    readonly 'time.minutes': {
+        readonly kind: "title";
+        readonly text: "الدقائق";
+    };
+    readonly 'timePicker.apply': {
+        readonly kind: "button";
+        readonly text: "اعتمد الوقت";
+    };
+    readonly 'timePicker.choose': {
+        readonly kind: "help";
+        readonly text: "اختر الوقت";
+    };
+    readonly 'timePicker.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {time}";
+    };
+    readonly 'field.deliveryTime': {
+        readonly kind: "badge";
+        readonly text: "وقت التسليم";
+    };
+    readonly 'title.timePicker': {
+        readonly kind: "title";
+        readonly text: "منتقي الوقت";
+    };
+    readonly 'lab.h.timePicker': {
+        readonly kind: "title";
+        readonly text: "حقل موعد بلحظة";
+    };
+    readonly 'lab.timePickerHint': {
+        readonly kind: "help";
+        readonly text: "اضغط الحقل تفتح الورقة، واعتمد منها.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";
