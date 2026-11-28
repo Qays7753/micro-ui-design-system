@@ -1,0 +1,56 @@
+/*
+ * DateQuickChips.css — BATCH2-SPECS §1.8. The chips render FilterChips' own
+ * classes (the composed anatomy); this file owns the WRAPPING row (no
+ * horizontal scrolling here — §1.8-6) and the error line. Every value
+ * rides a token by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-date-quick {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* The chips row: wraps onto more lines at 200% (§1.8-6), 48-high touch
+   zone, the chip gap between; NO horizontal scroll — unlike FilterChips'
+   scrolling row. */
+.mds-date-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mds-layout-chip-gap);
+  row-gap: var(--mds-layout-chip-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--mds-size-touch-min);
+  padding-block: var(--mds-layout-segmented-padding);
+}
+
+/* The chips themselves keep their natural height (they never stretch to
+   the row's wrapped lines). */
+.mds-date-quick-chip {
+  flex: 0 0 auto;
+}
+
+/* The calendar icon (16) on the «تاريخ آخر» chip. */
+.mds-date-quick-chip-icon svg,
+.mds-date-quick-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+}
+
+/* The custom date reads with tabular figures inside the chip's own label
+   typography (ج7) — the same LTR direction isolation AmountField's digit
+   line uses (no unicode-bidi: the browserslist target only partially
+   supports it). */
+.mds-date-quick-chip-date {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+
+/* The save-time error under the row (§1.8-4). */
+.mds-date-quick-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}

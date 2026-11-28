@@ -19,7 +19,10 @@
  */
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import type { MovementTypeValue } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { formatDateParts, weekStartOf } from '@micro/ds';
+import type { PeriodValue } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 /* Domains wing (plan B): one import, rendered as one block after the
    batch-1 sections (the sections join SECTIONS through domainSections). */
@@ -80,6 +83,12 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'text-area', name: t('lab.h.textArea') },
   { id: 'amount-field', name: t('lab.h.amountField') },
   { id: 'amount-keypad', name: t('title.keypad') },
+  { id: 'movement-type-control', name: t('title.movementTypeControl') },
+  { id: 'quantity-stepper', name: t('title.quantityStepper') },
+  { id: 'date-quick-chips', name: t('title.dateQuickChips') },
+  { id: 'time-picker', name: t('title.timePicker') },
+  { id: 'duration-picker', name: t('title.durationPicker') },
+  { id: 'period-switcher', name: t('title.periodSwitcher') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -118,6 +127,12 @@ export function App() {
   const [composeLanded, setComposeLanded] = useState(false);
   const composeRowValue = useCountUp(rowFrom, rowValue, composeLanded);
   const saveMovement = () => {
+    // 4.8 (§1.5-4): a movement with no type chosen is NOT saved — the line
+    // appears under the control and the sheet stays open.
+    if (!movementSheetType) {
+      setMovementSheetError(true);
+      return;
+    }
     setSaving(true);
     window.setTimeout(() => {
       setSaving(false);
@@ -158,6 +173,69 @@ export function App() {
   // 4.7 — the AmountKeypad demo: the field above, the pad below (its keys
   // APPLY to the value; the long backspace press clears it — §1.4).
   const [keypadValue, setKeypadValue] = useState('');
+  // 4.8 — MovementTypeControl: the lab garden (§1.5-10: «خارج» selected) and
+  // the save-error demo (a save with nothing chosen shows the line under the
+  // control, §1.5-4). The movement SHEET integration rides its own state so
+  // the error logic is real: the save refuses until a type exists.
+  const [movementDemoType, setMovementDemoType] = useState<MovementTypeValue | undefined>('out');
+  const [movementFormType, setMovementFormType] = useState<MovementTypeValue | undefined>(undefined);
+  const [movementFormError, setMovementFormError] = useState(false);
+  const [movementSheetType, setMovementSheetType] = useState<MovementTypeValue | undefined>(undefined);
+  const [movementSheetError, setMovementSheetError] = useState(false);
+  // 4.9 — QuantityStepper: the lab garden (§1.6-10: «الكمية» at 2) with the
+  // host-owned polite live region announcing each change (§1.6-7, the
+  // §1.4-7 pattern).
+  const [quantityDemo, setQuantityDemo] = useState(2);
+  // 4.10 — DateQuickChips: §1.8-10's data («تاريخ البيع», «اليوم» selected)
+  // plus the custom-date sample («14/07/2026») and the app-level picker
+  // sheet the «تاريخ آخر» press opens — the kh16 interim pattern until the
+  // library's month sheet lands (PeriodSwitcher + MonthGrid, then the
+  // DatePicker composition wiring).
+  const [saleDate, setSaleDate] = useState<string | undefined>('27/11/2026');
+  const [saleDateError, setSaleDateError] = useState(false);
+  const [customDateDemo, setCustomDateDemo] = useState<string | undefined>('14/07/2026');
+  // 4.11 — TimePicker: the garden starts from the field's EMPTY state
+  // (§1.9-4) — the spec data («وقت التسليم», 4:00 م = 960) arrives through
+  // a real sheet pick. The clear button therefore never exists at the
+  // states gate's collect time (the SearchField pattern: a value-conditioned
+  // button that unmounts on its own press would fake a violation).
+  const [deliveryTime, setDeliveryTime] = useState<number | undefined>(undefined);
+  const [deliveryTimeError, setDeliveryTimeError] = useState(false);
+  // 4.12 — DurationPicker: §3.3-10's data (45 minutes) — the duration
+  // field does not exist before a time (criterion 2): the garden is a real
+  // mini form where the duration field appears only after the time.
+  const [orderDuration, setOrderDuration] = useState<number | undefined>(undefined);
+  // 4.13 — PeriodSwitcher: every garden starts at the CURRENT period of
+  // its size (the lab clock — at review time that IS the spec's own data
+  // «11/2026», and the day label reads «اليوم»): «السابق» steps back and
+  // the compact jump button «هذا الشهر»/«هذا الأسبوع»/«اليوم» APPEARS live
+  // — it never exists at scan time, because it unmounts on its own press
+  // (the 4.11 clear-button lesson: a self-unmounting button at rest fakes
+  // a states violation). The month-only garden previews the DatePicker
+  // composition's single-size anatomy (the label is not a button —
+  // ADDENDUM §3.4-2).
+  const todayParts = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+  const thisMonth = formatDateParts({ year: todayParts.year, month: todayParts.month, day: 1 });
+  const [financePeriod, setFinancePeriod] = useState<PeriodValue>({ size: 'month', start: thisMonth });
+  const [weekPeriod, setWeekPeriod] = useState<PeriodValue>({ size: 'week', start: formatDateParts(weekStartOf(todayParts, 0)) });
+  const [dayPeriod, setDayPeriod] = useState<PeriodValue>({ size: 'day', start: formatDateParts(todayParts) });
+  const [monthOnlyPeriod, setMonthOnlyPeriod] = useState<PeriodValue>({ size: 'month', start: thisMonth });
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  // the interim picker serves two targets: the catalog garden and the
+  // movement sheet's own date field (§746's composition order).
+  const [dateTarget, setDateTarget] = useState<'sale' | 'movement'>('sale');
+  const [movementSheetDate, setMovementSheetDate] = useState<string | undefined>('27/11/2026');
+  const applyPickedDate = (date: string) => {
+    if (dateTarget === 'movement') setMovementSheetDate(date);
+    else setSaleDate(date);
+    setSaleDateError(false);
+    setDatePickerOpen(false);
+  };
+  const quickDates = [
+    { value: '27/11/2026', label: t('dateWord.today') },
+    { value: '26/11/2026', label: t('dateWord.yesterday') },
+    { value: '28/11/2026', label: t('dateWord.tomorrow') },
+  ];
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -195,6 +273,24 @@ export function App() {
      (10.2 (5)) and the full needs-you list. */
   const demoSheets = (
     <>
+      {/* 4.10 — the HOST's interim date picker (kh16 pattern): the
+          «تاريخ آخر» press opens it until the library's month sheet lands
+          (PeriodSwitcher + MonthGrid, then the DatePicker composition
+          wiring). Five real upcoming dates; picking one sets the value. */}
+      {datePickerOpen ? (
+        <Sheet label={t('dateQuick.other')} onDismiss={() => setDatePickerOpen(false)}>
+          <Surface>
+            {['29/11/2026', '30/11/2026', '01/12/2026', '02/12/2026', '03/12/2026'].map((date) => (
+              <ObjectRow
+                key={date}
+                label={date}
+                leading={<CalendarIcon size={20} />}
+                onPress={() => applyPickedDate(date)}
+              />
+            ))}
+          </Surface>
+        </Sheet>
+      ) : null}
       {projectOpen ? (
         <Sheet label={t('sheet.projectTitle')} onDismiss={() => setProjectOpen(false)}>
           <Surface>
@@ -322,7 +418,32 @@ export function App() {
            (spinner + «يُرسل…» wait out motion.pending-delay; response at
            600ms), then the sheet closes and the affected row LANDS. */
         <Sheet variant="form" label={t('button.recordMovement')} onDismiss={() => setSheetOpen(false)}>
+          {/* 4.8 — §1.5-1: the type switch is the FIRST element of the
+              movement form; a save with nothing chosen shows the line under
+              it (§1.5-4) and the save refuses. */}
+          <MovementTypeControl
+            value={movementSheetType}
+            onChange={(next) => {
+              setMovementSheetType(next);
+              setMovementSheetError(false);
+            }}
+            state={movementSheetError ? 'error' : 'idle'}
+            data-ds-check="movement-type-sheet"
+          />
           <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
+          {/* 4.10 — §746's movement-form order: the date chips follow the
+              amount (FundPicker and PartyPicker are not built yet). */}
+          <DateQuickChips
+            label={t('field.saleDate')}
+            items={quickDates}
+            value={movementSheetDate}
+            onChange={setMovementSheetDate}
+            onPress={() => {
+              setDateTarget('movement');
+              setDatePickerOpen(true);
+            }}
+            data-ds-check="date-quick-sheet"
+          />
           <SaveState saveState={saving ? 'sending' : 'draft'} />
           <ActionBar
             label={t('button.saveMovement')}
@@ -1575,6 +1696,208 @@ export function App() {
               «.» and the digits go visibly off, §1.4-4) is REACHED by typing
               9.999 through the keys, never pre-rendered: the states gate
               toggles the native disabled attribute and must see a change. */}
+        </section>
+
+        {/* ---- MovementTypeControl (§1.5): the in/out/transfer switch ---- */}
+        <section className="lab-section" id="movement-type-control">
+          <h2 className="lab-title">{t('lab.h.movementTypeControl')}<span className="lab-tech">{t('title.movementTypeControl')}</span></h2>
+          <p className="lab-note">{t('lab.movementTypeHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            {/* §1.5-10: the lab data — «خارج» selected. The words come from
+                the dictionary so the 3ج.1 override flows into them too. */}
+            <MovementTypeControl
+              value={movementDemoType}
+              onChange={setMovementDemoType}
+              data-ds-check="movement-type-control"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.errorRow')}</span>
+            {/* §1.5-4: a save with nothing chosen shows the error line under
+                the control; choosing clears it. The save is REAL — the
+                error appears on press, not pre-rendered (the states gate
+                toggles and must see the change). */}
+            <div className="lab-garden">
+              <MovementTypeControl
+                value={movementFormType}
+                onChange={(next) => {
+                  setMovementFormType(next);
+                  setMovementFormError(false);
+                }}
+                state={movementFormError ? 'error' : 'idle'}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => setMovementFormError(!movementFormType)}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- QuantityStepper (§1.6): the integer quantity stepper ---- */}
+        <section className="lab-section" id="quantity-stepper">
+          <h2 className="lab-title">{t('lab.h.quantityStepper')}<span className="lab-tech">{t('title.quantityStepper')}</span></h2>
+          <p className="lab-note">{t('lab.quantityHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('field.quantity')}</span>
+            {/* §1.6-10: the lab data — «الكمية» at 2. The group is LTR (the
+                number line); the host-owned polite region announces each
+                new value (§1.6-7, the §1.4-7 pattern). */}
+            <QuantityStepper
+              label={t('field.quantity')}
+              value={quantityDemo}
+              onChange={setQuantityDemo}
+              min={0}
+              max={10}
+              data-ds-check="quantity-stepper"
+            />
+            <span className="mds-visually-hidden" aria-live="polite">
+              {quantityDemo}
+            </span>
+          </div>
+        </section>
+
+        {/* ---- DateQuickChips (§1.8): the quick-date single-choice chips ---- */}
+        <section className="lab-section" id="date-quick-chips">
+          <h2 className="lab-title">{t('lab.h.dateQuickChips')}<span className="lab-tech">{t('title.dateQuickChips')}</span></h2>
+          <p className="lab-note">{t('lab.dateQuickHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('field.saleDate')}</span>
+            {/* §1.8-10: «تاريخ البيع», «اليوم» selected. The «تاريخ آخر»
+                press opens the HOST's picker sheet (the kh16 interim
+                pattern) until the library's month sheet lands. */}
+            <DateQuickChips
+              label={t('field.saleDate')}
+              items={quickDates}
+              value={saleDate}
+              onChange={(next) => {
+                setSaleDate(next);
+                setSaleDateError(false);
+              }}
+              state={saleDateError ? 'error' : 'idle'}
+              onPress={() => {
+                setDateTarget('sale');
+                setDatePickerOpen(true);
+              }}
+              data-ds-check="date-quick-chips"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.customRow')}</span>
+            {/* a custom date none of the quick chips carries: the trailing
+                chip BECOMES the date itself, selected (§1.8-2). */}
+            <DateQuickChips
+              label={t('field.saleDate')}
+              items={quickDates}
+              value={customDateDemo}
+              onChange={setCustomDateDemo}
+            />
+          </div>
+        </section>
+
+        {/* ---- TimePicker (§1.9 + addendum §2.4): the delivery-moment picker ---- */}
+        <section className="lab-section" id="time-picker">
+          <h2 className="lab-title">{t('lab.h.timePicker')}<span className="lab-tech">{t('title.timePicker')}</span></h2>
+          <p className="lab-note">{t('lab.timePickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            {/* The field's own label names it (the TextField section's
+                pattern — no duplicate lab label); it opens the 92% sheet
+                and picks «4:00 م» through its chips, and the save without
+                a value shows the error line (§1.9-4). */}
+            <div className="lab-garden">
+              <TimePicker
+                label={t('field.deliveryTime')}
+                value={deliveryTime}
+                onChange={(next) => {
+                  setDeliveryTime(next);
+                  setDeliveryTimeError(false);
+                }}
+                state={deliveryTimeError ? 'error' : 'idle'}
+                data-ds-check="time-picker"
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => setDeliveryTimeError(deliveryTime === undefined)}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- DurationPicker (addendum §3.3): the appointment duration ---- */}
+        <section className="lab-section" id="duration-picker">
+          <h2 className="lab-title">{t('lab.h.durationPicker')}<span className="lab-tech">{t('title.durationPicker')}</span></h2>
+          <p className="lab-note">{t('lab.durationPickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            {/* A REAL mini form: pick the time first, the duration field
+                appears only then (criterion 2); its sheet carries the
+                common chips and the 15-minute stepper; the value rides
+                §3.3-10's data through a common pick. */}
+            <div className="lab-garden">
+              <TimePicker
+                label={t('field.deliveryTime')}
+                value={deliveryTime}
+                onChange={(next) => {
+                  setDeliveryTime(next);
+                  setDeliveryTimeError(false);
+                }}
+              />
+              {deliveryTime !== undefined ? (
+                <DurationPicker
+                  label={t('field.duration')}
+                  value={orderDuration}
+                  onChange={setOrderDuration}
+                  data-ds-check="duration-picker"
+                />
+              ) : null}
+            </div>
+          </div>
+        </section>
+
+        {/* ---- PeriodSwitcher (§1.27): the period row over period content ---- */}
+        <section className="lab-section" id="period-switcher">
+          <h2 className="lab-title">{t('lab.h.periodSwitcher')}<span className="lab-tech">{t('title.periodSwitcher')}</span></h2>
+          <p className="lab-note">{t('lab.periodSwitcherHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('nav.finance')}</span>
+            {/* §1.27-10's data: the month 11/2026. «السابق» steps to
+                10/2026 and the compact «هذا الشهر» appears; the label
+                button opens the size sheet (يوم/أسبوع/شهر — the custom
+                row arrives with the MonthGrid wiring in 4.15, the same
+                documented kh16 interim as 4.10's sheet). */}
+            <PeriodSwitcher
+              value={financePeriod}
+              onChange={setFinancePeriod}
+              data-ds-check="period-switcher"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('nav.orders')}</span>
+            {/* the CURRENT week: «السابق» steps back and «هذا الأسبوع»
+                appears (criterion 2's outside state), and it jumps back. */}
+            <PeriodSwitcher value={weekPeriod} onChange={setWeekPeriod} />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('lab.periodDayRow')}</span>
+            {/* the day size at today: the label reads «اليوم» (§1.27-2's
+                day form); «السابق» steps a day and «اليوم» appears. */}
+            <PeriodSwitcher value={dayPeriod} onChange={setDayPeriod} />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('lab.periodMonthOnlyRow')}</span>
+            {/* single-size items: the month-only anatomy the DatePicker
+                composition rides (ADDENDUM §3.4-2) — the label is NOT a
+                button and no size sheet; the arrows switch months. */}
+            <PeriodSwitcher value={monthOnlyPeriod} onChange={setMonthOnlyPeriod} items={['month']} />
+          </div>
         </section>
 
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}

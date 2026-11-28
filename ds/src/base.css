@@ -191,3 +191,53 @@ button,
   min-width: var(--mds-size-textfield-min-width);
   inline-size: 100%;
 }
+
+/* The display-only picker field (BATCH2-SPECS §1.9 + ADDENDUM §3.3, the
+   shared anatomy — ds-dup, plan rule 4-7): TimePicker and DurationPicker
+   render a TextField-look TRIGGER (a real button riding the
+   .mds-text-field-input class) with the clear IconButton at its end. The
+   row, the box layout, the press/focus/disabled treatments, and the
+   sheet's centered head live HERE once; the pickers own only their own
+   grids and words. */
+.mds-picker-field-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  width: 100%;
+}
+
+.mds-picker-field-box {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-space-8);
+  cursor: pointer;
+  text-align: start;
+  font-family: inherit;
+}
+
+.mds-picker-field-box:active,
+.mds-picker-field-box[data-pressed],
+.mds-picker-field-box--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-picker-field-box:focus-visible {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+  box-shadow: 0 0 0 var(--mds-border-field-focus-halo) var(--mds-role-field-focus-halo);
+  outline: none;
+}
+
+.mds-picker-field-box:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-picker-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--mds-space-8);
+}

@@ -532,6 +532,322 @@ export declare const arBase: {
         readonly kind: "help";
         readonly text: "اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.";
     };
+    readonly 'movementType.srGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "نوع الحركة";
+    };
+    readonly 'movementType.choose': {
+        readonly kind: "help";
+        readonly text: "اختر نوع الحركة";
+    };
+    readonly 'title.movementTypeControl': {
+        readonly kind: "title";
+        readonly text: "نوع الحركة";
+    };
+    readonly 'lab.h.movementTypeControl': {
+        readonly kind: "title";
+        readonly text: "مبدّل نوع الحركة";
+    };
+    readonly 'lab.movementTypeHint': {
+        readonly kind: "help";
+        readonly text: "حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.";
+    };
+    readonly 'quantity.increase': {
+        readonly kind: "screen-reader";
+        readonly text: "زيادة";
+    };
+    readonly 'quantity.decrease': {
+        readonly kind: "screen-reader";
+        readonly text: "إنقاص";
+    };
+    readonly 'field.quantity': {
+        readonly kind: "badge";
+        readonly text: "الكمية";
+    };
+    readonly 'title.quantityStepper': {
+        readonly kind: "title";
+        readonly text: "عداد الكمية";
+    };
+    readonly 'lab.h.quantityStepper': {
+        readonly kind: "title";
+        readonly text: "عداد كمية صحيحة";
+    };
+    readonly 'lab.quantityHint': {
+        readonly kind: "help";
+        readonly text: "اضغط مطولًا يتسارع العد، واكتب ما تشاء.";
+    };
+    readonly 'dateQuick.other': {
+        readonly kind: "button";
+        readonly text: "تاريخ آخر";
+    };
+    readonly 'dateQuick.choose': {
+        readonly kind: "help";
+        readonly text: "اختر التاريخ";
+    };
+    readonly 'dateQuick.chipName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {value}";
+    };
+    readonly 'field.saleDate': {
+        readonly kind: "badge";
+        readonly text: "تاريخ البيع";
+    };
+    readonly 'title.dateQuickChips': {
+        readonly kind: "title";
+        readonly text: "التواريخ السريعة";
+    };
+    readonly 'lab.h.dateQuickChips': {
+        readonly kind: "title";
+        readonly text: "رقائق تاريخ سريعة";
+    };
+    readonly 'lab.dateQuickHint': {
+        readonly kind: "help";
+        readonly text: "«تاريخ آخر» يفتح منتقي التطبيق حتى ورقة الشهر.";
+    };
+    readonly 'dateWord.today': {
+        readonly kind: "badge";
+        readonly text: "اليوم";
+    };
+    readonly 'dateWord.yesterday': {
+        readonly kind: "badge";
+        readonly text: "أمس";
+    };
+    readonly 'dateWord.tomorrow': {
+        readonly kind: "badge";
+        readonly text: "غداً";
+    };
+    readonly 'state.customRow': {
+        readonly kind: "badge";
+        readonly text: "تاريخ مخصص";
+    };
+    readonly 'time.am': {
+        readonly kind: "badge";
+        readonly text: "ص";
+    };
+    readonly 'time.pm': {
+        readonly kind: "badge";
+        readonly text: "م";
+    };
+    readonly 'time.amSpoken': {
+        readonly kind: "screen-reader";
+        readonly text: "صباحاً";
+    };
+    readonly 'time.pmSpoken': {
+        readonly kind: "screen-reader";
+        readonly text: "مساءً";
+    };
+    readonly 'time.periodGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة";
+    };
+    readonly 'time.hour': {
+        readonly kind: "title";
+        readonly text: "الساعة";
+    };
+    readonly 'time.minutes': {
+        readonly kind: "title";
+        readonly text: "الدقائق";
+    };
+    readonly 'timePicker.apply': {
+        readonly kind: "button";
+        readonly text: "اعتمد الوقت";
+    };
+    readonly 'timePicker.choose': {
+        readonly kind: "help";
+        readonly text: "اختر الوقت";
+    };
+    readonly 'timePicker.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {time}";
+    };
+    readonly 'field.deliveryTime': {
+        readonly kind: "badge";
+        readonly text: "وقت التسليم";
+    };
+    readonly 'title.timePicker': {
+        readonly kind: "title";
+        readonly text: "منتقي الوقت";
+    };
+    readonly 'lab.h.timePicker': {
+        readonly kind: "title";
+        readonly text: "حقل موعد بلحظة";
+    };
+    readonly 'lab.timePickerHint': {
+        readonly kind: "help";
+        readonly text: "اضغط الحقل تفتح الورقة، واعتمد منها.";
+    };
+    readonly 'duration.hourOne': {
+        readonly kind: "badge";
+        readonly text: "ساعة";
+    };
+    readonly 'duration.hourTwo': {
+        readonly kind: "badge";
+        readonly text: "ساعتان";
+    };
+    readonly 'duration.hourFew': {
+        readonly kind: "badge";
+        readonly text: "ساعات";
+    };
+    readonly 'duration.hourMany': {
+        readonly kind: "badge";
+        readonly text: "ساعة";
+    };
+    readonly 'duration.minuteOne': {
+        readonly kind: "badge";
+        readonly text: "دقيقة";
+    };
+    readonly 'duration.minuteTwo': {
+        readonly kind: "badge";
+        readonly text: "دقيقتان";
+    };
+    readonly 'duration.minuteFew': {
+        readonly kind: "badge";
+        readonly text: "دقائق";
+    };
+    readonly 'duration.minuteMany': {
+        readonly kind: "badge";
+        readonly text: "دقيقة";
+    };
+    readonly 'duration.half': {
+        readonly kind: "badge";
+        readonly text: "ونصف";
+    };
+    readonly 'duration.and': {
+        readonly kind: "badge";
+        readonly text: "و";
+    };
+    readonly 'duration.common': {
+        readonly kind: "title";
+        readonly text: "مدد شائعة";
+    };
+    readonly 'duration.other': {
+        readonly kind: "badge";
+        readonly text: "مدة أخرى";
+    };
+    readonly 'durationPicker.apply': {
+        readonly kind: "button";
+        readonly text: "اعتمد المدة";
+    };
+    readonly 'durationPicker.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {duration}";
+    };
+    readonly 'field.duration': {
+        readonly kind: "badge";
+        readonly text: "المدة";
+    };
+    readonly 'title.durationPicker': {
+        readonly kind: "title";
+        readonly text: "منتقي المدة";
+    };
+    readonly 'lab.h.durationPicker': {
+        readonly kind: "title";
+        readonly text: "حقل مدة الموعد";
+    };
+    readonly 'lab.durationPickerHint': {
+        readonly kind: "help";
+        readonly text: "المدة تظهر بعد اختيار الوقت، وتُعتمد من الورقة.";
+    };
+    readonly 'period.day': {
+        readonly kind: "badge";
+        readonly text: "يوم";
+    };
+    readonly 'period.week': {
+        readonly kind: "badge";
+        readonly text: "أسبوع";
+    };
+    readonly 'period.month': {
+        readonly kind: "badge";
+        readonly text: "شهر";
+    };
+    readonly 'period.custom': {
+        readonly kind: "button";
+        readonly text: "فترة مخصصة";
+    };
+    readonly 'period.apply': {
+        readonly kind: "button";
+        readonly text: "اعرض الفترة";
+    };
+    readonly 'period.today': {
+        readonly kind: "button";
+        readonly text: "اليوم";
+    };
+    readonly 'period.thisWeek': {
+        readonly kind: "button";
+        readonly text: "هذا الأسبوع";
+    };
+    readonly 'period.thisMonth': {
+        readonly kind: "button";
+        readonly text: "هذا الشهر";
+    };
+    readonly 'period.sheetTitle': {
+        readonly kind: "title";
+        readonly text: "حجم الفترة";
+    };
+    readonly 'period.sizeGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "حجم الفترة";
+    };
+    readonly 'period.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة: {spoken}، غيّر الفترة";
+    };
+    readonly 'period.spokenTo': {
+        readonly kind: "screen-reader";
+        readonly text: "إلى";
+    };
+    readonly 'period.srDayPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "اليوم السابق";
+    };
+    readonly 'period.srDayNext': {
+        readonly kind: "screen-reader";
+        readonly text: "اليوم التالي";
+    };
+    readonly 'period.srWeekPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الأسبوع السابق";
+    };
+    readonly 'period.srWeekNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الأسبوع التالي";
+    };
+    readonly 'period.srMonthPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الشهر السابق";
+    };
+    readonly 'period.srMonthNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الشهر التالي";
+    };
+    readonly 'period.srCustomPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة السابقة";
+    };
+    readonly 'period.srCustomNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة التالية";
+    };
+    readonly 'title.periodSwitcher': {
+        readonly kind: "title";
+        readonly text: "مبدّل الفترة";
+    };
+    readonly 'lab.h.periodSwitcher': {
+        readonly kind: "title";
+        readonly text: "تنقّل الفترات";
+    };
+    readonly 'lab.periodSwitcherHint': {
+        readonly kind: "help";
+        readonly text: "السابق والتالي يتنقّلان، والتسمية تفتح ورقة الحجم.";
+    };
+    readonly 'lab.periodDayRow': {
+        readonly kind: "badge";
+        readonly text: "تنقّل يومي";
+    };
+    readonly 'lab.periodMonthOnlyRow': {
+        readonly kind: "badge";
+        readonly text: "شهر فقط";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";
@@ -1398,7 +1714,7 @@ export declare const arBase: {
     };
     readonly 'state.fractionFull': {
         readonly kind: "badge";
-        readonly text: "ثلاث خانات عشرية";
+        readonly text: "خانات كاملة";
     };
     readonly 'title.checkbox': {
         readonly kind: "title";
